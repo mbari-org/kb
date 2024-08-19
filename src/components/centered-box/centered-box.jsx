@@ -10,11 +10,6 @@ import styles from "./centered-box-styles"
 const BareBox = ({ children, variant, classes, errorMessage, title }) => (
   <div className={classes.root}>
     <div className={classes.content}>
-      <img
-        alt=""
-        className={classes.logo}
-        src="https://uploads.digitalonboarding.com/do_logo_long.png"
-      />
       <Box className={cx({ [classes.errorBox]: variant === "error" })}>
         <Typography
           className={cx({ [classes.errorTitle]: variant === "error" })}
