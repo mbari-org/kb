@@ -1,18 +1,13 @@
 import { Typography } from "@mui/material"
 import withStyles from "@mui/styles/withStyles"
+
 import cx from "classnames"
 import { node, object, string } from "prop-types"
 
 import Box from "../box/box"
 import styles from "./centered-box-styles"
 
-const CenteredBoxBare = ({
-  children,
-  variant,
-  classes,
-  errorMessage,
-  title,
-}) => (
+const BareBox = ({ children, variant, classes, errorMessage, title }) => (
   <div className={classes.root}>
     <div className={classes.content}>
       <img
@@ -44,7 +39,7 @@ const CenteredBoxBare = ({
   </div>
 )
 
-CenteredBoxBare.propTypes = {
+BareBox.propTypes = {
   children: node,
   classes: object.isRequired,
   errorMessage: string,
@@ -53,6 +48,6 @@ CenteredBoxBare.propTypes = {
 }
 
 const styled = withStyles(styles)
-const CenteredBox = styled(CenteredBoxBare)
+const CenteredBox = styled(BareBox)
 
 export default CenteredBox
