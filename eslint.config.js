@@ -39,6 +39,7 @@ export default [
         { allowConstantExport: true },
       ],
       semi: ["error", "never"],
+      "array-bracket-spacing": ["error", "never"],
       "arrow-parens": ["error", "as-needed"],
     },
   },

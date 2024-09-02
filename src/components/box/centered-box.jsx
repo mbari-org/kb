@@ -4,7 +4,7 @@ import withStyles from "@mui/styles/withStyles"
 import cx from "classnames"
 import { node, object, string } from "prop-types"
 
-import Box from "../box/box"
+import Box from "./box"
 import styles from "./centered-box-styles"
 
 const BareBox = ({ children, variant, classes, errorMessage, title }) => (

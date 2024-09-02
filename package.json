@@ -10,11 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "@mui/styles": "^5.16.7",
+    "@stylistic/eslint-plugin-js": "^2.7.2",
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
     "react": "19.0.0-rc-1eaccd82-20240816",

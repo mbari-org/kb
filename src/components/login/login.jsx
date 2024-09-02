@@ -2,12 +2,12 @@ import { Card, CardActions, CardContent, TextField } from "@mui/material"
 
 import { useActionState } from "react"
 
-import LoginButton from "./login-button"
+import CenteredBox from "@/components/box/centered-box"
+import loginUser from "@/lib/login-user"
+import mbariLogo from "@/assets/login-logo.png"
 
-import loginUser from "./login-user"
+import LoginButton from "./login-button"
 import useLoginStyles from "./login-styles"
-import CenteredBox from "../centered-box/centered-box"
-import mbariLogo from "../../assets/login-logo.png"
 
 const Login = () => {
   const [loginState, loginAction] = useActionState(loginUser, null)
