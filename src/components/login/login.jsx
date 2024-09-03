@@ -3,11 +3,11 @@ import { Card, CardActions, CardContent, TextField } from "@mui/material"
 import { useActionState } from "react"
 
 import CenteredBox from "@/components/box/centered-box"
-import loginUser from "@/lib/login-user"
 import mbariLogo from "@/assets/login-logo.png"
 
 import LoginButton from "./login-button"
 import useLoginStyles from "./login-styles"
+import loginUser from "./login-user"
 
 const Login = () => {
   const [loginState, loginAction] = useActionState(loginUser, null)
@@ -41,9 +41,9 @@ const Login = () => {
             <TextField
               className={classes.field}
               fullWidth={true}
-              label="User"
+              label="Username"
               id="login-user"
-              name="user"
+              name="username"
             />
             <TextField
               className={classes.field}
