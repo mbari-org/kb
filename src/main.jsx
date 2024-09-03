@@ -1,8 +1,9 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { createRoot } from "react-dom/client"
+import { StrictMode } from "react"
+
 import { CssBaseline } from "@mui/material"
 import { ThemeProvider } from "@mui/material/styles"
-
-import { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
 
 import kbTheme from "@/themes/kb"
 
@@ -12,7 +13,12 @@ const App = () => (
   <StrictMode>
     <ThemeProvider theme={kbTheme}>
       <CssBaseline />
-      <KnowledgeBase />
+      <Router>
+        <Routes>
+          <Route path="/" element={<KnowledgeBase />} />
+          {/* Add more routes as needed */}
+        </Routes>
+      </Router>
     </ThemeProvider>
   </StrictMode>
 )

@@ -19,7 +19,8 @@
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
     "react": "19.0.0-rc-1eaccd82-20240816",
-    "react-dom": "19.0.0-rc-1eaccd82-20240816"
+    "react-dom": "19.0.0-rc-1eaccd82-20240816",
+    "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
