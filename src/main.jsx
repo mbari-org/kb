@@ -7,7 +7,8 @@ import { ThemeProvider } from "@mui/material/styles"
 
 import kbTheme from "@/themes/kb"
 
-import KnowledgeBase from "@/components/knowledge-base"
+// import KnowledgeBase from "@/components/knowledge-base"
+import Login from "@/components/login/login"
 
 const App = () => (
   <StrictMode>
@@ -15,7 +16,7 @@ const App = () => (
       <CssBaseline />
       <Router>
         <Routes>
-          <Route path="/" element={<KnowledgeBase />} />
+          <Route path="/" element={<Login />} />
           {/* Add more routes as needed */}
         </Routes>
       </Router>
