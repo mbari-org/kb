@@ -5,9 +5,9 @@ import { useActionState } from "react"
 import CenteredBox from "@/components/box/centered-box"
 import mbariLogo from "@/assets/login-logo.png"
 
-import LoginButton from "./login-button"
-import useLoginStyles from "./login-styles"
-import loginUser from "./login-user"
+import LoginButton from "./loginButton"
+import useLoginStyles from "./loginStyles"
+import loginUser from "./loginUser"
 
 const Login = () => {
   const [loginState, loginAction] = useActionState(loginUser, null)
@@ -18,6 +18,10 @@ const Login = () => {
       <span className={classes.errorField}>{errorText}</span>
     </div>
   )
+
+  if (!!loginState) {
+    console.log("Hey, now", loginState)
+  }
 
   return (
     <CenteredBox component="main" sx={{ width: "100%", height: "100vh" }}>

@@ -1,4 +1,4 @@
-import { setAccessToken } from "./accessToken"
+import { getToken, isTokenExpired, setToken } from "./accessToken"
 
 // const server = "http://localhost:8083"
 const loginUrl = "/v1/auth/login"
@@ -38,8 +38,8 @@ export const login = async (username, password) => {
       return { error: response.statusText }
     }
 
-    const { access_token } = await response.json()
-    setAccessToken(access_token)
+    const { access_token: accessToken } = await response.json()
+    setToken(accessToken)
 
     return { status: "ok" }
   } catch (error) {
@@ -48,6 +48,7 @@ export const login = async (username, password) => {
 }
 
 export const isLoggedIn = () => {
-  const accessToken = localStorage.getItem(storageKey)
-  return !!accessToken && !isTokenExpired(accessToken)
+  const token = getToken()
+
+  return !!token && isTokenExpired(token)
 }

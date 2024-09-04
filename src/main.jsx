@@ -12,9 +12,9 @@ import { ThemeProvider } from "@mui/material/styles"
 
 import kbTheme from "@/themes/kb"
 
-import KnowledgeBase from "@/components/knowledge-base"
+import KnowledgeBase from "@/components/knowledgeBase"
 import Login from "@/components/login/login"
-import { isLoggedIn } from "@/lib/auth"
+import { isLoggedIn } from "@/lib/auth/login"
 
 const App = () => {
   return (
