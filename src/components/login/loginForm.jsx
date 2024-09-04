@@ -2,25 +2,27 @@ import { Card, CardActions, CardContent, TextField } from "@mui/material"
 
 import { useActionState } from "react"
 
-import CenteredBox from "@/components/box/centered-box"
+import CenteredBox from "@/components/box/CenteredBox"
+
+import LoginButton from "./LoginButton"
+import LoginError from "./LoginError"
+import useLoginStyles from "./loginStyles"
+
 import mbariLogo from "@/assets/login-logo.png"
 
-import LoginButton from "./loginButton"
-import useLoginStyles from "./loginStyles"
-import loginUser from "./loginUser"
+import { useAuth } from "@/components/auth/AuthProvider"
 
-const Login = () => {
-  const [loginState, loginAction] = useActionState(loginUser, null)
+import login from "@/lib/auth/login"
+
+const LoginForm = () => {
   const classes = useLoginStyles()
 
-  const logginError = errorText => (
-    <div className={classes.errorContainer}>
-      <span className={classes.errorField}>{errorText}</span>
-    </div>
-  )
+  const [loginState, loginAction] = useActionState(login, null)
 
-  if (!!loginState) {
-    console.log("Hey, now", loginState)
+  const { setUser } = useAuth()
+
+  if (loginState?.user) {
+    setUser(loginState.user)
   }
 
   return (
@@ -57,7 +59,7 @@ const Login = () => {
               name="password"
               type="password"
             />
-            {loginState?.error && logginError(loginState.error)}
+            {loginState?.error && <LoginError errorText={loginState.error} />}
           </CardContent>
           <CardActions>
             <LoginButton />
@@ -68,4 +70,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginForm

@@ -1,7 +1,38 @@
-import { getToken, isTokenExpired, setToken } from "./accessToken"
+import { setAuth } from "@/lib/auth/user"
 
 // const server = "http://localhost:8083"
 const loginUrl = "/v1/auth/login"
+
+const login = async (prevState, formData) => {
+  const username = formData.get("username")
+  const password = formData.get("password")
+
+  if (username.trim() == "" || password.trim() == "")
+    return { error: "Provide Username and Password" }
+
+  return loginUser(username, password)
+}
+
+const loginUser = async (username, password) => {
+  try {
+    const loginParams = params(username, password)
+    const response = await fetch(loginUrl, loginParams)
+
+    const status = response.statusText
+
+    if (status !== "OK") {
+      return kbErrorMessage(status)
+    }
+
+    const { access_token: accessToken } = await response.json()
+    const user = { name: username, token: accessToken }
+    await setAuth(user)
+
+    return { user: user }
+  } catch (error) {
+    return { error: error.message }
+  }
+}
 
 const params = (username, password) => {
   const auth = basicAuth(username, password)
@@ -28,27 +59,19 @@ const headers = auth => ({
   Priority: "u=0",
 })
 
-export const login = async (username, password) => {
-  try {
-    const loginParams = params(username, password)
-
-    const response = await fetch(loginUrl, loginParams)
-
-    if (response.statusText !== "OK") {
-      return { error: response.statusText }
-    }
-
-    const { access_token: accessToken } = await response.json()
-    setToken(accessToken)
-
-    return { status: "ok" }
-  } catch (error) {
-    return { error: error.message }
+const kbErrorMessage = statusText => {
+  var message
+  switch (statusText.toLowerCase()) {
+    case "unauthorized":
+      message = "Invalid Username/Password"
+      break
+    case "invalid":
+      message = "Invalid Username/Password"
+      break
+    default:
+      message = "An unknown error occurred.\n Please contact support."
   }
+  return { error: message }
 }
 
-export const isLoggedIn = () => {
-  const token = getToken()
-
-  return !!token && isTokenExpired(token)
-}
+export default login

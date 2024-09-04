@@ -1,9 +1,9 @@
 import { makeStyles } from "@mui/styles"
 
-const loginStyles = () => ({
+const loginStyles = theme => ({
   actions: {
     display: "block",
-    marginTop: 20,
+    marginTop: theme.spacing(2),
   },
   alternativeActions: {
     display: "flex",
@@ -15,27 +15,26 @@ const loginStyles = () => ({
     width: 400,
   },
   errorContainer: {
-    marginTop: "5px",
+    marginTop: theme.spacing(1),
     textAlign: "center",
-    marginBottom: "10px",
+    marginBottom: theme.spacing(2),
   },
   errorField: {
-    color: "red",
-    fontSize: "14px",
-    fontWeight: "bold",
+    color: theme.palette.error.main,
+    fontSize: theme.typography.pxToRem(14),
+    fontWeight: theme.typography.fontWeightBold,
   },
   field: {
-    margin: "10px 0",
-    minHeight: "40px",
+    margin: theme.spacing(1),
+    minHeight: theme.spacing(4),
   },
   forgotPassword: {
     display: "block",
-    color: "initial",
+    color: theme.palette.text.primary,
+    marginTop: theme.spacing(2),
     textDecoration: "none",
     textAlign: "center",
   },
 })
 
-const useStyles = makeStyles(loginStyles)
-
-export default useStyles
+export default makeStyles(loginStyles)
