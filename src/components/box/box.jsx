@@ -1,7 +1,8 @@
-import {Paper} from "@mui/material"
-import {styled} from "@mui/material/styles"
+import { Paper } from "@mui/material"
+import { css } from "@emotion/react"
+import styled from "@emotion/styled"
 
-const Box = styled(Paper)`
+const styles = css`
   padding: 20px;
 
   &.widget-bar a,
@@ -18,5 +19,13 @@ const Box = styled(Paper)`
     margin-right: 10px;
   }
 `
+
+const StyledPaper = styled(Paper)`
+  ${styles};
+`
+
+const Box = ({ className, ...props }) => (
+  <StyledPaper className={className} {...props} />
+)
 
 export default Box

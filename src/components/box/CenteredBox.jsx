@@ -1,18 +1,27 @@
-import { Typography } from "@mui/material"
-import withStyles from "@mui/styles/withStyles"
+import { Box, Typography } from "@mui/material"
+import { css } from "@emotion/react"
 
-import cx from "classnames"
-import { node, object, string } from "prop-types"
-
-import Box from "./Box"
-import styles from "./centeredBoxStyles"
-
-const BareBox = ({ children, variant, classes, errorMessage, title }) => (
-  <div className={classes.root}>
+const CenteredBox = ({
+  children,
+  variant,
+  customClasses: classes,
+  errorMessage,
+  title,
+  fullWidth = false,
+}) => (
+  <div className={`${classes.root} centered-box`}>
     <div className={classes.content}>
-      <Box className={cx({ [classes.errorBox]: variant === "error" })}>
+      <Box
+        className={css({
+          [classes.errorBox]: variant === "error",
+          [classes.errorTitle]: variant === "error",
+          [classes.errorMessage]: variant === "error",
+        })}
+      >
         <Typography
-          className={cx({ [classes.errorTitle]: variant === "error" })}
+          className={css({
+            [classes.errorTitle]: variant === "error",
+          })}
           gutterBottom={variant !== "error"}
           variant="subtitle2"
         >
@@ -20,7 +29,9 @@ const BareBox = ({ children, variant, classes, errorMessage, title }) => (
         </Typography>
         {errorMessage && (
           <Typography
-            className={cx({ [classes.errorMessage]: variant === "error" })}
+            className={css({
+              [classes.errorMessage]: variant === "error",
+            })}
             color={variant === "error" ? "initial" : "error"}
             gutterBottom={true}
             variant="caption"
@@ -33,16 +44,5 @@ const BareBox = ({ children, variant, classes, errorMessage, title }) => (
     </div>
   </div>
 )
-
-BareBox.propTypes = {
-  children: node,
-  classes: object.isRequired,
-  errorMessage: string,
-  title: string.isRequired,
-  variant: string,
-}
-
-const styled = withStyles(styles)
-const CenteredBox = styled(BareBox)
 
 export default CenteredBox

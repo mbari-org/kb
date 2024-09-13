@@ -12,9 +12,9 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/icons-material": "^5.16.7",
+    "@fontsource/roboto": "^5.1.0",
+    "@mui/icons-material": "^6.1.0",
     "@mui/material": "^5.16.7",
-    "@mui/styles": "^5.16.7",
     "@stylistic/eslint-plugin-js": "^2.7.2",
     "classnames": "^2.5.1",
     "jwt-decode": "^4.0.0",

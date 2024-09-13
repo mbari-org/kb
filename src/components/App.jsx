@@ -8,9 +8,8 @@ import { createRoot } from "react-dom/client"
 import { StrictMode } from "react"
 
 import { CssBaseline } from "@mui/material"
-import { ThemeProvider } from "@mui/material/styles"
-
-import kbTheme from "@/themes/kb"
+import { ThemeProvider } from "@emotion/react"
+import theme from "@/themes/kb"
 
 import AuthProvider from "@/components/auth/AuthProvider"
 import AuthRoute from "@/components/auth/AuthRoute"
@@ -20,7 +19,7 @@ import Login from "@/components/login/Login"
 const App = () => {
   return (
     <StrictMode>
-      <ThemeProvider theme={kbTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
           <AuthProvider>

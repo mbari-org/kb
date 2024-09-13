@@ -1,40 +1,48 @@
-import { makeStyles } from "@mui/styles"
+import { css } from "@emotion/react"
+import theme from "@/themes/kb"
 
-const loginStyles = theme => ({
-  actions: {
-    display: "block",
-    marginTop: theme.spacing(2),
-  },
-  alternativeActions: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  content: {
-    width: 400,
-  },
-  errorContainer: {
-    marginTop: theme.spacing(1),
-    textAlign: "center",
-    marginBottom: theme.spacing(2),
-  },
-  errorField: {
-    color: theme.palette.error.main,
-    fontSize: theme.typography.pxToRem(14),
-    fontWeight: theme.typography.fontWeightBold,
-  },
-  field: {
-    margin: theme.spacing(1),
-    minHeight: theme.spacing(4),
-  },
-  forgotPassword: {
-    display: "block",
-    color: theme.palette.text.primary,
-    marginTop: theme.spacing(2),
-    textDecoration: "none",
-    textAlign: "center",
-  },
-})
+const loginStyles = css`
+  /* Login-specific styles using the imported theme */
+  &.actions {
+    display: block;
+    margin-top: ${theme.spacing * 2}px;
+  }
 
-export default makeStyles(loginStyles)
+  &.alternativeActions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &.content {
+    width: 400px;
+  }
+
+  &.errorContainer {
+    margin-top: ${theme.spacing}px;
+    text-align: center;
+    margin-bottom: ${theme.spacing * 2}px;
+  }
+
+  &.errorField {
+    color: ${theme.colors.error.main};
+    font-size: ${theme.spacing * 4}px;
+    font-weight: ${theme.typography.fontWeightBold};
+  }
+
+  &.field {
+    margin: ${theme.spacing}px;
+    min-height: ${theme.spacing * 4}px;
+  }
+
+  &.forgotPassword {
+    display: block;
+    color: ${theme.colors.text.primary};
+    margin-top: ${theme.spacing * 2}px;
+    text-decoration: none;
+    text-align: center;
+  }
+`
+
+export default loginStyles

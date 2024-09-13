@@ -1,58 +1,64 @@
-import { Card, CardActions, CardContent, TextField } from "@mui/material"
-
 import { useActionState } from "react"
 
+import { Card, CardActions, CardContent, TextField } from "@mui/material"
+import { css } from "@emotion/react"
+import styled from "@emotion/styled"
+
+import { useAuth } from "@/components/auth/AuthProvider"
 import CenteredBox from "@/components/box/CenteredBox"
+import mbariLogo from "@/assets/login-logo.png"
+import login from "@/lib/auth/login"
 
 import LoginButton from "./LoginButton"
 import LoginError from "./LoginError"
-import useLoginStyles from "./loginStyles"
+import loginStyles from "./loginStyles"
 
-import mbariLogo from "@/assets/login-logo.png"
-
-import { useAuth } from "@/components/auth/AuthProvider"
-
-import login from "@/lib/auth/login"
+const StyledForm = styled.form`
+  ${loginStyles}
+`
 
 const LoginForm = () => {
-  const classes = useLoginStyles()
+  const { setUser } = useAuth()
 
   const [loginState, loginAction] = useActionState(login, null)
-
-  const { setUser } = useAuth()
 
   if (loginState?.user) {
     setUser(loginState.user)
   }
 
   return (
-    <CenteredBox component="main" sx={{ width: "100%", height: "100vh" }}>
-      <img
-        alt=""
-        className={classes.logo}
-        src={mbariLogo}
-        sx={{ mx: "auto", width: "200px" }}
-      />
-      <form action={loginAction}>
-        <Card sx={{ maxWidth: "400px", mx: "auto" }}>
+    <CenteredBox
+      variant="default"
+      customClasses={{
+        root: css({ width: "100%", height: "100vh" }),
+        content: css({
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }),
+      }}
+    >
+      <img alt="" css={css({ mx: "auto", width: "200px" })} src={mbariLogo} />
+      <StyledForm action={loginAction}>
+        <Card css={css({ maxWidth: "400px", mx: "auto" })}>
           <CardContent
-            sx={{
+            css={css({
               alignItems: "stretch",
               display: "flex",
               flexDirection: "column",
               gap: 2,
               height: "150px",
-            }}
+            })}
           >
             <TextField
-              className={classes.field}
+              className="field"
               fullWidth={true}
               label="Username"
               id="login-user"
               name="username"
             />
             <TextField
-              className={classes.field}
+              className="field"
               fullWidth={true}
               id="login-password"
               label="Password"
@@ -65,7 +71,7 @@ const LoginForm = () => {
             <LoginButton />
           </CardActions>
         </Card>
-      </form>
+      </StyledForm>
     </CenteredBox>
   )
 }
