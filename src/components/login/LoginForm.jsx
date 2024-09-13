@@ -1,12 +1,12 @@
 import { useActionState } from "react"
 
-import { Card, CardActions, CardContent, TextField } from "@mui/material"
+import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
+
 import { css } from "@emotion/react"
 import styled from "@emotion/styled"
 
-import { useAuth } from "@/components/auth/AuthProvider"
-import CenteredBox from "@/components/box/CenteredBox"
 import mbariLogo from "@/assets/login-logo.png"
+import { useAuth } from "@/components/auth/AuthProvider"
 import login from "@/lib/auth/login"
 
 import LoginButton from "./LoginButton"
@@ -27,52 +27,64 @@ const LoginForm = () => {
   }
 
   return (
-    <CenteredBox
-      variant="default"
-      customClasses={{
-        root: css({ width: "100%", height: "100vh" }),
-        content: css({
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }),
+    <Box
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
       }}
     >
-      <img alt="" css={css({ mx: "auto", width: "200px" })} src={mbariLogo} />
-      <StyledForm action={loginAction}>
-        <Card css={css({ maxWidth: "400px", mx: "auto" })}>
-          <CardContent
-            css={css({
-              alignItems: "stretch",
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              height: "150px",
-            })}
-          >
-            <TextField
-              className="field"
-              fullWidth={true}
-              label="Username"
-              id="login-user"
-              name="username"
-            />
-            <TextField
-              className="field"
-              fullWidth={true}
-              id="login-password"
-              label="Password"
-              name="password"
-              type="password"
-            />
-            {loginState?.error && <LoginError errorText={loginState.error} />}
-          </CardContent>
-          <CardActions>
-            <LoginButton />
-          </CardActions>
-        </Card>
-      </StyledForm>
-    </CenteredBox>
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "500px",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 0 20px rgba(0,0,0,0.3)",
+        }}
+      >
+        <img
+          alt=""
+          src={mbariLogo}
+          style={{
+            margin: "0px auto 0",
+            display: "block",
+            width: "300px",
+          }}
+        />
+        <StyledForm action={loginAction}>
+          <Card css={css({ maxWidth: "400px", mx: "auto" })}>
+            <CardContent>
+              <TextField
+                sx={{ mb: 3 }}
+                className="field"
+                fullWidth={true}
+                label="Username"
+                id="login-user"
+                name="username"
+              />
+              <TextField
+                className="field"
+                fullWidth={true}
+                id="login-password"
+                label="Password"
+                name="password"
+                type="password"
+              />
+              {loginState?.error && <LoginError errorText={loginState.error} />}
+            </CardContent>
+            <CardActions>
+              <LoginButton />
+            </CardActions>
+          </Card>
+        </StyledForm>
+      </Box>
+    </Box>
   )
 }
 

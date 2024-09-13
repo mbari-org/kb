@@ -7,7 +7,7 @@ const LoginButton = () => {
     <Button
       disabled={pending}
       type="submit"
-      sx={{ mx: "auto" }}
+      sx={{ mx: "auto", mb: 3 }}
       variant="contained"
     >
       {pending ? "Login..." : "Login"}
