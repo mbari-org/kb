@@ -14,8 +14,19 @@ import kbTheme from "@/themes/kb"
 
 import AuthProvider from "@/components/auth/AuthProvider"
 import AuthRoute from "@/components/auth/AuthRoute"
+
 import KnowledgeBase from "@/components/KnowledgeBase"
+
 import Login from "@/components/login/Login"
+
+import AboutHelp from "./panels/AboutHelp"
+import Concepts from "@/components/panels/Concepts"
+import Embargoes from "./panels/Embargoes"
+import History from "./panels/History"
+import ImportExport from "@/components/panels/ImportExport"
+import Notes from "./panels/Notes"
+import References from "@/components/panels/References"
+import Templates from "@/components/panels/Templates"
 
 const App = () => {
   return (
@@ -28,7 +39,16 @@ const App = () => {
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="/login" element={<Login />} />
               <Route element={<AuthRoute />}>
-                <Route path="/kb" element={<KnowledgeBase />} />
+                <Route path="/kb" element={<KnowledgeBase />}>
+                  <Route path="about-help" element={<AboutHelp />} />
+                  <Route path="concepts" element={<Concepts />} />
+                  <Route path="embargoes" element={<Embargoes />} />
+                  <Route path="history" element={<History />} />
+                  <Route path="import-export" element={<ImportExport />} />
+                  <Route path="notes" element={<Notes />} />
+                  <Route path="references" element={<References />} />
+                  <Route path="templates" element={<Templates />} />
+                </Route>
               </Route>
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>

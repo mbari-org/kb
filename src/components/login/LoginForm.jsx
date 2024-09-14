@@ -3,7 +3,6 @@ import { useActionState } from "react"
 import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 
 import { css } from "@emotion/react"
-import styled from "@emotion/styled"
 
 import mbariLogo from "@/assets/login-logo.png"
 import { useAuth } from "@/components/auth/AuthProvider"
@@ -35,6 +34,8 @@ const LoginForm = () => {
       }}
     >
       <Box
+        component="form"
+        action={loginAction}
         sx={{
           width: "100%",
           maxWidth: "500px",
@@ -52,32 +53,33 @@ const LoginForm = () => {
             width: "300px",
           }}
         />
-        <form action={loginAction}>
-          <Card css={css({ maxWidth: "400px", mx: "auto" })}>
-            <CardContent>
-              <TextField
-                sx={{ mb: 3 }}
-                className="field"
-                fullWidth={true}
-                label="Username"
-                id="login-user"
-                name="username"
-              />
-              <TextField
-                className="field"
-                fullWidth={true}
-                id="login-password"
-                label="Password"
-                name="password"
-                type="password"
-              />
-              {loginState?.error && <LoginError errorText={loginState.error} />}
-            </CardContent>
-            <CardActions>
-              <LoginButton />
-            </CardActions>
-          </Card>
-        </form>
+        <Card css={css({ maxWidth: "400px", mx: "auto" })}>
+          <CardContent>
+            <TextField
+              id="login-user"
+              className="field"
+              fullWidth={true}
+              label="Username"
+              name="username"
+              required
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              id="login-password"
+              className="field"
+              fullWidth={true}
+              label="Password"
+              name="password"
+              required
+              type="password"
+            />
+            <LoginError errorText={loginState?.error} />
+          </CardContent>
+          <CardActions style={{ display: "flex", justifyContent: "center" }}>
+            <LoginButton />
+          </CardActions>
+        </Card>
+        {/* </form> */}
       </Box>
     </Box>
   )

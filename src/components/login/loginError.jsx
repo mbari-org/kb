@@ -1,26 +1,18 @@
-import { css } from "@emotion/react"
-import theme from "@/themes/kb"
+import { useTheme } from "@mui/material/styles"
 
 const LoginError = ({ errorText }) => {
-  return (
-    <div
-      className={css`
-        margin-top: ${theme.spacing}px;
-        text-align: center;
-        margin-bottom: ${theme.spacing * 2}px;
-      `}
-    >
-      <span
-        className={css`
-          color: ${theme.colors.error};
-          font-size: ${theme.spacing * 4}px;
-          font-weight: ${theme.typography.fontWeightBold};
-        `}
-      >
-        {errorText}
-      </span>
-    </div>
-  )
+  const theme = useTheme()
+
+  const styles = {
+    color: theme.palette.error.main,
+    fontSize: theme.typography.fontSize,
+    fontWeight: theme.typography.fontWeightBold,
+    height: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    textAlign: "center",
+  }
+
+  return <div style={styles}>{errorText}</div>
 }
 
 export default LoginError
