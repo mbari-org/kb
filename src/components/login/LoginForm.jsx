@@ -11,11 +11,6 @@ import login from "@/lib/auth/login"
 
 import LoginButton from "./LoginButton"
 import LoginError from "./LoginError"
-import loginStyles from "./loginStyles"
-
-const StyledForm = styled.form`
-  ${loginStyles}
-`
 
 const LoginForm = () => {
   const { setUser } = useAuth()
@@ -57,7 +52,7 @@ const LoginForm = () => {
             width: "300px",
           }}
         />
-        <StyledForm action={loginAction}>
+        <form action={loginAction}>
           <Card css={css({ maxWidth: "400px", mx: "auto" })}>
             <CardContent>
               <TextField
@@ -82,7 +77,7 @@ const LoginForm = () => {
               <LoginButton />
             </CardActions>
           </Card>
-        </StyledForm>
+        </form>
       </Box>
     </Box>
   )

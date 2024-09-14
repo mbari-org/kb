@@ -160,21 +160,6 @@ const globalStyles = css`
   * {
     box-sizing: border-box;
   }
-
-  .centered-box {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 800px; // Set a specific width
-    max-width: 800px; // Keep a maximum width
-    height: 600px; // Set a specific height
-    margin: 0 auto;
-    z-index: 1000; // Ensure it appears above other elements
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 `
 
 export default theme

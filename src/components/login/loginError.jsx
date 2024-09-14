@@ -1,11 +1,24 @@
-import useLoginStyles from "./loginStyles"
+import { css } from "@emotion/react"
+import theme from "@/themes/kb"
 
 const LoginError = ({ errorText }) => {
-  const classes = useLoginStyles()
-
   return (
-    <div className={classes.errorContainer}>
-      <span className={classes.errorField}>{errorText}</span>
+    <div
+      className={css`
+        margin-top: ${theme.spacing}px;
+        text-align: center;
+        margin-bottom: ${theme.spacing * 2}px;
+      `}
+    >
+      <span
+        className={css`
+          color: ${theme.colors.error};
+          font-size: ${theme.spacing * 4}px;
+          font-weight: ${theme.typography.fontWeightBold};
+        `}
+      >
+        {errorText}
+      </span>
     </div>
   )
 }
