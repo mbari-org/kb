@@ -2,9 +2,12 @@ import { Link } from "react-router-dom"
 
 import { useTheme } from "@emotion/react"
 
-const NavLink = ({ text, to }) => {
-  const theme = useTheme()
+import { useAuth } from "@/components/auth/AuthProvider"
 
+const NavLink = ({ text, to }) => {
+  const { updateUser } = useAuth()
+
+  const theme = useTheme()
   const style = {
     textDecoration: "none",
     color: theme.palette.primary.contrastText,
@@ -16,8 +19,13 @@ const NavLink = ({ text, to }) => {
     },
   }
 
+  const navChange = event => {
+    const panel = event.target.pathname.split("/").at(2)
+    updateUser({ panel: panel })
+  }
+
   return (
-    <Link style={style} to={to}>
+    <Link onClick={navChange} style={style} to={to}>
       {text}
     </Link>
   )

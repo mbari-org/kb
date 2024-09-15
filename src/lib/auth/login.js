@@ -3,6 +3,8 @@ import { setAuth } from "@/lib/auth/user"
 // const server = "http://localhost:8083"
 const loginUrl = "/v1/auth/login"
 
+const initialPanel = "concepts"
+
 const login = async (prevState, formData) => {
   const username = formData.get("username")
   const password = formData.get("password")
@@ -25,7 +27,7 @@ const loginUser = async (username, password) => {
     }
 
     const { access_token: accessToken } = await response.json()
-    const user = { name: username, token: accessToken }
+    const user = { name: username, panel: initialPanel, token: accessToken }
     await setAuth(user)
 
     return { user: user }

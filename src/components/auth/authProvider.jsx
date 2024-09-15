@@ -1,16 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { clearAuth, getAuth } from "@/lib/auth/user"
+import { clearAuth, getAuth, setAuth } from "@/lib/auth/user"
 
-const UserContext = createContext()
-UserContext.displayName = "User Context"
+const AuthContext = createContext()
+AuthContext.displayName = "Auth Context"
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+
   const navigate = useNavigate()
 
-  const updateUser = update => {
+  const updateUser = async update => {
+    const auth = await getAuth()
+    setAuth({ ...auth, ...update })
+
     setUser(prevUser => {
       return !!prevUser ? { ...prevUser, ...update } : update
     })
@@ -26,16 +30,14 @@ const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <UserContext.Provider
-      value={{ logout, navigate, setUser, updateUser, user }}
-    >
+    <AuthContext.Provider value={{ logout, setUser, updateUser, user }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
 export default AuthProvider
 
 export const useAuth = () => {
-  return useContext(UserContext)
+  return useContext(AuthContext)
 }

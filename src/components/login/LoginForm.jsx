@@ -5,20 +5,21 @@ import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 import { css } from "@emotion/react"
 
 import mbariLogo from "@/assets/login-logo.png"
-import { useAuth } from "@/components/auth/AuthProvider"
 import login from "@/lib/auth/login"
+
+import { useAuth } from "@/components/auth/AuthProvider"
 
 import LoginButton from "./LoginButton"
 import LoginError from "./LoginError"
 
 const LoginForm = () => {
-  const { updateUser } = useAuth()
+  const { setUser } = useAuth()
 
   const [loginState, loginAction] = useActionState(login, null)
 
   useEffect(() => {
-    loginState?.user && updateUser(loginState.user)
-  }, [loginState, updateUser])
+    loginState?.user && setUser(loginState.user)
+  }, [loginState, setUser])
 
   return (
     <Box
