@@ -1,4 +1,4 @@
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
 
 import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 
@@ -12,13 +12,13 @@ import LoginButton from "./LoginButton"
 import LoginError from "./LoginError"
 
 const LoginForm = () => {
-  const { setUser } = useAuth()
+  const { updateUser } = useAuth()
 
   const [loginState, loginAction] = useActionState(login, null)
 
-  if (loginState?.user) {
-    setUser(loginState.user)
-  }
+  useEffect(() => {
+    loginState?.user && updateUser(loginState.user)
+  }, [loginState, updateUser])
 
   return (
     <Box

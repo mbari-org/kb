@@ -3,31 +3,39 @@ import { useNavigate } from "react-router-dom"
 
 import { clearAuth, getAuth } from "@/lib/auth/user"
 
-const AuthContext = createContext()
-AuthContext.displayName = "Auth Context"
+const UserContext = createContext()
+UserContext.displayName = "User Context"
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    getAuth().then(setUser)
-  }, [])
+  const updateUser = update => {
+    setUser(prevUser => {
+      return !!prevUser ? { ...prevUser, ...update } : update
+    })
+  }
 
   const logout = () => {
     clearAuth().then(setUser)
     navigate("/")
   }
 
+  useEffect(() => {
+    getAuth().then(setUser)
+  }, [])
+
   return (
-    <AuthContext.Provider value={{ logout, navigate, setUser, user }}>
+    <UserContext.Provider
+      value={{ logout, navigate, setUser, updateUser, user }}
+    >
       {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   )
 }
 
 export default AuthProvider
 
 export const useAuth = () => {
-  return useContext(AuthContext)
+  return useContext(UserContext)
 }
