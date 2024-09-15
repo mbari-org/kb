@@ -6,11 +6,6 @@ export const getAuth = async () => JSON.parse(localStorage.getItem(storageKey))
 export const setAuth = async user =>
   localStorage.setItem(storageKey, JSON.stringify(user))
 
-// export const upsertAuth = async update => {
-//   const user = (await getAuth()) || {}
-//   setUser({ ...user, ...update })
-// }
-
 export const clearAuth = async () => localStorage.removeItem(storageKey)
 
 export const isTokenValid = user => {
