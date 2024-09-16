@@ -24,7 +24,7 @@ const KbLink = ({ text, to }) => {
 
     return {
       color: color,
-      fontSize: theme.typography.fontSize,
+      // fontSize: theme.typography.fontSize,
       fontSize: "1.25rem",
       fontWeight: isActive ? "bold" : "",
       marginLeft: theme.spacing(2),
