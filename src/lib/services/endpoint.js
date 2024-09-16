@@ -40,7 +40,7 @@ const endpointUrl = async service => {
     return { error: `No endpoint info for service: ${service}` }
   }
 
-  return endpoint.url
+  return { url: endpoint.url }
 }
 
 export { endpointUrl }

@@ -1,23 +1,17 @@
-import { endpointUrl } from "@/lib/services/endpoint"
+import pathUrl from "./pathUrl"
 
 const loginPath = "auth/login"
 
 const authUser = async (username, password) => {
   try {
-    const oniParams = params(username, password)
+    const authParams = params(username, password)
 
-    const oniUrl = await endpointUrl("oni")
-    if (!!oniUrl.error) {
-      return oniUrl
+    const authUrl = await pathUrl(loginPath)
+    if (!!authUrl.error) {
+      return authUrl
     }
 
-    const loginUrl = `${oniUrl}/${loginPath}`
-    const proxyPath = `/v1/${loginPath}`
-    console.log(
-      `Ignoring loginUrl ${loginUrl} and using proxy path ${proxyPath}`
-    )
-
-    const response = await fetch(proxyPath, oniParams)
+    const response = await fetch(authUrl.url, authParams)
 
     if (response.status !== 200) {
       return authErrorMessage(response.statusText)

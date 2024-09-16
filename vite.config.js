@@ -24,6 +24,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace(/^\/v1\/auth\/login/, "/v1/auth/login"),
       },
+      "/v1/names": {
+        target: "http://localhost:8083",
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/v1\/names/, "/v1/names"),
+      },
     },
     cors: true,
   },
