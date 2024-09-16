@@ -1,3 +1,5 @@
+import { decodeJwt } from "jose"
+
 import { setAuth } from "@/lib/auth/user"
 import { authUser } from "@/lib/services/oni"
 
@@ -13,7 +15,14 @@ const login = async (_prevState, formData) => {
     return userAuth
   }
 
-  const user = { name: username, panel: initialPanel, token: userAuth.token }
+  const { role } = decodeJwt(userAuth.token)
+
+  const user = {
+    name: username,
+    panel: initialPanel,
+    role: role,
+    token: userAuth.token,
+  }
 
   await setAuth(user)
 
