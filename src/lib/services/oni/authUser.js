@@ -1,15 +1,13 @@
-import pathUrl from "./pathUrl"
-
-const loginPath = "auth/login"
+import { serviceUrl } from "@/lib/services/config"
 
 const authUser = async (username, password) => {
   try {
-    const authParams = params(username, password)
-
-    const authUrl = await pathUrl(loginPath)
+    const authUrl = await serviceUrl("oni", "auth/login")
     if (!!authUrl.error) {
       return authUrl
     }
+
+    const authParams = params(username, password)
 
     const response = await fetch(authUrl.url, authParams)
 

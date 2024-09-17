@@ -12,13 +12,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/config/endpoints": {
-        target: "http://localhost:8400",
-        changeOrigin: true,
-        rewrite: path =>
-          path.replace(/^\/config\/endpoints/, "/config/endpoints"),
-      },
-
+      // "/config/endpoints": {
+      //   target: "http://localhost:8400",
+      //   changeOrigin: true,
+      //   rewrite: path =>
+      //     path.replace(/^\/config\/endpoints/, "/config/endpoints"),
+      // },
       "/v1/auth/login": {
         target: "http://localhost:8083",
         changeOrigin: true,

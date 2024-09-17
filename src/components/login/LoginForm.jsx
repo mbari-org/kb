@@ -1,4 +1,4 @@
-import { useActionState, useEffect } from "react"
+import { useActionState, useEffect, useState } from "react"
 
 import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 
@@ -8,14 +8,21 @@ import mbariLogo from "@/assets/login-logo.png"
 import login from "@/lib/auth/login"
 
 import { useAuth } from "@/components/auth/AuthProvider"
+import { getConfigUrl } from "@/lib/services/config"
 
-import LoginButton from "./LoginButton"
-import LoginError from "./LoginError"
+import SubmitButton from "./SubmitButton"
+import SubmitError from "./SubmitError"
 
 const LoginForm = () => {
   const { setUser } = useAuth()
 
+  const [configUrl, setConfigUrl] = useState(null)
   const [loginState, loginAction] = useActionState(login, null)
+
+  useEffect(() => {
+    const storedUrl = getConfigUrl()
+    setConfigUrl(storedUrl)
+  }, [])
 
   useEffect(() => {
     loginState?.user && setUser(loginState.user)
@@ -63,7 +70,6 @@ const LoginForm = () => {
               label="Username"
               name="username"
               required
-              sx={{ mb: 2 }}
             />
             <TextField
               id="login-password"
@@ -72,12 +78,25 @@ const LoginForm = () => {
               label="Password"
               name="password"
               required
+              sx={{ mt: 2 }}
               type="password"
             />
-            <LoginError errorText={loginState?.error} />
+            <SubmitError errorText={loginState?.authError} />
+            <TextField
+              id="config-service-url"
+              className="field"
+              fullWidth={true}
+              label="Config Service URL"
+              name="configUrl"
+              onChange={e => setConfigUrl(e.target.value)}
+              required
+              sx={{ mt: 6 }}
+              value={configUrl || ""}
+            />
+            <SubmitError errorText={loginState?.configError} />
           </CardContent>
           <CardActions style={{ display: "flex", justifyContent: "center" }}>
-            <LoginButton />
+            <SubmitButton />
           </CardActions>
         </Card>
         {/* </form> */}

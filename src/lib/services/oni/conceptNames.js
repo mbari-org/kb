@@ -1,11 +1,11 @@
-import pathUrl from "@/lib/services/oni/pathUrl"
+import { serviceUrl } from "@/lib/services/config"
 
 const conceptNamesPath = "names"
 
 // CxNote Currently not using pagination. The payload structure is:
 //   { content: namesArray, limit: 10000, offset: 0}
 const conceptNames = async () => {
-  const namesUrl = await pathUrl(conceptNamesPath)
+  const namesUrl = await serviceUrl("oni", conceptNamesPath)
   if (!!namesUrl.error) {
     return namesUrl
   }

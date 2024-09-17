@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles"
 
-const LoginError = ({ errorText }) => {
+const SubmitError = ({ errorText }) => {
   const theme = useTheme()
 
   const styles = {
@@ -15,4 +15,4 @@ const LoginError = ({ errorText }) => {
   return <div style={styles}>{errorText}</div>
 }
 
-export default LoginError
+export default SubmitError
