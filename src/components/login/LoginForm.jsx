@@ -8,25 +8,25 @@ import mbariLogo from "@/assets/login-logo.png"
 import login from "@/lib/auth/login"
 
 import { useAuth } from "@/components/auth/AuthProvider"
-import { getConfigUrl } from "@/lib/services/config"
+import configUrlStore from "@/lib/store/configUrl"
 
 import SubmitButton from "./SubmitButton"
 import SubmitError from "./SubmitError"
 
 const LoginForm = () => {
-  const { setUser } = useAuth()
+  const { updateUser } = useAuth()
 
-  const [configUrl, setConfigUrl] = useState(null)
+  const [configUrl, setConfigUrl] = useState("")
   const [loginState, loginAction] = useActionState(login, null)
 
   useEffect(() => {
-    const storedUrl = getConfigUrl()
+    const storedUrl = configUrlStore.get()
     setConfigUrl(storedUrl)
   }, [])
 
   useEffect(() => {
-    loginState?.user && setUser(loginState.user)
-  }, [loginState, setUser])
+    loginState?.user && updateUser(loginState.user)
+  }, [loginState, updateUser])
 
   return (
     <Box
@@ -91,7 +91,7 @@ const LoginForm = () => {
               onChange={e => setConfigUrl(e.target.value)}
               required
               sx={{ mt: 6 }}
-              value={configUrl || ""}
+              value={configUrl}
             />
             <SubmitError errorText={loginState?.configError} />
           </CardContent>

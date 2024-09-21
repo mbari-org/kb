@@ -1,4 +1,4 @@
-import authUser from "./oni/authUser"
+import authLogin from "./oni/authLogin"
 import conceptNames from "./oni/conceptNames"
 
-export { authUser, conceptNames }
+export { authLogin, conceptNames }

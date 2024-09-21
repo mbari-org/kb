@@ -1,5 +1,5 @@
+import configUrl from "../store/configUrl"
 import endpoints from "./config/endpoints"
-import { getConfigUrl, setConfigUrl } from "./config/configUrl"
 import serviceUrl from "./config/serviceUrl"
 
-export { endpoints, getConfigUrl, serviceUrl }
+export { configUrl, endpoints, serviceUrl }

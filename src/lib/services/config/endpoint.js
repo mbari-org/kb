@@ -1,4 +1,3 @@
-import { getConfigUrl } from "./configUrl"
 import endpoints from "./endpoints"
 
 const serviceNames = ["annosauras", "oni"]

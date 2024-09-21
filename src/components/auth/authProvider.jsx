@@ -1,36 +1,38 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { clearAuth, getAuth, setAuth } from "@/lib/auth/user"
+import appUser from "@/lib/store/appUser"
+import auth from "@/lib/store/auth"
 
 const AuthContext = createContext()
 AuthContext.displayName = "Auth Context"
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-
   const navigate = useNavigate()
 
-  const updateUser = async update => {
-    const auth = await getAuth()
-    setAuth({ ...auth, ...update })
+  const [user, setUser] = useState(null)
 
-    setUser(prevUser => {
-      return !!prevUser ? { ...prevUser, ...update } : update
+  const updateUser = update => {
+    setUser(user => {
+      return !!user ? { ...user, ...update } : update
     })
   }
 
   const logout = () => {
-    clearAuth().then(setUser)
+    appUser.clear()
+    auth.clear()
     navigate("/")
   }
 
   useEffect(() => {
-    getAuth().then(setUser)
+    const storedUser = appUser.get()
+    if (!!storedUser) {
+      setUser(storedUser)
+    }
   }, [])
 
   return (
-    <AuthContext.Provider value={{ logout, setUser, updateUser, user }}>
+    <AuthContext.Provider value={{ logout, updateUser, user }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,4 +1,4 @@
-import { getConfigUrl, setConfigUrl } from "./configUrl"
+import configUrlStore from "@/lib/store/configUrl"
 
 let cached = {
   endpoints: null,
@@ -10,7 +10,7 @@ const endpoints = async configUrl => {
     return cached
   }
 
-  setConfigUrl(configUrl)
+  configUrlStore.set(configUrl)
 
   const { endpoints, error } = await fetchConfig(configUrl)
   if (error) {

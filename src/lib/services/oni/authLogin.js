@@ -1,15 +1,15 @@
 import { serviceUrl } from "@/lib/services/config"
 
-const authUser = async (username, password) => {
+const authLogin = async (username, password) => {
   try {
-    const authUrl = await serviceUrl("oni", "auth/login")
-    if (!!authUrl.error) {
-      return authUrl
+    const { error, url: authUrl } = await serviceUrl("oni", "auth/login")
+    if (!!error) {
+      return { error }
     }
 
     const authParams = params(username, password)
 
-    const response = await fetch(authUrl.url, authParams)
+    const response = await fetch(authUrl, authParams)
 
     if (response.status !== 200) {
       return authErrorMessage(response.statusText)
@@ -29,7 +29,7 @@ const params = (username, password) => {
     credentials: "include",
     headers: headers(auth),
     method: "POST",
-    mode: "cors",
+    // mode: "cors",
   }
 }
 
@@ -40,12 +40,7 @@ const basicAuth = (username, password) => {
 
 const headers = auth => ({
   Accept: "application/json",
-  "Accept-Language": "en-US,en;q=0.5",
   Authorization: `${auth}`,
-  "Sec-Fetch-Dest": "empty",
-  "Sec-Fetch-Mode": "cors",
-  "Sec-Fetch-Site": "same-origin",
-  Priority: "u=0",
 })
 
 const authErrorMessage = statusText => {
@@ -63,4 +58,4 @@ const authErrorMessage = statusText => {
   return { error: message }
 }
 
-export default authUser
+export default authLogin

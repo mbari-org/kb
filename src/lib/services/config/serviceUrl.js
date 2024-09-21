@@ -10,11 +10,13 @@ const serviceUrl = async (service, path) => {
   }
 
   const url = `${serviceEndpoint.url}/${path}`
-  const proxyPath = `/v1/${path}`
 
-  console.log(`Ignoring loginUrl ${url} and using proxy path ${proxyPath}`)
+  return { url }
+  // const proxyPath = `/v1/${path}`
 
-  return { url: proxyPath }
+  // console.log(`Ignoring loginUrl ${url} and using proxy path ${proxyPath}`)
+
+  // return { url: proxyPath }
 }
 
 export default serviceUrl
