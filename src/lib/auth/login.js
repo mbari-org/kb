@@ -1,19 +1,21 @@
 import { decodeJwt } from "jose"
+import _ from "lodash"
 
 import { obfuscate } from "@/lib/auth/obfuscate"
 import { authLogin } from "@/lib/services/oni"
 import { endpoints } from "@/lib/services/config"
 
+import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"
-
-import { extract } from "@/lib/auth/obfuscate"
+import configUrl from "@/lib/store/configUrl"
 
 const initialPanel = "concepts"
 
 const login = async (_prevState, formData) => {
-  const configUrl = formData.get("configUrl")
+  const formConfigUrl = formData.get("configUrl")
+  configUrl.set(formConfigUrl)
 
-  const { error: configError } = await endpoints(configUrl)
+  const { error: configError } = await endpoints()
 
   if (!!configError) {
     return { configError }
@@ -39,6 +41,8 @@ const login = async (_prevState, formData) => {
     username,
   }
 
+  appUser.set(user)
+
   const refresh = await obfuscate(password)
 
   auth.set({
@@ -49,4 +53,55 @@ const login = async (_prevState, formData) => {
   return { user }
 }
 
-export default login
+const loggedInUser = () => {
+  // const storedConfigUrl = configUrl.get()
+  // if (!storedConfigUrl) {
+  //   return invalidLoggedIn()
+  // }
+
+  // const { error: configError } = await endpoints()
+
+  // if (!!configError) {
+  //   return invalidLoggedIn()
+  // }
+
+  const user = appUser.get()
+  if (!user) {
+    return invalidLoggedIn()
+  }
+
+  const { token } = auth.get()
+  if (!token) {
+    return invalidLoggedIn()
+  }
+
+  const { role, username } = decodeJwt(token)
+  if (user.name !== username || user.role !== role) {
+    return invalidLoggedIn()
+  }
+
+  return user
+}
+
+const invalidLoggedIn = () => {
+  appUser.clear()
+  auth.clear()
+  return {}
+}
+
+const isLoggedIn = () => {
+  const user = appUser.get()
+  if (!user || _.isEmpty(user)) {
+    return false
+  }
+
+  const { token } = auth.get()
+  if (!token) {
+    return false
+  }
+
+  const { role, username } = decodeJwt(token)
+  return user.name === username || user.role === role
+}
+
+export { login, loggedInUser, isLoggedIn }

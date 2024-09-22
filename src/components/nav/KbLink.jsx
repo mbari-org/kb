@@ -37,7 +37,7 @@ const KbLink = ({ text, to }) => {
 
   const onNav = event => {
     const panel = event.target.pathname.split("/").at(2)
-    updateUser({ panel: panel })
+    updateUser({ panel })
   }
 
   return (

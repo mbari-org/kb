@@ -15,16 +15,15 @@ import kbTheme from "@/themes/kb"
 import AuthProvider from "@/components/auth/AuthProvider"
 import AuthRoute from "@/components/auth/AuthRoute"
 
-import KnowledgeBase from "@/components/KnowledgeBase"
-
 import Login from "@/components/login/Login"
 
-import AboutHelp from "./panels/AboutHelp"
+import KnowledgeBase from "@/components/KnowledgeBase"
+import AboutHelp from "@/components/panels/AboutHelp"
 import Concepts from "@/components/panels/Concepts"
-import Embargoes from "./panels/Embargoes"
-import History from "./panels/History"
+import Embargoes from "@/components/panels/Embargoes"
+import History from "@/components/panels/History"
 import ImportExport from "@/components/panels/ImportExport"
-import Notes from "./panels/Notes"
+import Notes from "@/components/panels/Notes"
 import References from "@/components/panels/References"
 import Templates from "@/components/panels/Templates"
 

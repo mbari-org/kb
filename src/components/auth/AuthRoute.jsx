@@ -1,13 +1,10 @@
 import React from "react"
 import { Navigate, Outlet } from "react-router-dom"
 
-import { useAuth } from "./AuthProvider"
-import { isTokenValid } from "@/lib/auth/token"
+import { isLoggedIn } from "@/lib/auth/login"
 
-const AuthRoute = () => {
-  const { user } = useAuth()
-
-  return <>{!isTokenValid(user) ? <Navigate to="/login" /> : <Outlet />}</>
-}
+const AuthRoute = () => (
+  <>{isLoggedIn() ? <Outlet /> : <Navigate to="/login" />}</>
+)
 
 export default AuthRoute

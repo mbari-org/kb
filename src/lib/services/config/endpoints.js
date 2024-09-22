@@ -5,12 +5,12 @@ let cached = {
   url: null,
 }
 
-const endpoints = async configUrl => {
-  if (!configUrl) {
+const endpoints = async () => {
+  if (!!cached.endpoints) {
     return cached
   }
 
-  configUrlStore.set(configUrl)
+  const configUrl = configUrlStore.get()
 
   const { endpoints, error } = await fetchConfig(configUrl)
   if (error) {
