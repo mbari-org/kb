@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "kb": "yarn build && yarn preview",
     "lint": "eslint .",
     "preview": "vite preview"
   },
