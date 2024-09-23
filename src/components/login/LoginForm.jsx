@@ -41,7 +41,7 @@ const LoginForm = ({ configIsValid }) => {
               sx={{ mt: 2 }}
               type="password"
             />
-            <SubmitError errorText={loginState?.authError} />
+            <SubmitError errorText={loginState?.error} />
           </CardContent>
           <CardActions style={{ display: "flex", justifyContent: "center" }}>
             <SubmitButton buttonText="Login" pendingText="Logging In..." />

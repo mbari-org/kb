@@ -5,7 +5,7 @@ const conceptNamesPath = "names"
 // CxNote Currently not using pagination. The payload structure is:
 //   { content: namesArray, limit: 10000, offset: 0}
 const conceptNames = async () => {
-  const namesUrl = await serviceUrl("oni", conceptNamesPath)
+  const namesUrl = serviceUrl("oni", conceptNamesPath)
   if (!!namesUrl.error) {
     return namesUrl
   }
@@ -13,7 +13,6 @@ const conceptNames = async () => {
   const response = await fetch(namesUrl.url, namesParams)
   const payload = await response.json()
 
-  // CxTBD Is this right?
   if (response.status !== 200) {
     return { error: payload.message }
   }

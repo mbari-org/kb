@@ -1,6 +1,6 @@
 import configUrlStore from "@/lib/store/configUrl"
 
-import endpointsConfig from "./endpoints"
+import { endpointsConfig } from "./endpoints"
 
 const submitConfigUrl = async (_prevState, formData) => {
   const formConfigUrl = formData.get("configUrl")

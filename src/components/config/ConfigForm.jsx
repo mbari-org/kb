@@ -23,7 +23,6 @@ const ConfigForm = ({ configIsValid, setConfigIsValid }) => {
   const handleConfigChange = event => {
     const url = event.target.value
     setConfig({ url })
-    // setConfigUrl(url)
     setConfigIsValid(false)
   }
 

@@ -2,14 +2,14 @@ import { serviceUrl } from "@/lib/services/config"
 
 const authLogin = async (username, password) => {
   try {
-    const { error, url: authUrl } = await serviceUrl("oni", "auth/login")
+    const { error, url: loginUrl } = serviceUrl("oni", "auth/login")
     if (!!error) {
       return { error }
     }
 
     const authParams = params(username, password)
 
-    const response = await fetch(authUrl, authParams)
+    const response = await fetch(loginUrl, authParams)
 
     if (response.status !== 200) {
       return authErrorMessage(response.statusText)
@@ -26,10 +26,10 @@ const authLogin = async (username, password) => {
 const params = (username, password) => {
   const auth = basicAuth(username, password)
   return {
-    credentials: "include",
+    // credentials: "include",
     headers: headers(auth),
     method: "POST",
-    // mode: "cors",
+    mode: "cors",
   }
 }
 

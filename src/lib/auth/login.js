@@ -3,11 +3,9 @@ import _ from "lodash"
 
 import { obfuscate } from "@/lib/auth/obfuscate"
 import { authLogin } from "@/lib/services/oni"
-import { endpoints } from "@/lib/services/config"
 
 import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"
-import configUrl from "@/lib/store/configUrl"
 
 const initialPanel = "concepts"
 
@@ -18,6 +16,7 @@ const login = async (_prevState, formData) => {
   const { error, _token } = await authLogin(username, password)
 
   if (!!error) {
+    console.error(error)
     // return { error }
   }
 

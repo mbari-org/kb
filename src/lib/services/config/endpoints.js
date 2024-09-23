@@ -24,7 +24,11 @@ const endpointsConfig = async url => {
 
 const fetchConfig = async url => {
   try {
-    const response = await fetch(configPath(url))
+    // This allows the user's input for config server URL to be slashed or slashless
+    const slashlessUrl = url.replace(/\/+$/, "")
+    const configPath = `${slashlessUrl}/config/endpoints`
+
+    const response = await fetch(configPath)
 
     if (response.status !== 200) {
       return { error: `Config service: ${response.statusText}` }
@@ -42,10 +46,6 @@ const fetchConfig = async url => {
   }
 }
 
-// This allows the user's input config server URL to be slashed or slashless
-const configPath = url => {
-  const slashlessUrl = url.replace(/\/+$/, "")
-  return `${slashlessUrl}/config/endpoints`
-}
+const endpoints = () => cached
 
-export default endpointsConfig
+export { endpoints, endpointsConfig }
