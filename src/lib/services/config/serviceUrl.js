@@ -1,15 +1,28 @@
-import { endpoint } from "./endpoint"
+const serviceNames = ["annosauras", "oni"]
 
-const serviceUrl = async (service, path) => {
-  const { endpoint: serviceEndpoint, error: serviceError } = await endpoint(
-    service
-  )
+const service = async serviceName => {
+  if (!serviceNames.includes(service)) {
+    return { error: `Unknown service: ${serviceName}` }
+  }
+  const { endpoints: serviceEndpoints } = await endpoints()
 
-  if (!!serviceError) {
-    return { error: serviceError }
+  const serviceEndpoint = serviceEndpoints.get(serviceName)
+
+  if (!serviceEndpoint) {
+    return { error: `No endpoint info for service: ${serviceName}` }
   }
 
-  const url = `${serviceEndpoint.url}/${path}`
+  return { endpoint: serviceEndpoint }
+}
+
+const serviceUrl = async (serviceName, path) => {
+  const { endpoint, error } = await service(serviceName)
+
+  if (!!error) {
+    return { error }
+  }
+
+  const url = `${endpoint.url}/${path}`
 
   return { url }
   // const proxyPath = `/v1/${path}`

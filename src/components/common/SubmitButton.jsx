@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles"
 
 import { useFormStatus } from "react-dom"
 
-const SubmitButton = () => {
+const SubmitButton = ({ buttonText, disabled, pendingText }) => {
   const theme = useTheme()
 
   const styles = {
@@ -12,8 +12,13 @@ const SubmitButton = () => {
 
   const { pending } = useFormStatus()
   return (
-    <Button disabled={pending} style={styles} type="submit" variant="contained">
-      {pending ? "Submit..." : "Submit"}
+    <Button
+      disabled={disabled || pending}
+      style={styles}
+      type="submit"
+      variant="contained"
+    >
+      {pending ? pendingText : buttonText}
     </Button>
   )
 }

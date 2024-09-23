@@ -15,9 +15,10 @@ import kbTheme from "@/themes/kb"
 import AuthProvider from "@/components/auth/AuthProvider"
 import AuthRoute from "@/components/auth/AuthRoute"
 
-import Login from "@/components/login/Login"
+// import LoginForm from "@/components/login/LoginForm"
+import StartUp from "@/components/StartUp"
 
-import KnowledgeBase from "@/components/KnowledgeBase"
+import KnowledgeBase from "@/components/Knowledge_Base"
 import AboutHelp from "@/components/panels/AboutHelp"
 import Concepts from "@/components/panels/Concepts"
 import Embargoes from "@/components/panels/Embargoes"
@@ -36,7 +37,7 @@ const App = () => {
           <AuthProvider>
             <Routes>
               <Route path="/" element={<Navigate to="/login" />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<StartUp />} />
               <Route element={<AuthRoute />}>
                 <Route path="/kb" element={<KnowledgeBase />}>
                   <Route path="about-help" element={<AboutHelp />} />

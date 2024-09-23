@@ -12,22 +12,13 @@ import configUrl from "@/lib/store/configUrl"
 const initialPanel = "concepts"
 
 const login = async (_prevState, formData) => {
-  const formConfigUrl = formData.get("configUrl")
-  configUrl.set(formConfigUrl)
-
-  const { error: configError } = await endpoints()
-
-  if (!!configError) {
-    return { configError }
-  }
-
   const username = formData.get("username")
   const password = formData.get("password")
 
-  const { error: authError, _token } = await authLogin(username, password)
+  const { error, _token } = await authLogin(username, password)
 
-  if (!!authError) {
-    // return { authError }
+  if (!!error) {
+    // return { error }
   }
 
   const token =
@@ -54,36 +45,25 @@ const login = async (_prevState, formData) => {
 }
 
 const loggedInUser = () => {
-  // const storedConfigUrl = configUrl.get()
-  // if (!storedConfigUrl) {
-  //   return invalidLoggedIn()
-  // }
-
-  // const { error: configError } = await endpoints()
-
-  // if (!!configError) {
-  //   return invalidLoggedIn()
-  // }
-
   const user = appUser.get()
   if (!user) {
-    return invalidLoggedIn()
+    return clearLoggedIn()
   }
 
   const { token } = auth.get()
   if (!token) {
-    return invalidLoggedIn()
+    return clearLoggedIn()
   }
 
   const { role, username } = decodeJwt(token)
   if (user.name !== username || user.role !== role) {
-    return invalidLoggedIn()
+    return clearLoggedIn()
   }
 
   return user
 }
 
-const invalidLoggedIn = () => {
+const clearLoggedIn = () => {
   appUser.clear()
   auth.clear()
   return {}

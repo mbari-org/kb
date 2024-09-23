@@ -5,28 +5,26 @@ let cached = {
   url: null,
 }
 
-const endpoints = async () => {
+const endpointsConfig = async url => {
   if (!!cached.endpoints) {
     return cached
   }
 
-  const configUrl = configUrlStore.get()
-
-  const { endpoints, error } = await fetchConfig(configUrl)
+  const { endpoints, error } = await fetchConfig(url)
   if (error) {
-    return { error: error }
+    return { error, url }
   }
   cached = {
     endpoints,
-    url: configUrl,
+    url,
   }
 
   return cached
 }
 
-const fetchConfig = async configUrl => {
+const fetchConfig = async url => {
   try {
-    const response = await fetch(configPath(configUrl))
+    const response = await fetch(configPath(url))
 
     if (response.status !== 200) {
       return { error: `Config service: ${response.statusText}` }
@@ -40,7 +38,7 @@ const fetchConfig = async configUrl => {
       return { endpoints: endpointsMap }
     }
   } catch {
-    return { error: `Config service: Failed access` }
+    return { error: `Config service: Failed access`, url }
   }
 }
 
@@ -50,4 +48,4 @@ const configPath = url => {
   return `${slashlessUrl}/config/endpoints`
 }
 
-export default endpoints
+export default endpointsConfig
