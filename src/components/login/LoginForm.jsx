@@ -1,4 +1,4 @@
-import { useActionState, useEffect } from "react"
+import { use, useActionState, useEffect } from "react"
 
 import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 
@@ -7,10 +7,10 @@ import SubmitError from "@/components/common/SubmitError"
 
 import { login } from "@/lib/auth/login"
 
-import { useAuth } from "@/components/auth/Auth_Provider"
+import AuthContext from "@/components/auth/AuthContext"
 
 const LoginForm = ({ configIsValid }) => {
-  const { updateUser } = useAuth()
+  const { updateUser } = use(AuthContext)
 
   const [loginState, loginAction] = useActionState(login, null)
 

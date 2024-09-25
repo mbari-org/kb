@@ -1,14 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import _ from "lodash"
+
+import AuthContext from "@/components/auth/AuthContext"
 
 import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"
 
 import { loggedInUser } from "@/lib/auth/login"
-
-const AuthContext = createContext()
-AuthContext.displayName = "Auth Context"
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
@@ -48,7 +47,3 @@ const AuthProvider = ({ children }) => {
 }
 
 export default AuthProvider
-
-export const useAuth = () => {
-  return useContext(AuthContext)
-}

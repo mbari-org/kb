@@ -1,12 +1,12 @@
-import { useState } from "react"
+import { use, useState } from "react"
 import { NavLink } from "react-router-dom"
 
 import { useTheme } from "@emotion/react"
 
-import { useAuth } from "@/components/auth/Auth_Provider"
+import AuthContext from "@/components/auth/AuthContext"
 
 const KbLink = ({ text, to }) => {
-  const { updateUser } = useAuth()
+  const { updateUser } = use(AuthContext)
 
   const [isHovering, setIsHovering] = useState(false)
 

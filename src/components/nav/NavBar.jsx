@@ -1,11 +1,13 @@
+import { use } from "react"
+
 import { AppBar, Toolbar, Button } from "@mui/material"
 
-import { useAuth } from "@/components/auth/Auth_Provider"
+import AuthContext from "@/components/auth/AuthContext"
 
 import KbLink from "./KbLink"
 
 const NavBar = () => {
-  const { logout } = useAuth()
+  const { logout } = use(AuthContext)
 
   return (
     <AppBar position="static">

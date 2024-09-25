@@ -12,7 +12,7 @@ import { ThemeProvider } from "@mui/material/styles"
 
 import kbTheme from "@/themes/kb"
 
-import AuthProvider from "@/components/auth/Auth_Provider"
+import AuthProvider from "@/components/auth/AuthProvider"
 import AuthRoute from "@/components/auth/AuthRoute"
 
 import StartUp from "@/components/StartUp"
