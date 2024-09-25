@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 
 import { useTheme } from "@emotion/react"
 
-import { useAuth } from "@/components/auth/AuthProvider"
+import { useAuth } from "@/components/auth/Auth_Provider"
 
 const KbLink = ({ text, to }) => {
   const { updateUser } = useAuth()

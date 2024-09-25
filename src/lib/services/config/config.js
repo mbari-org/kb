@@ -1,6 +1,6 @@
 import configUrlStore from "@/lib/store/configUrl"
 
-import { endpointsConfig } from "./endpoints"
+import { fetchEndpoints } from "./endpoints"
 
 const submitConfigUrl = async (_prevState, formData) => {
   const formConfigUrl = formData.get("configUrl")
@@ -13,7 +13,7 @@ const setConfigUrl = async url => {
     return { url }
   }
   configUrlStore.set(url)
-  return endpointsConfig(url)
+  return fetchEndpoints(url)
 }
 
 export { setConfigUrl, submitConfigUrl }

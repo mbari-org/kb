@@ -26,7 +26,7 @@ const authLogin = async (username, password) => {
 const params = (username, password) => {
   const auth = basicAuth(username, password)
   return {
-    // credentials: "include",
+    credentials: "include",
     headers: headers(auth),
     method: "POST",
     mode: "cors",

@@ -1,51 +1,51 @@
-import configUrlStore from "@/lib/store/configUrl"
-
-let cached = {
+const EMPTY_CONFIG = {
   endpoints: null,
   url: null,
 }
 
-const endpointsConfig = async url => {
-  if (!!cached.endpoints) {
-    return cached
-  }
+let config = EMPTY_CONFIG
+
+const fetchEndpoints = async url => {
+  config = EMPTY_CONFIG
 
   const { endpoints, error } = await fetchConfig(url)
   if (error) {
     return { error, url }
   }
-  cached = {
+  config = {
     endpoints,
     url,
   }
 
-  return cached
+  return config
 }
 
 const fetchConfig = async url => {
   try {
     // This allows the user's input for config server URL to be slashed or slashless
     const slashlessUrl = url.replace(/\/+$/, "")
-    const configPath = `${slashlessUrl}/config/endpoints`
+    const configPath = `${slashlessUrl}/endpoints`
 
-    const response = await fetch(configPath)
-
+    const response = await fetch(configPath, {
+      method: "GET",
+      mode: "cors",
+    })
     if (response.status !== 200) {
       return { error: `Config service: ${response.statusText}` }
-    } else {
-      const endpoints = await response.json()
-      const endpointsMap = endpoints.reduce((acc, obj) => {
-        acc.set(obj.name, obj)
-        return acc
-      }, new Map())
-
-      return { endpoints: endpointsMap }
     }
+
+    const endpointsJson = await response.json()
+    const endpoints = endpointsJson.reduce((acc, obj) => {
+      acc.set(obj.name, obj)
+      return acc
+    }, new Map())
+
+    return { endpoints }
   } catch {
     return { error: `Config service: Failed access`, url }
   }
 }
 
-const endpoints = () => cached
+const endpoints = () => config
 
-export { endpoints, endpointsConfig }
+export { endpoints, fetchEndpoints }

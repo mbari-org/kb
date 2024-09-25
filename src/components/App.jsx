@@ -12,13 +12,12 @@ import { ThemeProvider } from "@mui/material/styles"
 
 import kbTheme from "@/themes/kb"
 
-import AuthProvider from "@/components/auth/AuthProvider"
+import AuthProvider from "@/components/auth/Auth_Provider"
 import AuthRoute from "@/components/auth/AuthRoute"
 
-// import LoginForm from "@/components/login/LoginForm"
 import StartUp from "@/components/StartUp"
 
-import KnowledgeBase from "@/components/Knowledge_Base"
+import KnowledgeBase from "@/components/KnowledgeBase"
 import AboutHelp from "@/components/panels/AboutHelp"
 import Concepts from "@/components/panels/Concepts"
 import Embargoes from "@/components/panels/Embargoes"

@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Button } from "@mui/material"
 
-import { useAuth } from "@/components/auth/AuthProvider"
+import { useAuth } from "@/components/auth/Auth_Provider"
 
 import KbLink from "./KbLink"
 

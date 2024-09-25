@@ -8,14 +8,13 @@ const serviceUrl = (serviceName, path) => {
   }
   const { endpoints: serviceEndpoints } = endpoints()
 
-  const serviceEndpoint = serviceEndpoints.get(serviceName)
+  const serviceEndpoint = serviceEndpoints?.get(serviceName)
 
   if (!serviceEndpoint) {
     return { error: `No endpoint info for service: ${serviceName}` }
   }
-  const url = `${serviceEndpoint.url}/${path}`
 
-  return { url }
+  return { url: `${serviceEndpoint.url}/${path}` }
 }
 
 export default serviceUrl
