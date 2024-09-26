@@ -1,6 +1,9 @@
-import { serviceUrl } from "@/lib/services/config"
+import { use } from "react"
+
+import ConfigContext from "@/components/config/ConfigContext"
 
 const authLogin = async (username, password) => {
+  const { serviceUrl } = use(ConfigContext)
   try {
     const { error, url: loginUrl } = serviceUrl("oni", "auth/login")
     if (!!error) {
@@ -53,7 +56,7 @@ const authErrorMessage = statusText => {
       message = "Invalid Username/Password"
       break
     default:
-      message = "An unknown error occurred.\n Please contact support."
+      message = `An unknown error occurred: ${statusText}\nPlease contact support.`
   }
   return { error: message }
 }

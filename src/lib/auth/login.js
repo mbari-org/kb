@@ -7,7 +7,7 @@ import { authLogin } from "@/lib/services/oni"
 import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"
 
-const initialPanel = "concepts"
+const initialPanel = "Concepts"
 
 const login = async (_prevState, formData) => {
   const username = formData.get("username")
@@ -16,7 +16,7 @@ const login = async (_prevState, formData) => {
   const { error, _token } = await authLogin(username, password)
 
   if (!!error) {
-    console.error(error)
+    console.error(`Login error: ${error}`)
     // return { error }
   }
 

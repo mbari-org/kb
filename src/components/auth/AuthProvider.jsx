@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import _ from "lodash"
 
@@ -11,34 +11,33 @@ import { loggedInUser } from "@/lib/auth/login"
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
-  const navigateToPanel = user => navigate(`/kb/${user.panel}`)
 
   const [user, setUser] = useState(null)
 
   const updateUser = update => {
-    if (user === null) {
-      setUser(update)
-      return
-    }
+    const updated = { ...user, ...update }
 
     if (!_.isEqual(user, update)) {
-      const updated = { ...user, ...update }
-      setUser(updated)
       appUser.set(updated)
-      navigateToPanel(updated)
+      setUser(updated)
+    }
+
+    if (_.isEmpty(user)) {
+      navigate("/kb")
     }
   }
 
   const logout = () => {
-    appUser.clear()
     auth.clear()
-    navigate("/")
+    appUser.clear()
+    setUser({})
+    navigate("/login")
   }
 
   useEffect(() => {
     const storedUser = loggedInUser(user)
     setUser(storedUser)
-    _.isEmpty(storedUser) ? navigate("/login") : navigateToPanel(storedUser)
+    _.isEmpty(storedUser) ? navigate("/login") : navigate("/kb")
   }, [])
 
   return (

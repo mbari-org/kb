@@ -1,29 +1,23 @@
-import { use } from "react"
+import { AppBar, Toolbar } from "@mui/material"
 
-import { AppBar, Toolbar, Button } from "@mui/material"
+import PanelLink from "./PanelLink"
+import LogoutLink from "./LogoutLink.jsx"
 
-import AuthContext from "@/components/auth/AuthContext"
-
-import KbLink from "./KbLink"
-
-const NavBar = () => {
-  const { logout } = use(AuthContext)
-
+const NavBar = ({ activeTitle, titles, selectPanel }) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <KbLink text="Concepts" to="/kb/concepts" />
-        <KbLink text="Templates" to="/kb/templates" />
-        <KbLink text="References" to="/kb/references" />
-        <KbLink text="Embargoes" to="/kb/embargoes" />
-        <KbLink text="History" to="/kb/history" />
-        <KbLink text="Notes" to="/kb/notes" />
-        <KbLink text="Import/Export" to="/kb/import-export" />
-        <KbLink text="About/Help" to="/kb/about-help" />
+        {titles.map(title => (
+          <PanelLink
+            id={`nav-link-${title}`}
+            isActive={title === activeTitle}
+            key={title}
+            selectPanel={selectPanel}
+            title={title}
+          />
+        ))}
         <div style={{ flexGrow: 1 }} />
-        <Button color="inherit" onClick={logout}>
-          Logout
-        </Button>
+        <LogoutLink />
       </Toolbar>
     </AppBar>
   )

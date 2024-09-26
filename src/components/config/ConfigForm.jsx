@@ -1,38 +1,31 @@
-import { useActionState, useEffect, useState } from "react"
+import { use, useActionState, useEffect, useState } from "react"
 
 import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
+
+import ConfigContext from "@/components/config/ConfigContext"
 
 import SubmitButton from "@/components/common/SubmitButton"
 import SubmitError from "@/components/common/SubmitError"
 
-import { setConfigUrl } from "@/lib/services/config/config"
-import configUrlStore from "@/lib/store/configUrl"
+const ConfigForm = () => {
+  const { config, updateConfigUrl } = use(ConfigContext)
 
-const ConfigForm = ({ configIsValid, setConfigIsValid }) => {
-  const [config, setConfig] = useState(null)
-
+  const [configUrl, setConfigUrl] = useState(null)
   const submitConfigUrl = async (_prevState, formData) => {
     const formConfigUrl = formData.get("configUrl")
-    const result = await setConfigUrl(formConfigUrl)
-    setConfigIsValid(!!result.url && !result.error)
-    return result
+    return updateConfigUrl(formConfigUrl)
   }
 
   const [configState, configAction] = useActionState(submitConfigUrl, "")
 
   const handleConfigChange = event => {
     const url = event.target.value
-    setConfig({ url })
-    setConfigIsValid(false)
+    setConfigUrl(url)
   }
 
   useEffect(() => {
-    const storedConfigUrl = configUrlStore.get()
-    setConfigUrl(storedConfigUrl).then(result => {
-      setConfig(result)
-      setConfigIsValid(!!result.url && !result.error)
-    })
-  }, [])
+    setConfigUrl(config?.url)
+  })
 
   return (
     <Box component="form" action={configAction}>
@@ -47,14 +40,14 @@ const ConfigForm = ({ configIsValid, setConfigIsValid }) => {
             onChange={handleConfigChange}
             required
             sx={{ mt: 1 }}
-            value={config?.url || ""}
+            value={configUrl || ""}
           />
           <SubmitError errorText={config?.error || configState?.error || ""} />
         </CardContent>
         <CardActions style={{ display: "flex", justifyContent: "center" }}>
           <SubmitButton
             buttonText="Set"
-            disabled={configIsValid}
+            disabled={config?.valid}
             pendingText="Setting..."
           />
         </CardActions>

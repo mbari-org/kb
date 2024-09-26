@@ -9,7 +9,7 @@ import { login } from "@/lib/auth/login"
 
 import AuthContext from "@/components/auth/AuthContext"
 
-const LoginForm = ({ configIsValid }) => {
+const LoginForm = () => {
   const { updateUser } = use(AuthContext)
 
   const [loginState, loginAction] = useActionState(login, null)
@@ -20,34 +20,32 @@ const LoginForm = ({ configIsValid }) => {
 
   return (
     <Box component="form" action={loginAction} sx={{ minHeight: "300px" }}>
-      {configIsValid && (
-        <Card>
-          <CardContent>
-            <TextField
-              id="login-user"
-              className="field"
-              fullWidth={true}
-              label="Username"
-              name="username"
-              required
-            />
-            <TextField
-              id="login-password"
-              className="field"
-              fullWidth={true}
-              label="Password"
-              name="password"
-              required
-              sx={{ mt: 2 }}
-              type="password"
-            />
-            <SubmitError errorText={loginState?.error} />
-          </CardContent>
-          <CardActions style={{ display: "flex", justifyContent: "center" }}>
-            <SubmitButton buttonText="Login" pendingText="Logging In..." />
-          </CardActions>
-        </Card>
-      )}
+      <Card>
+        <CardContent>
+          <TextField
+            id="login-user"
+            className="field"
+            fullWidth={true}
+            label="Username"
+            name="username"
+            required
+          />
+          <TextField
+            id="login-password"
+            className="field"
+            fullWidth={true}
+            label="Password"
+            name="password"
+            required
+            sx={{ mt: 2 }}
+            type="password"
+          />
+          <SubmitError errorText={loginState?.error} />
+        </CardContent>
+        <CardActions style={{ display: "flex", justifyContent: "center" }}>
+          <SubmitButton buttonText="Login" pendingText="Logging In..." />
+        </CardActions>
+      </Card>
     </Box>
   )
 }

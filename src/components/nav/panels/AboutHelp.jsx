@@ -4,10 +4,9 @@ const AboutHelp = () => {
   return (
     <>
       <Typography align="center" sx={{ mt: 3, mb: 1 }} variant="h3">
-        About/Help
+        AboutHelp
       </Typography>
     </>
   )
 }
-
 export default AboutHelp

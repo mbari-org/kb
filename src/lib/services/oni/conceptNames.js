@@ -1,10 +1,14 @@
-import { serviceUrl } from "@/lib/services/config"
+import { use } from "react"
+
+import ConfigContext from "@/components/config/ConfigContext"
 
 const conceptNamesPath = "names"
 
 // CxNote Currently not using pagination. The payload structure is:
 //   { content: namesArray, limit: 10000, offset: 0}
 const conceptNames = async () => {
+  const { serviceUrl } = use(ConfigContext)
+
   const namesUrl = serviceUrl("oni", conceptNamesPath)
   if (!!namesUrl.error) {
     return namesUrl

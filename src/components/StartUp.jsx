@@ -1,14 +1,16 @@
-import { useState } from "react"
+import { use } from "react"
 
 import { Box } from "@mui/material"
 
 import mbariLogo from "@/assets/login-logo.png"
 
+import ConfigContext from "@/components/config/ConfigContext"
+
 import ConfigForm from "@/components/config/ConfigForm"
 import LoginForm from "@/components/login/LoginForm"
 
 const StartUp = () => {
-  const [configIsValid, setConfigIsValid] = useState(false)
+  const { config } = use(ConfigContext)
 
   return (
     <Box
@@ -38,11 +40,8 @@ const StartUp = () => {
             width: "300px",
           }}
         />
-        <ConfigForm
-          configIsValid={configIsValid}
-          setConfigIsValid={setConfigIsValid}
-        />
-        <LoginForm configIsValid={configIsValid} />
+        <ConfigForm />
+        {config?.valid && <LoginForm />}
       </Box>
     </Box>
   )
