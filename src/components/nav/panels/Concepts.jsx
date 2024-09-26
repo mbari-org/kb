@@ -1,23 +1,19 @@
-import { useEffect, useState } from "react"
+import { use } from "react"
 
 import { Typography } from "@mui/material"
 
-import { conceptNames as oniConceptNames } from "@/lib/services/oni"
+import ConfigContext from "@/components/config/ConfigContext"
 
 const Concepts = () => {
-  const [conceptNames, setConceptNames] = useState([])
+  const { config } = use(ConfigContext)
 
-  useEffect(() => {
-    const fetchConceptNames = async () => {
-      try {
-        const conceptNames = await oniConceptNames()
-        setConceptNames(conceptNames)
-      } catch (error) {
-        console.error("Error fetching oni concept names:", error)
-      }
-    }
-    fetchConceptNames()
-  }, [])
+  if (!config || config.conceptNamesFetch.error) {
+    return null
+  }
+
+  const conceptNames = config.conceptNamesFetch.names
+
+  console.log("Num fetched concept names: ", conceptNames.length)
 
   return (
     <>

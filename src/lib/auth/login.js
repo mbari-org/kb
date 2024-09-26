@@ -2,18 +2,15 @@ import { decodeJwt } from "jose"
 import _ from "lodash"
 
 import { obfuscate } from "@/lib/auth/obfuscate"
-import { authLogin } from "@/lib/services/oni"
+import authLogin from "@/lib/services/oni/authLogin"
 
 import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"
 
 const initialPanel = "Concepts"
 
-const login = async (_prevState, formData) => {
-  const username = formData.get("username")
-  const password = formData.get("password")
-
-  const { error, _token } = await authLogin(username, password)
+const login = async (getServiceUrl, username, password) => {
+  const { error, _token } = await authLogin(getServiceUrl, username, password)
 
   if (!!error) {
     console.error(`Login error: ${error}`)

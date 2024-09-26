@@ -7,10 +7,11 @@ import ConfigContext from "@/components/config/ConfigContext"
 import SubmitButton from "@/components/common/SubmitButton"
 import SubmitError from "@/components/common/SubmitError"
 
-const ConfigForm = () => {
+const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const { config, updateConfigUrl } = use(ConfigContext)
 
   const [configUrl, setConfigUrl] = useState(null)
+
   const submitConfigUrl = async (_prevState, formData) => {
     const formConfigUrl = formData.get("configUrl")
     return updateConfigUrl(formConfigUrl)
@@ -21,11 +22,12 @@ const ConfigForm = () => {
   const handleConfigChange = event => {
     const url = event.target.value
     setConfigUrl(url)
+    setConfigIsDirty(!!url && url !== config.url)
   }
 
   useEffect(() => {
-    setConfigUrl(config?.url)
-  })
+    setConfigUrl(config?.url || "")
+  }, [config])
 
   return (
     <Box component="form" action={configAction}>
@@ -47,7 +49,7 @@ const ConfigForm = () => {
         <CardActions style={{ display: "flex", justifyContent: "center" }}>
           <SubmitButton
             buttonText="Set"
-            disabled={config?.valid}
+            disabled={!configIsDirty}
             pendingText="Setting..."
           />
         </CardActions>

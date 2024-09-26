@@ -2,68 +2,55 @@ import { useEffect, useState } from "react"
 
 import configUrlStore from "@/lib/store/configUrl"
 import fetchEndpoints from "@/lib/services/config/fetchEndpoints"
+import fetchConceptNames from "@/lib/services/oni/fetchConceptNames"
 
 import ConfigContext from "@/components/config/ConfigContext"
 
-const serviceNames = ["annosaurus", "oni"]
+import createServiceUrl from "@/lib/services/config/createServiceUrl"
 
 const ConfigProvider = ({ children }) => {
   const [config, setConfig] = useState(null)
-  const [endpoints, setEndpoints] = useState(null)
 
-  const updateEndpoints = async url => {
+  const updateConfig = async url => {
     const { endpoints: allEndpoints, error } = await fetchEndpoints(url)
 
-    setConfig({
-      error,
-      url,
-      valid: !!allEndpoints,
-    })
-
     if (!!allEndpoints) {
-      const serviceEndpoints = allEndpoints
-        .filter(endpoint => serviceNames.includes(endpoint.name))
-        .reduce((acc, obj) => {
-          acc.set(obj.name, obj)
-          return acc
-        }, new Map())
+      const getServiceUrl = createServiceUrl(allEndpoints)
+      const { url: conceptNamesUrl } = getServiceUrl("oni", "names")
+      const conceptNamesFetch = await fetchConceptNames(conceptNamesUrl)
 
-      setEndpoints(serviceEndpoints)
+      setConfig({
+        conceptNamesFetch,
+        getServiceUrl,
+        url,
+        valid: true,
+      })
+    } else {
+      setConfig({
+        error,
+        url,
+        valid: false,
+      })
     }
   }
 
-  const updateConfigUrl = async url => {
+  const setConfigUrl = async url => {
     if (url === null) {
       return { url }
     }
     configUrlStore.set(url)
-    updateEndpoints(url)
-  }
-
-  const serviceUrl = (serviceName, path) => {
-    if (!serviceNames.includes(serviceName)) {
-      return { error: `Unknown service: ${serviceName}` }
-    }
-    const serviceEndpoint = endpoints?.get(serviceName)
-
-    if (!serviceEndpoint) {
-      return { error: `No endpoint info for service: ${serviceName}` }
-    }
-
-    return { url: `${serviceEndpoint.url}/${path}` }
+    updateConfig(url)
   }
 
   useEffect(() => {
     const storedConfigUrl = configUrlStore.get()
     if (!!storedConfigUrl) {
-      updateEndpoints(storedConfigUrl)
+      updateConfig(storedConfigUrl)
     }
   }, [])
 
   return (
-    <ConfigContext value={{ config, serviceUrl, updateConfigUrl }}>
-      {children}
-    </ConfigContext>
+    <ConfigContext value={{ config, setConfigUrl }}>{children}</ConfigContext>
   )
 }
 

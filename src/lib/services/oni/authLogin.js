@@ -1,11 +1,8 @@
 import { use } from "react"
 
-import ConfigContext from "@/components/config/ConfigContext"
-
-const authLogin = async (username, password) => {
-  const { serviceUrl } = use(ConfigContext)
+const authLogin = async (getServiceUrl, username, password) => {
   try {
-    const { error, url: loginUrl } = serviceUrl("oni", "auth/login")
+    const { error, url: loginUrl } = getServiceUrl("oni", "auth/login")
     if (!!error) {
       return { error }
     }

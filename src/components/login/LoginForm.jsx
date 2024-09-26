@@ -5,14 +5,22 @@ import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 import SubmitButton from "@/components/common/SubmitButton"
 import SubmitError from "@/components/common/SubmitError"
 
-import { login } from "@/lib/auth/login"
-
 import AuthContext from "@/components/auth/AuthContext"
+import ConfigContext from "@/components/config/ConfigContext"
+
+import { login } from "@/lib/auth/login"
 
 const LoginForm = () => {
   const { updateUser } = use(AuthContext)
+  const { config } = use(ConfigContext)
 
-  const [loginState, loginAction] = useActionState(login, null)
+  const submitLogin = async (_prevState, formData) => {
+    const username = formData.get("username")
+    const password = formData.get("password")
+
+    return login(config.getServiceUrl, username, password)
+  }
+  const [loginState, loginAction] = useActionState(submitLogin, null)
 
   useEffect(() => {
     loginState?.user && updateUser(loginState.user)

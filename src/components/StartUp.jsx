@@ -1,4 +1,4 @@
-import { use } from "react"
+import { use, useEffect, useState } from "react"
 
 import { Box } from "@mui/material"
 
@@ -11,6 +11,11 @@ import LoginForm from "@/components/login/LoginForm"
 
 const StartUp = () => {
   const { config } = use(ConfigContext)
+  const [configIsDirty, setConfigIsDirty] = useState(true)
+
+  useEffect(() => {
+    setConfigIsDirty(!config?.valid)
+  }, [config])
 
   return (
     <Box
@@ -40,8 +45,11 @@ const StartUp = () => {
             width: "300px",
           }}
         />
-        <ConfigForm />
-        {config?.valid && <LoginForm />}
+        <ConfigForm
+          configIsDirty={configIsDirty}
+          setConfigIsDirty={setConfigIsDirty}
+        />
+        {!configIsDirty && <LoginForm />}
       </Box>
     </Box>
   )
