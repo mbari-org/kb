@@ -14,6 +14,7 @@ import kbTheme from "@/themes/kb"
 
 import AuthProvider from "@/contexts/auth/AuthProvider"
 import ConfigProvider from "@/contexts/config/ConfigProvider"
+import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
 
 import AuthRoute from "@/components/auth/AuthRoute"
 
@@ -28,14 +29,16 @@ const App = () => {
         <Router>
           <ConfigProvider>
             <AuthProvider>
-              <Routes>
-                <Route path="/" element={<Navigate to="/login" />} />
-                <Route path="/login" element={<StartUp />} />
-                <Route element={<AuthRoute />}>
-                  <Route path="/kb" element={<KnowledgeBase />}></Route>
-                </Route>
-                <Route path="*" element={<Navigate to="/login" replace />} />
-              </Routes>
+              <TaxonomyProvider>
+                <Routes>
+                  <Route path="/" element={<Navigate to="/login" />} />
+                  <Route path="/login" element={<StartUp />} />
+                  <Route element={<AuthRoute />}>
+                    <Route path="/kb" element={<KnowledgeBase />}></Route>
+                  </Route>
+                  <Route path="*" element={<Navigate to="/login" replace />} />
+                </Routes>
+              </TaxonomyProvider>
             </AuthProvider>
           </ConfigProvider>
         </Router>

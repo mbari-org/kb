@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 
-import configUrlStore from "@/lib/store/configUrl"
-import fetchEndpoints from "@/lib/services/config/fetchEndpoints"
-import fetchConceptNames from "@/lib/services/oni/fetchConceptNames"
-
 import ConfigContext from "@/contexts/config/ConfigContext"
 
+import fetchEndpoints from "@/lib/services/config/fetchEndpoints"
+import fetchConceptNames from "@/lib/services/oni/fetchConceptNames"
 import createServiceUrl from "@/lib/services/config/createServiceUrl"
+
+import configUrlStore from "@/lib/store/configUrl"
 
 const ConfigProvider = ({ children }) => {
   const [config, setConfig] = useState(null)
