@@ -7,7 +7,7 @@ import mbariLogo from "@/assets/login-logo.png"
 import ConfigContext from "@/components/config/ConfigContext"
 
 import ConfigForm from "@/components/config/ConfigForm"
-import LoginForm from "@/components/login/LoginForm"
+import LoginForm from "@/components/auth/LoginForm"
 
 const StartUp = () => {
   const { config } = use(ConfigContext)
