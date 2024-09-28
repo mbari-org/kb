@@ -1,7 +1,6 @@
 const authLogin = async (getServiceUrl, username, password) => {
   try {
     const { error, url: oniUrl } = getServiceUrl("oni")
-
     if (!!error) {
       return { error }
     }

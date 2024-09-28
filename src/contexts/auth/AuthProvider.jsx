@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
   const logout = () => {
     auth.clear()
     appUser.clear()
-    setUser({})
+    setUser(null)
     navigate("/login")
   }
 

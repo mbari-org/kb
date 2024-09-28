@@ -23,29 +23,25 @@ const panels = [
   { mod: ImportExport, title: "Import/Export" },
   { mod: AboutHelp, title: "About/Help" },
 ]
-const panelTitles = panels.map(({ title }) => title)
-
-const findPanel = title =>
-  panels.find(({ title: panelTitle }) => title === panelTitle)
-
 const KnowledgeBase = () => {
   const { updateUser, user } = use(AuthContext)
 
+  // CxNote panel is just the title (immutable string and to match user.panel)
   const [panel, setPanel] = useState(null)
   const [isPending, startTransition] = useTransition()
 
   const selectPanel = panelTitle => {
-    startTransition(() => {
-      const activatePanel = findPanel(panelTitle)
-      setPanel(activatePanel)
-      updateUser({ panel: panelTitle })
-    })
+    if (panelTitle !== panel) {
+      startTransition(() => {
+        setPanel(panelTitle)
+        updateUser({ panel: panelTitle })
+      })
+    }
   }
 
   useEffect(() => {
     if (user && !panel) {
-      const userPanel = findPanel(user.panel)
-      setPanel(userPanel)
+      setPanel(user.panel)
     }
   }, [user, panel])
 
@@ -56,12 +52,12 @@ const KnowledgeBase = () => {
   return (
     <>
       <NavBar
-        activeTitle={panel.title}
-        titles={panelTitles}
+        activePanel={panel}
+        titles={panels.map(({ title }) => title)}
         selectPanel={selectPanel}
       />
       {panels.map(navPanel => {
-        return navPanel.title === panel.title ? (
+        return navPanel.title === panel ? (
           <navPanel.mod
             id={`nav-panel-${navPanel.title}`}
             key={navPanel.title}

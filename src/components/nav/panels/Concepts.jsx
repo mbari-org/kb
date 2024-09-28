@@ -2,18 +2,14 @@ import { use } from "react"
 
 import { Typography } from "@mui/material"
 
-import ConfigContext from "@/contexts/config/ConfigContext"
+import ConceptsContext from "@/contexts/concepts/ConceptsContext"
 
 const Concepts = () => {
-  const { config } = use(ConfigContext)
+  const { concepts } = use(ConceptsContext)
 
-  if (!config || config.conceptNamesFetch.error) {
+  if (!concepts) {
     return null
   }
-
-  const conceptNames = config.conceptNamesFetch.names
-
-  console.log("Num fetched concept names: ", conceptNames.length)
 
   return (
     <>
