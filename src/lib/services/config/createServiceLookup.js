@@ -1,4 +1,4 @@
-const createServiceUrl = endpoints => {
+const createServiceLookup = endpoints => {
   const serviceNames = ["annosaurus", "oni"]
 
   const serviceEndpoints = endpoints
@@ -8,7 +8,7 @@ const createServiceUrl = endpoints => {
       return acc
     }, new Map())
 
-  return (serviceName, path) => {
+  return serviceName => {
     if (!serviceNames.includes(serviceName)) {
       return { error: `Unknown service: ${serviceName}` }
     }
@@ -20,8 +20,8 @@ const createServiceUrl = endpoints => {
       }
     }
 
-    return { url: `${serviceEndpoint.url}/${path}` }
+    return { url: serviceEndpoint.url }
   }
 }
 
-export default createServiceUrl
+export default createServiceLookup

@@ -3,8 +3,7 @@ import { useEffect, useState } from "react"
 import ConfigContext from "@/contexts/config/ConfigContext"
 
 import fetchEndpoints from "@/lib/services/config/fetchEndpoints"
-import fetchConceptNames from "@/lib/services/oni/fetchConceptNames"
-import createServiceUrl from "@/lib/services/config/createServiceUrl"
+import createServiceLookup from "@/lib/services/config/createServiceLookup"
 
 import configUrlStore from "@/lib/store/configUrl"
 
@@ -15,12 +14,9 @@ const ConfigProvider = ({ children }) => {
     const { endpoints: allEndpoints, error } = await fetchEndpoints(url)
 
     if (!!allEndpoints) {
-      const getServiceUrl = createServiceUrl(allEndpoints)
-      const { url: conceptNamesUrl } = getServiceUrl("oni", "names")
-      const conceptNamesFetch = await fetchConceptNames(conceptNamesUrl)
+      const getServiceUrl = createServiceLookup(allEndpoints)
 
       setConfig({
-        conceptNamesFetch,
         getServiceUrl,
         url,
         valid: true,
