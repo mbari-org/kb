@@ -4,7 +4,7 @@ import configUrlStore from "@/lib/store/configUrl"
 import fetchEndpoints from "@/lib/services/config/fetchEndpoints"
 import fetchConceptNames from "@/lib/services/oni/fetchConceptNames"
 
-import ConfigContext from "@/components/config/ConfigContext"
+import ConfigContext from "@/contexts/config/ConfigContext"
 
 import createServiceUrl from "@/lib/services/config/createServiceUrl"
 

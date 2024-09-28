@@ -2,7 +2,7 @@ import { use } from "react"
 
 import { Typography } from "@mui/material"
 
-import ConfigContext from "@/components/config/ConfigContext"
+import ConfigContext from "@/contexts/config/ConfigContext"
 
 const Concepts = () => {
   const { config } = use(ConfigContext)

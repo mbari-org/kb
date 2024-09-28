@@ -2,7 +2,7 @@ import { use } from "react"
 
 import { Button } from "@mui/material"
 
-import AuthContext from "@/components/auth/AuthContext"
+import AuthContext from "@/contexts/auth/AuthContext"
 
 const LogoutLink = () => {
   const { logout } = use(AuthContext)

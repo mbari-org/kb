@@ -7,6 +7,7 @@ import authLogin from "@/lib/services/oni/authLogin"
 import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"
 
+const initialConcept = "object"
 const initialPanel = "Concepts"
 
 const login = async (getServiceUrl, username, password) => {
@@ -23,6 +24,7 @@ const login = async (getServiceUrl, username, password) => {
   const { role } = decodeJwt(token)
 
   const user = {
+    concept: initialConcept,
     panel: initialPanel,
     role,
     username,

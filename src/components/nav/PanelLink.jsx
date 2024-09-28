@@ -2,7 +2,7 @@ import { use, useState } from "react"
 import { Button } from "@mui/material"
 import { useTheme } from "@emotion/react"
 
-import AuthContext from "@/components/auth/AuthContext"
+import AuthContext from "@/contexts/auth/AuthContext"
 
 const PanelLink = ({ isActive, selectPanel, title }) => {
   const [isHovering, setIsHovering] = useState(false)

@@ -1,6 +1,6 @@
 import { use, useEffect, useState, useTransition } from "react"
 
-import AuthContext from "@/components/auth/AuthContext"
+import AuthContext from "@/contexts/auth/AuthContext"
 
 import NavBar from "@/components/nav/NavBar"
 

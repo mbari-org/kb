@@ -4,7 +4,7 @@ import { Box } from "@mui/material"
 
 import mbariLogo from "@/assets/login-logo.png"
 
-import ConfigContext from "@/components/config/ConfigContext"
+import ConfigContext from "@/contexts/config/ConfigContext"
 
 import ConfigForm from "@/components/config/ConfigForm"
 import LoginForm from "@/components/auth/LoginForm"

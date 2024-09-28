@@ -5,8 +5,8 @@ import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 import SubmitButton from "@/components/common/SubmitButton"
 import SubmitError from "@/components/common/SubmitError"
 
-import AuthContext from "@/components/auth/AuthContext"
-import ConfigContext from "@/components/config/ConfigContext"
+import AuthContext from "@/contexts/auth/AuthContext"
+import ConfigContext from "@/contexts/config/ConfigContext"
 
 import { login } from "@/lib/auth/login"
 

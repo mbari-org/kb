@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import _ from "lodash"
 
-import AuthContext from "@/components/auth/AuthContext"
+import AuthContext from "@/contexts/auth/AuthContext"
 
 import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"

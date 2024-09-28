@@ -2,7 +2,7 @@ import { use, useActionState, useEffect, useState } from "react"
 
 import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 
-import ConfigContext from "@/components/config/ConfigContext"
+import ConfigContext from "@/contexts/config/ConfigContext"
 
 import SubmitButton from "@/components/common/SubmitButton"
 import SubmitError from "@/components/common/SubmitError"
