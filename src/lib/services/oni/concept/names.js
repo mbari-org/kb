@@ -1,4 +1,4 @@
-const fetchConceptNames = async url => {
+const getNames = async url => {
   const params = {
     headers: {
       Accept: "application/json",
@@ -17,4 +17,4 @@ const fetchConceptNames = async url => {
   return { names }
 }
 
-export default fetchConceptNames
+export default getNames

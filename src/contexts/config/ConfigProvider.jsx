@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import ConfigContext from "@/contexts/config/ConfigContext"
+import ConfigContext from "./ConfigContext"
 
 import fetchEndpoints from "@/lib/services/config/fetchEndpoints"
 import createServiceLookup from "@/lib/services/config/createServiceLookup"

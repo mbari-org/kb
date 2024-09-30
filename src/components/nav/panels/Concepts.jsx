@@ -2,10 +2,10 @@ import { use } from "react"
 
 import { Typography } from "@mui/material"
 
-import ConceptsContext from "@/contexts/concepts/ConceptsContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const Concepts = () => {
-  const { concepts } = use(ConceptsContext)
+  const { concepts } = use(TaxonomyContext)
 
   if (!concepts) {
     return null

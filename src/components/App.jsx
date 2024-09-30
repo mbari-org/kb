@@ -13,7 +13,7 @@ import { ThemeProvider } from "@mui/material/styles"
 import kbTheme from "@/themes/kb"
 
 import AuthProvider from "@/contexts/auth/AuthProvider"
-import ConceptsProvider from "@/contexts/concepts/ConceptsProvider"
+import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
 import ConfigProvider from "@/contexts/config/ConfigProvider"
 
 import AuthRoute from "@/components/auth/AuthRoute"
@@ -29,7 +29,7 @@ const App = () => {
         <Router>
           <ConfigProvider>
             <AuthProvider>
-              <ConceptsProvider>
+              <TaxonomyProvider>
                 <Routes>
                   <Route path="/" element={<Navigate to="/login" />} />
                   <Route path="/login" element={<StartUp />} />
@@ -38,7 +38,7 @@ const App = () => {
                   </Route>
                   <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
-              </ConceptsProvider>
+              </TaxonomyProvider>
             </AuthProvider>
           </ConfigProvider>
         </Router>

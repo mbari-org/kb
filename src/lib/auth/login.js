@@ -2,7 +2,7 @@ import { decodeJwt } from "jose"
 import _ from "lodash"
 
 import { obfuscate } from "@/lib/auth/obfuscate"
-import authLogin from "@/lib/services/oni/authLogin"
+import authLogin from "@/lib/services/oni/auth/login"
 
 import appUser from "@/lib/store/appUser"
 import auth from "@/lib/store/auth"

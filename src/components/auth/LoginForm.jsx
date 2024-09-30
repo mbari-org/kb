@@ -18,7 +18,7 @@ const LoginForm = () => {
     const username = formData.get("username")
     const password = formData.get("password")
 
-    return login(config.getServiceUrl, username, password)
+    return login(config, username, password)
   }
   const [loginState, loginAction] = useActionState(submitLogin, null)
 

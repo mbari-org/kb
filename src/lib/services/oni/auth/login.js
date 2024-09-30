@@ -1,11 +1,12 @@
-const authLogin = async (getServiceUrl, username, password) => {
+import authUrl from "./authUrl"
+
+const login = async (config, username, password) => {
   try {
-    const { error, url: oniUrl } = getServiceUrl("oni")
+    const { error, url: loginUrl } = authUrl(config, "login")
     if (!!error) {
       return { error }
     }
 
-    const loginUrl = `${oniUrl}/auth/login`
     const authParams = params(username, password)
 
     const response = await fetch(loginUrl, authParams)
@@ -57,4 +58,4 @@ const authErrorMessage = statusText => {
   return { error: message }
 }
 
-export default authLogin
+export default login
