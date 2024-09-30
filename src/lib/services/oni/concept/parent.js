@@ -1,4 +1,4 @@
-import conceptUrl from "./conceptUrl"
+import { conceptUrl } from "./util"
 
 const getParent = async (config, name) => {
   const encodedName = encodeURIComponent(name)
@@ -23,4 +23,4 @@ const getParent = async (config, name) => {
   return { parent: payload }
 }
 
-export default getParent
+export { getParent }

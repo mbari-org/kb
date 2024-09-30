@@ -5,9 +5,9 @@ import { Typography } from "@mui/material"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const Concepts = () => {
-  const { concepts } = use(TaxonomyContext)
+  const { taxonomy } = use(TaxonomyContext)
 
-  if (!concepts) {
+  if (!taxonomy) {
     return null
   }
 

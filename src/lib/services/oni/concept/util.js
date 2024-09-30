@@ -3,4 +3,4 @@ const conceptUrl = (config, path) => {
   return !!error ? { error } : { url: `${url}/concept/${path}` }
 }
 
-export default conceptUrl
+export { conceptUrl }
