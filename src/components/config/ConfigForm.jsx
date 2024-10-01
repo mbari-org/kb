@@ -8,13 +8,13 @@ import SubmitButton from "@/components/common/SubmitButton"
 import SubmitError from "@/components/common/SubmitError"
 
 const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
-  const { config, updateConfigUrl } = use(ConfigContext)
+  const { config, setConfig } = use(ConfigContext)
 
   const [configUrl, setConfigUrl] = useState(null)
 
   const submitConfigUrl = async (_prevState, formData) => {
     const formConfigUrl = formData.get("configUrl")
-    return updateConfigUrl(formConfigUrl)
+    return setConfig(formConfigUrl)
   }
 
   const [configState, configAction] = useActionState(submitConfigUrl, "")
@@ -22,7 +22,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const handleConfigChange = event => {
     const url = event.target.value
     setConfigUrl(url)
-    setConfigIsDirty(!!url && url !== config.url)
+    setConfigIsDirty(!!url && url !== config?.url)
   }
 
   useEffect(() => {

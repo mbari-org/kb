@@ -1,67 +1,40 @@
-import { use, useEffect, useState, useTransition } from "react"
+import { use, useTransition } from "react"
 
-import AuthContext from "@/contexts/auth/AuthContext"
+import userStore from "@/lib/store/user"
 
 import NavBar from "@/components/nav/NavBar"
 
-import AboutHelp from "@/components/nav/panels/AboutHelp"
-import Concepts from "@/components/nav/panels/Concepts"
-import Embargoes from "@/components/nav/panels/Embargoes"
-import History from "@/components/nav/panels/History"
-import ImportExport from "@/components/nav/panels/ImportExport"
-import Notes from "@/components/nav/panels/Notes"
-import References from "@/components/nav/panels/References"
-import Templates from "@/components/nav/panels/Templates"
+import panels from "@/components/nav/panels"
 
-const panels = [
-  { mod: Concepts, title: "Concepts" },
-  { mod: Templates, title: "Templates" },
-  { mod: References, title: "References" },
-  { mod: Embargoes, title: "Embargoes" },
-  { mod: History, title: "History" },
-  { mod: Notes, title: "Notes" },
-  { mod: ImportExport, title: "Import/Export" },
-  { mod: AboutHelp, title: "About/Help" },
-]
+import UserContext from "@/contexts/user/UserContext"
+
 const KnowledgeBase = () => {
-  const { updateUser, user } = use(AuthContext)
+  const { user, updateUser } = use(UserContext)
 
-  // CxNote panel is just the title (immutable string and to match user.panel)
-  const [panel, setPanel] = useState(null)
   const [isPending, startTransition] = useTransition()
 
   const selectPanel = panelTitle => {
-    if (panelTitle !== panel) {
+    if (panelTitle !== user.panel) {
       startTransition(() => {
-        setPanel(panelTitle)
         updateUser({ panel: panelTitle })
       })
     }
   }
 
-  useEffect(() => {
-    if (user && !panel) {
-      setPanel(user.panel)
-    }
-  }, [user, panel])
-
-  if (!panel) {
+  if (!user) {
     return null
   }
 
   return (
     <>
       <NavBar
-        activePanel={panel}
+        activePanel={user.panel}
         titles={panels.map(({ title }) => title)}
         selectPanel={selectPanel}
       />
-      {panels.map(navPanel => {
-        return navPanel.title === panel ? (
-          <navPanel.mod
-            id={`nav-panel-${navPanel.title}`}
-            key={navPanel.title}
-          />
+      {panels.map(panel => {
+        return panel.title === user.panel ? (
+          <panel.mod id={`nav-panel-${panel.title}`} key={panel.title} />
         ) : null
       })}
     </>

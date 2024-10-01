@@ -13,8 +13,9 @@ import { ThemeProvider } from "@mui/material/styles"
 import kbTheme from "@/themes/kb"
 
 import AuthProvider from "@/contexts/auth/AuthProvider"
-import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
 import ConfigProvider from "@/contexts/config/ConfigProvider"
+import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
+import UserProvider from "@/contexts/user/UserProvider"
 
 import AuthRoute from "@/components/auth/AuthRoute"
 
@@ -30,14 +31,19 @@ const App = () => {
           <ConfigProvider>
             <AuthProvider>
               <TaxonomyProvider>
-                <Routes>
-                  <Route path="/" element={<Navigate to="/login" />} />
-                  <Route path="/login" element={<StartUp />} />
-                  <Route element={<AuthRoute />}>
-                    <Route path="/kb" element={<KnowledgeBase />}></Route>
-                  </Route>
-                  <Route path="*" element={<Navigate to="/login" replace />} />
-                </Routes>
+                <UserProvider>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/login" />} />
+                    <Route path="/login" element={<StartUp />} />
+                    <Route element={<AuthRoute />}>
+                      <Route path="/kb" element={<KnowledgeBase />}></Route>
+                    </Route>
+                    <Route
+                      path="*"
+                      element={<Navigate to="/login" replace />}
+                    />
+                  </Routes>
+                </UserProvider>
               </TaxonomyProvider>
             </AuthProvider>
           </ConfigProvider>

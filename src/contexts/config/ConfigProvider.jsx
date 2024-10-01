@@ -8,21 +8,29 @@ import createServiceLookup from "@/lib/services/config/createServiceLookup"
 import configUrlStore from "@/lib/store/configUrl"
 
 const ConfigProvider = ({ children }) => {
-  const [config, setConfig] = useState(null)
+  const [config, setStateConfig] = useState(null)
 
-  const updateConfig = async url => {
+  const setConfig = async url => {
+    if (url === null) {
+      setStateConfig(null)
+      configUrlStore.clear()
+      return
+    }
+
+    configUrlStore.set(url)
+
     const { endpoints: allEndpoints, error } = await fetchEndpoints(url)
 
     if (!!allEndpoints) {
       const getServiceUrl = createServiceLookup(allEndpoints)
 
-      setConfig({
+      setStateConfig({
         getServiceUrl,
         url,
         valid: true,
       })
     } else {
-      setConfig({
+      setStateConfig({
         error,
         url,
         valid: false,
@@ -30,24 +38,12 @@ const ConfigProvider = ({ children }) => {
     }
   }
 
-  const setConfigUrl = async url => {
-    if (url === null) {
-      return { url }
-    }
-    configUrlStore.set(url)
-    updateConfig(url)
-  }
-
   useEffect(() => {
     const storedConfigUrl = configUrlStore.get()
-    if (!!storedConfigUrl) {
-      updateConfig(storedConfigUrl)
-    }
+    setConfig(storedConfigUrl)
   }, [])
 
-  return (
-    <ConfigContext value={{ config, setConfigUrl }}>{children}</ConfigContext>
-  )
+  return <ConfigContext value={{ config, setConfig }}>{children}</ConfigContext>
 }
 
 export default ConfigProvider

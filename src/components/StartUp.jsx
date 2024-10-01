@@ -11,6 +11,7 @@ import LoginForm from "@/components/auth/LoginForm"
 
 const StartUp = () => {
   const { config } = use(ConfigContext)
+
   const [configIsDirty, setConfigIsDirty] = useState(true)
 
   useEffect(() => {

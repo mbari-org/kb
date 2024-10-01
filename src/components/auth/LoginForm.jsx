@@ -11,7 +11,7 @@ import ConfigContext from "@/contexts/config/ConfigContext"
 import { login } from "@/lib/auth/login"
 
 const LoginForm = () => {
-  const { updateUser } = use(AuthContext)
+  // const { updateUser } = use(AuthContext)
   const { config } = use(ConfigContext)
 
   const submitLogin = async (_prevState, formData) => {
@@ -22,9 +22,9 @@ const LoginForm = () => {
   }
   const [loginState, loginAction] = useActionState(submitLogin, null)
 
-  useEffect(() => {
-    loginState?.user && updateUser(loginState.user)
-  }, [loginState, updateUser])
+  // useEffect(() => {
+  //   loginState?.user && updateUser(loginState.user)
+  // }, [loginState, updateUser])
 
   return (
     <Box component="form" action={loginAction} sx={{ minHeight: "300px" }}>

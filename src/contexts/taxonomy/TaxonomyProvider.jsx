@@ -2,36 +2,34 @@ import { use, useEffect, useState } from "react"
 
 import TaxonomyContext from "./TaxonomyContext"
 
-import AuthContext from "@/contexts/auth/AuthContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { lineage } from "@/model/concept"
+import { lineage, load } from "@/model/concept"
 
 const TaxonomyProvider = ({ children }) => {
-  const { user } = use(AuthContext)
   const { config } = use(ConfigContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const updateTaxonomy = update => {
-    console.log("Apply taxonomy update:", update)
+  const loadConcept = conceptName => {
+    console.log("load ", conceptName)
   }
 
   useEffect(() => {
-    if (!!config && !!user) {
-      const initialTaxonomy = { _config: config }
-      lineage(initialTaxonomy, user.concept).then(({ taxonomy }) => {
-        setTaxonomy(taxonomy)
-      })
+    if (!!config) {
+      setTaxonomy({ _config: config })
+      // lineage(initialTaxonomy, user.concept).then(({ taxonomy }) => {
+      //   setTaxonomy(taxonomy)
+      // })
     }
-  }, [config?.valid, user])
+  }, [config])
 
-  if (!config || !user) {
-    return null
-  }
+  // if (!config) {
+  //   return null
+  // }
 
   return (
-    <TaxonomyContext value={{ taxonomy, updateTaxonomy }}>
+    <TaxonomyContext value={{ taxonomy, loadConcept }}>
       {children}
     </TaxonomyContext>
   )
