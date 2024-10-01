@@ -8,10 +8,10 @@ import SubmitError from "@/components/common/SubmitError"
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { login } from "@/lib/auth/login"
+import login from "@/lib/services/oni/auth/login"
 
 const LoginForm = () => {
-  // const { updateUser } = use(AuthContext)
+  const { setAuth } = use(AuthContext)
   const { config } = use(ConfigContext)
 
   const submitLogin = async (_prevState, formData) => {
@@ -22,9 +22,9 @@ const LoginForm = () => {
   }
   const [loginState, loginAction] = useActionState(submitLogin, null)
 
-  // useEffect(() => {
-  //   loginState?.user && updateUser(loginState.user)
-  // }, [loginState, updateUser])
+  useEffect(() => {
+    setAuth(loginState?.auth)
+  }, [loginState])
 
   return (
     <Box component="form" action={loginAction} sx={{ minHeight: "300px" }}>

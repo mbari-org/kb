@@ -1,6 +1,7 @@
 import { getChildren } from "@/lib/services/oni/concept/children"
 import { getConcept } from "@/lib/services/oni/concept/concept"
 import { getParent } from "@/lib/services/oni/concept/parent"
+import { getRoot } from "@/lib/services/oni/concept/root"
 
 // nullify Concept arrays (which are all [] from the API). This allows taxonomy introspection
 // to "know" if the concept has already been filled (which requires separate API calls).
@@ -61,7 +62,7 @@ const load = async (taxonomy, conceptName) => {
 
   if (!concept) {
     const { concept: apiConcept, error: conceptError } = await getConcept(
-      taxonomy._config,
+      taxonomy,
       conceptName
     )
     if (!!conceptError) {
@@ -101,7 +102,7 @@ const loadChildren = async (taxonomy, parentName, knownChildName) => {
   }
 
   const { error: childrenError, children } = await getChildren(
-    taxonomy._config,
+    taxonomy,
     parentName
   )
   if (!!childrenError) {
@@ -146,10 +147,7 @@ const loadParent = async (taxonomy, conceptName) => {
     return { error: conceptError, taxonomy }
   }
 
-  const { error: parentError, parent } = await getParent(
-    taxonomy._config,
-    conceptName
-  )
+  const { error: parentError, parent } = await getParent(taxonomy, conceptName)
   if (!!parentError) {
     return { error: parentError, taxonomy }
   }
@@ -169,6 +167,23 @@ const loadParent = async (taxonomy, conceptName) => {
   }
 }
 
+const root = async taxonomy => {
+  if (taxonomy._root) {
+    return { taxonomy }
+  }
+  const { error, root } = await getRoot(taxonomy)
+  if (!!error) {
+    return { error, taxonomy }
+  }
+
+  return {
+    taxonomy: {
+      ...taxonomy,
+      _root: root.name,
+    },
+  }
+}
+
 const taxonomyConcept = (taxonomy, conceptName) => {
   const concept = taxonomy[conceptName]
   if (!concept) {
@@ -177,4 +192,4 @@ const taxonomyConcept = (taxonomy, conceptName) => {
   return { concept }
 }
 
-export { lineage, load }
+export { lineage, load, root }

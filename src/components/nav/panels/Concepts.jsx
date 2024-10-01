@@ -1,15 +1,23 @@
-import { use } from "react"
+import { use, useEffect, useState } from "react"
 
 import { Typography } from "@mui/material"
 
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import UserContext from "@/contexts/user/UserContext"
 
 const Concepts = () => {
-  const { taxonomy } = use(TaxonomyContext)
+  const { taxonomy, loadConcept } = use(TaxonomyContext)
+  const { user } = use(UserContext)
 
-  if (!taxonomy) {
-    return null
-  }
+  const [concept, setConcept] = useState(null)
+
+  useEffect(() => {
+    if (!!taxonomy) {
+      loadConcept(user.concept).then(({ error, taxonomy }) => {
+        setConcept(taxonomy[user.concept])
+      })
+    }
+  }, [taxonomy, user])
 
   return (
     <>

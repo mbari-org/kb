@@ -1,5 +1,5 @@
-const conceptUrl = (config, path) => {
-  const { error, url } = config.getServiceUrl("oni")
+const conceptUrl = (taxonomy, path) => {
+  const { error, url } = taxonomy._config.getServiceUrl("oni")
   return !!error ? { error } : { url: `${url}/concept/${path}` }
 }
 

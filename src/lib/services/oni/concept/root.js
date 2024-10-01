@@ -1,8 +1,7 @@
 import { conceptUrl } from "./util"
 
-const getChildren = async (taxonomy, name) => {
-  const encodedName = encodeURIComponent(name)
-  const { error, url } = conceptUrl(taxonomy, `children/${encodedName}`)
+const getRoot = async taxonomy => {
+  const { error, url } = conceptUrl(taxonomy, "query/root")
   if (!!error) {
     return { error }
   }
@@ -20,7 +19,7 @@ const getChildren = async (taxonomy, name) => {
     return { error: payload.message }
   }
 
-  return { children: payload }
+  return { root: payload }
 }
 
-export { getChildren }
+export { getRoot }

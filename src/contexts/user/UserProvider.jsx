@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 import UserContext from "./UserContext"
 
 import userStore from "@/lib/store/user"
 
-const defaultUserState = {
-  concept: "object",
-  panel: "Concepts",
-}
-
 const UserProvider = ({ children }) => {
+  const { taxonomy } = use(TaxonomyContext)
+
   const [user, setUser] = useState(null)
 
   const updateUser = update => {
@@ -23,10 +21,18 @@ const UserProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const initialUser = userStore.get() || defaultUserState
-    userStore.set(initialUser)
-    setUser(initialUser)
-  }, [])
+    if (!!taxonomy) {
+      const storedUser = userStore.get()
+      if (storedUser) {
+        setUser(storedUser)
+      } else {
+        setUser({
+          concept: taxonomy._root,
+          panel: "Concepts",
+        })
+      }
+    }
+  }, [taxonomy])
 
   return <UserContext value={{ user, updateUser }}>{children}</UserContext>
 }

@@ -1,7 +1,5 @@
 import { use, useTransition } from "react"
 
-import userStore from "@/lib/store/user"
-
 import NavBar from "@/components/nav/NavBar"
 
 import panels from "@/components/nav/panels"

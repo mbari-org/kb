@@ -4,27 +4,39 @@ import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { lineage, load } from "@/model/concept"
+import { lineage, load, root } from "@/model/concept"
 
 const TaxonomyProvider = ({ children }) => {
   const { config } = use(ConfigContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const loadConcept = conceptName => {
-    console.log("load ", conceptName)
+  const loadConcept = async conceptName => {
+    const rootConcept = taxonomy[taxonomy._root]
+
+    if (conceptName === taxonomy._root) {
+      return !!rootConcept ? { taxonomy } : load(taxonomy, conceptName)
+    }
+
+    return !!rootConcept
+      ? load(taxonomy, conceptName)
+      : lineage(taxonomy, conceptName)
   }
 
   useEffect(() => {
     if (!!config) {
-      setTaxonomy({ _config: config })
-      // lineage(initialTaxonomy, user.concept).then(({ taxonomy }) => {
-      //   setTaxonomy(taxonomy)
-      // })
+      const taxonomyWithConfig = { _config: config }
+      root(taxonomyWithConfig).then(({ error, taxonomy: taxonomyWithRoot }) => {
+        if (!!error) {
+          console.error("Handle taxonomy root error:", error)
+        } else {
+          setTaxonomy(taxonomyWithRoot)
+        }
+      })
     }
   }, [config])
 
-  // if (!config) {
+  // if (!taxonomy) {
   //   return null
   // }
 
