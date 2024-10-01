@@ -1,33 +1,27 @@
-import { use, useEffect, useState } from "react"
+import Box from "@mui/material/Box"
 
-import { Typography } from "@mui/material"
+import Concept from "@/components/concepts/Concept"
+import ConceptsTree from "@/components/concepts/ConceptsTree"
 
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
-import UserContext from "@/contexts/user/UserContext"
+import { styled } from "@mui/material/styles"
+
+const VerticalLine = styled(Box)(({ theme }) => ({
+  width: 8,
+  backgroundColor: theme.palette.divider,
+  minHeight: "100vh",
+}))
 
 const Concepts = () => {
-  const { taxonomy, loadConcept } = use(TaxonomyContext)
-  const { user } = use(UserContext)
-
-  const [concept, setConcept] = useState(null)
-
-  useEffect(() => {
-    if (!!taxonomy) {
-      loadConcept(user.concept).then(({ error, taxonomy }) => {
-        setConcept(taxonomy[user.concept])
-      })
-    }
-  }, [taxonomy, user])
-
   return (
-    <>
-      <Typography align="center" sx={{ mt: 3, mb: 1 }} variant="h3">
-        Concepts
-      </Typography>
-      <Typography align="center" variant="h5" sx={{ mt: 3, mb: 1 }}>
-        Herein lies great knowledge of all ocean creatures, far and wide.
-      </Typography>
-    </>
+    <Box sx={{ display: "flex", height: "100%" }}>
+      <Box sx={{ width: 240, overflowY: "auto", pl: 1, pt: 1 }}>
+        <ConceptsTree />
+      </Box>
+      <VerticalLine />
+      <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
+        <Concept />
+      </Box>
+    </Box>
   )
 }
 
