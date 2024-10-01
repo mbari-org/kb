@@ -2,7 +2,7 @@ import { use, useTransition } from "react"
 
 import NavBar from "@/components/nav/NavBar"
 
-import panels from "@/components/nav/panels"
+import panels from "@/components/panels/panels"
 
 import UserContext from "@/contexts/user/UserContext"
 
