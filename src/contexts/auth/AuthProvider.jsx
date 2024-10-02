@@ -11,50 +11,50 @@ import userStore from "@/lib/store/user"
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
 
-  const [auth, setStateAuth] = useState(null)
+  const [auth, setAuth] = useState(null)
 
-  const setAuth = someAuth => {
-    const invalid = () => {
-      setStateAuth(null)
+  const updateAuth = someAuth => {
+    const invalidAuth = () => {
+      setAuth(null)
       authStore.clear()
       navigate("/login")
-      // return false
     }
 
     if (!someAuth) {
-      return invalid()
+      return invalidAuth()
     }
 
     const { role: someRole, token, username: someUsername } = someAuth
     if (!token) {
-      return invalid()
+      return invalidAuth()
     }
 
     const { role: authRole, name: authUsername } = decodeJwt(token)
     if (someRole !== authRole || someUsername !== authUsername) {
-      return invalid()
+      return invalidAuth()
     }
 
-    setStateAuth(someAuth)
+    setAuth(someAuth)
     authStore.set(someAuth)
 
     navigate("/kb")
-    // return true
   }
 
   const logout = () => {
     authStore.clear()
     userStore.clear()
-    setAuth(null)
+    updateAuth(null)
     navigate("/login")
   }
 
   useEffect(() => {
-    setAuth(authStore.get())
-    // setAuth(authStore.get()) ? navigate("/kb") : navigate("/login")
+    updateAuth(authStore.get())
+    // updateAuth(authStore.get()) ? navigate("/kb") : navigate("/login")
   }, [])
 
-  return <AuthContext value={{ auth, logout, setAuth }}>{children}</AuthContext>
+  return (
+    <AuthContext value={{ auth, logout, updateAuth }}>{children}</AuthContext>
+  )
 }
 
 export default AuthProvider

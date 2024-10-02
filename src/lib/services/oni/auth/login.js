@@ -43,9 +43,7 @@ const processToken = async (password, token) => {
   }
   authStore.set(auth)
 
-  return {
-    auth,
-  }
+  return { auth }
 }
 
 const params = (username, password) => {

@@ -11,7 +11,7 @@ import ConfigContext from "@/contexts/config/ConfigContext"
 import login from "@/lib/services/oni/auth/login"
 
 const LoginForm = () => {
-  const { setAuth } = use(AuthContext)
+  const { updateAuth } = use(AuthContext)
   const { config } = use(ConfigContext)
 
   const submitLogin = async (_prevState, formData) => {
@@ -23,7 +23,7 @@ const LoginForm = () => {
   const [loginState, loginAction] = useActionState(submitLogin, null)
 
   useEffect(() => {
-    setAuth(loginState?.auth)
+    updateAuth(loginState?.auth)
   }, [loginState])
 
   return (
