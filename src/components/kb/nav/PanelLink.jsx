@@ -4,7 +4,7 @@ import { useTheme } from "@emotion/react"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 
-const PanelLink = ({ isActive, selectPanel, title }) => {
+const PanelLink = ({ isActive, name, selectPanel }) => {
   const [isHovering, setIsHovering] = useState(false)
 
   const theme = useTheme()
@@ -29,12 +29,12 @@ const PanelLink = ({ isActive, selectPanel, title }) => {
 
   return (
     <Button
-      onClick={() => selectPanel(title)}
+      onClick={() => selectPanel(name)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       style={style()}
     >
-      {title}
+      {name}
     </Button>
   )
 }

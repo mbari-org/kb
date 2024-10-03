@@ -4,7 +4,10 @@ import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { lineage, load, root } from "@/model/concept"
+import { lineage, load } from "@/model/concept"
+
+import taxonomyWithConcept from "./taxonomyWithConcept"
+import taxonomyWithRoot from "./taxonomyWithRoot"
 
 const TaxonomyProvider = ({ children }) => {
   const { config } = use(ConfigContext)
@@ -33,12 +36,11 @@ const TaxonomyProvider = ({ children }) => {
 
   useEffect(() => {
     if (!!config) {
-      const taxonomyWithConfig = { _config_: config }
-      root(taxonomyWithConfig).then(({ error, taxonomy: taxonomyWithRoot }) => {
+      taxonomyWithRoot(config).then(({ error, taxonomy: initialTaxonomy }) => {
         if (!!error) {
           console.error("Handle taxonomy root error:", error)
         } else {
-          setTaxonomy(taxonomyWithRoot)
+          setTaxonomy(initialTaxonomy)
         }
       })
     }

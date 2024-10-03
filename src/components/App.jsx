@@ -17,7 +17,7 @@ import ConfigProvider from "@/contexts/config/ConfigProvider"
 
 import AuthRoute from "@/components/auth/AuthRoute"
 
-import KnowledgeBase from "@/components/KnowledgeBase"
+import KbContainer from "@/components/KbContainer"
 import StartUp from "@/components/StartUp"
 
 const App = () => {
@@ -32,7 +32,7 @@ const App = () => {
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<StartUp />} />
                 <Route element={<AuthRoute />}>
-                  <Route path="/kb" element={<KnowledgeBase />}></Route>
+                  <Route path="/kb" element={<KbContainer />}></Route>
                 </Route>
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>

@@ -7,7 +7,7 @@ import Concept from "@/components/concepts/Concept"
 import ConceptsTree from "@/components/concepts/ConceptsTree"
 
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
-import StatusContext from "@/contexts/app/StatusContext"
+import StatusContext from "@/contexts/status/StatusContext"
 
 const VerticalLine = styled(Box)(({ theme }) => ({
   width: 8,
@@ -21,9 +21,9 @@ const Concepts = () => {
 
   const [concept, setConcept] = useState(null)
 
-  console.log("taxonomy:", taxonomy)
-  console.log("status", status)
-  console.log("concept", concept)
+  console.log("CxDebug Concepts taxonomy:", taxonomy)
+  console.log("CxDebug Concepts status", status)
+  console.log("CxDebug Concepts concept", concept)
 
   return (
     <Box sx={{ display: "flex", height: "100%" }}>

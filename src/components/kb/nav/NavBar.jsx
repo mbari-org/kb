@@ -1,19 +1,23 @@
 import { AppBar, Toolbar } from "@mui/material"
 
+import LogoutLink from "./LogoutLink"
 import PanelLink from "./PanelLink"
-import LogoutLink from "./LogoutLink.jsx"
 
-const NavBar = ({ activePanel, titles, selectPanel }) => {
+import panels from "@/components/kb/panels"
+
+const NavBar = ({ activePanel, selectPanel }) => {
+  const names = panels.map(({ name }) => name)
+
   return (
     <AppBar position="static">
       <Toolbar>
-        {titles.map(title => (
+        {names.map(name => (
           <PanelLink
-            id={`nav-link-${title}`}
-            isActive={title === activePanel}
-            key={title}
+            id={`nav-link-${name}`}
+            isActive={name === activePanel}
+            key={name}
             selectPanel={selectPanel}
-            title={title}
+            name={name}
           />
         ))}
         <div style={{ flexGrow: 1 }} />

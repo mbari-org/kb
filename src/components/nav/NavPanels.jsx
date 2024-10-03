@@ -1,13 +1,14 @@
-import { use, useTransition } from "react"
+import { use, useEffect, useTransition } from "react"
 
-import NavBar from "@/components/nav/NavBar"
-
+import NavBar from "@/components/kb/nav/NavBar"
 import panels from "@/components/panels/panels"
 
-import StatusContext from "@/contexts/app/StatusContext"
+import StatusContext from "@/contexts/status/StatusContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const NavPanels = () => {
   const { status, updateStatus } = use(StatusContext)
+  const { taxonomy } = use(TaxonomyContext)
 
   const [isPending, startTransition] = useTransition()
 
@@ -18,6 +19,11 @@ const NavPanels = () => {
       })
     }
   }
+
+  useEffect(() => {
+    console.log("CxDebug NavPanels status", status)
+    console.log("CxDebug NavPanels taxonomy", taxonomy)
+  }, [status, taxonomy])
 
   return (
     <>

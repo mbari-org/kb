@@ -1,18 +1,18 @@
 import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
-import StatusProvider from "@/contexts/app/StatusProvider"
+import StatusProvider from "@/contexts/status/StatusProvider"
 
-import NavPanels from "@/components/nav/NavPanels"
+import KnowledgeBase from "@/components/kb/KnowledgeBase"
 
-const KnowledgeBase = () => {
+const KbContainer = () => {
   return (
     <>
       <TaxonomyProvider>
         <StatusProvider>
-          <NavPanels />
+          <KnowledgeBase />
         </StatusProvider>
       </TaxonomyProvider>
     </>
   )
 }
 
-export default KnowledgeBase
+export default KbContainer

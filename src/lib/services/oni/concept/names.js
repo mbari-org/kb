@@ -17,4 +17,4 @@ const getNames = async url => {
   return { names }
 }
 
-export { getNames }
+export default getNames

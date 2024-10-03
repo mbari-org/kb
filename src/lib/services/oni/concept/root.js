@@ -1,7 +1,7 @@
-import { conceptUrl } from "./util"
+import conceptUrl from "./conceptUrl"
 
-const getRoot = async taxonomy => {
-  const { error, url } = conceptUrl(taxonomy, "query/root")
+const getRoot = async config => {
+  const { error, url } = conceptUrl(config, "query/root")
   if (!!error) {
     return { error }
   }
@@ -22,4 +22,4 @@ const getRoot = async taxonomy => {
   return { root: payload }
 }
 
-export { getRoot }
+export default getRoot

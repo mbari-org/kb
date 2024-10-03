@@ -1,8 +1,8 @@
-import { conceptUrl } from "./util"
+import conceptUrl from "./conceptUrl"
 
-const getParent = async (taxonomy, name) => {
+const getParent = async (config, name) => {
   const encodedName = encodeURIComponent(name)
-  const { error, url } = conceptUrl(taxonomy, `parent/${encodedName}`)
+  const { error, url } = conceptUrl(config, `parent/${encodedName}`)
   if (!!error) {
     return { error }
   }
@@ -23,4 +23,4 @@ const getParent = async (taxonomy, name) => {
   return { parent: payload }
 }
 
-export { getParent }
+export default getParent
