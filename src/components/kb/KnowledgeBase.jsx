@@ -1,14 +1,12 @@
 import { use, useEffect, useTransition } from "react"
 
 import StatusContext from "@/contexts/status/StatusContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import NavBar from "@/components/kb/nav/NavBar"
 import Panel from "@/components/kb/Panel"
 
 const KnowledgeBase = () => {
   const { status, updateStatus } = use(StatusContext)
-  const { taxonomy } = use(TaxonomyContext)
 
   const [isPending, startTransition] = useTransition()
 
@@ -22,8 +20,7 @@ const KnowledgeBase = () => {
 
   useEffect(() => {
     console.log("CxDebug KnowledgeBase status", status)
-    console.log("CxDebug KnowledgeBase taxonomy", taxonomy)
-  }, [status, taxonomy])
+  }, [status])
 
   if (!status) {
     return null

@@ -15,12 +15,11 @@ const TaxonomyProvider = ({ children }) => {
   const [taxonomy, setTaxonomy] = useState(null)
 
   const loadConcept = async conceptName => {
-    const concept = taxonomy[conceptName]
-    if (!concept) {
-      const root = taxonomy[taxonomy._root_]
-      const loadFn = conceptName === taxonomy._root_ || !!root ? load : lineage
+    if (!taxonomy[conceptName]) {
+      // const root = taxonomy[taxonomy._root_]
+      // const loadFn = conceptName === taxonomy._root_ || !!root ? load : lineage
 
-      const { error, taxonomy: updatedTaxonomy } = await loadFn(
+      const { error, taxonomy: taxonomyWithConcept } = await load(
         taxonomy,
         conceptName
       )
@@ -28,8 +27,8 @@ const TaxonomyProvider = ({ children }) => {
         console.error("Handle loadConcept error:", error)
         return { error }
       } else {
-        setTaxonomy(updatedTaxonomy)
-        return { updatedTaxonomy }
+        setTaxonomy(taxonomyWithConcept)
+        return { taxonomy: taxonomyWithConcept }
       }
     }
   }

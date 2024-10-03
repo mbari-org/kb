@@ -16,6 +16,7 @@
     "@fontsource/roboto": "^5.1.0",
     "@mui/icons-material": "^6.1.0",
     "@mui/material": "^5.16.7",
+    "@mui/x-tree-view": "^7.18.0",
     "@stylistic/eslint-plugin-js": "^2.7.2",
     "classnames": "^2.5.1",
     "jose": "^5.9.2",

@@ -1,7 +1,7 @@
 import React from "react"
-import TreeView from "@mui/lab/TreeView"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
+import { RichTreeView, TreeItem } from "@mui/x-tree-view"
 
 const NavSidebar = () => {
   const treeData = [
@@ -30,7 +30,7 @@ const NavSidebar = () => {
   return (
     <aside className="left-sidebar">
       <h2>Navigation</h2>
-      <TreeView
+      <RichTreeView
         aria-label="file system navigator"
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
@@ -54,7 +54,7 @@ const NavSidebar = () => {
               : node.label}
           </TreeItem>
         ))}
-      </TreeView>
+      </RichTreeView>
     </aside>
   )
 }

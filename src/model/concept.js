@@ -55,13 +55,13 @@ const lineage = async (taxonomy, conceptName) => {
 }
 
 // Loads the specifed concept and all it's children
-const load = async (taxonomy, conceptName) => {
+const load = async (config, taxonomy, conceptName) => {
   let concept = taxonomy[conceptName]
   let updatedTaxonomy = taxonomy
 
   if (!concept) {
     const { concept: apiConcept, error: conceptError } = await getConcept(
-      taxonomy,
+      config,
       conceptName
     )
     if (!!conceptError) {
@@ -76,7 +76,7 @@ const load = async (taxonomy, conceptName) => {
 
   if (!concept.children) {
     const { error: childrenError, taxonomy: taxonomyWithChildren } =
-      await loadChildren(updatedTaxonomy, conceptName)
+      await loadChildren(config, updatedTaxonomy, conceptName)
 
     if (!!childrenError) {
       return {
@@ -94,14 +94,14 @@ const load = async (taxonomy, conceptName) => {
 
 // Loads all the children of a parent. If a known child name is specified, that child is skipped
 // to prevent overwriting previously obtained data.
-const loadChildren = async (taxonomy, parentName, knownChildName) => {
+const loadChildren = async (config, taxonomy, parentName, knownChildName) => {
   const { error: conceptError, concept } = taxonomyConcept(taxonomy, parentName)
   if (!!conceptError) {
     return { error: conceptError, taxonomy }
   }
 
   const { error: childrenError, children } = await getChildren(
-    taxonomy,
+    config,
     parentName
   )
   if (!!childrenError) {
@@ -130,7 +130,7 @@ const loadChildren = async (taxonomy, parentName, knownChildName) => {
 }
 
 // Loads the concept parent and assigns the parent to the concept
-const loadParent = async (taxonomy, conceptName) => {
+const loadParent = async (config, taxonomy, conceptName) => {
   if (conceptName === "object") {
     return {
       parentName: null,
@@ -146,7 +146,7 @@ const loadParent = async (taxonomy, conceptName) => {
     return { error: conceptError, taxonomy }
   }
 
-  const { error: parentError, parent } = await getParent(taxonomy, conceptName)
+  const { error: parentError, parent } = await getParent(config, conceptName)
   if (!!parentError) {
     return { error: parentError, taxonomy }
   }
@@ -174,4 +174,4 @@ const taxonomyConcept = (taxonomy, conceptName) => {
   return { concept }
 }
 
-export { fromApi, lineage, load }
+export { fromApi, lineage, load, loadChildren, loadParent }
