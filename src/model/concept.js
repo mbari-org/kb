@@ -168,7 +168,7 @@ const loadParent = async (taxonomy, conceptName) => {
 }
 
 const root = async taxonomy => {
-  if (taxonomy._root) {
+  if (taxonomy._root_) {
     return { taxonomy }
   }
   const { error, root } = await getRoot(taxonomy)
@@ -179,7 +179,7 @@ const root = async taxonomy => {
   return {
     taxonomy: {
       ...taxonomy,
-      _root: root.name,
+      _root_: root.name,
     },
   }
 }

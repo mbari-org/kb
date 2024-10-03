@@ -6,7 +6,7 @@ import { decodeJwt } from "jose"
 import AuthContext from "./AuthContext"
 
 import authStore from "@/lib/store/auth"
-import userStore from "@/lib/store/user"
+import statusStore from "@/lib/store/status"
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     authStore.clear()
-    userStore.clear()
+    statusStore.clear()
     updateAuth(null)
     navigate("/login")
   }

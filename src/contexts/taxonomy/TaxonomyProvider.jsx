@@ -14,8 +14,8 @@ const TaxonomyProvider = ({ children }) => {
   const loadConcept = async conceptName => {
     const concept = taxonomy[conceptName]
     if (!concept) {
-      const root = taxonomy[taxonomy._root]
-      const loadFn = conceptName === taxonomy._root || !!root ? load : lineage
+      const root = taxonomy[taxonomy._root_]
+      const loadFn = conceptName === taxonomy._root_ || !!root ? load : lineage
 
       const { error, taxonomy: updatedTaxonomy } = await loadFn(
         taxonomy,
@@ -33,7 +33,7 @@ const TaxonomyProvider = ({ children }) => {
 
   useEffect(() => {
     if (!!config) {
-      const taxonomyWithConfig = { _config: config }
+      const taxonomyWithConfig = { _config_: config }
       root(taxonomyWithConfig).then(({ error, taxonomy: taxonomyWithRoot }) => {
         if (!!error) {
           console.error("Handle taxonomy root error:", error)

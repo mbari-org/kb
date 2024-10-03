@@ -4,34 +4,30 @@ import NavBar from "@/components/nav/NavBar"
 
 import panels from "@/components/panels/panels"
 
-import UserContext from "@/contexts/user/UserContext"
+import StatusContext from "@/contexts/app/StatusContext"
 
 const NavPanels = () => {
-  const { user, updateUser } = use(UserContext)
+  const { status, updateStatus } = use(StatusContext)
 
   const [isPending, startTransition] = useTransition()
 
   const selectPanel = panelTitle => {
-    if (panelTitle !== user.panel) {
+    if (panelTitle !== status.panel) {
       startTransition(() => {
-        updateUser({ panel: panelTitle })
+        updateStatus({ panel: panelTitle })
       })
     }
-  }
-
-  if (!user) {
-    return null
   }
 
   return (
     <>
       <NavBar
-        activePanel={user.panel}
+        activePanel={status?.panel}
         titles={panels.map(({ title }) => title)}
         selectPanel={selectPanel}
       />
       {panels.map(panel => {
-        return panel.title === user.panel ? (
+        return panel.title === status?.panel ? (
           <panel.mod id={`nav-panel-${panel.title}`} key={panel.title} />
         ) : null
       })}

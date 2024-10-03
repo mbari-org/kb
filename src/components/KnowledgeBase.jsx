@@ -1,5 +1,5 @@
 import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
-import UserProvider from "@/contexts/user/UserProvider"
+import StatusProvider from "@/contexts/app/StatusProvider"
 
 import NavPanels from "@/components/nav/NavPanels"
 
@@ -7,9 +7,9 @@ const KnowledgeBase = () => {
   return (
     <>
       <TaxonomyProvider>
-        <UserProvider>
+        <StatusProvider>
           <NavPanels />
-        </UserProvider>
+        </StatusProvider>
       </TaxonomyProvider>
     </>
   )

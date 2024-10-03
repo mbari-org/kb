@@ -7,7 +7,7 @@ import Concept from "@/components/concepts/Concept"
 import ConceptsTree from "@/components/concepts/ConceptsTree"
 
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
-import UserContext from "@/contexts/user/UserContext"
+import StatusContext from "@/contexts/app/StatusContext"
 
 const VerticalLine = styled(Box)(({ theme }) => ({
   width: 8,
@@ -17,12 +17,12 @@ const VerticalLine = styled(Box)(({ theme }) => ({
 
 const Concepts = () => {
   const { taxonomy, loadConcept } = use(TaxonomyContext)
-  const { user } = use(UserContext)
+  const { status } = use(StatusContext)
 
   const [concept, setConcept] = useState(null)
 
   console.log("taxonomy:", taxonomy)
-  console.log("user", user)
+  console.log("status", status)
   console.log("concept", concept)
 
   return (
