@@ -1,6 +1,4 @@
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
-
-const ConceptsTree = () => {
+const ConceptsTree = ({ concept, taxonomy }) => {
   return <div>Tree</div>
 }
 

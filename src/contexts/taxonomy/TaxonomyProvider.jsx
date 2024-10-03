@@ -23,8 +23,10 @@ const TaxonomyProvider = ({ children }) => {
       )
       if (!!error) {
         console.error("Handle loadConcept error:", error)
+        return { error }
       } else {
         setTaxonomy(updatedTaxonomy)
+        return { updatedTaxonomy }
       }
     }
   }
