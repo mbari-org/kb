@@ -6,7 +6,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
 
-// import StatusContext from "@/contexts/status/StatusContext"
+// import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import treeItems from "./treeIItems"

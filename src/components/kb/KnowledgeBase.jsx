@@ -1,35 +1,31 @@
 import { use, useEffect, useTransition } from "react"
 
-import StatusContext from "@/contexts/status/StatusContext"
+import SelectedContext from "@/contexts/selected/SelectedContext"
 
 import NavBar from "@/components/kb/nav/NavBar"
 import Panel from "@/components/kb/Panel"
 
 const KnowledgeBase = () => {
-  const { status, updateStatus } = use(StatusContext)
+  const { selected, updateSelected } = use(SelectedContext)
 
   const [isPending, startTransition] = useTransition()
 
   const selectPanel = panelName => {
-    if (panelName !== status.panel) {
+    if (panelName !== selected.panel) {
       startTransition(() => {
-        updateStatus({ panel: panelName })
+        updateSelected({ panel: panelName })
       })
     }
   }
 
-  // useEffect(() => {
-  //   console.log("CxDebug KnowledgeBase status", status)
-  // }, [status])
-
-  if (!status) {
+  if (!selected) {
     return null
   }
 
   return (
     <>
-      <NavBar activePanel={status.panel} selectPanel={selectPanel} />
-      <Panel name={status.panel} />
+      <NavBar activePanel={selected.panel} selectPanel={selectPanel} />
+      <Panel name={selected.panel} />
     </>
   )
 }

@@ -7,7 +7,7 @@ import Concept from "@/components/kb/panels/concepts/Concept"
 import TaxonomyTree from "@/components/kb/panels/concepts/TaxonomyTree"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
-import StatusContext from "@/contexts/status/StatusContext"
+import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const VerticalLine = styled(Box)(({ theme }) => ({
@@ -18,24 +18,21 @@ const VerticalLine = styled(Box)(({ theme }) => ({
 
 const Concepts = () => {
   const { taxonomy, loadConcept } = use(TaxonomyContext)
-  const { status } = use(StatusContext)
+  const { selected } = use(SelectedContext)
 
   const [concept, setConcept] = useState(null)
 
   const selectConcept = conceptName => {
     loadConcept(conceptName)
-    // loadConcept(conceptName).then(result => {
-    //   console.log("CxDebug result:", result)
-    // })
   }
 
   useEffect(() => {
-    setConcept(taxonomy[status.concept])
-  }, [status, taxonomy])
+    setConcept(taxonomy[selected.concept])
+  }, [selected, taxonomy])
 
   return (
     <Box sx={{ display: "flex", height: "100%" }}>
-      <Box sx={{ width: 240, overflowY: "auto", pl: 1, pt: 1 }}>
+      <Box sx={{ width: 300, overflowY: "auto", pl: 1, pt: 1 }}>
         <TaxonomyTree
           concept={concept}
           selectConcept={selectConcept}

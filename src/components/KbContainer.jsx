@@ -1,5 +1,5 @@
 import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
-import StatusProvider from "@/contexts/status/StatusProvider"
+import SelectedProvider from "@/contexts/selected/SelectedProvider"
 
 import KnowledgeBase from "@/components/kb/KnowledgeBase"
 
@@ -7,9 +7,9 @@ const KbContainer = () => {
   return (
     <>
       <TaxonomyProvider>
-        <StatusProvider>
+        <SelectedProvider>
           <KnowledgeBase />
-        </StatusProvider>
+        </SelectedProvider>
       </TaxonomyProvider>
     </>
   )

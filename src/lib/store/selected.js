@@ -1,3 +1,3 @@
 import localStore from "@/lib/store/localStore"
 
-export default localStore("app:status")
+export default localStore("app:selected")
