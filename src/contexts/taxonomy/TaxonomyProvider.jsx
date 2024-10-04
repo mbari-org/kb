@@ -4,31 +4,27 @@ import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { lineage, load } from "@/model/concept"
+import { load } from "@/model/taxonomy"
 
-// import taxonomyWithConcept from "./taxonomyWithConcept"
 import loadTaxonomyRoot from "./loadTaxonomyRoot"
 
 const TaxonomyProvider = ({ children }) => {
-  const { config } = use(ConfigContext)
+  const { error: configError, config } = use(ConfigContext)
+  if (!!configError) {
+    console.log("CxTBD TaxonomyProvider config error:", error)
+  }
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const loadConcept = async conceptName => {
-    let concept = taxonomy[conceptName]
-    if (!concept || !concept.children) {
-      const { error, taxonomy: taxonomyWithConcept } = await load(
-        taxonomy,
-        conceptName
-      )
-      if (!!error) {
-        console.error("Handle loadConcept error:", error)
-        return { error }
-      } else {
-        setTaxonomy(taxonomyWithConcept)
-        return { taxonomy: taxonomyWithConcept }
-      }
+  const updateTaxonomy = async conceptName => {
+    const { error, taxonomy: updatedTaxonomy } = await load(
+      taxonomy,
+      conceptName
+    )
+    if (!!error) {
+      console.error("Handle load concept error:", error)
     }
+    setTaxonomy(updatedTaxonomy)
   }
 
   useEffect(() => {
@@ -43,8 +39,12 @@ const TaxonomyProvider = ({ children }) => {
     }
   }, [config])
 
+  if (!taxonomy) {
+    return null
+  }
+
   return (
-    <TaxonomyContext value={{ taxonomy, loadConcept }}>
+    <TaxonomyContext value={{ taxonomy, updateTaxonomy }}>
       {children}
     </TaxonomyContext>
   )

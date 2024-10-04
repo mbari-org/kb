@@ -1,4 +1,4 @@
-import { fromApi, load } from "@/model/concept"
+import { load } from "@/model/taxonomy"
 import getRoot from "@/lib/services/oni/concept/root"
 
 const loadTaxonomyRoot = async config => {
@@ -7,16 +7,16 @@ const loadTaxonomyRoot = async config => {
     return { error: rootError }
   }
 
-  const { error: childrenError, taxonomy: taxonomyWithChildren } = await load(
+  const { error: loadError, taxonomy: taxonomyWithRoot } = await load(
     { _config_: config, _root_: root.name },
     root.name
   )
 
-  if (!!childrenError) {
-    return { error: childrenError }
+  if (!!loadError) {
+    return { error: loadError }
   }
 
-  return { taxonomy: taxonomyWithChildren }
+  return { taxonomy: taxonomyWithRoot }
 }
 
 export default loadTaxonomyRoot

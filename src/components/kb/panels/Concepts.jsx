@@ -6,7 +6,6 @@ import { styled } from "@mui/material/styles"
 import Concept from "@/components/kb/panels/concepts/Concept"
 import TaxonomyTree from "@/components/kb/panels/concepts/TaxonomyTree"
 
-import ConfigContext from "@/contexts/config/ConfigContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
@@ -17,13 +16,14 @@ const VerticalLine = styled(Box)(({ theme }) => ({
 }))
 
 const Concepts = () => {
-  const { taxonomy, loadConcept } = use(TaxonomyContext)
-  const { selected } = use(SelectedContext)
+  const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
+  const { selected, updateSelected } = use(SelectedContext)
 
   const [concept, setConcept] = useState(null)
 
   const selectConcept = conceptName => {
-    loadConcept(conceptName)
+    updateTaxonomy(conceptName)
+    updateSelected({ concept: conceptName })
   }
 
   useEffect(() => {
