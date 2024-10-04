@@ -1,4 +1,4 @@
-const taxonomyWithConcept = async (taxonomy, conceptName) => {
+const loadTaxonomyConcept = async (taxonomy, conceptName) => {
   const concept = taxonomy[conceptName]
   if (!concept) {
     const root = taxonomy[taxonomy._root_]
@@ -17,4 +17,4 @@ const taxonomyWithConcept = async (taxonomy, conceptName) => {
   }
 }
 
-export default taxonomyWithConcept
+export default loadTaxonomyConcept

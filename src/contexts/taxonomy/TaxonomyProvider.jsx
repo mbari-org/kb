@@ -6,8 +6,8 @@ import ConfigContext from "@/contexts/config/ConfigContext"
 
 import { lineage, load } from "@/model/concept"
 
-import taxonomyWithConcept from "./taxonomyWithConcept"
-import taxonomyWithRoot from "./taxonomyWithRoot"
+// import taxonomyWithConcept from "./taxonomyWithConcept"
+import loadTaxonomyRoot from "./loadTaxonomyRoot"
 
 const TaxonomyProvider = ({ children }) => {
   const { config } = use(ConfigContext)
@@ -15,10 +15,8 @@ const TaxonomyProvider = ({ children }) => {
   const [taxonomy, setTaxonomy] = useState(null)
 
   const loadConcept = async conceptName => {
-    if (!taxonomy[conceptName]) {
-      // const root = taxonomy[taxonomy._root_]
-      // const loadFn = conceptName === taxonomy._root_ || !!root ? load : lineage
-
+    let concept = taxonomy[conceptName]
+    if (!concept || !concept.children) {
       const { error, taxonomy: taxonomyWithConcept } = await load(
         taxonomy,
         conceptName
@@ -35,7 +33,7 @@ const TaxonomyProvider = ({ children }) => {
 
   useEffect(() => {
     if (!!config) {
-      taxonomyWithRoot(config).then(({ error, taxonomy: initialTaxonomy }) => {
+      loadTaxonomyRoot(config).then(({ error, taxonomy: initialTaxonomy }) => {
         if (!!error) {
           console.error("Handle taxonomy root error:", error)
         } else {

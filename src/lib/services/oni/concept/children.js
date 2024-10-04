@@ -1,8 +1,11 @@
 import conceptUrl from "./conceptUrl"
 
-const getChildren = async (config, name) => {
+const getChildren = async (taxonomy, name) => {
   const encodedName = encodeURIComponent(name)
-  const { error, url } = conceptUrl(config, `children/${encodedName}`)
+  const { error, url } = conceptUrl(
+    taxonomy._config_,
+    `children/${encodedName}`
+  )
   if (!!error) {
     return { error }
   }

@@ -1,8 +1,8 @@
 import conceptUrl from "./conceptUrl"
 
-const getConcept = async (config, name) => {
+const getConcept = async (taxonomy, name) => {
   const encodedName = encodeURIComponent(name)
-  const { error, url } = conceptUrl(config, encodedName)
+  const { error, url } = conceptUrl(taxonomy._config_, encodedName)
   if (!!error) {
     return { error }
   }

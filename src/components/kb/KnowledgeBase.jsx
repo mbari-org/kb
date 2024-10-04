@@ -18,9 +18,9 @@ const KnowledgeBase = () => {
     }
   }
 
-  useEffect(() => {
-    console.log("CxDebug KnowledgeBase status", status)
-  }, [status])
+  // useEffect(() => {
+  //   console.log("CxDebug KnowledgeBase status", status)
+  // }, [status])
 
   if (!status) {
     return null

@@ -20,10 +20,6 @@ const treeItem = (taxonomy, name) => {
   }
 }
 
-const treeItems = taxonomy => {
-  const treeItems = [treeItem(taxonomy, taxonomy._root_)]
-
-  return treeItems
-}
+const treeItems = taxonomy => [treeItem(taxonomy, taxonomy._root_)]
 
 export default treeItems
