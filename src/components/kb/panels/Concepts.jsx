@@ -4,7 +4,7 @@ import Box from "@mui/material/Box"
 import { styled } from "@mui/material/styles"
 
 import Concept from "@/components/kb/panels/concepts/Concept"
-import TaxonomyTree from "@/components/kb/panels/concepts/TaxonomyTree"
+import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"

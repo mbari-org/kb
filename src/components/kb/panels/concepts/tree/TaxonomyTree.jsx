@@ -10,22 +10,30 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   const [selectedItem, setSelectedItem] = useState([])
   const [expandedItems, setExpandedItems] = useState([])
 
-  const handleSelectConcept = (_event, itemId, _isSelected) => {
-    if (itemId !== concept.name) {
+  const handleSelectConcept = (_event, itemId) => {
+    if (itemId === concept.name) {
+      if (0 < concept.children.length) {
+        if (expandedItems.includes(itemId)) {
+          setExpandedItems(expandedItems.filter(id => id !== itemId))
+        } else {
+          setExpandedItems([...expandedItems, itemId])
+        }
+      }
+    } else {
       selectConcept(itemId)
     }
-  }
-
-  const handleToggleConcept = (_event, itemId, isExpanded) => {
-    const selectedConcept = taxonomy[itemId]
   }
 
   useEffect(() => {
     if (!!concept) {
       const treeRootItem = createRootItem(taxonomy)
       setRootItem(treeRootItem)
-      const item = findItem(treeRootItem, concept.name)
+      const { item, path } = findItem(treeRootItem, concept.name)
       setSelectedItem(item)
+
+      console.log(`Set expanded items: [${path.join(", ")}]`)
+
+      setExpandedItems(path)
     }
   }, [concept, taxonomy])
 
@@ -36,10 +44,10 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   return (
     <aside className="taxonomy-tree">
       <RichTreeView
+        expandedItems={expandedItems}
         items={[rootItem]}
         onItemClick={handleSelectConcept}
         selectedItems={selectedItem ? [selectedItem] : []}
-        onItemExpansionToggle={handleToggleConcept}
         slots={{ item: TreeItem2 }}
       />
     </aside>

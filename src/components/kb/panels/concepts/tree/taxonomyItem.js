@@ -18,18 +18,28 @@ const treeItem = (taxonomy, name, parent) => {
 
 const createRootItem = taxonomy => treeItem(taxonomy, taxonomy._root_)
 
+// Walk the tree from root item to find an id as well as the path from root to that id
 const findItem = (rootItem, id) => {
-  const queue = [rootItem]
+  const queue = [{ item: rootItem, path: [] }]
+
   while (queue.length > 0) {
-    const item = queue.shift()
+    const { item, path } = queue.shift()
     if (item.id === id) {
-      return item
+      if (0 < item.children?.length) {
+        return { item, path: [...path, id] }
+      }
+      return { item, path }
     }
     if (item.children && item.children.length > 0) {
-      queue.push(...item.children)
+      queue.push(
+        ...item.children.map(child => ({
+          item: child,
+          path: [...path, item.id],
+        }))
+      )
     }
   }
   return null
 }
 
-export { findItem, createRootItem }
+export { createRootItem, findItem }
