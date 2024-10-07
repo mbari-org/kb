@@ -3,10 +3,12 @@ import { useEffect, useState } from "react"
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
 
-import treeItems from "./treeIItems"
+import { createRootItem, findItem } from "./taxonomyItem"
 
 const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
-  const [items, setItems] = useState(null)
+  const [rootItem, setRootItem] = useState(null)
+  const [selectedItem, setSelectedItem] = useState([])
+  const [expandedItems, setExpandedItems] = useState([])
 
   const handleSelectConcept = (_event, itemId, _isSelected) => {
     if (itemId !== concept.name) {
@@ -19,18 +21,24 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   }
 
   useEffect(() => {
-    setItems(treeItems(taxonomy))
-  }, [taxonomy])
+    if (!!concept) {
+      const treeRootItem = createRootItem(taxonomy)
+      setRootItem(treeRootItem)
+      const item = findItem(treeRootItem, concept.name)
+      setSelectedItem(item)
+    }
+  }, [concept, taxonomy])
 
-  if (!items) {
+  if (!rootItem) {
     return null
   }
 
   return (
     <aside className="taxonomy-tree">
       <RichTreeView
-        items={items}
+        items={[rootItem]}
         onItemClick={handleSelectConcept}
+        selectedItems={selectedItem ? [selectedItem] : []}
         onItemExpansionToggle={handleToggleConcept}
         slots={{ item: TreeItem2 }}
       />

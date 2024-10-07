@@ -22,8 +22,15 @@ const Concepts = () => {
   const [concept, setConcept] = useState(null)
 
   const selectConcept = conceptName => {
-    updateTaxonomy(conceptName)
-    updateSelected({ concept: conceptName })
+    if (conceptName !== concept.name) {
+      if (!!concept.children) {
+        updateTaxonomy(conceptName).then(
+          updateSelected({ concept: conceptName })
+        )
+      } else {
+        updateSelected({ concept: conceptName })
+      }
+    }
   }
 
   useEffect(() => {
