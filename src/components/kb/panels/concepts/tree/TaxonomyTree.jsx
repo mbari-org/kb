@@ -12,14 +12,20 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
 
   const handleSelectConcept = (_event, itemId) => {
     if (itemId === concept.name) {
-      if (0 < concept.children.length) {
+      if (0 < concept.children?.length) {
         if (expandedItems.includes(itemId)) {
           setExpandedItems(expandedItems.filter(id => id !== itemId))
         } else {
           setExpandedItems([...expandedItems, itemId])
         }
+      } else {
+        selectConcept(itemId)
       }
     } else {
+      const selectingConcept = taxonomy[itemId]
+      if (0 < selectingConcept.children?.length) {
+        setExpandedItems(expandedItems.filter(id => id !== itemId))
+      }
       selectConcept(itemId)
     }
   }
@@ -28,12 +34,14 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
     if (!!concept) {
       const treeRootItem = createRootItem(taxonomy)
       setRootItem(treeRootItem)
+
       const { item, path } = findItem(treeRootItem, concept.name)
       setSelectedItem(item)
+      setExpandedItems(path)
+
+      console.log("CxDebug taxonomy keys:", Object.keys(taxonomy))
 
       console.log(`Set expanded items: [${path.join(", ")}]`)
-
-      setExpandedItems(path)
     }
   }, [concept, taxonomy])
 

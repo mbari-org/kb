@@ -9,6 +9,8 @@ import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
+import { needsUpdate } from "@/model/taxonomy"
+
 const VerticalLine = styled(Box)(({ theme }) => ({
   width: 6,
   backgroundColor: theme.palette.divider,
@@ -16,24 +18,15 @@ const VerticalLine = styled(Box)(({ theme }) => ({
 }))
 
 const Concepts = () => {
-  const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
+  const { taxonomy } = use(TaxonomyContext)
   const { selected, updateSelected } = use(SelectedContext)
 
   const [concept, setConcept] = useState(null)
 
-  const selectConcept = conceptName => {
-    if (conceptName !== concept.name) {
-      if (!!concept.children) {
-        updateTaxonomy(conceptName).then(
-          updateSelected({ concept: conceptName })
-        )
-      } else {
-        updateSelected({ concept: conceptName })
-      }
-    }
-  }
+  const selectConcept = conceptName => updateSelected({ concept: conceptName })
 
   useEffect(() => {
+    console.log("CxDebug Concepts init w/ selected:", selected.concept)
     setConcept(taxonomy[selected.concept])
   }, [selected, taxonomy])
 

@@ -4,9 +4,7 @@ import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { load } from "@/model/taxonomy"
-
-import loadTaxonomyRoot from "./loadTaxonomyRoot"
+import { load, loadRoot } from "@/model/taxonomy"
 
 const TaxonomyProvider = ({ children }) => {
   const { error: configError, config } = use(ConfigContext)
@@ -29,7 +27,7 @@ const TaxonomyProvider = ({ children }) => {
 
   useEffect(() => {
     if (!!config) {
-      loadTaxonomyRoot(config).then(({ error, taxonomy: initialTaxonomy }) => {
+      loadRoot(config).then(({ error, taxonomy: initialTaxonomy }) => {
         if (!!error) {
           console.error("Handle taxonomy root error:", error)
         } else {

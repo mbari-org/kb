@@ -1,14 +1,19 @@
 import getChildren from "@/lib/services/oni/concept/children"
 import getConcept from "@/lib/services/oni/concept/concept"
 import getParent from "@/lib/services/oni/concept/parent"
+import getRoot from "@/lib/services/oni/concept/root"
+
+// nullify arrays (which are all [] from the API) to allow taxonomy introspection
+// to "know" if the concept has already been filled (which requires additional API calls).
+const fromApi = concept => ({
+  ...concept,
+  linkRealizations: null,
+  media: null,
+  references: null,
+})
 
 const load = async (taxonomy, conceptName, updatable = false) => {
-  const existingConcept = taxonomy[conceptName]
-  if (
-    !!existingConcept &&
-    !!existingConcept.children &&
-    !!existingConcept.parent
-  ) {
+  if (!needsUpdate(taxonomy, conceptName)) {
     return { taxonomy }
   }
 
@@ -78,8 +83,12 @@ const loadConcept = async (updatableTaxonomy, conceptName) => {
   return {}
 }
 
-// Loads all the children of a parent, skipping children already in taxonomy.
-const loadChildren = async (updatableTaxonomy, conceptName) => {
+// Loads all concept children, skipping children already in taxonomy.
+const loadChildren = async (
+  updatableTaxonomy,
+  conceptName,
+  includeGrandChildren = true
+) => {
   const concept = updatableTaxonomy[conceptName]
   if (!!concept.children) {
     return {}
@@ -98,11 +107,19 @@ const loadChildren = async (updatableTaxonomy, conceptName) => {
     children: children.map(child => child.name),
   }
 
-  children
-    .filter(child => !updatableTaxonomy[child.name])
-    .forEach(child => {
-      updatableTaxonomy[child.name] = { ...fromApi(child), parent: conceptName }
+  const nonExtantChildren = children.filter(
+    child => !updatableTaxonomy[child.name]
+  )
+
+  nonExtantChildren.forEach(child => {
+    updatableTaxonomy[child.name] = { ...fromApi(child), parent: conceptName }
+  })
+
+  if (includeGrandChildren) {
+    nonExtantChildren.forEach(async child => {
+      await loadChildren(updatableTaxonomy, child.name, false)
     })
+  }
 
   return {}
 }
@@ -138,13 +155,38 @@ const loadParent = async (updatableTaxonomy, conceptName) => {
   return {}
 }
 
-// nullify arrays (which are all [] from the API) to allow taxonomy introspection
-// to "know" if the concept has already been filled (which requires additional API calls).
-const fromApi = concept => ({
-  ...concept,
-  linkRealizations: null,
-  media: null,
-  references: null,
-})
+const loadRoot = async config => {
+  const { error: rootError, root } = await getRoot(config)
+  if (!!rootError) {
+    return { error: rootError }
+  }
 
-export { load }
+  const { error: loadError, taxonomy: taxonomyWithRoot } = await load(
+    { _config_: config, _root_: root.name },
+    root.name
+  )
+
+  if (!!loadError) {
+    return { error: loadError }
+  }
+
+  return { taxonomy: taxonomyWithRoot }
+}
+
+const needsUpdate = (taxonomy, conceptName, includeGrandChildren = false) => {
+  const concept = taxonomy[conceptName]
+  if (!concept || !concept.children || !concept.parent) {
+    return true
+  }
+
+  if (includeGrandChildren) {
+    return concept.children.reduce(
+      (acc, child) => acc && !!taxonomy[child],
+      true
+    )
+  }
+
+  return false
+}
+
+export { load, loadRoot, needsUpdate }
