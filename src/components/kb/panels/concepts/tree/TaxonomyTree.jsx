@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
 
+import ConceptExpand from "./ConceptExpand"
+
 import { createRootItem, findItem } from "./taxonomyItem"
 
 const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
@@ -56,6 +58,7 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
         items={[rootItem]}
         onItemClick={handleSelectConcept}
         selectedItems={selectedItem ? [selectedItem] : []}
+        slotProps={{ item: { slots: { groupTransition: ConceptExpand } } }}
         slots={{ item: TreeItem2 }}
       />
     </aside>
