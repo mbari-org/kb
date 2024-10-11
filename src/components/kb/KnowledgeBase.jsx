@@ -21,7 +21,7 @@ const KnowledgeBase = () => {
   }
 
   useEffect(() => {
-    if (!taxonomy[selected.concept]) {
+    if (!taxonomy.concepts[selected.concept]) {
       updateTaxonomy(selected.concept)
     }
   }, [selected, taxonomy])

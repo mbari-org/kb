@@ -1,6 +1,6 @@
 import conceptUrl from "./conceptUrl"
 
-const getRoot = async config => {
+const fetchRoot = async config => {
   const { error, url } = conceptUrl(config, "query/root")
   if (!!error) {
     return { error }
@@ -22,4 +22,4 @@ const getRoot = async config => {
   return { root: payload }
 }
 
-export default getRoot
+export default fetchRoot

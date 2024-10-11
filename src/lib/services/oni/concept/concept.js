@@ -1,8 +1,8 @@
 import conceptUrl from "./conceptUrl"
 
-const getConcept = async (taxonomy, name) => {
+const fetchConcept = async (taxonomy, name) => {
   const encodedName = encodeURIComponent(name)
-  const { error, url } = conceptUrl(taxonomy._config_, encodedName)
+  const { error, url } = conceptUrl(taxonomy.config, encodedName)
   if (!!error) {
     return { error }
   }
@@ -23,4 +23,4 @@ const getConcept = async (taxonomy, name) => {
   return { concept: payload }
 }
 
-export default getConcept
+export default fetchConcept

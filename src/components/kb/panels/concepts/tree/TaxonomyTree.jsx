@@ -2,15 +2,23 @@ import { useEffect, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
+import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
 import ConceptExpand from "./ConceptExpand"
 
-import { createRootItem, findItem } from "./taxonomyItem"
+import { getConceptLabel, getConceptName, getConceptPath } from "./taxonomyItem"
 
 const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
-  const [rootItem, setRootItem] = useState(null)
-  const [selectedItem, setSelectedItem] = useState([])
+  const apiRef = useTreeViewApiRef()
+
+  // const [selectedItem, setSelectedItem] = useState(null)
   const [expandedItems, setExpandedItems] = useState([])
+
+  const getItemId = concept => concept.name
+  const getItemLabel = concept =>
+    concept.alternateNames.length === 0
+      ? concept.name
+      : `${concept.name} (${concept.alternateNames.join(", ")})`
 
   const handleSelectConcept = (_event, itemId) => {
     if (itemId === concept.name) {
@@ -24,7 +32,7 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
         selectConcept(itemId)
       }
     } else {
-      const selectingConcept = taxonomy[itemId]
+      const selectingConcept = taxonomy.concepts[itemId]
       if (0 < selectingConcept.children?.length) {
         setExpandedItems(expandedItems.filter(id => id !== itemId))
       }
@@ -34,20 +42,17 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
 
   useEffect(() => {
     if (!!concept) {
-      const treeRootItem = createRootItem(taxonomy)
-      setRootItem(treeRootItem)
-
-      const { item, path } = findItem(treeRootItem, concept.name)
-      setSelectedItem(item)
+      // const item = apiRef.current.getItem(concept)
+      const path = getConceptPath(taxonomy, concept)
       setExpandedItems(path)
 
-      console.log("CxDebug taxonomy keys:", Object.keys(taxonomy))
+      // setSelectedItem(item)
 
       console.log(`Set expanded items: [${path.join(", ")}]`)
     }
   }, [concept, taxonomy])
 
-  if (!rootItem) {
+  if (!concept) {
     return null
   }
 
@@ -55,9 +60,11 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
     <aside className="taxonomy-tree">
       <RichTreeView
         expandedItems={expandedItems}
-        items={[rootItem]}
+        getItemId={getConceptName}
+        getItemLabel={getConceptLabel}
+        items={[taxonomy.root]}
         onItemClick={handleSelectConcept}
-        selectedItems={selectedItem ? [selectedItem] : []}
+        selectedItems={[concept]}
         slotProps={{ item: { slots: { groupTransition: ConceptExpand } } }}
         slots={{ item: TreeItem2 }}
       />

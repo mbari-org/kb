@@ -1,11 +1,8 @@
 import conceptUrl from "./conceptUrl"
 
-const getChildren = async (taxonomy, name) => {
+const fetchChildren = async (taxonomy, name) => {
   const encodedName = encodeURIComponent(name)
-  const { error, url } = conceptUrl(
-    taxonomy._config_,
-    `children/${encodedName}`
-  )
+  const { error, url } = conceptUrl(taxonomy.config, `children/${encodedName}`)
   if (!!error) {
     return { error }
   }
@@ -26,4 +23,4 @@ const getChildren = async (taxonomy, name) => {
   return { children: payload }
 }
 
-export default getChildren
+export default fetchChildren

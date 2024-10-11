@@ -26,8 +26,7 @@ const Concepts = () => {
   const selectConcept = conceptName => updateSelected({ concept: conceptName })
 
   useEffect(() => {
-    console.log("CxDebug Concepts init w/ selected:", selected.concept)
-    setConcept(taxonomy[selected.concept])
+    setConcept(taxonomy.concepts[selected.concept])
   }, [selected, taxonomy])
 
   return (

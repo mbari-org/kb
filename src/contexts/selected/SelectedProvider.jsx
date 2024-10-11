@@ -21,7 +21,7 @@ const SelectedProvider = ({ children }) => {
     selectedStore.set(updated)
 
     const { concept: conceptName } = update
-    const selectedConcept = taxonomy[conceptName]
+    const selectedConcept = taxonomy.concepts[conceptName]
 
     if (!!selectedConcept && !selectedConcept.children) {
       updateTaxonomy(conceptName).then(() => {
@@ -35,7 +35,7 @@ const SelectedProvider = ({ children }) => {
   useEffect(() => {
     if (!!taxonomy) {
       const initialSelected = selectedStore.get() || {
-        concept: taxonomy._root_,
+        concept: taxonomy.root.name,
         panel: "Concepts",
       }
       setSelected(initialSelected)
