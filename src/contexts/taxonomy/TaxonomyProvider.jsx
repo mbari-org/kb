@@ -6,9 +6,12 @@ import ConfigContext from "@/contexts/config/ConfigContext"
 
 import { load, loadRoot } from "@/model/taxonomy"
 
+import selectedStore from "@/lib/store/selected"
+import conceptUrl from "@/lib/services/oni/concept/conceptUrl"
+
 const TaxonomyProvider = ({ children }) => {
   const { error: configError, config } = use(ConfigContext)
-  if (!!configError) {
+  if (configError) {
     console.log("CxTBD TaxonomyProvider config error:", error)
   }
 
@@ -19,19 +22,36 @@ const TaxonomyProvider = ({ children }) => {
       taxonomy,
       conceptName
     )
-    if (!!error) {
+    if (error) {
       console.error("Handle load concept error:", error)
     }
     setTaxonomy(updatedTaxonomy)
   }
 
   useEffect(() => {
-    if (!!config) {
-      loadRoot(config).then(({ error, taxonomy: initialTaxonomy }) => {
-        if (!!error) {
-          console.error("Handle taxonomy root error:", error)
-        } else {
-          setTaxonomy(initialTaxonomy)
+    if (config) {
+      loadRoot(config).then(({ error: rootError, taxonomy: rootTaxonomy }) => {
+        if (rootError) {
+          console.error("Handle taxonomy root error:", rootError)
+          return
+        }
+        const initialSelected = selectedStore.get()
+        if (initialSelected?.concept) {
+          load(rootTaxonomy, initialSelected.concept).then(
+            ({
+              error: selectedConceptError,
+              taxonomy: taxonomyWithConcept,
+            }) => {
+              if (selectedConceptError) {
+                console.error(
+                  "Handle taxonomy load selected concept error:",
+                  selectedConceptError
+                )
+                return
+              }
+              setTaxonomy(taxonomyWithConcept)
+            }
+          )
         }
       })
     }

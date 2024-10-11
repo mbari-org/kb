@@ -9,8 +9,6 @@ import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import { needsUpdate } from "@/model/taxonomy"
-
 const VerticalLine = styled(Box)(({ theme }) => ({
   width: 6,
   backgroundColor: theme.palette.divider,
@@ -21,13 +19,13 @@ const Concepts = () => {
   const { taxonomy } = use(TaxonomyContext)
   const { selected, updateSelected } = use(SelectedContext)
 
-  const [concept, setConcept] = useState(null)
+  const concept = taxonomy.concepts[selected.concept]
 
   const selectConcept = conceptName => updateSelected({ concept: conceptName })
 
-  useEffect(() => {
-    setConcept(taxonomy.concepts[selected.concept])
-  }, [selected, taxonomy])
+  if (!selected) {
+    return null
+  }
 
   return (
     <Box sx={{ display: "flex", height: "100%" }}>

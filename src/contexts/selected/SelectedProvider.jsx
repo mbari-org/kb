@@ -5,6 +5,8 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 
 import selectedStore from "@/lib/store/selected"
 
+import { needsUpdate } from "@/model/taxonomy"
+
 const SelectedProvider = ({ children }) => {
   const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
 
@@ -23,7 +25,7 @@ const SelectedProvider = ({ children }) => {
     const { concept: conceptName } = update
     const selectedConcept = taxonomy.concepts[conceptName]
 
-    if (!!selectedConcept && !selectedConcept.children) {
+    if (selectedConcept && needsUpdate(taxonomy, conceptName)) {
       updateTaxonomy(conceptName).then(() => {
         setSelected(updated)
       })
@@ -33,7 +35,7 @@ const SelectedProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (!!taxonomy) {
+    if (taxonomy) {
       const initialSelected = selectedStore.get() || {
         concept: taxonomy.root.name,
         panel: "Concepts",

@@ -2,6 +2,7 @@ import fetchChildren from "@/lib/services/oni/concept/children"
 import fetchConcept from "@/lib/services/oni/concept/concept"
 import fetchParent from "@/lib/services/oni/concept/parent"
 import fetchRoot from "@/lib/services/oni/concept/root"
+import { ChildCare } from "@mui/icons-material"
 
 // nullify a fetched concept's arrays (which are all [] from the API) to allow taxonomy introspection
 // to "know" if the concept has already been "filled" (which requires additional API calls).
@@ -23,7 +24,7 @@ const load = async (taxonomy, conceptName, updatable = false) => {
     updatableTaxonomy,
     conceptName
   )
-  if (!!conceptError) {
+  if (conceptError) {
     return {
       error: conceptError,
       taxonomy: updatableTaxonomy,
@@ -35,17 +36,29 @@ const load = async (taxonomy, conceptName, updatable = false) => {
     updatableTaxonomy,
     updatableConcept
   )
-  if (!!childrenError) {
+  if (childrenError) {
     return {
       error: childrenError,
       taxonomy: updatableTaxonomy,
     }
   }
+
+  const { error: grandChildrenError } = await loadGrandChildren(
+    updatableTaxonomy,
+    updatableConcept
+  )
+  if (grandChildrenError) {
+    return {
+      error: grandChildrenError,
+      taxonomy: updatableTaxonomy,
+    }
+  }
+
   const { error: parentError } = await loadParent(
     updatableTaxonomy,
     updatableConcept
   )
-  if (!!parentError) {
+  if (parentError) {
     return {
       error: parentError,
       taxonomy: updatableTaxonomy,
@@ -56,18 +69,16 @@ const load = async (taxonomy, conceptName, updatable = false) => {
     return { taxonomy: updatableTaxonomy }
   }
 
-  // const concept = updatableTaxonomy.concepts[conceptName]
   const parent = updatableConcept.parent
-
-  if (!!parent.children) {
+  if (parent.children) {
     return { taxonomy: updatableTaxonomy }
   }
 
-  return await load(updatableTaxonomy, parent.name, true)
+  return load(updatableTaxonomy, parent.name, true)
 }
 
 const loadConcept = async (updatableTaxonomy, conceptName) => {
-  if (!!updatableTaxonomy.concepts[conceptName]) {
+  if (updatableTaxonomy.concepts[conceptName]) {
     return {}
   }
 
@@ -75,7 +86,7 @@ const loadConcept = async (updatableTaxonomy, conceptName) => {
     updatableTaxonomy,
     conceptName
   )
-  if (!!conceptError) {
+  if (conceptError) {
     return { error: conceptError }
   }
 
@@ -86,12 +97,8 @@ const loadConcept = async (updatableTaxonomy, conceptName) => {
 }
 
 // Loads all concept children, skipping children already in taxonomy.
-const loadChildren = async (
-  updatableTaxonomy,
-  updatableConcept,
-  includeGrandChildren = true
-) => {
-  if (!!updatableConcept.children) {
+const loadChildren = async (updatableTaxonomy, updatableConcept) => {
+  if (updatableConcept.children) {
     return { children: updatableConcept.children }
   }
 
@@ -99,12 +106,12 @@ const loadChildren = async (
     updatableTaxonomy,
     updatableConcept.name
   )
-  if (!!childrenError) {
+  if (childrenError) {
     return { error: childrenError }
   }
 
-  const updatableChildren = apiChildren.map(apiChild => {
-    if (!!updatableTaxonomy.concepts[apiChild.name]?.children) {
+  const children = apiChildren.map(apiChild => {
+    if (updatableTaxonomy.concepts[apiChild.name]?.children) {
       return { ...updatableTaxonomy.concepts[apiChild.name] }
     }
     const updatableChild = fromApi(apiChild)
@@ -114,16 +121,39 @@ const loadChildren = async (
     return updatableChild
   })
 
-  updatableConcept.children = updatableChildren
+  updatableConcept.children = children
   updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
 
-  if (includeGrandChildren) {
-    await Promise.all(
-      updatableChildren.map(async updatableChild => {
-        await loadChildren(updatableTaxonomy, updatableChild, false)
-      })
-    )
+  return {}
+}
+
+const loadGrandChildren = async (updatableTaxonomy, updatableConcept) => {
+  if (!updatableConcept.children.some(child => !child.children)) {
+    return {}
   }
+
+  let error
+  const loadChildrenPromises = updatableConcept.children.map(async child => {
+    if (!child.children) {
+      const updatableChild = { ...child }
+      const { error: childrenError } = await loadChildren(
+        updatableTaxonomy,
+        updatableChild
+      )
+      if (childrenError) {
+        error = childrenError
+      }
+      return updatableChild
+    }
+    return child
+  })
+  const children = await Promise.all(loadChildrenPromises)
+
+  if (error) {
+    return { error }
+  }
+
+  updatableConcept.children = children
 
   return {}
 }
@@ -133,7 +163,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
     return {}
   }
 
-  if (!!updatableConcept.parent) {
+  if (updatableConcept.parent) {
     return {}
   }
 
@@ -141,11 +171,11 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
     updatableTaxonomy,
     updatableConcept.name
   )
-  if (!!parentError) {
+  if (parentError) {
     return { error: parentError }
   }
 
-  if (!!updatableTaxonomy.concepts[apiParent.name]) {
+  if (updatableTaxonomy.concepts[apiParent.name]) {
     updatableConcept.parent = updatableTaxonomy.concepts[apiParent.name]
     updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
     return {}
@@ -156,7 +186,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   updatableTaxonomy.concepts[conceptName] = updatableConcept
 
   const { error: childrenError } = await loadChildren(updatableTaxonomy, parent)
-  if (!!childrenError) {
+  if (childrenError) {
     return {
       error: childrenError,
       taxonomy: updatableTaxonomy,
@@ -168,7 +198,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
 
 const loadRoot = async config => {
   const { error: rootError, root: apiRoot } = await fetchRoot(config)
-  if (!!rootError) {
+  if (rootError) {
     return { error: rootError }
   }
 
@@ -184,7 +214,7 @@ const loadRoot = async config => {
     root.name
   )
 
-  if (!!loadError) {
+  if (loadError) {
     return { error: loadError }
   }
 
@@ -195,19 +225,17 @@ const loadRoot = async config => {
   return { taxonomy: { ...taxonomyWithRoot, root: rootWithChildren } }
 }
 
-const needsUpdate = (taxonomy, conceptName, includeGrandChildren = false) => {
+const needsUpdate = (taxonomy, conceptName) => {
   const concept = taxonomy.concepts[conceptName]
   if (!concept || !concept.children || !concept.parent) {
     return true
   }
+  return concept.children.some(child => !child.children)
 
-  if (includeGrandChildren) {
-    return concept.children.reduce(
-      (acc, child) => acc && !!taxonomy.concepts[child],
-      true
-    )
-  }
+  // if (includeGrandChildren) {
+  //   return concept.children.reduce((acc, child) => acc && !child.children, false)
+  // }
 
-  return false
+  // return false
 }
 export { load, loadRoot, needsUpdate }

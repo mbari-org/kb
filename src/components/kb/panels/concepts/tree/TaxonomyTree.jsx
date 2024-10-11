@@ -2,16 +2,15 @@ import { useEffect, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
-import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
+// import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
 import ConceptExpand from "./ConceptExpand"
 
 import { getConceptLabel, getConceptName, getConceptPath } from "./taxonomyItem"
 
 const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
-  const apiRef = useTreeViewApiRef()
+  // const apiRef = useTreeViewApiRef()
 
-  // const [selectedItem, setSelectedItem] = useState(null)
   const [expandedItems, setExpandedItems] = useState([])
 
   const getItemId = concept => concept.name
@@ -41,14 +40,9 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   }
 
   useEffect(() => {
-    if (!!concept) {
-      // const item = apiRef.current.getItem(concept)
+    if (concept) {
       const path = getConceptPath(taxonomy, concept)
       setExpandedItems(path)
-
-      // setSelectedItem(item)
-
-      console.log(`Set expanded items: [${path.join(", ")}]`)
     }
   }, [concept, taxonomy])
 
