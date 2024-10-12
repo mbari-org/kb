@@ -52,6 +52,8 @@ const TaxonomyProvider = ({ children }) => {
               setTaxonomy(taxonomyWithConcept)
             }
           )
+        } else {
+          setTaxonomy(rootTaxonomy)
         }
       })
     }

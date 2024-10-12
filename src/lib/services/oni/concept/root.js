@@ -2,7 +2,7 @@ import conceptUrl from "./conceptUrl"
 
 const fetchRoot = async config => {
   const { error, url } = conceptUrl(config, "query/root")
-  if (!!error) {
+  if (error) {
     return { error }
   }
 

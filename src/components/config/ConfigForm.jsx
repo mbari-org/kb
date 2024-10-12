@@ -22,7 +22,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const handleConfigChange = event => {
     const url = event.target.value
     setConfigUrl(url)
-    setConfigIsDirty(!!url && url !== config?.url)
+    setConfigIsDirty(url && url !== config?.url)
   }
 
   useEffect(() => {

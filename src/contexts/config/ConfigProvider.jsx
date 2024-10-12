@@ -21,7 +21,7 @@ const ConfigProvider = ({ children }) => {
 
     const { endpoints: allEndpoints, error } = await fetchEndpoints(url)
 
-    if (!!allEndpoints) {
+    if (allEndpoints) {
       const getServiceUrl = createServiceLookup(allEndpoints)
 
       setConfig({

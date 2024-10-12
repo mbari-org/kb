@@ -7,7 +7,7 @@ import { obfuscate } from "./refresh"
 
 const login = async (config, username, password) => {
   const { error, url: loginUrl } = authUrl(config, "login")
-  if (!!error) {
+  if (error) {
     return { error }
   }
 

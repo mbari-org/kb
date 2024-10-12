@@ -5,13 +5,11 @@ import KnowledgeBase from "@/components/kb/KnowledgeBase"
 
 const KbContainer = () => {
   return (
-    <>
-      <TaxonomyProvider>
-        <SelectedProvider>
-          <KnowledgeBase />
-        </SelectedProvider>
-      </TaxonomyProvider>
-    </>
+    <TaxonomyProvider>
+      <SelectedProvider>
+        <KnowledgeBase />
+      </SelectedProvider>
+    </TaxonomyProvider>
   )
 }
 

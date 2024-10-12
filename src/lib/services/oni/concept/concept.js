@@ -3,7 +3,7 @@ import conceptUrl from "./conceptUrl"
 const fetchConcept = async (taxonomy, name) => {
   const encodedName = encodeURIComponent(name)
   const { error, url } = conceptUrl(taxonomy.config, encodedName)
-  if (!!error) {
+  if (error) {
     return { error }
   }
 
