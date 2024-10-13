@@ -1,5 +1,6 @@
 import fetchChildren from "@/lib/services/oni/concept/children"
 import fetchConcept from "@/lib/services/oni/concept/concept"
+import fetchNames from "@/lib/services/oni/concept/names"
 import fetchParent from "@/lib/services/oni/concept/parent"
 import fetchRoot from "@/lib/services/oni/concept/root"
 import { ChildCare } from "@mui/icons-material"
@@ -196,7 +197,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   return {}
 }
 
-const loadRoot = async config => {
+const loadRoot = async (config, names) => {
   const { error: rootError, root: apiRoot } = await fetchRoot(config)
   if (rootError) {
     return { error: rootError }
@@ -205,6 +206,7 @@ const loadRoot = async config => {
   const root = fromApi(apiRoot)
   const taxonomy = {
     config,
+    names,
     root,
     concepts: { [root.name]: root },
   }
@@ -225,6 +227,11 @@ const loadRoot = async config => {
   return { taxonomy: { ...taxonomyWithRoot, root: rootWithChildren } }
 }
 
+const loadNames = async config => {
+  const { error, names } = await fetchNames(config)
+  return { names }
+}
+
 const needsUpdate = (taxonomy, conceptName) => {
   const concept = taxonomy.concepts[conceptName]
   if (!concept || !concept.children || !concept.parent) {
@@ -238,4 +245,4 @@ const needsUpdate = (taxonomy, conceptName) => {
 
   // return false
 }
-export { load, loadRoot, needsUpdate }
+export { load, loadNames, loadRoot, needsUpdate }

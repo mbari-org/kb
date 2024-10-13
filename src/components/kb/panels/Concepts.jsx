@@ -1,6 +1,7 @@
 import { use, useEffect, useState } from "react"
 
 import Box from "@mui/material/Box"
+import Divider from "@mui/material/Divider"
 import { styled } from "@mui/material/styles"
 
 import Concept from "@/components/kb/panels/concepts/Concept"
@@ -36,7 +37,8 @@ const Concepts = () => {
           taxonomy={taxonomy}
         />
       </Box>
-      <VerticalLine />
+      <Divider flexItem orientation="vertical" sx={{ borderRightWidth: 6 }} />
+      {/* <VerticalLine /> */}
       <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
         <Concept concept={concept} />
       </Box>

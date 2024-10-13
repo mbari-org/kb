@@ -4,7 +4,7 @@ import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { load, loadRoot } from "@/model/taxonomy"
+import { load, loadNames, loadRoot } from "@/model/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
 import conceptUrl from "@/lib/services/oni/concept/conceptUrl"
@@ -30,31 +30,40 @@ const TaxonomyProvider = ({ children }) => {
 
   useEffect(() => {
     if (config) {
-      loadRoot(config).then(({ error: rootError, taxonomy: rootTaxonomy }) => {
-        if (rootError) {
-          console.error("Handle taxonomy root error:", rootError)
+      loadNames(config).then(({ error: namesError, names }) => {
+        if (namesError) {
+          console.error("Handle taxonomy names error:", namesError)
           return
         }
-        const initialSelected = selectedStore.get()
-        if (initialSelected?.concept) {
-          load(rootTaxonomy, initialSelected.concept).then(
-            ({
-              error: selectedConceptError,
-              taxonomy: taxonomyWithConcept,
-            }) => {
-              if (selectedConceptError) {
-                console.error(
-                  "Handle taxonomy load selected concept error:",
-                  selectedConceptError
-                )
-                return
-              }
-              setTaxonomy(taxonomyWithConcept)
+        loadRoot(config, names).then(
+          ({ error: rootError, taxonomy: rootTaxonomy }) => {
+            if (rootError) {
+              console.error("Handle taxonomy root error:", rootError)
+              return
             }
-          )
-        } else {
-          setTaxonomy(rootTaxonomy)
-        }
+
+            const initialSelected = selectedStore.get()
+            if (initialSelected?.concept) {
+              load(rootTaxonomy, initialSelected.concept).then(
+                ({
+                  error: selectedConceptError,
+                  taxonomy: taxonomyWithConcept,
+                }) => {
+                  if (selectedConceptError) {
+                    console.error(
+                      "Handle taxonomy load selected concept error:",
+                      selectedConceptError
+                    )
+                    return
+                  }
+                  setTaxonomy(taxonomyWithConcept)
+                }
+              )
+            } else {
+              setTaxonomy(rootTaxonomy)
+            }
+          }
+        )
       })
     }
   }, [config])

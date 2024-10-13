@@ -1,11 +1,18 @@
-const getNames = async url => {
+import conceptUrl from "./conceptUrl"
+
+const fetchNames = async config => {
+  const { error, url } = config.getServiceUrl("oni")
+  if (error) {
+    return { error }
+  }
+  const namesUrl = `${url}/names`
   const params = {
     headers: {
       Accept: "application/json",
     },
   }
 
-  const response = await fetch(url, params)
+  const response = await fetch(namesUrl, params)
   const payload = await response.json()
 
   if (response.status !== 200) {
@@ -17,4 +24,4 @@ const getNames = async url => {
   return { names }
 }
 
-export default getNames
+export default fetchNames
