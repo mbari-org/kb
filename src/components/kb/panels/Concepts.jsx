@@ -1,10 +1,11 @@
-import { use, useEffect, useState } from "react"
+import { use } from "react"
 
 import Box from "@mui/material/Box"
 import Divider from "@mui/material/Divider"
 import { styled } from "@mui/material/styles"
 
 import Concept from "@/components/kb/panels/concepts/Concept"
+import ConceptSearch from "@/components/kb/panels/concepts/ConceptSearch"
 import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 
 import SelectedContext from "@/contexts/selected/SelectedContext"
@@ -31,14 +32,22 @@ const Concepts = () => {
   return (
     <Box sx={{ display: "flex", height: "100%" }}>
       <Box sx={{ width: 300, overflowY: "auto", pl: 1, pt: 1 }}>
+        <ConceptSearch
+          concept={concept}
+          names={taxonomy.names}
+          selectConcept={selectConcept}
+        />
         <TaxonomyTree
           concept={concept}
           selectConcept={selectConcept}
           taxonomy={taxonomy}
         />
       </Box>
-      <Divider flexItem orientation="vertical" sx={{ borderRightWidth: 6 }} />
-      {/* <VerticalLine /> */}
+      <Divider
+        flexItem
+        orientation="vertical"
+        sx={{ borderRightWidth: 6, minHeight: "100vh" }}
+      />
       <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
         <Concept concept={concept} />
       </Box>
