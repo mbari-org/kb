@@ -7,7 +7,7 @@ import fetchRoot from "@/lib/services/oni/concept/root"
 const getConcept = (taxonomy, name) => {
   let concept = taxonomy?.concepts[name]
   if (concept) {
-    return concept
+    return needsUpdate(concept) ? null : concept
   }
 
   const aliasedName = taxonomy.aliases[name]
@@ -78,7 +78,7 @@ const loadTaxonomy = async (config, conceptName) => {
 }
 
 const load = async (taxonomy, conceptName, updatable = false) => {
-  if (!needsUpdate(taxonomy, conceptName)) {
+  if (!needsUpdate(getConcept(taxonomy, conceptName))) {
     return { taxonomy }
   }
 
@@ -129,16 +129,11 @@ const load = async (taxonomy, conceptName, updatable = false) => {
     }
   }
 
-  if (conceptName === taxonomy.root.name) {
+  if (updatableConcept.parent === null) {
     return { taxonomy: updatableTaxonomy }
   }
 
-  const parent = updatableConcept.parent
-  if (parent.children) {
-    return { taxonomy: updatableTaxonomy }
-  }
-
-  return load(updatableTaxonomy, parent.name, true)
+  return load(updatableTaxonomy, updatableConcept.parent.name, true)
 }
 
 const loadConcept = async (updatableTaxonomy, conceptName) => {
@@ -228,6 +223,7 @@ const loadGrandChildren = async (updatableTaxonomy, updatableConcept) => {
 
 const loadParent = async (updatableTaxonomy, updatableConcept) => {
   if (updatableConcept.name === updatableTaxonomy.root.name) {
+    updatableConcept.parent = null
     return {}
   }
 
@@ -250,9 +246,10 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   }
 
   const parent = fromApi(apiParent)
-  updatableConcept.parent = parent
-  updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
+  updatableTaxonomy.concepts[parent.name] = parent
   addAliases(updatableTaxonomy, parent)
+
+  updatableConcept.parent = parent
 
   const { error: childrenError } = await loadChildren(updatableTaxonomy, parent)
   if (childrenError) {
@@ -265,8 +262,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   return {}
 }
 
-const needsUpdate = (taxonomy, conceptName) => {
-  const concept = taxonomy.concepts[conceptName]
+const needsUpdate = concept => {
   return (
     !concept ||
     !concept.children ||

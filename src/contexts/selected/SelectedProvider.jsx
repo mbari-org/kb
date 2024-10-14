@@ -27,15 +27,6 @@ const SelectedProvider = ({ children }) => {
       loadConcept(conceptName).then(() => {
         updateSelected({ concept: conceptName })
       })
-
-      // const concept = getConcept(conceptName)
-      // if (concept) {
-      //   updateSelected({ concept: concept.name })
-      // } else {
-      //   loadConcept(conceptName).then(() => {
-      //     updateSelected({ concept: conceptName })
-      //   })
-      // }
     }
   }
 
