@@ -11,8 +11,6 @@ import {
   needsUpdate,
 } from "@/model/taxonomy"
 
-import selectedStore from "@/lib/store/selected"
-
 const TaxonomyProvider = ({ children }) => {
   const { error: configError, config } = use(ConfigContext)
   if (configError) {
@@ -44,8 +42,7 @@ const TaxonomyProvider = ({ children }) => {
 
   useEffect(() => {
     if (config) {
-      const initialSelected = selectedStore.get()
-      loadTaxonomy(config, initialSelected?.concept).then(
+      loadTaxonomy(config).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           if (taxonomyError) {
             console.error("Handle taxonomy root error:", rootError)
