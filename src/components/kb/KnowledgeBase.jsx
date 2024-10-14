@@ -1,9 +1,11 @@
 import { use, useTransition } from "react"
 
-import SelectedContext from "@/contexts/selected/SelectedContext"
+import Box from "@mui/material/Box"
 
 import NavBar from "@/components/kb/nav/NavBar"
 import Panel from "@/components/kb/Panel"
+
+import SelectedContext from "@/contexts/selected/SelectedContext"
 
 const KnowledgeBase = () => {
   const { selected, updatePanel } = use(SelectedContext)
@@ -23,10 +25,12 @@ const KnowledgeBase = () => {
   }
 
   return (
-    <>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <NavBar activePanel={selected.panel} selectPanel={selectPanel} />
-      <Panel name={selected.panel} />
-    </>
+      <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
+        <Panel name={selected.panel} />
+      </Box>
+    </Box>
   )
 }
 

@@ -2,22 +2,22 @@ import { useEffect, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
-// import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
 import ConceptExpand from "./ConceptExpand"
-
 import { getConceptLabel, getConceptName, getConceptPath } from "./taxonomyItem"
 
-const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
-  // const apiRef = useTreeViewApiRef()
+import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
+const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   const [expandedItems, setExpandedItems] = useState([])
+
+  const apiRef = useTreeViewApiRef()
 
   const getItemId = concept => concept.name
   const getItemLabel = concept =>
     concept.alternateNames.length === 0
       ? concept.name
-      : `${concept.name} (${concept.alternateNames.join(", ")})`
+      : `${concept.name} (${concept.alternateNames.join(", ")})}`
 
   const handleSelectConcept = (_event, itemId) => {
     if (itemId === concept.name) {
@@ -43,6 +43,15 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
     if (concept) {
       const path = getConceptPath(taxonomy, concept)
       setExpandedItems(path)
+
+      // Scroll and focused item after a short delay to allow tree expansion
+      setTimeout(() => {
+        apiRef.current
+          .getItemDOMElement(concept.name)
+          ?.scrollIntoView({ block: "center" })
+
+        apiRef.current?.focusItem(null, concept.name)
+      }, 200)
     }
   }, [concept, taxonomy])
 
@@ -53,6 +62,7 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   return (
     <aside className="taxonomy-tree">
       <RichTreeView
+        apiRef={apiRef}
         expandedItems={expandedItems}
         getItemId={getConceptName}
         getItemLabel={getConceptLabel}

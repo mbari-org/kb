@@ -1,4 +1,4 @@
-import { use, useEffect } from "react"
+import { use } from "react"
 
 import Box from "@mui/material/Box"
 import Divider from "@mui/material/Divider"
@@ -21,7 +21,7 @@ const Concepts = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", height: "100%" }}>
+    <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
       <Box sx={{ width: 300, overflowY: "auto", pl: 1, pt: 1 }}>
         <ConceptSearch
           concept={concept}
@@ -34,11 +34,7 @@ const Concepts = () => {
           taxonomy={taxonomy}
         />
       </Box>
-      <Divider
-        flexItem
-        orientation="vertical"
-        sx={{ borderRightWidth: 6, minHeight: "100vh" }}
-      />
+      <Divider flexItem orientation="vertical" sx={{ borderRightWidth: 6 }} />
       <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
         <Concept concept={concept} />
       </Box>
