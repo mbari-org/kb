@@ -8,6 +8,7 @@ import {
   getConcept as getTaxonomyContext,
   load,
   loadTaxonomy,
+  needsUpdate,
 } from "@/model/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
@@ -24,7 +25,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const loadConcept = async conceptName => {
     const existing = getTaxonomyContext(taxonomy, conceptName)
-    if (existing) {
+    if (!needsUpdate(existing)) {
       return {}
     }
 

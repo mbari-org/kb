@@ -6,7 +6,7 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 import selectedStore from "@/lib/store/selected"
 
 const SelectedProvider = ({ children }) => {
-  const { getConcept, loadConcept, taxonomy } = use(TaxonomyContext)
+  const { loadConcept, taxonomy } = use(TaxonomyContext)
 
   const [selected, setSelected] = useState(null)
 

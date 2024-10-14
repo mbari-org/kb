@@ -7,7 +7,7 @@ import fetchRoot from "@/lib/services/oni/concept/root"
 const getConcept = (taxonomy, name) => {
   let concept = taxonomy?.concepts[name]
   if (concept) {
-    return needsUpdate(concept) ? null : concept
+    return concept
   }
 
   const aliasedName = taxonomy.aliases[name]
@@ -281,4 +281,4 @@ const addAliases = (updatableTaxonomy, concept) => {
   }
 }
 
-export { getConcept, load, loadTaxonomy }
+export { getConcept, load, loadTaxonomy, needsUpdate }
