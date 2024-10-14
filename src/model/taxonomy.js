@@ -254,10 +254,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
 
   const { error: childrenError } = await loadChildren(updatableTaxonomy, parent)
   if (childrenError) {
-    return {
-      error: childrenError,
-      taxonomy: updatableTaxonomy,
-    }
+    return { error: childrenError }
   }
 
   return {}

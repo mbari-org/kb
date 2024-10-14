@@ -9,9 +9,11 @@ const Concept = ({ concept }) => {
       <div>Author: {concept.author}</div>
       <div>Aliases: {concept.alternateNames?.join(", ")}</div>
       <div>Rank: {concept.rank}</div>
-      <div>Media: {concept.media}</div>
-      <div>Link Realizations: {concept.linkRealizations}</div>
-      <div>References: {concept.references}</div>
+      <div>Media: {0 < concept.media.length ? "YES" : "NO"}</div>
+      <div>
+        Link Realizations: {0 < concept.linkRealizations.length ? "YES" : "NO"}
+      </div>
+      <div>References: {0 < concept.references.length ? "YES" : "NO"}</div>
     </>
   )
 }
