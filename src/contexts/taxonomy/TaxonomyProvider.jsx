@@ -4,10 +4,13 @@ import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { load, loadNames, loadRoot } from "@/model/taxonomy"
+import {
+  getConcept as getTaxonomyContext,
+  load,
+  loadTaxonomy,
+} from "@/model/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
-import conceptUrl from "@/lib/services/oni/concept/conceptUrl"
 
 const TaxonomyProvider = ({ children }) => {
   const { error: configError, config } = use(ConfigContext)
@@ -17,54 +20,39 @@ const TaxonomyProvider = ({ children }) => {
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const updateTaxonomy = async conceptName => {
-    const { error, taxonomy: updatedTaxonomy } = await load(
+  const getConcept = conceptName => getTaxonomyContext(taxonomy, conceptName)
+
+  const loadConcept = async conceptName => {
+    const existing = getTaxonomyContext(taxonomy, conceptName)
+    if (existing) {
+      return {}
+    }
+
+    const { error: loadError, taxonomy: taxonmyWithConcept } = await load(
       taxonomy,
       conceptName
     )
-    if (error) {
-      console.error("Handle load concept error:", error)
+
+    if (loadError) {
+      return { error: loadError }
     }
-    setTaxonomy(updatedTaxonomy)
+    setTaxonomy(taxonmyWithConcept)
+
+    return {}
   }
 
   useEffect(() => {
     if (config) {
-      loadNames(config).then(({ error: namesError, names }) => {
-        if (namesError) {
-          console.error("Handle taxonomy names error:", namesError)
-          return
-        }
-        loadRoot(config, names).then(
-          ({ error: rootError, taxonomy: rootTaxonomy }) => {
-            if (rootError) {
-              console.error("Handle taxonomy root error:", rootError)
-              return
-            }
-
-            const initialSelected = selectedStore.get()
-            if (initialSelected?.concept) {
-              load(rootTaxonomy, initialSelected.concept).then(
-                ({
-                  error: selectedConceptError,
-                  taxonomy: taxonomyWithConcept,
-                }) => {
-                  if (selectedConceptError) {
-                    console.error(
-                      "Handle taxonomy load selected concept error:",
-                      selectedConceptError
-                    )
-                    return
-                  }
-                  setTaxonomy(taxonomyWithConcept)
-                }
-              )
-            } else {
-              setTaxonomy(rootTaxonomy)
-            }
+      const initialSelected = selectedStore.get()
+      loadTaxonomy(config, initialSelected?.concept).then(
+        ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
+          if (taxonomyError) {
+            console.error("Handle taxonomy root error:", rootError)
+            return
           }
-        )
-      })
+          setTaxonomy(initialTaxonomy)
+        }
+      )
     }
   }, [config])
 
@@ -73,7 +61,7 @@ const TaxonomyProvider = ({ children }) => {
   }
 
   return (
-    <TaxonomyContext value={{ taxonomy, updateTaxonomy }}>
+    <TaxonomyContext value={{ getConcept, loadConcept, taxonomy }}>
       {children}
     </TaxonomyContext>
   )

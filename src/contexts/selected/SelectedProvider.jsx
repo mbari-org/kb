@@ -5,32 +5,37 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 
 import selectedStore from "@/lib/store/selected"
 
-import { needsUpdate } from "@/model/taxonomy"
-
 const SelectedProvider = ({ children }) => {
-  const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
+  const { getConcept, loadConcept, taxonomy } = use(TaxonomyContext)
 
   const [selected, setSelected] = useState(null)
 
   const updateSelected = update => {
-    let updated
-    if (selected === null) {
-      updated = update
-    } else if (JSON.stringify(update) !== JSON.stringify(selected)) {
-      updated = { ...selected, ...update }
-    }
-
+    const updated = selected ? { ...selected, ...update } : update
     selectedStore.set(updated)
+    setSelected(updated)
+  }
 
-    const { concept: conceptName } = update
-    const selectedConcept = taxonomy.concepts[conceptName]
+  const updatePanel = panel => {
+    if (panel !== selected.panel) {
+      updateSelected({ panel })
+    }
+  }
 
-    if (selectedConcept && needsUpdate(taxonomy, conceptName)) {
-      updateTaxonomy(conceptName).then(() => {
-        setSelected(updated)
+  const updateConcept = conceptName => {
+    if (conceptName !== selected.concept) {
+      loadConcept(conceptName).then(() => {
+        updateSelected({ concept: conceptName })
       })
-    } else {
-      setSelected(updated)
+
+      // const concept = getConcept(conceptName)
+      // if (concept) {
+      //   updateSelected({ concept: concept.name })
+      // } else {
+      //   loadConcept(conceptName).then(() => {
+      //     updateSelected({ concept: conceptName })
+      //   })
+      // }
     }
   }
 
@@ -49,7 +54,7 @@ const SelectedProvider = ({ children }) => {
   }
 
   return (
-    <SelectedContext value={{ selected, updateSelected }}>
+    <SelectedContext value={{ selected, updateConcept, updatePanel }}>
       {children}
     </SelectedContext>
   )

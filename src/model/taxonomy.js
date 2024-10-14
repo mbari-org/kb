@@ -3,7 +3,20 @@ import fetchConcept from "@/lib/services/oni/concept/concept"
 import fetchNames from "@/lib/services/oni/concept/names"
 import fetchParent from "@/lib/services/oni/concept/parent"
 import fetchRoot from "@/lib/services/oni/concept/root"
-import { ChildCare } from "@mui/icons-material"
+
+const getConcept = (taxonomy, name) => {
+  let concept = taxonomy?.concepts[name]
+  if (concept) {
+    return concept
+  }
+
+  const aliasedName = taxonomy.aliases[name]
+  if (aliasedName) {
+    return taxonomy.concepts[aliasedName] || null
+  }
+
+  return null
+}
 
 // nullify a fetched concept's arrays (which are all [] from the API) to allow taxonomy introspection
 // to "know" if the concept has already been "filled" (which requires additional API calls).
@@ -13,6 +26,56 @@ const fromApi = concept => ({
   media: null,
   references: null,
 })
+
+const loadTaxonomy = async (config, conceptName) => {
+  const { error: namesError, names } = await fetchNames(config)
+  if (namesError) {
+    return { error: namesError }
+  }
+
+  const { error: rootError, root: apiRoot } = await fetchRoot(config)
+  if (rootError) {
+    return { error: rootError }
+  }
+
+  const root = fromApi(apiRoot)
+  const aliases = root.alternateNames.reduce((acc, name) => {
+    acc[name] = root.name
+    return acc
+  }, {})
+
+  const taxonomy = {
+    aliases,
+    config,
+    names,
+    root,
+    concepts: { [root.name]: root },
+  }
+
+  const { error: loadRootError, taxonomy: taxonomyWithRoot } = await load(
+    taxonomy,
+    root.name,
+    true
+  )
+  if (loadRootError) {
+    return { error: loadRootError }
+  }
+
+  if (!conceptName) {
+    return { taxonomy: taxonomyWithRoot }
+  }
+
+  const { error: loadConceptError, taxonomy: taxonomyWithConcept } = await load(
+    taxonomyWithRoot,
+    conceptName,
+    true
+  )
+  if (loadConceptError) {
+    return { error: loadConceptError }
+  }
+
+  return { taxonomy: taxonomyWithConcept }
+}
 
 const load = async (taxonomy, conceptName, updatable = false) => {
   if (!needsUpdate(taxonomy, conceptName)) {
@@ -93,6 +156,7 @@ const loadConcept = async (updatableTaxonomy, conceptName) => {
 
   const concept = fromApi(apiConcept)
   updatableTaxonomy.concepts[conceptName] = concept
+  addAliases(updatableTaxonomy, concept)
 
   return {}
 }
@@ -119,11 +183,14 @@ const loadChildren = async (updatableTaxonomy, updatableConcept) => {
     updatableChild.parent = updatableConcept
 
     updatableTaxonomy.concepts[updatableChild.name] = updatableChild
+    addAliases(updatableTaxonomy, updatableChild)
+
     return updatableChild
   })
 
   updatableConcept.children = children
   updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
+  addAliases(updatableTaxonomy, updatableConcept)
 
   return {}
 }
@@ -184,7 +251,8 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
 
   const parent = fromApi(apiParent)
   updatableConcept.parent = parent
-  updatableTaxonomy.concepts[conceptName] = updatableConcept
+  updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
+  addAliases(updatableTaxonomy, parent)
 
   const { error: childrenError } = await loadChildren(updatableTaxonomy, parent)
   if (childrenError) {
@@ -197,52 +265,24 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   return {}
 }
 
-const loadRoot = async (config, names) => {
-  const { error: rootError, root: apiRoot } = await fetchRoot(config)
-  if (rootError) {
-    return { error: rootError }
-  }
-
-  const root = fromApi(apiRoot)
-  const taxonomy = {
-    config,
-    names,
-    root,
-    concepts: { [root.name]: root },
-  }
-
-  const { error: loadError, taxonomy: taxonomyWithRoot } = await load(
-    taxonomy,
-    root.name
-  )
-
-  if (loadError) {
-    return { error: loadError }
-  }
-
-  const rootName = root.name
-
-  const rootWithChildren = taxonomyWithRoot.concepts[rootName]
-
-  return { taxonomy: { ...taxonomyWithRoot, root: rootWithChildren } }
-}
-
-const loadNames = async config => {
-  const { error, names } = await fetchNames(config)
-  return { names }
-}
-
 const needsUpdate = (taxonomy, conceptName) => {
   const concept = taxonomy.concepts[conceptName]
-  if (!concept || !concept.children || !concept.parent) {
-    return true
-  }
-  return concept.children.some(child => !child.children)
-
-  // if (includeGrandChildren) {
-  //   return concept.children.reduce((acc, child) => acc && !child.children, false)
-  // }
-
-  // return false
+  return (
+    !concept ||
+    !concept.children ||
+    !concept.parent ||
+    concept.children.some(child => !child.children)
+  )
 }
-export { load, loadNames, loadRoot, needsUpdate }
+
+const addAliases = (updatableTaxonomy, concept) => {
+  if (0 < concept.alternateNames?.length) {
+    const aliases = { ...updatableTaxonomy.aliases }
+    concept.alternateNames.forEach(name => {
+      aliases[name] = concept.name
+    })
+    updatableTaxonomy.aliases = aliases
+  }
+}
+
+export { getConcept, load, loadTaxonomy }

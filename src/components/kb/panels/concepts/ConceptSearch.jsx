@@ -7,14 +7,14 @@ const ConceptSearch = ({ concept, names, selectConcept }) => {
   const [value, setValue] = useState(null)
 
   useEffect(() => {
-    setValue(concept?.name)
+    setValue(concept.name)
   }, [concept])
 
   return (
     <Autocomplete
       disablePortal
       onChange={(_event, newValue) => {
-        selectConcept(newValue)
+        newValue && selectConcept(newValue)
       }}
       options={names}
       renderInput={params => (

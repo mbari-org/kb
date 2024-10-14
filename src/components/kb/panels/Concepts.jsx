@@ -1,8 +1,7 @@
-import { use } from "react"
+import { use, useEffect } from "react"
 
 import Box from "@mui/material/Box"
 import Divider from "@mui/material/Divider"
-import { styled } from "@mui/material/styles"
 
 import Concept from "@/components/kb/panels/concepts/Concept"
 import ConceptSearch from "@/components/kb/panels/concepts/ConceptSearch"
@@ -11,21 +10,13 @@ import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-const VerticalLine = styled(Box)(({ theme }) => ({
-  width: 6,
-  backgroundColor: theme.palette.divider,
-  minHeight: "100vh",
-}))
-
 const Concepts = () => {
-  const { taxonomy } = use(TaxonomyContext)
-  const { selected, updateSelected } = use(SelectedContext)
+  const { getConcept, taxonomy } = use(TaxonomyContext)
+  const { selected, updateConcept } = use(SelectedContext)
 
-  const concept = taxonomy.concepts[selected.concept]
+  const concept = getConcept(selected.concept)
 
-  const selectConcept = conceptName => updateSelected({ concept: conceptName })
-
-  if (!selected) {
+  if (!concept) {
     return null
   }
 
@@ -35,11 +26,11 @@ const Concepts = () => {
         <ConceptSearch
           concept={concept}
           names={taxonomy.names}
-          selectConcept={selectConcept}
+          selectConcept={updateConcept}
         />
         <TaxonomyTree
           concept={concept}
-          selectConcept={selectConcept}
+          selectConcept={updateConcept}
           taxonomy={taxonomy}
         />
       </Box>

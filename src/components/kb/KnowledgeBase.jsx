@@ -1,30 +1,22 @@
-import { use, useEffect, useTransition } from "react"
+import { use, useTransition } from "react"
 
 import SelectedContext from "@/contexts/selected/SelectedContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import NavBar from "@/components/kb/nav/NavBar"
 import Panel from "@/components/kb/Panel"
 
 const KnowledgeBase = () => {
-  const { selected, updateSelected } = use(SelectedContext)
-  const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
+  const { selected, updatePanel } = use(SelectedContext)
 
-  const [isPending, startTransition] = useTransition()
+  const [_isPending, startTransition] = useTransition()
 
   const selectPanel = panelName => {
     if (panelName !== selected.panel) {
       startTransition(() => {
-        updateSelected({ panel: panelName })
+        updatePanel(panelName)
       })
     }
   }
-
-  useEffect(() => {
-    if (!taxonomy.concepts[selected.concept]) {
-      updateTaxonomy(selected.concept)
-    }
-  }, [selected, taxonomy])
 
   if (!selected) {
     return null
