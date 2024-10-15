@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
-import { useTheme } from "@mui/material/styles"
+import { Divider, Stack, Typography } from "@mui/material"
+import { alpha, useTheme } from "@mui/material/styles"
 
 import TextField from "@mui/material/TextField"
 import Autocomplete from "@mui/material/Autocomplete"
@@ -21,8 +22,26 @@ const ConceptSearch = ({ concept, names, selectConcept }) => {
         newValue && selectConcept(newValue)
       }}
       options={names}
-      renderInput={params => <TextField {...params} label="Concept" />}
-      sx={{ backgroundColor: theme.palette.grey[200] }}
+      renderInput={params => (
+        <Stack>
+          <Typography
+            sx={{
+              fontSize: theme => theme.typography.fontSize * 1.4,
+              fontWeight: "bold",
+            }}
+          >
+            Concept
+          </Typography>
+          <TextField
+            {...params}
+            sx={{ backgroundColor: alpha(theme.palette.primary.main, 0.2) }}
+          />
+          <hr />
+        </Stack>
+      )}
+      // sx={{
+      //   backgroundColor: alpha((theme.vars || theme).palette.grey, 0.3),
+      // }}
       value={value}
     />
   )

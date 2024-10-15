@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
-import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
 
+import ConceptItem from "./ConceptItem"
 import ExpandConcept from "./ExpandConcept"
+
 import { getConceptLabel, getConceptName, getConceptPath } from "./taxonomyItem"
 
 import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
@@ -62,6 +63,7 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   return (
     <aside className="taxonomy-tree">
       <RichTreeView
+        itemChildrenIndentation={8}
         apiRef={apiRef}
         expandedItems={expandedItems}
         getItemId={getConceptName}
@@ -69,8 +71,13 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
         items={[taxonomy.root]}
         onItemClick={handleSelectConcept}
         selectedItems={[concept]}
-        slotProps={{ item: { slots: { groupTransition: ExpandConcept } } }}
-        slots={{ item: TreeItem2 }}
+        slotProps={{
+          item: {
+            concept,
+            slots: { groupTransition: ExpandConcept },
+          },
+        }}
+        slots={{ item: ConceptItem }}
       />
     </aside>
   )
