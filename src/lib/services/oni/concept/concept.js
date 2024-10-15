@@ -24,7 +24,7 @@ const fetchConcept = async (taxonomy, conceptName) => {
     return { concept: payload }
   } catch (error) {
     console.error(`Error fetching concept '${conceptName}':`, error)
-    return { error: error.message || "An unknown error occurred" }
+    throw new Error(`Error fetching concept '${conceptName}': ${error.message}`)
   }
 }
 

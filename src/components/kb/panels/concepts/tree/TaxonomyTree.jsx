@@ -48,10 +48,10 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
       setTimeout(() => {
         apiRef.current
           .getItemDOMElement(concept.name)
-          ?.scrollIntoView({ block: "center" })
+          ?.scrollIntoView({ behavior: "smooth", block: "center" })
 
         apiRef.current?.focusItem(null, concept.name)
-      }, 200)
+      }, 500)
     }
   }, [concept, taxonomy])
 

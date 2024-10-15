@@ -3,7 +3,7 @@ import { use, useTransition } from "react"
 import Box from "@mui/material/Box"
 
 import NavBar from "@/components/kb/nav/NavBar"
-import Panel from "@/components/kb/Panel"
+import Panel from "@/components/kb/panels/Panel"
 
 import SelectedContext from "@/contexts/selected/SelectedContext"
 
