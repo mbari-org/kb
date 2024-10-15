@@ -23,11 +23,13 @@ const Concepts = () => {
   return (
     <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
       <Box sx={{ width: 300, overflowY: "auto", pl: 1, pt: 1 }}>
-        <ConceptSearch
-          concept={concept}
-          names={taxonomy.names}
-          selectConcept={updateConcept}
-        />
+        <Box sx={{ m: 1 }}>
+          <ConceptSearch
+            concept={concept}
+            names={taxonomy.names}
+            selectConcept={updateConcept}
+          />
+        </Box>
         <TaxonomyTree
           concept={concept}
           selectConcept={updateConcept}

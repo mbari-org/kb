@@ -1,7 +1,7 @@
 import { animated, useSpring } from "@react-spring/web"
 import Collapse from "@mui/material/Collapse"
 
-const ConceptExpand = props => {
+const ExpandConcept = props => {
   const style = useSpring({
     to: {
       opacity: props.in ? 1 : 0,
@@ -16,4 +16,4 @@ const ConceptExpand = props => {
   )
 }
 
-export default ConceptExpand
+export default ExpandConcept

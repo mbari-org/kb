@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react"
 
+import { useTheme } from "@mui/material/styles"
+
 import TextField from "@mui/material/TextField"
 import Autocomplete from "@mui/material/Autocomplete"
 
 const ConceptSearch = ({ concept, names, selectConcept }) => {
+  const theme = useTheme()
+
   const [value, setValue] = useState(null)
 
   useEffect(() => {
@@ -17,11 +21,8 @@ const ConceptSearch = ({ concept, names, selectConcept }) => {
         newValue && selectConcept(newValue)
       }}
       options={names}
-      renderInput={params => (
-        <div style={{ marginRight: "7px" }}>
-          <TextField {...params} label="Concept" />
-        </div>
-      )}
+      renderInput={params => <TextField {...params} label="Concept" />}
+      sx={{ backgroundColor: theme.palette.grey[200] }}
       value={value}
     />
   )
