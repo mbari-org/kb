@@ -48,7 +48,7 @@ const TaxonomyProvider = ({ children }) => {
       loadTaxonomy(config).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           if (taxonomyError) {
-            console.error("Handle taxonomy root error:", rootError)
+            console.error("Handle taxonomy root error:", taxonomyError)
             return
           }
           setTaxonomy(initialTaxonomy)

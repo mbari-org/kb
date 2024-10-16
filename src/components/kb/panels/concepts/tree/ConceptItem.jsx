@@ -3,7 +3,7 @@ import { forwardRef } from "react"
 import { alpha, styled } from "@mui/material/styles"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
 
-const ConceptContent = styled("div")(({ theme, isSelected }) => ({
+const ConceptContent = styled("div")(({ theme }) => ({
   padding: theme.spacing(0.5, 1),
   borderRadius: theme.shape.borderRadius,
   width: "100%",
