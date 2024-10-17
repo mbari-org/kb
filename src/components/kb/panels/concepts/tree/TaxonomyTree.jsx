@@ -1,63 +1,124 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 
 import ConceptItem from "./ConceptItem"
-import ExpandConcept from "./ExpandConcept"
 
 import { getConceptLabel, getConceptName, getConceptPath } from "./taxonomyItem"
+import { handleArrowNav, handleSelectConcept } from "./handleTreeEvents"
 
 import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
 const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   const [expandedItems, setExpandedItems] = useState([])
+  const [autoExpand, setAutoExpand] = useState(true)
 
   const apiRef = useTreeViewApiRef()
+  const timeoutRef = useRef(null)
 
-  const getItemId = concept => concept.name
-  const getItemLabel = concept =>
-    concept.alternateNames.length === 0
-      ? concept.name
-      : `${concept.name} (${concept.alternateNames.join(", ")})}`
-
-  const handleSelectConcept = (_event, itemId) => {
-    if (itemId === concept.name) {
-      if (0 < concept.children?.length) {
-        if (expandedItems.includes(itemId)) {
-          setExpandedItems(expandedItems.filter(id => id !== itemId))
-        } else {
-          setExpandedItems([...expandedItems, itemId])
-        }
-      } else {
-        selectConcept(itemId)
+  const expandConcept = useCallback(
+    (concept, expand = true) => {
+      if (expand && !expandedItems.includes(concept.name)) {
+        setExpandedItems([...expandedItems, concept.name])
       }
+      if (!expand && expandedItems.includes(concept.name)) {
+        setExpandedItems(expandedItems.filter(id => id !== concept.name))
+      }
+    },
+    [expandedItems]
+  )
+
+  const allLeafs = (concept, leafs = []) => {
+    if (concept.children && 0 < concept.children.length) {
+      leafs.push(concept.name)
+      concept.children.forEach(child => allLeafs(child, leafs))
+    }
+    return leafs
+  }
+
+  const expandAllChildren = (concept, expand = true) => {
+    const leafs = allLeafs(concept)
+    if (expand) {
+      setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
     } else {
-      const selectingConcept = taxonomy.concepts[itemId]
-      if (0 < selectingConcept.children?.length) {
-        setExpandedItems(expandedItems.filter(id => id !== itemId))
-      }
-      selectConcept(itemId)
+      const trimmedItems = expandedItems.filter(item => !leafs.includes(item))
+      setExpandedItems([...trimmedItems, concept.name])
     }
   }
 
+  const handleConceptClick = (event, itemId) =>
+    handleSelectConcept(
+      concept,
+      expandConcept,
+      expandedItems,
+      itemId,
+      selectConcept,
+      setAutoExpand
+    )
+
   useEffect(() => {
     if (concept) {
-      const path = getConceptPath(taxonomy, concept)
-      setExpandedItems(path)
+      if (expandedItems.length === 0) {
+        setExpandedItems(getConceptPath(taxonomy, concept))
+      } else {
+        expandConcept(concept, autoExpand)
+      }
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
 
       // Scroll and focused item after a short delay to allow tree expansion
-      setTimeout(() => {
-        apiRef.current
-          .getItemDOMElement(concept.name)
-          ?.scrollIntoView({ behavior: "smooth", block: "center" })
-
-        apiRef.current?.focusItem(null, concept.name)
+      timeoutRef.current = setTimeout(() => {
+        const domElement = apiRef.current.getItemDOMElement(concept.name)
+        if (!domElement) {
+          return
+        }
+        const rect = domElement.getBoundingClientRect()
+        const conceptIsVisible =
+          rect.top >= 0 &&
+          rect.bottom <=
+            (window.innerHeight || document.documentElement.clientHeight)
+        if (!conceptIsVisible) {
+          domElement.scrollIntoView({ behavior: "smooth", block: "nearest" })
+          apiRef.current.focusItem(null, concept.name)
+        }
       }, 500)
     }
   }, [concept, taxonomy])
 
+  useEffect(() => {
+    const arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
+    const handleArrowKeys = event => {
+      if (arrowKeys.includes(event.key)) {
+        event.preventDefault()
+        handleArrowNav(
+          concept,
+          event,
+          expandAllChildren,
+          expandConcept,
+          expandedItems,
+          selectConcept,
+          setAutoExpand
+        )
+      }
+    }
+
+    window.addEventListener("keydown", handleArrowKeys)
+
+    return () => {
+      window.removeEventListener("keydown", handleArrowKeys)
+    }
+  }, [concept, expandedItems, selectConcept, setExpandedItems, taxonomy])
+
   if (!concept) {
     return null
+  }
+
+  const slotProps = {
+    item: {
+      concept,
+    },
   }
 
   return (
@@ -69,14 +130,9 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
         getItemId={getConceptName}
         getItemLabel={getConceptLabel}
         items={[taxonomy.root]}
-        onItemClick={handleSelectConcept}
+        onItemClick={handleConceptClick}
         selectedItems={[concept]}
-        slotProps={{
-          item: {
-            concept,
-            slots: { groupTransition: ExpandConcept },
-          },
-        }}
+        slotProps={slotProps}
         slots={{ item: ConceptItem }}
       />
     </aside>

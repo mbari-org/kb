@@ -26,21 +26,10 @@ const TaxonomyProvider = ({ children }) => {
 
   const loadConcept = async conceptName => {
     const existing = getTaxonomyContext(taxonomy, conceptName)
-    if (!needsUpdate(existing)) {
-      return {}
+    if (needsUpdate(existing)) {
+      const { taxonomy: taxonmyWithConcept } = await load(taxonomy, conceptName)
+      setTaxonomy(taxonmyWithConcept)
     }
-
-    const { error: loadError, taxonomy: taxonmyWithConcept } = await load(
-      taxonomy,
-      conceptName
-    )
-
-    if (loadError) {
-      return { error: loadError }
-    }
-    setTaxonomy(taxonmyWithConcept)
-
-    return {}
   }
 
   useEffect(() => {

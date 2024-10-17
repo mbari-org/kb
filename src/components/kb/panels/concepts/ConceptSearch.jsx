@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { Divider, Stack, Typography } from "@mui/material"
+import { Paper, Stack, Typography } from "@mui/material"
 import { alpha, useTheme } from "@mui/material/styles"
 
 import TextField from "@mui/material/TextField"
@@ -17,7 +17,7 @@ const ConceptSearch = ({ concept, names, selectConcept }) => {
 
   return (
     <Autocomplete
-      disablePortal
+      // disablePortal
       onChange={(_event, newValue) => {
         newValue && selectConcept(newValue)
       }}
@@ -34,14 +34,25 @@ const ConceptSearch = ({ concept, names, selectConcept }) => {
           </Typography>
           <TextField
             {...params}
-            sx={{ backgroundColor: alpha(theme.palette.primary.main, 0.2) }}
+            sx={{
+              backgroundColor: alpha(theme.palette.primary.main, 0.2),
+            }}
           />
           <hr />
         </Stack>
       )}
-      // sx={{
-      //   backgroundColor: alpha((theme.vars || theme).palette.grey, 0.3),
-      // }}
+      size="small"
+      slotProps={{
+        paper: {
+          sx: {
+            "& .MuiAutocomplete-listbox": {
+              "& .MuiAutocomplete-option": {
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+              },
+            },
+          },
+        },
+      }}
       value={value}
     />
   )

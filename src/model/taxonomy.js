@@ -22,6 +22,38 @@ const getConcept = (taxonomy, name) => {
   return null
 }
 
+const getNextSibling = concept => {
+  if (concept && concept.parent) {
+    const siblings = concept.parent.children
+    const currentIndex = siblings.findIndex(
+      sibling => sibling.name === concept.name
+    )
+
+    if (currentIndex !== -1 && currentIndex < siblings.length - 1) {
+      return siblings[currentIndex + 1]
+    }
+  }
+  return null
+}
+
+const getPrevSibling = concept => {
+  const { parent } = concept
+
+  if (parent) {
+    const siblings = parent.children
+    const currentIndex = siblings.findIndex(
+      sibling => sibling.name === concept.name
+    )
+
+    if (currentIndex > 0) {
+      return siblings[currentIndex - 1]
+    }
+  }
+
+  // If no previous sibling, return null
+  return null
+}
+
 const loadTaxonomy = async config => {
   const names = await fetchNames(config)
   const root = await fetchRoot(config)
@@ -184,4 +216,11 @@ const addAliases = (updatableTaxonomy, concept) => {
   }
 }
 
-export { getConcept, load, loadTaxonomy, needsUpdate }
+export {
+  getConcept,
+  getNextSibling,
+  getPrevSibling,
+  load,
+  loadTaxonomy,
+  needsUpdate,
+}
