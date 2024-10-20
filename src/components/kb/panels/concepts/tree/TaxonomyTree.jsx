@@ -9,17 +9,25 @@ import { handleArrowNav, handleSelectConcept } from "./handleTreeEvents"
 
 import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
-const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
+const TaxonomyTree = ({
+  concept,
+  loadAllDescendants,
+  selectConcept,
+  taxonomy,
+}) => {
   const [expandedItems, setExpandedItems] = useState([])
   const [autoExpand, setAutoExpand] = useState(true)
 
   const apiRef = useTreeViewApiRef()
   const timeoutRef = useRef(null)
 
+  const addExpandedItems = items =>
+    setExpandedItems(prevItems => [...new Set([...prevItems, ...items])])
+
   const expandConcept = useCallback(
     (concept, expand = true) => {
       if (expand && !expandedItems.includes(concept.name)) {
-        setExpandedItems([...expandedItems, concept.name])
+        addExpandedItems(getConceptPath(taxonomy, concept))
       }
       if (!expand && expandedItems.includes(concept.name)) {
         setExpandedItems(expandedItems.filter(id => id !== concept.name))
@@ -36,13 +44,15 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
     return leafs
   }
 
+  // CxTBD This only expands "loaded" children and doesn't load more concepts
   const expandAllChildren = (concept, expand = true) => {
-    const leafs = allLeafs(concept)
     if (expand) {
-      setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
+      loadAllDescendants(concept).then(() => {
+        const leafs = allLeafs(concept)
+        addExpandedItems(leafs)
+      })
     } else {
-      const trimmedItems = expandedItems.filter(item => !leafs.includes(item))
-      setExpandedItems([...trimmedItems, concept.name])
+      setExpandedItems(getConceptPath(taxonomy, concept))
     }
   }
 

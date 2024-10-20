@@ -8,13 +8,28 @@ import {
 
 import selectedStore from "@/lib/store/selected"
 
-const getConcept = (taxonomy, name) => {
-  let concept = taxonomy?.concepts[name]
+const loadAllDescendants = async (taxonomy, concept, updatable = false) => {
+  const updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
+  const updatableConcept = { ...concept }
+
+  await loadChildren(updatableTaxonomy, updatableConcept)
+
+  if (updatableConcept.children) {
+    for (const child of updatableConcept.children) {
+      await loadAllDescendants(updatableTaxonomy, child, true)
+    }
+  }
+
+  return { taxonomy: updatableTaxonomy }
+}
+
+const getConcept = (taxonomy, conceptName) => {
+  let concept = taxonomy?.concepts[conceptName]
   if (concept) {
     return concept
   }
 
-  const aliasedName = taxonomy.aliases[name]
+  const aliasedName = taxonomy.aliases[conceptName]
   if (aliasedName) {
     return taxonomy.concepts[aliasedName] || null
   }
@@ -221,6 +236,7 @@ export {
   getNextSibling,
   getPrevSibling,
   load,
+  loadAllDescendants,
   loadTaxonomy,
   needsUpdate,
 }
