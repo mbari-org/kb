@@ -1,3 +1,4 @@
+import axios from "axios"
 import { decodeJwt } from "jose"
 
 import authStore from "@/lib/store/auth"
@@ -12,23 +13,19 @@ const login = async (config, username, password) => {
   }
 
   try {
-    const authParams = params(username, password)
-    const response = await fetch(loginUrl, authParams)
-
-    if (response.status !== 200) {
-      return authErrorMessage(response.statusText)
+    var basicAuth = "Basic " + btoa(username + ":" + password)
+    const response = await axios.post(
+      loginUrl,
+      {},
+      { headers: { Authorization: basicAuth } }
+    )
+    return processToken(password, response.data.access_token)
+  } catch (error) {
+    if (error.status === 401) {
+      return authErrorMessage(error.response.statusText)
     }
 
-    const { access_token: token } = await response.json()
-
-    return processToken(password, token)
-  } catch (error) {
-    // return { error: error.message }
-
-    console.warn("Ignoring login error:", error)
-    const token =
-      "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8vd3d3Lm1iYXJpLm9yZyIsImlhdCI6MTcyNjg2MjcwNywiZXhwIjoxNzI2OTQ5MTA3LCJzdWIiOiIxIiwibmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIn0.tRzIl5fNre02LMM3BGuVHfiF4LacKFVDxkURbb3vzRdtw-p7IuTcVeVW_UC7I3xK74cQwZUtkdOFJnj6atc3vg"
-    return processToken(password, token)
+    return { error: error.message }
   }
 }
 
