@@ -1,4 +1,3 @@
-import axios from "axios"
 import { decodeJwt } from "jose"
 
 import authStore from "@/lib/store/auth"
@@ -13,18 +12,17 @@ const login = async (config, username, password) => {
   }
 
   try {
-    var basicAuth = "Basic " + btoa(username + ":" + password)
-    const response = await axios.post(
-      loginUrl,
-      {},
-      { headers: { Authorization: basicAuth } }
-    )
-    return processToken(password, response.data.access_token)
-  } catch (error) {
-    if (error.status === 401) {
-      return authErrorMessage(error.response.statusText)
+    const authParams = params(username, password)
+    const response = await fetch(loginUrl, authParams)
+
+    if (response.status !== 200) {
+      return authErrorMessage(response.statusText)
     }
 
+    const { access_token: token } = await response.json()
+
+    return processToken(password, token)
+  } catch (error) {
     return { error: error.message }
   }
 }
@@ -46,10 +44,8 @@ const processToken = async (password, token) => {
 const params = (username, password) => {
   const auth = basicAuth(username, password)
   return {
-    credentials: "include",
     headers: headers(auth),
     method: "POST",
-    mode: "cors",
   }
 }
 
