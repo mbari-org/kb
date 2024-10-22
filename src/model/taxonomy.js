@@ -48,7 +48,6 @@ const getNextSibling = concept => {
       return siblings[currentIndex + 1]
     }
   }
-
   return null
 }
 
@@ -66,6 +65,7 @@ const getPrevSibling = concept => {
     }
   }
 
+  // If no previous sibling, return null
   return null
 }
 
