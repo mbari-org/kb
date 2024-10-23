@@ -8,8 +8,8 @@ import ConfigContext from "@/contexts/config/ConfigContext"
 import {
   getConcept as getTaxonomyContext,
   load,
-  loadAllDescendants as loadTaxonomyDescendants,
   loadTaxonomy,
+  loadDescendants as loadTaxonomyDescendants,
   needsUpdate,
 } from "@/model/taxonomy"
 
@@ -33,7 +33,7 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
-  const loadAllDescendants = async concept => {
+  const loadDescendants = async concept => {
     try {
       const { taxonomy: taxonomyWithDescendants } =
         await loadTaxonomyDescendants(taxonomy, concept)
@@ -66,7 +66,7 @@ const TaxonomyProvider = ({ children }) => {
 
   return (
     <TaxonomyContext
-      value={{ getConcept, loadAllDescendants, loadConcept, taxonomy }}
+      value={{ getConcept, loadDescendants, loadConcept, taxonomy }}
     >
       {children}
     </TaxonomyContext>

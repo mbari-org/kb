@@ -12,7 +12,7 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const Concepts = () => {
-  const { getConcept, loadAllDescendants, taxonomy } = use(TaxonomyContext)
+  const { getConcept, taxonomy } = use(TaxonomyContext)
   const { selected, updateConcept } = use(SelectedContext)
 
   const concept = getConcept(selected.concept)
@@ -34,7 +34,6 @@ const Concepts = () => {
         <Box sx={{ overflowY: "auto", ml: 1, mr: 1 }}>
           <TaxonomyTree
             concept={concept}
-            loadAllDescendants={loadAllDescendants}
             selectConcept={updateConcept}
             taxonomy={taxonomy}
           />

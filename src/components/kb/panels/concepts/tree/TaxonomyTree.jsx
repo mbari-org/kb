@@ -1,70 +1,50 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
+import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
 import ConceptItem from "./ConceptItem"
 
-import { getConceptLabel, getConceptName, getConceptPath } from "./taxonomyItem"
-import { handleArrowNav, handleSelectConcept } from "./handleTreeEvents"
+import {
+  getConceptLabel,
+  getConceptName,
+  getConceptPath,
+} from "./lib/taxonomyItem"
 
-import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
+import useArrowNavigation from "./lib/useArrowNavigation"
+import useExpandConcept from "./lib/useExpandConcept"
+import useSelectConcept from "./lib/useSelectConcept"
 
-const TaxonomyTree = ({
-  concept,
-  loadAllDescendants,
-  selectConcept,
-  taxonomy,
-}) => {
+const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   const [expandedItems, setExpandedItems] = useState([])
   const [autoExpand, setAutoExpand] = useState(true)
 
   const apiRef = useTreeViewApiRef()
   const timeoutRef = useRef(null)
 
-  const addExpandedItems = items =>
-    setExpandedItems(prevItems => [...new Set([...prevItems, ...items])])
-
-  const expandConcept = useCallback(
-    (concept, expand = true) => {
-      if (expand && !expandedItems.includes(concept.name)) {
-        addExpandedItems(getConceptPath(taxonomy, concept))
-      }
-      if (!expand && expandedItems.includes(concept.name)) {
-        setExpandedItems(expandedItems.filter(id => id !== concept.name))
-      }
-    },
-    [expandedItems]
+  const expandConcept = useExpandConcept(
+    expandedItems,
+    setExpandedItems,
+    taxonomy
   )
 
-  const allLeafs = (concept, leafs = []) => {
-    if (concept.children && 0 < concept.children.length) {
-      leafs.push(concept.name)
-      concept.children.forEach(child => allLeafs(child, leafs))
-    }
-    return leafs
-  }
+  const handleSelectConcept = useSelectConcept(
+    concept,
+    expandConcept,
+    expandedItems,
+    selectConcept,
+    setAutoExpand
+  )
 
-  // CxTBD This only expands "loaded" children and doesn't load more concepts
-  const expandAllChildren = (concept, expand = true) => {
-    if (expand) {
-      loadAllDescendants(concept).then(() => {
-        const leafs = allLeafs(concept)
-        addExpandedItems(leafs)
-      })
-    } else {
-      setExpandedItems(getConceptPath(taxonomy, concept))
-    }
-  }
-
-  const handleConceptClick = (event, itemId) =>
-    handleSelectConcept(
-      concept,
-      expandConcept,
-      expandedItems,
-      itemId,
-      selectConcept,
-      setAutoExpand
-    )
+  const handleArrowKeys = useArrowNavigation(
+    concept,
+    expandConcept,
+    expandedItems,
+    selectConcept,
+    setAutoExpand,
+    setExpandedItems,
+    taxonomy
+  )
 
   useEffect(() => {
     if (concept) {
@@ -99,27 +79,18 @@ const TaxonomyTree = ({
 
   useEffect(() => {
     const arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
-    const handleArrowKeys = event => {
+    const handleKeyDown = event => {
       if (arrowKeys.includes(event.key)) {
         event.preventDefault()
-        handleArrowNav(
-          concept,
-          event,
-          expandAllChildren,
-          expandConcept,
-          expandedItems,
-          selectConcept,
-          setAutoExpand
-        )
+        handleArrowKeys(event)
       }
     }
-
-    window.addEventListener("keydown", handleArrowKeys)
+    window.addEventListener("keydown", handleKeyDown)
 
     return () => {
-      window.removeEventListener("keydown", handleArrowKeys)
+      window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [concept, expandedItems, selectConcept, setExpandedItems, taxonomy])
+  }, [handleArrowKeys])
 
   if (!concept) {
     return null
@@ -140,7 +111,7 @@ const TaxonomyTree = ({
         getItemId={getConceptName}
         getItemLabel={getConceptLabel}
         items={[taxonomy.root]}
-        onItemClick={handleConceptClick}
+        onItemClick={(_event, itemId) => handleSelectConcept(itemId)}
         selectedItems={[concept]}
         slotProps={slotProps}
         slots={{ item: ConceptItem }}

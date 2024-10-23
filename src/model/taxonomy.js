@@ -8,7 +8,7 @@ import {
 
 import selectedStore from "@/lib/store/selected"
 
-const loadAllDescendants = async (taxonomy, concept, updatable = false) => {
+const loadDescendants = async (taxonomy, concept, updatable = false) => {
   const updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
   const updatableConcept = { ...concept }
 
@@ -16,7 +16,7 @@ const loadAllDescendants = async (taxonomy, concept, updatable = false) => {
 
   if (updatableConcept.children) {
     for (const child of updatableConcept.children) {
-      await loadAllDescendants(updatableTaxonomy, child, true)
+      await loadDescendants(updatableTaxonomy, child, true)
     }
   }
 
@@ -236,7 +236,7 @@ export {
   getNextSibling,
   getPrevSibling,
   load,
-  loadAllDescendants,
+  loadDescendants,
   loadTaxonomy,
   needsUpdate,
 }
