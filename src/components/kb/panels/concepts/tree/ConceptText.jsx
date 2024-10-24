@@ -1,3 +1,6 @@
+import { Typography } from "@mui/material"
+import { styled } from "@mui/material/styles"
+
 const TextProps = {
   color: "inherit",
   fontFamily: "General Sans",
