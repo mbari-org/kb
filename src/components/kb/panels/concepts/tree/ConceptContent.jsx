@@ -4,14 +4,10 @@ const ConceptContent = ({ theme, isSelected }) => {
   return {
     borderRadius: theme.spacing(0.8),
     display: "flex",
-    flexDirection: "row-reverse",
-    fontWeight: 700,
-    padding: theme.spacing(0.5, 1),
+    padding: theme.spacing(0.25, 1),
     width: "100%",
     "&:hover": !isSelected && {
-      backgroundColor: alpha(theme.palette.primary.main, 0.1),
-      color: theme.palette.primary.main,
-      fontStyle: "italic",
+      backgroundColor: alpha(theme.palette.primary.main, 0.2),
     },
     variants: [
       {
@@ -19,7 +15,8 @@ const ConceptContent = ({ theme, isSelected }) => {
         style: {
           backgroundColor: theme.palette.primary.dark,
           border: "1px solid",
-          color: theme.palette.primary.contrastText,
+          borderColor: theme.palette.common.black,
+          color: theme.palette.grey[100],
           ...theme.applyStyles("light", {
             backgroundColor: theme.palette.primary.main,
           }),

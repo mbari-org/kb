@@ -9,9 +9,8 @@ const HistoryIcon = () => {
         borderRadius: "70%",
         bgcolor: "warning.main",
         display: "inline-block",
-        verticalAlign: "middle",
         zIndex: 1,
-        mx: 1,
+        mx: 0.5,
       }}
     />
   )

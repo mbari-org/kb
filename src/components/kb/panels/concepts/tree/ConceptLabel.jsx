@@ -1,9 +1,24 @@
 import { styled } from "@mui/material/styles"
 
-import ConceptText from "./ConceptText"
+import ImageIcon from "@mui/icons-material/Image"
+import HistoryIcon from "./HistoryIcon"
 
-const ConceptLabel = ({ children }) => {
-  return <ConceptText>{children}</ConceptText>
+const StyledLabel = styled("div")(({ theme, isSelected }) => ({
+  fontWeight: isSelected ? 600 : 500,
+  "&:hover": !isSelected && {
+    color: theme.palette.primary.main,
+    fontStyle: "italic",
+  },
+}))
+
+const ConceptLabel = ({ children, hasHistory, hasMedia, isSelected }) => {
+  return (
+    <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+      <StyledLabel isSelected={isSelected}>{children}</StyledLabel>
+      {hasMedia && <ImageIcon sx={{ ml: 0.5, maxWidth: "16px" }} />}
+      {hasHistory && <HistoryIcon />}
+    </div>
+  )
 }
 
-export default styled("div")(ConceptLabel)
+export default ConceptLabel

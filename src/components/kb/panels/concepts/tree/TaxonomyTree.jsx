@@ -98,9 +98,13 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
     return null
   }
 
+  const slots = {
+    item: ConceptItem,
+  }
   const slotProps = {
     item: {
       concept,
+      taxonomy,
     },
   }
 
@@ -115,8 +119,8 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
         items={[taxonomy.root]}
         onItemClick={(_event, itemId) => handleSelectConcept(itemId)}
         selectedItems={[concept]}
+        slots={slots}
         slotProps={slotProps}
-        slots={{ item: ConceptItem }}
       />
     </aside>
   )
