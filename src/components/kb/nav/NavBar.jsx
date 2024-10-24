@@ -9,7 +9,10 @@ const NavBar = ({ activePanel, selectPanel }) => {
   const names = panels.map(({ name }) => name)
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: theme => theme.palette.primary.dark }}
+    >
       <Toolbar>
         {names.map(name => (
           <PanelLink

@@ -51,7 +51,9 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
       if (expandedItems.length === 0) {
         setExpandedItems(getConceptPath(taxonomy, concept))
       } else {
-        expandConcept(concept, autoExpand)
+        const isExpanded = expandedItems.includes(concept.name)
+        const expand = autoExpand ? !isExpanded : isExpanded
+        expandConcept(concept, expand)
       }
 
       if (timeoutRef.current) {

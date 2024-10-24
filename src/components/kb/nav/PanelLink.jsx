@@ -1,8 +1,7 @@
-import { use, useState } from "react"
-import { Button } from "@mui/material"
 import { useTheme } from "@emotion/react"
+import { useState } from "react"
 
-import AuthContext from "@/contexts/auth/AuthContext"
+import { Button, darken } from "@mui/material"
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
   const [isHovering, setIsHovering] = useState(false)
@@ -11,7 +10,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
   const style = () => {
     const activeColor = theme.palette.warning.light
     const hoverColor = theme.palette.primary.contrastText
-    const inactiveColor = theme.palette.common.black
+    const inactiveColor = darken(theme.palette.primary.contrastText, 0.15)
 
     const color = isActive
       ? activeColor
@@ -22,6 +21,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
     return {
       color: color,
       fontSize: theme.typography.fontSize,
+      fontStyle: !isActive && isHovering ? "italic" : "",
       fontWeight: isActive ? "bold" : "",
       marginLeft: theme.spacing(2),
     }
