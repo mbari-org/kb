@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 
-import { Paper, Stack, Typography } from "@mui/material"
+import { Stack, Typography } from "@mui/material"
 import { alpha, useTheme } from "@mui/material/styles"
 
-import TextField from "@mui/material/TextField"
 import Autocomplete from "@mui/material/Autocomplete"
+import TextField from "@mui/material/TextField"
 
 const ConceptSearch = ({ concept, names, selectConcept }) => {
   const theme = useTheme()

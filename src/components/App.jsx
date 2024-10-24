@@ -1,10 +1,9 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import { ErrorBoundary } from "react-error-boundary"
 import {
-  BrowserRouter as Router,
   Navigate,
   Route,
+  BrowserRouter as Router,
   Routes,
 } from "react-router-dom"
 

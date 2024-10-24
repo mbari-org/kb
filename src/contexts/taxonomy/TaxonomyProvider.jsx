@@ -18,7 +18,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const { error: configError, config } = use(ConfigContext)
   if (configError) {
-    console.log("CxTBD TaxonomyProvider config error:", error)
+    console.log("CxTBD TaxonomyProvider config error:", configError)
   }
 
   const [taxonomy, setTaxonomy] = useState(null)

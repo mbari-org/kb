@@ -9,6 +9,6 @@ const render = ({ error }) => {
   )
 }
 
-const reset = details => {}
+const reset = _details => {}
 
 export { render, reset }

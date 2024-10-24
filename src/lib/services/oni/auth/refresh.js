@@ -42,7 +42,7 @@ const extract = async obfuscated => {
   try {
     const ptBuf = await subtleCrypto.decrypt(algo(iv), key, ctUint8)
     return { ok: new TextDecoder().decode(ptBuf) }
-  } catch (_e) {
+  } catch {
     return { error: "Extract failed" }
   }
 }

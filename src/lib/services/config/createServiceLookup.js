@@ -16,7 +16,7 @@ const createServiceLookup = endpoints => {
 
     if (!serviceEndpoint) {
       return {
-        error: `${config.url} has no endpoint info for service: ${serviceName}`,
+        error: `no endpoint info for service: ${serviceName}`,
       }
     }
 

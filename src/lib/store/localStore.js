@@ -7,14 +7,6 @@ const localStore = (key, json = true) => {
 
   if (json) {
     return {
-      // get: () => {
-      //   try {
-      //     JSON.parse(stringStore.get(key))
-      //   } catch {
-      //     stringStore.set(null)
-      //     return null
-      //   }
-      // },
       get: () => JSON.parse(stringStore.get(key)),
       set: value => stringStore.set(JSON.stringify(value)),
       clear: () => localStorage.removeItem(key),

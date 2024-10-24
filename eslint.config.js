@@ -17,28 +17,16 @@ export default [
         sourceType: "module",
       },
     },
-    settings: { react: { version: "19.0" } },
     plugins: {
       react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-    },
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
-      },
     },
     rules: {
       ...js.configs.recommended.rules,
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
       ...reactHooks.configs.recommended.rules,
-      "react/jsx-no-target-blank": "off",
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
-      semi: ["error", "never"],
       "array-bracket-spacing": ["error", "never"],
       "arrow-parens": ["error", "as-needed"],
       "no-unused-vars": [
@@ -48,9 +36,18 @@ export default [
           args: "after-used",
           caughtErrors: "all",
           argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
           reportUsedIgnorePattern: true,
         },
       ],
+      "react/jsx-no-target-blank": "off",
+      "react/prop-types": "off",
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
+      ],
+      semi: ["error", "never"],
     },
+    settings: { react: { version: "19.0" } },
   },
 ]
