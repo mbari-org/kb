@@ -13,7 +13,7 @@ const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
         setExpandedItems(expandedItems.filter(id => id !== concept.name))
       }
     },
-    [expandedItems, taxonomy]
+    [expandedItems, setExpandedItems, taxonomy]
   )
 
   return expandConcept

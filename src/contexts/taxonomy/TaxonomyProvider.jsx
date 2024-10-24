@@ -58,7 +58,7 @@ const TaxonomyProvider = ({ children }) => {
         }
       )
     }
-  }, [config])
+  }, [config, showBoundary])
 
   if (!taxonomy) {
     return null

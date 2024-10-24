@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { decodeJwt } from "jose"
@@ -13,32 +13,35 @@ const AuthProvider = ({ children }) => {
 
   const [auth, setAuth] = useState(null)
 
-  const updateAuth = someAuth => {
-    const invalidAuth = () => {
-      setAuth(null)
-      authStore.clear()
-      navigate("/login")
-    }
+  const updateAuth = useCallback(
+    someAuth => {
+      const invalidAuth = () => {
+        setAuth(null)
+        authStore.clear()
+        navigate("/login")
+      }
 
-    if (!someAuth) {
-      return invalidAuth()
-    }
+      if (!someAuth) {
+        return invalidAuth()
+      }
 
-    const { role: someRole, token, username: someUsername } = someAuth
-    if (!token) {
-      return invalidAuth()
-    }
+      const { role: someRole, token, username: someUsername } = someAuth
+      if (!token) {
+        return invalidAuth()
+      }
 
-    const { role: authRole, name: authUsername } = decodeJwt(token)
-    if (someRole !== authRole || someUsername !== authUsername) {
-      return invalidAuth()
-    }
+      const { role: authRole, name: authUsername } = decodeJwt(token)
+      if (someRole !== authRole || someUsername !== authUsername) {
+        return invalidAuth()
+      }
 
-    setAuth(someAuth)
-    authStore.set(someAuth)
+      setAuth(someAuth)
+      authStore.set(someAuth)
 
-    navigate("/kb")
-  }
+      navigate("/kb")
+    },
+    [navigate]
+  )
 
   const logout = () => {
     authStore.clear()
@@ -49,8 +52,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     updateAuth(authStore.get())
-    // updateAuth(authStore.get()) ? navigate("/kb") : navigate("/login")
-  }, [])
+  }, [updateAuth])
 
   return (
     <AuthContext value={{ auth, logout, updateAuth }}>{children}</AuthContext>
