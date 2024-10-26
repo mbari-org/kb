@@ -4,7 +4,11 @@ import {
   fetchParent,
 } from "@/lib/services/oni/api/concept"
 
-import { fetchNames, fetchRoot } from "@/lib/services/oni/api/taxonomy"
+import {
+  fetchNames,
+  fetchPendingHistory,
+  fetchRoot,
+} from "@/lib/services/oni/api/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
 
@@ -72,7 +76,7 @@ const getPrevSibling = concept => {
 const loadTaxonomy = async config => {
   const names = await fetchNames(config)
   const root = await fetchRoot(config)
-  // const pending = await fetchPending(config)
+  const pendingHistory = await fetchPendingHistory(config)
 
   const aliases = root.alternateNames.reduce((acc, name) => {
     acc[name] = root.name
@@ -83,6 +87,7 @@ const loadTaxonomy = async config => {
     aliases,
     config,
     names,
+    pendingHistory,
     root,
     concepts: { [root.name]: root },
   }

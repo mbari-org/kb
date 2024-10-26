@@ -5,6 +5,10 @@ const fetchNames = async config => {
   return content
 }
 
+const fetchPendingHistory = async config => {
+  const { content } = await oniFetch(config, ["history", "pending"])
+  return content
+}
 const fetchRoot = async config => oniFetch(config, ["concept", "query", "root"])
 
-export { fetchNames, fetchRoot }
+export { fetchNames, fetchPendingHistory, fetchRoot }
