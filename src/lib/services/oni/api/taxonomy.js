@@ -1,19 +1,10 @@
-import { apiFetch } from "./fetch"
-
-const fetchChildren = async (taxonomy, conceptName) =>
-  apiFetch(taxonomy.config, ["concept", "children", conceptName])
-
-const fetchConcept = async (taxonomy, conceptName) =>
-  apiFetch(taxonomy.config, ["concept", conceptName])
+import { oniFetch } from "./fetch"
 
 const fetchNames = async config => {
-  const { content } = await apiFetch(config, ["names"])
+  const { content } = await oniFetch(config, ["names"])
   return content
 }
 
-const fetchParent = async (taxonomy, conceptName) =>
-  apiFetch(taxonomy.config, ["concept", "parent", conceptName])
+const fetchRoot = async config => oniFetch(config, ["concept", "query", "root"])
 
-const fetchRoot = async config => apiFetch(config, ["concept", "query", "root"])
-
-export { fetchChildren, fetchConcept, fetchNames, fetchParent, fetchRoot }
+export { fetchNames, fetchRoot }

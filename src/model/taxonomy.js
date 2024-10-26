@@ -1,10 +1,10 @@
 import {
   fetchChildren,
   fetchConcept,
-  fetchNames,
   fetchParent,
-  fetchRoot,
-} from "@/lib/services/oni/api/taxonomy"
+} from "@/lib/services/oni/api/concept"
+
+import { fetchNames, fetchRoot } from "@/lib/services/oni/api/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
 
@@ -72,6 +72,7 @@ const getPrevSibling = concept => {
 const loadTaxonomy = async config => {
   const names = await fetchNames(config)
   const root = await fetchRoot(config)
+  // const pending = await fetchPending(config)
 
   const aliases = root.alternateNames.reduce((acc, name) => {
     acc[name] = root.name
