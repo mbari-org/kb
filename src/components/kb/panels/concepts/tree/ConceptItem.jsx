@@ -11,7 +11,10 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { concept, itemId, taxonomy } = props
   const isSelected = itemId === concept.name
 
-  const hasHistory = itemId === "data file"
+  const pendingHistory = taxonomy.pendingHistory.find(
+    history => itemId === history.concept
+  )
+  const hasPendingHistory = pendingHistory ? true : false
 
   const itemConcept = taxonomy.concepts[itemId]
   const hasMedia = 0 < itemConcept.media.length
@@ -23,7 +26,7 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
         ref={ref}
         slotProps={{
           content: { isSelected },
-          label: { hasHistory, hasMedia, isSelected },
+          label: { hasPendingHistory, hasMedia, isSelected },
         }}
         slots={{
           content: ConceptContent,

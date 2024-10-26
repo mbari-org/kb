@@ -11,12 +11,17 @@ const StyledLabel = styled("div")(({ theme, isSelected }) => ({
   },
 }))
 
-const ConceptLabel = ({ children, hasHistory, hasMedia, isSelected }) => {
+const ConceptLabel = ({
+  children,
+  hasPendingHistory,
+  hasMedia,
+  isSelected,
+}) => {
   return (
     <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
       <StyledLabel isSelected={isSelected}>{children}</StyledLabel>
       {hasMedia && <ImageIcon sx={{ ml: 0.5, maxWidth: "16px" }} />}
-      {hasHistory && <HistoryIcon />}
+      {hasPendingHistory && <HistoryIcon />}
     </div>
   )
 }
