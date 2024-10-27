@@ -11,7 +11,7 @@ const useExpandDescendants = (setExpandedItems, taxonomy) => {
     return leafs
   }
 
-  const expandDescendants = (concept, expand = true) => {
+  return (concept, expand = true) => {
     if (expand) {
       loadDescendants(taxonomy, concept).then(() => {
         const leafs = allLeafs(concept)
@@ -21,8 +21,6 @@ const useExpandDescendants = (setExpandedItems, taxonomy) => {
       setExpandedItems(getConceptPath(taxonomy, concept))
     }
   }
-
-  return expandDescendants
 }
 
 export default useExpandDescendants

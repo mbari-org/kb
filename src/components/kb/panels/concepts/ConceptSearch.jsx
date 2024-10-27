@@ -6,7 +6,7 @@ import { alpha, useTheme } from "@mui/material/styles"
 import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
 
-const ConceptSearch = ({ concept, names, selectConcept }) => {
+const ConceptSearch = ({ concept, selectConcept, taxonomy }) => {
   const theme = useTheme()
 
   const [value, setValue] = useState(null)
@@ -21,7 +21,7 @@ const ConceptSearch = ({ concept, names, selectConcept }) => {
       onChange={(_event, newValue) => {
         newValue && selectConcept(newValue)
       }}
-      options={names}
+      options={taxonomy.names}
       renderInput={params => (
         <Stack>
           <Typography

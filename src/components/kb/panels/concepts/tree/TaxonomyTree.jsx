@@ -5,11 +5,7 @@ import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
 import ConceptItem from "./ConceptItem"
 
-import {
-  getConceptLabel,
-  getConceptName,
-  getConceptPath,
-} from "./lib/taxonomyItem"
+import { getConceptLabel, getConceptName } from "./lib/taxonomyItem"
 
 import useArrowNavigation from "./lib/useArrowNavigation"
 import useExpandConcept from "./lib/useExpandConcept"
@@ -48,14 +44,14 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
 
   useEffect(() => {
     if (concept) {
-      if (expandedItems.length === 0) {
-        setExpandedItems(getConceptPath(taxonomy, concept))
-      } else {
-        if (autoExpand && !expandedItems.includes(concept.name)) {
-          expandConcept(concept, true)
-          setAutoExpand(false)
-        }
+      // if (expandedItems.length === 0) {
+      //   setExpandedItems(getConceptPath(taxonomy, concept))
+      // } else {
+      if (autoExpand && !expandedItems.includes(concept.name)) {
+        expandConcept(concept, true)
+        setAutoExpand(false)
       }
+      // }
     }
   }, [autoExpand, concept, expandConcept, expandedItems, taxonomy])
 

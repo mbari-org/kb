@@ -27,8 +27,8 @@ const Concepts = () => {
         <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
           <ConceptSearch
             concept={concept}
-            names={taxonomy.names}
             selectConcept={updateConcept}
+            taxonomy={taxonomy}
           />
         </Box>
         <Box sx={{ overflowY: "auto", ml: 1, mr: 1 }}>

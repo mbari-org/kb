@@ -14,7 +14,7 @@ const useArrowNavigation = (
 ) => {
   const expandDescendants = useExpandDescendants(setExpandedItems, taxonomy)
 
-  const handleArrowNav = useCallback(
+  return useCallback(
     event => {
       const isExpanded = concept =>
         0 < concept.children.length && expandedItems.includes(concept.name)
@@ -101,8 +101,6 @@ const useArrowNavigation = (
       setAutoExpand,
     ]
   )
-
-  return handleArrowNav
 }
 
 export default useArrowNavigation
