@@ -20,10 +20,6 @@ const KnowledgeBase = () => {
     }
   }
 
-  if (!selected) {
-    return null
-  }
-
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <NavBar activePanel={selected.panel} selectPanel={selectPanel} />

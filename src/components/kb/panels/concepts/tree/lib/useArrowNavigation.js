@@ -21,7 +21,7 @@ const useArrowNavigation = (
 
       let navToConcept
       switch (event.key) {
-        case "ArrowDown":
+        case "ArrowDown": {
           if (isExpanded(concept)) {
             navToConcept = concept.children[0]
             break
@@ -46,6 +46,7 @@ const useArrowNavigation = (
             }
           }
           break
+        }
 
         case "ArrowUp": {
           const prevSibling = getPrevSibling(concept)

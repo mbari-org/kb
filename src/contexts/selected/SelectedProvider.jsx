@@ -1,8 +1,8 @@
 import { use, useEffect, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import selectedStore from "@/lib/store/selected"
 
@@ -10,9 +10,7 @@ import panels from "@/lib/panels"
 
 const SelectedProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
-
   const { loadConcept, taxonomy } = use(TaxonomyContext)
-
   const [selected, setSelected] = useState(null)
 
   const updateSelected = update => {
