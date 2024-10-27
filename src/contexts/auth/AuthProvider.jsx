@@ -1,46 +1,38 @@
-import { useCallback, useEffect, useState } from "react"
+import { use, useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { decodeJwt } from "jose"
-
+import ConfigContext from "@/contexts/config/ConfigContext"
 import AuthContext from "./AuthContext"
 
+import validate from "@/lib/services/oni/auth/validate"
 import authStore from "@/lib/store/auth"
 import selectedStore from "@/lib/store/selected"
 
 const AuthProvider = ({ children }) => {
+  const { config } = use(ConfigContext)
+
   const navigate = useNavigate()
 
   const [auth, setAuth] = useState(null)
 
+  const handleInvalidAuth = useCallback(() => {
+    setAuth(null)
+    authStore.clear()
+    navigate("/login")
+  }, [navigate])
+
   const updateAuth = useCallback(
-    someAuth => {
-      const invalidAuth = () => {
-        setAuth(null)
-        authStore.clear()
-        navigate("/login")
+    anAuth => {
+      if (validate(anAuth)) {
+        setAuth(anAuth)
+        authStore.set(anAuth)
+
+        navigate("/kb")
+      } else {
+        handleInvalidAuth()
       }
-
-      if (!someAuth) {
-        return invalidAuth()
-      }
-
-      const { role: someRole, token, username: someUsername } = someAuth
-      if (!token) {
-        return invalidAuth()
-      }
-
-      const { role: authRole, name: authUsername } = decodeJwt(token)
-      if (someRole !== authRole || someUsername !== authUsername) {
-        return invalidAuth()
-      }
-
-      setAuth(someAuth)
-      authStore.set(someAuth)
-
-      navigate("/kb")
     },
-    [navigate]
+    [handleInvalidAuth, navigate]
   )
 
   const logout = () => {
@@ -51,8 +43,10 @@ const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    updateAuth(authStore.get())
-  }, [updateAuth])
+    if (config) {
+      config.valid ? updateAuth(authStore.get()) : handleInvalidAuth()
+    }
+  }, [config, handleInvalidAuth, updateAuth])
 
   return (
     <AuthContext value={{ auth, logout, updateAuth }}>{children}</AuthContext>

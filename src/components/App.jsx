@@ -31,7 +31,6 @@ const App = () => {
             <ConfigProvider>
               <AuthProvider>
                 <Routes>
-                  <Route path="/" element={<Navigate to="/login" />} />
                   <Route path="/login" element={<StartUp />} />
                   <Route element={<AuthRoute />}>
                     <Route path="/kb" element={<KbContainer />}></Route>
@@ -48,3 +47,5 @@ const App = () => {
 }
 
 createRoot(document.getElementById("root")).render(<App />)
+
+export default App

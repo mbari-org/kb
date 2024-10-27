@@ -24,7 +24,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     updateAuth(loginState?.auth)
-  }, [loginState])
+  }, [loginState, updateAuth])
 
   return (
     <Box component="form" action={loginAction} sx={{ minHeight: "300px" }}>
