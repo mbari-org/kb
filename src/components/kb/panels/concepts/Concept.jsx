@@ -4,7 +4,7 @@ const Concept = ({ concept }) => {
   return (
     <>
       <Typography align="center" sx={{ mt: 3, mb: 1 }} variant="h3">
-        {concept?.name}
+        {concept.name}
       </Typography>
       <div>Author: {concept.author}</div>
       <div>Aliases: {concept.alternateNames?.join(", ")}</div>

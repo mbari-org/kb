@@ -7,7 +7,7 @@ const oniResource = (config, path) => {
   return `${url}/${resourcePath}`
 }
 
-const oniFetch = async (config, path) => {
+const oniFetchJson = async (config, path) => {
   const resource = oniResource(config, path)
 
   const params = {
@@ -30,4 +30,8 @@ const oniFetch = async (config, path) => {
   }
 }
 
-export { oniFetch }
+const oniFetchImage = async (config, path) => {
+  const resource = oniResource(config, path)
+}
+
+export { oniFetchJson }
