@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 
 import { Stack, Typography } from "@mui/material"
 import { alpha, useTheme } from "@mui/material/styles"
@@ -6,13 +6,16 @@ import { alpha, useTheme } from "@mui/material/styles"
 import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
 
-const ConceptSearch = ({ concept, selectConcept, taxonomy }) => {
-  const theme = useTheme()
+import SelectedContext from "@/contexts/selected/SelectedContext"
 
-  const [value, setValue] = useState(null)
+const ConceptSearch = ({ concept, taxonomy }) => {
+  const theme = useTheme()
+  const { updateSelectedConcept: selectConcept } = use(SelectedContext)
+
+  const [conceptName, setConceptName] = useState(null)
 
   useEffect(() => {
-    setValue(concept.name)
+    setConceptName(concept.name)
   }, [concept])
 
   return (
@@ -53,7 +56,7 @@ const ConceptSearch = ({ concept, selectConcept, taxonomy }) => {
           },
         },
       }}
-      value={value}
+      value={conceptName}
     />
   )
 }

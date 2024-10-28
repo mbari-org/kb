@@ -1,22 +1,27 @@
-import { useEffect, useRef, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
+import SelectedContext from "@/contexts/selected/SelectedContext"
+
 import ConceptItem from "./ConceptItem"
+import Expand from "./lib/expandedEnum"
 
 import { getConceptLabel, getConceptName } from "./lib/taxonomyItem"
 
 import useArrowNavigation from "./lib/useArrowNavigation"
+import useConceptClick from "./lib/useConceptClick"
 import useExpandConcept from "./lib/useExpandConcept"
-import useSelectConcept from "./lib/useSelectConcept"
 
-const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
+const TaxonomyTree = ({ concept, taxonomy }) => {
   const [expandedItems, setExpandedItems] = useState([])
   const [autoExpand, setAutoExpand] = useState(true)
 
-  const apiRef = useTreeViewApiRef()
-  const timeoutRef = useRef(null)
+  const { updateSelectedConcept: selectConcept } = use(SelectedContext)
+
+  const isExpanded = concept =>
+    0 < concept.children.length && expandedItems.includes(concept.name)
 
   const expandConcept = useExpandConcept(
     expandedItems,
@@ -24,36 +29,32 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
     taxonomy
   )
 
-  const handleSelectConcept = useSelectConcept(
+  const apiRef = useTreeViewApiRef()
+  const timeoutRef = useRef(null)
+  const treeRef = useRef(null)
+
+  const handleConceptClick = useConceptClick(
     concept,
     expandConcept,
-    expandedItems,
-    selectConcept,
-    setAutoExpand
+    selectConcept
   )
 
   const handleArrowKeys = useArrowNavigation(
     concept,
     expandConcept,
-    expandedItems,
+    isExpanded,
     selectConcept,
-    setAutoExpand,
-    setExpandedItems,
-    taxonomy
+    setAutoExpand
   )
 
   useEffect(() => {
     if (concept) {
-      // if (expandedItems.length === 0) {
-      //   setExpandedItems(getConceptPath(taxonomy, concept))
-      // } else {
       if (autoExpand && !expandedItems.includes(concept.name)) {
-        expandConcept(concept, true)
-        setAutoExpand(false)
+        expandConcept(concept, Expand.ON)
+        setAutoExpand(true)
       }
-      // }
     }
-  }, [autoExpand, concept, expandConcept, expandedItems, taxonomy])
+  }, [autoExpand, concept, expandConcept, expandedItems])
 
   useEffect(() => {
     if (timeoutRef.current) {
@@ -86,10 +87,15 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
         handleArrowKeys(event)
       }
     }
-    window.addEventListener("keydown", handleKeyDown)
+    const currentTreeRef = treeRef.current
+    if (currentTreeRef) {
+      currentTreeRef.addEventListener("keydown", handleKeyDown)
+    }
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown)
+      if (currentTreeRef) {
+        currentTreeRef.removeEventListener("keydown", handleKeyDown)
+      }
     }
   }, [handleArrowKeys])
 
@@ -108,7 +114,7 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
   }
 
   return (
-    <aside className="taxonomy-tree">
+    <aside className="taxonomy-tree" ref={treeRef}>
       <RichTreeView
         itemChildrenIndentation={8}
         apiRef={apiRef}
@@ -116,7 +122,7 @@ const TaxonomyTree = ({ concept, selectConcept, taxonomy }) => {
         getItemId={getConceptName}
         getItemLabel={getConceptLabel}
         items={[taxonomy.root]}
-        onItemClick={(_event, itemId) => handleSelectConcept(itemId)}
+        onItemClick={(_event, itemId) => handleConceptClick(itemId)}
         selectedItems={[concept]}
         slots={slots}
         slotProps={slotProps}

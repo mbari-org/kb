@@ -1,34 +1,30 @@
-import { getNextSibling, getPrevSibling } from "@/model/taxonomy"
 import { useCallback } from "react"
 
-import useExpandDescendants from "./useExpandDescendants"
+import { getNextSibling, getPrevSibling } from "@/model/taxonomy"
+
+import Expand from "./expandedEnum"
 
 const useArrowNavigation = (
   concept,
   expandConcept,
-  expandedItems,
+  isExpanded,
   selectConcept,
-  setAutoExpand,
-  setExpandedItems,
-  taxonomy
+  setAutoExpand
 ) => {
-  const expandDescendants = useExpandDescendants(setExpandedItems, taxonomy)
-
   return useCallback(
     event => {
-      const isExpanded = concept =>
-        0 < concept.children.length && expandedItems.includes(concept.name)
-
       let navToConcept
       switch (event.key) {
         case "ArrowDown": {
-          if (isExpanded(concept)) {
+          const isConceptExpanded = isExpanded(concept)
+
+          if (isConceptExpanded) {
             navToConcept = concept.children[0]
             break
           }
 
           const nextSibling = getNextSibling(concept)
-          if (!isExpanded(concept) && nextSibling) {
+          if (!isConceptExpanded && nextSibling) {
             navToConcept = nextSibling
             break
           }
@@ -65,11 +61,7 @@ const useArrowNavigation = (
 
         case "ArrowLeft": {
           if (isExpanded(concept)) {
-            if (event.altKey && event.ctrlKey) {
-              expandDescendants(concept, false)
-            } else {
-              expandConcept(concept, false)
-            }
+            expandConcept(concept, Expand.OFF)
           } else {
             navToConcept = concept.parent
           }
@@ -78,9 +70,9 @@ const useArrowNavigation = (
 
         case "ArrowRight":
           if (event.altKey && event.ctrlKey) {
-            expandDescendants(concept, true)
+            expandConcept(concept, Expand.DESCENDANTS)
           } else {
-            expandConcept(concept, true)
+            expandConcept(concept, Expand.ON)
           }
           break
         default:
@@ -92,14 +84,7 @@ const useArrowNavigation = (
         selectConcept(navToConcept.name)
       }
     },
-    [
-      concept,
-      expandDescendants,
-      expandConcept,
-      expandedItems,
-      selectConcept,
-      setAutoExpand,
-    ]
+    [isExpanded, concept, expandConcept, setAutoExpand, selectConcept]
   )
 }
 

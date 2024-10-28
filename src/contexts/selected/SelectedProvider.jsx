@@ -19,13 +19,14 @@ const SelectedProvider = ({ children }) => {
     setSelected(updated)
   }
 
-  const updatePanel = panel => {
+  const updateSelectedPanel = panel => {
     if (panel !== selected.panel) {
       updateSelected({ panel })
     }
   }
 
-  const updateConcept = conceptName => {
+  const updateSelectedConcept = conceptName => {
+    console.log("Updated selected concept:", conceptName)
     if (conceptName !== selected.concept) {
       loadConcept(conceptName).then(
         () => {
@@ -58,7 +59,9 @@ const SelectedProvider = ({ children }) => {
   }
 
   return (
-    <SelectedContext value={{ selected, updateConcept, updatePanel }}>
+    <SelectedContext
+      value={{ selected, updateSelectedConcept, updateSelectedPanel }}
+    >
       {children}
     </SelectedContext>
   )

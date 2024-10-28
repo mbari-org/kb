@@ -13,7 +13,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const Concepts = () => {
   const { getConcept, taxonomy } = use(TaxonomyContext)
-  const { selected, updateConcept } = use(SelectedContext)
+  const { selected } = use(SelectedContext)
 
   const concept = getConcept(selected.concept)
 
@@ -25,18 +25,10 @@ const Concepts = () => {
     <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
       <Stack sx={{ width: 320 }}>
         <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
-          <ConceptSearch
-            concept={concept}
-            selectConcept={updateConcept}
-            taxonomy={taxonomy}
-          />
+          <ConceptSearch concept={concept} taxonomy={taxonomy} />
         </Box>
         <Box sx={{ overflowY: "auto", ml: 1, mr: 1 }}>
-          <TaxonomyTree
-            concept={concept}
-            selectConcept={updateConcept}
-            taxonomy={taxonomy}
-          />
+          <TaxonomyTree concept={concept} taxonomy={taxonomy} />
         </Box>
       </Stack>
       <Divider flexItem orientation="vertical" sx={{ borderRightWidth: 6 }} />
