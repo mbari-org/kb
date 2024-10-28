@@ -1,5 +1,7 @@
 import { Typography } from "@mui/material"
 
+import ConceptMedia from "./ConceptMedia"
+
 const Concept = ({ concept }) => {
   return (
     <>
@@ -14,6 +16,7 @@ const Concept = ({ concept }) => {
         Link Realizations: {0 < concept.linkRealizations.length ? "YES" : "NO"}
       </div>
       <div>References: {0 < concept.references.length ? "YES" : "NO"}</div>
+      {concept && <ConceptMedia concept={concept} />}
     </>
   )
 }
