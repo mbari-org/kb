@@ -1,11 +1,25 @@
+import { useEffect, useState } from "react"
+
 const ConceptMedia = ({ concept }) => {
-  const primary = concept.media?.find(media => media.isPrimary)
+  const [showMedia, setShowMedia] = useState(false)
 
-  if (concept.media.length === 0) {
-    return null
-  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMedia(0 < concept.media.length)
+    }, 250)
 
-  return <img src={primary.url} />
+    return () => clearTimeout(timer)
+  }, [concept])
+
+  const primaryMedia = concept.media?.find(media => media.isPrimary)
+
+  return (
+    <>
+      {showMedia && primaryMedia && (
+        <img src={primaryMedia.url} alt="Primary Media" />
+      )}
+    </>
+  )
 }
 
 export default ConceptMedia

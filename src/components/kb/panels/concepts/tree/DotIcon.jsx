@@ -1,19 +1,19 @@
 import { Box } from "@mui/material"
 
-const HistoryIcon = () => {
+const DotIcon = ({ bgcolor }) => {
   return (
     <Box
       sx={{
-        width: 6,
-        height: 6,
+        bgcolor,
         borderRadius: "70%",
-        bgcolor: "warning.main",
         display: "inline-block",
-        zIndex: 1,
+        height: 6,
         mx: 0.5,
+        width: 6,
+        zIndex: 1,
       }}
     />
   )
 }
 
-export default HistoryIcon
+export default DotIcon
