@@ -21,9 +21,10 @@ const Concepts = () => {
 
   return (
     <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
-      <TaxonomySidebar concept={concept} taxonomy={taxonomy} />
+      <Box sx={{ width: 320 }}>
+        <TaxonomySidebar concept={concept} taxonomy={taxonomy} />
+      </Box>
       <Divider flexItem orientation="vertical" sx={{ borderRightWidth: 6 }} />
-
       <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
         <Concept concept={concept} />
       </Box>

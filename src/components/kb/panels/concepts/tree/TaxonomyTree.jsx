@@ -14,7 +14,13 @@ import useArrowNavigation from "./lib/useArrowNavigation"
 import useConceptClick from "./lib/useConceptClick"
 import useExpandConcept from "./lib/useExpandConcept"
 
-const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, taxonomy }) => {
+const TaxonomyTree = ({
+  autoExpand,
+  concept,
+  setAutoExpand,
+  sidebarRef,
+  taxonomy,
+}) => {
   const { updateSelectedConcept } = use(SelectedContext)
 
   const [expandedItems, setExpandedItems] = useState([])
@@ -50,7 +56,6 @@ const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, taxonomy }) => {
 
   const apiRef = useTreeViewApiRef()
   const timeoutRef = useRef(null)
-  const treeRef = useRef(null)
 
   useEffect(() => {
     // Expand concept on initial load
@@ -97,17 +102,17 @@ const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, taxonomy }) => {
         handleArrowKeys(event)
       }
     }
-    const currentTreeRef = treeRef.current
-    if (currentTreeRef) {
-      currentTreeRef.addEventListener("keydown", handleKeyDown)
+    const currentSidebar = sidebarRef.current
+    if (currentSidebar) {
+      currentSidebar.addEventListener("keydown", handleKeyDown)
     }
 
     return () => {
-      if (currentTreeRef) {
-        currentTreeRef.removeEventListener("keydown", handleKeyDown)
+      if (currentSidebar) {
+        currentSidebar.removeEventListener("keydown", handleKeyDown)
       }
     }
-  }, [handleArrowKeys])
+  }, [handleArrowKeys, sidebarRef])
 
   if (!concept) {
     return null
@@ -124,7 +129,7 @@ const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, taxonomy }) => {
   }
 
   return (
-    <aside className="taxonomy-tree" ref={treeRef}>
+    <aside className="taxonomy-tree" style={{ flexGrow: 1, height: "100%" }}>
       <RichTreeView
         itemChildrenIndentation={8}
         apiRef={apiRef}
@@ -136,6 +141,7 @@ const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, taxonomy }) => {
         selectedItems={[concept]}
         slots={slots}
         slotProps={slotProps}
+        style={{ flexGrow: 1, height: "100%" }}
       />
     </aside>
   )
