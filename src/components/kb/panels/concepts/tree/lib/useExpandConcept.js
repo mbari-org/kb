@@ -1,4 +1,6 @@
-import { useCallback } from "react"
+import { use, useCallback } from "react"
+
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import { getConceptPath } from "./taxonomyItem"
 
@@ -12,7 +14,9 @@ const allLeafs = (concept, leafs = []) => {
   return leafs
 }
 
-const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
+const useExpandConcept = (expandedItems, setExpandedItems) => {
+  const { loadDescendants, taxonomy } = use(TaxonomyContext)
+
   const isExpanded = useCallback(
     concept => expandedItems.includes(concept.name),
     [expandedItems]
@@ -35,10 +39,12 @@ const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
 
   const descendants = useCallback(
     concept => {
-      const leafs = allLeafs(concept)
-      setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
+      loadDescendants(concept).then(() => {
+        const leafs = allLeafs(concept)
+        setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
+      })
     },
-    [setExpandedItems]
+    [loadDescendants, setExpandedItems]
   )
 
   const toggle = useCallback(

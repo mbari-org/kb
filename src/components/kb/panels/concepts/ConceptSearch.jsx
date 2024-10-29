@@ -7,10 +7,12 @@ import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
 
 import SelectedContext from "@/contexts/selected/SelectedContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-const ConceptSearch = ({ concept, setAutoExpand, taxonomy }) => {
+const ConceptSearch = ({ concept, setAutoExpand }) => {
   const theme = useTheme()
   const { updateSelectedConcept: selectConcept } = use(SelectedContext)
+  const { taxonomy } = use(TaxonomyContext)
 
   const [conceptName, setConceptName] = useState(null)
 

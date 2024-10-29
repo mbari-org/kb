@@ -4,6 +4,7 @@ import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
 import SelectedContext from "@/contexts/selected/SelectedContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import ConceptItem from "./ConceptItem"
 import Expand from "./lib/expandedEnum"
@@ -14,25 +15,16 @@ import useArrowNavigation from "./lib/useArrowNavigation"
 import useConceptClick from "./lib/useConceptClick"
 import useExpandConcept from "./lib/useExpandConcept"
 
-const TaxonomyTree = ({
-  autoExpand,
-  concept,
-  setAutoExpand,
-  sidebarRef,
-  taxonomy,
-}) => {
+const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, sidebarRef }) => {
   const { updateSelectedConcept } = use(SelectedContext)
+  const { taxonomy } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
 
   const isExpanded = concept =>
     0 < concept.children.length && expandedItems.includes(concept.name)
 
-  const expandConcept = useExpandConcept(
-    expandedItems,
-    setExpandedItems,
-    taxonomy
-  )
+  const expandConcept = useExpandConcept(expandedItems, setExpandedItems)
 
   const selectConcept = conceptName => {
     updateSelectedConcept(conceptName)

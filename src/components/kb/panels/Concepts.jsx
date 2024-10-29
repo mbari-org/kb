@@ -11,7 +11,7 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const Concepts = () => {
-  const { getConcept, taxonomy } = use(TaxonomyContext)
+  const { getConcept } = use(TaxonomyContext)
   const { selected } = use(SelectedContext)
 
   const concept = getConcept(selected.concept)
@@ -63,7 +63,7 @@ const Concepts = () => {
   return (
     <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
       <Box sx={{ width: sidebarWidth }}>
-        <TaxonomySidebar concept={concept} taxonomy={taxonomy} />
+        <TaxonomySidebar concept={concept} />
       </Box>
       <Divider
         flexItem

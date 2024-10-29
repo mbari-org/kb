@@ -6,20 +6,16 @@ import Stack from "@mui/material/Stack"
 import ConceptSearch from "@/components/kb/panels/concepts/ConceptSearch"
 import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 
-const TaxonomySidebar = ({ concept, taxonomy }) => {
+const TaxonomySidebar = ({ concept }) => {
   const sidebarRef = useRef(null)
 
   const [autoExpand, setAutoExpand] = useState(null)
 
   return (
     <>
-      <Stack sx={{ height: "100vh" }}>
+      <Stack sx={{ height: "100%" }}>
         <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
-          <ConceptSearch
-            concept={concept}
-            setAutoExpand={setAutoExpand}
-            taxonomy={taxonomy}
-          />
+          <ConceptSearch concept={concept} setAutoExpand={setAutoExpand} />
         </Box>
         <Box
           ref={sidebarRef}
@@ -40,7 +36,6 @@ const TaxonomySidebar = ({ concept, taxonomy }) => {
             setAutoExpand={setAutoExpand}
             sidebarRef={sidebarRef}
             style={{ flexGrow: 1, height: "100%" }}
-            taxonomy={taxonomy}
           />
         </Box>
       </Stack>
