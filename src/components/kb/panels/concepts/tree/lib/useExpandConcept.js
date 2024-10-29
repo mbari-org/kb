@@ -4,50 +4,54 @@ import { getConceptPath } from "./taxonomyItem"
 
 import Expand from "./expandedEnum"
 
-const collapseConcept = (expandedItems, setExpandedItems) => {
-  return concept => {
-    setExpandedItems(expandedItems.filter(id => id !== concept.name))
+const allLeafs = (concept, leafs = []) => {
+  if (concept.children && 0 < concept.children.length) {
+    leafs.push(concept.name)
+    concept.children.forEach(child => allLeafs(child, leafs))
   }
+  return leafs
 }
 
-const expandConcept = (setExpandedItems, taxonomy) => {
-  return concept => {
-    const leafs = getConceptPath(taxonomy, concept)
-    setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
-  }
-}
+const useExpandConcept = (
+  expandedItems,
+  // setAutoExpand,
+  setExpandedItems,
+  taxonomy
+) => {
+  const isExpanded = useCallback(
+    concept => expandedItems.includes(concept.name),
+    [expandedItems]
+  )
 
-const expandDescendants = setExpandedItems => {
-  const allLeafs = (concept, leafs = []) => {
-    if (concept.children && 0 < concept.children.length) {
-      leafs.push(concept.name)
-      concept.children.forEach(child => allLeafs(child, leafs))
-    }
-    return leafs
-  }
+  const collapse = useCallback(
+    concept => {
+      setExpandedItems(prevItems => prevItems.filter(id => id !== concept.name))
+    },
+    [setExpandedItems]
+  )
 
-  return concept => {
-    const leafs = allLeafs(concept)
-    setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
-  }
-}
-
-const toggleConcept = (expandedItems, setExpandedItems, taxonomy) => {
-  return concept => {
-    if (!expandedItems.includes(concept.name)) {
+  const expand = useCallback(
+    concept => {
       const leafs = getConceptPath(taxonomy, concept)
       setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
-    } else {
-      setExpandedItems(expandedItems.filter(id => id !== concept.name))
-    }
-  }
-}
+    },
+    [setExpandedItems, taxonomy]
+  )
 
-const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
-  const collapse = collapseConcept(expandedItems, setExpandedItems)
-  const descendants = expandDescendants(setExpandedItems)
-  const expand = expandConcept(setExpandedItems, taxonomy)
-  const toggle = toggleConcept(expandedItems, setExpandedItems, taxonomy)
+  const descendants = useCallback(
+    concept => {
+      const leafs = allLeafs(concept)
+      setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
+    },
+    [setExpandedItems]
+  )
+
+  const toggle = useCallback(
+    concept => {
+      isExpanded(concept) ? collapse(concept) : expand(concept)
+    },
+    [collapse, expand, isExpanded]
+  )
 
   return useCallback(
     (concept, expanded) => {
@@ -68,6 +72,7 @@ const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
           toggle(concept)
           break
       }
+      // setAutoExpand(false)
     },
     [collapse, descendants, expand, toggle]
   )

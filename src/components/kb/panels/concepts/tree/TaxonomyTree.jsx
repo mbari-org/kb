@@ -15,10 +15,10 @@ import useConceptClick from "./lib/useConceptClick"
 import useExpandConcept from "./lib/useExpandConcept"
 
 const TaxonomyTree = ({ concept, taxonomy }) => {
+  const { updateSelectedConcept } = use(SelectedContext)
+
   const [expandedItems, setExpandedItems] = useState([])
   const [autoExpand, setAutoExpand] = useState(true)
-
-  const { updateSelectedConcept: selectConcept } = use(SelectedContext)
 
   const isExpanded = concept =>
     0 < concept.children.length && expandedItems.includes(concept.name)
@@ -29,14 +29,16 @@ const TaxonomyTree = ({ concept, taxonomy }) => {
     taxonomy
   )
 
-  const apiRef = useTreeViewApiRef()
-  const timeoutRef = useRef(null)
-  const treeRef = useRef(null)
+  const selectConcept = conceptName => {
+    updateSelectedConcept(conceptName)
+    setAutoExpand(true)
+  }
 
   const handleConceptClick = useConceptClick(
     concept,
     expandConcept,
-    selectConcept
+    selectConcept,
+    setAutoExpand
   )
 
   const handleArrowKeys = useArrowNavigation(
@@ -47,14 +49,16 @@ const TaxonomyTree = ({ concept, taxonomy }) => {
     setAutoExpand
   )
 
+  const apiRef = useTreeViewApiRef()
+  const timeoutRef = useRef(null)
+  const treeRef = useRef(null)
+
   useEffect(() => {
-    if (concept) {
-      if (autoExpand && !expandedItems.includes(concept.name)) {
-        expandConcept(concept, Expand.ON)
-        setAutoExpand(true)
-      }
+    if (concept && autoExpand) {
+      expandConcept(concept, Expand.ON)
+      setAutoExpand(false)
     }
-  }, [autoExpand, concept, expandConcept, expandedItems])
+  }, [autoExpand, concept, expandConcept])
 
   useEffect(() => {
     if (timeoutRef.current) {

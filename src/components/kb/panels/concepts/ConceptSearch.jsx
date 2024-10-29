@@ -22,7 +22,10 @@ const ConceptSearch = ({ concept, taxonomy }) => {
     <Autocomplete
       // disablePortal
       onChange={(_event, newValue) => {
-        newValue && selectConcept(newValue)
+        if (newValue) {
+          selectConcept(newValue)
+          // setAutoExapnd(true)
+        }
       }}
       options={taxonomy.names}
       renderInput={params => (
