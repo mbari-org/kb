@@ -4,7 +4,7 @@ const getConceptLabel = concept =>
     ? concept.name
     : `${concept.name} (${concept.alternateNames.join(", ")})`
 
-const getConceptPath = (taxonomy, concept, path = []) =>
+const getConceptPath = (taxonomy, concept, path = [concept.name]) =>
   concept.parent
     ? getConceptPath(taxonomy, concept.parent, [concept.name, ...path])
     : [concept.name, ...path]

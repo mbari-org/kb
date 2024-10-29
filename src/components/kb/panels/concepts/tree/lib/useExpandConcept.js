@@ -12,12 +12,7 @@ const allLeafs = (concept, leafs = []) => {
   return leafs
 }
 
-const useExpandConcept = (
-  expandedItems,
-  // setAutoExpand,
-  setExpandedItems,
-  taxonomy
-) => {
+const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
   const isExpanded = useCallback(
     concept => expandedItems.includes(concept.name),
     [expandedItems]
@@ -32,8 +27,8 @@ const useExpandConcept = (
 
   const expand = useCallback(
     concept => {
-      const leafs = getConceptPath(taxonomy, concept)
-      setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
+      const path = getConceptPath(taxonomy, concept)
+      setExpandedItems(prevItems => [...new Set([...prevItems, ...path])])
     },
     [setExpandedItems, taxonomy]
   )
@@ -72,7 +67,6 @@ const useExpandConcept = (
           toggle(concept)
           break
       }
-      // setAutoExpand(false)
     },
     [collapse, descendants, expand, toggle]
   )

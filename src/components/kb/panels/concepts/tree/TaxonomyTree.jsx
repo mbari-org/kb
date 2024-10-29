@@ -14,11 +14,10 @@ import useArrowNavigation from "./lib/useArrowNavigation"
 import useConceptClick from "./lib/useConceptClick"
 import useExpandConcept from "./lib/useExpandConcept"
 
-const TaxonomyTree = ({ concept, taxonomy }) => {
+const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, taxonomy }) => {
   const { updateSelectedConcept } = use(SelectedContext)
 
   const [expandedItems, setExpandedItems] = useState([])
-  const [autoExpand, setAutoExpand] = useState(true)
 
   const isExpanded = concept =>
     0 < concept.children.length && expandedItems.includes(concept.name)
@@ -31,7 +30,7 @@ const TaxonomyTree = ({ concept, taxonomy }) => {
 
   const selectConcept = conceptName => {
     updateSelectedConcept(conceptName)
-    setAutoExpand(true)
+    setAutoExpand({ expand: true, name: conceptName })
   }
 
   const handleConceptClick = useConceptClick(
@@ -54,11 +53,18 @@ const TaxonomyTree = ({ concept, taxonomy }) => {
   const treeRef = useRef(null)
 
   useEffect(() => {
-    if (concept && autoExpand) {
+    // Expand concept on initial load
+    if (concept && autoExpand === null) {
+      setAutoExpand({ expand: true, name: concept.name })
+    } else if (
+      concept &&
+      autoExpand.expand &&
+      autoExpand.name === concept.name
+    ) {
       expandConcept(concept, Expand.ON)
-      setAutoExpand(false)
+      setAutoExpand({ expand: false, name: null })
     }
-  }, [autoExpand, concept, expandConcept])
+  }, [autoExpand, concept, expandConcept, expandedItems, setAutoExpand])
 
   useEffect(() => {
     if (timeoutRef.current) {

@@ -81,7 +81,7 @@ const useArrowNavigation = (
 
       if (navToConcept) {
         selectConcept(navToConcept.name)
-        setAutoExpand(false)
+        setAutoExpand({ expand: false, name: navToConcept.name })
       }
     },
     [isExpanded, concept, expandConcept, setAutoExpand, selectConcept]

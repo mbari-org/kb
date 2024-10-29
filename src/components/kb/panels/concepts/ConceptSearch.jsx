@@ -8,11 +8,18 @@ import TextField from "@mui/material/TextField"
 
 import SelectedContext from "@/contexts/selected/SelectedContext"
 
-const ConceptSearch = ({ concept, taxonomy }) => {
+const ConceptSearch = ({ concept, setAutoExpand, taxonomy }) => {
   const theme = useTheme()
   const { updateSelectedConcept: selectConcept } = use(SelectedContext)
 
   const [conceptName, setConceptName] = useState(null)
+
+  const handleConceptChange = (_event, conceptName) => {
+    if (conceptName) {
+      selectConcept(conceptName)
+      setAutoExpand({ expand: true, name: conceptName })
+    }
+  }
 
   useEffect(() => {
     setConceptName(concept.name)
@@ -21,12 +28,7 @@ const ConceptSearch = ({ concept, taxonomy }) => {
   return (
     <Autocomplete
       // disablePortal
-      onChange={(_event, newValue) => {
-        if (newValue) {
-          selectConcept(newValue)
-          // setAutoExapnd(true)
-        }
-      }}
+      onChange={handleConceptChange}
       options={taxonomy.names}
       renderInput={params => (
         <Stack>
