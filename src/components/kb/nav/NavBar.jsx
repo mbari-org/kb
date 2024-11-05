@@ -11,7 +11,10 @@ const NavBar = ({ activePanel, selectPanel }) => {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: theme => theme.palette.primary.dark }}
+      sx={{
+        height: "50px",
+        backgroundColor: theme => theme.palette.primary.dark,
+      }}
     >
       <Toolbar>
         {names.map(name => (

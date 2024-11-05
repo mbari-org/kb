@@ -1,23 +1,59 @@
-import { Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 
-import ConceptMedia from "./ConceptMedia"
+import ConceptViewToggle from "./ConceptViewToggle"
+import ConceptMedia from "./media/ConceptMedia"
 
 const Concept = ({ concept }) => {
+  const theme = useTheme()
   return (
-    <>
-      <Typography align="center" sx={{ mt: 3, mb: 1 }} variant="h3">
-        {concept.name}
-      </Typography>
-      <div>Author: {concept.author}</div>
-      <div>Aliases: {concept.alternateNames?.join(", ")}</div>
-      <div>Rank: {concept.rank}</div>
-      <div>Media: {0 < concept.media.length ? "YES" : "NO"}</div>
-      <div>
-        Link Realizations: {0 < concept.linkRealizations.length ? "YES" : "NO"}
-      </div>
-      <div>References: {0 < concept.references.length ? "YES" : "NO"}</div>
-      <ConceptMedia concept={concept} />
-    </>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        position: "relative",
+      }}
+    >
+      <Box sx={{ display: "flex", p: 1.5, width: "100%" }}>
+        <Box sx={{ flexBasis: "33.33%", flexShrink: 0 }}>
+          <ConceptMedia concept={concept} />
+        </Box>
+        <Box sx={{ flex: "1", textAlign: "left" }}>
+          <Typography
+            sx={{
+              color: theme.palette.concept.color,
+              fontFamily: theme.palette.concept.fontFamily,
+              fontSize: theme.palette.concept.fontSize,
+              fontWeight: theme.palette.concept.fontWeight,
+              ml: 1,
+            }}
+          >
+            {concept.name.toUpperCase()}
+          </Typography>
+        </Box>
+        <Box sx={{ flex: "0 0 auto", marginLeft: "auto" }}>
+          <ConceptViewToggle />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 60,
+          left: 10,
+          right: 20,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Button variant="contained" color="primary">
+          Edit
+        </Button>
+        <Button variant="contained" color="secondary" disabled>
+          Save
+        </Button>
+      </Box>
+    </Box>
   )
 }
 
