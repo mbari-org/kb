@@ -6,6 +6,7 @@ import ConceptMedia from "./media/ConceptMedia"
 
 const Concept = ({ concept }) => {
   const theme = useTheme()
+
   return (
     <Box
       sx={{
@@ -16,7 +17,7 @@ const Concept = ({ concept }) => {
       }}
     >
       <Box sx={{ display: "flex", p: 1.5, width: "100%" }}>
-        <Box sx={{ flexBasis: "33.33%", flexShrink: 0 }}>
+        <Box sx={{ flexBasis: "33.33%", flexShrink: 0, overflow: "hidden" }}>
           <ConceptMedia concept={concept} />
         </Box>
         <Box sx={{ flex: "1", textAlign: "left" }}>

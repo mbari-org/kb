@@ -26,7 +26,6 @@ const SelectedProvider = ({ children }) => {
   }
 
   const updateSelectedConcept = conceptName => {
-    console.log("Updated selected concept:", conceptName)
     if (conceptName !== selected.concept) {
       loadConcept(conceptName).then(
         () => {

@@ -1,23 +1,24 @@
 import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const MediaDisplay = ({ media }) => {
+const MediaDisplay = ({ mediaSrc, openPreview }) => {
   const theme = useTheme()
 
   return (
     <>
       <Box
-        style={{
+        sx={{
           width: "100%",
           height: "0",
           paddingBottom: "100%",
           position: "relative",
           overflow: "hidden",
+          border: `1px solid ${theme.palette.grey[300]}`,
         }}
       >
         <img
-          src={media.url}
-          alt="Concept Media Display"
+          src={mediaSrc}
+          alt="Concept Has No Media"
           style={{
             position: "absolute",
             top: "50%",
@@ -25,9 +26,12 @@ const MediaDisplay = ({ media }) => {
             width: "100%",
             height: "100%",
             objectFit: "contain",
-            objectPosition: "top",
+            objectPosition: "center",
             transform: "translate(-50%, -50%)",
+            maxWidth: "100%",
+            maxHeight: "100%",
           }}
+          onClick={openPreview}
         />
       </Box>
     </>

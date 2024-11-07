@@ -1,32 +1,72 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+
+import { Box } from "@mui/material"
 
 import MediaDisplay from "./MediaDisplay"
+import MediaPreview from "./MediaPreview"
+import MediaSwiper from "./MediaSwiper"
 
 const ConceptMedia = ({ concept }) => {
   const [media, setMedia] = useState(null)
-  const [mediaIndex, setMediaIndex] = useState(-1)
+  const [mediaIndex, setMediaIndex] = useState(0)
+
+  const mediaDisplayRef = useRef(null)
+  const [swiperHeight, setSwiperHeight] = useState("auto")
+
+  const [previewImage, setPreviewImage] = useState(false)
+
+  const openPreview = () => setPreviewImage(true)
+  const closePreview = () => setPreviewImage(false)
 
   const orderMedia = useCallback(concept => {
-    const primaryMedia = concept.media.find(
+    const primaryMedia = concept.media.filter(
       conceptMedia => conceptMedia.isPrimary
     )
     const otherMedia = concept.media.filter(
-      conceptMedia => conceptMedia.url !== primaryMedia.url
+      conceptMedia => !conceptMedia.isPrimary
     )
-    return [primaryMedia, ...otherMedia]
+    return [...primaryMedia, ...otherMedia]
   }, [])
+
+  const mediaSrc = () => (0 < media?.length ? media[mediaIndex]?.url : null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const orderedMedia = orderMedia(concept)
       setMedia(orderedMedia)
-      0 < orderedMedia.length && setMediaIndex(0)
     }, 500)
 
     return () => clearTimeout(timer)
   }, [concept, orderMedia])
 
-  return <>{-1 < mediaIndex && <MediaDisplay media={media[mediaIndex]} />}</>
+  useEffect(() => {
+    if (mediaDisplayRef.current) {
+      const width = mediaDisplayRef.current.offsetWidth
+      setSwiperHeight(`${width / 4}px`)
+    }
+  }, [media])
+
+  return (
+    <>
+      {0 < media?.length && (
+        <Box ref={mediaDisplayRef} sx={{ mb: 1 }}>
+          <MediaDisplay mediaSrc={mediaSrc()} openPreview={openPreview} />
+          <MediaPreview
+            closePreview={closePreview}
+            mediaSrc={mediaSrc()}
+            previewImage={previewImage}
+          />
+        </Box>
+      )}
+      {1 < media?.length && (
+        <MediaSwiper
+          media={media}
+          height={swiperHeight}
+          setMediaIndex={setMediaIndex}
+        />
+      )}
+    </>
+  )
 }
 
 export default ConceptMedia
