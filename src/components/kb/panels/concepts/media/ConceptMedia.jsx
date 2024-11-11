@@ -6,7 +6,7 @@ import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
-const ConceptMedia = ({ concept }) => {
+const ConceptMedia = ({ concept, sx }) => {
   const [media, setMedia] = useState(null)
   const [mediaIndex, setMediaIndex] = useState(0)
 
@@ -47,7 +47,7 @@ const ConceptMedia = ({ concept }) => {
   }, [media])
 
   return (
-    <>
+    <Box sx={sx}>
       {0 < media?.length && (
         <Box ref={mediaDisplayRef} sx={{ mb: 1 }}>
           <MediaDisplay mediaSrc={mediaSrc()} openPreview={openPreview} />
@@ -65,7 +65,7 @@ const ConceptMedia = ({ concept }) => {
           setMediaIndex={setMediaIndex}
         />
       )}
-    </>
+    </Box>
   )
 }
 

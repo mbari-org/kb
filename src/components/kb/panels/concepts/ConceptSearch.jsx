@@ -29,7 +29,6 @@ const ConceptSearch = ({ concept, setAutoExpand }) => {
 
   return (
     <Autocomplete
-      // disablePortal
       onChange={handleConceptChange}
       options={taxonomy.names}
       renderInput={params => (
@@ -40,7 +39,7 @@ const ConceptSearch = ({ concept, setAutoExpand }) => {
               fontWeight: "bold",
             }}
           >
-            Concept
+            Search
           </Typography>
           <TextField
             {...params}

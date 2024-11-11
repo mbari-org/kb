@@ -1,11 +1,17 @@
-import { Box, Button, Typography } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { useState } from "react"
 
-import ConceptViewToggle from "./ConceptViewToggle"
+import { Box, Button } from "@mui/material"
+
+import ConceptInfo from "./info/ConceptInfo"
 import ConceptMedia from "./media/ConceptMedia"
+import ConceptViewToggle from "./ConceptViewToggle"
 
 const Concept = ({ concept }) => {
-  const theme = useTheme()
+  const [editable, setEditable] = useState(false)
+
+  const handleEditCancel = () => {
+    setEditable(!editable)
+  }
 
   return (
     <Box
@@ -17,25 +23,12 @@ const Concept = ({ concept }) => {
       }}
     >
       <Box sx={{ display: "flex", p: 1.5, width: "100%" }}>
-        <Box sx={{ flexBasis: "33.33%", flexShrink: 0, overflow: "hidden" }}>
-          <ConceptMedia concept={concept} />
-        </Box>
-        <Box sx={{ flex: "1", textAlign: "left" }}>
-          <Typography
-            sx={{
-              color: theme.palette.concept.color,
-              fontFamily: theme.palette.concept.fontFamily,
-              fontSize: theme.palette.concept.fontSize,
-              fontWeight: theme.palette.concept.fontWeight,
-              ml: 1,
-            }}
-          >
-            {concept.name.toUpperCase()}
-          </Typography>
-        </Box>
-        <Box sx={{ flex: "0 0 auto", marginLeft: "auto" }}>
-          <ConceptViewToggle />
-        </Box>
+        <ConceptMedia
+          concept={concept}
+          sx={{ flexBasis: "33.33%", flexShrink: 0, overflow: "hidden" }}
+        />
+        <ConceptInfo concept={concept} editable={editable} />
+        <ConceptViewToggle sx={{ flex: "0 0 auto", marginLeft: "auto" }} />
       </Box>
       <Box
         sx={{
@@ -47,10 +40,19 @@ const Concept = ({ concept }) => {
           justifyContent: "space-between",
         }}
       >
-        <Button variant="contained" color="primary">
-          Edit
+        <Button
+          color={editable ? "secondary" : "primary"}
+          onClick={handleEditCancel}
+          variant="contained"
+        >
+          {editable ? "Cancel" : "Edit"}
         </Button>
-        <Button variant="contained" color="secondary" disabled>
+        <Button
+          color={editable ? "primary" : "secondary"}
+          disabled={!editable}
+          onClick={() => setEditable(false)}
+          variant="contained"
+        >
           Save
         </Button>
       </Box>
