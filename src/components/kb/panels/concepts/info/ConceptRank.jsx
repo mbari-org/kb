@@ -11,11 +11,11 @@ const ranks = [
   "domain",
 ]
 
-const ConceptRank = ({ concept, editable }) => {
+const ConceptRank = ({ concept, infoStyle }) => {
   return (
-    <FormControl fullWidth variant="filled" size="small">
+    <FormControl {...infoStyle}>
       <InputLabel>Rank</InputLabel>
-      <Select disabled={!editable} value={concept.rank || ""} displayEmpty>
+      <Select value={concept.rank} displayEmpty>
         {ranks.map(rank => (
           <MenuItem key={rank} value={rank}>
             {rank}

@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from "react"
 
 import { Stack, Typography } from "@mui/material"
-import { alpha, useTheme } from "@mui/material/styles"
+import { useTheme } from "@mui/material/styles"
 
 import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
@@ -11,6 +11,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const ConceptSearch = ({ concept, setAutoExpand }) => {
   const theme = useTheme()
+
   const { updateSelectedConcept: selectConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)
 
@@ -44,7 +45,7 @@ const ConceptSearch = ({ concept, setAutoExpand }) => {
           <TextField
             {...params}
             sx={{
-              backgroundColor: alpha(theme.palette.primary.main, 0.2),
+              backgroundColor: theme.palette.primary.pale,
             }}
           />
           <hr />
@@ -56,7 +57,7 @@ const ConceptSearch = ({ concept, setAutoExpand }) => {
           sx: {
             "& .MuiAutocomplete-listbox": {
               "& .MuiAutocomplete-option": {
-                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                backgroundColor: theme.palette.primary.light,
               },
             },
           },

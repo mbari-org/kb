@@ -1,10 +1,14 @@
-import { Stack, TextField, Typography } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Stack } from "@mui/material"
 
+import ConceptAuthor from "./ConceptAuthor"
+import ConceptLevel from "./ConceptLevel"
+import ConceptName from "./ConceptName"
 import ConceptRank from "./ConceptRank"
 
+import useConceptInfoStyle from "./useConceptInfoStyle"
+
 const ConceptInfo = ({ concept, editable }) => {
-  const theme = useTheme()
+  const infoStyle = useConceptInfoStyle(editable)()
 
   return (
     <Stack
@@ -12,34 +16,11 @@ const ConceptInfo = ({ concept, editable }) => {
       spacing={2}
       sx={{ flex: "1", ml: 1, mr: 1, textAlign: "left" }}
     >
-      <Typography
-        sx={{
-          color: theme.palette.concept.color,
-          fontFamily: theme.palette.concept.fontFamily,
-          fontSize: theme.palette.concept.fontSize,
-          fontWeight: theme.palette.concept.fontWeight,
-        }}
-      >
-        {concept.name.toUpperCase()}
-      </Typography>
-      <TextField
-        disabled={!editable}
-        fullWidth
-        label="Author"
-        size="small"
-        value={concept?.author}
-        variant="filled"
-      />
+      <ConceptName concept={concept} />
+      <ConceptAuthor concept={concept} infoStyle={infoStyle} />
       <Stack direction="row" spacing={2}>
-        <ConceptRank concept={concept} editable={editable} />
-        <TextField
-          disabled={!editable}
-          fullWidth
-          label="Level"
-          size="small"
-          value={undefined}
-          variant="filled"
-        />
+        <ConceptRank concept={concept} infoStyle={infoStyle} />
+        <ConceptLevel concept={concept} infoStyle={infoStyle} />
       </Stack>
     </Stack>
   )

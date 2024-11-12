@@ -1,12 +1,15 @@
 import { useState } from "react"
 
 import { Box, Button } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 
 import ConceptInfo from "./info/ConceptInfo"
 import ConceptMedia from "./media/ConceptMedia"
 import ConceptViewToggle from "./ConceptViewToggle"
 
 const Concept = ({ concept }) => {
+  const theme = useTheme()
+
   const [editable, setEditable] = useState(false)
 
   const handleEditCancel = () => {
@@ -41,14 +44,14 @@ const Concept = ({ concept }) => {
         }}
       >
         <Button
-          color={editable ? "secondary" : "primary"}
+          color={editable ? "cancel" : "main"}
           onClick={handleEditCancel}
           variant="contained"
         >
           {editable ? "Cancel" : "Edit"}
         </Button>
         <Button
-          color={editable ? "primary" : "secondary"}
+          // color={editable ? "secondary" : "primary"}
           disabled={!editable}
           onClick={() => setEditable(false)}
           variant="contained"

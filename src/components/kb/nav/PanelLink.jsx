@@ -1,16 +1,16 @@
 import { useTheme } from "@emotion/react"
 import { useState } from "react"
 
-import { Button, darken } from "@mui/material"
+import { Button } from "@mui/material"
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
   const [isHovering, setIsHovering] = useState(false)
 
   const theme = useTheme()
   const style = () => {
-    const activeColor = theme.palette.warning.light
-    const hoverColor = theme.palette.primary.contrastText
-    const inactiveColor = darken(theme.palette.primary.contrastText, 0.15)
+    const activeColor = theme.nav.active
+    const hoverColor = theme.nav.hover
+    const inactiveColor = theme.nav.inactive
 
     const color = isActive
       ? activeColor
