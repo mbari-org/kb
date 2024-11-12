@@ -1,5 +1,7 @@
-import { Box, Stack, TextField, Typography } from "@mui/material"
+import { Stack, TextField, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
+
+import ConceptRank from "./ConceptRank"
 
 const ConceptInfo = ({ concept, editable }) => {
   const theme = useTheme()
@@ -29,14 +31,7 @@ const ConceptInfo = ({ concept, editable }) => {
         variant="filled"
       />
       <Stack direction="row" spacing={2}>
-        <TextField
-          disabled={!editable}
-          fullWidth
-          label="Rank"
-          size="small"
-          value={concept.rank || undefined}
-          variant="filled"
-        />
+        <ConceptRank concept={concept} editable={editable} />
         <TextField
           disabled={!editable}
           fullWidth
