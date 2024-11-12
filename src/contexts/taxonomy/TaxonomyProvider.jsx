@@ -1,6 +1,7 @@
 import { use, useEffect, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
+import LoadingContext from "@/contexts/loading/LoadingContext"
 import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
@@ -15,6 +16,7 @@ import {
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
+  const { setLoading } = use(LoadingContext)
 
   const { error: configError, config } = use(ConfigContext)
   if (configError) {
@@ -28,23 +30,29 @@ const TaxonomyProvider = ({ children }) => {
   const loadConcept = async conceptName => {
     const existing = getTaxonomyContext(taxonomy, conceptName)
     if (needsUpdate(existing)) {
+      setLoading(true)
       const { taxonomy: taxonmyWithConcept } = await load(taxonomy, conceptName)
+      setLoading(false)
       setTaxonomy(taxonmyWithConcept)
     }
   }
 
   const loadDescendants = async concept => {
     try {
+      setLoading(true)
       const { taxonomy: taxonomyWithDescendants } =
         await loadTaxonomyDescendants(taxonomy, concept)
       setTaxonomy(taxonomyWithDescendants)
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       showBoundary(error)
     }
   }
 
   useEffect(() => {
     if (config) {
+      setLoading(true)
       loadTaxonomy(config).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           if (taxonomyError) {
@@ -52,8 +60,10 @@ const TaxonomyProvider = ({ children }) => {
             return
           }
           setTaxonomy(initialTaxonomy)
+          setLoading(false)
         },
         error => {
+          setLoading(false)
           showBoundary(error)
         }
       )

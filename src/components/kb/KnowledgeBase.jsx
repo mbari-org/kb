@@ -1,7 +1,8 @@
 import { use, useTransition } from "react"
 
-import Box from "@mui/material/Box"
+import { Box } from "@mui/material"
 
+import LoadingBackdrop from "@/components/kb/LoadingBackdrop"
 import NavBar from "@/components/kb/nav/NavBar"
 import Panel from "@/components/kb/panels/Panel"
 
@@ -26,6 +27,7 @@ const KnowledgeBase = () => {
       <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
         <Panel name={selected.panel} />
       </Box>
+      <LoadingBackdrop />
     </Box>
   )
 }

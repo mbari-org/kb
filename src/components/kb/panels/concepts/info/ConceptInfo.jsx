@@ -27,7 +27,7 @@ const ConceptInfo = ({ concept, editable }) => {
         fullWidth
         label="Author"
         size="small"
-        value={concept.author}
+        value={concept?.author}
         variant="filled"
       />
       <Stack direction="row" spacing={2}>
