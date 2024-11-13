@@ -26,7 +26,7 @@ const App = () => {
     <StrictMode>
       <ThemeProvider theme={kbTheme}>
         <CssBaseline />
-        <Router>
+        <Router basename="/kbeditor">
           <Whoops>
             <ConfigProvider>
               <AuthProvider>
