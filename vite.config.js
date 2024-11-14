@@ -15,13 +15,9 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      "/api": {
-        target: "http://your-proxy-server.com",
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ""),
-      },
-    },
+    host: true,
+    strictPort: true,
+    port: 5173,
   },
   base: "/kbeditor/",
 })

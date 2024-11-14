@@ -3,13 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "kb": "yarn build && yarn preview",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+  "homepage": "/kbeditor/",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -42,5 +36,11 @@
     "vite": "^5.4.1"
   },
   "packageManager": "yarn@4.5.1",
-  "homepage": "/kbeditor/"
+  "scripts": {
+    "dev": "vite --port 5174",
+    "build": "vite build",
+    "kb": "yarn build && yarn preview",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  }
 }
