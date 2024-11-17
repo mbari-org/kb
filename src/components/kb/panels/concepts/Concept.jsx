@@ -1,15 +1,13 @@
 import { useState } from "react"
 
-import { Box, Button } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Box } from "@mui/material"
 
+import ConceptActionButtons from "./info/ConceptActionButtons"
 import ConceptInfo from "./info/ConceptInfo"
 import ConceptMedia from "./media/ConceptMedia"
 import ConceptViewToggle from "./ConceptViewToggle"
 
 const Concept = ({ concept }) => {
-  const theme = useTheme()
-
   const [editable, setEditable] = useState(false)
 
   const handleEditCancel = () => {
@@ -33,32 +31,11 @@ const Concept = ({ concept }) => {
         <ConceptInfo concept={concept} editable={editable} />
         <ConceptViewToggle sx={{ flex: "0 0 auto", marginLeft: "auto" }} />
       </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 60,
-          left: 10,
-          right: 20,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Button
-          color={editable ? "cancel" : "main"}
-          onClick={handleEditCancel}
-          variant="contained"
-        >
-          {editable ? "Cancel" : "Edit"}
-        </Button>
-        <Button
-          // color={editable ? "secondary" : "primary"}
-          disabled={!editable}
-          onClick={() => setEditable(false)}
-          variant="contained"
-        >
-          Save
-        </Button>
-      </Box>
+      <ConceptActionButtons
+        editable={editable}
+        handleEditCancel={handleEditCancel}
+        setEditable={setEditable}
+      />
     </Box>
   )
 }
