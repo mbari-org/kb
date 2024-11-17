@@ -9,7 +9,7 @@ const MediaSwiperSlide = ({ index, slide }) => {
     <img
       onClick={() => slideClick(index)}
       src={slide.url}
-      style={{ height: "100%", width: "auto" }}
+      style={{ height: "auto", width: "100%" }}
     />
   )
 }

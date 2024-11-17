@@ -49,7 +49,7 @@ const ConceptMedia = ({ concept, sx }) => {
   return (
     <Box sx={sx}>
       {0 < media?.length && (
-        <Box ref={mediaDisplayRef} sx={{ mb: 1 }}>
+        <Box ref={mediaDisplayRef} sx={{ mb: "2px" }}>
           <MediaDisplay mediaSrc={mediaSrc()} openPreview={openPreview} />
           <MediaPreview
             closePreview={closePreview}

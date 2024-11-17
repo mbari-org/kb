@@ -29,9 +29,7 @@ const MediaSwiper = ({ media, height, setMediaIndex }) => {
         onSlideChange={change => setMediaIndex(change.snapIndex)}
         pagination={pagination}
         slidesPerView={3}
-        spaceBetween={10}
         style={{
-          border: `1px solid ${theme.palette.grey[300]}`,
           height,
           overflow: "hidden",
         }}
