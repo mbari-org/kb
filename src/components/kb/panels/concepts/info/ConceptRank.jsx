@@ -1,14 +1,19 @@
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 const ranks = [
-  "species",
-  "genus",
-  "family",
-  "order",
-  "class",
-  "phylum",
-  "kingdom",
   "domain",
+  "realm",
+  "kingdom",
+  "division",
+  "phylum",
+  "class",
+  "order",
+  "family",
+  "tribe",
+  "genus",
+  "species",
+  "variety",
+  "form",
 ]
 
 const ConceptRank = ({ concept, infoStyle }) => {

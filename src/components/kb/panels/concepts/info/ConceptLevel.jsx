@@ -1,6 +1,15 @@
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
-const levels = ["infra", "sub", "super"]
+const levels = [
+  "epi",
+  "giga",
+  "grand",
+  "hyper",
+  "infra",
+  "parv",
+  "sub",
+  "super",
+]
 
 const ConceptLevel = ({ concept, infoStyle }) => {
   return (
