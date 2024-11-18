@@ -1,6 +1,10 @@
+import { use } from "react"
+
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
-const levels = [
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
+
+const taxonomyLevels = [
   "epi",
   "giga",
   "grand",
@@ -11,14 +15,23 @@ const levels = [
   "super",
 ]
 
-const ConceptLevel = ({ concept, infoStyle }) => {
+const ConceptLevel = ({ infoStyle }) => {
+  const {
+    conceptState: { level },
+    setConcept,
+  } = use(ConceptEditContext)
+
   return (
     <FormControl {...infoStyle}>
       <InputLabel>Level</InputLabel>
-      <Select value={concept.level || ""} displayEmpty>
-        {levels.map(level => (
-          <MenuItem key={level} value={level}>
-            {level}
+      <Select
+        displayEmpty
+        onChange={e => setConcept({ level: e.target.value })}
+        value={level}
+      >
+        {taxonomyLevels.map(taxonomyLevel => (
+          <MenuItem key={taxonomyLevel} value={taxonomyLevel}>
+            {taxonomyLevel}
           </MenuItem>
         ))}
       </Select>

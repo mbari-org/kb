@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { use, useState } from "react"
 
 import { Box } from "@mui/material"
 
@@ -8,7 +8,11 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 
 import ConceptViewToggleButton from "./ConceptViewToggleButton"
 
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
+
 const ConceptViewToggle = ({ sx }) => {
+  const { editable } = use(ConceptEditContext)
+
   const [conceptView, setConceptView] = useState("standard")
 
   const handleViewSelection = (_event, newConceptView) => {
@@ -19,6 +23,7 @@ const ConceptViewToggle = ({ sx }) => {
     <Box sx={sx}>
       <ToggleButtonGroup
         aria-label="text alignment"
+        disabled={editable}
         exclusive
         onChange={handleViewSelection}
         value={conceptView}

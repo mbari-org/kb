@@ -1,3 +1,5 @@
+import { use } from "react"
+
 import { Stack } from "@mui/material"
 
 import ConceptAuthor from "./ConceptAuthor"
@@ -7,7 +9,11 @@ import ConceptRank from "./ConceptRank"
 
 import useConceptInfoStyle from "./useConceptInfoStyle"
 
-const ConceptInfo = ({ concept, editable }) => {
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
+
+const ConceptInfo = () => {
+  const { editable } = use(ConceptEditContext)
+
   const infoStyle = useConceptInfoStyle(editable)()
 
   return (
@@ -16,11 +22,11 @@ const ConceptInfo = ({ concept, editable }) => {
       spacing={2}
       sx={{ flex: "1", ml: 1, mr: 1, textAlign: "left" }}
     >
-      <ConceptName concept={concept} />
-      <ConceptAuthor concept={concept} infoStyle={infoStyle} />
+      <ConceptName />
+      <ConceptAuthor infoStyle={infoStyle} />
       <Stack direction="row" spacing={2}>
-        <ConceptRank concept={concept} infoStyle={infoStyle} />
-        <ConceptLevel concept={concept} infoStyle={infoStyle} />
+        <ConceptRank infoStyle={infoStyle} />
+        <ConceptLevel infoStyle={infoStyle} />
       </Stack>
     </Stack>
   )

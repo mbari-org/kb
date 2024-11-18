@@ -1,7 +1,13 @@
+import { use } from "react"
+
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 
-const ConceptActionButtons = ({ editable, handleEditCancel, setEditable }) => {
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
+
+const ConceptActionButtons = () => {
+  const { editable, isModified, setEditable } = use(ConceptEditContext)
+
   return (
     <Box
       sx={{
@@ -15,13 +21,13 @@ const ConceptActionButtons = ({ editable, handleEditCancel, setEditable }) => {
     >
       <Button
         color={editable ? "cancel" : "main"}
-        onClick={handleEditCancel}
+        onClick={() => setEditable(!editable)}
         variant="contained"
       >
         {editable ? "Cancel" : "Edit"}
       </Button>
       <Button
-        disabled={!editable}
+        disabled={!editable || !isModified}
         onClick={() => setEditable(false)}
         variant="contained"
       >

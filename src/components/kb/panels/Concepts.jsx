@@ -9,6 +9,8 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 import ConceptDivider from "./concepts/ConceptDivider"
 
+import ConceptProvider from "@/contexts/concept/ConceptProvider"
+
 const Concepts = () => {
   const { getConcept } = use(TaxonomyContext)
   const { selected } = use(SelectedContext)
@@ -28,7 +30,9 @@ const Concepts = () => {
       </Box>
       <ConceptDivider setSidebarWidth={setSidebarWidth} />
       <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
-        <Concept concept={concept} />
+        <ConceptProvider concept={concept}>
+          <Concept />
+        </ConceptProvider>
       </Box>
     </Box>
   )

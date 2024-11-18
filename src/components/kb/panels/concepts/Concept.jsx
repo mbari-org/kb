@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { use } from "react"
 
 import { Box } from "@mui/material"
 
@@ -7,11 +7,13 @@ import ConceptInfo from "./info/ConceptInfo"
 import ConceptMedia from "./media/ConceptMedia"
 import ConceptViewToggle from "./ConceptViewToggle"
 
-const Concept = ({ concept }) => {
-  const [editable, setEditable] = useState(false)
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
 
-  const handleEditCancel = () => {
-    setEditable(!editable)
+const Concept = () => {
+  const { conceptState } = use(ConceptEditContext)
+
+  if (conceptState && Object.keys(conceptState).length === 0) {
+    return null
   }
 
   return (
@@ -25,17 +27,12 @@ const Concept = ({ concept }) => {
     >
       <Box sx={{ display: "flex", p: 1.5, width: "100%" }}>
         <ConceptMedia
-          concept={concept}
           sx={{ flexBasis: "33.33%", flexShrink: 0, overflow: "hidden" }}
         />
-        <ConceptInfo concept={concept} editable={editable} />
+        <ConceptInfo />
         <ConceptViewToggle sx={{ flex: "0 0 auto", marginLeft: "auto" }} />
       </Box>
-      <ConceptActionButtons
-        editable={editable}
-        handleEditCancel={handleEditCancel}
-        setEditable={setEditable}
-      />
+      <ConceptActionButtons />
     </Box>
   )
 }

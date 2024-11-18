@@ -1,18 +1,26 @@
+import { use } from "react"
+
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const ConceptName = ({ concept }) => {
-  const theme = useTheme()
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
+
+const ConceptName = () => {
+  const {
+    conceptState: { name },
+  } = use(ConceptEditContext)
+
+  const { concept: conceptTheme } = useTheme()
   return (
     <Typography
       sx={{
-        color: theme.concept.color,
-        fontFamily: theme.concept.fontFamily,
-        fontSize: theme.concept.fontSize,
-        fontWeight: theme.concept.fontWeight,
+        color: conceptTheme.color,
+        fontFamily: conceptTheme.fontFamily,
+        fontSize: conceptTheme.fontSize,
+        fontWeight: conceptTheme.fontWeight,
       }}
     >
-      {concept.name.toUpperCase()}
+      {name.toUpperCase()}
     </Typography>
   )
 }

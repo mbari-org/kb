@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { use, useCallback, useEffect, useRef, useState } from "react"
 
 import { Box } from "@mui/material"
 
@@ -6,7 +6,13 @@ import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
-const ConceptMedia = ({ concept, sx }) => {
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
+
+const ConceptMedia = ({ sx }) => {
+  const {
+    conceptState: { media: conceptMedia },
+  } = use(ConceptEditContext)
+
   const [media, setMedia] = useState(null)
   const [mediaIndex, setMediaIndex] = useState(0)
 
@@ -18,26 +24,21 @@ const ConceptMedia = ({ concept, sx }) => {
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
 
-  const orderMedia = useCallback(concept => {
-    const primaryMedia = concept.media.filter(
-      conceptMedia => conceptMedia.isPrimary
-    )
-    const otherMedia = concept.media.filter(
-      conceptMedia => !conceptMedia.isPrimary
-    )
+  const orderMedia = useCallback(() => {
+    const primaryMedia = conceptMedia.filter(media => media.isPrimary)
+    const otherMedia = conceptMedia.filter(media => !media.isPrimary)
     return [...primaryMedia, ...otherMedia]
-  }, [])
+  }, [conceptMedia])
 
   const mediaSrc = () => (0 < media?.length ? media[mediaIndex]?.url : null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const orderedMedia = orderMedia(concept)
-      setMedia(orderedMedia)
+      setMedia(orderMedia())
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [concept, orderMedia])
+  }, [orderMedia])
 
   useEffect(() => {
     if (mediaDisplayRef.current) {

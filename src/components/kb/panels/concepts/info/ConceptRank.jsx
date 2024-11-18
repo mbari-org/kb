@@ -1,6 +1,10 @@
+import { use } from "react"
+
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
-const ranks = [
+import ConceptEditContext from "@/contexts/concept/ConceptContext"
+
+const taxonomyRanks = [
   "domain",
   "realm",
   "kingdom",
@@ -16,14 +20,23 @@ const ranks = [
   "form",
 ]
 
-const ConceptRank = ({ concept, infoStyle }) => {
+const ConceptRank = ({ infoStyle }) => {
+  const {
+    conceptState: { rank },
+    setConcept,
+  } = use(ConceptEditContext)
+
   return (
     <FormControl {...infoStyle}>
       <InputLabel>Rank</InputLabel>
-      <Select value={concept.rank} displayEmpty>
-        {ranks.map(rank => (
-          <MenuItem key={rank} value={rank}>
-            {rank}
+      <Select
+        displayEmpty
+        onChange={e => setConcept({ rank: e.target.value })}
+        value={rank}
+      >
+        {taxonomyRanks.map(taxonomyRank => (
+          <MenuItem key={taxonomyRank} value={taxonomyRank}>
+            {taxonomyRank}
           </MenuItem>
         ))}
       </Select>
