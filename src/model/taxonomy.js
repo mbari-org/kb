@@ -142,7 +142,7 @@ const load = async (taxonomy, conceptName, updatable = false) => {
 
 const loadConcept = async (updatableTaxonomy, conceptName) => {
   if (!updatableTaxonomy.concepts[conceptName]) {
-    const concept = await fetchConcept(updatableTaxonomy, conceptName)
+    const concept = await fetchConcept(conceptName, updatableTaxonomy)
     updatableTaxonomy.concepts[conceptName] = concept
     addAliases(updatableTaxonomy, concept)
   }
@@ -155,8 +155,8 @@ const loadChildren = async (updatableTaxonomy, updatableConcept) => {
   }
 
   const apiChildren = await fetchChildren(
-    updatableTaxonomy,
-    updatableConcept.name
+    updatableConcept.name,
+    updatableTaxonomy
   )
 
   const children = apiChildren.map(apiChild => {
@@ -203,7 +203,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
     return
   }
 
-  const parent = await fetchParent(updatableTaxonomy, updatableConcept.name)
+  const parent = await fetchParent(updatableConcept.name, updatableTaxonomy)
 
   if (updatableTaxonomy.concepts[parent.name]) {
     updatableConcept.parent = updatableTaxonomy.concepts[parent.name]
