@@ -22,7 +22,7 @@ const taxonomyRanks = [
 
 const ConceptRank = ({ infoStyle }) => {
   const {
-    conceptState: { rank },
+    conceptState: { rankName },
     setConcept,
   } = use(ConceptContext)
 
@@ -31,8 +31,8 @@ const ConceptRank = ({ infoStyle }) => {
       <InputLabel>Rank</InputLabel>
       <Select
         displayEmpty
-        onChange={e => setConcept({ rank: e.target.value })}
-        value={rank}
+        onChange={e => setConcept({ rankName: e.target.value })}
+        value={rankName}
       >
         {taxonomyRanks.map(taxonomyRank => (
           <MenuItem key={taxonomyRank} value={taxonomyRank}>

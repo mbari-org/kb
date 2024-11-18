@@ -17,7 +17,7 @@ const taxonomyLevels = [
 
 const ConceptLevel = ({ infoStyle }) => {
   const {
-    conceptState: { level },
+    conceptState: { rankLevel },
     setConcept,
   } = use(ConceptContext)
 
@@ -26,8 +26,8 @@ const ConceptLevel = ({ infoStyle }) => {
       <InputLabel>Level</InputLabel>
       <Select
         displayEmpty
-        onChange={e => setConcept({ level: e.target.value })}
-        value={level}
+        onChange={e => setConcept({ rankLevel: e.target.value })}
+        value={rankLevel}
       >
         {taxonomyLevels.map(taxonomyLevel => (
           <MenuItem key={taxonomyLevel} value={taxonomyLevel}>

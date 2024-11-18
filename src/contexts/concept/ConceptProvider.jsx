@@ -71,10 +71,10 @@ const ConceptProvider = ({ children, concept }) => {
 
     const initialState = {
       author: concept.author || "unknown",
-      level: concept.rankLevel || "",
+      rankLevel: concept.rankLevel || "",
       name: concept.name,
       media: concept.media,
-      rank: concept.rankName || "",
+      rankName: concept.rankName || "",
     }
     setInitialConceptState(initialState)
 

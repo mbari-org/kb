@@ -1,4 +1,4 @@
-import { oniGet } from "./fetch"
+import { oniGet } from "./get"
 
 const fetchNames = async config => {
   const { content } = await oniGet(config, ["names"])
