@@ -3,12 +3,12 @@ import { use } from "react"
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import ConceptEditContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptName = () => {
   const {
     conceptState: { name },
-  } = use(ConceptEditContext)
+  } = use(ConceptContext)
 
   const { concept: conceptTheme } = useTheme()
   return (

@@ -3,10 +3,10 @@ import { use } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 
-import ConceptEditContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptActionButtons = () => {
-  const { editable, isModified, setEditable } = use(ConceptEditContext)
+  const { editable, isModified, saveChanges, setEditable } = use(ConceptContext)
 
   return (
     <Box
@@ -21,14 +21,14 @@ const ConceptActionButtons = () => {
     >
       <Button
         color={editable ? "cancel" : "main"}
-        onClick={() => setEditable(!editable)}
+        onClick={() => (editable ? saveChanges(false) : setEditable(true))}
         variant="contained"
       >
         {editable ? "Cancel" : "Edit"}
       </Button>
       <Button
         disabled={!editable || !isModified}
-        onClick={() => setEditable(false)}
+        onClick={() => saveChanges(true)}
         variant="contained"
       >
         Save

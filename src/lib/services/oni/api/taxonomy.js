@@ -1,15 +1,14 @@
-import { oniFetchJson } from "./fetch"
+import { oniGet } from "./fetch"
 
 const fetchNames = async config => {
-  const { content } = await oniFetchJson(config, ["names"])
+  const { content } = await oniGet(config, ["names"])
   return content
 }
 
 const fetchPendingHistory = async config => {
-  const { content } = await oniFetchJson(config, ["history", "pending"])
+  const { content } = await oniGet(config, ["history", "pending"])
   return content
 }
-const fetchRoot = async config =>
-  oniFetchJson(config, ["concept", "query", "root"])
+const fetchRoot = async config => oniGet(config, ["concept", "query", "root"])
 
 export { fetchNames, fetchPendingHistory, fetchRoot }

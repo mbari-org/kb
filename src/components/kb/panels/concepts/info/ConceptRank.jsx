@@ -2,7 +2,7 @@ import { use } from "react"
 
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
-import ConceptEditContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const taxonomyRanks = [
   "domain",
@@ -24,7 +24,7 @@ const ConceptRank = ({ infoStyle }) => {
   const {
     conceptState: { rank },
     setConcept,
-  } = use(ConceptEditContext)
+  } = use(ConceptContext)
 
   return (
     <FormControl {...infoStyle}>

@@ -2,7 +2,7 @@ import { use } from "react"
 
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
-import ConceptEditContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const taxonomyLevels = [
   "epi",
@@ -19,7 +19,7 @@ const ConceptLevel = ({ infoStyle }) => {
   const {
     conceptState: { level },
     setConcept,
-  } = use(ConceptEditContext)
+  } = use(ConceptContext)
 
   return (
     <FormControl {...infoStyle}>

@@ -6,12 +6,12 @@ import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
-import ConceptEditContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptMedia = ({ sx }) => {
   const {
     conceptState: { media: conceptMedia },
-  } = use(ConceptEditContext)
+  } = use(ConceptContext)
 
   const [media, setMedia] = useState(null)
   const [mediaIndex, setMediaIndex] = useState(0)

@@ -1,24 +1,44 @@
-import { useCallback, useEffect, useReducer, useState } from "react"
+import { use, useCallback, useEffect, useReducer, useState } from "react"
+
+import ConceptContext from "./ConceptContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import conceptReducer from "./conceptReducer"
 
-import ConceptContext from "./ConceptContext"
+import { updateConcept } from "@/lib/services/oni/api/concept"
 
 const ConceptProvider = ({ children, concept }) => {
+  const { taxonomy } = use(TaxonomyContext)
+
   const [editable, setEditable] = useState(false)
   const [isModified, setIsModified] = useState(false)
 
-  const [initConceptState, setInitConceptState] = useState(null)
+  const [initialConceptState, setInitialConceptState] = useState(null)
   const [conceptState, dispatch] = useReducer(conceptReducer, {})
+
+  const getChanges = useCallback(
+    state => {
+      if (!initialConceptState) return {}
+      const changes = {}
+      Object.keys(state).forEach(key => {
+        if (state[key] !== initialConceptState[key]) {
+          changes[key] = state[key]
+        }
+      })
+      return changes
+    },
+    [initialConceptState]
+  )
 
   const isStateModified = useCallback(
     state => {
-      const modified = Object.keys(state).some(
-        key => state[key] !== initConceptState[key]
-      )
+      const modified =
+        initialConceptState &&
+        Object.keys(state).some(key => state[key] !== initialConceptState[key])
+
       setIsModified(modified)
     },
-    [initConceptState]
+    [initialConceptState]
   )
 
   const setConcept = update => {
@@ -26,11 +46,25 @@ const ConceptProvider = ({ children, concept }) => {
     isStateModified(conceptState)
   }
 
+  const saveChanges = bool => {
+    if (bool && isStateModified) {
+      updateConcept(concept.name, getChanges(conceptState), taxonomy).then(
+        () => {
+          setInitialConceptState(conceptState)
+        }
+      )
+    } else if (!bool) {
+      dispatch({ type: "INIT_STATE", payload: initialConceptState })
+    }
+    setEditable(false)
+    setIsModified(false)
+  }
+
   useEffect(() => {
-    if (conceptState && initConceptState) {
+    if (conceptState && initialConceptState) {
       isStateModified(conceptState)
     }
-  }, [conceptState, initConceptState, isStateModified])
+  }, [conceptState, initialConceptState, isStateModified])
 
   useEffect(() => {
     if (!concept) return
@@ -42,14 +76,21 @@ const ConceptProvider = ({ children, concept }) => {
       media: concept.media,
       rank: concept.rankName || "",
     }
-    setInitConceptState(initialState)
+    setInitialConceptState(initialState)
 
     dispatch({ type: "INIT_STATE", payload: initialState })
   }, [concept])
 
   return (
     <ConceptContext
-      value={{ conceptState, editable, setConcept, isModified, setEditable }}
+      value={{
+        conceptState,
+        editable,
+        setConcept,
+        isModified,
+        saveChanges,
+        setEditable,
+      }}
     >
       {children}
     </ConceptContext>
