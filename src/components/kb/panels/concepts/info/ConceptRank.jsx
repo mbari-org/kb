@@ -18,6 +18,7 @@ const taxonomyRanks = [
   "species",
   "variety",
   "form",
+  "NONE",
 ]
 
 const ConceptRank = ({ infoStyle }) => {
@@ -32,7 +33,7 @@ const ConceptRank = ({ infoStyle }) => {
       <Select
         displayEmpty
         onChange={e => setConcept({ rankName: e.target.value })}
-        value={rankName}
+        value={rankName !== "NONE" ? rankName : ""}
       >
         {taxonomyRanks.map(taxonomyRank => (
           <MenuItem key={taxonomyRank} value={taxonomyRank}>

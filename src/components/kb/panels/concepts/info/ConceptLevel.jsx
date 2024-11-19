@@ -13,6 +13,7 @@ const taxonomyLevels = [
   "parv",
   "sub",
   "super",
+  "NONE",
 ]
 
 const ConceptLevel = ({ infoStyle }) => {
@@ -27,7 +28,7 @@ const ConceptLevel = ({ infoStyle }) => {
       <Select
         displayEmpty
         onChange={e => setConcept({ rankLevel: e.target.value })}
-        value={rankLevel}
+        value={rankLevel !== "NONE" ? rankLevel : ""}
       >
         {taxonomyLevels.map(taxonomyLevel => (
           <MenuItem key={taxonomyLevel} value={taxonomyLevel}>
