@@ -4,11 +4,9 @@ import {
   fetchParent,
 } from "@/lib/services/oni/api/concept"
 
-import {
-  fetchNames,
-  fetchPendingHistory,
-  fetchRoot,
-} from "@/lib/services/oni/api/taxonomy"
+import { fetchPendingHistory } from "@/lib/services/oni/api/history"
+
+import { fetchNames, fetchRoot } from "@/lib/services/oni/api/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
 
