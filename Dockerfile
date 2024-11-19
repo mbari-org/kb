@@ -12,6 +12,6 @@ EXPOSE 5173
 
 # CMD ["yarn", "dlx", "serve", "-s", "dist", "-l", "5173"]
 
-CMD ["yarn", "dlx", "http-server", ".", "-p", "5173"]
+CMD ["yarn", "dlx", "http-server", ".", "-p", "5173", "--spa"]
 
 
