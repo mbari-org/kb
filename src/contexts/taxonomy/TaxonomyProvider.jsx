@@ -7,10 +7,10 @@ import TaxonomyContext from "./TaxonomyContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
 
 import {
-  getConcept as getTaxonomyContext,
+  getConcept as getTaxonomyConcept,
   load,
   loadTaxonomy,
-  loadDescendants as loadTaxonomyDescendants,
+  loadDescendants,
   needsUpdate,
 } from "@/model/taxonomy"
 
@@ -25,23 +25,25 @@ const TaxonomyProvider = ({ children }) => {
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const getConcept = conceptName => getTaxonomyContext(taxonomy, conceptName)
+  const getConcept = conceptName => getTaxonomyConcept(conceptName, taxonomy)
 
   const loadConcept = async conceptName => {
-    const existing = getTaxonomyContext(taxonomy, conceptName)
+    const existing = getTaxonomyConcept(conceptName, taxonomy)
     if (needsUpdate(existing)) {
       setLoading(true)
-      const { taxonomy: taxonmyWithConcept } = await load(taxonomy, conceptName)
+      const { taxonomy: taxonmyWithConcept } = await load(conceptName, taxonomy)
       setLoading(false)
       setTaxonomy(taxonmyWithConcept)
     }
   }
 
-  const loadDescendants = async concept => {
+  const loadConceptDescendants = async concept => {
     try {
       setLoading(true)
-      const { taxonomy: taxonomyWithDescendants } =
-        await loadTaxonomyDescendants(taxonomy, concept)
+      const { taxonomy: taxonomyWithDescendants } = await loadDescendants(
+        concept,
+        taxonomy
+      )
       setTaxonomy(taxonomyWithDescendants)
       setLoading(false)
     } catch (error) {
@@ -68,7 +70,7 @@ const TaxonomyProvider = ({ children }) => {
         }
       )
     }
-  }, [config, showBoundary])
+  }, [config, setLoading, showBoundary])
 
   if (!taxonomy) {
     return null
@@ -76,7 +78,7 @@ const TaxonomyProvider = ({ children }) => {
 
   return (
     <TaxonomyContext
-      value={{ getConcept, loadDescendants, loadConcept, taxonomy }}
+      value={{ getConcept, loadConcept, loadConceptDescendants, taxonomy }}
     >
       {children}
     </TaxonomyContext>

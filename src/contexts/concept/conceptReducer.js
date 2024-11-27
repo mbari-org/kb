@@ -3,7 +3,7 @@ const conceptReducer = (state, action) => {
     case "INIT_STATE":
       return action.payload
 
-    case "UPDATE_FIELD":
+    case "SET_FIELD":
       return {
         ...state,
         ...action.payload,

@@ -10,22 +10,22 @@ import { fetchNames, fetchRoot } from "@/lib/services/oni/api/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
 
-const loadDescendants = async (taxonomy, concept, updatable = false) => {
+const loadDescendants = async (concept, taxonomy, updatable = false) => {
   const updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
   const updatableConcept = { ...concept }
 
-  await loadChildren(updatableTaxonomy, updatableConcept)
+  await loadChildren(updatableConcept, updatableTaxonomy)
 
   if (updatableConcept.children) {
     for (const child of updatableConcept.children) {
-      await loadDescendants(updatableTaxonomy, child, true)
+      await loadDescendants(child, updatableTaxonomy, true)
     }
   }
 
   return { taxonomy: updatableTaxonomy }
 }
 
-const getConcept = (taxonomy, conceptName) => {
+const getConcept = (conceptName, taxonomy) => {
   let concept = taxonomy?.concepts[conceptName]
   if (concept) {
     return concept
@@ -90,7 +90,7 @@ const loadTaxonomy = async config => {
     concepts: { [root.name]: root },
   }
 
-  const { taxonomy: taxonomyWithRoot } = await load(taxonomy, root.name, true)
+  const { taxonomy: taxonomyWithRoot } = await load(root.name, taxonomy, true)
 
   const initialSelected = selectedStore.get()
   if (!initialSelected) {
@@ -108,53 +108,53 @@ const loadTaxonomy = async config => {
   }
 
   const { taxonomy: taxonomyWithConcept } = await load(
-    taxonomyWithRoot,
     conceptName,
+    taxonomyWithRoot,
     true
   )
 
   return { taxonomy: taxonomyWithConcept }
 }
 
-const load = async (taxonomy, conceptName, updatable = false) => {
-  if (!needsUpdate(getConcept(taxonomy, conceptName))) {
+const load = async (conceptName, taxonomy, updatable = false) => {
+  if (!needsUpdate(getConcept(conceptName, taxonomy))) {
     return { taxonomy }
   }
 
   let updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
 
-  await loadConcept(updatableTaxonomy, conceptName)
+  await loadConcept(conceptName, updatableTaxonomy)
 
   const updatableConcept = updatableTaxonomy.concepts[conceptName]
-  await loadChildren(updatableTaxonomy, updatableConcept)
+  await loadChildren(updatableConcept, updatableTaxonomy)
 
-  await loadGrandChildren(updatableTaxonomy, updatableConcept)
+  await loadGrandChildren(updatableConcept, updatableTaxonomy)
 
-  await loadParent(updatableTaxonomy, updatableConcept)
+  await loadParent(updatableConcept, updatableTaxonomy)
 
   if (updatableConcept.parent === null) {
     return { taxonomy: updatableTaxonomy }
   }
-  return load(updatableTaxonomy, updatableConcept.parent.name, true)
+  return load(updatableConcept.parent.name, updatableTaxonomy, true)
 }
 
-const loadConcept = async (updatableTaxonomy, conceptName) => {
+const loadConcept = async (conceptName, updatableTaxonomy) => {
   if (!updatableTaxonomy.concepts[conceptName]) {
-    const concept = await fetchConcept(conceptName, updatableTaxonomy)
+    const concept = await fetchConcept(conceptName, updatableTaxonomy.config)
     updatableTaxonomy.concepts[conceptName] = concept
     addAliases(updatableTaxonomy, concept)
   }
 }
 
 // Loads all concept children, skipping children already in taxonomy.
-const loadChildren = async (updatableTaxonomy, updatableConcept) => {
+const loadChildren = async (updatableConcept, updatableTaxonomy) => {
   if (updatableConcept.children) {
     return { children: updatableConcept.children }
   }
 
   const apiChildren = await fetchChildren(
     updatableConcept.name,
-    updatableTaxonomy
+    updatableTaxonomy.config
   )
 
   const children = apiChildren.map(apiChild => {
@@ -175,7 +175,7 @@ const loadChildren = async (updatableTaxonomy, updatableConcept) => {
   addAliases(updatableTaxonomy, updatableConcept)
 }
 
-const loadGrandChildren = async (updatableTaxonomy, updatableConcept) => {
+const loadGrandChildren = async (updatableConcept, updatableTaxonomy) => {
   if (!updatableConcept.children.some(child => !child.children)) {
     return
   }
@@ -183,7 +183,7 @@ const loadGrandChildren = async (updatableTaxonomy, updatableConcept) => {
   const loadChildrenPromises = updatableConcept.children.map(async child => {
     if (!child.children) {
       const updatableChild = { ...child }
-      await loadChildren(updatableTaxonomy, updatableChild)
+      await loadChildren(updatableChild, updatableTaxonomy)
       return updatableChild
     }
     return child
@@ -191,7 +191,7 @@ const loadGrandChildren = async (updatableTaxonomy, updatableConcept) => {
   updatableConcept.children = await Promise.all(loadChildrenPromises)
 }
 
-const loadParent = async (updatableTaxonomy, updatableConcept) => {
+const loadParent = async (updatableConcept, updatableTaxonomy) => {
   if (updatableConcept.name === updatableTaxonomy.root.name) {
     updatableConcept.parent = null
     return
@@ -201,7 +201,10 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
     return
   }
 
-  const parent = await fetchParent(updatableConcept.name, updatableTaxonomy)
+  const parent = await fetchParent(
+    updatableConcept.name,
+    updatableTaxonomy.config
+  )
 
   if (updatableTaxonomy.concepts[parent.name]) {
     updatableConcept.parent = updatableTaxonomy.concepts[parent.name]
@@ -213,7 +216,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   updatableConcept.parent = parent
   addAliases(updatableTaxonomy, parent)
 
-  await loadChildren(updatableTaxonomy, parent)
+  await loadChildren(parent, updatableTaxonomy)
 }
 
 const needsUpdate = concept => {

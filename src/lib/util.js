@@ -21,4 +21,16 @@ const isElementInViewport = element => {
   )
 }
 
-export { debounce, isElementInViewport }
+const isEmpty = object => Object.keys(object).length === 0
+
+const prune = obj => {
+  const pruned = { ...obj }
+  Object.keys(pruned).forEach(key => {
+    if (obj[key] === undefined) {
+      delete pruned[key]
+    }
+  })
+  return pruned
+}
+
+export { debounce, isElementInViewport, isEmpty, prune }

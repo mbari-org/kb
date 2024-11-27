@@ -15,7 +15,7 @@ const allLeafs = (concept, leafs = []) => {
 }
 
 const useExpandConcept = (expandedItems, setExpandedItems) => {
-  const { loadDescendants, taxonomy } = use(TaxonomyContext)
+  const { loadConceptDescendants, taxonomy } = use(TaxonomyContext)
 
   const isExpanded = useCallback(
     concept => expandedItems.includes(concept.name),
@@ -39,12 +39,12 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
 
   const descendants = useCallback(
     concept => {
-      loadDescendants(concept).then(() => {
+      loadConceptDescendants(concept).then(() => {
         const leafs = allLeafs(concept)
         setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
       })
     },
-    [loadDescendants, setExpandedItems]
+    [loadConceptDescendants, setExpandedItems]
   )
 
   const toggle = useCallback(

@@ -28,12 +28,8 @@ const SelectedProvider = ({ children }) => {
   const updateSelectedConcept = conceptName => {
     if (conceptName !== selected.concept) {
       loadConcept(conceptName).then(
-        () => {
-          updateSelected({ concept: conceptName })
-        },
-        error => {
-          showBoundary(error)
-        }
+        () => updateSelected({ concept: conceptName }),
+        error => showBoundary(error)
       )
     }
   }

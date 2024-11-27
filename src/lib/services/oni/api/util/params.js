@@ -9,12 +9,10 @@ const oniParams = (method, data) => {
     "Content-Type": "application/json",
   }
 
-  if (method === "GET") {
-    return {
-      method,
-      headers,
-      body: data ? JSON.stringify(data) : undefined,
-    }
+  return {
+    method,
+    headers,
+    body: data ? JSON.stringify(data) : undefined,
   }
 }
 

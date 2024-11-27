@@ -1,13 +1,15 @@
 import { use, useCallback, useEffect, useReducer, useState } from "react"
+import { useErrorBoundary } from "react-error-boundary"
 
 import ConceptContext from "./ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import conceptReducer from "./conceptReducer"
 
-import { updateConcept } from "@/lib/services/oni/api/concept"
+import { processChanges } from "./processChanges"
 
 const ConceptProvider = ({ children, concept }) => {
+  const { showBoundary } = useErrorBoundary()
   const { taxonomy } = use(TaxonomyContext)
 
   const [editable, setEditable] = useState(false)
@@ -42,15 +44,21 @@ const ConceptProvider = ({ children, concept }) => {
   )
 
   const setConcept = update => {
-    dispatch({ type: "UPDATE_FIELD", payload: update })
+    dispatch({ type: "SET_FIELD", payload: update })
     isStateModified(conceptState)
   }
 
   const saveChanges = bool => {
     if (bool && isStateModified) {
-      updateConcept(concept.name, getChanges(conceptState), taxonomy).then(
-        () => {
+      const changes = getChanges(conceptState)
+
+      processChanges(concept.name, changes, taxonomy).then(
+        wtf => {
+          console.log("Updated concept fields:", wtf)
           setInitialConceptState(conceptState)
+        },
+        error => {
+          showBoundary(error)
         }
       )
     } else if (!bool) {

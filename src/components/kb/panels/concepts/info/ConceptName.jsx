@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import { Typography } from "@mui/material"
+import { TextField } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -8,20 +8,46 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 const ConceptName = () => {
   const {
     conceptState: { name },
+    editable,
+    setConcept,
   } = use(ConceptContext)
 
-  const { concept: conceptTheme } = useTheme()
+  const { concept: conceptTheme, palette } = useTheme()
+
+  const handleBlur = event => setConcept({ name: event.target.value })
+
+  const handleKeyDown = event => {
+    if (event.key === "Enter") {
+      setConcept({ name: event.target.value })
+    }
+  }
+
   return (
-    <Typography
-      sx={{
-        color: conceptTheme.color,
-        fontFamily: conceptTheme.fontFamily,
-        fontSize: conceptTheme.fontSize,
-        fontWeight: conceptTheme.fontWeight,
+    <TextField
+      disabled={!editable}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
+      slotProps={{
+        input: {
+          sx: {
+            fontFamily: conceptTheme.fontFamily,
+            fontSize: conceptTheme.fontSize,
+            fontWeight: conceptTheme.fontWeight,
+            cursor: editable ? "text" : "pointer",
+            "& .MuiInputBase-input": {
+              backgroundColor: palette.primary.light,
+              color: palette.grey[700],
+            },
+            "& .MuiInputBase-input.Mui-disabled": {
+              backgroundColor: "transparent",
+              WebkitTextFillColor: conceptTheme.color,
+            },
+          },
+        },
       }}
-    >
-      {name.toUpperCase()}
-    </Typography>
+      value={name}
+      variant="standard"
+    />
   )
 }
 
