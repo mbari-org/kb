@@ -1,4 +1,4 @@
-import { use, useActionState, useEffect } from "react"
+import { use, useActionState, useEffect, useRef } from "react"
 
 import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
 
@@ -13,6 +13,7 @@ import login from "@/lib/services/oni/auth/login"
 const LoginForm = () => {
   const { updateAuth } = use(AuthContext)
   const { config } = use(ConfigContext)
+  const usernameRef = useRef(null)
 
   const submitLogin = async (_prevState, formData) => {
     const username = formData.get("username")
@@ -26,6 +27,12 @@ const LoginForm = () => {
     updateAuth(loginState?.auth)
   }, [loginState, updateAuth])
 
+  useEffect(() => {
+    if (usernameRef.current) {
+      usernameRef.current.focus()
+    }
+  }, [])
+
   return (
     <Box component="form" action={loginAction} sx={{ minHeight: "300px" }}>
       <Card>
@@ -34,6 +41,7 @@ const LoginForm = () => {
             id="login-user"
             className="field"
             fullWidth={true}
+            inputRef={usernameRef}
             label="Username"
             name="username"
             required
