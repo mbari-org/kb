@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
-import LoadingContext from "@/contexts/loading/LoadingContext"
+import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
@@ -17,7 +17,7 @@ import {
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
-  const { setLoading } = use(LoadingContext)
+  const { setLoading } = use(ModalContext)
 
   const { error: configError, config } = use(ConfigContext)
   if (configError) {

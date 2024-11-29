@@ -2,20 +2,20 @@ import Box from "@mui/material/Box"
 
 import KnowledgeBase from "@/components/kb/KnowledgeBase"
 
-import LoadingProvider from "@/contexts/loading/LoadingProvider"
+import ModalProvider from "@/contexts/modal/ModalProvider"
 import SelectedProvider from "@/contexts/selected/SelectedProvider"
 import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
 
 const KbContainer = () => {
   return (
     <Box sx={{ height: "100vh" }}>
-      <LoadingProvider>
+      <ModalProvider>
         <TaxonomyProvider>
           <SelectedProvider>
             <KnowledgeBase />
           </SelectedProvider>
         </TaxonomyProvider>
-      </LoadingProvider>
+      </ModalProvider>
     </Box>
   )
 }

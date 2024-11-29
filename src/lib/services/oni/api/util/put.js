@@ -1,4 +1,4 @@
-import { isAdmin } from "@/lib/oni/auth/validate"
+import { isAdmin } from "@/lib/services/oni/auth/validate"
 
 import { oniParams } from "./params"
 import { oniSend } from "./send"
