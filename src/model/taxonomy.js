@@ -10,6 +10,14 @@ import { fetchNames, fetchRoot } from "@/lib/services/oni/api/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
 
+const apiCall = async fetchFn => {
+  const { error, payload } = await fetchFn()
+  if (error) {
+    throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
+  }
+  return payload
+}
+
 const loadDescendants = async (concept, taxonomy, updatable = false) => {
   const updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
   const updatableConcept = { ...concept }
@@ -72,9 +80,9 @@ const getPrevSibling = concept => {
 }
 
 const loadTaxonomy = async config => {
-  const names = await fetchNames(config)
-  const root = await fetchRoot(config)
-  const pendingHistory = await fetchPendingHistory(config)
+  const names = await apiCall(() => fetchNames(config))
+  const root = await apiCall(() => fetchRoot(config))
+  const pendingHistory = await apiCall(() => fetchPendingHistory(config))
 
   const aliases = root.alternateNames.reduce((acc, name) => {
     acc[name] = root.name
@@ -140,7 +148,10 @@ const load = async (conceptName, taxonomy, updatable = false) => {
 
 const loadConcept = async (conceptName, updatableTaxonomy) => {
   if (!updatableTaxonomy.concepts[conceptName]) {
-    const concept = await fetchConcept(conceptName, updatableTaxonomy.config)
+    const concept = await apiCall(() =>
+      fetchConcept(conceptName, updatableTaxonomy.config)
+    )
+
     updatableTaxonomy.concepts[conceptName] = concept
     addAliases(concept, updatableTaxonomy)
   }
@@ -152,9 +163,8 @@ const loadChildren = async (updatableConcept, updatableTaxonomy) => {
     return { children: updatableConcept.children }
   }
 
-  const apiChildren = await fetchChildren(
-    updatableConcept.name,
-    updatableTaxonomy.config
+  const apiChildren = await apiCall(() =>
+    fetchChildren(updatableConcept.name, updatableTaxonomy.config)
   )
 
   const children = apiChildren.map(apiChild => {
@@ -201,9 +211,8 @@ const loadParent = async (updatableConcept, updatableTaxonomy) => {
     return
   }
 
-  const parent = await fetchParent(
-    updatableConcept.name,
-    updatableTaxonomy.config
+  const parent = await apiCall(() =>
+    fetchParent(updatableConcept.name, updatableTaxonomy.config)
   )
 
   if (updatableTaxonomy.concepts[parent.name]) {

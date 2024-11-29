@@ -5,13 +5,13 @@ import { oniSend } from "./send"
 import { oniUrl } from "./url"
 
 const oniPut = async (config, path, data, requireAdmin = false) => {
+  const params = oniParams("PUT", data)
+  const url = oniUrl(config, path)
+
   if (requireAdmin && !isAdmin()) {
-    return
+    return { error: `Request requires admin role: ${url}` }
   }
 
-  const params = oniParams("PUT", data)
-
-  const url = oniUrl(config, path)
   return oniSend(url, params)
 }
 

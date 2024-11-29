@@ -17,7 +17,7 @@ import {
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
-  const { setLoading } = use(ModalContext)
+  const { setLoading, setModalMessage } = use(ModalContext)
 
   const { error: configError, config } = use(ConfigContext)
   if (configError) {
@@ -66,12 +66,12 @@ const TaxonomyProvider = ({ children }) => {
       setLoading(true)
       loadTaxonomy(config).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
-          if (taxonomyError) {
-            console.error("Handle taxonomy root error:", taxonomyError)
-            return
-          }
-          setTaxonomy(initialTaxonomy)
           setLoading(false)
+          if (taxonomyError) {
+            setModalMessage({ title: "CxInc", message: taxonomyError.message })
+          } else {
+            setTaxonomy(initialTaxonomy)
+          }
         },
         error => {
           setLoading(false)
@@ -79,7 +79,7 @@ const TaxonomyProvider = ({ children }) => {
         }
       )
     }
-  }, [config, setLoading, showBoundary])
+  }, [config, setLoading, setModalMessage, showBoundary])
 
   if (!taxonomy) {
     return null

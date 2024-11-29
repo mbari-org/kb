@@ -7,47 +7,34 @@ const oniSend = async (url, params) => {
       case 200:
         break
       case 400:
-        return reportError(payload.message, response.status, url)
+        return returnError("Bad Request", url, payload.message)
       case 401:
-        return reportError(
-          "Unauthorized. Perhaps you need to log in again?",
-          response.status,
-          url
-        )
+        return returnError("Unauthorized", url, payload.message)
       case 403:
-        return reportError(
-          "Forbidden. Contact support for assistance",
-          response.status,
-          url
-        )
+        return returnError("Forbidden", url, payload.message)
       case 404:
-        return reportError
+        return returnError("Not Found", url, payload.message)
       case 500:
-        return reportError(
-          "Internal Server Error. Contact support for assistance",
-          response.status,
-          url
-        )
+        return returnError("Internal Server Error", url, "")
       default:
-        return reportError(
-          "Unknown Error. Contact support for assistance",
-          response.status,
-          url
-        )
+        return returnError(`Unknown Error: Status ${response.status}`, url, "")
     }
     return {
       payload,
-      status: response.status,
     }
   } catch (error) {
-    reportError(error.message, 500, url)
+    returnError("Unknown Error", url, error.message)
   }
 }
 
-const reportError = (message, status, url) => {
-  const error = new Error(`Error processing ${url}: ${message}`)
-  console.error(`Error processing ${url}:`, error)
-  throw error
+const returnError = (title, url, message) => {
+  return {
+    error: {
+      detail: `Processing ${url}`,
+      message,
+      title,
+    },
+  }
 }
 
 export { oniSend }

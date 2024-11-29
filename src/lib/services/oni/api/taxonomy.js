@@ -1,13 +1,10 @@
 import { oniGet } from "./util/get"
 
 const fetchNames = async config => {
-  const { payload } = await oniGet(config, ["names"])
-  return payload.content
+  const { error, payload } = await oniGet(config, ["names"])
+  return { error, payload: payload.content }
 }
 
-const fetchRoot = async config => {
-  const { payload } = await oniGet(config, ["concept", "query", "root"])
-  return payload
-}
+const fetchRoot = async config => oniGet(config, ["concept", "query", "root"])
 
 export { fetchNames, fetchRoot }

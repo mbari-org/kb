@@ -11,6 +11,10 @@ const ModalMessage = () => {
     setModalMessage(null)
   }
 
+  if (!modalMessage) {
+    return null
+  }
+
   return (
     <Modal
       open={modalMessage}
@@ -21,20 +25,41 @@ const ModalMessage = () => {
       <Box
         sx={{
           position: "absolute",
-          top: "50%",
+          top: "33%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: "50%",
           bgcolor: "background.paper",
           border: "2px solid #000",
           boxShadow: 24,
           p: 4,
         }}
       >
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {modalMessage}
+        <Typography
+          id="modal-message-title"
+          variant="h5"
+          component="h2"
+          sx={{ fontWeight: "bold" }}
+        >
+          {modalMessage.title}
         </Typography>
-        <Button onClick={onClose}>Close</Button>
+        <Typography
+          id="modal-message"
+          variant="h6"
+          component="h3"
+          sx={{ mt: 2 }}
+        >
+          {modalMessage.message}
+        </Typography>
+        {modalMessage.detail && (
+          <Typography id="modal-message-detail" sx={{ mt: 1 }}>
+            {modalMessage.detail}
+          </Typography>
+        )}
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+          <Button onClick={onClose}>Close</Button>
+        </Box>
       </Box>
     </Modal>
   )

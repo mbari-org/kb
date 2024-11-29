@@ -1,29 +1,16 @@
 import { oniGet } from "./util/get"
-
 import { oniPut } from "./util/put"
 
-const fetchChildren = async (conceptName, config) => {
-  const path = ["concept", "children", conceptName]
-  const { payload } = await oniGet(config, path)
-  return payload
-}
+const fetchChildren = async (conceptName, config) =>
+  oniGet(config, ["concept", "children", conceptName])
 
-const fetchConcept = async (conceptName, config) => {
-  const path = ["concept", conceptName]
-  const { payload } = await oniGet(config, path)
-  return payload
-}
+const fetchConcept = async (conceptName, config) =>
+  oniGet(config, ["concept", conceptName])
 
-const fetchParent = async (conceptName, config) => {
-  const path = ["concept", "parent", conceptName]
-  const { payload } = await oniGet(config, path)
-  return payload
-}
+const fetchParent = async (conceptName, config) =>
+  oniGet(config, ["concept", "parent", conceptName])
 
-const updateConceptFields = async (conceptName, updates, config) => {
-  const path = ["concept", conceptName]
-  const { payload } = await oniPut(config, path, updates)
-  return payload
-}
+const updateConceptFields = async (conceptName, updates, config) =>
+  oniPut(config, ["concept", conceptName], updates)
 
 export { fetchChildren, fetchConcept, fetchParent, updateConceptFields }

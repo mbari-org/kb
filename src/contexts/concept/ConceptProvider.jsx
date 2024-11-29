@@ -2,15 +2,18 @@ import { use, useCallback, useEffect, useReducer, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
 import ConceptContext from "./ConceptContext"
+import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import conceptReducer from "./conceptReducer"
 
-import { processChanges } from "./processChanges"
+import { processUpdates } from "./processUpdates"
 
 const ConceptProvider = ({ children, concept }) => {
   const { showBoundary } = useErrorBoundary()
+
   const { taxonomy, updateConcept } = use(TaxonomyContext)
+  const { setModalMessage } = use(ModalContext)
 
   const [editable, setEditable] = useState(false)
   const [isModified, setIsModified] = useState(false)
@@ -18,16 +21,16 @@ const ConceptProvider = ({ children, concept }) => {
   const [initialConceptState, setInitialConceptState] = useState(null)
   const [conceptState, dispatch] = useReducer(conceptReducer, {})
 
-  const getChanges = useCallback(
+  const getUpdates = useCallback(
     state => {
       if (!initialConceptState) return {}
-      const changes = {}
+      const updates = {}
       Object.keys(state).forEach(key => {
         if (state[key] !== initialConceptState[key]) {
-          changes[key] = state[key]
+          updates[key] = state[key]
         }
       })
-      return changes
+      return updates
     },
     [initialConceptState]
   )
@@ -50,11 +53,15 @@ const ConceptProvider = ({ children, concept }) => {
 
   const saveChanges = bool => {
     if (bool && isStateModified) {
-      const changes = getChanges(conceptState)
-      processChanges(concept, changes, taxonomy).then(
-        updatedConcept => {
-          updateConcept(updatedConcept, taxonomy)
-          setInitialConceptState(conceptState)
+      const updates = getUpdates(conceptState)
+      processUpdates(concept, updates, taxonomy).then(
+        ({ error, updatedConcept }) => {
+          if (error) {
+            setModalMessage(error)
+          } else {
+            updateConcept(updatedConcept, taxonomy)
+            setInitialConceptState(conceptState)
+          }
         },
         error => {
           showBoundary(error)
