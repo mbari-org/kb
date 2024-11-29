@@ -142,7 +142,7 @@ const loadConcept = async (conceptName, updatableTaxonomy) => {
   if (!updatableTaxonomy.concepts[conceptName]) {
     const concept = await fetchConcept(conceptName, updatableTaxonomy.config)
     updatableTaxonomy.concepts[conceptName] = concept
-    addAliases(updatableTaxonomy, concept)
+    addAliases(concept, updatableTaxonomy)
   }
 }
 
@@ -165,14 +165,14 @@ const loadChildren = async (updatableConcept, updatableTaxonomy) => {
     updatableChild.parent = updatableConcept
 
     updatableTaxonomy.concepts[updatableChild.name] = updatableChild
-    addAliases(updatableTaxonomy, updatableChild)
+    addAliases(updatableChild, updatableTaxonomy)
 
     return updatableChild
   })
 
   updatableConcept.children = children
   updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
-  addAliases(updatableTaxonomy, updatableConcept)
+  addAliases(updatableConcept, updatableTaxonomy)
 }
 
 const loadGrandChildren = async (updatableConcept, updatableTaxonomy) => {
@@ -214,7 +214,7 @@ const loadParent = async (updatableConcept, updatableTaxonomy) => {
 
   updatableTaxonomy.concepts[parent.name] = parent
   updatableConcept.parent = parent
-  addAliases(updatableTaxonomy, parent)
+  addAliases(parent, updatableTaxonomy)
 
   await loadChildren(parent, updatableTaxonomy)
 }
@@ -228,7 +228,7 @@ const needsUpdate = concept => {
   )
 }
 
-const addAliases = (updatableTaxonomy, concept) => {
+const addAliases = (concept, updatableTaxonomy) => {
   if (0 < concept.alternateNames?.length) {
     const aliases = { ...updatableTaxonomy.aliases }
     concept.alternateNames.forEach(name => {
@@ -236,6 +236,13 @@ const addAliases = (updatableTaxonomy, concept) => {
     })
     updatableTaxonomy.aliases = aliases
   }
+}
+
+const updateTaxonomyConcept = (concept, taxonomy) => {
+  const updatedConcepts = { ...taxonomy.concepts }
+  updatedConcepts[concept.name] = concept
+
+  return { taxonomy: { ...taxonomy, concepts: updatedConcepts } }
 }
 
 export {
@@ -246,4 +253,5 @@ export {
   loadDescendants,
   loadTaxonomy,
   needsUpdate,
+  updateTaxonomyConcept,
 }

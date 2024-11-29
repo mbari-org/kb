@@ -12,6 +12,7 @@ import {
   loadTaxonomy,
   loadDescendants,
   needsUpdate,
+  updateTaxonomyConcept,
 } from "@/model/taxonomy"
 
 const TaxonomyProvider = ({ children }) => {
@@ -52,6 +53,14 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
+  const updateConcept = concept => {
+    const { taxonomy: updatedTaxonomy } = updateTaxonomyConcept(
+      concept,
+      taxonomy
+    )
+    setTaxonomy(updatedTaxonomy)
+  }
+
   useEffect(() => {
     if (config) {
       setLoading(true)
@@ -78,7 +87,13 @@ const TaxonomyProvider = ({ children }) => {
 
   return (
     <TaxonomyContext
-      value={{ getConcept, loadConcept, loadConceptDescendants, taxonomy }}
+      value={{
+        getConcept,
+        loadConcept,
+        loadConceptDescendants,
+        taxonomy,
+        updateConcept,
+      }}
     >
       {children}
     </TaxonomyContext>

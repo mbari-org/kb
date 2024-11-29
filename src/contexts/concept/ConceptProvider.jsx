@@ -10,7 +10,7 @@ import { processChanges } from "./processChanges"
 
 const ConceptProvider = ({ children, concept }) => {
   const { showBoundary } = useErrorBoundary()
-  const { taxonomy } = use(TaxonomyContext)
+  const { taxonomy, updateConcept } = use(TaxonomyContext)
 
   const [editable, setEditable] = useState(false)
   const [isModified, setIsModified] = useState(false)
@@ -51,10 +51,9 @@ const ConceptProvider = ({ children, concept }) => {
   const saveChanges = bool => {
     if (bool && isStateModified) {
       const changes = getChanges(conceptState)
-
-      processChanges(concept.name, changes, taxonomy).then(
-        wtf => {
-          console.log("Updated concept fields:", wtf)
+      processChanges(concept, changes, taxonomy).then(
+        updatedConcept => {
+          updateConcept(updatedConcept, taxonomy)
           setInitialConceptState(conceptState)
         },
         error => {

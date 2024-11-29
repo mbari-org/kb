@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom"
 import ConfigContext from "@/contexts/config/ConfigContext"
 import AuthContext from "./AuthContext"
 
-import validate from "@/lib/services/oni/auth/validate"
+import { validateAuth } from "@/lib/services/oni/auth/validate"
+
 import authStore from "@/lib/store/auth"
 import selectedStore from "@/lib/store/selected"
 
@@ -23,7 +24,7 @@ const AuthProvider = ({ children }) => {
 
   const updateAuth = useCallback(
     anAuth => {
-      if (validate(anAuth)) {
+      if (validateAuth(anAuth)) {
         setAuth(anAuth)
         authStore.set(anAuth)
 

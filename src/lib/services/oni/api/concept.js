@@ -20,9 +20,9 @@ const fetchParent = async (conceptName, config) => {
   return payload
 }
 
-const updateConceptFields = async (conceptName, changes, config) => {
+const updateConceptFields = async (conceptName, updates, config) => {
   const path = ["concept", conceptName]
-  const { payload } = await oniPut(config, path, changes)
+  const { payload } = await oniPut(config, path, updates)
   return payload
 }
 

@@ -1,6 +1,15 @@
 import { decodeJwt } from "jose"
 
-const validate = auth => {
+import authStore from "@/lib/store/auth"
+
+const isAdmin = () => {
+  const { token } = authStore.get()
+
+  const { role: authRole } = decodeJwt(token)
+  return authRole === "admin"
+}
+
+const validateAuth = auth => {
   if (!auth) {
     return false
   }
@@ -18,4 +27,4 @@ const validate = auth => {
   return true
 }
 
-export default validate
+export { isAdmin, validateAuth }
