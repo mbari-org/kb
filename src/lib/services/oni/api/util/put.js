@@ -9,7 +9,13 @@ const oniPut = async (config, path, data, requireAdmin = false) => {
   const url = oniUrl(config, path)
 
   if (requireAdmin && !isAdmin()) {
-    return { error: `Request requires admin role: ${url}` }
+    return {
+      error: {
+        detail: JSON.stringify(data),
+        message: url,
+        title: "Request requires Admin role",
+      },
+    }
   }
 
   return oniSend(url, params)
