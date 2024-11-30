@@ -1,33 +1,29 @@
-import { updateConceptFields } from "@/lib/services/oni/api/concept"
+import {
+  updateConceptAuthor,
+  updateConceptRankLevel,
+} from "@/lib/services/oni/api/concept"
 import { isEmpty, prune } from "@/lib/util"
 
+// Updates are effectively transactional. The original concept is returned if any error occurs.
 const processUpdates = async (concept, updates, taxonomy) => {
   const { author, rankLevel, name, media, rankName } = updates
 
-  let updatedConcept = { ...concept }
+  const nextResult = submitUpdate(concept, taxonomy.config)
 
-  updatedConcept = await submit(
-    updateConceptFields,
-    updatedConcept,
-    { author, rankLevel, rankName },
-    taxonomy.config
-  )
+  let result = { error: null, concept: { ...concept } }
 
-  updatedConcept = await submit(
-    updateName,
-    updatedConcept,
-    { name },
-    taxonomy.config
-  )
+  result = await nextResult(result, updateConceptAuthor, { author })
 
-  updatedConcept = await submit(
-    updateMedia,
-    updatedConcept,
-    { media },
-    taxonomy.config
-  )
+  result = await nextResult(result, updateConceptRankLevel, {
+    rankLevel,
+    rankName,
+  })
 
-  return updatedConcept
+  result = await nextResult(result, updateName, { name })
+
+  result = await nextResult(result, updateMedia, { media })
+
+  return result
 }
 
 const updateMedia = async (concept, media, _config) => {
@@ -40,16 +36,23 @@ const updateName = async (concept, name, _config) => {
   return { concept }
 }
 
-const submit = async (updateFn, concept, conceptUpdates, config) => {
-  const updates = prune(conceptUpdates)
-  if (isEmpty(updates)) return concept
+const submitUpdate =
+  (concept, config) => async (result, updateFn, conceptUpdates) => {
+    if (result.error)
+      return {
+        error: result.error,
+        concept,
+      }
 
-  const { error, payload: updatedConcept } = await updateFn(
-    concept.name,
-    updates,
-    config
-  )
-  return { error, updatedConcept }
-}
+    const updates = prune(conceptUpdates)
+    if (isEmpty(updates)) {
+      return { concept }
+    }
+
+    const { error, _payload } = await updateFn(concept.name, updates, config)
+    const updatedConcept = { ...concept, ...updates }
+
+    return { error, updatedConcept }
+  }
 
 export { processUpdates }

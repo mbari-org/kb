@@ -2,38 +2,40 @@ const oniSend = async (url, params) => {
   try {
     const response = await fetch(url, params)
     const payload = await response.json()
+    if (response.status === 200) {
+      return {
+        payload,
+      }
+    }
 
-    switch (response.status) {
-      case 200:
-        break
-      case 400:
-        return returnError("Bad Request", url, payload.message)
-      case 401:
-        return returnError("Unauthorized", url, payload.message)
-      case 403:
-        return returnError("Forbidden", url, payload.message)
-      case 404:
-        return returnError("Not Found", url, payload.message)
-      case 500:
-        return returnError("Internal Server Error", url, "")
-      default:
-        return returnError(`Unknown Error: Status ${response.status}`, url, "")
-    }
-    return {
-      payload,
-    }
+    return errorResponse(url, errorTitle(response.status), payload.message)
   } catch (error) {
-    returnError("Unknown Error", url, error.message)
+    return errorResponse(url, "Unknown Error", error.message)
   }
 }
 
-const returnError = (title, url, message) => {
-  return {
-    error: {
-      detail: `Processing ${url}`,
-      message,
-      title,
-    },
+const errorResponse = (url, title, message) => ({
+  error: {
+    detail: url,
+    message,
+    title,
+  },
+})
+
+const errorTitle = status => {
+  switch (status) {
+    case 400:
+      return "Bad Request"
+    case 401:
+      return "Unauthorized"
+    case 403:
+      return "Forbidden"
+    case 404:
+      return "Not Found"
+    case 500:
+      return "Internal Server Error"
+    default:
+      return "Unknown Error"
   }
 }
 
