@@ -2,7 +2,7 @@ import { use, useTransition } from "react"
 
 import { Box } from "@mui/material"
 
-import Modals from "@/components/kb/modals/Modals"
+import Modals from "@/components/modals/Modals"
 import NavBar from "@/components/kb/nav/NavBar"
 import Panel from "@/components/kb/panels/Panel"
 
