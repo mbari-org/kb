@@ -1,11 +1,11 @@
 import LoadingBackdrop from "./LoadingBackdrop"
-import ModalWarn from "./ModalWarn"
+import ModalError from "./ModalError"
 
 const Modals = () => {
   return (
     <>
       <LoadingBackdrop />
-      <ModalWarn />
+      <ModalError />
     </>
   )
 }

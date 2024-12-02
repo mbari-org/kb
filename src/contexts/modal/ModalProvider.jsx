@@ -4,10 +4,10 @@ import ModalContext from "./ModalContext"
 
 const ModalProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
-  const [modalWarn, setModalWarn] = useState(null)
+  const [modalError, setModalError] = useState(null)
 
   return (
-    <ModalContext value={{ loading, modalWarn, setLoading, setModalWarn }}>
+    <ModalContext value={{ loading, modalError, setLoading, setModalError }}>
       {children}
     </ModalContext>
   )

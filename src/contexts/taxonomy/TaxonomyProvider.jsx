@@ -17,7 +17,7 @@ import {
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
-  const { setLoading, setModalWarn } = use(ModalContext)
+  const { setLoading, setModalError } = use(ModalContext)
 
   const { error: configError, config } = use(ConfigContext)
   if (configError) {
@@ -68,7 +68,7 @@ const TaxonomyProvider = ({ children }) => {
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           setLoading(false)
           if (taxonomyError) {
-            setModalWarn({ title: "CxInc", message: taxonomyError.message })
+            setModalError({ title: "CxInc", message: taxonomyError.message })
           } else {
             setTaxonomy(initialTaxonomy)
           }
@@ -79,7 +79,7 @@ const TaxonomyProvider = ({ children }) => {
         }
       )
     }
-  }, [config, setLoading, setModalWarn, showBoundary])
+  }, [config, setLoading, setModalError, showBoundary])
 
   if (!taxonomy) {
     return null

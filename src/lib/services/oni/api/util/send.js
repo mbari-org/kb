@@ -17,6 +17,7 @@ const oniSend = async (url, params) => {
 const errorResponse = (url, title, message) => ({
   error: {
     detail: url,
+    level: "error",
     message,
     title,
   },

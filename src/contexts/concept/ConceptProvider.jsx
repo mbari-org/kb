@@ -5,106 +5,115 @@ import ConceptContext from "./ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import conceptReducer from "./conceptReducer"
+import conceptStateReducer from "./conceptStateReducer"
 
-import { processUpdates } from "./processUpdates"
+import { filterUpdates } from "./filterUpdates"
+import { stateForConcept } from "./stateForConcept"
+import { submitUpdates } from "./submitUpdates"
+import { validateUpdates } from "./validateUpdates"
+
+import { isEmpty } from "@/lib/util"
 
 const ConceptProvider = ({ children, concept }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { taxonomy, updateConcept } = use(TaxonomyContext)
-  const { setModalWarn } = use(ModalContext)
+  const { setModalError } = use(ModalContext)
 
   const [editable, setEditable] = useState(false)
   const [isModified, setIsModified] = useState(false)
+  const [validated, setValidated] = useState(false)
 
-  const [initialConceptState, setInitialConceptState] = useState(null)
-  const [conceptState, dispatch] = useReducer(conceptReducer, {})
+  const [initialState, setInitialState] = useState(null)
+  const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
 
-  const getUpdates = useCallback(
-    state => {
-      if (!initialConceptState) return {}
-      const updates = {}
-      Object.keys(state).forEach(key => {
-        if (state[key] !== initialConceptState[key]) {
-          updates[key] = state[key]
+  // the next line is bc filterUpdate returns a function but eslint isn't aware of that
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getCurrentUpdates = useCallback(filterUpdates(initialState), [
+    initialState,
+  ])
+
+  const setConcept = update => dispatch({ type: "SET_FIELD", payload: update })
+
+  const saveChanges = save => {
+    setEditable(false)
+
+    if (save && isModified) {
+      const config = taxonomy.config
+      const updates = getCurrentUpdates(updatedState)
+
+      validateUpdates(concept, updates, config).then(({ error }) => {
+        if (!error) {
+          setValidated(true)
+        } else {
+          dispatch({ type: "INIT_STATE", payload: initialState })
+          setIsModified(false)
+          setModalError(error)
         }
       })
-      return updates
-    },
-    [initialConceptState]
-  )
-
-  const isStateModified = useCallback(
-    state => {
-      const modified =
-        initialConceptState &&
-        Object.keys(state).some(key => state[key] !== initialConceptState[key])
-
-      setIsModified(modified)
-    },
-    [initialConceptState]
-  )
-
-  const setConcept = update => {
-    dispatch({ type: "SET_FIELD", payload: update })
-    isStateModified(conceptState)
+    } else if (!save) {
+      dispatch({ type: "INIT_STATE", payload: initialState })
+      setIsModified(false)
+    }
   }
 
-  const saveChanges = bool => {
-    if (bool && isStateModified) {
-      const updates = getUpdates(conceptState)
-      processUpdates(concept, updates, taxonomy).then(
-        ({ error, updatedConcept }) => {
-          if (error) {
-            setModalWarn(error)
-            setInitialConceptState(initialConceptState)
-            dispatch({ type: "INIT_STATE", payload: initialConceptState })
-          } else {
-            updateConcept(updatedConcept, taxonomy)
-            setInitialConceptState(conceptState)
-          }
-        },
-        error => {
-          showBoundary(error)
-        }
-      )
-    } else if (!bool) {
-      dispatch({ type: "INIT_STATE", payload: initialConceptState })
-    }
-    setEditable(false)
-    setIsModified(false)
-  }
+  const submissionResult = useCallback(
+    ({ error, updatedConcept }) => {
+      if (!error) {
+        updateConcept(updatedConcept, taxonomy)
+        setInitialState(updatedState)
+      } else {
+        setModalError(error)
+        setInitialState(initialState)
+        dispatch({ type: "INIT_STATE", payload: initialState })
+      }
+      setEditable(false)
+      setIsModified(false)
+      setValidated(false)
+    },
+    [initialState, setModalError, taxonomy, updateConcept, updatedState]
+  )
 
   useEffect(() => {
-    if (conceptState && initialConceptState) {
-      isStateModified(conceptState)
-    }
-  }, [conceptState, initialConceptState, isStateModified])
+    const hasUpdates = !isEmpty(getCurrentUpdates(updatedState))
+    setIsModified(hasUpdates)
+  }, [getCurrentUpdates, updatedState])
 
   useEffect(() => {
-    if (!concept) return
-
-    const initialState = {
-      author: concept.author || "unknown",
-      rankLevel: concept.rankLevel || "",
-      name: concept.name,
-      media: concept.media,
-      rankName: concept.rankName || "",
+    if (concept) {
+      const conceptState = stateForConcept(concept)
+      setInitialState(conceptState)
+      dispatch({ type: "INIT_STATE", payload: conceptState })
     }
-    setInitialConceptState(initialState)
-
-    dispatch({ type: "INIT_STATE", payload: initialState })
   }, [concept])
+
+  useEffect(() => {
+    if (validated) {
+      const config = taxonomy.config
+      const updates = getCurrentUpdates(updatedState)
+      submitUpdates(concept, updates, config).then(
+        result => submissionResult(result),
+        error => showBoundary(error)
+      )
+    }
+  }, [
+    concept,
+    getCurrentUpdates,
+    showBoundary,
+    submissionResult,
+    taxonomy.config,
+    updatedState,
+    validated,
+  ])
 
   return (
     <ConceptContext
       value={{
-        conceptState,
+        conceptState: updatedState,
         editable,
-        setConcept,
         isModified,
         saveChanges,
+        setConcept,
         setEditable,
       }}
     >
