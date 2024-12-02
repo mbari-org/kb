@@ -16,6 +16,11 @@ const ConceptName = () => {
 
   const handleBlur = event => setConcept({ name: event.target.value })
 
+  const handleChange = event => {
+    if (editable) {
+      setConcept({ name: event.target.value })
+    }
+  }
   const handleKeyDown = event => {
     if (event.key === "Enter") {
       setConcept({ name: event.target.value })
@@ -26,6 +31,7 @@ const ConceptName = () => {
     <TextField
       disabled={!editable}
       onBlur={handleBlur}
+      onChange={handleChange}
       onKeyDown={handleKeyDown}
       slotProps={{
         input: {

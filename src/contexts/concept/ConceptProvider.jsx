@@ -18,7 +18,7 @@ const ConceptProvider = ({ children, concept }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { taxonomy, updateConcept } = use(TaxonomyContext)
-  const { setModalError } = use(ModalContext)
+  const { setModalAlert } = use(ModalContext)
 
   const [editable, setEditable] = useState(false)
   const [isModified, setIsModified] = useState(false)
@@ -48,7 +48,7 @@ const ConceptProvider = ({ children, concept }) => {
         } else {
           dispatch({ type: "INIT_STATE", payload: initialState })
           setIsModified(false)
-          setModalError(error)
+          setModalAlert(error)
         }
       })
     } else if (!save) {
@@ -63,7 +63,7 @@ const ConceptProvider = ({ children, concept }) => {
         updateConcept(updatedConcept, taxonomy)
         setInitialState(updatedState)
       } else {
-        setModalError(error)
+        setModalAlert(error)
         setInitialState(initialState)
         dispatch({ type: "INIT_STATE", payload: initialState })
       }
@@ -71,7 +71,7 @@ const ConceptProvider = ({ children, concept }) => {
       setIsModified(false)
       setValidated(false)
     },
-    [initialState, setModalError, taxonomy, updateConcept, updatedState]
+    [initialState, setModalAlert, taxonomy, updateConcept, updatedState]
   )
 
   useEffect(() => {

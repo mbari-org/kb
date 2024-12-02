@@ -1,15 +1,16 @@
 import { Box, Button, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const ModalError = (modalAlert, onClose) => {
+const ModalWarning = ({ modalAlert, onClose }) => {
   const theme = useTheme()
+
   return (
     <>
       <Typography
         id="modal-message"
         variant="h6"
         component="h3"
-        sx={{ color: theme.palette.error.main, mt: 2 }}
+        sx={{ color: theme.palette.primary.main, mt: 2 }}
       >
         {modalAlert.message}
       </Typography>
@@ -25,4 +26,4 @@ const ModalError = (modalAlert, onClose) => {
   )
 }
 
-export default ModalError
+export default ModalWarning

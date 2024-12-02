@@ -1,32 +1,30 @@
-import { isAdmin } from "@/lib/services/oni/auth/validate"
+import { fetchLinkTemplates } from "@/lib/services/oni/api/linkTemplates"
+
 import { isEmpty, prune } from "@/lib/util"
 
 const validateUpdates = async (concept, updates, config) => {
-  const { error: adminError } = validateIfAdminNeeded(updates)
+  const { error: adminError } = validateAdminUpdates(updates)
   if (adminError) return { error: adminError }
 
-  // const { author, name, media, rankLevel, rankName } = updates
+  const { error: nameError } = await validateNameUpdate(
+    concept,
+    updates,
+    config
+  )
+  if (nameError) return { error: nameError }
 
-  return {
-    error: {
-      level: "confirm",
-      message: "Are you sure you want to update?",
-      title: "CxDebug: Unauthorized",
-    },
-  }
-
-  // return { error: null }
+  return { error: null }
 }
 
-const validateIfAdminNeeded = updates => {
-  if (isAdmin()) return { error: null }
+const validateAdminUpdates = updates => {
+  // if (isAdmin()) return { error: null }
 
   const { name, rankLevel, rankName } = updates
   const needsAdmin = prune({ name, rankLevel, rankName })
   if (!isEmpty(needsAdmin)) {
     return {
       error: {
-        level: "warning",
+        type: "warning",
         message: "Request requires Admin role",
         title: "Unauthorized",
       },
@@ -36,8 +34,34 @@ const validateIfAdminNeeded = updates => {
   return { error: null }
 }
 
-const validateConceptNameChange = async (concept, updates, config) => {
-  return
+const validateNameUpdate = async (concept, updates, config) => {
+  if (!updates.name) return { error: null }
+
+  // CxTBD
+  // const { error: linkTemplatesError, payload: linkTemplates } =
+  const linkTemplates = await fetchLinkTemplates(concept.name, config)
+  // if (linkTemplatesError) return { error: linkTemplatesError }
+
+  const nLinkRealizations = concept.linkRealizations.length
+  const nLinkTemplates = linkTemplates.length
+
+  const details = JSON.stringify({
+    linkRealizations: nLinkRealizations,
+    linkTemplates: nLinkTemplates,
+  })
+
+  // if (0 < nLinkRealizations || 0 < nLinkTemplates) {
+  return {
+    error: {
+      details: details,
+      type: "confirm",
+      message: `Are you sure you want to update concept name to ${updates.name}?`,
+      title: "CxDebug: Confirm",
+    },
+  }
+  // }
+
+  // return { error: null }
 }
 
 export { validateUpdates }
