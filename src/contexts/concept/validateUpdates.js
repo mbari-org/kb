@@ -1,37 +1,46 @@
 import { fetchLinkTemplates } from "@/lib/services/oni/api/linkTemplates"
 
-import { isEmpty, prune } from "@/lib/util"
+import { isAdmin } from "@/lib/services/oni/auth/validate"
+import { prune } from "@/lib/util"
+
+const REMOVAL_VALUE = "REMOVE"
+
+const rankLevelNameValue = value => (value !== REMOVAL_VALUE ? value : "")
 
 const validateUpdates = async (concept, updates, config) => {
-  const { error: adminError } = validateAdminUpdates(updates)
-  if (adminError) return { error: adminError }
+  const { alert: adminAlert } = validateRankLevelUpdates(updates)
+  if (adminAlert) return { alert: adminAlert }
 
-  const { error: nameError } = await validateNameUpdate(
+  const { alert: nameAlert } = await validateNameUpdate(
     concept,
     updates,
     config
   )
-  if (nameError) return { error: nameError }
+  if (nameAlert) return { alert: nameAlert }
 
-  return { error: null }
+  return { alert: null }
 }
 
-const validateAdminUpdates = updates => {
-  // if (isAdmin()) return { error: null }
-
-  const { name, rankLevel, rankName } = updates
-  const needsAdmin = prune({ name, rankLevel, rankName })
-  if (!isEmpty(needsAdmin)) {
+const validateRankLevelUpdates = updates => {
+  if (
+    (updates.rankLevel === REMOVAL_VALUE ||
+      updates.rankName === REMOVAL_VALUE) &&
+    !isAdmin()
+  ) {
+    const lnUpdates = prune({
+      rankLevel: rankLevelNameValue(updates.rankLevel),
+      rankName: rankLevelNameValue(updates.rankName),
+    })
     return {
-      error: {
+      alert: {
+        detail: JSON.stringify(lnUpdates),
+        message: "Removing rank level and/or name requires admin role",
+        title: "Update Error",
         type: "warning",
-        message: "Request requires Admin role",
-        title: "Unauthorized",
       },
     }
   }
-
-  return { error: null }
+  return { alert: null }
 }
 
 const validateNameUpdate = async (concept, updates, config) => {
@@ -39,21 +48,21 @@ const validateNameUpdate = async (concept, updates, config) => {
 
   // CxTBD
   // const { error: linkTemplatesError, payload: linkTemplates } =
-  const linkTemplates = await fetchLinkTemplates(concept.name, config)
   // if (linkTemplatesError) return { error: linkTemplatesError }
+  const linkTemplates = await fetchLinkTemplates(concept.name, config)
 
   const nLinkRealizations = concept.linkRealizations.length
   const nLinkTemplates = linkTemplates.length
 
-  const details = JSON.stringify({
+  const detail = JSON.stringify({
     linkRealizations: nLinkRealizations,
     linkTemplates: nLinkTemplates,
   })
 
   // if (0 < nLinkRealizations || 0 < nLinkTemplates) {
   return {
-    error: {
-      details: details,
+    alert: {
+      detail: detail,
       type: "confirm",
       message: `Are you sure you want to update concept name to ${updates.name}?`,
       title: "CxDebug: Confirm",
@@ -61,7 +70,7 @@ const validateNameUpdate = async (concept, updates, config) => {
   }
   // }
 
-  // return { error: null }
+  // return { alert: null }
 }
 
-export { validateUpdates }
+export { rankLevelNameValue, REMOVAL_VALUE, validateUpdates }

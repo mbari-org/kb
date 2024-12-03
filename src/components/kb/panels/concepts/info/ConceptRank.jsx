@@ -3,8 +3,12 @@ import { use } from "react"
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import {
+  REMOVAL_VALUE,
+  rankLevelNameValue,
+} from "@/contexts/concept/validateUpdates"
 
-const taxonomyRanks = [
+const rankNames = [
   "domain",
   "realm",
   "kingdom",
@@ -18,7 +22,6 @@ const taxonomyRanks = [
   "species",
   "variety",
   "form",
-  "NONE",
 ]
 
 const ConceptRank = ({ infoStyle }) => {
@@ -33,13 +36,18 @@ const ConceptRank = ({ infoStyle }) => {
       <Select
         displayEmpty
         onChange={e => setConcept({ rankName: e.target.value })}
-        value={rankName !== "NONE" ? rankName : ""}
+        value={rankLevelNameValue(rankName)}
       >
-        {taxonomyRanks.map(taxonomyRank => (
-          <MenuItem key={taxonomyRank} value={taxonomyRank}>
-            {taxonomyRank}
+        {rankNames.map(rName => (
+          <MenuItem key={rName} value={rName}>
+            {rName}
           </MenuItem>
         ))}
+        {rankName !== "" && (
+          <MenuItem key={REMOVAL_VALUE} value={REMOVAL_VALUE}>
+            {REMOVAL_VALUE}
+          </MenuItem>
+        )}
       </Select>
     </FormControl>
   )

@@ -1,7 +1,8 @@
 import { use, useCallback, useEffect, useReducer, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
-import ConceptContext from "./ConceptContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
+
 import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
@@ -42,13 +43,13 @@ const ConceptProvider = ({ children, concept }) => {
       const config = taxonomy.config
       const updates = getCurrentUpdates(updatedState)
 
-      validateUpdates(concept, updates, config).then(({ error }) => {
-        if (!error) {
+      validateUpdates(concept, updates, config).then(({ alert }) => {
+        if (!alert) {
           setValidated(true)
         } else {
           dispatch({ type: "INIT_STATE", payload: initialState })
           setIsModified(false)
-          setModalAlert(error)
+          setModalAlert(alert)
         }
       })
     } else if (!save) {

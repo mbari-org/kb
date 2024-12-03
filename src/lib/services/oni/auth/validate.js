@@ -6,7 +6,7 @@ const isAdmin = () => {
   const { token } = authStore.get()
 
   const { role: authRole } = decodeJwt(token)
-  return authRole.toLowerCase() === "admin"
+  return authRole.toLowerCase() === "admin" && false
 }
 
 const validateAuth = auth => {

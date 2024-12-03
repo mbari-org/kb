@@ -68,7 +68,11 @@ const TaxonomyProvider = ({ children }) => {
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           setLoading(false)
           if (taxonomyError) {
-            setModalAlert({ title: "CxInc", message: taxonomyError.message })
+            setModalAlert({
+              type: "error",
+              title: "CxInc",
+              message: taxonomyError.message,
+            })
           } else {
             setTaxonomy(initialTaxonomy)
           }

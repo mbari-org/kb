@@ -3,8 +3,12 @@ import { use } from "react"
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import {
+  REMOVAL_VALUE,
+  rankLevelNameValue,
+} from "@/contexts/concept/validateUpdates"
 
-const taxonomyLevels = [
+const rankLevels = [
   "epi",
   "giga",
   "grand",
@@ -13,7 +17,6 @@ const taxonomyLevels = [
   "parv",
   "sub",
   "super",
-  "NONE",
 ]
 
 const ConceptLevel = ({ infoStyle }) => {
@@ -28,13 +31,18 @@ const ConceptLevel = ({ infoStyle }) => {
       <Select
         displayEmpty
         onChange={e => setConcept({ rankLevel: e.target.value })}
-        value={rankLevel !== "NONE" ? rankLevel : ""}
+        value={rankLevelNameValue(rankLevel)}
       >
-        {taxonomyLevels.map(taxonomyLevel => (
-          <MenuItem key={taxonomyLevel} value={taxonomyLevel}>
-            {taxonomyLevel}
+        {rankLevels.map(rLevel => (
+          <MenuItem key={rLevel} value={rLevel}>
+            {rLevel}
           </MenuItem>
         ))}
+        {rankLevel !== "" && (
+          <MenuItem key={REMOVAL_VALUE} value={REMOVAL_VALUE}>
+            {REMOVAL_VALUE}
+          </MenuItem>
+        )}
       </Select>
     </FormControl>
   )
