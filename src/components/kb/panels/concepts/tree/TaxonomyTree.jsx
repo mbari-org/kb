@@ -3,9 +3,6 @@ import { use, useEffect, useRef, useState } from "react"
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
 
-import SelectedContext from "@/contexts/selected/SelectedContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
-
 import ConceptItem from "./ConceptItem"
 import Expand from "./lib/expandedEnum"
 
@@ -15,7 +12,14 @@ import useArrowNavigation from "./lib/useArrowNavigation"
 import useConceptClick from "./lib/useConceptClick"
 import useExpandConcept from "./lib/useExpandConcept"
 
+import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
+import ModalContext from "@/contexts/modal/ModalContext"
+import SelectedContext from "@/contexts/selected/SelectedContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+
 const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, sidebarRef }) => {
+  const { editable, isModified, setEditable } = use(ConceptEditContext)
+  const { setModalAlert } = use(ModalContext)
   const { updateSelectedConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)
 
@@ -27,8 +31,17 @@ const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, sidebarRef }) => {
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems)
 
   const selectConcept = conceptName => {
-    updateSelectedConcept(conceptName)
-    setAutoExpand({ expand: true, name: conceptName })
+    if (editable && isModified) {
+      setModalAlert({
+        message: "You have unsaved changes. Please Cancel or Save.",
+        title: "Unsaved Changes",
+        type: "warning",
+      })
+    } else {
+      editable && setEditable(false)
+      updateSelectedConcept(conceptName)
+      setAutoExpand({ expand: true, name: conceptName })
+    }
   }
 
   const handleConceptClick = useConceptClick(

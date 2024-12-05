@@ -10,7 +10,7 @@ const ModalWarning = ({ modalAlert, onClose }) => {
         id="modal-message"
         variant="h6"
         component="h3"
-        sx={{ color: theme.palette.primary.main, mt: 2 }}
+        sx={{ color: theme.palette.common.black, mt: 2 }}
       >
         {modalAlert.message}
       </Typography>
