@@ -8,7 +8,7 @@ const baseMain = "#0077be"
 const lightColor = alpha(baseMain, 0.1)
 const paleColor = alpha(baseMain, 0.3)
 
-const navActive = palette.warning.light
+const navActive = palette.common.white
 const navHover = palette.primary.contrastText
 const navInactive = darken(palette.primary.contrastText, 0.15)
 
@@ -25,6 +25,10 @@ const theme = createTheme({
     inactive: navInactive,
   },
   palette: {
+    background: {
+      default: "#f0f0f0",
+      paper: "#f0f0f0",
+    },
     cancel: addColor("#8b0000"),
     light: addColor(lightColor),
     pale: addColor(paleColor),

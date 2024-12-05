@@ -1,17 +1,17 @@
 import { use, useCallback, useEffect, useRef, useState } from "react"
 
-import { Box } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
 
 const ConceptMedia = ({ sx }) => {
   const {
     conceptState: { media: conceptMedia },
-  } = use(ConceptContext)
+  } = use(ConceptEditContext)
 
   const [media, setMedia] = useState(null)
   const [mediaIndex, setMediaIndex] = useState(0)
@@ -48,7 +48,37 @@ const ConceptMedia = ({ sx }) => {
   }, [media])
 
   return (
-    <Box sx={sx}>
+    <Box
+      sx={[
+        sx,
+        {
+          position: "relative",
+          overflow: "hidden",
+        },
+      ]}
+    >
+      {media?.length === 0 && (
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%) rotate(-45deg)",
+            opacity: 0.2,
+            color: "#888",
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        >
+          No Media
+        </Typography>
+      )}
+
       {0 < media?.length && (
         <Box ref={mediaDisplayRef} sx={{ mb: "2px" }}>
           <MediaDisplay mediaSrc={mediaSrc()} openPreview={openPreview} />
@@ -59,6 +89,7 @@ const ConceptMedia = ({ sx }) => {
           />
         </Box>
       )}
+
       {1 < media?.length && (
         <MediaSwiper
           media={media}

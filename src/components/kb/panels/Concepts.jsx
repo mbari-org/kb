@@ -9,7 +9,7 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 import ConceptDivider from "./concepts/ConceptDivider"
 
-import ConceptProvider from "@/contexts/concept/ConceptProvider"
+import ConceptEditProvider from "@/contexts/conceptEdit/ConceptEditProvider"
 
 const Concepts = () => {
   const { getConcept } = use(TaxonomyContext)
@@ -24,17 +24,17 @@ const Concepts = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
-      <Box sx={{ width: sidebarWidth }}>
-        <TaxonomySidebar concept={concept} />
-      </Box>
-      <ConceptDivider setSidebarWidth={setSidebarWidth} />
-      <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
-        <ConceptProvider concept={concept}>
+    <ConceptEditProvider concept={concept}>
+      <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
+        <Box sx={{ width: sidebarWidth }}>
+          <TaxonomySidebar concept={concept} />
+        </Box>
+        <ConceptDivider setSidebarWidth={setSidebarWidth} />
+        <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
           <Concept />
-        </ConceptProvider>
+        </Box>
       </Box>
-    </Box>
+    </ConceptEditProvider>
   )
 }
 

@@ -3,13 +3,13 @@ import { use } from "react"
 import { TextField } from "@mui/material"
 // import { useTheme } from "@mui/material/styles"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
 
 const ConceptAuthor = ({ infoStyle }) => {
   const {
     conceptState: { author },
     setConcept,
-  } = use(ConceptContext)
+  } = use(ConceptEditContext)
 
   return (
     <TextField

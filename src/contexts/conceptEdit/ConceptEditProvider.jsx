@@ -1,7 +1,7 @@
 import { use, useCallback, useEffect, useReducer, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
@@ -15,7 +15,7 @@ import { validateUpdates } from "./validateUpdates"
 
 import { isEmpty } from "@/lib/util"
 
-const ConceptProvider = ({ children, concept }) => {
+const ConceptEditProvider = ({ children, concept }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { taxonomy, updateConcept } = use(TaxonomyContext)
@@ -108,7 +108,7 @@ const ConceptProvider = ({ children, concept }) => {
   ])
 
   return (
-    <ConceptContext
+    <ConceptEditContext
       value={{
         conceptState: updatedState,
         editable,
@@ -119,8 +119,8 @@ const ConceptProvider = ({ children, concept }) => {
       }}
     >
       {children}
-    </ConceptContext>
+    </ConceptEditContext>
   )
 }
 
-export default ConceptProvider
+export default ConceptEditProvider

@@ -12,9 +12,8 @@ const conceptContentStyle = ({ theme, isSelected }) => ({
     {
       props: ({ isSelected }) => isSelected,
       style: {
-        backgroundColor: theme.palette.primary.dark,
         border: "1px solid",
-        borderColor: theme.palette.common.black,
+        borderColor: theme.palette.primary.dark,
         color: theme.palette.grey[100],
         ...theme.applyStyles("light", {
           backgroundColor: theme.palette.primary.main,

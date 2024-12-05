@@ -21,7 +21,7 @@ const ModalAlert = () => {
     <ModalTitledBox
       open={!!modalAlert}
       onClose={onClose}
-      title={modalAlert.title}
+      modalAlert={modalAlert}
     >
       {modalAlert.type === "error" && (
         <ModalError modalAlert={modalAlert} onClose={onClose} />

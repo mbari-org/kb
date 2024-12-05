@@ -19,7 +19,15 @@ const ModalError = (modalAlert, onClose) => {
         </Typography>
       )}
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button onClick={onClose}>Close</Button>
+        <Button
+          onClick={onClose}
+          sx={{
+            fontWeight: "bold",
+            color: theme.palette.error.main,
+          }}
+        >
+          Close
+        </Button>
       </Box>
     </>
   )

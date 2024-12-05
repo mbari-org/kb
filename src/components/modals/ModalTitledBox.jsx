@@ -1,12 +1,22 @@
 import { Typography } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 
 import ModalBox from "./ModalBox"
 
-const ModalTitledBox = ({ children, onClose, open, title, titleColor }) => {
-  const color = titleColor || "primary"
+const ModalTitledBox = ({ children, onClose, open, modalAlert }) => {
+  const theme = useTheme()
+
+  const color =
+    modalAlert.type === "error"
+      ? theme.palette.error.main
+      : theme.palette.primary.main
 
   return (
-    <ModalBox open={open} onClose={onClose}>
+    <ModalBox
+      backgroundColor={theme.palette.background.paper}
+      open={open}
+      onClose={onClose}
+    >
       <Typography
         id="modal-titled-box"
         variant="h5"
@@ -20,7 +30,7 @@ const ModalTitledBox = ({ children, onClose, open, title, titleColor }) => {
           width: "100%",
         }}
       >
-        {title}
+        {modalAlert.title}
       </Typography>
       {children}
     </ModalBox>

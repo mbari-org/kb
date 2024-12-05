@@ -9,19 +9,18 @@ const StyledLabel = styled("div")(
     const nonHoverStyle = { color: theme.palette.common.black, fontWeight: 500 }
 
     if (isSelected) {
-      nonHoverStyle.color = theme.palette.grey[300]
+      nonHoverStyle.color = theme.palette.common.white
       nonHoverStyle.fontWeight = 600
     }
     if (hasPendingHistory) {
       nonHoverStyle.color = isSelected
-        ? lighten(theme.palette.error.main, 0.5)
+        ? lighten(theme.palette.error.main, 0.65)
         : theme.palette.error.main
     }
 
     return {
       ...nonHoverStyle,
       "&:hover": !isSelected && {
-        color: theme.palette.primary.main,
         fontStyle: "italic",
       },
     }

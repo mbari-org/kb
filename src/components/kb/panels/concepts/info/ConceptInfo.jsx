@@ -9,10 +9,10 @@ import ConceptRank from "./ConceptRank"
 
 import useConceptInfoStyle from "./useConceptInfoStyle"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
 
 const ConceptInfo = () => {
-  const { editable } = use(ConceptContext)
+  const { editable } = use(ConceptEditContext)
 
   const infoStyle = useConceptInfoStyle(editable)()
 

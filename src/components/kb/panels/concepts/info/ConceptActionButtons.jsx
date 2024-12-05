@@ -3,10 +3,11 @@ import { use } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
 
 const ConceptActionButtons = () => {
-  const { editable, isModified, saveChanges, setEditable } = use(ConceptContext)
+  const { editable, isModified, saveChanges, setEditable } =
+    use(ConceptEditContext)
 
   return (
     <Box

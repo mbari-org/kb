@@ -20,7 +20,16 @@ const ModalWarning = ({ modalAlert, onClose }) => {
         </Typography>
       )}
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button onClick={onClose}>Close</Button>
+        <Button
+          onClick={onClose}
+          sx={{
+            color: theme.palette.primary.main,
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+          }}
+        >
+          Close
+        </Button>
       </Box>
     </>
   )
