@@ -1,14 +1,9 @@
 import { Dialog } from "@mui/material"
-
-import MediaPreviewTransition from "./MediaPreviewTransition"
+import { Zoom } from "@mui/material"
 
 const MediaPreview = ({ closePreview, mediaSrc, previewImage }) => {
   return (
-    <Dialog
-      fullScreen
-      open={previewImage}
-      TransitionComponent={MediaPreviewTransition}
-    >
+    <Dialog fullScreen open={previewImage} TransitionComponent={Zoom}>
       <img
         src={mediaSrc}
         alt="Concept Media Display"

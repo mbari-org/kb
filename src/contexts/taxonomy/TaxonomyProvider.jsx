@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react"
+import { use, useCallback, useEffect, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
 import ModalContext from "@/contexts/modal/ModalContext"
@@ -26,13 +26,16 @@ const TaxonomyProvider = ({ children }) => {
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const getConcept = conceptName => getTaxonomyConcept(conceptName, taxonomy)
+  const getConcept = useCallback(
+    conceptName => getTaxonomyConcept(taxonomy, conceptName),
+    [taxonomy]
+  )
 
   const loadConcept = async conceptName => {
-    const existing = getTaxonomyConcept(conceptName, taxonomy)
+    const existing = getTaxonomyConcept(taxonomy, conceptName)
     if (needsUpdate(existing)) {
       setLoading(true)
-      const { taxonomy: taxonmyWithConcept } = await load(conceptName, taxonomy)
+      const { taxonomy: taxonmyWithConcept } = await load(taxonomy, conceptName)
       setLoading(false)
       setTaxonomy(taxonmyWithConcept)
     }
@@ -42,8 +45,8 @@ const TaxonomyProvider = ({ children }) => {
     try {
       setLoading(true)
       const { taxonomy: taxonomyWithDescendants } = await loadDescendants(
-        concept,
-        taxonomy
+        taxonomy,
+        concept
       )
       setTaxonomy(taxonomyWithDescendants)
       setLoading(false)
@@ -55,8 +58,8 @@ const TaxonomyProvider = ({ children }) => {
 
   const updateConcept = concept => {
     const { taxonomy: updatedTaxonomy } = updateTaxonomyConcept(
-      concept,
-      taxonomy
+      taxonomy,
+      concept
     )
     setTaxonomy(updatedTaxonomy)
   }

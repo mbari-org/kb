@@ -1,4 +1,3 @@
-import { useTheme } from "@mui/material/styles"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import { Pagination } from "swiper/modules"
@@ -11,8 +10,6 @@ import "swiper/css/pagination"
 import "./mediaSwiper.css"
 
 const MediaSwiper = ({ media, height, setMediaIndex }) => {
-  const theme = useTheme()
-
   const pagination = {
     clickable: true,
     renderBullet: function (index, className) {
