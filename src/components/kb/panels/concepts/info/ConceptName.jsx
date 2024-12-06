@@ -3,14 +3,14 @@ import { use } from "react"
 import { TextField } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptName = () => {
   const {
     conceptState: { name },
     editable,
     setConcept,
-  } = use(ConceptEditContext)
+  } = use(ConceptContext)
 
   const { concept: conceptTheme, palette } = useTheme()
 

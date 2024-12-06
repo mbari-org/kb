@@ -1,13 +1,17 @@
-import { useRef, useState } from "react"
+import { use, useRef, useState } from "react"
 
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
 
+import ConceptContext from "@/contexts/concept/ConceptContext"
+
 import TaxonomySearch from "@/components/kb/panels/concepts/TaxonomySearch"
 import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 
-const TaxonomySidebar = ({ concept }) => {
+const TaxonomySidebar = () => {
   const sidebarRef = useRef(null)
+
+  const { concept } = use(ConceptContext)
 
   const [autoExpand, setAutoExpand] = useState(null)
 

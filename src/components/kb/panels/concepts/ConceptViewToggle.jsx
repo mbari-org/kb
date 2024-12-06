@@ -8,10 +8,10 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 
 import ConceptViewToggleButton from "./ConceptViewToggleButton"
 
-import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptViewToggle = ({ sx }) => {
-  const { editable } = use(ConceptEditContext)
+  const { editable } = use(ConceptContext)
 
   const [conceptView, setConceptView] = useState("standard")
 

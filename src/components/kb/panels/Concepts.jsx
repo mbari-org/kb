@@ -1,40 +1,24 @@
-import { use, useState } from "react"
+import { useState } from "react"
 
 import Box from "@mui/material/Box"
 
 import Concept from "@/components/kb/panels/concepts/Concept"
+import ConceptDivider from "./concepts/ConceptDivider"
 import TaxonomySidebar from "@/components/kb/panels/concepts/TaxonomySidebar"
 
-import SelectedContext from "@/contexts/selected/SelectedContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
-import ConceptDivider from "./concepts/ConceptDivider"
-
-import ConceptEditProvider from "@/contexts/conceptEdit/ConceptEditProvider"
-
 const Concepts = () => {
-  const { getConcept } = use(TaxonomyContext)
-  const { selected } = use(SelectedContext)
-
-  const concept = getConcept(selected.concept)
-
   const [sidebarWidth, setSidebarWidth] = useState(0)
 
-  if (!concept) {
-    return null
-  }
-
   return (
-    <ConceptEditProvider concept={concept}>
-      <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
-        <Box sx={{ width: sidebarWidth }}>
-          <TaxonomySidebar concept={concept} />
-        </Box>
-        <ConceptDivider setSidebarWidth={setSidebarWidth} />
-        <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
-          <Concept />
-        </Box>
+    <Box sx={{ display: "flex", height: "100%", overflow: "hidden" }}>
+      <Box sx={{ width: sidebarWidth }}>
+        <TaxonomySidebar />
       </Box>
-    </ConceptEditProvider>
+      <ConceptDivider setSidebarWidth={setSidebarWidth} />
+      <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
+        <Concept />
+      </Box>
+    </Box>
   )
 }
 

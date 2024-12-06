@@ -2,11 +2,11 @@ import { use } from "react"
 
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
-import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 import {
   REMOVAL_VALUE,
   rankLevelNameValue,
-} from "@/contexts/conceptEdit/lib/validateUpdates"
+} from "@/contexts/concept/lib/validateUpdates"
 
 const rankLevels = [
   "epi",
@@ -23,7 +23,7 @@ const ConceptLevel = ({ infoStyle }) => {
   const {
     conceptState: { rankLevel },
     setConcept,
-  } = use(ConceptEditContext)
+  } = use(ConceptContext)
 
   return (
     <FormControl {...infoStyle}>

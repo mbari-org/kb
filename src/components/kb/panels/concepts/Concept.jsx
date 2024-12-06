@@ -7,10 +7,10 @@ import ConceptInfo from "./info/ConceptInfo"
 import ConceptMedia from "./media/ConceptMedia"
 import ConceptViewToggle from "./ConceptViewToggle"
 
-import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const Concept = () => {
-  const { conceptState } = use(ConceptEditContext)
+  const { conceptState } = use(ConceptContext)
 
   if (conceptState && Object.keys(conceptState).length === 0) {
     return null

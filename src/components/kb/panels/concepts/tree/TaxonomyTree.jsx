@@ -14,7 +14,7 @@ import useExpandConcept from "./lib/useExpandConcept"
 import useSelectConcept from "./lib/useSelectConcept"
 import useTaxonomyTreeReposition from "./lib/useTaxonomyTreeReposition"
 
-import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
@@ -22,7 +22,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 import { getConceptPrimaryName } from "@/model/taxonomy"
 
 const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, sidebarRef }) => {
-  const { editable, isModified, setEditable } = use(ConceptEditContext)
+  const { editable, isModified, setEditable } = use(ConceptContext)
   const { setModalAlert } = use(ModalContext)
   const { updateSelectedConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)

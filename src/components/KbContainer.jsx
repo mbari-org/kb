@@ -2,7 +2,7 @@ import Box from "@mui/material/Box"
 
 import KnowledgeBase from "@/components/kb/KnowledgeBase"
 
-// import ConceptEditProvider from "@/contexts/conceptEdit/ConceptEditProvider"
+import ConceptProvider from "@/contexts/concept/ConceptProvider"
 import ModalProvider from "@/contexts/modal/ModalProvider"
 import SelectedProvider from "@/contexts/selected/SelectedProvider"
 import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
@@ -13,7 +13,9 @@ const KbContainer = () => {
       <ModalProvider>
         <TaxonomyProvider>
           <SelectedProvider>
-            <KnowledgeBase />
+            <ConceptProvider>
+              <KnowledgeBase />
+            </ConceptProvider>
           </SelectedProvider>
         </TaxonomyProvider>
       </ModalProvider>
