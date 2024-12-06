@@ -6,7 +6,7 @@ import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
 import {
   REMOVAL_VALUE,
   rankLevelNameValue,
-} from "@/contexts/conceptEdit/validateUpdates"
+} from "@/contexts/conceptEdit/lib/validateUpdates"
 
 const rankNames = [
   "domain",

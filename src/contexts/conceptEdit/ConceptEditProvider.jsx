@@ -6,12 +6,12 @@ import ConceptEditContext from "@/contexts/conceptEdit/ConceptEditContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import conceptStateReducer from "./conceptStateReducer"
+import conceptStateReducer from "./lib/conceptStateReducer"
 
-import { filterUpdates } from "./filterUpdates"
-import { stateForConcept } from "./stateForConcept"
-import { submitUpdates } from "./submitUpdates"
-import { validateUpdates } from "./validateUpdates"
+import { filterUpdates } from "./lib/filterUpdates"
+import { stateForConcept } from "./lib/stateForConcept"
+import { submitUpdates } from "./lib/submitUpdates"
+import { validateUpdates } from "./lib/validateUpdates"
 
 import { isEmpty } from "@/lib/util"
 
