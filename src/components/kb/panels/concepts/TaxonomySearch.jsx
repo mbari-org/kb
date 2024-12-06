@@ -9,18 +9,24 @@ import TextField from "@mui/material/TextField"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-const ConceptSearch = ({ concept, setAutoExpand }) => {
+import { getConcept, getConceptPrimaryName } from "@/model/taxonomy"
+
+const TaxonomySearch = ({ concept, setAutoExpand }) => {
   const theme = useTheme()
 
-  const { updateSelectedConcept: selectConcept } = use(SelectedContext)
+  const { updateSelectedConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)
 
   const [conceptName, setConceptName] = useState(null)
 
   const handleConceptChange = (_event, conceptName) => {
     if (conceptName) {
-      selectConcept(conceptName)
+      updateSelectedConcept(conceptName)
       setAutoExpand({ expand: true, name: conceptName })
+
+      setConceptName(
+        getConceptPrimaryName(taxonomy, conceptName) || conceptName
+      )
     }
   }
 
@@ -68,4 +74,4 @@ const ConceptSearch = ({ concept, setAutoExpand }) => {
   )
 }
 
-export default ConceptSearch
+export default TaxonomySearch

@@ -1,12 +1,13 @@
-const getConceptName = concept => concept.name
-const getConceptLabel = concept =>
+const itemConceptName = concept => concept.name
+
+const itemConceptLabel = concept =>
   concept.alternateNames.length === 0
     ? concept.name
     : `${concept.name} (${concept.alternateNames.join(", ")})`
 
-const getConceptPath = (taxonomy, concept, path = [concept.name]) =>
+const itemConceptPath = (taxonomy, concept, path = [concept.name]) =>
   concept.parent
-    ? getConceptPath(taxonomy, concept.parent, [concept.name, ...path])
+    ? itemConceptPath(taxonomy, concept.parent, [concept.name, ...path])
     : [concept.name, ...path]
 
-export { getConceptLabel, getConceptName, getConceptPath }
+export { itemConceptLabel, itemConceptName, itemConceptPath }

@@ -47,6 +47,11 @@ const getConcept = (taxonomy, conceptName) => {
   return null
 }
 
+const getConceptPrimaryName = (taxonomy, conceptNameOrAlias) => {
+  const concept = getConcept(taxonomy, conceptNameOrAlias)
+  return concept ? concept.name : null
+}
+
 const getNextSibling = concept => {
   if (concept && concept.parent) {
     const siblings = concept.parent.children
@@ -175,14 +180,14 @@ const loadChildren = async (updatableTaxonomy, updatableConcept) => {
     updatableChild.parent = updatableConcept
 
     updatableTaxonomy.concepts[updatableChild.name] = updatableChild
-    addAliases(updatableChild, updatableTaxonomy)
+    addAliases(updatableTaxonomy, updatableChild)
 
     return updatableChild
   })
 
   updatableConcept.children = children
   updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
-  addAliases(updatableConcept, updatableTaxonomy)
+  addAliases(updatableTaxonomy, updatableConcept)
 }
 
 const loadGrandChildren = async (updatableTaxonomy, updatableConcept) => {
@@ -223,7 +228,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
 
   updatableTaxonomy.concepts[parent.name] = parent
   updatableConcept.parent = parent
-  addAliases(parent, updatableTaxonomy)
+  addAliases(updatableTaxonomy, parent)
 
   await loadChildren(updatableTaxonomy, parent)
 }
@@ -256,6 +261,7 @@ const updateTaxonomyConcept = (taxonomy, concept) => {
 
 export {
   getConcept,
+  getConceptPrimaryName,
   getNextSibling,
   getPrevSibling,
   load,

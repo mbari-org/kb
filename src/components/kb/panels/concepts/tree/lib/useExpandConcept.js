@@ -2,7 +2,7 @@ import { use, useCallback } from "react"
 
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import { getConceptPath } from "./taxonomyItem"
+import { itemConceptPath } from "./taxonomyItem"
 
 import Expand from "./expandedEnum"
 
@@ -31,7 +31,7 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
 
   const expand = useCallback(
     concept => {
-      const path = getConceptPath(taxonomy, concept)
+      const path = itemConceptPath(taxonomy, concept)
       setExpandedItems(prevItems => [...new Set([...prevItems, ...path])])
     },
     [setExpandedItems, taxonomy]

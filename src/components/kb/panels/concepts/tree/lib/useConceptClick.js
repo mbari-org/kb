@@ -9,7 +9,7 @@ const useConceptClick = (
   setAutoExpand
 ) => {
   return useCallback(
-    conceptName => {
+    (_event, conceptName) => {
       if (conceptName === concept.name) {
         setAutoExpand({ expand: false, name: null })
         expandConcept(concept, Expand.TOGGLE)
