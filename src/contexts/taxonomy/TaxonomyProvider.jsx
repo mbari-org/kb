@@ -56,7 +56,7 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
-  const updateConcept = concept => {
+  const updateTaxonomy = concept => {
     const { taxonomy: updatedTaxonomy } = updateTaxonomyConcept(
       taxonomy,
       concept
@@ -99,7 +99,7 @@ const TaxonomyProvider = ({ children }) => {
         loadConcept,
         loadConceptDescendants,
         taxonomy,
-        updateConcept,
+        updateTaxonomy,
       }}
     >
       {children}

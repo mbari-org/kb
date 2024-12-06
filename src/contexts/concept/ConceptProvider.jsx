@@ -20,7 +20,7 @@ const ConceptProvider = ({ children, _concept }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { setModalAlert } = use(ModalContext)
-  const { getConcept, taxonomy, updateConcept } = use(TaxonomyContext)
+  const { getConcept, taxonomy, updateTaxonomy } = use(TaxonomyContext)
   const { selected } = use(SelectedContext)
 
   const concept = getConcept(selected.concept)
@@ -65,7 +65,7 @@ const ConceptProvider = ({ children, _concept }) => {
   const submissionResult = useCallback(
     ({ error, updatedConcept }) => {
       if (!error) {
-        updateConcept(updatedConcept, taxonomy)
+        updateTaxonomy(updatedConcept, taxonomy)
         setInitialState(updatedState)
       } else {
         setModalAlert(error)
@@ -76,7 +76,7 @@ const ConceptProvider = ({ children, _concept }) => {
       setIsModified(false)
       setValidated(false)
     },
-    [initialState, setModalAlert, taxonomy, updateConcept, updatedState]
+    [initialState, setModalAlert, taxonomy, updateTaxonomy, updatedState]
   )
 
   useEffect(() => {
