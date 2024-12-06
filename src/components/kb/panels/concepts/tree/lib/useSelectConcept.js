@@ -1,32 +1,32 @@
 import { useCallback } from "react"
 
 const useSelectConcept = (
-  editable,
-  isModified,
+  editing,
+  modified,
   setModalAlert,
-  setEditable,
+  setEditing,
   updateSelectedConcept,
   setAutoExpand
 ) => {
   return useCallback(
     conceptName => {
-      if (editable && isModified) {
+      if (editing && modified) {
         setModalAlert({
           message: "You have unsaved changes. Please Cancel or Save.",
           title: "Unsaved Changes",
           type: "warning",
         })
       } else {
-        editable && setEditable(false)
+        editing && setEditing(false)
         updateSelectedConcept(conceptName)
         setAutoExpand({ expand: true, name: conceptName })
       }
     },
     [
-      editable,
-      isModified,
+      editing,
+      modified,
       setModalAlert,
-      setEditable,
+      setEditing,
       updateSelectedConcept,
       setAutoExpand,
     ]

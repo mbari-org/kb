@@ -8,7 +8,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 const ConceptName = () => {
   const {
     conceptState: { name },
-    editable,
+    editing,
     updateConcept,
   } = use(ConceptContext)
 
@@ -17,7 +17,7 @@ const ConceptName = () => {
   const handleBlur = event => updateConcept({ name: event.target.value })
 
   const handleChange = event => {
-    if (editable) {
+    if (editing) {
       updateConcept({ name: event.target.value })
     }
   }
@@ -29,7 +29,7 @@ const ConceptName = () => {
 
   return (
     <TextField
-      disabled={!editable}
+      disabled={!editing}
       onBlur={handleBlur}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
@@ -39,7 +39,7 @@ const ConceptName = () => {
             fontFamily: conceptTheme.fontFamily,
             fontSize: conceptTheme.fontSize,
             fontWeight: conceptTheme.fontWeight,
-            cursor: editable ? "text" : "pointer",
+            cursor: editing ? "text" : "pointer",
             "& .MuiInputBase-input": {
               backgroundColor: palette.primary.light,
               color: palette.grey[700],

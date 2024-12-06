@@ -12,9 +12,9 @@ import useConceptInfoStyle from "./useConceptInfoStyle"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptInfo = () => {
-  const { editable } = use(ConceptContext)
+  const { editing } = use(ConceptContext)
 
-  const infoStyle = useConceptInfoStyle(editable)()
+  const infoStyle = useConceptInfoStyle(editing)()
 
   return (
     <Stack

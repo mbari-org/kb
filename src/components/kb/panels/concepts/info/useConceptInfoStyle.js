@@ -1,15 +1,15 @@
 import { useTheme } from "@mui/material/styles"
 import { useCallback } from "react"
 
-const useConceptInfoStyle = editable => {
+const useConceptInfoStyle = editing => {
   const theme = useTheme()
 
   return useCallback(() => {
     return {
-      disabled: !editable,
+      disabled: !editing,
       fullWidth: true,
       size: "small",
-      variant: editable ? "filled" : "standard",
+      variant: editing ? "filled" : "standard",
       sx: {
         "& .MuiInputBase-input": {
           backgroundColor: theme.palette.primary.light,
@@ -23,7 +23,7 @@ const useConceptInfoStyle = editable => {
         },
       },
     }
-  }, [editable, theme])
+  }, [editing, theme])
 }
 
 export default useConceptInfoStyle

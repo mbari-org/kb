@@ -25,8 +25,8 @@ const ConceptProvider = ({ children, _concept }) => {
 
   const concept = getConcept(selected.concept)
 
-  const [editable, setEditable] = useState(false)
-  const [isModified, setIsModified] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [modified, setModified] = useState(false)
   const [validated, setValidated] = useState(false)
 
   const [initialState, setInitialState] = useState(null)
@@ -42,9 +42,9 @@ const ConceptProvider = ({ children, _concept }) => {
     dispatch({ type: "SET_FIELD", payload: update })
 
   const saveChanges = save => {
-    setEditable(false)
+    setEditing(false)
 
-    if (save && isModified) {
+    if (save && modified) {
       const config = taxonomy.config
       const updates = getCurrentUpdates(updatedState)
 
@@ -53,13 +53,13 @@ const ConceptProvider = ({ children, _concept }) => {
           setValidated(true)
         } else {
           dispatch({ type: "INIT_STATE", payload: initialState })
-          setIsModified(false)
+          setModified(false)
           setModalAlert(alert)
         }
       })
     } else if (!save) {
       dispatch({ type: "INIT_STATE", payload: initialState })
-      setIsModified(false)
+      setModified(false)
     }
   }
 
@@ -73,8 +73,8 @@ const ConceptProvider = ({ children, _concept }) => {
         setInitialState(initialState)
         dispatch({ type: "INIT_STATE", payload: initialState })
       }
-      setEditable(false)
-      setIsModified(false)
+      setEditing(false)
+      setModified(false)
       setValidated(false)
     },
     [initialState, setModalAlert, taxonomy, updateTaxonomy, updatedState]
@@ -82,7 +82,7 @@ const ConceptProvider = ({ children, _concept }) => {
 
   useEffect(() => {
     const hasUpdates = !isEmpty(getCurrentUpdates(updatedState))
-    setIsModified(hasUpdates)
+    setModified(hasUpdates)
   }, [getCurrentUpdates, updatedState])
 
   useEffect(() => {
@@ -117,10 +117,10 @@ const ConceptProvider = ({ children, _concept }) => {
       value={{
         concept,
         conceptState: updatedState,
-        editable,
-        isModified,
+        editing,
+        modified,
         saveChanges,
-        setEditable,
+        setEditing,
         updateConcept,
       }}
     >

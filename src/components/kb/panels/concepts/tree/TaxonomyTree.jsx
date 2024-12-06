@@ -22,7 +22,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 import { getConceptPrimaryName } from "@/model/taxonomy"
 
 const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, sidebarRef }) => {
-  const { editable, isModified, setEditable } = use(ConceptContext)
+  const { editing, modified, setEditing } = use(ConceptContext)
   const { setModalAlert } = use(ModalContext)
   const { updateSelectedConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)
@@ -32,10 +32,10 @@ const TaxonomyTree = ({ autoExpand, concept, setAutoExpand, sidebarRef }) => {
   const apiRef = useTreeViewApiRef()
 
   const selectConcept = useSelectConcept(
-    editable,
-    isModified,
+    editing,
+    modified,
     setModalAlert,
-    setEditable,
+    setEditing,
     updateSelectedConcept,
     setAutoExpand
   )
