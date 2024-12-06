@@ -22,7 +22,7 @@ const rankLevels = [
 const ConceptLevel = ({ infoStyle }) => {
   const {
     conceptState: { rankLevel },
-    setConcept,
+    updateConcept,
   } = use(ConceptContext)
 
   return (
@@ -30,7 +30,7 @@ const ConceptLevel = ({ infoStyle }) => {
       <InputLabel>Level</InputLabel>
       <Select
         displayEmpty
-        onChange={e => setConcept({ rankLevel: e.target.value })}
+        onChange={e => updateConcept({ rankLevel: e.target.value })}
         value={rankLevelNameValue(rankLevel)}
       >
         {rankLevels.map(rLevel => (

@@ -9,21 +9,21 @@ const ConceptName = () => {
   const {
     conceptState: { name },
     editable,
-    setConcept,
+    updateConcept,
   } = use(ConceptContext)
 
   const { concept: conceptTheme, palette } = useTheme()
 
-  const handleBlur = event => setConcept({ name: event.target.value })
+  const handleBlur = event => updateConcept({ name: event.target.value })
 
   const handleChange = event => {
     if (editable) {
-      setConcept({ name: event.target.value })
+      updateConcept({ name: event.target.value })
     }
   }
   const handleKeyDown = event => {
     if (event.key === "Enter") {
-      setConcept({ name: event.target.value })
+      updateConcept({ name: event.target.value })
     }
   }
 

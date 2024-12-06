@@ -8,14 +8,14 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 const ConceptAuthor = ({ infoStyle }) => {
   const {
     conceptState: { author },
-    setConcept,
+    updateConcept,
   } = use(ConceptContext)
 
   return (
     <TextField
       {...infoStyle}
       label="Author"
-      onChange={e => setConcept({ author: e.target.value })}
+      onChange={e => updateConcept({ author: e.target.value })}
       value={author}
     />
   )

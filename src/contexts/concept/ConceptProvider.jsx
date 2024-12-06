@@ -38,7 +38,8 @@ const ConceptProvider = ({ children, _concept }) => {
     initialState,
   ])
 
-  const setConcept = update => dispatch({ type: "SET_FIELD", payload: update })
+  const updateConcept = update =>
+    dispatch({ type: "SET_FIELD", payload: update })
 
   const saveChanges = save => {
     setEditable(false)
@@ -119,8 +120,8 @@ const ConceptProvider = ({ children, _concept }) => {
         editable,
         isModified,
         saveChanges,
-        setConcept,
         setEditable,
+        updateConcept,
       }}
     >
       {children}
