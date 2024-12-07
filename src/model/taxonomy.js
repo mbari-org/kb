@@ -49,7 +49,7 @@ const getConcept = (taxonomy, conceptName) => {
 
 const getConceptPrimaryName = (taxonomy, conceptNameOrAlias) => {
   const concept = getConcept(taxonomy, conceptNameOrAlias)
-  return concept ? concept.name : null
+  return concept ? concept.name : conceptNameOrAlias
 }
 
 const getNextSibling = concept => {

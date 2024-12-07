@@ -16,14 +16,16 @@ import { validateUpdates } from "./lib/validateUpdates"
 
 import { isEmpty } from "@/lib/util"
 
-const ConceptProvider = ({ children, _concept }) => {
+const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { setModalAlert } = use(ModalContext)
   const { getConcept, taxonomy, updateTaxonomy } = use(TaxonomyContext)
   const { selected } = use(SelectedContext)
 
-  const concept = getConcept(selected.concept)
+  const [concept, setConcept] = useState(null)
+
+  // const concept = getConcept(selected.concept)
 
   const [editing, setEditing] = useState(false)
   const [modified, setModified] = useState(false)
@@ -32,7 +34,7 @@ const ConceptProvider = ({ children, _concept }) => {
   const [initialState, setInitialState] = useState(null)
   const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
 
-  // the next line is bc filterUpdate returns a function but eslint isn't aware of that
+  // filterUpdate returns a function but eslint isn't aware of that
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getCurrentUpdates = useCallback(filterUpdates(initialState), [
     initialState,
@@ -79,6 +81,13 @@ const ConceptProvider = ({ children, _concept }) => {
     },
     [initialState, setModalAlert, taxonomy, updateTaxonomy, updatedState]
   )
+
+  useEffect(() => {
+    if (selected) {
+      const concept = getConcept(selected.concept)
+      setConcept(concept)
+    }
+  }, [getConcept, selected])
 
   useEffect(() => {
     const hasUpdates = !isEmpty(getCurrentUpdates(updatedState))

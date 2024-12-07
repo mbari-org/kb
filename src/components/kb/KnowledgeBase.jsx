@@ -9,7 +9,7 @@ import Panel from "@/components/kb/panels/Panel"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 
 const KnowledgeBase = () => {
-  const { selected, updateSelectedPanel } = use(SelectedContext)
+  const { selected, selectPanel: updateSelectedPanel } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
 

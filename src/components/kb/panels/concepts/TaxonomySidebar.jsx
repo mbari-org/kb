@@ -1,9 +1,7 @@
-import { use, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
-
-import ConceptContext from "@/contexts/concept/ConceptContext"
 
 import TaxonomySearch from "@/components/kb/panels/concepts/TaxonomySearch"
 import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
@@ -11,15 +9,13 @@ import TaxonomyTree from "@/components/kb/panels/concepts/tree/TaxonomyTree"
 const TaxonomySidebar = () => {
   const sidebarRef = useRef(null)
 
-  const { concept } = use(ConceptContext)
-
   const [autoExpand, setAutoExpand] = useState(null)
 
   return (
     <>
       <Stack sx={{ height: "100%" }}>
         <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
-          <TaxonomySearch concept={concept} setAutoExpand={setAutoExpand} />
+          <TaxonomySearch setAutoExpand={setAutoExpand} />
         </Box>
         <Box
           ref={sidebarRef}
@@ -36,7 +32,6 @@ const TaxonomySidebar = () => {
         >
           <TaxonomyTree
             autoExpand={autoExpand}
-            concept={concept}
             setAutoExpand={setAutoExpand}
             sidebarRef={sidebarRef}
             style={{ flexGrow: 1, height: "100%" }}
