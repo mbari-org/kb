@@ -19,7 +19,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   const { selectConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)
 
-  const [primaryName, setPrimaryName] = useState(null)
+  const [primaryName, setPrimaryName] = useState("")
 
   const handleConceptChange = (_event, selectedName) => {
     if (selectedName) {
@@ -32,7 +32,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
 
   useEffect(() => {
     const conceptPrimaryName = getConceptPrimaryName(taxonomy, concept?.name)
-    setPrimaryName(conceptPrimaryName)
+    setPrimaryName(conceptPrimaryName || "")
   }, [concept, taxonomy])
 
   return (

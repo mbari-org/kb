@@ -20,7 +20,8 @@ const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { setModalAlert } = use(ModalContext)
-  const { getConcept, taxonomy, updateTaxonomy } = use(TaxonomyContext)
+  const { getConcept, loadConcept, taxonomy, updateTaxonomy } =
+    use(TaxonomyContext)
   const { selected } = use(SelectedContext)
 
   const [concept, setConcept] = useState(null)
@@ -83,11 +84,16 @@ const ConceptProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (selected) {
-      const concept = getConcept(selected.concept)
-      setConcept(concept)
+    if (selected && selected.concept !== concept?.name) {
+      loadConcept(selected.concept).then(
+        () => {
+          const concept = getConcept(selected.concept)
+          setConcept(concept)
+        },
+        error => showBoundary(error)
+      )
     }
-  }, [getConcept, selected])
+  }, [concept, getConcept, loadConcept, selected, showBoundary])
 
   useEffect(() => {
     const hasUpdates = !isEmpty(getCurrentUpdates(updatedState))
