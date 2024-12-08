@@ -19,20 +19,20 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   const { selectConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)
 
-  const [primaryName, setPrimaryName] = useState("")
+  const [value, setValue] = useState("")
 
   const handleConceptChange = (_event, selectedName) => {
     if (selectedName) {
       const conceptPrimaryName = getConceptPrimaryName(taxonomy, selectedName)
       selectConcept(conceptPrimaryName)
       setAutoExpand({ expand: true, name: conceptPrimaryName })
-      setPrimaryName(conceptPrimaryName)
+      setValue(conceptPrimaryName)
     }
   }
 
   useEffect(() => {
     const conceptPrimaryName = getConceptPrimaryName(taxonomy, concept?.name)
-    setPrimaryName(conceptPrimaryName || "")
+    setValue(conceptPrimaryName || "")
   }, [concept, taxonomy])
 
   return (
@@ -70,7 +70,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
           },
         },
       }}
-      value={primaryName}
+      value={value}
     />
   )
 }

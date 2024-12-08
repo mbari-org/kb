@@ -50,10 +50,6 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   )
 
   useConceptAutoExpand(concept, autoExpand, setAutoExpand, expandConcept)
-  // useTaxonomyTreeReposition(
-  //   apiRef,
-  //   getConceptPrimaryName(taxonomy, concept.name)
-  // )
   useTaxonomyTreeReposition(apiRef, concept?.name)
 
   useArrowKeys(
