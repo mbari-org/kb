@@ -1,4 +1,11 @@
-import { use, useCallback, useEffect, useReducer, useState } from "react"
+import {
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -20,13 +27,11 @@ const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { setModalAlert } = use(ModalContext)
+  const { selected } = use(SelectedContext)
   const { getConcept, loadConcept, taxonomy, updateTaxonomy } =
     use(TaxonomyContext)
-  const { selected } = use(SelectedContext)
 
   const [concept, setConcept] = useState(null)
-
-  // const concept = getConcept(selected.concept)
 
   const [editing, setEditing] = useState(false)
   const [modified, setModified] = useState(false)
@@ -34,6 +39,20 @@ const ConceptProvider = ({ children }) => {
 
   const [initialState, setInitialState] = useState(null)
   const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
+
+  const getConceptPath = useCallback(
+    (concept, path = [concept.name]) =>
+      concept.parent
+        ? getConceptPath(concept.parent, [concept.parent.name, ...path])
+        : path,
+    []
+  )
+
+  const conceptPath = useMemo(() => {
+    if (concept) {
+      return getConceptPath(concept)
+    }
+  }, [concept, getConceptPath])
 
   // filterUpdate returns a function but eslint isn't aware of that
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,6 +150,7 @@ const ConceptProvider = ({ children }) => {
     <ConceptContext
       value={{
         concept,
+        conceptPath,
         conceptState: updatedState,
         editing,
         modified,

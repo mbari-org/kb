@@ -1,10 +1,11 @@
 import { use } from "react"
 
-import { Box } from "@mui/material"
+import { Stack } from "@mui/material"
 
 import ConceptActionButtons from "./detail/ConceptActionButtons"
 import ConceptInfo from "./ConceptDetail"
 import ConceptMedia from "./media/ConceptMedia"
+import ConceptPath from "./ConceptPath"
 import ConceptViewToggle from "./toggleView/ConceptViewToggle"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -17,23 +18,25 @@ const Concept = () => {
   }
 
   return (
-    <Box
+    <Stack
+      direction="column"
+      spacing={1.5}
       sx={{
-        display: "flex",
-        flexDirection: "column",
         minHeight: "100vh",
         position: "relative",
+        m: 1,
       }}
     >
-      <Box sx={{ display: "flex", p: 1.5, width: "100%" }}>
+      <ConceptPath />
+      <Stack direction="row" spacing={1.5}>
         <ConceptMedia
           sx={{ flexBasis: "33.33%", flexShrink: 0, overflow: "hidden" }}
         />
         <ConceptInfo />
         <ConceptViewToggle sx={{ flex: "0 0 auto", marginLeft: "auto" }} />
-      </Box>
+      </Stack>
       <ConceptActionButtons />
-    </Box>
+    </Stack>
   )
 }
 
