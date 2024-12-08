@@ -19,8 +19,6 @@ import ModalContext from "@/contexts/modal/ModalContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-// import { getConceptPrimaryName } from "@/model/taxonomy"
-
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept, editing, modified, setEditing } = use(ConceptContext)
   const { setModalAlert } = use(ModalContext)
@@ -50,7 +48,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   )
 
   useConceptAutoExpand(concept, autoExpand, setAutoExpand, expandConcept)
-  useTaxonomyTreeReposition(apiRef, concept?.name)
+  useTaxonomyTreeReposition(apiRef, concept)
 
   useArrowKeys(
     concept,

@@ -7,7 +7,7 @@ import TaxonomyContext from "./TaxonomyContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
 
 import {
-  getConcept as getTaxonomyConcept,
+  getTaxonomyConcept,
   load,
   loadTaxonomy,
   loadDescendants,
@@ -42,11 +42,22 @@ const TaxonomyProvider = ({ children }) => {
   }
 
   const loadConceptDescendants = async concept => {
+    if (!concept) {
+      console.log("CxTBD TaxonomyProvider loadConceptDescendants w/o concept")
+    }
     try {
       setLoading(true)
+      console.log(
+        "CxTBD TaxonomyProvider loadConceptDescendants concept:",
+        concept.name
+      )
       const { taxonomy: taxonomyWithDescendants } = await loadDescendants(
         taxonomy,
         concept
+      )
+      console.log(
+        "CxTBD TaxonomyProvider loadConceptDescendants DONE for concept:",
+        concept.name
       )
       setTaxonomy(taxonomyWithDescendants)
       setLoading(false)

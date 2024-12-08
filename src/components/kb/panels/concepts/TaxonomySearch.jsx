@@ -10,30 +10,29 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import { getConceptPrimaryName } from "@/model/taxonomy"
-
 const TaxonomySearch = ({ setAutoExpand }) => {
   const theme = useTheme()
 
   const { concept } = use(ConceptContext)
   const { selectConcept } = use(SelectedContext)
-  const { taxonomy } = use(TaxonomyContext)
+  const { getConcept, taxonomy } = use(TaxonomyContext)
 
   const [value, setValue] = useState("")
 
   const handleConceptChange = (_event, selectedName) => {
     if (selectedName) {
-      const conceptPrimaryName = getConceptPrimaryName(taxonomy, selectedName)
-      selectConcept(conceptPrimaryName)
-      setAutoExpand({ expand: true, name: conceptPrimaryName })
-      setValue(conceptPrimaryName)
+      const primaryName = getConcept(selectedName)?.name
+      if (primaryName) {
+        setAutoExpand({ expand: true, name: primaryName })
+      }
+      selectConcept(primaryName || selectedName)
     }
   }
 
   useEffect(() => {
-    const conceptPrimaryName = getConceptPrimaryName(taxonomy, concept?.name)
-    setValue(conceptPrimaryName || "")
-  }, [concept, taxonomy])
+    const primaryName = getConcept(concept?.name)?.name
+    setValue(primaryName || "")
+  }, [concept, getConcept, taxonomy])
 
   return (
     <Autocomplete

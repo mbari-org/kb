@@ -2,10 +2,12 @@ import { use, useEffect, useRef } from "react"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
-const useTaxonomyTreeReposition = (apiRef, conceptName) => {
+const useTaxonomyTreeReposition = (apiRef, concept) => {
   const { loading } = use(ModalContext)
 
   const timeoutRef = useRef(null)
+
+  const conceptName = concept?.name
 
   useEffect(() => {
     if (timeoutRef.current) {
