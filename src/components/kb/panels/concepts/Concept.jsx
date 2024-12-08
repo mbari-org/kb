@@ -2,10 +2,10 @@ import { use } from "react"
 
 import { Box } from "@mui/material"
 
-import ConceptActionButtons from "./info/ConceptActionButtons"
-import ConceptInfo from "./info/ConceptInfo"
+import ConceptActionButtons from "./detail/ConceptActionButtons"
+import ConceptInfo from "./ConceptDetail"
 import ConceptMedia from "./media/ConceptMedia"
-import ConceptViewToggle from "./ConceptViewToggle"
+import ConceptViewToggle from "./toggleView/ConceptViewToggle"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 

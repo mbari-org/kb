@@ -2,12 +2,12 @@ import { use } from "react"
 
 import { Stack } from "@mui/material"
 
-import ConceptAuthor from "./ConceptAuthor"
-import ConceptLevel from "./ConceptLevel"
-import ConceptName from "./ConceptName"
-import ConceptRank from "./ConceptRank"
+import ConceptAuthor from "./detail/ConceptAuthor"
+import ConceptLevel from "./detail/ConceptLevel"
+import ConceptName from "./detail/ConceptName"
+import ConceptRank from "./detail/ConceptRank"
 
-import useConceptInfoStyle from "./useConceptInfoStyle"
+import useConceptInfoStyle from "./detail/useConceptInfoStyle"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
