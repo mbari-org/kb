@@ -68,11 +68,13 @@ const TaxonomyProvider = ({ children }) => {
   }
 
   const updateTaxonomy = concept => {
-    const { taxonomy: updatedTaxonomy } = updateTaxonomyConcept(
-      taxonomy,
-      concept
-    )
-    setTaxonomy(updatedTaxonomy)
+    if (concept) {
+      const { taxonomy: updatedTaxonomy } = updateTaxonomyConcept(
+        taxonomy,
+        concept
+      )
+      setTaxonomy(updatedTaxonomy)
+    }
   }
 
   useEffect(() => {

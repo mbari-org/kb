@@ -64,42 +64,69 @@ const ConceptProvider = ({ children }) => {
     dispatch({ type: "SET_FIELD", payload: update })
 
   const saveChanges = save => {
-    setEditing(false)
-
-    if (save && modified) {
-      const config = taxonomy.config
-      const updates = getCurrentUpdates(updatedState)
-
-      validateUpdates(concept, updates, config).then(({ alert }) => {
-        if (!alert) {
-          setValidated(true)
-        } else {
-          dispatch({ type: "INIT_STATE", payload: initialState })
-          setModified(false)
-          setModalAlert(alert)
-        }
-      })
-    } else if (!save) {
-      dispatch({ type: "INIT_STATE", payload: initialState })
-      setModified(false)
+    if (!modified) {
+      setEditing(false)
+      setValidated(false)
+      return
     }
+
+    if (!save) {
+      dispatch({ type: "INIT_STATE", payload: initialState })
+      setEditing(false)
+      setModified(false)
+      setValidated(false)
+      return
+    }
+
+    const config = taxonomy.config
+    const updates = getCurrentUpdates(updatedState)
+
+    validateUpdates(
+      concept,
+      updates,
+      config,
+      setModalAlert,
+      updateConcept
+    ).then(({ alert }) => {
+      if (alert) {
+        setModalAlert(alert)
+      } else {
+        // dispatch({ type: "INIT_STATE", payload: initialState })
+        // setModalAlert(null)
+        // setModified(false)
+        setValidated(true)
+      }
+    })
   }
 
-  const submissionResult = useCallback(
+  const processSubmissionResult = useCallback(
     ({ error, updatedConcept }) => {
       if (!error) {
-        updateTaxonomy(updatedConcept, taxonomy)
+        // setEditing(false)
+        // setModified(false)
+        // setValidated(false)
+
+        updateTaxonomy(updatedConcept)
+
         setInitialState(updatedState)
+        dispatch({ type: "INIT_STATE", payload: updatedState })
       } else {
-        setModalAlert(error)
-        setInitialState(initialState)
-        dispatch({ type: "INIT_STATE", payload: initialState })
+        const modalAlert = {
+          ...error,
+          onClose: () => {
+            setInitialState(initialState)
+            dispatch({ type: "INIT_STATE", payload: initialState })
+
+            setModalAlert(null)
+          },
+        }
+        setModalAlert(modalAlert)
       }
       setEditing(false)
       setModified(false)
       setValidated(false)
     },
-    [initialState, setModalAlert, taxonomy, updateTaxonomy, updatedState]
+    [initialState, setModalAlert, updateTaxonomy, updatedState]
   )
 
   useEffect(() => {
@@ -162,7 +189,7 @@ const ConceptProvider = ({ children }) => {
       const config = taxonomy.config
       const updates = getCurrentUpdates(updatedState)
       submitUpdates(concept, updates, config).then(
-        result => submissionResult(result),
+        result => processSubmissionResult(result),
         error => showBoundary(error)
       )
     }
@@ -170,7 +197,7 @@ const ConceptProvider = ({ children }) => {
     concept,
     getCurrentUpdates,
     showBoundary,
-    submissionResult,
+    processSubmissionResult,
     taxonomy.config,
     updatedState,
     validated,

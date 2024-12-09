@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles"
 
 import ModalBox from "./ModalBox"
 
-const ModalTitledBox = ({ children, onClose, open, modalAlert }) => {
+const ModalTitledBox = ({ children, open, modalAlert }) => {
   const theme = useTheme()
 
   const color =
@@ -12,11 +12,7 @@ const ModalTitledBox = ({ children, onClose, open, modalAlert }) => {
       : theme.palette.primary.main
 
   return (
-    <ModalBox
-      backgroundColor={theme.palette.background.paper}
-      open={open}
-      onClose={onClose}
-    >
+    <ModalBox backgroundColor={theme.palette.background.paper} open={open}>
       <Typography
         id="modal-titled-box"
         variant="h5"

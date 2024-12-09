@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const ModalWarning = ({ modalAlert, onClose }) => {
+const ModalWarning = ({ modalAlert }) => {
   const theme = useTheme()
 
   return (
@@ -21,10 +21,10 @@ const ModalWarning = ({ modalAlert, onClose }) => {
       )}
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button
-          onClick={onClose}
+          onClick={modalAlert.onClose}
           sx={{
             color: theme.palette.primary.main,
-            fontSize: "1.5rem",
+            fontSize: "1.25rem",
             fontWeight: "bold",
           }}
         >

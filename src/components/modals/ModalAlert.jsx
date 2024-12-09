@@ -1,5 +1,6 @@
-import { use, useCallback } from "react"
+import { use } from "react"
 
+import ModalConfirm from "./ModalConfirm"
 import ModalError from "./ModalError"
 import ModalTitledBox from "./ModalTitledBox"
 import ModalWarning from "./ModalWarning"
@@ -7,28 +8,34 @@ import ModalWarning from "./ModalWarning"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 const ModalAlert = () => {
-  const { modalAlert, setModalAlert } = use(ModalContext)
+  const { modalAlert } = use(ModalContext)
 
-  const onClose = useCallback(() => {
-    setModalAlert(null)
-  }, [setModalAlert])
+  // const onClose = useCallback(() => {
+  //   setModalAlert(null)
+  // }, [setModalAlert])
 
   if (!modalAlert) {
     return null
   }
 
+  let ModalComponent
+  switch (modalAlert.type) {
+    case "confirm":
+      ModalComponent = ModalConfirm
+      break
+    case "error":
+      ModalComponent = ModalError
+      break
+    case "warning":
+      ModalComponent = ModalWarning
+      break
+    default:
+      ModalComponent = ModalError
+  }
+
   return (
-    <ModalTitledBox
-      open={!!modalAlert}
-      onClose={onClose}
-      modalAlert={modalAlert}
-    >
-      {modalAlert.type === "error" && (
-        <ModalError modalAlert={modalAlert} onClose={onClose} />
-      )}
-      {modalAlert.type === "warning" && (
-        <ModalWarning modalAlert={modalAlert} onClose={onClose} />
-      )}
+    <ModalTitledBox open={!!modalAlert} modalAlert={modalAlert}>
+      <ModalComponent modalAlert={modalAlert} />
     </ModalTitledBox>
   )
 }

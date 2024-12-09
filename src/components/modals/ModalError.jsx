@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const ModalError = (modalAlert, onClose) => {
+const ModalError = ({ modalAlert }) => {
   const theme = useTheme()
   return (
     <>
@@ -20,10 +20,11 @@ const ModalError = (modalAlert, onClose) => {
       )}
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button
-          onClick={onClose}
+          onClick={modalAlert.onClose}
           sx={{
-            fontWeight: "bold",
             color: theme.palette.error.main,
+            fontSize: "1.25rem",
+            fontWeight: "bold",
           }}
         >
           Close

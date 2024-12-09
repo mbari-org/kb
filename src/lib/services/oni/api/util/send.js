@@ -14,15 +14,6 @@ const oniSend = async (url, params) => {
   }
 }
 
-const errorResponse = (url, title, message) => ({
-  error: {
-    detail: url,
-    type: "error",
-    message,
-    title,
-  },
-})
-
 const errorTitle = status => {
   switch (status) {
     case 400:
@@ -39,5 +30,14 @@ const errorTitle = status => {
       return "Unknown Error"
   }
 }
+
+const errorResponse = (url, title, message) => ({
+  error: {
+    detail: url,
+    type: "error",
+    message,
+    title,
+  },
+})
 
 export { oniSend }

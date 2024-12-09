@@ -7,7 +7,14 @@ const ModalProvider = ({ children }) => {
   const [modalAlert, setModalAlert] = useState(null)
 
   return (
-    <ModalContext value={{ loading, modalAlert, setLoading, setModalAlert }}>
+    <ModalContext
+      value={{
+        loading,
+        modalAlert,
+        setLoading,
+        setModalAlert,
+      }}
+    >
       {children}
     </ModalContext>
   )
