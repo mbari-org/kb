@@ -27,7 +27,7 @@ const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { setModalAlert } = use(ModalContext)
-  const { selected } = use(SelectedContext)
+  const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const { getConcept, loadConcept, taxonomy, updateTaxonomy } =
     use(TaxonomyContext)
 
@@ -103,16 +103,46 @@ const ConceptProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (selected && selected.concept !== concept?.name) {
-      loadConcept(selected.concept).then(
-        () => {
-          const concept = getConcept(selected.concept)
-          setConcept(concept)
-        },
-        error => showBoundary(error)
-      )
+    if (!selected) {
+      return
     }
-  }, [concept, getConcept, loadConcept, selected, showBoundary])
+
+    if (editing && modified) {
+      if (selected.concept === concept?.name && selected.panel === "Concepts") {
+        return
+      }
+      selectConcept(concept?.name)
+      selectPanel("Concepts")
+
+      setModalAlert({
+        message:
+          "You have unsaved Concept changes. Please Cancel or Save to continue.",
+        title: "Unsaved Changes",
+        type: "warning",
+      })
+    } else {
+      if (selected.concept !== concept?.name) {
+        loadConcept(selected.concept).then(
+          () => {
+            const concept = getConcept(selected.concept)
+            setConcept(concept)
+          },
+          error => showBoundary(error)
+        )
+      }
+    }
+  }, [
+    concept,
+    editing,
+    getConcept,
+    loadConcept,
+    modified,
+    selectConcept,
+    selectPanel,
+    selected,
+    setModalAlert,
+    showBoundary,
+  ])
 
   useEffect(() => {
     const hasUpdates = !isEmpty(getCurrentUpdates(updatedState))

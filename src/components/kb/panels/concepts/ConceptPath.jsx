@@ -19,6 +19,8 @@ const ConceptPath = () => {
           minWidth: "auto",
           textTransform: "none",
         },
+        height: theme => `${theme.typography.fontSize * 3}px`,
+        display: "flex",
       }}
     >
       {conceptPath.map((path, index) => (

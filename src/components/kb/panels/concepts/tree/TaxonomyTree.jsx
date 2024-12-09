@@ -1,4 +1,4 @@
-import { use, useState } from "react"
+import { use, useCallback, useState } from "react"
 
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
 import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
@@ -11,17 +11,14 @@ import useArrowKeys from "./lib/useArrowKeys"
 import useConceptAutoExpand from "./lib/useConceptAutoExpand"
 import useConceptClick from "./lib/useConceptClick"
 import useExpandConcept from "./lib/useExpandConcept"
-import useSelectConcept from "./lib/useSelectConcept"
 import useTaxonomyTreeReposition from "./lib/useTaxonomyTreeReposition"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import ModalContext from "@/contexts/modal/ModalContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
-  const { concept, editing, modified, setEditing } = use(ConceptContext)
-  const { setModalAlert } = use(ModalContext)
+  const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
   const { taxonomy } = use(TaxonomyContext)
 
@@ -29,13 +26,12 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   const apiRef = useTreeViewApiRef()
 
-  const selectConcept = useSelectConcept(
-    editing,
-    modified,
-    setModalAlert,
-    setEditing,
-    updateSelectedConcept,
-    setAutoExpand
+  const selectConcept = useCallback(
+    conceptName => {
+      updateSelectedConcept(conceptName)
+      setAutoExpand({ expand: true, name: conceptName })
+    },
+    [setAutoExpand, updateSelectedConcept]
   )
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems)
