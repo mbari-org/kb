@@ -63,17 +63,20 @@ const ConceptProvider = ({ children }) => {
   const updateConcept = update =>
     dispatch({ type: "SET_FIELD", payload: update })
 
+  const cancelChanges = () => {
+    dispatch({ type: "INIT_STATE", payload: initialState })
+    setEditing(false)
+    setModified(false)
+    setValidated(false)
+  }
+
   const saveChanges = save => {
-    if (!modified) {
-      setEditing(false)
-      setValidated(false)
-      return
+    if (!save) {
+      return cancelChanges()
     }
 
-    if (!save) {
-      dispatch({ type: "INIT_STATE", payload: initialState })
+    if (!modified) {
       setEditing(false)
-      setModified(false)
       setValidated(false)
       return
     }
@@ -81,13 +84,14 @@ const ConceptProvider = ({ children }) => {
     const config = taxonomy.config
     const updates = getCurrentUpdates(updatedState)
 
-    validateUpdates(
+    validateUpdates({
+      cancelChanges,
       concept,
-      updates,
       config,
       setModalAlert,
-      updateConcept
-    ).then(({ alert }) => {
+      updateConcept,
+      updates,
+    }).then(({ alert }) => {
       if (alert) {
         setModalAlert(alert)
       } else {
@@ -140,13 +144,15 @@ const ConceptProvider = ({ children }) => {
       }
       selectConcept(concept?.name)
       selectPanel("Concepts")
-
-      setModalAlert({
+      const modalAlert = {
+        onClose: () => setModalAlert(null),
         message:
           "You have unsaved Concept changes. Please Cancel or Save to continue.",
         title: "Unsaved Changes",
         type: "warning",
-      })
+      }
+
+      setModalAlert(modalAlert)
     } else {
       if (selected.concept !== concept?.name) {
         loadConcept(selected.concept).then(

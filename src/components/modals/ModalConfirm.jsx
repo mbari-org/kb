@@ -23,7 +23,9 @@ const ModalConfirm = ({ modalAlert }) => {
         {modalAlert.choices.map((choice, index) => (
           <Button
             key={index}
-            onClick={modalAlert.onChoice.bind(null, choice)}
+            onClick={() => {
+              modalAlert.onChoice(choice)
+            }}
             sx={{
               flex: 1,
               color: theme.palette.primary.main,

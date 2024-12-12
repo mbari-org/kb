@@ -4,7 +4,7 @@ import { MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import {
-  REMOVAL_VALUE,
+  REMOVE_RANK_NAME_VALUE,
   rankLevelNameValue,
 } from "@/contexts/concept/lib/validateUpdates"
 
@@ -39,8 +39,8 @@ const ConceptLevel = ({ infoStyle }) => {
           </MenuItem>
         ))}
         {rankLevel !== "" && (
-          <MenuItem key={REMOVAL_VALUE} value={REMOVAL_VALUE}>
-            {REMOVAL_VALUE}
+          <MenuItem key={REMOVE_RANK_NAME_VALUE} value={REMOVE_RANK_NAME_VALUE}>
+            {REMOVE_RANK_NAME_VALUE}
           </MenuItem>
         )}
       </Select>

@@ -10,10 +10,6 @@ import ModalContext from "@/contexts/modal/ModalContext"
 const ModalAlert = () => {
   const { modalAlert } = use(ModalContext)
 
-  // const onClose = useCallback(() => {
-  //   setModalAlert(null)
-  // }, [setModalAlert])
-
   if (!modalAlert) {
     return null
   }
