@@ -34,9 +34,9 @@ const errorTitle = status => {
 const errorResponse = (url, title, message) => ({
   error: {
     detail: url,
-    type: "error",
     message,
     title,
+    type: "error",
   },
 })
 

@@ -1,7 +1,13 @@
+import {
+  createAlertChoices,
+  createAlertConceptNameMessage,
+  createAlertTextMessage,
+  createAlertTitle,
+} from "@/components/modals/alert/components"
+
 import { fetchLinkTemplates } from "@/lib/services/oni/api/linkTemplates"
 
 import { isAdmin } from "@/lib/services/oni/auth/validate"
-import { prune } from "@/lib/util"
 
 const REMOVE_RANK_NAME_VALUE = "REMOVE"
 
@@ -24,32 +30,37 @@ const validateRankLevelUpdates = ({
   updates,
   updateConcept,
 }) => {
-  if (
-    (updates.rankLevel === REMOVE_RANK_NAME_VALUE ||
-      updates.rankName === REMOVE_RANK_NAME_VALUE) &&
-    !isAdmin()
-  ) {
-    const onClose = () => {
-      if (updates.rankLevel === REMOVE_RANK_NAME_VALUE) {
+  const removeLevel = updates.rankLevel === REMOVE_RANK_NAME_VALUE
+  const removeName = updates.rankName === REMOVE_RANK_NAME_VALUE
+  if ((removeLevel || removeName) && isAdmin()) {
+    const choices = ["OK"]
+    const onChoice = _choice => {
+      if (removeLevel) {
         updateConcept({ rankLevel: concept.rankLevel })
       }
-      if (updates.rankName === REMOVE_RANK_NAME_VALUE) {
+      if (removeName) {
         updateConcept({ rankName: concept.rankName })
       }
       setModalAlert(null)
     }
 
-    const lnUpdates = prune({
-      rankLevel: rankLevelNameValue(updates.rankLevel),
-      rankName: rankLevelNameValue(updates.rankName),
-    })
+    let text
+    if (removeLevel && removeName) {
+      text = "Removing rank level and name requires admin role"
+    } else if (removeLevel) {
+      text = "Removing rank level requires admin role"
+    } else {
+      text = "Removing rank name requires admin role"
+    }
+
     return {
       alert: {
-        detail: JSON.stringify(lnUpdates),
-        message: "Removing rank level and/or name requires admin role",
-        onClose,
-        title: "Update Error",
-        type: "warning",
+        Title: createAlertTitle({
+          title: "Update Rank/Level Error",
+          type: "warning",
+        }),
+        Message: createAlertTextMessage({ text }),
+        Choices: createAlertChoices({ choices, onChoice }),
       },
     }
   }
@@ -57,11 +68,11 @@ const validateRankLevelUpdates = ({
 }
 
 const validateNameUpdate = async ({
-  cancelChanges,
   concept,
   config,
   setModalAlert,
   updates,
+  updateConcept,
 }) => {
   if (!updates.name) return { alert: null }
 
@@ -73,35 +84,37 @@ const validateNameUpdate = async ({
   const nLinkRealizations = concept.linkRealizations.length
   const nLinkTemplates = linkTemplates.length
 
-  const detail = JSON.stringify({
-    linkRealizations: nLinkRealizations,
-    linkTemplates: nLinkTemplates,
-  })
+  const choices = ["Cancel", "Name Only", "All Data"]
+  const onChoice = choice => {
+    switch (choice) {
+      case "Cancel":
+        updateConcept({ name: concept.name })
+        // cancelChanges()
+        break
+      case "Name Only":
+        console.log("Handle Name Only")
+        break
+      case "All Data":
+        console.log("Handle All data")
+        break
+      default:
+        break
+    }
+
+    setModalAlert(null)
+  }
 
   return {
     alert: {
-      choices: ["Cancel", "Name Only", "All Data"],
-      detail,
-      message: `Are you sure you want to update concept name '${concept.name}' to '${updates.name}'?`,
-      onChoice: choice => {
-        switch (choice) {
-          case "Cancel":
-            cancelChanges()
-            break
-          case "Name Only":
-            console.log("Handle Name Only")
-            break
-          case "All Data":
-            console.log("Handle All data")
-            break
-          default:
-            break
-        }
-
-        setModalAlert(null)
-      },
-      title: "Confirm Concept Name Change",
-      type: "confirm",
+      Title: createAlertTitle({
+        title: "Update Concept Name",
+        type: "confirm",
+      }),
+      Message: createAlertConceptNameMessage({
+        from: concept.name,
+        to: updates.name,
+      }),
+      Choices: createAlertChoices({ choices, onChoice }),
     },
   }
 }

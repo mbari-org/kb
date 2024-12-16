@@ -1,38 +1,30 @@
-import { use } from "react"
+import { Box, Modal } from "@mui/material"
 
-import ModalConfirm from "./ModalConfirm"
-import ModalError from "./ModalError"
-import ModalTitledBox from "./ModalTitledBox"
-import ModalWarning from "./ModalWarning"
-
-import ModalContext from "@/contexts/modal/ModalContext"
-
-const ModalAlert = () => {
-  const { modalAlert } = use(ModalContext)
-
-  if (!modalAlert) {
-    return null
-  }
-
-  let ModalComponent
-  switch (modalAlert.type) {
-    case "confirm":
-      ModalComponent = ModalConfirm
-      break
-    case "error":
-      ModalComponent = ModalError
-      break
-    case "warning":
-      ModalComponent = ModalWarning
-      break
-    default:
-      ModalComponent = ModalError
-  }
-
+const ModalAlert = ({ modalAlert }) => {
   return (
-    <ModalTitledBox open={!!modalAlert} modalAlert={modalAlert}>
-      <ModalComponent modalAlert={modalAlert} />
-    </ModalTitledBox>
+    <Modal
+      aria-labelledby="modal-alert"
+      aria-describedby="modal-alert-description"
+      open
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: "33%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "50%",
+          bgcolor: "background.paper",
+          border: "2px solid #000",
+          boxShadow: 24,
+          p: 4,
+        }}
+      >
+        <modalAlert.Title />
+        <modalAlert.Message />
+        <modalAlert.Choices />
+      </Box>
+    </Modal>
   )
 }
 
