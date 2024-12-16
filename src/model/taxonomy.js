@@ -150,7 +150,7 @@ const load = async (taxonomy, conceptName, updatable = false) => {
 const loadConcept = async (updatableTaxonomy, conceptName) => {
   if (!updatableTaxonomy.concepts[conceptName]) {
     const concept = await apiCall(() =>
-      fetchConcept(conceptName, updatableTaxonomy.config)
+      fetchConcept(updatableTaxonomy.config, conceptName)
     )
 
     updatableTaxonomy.concepts[conceptName] = concept
@@ -165,7 +165,7 @@ const loadChildren = async (updatableTaxonomy, updatableConcept) => {
   }
 
   const apiChildren = await apiCall(() =>
-    fetchChildren(updatableConcept.name, updatableTaxonomy.config)
+    fetchChildren(updatableTaxonomy.config, updatableConcept.name)
   )
 
   const children = apiChildren.map(apiChild => {
@@ -213,7 +213,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   }
 
   const parent = await apiCall(() =>
-    fetchParent(updatableConcept.name, updatableTaxonomy.config)
+    fetchParent(updatableTaxonomy.configupdatableConcept.name)
   )
 
   if (updatableTaxonomy.concepts[parent.name]) {

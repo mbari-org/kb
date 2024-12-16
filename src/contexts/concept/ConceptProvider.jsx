@@ -200,7 +200,9 @@ const ConceptProvider = ({ children }) => {
       const config = taxonomy.config
       const updates = getCurrentUpdates(updatedState)
       submitUpdates({ concept, config, updates, validation }).then(
-        result => processResult(result),
+        result => {
+          processResult(result)
+        },
         error => showBoundary(error)
       )
     }

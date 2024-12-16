@@ -1,19 +1,22 @@
 import { oniGet } from "./util/get"
 import { oniPut } from "./util/put"
 
-const fetchChildren = async (conceptName, config) =>
+const fetchChildren = async (config, conceptName) =>
   oniGet(config, ["concept", "children", conceptName])
 
-const fetchConcept = async (conceptName, config) =>
+const fetchConcept = async (config, conceptName) =>
   oniGet(config, ["concept", conceptName])
 
-const fetchParent = async (conceptName, config) =>
+const fetchParent = async (config, conceptName) =>
   oniGet(config, ["concept", "parent", conceptName])
 
-const updateConceptAuthor = async (conceptName, updates, config) =>
+const updateConceptAuthor = async (config, conceptName, updates) =>
   oniPut(config, ["names", conceptName], updates)
 
-const updateConceptRank = async (conceptName, updates, config) =>
+const updateConceptName = async (config, conceptName, updates) =>
+  oniPut(config, ["names", conceptName], updates)
+
+const updateConceptRank = async (config, conceptName, updates) =>
   oniPut(config, ["concept", conceptName], updates)
 
 export {
@@ -21,5 +24,6 @@ export {
   fetchConcept,
   fetchParent,
   updateConceptAuthor,
+  updateConceptName,
   updateConceptRank,
 }

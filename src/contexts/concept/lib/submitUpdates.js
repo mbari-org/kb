@@ -12,31 +12,35 @@ const submitUpdates = async params => {
 
   let result = { error: null, concept: { ...concept } }
 
-  if (validation.author === true) {
-    result = await nextResult(result, updateAuthor, { author })
+  if (author && validation.author === true) {
+    result = await nextResult(result, { author }, updateAuthor)
   }
 
-  if (validation.name === "solo" || validation.name === "all") {
-    result = await nextResult(result, updateName, { name })
+  if (name && validation.name === "solo") {
+    result = await nextResult(result, { name }, updateName)
   }
 
-  if (validation.media === true) {
-    result = await nextResult(result, updateMedia, { media })
+  if (name && validation.name === "all") {
+    result = await nextResult(result, { name }, updateName)
   }
 
-  if (validation.rankLevel === true) {
-    result = await nextResult(result, updateRank, { rankLevel })
+  if (media && validation.media === true) {
+    result = await nextResult(result, { media }, updateMedia)
   }
 
-  if (validation.rankName === true) {
-    result = await nextResult(result, updateRank, { rankName })
+  if (rankLevel && validation.rankLevel === true) {
+    result = await nextResult(result, { rankLevel }, updateRank)
+  }
+
+  if (rankName && validation.rankName === true) {
+    result = await nextResult(result, { rankName }, updateRank)
   }
 
   return result
 }
 
 const updateSubmitter =
-  (concept, config) => async (result, updateFn, conceptUpdates) => {
+  (concept, config) => async (result, conceptUpdates, updateFn) => {
     if (result.error)
       return {
         error: result.error,
@@ -48,7 +52,7 @@ const updateSubmitter =
       return { concept }
     }
 
-    const { error, _payload } = await updateFn(concept.name, updates, config)
+    const { error, _payload } = await updateFn(config, concept.name, updates)
     const updatedConcept = { ...concept, ...updates }
 
     return { error, updatedConcept }

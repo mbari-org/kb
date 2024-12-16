@@ -1,31 +1,23 @@
 import {
   updateConceptAuthor,
+  updateConceptName,
   updateConceptRank,
 } from "@/lib/services/oni/api/concept"
-import { fetchLinkTemplates } from "@/lib/services/oni/api/linkTemplates"
 
 const updateAuthor = updateConceptAuthor
+
 const updateRank = updateConceptRank
 
-const updateMedia = async (concept, media, _config) => {
-  console.log(`Updating media for concept ${concept.name} with:`, media)
-  return { concept }
+const updateMedia = async (_config, conceptName, media) => {
+  console.log(`Updating media for concept ${conceptName} with:`, media)
+  return null
+  // return { concept }
 }
 
-const updateName = async (concept, name, config) => {
-  const { error: linkTemplatesError, payload: linkTemplates } =
-    await fetchLinkTemplates(concept.name, config)
+const updateName = async (config, conceptName, updates) => {
+  console.log(`Updating name for concept ${conceptName} with:`, updates.name)
 
-  if (linkTemplatesError) {
-    return { error: linkTemplatesError }
-  }
-
-  if (0 < concept.linkRealizations.length || 0 < linkTemplates.length) {
-    console.log(`Concept ${concept.name} has realizations or templates`)
-  }
-
-  console.log(`Updating name for concept ${concept.name} with:`, name)
-  return { concept }
+  return updateConceptName(config, conceptName, { newName: updates.name })
 }
 
 export { updateAuthor, updateMedia, updateName, updateRank }
