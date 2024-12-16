@@ -6,7 +6,7 @@ import Button from "@mui/material/Button"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptActionButtons = () => {
-  const { editing, modified, saveChanges, setEditing } = use(ConceptContext)
+  const { editing, modified, processUpdates, setEditing } = use(ConceptContext)
 
   return (
     <Box
@@ -21,14 +21,14 @@ const ConceptActionButtons = () => {
     >
       <Button
         color={editing ? "cancel" : "main"}
-        onClick={() => (editing ? saveChanges(false) : setEditing(true))}
+        onClick={() => (editing ? processUpdates(false) : setEditing(true))}
         variant="contained"
       >
         {editing ? "Cancel" : "Edit"}
       </Button>
       <Button
         disabled={!editing || !modified}
-        onClick={() => saveChanges(true)}
+        onClick={() => processUpdates(true)}
         variant="contained"
       >
         Save

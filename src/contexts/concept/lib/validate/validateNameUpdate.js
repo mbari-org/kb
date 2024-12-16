@@ -13,7 +13,13 @@ const validateNameUpdate = async ({
   updates,
   updateConcept,
 }) => {
-  if (!updates.name) return { alert: null }
+  let validation = {
+    name: "noop",
+  }
+
+  if (!updates.name) {
+    return validation
+  }
 
   const { payload: linkTemplates } = await fetchLinkTemplates(
     concept.name,
@@ -23,37 +29,43 @@ const validateNameUpdate = async ({
   const nLinkRealizations = concept.linkRealizations.length
   const nLinkTemplates = linkTemplates.length
 
+  let resolvePromise
+  const promise = new Promise(resolve => {
+    resolvePromise = resolve
+  })
+
   const choices = ["Cancel", "Name Only", "All Data"]
   const onChoice = async choice => {
     switch (choice) {
       case "Cancel":
-        updateConcept({ name: concept.name })
+        validation = { name: "cancel" }
         break
       case "Name Only":
+        validation = { name: "solo" }
         break
       case "All Data":
-        console.log("Handle All data")
+        validation = { name: "all" }
         break
       default:
         break
     }
-
     setModalAlert(null)
+    resolvePromise(validation)
   }
 
-  return {
-    alert: {
-      Title: createAlertTitle({
-        title: "Update Concept Name",
-        type: "confirm",
-      }),
-      Message: createAlertConceptNameMessage({
-        from: concept.name,
-        to: updates.name,
-      }),
-      Choices: createAlertChoices({ choices, onChoice }),
-    },
-  }
+  setModalAlert({
+    Title: createAlertTitle({
+      title: "Update Concept Name",
+      type: "confirm",
+    }),
+    Message: createAlertConceptNameMessage({
+      from: concept.name,
+      to: updates.name,
+    }),
+    Choices: createAlertChoices({ choices, onChoice }),
+  })
+
+  return promise
 }
 
 export default validateNameUpdate

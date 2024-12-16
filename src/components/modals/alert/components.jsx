@@ -15,6 +15,12 @@ const createAlertConceptNameMessage = ({ from, to }) => {
   return component
 }
 
+const createAlertErrorMessage = ({ error }) => {
+  const component = () => <AlertTextMessage text={error.message} type="error" />
+  component.displayName = "AlertErrorMessage"
+  return component
+}
+
 const createAlertTextMessage = ({ text, type }) => {
   const component = () => <AlertTextMessage text={text} type={type} />
   component.displayName = "AlertTextMessage"
@@ -30,6 +36,7 @@ const createAlertTitle = ({ title, type }) => {
 export {
   createAlertChoices,
   createAlertConceptNameMessage,
+  createAlertErrorMessage,
   createAlertTextMessage,
   createAlertTitle,
 }

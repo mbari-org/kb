@@ -1,11 +1,11 @@
 import {
   updateConceptAuthor,
-  updateConceptRankLevel,
+  updateConceptRank,
 } from "@/lib/services/oni/api/concept"
 import { fetchLinkTemplates } from "@/lib/services/oni/api/linkTemplates"
 
 const updateAuthor = updateConceptAuthor
-const updateRankLevel = updateConceptRankLevel
+const updateRank = updateConceptRank
 
 const updateMedia = async (concept, media, _config) => {
   console.log(`Updating media for concept ${concept.name} with:`, media)
@@ -28,4 +28,4 @@ const updateName = async (concept, name, config) => {
   return { concept }
 }
 
-export { updateAuthor, updateMedia, updateName, updateRankLevel }
+export { updateAuthor, updateMedia, updateName, updateRank }

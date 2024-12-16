@@ -21,6 +21,12 @@ import { stateForConcept } from "./lib/stateForConcept"
 import { submitUpdates } from "./lib/submitUpdates"
 import { validateUpdates } from "./lib/validate/validateUpdates"
 
+import {
+  createAlertChoices,
+  createAlertErrorMessage,
+  createAlertTitle,
+} from "@/components/modals/alert/components"
+
 import { isEmpty } from "@/lib/util"
 
 const ConceptProvider = ({ children }) => {
@@ -35,7 +41,7 @@ const ConceptProvider = ({ children }) => {
 
   const [editing, setEditing] = useState(false)
   const [modified, setModified] = useState(false)
-  const [validated, setValidated] = useState(false)
+  const [validation, setValidation] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
   const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
@@ -63,21 +69,22 @@ const ConceptProvider = ({ children }) => {
   const updateConcept = update =>
     dispatch({ type: "SET_FIELD", payload: update })
 
-  const cancelChanges = () => {
+  const cancelUpdates = () => {
     dispatch({ type: "INIT_STATE", payload: initialState })
     setEditing(false)
     setModified(false)
-    setValidated(false)
+    setValidation(null)
   }
 
-  const saveChanges = save => {
+  const processUpdates = save => {
     if (!save) {
-      return cancelChanges()
+      cancelUpdates()
+      return
     }
 
     if (!modified) {
       setEditing(false)
-      setValidated(false)
+      setValidation(null)
       return
     }
 
@@ -85,50 +92,48 @@ const ConceptProvider = ({ children }) => {
     const updates = getCurrentUpdates(updatedState)
 
     validateUpdates({
-      cancelChanges,
       concept,
       config,
       setModalAlert,
       updateConcept,
       updates,
-    }).then(({ alert }) => {
-      if (alert) {
-        setModalAlert(alert)
-      } else {
-        // dispatch({ type: "INIT_STATE", payload: initialState })
-        // setModalAlert(null)
-        // setModified(false)
-        setValidated(true)
-      }
+    }).then(updatesValidation => {
+      setValidation(updatesValidation)
     })
   }
 
-  const processSubmissionResult = useCallback(
+  const processResult = useCallback(
     ({ error, updatedConcept }) => {
       if (!error) {
-        // setEditing(false)
-        // setModified(false)
-        // setValidated(false)
+        setEditing(false)
+        setModified(false)
+        setValidation(null)
+        setInitialState(updatedState)
 
         updateTaxonomy(updatedConcept)
 
-        setInitialState(updatedState)
         dispatch({ type: "INIT_STATE", payload: updatedState })
       } else {
-        const modalAlert = {
-          ...error,
-          onClose: () => {
-            setInitialState(initialState)
-            dispatch({ type: "INIT_STATE", payload: initialState })
-
-            setModalAlert(null)
-          },
-        }
-        setModalAlert(modalAlert)
+        setModalAlert({
+          Title: createAlertTitle({
+            title: "Update Error",
+            type: "error",
+          }),
+          Message: createAlertErrorMessage({ error }),
+          Choices: createAlertChoices({
+            choices: ["Continue"],
+            onChoice: () => {
+              setInitialState(initialState)
+              dispatch({ type: "INIT_STATE", payload: initialState })
+              setModalAlert(null)
+            },
+          }),
+        })
       }
+
       setEditing(false)
       setModified(false)
-      setValidated(false)
+      setValidation(null)
     },
     [initialState, setModalAlert, updateTaxonomy, updatedState]
   )
@@ -191,11 +196,11 @@ const ConceptProvider = ({ children }) => {
   }, [concept])
 
   useEffect(() => {
-    if (validated) {
+    if (validation) {
       const config = taxonomy.config
       const updates = getCurrentUpdates(updatedState)
-      submitUpdates(concept, updates, config).then(
-        result => processSubmissionResult(result),
+      submitUpdates({ concept, config, updates, validation }).then(
+        result => processResult(result),
         error => showBoundary(error)
       )
     }
@@ -203,10 +208,10 @@ const ConceptProvider = ({ children }) => {
     concept,
     getCurrentUpdates,
     showBoundary,
-    processSubmissionResult,
+    processResult,
     taxonomy.config,
     updatedState,
-    validated,
+    validation,
   ])
 
   return (
@@ -217,7 +222,7 @@ const ConceptProvider = ({ children }) => {
         conceptState: updatedState,
         editing,
         modified,
-        saveChanges,
+        processUpdates,
         setEditing,
         updateConcept,
       }}

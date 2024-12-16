@@ -1,27 +1,36 @@
 import { isEmpty, prune } from "@/lib/util"
 
-import {
-  updateAuthor,
-  updateMedia,
-  updateName,
-  updateRankLevel,
-} from "./update"
+import { updateAuthor, updateMedia, updateName, updateRank } from "./update"
 
 // Updates are transactional, wtih the original concept is returned if any error occurs.
-const submitUpdates = async (concept, updates, config) => {
-  const { author, rankLevel, name, media, rankName } = updates
+const submitUpdates = async params => {
+  const { concept, config, updates, validation } = params
+
+  const { author, name, media, rankLevel, rankName } = updates
 
   const nextResult = updateSubmitter(concept, config)
 
   let result = { error: null, concept: { ...concept } }
 
-  result = await nextResult(result, updateAuthor, { author })
-  result = await nextResult(result, updateName, { name })
-  result = await nextResult(result, updateMedia, { media })
-  result = await nextResult(result, updateRankLevel, {
-    rankLevel,
-    rankName,
-  })
+  if (validation.author === true) {
+    result = await nextResult(result, updateAuthor, { author })
+  }
+
+  if (validation.name === "solo" || validation.name === "all") {
+    result = await nextResult(result, updateName, { name })
+  }
+
+  if (validation.media === true) {
+    result = await nextResult(result, updateMedia, { media })
+  }
+
+  if (validation.rankLevel === true) {
+    result = await nextResult(result, updateRank, { rankLevel })
+  }
+
+  if (validation.rankName === true) {
+    result = await nextResult(result, updateRank, { rankName })
+  }
 
   return result
 }
