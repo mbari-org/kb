@@ -6,7 +6,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import {
   REMOVE_RANK_NAME_VALUE,
   rankLevelNameValue,
-} from "@/contexts/concept/lib/validateUpdates"
+} from "@/contexts/concept/lib/validate/validateUpdates"
 
 const rankNames = [
   "domain",

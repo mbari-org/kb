@@ -19,7 +19,7 @@ import conceptStateReducer from "./lib/conceptStateReducer"
 import { filterUpdates } from "./lib/filterUpdates"
 import { stateForConcept } from "./lib/stateForConcept"
 import { submitUpdates } from "./lib/submitUpdates"
-import { validateUpdates } from "./lib/validateUpdates"
+import { validateUpdates } from "./lib/validate/validateUpdates"
 
 import { isEmpty } from "@/lib/util"
 
