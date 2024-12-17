@@ -24,9 +24,8 @@ import { validateUpdates } from "./lib/validate/validateUpdates"
 import {
   createAlertChoices,
   createAlertErrorMessage,
-  createAlertTextMessage,
   createAlertTitle,
-  createConceptEditingModalAlert,
+  createAlertUnsavedEditsMessage,
 } from "@/components/modals/alert/components"
 
 import { isEmpty } from "@/lib/util"
@@ -158,9 +157,42 @@ const ConceptProvider = ({ children }) => {
     [cancelUpdates, concept, selectConcept, selectPanel, setModalAlert]
   )
 
-  const conceptEditingModalAlert = createConceptEditingModalAlert({
-    onChoice: editingAlertChoice,
-  })
+  const createUnsavedEditsModalAlert = ({ onChoice, updates }) => {
+    return {
+      Title: createAlertTitle({
+        title: "Current Edits",
+        type: "warning",
+      }),
+      Message: createAlertUnsavedEditsMessage({ updates }),
+      Choices: createAlertChoices({
+        choices: ["Discard Edits", "Continue Editing"],
+        onChoice,
+      }),
+    }
+  }
+
+  const displayConceptEditsAlert = useCallback(() => {
+    const onChoice = choice => {
+      switch (choice) {
+        case "Discard Edits":
+          cancelUpdates()
+          break
+        case "Continue Editing":
+          setEditing(true)
+          break
+        default:
+          break
+      }
+      setModalAlert(null)
+    }
+
+    const updates = getCurrentUpdates(updatedState)
+    const conceptEditingModalAlert = createUnsavedEditsModalAlert({
+      onChoice,
+      updates,
+    })
+    setModalAlert(conceptEditingModalAlert)
+  }, [getCurrentUpdates, updatedState, setModalAlert, cancelUpdates])
 
   useEffect(() => {
     if (!selected) {
@@ -175,7 +207,7 @@ const ConceptProvider = ({ children }) => {
         setEditing(false)
       } else {
         if (!modalAlert) {
-          setModalAlert(conceptEditingModalAlert)
+          displayConceptEditsAlert()
         }
       }
       return
@@ -193,9 +225,11 @@ const ConceptProvider = ({ children }) => {
     // }
   }, [
     concept,
-    conceptEditingModalAlert,
+    displayConceptEditsAlert,
     editing,
+    editingAlertChoice,
     getConcept,
+    getCurrentUpdates,
     loadConcept,
     modalAlert,
     modified,
@@ -204,6 +238,7 @@ const ConceptProvider = ({ children }) => {
     selected,
     setModalAlert,
     showBoundary,
+    updatedState,
   ])
 
   useEffect(() => {
@@ -246,6 +281,7 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         conceptState: updatedState,
+        displayConceptEditsAlert,
         editing,
         modified,
         processUpdates,

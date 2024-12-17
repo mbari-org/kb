@@ -6,7 +6,13 @@ import Button from "@mui/material/Button"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptActionButtons = () => {
-  const { editing, modified, processUpdates, setEditing } = use(ConceptContext)
+  const {
+    displayConceptEditsAlert,
+    editing,
+    modified,
+    processUpdates,
+    setEditing,
+  } = use(ConceptContext)
 
   return (
     <Box
@@ -17,6 +23,7 @@ const ConceptActionButtons = () => {
         right: 20,
         display: "flex",
         justifyContent: "space-between",
+        alignItems: "center",
       }}
     >
       <Button
@@ -26,6 +33,15 @@ const ConceptActionButtons = () => {
       >
         {editing ? "Cancel" : "Edit"}
       </Button>
+      {editing && modified && (
+        <Button
+          onClick={displayConceptEditsAlert}
+          variant="contained"
+          sx={{ margin: "0 10px" }}
+        >
+          Show
+        </Button>
+      )}
       <Button
         disabled={!editing || !modified}
         onClick={() => processUpdates(true)}

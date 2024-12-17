@@ -11,9 +11,9 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { concept, itemId, taxonomy } = props
   const isSelected = itemId === concept.name
 
-  const pendingHistory =
-    taxonomy.pendingHistory.find(history => itemId === history.concept) ||
-    itemId === "data file"
+  const pendingHistory = taxonomy.pendingHistory.find(
+    history => itemId === history.concept
+  )
   const hasPendingHistory = pendingHistory ? true : false
 
   const itemConcept = taxonomy.concepts[itemId]

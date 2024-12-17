@@ -1,8 +1,8 @@
 import AlertChoices from "./AlertChoices"
 import AlertConceptNameMessage from "./AlertConceptNameMessage"
-import ConceptModificationsAlert from "./ConceptModificationsAlert"
 import AlertTextMessage from "./AlertTextMessage"
 import AlertTitle from "./AlertTitle"
+import AlertUnsavedEditsMessage from "./AlertUnsavedEditsMessage"
 
 const createAlertChoices = ({ choices, onChoice }) => {
   const component = () => <AlertChoices choices={choices} onChoice={onChoice} />
@@ -34,20 +34,10 @@ const createAlertTitle = ({ title, type }) => {
   return component
 }
 
-const createConceptEditingModalAlert = ({ onChoice }) => {
-  return {
-    Title: createAlertTitle({
-      title: "Update Rank/Level Error",
-      type: "warning",
-    }),
-    Message: createAlertTextMessage({
-      text: "You have unsaved Concept changes.",
-    }),
-    Choices: createAlertChoices({
-      choices: ["Discard Edits", "Continue Editing"],
-      onChoice,
-    }),
-  }
+const createAlertUnsavedEditsMessage = ({ updates }) => {
+  const component = () => <AlertUnsavedEditsMessage updates={updates} />
+  component.displayName = "AlertUnsavedEditsMessage"
+  return component
 }
 
 export {
@@ -56,5 +46,5 @@ export {
   createAlertErrorMessage,
   createAlertTextMessage,
   createAlertTitle,
-  createConceptEditingModalAlert,
+  createAlertUnsavedEditsMessage,
 }
