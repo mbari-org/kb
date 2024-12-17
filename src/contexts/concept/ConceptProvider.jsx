@@ -24,7 +24,9 @@ import { validateUpdates } from "./lib/validate/validateUpdates"
 import {
   createAlertChoices,
   createAlertErrorMessage,
+  createAlertTextMessage,
   createAlertTitle,
+  createConceptEditingModalAlert,
 } from "@/components/modals/alert/components"
 
 import { isEmpty } from "@/lib/util"
@@ -32,7 +34,7 @@ import { isEmpty } from "@/lib/util"
 const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
-  const { setModalAlert } = use(ModalContext)
+  const { modalAlert, setModalAlert } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const { getConcept, loadConcept, taxonomy, updateTaxonomy } =
     use(TaxonomyContext)
@@ -69,12 +71,12 @@ const ConceptProvider = ({ children }) => {
   const updateConcept = update =>
     dispatch({ type: "SET_FIELD", payload: update })
 
-  const cancelUpdates = () => {
+  const cancelUpdates = useCallback(() => {
     dispatch({ type: "INIT_STATE", payload: initialState })
     setEditing(false)
     setModified(false)
     setValidation(null)
-  }
+  }, [initialState])
 
   const processUpdates = save => {
     if (!save) {
@@ -138,42 +140,64 @@ const ConceptProvider = ({ children }) => {
     [initialState, setModalAlert, updateTaxonomy, updatedState]
   )
 
+  const editingAlertChoice = useCallback(
+    choice => {
+      switch (choice) {
+        case "Discard Edits":
+          cancelUpdates()
+          break
+        case "Continue Editing":
+          selectConcept(concept?.name)
+          selectPanel("Concepts")
+          break
+        default:
+          break
+      }
+      setModalAlert(null)
+    },
+    [cancelUpdates, concept, selectConcept, selectPanel, setModalAlert]
+  )
+
+  const conceptEditingModalAlert = createConceptEditingModalAlert({
+    onChoice: editingAlertChoice,
+  })
+
   useEffect(() => {
     if (!selected) {
       return
     }
 
-    if (editing && modified) {
-      if (selected.concept === concept?.name && selected.panel === "Concepts") {
-        return
+    if (
+      editing &&
+      (selected.panel !== "Concepts" || selected.concept !== concept?.name)
+    ) {
+      if (!modified) {
+        setEditing(false)
+      } else {
+        if (!modalAlert) {
+          setModalAlert(conceptEditingModalAlert)
+        }
       }
-      selectConcept(concept?.name)
-      selectPanel("Concepts")
-      const modalAlert = {
-        onClose: () => setModalAlert(null),
-        message:
-          "You have unsaved Concept changes. Please Cancel or Save to continue.",
-        title: "Unsaved Changes",
-        type: "warning",
-      }
-
-      setModalAlert(modalAlert)
-    } else {
-      if (selected.concept !== concept?.name) {
-        loadConcept(selected.concept).then(
-          () => {
-            const concept = getConcept(selected.concept)
-            setConcept(concept)
-          },
-          error => showBoundary(error)
-        )
-      }
+      return
     }
+
+    if (selected.concept !== concept?.name) {
+      loadConcept(selected.concept).then(
+        () => {
+          const concept = getConcept(selected.concept)
+          setConcept(concept)
+        },
+        error => showBoundary(error)
+      )
+    }
+    // }
   }, [
     concept,
+    conceptEditingModalAlert,
     editing,
     getConcept,
     loadConcept,
+    modalAlert,
     modified,
     selectConcept,
     selectPanel,
