@@ -1,6 +1,6 @@
 import { use } from "react"
 import { Breadcrumbs, Button } from "@mui/material"
-import NavigateNextIcon from "@mui/icons-material/NavigateNext"
+import { MdNavigateNext } from "react-icons/md"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
@@ -11,7 +11,7 @@ const ConceptPath = () => {
 
   return (
     <Breadcrumbs
-      separator={<NavigateNextIcon fontSize="small" />}
+      separator={<MdNavigateNext fontSize="large" />}
       sx={{
         "& .MuiBreadcrumbs-separator": { mx: 0 },
         "& .MuiButton-root": {

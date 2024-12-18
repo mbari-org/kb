@@ -9,6 +9,7 @@ import panels from "@/lib/panels"
 
 const SelectedProvider = ({ children }) => {
   const { taxonomy } = use(TaxonomyContext)
+
   const [selected, setSelected] = useState(null)
 
   const updateSelected = update => {

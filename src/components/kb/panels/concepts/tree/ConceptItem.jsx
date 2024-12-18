@@ -21,6 +21,7 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
 
   const itemConcept = getConcept(itemId)
   const hasMedia = 0 < itemConcept.media.length
+  const mediaCount = itemConcept.media.length
 
   return (
     <TreeItem2Provider itemId={itemId}>
@@ -29,7 +30,7 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
         ref={ref}
         slotProps={{
           content: { isSelected },
-          label: { hasPendingHistory, hasMedia, isSelected },
+          label: { hasPendingHistory, hasMedia, isSelected, mediaCount },
         }}
         slots={{
           content: ConceptContent,

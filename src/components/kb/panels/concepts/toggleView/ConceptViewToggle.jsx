@@ -1,10 +1,10 @@
 import { use, useState } from "react"
 
 import { Box } from "@mui/material"
-
-import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify"
-import GridViewIcon from "@mui/icons-material/GridView"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
+
+import { FaList } from "react-icons/fa6"
+import { SlGrid } from "react-icons/sl"
 
 import ConceptViewToggleButton from "./ConceptViewToggleButton"
 
@@ -28,11 +28,8 @@ const ConceptViewToggle = ({ sx }) => {
         onChange={handleViewSelection}
         value={conceptView}
       >
-        <ConceptViewToggleButton
-          Icon={FormatAlignJustifyIcon}
-          value="standard"
-        />
-        <ConceptViewToggleButton Icon={GridViewIcon} value="thumbnail" />
+        <ConceptViewToggleButton Icon={FaList} value="standard" />
+        <ConceptViewToggleButton Icon={SlGrid} value="thumbnail" />
       </ToggleButtonGroup>
     </Box>
   )

@@ -213,7 +213,7 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   }
 
   const parent = await apiCall(() =>
-    fetchParent(updatableTaxonomy.configupdatableConcept.name)
+    fetchParent(updatableTaxonomy.config, updatableConcept.name)
   )
 
   if (updatableTaxonomy.concepts[parent.name]) {

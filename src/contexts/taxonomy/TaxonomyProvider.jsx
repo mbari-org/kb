@@ -57,7 +57,7 @@ const TaxonomyProvider = ({ children }) => {
       setLoading(true)
       console.log(
         "CxTBD TaxonomyProvider loadConceptDescendants concept:",
-        concept.name
+        concept?.name
       )
       const { taxonomy: taxonomyWithDescendants } = await loadDescendants(
         taxonomy,
@@ -65,7 +65,7 @@ const TaxonomyProvider = ({ children }) => {
       )
       console.log(
         "CxTBD TaxonomyProvider loadConceptDescendants DONE for concept:",
-        concept.name
+        concept?.name
       )
       setTaxonomy(taxonomyWithDescendants)
       setLoading(false)

@@ -736,22 +736,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:^6.1.0":
-  version: 6.1.5
-  resolution: "@mui/icons-material@npm:6.1.5"
-  dependencies:
-    "@babel/runtime": "npm:^7.25.7"
-  peerDependencies:
-    "@mui/material": ^6.1.5
-    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
-    react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 10c0/112f7570b8d27019a16b619a3a5b9f01cb7d8a244d50014596e17f06ed5f569888aeac2223c058da37567b5a358c99a53ee2afdf8958bc4a34b964a02f796787
-  languageName: node
-  linkType: hard
-
 "@mui/material@npm:^6.1.6":
   version: 6.1.6
   resolution: "@mui/material@npm:6.1.6"
@@ -3147,7 +3131,6 @@ __metadata:
     "@emotion/styled": "npm:^11.13.0"
     "@eslint/js": "npm:^9.9.0"
     "@fontsource/roboto": "npm:^5.1.0"
-    "@mui/icons-material": "npm:^6.1.0"
     "@mui/material": "npm:^6.1.6"
     "@mui/x-tree-view": "npm:^7.18.0"
     "@react-spring/web": "npm:^9.7.5"
@@ -3167,6 +3150,7 @@ __metadata:
     react: "npm:19.0.0-rc-fb9a90fa48-20240614"
     react-dom: "npm:19.0.0-rc-fb9a90fa48-20240614"
     react-error-boundary: "npm:^4.0.13"
+    react-icons: "npm:^5.4.0"
     react-router-dom: "npm:^6.26.1"
     swiper: "npm:^11.1.14"
     vite: "npm:^5.4.1"
@@ -3724,6 +3708,15 @@ __metadata:
   peerDependencies:
     react: ">=16.13.1"
   checksum: 10c0/0737e5259bed40ce14eb0823b3c7b152171921f2179e604f48f3913490cdc594d6c22d43d7abb4ffb1512c832850228db07aa69d3b941db324953a5e393cb399
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.4.0":
+  version: 5.4.0
+  resolution: "react-icons@npm:5.4.0"
+  peerDependencies:
+    react: "*"
+  checksum: 10c0/698b0c4616870152d86de2585fb709bf3eeb9292d971d689965dade5f0ee71cdc92d2125b728ab220cc39a4c6d6bad1ed526b9b934ab39a7b6001bc23b73ee16
   languageName: node
   linkType: hard
 

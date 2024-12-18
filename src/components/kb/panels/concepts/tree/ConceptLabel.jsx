@@ -1,7 +1,8 @@
-import { styled, useTheme } from "@mui/material/styles"
+import { Box } from "@mui/material"
+import { styled } from "@mui/material/styles"
 
-import ImageIcon from "@mui/icons-material/Image"
-import DotIcon from "./DotIcon"
+import ConceptMediaIcon from "./ConceptMediaIcon"
+import PendingHistoryIcon from "./PendingHistoryIcon"
 
 const StyledLabel = styled("div")(
   ({ theme, hasPendingHistory, isSelected }) => {
@@ -29,25 +30,20 @@ const StyledLabel = styled("div")(
 const ConceptLabel = ({
   children,
   hasPendingHistory,
-  hasMedia,
   isSelected,
+  mediaCount,
 }) => {
-  const { concept: conceptTheme } = useTheme()
-  const dotColor = hasPendingHistory
-    ? conceptTheme.pendingHistoryDot
-    : conceptTheme.dot
-
   return (
-    <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+    <Box sx={{ display: "flex", alignItems: "top", flexGrow: 1, mr: 0.5 }}>
       <StyledLabel
         hasPendingHistory={hasPendingHistory}
         isSelected={isSelected}
       >
         {children}
       </StyledLabel>
-      {hasMedia && <ImageIcon sx={{ ml: 0.5, maxWidth: "16px" }} />}
-      {isSelected && <DotIcon bgcolor={dotColor} />}
-    </div>
+      <ConceptMediaIcon mediaCount={mediaCount} />
+      <PendingHistoryIcon hasPendingHistory={hasPendingHistory} />
+    </Box>
   )
 }
 
