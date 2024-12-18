@@ -1,6 +1,7 @@
 import { use } from "react"
+import { CiEdit } from "react-icons/ci"
 
-import { Typography } from "@mui/material"
+import { Button, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -19,19 +20,31 @@ const ConceptName = () => {
     : conceptTheme.color
 
   return (
-    <Typography
-      variant="body1"
-      component="div"
-      sx={{
-        fontFamily: conceptTheme.fontFamily,
-        fontSize: conceptTheme.fontSize,
-        fontWeight: conceptTheme.fontWeight,
-        backgroundColor: "transparent",
-        color: conceptColor,
-      }}
-    >
-      {concept.name}
-    </Typography>
+    <Stack direction="row" alignItems="center">
+      <Typography
+        component="div"
+        sx={{
+          fontFamily: conceptTheme.fontFamily,
+          fontSize: conceptTheme.fontSize,
+          fontWeight: conceptTheme.fontWeight,
+          backgroundColor: "transparent",
+          color: conceptColor,
+        }}
+        variant="body1"
+      >
+        {concept.name}
+      </Typography>
+      <Button
+        startIcon={<CiEdit size={28} />}
+        sx={{
+          mb: 2,
+          ml: 1.5,
+          minWidth: "auto",
+          padding: "0",
+        }}
+        onClick={() => console.log("Edit button clicked")}
+      />
+    </Stack>
   )
 }
 
