@@ -9,6 +9,7 @@ const DotIcon = ({ bgcolor }) => {
         display: "inline-block",
         height: 6,
         mx: 0.5,
+        mb: 1,
         width: 6,
         zIndex: 1,
       }}

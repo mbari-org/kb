@@ -1,4 +1,4 @@
-import { forwardRef } from "react"
+import { use, forwardRef } from "react"
 
 import { TreeItem2Provider } from "@mui/x-tree-view"
 import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
@@ -7,16 +7,19 @@ import ConceptContent from "./ConceptContent"
 import ConceptLabel from "./ConceptLabel"
 import ConceptsExpand from "./ConceptsExpand"
 
+import ConceptContext from "@/contexts/concept/ConceptContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+
 const ConceptItem = forwardRef(function ConceptItem(props, ref) {
-  const { concept, itemId, taxonomy } = props
+  const { concept } = use(ConceptContext)
+  const { getConcept, getPendingHistory } = use(TaxonomyContext)
+
+  const { itemId } = props
   const isSelected = itemId === concept.name
 
-  const pendingHistory = taxonomy.pendingHistory.find(
-    history => itemId === history.concept
-  )
-  const hasPendingHistory = pendingHistory ? true : false
+  const hasPendingHistory = getPendingHistory(itemId) ? true : false
 
-  const itemConcept = taxonomy.concepts[itemId]
+  const itemConcept = getConcept(itemId)
   const hasMedia = 0 < itemConcept.media.length
 
   return (

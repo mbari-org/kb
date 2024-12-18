@@ -31,6 +31,14 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
+  const getConceptNames = useCallback(() => taxonomy.names, [taxonomy])
+
+  const getPendingHistory = useCallback(
+    conceptName =>
+      taxonomy.pendingHistory.find(history => conceptName === history.concept),
+    [taxonomy]
+  )
+
   const loadConcept = async conceptName => {
     const existing = getTaxonomyConcept(taxonomy, conceptName)
     if (needsUpdate(existing)) {
@@ -109,6 +117,8 @@ const TaxonomyProvider = ({ children }) => {
     <TaxonomyContext
       value={{
         getConcept,
+        getConceptNames,
+        getPendingHistory,
         loadConcept,
         loadConceptDescendants,
         taxonomy,

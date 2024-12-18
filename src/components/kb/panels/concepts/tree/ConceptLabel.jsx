@@ -1,5 +1,4 @@
-import { styled } from "@mui/material/styles"
-import { lighten } from "@mui/system"
+import { styled, useTheme } from "@mui/material/styles"
 
 import ImageIcon from "@mui/icons-material/Image"
 import DotIcon from "./DotIcon"
@@ -14,7 +13,7 @@ const StyledLabel = styled("div")(
     }
     if (hasPendingHistory) {
       nonHoverStyle.color = isSelected
-        ? lighten(theme.palette.error.main, 0.65)
+        ? theme.palette.common.white
         : theme.palette.error.main
     }
 
@@ -33,6 +32,11 @@ const ConceptLabel = ({
   hasMedia,
   isSelected,
 }) => {
+  const { concept: conceptTheme } = useTheme()
+  const dotColor = hasPendingHistory
+    ? conceptTheme.pendingHistoryDot
+    : conceptTheme.dot
+
   return (
     <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
       <StyledLabel
@@ -42,7 +46,7 @@ const ConceptLabel = ({
         {children}
       </StyledLabel>
       {hasMedia && <ImageIcon sx={{ ml: 0.5, maxWidth: "16px" }} />}
-      {hasPendingHistory && <DotIcon />}
+      {isSelected && <DotIcon bgcolor={dotColor} />}
     </div>
   )
 }

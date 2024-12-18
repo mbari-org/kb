@@ -15,7 +15,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
 
   const { concept } = use(ConceptContext)
   const { selectConcept } = use(SelectedContext)
-  const { getConcept, taxonomy } = use(TaxonomyContext)
+  const { getConcept, getConceptNames, taxonomy } = use(TaxonomyContext)
 
   const [value, setValue] = useState("")
 
@@ -37,7 +37,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   return (
     <Autocomplete
       onChange={handleConceptChange}
-      options={taxonomy.names}
+      options={getConceptNames()}
       renderInput={params => (
         <Stack>
           <Typography

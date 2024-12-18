@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import { Box, Stack } from "@mui/material"
+import { Stack } from "@mui/material"
 
 import ConceptAuthor from "./detail/ConceptAuthor"
 import ConceptLevel from "./detail/ConceptLevel"
