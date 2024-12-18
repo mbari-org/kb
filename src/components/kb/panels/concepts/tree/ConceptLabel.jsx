@@ -42,7 +42,9 @@ const ConceptLabel = ({
         {children}
       </StyledLabel>
       <ConceptMediaIcon mediaCount={mediaCount} />
-      <PendingHistoryIcon hasPendingHistory={hasPendingHistory} />
+      {isSelected && (
+        <PendingHistoryIcon hasPendingHistory={hasPendingHistory} />
+      )}
     </Box>
   )
 }
