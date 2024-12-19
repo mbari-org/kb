@@ -21,7 +21,7 @@ const ModalAlert = ({ modalAlert }) => {
         }}
       >
         <modalAlert.Title />
-        <modalAlert.Message />
+        <modalAlert.Content />
         <modalAlert.Choices />
       </Box>
     </Modal>

@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const AlertTextMessage = ({ text }) => {
+const AlertContentText = ({ text }) => {
   const theme = useTheme()
 
   return (
@@ -16,4 +16,4 @@ const AlertTextMessage = ({ text }) => {
   )
 }
 
-export default AlertTextMessage
+export default AlertContentText

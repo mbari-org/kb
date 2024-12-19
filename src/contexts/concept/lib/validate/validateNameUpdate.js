@@ -58,7 +58,7 @@ const validateNameUpdate = async ({
       title: "Update Concept Name",
       type: "confirm",
     }),
-    Message: createAlertConceptNameMessage({
+    Content: createAlertConceptNameMessage({
       from: concept.name,
       to: updates.name,
     }),

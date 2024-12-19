@@ -1,7 +1,7 @@
 import {
   createAlertChoices,
-  createAlertTextMessage,
   createAlertTitle,
+  createTextAlertMessage,
 } from "@/components/modals/alert/components"
 
 import { isAdmin } from "@/lib/services/oni/auth/validate"
@@ -64,7 +64,7 @@ const validateRankUpdates = async ({
       title: "Update Rank/Level Error",
       type: "warning",
     }),
-    Message: createAlertTextMessage({ text }),
+    Content: createTextAlertMessage({ text }),
     Choices: createAlertChoices({ choices, onChoice }),
   })
 

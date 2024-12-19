@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const AlertConceptNameMessage = ({ from, to }) => {
+const AlertContentConceptName = ({ from, to }) => {
   const theme = useTheme()
 
   const text = "Are you sure you want to update Concept name"
@@ -52,4 +52,4 @@ const AlertConceptNameMessage = ({ from, to }) => {
   )
 }
 
-export default AlertConceptNameMessage
+export default AlertContentConceptName

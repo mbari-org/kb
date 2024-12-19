@@ -23,9 +23,9 @@ import { validateUpdates } from "./lib/validate/validateUpdates"
 
 import {
   createAlertChoices,
-  createAlertErrorMessage,
+  createErrorAlertMessage,
   createAlertTitle,
-  createAlertUnsavedEditsMessage,
+  createUnsavedEditsAlertMessage,
 } from "@/components/modals/alert/components"
 
 import { isEmpty } from "@/lib/util"
@@ -120,7 +120,7 @@ const ConceptProvider = ({ children }) => {
             title: "Update Error",
             type: "error",
           }),
-          Message: createAlertErrorMessage({ error }),
+          Content: createErrorAlertMessage({ error }),
           Choices: createAlertChoices({
             choices: ["Continue"],
             onChoice: () => {
@@ -163,7 +163,7 @@ const ConceptProvider = ({ children }) => {
         title: "Current Edits",
         type: "warning",
       }),
-      Message: createAlertUnsavedEditsMessage({ updates }),
+      Content: createUnsavedEditsAlertMessage({ updates }),
       Choices: createAlertChoices({
         choices: ["Discard Edits", "Continue Editing"],
         onChoice,

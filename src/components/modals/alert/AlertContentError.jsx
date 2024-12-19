@@ -1,12 +1,12 @@
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import { createAlertTextMessage } from "./components"
+import { createTextAlertMessage } from "./components"
 
-const AlertErrorMessage = ({ error }) => {
+const AlertContentError = ({ error }) => {
   const theme = useTheme()
 
-  const alertTextMessage = createAlertTextMessage({
+  const alertTextMessage = createTextAlertMessage({
     text: error.message,
     type: "error",
   })
@@ -25,4 +25,4 @@ const AlertErrorMessage = ({ error }) => {
   )
 }
 
-export default AlertErrorMessage
+export default AlertContentError
