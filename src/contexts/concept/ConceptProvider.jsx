@@ -47,6 +47,8 @@ const ConceptProvider = ({ children }) => {
   const [initialState, setInitialState] = useState(null)
   const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
 
+  const [modalHasBeenDiplayed, setModalAlertHasBeenDisplayed] = useState(false)
+
   const getConceptPath = useCallback(
     (concept, path = [concept.name]) =>
       concept.parent
@@ -179,6 +181,8 @@ const ConceptProvider = ({ children }) => {
           break
         case "Continue Editing":
           setEditing(true)
+          selectConcept(concept?.name)
+          selectPanel("Concepts")
           break
         default:
           break
@@ -192,7 +196,15 @@ const ConceptProvider = ({ children }) => {
       updates,
     })
     setModalAlert(conceptEditingModalAlert)
-  }, [getCurrentUpdates, updatedState, setModalAlert, cancelUpdates])
+  }, [
+    getCurrentUpdates,
+    updatedState,
+    setModalAlert,
+    cancelUpdates,
+    selectConcept,
+    concept?.name,
+    selectPanel,
+  ])
 
   useEffect(() => {
     if (!selected) {
@@ -205,11 +217,20 @@ const ConceptProvider = ({ children }) => {
     ) {
       if (!modified) {
         setEditing(false)
-      } else {
-        if (!modalAlert) {
-          displayConceptEditsAlert()
-        }
+        return
       }
+
+      if (!modalAlert && !modalHasBeenDiplayed) {
+        displayConceptEditsAlert()
+        setModalAlertHasBeenDisplayed(true)
+        return
+      }
+
+      if (!modalAlert) {
+        setModalAlertHasBeenDisplayed(false)
+        return
+      }
+
       return
     }
 
@@ -232,6 +253,7 @@ const ConceptProvider = ({ children }) => {
     getCurrentUpdates,
     loadConcept,
     modalAlert,
+    modalHasBeenDiplayed,
     modified,
     selectConcept,
     selectPanel,
