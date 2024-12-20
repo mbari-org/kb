@@ -22,10 +22,10 @@ import { submitUpdates } from "./lib/submitUpdates"
 import { validateUpdates } from "./lib/validate/validateUpdates"
 
 import {
-  createAlertChoices,
-  createErrorAlertMessage,
+  createAlertButtons,
+  createAlertContentText,
   createAlertTitle,
-  createUnsavedEditsAlertMessage,
+  createAlertContentUnsavedEdits,
 } from "@/components/modals/alert/components"
 
 import { isEmpty } from "@/lib/util"
@@ -122,8 +122,11 @@ const ConceptProvider = ({ children }) => {
             title: "Update Error",
             type: "error",
           }),
-          Content: createErrorAlertMessage({ error }),
-          Choices: createAlertChoices({
+          Content: createAlertContentText({
+            text: error.message,
+            type: "error",
+          }),
+          Choices: createAlertButtons({
             choices: ["Continue"],
             onChoice: () => {
               setInitialState(initialState)
@@ -165,8 +168,8 @@ const ConceptProvider = ({ children }) => {
         title: "Current Edits",
         type: "warning",
       }),
-      Content: createUnsavedEditsAlertMessage({ updates }),
-      Choices: createAlertChoices({
+      Content: createAlertContentUnsavedEdits({ updates }),
+      Choices: createAlertButtons({
         choices: ["Discard Edits", "Continue Editing"],
         onChoice,
       }),

@@ -1,50 +1,51 @@
-import AlertChoices from "./AlertChoices"
-import AlertContentConceptName from "./AlertContentConceptName"
-import AlertContentText from "./AlertContentText"
+import AlertButtons from "./buttons/AlertButtons"
+import AlertButtonsConceptNameUpdate from "./buttons/AlertButtonsConceptNameUpdate"
+import AlertContentConceptNameUpdate from "./content/AlertContentConceptNameUpdate"
+import AlertContentText from "./content/AlertContentText"
 import AlertTitle from "./AlertTitle"
-import AlertContentUnsavedEdits from "./AlertContentUnsavedEdits"
+import AlertContentUnsavedEdits from "./content/AlertContentUnsavedEdits"
 
-const createAlertChoices = ({ choices, onChoice }) => {
-  const component = () => <AlertChoices choices={choices} onChoice={onChoice} />
-  component.displayName = "AlertChoices"
+const createAlertButtons = props => {
+  const component = () => <AlertButtons {...props} />
+  component.displayName = "AlertButtons"
   return component
 }
 
-const createAlertConceptNameMessage = ({ from, to }) => {
-  const component = () => <AlertContentConceptName from={from} to={to} />
+const createAlertButtonsConceptNameUpdate = () => {
+  const component = () => <AlertButtonsConceptNameUpdate />
+  component.displayName = "AlertButtonsConceptNameUpdate"
+  return component
+}
+
+const createAlertContentConceptNameUpdate = () => {
+  const component = () => <AlertContentConceptNameUpdate />
+  component.displayName = "AlertContentConceptNameUpdate"
+  return component
+}
+
+const createAlertContentText = props => {
+  const component = () => <AlertContentText {...props} />
   component.displayName = "AlertContentText"
   return component
 }
 
-const createErrorAlertMessage = ({ error }) => {
-  const component = () => <AlertContentText text={error.message} type="error" />
-  component.displayName = "AlertContentError"
-  return component
-}
-
-const createTextAlertMessage = ({ text, type }) => {
-  const component = () => <AlertContentText text={text} type={type} />
-  component.displayName = "AlertContentText"
-  return component
-}
-
-const createAlertTitle = ({ title, type }) => {
-  const component = () => <AlertTitle title={title} type={type} />
-  component.displayName = "AlertTitle"
-  return component
-}
-
-const createUnsavedEditsAlertMessage = ({ updates }) => {
-  const component = () => <AlertContentUnsavedEdits updates={updates} />
+const createAlertContentUnsavedEdits = props => {
+  const component = () => <AlertContentUnsavedEdits {...props} />
   component.displayName = "AlertContentUnsavedEdits"
   return component
 }
 
+const createAlertTitle = props => {
+  const component = () => <AlertTitle {...props} />
+  component.displayName = "AlertTitle"
+  return component
+}
+
 export {
-  createAlertChoices,
-  createAlertConceptNameMessage,
-  createErrorAlertMessage,
-  createTextAlertMessage,
+  createAlertButtons,
+  createAlertButtonsConceptNameUpdate,
+  createAlertContentConceptNameUpdate,
+  createAlertContentText,
   createAlertTitle,
-  createUnsavedEditsAlertMessage,
+  createAlertContentUnsavedEdits,
 }

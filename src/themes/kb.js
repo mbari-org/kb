@@ -19,7 +19,7 @@ const navInactive = darken(palette.primary.contrastText, 0.15)
 const theme = createTheme({
   concept: {
     fontFamily: "Roboto, sans-serif",
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: 600,
     color: midGreen,
     dot: green,

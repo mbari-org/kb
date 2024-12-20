@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import { createTextAlertMessage } from "./components"
+import { createAlertContentText } from "../components"
 
 const prettyPrintUpdates = updates => {
   return Object.entries(updates)
@@ -12,7 +12,7 @@ const prettyPrintUpdates = updates => {
 const AlertContentUnsavedEdits = ({ updates }) => {
   const theme = useTheme()
 
-  const AlertContentText = createTextAlertMessage({
+  const AlertContentText = createAlertContentText({
     text: "You have the following unsaved edits:",
     type: "warning",
   })
