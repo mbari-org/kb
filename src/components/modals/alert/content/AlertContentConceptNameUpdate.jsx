@@ -6,10 +6,13 @@ import { useTheme } from "@mui/material/styles"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const AlertContentConceptNameUpdate = () => {
+  const { concept, conceptState, updateConcept } = use(ConceptContext)
   const { concept: conceptTheme, palette } = useTheme()
 
-  const { concept, conceptState, updateConcept } = use(ConceptContext)
-  console.log("conceptState", conceptState)
+  const toColor =
+    conceptState.name === concept.name
+      ? conceptTheme.infoColor
+      : conceptTheme.pendingHistoryColor
 
   const handleChange = event => {
     updateConcept({ name: event.target.value })
@@ -23,7 +26,7 @@ const AlertContentConceptNameUpdate = () => {
             <Typography minWidth={60}>From:</Typography>
             <Typography
               fontFamily={conceptTheme.fontFamily}
-              fontSize={conceptTheme.fontSize}
+              fontSize={conceptTheme.updateFontSize}
               fontWeight={conceptTheme.fontWeight}
               sx={{ color: palette.common.black }}
               variant="h6"
@@ -39,12 +42,15 @@ const AlertContentConceptNameUpdate = () => {
               slotProps={{
                 input: {
                   sx: {
-                    color: palette.primary.main,
+                    color: toColor,
                     cursor: "text",
                     fontFamily: conceptTheme.fontFamily,
-                    fontSize: conceptTheme.fontSize,
+                    fontSize: conceptTheme.updateFontSize,
                     fontWeight: conceptTheme.fontWeight,
                     height: "auto",
+                    borderBottom: "none",
+                    "&::before": { borderBottom: "none" },
+                    "&::after": { borderBottom: "none" },
                   },
                 },
               }}
@@ -53,7 +59,7 @@ const AlertContentConceptNameUpdate = () => {
             />
           </Box>
         </Box>
-        <Box sx={{ borderTop: "1px dashed #000000" }}>
+        <Box sx={{ borderTop: "1px solid #000000" }}>
           <Box sx={{ mt: 2 }}>
             <div>
               {`Updating the name of concept will affect CxTBD link realizations.`}

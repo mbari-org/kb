@@ -26,7 +26,7 @@ const ConceptName = () => {
 
   const conceptColor = hasPendingHistory
     ? conceptTheme.pendingHistoryColor
-    : conceptTheme.color
+    : conceptTheme.infoColor
 
   const editConceptName = () => {
     setModalAlert({
@@ -44,7 +44,7 @@ const ConceptName = () => {
         component="div"
         sx={{
           fontFamily: conceptTheme.fontFamily,
-          fontSize: conceptTheme.fontSize,
+          fontSize: conceptTheme.infoFontSize,
           fontWeight: conceptTheme.fontWeight,
           backgroundColor: "transparent",
           color: conceptColor,
