@@ -18,7 +18,7 @@ const navInactive = darken(palette.primary.contrastText, 0.15)
 
 const theme = createTheme({
   concept: {
-    infoColor: midGreen,
+    detailColor: midGreen,
     dot: green,
     pendingHistoryColor: darkRed,
     pendingHistoryDot: red,

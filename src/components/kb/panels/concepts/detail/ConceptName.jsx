@@ -5,7 +5,6 @@ import { Button, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import {
-  // createAlertButtons,
   createAlertButtonsConceptNameUpdate,
   createAlertContentConceptNameUpdate,
   createAlertTitle,
@@ -26,7 +25,7 @@ const ConceptName = () => {
 
   const conceptColor = hasPendingHistory
     ? conceptTheme.pendingHistoryColor
-    : conceptTheme.infoColor
+    : conceptTheme.detailColor
 
   const editConceptName = () => {
     setModalAlert({

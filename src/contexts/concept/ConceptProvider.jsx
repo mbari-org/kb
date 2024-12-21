@@ -79,18 +79,29 @@ const ConceptProvider = ({ children }) => {
     setValidation(null)
   }, [initialState])
 
-  const processUpdates = save => {
-    if (!save) {
+  const processUpdates = choice => {
+    if (!modified) {
       cancelUpdates()
       return
     }
 
-    if (!modified) {
-      setEditing(false)
-      setValidation(null)
-      return
+    switch (choice) {
+      case "Cancel":
+        cancelUpdates()
+        break
+      case "Info":
+        processInfoUpdates()
+        break
+      case "Name Only":
+        break
+      case "All Data":
+        break
+      default:
+        break
     }
+  }
 
+  const processInfoUpdates = useCallback(() => {
     const config = taxonomy.config
     const updates = getCurrentUpdates(updatedState)
 
@@ -103,7 +114,7 @@ const ConceptProvider = ({ children }) => {
     }).then(updatesValidation => {
       setValidation(updatesValidation)
     })
-  }
+  }, [concept, getCurrentUpdates, setModalAlert, taxonomy.config, updatedState])
 
   const processResult = useCallback(
     ({ error, updatedConcept }) => {

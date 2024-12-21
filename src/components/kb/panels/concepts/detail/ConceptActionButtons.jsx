@@ -28,7 +28,7 @@ const ConceptActionButtons = () => {
     >
       <Button
         color={editing ? "cancel" : "main"}
-        onClick={() => (editing ? processUpdates(false) : setEditing(true))}
+        onClick={() => (editing ? processUpdates("Cancel") : setEditing(true))}
         variant="contained"
       >
         {editing ? "Cancel" : "Edit"}
@@ -44,7 +44,7 @@ const ConceptActionButtons = () => {
       )}
       <Button
         disabled={!editing || !modified}
-        onClick={() => processUpdates(true)}
+        onClick={() => processUpdates("Info")}
         variant="contained"
       >
         Save

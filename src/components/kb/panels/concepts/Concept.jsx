@@ -25,6 +25,7 @@ const Concept = () => {
         minHeight: "100vh",
         position: "relative",
         m: 1,
+        mr: 2,
       }}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between">

@@ -11,7 +11,7 @@ const AlertContentConceptNameUpdate = () => {
 
   const toColor =
     conceptState.name === concept.name
-      ? conceptTheme.infoColor
+      ? conceptTheme.detailColor
       : conceptTheme.pendingHistoryColor
 
   const handleChange = event => {
@@ -21,7 +21,7 @@ const AlertContentConceptNameUpdate = () => {
   return (
     <>
       <Box>
-        <Box display="flex" flexDirection="column" sx={{ mt: 2, ml: 3, mb: 4 }}>
+        <Box display="flex" flexDirection="column" sx={{ mt: 2, ml: 3, mb: 2 }}>
           <Box display="flex" alignItems="center">
             <Typography minWidth={60}>From:</Typography>
             <Typography
