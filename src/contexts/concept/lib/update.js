@@ -6,8 +6,6 @@ import {
 
 const updateAuthor = updateConceptAuthor
 
-const updateRank = updateConceptRank
-
 const updateMedia = async (_config, conceptName, media) => {
   console.log(`Updating media for concept ${conceptName} with:`, media)
   return null
@@ -15,9 +13,9 @@ const updateMedia = async (_config, conceptName, media) => {
 }
 
 const updateName = async (config, conceptName, updates) => {
-  console.log(`Updating name for concept ${conceptName} with:`, updates.name)
-
   return updateConceptName(config, conceptName, { newName: updates.name })
 }
+
+const updateRank = updateConceptRank
 
 export { updateAuthor, updateMedia, updateName, updateRank }

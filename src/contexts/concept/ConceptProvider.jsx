@@ -18,7 +18,12 @@ import conceptStateReducer from "./lib/conceptStateReducer"
 
 import { filterUpdates } from "./lib/filterUpdates"
 import { stateForConcept } from "./lib/stateForConcept"
-import { submitUpdates } from "./lib/submitUpdates"
+import { submitDetailUpdates } from "./lib/submitDetailUpdates"
+import {
+  submitNameUpdates,
+  UPDATE_ALL_DATA,
+  UPDATE_NAME_ONLY,
+} from "./lib/submitNameUpdates"
 import { validateUpdates } from "./lib/validate/validateUpdates"
 
 import {
@@ -49,6 +54,8 @@ const ConceptProvider = ({ children }) => {
 
   const [modalHasBeenDiplayed, setModalAlertHasBeenDisplayed] = useState(false)
 
+  const config = taxonomy.config
+
   const getConceptPath = useCallback(
     (concept, path = [concept.name]) =>
       concept.parent
@@ -77,44 +84,8 @@ const ConceptProvider = ({ children }) => {
     setEditing(false)
     setModified(false)
     setValidation(null)
-  }, [initialState])
-
-  const processUpdates = choice => {
-    if (!modified) {
-      cancelUpdates()
-      return
-    }
-
-    switch (choice) {
-      case "Cancel":
-        cancelUpdates()
-        break
-      case "Info":
-        processInfoUpdates()
-        break
-      case "Name Only":
-        break
-      case "All Data":
-        break
-      default:
-        break
-    }
-  }
-
-  const processInfoUpdates = useCallback(() => {
-    const config = taxonomy.config
-    const updates = getCurrentUpdates(updatedState)
-
-    validateUpdates({
-      concept,
-      config,
-      setModalAlert,
-      updateConcept,
-      updates,
-    }).then(updatesValidation => {
-      setValidation(updatesValidation)
-    })
-  }, [concept, getCurrentUpdates, setModalAlert, taxonomy.config, updatedState])
+    setModalAlert(null)
+  }, [initialState, setModalAlert])
 
   const processResult = useCallback(
     ({ error, updatedConcept }) => {
@@ -153,6 +124,59 @@ const ConceptProvider = ({ children }) => {
       setValidation(null)
     },
     [initialState, setModalAlert, updateTaxonomy, updatedState]
+  )
+
+  const processUpdates = choice => {
+    if (!modified) {
+      cancelUpdates()
+      return
+    }
+
+    const updates = getCurrentUpdates(updatedState)
+
+    switch (choice) {
+      case "Cancel":
+        cancelUpdates()
+        break
+      case "Info":
+        processInfoUpdates(config, updates)
+        break
+      case "Name Only":
+        processNameUpdates(UPDATE_NAME_ONLY, updates)
+        break
+      case "All Data":
+        processNameUpdates(UPDATE_ALL_DATA, updates)
+        break
+      default:
+        break
+    }
+  }
+
+  const processInfoUpdates = useCallback(
+    updates => {
+      validateUpdates({
+        concept,
+        config,
+        setModalAlert,
+        updateConcept,
+        updates,
+      }).then(updatesValidation => {
+        setValidation(updatesValidation)
+      })
+    },
+    [concept, config, setModalAlert]
+  )
+
+  const processNameUpdates = useCallback(
+    (extent, updates) => {
+      submitNameUpdates({ concept, config, extent, updates }).then(
+        result => {
+          processResult(result)
+        },
+        error => showBoundary(error)
+      )
+    },
+    [concept, config, processResult, showBoundary]
   )
 
   const editingAlertChoice = useCallback(
@@ -292,9 +316,8 @@ const ConceptProvider = ({ children }) => {
 
   useEffect(() => {
     if (validation) {
-      const config = taxonomy.config
       const updates = getCurrentUpdates(updatedState)
-      submitUpdates({ concept, config, updates, validation }).then(
+      submitDetailUpdates({ concept, config, updates, validation }).then(
         result => {
           processResult(result)
         },
@@ -303,10 +326,10 @@ const ConceptProvider = ({ children }) => {
     }
   }, [
     concept,
+    config,
     getCurrentUpdates,
     showBoundary,
     processResult,
-    taxonomy.config,
     updatedState,
     validation,
   ])

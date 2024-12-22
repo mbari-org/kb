@@ -4,28 +4,11 @@ import AlertButton from "./AlertButton"
 import AlertButtonsContainer from "./AlertButtonsContainer"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import ModalContext from "@/contexts/modal/ModalContext"
 
 const AlertButtonsConceptNameUpdate = () => {
-  const { concept, conceptState } = use(ConceptContext)
-  const { setModalAlert } = use(ModalContext)
+  const { concept, conceptState, processUpdates } = use(ConceptContext)
 
   const choices = ["Cancel", "Name Only", "All Data"]
-
-  const onChoice = choice => {
-    switch (choice) {
-      case "Cancel":
-        break
-      case "Name Only":
-        break
-      case "All Data":
-        break
-      default:
-        break
-    }
-    console.log("conceptState name", conceptState.name)
-    setModalAlert(null)
-  }
 
   const disabled =
     concept.name !== conceptState.name
@@ -39,7 +22,7 @@ const AlertButtonsConceptNameUpdate = () => {
       choice={choice}
       index={index}
       totalChoices={choices.length}
-      onChoice={onChoice}
+      onChoice={processUpdates}
     />
   ))
 
