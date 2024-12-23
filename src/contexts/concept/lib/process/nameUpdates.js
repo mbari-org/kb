@@ -3,21 +3,21 @@ import { updateConceptName } from "@/lib/services/oni/api/concept"
 const UPDATE_ALL_DATA = "all"
 const UPDATE_NAME_ONLY = "solo"
 
-const processNameUpdates = async params => {
-  const { error, payload: updatedConcept } = await processNameUpdate(params)
+const processNameUpdate = async params => {
+  const { error } = await nameUpdate(params)
 
   if (params.extent === UPDATE_NAME_ONLY || error) {
-    return { error, updatedConcept }
+    return { error, updatedName: params.updates.name }
   }
 
   return processConceptDataUpdate(params)
 }
 
-const processNameUpdate = async ({ config, concept, updates }) =>
+const nameUpdate = async ({ config, concept, updates }) =>
   updateConceptName(config, concept.name, { newName: updates.name })
 
-const processConceptDataUpdate = async ({ config, concept, updates }) => {
+const processConceptDataUpdate = async ({ _config, concept, _updates }) => {
   return { error: `CxTBD: Update ${concept.name} data` }
 }
 
-export { processNameUpdates, UPDATE_ALL_DATA, UPDATE_NAME_ONLY }
+export { processNameUpdate, UPDATE_ALL_DATA, UPDATE_NAME_ONLY }

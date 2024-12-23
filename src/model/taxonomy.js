@@ -255,6 +255,55 @@ const updateConcept = (taxonomy, concept) => {
   return { taxonomy: { ...taxonomy, concepts: updatedConcepts } }
 }
 
+const updateConceptName = (taxonomy, concept, newName) => {
+  const updatedConcepts = { ...taxonomy.concepts }
+
+  // Update concept
+  const updatedConcept = { ...concept, name: newName }
+  delete updatedConcepts[concept.name]
+  updatedConcepts[newName] = updatedConcept
+
+  // Update parent
+  if (updatedConcept.parent) {
+    const parent = updatedConcepts[updatedConcept.parent.name]
+    if (parent && parent.children) {
+      const childIndex = parent.children.findIndex(
+        child => child.name === concept.name
+      )
+      if (childIndex !== -1) {
+        parent.children[childIndex] = updatedConcept
+      }
+    }
+  }
+
+  // Update children
+  if (updatedConcept.children) {
+    updatedConcept.children.forEach(child => {
+      const childInUpdatedConcepts = updatedConcepts[child.name]
+      if (childInUpdatedConcepts) {
+        childInUpdatedConcepts.parent = updatedConcept
+      }
+    })
+  }
+
+  // Update names
+  const updatedNames = [...taxonomy.names]
+  const oldIndex = updatedNames.indexOf(concept.name)
+  if (oldIndex !== -1) {
+    updatedNames.splice(oldIndex, 1)
+  }
+  updatedNames.push(newName)
+  updatedNames.sort()
+
+  return {
+    taxonomy: {
+      ...taxonomy,
+      concepts: updatedConcepts,
+      names: updatedNames,
+    },
+  }
+}
+
 export {
   getConcept,
   getNextSibling,
@@ -264,4 +313,5 @@ export {
   loadTaxonomy,
   needsUpdate,
   updateConcept,
+  updateConceptName,
 }

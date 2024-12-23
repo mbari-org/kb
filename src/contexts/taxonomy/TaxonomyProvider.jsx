@@ -13,6 +13,7 @@ import {
   loadDescendants,
   needsUpdate,
   updateConcept as updateTaxonomyConcept,
+  updateConceptName as updateTaxonomyConceptName,
 } from "@/model/taxonomy"
 
 const TaxonomyProvider = ({ children }) => {
@@ -75,11 +76,22 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
-  const updateTaxonomy = concept => {
+  const updateConcept = concept => {
     if (concept) {
       const { taxonomy: updatedTaxonomy } = updateTaxonomyConcept(
         taxonomy,
         concept
+      )
+      setTaxonomy(updatedTaxonomy)
+    }
+  }
+
+  const updateConceptName = (concept, updatedName) => {
+    if (concept && updatedName) {
+      const { taxonomy: updatedTaxonomy } = updateTaxonomyConceptName(
+        taxonomy,
+        concept,
+        updatedName
       )
       setTaxonomy(updatedTaxonomy)
     }
@@ -122,7 +134,8 @@ const TaxonomyProvider = ({ children }) => {
         loadConcept,
         loadConceptDescendants,
         taxonomy,
-        updateTaxonomy,
+        updateConcept,
+        updateConceptName,
       }}
     >
       {children}

@@ -8,9 +8,9 @@ import { REMOVE_RANK_NAME_VALUE } from "./validateDetailUpdates"
 
 const validateRankUpdates = async ({
   concept,
+  conceptUpdate,
   setModalAlert,
   updates,
-  updateConcept,
 }) => {
   let validation = {
     rankLevel: true,
@@ -37,11 +37,11 @@ const validateRankUpdates = async ({
   const onChoice = _choice => {
     // Restore removed rank level and/or name
     if (removeLevel) {
-      updateConcept({ rankLevel: concept.rankLevel })
+      conceptUpdate({ rankLevel: concept.rankLevel })
       validation = { ...validation, rankLevel: false }
     }
     if (removeName) {
-      updateConcept({ rankName: concept.rankName })
+      conceptUpdate({ rankName: concept.rankName })
       validation = { ...validation, rankName: false }
     }
     setModalAlert(null)

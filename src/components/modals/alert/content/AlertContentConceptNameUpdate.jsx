@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material/styles"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const AlertContentConceptNameUpdate = () => {
-  const { concept, conceptState, updateConcept } = use(ConceptContext)
+  const { concept, conceptState, conceptUpdate } = use(ConceptContext)
   const { concept: conceptTheme, palette } = useTheme()
 
   const toColor =
@@ -15,7 +15,7 @@ const AlertContentConceptNameUpdate = () => {
       : conceptTheme.pendingHistoryColor
 
   const handleChange = event => {
-    updateConcept({ name: event.target.value })
+    conceptUpdate({ name: event.target.value })
   }
 
   return (

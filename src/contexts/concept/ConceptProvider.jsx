@@ -23,7 +23,7 @@ import {
   processDetailUpdates,
 } from "./lib/process/detailUpdates"
 import {
-  processNameUpdates,
+  processNameUpdate,
   UPDATE_ALL_DATA,
   UPDATE_NAME_ONLY,
 } from "./lib/process/nameUpdates"
@@ -43,8 +43,13 @@ const ConceptProvider = ({ children }) => {
 
   const { modalAlert, setModalAlert } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
-  const { getConcept, loadConcept, taxonomy, updateTaxonomy } =
-    use(TaxonomyContext)
+  const {
+    getConcept,
+    loadConcept,
+    taxonomy,
+    updateConcept,
+    updateConceptName,
+  } = use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
 
@@ -78,7 +83,7 @@ const ConceptProvider = ({ children }) => {
     initialState,
   ])
 
-  const updateConcept = update =>
+  const conceptUpdate = update =>
     dispatch({ type: "SET_FIELD", payload: update })
 
   const cancelUpdates = useCallback(() => {
@@ -88,46 +93,58 @@ const ConceptProvider = ({ children }) => {
     setModalAlert(null)
   }, [initialState, setModalAlert])
 
-  const processResult = useCallback(
-    ({ error, updatedConcept }) => {
-      if (!error) {
-        setEditing(false)
-        setModified(false)
+  const processDetailResult = useCallback(
+    updatedConcept => {
+      updateConcept(updatedConcept)
 
-        updateTaxonomy(updatedConcept)
+      selectConcept(updatedConcept.name)
+      setInitialState(updatedState)
 
-        selectConcept(updatedConcept.name)
-        setInitialState(updatedState)
+      dispatch({ type: "INIT_STATE", payload: updatedState })
 
-        dispatch({ type: "INIT_STATE", payload: updatedState })
-
-        setModalAlert(null)
-      } else {
-        setModalAlert({
-          Title: createAlertTitle({
-            title: "Update Error",
-            type: "error",
-          }),
-          Content: createAlertContentText({
-            text: error.message,
-            type: "error",
-          }),
-          Choices: createAlertButtons({
-            choices: ["Continue"],
-            onChoice: () => {
-              setInitialState(initialState)
-              dispatch({ type: "INIT_STATE", payload: initialState })
-              setModalAlert(null)
-            },
-          }),
-        })
-      }
-
+      setModalAlert(null)
       setEditing(false)
       setModified(false)
-      // setValidation(null)
     },
-    [initialState, setModalAlert, updateTaxonomy, updatedState]
+    [selectConcept, setModalAlert, updateConcept, updatedState]
+  )
+
+  const processError = useCallback(
+    error => {
+      setModalAlert({
+        Title: createAlertTitle({
+          title: "Update Error",
+          type: "error",
+        }),
+        Content: createAlertContentText({
+          text: error.message,
+          type: "error",
+        }),
+        Choices: createAlertButtons({
+          choices: ["Continue"],
+          onChoice: () => {
+            setInitialState(initialState)
+            dispatch({ type: "INIT_STATE", payload: initialState })
+            setModalAlert(null)
+          },
+        }),
+      })
+    },
+    [initialState, setModalAlert]
+  )
+
+  const processNameResult = useCallback(
+    updatedName => {
+      updateConceptName(concept, updatedName)
+      selectConcept(updatedName)
+
+      // CxInc - need to get the updated concept
+
+      setModalAlert(null)
+      setEditing(false)
+      setModified(false)
+    },
+    [concept, selectConcept, setModalAlert, updateConceptName]
   )
 
   const submitUpdates = choice => {
@@ -160,34 +177,43 @@ const ConceptProvider = ({ children }) => {
     updates => {
       validateDetailUpdates({
         concept,
+        conceptUpdate,
         config,
         setModalAlert,
-        updateConcept,
         updates,
       }).then(validation => {
         if (isDetailValid(validation)) {
           processDetailUpdates({ concept, config, updates, validation }).then(
-            result => {
-              processResult(result)
+            ({ error, updatedConcept }) => {
+              updatedConcept
+                ? processDetailResult(updatedConcept)
+                : processError(error)
             },
             error => showBoundary(error)
           )
         }
       })
     },
-    [concept, config, processResult, setModalAlert, showBoundary]
+    [
+      concept,
+      config,
+      processDetailResult,
+      processError,
+      setModalAlert,
+      showBoundary,
+    ]
   )
 
   const submitNameUpdates = useCallback(
     (extent, updates) => {
-      processNameUpdates({ concept, config, extent, updates }).then(
-        result => {
-          processResult(result)
+      processNameUpdate({ concept, config, extent, updates }).then(
+        ({ error, updatedName }) => {
+          updatedName ? processNameResult(updatedName) : processError(error)
         },
         error => showBoundary(error)
       )
     },
-    [concept, config, processResult, showBoundary]
+    [concept, config, processError, processNameResult, showBoundary]
   )
 
   const editingAlertChoice = useCallback(
@@ -328,12 +354,12 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         conceptState: updatedState,
+        conceptUpdate,
         displayConceptEditsAlert,
         editing,
         modified,
         processUpdates: submitUpdates,
         setEditing,
-        updateConcept,
       }}
     >
       {children}

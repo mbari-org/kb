@@ -27,7 +27,7 @@ const rankNames = [
 const ConceptRank = ({ infoStyle }) => {
   const {
     conceptState: { rankName },
-    updateConcept,
+    conceptUpdate,
   } = use(ConceptContext)
 
   return (
@@ -35,7 +35,7 @@ const ConceptRank = ({ infoStyle }) => {
       <InputLabel>Rank</InputLabel>
       <Select
         displayEmpty
-        onChange={e => updateConcept({ rankName: e.target.value })}
+        onChange={e => conceptUpdate({ rankName: e.target.value })}
         value={rankLevelNameValue(rankName)}
       >
         {rankNames.map(rName => (
