@@ -13,8 +13,8 @@ const AlertContentUnsavedEdits = ({ updates }) => {
   const theme = useTheme()
 
   const AlertContentText = createAlertContentText({
+    sx: { mt: 2, mb: 2 },
     text: "You have the following unsaved edits:",
-    type: "warning",
   })
 
   return (
@@ -28,7 +28,7 @@ const AlertContentUnsavedEdits = ({ updates }) => {
           color: theme.palette.common.black,
           mt: 1,
           ml: 2,
-          mb: 5,
+          mb: 8,
           whiteSpace: "pre-wrap",
           fontFamily: "monospace",
         }}

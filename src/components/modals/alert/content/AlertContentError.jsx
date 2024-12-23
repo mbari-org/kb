@@ -7,6 +7,7 @@ const AlertContentError = ({ error }) => {
   const theme = useTheme()
 
   const alertTextMessage = createAlertContentText({
+    sx: { mt: 2, mb: 2 },
     text: error.message,
     type: "error",
   })

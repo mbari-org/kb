@@ -18,13 +18,16 @@ import conceptStateReducer from "./lib/conceptStateReducer"
 
 import { filterUpdates } from "./lib/filterUpdates"
 import { stateForConcept } from "./lib/stateForConcept"
-import { submitDetailUpdates } from "./lib/submitDetailUpdates"
 import {
-  submitNameUpdates,
+  isDetailValid,
+  processDetailUpdates,
+} from "./lib/process/detailUpdates"
+import {
+  processNameUpdates,
   UPDATE_ALL_DATA,
   UPDATE_NAME_ONLY,
-} from "./lib/submitNameUpdates"
-import { validateUpdates } from "./lib/validate/validateUpdates"
+} from "./lib/process/nameUpdates"
+import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
 
 import {
   createAlertButtons,
@@ -47,7 +50,6 @@ const ConceptProvider = ({ children }) => {
 
   const [editing, setEditing] = useState(false)
   const [modified, setModified] = useState(false)
-  const [validation, setValidation] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
   const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
@@ -83,7 +85,6 @@ const ConceptProvider = ({ children }) => {
     dispatch({ type: "INIT_STATE", payload: initialState })
     setEditing(false)
     setModified(false)
-    setValidation(null)
     setModalAlert(null)
   }, [initialState, setModalAlert])
 
@@ -92,12 +93,15 @@ const ConceptProvider = ({ children }) => {
       if (!error) {
         setEditing(false)
         setModified(false)
-        setValidation(null)
-        setInitialState(updatedState)
 
         updateTaxonomy(updatedConcept)
 
+        selectConcept(updatedConcept.name)
+        setInitialState(updatedState)
+
         dispatch({ type: "INIT_STATE", payload: updatedState })
+
+        setModalAlert(null)
       } else {
         setModalAlert({
           Title: createAlertTitle({
@@ -121,12 +125,12 @@ const ConceptProvider = ({ children }) => {
 
       setEditing(false)
       setModified(false)
-      setValidation(null)
+      // setValidation(null)
     },
     [initialState, setModalAlert, updateTaxonomy, updatedState]
   )
 
-  const processUpdates = choice => {
+  const submitUpdates = choice => {
     if (!modified) {
       cancelUpdates()
       return
@@ -139,37 +143,44 @@ const ConceptProvider = ({ children }) => {
         cancelUpdates()
         break
       case "Info":
-        processInfoUpdates(config, updates)
+        submitDetailUpdates(updates)
         break
       case "Name Only":
-        processNameUpdates(UPDATE_NAME_ONLY, updates)
+        submitNameUpdates(UPDATE_NAME_ONLY, updates)
         break
       case "All Data":
-        processNameUpdates(UPDATE_ALL_DATA, updates)
+        submitNameUpdates(UPDATE_ALL_DATA, updates)
         break
       default:
         break
     }
   }
 
-  const processInfoUpdates = useCallback(
+  const submitDetailUpdates = useCallback(
     updates => {
-      validateUpdates({
+      validateDetailUpdates({
         concept,
         config,
         setModalAlert,
         updateConcept,
         updates,
-      }).then(updatesValidation => {
-        setValidation(updatesValidation)
+      }).then(validation => {
+        if (isDetailValid(validation)) {
+          processDetailUpdates({ concept, config, updates, validation }).then(
+            result => {
+              processResult(result)
+            },
+            error => showBoundary(error)
+          )
+        }
       })
     },
-    [concept, config, setModalAlert]
+    [concept, config, processResult, setModalAlert, showBoundary]
   )
 
-  const processNameUpdates = useCallback(
+  const submitNameUpdates = useCallback(
     (extent, updates) => {
-      submitNameUpdates({ concept, config, extent, updates }).then(
+      processNameUpdates({ concept, config, extent, updates }).then(
         result => {
           processResult(result)
         },
@@ -199,10 +210,7 @@ const ConceptProvider = ({ children }) => {
 
   const createUnsavedEditsModalAlert = ({ onChoice, updates }) => {
     return {
-      Title: createAlertTitle({
-        title: "Current Edits",
-        type: "warning",
-      }),
+      Title: createAlertTitle({ title: "Current Edits" }),
       Content: createAlertContentUnsavedEdits({ updates }),
       Choices: createAlertButtons({
         choices: ["Discard Edits", "Continue Editing"],
@@ -314,26 +322,6 @@ const ConceptProvider = ({ children }) => {
     }
   }, [concept])
 
-  useEffect(() => {
-    if (validation) {
-      const updates = getCurrentUpdates(updatedState)
-      submitDetailUpdates({ concept, config, updates, validation }).then(
-        result => {
-          processResult(result)
-        },
-        error => showBoundary(error)
-      )
-    }
-  }, [
-    concept,
-    config,
-    getCurrentUpdates,
-    showBoundary,
-    processResult,
-    updatedState,
-    validation,
-  ])
-
   return (
     <ConceptContext
       value={{
@@ -343,7 +331,7 @@ const ConceptProvider = ({ children }) => {
         displayConceptEditsAlert,
         editing,
         modified,
-        processUpdates,
+        processUpdates: submitUpdates,
         setEditing,
         updateConcept,
       }}

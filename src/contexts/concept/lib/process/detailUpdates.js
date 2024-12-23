@@ -1,14 +1,16 @@
 import { isEmpty, prune } from "@/lib/util"
 
-import { updateAuthor, updateMedia, updateRank } from "./update"
+import { updateAuthor, updateMedia, updateRank } from "../update"
+
+const isDetailValid = detail => Object.values(detail).every(Boolean)
 
 // Updates are transactional; the original concept is returned if any error occurs.
-const submitDetailUpdates = async params => {
+const processDetailUpdates = async params => {
   const { concept, config, updates, validation } = params
 
   const { author, media, rankLevel, rankName } = updates
 
-  const nextResult = detailSubmitter(concept, config)
+  const nextResult = detailProcessor(concept, config)
 
   let result = { error: null, concept: { ...concept } }
 
@@ -31,7 +33,7 @@ const submitDetailUpdates = async params => {
   return result
 }
 
-const detailSubmitter =
+const detailProcessor =
   (concept, config) => async (result, conceptUpdates, updateFn) => {
     if (result.error)
       return {
@@ -50,4 +52,4 @@ const detailSubmitter =
     return { error, updatedConcept }
   }
 
-export { submitDetailUpdates }
+export { isDetailValid, processDetailUpdates }

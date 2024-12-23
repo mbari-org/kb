@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const AlertContentText = ({ text }) => {
+const AlertContentText = ({ sx, text }) => {
   const theme = useTheme()
 
   return (
@@ -9,7 +9,7 @@ const AlertContentText = ({ text }) => {
       id="modal-message"
       variant="h6"
       component="h3"
-      sx={{ color: theme.palette.common.black, mt: 2 }}
+      sx={{ ...sx, color: theme.palette.common.black }}
     >
       {text}
     </Typography>

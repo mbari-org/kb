@@ -5,7 +5,7 @@ const REMOVE_RANK_NAME_VALUE = "REMOVE"
 const rankLevelNameValue = value =>
   value !== REMOVE_RANK_NAME_VALUE ? value : ""
 
-const validateUpdates = async updatesObject => {
+const validateDetailUpdates = async updatesObject => {
   let rankValidation = await validateRankUpdates(updatesObject)
 
   return {
@@ -14,4 +14,4 @@ const validateUpdates = async updatesObject => {
   }
 }
 
-export { rankLevelNameValue, REMOVE_RANK_NAME_VALUE, validateUpdates }
+export { rankLevelNameValue, REMOVE_RANK_NAME_VALUE, validateDetailUpdates }
