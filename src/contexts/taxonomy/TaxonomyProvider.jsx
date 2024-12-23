@@ -7,12 +7,12 @@ import TaxonomyContext from "./TaxonomyContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
 
 import {
-  getTaxonomyConcept,
+  getConcept as getTaxonomyConcept,
   load,
   loadTaxonomy,
   loadDescendants,
   needsUpdate,
-  updateTaxonomyConcept,
+  updateConcept as updateTaxonomyConcept,
 } from "@/model/taxonomy"
 
 const TaxonomyProvider = ({ children }) => {

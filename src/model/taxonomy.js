@@ -33,7 +33,7 @@ const loadDescendants = async (taxonomy, concept, updatable = false) => {
   return { taxonomy: updatableTaxonomy }
 }
 
-const getTaxonomyConcept = (taxonomy, conceptName) => {
+const getConcept = (taxonomy, conceptName) => {
   let concept = taxonomy?.concepts[conceptName]
   if (concept) {
     return concept
@@ -125,7 +125,7 @@ const loadTaxonomy = async config => {
 }
 
 const load = async (taxonomy, conceptName, updatable = false) => {
-  const existingConcept = getTaxonomyConcept(taxonomy, conceptName)
+  const existingConcept = getConcept(taxonomy, conceptName)
   if (!needsUpdate(existingConcept)) {
     return { taxonomy }
   }
@@ -248,7 +248,7 @@ const addAliases = (updatableTaxonomy, concept) => {
   }
 }
 
-const updateTaxonomyConcept = (taxonomy, concept) => {
+const updateConcept = (taxonomy, concept) => {
   const updatedConcepts = { ...taxonomy.concepts }
   updatedConcepts[concept.name] = concept
 
@@ -256,12 +256,12 @@ const updateTaxonomyConcept = (taxonomy, concept) => {
 }
 
 export {
+  getConcept,
   getNextSibling,
   getPrevSibling,
-  getTaxonomyConcept,
   load,
   loadDescendants,
   loadTaxonomy,
   needsUpdate,
-  updateTaxonomyConcept,
+  updateConcept,
 }
