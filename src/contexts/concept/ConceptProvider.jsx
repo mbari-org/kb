@@ -24,12 +24,7 @@ import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
 
 import useConceptPath from "./lib/useConceptPath"
 import useProcessError from "./lib/useProcessError"
-
-import {
-  createAlertButtons,
-  createAlertTitle,
-  createAlertContentUnsavedEdits,
-} from "@/components/modals/alert/components"
+import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
 
 import { isEmpty } from "@/lib/util"
 
@@ -195,50 +190,50 @@ const ConceptProvider = ({ children }) => {
     [concept, selectConcept, selectPanel, setModalAlert, reset, initialState]
   )
 
-  const createUnsavedEditsModalAlert = ({ onChoice, updates }) => {
-    return {
-      Title: createAlertTitle({ title: "Current Edits" }),
-      Content: createAlertContentUnsavedEdits({ updates }),
-      Choices: createAlertButtons({
-        choices: ["Discard Edits", "Continue Editing"],
-        onChoice,
-      }),
-    }
-  }
-
-  const displayConceptEditsAlert = useCallback(() => {
-    const onChoice = choice => {
-      switch (choice) {
-        case "Discard Edits":
-          reset(initialState)
-          break
-        case "Continue Editing":
-          setEditing(true)
-          selectConcept(concept?.name)
-          selectPanel("Concepts")
-          break
-        default:
-          break
-      }
-      setModalAlert(null)
-    }
-
-    const updates = getCurrentUpdates(updatedState)
-    const conceptEditingModalAlert = createUnsavedEditsModalAlert({
-      onChoice,
-      updates,
-    })
-    setModalAlert(conceptEditingModalAlert)
-  }, [
+  const displayConceptEditsAlert = useDisplayConceptEditsAlert({
     getCurrentUpdates,
     updatedState,
     setModalAlert,
     reset,
     initialState,
     selectConcept,
-    concept?.name,
+    conceptName: concept?.name,
     selectPanel,
-  ])
+  })
+
+  // const displayConceptEditsAlert = useCallback(() => {
+  //   const onChoice = choice => {
+  //     switch (choice) {
+  //       case "Discard Edits":
+  //         reset(initialState)
+  //         break
+  //       case "Continue Editing":
+  //         setEditing(true)
+  //         selectConcept(concept?.name)
+  //         selectPanel("Concepts")
+  //         break
+  //       default:
+  //         break
+  //     }
+  //     setModalAlert(null)
+  //   }
+
+  //   const updates = getCurrentUpdates(updatedState)
+  //   const conceptEditingModalAlert = createUnsavedEditsModalAlert({
+  //     onChoice,
+  //     updates,
+  //   })
+  //   setModalAlert(conceptEditingModalAlert)
+  // }, [
+  //   getCurrentUpdates,
+  //   updatedState,
+  //   setModalAlert,
+  //   reset,
+  //   initialState,
+  //   selectConcept,
+  //   concept?.name,
+  //   selectPanel,
+  // ])
 
   useEffect(() => {
     if (!selected) {
