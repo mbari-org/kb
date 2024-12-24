@@ -21,11 +21,12 @@ import {
   UPDATE_NAME_ONLY,
 } from "./lib/process/nameUpdates"
 import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
+
 import useConceptPath from "./lib/useConceptPath"
+import useProcessError from "./lib/useProcessError"
 
 import {
   createAlertButtons,
-  createAlertContentText,
   createAlertTitle,
   createAlertContentUnsavedEdits,
 } from "@/components/modals/alert/components"
@@ -91,29 +92,7 @@ const ConceptProvider = ({ children }) => {
     [reset, selectConcept, updateConcept, updatedState]
   )
 
-  const processError = useCallback(
-    error => {
-      setModalAlert({
-        Title: createAlertTitle({
-          title: "Update Error",
-          type: "error",
-        }),
-        Content: createAlertContentText({
-          text: error.message,
-          type: "error",
-        }),
-        Choices: createAlertButtons({
-          choices: ["Continue"],
-          onChoice: () => {
-            setInitialState(initialState)
-            dispatch({ type: "INIT_STATE", payload: initialState })
-            setModalAlert(null)
-          },
-        }),
-      })
-    },
-    [initialState, setModalAlert]
-  )
+  const processError = useProcessError(initialState, reset)
 
   const processNameResult = useCallback(
     updatedName => {
@@ -213,7 +192,7 @@ const ConceptProvider = ({ children }) => {
       }
       setModalAlert(null)
     },
-    [, concept, selectConcept, selectPanel, setModalAlert, reset, initialState]
+    [concept, selectConcept, selectPanel, setModalAlert, reset, initialState]
   )
 
   const createUnsavedEditsModalAlert = ({ onChoice, updates }) => {
@@ -254,6 +233,8 @@ const ConceptProvider = ({ children }) => {
     getCurrentUpdates,
     updatedState,
     setModalAlert,
+    reset,
+    initialState,
     selectConcept,
     concept?.name,
     selectPanel,
