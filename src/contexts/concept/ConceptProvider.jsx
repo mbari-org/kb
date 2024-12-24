@@ -1,5 +1,6 @@
 import { use, useCallback, useEffect, useReducer, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
+import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
@@ -23,13 +24,14 @@ import {
 import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
 
 import useConceptPath from "./lib/useConceptPath"
-import useConceptSelected from "./lib/useConceptSelected"
 import useProcessError from "./lib/useProcessError"
 import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
 
 import { isEmpty } from "@/lib/util"
 
 const ConceptProvider = ({ children }) => {
+  const theme = useTheme()
+
   const { showBoundary } = useErrorBoundary()
 
   const { modalAlert, setModalAlert } = use(ModalContext)
@@ -137,6 +139,7 @@ const ConceptProvider = ({ children }) => {
         conceptUpdate,
         config,
         setModalAlert,
+        theme,
         updates,
       }).then(validation => {
         if (isDetailValid(validation)) {
@@ -158,6 +161,7 @@ const ConceptProvider = ({ children }) => {
       processError,
       setModalAlert,
       showBoundary,
+      theme,
     ]
   )
 
@@ -202,21 +206,6 @@ const ConceptProvider = ({ children }) => {
     selectPanel,
   })
 
-  useConceptSelected({
-    selected,
-    concept,
-    editing,
-    modified,
-    modalAlert,
-    modalHasBeenDiplayed,
-    setEditing,
-    setModalAlertHasBeenDisplayed,
-    displayConceptEditsAlert,
-    loadConcept,
-    getConcept,
-    showBoundary,
-  })
-
   useEffect(() => {
     if (!selected) {
       return
@@ -254,7 +243,6 @@ const ConceptProvider = ({ children }) => {
         error => showBoundary(error)
       )
     }
-    // }
   }, [
     concept,
     displayConceptEditsAlert,

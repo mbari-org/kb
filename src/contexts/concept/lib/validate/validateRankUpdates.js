@@ -6,10 +6,13 @@ import {
 
 import { REMOVE_RANK_NAME_VALUE } from "./validateDetailUpdates"
 
+import { isAdmin } from "@/lib/services/oni/auth/validate"
+
 const validateRankUpdates = async ({
   concept,
   conceptUpdate,
   setModalAlert,
+  theme,
   updates,
 }) => {
   let validation = {
@@ -17,9 +20,9 @@ const validateRankUpdates = async ({
     rankName: true,
   }
 
-  // if (isAdmin()) {
-  //   return validation
-  // }
+  if (isAdmin()) {
+    return validation
+  }
 
   const removeLevel = updates.rankLevel === REMOVE_RANK_NAME_VALUE
   const removeName = updates.rankName === REMOVE_RANK_NAME_VALUE
@@ -60,10 +63,13 @@ const validateRankUpdates = async ({
   setModalAlert({
     Title: createAlertTitle({
       title: "Update Rank/Level Error",
-      type: "error",
     }),
     Content: createAlertContentText({ sx: { mt: 4, mb: 6 }, text }),
-    Choices: createAlertButtons({ choices, onChoice }),
+    Choices: createAlertButtons({
+      choices,
+      colors: [theme.color.cancel],
+      onChoice,
+    }),
   })
 
   return promise

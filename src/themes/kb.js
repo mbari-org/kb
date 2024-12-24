@@ -4,24 +4,26 @@ const { palette } = createTheme()
 const { augmentColor } = palette
 const addColor = color => augmentColor({ color: { main: color } })
 
-const baseMain = "#0077be"
-const baseLight = alpha(baseMain, 0.1)
-const basePale = alpha(baseMain, 0.3)
-const darkRed = "#af0000"
-const green = "#00ff00"
-const midGreen = "#008800"
-const red = "#ff0000"
+const main = "#0077be"
+const light = alpha(main, 0.1)
+const pale = alpha(main, 0.3)
 
-const navActive = palette.common.white
-const navHover = palette.primary.contrastText
-const navInactive = darken(palette.primary.contrastText, 0.15)
+const cancel = "#af0000"
+const cleanDot = "#00ff00"
+const conceptDetail = "#008800"
+const paper = "#f0f0f0"
+const navActive = "#ffffff"
 
 const theme = createTheme({
+  color: {
+    cancel,
+  },
   concept: {
-    detailColor: midGreen,
-    dot: green,
-    pendingHistoryColor: darkRed,
-    pendingHistoryDot: red,
+    color: {
+      clean: cleanDot,
+      detail: conceptDetail,
+      pending: cancel,
+    },
     fontFamily: "Roboto, sans-serif",
     fontWeight: 600,
     infoFontSize: 32,
@@ -29,22 +31,22 @@ const theme = createTheme({
   },
   nav: {
     active: navActive,
-    hover: navHover,
-    inactive: navInactive,
+    hover: navActive,
+    inactive: darken(navActive, 0.15),
   },
   palette: {
     background: {
-      default: "#f0f0f0",
-      paper: "#f0f0f0",
+      default: paper,
+      paper,
     },
-    cancel: addColor(darkRed),
-    light: addColor(baseLight),
-    pale: addColor(basePale),
-    main: addColor(baseMain),
+    cancel: addColor(cancel),
+    light: addColor(light),
+    pale: addColor(pale),
+    main: addColor(main),
     primary: {
-      light: baseLight,
-      main: baseMain,
-      pale: basePale,
+      light,
+      main,
+      pale,
     },
     secondary: {
       main: "#ff5722",

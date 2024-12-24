@@ -1,18 +1,25 @@
 import { Button } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const AlertButton = ({ choice, disabled, index, totalChoices, onChoice }) => {
+const AlertButton = ({
+  choice,
+  color,
+  disabled,
+  index,
+  totalChoices,
+  onChoice,
+}) => {
   const theme = useTheme()
+
+  const buttonColor = color || theme.palette.primary.main
 
   return (
     <Button
       key={index}
       disabled={disabled}
-      onClick={() => {
-        onChoice(choice)
-      }}
+      onClick={() => onChoice(choice)}
       sx={{
-        color: theme.palette.primary.main,
+        color: buttonColor,
         fontSize: "1.25rem",
         fontWeight: "bold",
         minWidth: "auto",

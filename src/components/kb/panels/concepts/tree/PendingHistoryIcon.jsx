@@ -5,8 +5,8 @@ const PendingHistoryIcon = ({ hasPendingHistory }) => {
   const { concept: conceptTheme } = useTheme()
 
   const dotColor = hasPendingHistory
-    ? conceptTheme.pendingHistoryDot
-    : conceptTheme.dot
+    ? conceptTheme.color.pending
+    : conceptTheme.color.clean
 
   return (
     <Box

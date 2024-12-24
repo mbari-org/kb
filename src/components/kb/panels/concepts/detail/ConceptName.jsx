@@ -24,8 +24,8 @@ const ConceptName = () => {
   const hasPendingHistory = !!getPendingHistory(concept.name)
 
   const conceptColor = hasPendingHistory
-    ? conceptTheme.pendingHistoryColor
-    : conceptTheme.detailColor
+    ? conceptTheme.color.pending
+    : conceptTheme.color.detail
 
   const editConceptName = () => {
     setModalAlert({

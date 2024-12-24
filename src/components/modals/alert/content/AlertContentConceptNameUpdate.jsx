@@ -4,15 +4,20 @@ import { Box, TextField, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const AlertContentConceptNameUpdate = () => {
-  const { concept, conceptState, conceptUpdate } = use(ConceptContext)
   const { concept: conceptTheme, palette } = useTheme()
 
+  const { concept, conceptState, conceptUpdate } = use(ConceptContext)
+  const { getConceptNames } = use(TaxonomyContext)
+
+  const names = getConceptNames()
+
   const toColor =
-    conceptState.name === concept.name
-      ? conceptTheme.detailColor
-      : conceptTheme.pendingHistoryColor
+    conceptState.name === concept.name || names.includes(conceptState.name)
+      ? palette.grey[500]
+      : palette.primary.main
 
   const handleChange = event => {
     conceptUpdate({ name: event.target.value })
@@ -28,7 +33,7 @@ const AlertContentConceptNameUpdate = () => {
               fontFamily={conceptTheme.fontFamily}
               fontSize={conceptTheme.updateFontSize}
               fontWeight={conceptTheme.fontWeight}
-              sx={{ color: palette.common.black }}
+              sx={{ color: conceptTheme.color.detail }}
               variant="h6"
             >
               {concept.name}
