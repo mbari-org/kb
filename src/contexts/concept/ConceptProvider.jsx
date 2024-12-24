@@ -28,6 +28,7 @@ import {
   UPDATE_NAME_ONLY,
 } from "./lib/process/nameUpdates"
 import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
+import useConceptPath from "./lib/useConceptPath"
 
 import {
   createAlertButtons,
@@ -63,19 +64,7 @@ const ConceptProvider = ({ children }) => {
 
   const config = taxonomy.config
 
-  const getConceptPath = useCallback(
-    (concept, path = [concept.name]) =>
-      concept.parent
-        ? getConceptPath(concept.parent, [concept.parent.name, ...path])
-        : path,
-    []
-  )
-
-  const conceptPath = useMemo(() => {
-    if (concept) {
-      return getConceptPath(concept)
-    }
-  }, [concept, getConceptPath])
+  const conceptPath = useConceptPath(concept)
 
   // filterUpdate returns a function but eslint isn't aware of that
   // eslint-disable-next-line react-hooks/exhaustive-deps
