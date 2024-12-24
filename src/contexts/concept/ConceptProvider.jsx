@@ -1,11 +1,4 @@
-import {
-  use,
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from "react"
+import { use, useCallback, useEffect, useReducer, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -75,12 +68,16 @@ const ConceptProvider = ({ children }) => {
   const conceptUpdate = update =>
     dispatch({ type: "SET_FIELD", payload: update })
 
-  const cancelUpdates = useCallback(() => {
-    dispatch({ type: "INIT_STATE", payload: initialState })
-    setEditing(false)
-    setModified(false)
-    setModalAlert(null)
-  }, [initialState, setModalAlert])
+  const reset = useCallback(
+    conceptState => {
+      setEditing(false)
+      setModified(false)
+      setModalAlert(null)
+
+      dispatch({ type: "INIT_STATE", payload: conceptState })
+    },
+    [setEditing, setModified, setModalAlert]
+  )
 
   const processDetailResult = useCallback(
     updatedConcept => {
@@ -89,13 +86,9 @@ const ConceptProvider = ({ children }) => {
       selectConcept(updatedConcept.name)
       setInitialState(updatedState)
 
-      dispatch({ type: "INIT_STATE", payload: updatedState })
-
-      setModalAlert(null)
-      setEditing(false)
-      setModified(false)
+      reset(updatedState)
     },
-    [selectConcept, setModalAlert, updateConcept, updatedState]
+    [reset, selectConcept, updateConcept, updatedState]
   )
 
   const processError = useCallback(
@@ -138,7 +131,7 @@ const ConceptProvider = ({ children }) => {
 
   const submitUpdates = choice => {
     if (!modified) {
-      cancelUpdates()
+      reset(initialState)
       return
     }
 
@@ -146,7 +139,7 @@ const ConceptProvider = ({ children }) => {
 
     switch (choice) {
       case "Cancel":
-        cancelUpdates()
+        reset(initialState)
         break
       case "Info":
         submitDetailUpdates(updates)
@@ -209,7 +202,7 @@ const ConceptProvider = ({ children }) => {
     choice => {
       switch (choice) {
         case "Discard Edits":
-          cancelUpdates()
+          reset(initialState)
           break
         case "Continue Editing":
           selectConcept(concept?.name)
@@ -220,7 +213,7 @@ const ConceptProvider = ({ children }) => {
       }
       setModalAlert(null)
     },
-    [cancelUpdates, concept, selectConcept, selectPanel, setModalAlert]
+    [, concept, selectConcept, selectPanel, setModalAlert, reset, initialState]
   )
 
   const createUnsavedEditsModalAlert = ({ onChoice, updates }) => {
@@ -238,7 +231,7 @@ const ConceptProvider = ({ children }) => {
     const onChoice = choice => {
       switch (choice) {
         case "Discard Edits":
-          cancelUpdates()
+          reset(initialState)
           break
         case "Continue Editing":
           setEditing(true)
@@ -261,7 +254,6 @@ const ConceptProvider = ({ children }) => {
     getCurrentUpdates,
     updatedState,
     setModalAlert,
-    cancelUpdates,
     selectConcept,
     concept?.name,
     selectPanel,
