@@ -1,18 +1,25 @@
-import { use, useEffect, useState } from "react"
+import { use, useCallback, useEffect, useState, useTransition } from "react"
 
 import { Box } from "@mui/material"
+
+import ConfigForm from "@/components/config/ConfigForm"
+import LoginForm from "@/components/auth/LoginForm"
 
 import mbariLogo from "@/assets/login-logo.png"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
-import ConfigForm from "@/components/config/ConfigForm"
-import LoginForm from "@/components/auth/LoginForm"
-
 const StartUp = () => {
   const { config } = use(ConfigContext)
-
   const [configIsDirty, setConfigIsDirty] = useState(true)
+
+  const [isPending, startTransition] = useTransition()
+
+  const handleConfigChange = useCallback(newConfigIsDirty => {
+    startTransition(() => {
+      setConfigIsDirty(newConfigIsDirty)
+    })
+  }, [])
 
   useEffect(() => {
     setConfigIsDirty(!config?.valid)
@@ -48,9 +55,17 @@ const StartUp = () => {
         />
         <ConfigForm
           configIsDirty={configIsDirty}
-          setConfigIsDirty={setConfigIsDirty}
+          setConfigIsDirty={handleConfigChange}
         />
-        {!configIsDirty && <LoginForm />}
+        <Box
+          style={{
+            opacity: configIsDirty ? 0 : 1,
+            transition: "opacity 300ms ease-out",
+            pointerEvents: configIsDirty ? "none" : "auto",
+          }}
+        >
+          <LoginForm />
+        </Box>
       </Box>
     </Box>
   )
