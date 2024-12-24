@@ -38,7 +38,7 @@ const useDisplayConceptEditsAlert = ({
 
     const createUnsavedEditsModalAlert = ({ onChoice, updates }) => {
       return {
-        Title: createAlertTitle({ title: "Current Edits" }),
+        Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
         Content: createAlertContentUnsavedEdits({ updates }),
         Choices: createAlertButtons({
           choices: ["Discard Edits", "Continue Editing"],
