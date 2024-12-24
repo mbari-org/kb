@@ -23,6 +23,7 @@ import {
 import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
 
 import useConceptPath from "./lib/useConceptPath"
+import useConceptSelected from "./lib/useConceptSelected"
 import useProcessError from "./lib/useProcessError"
 import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
 
@@ -201,39 +202,20 @@ const ConceptProvider = ({ children }) => {
     selectPanel,
   })
 
-  // const displayConceptEditsAlert = useCallback(() => {
-  //   const onChoice = choice => {
-  //     switch (choice) {
-  //       case "Discard Edits":
-  //         reset(initialState)
-  //         break
-  //       case "Continue Editing":
-  //         setEditing(true)
-  //         selectConcept(concept?.name)
-  //         selectPanel("Concepts")
-  //         break
-  //       default:
-  //         break
-  //     }
-  //     setModalAlert(null)
-  //   }
-
-  //   const updates = getCurrentUpdates(updatedState)
-  //   const conceptEditingModalAlert = createUnsavedEditsModalAlert({
-  //     onChoice,
-  //     updates,
-  //   })
-  //   setModalAlert(conceptEditingModalAlert)
-  // }, [
-  //   getCurrentUpdates,
-  //   updatedState,
-  //   setModalAlert,
-  //   reset,
-  //   initialState,
-  //   selectConcept,
-  //   concept?.name,
-  //   selectPanel,
-  // ])
+  useConceptSelected({
+    selected,
+    concept,
+    editing,
+    modified,
+    modalAlert,
+    modalHasBeenDiplayed,
+    setEditing,
+    setModalAlertHasBeenDisplayed,
+    displayConceptEditsAlert,
+    loadConcept,
+    getConcept,
+    showBoundary,
+  })
 
   useEffect(() => {
     if (!selected) {
