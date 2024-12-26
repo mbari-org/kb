@@ -4,13 +4,12 @@ const AlertButtonsContainer = ({ buttons }) => {
   return (
     <Box
       sx={{
-        alignItems: "center",
-        boxSizing: "border-box",
+        backgroundColor: "inherit",
         display: "flex",
-        height: "100%",
-        mt: 2,
-        position: "relative",
-        px: 0,
+        justifyContent: "space-between",
+        mt: 4,
+        padding: 1,
+        width: "100%",
       }}
     >
       {buttons}

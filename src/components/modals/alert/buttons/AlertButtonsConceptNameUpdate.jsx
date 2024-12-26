@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import { useTheme } from "@mui/material/styles"
+// import { useTheme } from "@mui/material/styles"
 
 import AlertButton from "./AlertButton"
 import AlertButtonsContainer from "./AlertButtonsContainer"
@@ -9,7 +9,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const AlertButtonsConceptNameUpdate = () => {
-  const theme = useTheme()
+  // const theme = useTheme()
 
   const { concept, conceptState, processUpdates } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
@@ -18,8 +18,7 @@ const AlertButtonsConceptNameUpdate = () => {
 
   const names = getConceptNames()
 
-  const color = index =>
-    index === 0 ? theme.color.cancel : theme.palette.primary.main
+  const color = index => (index === 0 ? "cancel" : "main")
 
   const disabled =
     concept.name !== conceptState.name && !names.includes(conceptState.name)

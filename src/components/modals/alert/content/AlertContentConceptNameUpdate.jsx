@@ -10,9 +10,15 @@ const AlertContentConceptNameUpdate = () => {
   const { concept: conceptTheme, palette } = useTheme()
 
   const { concept, conceptState, conceptUpdate } = use(ConceptContext)
-  const { getConceptNames } = use(TaxonomyContext)
+  const { getConceptNames, getPendingHistory } = use(TaxonomyContext)
 
   const names = getConceptNames()
+
+  const fromColor = getPendingHistory(concept.name)
+    ? conceptTheme.color.pending
+    : conceptTheme.color.detail
+
+  // const fromColor =
 
   const toColor =
     conceptState.name === concept.name || names.includes(conceptState.name)
@@ -30,10 +36,10 @@ const AlertContentConceptNameUpdate = () => {
           <Box display="flex" alignItems="center">
             <Typography minWidth={60}>From:</Typography>
             <Typography
+              color={fromColor}
               fontFamily={conceptTheme.fontFamily}
               fontSize={conceptTheme.updateFontSize}
               fontWeight={conceptTheme.fontWeight}
-              sx={{ color: conceptTheme.color.detail }}
               variant="h6"
             >
               {concept.name}
