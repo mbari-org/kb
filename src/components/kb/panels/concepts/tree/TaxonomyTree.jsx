@@ -20,7 +20,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
-  const { taxonomy } = use(TaxonomyContext)
+  const { getConcept, taxonomy } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
 
@@ -55,7 +55,9 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     sidebarRef
   )
 
-  if (!concept) {
+  // when the concept name changes, we get the stale concept here during update. the
+  // getConcept call prevents further processing until the concept done updating
+  if (!concept || !getConcept(concept.name)) {
     return null
   }
 
