@@ -13,13 +13,16 @@ const StartUp = () => {
   const { config } = use(ConfigContext)
   const [configIsDirty, setConfigIsDirty] = useState(true)
 
-  const [isPending, startTransition] = useTransition()
+  const [_isPending, startTransition] = useTransition()
 
-  const handleConfigChange = useCallback(newConfigIsDirty => {
-    startTransition(() => {
-      setConfigIsDirty(newConfigIsDirty)
-    })
-  }, [])
+  const handleConfigChange = useCallback(
+    newConfigIsDirty => {
+      startTransition(() => {
+        setConfigIsDirty(newConfigIsDirty)
+      })
+    },
+    [startTransition]
+  )
 
   useEffect(() => {
     setConfigIsDirty(!config?.valid)

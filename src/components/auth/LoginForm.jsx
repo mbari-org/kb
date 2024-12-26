@@ -24,7 +24,7 @@ const LoginForm = () => {
   const [loginState, loginAction] = useActionState(submitLogin, null)
 
   useEffect(() => {
-    updateAuth(loginState?.auth)
+    !!loginState && updateAuth(loginState?.auth)
   }, [loginState, updateAuth])
 
   useEffect(() => {
