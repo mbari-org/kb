@@ -67,7 +67,7 @@ const validateRankUpdates = async ({
     Content: createAlertContentText({ sx: { mt: 4, mb: 6 }, text }),
     Choices: createAlertButtons({
       choices,
-      colors: [theme.color.cancel],
+      colors: ["cancel"],
       onChoice,
     }),
   })

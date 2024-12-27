@@ -42,7 +42,7 @@ const useDisplayConceptEditsAlert = ({
         Content: createAlertContentUnsavedEdits({ updates }),
         Choices: createAlertButtons({
           choices: ["Discard Edits", "Continue Editing"],
-          colors: [theme.color.cancel, theme.palette.primary.main],
+          colors: ["cancel", "main"],
           onChoice,
         }),
       }
