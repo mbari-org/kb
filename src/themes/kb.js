@@ -1,4 +1,4 @@
-import { alpha, createTheme, darken } from "@mui/material/styles"
+import { alpha, createTheme, darken, lighten } from "@mui/material/styles"
 
 const { palette } = createTheme()
 const { augmentColor } = palette
@@ -38,12 +38,15 @@ const theme = createTheme({
     background: {
       default: paper,
       paper,
+      paperDark: darken(paper, 0.1),
+      paperLight: lighten(paper, 0.1),
     },
     cancel: addColor(cancel),
     light: addColor(light),
     pale: addColor(pale),
     main: addColor(main),
     primary: {
+      cancel,
       light,
       main,
       pale,
