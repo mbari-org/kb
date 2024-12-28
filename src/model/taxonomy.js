@@ -47,6 +47,11 @@ const getConcept = (taxonomy, conceptName) => {
   return null
 }
 
+const getConceptPrimaryName = (taxonomy, conceptName) => {
+  const concept = getConcept(taxonomy, conceptName)
+  return concept?.name
+}
+
 const getNextSibling = concept => {
   if (concept && concept.parent) {
     const siblings = concept.parent.children
@@ -306,6 +311,7 @@ const updateConceptName = (taxonomy, concept, newName) => {
 
 export {
   getConcept,
+  getConceptPrimaryName,
   getNextSibling,
   getPrevSibling,
   load,

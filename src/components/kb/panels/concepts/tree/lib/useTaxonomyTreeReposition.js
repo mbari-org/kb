@@ -15,19 +15,13 @@ const useTaxonomyTreeReposition = (apiRef, concept) => {
     }
 
     if (loading) {
-      console.log("TaxonomyTree loading conceptName", conceptName)
       return
     }
 
-    console.log("TaxonomyTree loading done for conceptName", conceptName)
-
     // Scroll and focused item after a short delay to allow tree expansion
     timeoutRef.current = setTimeout(() => {
-      console.log("TaxonomyTree reposition conceptName", conceptName)
-
       const domElement = apiRef.current.getItemDOMElement(conceptName)
       if (!domElement) {
-        console.log("TaxonomyTree reposition: no domElement")
         return
       }
       const rect = domElement.getBoundingClientRect()
@@ -39,7 +33,7 @@ const useTaxonomyTreeReposition = (apiRef, concept) => {
         domElement.scrollIntoView({ behavior: "smooth", block: "nearest" })
         apiRef.current.focusItem(null, conceptName)
       }
-    }, 1000)
+    }, 750)
 
     return () => {
       if (timeoutRef.current) {

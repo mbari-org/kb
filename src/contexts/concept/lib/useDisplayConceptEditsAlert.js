@@ -1,7 +1,5 @@
 import { useCallback } from "react"
 
-import { useTheme } from "@mui/material/styles"
-
 import {
   createAlertButtons,
   createAlertContentUnsavedEdits,
@@ -18,8 +16,6 @@ const useDisplayConceptEditsAlert = ({
   conceptName,
   selectPanel,
 }) => {
-  const theme = useTheme()
-
   const displayConceptEditsAlert = useCallback(() => {
     const onChoice = choice => {
       switch (choice) {
@@ -63,7 +59,6 @@ const useDisplayConceptEditsAlert = ({
     selectConcept,
     conceptName,
     selectPanel,
-    theme,
   ])
 
   return displayConceptEditsAlert

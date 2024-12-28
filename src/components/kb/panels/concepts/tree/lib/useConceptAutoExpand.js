@@ -2,25 +2,36 @@ import { useEffect } from "react"
 
 import Expand from "./expandedEnum"
 
-const useConceptAutoExpand = (
-  concept,
+const useConceptAutoExpand = ({
   autoExpand,
+  concept,
+  expandConcept,
+  getConceptPrimaryName,
   setAutoExpand,
-  expandConcept
-) => {
+}) => {
   useEffect(() => {
+    if (!concept) {
+      return
+    }
+
     // Expand concept on initial load
-    if (concept && autoExpand === null) {
+    if (autoExpand === null) {
       setAutoExpand({ expand: true, name: concept.name })
-    } else if (
-      concept &&
-      autoExpand.expand &&
-      autoExpand.name === concept.name
+      return
+    }
+
+    if (!autoExpand) {
+      return
+    }
+
+    if (
+      autoExpand.name === concept.name ||
+      getConceptPrimaryName(autoExpand.name) === concept.name
     ) {
       expandConcept(concept, Expand.ON)
       setAutoExpand({ expand: false, name: null })
     }
-  }, [autoExpand, concept, expandConcept, setAutoExpand])
+  }, [autoExpand, concept, expandConcept, getConceptPrimaryName, setAutoExpand])
 }
 
 export default useConceptAutoExpand

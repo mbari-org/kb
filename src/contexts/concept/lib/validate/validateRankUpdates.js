@@ -12,7 +12,6 @@ const validateRankUpdates = async ({
   concept,
   conceptUpdate,
   setModalAlert,
-  theme,
   updates,
 }) => {
   let validation = {

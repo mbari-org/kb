@@ -1,7 +1,5 @@
 import { use, useCallback } from "react"
 
-import { useTheme } from "@mui/material/styles"
-
 import ModalContext from "@/contexts/modal/ModalContext"
 
 import {
@@ -12,7 +10,6 @@ import {
 
 const useProcessError = (initialState, reset) => {
   const { setModalAlert } = use(ModalContext)
-  const theme = useTheme()
 
   return useCallback(
     error => {
@@ -27,14 +24,14 @@ const useProcessError = (initialState, reset) => {
         }),
         Choices: createAlertButtons({
           choices: ["Continue"],
-          colors: [theme.color.cancel],
+          colors: ["cancel"],
           onChoice: () => {
             reset(initialState)
           },
         }),
       })
     },
-    [initialState, reset, setModalAlert, theme]
+    [initialState, reset, setModalAlert]
   )
 }
 

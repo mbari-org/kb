@@ -20,7 +20,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
-  const { getConcept, taxonomy } = use(TaxonomyContext)
+  const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
 
@@ -43,7 +43,13 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     setAutoExpand
   )
 
-  useConceptAutoExpand(concept, autoExpand, setAutoExpand, expandConcept)
+  useConceptAutoExpand({
+    autoExpand,
+    concept,
+    expandConcept,
+    getConceptPrimaryName,
+    setAutoExpand,
+  })
   useTaxonomyTreeReposition(apiRef, concept)
 
   useArrowKeys(
