@@ -1,7 +1,7 @@
 import { use } from "react"
 import { CiEdit } from "react-icons/ci"
 
-import { Button, Stack, Typography } from "@mui/material"
+import { IconButton, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import {
@@ -53,16 +53,18 @@ const ConceptName = () => {
         {concept.name}
       </Typography>
       {!editing && (
-        <Button
-          startIcon={<CiEdit size={24} />}
+        <IconButton
+          aria-label="Edit concept name"
+          color="main"
+          disabled={editing}
+          onClick={editConceptName}
           sx={{
             mb: 2,
-            ml: 1.5,
-            minWidth: "auto",
-            padding: "0",
+            visibility: editing ? "hidden" : "visible",
           }}
-          onClick={editConceptName}
-        />
+        >
+          <CiEdit size={24} />
+        </IconButton>
       )}
     </Stack>
   )

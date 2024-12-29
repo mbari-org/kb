@@ -11,6 +11,7 @@ const ConceptPath = () => {
 
   return (
     <Breadcrumbs
+      maxItems={Infinity}
       separator={<MdNavigateNext fontSize="large" />}
       sx={{
         "& .MuiBreadcrumbs-separator": { mx: 0 },

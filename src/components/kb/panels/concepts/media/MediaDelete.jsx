@@ -22,9 +22,9 @@ const MediaDelete = ({ onClick }) => {
     >
       <IconButton
         onClick={onClick}
+        color="cancel"
         sx={{
           backgroundColor: theme.palette.background.paper,
-          color: theme.palette.primary.cancel,
           "&:hover": {
             backgroundColor: `${theme.palette.background.paperLight} !important`,
             transform: "scale(1.1)",

@@ -19,9 +19,9 @@ const MediaAdd = ({ onClick }) => {
     >
       <IconButton
         onClick={onClick}
+        color="main"
         sx={{
           backgroundColor: theme.palette.background.paper,
-          color: theme.palette.primary.main,
           "&:hover": {
             backgroundColor: `${theme.palette.background.paperLight} !important`,
             transform: "scale(1.1)",

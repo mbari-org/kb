@@ -11,7 +11,7 @@ import useConceptInfoStyle from "./detail/useConceptInfoStyle"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const ConceptInfo = () => {
+const ConceptDetail = () => {
   const { editing } = use(ConceptContext)
 
   const infoStyle = useConceptInfoStyle(editing)()
@@ -32,4 +32,4 @@ const ConceptInfo = () => {
   )
 }
 
-export default ConceptInfo
+export default ConceptDetail

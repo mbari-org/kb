@@ -1,5 +1,3 @@
-// src/components/kb/panels/concepts/media/ConceptMedia.jsx
-
 import { use, useCallback, useEffect, useState } from "react"
 import { Box } from "@mui/material"
 

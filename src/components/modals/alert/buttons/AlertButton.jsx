@@ -15,7 +15,7 @@ const AlertButton = ({
       disabled={disabled}
       onClick={() => onChoice(choice)}
       sx={{
-        mx: index > 0 && index < totalChoices - 1 ? 0.5 : 0,
+        marginLeft: totalChoices === 1 ? "auto" : "inherit",
         minWidth: "auto",
         paddingX: 2,
         textAlign: index > 0 && index < totalChoices - 1 ? "center" : "inherit",

@@ -3,7 +3,7 @@ import { use } from "react"
 import { Stack } from "@mui/material"
 
 import ConceptActionButtons from "./detail/ConceptActionButtons"
-import ConceptInfo from "./ConceptDetail"
+import ConceptDetail from "./ConceptDetail"
 import ConceptMedia from "./media/ConceptMedia"
 import ConceptPath from "./ConceptPath"
 import ConceptViewToggle from "./toggleView/ConceptViewToggle"
@@ -36,7 +36,7 @@ const Concept = () => {
         <ConceptMedia
           sx={{ flexBasis: "33.33%", flexShrink: 0, overflow: "hidden" }}
         />
-        <ConceptInfo />
+        <ConceptDetail />
       </Stack>
       <ConceptActionButtons />
     </Stack>
