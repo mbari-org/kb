@@ -18,8 +18,6 @@ const AlertContentConceptNameUpdate = () => {
     ? conceptTheme.color.pending
     : conceptTheme.color.detail
 
-  // const fromColor =
-
   const toColor =
     conceptState.name === concept.name || names.includes(conceptState.name)
       ? palette.grey[500]

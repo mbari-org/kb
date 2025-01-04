@@ -1,5 +1,3 @@
-import { use } from "react"
-
 import { Stack } from "@mui/material"
 
 import ConceptAuthor from "./detail/ConceptAuthor"
@@ -7,15 +5,7 @@ import ConceptLevel from "./detail/ConceptLevel"
 import ConceptName from "./detail/ConceptName"
 import ConceptRank from "./detail/ConceptRank"
 
-import useConceptInfoStyle from "./detail/useConceptInfoStyle"
-
-import ConceptContext from "@/contexts/concept/ConceptContext"
-
 const ConceptDetail = () => {
-  const { editing } = use(ConceptContext)
-
-  const infoStyle = useConceptInfoStyle(editing)()
-
   return (
     <Stack
       direction="column"
@@ -23,10 +13,10 @@ const ConceptDetail = () => {
       sx={{ flex: "1", ml: 1, mr: 1, textAlign: "left" }}
     >
       <ConceptName />
-      <ConceptAuthor infoStyle={infoStyle} />
+      <ConceptAuthor />
       <Stack direction="row" spacing={2}>
-        <ConceptRank infoStyle={infoStyle} />
-        <ConceptLevel infoStyle={infoStyle} />
+        <ConceptRank />
+        <ConceptLevel />
       </Stack>
     </Stack>
   )

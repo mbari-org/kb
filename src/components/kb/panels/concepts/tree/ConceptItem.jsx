@@ -10,6 +10,8 @@ import ConceptsExpand from "./ConceptsExpand"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
+import { isEmpty } from "@/lib/util"
+
 const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { concept } = use(ConceptContext)
   const { getConcept, getConceptPendingHistory } = use(TaxonomyContext)
@@ -17,7 +19,7 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { itemId } = props
   const isSelected = itemId === concept.name
 
-  const hasPendingHistory = getConceptPendingHistory(itemId) ? true : false
+  const hasPendingHistory = !isEmpty(getConceptPendingHistory(itemId))
 
   const itemConcept = getConcept(itemId)
   const hasMedia = 0 < itemConcept.media.length

@@ -8,6 +8,8 @@ import {
   rankLevelNameValue,
 } from "@/contexts/concept/lib/validate/validateDetailUpdates"
 
+import useConceptDetailStyle from "./useConceptDetailStyle"
+
 const rankNames = [
   "domain",
   "realm",
@@ -24,11 +26,13 @@ const rankNames = [
   "form",
 ]
 
-const ConceptRank = ({ infoStyle }) => {
+const ConceptRank = () => {
   const {
     conceptState: { rankName },
     conceptUpdate,
   } = use(ConceptContext)
+
+  const infoStyle = useConceptDetailStyle("RankName")
 
   return (
     <FormControl {...infoStyle}>

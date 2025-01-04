@@ -14,6 +14,8 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
+import { isEmpty } from "@/lib/util"
+
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
 
@@ -21,7 +23,9 @@ const ConceptName = () => {
   const { setModalAlert } = use(ModalContext)
   const { getConceptPendingHistory } = use(TaxonomyContext)
 
-  const hasPendingHistory = !!getConceptPendingHistory(concept.name)
+  const hasPendingHistory = !isEmpty(
+    getConceptPendingHistory(concept.name, "ConceptName")
+  )
 
   const conceptColor = hasPendingHistory
     ? conceptTheme.color.pending

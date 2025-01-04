@@ -37,7 +37,7 @@ const getConceptNames = taxonomy => {
 }
 
 const getConceptPendingHistory = (taxonomy, conceptName) => {
-  return taxonomy.pendingHistory.find(
+  return taxonomy.pendingHistory.filter(
     history => history.concept === conceptName
   )
 }

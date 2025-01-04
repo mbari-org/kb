@@ -1,15 +1,18 @@
 import { use } from "react"
 
 import { TextField } from "@mui/material"
-// import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const ConceptAuthor = ({ infoStyle }) => {
+import useConceptDetailStyle from "./useConceptDetailStyle"
+
+const ConceptAuthor = () => {
   const {
     conceptState: { author },
     conceptUpdate,
   } = use(ConceptContext)
+
+  const infoStyle = useConceptDetailStyle("Author")
 
   return (
     <TextField

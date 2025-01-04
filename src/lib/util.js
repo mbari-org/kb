@@ -21,7 +21,14 @@ const isElementInViewport = element => {
   )
 }
 
-const isEmpty = object => Object.keys(object).length === 0
+const isEmpty = object => {
+  if (Array.isArray(object)) {
+    return object.length === 0
+  } else if (typeof object === "object" && object !== null) {
+    return Object.keys(object).length === 0
+  }
+  return true
+}
 
 const prune = obj => {
   const pruned = { ...obj }

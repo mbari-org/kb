@@ -40,11 +40,6 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getConceptPrimaryName = useCallback(
-    conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
-    [taxonomy]
-  )
-
   const getConceptPendingHistory = useCallback(
     (conceptName, field) => {
       const pendingHistory = getTaxonomyConceptPendingHistory(
@@ -54,8 +49,13 @@ const TaxonomyProvider = ({ children }) => {
       if (!field) {
         return pendingHistory
       }
-      return pendingHistory?.[field]
+      return pendingHistory.find(history => history.field === field)
     },
+    [taxonomy]
+  )
+
+  const getConceptPrimaryName = useCallback(
+    conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
     [taxonomy]
   )
 
