@@ -24,7 +24,7 @@ const ConceptName = () => {
   const { getConceptPendingHistory } = use(TaxonomyContext)
 
   const hasPendingHistory = !isEmpty(
-    getConceptPendingHistory(concept.name, "ConceptName")
+    getConceptPendingHistory(concept?.name, "ConceptName")
   )
 
   const conceptColor = hasPendingHistory
@@ -54,7 +54,7 @@ const ConceptName = () => {
         }}
         variant="body1"
       >
-        {concept.name}
+        {concept?.name}
       </Typography>
       {!editing && !hasPendingHistory && (
         <IconButton

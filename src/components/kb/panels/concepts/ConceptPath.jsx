@@ -24,7 +24,7 @@ const ConceptPath = () => {
         display: "flex",
       }}
     >
-      {conceptPath.map((path, index) => (
+      {conceptPath?.map((path, index) => (
         <Button
           key={index}
           color={index === conceptPath.length - 1 ? "primary" : "inherit"}
