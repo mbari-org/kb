@@ -263,11 +263,17 @@ const addAliases = (updatableTaxonomy, concept) => {
   }
 }
 
-const updateConcept = (taxonomy, concept) => {
+const updateConcept = async (taxonomy, concept) => {
   const updatedConcepts = { ...taxonomy.concepts }
   updatedConcepts[concept.name] = concept
 
-  return { taxonomy: { ...taxonomy, concepts: updatedConcepts } }
+  const pendingHistory = await apiCall(() =>
+    fetchPendingHistory(taxonomy.config)
+  )
+
+  return {
+    taxonomy: { ...taxonomy, concepts: updatedConcepts, pendingHistory },
+  }
 }
 
 const updateConceptName = (taxonomy, concept, newName) => {

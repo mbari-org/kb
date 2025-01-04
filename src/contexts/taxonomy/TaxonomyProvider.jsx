@@ -97,11 +97,11 @@ const TaxonomyProvider = ({ children }) => {
 
   const updateConcept = concept => {
     if (concept) {
-      const { taxonomy: updatedTaxonomy } = updateTaxonomyConcept(
-        taxonomy,
-        concept
+      updateTaxonomyConcept(taxonomy, concept).then(
+        ({ taxonomy: updatedTaxonomy }) => {
+          setTaxonomy(updatedTaxonomy)
+        }
       )
-      setTaxonomy(updatedTaxonomy)
     }
   }
 

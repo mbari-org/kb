@@ -22,8 +22,13 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const hasPendingHistory = !isEmpty(getConceptPendingHistory(itemId))
 
   const itemConcept = getConcept(itemId)
-  const hasMedia = 0 < itemConcept.media.length
+
+  if (!itemConcept) {
+    return null
+  }
+
   const mediaCount = itemConcept.media.length
+  const hasMedia = 0 < mediaCount
 
   return (
     <TreeItem2Provider itemId={itemId}>
