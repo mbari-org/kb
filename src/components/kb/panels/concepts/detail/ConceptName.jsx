@@ -56,7 +56,7 @@ const ConceptName = () => {
       >
         {concept.name}
       </Typography>
-      {!editing && (
+      {!editing && !hasPendingHistory && (
         <IconButton
           aria-label="Edit concept name"
           color="main"

@@ -2,6 +2,9 @@ import { useTheme } from "@mui/material/styles"
 import { use } from "react"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+
+import { isEmpty } from "@/lib/util"
 
 const baseStyle = {
   fullWidth: true,
@@ -20,36 +23,44 @@ const standardStyle = {
   variant: "standard",
 }
 
-const useConceptDetailStyle = _field => {
+const useConceptDetailStyle = field => {
   const theme = useTheme()
 
-  const { editing } = use(ConceptContext)
+  const { concept, editing } = use(ConceptContext)
+  const { getConceptPendingHistory } = use(TaxonomyContext)
 
-  const color = theme.palette.common.black
+  const hasPendingHistory = !isEmpty(
+    getConceptPendingHistory(concept?.name, field)
+  )
+
+  const textColor = hasPendingHistory
+    ? theme.concept.color.pending
+    : theme.palette.common.black
+  // : theme.concept.color.detail
 
   const sx = {
     "& .MuiInputBase-input": {
       backgroundColor: theme.palette.primary.light,
-      color,
-      WebkitTextFillColor: color,
+      color: textColor,
+      WebkitTextFillColor: textColor,
     },
     "& .MuiInputBase-input.Mui-disabled": {
       backgroundColor: "transparent",
-      color,
-      WebkitTextFillColor: color,
+      color: textColor,
+      WebkitTextFillColor: textColor,
     },
   }
 
-  if (editing) {
-    return {
-      ...editingStyle,
-      sx: sx,
-    }
-  } else {
+  if (!editing || hasPendingHistory) {
     return {
       ...standardStyle,
       sx: sx,
     }
+  }
+
+  return {
+    ...editingStyle,
+    sx: sx,
   }
 }
 
