@@ -12,12 +12,12 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { concept } = use(ConceptContext)
-  const { getConcept, getPendingHistory } = use(TaxonomyContext)
+  const { getConcept, getConceptPendingHistory } = use(TaxonomyContext)
 
   const { itemId } = props
   const isSelected = itemId === concept.name
 
-  const hasPendingHistory = getPendingHistory(itemId) ? true : false
+  const hasPendingHistory = getConceptPendingHistory(itemId) ? true : false
 
   const itemConcept = getConcept(itemId)
   const hasMedia = 0 < itemConcept.media.length

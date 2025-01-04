@@ -8,6 +8,8 @@ import ConfigContext from "@/contexts/config/ConfigContext"
 
 import {
   getConcept as getTaxonomyConcept,
+  getConceptNames as getTaxonomyConceptNames,
+  getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   load,
   loadTaxonomy,
@@ -33,16 +35,27 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getConceptNames = useCallback(() => taxonomy.names, [taxonomy])
-
-  const getPendingHistory = useCallback(
-    conceptName =>
-      taxonomy.pendingHistory.find(history => conceptName === history.concept),
+  const getConceptNames = useCallback(
+    () => getTaxonomyConceptNames(taxonomy),
     [taxonomy]
   )
 
   const getConceptPrimaryName = useCallback(
     conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
+    [taxonomy]
+  )
+
+  const getConceptPendingHistory = useCallback(
+    (conceptName, field) => {
+      const pendingHistory = getTaxonomyConceptPendingHistory(
+        taxonomy,
+        conceptName
+      )
+      if (!field) {
+        return pendingHistory
+      }
+      return pendingHistory?.[field]
+    },
     [taxonomy]
   )
 
@@ -136,7 +149,7 @@ const TaxonomyProvider = ({ children }) => {
       value={{
         getConcept,
         getConceptNames,
-        getPendingHistory,
+        getConceptPendingHistory,
         getConceptPrimaryName,
         loadConcept,
         loadConceptDescendants,

@@ -18,21 +18,6 @@ const apiCall = async fetchFn => {
   return payload
 }
 
-const loadDescendants = async (taxonomy, concept, updatable = false) => {
-  const updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
-  const updatableConcept = { ...concept }
-
-  await loadChildren(updatableTaxonomy, updatableConcept)
-
-  if (updatableConcept.children) {
-    for (const child of updatableConcept.children) {
-      await loadDescendants(updatableTaxonomy, child, true)
-    }
-  }
-
-  return { taxonomy: updatableTaxonomy }
-}
-
 const getConcept = (taxonomy, conceptName) => {
   let concept = taxonomy?.concepts[conceptName]
   if (concept) {
@@ -45,6 +30,16 @@ const getConcept = (taxonomy, conceptName) => {
   }
 
   return null
+}
+
+const getConceptNames = taxonomy => {
+  return taxonomy.names
+}
+
+const getConceptPendingHistory = (taxonomy, conceptName) => {
+  return taxonomy.pendingHistory.find(
+    history => history.concept === conceptName
+  )
 }
 
 const getConceptPrimaryName = (taxonomy, conceptName) => {
@@ -191,6 +186,21 @@ const loadChildren = async (updatableTaxonomy, updatableConcept) => {
   addAliases(updatableTaxonomy, updatableConcept)
 }
 
+const loadDescendants = async (taxonomy, concept, updatable = false) => {
+  const updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
+  const updatableConcept = { ...concept }
+
+  await loadChildren(updatableTaxonomy, updatableConcept)
+
+  if (updatableConcept.children) {
+    for (const child of updatableConcept.children) {
+      await loadDescendants(updatableTaxonomy, child, true)
+    }
+  }
+
+  return { taxonomy: updatableTaxonomy }
+}
+
 const loadGrandChildren = async (updatableTaxonomy, updatableConcept) => {
   if (!updatableConcept.children.some(child => !child.children)) {
     return
@@ -311,6 +321,8 @@ const updateConceptName = (taxonomy, concept, newName) => {
 
 export {
   getConcept,
+  getConceptNames,
+  getConceptPendingHistory,
   getConceptPrimaryName,
   getNextSibling,
   getPrevSibling,

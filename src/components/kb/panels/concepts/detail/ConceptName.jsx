@@ -19,9 +19,9 @@ const ConceptName = () => {
 
   const { concept, editing } = use(ConceptContext)
   const { setModalAlert } = use(ModalContext)
-  const { getPendingHistory } = use(TaxonomyContext)
+  const { getConceptPendingHistory } = use(TaxonomyContext)
 
-  const hasPendingHistory = !!getPendingHistory(concept.name)
+  const hasPendingHistory = !!getConceptPendingHistory(concept.name)
 
   const conceptColor = hasPendingHistory
     ? conceptTheme.color.pending

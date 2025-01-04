@@ -10,11 +10,11 @@ const AlertContentConceptNameUpdate = () => {
   const { concept: conceptTheme, palette } = useTheme()
 
   const { concept, conceptState, conceptUpdate } = use(ConceptContext)
-  const { getConceptNames, getPendingHistory } = use(TaxonomyContext)
+  const { getConceptNames, getConceptPendingHistory } = use(TaxonomyContext)
 
   const names = getConceptNames()
 
-  const fromColor = getPendingHistory(concept.name)
+  const fromColor = getConceptPendingHistory(concept.name)
     ? conceptTheme.color.pending
     : conceptTheme.color.detail
 
