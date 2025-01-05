@@ -46,24 +46,40 @@ const MediaPreview = ({ previewMedia, openPreview }) => {
         }}
       >
         <Typography
-          variant="caption"
           align="center"
           sx={{
             flexGrow: 1,
             textAlign: "center",
           }}
+          variant="caption"
         >
           {previewMedia?.caption}
         </Typography>
-        {previewMedia?.caption && (
-          <Tooltip title={previewMedia?.credit}>
+        {previewMedia?.credit && (
+          <Tooltip
+            title={previewMedia?.credit}
+            slotProps={{
+              tooltip: {
+                sx: {
+                  backgroundColor: theme.palette.primary.main,
+                  color: "white",
+                },
+              },
+            }}
+          >
             <IconButton
               sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: "white",
                 padding: 0,
                 marginLeft: 1,
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.main,
+                  transform: "scale(1.25)",
+                },
               }}
             >
-              <BsInfoCircle size="16" />
+              <BsInfoCircle size="18" />
             </IconButton>
           </Tooltip>
         )}

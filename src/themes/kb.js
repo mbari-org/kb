@@ -15,9 +15,6 @@ const paper = "#f0f0f0"
 const navActive = "#ffffff"
 
 const theme = createTheme({
-  color: {
-    cancel,
-  },
   concept: {
     color: {
       clean: cleanDot,
