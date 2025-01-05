@@ -1,26 +1,48 @@
-import { Typography } from "@mui/material"
+import { use } from "react"
+import { Box, Typography } from "@mui/material"
 
-const NoMedia = () => {
+import AddMedia from "./AddMedia"
+
+import ConceptContext from "@/contexts/concept/ConceptContext"
+
+const NoMedia = ({ addMedia }) => {
+  const { editing } = use(ConceptContext)
+
   return (
-    <Typography
-      variant="h4"
-      align="center"
+    <Box
       sx={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%) rotate(-45deg)",
-        opacity: 0.2,
-        color: "#888",
-        fontWeight: "bold",
-        textTransform: "uppercase",
-        letterSpacing: "0.1em",
-        pointerEvents: "none",
-        zIndex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100%",
+        textAlign: "center",
+        position: "relative",
       }}
     >
-      No Media
-    </Typography>
+      <Typography
+        variant="h4"
+        align="center"
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%) rotate(-45deg)",
+          opacity: 0.2,
+          color: "#888",
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          letterSpacing: "0.1em",
+          pointerEvents: "none",
+          zIndex: 1,
+        }}
+      >
+        No Media
+      </Typography>
+      {editing && (
+        <AddMedia bgColor="transparent" marginTop={10} onClick={addMedia} />
+      )}
+    </Box>
   )
 }
 

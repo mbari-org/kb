@@ -1,16 +1,13 @@
 import { Box, IconButton } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
 
 import { MdAddPhotoAlternate } from "react-icons/md"
 
-const MediaAdd = ({ onClick }) => {
-  const theme = useTheme()
-
+const AddMedia = ({ bgColor, marginTop, onClick }) => {
   return (
     <Box
       sx={{
         left: "50%",
-        marginTop: 2,
+        marginTop: marginTop,
         position: "absolute",
         top: 0,
         transform: "translateX(-50%)",
@@ -21,11 +18,12 @@ const MediaAdd = ({ onClick }) => {
         onClick={onClick}
         color="main"
         sx={{
-          backgroundColor: theme.palette.background.paper,
+          backgroundColor: bgColor,
           "&:hover": {
-            backgroundColor: `${theme.palette.background.paperLight} !important`,
-            transform: "scale(1.1)",
+            backgroundColor: `${bgColor} !important`,
+            transform: "scale(1.25)",
           },
+          padding: 0.5,
         }}
       >
         <MdAddPhotoAlternate size={28} />
@@ -34,4 +32,4 @@ const MediaAdd = ({ onClick }) => {
   )
 }
 
-export default MediaAdd
+export default AddMedia

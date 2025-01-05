@@ -27,6 +27,17 @@ const ConceptMedia = () => {
     return () => clearTimeout(timer)
   }, [orderMedia])
 
+  const deleteMedia = mediaIndex => {
+    const updatedMedia = [...media]
+    updatedMedia.splice(mediaIndex, 1)
+    setMedia(updatedMedia)
+  }
+
+  const addMedia = newMedia => {
+    const updatedMedia = [...media, ...newMedia]
+    setMedia(updatedMedia)
+  }
+
   return (
     <Box
       sx={{
@@ -36,8 +47,15 @@ const ConceptMedia = () => {
         position: "relative",
       }}
     >
-      {media?.length === 0 && <NoMedia />}
-      {media?.length > 0 && <MediaView media={media} setMedia={setMedia} />}
+      {media?.length === 0 && <NoMedia addMedia={addMedia} />}
+      {media?.length > 0 && (
+        <MediaView
+          media={media}
+          setMedia={setMedia}
+          addMedia={addMedia}
+          deleteMedia={deleteMedia}
+        />
+      )}
     </Box>
   )
 }

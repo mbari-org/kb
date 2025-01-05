@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles"
 
 import { MdDeleteForever } from "react-icons/md"
 
-const MediaDelete = ({ onClick }) => {
+const DeleteMedia = ({ onClick }) => {
   const theme = useTheme()
 
   return (
@@ -27,8 +27,9 @@ const MediaDelete = ({ onClick }) => {
           backgroundColor: theme.palette.background.paper,
           "&:hover": {
             backgroundColor: `${theme.palette.background.paperLight} !important`,
-            transform: "scale(1.1)",
+            transform: "scale(1.25)",
           },
+          padding: 0.5,
         }}
       >
         <MdDeleteForever size={32} />
@@ -37,4 +38,4 @@ const MediaDelete = ({ onClick }) => {
   )
 }
 
-export default MediaDelete
+export default DeleteMedia

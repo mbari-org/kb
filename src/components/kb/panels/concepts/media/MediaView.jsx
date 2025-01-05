@@ -1,21 +1,19 @@
-// src/components/kb/panels/concepts/media/MediaView.jsx
-
 import { use, useEffect, useRef, useState } from "react"
 import { Box } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 
-import MediaAdd from "./MediaAdd"
+import AddMedia from "./AddMedia"
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
-import MediaDelete from "./MediaDelete"
+import DeleteMedia from "./DeleteMedia"
 import MediaSwiper from "./MediaSwiper"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const MediaView = ({ media, setMedia }) => {
-  const {
-    // conceptState: { media: conceptMedia },
-    editing,
-  } = use(ConceptContext)
+const MediaView = ({ media, addMedia, deleteMedia }) => {
+  const theme = useTheme()
+
+  const { editing } = use(ConceptContext)
 
   const mediaDisplayRef = useRef(null)
 
@@ -26,18 +24,7 @@ const MediaView = ({ media, setMedia }) => {
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
 
-  const handleMediaDelete = () => {
-    const updatedMedia = [...media]
-    updatedMedia.splice(mediaIndex, 1)
-    setMedia(updatedMedia)
-  }
-
-  const handleMediaAdd = newMedia => {
-    const updatedMedia = [...media, ...newMedia]
-    setMedia(updatedMedia)
-  }
-
-  const mediaSrc = () => (0 < media?.length ? media[mediaIndex]?.url : null)
+  const mediaSrc = 0 < media?.length ? media[mediaIndex]?.url : null
 
   useEffect(() => {
     if (mediaDisplayRef.current) {
@@ -49,15 +36,15 @@ const MediaView = ({ media, setMedia }) => {
   return (
     <>
       <Box ref={mediaDisplayRef}>
-        <MediaDisplay mediaSrc={mediaSrc()} openPreview={openPreview} />
+        <MediaDisplay mediaSrc={mediaSrc} openPreview={openPreview} />
         {!editing && (
           <MediaPreview
             closePreview={closePreview}
-            mediaSrc={mediaSrc()}
+            mediaSrc={mediaSrc}
             previewImage={previewImage}
           />
         )}
-        {editing && <MediaDelete onClick={handleMediaDelete} />}
+        {editing && <DeleteMedia onClick={() => deleteMedia(mediaIndex)} />}
       </Box>
       <Box sx={{ mt: 0.5, position: "relative", overflow: "visible" }}>
         <MediaSwiper
@@ -65,7 +52,13 @@ const MediaView = ({ media, setMedia }) => {
           height={swiperHeight}
           setMediaIndex={setMediaIndex}
         />
-        {editing && <MediaAdd onClick={handleMediaAdd} />}
+        {editing && (
+          <AddMedia
+            bgColor={theme.palette.background.paperLight}
+            marginTop={2}
+            onClick={addMedia}
+          />
+        )}
       </Box>
     </>
   )
