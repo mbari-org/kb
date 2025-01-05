@@ -3,9 +3,9 @@ import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import AddMedia from "./AddMedia"
+import DeleteMedia from "./DeleteMedia"
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
-import DeleteMedia from "./DeleteMedia"
 import MediaSwiper from "./MediaSwiper"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -15,7 +15,7 @@ const MediaView = ({ media, addMedia, deleteMedia }) => {
 
   const { editing } = use(ConceptContext)
 
-  const mediaDisplayRef = useRef(null)
+  const mediaViewRef = useRef(null)
 
   const [mediaIndex, setMediaIndex] = useState(0)
   const [previewImage, setPreviewImage] = useState(false)
@@ -24,23 +24,24 @@ const MediaView = ({ media, addMedia, deleteMedia }) => {
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
 
-  const mediaSrc = 0 < media?.length ? media[mediaIndex]?.url : null
-
   useEffect(() => {
-    if (mediaDisplayRef.current) {
-      const width = mediaDisplayRef.current.offsetWidth
+    if (mediaViewRef.current) {
+      const width = mediaViewRef.current.offsetWidth
       setSwiperHeight(`${width / 4}px`)
     }
   }, [media])
 
   return (
     <>
-      <Box ref={mediaDisplayRef}>
-        <MediaDisplay mediaSrc={mediaSrc} openPreview={openPreview} />
+      <Box ref={mediaViewRef}>
+        <MediaPreview
+          previewMedia={media[mediaIndex]}
+          openPreview={openPreview}
+        />
         {!editing && (
-          <MediaPreview
+          <MediaDisplay
             closePreview={closePreview}
-            mediaSrc={mediaSrc}
+            mediaSrc={media[mediaIndex]?.url}
             previewImage={previewImage}
           />
         )}
@@ -55,7 +56,7 @@ const MediaView = ({ media, addMedia, deleteMedia }) => {
         {editing && (
           <AddMedia
             bgColor={theme.palette.background.paperLight}
-            marginTop={2}
+            marginTop={4}
             onClick={addMedia}
           />
         )}

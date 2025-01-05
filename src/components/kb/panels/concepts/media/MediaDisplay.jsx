@@ -1,40 +1,41 @@
-import { Box } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Box, Dialog, Typography } from "@mui/material"
+import { Zoom } from "@mui/material"
 
-const MediaDisplay = ({ mediaSrc, openPreview }) => {
-  const theme = useTheme()
-
+const MediaDisplay = ({ closePreview, mediaSrc, previewImage, caption }) => {
   return (
-    <>
+    <Dialog fullScreen open={previewImage} TransitionComponent={Zoom}>
       <Box
         sx={{
-          width: "100%",
-          height: "0",
-          paddingBottom: "100%",
-          position: "relative",
-          overflow: "hidden",
-          border: `1px solid ${theme.palette.grey[300]}`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
         }}
       >
         <img
           src={mediaSrc}
-          alt="Concept Has No Media"
+          alt="Concept Media Display"
+          onClick={closePreview}
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
             width: "100%",
             height: "100%",
             objectFit: "contain",
-            objectPosition: "center",
-            transform: "translate(-50%, -50%)",
-            maxWidth: "100%",
-            maxHeight: "100%",
           }}
-          onClick={openPreview}
         />
+        <Typography
+          variant="caption"
+          align="center"
+          sx={{
+            display: "block",
+            marginTop: 1,
+            textAlign: "center",
+          }}
+        >
+          {caption}
+        </Typography>
       </Box>
-    </>
+    </Dialog>
   )
 }
 
