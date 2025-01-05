@@ -95,13 +95,13 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
-  const updateConcept = concept => {
+  const updateConcept = async concept => {
     if (concept) {
-      updateTaxonomyConcept(taxonomy, concept).then(
-        ({ taxonomy: updatedTaxonomy }) => {
-          setTaxonomy(updatedTaxonomy)
-        }
+      const { taxonomy: updatedTaxonomy } = await updateTaxonomyConcept(
+        taxonomy,
+        concept
       )
+      setTaxonomy(updatedTaxonomy)
     }
   }
 

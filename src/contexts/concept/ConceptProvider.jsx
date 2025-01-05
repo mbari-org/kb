@@ -80,29 +80,32 @@ const ConceptProvider = ({ children }) => {
 
   const processDetailResult = useCallback(
     updatedConcept => {
-      updateConcept(updatedConcept)
-
-      selectConcept(updatedConcept.name)
-      setInitialState(updatedState)
-
-      reset(updatedState)
+      updateConcept(updatedConcept).then(
+        () => {
+          selectConcept(updatedConcept.name)
+          setInitialState(updatedState)
+          reset(updatedState)
+        },
+        error => showBoundary(error)
+      )
     },
-    [reset, selectConcept, updateConcept, updatedState]
+    [reset, selectConcept, showBoundary, updateConcept, updatedState]
   )
 
   const processError = useProcessError(initialState, reset)
 
   const processNameResult = useCallback(
     updatedName => {
-      updateConceptName(concept, updatedName).then(() =>
-        selectConcept(updatedName)
+      updateConceptName(concept, updatedName).then(
+        () => selectConcept(updatedName),
+        error => showBoundary(error)
       )
 
       setModalAlert(null)
       setEditing(false)
       setModified(false)
     },
-    [concept, selectConcept, setModalAlert, updateConceptName]
+    [concept, selectConcept, setModalAlert, showBoundary, updateConceptName]
   )
 
   const submitUpdates = choice => {
