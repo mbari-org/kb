@@ -105,9 +105,9 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
-  const updateConceptName = (concept, updatedName) => {
+  const updateConceptName = async (concept, updatedName) => {
     if (concept && updatedName) {
-      const { taxonomy: updatedTaxonomy } = updateTaxonomyConceptName(
+      const { taxonomy: updatedTaxonomy } = await updateTaxonomyConceptName(
         taxonomy,
         concept,
         updatedName

@@ -276,7 +276,7 @@ const updateConcept = async (taxonomy, concept) => {
   }
 }
 
-const updateConceptName = (taxonomy, concept, newName) => {
+const updateConceptName = async (taxonomy, concept, newName) => {
   const updatedConcepts = { ...taxonomy.concepts }
 
   // Update concept
@@ -316,11 +316,16 @@ const updateConceptName = (taxonomy, concept, newName) => {
   updatedNames.push(newName)
   updatedNames.sort()
 
+  const pendingHistory = await apiCall(() =>
+    fetchPendingHistory(taxonomy.config)
+  )
+
   return {
     taxonomy: {
       ...taxonomy,
       concepts: updatedConcepts,
       names: updatedNames,
+      pendingHistory,
     },
   }
 }

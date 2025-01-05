@@ -94,10 +94,9 @@ const ConceptProvider = ({ children }) => {
 
   const processNameResult = useCallback(
     updatedName => {
-      updateConceptName(concept, updatedName)
-      selectConcept(updatedName)
-
-      // CxInc - need to get the updated concept
+      updateConceptName(concept, updatedName).then(() =>
+        selectConcept(updatedName)
+      )
 
       setModalAlert(null)
       setEditing(false)
