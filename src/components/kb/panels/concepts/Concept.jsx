@@ -29,13 +29,11 @@ const Concept = () => {
       }}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <ConceptPath sx={{ flexGrow: 1 }} />
+        <ConceptPath />
         <ConceptViewToggle />
       </Stack>
       <Stack direction="row" spacing={1.5}>
-        <ConceptMedia
-          sx={{ flexBasis: "33.33%", flexShrink: 0, overflow: "hidden" }}
-        />
+        <ConceptMedia />
         <ConceptDetail />
       </Stack>
       <ConceptActionButtons />

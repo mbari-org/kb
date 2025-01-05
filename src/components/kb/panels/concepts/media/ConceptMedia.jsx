@@ -6,7 +6,7 @@ import NoMedia from "./NoMedia"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const ConceptMedia = ({ sx }) => {
+const ConceptMedia = () => {
   const {
     conceptState: { media: conceptMedia },
   } = use(ConceptContext)
@@ -28,7 +28,14 @@ const ConceptMedia = ({ sx }) => {
   }, [orderMedia])
 
   return (
-    <Box sx={[sx, { position: "relative", overflow: "hidden" }]}>
+    <Box
+      sx={{
+        flexBasis: "33.33%",
+        flexShrink: 0,
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
       {media?.length === 0 && <NoMedia />}
       {media?.length > 0 && <MediaView media={media} setMedia={setMedia} />}
     </Box>
