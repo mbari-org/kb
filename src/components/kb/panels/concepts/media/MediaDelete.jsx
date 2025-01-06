@@ -1,9 +1,9 @@
 import { Box, IconButton } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import { MdDeleteForever } from "react-icons/md"
+import { MdOutlineDeleteForever } from "react-icons/md"
 
-const DeleteMedia = ({ onClick }) => {
+const MediaDelete = ({ onClick }) => {
   const theme = useTheme()
 
   return (
@@ -11,12 +11,12 @@ const DeleteMedia = ({ onClick }) => {
       sx={{
         alignItems: "flex-start",
         backgroundColor: theme.palette.background.paper,
+        bottom: 28,
         cursor: "pointer",
         display: "flex",
         justifyContent: "center",
-        left: 4,
+        left: 2,
         position: "absolute",
-        top: 4,
         zIndex: 1,
       }}
     >
@@ -32,10 +32,10 @@ const DeleteMedia = ({ onClick }) => {
           padding: 0.5,
         }}
       >
-        <MdDeleteForever size={32} />
+        <MdOutlineDeleteForever size={32} />
       </IconButton>
     </Box>
   )
 }
 
-export default DeleteMedia
+export default MediaDelete

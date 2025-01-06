@@ -1,8 +1,8 @@
 import { Box, IconButton } from "@mui/material"
 
-import { MdAddPhotoAlternate } from "react-icons/md"
+import { MdOutlineAddPhotoAlternate } from "react-icons/md"
 
-const AddMedia = ({ bgColor, marginTop, onClick }) => {
+const MediaAdd = ({ bgColor, marginTop, onClick }) => {
   return (
     <Box
       sx={{
@@ -26,10 +26,10 @@ const AddMedia = ({ bgColor, marginTop, onClick }) => {
           padding: 0.5,
         }}
       >
-        <MdAddPhotoAlternate size={28} />
+        <MdOutlineAddPhotoAlternate size={28} />
       </IconButton>
     </Box>
   )
 }
 
-export default AddMedia
+export default MediaAdd

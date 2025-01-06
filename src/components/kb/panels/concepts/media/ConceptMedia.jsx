@@ -27,15 +27,19 @@ const ConceptMedia = () => {
     return () => clearTimeout(timer)
   }, [orderMedia])
 
+  const addMedia = newMedia => {
+    const updatedMedia = [...media, ...newMedia]
+    setMedia(updatedMedia)
+  }
   const deleteMedia = mediaIndex => {
     const updatedMedia = [...media]
     updatedMedia.splice(mediaIndex, 1)
     setMedia(updatedMedia)
   }
 
-  const addMedia = newMedia => {
-    const updatedMedia = [...media, ...newMedia]
-    setMedia(updatedMedia)
+  const editMedia = _media => {
+    // const updatedMedia = [...media, ...newMedia]
+    // setMedia(media)
   }
 
   return (
@@ -50,10 +54,11 @@ const ConceptMedia = () => {
       {media?.length === 0 && <NoMedia addMedia={addMedia} />}
       {media?.length > 0 && (
         <MediaView
-          media={media}
-          setMedia={setMedia}
           addMedia={addMedia}
           deleteMedia={deleteMedia}
+          editMedia={editMedia}
+          media={media}
+          setMedia={setMedia}
         />
       )}
     </Box>
