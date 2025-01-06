@@ -38,6 +38,7 @@ const ConceptProvider = ({ children }) => {
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
     getConcept,
+    getConceptPendingHistory,
     loadConcept,
     taxonomy,
     updateConcept,
@@ -45,6 +46,8 @@ const ConceptProvider = ({ children }) => {
   } = use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
+
+  const [pendingHistory, setPendingHistory] = useState(null)
 
   const [editing, setEditing] = useState(false)
   const [modified, setModified] = useState(false)
@@ -271,6 +274,9 @@ const ConceptProvider = ({ children }) => {
 
   useEffect(() => {
     if (concept) {
+      const pendingHistory = getConceptPendingHistory(concept.name)
+      setPendingHistory(pendingHistory)
+
       const conceptState = stateForConcept(concept)
       setInitialState(conceptState)
       dispatch({ type: "INIT_STATE", payload: conceptState })
@@ -287,6 +293,7 @@ const ConceptProvider = ({ children }) => {
         displayConceptEditsAlert,
         editing,
         modified,
+        pendingHistory,
         processUpdates: submitUpdates,
         setEditing,
       }}

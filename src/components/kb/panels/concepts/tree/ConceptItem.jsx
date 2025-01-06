@@ -19,14 +19,12 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { itemId } = props
   const isSelected = itemId === concept.name
 
-  const hasPendingHistory = !isEmpty(getConceptPendingHistory(itemId))
-
   const itemConcept = getConcept(itemId)
-
   if (!itemConcept) {
     return null
   }
 
+  const hasPendingHistory = !isEmpty(getConceptPendingHistory(itemConcept.name))
   const mediaCount = itemConcept.media.length
   const hasMedia = 0 < mediaCount
 
