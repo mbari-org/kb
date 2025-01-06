@@ -41,7 +41,7 @@ const ConceptLabel = ({
       >
         {children}
       </StyledLabel>
-      <ConceptMediaIcon mediaCount={mediaCount} />
+      <ConceptMediaIcon mediaCount={mediaCount} isSelected={isSelected} />
       {isSelected && (
         <PendingHistoryIcon hasPendingHistory={hasPendingHistory} />
       )}
