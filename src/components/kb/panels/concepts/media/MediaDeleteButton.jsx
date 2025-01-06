@@ -32,7 +32,7 @@ const MediaDeleteButton = ({ onClick }) => {
           padding: 0.5,
         }}
       >
-        <MdOutlineDeleteForever size={32} />
+        <MdOutlineDeleteForever size={28} />
       </IconButton>
     </Box>
   )

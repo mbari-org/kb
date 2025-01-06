@@ -2,11 +2,11 @@ import { decodeJwt } from "jose"
 
 import authStore from "@/lib/store/auth"
 
-const isAdmin = () => {
+const isRole = role => {
   const { token } = authStore.get()
 
   const { role: authRole } = decodeJwt(token)
-  return authRole.toLowerCase() === "admin"
+  return authRole.toLowerCase() === role
 }
 
 const validateAuth = auth => {
@@ -27,4 +27,4 @@ const validateAuth = auth => {
   return true
 }
 
-export { isAdmin, validateAuth }
+export { isRole, validateAuth }

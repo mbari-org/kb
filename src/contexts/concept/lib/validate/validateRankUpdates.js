@@ -6,7 +6,7 @@ import {
 
 import { REMOVE_RANK_NAME_VALUE } from "./validateDetailUpdates"
 
-import { isAdmin } from "@/lib/services/oni/auth/validate"
+import { isRole } from "@/lib/services/oni/auth/validate"
 
 const validateRankUpdates = async ({
   concept,
@@ -19,7 +19,7 @@ const validateRankUpdates = async ({
     rankName: true,
   }
 
-  if (isAdmin()) {
+  if (isRole("admin")) {
     return validation
   }
 

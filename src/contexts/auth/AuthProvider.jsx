@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import ConfigContext from "@/contexts/config/ConfigContext"
 import AuthContext from "./AuthContext"
 
-import { validateAuth } from "@/lib/services/oni/auth/validate"
+import { isRole, validateAuth } from "@/lib/services/oni/auth/validate"
 
 import authStore from "@/lib/store/auth"
 import selectedStore from "@/lib/store/selected"
@@ -15,6 +15,9 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
 
   const [auth, setAuth] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [isMaint, setIsMaint] = useState(false)
+  const [isReadOnly, setIsReadOnly] = useState(false)
 
   const handleInvalidAuth = useCallback(() => {
     setAuth(null)
@@ -27,6 +30,12 @@ const AuthProvider = ({ children }) => {
       if (validateAuth(anAuth)) {
         setAuth(anAuth)
         authStore.set(anAuth)
+
+        const admin = isRole("admin")
+        const maint = isRole("maint")
+        setIsAdmin(admin)
+        setIsMaint(maint)
+        setIsReadOnly(!admin && !maint)
 
         navigate("/kb")
       } else {
@@ -50,7 +59,11 @@ const AuthProvider = ({ children }) => {
   }, [config, handleInvalidAuth, updateAuth])
 
   return (
-    <AuthContext value={{ auth, logout, updateAuth }}>{children}</AuthContext>
+    <AuthContext
+      value={{ auth, isAdmin, isMaint, isReadOnly, logout, updateAuth }}
+    >
+      {children}
+    </AuthContext>
   )
 }
 

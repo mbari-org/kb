@@ -8,9 +8,11 @@ import ConceptMedia from "./media/ConceptMedia"
 import ConceptPath from "./ConceptPath"
 import ConceptViewToggle from "./toggleView/ConceptViewToggle"
 
+import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const Concept = () => {
+  const { isReadOnly } = use(AuthContext)
   const { conceptState } = use(ConceptContext)
 
   if (conceptState && Object.keys(conceptState).length === 0) {
@@ -36,7 +38,7 @@ const Concept = () => {
         <ConceptMedia />
         <ConceptDetail />
       </Stack>
-      <ConceptActionButtons />
+      {!isReadOnly && <ConceptActionButtons />}
     </Stack>
   )
 }

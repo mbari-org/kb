@@ -10,6 +10,7 @@ import {
   createAlertTitle,
 } from "@/components/modals/alert/components"
 
+import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
@@ -18,6 +19,7 @@ import { isEmpty } from "@/lib/util"
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
 
+  const { isReadOnly } = use(AuthContext)
   const { concept, editing, pendingHistory } = use(ConceptContext)
   const { setModalAlert } = use(ModalContext)
 
@@ -54,7 +56,7 @@ const ConceptName = () => {
       >
         {concept?.name}
       </Typography>
-      {!editing && !hasPendingHistory && (
+      {!editing && !hasPendingHistory && !isReadOnly && (
         <IconButton
           aria-label="Edit concept name"
           color="main"
