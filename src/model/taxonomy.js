@@ -149,11 +149,11 @@ const load = async (taxonomy, conceptName, updatable = false) => {
 
 const loadConcept = async (updatableTaxonomy, conceptName) => {
   if (!updatableTaxonomy.concepts[conceptName]) {
-    const concept = await apiCall(() =>
+    const updatableConcept = await apiCall(() =>
       fetchConcept(updatableTaxonomy.config, conceptName)
     )
 
-    addConcept(updatableTaxonomy, concept)
+    addConcept(updatableTaxonomy, updatableConcept)
   }
 }
 
@@ -224,21 +224,21 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
     return
   }
 
-  const parent = await apiCall(() =>
+  const updatableParent = await apiCall(() =>
     fetchParent(updatableTaxonomy.config, updatableConcept.name)
   )
 
-  if (updatableTaxonomy.concepts[parent.name]) {
-    updatableConcept.parent = updatableTaxonomy.concepts[parent.name]
+  if (updatableTaxonomy.concepts[updatableParent.name]) {
+    updatableConcept.parent = updatableTaxonomy.concepts[updatableParent.name]
     addConcept(updatableTaxonomy, updatableConcept)
 
     return
   }
 
-  addConcept(updatableTaxonomy, parent)
-  updatableConcept.parent = parent
+  addConcept(updatableTaxonomy, updatableParent)
+  updatableConcept.parent = updatableParent
 
-  await loadChildren(updatableTaxonomy, parent)
+  await loadChildren(updatableTaxonomy, updatableParent)
 }
 
 const needsUpdate = concept => {
@@ -250,14 +250,14 @@ const needsUpdate = concept => {
   )
 }
 
-const addConcept = async (updatableTaxonomy, concept) => {
-  updatableTaxonomy.concepts[concept.name] = concept
+const addConcept = async (updatableTaxonomy, updatableConcept) => {
+  updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
 
   // add aliases
-  if (0 < concept.alternateNames?.length) {
+  if (0 < updatableConcept.alternateNames?.length) {
     const aliases = { ...updatableTaxonomy.aliases }
-    concept.alternateNames.forEach(name => {
-      aliases[name] = concept.name
+    updatableConcept.alternateNames.forEach(name => {
+      aliases[name] = updatableConcept.name
     })
     updatableTaxonomy.aliases = aliases
   }
