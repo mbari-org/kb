@@ -80,8 +80,8 @@ const getPrevSibling = concept => {
 }
 
 const loadTaxonomy = async config => {
-  const names = await apiCall(() => fetchNames(config))
   const root = await apiCall(() => fetchRoot(config))
+  const names = await apiCall(() => fetchNames(config))
   const pendingHistory = await apiCall(() => fetchPendingHistory(config))
 
   const aliases = root.alternateNames.reduce((acc, name) => {
@@ -134,7 +134,7 @@ const load = async (taxonomy, conceptName, updatable = false) => {
 
   await loadConcept(updatableTaxonomy, conceptName)
 
-  const updatableConcept = updatableTaxonomy.concepts[conceptName]
+  const updatableConcept = getConcept(updatableTaxonomy, conceptName)
   await loadChildren(updatableTaxonomy, updatableConcept)
 
   await loadGrandChildren(updatableTaxonomy, updatableConcept)
@@ -153,8 +153,7 @@ const loadConcept = async (updatableTaxonomy, conceptName) => {
       fetchConcept(updatableTaxonomy.config, conceptName)
     )
 
-    updatableTaxonomy.concepts[conceptName] = concept
-    addAliases(updatableTaxonomy, concept)
+    addConcept(updatableTaxonomy, concept)
   }
 }
 
@@ -175,15 +174,13 @@ const loadChildren = async (updatableTaxonomy, updatableConcept) => {
     const updatableChild = { ...apiChild }
     updatableChild.parent = updatableConcept
 
-    updatableTaxonomy.concepts[updatableChild.name] = updatableChild
-    addAliases(updatableTaxonomy, updatableChild)
+    addConcept(updatableTaxonomy, updatableChild)
 
     return updatableChild
   })
 
   updatableConcept.children = children
-  updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
-  addAliases(updatableTaxonomy, updatableConcept)
+  addConcept(updatableTaxonomy, updatableConcept)
 }
 
 const loadDescendants = async (taxonomy, concept, updatable = false) => {
@@ -233,13 +230,13 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
 
   if (updatableTaxonomy.concepts[parent.name]) {
     updatableConcept.parent = updatableTaxonomy.concepts[parent.name]
-    updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
+    addConcept(updatableTaxonomy, updatableConcept)
+
     return
   }
 
-  updatableTaxonomy.concepts[parent.name] = parent
+  addConcept(updatableTaxonomy, parent)
   updatableConcept.parent = parent
-  addAliases(updatableTaxonomy, parent)
 
   await loadChildren(updatableTaxonomy, parent)
 }
@@ -253,7 +250,10 @@ const needsUpdate = concept => {
   )
 }
 
-const addAliases = (updatableTaxonomy, concept) => {
+const addConcept = async (updatableTaxonomy, concept) => {
+  updatableTaxonomy.concepts[concept.name] = concept
+
+  // add aliases
   if (0 < concept.alternateNames?.length) {
     const aliases = { ...updatableTaxonomy.aliases }
     concept.alternateNames.forEach(name => {
