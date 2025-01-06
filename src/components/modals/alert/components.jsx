@@ -1,8 +1,10 @@
+import AlertTitle from "./AlertTitle"
+
 import AlertButtons from "./buttons/AlertButtons"
 import AlertButtonsConceptNameUpdate from "./buttons/AlertButtonsConceptNameUpdate"
+
 import AlertContentConceptNameUpdate from "./content/AlertContentConceptNameUpdate"
 import AlertContentText from "./content/AlertContentText"
-import AlertTitle from "./AlertTitle"
 import AlertContentUnsavedEdits from "./content/AlertContentUnsavedEdits"
 
 const createAlertButtons = props => {

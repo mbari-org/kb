@@ -1,7 +1,5 @@
 import { use } from "react"
 
-// import { useTheme } from "@mui/material/styles"
-
 import AlertButton from "./AlertButton"
 import AlertButtonsContainer from "./AlertButtonsContainer"
 
@@ -9,8 +7,6 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const AlertButtonsConceptNameUpdate = () => {
-  // const theme = useTheme()
-
   const { concept, conceptState, processUpdates } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 

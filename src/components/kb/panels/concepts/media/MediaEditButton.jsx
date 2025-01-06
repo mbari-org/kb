@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles"
 
 import { CiEdit } from "react-icons/ci"
 
-const MediaEdit = ({ onClick }) => {
+const MediaEditButton = ({ onClick }) => {
   const theme = useTheme()
 
   return (
@@ -38,4 +38,4 @@ const MediaEdit = ({ onClick }) => {
   )
 }
 
-export default MediaEdit
+export default MediaEditButton

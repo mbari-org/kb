@@ -1,7 +1,7 @@
 import { use } from "react"
 import { Box, Typography } from "@mui/material"
 
-import MediaAdd from "./MediaAdd"
+import MediaAddButton from "./MediaAddButton"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
@@ -40,7 +40,11 @@ const NoMedia = ({ addMedia }) => {
         No Media
       </Typography>
       {editing && (
-        <MediaAdd bgColor="transparent" marginTop={10} onClick={addMedia} />
+        <MediaAddButton
+          bgColor="transparent"
+          marginTop={10}
+          onClick={addMedia}
+        />
       )}
     </Box>
   )

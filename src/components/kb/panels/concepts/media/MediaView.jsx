@@ -2,9 +2,9 @@ import { use, useEffect, useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import MediaAdd from "./MediaAdd"
-import MediaDelete from "./MediaDelete"
-import MediaEdit from "./MediaEdit"
+import MediaAddButton from "./MediaAddButton"
+import MediaDeleteButton from "./MediaDeleteButton"
+import MediaEditButton from "./MediaEditButton"
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
@@ -47,7 +47,7 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
           />
         )}
         {editing && (
-          <MediaDelete
+          <MediaDeleteButton
             onClick={() => deleteMedia(mediaIndex)}
             sx={{
               position: "absolute",
@@ -57,7 +57,7 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
           />
         )}
         {editing && (
-          <MediaEdit
+          <MediaEditButton
             onClick={() => editMedia(mediaIndex)}
             sx={{
               position: "absolute",
@@ -74,7 +74,7 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
           setMediaIndex={setMediaIndex}
         />
         {editing && (
-          <MediaAdd
+          <MediaAddButton
             bgColor={theme.palette.background.paperLight}
             marginTop={1}
             onClick={addMedia}
