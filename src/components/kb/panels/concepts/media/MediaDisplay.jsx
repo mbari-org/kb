@@ -1,7 +1,7 @@
-import { Box, Dialog, Typography } from "@mui/material"
+import { Box, Dialog } from "@mui/material"
 import { Zoom } from "@mui/material"
 
-const MediaDisplay = ({ closePreview, mediaSrc, previewImage, caption }) => {
+const MediaDisplay = ({ closePreview, mediaSrc, previewImage }) => {
   return (
     <Dialog fullScreen open={previewImage} TransitionComponent={Zoom}>
       <Box
@@ -23,17 +23,6 @@ const MediaDisplay = ({ closePreview, mediaSrc, previewImage, caption }) => {
             objectFit: "contain",
           }}
         />
-        <Typography
-          variant="caption"
-          align="center"
-          sx={{
-            display: "block",
-            marginTop: 1,
-            textAlign: "center",
-          }}
-        >
-          {caption}
-        </Typography>
       </Box>
     </Dialog>
   )

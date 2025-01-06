@@ -11,38 +11,39 @@ const MediaPreview = ({ previewMedia, openPreview }) => {
     <>
       <Box
         sx={{
-          width: "100%",
+          border: `1px solid ${theme.palette.grey[300]}`,
           height: "0",
           paddingBottom: "100%",
           position: "relative",
           overflow: "hidden",
-          border: `1px solid ${theme.palette.grey[300]}`,
+          width: "100%",
         }}
       >
         <img
-          src={mediaSrc}
           alt={`Unable to Display Media: ${mediaSrc}`}
+          onClick={openPreview}
+          src={mediaSrc}
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: "100%",
             height: "100%",
+            left: "50%",
+            maxHeight: "100%",
+            maxWidth: "100%",
             objectFit: "contain",
             objectPosition: "center",
+            position: "absolute",
+            top: "50%",
+            width: "100%",
             transform: "translate(-50%, -50%)",
-            maxWidth: "100%",
-            maxHeight: "100%",
           }}
-          onClick={openPreview}
         />
       </Box>
       <Box
         sx={{
-          display: "flex",
           alignItems: "center",
+          display: "flex",
           justifyContent: "center",
           marginTop: 1,
+          minHeight: "24px", // Ensure the Box always takes the same space
         }}
       >
         <Typography
