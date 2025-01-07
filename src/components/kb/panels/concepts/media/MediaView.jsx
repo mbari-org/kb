@@ -22,8 +22,13 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
   const [previewImage, setPreviewImage] = useState(false)
   const [swiperHeight, setSwiperHeight] = useState("auto")
 
+  const mediaItem = media[mediaIndex]
+
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
+
+  const hasPending = mediaItem.action !== "None"
+  const allowEditDelete = editing && !hasPending
 
   useEffect(() => {
     if (mediaViewRef.current) {
@@ -36,17 +41,18 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
     <>
       <Box ref={mediaViewRef} sx={{ position: "relative" }}>
         <MediaPreview
-          previewMedia={media[mediaIndex]}
+          hasPending={hasPending}
           openPreview={openPreview}
+          previewMedia={mediaItem}
         />
         {!editing && (
           <MediaDisplay
             closePreview={closePreview}
-            mediaSrc={media[mediaIndex]?.url}
+            mediaSrc={mediaItem?.url}
             previewImage={previewImage}
           />
         )}
-        {editing && (
+        {allowEditDelete && (
           <MediaDeleteButton
             onClick={() => deleteMedia(mediaIndex)}
             sx={{
@@ -56,7 +62,7 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
             }}
           />
         )}
-        {editing && (
+        {allowEditDelete && (
           <MediaEditButton
             onClick={() => editMedia(mediaIndex)}
             sx={{

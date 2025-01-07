@@ -2,16 +2,20 @@ import { Box, Typography, IconButton, Tooltip } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { BsInfoCircle } from "react-icons/bs"
 
-const MediaPreview = ({ previewMedia, openPreview }) => {
+const MediaPreview = ({ hasPending, previewMedia, openPreview }) => {
   const theme = useTheme()
 
   const mediaSrc = previewMedia?.url
+
+  const displayBorder = hasPending
+    ? `2px solid ${theme.palette.primary.cancel}`
+    : `1px solid ${theme.palette.grey[300]}`
 
   return (
     <>
       <Box
         sx={{
-          border: `1px solid ${theme.palette.grey[300]}`,
+          border: displayBorder,
           height: "0",
           paddingBottom: "100%",
           position: "relative",
@@ -43,7 +47,7 @@ const MediaPreview = ({ previewMedia, openPreview }) => {
           display: "flex",
           justifyContent: "center",
           marginTop: 1,
-          minHeight: "24px", // Ensure the Box always takes the same space
+          minHeight: "24px",
         }}
       >
         <Typography

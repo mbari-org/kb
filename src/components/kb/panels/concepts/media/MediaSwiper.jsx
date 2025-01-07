@@ -9,7 +9,7 @@ import "swiper/css/pagination"
 
 import "./mediaSwiper.css"
 
-const MediaSwiper = ({ media, height, setMediaIndex }) => {
+const MediaSwiper = ({ height, media, setMediaIndex }) => {
   const pagination = {
     clickable: true,
     renderBullet: function (index, className) {

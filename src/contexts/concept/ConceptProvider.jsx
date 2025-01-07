@@ -281,7 +281,7 @@ const ConceptProvider = ({ children }) => {
       setInitialState(conceptState)
       dispatch({ type: "INIT_STATE", payload: conceptState })
     }
-  }, [concept])
+  }, [concept, getConceptPendingHistory])
 
   return (
     <ConceptContext
