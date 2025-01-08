@@ -6,6 +6,9 @@ import {
   createAlertTitle,
 } from "@/components/modals/alert/components"
 
+const CONTINUE = "Continue"
+const DISCARD = "Discard"
+
 const useDisplayConceptEditsAlert = ({
   getCurrentUpdates,
   updatedState,
@@ -19,10 +22,10 @@ const useDisplayConceptEditsAlert = ({
   const displayConceptEditsAlert = useCallback(() => {
     const onChoice = choice => {
       switch (choice) {
-        case "Discard Edits":
+        case DISCARD:
           reset(initialState)
           break
-        case "Continue Editing":
+        case CONTINUE:
           selectConcept(conceptName)
           selectPanel("Concepts")
           break
@@ -37,7 +40,7 @@ const useDisplayConceptEditsAlert = ({
         Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
         Content: createAlertContentUnsavedEdits({ updates }),
         Choices: createAlertButtons({
-          choices: ["Discard Edits", "Continue Editing"],
+          choices: [DISCARD, CONTINUE],
           colors: ["cancel", "main"],
           onChoice,
         }),

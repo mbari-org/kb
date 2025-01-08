@@ -24,8 +24,8 @@ import {
 import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
 
 import useConceptPath from "./lib/useConceptPath"
-import useProcessError from "./lib/useProcessError"
 import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
+import useProcessResult from "./lib/useProcessResult"
 
 import { isEmpty } from "@/lib/util"
 
@@ -81,35 +81,20 @@ const ConceptProvider = ({ children }) => {
     [setEditing, setModified, setModalAlert]
   )
 
-  const processDetailResult = useCallback(
-    updatedConcept => {
-      updateConcept(updatedConcept).then(
-        () => {
-          selectConcept(updatedConcept.name)
-          setInitialState(updatedState)
-          reset(updatedState)
-        },
-        error => showBoundary(error)
-      )
-    },
-    [reset, selectConcept, showBoundary, updateConcept, updatedState]
-  )
-
-  const processError = useProcessError(initialState, reset)
-
-  const processNameResult = useCallback(
-    updatedName => {
-      updateConceptName(concept, updatedName).then(
-        () => selectConcept(updatedName),
-        error => showBoundary(error)
-      )
-
-      setModalAlert(null)
-      setEditing(false)
-      setModified(false)
-    },
-    [concept, selectConcept, setModalAlert, showBoundary, updateConceptName]
-  )
+  const { processDetailResult, processNameResult, processErrorResult } =
+    useProcessResult({
+      concept,
+      reset,
+      selectConcept,
+      showBoundary,
+      updateConcept,
+      updateConceptName,
+      setModalAlert,
+      setEditing,
+      setModified,
+      updatedState,
+      initialState,
+    })
 
   const submitUpdates = choice => {
     if (!modified) {
@@ -152,7 +137,7 @@ const ConceptProvider = ({ children }) => {
             ({ error, updatedConcept }) => {
               updatedConcept
                 ? processDetailResult(updatedConcept)
-                : processError(error)
+                : processErrorResult(error)
             },
             error => showBoundary(error)
           )
@@ -163,7 +148,7 @@ const ConceptProvider = ({ children }) => {
       concept,
       config,
       processDetailResult,
-      processError,
+      processErrorResult,
       setModalAlert,
       showBoundary,
       theme,
@@ -174,30 +159,14 @@ const ConceptProvider = ({ children }) => {
     (extent, updates) => {
       processNameUpdate({ concept, config, extent, updates }).then(
         ({ error, updatedName }) => {
-          updatedName ? processNameResult(updatedName) : processError(error)
+          updatedName
+            ? processNameResult(updatedName)
+            : processErrorResult(error)
         },
         error => showBoundary(error)
       )
     },
-    [concept, config, processError, processNameResult, showBoundary]
-  )
-
-  const editingAlertChoice = useCallback(
-    choice => {
-      switch (choice) {
-        case "Discard Edits":
-          reset(initialState)
-          break
-        case "Continue Editing":
-          selectConcept(concept?.name)
-          selectPanel("Concepts")
-          break
-        default:
-          break
-      }
-      setModalAlert(null)
-    },
-    [concept, selectConcept, selectPanel, setModalAlert, reset, initialState]
+    [concept, config, processErrorResult, processNameResult, showBoundary]
   )
 
   const displayConceptEditsAlert = useDisplayConceptEditsAlert({
@@ -252,7 +221,6 @@ const ConceptProvider = ({ children }) => {
     concept,
     displayConceptEditsAlert,
     editing,
-    editingAlertChoice,
     getConcept,
     getCurrentUpdates,
     loadConcept,
