@@ -28,6 +28,7 @@ const theme = createTheme({
   },
   nav: {
     active: navActive,
+    fontSize: 12,
     hover: navActive,
     inactive: darken(navActive, 0.15),
   },

@@ -7,7 +7,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
   const [isHovering, setIsHovering] = useState(false)
 
   const theme = useTheme()
-  const style = () => {
+  const getSx = () => {
     const activeColor = theme.nav.active
     const hoverColor = theme.nav.hover
     const inactiveColor = theme.nav.inactive
@@ -20,10 +20,10 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
 
     return {
       color: color,
-      fontSize: theme.typography.fontSize,
+      fontSize: theme.nav.fontSize,
       fontStyle: !isActive && isHovering ? "italic" : "",
       fontWeight: isActive ? "bold" : "",
-      marginLeft: theme.spacing(2),
+      marginLeft: theme.spacing(0.5),
     }
   }
 
@@ -32,7 +32,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
       onClick={() => selectPanel(name)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      style={style()}
+      sx={getSx()}
     >
       {name}
     </Button>
