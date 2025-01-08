@@ -26,6 +26,14 @@ const useProcessResult = ({
     [reset, selectConcept, showBoundary, updateConcept, updatedState]
   )
 
+  const processErrorResult = useCallback(
+    error => {
+      reset(initialState)
+      showBoundary(error)
+    },
+    [reset, initialState, showBoundary]
+  )
+
   const processNameResult = useCallback(
     updatedName => {
       updateConceptName(concept, updatedName).then(
@@ -41,22 +49,14 @@ const useProcessResult = ({
       concept,
       selectConcept,
       setModalAlert,
-      showBoundary,
-      updateConceptName,
       setEditing,
       setModified,
+      showBoundary,
+      updateConceptName,
     ]
   )
 
-  const processErrorResult = useCallback(
-    error => {
-      reset(initialState)
-      showBoundary(error)
-    },
-    [reset, initialState, showBoundary]
-  )
-
-  return { processDetailResult, processNameResult, processErrorResult }
+  return { processDetailResult, processErrorResult, processNameResult }
 }
 
 export default useProcessResult

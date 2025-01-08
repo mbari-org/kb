@@ -10,14 +10,14 @@ const CONTINUE = "Continue"
 const DISCARD = "Discard"
 
 const useDisplayConceptEditsAlert = ({
-  getCurrentUpdates,
-  updatedState,
-  setModalAlert,
-  reset,
-  initialState,
-  selectConcept,
   conceptName,
+  getCurrentUpdates,
+  initialState,
+  reset,
+  selectConcept,
   selectPanel,
+  setModalAlert,
+  updatedState,
 }) => {
   const displayConceptEditsAlert = useCallback(() => {
     const onChoice = choice => {
@@ -54,14 +54,14 @@ const useDisplayConceptEditsAlert = ({
     })
     setModalAlert(conceptEditingModalAlert)
   }, [
-    getCurrentUpdates,
-    updatedState,
-    setModalAlert,
-    reset,
-    initialState,
-    selectConcept,
     conceptName,
+    getCurrentUpdates,
+    initialState,
+    reset,
+    selectConcept,
     selectPanel,
+    setModalAlert,
+    updatedState,
   ])
 
   return displayConceptEditsAlert

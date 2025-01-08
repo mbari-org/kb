@@ -12,20 +12,10 @@ import conceptStateReducer from "./lib/conceptStateReducer"
 
 import { filterUpdates } from "./lib/filterUpdates"
 import { stateForConcept } from "./lib/stateForConcept"
-import {
-  isDetailValid,
-  processDetailUpdates,
-} from "./lib/process/detailUpdates"
-import {
-  processNameUpdate,
-  UPDATE_ALL_DATA,
-  UPDATE_NAME_ONLY,
-} from "./lib/process/nameUpdates"
-import { validateDetailUpdates } from "./lib/validate/validateDetailUpdates"
 
 import useConceptPath from "./lib/useConceptPath"
 import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
-import useProcessResult from "./lib/useProcessResult"
+import useSubmitUpdates from "./lib/useSubmitUpdates"
 
 import { isEmpty } from "@/lib/util"
 
@@ -81,103 +71,31 @@ const ConceptProvider = ({ children }) => {
     [setEditing, setModified, setModalAlert]
   )
 
-  const { processDetailResult, processNameResult, processErrorResult } =
-    useProcessResult({
-      concept,
-      reset,
-      selectConcept,
-      showBoundary,
-      updateConcept,
-      updateConceptName,
-      setModalAlert,
-      setEditing,
-      setModified,
-      updatedState,
-      initialState,
-    })
-
-  const submitUpdates = choice => {
-    if (!modified) {
-      reset(initialState)
-      return
-    }
-
-    const updates = getCurrentUpdates(updatedState)
-
-    switch (choice) {
-      case "Cancel":
-        reset(initialState)
-        break
-      case "Info":
-        submitDetailUpdates(updates)
-        break
-      case "Name Only":
-        submitNameUpdates(UPDATE_NAME_ONLY, updates)
-        break
-      case "All Data":
-        submitNameUpdates(UPDATE_ALL_DATA, updates)
-        break
-      default:
-        break
-    }
-  }
-
-  const submitDetailUpdates = useCallback(
-    updates => {
-      validateDetailUpdates({
-        concept,
-        conceptUpdate,
-        config,
-        setModalAlert,
-        theme,
-        updates,
-      }).then(validation => {
-        if (isDetailValid(validation)) {
-          processDetailUpdates({ concept, config, updates, validation }).then(
-            ({ error, updatedConcept }) => {
-              updatedConcept
-                ? processDetailResult(updatedConcept)
-                : processErrorResult(error)
-            },
-            error => showBoundary(error)
-          )
-        }
-      })
-    },
-    [
-      concept,
-      config,
-      processDetailResult,
-      processErrorResult,
-      setModalAlert,
-      showBoundary,
-      theme,
-    ]
-  )
-
-  const submitNameUpdates = useCallback(
-    (extent, updates) => {
-      processNameUpdate({ concept, config, extent, updates }).then(
-        ({ error, updatedName }) => {
-          updatedName
-            ? processNameResult(updatedName)
-            : processErrorResult(error)
-        },
-        error => showBoundary(error)
-      )
-    },
-    [concept, config, processErrorResult, processNameResult, showBoundary]
-  )
+  const submitUpdates = useSubmitUpdates({
+    concept,
+    conceptUpdate,
+    config,
+    getCurrentUpdates,
+    initialState,
+    modified,
+    reset,
+    setModalAlert,
+    showBoundary,
+    theme,
+    updateConcept,
+    updateConceptName,
+    updatedState,
+  })
 
   const displayConceptEditsAlert = useDisplayConceptEditsAlert({
-    getCurrentUpdates,
-    updatedState,
-    setModalAlert,
-    reset,
-    initialState,
-    selectConcept,
     conceptName: concept?.name,
+    getCurrentUpdates,
+    initialState,
+    reset,
+    selectConcept,
     selectPanel,
+    setModalAlert,
+    updatedState,
   })
 
   useEffect(() => {
