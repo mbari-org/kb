@@ -57,9 +57,9 @@ const ConceptProvider = ({ children }) => {
     initialState,
   ])
 
-  const conceptUpdate = update =>
+  const conceptUpdate = update => {
     dispatch({ type: "SET_FIELD", payload: update })
-
+  }
   const reset = useCallback(
     conceptState => {
       setEditing(false)
@@ -154,7 +154,8 @@ const ConceptProvider = ({ children }) => {
   ])
 
   useEffect(() => {
-    const hasUpdates = !isEmpty(getCurrentUpdates(updatedState))
+    const currentUpdates = getCurrentUpdates(updatedState)
+    const hasUpdates = !isEmpty(currentUpdates)
     setModified(hasUpdates)
   }, [getCurrentUpdates, updatedState])
 

@@ -17,13 +17,13 @@ const useProcessResult = ({
     updatedConcept => {
       updateConcept(updatedConcept).then(
         () => {
-          selectConcept(updatedConcept.name)
+          // selectConcept(updatedConcept.name)
           reset(updatedState)
         },
         error => showBoundary(error)
       )
     },
-    [reset, selectConcept, showBoundary, updateConcept, updatedState]
+    [reset, showBoundary, updateConcept, updatedState]
   )
 
   const processErrorResult = useCallback(
