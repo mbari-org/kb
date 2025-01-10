@@ -2,10 +2,8 @@ import { isEmpty, prune } from "@/lib/util"
 
 import { updateAuthor, updateMedia, updateRank } from "../update"
 
-const isDetailValid = detail => Object.values(detail).every(Boolean)
-
 // Updates are transactional; the original concept is returned if any error occurs.
-const processDetailUpdates = async params => {
+const detailUpdates = async params => {
   const { concept, config, updates, validation } = params
 
   const { author, media, rankLevel, rankName } = updates
@@ -52,4 +50,4 @@ const detailProcessor =
     return { error, updatedConcept }
   }
 
-export { isDetailValid, processDetailUpdates }
+export default detailUpdates

@@ -4,9 +4,9 @@ import {
   createAlertTitle,
 } from "@/components/modals/alert/components"
 
-import { REMOVE_RANK_NAME_VALUE } from "./validateDetailUpdates"
-
 import { isRole } from "@/lib/services/oni/auth/validate"
+
+const REMOVE_RANK_VALUE = "REMOVE"
 
 const validateRankUpdates = async ({
   concept,
@@ -23,8 +23,8 @@ const validateRankUpdates = async ({
     return validation
   }
 
-  const removeLevel = updates.rankLevel === REMOVE_RANK_NAME_VALUE
-  const removeName = updates.rankName === REMOVE_RANK_NAME_VALUE
+  const removeLevel = updates.rankLevel === REMOVE_RANK_VALUE
+  const removeName = updates.rankName === REMOVE_RANK_VALUE
 
   if (!(removeLevel || removeName)) {
     return validation
@@ -74,4 +74,13 @@ const validateRankUpdates = async ({
   return promise
 }
 
-export default validateRankUpdates
+const validateUpdates = async updatesObject => {
+  let rankValidation = await validateRankUpdates(updatesObject)
+
+  return {
+    author: true,
+    ...rankValidation,
+  }
+}
+
+export { REMOVE_RANK_VALUE, validateUpdates }

@@ -36,18 +36,13 @@ const ConceptProvider = ({ children }) => {
   } = use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
-
-  const [pendingHistory, setPendingHistory] = useState(null)
-
   const [editing, setEditing] = useState(false)
+  const [modalHasBeenDiplayed, setModalAlertHasBeenDisplayed] = useState(false)
   const [modified, setModified] = useState(false)
+  const [pendingHistory, setPendingHistory] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
   const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
-
-  const [modalHasBeenDiplayed, setModalAlertHasBeenDisplayed] = useState(false)
-
-  const config = taxonomy.config
 
   const conceptPath = useConceptPath(concept)
 
@@ -63,9 +58,6 @@ const ConceptProvider = ({ children }) => {
     },
     [dispatch]
   )
-  // const conceptUpdate = update => {
-  //   dispatch({ type: "SET_FIELD", payload: update })
-  // }
 
   const reset = useCallback(
     conceptState => {
@@ -81,7 +73,7 @@ const ConceptProvider = ({ children }) => {
   const submitUpdates = useSubmitUpdates({
     concept,
     conceptUpdate,
-    config,
+    config: taxonomy.config,
     getCurrentUpdates,
     initialState,
     modified,

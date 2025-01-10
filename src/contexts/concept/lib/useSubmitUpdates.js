@@ -1,14 +1,15 @@
 import { useCallback } from "react"
 
-import useProcessResult from "./useProcessResult"
-import { validateDetailUpdates } from "./validate/validateDetailUpdates"
+import detailUpdates from "./submit/detailUpdates"
+import nameUpdates from "./submit/nameUpdates"
+import { validateUpdates } from "./submit/validateUpdates"
 
-import { isDetailValid, processDetailUpdates } from "./process/detailUpdates"
-import {
-  processNameUpdate,
-  UPDATE_ALL_DATA,
-  UPDATE_NAME_ONLY,
-} from "./process/nameUpdates"
+import useProcessError from "@/lib/hooks/useProcessError"
+
+const UPDATE_ALL_DATA = "all"
+const UPDATE_NAME_ONLY = "solo"
+
+const allValid = values => Object.values(values).every(Boolean)
 
 const useSubmitUpdates = ({
   concept,
@@ -21,39 +22,43 @@ const useSubmitUpdates = ({
   selectConcept,
   setModalAlert,
   showBoundary,
-  theme,
   updateConcept,
   updateConceptName,
   updatedState,
 }) => {
-  const { processDetailResult, processNameResult, processErrorResult } =
-    useProcessResult({
-      concept,
-      initialState,
-      reset,
-      selectConcept,
-      setModalAlert,
-      updateConcept,
-      updateConceptName,
-      updatedState,
-    })
+  const processError = useProcessError()
+  const onContinue = useCallback(
+    () => reset(initialState),
+    [initialState, reset]
+  )
 
   const submitDetailUpdates = useCallback(
     updates => {
-      validateDetailUpdates({
+      validateUpdates({
         concept,
         conceptUpdate,
-        config,
         setModalAlert,
-        theme,
         updates,
-      }).then(validation => {
-        if (isDetailValid(validation)) {
-          processDetailUpdates({ concept, config, updates, validation }).then(
+      }).then(detailValidation => {
+        if (allValid(detailValidation)) {
+          detailUpdates({
+            concept,
+            config,
+            updates,
+            validation: detailValidation,
+          }).then(
             ({ error, updatedConcept }) => {
-              updatedConcept
-                ? processDetailResult(updatedConcept)
-                : processErrorResult(error)
+              if (error) {
+                processError(error, onContinue)
+                return
+              }
+              updateConcept(updatedConcept).then(
+                () => {
+                  selectConcept(updatedConcept.name)
+                  // reset(updatedState)
+                },
+                error => showBoundary(error)
+              )
             },
             error => showBoundary(error)
           )
@@ -64,26 +69,42 @@ const useSubmitUpdates = ({
       concept,
       conceptUpdate,
       config,
-      processDetailResult,
-      processErrorResult,
+      onContinue,
+      processError,
+      selectConcept,
       setModalAlert,
       showBoundary,
-      theme,
+      updateConcept,
     ]
   )
 
   const submitNameUpdates = useCallback(
     (extent, updates) => {
-      processNameUpdate({ concept, config, extent, updates }).then(
+      nameUpdates({ concept, config, extent, updates }).then(
         ({ error, updatedName }) => {
-          updatedName
-            ? processNameResult(updatedName)
-            : processErrorResult(error)
+          if (error) {
+            processError(error, onContinue)
+            return
+          }
+          updateConceptName(concept, updatedName).then(
+            () => {
+              selectConcept(updatedName)
+            },
+            error => showBoundary(error)
+          )
         },
         error => showBoundary(error)
       )
     },
-    [concept, config, processErrorResult, processNameResult, showBoundary]
+    [
+      concept,
+      config,
+      onContinue,
+      processError,
+      selectConcept,
+      showBoundary,
+      updateConceptName,
+    ]
   )
 
   const submitUpdates = choice => {

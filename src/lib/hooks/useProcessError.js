@@ -8,14 +8,14 @@ import {
   createAlertTitle,
 } from "@/components/modals/alert/components"
 
-const useProcessError = (initialState, reset) => {
+const useProcessError = () => {
   const { setModalAlert } = use(ModalContext)
 
   return useCallback(
-    error => {
+    (error, onContinue) => {
       setModalAlert({
         Title: createAlertTitle({
-          title: "Update Error",
+          title: "Process Error",
           type: "error",
         }),
         Content: createAlertContentText({
@@ -25,13 +25,11 @@ const useProcessError = (initialState, reset) => {
         Choices: createAlertButtons({
           choices: ["Continue"],
           colors: ["cancel"],
-          onChoice: () => {
-            reset(initialState)
-          },
+          onChoice: onContinue,
         }),
       })
     },
-    [initialState, reset, setModalAlert]
+    [setModalAlert]
   )
 }
 
