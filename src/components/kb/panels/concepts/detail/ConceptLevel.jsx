@@ -9,6 +9,7 @@ import {
 } from "@/contexts/concept/lib/validate/validateDetailUpdates"
 
 import useConceptDetailStyle from "./useConceptDetailStyle"
+import useWhyDidYouUpdate from "@/lib/useWhyDidYouUpdate"
 
 const rankLevels = [
   "epi",
@@ -28,6 +29,8 @@ const ConceptLevel = () => {
   } = use(ConceptContext)
 
   const infoStyle = useConceptDetailStyle("RankLevel")
+
+  useWhyDidYouUpdate("ConceptLevel", { rankLevel })
 
   return (
     <FormControl {...infoStyle}>

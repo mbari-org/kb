@@ -2,28 +2,28 @@ import { useCallback } from "react"
 
 const useProcessResult = ({
   concept,
+  initialState,
   reset,
   selectConcept,
+  setEditing,
+  setModalAlert,
+  setModified,
   showBoundary,
   updateConcept,
   updateConceptName,
-  setModalAlert,
-  setEditing,
-  setModified,
   updatedState,
-  initialState,
 }) => {
   const processDetailResult = useCallback(
     updatedConcept => {
       updateConcept(updatedConcept).then(
         () => {
-          // selectConcept(updatedConcept.name)
+          selectConcept(updatedConcept.name)
           reset(updatedState)
         },
         error => showBoundary(error)
       )
     },
-    [reset, showBoundary, updateConcept, updatedState]
+    [reset, selectConcept, showBoundary, updateConcept, updatedState]
   )
 
   const processErrorResult = useCallback(
