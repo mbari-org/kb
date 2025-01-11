@@ -7,4 +7,4 @@ const oniUrl = (config, path) => {
   return `${url}/${resourcePath}`
 }
 
-export { oniUrl }
+export default oniUrl

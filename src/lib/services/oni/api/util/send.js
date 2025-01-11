@@ -40,4 +40,4 @@ const errorResponse = (url, title, message) => ({
   },
 })
 
-export { oniSend }
+export default oniSend

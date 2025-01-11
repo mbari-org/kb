@@ -16,4 +16,4 @@ const oniParams = (method, data) => {
   }
 }
 
-export { oniParams }
+export default oniParams

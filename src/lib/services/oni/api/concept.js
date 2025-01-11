@@ -1,5 +1,4 @@
-import { oniGet } from "./util/get"
-import { oniPut } from "./util/put"
+import { oniGet, oniPut } from "./util"
 
 const fetchChildren = async (config, conceptName) =>
   oniGet(config, ["concept", "children", conceptName])

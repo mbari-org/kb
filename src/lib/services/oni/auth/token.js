@@ -14,4 +14,4 @@ const isTokenValid = ({ token }) => {
   }
 }
 
-export { isTokenValid }
+export default isTokenValid

@@ -1,4 +1,4 @@
-import { oniGet } from "./util/get"
+import { oniGet } from "./util"
 
 const fetchPendingHistory = async config => {
   const { error, payload } = await oniGet(config, ["history", "pending"])

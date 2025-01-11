@@ -1,6 +1,6 @@
-import { oniParams } from "./params"
-import { oniSend } from "./send"
-import { oniUrl } from "./url"
+import oniParams from "./params"
+import oniSend from "./send"
+import oniUrl from "./url"
 
 const oniPut = async (config, path, data) => {
   const params = oniParams("PUT", data)
@@ -8,4 +8,4 @@ const oniPut = async (config, path, data) => {
   return oniSend(url, params)
 }
 
-export { oniPut }
+export default oniPut

@@ -1,6 +1,6 @@
-import { oniParams } from "./params"
-import { oniSend } from "./send"
-import { oniUrl } from "./url"
+import oniParams from "./params"
+import oniSend from "./send"
+import oniUrl from "./url"
 
 const oniGet = async (config, path) => {
   const params = oniParams("GET")
@@ -8,4 +8,4 @@ const oniGet = async (config, path) => {
   return oniSend(url, params)
 }
 
-export { oniGet }
+export default oniGet
