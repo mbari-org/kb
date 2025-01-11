@@ -10,7 +10,7 @@ import {
 import { CssBaseline } from "@mui/material"
 import { ThemeProvider } from "@mui/material/styles"
 
-import kbTheme from "@/themes/kb"
+import kbTheme from "@/lib/kb/theme"
 
 import AuthProvider from "@/contexts/auth/AuthProvider"
 import ConfigProvider from "@/contexts/config/ConfigProvider"

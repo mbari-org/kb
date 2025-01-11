@@ -15,7 +15,7 @@ const useProcessError = () => {
     (error, onContinue) => {
       setModalAlert({
         Title: createAlertTitle({
-          title: "Process Error",
+          title: "Processing Error",
           type: "error",
         }),
         Content: createAlertContentText({

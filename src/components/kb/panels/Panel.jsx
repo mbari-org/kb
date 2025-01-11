@@ -1,4 +1,4 @@
-import panels from "@/lib/panels"
+import panels from "@/lib/kb/panels"
 
 const Panel = ({ name }) => {
   const panel = panels.find(p => p.name === name)

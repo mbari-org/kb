@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 
-import { getNextSibling, getPrevSibling } from "@/model/taxonomy"
+import { getNextSibling, getPrevSibling } from "@/lib/kb/taxonomy"
 
 import Expand from "./expandedEnum"
 

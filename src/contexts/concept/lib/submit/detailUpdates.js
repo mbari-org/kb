@@ -1,4 +1,4 @@
-import { isEmpty, prune } from "@/lib/util"
+import { isEmpty, prune } from "@/lib/kb/util"
 
 import { updateAuthor, updateMedia, updateRank } from "../update"
 

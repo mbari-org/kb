@@ -17,7 +17,7 @@ import {
   needsUpdate,
   updateConcept as updateTaxonomyConcept,
   updateConceptName as updateTaxonomyConceptName,
-} from "@/model/taxonomy"
+} from "@/lib/kb/taxonomy"
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()

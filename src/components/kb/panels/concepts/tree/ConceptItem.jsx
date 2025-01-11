@@ -10,7 +10,7 @@ import ConceptsExpand from "./ConceptsExpand"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import { isEmpty } from "@/lib/util"
+import { isEmpty } from "@/lib/kb/util"
 
 const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { concept } = use(ConceptContext)

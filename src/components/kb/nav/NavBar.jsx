@@ -3,7 +3,7 @@ import { AppBar, Toolbar } from "@mui/material"
 import LogoutLink from "./LogoutLink"
 import PanelLink from "./PanelLink"
 
-import panels from "@/lib/panels"
+import panels from "@/lib/kb/panels"
 
 const NavBar = ({ activePanel, selectPanel }) => {
   const names = panels.map(({ name }) => name)

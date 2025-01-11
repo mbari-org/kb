@@ -17,7 +17,7 @@ import useConceptPath from "./lib/useConceptPath"
 import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { isEmpty } from "@/lib/util"
+import { isEmpty } from "@/lib/kb/util"
 
 const ConceptProvider = ({ children }) => {
   const theme = useTheme()

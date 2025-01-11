@@ -3,7 +3,7 @@ import { use } from "react"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { isEmpty } from "@/lib/util"
+import { isEmpty } from "@/lib/kb/util"
 
 const baseStyle = {
   fullWidth: true,

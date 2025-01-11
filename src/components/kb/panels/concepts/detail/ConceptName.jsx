@@ -14,7 +14,7 @@ import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { isEmpty } from "@/lib/util"
+import { isEmpty } from "@/lib/kb/util"
 
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
