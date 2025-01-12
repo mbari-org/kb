@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from "react"
+import { use, useCallback, useEffect, useRef, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
 import ModalContext from "@/contexts/modal/ModalContext"
@@ -21,14 +21,12 @@ import {
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
+
+  const { config } = use(ConfigContext)
   const { setLoading, setModalAlert } = use(ModalContext)
 
-  const { error: configError, config } = use(ConfigContext)
-  if (configError) {
-    console.log("CxTBD TaxonomyProvider config error:", configError)
-  }
-
   const [taxonomy, setTaxonomy] = useState(null)
+  const initialLoad = useRef(true)
 
   const getConcept = useCallback(
     conceptName => getTaxonomyConcept(taxonomy, conceptName),
@@ -61,22 +59,11 @@ const TaxonomyProvider = ({ children }) => {
   }
 
   const loadConceptDescendants = async concept => {
-    if (!concept) {
-      console.log("CxTBD TaxonomyProvider loadConceptDescendants w/o concept")
-    }
     try {
       setLoading(true)
-      console.log(
-        "CxTBD TaxonomyProvider loadConceptDescendants concept:",
-        concept?.name
-      )
       const { taxonomy: taxonomyWithDescendants } = await loadDescendants(
         taxonomy,
         concept
-      )
-      console.log(
-        "CxTBD TaxonomyProvider loadConceptDescendants DONE for concept:",
-        concept?.name
       )
       setTaxonomy(taxonomyWithDescendants)
       setLoading(false)
@@ -108,7 +95,9 @@ const TaxonomyProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (config) {
+    if (initialLoad.current && config) {
+      initialLoad.current = false
+
       setLoading(true)
       loadTaxonomy(config).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {

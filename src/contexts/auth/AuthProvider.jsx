@@ -22,7 +22,9 @@ const AuthProvider = ({ children }) => {
 
     setUser(null)
     navigate("/login")
-  }, [navigate])
+    // navigate does not change, so no need to include it in the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const processAuth = useCallback(
     anAuth => {
@@ -46,7 +48,9 @@ const AuthProvider = ({ children }) => {
     selectedStore.clear()
     setUser(null)
     navigate("/login")
-  }, [navigate])
+    // navigate does not change, so no need to include it in the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (user) return
@@ -88,7 +92,9 @@ const AuthProvider = ({ children }) => {
         processAuth(auth)
       })
     })
-  }, [config, handleInvalidAuth, navigate, processAuth, user])
+    // navigate does not change, so no need to include it in the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config, handleInvalidAuth, processAuth, user])
 
   return (
     <AuthContext value={{ logout, processAuth, user }}>{children}</AuthContext>

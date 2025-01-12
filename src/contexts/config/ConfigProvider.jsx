@@ -57,7 +57,9 @@ const ConfigProvider = ({ children }) => {
     } else {
       navigate("/login")
     }
-  }, [navigate])
+    // navigate does not change, so no need to include it in the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <ConfigContext value={{ config, updateConfig }}>{children}</ConfigContext>
