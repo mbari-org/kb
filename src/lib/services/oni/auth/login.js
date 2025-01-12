@@ -1,9 +1,7 @@
-import { decodeJwt } from "jose"
-
+import { genRefresh } from "@/lib/auth/refresh"
 import authStore from "@/lib/store/auth"
 
 import authUrl from "./authUrl"
-import { obfuscate } from "./refresh"
 
 const login = async (config, username, password) => {
   const { error, url: loginUrl } = authUrl(config, "login")
@@ -12,34 +10,41 @@ const login = async (config, username, password) => {
   }
 
   try {
-    const authParams = params(username, password)
-    const response = await fetch(loginUrl, authParams)
+    const loginParams = params(username, password)
+    const loginResponse = await fetch(loginUrl, loginParams)
 
-    if (response.status !== 200) {
-      return authErrorMessage(response.statusText)
+    if (loginResponse.status !== 200) {
+      return { error: errorMessage(loginResponse.statusText) }
     }
 
-    const { access_token: token } = await response.json()
+    const { access_token: token } = await loginResponse.json()
+    const refresh = await genRefresh(password)
 
-    return processToken(password, token)
+    const auth = {
+      refresh,
+      token,
+    }
+    authStore.set(auth)
+
+    return { auth }
   } catch (error) {
     return { error: error.message }
   }
 }
 
-const processToken = async (password, token) => {
-  const { role, name } = decodeJwt(token)
-  const refresh = await obfuscate(password)
-  const auth = {
-    token,
-    refresh,
-    role,
-    username: name,
-  }
-  authStore.set(auth)
+// const processToken = async (password, token) => {
+//   const { role, name } = decodeJwt(token)
+//   const refresh = await obfuscate(password)
+// const auth = {
+//   token,
+//   refresh,
+//   role,
+//   username: name,
+// }
+// authStore.set(auth)
 
-  return { auth }
-}
+//   return { auth }
+// }
 
 const params = (username, password) => {
   const auth = basicAuth(username, password)
@@ -59,7 +64,7 @@ const headers = auth => ({
   Authorization: `${auth}`,
 })
 
-const authErrorMessage = statusText => {
+const errorMessage = statusText => {
   var message
   switch (statusText.toLowerCase()) {
     case "unauthorized":

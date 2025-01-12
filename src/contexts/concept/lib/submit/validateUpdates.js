@@ -4,7 +4,7 @@ import {
   createAlertTitle,
 } from "@/components/modals/alert/components"
 
-import { isRole } from "@/lib/services/oni/auth/validate"
+import { isAdmin } from "@/lib/auth/role"
 
 const REMOVE_RANK_VALUE = "REMOVE"
 
@@ -13,13 +13,14 @@ const validateRankUpdates = async ({
   conceptUpdate,
   setModalAlert,
   updates,
+  user,
 }) => {
   let validation = {
     rankLevel: true,
     rankName: true,
   }
 
-  if (isRole("admin")) {
+  if (isAdmin(user)) {
     return validation
   }
 

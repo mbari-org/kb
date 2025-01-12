@@ -1,11 +1,20 @@
+import { validateToken } from "@/lib/auth/validate"
+
 const oniSend = async (url, params) => {
+  validateToken()
+
   try {
     const response = await fetch(url, params)
     const payload = await response.json()
     if (response.status === 200) {
-      return {
-        payload,
-      }
+      return { payload }
+    }
+    if (response.status === 401) {
+      return errorResponse(
+        url,
+        errorTitle(response.status),
+        "Unauthorized: Invalid token"
+      )
     }
 
     return errorResponse(url, errorTitle(response.status), payload.message)

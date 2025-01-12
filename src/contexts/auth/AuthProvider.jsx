@@ -1,69 +1,97 @@
 import { use, useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import ConfigContext from "@/contexts/config/ConfigContext"
 import AuthContext from "./AuthContext"
+import ConfigContext from "@/contexts/config/ConfigContext"
 
-import { isRole, validateAuth } from "@/lib/services/oni/auth/validate"
-
+import processToken from "@/lib/auth/processToken"
+import { extract } from "@/lib/auth/refresh"
+import login from "@/lib/services/oni/auth/login"
 import authStore from "@/lib/store/auth"
 import selectedStore from "@/lib/store/selected"
 
 const AuthProvider = ({ children }) => {
-  const { config } = use(ConfigContext)
-
   const navigate = useNavigate()
 
-  const [auth, setAuth] = useState(null)
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [isMaint, setIsMaint] = useState(false)
-  const [isReadOnly, setIsReadOnly] = useState(false)
+  const { config } = use(ConfigContext)
+
+  const [user, setUser] = useState(null)
 
   const handleInvalidAuth = useCallback(() => {
-    setAuth(null)
     authStore.clear()
+
+    setUser(null)
     navigate("/login")
   }, [navigate])
 
-  const updateAuth = useCallback(
+  const processAuth = useCallback(
     anAuth => {
-      if (validateAuth(anAuth)) {
-        setAuth(anAuth)
-        authStore.set(anAuth)
-
-        const admin = isRole("admin")
-        const maint = isRole("maint")
-        setIsAdmin(admin)
-        setIsMaint(maint)
-        setIsReadOnly(!admin && !maint)
-
-        navigate("/kb")
-      } else {
-        handleInvalidAuth()
+      if (!anAuth) {
+        return
       }
+
+      const { error: authError, user: authUser } = processToken(anAuth.token)
+      if (authError) {
+        handleInvalidAuth()
+        return
+      }
+
+      setUser(authUser)
     },
-    [handleInvalidAuth, navigate]
+    [handleInvalidAuth]
   )
 
-  const logout = () => {
+  const logout = useCallback(() => {
     authStore.clear()
     selectedStore.clear()
-    updateAuth(null)
+    setUser(null)
     navigate("/login")
-  }
+  }, [navigate])
 
   useEffect(() => {
-    if (config) {
-      config.valid ? updateAuth(authStore.get()) : handleInvalidAuth()
+    if (user) return
+
+    const auth = authStore.get()
+    if (!auth) return
+
+    const { error: authError, user: authUser } = processToken(auth.token)
+    if (authError) {
+      logout()
+      return
     }
-  }, [config, handleInvalidAuth, updateAuth])
+    setUser(authUser)
+  }, [logout, user])
+
+  useEffect(() => {
+    if (!config) return
+    if (!user) return
+
+    const { expiry, name } = user
+    const currentTime = Date.now() / 1000
+    if (currentTime < expiry) {
+      navigate("/kb")
+      return
+    }
+
+    const { refresh } = authStore.get()
+    extract(refresh).then(userRefresh => {
+      if (userRefresh.error) {
+        handleInvalidAuth()
+        return
+      }
+
+      login(config, name, userRefresh.password).then(({ auth, error }) => {
+        if (error) {
+          handleInvalidAuth()
+          return
+        }
+        processAuth(auth)
+      })
+    })
+  }, [config, handleInvalidAuth, navigate, processAuth, user])
 
   return (
-    <AuthContext
-      value={{ auth, isAdmin, isMaint, isReadOnly, logout, updateAuth }}
-    >
-      {children}
-    </AuthContext>
+    <AuthContext value={{ logout, processAuth, user }}>{children}</AuthContext>
   )
 }
 

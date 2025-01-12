@@ -1,8 +1,10 @@
-import { useCallback } from "react"
+import { use, useCallback } from "react"
 
 import detailUpdates from "./submit/detailUpdates"
 import nameUpdates from "./submit/nameUpdates"
 import { validateUpdates } from "./submit/validateUpdates"
+
+import AuthContext from "@/contexts/auth/AuthContext"
 
 import useProcessError from "@/lib/hooks/useProcessError"
 
@@ -26,6 +28,8 @@ const useSubmitUpdates = ({
   updateConceptName,
   updatedState,
 }) => {
+  const { user } = use(AuthContext)
+
   const processError = useProcessError()
   const onContinue = useCallback(
     () => reset(initialState),
@@ -39,6 +43,7 @@ const useSubmitUpdates = ({
         conceptUpdate,
         setModalAlert,
         updates,
+        user,
       }).then(detailValidation => {
         if (allValid(detailValidation)) {
           detailUpdates({

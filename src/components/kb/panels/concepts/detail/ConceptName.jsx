@@ -14,12 +14,13 @@ import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
+import { isReadOnly } from "@/lib/auth/role"
 import { isEmpty } from "@/lib/kb/util"
 
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
 
-  const { isReadOnly } = use(AuthContext)
+  const { user } = use(AuthContext)
   const { concept, editing, pendingHistory } = use(ConceptContext)
   const { setModalAlert } = use(ModalContext)
 
@@ -56,7 +57,7 @@ const ConceptName = () => {
       >
         {concept?.name}
       </Typography>
-      {!editing && !hasPendingHistory && !isReadOnly && (
+      {!editing && !hasPendingHistory && !isReadOnly(user) && (
         <IconButton
           aria-label="Edit concept name"
           color="main"
