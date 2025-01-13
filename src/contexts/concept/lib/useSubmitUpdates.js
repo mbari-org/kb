@@ -15,11 +15,11 @@ const allValid = values => Object.values(values).every(Boolean)
 
 const useSubmitUpdates = ({
   concept,
-  conceptUpdate,
   config,
   getCurrentUpdates,
   initialState,
   modified,
+  modifyConcept,
   reset,
   selectConcept,
   setModalAlert,
@@ -40,7 +40,7 @@ const useSubmitUpdates = ({
     updates => {
       validateUpdates({
         concept,
-        conceptUpdate,
+        modifyConcept,
         setModalAlert,
         updates,
         user,
@@ -59,7 +59,7 @@ const useSubmitUpdates = ({
               }
               updateConcept(updatedConcept).then(
                 () => {
-                  selectConcept(updatedConcept.name)
+                  // selectConcept(updatedConcept.name)
                   // reset(updatedState)
                 },
                 error => showBoundary(error)
@@ -72,14 +72,14 @@ const useSubmitUpdates = ({
     },
     [
       concept,
-      conceptUpdate,
       config,
+      modifyConcept,
       onContinue,
       processError,
-      selectConcept,
       setModalAlert,
       showBoundary,
       updateConcept,
+      user,
     ]
   )
 

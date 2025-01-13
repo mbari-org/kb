@@ -9,7 +9,7 @@ import useConceptDetailStyle from "./useConceptDetailStyle"
 const ConceptAuthor = () => {
   const {
     conceptState: { author },
-    conceptUpdate,
+    modifyConcept,
   } = use(ConceptContext)
 
   const infoStyle = useConceptDetailStyle("Author")
@@ -18,7 +18,7 @@ const ConceptAuthor = () => {
     <TextField
       {...infoStyle}
       label="Author"
-      onChange={e => conceptUpdate({ author: e.target.value })}
+      onChange={e => modifyConcept({ author: e.target.value })}
       value={author}
     />
   )

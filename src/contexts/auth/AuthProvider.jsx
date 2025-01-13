@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom"
 import { useErrorBoundary } from "react-error-boundary"
 
 import useAuthUser from "@/contexts/auth/lib/useAuthUser"
-import useInvalidAuth from "@/contexts/auth/lib/useInvalidAuth"
 import useLogout from "@/contexts/auth/lib/useLogout"
 import useProcessAuth from "@/contexts/auth/lib/useProcessAuth"
 import useRefreshUser from "@/contexts/auth/lib/useRefreshUser"
@@ -19,12 +18,11 @@ const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(null)
 
-  const handleInvalidAuth = useInvalidAuth(setUser)
   const logout = useLogout(setUser)
   const processAuth = useProcessAuth(setUser)
-  const refreshUser = useRefreshUser(config, setUser, user)
+  const refreshUser = useRefreshUser({ setUser, user })
 
-  useAuthUser(user, setUser, logout)
+  useAuthUser({ logout, setUser, user })
 
   useEffect(() => {
     if (!config) return
@@ -37,15 +35,9 @@ const AuthProvider = ({ children }) => {
       .catch(error => {
         showBoundary(error)
       })
-  }, [
-    config,
-    handleInvalidAuth,
-    navigate,
-    processAuth,
-    refreshUser,
-    showBoundary,
-    user,
-  ])
+    // None of config, navigate, refreshUser, showBoundary change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshUser, user])
 
   return (
     <AuthContext value={{ logout, processAuth, refreshUser, user }}>

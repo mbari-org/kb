@@ -10,7 +10,7 @@ const REMOVE_RANK_VALUE = "REMOVE"
 
 const validateRankUpdates = async ({
   concept,
-  conceptUpdate,
+  modifyConcept,
   setModalAlert,
   updates,
   user,
@@ -40,11 +40,11 @@ const validateRankUpdates = async ({
   const onChoice = _choice => {
     // Restore removed rank level and/or name
     if (removeLevel) {
-      conceptUpdate({ rankLevel: concept.rankLevel })
+      modifyConcept({ rankLevel: concept.rankLevel })
       validation = { ...validation, rankLevel: false }
     }
     if (removeName) {
-      conceptUpdate({ rankName: concept.rankName })
+      modifyConcept({ rankName: concept.rankName })
       validation = { ...validation, rankName: false }
     }
     setModalAlert(null)

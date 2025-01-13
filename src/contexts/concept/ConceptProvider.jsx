@@ -52,7 +52,7 @@ const ConceptProvider = ({ children }) => {
     initialState,
   ])
 
-  const conceptUpdate = useCallback(
+  const modifyConcept = useCallback(
     update => {
       dispatch({ type: "SET_FIELD", payload: update })
     },
@@ -72,11 +72,11 @@ const ConceptProvider = ({ children }) => {
 
   const submitUpdates = useSubmitUpdates({
     concept,
-    conceptUpdate,
     config: taxonomy.config,
     getCurrentUpdates,
     initialState,
     modified,
+    modifyConcept,
     reset,
     selectConcept,
     setModalAlert,
@@ -176,7 +176,7 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         conceptState: updatedState,
-        conceptUpdate,
+        modifyConcept,
         displayConceptEditsAlert,
         editing,
         modified,

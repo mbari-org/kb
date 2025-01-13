@@ -1,6 +1,7 @@
+import { use, useCallback } from "react"
+
 import useInvalidAuth from "@/contexts/auth/lib/useInvalidAuth"
 import useProcessAuth from "@/contexts/auth/lib/useProcessAuth"
-import { useCallback } from "react"
 
 import { extract } from "@/lib/auth/refreshKey"
 import login from "@/lib/services/oni/auth/login"
@@ -8,7 +9,11 @@ import authStore from "@/lib/store/auth"
 
 import tokenIsExpiring from "./tokenIsExpiring"
 
-const useRefreshUser = (config, setUser, user) => {
+import ConfigContext from "@/contexts/config/ConfigContext"
+
+const useRefreshUser = ({ setUser, user }) => {
+  const { config } = use(ConfigContext)
+
   const handleInvalidAuth = useInvalidAuth(setUser)
   const processAuth = useProcessAuth(setUser)
 

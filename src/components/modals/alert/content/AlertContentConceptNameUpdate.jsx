@@ -9,7 +9,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 const AlertContentConceptNameUpdate = () => {
   const { concept: conceptTheme, palette } = useTheme()
 
-  const { concept, conceptState, conceptUpdate } = use(ConceptContext)
+  const { concept, conceptState, modifyConcept } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 
   const names = getConceptNames()
@@ -22,7 +22,7 @@ const AlertContentConceptNameUpdate = () => {
       : conceptTheme.color.pending
 
   const handleChange = event => {
-    conceptUpdate({ name: event.target.value })
+    modifyConcept({ name: event.target.value })
   }
 
   return (

@@ -32,14 +32,14 @@ const detailUpdates = async params => {
 }
 
 const detailProcessor =
-  (concept, config) => async (result, conceptUpdates, updateFn) => {
+  (concept, config) => async (result, modifyConcepts, updateFn) => {
     if (result.error)
       return {
         error: result.error,
         concept,
       }
 
-    const updates = prune(conceptUpdates)
+    const updates = prune(modifyConcepts)
     if (isEmpty(updates)) {
       return { concept }
     }

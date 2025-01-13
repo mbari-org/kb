@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import processToken from "@/lib/auth/processToken"
 import authStore from "@/lib/store/auth"
 
-const useAuthUser = (user, setUser, logout) => {
+const useAuthUser = ({ logout, setUser, user }) => {
   useEffect(() => {
     if (user) return
 
@@ -16,7 +16,7 @@ const useAuthUser = (user, setUser, logout) => {
       return
     }
     setUser(authUser)
-  }, [logout, user, setUser])
+  }, [logout, setUser, user])
 }
 
 export default useAuthUser
