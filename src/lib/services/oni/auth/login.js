@@ -1,4 +1,4 @@
-import { genRefresh } from "@/lib/auth/refresh"
+import { genRefresh } from "@/lib/auth/refreshKey"
 import authStore from "@/lib/store/auth"
 
 import authUrl from "./authUrl"

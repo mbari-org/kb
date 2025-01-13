@@ -1,8 +1,4 @@
-import { validateToken } from "@/lib/auth/validate"
-
 const oniSend = async (url, params) => {
-  validateToken()
-
   try {
     const response = await fetch(url, params)
     const payload = await response.json()

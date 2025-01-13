@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+
 import processToken from "@/lib/auth/processToken"
 import authStore from "@/lib/store/auth"
 

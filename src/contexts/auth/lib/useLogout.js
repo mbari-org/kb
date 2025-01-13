@@ -1,7 +1,7 @@
-import { useCallback } from "react"
-import { useNavigate } from "react-router-dom"
 import authStore from "@/lib/store/auth"
 import selectedStore from "@/lib/store/selected"
+import { useCallback } from "react"
+import { useNavigate } from "react-router-dom"
 
 const useLogout = setUser => {
   const navigate = useNavigate()

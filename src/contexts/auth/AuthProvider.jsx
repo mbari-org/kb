@@ -6,7 +6,6 @@ import useAuthUser from "@/contexts/auth/lib/useAuthUser"
 import useInvalidAuth from "@/contexts/auth/lib/useInvalidAuth"
 import useLogout from "@/contexts/auth/lib/useLogout"
 import useProcessAuth from "@/contexts/auth/lib/useProcessAuth"
-import useTokenExpiring from "@/contexts/auth/lib/useTokenExpiring"
 import useRefreshUser from "@/contexts/auth/lib/useRefreshUser"
 
 import AuthContext from "@/contexts/auth/AuthContext"
