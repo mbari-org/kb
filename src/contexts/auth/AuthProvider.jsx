@@ -1,103 +1,57 @@
-import { use, useCallback, useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useErrorBoundary } from "react-error-boundary"
 
-import AuthContext from "./AuthContext"
+import useAuthUser from "@/contexts/auth/lib/useAuthUser"
+import useInvalidAuth from "@/contexts/auth/lib/useInvalidAuth"
+import useLogout from "@/contexts/auth/lib/useLogout"
+import useProcessAuth from "@/contexts/auth/lib/useProcessAuth"
+import useTokenExpiring from "@/contexts/auth/lib/useTokenExpiring"
+import useRefreshUser from "@/contexts/auth/lib/useRefreshUser"
+
+import AuthContext from "@/contexts/auth/AuthContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
-
-import processToken from "@/lib/auth/processToken"
-import { extract } from "@/lib/auth/refresh"
-import login from "@/lib/services/oni/auth/login"
-import authStore from "@/lib/store/auth"
-import selectedStore from "@/lib/store/selected"
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
+  const { showBoundary } = useErrorBoundary()
 
   const { config } = use(ConfigContext)
 
   const [user, setUser] = useState(null)
 
-  const handleInvalidAuth = useCallback(() => {
-    authStore.clear()
+  const handleInvalidAuth = useInvalidAuth(setUser)
+  const logout = useLogout(setUser)
+  const processAuth = useProcessAuth(setUser)
+  const refreshUser = useRefreshUser(config, setUser, user)
 
-    setUser(null)
-    navigate("/login")
-    // navigate does not change, so no need to include it in the dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const processAuth = useCallback(
-    anAuth => {
-      if (!anAuth) {
-        return
-      }
-
-      const { error: authError, user: authUser } = processToken(anAuth.token)
-      if (authError) {
-        handleInvalidAuth()
-        return
-      }
-
-      setUser(authUser)
-    },
-    [handleInvalidAuth]
-  )
-
-  const logout = useCallback(() => {
-    authStore.clear()
-    selectedStore.clear()
-    setUser(null)
-    navigate("/login")
-    // navigate does not change, so no need to include it in the dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (user) return
-
-    const auth = authStore.get()
-    if (!auth) return
-
-    const { error: authError, user: authUser } = processToken(auth.token)
-    if (authError) {
-      logout()
-      return
-    }
-    setUser(authUser)
-  }, [logout, user])
+  useAuthUser(user, setUser, logout)
 
   useEffect(() => {
     if (!config) return
     if (!user) return
 
-    const { expiry, name } = user
-    const currentTime = Date.now() / 1000
-    if (currentTime < expiry) {
-      navigate("/kb")
-      return
-    }
-
-    const { refresh } = authStore.get()
-    extract(refresh).then(userRefresh => {
-      if (userRefresh.error) {
-        handleInvalidAuth()
-        return
-      }
-
-      login(config, name, userRefresh.password).then(({ auth, error }) => {
-        if (error) {
-          handleInvalidAuth()
-          return
-        }
-        processAuth(auth)
+    refreshUser()
+      .then(() => {
+        navigate("/kb")
       })
-    })
-    // navigate does not change, so no need to include it in the dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config, handleInvalidAuth, processAuth, user])
+      .catch(error => {
+        showBoundary(error)
+      })
+  }, [
+    config,
+    handleInvalidAuth,
+    navigate,
+    processAuth,
+    refreshUser,
+    showBoundary,
+    user,
+  ])
 
   return (
-    <AuthContext value={{ logout, processAuth, user }}>{children}</AuthContext>
+    <AuthContext value={{ logout, processAuth, refreshUser, user }}>
+      {children}
+    </AuthContext>
   )
 }
 
