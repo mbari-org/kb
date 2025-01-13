@@ -60,14 +60,17 @@ const ConceptProvider = ({ children }) => {
   )
 
   const reset = useCallback(
-    conceptState => {
+    resetState => {
       setEditing(false)
       setModified(false)
       setModalAlert(null)
 
-      dispatch({ type: "INIT_STATE", payload: conceptState })
+      const resetConcept = { ...concept, ...resetState }
+      setConcept(resetConcept)
+
+      dispatch({ type: "INIT_STATE", payload: resetState })
     },
-    [setEditing, setModified, setModalAlert]
+    [concept, setModalAlert]
   )
 
   const submitUpdates = useSubmitUpdates({

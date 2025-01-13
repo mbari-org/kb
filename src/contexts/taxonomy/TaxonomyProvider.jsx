@@ -80,6 +80,7 @@ const TaxonomyProvider = ({ children }) => {
         concept
       )
       setTaxonomy(updatedTaxonomy)
+      return updatedTaxonomy
     }
   }
 

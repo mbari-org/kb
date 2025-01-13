@@ -1,19 +1,19 @@
 import { updateConceptName } from "@/lib/services/oni/api/concept"
+import { UPDATE_NAME_ONLY } from "../useSubmitUpdates"
 
-const nameUpdates = async (params, UPDATE_NAME_ONLY) => {
-  const { error } = await nameUpdate(params)
+const nameUpdates = async ({ config, concept, extent, updates }) => {
+  const { error } = await updateConceptName(config, concept.name, {
+    newName: updates.name,
+  })
 
-  if (params.extent === UPDATE_NAME_ONLY || error) {
-    return { error, updatedName: params.updates.name }
+  if (extent === UPDATE_NAME_ONLY || error) {
+    return { error, updatedName: updates.name }
   }
 
-  return processConceptDataUpdate(params)
+  return updateConceptData(concept)
 }
 
-const nameUpdate = async ({ config, concept, updates }) =>
-  updateConceptName(config, concept.name, { newName: updates.name })
-
-const processConceptDataUpdate = async ({ _config, concept, _updates }) => {
+const updateConceptData = async ({ _config, concept, _updates }) => {
   return { error: `CxTBD: Update ${concept.name} data` }
 }
 
