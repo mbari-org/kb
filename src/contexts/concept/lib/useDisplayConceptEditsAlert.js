@@ -1,10 +1,13 @@
-import { useCallback } from "react"
+import { use, useCallback, useContext } from "react"
 
 import {
   createAlertButtons,
   createAlertContentUnsavedEdits,
   createAlertTitle,
 } from "@/components/modals/alert/components"
+
+import ModalContext from "@/contexts/modal/ModalContext"
+import SelectedContext from "@/contexts/selected/SelectedContext"
 
 const CONTINUE = "Continue"
 const DISCARD = "Discard"
@@ -14,12 +17,13 @@ const useDisplayConceptEditsAlert = ({
   getCurrentUpdates,
   initialState,
   reset,
-  selectConcept,
-  selectPanel,
-  setModalAlert,
   updatedState,
 }) => {
+  const { setModalAlert } = use(ModalContext)
+  const { selectConcept, selectPanel } = useContext(SelectedContext)
+
   const displayConceptEditsAlert = useCallback(() => {
+    const updates = getCurrentUpdates(updatedState)
     const onChoice = choice => {
       switch (choice) {
         case DISCARD:
@@ -35,24 +39,15 @@ const useDisplayConceptEditsAlert = ({
       setModalAlert(null)
     }
 
-    const createUnsavedEditsModalAlert = ({ onChoice, updates }) => {
-      return {
-        Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
-        Content: createAlertContentUnsavedEdits({ updates }),
-        Choices: createAlertButtons({
-          choices: [DISCARD, CONTINUE],
-          colors: ["cancel", "main"],
-          onChoice,
-        }),
-      }
-    }
-
-    const updates = getCurrentUpdates(updatedState)
-    const conceptEditingModalAlert = createUnsavedEditsModalAlert({
-      onChoice,
-      updates,
+    setModalAlert({
+      Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
+      Content: createAlertContentUnsavedEdits({ updates }),
+      Choices: createAlertButtons({
+        choices: [DISCARD, CONTINUE],
+        colors: ["cancel", "main"],
+        onChoice,
+      }),
     })
-    setModalAlert(conceptEditingModalAlert)
   }, [
     conceptName,
     getCurrentUpdates,

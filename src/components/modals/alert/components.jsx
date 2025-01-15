@@ -4,8 +4,9 @@ import AlertButtons from "./buttons/AlertButtons"
 import AlertButtonsConceptNameUpdate from "./buttons/AlertButtonsConceptNameUpdate"
 
 import AlertContentConceptNameUpdate from "./content/AlertContentConceptNameUpdate"
-import AlertContentText from "./content/AlertContentText"
+import AlertContentPendingEdit from "./content/AlertContentPendingEdit"
 import AlertContentUnsavedEdits from "./content/AlertContentUnsavedEdits"
+import AlertContentText from "./content/AlertContentText"
 
 const createAlertButtons = props => {
   const component = () => <AlertButtons {...props} />
@@ -37,6 +38,12 @@ const createAlertContentUnsavedEdits = props => {
   return component
 }
 
+const createAlertContentPendingEdit = props => {
+  const component = () => <AlertContentPendingEdit {...props} />
+  component.displayName = "AlertContentPendingEdit"
+  return component
+}
+
 const createAlertTitle = props => {
   const component = () => <AlertTitle {...props} />
   component.displayName = "AlertTitle"
@@ -47,6 +54,7 @@ export {
   createAlertButtons,
   createAlertButtonsConceptNameUpdate,
   createAlertContentConceptNameUpdate,
+  createAlertContentPendingEdit,
   createAlertContentText,
   createAlertTitle,
   createAlertContentUnsavedEdits,

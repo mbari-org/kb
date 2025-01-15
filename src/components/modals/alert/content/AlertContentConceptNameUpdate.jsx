@@ -14,7 +14,7 @@ const AlertContentConceptNameUpdate = () => {
 
   const names = getConceptNames()
 
-  const fromColor = conceptTheme.color.detail
+  const fromColor = conceptTheme.color.clean
 
   const toColor =
     conceptState.name === concept.name || names.includes(conceptState.name)

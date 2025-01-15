@@ -21,8 +21,13 @@ import { hasPendingHistory } from "@/lib/kb/util"
 
 const ConceptRank = ({ field, options }) => {
   const { user } = use(AuthContext)
-  const { conceptState, editing, pendingHistory, modifyConcept } =
-    use(ConceptContext)
+  const {
+    conceptState,
+    displayPendingEditAlert,
+    editing,
+    pendingHistory,
+    modifyConcept,
+  } = use(ConceptContext)
 
   const rankValue = conceptState[field]
 
@@ -65,6 +70,7 @@ const ConceptRank = ({ field, options }) => {
               },
               padding: 0.5,
             }}
+            onClick={displayPendingEditAlert}
           >
             <PiStamp />
           </IconButton>

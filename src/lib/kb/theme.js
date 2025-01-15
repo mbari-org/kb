@@ -9,17 +9,23 @@ const light = alpha(main, 0.1)
 const pale = alpha(main, 0.3)
 
 const cancel = "#af0000"
-const cleanDot = "#00ff00"
+const clean = "#008800"
 const conceptDetail = "#008800"
 const paper = "#f0f0f0"
+const pendingIconClean = "#00dd00"
+const pendingIconDirty = "#dd0000"
 const navActive = "#ffffff"
 
 const theme = createTheme({
   concept: {
     color: {
-      clean: cleanDot,
+      clean,
       detail: conceptDetail,
       pending: cancel,
+      pendingIcon: {
+        clean: pendingIconClean,
+        dirty: pendingIconDirty,
+      },
     },
     fontFamily: "Roboto, sans-serif",
     fontWeight: 600,
@@ -40,6 +46,7 @@ const theme = createTheme({
       paperLight: lighten(paper, 0.1),
     },
     cancel: addColor(cancel),
+    clean: addColor(clean),
     light: addColor(light),
     pale: addColor(pale),
     main: addColor(main),

@@ -15,6 +15,7 @@ import { stateForConcept } from "./lib/stateForConcept"
 
 import useConceptPath from "./lib/useConceptPath"
 import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
+import useDisplayPendingEditAlert from "./lib/useDisplayPendingEditAlert"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
 import { isEmpty } from "@/lib/kb/util"
@@ -95,10 +96,11 @@ const ConceptProvider = ({ children }) => {
     getCurrentUpdates,
     initialState,
     reset,
-    selectConcept,
-    selectPanel,
-    setModalAlert,
     updatedState,
+  })
+
+  const displayPendingEditAlert = useDisplayPendingEditAlert({
+    conceptName: concept?.name,
   })
 
   useEffect(() => {
@@ -179,9 +181,10 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         conceptState: updatedState,
-        modifyConcept,
         displayConceptEditsAlert,
+        displayPendingEditAlert,
         editing,
+        modifyConcept,
         modified,
         pendingHistory,
         processUpdates: submitUpdates,

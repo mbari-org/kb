@@ -30,7 +30,7 @@ const ConceptName = () => {
 
   const conceptColor = hasPendingHistory
     ? conceptTheme.color.pending
-    : conceptTheme.color.detail
+    : conceptTheme.color.clean
 
   const editConceptName = () => {
     setModalAlert({
