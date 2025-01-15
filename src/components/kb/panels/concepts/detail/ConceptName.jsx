@@ -66,6 +66,10 @@ const ConceptName = () => {
           sx={{
             mb: 2,
             visibility: editing ? "hidden" : "visible",
+            "&:hover": {
+              backgroundColor: `transparent !important`,
+              transform: "scale(1.25)",
+            },
           }}
         >
           <CiEdit size={24} />

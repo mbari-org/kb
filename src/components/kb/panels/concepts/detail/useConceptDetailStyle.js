@@ -1,9 +1,9 @@
 import { useTheme } from "@mui/material/styles"
-import { use } from "react"
+import { use, useMemo } from "react"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { isEmpty } from "@/lib/kb/util"
+import { hasPendingHistory } from "@/lib/kb/util"
 
 const baseStyle = {
   fullWidth: true,
@@ -27,28 +27,29 @@ const useConceptDetailStyle = field => {
 
   const { editing, pendingHistory } = use(ConceptContext)
 
-  const hasPendingHistory = !isEmpty(
-    pendingHistory.filter(pending => pending.field === field)
-  )
+  const fieldHasPendingHistory = hasPendingHistory(pendingHistory, field)
 
-  const textColor = hasPendingHistory
+  const textColor = fieldHasPendingHistory
     ? theme.concept.color.pending
     : theme.palette.common.black
 
-  const sx = {
-    "& .MuiInputBase-input": {
-      backgroundColor: theme.palette.primary.light,
-      color: textColor,
-      WebkitTextFillColor: textColor,
-    },
-    "& .MuiInputBase-input.Mui-disabled": {
-      backgroundColor: "transparent",
-      color: textColor,
-      WebkitTextFillColor: textColor,
-    },
-  }
+  const sx = useMemo(
+    () => ({
+      "& .MuiInputBase-input": {
+        backgroundColor: theme.palette.primary.light,
+        color: textColor,
+        WebkitTextFillColor: textColor,
+      },
+      "& .MuiInputBase-input.Mui-disabled": {
+        backgroundColor: "transparent",
+        color: textColor,
+        WebkitTextFillColor: textColor,
+      },
+    }),
+    [theme, textColor]
+  )
 
-  if (!editing || hasPendingHistory) {
+  if (!editing || fieldHasPendingHistory) {
     return {
       ...standardStyle,
       sx: sx,

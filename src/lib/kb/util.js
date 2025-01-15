@@ -1,3 +1,5 @@
+const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
+
 const debounce = (func, delay) => {
   let timeout
   return function executedFunction(...args) {
@@ -8,6 +10,14 @@ const debounce = (func, delay) => {
     clearTimeout(timeout)
     timeout = setTimeout(later, delay)
   }
+}
+
+const hasPendingHistory = (pendingHistory, field) => {
+  const pendingField = capitalize(field)
+
+  return field
+    ? pendingHistory.some(pending => pending.field === pendingField)
+    : !isEmpty(pendingHistory)
 }
 
 const isDeepEqual = (obj1, obj2) => {
@@ -65,4 +75,11 @@ const prune = obj => {
   return pruned
 }
 
-export { debounce, isDeepEqual, isElementInViewport, isEmpty, prune }
+export {
+  debounce,
+  hasPendingHistory,
+  isDeepEqual,
+  isElementInViewport,
+  isEmpty,
+  prune,
+}

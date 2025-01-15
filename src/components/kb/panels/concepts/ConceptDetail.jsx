@@ -1,9 +1,10 @@
 import { Stack } from "@mui/material"
 
 import ConceptAuthor from "./detail/ConceptAuthor"
-import ConceptLevel from "./detail/ConceptLevel"
 import ConceptName from "./detail/ConceptName"
 import ConceptRank from "./detail/ConceptRank"
+
+import { RANK_LEVEL, RANK_LEVELS, RANK_NAME, RANK_NAMES } from "./detail/rank"
 
 const ConceptDetail = () => {
   return (
@@ -15,8 +16,8 @@ const ConceptDetail = () => {
       <ConceptName />
       <ConceptAuthor />
       <Stack direction="row" spacing={2}>
-        <ConceptRank />
-        <ConceptLevel />
+        <ConceptRank field={RANK_NAME} options={RANK_NAMES} />
+        <ConceptRank field={RANK_LEVEL} options={RANK_LEVELS} />
       </Stack>
     </Stack>
   )
