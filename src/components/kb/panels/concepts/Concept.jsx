@@ -26,10 +26,10 @@ const Concept = () => {
       direction="column"
       spacing={1.5}
       sx={{
+        m: 2,
+        mt: 1,
         minHeight: "100vh",
         position: "relative",
-        m: 1,
-        mr: 2,
       }}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between">

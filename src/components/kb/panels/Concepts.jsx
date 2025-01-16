@@ -15,7 +15,7 @@ const Concepts = () => {
         <TaxonomySidebar />
       </Box>
       <ConceptDivider setSidebarWidth={setSidebarWidth} />
-      <Box sx={{ flexGrow: 1, overflowY: "auto", pl: 1 }}>
+      <Box sx={{ flexGrow: 1, overflowY: "hidden" }}>
         <Concept />
       </Box>
     </Box>

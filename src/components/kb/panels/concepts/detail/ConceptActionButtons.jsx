@@ -17,13 +17,13 @@ const ConceptActionButtons = () => {
   return (
     <Box
       sx={{
-        position: "absolute",
-        bottom: 60,
-        left: 10,
-        right: 20,
+        alignItems: "center",
+        bottom: 65,
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "center",
+        left: 10,
+        position: "absolute",
+        right: 15,
       }}
     >
       <Button
@@ -36,8 +36,8 @@ const ConceptActionButtons = () => {
       {editing && modified && (
         <Button
           onClick={displayConceptEditsAlert}
-          variant="contained"
           sx={{ margin: "0 10px" }}
+          variant="contained"
         >
           Show
         </Button>
