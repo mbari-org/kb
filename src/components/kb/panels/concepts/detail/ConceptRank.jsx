@@ -1,33 +1,21 @@
 import { use } from "react"
-import { PiStamp } from "react-icons/pi"
 
-import {
-  Box,
-  IconButton,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-} from "@mui/material"
+import { Box, MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import { REMOVE_RANK_VALUE } from "@/contexts/concept/lib/submit/validateUpdates"
 
 import useConceptDetailStyle from "./useConceptDetailStyle"
+import ConceptPendingHistoryButton from "./ConceptPendingHistoryButton"
 
 import { isAdmin } from "@/lib/auth/role"
 import { hasPendingHistory } from "@/lib/kb/util"
 
 const ConceptRank = ({ field, options }) => {
   const { user } = use(AuthContext)
-  const {
-    conceptState,
-    displayPendingEditAlert,
-    editing,
-    pendingHistory,
-    modifyConcept,
-  } = use(ConceptContext)
+  const { conceptState, editing, pendingHistory, modifyConcept } =
+    use(ConceptContext)
 
   const rankValue = conceptState[field]
 
@@ -60,20 +48,7 @@ const ConceptRank = ({ field, options }) => {
           </Select>
         </Box>
         {editing && fieldHasPendingHistory && isAdmin(user) && (
-          <IconButton
-            color="main"
-            sx={{
-              backgroundColor: "main",
-              "&:hover": {
-                backgroundColor: `transparent !important`,
-                transform: "scale(1.25)",
-              },
-              padding: 0.5,
-            }}
-            onClick={displayPendingEditAlert}
-          >
-            <PiStamp />
-          </IconButton>
+          <ConceptPendingHistoryButton field={field} />
         )}
       </Box>
     </FormControl>

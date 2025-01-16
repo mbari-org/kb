@@ -101,6 +101,7 @@ const ConceptProvider = ({ children }) => {
 
   const displayPendingEditAlert = useDisplayPendingEditAlert({
     conceptName: concept?.name,
+    pendingHistory,
   })
 
   useEffect(() => {

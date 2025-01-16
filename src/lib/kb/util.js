@@ -12,10 +12,14 @@ const debounce = (func, delay) => {
   }
 }
 
+const getFieldPendingHistory = (pendingHistory, field) => {
+  const pendingField = capitalize(field)
+  return pendingHistory?.find(pending => pending.field === pendingField)
+}
+
 const hasPendingHistory = (pendingHistory, field) => {
   if (field) {
-    const pendingField = capitalize(field)
-    return pendingHistory.some(pending => pending.field === pendingField)
+    return !isEmpty(getFieldPendingHistory(pendingHistory, field))
   }
   return !isEmpty(pendingHistory)
 }
@@ -65,6 +69,15 @@ const isEmpty = object => {
   return true
 }
 
+const pickFields = (object, fields) => {
+  return fields.reduce((result, field) => {
+    if (Object.prototype.hasOwnProperty.call(object, field)) {
+      result[field] = object[field]
+    }
+    return result
+  }, {})
+}
+
 const prune = obj => {
   const pruned = { ...obj }
   Object.keys(pruned).forEach(key => {
@@ -77,9 +90,11 @@ const prune = obj => {
 
 export {
   debounce,
+  getFieldPendingHistory,
   hasPendingHistory,
   isDeepEqual,
   isElementInViewport,
   isEmpty,
+  pickFields,
   prune,
 }

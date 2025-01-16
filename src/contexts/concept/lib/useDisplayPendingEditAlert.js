@@ -8,38 +8,56 @@ import {
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
+import { getFieldPendingHistory, pickFields } from "@/lib/kb/util"
+
 const ACCEPT = "Accept"
 const DEFER = "Defer"
 const REJECT = "Reject"
 
-const useDisplayPendingEditAlert = ({ conceptName }) => {
+const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
   const { setModalAlert } = use(ModalContext)
 
-  const displayPendingEditAlert = useCallback(() => {
-    const onChoice = choice => {
-      switch (choice) {
-        case REJECT:
-          break
-        case DEFER:
-          break
-        case ACCEPT:
-          break
-        default:
-          break
-      }
+  const displayPendingEditAlert = useCallback(
+    field => {
+      console.log("field", field)
+      console.log("pendingHistory", pendingHistory)
+      const fieldPendingHistory = getFieldPendingHistory(pendingHistory, field)
+      console.log("fieldPendingHistory", fieldPendingHistory)
 
-      setModalAlert(null)
-    }
-    setModalAlert({
-      Title: createAlertTitle({ title: `Pending Edit: ${conceptName}` }),
-      Content: createAlertContentPendingEdit(),
-      Choices: createAlertButtons({
-        choices: [REJECT, DEFER, ACCEPT],
-        colors: ["cancel", "main", "clean"],
-        onChoice,
-      }),
-    })
-  }, [conceptName, setModalAlert])
+      const pendingEdit = pickFields(fieldPendingHistory, [
+        "action",
+        "creationTimestamp",
+        "creatorName",
+        "newValue",
+        "oldValue",
+      ])
+
+      const onChoice = choice => {
+        switch (choice) {
+          case REJECT:
+            break
+          case DEFER:
+            break
+          case ACCEPT:
+            break
+          default:
+            break
+        }
+
+        setModalAlert(null)
+      }
+      setModalAlert({
+        Title: createAlertTitle({ title: `Pending Edit: ${conceptName}` }),
+        Content: createAlertContentPendingEdit(pendingEdit),
+        Choices: createAlertButtons({
+          choices: [REJECT, DEFER, ACCEPT],
+          colors: ["cancel", "main", "clean"],
+          onChoice,
+        }),
+      })
+    },
+    [conceptName, pendingHistory, setModalAlert]
+  )
 
   return displayPendingEditAlert
 }
