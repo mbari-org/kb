@@ -13,11 +13,11 @@ const debounce = (func, delay) => {
 }
 
 const hasPendingHistory = (pendingHistory, field) => {
-  const pendingField = capitalize(field)
-
-  return field
-    ? pendingHistory.some(pending => pending.field === pendingField)
-    : !isEmpty(pendingHistory)
+  if (field) {
+    const pendingField = capitalize(field)
+    return pendingHistory.some(pending => pending.field === pendingField)
+  }
+  return !isEmpty(pendingHistory)
 }
 
 const isDeepEqual = (obj1, obj2) => {

@@ -10,7 +10,7 @@ import ConceptsExpand from "./ConceptsExpand"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import { isEmpty } from "@/lib/kb/util"
+import { hasPendingHistory } from "@/lib/kb/util"
 
 const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { concept } = use(ConceptContext)
@@ -19,13 +19,16 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { itemId } = props
   const isSelected = itemId === concept.name
 
-  const itemConcept = getConcept(itemId)
-  if (!itemConcept) {
+  const item = getConcept(itemId)
+  if (!item) {
     return null
   }
 
-  const hasPendingHistory = !isEmpty(getConceptPendingHistory(itemConcept.name))
-  const mediaCount = itemConcept.media.length
+  const itemHasPendingHistory = hasPendingHistory(
+    getConceptPendingHistory(item.name)
+  )
+
+  const mediaCount = item.media.length
   const hasMedia = 0 < mediaCount
 
   return (
@@ -35,7 +38,12 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
         ref={ref}
         slotProps={{
           content: { isSelected },
-          label: { hasPendingHistory, hasMedia, isSelected, mediaCount },
+          label: {
+            hasPendingHistory: itemHasPendingHistory,
+            hasMedia,
+            isSelected,
+            mediaCount,
+          },
         }}
         slots={{
           content: ConceptContent,

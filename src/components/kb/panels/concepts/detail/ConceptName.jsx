@@ -15,7 +15,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 import { isReadOnly } from "@/lib/auth/role"
-import { isEmpty } from "@/lib/kb/util"
+import { hasPendingHistory } from "@/lib/kb/util"
 
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
@@ -24,11 +24,9 @@ const ConceptName = () => {
   const { concept, editing, pendingHistory } = use(ConceptContext)
   const { setModalAlert } = use(ModalContext)
 
-  const hasPendingHistory = !isEmpty(
-    pendingHistory.filter(pending => pending.field === "ConceptName")
-  )
+  const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
 
-  const conceptColor = hasPendingHistory
+  const conceptColor = nameHasPendingHistory
     ? conceptTheme.color.pending
     : conceptTheme.color.clean
 
@@ -57,7 +55,7 @@ const ConceptName = () => {
       >
         {concept?.name}
       </Typography>
-      {!editing && !hasPendingHistory && !isReadOnly(user) && (
+      {!editing && !nameHasPendingHistory && !isReadOnly(user) && (
         <IconButton
           aria-label="Edit concept name"
           color="main"
