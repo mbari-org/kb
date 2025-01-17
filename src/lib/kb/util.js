@@ -78,6 +78,12 @@ const pickFields = (object, fields) => {
   }, {})
 }
 
+const prettyPrintObject = object => {
+  return Object.entries(object)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join("\n")
+}
+
 const prune = obj => {
   const pruned = { ...obj }
   Object.keys(pruned).forEach(key => {
@@ -96,5 +102,6 @@ export {
   isElementInViewport,
   isEmpty,
   pickFields,
+  prettyPrintObject,
   prune,
 }

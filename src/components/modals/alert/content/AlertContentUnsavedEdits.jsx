@@ -3,11 +3,7 @@ import { useTheme } from "@mui/material/styles"
 
 import { createAlertContentText } from "../components"
 
-const prettyPrintUpdates = updates => {
-  return Object.entries(updates)
-    .map(([key, value]) => `${key}: ${value}`)
-    .join("\n")
-}
+import { prettyPrintObject } from "@/lib/kb/util"
 
 const AlertContentUnsavedEdits = ({ updates }) => {
   const theme = useTheme()
@@ -33,7 +29,7 @@ const AlertContentUnsavedEdits = ({ updates }) => {
           fontFamily: "monospace",
         }}
       >
-        {prettyPrintUpdates(updates)}
+        {prettyPrintObject(updates)}
       </Typography>
     </>
   )

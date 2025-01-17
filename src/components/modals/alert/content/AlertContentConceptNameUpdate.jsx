@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import { Box, TextField, Typography } from "@mui/material"
+import { Box, TextField, Typography, Stack } from "@mui/material" // Added Stack
 import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -27,8 +27,8 @@ const AlertContentConceptNameUpdate = () => {
 
   return (
     <Box>
-      <Box display="flex" flexDirection="column" sx={{ mt: 2, ml: 3, mb: 2 }}>
-        <Box display="flex" alignItems="center">
+      <Stack spacing={2} sx={{ mt: 2, ml: 3, mb: 2 }}>
+        <Stack direction="row" spacing={2} alignItems="center">
           <Typography minWidth={60}>From:</Typography>
           <Typography
             color={fromColor}
@@ -39,8 +39,8 @@ const AlertContentConceptNameUpdate = () => {
           >
             {concept.name}
           </Typography>
-        </Box>
-        <Box display="flex" alignItems="center">
+        </Stack>
+        <Stack direction="row" spacing={2} alignItems="center">
           <Typography minWidth={60}>To:</Typography>
           <TextField
             fullWidth
@@ -63,8 +63,8 @@ const AlertContentConceptNameUpdate = () => {
             value={conceptState.name}
             variant="standard"
           />
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
       <Box sx={{ borderTop: "1px solid #000000" }}>
         <Box sx={{ mt: 2 }}>
           <div>
