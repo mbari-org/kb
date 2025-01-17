@@ -71,14 +71,19 @@ const isEmpty = object => {
 
 const pickFields = (object, fields) => {
   return fields.reduce((result, field) => {
-    if (Object.prototype.hasOwnProperty.call(object, field)) {
+    if (Array.isArray(field)) {
+      const [originalField, newField] = field
+      if (Object.prototype.hasOwnProperty.call(object, originalField)) {
+        result[newField] = object[originalField]
+      }
+    } else if (Object.prototype.hasOwnProperty.call(object, field)) {
       result[field] = object[field]
     }
     return result
   }, {})
 }
 
-const prettyPrintObject = object => {
+const prettyFormat = object => {
   return Object.entries(object)
     .map(([key, value]) => `${key}: ${value}`)
     .join("\n")
@@ -102,6 +107,6 @@ export {
   isElementInViewport,
   isEmpty,
   pickFields,
-  prettyPrintObject,
+  prettyFormat,
   prune,
 }

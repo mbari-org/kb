@@ -1,11 +1,29 @@
-import { Box, Typography } from "@mui/material"
+import { createAlertContentText } from "../components"
 
-const AlertContentPendingEdit = props => {
-  console.log("AlertContentPendingEdit props: ", props)
+import { prettyFormat } from "@/lib/kb/util"
+
+const AlertContentPendingEdit = ({ field, pendingEdit }) => {
+  const Description = createAlertContentText({
+    sx: { mt: 2, mb: 2 },
+    text: `Pending Edit: ${field}`,
+  })
+
+  const Detail = createAlertContentText({
+    sx: {
+      mt: 1,
+      ml: 2,
+      mb: 8,
+      whiteSpace: "pre-wrap",
+      fontFamily: "monospace",
+    },
+    text: prettyFormat(pendingEdit),
+  })
+
   return (
-    <Box>
-      <Typography>CxTBD</Typography>
-    </Box>
+    <>
+      <Description id="alert-content-pending-edit-description" />
+      <Detail id="alert-content-pending-edit-detail" />
+    </>
   )
 }
 

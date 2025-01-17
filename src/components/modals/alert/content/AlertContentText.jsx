@@ -8,7 +8,7 @@ const AlertContentText = ({ sx, text }) => {
     <Typography
       id="modal-message"
       variant="h6"
-      component="h3"
+      component="h4"
       sx={{ ...sx, color: theme.palette.common.black }}
     >
       {text}

@@ -1,36 +1,28 @@
-import { Typography } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
-
 import { createAlertContentText } from "../components"
 
-import { prettyPrintObject } from "@/lib/kb/util"
+import { prettyFormat } from "@/lib/kb/util"
 
 const AlertContentEditingState = ({ updates }) => {
-  const theme = useTheme()
-
-  const AlertContentText = createAlertContentText({
+  const Description = createAlertContentText({
     sx: { mt: 2, mb: 2 },
     text: "You have the following unsaved edits:",
   })
 
+  const Detail = createAlertContentText({
+    sx: {
+      mt: 1,
+      ml: 2,
+      mb: 8,
+      whiteSpace: "pre-wrap",
+      fontFamily: "monospace",
+    },
+    text: prettyFormat(updates),
+  })
+
   return (
     <>
-      <AlertContentText />
-      <Typography
-        id="modal-error-detail"
-        variant="h6"
-        component="h3"
-        sx={{
-          color: theme.palette.common.black,
-          mt: 1,
-          ml: 2,
-          mb: 8,
-          whiteSpace: "pre-wrap",
-          fontFamily: "monospace",
-        }}
-      >
-        {prettyPrintObject(updates)}
-      </Typography>
+      <Description id="alert-content-editing-state-description" />
+      <Detail id="alert-content-editing-state-detail" />
     </>
   )
 }

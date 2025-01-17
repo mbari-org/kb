@@ -19,17 +19,13 @@ const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
 
   const displayPendingEditAlert = useCallback(
     field => {
-      console.log("field", field)
-      console.log("pendingHistory", pendingHistory)
       const fieldPendingHistory = getFieldPendingHistory(pendingHistory, field)
-      console.log("fieldPendingHistory", fieldPendingHistory)
-
       const pendingEdit = pickFields(fieldPendingHistory, [
         "action",
-        "creationTimestamp",
-        "creatorName",
-        "newValue",
-        "oldValue",
+        ["oldValue", "before"],
+        ["newValue", "after"],
+        ["creatorName", "user"],
+        ["creationTimestamp", "created"],
       ])
 
       const onChoice = choice => {
@@ -47,8 +43,8 @@ const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
         setModalAlert(null)
       }
       setModalAlert({
-        Title: createAlertTitle({ title: `Pending Edit: ${conceptName}` }),
-        Content: createAlertContentPendingEdit(pendingEdit),
+        Title: createAlertTitle({ title: `Concept: ${conceptName}` }),
+        Content: createAlertContentPendingEdit({ field, pendingEdit }),
         Choices: createAlertButtons({
           choices: [REJECT, DEFER, ACCEPT],
           colors: ["cancel", "main", "clean"],
