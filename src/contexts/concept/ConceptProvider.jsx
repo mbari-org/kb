@@ -14,7 +14,7 @@ import { filterUpdates } from "./lib/filterUpdates"
 import { stateForConcept } from "./lib/stateForConcept"
 
 import useConceptPath from "./lib/useConceptPath"
-import useDisplayConceptEditsAlert from "./lib/useDisplayConceptEditsAlert"
+import useDisplayEditingStateAlert from "./lib/useDisplayEditingStateAlert"
 import useDisplayPendingEditAlert from "./lib/useDisplayPendingEditAlert"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
@@ -43,7 +43,7 @@ const ConceptProvider = ({ children }) => {
   const [pendingHistory, setPendingHistory] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
-  const [updatedState, dispatch] = useReducer(conceptStateReducer, {})
+  const [editingState, dispatch] = useReducer(conceptStateReducer, {})
 
   const conceptPath = useConceptPath(concept)
 
@@ -77,6 +77,7 @@ const ConceptProvider = ({ children }) => {
   const submitUpdates = useSubmitUpdates({
     concept,
     config: taxonomy.config,
+    editingState,
     getCurrentUpdates,
     initialState,
     modified,
@@ -88,15 +89,14 @@ const ConceptProvider = ({ children }) => {
     theme,
     updateConcept,
     updateConceptName,
-    updatedState,
   })
 
-  const displayConceptEditsAlert = useDisplayConceptEditsAlert({
+  const dispalyEditingStateAlert = useDisplayEditingStateAlert({
     conceptName: concept?.name,
     getCurrentUpdates,
     initialState,
     reset,
-    updatedState,
+    editingState,
   })
 
   const displayPendingEditAlert = useDisplayPendingEditAlert({
@@ -119,7 +119,7 @@ const ConceptProvider = ({ children }) => {
       }
 
       if (!modalAlert && !modalHasBeenDiplayed) {
-        displayConceptEditsAlert()
+        dispalyEditingStateAlert()
         setModalAlertHasBeenDisplayed(true)
         return
       }
@@ -143,8 +143,9 @@ const ConceptProvider = ({ children }) => {
     }
   }, [
     concept,
-    displayConceptEditsAlert,
+    dispalyEditingStateAlert,
     editing,
+    editingState,
     getConcept,
     getCurrentUpdates,
     loadConcept,
@@ -156,23 +157,22 @@ const ConceptProvider = ({ children }) => {
     selected,
     setModalAlert,
     showBoundary,
-    updatedState,
   ])
 
   useEffect(() => {
-    const currentUpdates = getCurrentUpdates(updatedState)
+    const currentUpdates = getCurrentUpdates(editingState)
     const hasUpdates = !isEmpty(currentUpdates)
     setModified(hasUpdates)
-  }, [getCurrentUpdates, updatedState])
+  }, [getCurrentUpdates, editingState])
 
   useEffect(() => {
     if (concept) {
       const pendingHistory = getConceptPendingHistory(concept.name)
       setPendingHistory(pendingHistory)
 
-      const conceptState = stateForConcept(concept)
-      setInitialState(conceptState)
-      dispatch({ type: "INIT_STATE", payload: conceptState })
+      const editingState = stateForConcept(concept)
+      setInitialState(editingState)
+      dispatch({ type: "INIT_STATE", payload: editingState })
     }
   }, [concept, getConceptPendingHistory])
 
@@ -181,10 +181,11 @@ const ConceptProvider = ({ children }) => {
       value={{
         concept,
         conceptPath,
-        conceptState: updatedState,
-        displayConceptEditsAlert,
+        dispalyEditingStateAlert,
         displayPendingEditAlert,
         editing,
+        editingState,
+        initialState,
         modifyConcept,
         modified,
         pendingHistory,

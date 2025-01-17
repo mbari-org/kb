@@ -5,7 +5,7 @@ import { createAlertContentText } from "../components"
 
 import { prettyPrintObject } from "@/lib/kb/util"
 
-const AlertContentUnsavedEdits = ({ updates }) => {
+const AlertContentEditingState = ({ updates }) => {
   const theme = useTheme()
 
   const AlertContentText = createAlertContentText({
@@ -35,4 +35,4 @@ const AlertContentUnsavedEdits = ({ updates }) => {
   )
 }
 
-export default AlertContentUnsavedEdits
+export default AlertContentEditingState

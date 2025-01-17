@@ -14,10 +14,10 @@ import { hasPendingHistory } from "@/lib/kb/util"
 
 const ConceptRank = ({ field, options }) => {
   const { user } = use(AuthContext)
-  const { conceptState, editing, pendingHistory, modifyConcept } =
+  const { editingState, editing, pendingHistory, modifyConcept } =
     use(ConceptContext)
 
-  const rankValue = conceptState[field]
+  const rankValue = editingState[field]
 
   const infoStyle = useConceptDetailStyle(field)
   const fieldHasPendingHistory = hasPendingHistory(pendingHistory, field)

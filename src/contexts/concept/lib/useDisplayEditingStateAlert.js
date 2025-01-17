@@ -2,7 +2,7 @@ import { use, useCallback, useContext } from "react"
 
 import {
   createAlertButtons,
-  createAlertContentUnsavedEdits,
+  createAlertContentEditingState,
   createAlertTitle,
 } from "@/components/modals/alert/components"
 
@@ -12,18 +12,18 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 const CONTINUE = "Continue"
 const DISCARD = "Discard"
 
-const useDisplayConceptEditsAlert = ({
+const useDisplayEditingStateAlert = ({
   conceptName,
+  editingState,
   getCurrentUpdates,
   initialState,
   reset,
-  updatedState,
 }) => {
   const { setModalAlert } = use(ModalContext)
   const { selectConcept, selectPanel } = useContext(SelectedContext)
 
-  const displayConceptEditsAlert = useCallback(() => {
-    const updates = getCurrentUpdates(updatedState)
+  const dispalyEditingStateAlert = useCallback(() => {
+    const updates = getCurrentUpdates(editingState)
     const onChoice = choice => {
       switch (choice) {
         case DISCARD:
@@ -41,7 +41,7 @@ const useDisplayConceptEditsAlert = ({
 
     setModalAlert({
       Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
-      Content: createAlertContentUnsavedEdits({ updates }),
+      Content: createAlertContentEditingState({ updates }),
       Choices: createAlertButtons({
         choices: [DISCARD, CONTINUE],
         colors: ["cancel", "main"],
@@ -56,10 +56,10 @@ const useDisplayConceptEditsAlert = ({
     selectConcept,
     selectPanel,
     setModalAlert,
-    updatedState,
+    editingState,
   ])
 
-  return displayConceptEditsAlert
+  return dispalyEditingStateAlert
 }
 
-export default useDisplayConceptEditsAlert
+export default useDisplayEditingStateAlert

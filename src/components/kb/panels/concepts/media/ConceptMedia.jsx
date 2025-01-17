@@ -8,17 +8,17 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptMedia = () => {
   const {
-    conceptState: { media: conceptStateMedia },
+    editingState: { media: mediaEditingState },
     pendingHistory,
   } = use(ConceptContext)
 
   const [conceptMedia, setConceptMedia] = useState(null)
 
   const orderedMedia = useMemo(() => {
-    const primaryMedia = conceptStateMedia.filter(media => media.isPrimary)
-    const otherMedia = conceptStateMedia.filter(media => !media.isPrimary)
+    const primaryMedia = mediaEditingState.filter(media => media.isPrimary)
+    const otherMedia = mediaEditingState.filter(media => !media.isPrimary)
     return [...primaryMedia, ...otherMedia]
-  }, [conceptStateMedia])
+  }, [mediaEditingState])
 
   const isPendingMedia = useCallback(
     (action, actionField, value) => {

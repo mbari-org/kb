@@ -8,7 +8,7 @@ import useConceptDetailStyle from "./useConceptDetailStyle"
 
 const ConceptAuthor = () => {
   const {
-    conceptState: { author },
+    editingState: { author },
     modifyConcept,
   } = use(ConceptContext)
 

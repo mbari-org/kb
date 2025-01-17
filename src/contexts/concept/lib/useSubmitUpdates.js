@@ -26,7 +26,7 @@ const useSubmitUpdates = ({
   showBoundary,
   updateConcept,
   updateConceptName,
-  updatedState,
+  editingState,
 }) => {
   const { user } = use(AuthContext)
 
@@ -59,7 +59,7 @@ const useSubmitUpdates = ({
               }
               updateConcept(updatedConcept).then(
                 () => {
-                  reset(updatedState)
+                  reset(editingState)
                 },
                 error => showBoundary(error)
               )
@@ -79,7 +79,7 @@ const useSubmitUpdates = ({
       setModalAlert,
       showBoundary,
       updateConcept,
-      updatedState,
+      editingState,
       user,
     ]
   )
@@ -95,7 +95,7 @@ const useSubmitUpdates = ({
           updateConceptName(concept, updatedName).then(
             () => {
               selectConcept(updatedName)
-              reset(updatedState)
+              reset(editingState)
             },
             error => showBoundary(error)
           )
@@ -112,7 +112,7 @@ const useSubmitUpdates = ({
       selectConcept,
       showBoundary,
       updateConceptName,
-      updatedState,
+      editingState,
     ]
   )
 
@@ -122,7 +122,7 @@ const useSubmitUpdates = ({
       return
     }
 
-    const updates = getCurrentUpdates(updatedState)
+    const updates = getCurrentUpdates(editingState)
 
     switch (choice) {
       case "All Data":

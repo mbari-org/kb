@@ -7,7 +7,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptActionButtons = () => {
   const {
-    displayConceptEditsAlert,
+    dispalyEditingStateAlert,
     editing,
     modified,
     processUpdates,
@@ -35,7 +35,7 @@ const ConceptActionButtons = () => {
       </Button>
       {editing && modified && (
         <Button
-          onClick={displayConceptEditsAlert}
+          onClick={dispalyEditingStateAlert}
           sx={{ margin: "0 10px" }}
           variant="contained"
         >

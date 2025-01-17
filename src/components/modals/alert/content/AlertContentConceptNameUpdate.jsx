@@ -9,7 +9,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 const AlertContentConceptNameUpdate = () => {
   const { concept: conceptTheme, palette } = useTheme()
 
-  const { concept, conceptState, modifyConcept } = use(ConceptContext)
+  const { concept, editingState, modifyConcept } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 
   const names = getConceptNames()
@@ -17,7 +17,7 @@ const AlertContentConceptNameUpdate = () => {
   const fromColor = conceptTheme.color.clean
 
   const toColor =
-    conceptState.name === concept.name || names.includes(conceptState.name)
+    editingState.name === concept.name || names.includes(editingState.name)
       ? palette.grey[500]
       : conceptTheme.color.pending
 
@@ -60,7 +60,7 @@ const AlertContentConceptNameUpdate = () => {
                 },
               },
             }}
-            value={conceptState.name}
+            value={editingState.name}
             variant="standard"
           />
         </Stack>

@@ -7,7 +7,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 const AlertButtonsConceptNameUpdate = () => {
-  const { concept, conceptState, processUpdates } = use(ConceptContext)
+  const { concept, editingState, processUpdates } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 
   const choices = ["Cancel", "Name Only", "All Data"]
@@ -17,7 +17,7 @@ const AlertButtonsConceptNameUpdate = () => {
   const color = index => (index === 0 ? "cancel" : "main")
 
   const disabled =
-    concept.name !== conceptState.name && !names.includes(conceptState.name)
+    concept.name !== editingState.name && !names.includes(editingState.name)
       ? [false, false, false]
       : [false, true, true]
 
