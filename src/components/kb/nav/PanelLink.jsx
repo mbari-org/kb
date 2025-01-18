@@ -20,9 +20,8 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
 
     return {
       color: color,
-      fontSize: theme.nav.fontSize,
+      fontSize: "0.875rem",
       fontStyle: !isActive && isHovering ? "italic" : "",
-      fontWeight: isActive ? "bold" : "",
       marginLeft: theme.spacing(0.5),
     }
   }

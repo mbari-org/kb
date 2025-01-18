@@ -27,7 +27,7 @@ const NavBar = ({ activePanel, selectPanel }) => {
           />
         ))}
         <div style={{ flexGrow: 1 }} />
-        <LogoutLink />
+        <LogoutLink sx={{ marginTop: "-10px" }} />
       </Toolbar>
     </AppBar>
   )
