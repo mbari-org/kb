@@ -15,7 +15,7 @@ const DISCARD = "Discard"
 const useDisplayEditingStateAlert = ({
   conceptName,
   editingState,
-  getCurrentUpdates,
+  getPendingEdits,
   initialState,
   reset,
 }) => {
@@ -23,7 +23,7 @@ const useDisplayEditingStateAlert = ({
   const { selectConcept, selectPanel } = useContext(SelectedContext)
 
   const dispalyEditingStateAlert = useCallback(() => {
-    const updates = getCurrentUpdates(editingState)
+    const pendingEdits = getPendingEdits(editingState)
     const onChoice = choice => {
       switch (choice) {
         case DISCARD:
@@ -41,7 +41,7 @@ const useDisplayEditingStateAlert = ({
 
     setModalAlert({
       Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
-      Content: createAlertContentEditingState({ updates }),
+      Content: createAlertContentEditingState({ pendingEdits }),
       Choices: createAlertButtons({
         choices: [DISCARD, CONTINUE],
         colors: ["cancel", "main"],
@@ -50,7 +50,7 @@ const useDisplayEditingStateAlert = ({
     })
   }, [
     conceptName,
-    getCurrentUpdates,
+    getPendingEdits,
     initialState,
     reset,
     selectConcept,

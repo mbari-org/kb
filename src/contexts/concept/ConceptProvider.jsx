@@ -10,12 +10,12 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import conceptStateReducer from "./lib/conceptStateReducer"
 
-import { filterUpdates } from "./lib/filterUpdates"
 import { stateForConcept } from "./lib/stateForConcept"
 
 import useConceptPath from "./lib/useConceptPath"
 import useDisplayEditingStateAlert from "./lib/useDisplayEditingStateAlert"
 import useDisplayPendingEditAlert from "./lib/useDisplayPendingEditAlert"
+import usePendingEdits from "./lib/usePendingEdits"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
 import { isEmpty } from "@/lib/kb/util"
@@ -47,11 +47,7 @@ const ConceptProvider = ({ children }) => {
 
   const conceptPath = useConceptPath(concept)
 
-  // filterUpdate returns a function but eslint isn't aware of that
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getCurrentUpdates = useCallback(filterUpdates(initialState), [
-    initialState,
-  ])
+  const getPendingEdits = usePendingEdits(initialState)
 
   const modifyConcept = useCallback(
     update => {
@@ -78,7 +74,7 @@ const ConceptProvider = ({ children }) => {
     concept,
     config: taxonomy.config,
     editingState,
-    getCurrentUpdates,
+    getPendingEdits,
     initialState,
     modified,
     modifyConcept,
@@ -93,7 +89,7 @@ const ConceptProvider = ({ children }) => {
 
   const dispalyEditingStateAlert = useDisplayEditingStateAlert({
     conceptName: concept?.name,
-    getCurrentUpdates,
+    getPendingEdits,
     initialState,
     reset,
     editingState,
@@ -147,7 +143,7 @@ const ConceptProvider = ({ children }) => {
     editing,
     editingState,
     getConcept,
-    getCurrentUpdates,
+    getPendingEdits,
     loadConcept,
     modalAlert,
     modalHasBeenDiplayed,
@@ -160,10 +156,14 @@ const ConceptProvider = ({ children }) => {
   ])
 
   useEffect(() => {
-    const currentUpdates = getCurrentUpdates(editingState)
-    const hasUpdates = !isEmpty(currentUpdates)
+    const pendingEdits = getPendingEdits(editingState)
+    const updates = Object.keys(pendingEdits).reduce((acc, key) => {
+      acc[key] = pendingEdits[key].pending
+      return acc
+    }, {})
+    const hasUpdates = !isEmpty(updates)
     setModified(hasUpdates)
-  }, [getCurrentUpdates, editingState])
+  }, [getPendingEdits, editingState])
 
   useEffect(() => {
     if (concept) {

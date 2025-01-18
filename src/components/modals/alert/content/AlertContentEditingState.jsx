@@ -1,12 +1,18 @@
 import { createAlertContentText } from "../components"
 
-import { prettyFormat } from "@/lib/kb/util"
-
-const AlertContentEditingState = ({ updates }) => {
+const AlertContentEditingState = ({ pendingEdits }) => {
   const Description = createAlertContentText({
     sx: { mt: 2, mb: 2 },
     text: "You have the following unsaved edits:",
   })
+
+  const pendingEditText = field => {
+    const { initial, pending } = pendingEdits[field]
+    return `${field}: ${initial} --> ${pending}`
+  }
+  const pendingEditsText = Object.keys(pendingEdits)
+    .map(pendingEditText)
+    .join("\n")
 
   const Detail = createAlertContentText({
     sx: {
@@ -16,7 +22,7 @@ const AlertContentEditingState = ({ updates }) => {
       whiteSpace: "pre-wrap",
       fontFamily: "monospace",
     },
-    text: prettyFormat(updates),
+    text: pendingEditsText,
   })
 
   return (

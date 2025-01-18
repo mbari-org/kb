@@ -12,6 +12,12 @@ const debounce = (func, delay) => {
   }
 }
 
+const formatPendingEdit = (pendingEdits, field) => {
+  const { initial, pending } = pendingEdits(field)
+
+  return pendingEdits?.[pendingField]
+}
+
 const getFieldPendingHistory = (pendingHistory, field) => {
   const pendingField = capitalize(field)
   return pendingHistory?.find(pending => pending.field === pendingField)
