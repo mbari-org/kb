@@ -5,7 +5,7 @@ import { prettyFormat } from "@/lib/kb/util"
 const AlertContentPendingEdit = ({ field, pendingEdit }) => {
   const Description = createAlertContentText({
     sx: { mt: 2, mb: 2 },
-    text: `Pending Edit: ${field}`,
+    text: field,
   })
 
   const Detail = createAlertContentText({

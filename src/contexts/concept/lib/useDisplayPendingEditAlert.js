@@ -6,15 +6,18 @@ import {
   createAlertTitle,
 } from "@/components/modals/alert/components"
 
+import ConfigContext from "@/contexts/config/ConfigContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 import { getFieldPendingHistory, pickFields } from "@/lib/kb/util"
+import { sendPendingAction } from "@/lib/services/oni/api/history"
 
-const ACCEPT = "Accept"
+const APPROVE = "Approve"
 const DEFER = "Defer"
 const REJECT = "Reject"
 
 const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
+  const { config } = use(ConfigContext)
   const { setModalAlert } = use(ModalContext)
 
   const displayPendingEditAlert = useCallback(
@@ -31,10 +34,12 @@ const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
       const onChoice = choice => {
         switch (choice) {
           case REJECT:
+            sendPendingAction(config, "reject", fieldPendingHistory.id)
             break
           case DEFER:
             break
-          case ACCEPT:
+          case APPROVE:
+            sendPendingAction(config, "approve", fieldPendingHistory.id)
             break
           default:
             break
@@ -46,13 +51,13 @@ const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
         Title: createAlertTitle({ title: `Concept: ${conceptName}` }),
         Content: createAlertContentPendingEdit({ field, pendingEdit }),
         Choices: createAlertButtons({
-          choices: [REJECT, DEFER, ACCEPT],
+          choices: [REJECT, DEFER, APPROVE],
           colors: ["cancel", "main", "clean"],
           onChoice,
         }),
       })
     },
-    [conceptName, pendingHistory, setModalAlert]
+    [conceptName, config, pendingHistory, setModalAlert]
   )
 
   return displayPendingEditAlert
