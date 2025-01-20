@@ -22,8 +22,8 @@ const NavBar = ({ activePanel, selectPanel }) => {
             id={`nav-link-${name}`}
             isActive={name === activePanel}
             key={name}
-            selectPanel={selectPanel}
             name={name}
+            selectPanel={selectPanel}
           />
         ))}
         <div style={{ flexGrow: 1 }} />

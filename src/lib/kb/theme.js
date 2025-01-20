@@ -36,7 +36,7 @@ const theme = createTheme({
     active: navActive,
     fontSize: 12,
     hover: navActive,
-    inactive: darken(navActive, 0.15),
+    inactive: darken(navActive, 0.33),
   },
   palette: {
     background: {

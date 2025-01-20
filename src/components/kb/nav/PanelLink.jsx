@@ -23,6 +23,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
       fontSize: "0.875rem",
       fontStyle: !isActive && isHovering ? "italic" : "",
       marginLeft: theme.spacing(0.5),
+      marginBottom: 1.5,
     }
   }
 
