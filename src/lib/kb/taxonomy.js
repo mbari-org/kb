@@ -4,8 +4,7 @@ import {
   fetchParent,
 } from "@/lib/services/oni/api/concept"
 
-import { fetchPendingHistory } from "@/lib/services/oni/api/history"
-
+import { fetchHistory } from "@/lib/services/oni/api/history"
 import { fetchNames, fetchRoot } from "@/lib/services/oni/api/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
@@ -75,14 +74,22 @@ const getPrevSibling = concept => {
     }
   }
 
-  // If no previous sibling, return null
   return null
+}
+
+const fetchTaxonomyHistory = async config => {
+  const approvedHistory = await apiCall(() => fetchHistory(config, "approved"))
+  const pendingHistory = await apiCall(() => fetchHistory(config, "pending"))
+  return {
+    approvedHistory,
+    pendingHistory,
+  }
 }
 
 const loadTaxonomy = async config => {
   const root = await apiCall(() => fetchRoot(config))
   const names = await apiCall(() => fetchNames(config))
-  const pendingHistory = await apiCall(() => fetchPendingHistory(config))
+  const { approvedHistory, pendingHistory } = await fetchTaxonomyHistory(config)
 
   const aliases = root.alternateNames.reduce((acc, name) => {
     acc[name] = root.name
@@ -91,6 +98,7 @@ const loadTaxonomy = async config => {
 
   const taxonomy = {
     aliases,
+    approvedHistory,
     config,
     names,
     pendingHistory,
@@ -263,16 +271,35 @@ const addConcept = async (updatableTaxonomy, updatableConcept) => {
   }
 }
 
+const refreshHistory = async taxonomy => {
+  const approvedHistory = await apiCall(() =>
+    fetchHistory(taxonomy.config, "approved")
+  )
+  const pendingHistory = await apiCall(() =>
+    fetchHistory(taxonomy.config, "pending")
+  )
+  return {
+    ...taxonomy,
+    approvedHistory,
+    pendingHistory,
+  }
+}
+
 const updateConcept = async (taxonomy, concept) => {
   const updatedConcepts = { ...taxonomy.concepts }
   updatedConcepts[concept.name] = concept
 
-  const pendingHistory = await apiCall(() =>
-    fetchPendingHistory(taxonomy.config)
+  const { approvedHistory, pendingHistory } = await fetchTaxonomyHistory(
+    taxonomy.config
   )
 
   return {
-    taxonomy: { ...taxonomy, concepts: updatedConcepts, pendingHistory },
+    taxonomy: {
+      ...taxonomy,
+      approvedHistory,
+      concepts: updatedConcepts,
+      pendingHistory,
+    },
   }
 }
 
@@ -316,13 +343,14 @@ const updateConceptName = async (taxonomy, concept, newName) => {
   updatedNames.push(newName)
   updatedNames.sort()
 
-  const pendingHistory = await apiCall(() =>
-    fetchPendingHistory(taxonomy.config)
+  const { approvedHistory, pendingHistory } = await fetchTaxonomyHistory(
+    taxonomy.config
   )
 
   return {
     taxonomy: {
       ...taxonomy,
+      approvedHistory,
       concepts: updatedConcepts,
       names: updatedNames,
       pendingHistory,

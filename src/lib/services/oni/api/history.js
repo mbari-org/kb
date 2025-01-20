@@ -1,11 +1,11 @@
 import { oniGet, oniPut } from "./util"
 
-const fetchPendingHistory = async config => {
-  const { error, payload } = await oniGet(config, ["history", "pending"])
+const fetchHistory = async (config, action) => {
+  const { error, payload } = await oniGet(config, ["history", action])
   return { error, payload: payload.content }
 }
 
 const sendPendingAction = async (config, action, pendingId) =>
   oniPut(config, ["history", action, pendingId])
 
-export { fetchPendingHistory, sendPendingAction }
+export { fetchHistory, sendPendingAction }
