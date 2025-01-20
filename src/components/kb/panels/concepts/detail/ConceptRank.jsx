@@ -4,7 +4,10 @@ import { Box, MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import { REMOVE_RANK_VALUE } from "@/contexts/concept/lib/submit/validateUpdates"
+import {
+  RANK_REMOVE_VALUE,
+  rankValue,
+} from "@/contexts/concept/lib/submit/validateUpdates"
 
 import useConceptDetailStyle from "./useConceptDetailStyle"
 import ConceptPendingHistoryButton from "./ConceptPendingHistoryButton"
@@ -17,32 +20,31 @@ const ConceptRank = ({ field, options }) => {
   const { editingState, editing, pendingHistory, modifyConcept } =
     use(ConceptContext)
 
-  const rankValue = editingState[field]
+  const fieldValue = editingState[field]
 
   const infoStyle = useConceptDetailStyle(field)
   const fieldHasPendingHistory = hasPendingHistory(pendingHistory, field)
 
-  // REMOVE_RANK_LEVEL is the displayed value, whereas the "removal" value is an empty string
-  const rankLevelNameValue = value => (value !== REMOVE_RANK_VALUE ? value : "")
+  const label = field === "rankName" ? "Rank" : "Level"
 
   return (
     <FormControl {...infoStyle}>
       <Box display="flex" flexDirection="row" alignItems="center" width="100%">
         <Box display="flex" flexDirection="column" flexGrow={1}>
-          <InputLabel>Level</InputLabel>
+          <InputLabel>{label}</InputLabel>
           <Select
             displayEmpty
             onChange={e => modifyConcept({ [field]: e.target.value })}
-            value={rankLevelNameValue(rankValue)}
+            value={rankValue(fieldValue)}
           >
             {options.map(option => (
               <MenuItem key={option} value={option}>
                 {option}
               </MenuItem>
             ))}
-            {rankValue !== "" && (
-              <MenuItem key={REMOVE_RANK_VALUE} value={REMOVE_RANK_VALUE}>
-                {REMOVE_RANK_VALUE}
+            {fieldValue !== "" && (
+              <MenuItem key={RANK_REMOVE_VALUE} value={RANK_REMOVE_VALUE}>
+                {RANK_REMOVE_VALUE}
               </MenuItem>
             )}
           </Select>
