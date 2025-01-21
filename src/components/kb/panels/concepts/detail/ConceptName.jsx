@@ -4,6 +4,8 @@ import { CiEdit } from "react-icons/ci"
 import { IconButton, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
+import ConceptPendingApprovalButton from "./ConceptPendingApprovalButton"
+
 import {
   createAlertButtonsConceptNameUpdate,
   createAlertContentConceptNameUpdate,
@@ -14,7 +16,7 @@ import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { isReadOnly } from "@/lib/auth/role"
+import { isAdmin, isReadOnly } from "@/lib/auth/role"
 import { hasPendingHistory } from "@/lib/kb/util"
 
 const ConceptName = () => {
@@ -25,6 +27,9 @@ const ConceptName = () => {
   const { setModalAlert } = use(ModalContext)
 
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
+
+  const showApprovalButton = editing && nameHasPendingHistory && isAdmin(user)
+  const showEditButton = !editing && !nameHasPendingHistory && !isReadOnly(user)
 
   const conceptColor = nameHasPendingHistory
     ? conceptTheme.color.pending
@@ -55,7 +60,7 @@ const ConceptName = () => {
       >
         {concept?.name}
       </Typography>
-      {!editing && !nameHasPendingHistory && !isReadOnly(user) && (
+      {showEditButton && (
         <IconButton
           aria-label="Edit concept name"
           color="main"
@@ -72,6 +77,9 @@ const ConceptName = () => {
         >
           <CiEdit size={24} />
         </IconButton>
+      )}
+      {showApprovalButton && (
+        <ConceptPendingApprovalButton field={"conceptName"} />
       )}
     </Stack>
   )

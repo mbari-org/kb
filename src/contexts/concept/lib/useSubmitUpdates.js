@@ -2,7 +2,7 @@ import { use, useCallback } from "react"
 
 import detailUpdates from "./submit/detailUpdates"
 import nameUpdates from "./submit/nameUpdates"
-import { validateUpdates } from "./submit/validateUpdates"
+import validateUpdates from "./submit/validateUpdates"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 

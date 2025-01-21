@@ -157,12 +157,7 @@ const ConceptProvider = ({ children }) => {
 
   useEffect(() => {
     const pendingEdits = getPendingEdits(editingState)
-    const updates = Object.keys(pendingEdits).reduce((acc, key) => {
-      acc[key] = pendingEdits[key].pending
-      return acc
-    }, {})
-    const hasUpdates = !isEmpty(updates)
-    setModified(hasUpdates)
+    setModified(!isEmpty(pendingEdits))
   }, [getPendingEdits, editingState])
 
   useEffect(() => {

@@ -6,9 +6,11 @@ const AlertContentEditingState = ({ pendingEdits }) => {
     text: "You have the following unsaved edits:",
   })
 
+  const displayField = field => (field !== "" ? field : '""')
+
   const pendingEditText = field => {
     const { initial, pending } = pendingEdits[field]
-    return `${field}: ${initial} --> ${pending}`
+    return `${field}: ${displayField(initial)} --> ${displayField(pending)}`
   }
   const pendingEditsText = Object.keys(pendingEdits)
     .map(pendingEditText)

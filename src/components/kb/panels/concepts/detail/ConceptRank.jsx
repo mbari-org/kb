@@ -4,28 +4,30 @@ import { Box, MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import {
-  RANK_REMOVE_VALUE,
-  rankValue,
-} from "@/contexts/concept/lib/submit/validateUpdates"
 
 import useConceptDetailStyle from "./useConceptDetailStyle"
-import ConceptPendingHistoryButton from "./ConceptPendingHistoryButton"
+import ConceptPendingApprovalButton from "./ConceptPendingApprovalButton"
 
 import { isAdmin } from "@/lib/auth/role"
 import { hasPendingHistory } from "@/lib/kb/util"
+
+const RANK_REMOVE_VALUE = "REMOVE"
 
 const ConceptRank = ({ field, options }) => {
   const { user } = use(AuthContext)
   const { editingState, editing, pendingHistory, modifyConcept } =
     use(ConceptContext)
 
+  // REMOVE_RANK_LEVEL is the Select option value, whereas the actual "removal" value is an empty string
+  const rankValue = value => (value !== RANK_REMOVE_VALUE ? value : "")
+
   const fieldValue = editingState[field]
+  const label = field === "rankName" ? "Rank" : "Level"
 
   const infoStyle = useConceptDetailStyle(field)
-  const fieldHasPendingHistory = hasPendingHistory(pendingHistory, field)
 
-  const label = field === "rankName" ? "Rank" : "Level"
+  const showApprovalButton =
+    editing && isAdmin(user) && hasPendingHistory(pendingHistory, field)
 
   return (
     <FormControl {...infoStyle}>
@@ -34,7 +36,9 @@ const ConceptRank = ({ field, options }) => {
           <InputLabel>{label}</InputLabel>
           <Select
             displayEmpty
-            onChange={e => modifyConcept({ [field]: e.target.value })}
+            onChange={e =>
+              modifyConcept({ [field]: rankValue(e.target.value) })
+            }
             value={rankValue(fieldValue)}
           >
             {options.map(option => (
@@ -49,9 +53,7 @@ const ConceptRank = ({ field, options }) => {
             )}
           </Select>
         </Box>
-        {editing && fieldHasPendingHistory && isAdmin(user) && (
-          <ConceptPendingHistoryButton field={field} />
-        )}
+        {showApprovalButton && <ConceptPendingApprovalButton field={field} />}
       </Box>
     </FormControl>
   )

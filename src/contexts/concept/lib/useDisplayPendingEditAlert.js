@@ -49,7 +49,10 @@ const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
       }
       setModalAlert({
         Title: createAlertTitle({ title: `Concept: ${conceptName}` }),
-        Content: createAlertContentPendingEdit({ field, pendingEdit }),
+        Content: createAlertContentPendingEdit({
+          field: fieldPendingHistory.field,
+          pendingEdit,
+        }),
         Choices: createAlertButtons({
           choices: [REJECT, DEFER, APPROVE],
           colors: ["cancel", "main", "clean"],

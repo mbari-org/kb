@@ -6,11 +6,6 @@ import {
 
 import { isAdmin } from "@/lib/auth/role"
 
-const RANK_REMOVE_VALUE = "REMOVE"
-
-// REMOVE_RANK_LEVEL is the Select option value, whereas the actual "removal" value is an empty string
-const rankValue = value => (value !== RANK_REMOVE_VALUE ? value : "")
-
 const validateRankUpdates = async ({
   concept,
   modifyConcept,
@@ -27,8 +22,8 @@ const validateRankUpdates = async ({
     return validation
   }
 
-  const removeLevel = updates.rankLevel === RANK_REMOVE_VALUE
-  const removeName = updates.rankName === RANK_REMOVE_VALUE
+  const removeLevel = updates.rankLevel === ""
+  const removeName = updates.rankName === ""
 
   if (!(removeLevel || removeName)) {
     return validation
@@ -87,4 +82,4 @@ const validateUpdates = async updatesObject => {
   }
 }
 
-export { RANK_REMOVE_VALUE, rankValue, validateUpdates }
+export default validateUpdates

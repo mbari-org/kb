@@ -4,7 +4,7 @@ import { IconButton } from "@mui/material"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const ConceptPendingHistoryButton = ({ field }) => {
+const ConceptPendingApprovalButton = ({ field }) => {
   const { displayPendingEditAlert } = use(ConceptContext)
 
   return (
@@ -25,4 +25,4 @@ const ConceptPendingHistoryButton = ({ field }) => {
   )
 }
 
-export default ConceptPendingHistoryButton
+export default ConceptPendingApprovalButton
