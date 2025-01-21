@@ -1,4 +1,4 @@
-import { Box, Modal } from "@mui/material"
+import { Box, Card, CardActions, CardContent, Modal } from "@mui/material"
 
 const ModalAlert = ({ modalAlert }) => {
   return (
@@ -9,21 +9,21 @@ const ModalAlert = ({ modalAlert }) => {
     >
       <Box
         sx={{
-          bgcolor: "background.paper",
-          border: "2px solid #000",
-          boxShadow: 24,
-          left: "50%",
-          position: "absolute",
-          top: "33%",
-          transform: "translate(-50%, -50%)",
-          width: "50%",
-          p: 4,
-          pb: 1,
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+          // minHeight: "300px",
         }}
       >
-        <modalAlert.Title />
-        <modalAlert.Content />
-        <modalAlert.Choices />
+        <Card sx={{ p: 2, pb: 0 }}>
+          <CardContent>
+            <modalAlert.Title />
+            <modalAlert.Content />
+          </CardContent>
+          <CardActions style={{ display: "flex", justifyContent: "center" }}>
+            <modalAlert.Choices />
+          </CardActions>
+        </Card>
       </Box>
     </Modal>
   )
