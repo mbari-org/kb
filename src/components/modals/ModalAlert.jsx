@@ -8,7 +8,9 @@ import {
   Modal,
 } from "@mui/material"
 
-const ModalAlert = ({ modalAlert: { Actions, Content, Title } }) => {
+const ModalAlert = ({ modalAlert }) => {
+  const { Actions, Content, Title } = modalAlert
+
   return (
     <Modal
       aria-labelledby="modal-alert"
@@ -16,7 +18,7 @@ const ModalAlert = ({ modalAlert: { Actions, Content, Title } }) => {
       open
       closeAfterTransition
     >
-      <Fade in={true}>
+      <Fade in={true} timeout={500}>
         <Box
           sx={{
             alignItems: "center",
