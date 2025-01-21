@@ -67,7 +67,8 @@ const ConceptName = () => {
           disabled={editing}
           onClick={editConceptName}
           sx={{
-            mb: 2,
+            mb: 3,
+            padding: 0,
             visibility: editing ? "hidden" : "visible",
             "&:hover": {
               backgroundColor: `transparent !important`,

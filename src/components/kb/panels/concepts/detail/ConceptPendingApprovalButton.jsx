@@ -16,11 +16,13 @@ const ConceptPendingApprovalButton = ({ field }) => {
           backgroundColor: `transparent !important`,
           transform: "scale(1.25)",
         },
-        padding: 0.5,
+        mb: 2,
+        marginLeft: "-8px",
+        padding: 0,
       }}
       onClick={() => displayPendingEditAlert(field)}
     >
-      <PiStamp />
+      <PiStamp size={24} />
     </IconButton>
   )
 }
