@@ -14,7 +14,7 @@ const login = async (config, username, password) => {
     const loginResponse = await fetch(loginUrl, loginParams)
 
     if (loginResponse.status !== 200) {
-      return { error: errorMessage(loginResponse.statusText) }
+      return errorMessage(loginResponse.statusText)
     }
 
     const { access_token: token } = await loginResponse.json()

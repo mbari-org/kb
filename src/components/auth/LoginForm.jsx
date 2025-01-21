@@ -1,6 +1,13 @@
 import { use, useActionState, useEffect, useRef } from "react"
 
-import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  FormControl,
+  TextField,
+} from "@mui/material"
 
 import SubmitButton from "@/components/common/SubmitButton"
 import SubmitError from "@/components/common/SubmitError"
@@ -38,25 +45,26 @@ const LoginForm = () => {
     <Box component="form" action={loginAction} sx={{ minHeight: "300px" }}>
       <Card>
         <CardContent>
-          <TextField
-            id="login-user"
-            className="field"
-            fullWidth={true}
-            inputRef={usernameRef}
-            label="Username"
-            name="username"
-            required
-          />
-          <TextField
-            id="login-password"
-            className="field"
-            fullWidth={true}
-            label="Password"
-            name="password"
-            required
-            sx={{ mt: 2 }}
-            type="password"
-          />
+          <FormControl fullWidth>
+            <TextField
+              id="login-user"
+              className="field"
+              inputRef={usernameRef}
+              label="Username"
+              name="username"
+              required
+            />
+          </FormControl>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <TextField
+              id="login-password"
+              className="field"
+              label="Password"
+              name="password"
+              required
+              type="password"
+            />
+          </FormControl>
           <SubmitError errorText={loginState?.error} />
         </CardContent>
         <CardActions style={{ display: "flex", justifyContent: "center" }}>
