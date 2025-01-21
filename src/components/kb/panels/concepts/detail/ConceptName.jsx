@@ -41,7 +41,7 @@ const ConceptName = () => {
         title: "Update Concept Name",
       }),
       Content: createAlertContentConceptNameUpdate(),
-      Choices: createAlertButtonsConceptNameUpdate(),
+      Actions: createAlertButtonsConceptNameUpdate(),
     })
   }
 

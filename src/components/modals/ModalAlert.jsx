@@ -1,30 +1,40 @@
-import { Box, Card, CardActions, CardContent, Modal } from "@mui/material"
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Fade,
+  Modal,
+} from "@mui/material"
 
-const ModalAlert = ({ modalAlert }) => {
+const ModalAlert = ({ modalAlert: { Actions, Content, Title } }) => {
   return (
     <Modal
       aria-labelledby="modal-alert"
       aria-describedby="modal-alert-description"
       open
+      closeAfterTransition
     >
-      <Box
-        sx={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-          // minHeight: "300px",
-        }}
-      >
-        <Card sx={{ p: 2, pb: 0 }}>
-          <CardContent>
-            <modalAlert.Title />
-            <modalAlert.Content />
-          </CardContent>
-          <CardActions style={{ display: "flex", justifyContent: "center" }}>
-            <modalAlert.Choices />
-          </CardActions>
-        </Card>
-      </Box>
+      <Fade in={true}>
+        <Box
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Card sx={{ p: 2, pb: 0 }}>
+            <CardHeader title={<Title />} />
+            <CardContent>
+              <Content />
+            </CardContent>
+            <CardActions style={{ display: "flex", justifyContent: "center" }}>
+              <Actions />
+            </CardActions>
+          </Card>
+        </Box>
+      </Fade>
     </Modal>
   )
 }

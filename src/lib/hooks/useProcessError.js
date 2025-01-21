@@ -22,7 +22,7 @@ const useProcessError = () => {
           text: error.message,
           type: "error",
         }),
-        Choices: createAlertButtons({
+        Actions: createAlertButtons({
           choices: ["Continue"],
           colors: ["cancel"],
           onChoice: onContinue,

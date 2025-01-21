@@ -63,7 +63,7 @@ const validateRankUpdates = async ({
       title: "Update Rank/Level Error",
     }),
     Content: createAlertContentText({ sx: { mt: 4, mb: 6 }, text }),
-    Choices: createAlertButtons({
+    Actions: createAlertButtons({
       choices,
       colors: ["cancel"],
       onChoice,

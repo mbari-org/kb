@@ -53,7 +53,7 @@ const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
           field: fieldPendingHistory.field,
           pendingEdit,
         }),
-        Choices: createAlertButtons({
+        Actions: createAlertButtons({
           choices: [REJECT, DEFER, APPROVE],
           colors: ["cancel", "main", "clean"],
           onChoice,

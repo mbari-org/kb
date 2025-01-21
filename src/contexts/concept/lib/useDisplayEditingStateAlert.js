@@ -42,7 +42,7 @@ const useDisplayEditingStateAlert = ({
     setModalAlert({
       Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
       Content: createAlertContentEditingState({ pendingEdits }),
-      Choices: createAlertButtons({
+      Actions: createAlertButtons({
         choices: [DISCARD, CONTINUE],
         colors: ["cancel", "main"],
         onChoice,
