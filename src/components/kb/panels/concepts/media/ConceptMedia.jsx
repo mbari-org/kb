@@ -6,6 +6,8 @@ import NoMedia from "./NoMedia"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
+import useMediaActions from "./actions/useMediaActions"
+
 const ConceptMedia = () => {
   const {
     editingState: { media: mediaEditingState },
@@ -32,6 +34,8 @@ const ConceptMedia = () => {
     [pendingHistory]
   )
 
+  const { addMedia, deleteMedia, editMedia } = useMediaActions()
+
   useEffect(() => {
     const preppedMedia = orderedMedia.map(media => {
       let action = "None"
@@ -49,21 +53,6 @@ const ConceptMedia = () => {
     return () => clearTimeout(timer)
   }, [isPendingMedia, orderedMedia, pendingHistory])
 
-  const addMedia = newMedia => {
-    const updatedMedia = [...conceptMedia, ...newMedia]
-    setConceptMedia(updatedMedia)
-  }
-  const deleteMedia = mediaIndex => {
-    const updatedMedia = [...conceptMedia]
-    updatedMedia.splice(mediaIndex, 1)
-    setConceptMedia(updatedMedia)
-  }
-
-  const editMedia = _media => {
-    // const updatedMedia = [...media, ...newMedia]
-    // setMedia(media)
-  }
-
   return (
     <Box
       sx={{
@@ -75,13 +64,7 @@ const ConceptMedia = () => {
     >
       {conceptMedia?.length === 0 && <NoMedia addMedia={addMedia} />}
       {conceptMedia?.length > 0 && (
-        <MediaView
-          addMedia={addMedia}
-          deleteMedia={deleteMedia}
-          editMedia={editMedia}
-          media={conceptMedia}
-          setMedia={setConceptMedia}
-        />
+        <MediaView media={conceptMedia} setMedia={setConceptMedia} />
       )}
     </Box>
   )

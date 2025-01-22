@@ -2,17 +2,21 @@ import { use, useEffect, useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import MediaAddButton from "./MediaAddButton"
-import MediaDeleteButton from "./MediaDeleteButton"
-import MediaEditButton from "./MediaEditButton"
+import MediaAdd from "./actions/MediaAdd"
+import MediaDelete from "./actions/MediaDelete"
+import MediaEdit from "./actions/MediaEdit"
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
+import useMediaActions from "./actions/useMediaActions"
+
+const MediaView = ({ media, setMedia }) => {
   const theme = useTheme()
+
+  const { addMedia, deleteMedia, editMedia } = useMediaActions(setMedia)
 
   const { editing } = use(ConceptContext)
 
@@ -53,7 +57,7 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
           />
         )}
         {allowEditDelete && (
-          <MediaDeleteButton
+          <MediaDelete
             onClick={() => deleteMedia(mediaIndex)}
             sx={{
               position: "absolute",
@@ -63,7 +67,7 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
           />
         )}
         {allowEditDelete && (
-          <MediaEditButton
+          <MediaEdit
             onClick={() => editMedia(mediaIndex)}
             sx={{
               position: "absolute",
@@ -80,10 +84,10 @@ const MediaView = ({ addMedia, deleteMedia, editMedia, media }) => {
           setMediaIndex={setMediaIndex}
         />
         {editing && (
-          <MediaAddButton
+          <MediaAdd
             bgColor={theme.palette.background.paperLight}
             marginTop={1}
-            onClick={addMedia}
+            onClick={() => addMedia(mediaIndex)}
           />
         )}
       </Box>

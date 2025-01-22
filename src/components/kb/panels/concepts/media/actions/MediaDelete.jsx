@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles"
 
 import { MdOutlineDeleteForever } from "react-icons/md"
 
-const MediaDeleteButton = ({ onClick }) => {
+const MediaDelete = ({ onClick }) => {
   const theme = useTheme()
 
   return (
@@ -38,4 +38,4 @@ const MediaDeleteButton = ({ onClick }) => {
   )
 }
 
-export default MediaDeleteButton
+export default MediaDelete
