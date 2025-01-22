@@ -8,8 +8,8 @@ import {
   Modal,
 } from "@mui/material"
 
-const ModalAlert = ({ modalAlert }) => {
-  const { Actions, Content, Title } = modalAlert
+const Alert = ({ alert }) => {
+  const { Actions, Content, Title } = alert
 
   return (
     <Modal
@@ -41,4 +41,4 @@ const ModalAlert = ({ modalAlert }) => {
   )
 }
 
-export default ModalAlert
+export default Alert

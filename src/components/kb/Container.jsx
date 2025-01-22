@@ -7,7 +7,7 @@ import ModalProvider from "@/contexts/modal/ModalProvider"
 import SelectedProvider from "@/contexts/selected/SelectedProvider"
 import TaxonomyProvider from "@/contexts/taxonomy/TaxonomyProvider"
 
-const KbContainer = () => {
+const Container = () => {
   return (
     <Box sx={{ height: "100vh" }}>
       <ModalProvider>
@@ -23,4 +23,4 @@ const KbContainer = () => {
   )
 }
 
-export default KbContainer
+export default Container

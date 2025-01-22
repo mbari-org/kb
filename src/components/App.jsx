@@ -17,9 +17,9 @@ import ConfigProvider from "@/contexts/config/ConfigProvider"
 
 import AuthRoute from "@/components/auth/AuthRoute"
 
-import KbContainer from "@/components/KbContainer"
+import KbContainer from "@/components/kb/Container"
 import StartUp from "@/components/StartUp"
-import Whoops from "@/components/kb/Whoops"
+import Whoops from "@/components/Whoops"
 
 const App = () => {
   return (

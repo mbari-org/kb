@@ -9,7 +9,7 @@ const useProcessResult = ({
   showBoundary,
   updateConcept,
   updateConceptName,
-  setModalAlert,
+  setAlert,
   setEditing,
   setModified,
 }) => {
@@ -41,14 +41,14 @@ const useProcessResult = ({
         error => showBoundary(error)
       )
 
-      setModalAlert(null)
+      setAlert(null)
       setEditing(false)
       setModified(false)
     },
     [
       concept,
       selectConcept,
-      setModalAlert,
+      setAlert,
       setEditing,
       setModified,
       showBoundary,

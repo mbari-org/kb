@@ -1,14 +1,14 @@
-import { createAlertContentText } from "../components"
+import { createTextContent } from "../components"
 
 import { prettyFormat } from "@/lib/kb/util"
 
-const AlertContentPendingEdit = ({ field, pendingEdit }) => {
-  const Description = createAlertContentText({
+const PendingEditContent = ({ field, pendingEdit }) => {
+  const Description = createTextContent({
     sx: { mt: 2, mb: 2 },
     text: field,
   })
 
-  const Detail = createAlertContentText({
+  const Detail = createTextContent({
     sx: {
       mt: 1,
       ml: 2,
@@ -27,4 +27,4 @@ const AlertContentPendingEdit = ({ field, pendingEdit }) => {
   )
 }
 
-export default AlertContentPendingEdit
+export default PendingEditContent

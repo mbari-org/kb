@@ -23,7 +23,7 @@ const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { config } = use(ConfigContext)
-  const { setLoading, setModalAlert } = use(ModalContext)
+  const { setLoading, setAlert } = use(ModalContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
   const initialLoad = useRef(true)
@@ -104,7 +104,7 @@ const TaxonomyProvider = ({ children }) => {
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           setLoading(false)
           if (taxonomyError) {
-            setModalAlert({
+            setAlert({
               type: "error",
               title: "CxInc",
               message: taxonomyError.message,
@@ -119,7 +119,7 @@ const TaxonomyProvider = ({ children }) => {
         }
       )
     }
-  }, [config, setLoading, setModalAlert, showBoundary])
+  }, [config, setLoading, setAlert, showBoundary])
 
   if (!taxonomy) {
     return null

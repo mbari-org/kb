@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
 
-const AlertButtonsContainer = ({ buttons }) => {
+const ActionsContainer = ({ buttons }) => {
   return (
     <Box
       sx={{
@@ -17,4 +17,4 @@ const AlertButtonsContainer = ({ buttons }) => {
   )
 }
 
-export default AlertButtonsContainer
+export default ActionsContainer

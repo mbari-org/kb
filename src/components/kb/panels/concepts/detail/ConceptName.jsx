@@ -7,10 +7,10 @@ import { useTheme } from "@mui/material/styles"
 import ConceptPendingApprovalButton from "./ConceptPendingApprovalButton"
 
 import {
-  createAlertButtonsConceptNameUpdate,
-  createAlertContentConceptNameUpdate,
-  createAlertTitle,
-} from "@/components/modals/alert/components"
+  createConceptNameUpdateActions,
+  createConceptNameUpdateContent,
+  createTitile,
+} from "@/components/alert/components"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -24,7 +24,7 @@ const ConceptName = () => {
 
   const { user } = use(AuthContext)
   const { concept, editing, pendingHistory } = use(ConceptContext)
-  const { setModalAlert } = use(ModalContext)
+  const { setAlert } = use(ModalContext)
 
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
 
@@ -36,12 +36,12 @@ const ConceptName = () => {
     : conceptTheme.color.clean
 
   const editConceptName = () => {
-    setModalAlert({
-      Title: createAlertTitle({
+    setAlert({
+      Title: createTitile({
         title: "Update Concept Name",
       }),
-      Content: createAlertContentConceptNameUpdate(),
-      Actions: createAlertButtonsConceptNameUpdate(),
+      Content: createConceptNameUpdateContent(),
+      Actions: createConceptNameUpdateActions(),
     })
   }
 

@@ -1,15 +1,15 @@
 import {
-  createAlertButtons,
-  createAlertContentText,
-  createAlertTitle,
-} from "@/components/modals/alert/components"
+  createActions,
+  createTextContent,
+  createTitile,
+} from "@/components/alert/components"
 
 import { isAdmin } from "@/lib/auth/role"
 
 const validateRankUpdates = async ({
   concept,
   modifyConcept,
-  setModalAlert,
+  setAlert,
   updates,
   user,
 }) => {
@@ -45,7 +45,7 @@ const validateRankUpdates = async ({
       modifyConcept({ rankName: concept.rankName })
       validation = { ...validation, rankName: false }
     }
-    setModalAlert(null)
+    setAlert(null)
     resolvePromise(validation)
   }
 
@@ -58,12 +58,12 @@ const validateRankUpdates = async ({
     text = "Removing rank name requires admin role"
   }
 
-  setModalAlert({
-    Title: createAlertTitle({
+  setAlert({
+    Title: createTitile({
       title: "Update Rank/Level Error",
     }),
-    Content: createAlertContentText({ sx: { mt: 4, mb: 6 }, text }),
-    Actions: createAlertButtons({
+    Content: createTextContent({ sx: { mt: 4, mb: 6 }, text }),
+    Actions: createActions({
       choices,
       colors: ["cancel"],
       onChoice,

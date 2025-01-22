@@ -1,12 +1,12 @@
 import { use } from "react"
 
-import AlertButton from "./AlertButton"
-import AlertButtonsContainer from "./AlertButtonsContainer"
+import Action from "./Action"
+import ActionsContainer from "./ActionsContainer"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-const AlertButtonsConceptNameUpdate = () => {
+const ConceptNameUpdateActions = () => {
   const { concept, editingState, processUpdates } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 
@@ -22,7 +22,7 @@ const AlertButtonsConceptNameUpdate = () => {
       : [false, true, true]
 
   const buttonComponents = choices.map((choice, index) => (
-    <AlertButton
+    <Action
       key={index}
       disabled={disabled[index]}
       choice={choice}
@@ -33,7 +33,7 @@ const AlertButtonsConceptNameUpdate = () => {
     />
   ))
 
-  return <AlertButtonsContainer buttons={buttonComponents} />
+  return <ActionsContainer buttons={buttonComponents} />
 }
 
-export default AlertButtonsConceptNameUpdate
+export default ConceptNameUpdateActions

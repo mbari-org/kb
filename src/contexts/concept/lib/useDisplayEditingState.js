@@ -1,10 +1,10 @@
 import { use, useCallback, useContext } from "react"
 
 import {
-  createAlertButtons,
-  createAlertContentEditingState,
-  createAlertTitle,
-} from "@/components/modals/alert/components"
+  createActions,
+  createEditingStateContent,
+  createTitile,
+} from "@/components/alert/components"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
@@ -12,17 +12,17 @@ import SelectedContext from "@/contexts/selected/SelectedContext"
 const CONTINUE = "Continue"
 const DISCARD = "Discard"
 
-const useDisplayEditingStateAlert = ({
+const useDisplayEditingState = ({
   conceptName,
   editingState,
   getPendingEdits,
   initialState,
   reset,
 }) => {
-  const { setModalAlert } = use(ModalContext)
+  const { setAlert } = use(ModalContext)
   const { selectConcept, selectPanel } = useContext(SelectedContext)
 
-  const dispalyEditingStateAlert = useCallback(() => {
+  const dispalyEditingState = useCallback(() => {
     const pendingEdits = getPendingEdits(editingState)
     const onChoice = choice => {
       switch (choice) {
@@ -36,13 +36,13 @@ const useDisplayEditingStateAlert = ({
         default:
           break
       }
-      setModalAlert(null)
+      setAlert(null)
     }
 
-    setModalAlert({
-      Title: createAlertTitle({ title: `Current Edits: ${conceptName}` }),
-      Content: createAlertContentEditingState({ pendingEdits }),
-      Actions: createAlertButtons({
+    setAlert({
+      Title: createTitile({ title: `Current Edits: ${conceptName}` }),
+      Content: createEditingStateContent({ pendingEdits }),
+      Actions: createActions({
         choices: [DISCARD, CONTINUE],
         colors: ["cancel", "main"],
         onChoice,
@@ -55,11 +55,11 @@ const useDisplayEditingStateAlert = ({
     reset,
     selectConcept,
     selectPanel,
-    setModalAlert,
+    setAlert,
     editingState,
   ])
 
-  return dispalyEditingStateAlert
+  return dispalyEditingState
 }
 
-export default useDisplayEditingStateAlert
+export default useDisplayEditingState

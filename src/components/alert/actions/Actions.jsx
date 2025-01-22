@@ -1,11 +1,11 @@
-import AlertButton from "./AlertButton"
-import AlertButtonsContainer from "./AlertButtonsContainer"
+import Action from "./Action"
+import ActionsContainer from "./ActionsContainer"
 
-const AlertButtons = ({ choices, colors, onChoice }) => {
+const Actions = ({ choices, colors, onChoice }) => {
   const buttonColor = index => (colors ? colors[index] : "main")
 
   const buttonComponents = choices.map((choice, index) => (
-    <AlertButton
+    <Action
       key={index}
       choice={choice}
       color={buttonColor(index)}
@@ -15,7 +15,7 @@ const AlertButtons = ({ choices, colors, onChoice }) => {
     />
   ))
 
-  return <AlertButtonsContainer buttons={buttonComponents} />
+  return <ActionsContainer buttons={buttonComponents} />
 }
 
-export default AlertButtons
+export default Actions

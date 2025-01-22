@@ -1,7 +1,7 @@
-import { createAlertContentText } from "../components"
+import { createTextContent } from "../components"
 
-const AlertContentEditingState = ({ pendingEdits }) => {
-  const Description = createAlertContentText({
+const EditingStateContent = ({ pendingEdits }) => {
+  const Description = createTextContent({
     sx: { mt: 2, mb: 2 },
     text: "You have the following unsaved edits:",
   })
@@ -16,7 +16,7 @@ const AlertContentEditingState = ({ pendingEdits }) => {
     .map(pendingEditText)
     .join("\n")
 
-  const Detail = createAlertContentText({
+  const Detail = createTextContent({
     sx: {
       mt: 1,
       ml: 2,
@@ -35,4 +35,4 @@ const AlertContentEditingState = ({ pendingEdits }) => {
   )
 }
 
-export default AlertContentEditingState
+export default EditingStateContent

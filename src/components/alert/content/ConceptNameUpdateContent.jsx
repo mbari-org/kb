@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material/styles"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-const AlertContentConceptNameUpdate = () => {
+const ConceptNameUpdateContent = () => {
   const { concept: conceptTheme, palette } = useTheme()
 
   const { concept, editingState, modifyConcept } = use(ConceptContext)
@@ -77,4 +77,4 @@ const AlertContentConceptNameUpdate = () => {
   )
 }
 
-export default AlertContentConceptNameUpdate
+export default ConceptNameUpdateContent

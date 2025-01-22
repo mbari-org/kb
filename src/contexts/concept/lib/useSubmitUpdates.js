@@ -22,7 +22,7 @@ const useSubmitUpdates = ({
   modifyConcept,
   reset,
   selectConcept,
-  setModalAlert,
+  setAlert,
   showBoundary,
   updateConcept,
   updateConceptName,
@@ -41,7 +41,7 @@ const useSubmitUpdates = ({
       validateUpdates({
         concept,
         modifyConcept,
-        setModalAlert,
+        setAlert,
         updates,
         user,
       }).then(detailValidation => {
@@ -76,7 +76,7 @@ const useSubmitUpdates = ({
       onContinue,
       processError,
       reset,
-      setModalAlert,
+      setAlert,
       showBoundary,
       updateConcept,
       editingState,

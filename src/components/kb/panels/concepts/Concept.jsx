@@ -2,7 +2,7 @@ import { use } from "react"
 
 import { Stack } from "@mui/material"
 
-import ConceptActionButtons from "./detail/ConceptActionButtons"
+import ConceptActions from "./detail/ConceptActions"
 import ConceptDetail from "./ConceptDetail"
 import ConceptMedia from "./media/ConceptMedia"
 import ConceptPath from "./ConceptPath"
@@ -40,7 +40,7 @@ const Concept = () => {
         <ConceptMedia />
         <ConceptDetail />
       </Stack>
-      {!isReadOnly(user) && <ConceptActionButtons />}
+      {!isReadOnly(user) && <ConceptActions />}
     </Stack>
   )
 }

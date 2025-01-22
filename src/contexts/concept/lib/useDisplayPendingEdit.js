@@ -1,10 +1,10 @@
 import { use, useCallback } from "react"
 
 import {
-  createAlertButtons,
-  createAlertContentPendingEdit,
-  createAlertTitle,
-} from "@/components/modals/alert/components"
+  createActions,
+  createPendingEditContent,
+  createTitile,
+} from "@/components/alert/components"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 import ModalContext from "@/contexts/modal/ModalContext"
@@ -16,11 +16,11 @@ const APPROVE = "Approve"
 const DEFER = "Defer"
 const REJECT = "Reject"
 
-const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
+const useDisplayPendingEdit = ({ conceptName, pendingHistory }) => {
   const { config } = use(ConfigContext)
-  const { setModalAlert } = use(ModalContext)
+  const { setAlert } = use(ModalContext)
 
-  const displayPendingEditAlert = useCallback(
+  const displayPendingEdit = useCallback(
     field => {
       const fieldPendingHistory = getFieldPendingHistory(pendingHistory, field)
       const pendingEdit = pickFields(fieldPendingHistory, [
@@ -45,25 +45,25 @@ const useDisplayPendingEditAlert = ({ conceptName, pendingHistory }) => {
             break
         }
 
-        setModalAlert(null)
+        setAlert(null)
       }
-      setModalAlert({
-        Title: createAlertTitle({ title: `Concept: ${conceptName}` }),
-        Content: createAlertContentPendingEdit({
+      setAlert({
+        Title: createTitile({ title: `Concept: ${conceptName}` }),
+        Content: createPendingEditContent({
           field: fieldPendingHistory.field,
           pendingEdit,
         }),
-        Actions: createAlertButtons({
+        Actions: createActions({
           choices: [REJECT, DEFER, APPROVE],
           colors: ["cancel", "main", "clean"],
           onChoice,
         }),
       })
     },
-    [conceptName, config, pendingHistory, setModalAlert]
+    [conceptName, config, pendingHistory, setAlert]
   )
 
-  return displayPendingEditAlert
+  return displayPendingEdit
 }
 
-export default useDisplayPendingEditAlert
+export default useDisplayPendingEdit

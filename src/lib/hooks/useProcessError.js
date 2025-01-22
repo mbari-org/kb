@@ -3,33 +3,33 @@ import { use, useCallback } from "react"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 import {
-  createAlertButtons,
-  createAlertContentText,
-  createAlertTitle,
-} from "@/components/modals/alert/components"
+  createActions,
+  createTextContent,
+  createTitile,
+} from "@/components/alert/components"
 
 const useProcessError = () => {
-  const { setModalAlert } = use(ModalContext)
+  const { setAlert } = use(ModalContext)
 
   return useCallback(
     (error, onContinue) => {
-      setModalAlert({
-        Title: createAlertTitle({
+      setAlert({
+        Title: createTitile({
           title: "Processing Error",
           type: "error",
         }),
-        Content: createAlertContentText({
+        Content: createTextContent({
           text: error.message,
           type: "error",
         }),
-        Actions: createAlertButtons({
+        Actions: createActions({
           choices: ["Continue"],
           colors: ["cancel"],
           onChoice: onContinue,
         }),
       })
     },
-    [setModalAlert]
+    [setAlert]
   )
 }
 

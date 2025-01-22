@@ -13,8 +13,8 @@ import conceptStateReducer from "./lib/conceptStateReducer"
 import { stateForConcept } from "./lib/stateForConcept"
 
 import useConceptPath from "./lib/useConceptPath"
-import useDisplayEditingStateAlert from "./lib/useDisplayEditingStateAlert"
-import useDisplayPendingEditAlert from "./lib/useDisplayPendingEditAlert"
+import useDisplayEditingState from "./lib/useDisplayEditingState"
+import useDisplayPendingEdit from "./lib/useDisplayPendingEdit"
 import usePendingEdits from "./lib/usePendingEdits"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
@@ -25,7 +25,7 @@ const ConceptProvider = ({ children }) => {
 
   const { showBoundary } = useErrorBoundary()
 
-  const { modalAlert, setModalAlert } = use(ModalContext)
+  const { alert, setAlert } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
     getConcept,
@@ -60,14 +60,14 @@ const ConceptProvider = ({ children }) => {
     resetState => {
       setEditing(false)
       setModified(false)
-      setModalAlert(null)
+      setAlert(null)
 
       const resetConcept = { ...concept, ...resetState }
       setConcept(resetConcept)
 
       dispatch({ type: "INIT_STATE", payload: resetState })
     },
-    [concept, setModalAlert]
+    [concept, setAlert]
   )
 
   const submitUpdates = useSubmitUpdates({
@@ -80,14 +80,14 @@ const ConceptProvider = ({ children }) => {
     modifyConcept,
     reset,
     selectConcept,
-    setModalAlert,
+    setAlert,
     showBoundary,
     theme,
     updateConcept,
     updateConceptName,
   })
 
-  const dispalyEditingStateAlert = useDisplayEditingStateAlert({
+  const dispalyEditingState = useDisplayEditingState({
     conceptName: concept?.name,
     getPendingEdits,
     initialState,
@@ -95,7 +95,7 @@ const ConceptProvider = ({ children }) => {
     editingState,
   })
 
-  const displayPendingEditAlert = useDisplayPendingEditAlert({
+  const displayPendingEdit = useDisplayPendingEdit({
     conceptName: concept?.name,
     pendingHistory,
   })
@@ -114,13 +114,13 @@ const ConceptProvider = ({ children }) => {
         return
       }
 
-      if (!modalAlert && !modalHasBeenDiplayed) {
-        dispalyEditingStateAlert()
+      if (!alert && !modalHasBeenDiplayed) {
+        dispalyEditingState()
         setModalAlertHasBeenDisplayed(true)
         return
       }
 
-      if (!modalAlert) {
+      if (!alert) {
         setModalAlertHasBeenDisplayed(false)
         return
       }
@@ -139,19 +139,19 @@ const ConceptProvider = ({ children }) => {
     }
   }, [
     concept,
-    dispalyEditingStateAlert,
+    dispalyEditingState,
     editing,
     editingState,
     getConcept,
     getPendingEdits,
     loadConcept,
-    modalAlert,
+    alert,
     modalHasBeenDiplayed,
     modified,
     selectConcept,
     selectPanel,
     selected,
-    setModalAlert,
+    setAlert,
     showBoundary,
   ])
 
@@ -176,8 +176,8 @@ const ConceptProvider = ({ children }) => {
       value={{
         concept,
         conceptPath,
-        dispalyEditingStateAlert,
-        displayPendingEditAlert,
+        dispalyEditingState,
+        displayPendingEdit,
         editing,
         editingState,
         initialState,
