@@ -4,34 +4,33 @@ const useProcessResult = ({
   concept,
   editingState,
   initialState,
-  reset,
+  resetState,
   selectConcept,
-  showBoundary,
-  updateConcept,
-  updateConceptName,
   setAlert,
   setEditing,
   setModified,
+  showBoundary,
+  updateConcept,
+  updateConceptName,
 }) => {
   const processDetailResult = useCallback(
     updatedConcept => {
       updateConcept(updatedConcept).then(
         () => {
-          // selectConcept(updatedConcept.name)
-          reset(editingState)
+          resetState(editingState)
         },
         error => showBoundary(error)
       )
     },
-    [editingState, reset, showBoundary, updateConcept]
+    [editingState, resetState, showBoundary, updateConcept]
   )
 
   const processErrorResult = useCallback(
     error => {
-      reset(initialState)
+      resetState(initialState)
       showBoundary(error)
     },
-    [reset, initialState, showBoundary]
+    [resetState, initialState, showBoundary]
   )
 
   const processNameResult = useCallback(

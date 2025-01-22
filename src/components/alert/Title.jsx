@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-const Titile = ({ title, type }) => {
+const Title = ({ title, type }) => {
   const theme = useTheme()
 
   let color
@@ -35,4 +35,4 @@ const Titile = ({ title, type }) => {
   )
 }
 
-export default Titile
+export default Title

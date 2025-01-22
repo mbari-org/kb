@@ -4,13 +4,11 @@ import { CiEdit } from "react-icons/ci"
 import { IconButton, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import ConceptPendingApprovalButton from "./ConceptPendingApprovalButton"
-
-import {
-  createConceptNameUpdateActions,
-  createConceptNameUpdateContent,
-  createTitle,
-} from "@/components/alert/components"
+import ApprovalButton from "./ApprovalButton"
+import EditNameActions from "@/components/kb/panels/concepts/detail/editName/EditNameActions"
+import EditNameContent from "@/components/kb/panels/concepts/detail/editName/EditNameContent"
+import EditNameTitle from "@/components/kb/panels/concepts/detail/editName/EditNameTitle"
+import { createAlert } from "@/components/factory"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -36,13 +34,12 @@ const ConceptName = () => {
     : conceptTheme.color.clean
 
   const editConceptName = () => {
-    setAlert({
-      Title: createTitle({
-        title: "Update Concept Name",
-      }),
-      Content: createConceptNameUpdateContent(),
-      Actions: createConceptNameUpdateActions(),
+    const alert = createAlert({
+      Actions: EditNameActions,
+      Content: EditNameContent,
+      Title: EditNameTitle,
     })
+    setAlert(alert)
   }
 
   return (
@@ -67,7 +64,8 @@ const ConceptName = () => {
           disabled={editing}
           onClick={editConceptName}
           sx={{
-            mb: 3,
+            mb: 2,
+            ml: 0.5,
             padding: 0,
             visibility: editing ? "hidden" : "visible",
             "&:hover": {
@@ -79,9 +77,7 @@ const ConceptName = () => {
           <CiEdit size={24} />
         </IconButton>
       )}
-      {showApprovalButton && (
-        <ConceptPendingApprovalButton field={"conceptName"} />
-      )}
+      {showApprovalButton && <ApprovalButton field={"conceptName"} />}
     </Stack>
   )
 }

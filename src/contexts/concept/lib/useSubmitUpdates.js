@@ -16,24 +16,24 @@ const allValid = values => Object.values(values).every(Boolean)
 const useSubmitUpdates = ({
   concept,
   config,
+  editingState,
   getPendingEdits,
   initialState,
   modified,
   modifyConcept,
-  reset,
+  resetState,
   selectConcept,
   setAlert,
   showBoundary,
   updateConcept,
   updateConceptName,
-  editingState,
 }) => {
   const { user } = use(AuthContext)
 
   const processError = useProcessError()
   const onContinue = useCallback(
-    () => reset(initialState),
-    [initialState, reset]
+    () => resetState(initialState),
+    [initialState, resetState]
   )
 
   const submitDetailUpdates = useCallback(
@@ -58,9 +58,7 @@ const useSubmitUpdates = ({
                 return
               }
               updateConcept(updatedConcept).then(
-                () => {
-                  reset(editingState)
-                },
+                () => resetState(editingState),
                 error => showBoundary(error)
               )
             },
@@ -75,7 +73,7 @@ const useSubmitUpdates = ({
       modifyConcept,
       onContinue,
       processError,
-      reset,
+      resetState,
       setAlert,
       showBoundary,
       updateConcept,
@@ -95,7 +93,7 @@ const useSubmitUpdates = ({
           updateConceptName(concept, updatedName).then(
             () => {
               selectConcept(updatedName)
-              reset(editingState)
+              resetState(editingState)
             },
             error => showBoundary(error)
           )
@@ -108,7 +106,7 @@ const useSubmitUpdates = ({
       config,
       onContinue,
       processError,
-      reset,
+      resetState,
       selectConcept,
       showBoundary,
       updateConceptName,
@@ -118,7 +116,7 @@ const useSubmitUpdates = ({
 
   const submitUpdates = choice => {
     if (!modified) {
-      reset(initialState)
+      resetState(initialState)
       return
     }
 
@@ -133,7 +131,7 @@ const useSubmitUpdates = ({
         submitNameUpdate(UPDATE_ALL_DATA, updates)
         break
       case "Cancel":
-        reset(initialState)
+        resetState(initialState)
         break
       case "Info":
         submitDetailUpdates(updates)

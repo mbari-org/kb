@@ -3,16 +3,16 @@ import { useState } from "react"
 import ModalContext from "./ModalContext"
 
 const ModalProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false)
   const [alert, setAlert] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   return (
     <ModalContext
       value={{
-        loading,
         alert,
-        setLoading,
+        loading,
         setAlert,
+        setLoading,
       }}
     >
       {children}

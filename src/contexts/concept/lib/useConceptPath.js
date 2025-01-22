@@ -11,14 +11,12 @@ const useConceptPath = concept => {
     []
   )
 
-  const conceptPath = useMemo(() => {
+  return useMemo(() => {
     if (concept) {
       return getConceptPath(concept)
     }
     return null
   }, [concept, getConceptPath])
-
-  return conceptPath
 }
 
 export default useConceptPath

@@ -14,7 +14,7 @@ import { stateForConcept } from "./lib/stateForConcept"
 
 import useConceptPath from "./lib/useConceptPath"
 import useDisplayEditingState from "./lib/useDisplayEditingState"
-import useDisplayPendingEdit from "./lib/useDisplayPendingEdit"
+import useDisplayPendingField from "./lib/useDisplayPendingField"
 import usePendingEdits from "./lib/usePendingEdits"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
@@ -49,6 +49,9 @@ const ConceptProvider = ({ children }) => {
 
   const getPendingEdits = usePendingEdits(initialState)
 
+  const displayEditingState = useDisplayEditingState()
+  const displayPendingField = useDisplayPendingField()
+
   const modifyConcept = useCallback(
     update => {
       dispatch({ type: "SET_FIELD", payload: update })
@@ -56,16 +59,16 @@ const ConceptProvider = ({ children }) => {
     [dispatch]
   )
 
-  const reset = useCallback(
-    resetState => {
+  const resetState = useCallback(
+    toState => {
       setEditing(false)
       setModified(false)
       setAlert(null)
 
-      const resetConcept = { ...concept, ...resetState }
-      setConcept(resetConcept)
+      const resetStateConcept = { ...concept, ...toState }
+      setConcept(resetStateConcept)
 
-      dispatch({ type: "INIT_STATE", payload: resetState })
+      dispatch({ type: "INIT_STATE", payload: toState })
     },
     [concept, setAlert]
   )
@@ -78,26 +81,13 @@ const ConceptProvider = ({ children }) => {
     initialState,
     modified,
     modifyConcept,
-    reset,
+    resetState,
     selectConcept,
     setAlert,
     showBoundary,
     theme,
     updateConcept,
     updateConceptName,
-  })
-
-  const dispalyEditingState = useDisplayEditingState({
-    conceptName: concept?.name,
-    getPendingEdits,
-    initialState,
-    reset,
-    editingState,
-  })
-
-  const displayPendingEdit = useDisplayPendingEdit({
-    conceptName: concept?.name,
-    pendingHistory,
   })
 
   useEffect(() => {
@@ -115,7 +105,7 @@ const ConceptProvider = ({ children }) => {
       }
 
       if (!alert && !modalHasBeenDiplayed) {
-        dispalyEditingState()
+        displayEditingState()
         setModalAlertHasBeenDisplayed(true)
         return
       }
@@ -138,14 +128,14 @@ const ConceptProvider = ({ children }) => {
       )
     }
   }, [
+    alert,
     concept,
-    dispalyEditingState,
+    displayEditingState,
     editing,
     editingState,
     getConcept,
     getPendingEdits,
     loadConcept,
-    alert,
     modalHasBeenDiplayed,
     modified,
     selectConcept,
@@ -176,8 +166,8 @@ const ConceptProvider = ({ children }) => {
       value={{
         concept,
         conceptPath,
-        dispalyEditingState,
-        displayPendingEdit,
+        displayEditingState,
+        displayPendingField,
         editing,
         editingState,
         initialState,
@@ -185,6 +175,7 @@ const ConceptProvider = ({ children }) => {
         modified,
         pendingHistory,
         processUpdates: submitUpdates,
+        resetState,
         setEditing,
       }}
     >

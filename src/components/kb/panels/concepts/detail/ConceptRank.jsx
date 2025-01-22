@@ -6,7 +6,7 @@ import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 import useConceptDetailStyle from "./useConceptDetailStyle"
-import ConceptPendingApprovalButton from "./ConceptPendingApprovalButton"
+import ApprovalButton from "./ApprovalButton"
 
 import { isAdmin } from "@/lib/auth/role"
 import { hasPendingHistory } from "@/lib/kb/util"
@@ -53,7 +53,7 @@ const ConceptRank = ({ field, options }) => {
             )}
           </Select>
         </Box>
-        {showApprovalButton && <ConceptPendingApprovalButton field={field} />}
+        {showApprovalButton && <ApprovalButton field={field} />}
       </Box>
     </FormControl>
   )

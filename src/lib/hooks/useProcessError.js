@@ -6,7 +6,7 @@ import {
   createActions,
   createTextContent,
   createTitle,
-} from "@/components/alert/components"
+} from "@/components/factory"
 
 const useProcessError = () => {
   const { setAlert } = use(ModalContext)

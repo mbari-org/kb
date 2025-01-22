@@ -1,65 +1,23 @@
-import { use, useCallback, useContext } from "react"
+import { use, useCallback } from "react"
 
-import {
-  createActions,
-  createEditingStateContent,
-  createTitle,
-} from "@/components/alert/components"
+import { createAlert } from "@/components/factory"
+import EditingStateActions from "@/components/kb/panels/concepts/detail/editingState/EditingStateActions"
+import EditingStateContent from "@/components/kb/panels/concepts/detail/editingState/EditingStateContent"
+import EditingStateTitle from "@/components/kb/panels/concepts/detail/editingState/EditingStateTitle"
 
 import ModalContext from "@/contexts/modal/ModalContext"
-import SelectedContext from "@/contexts/selected/SelectedContext"
 
-const CONTINUE = "Continue"
-const DISCARD = "Discard"
-
-const useDisplayEditingState = ({
-  conceptName,
-  editingState,
-  getPendingEdits,
-  initialState,
-  reset,
-}) => {
+const useDisplayEditingState = () => {
   const { setAlert } = use(ModalContext)
-  const { selectConcept, selectPanel } = useContext(SelectedContext)
 
-  const dispalyEditingState = useCallback(() => {
-    const pendingEdits = getPendingEdits(editingState)
-    const onChoice = choice => {
-      switch (choice) {
-        case DISCARD:
-          reset(initialState)
-          break
-        case CONTINUE:
-          selectConcept(conceptName)
-          selectPanel("Concepts")
-          break
-        default:
-          break
-      }
-      setAlert(null)
-    }
-
-    setAlert({
-      Title: createTitle({ title: `Current Edits: ${conceptName}` }),
-      Content: createEditingStateContent({ pendingEdits }),
-      Actions: createActions({
-        choices: [DISCARD, CONTINUE],
-        colors: ["cancel", "main"],
-        onChoice,
-      }),
+  return useCallback(() => {
+    const alert = createAlert({
+      Actions: EditingStateActions,
+      Content: EditingStateContent,
+      Title: EditingStateTitle,
     })
-  }, [
-    conceptName,
-    getPendingEdits,
-    initialState,
-    reset,
-    selectConcept,
-    selectPanel,
-    setAlert,
-    editingState,
-  ])
-
-  return dispalyEditingState
+    setAlert(alert)
+  }, [setAlert])
 }
 
 export default useDisplayEditingState

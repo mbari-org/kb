@@ -1,21 +1,35 @@
+import { Box } from "@mui/material"
+
 import Action from "./Action"
-import ActionsContainer from "./ActionsContainer"
 
-const Actions = ({ choices, colors, onChoice }) => {
-  const buttonColor = index => (colors ? colors[index] : "main")
+const Actions = ({ colors, labels, onAction }) => {
+  const actionColor = index => (colors ? colors[index] : "main")
 
-  const buttonComponents = choices.map((choice, index) => (
+  const actions = labels.map((label, index) => (
     <Action
       key={index}
-      choice={choice}
-      color={buttonColor(index)}
+      color={actionColor(index)}
       index={index}
-      totalChoices={choices.length}
-      onChoice={onChoice}
+      label={label}
+      totalActions={labels.length}
+      onAction={onAction}
     />
   ))
 
-  return <ActionsContainer buttons={buttonComponents} />
+  return (
+    <Box
+      sx={{
+        backgroundColor: "inherit",
+        display: "flex",
+        justifyContent: "space-between",
+        mt: 4,
+        padding: 1,
+        width: "100%",
+      }}
+    >
+      {actions}
+    </Box>
+  )
 }
 
 export default Actions

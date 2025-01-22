@@ -4,8 +4,8 @@ import { IconButton } from "@mui/material"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const ConceptPendingApprovalButton = ({ field }) => {
-  const { displayPendingEdit } = use(ConceptContext)
+const ApprovalButton = ({ field }) => {
+  const { displayPendingField } = use(ConceptContext)
 
   return (
     <IconButton
@@ -20,11 +20,11 @@ const ConceptPendingApprovalButton = ({ field }) => {
         marginLeft: "-8px",
         padding: 0,
       }}
-      onClick={() => displayPendingEdit(field)}
+      onClick={() => displayPendingField(field)}
     >
       <PiStamp size={24} />
     </IconButton>
   )
 }
 
-export default ConceptPendingApprovalButton
+export default ApprovalButton

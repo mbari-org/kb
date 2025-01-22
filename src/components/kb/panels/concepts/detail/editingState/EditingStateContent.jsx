@@ -1,6 +1,17 @@
-import { createTextContent } from "../components"
+import { use } from "react"
 
-const EditingStateContent = ({ pendingEdits }) => {
+import { createTextContent } from "@/components/factory"
+
+import ConceptContext from "@/contexts/concept/ConceptContext"
+
+import usePendingEdits from "@/contexts/concept/lib/usePendingEdits"
+
+const EditingStateContent = () => {
+  const { editingState, initialState } = use(ConceptContext)
+
+  const getPendingEdits = usePendingEdits(initialState)
+  const pendingEdits = getPendingEdits(editingState)
+
   const Description = createTextContent({
     sx: { mt: 2, mb: 2 },
     text: "You have the following unsaved edits:",

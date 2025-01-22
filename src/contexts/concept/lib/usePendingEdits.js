@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 
 const usePendingEdits = initialState => {
-  const pendingEdits = useCallback(
+  return useCallback(
     editingState => {
       const pending = {}
       Object.keys(editingState).forEach(key => {
@@ -17,7 +17,6 @@ const usePendingEdits = initialState => {
     },
     [initialState]
   )
-  return pendingEdits
 }
 
 export default usePendingEdits
