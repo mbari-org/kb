@@ -3,7 +3,7 @@ import { use, useCallback, useContext } from "react"
 import {
   createActions,
   createEditingStateContent,
-  createTitile,
+  createTitle,
 } from "@/components/alert/components"
 
 import ModalContext from "@/contexts/modal/ModalContext"
@@ -40,7 +40,7 @@ const useDisplayEditingState = ({
     }
 
     setAlert({
-      Title: createTitile({ title: `Current Edits: ${conceptName}` }),
+      Title: createTitle({ title: `Current Edits: ${conceptName}` }),
       Content: createEditingStateContent({ pendingEdits }),
       Actions: createActions({
         choices: [DISCARD, CONTINUE],

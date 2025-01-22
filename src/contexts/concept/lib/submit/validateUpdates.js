@@ -1,7 +1,7 @@
 import {
   createActions,
   createTextContent,
-  createTitile,
+  createTitle,
 } from "@/components/alert/components"
 
 import { isAdmin } from "@/lib/auth/role"
@@ -59,7 +59,7 @@ const validateRankUpdates = async ({
   }
 
   setAlert({
-    Title: createTitile({
+    Title: createTitle({
       title: "Update Rank/Level Error",
     }),
     Content: createTextContent({ sx: { mt: 4, mb: 6 }, text }),

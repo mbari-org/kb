@@ -5,7 +5,7 @@ import ModalContext from "@/contexts/modal/ModalContext"
 import {
   createActions,
   createTextContent,
-  createTitile,
+  createTitle,
 } from "@/components/alert/components"
 
 const useProcessError = () => {
@@ -14,7 +14,7 @@ const useProcessError = () => {
   return useCallback(
     (error, onContinue) => {
       setAlert({
-        Title: createTitile({
+        Title: createTitle({
           title: "Processing Error",
           type: "error",
         }),

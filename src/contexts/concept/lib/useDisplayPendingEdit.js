@@ -3,7 +3,7 @@ import { use, useCallback } from "react"
 import {
   createActions,
   createPendingEditContent,
-  createTitile,
+  createTitle,
 } from "@/components/alert/components"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
@@ -48,7 +48,7 @@ const useDisplayPendingEdit = ({ conceptName, pendingHistory }) => {
         setAlert(null)
       }
       setAlert({
-        Title: createTitile({ title: `Concept: ${conceptName}` }),
+        Title: createTitle({ title: `Concept: ${conceptName}` }),
         Content: createPendingEditContent({
           field: fieldPendingHistory.field,
           pendingEdit,

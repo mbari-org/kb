@@ -9,7 +9,7 @@ import ConceptPendingApprovalButton from "./ConceptPendingApprovalButton"
 import {
   createConceptNameUpdateActions,
   createConceptNameUpdateContent,
-  createTitile,
+  createTitle,
 } from "@/components/alert/components"
 
 import AuthContext from "@/contexts/auth/AuthContext"
@@ -37,7 +37,7 @@ const ConceptName = () => {
 
   const editConceptName = () => {
     setAlert({
-      Title: createTitile({
+      Title: createTitle({
         title: "Update Concept Name",
       }),
       Content: createConceptNameUpdateContent(),

@@ -1,12 +1,18 @@
-import Titile from "./Title"
-
 import Actions from "./actions/Actions"
 import ConceptNameUpdateActions from "./actions/ConceptNameUpdateActions"
 
 import ConceptNameUpdateContent from "./content/ConceptNameUpdateContent"
-import PendingEditContent from "./content/PendingEditContent"
 import EditingStateContent from "./content/EditingStateContent"
+import EditMediaContent from "./content/EditMediaContent"
+import PendingEditContent from "./content/PendingEditContent"
 import TextContent from "./content/TextContent"
+import Title from "./Title"
+
+const createNamedComponent = (Component, displayName, props) => {
+  const NamedComponent = extraProps => <Component {...props} {...extraProps} />
+  NamedComponent.displayName = displayName
+  return NamedComponent
+}
 
 const createActions = props => {
   const component = () => <Actions {...props} />
@@ -21,33 +27,30 @@ const createConceptNameUpdateActions = () => {
 }
 
 const createConceptNameUpdateContent = () => {
-  const component = () => <ConceptNameUpdateContent />
-  component.displayName = "ConceptNameUpdateContent"
-  return component
-}
-
-const createTextContent = props => {
-  const component = () => <TextContent {...props} />
-  component.displayName = "TextContent"
-  return component
+  return createNamedComponent(
+    ConceptNameUpdateContent,
+    "ConceptNameUpdateContent"
+  )
 }
 
 const createEditingStateContent = props => {
-  const component = () => <EditingStateContent {...props} />
-  component.displayName = "EditingStateContent"
-  return component
+  return createNamedComponent(EditingStateContent, "EditingStateContent", props)
+}
+
+const createEditMediaContent = props => {
+  return createNamedComponent(EditMediaContent, "EditMediaContent", props)
 }
 
 const createPendingEditContent = props => {
-  const component = () => <PendingEditContent {...props} />
-  component.displayName = "PendingEditContent"
-  return component
+  return createNamedComponent(PendingEditContent, "PendingEditContent", props)
 }
 
-const createTitile = props => {
-  const component = () => <Titile {...props} />
-  component.displayName = "Titile"
-  return component
+const createTextContent = props => {
+  return createNamedComponent(TextContent, "TextContent", props)
+}
+
+const createTitle = props => {
+  return createNamedComponent(Title, "Title", props)
 }
 
 export {
@@ -55,7 +58,8 @@ export {
   createConceptNameUpdateActions,
   createConceptNameUpdateContent,
   createEditingStateContent,
+  createEditMediaContent,
   createPendingEditContent,
   createTextContent,
-  createTitile,
+  createTitle,
 }
