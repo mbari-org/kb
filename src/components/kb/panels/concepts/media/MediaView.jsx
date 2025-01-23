@@ -2,21 +2,21 @@ import { use, useEffect, useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import MediaAdd from "./actions/MediaAdd"
-import MediaDelete from "./actions/MediaDelete"
-import MediaEdit from "./actions/MediaEdit"
+import MediaAdd from "./editMedia/actions/MediaAdd"
+import MediaDelete from "./deleteMedia/MediaDelete"
+import MediaEdit from "./editMedia/actions/MediaEdit"
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import useMediaActions from "./actions/useMediaActions"
+import useMediaActions from "@/components/kb/panels/concepts/media/useMediaActions"
 
 const MediaView = ({ media, setMedia }) => {
   const theme = useTheme()
 
-  const { addMedia, deleteMedia, editMedia } = useMediaActions(setMedia)
+  const { addMedia, editMedia } = useMediaActions(setMedia)
 
   const { editing } = use(ConceptContext)
 
@@ -58,7 +58,8 @@ const MediaView = ({ media, setMedia }) => {
         )}
         {allowEditDelete && (
           <MediaDelete
-            onClick={() => deleteMedia(mediaIndex)}
+            mediaIndex={mediaIndex}
+            // onClick={() => deleteMedia(mediaIndex)}
             sx={{
               position: "absolute",
               bottom: 0,

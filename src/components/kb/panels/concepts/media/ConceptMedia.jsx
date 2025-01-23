@@ -6,8 +6,6 @@ import NoMedia from "./NoMedia"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import useMediaActions from "./actions/useMediaActions"
-
 const ConceptMedia = () => {
   const {
     editingState: { media: mediaEditingState },
@@ -33,8 +31,6 @@ const ConceptMedia = () => {
     },
     [pendingHistory]
   )
-
-  const { addMedia, deleteMedia, editMedia } = useMediaActions()
 
   useEffect(() => {
     const preppedMedia = orderedMedia.map(media => {
@@ -62,7 +58,7 @@ const ConceptMedia = () => {
         position: "relative",
       }}
     >
-      {conceptMedia?.length === 0 && <NoMedia addMedia={addMedia} />}
+      {conceptMedia?.length === 0 && <NoMedia />}
       {conceptMedia?.length > 0 && (
         <MediaView media={conceptMedia} setMedia={setConceptMedia} />
       )}

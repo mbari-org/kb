@@ -1,12 +1,15 @@
 import { use } from "react"
 import { Box, Typography } from "@mui/material"
 
-import MediaAdd from "./actions/MediaAdd"
+import MediaAdd from "./editMedia/actions/MediaAdd"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import useMediaActions from "@/components/kb/panels/concepts/media/useMediaActions"
 
-const NoMedia = ({ addMedia }) => {
+const NoMedia = () => {
   const { editing } = use(ConceptContext)
+
+  const { addMedia } = useMediaActions()
 
   return (
     <Box

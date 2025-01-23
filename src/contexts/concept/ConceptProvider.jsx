@@ -14,6 +14,7 @@ import { stateForConcept } from "./lib/stateForConcept"
 
 import useConceptPath from "./lib/useConceptPath"
 import useDisplayEditingState from "./lib/useDisplayEditingState"
+import useDisplayEditMedia from "./lib/useDisplayEditMedia"
 import useDisplayPendingField from "./lib/useDisplayPendingField"
 import usePendingEdits from "./lib/usePendingEdits"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
@@ -50,6 +51,7 @@ const ConceptProvider = ({ children }) => {
   const getPendingEdits = usePendingEdits(initialState)
 
   const displayEditingState = useDisplayEditingState()
+  const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
 
   const modifyConcept = useCallback(
@@ -167,6 +169,7 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         displayEditingState,
+        displayEditMedia,
         displayPendingField,
         editing,
         editingState,

@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import { createTextContent } from "@/components/factory"
+import DescriptionDetail from "../DescriptionDetail"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
@@ -12,11 +12,6 @@ const EditingStateContent = () => {
   const getPendingEdits = usePendingEdits(initialState)
   const pendingEdits = getPendingEdits(editingState)
 
-  const Description = createTextContent({
-    sx: { mt: 2, mb: 2 },
-    text: "You have the following unsaved edits:",
-  })
-
   const displayField = field => (field !== "" ? field : '""')
 
   const pendingEditText = field => {
@@ -27,22 +22,11 @@ const EditingStateContent = () => {
     .map(pendingEditText)
     .join("\n")
 
-  const Detail = createTextContent({
-    sx: {
-      mt: 1,
-      ml: 2,
-      mb: 8,
-      whiteSpace: "pre-wrap",
-      fontFamily: "monospace",
-    },
-    text: pendingEditsText,
-  })
-
   return (
-    <>
-      <Description id="alert-content-editing-state-description" />
-      <Detail id="alert-content-editing-state-detail" />
-    </>
+    <DescriptionDetail
+      description="You have the following unsaved edits:"
+      detail={pendingEditsText}
+    />
   )
 }
 

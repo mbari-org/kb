@@ -17,7 +17,6 @@ const ApprovalButton = ({ field }) => {
           transform: "scale(1.25)",
         },
         mb: 2,
-        marginLeft: "-8px",
         padding: 0,
       }}
       onClick={() => displayPendingField(field)}

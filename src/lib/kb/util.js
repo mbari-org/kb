@@ -12,6 +12,15 @@ const debounce = (func, delay) => {
   }
 }
 
+const dropFields = (object, fields) => {
+  return Object.keys(object).reduce((result, key) => {
+    if (!fields.includes(key)) {
+      result[key] = object[key]
+    }
+    return result
+  }, {})
+}
+
 const getFieldPendingHistory = (pendingHistory, field) => {
   const pendingField = capitalize(field)
   return pendingHistory?.find(pending => pending.field === pendingField)
@@ -101,6 +110,7 @@ const prune = obj => {
 
 export {
   debounce,
+  dropFields,
   getFieldPendingHistory,
   hasPendingHistory,
   isDeepEqual,

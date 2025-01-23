@@ -4,7 +4,7 @@ import { CiEdit } from "react-icons/ci"
 import { IconButton, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import ApprovalButton from "./ApprovalButton"
+import ApprovalButton from "@/components/kb/panels/concepts/detail/ApprovalButton"
 import EditNameActions from "@/components/kb/panels/concepts/detail/editName/EditNameActions"
 import EditNameContent from "@/components/kb/panels/concepts/detail/editName/EditNameContent"
 import EditNameTitle from "@/components/kb/panels/concepts/detail/editName/EditNameTitle"

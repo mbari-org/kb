@@ -3,7 +3,7 @@ import { use, useCallback } from "react"
 import { createAlert } from "@/components/factory"
 import PendingFieldActions from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldActions"
 import PendingFieldContent from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldContent"
-import PendingFieldTitle from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldTitile"
+import PendingFieldTitle from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldTitle"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 

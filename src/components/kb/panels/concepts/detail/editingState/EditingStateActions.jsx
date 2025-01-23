@@ -15,7 +15,7 @@ const EditingStateActions = () => {
   const { selectConcept, selectPanel } = use(SelectedContext)
 
   const colors = ["cancel", "main"]
-  const labels = [CONTINUE, DISCARD]
+  const labels = [DISCARD, CONTINUE]
 
   const onAction = label => {
     switch (label) {

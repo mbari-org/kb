@@ -3,8 +3,12 @@ import { useTheme } from "@mui/material/styles"
 
 import { MdOutlineDeleteForever } from "react-icons/md"
 
-const MediaDelete = ({ onClick }) => {
+import useMediaActions from "@/components/kb/panels/concepts/media/useMediaActions"
+
+const MediaDelete = ({ mediaIndex }) => {
   const theme = useTheme()
+
+  const { deleteMedia } = useMediaActions()
 
   return (
     <Box
@@ -21,7 +25,9 @@ const MediaDelete = ({ onClick }) => {
       }}
     >
       <IconButton
-        onClick={onClick}
+        onClick={() => {
+          deleteMedia(mediaIndex)
+        }}
         color="cancel"
         sx={{
           backgroundColor: theme.palette.background.paper,
