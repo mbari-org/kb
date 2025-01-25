@@ -2,33 +2,36 @@ import { use } from "react"
 
 import { createActions } from "@/components/factory"
 
+import ConceptContext from "@/contexts/concept/ConceptContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
+import { getFieldPendingHistory } from "@/lib/kb/util"
 import { sendPendingAction } from "@/lib/services/oni/api/history"
 
 const APPROVE = "Approve"
 const DEFER = "Defer"
 const REJECT = "Reject"
 
-const PendingFieldActions = () => {
+const PendingFieldActions = ({ field }) => {
+  const { pendingHistory } = use(ConceptContext)
   const { config } = use(ConfigContext)
   const { setAlert } = use(ModalContext)
+
+  const pendingFieldHistory = getFieldPendingHistory(pendingHistory, field)
 
   const colors = ["cancel", "main", "clean"]
   const labels = [REJECT, DEFER, APPROVE]
 
-  const fieldPendingHistory = { id: "CxInc ID" }
-
   const onAction = label => {
     switch (label) {
       case REJECT:
-        sendPendingAction(config, "reject", fieldPendingHistory.id)
+        sendPendingAction(config, "reject", pendingFieldHistory.id)
         break
       case DEFER:
         break
       case APPROVE:
-        sendPendingAction(config, "approve", fieldPendingHistory.id)
+        sendPendingAction(config, "approve", pendingFieldHistory.id)
         break
       default:
         break

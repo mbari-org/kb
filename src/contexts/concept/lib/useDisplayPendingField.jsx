@@ -13,7 +13,7 @@ const useDisplayPendingField = () => {
   return useCallback(
     field => {
       const alert = createAlert({
-        Actions: PendingFieldActions,
+        Actions: () => <PendingFieldActions field={field} />,
         Content: () => <PendingFieldContent field={field} />,
         Title: PendingFieldTitle,
       })

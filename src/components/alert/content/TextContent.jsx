@@ -6,7 +6,7 @@ const TextContent = ({ sx, text }) => {
 
   return (
     <Typography
-      id="modal-message"
+      id="text-content"
       variant="h6"
       component="h4"
       sx={{ ...sx, color: theme.palette.common.black }}

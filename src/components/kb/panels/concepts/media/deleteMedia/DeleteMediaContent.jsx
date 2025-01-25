@@ -4,7 +4,7 @@ import DescriptionDetail from "@/components/kb/panels/concepts/detail/Descriptio
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { dropFields, prettyFormat } from "@/lib/kb/util"
+import { dropFields } from "@/lib/kb/util"
 
 const DeleteMediaContent = ({ mediaIndex }) => {
   const { concept } = use(ConceptContext)
@@ -13,12 +13,7 @@ const DeleteMediaContent = ({ mediaIndex }) => {
 
   const displayValues = dropFields(mediaItem, ["conceptName", "id"])
 
-  return (
-    <DescriptionDetail
-      description="Delete Media"
-      detail={prettyFormat(displayValues)}
-    />
-  )
+  return <DescriptionDetail description="Delete Media" detail={displayValues} />
 }
 
 export default DeleteMediaContent

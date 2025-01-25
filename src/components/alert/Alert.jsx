@@ -28,7 +28,7 @@ const Alert = ({ alert }) => {
         >
           <Card sx={{ p: 2, pb: 0 }}>
             <CardHeader title={<Title />} />
-            <CardContent>
+            <CardContent sx={{ pb: 0, pt: 0 }}>
               <Content />
             </CardContent>
             <CardActions style={{ display: "flex", justifyContent: "center" }}>

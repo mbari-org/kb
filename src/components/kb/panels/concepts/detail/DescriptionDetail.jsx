@@ -1,23 +1,12 @@
-import { createTextContent } from "@/components/factory"
+import { createDetailContent, createTextContent } from "@/components/factory"
 
 const DescriptionDetail = ({ description, detail }) => {
   const Description = createTextContent({
-    sx: { mt: 2, mb: 2 },
+    sx: { mb: 1 },
     text: description,
   })
 
-  const Detail = createTextContent({
-    sx: {
-      mt: 1,
-      ml: 2,
-      mb: 4,
-      fontFamily: "monospace",
-      fontSize: "1.25rem",
-      fontWeight: 600,
-      whiteSpace: "pre-wrap",
-    },
-    text: detail,
-  })
+  const Detail = createDetailContent({ detail, sx: { ml: 1 } })
 
   return (
     <>
