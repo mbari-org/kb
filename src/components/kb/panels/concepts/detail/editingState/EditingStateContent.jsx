@@ -12,20 +12,21 @@ const EditingStateContent = () => {
   const getPendingEdits = usePendingEdits(initialState)
   const pendingEdits = getPendingEdits(editingState)
 
-  const displayField = field => (field !== "" ? field : '""')
-
-  const pendingEditText = field => {
+  const fieldDisplay = field => (field !== "" ? field : '""')
+  const pendingEditDisplay = field => {
     const { initial, pending } = pendingEdits[field]
-    return `${field}: ${displayField(initial)} --> ${displayField(pending)}`
+    return `${fieldDisplay(initial)} --> ${fieldDisplay(pending)}`
   }
-  const pendingEditsText = Object.keys(pendingEdits)
-    .map(pendingEditText)
-    .join("\n")
+
+  const pendingEditsDisplay = Object.keys(pendingEdits).reduce((acc, field) => {
+    acc[field] = pendingEditDisplay(field)
+    return acc
+  }, {})
 
   return (
     <DescriptionDetail
       description="You have the following unsaved edits:"
-      detail={pendingEditsText}
+      detail={pendingEditsDisplay}
     />
   )
 }

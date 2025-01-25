@@ -47,12 +47,10 @@ const ConceptProvider = ({ children }) => {
   const [editingState, dispatch] = useReducer(conceptStateReducer, {})
 
   const conceptPath = useConceptPath(concept)
-
-  const getPendingEdits = usePendingEdits(initialState)
-
   const displayEditingState = useDisplayEditingState()
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
+  const getPendingEdits = usePendingEdits(initialState)
 
   const modifyConcept = useCallback(
     update => {

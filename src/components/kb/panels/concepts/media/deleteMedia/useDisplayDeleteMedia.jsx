@@ -13,7 +13,7 @@ const useDisplayDeleteMedia = () => {
   return useCallback(
     mediaIndex => {
       const alert = createAlert({
-        Actions: DeleteMediaActions,
+        Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
         Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
         Title: DeleteMediaTitle,
       })
