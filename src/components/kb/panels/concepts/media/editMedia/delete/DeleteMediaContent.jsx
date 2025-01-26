@@ -11,7 +11,7 @@ const DeleteMediaContent = ({ mediaIndex }) => {
 
   const mediaItem = concept.media[mediaIndex]
 
-  const displayValues = dropFields(mediaItem, ["conceptName", "id"])
+  const displayValues = dropFields(mediaItem, ["conceptName", "id", "mimeType"])
 
   return <DescriptionDetail description="Delete Media" detail={displayValues} />
 }

@@ -8,7 +8,7 @@ import ModalContext from "@/contexts/modal/ModalContext"
 const ADD = "Add"
 const DISCARD = "Discard"
 
-const AddMediaActions = ({ mediaIndex }) => {
+const AddMediaActions = ({ mediaIndex, formRef }) => {
   const { concept } = use(ConceptContext)
   const { setAlert } = use(ModalContext)
 
@@ -17,9 +17,12 @@ const AddMediaActions = ({ mediaIndex }) => {
 
   const onAction = label => {
     if (label === ADD) {
-      console.log("Add media at index", mediaIndex)
+      if (formRef.current) {
+        formRef.current.submitForm()
+      }
+    } else {
+      setAlert(null)
     }
-    setAlert(null)
   }
 
   return createActions({ colors, labels, onAction }, "ConceptEditMediaActions")

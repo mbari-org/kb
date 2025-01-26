@@ -1,4 +1,4 @@
-import { use, useCallback } from "react"
+import { use, useCallback, useRef } from "react"
 
 import AddMediaActions from "@/components/kb/panels/concepts/media/editMedia/add/AddMediaActions"
 import AddMediaContent from "@/components/kb/panels/concepts/media/editMedia/add/AddMediaContent"
@@ -22,6 +22,7 @@ export const MEDIA_ACTIONS = {
 
 const useDisplayEditMedia = _concept => {
   const { setAlert } = use(ModalContext)
+  const formRef = useRef(null)
 
   return useCallback(
     (action, mediaIndex) => {
@@ -30,8 +31,12 @@ const useDisplayEditMedia = _concept => {
       switch (action) {
         case MEDIA_ACTIONS.ADD:
           alert = createAlert({
-            Actions: () => <AddMediaActions mediaIndex={mediaIndex} />,
-            Content: () => <AddMediaContent mediaIndex={mediaIndex} />,
+            Actions: () => (
+              <AddMediaActions mediaIndex={mediaIndex} formRef={formRef} />
+            ),
+            Content: () => (
+              <AddMediaContent mediaIndex={mediaIndex} formRef={formRef} />
+            ),
             Title: EditMediaTitle,
           })
           break

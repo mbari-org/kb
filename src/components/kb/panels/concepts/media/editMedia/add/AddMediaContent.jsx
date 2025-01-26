@@ -1,19 +1,17 @@
 import { use } from "react"
 
-import DescriptionDetail from "@/components/kb/panels/concepts/detail/DescriptionDetail"
+import EditMediaForm from "../EditMediaForm"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-// import { dropFields } from "@/lib/kb/util"
-
-const AddMediaContent = ({ mediaIndex }) => {
+const AddMediaContent = ({ mediaIndex, formRef }) => {
   const { concept } = use(ConceptContext)
 
-  // const mediaItem = concept.media[mediaIndex]
+  const onSubmit = wtf => {
+    console.log("onSubmit?", wtf)
+  }
 
-  // const displayValues = dropFields(mediaItem, ["conceptName", "id"])
-
-  return <DescriptionDetail description="Add Media" detail={{}} />
+  return <EditMediaForm mediaItem={{}} ref={formRef} onSubmit={onSubmit} />
 }
 
 export default AddMediaContent
