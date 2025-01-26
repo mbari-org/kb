@@ -5,19 +5,27 @@ import { createActions } from "@/components/factory"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-const CONTINUE = "Continue"
+const ADD = "Add"
 const DISCARD = "Discard"
+const SAVE = "Save"
 
-const EditMediaActions = () => {
-  const { _concept, initialState, resetState } = use(ConceptContext)
+const EditMediaActions = ({ mediaIndex }) => {
+  const { concept } = use(ConceptContext)
   const { setAlert } = use(ModalContext)
 
+  const existingMedia = concept.media[mediaIndex]
+
   const colors = ["cancel", "main"]
-  const labels = [DISCARD, CONTINUE]
+  const labels = [DISCARD]
+  labels.push(existingMedia ? SAVE : ADD)
 
   const onAction = label => {
-    if (label === DISCARD) {
-      resetState(initialState)
+    if (label === SAVE) {
+      if (existingMedia) {
+        console.log("Update media index", mediaIndex)
+      } else {
+        console.log("Add media at index", mediaIndex)
+      }
     }
     setAlert(null)
   }

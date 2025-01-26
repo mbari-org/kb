@@ -11,12 +11,8 @@ import MediaSwiper from "./MediaSwiper"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import useMediaActions from "@/components/kb/panels/concepts/media/useMediaActions"
-
-const MediaView = ({ media, setMedia }) => {
+const MediaView = ({ media }) => {
   const theme = useTheme()
-
-  const { addMedia, editMedia } = useMediaActions(setMedia)
 
   const { editing } = use(ConceptContext)
 
@@ -59,7 +55,6 @@ const MediaView = ({ media, setMedia }) => {
         {allowEditDelete && (
           <MediaDelete
             mediaIndex={mediaIndex}
-            // onClick={() => deleteMedia(mediaIndex)}
             sx={{
               position: "absolute",
               bottom: 0,
@@ -69,7 +64,7 @@ const MediaView = ({ media, setMedia }) => {
         )}
         {allowEditDelete && (
           <MediaEdit
-            onClick={() => editMedia(mediaIndex)}
+            mediaIndex={mediaIndex}
             sx={{
               position: "absolute",
               bottom: 0,
@@ -88,7 +83,7 @@ const MediaView = ({ media, setMedia }) => {
           <MediaAdd
             bgColor={theme.palette.background.paperLight}
             marginTop={1}
-            onClick={() => addMedia(mediaIndex)}
+            mediaIndex={mediaIndex}
           />
         )}
       </Box>

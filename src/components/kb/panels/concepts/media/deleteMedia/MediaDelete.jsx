@@ -1,14 +1,16 @@
+import { use } from "react"
 import { Box, IconButton } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import { MdOutlineDeleteForever } from "react-icons/md"
 
-import useMediaActions from "@/components/kb/panels/concepts/media/useMediaActions"
+import ConceptContext from "@/contexts/concept/ConceptContext"
+import { MEDIA_ACTIONS } from "@/contexts/concept/lib/useDisplayEditMedia"
 
 const MediaDelete = ({ mediaIndex }) => {
   const theme = useTheme()
 
-  const { deleteMedia } = useMediaActions()
+  const { displayEditMedia } = use(ConceptContext)
 
   return (
     <Box
@@ -26,7 +28,7 @@ const MediaDelete = ({ mediaIndex }) => {
     >
       <IconButton
         onClick={() => {
-          deleteMedia(mediaIndex)
+          displayEditMedia(MEDIA_ACTIONS.DELETE, mediaIndex)
         }}
         color="cancel"
         sx={{

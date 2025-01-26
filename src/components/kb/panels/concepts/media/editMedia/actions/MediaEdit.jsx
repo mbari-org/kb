@@ -1,10 +1,16 @@
+import { use } from "react"
 import { Box, IconButton } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import { CiEdit } from "react-icons/ci"
 
-const MediaEdit = ({ onClick }) => {
+import ConceptContext from "@/contexts/concept/ConceptContext"
+import { MEDIA_ACTIONS } from "@/contexts/concept/lib/useDisplayEditMedia"
+
+const MediaEdit = ({ mediaIndex }) => {
   const theme = useTheme()
+
+  const { displayEditMedia } = use(ConceptContext)
 
   return (
     <Box
@@ -21,7 +27,7 @@ const MediaEdit = ({ onClick }) => {
       }}
     >
       <IconButton
-        onClick={onClick}
+        onClick={() => displayEditMedia(MEDIA_ACTIONS.EDIT, mediaIndex)}
         color="main"
         sx={{
           backgroundColor: theme.palette.background.paper,

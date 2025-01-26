@@ -1,8 +1,14 @@
+import { use } from "react"
 import { Box, IconButton } from "@mui/material"
 
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
 
-const MediaAdd = ({ bgColor, marginTop, onClick }) => {
+import ConceptContext from "@/contexts/concept/ConceptContext"
+import { MEDIA_ACTIONS } from "@/contexts/concept/lib/useDisplayEditMedia"
+
+const MediaAdd = ({ bgColor, marginTop, mediaIndex }) => {
+  const { displayEditMedia } = use(ConceptContext)
+
   return (
     <Box
       sx={{
@@ -15,7 +21,7 @@ const MediaAdd = ({ bgColor, marginTop, onClick }) => {
       }}
     >
       <IconButton
-        onClick={onClick}
+        onClick={() => displayEditMedia(MEDIA_ACTIONS.ADD, mediaIndex)}
         color="main"
         sx={{
           backgroundColor: bgColor,

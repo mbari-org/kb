@@ -4,12 +4,9 @@ import { Box, Typography } from "@mui/material"
 import MediaAdd from "./editMedia/actions/MediaAdd"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import useMediaActions from "@/components/kb/panels/concepts/media/useMediaActions"
 
 const NoMedia = () => {
   const { editing } = use(ConceptContext)
-
-  const { addMedia } = useMediaActions()
 
   return (
     <Box
@@ -43,7 +40,7 @@ const NoMedia = () => {
         No Media
       </Typography>
       {editing && (
-        <MediaAdd bgColor="transparent" marginTop={10} onClick={addMedia} />
+        <MediaAdd bgColor="transparent" marginTop={10} mediaIndex={0} />
       )}
     </Box>
   )
