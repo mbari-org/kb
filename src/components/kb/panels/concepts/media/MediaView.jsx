@@ -2,9 +2,9 @@ import { use, useEffect, useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import MediaAdd from "./editMedia/actions/MediaAdd"
-import MediaDelete from "./deleteMedia/MediaDelete"
-import MediaEdit from "./editMedia/actions/MediaEdit"
+import MediaAdd from "./editMedia/add/MediaAdd"
+import MediaDelete from "./editMedia/delete/MediaDelete"
+import MediaEdit from "./editMedia/edit/MediaEdit"
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
@@ -82,8 +82,21 @@ const MediaView = ({ media }) => {
         {editing && (
           <MediaAdd
             bgColor={theme.palette.background.paperLight}
-            marginTop={1}
-            mediaIndex={mediaIndex}
+            mediaIndex={mediaIndex - 1}
+            sx={{
+              ml: -10,
+              mt: 1,
+            }}
+          />
+        )}
+        {editing && (
+          <MediaAdd
+            bgColor={theme.palette.background.paperLight}
+            mediaIndex={mediaIndex + 1}
+            sx={{
+              ml: 10,
+              mt: 1,
+            }}
           />
         )}
       </Box>

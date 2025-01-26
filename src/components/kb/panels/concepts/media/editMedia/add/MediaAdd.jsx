@@ -6,14 +6,14 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import { MEDIA_ACTIONS } from "@/contexts/concept/lib/useDisplayEditMedia"
 
-const MediaAdd = ({ bgColor, marginTop, mediaIndex }) => {
+const MediaAdd = ({ bgColor, mediaIndex, sx }) => {
   const { displayEditMedia } = use(ConceptContext)
 
   return (
     <Box
       sx={{
+        ...sx,
         left: "50%",
-        marginTop: marginTop,
         position: "absolute",
         top: 0,
         transform: "translateX(-50%)",

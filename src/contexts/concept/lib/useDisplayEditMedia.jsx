@@ -1,11 +1,13 @@
 import { use, useCallback } from "react"
 
-import DeleteMediaActions from "@/components/kb/panels/concepts/media/deleteMedia/DeleteMediaActions"
-import DeleteMediaContent from "@/components/kb/panels/concepts/media/deleteMedia/DeleteMediaContent"
-import DeleteMediaTitle from "@/components/kb/panels/concepts/media/deleteMedia/DeleteMediaTitle"
+import AddMediaActions from "@/components/kb/panels/concepts/media/editMedia/add/AddMediaActions"
+import AddMediaContent from "@/components/kb/panels/concepts/media/editMedia/add/AddMediaContent"
 
-import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/EditMediaActions"
-import EditMediaContent from "@/components/kb/panels/concepts/media/editMedia/EditMediaContent"
+import DeleteMediaActions from "@/components/kb/panels/concepts/media/editMedia/delete/DeleteMediaActions"
+import DeleteMediaContent from "@/components/kb/panels/concepts/media/editMedia/delete/DeleteMediaContent"
+
+import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/edit/EditMediaActions"
+import EditMediaContent from "@/components/kb/panels/concepts/media/editMedia/edit/EditMediaContent"
 import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/EditMediaTitle"
 
 import { createAlert } from "@/components/factory"
@@ -18,7 +20,7 @@ export const MEDIA_ACTIONS = {
   EDIT: "Edit",
 }
 
-const useDisplayEditMedia = () => {
+const useDisplayEditMedia = _concept => {
   const { setAlert } = use(ModalContext)
 
   return useCallback(
@@ -28,8 +30,8 @@ const useDisplayEditMedia = () => {
       switch (action) {
         case MEDIA_ACTIONS.ADD:
           alert = createAlert({
-            Actions: () => <EditMediaActions mediaIndex={mediaIndex} />,
-            Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
+            Actions: () => <AddMediaActions mediaIndex={mediaIndex} />,
+            Content: () => <AddMediaContent mediaIndex={mediaIndex} />,
             Title: EditMediaTitle,
           })
           break
@@ -37,11 +39,11 @@ const useDisplayEditMedia = () => {
           alert = createAlert({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
-            Title: DeleteMediaTitle,
+            Title: EditMediaTitle,
           })
 
           break
-        case MEDIA_ACTIONS.EDIT:
+        case MEDIA_ACTIONS.EDIT: {
           alert = createAlert({
             Actions: () => <EditMediaActions mediaIndex={mediaIndex} />,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
@@ -49,6 +51,7 @@ const useDisplayEditMedia = () => {
           })
 
           break
+        }
       }
 
       setAlert(alert)
