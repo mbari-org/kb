@@ -11,6 +11,7 @@ import {
   getConceptNames as getTaxonomyConceptNames,
   getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
+  getRanks as getTaxonomyRanks,
   load,
   loadTaxonomy,
   loadDescendants,
@@ -45,6 +46,11 @@ const TaxonomyProvider = ({ children }) => {
 
   const getConceptPrimaryName = useCallback(
     conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
+    [taxonomy]
+  )
+
+  const getRanks = useCallback(
+    rankType => getTaxonomyRanks(taxonomy, rankType),
     [taxonomy]
   )
 
@@ -132,6 +138,7 @@ const TaxonomyProvider = ({ children }) => {
         getConceptNames,
         getConceptPendingHistory,
         getConceptPrimaryName,
+        getRanks,
         loadConcept,
         loadConceptDescendants,
         taxonomy,

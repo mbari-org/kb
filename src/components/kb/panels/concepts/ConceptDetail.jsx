@@ -1,12 +1,17 @@
+import { use } from "react"
 import { Stack } from "@mui/material"
 
 import ConceptAuthor from "./detail/ConceptAuthor"
 import ConceptName from "./detail/ConceptName"
 import ConceptRank from "./detail/ConceptRank"
 
-import { RANK_LEVEL, RANK_LEVELS, RANK_NAME, RANK_NAMES } from "./detail/rank"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+
+import { RANK } from "@/lib/kb/taxonomy"
 
 const ConceptDetail = () => {
+  const { getRanks } = use(TaxonomyContext)
+
   return (
     <Stack
       direction="column"
@@ -16,8 +21,8 @@ const ConceptDetail = () => {
       <ConceptName />
       <ConceptAuthor />
       <Stack direction="row" spacing={2}>
-        <ConceptRank field={RANK_NAME} options={RANK_NAMES} />
-        <ConceptRank field={RANK_LEVEL} options={RANK_LEVELS} />
+        <ConceptRank field={RANK.LEVEL} options={getRanks(RANK.LEVEL)} />
+        <ConceptRank field={RANK.NAME} options={getRanks(RANK.NAME)} />
       </Stack>
     </Stack>
   )

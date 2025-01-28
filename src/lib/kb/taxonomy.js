@@ -5,9 +5,18 @@ import {
 } from "@/lib/services/oni/api/concept"
 
 import { fetchHistory } from "@/lib/services/oni/api/history"
-import { fetchNames, fetchRoot } from "@/lib/services/oni/api/taxonomy"
+import {
+  fetchNames,
+  fetchRanks,
+  fetchRoot,
+} from "@/lib/services/oni/api/taxonomy"
 
 import selectedStore from "@/lib/store/selected"
+
+const RANK = {
+  LEVEL: "rankLevel",
+  NAME: "rankName",
+}
 
 const apiCall = async fetchFn => {
   const { error, payload } = await fetchFn()
@@ -77,6 +86,14 @@ const getPrevSibling = concept => {
   return null
 }
 
+const getRanks = (taxonomy, rankType) => {
+  if (!rankType) {
+    return taxonomy.ranks
+  }
+  const rankValues = taxonomy.ranks.map(rank => rank[rankType])
+  return [...new Set(rankValues)]
+}
+
 const fetchTaxonomyHistory = async config => {
   const approvedHistory = await apiCall(() => fetchHistory(config, "approved"))
   const pendingHistory = await apiCall(() => fetchHistory(config, "pending"))
@@ -89,6 +106,7 @@ const fetchTaxonomyHistory = async config => {
 const loadTaxonomy = async config => {
   const root = await apiCall(() => fetchRoot(config))
   const names = await apiCall(() => fetchNames(config))
+  const ranks = await apiCall(() => fetchRanks(config))
   const { approvedHistory, pendingHistory } = await fetchTaxonomyHistory(config)
 
   const aliases = root.alternateNames.reduce((acc, name) => {
@@ -102,6 +120,7 @@ const loadTaxonomy = async config => {
     config,
     names,
     pendingHistory,
+    ranks,
     root,
     concepts: { [root.name]: root },
   }
@@ -365,10 +384,12 @@ export {
   getConceptPrimaryName,
   getNextSibling,
   getPrevSibling,
+  getRanks,
   load,
   loadDescendants,
   loadTaxonomy,
   needsUpdate,
+  RANK,
   updateConcept,
   updateConceptName,
 }
