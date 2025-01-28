@@ -4,6 +4,7 @@ import { Box, MenuItem, Select, FormControl, InputLabel } from "@mui/material"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import useConceptDetailStyle from "./useConceptDetailStyle"
 import ApprovalButton from "./ApprovalButton"
@@ -13,10 +14,12 @@ import { hasPendingHistory } from "@/lib/kb/util"
 
 const RANK_REMOVE_VALUE = "REMOVE"
 
-const ConceptRank = ({ field, options }) => {
+const ConceptRank = ({ field }) => {
   const { user } = use(AuthContext)
   const { editingState, editing, pendingHistory, modifyConcept } =
     use(ConceptContext)
+  const { getRanks } = use(TaxonomyContext)
+  const options = getRanks(field)
 
   // REMOVE_RANK_LEVEL is the Select option value, whereas the actual "removal" value is an empty string
   const rankValue = value => (value !== RANK_REMOVE_VALUE ? value : "")

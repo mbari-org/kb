@@ -10,7 +10,7 @@ import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/ed
 import EditMediaContent from "@/components/kb/panels/concepts/media/editMedia/edit/EditMediaContent"
 import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/EditMediaTitle"
 
-import { createAlert } from "@/components/factory"
+import { createAlert } from "@/components/kb/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 

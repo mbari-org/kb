@@ -8,7 +8,7 @@ import ApprovalButton from "@/components/kb/panels/concepts/detail/ApprovalButto
 import EditNameActions from "@/components/kb/panels/concepts/detail/editName/EditNameActions"
 import EditNameContent from "@/components/kb/panels/concepts/detail/editName/EditNameContent"
 import EditNameTitle from "@/components/kb/panels/concepts/detail/editName/EditNameTitle"
-import { createAlert } from "@/components/factory"
+import { createAlert } from "@/components/kb/factory"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"

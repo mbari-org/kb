@@ -1,4 +1,4 @@
-import { createDetailContent, createTextContent } from "@/components/factory"
+import { createDetailContent, createTextContent } from "@/components/kb/factory"
 
 const DescriptionDetail = ({ description, detail }) => {
   const Description = createTextContent({

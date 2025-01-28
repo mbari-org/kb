@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import { createActions } from "@/components/factory"
+import { createActions } from "@/components/kb/factory"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ConfigContext from "@/contexts/config/ConfigContext"

@@ -1,6 +1,6 @@
 import { use, useCallback } from "react"
 
-import { createAlert } from "@/components/factory"
+import { createAlert } from "@/components/kb/factory"
 import EditingStateActions from "@/components/kb/panels/concepts/detail/editingState/EditingStateActions"
 import EditingStateContent from "@/components/kb/panels/concepts/detail/editingState/EditingStateContent"
 import EditingStateTitle from "@/components/kb/panels/concepts/detail/editingState/EditingStateTitle"

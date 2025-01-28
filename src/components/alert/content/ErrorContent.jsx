@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import { createTextContent } from "@/components/factory"
+import { createTextContent } from "@/components/kb/factory"
 
 const ErrorContent = ({ error }) => {
   const theme = useTheme()
@@ -20,7 +20,7 @@ const ErrorContent = ({ error }) => {
         component="h3"
         sx={{ color: theme.palette.common.black, mt: 2 }}
       >
-        {error.detail}
+        {error.url}
       </Typography>
     </>
   )

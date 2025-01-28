@@ -133,7 +133,7 @@ const useSubmitUpdates = ({
       case "Cancel":
         resetState(initialState)
         break
-      case "Info":
+      case "Detail":
         submitDetailUpdates(updates)
         break
       case "Name Only":

@@ -1,5 +1,5 @@
 import Actions from "@/components/alert/actions/Actions"
-import DetailContent from "./alert/content/DetailContent"
+import DetailContent from "../alert/content/DetailContent"
 import TextContent from "@/components/alert/content/TextContent"
 import Title from "@/components/alert/Title"
 

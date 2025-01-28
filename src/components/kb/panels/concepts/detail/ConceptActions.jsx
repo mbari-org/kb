@@ -39,7 +39,7 @@ const ConceptActions = () => {
       )}
       <Button
         disabled={!editing || !modified}
-        onClick={() => processUpdates("Info")}
+        onClick={() => processUpdates("Detail")}
         variant="contained"
       >
         Save

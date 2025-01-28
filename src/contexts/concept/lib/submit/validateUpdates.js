@@ -2,7 +2,7 @@ import {
   createActions,
   createTextContent,
   createTitle,
-} from "@/components/factory"
+} from "@/components/kb/factory"
 
 import { isAdmin } from "@/lib/auth/role"
 
