@@ -20,7 +20,7 @@ export const MEDIA_ACTIONS = {
   EDIT: "Edit",
 }
 
-const useDisplayEditMedia = _concept => {
+const useDisplayEditMedia = () => {
   const { setAlert } = use(ModalContext)
   const formRef = useRef(null)
 

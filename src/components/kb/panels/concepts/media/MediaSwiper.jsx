@@ -18,26 +18,24 @@ const MediaSwiper = ({ height, media, setMediaIndex }) => {
   }
 
   return (
-    <>
-      <Swiper
-        centeredSlides={true}
-        initialSlide={0}
-        modules={[Pagination]}
-        onSlideChange={change => setMediaIndex(change.snapIndex)}
-        pagination={pagination}
-        slidesPerView={3}
-        style={{
-          height,
-          overflow: "hidden",
-        }}
-      >
-        {media.map((slide, index) => (
-          <SwiperSlide key={`concept-media-${index}`}>
-            <MediaSwiperSlide index={index} slide={slide} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </>
+    <Swiper
+      centeredSlides={true}
+      initialSlide={0}
+      modules={[Pagination]}
+      onSlideChange={change => setMediaIndex(change.snapIndex)}
+      pagination={pagination}
+      slidesPerView={3}
+      style={{
+        height,
+        overflow: "hidden",
+      }}
+    >
+      {media.map((slide, index) => (
+        <SwiperSlide key={`concept-media-${index}`}>
+          <MediaSwiperSlide index={index} slide={slide} />
+        </SwiperSlide>
+      ))}
+    </Swiper>
   )
 }
 

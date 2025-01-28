@@ -6,6 +6,7 @@ import TaxonomyContext from "./TaxonomyContext"
 
 import ConfigContext from "@/contexts/config/ConfigContext"
 
+import { needsUpdate } from "@/lib/kb/concept"
 import {
   getConcept as getTaxonomyConcept,
   getConceptNames as getTaxonomyConceptNames,
@@ -15,7 +16,6 @@ import {
   load,
   loadTaxonomy,
   loadDescendants,
-  needsUpdate,
   updateConcept as updateTaxonomyConcept,
   updateConceptName as updateTaxonomyConceptName,
 } from "@/lib/kb/taxonomy"

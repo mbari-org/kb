@@ -6,6 +6,8 @@ import NoMedia from "./NoMedia"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
+import { getPrimary } from "@/lib/kb/media"
+
 const ConceptMedia = () => {
   const {
     editingState: { media: mediaEditingState },
@@ -15,9 +17,11 @@ const ConceptMedia = () => {
   const [conceptMedia, setConceptMedia] = useState(null)
 
   const orderedMedia = useMemo(() => {
-    const primaryMedia = mediaEditingState.filter(media => media.isPrimary)
-    const otherMedia = mediaEditingState.filter(media => !media.isPrimary)
-    return [...primaryMedia, ...otherMedia]
+    const primaryMedia = getPrimary(mediaEditingState)
+    const otherMedia = mediaEditingState.filter(
+      mediaItem => mediaItem.url !== primaryMedia.url
+    )
+    return [primaryMedia, ...otherMedia]
   }, [mediaEditingState])
 
   const isPendingMedia = useCallback(
@@ -33,14 +37,14 @@ const ConceptMedia = () => {
   )
 
   useEffect(() => {
-    const preppedMedia = orderedMedia.map(media => {
+    const preppedMedia = orderedMedia.map(mediaItem => {
       let action = "None"
-      if (isPendingMedia("DELETE", "oldValue", media.url)) {
+      if (isPendingMedia("DELETE", "oldValue", mediaItem.url)) {
         action = "Delete"
-      } else if (isPendingMedia("ADD", "newValue", media.url)) {
+      } else if (isPendingMedia("ADD", "newValue", mediaItem.url)) {
         action = "Add"
       }
-      return { ...media, action }
+      return { ...mediaItem, action }
     })
     const timer = setTimeout(() => {
       setConceptMedia(preppedMedia)
@@ -60,7 +64,8 @@ const ConceptMedia = () => {
     >
       {conceptMedia?.length === 0 && <NoMedia />}
       {conceptMedia?.length > 0 && (
-        <MediaView media={conceptMedia} setMedia={setConceptMedia} />
+        <MediaView media={conceptMedia} />
+        // <MediaView media={conceptMedia} setMedia={setConceptMedia} />
       )}
     </Box>
   )

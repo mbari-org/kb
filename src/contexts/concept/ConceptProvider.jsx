@@ -48,7 +48,7 @@ const ConceptProvider = ({ children }) => {
 
   const conceptPath = useConceptPath(concept)
   const displayEditingState = useDisplayEditingState()
-  const displayEditMedia = useDisplayEditMedia(concept)
+  const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
   const getPendingEdits = usePendingEdits(initialState)
 

@@ -7,9 +7,9 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import { dropFields } from "@/lib/kb/util"
 
 const DeleteMediaContent = ({ mediaIndex }) => {
-  const { concept } = use(ConceptContext)
+  const { editingState } = use(ConceptContext)
 
-  const mediaItem = concept.media[mediaIndex]
+  const mediaItem = editingState.media[mediaIndex]
 
   const displayValues = dropFields(mediaItem, ["conceptName", "id", "mimeType"])
 

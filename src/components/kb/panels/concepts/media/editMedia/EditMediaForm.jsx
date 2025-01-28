@@ -8,7 +8,7 @@ import {
 } from "@mui/material"
 
 const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
-  const [editingState, setEditingState] = useState({
+  const [editingMediaState, setEditingMediaState] = useState({
     caption: mediaItem.caption || "",
     credit: mediaItem.credit || "",
     url: mediaItem.url || "",
@@ -19,15 +19,15 @@ const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target
-    setEditingState({
-      ...editingState,
+    setEditingMediaState({
+      ...editingMediaState,
       [name]: type === "checkbox" ? checked : value,
     })
   }
 
   const handleSubmit = e => {
     e.preventDefault()
-    onSubmit(editingState)
+    onSubmit(editingMediaState)
   }
 
   useImperativeHandle(ref, () => ({
@@ -44,7 +44,7 @@ const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
         <TextField
           label="Caption"
           name="caption"
-          value={editingState.caption}
+          value={editingMediaState.caption}
           onChange={handleChange}
           required
         />
@@ -53,7 +53,7 @@ const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
         <TextField
           label="Credit"
           name="credit"
-          value={editingState.credit}
+          value={editingMediaState.credit}
           onChange={handleChange}
           required
         />
@@ -62,7 +62,7 @@ const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
         <TextField
           label="URL"
           name="url"
-          value={editingState.url}
+          value={editingMediaState.url}
           onChange={handleChange}
           required
         />
@@ -71,7 +71,7 @@ const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
         control={
           <Checkbox
             name="isPrimary"
-            checked={editingState.isPrimary}
+            checked={editingMediaState.isPrimary}
             onChange={handleChange}
           />
         }

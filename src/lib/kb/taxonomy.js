@@ -13,6 +13,8 @@ import {
 
 import selectedStore from "@/lib/store/selected"
 
+import { needsUpdate } from "./concept"
+
 const RANK = {
   LEVEL: "rankLevel",
   NAME: "rankName",
@@ -53,37 +55,6 @@ const getConceptPendingHistory = (taxonomy, conceptName) => {
 const getConceptPrimaryName = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return concept?.name
-}
-
-const getNextSibling = concept => {
-  if (concept && concept.parent) {
-    const siblings = concept.parent.children
-    const currentIndex = siblings.findIndex(
-      sibling => sibling.name === concept.name
-    )
-
-    if (currentIndex !== -1 && currentIndex < siblings.length - 1) {
-      return siblings[currentIndex + 1]
-    }
-  }
-  return null
-}
-
-const getPrevSibling = concept => {
-  const { parent } = concept
-
-  if (parent) {
-    const siblings = parent.children
-    const currentIndex = siblings.findIndex(
-      sibling => sibling.name === concept.name
-    )
-
-    if (currentIndex > 0) {
-      return siblings[currentIndex - 1]
-    }
-  }
-
-  return null
 }
 
 const getRanks = (taxonomy, rankType) => {
@@ -268,15 +239,6 @@ const loadParent = async (updatableTaxonomy, updatableConcept) => {
   await loadChildren(updatableTaxonomy, updatableParent)
 }
 
-const needsUpdate = concept => {
-  return (
-    !concept ||
-    !concept.children ||
-    !concept.parent ||
-    concept.children.some(child => !child.children)
-  )
-}
-
 const addConcept = async (updatableTaxonomy, updatableConcept) => {
   updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
 
@@ -382,13 +344,10 @@ export {
   getConceptNames,
   getConceptPendingHistory,
   getConceptPrimaryName,
-  getNextSibling,
-  getPrevSibling,
   getRanks,
   load,
   loadDescendants,
   loadTaxonomy,
-  needsUpdate,
   RANK,
   updateConcept,
   updateConceptName,
