@@ -21,6 +21,7 @@ const useSubmitUpdates = ({
   initialState,
   modified,
   modifyConcept,
+  ranks,
   resetState,
   selectConcept,
   setAlert,
@@ -41,6 +42,7 @@ const useSubmitUpdates = ({
       validateUpdates({
         concept,
         modifyConcept,
+        ranks,
         setAlert,
         updates,
         user,
@@ -69,16 +71,17 @@ const useSubmitUpdates = ({
     },
     [
       concept,
-      config,
       modifyConcept,
-      onContinue,
-      processError,
-      resetState,
+      ranks,
       setAlert,
-      showBoundary,
-      updateConcept,
-      editingState,
       user,
+      config,
+      updateConcept,
+      processError,
+      onContinue,
+      resetState,
+      editingState,
+      showBoundary,
     ]
   )
 

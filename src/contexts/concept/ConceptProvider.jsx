@@ -31,6 +31,7 @@ const ConceptProvider = ({ children }) => {
   const {
     getConcept,
     getConceptPendingHistory,
+    getRanks,
     loadConcept,
     taxonomy,
     updateConcept,
@@ -81,6 +82,7 @@ const ConceptProvider = ({ children }) => {
     initialState,
     modified,
     modifyConcept,
+    ranks: getRanks(),
     resetState,
     selectConcept,
     setAlert,
