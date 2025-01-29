@@ -29,9 +29,9 @@ const ConceptProvider = ({ children }) => {
   const { alert, setAlert } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
+    filterRanks,
     getConcept,
     getConceptPendingHistory,
-    getRanks,
     loadConcept,
     taxonomy,
     updateConcept,
@@ -82,7 +82,7 @@ const ConceptProvider = ({ children }) => {
     initialState,
     modified,
     modifyConcept,
-    ranks: getRanks(),
+    ranks: filterRanks(),
     resetState,
     selectConcept,
     setAlert,

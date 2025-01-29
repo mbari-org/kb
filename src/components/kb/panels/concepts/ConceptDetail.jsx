@@ -5,9 +5,15 @@ import ConceptAuthor from "./detail/ConceptAuthor"
 import ConceptName from "./detail/ConceptName"
 import ConceptRank from "./detail/ConceptRank"
 
-import { RANK } from "@/lib/kb/taxonomy"
+import { RANK } from "@/lib/kb/concept/rank"
+
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const ConceptDetail = () => {
+  const { editingState, initialState } = use(ConceptContext)
+  const levelValue = editingState[RANK.LEVEL] || initialState[RANK.LEVEL]
+  const nameValue = editingState[RANK.NAME] || initialState[RANK.NAME]
+
   return (
     <Stack
       direction="column"
@@ -17,8 +23,8 @@ const ConceptDetail = () => {
       <ConceptName />
       <ConceptAuthor />
       <Stack direction="row" spacing={2}>
-        <ConceptRank field={RANK.LEVEL} />
-        <ConceptRank field={RANK.NAME} />
+        <ConceptRank field={RANK.NAME} otherValue={levelValue} />
+        <ConceptRank field={RANK.LEVEL} otherValue={nameValue} />
       </Stack>
     </Stack>
   )

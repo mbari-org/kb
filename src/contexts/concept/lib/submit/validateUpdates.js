@@ -9,27 +9,10 @@ import { isAdmin } from "@/lib/auth/role"
 const validateRankUpdates = async ({
   concept,
   modifyConcept,
-  ranks,
   setAlert,
   updates,
   user,
 }) => {
-  const rank = {
-    level: updates.rankLevel || concept.rankLevel,
-    name: updates.rankName || concept.rankName,
-  }
-
-  // Check if the rank object is in ranks
-  const rankExists = ranks.some(
-    r => r.level === rank.level && r.name === rank.name
-  )
-  if (!rankExists) {
-    return {
-      rankLevel: false,
-      rankName: false,
-    }
-  }
-
   let validation = {
     rankLevel: true,
     rankName: true,
@@ -84,7 +67,7 @@ const validateRankUpdates = async ({
       choices,
       colors: ["cancel"],
       onChoice,
-    }),
+    })(),
   })
 
   return promise

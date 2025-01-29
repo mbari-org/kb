@@ -6,7 +6,7 @@ import NoMedia from "./NoMedia"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { getPrimary } from "@/lib/kb/media"
+import { getPrimary } from "@/lib/kb/concept/media"
 
 const ConceptMedia = () => {
   const {

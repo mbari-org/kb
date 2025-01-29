@@ -14,11 +14,7 @@ import {
 import selectedStore from "@/lib/store/selected"
 
 import { needsUpdate } from "./concept"
-
-const RANK = {
-  LEVEL: "rankLevel",
-  NAME: "rankName",
-}
+import { filterRanks } from "./concept/rank"
 
 const apiCall = async fetchFn => {
   const { error, payload } = await fetchFn()
@@ -57,13 +53,8 @@ const getConceptPrimaryName = (taxonomy, conceptName) => {
   return concept?.name
 }
 
-const getRanks = (taxonomy, rankType) => {
-  if (!rankType) {
-    return taxonomy.ranks
-  }
-  const rankValues = taxonomy.ranks.map(rank => rank[rankType])
-  return [...new Set(rankValues)]
-}
+const filterTaxonomyRanks = (taxonomy, field, otherValue) =>
+  filterRanks(taxonomy.ranks, field, otherValue)
 
 const fetchTaxonomyHistory = async config => {
   const approvedHistory = await apiCall(() => fetchHistory(config, "approved"))
@@ -252,19 +243,19 @@ const addConcept = async (updatableTaxonomy, updatableConcept) => {
   }
 }
 
-const refreshHistory = async taxonomy => {
-  const approvedHistory = await apiCall(() =>
-    fetchHistory(taxonomy.config, "approved")
-  )
-  const pendingHistory = await apiCall(() =>
-    fetchHistory(taxonomy.config, "pending")
-  )
-  return {
-    ...taxonomy,
-    approvedHistory,
-    pendingHistory,
-  }
-}
+// const refreshHistory = async taxonomy => {
+//   const approvedHistory = await apiCall(() =>
+//     fetchHistory(taxonomy.config, "approved")
+//   )
+//   const pendingHistory = await apiCall(() =>
+//     fetchHistory(taxonomy.config, "pending")
+//   )
+//   return {
+//     ...taxonomy,
+//     approvedHistory,
+//     pendingHistory,
+//   }
+// }
 
 const updateConcept = async (taxonomy, concept) => {
   const updatedConcepts = { ...taxonomy.concepts }
@@ -340,15 +331,14 @@ const updateConceptName = async (taxonomy, concept, newName) => {
 }
 
 export {
+  filterTaxonomyRanks,
   getConcept,
   getConceptNames,
   getConceptPendingHistory,
   getConceptPrimaryName,
-  getRanks,
   load,
   loadDescendants,
   loadTaxonomy,
-  RANK,
   updateConcept,
   updateConceptName,
 }

@@ -12,18 +12,13 @@ import ApprovalButton from "./ApprovalButton"
 import { isAdmin } from "@/lib/auth/role"
 import { hasPendingHistory } from "@/lib/kb/util"
 
-const RANK_REMOVE_VALUE = "REMOVE"
-
-const ConceptRank = ({ field }) => {
+const ConceptRank = ({ field, otherValue }) => {
   const { user } = use(AuthContext)
   const { editingState, editing, pendingHistory, modifyConcept } =
     use(ConceptContext)
-  const { getRanks } = use(TaxonomyContext)
-  const options = getRanks(field)
+  const { filterRanks } = use(TaxonomyContext)
 
-  // REMOVE_RANK_LEVEL is the Select option value, whereas the actual "removal" value is an empty string
-  const rankValue = value => (value !== RANK_REMOVE_VALUE ? value : "")
-
+  const rankOptions = filterRanks(field, otherValue)
   const fieldValue = editingState[field]
   const label = field === "rankName" ? "Rank" : "Level"
 
@@ -39,21 +34,14 @@ const ConceptRank = ({ field }) => {
           <InputLabel>{label}</InputLabel>
           <Select
             displayEmpty
-            onChange={e =>
-              modifyConcept({ [field]: rankValue(e.target.value) })
-            }
-            value={rankValue(fieldValue)}
+            onChange={e => modifyConcept({ [field]: e.target.value })}
+            value={fieldValue}
           >
-            {options.map(option => (
-              <MenuItem key={option} value={option}>
+            {rankOptions.map(option => (
+              <MenuItem key={option} sx={{ height: "1.75em" }} value={option}>
                 {option}
               </MenuItem>
             ))}
-            {fieldValue !== "" && (
-              <MenuItem key={RANK_REMOVE_VALUE} value={RANK_REMOVE_VALUE}>
-                {RANK_REMOVE_VALUE}
-              </MenuItem>
-            )}
           </Select>
         </Box>
         {showApprovalButton && <ApprovalButton field={field} />}

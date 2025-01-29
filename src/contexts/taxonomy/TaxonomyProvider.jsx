@@ -12,7 +12,7 @@ import {
   getConceptNames as getTaxonomyConceptNames,
   getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
-  getRanks as getTaxonomyRanks,
+  filterTaxonomyRanks,
   load,
   loadTaxonomy,
   loadDescendants,
@@ -28,6 +28,11 @@ const TaxonomyProvider = ({ children }) => {
 
   const [taxonomy, setTaxonomy] = useState(null)
   const initialLoad = useRef(true)
+
+  const filterRanks = useCallback(
+    (field, otherValue) => filterTaxonomyRanks(taxonomy, field, otherValue),
+    [taxonomy]
+  )
 
   const getConcept = useCallback(
     conceptName => getTaxonomyConcept(taxonomy, conceptName),
@@ -46,11 +51,6 @@ const TaxonomyProvider = ({ children }) => {
 
   const getConceptPrimaryName = useCallback(
     conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
-    [taxonomy]
-  )
-
-  const getRanks = useCallback(
-    rankType => getTaxonomyRanks(taxonomy, rankType),
     [taxonomy]
   )
 
@@ -134,11 +134,11 @@ const TaxonomyProvider = ({ children }) => {
   return (
     <TaxonomyContext
       value={{
+        filterRanks,
         getConcept,
         getConceptNames,
         getConceptPendingHistory,
         getConceptPrimaryName,
-        getRanks,
         loadConcept,
         loadConceptDescendants,
         taxonomy,

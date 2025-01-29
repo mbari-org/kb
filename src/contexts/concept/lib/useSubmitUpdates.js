@@ -32,7 +32,8 @@ const useSubmitUpdates = ({
   const { user } = use(AuthContext)
 
   const processError = useProcessError()
-  const onContinue = useCallback(
+
+  const onAction = useCallback(
     () => resetState(initialState),
     [initialState, resetState]
   )
@@ -56,7 +57,7 @@ const useSubmitUpdates = ({
           }).then(
             ({ error, updatedConcept }) => {
               if (error) {
-                processError(error, onContinue)
+                processError(error)
                 return
               }
               updateConcept(updatedConcept).then(
@@ -78,7 +79,6 @@ const useSubmitUpdates = ({
       config,
       updateConcept,
       processError,
-      onContinue,
       resetState,
       editingState,
       showBoundary,
@@ -90,7 +90,7 @@ const useSubmitUpdates = ({
       nameUpdates({ concept, config, extent, updates }).then(
         ({ error, updatedName }) => {
           if (error) {
-            processError(error, onContinue)
+            processError(error, onAction)
             return
           }
           updateConceptName(concept, updatedName).then(
@@ -107,7 +107,7 @@ const useSubmitUpdates = ({
     [
       concept,
       config,
-      onContinue,
+      onAction,
       processError,
       resetState,
       selectConcept,
