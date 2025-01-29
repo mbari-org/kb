@@ -4,24 +4,12 @@ import DescriptionDetail from "../DescriptionDetail"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import usePendingEdits from "@/contexts/concept/lib/usePendingEdits"
+import { editsDisplay } from "@/lib/kb/util"
 
 const EditingStateContent = () => {
   const { editingState, initialState } = use(ConceptContext)
 
-  const getPendingEdits = usePendingEdits(initialState)
-  const pendingEdits = getPendingEdits(editingState)
-
-  const fieldDisplay = field => (field !== "" ? field : '""')
-  const pendingEditDisplay = field => {
-    const { initial, pending } = pendingEdits[field]
-    return `${fieldDisplay(initial)} --> ${fieldDisplay(pending)}`
-  }
-
-  const pendingEditsDisplay = Object.keys(pendingEdits).reduce((acc, field) => {
-    acc[field] = pendingEditDisplay(field)
-    return acc
-  }, {})
+  const pendingEditsDisplay = editsDisplay(initialState, editingState)
 
   return (
     <DescriptionDetail

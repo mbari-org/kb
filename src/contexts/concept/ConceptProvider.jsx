@@ -16,10 +16,9 @@ import useConceptPath from "./lib/useConceptPath"
 import useDisplayEditingState from "./lib/useDisplayEditingState"
 import useDisplayEditMedia from "./lib/useDisplayEditMedia"
 import useDisplayPendingField from "./lib/useDisplayPendingField"
-import usePendingEdits from "./lib/usePendingEdits"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { isEmpty } from "@/lib/kb/util"
+import { editsObject, isEmpty } from "@/lib/kb/util"
 
 const ConceptProvider = ({ children }) => {
   const theme = useTheme()
@@ -51,7 +50,6 @@ const ConceptProvider = ({ children }) => {
   const displayEditingState = useDisplayEditingState()
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
-  const getPendingEdits = usePendingEdits(initialState)
 
   const modifyConcept = useCallback(
     update => {
@@ -78,7 +76,6 @@ const ConceptProvider = ({ children }) => {
     concept,
     config: taxonomy.config,
     editingState,
-    getPendingEdits,
     initialState,
     modified,
     modifyConcept,
@@ -136,7 +133,6 @@ const ConceptProvider = ({ children }) => {
     editing,
     editingState,
     getConcept,
-    getPendingEdits,
     loadConcept,
     modalHasBeenDiplayed,
     modified,
@@ -148,9 +144,9 @@ const ConceptProvider = ({ children }) => {
   ])
 
   useEffect(() => {
-    const pendingEdits = getPendingEdits(editingState)
+    const pendingEdits = editsObject(initialState, editingState)
     setModified(!isEmpty(pendingEdits))
-  }, [getPendingEdits, editingState])
+  }, [editingState, initialState])
 
   useEffect(() => {
     if (concept) {

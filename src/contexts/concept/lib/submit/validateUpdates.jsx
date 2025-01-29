@@ -1,0 +1,97 @@
+import RankUpdateErrorActions from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorActions"
+import RankUpdateErrorContent from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorContent"
+import RankUpdateErrorTitle from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorTitle"
+import { createAlert } from "@/components/kb/factory"
+
+import { isAdmin } from "@/lib/auth/role"
+
+import { pickFields } from "@/lib/kb/util"
+
+const validateRankUpdates = async ({
+  concept,
+  initialState,
+  modifyConcept,
+  setAlert,
+  updates,
+  user,
+}) => {
+  let validation = {
+    rankLevel: true,
+    rankName: true,
+  }
+
+  if (isAdmin(user)) {
+    return validation
+  }
+
+  const removeLevel = updates.rankLevel === ""
+  const removeName = updates.rankName === ""
+
+  if (!(removeLevel || removeName)) {
+    return validation
+  }
+
+  let resolvePromise
+  const promise = new Promise(resolve => {
+    resolvePromise = resolve
+  })
+
+  const onAction = () => {
+    // Restore removed rank level and/or name
+    if (removeLevel) {
+      modifyConcept({ rankLevel: concept.rankLevel })
+      validation = { ...validation, rankLevel: false }
+    }
+    if (removeName) {
+      modifyConcept({ rankName: concept.rankName })
+      validation = { ...validation, rankName: false }
+    }
+    setAlert(null)
+    resolvePromise(validation)
+  }
+
+  const rankUpdates = pickFields(updates, ["rankName", "rankLevel"])
+
+  const detailUpdates = {}
+  Object.keys(rankUpdates).forEach(field => {
+    if (updates[field] !== initialState[field]) {
+      detailUpdates[field] = {
+        initial: initialState[field],
+        pending: updates[field],
+      }
+    }
+  })
+
+  const fieldDisplay = field => (field !== "" ? field : '""')
+  const pendingEditDisplay = field => {
+    const { initial, pending } = detailUpdates[field]
+    return `${fieldDisplay(initial)} --> ${fieldDisplay(pending)}`
+  }
+  const detailUpdatesDisplay = Object.keys(detailUpdates).reduce(
+    (acc, field) => {
+      acc[field] = pendingEditDisplay(field)
+      return acc
+    },
+    {}
+  )
+
+  const alert = createAlert({
+    Actions: () => <RankUpdateErrorActions onAction={onAction} />,
+    Content: () => <RankUpdateErrorContent detail={detailUpdatesDisplay} />,
+    Title: RankUpdateErrorTitle,
+  })
+  setAlert(alert)
+
+  return promise
+}
+
+const validateUpdates = async updatesObject => {
+  let rankValidation = await validateRankUpdates(updatesObject)
+
+  return {
+    author: true,
+    ...rankValidation,
+  }
+}
+
+export default validateUpdates

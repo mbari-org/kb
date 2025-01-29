@@ -8,6 +8,8 @@ import AuthContext from "@/contexts/auth/AuthContext"
 
 import useProcessError from "@/lib/hooks/useProcessError"
 
+import { editsObject } from "@/lib/kb/util"
+
 export const UPDATE_ALL_DATA = "all"
 export const UPDATE_NAME_ONLY = "solo"
 
@@ -17,7 +19,6 @@ const useSubmitUpdates = ({
   concept,
   config,
   editingState,
-  getPendingEdits,
   initialState,
   modified,
   modifyConcept,
@@ -42,6 +43,7 @@ const useSubmitUpdates = ({
     updates => {
       validateUpdates({
         concept,
+        initialState,
         modifyConcept,
         ranks,
         setAlert,
@@ -53,7 +55,7 @@ const useSubmitUpdates = ({
             concept,
             config,
             updates,
-            validation: detailValidation,
+            // validation: detailValidation,
           }).then(
             ({ error, updatedConcept }) => {
               if (error) {
@@ -72,6 +74,7 @@ const useSubmitUpdates = ({
     },
     [
       concept,
+      initialState,
       modifyConcept,
       ranks,
       setAlert,
@@ -123,7 +126,7 @@ const useSubmitUpdates = ({
       return
     }
 
-    const pendingEdits = getPendingEdits(editingState)
+    const pendingEdits = editsObject(initialState, editingState)
     const updates = Object.keys(pendingEdits).reduce((acc, key) => {
       acc[key] = pendingEdits[key].pending
       return acc
