@@ -21,34 +21,23 @@ const dropFields = (object, fields) => {
   }, {})
 }
 
-const editsObject = (initialValues, editingValues) => {
-  const edits = {}
-  Object.keys(editingValues).forEach(field => {
-    if (editingValues[field] !== initialValues[field]) {
-      edits[field] = {
-        initial: initialValues[field],
-        pending: editingValues[field],
-      }
+const pendingEdits = (initialState, editingState) => {
+  return Object.keys(editingState).reduce((edits, field) => {
+    if (editingState[field] !== initialState[field]) {
+      edits.push([field, initialState[field], editingState[field]])
     }
-  })
-  return edits
+    return edits
+  }, [])
 }
 
-const editsDisplay = (initialValues, editingValues) => {
-  const pendingEdits = editsObject(initialValues, editingValues)
-
-  const fieldDisplay = field => (field !== "" ? field : '""')
-  const pendingEditDisplay = field => {
-    const { initial, pending } = pendingEdits[field]
-    return `${fieldDisplay(initial)} --> ${fieldDisplay(pending)}`
-  }
-
-  return Object.keys(pendingEdits).reduce((acc, field) => {
-    if (initialValues[field] !== editingValues[field]) {
-      acc[field] = pendingEditDisplay(field)
-      return acc
-    }
-  }, {})
+const editsObject = (initialState, editingState) => {
+  return pendingEdits(initialState, editingState).reduce(
+    (edits, [field, initial, pending]) => {
+      edits[field] = { initial, pending }
+      return edits
+    },
+    {}
+  )
 }
 
 const getFieldPendingHistory = (pendingHistory, field) => {
@@ -145,7 +134,6 @@ const prune = obj => {
 export {
   debounce,
   dropFields,
-  editsDisplay,
   editsObject,
   getFieldPendingHistory,
   hasPendingHistory,
