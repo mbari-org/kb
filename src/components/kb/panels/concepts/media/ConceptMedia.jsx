@@ -19,9 +19,9 @@ const ConceptMedia = () => {
   const orderedMedia = useMemo(() => {
     const primaryMedia = getPrimary(mediaEditingState)
     const otherMedia = mediaEditingState.filter(
-      mediaItem => mediaItem.url !== primaryMedia.url
+      mediaItem => mediaItem.url !== primaryMedia?.url
     )
-    return [primaryMedia, ...otherMedia]
+    return primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
   }, [mediaEditingState])
 
   const isPendingMedia = useCallback(

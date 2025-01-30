@@ -26,7 +26,7 @@ const LogoutLink = () => {
           color: grey[400],
         }}
       >
-        {user.name}
+        {user.name} ({user.role})
       </Typography>
       <Button
         color="inherit"

@@ -82,19 +82,8 @@ const MediaView = ({ media }) => {
         {editing && (
           <MediaAdd
             bgColor={theme.palette.background.paperLight}
-            mediaIndex={mediaIndex - 1}
+            mediaIndex={mediaIndex.length}
             sx={{
-              ml: -10,
-              mt: 1,
-            }}
-          />
-        )}
-        {editing && (
-          <MediaAdd
-            bgColor={theme.palette.background.paperLight}
-            mediaIndex={mediaIndex + 1}
-            sx={{
-              ml: 10,
               mt: 1,
             }}
           />

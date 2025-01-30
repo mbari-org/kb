@@ -1,6 +1,6 @@
 const getPrimary = media => {
   if (media.length === 0) {
-    return []
+    return null
   }
   let primaryMedia = media.find(mediaItem => /.*_01\..*/.test(mediaItem.url))
   if (primaryMedia) {
