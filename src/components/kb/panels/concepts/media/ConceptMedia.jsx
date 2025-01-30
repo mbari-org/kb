@@ -6,23 +6,10 @@ import NoMedia from "./NoMedia"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { getPrimary } from "@/lib/kb/concept/media"
-
 const ConceptMedia = () => {
-  const {
-    editingState: { media: mediaEditingState },
-    pendingHistory,
-  } = use(ConceptContext)
+  const { editingState, pendingHistory } = use(ConceptContext)
 
   const [conceptMedia, setConceptMedia] = useState(null)
-
-  const orderedMedia = useMemo(() => {
-    const primaryMedia = getPrimary(mediaEditingState)
-    const otherMedia = mediaEditingState.filter(
-      mediaItem => mediaItem.url !== primaryMedia?.url
-    )
-    return primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
-  }, [mediaEditingState])
 
   const isPendingMedia = useCallback(
     (action, actionField, value) => {
@@ -37,7 +24,7 @@ const ConceptMedia = () => {
   )
 
   useEffect(() => {
-    const preppedMedia = orderedMedia.map(mediaItem => {
+    const preppedMedia = editingState.media.map(mediaItem => {
       let action = "None"
       if (isPendingMedia("DELETE", "oldValue", mediaItem.url)) {
         action = "Delete"
@@ -51,7 +38,7 @@ const ConceptMedia = () => {
     }, 250)
 
     return () => clearTimeout(timer)
-  }, [isPendingMedia, orderedMedia, pendingHistory])
+  }, [editingState, isPendingMedia, pendingHistory])
 
   return (
     <Box

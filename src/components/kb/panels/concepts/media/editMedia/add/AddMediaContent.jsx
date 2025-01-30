@@ -4,14 +4,24 @@ import EditMediaForm from "../EditMediaForm"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const AddMediaContent = ({ mediaIndex, formRef }) => {
-  const { concept } = use(ConceptContext)
+import { hasPrimary } from "@/lib/kb/concept/media"
 
-  const onSubmit = wtf => {
-    console.log("onSubmit?", wtf)
+const AddMediaContent = ({ mediaIndex, formRef }) => {
+  const { editingState } = use(ConceptContext)
+  const hasPrimaryMedia = hasPrimary(editingState.media)
+
+  const onSubmit = () => {
+    console.log("CxInc: Add Media onSubmit at mediaIndex", mediaIndex)
   }
 
-  return <EditMediaForm mediaItem={{}} ref={formRef} onSubmit={onSubmit} />
+  return (
+    <EditMediaForm
+      hasPrimary={hasPrimaryMedia}
+      mediaItem={{}}
+      ref={formRef}
+      onSubmit={onSubmit}
+    />
+  )
 }
 
 export default AddMediaContent

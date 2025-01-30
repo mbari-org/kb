@@ -7,15 +7,19 @@ import {
   TextField,
 } from "@mui/material"
 
-const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
+import { isPrimary as isPrimaryMedia } from "@/lib/kb/concept/media"
+
+const EditMediaForm = forwardRef(({ hasPrimary, mediaItem, onSubmit }, ref) => {
+  const formRef = useRef(null)
+
   const [editingMediaState, setEditingMediaState] = useState({
-    caption: mediaItem.caption || "",
-    credit: mediaItem.credit || "",
     url: mediaItem.url || "",
-    isPrimary: mediaItem.isPrimary || false,
+    credit: mediaItem.credit || "",
+    caption: mediaItem.caption || "",
+    isPrimary: isPrimaryMedia(mediaItem),
   })
 
-  const formRef = useRef(null)
+  const showPrimaryCheckbox = !hasPrimary || editingMediaState.isPrimary
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target
@@ -42,9 +46,9 @@ const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
     <Box component="form" onSubmit={handleSubmit} ref={formRef}>
       <FormControl fullWidth margin="normal">
         <TextField
-          label="Caption"
-          name="caption"
-          value={editingMediaState.caption}
+          label="URL"
+          name="url"
+          value={editingMediaState.url}
           onChange={handleChange}
           required
         />
@@ -60,23 +64,26 @@ const EditMediaForm = forwardRef(({ mediaItem, onSubmit }, ref) => {
       </FormControl>
       <FormControl fullWidth margin="normal">
         <TextField
-          label="URL"
-          name="url"
-          value={editingMediaState.url}
+          label="Caption"
+          name="caption"
+          value={editingMediaState.caption}
           onChange={handleChange}
-          required
         />
       </FormControl>
-      <FormControlLabel
-        control={
-          <Checkbox
-            name="isPrimary"
-            checked={editingMediaState.isPrimary}
-            onChange={handleChange}
+      {showPrimaryCheckbox && (
+        <Box display="flex" justifyContent="flex-end">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={editingMediaState.isPrimary}
+                name="isPrimary"
+                onChange={handleChange}
+              />
+            }
+            label="Is Primary"
           />
-        }
-        label="Is Primary"
-      />
+        </Box>
+      )}
     </Box>
   )
 })

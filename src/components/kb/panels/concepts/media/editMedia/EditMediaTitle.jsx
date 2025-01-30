@@ -6,7 +6,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const EditMediaTitle = () => {
   const { concept } = use(ConceptContext)
-  return <Title title={`Concept: ${concept.name}`} />
+  return <Title title={`Media: ${concept.name}`} />
 }
 
 export default EditMediaTitle

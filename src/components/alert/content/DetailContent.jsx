@@ -21,7 +21,7 @@ const DetailContent = ({ detail, sx }) => {
         <Box key={key} display="flex" flexDirection="row" sx={sx}>
           <Typography sx={keySx}>{key}:</Typography>
           <Typography sx={valueSx} ml={1}>
-            {value}
+            {typeof value === "boolean" ? value.toString() : value}
           </Typography>
         </Box>
       ))}
