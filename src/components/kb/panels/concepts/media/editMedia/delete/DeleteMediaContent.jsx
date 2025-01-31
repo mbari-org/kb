@@ -11,7 +11,12 @@ const DeleteMediaContent = ({ mediaIndex }) => {
 
   const mediaItem = editingState.media[mediaIndex]
 
-  const displayValues = dropFields(mediaItem, ["conceptName", "id", "mimeType"])
+  const displayValues = dropFields(mediaItem, [
+    "action",
+    "conceptName",
+    "id",
+    "mimeType",
+  ])
 
   return <DescriptionDetail description="Delete Media" detail={displayValues} />
 }

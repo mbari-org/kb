@@ -21,7 +21,7 @@ const mediaState = media => {
 
   return orderedMedia.map(mediaItem => ({
     ...mediaItem,
-    state: MEDIA_STATE.NONE,
+    action: MEDIA_STATE.NONE,
   }))
 }
 

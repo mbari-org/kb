@@ -34,7 +34,12 @@ const ConceptRank = ({ field, otherValue }) => {
           <InputLabel>{label}</InputLabel>
           <Select
             displayEmpty
-            onChange={e => modifyConcept({ [field]: e.target.value })}
+            onChange={e =>
+              modifyConcept({
+                type: "SET_FIELD",
+                update: { [field]: e.target.value },
+              })
+            }
             value={fieldValue}
           >
             {rankOptions.map(option => (

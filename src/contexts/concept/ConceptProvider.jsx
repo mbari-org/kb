@@ -39,7 +39,7 @@ const ConceptProvider = ({ children }) => {
 
   const [concept, setConcept] = useState(null)
   const [editing, setEditing] = useState(false)
-  const [modalHasBeenDiplayed, setModalAlertHasBeenDisplayed] = useState(false)
+  const [modalHasBeenDisplayed, setModalAlertHasBeenDisplayed] = useState(false)
   const [modified, setModified] = useState(false)
   const [pendingHistory, setPendingHistory] = useState(null)
 
@@ -52,8 +52,8 @@ const ConceptProvider = ({ children }) => {
   const displayPendingField = useDisplayPendingField()
 
   const modifyConcept = useCallback(
-    update => {
-      dispatch({ type: "SET_FIELD", payload: update })
+    ({ type = "SET_FIELD", update }) => {
+      dispatch({ type, payload: update })
     },
     [dispatch]
   )
@@ -103,7 +103,7 @@ const ConceptProvider = ({ children }) => {
         return
       }
 
-      if (!alert && !modalHasBeenDiplayed) {
+      if (!alert && !modalHasBeenDisplayed) {
         displayEditingState()
         setModalAlertHasBeenDisplayed(true)
         return
@@ -134,7 +134,7 @@ const ConceptProvider = ({ children }) => {
     editingState,
     getConcept,
     loadConcept,
-    modalHasBeenDiplayed,
+    modalHasBeenDisplayed,
     modified,
     selectConcept,
     selectPanel,

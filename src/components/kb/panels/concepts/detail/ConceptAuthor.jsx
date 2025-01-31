@@ -19,7 +19,12 @@ const ConceptAuthor = () => {
       <TextField
         {...infoStyle}
         label="Author"
-        onChange={e => modifyConcept({ author: e.target.value })}
+        onChange={e =>
+          modifyConcept({
+            type: "SET_FIELD",
+            update: { author: e.target.value },
+          })
+        }
         value={author}
       />
     </FormControl>

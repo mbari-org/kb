@@ -22,7 +22,7 @@ const EditNameContent = () => {
       : conceptTheme.color.pending
 
   const handleChange = event => {
-    modifyConcept({ name: event.target.value })
+    modifyConcept({ type: "SET_FIELD", update: { name: event.target.value } })
   }
 
   return (
