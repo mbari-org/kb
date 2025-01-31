@@ -1,8 +1,8 @@
 const MEDIA_STATE = {
   ADD: "Add",
   DELETE: "Delete",
+  EDIT: "Edit",
   NONE: "None",
-  UPDATE: "Update",
 }
 
 const getPrimary = media => media.find(mediaItem => isPrimary(mediaItem))

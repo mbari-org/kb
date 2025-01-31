@@ -9,6 +9,8 @@ import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
+import { MEDIA_STATE } from "@/lib/kb/concept/media"
+
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const MediaView = ({ media }) => {
@@ -22,13 +24,10 @@ const MediaView = ({ media }) => {
   const [previewImage, setPreviewImage] = useState(false)
   const [swiperHeight, setSwiperHeight] = useState("auto")
 
-  const mediaItem = media[mediaIndex]
+  const showEditMedia = editing && media[mediaIndex].action === MEDIA_STATE.NONE
 
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
-
-  const hasPending = mediaItem.action !== "None"
-  const allowEditDelete = editing && !hasPending
 
   useEffect(() => {
     if (mediaViewRef.current) {
@@ -40,43 +39,39 @@ const MediaView = ({ media }) => {
   return (
     <>
       <Box ref={mediaViewRef} sx={{ position: "relative" }}>
-        <MediaPreview
-          hasPending={hasPending}
-          openPreview={openPreview}
-          previewMedia={mediaItem}
-        />
+        <MediaPreview openPreview={openPreview} mediaIndex={mediaIndex} />
         {!editing && (
           <MediaDisplay
             closePreview={closePreview}
-            mediaSrc={mediaItem?.url}
+            mediaIndex={mediaIndex}
             previewImage={previewImage}
           />
         )}
-        {allowEditDelete && (
-          <MediaDelete
-            mediaIndex={mediaIndex}
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-            }}
-          />
-        )}
-        {allowEditDelete && (
-          <MediaEdit
-            mediaIndex={mediaIndex}
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-            }}
-          />
+        {showEditMedia && (
+          <>
+            <MediaDelete
+              mediaIndex={mediaIndex}
+              sx={{
+                bottom: 0,
+                left: 0,
+                position: "absolute",
+              }}
+            />
+            <MediaEdit
+              mediaIndex={mediaIndex}
+              sx={{
+                bottom: 0,
+                left: 0,
+                position: "absolute",
+              }}
+            />
+          </>
         )}
       </Box>
       <Box sx={{ mt: 0.5, position: "relative", overflow: "visible" }}>
         <MediaSwiper
-          media={media}
           height={swiperHeight}
+          media={media}
           setMediaIndex={setMediaIndex}
         />
         {editing && (

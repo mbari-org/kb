@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material/styles"
 import { CiEdit } from "react-icons/ci"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import { MEDIA_ACTIONS } from "@/contexts/concept/lib/useDisplayEditMedia"
+import { MEDIA_STATE } from "@/lib/kb/concept/media"
 
 const MediaEdit = ({ mediaIndex }) => {
   const theme = useTheme()
@@ -27,7 +27,7 @@ const MediaEdit = ({ mediaIndex }) => {
       }}
     >
       <IconButton
-        onClick={() => displayEditMedia(MEDIA_ACTIONS.EDIT, mediaIndex)}
+        onClick={() => displayEditMedia(MEDIA_STATE.EDIT, mediaIndex)}
         color="main"
         sx={{
           backgroundColor: theme.palette.background.paper,

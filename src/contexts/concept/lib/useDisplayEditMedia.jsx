@@ -12,13 +12,9 @@ import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/Edit
 
 import { createAlert } from "@/components/kb/factory"
 
-import ModalContext from "@/contexts/modal/ModalContext"
+import { MEDIA_STATE } from "@/lib/kb/concept/media"
 
-export const MEDIA_ACTIONS = {
-  ADD: "Add",
-  DELETE: "Delete",
-  EDIT: "Edit",
-}
+import ModalContext from "@/contexts/modal/ModalContext"
 
 const useDisplayEditMedia = () => {
   const { setAlert } = use(ModalContext)
@@ -29,7 +25,7 @@ const useDisplayEditMedia = () => {
       let alert
 
       switch (action) {
-        case MEDIA_ACTIONS.ADD:
+        case MEDIA_STATE.ADD:
           alert = createAlert({
             Actions: () => (
               <AddMediaActions mediaIndex={mediaIndex} formRef={formRef} />
@@ -40,7 +36,7 @@ const useDisplayEditMedia = () => {
             Title: EditMediaTitle,
           })
           break
-        case MEDIA_ACTIONS.DELETE:
+        case MEDIA_STATE.DELETE:
           alert = createAlert({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
@@ -48,7 +44,7 @@ const useDisplayEditMedia = () => {
           })
 
           break
-        case MEDIA_ACTIONS.EDIT: {
+        case MEDIA_STATE.EDIT: {
           alert = createAlert({
             Actions: () => <EditMediaActions mediaIndex={mediaIndex} />,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,

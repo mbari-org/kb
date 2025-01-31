@@ -4,7 +4,7 @@ import { Box, IconButton } from "@mui/material"
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import { MEDIA_ACTIONS } from "@/contexts/concept/lib/useDisplayEditMedia"
+import { MEDIA_STATE } from "@/lib/kb/concept/media"
 
 const MediaAdd = ({ bgColor, mediaIndex, sx }) => {
   const { displayEditMedia } = use(ConceptContext)
@@ -21,7 +21,7 @@ const MediaAdd = ({ bgColor, mediaIndex, sx }) => {
       }}
     >
       <IconButton
-        onClick={() => displayEditMedia(MEDIA_ACTIONS.ADD, mediaIndex)}
+        onClick={() => displayEditMedia(MEDIA_STATE.ADD, mediaIndex)}
         color="main"
         sx={{
           backgroundColor: bgColor,

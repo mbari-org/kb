@@ -51,12 +51,7 @@ const ConceptProvider = ({ children }) => {
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
 
-  const modifyConcept = useCallback(
-    ({ type = "SET_FIELD", update }) => {
-      dispatch({ type, payload: update })
-    },
-    [dispatch]
-  )
+  const modifyConcept = useCallback(action => dispatch(action), [dispatch])
 
   const resetState = useCallback(
     toState => {
@@ -67,7 +62,7 @@ const ConceptProvider = ({ children }) => {
       const resetStateConcept = { ...concept, ...toState }
       setConcept(resetStateConcept)
 
-      dispatch({ type: "INIT_STATE", payload: toState })
+      dispatch({ type: "INIT_STATE", update: toState })
     },
     [concept, setAlert]
   )
@@ -155,7 +150,7 @@ const ConceptProvider = ({ children }) => {
 
       const editingState = stateForConcept(concept)
       setInitialState(editingState)
-      dispatch({ type: "INIT_STATE", payload: editingState })
+      dispatch({ type: "INIT_STATE", update: editingState })
     }
   }, [concept, getConceptPendingHistory])
 

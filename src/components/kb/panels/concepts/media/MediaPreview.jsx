@@ -1,12 +1,18 @@
+import { use } from "react"
 import { Box, Typography, IconButton, Tooltip } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { BsInfoCircle } from "react-icons/bs"
 
-const MediaPreview = ({ hasPending, previewMedia, openPreview }) => {
+import ConceptContext from "@/contexts/concept/ConceptContext"
+
+import { MEDIA_STATE } from "@/lib/kb/concept/media"
+
+const MediaPreview = ({ mediaIndex, openPreview }) => {
   const theme = useTheme()
+  const { editingState } = use(ConceptContext)
+  const mediaItem = editingState.media[mediaIndex]
 
-  const mediaSrc = previewMedia?.url
-
+  const hasPending = mediaItem.action !== MEDIA_STATE.NONE
   const displayBorder = hasPending
     ? `2px solid ${theme.palette.primary.cancel}`
     : `1px solid ${theme.palette.grey[300]}`
@@ -24,9 +30,9 @@ const MediaPreview = ({ hasPending, previewMedia, openPreview }) => {
         }}
       >
         <img
-          alt={`Unable to Display Media: ${mediaSrc}`}
+          alt={`Unable to Display Media: ${mediaItem?.url}`}
           onClick={openPreview}
-          src={mediaSrc}
+          src={mediaItem?.url}
           style={{
             height: "100%",
             left: "50%",
@@ -58,11 +64,11 @@ const MediaPreview = ({ hasPending, previewMedia, openPreview }) => {
           }}
           variant="caption"
         >
-          {previewMedia?.caption}
+          {mediaItem?.caption}
         </Typography>
-        {previewMedia?.credit && (
+        {mediaItem?.credit && (
           <Tooltip
-            title={previewMedia?.credit}
+            title={mediaItem?.credit}
             slotProps={{
               tooltip: {
                 sx: {
