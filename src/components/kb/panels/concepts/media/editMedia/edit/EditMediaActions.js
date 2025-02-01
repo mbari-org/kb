@@ -2,19 +2,16 @@ import { use } from "react"
 
 import { createActions } from "@/components/kb/factory"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 const DISCARD = "Discard"
 const SAVE = "Save"
 
-const EditMediaActions = ({ mediaIndex, formRef }) => {
-  const { concept } = use(ConceptContext)
-  const { setAlert } = use(ModalContext)
-
-  // const existingMedia = concept.media[mediaIndex]
+const EditMediaActions = ({ formRef }) => {
+  const { data, setAlert } = use(ModalContext)
 
   const colors = ["cancel", "main"]
+  const disabled = [false, !data?.dirty]
   const labels = [DISCARD, SAVE]
 
   const onAction = label => {
@@ -27,7 +24,10 @@ const EditMediaActions = ({ mediaIndex, formRef }) => {
     }
   }
 
-  return createActions({ colors, labels, onAction }, "ConceptEditMediaActions")
+  return createActions(
+    { colors, disabled, labels, onAction },
+    "ConceptEditMediaActions"
+  )
 }
 
 export default EditMediaActions

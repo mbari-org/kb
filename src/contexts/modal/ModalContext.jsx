@@ -1,6 +1,6 @@
 import { createContext } from "react"
 
 const ModalContext = createContext()
-ModalContext.displayName = "Loading Context"
+ModalContext.displayName = "Modal Context"
 
 export default ModalContext

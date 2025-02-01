@@ -5,7 +5,9 @@ const AddMediaContent = ({ mediaIndex, formRef }) => {
     console.log("CxInc: Add Media onSubmit at mediaIndex", mediaIndex)
   }
 
-  return <EditMediaForm onSubmit={onSubmit} ref={formRef} />
+  return (
+    <EditMediaForm mediaIndex={mediaIndex} onSubmit={onSubmit} ref={formRef} />
+  )
 }
 
 export default AddMediaContent

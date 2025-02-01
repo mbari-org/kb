@@ -5,7 +5,7 @@ const Action = ({ color, disabled, index, label, onAction, totalActions }) => {
     <Button
       key={index}
       color={color || "main"}
-      disabled={disabled && disabled[index]}
+      disabled={disabled}
       onClick={() => onAction(label)}
       sx={{
         marginLeft: totalActions === 1 ? "auto" : "inherit",

@@ -2,17 +2,18 @@ import { Box } from "@mui/material"
 
 import Action from "./Action"
 
-const Actions = ({ colors, labels, onAction }) => {
+const Actions = ({ colors, disabled, labels, onAction }) => {
   const actionColor = index => (colors ? colors[index] : "main")
 
   const actions = labels.map((label, index) => (
     <Action
-      key={index}
       color={actionColor(index)}
+      disabled={disabled && disabled[index]}
       index={index}
+      key={index}
       label={label}
-      totalActions={labels.length}
       onAction={onAction}
+      totalActions={labels.length}
     />
   ))
 
