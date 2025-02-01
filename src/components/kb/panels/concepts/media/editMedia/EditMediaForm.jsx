@@ -1,4 +1,11 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from "react"
+import {
+  forwardRef,
+  use,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react"
 import {
   Box,
   Checkbox,
@@ -7,17 +14,33 @@ import {
   TextField,
 } from "@mui/material"
 
-import { isPrimary as isPrimaryMedia } from "@/lib/kb/concept/media"
+import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const EditMediaForm = forwardRef(({ hasPrimary, mediaItem, onSubmit }, ref) => {
+import { hasPrimary, isPrimary } from "@/lib/kb/concept/media"
+
+const EditMediaForm = forwardRef(({ mediaIndex, onSubmit }, ref) => {
   const formRef = useRef(null)
 
-  const [editingMediaState, setEditingMediaState] = useState({
+  const { editingState } = use(ConceptContext)
+  const hasPrimaryMedia = hasPrimary(editingState.media)
+
+  const newMediaItem = {
+    url: "",
+    credit: "",
+    caption: "",
+    isPrimary: false,
+  }
+
+  const mediaItem = editingState.media[mediaIndex]
+
+  const initialMediaState = {
     url: mediaItem.url || "",
     credit: mediaItem.credit || "",
     caption: mediaItem.caption || "",
-    isPrimary: isPrimaryMedia(mediaItem),
-  })
+    isPrimary: isPrimary(mediaItem),
+  }
+
+  const [editingMediaState, setEditingMediaState] = useState(initialMediaState)
 
   const showPrimaryCheckbox = !hasPrimary || editingMediaState.isPrimary
 

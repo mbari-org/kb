@@ -12,16 +12,30 @@ const MediaPreview = ({ mediaIndex, openPreview }) => {
   const { editingState } = use(ConceptContext)
   const mediaItem = editingState.media[mediaIndex]
 
-  const hasPending = mediaItem.action !== MEDIA_STATE.NONE
-  const displayBorder = hasPending
-    ? `2px solid ${theme.palette.primary.cancel}`
-    : `1px solid ${theme.palette.grey[300]}`
+  const borderWidth = mediaItem.action === MEDIA_STATE.NONE ? "1px" : "2px"
+  let borderColor
+
+  switch (mediaItem.action) {
+    case MEDIA_STATE.ADD:
+      borderColor = theme.concept.color.pending
+      break
+    case MEDIA_STATE.EDIT:
+      borderColor = theme.concept.color.pending
+      break
+    case MEDIA_STATE.DELETE:
+      borderColor = theme.concept.color.remove
+      break
+    default:
+      borderColor = theme.palette.grey[300]
+  }
+
+  const borderDisplay = `${borderWidth} solid ${borderColor}`
 
   return (
     <>
       <Box
         sx={{
-          border: displayBorder,
+          border: borderDisplay,
           height: "0",
           paddingBottom: "100%",
           position: "relative",

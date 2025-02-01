@@ -11,10 +11,11 @@ const pale = alpha(main, 0.3)
 const cancel = "#af0000"
 const clean = "#008800"
 const conceptDetail = "#008800"
+const navActive = "#ffffff"
 const paper = "#f0f0f0"
 const pendingIconClean = "#00dd00"
 const pendingIconDirty = "#dd0000"
-const navActive = "#ffffff"
+const remove = "#af0000"
 
 const theme = createTheme({
   concept: {
@@ -26,6 +27,7 @@ const theme = createTheme({
         clean: pendingIconClean,
         dirty: pendingIconDirty,
       },
+      remove,
     },
     fontFamily: "Roboto, sans-serif",
     fontWeight: 600,

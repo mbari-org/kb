@@ -24,7 +24,8 @@ const MediaView = ({ media }) => {
   const [previewImage, setPreviewImage] = useState(false)
   const [swiperHeight, setSwiperHeight] = useState("auto")
 
-  const showEditMedia = editing && media[mediaIndex].action === MEDIA_STATE.NONE
+  const showEditMedia =
+    editing && media[mediaIndex]?.action === MEDIA_STATE.NONE
 
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
@@ -49,22 +50,8 @@ const MediaView = ({ media }) => {
         )}
         {showEditMedia && (
           <>
-            <MediaDelete
-              mediaIndex={mediaIndex}
-              sx={{
-                bottom: 0,
-                left: 0,
-                position: "absolute",
-              }}
-            />
-            <MediaEdit
-              mediaIndex={mediaIndex}
-              sx={{
-                bottom: 0,
-                left: 0,
-                position: "absolute",
-              }}
-            />
+            <MediaDelete mediaIndex={mediaIndex} />
+            <MediaEdit mediaIndex={mediaIndex} />
           </>
         )}
       </Box>

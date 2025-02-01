@@ -1,41 +1,28 @@
-import { use } from "react"
-import { Box, IconButton } from "@mui/material"
-
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
-
-import ConceptContext from "@/contexts/concept/ConceptContext"
 import { MEDIA_STATE } from "@/lib/kb/concept/media"
+import MediaActionButton from "../MediaActionButton"
 
-const MediaAdd = ({ bgColor, mediaIndex, sx }) => {
-  const { displayEditMedia } = use(ConceptContext)
-
-  return (
-    <Box
-      sx={{
-        ...sx,
-        left: "50%",
-        position: "absolute",
-        top: 0,
-        transform: "translateX(-50%)",
-        zIndex: 1,
-      }}
-    >
-      <IconButton
-        onClick={() => displayEditMedia(MEDIA_STATE.ADD, mediaIndex)}
-        color="main"
-        sx={{
-          backgroundColor: bgColor,
-          "&:hover": {
-            backgroundColor: `${bgColor} !important`,
-            transform: "scale(1.25)",
-          },
-          padding: 0.5,
-        }}
-      >
-        <MdOutlineAddPhotoAlternate size={24} />
-      </IconButton>
-    </Box>
-  )
-}
+const MediaAdd = ({ bgColor, mediaIndex, sx }) => (
+  <MediaActionButton
+    Icon={props => <MdOutlineAddPhotoAlternate {...props} size={24} />}
+    color="main"
+    action={MEDIA_STATE.ADD}
+    mediaIndex={mediaIndex}
+    sx={{
+      ...sx,
+      left: "50%",
+      top: 0,
+      transform: "translateX(-50%)",
+      bottom: "unset",
+      right: "unset",
+      "& .MuiIconButton-root": {
+        backgroundColor: bgColor,
+        "&:hover": {
+          backgroundColor: `${bgColor} !important`,
+        },
+      },
+    }}
+  />
+)
 
 export default MediaAdd
