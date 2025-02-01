@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import DescriptionDetail from "@/components/kb/panels/concepts/detail/DescriptionDetail"
+import { createDetailContent } from "@/components/kb/factory"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
@@ -18,7 +18,12 @@ const DeleteMediaContent = ({ mediaIndex }) => {
     "mimeType",
   ])
 
-  return <DescriptionDetail description="Delete Media" detail={displayValues} />
+  const Detail = createDetailContent({
+    detail: displayValues,
+    sx: { ml: 1, mr: 1 },
+  })
+
+  return <Detail id="alert-content-detail" />
 }
 
 export default DeleteMediaContent

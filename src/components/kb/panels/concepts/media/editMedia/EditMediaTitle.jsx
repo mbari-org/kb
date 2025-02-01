@@ -4,9 +4,11 @@ import Title from "@/components/alert/Title"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const EditMediaTitle = () => {
+const EditMediaTitle = ({ action }) => {
   const { concept } = use(ConceptContext)
-  return <Title title={`Media: ${concept.name}`} />
+  return <Title title={`${action} Media: ${concept.name}`} />
 }
+
+EditMediaTitle.displayName = "EditMediaTitle"
 
 export default EditMediaTitle

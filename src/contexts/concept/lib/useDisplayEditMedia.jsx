@@ -24,6 +24,8 @@ const useDisplayEditMedia = () => {
     (action, mediaIndex) => {
       let alert
 
+      const Title = () => <EditMediaTitle action={action} />
+
       switch (action) {
         case MEDIA_STATE.ADD:
           alert = createAlert({
@@ -33,14 +35,14 @@ const useDisplayEditMedia = () => {
             Content: () => (
               <AddMediaContent mediaIndex={mediaIndex} formRef={formRef} />
             ),
-            Title: EditMediaTitle,
+            Title,
           })
           break
         case MEDIA_STATE.DELETE:
           alert = createAlert({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
-            Title: EditMediaTitle,
+            Title,
           })
 
           break
@@ -48,7 +50,7 @@ const useDisplayEditMedia = () => {
           alert = createAlert({
             Actions: () => <EditMediaActions mediaIndex={mediaIndex} />,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
-            Title: EditMediaTitle,
+            Title,
           })
 
           break
