@@ -1,26 +1,27 @@
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
-import { MEDIA_STATE } from "@/lib/kb/concept/media"
-import MediaActionButton from "../MediaActionButton"
+import MediaActionButton from "./MediaActionButton"
+
+import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
 const MediaAdd = ({ bgColor, mediaIndex, sx }) => (
   <MediaActionButton
-    Icon={props => <MdOutlineAddPhotoAlternate {...props} size={24} />}
+    action={CONCEPT_STATE.ADD_MEDIA}
     color="main"
-    action={MEDIA_STATE.ADD}
+    Icon={props => <MdOutlineAddPhotoAlternate {...props} size={24} />}
     mediaIndex={mediaIndex}
     sx={{
       ...sx,
-      left: "50%",
-      top: 0,
-      transform: "translateX(-50%)",
-      bottom: "unset",
-      right: "unset",
       "& .MuiIconButton-root": {
         backgroundColor: bgColor,
         "&:hover": {
           backgroundColor: `${bgColor} !important`,
         },
       },
+      bottom: "unset",
+      left: "50%",
+      right: "unset",
+      top: 0,
+      transform: "translateX(-50%)",
     }}
   />
 )

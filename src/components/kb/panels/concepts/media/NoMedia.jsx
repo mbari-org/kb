@@ -1,7 +1,7 @@
 import { use } from "react"
 import { Box, Typography } from "@mui/material"
 
-import MediaAdd from "./editMedia/add/MediaAdd"
+import MediaAdd from "./editMedia/MediaAdd"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 

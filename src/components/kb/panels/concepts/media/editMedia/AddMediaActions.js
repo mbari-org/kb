@@ -2,14 +2,12 @@ import { use } from "react"
 
 import { createActions } from "@/components/kb/factory"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 const ADD = "Add"
 const DISCARD = "Discard"
 
-const AddMediaActions = ({ mediaIndex, formRef }) => {
-  const { concept } = use(ConceptContext)
+const AddMediaActions = () => {
   const { setAlert } = use(ModalContext)
 
   const colors = ["cancel", "main"]
@@ -17,9 +15,8 @@ const AddMediaActions = ({ mediaIndex, formRef }) => {
 
   const onAction = label => {
     if (label === ADD) {
-      if (formRef.current) {
-        formRef.current.submitForm()
-      }
+      const form = document.querySelector("form")
+      form?.requestSubmit()
     } else {
       setAlert(null)
     }

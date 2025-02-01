@@ -7,7 +7,7 @@ import ModalContext from "@/contexts/modal/ModalContext"
 const DISCARD = "Discard"
 const SAVE = "Save"
 
-const EditMediaActions = ({ formRef }) => {
+const EditMediaActions = () => {
   const { data, setAlert } = use(ModalContext)
 
   const colors = ["cancel", "main"]
@@ -16,9 +16,8 @@ const EditMediaActions = ({ formRef }) => {
 
   const onAction = label => {
     if (label === SAVE) {
-      if (formRef.current) {
-        formRef.current.submitForm()
-      }
+      const form = document.querySelector("form")
+      form?.requestSubmit()
     } else {
       setAlert(null)
     }

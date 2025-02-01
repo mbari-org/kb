@@ -1,4 +1,5 @@
-import { forwardRef, use, useEffect, useImperativeHandle, useRef } from "react"
+import { forwardRef, use, useEffect, useState } from "react"
+
 import {
   Box,
   Checkbox,
@@ -10,47 +11,49 @@ import {
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { hasPrimary } from "@/lib/kb/concept/media"
+import { hasPrimary, isPrimary } from "@/lib/kb/concept/media"
+import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
-const EditMediaForm = forwardRef(({ mediaIndex, onSubmit }, ref) => {
-  const formRef = useRef(null)
+const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
+  const { editingState, modifyConcept } = use(ConceptContext)
+  const { data, setAlert, setData } = use(ModalContext)
 
-  const { editingState } = use(ConceptContext)
-  const { data, setData } = use(ModalContext)
-
-  const showPrimaryCheckbox = !hasPrimary || editingState.isPrimary
+  const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target
 
-    const newEditing = {
+    const dataEditing = {
       ...data.editing,
       [name]: type === "checkbox" ? checked : value,
     }
 
-    const isDirty = Object.keys(newEditing).some(
-      key => newEditing[key] !== data.initial[key]
+    const isDirty = Object.keys(dataEditing).some(
+      key => dataEditing[key] !== data.initial[key]
     )
 
     setData(prev => ({
       ...prev,
       dirty: isDirty,
-      editing: newEditing,
+      editing: dataEditing,
     }))
   }
 
   const handleSubmit = e => {
     e.preventDefault()
-    onSubmit(data.editing)
+    const type =
+      mediaIndex === editingState.media.length
+        ? CONCEPT_STATE.ADD_MEDIA
+        : CONCEPT_STATE.EDIT_MEDIA
+    modifyConcept({
+      type,
+      update: {
+        mediaIndex,
+        media: data.editing,
+      },
+    })
+    setAlert(null)
   }
-
-  useImperativeHandle(ref, () => ({
-    submitForm: () => {
-      if (formRef.current) {
-        formRef.current.requestSubmit()
-      }
-    },
-  }))
 
   useEffect(() => {
     const mediaItem = editingState.media[mediaIndex] || {
@@ -59,7 +62,15 @@ const EditMediaForm = forwardRef(({ mediaIndex, onSubmit }, ref) => {
       caption: "",
       isPrimary: false,
     }
-    setData({ initial: mediaItem, dirty: false, editing: mediaItem })
+
+    setData({
+      initial: mediaItem,
+      dirty: false,
+      editing: mediaItem,
+    })
+    setShowPrimaryCheckbox(
+      !hasPrimary(editingState.media) || isPrimary(mediaItem)
+    )
   }, [editingState.media, mediaIndex, setData])
 
   if (!data) {
@@ -67,7 +78,7 @@ const EditMediaForm = forwardRef(({ mediaIndex, onSubmit }, ref) => {
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit} ref={formRef}>
+    <Box component="form" onSubmit={handleSubmit} ref={ref}>
       <FormControl fullWidth margin="normal">
         <TextField
           label="URL"

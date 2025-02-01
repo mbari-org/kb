@@ -1,44 +1,47 @@
-import { MEDIA_STATE } from "@/lib/kb/concept/media"
+export const CONCEPT_STATE = {
+  INIT_STATE: "INIT_STATE",
+  SET_FIELD: "SET_FIELD",
+  ADD_MEDIA: "ADD_MEDIA",
+  DELETE_MEDIA: "DELETE_MEDIA",
+  EDIT_MEDIA: "EDIT_MEDIA",
+  NONE: "NONE",
+}
+
+const updateMedia = (state, { type, update }) => {
+  const { mediaIndex, media } = update
+  const updatedItem = { ...state.media[mediaIndex], ...media, action: type }
+  return {
+    ...state,
+    media: state.media.map((item, index) =>
+      index === mediaIndex ? updatedItem : item
+    ),
+  }
+}
 
 const conceptReducer = (state, { type, update }) => {
   switch (type) {
-    case "INIT_STATE":
+    case CONCEPT_STATE.INIT_STATE:
       return update
 
-    case "SET_FIELD":
+    case CONCEPT_STATE.SET_FIELD:
       return {
         ...state,
         ...update,
       }
 
-    case "ADD_MEDIA": {
-      const mediaItem = { ...update, action: MEDIA_STATE.ADD }
+    case CONCEPT_STATE.ADD_MEDIA: {
+      const addItem = { ...update, action: type }
       return {
         ...state,
-        media: [...state.media, mediaItem],
+        media: [...state.media, addItem],
       }
     }
 
-    case "DELETE_MEDIA": {
-      const mediaItem = state.media[update.mediaIndex]
-      const updatedItem = { ...mediaItem, action: MEDIA_STATE.DELETE }
-      return {
-        ...state,
-        media: state.media.map((item, index) =>
-          index === update.mediaIndex ? updatedItem : item
-        ),
-      }
-    }
+    case CONCEPT_STATE.DELETE_MEDIA:
+      return updateMedia(state, { type, update })
 
-    case "EDIT_MEDIA": {
-      const updatedItem = { ...update, action: MEDIA_STATE.EDIT }
-      return {
-        ...state,
-        media: state.media.map((item, index) =>
-          index === update.mediaIndex ? updatedItem : item
-        ),
-      }
-    }
+    case CONCEPT_STATE.EDIT_MEDIA:
+      return updateMedia(state, { type, update })
 
     default:
       return state

@@ -1,23 +1,27 @@
 import { useSwiper } from "swiper/react"
 import { useTheme } from "@mui/material/styles"
 
-const MediaSwiperSlide = ({ index, slide }) => {
+import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
+
+import { mediaBorder } from "@/lib/kb/concept/media"
+
+const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()
 
   const swiper = useSwiper()
 
-  const slideClick = index => swiper.slideTo(index)
+  const slideClick = mediaIndex => swiper.slideTo(mediaIndex)
 
-  const hasPending = slide.action !== "None"
-  const slideBorder = hasPending
-    ? `2px solid ${theme.palette.primary.cancel}`
-    : "none"
+  const border =
+    mediaIndex.action === CONCEPT_STATE.NONE
+      ? "none"
+      : mediaBorder(mediaItem, theme)
 
   return (
     <img
-      onClick={() => slideClick(index)}
-      src={slide.url}
-      style={{ border: slideBorder, height: "auto", width: "100%" }}
+      onClick={() => slideClick(mediaIndex)}
+      src={mediaItem.url}
+      style={{ border, height: "auto", width: "100%" }}
     />
   )
 }

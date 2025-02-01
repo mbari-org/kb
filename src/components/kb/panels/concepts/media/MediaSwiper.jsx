@@ -1,3 +1,5 @@
+import { use } from "react"
+
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import { Pagination } from "swiper/modules"
@@ -9,7 +11,11 @@ import "swiper/css/pagination"
 
 import "./mediaSwiper.css"
 
-const MediaSwiper = ({ height, media, setMediaIndex }) => {
+import ConceptContext from "@/contexts/concept/ConceptContext"
+
+const MediaSwiper = ({ height, setMediaIndex }) => {
+  const { editingState } = use(ConceptContext)
+
   const pagination = {
     clickable: true,
     renderBullet: function (index, className) {
@@ -30,9 +36,9 @@ const MediaSwiper = ({ height, media, setMediaIndex }) => {
         overflow: "hidden",
       }}
     >
-      {media.map((slide, index) => (
-        <SwiperSlide key={`concept-media-${index}`}>
-          <MediaSwiperSlide index={index} slide={slide} />
+      {editingState.media.map((mediaItem, mediaIndex) => (
+        <SwiperSlide key={`concept-media-${mediaIndex}`}>
+          <MediaSwiperSlide mediaIndex={mediaIndex} mediaItem={mediaItem} />
         </SwiperSlide>
       ))}
     </Swiper>

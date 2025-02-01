@@ -2,14 +2,14 @@ import { use, useEffect, useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-import MediaAdd from "./editMedia/add/MediaAdd"
-import MediaDelete from "./editMedia/delete/MediaDelete"
-import MediaEdit from "./editMedia/edit/MediaEdit"
+import MediaAdd from "./editMedia/MediaAdd"
+import MediaDelete from "./editMedia/MediaDelete"
+import MediaEdit from "./editMedia/MediaEdit"
 import MediaDisplay from "./MediaDisplay"
 import MediaPreview from "./MediaPreview"
 import MediaSwiper from "./MediaSwiper"
 
-import { MEDIA_STATE } from "@/lib/kb/concept/media"
+import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
@@ -25,7 +25,7 @@ const MediaView = ({ media }) => {
   const [swiperHeight, setSwiperHeight] = useState("auto")
 
   const showEditMedia =
-    editing && media[mediaIndex]?.action === MEDIA_STATE.NONE
+    editing && media[mediaIndex]?.action === CONCEPT_STATE.NONE
 
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
@@ -58,7 +58,7 @@ const MediaView = ({ media }) => {
       <Box sx={{ mt: 0.5, position: "relative", overflow: "visible" }}>
         <MediaSwiper
           height={swiperHeight}
-          media={media}
+          // media={media}
           setMediaIndex={setMediaIndex}
         />
         {editing && (

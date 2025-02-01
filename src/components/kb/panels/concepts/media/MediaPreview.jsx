@@ -5,37 +5,20 @@ import { BsInfoCircle } from "react-icons/bs"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { MEDIA_STATE } from "@/lib/kb/concept/media"
+import { mediaBorder } from "@/lib/kb/concept/media"
 
 const MediaPreview = ({ mediaIndex, openPreview }) => {
   const theme = useTheme()
   const { editingState } = use(ConceptContext)
   const mediaItem = editingState.media[mediaIndex]
 
-  const borderWidth = mediaItem.action === MEDIA_STATE.NONE ? "1px" : "2px"
-  let borderColor
-
-  switch (mediaItem.action) {
-    case MEDIA_STATE.ADD:
-      borderColor = theme.concept.color.pending
-      break
-    case MEDIA_STATE.EDIT:
-      borderColor = theme.concept.color.pending
-      break
-    case MEDIA_STATE.DELETE:
-      borderColor = theme.concept.color.remove
-      break
-    default:
-      borderColor = theme.palette.grey[300]
-  }
-
-  const borderDisplay = `${borderWidth} solid ${borderColor}`
+  const border = mediaBorder(mediaItem, theme)
 
   return (
     <>
       <Box
         sx={{
-          border: borderDisplay,
+          border,
           height: "0",
           paddingBottom: "100%",
           position: "relative",

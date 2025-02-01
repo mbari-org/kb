@@ -1,12 +1,13 @@
 import { MdOutlineDeleteForever } from "react-icons/md"
-import { MEDIA_STATE } from "@/lib/kb/concept/media"
-import MediaActionButton from "../MediaActionButton"
+import MediaActionButton from "./MediaActionButton"
+
+import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
 const MediaDelete = ({ mediaIndex }) => (
   <MediaActionButton
-    Icon={MdOutlineDeleteForever}
+    action={CONCEPT_STATE.DELETE_MEDIA}
     color="cancel"
-    action={MEDIA_STATE.DELETE}
+    Icon={MdOutlineDeleteForever}
     mediaIndex={mediaIndex}
     position="left"
   />

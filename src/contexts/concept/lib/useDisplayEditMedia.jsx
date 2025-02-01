@@ -1,44 +1,37 @@
 import { use, useCallback, useRef } from "react"
 
-import AddMediaActions from "@/components/kb/panels/concepts/media/editMedia/add/AddMediaActions"
-import AddMediaContent from "@/components/kb/panels/concepts/media/editMedia/add/AddMediaContent"
+import AddMediaActions from "@/components/kb/panels/concepts/media/editMedia/AddMediaActions"
 
-import DeleteMediaActions from "@/components/kb/panels/concepts/media/editMedia/delete/DeleteMediaActions"
-import DeleteMediaContent from "@/components/kb/panels/concepts/media/editMedia/delete/DeleteMediaContent"
+import DeleteMediaActions from "@/components/kb/panels/concepts/media/editMedia/DeleteMediaActions"
+import DeleteMediaContent from "@/components/kb/panels/concepts/media/editMedia/DeleteMediaContent"
 
-import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/edit/EditMediaActions"
-import EditMediaContent from "@/components/kb/panels/concepts/media/editMedia/edit/EditMediaContent"
+import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/EditMediaActions"
 import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/EditMediaTitle"
 
 import { createAlert } from "@/components/kb/factory"
 
-import { MEDIA_STATE } from "@/lib/kb/concept/media"
-
 import ModalContext from "@/contexts/modal/ModalContext"
+import EditMediaForm from "@/components/kb/panels/concepts/media/editMedia/EditMediaForm"
+
+import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
 const useDisplayEditMedia = () => {
   const { setAlert } = use(ModalContext)
-  const formRef = useRef(null)
 
   return useCallback(
     (action, mediaIndex) => {
-      let alert
-
       const Title = () => <EditMediaTitle action={action} />
 
+      let alert
       switch (action) {
-        case MEDIA_STATE.ADD:
+        case CONCEPT_STATE.ADD_MEDIA:
           alert = createAlert({
-            Actions: () => (
-              <AddMediaActions mediaIndex={mediaIndex} formRef={formRef} />
-            ),
-            Content: () => (
-              <AddMediaContent mediaIndex={mediaIndex} formRef={formRef} />
-            ),
+            Actions: () => <AddMediaActions />,
+            Content: () => <EditMediaForm mediaIndex={mediaIndex} />,
             Title,
           })
           break
-        case MEDIA_STATE.DELETE:
+        case CONCEPT_STATE.DELETE_MEDIA:
           alert = createAlert({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
@@ -46,10 +39,10 @@ const useDisplayEditMedia = () => {
           })
 
           break
-        case MEDIA_STATE.EDIT: {
+        case CONCEPT_STATE.EDIT_MEDIA: {
           alert = createAlert({
-            Actions: () => <EditMediaActions mediaIndex={mediaIndex} />,
-            Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
+            Actions: () => <EditMediaActions />,
+            Content: () => <EditMediaForm mediaIndex={mediaIndex} />,
             Title,
           })
 
