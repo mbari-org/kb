@@ -5,13 +5,14 @@ export const CONCEPT_STATE = {
   DELETE_MEDIA: "DELETE_MEDIA",
   EDIT_MEDIA: "EDIT_MEDIA",
   NONE: "NONE",
+  RESTORE_MEDIA: "RESTORE_MEDIA",
 }
 
 import { isPrimary } from "@/lib/kb/concept/media"
 
 const updateMedia = (state, { type, update }) => {
-  const { mediaIndex, media } = update
-  const updatedItem = { ...state.media[mediaIndex], ...media, action: type }
+  const { mediaIndex, mediaItem } = update
+  const updatedItem = { ...state.media[mediaIndex], ...mediaItem, action: type }
   return {
     ...state,
     media: state.media.map((item, index) =>
@@ -32,9 +33,9 @@ const conceptReducer = (state, { type, update }) => {
       }
 
     case CONCEPT_STATE.ADD_MEDIA: {
-      const isPrimaryMedia = isPrimary(update.media)
+      const isPrimaryMedia = isPrimary(update.mediaItem)
       const addItem = {
-        ...update.media,
+        ...update.mediaItem,
         isPrimary: isPrimaryMedia,
         action: type,
       }
@@ -63,7 +64,7 @@ const conceptReducer = (state, { type, update }) => {
       if (stateMedia.action === CONCEPT_STATE.ADD_MEDIA) {
         const updatedItem = {
           ...stateMedia,
-          ...update.media,
+          ...update.mediaItem,
           action: CONCEPT_STATE.ADD_MEDIA,
         }
         return {
@@ -74,6 +75,17 @@ const conceptReducer = (state, { type, update }) => {
         }
       }
       return updateMedia(state, { type, update })
+    }
+
+    case CONCEPT_STATE.RESTORE_MEDIA: {
+      const restoreMediaItem = {
+        ...update.mediaItem,
+        action: CONCEPT_STATE.NONE,
+      }
+      const updatedMedia = state.media.map((mediaItem, mediaIndex) =>
+        mediaIndex === update.mediaIndex ? restoreMediaItem : mediaItem
+      )
+      return { ...state, media: updatedMedia }
     }
 
     default:

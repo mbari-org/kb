@@ -18,7 +18,7 @@ import useDisplayEditMedia from "./lib/useDisplayEditMedia"
 import useDisplayPendingField from "./lib/useDisplayPendingField"
 import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { editsObject, isEmpty } from "@/lib/kb/util"
+import { hasPendingEdits } from "@/lib/kb/util"
 
 const ConceptProvider = ({ children }) => {
   const theme = useTheme()
@@ -51,7 +51,14 @@ const ConceptProvider = ({ children }) => {
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
 
-  const modifyConcept = useCallback(action => dispatch(action), [dispatch])
+  const modifyConcept = useCallback(
+    action => {
+      dispatch(action)
+
+      // CxTBD Check for restored media edit. See useModifyConcept.
+    },
+    [dispatch]
+  )
 
   const resetState = useCallback(
     toState => {
@@ -139,8 +146,7 @@ const ConceptProvider = ({ children }) => {
   ])
 
   useEffect(() => {
-    const pendingEdits = editsObject(initialState, editingState)
-    setModified(!isEmpty(pendingEdits))
+    setModified(hasPendingEdits(initialState, editingState))
   }, [editingState, initialState])
 
   useEffect(() => {

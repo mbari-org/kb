@@ -11,6 +11,9 @@ const MediaEdit = ({ mediaIndex }) => (
     Icon={CiEdit}
     mediaIndex={mediaIndex}
     position="right"
+    sx={{
+      mb: 1,
+    }}
   />
 )
 

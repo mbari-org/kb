@@ -21,15 +21,6 @@ const dropFields = (object, fields) => {
   }, {})
 }
 
-const pendingEdits = (initialState, editingState) => {
-  return Object.keys(editingState).reduce((edits, field) => {
-    if (editingState[field] !== initialState[field]) {
-      edits.push([field, initialState[field], editingState[field]])
-    }
-    return edits
-  }, [])
-}
-
 const editsObject = (initialState, editingState) => {
   return pendingEdits(initialState, editingState).reduce(
     (edits, [field, initial, pending]) => {
@@ -49,6 +40,10 @@ const getFieldPendingHistory = (pendingHistory, field) => {
     )?.[0]
 }
 
+const hasPendingEdits = (initialState, editingState) => {
+  return !isEmpty(editsObject(initialState, editingState))
+}
+
 const hasPendingHistory = (pendingHistory, field) => {
   if (field) {
     return !isEmpty(getFieldPendingHistory(pendingHistory, field))
@@ -56,7 +51,7 @@ const hasPendingHistory = (pendingHistory, field) => {
   return !isEmpty(pendingHistory)
 }
 
-const isDeepEqual = (obj1, obj2) => {
+const isEqual = (obj1, obj2) => {
   if (obj1 === obj2) return true
 
   if (
@@ -74,13 +69,42 @@ const isDeepEqual = (obj1, obj2) => {
   if (keys1.length !== keys2.length) return false
 
   for (let key of keys1) {
-    if (!keys2.includes(key) || !isDeepEqual(obj1[key], obj2[key])) {
+    if (!keys2.includes(key) || obj1[key] !== obj2[key]) {
       return false
     }
   }
 
   return true
 }
+
+const isDeepEqual = (obj1, obj2) => {
+  if (
+    typeof obj1 !== "object" ||
+    obj1 === null ||
+    typeof obj2 !== "object" ||
+    obj2 === null
+  ) {
+    return isEqual(obj1, obj2)
+  }
+
+  const keys1 = Object.keys(obj1)
+  const keys2 = Object.keys(obj2)
+
+  if (keys1.length !== keys2.length) return false
+
+  for (let key of keys1) {
+    if (!keys2.includes(key)) return false
+
+    if (typeof obj1[key] === "object" && obj1[key] !== null) {
+      if (!isDeepEqual(obj1[key], obj2[key])) return false
+    } else if (!isEqual(obj1[key], obj2[key])) {
+      return false
+    }
+  }
+
+  return true
+}
+
 const isElementInViewport = element => {
   const rect = element.getBoundingClientRect()
   return (
@@ -99,6 +123,15 @@ const isEmpty = object => {
     return Object.keys(object).length === 0
   }
   return true
+}
+
+const pendingEdits = (initialState, editingState) => {
+  return Object.keys(editingState).reduce((edits, field) => {
+    if (editingState[field] !== initialState[field]) {
+      edits.push([field, initialState[field], editingState[field]])
+    }
+    return edits
+  }, [])
 }
 
 const pickFields = (object, fields) => {
@@ -136,10 +169,13 @@ export {
   dropFields,
   editsObject,
   getFieldPendingHistory,
+  hasPendingEdits,
   hasPendingHistory,
   isDeepEqual,
   isElementInViewport,
   isEmpty,
+  isEqual,
+  pendingEdits,
   pickFields,
   prettyFormat,
   prune,

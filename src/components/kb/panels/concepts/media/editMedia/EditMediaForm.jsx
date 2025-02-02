@@ -41,6 +41,7 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
 
   const handleSubmit = e => {
     e.preventDefault()
+
     const type =
       mediaIndex === editingState.media.length
         ? CONCEPT_STATE.ADD_MEDIA
@@ -49,7 +50,7 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
       type,
       update: {
         mediaIndex,
-        media: data.editing,
+        mediaItem: data.editing,
       },
     })
     setAlert(null)

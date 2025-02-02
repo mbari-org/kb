@@ -17,6 +17,7 @@ const MediaAdd = ({ bgColor, mediaIndex, sx }) => (
           backgroundColor: `${bgColor} !important`,
         },
       },
+      backgroundColor: "transparent",
       bottom: "unset",
       left: "50%",
       right: "unset",

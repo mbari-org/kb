@@ -10,6 +10,9 @@ const MediaDelete = ({ mediaIndex }) => (
     Icon={MdOutlineDeleteForever}
     mediaIndex={mediaIndex}
     position="left"
+    sx={{
+      mb: 1,
+    }}
   />
 )
 
