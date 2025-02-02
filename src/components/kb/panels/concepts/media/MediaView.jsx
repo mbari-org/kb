@@ -13,10 +13,10 @@ import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const MediaView = ({ media }) => {
+const MediaView = () => {
   const theme = useTheme()
 
-  const { editing } = use(ConceptContext)
+  const { editing, editingState } = use(ConceptContext)
 
   const mediaViewRef = useRef(null)
 
@@ -25,7 +25,8 @@ const MediaView = ({ media }) => {
   const [swiperHeight, setSwiperHeight] = useState("auto")
 
   const showEditMedia =
-    editing && media[mediaIndex]?.action === CONCEPT_STATE.NONE
+    editing &&
+    editingState.media[mediaIndex]?.action !== CONCEPT_STATE.DELETE_MEDIA
 
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
@@ -35,7 +36,7 @@ const MediaView = ({ media }) => {
       const width = mediaViewRef.current.offsetWidth
       setSwiperHeight(`${width / 4}px`)
     }
-  }, [media])
+  }, [editingState.media])
 
   return (
     <>
@@ -56,15 +57,11 @@ const MediaView = ({ media }) => {
         )}
       </Box>
       <Box sx={{ mt: 0.5, position: "relative", overflow: "visible" }}>
-        <MediaSwiper
-          height={swiperHeight}
-          // media={media}
-          setMediaIndex={setMediaIndex}
-        />
+        <MediaSwiper height={swiperHeight} setMediaIndex={setMediaIndex} />
         {editing && (
           <MediaAdd
             bgColor={theme.palette.background.paperLight}
-            mediaIndex={mediaIndex.length}
+            mediaIndex={editingState.media.length}
             sx={{
               mt: 1,
             }}

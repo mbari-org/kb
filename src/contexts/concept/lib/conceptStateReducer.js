@@ -7,6 +7,8 @@ export const CONCEPT_STATE = {
   NONE: "NONE",
 }
 
+import { isPrimary } from "@/lib/kb/concept/media"
+
 const updateMedia = (state, { type, update }) => {
   const { mediaIndex, media } = update
   const updatedItem = { ...state.media[mediaIndex], ...media, action: type }
@@ -30,18 +32,49 @@ const conceptReducer = (state, { type, update }) => {
       }
 
     case CONCEPT_STATE.ADD_MEDIA: {
-      const addItem = { ...update, action: type }
+      const isPrimaryMedia = isPrimary(update.media)
+      const addItem = {
+        ...update.media,
+        isPrimary: isPrimaryMedia,
+        action: type,
+      }
       return {
         ...state,
         media: [...state.media, addItem],
       }
     }
 
-    case CONCEPT_STATE.DELETE_MEDIA:
+    case CONCEPT_STATE.DELETE_MEDIA: {
+      const stateMedia = state.media[update.mediaIndex]
+      if (stateMedia.action === CONCEPT_STATE.ADD_MEDIA) {
+        const updatedMedia = state.media.filter(
+          (_item, index) => index !== update.mediaIndex
+        )
+        return {
+          ...state,
+          media: updatedMedia,
+        }
+      }
       return updateMedia(state, { type, update })
+    }
 
-    case CONCEPT_STATE.EDIT_MEDIA:
+    case CONCEPT_STATE.EDIT_MEDIA: {
+      const stateMedia = state.media[update.mediaIndex]
+      if (stateMedia.action === CONCEPT_STATE.ADD_MEDIA) {
+        const updatedItem = {
+          ...stateMedia,
+          ...update.media,
+          action: CONCEPT_STATE.ADD_MEDIA,
+        }
+        return {
+          ...state,
+          media: state.media.map((item, index) =>
+            index === update.mediaIndex ? updatedItem : item
+          ),
+        }
+      }
       return updateMedia(state, { type, update })
+    }
 
     default:
       return state

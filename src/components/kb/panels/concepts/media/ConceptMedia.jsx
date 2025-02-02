@@ -20,7 +20,7 @@ const ConceptMedia = () => {
       }}
     >
       {media?.length === 0 && <NoMedia />}
-      {media?.length > 0 && <MediaView media={media} />}
+      {media?.length > 0 && <MediaView />}
     </Box>
   )
 }

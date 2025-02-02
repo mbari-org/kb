@@ -25,7 +25,7 @@ const mediaBorder = (mediaItem, theme) => {
   let borderColor
   switch (mediaItem.action) {
     case CONCEPT_STATE.ADD_MEDIA:
-      borderColor = theme.concept.color.pending
+      borderColor = theme.concept.color.clean
       break
     case CONCEPT_STATE.EDIT_MEDIA:
       borderColor = theme.palette.primary.main
