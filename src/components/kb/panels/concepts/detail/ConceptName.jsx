@@ -1,32 +1,39 @@
-import { use } from "react"
+import { use, useState } from "react"
 
 import { Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import ApprovalButton from "@/components/kb/panels/concepts/detail/ApprovalButton"
+import StructureEditButton from "./conceptStructure/StructureEditButton"
+import StructureEditChoices from "./conceptStructure/StructureEditChoices"
+
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import { isAdmin, isReadOnly } from "@/lib/auth/role"
+
 import { hasPendingHistory } from "@/lib/kb/util"
-import ConceptNameEditButton from "./conceptName/ConceptNameEditButton"
+import { isAdmin, isReadOnly } from "@/lib/auth/role"
 
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
+
+  const [showEditChoices, setShowEditChoices] = useState(false)
 
   const { user } = use(AuthContext)
   const { concept, editing, pendingHistory } = use(ConceptContext)
 
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
 
-  const showApprovalButton = editing && nameHasPendingHistory && isAdmin(user)
-  const showEditButton = !editing && !nameHasPendingHistory && !isReadOnly(user)
+  const showApprovalButton =
+    editing && nameHasPendingHistory && isAdmin(user) && !showEditChoices
+  const showEditStructureButton =
+    !editing && !nameHasPendingHistory && !isReadOnly(user) && !showEditChoices
 
   const conceptColor = nameHasPendingHistory
     ? conceptTheme.color.pending
     : conceptTheme.color.clean
 
   return (
-    <Stack direction="row" alignItems="center">
+    <Stack direction="row" alignItems="center" sx={{ position: "relative" }}>
       <Typography
         component="div"
         sx={{
@@ -40,8 +47,13 @@ const ConceptName = () => {
       >
         {concept?.name}
       </Typography>
-      {showEditButton && <ConceptNameEditButton />}
       {showApprovalButton && <ApprovalButton field={"conceptName"} />}
+      {showEditStructureButton && (
+        <StructureEditButton onClick={() => setShowEditChoices(true)} />
+      )}
+      {showEditChoices && (
+        <StructureEditChoices onClose={() => setShowEditChoices(false)} />
+      )}
     </Stack>
   )
 }
