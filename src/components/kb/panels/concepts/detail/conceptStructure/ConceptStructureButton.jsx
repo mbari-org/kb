@@ -4,7 +4,7 @@ import { IconButton } from "@mui/material"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const StructureEditButton = ({ onClick }) => {
+const ConceptStructureButton = ({ onClick }) => {
   const { editing } = use(ConceptContext)
 
   return (
@@ -29,4 +29,4 @@ const StructureEditButton = ({ onClick }) => {
   )
 }
 
-export default StructureEditButton
+export default ConceptStructureButton

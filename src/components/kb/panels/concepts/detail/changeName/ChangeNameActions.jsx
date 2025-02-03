@@ -5,7 +5,7 @@ import { createActions } from "@/components/kb/factory"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-const EditNameActions = () => {
+const ChangeNameActions = () => {
   const { concept, editingState, processUpdates } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 
@@ -24,4 +24,4 @@ const EditNameActions = () => {
   )
 }
 
-export default EditNameActions
+export default ChangeNameActions

@@ -1,42 +1,25 @@
-import { use } from "react"
 import { Modal, Box, Button, IconButton, Stack } from "@mui/material"
 import { IoClose } from "react-icons/io5"
 
-import EditNameActions from "../editName/EditNameActions"
-import EditNameContent from "../editName/EditNameContent"
-import EditNameTitle from "../editName/EditNameTitle"
+import changeName from "../changeName/useChangeName"
+import changeParent from "../changeParent/useChangeParent"
 
-import { createModal } from "@/components/kb/factory"
-import ModalContext from "@/contexts/modal/ModalContext"
-
-const StructureEditChoices = ({ onClose }) => {
-  const { setModal } = use(ModalContext)
-
-  const editConceptName = () => {
-    const modal = createModal({
-      Actions: EditNameActions,
-      Content: EditNameContent,
-      Title: EditNameTitle,
-    })
-    onClose()
-    setModal(modal)
-  }
-
+const ConceptStructureChoices = ({ onClose }) => {
   return (
     <Modal open={true} onClose={onClose}>
       <Box
         sx={{
-          position: "absolute",
-          left: "50%",
-          top: "25%",
-          transform: "translate(-50%, -25%)",
           bgcolor: "background.paper",
           border: 1,
           borderColor: "divider",
           borderRadius: 1,
           boxShadow: 3,
-          p: 2,
+          left: "50%",
           minWidth: 200,
+          p: 2,
+          position: "absolute",
+          top: "25%",
+          transform: "translate(-50%, -25%)",
           zIndex: 1000,
         }}
       >
@@ -52,11 +35,19 @@ const StructureEditChoices = ({ onClose }) => {
           <IoClose size={24} />
         </IconButton>
 
-        <Stack spacing={1} mt={2}>
-          <Button variant="contained" color="primary" onClick={editConceptName}>
+        <Stack spacing={1.5} mt={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={changeName({ onClose })}
+          >
             Change Name
           </Button>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={changeParent({ onClose })}
+          >
             Change Parent
           </Button>
           <Button variant="contained" color="primary">
@@ -71,4 +62,4 @@ const StructureEditChoices = ({ onClose }) => {
   )
 }
 
-export default StructureEditChoices
+export default ConceptStructureChoices

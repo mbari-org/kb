@@ -1,9 +1,10 @@
 import { use, useCallback } from "react"
 
-import { createModal } from "@/components/kb/factory"
 import EditingStateActions from "@/components/kb/panels/concepts/detail/editingState/EditingStateActions"
 import EditingStateContent from "@/components/kb/panels/concepts/detail/editingState/EditingStateContent"
 import EditingStateTitle from "@/components/kb/panels/concepts/detail/editingState/EditingStateTitle"
+
+import { createModal } from "@/components/kb/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
