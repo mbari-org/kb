@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import Modal from "../modal/Modal"
+import Modal from "./Modal"
 import LoadingBackdrop from "./LoadingBackdrop"
 
 import ModalContext from "@/contexts/modal/ModalContext"

@@ -24,6 +24,7 @@ const Modal = ({ modal }) => {
             alignItems: "center",
             display: "flex",
             justifyContent: "center",
+            mt: 10,
           }}
         >
           <Card sx={{ p: 2, pb: 0 }}>
