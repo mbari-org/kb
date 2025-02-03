@@ -1,28 +1,20 @@
 import { use } from "react"
-import { CiEdit } from "react-icons/ci"
 
-import { IconButton, Stack, Typography } from "@mui/material"
+import { Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import ApprovalButton from "@/components/kb/panels/concepts/detail/ApprovalButton"
-import EditNameActions from "@/components/kb/panels/concepts/detail/editName/EditNameActions"
-import EditNameContent from "@/components/kb/panels/concepts/detail/editName/EditNameContent"
-import EditNameTitle from "@/components/kb/panels/concepts/detail/editName/EditNameTitle"
-import { createAlert } from "@/components/kb/factory"
-
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
-import ModalContext from "@/contexts/modal/ModalContext"
-
 import { isAdmin, isReadOnly } from "@/lib/auth/role"
 import { hasPendingHistory } from "@/lib/kb/util"
+import ConceptNameEditButton from "./conceptName/ConceptNameEditButton"
 
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
 
   const { user } = use(AuthContext)
   const { concept, editing, pendingHistory } = use(ConceptContext)
-  const { setAlert } = use(ModalContext)
 
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
 
@@ -32,15 +24,6 @@ const ConceptName = () => {
   const conceptColor = nameHasPendingHistory
     ? conceptTheme.color.pending
     : conceptTheme.color.clean
-
-  const editConceptName = () => {
-    const alert = createAlert({
-      Actions: EditNameActions,
-      Content: EditNameContent,
-      Title: EditNameTitle,
-    })
-    setAlert(alert)
-  }
 
   return (
     <Stack direction="row" alignItems="center">
@@ -57,26 +40,7 @@ const ConceptName = () => {
       >
         {concept?.name}
       </Typography>
-      {showEditButton && (
-        <IconButton
-          aria-label="Edit concept name"
-          color="main"
-          disabled={editing}
-          onClick={editConceptName}
-          sx={{
-            mb: 2,
-            ml: 0.5,
-            padding: 0,
-            visibility: editing ? "hidden" : "visible",
-            "&:hover": {
-              backgroundColor: `transparent !important`,
-              transform: "scale(1.25)",
-            },
-          }}
-        >
-          <CiEdit size={24} />
-        </IconButton>
-      )}
+      {showEditButton && <ConceptNameEditButton />}
       {showApprovalButton && <ApprovalButton field={"conceptName"} />}
     </Stack>
   )
