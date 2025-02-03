@@ -1,7 +1,7 @@
 import RankUpdateErrorActions from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorActions"
 import RankUpdateErrorContent from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorContent"
 import RankUpdateErrorTitle from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorTitle"
-import { createAlert } from "@/components/kb/factory"
+import { createModal } from "@/components/kb/factory"
 
 import { isAdmin } from "@/lib/auth/role"
 
@@ -11,7 +11,7 @@ const validateRankUpdates = async ({
   concept,
   initialState,
   modifyConcept,
-  setAlert,
+  setModal,
   updates,
   user,
 }) => {
@@ -52,7 +52,7 @@ const validateRankUpdates = async ({
       })
       validation = { ...validation, rankName: false }
     }
-    setAlert(null)
+    setModal(null)
     resolvePromise(validation)
   }
 
@@ -81,12 +81,12 @@ const validateRankUpdates = async ({
     {}
   )
 
-  const alert = createAlert({
+  const modal = createModal({
     Actions: () => <RankUpdateErrorActions onAction={onAction} />,
     Content: () => <RankUpdateErrorContent detail={detailUpdatesDisplay} />,
     Title: RankUpdateErrorTitle,
   })
-  setAlert(alert)
+  setModal(modal)
 
   return promise
 }

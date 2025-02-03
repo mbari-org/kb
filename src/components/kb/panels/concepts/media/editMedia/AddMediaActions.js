@@ -8,7 +8,7 @@ const ADD = "Add"
 const DISCARD = "Discard"
 
 const AddMediaActions = () => {
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   const colors = ["cancel", "main"]
   const labels = [DISCARD, ADD]
@@ -18,7 +18,7 @@ const AddMediaActions = () => {
       const form = document.querySelector("form")
       form?.requestSubmit()
     } else {
-      setAlert(null)
+      setModal(null)
     }
   }
 

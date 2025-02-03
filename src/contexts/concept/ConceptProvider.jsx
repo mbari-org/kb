@@ -25,7 +25,7 @@ const ConceptProvider = ({ children }) => {
 
   const { showBoundary } = useErrorBoundary()
 
-  const { alert, setAlert } = use(ModalContext)
+  const { modal, setModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
     filterRanks,
@@ -39,7 +39,7 @@ const ConceptProvider = ({ children }) => {
 
   const [concept, setConcept] = useState(null)
   const [editing, setEditing] = useState(false)
-  const [modalHasBeenDisplayed, setModalAlertHasBeenDisplayed] = useState(false)
+  const [modalHasBeenDisplayed, setModalHasBeenDisplayed] = useState(false)
   const [modified, setModified] = useState(false)
   const [pendingHistory, setPendingHistory] = useState(null)
 
@@ -64,14 +64,14 @@ const ConceptProvider = ({ children }) => {
     toState => {
       setEditing(false)
       setModified(false)
-      setAlert(null)
+      setModal(null)
 
       const resetStateConcept = { ...concept, ...toState }
       setConcept(resetStateConcept)
 
       dispatch({ type: "INIT_STATE", update: toState })
     },
-    [concept, setAlert]
+    [concept, setModal]
   )
 
   const submitUpdates = useSubmitUpdates({
@@ -84,7 +84,7 @@ const ConceptProvider = ({ children }) => {
     ranks: filterRanks(),
     resetState,
     selectConcept,
-    setAlert,
+    setModal,
     showBoundary,
     theme,
     updateConcept,
@@ -105,14 +105,14 @@ const ConceptProvider = ({ children }) => {
         return
       }
 
-      if (!alert && !modalHasBeenDisplayed) {
+      if (!modal && !modalHasBeenDisplayed) {
         displayEditingState()
-        setModalAlertHasBeenDisplayed(true)
+        setModalHasBeenDisplayed(true)
         return
       }
 
-      if (!alert) {
-        setModalAlertHasBeenDisplayed(false)
+      if (!modal) {
+        setModalHasBeenDisplayed(false)
         return
       }
 
@@ -129,7 +129,7 @@ const ConceptProvider = ({ children }) => {
       )
     }
   }, [
-    alert,
+    modal,
     concept,
     displayEditingState,
     editing,
@@ -141,7 +141,7 @@ const ConceptProvider = ({ children }) => {
     selectConcept,
     selectPanel,
     selected,
-    setAlert,
+    setModal,
     showBoundary,
   ])
 

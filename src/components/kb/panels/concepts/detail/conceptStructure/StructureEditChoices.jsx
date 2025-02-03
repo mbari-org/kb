@@ -8,20 +8,20 @@ import EditNameActions from "../editName/EditNameActions"
 import EditNameContent from "../editName/EditNameContent"
 import EditNameTitle from "../editName/EditNameTitle"
 
-import { createAlert } from "@/components/kb/factory"
+import { createModal } from "@/components/kb/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
 const StructureEditChoices = ({ onClose }) => {
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   const editConceptName = () => {
-    const alert = createAlert({
+    const modal = createModal({
       Actions: EditNameActions,
       Content: EditNameContent,
       Title: EditNameTitle,
     })
-    setAlert(alert)
+    setModal(modal)
   }
 
   return (

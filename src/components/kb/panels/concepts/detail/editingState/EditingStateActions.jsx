@@ -11,7 +11,7 @@ const DISCARD = "Discard"
 
 const EditingStateActions = () => {
   const { concept, initialState, resetState } = use(ConceptContext)
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
 
   const colors = ["cancel", "main"]
@@ -29,7 +29,7 @@ const EditingStateActions = () => {
       default:
         break
     }
-    setAlert(null)
+    setModal(null)
   }
 
   return createActions(

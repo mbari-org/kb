@@ -1,6 +1,6 @@
 import { use, useCallback } from "react"
 
-import { createAlert } from "@/components/kb/factory"
+import { createModal } from "@/components/kb/factory"
 import PendingFieldActions from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldActions"
 import PendingFieldContent from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldContent"
 import PendingFieldTitle from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldTitle"
@@ -8,18 +8,18 @@ import PendingFieldTitle from "@/components/kb/panels/concepts/detail/pendingFie
 import ModalContext from "@/contexts/modal/ModalContext"
 
 const useDisplayPendingField = () => {
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   return useCallback(
     field => {
-      const alert = createAlert({
+      const modal = createModal({
         Actions: () => <PendingFieldActions field={field} />,
         Content: () => <PendingFieldContent field={field} />,
         Title: PendingFieldTitle,
       })
-      setAlert(alert)
+      setModal(modal)
     },
-    [setAlert]
+    [setModal]
   )
 }
 

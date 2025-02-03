@@ -23,7 +23,7 @@ const DeleteMediaContent = ({ mediaIndex }) => {
     sx: { ml: 1, mr: 1 },
   })
 
-  return <Detail id="alert-content-detail" />
+  return <Detail id="modal-content-detail" />
 }
 
 export default DeleteMediaContent

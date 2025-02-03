@@ -6,14 +6,14 @@ import { createTextContent } from "@/components/kb/factory"
 const ErrorContent = ({ error }) => {
   const theme = useTheme()
 
-  const alertTextMessage = createTextContent({
+  const modalTextMessage = createTextContent({
     sx: { mt: 2, mb: 2 },
     text: error.message,
     type: "error",
   })
   return (
     <>
-      {alertTextMessage}
+      {modalTextMessage}
       <Typography
         id="modal-error-detail"
         variant="h6"

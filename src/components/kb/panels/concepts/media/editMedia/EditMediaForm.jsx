@@ -16,7 +16,7 @@ import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
 const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
   const { editingState, modifyConcept } = use(ConceptContext)
-  const { data, setAlert, setData } = use(ModalContext)
+  const { data, setModal, setData } = use(ModalContext)
 
   const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
 
@@ -53,7 +53,7 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
         mediaItem: data.editing,
       },
     })
-    setAlert(null)
+    setModal(null)
   }
 
   useEffect(() => {

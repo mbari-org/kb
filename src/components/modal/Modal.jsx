@@ -5,14 +5,14 @@ import {
   CardContent,
   CardHeader,
   Fade,
-  Modal,
+  Modal as MuiModal,
 } from "@mui/material"
 
-const Alert = ({ alert }) => {
-  const { Actions, Content, Title } = alert
+const Modal = ({ modal }) => {
+  const { Actions, Content, Title } = modal
 
   return (
-    <Modal
+    <MuiModal
       aria-labelledby="modal-alert"
       aria-describedby="modal-alert-description"
       open
@@ -37,8 +37,8 @@ const Alert = ({ alert }) => {
           </Card>
         </Box>
       </Fade>
-    </Modal>
+    </MuiModal>
   )
 }
 
-export default Alert
+export default Modal

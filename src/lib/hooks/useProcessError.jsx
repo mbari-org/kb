@@ -3,23 +3,23 @@ import { use, useCallback } from "react"
 import ErrorActions from "@/components/kb/error/ErrorActions"
 import ErrorContent from "@/components/kb/error/ErrorContent"
 import ErrorTitle from "@/components/kb/Error/ErrorTitle"
-import { createAlert } from "@/components/kb/factory"
+import { createModal } from "@/components/kb/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
 const useProcessError = () => {
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   return useCallback(
     error => {
-      const alert = createAlert({
+      const modal = createModal({
         Actions: ErrorActions,
         Content: () => <ErrorContent error={error} />,
         Title: ErrorTitle,
       })
-      setAlert(alert)
+      setModal(modal)
     },
-    [setAlert]
+    [setModal]
   )
 }
 

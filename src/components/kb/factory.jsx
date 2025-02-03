@@ -1,7 +1,7 @@
-import Actions from "@/components/alert/actions/Actions"
-import DetailContent from "../alert/content/DetailContent"
-import TextContent from "@/components/alert/content/TextContent"
-import Title from "@/components/alert/Title"
+import Actions from "@/components/modal/actions/Actions"
+import DetailContent from "../modal/content/DetailContent"
+import TextContent from "@/components/modal/content/TextContent"
+import Title from "@/components/modal/Title"
 
 const createComponent = (Component, props, name) => {
   const NamedComponent = () => <Component {...props} />
@@ -14,7 +14,7 @@ const createDetailContent = props => createComponent(DetailContent, props)
 const createTextContent = props => createComponent(TextContent, props)
 const createTitle = (props, name) => createComponent(Title, props, name)
 
-const createAlert = ({ Actions, Content, Title }) => ({
+const createModal = ({ Actions, Content, Title }) => ({
   Title: createComponent(Title),
   Content: createComponent(Content),
   Actions: createComponent(Actions),
@@ -22,7 +22,7 @@ const createAlert = ({ Actions, Content, Title }) => ({
 
 export {
   createActions,
-  createAlert,
+  createModal,
   createDetailContent,
   createTextContent,
   createTitle,

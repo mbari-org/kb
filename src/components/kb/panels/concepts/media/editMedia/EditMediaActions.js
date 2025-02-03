@@ -8,7 +8,7 @@ const DISCARD = "Discard"
 const SAVE = "Save"
 
 const EditMediaActions = () => {
-  const { data, setAlert } = use(ModalContext)
+  const { data, setModal } = use(ModalContext)
 
   const colors = ["cancel", "main"]
   const disabled = [false, !data?.dirty]
@@ -19,7 +19,7 @@ const EditMediaActions = () => {
       const form = document.querySelector("form")
       form?.requestSubmit()
     } else {
-      setAlert(null)
+      setModal(null)
     }
   }
 

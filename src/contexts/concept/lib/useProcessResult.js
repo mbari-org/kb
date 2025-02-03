@@ -6,7 +6,7 @@ const useProcessResult = ({
   initialState,
   resetState,
   selectConcept,
-  setAlert,
+  setModal,
   setEditing,
   setModified,
   showBoundary,
@@ -40,14 +40,14 @@ const useProcessResult = ({
         error => showBoundary(error)
       )
 
-      setAlert(null)
+      setModal(null)
       setEditing(false)
       setModified(false)
     },
     [
       concept,
       selectConcept,
-      setAlert,
+      setModal,
       setEditing,
       setModified,
       showBoundary,

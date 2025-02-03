@@ -16,7 +16,7 @@ const REJECT = "Reject"
 const PendingFieldActions = ({ field }) => {
   const { pendingHistory } = use(ConceptContext)
   const { config } = use(ConfigContext)
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   const pendingFieldHistory = getFieldPendingHistory(pendingHistory, field)
 
@@ -36,7 +36,7 @@ const PendingFieldActions = ({ field }) => {
       default:
         break
     }
-    setAlert(null)
+    setModal(null)
   }
 
   return createActions({ colors, labels, onAction }, "PendingFieldActions")

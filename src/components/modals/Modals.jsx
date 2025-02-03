@@ -1,16 +1,16 @@
 import { use } from "react"
 
-import Alert from "../alert/Alert"
+import Modal from "../modal/Modal"
 import LoadingBackdrop from "./LoadingBackdrop"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
 const Modals = () => {
-  const { loading, alert } = use(ModalContext)
+  const { loading, modal } = use(ModalContext)
 
   return (
     <>
-      {alert && <Alert alert={alert} />}
+      {modal && <Modal modal={modal} />}
       {loading && <LoadingBackdrop loading={loading} />}
     </>
   )

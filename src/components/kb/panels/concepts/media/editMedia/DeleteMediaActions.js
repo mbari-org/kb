@@ -10,7 +10,7 @@ const DELETE = "Delete"
 
 const DeleteMediaActions = ({ mediaIndex }) => {
   const { modifyConcept } = use(ConceptContext)
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   const colors = ["main", "cancel"]
   const labels = [CANCEL, DELETE]
@@ -19,7 +19,7 @@ const DeleteMediaActions = ({ mediaIndex }) => {
     if (label === DELETE) {
       modifyConcept({ type: "DELETE_MEDIA", update: { mediaIndex } })
     }
-    setAlert(null)
+    setModal(null)
   }
 
   return createActions({ colors, labels, onAction }, "DeleteMediaActions")

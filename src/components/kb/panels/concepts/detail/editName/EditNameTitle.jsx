@@ -1,4 +1,4 @@
-import Title from "@/components/alert/Title"
+import Title from "@/components/modal/Title"
 
 const EditNameTitle = () => {
   return <Title title={"Edit Concept Name"} />

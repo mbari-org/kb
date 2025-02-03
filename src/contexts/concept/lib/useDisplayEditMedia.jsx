@@ -8,7 +8,7 @@ import DeleteMediaContent from "@/components/kb/panels/concepts/media/editMedia/
 import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/EditMediaActions"
 import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/EditMediaTitle"
 
-import { createAlert } from "@/components/kb/factory"
+import { createModal } from "@/components/kb/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 import EditMediaForm from "@/components/kb/panels/concepts/media/editMedia/EditMediaForm"
@@ -16,23 +16,23 @@ import EditMediaForm from "@/components/kb/panels/concepts/media/editMedia/EditM
 import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
 
 const useDisplayEditMedia = () => {
-  const { setAlert } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   return useCallback(
     (action, mediaIndex) => {
       const Title = () => <EditMediaTitle action={action} />
 
-      let alert
+      let modal
       switch (action) {
         case CONCEPT_STATE.ADD_MEDIA:
-          alert = createAlert({
+          modal = createModal({
             Actions: () => <AddMediaActions />,
             Content: () => <EditMediaForm mediaIndex={mediaIndex} />,
             Title,
           })
           break
         case CONCEPT_STATE.DELETE_MEDIA:
-          alert = createAlert({
+          modal = createModal({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
             Title,
@@ -40,7 +40,7 @@ const useDisplayEditMedia = () => {
 
           break
         case CONCEPT_STATE.EDIT_MEDIA: {
-          alert = createAlert({
+          modal = createModal({
             Actions: () => <EditMediaActions />,
             Content: () => <EditMediaForm mediaIndex={mediaIndex} />,
             Title,
@@ -50,9 +50,9 @@ const useDisplayEditMedia = () => {
         }
       }
 
-      setAlert(alert)
+      setModal(modal)
     },
-    [setAlert]
+    [setModal]
   )
 }
 

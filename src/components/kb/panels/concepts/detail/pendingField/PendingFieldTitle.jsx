@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import Title from "@/components/alert/Title"
+import Title from "@/components/modal/Title"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
