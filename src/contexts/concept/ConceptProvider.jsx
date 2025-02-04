@@ -105,18 +105,15 @@ const ConceptProvider = ({ children }) => {
         return
       }
 
-      if (!modal && !modalHasBeenDisplayed) {
-        displayEditingState()
-        setModalHasBeenDisplayed(true)
-        return
-      }
-
       if (!modal) {
-        setModalHasBeenDisplayed(false)
+        if (modalHasBeenDisplayed) {
+          setModalHasBeenDisplayed(false)
+        } else {
+          displayEditingState()
+          setModalHasBeenDisplayed(true)
+        }
         return
       }
-
-      return
     }
 
     if (selected.concept !== concept?.name) {

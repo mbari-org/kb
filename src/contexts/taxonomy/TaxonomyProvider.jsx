@@ -12,6 +12,7 @@ import {
   getConceptNames as getTaxonomyConceptNames,
   getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
+  getRoot as getTaxonomyRoot,
   filterTaxonomyRanks,
   load,
   loadTaxonomy,
@@ -54,13 +55,18 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
+  const getRoot = useCallback(() => getTaxonomyRoot(taxonomy), [taxonomy])
+
   const loadConcept = async conceptName => {
     const existing = getTaxonomyConcept(taxonomy, conceptName)
     if (needsUpdate(existing)) {
       setLoading(true)
-      const { taxonomy: taxonmyWithConcept } = await load(taxonomy, conceptName)
+      const { taxonomy: taxonomyWithConcept } = await load(
+        taxonomy,
+        conceptName
+      )
       setLoading(false)
-      setTaxonomy(taxonmyWithConcept)
+      setTaxonomy(taxonomyWithConcept)
     }
   }
 
@@ -139,6 +145,7 @@ const TaxonomyProvider = ({ children }) => {
         getConceptNames,
         getConceptPendingHistory,
         getConceptPrimaryName,
+        getRoot,
         loadConcept,
         loadConceptDescendants,
         taxonomy,

@@ -1,4 +1,4 @@
-import { use } from "react"
+import { use, useState } from "react"
 
 import {
   Box,
@@ -16,7 +16,9 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 const ChangeParentContent = () => {
   const theme = useTheme()
 
-  const { concept, editingState, modifyConcept } = use(ConceptContext)
+  const [toParentName, setToParentName] = useState(null)
+
+  const { concept } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 
   const conceptNames = getConceptNames().filter(
@@ -24,11 +26,8 @@ const ChangeParentContent = () => {
   )
 
   const fromColor = theme.concept.color.clean
-  // const toColor = theme.concept.color.pending
 
-  const handleChange = event => {
-    // modifyConcept({ type: "SET_PARENT", update: { name: event.target.value } })
-  }
+  const handleChange = event => setToParentName(event.target.value)
 
   return (
     <Box>
@@ -81,7 +80,7 @@ const ChangeParentContent = () => {
               />
             )}
             size="small"
-            // value={}
+            value={toParentName}
             sx={{ width: "500px" }}
           />
           <Divider sx={{ marginTop: 1 }} />

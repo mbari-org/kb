@@ -1,10 +1,24 @@
+import { use } from "react"
+
 import { Modal, Box, Button, IconButton, Stack } from "@mui/material"
 import { IoClose } from "react-icons/io5"
 
 import changeName from "../changeName/useChangeName"
 import changeParent from "../changeParent/useChangeParent"
 
+import ConceptContext from "@/contexts/concept/ConceptContext"
+import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+
+import { hasPendingHistory } from "@/lib/kb/util"
+
 const ConceptStructureChoices = ({ onClose }) => {
+  const { concept, pendingHistory } = use(ConceptContext)
+  const { getRoot } = use(TaxonomyContext)
+
+  const isRoot = concept.name === getRoot().name
+  const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
+  const conceptHasChildren = concept.children.length > 0
+
   return (
     <Modal open={true} onClose={onClose}>
       <Box
@@ -39,6 +53,7 @@ const ConceptStructureChoices = ({ onClose }) => {
           <Button
             variant="contained"
             color="primary"
+            disabled={isRoot || nameHasPendingHistory}
             onClick={changeName({ onClose })}
           >
             Change Name
@@ -46,6 +61,7 @@ const ConceptStructureChoices = ({ onClose }) => {
           <Button
             variant="contained"
             color="primary"
+            disabled={isRoot}
             onClick={changeParent({ onClose })}
           >
             Change Parent
@@ -53,7 +69,11 @@ const ConceptStructureChoices = ({ onClose }) => {
           <Button variant="contained" color="primary">
             Add Child
           </Button>
-          <Button variant="contained" color="error">
+          <Button
+            variant="contained"
+            color="error"
+            disabled={isRoot || conceptHasChildren}
+          >
             Delete Concept
           </Button>
         </Stack>

@@ -53,6 +53,10 @@ const getConceptPrimaryName = (taxonomy, conceptName) => {
   return concept?.name
 }
 
+const getRoot = taxonomy => {
+  return taxonomy.root
+}
+
 const filterTaxonomyRanks = (taxonomy, field, otherValue) =>
   filterRanks(taxonomy.ranks, field, otherValue)
 
@@ -336,6 +340,7 @@ export {
   getConceptNames,
   getConceptPendingHistory,
   getConceptPrimaryName,
+  getRoot,
   load,
   loadDescendants,
   loadTaxonomy,

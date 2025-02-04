@@ -16,16 +16,11 @@ const ChangeParentActions = () => {
   const labels = [DISCARD, SAVE]
 
   const onAction = label => {
-    switch (label) {
-      case DISCARD:
-        // resetState(initialState)
-        break
-      case SAVE:
-        // processUpdates()
-        break
-      default:
-        break
+    if (label === SAVE) {
+      console.log("save")
+      // processUpdates()
     }
+
     setModal(null)
   }
 

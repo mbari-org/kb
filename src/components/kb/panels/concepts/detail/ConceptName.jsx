@@ -16,7 +16,7 @@ import { isAdmin, isReadOnly } from "@/lib/auth/role"
 const ConceptName = () => {
   const { concept: conceptTheme } = useTheme()
 
-  const [showEditChoices, setShowEditChoices] = useState(false)
+  const [showStructureChoices, setShowStructureChoices] = useState(false)
 
   const { user } = use(AuthContext)
   const { concept, editing, pendingHistory } = use(ConceptContext)
@@ -24,9 +24,9 @@ const ConceptName = () => {
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
 
   const showApprovalButton =
-    editing && nameHasPendingHistory && isAdmin(user) && !showEditChoices
-  const showEditStructureButton =
-    !editing && !nameHasPendingHistory && !isReadOnly(user) && !showEditChoices
+    editing && nameHasPendingHistory && isAdmin(user) && !showStructureChoices
+  const showConceptStructureButton =
+    !editing && !isReadOnly(user) && !showStructureChoices
 
   const conceptColor = nameHasPendingHistory
     ? conceptTheme.color.pending
@@ -48,11 +48,13 @@ const ConceptName = () => {
         {concept?.name}
       </Typography>
       {showApprovalButton && <ApprovalButton field={"conceptName"} />}
-      {showEditStructureButton && (
-        <ConceptStructureButton onClick={() => setShowEditChoices(true)} />
+      {showConceptStructureButton && (
+        <ConceptStructureButton onClick={() => setShowStructureChoices(true)} />
       )}
-      {showEditChoices && (
-        <ConceptStructureChoices onClose={() => setShowEditChoices(false)} />
+      {showStructureChoices && (
+        <ConceptStructureChoices
+          onClose={() => setShowStructureChoices(false)}
+        />
       )}
     </Stack>
   )
