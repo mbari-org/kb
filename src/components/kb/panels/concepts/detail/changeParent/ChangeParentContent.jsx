@@ -13,21 +13,43 @@ import { useTheme } from "@mui/material/styles"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
+import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
+
 const ChangeParentContent = () => {
   const theme = useTheme()
 
   const [toParentName, setToParentName] = useState(null)
 
-  const { concept } = use(ConceptContext)
+  const { concept, modifyConcept } = use(ConceptContext)
   const { getConceptNames } = use(TaxonomyContext)
 
   const conceptNames = getConceptNames().filter(
-    name => name !== concept.name && name !== concept.parent.name
+    name => name !== concept.name && name !== concept.parent?.name
   )
 
   const fromColor = theme.concept.color.clean
 
-  const handleChange = event => setToParentName(event.target.value)
+  const setParent = toName => {
+    const parentName = toName === null ? concept.parent.name : toName
+    modifyConcept({
+      type: CONCEPT_STATE.CHANGE_PARENT,
+      update: { parent: { name: parentName } },
+    })
+    toName === null ? setToParentName(null) : setToParentName(toName)
+  }
+
+  const handleChange = (_event, selectedName) => {
+    setParent(selectedName)
+  }
+
+  const handleKeyUp = event => {
+    if (event.key === "Enter") {
+      const conceptName = event.target.value.trim()
+      if (conceptNames.includes(conceptName)) {
+        setParent(conceptName)
+      }
+    }
+  }
 
   return (
     <Box>
@@ -40,7 +62,6 @@ const ChangeParentContent = () => {
             fontFamily={theme.concept.fontFamily}
             fontSize={theme.concept.updateFontSize}
             fontWeight={theme.concept.fontWeight}
-            // variant="h6"
           >
             {concept.parent.name}
           </Typography>
@@ -77,6 +98,8 @@ const ChangeParentContent = () => {
                   },
                   ml: -2,
                 }}
+                value={toParentName}
+                onKeyUp={handleKeyUp}
               />
             )}
             size="small"

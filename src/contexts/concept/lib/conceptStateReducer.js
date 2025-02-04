@@ -1,11 +1,12 @@
 export const CONCEPT_STATE = {
-  INIT_STATE: "INIT_STATE",
-  SET_FIELD: "SET_FIELD",
   ADD_MEDIA: "ADD_MEDIA",
+  CHANGE_PARENT: "CHANGE_PARENT",
   DELETE_MEDIA: "DELETE_MEDIA",
   EDIT_MEDIA: "EDIT_MEDIA",
+  INIT_STATE: "INIT_STATE",
   NONE: "NONE",
   RESTORE_MEDIA: "RESTORE_MEDIA",
+  SET_FIELD: "SET_FIELD",
 }
 
 import { isPrimary } from "@/lib/kb/concept/media"
@@ -26,12 +27,6 @@ const conceptReducer = (state, { type, update }) => {
     case CONCEPT_STATE.INIT_STATE:
       return update
 
-    case CONCEPT_STATE.SET_FIELD:
-      return {
-        ...state,
-        ...update,
-      }
-
     case CONCEPT_STATE.ADD_MEDIA: {
       const isPrimaryMedia = isPrimary(update.mediaItem)
       const addItem = {
@@ -44,6 +39,12 @@ const conceptReducer = (state, { type, update }) => {
         media: [...state.media, addItem],
       }
     }
+
+    case CONCEPT_STATE.CHANGE_PARENT:
+      return {
+        ...state,
+        parent: update.parent.name,
+      }
 
     case CONCEPT_STATE.DELETE_MEDIA: {
       const stateMedia = state.media[update.mediaIndex]
@@ -87,6 +88,12 @@ const conceptReducer = (state, { type, update }) => {
       )
       return { ...state, media: updatedMedia }
     }
+
+    case CONCEPT_STATE.SET_FIELD:
+      return {
+        ...state,
+        ...update,
+      }
 
     default:
       return state

@@ -12,12 +12,14 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 import { hasPendingHistory } from "@/lib/kb/util"
 
 const ConceptStructureChoices = ({ onClose }) => {
-  const { concept, pendingHistory } = use(ConceptContext)
+  const { concept, editingState, pendingHistory } = use(ConceptContext)
   const { getRoot } = use(TaxonomyContext)
 
   const isRoot = concept.name === getRoot().name
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
+
   const conceptHasChildren = concept.children.length > 0
+  const conceptHasParentChange = editingState.parent !== concept.parent?.name
 
   return (
     <Modal open={true} onClose={onClose}>
@@ -61,7 +63,7 @@ const ConceptStructureChoices = ({ onClose }) => {
           <Button
             variant="contained"
             color="primary"
-            disabled={isRoot}
+            disabled={isRoot || conceptHasParentChange}
             onClick={changeParent({ onClose })}
           >
             Change Parent

@@ -20,6 +20,8 @@ import useSubmitUpdates from "./lib/useSubmitUpdates"
 
 import { hasPendingEdits } from "@/lib/kb/util"
 
+import { CONCEPT_STATE } from "./lib/conceptStateReducer"
+
 const ConceptProvider = ({ children }) => {
   const theme = useTheme()
 
@@ -69,7 +71,7 @@ const ConceptProvider = ({ children }) => {
       const resetStateConcept = { ...concept, ...toState }
       setConcept(resetStateConcept)
 
-      dispatch({ type: "INIT_STATE", update: toState })
+      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: toState })
     },
     [concept, setModal]
   )
@@ -153,7 +155,7 @@ const ConceptProvider = ({ children }) => {
 
       const editingState = stateForConcept(concept)
       setInitialState(editingState)
-      dispatch({ type: "INIT_STATE", update: editingState })
+      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: editingState })
     }
   }, [concept, getConceptPendingHistory])
 
