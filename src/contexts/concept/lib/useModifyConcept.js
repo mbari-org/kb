@@ -9,8 +9,8 @@ const useModifyConcept = (editingState, initialState, dispatch) => {
 
       // // If the edit undoes all previous edits, the concept is not modified
       // if (
-      //   action.type === CONCEPT_STATE.EDIT_MEDIA &&
-      //   editingState.media[mediaIndex].action === CONCEPT_STATE.EDIT_MEDIA
+      //   action.type === CONCEPT.MEDIA_EDIT &&
+      //   editingState.media[mediaIndex].action === CONCEPT.MEDIA_EDIT
       // ) {
       //   const initialMediaItem = dropFields(initialState.media[mediaIndex], [
       //     "action",

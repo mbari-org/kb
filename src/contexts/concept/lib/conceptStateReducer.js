@@ -1,11 +1,12 @@
-export const CONCEPT_STATE = {
-  ADD_MEDIA: "ADD_MEDIA",
-  CHANGE_PARENT: "CHANGE_PARENT",
-  DELETE_MEDIA: "DELETE_MEDIA",
-  EDIT_MEDIA: "EDIT_MEDIA",
+export const CONCEPT = {
+  MEDIA_ADD: "MEDIA_ADD",
+  PARENT_UPDATE: "PARENT_UPDATE",
+  NAME_UPDATE: "NAME_UPDATE",
+  MEDIA_DELETE: "MEDIA_DELETE",
+  MEDIA_EDIT: "MEDIA_EDIT",
   INIT_STATE: "INIT_STATE",
   NONE: "NONE",
-  RESTORE_MEDIA: "RESTORE_MEDIA",
+  MEDIA_RESTORE: "MEDIA_RESTORE",
   SET_FIELD: "SET_FIELD",
 }
 
@@ -24,10 +25,10 @@ const updateMedia = (state, { type, update }) => {
 
 const conceptReducer = (state, { type, update }) => {
   switch (type) {
-    case CONCEPT_STATE.INIT_STATE:
+    case CONCEPT.INIT_STATE:
       return update
 
-    case CONCEPT_STATE.ADD_MEDIA: {
+    case CONCEPT.MEDIA_ADD: {
       const isPrimaryMedia = isPrimary(update.mediaItem)
       const addItem = {
         ...update.mediaItem,
@@ -40,15 +41,9 @@ const conceptReducer = (state, { type, update }) => {
       }
     }
 
-    case CONCEPT_STATE.CHANGE_PARENT:
-      return {
-        ...state,
-        parent: update.parent.name,
-      }
-
-    case CONCEPT_STATE.DELETE_MEDIA: {
+    case CONCEPT.MEDIA_DELETE: {
       const stateMedia = state.media[update.mediaIndex]
-      if (stateMedia.action === CONCEPT_STATE.ADD_MEDIA) {
+      if (stateMedia.action === CONCEPT.MEDIA_ADD) {
         const updatedMedia = state.media.filter(
           (_item, index) => index !== update.mediaIndex
         )
@@ -60,13 +55,13 @@ const conceptReducer = (state, { type, update }) => {
       return updateMedia(state, { type, update })
     }
 
-    case CONCEPT_STATE.EDIT_MEDIA: {
+    case CONCEPT.MEDIA_EDIT: {
       const stateMedia = state.media[update.mediaIndex]
-      if (stateMedia.action === CONCEPT_STATE.ADD_MEDIA) {
+      if (stateMedia.action === CONCEPT.MEDIA_ADD) {
         const updatedItem = {
           ...stateMedia,
           ...update.mediaItem,
-          action: CONCEPT_STATE.ADD_MEDIA,
+          action: CONCEPT.MEDIA_ADD,
         }
         return {
           ...state,
@@ -78,10 +73,10 @@ const conceptReducer = (state, { type, update }) => {
       return updateMedia(state, { type, update })
     }
 
-    case CONCEPT_STATE.RESTORE_MEDIA: {
+    case CONCEPT.MEDIA_RESTORE: {
       const restoreMediaItem = {
         ...update.mediaItem,
-        action: CONCEPT_STATE.NONE,
+        action: CONCEPT.NONE,
       }
       const updatedMedia = state.media.map((mediaItem, mediaIndex) =>
         mediaIndex === update.mediaIndex ? restoreMediaItem : mediaItem
@@ -89,7 +84,20 @@ const conceptReducer = (state, { type, update }) => {
       return { ...state, media: updatedMedia }
     }
 
-    case CONCEPT_STATE.SET_FIELD:
+    case CONCEPT.NAME_UPDATE: {
+      return {
+        ...state,
+        nameUpdate: update.nameUpdate,
+      }
+    }
+
+    case CONCEPT.PARENT_UPDATE:
+      return {
+        ...state,
+        parent: update.parent.name,
+      }
+
+    case CONCEPT.SET_FIELD:
       return {
         ...state,
         ...update,

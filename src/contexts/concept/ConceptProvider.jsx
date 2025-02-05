@@ -1,6 +1,6 @@
 import { use, useCallback, useEffect, useReducer, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
-import { useTheme } from "@mui/material/styles"
+// import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
@@ -16,27 +16,29 @@ import useConceptPath from "./lib/useConceptPath"
 import useDisplayEditingState from "./lib/useDisplayEditingState"
 import useDisplayEditMedia from "./lib/useDisplayEditMedia"
 import useDisplayPendingField from "./lib/useDisplayPendingField"
-import useSubmitUpdates from "./lib/useSubmitUpdates"
+// import useSubmitUpdates from "./lib/useSubmitUpdates"
+
+import update from "./lib/submit/update"
 
 import { hasPendingEdits } from "@/lib/kb/util"
 
-import { CONCEPT_STATE } from "./lib/conceptStateReducer"
+import { CONCEPT } from "./lib/conceptStateReducer"
 
 const ConceptProvider = ({ children }) => {
-  const theme = useTheme()
+  // const theme = useTheme()
 
   const { showBoundary } = useErrorBoundary()
 
   const { modal, setModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
-    filterRanks,
+    // filterRanks,
     getConcept,
     getConceptPendingHistory,
     loadConcept,
     taxonomy,
-    updateConcept,
-    updateConceptName,
+    // updateConcept,
+    // updateConceptName,
   } = use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
@@ -71,27 +73,41 @@ const ConceptProvider = ({ children }) => {
       const resetStateConcept = { ...concept, ...toState }
       setConcept(resetStateConcept)
 
-      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: toState })
+      dispatch({ type: CONCEPT.INIT_STATE, update: toState })
     },
     [concept, setModal]
   )
 
-  const submitUpdates = useSubmitUpdates({
-    concept,
-    config: taxonomy.config,
-    editingState,
-    initialState,
-    modified,
-    modifyConcept,
-    ranks: filterRanks(),
-    resetState,
-    selectConcept,
-    setModal,
-    showBoundary,
-    theme,
-    updateConcept,
-    updateConceptName,
-  })
+  const submitUpdates = submit => {
+    if (!submit) {
+      resetState(initialState)
+      return
+    }
+
+    console.log("submitUpdates")
+    update({
+      concept,
+      config: taxonomy.config,
+      updates: editingState,
+    })
+  }
+
+  // const submitUpdates = useSubmitUpdates({
+  //   concept,
+  //   config: taxonomy.config,
+  //   editingState,
+  //   initialState,
+  //   modified,
+  //   modifyConcept,
+  //   ranks: filterRanks(),
+  //   resetState,
+  //   selectConcept,
+  //   setModal,
+  //   showBoundary,
+  //   theme,
+  //   updateConcept,
+  //   updateConceptName,
+  // })
 
   useEffect(() => {
     if (!selected) {
@@ -155,7 +171,7 @@ const ConceptProvider = ({ children }) => {
 
       const editingState = stateForConcept(concept)
       setInitialState(editingState)
-      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: editingState })
+      dispatch({ type: CONCEPT.INIT_STATE, update: editingState })
     }
   }, [concept, getConceptPendingHistory])
 
@@ -173,9 +189,9 @@ const ConceptProvider = ({ children }) => {
         modifyConcept,
         modified,
         pendingHistory,
-        processUpdates: submitUpdates,
         resetState,
         setEditing,
+        submitUpdates,
       }}
     >
       {children}

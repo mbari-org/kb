@@ -12,7 +12,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 import { hasPrimary, isPrimary } from "@/lib/kb/concept/media"
-import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
 const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
   const { editingState, modifyConcept } = use(ConceptContext)
@@ -44,8 +44,8 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
 
     const type =
       mediaIndex === editingState.media.length
-        ? CONCEPT_STATE.ADD_MEDIA
-        : CONCEPT_STATE.EDIT_MEDIA
+        ? CONCEPT.MEDIA_ADD
+        : CONCEPT.MEDIA_EDIT
     modifyConcept({
       type,
       update: {

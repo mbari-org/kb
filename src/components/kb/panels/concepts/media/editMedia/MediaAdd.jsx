@@ -1,11 +1,11 @@
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
 import MediaActionButton from "./MediaActionButton"
 
-import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
 const MediaAdd = ({ bgColor, mediaIndex, sx }) => (
   <MediaActionButton
-    action={CONCEPT_STATE.ADD_MEDIA}
+    action={CONCEPT.MEDIA_ADD}
     color="main"
     Icon={props => <MdOutlineAddPhotoAlternate {...props} size={24} />}
     mediaIndex={mediaIndex}

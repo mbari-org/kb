@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
 const getPrimary = media => media.find(mediaItem => isPrimary(mediaItem))
 
@@ -16,21 +16,21 @@ const mediaState = media => {
 
   return orderedMedia.map(mediaItem => ({
     ...mediaItem,
-    action: CONCEPT_STATE.NONE,
+    action: CONCEPT.NONE,
   }))
 }
 
 const mediaBorder = (mediaItem, theme) => {
-  const borderWidth = mediaItem.action === CONCEPT_STATE.NONE ? "1px" : "2px"
+  const borderWidth = mediaItem.action === CONCEPT.NONE ? "1px" : "2px"
   let borderColor
   switch (mediaItem.action) {
-    case CONCEPT_STATE.ADD_MEDIA:
+    case CONCEPT.MEDIA_ADD:
       borderColor = theme.concept.color.clean
       break
-    case CONCEPT_STATE.EDIT_MEDIA:
+    case CONCEPT.MEDIA_EDIT:
       borderColor = theme.palette.primary.main
       break
-    case CONCEPT_STATE.DELETE_MEDIA:
+    case CONCEPT.MEDIA_DELETE:
       borderColor = theme.concept.color.remove
       break
     default:

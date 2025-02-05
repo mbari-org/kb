@@ -51,7 +51,7 @@ const ConceptStructureChoices = ({ onClose }) => {
           <IoClose size={24} />
         </IconButton>
 
-        <Stack spacing={1.5} mt={3}>
+        <Stack spacing={2.5} mt={3}>
           <Button
             variant="contained"
             color="primary"

@@ -3,10 +3,18 @@ import { use } from "react"
 import { createActions } from "@/components/kb/factory"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
+import { UPDATE } from "@/contexts/concept/lib/submit/nameUpdates"
+
+import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+
+const CANCEL = "Cancel"
+
 const ChangeNameActions = () => {
-  const { concept, editingState, processUpdates } = use(ConceptContext)
+  const { concept, editingState, modifyConcept } = use(ConceptContext)
+  const { setModal } = use(ModalContext)
   const { getConceptNames } = use(TaxonomyContext)
 
   const names = getConceptNames()
@@ -16,10 +24,21 @@ const ChangeNameActions = () => {
     concept.name !== editingState.name && !names.includes(editingState.name)
       ? [false, false, false]
       : [false, true, true]
-  const labels = ["Cancel", "Name Only", "All Data"]
+  const labels = [CANCEL, UPDATE.NAME_ONLY, UPDATE.ALL_DATA]
+
+  const onAction = label => {
+    if (label !== CANCEL) {
+      modifyConcept({
+        type: CONCEPT.NAME_UPDATE,
+        update: { nameUpdate: label },
+      })
+    }
+
+    setModal(null)
+  }
 
   return createActions(
-    { colors, disabled, labels, onAction: processUpdates },
+    { colors, disabled, labels, onAction },
     "ConceptNameUpdateActions"
   )
 }

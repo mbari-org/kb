@@ -7,6 +7,8 @@ import { isAdmin } from "@/lib/auth/role"
 
 import { pickFields } from "@/lib/kb/util"
 
+import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+
 const validateRankUpdates = async ({
   concept,
   initialState,
@@ -40,14 +42,14 @@ const validateRankUpdates = async ({
     // Restore removed rank level and/or name
     if (removeLevel) {
       modifyConcept({
-        type: "SET_FIELD",
+        type: CONCEPT.SET_FIELD,
         update: { rankLevel: concept.rankLevel },
       })
       validation = { ...validation, rankLevel: false }
     }
     if (removeName) {
       modifyConcept({
-        type: "SET_FIELD",
+        type: CONCEPT.SET_FIELD,
         update: { rankName: concept.rankName },
       })
       validation = { ...validation, rankName: false }

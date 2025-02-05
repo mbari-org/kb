@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material/styles"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import { CONCEPT_STATE } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
 const ChangeParentContent = () => {
   const theme = useTheme()
@@ -32,7 +32,7 @@ const ChangeParentContent = () => {
   const setParent = toName => {
     const parentName = toName === null ? concept.parent.name : toName
     modifyConcept({
-      type: CONCEPT_STATE.CHANGE_PARENT,
+      type: CONCEPT.PARENT_UPDATE,
       update: { parent: { name: parentName } },
     })
     toName === null ? setToParentName(null) : setToParentName(toName)

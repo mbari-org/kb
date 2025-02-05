@@ -5,6 +5,8 @@ import { createActions } from "@/components/kb/factory"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
+import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+
 const CANCEL = "Cancel"
 const DELETE = "Delete"
 
@@ -17,7 +19,7 @@ const DeleteMediaActions = ({ mediaIndex }) => {
 
   const onAction = label => {
     if (label === DELETE) {
-      modifyConcept({ type: "DELETE_MEDIA", update: { mediaIndex } })
+      modifyConcept({ type: CONCEPT.MEDIA_DELETE, update: { mediaIndex } })
     }
     setModal(null)
   }
