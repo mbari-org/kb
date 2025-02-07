@@ -16,7 +16,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 const MediaView = () => {
   const theme = useTheme()
 
-  const { editing, editingState } = use(ConceptContext)
+  const { concept, editing, editingState } = use(ConceptContext)
 
   const mediaViewRef = useRef(null)
 
@@ -29,6 +29,10 @@ const MediaView = () => {
 
   const openPreview = () => setPreviewImage(true)
   const closePreview = () => setPreviewImage(false)
+
+  useEffect(() => {
+    setMediaIndex(0)
+  }, [concept])
 
   useEffect(() => {
     if (mediaViewRef.current) {

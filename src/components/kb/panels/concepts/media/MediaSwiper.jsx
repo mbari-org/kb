@@ -1,4 +1,4 @@
-import { use } from "react"
+import { use, useEffect, useRef } from "react"
 
 import { Swiper, SwiperSlide } from "swiper/react"
 
@@ -14,7 +14,8 @@ import "./mediaSwiper.css"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const MediaSwiper = ({ height, setMediaIndex }) => {
-  const { editingState } = use(ConceptContext)
+  const { concept, editingState } = use(ConceptContext)
+  const swiperRef = useRef(null)
 
   const pagination = {
     clickable: true,
@@ -23,12 +24,21 @@ const MediaSwiper = ({ height, setMediaIndex }) => {
     },
   }
 
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(0)
+    }
+  }, [concept])
+
   return (
     <Swiper
       centeredSlides={true}
       initialSlide={0}
       modules={[Pagination]}
       onSlideChange={change => setMediaIndex(change.snapIndex)}
+      onSwiper={swiper => {
+        swiperRef.current = swiper
+      }}
       pagination={pagination}
       slidesPerView={3}
       style={{
