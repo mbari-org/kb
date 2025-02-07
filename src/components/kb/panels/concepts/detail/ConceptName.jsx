@@ -19,18 +19,20 @@ const ConceptName = () => {
   const [showStructureChoices, setShowStructureChoices] = useState(false)
 
   const { user } = use(AuthContext)
-  const { concept, editing, pendingHistory } = use(ConceptContext)
+  const { concept, editing, editingState, pendingHistory } = use(ConceptContext)
 
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
+  const conceptHasNameUpdate = editingState.name !== concept.name
 
   const showApprovalButton =
-    editing && nameHasPendingHistory && isAdmin(user) && !showStructureChoices
-  const showConceptStructureButton =
-    !editing && !isReadOnly(user) && !showStructureChoices
+    isAdmin(user) && editing && nameHasPendingHistory && !showStructureChoices
+  const showStructureButton =
+    !isReadOnly(user) && editing && !showStructureChoices
 
-  const conceptColor = nameHasPendingHistory
-    ? conceptTheme.color.pending
-    : conceptTheme.color.clean
+  const conceptColor =
+    nameHasPendingHistory || conceptHasNameUpdate
+      ? conceptTheme.color.pending
+      : conceptTheme.color.clean
 
   return (
     <Stack direction="row" alignItems="center" sx={{ position: "relative" }}>
@@ -48,7 +50,7 @@ const ConceptName = () => {
         {concept?.name}
       </Typography>
       {showApprovalButton && <ApprovalButton field={"conceptName"} />}
-      {showConceptStructureButton && (
+      {showStructureButton && (
         <ConceptStructureButton onClick={() => setShowStructureChoices(true)} />
       )}
       {showStructureChoices && (

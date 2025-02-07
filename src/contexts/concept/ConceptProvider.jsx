@@ -58,8 +58,8 @@ const ConceptProvider = ({ children }) => {
   const modifyConcept = useCallback(
     action => {
       dispatch(action)
-
-      // CxTBD Check for restored media edit. See useModifyConcept.
+      // CxTBD Check if edit has restored state. See useModifyConcept.
+      setModified(true)
     },
     [dispatch]
   )

@@ -19,7 +19,8 @@ const ConceptStructureChoices = ({ onClose }) => {
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, "ConceptName")
 
   const conceptHasChildren = concept.children.length > 0
-  const conceptHasParentChange = editingState.parent !== concept.parent?.name
+  const conceptHasNameUpdate = editingState.name !== concept.name
+  const conceptHasParentUpdate = editingState.parent !== concept.parent?.name
 
   return (
     <Modal open={true} onClose={onClose}>
@@ -55,7 +56,7 @@ const ConceptStructureChoices = ({ onClose }) => {
           <Button
             variant="contained"
             color="primary"
-            disabled={isRoot || nameHasPendingHistory}
+            disabled={isRoot || nameHasPendingHistory || conceptHasNameUpdate}
             onClick={changeName({ onClose })}
           >
             Change Name
@@ -63,7 +64,7 @@ const ConceptStructureChoices = ({ onClose }) => {
           <Button
             variant="contained"
             color="primary"
-            disabled={isRoot || conceptHasParentChange}
+            disabled={isRoot || conceptHasParentUpdate}
             onClick={changeParent({ onClose })}
           >
             Change Parent
