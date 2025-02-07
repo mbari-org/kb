@@ -1,5 +1,14 @@
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
 
+const checkUrlExists = url => {
+  return new Promise(resolve => {
+    const img = new Image()
+    img.onload = () => resolve(true)
+    img.onerror = () => resolve(false)
+    img.src = url
+  })
+}
+
 const debounce = (func, delay) => {
   let timeout
   return function executedFunction(...args) {
@@ -51,32 +60,6 @@ const hasPendingHistory = (pendingHistory, field) => {
   return !isEmpty(pendingHistory)
 }
 
-const isEqual = (obj1, obj2) => {
-  if (obj1 === obj2) return true
-
-  if (
-    typeof obj1 !== "object" ||
-    obj1 === null ||
-    typeof obj2 !== "object" ||
-    obj2 === null
-  ) {
-    return false
-  }
-
-  const keys1 = Object.keys(obj1)
-  const keys2 = Object.keys(obj2)
-
-  if (keys1.length !== keys2.length) return false
-
-  for (let key of keys1) {
-    if (!keys2.includes(key) || obj1[key] !== obj2[key]) {
-      return false
-    }
-  }
-
-  return true
-}
-
 const isDeepEqual = (obj1, obj2) => {
   if (
     typeof obj1 !== "object" ||
@@ -125,6 +108,41 @@ const isEmpty = object => {
   return true
 }
 
+const isEqual = (obj1, obj2) => {
+  if (obj1 === obj2) return true
+
+  if (
+    typeof obj1 !== "object" ||
+    obj1 === null ||
+    typeof obj2 !== "object" ||
+    obj2 === null
+  ) {
+    return false
+  }
+
+  const keys1 = Object.keys(obj1)
+  const keys2 = Object.keys(obj2)
+
+  if (keys1.length !== keys2.length) return false
+
+  for (let key of keys1) {
+    if (!keys2.includes(key) || obj1[key] !== obj2[key]) {
+      return false
+    }
+  }
+
+  return true
+}
+
+const isValidUrl = url => {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+
 const pendingEdits = (initialState, editingState) => {
   return Object.keys(editingState).reduce((edits, field) => {
     if (editingState[field] !== initialState[field]) {
@@ -165,6 +183,7 @@ const prune = obj => {
 }
 
 export {
+  checkUrlExists,
   debounce,
   dropFields,
   editsObject,
@@ -175,6 +194,7 @@ export {
   isElementInViewport,
   isEmpty,
   isEqual,
+  isValidUrl,
   pendingEdits,
   pickFields,
   prettyFormat,

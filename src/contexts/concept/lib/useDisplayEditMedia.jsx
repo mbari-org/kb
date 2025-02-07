@@ -1,4 +1,4 @@
-import { use, useCallback, useRef } from "react"
+import { use, useCallback } from "react"
 
 import AddMediaActions from "@/components/kb/panels/concepts/media/editMedia/AddMediaActions"
 
@@ -6,12 +6,13 @@ import DeleteMediaActions from "@/components/kb/panels/concepts/media/editMedia/
 import DeleteMediaContent from "@/components/kb/panels/concepts/media/editMedia/DeleteMediaContent"
 
 import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/EditMediaActions"
+import EditMediaContent from "@/components/kb/panels/concepts/media/editMedia/EditMediaContent"
+
 import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/EditMediaTitle"
 
 import { createModal } from "@/components/kb/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
-import EditMediaForm from "@/components/kb/panels/concepts/media/editMedia/EditMediaForm"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
@@ -27,7 +28,7 @@ const useDisplayEditMedia = () => {
         case CONCEPT.MEDIA_ADD:
           modal = createModal({
             Actions: () => <AddMediaActions />,
-            Content: () => <EditMediaForm mediaIndex={mediaIndex} />,
+            Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
             Title,
           })
           break
@@ -37,15 +38,13 @@ const useDisplayEditMedia = () => {
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
             Title,
           })
-
           break
         case CONCEPT.MEDIA_EDIT: {
           modal = createModal({
             Actions: () => <EditMediaActions />,
-            Content: () => <EditMediaForm mediaIndex={mediaIndex} />,
+            Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
             Title,
           })
-
           break
         }
       }

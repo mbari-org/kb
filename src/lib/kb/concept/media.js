@@ -21,9 +21,9 @@ const mediaState = media => {
 }
 
 const mediaBorder = (mediaItem, theme) => {
-  const borderWidth = mediaItem.action === CONCEPT.NONE ? "1px" : "2px"
+  const borderWidth = mediaItem?.action === CONCEPT.NONE ? "1px" : "2px"
   let borderColor
-  switch (mediaItem.action) {
+  switch (mediaItem?.action) {
     case CONCEPT.MEDIA_ADD:
       borderColor = theme.concept.color.clean
       break
