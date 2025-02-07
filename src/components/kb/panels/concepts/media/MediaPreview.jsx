@@ -7,7 +7,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 
 import { mediaBorder } from "@/lib/kb/concept/media"
 
-const MediaPreview = ({ mediaIndex, openPreview }) => {
+const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
   const theme = useTheme()
   const { editingState } = use(ConceptContext)
   const mediaItem = editingState.media[mediaIndex]
@@ -28,7 +28,7 @@ const MediaPreview = ({ mediaIndex, openPreview }) => {
       >
         <img
           alt={`Unable to Display Media: ${mediaItem?.url}`}
-          onClick={openPreview}
+          onClick={() => setPreviewImage(true)}
           src={mediaItem?.url}
           style={{
             height: "100%",

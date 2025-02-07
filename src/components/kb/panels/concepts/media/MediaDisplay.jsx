@@ -3,7 +3,7 @@ import { Box, Dialog, Zoom } from "@mui/material"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const MediaDisplay = ({ closePreview, mediaIndex, previewImage }) => {
+const MediaDisplay = ({ mediaIndex, previewImage, setPreviewImage }) => {
   const { editingState } = use(ConceptContext)
   const mediaItem = editingState.media[mediaIndex]
 
@@ -20,7 +20,7 @@ const MediaDisplay = ({ closePreview, mediaIndex, previewImage }) => {
       >
         <img
           alt="Concept Media Display"
-          onClick={closePreview}
+          onClick={() => setPreviewImage(false)}
           src={mediaItem?.url}
           style={{
             height: "100%",

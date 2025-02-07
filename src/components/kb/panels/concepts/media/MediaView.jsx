@@ -13,10 +13,13 @@ import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
+const closePreview = setPreviewImage => () => setPreviewImage(false)
+const openPreview = setPreviewImage => () => setPreviewImage(true)
+
 const MediaView = () => {
   const theme = useTheme()
 
-  const { concept, editing, editingState } = use(ConceptContext)
+  const { editing, editingState } = use(ConceptContext)
 
   const mediaViewRef = useRef(null)
 
@@ -26,13 +29,6 @@ const MediaView = () => {
 
   const showEditMedia =
     editing && editingState.media[mediaIndex]?.action !== CONCEPT.MEDIA_DELETE
-
-  const openPreview = () => setPreviewImage(true)
-  const closePreview = () => setPreviewImage(false)
-
-  useEffect(() => {
-    setMediaIndex(0)
-  }, [concept])
 
   useEffect(() => {
     if (mediaViewRef.current) {
@@ -44,14 +40,15 @@ const MediaView = () => {
   return (
     <>
       <Box ref={mediaViewRef} sx={{ position: "relative" }}>
-        <MediaPreview openPreview={openPreview} mediaIndex={mediaIndex} />
-        {!editing && (
-          <MediaDisplay
-            closePreview={closePreview}
-            mediaIndex={mediaIndex}
-            previewImage={previewImage}
-          />
-        )}
+        <MediaPreview
+          mediaIndex={mediaIndex}
+          setPreviewImage={setPreviewImage}
+        />
+        <MediaDisplay
+          mediaIndex={mediaIndex}
+          previewImage={previewImage}
+          setPreviewImage={setPreviewImage}
+        />
         {showEditMedia && (
           <>
             <MediaDelete mediaIndex={mediaIndex} />
