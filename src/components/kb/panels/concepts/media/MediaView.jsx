@@ -13,9 +13,6 @@ import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-const closePreview = setPreviewImage => () => setPreviewImage(false)
-const openPreview = setPreviewImage => () => setPreviewImage(true)
-
 const MediaView = () => {
   const theme = useTheme()
 
