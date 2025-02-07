@@ -6,7 +6,13 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 
 const EditMediaTitle = ({ action }) => {
   const { concept } = use(ConceptContext)
-  return <Title title={`${action} Media: ${concept.name}`} />
+
+  const actionText = action
+    .split("_")[1]
+    .toLowerCase()
+    .replace(/^\w/, c => c.toUpperCase())
+
+  return <Title title={`${actionText} Media: ${concept.name}`} />
 }
 
 EditMediaTitle.displayName = "EditMediaTitle"

@@ -36,6 +36,10 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
       ...prev,
       dirty: isDirty,
       editing: dataEditing,
+      touched: {
+        ...prev.touched,
+        [name]: true,
+      },
     }))
   }
 
@@ -68,6 +72,7 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
       initial: mediaItem,
       dirty: false,
       editing: mediaItem,
+      touched: {},
     })
     setShowPrimaryCheckbox(
       !hasPrimary(editingState.media) || isPrimary(mediaItem)
@@ -87,6 +92,12 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
           onChange={handleChange}
           required
           value={data.editing.url}
+          error={data.touched?.url && data.editing.url.trim() === ""}
+          helperText={
+            data.touched?.url && data.editing.url.trim() === ""
+              ? "URL cannot be empty"
+              : ""
+          }
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -96,6 +107,12 @@ const EditMediaForm = forwardRef(({ mediaIndex }, ref) => {
           onChange={handleChange}
           required
           value={data.editing.credit}
+          error={data.touched?.credit && data.editing.credit.trim() === ""}
+          helperText={
+            data.touched?.credit && data.editing.credit.trim() === ""
+              ? "Credit cannot be empty"
+              : ""
+          }
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
