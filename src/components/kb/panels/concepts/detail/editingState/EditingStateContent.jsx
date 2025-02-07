@@ -10,18 +10,26 @@ const EditingStateContent = () => {
   const { editingState, initialState } = use(ConceptContext)
 
   const stringDisplay = field => (field !== "" ? field : '""')
+
+  const format = (field, initial, pending) => {
+    if (field === "nameUpdate") {
+      return { "name update": pending }
+    }
+    return {
+      [field]: `${stringDisplay(initial)} --> ${stringDisplay(pending)}`,
+    }
+  }
+
   const edits = editsObject(initialState, editingState)
-  const editsDetail = Object.entries(edits).reduce(
-    (acc, [field, { initial, pending }]) => {
-      acc[field] = `${stringDisplay(initial)} --> ${stringDisplay(pending)}`
-      return acc
-    },
-    {}
-  )
+  const editsDetail = Object.entries(edits)
+    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+    .reduce((acc, [field, { initial, pending }]) => {
+      return { ...acc, ...format(field, initial, pending) }
+    }, {})
 
   return (
     <DescriptionDetail
-      description="You have the following unsaved edits:"
+      description="You have the following edits:"
       detail={editsDetail}
     />
   )

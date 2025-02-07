@@ -32,6 +32,11 @@ const ChangeNameActions = () => {
         type: CONCEPT.NAME_UPDATE,
         update: { nameUpdate: label },
       })
+    } else {
+      modifyConcept({
+        type: CONCEPT.SET_FIELD,
+        update: { name: concept.name },
+      })
     }
 
     setModal(null)
