@@ -1,10 +1,11 @@
 import { use } from "react"
 
-import DescriptionDetail from "../../../../../common/DescriptionDetail"
+import DescriptionDetail from "@/components/common/DescriptionDetail"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { getFieldPendingHistory, pickFields } from "@/lib/kb/util"
+import { pickFields } from "@/lib/util"
+import { getFieldPendingHistory } from "@/lib/kb/util/pendingHistory"
 
 const PendingFieldContent = ({ field }) => {
   const { pendingHistory } = use(ConceptContext)

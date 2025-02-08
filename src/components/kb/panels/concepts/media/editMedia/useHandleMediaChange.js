@@ -2,7 +2,7 @@ import { use, useState } from "react"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { checkUrlExists, isValidUrl } from "@/lib/kb/util"
+import { checkUrlExists, isValidUrl } from "@/lib/util"
 
 const useHandleMediaChange = (mediaIndex, setData) => {
   const { data } = use(ModalContext)

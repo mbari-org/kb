@@ -4,7 +4,7 @@ import ChangeNameActions from "./ChangeNameActions"
 import ChangeNameContent from "./ChangeNameContent"
 import ChangeNameTitle from "./ChangeNameTitle"
 
-import { createModal } from "@/components/kb/factory"
+import { createModal } from "@/components/modal/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 

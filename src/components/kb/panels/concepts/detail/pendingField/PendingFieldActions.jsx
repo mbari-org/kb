@@ -1,12 +1,12 @@
 import { use } from "react"
 
-import { createActions } from "@/components/kb/factory"
+import { createActions } from "@/components/modal/factory"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ConfigContext from "@/contexts/config/ConfigContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { getFieldPendingHistory } from "@/lib/kb/util"
+import { getFieldPendingHistory } from "@/lib/kb/util/pendingHistory"
 import { sendPendingAction } from "@/lib/services/oni/api/history"
 
 const APPROVE = "Approve"

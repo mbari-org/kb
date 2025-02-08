@@ -20,7 +20,7 @@ import useDisplayPendingField from "./lib/useDisplayPendingField"
 
 import update from "./lib/submit/update"
 
-import { hasPendingEdits } from "@/lib/kb/util"
+import { hasPendingEdits } from "@/lib/kb/util/editingState"
 
 import { CONCEPT } from "./lib/conceptStateReducer"
 

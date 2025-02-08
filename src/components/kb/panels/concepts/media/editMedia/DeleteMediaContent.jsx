@@ -1,10 +1,10 @@
 import { use } from "react"
 
-import { createDetailContent } from "@/components/kb/factory"
+import { createDetailContent } from "@/components/modal/factory"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { dropFields } from "@/lib/kb/util"
+import { dropFields } from "@/lib/util"
 
 const DeleteMediaContent = ({ mediaIndex }) => {
   const { editingState } = use(ConceptContext)

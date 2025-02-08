@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 
-import { isDeepEqual } from "@/lib/kb/util"
+import { isDeepEqual } from "@/lib/util"
 
 const useWhyDidYouUpdate = (name, props) => {
   const previousProps = useRef()

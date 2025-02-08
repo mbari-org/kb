@@ -10,7 +10,7 @@ import useConceptDetailStyle from "./useConceptDetailStyle"
 import ApprovalButton from "./ApprovalButton"
 
 import { isAdmin } from "@/lib/auth/role"
-import { hasPendingHistory } from "@/lib/kb/util"
+import { hasPendingHistory } from "@/lib/kb/util/pendingHistory"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 

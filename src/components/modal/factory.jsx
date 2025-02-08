@@ -1,5 +1,5 @@
 import Actions from "@/components/modal/actions/Actions"
-import DetailContent from "../modal/content/DetailContent"
+import DetailContent from "@/components/modal/content/DetailContent"
 import TextContent from "@/components/modal/content/TextContent"
 import Title from "@/components/modal/Title"
 

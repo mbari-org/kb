@@ -1,4 +1,4 @@
-import { createActions } from "@/components/kb/factory"
+import { createActions } from "@/components/modal/factory"
 
 const RESET = "Reset"
 

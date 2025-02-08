@@ -4,7 +4,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
-import { checkUrlExists, isValidUrl } from "@/lib/kb/util"
+import { checkUrlExists, isValidUrl } from "@/lib/util"
 
 const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
   const { editingState, modifyConcept } = use(ConceptContext)

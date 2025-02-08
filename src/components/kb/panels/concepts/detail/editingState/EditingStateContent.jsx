@@ -7,21 +7,10 @@ import Detail from "@/components/common/Detail"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { editsObject } from "@/lib/kb/util"
+import { editsObject, format } from "@/lib/kb/util/editingState"
 
 const EditingStateContent = () => {
   const { editingState, initialState } = use(ConceptContext)
-
-  const stringDisplay = field => (field !== "" ? field : '""')
-
-  const format = (field, initial, pending) => {
-    if (field === "nameUpdate") {
-      return { "name update": pending }
-    }
-    return {
-      [field]: `${stringDisplay(initial)} --> ${stringDisplay(pending)}`,
-    }
-  }
 
   const edits = editsObject(initialState, editingState)
   const editsDetail = Object.entries(edits)

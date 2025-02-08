@@ -18,7 +18,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 import { hasPrimary, isPrimary } from "@/lib/kb/concept/media"
-import { isValidUrl } from "@/lib/kb/util"
+import { isValidUrl } from "@/lib/util"
 import useHandleMediaChange from "./useHandleMediaChange"
 import useHandleMediaSubmit from "./useHandleMediaSubmit"
 

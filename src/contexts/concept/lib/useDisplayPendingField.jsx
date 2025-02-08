@@ -1,6 +1,6 @@
 import { use, useCallback } from "react"
 
-import { createModal } from "@/components/kb/factory"
+import { createModal } from "@/components/modal/factory"
 import PendingFieldActions from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldActions"
 import PendingFieldContent from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldContent"
 import PendingFieldTitle from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldTitle"

@@ -4,7 +4,7 @@ import EditingStateActions from "@/components/kb/panels/concepts/detail/editingS
 import EditingStateContent from "@/components/kb/panels/concepts/detail/editingState/EditingStateContent"
 import EditingStateTitle from "@/components/kb/panels/concepts/detail/editingState/EditingStateTitle"
 
-import { createModal } from "@/components/kb/factory"
+import { createModal } from "@/components/modal/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 

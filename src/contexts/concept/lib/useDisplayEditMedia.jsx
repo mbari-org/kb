@@ -10,7 +10,7 @@ import EditMediaContent from "@/components/kb/panels/concepts/media/editMedia/Ed
 
 import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/EditMediaTitle"
 
-import { createModal } from "@/components/kb/factory"
+import { createModal } from "@/components/modal/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
@@ -32,6 +32,7 @@ const useDisplayEditMedia = () => {
             Title,
           })
           break
+
         case CONCEPT.MEDIA_DELETE:
           modal = createModal({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
@@ -39,9 +40,10 @@ const useDisplayEditMedia = () => {
             Title,
           })
           break
+
         case CONCEPT.MEDIA_EDIT: {
           modal = createModal({
-            Actions: () => <EditMediaActions />,
+            Actions: EditMediaActions,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
             Title,
           })

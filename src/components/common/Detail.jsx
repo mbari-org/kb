@@ -1,4 +1,4 @@
-import { createDetailContent } from "@/components/kb/factory"
+import { createDetailContent } from "@/components/modal/factory"
 
 const Detail = props => {
   const { detail } = props

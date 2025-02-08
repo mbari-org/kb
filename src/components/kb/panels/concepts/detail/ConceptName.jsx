@@ -10,7 +10,7 @@ import ConceptStructureChoices from "./conceptStructure/ConceptStructureChoices"
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
-import { hasPendingHistory } from "@/lib/kb/util"
+import { hasPendingHistory } from "@/lib/kb/util/pendingHistory"
 import { isAdmin, isReadOnly } from "@/lib/auth/role"
 
 const ConceptName = () => {

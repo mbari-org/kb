@@ -4,7 +4,7 @@ import ChangeParentActions from "./ChangeParentActions"
 import ChangeParentContent from "./ChangeParentContent"
 import ChangeParentTitle from "./ChangeParentTitle"
 
-import { createModal } from "@/components/kb/factory"
+import { createModal } from "@/components/modal/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 

@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import { createActions } from "@/components/kb/factory"
+import { createActions } from "@/components/modal/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 

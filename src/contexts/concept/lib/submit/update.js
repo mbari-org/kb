@@ -3,7 +3,7 @@ import mediaUpdates from "./mediaUpdates"
 import nameUpdates from "./nameUpdates"
 import structureUpdates from "./structureUpdates"
 
-import { isEmpty, prune } from "@/lib/kb/util"
+import { isEmpty, prune } from "@/lib/util"
 
 const update = async params => {
   const { concept, config, updates } = params

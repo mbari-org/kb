@@ -30,36 +30,6 @@ const dropFields = (object, fields) => {
   }, {})
 }
 
-const editsObject = (initialState, editingState) => {
-  return pendingEdits(initialState, editingState).reduce(
-    (edits, [field, initial, pending]) => {
-      edits[field] = { initial, pending }
-      return edits
-    },
-    {}
-  )
-}
-
-const getFieldPendingHistory = (pendingHistory, field) => {
-  const pendingField = capitalize(field)
-  return pendingHistory
-    ?.filter(pending => pending.field === pendingField)
-    .sort(
-      (a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp)
-    )?.[0]
-}
-
-const hasPendingEdits = (initialState, editingState) => {
-  return !isEmpty(editsObject(initialState, editingState))
-}
-
-const hasPendingHistory = (pendingHistory, field) => {
-  if (field) {
-    return !isEmpty(getFieldPendingHistory(pendingHistory, field))
-  }
-  return !isEmpty(pendingHistory)
-}
-
 const isDeepEqual = (obj1, obj2) => {
   if (
     typeof obj1 !== "object" ||
@@ -143,15 +113,6 @@ const isValidUrl = url => {
   }
 }
 
-const pendingEdits = (initialState, editingState) => {
-  return Object.keys(editingState).reduce((edits, field) => {
-    if (editingState[field] !== initialState[field]) {
-      edits.push([field, initialState[field], editingState[field]])
-    }
-    return edits
-  }, [])
-}
-
 const pickFields = (object, fields) => {
   return fields.reduce((result, field) => {
     if (Array.isArray(field)) {
@@ -183,19 +144,15 @@ const prune = obj => {
 }
 
 export {
+  capitalize,
   checkUrlExists,
   debounce,
   dropFields,
-  editsObject,
-  getFieldPendingHistory,
-  hasPendingEdits,
-  hasPendingHistory,
   isDeepEqual,
   isElementInViewport,
   isEmpty,
   isEqual,
   isValidUrl,
-  pendingEdits,
   pickFields,
   prettyFormat,
   prune,

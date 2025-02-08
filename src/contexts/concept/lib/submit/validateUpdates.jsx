@@ -1,11 +1,11 @@
 import RankUpdateErrorActions from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorActions"
 import RankUpdateErrorContent from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorContent"
 import RankUpdateErrorTitle from "@/components/kb/panels/concepts/detail/rankUpdateError/RankUpdateErrorTitle"
-import { createModal } from "@/components/kb/factory"
+import { createModal } from "@/components/modal/factory"
 
 import { isAdmin } from "@/lib/auth/role"
 
-import { pickFields } from "@/lib/kb/util"
+import { pickFields } from "@/lib/util"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
