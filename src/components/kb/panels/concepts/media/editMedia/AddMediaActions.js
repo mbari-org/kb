@@ -15,8 +15,8 @@ const AddMediaActions = () => {
 
   const onAction = label => {
     if (label === ADD) {
-      const form = document.querySelector("form")
-      form?.requestSubmit()
+      const mediaForm = document.querySelector("#edit-media-form")
+      mediaForm?.requestSubmit()
     } else {
       setModal(null)
     }

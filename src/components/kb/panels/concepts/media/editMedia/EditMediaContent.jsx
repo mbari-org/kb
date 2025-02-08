@@ -72,7 +72,12 @@ const EditMediaContent = ({ mediaIndex, formRef }) => {
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit} ref={formRef}>
+    <Box
+      component="form"
+      id="edit-media-form"
+      onSubmit={handleSubmit}
+      ref={formRef}
+    >
       <FormControl fullWidth margin="normal">
         <TextField
           label="URL"
