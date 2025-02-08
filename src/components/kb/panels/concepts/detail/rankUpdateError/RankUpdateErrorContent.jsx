@@ -1,4 +1,4 @@
-import DescriptionDetail from "../DescriptionDetail"
+import DescriptionDetail from "../../../../../common/DescriptionDetail"
 
 const RankUpdateErrorContent = ({ detail }) => {
   return (

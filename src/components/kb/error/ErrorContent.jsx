@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material"
 
-import DescriptionDetail from "@/components/kb/panels/concepts/detail/DescriptionDetail"
+import DescriptionDetail from "@/components/common/DescriptionDetail"
 
 const ErrorContent = ({ error }) => {
   return (

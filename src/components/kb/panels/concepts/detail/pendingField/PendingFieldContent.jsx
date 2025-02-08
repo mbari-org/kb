@@ -1,6 +1,6 @@
 import { use } from "react"
 
-import DescriptionDetail from "../DescriptionDetail"
+import DescriptionDetail from "../../../../../common/DescriptionDetail"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
