@@ -8,17 +8,25 @@ import { createModal } from "@/components/kb/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
+export const INTENT = {
+  SAVE: "Save",
+  SHOW: "Show",
+}
+
 const useDisplayEditingState = () => {
   const { setModal } = use(ModalContext)
 
-  return useCallback(() => {
-    const modal = createModal({
-      Actions: EditingStateActions,
-      Content: EditingStateContent,
-      Title: EditingStateTitle,
-    })
-    setModal(modal)
-  }, [setModal])
+  return useCallback(
+    intent => {
+      const modal = createModal({
+        Actions: () => <EditingStateActions intent={intent} />,
+        Content: EditingStateContent,
+        Title: EditingStateTitle,
+      })
+      setModal(modal)
+    },
+    [setModal]
+  )
 }
 
 export default useDisplayEditingState

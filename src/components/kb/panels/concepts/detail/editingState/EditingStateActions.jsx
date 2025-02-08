@@ -6,16 +6,20 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 
-const CONTINUE = "Continue"
-const DISCARD = "Discard"
+import { INTENT } from "@/contexts/concept/lib/useDisplayEditingState"
 
-const EditingStateActions = () => {
-  const { concept, initialState, resetState } = use(ConceptContext)
+const CONTINUE = "Continue"
+const DISCARD = "Discard All"
+const SAVE = "Save"
+
+const EditingStateActions = ({ intent }) => {
+  const { concept, initialState, resetState, submitUpdates } =
+    use(ConceptContext)
   const { setModal } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
 
   const colors = ["cancel", "main"]
-  const labels = [DISCARD, CONTINUE]
+  const labels = [DISCARD, intent === INTENT.SAVE ? SAVE : CONTINUE]
 
   const onAction = label => {
     switch (label) {
@@ -25,6 +29,9 @@ const EditingStateActions = () => {
       case CONTINUE:
         selectConcept(concept.name)
         selectPanel("Concepts")
+        break
+      case SAVE:
+        submitUpdates(true)
         break
       default:
         break

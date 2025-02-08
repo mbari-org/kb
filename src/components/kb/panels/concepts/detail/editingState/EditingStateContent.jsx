@@ -1,5 +1,6 @@
 import { use } from "react"
 
+import { Box } from "@mui/material"
 import DescriptionDetail from "../DescriptionDetail"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -28,10 +29,12 @@ const EditingStateContent = () => {
     }, {})
 
   return (
-    <DescriptionDetail
-      description="You have the following edits:"
-      detail={editsDetail}
-    />
+    <Box minWidth={500}>
+      <DescriptionDetail
+        description="You have the following edits:"
+        detail={editsDetail}
+      />
+    </Box>
   )
 }
 

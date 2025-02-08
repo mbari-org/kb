@@ -6,7 +6,7 @@ const DescriptionDetail = ({ description, detail }) => {
     text: description,
   })
 
-  const Detail = createDetailContent({ detail, sx: { ml: 1 } })
+  const Detail = createDetailContent({ detail, sx: { ml: 2 } })
 
   return (
     <>

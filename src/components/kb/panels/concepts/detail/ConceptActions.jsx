@@ -5,6 +5,8 @@ import Button from "@mui/material/Button"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
+import { INTENT } from "@/contexts/concept/lib/useDisplayEditingState"
+
 const ConceptActions = () => {
   const { displayEditingState, editing, modified, setEditing, submitUpdates } =
     use(ConceptContext)
@@ -30,7 +32,7 @@ const ConceptActions = () => {
       </Button>
       {editing && modified && (
         <Button
-          onClick={displayEditingState}
+          onClick={() => displayEditingState(INTENT.SHOW)}
           sx={{ margin: "0 10px" }}
           variant="contained"
         >
@@ -39,7 +41,7 @@ const ConceptActions = () => {
       )}
       <Button
         disabled={!editing || !modified}
-        onClick={() => submitUpdates(true)}
+        onClick={() => displayEditingState(INTENT.SAVE)}
         variant="contained"
       >
         Save
