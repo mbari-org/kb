@@ -24,7 +24,7 @@ const ChangeParentActions = () => {
     if (label === SAVE) {
       modifyConcept({
         type: CONCEPT.PARENT_UPDATE,
-        update: { parent: { name: editingState.parent } },
+        update: { parent: { name: editingState.parentName } },
       })
     }
 
@@ -32,7 +32,7 @@ const ChangeParentActions = () => {
   }
 
   useEffect(() => {
-    setSaveDisabled(editingState.parent === initialState.parent)
+    setSaveDisabled(editingState.parentName === initialState.parentName)
   }, [editingState, initialState])
 
   return createActions(

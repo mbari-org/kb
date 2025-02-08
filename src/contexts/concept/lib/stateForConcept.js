@@ -6,7 +6,7 @@ const stateForConcept = concept => {
     name: concept.name,
     media: mediaState(concept.media),
     mediaIndex: 0,
-    parent: concept.parent?.name,
+    parentName: concept.parent?.name,
     rankLevel: concept.rankLevel || "",
     rankName: concept.rankName || "",
   }

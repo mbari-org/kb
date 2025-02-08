@@ -20,7 +20,8 @@ const ConceptStructureChoices = ({ onClose }) => {
 
   const conceptHasChildren = concept.children.length > 0
   const conceptHasNameUpdate = editingState.name !== concept.name
-  const conceptHasParentUpdate = editingState.parent !== concept.parent?.name
+  const conceptHasParentUpdate =
+    editingState.parentName !== concept.parent?.name
 
   return (
     <Modal open={true} onClose={onClose}>
