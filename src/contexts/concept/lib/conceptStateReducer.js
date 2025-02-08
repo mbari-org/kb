@@ -1,4 +1,4 @@
-export const CONCEPT = {
+const CONCEPT = {
   MEDIA_ADD: "MEDIA_ADD",
   PARENT_UPDATE: "PARENT_UPDATE",
   NAME_UPDATE: "NAME_UPDATE",
@@ -23,7 +23,7 @@ const updateMedia = (state, { type, update }) => {
   }
 }
 
-const conceptReducer = (state, { type, update }) => {
+const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
     case CONCEPT.INIT_STATE:
       return update
@@ -108,4 +108,4 @@ const conceptReducer = (state, { type, update }) => {
   }
 }
 
-export default conceptReducer
+export { CONCEPT, conceptStateReducer }

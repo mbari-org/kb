@@ -26,14 +26,14 @@ const MediaSwiper = ({ height, setMediaIndex }) => {
 
   useEffect(() => {
     if (swiperRef.current) {
-      swiperRef.current.slideTo(0)
+      swiperRef.current.slideTo(editingState.mediaIndex)
     }
-  }, [concept])
+  }, [concept, editingState.mediaIndex])
 
   return (
     <Swiper
       centeredSlides={true}
-      initialSlide={0}
+      initialSlide={editingState.mediaIndex}
       modules={[Pagination]}
       onSlideChange={change => setMediaIndex(change.snapIndex)}
       onSwiper={swiper => {

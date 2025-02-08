@@ -17,12 +17,15 @@ import MediaDisplay from "@/components/kb/panels/concepts/media/MediaDisplay"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { hasPrimary, isPrimary } from "@/lib/kb/concept/media"
-import { isValidUrl } from "@/lib/util"
 import useHandleMediaChange from "./useHandleMediaChange"
 import useHandleMediaSubmit from "./useHandleMediaSubmit"
 
-const EditMediaContent = ({ mediaIndex, formRef }) => {
+import { hasPrimary, isPrimary } from "@/lib/kb/concept/media"
+import { isValidUrl } from "@/lib/util"
+
+export const EDIT_MEDIA_FORM_ID = "edit-media-form"
+
+const EditMediaContent = ({ mediaIndex }) => {
   const { editingState } = use(ConceptContext)
   const { data, setModal, setData } = use(ModalContext)
 
@@ -72,12 +75,7 @@ const EditMediaContent = ({ mediaIndex, formRef }) => {
   }
 
   return (
-    <Box
-      component="form"
-      id="edit-media-form"
-      onSubmit={handleSubmit}
-      ref={formRef}
-    >
+    <Box component="form" id={EDIT_MEDIA_FORM_ID} onSubmit={handleSubmit}>
       <FormControl fullWidth margin="normal">
         <TextField
           label="URL"

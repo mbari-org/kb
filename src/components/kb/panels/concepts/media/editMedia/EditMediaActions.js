@@ -4,6 +4,8 @@ import { createActions } from "@/components/modal/factory"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
+import { EDIT_MEDIA_FORM_ID } from "./EditMediaContent"
+
 const DISCARD = "Discard"
 const SAVE = "Save"
 
@@ -15,12 +17,9 @@ const EditMediaActions = () => {
   const labels = [DISCARD, SAVE]
 
   const onAction = label => {
-    if (label === SAVE) {
-      const form = document.querySelector("form")
-      form?.requestSubmit()
-    } else {
-      setModal(null)
-    }
+    label === SAVE
+      ? document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
+      : setModal(null)
   }
 
   return createActions(

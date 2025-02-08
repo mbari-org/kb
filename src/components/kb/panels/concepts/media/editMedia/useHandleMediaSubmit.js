@@ -12,15 +12,15 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
   const handleSubmit = async e => {
     e.preventDefault()
 
-    // First check if URL is valid
+    // check if URL is valid
     if (!isValidUrl(data.editing.url)) {
       return
     }
 
-    // Show loading state
+    // loading state
     setUrlStatus({ loading: true, valid: true })
 
-    // Check if URL is accessible
+    // check if URL is accessible
     const urlExists = await checkUrlExists(data.editing.url)
     setUrlStatus({ loading: false, valid: urlExists })
 
@@ -28,11 +28,12 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
       return
     }
 
-    // Proceed with form submission
+    // proceed with concept media update
     const type =
       mediaIndex === editingState.media.length
         ? CONCEPT.MEDIA_ADD
         : CONCEPT.MEDIA_EDIT
+
     modifyConcept({
       type,
       update: {
@@ -40,6 +41,11 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
         mediaItem: data.editing,
       },
     })
+
+    if (type === CONCEPT.MEDIA_ADD) {
+      editingState.mediaIndex = mediaIndex
+    }
+
     setModal(null)
   }
 

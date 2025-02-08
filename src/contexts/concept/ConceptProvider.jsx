@@ -3,26 +3,25 @@ import { useErrorBoundary } from "react-error-boundary"
 // import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
+import { stateForConcept } from "@/contexts/concept/lib/stateForConcept"
+import useConceptPath from "@/contexts/concept/lib/useConceptPath"
+import useDisplayEditingState from "@/contexts/concept/lib/useDisplayEditingState"
+import useDisplayEditMedia from "@/contexts/concept/lib/useDisplayEditMedia"
+import useDisplayPendingField from "@/contexts/concept/lib/useDisplayPendingField"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
-import conceptStateReducer from "./lib/conceptStateReducer"
-
-import { stateForConcept } from "./lib/stateForConcept"
-
-import useConceptPath from "./lib/useConceptPath"
-import useDisplayEditingState from "./lib/useDisplayEditingState"
-import useDisplayEditMedia from "./lib/useDisplayEditMedia"
-import useDisplayPendingField from "./lib/useDisplayPendingField"
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import update from "./lib/submit/update"
+import update from "@/contexts/concept/lib/submit/update"
+import {
+  CONCEPT,
+  conceptStateReducer,
+} from "@/contexts/concept/lib/conceptStateReducer"
 
 import { hasPendingEdits } from "@/lib/kb/util/editingState"
-
-import { CONCEPT } from "./lib/conceptStateReducer"
 
 const ConceptProvider = ({ children }) => {
   // const theme = useTheme()

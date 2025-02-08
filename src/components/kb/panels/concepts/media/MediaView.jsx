@@ -1,4 +1,4 @@
-import { use, useEffect, useRef, useState } from "react"
+import { use, useCallback, useEffect, useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
@@ -27,12 +27,26 @@ const MediaView = () => {
   const showEditMedia =
     editing && editingState.media[mediaIndex]?.action !== CONCEPT.MEDIA_DELETE
 
+  const handleMediaIndexChange = useCallback(
+    mediaIndex => {
+      editingState.mediaIndex = mediaIndex
+      setMediaIndex(mediaIndex)
+    },
+    [editingState, setMediaIndex]
+  )
+
   useEffect(() => {
     if (mediaViewRef.current) {
       const width = mediaViewRef.current.offsetWidth
       setSwiperHeight(`${width / 4}px`)
     }
   }, [editingState.media])
+
+  useEffect(() => {
+    if (editingState.mediaIndex !== mediaIndex) {
+      setMediaIndex(editingState.mediaIndex)
+    }
+  }, [editingState.mediaIndex, mediaIndex])
 
   return (
     <>
@@ -54,7 +68,10 @@ const MediaView = () => {
         )}
       </Box>
       <Box sx={{ mt: 0.5, position: "relative", overflow: "visible" }}>
-        <MediaSwiper height={swiperHeight} setMediaIndex={setMediaIndex} />
+        <MediaSwiper
+          height={swiperHeight}
+          setMediaIndex={handleMediaIndexChange}
+        />
         {editing && (
           <MediaAdd
             bgColor={theme.palette.background.paperLight}
