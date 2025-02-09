@@ -21,7 +21,7 @@ import {
   conceptStateReducer,
 } from "@/contexts/concept/lib/conceptStateReducer"
 
-import { hasPendingEdits } from "@/lib/kb/util/editingState"
+import { hasPendingEdits } from "@/components/kb/panels/concepts/detail/editingState/edits/editingState"
 
 const ConceptProvider = ({ children }) => {
   // const theme = useTheme()
