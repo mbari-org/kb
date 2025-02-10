@@ -8,6 +8,7 @@ import useConceptPath from "@/contexts/concept/lib/useConceptPath"
 import useDisplayEditingState from "@/contexts/concept/lib/useDisplayEditingState"
 import useDisplayEditMedia from "@/contexts/concept/lib/useDisplayEditMedia"
 import useDisplayPendingField from "@/contexts/concept/lib/useDisplayPendingField"
+import useModifyConcept from "@/contexts/concept/lib/useModifyConcept"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 import SelectedContext from "@/contexts/selected/SelectedContext"
@@ -53,15 +54,7 @@ const ConceptProvider = ({ children }) => {
   const displayEditingState = useDisplayEditingState()
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
-
-  const modifyConcept = useCallback(
-    action => {
-      dispatch(action)
-      // CxTBD Check if edit has restored state. See useModifyConcept.
-      setModified(true)
-    },
-    [dispatch]
-  )
+  const modifyConcept = useModifyConcept(dispatch, initialState, setModified)
 
   const resetState = useCallback(
     toState => {

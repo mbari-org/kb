@@ -1,12 +1,13 @@
 const CONCEPT = {
+  INIT_STATE: "INIT_STATE",
   MEDIA_ADD: "MEDIA_ADD",
-  PARENT_UPDATE: "PARENT_UPDATE",
-  NAME_UPDATE: "NAME_UPDATE",
   MEDIA_DELETE: "MEDIA_DELETE",
   MEDIA_EDIT: "MEDIA_EDIT",
-  INIT_STATE: "INIT_STATE",
-  NONE: "NONE",
   MEDIA_RESTORE: "MEDIA_RESTORE",
+  NAME_UPDATE: "NAME_UPDATE",
+  NONE: "NONE",
+  PARENT_UPDATE: "PARENT_UPDATE",
+  RESET_FIELD: "RESET_FIELD",
   SET_FIELD: "SET_FIELD",
 }
 
@@ -84,18 +85,26 @@ const conceptStateReducer = (state, { type, update }) => {
       return { ...state, media: updatedMedia }
     }
 
-    case CONCEPT.NAME_UPDATE: {
+    case CONCEPT.NAME_UPDATE:
       return {
         ...state,
         nameUpdate: update.nameUpdate,
       }
-    }
 
     case CONCEPT.PARENT_UPDATE:
       return {
         ...state,
         parent: update.parent.name,
       }
+
+    case CONCEPT.RESET_FIELD: {
+      const { field, initial } = update
+
+      return {
+        ...state,
+        [field]: initial,
+      }
+    }
 
     case CONCEPT.SET_FIELD:
       return {

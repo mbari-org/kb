@@ -1,7 +1,8 @@
 import Actions from "@/components/modal/actions/Actions"
-import DetailContent from "@/components/modal/content/DetailContent"
 import TextContent from "@/components/modal/content/TextContent"
 import Title from "@/components/modal/Title"
+
+import DetailContent from "@/components/kb/panels/concepts/detail/editingState/edits/DetailContent"
 
 const createComponent = (Component, props, name) => {
   const NamedComponent = () => <Component {...props} />
@@ -22,6 +23,7 @@ const createModal = ({ Actions, Content, Title }) => ({
 
 export {
   createActions,
+  createComponent,
   createModal,
   createDetailContent,
   createTextContent,

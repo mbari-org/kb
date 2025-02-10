@@ -9,7 +9,7 @@ const editsObject = (initialState, editingState) => {
     {}
   )
 }
-const format = (field, initial, pending) => {
+const formatField = (field, initial, pending) => {
   if (field === "nameUpdate") {
     return { "name update": pending }
   }
@@ -33,4 +33,4 @@ const pendingEdits = (initialState, editingState) => {
 
 const stringDisplay = field => (field !== "" ? field : '""')
 
-export { editsObject, format, hasPendingEdits }
+export { editsObject, formatField, hasPendingEdits }

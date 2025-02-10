@@ -1,10 +1,10 @@
-import EntryDetail from "./EntryDetail"
+import FieldDisplay from "./FieldDisplay"
 
 const DetailContent = ({ detail, sx }) => {
   return (
     <>
       {Object.entries(detail).map(([key, value]) => (
-        <EntryDetail key={key} field={key} value={value} sx={sx} />
+        <FieldDisplay key={key} field={key} value={value} sx={sx} />
       ))}
     </>
   )
