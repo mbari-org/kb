@@ -14,10 +14,26 @@ const useModifyConcept = (dispatch, initialState, setModified) => {
     action => {
       if (action.type === CONCEPT.RESET_FIELD) {
         resetField(dispatch, action.field, initialState)
-        
-        // If either rank field is reset, reset the other. This prevents invalid pairings.
-        action.field === "rankName" && resetField(dispatch, "rankLevel", initialState)
-        action.field === "rankLevel" && resetField(dispatch, "rankName", initialState)
+
+        // Certain resets force other resets.
+        switch (action.field) {
+          case "name":
+            resetField(dispatch, "nameUpdate", initialState)
+            break
+          case "nameUpdate":
+            resetField(dispatch, "name", initialState)
+            break
+
+          case "rankLevel":
+            resetField(dispatch, "rankName", initialState)
+            break
+          case "rankName":
+            resetField(dispatch, "rankLevel", initialState)
+            break
+
+          default:
+            break
+        }
       } else {
         dispatch(action)
       }
