@@ -28,7 +28,7 @@ const ConceptActions = () => {
         onClick={() => (editing ? submitUpdates(false) : setEditing(true))}
         variant="contained"
       >
-        {editing ? "Discard" : "Edit"}
+        {editing ? (modified ? "Discard" : "Cancel") : "Edit"}
       </Button>
       {editing && modified && (
         <Button
