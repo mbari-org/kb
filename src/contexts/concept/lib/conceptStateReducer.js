@@ -94,7 +94,7 @@ const conceptStateReducer = (state, { type, update }) => {
     case CONCEPT.PARENT_UPDATE:
       return {
         ...state,
-        parent: update.parent.name,
+        parentName: update.parentName,
       }
 
     case CONCEPT.RESET_FIELD: {

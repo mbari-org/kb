@@ -24,7 +24,7 @@ const ChangeParentActions = () => {
     if (label === SAVE) {
       modifyConcept({
         type: CONCEPT.PARENT_UPDATE,
-        update: { parent: { name: editingState.parentName } },
+        update: { parentName: editingState.parentName },
       })
     }
 

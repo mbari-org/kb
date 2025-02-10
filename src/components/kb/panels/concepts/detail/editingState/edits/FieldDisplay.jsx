@@ -1,7 +1,5 @@
 import { Box, Typography } from "@mui/material"
 
-import { formatField } from "./editingState"
-
 const baseSx = {
   fontSize: "1.25rem",
   whiteSpace: "pre-wrap",
@@ -25,14 +23,20 @@ const formatDelta = (field, initial, pending) => {
   return `${stringDisplay(initial)} --> ${stringDisplay(pending)}`
 }
 
+const formatField = field => {
+  return field
+    .replace(/([A-Z])/g, " $1") // Add space before capital letters
+    .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
+    .trim() // Remove any leading/trailing spaces
+}
+
 const FieldDisplay = ({ edit, sx }) => {
   const [field, { initial, pending }] = edit
-  const delta = formatDelta(field, initial, pending)
   return (
     <Box key={field} display="flex" flexDirection="row" sx={sx}>
-      <Typography sx={fieldSx}>{field}:</Typography>
+      <Typography sx={fieldSx}>{formatField(field)}:</Typography>
       <Typography sx={deltaSx} ml={1}>
-        {delta}
+        {formatDelta(field, initial, pending)}
       </Typography>
     </Box>
   )

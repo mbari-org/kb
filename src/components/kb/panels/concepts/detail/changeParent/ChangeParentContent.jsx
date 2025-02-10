@@ -29,24 +29,24 @@ const ChangeParentContent = () => {
 
   const fromColor = theme.concept.color.clean
 
-  const setParent = toName => {
+  const setParentName = toName => {
     const parentName = toName === null ? concept.parent.name : toName
     modifyConcept({
       type: CONCEPT.PARENT_UPDATE,
-      update: { parent: { name: parentName } },
+      update: { parentName: parentName },
     })
     toName === null ? setToParentName(null) : setToParentName(toName)
   }
 
   const handleChange = (_event, selectedName) => {
-    setParent(selectedName)
+    setParentName(selectedName)
   }
 
   const handleKeyUp = event => {
     if (event.key === "Enter") {
       const conceptName = event.target.value.trim()
       if (conceptNames.includes(conceptName)) {
-        setParent(conceptName)
+        setParentName(conceptName)
       }
     }
   }
