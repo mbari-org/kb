@@ -1,6 +1,7 @@
 import { use, useCallback, useEffect, useRef, useState } from "react"
 import { useErrorBoundary } from "react-error-boundary"
 
+import AuthContext from "@/contexts/auth/AuthContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 import TaxonomyContext from "./TaxonomyContext"
 
@@ -21,9 +22,12 @@ import {
   updateConceptName as updateTaxonomyConceptName,
 } from "@/lib/kb/taxonomy"
 
+import { isAdmin } from "@/lib/auth/role"
+
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
+  const { user } = use(AuthContext)
   const { config } = use(ConfigContext)
   const { setLoading, setModal } = use(ModalContext)
 
@@ -31,8 +35,14 @@ const TaxonomyProvider = ({ children }) => {
   const initialLoad = useRef(true)
 
   const filterRanks = useCallback(
-    (field, otherValue) => filterTaxonomyRanks(taxonomy, field, otherValue),
-    [taxonomy]
+    (field, otherValue) => {
+      const taxonomyRanks = filterTaxonomyRanks(taxonomy, field, otherValue)
+      if (isAdmin(user)) {
+        return taxonomyRanks
+      }
+      return taxonomyRanks.filter(rank => rank !== "")
+    },
+    [taxonomy, user]
   )
 
   const getConcept = useCallback(
