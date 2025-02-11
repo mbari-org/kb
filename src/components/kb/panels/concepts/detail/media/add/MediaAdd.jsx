@@ -1,5 +1,5 @@
 import { MdOutlineAddPhotoAlternate } from "react-icons/md"
-import MediaActionButton from "./MediaActionButton"
+import MediaActionButton from "../MediaActionButton"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 

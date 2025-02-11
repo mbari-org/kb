@@ -1,7 +1,7 @@
 import { Box } from "@mui/material"
 
 import FieldDisplay from "@/components/common/FieldDisplay"
-import ResetField from "./ResetField"
+import FieldReset from "./FieldReset"
 
 import { formatDelta } from "@/components/common/format"
 const FieldDetail = ({ edit }) => {
@@ -9,7 +9,7 @@ const FieldDetail = ({ edit }) => {
   const value = formatDelta(field, initial, pending)
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <ResetField field={field} />
+      <FieldReset field={field} />
       <FieldDisplay field={field} value={value} />
     </Box>
   )

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material"
 
 import Description from "@/components/common/Description"
-import EditsDetail from "@/components/kb/panels/concepts/editingState/edits/EditsDetail"
+import EditDetails from "@/components/kb/panels/concepts/editingState/edits/EditDetails"
 
 const EditingStateContent = () => {
   return (
@@ -10,7 +10,7 @@ const EditingStateContent = () => {
         description="You have the following unsaved changes:"
         sx={{ mb: 1 }}
       />
-      <EditsDetail />
+      <EditDetails />
     </Box>
   )
 }

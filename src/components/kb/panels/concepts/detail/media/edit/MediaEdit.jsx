@@ -1,6 +1,6 @@
 import { CiEdit } from "react-icons/ci"
 
-import MediaActionButton from "./MediaActionButton"
+import MediaActionButton from "../MediaActionButton"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 

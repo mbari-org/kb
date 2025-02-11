@@ -8,6 +8,8 @@ const CONCEPT = {
   NONE: "NONE",
   PARENT_UPDATE: "PARENT_UPDATE",
   RESET_FIELD: "RESET_FIELD",
+  RESET_MEDIA: "RESET_MEDIA",
+  RESET_MEDIA_ITEM: "RESET_MEDIA_ITEM",
   SET_FIELD: "SET_FIELD",
 }
 
@@ -98,11 +100,29 @@ const conceptStateReducer = (state, { type, update }) => {
       }
 
     case CONCEPT.RESET_FIELD: {
-      const { field, initial } = update
+      const { field, value } = update
 
       return {
         ...state,
-        [field]: initial,
+        [field]: value,
+      }
+    }
+
+    case CONCEPT.RESET_MEDIA: {
+      const { media } = update
+      return {
+        ...state,
+        media,
+      }
+    }
+
+    case CONCEPT.RESET_MEDIA_ITEM: {
+      const { mediaIndex, mediaItem } = update
+      return {
+        ...state,
+        media: state.media.map((item, index) =>
+          index === mediaIndex ? mediaItem : item
+        ),
       }
     }
 

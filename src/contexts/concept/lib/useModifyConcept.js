@@ -2,40 +2,63 @@ import { useCallback } from "react"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
-const resetField = (dispatch, field, initialState) => {
+const resetFieldValue = (dispatch, field, initialState) => {
   dispatch({
     type: CONCEPT.RESET_FIELD,
-    update: { field, initial: initialState[field] },
+    update: { field, value: initialState[field] },
   })
 }
+
+const resetField = (dispatch, field, initialState) => {
+  resetFieldValue(dispatch, field, initialState)
+
+  // Certain resets force other resets.
+  switch (field) {
+    case "name":
+      resetFieldValue(dispatch, "nameUpdate", initialState)
+      break
+    case "nameUpdate":
+      resetFieldValue(dispatch, "name", initialState)
+      break
+
+    case "rankLevel":
+      resetFieldValue(dispatch, "rankName", initialState)
+      break
+    case "rankName":
+      resetFieldValue(dispatch, "rankLevel", initialState)
+      break
+
+    default:
+      break
+  }
+}
+
+const resetMediaItem = (dispatch, mediaIndex, initialState) => {}
 
 const useModifyConcept = (dispatch, initialState, setModified) => {
   return useCallback(
     action => {
-      if (action.type === CONCEPT.RESET_FIELD) {
-        resetField(dispatch, action.field, initialState)
+      switch (action.type) {
+        case CONCEPT.RESET_FIELD:
+          resetField(dispatch, action.field, initialState)
+          break
+        case CONCEPT.RESET_MEDIA:
+          dispatch({
+            type: CONCEPT.RESET_MEDIA,
+            update: { media: initialState.media },
+          })
 
-        // Certain resets force other resets.
-        switch (action.field) {
-          case "name":
-            resetField(dispatch, "nameUpdate", initialState)
-            break
-          case "nameUpdate":
-            resetField(dispatch, "name", initialState)
-            break
+          break
 
-          case "rankLevel":
-            resetField(dispatch, "rankName", initialState)
-            break
-          case "rankName":
-            resetField(dispatch, "rankLevel", initialState)
-            break
+        case CONCEPT.RESET_MEDIA_ITEM:
+          dispatch({
+            type: CONCEPT.RESET_MEDIA_ITEM,
+            update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
+          })
 
-          default:
-            break
-        }
-      } else {
-        dispatch(action)
+          break
+        default:
+          dispatch(action)
       }
 
       // CxTBD Check if edit has restored state. See useModifyConcept.

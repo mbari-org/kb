@@ -1,5 +1,0 @@
-- I was futzing with checking client-side admin privledges and changed the DB role of the admin user
-  to something other than Admin. Curiously I was then unable to login. It seems the server side
-  login checks that the admin use has Admin role, and reports invalid username/password if not.
-
-

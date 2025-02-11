@@ -3,14 +3,14 @@ import { use, useMemo } from "react"
 import { Box } from "@mui/material"
 
 import FieldDetail from "./FieldDetail"
-import MediaDetail from "./MediaDetail"
+import MediaDetails from "./MediaDetails"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
 import { editsObject } from "./editingState"
 
-const EditsDetail = () => {
+const EditDetails = () => {
   const { editingState, initialState } = use(ConceptContext)
   const { setModal } = use(ModalContext)
 
@@ -25,7 +25,7 @@ const EditsDetail = () => {
   const editComponent = edit => {
     const [field, _] = edit
     if (field === "media") {
-      return <MediaDetail key={field} edit={edit} />
+      return <MediaDetails key={field} edit={edit} />
     }
 
     return <FieldDetail key={field} edit={edit} />
@@ -37,10 +37,10 @@ const EditsDetail = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, ml: 2 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       {edits.map(editComponent)}
     </Box>
   )
 }
 
-export default EditsDetail
+export default EditDetails
