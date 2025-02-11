@@ -1,8 +1,8 @@
 import { use, useCallback } from "react"
 
-import EditingStateActions from "@/components/kb/panels/concepts/detail/editingState/EditingStateActions"
-import EditingStateContent from "@/components/kb/panels/concepts/detail/editingState/EditingStateContent"
-import EditingStateTitle from "@/components/kb/panels/concepts/detail/editingState/EditingStateTitle"
+import EditingStateActions from "@/components/kb/panels/concepts/editingState/EditingStateActions"
+import EditingStateContent from "@/components/kb/panels/concepts/editingState/EditingStateContent"
+import EditingStateTitle from "@/components/kb/panels/concepts/editingState/EditingStateTitle"
 
 import { createModal } from "@/components/modal/factory"
 

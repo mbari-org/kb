@@ -1,7 +1,8 @@
 // import { Box } from "@mui/material"
 
 const MediaDetail = ({ edit }) => {
-  const [_field, _changes] = edit
+  const [_field, { initial, pending }] = edit
+
   return null
 }
 

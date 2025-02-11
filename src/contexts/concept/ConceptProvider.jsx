@@ -22,7 +22,7 @@ import {
   conceptStateReducer,
 } from "@/contexts/concept/lib/conceptStateReducer"
 
-import { hasPendingEdits } from "@/components/kb/panels/concepts/detail/editingState/edits/editingState"
+import { hasPendingEdits } from "@/components/kb/panels/concepts/editingState/edits/editingState"
 
 const ConceptProvider = ({ children }) => {
   // const theme = useTheme()

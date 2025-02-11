@@ -1,6 +1,7 @@
 import { use } from "react"
 
-import { createDetailContent } from "@/components/modal/factory"
+import DetailsContent from "@/components/common/DetailsContent"
+import { createComponent } from "@/components/modal/factory"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 
@@ -11,19 +12,19 @@ const DeleteMediaContent = ({ mediaIndex }) => {
 
   const mediaItem = editingState.media[mediaIndex]
 
-  const displayValues = dropFields(mediaItem, [
+  const details = dropFields(mediaItem, [
     "action",
     "conceptName",
     "id",
     "mimeType",
   ])
 
-  const Detail = createDetailContent({
-    detail: displayValues,
+  const Details = createComponent(DetailsContent, {
+    details,
     sx: { ml: 1, mr: 1 },
   })
 
-  return <Detail id="modal-content-detail" />
+  return <Details id="delete-media-content-detail" />
 }
 
 export default DeleteMediaContent

@@ -26,10 +26,10 @@ const validateRankUpdates = async ({
     return validation
   }
 
-  const removeLevel = updates.rankLevel === ""
-  const removeName = updates.rankName === ""
+  const removedLevel = updates.rankLevel === ""
+  const removedName = updates.rankName === ""
 
-  if (!(removeLevel || removeName)) {
+  if (!(removedLevel || removedName)) {
     return validation
   }
 
@@ -40,14 +40,14 @@ const validateRankUpdates = async ({
 
   const onAction = () => {
     // Restore removed rank level and/or name
-    if (removeLevel) {
+    if (removedLevel) {
       modifyConcept({
         type: CONCEPT.SET_FIELD,
         update: { rankLevel: concept.rankLevel },
       })
       validation = { ...validation, rankLevel: false }
     }
-    if (removeName) {
+    if (removedName) {
       modifyConcept({
         type: CONCEPT.SET_FIELD,
         update: { rankName: concept.rankName },
