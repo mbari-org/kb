@@ -2,6 +2,7 @@ import { use } from "react"
 import { Stack } from "@mui/material"
 
 import ConceptAuthor from "./detail/ConceptAuthor"
+import ConceptMedia from "./detail/media/ConceptMedia"
 import ConceptName from "./detail/ConceptName"
 import ConceptRank from "./detail/ConceptRank"
 
@@ -15,16 +16,19 @@ const ConceptDetail = () => {
   const nameValue = editingState[RANK.NAME] || initialState[RANK.NAME]
 
   return (
-    <Stack
-      direction="column"
-      spacing={2}
-      sx={{ flex: "1", ml: 1, mr: 1, textAlign: "left" }}
-    >
-      <ConceptName />
-      <ConceptAuthor />
-      <Stack direction="row" spacing={2}>
-        <ConceptRank field={RANK.NAME} otherValue={levelValue} />
-        <ConceptRank field={RANK.LEVEL} otherValue={nameValue} />
+    <Stack direction="row" spacing={1.5}>
+      <ConceptMedia />
+      <Stack
+        direction="column"
+        spacing={2}
+        sx={{ flex: "1", ml: 1, mr: 1, textAlign: "left" }}
+      >
+        <ConceptName />
+        <ConceptAuthor />
+        <Stack direction="row" spacing={2}>
+          <ConceptRank field={RANK.NAME} otherValue={levelValue} />
+          <ConceptRank field={RANK.LEVEL} otherValue={nameValue} />
+        </Stack>
       </Stack>
     </Stack>
   )

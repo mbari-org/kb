@@ -4,7 +4,6 @@ import { Stack } from "@mui/material"
 
 import ConceptActions from "./detail/ConceptActions"
 import ConceptDetail from "./ConceptDetail"
-import ConceptMedia from "./media/ConceptMedia"
 import ConceptPath from "./ConceptPath"
 import ConceptViewToggle from "./toggleView/ConceptViewToggle"
 
@@ -36,10 +35,7 @@ const Concept = () => {
         <ConceptPath />
         <ConceptViewToggle />
       </Stack>
-      <Stack direction="row" spacing={1.5}>
-        <ConceptMedia />
-        <ConceptDetail />
-      </Stack>
+      <ConceptDetail />
       {!isReadOnly(user) && <ConceptActions />}
     </Stack>
   )

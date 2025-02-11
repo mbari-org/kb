@@ -1,14 +1,14 @@
 import { use, useCallback } from "react"
 
-import AddMediaActions from "@/components/kb/panels/concepts/media/editMedia/AddMediaActions"
+import AddMediaActions from "@/components/kb/panels/concepts/detail/media/editMedia/AddMediaActions"
 
-import DeleteMediaActions from "@/components/kb/panels/concepts/media/editMedia/DeleteMediaActions"
-import DeleteMediaContent from "@/components/kb/panels/concepts/media/editMedia/DeleteMediaContent"
+import DeleteMediaActions from "@/components/kb/panels/concepts/detail/media/editMedia/DeleteMediaActions"
+import DeleteMediaContent from "@/components/kb/panels/concepts/detail/media/editMedia/DeleteMediaContent"
 
-import EditMediaActions from "@/components/kb/panels/concepts/media/editMedia/EditMediaActions"
-import EditMediaContent from "@/components/kb/panels/concepts/media/editMedia/EditMediaContent"
+import EditMediaActions from "@/components/kb/panels/concepts/detail/media/editMedia/EditMediaActions"
+import EditMediaContent from "@/components/kb/panels/concepts/detail/media/editMedia/EditMediaContent"
 
-import EditMediaTitle from "@/components/kb/panels/concepts/media/editMedia/EditMediaTitle"
+import EditMediaTitle from "@/components/kb/panels/concepts/detail/media/editMedia/EditMediaTitle"
 
 import { createModal } from "@/components/modal/factory"
 

@@ -12,7 +12,7 @@ import {
 } from "@mui/material"
 import { MdOutlinePhoto } from "react-icons/md"
 
-import MediaDisplay from "@/components/kb/panels/concepts/media/MediaDisplay"
+import MediaDisplay from "@/components/kb/panels/concepts/detail/media/MediaDisplay"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
