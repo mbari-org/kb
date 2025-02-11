@@ -10,7 +10,7 @@ import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 const DISCARD = "Discard"
 const SAVE = "Save"
 
-const ChangeParentActions = () => {
+const ParentActions = () => {
   const { editingState, initialState, modifyConcept } = use(ConceptContext)
   const { setModal } = use(ModalContext)
 
@@ -41,4 +41,4 @@ const ChangeParentActions = () => {
   )
 }
 
-export default ChangeParentActions
+export default ParentActions

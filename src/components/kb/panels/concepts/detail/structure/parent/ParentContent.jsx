@@ -15,7 +15,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
-const ChangeParentContent = () => {
+const ParentContent = () => {
   const theme = useTheme()
 
   const [toParentName, setToParentName] = useState(null)
@@ -113,4 +113,4 @@ const ChangeParentContent = () => {
   )
 }
 
-export default ChangeParentContent
+export default ParentContent

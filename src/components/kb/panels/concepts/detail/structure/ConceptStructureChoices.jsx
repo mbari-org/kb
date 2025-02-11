@@ -3,15 +3,15 @@ import { use } from "react"
 import { Modal, Box, Button, IconButton, Stack } from "@mui/material"
 import { IoClose } from "react-icons/io5"
 
-import changeName from "../changeName/useChangeName"
-import changeParent from "../changeParent/useChangeParent"
+import changeName from "./name/useChangeName"
+import changeParent from "./parent/useChangeParent"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import { hasPendingHistory } from "@/lib/kb/util/pendingHistory"
 
-const ConceptStructureChoices = ({ onClose }) => {
+const ChangeStructureChoices = ({ onClose }) => {
   const { concept, editingState, pendingHistory } = use(ConceptContext)
   const { getRoot } = use(TaxonomyContext)
 
@@ -86,4 +86,4 @@ const ConceptStructureChoices = ({ onClose }) => {
   )
 }
 
-export default ConceptStructureChoices
+export default ChangeStructureChoices

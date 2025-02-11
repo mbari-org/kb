@@ -8,7 +8,7 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
-const ChangeNameContent = () => {
+const NameContent = () => {
   const { concept: conceptTheme, palette } = useTheme()
 
   const { concept, editingState, modifyConcept } = use(ConceptContext)
@@ -82,4 +82,4 @@ const ChangeNameContent = () => {
   )
 }
 
-export default ChangeNameContent
+export default NameContent

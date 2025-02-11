@@ -1,8 +1,8 @@
 import { use, useCallback } from "react"
 
-import ChangeParentActions from "./ChangeParentActions"
-import ChangeParentContent from "./ChangeParentContent"
-import ChangeParentTitle from "./ChangeParentTitle"
+import ParentActions from "./ParentActions"
+import ParentContent from "./ParentContent"
+import ParentTitle from "./ParentTitle"
 
 import { createModal } from "@/components/modal/factory"
 
@@ -13,9 +13,9 @@ const useChangeParent = ({ onClose }) => {
 
   return useCallback(() => {
     const modal = createModal({
-      Actions: ChangeParentActions,
-      Content: ChangeParentContent,
-      Title: ChangeParentTitle,
+      Actions: ParentActions,
+      Content: ParentContent,
+      Title: ParentTitle,
     })
     onClose()
     setModal(modal)

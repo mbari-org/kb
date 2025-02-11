@@ -1,7 +1,7 @@
 import { CiEdit } from "react-icons/ci"
 import { IconButton } from "@mui/material"
 
-const ConceptStructureButton = ({ onClick }) => {
+const ChangeStructureButton = ({ onClick }) => {
   return (
     <IconButton
       aria-label="Edit concept name"
@@ -22,4 +22,4 @@ const ConceptStructureButton = ({ onClick }) => {
   )
 }
 
-export default ConceptStructureButton
+export default ChangeStructureButton

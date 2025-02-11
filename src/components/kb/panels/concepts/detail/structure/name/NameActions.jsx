@@ -12,7 +12,7 @@ import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
 const CANCEL = "Cancel"
 
-const ChangeNameActions = () => {
+const NameActions = () => {
   const { concept, editingState, modifyConcept } = use(ConceptContext)
   const { setModal } = use(ModalContext)
   const { getConceptNames } = use(TaxonomyContext)
@@ -48,4 +48,4 @@ const ChangeNameActions = () => {
   )
 }
 
-export default ChangeNameActions
+export default NameActions

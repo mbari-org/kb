@@ -4,8 +4,8 @@ import { Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
 import ApprovalButton from "@/components/kb/panels/concepts/detail/ApprovalButton"
-import ConceptStructureButton from "./conceptStructure/ConceptStructureButton"
-import ConceptStructureChoices from "./conceptStructure/ConceptStructureChoices"
+import ChangeStructureButton from "./structure/ConceptStructureButton"
+import ChangeStructureChoices from "./structure/ConceptStructureChoices"
 
 import AuthContext from "@/contexts/auth/AuthContext"
 import ConceptContext from "@/contexts/concept/ConceptContext"
@@ -51,10 +51,10 @@ const ConceptName = () => {
       </Typography>
       {showApprovalButton && <ApprovalButton field={"conceptName"} />}
       {showStructureButton && (
-        <ConceptStructureButton onClick={() => setShowStructureChoices(true)} />
+        <ChangeStructureButton onClick={() => setShowStructureChoices(true)} />
       )}
       {showStructureChoices && (
-        <ConceptStructureChoices
+        <ChangeStructureChoices
           onClose={() => setShowStructureChoices(false)}
         />
       )}
