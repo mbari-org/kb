@@ -2,8 +2,9 @@ import { use, useMemo } from "react"
 
 import { Box } from "@mui/material"
 
-import FieldDetail from "./FieldDetail"
-import MediaDetails from "./MediaDetails"
+import FieldDeltaDetail from "./field/FieldDeltaDetail"
+import FieldValueDetail from "./field/FieldValueDetail"
+import MediaDetails from "./media/MediaDetails"
 
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
@@ -23,12 +24,17 @@ const EditDetails = () => {
   )
 
   const editComponent = edit => {
-    const [field, _] = edit
-    if (field === "media") {
-      return <MediaDetails key={field} edit={edit} />
+    const [field, { _initial, pending }] = edit
+    switch (field) {
+      case "media":
+        return <MediaDetails key={field} edit={edit} />
+      case "mediaIndex":
+        return null
+      case "nameUpdate":
+        return <FieldValueDetail key={field} field={field} value={pending} />
+      default:
+        return <FieldDeltaDetail key={field} edit={edit} />
     }
-
-    return <FieldDetail key={field} edit={edit} />
   }
 
   if (edits.length === 0) {

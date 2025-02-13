@@ -1,9 +1,5 @@
-const formatDelta = (field, initial, pending) => {
-  if (field === "nameUpdate") {
-    return pending
-  }
-  return `${stringDisplay(initial)} --> ${stringDisplay(pending)}`
-}
+const formatDelta = (initialValue, pendingValue) =>
+  `${stringDisplay(initialValue)} --> ${stringDisplay(pendingValue)}`
 
 const formatField = field => {
   return field
@@ -12,7 +8,17 @@ const formatField = field => {
     .trim()
 }
 
+const fieldSx = {
+  fontSize: "1.25rem",
+  whiteSpace: "pre-wrap",
+}
+
+const valueSx = {
+  ...fieldSx,
+  fontFamily: "monospace",
+  fontWeight: 800,
+}
+
 const stringDisplay = field => (field !== "" ? field : '""')
 
-
-export { formatDelta, formatField }
+export { fieldSx, formatDelta, formatField, valueSx }

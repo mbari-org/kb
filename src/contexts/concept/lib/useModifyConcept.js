@@ -42,21 +42,23 @@ const useModifyConcept = (dispatch, initialState, setModified) => {
         case CONCEPT.RESET_FIELD:
           resetField(dispatch, action.field, initialState)
           break
+
         case CONCEPT.RESET_MEDIA:
           dispatch({
             type: CONCEPT.RESET_MEDIA,
             update: { media: initialState.media },
           })
-
           break
 
-        case CONCEPT.RESET_MEDIA_ITEM:
+        case CONCEPT.RESET_MEDIA_ITEM: {
+          const { mediaIndex } = action.update
           dispatch({
             type: CONCEPT.RESET_MEDIA_ITEM,
             update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
           })
-
           break
+        }
+
         default:
           dispatch(action)
       }

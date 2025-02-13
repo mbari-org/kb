@@ -1,5 +1,9 @@
 import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
 
+import { pickFields } from "@/lib/util"
+
+const MEDIA_DISPLAY_FIELDS = ["url", "credit", "caption", "isPrimary"]
+
 const getPrimary = media => media.find(mediaItem => isPrimary(mediaItem))
 
 const hasPrimary = media => !!getPrimary(media)
@@ -26,27 +30,82 @@ const mediaBorder = (mediaItem, theme) => {
   return `${borderWidth} solid ${borderColor}`
 }
 
-const mediaUpdate = (initial, pending) => 
-  ["url", "credits", "caption", "isPrimary"].map(key => 
-    pending[key] !== initial[key] ? [key, {initial: initial[key], pending: pending[key]}] : null
-  )
-
-const mediaUpdates = (initial, pending) => 
+const mediaEdits = (initial, pending) =>
   pending.map((pendingItem, pendingIndex) => {
+    let mediaItemEdits
     switch (pendingItem.action) {
       case CONCEPT.NONE:
-        return null
+        mediaItemEdits = null
+        break
       case CONCEPT.MEDIA_ADD:
-        return [pendingItem.url, {initial: null, pending: pendingItem.url}]
+        mediaItemEdits = pendingItem
+        break
       case CONCEPT.MEDIA_DELETE:
-        return [pendingItem.url, {initial: pendingItem.url, pending: null}]
-      case CONCEPT.MEDIA_EDIT:
-        return mediaUpdate(initial[pendingIndex], pendingItem)
+        mediaItemEdits = pickFields(initial[pendingIndex], MEDIA_DISPLAY_FIELDS)
+        break
+      case CONCEPT.MEDIA_EDIT: {
+        const initialItem = initial[pendingIndex]
+        mediaItemEdits = MEDIA_DISPLAY_FIELDS.reduce((edits, field) => {
+          if (pendingItem[field] !== initial[pendingIndex][field]) {
+            edits.push([
+              field,
+              { initial: initialItem[field], pending: pendingItem[field] },
+            ])
+          }
+          return edits
+        }, [])
+
+        break
+      }
       default:
-        return null
+        mediaItemEdits = null
+        break
     }
+    return { action: pendingItem.action, mediaItemEdits }
   })
 
+const mediaItemEdit = (mediaIndex, initialItem, pendingItem) => {
+  switch (pendingItem.action) {
+    case CONCEPT.NONE:
+      return null
+
+    case CONCEPT.MEDIA_ADD:
+      return [
+        mediaIndex,
+        `${mediaIndex}: Add`,
+        null,
+        mediaItemFields(pendingItem),
+      ]
+
+    case CONCEPT.MEDIA_DELETE:
+      return [
+        mediaIndex,
+        `${mediaIndex}: Delete`,
+        mediaItemFields(initialItem),
+        null,
+      ]
+
+    case CONCEPT.MEDIA_EDIT:
+      return [
+        mediaIndex,
+        `${mediaIndex}: Edit`,
+        mediaItemFields(initialItem),
+        mediaItemFields(pendingItem),
+      ]
+  }
+}
+
+const mediaItemEdits = (initial, pending) =>
+  pending.map((pendingItem, pendingIndex) => {
+    const initialItem = initial[pendingIndex]
+    return mediaItemEdit(pendingIndex, initialItem, pendingItem)
+  })
+
+const mediaItemFields = mediaItem =>
+  MEDIA_DISPLAY_FIELDS.reduce((fields, field) => {
+    fields.push([field, mediaItem[field]])
+    return fields
+  }, [])
 
 const mediaState = media => {
   const primaryMedia = getPrimary(media)
@@ -61,5 +120,13 @@ const mediaState = media => {
   }))
 }
 
-
-export { getPrimary, hasPrimary, isPrimary, mediaBorder, mediaState, mediaUpdates }
+export {
+  getPrimary,
+  hasPrimary,
+  isPrimary,
+  mediaBorder,
+  mediaEdits,
+  mediaItemEdits,
+  mediaItemFields,
+  mediaState,
+}
