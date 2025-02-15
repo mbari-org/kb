@@ -16,6 +16,8 @@ import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
 
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
+import { INTENT } from "@/contexts/concept/lib/useDisplayEditingState"
+
 import update from "@/contexts/concept/lib/submit/update"
 import {
   CONCEPT,
@@ -119,7 +121,7 @@ const ConceptProvider = ({ children }) => {
         if (modalHasBeenDisplayed) {
           setModalHasBeenDisplayed(false)
         } else {
-          displayEditingState()
+          displayEditingState(INTENT.CONTINUE)
           setModalHasBeenDisplayed(true)
         }
         return
