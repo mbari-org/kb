@@ -8,7 +8,12 @@ const RESET_TYPES = [
   CONCEPT.RESET_MEDIA_ITEM,
 ]
 
-const useModifyConcept = (dispatch, initialState, setModified) => {
+const useModifyConcept = (
+  dispatch,
+  editingState,
+  initialState,
+  setModified
+) => {
   const resetConcept = useResetConcept(dispatch, initialState)
 
   return useCallback(

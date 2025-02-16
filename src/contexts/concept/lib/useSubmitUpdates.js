@@ -7,7 +7,7 @@
 
 // import useProcessError from "@/lib/hooks/useProcessError"
 
-// import { editsObject } from "@/lib/kb/util"
+// import { stateChange } from "@/lib/kb/util"
 
 // export const UPDATE_ALL_DATA = "all"
 // export const UPDATE_NAME_ONLY = "solo"
@@ -125,7 +125,7 @@
 //       return
 //     }
 
-//     const pendingEdits = editsObject(initialState, editingState)
+//     const pendingEdits = stateChange(initialState, editingState)
 //     const updates = Object.keys(pendingEdits).reduce((acc, key) => {
 //       acc[key] = pendingEdits[key].pending
 //       return acc

@@ -24,7 +24,7 @@ import {
   conceptStateReducer,
 } from "@/contexts/concept/lib/conceptStateReducer"
 
-import { hasPendingEdits } from "@/components/kb/panels/concepts/editingState/edits/editingState"
+import { hasStateChange } from "@/components/kb/panels/concepts/editingState/edits/stateChange"
 
 const ConceptProvider = ({ children }) => {
   // const theme = useTheme()
@@ -56,7 +56,12 @@ const ConceptProvider = ({ children }) => {
   const displayEditingState = useDisplayEditingState()
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
-  const modifyConcept = useModifyConcept(dispatch, initialState, setModified)
+  const modifyConcept = useModifyConcept(
+    dispatch,
+    editingState,
+    initialState,
+    setModified
+  )
 
   const resetState = useCallback(
     toState => {
@@ -107,6 +112,16 @@ const ConceptProvider = ({ children }) => {
     if (!selected) {
       return
     }
+    if (!editing && selected.concept !== concept?.name) {
+      loadConcept(selected.concept).then(
+        () => {
+          const concept = getConcept(selected.concept)
+          setConcept(concept)
+        },
+        error => showBoundary(error)
+      )
+      return
+    }
 
     if (
       editing &&
@@ -127,16 +142,6 @@ const ConceptProvider = ({ children }) => {
         return
       }
     }
-
-    if (selected.concept !== concept?.name) {
-      loadConcept(selected.concept).then(
-        () => {
-          const concept = getConcept(selected.concept)
-          setConcept(concept)
-        },
-        error => showBoundary(error)
-      )
-    }
   }, [
     modal,
     concept,
@@ -155,7 +160,7 @@ const ConceptProvider = ({ children }) => {
   ])
 
   useEffect(() => {
-    setModified(hasPendingEdits(initialState, editingState))
+    setModified(hasStateChange(initialState, editingState))
   }, [editingState, initialState])
 
   useEffect(() => {

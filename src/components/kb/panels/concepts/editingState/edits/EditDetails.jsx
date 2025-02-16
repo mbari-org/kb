@@ -9,7 +9,7 @@ import MediaDetails from "./media/MediaDetails"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { editsObject } from "./editingState"
+import { stateChange } from "./stateChange"
 
 const EditDetails = () => {
   const { editingState, initialState } = use(ConceptContext)
@@ -17,7 +17,7 @@ const EditDetails = () => {
 
   const edits = useMemo(
     () =>
-      Object.entries(editsObject(initialState, editingState)).sort(
+      Object.entries(stateChange(initialState, editingState)).sort(
         ([keyA], [keyB]) => keyA.localeCompare(keyB)
       ),
     [initialState, editingState]
