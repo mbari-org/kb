@@ -8,12 +8,7 @@ const RESET_TYPES = [
   CONCEPT.RESET_MEDIA_ITEM,
 ]
 
-const useModifyConcept = (
-  dispatch,
-  editingState,
-  initialState,
-  setModified
-) => {
+const useModifyConcept = (dispatch, initialState) => {
   const resetConcept = useResetConcept(dispatch, initialState)
 
   return useCallback(
@@ -21,11 +16,8 @@ const useModifyConcept = (
       RESET_TYPES.includes(action.type)
         ? resetConcept(action, dispatch, initialState)
         : dispatch(action)
-
-      // CxTBD Check if edit has restored state.
-      setModified(true)
     },
-    [dispatch, initialState, resetConcept, setModified]
+    [dispatch, initialState, resetConcept]
   )
 }
 

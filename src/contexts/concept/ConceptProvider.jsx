@@ -56,12 +56,7 @@ const ConceptProvider = ({ children }) => {
   const displayEditingState = useDisplayEditingState()
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
-  const modifyConcept = useModifyConcept(
-    dispatch,
-    editingState,
-    initialState,
-    setModified
-  )
+  const modifyConcept = useModifyConcept(dispatch, initialState)
 
   const resetState = useCallback(
     toState => {
@@ -90,23 +85,6 @@ const ConceptProvider = ({ children }) => {
       updates: editingState,
     })
   }
-
-  // const submitUpdates = useSubmitUpdates({
-  //   concept,
-  //   config: taxonomy.config,
-  //   editingState,
-  //   initialState,
-  //   modified,
-  //   modifyConcept,
-  //   ranks: filterRanks(),
-  //   resetState,
-  //   selectConcept,
-  //   setModal,
-  //   showBoundary,
-  //   theme,
-  //   updateConcept,
-  //   updateConceptName,
-  // })
 
   useEffect(() => {
     if (!selected) {
