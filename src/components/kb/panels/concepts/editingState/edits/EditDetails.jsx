@@ -1,4 +1,4 @@
-import { use, useMemo } from "react"
+import { use, useEffect, useMemo } from "react"
 
 import { Box } from "@mui/material"
 
@@ -9,12 +9,11 @@ import MediaDetails from "./media/MediaDetails"
 import ConceptContext from "@/contexts/concept/ConceptContext"
 import ModalContext from "@/contexts/modal/ModalContext"
 
-import { stateChange } from "./stateChange"
+import { hasStateChange, stateChange } from "./stateChange"
 
 const EditDetails = () => {
   const { editingState, initialState } = use(ConceptContext)
   const { setModal } = use(ModalContext)
-
   const edits = useMemo(
     () =>
       Object.entries(stateChange(initialState, editingState)).sort(
@@ -37,10 +36,11 @@ const EditDetails = () => {
     }
   }
 
-  if (edits.length === 0) {
-    setModal(null)
-    return null
-  }
+  useEffect(() => {
+    if (!hasStateChange(initialState, editingState)) {
+      setModal(null)
+    }
+  }, [editingState, initialState, setModal])
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>

@@ -8,8 +8,8 @@ import {
   CardContent,
   CardHeader,
   Fade,
-  Modal,
   IconButton,
+  Modal,
 } from "@mui/material"
 
 import ModalContext from "@/contexts/modal/ModalContext"
