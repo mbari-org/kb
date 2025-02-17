@@ -1,6 +1,7 @@
 import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
 const MEDIA_TYPES = [CONCEPT.RESET_MEDIA, CONCEPT.RESET_MEDIA_ITEM]
+export const RESET_TYPES = [CONCEPT.RESET_FIELD, CONCEPT.RESET_MEDIA, CONCEPT.RESET_MEDIA_ITEM]
 
 const resetConceptField = (action, dispatch, initialState) => {
   const resetFieldValue = field => {

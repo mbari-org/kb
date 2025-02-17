@@ -8,7 +8,9 @@ import useConceptPath from '@/contexts/concept/lib/useConceptPath'
 import useDisplayEditingState from '@/contexts/concept/lib/useDisplayEditingState'
 import useDisplayEditMedia from '@/contexts/concept/lib/useDisplayEditMedia'
 import useDisplayPendingField from '@/contexts/concept/lib/useDisplayPendingField'
+
 import useModifyConcept from '@/contexts/concept/lib/useModifyConcept'
+import useResetConcept from '@/contexts/concept/lib/useResetConcept'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -53,7 +55,9 @@ const ConceptProvider = ({ children }) => {
   const displayEditingState = useDisplayEditingState()
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
-  const modifyConcept = useModifyConcept(dispatch, initialState)
+
+  const resetConcept = useResetConcept(dispatch, initialState)
+  const modifyConcept = useModifyConcept(dispatch, resetConcept)
 
   const resetState = useCallback(
     toState => {
@@ -75,7 +79,7 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    console.log('submitUpdates')
+    console.log('CxINC: submitUpdates', editingState)
     update({
       concept,
       config: taxonomy.config,
