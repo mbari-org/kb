@@ -1,3 +1,6 @@
+import { use } from "react"
+import { IoClose } from "react-icons/io5"
+
 import {
   Box,
   Card,
@@ -5,14 +8,19 @@ import {
   CardContent,
   CardHeader,
   Fade,
-  Modal as MuiModal,
+  Modal,
+  IconButton,
 } from "@mui/material"
 
-const Modal = ({ modal }) => {
+import ModalContext from "@/contexts/modal/ModalContext"
+
+const KbModal = ({ modal }) => {
+  const { setModal } = use(ModalContext)
+
   const { Actions, Content, Title } = modal
 
   return (
-    <MuiModal
+    <Modal
       aria-labelledby="modal-alert"
       aria-describedby="modal-alert-description"
       open
@@ -27,7 +35,14 @@ const Modal = ({ modal }) => {
             mt: 10,
           }}
         >
-          <Card sx={{ p: 2, pb: 0 }}>
+          <Card sx={{ p: 2, pb: 0, position: "relative" }}>
+            <IconButton
+              aria-label="close"
+              onClick={() => setModal(null)}
+              sx={{ position: "absolute", right: 8, top: 8 }}
+            >
+              <IoClose />
+            </IconButton>
             <CardHeader title={<Title />} />
             <CardContent sx={{ pb: 0, pt: 0 }}>
               <Content />
@@ -38,8 +53,8 @@ const Modal = ({ modal }) => {
           </Card>
         </Box>
       </Fade>
-    </MuiModal>
+    </Modal>
   )
 }
 
-export default Modal
+export default KbModal

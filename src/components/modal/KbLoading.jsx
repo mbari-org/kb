@@ -3,7 +3,7 @@ import { Backdrop, CircularProgress, useTheme } from "@mui/material"
 
 const LOADING_DELAY = 333
 
-const LoadingBackdrop = ({ loading }) => {
+const KbLoading = ({ loading }) => {
   const timerRef = useRef(undefined)
   const [active, setActive] = useState(false)
   const theme = useTheme()
@@ -31,4 +31,4 @@ const LoadingBackdrop = ({ loading }) => {
     </Backdrop>
   )
 }
-export default LoadingBackdrop
+export default KbLoading

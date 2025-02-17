@@ -1,7 +1,7 @@
 import { use } from "react"
 
-import Modal from "./Modal"
-import LoadingBackdrop from "./LoadingBackdrop"
+import KbModal from "./KbModal"
+import KbLoading from "./KbLoading"
 
 import ModalContext from "@/contexts/modal/ModalContext"
 
@@ -10,8 +10,8 @@ const Modals = () => {
 
   return (
     <>
-      {modal && <Modal modal={modal} />}
-      {loading && <LoadingBackdrop loading={loading} />}
+      {modal && <KbModal modal={modal} />}
+      {loading && <KbLoading loading={loading} />}
     </>
   )
 }
