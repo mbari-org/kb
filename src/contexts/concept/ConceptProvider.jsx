@@ -30,7 +30,7 @@ const ConceptProvider = ({ children }) => {
 
   const { showBoundary } = useErrorBoundary()
 
-  const { modal, setModal } = use(ModalContext)
+  const { data, modal, setData, setModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
     // filterRanks,
@@ -56,7 +56,7 @@ const ConceptProvider = ({ children }) => {
   const displayEditMedia = useDisplayEditMedia()
   const displayPendingField = useDisplayPendingField()
 
-  const resetConcept = useResetConcept(dispatch, initialState)
+  const resetConcept = useResetConcept(dispatch, initialState, data, setData)
   const modifyConcept = useModifyConcept(dispatch, resetConcept)
 
   const resetState = useCallback(

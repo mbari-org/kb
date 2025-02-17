@@ -11,7 +11,7 @@ const resetConceptField = (action, dispatch, initialState) => {
     })
   }
 
-  // Certain field resets are done in tandem.
+  // Certain field resets are grouped together.
   switch (action.field) {
     case 'name':
     case 'nameUpdate':
@@ -54,9 +54,17 @@ const resetConceptMedia = (action, dispatch, initialState) => {
   }
 }
 
-const useResetConcept = (dispatch, initialState) => action => {
+const useResetConcept = (dispatch, initialState, data, setData) => action => {
+  console.log('CxINC: data', data)
+  if (data?.confirmResetFn) {
+    data.confirmResetFn()
+    return
+  }
+
   const resetFn = MEDIA_TYPES.includes(action.type) ? resetConceptMedia : resetConceptField
-  resetFn(action, dispatch, initialState)
+  const confirmResetFn = () => resetFn(action, dispatch, initialState)
+
+  setData({ confirmResetFn })
 }
 
 export default useResetConcept
