@@ -8,8 +8,7 @@ import ConceptContext from "@/contexts/concept/ConceptContext"
 import { INTENT } from "@/contexts/concept/lib/useDisplayEditingState"
 
 const ConceptActions = () => {
-  const { displayEditingState, editing, modified, setEditing } =
-    use(ConceptContext)
+  const { displayEditingState, editing, modified, setEditing } = use(ConceptContext)
 
   return (
     <Box
@@ -26,7 +25,11 @@ const ConceptActions = () => {
       <Button
         color={editing ? "cancel" : "main"}
         onClick={() =>
-          editing ? displayEditingState(INTENT.SHOW) : setEditing(true)
+          editing
+            ? modified
+              ? displayEditingState(INTENT.SHOW)
+              : setEditing(false)
+            : setEditing(true)
         }
         variant="contained"
       >
