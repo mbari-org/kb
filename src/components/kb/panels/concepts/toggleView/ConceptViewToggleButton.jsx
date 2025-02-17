@@ -1,6 +1,6 @@
-import ToggleButton from "@mui/material/ToggleButton"
+import ToggleButton from '@mui/material/ToggleButton'
 
-import { useTheme } from "@mui/material/styles"
+import { useTheme } from '@mui/material/styles'
 
 const ConceptViewToggleButton = ({ Icon, value }) => {
   const theme = useTheme()
@@ -12,15 +12,15 @@ const ConceptViewToggleButton = ({ Icon, value }) => {
       sx={{
         backgroundColor: theme.palette.grey[800],
         color: theme.palette.grey[200],
-        "&.Mui-selected": {
+        '&.Mui-selected': {
           backgroundColor: theme.palette.primary.main,
           color: theme.palette.common.white,
         },
-        "&:hover": {
+        '&:hover': {
           backgroundColor: theme.palette.grey[800],
           color: theme.palette.grey[200],
         },
-        "&.Mui-selected:hover": {
+        '&.Mui-selected:hover': {
           backgroundColor: theme.palette.primary.main,
           color: theme.palette.common.white,
         },

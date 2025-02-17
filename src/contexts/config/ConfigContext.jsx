@@ -1,6 +1,6 @@
-import { createContext } from "react"
+import { createContext } from 'react'
 
 const ConfigContext = createContext()
-ConfigContext.displayName = "Config Context"
+ConfigContext.displayName = 'Config Context'
 
 export default ConfigContext

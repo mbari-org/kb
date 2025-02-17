@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect } from 'react'
 
-import useArrowNavigation from "./useArrowNavigation"
+import useArrowNavigation from './useArrowNavigation'
 
 const useArrowKeys = (
   concept,
@@ -11,8 +11,7 @@ const useArrowKeys = (
   sidebarRef
 ) => {
   const isExpanded = useCallback(
-    concept =>
-      0 < concept.children.length && expandedItems.includes(concept.name),
+    concept => 0 < concept.children.length && expandedItems.includes(concept.name),
     [expandedItems]
   )
 
@@ -25,7 +24,7 @@ const useArrowKeys = (
   )
 
   useEffect(() => {
-    const arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
+    const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
     const handleKeyDown = event => {
       if (arrowKeys.includes(event.key)) {
         event.preventDefault()
@@ -34,12 +33,12 @@ const useArrowKeys = (
     }
     const currentSidebar = sidebarRef.current
     if (currentSidebar) {
-      currentSidebar.addEventListener("keydown", handleKeyDown)
+      currentSidebar.addEventListener('keydown', handleKeyDown)
     }
 
     return () => {
       if (currentSidebar) {
-        currentSidebar.removeEventListener("keydown", handleKeyDown)
+        currentSidebar.removeEventListener('keydown', handleKeyDown)
       }
     }
   }, [handleArrowKeys, sidebarRef])

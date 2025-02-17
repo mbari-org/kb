@@ -1,22 +1,22 @@
-import { use } from "react"
+import { use } from 'react'
 
-import { createActions } from "@/components/modal/factory"
+import { createActions } from '@/components/modal/factory'
 
-import ModalContext from "@/contexts/modal/ModalContext"
+import ModalContext from '@/contexts/modal/ModalContext'
 
-const RESET = "Reset"
+const RESET = 'Reset'
 
 const ErrorActions = () => {
   const { setModal } = use(ModalContext)
 
-  const colors = ["main"]
+  const colors = ['main']
   const labels = [RESET]
 
   const onAction = () => {
     setModal(null)
   }
 
-  return createActions({ colors, labels, onAction }, "ErrorActions")
+  return createActions({ colors, labels, onAction }, 'ErrorActions')
 }
 
 export default ErrorActions

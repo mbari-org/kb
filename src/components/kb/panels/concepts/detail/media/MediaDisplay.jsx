@@ -1,7 +1,7 @@
-import { use } from "react"
-import { Box, Dialog, Zoom } from "@mui/material"
+import { use } from 'react'
+import { Box, Dialog, Zoom } from '@mui/material'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const MediaDisplay = ({ mediaIndex, previewImage, setPreviewImage, url }) => {
   const { editingState } = use(ConceptContext)
@@ -14,21 +14,21 @@ const MediaDisplay = ({ mediaIndex, previewImage, setPreviewImage, url }) => {
     <Dialog fullScreen open={previewImage} TransitionComponent={Zoom}>
       <Box
         sx={{
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          justifyContent: "center",
+          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          justifyContent: 'center',
         }}
       >
         <img
-          alt="Concept Media Display"
+          alt='Concept Media Display'
           onClick={() => setPreviewImage(false)}
           src={imageUrl}
           style={{
-            height: "100%",
-            objectFit: "contain",
-            width: "100%",
+            height: '100%',
+            objectFit: 'contain',
+            width: '100%',
           }}
         />
       </Box>

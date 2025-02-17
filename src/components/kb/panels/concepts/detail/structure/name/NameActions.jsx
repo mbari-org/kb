@@ -1,16 +1,16 @@
-import { use } from "react"
+import { use } from 'react'
 
-import { createActions } from "@/components/modal/factory"
+import { createActions } from '@/components/modal/factory'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import ModalContext from "@/contexts/modal/ModalContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import ModalContext from '@/contexts/modal/ModalContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { UPDATE } from "@/contexts/concept/lib/submit/nameUpdates"
+import { UPDATE } from '@/contexts/concept/lib/submit/nameUpdates'
 
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
-const CANCEL = "Cancel"
+const CANCEL = 'Cancel'
 
 const NameActions = () => {
   const { concept, editingState, modifyConcept } = use(ConceptContext)
@@ -19,7 +19,7 @@ const NameActions = () => {
 
   const names = getConceptNames()
 
-  const colors = ["cancel", "main", "main"]
+  const colors = ['cancel', 'main', 'main']
   const disabled =
     concept.name !== editingState.name && !names.includes(editingState.name)
       ? [false, false, false]
@@ -42,10 +42,7 @@ const NameActions = () => {
     setModal(null)
   }
 
-  return createActions(
-    { colors, disabled, labels, onAction },
-    "ConceptNameUpdateActions"
-  )
+  return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
 }
 
 export default NameActions

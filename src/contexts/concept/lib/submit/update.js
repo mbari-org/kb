@@ -1,9 +1,9 @@
-import detailUpdates from "./detailUpdates"
-import mediaUpdates from "./mediaUpdates"
-import nameUpdates from "./nameUpdates"
-import structureUpdates from "./structureUpdates"
+import detailUpdates from './detailUpdates'
+import mediaUpdates from './mediaUpdates'
+import nameUpdates from './nameUpdates'
+import structureUpdates from './structureUpdates'
 
-import { isEmpty, prune } from "@/lib/util"
+import { isEmpty, prune } from '@/lib/util'
 
 const update = async params => {
   const { concept, config, updates } = params
@@ -20,23 +20,22 @@ const update = async params => {
   return result
 }
 
-const updateProcessor =
-  (concept, config) => async (result, conceptUpdates, updateFn) => {
-    if (result.error)
-      return {
-        error: result.error,
-        concept,
-      }
-
-    const updates = prune(conceptUpdates)
-    if (isEmpty(updates)) {
-      return { concept }
+const updateProcessor = (concept, config) => async (result, conceptUpdates, updateFn) => {
+  if (result.error)
+    return {
+      error: result.error,
+      concept,
     }
 
-    const { error, _payload } = await updateFn(config, concept.name, updates)
-    const updatedConcept = { ...concept, ...updates }
-
-    return { error, updatedConcept }
+  const updates = prune(conceptUpdates)
+  if (isEmpty(updates)) {
+    return { concept }
   }
+
+  const { error, _payload } = await updateFn(config, concept.name, updates)
+  const updatedConcept = { ...concept, ...updates }
+
+  return { error, updatedConcept }
+}
 
 export default update

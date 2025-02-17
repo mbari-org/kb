@@ -1,12 +1,12 @@
-import { use } from "react"
+import { use } from 'react'
 
-import { FormControl, TextField } from "@mui/material"
+import { FormControl, TextField } from '@mui/material'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useConceptDetailStyle from "./useConceptDetailStyle"
+import useConceptDetailStyle from './useConceptDetailStyle'
 
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
 const ConceptAuthor = () => {
   const {
@@ -14,13 +14,13 @@ const ConceptAuthor = () => {
     modifyConcept,
   } = use(ConceptContext)
 
-  const infoStyle = useConceptDetailStyle("Author")
+  const infoStyle = useConceptDetailStyle('Author')
 
   return (
     <FormControl>
       <TextField
         {...infoStyle}
-        label="Author"
+        label='Author'
         onChange={e =>
           modifyConcept({
             type: CONCEPT.SET_FIELD,

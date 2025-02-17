@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-import ModalContext from "./ModalContext"
+import ModalContext from './ModalContext'
 
 const ModalProvider = ({ children }) => {
   const [data, setData] = useState(null)

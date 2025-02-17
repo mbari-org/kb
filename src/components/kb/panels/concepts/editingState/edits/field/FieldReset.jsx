@@ -1,9 +1,9 @@
-import { use } from "react"
+import { use } from 'react'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
-import Reset from "../Reset"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import Reset from '../Reset'
 
 const FieldReset = ({ field }) => {
   const { modifyConcept } = use(ConceptContext)

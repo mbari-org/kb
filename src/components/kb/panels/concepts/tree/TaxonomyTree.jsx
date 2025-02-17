@@ -1,21 +1,21 @@
-import { use, useCallback, useState } from "react"
+import { use, useCallback, useState } from 'react'
 
-import { RichTreeView } from "@mui/x-tree-view/RichTreeView"
-import { useTreeViewApiRef } from "@mui/x-tree-view/hooks"
+import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
+import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
 
-import ConceptItem from "./ConceptItem"
+import ConceptItem from './ConceptItem'
 
-import { itemConceptLabel, itemConceptName } from "./lib/taxonomyItem"
+import { itemConceptLabel, itemConceptName } from './lib/taxonomyItem'
 
-import useArrowKeys from "./lib/useArrowKeys"
-import useConceptAutoExpand from "./lib/useConceptAutoExpand"
-import useConceptClick from "./lib/useConceptClick"
-import useExpandConcept from "./lib/useExpandConcept"
-import useTaxonomyTreeReposition from "./lib/useTaxonomyTreeReposition"
+import useArrowKeys from './lib/useArrowKeys'
+import useConceptAutoExpand from './lib/useConceptAutoExpand'
+import useConceptClick from './lib/useConceptClick'
+import useExpandConcept from './lib/useExpandConcept'
+import useTaxonomyTreeReposition from './lib/useTaxonomyTreeReposition'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import SelectedContext from "@/contexts/selected/SelectedContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
@@ -36,12 +36,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems)
 
-  const handleConceptClick = useConceptClick(
-    concept,
-    expandConcept,
-    selectConcept,
-    setAutoExpand
-  )
+  const handleConceptClick = useConceptClick(concept, expandConcept, selectConcept, setAutoExpand)
 
   useConceptAutoExpand({
     autoExpand,
@@ -52,14 +47,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   })
   useTaxonomyTreeReposition(apiRef, concept)
 
-  useArrowKeys(
-    concept,
-    expandConcept,
-    expandedItems,
-    selectConcept,
-    setAutoExpand,
-    sidebarRef
-  )
+  useArrowKeys(concept, expandConcept, expandedItems, selectConcept, setAutoExpand, sidebarRef)
 
   // when the concept name changes, we get the stale concept here during update. the
   // getConcept call prevents further processing until the concept done updating
@@ -68,7 +56,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   }
 
   return (
-    <aside className="taxonomy-tree" style={{ flexGrow: 1, height: "100%" }}>
+    <aside className='taxonomy-tree' style={{ flexGrow: 1, height: '100%' }}>
       <RichTreeView
         itemChildrenIndentation={8}
         apiRef={apiRef}
@@ -85,7 +73,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
             taxonomy,
           },
         }}
-        style={{ flexGrow: 1, height: "100%" }}
+        style={{ flexGrow: 1, height: '100%' }}
       />
     </aside>
   )

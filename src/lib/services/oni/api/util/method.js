@@ -1,6 +1,6 @@
-import oniParams from "./params"
-import oniSend from "./send"
-import oniUrl from "./url"
+import oniParams from './params'
+import oniSend from './send'
+import oniUrl from './url'
 
 const oniMethod = method => async (config, path, data) => {
   const params = oniParams(method, data)

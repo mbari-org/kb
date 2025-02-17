@@ -6,13 +6,10 @@ const stateChange = (initialState, editingState) => {
     return {}
   }
 
-  return stateChanges(initialState, editingState).reduce(
-    (edits, [field, initial, pending]) => {
-      edits[field] = { initial, pending }
-      return edits
-    },
-    {}
-  )
+  return stateChanges(initialState, editingState).reduce((edits, [field, initial, pending]) => {
+    edits[field] = { initial, pending }
+    return edits
+  }, {})
 }
 
 const stateChanges = (initialState, editingState) => {

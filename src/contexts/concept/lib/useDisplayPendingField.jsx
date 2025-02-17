@@ -1,11 +1,11 @@
-import { use, useCallback } from "react"
+import { use, useCallback } from 'react'
 
-import { createModal } from "@/components/modal/factory"
-import PendingFieldActions from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldActions"
-import PendingFieldContent from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldContent"
-import PendingFieldTitle from "@/components/kb/panels/concepts/detail/pendingField/PendingFieldTitle"
+import { createModal } from '@/components/modal/factory'
+import PendingFieldActions from '@/components/kb/panels/concepts/detail/pendingField/PendingFieldActions'
+import PendingFieldContent from '@/components/kb/panels/concepts/detail/pendingField/PendingFieldContent'
+import PendingFieldTitle from '@/components/kb/panels/concepts/detail/pendingField/PendingFieldTitle'
 
-import ModalContext from "@/contexts/modal/ModalContext"
+import ModalContext from '@/contexts/modal/ModalContext'
 
 const useDisplayPendingField = () => {
   const { setModal } = use(ModalContext)

@@ -1,21 +1,21 @@
-import { alpha, createTheme, darken, lighten } from "@mui/material/styles"
+import { alpha, createTheme, darken, lighten } from '@mui/material/styles'
 
 const { palette } = createTheme()
 const { augmentColor } = palette
 const addColor = color => augmentColor({ color: { main: color } })
 
-const main = "#0077be"
+const main = '#0077be'
 const light = alpha(main, 0.1)
 const pale = alpha(main, 0.3)
 
-const cancel = "#af0000"
-const clean = "#008800"
-const conceptDetail = "#008800"
-const navActive = "#ffffff"
-const paper = "#f0f0f0"
-const pendingIconClean = "#00dd00"
-const pendingIconDirty = "#dd0000"
-const remove = "#af0000"
+const cancel = '#af0000'
+const clean = '#008800'
+const conceptDetail = '#008800'
+const navActive = '#ffffff'
+const paper = '#f0f0f0'
+const pendingIconClean = '#00dd00'
+const pendingIconDirty = '#dd0000'
+const remove = '#af0000'
 
 const theme = createTheme({
   concept: {
@@ -29,7 +29,7 @@ const theme = createTheme({
       },
       remove,
     },
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: 'Roboto, sans-serif',
     fontWeight: 600,
     infoFontSize: 32,
     updateFontSize: 24,
@@ -59,11 +59,11 @@ const theme = createTheme({
       pale,
     },
     secondary: {
-      main: "#ff5722",
+      main: '#ff5722',
     },
   },
   typography: {
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: 'Roboto, sans-serif',
     fontSize: 16,
     fontWeight: 600,
   },

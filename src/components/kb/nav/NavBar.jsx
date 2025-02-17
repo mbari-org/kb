@@ -1,18 +1,18 @@
-import { AppBar, Toolbar } from "@mui/material"
+import { AppBar, Toolbar } from '@mui/material'
 
-import LogoutLink from "./LogoutLink"
-import PanelLink from "./PanelLink"
+import LogoutLink from './LogoutLink'
+import PanelLink from './PanelLink'
 
-import panels from "@/lib/kb/panels"
+import panels from '@/lib/kb/panels'
 
 const NavBar = ({ activePanel, selectPanel }) => {
   const names = panels.map(({ name }) => name)
 
   return (
     <AppBar
-      position="static"
+      position='static'
       sx={{
-        height: "50px",
+        height: '50px',
         backgroundColor: theme => theme.palette.primary.dark,
       }}
     >
@@ -27,7 +27,7 @@ const NavBar = ({ activePanel, selectPanel }) => {
           />
         ))}
         <div style={{ flexGrow: 1 }} />
-        <LogoutLink sx={{ marginTop: "-10px" }} />
+        <LogoutLink sx={{ marginTop: '-10px' }} />
       </Toolbar>
     </AppBar>
   )

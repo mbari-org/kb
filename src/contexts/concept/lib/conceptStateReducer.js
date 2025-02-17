@@ -1,28 +1,26 @@
 const CONCEPT = {
-  INIT_STATE: "INIT_STATE",
-  MEDIA_ADD: "MEDIA_ADD",
-  MEDIA_DELETE: "MEDIA_DELETE",
-  MEDIA_EDIT: "MEDIA_EDIT",
-  MEDIA_RESTORE: "MEDIA_RESTORE",
-  NAME_UPDATE: "NAME_UPDATE",
-  NONE: "NONE",
-  PARENT_UPDATE: "PARENT_UPDATE",
-  RESET_FIELD: "RESET_FIELD",
-  RESET_MEDIA: "RESET_MEDIA",
-  RESET_MEDIA_ITEM: "RESET_MEDIA_ITEM",
-  SET_FIELD: "SET_FIELD",
+  INIT_STATE: 'INIT_STATE',
+  MEDIA_ADD: 'MEDIA_ADD',
+  MEDIA_DELETE: 'MEDIA_DELETE',
+  MEDIA_EDIT: 'MEDIA_EDIT',
+  MEDIA_RESTORE: 'MEDIA_RESTORE',
+  NAME_UPDATE: 'NAME_UPDATE',
+  NONE: 'NONE',
+  PARENT_UPDATE: 'PARENT_UPDATE',
+  RESET_FIELD: 'RESET_FIELD',
+  RESET_MEDIA: 'RESET_MEDIA',
+  RESET_MEDIA_ITEM: 'RESET_MEDIA_ITEM',
+  SET_FIELD: 'SET_FIELD',
 }
 
-import { isPrimary } from "@/lib/kb/concept/media"
+import { isPrimary } from '@/lib/kb/concept/media'
 
 const updateMedia = (state, { type, update }) => {
   const { mediaIndex, mediaItem } = update
   const updatedItem = { ...state.media[mediaIndex], ...mediaItem, action: type }
   return {
     ...state,
-    media: state.media.map((item, index) =>
-      index === mediaIndex ? updatedItem : item
-    ),
+    media: state.media.map((item, index) => (index === mediaIndex ? updatedItem : item)),
   }
 }
 
@@ -47,9 +45,7 @@ const conceptStateReducer = (state, { type, update }) => {
     case CONCEPT.MEDIA_DELETE: {
       const stateMedia = state.media[update.mediaIndex]
       if (stateMedia.action === CONCEPT.MEDIA_ADD) {
-        const updatedMedia = state.media.filter(
-          (_item, index) => index !== update.mediaIndex
-        )
+        const updatedMedia = state.media.filter((_item, index) => index !== update.mediaIndex)
         return {
           ...state,
           media: updatedMedia,
@@ -120,9 +116,7 @@ const conceptStateReducer = (state, { type, update }) => {
       const { mediaIndex, mediaItem } = update
       return {
         ...state,
-        media: state.media.map((item, index) =>
-          index === mediaIndex ? mediaItem : item
-        ),
+        media: state.media.map((item, index) => (index === mediaIndex ? mediaItem : item)),
       }
     }
 

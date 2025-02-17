@@ -1,4 +1,4 @@
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
 const MEDIA_TYPES = [CONCEPT.RESET_MEDIA, CONCEPT.RESET_MEDIA_ITEM]
 
@@ -12,16 +12,16 @@ const resetConceptField = (action, dispatch, initialState) => {
 
   // Certain field resets are done in tandem.
   switch (action.field) {
-    case "name":
-    case "nameUpdate":
-      resetFieldValue("name")
-      resetFieldValue("nameUpdate")
+    case 'name':
+    case 'nameUpdate':
+      resetFieldValue('name')
+      resetFieldValue('nameUpdate')
       break
 
-    case "rankLevel":
-    case "rankName":
-      resetFieldValue("rankLevel")
-      resetFieldValue("rankName")
+    case 'rankLevel':
+    case 'rankName':
+      resetFieldValue('rankLevel')
+      resetFieldValue('rankName')
       break
 
     default:
@@ -54,9 +54,7 @@ const resetConceptMedia = (action, dispatch, initialState) => {
 }
 
 const useResetConcept = (dispatch, initialState) => action => {
-  const resetFn = MEDIA_TYPES.includes(action.type)
-    ? resetConceptMedia
-    : resetConceptField
+  const resetFn = MEDIA_TYPES.includes(action.type) ? resetConceptMedia : resetConceptField
   resetFn(action, dispatch, initialState)
 }
 

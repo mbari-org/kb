@@ -1,16 +1,16 @@
-import { use, forwardRef } from "react"
+import { use, forwardRef } from 'react'
 
-import { TreeItem2Provider } from "@mui/x-tree-view"
-import { TreeItem2 } from "@mui/x-tree-view/TreeItem2"
+import { TreeItem2Provider } from '@mui/x-tree-view'
+import { TreeItem2 } from '@mui/x-tree-view/TreeItem2'
 
-import ConceptContent from "./ConceptContent"
-import ConceptLabel from "./ConceptLabel"
-import ConceptsExpand from "./ConceptsExpand"
+import ConceptContent from './ConceptContent'
+import ConceptLabel from './ConceptLabel'
+import ConceptsExpand from './ConceptsExpand'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { hasPendingHistory } from "@/lib/kb/util/pendingHistory"
+import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
 const ConceptItem = forwardRef(function ConceptItem(props, ref) {
   const { concept } = use(ConceptContext)
@@ -24,9 +24,7 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
     return null
   }
 
-  const itemHasPendingHistory = hasPendingHistory(
-    getConceptPendingHistory(item.name)
-  )
+  const itemHasPendingHistory = hasPendingHistory(getConceptPendingHistory(item.name))
 
   const mediaCount = item.media.length
   const hasMedia = 0 < mediaCount

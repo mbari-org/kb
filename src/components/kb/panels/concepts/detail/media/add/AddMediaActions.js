@@ -1,20 +1,20 @@
-import { use } from "react"
+import { use } from 'react'
 
-import { createActions } from "@/components/modal/factory"
+import { createActions } from '@/components/modal/factory'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import ModalContext from "@/contexts/modal/ModalContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import ModalContext from '@/contexts/modal/ModalContext'
 
-import { EDIT_MEDIA_FORM_ID } from "../edit/EditMediaContent"
+import { EDIT_MEDIA_FORM_ID } from '../edit/EditMediaContent'
 
-const ADD = "Add"
-const DISCARD = "Discard"
+const ADD = 'Add'
+const DISCARD = 'Discard'
 
 const AddMediaActions = () => {
   const { editingState } = use(ConceptContext)
   const { setModal } = use(ModalContext)
 
-  const colors = ["cancel", "main"]
+  const colors = ['cancel', 'main']
   const labels = [DISCARD, ADD]
 
   const onAction = label => {
@@ -26,7 +26,7 @@ const AddMediaActions = () => {
     }
   }
 
-  return createActions({ colors, labels, onAction }, "ConceptAddMediaActions")
+  return createActions({ colors, labels, onAction }, 'ConceptAddMediaActions')
 }
 
 export default AddMediaActions

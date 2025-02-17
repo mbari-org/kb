@@ -1,6 +1,6 @@
-import Actions from "@/components/modal/actions/Actions"
-import TextContent from "@/components/modal/content/TextContent"
-import Title from "@/components/modal/Title"
+import Actions from '@/components/modal/actions/Actions'
+import TextContent from '@/components/modal/content/TextContent'
+import Title from '@/components/modal/Title'
 
 const createComponent = (Component, props, name) => {
   const NamedComponent = () => <Component {...props} />
@@ -18,10 +18,4 @@ const createModal = ({ Actions, Content, Title }) => ({
   Actions: createComponent(Actions),
 })
 
-export {
-  createActions,
-  createComponent,
-  createModal,
-  createTextContent,
-  createTitle,
-}
+export { createActions, createComponent, createModal, createTextContent, createTitle }

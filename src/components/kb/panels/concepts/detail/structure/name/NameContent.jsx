@@ -1,12 +1,12 @@
-import { use } from "react"
+import { use } from 'react'
 
-import { Box, TextField, Typography, Stack } from "@mui/material" // Added Stack
-import { useTheme } from "@mui/material/styles"
+import { Box, TextField, Typography, Stack } from '@mui/material' // Added Stack
+import { useTheme } from '@mui/material/styles'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
 const NameContent = () => {
   const { concept: conceptTheme, palette } = useTheme()
@@ -33,19 +33,19 @@ const NameContent = () => {
   return (
     <Box>
       <Stack spacing={2} sx={{ mt: 2, ml: 3, mb: 2 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction='row' spacing={2} alignItems='center'>
           <Typography minWidth={60}>From:</Typography>
           <Typography
             color={fromColor}
             fontFamily={conceptTheme.fontFamily}
             fontSize={conceptTheme.updateFontSize}
             fontWeight={conceptTheme.fontWeight}
-            variant="h6"
+            variant='h6'
           >
             {concept.name}
           </Typography>
         </Stack>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction='row' spacing={2} alignItems='center'>
           <Typography minWidth={60}>To:</Typography>
           <TextField
             fullWidth
@@ -54,27 +54,25 @@ const NameContent = () => {
               input: {
                 sx: {
                   color: toColor,
-                  cursor: "text",
+                  cursor: 'text',
                   fontFamily: conceptTheme.fontFamily,
                   fontSize: conceptTheme.updateFontSize,
                   fontWeight: conceptTheme.fontWeight,
-                  height: "auto",
-                  borderBottom: "none",
-                  "&::before": { borderBottom: "none" },
-                  "&::after": { borderBottom: "none" },
+                  height: 'auto',
+                  borderBottom: 'none',
+                  '&::before': { borderBottom: 'none' },
+                  '&::after': { borderBottom: 'none' },
                 },
               },
             }}
             value={editingState.name}
-            variant="standard"
+            variant='standard'
           />
         </Stack>
       </Stack>
-      <Box sx={{ borderTop: "1px solid #000000" }}>
+      <Box sx={{ borderTop: '1px solid #000000' }}>
         <Box sx={{ mt: 2 }}>
-          <div>
-            {`Updating the name of concept will affect CxTBD link realizations.`}
-          </div>
+          <div>{`Updating the name of concept will affect CxTBD link realizations.`}</div>
           <div>{`Proceed with caution.`}</div>
         </Box>
       </Box>

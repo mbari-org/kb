@@ -1,17 +1,17 @@
-import { use, useEffect, useRef } from "react"
+import { use, useEffect, useRef } from 'react'
 
-import { Swiper, SwiperSlide } from "swiper/react"
+import { Swiper, SwiperSlide } from 'swiper/react'
 
-import { Pagination } from "swiper/modules"
+import { Pagination } from 'swiper/modules'
 
-import MediaSwiperSlide from "./MediaSwiperSlide"
+import MediaSwiperSlide from './MediaSwiperSlide'
 
-import "swiper/css"
-import "swiper/css/pagination"
+import 'swiper/css'
+import 'swiper/css/pagination'
 
-import "./mediaSwiper.css"
+import './mediaSwiper.css'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const MediaSwiper = ({ height, setMediaIndex }) => {
   const { concept, editingState } = use(ConceptContext)
@@ -20,7 +20,7 @@ const MediaSwiper = ({ height, setMediaIndex }) => {
   const pagination = {
     clickable: true,
     renderBullet: (index, className) => {
-      return '<span class="' + className + '">' + (index + 1) + "</span>"
+      return '<span class="' + className + '">' + (index + 1) + '</span>'
     },
   }
 
@@ -43,7 +43,7 @@ const MediaSwiper = ({ height, setMediaIndex }) => {
       slidesPerView={3}
       style={{
         height,
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       {editingState.media.map((mediaItem, mediaIndex) => (

@@ -1,6 +1,6 @@
-import { createComponent } from "@/components/modal/factory"
+import { createComponent } from '@/components/modal/factory'
 
-import DetailsContent from "@/components/common/DetailsContent"
+import DetailsContent from '@/components/common/DetailsContent'
 
 const Detail = props => {
   const { detail } = props

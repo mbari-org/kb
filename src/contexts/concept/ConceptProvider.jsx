@@ -1,30 +1,27 @@
-import { use, useCallback, useEffect, useReducer, useState } from "react"
-import { useErrorBoundary } from "react-error-boundary"
+import { use, useCallback, useEffect, useReducer, useState } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 // import { useTheme } from "@mui/material/styles"
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import { stateForConcept } from "@/contexts/concept/lib/stateForConcept"
-import useConceptPath from "@/contexts/concept/lib/useConceptPath"
-import useDisplayEditingState from "@/contexts/concept/lib/useDisplayEditingState"
-import useDisplayEditMedia from "@/contexts/concept/lib/useDisplayEditMedia"
-import useDisplayPendingField from "@/contexts/concept/lib/useDisplayPendingField"
-import useModifyConcept from "@/contexts/concept/lib/useModifyConcept"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import { stateForConcept } from '@/contexts/concept/lib/stateForConcept'
+import useConceptPath from '@/contexts/concept/lib/useConceptPath'
+import useDisplayEditingState from '@/contexts/concept/lib/useDisplayEditingState'
+import useDisplayEditMedia from '@/contexts/concept/lib/useDisplayEditMedia'
+import useDisplayPendingField from '@/contexts/concept/lib/useDisplayPendingField'
+import useModifyConcept from '@/contexts/concept/lib/useModifyConcept'
 
-import ModalContext from "@/contexts/modal/ModalContext"
-import SelectedContext from "@/contexts/selected/SelectedContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import ModalContext from '@/contexts/modal/ModalContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { INTENT } from "@/contexts/concept/lib/useDisplayEditingState"
+import { INTENT } from '@/contexts/concept/lib/useDisplayEditingState'
 
-import update from "@/contexts/concept/lib/submit/update"
-import {
-  CONCEPT,
-  conceptStateReducer,
-} from "@/contexts/concept/lib/conceptStateReducer"
+import update from '@/contexts/concept/lib/submit/update'
+import { CONCEPT, conceptStateReducer } from '@/contexts/concept/lib/conceptStateReducer'
 
-import { hasStateChange } from "@/components/kb/panels/concepts/editingState/edits/stateChange"
+import { hasStateChange } from '@/components/kb/panels/concepts/editingState/edits/stateChange'
 
 const ConceptProvider = ({ children }) => {
   // const theme = useTheme()
@@ -78,7 +75,7 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    console.log("submitUpdates")
+    console.log('submitUpdates')
     update({
       concept,
       config: taxonomy.config,
@@ -101,10 +98,7 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    if (
-      editing &&
-      (selected.panel !== "Concepts" || selected.concept !== concept?.name)
-    ) {
+    if (editing && (selected.panel !== 'Concepts' || selected.concept !== concept?.name)) {
       if (!modified) {
         setEditing(false)
         return

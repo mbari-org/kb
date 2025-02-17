@@ -1,10 +1,10 @@
-import { use } from "react"
-import { Box } from "@mui/material"
+import { use } from 'react'
+import { Box } from '@mui/material'
 
-import MediaView from "./MediaView"
-import NoMedia from "./NoMedia"
+import MediaView from './MediaView'
+import NoMedia from './NoMedia'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptMedia = () => {
   const { editingState } = use(ConceptContext)
@@ -13,10 +13,10 @@ const ConceptMedia = () => {
   return (
     <Box
       sx={{
-        flexBasis: "33.33%",
+        flexBasis: '33.33%',
         flexShrink: 0,
-        overflow: "hidden",
-        position: "relative",
+        overflow: 'hidden',
+        position: 'relative',
       }}
     >
       {media?.length === 0 && <NoMedia />}

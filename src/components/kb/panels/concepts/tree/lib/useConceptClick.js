@@ -1,13 +1,8 @@
-import { useCallback } from "react"
+import { useCallback } from 'react'
 
-import Expand from "./expandedEnum"
+import Expand from './expandedEnum'
 
-const useConceptClick = (
-  concept,
-  expandConcept,
-  selectConcept,
-  setAutoExpand
-) => {
+const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand) => {
   return useCallback(
     (_event, conceptName) => {
       if (conceptName === concept.name) {

@@ -1,6 +1,6 @@
-import { createContext } from "react"
+import { createContext } from 'react'
 
 const ModalContext = createContext()
-ModalContext.displayName = "Modal Context"
+ModalContext.displayName = 'Modal Context'
 
 export default ModalContext

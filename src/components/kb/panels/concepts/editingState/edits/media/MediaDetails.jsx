@@ -1,10 +1,10 @@
-import { Box, Typography } from "@mui/material"
+import { Box, Typography } from '@mui/material'
 
-import MediaItemEdit from "./MediaItemEdit"
-import MediaReset from "./MediaReset"
+import MediaItemEdit from './MediaItemEdit'
+import MediaReset from './MediaReset'
 
-import { fieldSx } from "@/components/common/format"
-import { mediaItemEdits } from "@/lib/kb/concept/media"
+import { fieldSx } from '@/components/common/format'
+import { mediaItemEdits } from '@/lib/kb/concept/media'
 
 const MediaDetails = ({ edit }) => {
   const [_, { initial, pending }] = edit
@@ -12,12 +12,12 @@ const MediaDetails = ({ edit }) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <MediaReset />
         <Typography sx={fieldSx}>Media</Typography>
       </Box>
@@ -26,11 +26,8 @@ const MediaDetails = ({ edit }) => {
           if (mediaItemEdit === null) {
             return null
           }
-          const [_mediaItemIndex, itemAction, _initialFields, _pendingFields] =
-            mediaItemEdit
-          return (
-            <MediaItemEdit key={itemAction} mediaItemEdit={mediaItemEdit} />
-          )
+          const [_mediaItemIndex, itemAction, _initialFields, _pendingFields] = mediaItemEdit
+          return <MediaItemEdit key={itemAction} mediaItemEdit={mediaItemEdit} />
         })}
       </Box>
     </Box>

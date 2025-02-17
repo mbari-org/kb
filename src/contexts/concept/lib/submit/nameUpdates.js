@@ -1,9 +1,9 @@
-import { updateConceptName } from "@/lib/services/oni/api/concept"
+import { updateConceptName } from '@/lib/services/oni/api/concept'
 // import { UPDATE_NAME_ONLY } from "../useSubmitUpdates"
 
 export const UPDATE = {
-  NAME_ONLY: "Name Only",
-  ALL_DATA: "All Data",
+  NAME_ONLY: 'Name Only',
+  ALL_DATA: 'All Data',
 }
 
 const nameUpdates = async ({ config, concept, updates }) => {

@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import ConfigContext from "./ConfigContext"
+import ConfigContext from './ConfigContext'
 
-import createServiceLookup from "@/lib/services/config/createServiceLookup"
-import fetchEndpoints from "@/lib/services/config/fetchEndpoints"
+import createServiceLookup from '@/lib/services/config/createServiceLookup'
+import fetchEndpoints from '@/lib/services/config/fetchEndpoints'
 
-import configUrlStore from "@/lib/store/configUrl"
+import configUrlStore from '@/lib/store/configUrl'
 
 const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
@@ -55,15 +55,13 @@ const ConfigProvider = ({ children }) => {
         }
       })
     } else {
-      navigate("/login")
+      navigate('/login')
     }
     // navigate does not change, so no need to include it in the dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return (
-    <ConfigContext value={{ config, updateConfig }}>{children}</ConfigContext>
-  )
+  return <ConfigContext value={{ config, updateConfig }}>{children}</ConfigContext>
 }
 
 export default ConfigProvider

@@ -1,5 +1,5 @@
 const createServiceLookup = endpoints => {
-  const serviceNames = ["annosaurus", "oni"]
+  const serviceNames = ['annosaurus', 'oni']
 
   const serviceEndpoints = endpoints
     .filter(endpoint => serviceNames.includes(endpoint.name))

@@ -1,5 +1,5 @@
-import Collapse from "@mui/material/Collapse"
-import { animated, useSpring } from "@react-spring/web"
+import Collapse from '@mui/material/Collapse'
+import { animated, useSpring } from '@react-spring/web'
 
 const ConceptsExpand = props => {
   const style = useSpring({

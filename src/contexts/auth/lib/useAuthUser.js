@@ -1,7 +1,7 @@
-import { useEffect } from "react"
+import { useEffect } from 'react'
 
-import processToken from "@/lib/auth/processToken"
-import authStore from "@/lib/store/auth"
+import processToken from '@/lib/auth/processToken'
+import authStore from '@/lib/store/auth'
 
 const useAuthUser = ({ logout, setUser, user }) => {
   useEffect(() => {

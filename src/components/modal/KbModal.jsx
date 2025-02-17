@@ -1,5 +1,5 @@
-import { use } from "react"
-import { IoClose } from "react-icons/io5"
+import { use } from 'react'
+import { IoClose } from 'react-icons/io5'
 
 import {
   Box,
@@ -10,9 +10,9 @@ import {
   Fade,
   IconButton,
   Modal,
-} from "@mui/material"
+} from '@mui/material'
 
-import ModalContext from "@/contexts/modal/ModalContext"
+import ModalContext from '@/contexts/modal/ModalContext'
 
 const KbModal = ({ modal }) => {
   const { setModal } = use(ModalContext)
@@ -21,25 +21,25 @@ const KbModal = ({ modal }) => {
 
   return (
     <Modal
-      aria-labelledby="modal-alert"
-      aria-describedby="modal-alert-description"
+      aria-labelledby='modal-alert'
+      aria-describedby='modal-alert-description'
       open
       closeAfterTransition
     >
       <Fade in={true} timeout={500}>
         <Box
           sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "center",
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
             mt: 10,
           }}
         >
-          <Card sx={{ p: 2, pb: 0, position: "relative" }}>
+          <Card sx={{ p: 2, pb: 0, position: 'relative' }}>
             <IconButton
-              aria-label="close"
+              aria-label='close'
               onClick={() => setModal(null)}
-              sx={{ position: "absolute", right: 8, top: 8 }}
+              sx={{ position: 'absolute', right: 8, top: 8 }}
             >
               <IoClose />
             </IconButton>
@@ -47,7 +47,7 @@ const KbModal = ({ modal }) => {
             <CardContent sx={{ pb: 0, pt: 0 }}>
               <Content />
             </CardContent>
-            <CardActions style={{ display: "flex", justifyContent: "center" }}>
+            <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
               <Actions />
             </CardActions>
           </Card>

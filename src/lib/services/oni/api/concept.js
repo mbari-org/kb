@@ -1,25 +1,24 @@
-import { oniGet, oniPut } from "./util"
+import { oniGet, oniPut } from './util'
 
 const fetchChildren = async (config, conceptName) =>
-  oniGet(config, ["concept", "children", conceptName])
+  oniGet(config, ['concept', 'children', conceptName])
 
-const fetchConcept = async (config, conceptName) =>
-  oniGet(config, ["concept", conceptName])
+const fetchConcept = async (config, conceptName) => oniGet(config, ['concept', conceptName])
 
 const fetchParent = async (config, conceptName) =>
-  oniGet(config, ["concept", "parent", conceptName])
+  oniGet(config, ['concept', 'parent', conceptName])
 
 const updateConceptAuthor = async (config, conceptName, updates) =>
-  oniPut(config, ["names", conceptName], updates)
+  oniPut(config, ['names', conceptName], updates)
 
 const updateConceptName = async (config, conceptName, updates) =>
-  oniPut(config, ["names", conceptName], { newName: updates.name })
+  oniPut(config, ['names', conceptName], { newName: updates.name })
 
 const updateConceptParent = async (config, conceptName, updates) =>
-  oniPut(config, ["concept", conceptName], { parentName: updates.parent })
+  oniPut(config, ['concept', conceptName], { parentName: updates.parent })
 
 const updateConceptRank = async (config, conceptName, updates) =>
-  oniPut(config, ["concept", conceptName], updates)
+  oniPut(config, ['concept', conceptName], updates)
 
 export {
   fetchChildren,

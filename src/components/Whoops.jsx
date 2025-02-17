@@ -1,13 +1,13 @@
-import { ErrorBoundary } from "react-error-boundary"
-import { useNavigate } from "react-router-dom"
+import { ErrorBoundary } from 'react-error-boundary'
+import { useNavigate } from 'react-router-dom'
 
-import { Button } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Button } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
-import whoops from "@/assets/whoops.jpg"
-import styled from "@emotion/styled"
+import whoops from '@/assets/whoops.jpg'
+import styled from '@emotion/styled'
 
-import selectedStore from "@/lib/store/selected"
+import selectedStore from '@/lib/store/selected'
 
 const WhoopsContainer = styled.div`
   display: flex;
@@ -35,7 +35,7 @@ const Whoops = ({ children }) => {
 
   const renderWhoops = ({ error, resetErrorBoundary }) => (
     <WhoopsContainer>
-      <WhoopsImage src={whoops} alt="Whoops!" />
+      <WhoopsImage src={whoops} alt='Whoops!' />
       <ErrorMessage>{error.message}</ErrorMessage>
       <Button
         onClick={() => resetErrorBoundary()}
@@ -49,7 +49,7 @@ const Whoops = ({ children }) => {
   const resetToRoot = () => {
     const currentSelected = selectedStore.get()
     selectedStore.set({ ...currentSelected, concept: null })
-    navigate("/")
+    navigate('/')
   }
 
   return (

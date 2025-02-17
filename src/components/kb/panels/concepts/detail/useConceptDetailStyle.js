@@ -1,25 +1,25 @@
-import { useTheme } from "@mui/material/styles"
-import { use, useMemo } from "react"
+import { useTheme } from '@mui/material/styles'
+import { use, useMemo } from 'react'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { hasPendingHistory } from "@/lib/kb/util/pendingHistory"
+import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
 const baseStyle = {
   fullWidth: true,
-  size: "small",
+  size: 'small',
 }
 
 const editingStyle = {
   ...baseStyle,
   disabled: false,
-  variant: "filled",
+  variant: 'filled',
 }
 
 const standardStyle = {
   ...baseStyle,
   disabled: true,
-  variant: "standard",
+  variant: 'standard',
 }
 
 const useConceptDetailStyle = field => {
@@ -35,13 +35,13 @@ const useConceptDetailStyle = field => {
 
   const sx = useMemo(
     () => ({
-      "& .MuiInputBase-input": {
+      '& .MuiInputBase-input': {
         backgroundColor: theme.palette.primary.light,
         color: textColor,
         WebkitTextFillColor: textColor,
       },
-      "& .MuiInputBase-input.Mui-disabled": {
-        backgroundColor: "transparent",
+      '& .MuiInputBase-input.Mui-disabled': {
+        backgroundColor: 'transparent',
         color: textColor,
         WebkitTextFillColor: textColor,
       },

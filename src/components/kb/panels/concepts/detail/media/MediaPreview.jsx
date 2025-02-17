@@ -1,11 +1,11 @@
-import { use } from "react"
-import { Box, Typography, IconButton, Tooltip } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
-import { BsInfoCircle } from "react-icons/bs"
+import { use } from 'react'
+import { Box, Typography, IconButton, Tooltip } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import { BsInfoCircle } from 'react-icons/bs'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { mediaBorder } from "@/lib/kb/concept/media"
+import { mediaBorder } from '@/lib/kb/concept/media'
 
 const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
   const theme = useTheme()
@@ -19,11 +19,11 @@ const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
       <Box
         sx={{
           border,
-          height: "0",
-          paddingBottom: "100%",
-          position: "relative",
-          overflow: "hidden",
-          width: "100%",
+          height: '0',
+          paddingBottom: '100%',
+          position: 'relative',
+          overflow: 'hidden',
+          width: '100%',
         }}
       >
         <img
@@ -31,35 +31,35 @@ const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
           onClick={() => setPreviewImage(true)}
           src={mediaItem?.url}
           style={{
-            height: "100%",
-            left: "50%",
-            maxHeight: "100%",
-            maxWidth: "100%",
-            objectFit: "contain",
-            objectPosition: "center",
-            position: "absolute",
-            top: "50%",
-            width: "100%",
-            transform: "translate(-50%, -50%)",
+            height: '100%',
+            left: '50%',
+            maxHeight: '100%',
+            maxWidth: '100%',
+            objectFit: 'contain',
+            objectPosition: 'center',
+            position: 'absolute',
+            top: '50%',
+            width: '100%',
+            transform: 'translate(-50%, -50%)',
           }}
         />
       </Box>
       <Box
         sx={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'center',
           marginTop: 1,
-          minHeight: "24px",
+          minHeight: '24px',
         }}
       >
         <Typography
-          align="center"
+          align='center'
           sx={{
             flexGrow: 1,
-            textAlign: "center",
+            textAlign: 'center',
           }}
-          variant="caption"
+          variant='caption'
         >
           {mediaItem?.caption}
         </Typography>
@@ -70,7 +70,7 @@ const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
               tooltip: {
                 sx: {
                   backgroundColor: theme.palette.primary.main,
-                  color: "white",
+                  color: 'white',
                 },
               },
             }}
@@ -78,16 +78,16 @@ const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
             <IconButton
               sx={{
                 backgroundColor: theme.palette.primary.main,
-                color: "white",
+                color: 'white',
                 padding: 0,
                 marginLeft: 1,
-                "&:hover": {
+                '&:hover': {
                   backgroundColor: theme.palette.primary.main,
-                  transform: "scale(1.25)",
+                  transform: 'scale(1.25)',
                 },
               }}
             >
-              <BsInfoCircle size="18" />
+              <BsInfoCircle size='18' />
             </IconButton>
           </Tooltip>
         )}

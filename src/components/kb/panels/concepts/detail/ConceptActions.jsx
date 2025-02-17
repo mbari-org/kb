@@ -1,11 +1,11 @@
-import { use } from "react"
+import { use } from 'react'
 
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { INTENT } from "@/contexts/concept/lib/useDisplayEditingState"
+import { INTENT } from '@/contexts/concept/lib/useDisplayEditingState'
 
 const ConceptActions = () => {
   const { displayEditingState, editing, modified, setEditing } = use(ConceptContext)
@@ -13,17 +13,17 @@ const ConceptActions = () => {
   return (
     <Box
       sx={{
-        alignItems: "center",
+        alignItems: 'center',
         bottom: 65,
-        display: "flex",
-        justifyContent: "space-between",
+        display: 'flex',
+        justifyContent: 'space-between',
         left: 10,
-        position: "absolute",
+        position: 'absolute',
         right: 15,
       }}
     >
       <Button
-        color={editing ? "cancel" : "main"}
+        color={editing ? 'cancel' : 'main'}
         onClick={() =>
           editing
             ? modified
@@ -31,15 +31,15 @@ const ConceptActions = () => {
               : setEditing(false)
             : setEditing(true)
         }
-        variant="contained"
+        variant='contained'
       >
-        {editing ? (modified ? "Discard" : "Cancel") : "Edit"}
+        {editing ? (modified ? 'Discard' : 'Cancel') : 'Edit'}
       </Button>
       {editing && modified && (
         <Button
           onClick={() => displayEditingState(INTENT.SHOW)}
-          sx={{ margin: "0 10px" }}
-          variant="contained"
+          sx={{ margin: '0 10px' }}
+          variant='contained'
         >
           Show
         </Button>
@@ -47,7 +47,7 @@ const ConceptActions = () => {
       <Button
         disabled={!editing || !modified}
         onClick={() => displayEditingState(INTENT.SAVE)}
-        variant="contained"
+        variant='contained'
       >
         Save
       </Button>

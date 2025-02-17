@@ -1,11 +1,11 @@
-import { use, useEffect, useState } from "react"
+import { use, useEffect, useState } from 'react'
 
-import SelectedContext from "@/contexts/selected/SelectedContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import selectedStore from "@/lib/store/selected"
+import selectedStore from '@/lib/store/selected'
 
-import panels from "@/lib/kb/panels"
+import panels from '@/lib/kb/panels'
 
 const SelectedProvider = ({ children }) => {
   const { taxonomy } = use(TaxonomyContext)
@@ -50,9 +50,7 @@ const SelectedProvider = ({ children }) => {
   }
 
   return (
-    <SelectedContext value={{ selected, selectConcept, selectPanel }}>
-      {children}
-    </SelectedContext>
+    <SelectedContext value={{ selected, selectConcept, selectPanel }}>{children}</SelectedContext>
   )
 }
 

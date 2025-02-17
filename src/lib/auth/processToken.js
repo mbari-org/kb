@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode"
+import { jwtDecode } from 'jwt-decode'
 
 const processToken = token => {
   const decodedToken = jwtDecode(token)
@@ -7,7 +7,7 @@ const processToken = token => {
 
   const currentTime = Date.now() / 1000
   if (exp * 1000 < currentTime) {
-    return { error: "Expired Token" }
+    return { error: 'Expired Token' }
   }
 
   const user = {

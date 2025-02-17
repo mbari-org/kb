@@ -6,33 +6,29 @@ const oniSend = async (url, params) => {
       return { payload }
     }
     if (response.status === 401) {
-      return errorResponse(
-        url,
-        errorTitle(response.status),
-        "Unauthorized: Invalid token"
-      )
+      return errorResponse(url, errorTitle(response.status), 'Unauthorized: Invalid token')
     }
 
     return errorResponse(url, errorTitle(response.status), payload.message)
   } catch (error) {
-    return errorResponse(url, "Unknown Error", error.message)
+    return errorResponse(url, 'Unknown Error', error.message)
   }
 }
 
 const errorTitle = status => {
   switch (status) {
     case 400:
-      return "Bad Request"
+      return 'Bad Request'
     case 401:
-      return "Unauthorized"
+      return 'Unauthorized'
     case 403:
-      return "Forbidden"
+      return 'Forbidden'
     case 404:
-      return "Not Found"
+      return 'Not Found'
     case 500:
-      return "Internal Server Error"
+      return 'Internal Server Error'
     default:
-      return "Unknown Error"
+      return 'Unknown Error'
   }
 }
 
@@ -40,7 +36,7 @@ const errorResponse = (url, title, message) => ({
   error: {
     message,
     title,
-    type: "error",
+    type: 'error',
     url,
   },
 })

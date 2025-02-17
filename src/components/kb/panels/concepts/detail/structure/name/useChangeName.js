@@ -1,12 +1,12 @@
-import { use, useCallback } from "react"
+import { use, useCallback } from 'react'
 
-import NameActions from "./NameActions"
-import NameContent from "./NameContent"
-import NameTitle from "./NameTitle"
+import NameActions from './NameActions'
+import NameContent from './NameContent'
+import NameTitle from './NameTitle'
 
-import { createModal } from "@/components/modal/factory"
+import { createModal } from '@/components/modal/factory'
 
-import ModalContext from "@/contexts/modal/ModalContext"
+import ModalContext from '@/contexts/modal/ModalContext'
 
 const useChangeName = ({ onClose }) => {
   const { setModal } = use(ModalContext)

@@ -1,6 +1,6 @@
-import { Typography } from "@mui/material"
+import { Typography } from '@mui/material'
 
-import DescriptionDetail from "@/components/common/DescriptionDetail"
+import DescriptionDetail from '@/components/common/DescriptionDetail'
 
 const ErrorContent = ({ error }) => {
   return (

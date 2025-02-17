@@ -1,13 +1,13 @@
-import { use, useCallback, useEffect, useRef, useState } from "react"
-import { useErrorBoundary } from "react-error-boundary"
+import { use, useCallback, useEffect, useRef, useState } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
-import AuthContext from "@/contexts/auth/AuthContext"
-import ModalContext from "@/contexts/modal/ModalContext"
-import TaxonomyContext from "./TaxonomyContext"
+import AuthContext from '@/contexts/auth/AuthContext'
+import ModalContext from '@/contexts/modal/ModalContext'
+import TaxonomyContext from './TaxonomyContext'
 
-import ConfigContext from "@/contexts/config/ConfigContext"
+import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { needsUpdate } from "@/lib/kb/concept"
+import { needsUpdate } from '@/lib/kb/concept'
 import {
   getConcept as getTaxonomyConcept,
   getConceptNames as getTaxonomyConceptNames,
@@ -20,9 +20,9 @@ import {
   loadDescendants,
   updateConcept as updateTaxonomyConcept,
   updateConceptName as updateTaxonomyConceptName,
-} from "@/lib/kb/taxonomy"
+} from '@/lib/kb/taxonomy'
 
-import { isAdmin } from "@/lib/auth/role"
+import { isAdmin } from '@/lib/auth/role'
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
@@ -40,7 +40,7 @@ const TaxonomyProvider = ({ children }) => {
       if (isAdmin(user)) {
         return taxonomyRanks
       }
-      return taxonomyRanks.filter(rank => rank !== "")
+      return taxonomyRanks.filter(rank => rank !== '')
     },
     [taxonomy, user]
   )
@@ -50,10 +50,7 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getConceptNames = useCallback(
-    () => getTaxonomyConceptNames(taxonomy),
-    [taxonomy]
-  )
+  const getConceptNames = useCallback(() => getTaxonomyConceptNames(taxonomy), [taxonomy])
 
   const getConceptPendingHistory = useCallback(
     conceptName => getTaxonomyConceptPendingHistory(taxonomy, conceptName),
@@ -71,10 +68,7 @@ const TaxonomyProvider = ({ children }) => {
     const existing = getTaxonomyConcept(taxonomy, conceptName)
     if (needsUpdate(existing)) {
       setLoading(true)
-      const { taxonomy: taxonomyWithConcept } = await load(
-        taxonomy,
-        conceptName
-      )
+      const { taxonomy: taxonomyWithConcept } = await load(taxonomy, conceptName)
       setLoading(false)
       setTaxonomy(taxonomyWithConcept)
     }
@@ -83,10 +77,7 @@ const TaxonomyProvider = ({ children }) => {
   const loadConceptDescendants = async concept => {
     try {
       setLoading(true)
-      const { taxonomy: taxonomyWithDescendants } = await loadDescendants(
-        taxonomy,
-        concept
-      )
+      const { taxonomy: taxonomyWithDescendants } = await loadDescendants(taxonomy, concept)
       setTaxonomy(taxonomyWithDescendants)
       setLoading(false)
     } catch (error) {
@@ -97,10 +88,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const updateConcept = async concept => {
     if (concept) {
-      const { taxonomy: updatedTaxonomy } = await updateTaxonomyConcept(
-        taxonomy,
-        concept
-      )
+      const { taxonomy: updatedTaxonomy } = await updateTaxonomyConcept(taxonomy, concept)
       setTaxonomy(updatedTaxonomy)
       return updatedTaxonomy
     }
@@ -127,8 +115,8 @@ const TaxonomyProvider = ({ children }) => {
           setLoading(false)
           if (taxonomyError) {
             setModal({
-              type: "error",
-              title: "CxInc",
+              type: 'error',
+              title: 'CxInc',
               message: taxonomyError.message,
             })
           } else {

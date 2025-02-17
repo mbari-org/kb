@@ -1,11 +1,11 @@
-import { use, useActionState, useEffect, useState } from "react"
+import { use, useActionState, useEffect, useState } from 'react'
 
-import { Box, Card, CardActions, CardContent, TextField } from "@mui/material"
+import { Box, Card, CardActions, CardContent, TextField } from '@mui/material'
 
-import ConfigContext from "@/contexts/config/ConfigContext"
+import ConfigContext from '@/contexts/config/ConfigContext'
 
-import SubmitButton from "@/components/common/SubmitButton"
-import SubmitError from "@/components/common/SubmitError"
+import SubmitButton from '@/components/common/SubmitButton'
+import SubmitError from '@/components/common/SubmitError'
 
 const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const { config, updateConfig } = use(ConfigContext)
@@ -13,11 +13,11 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const [configUrl, setConfigUrl] = useState(null)
 
   const submitConfigUrl = async (_prevState, formData) => {
-    const formConfigUrl = formData.get("configUrl")
+    const formConfigUrl = formData.get('configUrl')
     return updateConfig(formConfigUrl)
   }
 
-  const [configState, configAction] = useActionState(submitConfigUrl, "")
+  const [configState, configAction] = useActionState(submitConfigUrl, '')
 
   const handleConfigChange = event => {
     const url = event.target.value
@@ -26,32 +26,28 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   }
 
   useEffect(() => {
-    setConfigUrl(config?.url || "")
+    setConfigUrl(config?.url || '')
   }, [config])
 
   return (
-    <Box component="form" action={configAction}>
+    <Box component='form' action={configAction}>
       <Card>
         <CardContent>
           <TextField
-            id="config-service-url"
-            className="field"
+            id='config-service-url'
+            className='field'
             fullWidth={true}
-            label="Config Service URL"
-            name="configUrl"
+            label='Config Service URL'
+            name='configUrl'
             onChange={handleConfigChange}
             required
             sx={{ mt: 1 }}
-            value={configUrl || ""}
+            value={configUrl || ''}
           />
-          <SubmitError errorText={config?.error || configState?.error || ""} />
+          <SubmitError errorText={config?.error || configState?.error || ''} />
         </CardContent>
-        <CardActions style={{ display: "flex", justifyContent: "center" }}>
-          <SubmitButton
-            buttonText="Set"
-            disabled={!configIsDirty}
-            pendingText="Setting..."
-          />
+        <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
+          <SubmitButton buttonText='Set' disabled={!configIsDirty} pendingText='Setting...' />
         </CardActions>
       </Card>
     </Box>

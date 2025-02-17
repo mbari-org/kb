@@ -1,9 +1,9 @@
-import { Box, Typography } from "@mui/material"
+import { Box, Typography } from '@mui/material'
 
-import MediaItemReset from "./MediaItemReset"
-import MediaItemEditDetail from "./MediaItemEditDetail"
+import MediaItemReset from './MediaItemReset'
+import MediaItemEditDetail from './MediaItemEditDetail'
 
-import { fieldSx } from "@/components/common/format"
+import { fieldSx } from '@/components/common/format'
 // import { mediaItemEdits } from "@/lib/kb/concept/media"
 
 const MediaItemEdit = ({ mediaItemEdit }) => {
@@ -12,19 +12,16 @@ const MediaItemEdit = ({ mediaItemEdit }) => {
   return (
     <Box
       sx={{
-        alignItems: "flex-start",
-        display: "flex",
-        flexDirection: "column",
+        alignItems: 'flex-start',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <MediaItemReset mediaIndex={mediaIndex} />
         <Typography sx={fieldSx}>{itemAction}</Typography>
       </Box>
-      <MediaItemEditDetail
-        initialFields={initialFields}
-        pendingFields={pendingFields}
-      />
+      <MediaItemEditDetail initialFields={initialFields} pendingFields={pendingFields} />
     </Box>
   )
 }

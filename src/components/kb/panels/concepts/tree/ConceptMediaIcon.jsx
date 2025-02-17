@@ -1,15 +1,15 @@
-import { Icon } from "@mui/material"
-import Box from "@mui/material/Box"
+import { Icon } from '@mui/material'
+import Box from '@mui/material/Box'
 
-import { MdOutlinePhoto } from "react-icons/md"
-import { MdOutlinePhotoLibrary } from "react-icons/md"
+import { MdOutlinePhoto } from 'react-icons/md'
+import { MdOutlinePhotoLibrary } from 'react-icons/md'
 
 const ConceptMediaIcon = ({ mediaCount, isSelected }) => {
   if (mediaCount === 0) {
     return null
   }
 
-  const color = isSelected ? "white" : "main"
+  const color = isSelected ? 'white' : 'main'
 
   const MediaIcon = mediaCount === 1 ? MdOutlinePhoto : MdOutlinePhotoLibrary
 

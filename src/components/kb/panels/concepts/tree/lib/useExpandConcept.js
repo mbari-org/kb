@@ -1,10 +1,10 @@
-import { use, useCallback } from "react"
+import { use, useCallback } from 'react'
 
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { itemConceptPath } from "./taxonomyItem"
+import { itemConceptPath } from './taxonomyItem'
 
-import Expand from "./expandedEnum"
+import Expand from './expandedEnum'
 
 const allLeafs = (concept, leafs = []) => {
   if (concept.children && 0 < concept.children.length) {
@@ -17,10 +17,7 @@ const allLeafs = (concept, leafs = []) => {
 const useExpandConcept = (expandedItems, setExpandedItems) => {
   const { loadConceptDescendants, taxonomy } = use(TaxonomyContext)
 
-  const isExpanded = useCallback(
-    concept => expandedItems.includes(concept.name),
-    [expandedItems]
-  )
+  const isExpanded = useCallback(concept => expandedItems.includes(concept.name), [expandedItems])
 
   const collapse = useCallback(
     concept => {

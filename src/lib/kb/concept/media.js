@@ -1,18 +1,17 @@
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
-import { pickFields } from "@/lib/util"
+import { pickFields } from '@/lib/util'
 
-const MEDIA_DISPLAY_FIELDS = ["url", "credit", "caption", "isPrimary"]
+const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
 
 const getPrimary = media => media.find(mediaItem => isPrimary(mediaItem))
 
 const hasPrimary = media => !!getPrimary(media)
 
-const isPrimary = mediaItem =>
-  mediaItem.isPrimary || /.*_01\..*/.test(mediaItem.url)
+const isPrimary = mediaItem => mediaItem.isPrimary || /.*_01\..*/.test(mediaItem.url)
 
 const mediaBorder = (mediaItem, theme) => {
-  const borderWidth = mediaItem?.action === CONCEPT.NONE ? "1px" : "2px"
+  const borderWidth = mediaItem?.action === CONCEPT.NONE ? '1px' : '2px'
   let borderColor
   switch (mediaItem?.action) {
     case CONCEPT.MEDIA_ADD:
@@ -47,10 +46,7 @@ const mediaEdits = (initial, pending) =>
         const initialItem = initial[pendingIndex]
         mediaItemEdits = MEDIA_DISPLAY_FIELDS.reduce((edits, field) => {
           if (pendingItem[field] !== initial[pendingIndex][field]) {
-            edits.push([
-              field,
-              { initial: initialItem[field], pending: pendingItem[field] },
-            ])
+            edits.push([field, { initial: initialItem[field], pending: pendingItem[field] }])
           }
           return edits
         }, [])
@@ -70,20 +66,10 @@ const mediaItemEdit = (mediaIndex, initialItem, pendingItem) => {
       return null
 
     case CONCEPT.MEDIA_ADD:
-      return [
-        mediaIndex,
-        `${mediaIndex}: Add`,
-        null,
-        mediaItemFields(pendingItem),
-      ]
+      return [mediaIndex, `${mediaIndex}: Add`, null, mediaItemFields(pendingItem)]
 
     case CONCEPT.MEDIA_DELETE:
-      return [
-        mediaIndex,
-        `${mediaIndex}: Delete`,
-        mediaItemFields(initialItem),
-        null,
-      ]
+      return [mediaIndex, `${mediaIndex}: Delete`, mediaItemFields(initialItem), null]
 
     case CONCEPT.MEDIA_EDIT:
       return [
@@ -109,9 +95,7 @@ const mediaItemFields = mediaItem =>
 
 const mediaState = media => {
   const primaryMedia = getPrimary(media)
-  const otherMedia = media.filter(
-    mediaItem => mediaItem.url !== primaryMedia?.url
-  )
+  const otherMedia = media.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
   const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
 
   return orderedMedia.map(mediaItem => ({

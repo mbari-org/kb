@@ -1,8 +1,8 @@
-import { use, useState } from "react"
+import { use, useState } from 'react'
 
-import ModalContext from "@/contexts/modal/ModalContext"
+import ModalContext from '@/contexts/modal/ModalContext'
 
-import { checkUrlExists, isValidUrl } from "@/lib/util"
+import { checkUrlExists, isValidUrl } from '@/lib/util'
 
 const useHandleMediaChange = (mediaIndex, setData) => {
   const { data } = use(ModalContext)
@@ -15,12 +15,10 @@ const useHandleMediaChange = (mediaIndex, setData) => {
 
     const dataEditing = {
       ...data.editing,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }
 
-    const isDirty = Object.keys(dataEditing).some(
-      key => dataEditing[key] !== data.initial[key]
-    )
+    const isDirty = Object.keys(dataEditing).some(key => dataEditing[key] !== data.initial[key])
 
     setData(prev => ({
       ...prev,
@@ -33,7 +31,7 @@ const useHandleMediaChange = (mediaIndex, setData) => {
     }))
 
     // Debounced URL check
-    if (name === "url" && isValidUrl(value)) {
+    if (name === 'url' && isValidUrl(value)) {
       // Clear any existing timeout
       if (urlCheckTimeout) {
         clearTimeout(urlCheckTimeout)

@@ -1,19 +1,12 @@
-import { use, useState } from "react"
+import { use, useState } from 'react'
 
-import {
-  Box,
-  Stack,
-  Typography,
-  Autocomplete,
-  TextField,
-  Divider,
-} from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Box, Stack, Typography, Autocomplete, TextField, Divider } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
 const ParentContent = () => {
   const theme = useTheme()
@@ -43,7 +36,7 @@ const ParentContent = () => {
   }
 
   const handleKeyUp = event => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
       if (conceptNames.includes(conceptName)) {
         setParentName(conceptName)
@@ -53,9 +46,9 @@ const ParentContent = () => {
 
   return (
     <Box>
-      <Typography variant="h6">Change Parent</Typography>
+      <Typography variant='h6'>Change Parent</Typography>
       <Stack spacing={2} sx={{ mt: 2, ml: 3, mb: 2 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction='row' spacing={2} alignItems='center'>
           <Typography minWidth={60}>From:</Typography>
           <Typography
             color={fromColor}
@@ -66,7 +59,7 @@ const ParentContent = () => {
             {concept.parent.name}
           </Typography>
         </Stack>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction='row' spacing={2} alignItems='center'>
           <Typography minWidth={60}>To:</Typography>
           <Autocomplete
             onChange={handleChange}
@@ -76,22 +69,22 @@ const ParentContent = () => {
                 {...params}
                 fullWidth
                 sx={{
-                  border: "none",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
+                  border: 'none',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
                   },
-                  "&:before": {
-                    border: "none",
+                  '&:before': {
+                    border: 'none',
                     content: '""',
                   },
-                  "&:after": {
+                  '&:after': {
                     borderBottom: `2px solid ${theme.palette.primary.main}`,
                     content: '""',
                   },
                   fontSize: theme.concept.updateFontSize,
                   fontFamily: theme.concept.fontFamily,
                   fontWeight: theme.concept.fontWeight,
-                  "& input": {
+                  '& input': {
                     fontSize: theme.concept.updateFontSize,
                     fontFamily: theme.concept.fontFamily,
                     fontWeight: theme.concept.fontWeight,
@@ -102,9 +95,9 @@ const ParentContent = () => {
                 onKeyUp={handleKeyUp}
               />
             )}
-            size="small"
+            size='small'
             value={toParentName}
-            sx={{ width: "500px" }}
+            sx={{ width: '500px' }}
           />
           <Divider sx={{ marginTop: 1 }} />
         </Stack>

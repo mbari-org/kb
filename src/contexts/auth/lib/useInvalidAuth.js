@@ -1,6 +1,6 @@
-import { useCallback } from "react"
-import { useNavigate } from "react-router-dom"
-import authStore from "@/lib/store/auth"
+import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import authStore from '@/lib/store/auth'
 
 const useInvalidAuth = setUser => {
   const navigate = useNavigate()
@@ -8,7 +8,7 @@ const useInvalidAuth = setUser => {
   return useCallback(() => {
     authStore.clear()
     setUser(null)
-    navigate("/login")
+    navigate('/login')
     // navigate does not change, so no need to include it in the dependency array
   }, [navigate, setUser])
 }

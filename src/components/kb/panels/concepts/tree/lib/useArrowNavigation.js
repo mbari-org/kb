@@ -1,21 +1,15 @@
-import { useCallback } from "react"
+import { useCallback } from 'react'
 
-import { getNextSibling, getPrevSibling } from "@/lib/kb/concept"
+import { getNextSibling, getPrevSibling } from '@/lib/kb/concept'
 
-import Expand from "./expandedEnum"
+import Expand from './expandedEnum'
 
-const useArrowNavigation = (
-  concept,
-  expandConcept,
-  isExpanded,
-  selectConcept,
-  setAutoExpand
-) => {
+const useArrowNavigation = (concept, expandConcept, isExpanded, selectConcept, setAutoExpand) => {
   return useCallback(
     event => {
       let navToConcept
       switch (event.key) {
-        case "ArrowDown": {
+        case 'ArrowDown': {
           const isConceptExpanded = isExpanded(concept)
 
           if (isConceptExpanded) {
@@ -44,13 +38,12 @@ const useArrowNavigation = (
           break
         }
 
-        case "ArrowUp": {
+        case 'ArrowUp': {
           const prevSibling = getPrevSibling(concept)
           if (prevSibling) {
             let prevConcept = prevSibling
             while (isExpanded(prevConcept)) {
-              prevConcept =
-                prevConcept.children[prevConcept.children.length - 1]
+              prevConcept = prevConcept.children[prevConcept.children.length - 1]
             }
             navToConcept = prevConcept
           } else {
@@ -59,7 +52,7 @@ const useArrowNavigation = (
           break
         }
 
-        case "ArrowLeft": {
+        case 'ArrowLeft': {
           if (isExpanded(concept)) {
             expandConcept(concept, Expand.OFF)
           } else {
@@ -68,7 +61,7 @@ const useArrowNavigation = (
           break
         }
 
-        case "ArrowRight":
+        case 'ArrowRight':
           if (event.altKey && event.ctrlKey) {
             expandConcept(concept, Expand.DESCENDANTS)
           } else {

@@ -1,14 +1,14 @@
-import { mediaState } from "@/lib/kb/concept/media"
+import { mediaState } from '@/lib/kb/concept/media'
 
 const stateForConcept = concept => {
   return {
-    author: concept.author || "unknown",
+    author: concept.author || 'unknown',
     name: concept.name,
     media: mediaState(concept.media),
     mediaIndex: 0,
     parentName: concept.parent?.name,
-    rankLevel: concept.rankLevel || "",
-    rankName: concept.rankName || "",
+    rankLevel: concept.rankLevel || '',
+    rankName: concept.rankName || '',
   }
 }
 

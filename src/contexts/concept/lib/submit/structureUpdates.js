@@ -1,4 +1,4 @@
-import { updateConceptParent } from "@/lib/services/oni/api/concept"
+import { updateConceptParent } from '@/lib/services/oni/api/concept'
 
 const structureUpdates = async (updates, result, nextResult) => {
   const { parent } = updates

@@ -1,6 +1,6 @@
-import { use, useEffect, useRef } from "react"
+import { use, useEffect, useRef } from 'react'
 
-import ModalContext from "@/contexts/modal/ModalContext"
+import ModalContext from '@/contexts/modal/ModalContext'
 
 const useTaxonomyTreeReposition = (apiRef, concept) => {
   const { loading } = use(ModalContext)
@@ -27,10 +27,9 @@ const useTaxonomyTreeReposition = (apiRef, concept) => {
       const rect = domElement.getBoundingClientRect()
       const conceptIsVisible =
         rect.top >= 0 &&
-        rect.bottom <=
-          (window.innerHeight || document.documentElement.clientHeight)
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
       if (!conceptIsVisible) {
-        domElement.scrollIntoView({ behavior: "smooth", block: "nearest" })
+        domElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
         apiRef.current.focusItem(null, conceptName)
       }
     }, 750)

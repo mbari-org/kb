@@ -3,7 +3,7 @@ const itemConceptName = concept => concept.name
 const itemConceptLabel = concept =>
   concept.alternateNames.length === 0
     ? concept.name
-    : `${concept.name} (${concept.alternateNames.join(", ")})`
+    : `${concept.name} (${concept.alternateNames.join(', ')})`
 
 const itemConceptPath = (taxonomy, concept, path = [concept.name]) =>
   concept.parent

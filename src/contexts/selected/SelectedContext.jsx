@@ -1,6 +1,6 @@
-import { createContext } from "react"
+import { createContext } from 'react'
 
 const SelectedContext = createContext()
-SelectedContext.displayName = "Selected Context"
+SelectedContext.displayName = 'Selected Context'
 
 export default SelectedContext

@@ -31,12 +31,7 @@ const dropFields = (object, fields) => {
 }
 
 const isDeepEqual = (obj1, obj2) => {
-  if (
-    typeof obj1 !== "object" ||
-    obj1 === null ||
-    typeof obj2 !== "object" ||
-    obj2 === null
-  ) {
+  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
     return isEqual(obj1, obj2)
   }
 
@@ -48,7 +43,7 @@ const isDeepEqual = (obj1, obj2) => {
   for (let key of keys1) {
     if (!keys2.includes(key)) return false
 
-    if (typeof obj1[key] === "object" && obj1[key] !== null) {
+    if (typeof obj1[key] === 'object' && obj1[key] !== null) {
       if (!isDeepEqual(obj1[key], obj2[key])) return false
     } else if (!isEqual(obj1[key], obj2[key])) {
       return false
@@ -63,8 +58,7 @@ const isElementInViewport = element => {
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&
-    rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   )
 }
@@ -72,7 +66,7 @@ const isElementInViewport = element => {
 const isEmpty = object => {
   if (Array.isArray(object)) {
     return object.length === 0
-  } else if (typeof object === "object" && object !== null) {
+  } else if (typeof object === 'object' && object !== null) {
     return Object.keys(object).length === 0
   }
   return true
@@ -81,12 +75,7 @@ const isEmpty = object => {
 const isEqual = (obj1, obj2) => {
   if (obj1 === obj2) return true
 
-  if (
-    typeof obj1 !== "object" ||
-    obj1 === null ||
-    typeof obj2 !== "object" ||
-    obj2 === null
-  ) {
+  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
     return false
   }
 
@@ -130,7 +119,7 @@ const pickFields = (object, fields) => {
 const prettyFormat = object => {
   return Object.entries(object)
     .map(([key, value]) => `${key}: ${value}`)
-    .join("\n")
+    .join('\n')
 }
 
 const prune = obj => {

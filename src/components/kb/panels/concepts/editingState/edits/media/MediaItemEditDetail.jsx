@@ -1,8 +1,8 @@
-import { Box } from "@mui/material"
+import { Box } from '@mui/material'
 
-import FieldValueDisplay from "@/components/common/FieldValueDisplay"
+import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { formatDelta } from "@/components/common/format"
+import { formatDelta } from '@/components/common/format'
 
 const MediaItemEditDetail = ({ initialFields, pendingFields }) => {
   let fieldValues

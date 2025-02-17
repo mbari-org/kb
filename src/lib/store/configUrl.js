@@ -1,3 +1,3 @@
-import localStore from "@/lib/store/localStore"
+import localStore from '@/lib/store/localStore'
 
-export default localStore("config:url", false)
+export default localStore('config:url', false)

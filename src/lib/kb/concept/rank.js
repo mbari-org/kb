@@ -1,6 +1,6 @@
 const RANK = {
-  LEVEL: "rankLevel",
-  NAME: "rankName",
+  LEVEL: 'rankLevel',
+  NAME: 'rankName',
 }
 
 const filterRanks = (ranks, field, otherValue) => {
@@ -9,14 +9,12 @@ const filterRanks = (ranks, field, otherValue) => {
   }
   const otherField = field === RANK.LEVEL ? RANK.NAME : RANK.LEVEL
 
-  const fieldValues = ranks
-    .filter(rank => rank[otherField] === otherValue)
-    .map(rank => rank[field])
+  const fieldValues = ranks.filter(rank => rank[otherField] === otherValue).map(rank => rank[field])
 
   const uniqueFieldValues = [...new Set(fieldValues)]
-  if (uniqueFieldValues.includes("")) {
-    uniqueFieldValues.splice(uniqueFieldValues.indexOf(""), 1)
-    uniqueFieldValues.unshift("")
+  if (uniqueFieldValues.includes('')) {
+    uniqueFieldValues.splice(uniqueFieldValues.indexOf(''), 1)
+    uniqueFieldValues.unshift('')
   }
 
   return uniqueFieldValues

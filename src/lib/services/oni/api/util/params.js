@@ -1,12 +1,12 @@
-import authStore from "@/lib/store/auth"
+import authStore from '@/lib/store/auth'
 
 const oniParams = (method, data) => {
   const { token } = authStore.get()
 
   const headers = {
-    Accept: "application/json",
+    Accept: 'application/json',
     Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   }
 
   return {

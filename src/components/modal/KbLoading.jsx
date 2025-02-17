@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react"
-import { Backdrop, CircularProgress, useTheme } from "@mui/material"
+import { useEffect, useRef, useState } from 'react'
+import { Backdrop, CircularProgress, useTheme } from '@mui/material'
 
 const LOADING_DELAY = 333
 
@@ -27,7 +27,7 @@ const KbLoading = ({ loading }) => {
       }}
       open={active}
     >
-      <CircularProgress color="inherit" />
+      <CircularProgress color='inherit' />
     </Backdrop>
   )
 }

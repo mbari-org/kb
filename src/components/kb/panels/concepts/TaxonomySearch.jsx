@@ -1,26 +1,25 @@
-import { use, useEffect, useState } from "react"
+import { use, useEffect, useState } from 'react'
 
-import { Stack, Typography } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Stack, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
-import Autocomplete from "@mui/material/Autocomplete"
-import TextField from "@mui/material/TextField"
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import SelectedContext from "@/contexts/selected/SelectedContext"
-import TaxonomyContext from "@/contexts/taxonomy/TaxonomyContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const TaxonomySearch = ({ setAutoExpand }) => {
   const theme = useTheme()
 
   const { concept } = use(ConceptContext)
   const { selectConcept } = use(SelectedContext)
-  const { getConcept, getConceptNames, getConceptPrimaryName, taxonomy } =
-    use(TaxonomyContext)
+  const { getConcept, getConceptNames, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
   const conceptNames = getConceptNames()
 
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState('')
 
   const handleConceptChange = (_event, selectedName) => {
     if (selectedName) {
@@ -30,7 +29,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   }
 
   const handleKeyUp = event => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
       if (conceptNames.includes(conceptName)) {
         setAutoExpand({ expand: true, name: conceptName })
@@ -42,7 +41,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
 
   useEffect(() => {
     const primaryName = getConceptPrimaryName(concept?.name)
-    setValue(primaryName || "")
+    setValue(primaryName || '')
   }, [concept, getConcept, getConceptPrimaryName, taxonomy])
 
   return (
@@ -54,7 +53,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
           <Typography
             sx={{
               fontSize: theme => theme.typography.fontSize * 1.4,
-              fontWeight: "bold",
+              fontWeight: 'bold',
             }}
           >
             Search
@@ -69,12 +68,12 @@ const TaxonomySearch = ({ setAutoExpand }) => {
           <hr />
         </Stack>
       )}
-      size="small"
+      size='small'
       slotProps={{
         paper: {
           sx: {
-            "& .MuiAutocomplete-listbox": {
-              "& .MuiAutocomplete-option": {
+            '& .MuiAutocomplete-listbox': {
+              '& .MuiAutocomplete-option': {
                 backgroundColor: theme.palette.primary.light,
               },
             },

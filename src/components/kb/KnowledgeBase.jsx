@@ -1,12 +1,12 @@
-import { use, useTransition } from "react"
+import { use, useTransition } from 'react'
 
-import { Box } from "@mui/material"
+import { Box } from '@mui/material'
 
-import Modals from "@/components/modal/Modals"
-import NavBar from "@/components/kb/nav/NavBar"
-import Panel from "@/components/kb/panels/Panel"
+import Modals from '@/components/modal/Modals'
+import NavBar from '@/components/kb/nav/NavBar'
+import Panel from '@/components/kb/panels/Panel'
 
-import SelectedContext from "@/contexts/selected/SelectedContext"
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const KnowledgeBase = () => {
   const { selected, selectPanel: updateSelectedPanel } = use(SelectedContext)
@@ -22,9 +22,9 @@ const KnowledgeBase = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <NavBar activePanel={selected.panel} selectPanel={selectPanel} />
-      <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
+      <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <Panel name={selected.panel} />
       </Box>
       <Modals />

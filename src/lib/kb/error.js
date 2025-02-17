@@ -1,8 +1,8 @@
 const render = ({ error }) => {
   return (
-    <div role="alert">
+    <div role='alert'>
       <p>Whoops:</p>
-      <pre style={{ color: "red" }}>{error.message}</pre>
+      <pre style={{ color: 'red' }}>{error.message}</pre>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { createTextContent } from "@/components/modal/factory"
+import { createTextContent } from '@/components/modal/factory'
 
 const Description = props => {
   const { description } = props

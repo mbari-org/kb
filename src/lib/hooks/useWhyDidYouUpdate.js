@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from 'react'
 
-import { isDeepEqual } from "@/lib/util"
+import { isDeepEqual } from '@/lib/util'
 
 const useWhyDidYouUpdate = (name, props) => {
   const previousProps = useRef()
@@ -19,7 +19,7 @@ const useWhyDidYouUpdate = (name, props) => {
       })
 
       if (Object.keys(changes).length) {
-        console.log("[why-did-you-update]", name, changes)
+        console.log('[why-did-you-update]', name, changes)
       }
     }
 

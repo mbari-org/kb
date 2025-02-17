@@ -1,7 +1,7 @@
-import { Button } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Button } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
-import { useFormStatus } from "react-dom"
+import { useFormStatus } from 'react-dom'
 
 const SubmitButton = ({ buttonText, disabled, pendingText }) => {
   const theme = useTheme()
@@ -12,12 +12,7 @@ const SubmitButton = ({ buttonText, disabled, pendingText }) => {
 
   const { pending } = useFormStatus()
   return (
-    <Button
-      disabled={disabled || pending}
-      style={styles}
-      type="submit"
-      variant="contained"
-    >
+    <Button disabled={disabled || pending} style={styles} type='submit' variant='contained'>
       {pending ? pendingText : buttonText}
     </Button>
   )

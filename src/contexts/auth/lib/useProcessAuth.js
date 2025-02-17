@@ -1,6 +1,6 @@
-import { useCallback } from "react"
-import processToken from "@/lib/auth/processToken"
-import useInvalidAuth from "@/contexts/auth/lib/useInvalidAuth"
+import { useCallback } from 'react'
+import processToken from '@/lib/auth/processToken'
+import useInvalidAuth from '@/contexts/auth/lib/useInvalidAuth'
 
 const useProcessAuth = setUser => {
   const handleInvalidAuth = useInvalidAuth(setUser)

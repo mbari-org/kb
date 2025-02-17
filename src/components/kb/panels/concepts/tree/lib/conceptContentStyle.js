@@ -1,21 +1,21 @@
-import { alpha } from "@mui/material/styles"
+import { alpha } from '@mui/material/styles'
 
 const conceptContentStyle = ({ theme, isSelected }) => ({
   borderRadius: theme.spacing(0.8),
-  display: "flex",
+  display: 'flex',
   padding: theme.spacing(0.25, 1),
-  width: "100%",
-  "&:hover": !isSelected && {
+  width: '100%',
+  '&:hover': !isSelected && {
     backgroundColor: alpha(theme.palette.primary.main, 0.2),
   },
   variants: [
     {
       props: ({ isSelected }) => isSelected,
       style: {
-        border: "1px solid",
+        border: '1px solid',
         borderColor: theme.palette.primary.dark,
         color: theme.palette.grey[100],
-        ...theme.applyStyles("light", {
+        ...theme.applyStyles('light', {
           backgroundColor: theme.palette.primary.main,
         }),
       },

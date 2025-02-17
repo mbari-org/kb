@@ -1,14 +1,14 @@
-import { use, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useErrorBoundary } from "react-error-boundary"
+import { use, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useErrorBoundary } from 'react-error-boundary'
 
-import useAuthUser from "@/contexts/auth/lib/useAuthUser"
-import useLogout from "@/contexts/auth/lib/useLogout"
-import useProcessAuth from "@/contexts/auth/lib/useProcessAuth"
-import useRefreshUser from "@/contexts/auth/lib/useRefreshUser"
+import useAuthUser from '@/contexts/auth/lib/useAuthUser'
+import useLogout from '@/contexts/auth/lib/useLogout'
+import useProcessAuth from '@/contexts/auth/lib/useProcessAuth'
+import useRefreshUser from '@/contexts/auth/lib/useRefreshUser'
 
-import AuthContext from "@/contexts/auth/AuthContext"
-import ConfigContext from "@/contexts/config/ConfigContext"
+import AuthContext from '@/contexts/auth/AuthContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
 
     refreshUser()
       .then(() => {
-        navigate("/kb")
+        navigate('/kb')
       })
       .catch(error => {
         showBoundary(error)
@@ -39,11 +39,7 @@ const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshUser, user])
 
-  return (
-    <AuthContext value={{ logout, processAuth, refreshUser, user }}>
-      {children}
-    </AuthContext>
-  )
+  return <AuthContext value={{ logout, processAuth, refreshUser, user }}>{children}</AuthContext>
 }
 
 export default AuthProvider

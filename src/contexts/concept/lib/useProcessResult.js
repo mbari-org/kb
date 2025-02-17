@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback } from 'react'
 
 const useProcessResult = ({
   concept,
@@ -44,15 +44,7 @@ const useProcessResult = ({
       setEditing(false)
       setModified(false)
     },
-    [
-      concept,
-      selectConcept,
-      setModal,
-      setEditing,
-      setModified,
-      showBoundary,
-      updateConceptName,
-    ]
+    [concept, selectConcept, setModal, setEditing, setModified, showBoundary, updateConceptName]
   )
 
   return { processDetailResult, processErrorResult, processNameResult }

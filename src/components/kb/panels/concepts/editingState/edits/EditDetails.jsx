@@ -1,23 +1,23 @@
-import { use, useEffect, useMemo } from "react"
+import { use, useEffect, useMemo } from 'react'
 
-import { Box } from "@mui/material"
+import { Box } from '@mui/material'
 
-import FieldDeltaDetail from "./field/FieldDeltaDetail"
-import FieldValueDetail from "./field/FieldValueDetail"
-import MediaDetails from "./media/MediaDetails"
+import FieldDeltaDetail from './field/FieldDeltaDetail'
+import FieldValueDetail from './field/FieldValueDetail'
+import MediaDetails from './media/MediaDetails'
 
-import ConceptContext from "@/contexts/concept/ConceptContext"
-import ModalContext from "@/contexts/modal/ModalContext"
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import ModalContext from '@/contexts/modal/ModalContext'
 
-import { hasStateChange, stateChange } from "./stateChange"
+import { hasStateChange, stateChange } from './stateChange'
 
 const EditDetails = () => {
   const { editingState, initialState } = use(ConceptContext)
   const { setModal } = use(ModalContext)
   const edits = useMemo(
     () =>
-      Object.entries(stateChange(initialState, editingState)).sort(
-        ([keyA], [keyB]) => keyA.localeCompare(keyB)
+      Object.entries(stateChange(initialState, editingState)).sort(([keyA], [keyB]) =>
+        keyA.localeCompare(keyB)
       ),
     [initialState, editingState]
   )
@@ -25,11 +25,11 @@ const EditDetails = () => {
   const editComponent = edit => {
     const [field, { _initial, pending }] = edit
     switch (field) {
-      case "media":
+      case 'media':
         return <MediaDetails key={field} edit={edit} />
-      case "mediaIndex":
+      case 'mediaIndex':
         return null
-      case "nameUpdate":
+      case 'nameUpdate':
         return <FieldValueDetail key={field} field={field} value={pending} />
       default:
         return <FieldDeltaDetail key={field} edit={edit} />
@@ -43,9 +43,7 @@ const EditDetails = () => {
   }, [editingState, initialState, setModal])
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      {edits.map(editComponent)}
-    </Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{edits.map(editComponent)}</Box>
   )
 }
 

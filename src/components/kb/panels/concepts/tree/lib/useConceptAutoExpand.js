@@ -1,6 +1,6 @@
-import { useEffect } from "react"
+import { useEffect } from 'react'
 
-import Expand from "./expandedEnum"
+import Expand from './expandedEnum'
 
 const useConceptAutoExpand = ({
   autoExpand,

@@ -1,15 +1,15 @@
-import { Typography } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
 const Title = ({ title, type }) => {
   const theme = useTheme()
 
   let color
   switch (type) {
-    case "error":
+    case 'error':
       color = theme.palette.error.main
       break
-    case "warning":
+    case 'warning':
       color = theme.palette.warning.main
       break
     default:
@@ -18,16 +18,16 @@ const Title = ({ title, type }) => {
 
   return (
     <Typography
-      id="modal-title"
-      variant="h5"
-      component="h2"
+      id='modal-title'
+      variant='h5'
+      component='h2'
       sx={{
-        borderBottom: "1px solid #000",
+        borderBottom: '1px solid #000',
         color,
-        fontWeight: "bold",
+        fontWeight: 'bold',
         pb: 1,
-        textAlign: "center",
-        width: "100%",
+        textAlign: 'center',
+        width: '100%',
       }}
     >
       {title}

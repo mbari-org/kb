@@ -1,4 +1,4 @@
-import FieldValueDisplay from "./FieldValueDisplay"
+import FieldValueDisplay from './FieldValueDisplay'
 
 const DetailsContent = ({ details, sx }) => {
   return (

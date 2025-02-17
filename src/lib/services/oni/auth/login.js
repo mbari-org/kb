@@ -1,10 +1,10 @@
-import { genRefresh } from "@/lib/auth/refreshKey"
-import authStore from "@/lib/store/auth"
+import { genRefresh } from '@/lib/auth/refreshKey'
+import authStore from '@/lib/store/auth'
 
-import authUrl from "./authUrl"
+import authUrl from './authUrl'
 
 const login = async (config, username, password) => {
-  const { error, url: loginUrl } = authUrl(config, "login")
+  const { error, url: loginUrl } = authUrl(config, 'login')
   if (error) {
     return { error }
   }
@@ -50,7 +50,7 @@ const params = (username, password) => {
   const auth = basicAuth(username, password)
   return {
     headers: headers(auth),
-    method: "POST",
+    method: 'POST',
   }
 }
 
@@ -60,18 +60,18 @@ const basicAuth = (username, password) => {
 }
 
 const headers = auth => ({
-  Accept: "application/json",
+  Accept: 'application/json',
   Authorization: `${auth}`,
 })
 
 const errorMessage = statusText => {
   var message
   switch (statusText.toLowerCase()) {
-    case "unauthorized":
-      message = "Invalid Username/Password"
+    case 'unauthorized':
+      message = 'Invalid Username/Password'
       break
-    case "invalid":
-      message = "Invalid Username/Password"
+    case 'invalid':
+      message = 'Invalid Username/Password'
       break
     default:
       message = `An unknown error occurred: ${statusText}\nPlease contact support.`

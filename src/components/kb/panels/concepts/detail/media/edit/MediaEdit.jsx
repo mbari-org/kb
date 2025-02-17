@@ -1,16 +1,16 @@
-import { CiEdit } from "react-icons/ci"
+import { CiEdit } from 'react-icons/ci'
 
-import MediaActionButton from "../MediaActionButton"
+import MediaActionButton from '../MediaActionButton'
 
-import { CONCEPT } from "@/contexts/concept/lib/conceptStateReducer"
+import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
 
 const MediaEdit = ({ mediaIndex }) => (
   <MediaActionButton
     action={CONCEPT.MEDIA_EDIT}
-    color="main"
+    color='main'
     Icon={CiEdit}
     mediaIndex={mediaIndex}
-    position="right"
+    position='right'
     sx={{
       mb: 1,
     }}
