@@ -28,7 +28,7 @@ const EditingStateActions = ({ intent }) => {
     switch (label) {
       case CONFIRM_DISCARD:
         data?.confirmResetFn()
-        setModal(null)
+        setData({ confirmResetFn: null })
         break
       case CONTINUE:
         selectConcept(concept.name)

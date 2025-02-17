@@ -25,9 +25,9 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ minHeight: '40px', display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ minHeight: '44px', display: 'flex', justifyContent: 'center' }}>
         {data?.confirmResetFn && (
-          <Typography variant='body2' color='error' sx={{ mt: 2 }}>
+          <Typography color='error' sx={{ mt: 2 }}>
             Discarding edits is final. Please confirm to discard.
           </Typography>
         )}
