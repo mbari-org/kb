@@ -8,7 +8,7 @@ import SubmitError from '@/components/common/SubmitError'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import login from '@/lib/services/oni/auth/login'
+import { loginUser } from '@/lib/services/oni/auth/login'
 
 const LoginForm = () => {
   const { processAuth } = use(AuthContext)
@@ -20,7 +20,7 @@ const LoginForm = () => {
     const username = formData.get('username')
     const password = formData.get('password')
 
-    return login(config, username, password)
+    return loginUser(config, username, password)
   }
   const [loginState, loginAction] = useActionState(submitLogin, null)
 

@@ -18,6 +18,8 @@ const LogoutLink = () => {
 
   const handleLogout = () => (modified ? displayEditingState(INTENT.SAVE) : logout())
 
+  const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`
+
   return (
     <Stack
       alignItems='flex-end'
@@ -36,7 +38,7 @@ const LogoutLink = () => {
           color: grey[400],
         }}
       >
-        {user.name} ({user.role})
+        {loggedInUser} {user.role}
       </Typography>
       <Button
         color='inherit'

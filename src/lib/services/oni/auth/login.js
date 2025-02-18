@@ -3,7 +3,24 @@ import authStore from '@/lib/store/auth'
 
 import authUrl from './authUrl'
 
-const login = async (config, username, password) => {
+const loginReadOnly = async () => {
+  const refresh = await genRefresh('readonly')
+
+  // There is no reason to refresh a ReadOnly role so the token has an expiration in 2222
+  // cSpell:ignore eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9
+  const token =
+    'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8vd3d3Lm1iYXJpLm9yZyIsImlhdCI6MTU3Nzg3NDYzMywiZXhwIjo3OTUyMzgwMjE2LCJzdWIiOiIyMzgiLCJuYW1lIjoicmVhZG9ubHkiLCJyb2xlIjoiUmVhZE9ubHkifQ.8zHQftSuItJDnkpVcd6VJEI1t26z14h3tFexZaB1UR2ju0oLldkWoWpTmJE3PwGL6aPFHODChJpsFFzi-Qui5A'
+
+  const auth = {
+    refresh,
+    token,
+  }
+  authStore.set(auth)
+
+  return { auth }
+}
+
+const loginUser = async (config, username, password) => {
   const { error, url: loginUrl } = authUrl(config, 'login')
   if (error) {
     return { error }
@@ -79,4 +96,4 @@ const errorMessage = statusText => {
   return { error: message }
 }
 
-export default login
+export { loginReadOnly, loginUser }

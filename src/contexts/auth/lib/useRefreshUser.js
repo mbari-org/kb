@@ -4,7 +4,7 @@ import useInvalidAuth from '@/contexts/auth/lib/useInvalidAuth'
 import useProcessAuth from '@/contexts/auth/lib/useProcessAuth'
 
 import { extract } from '@/lib/auth/refreshKey'
-import login from '@/lib/services/oni/auth/login'
+import { loginUser } from '@/lib/services/oni/auth/login'
 import authStore from '@/lib/store/auth'
 
 import tokenIsExpiring from './tokenIsExpiring'
@@ -28,7 +28,7 @@ const useRefreshUser = ({ setUser, user }) => {
           if (userRefresh.error) throw userRefresh.error
 
           const { name } = user
-          const { auth, error } = await login(config, name, userRefresh.password)
+          const { auth, error } = await loginUser(config, name, userRefresh.password)
           if (error) throw error
 
           processAuth(auth)
