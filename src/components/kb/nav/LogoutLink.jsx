@@ -4,9 +4,19 @@ import { Button, Stack, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import AuthContext from '@/contexts/auth/AuthContext'
+import ConceptContext from '@/contexts/concept/ConceptContext'
+
+import useDisplayEditingState from '@/contexts/concept/lib/useDisplayEditingState'
+
+import { INTENT } from '@/contexts/concept/lib/useDisplayEditingState'
 
 const LogoutLink = () => {
   const { logout, user } = use(AuthContext)
+  const { modified } = use(ConceptContext)
+
+  const displayEditingState = useDisplayEditingState()
+
+  const handleLogout = () => (modified ? displayEditingState(INTENT.SAVE) : logout())
 
   return (
     <Stack
@@ -31,7 +41,7 @@ const LogoutLink = () => {
       <Button
         color='inherit'
         size='small'
-        onClick={logout}
+        onClick={handleLogout}
         sx={{
           padding: 0,
           margin: 0,

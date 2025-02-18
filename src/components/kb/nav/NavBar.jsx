@@ -1,4 +1,4 @@
-import { AppBar, Toolbar } from '@mui/material'
+import { AppBar, Box, Toolbar } from '@mui/material'
 
 import LogoutLink from './LogoutLink'
 import PanelLink from './PanelLink'
@@ -26,7 +26,7 @@ const NavBar = ({ activePanel, selectPanel }) => {
             selectPanel={selectPanel}
           />
         ))}
-        <div style={{ flexGrow: 1 }} />
+        <Box style={{ flexGrow: 1 }} />
         <LogoutLink sx={{ marginTop: '-10px' }} />
       </Toolbar>
     </AppBar>
