@@ -14,9 +14,9 @@ const ParentContent = () => {
   const [toParentName, setToParentName] = useState(null)
 
   const { concept, modifyConcept } = use(ConceptContext)
-  const { getConceptNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
-  const conceptNames = getConceptNames().filter(
+  const taxonomyNames = getNames().filter(
     name => name !== concept.name && name !== concept.parent?.name
   )
 
@@ -38,7 +38,7 @@ const ParentContent = () => {
   const handleKeyUp = event => {
     if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
-      if (conceptNames.includes(conceptName)) {
+      if (taxonomyNames.includes(conceptName)) {
         setParentName(conceptName)
       }
     }
@@ -63,7 +63,7 @@ const ParentContent = () => {
           <Typography minWidth={60}>To:</Typography>
           <Autocomplete
             onChange={handleChange}
-            options={conceptNames}
+            options={taxonomyNames}
             renderInput={params => (
               <TextField
                 {...params}

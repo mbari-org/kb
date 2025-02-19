@@ -15,13 +15,13 @@ const CANCEL = 'Cancel'
 const NameActions = () => {
   const { concept, editingState, modifyConcept } = use(ConceptContext)
   const { setModal } = use(ModalContext)
-  const { getConceptNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
-  const names = getConceptNames()
+  const taxonomyNames = getNames()
 
   const colors = ['cancel', 'main', 'main']
   const disabled =
-    concept.name !== editingState.name && !names.includes(editingState.name)
+    concept.name !== editingState.name && !taxonomyNames.includes(editingState.name)
       ? [false, false, false]
       : [false, true, true]
   const labels = [CANCEL, UPDATE.NAME_ONLY, UPDATE.ALL_DATA]

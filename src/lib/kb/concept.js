@@ -25,13 +25,13 @@ const getPrevSibling = concept => {
   return null
 }
 
-const needsUpdate = concept => {
+const incompleteTaxonomy = concept => {
   return (
     !concept ||
     !concept.children ||
-    !concept.parent ||
-    concept.children.some(child => !child.children)
+    concept.children.some(child => !child.children) ||
+    !concept.parent
   )
 }
 
-export { getNextSibling, getPrevSibling, needsUpdate }
+export { getNextSibling, getPrevSibling, incompleteTaxonomy }

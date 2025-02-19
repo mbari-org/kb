@@ -12,14 +12,14 @@ const NameContent = () => {
   const { concept: conceptTheme, palette } = useTheme()
 
   const { concept, editingState, modifyConcept } = use(ConceptContext)
-  const { getConceptNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
-  const names = getConceptNames()
+  const taxonomyNames = getNames()
 
   const fromColor = conceptTheme.color.clean
 
   const toColor =
-    editingState.name === concept.name || names.includes(editingState.name)
+    editingState.name === concept.name || taxonomyNames.includes(editingState.name)
       ? palette.grey[500]
       : conceptTheme.color.pending
 

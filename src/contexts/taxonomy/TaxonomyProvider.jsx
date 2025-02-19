@@ -7,17 +7,17 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { needsUpdate } from '@/lib/kb/concept'
+import { incompleteTaxonomy } from '@/lib/kb/concept'
 import {
   getConcept as getTaxonomyConcept,
-  getConceptNames as getTaxonomyConceptNames,
   getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getRoot as getTaxonomyRoot,
+  getNames as getTaxonomyNames,
   filterTaxonomyRanks,
   load,
+  loadConceptNames,
   loadTaxonomy,
-  loadDescendants,
   updateConcept as updateTaxonomyConcept,
   updateConceptName as updateTaxonomyConceptName,
 } from '@/lib/kb/taxonomy'
@@ -50,8 +50,6 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getConceptNames = useCallback(() => getTaxonomyConceptNames(taxonomy), [taxonomy])
-
   const getConceptPendingHistory = useCallback(
     conceptName => getTaxonomyConceptPendingHistory(taxonomy, conceptName),
     [taxonomy]
@@ -62,22 +60,27 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
+  const getNames = useCallback(() => getTaxonomyNames(taxonomy), [taxonomy])
+
   const getRoot = useCallback(() => getTaxonomyRoot(taxonomy), [taxonomy])
 
   const loadConcept = async conceptName => {
-    const existing = getTaxonomyConcept(taxonomy, conceptName)
-    if (needsUpdate(existing)) {
+    const concept = getTaxonomyConcept(taxonomy, conceptName)
+    if (incompleteTaxonomy(concept) || !concept.names) {
       setLoading(true)
-      const { taxonomy: taxonomyWithConcept } = await load(taxonomy, conceptName)
+
+      const { taxonomy: taxonomyWithStructure } = await load(taxonomy, conceptName)
+      const { taxonomy: taxonomyWithNames } = await loadConceptNames(taxonomyWithStructure, concept)
+
+      setTaxonomy(taxonomyWithNames)
       setLoading(false)
-      setTaxonomy(taxonomyWithConcept)
     }
   }
 
   const loadConceptDescendants = async concept => {
     try {
       setLoading(true)
-      const { taxonomy: taxonomyWithDescendants } = await loadDescendants(taxonomy, concept)
+      const { taxonomy: taxonomyWithDescendants } = await loadConceptDescendants(taxonomy, concept)
       setTaxonomy(taxonomyWithDescendants)
       setLoading(false)
     } catch (error) {
@@ -140,7 +143,7 @@ const TaxonomyProvider = ({ children }) => {
       value={{
         filterRanks,
         getConcept,
-        getConceptNames,
+        getNames,
         getConceptPendingHistory,
         getConceptPrimaryName,
         getRoot,

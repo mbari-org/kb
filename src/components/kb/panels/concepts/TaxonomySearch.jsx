@@ -15,9 +15,9 @@ const TaxonomySearch = ({ setAutoExpand }) => {
 
   const { concept } = use(ConceptContext)
   const { selectConcept } = use(SelectedContext)
-  const { getConcept, getConceptNames, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
+  const { getConcept, getNames, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
-  const conceptNames = getConceptNames()
+  const taxonomyNames = getNames()
 
   const [value, setValue] = useState('')
 
@@ -31,7 +31,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   const handleKeyUp = event => {
     if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
-      if (conceptNames.includes(conceptName)) {
+      if (taxonomyNames.includes(conceptName)) {
         setAutoExpand({ expand: true, name: conceptName })
         selectConcept(conceptName)
         document.activeElement.blur()
@@ -47,7 +47,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   return (
     <Autocomplete
       onChange={handleConceptChange}
-      options={conceptNames}
+      options={taxonomyNames}
       renderInput={params => (
         <Stack>
           <Typography
