@@ -22,7 +22,7 @@ const ConceptName = () => {
   const { concept, editing, editingState, pendingHistory } = use(ConceptContext)
 
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
-  const conceptHasNameUpdate = editingState.name !== concept.name
+  const conceptHasNameUpdate = editingState.name !== concept?.name
 
   const showApprovalButton =
     isAdmin(user) && editing && nameHasPendingHistory && !showStructureChoices

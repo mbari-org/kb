@@ -1,6 +1,7 @@
 import { use } from 'react'
 import { Stack } from '@mui/material'
 
+import ConceptAliases from './detail/ConceptAliases'
 import ConceptAuthor from './detail/ConceptAuthor'
 import ConceptMedia from './detail/media/ConceptMedia'
 import ConceptName from './detail/ConceptName'
@@ -25,6 +26,7 @@ const ConceptDetail = () => {
           <ConceptRank field={RANK.NAME} otherValue={levelValue} />
           <ConceptRank field={RANK.LEVEL} otherValue={nameValue} />
         </Stack>
+        <ConceptAliases />
       </Stack>
     </Stack>
   )

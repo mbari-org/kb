@@ -11,7 +11,7 @@ const Reset = ({ onClick }) => {
   return (
     <Button
       color='cancel'
-      disabled={data?.confirmResetFn}
+      disabled={!!data?.confirmResetFn}
       onClick={onClick}
       sx={{
         mr: 0.5,
