@@ -29,24 +29,24 @@ const mediaBorder = (mediaItem, theme) => {
   return `${borderWidth} solid ${borderColor}`
 }
 
-const mediaEdits = (initial, pending) =>
-  pending.map((pendingItem, pendingIndex) => {
+const mediaEdits = (initial, editing) =>
+  editing.map((editingItem, editingIndex) => {
     let mediaItemEdits
-    switch (pendingItem.action) {
+    switch (editingItem.action) {
       case CONCEPT.NONE:
         mediaItemEdits = null
         break
       case CONCEPT.MEDIA_ADD:
-        mediaItemEdits = pendingItem
+        mediaItemEdits = editingItem
         break
       case CONCEPT.MEDIA_DELETE:
-        mediaItemEdits = pickFields(initial[pendingIndex], MEDIA_DISPLAY_FIELDS)
+        mediaItemEdits = pickFields(initial[editingIndex], MEDIA_DISPLAY_FIELDS)
         break
       case CONCEPT.MEDIA_EDIT: {
-        const initialItem = initial[pendingIndex]
+        const initialItem = initial[editingIndex]
         mediaItemEdits = MEDIA_DISPLAY_FIELDS.reduce((edits, field) => {
-          if (pendingItem[field] !== initial[pendingIndex][field]) {
-            edits.push([field, { initial: initialItem[field], pending: pendingItem[field] }])
+          if (editingItem[field] !== initialItem[field]) {
+            edits.push([field, { initial: initialItem[field], editing: editingItem[field] }])
           }
           return edits
         }, [])
@@ -57,16 +57,16 @@ const mediaEdits = (initial, pending) =>
         mediaItemEdits = null
         break
     }
-    return { action: pendingItem.action, mediaItemEdits }
+    return { action: editingItem.action, mediaItemEdits }
   })
 
-const mediaItemEdit = (mediaIndex, initialItem, pendingItem) => {
-  switch (pendingItem.action) {
+const mediaItemEdit = (mediaIndex, initialItem, editingItem) => {
+  switch (editingItem.action) {
     case CONCEPT.NONE:
       return null
 
     case CONCEPT.MEDIA_ADD:
-      return [mediaIndex, `${mediaIndex}: Add`, null, mediaItemFields(pendingItem)]
+      return [mediaIndex, `${mediaIndex}: Add`, null, mediaItemFields(editingItem)]
 
     case CONCEPT.MEDIA_DELETE:
       return [mediaIndex, `${mediaIndex}: Delete`, mediaItemFields(initialItem), null]
@@ -76,15 +76,15 @@ const mediaItemEdit = (mediaIndex, initialItem, pendingItem) => {
         mediaIndex,
         `${mediaIndex}: Edit`,
         mediaItemFields(initialItem),
-        mediaItemFields(pendingItem),
+        mediaItemFields(editingItem),
       ]
   }
 }
 
-const mediaItemEdits = (initial, pending) =>
-  pending.map((pendingItem, pendingIndex) => {
-    const initialItem = initial[pendingIndex]
-    return mediaItemEdit(pendingIndex, initialItem, pendingItem)
+const mediaItemEdits = (initial, editing) =>
+  editing.map((editingItem, editingIndex) => {
+    const initialItem = initial[editingIndex]
+    return mediaItemEdit(editingIndex, initialItem, editingItem)
   })
 
 const mediaItemFields = mediaItem =>

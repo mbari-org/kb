@@ -4,20 +4,20 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { formatDelta } from '@/components/common/format'
 
-const MediaItemEditDetail = ({ initialFields, pendingFields }) => {
+const MediaItemEditDetail = ({ initialFields, editingFields }) => {
   let fieldValues
   if (initialFields === null) {
     // Media Add
-    fieldValues = pendingFields
-  } else if (pendingFields === null) {
+    fieldValues = editingFields
+  } else if (editingFields === null) {
     // Media Delete
     fieldValues = initialFields
   } else {
     // Media Edit
     fieldValues = initialFields.reduce((acc, [field, initialValue], index) => {
-      const pendingValue = pendingFields[index][1]
-      if (initialValue !== pendingValue) {
-        acc.push([field, formatDelta(initialValue, pendingValue)])
+      const editingValue = editingFields[index][1]
+      if (initialValue !== editingValue) {
+        acc.push([field, formatDelta(initialValue, editingValue)])
       }
       return acc
     }, [])

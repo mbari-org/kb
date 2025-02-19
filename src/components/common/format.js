@@ -1,5 +1,5 @@
-const formatDelta = (initialValue, pendingValue) =>
-  `${stringDisplay(initialValue)} --> ${stringDisplay(pendingValue)}`
+const formatDelta = (initialValue, editingValue) =>
+  `${stringDisplay(initialValue)} --> ${stringDisplay(editingValue)}`
 
 const formatField = field => {
   return field

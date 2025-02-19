@@ -23,14 +23,14 @@ const EditDetails = () => {
   )
 
   const editComponent = edit => {
-    const [field, { _initial, pending }] = edit
+    const [field, { _initial, editing }] = edit
     switch (field) {
       case 'media':
         return <MediaDetails key={field} edit={edit} />
       case 'mediaIndex':
         return null
       case 'nameUpdate':
-        return <FieldValueDetail key={field} field={field} value={pending} />
+        return <FieldValueDetail key={field} field={field} value={editing} />
       default:
         return <FieldDeltaDetail key={field} edit={edit} />
     }
