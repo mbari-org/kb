@@ -1,3 +1,5 @@
+import { NAME_TYPES } from './concept/names'
+
 const getNextSibling = concept => {
   if (concept && concept.parent) {
     const siblings = concept.parent.children
@@ -34,4 +36,4 @@ const incompleteTaxonomy = concept => {
   )
 }
 
-export { getNextSibling, getPrevSibling, incompleteTaxonomy }
+export { getNextSibling, getPrevSibling, incompleteTaxonomy, NAME_TYPES }

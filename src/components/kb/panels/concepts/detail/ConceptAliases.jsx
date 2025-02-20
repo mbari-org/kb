@@ -22,7 +22,7 @@ const ConceptAliases = () => {
           </IconButton>
         )}
       </Box>
-      {concept?.alternateNames?.map(alias => (
+      {concept?.names?.map(alias => (
         <ConceptAlias key={alias} alias={alias} />
       ))}
     </Box>

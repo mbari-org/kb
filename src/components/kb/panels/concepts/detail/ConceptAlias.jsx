@@ -21,7 +21,7 @@ const ConceptAlias = ({ alias }) => {
             update: { alias: e.target.value },
           })
         }
-        value={alias}
+        value={alias.name}
       />
     </FormControl>
   )

@@ -8,7 +8,7 @@ const fetchConcept = async (config, conceptName) => oniGet(config, ['concept', c
 const fetchParent = async (config, conceptName) =>
   oniGet(config, ['concept', 'parent', conceptName])
 
-const fetchNames = async (config, conceptName) => oniGet(config, ['raw', 'concept', conceptName])
+const fetchNames = async (config, conceptName) => oniGet(config, ['raw', 'names', conceptName])
 
 const updateConceptAuthor = async (config, conceptName, updates) =>
   oniPut(config, ['names', conceptName], updates)

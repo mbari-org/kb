@@ -29,7 +29,7 @@ const NameActions = () => {
   const onAction = label => {
     if (label !== CANCEL) {
       modifyConcept({
-        type: CONCEPT.NAME_UPDATE,
+        type: CONCEPT.NAME_EDIT,
         update: { nameUpdate: label },
       })
     } else {

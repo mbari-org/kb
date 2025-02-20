@@ -4,7 +4,9 @@ const CONCEPT = {
   MEDIA_DELETE: 'MEDIA_DELETE',
   MEDIA_EDIT: 'MEDIA_EDIT',
   MEDIA_RESTORE: 'MEDIA_RESTORE',
-  NAME_UPDATE: 'NAME_UPDATE',
+  NAME_ADD: 'NAME_ADD',
+  NAME_DELETE: 'NAME_DELETE',
+  NAME_EDIT: 'NAME_EDIT',
   NONE: 'NONE',
   PARENT_UPDATE: 'PARENT_UPDATE',
   RESET_FIELD: 'RESET_FIELD',
@@ -83,7 +85,7 @@ const conceptStateReducer = (state, { type, update }) => {
       return { ...state, media: updatedMedia }
     }
 
-    case CONCEPT.NAME_UPDATE:
+    case CONCEPT.NAME_EDIT:
       return {
         ...state,
         nameUpdate: update.nameUpdate,

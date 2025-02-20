@@ -66,15 +66,18 @@ const TaxonomyProvider = ({ children }) => {
 
   const loadConcept = async conceptName => {
     const concept = getTaxonomyConcept(taxonomy, conceptName)
-    if (incompleteTaxonomy(concept) || !concept.names) {
-      setLoading(true)
-
-      const { taxonomy: taxonomyWithStructure } = await load(taxonomy, conceptName)
-      const { taxonomy: taxonomyWithNames } = await loadConceptNames(taxonomyWithStructure, concept)
-
-      setTaxonomy(taxonomyWithNames)
-      setLoading(false)
+    if (concept?.names && !incompleteTaxonomy(concept)) {
+      return concept
     }
+
+    setLoading(true)
+
+    const { taxonomy: taxonomyWithStructure } = await load(taxonomy, conceptName)
+    const { taxonomy: taxonomyWithNames } = await loadConceptNames(taxonomyWithStructure, concept)
+
+    setTaxonomy(taxonomyWithNames)
+    setLoading(false)
+    return taxonomyWithNames.concepts[conceptName]
   }
 
   const loadConceptDescendants = async concept => {

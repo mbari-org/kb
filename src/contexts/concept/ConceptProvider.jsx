@@ -3,7 +3,7 @@ import { useErrorBoundary } from 'react-error-boundary'
 // import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
-import { stateForConcept } from '@/contexts/concept/lib/stateForConcept'
+import editingStateForConcept from '@/contexts/concept/lib/editingStateForConcept'
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
 import useDisplayEditingState from '@/contexts/concept/lib/useDisplayEditingState'
 import useDisplayEditMedia from '@/contexts/concept/lib/useDisplayEditMedia'
@@ -93,9 +93,8 @@ const ConceptProvider = ({ children }) => {
     }
     if (!editing && selected.concept !== concept?.name) {
       loadConcept(selected.concept).then(
-        () => {
-          const concept = getConcept(selected.concept)
-          setConcept(concept)
+        loadedConcept => {
+          setConcept(loadedConcept)
         },
         error => showBoundary(error)
       )
@@ -144,7 +143,7 @@ const ConceptProvider = ({ children }) => {
       const pendingHistory = getConceptPendingHistory(concept.name)
       setPendingHistory(pendingHistory)
 
-      const editingState = stateForConcept(concept)
+      const editingState = editingStateForConcept(concept)
       setInitialState(editingState)
       dispatch({ type: CONCEPT.INIT_STATE, update: editingState })
     }

@@ -93,17 +93,6 @@ const mediaItemFields = mediaItem =>
     return fields
   }, [])
 
-const mediaState = media => {
-  const primaryMedia = getPrimary(media)
-  const otherMedia = media.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
-  const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
-
-  return orderedMedia.map(mediaItem => ({
-    ...mediaItem,
-    action: CONCEPT.NONE,
-  }))
-}
-
 export {
   getPrimary,
   hasPrimary,
@@ -112,5 +101,4 @@ export {
   mediaEdits,
   mediaItemEdits,
   mediaItemFields,
-  mediaState,
 }
