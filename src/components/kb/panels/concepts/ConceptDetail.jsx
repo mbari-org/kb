@@ -22,7 +22,7 @@ const ConceptDetail = () => {
       <Stack direction='column' spacing={2} sx={{ flex: '1', ml: 1, mr: 1, textAlign: 'left' }}>
         <ConceptName />
         <ConceptAuthor />
-        <Stack direction='row' spacing={2}>
+        <Stack direction='row' spacing={1}>
           <ConceptRank field={RANK.NAME} otherValue={levelValue} />
           <ConceptRank field={RANK.LEVEL} otherValue={nameValue} />
         </Stack>

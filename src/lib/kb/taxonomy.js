@@ -14,6 +14,8 @@ import { incompleteTaxonomy } from './concept'
 import { NAME_TYPES } from './concept/names'
 import { filterRanks } from './concept/rank'
 
+import { capitalize } from '@/lib/util'
+
 const apiCall = async fetchFn => {
   const { error, payload } = await fetchFn()
   if (error) {
@@ -235,11 +237,14 @@ const loadConceptNames = async (taxonomy, concept) => {
     return { taxonomy }
   }
 
-  const names = await apiCall(() => fetchConceptNames(taxonomy.config, concept.name))
+  const rawNames = await apiCall(() => fetchConceptNames(taxonomy.config, concept.name))
+  const names = rawNames
+    .filter(name => name.nameType !== NAME_TYPES.PRIMARY)
+    .map(name => ({ ...name, nameType: capitalize(name.nameType) }))
 
   const updatedConcept = {
     ...concept,
-    names: names.filter(name => name.nameType !== NAME_TYPES.PRIMARY),
+    names,
   }
   const updatedTaxonomy = {
     ...taxonomy,

@@ -1,29 +1,67 @@
 import { use } from 'react'
-import { FormControl, TextField } from '@mui/material'
+import { Stack, FormControl, TextField, Select, MenuItem, InputLabel } from '@mui/material'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import useConceptDetailStyle from './useConceptDetailStyle'
 import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { NAME_TYPES } from '@/lib/kb/concept/names'
 
-const ConceptAlias = ({ alias }) => {
+const ConceptAlias = ({ alias, index }) => {
   const { modifyConcept } = use(ConceptContext)
 
   const infoStyle = useConceptDetailStyle('Alias')
 
   return (
-    <FormControl>
-      <TextField
-        {...infoStyle}
-        label='Name'
-        onChange={e =>
-          modifyConcept({
-            type: CONCEPT.SET_FIELD,
-            update: { alias: e.target.value },
-          })
-        }
-        value={alias.name}
-      />
-    </FormControl>
+    <Stack direction='row' alignItems='center' spacing={1} width='100%'>
+      <FormControl {...infoStyle} style={{ flex: 1 }}>
+        <TextField
+          {...infoStyle}
+          label='Name'
+          onChange={e =>
+            modifyConcept({
+              type: CONCEPT.NAME_EDIT,
+              update: { name: e.target.value, aliasIndex: index },
+            })
+          }
+          value={alias.name}
+        />
+      </FormControl>
+      <FormControl {...infoStyle} style={{ flex: 1 }}>
+        <TextField
+          {...infoStyle}
+          label='Author'
+          onChange={e =>
+            modifyConcept({
+              type: CONCEPT.NAME_EDIT,
+              update: { author: e.target.value, aliasIndex: index },
+            })
+          }
+          value={alias.author}
+        />
+      </FormControl>
+      <FormControl {...infoStyle} style={{ flex: 0.4 }}>
+        <InputLabel id={`name-type-label-${index}`} shrink>
+          Type
+        </InputLabel>
+        <Select
+          labelId={`name-type-label-${index}`}
+          displayEmpty
+          onChange={e =>
+            modifyConcept({
+              type: CONCEPT.NAME_EDIT,
+              update: { nameType: e.target.value, aliasIndex: index },
+            })
+          }
+          value={alias.nameType}
+        >
+          {Object.entries(NAME_TYPES).map(([key, value]) => (
+            <MenuItem key={key} value={value}>
+              {value}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Stack>
   )
 }
 

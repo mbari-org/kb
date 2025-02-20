@@ -6,6 +6,8 @@
 
 // Define and export NAME_TYPES here
 const NAME_TYPES = {
+  COMMON: 'Common',
+  FORMER: 'Former',
   PRIMARY: 'Primary',
   SYNONYM: 'Synonym',
 }
