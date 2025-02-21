@@ -1,15 +1,20 @@
-// import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { capitalize } from '@/lib/util'
 
-// import { pickFields } from '@/lib/util'
-
-// const NAME_DISPLAY_FIELDS = ['name', 'author', 'type']
-
-// Define and export NAME_TYPES here
 const NAME_TYPES = {
   COMMON: 'Common',
+  SYNONYM: 'Synonym',
   FORMER: 'Former',
   PRIMARY: 'Primary',
-  SYNONYM: 'Synonym',
 }
 
-export { NAME_TYPES }
+const ALTERNATE_NAME_TYPES = [NAME_TYPES.COMMON, NAME_TYPES.SYNONYM, NAME_TYPES.FORMER]
+
+const orderedNames = names => {
+  const capNameTypes = names.map(name => ({ ...name, nameType: capitalize(name.nameType) }))
+  return ALTERNATE_NAME_TYPES.flatMap(type => sortedType(capNameTypes, type))
+}
+
+const sortedType = (names, type) =>
+  names.filter(name => name.nameType === type).sort((a, b) => a.name.localeCompare(b.name))
+
+export { ALTERNATE_NAME_TYPES, NAME_TYPES, orderedNames }

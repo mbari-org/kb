@@ -22,7 +22,7 @@ const ConceptAliases = () => {
       </Box>
       <Stack spacing={1}>
         {concept?.names?.map((alias, index) => (
-          <ConceptAlias key={alias} alias={alias} index={index} />
+          <ConceptAlias key={alias.name} alias={alias} index={index} />
         ))}
       </Stack>
     </Box>

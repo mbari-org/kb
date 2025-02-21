@@ -4,7 +4,7 @@ import { Stack, FormControl, TextField, Select, MenuItem, InputLabel } from '@mu
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import useConceptDetailStyle from './useConceptDetailStyle'
 import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
-import { NAME_TYPES } from '@/lib/kb/concept/names'
+import { ALTERNATE_NAME_TYPES } from '@/lib/kb/concept/names'
 
 const ConceptAlias = ({ alias, index }) => {
   const { modifyConcept } = use(ConceptContext)
@@ -54,8 +54,8 @@ const ConceptAlias = ({ alias, index }) => {
           }
           value={alias.nameType}
         >
-          {Object.entries(NAME_TYPES).map(([key, value]) => (
-            <MenuItem key={key} value={value}>
+          {ALTERNATE_NAME_TYPES.map(value => (
+            <MenuItem key={value} value={value}>
               {value}
             </MenuItem>
           ))}

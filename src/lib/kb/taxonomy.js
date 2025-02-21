@@ -11,10 +11,8 @@ import { fetchNames, fetchRanks, fetchRoot } from '@/lib/services/oni/api/taxono
 import selectedStore from '@/lib/store/selected'
 
 import { incompleteTaxonomy } from './concept'
-import { NAME_TYPES } from './concept/names'
+import { orderedNames } from './concept/names'
 import { filterRanks } from './concept/rank'
-
-import { capitalize } from '@/lib/util'
 
 const apiCall = async fetchFn => {
   const { error, payload } = await fetchFn()
@@ -237,10 +235,8 @@ const loadConceptNames = async (taxonomy, concept) => {
     return { taxonomy }
   }
 
-  const rawNames = await apiCall(() => fetchConceptNames(taxonomy.config, concept.name))
-  const names = rawNames
-    .filter(name => name.nameType !== NAME_TYPES.PRIMARY)
-    .map(name => ({ ...name, nameType: capitalize(name.nameType) }))
+  const rawNames = await apiCall(() => fetchConceptNames(taxonomy.config, concept?.name))
+  const names = orderedNames(rawNames)
 
   const updatedConcept = {
     ...concept,
