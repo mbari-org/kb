@@ -9,6 +9,7 @@ import { mediaBorder } from '@/lib/kb/concept/media'
 
 const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
   const theme = useTheme()
+
   const { editingState } = use(ConceptContext)
   const mediaItem = editingState.media[mediaIndex]
 
@@ -82,8 +83,8 @@ const MediaPreview = ({ mediaIndex, setPreviewImage }) => {
                 padding: 0,
                 marginLeft: 1,
                 '&:hover': {
+                  ...theme.kb.icon.hover,
                   backgroundColor: theme.palette.primary.main,
-                  transform: 'scale(1.25)',
                 },
               }}
             >

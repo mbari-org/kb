@@ -4,17 +4,20 @@ import { IconButton } from '@mui/material'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import { useTheme } from '@mui/material/styles'
+
 const ApprovalButton = ({ field }) => {
+  const theme = useTheme()
+
   const { displayPendingField } = use(ConceptContext)
 
   return (
     <IconButton
       color='main'
       sx={{
-        backgroundColor: 'main',
+        backgroundColor: theme.palette.main.main,
         '&:hover': {
-          backgroundColor: `transparent !important`,
-          transform: 'scale(1.25)',
+          ...theme.kb.icon.hover,
         },
         mb: 2,
         padding: 0,

@@ -1,11 +1,13 @@
 import { use } from 'react'
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 import { Box, Typography, IconButton, Stack } from '@mui/material'
-
+import { useTheme } from '@mui/material/styles'
 import ConceptAlias from './ConceptAlias'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptAliases = () => {
+  const theme = useTheme()
+
   const { concept, editing } = use(ConceptContext)
 
   return (
@@ -15,7 +17,16 @@ const ConceptAliases = () => {
           Alternate Names
         </Typography>
         {editing && (
-          <IconButton color='main' sx={{ '&:hover': { transform: 'scale(1.25)' }, mb: 1 }}>
+          <IconButton
+            color='main'
+            sx={{
+              '&:hover': {
+                ...theme.kb.icon.hover,
+              },
+              backgroundColor: theme.palette.background.paper,
+              mb: 1,
+            }}
+          >
             <MdOutlinePlaylistAdd />
           </IconButton>
         )}

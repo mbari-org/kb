@@ -6,6 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const MediaActionButton = ({ Icon, color, action, mediaIndex, position = 'right', sx = {} }) => {
   const theme = useTheme()
+
   const { displayEditMedia } = use(ConceptContext)
 
   return (
@@ -27,11 +28,10 @@ const MediaActionButton = ({ Icon, color, action, mediaIndex, position = 'right'
         onClick={() => displayEditMedia(action, mediaIndex)}
         color={color}
         sx={{
-          backgroundColor: theme.palette.background.paper,
           '&:hover': {
-            backgroundColor: `${theme.palette.background.paperLight} !important`,
-            transform: 'scale(1.25)',
+            ...theme.kb.icon.hover,
           },
+          backgroundColor: theme.palette.background.paper,
           padding: 0.5,
         }}
       >

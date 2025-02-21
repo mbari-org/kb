@@ -34,6 +34,11 @@ const theme = createTheme({
     infoFontSize: 32,
     updateFontSize: 24,
   },
+  kb: {
+    icon: {
+      hover: { backgroundColor: `transparent !important`, transform: 'scale(1.25)' },
+    },
+  },
   nav: {
     active: navActive,
     fontSize: 12,

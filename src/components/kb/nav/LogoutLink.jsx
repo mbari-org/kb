@@ -23,20 +23,20 @@ const LogoutLink = () => {
   return (
     <Stack
       alignItems='flex-end'
-      spacing={0.25}
-      justifyContent='center'
       height='50px'
+      justifyContent='center'
       padding={0}
-      sx={{ padding: 0, margin: 0, marginTop: '-15px' }}
+      sx={{ padding: 0, margin: 0, mt: '-15px' }}
     >
       <Typography
-        variant='caption'
         style={{
+          color: grey[300],
           fontSize: '0.75rem',
+          paddingRight: '3px',
+          mt: 1,
           textAlign: 'right',
-          paddingRight: '4px',
-          color: grey[400],
         }}
+        variant='caption'
       >
         {loggedInUser} {user.role}
       </Typography>
@@ -45,12 +45,12 @@ const LogoutLink = () => {
         size='small'
         onClick={handleLogout}
         sx={{
-          padding: 0,
-          margin: 0,
-          fontSize: '0.875rem',
           '&:hover': {
             fontStyle: 'italic',
           },
+          fontSize: '0.875rem',
+          // margin: 0,
+          padding: 0,
         }}
       >
         Logout

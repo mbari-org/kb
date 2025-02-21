@@ -1,7 +1,11 @@
 import { CiEdit } from 'react-icons/ci'
+
 import { IconButton } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
 const ChangeStructureButton = ({ onClick }) => {
+  const theme = useTheme()
+
   return (
     <IconButton
       aria-label='Edit concept name'
@@ -12,8 +16,7 @@ const ChangeStructureButton = ({ onClick }) => {
         ml: 0.5,
         padding: 0,
         '&:hover': {
-          backgroundColor: `transparent !important`,
-          transform: 'scale(1.25)',
+          ...theme.kb.icon.hover,
         },
       }}
     >

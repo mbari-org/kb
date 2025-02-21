@@ -4,17 +4,18 @@ import MediaItemReset from './MediaItemReset'
 import MediaItemEditDetail from './MediaItemEditDetail'
 
 import { fieldSx } from '@/components/common/format'
-// import { mediaItemEdits } from "@/lib/kb/concept/media"
+
+const urlFile = fields =>
+  fields
+    ?.find(([field, _value]) => field === 'url')?.[1]
+    ?.split('/')
+    .pop()
 
 const MediaItemEdit = ({ mediaItemEdit }) => {
   const [mediaIndex, editingAction, initialFields, editingFields] = mediaItemEdit
 
   const actionText = `${editingAction.split(' ').pop()}`
-  const initialUrl =
-    initialFields
-      .find(([field, _value]) => field === 'url')?.[1]
-      .split('/')
-      .pop() || ''
+  const actionFile = urlFile(initialFields) || urlFile(editingFields) || ''
 
   return (
     <Box
@@ -22,13 +23,15 @@ const MediaItemEdit = ({ mediaItemEdit }) => {
         alignItems: 'flex-start',
         display: 'flex',
         flexDirection: 'column',
+        mt: 0.5,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ alignItems: 'center', display: 'flex' }}>
         <MediaItemReset mediaIndex={mediaIndex} />
-        <Typography sx={fieldSx}>
-          {actionText}: {initialUrl}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography sx={fieldSx}>{actionText}:</Typography>
+          <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
+        </Box>
       </Box>
       <MediaItemEditDetail initialFields={initialFields} editingFields={editingFields} />
     </Box>
