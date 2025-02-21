@@ -3,7 +3,7 @@ import { useErrorBoundary } from 'react-error-boundary'
 // import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
-import editingStateForConcept from '@/contexts/concept/lib/editingStateForConcept'
+
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
 import useDisplayEditingState from '@/contexts/concept/lib/useDisplayEditingState'
 import useDisplayEditMedia from '@/contexts/concept/lib/useDisplayEditMedia'
@@ -16,12 +16,14 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import { conceptState } from '@/lib/kb/concept/state/concept'
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import { INTENT } from '@/contexts/concept/lib/useDisplayEditingState'
 
 import update from '@/contexts/concept/lib/submit/update'
-import { CONCEPT, conceptStateReducer } from '@/contexts/concept/lib/conceptStateReducer'
+import { conceptStateReducer } from '@/contexts/concept/lib/conceptStateReducer'
 
 import { hasStateChange } from '@/components/kb/panels/concepts/editingState/edits/stateChange'
 
@@ -68,7 +70,7 @@ const ConceptProvider = ({ children }) => {
       const resetStateConcept = { ...concept, ...toState }
       setConcept(resetStateConcept)
 
-      dispatch({ type: CONCEPT.INIT_STATE, update: toState })
+      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: toState })
     },
     [concept, setModal]
   )
@@ -143,9 +145,9 @@ const ConceptProvider = ({ children }) => {
       const pendingHistory = getConceptPendingHistory(concept.name)
       setPendingHistory(pendingHistory)
 
-      const editingState = editingStateForConcept(concept)
-      setInitialState(editingState)
-      dispatch({ type: CONCEPT.INIT_STATE, update: editingState })
+      const initialState = conceptState(concept)
+      setInitialState(initialState)
+      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: initialState })
     }
   }, [concept, getConceptPendingHistory])
 

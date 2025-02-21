@@ -7,8 +7,9 @@ import NoMedia from './NoMedia'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptMedia = () => {
-  const { editingState } = use(ConceptContext)
-  const media = editingState.media
+  const {
+    editingState: { media },
+  } = use(ConceptContext)
 
   return (
     <Box

@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from './useConceptDetailStyle'
 
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const ConceptAuthor = () => {
   const {
@@ -23,7 +23,7 @@ const ConceptAuthor = () => {
         label='Author'
         onChange={e =>
           modifyConcept({
-            type: CONCEPT.SET_FIELD,
+            type: CONCEPT_STATE.SET_FIELD,
             update: { author: e.target.value },
           })
         }

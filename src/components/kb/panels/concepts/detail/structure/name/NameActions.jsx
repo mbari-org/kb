@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { UPDATE } from '@/contexts/concept/lib/submit/nameUpdates'
 
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const CANCEL = 'Cancel'
 
@@ -29,12 +29,12 @@ const NameActions = () => {
   const onAction = label => {
     if (label !== CANCEL) {
       modifyConcept({
-        type: CONCEPT.NAME_EDIT,
+        type: CONCEPT_STATE.NAME_EDIT,
         update: { nameUpdate: label },
       })
     } else {
       modifyConcept({
-        type: CONCEPT.SET_FIELD,
+        type: CONCEPT_STATE.SET_FIELD,
         update: { name: concept.name },
       })
     }

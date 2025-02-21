@@ -14,7 +14,7 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const useDisplayEditMedia = () => {
   const { setModal } = use(ModalContext)
@@ -25,7 +25,7 @@ const useDisplayEditMedia = () => {
 
       let modal
       switch (action) {
-        case CONCEPT.MEDIA_ADD:
+        case CONCEPT_STATE.MEDIA_ADD:
           modal = createModal({
             Actions: () => <AddMediaActions />,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
@@ -33,7 +33,7 @@ const useDisplayEditMedia = () => {
           })
           break
 
-        case CONCEPT.MEDIA_DELETE:
+        case CONCEPT_STATE.MEDIA_DELETE:
           modal = createModal({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
@@ -41,7 +41,7 @@ const useDisplayEditMedia = () => {
           })
           break
 
-        case CONCEPT.MEDIA_EDIT: {
+        case CONCEPT_STATE.MEDIA_EDIT: {
           modal = createModal({
             Actions: EditMediaActions,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,

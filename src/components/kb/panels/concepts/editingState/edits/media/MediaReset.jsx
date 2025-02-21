@@ -2,14 +2,14 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import Reset from '../Reset'
 
 const MediaReset = () => {
   const { modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
-    modifyConcept({ type: CONCEPT.RESET_MEDIA })
+    modifyConcept({ type: CONCEPT_STATE.RESET_MEDIA })
   }
 
   return <Reset onClick={onClick} />

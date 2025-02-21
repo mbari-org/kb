@@ -1,5 +1,4 @@
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
-
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import { pickFields } from '@/lib/util'
 
 const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
@@ -11,16 +10,16 @@ const hasPrimary = media => !!getPrimary(media)
 const isPrimary = mediaItem => mediaItem.isPrimary || /.*_01\..*/.test(mediaItem.url)
 
 const mediaBorder = (mediaItem, theme) => {
-  const borderWidth = mediaItem?.action === CONCEPT.NONE ? '1px' : '2px'
+  const borderWidth = mediaItem?.action === CONCEPT_STATE.NO_ACTION ? '1px' : '2px'
   let borderColor
   switch (mediaItem?.action) {
-    case CONCEPT.MEDIA_ADD:
+    case CONCEPT_STATE.MEDIA_ADD:
       borderColor = theme.concept.color.clean
       break
-    case CONCEPT.MEDIA_EDIT:
+    case CONCEPT_STATE.MEDIA_EDIT:
       borderColor = theme.palette.primary.main
       break
-    case CONCEPT.MEDIA_DELETE:
+    case CONCEPT_STATE.MEDIA_DELETE:
       borderColor = theme.concept.color.remove
       break
     default:
@@ -33,16 +32,16 @@ const mediaEdits = (initial, editing) =>
   editing.map((editingItem, editingIndex) => {
     let mediaItemEdits
     switch (editingItem.action) {
-      case CONCEPT.NONE:
+      case CONCEPT_STATE.NO_ACTION:
         mediaItemEdits = null
         break
-      case CONCEPT.MEDIA_ADD:
+      case CONCEPT_STATE.MEDIA_ADD:
         mediaItemEdits = editingItem
         break
-      case CONCEPT.MEDIA_DELETE:
+      case CONCEPT_STATE.MEDIA_DELETE:
         mediaItemEdits = pickFields(initial[editingIndex], MEDIA_DISPLAY_FIELDS)
         break
-      case CONCEPT.MEDIA_EDIT: {
+      case CONCEPT_STATE.MEDIA_EDIT: {
         const initialItem = initial[editingIndex]
         mediaItemEdits = MEDIA_DISPLAY_FIELDS.reduce((edits, field) => {
           if (editingItem[field] !== initialItem[field]) {
@@ -63,13 +62,15 @@ const mediaEdits = (initial, editing) =>
 const mediaItemEdit = (mediaIndex, initialItem, editingItem) => {
   const { action: editingAction } = editingItem
 
-  if (editingAction === CONCEPT.NONE) {
+  if (editingAction === CONCEPT_STATE.NO_ACTION) {
     return null
   }
 
-  const initialFields = editingAction === CONCEPT.MEDIA_ADD ? null : mediaItemFields(initialItem)
+  const initialFields =
+    editingAction === CONCEPT_STATE.MEDIA_ADD ? null : mediaItemFields(initialItem)
 
-  const editingFields = editingAction === CONCEPT.MEDIA_DELETE ? null : mediaItemFields(editingItem)
+  const editingFields =
+    editingAction === CONCEPT_STATE.MEDIA_DELETE ? null : mediaItemFields(editingItem)
 
   return [mediaIndex, editingAction, initialFields, editingFields]
 }

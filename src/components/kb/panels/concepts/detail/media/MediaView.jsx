@@ -9,7 +9,7 @@ import MediaDisplay from './MediaDisplay'
 import MediaPreview from './MediaPreview'
 import MediaSwiper from './MediaSwiper'
 
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
@@ -24,7 +24,8 @@ const MediaView = () => {
   const [previewImage, setPreviewImage] = useState(false)
   const [swiperHeight, setSwiperHeight] = useState('auto')
 
-  const showEditMedia = editing && editingState.media[mediaIndex]?.action !== CONCEPT.MEDIA_DELETE
+  const showEditMedia =
+    editing && editingState.media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA_DELETE
 
   const handleMediaIndexChange = useCallback(
     mediaIndex => {

@@ -2,9 +2,9 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
-
 import { checkUrlExists, isValidUrl } from '@/lib/util'
+
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
   const { editingState, modifyConcept } = use(ConceptContext)
@@ -29,7 +29,8 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
     }
 
     // proceed with concept media update
-    const type = mediaIndex === editingState.media.length ? CONCEPT.MEDIA_ADD : CONCEPT.MEDIA_EDIT
+    const type =
+      mediaIndex === editingState.media.length ? CONCEPT_STATE.MEDIA_ADD : CONCEPT_STATE.MEDIA_EDIT
 
     modifyConcept({
       type,
@@ -39,7 +40,7 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
       },
     })
 
-    if (type === CONCEPT.MEDIA_ADD) {
+    if (type === CONCEPT_STATE.MEDIA_ADD) {
       editingState.mediaIndex = mediaIndex
     }
 

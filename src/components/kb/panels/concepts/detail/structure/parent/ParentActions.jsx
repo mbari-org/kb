@@ -5,7 +5,7 @@ import { createActions } from '@/components/modal/factory'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const DISCARD = 'Discard'
 const SAVE = 'Save'
@@ -23,7 +23,7 @@ const ParentActions = () => {
   const onAction = label => {
     if (label === SAVE) {
       modifyConcept({
-        type: CONCEPT.PARENT_UPDATE,
+        type: CONCEPT_STATE.PARENT_UPDATE,
         update: { parentName: editingState.parentName },
       })
     }

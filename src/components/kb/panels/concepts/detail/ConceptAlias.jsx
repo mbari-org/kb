@@ -3,7 +3,7 @@ import { Stack, FormControl, TextField, Select, MenuItem, InputLabel } from '@mu
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import useConceptDetailStyle from './useConceptDetailStyle'
-import { CONCEPT } from '@/contexts/concept/lib/conceptStateReducer'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import { ALTERNATE_NAME_TYPES } from '@/lib/kb/concept/names'
 
 const ConceptAlias = ({ alias, index }) => {
@@ -19,7 +19,7 @@ const ConceptAlias = ({ alias, index }) => {
           label='Name'
           onChange={e =>
             modifyConcept({
-              type: CONCEPT.NAME_EDIT,
+              type: CONCEPT_STATE.NAME_EDIT,
               update: { name: e.target.value, aliasIndex: index },
             })
           }
@@ -32,7 +32,7 @@ const ConceptAlias = ({ alias, index }) => {
           label='Author'
           onChange={e =>
             modifyConcept({
-              type: CONCEPT.NAME_EDIT,
+              type: CONCEPT_STATE.NAME_EDIT,
               update: { author: e.target.value, aliasIndex: index },
             })
           }
@@ -48,7 +48,7 @@ const ConceptAlias = ({ alias, index }) => {
           displayEmpty
           onChange={e =>
             modifyConcept({
-              type: CONCEPT.NAME_EDIT,
+              type: CONCEPT_STATE.NAME_EDIT,
               update: { nameType: e.target.value, aliasIndex: index },
             })
           }
