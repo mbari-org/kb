@@ -61,24 +61,17 @@ const mediaEdits = (initial, editing) =>
   })
 
 const mediaItemEdit = (mediaIndex, initialItem, editingItem) => {
-  switch (editingItem.action) {
-    case CONCEPT.NONE:
-      return null
+  const { action: editingAction } = editingItem
 
-    case CONCEPT.MEDIA_ADD:
-      return [mediaIndex, `${mediaIndex}: Add`, null, mediaItemFields(editingItem)]
-
-    case CONCEPT.MEDIA_DELETE:
-      return [mediaIndex, `${mediaIndex}: Delete`, mediaItemFields(initialItem), null]
-
-    case CONCEPT.MEDIA_EDIT:
-      return [
-        mediaIndex,
-        `${mediaIndex}: Edit`,
-        mediaItemFields(initialItem),
-        mediaItemFields(editingItem),
-      ]
+  if (editingAction === CONCEPT.NONE) {
+    return null
   }
+
+  const initialFields = editingAction === CONCEPT.MEDIA_ADD ? null : mediaItemFields(initialItem)
+
+  const editingFields = editingAction === CONCEPT.MEDIA_DELETE ? null : mediaItemFields(editingItem)
+
+  return [mediaIndex, editingAction, initialFields, editingFields]
 }
 
 const mediaItemEdits = (initial, editing) =>

@@ -7,7 +7,14 @@ import { fieldSx } from '@/components/common/format'
 // import { mediaItemEdits } from "@/lib/kb/concept/media"
 
 const MediaItemEdit = ({ mediaItemEdit }) => {
-  const [mediaIndex, itemAction, initialFields, editingFields] = mediaItemEdit
+  const [mediaIndex, editingAction, initialFields, editingFields] = mediaItemEdit
+
+  const actionText = `${editingAction.split(' ').pop()}`
+  const initialUrl =
+    initialFields
+      .find(([field, _value]) => field === 'url')?.[1]
+      .split('/')
+      .pop() || ''
 
   return (
     <Box
@@ -19,7 +26,9 @@ const MediaItemEdit = ({ mediaItemEdit }) => {
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <MediaItemReset mediaIndex={mediaIndex} />
-        <Typography sx={fieldSx}>{itemAction}</Typography>
+        <Typography sx={fieldSx}>
+          {actionText}: {initialUrl}
+        </Typography>
       </Box>
       <MediaItemEditDetail initialFields={initialFields} editingFields={editingFields} />
     </Box>

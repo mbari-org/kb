@@ -1,18 +1,18 @@
 const CONCEPT = {
-  INIT_STATE: 'INIT_STATE',
-  MEDIA_ADD: 'MEDIA_ADD',
-  MEDIA_DELETE: 'MEDIA_DELETE',
-  MEDIA_EDIT: 'MEDIA_EDIT',
-  MEDIA_RESTORE: 'MEDIA_RESTORE',
-  NAME_ADD: 'NAME_ADD',
-  NAME_DELETE: 'NAME_DELETE',
-  NAME_EDIT: 'NAME_EDIT',
-  NONE: 'NONE',
-  PARENT_UPDATE: 'PARENT_UPDATE',
-  RESET_FIELD: 'RESET_FIELD',
-  RESET_MEDIA: 'RESET_MEDIA',
-  RESET_MEDIA_ITEM: 'RESET_MEDIA_ITEM',
-  SET_FIELD: 'SET_FIELD',
+  INIT_STATE: 'Init State',
+  MEDIA_ADD: 'Media Add',
+  MEDIA_DELETE: 'Media Delete',
+  MEDIA_EDIT: 'Media Edit',
+  MEDIA_RESTORE: 'Media Restore',
+  NAME_ADD: 'Name Add',
+  NAME_DELETE: 'Name Delete',
+  NAME_EDIT: 'Name Edit',
+  NONE: 'None',
+  PARENT_UPDATE: 'Parent Update',
+  RESET_FIELD: 'Reset Field',
+  RESET_MEDIA: 'Reset Media',
+  RESET_MEDIA_ITEM: 'Reset Media Item',
+  SET_FIELD: 'Set Field',
 }
 
 import { isPrimary } from '@/lib/kb/concept/media'
@@ -84,6 +84,18 @@ const conceptStateReducer = (state, { type, update }) => {
       )
       return { ...state, media: updatedMedia }
     }
+
+    case CONCEPT.NAME_ADD:
+      return {
+        ...state,
+        nameUpdate: update.nameUpdate,
+      }
+
+    case CONCEPT.NAME_DELETE:
+      return {
+        ...state,
+        nameUpdate: update.nameUpdate,
+      }
 
     case CONCEPT.NAME_EDIT:
       return {
