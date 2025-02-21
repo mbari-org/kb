@@ -65,14 +65,15 @@ const TaxonomyProvider = ({ children }) => {
   const getRoot = useCallback(() => getTaxonomyRoot(taxonomy), [taxonomy])
 
   const loadConcept = async conceptName => {
-    const concept = getTaxonomyConcept(taxonomy, conceptName)
-    if (concept?.names && !incompleteTaxonomy(concept)) {
-      return concept
+    const alreadyLoadedConcept = getTaxonomyConcept(taxonomy, conceptName)
+    if (alreadyLoadedConcept?.names && !incompleteTaxonomy(alreadyLoadedConcept)) {
+      return alreadyLoadedConcept
     }
 
     setLoading(true)
 
     const { taxonomy: taxonomyWithStructure } = await load(taxonomy, conceptName)
+    const concept = getTaxonomyConcept(taxonomyWithStructure, conceptName)
     const { taxonomy: taxonomyWithNames } = await loadConceptNames(taxonomyWithStructure, concept)
 
     setTaxonomy(taxonomyWithNames)
