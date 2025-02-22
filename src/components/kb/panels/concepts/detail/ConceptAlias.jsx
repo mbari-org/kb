@@ -3,6 +3,7 @@ import { Stack, FormControl, TextField, Select, MenuItem, InputLabel } from '@mu
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import useConceptDetailStyle from './useConceptDetailStyle'
+
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import { ALTERNATE_NAME_TYPES } from '@/lib/kb/concept/names'
 

@@ -5,7 +5,7 @@ import { IoClose } from 'react-icons/io5'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const Reset = ({ onClick }) => {
+const EditReset = ({ onClick }) => {
   const { data } = use(ModalContext)
 
   return (
@@ -23,4 +23,4 @@ const Reset = ({ onClick }) => {
   )
 }
 
-export default Reset
+export default EditReset

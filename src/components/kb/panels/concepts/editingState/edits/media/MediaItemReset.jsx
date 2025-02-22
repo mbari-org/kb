@@ -3,7 +3,7 @@ import { use } from 'react'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
-import Reset from '../Reset'
+import EditReset from '../EditReset'
 
 const MediaItemReset = ({ mediaIndex }) => {
   const { editingState, modifyConcept } = use(ConceptContext)
@@ -19,7 +19,7 @@ const MediaItemReset = ({ mediaIndex }) => {
         })
   }
 
-  return <Reset onClick={onClick} />
+  return <EditReset onClick={onClick} />
 }
 
 export default MediaItemReset
