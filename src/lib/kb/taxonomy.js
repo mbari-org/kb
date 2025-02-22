@@ -11,7 +11,7 @@ import { fetchNames, fetchRanks, fetchRoot } from '@/lib/services/oni/api/taxono
 import selectedStore from '@/lib/store/selected'
 
 import { incompleteTaxonomy } from './concept'
-import { orderedNames } from './concept/names'
+import { orderedAliases } from './concept/aliases'
 import { filterRanks } from './concept/rank'
 
 const apiCall = async fetchFn => {
@@ -230,17 +230,17 @@ const loadConceptParent = async (updatableTaxonomy, updatableConcept) => {
   await loadConceptChildren(updatableTaxonomy, updatableParent)
 }
 
-const loadConceptNames = async (taxonomy, concept) => {
-  if (concept?.names) {
+const loadConceptAliases = async (taxonomy, concept) => {
+  if (concept?.aliases) {
     return { taxonomy }
   }
 
   const rawNames = await apiCall(() => fetchConceptNames(taxonomy.config, concept?.name))
-  const names = orderedNames(rawNames)
+  const aliases = orderedAliases(rawNames)
 
   const updatedConcept = {
     ...concept,
-    names,
+    aliases,
   }
   const updatedTaxonomy = {
     ...taxonomy,
@@ -352,8 +352,8 @@ export {
   getNames,
   getRoot,
   loadTaxonomyConcept as load,
+  loadConceptAliases,
   loadConceptDescendants,
-  loadConceptNames,
   loadTaxonomy,
   updateConcept,
   updateConceptName,

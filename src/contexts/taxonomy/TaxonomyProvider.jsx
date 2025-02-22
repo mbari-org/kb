@@ -16,7 +16,7 @@ import {
   getNames as getTaxonomyNames,
   filterTaxonomyRanks,
   load,
-  loadConceptNames,
+  loadConceptAliases,
   loadTaxonomy,
   updateConcept as updateTaxonomyConcept,
   updateConceptName as updateTaxonomyConceptName,
@@ -66,7 +66,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const loadConcept = async conceptName => {
     const alreadyLoadedConcept = getTaxonomyConcept(taxonomy, conceptName)
-    if (alreadyLoadedConcept?.names && !incompleteTaxonomy(alreadyLoadedConcept)) {
+    if (alreadyLoadedConcept?.aliases && !incompleteTaxonomy(alreadyLoadedConcept)) {
       return alreadyLoadedConcept
     }
 
@@ -74,7 +74,7 @@ const TaxonomyProvider = ({ children }) => {
 
     const { taxonomy: taxonomyWithStructure } = await load(taxonomy, conceptName)
     const concept = getTaxonomyConcept(taxonomyWithStructure, conceptName)
-    const { taxonomy: taxonomyWithNames } = await loadConceptNames(taxonomyWithStructure, concept)
+    const { taxonomy: taxonomyWithNames } = await loadConceptAliases(taxonomyWithStructure, concept)
 
     setTaxonomy(taxonomyWithNames)
     setLoading(false)

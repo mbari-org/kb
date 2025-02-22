@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-const MediaActionButton = ({ Icon, color, action, mediaIndex, position = 'right', sx = {} }) => {
+const MediaActionButton = ({ Icon, action, color, mediaIndex, position = 'right', sx = {} }) => {
   const theme = useTheme()
 
   const { displayEditMedia } = use(ConceptContext)

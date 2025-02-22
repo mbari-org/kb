@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { Stack } from '@mui/material'
 
-import ConceptAliases from './detail/ConceptAliases'
+import ConceptAliases from './detail/aliases/ConceptAliases'
 import ConceptAuthor from './detail/ConceptAuthor'
 import ConceptMedia from './detail/media/ConceptMedia'
 import ConceptName from './detail/ConceptName'

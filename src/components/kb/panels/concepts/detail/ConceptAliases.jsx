@@ -2,7 +2,7 @@ import { use } from 'react'
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 import { Box, Typography, IconButton, Stack } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import ConceptAlias from './ConceptAlias'
+import ConceptAlias from './aliases/ConceptAlias'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptAliases = () => {
@@ -32,8 +32,8 @@ const ConceptAliases = () => {
         )}
       </Box>
       <Stack spacing={1}>
-        {concept?.names?.map((alias, index) => (
-          <ConceptAlias key={alias.name} alias={alias} index={index} />
+        {concept?.aliases?.map(alias => (
+          <ConceptAlias key={alias.name} alias={alias} />
         ))}
       </Stack>
     </Box>

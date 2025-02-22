@@ -1,15 +1,16 @@
+import { aliasesState } from '@/lib/kb/concept/state/aliases'
 import { mediaState } from '@/lib/kb/concept/state/media'
-import { namesState } from '@/lib/kb/concept/state/names'
 import { rankState } from '@/lib/kb/concept/state/rank'
 
 const CONCEPT_STATE = {
+  ALIAS_ADD: 'Alias Add',
+  ALIAS_DELETE: 'Alias Delete',
+  ALIAS_EDIT: 'Alias Edit',
   INIT_STATE: 'Init State',
   MEDIA_ADD: 'Media Add',
   MEDIA_DELETE: 'Media Delete',
   MEDIA_EDIT: 'Media Edit',
-  NAME_ADD: 'Name Add',
-  NAME_DELETE: 'Name Delete',
-  NAME_EDIT: 'Name Edit',
+  NAME_CHANGE: 'Name Change',
   NO_ACTION: 'No Action',
   PARENT_UPDATE: 'Parent Update',
   RESET_FIELD: 'Reset Field',
@@ -19,21 +20,13 @@ const CONCEPT_STATE = {
 }
 
 const conceptState = concept => {
-  const media = mediaState(concept)
-  const names = namesState(concept)
-  const rank = rankState(concept)
-
-  const conceptState = {
+  return {
+    ...aliasesState(concept),
     author: concept.author || 'unknown',
+    ...mediaState(concept),
     name: concept.name,
     parentName: concept.parent?.name,
-  }
-
-  return {
-    ...conceptState,
-    ...names,
-    ...media,
-    ...rank,
+    ...rankState(concept),
   }
 }
 

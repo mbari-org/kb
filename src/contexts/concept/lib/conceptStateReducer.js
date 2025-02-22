@@ -1,3 +1,4 @@
+import { addAlias, deleteAlias, editAlias } from '@/lib/kb/concept/state/aliases'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import { addMedia, deleteMedia, editMedia } from '@/lib/kb/concept/state/media'
 
@@ -5,6 +6,15 @@ const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
     case CONCEPT_STATE.INIT_STATE:
       return update
+
+    case CONCEPT_STATE.ALIAS_ADD:
+      return addAlias(state, update)
+
+    case CONCEPT_STATE.ALIAS_DELETE:
+      return deleteAlias(state, update)
+
+    case CONCEPT_STATE.ALIAS_EDIT:
+      return editAlias(state, update)
 
     case CONCEPT_STATE.MEDIA_ADD:
       return addMedia(state, update)
@@ -14,24 +24,6 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case CONCEPT_STATE.MEDIA_EDIT:
       return editMedia(state, update)
-
-    case CONCEPT_STATE.NAME_ADD:
-      return {
-        ...state,
-        nameUpdate: update.nameUpdate,
-      }
-
-    case CONCEPT_STATE.NAME_DELETE:
-      return {
-        ...state,
-        nameUpdate: update.nameUpdate,
-      }
-
-    case CONCEPT_STATE.NAME_EDIT:
-      return {
-        ...state,
-        nameUpdate: update.nameUpdate,
-      }
 
     case CONCEPT_STATE.PARENT_UPDATE:
       return {

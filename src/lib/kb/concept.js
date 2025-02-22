@@ -1,4 +1,4 @@
-import { NAME_TYPES } from './concept/names'
+import { NAME_TYPES } from './concept/aliases'
 
 const getNextSibling = concept => {
   if (concept && concept.parent) {
