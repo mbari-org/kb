@@ -25,12 +25,12 @@ const MediaDisplay = ({ mediaIndex, previewOn, setPreviewOn, setMediaIndex, url 
           },
           backgroundColor: theme.palette.background.paper,
           position: 'absolute',
-          top: 8,
           right: 8,
+          top: 8,
           zIndex: 1301,
         }}
       >
-        <IoClose size={24} />
+        <IoClose size={32} />
       </IconButton>
       <Box
         sx={{

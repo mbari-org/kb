@@ -7,8 +7,6 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  margin-left: 1px;
-  margin-right: 1px;
 }
 
 .swiper-slide img {
@@ -32,4 +30,22 @@
 .swiper-pagination-bullet-active {
   background: #0077be;
   color: #fff;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #888;
+}
+
+.swiper-button-next {
+  right: 15px;
+}
+
+.swiper-button-prev {
+  left: 15px;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #ddd;
 }
