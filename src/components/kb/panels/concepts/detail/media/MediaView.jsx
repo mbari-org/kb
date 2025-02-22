@@ -4,8 +4,8 @@ import { useTheme } from '@mui/material/styles'
 
 import MediaAdd from './add/MediaAdd'
 import MediaDelete from './delete/MediaDelete'
-import MediaEdit from './edit/MediaEdit'
 import MediaDisplay from './MediaDisplay'
+import MediaEdit from './edit/MediaEdit'
 import MediaPreview from './MediaPreview'
 import MediaSwiper from './MediaSwiper'
 
@@ -21,7 +21,7 @@ const MediaView = () => {
   const mediaViewRef = useRef(null)
 
   const [mediaIndex, setMediaIndex] = useState(0)
-  const [previewImage, setPreviewImage] = useState(false)
+  const [previewOn, setPreviewOn] = useState(false)
   const [swiperHeight, setSwiperHeight] = useState('auto')
 
   const showEditMedia =
@@ -51,11 +51,12 @@ const MediaView = () => {
   return (
     <>
       <Box ref={mediaViewRef} sx={{ position: 'relative' }}>
-        <MediaPreview mediaIndex={mediaIndex} setPreviewImage={setPreviewImage} />
+        <MediaPreview mediaIndex={mediaIndex} setPreviewOn={setPreviewOn} />
         <MediaDisplay
           mediaIndex={mediaIndex}
-          previewImage={previewImage}
-          setPreviewImage={setPreviewImage}
+          previewOn={previewOn}
+          setMediaIndex={handleMediaIndexChange}
+          setPreviewOn={setPreviewOn}
         />
         {showEditMedia && (
           <>

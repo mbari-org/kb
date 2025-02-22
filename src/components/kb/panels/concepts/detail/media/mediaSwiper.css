@@ -7,20 +7,18 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  margin-left: 1px;
-  margin-right: 1px;
 }
 
 .swiper-slide img {
   display: block;
-  width: 100%;
   height: 100%;
   object-fit: cover;
+  width: 100%;
 }
 
 .swiper-pagination-bullet {
-  background: rgba(142, 64, 22, 0.2);
-  color: #ccc;
+  background: #d3d3d3;
+  color: #333;
   line-height: 20px;
   opacity: 1;
   text-align: center;
@@ -32,4 +30,22 @@
 .swiper-pagination-bullet-active {
   background: #0077be;
   color: #fff;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #888;
+}
+
+.swiper-button-next {
+  right: 15px;
+}
+
+.swiper-button-prev {
+  left: 15px;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #ddd;
 }
