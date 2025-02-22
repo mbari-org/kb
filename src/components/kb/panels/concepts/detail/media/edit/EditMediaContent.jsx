@@ -30,7 +30,7 @@ const EditMediaContent = ({ mediaIndex }) => {
   const { data, setModal, setData } = use(ModalContext)
 
   const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
-  const [previewImage, setPreviewImage] = useState(false)
+  const [previewOn, setPreviewOn] = useState(false)
 
   const { handleChange, urlStatus, setUrlStatus, urlCheckTimeout } = useHandleMediaChange(
     mediaIndex,
@@ -89,12 +89,12 @@ const EditMediaContent = ({ mediaIndex }) => {
               ? data.editing.url.trim() === ''
                 ? 'URL cannot be empty'
                 : !isValidUrl(data.editing.url)
-                  ? 'Please enter a valid URL'
-                  : urlStatus.loading
-                    ? 'Checking URL...'
-                    : !urlStatus.valid
-                      ? 'URL is not accessible'
-                      : ''
+                ? 'Please enter a valid URL'
+                : urlStatus.loading
+                ? 'Checking URL...'
+                : !urlStatus.valid
+                ? 'URL is not accessible'
+                : ''
               : ''
           }
           slotProps={{
@@ -105,7 +105,7 @@ const EditMediaContent = ({ mediaIndex }) => {
                     urlStatus.valid &&
                     isValidUrl(data.editing.url) &&
                     data.editing.url.trim() !== '' && (
-                      <IconButton onClick={() => setPreviewImage(true)} edge='end'>
+                      <IconButton onClick={() => setPreviewOn(true)} edge='end'>
                         <Icon
                           color='main'
                           component={MdOutlinePhoto}
@@ -154,8 +154,8 @@ const EditMediaContent = ({ mediaIndex }) => {
       )}
       <MediaDisplay
         mediaIndex={mediaIndex}
-        previewImage={previewImage}
-        setPreviewImage={setPreviewImage}
+        previewOn={previewOn}
+        setPreviewOn={setPreviewOn}
         url={data.editing.url}
       />
     </Box>

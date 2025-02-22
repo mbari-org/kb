@@ -13,14 +13,14 @@
 
 .swiper-slide img {
   display: block;
-  width: 100%;
   height: 100%;
   object-fit: cover;
+  width: 100%;
 }
 
 .swiper-pagination-bullet {
-  background: rgba(142, 64, 22, 0.2);
-  color: #ccc;
+  background: #d3d3d3;
+  color: #333;
   line-height: 20px;
   opacity: 1;
   text-align: center;

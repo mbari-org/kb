@@ -2,18 +2,19 @@ import { use, useEffect, useRef } from 'react'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-import { Pagination } from 'swiper/modules'
+import { Pagination, Navigation } from 'swiper/modules'
 
 import MediaSwiperSlide from './MediaSwiperSlide'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 
 import './mediaSwiper.css'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-const MediaSwiper = ({ height, setMediaIndex }) => {
+const MediaSwiper = ({ height, setMediaIndex, slidesPerView = 3, showNavigation = false }) => {
   const { concept, editingState } = use(ConceptContext)
   const swiperRef = useRef(null)
 
@@ -34,13 +35,14 @@ const MediaSwiper = ({ height, setMediaIndex }) => {
     <Swiper
       centeredSlides={true}
       initialSlide={editingState.mediaIndex}
-      modules={[Pagination]}
+      modules={[Pagination, ...(showNavigation ? [Navigation] : [])]}
+      navigation={showNavigation}
       onSlideChange={change => setMediaIndex(change.snapIndex)}
       onSwiper={swiper => {
         swiperRef.current = swiper
       }}
       pagination={pagination}
-      slidesPerView={3}
+      slidesPerView={slidesPerView}
       style={{
         height,
         overflow: 'hidden',
