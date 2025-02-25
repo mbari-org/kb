@@ -11,6 +11,7 @@ const pale = alpha(main, 0.3)
 const cancel = '#af0000'
 const clean = '#008800'
 const conceptDetail = '#008800'
+const modified = '#dddd00'
 const navActive = '#ffffff'
 const paper = '#f0f0f0'
 const pendingIconClean = '#00dd00'
@@ -57,11 +58,16 @@ const theme = createTheme({
     light: addColor(light),
     pale: addColor(pale),
     main: addColor(main),
+    modified: addColor(modified),
+    remove: addColor(remove),
     primary: {
       cancel,
+      clean,
       light,
       main,
+      modified,
       pale,
+      remove,
     },
     secondary: {
       main: '#ff5722',
@@ -71,6 +77,26 @@ const theme = createTheme({
     fontFamily: 'Roboto, sans-serif',
     fontSize: 16,
     fontWeight: 600,
+  },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputLabel-root': {
+            color: 'rgba(0, 0, 0, 0.3)',
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputLabel-root': {
+            color: 'rgba(0, 0, 0, 0.3)',
+          },
+        },
+      },
+    },
   },
 })
 

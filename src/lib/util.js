@@ -9,18 +9,6 @@ const checkUrlExists = url => {
   })
 }
 
-const debounce = (func, delay) => {
-  let timeout
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout)
-      func(...args)
-    }
-    clearTimeout(timeout)
-    timeout = setTimeout(later, delay)
-  }
-}
-
 const dropFields = (object, fields) => {
   return Object.keys(object).reduce((result, key) => {
     if (!fields.includes(key)) {
@@ -135,7 +123,6 @@ const prune = obj => {
 export {
   capitalize,
   checkUrlExists,
-  debounce,
   dropFields,
   isDeepEqual,
   isElementInViewport,

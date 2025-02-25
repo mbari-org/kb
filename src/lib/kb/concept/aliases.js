@@ -25,7 +25,7 @@ const hasSameValues = (anAlias, otherAlias) => {
 
 const aliasBorder = (isDeleted, editedAlias, editingAlias, initialAlias, theme) => {
   if (isDeleted) {
-    return `${ACTION_BORDER} ${theme.concept.color.remove}`
+    return `${ACTION_BORDER} ${theme.palette.primary.remove}`
   }
 
   if (
@@ -46,7 +46,9 @@ const aliasBorder = (isDeleted, editedAlias, editingAlias, initialAlias, theme) 
   }
 
   const borderColor =
-    action === CONCEPT_STATE.ALIAS_ADD ? theme.concept.color.clean : theme.palette.primary.main
+    action === CONCEPT_STATE.ALIAS_ADD
+      ? theme.palette.primary.clean
+      : theme.palette.primary.modified
 
   return `${ACTION_BORDER} ${borderColor}`
 }

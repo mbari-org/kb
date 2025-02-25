@@ -10,17 +10,17 @@ const hasPrimary = media => !!getPrimary(media)
 const isPrimary = mediaItem => mediaItem.isPrimary || /.*_01\..*/.test(mediaItem.url)
 
 const mediaBorder = (mediaItem, theme) => {
-  const borderWidth = mediaItem?.action === CONCEPT_STATE.NO_ACTION ? '1px' : '2px'
+  const borderWidth = mediaItem?.action === CONCEPT_STATE.NO_ACTION ? '1px' : '3px'
   let borderColor
   switch (mediaItem?.action) {
     case CONCEPT_STATE.MEDIA_ADD:
-      borderColor = theme.concept.color.clean
+      borderColor = theme.palette.primary.clean
       break
     case CONCEPT_STATE.MEDIA_EDIT:
-      borderColor = theme.palette.primary.main
+      borderColor = theme.palette.primary.modified
       break
     case CONCEPT_STATE.MEDIA_DELETE:
-      borderColor = theme.concept.color.remove
+      borderColor = theme.palette.primary.remove
       break
     default:
       borderColor = theme.palette.grey[300]

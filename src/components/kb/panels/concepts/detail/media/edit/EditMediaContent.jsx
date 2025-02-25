@@ -1,14 +1,13 @@
-import { use } from 'react'
-import { useState, useEffect } from 'react'
+import { use, useState, useEffect } from 'react'
 import {
   Box,
-  FormControl,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Icon,
-  FormControlLabel,
   Checkbox,
+  FormControl,
+  FormControlLabel,
+  Icon,
+  IconButton,
+  InputAdornment,
+  TextField,
 } from '@mui/material'
 import { MdOutlinePhoto } from 'react-icons/md'
 
