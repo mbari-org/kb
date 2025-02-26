@@ -6,7 +6,7 @@ import MediaReset from './MediaReset'
 import { fieldSx } from '@/components/common/format'
 import { mediaItemEdits } from '@/lib/kb/concept/media'
 
-const MediaDetails = ({ edit }) => {
+const MediaDetail = ({ edit }) => {
   const [_, { initial, editing }] = edit
 
   return (
@@ -34,4 +34,4 @@ const MediaDetails = ({ edit }) => {
   )
 }
 
-export default MediaDetails
+export default MediaDetail

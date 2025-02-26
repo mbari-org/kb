@@ -4,7 +4,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { formatDelta } from '@/components/common/format'
 
-const MediaItemEditDetail = ({ initialFields, editingFields }) => {
+const MediaItemDetail = ({ initialFields, editingFields }) => {
   let fieldValues
   if (initialFields === null) {
     // Media Add
@@ -32,4 +32,4 @@ const MediaItemEditDetail = ({ initialFields, editingFields }) => {
   )
 }
 
-export default MediaItemEditDetail
+export default MediaItemDetail

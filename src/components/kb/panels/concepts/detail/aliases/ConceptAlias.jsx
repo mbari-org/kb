@@ -29,9 +29,11 @@ const ConceptAlias = ({ aliasIndex }) => {
   const [aliasUpdate, setAliasUpdate] = useState({
     action: editingAlias.action,
     aliasIndex,
-    author: editingAlias.author,
-    name: editingAlias.name,
-    nameType: editingAlias.nameType,
+    alias: {
+      author: editingAlias.author,
+      name: editingAlias.name,
+      nameType: editingAlias.nameType,
+    },
   })
 
   const isDeleted = editingAlias.action === CONCEPT_STATE.ALIAS.DELETE
@@ -46,7 +48,10 @@ const ConceptAlias = ({ aliasIndex }) => {
   const handleChange = field => event => {
     const update = {
       ...aliasUpdate,
-      [field]: event.target.value,
+      alias: {
+        ...aliasUpdate.alias,
+        [field]: event.target.value,
+      },
     }
     setAliasUpdate(update)
     debounceModifyAlias(update)
@@ -62,7 +67,7 @@ const ConceptAlias = ({ aliasIndex }) => {
             disabled={disabled}
             label='Name'
             onChange={handleChange('name')}
-            value={aliasUpdate.name}
+            value={aliasUpdate.alias.name}
           />
         </FormControl>
         <FormControl {...infoStyle} style={{ flex: 1 }}>
@@ -71,7 +76,7 @@ const ConceptAlias = ({ aliasIndex }) => {
             disabled={disabled}
             label='Author'
             onChange={handleChange('author')}
-            value={aliasUpdate.author}
+            value={aliasUpdate.alias.author}
           />
         </FormControl>
         <FormControl {...infoStyle} style={{ flex: 0.4 }}>
@@ -83,7 +88,7 @@ const ConceptAlias = ({ aliasIndex }) => {
             disabled={disabled}
             labelId={`${editingAlias.name}-name-type-label`}
             onChange={handleChange('nameType')}
-            value={aliasUpdate.nameType}
+            value={aliasUpdate.alias.nameType}
           >
             {ALIAS_TYPES.map(value => (
               <MenuItem key={value} value={value}>

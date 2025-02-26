@@ -28,37 +28,6 @@ const mediaBorder = (mediaItem, theme) => {
   return `${borderWidth} solid ${borderColor}`
 }
 
-const mediaEdits = (initial, editing) =>
-  editing.map((editingItem, editingIndex) => {
-    let mediaItemEdits
-    switch (editingItem.action) {
-      case CONCEPT_STATE.NO_ACTION:
-        mediaItemEdits = null
-        break
-      case CONCEPT_STATE.MEDIA.ADD:
-        mediaItemEdits = editingItem
-        break
-      case CONCEPT_STATE.MEDIA.DELETE:
-        mediaItemEdits = pickFields(initial[editingIndex], MEDIA_DISPLAY_FIELDS)
-        break
-      case CONCEPT_STATE.MEDIA.EDIT: {
-        const initialItem = initial[editingIndex]
-        mediaItemEdits = MEDIA_DISPLAY_FIELDS.reduce((edits, field) => {
-          if (editingItem[field] !== initialItem[field]) {
-            edits.push([field, { initial: initialItem[field], editing: editingItem[field] }])
-          }
-          return edits
-        }, [])
-
-        break
-      }
-      default:
-        mediaItemEdits = null
-        break
-    }
-    return { action: editingItem.action, mediaItemEdits }
-  })
-
 const mediaItemEdit = (mediaIndex, initialItem, editingItem) => {
   const { action: editingAction } = editingItem
 
@@ -92,7 +61,6 @@ export {
   hasPrimary,
   isPrimary,
   mediaBorder,
-  mediaEdits,
   mediaItemEdits,
   mediaItemFields,
 }

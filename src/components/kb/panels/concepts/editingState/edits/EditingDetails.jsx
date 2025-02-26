@@ -2,16 +2,17 @@ import { use, useEffect, useMemo } from 'react'
 
 import { Box } from '@mui/material'
 
+import AliasesDetail from './aliases/AliasesDetail'
 import FieldDeltaDetail from './field/FieldDeltaDetail'
 import FieldValueDetail from './field/FieldValueDetail'
-import MediaDetails from './media/MediaDetails'
+import MediaDetail from './media/MediaDetail'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import { hasStateChange, stateChange } from './stateChange'
 
-const EditDetails = () => {
+const EditingDetails = () => {
   const { editingState, initialState } = use(ConceptContext)
   const { setModal } = use(ModalContext)
   const edits = useMemo(
@@ -25,8 +26,10 @@ const EditDetails = () => {
   const editComponent = edit => {
     const [field, { _initial, editing }] = edit
     switch (field) {
+      case 'aliases':
+        return <AliasesDetail key={field} edit={edit} />
       case 'media':
-        return <MediaDetails key={field} edit={edit} />
+        return <MediaDetail key={field} edit={edit} />
       case 'mediaIndex':
         return null
       case 'nameUpdate':
@@ -47,4 +50,4 @@ const EditDetails = () => {
   )
 }
 
-export default EditDetails
+export default EditingDetails

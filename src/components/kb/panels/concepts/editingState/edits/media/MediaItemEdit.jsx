@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 
 import MediaItemReset from './MediaItemReset'
-import MediaItemEditDetail from './MediaItemEditDetail'
+import MediaItemDetail from './MediaItemDetail'
 
 import { fieldSx } from '@/components/common/format'
 
@@ -33,7 +33,7 @@ const MediaItemEdit = ({ mediaItemEdit }) => {
           <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
         </Box>
       </Box>
-      <MediaItemEditDetail initialFields={initialFields} editingFields={editingFields} />
+      <MediaItemDetail initialFields={initialFields} editingFields={editingFields} />
     </Box>
   )
 }
