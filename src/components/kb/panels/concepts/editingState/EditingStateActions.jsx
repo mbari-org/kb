@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { INTENT } from '@/contexts/concept/lib/useDisplayEditingState'
+import { INTENT } from '@/contexts/concept/lib/useEditingStateDisplay'
 
 const CONFIRM_DISCARD = 'Confirm Discard'
 const CONTINUE = 'Continue'

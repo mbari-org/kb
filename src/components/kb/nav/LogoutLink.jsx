@@ -6,17 +6,17 @@ import { grey } from '@mui/material/colors'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useDisplayEditingState from '@/contexts/concept/lib/useDisplayEditingState'
+import useEditingStateDisplay from '@/contexts/concept/lib/useEditingStateDisplay'
 
-import { INTENT } from '@/contexts/concept/lib/useDisplayEditingState'
+import { INTENT } from '@/contexts/concept/lib/useEditingStateDisplay'
 
 const LogoutLink = () => {
   const { logout, user } = use(AuthContext)
   const { modified } = use(ConceptContext)
 
-  const displayEditingState = useDisplayEditingState()
+  const editingStateDisplay = useEditingStateDisplay()
 
-  const handleLogout = () => (modified ? displayEditingState(INTENT.SAVE) : logout())
+  const handleLogout = () => (modified ? editingStateDisplay(INTENT.SAVE) : logout())
 
   const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`
 

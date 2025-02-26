@@ -12,18 +12,23 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
-import useDebounce from '@/lib/hooks/useDebounce'
+
+import useDebounceModifyAlias from './useDebounceModifyAlias'
+
+// import { isDeepEqual } from '@/lib/util'
 
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()
 
-  const { editing, editingState, initialState, modifyConcept } = use(ConceptContext)
+  const { editing, editingState, initialState } = use(ConceptContext)
 
-  // Both editedAlias and editingAlias are necessary due to debounce on edits
-  const editingAlias = editingState.aliases[aliasIndex]
-  const initialAlias = initialState.aliases[aliasIndex]
-  const [editedAlias, setEditedAlias] = useState({
+  const editingAlias = { ...editingState.aliases[aliasIndex] }
+  const initialAlias = { ...initialState.aliases[aliasIndex] }
+
+  // aliasUpdate is necessary due to debounce on edits
+  const [aliasUpdate, setAliasUpdate] = useState({
     action: editingAlias.action,
+    aliasIndex,
     author: editingAlias.author,
     name: editingAlias.name,
     nameType: editingAlias.nameType,
@@ -31,29 +36,20 @@ const ConceptAlias = ({ aliasIndex }) => {
 
   const isDeleted = editingAlias.action === CONCEPT_STATE.ALIAS_DELETE
 
-  const border = aliasBorder(isDeleted, editingAlias, editedAlias, initialAlias, theme)
+  const border = aliasBorder(isDeleted, editingAlias, aliasUpdate, initialAlias, theme)
   const infoStyle = useConceptDetailStyle('Alias')
 
   const disabled = isDeleted || !editing
 
-  const debouncedModifyConcept = useDebounce(newState => {
-    modifyConcept({
-      type: CONCEPT_STATE.ALIAS_EDIT,
-      update: newState,
-    })
-  }, 1000)
+  const debounceModifyAlias = useDebounceModifyAlias(CONCEPT_STATE.ALIAS_EDIT)
 
   const handleChange = field => event => {
-    console.log('handleChange', field, event.target.value)
-    const newState = {
-      ...editedAlias,
+    const update = {
+      ...aliasUpdate,
       [field]: event.target.value,
-      action: CONCEPT_STATE.ALIAS_EDIT,
     }
-    setEditedAlias(newState)
-
-    // Call the debounced function with the new state
-    debouncedModifyConcept(newState)
+    setAliasUpdate(update)
+    debounceModifyAlias(update)
   }
 
   return (
@@ -66,7 +62,7 @@ const ConceptAlias = ({ aliasIndex }) => {
             disabled={disabled}
             label='Name'
             onChange={handleChange('name')}
-            value={editedAlias.name}
+            value={aliasUpdate.name}
           />
         </FormControl>
         <FormControl {...infoStyle} style={{ flex: 1 }}>
@@ -75,7 +71,7 @@ const ConceptAlias = ({ aliasIndex }) => {
             disabled={disabled}
             label='Author'
             onChange={handleChange('author')}
-            value={editedAlias.author}
+            value={aliasUpdate.author}
           />
         </FormControl>
         <FormControl {...infoStyle} style={{ flex: 0.4 }}>
@@ -87,7 +83,7 @@ const ConceptAlias = ({ aliasIndex }) => {
             disabled={disabled}
             labelId={`${editingAlias.name}-name-type-label`}
             onChange={handleChange('nameType')}
-            value={editedAlias.nameType}
+            value={aliasUpdate.nameType}
           >
             {ALIAS_TYPES.map(value => (
               <MenuItem key={value} value={value}>

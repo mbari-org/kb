@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 const MediaActionButton = ({ Icon, action, color, mediaIndex, position = 'right', sx = {} }) => {
   const theme = useTheme()
 
-  const { displayEditMedia } = use(ConceptContext)
+  const { editMediaDisplay } = use(ConceptContext)
 
   return (
     <Box
@@ -25,7 +25,7 @@ const MediaActionButton = ({ Icon, action, color, mediaIndex, position = 'right'
       }}
     >
       <IconButton
-        onClick={() => displayEditMedia(action, mediaIndex)}
+        onClick={() => editMediaDisplay(action, mediaIndex)}
         color={color}
         sx={{
           '&:hover': {

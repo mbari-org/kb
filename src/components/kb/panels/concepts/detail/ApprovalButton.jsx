@@ -9,7 +9,7 @@ import { useTheme } from '@mui/material/styles'
 const ApprovalButton = ({ field }) => {
   const theme = useTheme()
 
-  const { displayPendingField } = use(ConceptContext)
+  const { pendingFieldDisplay } = use(ConceptContext)
 
   return (
     <IconButton
@@ -22,7 +22,7 @@ const ApprovalButton = ({ field }) => {
         mb: 2,
         padding: 0,
       }}
-      onClick={() => displayPendingField(field)}
+      onClick={() => pendingFieldDisplay(field)}
     >
       <PiStamp size={24} />
     </IconButton>

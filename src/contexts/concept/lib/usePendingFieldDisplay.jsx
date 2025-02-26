@@ -7,7 +7,7 @@ import PendingFieldTitle from '@/components/kb/panels/concepts/detail/pendingFie
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const useDisplayPendingField = () => {
+const usePendingFieldDisplay = () => {
   const { setModal } = use(ModalContext)
 
   return useCallback(
@@ -23,4 +23,4 @@ const useDisplayPendingField = () => {
   )
 }
 
-export default useDisplayPendingField
+export default usePendingFieldDisplay

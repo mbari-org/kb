@@ -79,20 +79,11 @@ const theme = createTheme({
     fontWeight: 600,
   },
   components: {
-    MuiTextField: {
+    MuiFormControl: {
       styleOverrides: {
         root: {
-          '& .MuiInputLabel-root': {
-            color: 'rgba(0, 0, 0, 0.3)',
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        root: {
-          '& .MuiInputLabel-root': {
-            color: 'rgba(0, 0, 0, 0.3)',
+          '& .MuiInputLabel-formControl': {
+            color: '#888888',
           },
         },
       },

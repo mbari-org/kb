@@ -1,3 +1,4 @@
+import { NAME_TYPES } from '@/lib/kb/concept/aliases'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const aliasesState = concept => {
@@ -21,7 +22,7 @@ const addAlias = state => {
   const addItem = {
     author: '',
     name: '',
-    nameType: '',
+    nameType: NAME_TYPES.COMMON,
     action: CONCEPT_STATE.ALIAS_ADD,
   }
   return {

@@ -16,7 +16,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
-const useDisplayEditMedia = () => {
+const useEditMediaDisplay = () => {
   const { setModal } = use(ModalContext)
 
   return useCallback(
@@ -57,4 +57,4 @@ const useDisplayEditMedia = () => {
   )
 }
 
-export default useDisplayEditMedia
+export default useEditMediaDisplay

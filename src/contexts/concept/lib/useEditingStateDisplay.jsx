@@ -13,7 +13,7 @@ export const INTENT = {
   SHOW: 'Show',
 }
 
-const useDisplayEditingState = () => {
+const useEditingStateDisplay = () => {
   const { setModal } = use(ModalContext)
 
   return useCallback(
@@ -29,4 +29,4 @@ const useDisplayEditingState = () => {
   )
 }
 
-export default useDisplayEditingState
+export default useEditingStateDisplay

@@ -5,9 +5,9 @@ import { useErrorBoundary } from 'react-error-boundary'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
-import useDisplayEditingState from '@/contexts/concept/lib/useDisplayEditingState'
-import useDisplayEditMedia from '@/contexts/concept/lib/useDisplayEditMedia'
-import useDisplayPendingField from '@/contexts/concept/lib/useDisplayPendingField'
+import useEditingStateDisplay from '@/contexts/concept/lib/useEditingStateDisplay'
+import useEditMediaDisplay from '@/contexts/concept/lib/useEditMediaDisplay'
+import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
 
 import useModifyConcept from '@/contexts/concept/lib/useModifyConcept'
 import useResetConcept from '@/contexts/concept/lib/useResetConcept'
@@ -20,7 +20,7 @@ import { conceptState } from '@/lib/kb/concept/state/concept'
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
-import { INTENT } from '@/contexts/concept/lib/useDisplayEditingState'
+import { INTENT } from '@/contexts/concept/lib/useEditingStateDisplay'
 
 import update from '@/contexts/concept/lib/submit/update'
 import { conceptStateReducer } from '@/contexts/concept/lib/conceptStateReducer'
@@ -54,9 +54,9 @@ const ConceptProvider = ({ children }) => {
   const [editingState, dispatch] = useReducer(conceptStateReducer, {})
 
   const conceptPath = useConceptPath(concept)
-  const displayEditingState = useDisplayEditingState()
-  const displayEditMedia = useDisplayEditMedia()
-  const displayPendingField = useDisplayPendingField()
+  const editingStateDisplay = useEditingStateDisplay()
+  const editMediaDisplay = useEditMediaDisplay()
+  const pendingFieldDisplay = usePendingFieldDisplay()
 
   const resetConcept = useResetConcept(dispatch, initialState, data, setData)
   const modifyConcept = useModifyConcept(dispatch, resetConcept)
@@ -113,7 +113,7 @@ const ConceptProvider = ({ children }) => {
         if (modalHasBeenDisplayed) {
           setModalHasBeenDisplayed(false)
         } else {
-          displayEditingState(INTENT.CONTINUE)
+          editingStateDisplay(INTENT.CONTINUE)
           setModalHasBeenDisplayed(true)
         }
         return
@@ -122,7 +122,7 @@ const ConceptProvider = ({ children }) => {
   }, [
     modal,
     concept,
-    displayEditingState,
+    editingStateDisplay,
     editing,
     editingState,
     getConcept,
@@ -156,9 +156,9 @@ const ConceptProvider = ({ children }) => {
       value={{
         concept,
         conceptPath,
-        displayEditingState,
-        displayEditMedia,
-        displayPendingField,
+        editingStateDisplay,
+        editMediaDisplay,
+        pendingFieldDisplay,
         editing,
         editingState,
         initialState,
