@@ -1,4 +1,4 @@
-import { use, useCallback, useState, useRef } from 'react' // Import useRef
+import { use, useState } from 'react' // Import useRef
 import { Stack, FormControl, TextField, Select, MenuItem, InputLabel } from '@mui/material'
 
 import { useTheme } from '@mui/material/styles'
@@ -12,6 +12,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
+import useDebounce from '@/lib/hooks/useDebounce'
 
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()
@@ -35,26 +36,12 @@ const ConceptAlias = ({ aliasIndex }) => {
 
   const disabled = isDeleted || !editing
 
-  // Use useRef to hold the timeout id
-  const timeoutRef = useRef(null)
-
-  const debouncedModifyConcept = useCallback(
-    newState => {
-      // Clear the previous timeout if it exists
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
-
-      // Set a new timeout
-      timeoutRef.current = setTimeout(() => {
-        modifyConcept({
-          type: CONCEPT_STATE.ALIAS_EDIT,
-          update: newState,
-        })
-      }, 1000)
-    },
-    [modifyConcept]
-  )
+  const debouncedModifyConcept = useDebounce(newState => {
+    modifyConcept({
+      type: CONCEPT_STATE.ALIAS_EDIT,
+      update: newState,
+    })
+  }, 1000)
 
   const handleChange = field => event => {
     console.log('handleChange', field, event.target.value)
