@@ -6,7 +6,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const MediaEdit = ({ mediaIndex }) => (
   <MediaActionButton
-    action={CONCEPT_STATE.MEDIA_EDIT}
+    action={CONCEPT_STATE.MEDIA.EDIT}
     color='main'
     Icon={CiEdit}
     mediaIndex={mediaIndex}

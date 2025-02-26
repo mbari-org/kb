@@ -24,7 +24,7 @@ const addMedia = (state, update) => {
   const mediaItem = {
     ...update.mediaItem,
     isPrimary: isPrimaryMedia,
-    action: CONCEPT_STATE.MEDIA_ADD,
+    action: CONCEPT_STATE.MEDIA.ADD,
   }
   return {
     ...state,
@@ -35,30 +35,30 @@ const addMedia = (state, update) => {
 const deleteMedia = (state, update) => {
   const mediaItem = state.media[update.mediaIndex]
   // If media is an add, just remove it from state
-  if (mediaItem.action === CONCEPT_STATE.MEDIA_ADD) {
+  if (mediaItem.action === CONCEPT_STATE.MEDIA.ADD) {
     const updatedMedia = state.media.filter((_item, index) => index !== update.mediaIndex)
     return {
       ...state,
       media: updatedMedia,
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.MEDIA_DELETE, update })
+  return updateState(state, { type: CONCEPT_STATE.MEDIA.DELETE, update })
 }
 
 const editMedia = (state, update) => {
   const mediaItem = state.media[update.mediaIndex]
-  if (mediaItem.action === CONCEPT_STATE.MEDIA_ADD) {
+  if (mediaItem.action === CONCEPT_STATE.MEDIA.ADD) {
     const updatedItem = {
       ...mediaItem,
       ...update.mediaItem,
-      action: CONCEPT_STATE.MEDIA_ADD,
+      action: CONCEPT_STATE.MEDIA.ADD,
     }
     return {
       ...state,
       media: state.media.map((item, index) => (index === update.mediaIndex ? updatedItem : item)),
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.MEDIA_EDIT, update })
+  return updateState(state, { type: CONCEPT_STATE.MEDIA.EDIT, update })
 }
 
 const updateState = (state, { type, update }) => {

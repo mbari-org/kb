@@ -5,7 +5,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const MediaAdd = ({ bgColor, mediaIndex, sx }) => (
   <MediaActionButton
-    action={CONCEPT_STATE.MEDIA_ADD}
+    action={CONCEPT_STATE.MEDIA.ADD}
     color='main'
     Icon={props => <MdOutlineAddPhotoAlternate {...props} size={24} />}
     mediaIndex={mediaIndex}

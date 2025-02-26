@@ -9,7 +9,7 @@ const MediaReset = () => {
   const { modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
-    modifyConcept({ type: CONCEPT_STATE.RESET_MEDIA })
+    modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
   }
 
   return <EditReset onClick={onClick} />

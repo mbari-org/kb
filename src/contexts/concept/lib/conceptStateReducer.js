@@ -4,25 +4,25 @@ import { addMedia, deleteMedia, editMedia } from '@/lib/kb/concept/state/media'
 
 const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
-    case CONCEPT_STATE.INIT_STATE:
+    case CONCEPT_STATE.INITIAL:
       return update
 
-    case CONCEPT_STATE.ALIAS_ADD:
+    case CONCEPT_STATE.ALIAS.ADD:
       return addAlias(state, update)
 
-    case CONCEPT_STATE.ALIAS_DELETE:
+    case CONCEPT_STATE.ALIAS.DELETE:
       return deleteAlias(state, update)
 
-    case CONCEPT_STATE.ALIAS_EDIT:
+    case CONCEPT_STATE.ALIAS.EDIT:
       return editAlias(state, update)
 
-    case CONCEPT_STATE.MEDIA_ADD:
+    case CONCEPT_STATE.MEDIA.ADD:
       return addMedia(state, update)
 
-    case CONCEPT_STATE.MEDIA_DELETE:
+    case CONCEPT_STATE.MEDIA.DELETE:
       return deleteMedia(state, update)
 
-    case CONCEPT_STATE.MEDIA_EDIT:
+    case CONCEPT_STATE.MEDIA.EDIT:
       return editMedia(state, update)
 
     case CONCEPT_STATE.PARENT_UPDATE:
@@ -31,7 +31,7 @@ const conceptStateReducer = (state, { type, update }) => {
         parentName: update.parentName,
       }
 
-    case CONCEPT_STATE.RESET_FIELD: {
+    case CONCEPT_STATE.RESET.FIELD: {
       const { field, value } = update
 
       return {
@@ -40,7 +40,7 @@ const conceptStateReducer = (state, { type, update }) => {
       }
     }
 
-    case CONCEPT_STATE.RESET_MEDIA: {
+    case CONCEPT_STATE.RESET.MEDIA: {
       const { media } = update
       return {
         ...state,
@@ -48,7 +48,7 @@ const conceptStateReducer = (state, { type, update }) => {
       }
     }
 
-    case CONCEPT_STATE.RESET_MEDIA_ITEM: {
+    case CONCEPT_STATE.RESET.MEDIA_ITEM: {
       const { mediaIndex, mediaItem } = update
       return {
         ...state,

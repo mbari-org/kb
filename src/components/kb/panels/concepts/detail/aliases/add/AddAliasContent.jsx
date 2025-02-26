@@ -20,7 +20,7 @@ const AddAliasContent = () => {
   const { _setModal } = use(ModalContext)
 
   const [editedAlias, setEditedAlias] = useState({
-    action: CONCEPT_STATE.ALIAS_ADD,
+    action: CONCEPT_STATE.ALIAS.ADD,
     author: '',
     name: '',
     nameType: '',
@@ -43,7 +43,7 @@ const AddAliasContent = () => {
     [theme]
   )
 
-  const debounceModifyAlias = useDebounceModifyAlias(CONCEPT_STATE.ALIAS_ADD)
+  const debounceModifyAlias = useDebounceModifyAlias(CONCEPT_STATE.ALIAS.ADD)
 
   const handleChange = field => event => {
     const update = {

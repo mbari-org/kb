@@ -70,7 +70,7 @@ const ConceptProvider = ({ children }) => {
       const resetStateConcept = { ...concept, ...toState }
       setConcept(resetStateConcept)
 
-      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: toState })
+      dispatch({ type: CONCEPT_STATE.INITIAL, update: toState })
     },
     [concept, setModal]
   )
@@ -147,7 +147,7 @@ const ConceptProvider = ({ children }) => {
 
       const initialState = conceptState(concept)
       setInitialState(initialState)
-      dispatch({ type: CONCEPT_STATE.INIT_STATE, update: initialState })
+      dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
     }
   }, [concept, getConceptPendingHistory])
 

@@ -34,14 +34,14 @@ const ConceptAlias = ({ aliasIndex }) => {
     nameType: editingAlias.nameType,
   })
 
-  const isDeleted = editingAlias.action === CONCEPT_STATE.ALIAS_DELETE
+  const isDeleted = editingAlias.action === CONCEPT_STATE.ALIAS.DELETE
 
   const border = aliasBorder(isDeleted, editingAlias, aliasUpdate, initialAlias, theme)
   const infoStyle = useConceptDetailStyle('Alias')
 
   const disabled = isDeleted || !editing
 
-  const debounceModifyAlias = useDebounceModifyAlias(CONCEPT_STATE.ALIAS_EDIT)
+  const debounceModifyAlias = useDebounceModifyAlias(CONCEPT_STATE.ALIAS.EDIT)
 
   const handleChange = field => event => {
     const update = {

@@ -13,13 +13,13 @@ const mediaBorder = (mediaItem, theme) => {
   const borderWidth = mediaItem?.action === CONCEPT_STATE.NO_ACTION ? '1px' : '3px'
   let borderColor
   switch (mediaItem?.action) {
-    case CONCEPT_STATE.MEDIA_ADD:
+    case CONCEPT_STATE.MEDIA.ADD:
       borderColor = theme.palette.primary.clean
       break
-    case CONCEPT_STATE.MEDIA_EDIT:
+    case CONCEPT_STATE.MEDIA.EDIT:
       borderColor = theme.palette.primary.modified
       break
-    case CONCEPT_STATE.MEDIA_DELETE:
+    case CONCEPT_STATE.MEDIA.DELETE:
       borderColor = theme.palette.primary.remove
       break
     default:
@@ -35,13 +35,13 @@ const mediaEdits = (initial, editing) =>
       case CONCEPT_STATE.NO_ACTION:
         mediaItemEdits = null
         break
-      case CONCEPT_STATE.MEDIA_ADD:
+      case CONCEPT_STATE.MEDIA.ADD:
         mediaItemEdits = editingItem
         break
-      case CONCEPT_STATE.MEDIA_DELETE:
+      case CONCEPT_STATE.MEDIA.DELETE:
         mediaItemEdits = pickFields(initial[editingIndex], MEDIA_DISPLAY_FIELDS)
         break
-      case CONCEPT_STATE.MEDIA_EDIT: {
+      case CONCEPT_STATE.MEDIA.EDIT: {
         const initialItem = initial[editingIndex]
         mediaItemEdits = MEDIA_DISPLAY_FIELDS.reduce((edits, field) => {
           if (editingItem[field] !== initialItem[field]) {
@@ -67,10 +67,10 @@ const mediaItemEdit = (mediaIndex, initialItem, editingItem) => {
   }
 
   const initialFields =
-    editingAction === CONCEPT_STATE.MEDIA_ADD ? null : mediaItemFields(initialItem)
+    editingAction === CONCEPT_STATE.MEDIA.ADD ? null : mediaItemFields(initialItem)
 
   const editingFields =
-    editingAction === CONCEPT_STATE.MEDIA_DELETE ? null : mediaItemFields(editingItem)
+    editingAction === CONCEPT_STATE.MEDIA.DELETE ? null : mediaItemFields(editingItem)
 
   return [mediaIndex, editingAction, initialFields, editingFields]
 }

@@ -19,7 +19,7 @@ const DeleteMediaActions = ({ mediaIndex }) => {
 
   const onAction = label => {
     if (label === DELETE) {
-      modifyConcept({ type: CONCEPT_STATE.MEDIA_DELETE, update: { mediaIndex } })
+      modifyConcept({ type: CONCEPT_STATE.MEDIA.DELETE, update: { mediaIndex } })
     }
     setModal(null)
   }

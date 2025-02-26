@@ -46,7 +46,7 @@ const aliasBorder = (isDeleted, editedAlias, editingAlias, initialAlias, theme) 
   }
 
   const borderColor =
-    action === CONCEPT_STATE.ALIAS_ADD
+    action === CONCEPT_STATE.ALIAS.ADD
       ? theme.palette.primary.clean
       : theme.palette.primary.modified
 

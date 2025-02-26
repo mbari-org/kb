@@ -5,7 +5,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
 
 const MediaDelete = ({ mediaIndex }) => (
   <MediaActionButton
-    action={CONCEPT_STATE.MEDIA_DELETE}
+    action={CONCEPT_STATE.MEDIA.DELETE}
     color='cancel'
     Icon={MdOutlineDeleteForever}
     mediaIndex={mediaIndex}

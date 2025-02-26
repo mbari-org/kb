@@ -14,14 +14,14 @@ const AliasDelete = ({ aliasIndex }) => {
   const { editingState, modifyConcept } = use(ConceptContext)
 
   const alias = editingState.aliases[aliasIndex]
-  const showDelete = alias.action !== CONCEPT_STATE.ALIAS_DELETE
+  const showDelete = alias.action !== CONCEPT_STATE.ALIAS.DELETE
 
   return (
     <Box sx={{ p: 0, m: 0, ml: -1 }}>
       {showDelete ? (
         <IconButton
           onClick={() =>
-            modifyConcept({ type: CONCEPT_STATE.ALIAS_DELETE, update: { aliasIndex } })
+            modifyConcept({ type: CONCEPT_STATE.ALIAS.DELETE, update: { aliasIndex } })
           }
           color='cancel'
           sx={{

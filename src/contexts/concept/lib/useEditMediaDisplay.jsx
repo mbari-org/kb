@@ -25,7 +25,7 @@ const useEditMediaDisplay = () => {
 
       let modal
       switch (action) {
-        case CONCEPT_STATE.MEDIA_ADD:
+        case CONCEPT_STATE.MEDIA.ADD:
           modal = createModal({
             Actions: () => <AddMediaActions />,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
@@ -33,7 +33,7 @@ const useEditMediaDisplay = () => {
           })
           break
 
-        case CONCEPT_STATE.MEDIA_DELETE:
+        case CONCEPT_STATE.MEDIA.DELETE:
           modal = createModal({
             Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
             Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
@@ -41,7 +41,7 @@ const useEditMediaDisplay = () => {
           })
           break
 
-        case CONCEPT_STATE.MEDIA_EDIT: {
+        case CONCEPT_STATE.MEDIA.EDIT: {
           modal = createModal({
             Actions: EditMediaActions,
             Content: () => <EditMediaContent mediaIndex={mediaIndex} />,

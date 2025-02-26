@@ -30,7 +30,7 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
 
     // proceed with concept media update
     const type =
-      mediaIndex === editingState.media.length ? CONCEPT_STATE.MEDIA_ADD : CONCEPT_STATE.MEDIA_EDIT
+      mediaIndex === editingState.media.length ? CONCEPT_STATE.MEDIA.ADD : CONCEPT_STATE.MEDIA.EDIT
 
     modifyConcept({
       type,
@@ -40,7 +40,7 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
       },
     })
 
-    if (type === CONCEPT_STATE.MEDIA_ADD) {
+    if (type === CONCEPT_STATE.MEDIA.ADD) {
       editingState.mediaIndex = mediaIndex
     }
 

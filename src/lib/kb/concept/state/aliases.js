@@ -23,7 +23,7 @@ const addAlias = state => {
     author: '',
     name: '',
     nameType: NAME_TYPES.COMMON,
-    action: CONCEPT_STATE.ALIAS_ADD,
+    action: CONCEPT_STATE.ALIAS.ADD,
   }
   return {
     ...state,
@@ -34,23 +34,23 @@ const addAlias = state => {
 const deleteAlias = (state, update) => {
   const alias = state.aliases[update.aliasIndex]
   // If alias is an add, just remove it from state
-  if (alias.action === CONCEPT_STATE.ALIAS_ADD) {
+  if (alias.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedAliases = state.aliases.filter((_item, index) => index !== update.aliasIndex)
     return {
       ...state,
       aliases: updatedAliases,
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.ALIAS_DELETE, update })
+  return updateState(state, { type: CONCEPT_STATE.ALIAS.DELETE, update })
 }
 
 const editAlias = (state, update) => {
   const alias = state.aliases[update.aliasIndex]
-  if (update.action === CONCEPT_STATE.ALIAS_ADD) {
+  if (update.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedItem = {
       ...alias,
       ...update.alias,
-      action: CONCEPT_STATE.ALIAS_ADD,
+      action: CONCEPT_STATE.ALIAS.ADD,
     }
     return {
       ...state,
@@ -59,7 +59,7 @@ const editAlias = (state, update) => {
       ),
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.ALIAS_EDIT, update })
+  return updateState(state, { type: CONCEPT_STATE.ALIAS.EDIT, update })
 }
 
 const isEmptyAlias = alias => {

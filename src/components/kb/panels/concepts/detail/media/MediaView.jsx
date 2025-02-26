@@ -25,7 +25,7 @@ const MediaView = () => {
   const [swiperHeight, setSwiperHeight] = useState('auto')
 
   const showEditMedia =
-    editing && editingState.media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA_DELETE
+    editing && editingState.media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA.DELETE
 
   const handleMediaIndexChange = useCallback(
     mediaIndex => {
