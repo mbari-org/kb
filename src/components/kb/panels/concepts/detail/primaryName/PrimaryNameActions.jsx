@@ -11,7 +11,7 @@ import { NAME_UPDATE } from '@/lib/kb/concept/state/structure'
 
 const CANCEL = 'Cancel'
 
-const NameActions = () => {
+const PrimaryNameActions = () => {
   const { concept, editingState, modifyConcept } = use(ConceptContext)
   const { setModal } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
@@ -44,4 +44,4 @@ const NameActions = () => {
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
 }
 
-export default NameActions
+export default PrimaryNameActions

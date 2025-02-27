@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useState } from 'react'
 
 import { Box, TextField, Typography, Stack } from '@mui/material' // Added Stack
 import { useTheme } from '@mui/material/styles'
@@ -6,28 +6,29 @@ import { useTheme } from '@mui/material/styles'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import useDebounceChangePrimaryName from './useDebounceChangePrimaryName'
 
-const NameContent = () => {
-  const { concept: conceptTheme, palette } = useTheme()
+const PrimaryNameContent = () => {
+  const theme = useTheme()
 
-  const { concept, editingState, modifyConcept } = use(ConceptContext)
+  const { concept, editingState } = use(ConceptContext)
   const { getNames } = use(TaxonomyContext)
+
+  const [primaryName, setPrimaryName] = useState(concept.name)
+  const debouncedChangePrimaryName = useDebounceChangePrimaryName()
 
   const taxonomyNames = getNames()
 
-  const fromColor = conceptTheme.color.clean
+  const fromColor = theme.concept.color.clean
 
   const toColor =
     editingState.name === concept.name || taxonomyNames.includes(editingState.name)
-      ? palette.grey[500]
-      : conceptTheme.color.pending
+      ? theme.palette.grey[500]
+      : theme.concept.color.pending
 
   const handleChange = event => {
-    modifyConcept({
-      type: CONCEPT_STATE.STRUCTURE.NAME_CHANGE,
-      update: { field: 'name', value: event.target.value },
-    })
+    setPrimaryName(event.target.value)
+    debouncedChangePrimaryName(event.target.value)
   }
 
   return (
@@ -37,9 +38,9 @@ const NameContent = () => {
           <Typography minWidth={60}>From:</Typography>
           <Typography
             color={fromColor}
-            fontFamily={conceptTheme.fontFamily}
-            fontSize={conceptTheme.updateFontSize}
-            fontWeight={conceptTheme.fontWeight}
+            fontFamily={theme.concept.fontFamily}
+            fontSize={theme.concept.updateFontSize}
+            fontWeight={theme.concept.fontWeight}
             variant='h6'
           >
             {concept.name}
@@ -55,9 +56,9 @@ const NameContent = () => {
                 sx: {
                   color: toColor,
                   cursor: 'text',
-                  fontFamily: conceptTheme.fontFamily,
-                  fontSize: conceptTheme.updateFontSize,
-                  fontWeight: conceptTheme.fontWeight,
+                  fontFamily: theme.concept.fontFamily,
+                  fontSize: theme.concept.updateFontSize,
+                  fontWeight: theme.concept.fontWeight,
                   height: 'auto',
                   borderBottom: 'none',
                   '&::before': { borderBottom: 'none' },
@@ -65,7 +66,7 @@ const NameContent = () => {
                 },
               },
             }}
-            value={editingState.name}
+            value={primaryName}
             variant='standard'
           />
         </Stack>
@@ -80,4 +81,4 @@ const NameContent = () => {
   )
 }
 
-export default NameContent
+export default PrimaryNameContent

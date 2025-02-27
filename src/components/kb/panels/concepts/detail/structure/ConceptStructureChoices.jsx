@@ -3,7 +3,7 @@ import { use } from 'react'
 import { Modal, Box, Button, IconButton, Stack } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
-import changeName from './name/useChangeName'
+import changeName from '../primaryName/useChangePrimaryName'
 import changeParent from './parent/useChangeParent'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'

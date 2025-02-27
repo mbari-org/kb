@@ -1,4 +1,4 @@
-import { use, useState } from 'react' // Import useRef
+import { use, useState } from 'react'
 import { Stack, FormControl, TextField, Select, MenuItem, InputLabel } from '@mui/material'
 
 import { useTheme } from '@mui/material/styles'
@@ -79,7 +79,7 @@ const ConceptAlias = ({ aliasIndex }) => {
             value={aliasUpdate.alias.author}
           />
         </FormControl>
-        <FormControl {...infoStyle} style={{ flex: 0.4 }}>
+        <FormControl {...infoStyle} style={{ flex: 0.45 }}>
           <InputLabel id={`${editingAlias.name}-name-type-label`} shrink>
             Type
           </InputLabel>

@@ -1,4 +1,4 @@
-import { use, useCallback, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 
 import { FormControl, TextField } from '@mui/material'
 
@@ -12,7 +12,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 const ConceptAuthor = () => {
   const { editingState, modifyConcept } = use(ConceptContext)
 
-  const [author, setAuthor] = useState(editingState.author)
+  const [author, setAuthor] = useState(null)
 
   const modifyAuthor = useCallback(
     author => {
@@ -28,10 +28,14 @@ const ConceptAuthor = () => {
 
   const infoStyle = useConceptDetailStyle('Author')
 
-  const handleChange = e => {
-    setAuthor(e.target.value)
-    debouncedAuthor(e.target.value)
+  const handleChange = event => {
+    setAuthor(event.target.value)
+    debouncedAuthor(event.target.value)
   }
+
+  useEffect(() => {
+    setAuthor(editingState.author)
+  }, [editingState.author])
 
   return (
     <FormControl>
