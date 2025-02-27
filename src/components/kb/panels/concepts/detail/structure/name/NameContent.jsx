@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const NameContent = () => {
   const { concept: conceptTheme, palette } = useTheme()
@@ -25,7 +25,7 @@ const NameContent = () => {
 
   const handleChange = event => {
     modifyConcept({
-      type: CONCEPT_STATE.SET_FIELD,
+      type: CONCEPT_STATE.FIELD.SET,
       update: { name: event.target.value },
     })
   }

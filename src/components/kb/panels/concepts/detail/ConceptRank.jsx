@@ -12,7 +12,7 @@ import ApprovalButton from './ApprovalButton'
 import { isAdmin } from '@/lib/auth/role'
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const ConceptRank = ({ field, otherValue }) => {
   const { user } = use(AuthContext)
@@ -36,7 +36,7 @@ const ConceptRank = ({ field, otherValue }) => {
             displayEmpty
             onChange={e =>
               modifyConcept({
-                type: CONCEPT_STATE.SET_FIELD,
+                type: CONCEPT_STATE.FIELD.SET,
                 update: { [field]: e.target.value },
               })
             }

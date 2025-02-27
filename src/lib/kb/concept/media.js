@@ -1,5 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
-import { pickFields } from '@/lib/util'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
 
@@ -56,11 +55,4 @@ const mediaItemFields = mediaItem =>
     return fields
   }, [])
 
-export {
-  getPrimary,
-  hasPrimary,
-  isPrimary,
-  mediaBorder,
-  mediaItemEdits,
-  mediaItemFields,
-}
+export { getPrimary, hasPrimary, isPrimary, mediaBorder, mediaItemEdits, mediaItemFields }

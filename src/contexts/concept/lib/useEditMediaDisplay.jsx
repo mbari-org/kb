@@ -14,7 +14,7 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const useEditMediaDisplay = () => {
   const { setModal } = use(ModalContext)

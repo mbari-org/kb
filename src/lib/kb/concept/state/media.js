@@ -1,6 +1,6 @@
 import { getPrimary, isPrimary } from '@/lib/kb/concept/media'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const mediaState = concept => {
   const { media: conceptMedia } = concept
@@ -61,6 +61,21 @@ const editMedia = (state, update) => {
   return updateState(state, { type: CONCEPT_STATE.MEDIA.EDIT, update })
 }
 
+const resetMedia = (state, update) => {
+  return {
+    ...state,
+    media: update.media,
+  }
+}
+
+const resetMediaItem = (state, update) => {
+  const { mediaIndex, mediaItem } = update
+  return {
+    ...state,
+    media: state.media.map((item, index) => (index === mediaIndex ? mediaItem : item)),
+  }
+}
+
 const updateState = (state, { type, update }) => {
   const { mediaIndex, mediaItem } = update
   const updatedItem = { ...state.media[mediaIndex], ...mediaItem, action: type }
@@ -70,4 +85,4 @@ const updateState = (state, { type, update }) => {
   }
 }
 
-export { addMedia, deleteMedia, editMedia, mediaState }
+export { addMedia, deleteMedia, editMedia, mediaState, resetMedia, resetMediaItem }

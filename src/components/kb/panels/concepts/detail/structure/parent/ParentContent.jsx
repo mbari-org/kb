@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const ParentContent = () => {
   const theme = useTheme()
@@ -25,7 +25,7 @@ const ParentContent = () => {
   const setParentName = toName => {
     const parentName = toName === null ? concept.parent.name : toName
     modifyConcept({
-      type: CONCEPT_STATE.PARENT_UPDATE,
+      type: CONCEPT_STATE.STRUCTURE.PARENT_UPDATE,
       update: { parentName: parentName },
     })
     toName === null ? setToParentName(null) : setToParentName(toName)

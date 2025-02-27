@@ -16,10 +16,10 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { conceptState } from '@/lib/kb/concept/state/concept'
+import { conceptState } from '@/lib/kb/concept/state/concept_state'
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 import { INTENT } from '@/contexts/concept/lib/useEditingStateDisplay'
 
 import update from '@/contexts/concept/lib/submit/update'

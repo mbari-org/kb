@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { UPDATE } from '@/contexts/concept/lib/submit/nameUpdates'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const CANCEL = 'Cancel'
 
@@ -34,7 +34,7 @@ const NameActions = () => {
       })
     } else {
       modifyConcept({
-        type: CONCEPT_STATE.SET_FIELD,
+        type: CONCEPT_STATE.FIELD.SET,
         update: { name: concept.name },
       })
     }

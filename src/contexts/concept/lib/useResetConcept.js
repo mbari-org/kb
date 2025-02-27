@@ -1,15 +1,15 @@
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept'
-const MEDIA_TYPES = [CONCEPT_STATE.RESET.MEDIA, CONCEPT_STATE.RESET.MEDIA_ITEM]
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+const MEDIA_TYPES = [CONCEPT_STATE.MEDIA.RESET, CONCEPT_STATE.MEDIA.RESET_ITEM]
 export const RESET_TYPES = [
-  CONCEPT_STATE.RESET.FIELD,
-  CONCEPT_STATE.RESET.MEDIA,
-  CONCEPT_STATE.RESET.MEDIA_ITEM,
+  CONCEPT_STATE.FIELD.RESET,
+  CONCEPT_STATE.MEDIA.RESET,
+  CONCEPT_STATE.MEDIA.RESET_ITEM,
 ]
 
 const resetConceptField = (action, dispatch, initialState) => {
   const resetFieldValue = field => {
     dispatch({
-      type: CONCEPT_STATE.RESET.FIELD,
+      type: CONCEPT_STATE.FIELD.RESET,
       update: { field, value: initialState[field] },
     })
   }
@@ -36,17 +36,17 @@ const resetConceptField = (action, dispatch, initialState) => {
 
 const resetConceptMedia = (action, dispatch, initialState) => {
   switch (action.type) {
-    case CONCEPT_STATE.RESET.MEDIA:
+    case CONCEPT_STATE.MEDIA.RESET:
       dispatch({
-        type: CONCEPT_STATE.RESET.MEDIA,
+        type: CONCEPT_STATE.MEDIA.RESET,
         update: { media: initialState.media },
       })
       break
 
-    case CONCEPT_STATE.RESET.MEDIA_ITEM: {
+    case CONCEPT_STATE.MEDIA.RESET_ITEM: {
       const { mediaIndex } = action.update
       dispatch({
-        type: CONCEPT_STATE.RESET.MEDIA_ITEM,
+        type: CONCEPT_STATE.MEDIA.RESET_ITEM,
         update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
       })
       break
