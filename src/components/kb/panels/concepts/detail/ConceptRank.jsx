@@ -37,7 +37,7 @@ const ConceptRank = ({ field, otherValue }) => {
             onChange={e =>
               modifyConcept({
                 type: CONCEPT_STATE.FIELD.SET,
-                update: { [field]: e.target.value },
+                update: { field, value: e.target.value },
               })
             }
             value={fieldValue}

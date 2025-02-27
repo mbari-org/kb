@@ -1,34 +1,41 @@
-import { use } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import { FormControl, TextField } from '@mui/material'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from './useConceptDetailStyle'
+import useDebounce from '@/lib/hooks/useDebounce'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 
 const ConceptAuthor = () => {
-  const {
-    editingState: { author },
-    modifyConcept,
-  } = use(ConceptContext)
+  const { editingState, modifyConcept } = use(ConceptContext)
+
+  const [author, setAuthor] = useState(editingState.author)
+
+  const modifyAuthor = useCallback(
+    author => {
+      modifyConcept({
+        type: CONCEPT_STATE.FIELD.SET,
+        update: { field: 'author', value: author },
+      })
+    },
+    [modifyConcept]
+  )
+
+  const debouncedAuthor = useDebounce(modifyAuthor)
 
   const infoStyle = useConceptDetailStyle('Author')
 
+  const handleChange = e => {
+    setAuthor(e.target.value)
+    debouncedAuthor(e.target.value)
+  }
+
   return (
     <FormControl>
-      <TextField
-        {...infoStyle}
-        label='Author'
-        onChange={e =>
-          modifyConcept({
-            type: CONCEPT_STATE.FIELD.SET,
-            update: { author: e.target.value },
-          })
-        }
-        value={author}
-      />
+      <TextField {...infoStyle} label='Author' onChange={handleChange} value={author} />
     </FormControl>
   )
 }

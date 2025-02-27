@@ -25,8 +25,8 @@ const NameContent = () => {
 
   const handleChange = event => {
     modifyConcept({
-      type: CONCEPT_STATE.FIELD.SET,
-      update: { name: event.target.value },
+      type: CONCEPT_STATE.STRUCTURE.NAME_CHANGE,
+      update: { field: 'name', value: event.target.value },
     })
   }
 

@@ -6,9 +6,8 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { UPDATE } from '@/contexts/concept/lib/submit/nameUpdates'
-
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { NAME_UPDATE } from '@/lib/kb/concept/state/structure'
 
 const CANCEL = 'Cancel'
 
@@ -24,18 +23,18 @@ const NameActions = () => {
     concept.name !== editingState.name && !taxonomyNames.includes(editingState.name)
       ? [false, false, false]
       : [false, true, true]
-  const labels = [CANCEL, UPDATE.NAME_ONLY, UPDATE.ALL_DATA]
+  const labels = [CANCEL, NAME_UPDATE.NAME_ONLY, NAME_UPDATE.ALL_DATA]
 
   const onAction = label => {
     if (label !== CANCEL) {
       modifyConcept({
-        type: CONCEPT_STATE.ALIAS.EDIT,
-        update: { nameUpdate: label },
+        type: CONCEPT_STATE.STRUCTURE.NAME_CHANGE,
+        update: { field: 'nameUpdate', value: label },
       })
     } else {
       modifyConcept({
         type: CONCEPT_STATE.FIELD.SET,
-        update: { name: concept.name },
+        update: { field: 'name', value: concept.name },
       })
     }
 

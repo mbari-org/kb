@@ -1,17 +1,13 @@
 import { updateConceptName } from '@/lib/services/oni/api/concept'
-// import { UPDATE_NAME_ONLY } from "../useSubmitUpdates"
 
-export const UPDATE = {
-  NAME_ONLY: 'Name Only',
-  ALL_DATA: 'All Data',
-}
+import { NAME_UPDATE } from '@/lib/kb/concept/state/structure'
 
 const nameUpdates = async ({ config, concept, updates }) => {
   const { error } = await updateConceptName(config, concept.name, {
     newName: updates.name,
   })
 
-  if (updates.nameUpdate === UPDATE.NAME_ONLY || error) {
+  if (updates.nameUpdate === NAME_UPDATE.NAME_ONLY || error) {
     return { error, updatedName: updates.name }
   }
 
