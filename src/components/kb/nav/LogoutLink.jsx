@@ -6,9 +6,9 @@ import { grey } from '@mui/material/colors'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useEditingStateDisplay from '@/contexts/concept/lib/useEditingStateDisplay'
+import useEditingStateDisplay from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
-import { INTENT } from '@/contexts/concept/lib/useEditingStateDisplay'
+import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
 const LogoutLink = () => {
   const { logout, user } = use(AuthContext)

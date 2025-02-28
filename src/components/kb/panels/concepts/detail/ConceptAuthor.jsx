@@ -12,7 +12,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
 const ConceptAuthor = () => {
   const { editingState, modifyConcept } = use(ConceptContext)
 
-  const [author, setAuthor] = useState(null)
+  const [author, setAuthor] = useState('')
 
   const modifyAuthor = useCallback(
     author => {

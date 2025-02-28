@@ -1,12 +1,24 @@
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
-const MEDIA_TYPES = [CONCEPT_STATE.MEDIA.RESET, CONCEPT_STATE.MEDIA.RESET_ITEM]
-export const RESET_TYPES = [
+
+const RESET_TYPES = [
+  CONCEPT_STATE.ALIAS.RESET,
+  CONCEPT_STATE.ALIAS.RESET_ALL,
   CONCEPT_STATE.FIELD.RESET,
   CONCEPT_STATE.MEDIA.RESET,
   CONCEPT_STATE.MEDIA.RESET_ITEM,
 ]
 
-const resetConceptField = (action, dispatch, initialState) => {
+const isResetAction = action => RESET_TYPES.includes(action.type)
+
+const resetAlias = (action, dispatch, initialState) => {
+  switch (action.type) {
+    case CONCEPT_STATE.ALIAS.RESET:
+      dispatch({ type: CONCEPT_STATE.ALIAS.RESET, update: { aliases: initialState.aliases } })
+      break
+  }
+}
+
+const resetField = (action, dispatch, initialState) => {
   const resetFieldValue = field => {
     dispatch({
       type: CONCEPT_STATE.FIELD.RESET,
@@ -34,7 +46,7 @@ const resetConceptField = (action, dispatch, initialState) => {
   }
 }
 
-const resetConceptMedia = (action, dispatch, initialState) => {
+const resetMedia = (action, dispatch, initialState) => {
   switch (action.type) {
     case CONCEPT_STATE.MEDIA.RESET:
       dispatch({
@@ -57,17 +69,35 @@ const resetConceptMedia = (action, dispatch, initialState) => {
   }
 }
 
-const useResetConcept = (dispatch, initialState, data, setData) => action => {
-  console.log('CxINC: data', data)
+const reset = (action, dispatch, initialState) => {
+  switch (action.type) {
+    case CONCEPT_STATE.ALIAS.RESET:
+      resetAlias(action, dispatch, initialState)
+      break
+
+    case CONCEPT_STATE.FIELD.RESET:
+      resetField(action, dispatch, initialState)
+      break
+
+    case CONCEPT_STATE.MEDIA.RESET:
+      resetMedia(action, dispatch, initialState)
+      break
+
+    default:
+      break
+  }
+}
+
+const resetEditingState = (dispatch, initialState, data, setData) => action => {
   if (data?.confirmResetFn) {
     data.confirmResetFn()
     return
   }
 
-  const resetFn = MEDIA_TYPES.includes(action.type) ? resetConceptMedia : resetConceptField
-  const confirmResetFn = () => resetFn(action, dispatch, initialState)
+  const confirmResetFn = () => reset(action, dispatch, initialState)
 
+  console.log('resetEditingState', { confirmResetFn })
   setData({ confirmResetFn })
 }
 
-export default useResetConcept
+export { isResetAction, resetEditingState }

@@ -5,12 +5,11 @@ import { useErrorBoundary } from 'react-error-boundary'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
-import useEditingStateDisplay from '@/contexts/concept/lib/useEditingStateDisplay'
-import useEditMediaDisplay from '@/contexts/concept/lib/useEditMediaDisplay'
+import useEditingStateDisplay from '@/contexts/concept/lib/edit/useEditingStateDisplay'
+import useEditMediaDisplay from '@/contexts/concept/lib/edit/useEditMediaDisplay'
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
 
-import useModifyConcept from '@/contexts/concept/lib/useModifyConcept'
-import useResetConcept from '@/contexts/concept/lib/useResetConcept'
+import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -20,10 +19,10 @@ import { conceptState } from '@/lib/kb/concept/state/concept_state'
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
-import { INTENT } from '@/contexts/concept/lib/useEditingStateDisplay'
+import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
 import update from '@/contexts/concept/lib/submit/update'
-import { conceptStateReducer } from '@/contexts/concept/lib/conceptStateReducer'
+import { conceptStateReducer } from '@/contexts/concept/lib/edit/conceptStateReducer'
 
 import { hasStateChange } from '@/components/kb/panels/concepts/editingState/edits/stateChange'
 
@@ -32,7 +31,7 @@ const ConceptProvider = ({ children }) => {
 
   const { showBoundary } = useErrorBoundary()
 
-  const { data, modal, setData, setModal } = use(ModalContext)
+  const { modal, setModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
     // filterRanks,
@@ -58,8 +57,9 @@ const ConceptProvider = ({ children }) => {
   const editMediaDisplay = useEditMediaDisplay()
   const pendingFieldDisplay = usePendingFieldDisplay()
 
-  const resetConcept = useResetConcept(dispatch, initialState, data, setData)
-  const modifyConcept = useModifyConcept(dispatch, resetConcept)
+  // const resetConcept = useResetConcept(dispatch, initialState, data, setData)
+  // const modifyConcept = useModifyConcept(dispatch, resetConcept)
+  const modifyConcept = useModifyConcept(dispatch, initialState)
 
   const resetState = useCallback(
     toState => {

@@ -31,10 +31,7 @@ const EditMediaContent = ({ mediaIndex }) => {
   const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
   const [previewOn, setPreviewOn] = useState(false)
 
-  const { handleChange, urlStatus, setUrlStatus, urlCheckTimeout } = useHandleMediaChange(
-    mediaIndex,
-    setData
-  )
+  const { handleChange, urlStatus, setUrlStatus, urlCheckTimeout } = useHandleMediaChange(setData)
 
   const handleSubmit = useHandleMediaSubmit(mediaIndex, data, setModal, setUrlStatus)
 

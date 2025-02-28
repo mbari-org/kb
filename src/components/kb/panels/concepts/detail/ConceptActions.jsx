@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { INTENT } from '@/contexts/concept/lib/useEditingStateDisplay'
+import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
 const ConceptActions = () => {
   const { editingStateDisplay, editing, modified, setEditing } = use(ConceptContext)

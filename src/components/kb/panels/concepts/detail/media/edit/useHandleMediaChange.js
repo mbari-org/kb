@@ -4,7 +4,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { checkUrlExists, isValidUrl } from '@/lib/util'
 
-const useHandleMediaChange = (mediaIndex, setData) => {
+const useHandleMediaChange = setData => {
   const { data } = use(ModalContext)
 
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true })
