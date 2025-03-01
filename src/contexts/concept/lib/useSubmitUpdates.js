@@ -22,7 +22,7 @@
 //   modified,
 //   modifyConcept,
 //   ranks,
-//   resetState,
+//   resetConcept,
 //   selectConcept,
 //   setModal,
 //   showBoundary,
@@ -34,8 +34,8 @@
 //   const processError = useProcessError()
 
 //   const onAction = useCallback(
-//     () => resetState(initialState),
-//     [initialState, resetState]
+//     () => resetConcept(initialState),
+//     [initialState, resetConcept]
 //   )
 
 //   const submitDetailUpdates = useCallback(
@@ -62,7 +62,7 @@
 //                 return
 //               }
 //               updateConcept(updatedConcept).then(
-//                 () => resetState(editingState),
+//                 () => resetConcept(editingState),
 //                 error => showBoundary(error)
 //               )
 //             },
@@ -81,7 +81,7 @@
 //       config,
 //       updateConcept,
 //       processError,
-//       resetState,
+//       resetConcept,
 //       editingState,
 //       showBoundary,
 //     ]
@@ -98,7 +98,7 @@
 //           updateConceptName(concept, updatedName).then(
 //             () => {
 //               selectConcept(updatedName)
-//               resetState(editingState)
+//               resetConcept(editingState)
 //             },
 //             error => showBoundary(error)
 //           )
@@ -111,7 +111,7 @@
 //       config,
 //       onAction,
 //       processError,
-//       resetState,
+//       resetConcept,
 //       selectConcept,
 //       showBoundary,
 //       updateConceptName,
@@ -121,7 +121,7 @@
 
 //   const submitUpdates = choice => {
 //     if (!modified) {
-//       resetState(initialState)
+//       resetConcept(initialState)
 //       return
 //     }
 
@@ -136,7 +136,7 @@
 //         submitNameUpdate(UPDATE_ALL_DATA, updates)
 //         break
 //       case "Cancel":
-//         resetState(initialState)
+//         resetConcept(initialState)
 //         break
 //       case "Detail":
 //         submitDetailUpdates(updates)

@@ -12,10 +12,10 @@ const SAVE = 'Save'
 
 const AddAliasActions = () => {
   const { _editingState } = use(ConceptContext)
-  const { data, setModal } = use(ModalContext)
+  const { modalData, setModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !data?.dirty]
+  const disabled = [false, !modalData?.dirty]
   const labels = [DISCARD, SAVE]
 
   const onAction = label => {

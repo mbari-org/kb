@@ -7,17 +7,17 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
 
 const DISCARD = 'Discard'
-const SAVE = 'Save'
+const STAGE = 'Stage'
 
 const EditMediaActions = () => {
-  const { data, setModal } = use(ModalContext)
+  const { modalData, setModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !data?.dirty]
-  const labels = [DISCARD, SAVE]
+  const disabled = [false, !modalData?.dirty]
+  const labels = [DISCARD, STAGE]
 
   const onAction = label => {
-    label === SAVE
+    label === STAGE
       ? document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
       : setModal(null)
   }

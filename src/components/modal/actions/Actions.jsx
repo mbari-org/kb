@@ -4,10 +4,10 @@ import { Box, Typography } from '@mui/material'
 
 import Action from './Action'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const Actions = ({ colors, disabled, labels, onAction }) => {
-  const { data } = use(ModalContext)
+  const { confirmReset } = use(ConceptContext)
 
   const actionColor = index => (colors ? colors[index] : 'main')
 
@@ -26,7 +26,7 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ minHeight: '44px', display: 'flex', justifyContent: 'center' }}>
-        {data?.confirmResetFn && (
+        {confirmReset && (
           <Typography color='cancel' sx={{ mt: 2 }}>
             Discarding edits is final. Please confirm to discard.
           </Typography>

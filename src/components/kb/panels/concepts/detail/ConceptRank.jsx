@@ -12,7 +12,7 @@ import ApprovalButton from './ApprovalButton'
 import { isAdmin } from '@/lib/auth/role'
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const ConceptRank = ({ field, otherValue }) => {
   const { user } = use(AuthContext)

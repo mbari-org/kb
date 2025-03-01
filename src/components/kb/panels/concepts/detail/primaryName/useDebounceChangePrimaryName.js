@@ -1,9 +1,9 @@
 import { use, useCallback } from 'react'
 
+import useDebounce from '@/components/hooks/useDebounce'
 import ConceptContext from '@/contexts/concept/ConceptContext'
-import useDebounce from '@/lib/hooks/useDebounce'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const useDebounceChangePrimaryName = () => {
   const { modifyConcept } = use(ConceptContext)

@@ -1,5 +1,5 @@
 import { NAME_TYPES } from '@/lib/kb/concept/aliases'
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const aliasesState = concept => {
   const { aliases: conceptAliases } = concept

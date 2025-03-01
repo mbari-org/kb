@@ -1,7 +1,7 @@
 import { use, useCallback } from 'react'
 
+import useDebounce from '@/components/hooks/useDebounce'
 import ConceptContext from '@/contexts/concept/ConceptContext'
-import useDebounce from '@/lib/hooks/useDebounce'
 
 const useDebounceModifyAlias = actionType => {
   const { modifyConcept } = use(ConceptContext)

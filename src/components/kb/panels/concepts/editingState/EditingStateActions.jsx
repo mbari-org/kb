@@ -8,35 +8,37 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+
 const CONFIRM_DISCARD = 'Confirm Discard'
 const CONTINUE = 'Continue'
 const DISCARD = 'Discard All'
 const SAVE = 'Save'
 
 const EditingStateActions = ({ intent }) => {
-  const { concept, initialState, resetState, submitUpdates } = use(ConceptContext)
-  const { data, setData, setModal } = use(ModalContext)
+  const { concept, confirmReset, modifyConcept, submitUpdates } = use(ConceptContext)
+  const { setModal } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
 
   const colors = ['cancel', 'main']
   const actionLabels = [DISCARD, intent === INTENT.SAVE ? SAVE : CONTINUE]
   const confirmLabels = [CONFIRM_DISCARD, CONTINUE]
 
-  const labels = data?.confirmResetFn ? confirmLabels : actionLabels
+  const labels = confirmReset ? confirmLabels : actionLabels
 
   const onAction = label => {
     switch (label) {
       case CONFIRM_DISCARD:
-        data?.confirmResetFn()
-        setData({ confirmResetFn: null })
+        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.YES })
         break
       case CONTINUE:
         selectConcept(concept.name)
         selectPanel('Concepts')
+        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
         setModal(null)
         break
       case DISCARD:
-        setData({ confirmResetFn: () => resetState(initialState) })
+        modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
         break
       case SAVE:
         submitUpdates(true)

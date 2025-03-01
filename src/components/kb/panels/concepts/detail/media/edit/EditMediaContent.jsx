@@ -22,18 +22,23 @@ import useHandleMediaSubmit from './useHandleMediaSubmit'
 import { hasPrimary, isPrimary } from '@/lib/kb/concept/media'
 import { isValidUrl } from '@/lib/util'
 
+import useWhyUpdate from '@/components/hooks/useWhyUpdate'
+
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
 const EditMediaContent = ({ mediaIndex }) => {
   const { editingState } = use(ConceptContext)
-  const { data, setModal, setData } = use(ModalContext)
+  const { modalData, setModal, setModalData } = use(ModalContext)
 
   const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
   const [previewOn, setPreviewOn] = useState(false)
 
-  const { handleChange, urlStatus, setUrlStatus, urlCheckTimeout } = useHandleMediaChange(setData)
+  const { handleChange, urlStatus, setUrlStatus, urlCheckTimeout } =
+    useHandleMediaChange(setModalData)
 
-  const handleSubmit = useHandleMediaSubmit(mediaIndex, data, setModal, setUrlStatus)
+  const handleSubmit = useHandleMediaSubmit(mediaIndex, modalData, setModal, setUrlStatus)
+
+  useWhyUpdate('EditMediaContent', { mediaIndex, modalData, setModal, setModalData })
 
   useEffect(() => {
     const mediaItem = editingState.media[mediaIndex] || {
@@ -43,14 +48,14 @@ const EditMediaContent = ({ mediaIndex }) => {
       isPrimary: false,
     }
 
-    setData({
+    setModalData({
       initial: mediaItem,
       dirty: false,
       editing: mediaItem,
       touched: {},
     })
     setShowPrimaryCheckbox(!hasPrimary(editingState.media) || isPrimary(mediaItem))
-  }, [editingState.media, mediaIndex, setData])
+  }, [editingState.media, mediaIndex, setModalData])
 
   // Clean up timeout on unmount
   useEffect(() => {
@@ -61,7 +66,7 @@ const EditMediaContent = ({ mediaIndex }) => {
     }
   }, [urlCheckTimeout])
 
-  if (!data) {
+  if (!modalData?.touched) {
     return null
   }
 
@@ -73,18 +78,18 @@ const EditMediaContent = ({ mediaIndex }) => {
           name='url'
           onChange={handleChange}
           required
-          value={data.editing.url}
+          value={modalData.editing.url}
           error={
-            data.touched?.url &&
-            (data.editing.url.trim() === '' ||
-              !isValidUrl(data.editing.url) ||
+            modalData.touched?.url &&
+            (modalData.editing.url.trim() === '' ||
+              !isValidUrl(modalData.editing.url) ||
               (!urlStatus.loading && !urlStatus.valid))
           }
           helperText={
-            data.touched?.url
-              ? data.editing.url.trim() === ''
+            modalData.touched?.url
+              ? modalData.editing.url.trim() === ''
                 ? 'URL cannot be empty'
-                : !isValidUrl(data.editing.url)
+                : !isValidUrl(modalData.editing.url)
                 ? 'Please enter a valid URL'
                 : urlStatus.loading
                 ? 'Checking URL...'
@@ -99,8 +104,8 @@ const EditMediaContent = ({ mediaIndex }) => {
                 <InputAdornment position='end'>
                   {!urlStatus.loading &&
                     urlStatus.valid &&
-                    isValidUrl(data.editing.url) &&
-                    data.editing.url.trim() !== '' && (
+                    isValidUrl(modalData.editing.url) &&
+                    modalData.editing.url.trim() !== '' && (
                       <IconButton onClick={() => setPreviewOn(true)} edge='end'>
                         <Icon
                           color='main'
@@ -121,10 +126,10 @@ const EditMediaContent = ({ mediaIndex }) => {
           name='credit'
           onChange={handleChange}
           required
-          value={data.editing.credit}
-          error={data.touched?.credit && data.editing.credit.trim() === ''}
+          value={modalData.editing.credit}
+          error={modalData.touched?.credit && modalData.editing.credit.trim() === ''}
           helperText={
-            data.touched?.credit && data.editing.credit.trim() === ''
+            modalData.touched?.credit && modalData.editing.credit.trim() === ''
               ? 'Credit cannot be empty'
               : ''
           }
@@ -135,14 +140,18 @@ const EditMediaContent = ({ mediaIndex }) => {
           label='Caption'
           name='caption'
           onChange={handleChange}
-          value={data.editing.caption}
+          value={modalData.editing.caption}
         />
       </FormControl>
       {showPrimaryCheckbox && (
         <Box display='flex' justifyContent='flex-end'>
           <FormControlLabel
             control={
-              <Checkbox checked={data.editing.isPrimary} name='isPrimary' onChange={handleChange} />
+              <Checkbox
+                checked={modalData.editing.isPrimary}
+                name='isPrimary'
+                onChange={handleChange}
+              />
             }
             label='Is Primary'
           />
@@ -152,7 +161,7 @@ const EditMediaContent = ({ mediaIndex }) => {
         mediaIndex={mediaIndex}
         previewOn={previewOn}
         setPreviewOn={setPreviewOn}
-        url={data.editing.url}
+        url={modalData.editing.url}
       />
     </Box>
   )

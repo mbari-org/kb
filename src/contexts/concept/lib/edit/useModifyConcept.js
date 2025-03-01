@@ -1,24 +1,40 @@
-import { use, useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
-import { isResetAction, resetEditingState } from '@/contexts/concept/lib/edit/resetEditingState'
+import { isResetAction, resetConceptState } from '@/contexts/concept/lib/edit/resetConceptState'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import useWhyDidYouUpdate from '@/lib/hooks/useWhyDidYouUpdate'
+import useWhyUpdate from '@/components/hooks/useWhyUpdate'
 
-const useModifyConcept = (dispatch, initialState) => {
-  const { data, setData } = use(ModalContext)
+const useModifyConcept = (dispatch, initialState, setConfirmReset) => {
+  const [confirmAction, setConfirmAction] = useState(null)
 
-  const resetConcept = useCallback(
-    () => resetEditingState(dispatch, initialState, data, setData),
-    [dispatch, initialState, data, setData]
-  )
-
-  useWhyDidYouUpdate('useModifyConcept', { dispatch, initialState, data, setData })
+  useWhyUpdate('useModifyConcept', { dispatch, initialState, setConfirmReset })
 
   return useCallback(
-    action => (isResetAction(action) ? resetConcept(action) : dispatch(action)),
-    [dispatch, resetConcept]
+    action => {
+      if (action.type === CONCEPT_STATE.RESET.CONFIRMED.NO) {
+        setConfirmAction(null)
+        setConfirmReset(false)
+        return
+      }
+
+      if (action.type === CONCEPT_STATE.RESET.CONFIRMED.YES) {
+        resetConceptState(confirmAction, dispatch, initialState)
+        setConfirmAction(null)
+        setConfirmReset(false)
+        return
+      }
+
+      if (isResetAction(action)) {
+        setConfirmAction(action)
+        setConfirmReset(true)
+        return
+      }
+
+      dispatch(action)
+    },
+    [confirmAction, dispatch, initialState, setConfirmReset]
   )
 }
 

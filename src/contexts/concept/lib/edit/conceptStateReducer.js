@@ -9,7 +9,7 @@ import {
 } from '@/lib/kb/concept/state/media'
 import { changeName, changeParent } from '@/lib/kb/concept/state/structure'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
@@ -25,9 +25,6 @@ const conceptStateReducer = (state, { type, update }) => {
     case CONCEPT_STATE.ALIAS.EDIT:
       return editAlias(state, update)
 
-    case CONCEPT_STATE.FIELD.RESET:
-      return resetField(state, update)
-
     case CONCEPT_STATE.FIELD.SET:
       return setField(state, update)
 
@@ -40,10 +37,13 @@ const conceptStateReducer = (state, { type, update }) => {
     case CONCEPT_STATE.MEDIA.EDIT:
       return editMedia(state, update)
 
-    case CONCEPT_STATE.MEDIA.RESET:
+    case CONCEPT_STATE.RESET.FIELD:
+      return resetField(state, update)
+
+    case CONCEPT_STATE.RESET.MEDIA:
       return resetMedia(state, update)
 
-    case CONCEPT_STATE.MEDIA.RESET_ITEM:
+    case CONCEPT_STATE.RESET.MEDIA_ITEM:
       return resetMediaItem(state, update)
 
     case CONCEPT_STATE.STRUCTURE.NAME_CHANGE:

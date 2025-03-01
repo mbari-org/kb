@@ -5,9 +5,9 @@ import { FormControl, TextField } from '@mui/material'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from './useConceptDetailStyle'
-import useDebounce from '@/lib/hooks/useDebounce'
+import useDebounce from '@/components/hooks/useDebounce'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const ConceptAuthor = () => {
   const { editingState, modifyConcept } = use(ConceptContext)
@@ -28,10 +28,13 @@ const ConceptAuthor = () => {
 
   const infoStyle = useConceptDetailStyle('Author')
 
-  const handleChange = event => {
-    setAuthor(event.target.value)
-    debouncedAuthor(event.target.value)
-  }
+  const handleChange = useCallback(
+    event => {
+      setAuthor(event.target.value)
+      debouncedAuthor(event.target.value)
+    },
+    [debouncedAuthor]
+  )
 
   useEffect(() => {
     setAuthor(editingState.author)

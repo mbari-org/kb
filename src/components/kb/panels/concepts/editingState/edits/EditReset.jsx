@@ -3,15 +3,15 @@ import { use } from 'react'
 import { Button } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const EditReset = ({ onClick }) => {
-  const { data } = use(ModalContext)
+  const { confirmReset } = use(ConceptContext)
 
   return (
     <Button
       color='cancel'
-      disabled={!!data?.confirmResetFn}
+      disabled={confirmReset}
       onClick={onClick}
       sx={{
         mr: 0.5,

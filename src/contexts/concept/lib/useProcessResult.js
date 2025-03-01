@@ -4,7 +4,7 @@ const useProcessResult = ({
   concept,
   editingState,
   initialState,
-  resetState,
+  resetConcept,
   selectConcept,
   setModal,
   setEditing,
@@ -17,20 +17,20 @@ const useProcessResult = ({
     updatedConcept => {
       updateConcept(updatedConcept).then(
         () => {
-          resetState(editingState)
+          resetConcept(editingState)
         },
         error => showBoundary(error)
       )
     },
-    [editingState, resetState, showBoundary, updateConcept]
+    [editingState, resetConcept, showBoundary, updateConcept]
   )
 
   const processErrorResult = useCallback(
     error => {
-      resetState(initialState)
+      resetConcept(initialState)
       showBoundary(error)
     },
-    [resetState, initialState, showBoundary]
+    [resetConcept, initialState, showBoundary]
   )
 
   const processNameResult = useCallback(

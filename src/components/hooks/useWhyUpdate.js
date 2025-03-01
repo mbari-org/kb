@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { isDeepEqual } from '@/lib/util'
 
-const useWhyDidYouUpdate = (name, props) => {
+const useWhyUpdate = (name, props) => {
   const previousProps = useRef()
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const useWhyDidYouUpdate = (name, props) => {
   })
 }
 
-export default useWhyDidYouUpdate
+export default useWhyUpdate

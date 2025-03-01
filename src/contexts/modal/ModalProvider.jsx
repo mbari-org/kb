@@ -1,25 +1,46 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import ModalContext from './ModalContext'
 
 const ModalProvider = ({ children }) => {
-  const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [modal, setModal] = useState(null)
 
-  const handleSetModal = modal => {
-    setData(null)
-    setModal(modal)
-  }
+  const [modal, setModal] = useState(null)
+  const [modalData, setModalData] = useState(null)
+
+  const [onClose, setOnClose] = useState(null)
+
+  const handleSetModal = useCallback(
+    (modal, onCloseCallback) => {
+      if (!modal) {
+        setModalData(null)
+        setModal(null)
+
+        onClose?.()
+        setOnClose(null)
+        return
+      }
+      if (onCloseCallback) {
+        setOnClose(() => onCloseCallback)
+      }
+      setModal(modal)
+    },
+    [onClose]
+  )
+
+  // const handleSetModalData = useCallback(data => {
+  //   console.log('handleSetModalData', modalData, data)
+  //   setModalData(prev => ({ ...prev, ...data }))
+  // }, [])
 
   return (
     <ModalContext
       value={{
         modal,
-        data,
+        modalData,
         loading,
         setModal: handleSetModal,
-        setData,
+        setModalData,
         setLoading,
       }}
     >

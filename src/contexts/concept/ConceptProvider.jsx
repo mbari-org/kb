@@ -6,7 +6,6 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
 import useEditingStateDisplay from '@/contexts/concept/lib/edit/useEditingStateDisplay'
-import useEditMediaDisplay from '@/contexts/concept/lib/edit/useEditMediaDisplay'
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
 
 import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
@@ -15,10 +14,10 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { conceptState } from '@/lib/kb/concept/state/concept_state'
+import { conceptState } from '@/lib/kb/concept/state/conceptState'
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
 import update from '@/contexts/concept/lib/submit/update'
@@ -44,6 +43,7 @@ const ConceptProvider = ({ children }) => {
   } = use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
+  const [confirmReset, setConfirmReset] = useState(false)
   const [editing, setEditing] = useState(false)
   const [modalHasBeenDisplayed, setModalHasBeenDisplayed] = useState(false)
   const [modified, setModified] = useState(false)
@@ -54,21 +54,18 @@ const ConceptProvider = ({ children }) => {
 
   const conceptPath = useConceptPath(concept)
   const editingStateDisplay = useEditingStateDisplay()
-  const editMediaDisplay = useEditMediaDisplay()
   const pendingFieldDisplay = usePendingFieldDisplay()
 
-  // const resetConcept = useResetConcept(dispatch, initialState, data, setData)
-  // const modifyConcept = useModifyConcept(dispatch, resetConcept)
-  const modifyConcept = useModifyConcept(dispatch, initialState)
+  const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset)
 
-  const resetState = useCallback(
+  const resetConcept = useCallback(
     toState => {
       setEditing(false)
       setModified(false)
       setModal(null)
 
-      const resetStateConcept = { ...concept, ...toState }
-      setConcept(resetStateConcept)
+      const resetConceptConcept = { ...concept, ...toState }
+      setConcept(resetConceptConcept)
 
       dispatch({ type: CONCEPT_STATE.INITIAL, update: toState })
     },
@@ -77,7 +74,7 @@ const ConceptProvider = ({ children }) => {
 
   const submitUpdates = submit => {
     if (!submit) {
-      resetState(initialState)
+      resetConcept(initialState)
       return
     }
 
@@ -156,8 +153,8 @@ const ConceptProvider = ({ children }) => {
       value={{
         concept,
         conceptPath,
+        confirmReset,
         editingStateDisplay,
-        editMediaDisplay,
         pendingFieldDisplay,
         editing,
         editingState,
@@ -165,7 +162,7 @@ const ConceptProvider = ({ children }) => {
         modifyConcept,
         modified,
         pendingHistory,
-        resetState,
+        resetConcept,
         setEditing,
         submitUpdates,
       }}

@@ -6,7 +6,7 @@ import { MdOutlineDeleteForever } from 'react-icons/md'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const AliasDelete = ({ aliasIndex }) => {
   const theme = useTheme()

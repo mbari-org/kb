@@ -7,7 +7,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from '../edit/EditMediaContent'
 
-const ADD = 'Add'
+const STAGE = 'Stage'
 const DISCARD = 'Discard'
 
 const AddMediaActions = () => {
@@ -15,10 +15,10 @@ const AddMediaActions = () => {
   const { setModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
-  const labels = [DISCARD, ADD]
+  const labels = [DISCARD, STAGE]
 
   const onAction = label => {
-    if (label === ADD) {
+    if (label === STAGE) {
       editingState.mediaIndex = editingState.media.length
       document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
     } else {

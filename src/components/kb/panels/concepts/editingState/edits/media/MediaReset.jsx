@@ -2,14 +2,14 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import EditReset from '../EditReset'
 
 const MediaReset = () => {
   const { modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
-    modifyConcept({ type: CONCEPT_STATE.MEDIA.RESET })
+    modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
   }
 
   return <EditReset onClick={onClick} />

@@ -14,8 +14,12 @@ import {
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const KbModal = ({ modal }) => {
-  const { data, setData, setModal } = use(ModalContext)
+const KbModal = () => {
+  const { modal, setModal } = use(ModalContext)
+
+  if (!modal) {
+    return null
+  }
 
   const { Actions, Content, Title } = modal
 

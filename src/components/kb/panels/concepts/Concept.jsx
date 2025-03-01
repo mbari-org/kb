@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Stack } from '@mui/material'
 
-import ConceptActions from './detail/ConceptActions'
+import ConceptEditingActions from './detail/ConceptEditingActions'
 import ConceptDetail from './ConceptDetail'
 import ConceptPath from './ConceptPath'
 import ConceptViewToggle from './toggleView/ConceptViewToggle'
@@ -36,7 +36,7 @@ const Concept = () => {
         <ConceptViewToggle />
       </Stack>
       <ConceptDetail />
-      {!isReadOnly(user) && <ConceptActions />}
+      {!isReadOnly(user) && <ConceptEditingActions />}
     </Stack>
   )
 }

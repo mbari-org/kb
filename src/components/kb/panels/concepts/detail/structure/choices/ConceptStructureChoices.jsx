@@ -3,15 +3,15 @@ import { use } from 'react'
 import { Modal, Box, Button, IconButton, Stack } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
-import changeName from '../primaryName/useChangePrimaryName'
-import changeParent from './parent/useChangeParent'
+import useChangePrimaryName from '@/components/kb/panels/concepts/detail/primaryName/useChangePrimaryName'
+import useChangeParent from '@/components/kb/panels/concepts/detail/structure/parent/useChangeParent'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
-const ChangeStructureChoices = ({ onClose }) => {
+const ChangeStructureChoices = ({ closeChoices }) => {
   const { concept, editingState, pendingHistory } = use(ConceptContext)
   const { getRoot } = use(TaxonomyContext)
 
@@ -22,8 +22,11 @@ const ChangeStructureChoices = ({ onClose }) => {
   const conceptHasNameUpdate = editingState.name !== concept.name
   const conceptHasParentUpdate = editingState.parentName !== concept.parent?.name
 
+  const changePrimaryName = useChangePrimaryName()
+  const changeParent = useChangeParent()
+
   return (
-    <Modal open={true} onClose={onClose}>
+    <Modal open={true} onClose={closeChoices}>
       <Box
         sx={{
           bgcolor: 'background.paper',
@@ -41,7 +44,7 @@ const ChangeStructureChoices = ({ onClose }) => {
         }}
       >
         <IconButton
-          onClick={onClose}
+          onClick={closeChoices}
           sx={{
             p: 0,
             position: 'absolute',
@@ -57,7 +60,10 @@ const ChangeStructureChoices = ({ onClose }) => {
             variant='contained'
             color='primary'
             disabled={isRoot || nameHasPendingHistory || conceptHasNameUpdate}
-            onClick={changeName({ onClose })}
+            onClick={() => {
+              closeChoices()
+              changePrimaryName()
+            }}
           >
             Change Name
           </Button>
@@ -65,7 +71,10 @@ const ChangeStructureChoices = ({ onClose }) => {
             variant='contained'
             color='primary'
             disabled={isRoot || conceptHasParentUpdate}
-            onClick={changeParent({ onClose })}
+            onClick={() => {
+              closeChoices()
+              changeParent()
+            }}
           >
             Change Parent
           </Button>

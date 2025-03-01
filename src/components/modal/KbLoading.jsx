@@ -1,9 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 import { Backdrop, CircularProgress, useTheme } from '@mui/material'
+
+import ModalContext from '@/contexts/modal/ModalContext'
 
 const LOADING_DELAY = 333
 
-const KbLoading = ({ loading }) => {
+const KbLoading = () => {
+  const { loading } = use(ModalContext)
+
   const timerRef = useRef(undefined)
   const [active, setActive] = useState(false)
   const theme = useTheme()
@@ -18,6 +22,10 @@ const KbLoading = ({ loading }) => {
       setActive(false)
     }
   }, [loading])
+
+  if (!loading) {
+    return null
+  }
 
   return (
     <Backdrop

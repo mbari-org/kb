@@ -9,7 +9,7 @@ import MediaEdit from './edit/MediaEdit'
 import MediaPreview from './MediaPreview'
 import MediaSwiper from './MediaSwiper'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/concept_state'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 

@@ -1,13 +1,12 @@
-import { use } from 'react'
 import { Box, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import useEditMedia from '@/contexts/concept/lib/edit/useEditMedia'
 
 const MediaActionButton = ({ Icon, action, color, mediaIndex, position = 'right', sx = {} }) => {
   const theme = useTheme()
 
-  const { editMediaDisplay } = use(ConceptContext)
+  const editMedia = useEditMedia(action, mediaIndex)
 
   return (
     <Box
@@ -25,7 +24,7 @@ const MediaActionButton = ({ Icon, action, color, mediaIndex, position = 'right'
       }}
     >
       <IconButton
-        onClick={() => editMediaDisplay(action, mediaIndex)}
+        onClick={editMedia}
         color={color}
         sx={{
           '&:hover': {

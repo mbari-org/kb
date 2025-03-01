@@ -4,8 +4,8 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { checkUrlExists, isValidUrl } from '@/lib/util'
 
-const useHandleMediaChange = setData => {
-  const { data } = use(ModalContext)
+const useHandleMediaChange = setModalData => {
+  const { modalData } = use(ModalContext)
 
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true })
   const [urlCheckTimeout, setUrlCheckTimeout] = useState(null)
@@ -14,13 +14,15 @@ const useHandleMediaChange = setData => {
     const { name, value, type, checked } = e.target
 
     const dataEditing = {
-      ...data.editing,
+      ...modalData.editing,
       [name]: type === 'checkbox' ? checked : value,
     }
 
-    const isDirty = Object.keys(dataEditing).some(key => dataEditing[key] !== data.initial[key])
+    const isDirty = Object.keys(dataEditing).some(
+      key => dataEditing[key] !== modalData.initial[key]
+    )
 
-    setData(prev => ({
+    setModalData(prev => ({
       ...prev,
       dirty: isDirty,
       editing: dataEditing,
