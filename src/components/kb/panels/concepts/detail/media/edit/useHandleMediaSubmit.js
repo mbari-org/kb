@@ -2,33 +2,16 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { checkUrlExists, isValidUrl } from '@/lib/util'
-
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
+const useHandleMediaSubmit = (mediaIndex, setModal) => {
   const { editingState, modifyConcept } = use(ConceptContext)
 
-  const handleSubmit = async e => {
-    e.preventDefault()
+  const mediaItem = editingState.media[mediaIndex]
 
-    // check if URL is valid
-    if (!isValidUrl(data.editing.url)) {
-      return
-    }
+  const handleSubmit = async event => {
+    event.preventDefault()
 
-    // loading state
-    setUrlStatus({ loading: true, valid: true })
-
-    // check if URL is accessible
-    const urlExists = await checkUrlExists(data.editing.url)
-    setUrlStatus({ loading: false, valid: urlExists })
-
-    if (!urlExists) {
-      return
-    }
-
-    // proceed with concept media update
     const type =
       mediaIndex === editingState.media.length ? CONCEPT_STATE.MEDIA.ADD : CONCEPT_STATE.MEDIA.EDIT
 
@@ -36,7 +19,7 @@ const useHandleMediaSubmit = (mediaIndex, data, setModal, setUrlStatus) => {
       type,
       update: {
         mediaIndex,
-        mediaItem: data.editing,
+        mediaItem,
       },
     })
 

@@ -1,38 +1,25 @@
-import { use, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import { checkImageUrlExists, isValidUrl } from '@/lib/util'
 
-import { checkUrlExists, isValidUrl } from '@/lib/util'
+const useHandleMediaChange = (mediaItem, setMediaItem) => {
+  // const { editingState, modifyConcept } = use(ConceptContext)
 
-const useHandleMediaChange = setModalData => {
-  const { modalData } = use(ModalContext)
-
+  // Checking the validity of the URL is delayed
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true })
   const [urlCheckTimeout, setUrlCheckTimeout] = useState(null)
 
-  const handleChange = e => {
-    const { name, value, type, checked } = e.target
+  const handleChange = event => {
+    const { name, value, type, checked } = event.target
 
-    const dataEditing = {
-      ...modalData.editing,
+    const formMediaItem = {
+      ...mediaItem,
       [name]: type === 'checkbox' ? checked : value,
     }
 
-    const isDirty = Object.keys(dataEditing).some(
-      key => dataEditing[key] !== modalData.initial[key]
-    )
+    setMediaItem(formMediaItem)
 
-    setModalData(prev => ({
-      ...prev,
-      dirty: isDirty,
-      editing: dataEditing,
-      touched: {
-        ...prev.touched,
-        [name]: true,
-      },
-    }))
-
-    // Debounced URL check
+    // Delay URL validation check
     if (name === 'url' && isValidUrl(value)) {
       // Clear any existing timeout
       if (urlCheckTimeout) {
@@ -44,21 +31,29 @@ const useHandleMediaChange = setModalData => {
 
       // Create new timeout for URL check
       const timeoutId = setTimeout(() => {
-        checkUrlExists(value).then(exists => {
+        checkImageUrlExists(value).then(exists => {
           setUrlStatus({ loading: false, valid: exists })
         })
-      }, 500) // 1 second delay
+      }, 500)
 
       setUrlCheckTimeout(timeoutId)
     }
+
+    return formMediaItem
   }
+
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (urlCheckTimeout) {
+        clearTimeout(urlCheckTimeout)
+      }
+    }
+  }, [urlCheckTimeout])
 
   return {
     handleChange,
     urlStatus,
-    setUrlStatus,
-    urlCheckTimeout,
-    setUrlCheckTimeout,
   }
 }
 

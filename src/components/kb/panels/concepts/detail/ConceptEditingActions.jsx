@@ -10,16 +10,20 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const ConceptEditingActions = () => {
-  const { editing, modified, modifyConcept, setEditing } = use(ConceptContext)
+  const { editing, isModified, modifyConcept, setEditing } = use(ConceptContext)
 
   const editingStateDiscard = useEditingStateDisplay(INTENT.DISCARD)
   const editingStateSave = useEditingStateDisplay(INTENT.SAVE)
   const editingStateShow = useEditingStateDisplay(INTENT.SHOW)
 
   const handleDiscard = useCallback(() => {
-    modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
-    editingStateDiscard()
-  }, [modifyConcept, editingStateDiscard])
+    if (isModified()) {
+      modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
+      editingStateDiscard()
+    } else {
+      setEditing(false)
+    }
+  }, [isModified, modifyConcept, editingStateDiscard, setEditing])
 
   const handleSave = useCallback(() => {
     modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
@@ -46,18 +50,18 @@ const ConceptEditingActions = () => {
       <Button
         color={editing ? 'cancel' : 'main'}
         onClick={() => {
-          editing ? (modified ? handleDiscard() : setEditing(false)) : setEditing(true)
+          editing ? (isModified() ? handleDiscard() : setEditing(false)) : setEditing(true)
         }}
         variant='contained'
       >
-        {editing ? (modified ? 'Discard' : 'Cancel') : 'Edit'}
+        {editing ? (isModified() ? 'Discard' : 'Cancel') : 'Edit'}
       </Button>
-      {editing && modified && (
+      {editing && isModified() && (
         <Button onClick={handleShow} sx={{ margin: '0 10px' }} variant='contained'>
           {INTENT.SHOW}
         </Button>
       )}
-      <Button disabled={!editing || !modified} onClick={handleSave} variant='contained'>
+      <Button disabled={!editing || !isModified()} onClick={handleSave} variant='contained'>
         {INTENT.SAVE}
       </Button>
     </Box>

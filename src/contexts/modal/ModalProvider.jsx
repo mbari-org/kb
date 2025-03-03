@@ -1,25 +1,29 @@
 import { useCallback, useState } from 'react'
 
-import ModalContext from './ModalContext'
+import ModalContext, { MODAL_X } from './ModalContext'
 
 const ModalProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
 
   const [modal, setModal] = useState(null)
-  const [modalData, setModalData] = useState(null)
 
   const [onClose, setOnClose] = useState(null)
 
   const handleSetModal = useCallback(
     (modal, onCloseCallback) => {
-      if (!modal) {
-        setModalData(null)
-        setModal(null)
-
-        onClose?.()
+      if (modal === MODAL_X) {
+        onClose?.(MODAL_X)
         setOnClose(null)
         return
       }
+
+      if (!modal) {
+        onClose?.()
+        setModal(null)
+        setOnClose(null)
+        return
+      }
+
       if (onCloseCallback) {
         setOnClose(() => onCloseCallback)
       }
@@ -28,19 +32,12 @@ const ModalProvider = ({ children }) => {
     [onClose]
   )
 
-  // const handleSetModalData = useCallback(data => {
-  //   console.log('handleSetModalData', modalData, data)
-  //   setModalData(prev => ({ ...prev, ...data }))
-  // }, [])
-
   return (
     <ModalContext
       value={{
         modal,
-        modalData,
         loading,
         setModal: handleSetModal,
-        setModalData,
         setLoading,
       }}
     >

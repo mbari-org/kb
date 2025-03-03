@@ -12,10 +12,12 @@ import {
   Modal,
 } from '@mui/material'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import ConceptContext from '@/contexts/concept/ConceptContext'
+import ModalContext, { MODAL_X } from '@/contexts/modal/ModalContext'
 
 const KbModal = () => {
   const { modal, setModal } = use(ModalContext)
+  const { confirmReset } = use(ConceptContext)
 
   if (!modal) {
     return null
@@ -40,13 +42,15 @@ const KbModal = () => {
           }}
         >
           <Card sx={{ p: 2, pb: 0, position: 'relative' }}>
-            <IconButton
-              aria-label='close'
-              onClick={() => setModal(null)}
-              sx={{ position: 'absolute', right: 8, top: 8 }}
-            >
-              <IoClose />
-            </IconButton>
+            {!confirmReset && (
+              <IconButton
+                aria-label='close'
+                onClick={() => setModal(MODAL_X)}
+                sx={{ position: 'absolute', right: 8, top: 8 }}
+              >
+                <IoClose />
+              </IconButton>
+            )}
             <CardHeader title={<Title />} />
             <CardContent sx={{ pb: 0, pt: 0 }}>
               <Content />

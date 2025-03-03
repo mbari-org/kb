@@ -12,11 +12,11 @@ import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
 const LogoutLink = () => {
   const { logout, user } = use(AuthContext)
-  const { modified } = use(ConceptContext)
+  const { isModified } = use(ConceptContext)
 
   const editingStateDisplay = useEditingStateDisplay()
 
-  const handleLogout = () => (modified ? editingStateDisplay(INTENT.SAVE) : logout())
+  const handleLogout = () => (isModified() ? editingStateDisplay(INTENT.SAVE) : logout())
 
   const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`
 

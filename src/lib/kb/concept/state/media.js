@@ -49,7 +49,6 @@ const editMedia = (state, update) => {
   const mediaItem = state.media[update.mediaIndex]
   if (mediaItem.action === CONCEPT_STATE.MEDIA.ADD) {
     const updatedItem = {
-      ...mediaItem,
       ...update.mediaItem,
       action: CONCEPT_STATE.MEDIA.ADD,
     }
@@ -78,11 +77,12 @@ const resetMediaItem = (state, update) => {
 
 const updateState = (state, { type, update }) => {
   const { mediaIndex, mediaItem } = update
-  const updatedItem = { ...state.media[mediaIndex], ...mediaItem, action: type }
-  return {
-    ...state,
-    media: state.media.map((item, index) => (index === mediaIndex ? updatedItem : item)),
-  }
+  const updatedItem = { ...mediaItem, action: type }
+  const updatedMedia = state.media.map((stateItem, stateIndex) =>
+    stateIndex === mediaIndex ? updatedItem : stateItem
+  )
+
+  return { ...state, media: updatedMedia }
 }
 
 export { addMedia, deleteMedia, editMedia, mediaState, resetMedia, resetMediaItem }

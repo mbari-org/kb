@@ -1,6 +1,6 @@
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
 
-const checkUrlExists = url => {
+const checkImageUrlExists = url => {
   return new Promise(resolve => {
     const img = new Image()
     img.onload = () => resolve(true)
@@ -40,6 +40,9 @@ const isDeepEqual = (obj1, obj2) => {
 
   return true
 }
+
+// quick comparison of simple, JSON serializable objects
+const isJsonEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2)
 
 const isElementInViewport = element => {
   const rect = element.getBoundingClientRect()
@@ -122,12 +125,13 @@ const prune = obj => {
 
 export {
   capitalize,
-  checkUrlExists,
+  checkImageUrlExists,
   dropFields,
   isDeepEqual,
   isElementInViewport,
   isEmpty,
   isEqual,
+  isJsonEqual,
   isValidUrl,
   pickFields,
   prettyFormat,

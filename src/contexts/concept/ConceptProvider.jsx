@@ -7,23 +7,22 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
 import useEditingStateDisplay from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
-
 import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { conceptState } from '@/lib/kb/concept/state/conceptState'
+import conceptState from '@/lib/kb/concept/state/conceptState'
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE, isStateModified } from '@/lib/kb/concept/state/conceptState'
 import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
 
 import update from '@/contexts/concept/lib/submit/update'
 import { conceptStateReducer } from '@/contexts/concept/lib/edit/conceptStateReducer'
 
-import { hasStateChange } from '@/components/kb/panels/concepts/editingState/edits/stateChange'
+import { isJsonEqual } from '@/lib/util'
 
 const ConceptProvider = ({ children }) => {
   // const theme = useTheme()
@@ -46,7 +45,6 @@ const ConceptProvider = ({ children }) => {
   const [confirmReset, setConfirmReset] = useState(false)
   const [editing, setEditing] = useState(false)
   const [modalHasBeenDisplayed, setModalHasBeenDisplayed] = useState(false)
-  const [modified, setModified] = useState(false)
   const [pendingHistory, setPendingHistory] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
@@ -58,10 +56,24 @@ const ConceptProvider = ({ children }) => {
 
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset)
 
+  const isConceptModified = useCallback(
+    () => !isJsonEqual(editingState, initialState),
+    [editingState, initialState]
+  )
+
+  const isFieldModified = useCallback(
+    (field, index) => isStateModified(editingState, initialState, field, index),
+    [editingState, initialState]
+  )
+
+  const isModified = useCallback(
+    (field, index) => (field ? isFieldModified(field, index) : isConceptModified()),
+    [isConceptModified, isFieldModified]
+  )
+
   const resetConcept = useCallback(
     toState => {
       setEditing(false)
-      setModified(false)
       setModal(null)
 
       const resetConceptConcept = { ...concept, ...toState }
@@ -101,7 +113,7 @@ const ConceptProvider = ({ children }) => {
     }
 
     if (editing && (selected.panel !== 'Concepts' || selected.concept !== concept?.name)) {
-      if (!modified) {
+      if (!isModified()) {
         setEditing(false)
         return
       }
@@ -123,19 +135,15 @@ const ConceptProvider = ({ children }) => {
     editing,
     editingState,
     getConcept,
+    isModified,
     loadConcept,
     modalHasBeenDisplayed,
-    modified,
     selectConcept,
     selectPanel,
     selected,
     setModal,
     showBoundary,
   ])
-
-  useEffect(() => {
-    setModified(hasStateChange(initialState, editingState))
-  }, [editingState, initialState])
 
   useEffect(() => {
     if (concept) {
@@ -154,13 +162,13 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         confirmReset,
-        editingStateDisplay,
-        pendingFieldDisplay,
         editing,
         editingState,
+        editingStateDisplay,
         initialState,
+        isModified,
         modifyConcept,
-        modified,
+        pendingFieldDisplay,
         pendingHistory,
         resetConcept,
         setEditing,

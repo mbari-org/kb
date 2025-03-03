@@ -8,18 +8,18 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import { ADD_ALIAS_FORM_ID } from './AddAliasContent'
 
 const DISCARD = 'Discard'
-const SAVE = 'Save'
+const STAGE = 'Stage'
 
 const AddAliasActions = () => {
   const { _editingState } = use(ConceptContext)
-  const { modalData, setModal } = use(ModalContext)
+  const { setModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !modalData?.dirty]
-  const labels = [DISCARD, SAVE]
+  const disabled = [false, true]
+  const labels = [DISCARD, STAGE]
 
   const onAction = label => {
-    label === SAVE
+    label === STAGE
       ? document.querySelector(`#${ADD_ALIAS_FORM_ID}`)?.requestSubmit()
       : setModal(null)
   }
