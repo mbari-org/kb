@@ -13,10 +13,7 @@ const mediaState = concept => {
     action: CONCEPT_STATE.NO_ACTION,
   }))
 
-  return {
-    media,
-    mediaIndex: 0,
-  }
+  return { media }
 }
 
 const addMedia = (state, update) => {

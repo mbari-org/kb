@@ -3,10 +3,10 @@ import { useTheme } from '@mui/material/styles'
 
 import useEditMedia from '@/contexts/concept/lib/edit/useEditMedia'
 
-const MediaActionButton = ({ Icon, action, color, mediaIndex, position = 'right', sx = {} }) => {
+const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} }) => {
   const theme = useTheme()
 
-  const editMedia = useEditMedia(action, mediaIndex)
+  const editMedia = useEditMedia(action)
 
   return (
     <Box

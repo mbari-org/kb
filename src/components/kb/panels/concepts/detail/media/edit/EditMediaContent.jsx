@@ -28,9 +28,12 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
-const EditMediaContent = ({ mediaIndex }) => {
+const EditMediaContent = ({ action }) => {
   const { editingState, initialState, modifyConcept } = use(ConceptContext)
   const { setModal } = use(ModalContext)
+
+  const mediaIndex =
+    action === CONCEPT_STATE.MEDIA.ADD ? editingState.media.length : editingState.mediaIndex
 
   const [mediaItem, setMediaItem] = useState(null)
   const [previewOn, setPreviewOn] = useState(false)
@@ -170,12 +173,7 @@ const EditMediaContent = ({ mediaIndex }) => {
           />
         </Box>
       )}
-      <MediaDisplay
-        mediaIndex={mediaIndex}
-        previewOn={previewOn}
-        setPreviewOn={setPreviewOn}
-        url={mediaItem.url}
-      />
+      <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} url={mediaItem.url} />
     </Box>
   )
 }

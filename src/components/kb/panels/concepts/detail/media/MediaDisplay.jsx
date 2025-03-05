@@ -7,10 +7,12 @@ import MediaSwiper from './MediaSwiper'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-const MediaDisplay = ({ mediaIndex, previewOn, setPreviewOn, setMediaIndex, url }) => {
+const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()
-  const { editingState } = use(ConceptContext)
-  const mediaItem = editingState.media[mediaIndex]
+  const {
+    editingState: { media, mediaIndex },
+  } = use(ConceptContext)
+  const mediaItem = media[mediaIndex]
 
   // Use provided URL if available, otherwise use mediaItem URL
   const imageUrl = url || mediaItem?.url
@@ -65,12 +67,7 @@ const MediaDisplay = ({ mediaIndex, previewOn, setPreviewOn, setMediaIndex, url 
               margin: 0,
             }}
           >
-            <MediaSwiper
-              height='100%'
-              setMediaIndex={setMediaIndex}
-              showNavigation={true}
-              slidesPerView={1}
-            />
+            <MediaSwiper height='100%' showNavigation={true} slidesPerView={1} />
           </Box>
         )}
       </Box>

@@ -39,7 +39,7 @@ const NoMedia = () => {
       >
         No Media
       </Typography>
-      {editing && <MediaAdd bgColor='transparent' mediaIndex={0} sx={{ mt: 10 }} />}
+      {editing && <MediaAdd bgColor='transparent' sx={{ mt: 10 }} />}
     </Box>
   )
 }

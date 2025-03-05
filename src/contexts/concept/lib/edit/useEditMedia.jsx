@@ -14,9 +14,12 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE, FIELDS } from '@/lib/kb/concept/state/conceptState'
 
-const useEditMedia = (action, mediaIndex) => {
-  const { confirmReset, isModified, modifyConcept } = use(ConceptContext)
+const useEditMedia = action => {
+  const { confirmReset, editingState, isModified, modifyConcept } = use(ConceptContext)
   const { setModal } = use(ModalContext)
+
+  const mediaIndex =
+    action === CONCEPT_STATE.MEDIA.ADD ? editingState.media.length : editingState.mediaIndex
 
   const noChange = !isModified(FIELDS.MEDIA, mediaIndex)
 
@@ -26,8 +29,8 @@ const useEditMedia = (action, mediaIndex) => {
   switch (action) {
     case CONCEPT_STATE.MEDIA.ADD: {
       components = {
-        Actions: () => <AddMediaActions />,
-        Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
+        Actions: AddMediaActions,
+        Content: () => <EditMediaContent action={action} />,
         Title,
       }
       break
@@ -35,8 +38,8 @@ const useEditMedia = (action, mediaIndex) => {
 
     case CONCEPT_STATE.MEDIA.DELETE: {
       components = {
-        Actions: () => <DeleteMediaActions mediaIndex={mediaIndex} />,
-        Content: () => <DeleteMediaContent mediaIndex={mediaIndex} />,
+        Actions: DeleteMediaActions,
+        Content: DeleteMediaContent,
         Title,
       }
       break
@@ -45,7 +48,8 @@ const useEditMedia = (action, mediaIndex) => {
     case CONCEPT_STATE.MEDIA.EDIT: {
       components = {
         Actions: EditMediaActions,
-        Content: () => <EditMediaContent mediaIndex={mediaIndex} />,
+        Content: () => <EditMediaContent action={action} />,
+
         Title,
       }
       break
@@ -72,7 +76,7 @@ const useEditMedia = (action, mediaIndex) => {
       }
     }
     setModal(modal, onClose)
-  }, [components, confirmReset, isModified, mediaIndex, modifyConcept, setModal])
+  }, [components, confirmReset, mediaIndex, modifyConcept, noChange, setModal])
 }
 
 export default useEditMedia

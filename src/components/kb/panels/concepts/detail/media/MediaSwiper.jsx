@@ -14,9 +14,13 @@ import './mediaSwiper.css'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-const MediaSwiper = ({ height, setMediaIndex, slidesPerView = 3, showNavigation = false }) => {
-  const { concept, editingState } = use(ConceptContext)
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+
+const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
+  const { concept, editingState, modifyConcept } = use(ConceptContext)
   const swiperRef = useRef(null)
+
+  const { media: editingMedia, mediaIndex: editingMediaIndex } = editingState
 
   const pagination = {
     clickable: true,
@@ -25,19 +29,26 @@ const MediaSwiper = ({ height, setMediaIndex, slidesPerView = 3, showNavigation 
     },
   }
 
+  const handleSlideChange = change => {
+    modifyConcept({
+      type: CONCEPT_STATE.FIELD.SET,
+      update: { field: 'mediaIndex', value: change.snapIndex },
+    })
+  }
+
   useEffect(() => {
     if (swiperRef.current) {
-      swiperRef.current.slideTo(editingState.mediaIndex)
+      swiperRef.current.slideTo(editingMediaIndex)
     }
-  }, [concept, editingState.mediaIndex])
+  }, [concept, editingMediaIndex])
 
   return (
     <Swiper
       centeredSlides={true}
-      initialSlide={editingState.mediaIndex}
+      initialSlide={editingMediaIndex}
       modules={[Pagination, ...(showNavigation ? [Navigation] : [])]}
       navigation={showNavigation}
-      onSlideChange={change => setMediaIndex(change.snapIndex)}
+      onSlideChange={handleSlideChange}
       onSwiper={swiper => {
         swiperRef.current = swiper
       }}
@@ -48,8 +59,8 @@ const MediaSwiper = ({ height, setMediaIndex, slidesPerView = 3, showNavigation 
         overflow: 'hidden',
       }}
     >
-      {editingState.media.map((mediaItem, mediaIndex) => (
-        <SwiperSlide key={`concept-media-${mediaIndex}`}>
+      {editingMedia.map((mediaItem, mediaIndex) => (
+        <SwiperSlide key={`concept-media-slide-${mediaIndex}`}>
           <MediaSwiperSlide mediaIndex={mediaIndex} mediaItem={mediaItem} />
         </SwiperSlide>
       ))}

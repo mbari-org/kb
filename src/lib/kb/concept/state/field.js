@@ -1,7 +1,9 @@
 const fieldState = concept => {
   const { author, rankLevel, rankName } = concept
   return {
+    aliasIndex: 0,
     author: author || 'unknown',
+    mediaIndex: 0,
     rankLevel: rankLevel || '',
     rankName: rankName || '',
   }

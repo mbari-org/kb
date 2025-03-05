@@ -33,7 +33,7 @@ const MediaItemEdit = ({ mediaItemEdit }) => {
           <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
         </Box>
       </Box>
-      <MediaItemDetail initialFields={initialFields} editingFields={editingFields} />
+      <MediaItemDetail editingFields={editingFields} initialFields={initialFields} />
     </Box>
   )
 }

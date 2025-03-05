@@ -14,7 +14,6 @@ const aliasesState = concept => {
 
   return {
     aliases,
-    aliasIndex: 0,
   }
 }
 

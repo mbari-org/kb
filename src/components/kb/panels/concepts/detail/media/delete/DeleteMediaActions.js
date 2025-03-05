@@ -10,8 +10,11 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const DISCARD = 'Discard'
 const STAGE = 'Stage'
 
-const DeleteMediaActions = ({ mediaIndex }) => {
-  const { modifyConcept } = use(ConceptContext)
+const DeleteMediaActions = () => {
+  const {
+    editingState: { mediaIndex },
+    modifyConcept,
+  } = use(ConceptContext)
   const { setModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
