@@ -13,10 +13,10 @@ import {
 } from '@mui/material'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
-import ModalContext, { MODAL_X } from '@/contexts/modal/ModalContext'
+import ModalContext from '@/contexts/modal/ModalContext'
 
 const KbModal = () => {
-  const { modal, setModal } = use(ModalContext)
+  const { modal, closeModal } = use(ModalContext)
   const { confirmReset } = use(ConceptContext)
 
   if (!modal) {
@@ -45,7 +45,7 @@ const KbModal = () => {
             {!confirmReset && (
               <IconButton
                 aria-label='close'
-                onClick={() => setModal(MODAL_X)}
+                onClick={() => closeModal()}
                 sx={{ position: 'absolute', right: 8, top: 8 }}
               >
                 <IoClose />

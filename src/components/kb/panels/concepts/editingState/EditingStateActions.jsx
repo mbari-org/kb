@@ -17,7 +17,7 @@ const SAVE = 'Save'
 
 const EditingStateActions = ({ intent }) => {
   const { concept, confirmReset, modifyConcept, submitUpdates } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
 
   const colors = ['cancel', 'main']
@@ -35,17 +35,17 @@ const EditingStateActions = ({ intent }) => {
         selectConcept(concept.name)
         selectPanel('Concepts')
         modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
-        setModal(null)
+        closeModal()
         break
       case DISCARD:
         modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
         break
       case SAVE:
         submitUpdates(true)
-        setModal(null)
+        closeModal()
         break
       default:
-        setModal(null)
+        closeModal()
         break
     }
   }

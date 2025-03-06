@@ -6,7 +6,6 @@ const useProcessResult = ({
   initialState,
   resetConcept,
   selectConcept,
-  setModal,
   setEditing,
   setModified,
   showBoundary,
@@ -40,7 +39,7 @@ const useProcessResult = ({
         error => showBoundary(error)
       )
 
-      setModal(null)
+      // closeModal()
       setEditing(false)
       setModified(false)
     },

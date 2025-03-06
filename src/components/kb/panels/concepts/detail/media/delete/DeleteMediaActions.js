@@ -15,7 +15,7 @@ const DeleteMediaActions = () => {
     editingState: { mediaIndex },
     modifyConcept,
   } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
   const labels = [DISCARD, STAGE]
@@ -24,7 +24,7 @@ const DeleteMediaActions = () => {
     if (label === STAGE) {
       modifyConcept({ type: CONCEPT_STATE.MEDIA.DELETE, update: { mediaIndex } })
     }
-    setModal(null)
+    closeModal()
   }
 
   return createActions({ colors, labels, onAction }, 'DeleteMediaActions')

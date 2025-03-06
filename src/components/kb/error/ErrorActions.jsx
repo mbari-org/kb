@@ -7,13 +7,13 @@ import ModalContext from '@/contexts/modal/ModalContext'
 const RESET = 'Reset'
 
 const ErrorActions = () => {
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
 
   const colors = ['main']
   const labels = [RESET]
 
   const onAction = () => {
-    setModal(null)
+    closeModal()
   }
 
   return createActions({ colors, labels, onAction }, 'ErrorActions')

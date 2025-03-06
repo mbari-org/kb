@@ -7,12 +7,12 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from '../edit/EditMediaContent'
 
-const STAGE = 'Stage'
 const DISCARD = 'Discard'
+const STAGE = 'Stage'
 
 const AddMediaActions = () => {
   const { editingState } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
   const labels = [DISCARD, STAGE]
@@ -22,7 +22,7 @@ const AddMediaActions = () => {
       editingState.mediaIndex = editingState.media.length
       document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
     } else {
-      setModal(null)
+      closeModal()
     }
   }
 

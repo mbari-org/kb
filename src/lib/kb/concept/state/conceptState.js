@@ -63,7 +63,6 @@ export const isStateModified = (editingState, initialState, field, index) => {
     case FIELDS.MEDIA: {
       const editingMediaItem = editingState.media[index]
       const initialMediaItem = initialState.media[index]
-      console.log(`MediaItem ${index} isModified`, !isEqual(editingMediaItem, initialMediaItem))
       return !isEqual(editingMediaItem, initialMediaItem)
     }
 

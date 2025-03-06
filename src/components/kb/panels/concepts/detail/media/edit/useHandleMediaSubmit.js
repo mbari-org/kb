@@ -1,33 +1,34 @@
 import { use } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
-
+import ModalContext from '@/contexts/modal/ModalContext'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const useHandleMediaSubmit = (mediaIndex, setModal) => {
-  const { editingState, modifyConcept } = use(ConceptContext)
-
-  const mediaItem = editingState.media[mediaIndex]
+const useHandleMediaSubmit = () => {
+  const { modifyConcept } = use(ConceptContext)
+  const { closeModal, modalData } = use(ModalContext)
 
   const handleSubmit = async event => {
     event.preventDefault()
 
-    const type =
-      mediaIndex === editingState.media.length ? CONCEPT_STATE.MEDIA.ADD : CONCEPT_STATE.MEDIA.EDIT
+    const { action, mediaIndex, mediaItem } = modalData
 
     modifyConcept({
-      type,
+      type: action,
       update: {
         mediaIndex,
         mediaItem,
       },
     })
 
-    if (type === CONCEPT_STATE.MEDIA.ADD) {
-      editingState.mediaIndex = mediaIndex
+    if (action === CONCEPT_STATE.MEDIA.ADD) {
+      modifyConcept({
+        type: CONCEPT_STATE.FIELD.SET,
+        update: { field: 'mediaIndex', value: mediaIndex },
+      })
     }
 
-    setModal(null)
+    closeModal(true)
   }
 
   return handleSubmit

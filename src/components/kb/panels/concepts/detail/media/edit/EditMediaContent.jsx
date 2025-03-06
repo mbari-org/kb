@@ -16,93 +16,123 @@ import MediaDisplay from '@/components/kb/panels/concepts/detail/media/MediaDisp
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import useHandleMediaChange from './useHandleMediaChange'
 import useHandleMediaSubmit from './useHandleMediaSubmit'
 
 import { hasPrimary, isPrimary } from '@/lib/kb/concept/media'
-import { isValidUrl } from '@/lib/util'
-
-// import useDebounce from '@/components/hooks/useDebounce'
+import { checkImageUrlExists, isValidUrl } from '@/lib/util'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { EMPTY_MEDIA_ITEM } from './mediaItem'
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
-const EditMediaContent = ({ action }) => {
-  const { editingState, initialState, modifyConcept } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+const EditMediaContent = ({ setMediaData }) => {
+  const { editingState } = use(ConceptContext)
+  const { modalData, setModal } = use(ModalContext)
 
-  const mediaIndex =
-    action === CONCEPT_STATE.MEDIA.ADD ? editingState.media.length : editingState.mediaIndex
+  const { action, mediaIndex, mediaItem } = modalData
 
-  const [mediaItem, setMediaItem] = useState(null)
+  const [formMediaItem, setFormMediaItem] = useState(mediaItem)
+
+  const [modifiedFields, setModifiedFields] = useState({
+    caption: false,
+    credit: false,
+    isPrimary: false,
+    url: false,
+  })
   const [previewOn, setPreviewOn] = useState(false)
   const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
-  const [changedFields, setChangedFields] = useState({
-    url: false,
-    credit: false,
-    caption: false,
-  })
 
-  const handleSetMediaItem = formMediaItem => {
-    setMediaItem(formMediaItem)
+  const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true })
+  const [urlCheckTimeout, setUrlCheckTimeout] = useState(null)
 
-    modifyConcept({
-      type: CONCEPT_STATE.MEDIA.EDIT,
-      update: {
-        mediaIndex,
-        mediaItem: formMediaItem,
-      },
+  const handleChange = event => {
+    const { name, value, type, checked } = event.target
+
+    const updatedMediaItem = {
+      ...formMediaItem,
+      [name]: type === 'checkbox' ? checked : value,
+    }
+    setFormMediaItem(updatedMediaItem)
+
+    console.log('handleChange for action', action)
+
+    const fieldIsModified =
+      action === CONCEPT_STATE.MEDIA.ADD
+        ? updatedMediaItem[name] !== EMPTY_MEDIA_ITEM[name]
+        : editingState.media[mediaIndex][name] !== updatedMediaItem[name]
+
+    const updatedModifiedFields = { ...modifiedFields, [name]: fieldIsModified }
+    setModifiedFields(updatedModifiedFields)
+
+    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
+
+    setMediaData({
+      modified,
+      mediaItem: updatedMediaItem,
     })
+
+    if (name === 'url') {
+      checkUrlChange(value)
+    }
   }
 
-  const { handleChange, urlStatus } = useHandleMediaChange(mediaItem, handleSetMediaItem)
+  const checkUrlChange = value => {
+    // Delay URL validation check
+    if (isValidUrl(value)) {
+      // Clear any existing timeout
+      if (urlCheckTimeout) {
+        clearTimeout(urlCheckTimeout)
+      }
+
+      // Set loading state immediately
+      setUrlStatus({ loading: true, valid: true })
+
+      // Create new timeout for URL check
+      const timeoutId = setTimeout(() => {
+        checkImageUrlExists(value).then(exists => {
+          setUrlStatus({ loading: false, valid: exists })
+        })
+      }, 500)
+
+      setUrlCheckTimeout(timeoutId)
+    }
+  }
 
   const handleSubmit = useHandleMediaSubmit(mediaIndex, setModal)
-
-  const handleFieldChange = event => {
-    const { name } = event.target
-    const updatedMediaItem = handleChange(event)
-    const changed = updatedMediaItem[name] !== initialState.media[mediaIndex][name]
-    setChangedFields(prev => ({ ...prev, [name]: changed }))
-  }
-
   const submitChange = event => {
-    event.preventDefault()
-
-    if (urlStatus.loading || !urlStatus.valid) {
-      return
+    if (!urlStatus.loading && urlStatus.valid) {
+      handleSubmit(event)
     }
-
-    handleSubmit(event)
   }
 
   useEffect(() => {
-    const mediaItem = editingState.media[mediaIndex] || {
-      url: '',
-      credit: '',
-      caption: '',
-      isPrimary: false,
-    }
-
-    setMediaItem(mediaItem)
     setShowPrimaryCheckbox(!hasPrimary(editingState.media) || isPrimary(mediaItem))
-  }, [editingState.media, mediaIndex])
+  }, [editingState.media, mediaIndex, mediaItem])
+
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (urlCheckTimeout) {
+        clearTimeout(urlCheckTimeout)
+      }
+    }
+  }, [urlCheckTimeout])
 
   if (!mediaItem) {
     return null
   }
 
   const urlError =
-    changedFields.url &&
-    (mediaItem.url.trim() === '' ||
-      !isValidUrl(mediaItem.url) ||
+    modifiedFields.url &&
+    (formMediaItem.url.trim() === '' ||
+      !isValidUrl(formMediaItem.url) ||
       (!urlStatus.loading && !urlStatus.valid))
 
   const urlHelperText =
-    mediaItem.url.trim() === ''
+    formMediaItem.url.trim() === ''
       ? 'URL cannot be empty'
-      : !isValidUrl(mediaItem.url)
+      : !isValidUrl(formMediaItem.url)
       ? 'Please enter a valid URL'
       : urlStatus.loading
       ? 'Checking URL...'
@@ -116,8 +146,8 @@ const EditMediaContent = ({ action }) => {
         <InputAdornment position='end'>
           {!urlStatus.loading &&
             urlStatus.valid &&
-            isValidUrl(mediaItem.url) &&
-            mediaItem.url.trim() !== '' && (
+            isValidUrl(formMediaItem.url) &&
+            formMediaItem.url.trim() !== '' && (
               <IconButton onClick={() => setPreviewOn(true)} edge='end'>
                 <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
               </IconButton>
@@ -127,53 +157,57 @@ const EditMediaContent = ({ action }) => {
     },
   }
 
-  const creditError = changedFields.credit && mediaItem.credit.trim() === ''
-  const creditHelperText = mediaItem.credit.trim() === '' ? 'Credit cannot be empty' : ''
+  const creditError = modifiedFields.credit && formMediaItem.credit.trim() === ''
+  const creditHelperText = formMediaItem.credit.trim() === '' ? 'Credit cannot be empty' : ''
 
   return (
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={submitChange}>
       <FormControl fullWidth margin='normal'>
         <TextField
           error={urlError}
-          helperText={changedFields.url ? urlHelperText : ''}
+          helperText={modifiedFields.url ? urlHelperText : ''}
           label='URL'
           name='url'
-          onChange={handleFieldChange}
+          onChange={handleChange}
           required
           slotProps={urlSlotProps}
-          value={mediaItem.url}
+          value={formMediaItem.url}
         />
       </FormControl>
       <FormControl fullWidth margin='normal'>
         <TextField
           error={creditError}
-          helperText={changedFields.credit ? creditHelperText : ''}
+          helperText={modifiedFields.credit ? creditHelperText : ''}
           label='Credit'
           name='credit'
-          onChange={handleFieldChange}
+          onChange={handleChange}
           required
-          value={mediaItem.credit}
+          value={formMediaItem.credit}
         />
       </FormControl>
       <FormControl fullWidth margin='normal'>
         <TextField
           label='Caption'
           name='caption'
-          onChange={handleFieldChange}
-          value={mediaItem.caption}
+          onChange={handleChange}
+          value={formMediaItem.caption}
         />
       </FormControl>
       {showPrimaryCheckbox && (
         <Box display='flex' justifyContent='flex-end'>
           <FormControlLabel
             control={
-              <Checkbox checked={mediaItem.isPrimary} name='isPrimary' onChange={handleChange} />
+              <Checkbox
+                checked={formMediaItem.isPrimary}
+                name='isPrimary'
+                onChange={handleChange}
+              />
             }
             label='Is Primary'
           />
         </Box>
       )}
-      <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} url={mediaItem.url} />
+      <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} url={formMediaItem.url} />
     </Box>
   )
 }

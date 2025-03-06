@@ -14,7 +14,7 @@ import { hasStateChange, stateChange } from './stateChange'
 
 const EditingDetails = () => {
   const { editingState, initialState } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
   const edits = useMemo(
     () =>
       Object.entries(stateChange(initialState, editingState)).sort(([keyA], [keyB]) =>
@@ -41,9 +41,9 @@ const EditingDetails = () => {
 
   useEffect(() => {
     if (!hasStateChange(initialState, editingState)) {
-      setModal(null)
+      closeModal()
     }
-  }, [editingState, initialState, setModal])
+  }, [editingState, initialState, closeModal])
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{edits.map(editComponent)}</Box>

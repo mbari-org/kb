@@ -29,7 +29,7 @@ const ConceptProvider = ({ children }) => {
 
   const { showBoundary } = useErrorBoundary()
 
-  const { modal, setModal } = use(ModalContext)
+  const { modal, closeModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
     // filterRanks,
@@ -67,21 +67,25 @@ const ConceptProvider = ({ children }) => {
   )
 
   const isModified = useCallback(
-    (field, index) => (field ? isFieldModified(field, index) : isConceptModified()),
-    [isConceptModified, isFieldModified]
+    (field, index) => {
+      if (!editing) return false
+
+      return field ? isFieldModified(field, index) : isConceptModified()
+    },
+    [editing, isConceptModified, isFieldModified]
   )
 
   const resetConcept = useCallback(
     toState => {
       setEditing(false)
-      setModal(null)
+      closeModal()
 
       const resetConceptConcept = { ...concept, ...toState }
       setConcept(resetConceptConcept)
 
       dispatch({ type: CONCEPT_STATE.INITIAL, update: toState })
     },
-    [concept, setModal]
+    [concept, closeModal]
   )
 
   const submitUpdates = submit => {
@@ -141,7 +145,6 @@ const ConceptProvider = ({ children }) => {
     selectConcept,
     selectPanel,
     selected,
-    setModal,
     showBoundary,
   ])
 

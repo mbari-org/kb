@@ -12,7 +12,7 @@ const SAVE = 'Save'
 
 const ParentActions = () => {
   const { editingState, initialState, modifyConcept } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
 
   const [saveDisabled, setSaveDisabled] = useState(true)
 
@@ -28,7 +28,7 @@ const ParentActions = () => {
       })
     }
 
-    setModal(null)
+    closeModal()
   }
 
   useEffect(() => {

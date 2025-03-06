@@ -1,62 +1,61 @@
-import { use } from 'react'
+import { use, useEffect, useMemo } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { CONCEPT_STATE, FIELDS } from '@/lib/kb/concept/state/conceptState'
+import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
+
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import { isValidUrl } from '@/lib/util'
 
-import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
-
 const CONFIRM_DISCARD = 'Confirm Discard'
+const CONTINUE = 'Continue'
 const DISCARD = 'Discard'
 const STAGE = 'Stage'
 
 const EditMediaActions = () => {
-  const { confirmReset, editingState, initialState, isModified, modifyConcept } =
-    use(ConceptContext)
-  const { MODAL_X, setModal } = use(ModalContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { closeModal, modalData } = use(ModalContext)
 
-  const { mediaIndex } = editingState
+  const { mediaItem, modified } = modalData
 
-  const editingMediaItem = editingState.media[mediaIndex]
-  const initialMediaItem = initialState.media[mediaIndex]
-
-  const noChange = !isModified(FIELDS.MEDIA, mediaIndex)
-
-  const validMediaItem = isValidUrl(editingMediaItem.url) && editingMediaItem.credit.trim() !== ''
+  const validMediaItem = useMemo(
+    () => isValidUrl(mediaItem.url) && mediaItem.credit.trim() !== '',
+    [mediaItem]
+  )
 
   const colors = ['cancel', 'main']
-  const disabled = [false, noChange && validMediaItem]
-  const labels = [confirmReset ? CONFIRM_DISCARD : DISCARD, STAGE]
+  const disabled = [false, !modified && validMediaItem]
+  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
     switch (label) {
+      case CONTINUE:
+        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
+        break
+
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.YES })
-        setModal(null)
+        closeModal(true)
         break
 
       case DISCARD:
-        noChange
-          ? setModal(MODAL_X)
-          : modifyConcept({
-              type: CONCEPT_STATE.RESET.MEDIA_ITEM,
-              update: { mediaIndex, mediaItem: initialMediaItem },
-            })
+        closeModal()
         break
 
       case STAGE:
+        // Need to go through the form to trigger required and validation checks
         document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
-        break
-
-      default:
         break
     }
   }
+
+  useEffect(() => {
+    console.log('mediaItem', mediaItem)
+  }, [mediaItem])
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptEditMediaActions')
 }

@@ -13,7 +13,7 @@ const CANCEL = 'Cancel'
 
 const PrimaryNameActions = () => {
   const { concept, editingState, modifyConcept } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const taxonomyNames = getNames()
@@ -38,7 +38,7 @@ const PrimaryNameActions = () => {
       })
     }
 
-    setModal(null)
+    closeModal()
   }
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')

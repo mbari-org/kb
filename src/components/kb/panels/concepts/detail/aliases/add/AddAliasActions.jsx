@@ -12,7 +12,7 @@ const STAGE = 'Stage'
 
 const AddAliasActions = () => {
   const { _editingState } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
   const disabled = [false, true]
@@ -21,7 +21,7 @@ const AddAliasActions = () => {
   const onAction = label => {
     label === STAGE
       ? document.querySelector(`#${ADD_ALIAS_FORM_ID}`)?.requestSubmit()
-      : setModal(null)
+      : closeModal()
   }
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptAddAliasActions')
