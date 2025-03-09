@@ -8,7 +8,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptMedia = () => {
   const {
-    editingState: { media },
+    stagedState: { media },
   } = use(ConceptContext)
 
   return (

@@ -19,16 +19,16 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} }) => {
   const theme = useTheme()
 
-  const { confirmReset, editingState, initialState, modifyConcept } = use(ConceptContext)
+  const { confirmReset, stagedState, initialState, modifyConcept } = use(ConceptContext)
   const { closeModal, setModal, setModalData } = use(ModalContext)
 
   const [buttonAction, setButtonAction] = useState(action)
 
   const handleClick = useCallback(() => {
     const mediaIndex =
-      buttonAction === CONCEPT_STATE.MEDIA.ADD ? editingState.media.length : editingState.mediaIndex
+      buttonAction === CONCEPT_STATE.MEDIA.ADD ? stagedState.media.length : stagedState.mediaIndex
 
-    const editingMediaItem = editingState.media[mediaIndex]
+    const editingMediaItem = stagedState.media[mediaIndex]
     const mediaItem = editingMediaItem ? mediaItemFields(editingMediaItem) : EMPTY_MEDIA_ITEM
 
     const actionModalData = {
@@ -51,7 +51,7 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
     const onClose = createEditMediaOnClose({
       closeModal,
       confirmReset,
-      editingState,
+      stagedState,
       initialState,
       modifyConcept,
       setMediaData,
@@ -61,7 +61,7 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
   }, [
     buttonAction,
     confirmReset,
-    editingState,
+    stagedState,
     initialState,
     modifyConcept,
     closeModal,

@@ -18,8 +18,8 @@ const MediaView = () => {
 
   const theme = useTheme()
 
-  const { editing, editingState } = use(ConceptContext)
-  const { media, mediaIndex } = editingState
+  const { editing, stagedState } = use(ConceptContext)
+  const { media, mediaIndex } = stagedState
 
   const [previewOn, setPreviewOn] = useState(false)
   const [swiperHeight, setSwiperHeight] = useState('auto')

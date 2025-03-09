@@ -19,10 +19,10 @@ const ConceptName = () => {
   const [showStructureChoices, setShowStructureChoices] = useState(false)
 
   const { user } = use(AuthContext)
-  const { concept, editing, editingState, pendingHistory } = use(ConceptContext)
+  const { concept, editing, stagedState, pendingHistory } = use(ConceptContext)
 
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
-  const conceptHasNameUpdate = editingState.name !== concept?.name
+  const conceptHasNameUpdate = stagedState.name !== concept?.name
 
   const showApprovalButton =
     isAdmin(user) && editing && nameHasPendingHistory && !showStructureChoices

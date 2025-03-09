@@ -26,7 +26,7 @@ const AliasesDetail = ({ edit }) => {
           if (aliasEdit === null) {
             return null
           }
-          const [_aliasIndex, editingAction, _initialFields, _editingFields] = aliasEdit
+          const [_aliasIndex, editingAction, _initialFields, _stagedFields] = aliasEdit
           return <AliasEdit key={editingAction} aliasEdit={aliasEdit} />
         })}
       </Box>

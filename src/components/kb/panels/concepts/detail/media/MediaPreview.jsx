@@ -11,7 +11,7 @@ const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
 
   const {
-    editingState: { media, mediaIndex },
+    stagedState: { media, mediaIndex },
   } = use(ConceptContext)
   const mediaItem = media[mediaIndex]
 

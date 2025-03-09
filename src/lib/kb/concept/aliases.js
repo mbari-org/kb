@@ -56,10 +56,10 @@ const aliasEdit = (aliasIndex, initialAlias, editingAlias) => {
 
   const initialFields = editingAction === CONCEPT_STATE.ALIAS.ADD ? null : aliasFields(initialAlias)
 
-  const editingFields =
+  const stagedFields =
     editingAction === CONCEPT_STATE.ALIAS.DELETE ? null : aliasFields(editingAlias)
 
-  return [aliasIndex, editingAction, initialFields, editingFields]
+  return [aliasIndex, editingAction, initialFields, stagedFields]
 }
 
 const aliasEdits = (initial, editing) => {

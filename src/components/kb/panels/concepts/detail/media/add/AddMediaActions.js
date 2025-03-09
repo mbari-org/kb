@@ -11,7 +11,7 @@ const DISCARD = 'Discard'
 const STAGE = 'Stage'
 
 const AddMediaActions = () => {
-  const { editingState } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
 
   const colors = ['cancel', 'main']
@@ -19,7 +19,7 @@ const AddMediaActions = () => {
 
   const onAction = label => {
     if (label === STAGE) {
-      editingState.mediaIndex = editingState.media.length
+      stagedState.mediaIndex = stagedState.media.length
       document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
     } else {
       closeModal()

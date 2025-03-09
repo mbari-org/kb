@@ -37,10 +37,10 @@ const mediaItemEdit = (mediaIndex, initialItem, editingItem) => {
   const initialFields =
     editingAction === CONCEPT_STATE.MEDIA.ADD ? null : mediaItemFields(initialItem)
 
-  const editingFields =
+  const stagedFields =
     editingAction === CONCEPT_STATE.MEDIA.DELETE ? null : mediaItemFields(editingItem)
 
-  return [mediaIndex, editingAction, initialFields, editingFields]
+  return [mediaIndex, editingAction, initialFields, stagedFields]
 }
 
 const mediaItemEdits = (initial, editing) =>

@@ -4,20 +4,20 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { formatDelta } from '@/components/common/format'
 
-const AliasDetail = ({ initialFields, editingFields }) => {
+const MediaItemDetail = ({ initialFields, stagedFields }) => {
   let fieldValues
   if (initialFields === null) {
-    // Alias Add
-    fieldValues = editingFields
-  } else if (editingFields === null) {
-    // Alias Delete
+    // Media Add
+    fieldValues = stagedFields
+  } else if (stagedFields === null) {
+    // Media Delete
     fieldValues = initialFields
   } else {
-    // Alias Edit
+    // Media Edit
     fieldValues = initialFields.reduce((acc, [field, initialValue], index) => {
-      const editingValue = editingFields[index][1]
-      if (initialValue !== editingValue) {
-        acc.push([field, formatDelta(initialValue, editingValue)])
+      const stagedValue = stagedFields[index][1]
+      if (initialValue !== stagedValue) {
+        acc.push([field, formatDelta(initialValue, stagedValue)])
       }
       return acc
     }, [])
@@ -32,4 +32,4 @@ const AliasDetail = ({ initialFields, editingFields }) => {
   )
 }
 
-export default AliasDetail
+export default MediaItemDetail

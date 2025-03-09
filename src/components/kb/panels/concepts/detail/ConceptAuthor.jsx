@@ -10,7 +10,7 @@ import useDebounce from '@/components/hooks/useDebounce'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const ConceptAuthor = () => {
-  const { editingState, modifyConcept } = use(ConceptContext)
+  const { stagedState, modifyConcept } = use(ConceptContext)
 
   const [author, setAuthor] = useState('')
 
@@ -37,8 +37,8 @@ const ConceptAuthor = () => {
   )
 
   useEffect(() => {
-    setAuthor(editingState.author)
-  }, [editingState.author])
+    setAuthor(stagedState.author)
+  }, [stagedState.author])
 
   return (
     <FormControl>

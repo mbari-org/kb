@@ -18,9 +18,9 @@ import useDebounceModifyAlias from './useDebounceModifyAlias'
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()
 
-  const { editing, editingState, initialState } = use(ConceptContext)
+  const { editing, stagedState, initialState } = use(ConceptContext)
 
-  const editingAlias = { ...editingState.aliases[aliasIndex] }
+  const editingAlias = { ...stagedState.aliases[aliasIndex] }
   const initialAlias = { ...initialState.aliases[aliasIndex] }
 
   // aliasUpdate is necessary due to debounce on edits

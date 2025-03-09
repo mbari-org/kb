@@ -9,7 +9,7 @@ import { dropFields } from '@/lib/util'
 
 const DeleteMediaContent = () => {
   const {
-    editingState: { media, mediaIndex },
+    stagedState: { media, mediaIndex },
   } = use(ConceptContext)
 
   const mediaItem = media[mediaIndex]

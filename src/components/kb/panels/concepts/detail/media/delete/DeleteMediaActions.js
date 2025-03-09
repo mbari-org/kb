@@ -12,7 +12,7 @@ const STAGE = 'Stage'
 
 const DeleteMediaActions = () => {
   const {
-    editingState: { mediaIndex },
+    stagedState: { mediaIndex },
     modifyConcept,
   } = use(ConceptContext)
   const { closeModal } = use(ModalContext)

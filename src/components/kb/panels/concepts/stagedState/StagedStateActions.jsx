@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
+import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
@@ -15,7 +15,7 @@ const CONTINUE = 'Continue'
 const DISCARD = 'Discard All'
 const SAVE = 'Save'
 
-const EditingStateActions = ({ intent }) => {
+const StagedStateActions = ({ intent }) => {
   const { concept, confirmReset, modifyConcept, submitUpdates } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
@@ -50,7 +50,7 @@ const EditingStateActions = ({ intent }) => {
     }
   }
 
-  return createActions({ colors, labels, onAction }, 'ConceptEditingStateActions')
+  return createActions({ colors, labels, onAction }, 'StagedStateActions')
 }
 
-export default EditingStateActions
+export default StagedStateActions

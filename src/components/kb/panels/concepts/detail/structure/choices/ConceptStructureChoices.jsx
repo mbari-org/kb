@@ -12,15 +12,15 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
 const ChangeStructureChoices = ({ closeChoices }) => {
-  const { concept, editingState, pendingHistory } = use(ConceptContext)
+  const { concept, stagedState, pendingHistory } = use(ConceptContext)
   const { getRoot } = use(TaxonomyContext)
 
   const isRoot = concept.name === getRoot().name
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
 
   const conceptHasChildren = concept.children.length > 0
-  const conceptHasNameUpdate = editingState.name !== concept.name
-  const conceptHasParentUpdate = editingState.parentName !== concept.parent?.name
+  const conceptHasNameUpdate = stagedState.name !== concept.name
+  const conceptHasParentUpdate = stagedState.parentName !== concept.parent?.name
 
   const changePrimaryName = useChangePrimaryName()
   const changeParent = useChangeParent()

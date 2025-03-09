@@ -10,7 +10,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()
   const {
-    editingState: { media, mediaIndex },
+    stagedState: { media, mediaIndex },
   } = use(ConceptContext)
   const mediaItem = media[mediaIndex]
 

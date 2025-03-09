@@ -12,9 +12,9 @@ import { RANK } from '@/lib/kb/concept/rank'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptDetail = () => {
-  const { editingState, initialState } = use(ConceptContext)
-  const levelValue = editingState[RANK.LEVEL] || initialState[RANK.LEVEL]
-  const nameValue = editingState[RANK.NAME] || initialState[RANK.NAME]
+  const { stagedState, initialState } = use(ConceptContext)
+  const levelValue = stagedState[RANK.LEVEL] || initialState[RANK.LEVEL]
+  const nameValue = stagedState[RANK.NAME] || initialState[RANK.NAME]
 
   return (
     <Stack direction='row' spacing={1.5}>

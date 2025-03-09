@@ -6,7 +6,7 @@ import AliasReset from './AliasReset'
 import { fieldSx } from '@/components/common/format'
 
 const AliasEdit = ({ aliasEdit }) => {
-  const [aliasIndex, editingAction, initialFields, editingFields] = aliasEdit
+  const [aliasIndex, editingAction, initialFields, stagedFields] = aliasEdit
 
   const actionText = `${editingAction.split(' ').pop()}`
   const aliasName = initialFields[0][1]
@@ -27,7 +27,7 @@ const AliasEdit = ({ aliasEdit }) => {
           <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>
         </Box>
       </Box>
-      <AliasDetail initialFields={initialFields} editingFields={editingFields} />
+      <AliasDetail initialFields={initialFields} stagedFields={stagedFields} />
     </Box>
   )
 }

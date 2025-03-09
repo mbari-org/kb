@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 const useProcessResult = ({
   concept,
-  editingState,
+  stagedState,
   initialState,
   resetConcept,
   selectConcept,
@@ -16,12 +16,12 @@ const useProcessResult = ({
     updatedConcept => {
       updateConcept(updatedConcept).then(
         () => {
-          resetConcept(editingState)
+          resetConcept(stagedState)
         },
         error => showBoundary(error)
       )
     },
-    [editingState, resetConcept, showBoundary, updateConcept]
+    [stagedState, resetConcept, showBoundary, updateConcept]
   )
 
   const processErrorResult = useCallback(
@@ -39,7 +39,6 @@ const useProcessResult = ({
         error => showBoundary(error)
       )
 
-      // closeModal()
       setEditing(false)
       setModified(false)
     },

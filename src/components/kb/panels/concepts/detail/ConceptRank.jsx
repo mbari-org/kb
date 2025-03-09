@@ -16,11 +16,11 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const ConceptRank = ({ field, otherValue }) => {
   const { user } = use(AuthContext)
-  const { editingState, editing, pendingHistory, modifyConcept } = use(ConceptContext)
+  const { stagedState, editing, pendingHistory, modifyConcept } = use(ConceptContext)
   const { filterRanks } = use(TaxonomyContext)
 
   const rankOptions = filterRanks(field, otherValue)
-  const fieldValue = editingState[field]
+  const fieldValue = stagedState[field]
   const label = field === 'rankName' ? 'Rank' : 'Level'
 
   const infoStyle = useConceptDetailStyle(field)

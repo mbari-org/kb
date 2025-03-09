@@ -1,5 +1,5 @@
-const formatDelta = (initialValue, editingValue) =>
-  `${stringDisplay(initialValue)} --> ${stringDisplay(editingValue)}`
+const formatDelta = (initialValue, stagedValue) =>
+  `${stringDisplay(initialValue)} --> ${stringDisplay(stagedValue)}`
 
 const formatField = field => {
   return field

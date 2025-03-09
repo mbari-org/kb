@@ -27,7 +27,7 @@ import { EMPTY_MEDIA_ITEM } from './mediaItem'
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
 const EditMediaContent = ({ setMediaData }) => {
-  const { editingState } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
   const { modalData, setModal } = use(ModalContext)
 
   const { action, mediaIndex, mediaItem } = modalData
@@ -58,7 +58,7 @@ const EditMediaContent = ({ setMediaData }) => {
     const fieldIsModified =
       action === CONCEPT_STATE.MEDIA.ADD
         ? updatedMediaItem[name] !== EMPTY_MEDIA_ITEM[name]
-        : editingState.media[mediaIndex][name] !== updatedMediaItem[name]
+        : stagedState.media[mediaIndex][name] !== updatedMediaItem[name]
 
     const updatedModifiedFields = { ...modifiedFields, [name]: fieldIsModified }
     setModifiedFields(updatedModifiedFields)
@@ -105,8 +105,8 @@ const EditMediaContent = ({ setMediaData }) => {
   }
 
   useEffect(() => {
-    setShowPrimaryCheckbox(!hasPrimary(editingState.media) || isPrimary(mediaItem))
-  }, [editingState.media, mediaIndex, mediaItem])
+    setShowPrimaryCheckbox(!hasPrimary(stagedState.media) || isPrimary(mediaItem))
+  }, [stagedState.media, mediaIndex, mediaItem])
 
   // Clean up timeout on unmount
   useEffect(() => {

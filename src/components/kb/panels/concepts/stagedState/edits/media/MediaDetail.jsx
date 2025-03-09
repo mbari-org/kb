@@ -26,7 +26,7 @@ const MediaDetail = ({ edit }) => {
           if (mediaItemEdit === null) {
             return null
           }
-          const [mediaItemIndex, editingAction, _initialFields, _editingFields] = mediaItemEdit
+          const [mediaItemIndex, editingAction, _initialFields, _stagedFields] = mediaItemEdit
           return (
             <MediaItemEdit
               key={`${mediaItemIndex}-${editingAction}`}

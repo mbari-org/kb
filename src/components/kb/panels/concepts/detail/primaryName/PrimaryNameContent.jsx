@@ -11,7 +11,7 @@ import useDebounceChangePrimaryName from './useDebounceChangePrimaryName'
 const PrimaryNameContent = () => {
   const theme = useTheme()
 
-  const { concept, editingState } = use(ConceptContext)
+  const { concept, stagedState } = use(ConceptContext)
   const { getNames } = use(TaxonomyContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
@@ -22,7 +22,7 @@ const PrimaryNameContent = () => {
   const fromColor = theme.concept.color.clean
 
   const toColor =
-    editingState.name === concept.name || taxonomyNames.includes(editingState.name)
+    stagedState.name === concept.name || taxonomyNames.includes(stagedState.name)
       ? theme.palette.grey[500]
       : theme.concept.color.pending
 

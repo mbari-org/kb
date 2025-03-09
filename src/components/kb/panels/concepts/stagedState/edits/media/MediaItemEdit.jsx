@@ -12,10 +12,10 @@ const urlFile = fields =>
     .pop()
 
 const MediaItemEdit = ({ mediaItemEdit }) => {
-  const [mediaIndex, editingAction, initialFields, editingFields] = mediaItemEdit
+  const [mediaIndex, editingAction, initialFields, stagedFields] = mediaItemEdit
 
   const actionText = `${editingAction.split(' ').pop()}`
-  const actionFile = urlFile(initialFields) || urlFile(editingFields) || ''
+  const actionFile = urlFile(initialFields) || urlFile(stagedFields) || ''
 
   return (
     <Box
@@ -33,7 +33,7 @@ const MediaItemEdit = ({ mediaItemEdit }) => {
           <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
         </Box>
       </Box>
-      <MediaItemDetail editingFields={editingFields} initialFields={initialFields} />
+      <MediaItemDetail stagedFields={stagedFields} initialFields={initialFields} />
     </Box>
   )
 }

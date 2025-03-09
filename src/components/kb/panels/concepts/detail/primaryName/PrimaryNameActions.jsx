@@ -12,7 +12,7 @@ import { NAME_UPDATE } from '@/lib/kb/concept/state/structure'
 const CANCEL = 'Cancel'
 
 const PrimaryNameActions = () => {
-  const { concept, editingState, modifyConcept } = use(ConceptContext)
+  const { concept, stagedState, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
 
@@ -20,7 +20,7 @@ const PrimaryNameActions = () => {
 
   const colors = ['cancel', 'main', 'main']
   const disabled =
-    concept.name !== editingState.name && !taxonomyNames.includes(editingState.name)
+    concept.name !== stagedState.name && !taxonomyNames.includes(stagedState.name)
       ? [false, false, false]
       : [false, true, true]
   const labels = [CANCEL, NAME_UPDATE.NAME_ONLY, NAME_UPDATE.ALL_DATA]

@@ -17,10 +17,10 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
-  const { concept, editingState, modifyConcept } = use(ConceptContext)
+  const { concept, stagedState, modifyConcept } = use(ConceptContext)
   const swiperRef = useRef(null)
 
-  const { media: editingMedia, mediaIndex: editingMediaIndex } = editingState
+  const { media: editingMedia, mediaIndex: editingMediaIndex } = stagedState
 
   const pagination = {
     clickable: true,

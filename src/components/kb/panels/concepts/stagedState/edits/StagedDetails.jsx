@@ -12,15 +12,15 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { hasStateChange, stateChange } from './stateChange'
 
-const EditingDetails = () => {
-  const { editingState, initialState } = use(ConceptContext)
+const StagedDetails = () => {
+  const { stagedState, initialState } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
   const edits = useMemo(
     () =>
-      Object.entries(stateChange(initialState, editingState)).sort(([keyA], [keyB]) =>
+      Object.entries(stateChange(initialState, stagedState)).sort(([keyA], [keyB]) =>
         keyA.localeCompare(keyB)
       ),
-    [initialState, editingState]
+    [initialState, stagedState]
   )
 
   const editComponent = edit => {
@@ -40,14 +40,14 @@ const EditingDetails = () => {
   }
 
   useEffect(() => {
-    if (!hasStateChange(initialState, editingState)) {
+    if (!hasStateChange(initialState, stagedState)) {
       closeModal()
     }
-  }, [editingState, initialState, closeModal])
+  }, [stagedState, initialState, closeModal])
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{edits.map(editComponent)}</Box>
   )
 }
 
-export default EditingDetails
+export default StagedDetails

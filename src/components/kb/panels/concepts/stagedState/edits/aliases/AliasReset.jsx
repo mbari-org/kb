@@ -6,13 +6,11 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import EditReset from '../EditReset'
 
 const AliasReset = ({ aliasIndex }) => {
-  const { editingState, modifyConcept } = use(ConceptContext)
+  const { stagedState, modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
     // CxTBD Check if this is the only alias edit, and if so, do RESET.ALIASES
-    const count = editingState.aliases.filter(
-      item => item.action !== CONCEPT_STATE.NO_ACTION
-    ).length
+    const count = stagedState.aliases.filter(item => item.action !== CONCEPT_STATE.NO_ACTION).length
     count === 1
       ? modifyConcept({ type: CONCEPT_STATE.RESET.ALIASES })
       : modifyConcept({

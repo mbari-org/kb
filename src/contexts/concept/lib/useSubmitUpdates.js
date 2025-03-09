@@ -17,7 +17,7 @@
 // const useSubmitUpdates = ({
 //   concept,
 //   config,
-//   editingState,
+//   stagedState,
 //   initialState,
 //   modified,
 //   modifyConcept,
@@ -62,7 +62,7 @@
 //                 return
 //               }
 //               updateConcept(updatedConcept).then(
-//                 () => resetConcept(editingState),
+//                 () => resetConcept(stagedState),
 //                 error => showBoundary(error)
 //               )
 //             },
@@ -82,7 +82,7 @@
 //       updateConcept,
 //       processError,
 //       resetConcept,
-//       editingState,
+//       stagedState,
 //       showBoundary,
 //     ]
 //   )
@@ -98,7 +98,7 @@
 //           updateConceptName(concept, updatedName).then(
 //             () => {
 //               selectConcept(updatedName)
-//               resetConcept(editingState)
+//               resetConcept(stagedState)
 //             },
 //             error => showBoundary(error)
 //           )
@@ -115,7 +115,7 @@
 //       selectConcept,
 //       showBoundary,
 //       updateConceptName,
-//       editingState,
+//       stagedState,
 //     ]
 //   )
 
@@ -125,7 +125,7 @@
 //       return
 //     }
 
-//     const pendingEdits = stateChange(initialState, editingState)
+//     const pendingEdits = stateChange(initialState, stagedState)
 //     const updates = Object.keys(pendingEdits).reduce((acc, key) => {
 //       acc[key] = pendingEdits[key].pending
 //       return acc

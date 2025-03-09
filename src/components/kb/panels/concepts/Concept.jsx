@@ -14,9 +14,9 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const Concept = () => {
   const { user } = use(AuthContext)
-  const { editingState } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
 
-  if (editingState && Object.keys(editingState).length === 0) {
+  if (stagedState && Object.keys(stagedState).length === 0) {
     return null
   }
 

@@ -53,45 +53,45 @@ export const FIELDS = {
   },
 }
 
-export const isStateModified = (editingState, initialState, field, index) => {
+export const isStateModified = (stagedState, initialState, field, index) => {
   switch (field) {
     case FIELDS.ALIASES: {
-      const editingAlias = editingState.aliases[index]
+      const editingAlias = stagedState.aliases[index]
       const initialAlias = initialState.aliases[index]
       return !isEqual(editingAlias, initialAlias)
     }
     case FIELDS.MEDIA: {
-      const editingMediaItem = editingState.media[index]
+      const editingMediaItem = stagedState.media[index]
       const initialMediaItem = initialState.media[index]
       return !isEqual(editingMediaItem, initialMediaItem)
     }
 
     case FIELDS.PARENT: {
-      const editingParentName = editingState.parentName
+      const editingParentName = stagedState.parentName
       const initialParentName = initialState.parentName
       return editingParentName !== initialParentName
     }
 
     case FIELDS.PRIMARY.NAME: {
-      const editingName = editingState.primary.name
+      const editingName = stagedState.primary.name
       const initialName = initialState.primary.name
       return editingName !== initialName
     }
 
     case FIELDS.PRIMARY.AUTHOR: {
-      const editingAuthor = editingState.primary.author
+      const editingAuthor = stagedState.primary.author
       const initialAuthor = initialState.primary.author
       return editingAuthor !== initialAuthor
     }
 
     case FIELDS.RANK.NAME: {
-      const editingRankName = editingState.rank.name
+      const editingRankName = stagedState.rank.name
       const initialRankName = initialState.rank.name
       return editingRankName !== initialRankName
     }
 
     case FIELDS.RANK.LEVEL: {
-      const editingRankLevel = editingState.rank.level
+      const editingRankLevel = stagedState.rank.level
       const initialRankLevel = initialState.rank.level
       return editingRankLevel !== initialRankLevel
     }

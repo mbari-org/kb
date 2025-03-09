@@ -11,9 +11,9 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const AliasDelete = ({ aliasIndex }) => {
   const theme = useTheme()
 
-  const { editingState, modifyConcept } = use(ConceptContext)
+  const { stagedState, modifyConcept } = use(ConceptContext)
 
-  const alias = editingState.aliases[aliasIndex]
+  const alias = stagedState.aliases[aliasIndex]
   const showDelete = alias.action !== CONCEPT_STATE.ALIAS.DELETE
 
   return (

@@ -5,7 +5,7 @@ import { useErrorBoundary } from 'react-error-boundary'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
-import useEditingStateDisplay from '@/contexts/concept/lib/edit/useEditingStateDisplay'
+import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
 import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 
@@ -17,7 +17,7 @@ import conceptState from '@/lib/kb/concept/state/conceptState'
 // import useSubmitUpdates from "./lib/useSubmitUpdates"
 
 import { CONCEPT_STATE, isStateModified } from '@/lib/kb/concept/state/conceptState'
-import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
+import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
 import update from '@/contexts/concept/lib/submit/update'
 import { conceptStateReducer } from '@/contexts/concept/lib/edit/conceptStateReducer'
@@ -48,22 +48,22 @@ const ConceptProvider = ({ children }) => {
   const [pendingHistory, setPendingHistory] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
-  const [editingState, dispatch] = useReducer(conceptStateReducer, {})
+  const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
   const conceptPath = useConceptPath(concept)
-  const editingStateDisplay = useEditingStateDisplay()
+  const stagedStateDisplay = useStagedStateDisplay()
   const pendingFieldDisplay = usePendingFieldDisplay()
 
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset)
 
   const isConceptModified = useCallback(
-    () => !isJsonEqual(editingState, initialState),
-    [editingState, initialState]
+    () => !isJsonEqual(stagedState, initialState),
+    [stagedState, initialState]
   )
 
   const isFieldModified = useCallback(
-    (field, index) => isStateModified(editingState, initialState, field, index),
-    [editingState, initialState]
+    (field, index) => isStateModified(stagedState, initialState, field, index),
+    [stagedState, initialState]
   )
 
   const isModified = useCallback(
@@ -94,11 +94,11 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    console.log('CxInc: submitUpdates', editingState)
+    console.log('CxInc: submitUpdates', stagedState)
     update({
       concept,
       config: taxonomy.config,
-      updates: editingState,
+      updates: stagedState,
     })
   }
 
@@ -126,7 +126,7 @@ const ConceptProvider = ({ children }) => {
         if (modalHasBeenDisplayed) {
           setModalHasBeenDisplayed(false)
         } else {
-          editingStateDisplay(INTENT.CONTINUE)
+          stagedStateDisplay(INTENT.CONTINUE)
           setModalHasBeenDisplayed(true)
         }
         return
@@ -135,9 +135,9 @@ const ConceptProvider = ({ children }) => {
   }, [
     modal,
     concept,
-    editingStateDisplay,
+    stagedStateDisplay,
     editing,
-    editingState,
+    stagedState,
     getConcept,
     isModified,
     loadConcept,
@@ -166,8 +166,8 @@ const ConceptProvider = ({ children }) => {
         conceptPath,
         confirmReset,
         editing,
-        editingState,
-        editingStateDisplay,
+        stagedState,
+        stagedStateDisplay,
         initialState,
         isModified,
         modifyConcept,

@@ -7,7 +7,7 @@ import ConceptAlias from './ConceptAlias'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptAliases = () => {
-  const { editing, editingState } = use(ConceptContext)
+  const { editing, stagedState } = use(ConceptContext)
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -18,7 +18,7 @@ const ConceptAliases = () => {
         {editing && <AliasAdd />}
       </Box>
       <Stack spacing={1}>
-        {editingState?.aliases?.map((alias, index) => (
+        {stagedState?.aliases?.map((alias, index) => (
           <ConceptAlias key={alias.name || index} aliasIndex={index} />
         ))}
       </Stack>

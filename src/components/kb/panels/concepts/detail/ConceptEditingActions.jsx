@@ -3,37 +3,37 @@ import { use, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
-import useEditingStateDisplay from '@/contexts/concept/lib/edit/useEditingStateDisplay'
+import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { INTENT } from '@/contexts/concept/lib/edit/useEditingStateDisplay'
+import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const ConceptEditingActions = () => {
   const { editing, isModified, modifyConcept, setEditing } = use(ConceptContext)
 
-  const editingStateDiscard = useEditingStateDisplay(INTENT.DISCARD)
-  const editingStateSave = useEditingStateDisplay(INTENT.SAVE)
-  const editingStateShow = useEditingStateDisplay(INTENT.SHOW)
+  const stagedStateDiscard = useStagedStateDisplay(INTENT.DISCARD)
+  const stagedStateSave = useStagedStateDisplay(INTENT.SAVE)
+  const stagedStateShow = useStagedStateDisplay(INTENT.SHOW)
 
   const handleDiscard = useCallback(() => {
     if (isModified()) {
       modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
-      editingStateDiscard()
+      stagedStateDiscard()
     } else {
       setEditing(false)
     }
-  }, [isModified, modifyConcept, editingStateDiscard, setEditing])
+  }, [isModified, modifyConcept, stagedStateDiscard, setEditing])
 
   const handleSave = useCallback(() => {
     modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
-    editingStateSave()
-  }, [modifyConcept, editingStateSave])
+    stagedStateSave()
+  }, [modifyConcept, stagedStateSave])
 
   const handleShow = useCallback(() => {
     modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
-    editingStateShow()
-  }, [modifyConcept, editingStateShow])
+    stagedStateShow()
+  }, [modifyConcept, stagedStateShow])
 
   return (
     <Box

@@ -11,7 +11,7 @@ const DISCARD = 'Discard'
 const SAVE = 'Save'
 
 const ParentActions = () => {
-  const { editingState, initialState, modifyConcept } = use(ConceptContext)
+  const { stagedState, initialState, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
 
   const [saveDisabled, setSaveDisabled] = useState(true)
@@ -24,7 +24,7 @@ const ParentActions = () => {
     if (label === SAVE) {
       modifyConcept({
         type: CONCEPT_STATE.STRUCTURE.PARENT_UPDATE,
-        update: { parentName: editingState.parentName },
+        update: { parentName: stagedState.parentName },
       })
     }
 
@@ -32,8 +32,8 @@ const ParentActions = () => {
   }
 
   useEffect(() => {
-    setSaveDisabled(editingState.parentName === initialState.parentName)
-  }, [editingState, initialState])
+    setSaveDisabled(stagedState.parentName === initialState.parentName)
+  }, [stagedState, initialState])
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
 }
