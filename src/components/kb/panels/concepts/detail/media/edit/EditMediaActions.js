@@ -1,4 +1,4 @@
-import { use, useEffect, useMemo } from 'react'
+import { use, useMemo } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
@@ -52,10 +52,6 @@ const EditMediaActions = () => {
         break
     }
   }
-
-  useEffect(() => {
-    console.log('mediaItem', mediaItem)
-  }, [mediaItem])
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptEditMediaActions')
 }

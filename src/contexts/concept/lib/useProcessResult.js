@@ -43,7 +43,7 @@ const useProcessResult = ({
       setEditing(false)
       setModified(false)
     },
-    [concept, selectConcept, setModal, setEditing, setModified, showBoundary, updateConceptName]
+    [concept, selectConcept, setEditing, setModified, showBoundary, updateConceptName]
   )
 
   return { processDetailResult, processErrorResult, processNameResult }

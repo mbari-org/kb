@@ -55,8 +55,6 @@ const EditMediaContent = ({ setMediaData }) => {
     }
     setFormMediaItem(updatedMediaItem)
 
-    console.log('handleChange for action', action)
-
     const fieldIsModified =
       action === CONCEPT_STATE.MEDIA.ADD
         ? updatedMediaItem[name] !== EMPTY_MEDIA_ITEM[name]

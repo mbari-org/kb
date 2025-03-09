@@ -94,7 +94,7 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    console.log('CxINC: submitUpdates', editingState)
+    console.log('CxInc: submitUpdates', editingState)
     update({
       concept,
       config: taxonomy.config,

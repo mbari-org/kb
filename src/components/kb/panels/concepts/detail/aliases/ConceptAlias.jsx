@@ -15,8 +15,6 @@ import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
 
 import useDebounceModifyAlias from './useDebounceModifyAlias'
 
-// import { isDeepEqual } from '@/lib/util'
-
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()
 

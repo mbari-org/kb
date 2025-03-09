@@ -1,5 +1,3 @@
-import { Typography } from '@mui/material'
-
 import DescriptionDetail from '@/components/common/DescriptionDetail'
 
 const ErrorContent = ({ error }) => {
