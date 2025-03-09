@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 const StagedStateTitle = () => {
   const { concept } = use(ConceptContext)
 
-  return <Title title={`Current Edits: ${concept.name}`} />
+  return <Title title={`Staged Edits: ${concept.name}`} />
 }
 
 export default StagedStateTitle

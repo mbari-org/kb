@@ -15,6 +15,7 @@ import { hasStateChange, stateChange } from './stateChange'
 const StagedDetails = () => {
   const { stagedState, initialState } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
+
   const edits = useMemo(
     () =>
       Object.entries(stateChange(initialState, stagedState)).sort(([keyA], [keyB]) =>
@@ -41,7 +42,7 @@ const StagedDetails = () => {
 
   useEffect(() => {
     if (!hasStateChange(initialState, stagedState)) {
-      closeModal()
+      closeModal(true)
     }
   }, [stagedState, initialState, closeModal])
 

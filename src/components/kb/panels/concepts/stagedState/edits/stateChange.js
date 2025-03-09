@@ -1,5 +1,11 @@
-const hasStateChange = (initialState, stagedState) =>
-  JSON.stringify(stagedState) !== JSON.stringify(initialState)
+import { dropFields } from '@/lib/util'
+
+const hasStateChange = (allInitialState, allStagedState) => {
+  // Drop fields that are not relevant to state change comparison
+  const initialState = dropFields(allInitialState, ['aliasIndex', 'mediaIndex'])
+  const stagedState = dropFields(allStagedState, ['aliasIndex', 'mediaIndex'])
+  return JSON.stringify(stagedState) !== JSON.stringify(initialState)
+}
 
 const stateChange = (initialState, stagedState) => {
   if (!hasStateChange(initialState, stagedState)) {
