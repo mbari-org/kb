@@ -1,29 +1,29 @@
 import { use, useMemo, useState } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import ConceptContext from '@/contexts/concept/ConceptContext'
+
 import ModalContext from '@/contexts/modal/ModalContext'
 
 // import useHandleMediaSubmit from './useHandleMediaSubmit'
 
 import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import useDebounceModifyAlias from '../useDebounceModifyAlias'
+import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/media/edit/alias'
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 
 const AddAliasContent = () => {
   const theme = useTheme()
 
-  const { _editingState, _modifyConcept } = use(ConceptContext)
-  const { _setModal } = use(ModalContext)
+  const { modalData, setModalData } = use(ModalContext)
+  const { alias } = modalData
 
-  const [editedAlias, setEditedAlias] = useState({
-    action: CONCEPT_STATE.ALIAS.ADD,
-    author: '',
-    name: '',
-    nameType: '',
+  const [formAlias, setFormAlias] = useState(alias)
+
+  const [modifiedFields, setModifiedFields] = useState({
+    author: false,
+    name: false,
+    nameType: false,
   })
 
   const inputStyle = useMemo(
@@ -43,15 +43,23 @@ const AddAliasContent = () => {
     [theme]
   )
 
-  const debounceModifyAlias = useDebounceModifyAlias(CONCEPT_STATE.ALIAS.ADD)
+  const handleChange = event => {
+    const { name: field, value } = event.target
 
-  const handleChange = field => event => {
-    const update = {
-      ...editedAlias,
-      [field]: event.target.value,
+    const updatedAlias = {
+      ...formAlias,
+      [field]: value,
     }
-    setEditedAlias(update)
-    debounceModifyAlias(update)
+    setFormAlias(updatedAlias)
+
+    const fieldIsModified = updatedAlias[field] !== EMPTY_ALIAS[field]
+
+    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
+    setModifiedFields(updatedModifiedFields)
+
+    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
+
+    setModalData(prev => ({ ...prev, alias: updatedAlias, modified }))
   }
 
   // const handleSubmit = useHandleMediaSubmit(aliasIndex, {}, setModal)
@@ -63,28 +71,28 @@ const AddAliasContent = () => {
         <TextField
           label='Name'
           name='name'
-          onChange={handleChange('name')}
+          onChange={handleChange}
           required
-          value={editedAlias.name}
+          value={formAlias.name}
         />
       </FormControl>
       <FormControl {...inputStyle}>
         <TextField
           label='Author'
           name='author'
-          onChange={handleChange('author')}
+          onChange={handleChange}
           required
-          value={editedAlias.author}
+          value={formAlias.author}
         />
       </FormControl>
       <FormControl {...inputStyle}>
-        <InputLabel id={`${editedAlias.name}-name-type-label`}>Type</InputLabel>
+        <InputLabel id={`${formAlias.name}-name-type-label`}>Type</InputLabel>
         <Select
           displayEmpty
-          labelId={`${editedAlias.name}-name-type-label`}
-          onChange={handleChange('nameType')}
+          labelId={`${formAlias.name}-name-type-label`}
+          onChange={handleChange}
           required
-          value={editedAlias.nameType}
+          value={formAlias.nameType}
         >
           {ALIAS_TYPES.map(value => (
             <MenuItem key={value} value={value}>

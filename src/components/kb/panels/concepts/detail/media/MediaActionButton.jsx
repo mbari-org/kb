@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback } from 'react'
 
 import { Box, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -19,59 +19,30 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} }) => {
   const theme = useTheme()
 
-  const { confirmReset, stagedState, initialState, modifyConcept } = use(ConceptContext)
-  const { closeModal, setModal, setModalData } = use(ModalContext)
-
-  const [buttonAction, setButtonAction] = useState(action)
+  const { stagedState, initialState, modifyConcept } = use(ConceptContext)
+  const { setModal, setModalData } = use(ModalContext)
 
   const handleClick = useCallback(() => {
     const mediaIndex =
-      buttonAction === CONCEPT_STATE.MEDIA.ADD ? stagedState.media.length : stagedState.mediaIndex
-
-    const editingMediaItem = stagedState.media[mediaIndex]
-    const mediaItem = editingMediaItem ? mediaItemFields(editingMediaItem) : EMPTY_MEDIA_ITEM
+      action === CONCEPT_STATE.MEDIA.ADD ? stagedState.media.length : stagedState.mediaIndex
+    const stagedMediaItem = stagedState.media[mediaIndex]
+    const mediaItem = stagedMediaItem ? mediaItemFields(stagedMediaItem) : EMPTY_MEDIA_ITEM
 
     const actionModalData = {
-      action: buttonAction,
+      action,
       mediaIndex,
       mediaItem,
       modified: false,
     }
-
     setModalData(actionModalData)
 
-    const setMediaData = update => {
-      setModalData(prev => ({
-        ...prev,
-        ...update,
-      }))
-    }
+    const setMediaData = update => setModalData(prev => ({ ...prev, ...update }))
 
-    const modal = createEditMediaModal(buttonAction, setMediaData)
-    const onClose = createEditMediaOnClose({
-      closeModal,
-      confirmReset,
-      stagedState,
-      initialState,
-      modifyConcept,
-      setMediaData,
-    })
+    const modal = createEditMediaModal(action, setMediaData)
+    const onClose = createEditMediaOnClose({ initialState, modifyConcept })
 
     setModal(modal, onClose)
-  }, [
-    buttonAction,
-    confirmReset,
-    stagedState,
-    initialState,
-    modifyConcept,
-    closeModal,
-    setModal,
-    setModalData,
-  ])
-
-  useEffect(() => {
-    setButtonAction(action)
-  }, [action])
+  }, [action, stagedState, initialState, modifyConcept, setModal, setModalData])
 
   return (
     <Box

@@ -28,8 +28,8 @@ export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
 const EditMediaContent = ({ setMediaData }) => {
   const { stagedState } = use(ConceptContext)
-  const { modalData, setModal } = use(ModalContext)
 
+  const { modalData } = use(ModalContext)
   const { action, mediaIndex, mediaItem } = modalData
 
   const [formMediaItem, setFormMediaItem] = useState(mediaItem)
@@ -47,20 +47,20 @@ const EditMediaContent = ({ setMediaData }) => {
   const [urlCheckTimeout, setUrlCheckTimeout] = useState(null)
 
   const handleChange = event => {
-    const { name, value, type, checked } = event.target
+    const { name: field, value, type, checked } = event.target
 
     const updatedMediaItem = {
       ...formMediaItem,
-      [name]: type === 'checkbox' ? checked : value,
+      [field]: type === 'checkbox' ? checked : value,
     }
     setFormMediaItem(updatedMediaItem)
 
     const fieldIsModified =
       action === CONCEPT_STATE.MEDIA.ADD
-        ? updatedMediaItem[name] !== EMPTY_MEDIA_ITEM[name]
-        : stagedState.media[mediaIndex][name] !== updatedMediaItem[name]
+        ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
+        : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
 
-    const updatedModifiedFields = { ...modifiedFields, [name]: fieldIsModified }
+    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
     setModifiedFields(updatedModifiedFields)
 
     const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
@@ -70,7 +70,7 @@ const EditMediaContent = ({ setMediaData }) => {
       mediaItem: updatedMediaItem,
     })
 
-    if (name === 'url') {
+    if (field === 'url') {
       checkUrlChange(value)
     }
   }
@@ -97,7 +97,7 @@ const EditMediaContent = ({ setMediaData }) => {
     }
   }
 
-  const handleSubmit = useHandleMediaSubmit(mediaIndex, setModal)
+  const handleSubmit = useHandleMediaSubmit()
   const submitChange = event => {
     if (!urlStatus.loading && urlStatus.valid) {
       handleSubmit(event)

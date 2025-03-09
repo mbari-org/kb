@@ -31,19 +31,23 @@ const StagedStateActions = ({ intent }) => {
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.YES })
         break
+
       case CONTINUE:
         selectConcept(concept.name)
         selectPanel('Concepts')
         modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
         closeModal()
         break
+
       case DISCARD:
         modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
         break
+
       case SAVE:
         submitUpdates(true)
         closeModal()
         break
+
       default:
         closeModal()
         break
