@@ -18,6 +18,23 @@ const dropFields = (object, fields) => {
   }, {})
 }
 
+const getDeepDiff = (o1, o2) => {
+  const diff = {}
+
+  Object.keys(o1).forEach(key => {
+    if (typeof o1[key] === 'object' && o1[key] !== null && !Array.isArray(o1[key])) {
+      const nestedDiff = getDeepDiff(o1[key], o2[key])
+      if (Object.keys(nestedDiff).length > 0) {
+        diff[key] = nestedDiff
+      }
+    } else if (!isEqual(o1[key], o2[key])) {
+      diff[key] = o1[key]
+    }
+  })
+
+  return diff
+}
+
 const isDeepEqual = (obj1, obj2) => {
   if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
     return isEqual(obj1, obj2)
@@ -127,6 +144,7 @@ export {
   capitalize,
   checkImageUrlExists,
   dropFields,
+  getDeepDiff,
   isDeepEqual,
   isElementInViewport,
   isEmpty,

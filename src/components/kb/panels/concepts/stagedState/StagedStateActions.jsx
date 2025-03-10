@@ -44,7 +44,7 @@ const StagedStateActions = ({ intent }) => {
         break
 
       case SAVE:
-        submitUpdates(true)
+        submitUpdates()
         closeModal()
         break
 

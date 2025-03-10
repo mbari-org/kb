@@ -4,9 +4,11 @@ import { useErrorBoundary } from 'react-error-boundary'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import useConceptModified from '@/contexts/concept/lib/useConceptModified'
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
-import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
+
+import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 
 import ModalContext from '@/contexts/modal/ModalContext'
@@ -14,15 +16,11 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import conceptState from '@/lib/kb/concept/state/conceptState'
-// import useSubmitUpdates from "./lib/useSubmitUpdates"
 
-import { CONCEPT_STATE, isStateModified } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
-import update from '@/contexts/concept/lib/submit/update'
 import { conceptStateReducer } from '@/contexts/concept/lib/edit/conceptStateReducer'
-
-import { isJsonEqual } from '@/lib/util'
 
 const ConceptProvider = ({ children }) => {
   // const theme = useTheme()
@@ -36,7 +34,6 @@ const ConceptProvider = ({ children }) => {
     getConcept,
     getConceptPendingHistory,
     loadConcept,
-    taxonomy,
     // updateConcept,
     // updateConceptName,
   } = use(TaxonomyContext)
@@ -56,25 +53,13 @@ const ConceptProvider = ({ children }) => {
 
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset)
 
-  const isConceptModified = useCallback(
-    () => !isJsonEqual(stagedState, initialState),
-    [stagedState, initialState]
-  )
+  const { getConceptUpdates, isModified } = useConceptModified({
+    editing,
+    initialState,
+    stagedState,
+  })
 
-  const isFieldModified = useCallback(
-    (field, index) => isStateModified(stagedState, initialState, field, index),
-    [stagedState, initialState]
-  )
-
-  const isModified = useCallback(
-    (field, index) => {
-      if (!editing) return false
-
-      return field ? isFieldModified(field, index) : isConceptModified()
-    },
-    [editing, isConceptModified, isFieldModified]
-  )
-
+  // CxTBD Is this needed?
   const resetConcept = useCallback(
     toState => {
       setEditing(false)
@@ -88,18 +73,14 @@ const ConceptProvider = ({ children }) => {
     [concept, closeModal]
   )
 
-  const submitUpdates = submit => {
-    if (!submit) {
-      resetConcept(initialState)
-      return
-    }
-
-    console.log('CxInc: submitUpdates', stagedState)
-    update({
-      concept,
-      config: taxonomy.config,
-      updates: stagedState,
-    })
+  const submitUpdates = () => {
+    const conceptUpdates = getConceptUpdates()
+    console.log('CxConceptProvider: conceptUpdates', conceptUpdates)
+    // update({
+    //   concept,
+    //   config: taxonomy.config,
+    //   updates: stagedState,
+    // })
   }
 
   useEffect(() => {
