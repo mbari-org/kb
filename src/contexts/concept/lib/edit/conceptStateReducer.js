@@ -1,4 +1,10 @@
-import { addAlias, deleteAlias, editAlias } from '@/lib/kb/concept/state/aliases'
+import {
+  addAlias,
+  deleteAlias,
+  editAlias,
+  resetAlias,
+  resetAliases,
+} from '@/lib/kb/concept/state/aliases'
 import { resetField, setField } from '@/lib/kb/concept/state/field'
 import {
   addMedia,
@@ -36,6 +42,12 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case CONCEPT_STATE.MEDIA.EDIT:
       return editMedia(state, update)
+
+    case CONCEPT_STATE.RESET.ALIASES:
+      return resetAliases(state, update)
+
+    case CONCEPT_STATE.RESET.ALIAS:
+      return resetAlias(state, update)
 
     case CONCEPT_STATE.RESET.FIELD:
       return resetField(state, update)

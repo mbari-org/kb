@@ -44,6 +44,7 @@ const deleteMedia = (state, update) => {
 
 const editMedia = (state, update) => {
   const mediaItem = state.media[update.mediaIndex]
+  // If editing an added media item, don't change the action
   if (mediaItem.action === CONCEPT_STATE.MEDIA.ADD) {
     const updatedItem = {
       ...update.mediaItem,

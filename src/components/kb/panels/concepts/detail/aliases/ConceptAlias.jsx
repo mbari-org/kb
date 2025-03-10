@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 import { Stack, FormControl, TextField, Select, MenuItem, InputLabel } from '@mui/material'
 
 import { useTheme } from '@mui/material/styles'
@@ -9,6 +9,7 @@ import useConceptDetailStyle from '../useConceptDetailStyle'
 import { aliasBorder } from '@/lib/kb/concept/aliases'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
@@ -18,25 +19,24 @@ import useDebounceModifyAlias from './useDebounceModifyAlias'
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()
 
-  const { editing, stagedState, initialState } = use(ConceptContext)
-
-  const editingAlias = { ...stagedState.aliases[aliasIndex] }
+  const { editing, initialState, stagedState } = use(ConceptContext)
+  const { getNames } = use(TaxonomyContext)
+  const stagedAlias = useMemo(
+    () => ({ ...stagedState.aliases[aliasIndex] }),
+    [stagedState.aliases, aliasIndex]
+  )
   const initialAlias = { ...initialState.aliases[aliasIndex] }
 
+  console.log('stagedState alias', stagedAlias)
+
   // aliasUpdate is necessary due to debounce on edits
-  const [aliasUpdate, setAliasUpdate] = useState({
-    action: editingAlias.action,
-    aliasIndex,
-    alias: {
-      author: editingAlias.author,
-      name: editingAlias.name,
-      nameType: editingAlias.nameType,
-    },
-  })
+  const [aliasUpdate, setAliasUpdate] = useState(null)
 
-  const isDeleted = editingAlias.action === CONCEPT_STATE.ALIAS.DELETE
+  const isDeleted = stagedAlias.action === CONCEPT_STATE.ALIAS.DELETE
 
-  const border = aliasBorder(isDeleted, editingAlias, aliasUpdate, initialAlias, theme)
+  const border = aliasUpdate
+    ? aliasBorder(isDeleted, stagedAlias, aliasUpdate, initialAlias, theme)
+    : 'none'
   const infoStyle = useConceptDetailStyle('Alias')
 
   const disabled = isDeleted || !editing
@@ -44,6 +44,13 @@ const ConceptAlias = ({ aliasIndex }) => {
   const debounceModifyAlias = useDebounceModifyAlias(CONCEPT_STATE.ALIAS.EDIT)
 
   const handleChange = field => event => {
+    if (field === 'name') {
+      const names = getNames()
+      if (names.includes(event.target.value)) {
+        return
+      }
+    }
+
     const update = {
       ...aliasUpdate,
       alias: {
@@ -53,6 +60,22 @@ const ConceptAlias = ({ aliasIndex }) => {
     }
     setAliasUpdate(update)
     debounceModifyAlias(update)
+  }
+
+  useEffect(() => {
+    setAliasUpdate({
+      action: stagedAlias.action,
+      aliasIndex,
+      alias: {
+        author: stagedAlias.author,
+        name: stagedAlias.name,
+        nameType: stagedAlias.nameType,
+      },
+    })
+  }, [aliasIndex, stagedAlias])
+
+  if (!aliasUpdate) {
+    return null
   }
 
   return (
@@ -78,13 +101,13 @@ const ConceptAlias = ({ aliasIndex }) => {
           />
         </FormControl>
         <FormControl {...infoStyle} style={{ flex: 0.45 }}>
-          <InputLabel id={`${editingAlias.name}-name-type-label`} shrink>
+          <InputLabel id={`${stagedAlias.name}-name-type-label`} shrink>
             Type
           </InputLabel>
           <Select
             displayEmpty
             disabled={disabled}
-            labelId={`${editingAlias.name}-name-type-label`}
+            labelId={`${stagedAlias.name}-name-type-label`}
             onChange={handleChange('nameType')}
             value={aliasUpdate.alias.nameType}
           >

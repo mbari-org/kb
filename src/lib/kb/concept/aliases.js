@@ -47,25 +47,23 @@ const aliasBorder = (isDeleted, editedAlias, editingAlias, initialAlias, theme) 
   return `${ACTION_BORDER} ${borderColor}`
 }
 
-const aliasEdit = (aliasIndex, initialAlias, editingAlias) => {
-  const { action: editingAction } = editingAlias
+const aliasEdit = (aliasIndex, initialAlias, stagedAlias) => {
+  const { action: stagedAction } = stagedAlias
 
-  if (editingAction === CONCEPT_STATE.NO_ACTION) {
+  if (stagedAction === CONCEPT_STATE.NO_ACTION) {
     return null
   }
 
-  const initialFields = editingAction === CONCEPT_STATE.ALIAS.ADD ? null : aliasFields(initialAlias)
+  const initialFields = stagedAction === CONCEPT_STATE.ALIAS.ADD ? null : aliasFields(initialAlias)
+  const stagedFields = stagedAction === CONCEPT_STATE.ALIAS.DELETE ? null : aliasFields(stagedAlias)
 
-  const stagedFields =
-    editingAction === CONCEPT_STATE.ALIAS.DELETE ? null : aliasFields(editingAlias)
-
-  return [aliasIndex, editingAction, initialFields, stagedFields]
+  return [aliasIndex, stagedAction, initialFields, stagedFields]
 }
 
-const aliasEdits = (initial, editing) => {
-  return initial.map((initialAlias, editingIndex) => {
-    const editingAlias = editing[editingIndex]
-    return aliasEdit(editingIndex, initialAlias, editingAlias)
+const aliasEdits = (initial, staged) => {
+  return staged.map((stagedAlias, stagedIndex) => {
+    const initialAlias = initial[stagedIndex]
+    return aliasEdit(stagedIndex, initialAlias, stagedAlias)
   })
 }
 

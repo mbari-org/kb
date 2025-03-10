@@ -1,8 +1,8 @@
 import { use } from 'react'
 import { Box } from '@mui/material'
 
-import MediaView from './MediaView'
-import NoMedia from './NoMedia'
+import MediaView from '@/components/kb/panels/concepts/detail/media/MediaView'
+import NoMedia from '@/components/kb/panels/concepts/detail/media/NoMedia'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 

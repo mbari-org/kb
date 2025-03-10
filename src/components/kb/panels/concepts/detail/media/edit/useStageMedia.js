@@ -2,13 +2,14 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
+
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const useHandleMediaSubmit = () => {
+const useStageMedia = () => {
   const { modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
 
-  const handleSubmit = async event => {
+  const stageMedia = async event => {
     event.preventDefault()
 
     const { action, mediaIndex, mediaItem } = modalData
@@ -31,7 +32,7 @@ const useHandleMediaSubmit = () => {
     closeModal(true)
   }
 
-  return handleSubmit
+  return stageMedia
 }
 
-export default useHandleMediaSubmit
+export default useStageMedia

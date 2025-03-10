@@ -1,9 +1,9 @@
 import { use } from 'react'
 import { Stack } from '@mui/material'
 
-import ConceptAliases from './detail/aliases/ConceptAliases'
+import ConceptAliases from './detail/ConceptAliases'
 import ConceptAuthor from './detail/ConceptAuthor'
-import ConceptMedia from './detail/media/ConceptMedia'
+import ConceptMedia from './detail/ConceptMedia'
 import ConceptName from './detail/ConceptName'
 import ConceptRank from './detail/ConceptRank'
 

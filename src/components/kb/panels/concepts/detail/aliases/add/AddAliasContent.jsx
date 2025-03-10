@@ -3,20 +3,24 @@ import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/
 import { useTheme } from '@mui/material/styles'
 
 import ModalContext from '@/contexts/modal/ModalContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-// import useHandleMediaSubmit from './useHandleMediaSubmit'
+import useStageAlias from './useStageAlias'
 
 import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
 
-import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/media/edit/alias'
+import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/aliases/add/alias'
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 
 const AddAliasContent = () => {
   const theme = useTheme()
 
-  const { modalData, setModalData } = use(ModalContext)
-  const { alias } = modalData
+  const {
+    modalData: { alias },
+    setModalData,
+  } = use(ModalContext)
+  const { getNames } = use(TaxonomyContext)
 
   const [formAlias, setFormAlias] = useState(alias)
 
@@ -62,11 +66,25 @@ const AddAliasContent = () => {
     setModalData(prev => ({ ...prev, alias: updatedAlias, modified }))
   }
 
-  // const handleSubmit = useHandleMediaSubmit(aliasIndex, {}, setModal)
-  const handleSubmit = () => console.log('CxInc handleSubmit')
+  const handleStage = useStageAlias()
+
+  const isValidName = useMemo(() => {
+    const names = getNames()
+    return !names.includes(formAlias.name)
+  }, [formAlias.name, getNames])
+
+  const nameError = modifiedFields.name && !isValidName
+
+  const nameHelperText = !modifiedFields.name
+    ? ''
+    : formAlias.name.trim() === ''
+    ? 'Name cannot be empty'
+    : !isValidName
+    ? 'Taxonomy name already exists'
+    : ''
 
   return (
-    <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleSubmit}>
+    <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>
       <FormControl {...inputStyle}>
         <TextField
           label='Name'
@@ -74,6 +92,8 @@ const AddAliasContent = () => {
           onChange={handleChange}
           required
           value={formAlias.name}
+          error={nameError}
+          helperText={nameHelperText}
         />
       </FormControl>
       <FormControl {...inputStyle}>

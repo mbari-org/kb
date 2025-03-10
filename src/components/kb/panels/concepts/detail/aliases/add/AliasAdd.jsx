@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 
-import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/media/edit/alias'
+import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/aliases/add/alias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'

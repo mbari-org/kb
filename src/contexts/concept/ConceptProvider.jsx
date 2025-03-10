@@ -133,19 +133,19 @@ const ConceptProvider = ({ children }) => {
       }
     }
   }, [
-    modal,
     concept,
-    stagedStateDisplay,
     editing,
-    stagedState,
     getConcept,
     isModified,
     loadConcept,
+    modal,
     modalHasBeenDisplayed,
     selectConcept,
     selectPanel,
     selected,
     showBoundary,
+    stagedState,
+    stagedStateDisplay,
   ])
 
   useEffect(() => {
@@ -166,8 +166,6 @@ const ConceptProvider = ({ children }) => {
         conceptPath,
         confirmReset,
         editing,
-        stagedState,
-        stagedStateDisplay,
         initialState,
         isModified,
         modifyConcept,
@@ -175,6 +173,8 @@ const ConceptProvider = ({ children }) => {
         pendingHistory,
         resetConcept,
         setEditing,
+        stagedState,
+        stagedStateDisplay,
         submitUpdates,
       }}
     >

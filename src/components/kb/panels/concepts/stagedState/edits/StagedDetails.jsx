@@ -25,16 +25,18 @@ const StagedDetails = () => {
   )
 
   const editComponent = edit => {
-    const [field, { _initial, editing }] = edit
+    const [field, { _initial, staged }] = edit
     switch (field) {
       case 'aliases':
         return <AliasesDetail key={field} edit={edit} />
+      case 'aliasIndex':
+        return null
       case 'media':
         return <MediaDetail key={field} edit={edit} />
       case 'mediaIndex':
         return null
       case 'nameUpdate':
-        return <FieldValueDetail key={field} field={field} value={editing} />
+        return <FieldValueDetail key={field} field={field} value={staged} />
       default:
         return <FieldDeltaDetail key={field} edit={edit} />
     }

@@ -12,9 +12,9 @@ const urlFile = fields =>
     .pop()
 
 const MediaItemEdit = ({ mediaItemEdit }) => {
-  const [mediaIndex, editingAction, initialFields, stagedFields] = mediaItemEdit
+  const [mediaIndex, stagedAction, initialFields, stagedFields] = mediaItemEdit
 
-  const actionText = `${editingAction.split(' ').pop()}`
+  const actionText = `${stagedAction.split(' ').pop()}`
   const actionFile = urlFile(initialFields) || urlFile(stagedFields) || ''
 
   return (

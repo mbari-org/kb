@@ -12,8 +12,8 @@ const stateChange = (initialState, stagedState) => {
     return {}
   }
 
-  return stateChanges(initialState, stagedState).reduce((edits, [field, initial, editing]) => {
-    edits[field] = { initial, editing }
+  return stateChanges(initialState, stagedState).reduce((edits, [field, initial, staged]) => {
+    edits[field] = { initial, staged }
     return edits
   }, {})
 }

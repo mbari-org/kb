@@ -16,7 +16,7 @@ import MediaDisplay from '@/components/kb/panels/concepts/detail/media/MediaDisp
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import useHandleMediaSubmit from './useHandleMediaSubmit'
+import useStageMedia from './useStageMedia'
 
 import { hasPrimary, isPrimary } from '@/lib/kb/concept/media'
 import { checkImageUrlExists, isValidUrl } from '@/lib/util'
@@ -26,10 +26,10 @@ import { EMPTY_MEDIA_ITEM } from './mediaItem'
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
-const EditMediaContent = ({ setMediaData }) => {
+const EditMediaContent = () => {
   const { stagedState } = use(ConceptContext)
 
-  const { modalData } = use(ModalContext)
+  const { modalData, setModalData } = use(ModalContext)
   const { action, mediaIndex, mediaItem } = modalData
 
   const [formMediaItem, setFormMediaItem] = useState(mediaItem)
@@ -65,10 +65,7 @@ const EditMediaContent = ({ setMediaData }) => {
 
     const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
 
-    setMediaData({
-      modified,
-      mediaItem: updatedMediaItem,
-    })
+    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified }))
 
     if (field === 'url') {
       checkUrlChange(value)
@@ -97,10 +94,10 @@ const EditMediaContent = ({ setMediaData }) => {
     }
   }
 
-  const handleSubmit = useHandleMediaSubmit()
-  const submitChange = event => {
+  const stageMedia = useStageMedia()
+  const stageChange = event => {
     if (!urlStatus.loading && urlStatus.valid) {
-      handleSubmit(event)
+      stageMedia(event)
     }
   }
 
@@ -159,7 +156,7 @@ const EditMediaContent = ({ setMediaData }) => {
   const creditHelperText = formMediaItem.credit.trim() === '' ? 'Credit cannot be empty' : ''
 
   return (
-    <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={submitChange}>
+    <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
       <FormControl fullWidth margin='normal'>
         <TextField
           error={urlError}

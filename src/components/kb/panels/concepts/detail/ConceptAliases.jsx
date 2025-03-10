@@ -1,14 +1,13 @@
 import { use } from 'react'
-import { MdOutlinePlaylistAdd } from 'react-icons/md'
-import { Box, Typography, IconButton, Stack } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
-import ConceptAlias from './aliases/ConceptAlias'
+import { Box, Typography, Stack } from '@mui/material'
+
+import AliasAdd from '@/components/kb/panels/concepts/detail/aliases/add/AliasAdd'
+import ConceptAlias from '@/components/kb/panels/concepts/detail/aliases/ConceptAlias'
+
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptAliases = () => {
-  const theme = useTheme()
-
-  const { concept, editing } = use(ConceptContext)
+  const { editing, stagedState } = use(ConceptContext)
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -16,24 +15,11 @@ const ConceptAliases = () => {
         <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
           Alternate Names
         </Typography>
-        {editing && (
-          <IconButton
-            color='main'
-            sx={{
-              '&:hover': {
-                ...theme.kb.icon.hover,
-              },
-              backgroundColor: theme.palette.background.paper,
-              mb: 1,
-            }}
-          >
-            <MdOutlinePlaylistAdd />
-          </IconButton>
-        )}
+        {editing && <AliasAdd />}
       </Box>
       <Stack spacing={1}>
-        {concept?.aliases?.map(alias => (
-          <ConceptAlias key={alias.name} alias={alias} />
+        {stagedState?.aliases?.map((alias, index) => (
+          <ConceptAlias key={alias.name || index} aliasIndex={index} />
         ))}
       </Stack>
     </Box>

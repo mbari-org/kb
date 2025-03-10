@@ -14,7 +14,7 @@ const isResetAction = action => RESET_ACTIONS.includes(action.type)
 const resetAlias = (aliasIndex, dispatch, initialState) => {
   dispatch({
     type: CONCEPT_STATE.RESET.ALIAS,
-    update: { alias: initialState.aliases[aliasIndex] },
+    update: { alias: initialState.aliases[aliasIndex], aliasIndex },
   })
 }
 

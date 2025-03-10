@@ -7,7 +7,7 @@ import { fieldSx } from '@/components/common/format'
 import { mediaItemEdits } from '@/lib/kb/concept/media'
 
 const MediaDetail = ({ edit }) => {
-  const [_, { initial, editing }] = edit
+  const [_, { initial, staged }] = edit
 
   return (
     <Box
@@ -22,14 +22,14 @@ const MediaDetail = ({ edit }) => {
         <Typography sx={fieldSx}>Media</Typography>
       </Box>
       <Box sx={{ ml: 3 }}>
-        {mediaItemEdits(initial, editing).map(mediaItemEdit => {
+        {mediaItemEdits(initial, staged).map(mediaItemEdit => {
           if (mediaItemEdit === null) {
             return null
           }
-          const [mediaItemIndex, editingAction, _initialFields, _stagedFields] = mediaItemEdit
+          const [mediaItemIndex, stagedAction, _initialFields, _stagedFields] = mediaItemEdit
           return (
             <MediaItemEdit
-              key={`${mediaItemIndex}-${editingAction}`}
+              key={`${mediaItemIndex}-${stagedAction}`}
               mediaItemEdit={mediaItemEdit}
             />
           )

@@ -14,7 +14,7 @@ const AliasReset = ({ aliasIndex }) => {
     count === 1
       ? modifyConcept({ type: CONCEPT_STATE.RESET.ALIASES })
       : modifyConcept({
-          type: CONCEPT_STATE.RESET.ALIAS_ITEM,
+          type: CONCEPT_STATE.RESET.ALIAS,
           update: { aliasIndex },
         })
   }

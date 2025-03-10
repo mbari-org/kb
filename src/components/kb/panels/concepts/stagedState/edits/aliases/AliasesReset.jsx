@@ -9,7 +9,7 @@ const AliasesReset = () => {
   const { modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
-    modifyConcept({ type: CONCEPT_STATE.RESET_ALIASES })
+    modifyConcept({ type: CONCEPT_STATE.RESET.ALIASES })
   }
 
   return <EditReset onClick={onClick} />

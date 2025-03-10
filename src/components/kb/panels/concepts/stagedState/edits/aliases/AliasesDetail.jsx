@@ -7,7 +7,7 @@ import { fieldSx } from '@/components/common/format'
 import { aliasEdits } from '@/lib/kb/concept/aliases'
 
 const AliasesDetail = ({ edit }) => {
-  const [_, { initial, editing }] = edit
+  const [_, { initial, staged }] = edit
 
   return (
     <Box
@@ -22,12 +22,12 @@ const AliasesDetail = ({ edit }) => {
         <Typography sx={fieldSx}>Aliases</Typography>
       </Box>
       <Box sx={{ ml: 3 }}>
-        {aliasEdits(initial, editing).map(aliasEdit => {
+        {aliasEdits(initial, staged).map(aliasEdit => {
           if (aliasEdit === null) {
             return null
           }
-          const [_aliasIndex, editingAction, _initialFields, _stagedFields] = aliasEdit
-          return <AliasEdit key={editingAction} aliasEdit={aliasEdit} />
+          const [aliasIndex, stagedAction, _initialFields, _stagedFields] = aliasEdit
+          return <AliasEdit key={`${stagedAction}-${aliasIndex}`} aliasEdit={aliasEdit} />
         })}
       </Box>
     </Box>

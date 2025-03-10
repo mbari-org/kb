@@ -36,9 +36,7 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
     }
     setModalData(actionModalData)
 
-    const setMediaData = update => setModalData(prev => ({ ...prev, ...update }))
-
-    const modal = createEditMediaModal(action, setMediaData)
+    const modal = createEditMediaModal(action)
     const onClose = createEditMediaOnClose({ initialState, modifyConcept })
 
     setModal(modal, onClose)

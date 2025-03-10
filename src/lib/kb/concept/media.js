@@ -27,26 +27,26 @@ const mediaBorder = (mediaItem, theme) => {
   return `${borderWidth} solid ${borderColor}`
 }
 
-const mediaItemEdit = (mediaIndex, initialItem, editingItem) => {
-  const { action: editingAction } = editingItem
+const mediaItemEdit = (mediaIndex, initialItem, stagedItem) => {
+  const { action: stagedAction } = stagedItem
 
-  if (editingAction === CONCEPT_STATE.NO_ACTION) {
+  if (stagedAction === CONCEPT_STATE.NO_ACTION) {
     return null
   }
 
   const initialFields =
-    editingAction === CONCEPT_STATE.MEDIA.ADD ? null : mediaItemFields(initialItem)
+    stagedAction === CONCEPT_STATE.MEDIA.ADD ? null : mediaItemFields(initialItem)
 
   const stagedFields =
-    editingAction === CONCEPT_STATE.MEDIA.DELETE ? null : mediaItemFields(editingItem)
+    stagedAction === CONCEPT_STATE.MEDIA.DELETE ? null : mediaItemFields(stagedItem)
 
-  return [mediaIndex, editingAction, initialFields, stagedFields]
+  return [mediaIndex, stagedAction, initialFields, stagedFields]
 }
 
-const mediaItemEdits = (initial, editing) =>
-  editing.map((editingItem, editingIndex) => {
-    const initialItem = initial[editingIndex]
-    return mediaItemEdit(editingIndex, initialItem, editingItem)
+const mediaItemEdits = (initial, staged) =>
+  staged.map((stagedItem, stagedIndex) => {
+    const initialItem = initial[stagedIndex]
+    return mediaItemEdit(stagedIndex, initialItem, stagedItem)
   })
 
 const mediaItemFields = mediaItem =>

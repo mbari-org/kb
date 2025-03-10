@@ -8,7 +8,7 @@ import { createModal } from '@/components/modal/factory'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const createEditMediaModal = (action, setMediaData) => {
+const createEditMediaModal = action => {
   const createComponents = () => {
     const Title = () => <EditMediaTitle action={action} />
 
@@ -16,7 +16,7 @@ const createEditMediaModal = (action, setMediaData) => {
       case CONCEPT_STATE.MEDIA.ADD: {
         return {
           Actions: EditMediaActions,
-          Content: () => <EditMediaContent setMediaData={setMediaData} />,
+          Content: () => <EditMediaContent />,
           Title,
         }
       }
@@ -30,7 +30,7 @@ const createEditMediaModal = (action, setMediaData) => {
       case CONCEPT_STATE.MEDIA.EDIT: {
         return {
           Actions: EditMediaActions,
-          Content: () => <EditMediaContent setMediaData={setMediaData} />,
+          Content: () => <EditMediaContent />,
           Title,
         }
       }

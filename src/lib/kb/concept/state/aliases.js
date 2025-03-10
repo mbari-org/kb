@@ -1,4 +1,3 @@
-import { NAME_TYPES } from '@/lib/kb/concept/aliases'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const aliasesState = concept => {
@@ -17,16 +16,14 @@ const aliasesState = concept => {
   }
 }
 
-const addAlias = state => {
-  const addItem = {
-    author: '',
-    name: '',
-    nameType: NAME_TYPES.COMMON,
+const addAlias = (state, update) => {
+  const alias = {
+    ...update.alias,
     action: CONCEPT_STATE.ALIAS.ADD,
   }
   return {
     ...state,
-    aliases: [...state.aliases, addItem],
+    aliases: [...state.aliases, alias],
   }
 }
 
@@ -45,9 +42,9 @@ const deleteAlias = (state, update) => {
 
 const editAlias = (state, update) => {
   const alias = state.aliases[update.aliasIndex]
-  if (update.action === CONCEPT_STATE.ALIAS.ADD) {
+  // If editing an added alias, don't change the action
+  if (alias.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedItem = {
-      ...alias,
       ...update.alias,
       action: CONCEPT_STATE.ALIAS.ADD,
     }
@@ -65,6 +62,21 @@ const isEmptyAlias = alias => {
   return !alias.name && !alias.author && !alias.nameType
 }
 
+const resetAlias = (state, update) => {
+  const { alias, aliasIndex } = update
+  return {
+    ...state,
+    aliases: state.aliases.map((item, index) => (index === aliasIndex ? alias : item)),
+  }
+}
+
+const resetAliases = (state, update) => {
+  return {
+    ...state,
+    aliases: update.aliases,
+  }
+}
+
 const updateState = (state, { type, update }) => {
   const { aliasIndex, alias } = update
   const updatedItem = { ...state.aliases[aliasIndex], ...alias, action: type }
@@ -74,4 +86,4 @@ const updateState = (state, { type, update }) => {
   }
 }
 
-export { addAlias, aliasesState, deleteAlias, editAlias, isEmptyAlias }
+export { addAlias, aliasesState, deleteAlias, editAlias, isEmptyAlias, resetAlias, resetAliases }
