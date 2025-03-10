@@ -12,7 +12,7 @@ const STAGE = 'Stage'
 
 const DeleteMediaActions = () => {
   const {
-    stagedState: { mediaIndex },
+    stagedState: { media, mediaIndex },
     modifyConcept,
   } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
@@ -22,7 +22,13 @@ const DeleteMediaActions = () => {
 
   const onAction = label => {
     if (label === STAGE) {
-      modifyConcept({ type: CONCEPT_STATE.MEDIA.DELETE, update: { mediaIndex } })
+      modifyConcept({
+        type: CONCEPT_STATE.MEDIA.DELETE,
+        update: {
+          mediaIndex,
+          mediaItem: { ...media[mediaIndex], action: CONCEPT_STATE.MEDIA.DELETE },
+        },
+      })
     }
     closeModal()
   }
