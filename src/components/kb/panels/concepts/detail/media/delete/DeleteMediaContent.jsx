@@ -5,7 +5,7 @@ import { createComponent } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { dropFields } from '@/lib/util'
+import { drop } from '@/lib/util'
 
 const DeleteMediaContent = () => {
   const {
@@ -14,7 +14,7 @@ const DeleteMediaContent = () => {
 
   const mediaItem = media[mediaIndex]
 
-  const details = dropFields(mediaItem, ['action', 'conceptName', 'id', 'mimeType'])
+  const details = drop(mediaItem, ['action', 'conceptName', 'id', 'mimeType'])
 
   const Details = createComponent(DetailsContent, {
     details,

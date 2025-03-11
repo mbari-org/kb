@@ -1,9 +1,9 @@
-import { dropFields } from '@/lib/util'
+import { drop } from '@/lib/util'
 
 const hasStateChange = (allInitialState, allStagedState) => {
   // Drop fields that are not relevant to state change comparison
-  const initialState = dropFields(allInitialState, ['aliasIndex', 'mediaIndex'])
-  const stagedState = dropFields(allStagedState, ['aliasIndex', 'mediaIndex'])
+  const initialState = drop(allInitialState, ['aliasIndex', 'mediaIndex'])
+  const stagedState = drop(allStagedState, ['aliasIndex', 'mediaIndex'])
   return JSON.stringify(stagedState) !== JSON.stringify(initialState)
 }
 

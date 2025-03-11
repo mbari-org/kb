@@ -27,8 +27,6 @@ const ConceptAlias = ({ aliasIndex }) => {
   )
   const initialAlias = { ...initialState.aliases[aliasIndex] }
 
-  console.log('stagedState alias', stagedAlias)
-
   // aliasUpdate is necessary due to debounce on edits
   const [aliasUpdate, setAliasUpdate] = useState(null)
 

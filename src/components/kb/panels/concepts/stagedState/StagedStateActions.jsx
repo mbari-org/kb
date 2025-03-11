@@ -3,6 +3,7 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -10,14 +11,17 @@ import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
+import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
+
 const CONFIRM_DISCARD = 'Confirm Discard'
 const CONTINUE = 'Continue'
 const DISCARD = 'Discard All'
 const SAVE = 'Save'
 
 const StagedStateActions = ({ intent }) => {
-  const { concept, confirmReset, modifyConcept, submitUpdates } = use(ConceptContext)
-  const { closeModal } = use(ModalContext)
+  const { config } = use(ConfigContext)
+  const { concept, confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { closeModal, setLoading } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
 
   const colors = ['cancel', 'main']
@@ -44,8 +48,11 @@ const StagedStateActions = ({ intent }) => {
         break
 
       case SAVE:
-        submitUpdates()
+        setLoading(true)
         closeModal()
+        submitUpdates(config, concept, initialState, stagedState).then(_result => {
+          setLoading(false)
+        })
         break
 
       default:

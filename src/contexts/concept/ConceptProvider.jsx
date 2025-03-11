@@ -53,11 +53,7 @@ const ConceptProvider = ({ children }) => {
 
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset)
 
-  const { getConceptUpdates, isModified } = useConceptModified({
-    editing,
-    initialState,
-    stagedState,
-  })
+  const { isModified } = useConceptModified({ editing, initialState, stagedState })
 
   // CxTBD Is this needed?
   const resetConcept = useCallback(
@@ -72,16 +68,6 @@ const ConceptProvider = ({ children }) => {
     },
     [concept, closeModal]
   )
-
-  const submitUpdates = () => {
-    const conceptUpdates = getConceptUpdates()
-    console.log('CxConceptProvider: conceptUpdates', conceptUpdates)
-    // update({
-    //   concept,
-    //   config: taxonomy.config,
-    //   updates: stagedState,
-    // })
-  }
 
   useEffect(() => {
     if (!selected) {
@@ -156,7 +142,6 @@ const ConceptProvider = ({ children }) => {
         setEditing,
         stagedState,
         stagedStateDisplay,
-        submitUpdates,
       }}
     >
       {children}

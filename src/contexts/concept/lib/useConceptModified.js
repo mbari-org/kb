@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { isStateModified } from '@/lib/kb/concept/state/conceptState'
 
-import { getDeepDiff, isJsonEqual } from '@/lib/util'
+import { isJsonEqual } from '@/lib/util'
 
 const useConceptModified = ({ editing, initialState, stagedState }) => {
   const isConceptModified = useCallback(
@@ -24,13 +24,7 @@ const useConceptModified = ({ editing, initialState, stagedState }) => {
     [editing, isConceptModified, isFieldModified]
   )
 
-  const getConceptUpdates = useCallback(
-    () => getDeepDiff(stagedState, initialState),
-
-    [initialState, stagedState]
-  )
-
-  return { getConceptUpdates, isModified }
+  return { isModified }
 }
 
 export default useConceptModified

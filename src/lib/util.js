@@ -9,7 +9,7 @@ const checkImageUrlExists = url => {
   })
 }
 
-const dropFields = (object, fields) => {
+const drop = (object, fields) => {
   return Object.keys(object).reduce((result, key) => {
     if (!fields.includes(key)) {
       result[key] = object[key]
@@ -110,7 +110,7 @@ const isValidUrl = url => {
   }
 }
 
-const pickFields = (object, fields) => {
+const pick = (object, fields) => {
   return fields.reduce((result, field) => {
     if (Array.isArray(field)) {
       const [originalField, newField] = field
@@ -140,10 +140,17 @@ const prune = obj => {
   return pruned
 }
 
+const updatedFields = (updates, fields) => {
+  const fieldUpdates = pick(updates, fields)
+  const prunedUpdates = prune(fieldUpdates)
+
+  return isEmpty(prunedUpdates) ? null : prunedUpdates
+}
+
 export {
   capitalize,
   checkImageUrlExists,
-  dropFields,
+  drop,
   getDeepDiff,
   isDeepEqual,
   isElementInViewport,
@@ -151,7 +158,8 @@ export {
   isEqual,
   isJsonEqual,
   isValidUrl,
-  pickFields,
+  pick,
   prettyFormat,
   prune,
+  updatedFields,
 }
