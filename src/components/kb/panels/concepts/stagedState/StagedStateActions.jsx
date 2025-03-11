@@ -18,10 +18,12 @@ const CONTINUE = 'Continue'
 const DISCARD = 'Discard All'
 const SAVE = 'Save'
 
+const SAVING = 'Saving...'
+
 const StagedStateActions = ({ intent }) => {
   const { config } = use(ConfigContext)
   const { concept, confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
-  const { closeModal, setLoading } = use(ModalContext)
+  const { closeModal, setProcessing } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
 
   const colors = ['cancel', 'main']
@@ -48,10 +50,10 @@ const StagedStateActions = ({ intent }) => {
         break
 
       case SAVE:
-        setLoading(true)
+        setProcessing(SAVING)
         closeModal()
         submitUpdates(config, concept, initialState, stagedState).then(_result => {
-          setLoading(false)
+          setProcessing(null)
         })
         break
 

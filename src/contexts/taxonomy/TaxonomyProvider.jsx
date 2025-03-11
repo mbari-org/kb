@@ -24,12 +24,14 @@ import {
 
 import { isAdmin } from '@/lib/auth/role'
 
+const LOADING = 'Loading...'
+
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { user } = use(AuthContext)
   const { config } = use(ConfigContext)
-  const { setLoading, setModal } = use(ModalContext)
+  const { setProcessing, setModal } = use(ModalContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
   const initialLoad = useRef(true)
@@ -70,25 +72,25 @@ const TaxonomyProvider = ({ children }) => {
       return alreadyLoadedConcept
     }
 
-    setLoading(true)
+    setProcessing(LOADING)
 
     const { taxonomy: taxonomyWithStructure } = await load(taxonomy, conceptName)
     const concept = getTaxonomyConcept(taxonomyWithStructure, conceptName)
     const { taxonomy: taxonomyWithNames } = await loadConceptAliases(taxonomyWithStructure, concept)
 
     setTaxonomy(taxonomyWithNames)
-    setLoading(false)
+    setProcessing(null)
     return taxonomyWithNames.concepts[conceptName]
   }
 
   const loadConceptDescendants = async concept => {
     try {
-      setLoading(true)
+      setProcessing(LOADING)
       const { taxonomy: taxonomyWithDescendants } = await loadConceptDescendants(taxonomy, concept)
       setTaxonomy(taxonomyWithDescendants)
-      setLoading(false)
+      setProcessing(null)
     } catch (error) {
-      setLoading(false)
+      setProcessing(null)
       showBoundary(error)
     }
   }
@@ -116,10 +118,10 @@ const TaxonomyProvider = ({ children }) => {
     if (initialLoad.current && config) {
       initialLoad.current = false
 
-      setLoading(true)
+      setProcessing(LOADING)
       loadTaxonomy(config).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
-          setLoading(false)
+          setProcessing(null)
           if (taxonomyError) {
             setModal({
               type: 'error',
@@ -131,12 +133,12 @@ const TaxonomyProvider = ({ children }) => {
           }
         },
         error => {
-          setLoading(false)
+          setProcessing(null)
           showBoundary(error)
         }
       )
     }
-  }, [config, setLoading, setModal, showBoundary])
+  }, [config, setProcessing, setModal, showBoundary])
 
   if (!taxonomy) {
     return null

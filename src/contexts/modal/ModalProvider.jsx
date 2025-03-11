@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import ModalContext from './ModalContext'
 
 const ModalProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false)
+  const [processing, setProcessing] = useState(null)
 
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState(null)
@@ -31,12 +31,12 @@ const ModalProvider = ({ children }) => {
     <ModalContext
       value={{
         closeModal,
-        loading,
+        processing,
         modal,
         modalData,
         setModalData,
         setModal: handleSetModal,
-        setLoading,
+        setProcessing,
       }}
     >
       {children}

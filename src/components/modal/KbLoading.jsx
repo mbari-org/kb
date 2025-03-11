@@ -1,19 +1,19 @@
 import { use, useEffect, useRef, useState } from 'react'
-import { Backdrop, CircularProgress, useTheme } from '@mui/material'
+import { Backdrop, CircularProgress, Stack, Typography, useTheme } from '@mui/material'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const LOADING_DELAY = 333
 
 const KbLoading = () => {
-  const { loading } = use(ModalContext)
+  const { processing } = use(ModalContext)
 
   const timerRef = useRef(undefined)
   const [active, setActive] = useState(false)
   const theme = useTheme()
 
   useEffect(() => {
-    if (loading) {
+    if (processing) {
       timerRef.current = setTimeout(() => {
         setActive(true)
       }, LOADING_DELAY)
@@ -21,21 +21,25 @@ const KbLoading = () => {
       clearTimeout(timerRef.current)
       setActive(false)
     }
-  }, [loading])
+  }, [processing])
 
-  if (!loading) {
+  if (!processing) {
     return null
   }
 
   return (
     <Backdrop
       sx={{
+        backgroundColor: 'rgba(0, 0, 0, 0.25)',
         color: theme.palette.primary.main,
         zIndex: theme.zIndex.drawer + 1,
       }}
       open={active}
     >
-      <CircularProgress color='inherit' />
+      <Stack alignItems='center' direction='row' spacing={2}>
+        <CircularProgress color='inherit' />
+        <Typography variant='h3'>{processing}</Typography>
+      </Stack>
     </Backdrop>
   )
 }

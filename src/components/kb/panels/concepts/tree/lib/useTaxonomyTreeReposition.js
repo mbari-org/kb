@@ -3,7 +3,7 @@ import { use, useEffect, useRef } from 'react'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const useTaxonomyTreeReposition = (apiRef, concept) => {
-  const { loading } = use(ModalContext)
+  const { processing } = use(ModalContext)
 
   const timeoutRef = useRef(null)
 
@@ -14,7 +14,7 @@ const useTaxonomyTreeReposition = (apiRef, concept) => {
       clearTimeout(timeoutRef.current)
     }
 
-    if (loading) {
+    if (processing) {
       return
     }
 
@@ -39,7 +39,7 @@ const useTaxonomyTreeReposition = (apiRef, concept) => {
         clearTimeout(timeoutRef.current)
       }
     }
-  }, [apiRef, conceptName, loading])
+  }, [apiRef, conceptName, processing])
 }
 
 export default useTaxonomyTreeReposition
