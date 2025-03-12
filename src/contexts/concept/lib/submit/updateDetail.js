@@ -2,22 +2,20 @@ import { updateConceptAuthor, updateConceptRank } from '@/lib/services/oni/api/c
 
 import { updatedFields } from '@/lib/util'
 
-const updateDetail = async (updates, result, process) => {
-  const fieldUpdates = updatedFields(updates, ['author', 'rankLevel', 'rankName'])
+const updateDetail = (concept, updates, submit) => {
+  const detailUpdates = updatedFields(updates, ['author', 'rankLevel', 'rankName'])
 
-  if (!fieldUpdates) {
-    return result
+  if (!detailUpdates) {
+    return []
   }
 
-  const { concept } = result
-  let detailResult = { ...result }
+  const author = detailUpdates.author?.staged
+  const rankLevel = detailUpdates.rankLevel?.staged
+  const rankName = detailUpdates.rankName?.staged
 
-  const author = fieldUpdates.author?.staged
-  const rankLevel = fieldUpdates.rankLevel?.staged
-  const rankName = fieldUpdates.rankName?.staged
-
+  const submitters = []
   if (author) {
-    detailResult = await process(updateConceptAuthor, { author }, detailResult)
+    submitters.push(() => submit(updateConceptAuthor, [concept.name, { author }]))
   }
 
   // Rank name and level must both be sent, even if only one changes.
@@ -26,10 +24,10 @@ const updateDetail = async (updates, result, process) => {
       rankLevel: typeof rankLevel === 'string' ? rankLevel : concept.rankLevel,
       rankName: typeof rankName === 'string' ? rankName : concept.rankName,
     }
-    detailResult = await process(updateConceptRank, rankUpdate, detailResult)
+    submitters.push(() => submit(updateConceptRank, [concept.name, rankUpdate]))
   }
 
-  return detailResult
+  return submitters
 }
 
 export default updateDetail

@@ -10,16 +10,16 @@ const fetchParent = async (config, conceptName) =>
 
 const fetchNames = async (config, conceptName) => oniGet(config, ['raw', 'names', conceptName])
 
-const updateConceptAuthor = async (config, conceptName, updates) =>
+const updateConceptAuthor = async (config, [conceptName, updates]) =>
   oniPut(config, ['names', conceptName], updates)
 
-const updateConceptName = async (config, conceptName, updates) =>
+const updateConceptName = async (config, [conceptName, updates]) =>
   oniPut(config, ['names', conceptName], { newName: updates.name })
 
-const updateConceptParent = async (config, conceptName, updates) =>
+const updateConceptParent = async (config, [conceptName, updates]) =>
   oniPut(config, ['concept', conceptName], { parentName: updates.parent })
 
-const updateConceptRank = async (config, conceptName, updates) =>
+const updateConceptRank = async (config, [conceptName, updates]) =>
   oniPut(config, ['concept', conceptName], updates)
 
 export {

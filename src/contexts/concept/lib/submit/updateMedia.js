@@ -1,20 +1,49 @@
-// import { updateConceptMedia } from "@/lib/services/oni/api/concept"
+import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/services/oni/api/media'
 
-import { updatedFields } from '@/lib/util'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const updateMedia = async (updates, result, process) => {
+import { prunePick, updatedFields } from '@/lib/util'
+
+const prunedMediaItem = stagedItem =>
+  prunePick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
+
+const updateMedia = (concept, updates, submit) => {
   const mediaUpdates = updatedFields(updates, ['media'])
 
   if (!mediaUpdates) {
-    return result
+    return []
   }
 
-  const { media } = mediaUpdates
+  const submitters = mediaUpdates.media.staged.reduce((acc, stagedItem, index) => {
+    switch (stagedItem.action) {
+      case CONCEPT_STATE.MEDIA.ADD: {
+        const params = {
+          conceptName: concept.name,
+          ...prunedMediaItem(stagedItem),
+        }
+        acc.push(() => submit(createMediaItem, params))
+        return acc
+      }
 
-  let mediaResult = { ...result }
+      case CONCEPT_STATE.MEDIA.EDIT: {
+        const mediaItemId = mediaUpdates.media.initial[index].id
+        const params = [mediaItemId, prunedMediaItem(stagedItem)]
+        acc.push(() => submit(updateMediaItem, params))
+        return acc
+      }
 
-  const cxInc = null
-  return process(cxInc, { media }, mediaResult)
+      case CONCEPT_STATE.MEDIA.DELETE: {
+        const mediaItemId = mediaUpdates.media.initial[index].id
+        acc.push(() => submit(deleteMediaItem, mediaItemId))
+        return acc
+      }
+
+      default:
+        return acc
+    }
+  }, [])
+
+  return submitters
 }
 
 export default updateMedia

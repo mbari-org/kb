@@ -5,32 +5,20 @@ import updateStructure from './updateStructure'
 
 import { stateChange } from '@/contexts/concept/lib/edit/stateChange'
 
-const processor = (config, concept) => async (submitter, updates, result) => {
-  if (result.error)
-    return {
-      error: result.error,
-      concept,
-    }
-
-  const { error, _payload } = await submitter(config, concept.name, updates)
-  const updatedConcept = { ...concept, ...updates }
-
-  return { error, updatedConcept }
-}
+const submitter = config => async (submitFn, params) => await submitFn(config, params)
 
 const submitUpdates = async (config, concept, initialState, stagedState) => {
-  const process = processor(config, concept)
+  const submit = submitter(config, concept)
   const updates = stateChange(initialState, stagedState)
 
-  let result = { error: null, concept: { ...concept } }
-  result = updateDetail(updates, result, process)
-  result = updateMedia(updates, result, process)
-  result = updateStructure(updates, result, process)
-  result = updateName(updates, result, process)
+  const submitters = []
 
-  await new Promise(resolve => setTimeout(resolve, 5000))
+  submitters.push(...updateDetail(concept, updates, submit))
+  submitters.push(...updateMedia(concept, updates, submit))
+  submitters.push(...updateName(concept, updates, submit))
+  submitters.push(...updateStructure(concept, updates, submit))
 
-  return result
+  return Promise.all(submitters.map(submitter => submitter()))
 }
 
 export default submitUpdates

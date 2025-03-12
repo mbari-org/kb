@@ -1,21 +1,21 @@
-import { updateConceptName } from '@/lib/services/oni/api/concept'
-
 import { updatedFields } from '@/lib/util'
 
-const updateName = async (updates, result, process) => {
+const updateName = (concept, updates, submit) => {
   const nameUpdates = updatedFields(updates, ['name'])
 
   if (!nameUpdates) {
-    return result
+    return []
   }
 
-  let nameResult = { ...result }
+  return []
 
-  const { name } = nameUpdates
+  // let nameResult = { ...result }
 
-  nameResult = await process(updateConceptName, { newName: name }, nameResult)
+  // const { name } = nameUpdates
 
-  return nameResult
+  // nameResult = await process(updateConceptName, { newName: name }, nameResult)
+
+  // return nameResult
 
   // if (updates.nameUpdate === NAME_UPDATE.NAME_ONLY || error) {
   //   return { error, updatedName: updates.name }

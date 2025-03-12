@@ -66,10 +66,12 @@ const TaxonomyProvider = ({ children }) => {
 
   const getRoot = useCallback(() => getTaxonomyRoot(taxonomy), [taxonomy])
 
-  const loadConcept = async conceptName => {
-    const alreadyLoadedConcept = getTaxonomyConcept(taxonomy, conceptName)
-    if (alreadyLoadedConcept?.aliases && !incompleteTaxonomy(alreadyLoadedConcept)) {
-      return alreadyLoadedConcept
+  const loadConcept = async (conceptName, refresh = false) => {
+    if (!refresh) {
+      const alreadyLoadedConcept = getTaxonomyConcept(taxonomy, conceptName)
+      if (alreadyLoadedConcept?.aliases && !incompleteTaxonomy(alreadyLoadedConcept)) {
+        return alreadyLoadedConcept
+      }
     }
 
     setProcessing(LOADING)

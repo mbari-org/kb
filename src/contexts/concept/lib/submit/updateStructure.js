@@ -1,24 +1,24 @@
-import { updateConceptParent } from '@/lib/services/oni/api/concept'
-
 import { updatedFields } from '@/lib/util'
 
-const updateStructure = async (updates, result, process) => {
+const updateStructure = (concept, updates, submit) => {
   const structureUpdates = updatedFields(updates, ['parent'])
 
   if (!structureUpdates) {
-    return result
+    return []
   }
 
-  const { parent } = structureUpdates
-  // const { concept } = result
+  return []
 
-  let structureResult = { ...result }
+  // const { parent } = structureUpdates
+  // // const { concept } = result
 
-  if (parent) {
-    structureResult = await process(updateConceptParent, { parent }, structureResult)
-  }
+  // let structureResult = { ...result }
 
-  return structureResult
+  // if (parent) {
+  //   structureResult = await process(updateConceptParent, { parent }, structureResult)
+  // }
+
+  // return structureResult
 }
 
 export default updateStructure

@@ -6,6 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
@@ -22,9 +23,11 @@ const SAVING = 'Saving...'
 
 const StagedStateActions = ({ intent }) => {
   const { config } = use(ConfigContext)
-  const { concept, confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { concept, confirmReset, initialState, modifyConcept, setEditing, stagedState } =
+    use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
+  const { loadConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
   const actionLabels = [DISCARD, intent === INTENT.SAVE ? SAVE : CONTINUE]
@@ -50,10 +53,13 @@ const StagedStateActions = ({ intent }) => {
         break
 
       case SAVE:
-        setProcessing(SAVING)
         closeModal()
-        submitUpdates(config, concept, initialState, stagedState).then(_result => {
-          setProcessing(null)
+        setProcessing(SAVING)
+        submitUpdates(config, concept, initialState, stagedState).then(results => {
+          console.log('Results:', results)
+          loadConcept(concept.name, true).then(() => {
+            setEditing(false)
+          })
         })
         break
 

@@ -124,6 +124,8 @@ const pick = (object, fields) => {
   }, {})
 }
 
+const prunePick = (object, fields) => prune(pick(object, fields))
+
 const prettyFormat = object => {
   return Object.entries(object)
     .map(([key, value]) => `${key}: ${value}`)
@@ -161,5 +163,6 @@ export {
   pick,
   prettyFormat,
   prune,
+  prunePick,
   updatedFields,
 }
