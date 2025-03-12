@@ -54,7 +54,7 @@ const ConceptEditingActions = () => {
         }}
         variant='contained'
       >
-        {editing ? (isModified() ? 'Discard' : 'Cancel') : 'Edit'}
+        {editing ? (isModified() ? 'Discard All' : 'Cancel') : 'Edit'}
       </Button>
       {editing && isModified() && (
         <Button onClick={handleShow} sx={{ margin: '0 10px' }} variant='contained'>

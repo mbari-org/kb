@@ -51,7 +51,7 @@ const ConceptProvider = ({ children }) => {
   const stagedStateDisplay = useStagedStateDisplay()
   const pendingFieldDisplay = usePendingFieldDisplay()
 
-  const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset)
+  const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
   const { isModified } = useConceptModified({ editing, initialState, stagedState })
 
