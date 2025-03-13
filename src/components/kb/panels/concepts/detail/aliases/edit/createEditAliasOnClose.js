@@ -1,6 +1,6 @@
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const createAddAliasOnClose = ({ initialState, modifyConcept }) => {
+const createEditAliasOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
     const { modified, aliasIndex } = modalData
 
@@ -16,4 +16,4 @@ const createAddAliasOnClose = ({ initialState, modifyConcept }) => {
   }
 }
 
-export default createAddAliasOnClose
+export default createEditAliasOnClose

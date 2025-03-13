@@ -12,39 +12,25 @@ const NAME_TYPES = {
 // Order of types in the dropdown
 const ALIAS_TYPES = [NAME_TYPES.COMMON, NAME_TYPES.SYNONYM, NAME_TYPES.FORMER]
 
-const NO_ACTION_BORDER = 'none'
-const ACTION_BORDER = '2px solid'
-
 const ALIAS_DISPLAY_FIELDS = ['name', 'author', 'nameType']
 
-const aliasBorder = (isDeleted, editedAlias, editingAlias, initialAlias, theme) => {
-  if (isDeleted) {
-    return `${ACTION_BORDER} ${theme.palette.primary.remove}`
+const aliasBorder = (alias, theme) => {
+  const borderWidth = alias?.action === CONCEPT_STATE.NO_ACTION ? '1px' : '2px'
+  let borderColor
+  switch (alias?.action) {
+    case CONCEPT_STATE.ALIAS.ADD:
+      borderColor = theme.palette.primary.add
+      break
+    case CONCEPT_STATE.ALIAS.EDIT:
+      borderColor = theme.palette.primary.edit
+      break
+    case CONCEPT_STATE.ALIAS.DELETE:
+      borderColor = theme.palette.primary.remove
+      break
+    default:
+      borderColor = 'none'
   }
-
-  if (
-    editedAlias.action === CONCEPT_STATE.NO_ACTION &&
-    editingAlias.action === CONCEPT_STATE.NO_ACTION
-  ) {
-    return NO_ACTION_BORDER
-  }
-
-  const action =
-    editingAlias.action !== CONCEPT_STATE.NO_ACTION ? editingAlias.action : editedAlias.action
-
-  if (
-    action === CONCEPT_STATE.NO_ACTION ||
-    (hasSameValues(editedAlias, initialAlias) && hasSameValues(editingAlias, initialAlias))
-  ) {
-    return NO_ACTION_BORDER
-  }
-
-  const borderColor =
-    action === CONCEPT_STATE.ALIAS.ADD
-      ? theme.palette.primary.clean
-      : theme.palette.primary.modified
-
-  return `${ACTION_BORDER} ${borderColor}`
+  return `${borderWidth} solid ${borderColor}`
 }
 
 const aliasEdit = (aliasIndex, initialAlias, stagedAlias) => {

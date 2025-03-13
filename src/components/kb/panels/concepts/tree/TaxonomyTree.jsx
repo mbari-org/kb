@@ -50,7 +50,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   useArrowKeys(concept, expandConcept, expandedItems, selectConcept, setAutoExpand, sidebarRef)
 
   // when the concept name changes, we get the stale concept here during update. the
-  // getConcept call prevents further processing until the concept done updating
+  // getConcept call prevents further processing until the concept is done updating
   if (!concept || !getConcept(concept.name)) {
     return null
   }

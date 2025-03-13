@@ -13,10 +13,10 @@ const mediaBorder = (mediaItem, theme) => {
   let borderColor
   switch (mediaItem?.action) {
     case CONCEPT_STATE.MEDIA.ADD:
-      borderColor = theme.palette.primary.clean
+      borderColor = theme.palette.primary.add
       break
     case CONCEPT_STATE.MEDIA.EDIT:
-      borderColor = theme.palette.primary.modified
+      borderColor = theme.palette.primary.edit
       break
     case CONCEPT_STATE.MEDIA.DELETE:
       borderColor = theme.palette.primary.remove

@@ -8,7 +8,7 @@ const MediaAdd = ({ bgColor, sx }) => {
   return (
     <MediaActionButton
       action={CONCEPT_STATE.MEDIA.ADD}
-      color='main'
+      color='add'
       Icon={props => <MdOutlineAddPhotoAlternate {...props} size={24} />}
       sx={{
         ...sx,

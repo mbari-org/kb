@@ -9,7 +9,7 @@ const ChangeStructureButton = ({ onClick }) => {
   return (
     <IconButton
       aria-label='Edit concept name'
-      color='main'
+      color='edit'
       onClick={onClick}
       sx={{
         mb: 2,

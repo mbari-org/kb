@@ -1,8 +1,8 @@
 import { use } from 'react'
 import { Box, Typography, Stack } from '@mui/material'
 
-import AliasAdd from '@/components/kb/panels/concepts/detail/aliases/add/AliasAdd'
-import ConceptAlias from '@/components/kb/panels/concepts/detail/aliases/ConceptAlias'
+import AliasAdd from '@/components/kb/panels/concepts/detail/aliases/edit/AliasAdd'
+import ConceptAlias from '@/components/kb/panels/concepts/detail/ConceptAlias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 

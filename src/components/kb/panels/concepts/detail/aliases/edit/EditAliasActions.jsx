@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { ADD_ALIAS_FORM_ID } from './AddAliasContent'
+import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
@@ -15,16 +15,26 @@ const CONTINUE = 'Continue'
 const DISCARD = 'Discard'
 const STAGE = 'Stage'
 
-const AddAliasActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+const EditAliasActions = () => {
+  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
-  const { alias, modified } = modalData
+
+  const { alias, aliasIndex, modified } = modalData
+
+  const stagedAlias = useMemo(
+    () => ({ ...stagedState.aliases[aliasIndex] }),
+    [stagedState.aliases, aliasIndex]
+  )
 
   const isValidName = useMemo(() => {
+    if (stagedAlias.name === modalData.alias.name) {
+      return true
+    }
+
     const names = getNames()
     return !names.includes(alias.name)
-  }, [alias.name, getNames])
+  }, [alias.name, getNames, modalData.alias.name, stagedAlias.name])
 
   const colors = ['cancel', 'main']
   const disabled = [false, !modified || !isValidName]
@@ -55,4 +65,4 @@ const AddAliasActions = () => {
   return createActions({ colors, disabled, labels, onAction }, 'AddAliasActions')
 }
 
-export default AddAliasActions
+export default EditAliasActions

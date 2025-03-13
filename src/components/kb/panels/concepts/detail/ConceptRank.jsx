@@ -6,8 +6,8 @@ import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useConceptDetailStyle from './useConceptDetailStyle'
-import ApprovalButton from './ApprovalButton'
+import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
+import ApprovalButton from '@/components/kb/panels/concepts/detail/ApprovalButton'
 
 import { isAdmin } from '@/lib/auth/role'
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'

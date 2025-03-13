@@ -10,39 +10,39 @@ import ChangeStructureChoices from './structure/choices/ConceptStructureChoices'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
+import { getFieldPendingHistory } from '@/lib/kb/util/pendingHistory'
 import { isAdmin, isReadOnly } from '@/lib/auth/role'
 
 const ConceptName = () => {
-  const { concept: conceptTheme } = useTheme()
+  const theme = useTheme()
 
   const [showStructureChoices, setShowStructureChoices] = useState(false)
 
   const { user } = use(AuthContext)
   const { concept, editing, stagedState, pendingHistory } = use(ConceptContext)
 
-  const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
+  const namePendingHistory = getFieldPendingHistory(pendingHistory, 'ConceptName')
   const conceptHasNameUpdate = stagedState.name !== concept?.name
 
   const showApprovalButton =
-    isAdmin(user) && editing && nameHasPendingHistory && !showStructureChoices
+    isAdmin(user) && editing && !!namePendingHistory && !showStructureChoices
   const showStructureButton = !isReadOnly(user) && editing && !showStructureChoices
 
   const conceptColor =
-    nameHasPendingHistory || conceptHasNameUpdate
-      ? conceptTheme.color.pending
-      : conceptTheme.color.clean
+    !!namePendingHistory || conceptHasNameUpdate
+      ? theme.palette.primary.pending
+      : theme.palette.primary.main
 
   return (
     <Stack direction='row' alignItems='center' sx={{ position: 'relative' }}>
       <Typography
         component='div'
         sx={{
-          fontFamily: conceptTheme.fontFamily,
-          fontSize: conceptTheme.infoFontSize,
-          fontWeight: conceptTheme.fontWeight,
           backgroundColor: 'transparent',
           color: conceptColor,
+          fontFamily: theme.concept.fontFamily,
+          fontSize: theme.concept.infoFontSize,
+          fontWeight: theme.concept.fontWeight,
         }}
         variant='body1'
       >

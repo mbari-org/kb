@@ -9,7 +9,7 @@ const AliasEdit = ({ aliasEdit }) => {
   const [aliasIndex, stagedAction, initialFields, stagedFields] = aliasEdit
 
   const actionText = `${stagedAction.split(' ').pop()}`
-  const aliasName = initialFields?.[aliasIndex]?.[1] || stagedFields?.[aliasIndex]?.[1]
+  const aliasName = initialFields?.[0]?.[1] || stagedFields?.[0]?.[1]
 
   return (
     <Box

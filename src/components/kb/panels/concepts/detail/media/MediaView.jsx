@@ -2,7 +2,7 @@ import { use, useEffect, useRef, useState } from 'react'
 import { Box } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import MediaAdd from './add/MediaAdd'
+import MediaAdd from './edit/MediaAdd'
 import MediaDelete from './delete/MediaDelete'
 import MediaDisplay from './MediaDisplay'
 import MediaEdit from './edit/MediaEdit'

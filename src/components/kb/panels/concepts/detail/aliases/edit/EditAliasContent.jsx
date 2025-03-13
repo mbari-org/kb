@@ -9,17 +9,18 @@ import useStageAlias from './useStageAlias'
 
 import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
 
-import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/aliases/add/alias'
+import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/aliases/edit/alias'
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 
-const AddAliasContent = () => {
+const EditAliasContent = () => {
   const theme = useTheme()
 
   const {
     modalData: { alias },
     setModalData,
   } = use(ModalContext)
+
   const { getNames } = use(TaxonomyContext)
 
   const [formAlias, setFormAlias] = useState(alias)
@@ -125,4 +126,4 @@ const AddAliasContent = () => {
   )
 }
 
-export default AddAliasContent
+export default EditAliasContent

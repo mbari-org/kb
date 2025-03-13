@@ -8,7 +8,7 @@ const MediaEdit = () => {
   return (
     <MediaActionButton
       action={CONCEPT_STATE.MEDIA.EDIT}
-      color='main'
+      color='edit'
       Icon={CiEdit}
       position='right'
       sx={{
