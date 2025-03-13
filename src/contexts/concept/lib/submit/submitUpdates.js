@@ -1,3 +1,4 @@
+import updateAliases from './updateAliases'
 import updateDetail from './updateDetail'
 import updateMedia from './updateMedia'
 import updateName from './updateName'
@@ -13,6 +14,7 @@ const submitUpdates = async (config, concept, initialState, stagedState) => {
 
   const submitters = []
 
+  submitters.push(...updateAliases(concept, updates, submit))
   submitters.push(...updateDetail(concept, updates, submit))
   submitters.push(...updateMedia(concept, updates, submit))
   submitters.push(...updateName(concept, updates, submit))

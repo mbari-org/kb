@@ -4,7 +4,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import { prunePick, updatedFields } from '@/lib/util'
 
-const prunedMediaItem = stagedItem =>
+const pruned = stagedItem =>
   prunePick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
 
 const updateMedia = (concept, updates, submit) => {
@@ -15,11 +15,13 @@ const updateMedia = (concept, updates, submit) => {
   }
 
   const submitters = mediaUpdates.media.staged.reduce((acc, stagedItem, index) => {
+    const prunedItem = pruned(stagedItem)
+
     switch (stagedItem.action) {
       case CONCEPT_STATE.MEDIA.ADD: {
         const params = {
           conceptName: concept.name,
-          ...prunedMediaItem(stagedItem),
+          ...prunedItem,
         }
         acc.push(() => submit(createMediaItem, params))
         return acc
@@ -27,7 +29,7 @@ const updateMedia = (concept, updates, submit) => {
 
       case CONCEPT_STATE.MEDIA.EDIT: {
         const mediaItemId = mediaUpdates.media.initial[index].id
-        const params = [mediaItemId, prunedMediaItem(stagedItem)]
+        const params = [mediaItemId, prunedItem]
         acc.push(() => submit(updateMediaItem, params))
         return acc
       }
