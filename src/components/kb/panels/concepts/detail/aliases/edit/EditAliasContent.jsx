@@ -2,6 +2,7 @@ import { use, useMemo, useState } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
+import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -9,27 +10,27 @@ import useStageAlias from './useStageAlias'
 
 import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
 
-import { EMPTY_ALIAS } from '@/components/kb/panels/concepts/detail/aliases/edit/alias'
-
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 
 const EditAliasContent = () => {
   const theme = useTheme()
 
-  const {
-    modalData: { alias },
-    setModalData,
-  } = use(ModalContext)
-
+  const { stagedState } = use(ConceptContext)
+  const { modalData, setModalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
 
-  const [formAlias, setFormAlias] = useState(alias)
+  const [formAlias, setFormAlias] = useState(modalData.alias)
 
   const [modifiedFields, setModifiedFields] = useState({
     author: false,
     name: false,
     nameType: false,
   })
+
+  const stagedAlias = useMemo(
+    () => ({ ...stagedState.aliases[modalData.aliasIndex] }),
+    [stagedState.aliases, modalData.aliasIndex]
+  )
 
   const inputStyle = useMemo(
     () => ({
@@ -57,7 +58,7 @@ const EditAliasContent = () => {
     }
     setFormAlias(updatedAlias)
 
-    const fieldIsModified = updatedAlias[field] !== EMPTY_ALIAS[field]
+    const fieldIsModified = updatedAlias[field] !== stagedAlias[field]
 
     const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
     setModifiedFields(updatedModifiedFields)
@@ -110,6 +111,8 @@ const EditAliasContent = () => {
         <InputLabel id={`${formAlias.name}-name-type-label`}>Type</InputLabel>
         <Select
           displayEmpty
+          label='Type'
+          name='nameType'
           labelId={`${formAlias.name}-name-type-label`}
           onChange={handleChange}
           required

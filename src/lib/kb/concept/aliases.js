@@ -32,40 +32,62 @@ const aliasBorder = (alias, theme) => {
   }
   return `${borderWidth} solid ${borderColor}`
 }
-
-const aliasEdit = (aliasIndex, initialAlias, stagedAlias) => {
-  const { action: stagedAction } = stagedAlias
-
-  if (stagedAction === CONCEPT_STATE.NO_ACTION) {
-    return null
-  }
-
-  const initialFields = stagedAction === CONCEPT_STATE.ALIAS.ADD ? null : aliasFields(initialAlias)
-  const stagedFields = stagedAction === CONCEPT_STATE.ALIAS.DELETE ? null : aliasFields(stagedAlias)
-
-  return [aliasIndex, stagedAction, initialFields, stagedFields]
-}
-
-const aliasEdits = (initial, staged) => {
-  return staged.map((stagedAlias, stagedIndex) => {
-    const initialAlias = initial[stagedIndex]
-    return aliasEdit(stagedIndex, initialAlias, stagedAlias)
-  })
-}
-
 const aliasFields = alias =>
   ALIAS_DISPLAY_FIELDS.reduce((fields, field) => {
     fields.push([field, alias[field]])
     return fields
   }, [])
 
-const hasSameValues = (anAlias, otherAlias) => {
-  return (
-    anAlias.author === otherAlias?.author &&
-    anAlias.name === otherAlias?.name &&
-    anAlias.nameType === otherAlias?.nameType
-  )
+const aliasEdit = (index, initialAlias, stagedAlias) => {
+  const { action } = stagedAlias
+
+  if (action === CONCEPT_STATE.NO_ACTION) {
+    return null
+  }
+
+  const initialFields = action === CONCEPT_STATE.ALIAS.ADD ? null : aliasFields(initialAlias)
+  const stagedFields = action === CONCEPT_STATE.ALIAS.DELETE ? null : aliasFields(stagedAlias)
+
+  return [action, index, initialFields, stagedFields]
 }
+
+const deleteAlias = edit => {
+  const [action, index, _initialFields, _stagedFields] = edit
+  return {
+    action,
+    index,
+    updates: {},
+  }
+}
+
+const editAlias = edit => {
+  const [action, index, initialFields, stagedFields] = edit
+  const updates = stagedFields.reduce((acc, [field, value], index) => {
+    const initialValue = initialFields ? initialFields[index][1] : null
+    if (value !== initialValue) {
+      acc[field] = value
+    }
+    return acc
+  }, {})
+
+  return {
+    action,
+    index,
+    updates,
+  }
+}
+
+const aliasEdits = (initial, staged) =>
+  staged
+    .reduce((acc, stagedAlias, stagedIndex) => {
+      const edit = aliasEdit(stagedIndex, initial[stagedIndex], stagedAlias)
+      if (edit === null) {
+        return acc
+      }
+      acc.push(edit)
+      return acc
+    }, [])
+    .map(edit => (edit[0] === CONCEPT_STATE.ALIAS.DELETE ? deleteAlias(edit) : editAlias(edit)))
 
 const orderedAliases = aliases => {
   const capNameTypes = aliases.map(alias => ({ ...alias, nameType: capitalize(alias.nameType) }))

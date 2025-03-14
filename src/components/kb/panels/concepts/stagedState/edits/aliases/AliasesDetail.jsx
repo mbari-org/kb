@@ -8,7 +8,6 @@ import { aliasEdits } from '@/lib/kb/concept/aliases'
 
 const AliasesDetail = ({ edit }) => {
   const [_, { initial, staged }] = edit
-
   return (
     <Box
       sx={{
@@ -23,11 +22,16 @@ const AliasesDetail = ({ edit }) => {
       </Box>
       <Box sx={{ ml: 3 }}>
         {aliasEdits(initial, staged).map(aliasEdit => {
-          if (aliasEdit === null) {
-            return null
-          }
-          const [aliasIndex, stagedAction, _initialFields, _stagedFields] = aliasEdit
-          return <AliasEdit key={`${stagedAction}-${aliasIndex}`} aliasEdit={aliasEdit} />
+          const index = aliasEdit.index
+          const aliasName = initial?.[index]?.name || staged?.[index]?.name
+          return (
+            <AliasEdit
+              key={`${aliasEdit[1]}-${index}`}
+              aliasEdit={aliasEdit}
+              aliasName={aliasName}
+              initial={initial[index]}
+            />
+          )
         })}
       </Box>
     </Box>

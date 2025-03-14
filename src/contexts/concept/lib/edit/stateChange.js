@@ -27,4 +27,4 @@ const stateChanges = (initialState, stagedState) => {
   }, [])
 }
 
-export { hasStateChange, stateChange }
+export { hasStateChange, stateChange, stateChanges }

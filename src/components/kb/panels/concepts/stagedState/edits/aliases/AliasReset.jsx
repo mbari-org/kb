@@ -5,7 +5,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import EditReset from '../EditReset'
 
-const AliasReset = ({ aliasIndex }) => {
+const AliasReset = ({ index }) => {
   const { stagedState, modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
@@ -15,7 +15,7 @@ const AliasReset = ({ aliasIndex }) => {
       ? modifyConcept({ type: CONCEPT_STATE.RESET.ALIASES })
       : modifyConcept({
           type: CONCEPT_STATE.RESET.ALIAS,
-          update: { aliasIndex },
+          update: { index },
         })
   }
 

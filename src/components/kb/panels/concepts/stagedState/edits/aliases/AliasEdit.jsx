@@ -5,11 +5,10 @@ import AliasReset from './AliasReset'
 
 import { fieldSx } from '@/components/common/format'
 
-const AliasEdit = ({ aliasEdit }) => {
-  const [aliasIndex, stagedAction, initialFields, stagedFields] = aliasEdit
+const AliasEdit = ({ aliasEdit, aliasName, initial }) => {
+  const { action, index, updates } = aliasEdit
 
-  const actionText = `${stagedAction.split(' ').pop()}`
-  const aliasName = initialFields?.[0]?.[1] || stagedFields?.[0]?.[1]
+  const actionText = `${action.split(' ').pop()}`
 
   return (
     <Box
@@ -21,13 +20,13 @@ const AliasEdit = ({ aliasEdit }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex' }}>
-        <AliasReset aliasIndex={aliasIndex} />
+        <AliasReset index={index} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={fieldSx}>{actionText}:</Typography>
           <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>
         </Box>
       </Box>
-      <AliasDetail initialFields={initialFields} stagedFields={stagedFields} />
+      <AliasDetail action={action} initial={initial} updates={updates} />
     </Box>
   )
 }

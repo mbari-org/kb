@@ -6,7 +6,7 @@ import StagedDetails from '@/components/kb/panels/concepts/stagedState/edits/Sta
 const StagedStateContent = () => {
   return (
     <Box minWidth={500}>
-      <Description description='You have the following unsaved changes:' sx={{ mb: 1 }} />
+      <Description description='You have the following changes:' sx={{ mb: 1 }} />
       <StagedDetails />
     </Box>
   )

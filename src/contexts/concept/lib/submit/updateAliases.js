@@ -2,56 +2,41 @@ import { createAlias, deleteAlias, updateAlias } from '@/lib/services/oni/api/al
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import { stateChange } from '@/contexts/concept/lib/edit/stateChange'
-import { pick, prunePick, updatedFields } from '@/lib/util'
+import { aliasEdits } from '@/lib/kb/concept/aliases'
 
-const pruned = stagedAlias => {
-  const apiAlias = {
-    newName: stagedAlias.name,
-    nameType: stagedAlias.nameType,
-    author: stagedAlias.author,
-  }
-
-  return prunePick(apiAlias, ['author', 'nameType', 'newName'])
-}
+import { updatedFields } from '@/lib/util'
 
 const updateAliases = (concept, updates, submit) => {
-  const aliasesUpdates = updatedFields(updates, ['aliases'])
+  const {
+    aliases: { initial, staged },
+  } = updatedFields(updates, ['aliases'])
 
-  if (!aliasesUpdates) {
-    return []
-  }
+  const submitters = aliasEdits(initial, staged).map(edit => {
+    const { action, index, updates } = edit
 
-  const submitters = aliasesUpdates.aliases.staged.reduce((acc, stagedAlias, index) => {
-    const initialAlias = pick(aliasesUpdates.aliases.initial[index], ['author', 'name', 'nameType'])
-    const alias = stateChange(initialAlias, prunePick(stagedAlias, ['author', 'name', 'nameType']))
-    const prunedAlias = pruned(alias)
-
-    switch (stagedAlias.action) {
+    switch (action) {
       case CONCEPT_STATE.ALIAS.ADD: {
         const params = {
+          ...updates,
           name: concept.name,
-          ...prunedAlias,
+          newName: updates.name,
         }
-        acc.push(() => submit(createAlias, params))
-        return acc
+        return () => submit(createAlias, params)
       }
 
       case CONCEPT_STATE.ALIAS.EDIT: {
-        const aliasName = aliasesUpdates.aliases.initial[index].name
-        const params = [aliasName, prunedAlias]
-        acc.push(() => submit(updateAlias, params))
-        return acc
+        const aliasName = initial[index].name
+        const params = [aliasName, updates]
+        return () => submit(updateAlias, params)
       }
 
       case CONCEPT_STATE.ALIAS.DELETE: {
-        const aliasName = aliasesUpdates.aliases.initial[index].name
-        acc.push(() => submit(deleteAlias, aliasName))
-        return acc
+        const aliasName = initial[index].name
+        return () => submit(deleteAlias, aliasName)
       }
 
       default:
-        return acc
+        return null
     }
   }, [])
 
