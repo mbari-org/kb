@@ -25,6 +25,11 @@ const updateAliases = (concept, updates, submit) => {
       }
 
       case CONCEPT_STATE.ALIAS.EDIT: {
+        if (updates.name) {
+          updates.newName = updates.name
+          delete updates.name
+        }
+
         const aliasName = initial[index].name
         const params = [aliasName, updates]
         return () => submit(updateAlias, params)

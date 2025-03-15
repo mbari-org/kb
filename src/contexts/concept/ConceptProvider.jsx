@@ -34,6 +34,8 @@ const ConceptProvider = ({ children }) => {
     getConcept,
     getConceptPendingHistory,
     loadConcept,
+    refreshConcept,
+    taxonomy,
     // updateConcept,
     // updateConceptName,
   } = use(TaxonomyContext)
@@ -70,9 +72,16 @@ const ConceptProvider = ({ children }) => {
   )
 
   useEffect(() => {
+    if (concept && concept !== taxonomy.concepts[concept.name]) {
+      setConcept(taxonomy.concepts[concept.name])
+    }
+  }, [concept, taxonomy])
+
+  useEffect(() => {
     if (!selected) {
       return
     }
+
     if (!editing && selected.concept !== concept?.name) {
       loadConcept(selected.concept).then(
         loadedConcept => {
@@ -138,6 +147,7 @@ const ConceptProvider = ({ children }) => {
         modifyConcept,
         pendingFieldDisplay,
         pendingHistory,
+        refreshConcept,
         resetConcept,
         setEditing,
         stagedState,

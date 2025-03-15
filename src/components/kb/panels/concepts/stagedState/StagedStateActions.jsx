@@ -27,7 +27,7 @@ const StagedStateActions = ({ intent }) => {
     use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
-  const { loadConcept } = use(TaxonomyContext)
+  const { refreshConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
   const actionLabels = [DISCARD, intent === INTENT.SAVE ? SAVE : CONTINUE]
@@ -57,8 +57,9 @@ const StagedStateActions = ({ intent }) => {
         setProcessing(SAVING)
         submitUpdates(config, concept, initialState, stagedState).then(results => {
           console.log('Results:', results)
-          loadConcept(concept.name, true).then(() => {
+          refreshConcept(concept.name).then(refreshedConcept => {
             setEditing(false)
+            setProcessing(null)
           })
         })
         break

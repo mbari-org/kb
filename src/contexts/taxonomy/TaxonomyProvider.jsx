@@ -18,6 +18,8 @@ import {
   load,
   loadConceptAliases,
   loadTaxonomy,
+  refreshConcept as refreshTaxonomyConcept,
+  refreshHistory as refreshTaxonomyHistory,
   updateConcept as updateTaxonomyConcept,
   updateConceptName as updateTaxonomyConceptName,
 } from '@/lib/kb/taxonomy'
@@ -97,6 +99,16 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
+  const refreshConcept = async conceptName => {
+    const { taxonomy: refreshedTaxonomy } = await refreshTaxonomyConcept(taxonomy, conceptName)
+    setTaxonomy(refreshedTaxonomy)
+  }
+
+  const refreshHistory = async () => {
+    const { taxonomy: refreshedTaxonomy } = await refreshTaxonomyHistory(taxonomy)
+    setTaxonomy(refreshedTaxonomy)
+  }
+
   const updateConcept = async concept => {
     if (concept) {
       const { taxonomy: updatedTaxonomy } = await updateTaxonomyConcept(taxonomy, concept)
@@ -157,6 +169,8 @@ const TaxonomyProvider = ({ children }) => {
         getRoot,
         loadConcept,
         loadConceptDescendants,
+        refreshConcept,
+        refreshHistory,
         taxonomy,
         updateConcept,
         updateConceptName,

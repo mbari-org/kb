@@ -137,13 +137,13 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, updatable = false) => 
 }
 
 const loadConcept = async (updatableTaxonomy, conceptName) => {
-  if (!updatableTaxonomy.concepts[conceptName]) {
-    const updatableConcept = await apiCall(() =>
-      fetchConcept(updatableTaxonomy.config, conceptName)
-    )
-    updatableConcept.raw = false
-    addConcept(updatableTaxonomy, updatableConcept)
+  if (updatableTaxonomy.concepts[conceptName]) {
+    return
   }
+
+  const updatableConcept = await apiCall(() => fetchConcept(updatableTaxonomy.config, conceptName))
+  updatableConcept.raw = false
+  addConceptAndAliases(updatableTaxonomy, updatableConcept)
 }
 
 // Loads all concept children, skipping children already in taxonomy.
@@ -163,13 +163,13 @@ const loadConceptChildren = async (updatableTaxonomy, updatableConcept) => {
     const updatableChild = { ...apiChild }
     updatableChild.parent = updatableConcept
 
-    addConcept(updatableTaxonomy, updatableChild)
+    addConceptAndAliases(updatableTaxonomy, updatableChild)
 
     return updatableChild
   })
 
   updatableConcept.children = children
-  addConcept(updatableTaxonomy, updatableConcept)
+  addConceptAndAliases(updatableTaxonomy, updatableConcept)
 }
 
 const loadConceptDescendants = async (taxonomy, concept, updatable = false) => {
@@ -219,12 +219,12 @@ const loadConceptParent = async (updatableTaxonomy, updatableConcept) => {
 
   if (updatableTaxonomy.concepts[updatableParent.name]) {
     updatableConcept.parent = updatableTaxonomy.concepts[updatableParent.name]
-    addConcept(updatableTaxonomy, updatableConcept)
+    addConceptAndAliases(updatableTaxonomy, updatableConcept)
 
     return
   }
 
-  addConcept(updatableTaxonomy, updatableParent)
+  addConceptAndAliases(updatableTaxonomy, updatableParent)
   updatableConcept.parent = updatableParent
 
   await loadConceptChildren(updatableTaxonomy, updatableParent)
@@ -250,7 +250,7 @@ const loadConceptAliases = async (taxonomy, concept) => {
   return { taxonomy: updatedTaxonomy }
 }
 
-const addConcept = async (updatableTaxonomy, updatableConcept) => {
+const addConceptAndAliases = async (updatableTaxonomy, updatableConcept) => {
   updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
 
   // add aliases
@@ -263,19 +263,47 @@ const addConcept = async (updatableTaxonomy, updatableConcept) => {
   }
 }
 
-// const refreshHistory = async taxonomy => {
-//   const approvedHistory = await apiCall(() =>
-//     fetchHistory(taxonomy.config, "approved")
-//   )
-//   const pendingHistory = await apiCall(() =>
-//     fetchHistory(taxonomy.config, "pending")
-//   )
-//   return {
-//     ...taxonomy,
-//     approvedHistory,
-//     pendingHistory,
-//   }
-// }
+const refreshConcept = async (taxonomy, conceptName) => {
+  const currentConcept = getConcept(taxonomy, conceptName)
+  if (!currentConcept) {
+    return
+  }
+
+  const [apiConcept, rawNames, approvedHistory, pendingHistory] = await Promise.all([
+    apiCall(() => fetchConcept(taxonomy.config, conceptName)),
+    apiCall(() => fetchConceptNames(taxonomy.config, conceptName)),
+    apiCall(() => fetchHistory(taxonomy.config, 'approved')),
+    apiCall(() => fetchHistory(taxonomy.config, 'pending')),
+  ])
+  const updatableTaxonomy = {
+    ...taxonomy,
+    approvedHistory,
+    pendingHistory,
+  }
+  currentConcept.alternateNames.forEach(name => delete updatableTaxonomy.aliases[name])
+
+  apiConcept.raw = false
+  apiConcept.aliases = orderedAliases(rawNames)
+  apiConcept.alternateNames = apiConcept.aliases.map(alias => alias.name)
+  apiConcept.alternateNames.forEach(name => {
+    updatableTaxonomy.aliases[name] = apiConcept.name
+  })
+  updatableTaxonomy.concepts[conceptName] = apiConcept
+
+  return { taxonomy: updatableTaxonomy }
+}
+
+const refreshHistory = async (taxonomy, _conceptName) => {
+  const [approvedHistory, pendingHistory] = await Promise.all([
+    apiCall(() => fetchHistory(taxonomy.config, 'approved')),
+    apiCall(() => fetchHistory(taxonomy.config, 'pending')),
+  ])
+  return {
+    ...taxonomy,
+    approvedHistory,
+    pendingHistory,
+  }
+}
 
 const updateConcept = async (taxonomy, concept) => {
   const updatedConcepts = { ...taxonomy.concepts }
@@ -355,6 +383,8 @@ export {
   loadConceptAliases,
   loadConceptDescendants,
   loadTaxonomy,
+  refreshConcept,
+  refreshHistory,
   updateConcept,
   updateConceptName,
 }

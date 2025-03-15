@@ -6,7 +6,7 @@ const deleteAlias = async (config, aliasName) => oniDelete(config, ['names', ali
 
 const fetchAliases = async (config, conceptName) => oniGet(config, ['names', conceptName])
 
-const updateAlias = async (config, [aliasName, alias]) =>
-  oniPut(config, ['names', aliasName], alias)
+const updateAlias = async (config, [conceptName, alias]) =>
+  oniPut(config, ['names', conceptName], alias)
 
 export { createAlias, deleteAlias, fetchAliases, updateAlias }
