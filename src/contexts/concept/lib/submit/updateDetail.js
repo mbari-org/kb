@@ -3,25 +3,25 @@ import { updateConceptAuthor, updateConceptRank } from '@/lib/services/oni/api/c
 import { prunePick } from '@/lib/util'
 
 const updateDetail = (concept, updates, submit) => {
-  const { detailUpdates } = prunePick(updates, ['author', 'rankLevel', 'rankName'])
-  if (!detailUpdates) {
+  const { author, rankLevel, rankName } = prunePick(updates, ['author', 'rankLevel', 'rankName'])
+  if (!author && !rankLevel && !rankName) {
     return []
   }
 
-  const author = detailUpdates.author?.staged
-  const rankLevel = detailUpdates.rankLevel?.staged
-  const rankName = detailUpdates.rankName?.staged
+  const stagedAuthor = author?.staged
+  const stagedRankLevel = rankLevel?.staged
+  const stagedRankName = rankName?.staged
 
   const submitters = []
-  if (author) {
-    submitters.push(() => submit(updateConceptAuthor, [concept.name, { author }]))
+  if (stagedAuthor) {
+    submitters.push(() => submit(updateConceptAuthor, [concept.name, { author: stagedAuthor }]))
   }
 
   // Rank name and level must both be sent, even if only one changes.
-  if (typeof rankLevel === 'string' || typeof rankName === 'string') {
+  if (typeof stagedRankLevel === 'string' || typeof stagedRankName === 'string') {
     const rankUpdate = {
-      rankLevel: typeof rankLevel === 'string' ? rankLevel : concept.rankLevel,
-      rankName: typeof rankName === 'string' ? rankName : concept.rankName,
+      rankLevel: typeof stagedRankLevel === 'string' ? stagedRankLevel : concept.rankLevel,
+      rankName: typeof stagedRankName === 'string' ? stagedRankName : concept.rankName,
     }
     submitters.push(() => submit(updateConceptRank, [concept.name, rankUpdate]))
   }
