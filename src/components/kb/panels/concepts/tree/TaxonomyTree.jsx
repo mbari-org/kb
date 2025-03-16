@@ -3,7 +3,7 @@ import { use, useCallback, useState } from 'react'
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
 
-import ConceptItem from './ConceptItem'
+import ConceptTreeItem from './ConceptTreeItem'
 
 import { itemConceptLabel, itemConceptName } from './lib/taxonomyItem'
 
@@ -20,7 +20,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
-  const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
+  const { getConcept, getConceptPrimaryName, taxonomy, taxonomyRoot } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
 
@@ -63,10 +63,10 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
         expandedItems={expandedItems}
         getItemId={itemConceptName}
         getItemLabel={itemConceptLabel}
-        items={[taxonomy.root]}
+        items={[taxonomyRoot]}
         onItemClick={handleConceptClick}
         selectedItems={[concept]}
-        slots={{ item: ConceptItem }}
+        slots={{ item: ConceptTreeItem }}
         slotProps={{
           item: {
             concept,

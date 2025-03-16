@@ -3,16 +3,16 @@ import { use, forwardRef } from 'react'
 import { TreeItem2Provider } from '@mui/x-tree-view'
 import { TreeItem2 } from '@mui/x-tree-view/TreeItem2'
 
-import ConceptContent from './ConceptContent'
-import ConceptLabel from './ConceptLabel'
+import ConceptTreeLabel from './ConceptTreeLabel'
 import ConceptsExpand from './ConceptsExpand'
+import ConceptTreeItemContent from './ConceptTreeItemContent'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
-const ConceptItem = forwardRef(function ConceptItem(props, ref) {
+const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
   const { concept } = use(ConceptContext)
   const { getConcept, getConceptPendingHistory } = use(TaxonomyContext)
 
@@ -44,13 +44,13 @@ const ConceptItem = forwardRef(function ConceptItem(props, ref) {
           },
         }}
         slots={{
-          content: ConceptContent,
+          content: ConceptTreeItemContent,
           groupTransition: ConceptsExpand,
-          label: ConceptLabel,
+          label: ConceptTreeLabel,
         }}
       />
     </TreeItem2Provider>
   )
 })
 
-export default ConceptItem
+export default ConceptTreeItem

@@ -36,6 +36,9 @@ const TaxonomyProvider = ({ children }) => {
   const { setProcessing, setModal } = use(ModalContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
+  const [taxonomyNames, setTaxonomyNames] = useState([])
+  const [taxonomyRoot, setTaxonomyRoot] = useState(null)
+
   const initialLoad = useRef(true)
 
   const filterRanks = useCallback(
@@ -64,9 +67,13 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getNames = useCallback(() => getTaxonomyNames(taxonomy), [taxonomy])
+  // const getNames = useCallback(() => {
+  //   return getTaxonomyNames(taxonomy)
+  // }, [taxonomy])
 
-  const getRoot = useCallback(() => getTaxonomyRoot(taxonomy), [taxonomy])
+  // const getRoot = useCallback(() => {
+  //   return getTaxonomyRoot(taxonomy)
+  // }, [taxonomy])
 
   const loadConcept = async (conceptName, refresh = false) => {
     if (!refresh) {
@@ -129,6 +136,11 @@ const TaxonomyProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    setTaxonomyNames(getTaxonomyNames(taxonomy))
+    setTaxonomyRoot(getTaxonomyRoot(taxonomy))
+  }, [taxonomy])
+
+  useEffect(() => {
     if (initialLoad.current && config) {
       initialLoad.current = false
 
@@ -163,15 +175,15 @@ const TaxonomyProvider = ({ children }) => {
       value={{
         filterRanks,
         getConcept,
-        getNames,
         getConceptPendingHistory,
         getConceptPrimaryName,
-        getRoot,
         loadConcept,
         loadConceptDescendants,
         refreshConcept,
         refreshHistory,
         taxonomy,
+        taxonomyNames,
+        taxonomyRoot,
         updateConcept,
         updateConceptName,
       }}

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-const PendingHistoryIcon = ({ hasPendingHistory }) => {
+const ConceptPendingHistoryIcon = ({ hasPendingHistory }) => {
   const { concept: conceptTheme } = useTheme()
 
   const dotColor = hasPendingHistory
@@ -24,4 +24,4 @@ const PendingHistoryIcon = ({ hasPendingHistory }) => {
   )
 }
 
-export default PendingHistoryIcon
+export default ConceptPendingHistoryIcon

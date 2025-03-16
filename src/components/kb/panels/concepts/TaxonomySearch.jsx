@@ -15,9 +15,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
 
   const { concept } = use(ConceptContext)
   const { selectConcept } = use(SelectedContext)
-  const { getConcept, getNames, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
-
-  const taxonomyNames = getNames()
+  const { getConceptPrimaryName, taxonomyNames } = use(TaxonomyContext)
 
   const [value, setValue] = useState('')
 
@@ -42,7 +40,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   useEffect(() => {
     const primaryName = getConceptPrimaryName(concept?.name)
     setValue(primaryName || '')
-  }, [concept, getConcept, getConceptPrimaryName, taxonomy])
+  }, [concept, getConceptPrimaryName])
 
   return (
     <Autocomplete

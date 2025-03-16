@@ -18,7 +18,7 @@ const STAGE = 'Stage'
 const EditAliasActions = () => {
   const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
-  const { getNames } = use(TaxonomyContext)
+  const { taxonomyNames } = use(TaxonomyContext)
 
   const { alias, aliasIndex, modified } = modalData
 
@@ -32,9 +32,8 @@ const EditAliasActions = () => {
       return true
     }
 
-    const names = getNames()
-    return !names.includes(alias.name)
-  }, [alias.name, getNames, modalData.alias.name, stagedAlias.name])
+    return !taxonomyNames.includes(alias.name)
+  }, [alias.name, modalData.alias.name, taxonomyNames, stagedAlias.name])
 
   const colors = ['cancel', 'main']
   const disabled = [false, !modified || !isValidName]

@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 import ConceptMediaIcon from './ConceptMediaIcon'
-import PendingHistoryIcon from './PendingHistoryIcon'
+import ConceptPendingHistoryIcon from './ConceptPendingHistoryIcon'
 
 const StyledLabel = styled('div')(({ theme, hasPendingHistory, isSelected }) => {
   const nonHoverStyle = { color: theme.palette.common.black, fontWeight: 500 }
@@ -23,7 +23,7 @@ const StyledLabel = styled('div')(({ theme, hasPendingHistory, isSelected }) => 
   }
 })
 
-const ConceptLabel = ({ children, hasPendingHistory, isSelected, mediaCount }) => {
+const ConceptTreeLabel = ({ children, hasPendingHistory, isSelected, mediaCount }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'top', flexGrow: 1, mr: 0.5 }}>
       <StyledLabel hasPendingHistory={hasPendingHistory} isSelected={isSelected}>
@@ -31,10 +31,10 @@ const ConceptLabel = ({ children, hasPendingHistory, isSelected, mediaCount }) =
       </StyledLabel>
       <ConceptMediaIcon mediaCount={mediaCount} isSelected={isSelected} />
       {isSelected && hasPendingHistory && (
-        <PendingHistoryIcon hasPendingHistory={hasPendingHistory} />
+        <ConceptPendingHistoryIcon hasPendingHistory={hasPendingHistory} />
       )}
     </Box>
   )
 }
 
-export default ConceptLabel
+export default ConceptTreeLabel

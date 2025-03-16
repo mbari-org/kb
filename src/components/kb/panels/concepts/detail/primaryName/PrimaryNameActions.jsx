@@ -14,9 +14,7 @@ const CANCEL = 'Cancel'
 const PrimaryNameActions = () => {
   const { concept, stagedState, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
-  const { getNames } = use(TaxonomyContext)
-
-  const taxonomyNames = getNames()
+  const { taxonomyNames } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main', 'main']
   const disabled =

@@ -12,12 +12,10 @@ const PrimaryNameContent = () => {
   const theme = useTheme()
 
   const { concept, stagedState } = use(ConceptContext)
-  const { getNames } = use(TaxonomyContext)
+  const { taxonomyNames } = use(TaxonomyContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
   const debouncedChangePrimaryName = useDebounceChangePrimaryName()
-
-  const taxonomyNames = getNames()
 
   const fromColor = theme.concept.color.clean
 

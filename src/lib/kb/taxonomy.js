@@ -36,29 +36,26 @@ const getConcept = (taxonomy, conceptName) => {
   return null
 }
 
-const getNames = taxonomy => {
-  return taxonomy.names
-}
+const getNames = taxonomy => taxonomy?.names
 
-const getConceptPendingHistory = (taxonomy, conceptName) => {
-  return taxonomy.pendingHistory.filter(history => history.concept === conceptName)
-}
+const getConceptPendingHistory = (taxonomy, conceptName) =>
+  taxonomy.pendingHistory.filter(history => history.concept === conceptName)
 
 const getConceptPrimaryName = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return concept?.name
 }
 
-const getRoot = taxonomy => {
-  return taxonomy.root
-}
+const getRoot = taxonomy => taxonomy?.root
 
 const filterTaxonomyRanks = (taxonomy, field, otherValue) =>
   filterRanks(taxonomy.ranks, field, otherValue)
 
 const fetchTaxonomyHistory = async config => {
-  const approvedHistory = await apiCall(() => fetchHistory(config, 'approved'))
-  const pendingHistory = await apiCall(() => fetchHistory(config, 'pending'))
+  const [approvedHistory, pendingHistory] = await Promise.all([
+    apiCall(() => fetchHistory(config, 'approved')),
+    apiCall(() => fetchHistory(config, 'pending')),
+  ])
   return {
     approvedHistory,
     pendingHistory,
@@ -66,10 +63,12 @@ const fetchTaxonomyHistory = async config => {
 }
 
 const loadTaxonomy = async config => {
-  const root = await apiCall(() => fetchRoot(config))
-  const names = await apiCall(() => fetchNames(config))
-  const ranks = await apiCall(() => fetchRanks(config))
-  const { approvedHistory, pendingHistory } = await fetchTaxonomyHistory(config)
+  const [root, names, ranks, { approvedHistory, pendingHistory }] = await Promise.all([
+    apiCall(() => fetchRoot(config)),
+    apiCall(() => fetchNames(config)),
+    apiCall(() => fetchRanks(config)),
+    fetchTaxonomyHistory(config),
+  ])
 
   const aliases = root.alternateNames.reduce((acc, name) => {
     acc[name] = root.name
@@ -269,16 +268,18 @@ const refreshConcept = async (taxonomy, conceptName) => {
     return
   }
 
-  const [apiConcept, rawNames, approvedHistory, pendingHistory] = await Promise.all([
+  const [apiConcept, rawNames, approvedHistory, pendingHistory, names] = await Promise.all([
     apiCall(() => fetchConcept(taxonomy.config, conceptName)),
     apiCall(() => fetchConceptNames(taxonomy.config, conceptName)),
     apiCall(() => fetchHistory(taxonomy.config, 'approved')),
     apiCall(() => fetchHistory(taxonomy.config, 'pending')),
+    apiCall(() => fetchNames(taxonomy.config)),
   ])
   const updatableTaxonomy = {
     ...taxonomy,
     approvedHistory,
     pendingHistory,
+    names,
   }
   currentConcept.alternateNames.forEach(name => delete updatableTaxonomy.aliases[name])
 

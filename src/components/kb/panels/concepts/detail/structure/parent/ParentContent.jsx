@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import { Box, Stack, Typography, Autocomplete, TextField, Divider } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -14,11 +14,11 @@ const ParentContent = () => {
   const [toParentName, setToParentName] = useState(null)
 
   const { concept, modifyConcept } = use(ConceptContext)
-  const { getNames } = use(TaxonomyContext)
+  const { taxonomyNames } = use(TaxonomyContext)
 
-  const taxonomyNames = getNames().filter(
-    name => name !== concept.name && name !== concept.parent?.name
-  )
+  const optionNames = useCallback(() => {
+    return taxonomyNames.filter(name => name !== concept.name && name !== concept.parent?.name)
+  }, [taxonomyNames, concept.name, concept.parent?.name])
 
   const fromColor = theme.concept.color.clean
 
@@ -38,7 +38,7 @@ const ParentContent = () => {
   const handleKeyUp = event => {
     if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
-      if (taxonomyNames.includes(conceptName)) {
+      if (optionNames.includes(conceptName)) {
         setParentName(conceptName)
       }
     }
@@ -63,7 +63,7 @@ const ParentContent = () => {
           <Typography minWidth={60}>To:</Typography>
           <Autocomplete
             onChange={handleChange}
-            options={taxonomyNames}
+            options={optionNames}
             renderInput={params => (
               <TextField
                 {...params}
