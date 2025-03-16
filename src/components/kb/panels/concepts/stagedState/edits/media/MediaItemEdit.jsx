@@ -5,17 +5,13 @@ import MediaItemDetail from './MediaItemDetail'
 
 import { fieldSx } from '@/components/common/format'
 
-const urlFile = fields =>
-  fields
-    ?.find(([field, _value]) => field === 'url')?.[1]
-    ?.split('/')
-    .pop()
+const urlFile = url => url?.split('/').pop()
 
-const MediaItemEdit = ({ mediaItemEdit }) => {
-  const [mediaIndex, stagedAction, initialFields, stagedFields] = mediaItemEdit
+const MediaItemEdit = ({ mediaItemEdit, initial }) => {
+  const { action, index, updates } = mediaItemEdit
 
-  const actionText = `${stagedAction.split(' ').pop()}`
-  const actionFile = urlFile(initialFields) || urlFile(stagedFields) || ''
+  const actionText = `${action.split(' ').pop()}`
+  const actionFile = urlFile(initial?.url) || urlFile(updates?.url) || ''
 
   return (
     <Box
@@ -27,13 +23,13 @@ const MediaItemEdit = ({ mediaItemEdit }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex' }}>
-        <MediaItemReset mediaIndex={mediaIndex} />
+        <MediaItemReset index={index} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={fieldSx}>{actionText}:</Typography>
           <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
         </Box>
       </Box>
-      <MediaItemDetail stagedFields={stagedFields} initialFields={initialFields} />
+      <MediaItemDetail action={action} initial={initial} updates={updates} />
     </Box>
   )
 }

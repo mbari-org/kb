@@ -5,10 +5,11 @@ import AliasReset from './AliasReset'
 
 import { fieldSx } from '@/components/common/format'
 
-const AliasEdit = ({ aliasEdit, aliasName, initial }) => {
+const AliasEdit = ({ aliasEdit, initial }) => {
   const { action, index, updates } = aliasEdit
 
   const actionText = `${action.split(' ').pop()}`
+  const aliasName = initial?.name || updates?.name
 
   return (
     <Box

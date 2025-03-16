@@ -5,7 +5,9 @@ import { BsInfoCircle } from 'react-icons/bs'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { mediaBorder } from '@/lib/kb/concept/media'
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+
+import { fieldBorder } from '@/lib/kb/concept/field'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
@@ -15,7 +17,7 @@ const MediaPreview = ({ setPreviewOn }) => {
   } = use(ConceptContext)
   const mediaItem = media[mediaIndex]
 
-  const border = mediaBorder(mediaItem, theme)
+  const border = fieldBorder(CONCEPT_STATE.MEDIA, mediaItem, theme, '3px', theme.palette.grey[300])
 
   return (
     <>

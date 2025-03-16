@@ -124,8 +124,6 @@ const pick = (object, fields) => {
   }, {})
 }
 
-const prunePick = (object, fields) => prune(pick(object, fields))
-
 const prettyFormat = object => {
   return Object.entries(object)
     .map(([key, value]) => `${key}: ${value}`)
@@ -142,12 +140,7 @@ const prune = obj => {
   return pruned
 }
 
-const updatedFields = (updates, fields) => {
-  const fieldUpdates = pick(updates, fields)
-  const prunedUpdates = prune(fieldUpdates)
-
-  return isEmpty(prunedUpdates) ? null : prunedUpdates
-}
+const prunePick = (object, fields) => prune(pick(object, fields))
 
 export {
   capitalize,
@@ -164,5 +157,4 @@ export {
   prettyFormat,
   prune,
   prunePick,
-  updatedFields,
 }

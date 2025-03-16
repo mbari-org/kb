@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import { mediaBorder } from '@/lib/kb/concept/media'
+import { fieldBorder } from '@/lib/kb/concept/field'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()
@@ -12,8 +12,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const slideClick = mediaIndex => swiper.slideTo(mediaIndex)
 
-  const border =
-    mediaIndex.action === CONCEPT_STATE.NO_ACTION ? 'none' : mediaBorder(mediaItem, theme)
+  const border = fieldBorder(CONCEPT_STATE.MEDIA, mediaItem, theme, '1px', theme.palette.grey[300])
 
   return (
     <img

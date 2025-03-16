@@ -1,8 +1,7 @@
-import { updatedFields } from '@/lib/util'
+import { prunePick } from '@/lib/util'
 
-const updateStructure = (concept, updates, submit) => {
-  const structureUpdates = updatedFields(updates, ['parent'])
-
+const updateStructure = (_concept, updates, _submit) => {
+  const { structureUpdates } = prunePick(updates, ['parent'])
   if (!structureUpdates) {
     return []
   }

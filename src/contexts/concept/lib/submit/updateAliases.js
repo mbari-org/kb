@@ -4,14 +4,15 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import { aliasEdits } from '@/lib/kb/concept/aliases'
 
-import { updatedFields } from '@/lib/util'
+import { prunePick } from '@/lib/util'
 
 const updateAliases = (concept, updates, submit) => {
-  const {
-    aliases: { initial, staged },
-  } = updatedFields(updates, ['aliases'])
+  const { aliases } = prunePick(updates, ['aliases'])
+  if (!aliases) {
+    return []
+  }
 
-  const submitters = aliasEdits(initial, staged).map(edit => {
+  const submitters = aliasEdits(aliases).map(edit => {
     const { action, index, updates } = edit
 
     switch (action) {
@@ -30,13 +31,13 @@ const updateAliases = (concept, updates, submit) => {
           delete updates.name
         }
 
-        const aliasName = initial[index].name
+        const aliasName = aliases.initial[index].name
         const params = [aliasName, updates]
         return () => submit(updateAlias, params)
       }
 
       case CONCEPT_STATE.ALIAS.DELETE: {
-        const aliasName = initial[index].name
+        const aliasName = aliases.initial[index].name
         return () => submit(deleteAlias, aliasName)
       }
 

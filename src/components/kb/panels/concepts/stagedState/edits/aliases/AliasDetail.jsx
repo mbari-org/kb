@@ -14,9 +14,11 @@ const AliasDetail = ({ action, initial, updates }) => {
     case CONCEPT_STATE.ALIAS.ADD:
       fieldValues = Object.entries(drop(updates, ['name']))
       break
+
     case CONCEPT_STATE.ALIAS.DELETE:
       fieldValues = []
       break
+
     case CONCEPT_STATE.ALIAS.EDIT:
       fieldValues = Object.entries(updates).map(([field, value]) => {
         if (initial[field] !== value) {

@@ -2,20 +2,17 @@ import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/service
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import { prunePick, updatedFields } from '@/lib/util'
-
-const pruned = stagedItem =>
-  prunePick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
+import { prunePick } from '@/lib/util'
 
 const updateMedia = (concept, updates, submit) => {
-  const mediaUpdates = updatedFields(updates, ['media'])
+  const { mediaUpdates } = prunePick(updates, ['media'])
 
   if (!mediaUpdates) {
     return []
   }
 
   const submitters = mediaUpdates.media.staged.reduce((acc, stagedItem, index) => {
-    const prunedItem = pruned(stagedItem)
+    const prunedItem = prunePick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
 
     switch (stagedItem.action) {
       case CONCEPT_STATE.MEDIA.ADD: {

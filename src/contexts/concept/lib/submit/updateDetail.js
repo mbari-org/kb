@@ -1,10 +1,9 @@
 import { updateConceptAuthor, updateConceptRank } from '@/lib/services/oni/api/concept'
 
-import { updatedFields } from '@/lib/util'
+import { prunePick } from '@/lib/util'
 
 const updateDetail = (concept, updates, submit) => {
-  const detailUpdates = updatedFields(updates, ['author', 'rankLevel', 'rankName'])
-
+  const { detailUpdates } = prunePick(updates, ['author', 'rankLevel', 'rankName'])
   if (!detailUpdates) {
     return []
   }

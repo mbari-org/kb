@@ -5,12 +5,13 @@ import { useTheme } from '@mui/material/styles'
 import AliasDelete from '@/components/kb/panels/concepts/detail/aliases/delete/AliasDelete'
 import AliasEdit from '@/components/kb/panels/concepts/detail/aliases/edit/AliasEdit'
 
-import { aliasBorder } from '@/lib/kb/concept/aliases'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+
+import { fieldBorder } from '@/lib/kb/concept/field'
 
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()
@@ -27,7 +28,7 @@ const ConceptAlias = ({ aliasIndex }) => {
     variant: 'standard',
   }
 
-  const border = aliasBorder(stagedAlias, theme)
+  const border = fieldBorder(CONCEPT_STATE.ALIAS, stagedAlias, theme, '2px', 'none')
 
   const showEdit = editing && stagedAlias.action !== CONCEPT_STATE.ALIAS.DELETE
 

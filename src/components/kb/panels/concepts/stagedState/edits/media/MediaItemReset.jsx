@@ -5,7 +5,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import EditReset from '../EditReset'
 
-const MediaItemReset = ({ mediaIndex }) => {
+const MediaItemReset = ({ index }) => {
   const { stagedState, modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
@@ -15,7 +15,7 @@ const MediaItemReset = ({ mediaIndex }) => {
       ? modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
       : modifyConcept({
           type: CONCEPT_STATE.RESET.MEDIA_ITEM,
-          update: { mediaIndex },
+          update: { index },
         })
   }
 

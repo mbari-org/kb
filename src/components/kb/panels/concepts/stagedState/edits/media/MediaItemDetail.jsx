@@ -4,24 +4,49 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { formatDelta } from '@/components/common/format'
 
-const MediaItemDetail = ({ initialFields, stagedFields }) => {
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+
+const MediaItemDetail = ({ action, initial, updates }) => {
   let fieldValues
-  if (initialFields === null) {
-    // Media Add
-    fieldValues = stagedFields
-  } else if (stagedFields === null) {
-    // Media Delete
-    fieldValues = initialFields
-  } else {
-    // Media Edit
-    fieldValues = initialFields.reduce((acc, [field, initialValue], index) => {
-      const stagedValue = stagedFields[index][1]
-      if (initialValue !== stagedValue) {
-        acc.push([field, formatDelta(initialValue, stagedValue)])
-      }
-      return acc
-    }, [])
+
+  switch (action) {
+    case CONCEPT_STATE.MEDIA.ADD:
+      fieldValues = updates
+      break
+    case CONCEPT_STATE.MEDIA.DELETE:
+      fieldValues = initial
+      break
+    case CONCEPT_STATE.MEDIA.EDIT:
+      fieldValues = Object.entries(updates).map(([field, value]) => {
+        if (initial[field] !== value) {
+          return [field, formatDelta(initial[field], value)]
+        }
+      })
+      // fieldValues = initial.reduce((acc, [field, initialValue], index) => {
+      //   const stagedValue = updates[index][1]
+      //   if (initialValue !== stagedValue) {
+      //     acc.push([field, formatDelta(initialValue, stagedValue)])
+      //   }
+      //   return acc
+      // }, [])
+      break
   }
+  // if (initial === null) {
+  //   // Media Add
+  //   fieldValues = updates
+  // } else if (updates === null) {
+  //   // Media Delete
+  //   fieldValues = initial
+  // } else {
+  //   // Media Edit
+  //   fieldValues = initial.reduce((acc, [field, initialValue], index) => {
+  //     const stagedValue = updates[index][1]
+  //     if (initialValue !== stagedValue) {
+  //       acc.push([field, formatDelta(initialValue, stagedValue)])
+  //     }
+  //     return acc
+  //   }, [])
+  // }
 
   return (
     <Box sx={{ ml: 7 }}>
