@@ -1,4 +1,4 @@
-import { use, useMemo, useState } from 'react'
+import { use, useCallback, useMemo, useState } from 'react'
 
 import { Box, FormControl, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -31,12 +31,12 @@ const AddChildContent = () => {
           WebkitTextFillColor: '#000',
         },
       },
-      variant: 'standard',
+      variant: 'outlined',
     }),
     [theme]
   )
 
-  const { initialState, stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
   const { setModalData } = use(ModalContext)
   const { taxonomyNames } = use(TaxonomyContext)
 
@@ -56,9 +56,6 @@ const AddChildContent = () => {
 
   const stagedChild = useMemo(() => ({ ...stagedState.child }), [stagedState.child])
 
-  const rankLevelValue = stagedState[RANK.LEVEL] || initialState[RANK.LEVEL]
-  const rankNameValue = stagedState[RANK.NAME] || initialState[RANK.NAME]
-
   const handleStage = useStageChild()
 
   const isValidName = useMemo(() => {
@@ -75,24 +72,32 @@ const AddChildContent = () => {
     ? 'Taxonomy name already exists'
     : ''
 
-  const handleChange = (event, _selectedName) => {
-    const { name: field, value } = event.target
+  const handleChange = useCallback(
+    (field, value) => {
+      const updatedChild = {
+        ...formChild,
+        [field]: value,
+      }
+      setFormChild(updatedChild)
 
-    const updatedChild = {
-      ...formChild,
-      [field]: value,
-    }
-    setFormChild(updatedChild)
+      const fieldIsModified = updatedChild[field] !== stagedChild[field]
 
-    const fieldIsModified = updatedChild[field] !== stagedChild[field]
+      const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
+      setModifiedFields(updatedModifiedFields)
 
-    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
-    setModifiedFields(updatedModifiedFields)
+      const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
 
-    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
+      setModalData(prev => ({ ...prev, child: updatedChild, modified }))
+    },
+    [formChild, stagedChild, modifiedFields, setModalData]
+  )
 
-    setModalData(prev => ({ ...prev, child: updatedChild, modified }))
-  }
+  const handleFieldChange = useCallback(
+    field => event => {
+      handleChange(field, event.target.value)
+    },
+    [handleChange]
+  )
 
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>
@@ -100,7 +105,7 @@ const AddChildContent = () => {
         <TextField
           label='Name'
           name='name'
-          onChange={handleChange}
+          onChange={handleFieldChange('name')}
           required
           value={formChild.name}
           error={nameError}
@@ -111,14 +116,28 @@ const AddChildContent = () => {
         <TextField
           label='Author'
           name='author'
-          onChange={handleChange}
+          onChange={handleFieldChange('author')}
           required
           value={formChild.author}
         />
       </FormControl>
-      <Stack direction='row' spacing={1}>
-        <ConceptRank field={RANK.NAME} otherValue={rankLevelValue} />
-        <ConceptRank field={RANK.LEVEL} otherValue={rankNameValue} />
+      <Stack direction='row' spacing={1} sx={{ mt: 2 }}>
+        <ConceptRank
+          field={RANK.NAME}
+          fieldValue={formChild.rankName}
+          otherValue={formChild.rankLevel}
+          inputStyle={inputStyle}
+          onChange={handleFieldChange('rankName')}
+          showApprovalButton={false}
+        />
+        <ConceptRank
+          field={RANK.LEVEL}
+          fieldValue={formChild.rankLevel}
+          otherValue={formChild.rankName}
+          inputStyle={inputStyle}
+          onChange={handleFieldChange('rankLevel')}
+          showApprovalButton={false}
+        />
       </Stack>
     </Box>
   )

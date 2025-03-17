@@ -1,9 +1,3 @@
-const NAME_UPDATE = {
-  ALL_DATA: 'Associated Data',
-  CANCEL: 'Discard',
-  NAME_ONLY: 'Name Only',
-}
-
 const structureState = concept => {
   return {
     name: concept.name,
@@ -26,4 +20,4 @@ const changeParent = (state, update) => {
   }
 }
 
-export { changeName, changeParent, NAME_UPDATE, structureState }
+export { changeName, changeParent, structureState }

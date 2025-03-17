@@ -8,12 +8,6 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-export const INTENT = {
-  DISCARD: 'Discard',
-  SAVE: 'Save',
-  SHOW: 'Staged',
-}
-
 const useStagedStateDisplay = intent => {
   const { setModal } = use(ModalContext)
 

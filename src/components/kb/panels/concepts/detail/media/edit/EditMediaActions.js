@@ -7,14 +7,13 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
 
+import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import { isValidUrl } from '@/lib/util'
 
-const CONFIRM_DISCARD = 'Confirm Discard'
-const CONTINUE = 'Continue'
-const DISCARD = 'Discard'
-const STAGE = 'Stage'
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
+const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const EditMediaActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
@@ -34,11 +33,11 @@ const EditMediaActions = () => {
   const onAction = label => {
     switch (label) {
       case CONTINUE:
-        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
+        modifyConcept({ type: CONFIRMED.NO })
         break
 
       case CONFIRM_DISCARD:
-        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.YES })
+        modifyConcept({ type: CONFIRMED.YES })
         closeModal(true)
         break
 

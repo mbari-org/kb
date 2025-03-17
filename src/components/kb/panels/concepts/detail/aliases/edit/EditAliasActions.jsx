@@ -9,11 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-
-const CONFIRM_DISCARD = 'Confirm Discard'
-const CONTINUE = 'Continue'
-const DISCARD = 'Discard'
-const STAGE = 'Stage'
+import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
 const EditAliasActions = () => {
   const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
@@ -34,6 +30,8 @@ const EditAliasActions = () => {
 
     return !taxonomyNames.includes(alias.name)
   }, [alias.name, modalData.alias.name, taxonomyNames, stagedAlias.name])
+
+  const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
 
   const colors = ['cancel', 'main']
   const disabled = [false, !modified || !isValidName]

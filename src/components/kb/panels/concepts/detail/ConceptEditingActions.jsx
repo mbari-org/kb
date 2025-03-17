@@ -7,18 +7,23 @@ import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDis
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+
+const { DISCARD, DISCARD_ALL } = LABELS.ACTION
+const { CANCEL, EDIT, SAVE, SHOW } = LABELS.CONCEPT.ACTION
+const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
+
 const ConceptEditingActions = () => {
   const { editing, isModified, modifyConcept, setEditing } = use(ConceptContext)
 
-  const stagedStateDiscard = useStagedStateDisplay(INTENT.DISCARD)
-  const stagedStateSave = useStagedStateDisplay(INTENT.SAVE)
-  const stagedStateShow = useStagedStateDisplay(INTENT.SHOW)
+  const stagedStateDiscard = useStagedStateDisplay(DISCARD)
+  const stagedStateSave = useStagedStateDisplay(SAVE)
+  const stagedStateShow = useStagedStateDisplay(SHOW)
 
   const handleDiscard = useCallback(() => {
     if (isModified()) {
-      modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
+      modifyConcept({ type: TO_INITIAL })
       stagedStateDiscard()
     } else {
       setEditing(false)
@@ -26,12 +31,12 @@ const ConceptEditingActions = () => {
   }, [isModified, modifyConcept, stagedStateDiscard, setEditing])
 
   const handleSave = useCallback(() => {
-    modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
+    modifyConcept({ type: CONFIRMED.NO })
     stagedStateSave()
   }, [modifyConcept, stagedStateSave])
 
   const handleShow = useCallback(() => {
-    modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
+    modifyConcept({ type: CONFIRMED.NO })
     stagedStateShow()
   }, [modifyConcept, stagedStateShow])
 
@@ -54,15 +59,15 @@ const ConceptEditingActions = () => {
         }}
         variant='contained'
       >
-        {editing ? (isModified() ? 'Discard All' : 'Cancel') : 'Edit'}
+        {editing ? (isModified() ? DISCARD_ALL : CANCEL) : EDIT}
       </Button>
       {editing && isModified() && (
         <Button onClick={handleShow} sx={{ margin: '0 10px' }} variant='contained'>
-          {INTENT.SHOW}
+          {SHOW}
         </Button>
       )}
       <Button disabled={!editing || !isModified()} onClick={handleSave} variant='contained'>
-        {INTENT.SAVE}
+        {SAVE}
       </Button>
     </Box>
   )

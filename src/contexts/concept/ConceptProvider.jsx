@@ -1,6 +1,5 @@
 import { use, useCallback, useEffect, useReducer, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
-// import { useTheme } from "@mui/material/styles"
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
@@ -18,19 +17,19 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import conceptState from '@/lib/kb/concept/state/conceptState'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
 import { conceptStateReducer } from '@/contexts/concept/lib/edit/conceptStateReducer'
 
-const ConceptProvider = ({ children }) => {
-  // const theme = useTheme()
+import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
+const { CONTINUE } = LABELS.ACTION
+
+const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { modal, closeModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const {
-    // filterRanks,
     getConcept,
     getConceptPendingHistory,
     loadConcept,
@@ -102,7 +101,7 @@ const ConceptProvider = ({ children }) => {
         if (modalHasBeenDisplayed) {
           setModalHasBeenDisplayed(false)
         } else {
-          stagedStateDisplay(INTENT.CONTINUE)
+          stagedStateDisplay(CONTINUE)
           setModalHasBeenDisplayed(true)
         }
         return

@@ -8,16 +8,13 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
-
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
 import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
 
-const CONFIRM_DISCARD = 'Confirm Discard'
-const CONTINUE = 'Continue'
-const DISCARD = 'Discard All'
-const SAVE = 'Save'
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, SAVE } = LABELS.ACTION
+const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const SAVING = 'Saving...'
 
@@ -30,7 +27,7 @@ const StagedStateActions = ({ intent }) => {
   const { refreshConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
-  const actionLabels = [DISCARD, intent === INTENT.SAVE ? SAVE : CONTINUE]
+  const actionLabels = [DISCARD, intent === SAVE ? SAVE : CONTINUE]
   const confirmLabels = [CONFIRM_DISCARD, CONTINUE]
 
   const labels = confirmReset ? confirmLabels : actionLabels
@@ -38,18 +35,18 @@ const StagedStateActions = ({ intent }) => {
   const onAction = label => {
     switch (label) {
       case CONFIRM_DISCARD:
-        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.YES })
+        modifyConcept({ type: CONFIRMED.YES })
         break
 
       case CONTINUE:
         selectConcept(concept.name)
         selectPanel('Concepts')
-        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
+        modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break
 
       case DISCARD:
-        modifyConcept({ type: CONCEPT_STATE.RESET.TO_INITIAL })
+        modifyConcept({ type: TO_INITIAL })
         break
 
       case SAVE:
@@ -57,7 +54,7 @@ const StagedStateActions = ({ intent }) => {
         setProcessing(SAVING)
         submitUpdates(config, concept, initialState, stagedState).then(results => {
           console.log('Results:', results)
-          refreshConcept(concept.name).then(refreshedConcept => {
+          refreshConcept(concept.name).then(() => {
             setEditing(false)
             setProcessing(null)
           })

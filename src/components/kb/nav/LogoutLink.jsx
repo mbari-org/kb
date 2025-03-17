@@ -8,7 +8,9 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
-import { INTENT } from '@/contexts/concept/lib/edit/useStagedStateDisplay'
+import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+
+const { SAVE } = LABELS.ACTION
 
 const LogoutLink = () => {
   const { logout, user } = use(AuthContext)
@@ -16,7 +18,7 @@ const LogoutLink = () => {
 
   const stagedStateDisplay = useStagedStateDisplay()
 
-  const handleLogout = () => (isModified() ? stagedStateDisplay(INTENT.SAVE) : logout())
+  const handleLogout = () => (isModified() ? stagedStateDisplay(SAVE) : logout())
 
   const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`
 
