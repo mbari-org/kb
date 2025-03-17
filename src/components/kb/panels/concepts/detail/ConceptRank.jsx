@@ -2,45 +2,47 @@ import { use } from 'react'
 
 import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material'
 
-import AuthContext from '@/contexts/auth/AuthContext'
-import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 import ApprovalButton from '@/components/kb/panels/concepts/detail/ApprovalButton'
 
-import { isAdmin } from '@/lib/auth/role'
-import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
+import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-
-const ConceptRank = ({ field, otherValue }) => {
-  const { user } = use(AuthContext)
-  const { stagedState, editing, pendingHistory, modifyConcept } = use(ConceptContext)
+const ConceptRank = ({
+  field,
+  fieldValue,
+  otherValue,
+  inputStyle,
+  onChange,
+  showApprovalButton,
+}) => {
   const { filterRanks } = use(TaxonomyContext)
 
+  useUpdateTrigger('ConceptRank', {
+    field,
+    fieldValue,
+    otherValue,
+    inputStyle,
+    onChange,
+    showApprovalButton,
+  })
+
   const rankOptions = filterRanks(field, otherValue)
-  const fieldValue = stagedState[field]
   const label = field === 'rankName' ? 'Rank' : 'Level'
 
-  const infoStyle = useConceptDetailStyle(field)
-
-  const showApprovalButton = editing && isAdmin(user) && hasPendingHistory(pendingHistory, field)
-
   return (
-    <FormControl {...infoStyle}>
-      <Box display='flex' flexDirection='row' alignItems='center' width='100%'>
+    <FormControl {...inputStyle}>
+      <Box alignItems='center' display='flex' flexDirection='row' width='100%'>
         <Box display='flex' flexDirection='column' flexGrow={1}>
-          <InputLabel>{label}</InputLabel>
-          <Select
-            displayEmpty
-            onChange={e =>
-              modifyConcept({
-                type: CONCEPT_STATE.FIELD.SET,
-                update: { field, value: e.target.value },
-              })
-            }
-            value={fieldValue}
+          <InputLabel id={`${field}-label`}>{label}</InputLabel>
+          <Select displayEmpty labelId={`${field}-label`} onChange={onChange} value={fieldValue}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderTop: 'none',
+                borderLeft: 'none',
+                borderRight: 'none',
+              },
+            }}
           >
             {rankOptions.map(option => (
               <MenuItem key={option} sx={{ height: '1.75em' }} value={option}>
