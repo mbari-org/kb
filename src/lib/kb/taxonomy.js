@@ -306,73 +306,6 @@ const refreshHistory = async (taxonomy, _conceptName) => {
   }
 }
 
-const updateConcept = async (taxonomy, concept) => {
-  const updatedConcepts = { ...taxonomy.concepts }
-  updatedConcepts[concept.name] = concept
-
-  const { approvedHistory, pendingHistory } = await fetchTaxonomyHistory(taxonomy.config)
-
-  return {
-    taxonomy: {
-      ...taxonomy,
-      approvedHistory,
-      concepts: updatedConcepts,
-      pendingHistory,
-    },
-  }
-}
-
-const updateConceptName = async (taxonomy, concept, newName) => {
-  const updatedConcepts = { ...taxonomy.concepts }
-
-  // Update concept
-  const updatedConcept = { ...concept, name: newName }
-  delete updatedConcepts[concept.name]
-  updatedConcepts[newName] = updatedConcept
-
-  // Update parent
-  if (updatedConcept.parent) {
-    const parent = updatedConcepts[updatedConcept.parent.name]
-    if (parent && parent.children) {
-      const childIndex = parent.children.findIndex(child => child.name === concept.name)
-      if (childIndex !== -1) {
-        parent.children[childIndex] = updatedConcept
-      }
-    }
-  }
-
-  // Update children
-  if (updatedConcept.children) {
-    updatedConcept.children.forEach(child => {
-      const childInUpdatedConcepts = updatedConcepts[child.name]
-      if (childInUpdatedConcepts) {
-        childInUpdatedConcepts.parent = updatedConcept
-      }
-    })
-  }
-
-  // Update names
-  const updatedNames = [...taxonomy.names]
-  const oldIndex = updatedNames.indexOf(concept.name)
-  if (oldIndex !== -1) {
-    updatedNames.splice(oldIndex, 1)
-  }
-  updatedNames.push(newName)
-  updatedNames.sort()
-
-  const { approvedHistory, pendingHistory } = await fetchTaxonomyHistory(taxonomy.config)
-
-  return {
-    taxonomy: {
-      ...taxonomy,
-      approvedHistory,
-      concepts: updatedConcepts,
-      names: updatedNames,
-      pendingHistory,
-    },
-  }
-}
-
 export {
   filterTaxonomyRanks,
   getConcept,
@@ -386,6 +319,4 @@ export {
   loadTaxonomy,
   refreshConcept,
   refreshHistory,
-  updateConcept,
-  updateConceptName,
 }

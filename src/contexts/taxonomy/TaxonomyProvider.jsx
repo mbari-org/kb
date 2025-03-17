@@ -20,8 +20,6 @@ import {
   loadTaxonomy,
   refreshConcept as refreshTaxonomyConcept,
   refreshHistory as refreshTaxonomyHistory,
-  updateConcept as updateTaxonomyConcept,
-  updateConceptName as updateTaxonomyConceptName,
 } from '@/lib/kb/taxonomy'
 
 import { isAdmin } from '@/lib/auth/role'
@@ -108,25 +106,6 @@ const TaxonomyProvider = ({ children }) => {
     setTaxonomy(refreshedTaxonomy)
   }
 
-  const updateConcept = async concept => {
-    if (concept) {
-      const { taxonomy: updatedTaxonomy } = await updateTaxonomyConcept(taxonomy, concept)
-      setTaxonomy(updatedTaxonomy)
-      return updatedTaxonomy
-    }
-  }
-
-  const updateConceptName = async (concept, updatedName) => {
-    if (concept && updatedName) {
-      const { taxonomy: updatedTaxonomy } = await updateTaxonomyConceptName(
-        taxonomy,
-        concept,
-        updatedName
-      )
-      setTaxonomy(updatedTaxonomy)
-    }
-  }
-
   useEffect(() => {
     setTaxonomyNames(getTaxonomyNames(taxonomy))
     setTaxonomyRoot(getTaxonomyRoot(taxonomy))
@@ -176,8 +155,6 @@ const TaxonomyProvider = ({ children }) => {
         taxonomy,
         taxonomyNames,
         taxonomyRoot,
-        updateConcept,
-        updateConceptName,
       }}
     >
       {children}

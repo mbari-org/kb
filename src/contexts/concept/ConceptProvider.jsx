@@ -29,15 +29,8 @@ const ConceptProvider = ({ children }) => {
 
   const { modal, closeModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
-  const {
-    getConcept,
-    getConceptPendingHistory,
-    loadConcept,
-    refreshConcept,
-    taxonomy,
-    // updateConcept,
-    // updateConceptName,
-  } = use(TaxonomyContext)
+  const { getConcept, getConceptPendingHistory, loadConcept, refreshConcept, taxonomy } =
+    use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(false)
