@@ -1,7 +1,6 @@
 import { use, useCallback, useMemo, useState } from 'react'
 
 import { Box, FormControl, Stack, TextField } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
 
 import ConceptRank from '@/components/kb/panels/concepts/detail/ConceptRank'
 
@@ -9,6 +8,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import useInputStyle from './useInputStyle'
 import useStageChild from './useStageChild'
 
 // import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
@@ -17,24 +17,7 @@ import { RANK } from '@/lib/kb/concept/rank'
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 
 const AddChildContent = () => {
-  const theme = useTheme()
-
-  const inputStyle = useMemo(
-    () => ({
-      fullWidth: true,
-      margin: 'normal',
-      size: 'small',
-      sx: {
-        '& .MuiInputBase-input': {
-          backgroundColor: theme.palette.background.paper,
-          color: '#000',
-          WebkitTextFillColor: '#000',
-        },
-      },
-      variant: 'outlined',
-    }),
-    [theme]
-  )
+  const inputStyle = useInputStyle()
 
   const { stagedState } = use(ConceptContext)
   const { setModalData } = use(ModalContext)

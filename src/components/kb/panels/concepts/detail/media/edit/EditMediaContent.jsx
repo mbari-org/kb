@@ -28,8 +28,8 @@ export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
 const EditMediaContent = () => {
   const { stagedState } = use(ConceptContext)
-
   const { modalData, setModalData } = use(ModalContext)
+
   const { action, mediaIndex, mediaItem } = modalData
 
   const [formMediaItem, setFormMediaItem] = useState(mediaItem)

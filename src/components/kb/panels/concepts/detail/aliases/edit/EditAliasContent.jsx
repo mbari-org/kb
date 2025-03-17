@@ -81,7 +81,7 @@ const EditAliasContent = () => {
     : formAlias.name.trim() === ''
     ? 'Name cannot be empty'
     : !isValidName
-    ? 'Taxonomy name already exists'
+    ? 'Concept name already exists'
     : ''
 
   return (

@@ -46,7 +46,7 @@ const EditMediaActions = () => {
         break
 
       case STAGE:
-        // Need to go through the form to trigger required and validation checks
+        // go through form to trigger required and validation checks
         document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
         break
     }
