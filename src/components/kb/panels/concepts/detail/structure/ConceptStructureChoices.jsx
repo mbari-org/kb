@@ -3,8 +3,9 @@ import { use } from 'react'
 import { Modal, Box, Button, IconButton, Stack } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
-import useChangePrimaryName from '@/components/kb/panels/concepts/detail/primaryName/useChangePrimaryName'
+import useChangeName from '@/components/kb/panels/concepts/detail/structure/name/useChangeName'
 import useChangeParent from '@/components/kb/panels/concepts/detail/structure/parent/useChangeParent'
+import useAddChild from '@/components/kb/panels/concepts/detail/structure/child/useAddChild'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -13,17 +14,18 @@ import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
 
 const ChangeStructureChoices = ({ closeChoices }) => {
   const { concept, stagedState, pendingHistory } = use(ConceptContext)
-  const { getRoot } = use(TaxonomyContext)
+  const { taxonomyRoot } = use(TaxonomyContext)
 
-  const isRoot = concept.name === getRoot().name
+  const isRoot = concept.name === taxonomyRoot.name
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
 
   const conceptHasChildren = concept.children.length > 0
   const conceptHasNameUpdate = stagedState.name !== concept.name
   const conceptHasParentUpdate = stagedState.parentName !== concept.parent?.name
 
-  const changePrimaryName = useChangePrimaryName()
+  const changeName = useChangeName()
   const changeParent = useChangeParent()
+  const addChild = useAddChild()
 
   return (
     <Modal open={true} onClose={closeChoices}>
@@ -62,7 +64,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
             disabled={isRoot || nameHasPendingHistory || conceptHasNameUpdate}
             onClick={() => {
               closeChoices()
-              changePrimaryName()
+              changeName()
             }}
           >
             Change Name
@@ -78,7 +80,14 @@ const ChangeStructureChoices = ({ closeChoices }) => {
           >
             Change Parent
           </Button>
-          <Button variant='contained' color='primary'>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => {
+              closeChoices()
+              addChild()
+            }}
+          >
             Add Child
           </Button>
           <Button variant='contained' color='error' disabled={isRoot || conceptHasChildren}>

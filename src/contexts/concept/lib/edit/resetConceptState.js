@@ -36,9 +36,9 @@ const resetField = (field, dispatch, initialState) => {
   // Certain field resets are grouped together.
   switch (field) {
     case 'name':
-    case 'nameUpdate':
+    case 'nameChange':
       resetFieldValue('name')
-      resetFieldValue('nameUpdate')
+      resetFieldValue('nameChange')
       break
 
     case 'rankLevel':

@@ -1,8 +1,8 @@
 import { prunePick } from '@/lib/util'
 
 const updateName = (_concept, updates, _submit) => {
-  const { nameUpdates } = prunePick(updates, ['name'])
-  if (!nameUpdates) {
+  const { name } = prunePick(updates, ['name'])
+  if (!name) {
     return []
   }
 
@@ -16,7 +16,7 @@ const updateName = (_concept, updates, _submit) => {
 
   // return nameResult
 
-  // if (updates.nameUpdate === NAME_UPDATE.NAME_ONLY || error) {
+  // if (updates.nameChange === NAME_UPDATE.NAME_ONLY || error) {
   //   return { error, updatedName: updates.name }
   // }
 

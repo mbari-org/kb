@@ -1,6 +1,7 @@
 const NAME_UPDATE = {
+  ALL_DATA: 'Associated Data',
+  CANCEL: 'Discard',
   NAME_ONLY: 'Name Only',
-  ALL_DATA: 'All Data',
 }
 
 const structureState = concept => {

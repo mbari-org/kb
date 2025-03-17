@@ -6,16 +6,16 @@ import { useTheme } from '@mui/material/styles'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useDebounceChangePrimaryName from './useDebounceChangePrimaryName'
+import useDebounceChangeName from './useDebounceChangeName'
 
-const PrimaryNameContent = () => {
+const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept, stagedState } = use(ConceptContext)
   const { taxonomyNames } = use(TaxonomyContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
-  const debouncedChangePrimaryName = useDebounceChangePrimaryName()
+  const debouncedChangePrimaryName = useDebounceChangeName()
 
   const fromColor = theme.concept.color.clean
 
@@ -79,4 +79,4 @@ const PrimaryNameContent = () => {
   )
 }
 
-export default PrimaryNameContent
+export default ChangeNameContent

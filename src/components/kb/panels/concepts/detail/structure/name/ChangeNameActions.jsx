@@ -9,9 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import { NAME_UPDATE } from '@/lib/kb/concept/state/structure'
 
-const CANCEL = 'Cancel'
-
-const PrimaryNameActions = () => {
+const ChangeNameActions = () => {
   const { concept, stagedState, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
   const { taxonomyNames } = use(TaxonomyContext)
@@ -21,13 +19,13 @@ const PrimaryNameActions = () => {
     concept.name !== stagedState.name && !taxonomyNames.includes(stagedState.name)
       ? [false, false, false]
       : [false, true, true]
-  const labels = [CANCEL, NAME_UPDATE.NAME_ONLY, NAME_UPDATE.ALL_DATA]
+  const labels = [NAME_UPDATE.CANCEL, NAME_UPDATE.NAME_ONLY, NAME_UPDATE.ALL_DATA]
 
   const onAction = label => {
-    if (label !== CANCEL) {
+    if (label !== NAME_UPDATE.CANCEL) {
       modifyConcept({
         type: CONCEPT_STATE.STRUCTURE.NAME_CHANGE,
-        update: { field: 'nameUpdate', value: label },
+        update: { field: 'nameChange', value: label },
       })
     } else {
       modifyConcept({
@@ -42,4 +40,4 @@ const PrimaryNameActions = () => {
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
 }
 
-export default PrimaryNameActions
+export default ChangeNameActions

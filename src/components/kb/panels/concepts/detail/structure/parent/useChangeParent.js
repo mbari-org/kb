@@ -1,14 +1,14 @@
-import ParentActions from './ParentActions'
-import ParentContent from './ParentContent'
-import ParentTitle from './ParentTitle'
+import ChangeParentActions from './ChangeParentActions'
+import ChangeParentContent from './ChangeParentContent'
+import ChangeParentTitle from './ChangeParentTitle'
 
 import useCreateEditingModal from '@/components/kb/panels/concepts/detail/useCreateEditingModal'
 
 const useChangeParent = () => {
   const createEditingModal = useCreateEditingModal({
-    Actions: ParentActions,
-    Content: ParentContent,
-    Title: ParentTitle,
+    Actions: ChangeParentActions,
+    Content: ChangeParentContent,
+    Title: ChangeParentTitle,
   })
 
   return createEditingModal

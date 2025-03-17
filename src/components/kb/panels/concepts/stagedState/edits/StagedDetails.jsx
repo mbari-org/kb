@@ -10,7 +10,10 @@ import MediaDetail from './media/MediaDetail'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { hasStateChange, stateChange } from '../../../../../../contexts/concept/lib/edit/stateChange'
+import {
+  hasStateChange,
+  stateChange,
+} from '../../../../../../contexts/concept/lib/edit/stateChange'
 
 const StagedDetails = () => {
   const { stagedState, initialState } = use(ConceptContext)
@@ -37,7 +40,7 @@ const StagedDetails = () => {
       case 'media':
         return <MediaDetail key={field} edit={edit} />
 
-      case 'nameUpdate':
+      case 'nameChange':
         return <FieldValueDetail key={field} field={field} value={staged} />
 
       default:

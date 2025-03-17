@@ -1,7 +1,7 @@
 import Title from '@/components/modal/Title'
 
-const PrimaryNameTitle = () => {
+const ChangeNameTitle = () => {
   return <Title title={'Change Concept Name'} />
 }
 
-export default PrimaryNameTitle
+export default ChangeNameTitle

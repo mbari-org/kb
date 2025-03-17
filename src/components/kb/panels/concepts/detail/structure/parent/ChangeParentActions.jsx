@@ -10,7 +10,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const DISCARD = 'Discard'
 const SAVE = 'Save'
 
-const ParentActions = () => {
+const ChangeParentActions = () => {
   const { stagedState, initialState, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
 
@@ -38,4 +38,4 @@ const ParentActions = () => {
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
 }
 
-export default ParentActions
+export default ChangeParentActions

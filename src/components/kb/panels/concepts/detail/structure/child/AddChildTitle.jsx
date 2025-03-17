@@ -4,10 +4,10 @@ import Title from '@/components/modal/Title'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-const ParentTitle = () => {
+const AddChildTitle = () => {
   const { concept } = use(ConceptContext)
 
-  return <Title title={`Concept: ${concept.name}`} />
+  return <Title title={`Add Child to: ${concept.name}`} />
 }
 
-export default ParentTitle
+export default AddChildTitle

@@ -5,7 +5,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const useDebounceChangePrimaryName = () => {
+const useDebounceChangeName = () => {
   const { modifyConcept } = use(ConceptContext)
 
   const modifyPrimaryName = useCallback(
@@ -23,4 +23,4 @@ const useDebounceChangePrimaryName = () => {
   return debouncedChangePrimaryName
 }
 
-export default useDebounceChangePrimaryName
+export default useDebounceChangeName

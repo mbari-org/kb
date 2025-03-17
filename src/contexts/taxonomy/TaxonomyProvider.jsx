@@ -67,14 +67,6 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  // const getNames = useCallback(() => {
-  //   return getTaxonomyNames(taxonomy)
-  // }, [taxonomy])
-
-  // const getRoot = useCallback(() => {
-  //   return getTaxonomyRoot(taxonomy)
-  // }, [taxonomy])
-
   const loadConcept = async (conceptName, refresh = false) => {
     if (!refresh) {
       const alreadyLoadedConcept = getTaxonomyConcept(taxonomy, conceptName)
