@@ -28,13 +28,13 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
     const stagedMediaItem = stagedState.media[mediaIndex]
     const mediaItem = stagedMediaItem ? mediaItemFields(stagedMediaItem) : EMPTY_MEDIA_ITEM
 
-    const actionModalData = {
+    const modalData = {
       action,
       mediaIndex,
       mediaItem,
       modified: false,
     }
-    setModalData(actionModalData)
+    setModalData(modalData)
 
     const modal = createEditMediaModal(action)
     const onClose = createEditMediaOnClose({ initialState, modifyConcept })

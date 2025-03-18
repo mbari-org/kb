@@ -1,12 +1,17 @@
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+const RESET = CONCEPT_STATE.RESET
 
 const RESET_ACTIONS = [
-  CONCEPT_STATE.RESET.ALIAS,
-  CONCEPT_STATE.RESET.ALIASES,
-  CONCEPT_STATE.RESET.FIELD,
-  CONCEPT_STATE.RESET.MEDIA,
-  CONCEPT_STATE.RESET.MEDIA_ITEM,
-  CONCEPT_STATE.RESET.TO_INITIAL,
+  RESET.ALIAS,
+  RESET.ALIASES,
+  RESET.FIELD,
+  RESET.MEDIA,
+  RESET.MEDIA_ITEM,
+  RESET.STRUCTURE.CHILD,
+  RESET.STRUCTURE.CONCEPT,
+  RESET.STRUCTURE.NAME,
+  RESET.STRUCTURE.PARENT,
+  RESET.TO_INITIAL,
 ]
 
 const isResetAction = action => RESET_ACTIONS.includes(action.type)
@@ -67,6 +72,10 @@ const resetMediaItem = (mediaIndex, dispatch, initialState) => {
   })
 }
 
+const resetStructure = (dispatch, action) => {
+  dispatch({ type: action.type })
+}
+
 const resetToInitial = (dispatch, initialState) => {
   dispatch({
     type: CONCEPT_STATE.INITIAL,
@@ -94,6 +103,10 @@ const resetConceptState = (action, dispatch, initialState) => {
 
     case CONCEPT_STATE.RESET.MEDIA_ITEM:
       resetMediaItem(action.update.mediaIndex, dispatch, initialState)
+      break
+
+    case CONCEPT_STATE.RESET.STRUCTURE.CHILD:
+      resetStructure(dispatch, action)
       break
 
     case CONCEPT_STATE.RESET.TO_INITIAL:

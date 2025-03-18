@@ -25,7 +25,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
 
   const changeName = useChangeName()
   const changeParent = useChangeParent()
-  const addChild = useAddChild()
+  const addChild = useAddChild(closeChoices)
 
   return (
     <Modal open={true} onClose={closeChoices}>
@@ -80,14 +80,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
           >
             Change Parent
           </Button>
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={() => {
-              closeChoices()
-              addChild()
-            }}
-          >
+          <Button variant='contained' color='primary' onClick={addChild}>
             Add Child
           </Button>
           <Button variant='contained' color='error' disabled={isRoot || conceptHasChildren}>

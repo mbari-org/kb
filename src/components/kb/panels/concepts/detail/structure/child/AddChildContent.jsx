@@ -20,15 +20,12 @@ const AddChildContent = () => {
   const inputStyle = useInputStyle()
 
   const { stagedState } = use(ConceptContext)
-  const { setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(ModalContext)
   const { taxonomyNames } = use(TaxonomyContext)
 
-  const [formChild, setFormChild] = useState({
-    author: '',
-    name: '',
-    rankLevel: '',
-    rankName: '',
-  })
+  const { child } = modalData
+
+  const [formChild, setFormChild] = useState(child)
 
   const [modifiedFields, setModifiedFields] = useState({
     author: false,

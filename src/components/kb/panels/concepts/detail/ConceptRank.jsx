@@ -6,8 +6,6 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import ApprovalButton from '@/components/kb/panels/concepts/detail/ApprovalButton'
 
-import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
-
 const ConceptRank = ({
   field,
   fieldValue,
@@ -17,15 +15,6 @@ const ConceptRank = ({
   showApprovalButton,
 }) => {
   const { filterRanks } = use(TaxonomyContext)
-
-  useUpdateTrigger('ConceptRank', {
-    field,
-    fieldValue,
-    otherValue,
-    inputStyle,
-    onChange,
-    showApprovalButton,
-  })
 
   const rankOptions = filterRanks(field, otherValue)
   const label = field === 'rankName' ? 'Rank' : 'Level'

@@ -65,7 +65,7 @@ const fieldEdits = ({ stateType, displayFields, initial, staged }) =>
       acc.push(edit)
       return acc
     }, [])
-    .map(edit => (edit[0] === stateType.DELETE ? deleteItem(edit) : editItem(edit)))
+    .map(edit => (edit.action === stateType.DELETE ? deleteItem(edit) : editItem(edit)))
 
 const itemEdit = (stateType, index, initialItem, stagedItem, displayFields) => {
   const { action } = stagedItem

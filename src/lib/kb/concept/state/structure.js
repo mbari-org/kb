@@ -1,7 +1,15 @@
 const structureState = concept => {
   return {
+    children: [],
     name: concept.name,
     parentName: concept.parent?.name,
+  }
+}
+
+const addChild = (state, update) => {
+  return {
+    ...state,
+    children: [...state.children, update.child],
   }
 }
 
@@ -20,4 +28,11 @@ const changeParent = (state, update) => {
   }
 }
 
-export { changeName, changeParent, structureState }
+const resetChild = (state, update) => {
+  return {
+    ...state,
+    children: state.children.map(item => (item.name === update.child.name ? update.child : item)),
+  }
+}
+
+export { addChild, changeName, changeParent, resetChild, structureState }

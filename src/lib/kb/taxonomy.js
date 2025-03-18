@@ -268,13 +268,15 @@ const refreshConcept = async (taxonomy, conceptName) => {
     return
   }
 
-  const [apiConcept, rawNames, approvedHistory, pendingHistory, names] = await Promise.all([
-    apiCall(() => fetchConcept(taxonomy.config, conceptName)),
-    apiCall(() => fetchConceptNames(taxonomy.config, conceptName)),
-    apiCall(() => fetchHistory(taxonomy.config, 'approved')),
-    apiCall(() => fetchHistory(taxonomy.config, 'pending')),
-    apiCall(() => fetchNames(taxonomy.config)),
-  ])
+  const [apiConcept, children, rawNames, approvedHistory, pendingHistory, names] =
+    await Promise.all([
+      apiCall(() => fetchConcept(taxonomy.config, conceptName)),
+      apiCall(() => fetchConceptChildren(taxonomy.config, conceptName)),
+      apiCall(() => fetchConceptNames(taxonomy.config, conceptName)),
+      apiCall(() => fetchHistory(taxonomy.config, 'approved')),
+      apiCall(() => fetchHistory(taxonomy.config, 'pending')),
+      apiCall(() => fetchNames(taxonomy.config)),
+    ])
   const updatableTaxonomy = {
     ...taxonomy,
     approvedHistory,
@@ -283,12 +285,20 @@ const refreshConcept = async (taxonomy, conceptName) => {
   }
   currentConcept.alternateNames.forEach(name => delete updatableTaxonomy.aliases[name])
 
+  const conceptChildren = children.map(child => {
+    if (updatableTaxonomy.concepts[child.name]) {
+      return { ...updatableTaxonomy.concepts[child.name] }
+    }
+    return child
+  })
+
   apiConcept.raw = false
   apiConcept.aliases = orderedAliases(rawNames)
   apiConcept.alternateNames = apiConcept.aliases.map(alias => alias.name)
   apiConcept.alternateNames.forEach(name => {
     updatableTaxonomy.aliases[name] = apiConcept.name
   })
+  apiConcept.children = conceptChildren
   updatableTaxonomy.concepts[conceptName] = apiConcept
 
   return { taxonomy: updatableTaxonomy }

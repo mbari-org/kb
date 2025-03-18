@@ -13,7 +13,8 @@ import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
 import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
 
-const { CONFIRM_DISCARD, CONTINUE, DISCARD, SAVE } = LABELS.ACTION
+const { CONFIRM_DISCARD, CONTINUE, DISCARD } = LABELS.ACTION
+const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const SAVING = 'Saving...'

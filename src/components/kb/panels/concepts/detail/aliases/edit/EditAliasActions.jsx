@@ -11,40 +11,35 @@ import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
+const { CONFIRMED } = CONCEPT_STATE.RESET
+
 const EditAliasActions = () => {
-  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
   const { taxonomyNames } = use(TaxonomyContext)
 
-  const { alias, aliasIndex, modified } = modalData
+  const { alias, modified } = modalData
 
-  const stagedAlias = useMemo(
-    () => ({ ...stagedState.aliases[aliasIndex] }),
-    [stagedState.aliases, aliasIndex]
-  )
-
-  const isValidName = useMemo(() => {
-    if (stagedAlias.name === modalData.alias.name) {
-      return true
+  const isValidAlias = useMemo(() => {
+    if (alias.name === '' || alias.author === '') {
+      return false
     }
-
     return !taxonomyNames.includes(alias.name)
-  }, [alias.name, modalData.alias.name, taxonomyNames, stagedAlias.name])
-
-  const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
+  }, [alias, taxonomyNames])
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !modified || !isValidName]
+  const disabled = [false, !modified || !isValidAlias]
   const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
     switch (label) {
       case CONTINUE:
-        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.NO })
+        modifyConcept({ type: CONFIRMED.NO })
         break
 
       case CONFIRM_DISCARD:
-        modifyConcept({ type: CONCEPT_STATE.RESET.CONFIRMED.YES })
+        modifyConcept({ type: CONFIRMED.YES })
         closeModal(true)
         break
 

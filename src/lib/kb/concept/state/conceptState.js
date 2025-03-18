@@ -31,9 +31,17 @@ export const CONCEPT_STATE = {
     FIELD: 'Reset Field',
     MEDIA: 'Reset Media',
     MEDIA_ITEM: 'Reset Media Item',
+    STRUCTURE: {
+      CHILD: 'Reset Child',
+      CONCEPT: 'Reset Concept',
+      NAME: 'Reset Name',
+      PARENT: 'Reset Parent',
+    },
     TO_INITIAL: 'Reset To Initial',
   },
   STRUCTURE: {
+    ADD_CHILD: 'Add Child',
+    DELETE_CONCEPT: 'Delete Concept',
     NAME_CHANGE: 'Name Change',
     PARENT_UPDATE: 'Parent Update',
   },
@@ -50,6 +58,12 @@ export const FIELDS = {
   RANK: {
     NAME: 'name',
     LEVEL: 'level',
+  },
+  STRUCTURE: {
+    CHILD: 'child',
+    CONCEPT: 'concept',
+    NAME: 'name',
+    PARENT: 'parent',
   },
 }
 
