@@ -1,20 +1,23 @@
 import { use } from 'react'
 
+import EditReset from '@/components/kb/panels/concepts/stagedState/edits/EditReset'
+
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-import EditReset from '../EditReset'
+
+const { NO_ACTION, RESET } = CONCEPT_STATE
 
 const AliasReset = ({ index }) => {
   const { stagedState, modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
-    // CxTBD Check if this is the only alias edit, and if so, do RESET.ALIASES
-    const count = stagedState.aliases.filter(item => item.action !== CONCEPT_STATE.NO_ACTION).length
+    // If last alias, do RESET.ALIASES
+    const count = stagedState.aliases.filter(item => item.action !== NO_ACTION).length
     count === 1
-      ? modifyConcept({ type: CONCEPT_STATE.RESET.ALIASES })
+      ? modifyConcept({ type: RESET.ALIASES })
       : modifyConcept({
-          type: CONCEPT_STATE.RESET.ALIAS,
+          type: RESET.ALIAS,
           update: { index },
         })
   }

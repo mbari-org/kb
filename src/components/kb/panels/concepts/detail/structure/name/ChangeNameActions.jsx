@@ -9,7 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
-const { ASSOCIATED_DATA, NAME_ONLY } = LABELS.CONCEPT.NAME_CHANGE
+const { ASSOCIATED_DATA, NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 const { DISCARD } = LABELS.ACTION
 
 const ChangeNameActions = () => {
@@ -27,7 +27,7 @@ const ChangeNameActions = () => {
   const onAction = label => {
     if (label !== DISCARD) {
       modifyConcept({
-        type: CONCEPT_STATE.STRUCTURE.NAME_CHANGE,
+        type: CONCEPT_STATE.STRUCTURE.CHANGE_NAME,
         update: { field: 'nameChange', value: label },
       })
     } else {

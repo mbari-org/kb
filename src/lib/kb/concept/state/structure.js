@@ -29,10 +29,18 @@ const changeParent = (state, update) => {
 }
 
 const resetChild = (state, update) => {
+  const { child } = update
   return {
     ...state,
-    children: state.children.map(item => (item.name === update.child.name ? update.child : item)),
+    children: state.children.map(item => (item.name === child.name ? child : item)),
   }
 }
 
-export { addChild, changeName, changeParent, resetChild, structureState }
+const resetChildren = state => {
+  return {
+    ...state,
+    children: [],
+  }
+}
+
+export { addChild, changeName, changeParent, resetChild, resetChildren, structureState }

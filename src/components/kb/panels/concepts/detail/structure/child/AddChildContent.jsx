@@ -42,14 +42,20 @@ const AddChildContent = () => {
     return !taxonomyNames.includes(formChild?.name)
   }, [formChild?.name, taxonomyNames])
 
-  const nameError = modifiedFields.name && !isValidName
+  const isValidAddition = useMemo(() => {
+    return !stagedState.children.some(stagedChild => stagedChild.name === formChild.name)
+  }, [formChild?.name, stagedState.children])
+
+  const nameError = modifiedFields.name && (!isValidName || !isValidAddition)
 
   const nameHelperText = !modifiedFields.name
     ? ''
     : formChild.name.trim() === ''
     ? 'Name cannot be empty'
     : !isValidName
-    ? 'Taxonomy name already exists'
+    ? 'Concept name already exists'
+    : !isValidAddition
+    ? 'Child already being added'
     : ''
 
   const handleChange = useCallback(

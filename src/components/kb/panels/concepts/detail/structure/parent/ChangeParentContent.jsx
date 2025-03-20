@@ -25,7 +25,7 @@ const ChangeParentContent = () => {
   const setParentName = toName => {
     const parentName = toName === null ? concept.parent.name : toName
     modifyConcept({
-      type: CONCEPT_STATE.STRUCTURE.PARENT_UPDATE,
+      type: CONCEPT_STATE.STRUCTURE.CHANGE_PARENT,
       update: { parentName: parentName },
     })
     toName === null ? setToParentName(null) : setToParentName(toName)

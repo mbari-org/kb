@@ -28,7 +28,7 @@ const addChildOnClose = modifyConcept => {
   return modalData => {
     if (modalData.modified) {
       modifyConcept({
-        type: RESET.STRUCTURE.CHILD,
+        type: RESET.ADD_CHILD,
         update: {
           child: modalData.child,
         },

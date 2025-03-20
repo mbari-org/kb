@@ -2,15 +2,16 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const RESET = CONCEPT_STATE.RESET
 
 const RESET_ACTIONS = [
+  RESET.ADD_CHILD,
+  RESET.ADD_CHILDREN,
   RESET.ALIAS,
   RESET.ALIASES,
+  RESET.CHANGE_NAME,
+  RESET.CHANGE_PARENT,
+  RESET.DELETE_CONCEPT,
   RESET.FIELD,
   RESET.MEDIA,
   RESET.MEDIA_ITEM,
-  RESET.STRUCTURE.CHILD,
-  RESET.STRUCTURE.CONCEPT,
-  RESET.STRUCTURE.NAME,
-  RESET.STRUCTURE.PARENT,
   RESET.TO_INITIAL,
 ]
 
@@ -18,22 +19,56 @@ const isResetAction = action => RESET_ACTIONS.includes(action.type)
 
 const resetAlias = (aliasIndex, dispatch, initialState) => {
   dispatch({
-    type: CONCEPT_STATE.RESET.ALIAS,
+    type: RESET.ALIAS,
     update: { alias: initialState.aliases[aliasIndex], aliasIndex },
   })
 }
 
 const resetAliases = (dispatch, initialState) => {
   dispatch({
-    type: CONCEPT_STATE.RESET.ALIASES,
+    type: RESET.ALIASES,
     update: { aliases: initialState.aliases },
+  })
+}
+
+const resetAddChild = (dispatch, child) => {
+  dispatch({
+    type: RESET.ADD_CHILD,
+    update: { child },
+  })
+}
+
+const resetAddChildren = dispatch => {
+  dispatch({
+    type: RESET.ADD_CHILDREN,
+  })
+}
+
+const resetChangeName = (dispatch, name) => {
+  dispatch({
+    type: RESET.CHANGE_NAME,
+    update: { name },
+  })
+}
+
+const resetChangeParent = (dispatch, parent) => {
+  dispatch({
+    type: RESET.CHANGE_PARENT,
+    update: { parent },
+  })
+}
+
+const resetDeleteConcept = (dispatch, concept) => {
+  dispatch({
+    type: RESET.DELETE_CONCEPT,
+    update: { concept },
   })
 }
 
 const resetField = (field, dispatch, initialState) => {
   const resetFieldValue = field => {
     dispatch({
-      type: CONCEPT_STATE.RESET.FIELD,
+      type: RESET.FIELD,
       update: { field, value: initialState[field] },
     })
   }
@@ -60,20 +95,16 @@ const resetField = (field, dispatch, initialState) => {
 
 const resetMedia = (dispatch, initialState) => {
   dispatch({
-    type: CONCEPT_STATE.RESET.MEDIA,
+    type: RESET.MEDIA,
     update: { media: initialState.media },
   })
 }
 
 const resetMediaItem = (mediaIndex, dispatch, initialState) => {
   dispatch({
-    type: CONCEPT_STATE.RESET.MEDIA_ITEM,
+    type: RESET.MEDIA_ITEM,
     update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
   })
-}
-
-const resetStructure = (dispatch, action) => {
-  dispatch({ type: action.type })
 }
 
 const resetToInitial = (dispatch, initialState) => {
@@ -85,31 +116,47 @@ const resetToInitial = (dispatch, initialState) => {
 
 const resetConceptState = (action, dispatch, initialState) => {
   switch (action.type) {
-    case CONCEPT_STATE.RESET.ALIAS:
+    case RESET.ALIAS:
       resetAlias(action.update.aliasIndex, dispatch, initialState)
       break
 
-    case CONCEPT_STATE.RESET.ALIASES:
+    case RESET.ALIASES:
       resetAliases(dispatch, initialState)
       break
 
-    case CONCEPT_STATE.RESET.FIELD:
+    case RESET.ADD_CHILD:
+      resetAddChild(dispatch, action.update.child)
+      break
+
+    case RESET.ADD_CHILDREN:
+      resetAddChildren(dispatch)
+      break
+
+    case RESET.CHANGE_NAME:
+      resetChangeName(dispatch, action.update.name)
+      break
+
+    case RESET.CHANGE_PARENT:
+      resetChangeParent(dispatch, action.update.parent)
+      break
+
+    case RESET.DELETE_CONCEPT:
+      resetDeleteConcept(dispatch, action.update.concept)
+      break
+
+    case RESET.FIELD:
       resetField(action.update.field, dispatch, initialState)
       break
 
-    case CONCEPT_STATE.RESET.MEDIA:
+    case RESET.MEDIA:
       resetMedia(dispatch, initialState)
       break
 
-    case CONCEPT_STATE.RESET.MEDIA_ITEM:
+    case RESET.MEDIA_ITEM:
       resetMediaItem(action.update.mediaIndex, dispatch, initialState)
       break
 
-    case CONCEPT_STATE.RESET.STRUCTURE.CHILD:
-      resetStructure(dispatch, action)
-      break
-
-    case CONCEPT_STATE.RESET.TO_INITIAL:
+    case RESET.TO_INITIAL:
       resetToInitial(dispatch, initialState)
       break
 

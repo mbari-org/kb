@@ -11,7 +11,7 @@ const useDebounceChangeName = () => {
   const modifyPrimaryName = useCallback(
     name => {
       modifyConcept({
-        type: CONCEPT_STATE.STRUCTURE.NAME_CHANGE,
+        type: CONCEPT_STATE.STRUCTURE.CHANGE_NAME,
         update: { field: 'name', value: name },
       })
     },

@@ -8,14 +8,20 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const { RESET } = CONCEPT_STATE
 
-const AliasesReset = () => {
-  const { modifyConcept } = use(ConceptContext)
+const ChildReset = ({ child }) => {
+  const { stagedState, modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
-    modifyConcept({ type: RESET.ALIASES })
+    // If last child, do RESET.ADD_CHILDREN
+    stagedState.children.length === 1
+      ? modifyConcept({ type: RESET.ADD_CHILDREN })
+      : modifyConcept({
+          type: RESET.ADD_CHILD,
+          update: { child },
+        })
   }
 
   return <EditReset onClick={onClick} />
 }
 
-export default AliasesReset
+export default ChildReset

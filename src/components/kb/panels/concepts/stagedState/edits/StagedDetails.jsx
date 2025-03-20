@@ -3,6 +3,7 @@ import { use, useEffect, useMemo } from 'react'
 import { Box } from '@mui/material'
 
 import AliasesDetail from './aliases/AliasesDetail'
+import ChildrenDetail from './structure/children/ChildrenDetail'
 import FieldDeltaDetail from './field/FieldDeltaDetail'
 import FieldValueDetail from './field/FieldValueDetail'
 import MediaDetail from './media/MediaDetail'
@@ -36,6 +37,9 @@ const StagedDetails = () => {
       case 'aliasIndex':
       case 'mediaIndex':
         return null
+
+      case 'children':
+        return <ChildrenDetail key={field} edit={edit} />
 
       case 'media':
         return <MediaDetail key={field} edit={edit} />

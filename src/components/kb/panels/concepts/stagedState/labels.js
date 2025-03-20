@@ -7,7 +7,7 @@ const LABELS = {
     STAGE: 'Stage',
   },
   CONCEPT: {
-    NAME_CHANGE: {
+    CHANGE_NAME: {
       ASSOCIATED_DATA: 'Associated Data',
       NAME_ONLY: 'Name Only',
     },

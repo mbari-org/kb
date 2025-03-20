@@ -13,7 +13,6 @@ import {
   resetMedia,
   resetMediaItem,
 } from '@/lib/kb/concept/state/media'
-import { addChild, changeName, changeParent } from '@/lib/kb/concept/state/structure'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
@@ -43,15 +42,23 @@ const conceptStateReducer = (state, { type, update }) => {
     case CONCEPT_STATE.MEDIA.EDIT:
       return editMedia(state, update)
 
+    case CONCEPT_STATE.RESET.ADD_CHILD:
+      return resetAddChild(state, update)
+
+    case CONCEPT_STATE.RESET.ADD_CHILDREN:
+      return resetAddChildren(state)
+
     case CONCEPT_STATE.RESET.ALIAS:
       return resetAlias(state, update)
 
     case CONCEPT_STATE.RESET.ALIASES:
       return resetAliases(state, update)
 
-    case CONCEPT_STATE.RESET.STRUCTURE.CHILD:
-      // return resetChild(state, update)
-      return state
+    case CONCEPT_STATE.RESET.CHANGE_NAME:
+      return resetChangeName(state, update)
+
+    case CONCEPT_STATE.RESET.CHANGE_PARENT:
+      return resetChangeParent(state, update)
 
     case CONCEPT_STATE.RESET.FIELD:
       return resetField(state, update)
@@ -61,15 +68,6 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case CONCEPT_STATE.RESET.MEDIA_ITEM:
       return resetMediaItem(state, update)
-
-    case CONCEPT_STATE.STRUCTURE.ADD_CHILD:
-      return addChild(state, update)
-
-    case CONCEPT_STATE.STRUCTURE.NAME_CHANGE:
-      return changeName(state, update)
-
-    case CONCEPT_STATE.STRUCTURE.PARENT_UPDATE:
-      return changeParent(state, update)
 
     default:
       return state

@@ -23,7 +23,7 @@ const ChangeParentActions = () => {
   const onAction = label => {
     if (label === SAVE) {
       modifyConcept({
-        type: CONCEPT_STATE.STRUCTURE.PARENT_UPDATE,
+        type: CONCEPT_STATE.STRUCTURE.CHANGE_PARENT,
         update: { parentName: stagedState.parentName },
       })
     }

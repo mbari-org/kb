@@ -16,7 +16,7 @@ const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
 const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const AddChildActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
   const { taxonomyNames } = use(TaxonomyContext)
 
@@ -26,8 +26,11 @@ const AddChildActions = () => {
     if (child.name === '' || child.author === '') {
       return false
     }
-    return !taxonomyNames.includes(child.name)
-  }, [child, taxonomyNames])
+    return (
+      !taxonomyNames.includes(child.name) &&
+      !stagedState.children.some(stagedChild => stagedChild.name === child.name)
+    )
+  }, [child, taxonomyNames, stagedState.children])
 
   const colors = ['cancel', 'main']
   const disabled = [false, !confirmReset && (!modified || !isValidChild)]
