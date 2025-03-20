@@ -11,8 +11,8 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
+const { RESET } = CONCEPT_STATE
 const { ADD_CHILD } = CONCEPT_STATE.STRUCTURE
-const RESET = CONCEPT_STATE.RESET
 
 const addChildModal = () => {
   const components = {

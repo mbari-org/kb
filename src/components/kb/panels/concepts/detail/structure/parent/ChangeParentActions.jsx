@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useMemo } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
@@ -7,33 +7,33 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const DISCARD = 'Discard'
-const SAVE = 'Save'
+import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+
+const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
+const { DISCARD, STAGE } = LABELS.ACTION
 
 const ChangeParentActions = () => {
   const { stagedState, initialState, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
 
-  const [saveDisabled, setSaveDisabled] = useState(true)
+  const isDisabled = useMemo(() => {
+    return stagedState.parentName === initialState.parentName
+  }, [stagedState, initialState])
 
   const colors = ['cancel', 'main']
-  const disabled = [false, saveDisabled]
-  const labels = [DISCARD, SAVE]
+  const disabled = [false, isDisabled]
+  const labels = [DISCARD, STAGE]
 
   const onAction = label => {
-    if (label === SAVE) {
+    if (label === STAGE) {
       modifyConcept({
-        type: CONCEPT_STATE.STRUCTURE.CHANGE_PARENT,
+        type: CHANGE_PARENT,
         update: { parentName: stagedState.parentName },
       })
     }
 
     closeModal()
   }
-
-  useEffect(() => {
-    setSaveDisabled(stagedState.parentName === initialState.parentName)
-  }, [stagedState, initialState])
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
 }

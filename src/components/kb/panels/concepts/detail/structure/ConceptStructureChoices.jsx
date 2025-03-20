@@ -1,31 +1,41 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 
-import { Modal, Box, Button, IconButton, Stack } from '@mui/material'
+import { Box, Button, IconButton, Modal, Stack } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
+import useAddChild from '@/components/kb/panels/concepts/detail/structure/child/useAddChild'
 import useChangeName from '@/components/kb/panels/concepts/detail/structure/name/useChangeName'
 import useChangeParent from '@/components/kb/panels/concepts/detail/structure/parent/useChangeParent'
-import useAddChild from '@/components/kb/panels/concepts/detail/structure/child/useAddChild'
+import useDeleteConcept from '@/components/kb/panels/concepts/detail/structure/concept/useDeleteConcept'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
+import { hasStateChange } from '@/contexts/concept/lib/edit/stateChange'
 
 const ChangeStructureChoices = ({ closeChoices }) => {
-  const { concept, stagedState, pendingHistory } = use(ConceptContext)
+  const { concept, initialState, stagedState, pendingHistory } = use(ConceptContext)
   const { taxonomyRoot } = use(TaxonomyContext)
 
   const isRoot = concept.name === taxonomyRoot.name
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
 
-  const conceptHasChildren = concept.children.length > 0
-  const conceptHasNameUpdate = stagedState.name !== concept.name
+  const conceptHasChildren = concept.children.length > 0 || stagedState.children.length > 0
+  const conceptHasNameUpdate = !!stagedState.nameChange
   const conceptHasParentUpdate = stagedState.parentName !== concept.parent?.name
 
+  const addChild = useAddChild(closeChoices)
   const changeName = useChangeName()
   const changeParent = useChangeParent()
-  const addChild = useAddChild(closeChoices)
+  const deleteConcept = useDeleteConcept(closeChoices)
+
+  const disableChangeName = isRoot || nameHasPendingHistory || conceptHasNameUpdate
+  const disableChangeParent = isRoot || conceptHasParentUpdate
+  const disableDelete = useMemo(
+    () => isRoot || conceptHasChildren || hasStateChange(initialState, stagedState),
+    [conceptHasChildren, initialState, isRoot, stagedState]
+  )
 
   return (
     <Modal open={true} onClose={closeChoices}>
@@ -57,33 +67,40 @@ const ChangeStructureChoices = ({ closeChoices }) => {
           <IoClose size={24} />
         </IconButton>
 
-        <Stack spacing={2.5} mt={3}>
+        <Stack spacing={5} mt={3}>
+          <Stack spacing={2.5}>
+            <Button
+              variant='contained'
+              color='primary'
+              disabled={disableChangeName}
+              onClick={() => {
+                closeChoices()
+                changeName()
+              }}
+            >
+              Change Name
+            </Button>
+            <Button
+              variant='contained'
+              color='primary'
+              disabled={disableChangeParent}
+              onClick={() => {
+                closeChoices()
+                changeParent()
+              }}
+            >
+              Change Parent
+            </Button>
+            <Button variant='contained' color='primary' onClick={addChild}>
+              Add Child
+            </Button>
+          </Stack>
           <Button
             variant='contained'
-            color='primary'
-            disabled={isRoot || nameHasPendingHistory || conceptHasNameUpdate}
-            onClick={() => {
-              closeChoices()
-              changeName()
-            }}
+            color='error'
+            disabled={disableDelete}
+            onClick={deleteConcept}
           >
-            Change Name
-          </Button>
-          <Button
-            variant='contained'
-            color='primary'
-            disabled={isRoot || conceptHasParentUpdate}
-            onClick={() => {
-              closeChoices()
-              changeParent()
-            }}
-          >
-            Change Parent
-          </Button>
-          <Button variant='contained' color='primary' onClick={addChild}>
-            Add Child
-          </Button>
-          <Button variant='contained' color='error' disabled={isRoot || conceptHasChildren}>
             Delete Concept
           </Button>
         </Stack>

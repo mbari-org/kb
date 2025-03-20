@@ -1,4 +1,8 @@
-import { oniGet, oniPut } from './util'
+import { oniDelete, oniGet, oniPost, oniPut } from './util'
+
+const createConcept = async (config, updates) => oniPost(config, ['concept'], updates)
+
+const deleteConcept = async (config, conceptName) => oniDelete(config, ['concept', conceptName])
 
 const fetchChildren = async (config, conceptName) =>
   oniGet(config, ['concept', 'children', conceptName])
@@ -23,6 +27,8 @@ const updateConceptRank = async (config, [conceptName, updates]) =>
   oniPut(config, ['concept', conceptName], updates)
 
 export {
+  createConcept,
+  deleteConcept,
   fetchChildren,
   fetchConcept,
   fetchNames,

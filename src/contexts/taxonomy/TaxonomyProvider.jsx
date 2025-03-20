@@ -9,6 +9,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { incompleteTaxonomy } from '@/lib/kb/concept'
 import {
+  deleteConcept as deleteTaxonomyConcept,
   getConcept as getTaxonomyConcept,
   getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
@@ -38,6 +39,14 @@ const TaxonomyProvider = ({ children }) => {
   const [taxonomyRoot, setTaxonomyRoot] = useState(null)
 
   const initialLoad = useRef(true)
+
+  const deleteConcept = useCallback(
+    conceptName => {
+      const { taxonomy: updatedTaxonomy } = deleteTaxonomyConcept(taxonomy, conceptName)
+      setTaxonomy(updatedTaxonomy)
+    },
+    [taxonomy]
+  )
 
   const filterRanks = useCallback(
     (field, otherValue) => {
@@ -144,6 +153,7 @@ const TaxonomyProvider = ({ children }) => {
   return (
     <TaxonomyContext
       value={{
+        deleteConcept,
         filterRanks,
         getConcept,
         getConceptPendingHistory,

@@ -28,7 +28,7 @@ const changeParent = (state, update) => {
   }
 }
 
-const resetChild = (state, update) => {
+const resetAddChild = (state, update) => {
   const { child } = update
   return {
     ...state,
@@ -36,11 +36,36 @@ const resetChild = (state, update) => {
   }
 }
 
-const resetChildren = state => {
+const resetAddChildren = state => {
   return {
     ...state,
     children: [],
   }
 }
 
-export { addChild, changeName, changeParent, resetChild, resetChildren, structureState }
+const resetChangeName = (state, update) => {
+  const { field, value } = update
+  return {
+    ...state,
+    [field]: value,
+  }
+}
+
+const resetChangeParent = (state, update) => {
+  const { field, value } = update
+  return {
+    ...state,
+    [field]: value,
+  }
+}
+
+export {
+  addChild,
+  changeName,
+  changeParent,
+  resetAddChild,
+  resetAddChildren,
+  resetChangeName,
+  resetChangeParent,
+  structureState,
+}

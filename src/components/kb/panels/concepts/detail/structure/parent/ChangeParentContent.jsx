@@ -1,4 +1,4 @@
-import { use, useCallback, useState } from 'react'
+import { use, useMemo, useState } from 'react'
 
 import { Box, Stack, Typography, Autocomplete, TextField, Divider } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -16,7 +16,7 @@ const ChangeParentContent = () => {
   const { concept, modifyConcept } = use(ConceptContext)
   const { taxonomyNames } = use(TaxonomyContext)
 
-  const optionNames = useCallback(() => {
+  const optionNames = useMemo(() => {
     return taxonomyNames.filter(name => name !== concept.name && name !== concept.parent?.name)
   }, [taxonomyNames, concept.name, concept.parent?.name])
 

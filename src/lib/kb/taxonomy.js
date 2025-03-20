@@ -22,6 +22,25 @@ const apiCall = async fetchFn => {
   return payload
 }
 
+const deleteConcept = (taxonomy, conceptName) => {
+  const { [conceptName]: deletedConcept, ...remainingConcepts } = taxonomy.concepts
+  const remainingAliases = { ...taxonomy.aliases }
+  deletedConcept.alternateNames.forEach(name => delete remainingAliases[name])
+
+  const updatedTaxonomy = {
+    ...taxonomy,
+    aliases: remainingAliases,
+    concepts: remainingConcepts,
+  }
+
+  if (deletedConcept?.parent) {
+    const parentConcept = updatedTaxonomy.concepts[deletedConcept.parent.name]
+    parentConcept.children = parentConcept.children.filter(child => child.name !== conceptName)
+  }
+
+  return { taxonomy: updatedTaxonomy }
+}
+
 const getConcept = (taxonomy, conceptName) => {
   let concept = taxonomy?.concepts[conceptName]
   if (concept) {
@@ -317,6 +336,7 @@ const refreshHistory = async (taxonomy, _conceptName) => {
 }
 
 export {
+  deleteConcept,
   filterTaxonomyRanks,
   getConcept,
   getConceptPendingHistory,

@@ -14,60 +14,81 @@ import {
   resetMediaItem,
 } from '@/lib/kb/concept/state/media'
 
+import {
+  addChild,
+  changeName,
+  changeParent,
+  resetAddChild,
+  resetAddChildren,
+  resetChangeName,
+  resetChangeParent,
+} from '@/lib/kb/concept/state/structure'
+
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+
+const { ALIAS, FIELD, MEDIA, RESET, STRUCTURE } = CONCEPT_STATE
 
 const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
     case CONCEPT_STATE.INITIAL:
       return update
 
-    case CONCEPT_STATE.ALIAS.ADD:
+    case ALIAS.ADD:
       return addAlias(state, update)
 
-    case CONCEPT_STATE.ALIAS.DELETE:
+    case ALIAS.DELETE:
       return deleteAlias(state, update)
 
-    case CONCEPT_STATE.ALIAS.EDIT:
+    case ALIAS.EDIT:
       return editAlias(state, update)
 
-    case CONCEPT_STATE.FIELD.SET:
+    case FIELD.SET:
       return setField(state, update)
 
-    case CONCEPT_STATE.MEDIA.ADD:
+    case MEDIA.ADD:
       return addMedia(state, update)
 
-    case CONCEPT_STATE.MEDIA.DELETE:
+    case MEDIA.DELETE:
       return deleteMedia(state, update)
 
-    case CONCEPT_STATE.MEDIA.EDIT:
+    case MEDIA.EDIT:
       return editMedia(state, update)
 
-    case CONCEPT_STATE.RESET.ADD_CHILD:
+    case RESET.ADD_CHILD:
       return resetAddChild(state, update)
 
-    case CONCEPT_STATE.RESET.ADD_CHILDREN:
+    case RESET.ADD_CHILDREN:
       return resetAddChildren(state)
 
-    case CONCEPT_STATE.RESET.ALIAS:
+    case RESET.ALIAS:
       return resetAlias(state, update)
 
-    case CONCEPT_STATE.RESET.ALIASES:
+    case RESET.ALIASES:
       return resetAliases(state, update)
 
-    case CONCEPT_STATE.RESET.CHANGE_NAME:
+    case RESET.CHANGE_NAME:
       return resetChangeName(state, update)
 
-    case CONCEPT_STATE.RESET.CHANGE_PARENT:
+    case RESET.CHANGE_PARENT:
       return resetChangeParent(state, update)
 
-    case CONCEPT_STATE.RESET.FIELD:
+    case RESET.FIELD:
       return resetField(state, update)
 
-    case CONCEPT_STATE.RESET.MEDIA:
+    case RESET.MEDIA:
       return resetMedia(state, update)
 
-    case CONCEPT_STATE.RESET.MEDIA_ITEM:
+    case RESET.MEDIA_ITEM:
       return resetMediaItem(state, update)
+
+    case STRUCTURE.ADD_CHILD:
+      return addChild(state, update)
+
+    case STRUCTURE.CHANGE_NAME:
+      return changeName(state, update)
+
+    case STRUCTURE.CHANGE_PARENT:
+      return changeParent(state, update)
 
     default:
       return state

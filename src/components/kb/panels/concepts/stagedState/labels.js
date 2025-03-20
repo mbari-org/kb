@@ -13,9 +13,10 @@ const LABELS = {
     },
     ACTION: {
       CANCEL: 'Cancel',
+      DELETE: 'Delete Concept',
       EDIT: 'Edit',
       SAVE: 'Save',
-      SHOW: 'Show',
+      SHOW: 'Staged',
     },
   },
 }

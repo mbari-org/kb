@@ -16,10 +16,10 @@ import { isAdmin, isReadOnly } from '@/lib/auth/role'
 const ConceptName = () => {
   const theme = useTheme()
 
-  const [showStructureChoices, setShowStructureChoices] = useState(false)
-
   const { user } = use(AuthContext)
   const { concept, editing, stagedState, pendingHistory } = use(ConceptContext)
+
+  const [showStructureChoices, setShowStructureChoices] = useState(false)
 
   const namePendingHistory = getFieldPendingHistory(pendingHistory, 'ConceptName')
   const conceptHasNameUpdate = stagedState.name !== concept?.name

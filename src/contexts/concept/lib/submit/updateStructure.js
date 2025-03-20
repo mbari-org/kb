@@ -1,23 +1,44 @@
+import {
+  createConcept,
+  updateConceptName,
+  updateConceptParent,
+} from '@/lib/services/oni/api/concept'
+
 import { prunePick } from '@/lib/util'
 
-const updateStructure = (_concept, updates, _submit) => {
-  const { structureUpdates } = prunePick(updates, ['parent'])
-  if (!structureUpdates) {
+const updateStructure = (concept, updates, submit) => {
+  const { children, name, nameChange, parentName } = prunePick(updates, [
+    'children',
+    'name',
+    'nameChange',
+    'parentName',
+  ])
+  if (!children && !name && !nameChange && !parentName) {
     return []
   }
 
-  return []
+  const submitters = []
 
-  // const { parent } = structureUpdates
-  // // const { concept } = result
+  if (name) {
+    submitters.push(submit(updateConceptName, { name }))
+  }
 
-  // let structureResult = { ...result }
+  if (nameChange) {
+    // submitters.push(submit(updateConceptName, { name: nameChange }))
+  }
 
-  // if (parent) {
-  //   structureResult = await process(updateConceptParent, { parent }, structureResult)
-  // }
+  if (parentName) {
+    submitters.push(submit(updateConceptParent, { parentName }))
+  }
 
-  // return structureResult
+  if (children) {
+    children.staged.reduce((acc, child) => {
+      acc.push(() => submit(createConcept, { ...child, parentName: concept.name }))
+      return acc
+    }, submitters)
+  }
+
+  return submitters
 }
 
 export default updateStructure

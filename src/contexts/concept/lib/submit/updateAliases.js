@@ -6,6 +6,8 @@ import { aliasEdits } from '@/lib/kb/concept/aliases'
 
 import { prunePick } from '@/lib/util'
 
+const { ALIAS } = CONCEPT_STATE
+
 const updateAliases = (concept, updates, submit) => {
   const { aliases } = prunePick(updates, ['aliases'])
   if (!aliases) {
@@ -16,7 +18,7 @@ const updateAliases = (concept, updates, submit) => {
     const { action, index, updates } = edit
 
     switch (action) {
-      case CONCEPT_STATE.ALIAS.ADD: {
+      case ALIAS.ADD: {
         const params = {
           ...updates,
           name: concept.name,
@@ -25,7 +27,7 @@ const updateAliases = (concept, updates, submit) => {
         return () => submit(createAlias, params)
       }
 
-      case CONCEPT_STATE.ALIAS.EDIT: {
+      case ALIAS.EDIT: {
         if (updates.name) {
           updates.newName = updates.name
           delete updates.name
@@ -36,7 +38,7 @@ const updateAliases = (concept, updates, submit) => {
         return () => submit(updateAlias, params)
       }
 
-      case CONCEPT_STATE.ALIAS.DELETE: {
+      case ALIAS.DELETE: {
         const aliasName = aliases.initial[index].name
         return () => submit(deleteAlias, aliasName)
       }
