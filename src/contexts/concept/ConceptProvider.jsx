@@ -29,8 +29,7 @@ const ConceptProvider = ({ children }) => {
 
   const { modal, closeModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
-  const { getConcept, getConceptPendingHistory, loadConcept, refreshConcept, taxonomy } =
-    use(TaxonomyContext)
+  const { getConcept, getConceptPendingHistory, loadConcept } = use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(false)
@@ -64,10 +63,11 @@ const ConceptProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (concept && concept !== taxonomy.concepts[concept.name]) {
-      setConcept(taxonomy.concepts[concept.name])
+    const taxonomyConcept = getConcept(concept?.name)
+    if (concept && concept !== taxonomyConcept) {
+      setConcept(taxonomyConcept)
     }
-  }, [concept, taxonomy])
+  }, [concept, getConcept])
 
   useEffect(() => {
     if (!selected) {
@@ -139,7 +139,6 @@ const ConceptProvider = ({ children }) => {
         modifyConcept,
         pendingFieldDisplay,
         pendingHistory,
-        refreshConcept,
         resetConcept,
         setEditing,
         stagedState,

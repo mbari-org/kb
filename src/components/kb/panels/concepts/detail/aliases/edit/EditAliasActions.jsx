@@ -17,7 +17,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 const EditAliasActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
-  const { taxonomyNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
   const { alias, modified } = modalData
 
@@ -25,8 +25,8 @@ const EditAliasActions = () => {
     if (alias.name === '' || alias.author === '') {
       return false
     }
-    return !taxonomyNames.includes(alias.name)
-  }, [alias, taxonomyNames])
+    return !getNames().includes(alias.name)
+  }, [alias, getNames])
 
   const colors = ['cancel', 'main']
   const disabled = [false, !modified || !isValidAlias]

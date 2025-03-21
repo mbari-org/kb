@@ -21,7 +21,7 @@ const AddChildContent = () => {
 
   const { stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ModalContext)
-  const { taxonomyNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
   const { child } = modalData
 
@@ -39,8 +39,8 @@ const AddChildContent = () => {
   const handleStage = useStageChild()
 
   const isValidName = useMemo(() => {
-    return !taxonomyNames.includes(formChild?.name)
-  }, [formChild?.name, taxonomyNames])
+    return !getNames().includes(formChild?.name)
+  }, [formChild?.name, getNames])
 
   const isValidAddition = useMemo(() => {
     return !stagedState.children.some(stagedChild => stagedChild.name === formChild.name)

@@ -17,7 +17,7 @@ const EditAliasContent = () => {
 
   const { stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ModalContext)
-  const { taxonomyNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
   const [formAlias, setFormAlias] = useState(modalData.alias)
 
@@ -71,8 +71,8 @@ const EditAliasContent = () => {
   const handleStage = useStageAlias()
 
   const isValidName = useMemo(() => {
-    return !taxonomyNames.includes(formAlias.name)
-  }, [formAlias.name, taxonomyNames])
+    return !getNames().includes(formAlias.name)
+  }, [formAlias.name, getNames])
 
   const nameError = modifiedFields.name && !isValidName
 

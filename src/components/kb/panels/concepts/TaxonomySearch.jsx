@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 
 import { Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -15,9 +15,11 @@ const TaxonomySearch = ({ setAutoExpand }) => {
 
   const { concept } = use(ConceptContext)
   const { selectConcept } = use(SelectedContext)
-  const { getConceptPrimaryName, taxonomyNames } = use(TaxonomyContext)
+  const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
 
   const [value, setValue] = useState('')
+
+  const taxonomyNames = useMemo(() => getNames(), [getNames])
 
   const handleConceptChange = (_event, selectedName) => {
     if (selectedName) {

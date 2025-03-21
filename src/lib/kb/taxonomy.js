@@ -27,10 +27,17 @@ const deleteConcept = (taxonomy, conceptName) => {
   const remainingAliases = { ...taxonomy.aliases }
   deletedConcept.alternateNames.forEach(name => delete remainingAliases[name])
 
+  const deletedNames = [deletedConcept.name, ...deletedConcept.alternateNames]
+
+  const names = taxonomy.names.filter(name => !deletedNames.includes(name))
+  const root = updatedRootWithConcept(taxonomy.root, deletedConcept, false)
+
   const updatedTaxonomy = {
     ...taxonomy,
     aliases: remainingAliases,
     concepts: remainingConcepts,
+    names,
+    root,
   }
 
   if (deletedConcept?.parent) {
@@ -296,29 +303,31 @@ const refreshConcept = async (taxonomy, conceptName) => {
       apiCall(() => fetchHistory(taxonomy.config, 'pending')),
       apiCall(() => fetchNames(taxonomy.config)),
     ])
+
+  apiConcept.raw = false
+  apiConcept.aliases = orderedAliases(rawNames)
+  apiConcept.alternateNames = apiConcept.aliases.map(alias => alias.name)
+  apiConcept.children = children.map(child => {
+    if (taxonomy.concepts[child.name]) {
+      return { ...taxonomy.concepts[child.name] }
+    }
+    return child
+  })
+
   const updatableTaxonomy = {
     ...taxonomy,
     approvedHistory,
     pendingHistory,
     names,
   }
+  updatableTaxonomy.concepts[conceptName] = apiConcept
+
+  updatableTaxonomy.root = updatedRootWithConcept(taxonomy.root, apiConcept, true)
+
   currentConcept.alternateNames.forEach(name => delete updatableTaxonomy.aliases[name])
-
-  const conceptChildren = children.map(child => {
-    if (updatableTaxonomy.concepts[child.name]) {
-      return { ...updatableTaxonomy.concepts[child.name] }
-    }
-    return child
-  })
-
-  apiConcept.raw = false
-  apiConcept.aliases = orderedAliases(rawNames)
-  apiConcept.alternateNames = apiConcept.aliases.map(alias => alias.name)
   apiConcept.alternateNames.forEach(name => {
     updatableTaxonomy.aliases[name] = apiConcept.name
   })
-  apiConcept.children = conceptChildren
-  updatableTaxonomy.concepts[conceptName] = apiConcept
 
   return { taxonomy: updatableTaxonomy }
 }
@@ -332,6 +341,20 @@ const refreshHistory = async (taxonomy, _conceptName) => {
     ...taxonomy,
     approvedHistory,
     pendingHistory,
+  }
+}
+
+const updatedRootWithConcept = (node, concept, add) => {
+  if (node.name === concept.name) {
+    return add ? { ...concept } : null
+  }
+  return {
+    ...node,
+    children: node.children
+      ? node.children
+          .map(child => updatedRootWithConcept(child, concept, add))
+          .filter(child => child !== null)
+      : [],
   }
 }
 

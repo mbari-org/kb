@@ -12,33 +12,31 @@ const TaxonomySidebar = () => {
   const [autoExpand, setAutoExpand] = useState(null)
 
   return (
-    <>
-      <Stack sx={{ height: '100%' }}>
-        <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
-          <TaxonomySearch setAutoExpand={setAutoExpand} />
-        </Box>
-        <Box
-          ref={sidebarRef}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            ml: 1,
-            mr: 1,
-            outline: 'none',
-            overflowY: 'auto',
-          }}
-          tabIndex={0}
-        >
-          <TaxonomyTree
-            autoExpand={autoExpand}
-            setAutoExpand={setAutoExpand}
-            sidebarRef={sidebarRef}
-            style={{ flexGrow: 1, height: '100%' }}
-          />
-        </Box>
-      </Stack>
-    </>
+    <Stack sx={{ height: '100%' }}>
+      <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
+        <TaxonomySearch setAutoExpand={setAutoExpand} />
+      </Box>
+      <Box
+        ref={sidebarRef}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          ml: 1,
+          mr: 1,
+          outline: 'none',
+          overflowY: 'auto',
+        }}
+        tabIndex={0}
+      >
+        <TaxonomyTree
+          autoExpand={autoExpand}
+          setAutoExpand={setAutoExpand}
+          sidebarRef={sidebarRef}
+          style={{ flexGrow: 1, height: '100%' }}
+        />
+      </Box>
+    </Stack>
   )
 }
 

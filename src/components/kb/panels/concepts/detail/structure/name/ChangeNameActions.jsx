@@ -15,11 +15,11 @@ const { DISCARD } = LABELS.ACTION
 const ChangeNameActions = () => {
   const { concept, stagedState, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
-  const { taxonomyNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main', 'main']
   const disabled =
-    concept.name !== stagedState.name && !taxonomyNames.includes(stagedState.name)
+    concept.name !== stagedState.name && !getNames().includes(stagedState.name)
       ? [false, false, false]
       : [false, true, true]
   const labels = [DISCARD, NAME_ONLY, ASSOCIATED_DATA]

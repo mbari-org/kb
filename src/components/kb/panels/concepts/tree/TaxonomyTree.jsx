@@ -1,4 +1,4 @@
-import { use, useCallback, useState } from 'react'
+import { use, useCallback, useMemo, useState } from 'react'
 
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
@@ -20,11 +20,13 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
-  const { getConcept, getConceptPrimaryName, taxonomy, taxonomyRoot } = use(TaxonomyContext)
+  const { getConcept, getConceptPrimaryName, getRoot, taxonomy } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
 
   const apiRef = useTreeViewApiRef()
+
+  const taxonomyRoot = useMemo(() => getRoot(), [getRoot])
 
   const selectConcept = useCallback(
     conceptName => {

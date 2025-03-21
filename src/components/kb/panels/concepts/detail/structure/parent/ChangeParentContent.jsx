@@ -14,11 +14,11 @@ const ChangeParentContent = () => {
   const [toParentName, setToParentName] = useState(null)
 
   const { concept, modifyConcept } = use(ConceptContext)
-  const { taxonomyNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
   const optionNames = useMemo(() => {
-    return taxonomyNames.filter(name => name !== concept.name && name !== concept.parent?.name)
-  }, [taxonomyNames, concept.name, concept.parent?.name])
+    return getNames().filter(name => name !== concept.name && name !== concept.parent?.name)
+  }, [getNames, concept.name, concept.parent?.name])
 
   const fromColor = theme.concept.color.clean
 

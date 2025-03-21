@@ -12,7 +12,7 @@ const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept, stagedState } = use(ConceptContext)
-  const { taxonomyNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
   const debouncedChangePrimaryName = useDebounceChangeName()
@@ -20,7 +20,7 @@ const ChangeNameContent = () => {
   const fromColor = theme.concept.color.clean
 
   const toColor =
-    stagedState.name === concept.name || taxonomyNames.includes(stagedState.name)
+    stagedState.name === concept.name || getNames().includes(stagedState.name)
       ? theme.palette.grey[500]
       : theme.concept.color.pending
 

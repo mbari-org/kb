@@ -16,9 +16,9 @@ import { hasStateChange } from '@/contexts/concept/lib/edit/stateChange'
 
 const ChangeStructureChoices = ({ closeChoices }) => {
   const { concept, initialState, stagedState, pendingHistory } = use(ConceptContext)
-  const { taxonomyRoot } = use(TaxonomyContext)
+  const { getRoot } = use(TaxonomyContext)
 
-  const isRoot = concept.name === taxonomyRoot.name
+  const isRoot = concept.name === getRoot().name
   const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
 
   const conceptHasChildren = concept.children.length > 0 || stagedState.children.length > 0

@@ -18,7 +18,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 const AddChildActions = () => {
   const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
-  const { taxonomyNames } = use(TaxonomyContext)
+  const { getNames } = use(TaxonomyContext)
 
   const { child, modified } = modalData
 
@@ -27,10 +27,10 @@ const AddChildActions = () => {
       return false
     }
     return (
-      !taxonomyNames.includes(child.name) &&
+      !getNames().includes(child.name) &&
       !stagedState.children.some(stagedChild => stagedChild.name === child.name)
     )
-  }, [child, taxonomyNames, stagedState.children])
+  }, [child, getNames, stagedState.children])
 
   const colors = ['cancel', 'main']
   const disabled = [false, !confirmReset && (!modified || !isValidChild)]
