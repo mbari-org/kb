@@ -1,3 +1,5 @@
+import { isJsonEqual } from '@/lib/util'
+
 const getNextSibling = concept => {
   if (concept && concept.parent) {
     const siblings = concept.parent.children
@@ -34,4 +36,6 @@ const incompleteTaxonomy = concept => {
   )
 }
 
-export { getNextSibling, getPrevSibling, incompleteTaxonomy }
+const hasModifiedState = ({ initialState, stagedState }) => !isJsonEqual(initialState, stagedState)
+
+export { getNextSibling, getPrevSibling, hasModifiedState, incompleteTaxonomy }

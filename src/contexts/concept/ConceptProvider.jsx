@@ -3,7 +3,6 @@ import { useErrorBoundary } from 'react-error-boundary'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useConceptModified from '@/contexts/concept/lib/useConceptModified'
 import useConceptPath from '@/contexts/concept/lib/useConceptPath'
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
 
@@ -13,12 +12,9 @@ import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
-import conceptState from '@/lib/kb/concept/state/conceptState'
-
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-
 import { conceptStateReducer } from '@/contexts/concept/lib/edit/conceptStateReducer'
+
+import conceptState, { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
@@ -45,8 +41,6 @@ const ConceptProvider = ({ children }) => {
   const pendingFieldDisplay = usePendingFieldDisplay()
 
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
-
-  const { isModified } = useConceptModified({ editing, initialState, stagedState })
 
   // CxTBD Is this needed?
   const resetConcept = useCallback(
@@ -84,27 +78,30 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    if (editing && (selected.panel !== 'Concepts' || selected.concept !== concept?.name)) {
-      if (!isModified()) {
-        setEditing(false)
-        return
-      }
+    // if (editing && !hasModifiedState({ initialState, stagedState })) {
+    //   setEditing(false)
+    //   return
+    // }
 
-      if (!modal) {
-        if (modalHasBeenDisplayed) {
-          setModalHasBeenDisplayed(false)
-        } else {
-          stagedStateDisplay(CONTINUE)
-          setModalHasBeenDisplayed(true)
-        }
-        return
+    if (
+      editing &&
+      !modal &&
+      (selected.panel !== 'Concepts' ||
+        (concept && ![concept.name, ...concept.alternateNames].includes(selected.concept)))
+    ) {
+      if (modalHasBeenDisplayed) {
+        setModalHasBeenDisplayed(false)
+      } else {
+        stagedStateDisplay(CONTINUE)
+        setModalHasBeenDisplayed(true)
       }
+      return
     }
   }, [
     concept,
     editing,
     getConcept,
-    isModified,
+    initialState,
     loadConcept,
     modal,
     modalHasBeenDisplayed,
@@ -135,7 +132,6 @@ const ConceptProvider = ({ children }) => {
         confirmReset,
         editing,
         initialState,
-        isModified,
         modifyConcept,
         pendingFieldDisplay,
         pendingHistory,

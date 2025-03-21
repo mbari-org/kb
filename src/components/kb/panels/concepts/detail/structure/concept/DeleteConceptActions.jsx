@@ -14,7 +14,7 @@ import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 const { CANCEL, DELETE } = LABELS.CONCEPT.ACTION
 
 const DeleteConceptActions = () => {
-  const { concept } = use(ConceptContext)
+  const { concept, setEditing } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
   const { selectConcept } = use(SelectedContext)
   const { deleteConcept, taxonomy } = use(TaxonomyContext)
@@ -29,6 +29,7 @@ const DeleteConceptActions = () => {
       submitDelete(taxonomy.config, concept.name).then(() => {
         deleteConcept(concept.name)
         selectConcept(concept.parent.name)
+        setEditing(false)
       })
     }
   }

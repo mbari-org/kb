@@ -4,12 +4,8 @@ import { isResetAction, resetConceptState } from '@/contexts/concept/lib/edit/re
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
-
 const useModifyConcept = (dispatch, initialState, setConfirmReset, setEditing) => {
   const [confirmAction, setConfirmAction] = useState(null)
-
-  useUpdateTrigger('useModifyConcept', { dispatch, initialState, setConfirmReset })
 
   return useCallback(
     action => {
