@@ -17,6 +17,8 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
+
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
@@ -26,7 +28,24 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   const apiRef = useTreeViewApiRef()
 
-  const taxonomyRoot = useMemo(() => getRoot(), [getRoot])
+  const selectedItems = useMemo(() => {
+    return concept ? [concept] : []
+  }, [concept])
+
+  const treeItems = useMemo(() => {
+    const root = getRoot()
+    return [root]
+  }, [getRoot])
+
+  const slots = { item: ConceptTreeItem }
+  const slotProps = useMemo(() => {
+    return {
+      item: {
+        concept,
+        taxonomy,
+      },
+    }
+  }, [concept, taxonomy])
 
   const selectConcept = useCallback(
     conceptName => {
@@ -36,7 +55,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     [setAutoExpand, updateSelectedConcept]
   )
 
-  const expandConcept = useExpandConcept(expandedItems, setExpandedItems)
+  const expandConcept = useExpandConcept(expandedItems, setExpandedItems, taxonomy)
 
   const handleConceptClick = useConceptClick(concept, expandConcept, selectConcept, setAutoExpand)
 
@@ -51,8 +70,8 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   useArrowKeys(concept, expandConcept, expandedItems, selectConcept, setAutoExpand, sidebarRef)
 
-  // when the concept name changes, we get the stale concept here during update. the
-  // getConcept call prevents further processing until the concept is done updating
+  useUpdateTrigger('TaxonomyTree', { concept, taxonomy })
+
   if (!concept || !getConcept(concept.name)) {
     return null
   }
@@ -65,16 +84,11 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
         expandedItems={expandedItems}
         getItemId={itemConceptName}
         getItemLabel={itemConceptLabel}
-        items={[taxonomyRoot]}
+        items={treeItems}
         onItemClick={handleConceptClick}
-        selectedItems={[concept]}
-        slots={{ item: ConceptTreeItem }}
-        slotProps={{
-          item: {
-            concept,
-            taxonomy,
-          },
-        }}
+        selectedItems={selectedItems}
+        slots={slots}
+        slotProps={slotProps}
         style={{ flexGrow: 1, height: '100%' }}
       />
     </aside>

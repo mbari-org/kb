@@ -35,8 +35,14 @@ const getDeepDiff = (o1, o2) => {
   return diff
 }
 
-const isDeepEqual = (obj1, obj2) => {
-  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+const isDeepEqual = (obj1, obj2, depth = Infinity) => {
+  if (
+    depth === 0 ||
+    typeof obj1 !== 'object' ||
+    obj1 === null ||
+    typeof obj2 !== 'object' ||
+    obj2 === null
+  ) {
     return isEqual(obj1, obj2)
   }
 
@@ -49,7 +55,7 @@ const isDeepEqual = (obj1, obj2) => {
     if (!keys2.includes(key)) return false
 
     if (typeof obj1[key] === 'object' && obj1[key] !== null) {
-      if (!isDeepEqual(obj1[key], obj2[key])) return false
+      if (!isDeepEqual(obj1[key], obj2[key], depth - 1)) return false
     } else if (!isEqual(obj1[key], obj2[key])) {
       return false
     }

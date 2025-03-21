@@ -110,6 +110,8 @@ const TaxonomyProvider = ({ children }) => {
   const refreshConcept = async conceptName => {
     const { taxonomy: refreshedTaxonomy } = await refreshTaxonomyConcept(taxonomy, conceptName)
     setTaxonomy(refreshedTaxonomy)
+
+    return getTaxonomyConcept(refreshedTaxonomy, conceptName)
   }
 
   const refreshHistory = async () => {

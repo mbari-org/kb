@@ -55,7 +55,9 @@ const StagedStateActions = ({ intent }) => {
         setProcessing(SAVING)
         submitUpdates(config, concept, initialState, stagedState).then(results => {
           console.log('Results:', results)
-          refreshConcept(concept.name).then(() => {
+          refreshConcept(concept.name).then(refreshedConcept => {
+            console.log('Refreshed Concept:', refreshedConcept)
+            console.log('Concept:', concept)
             setEditing(false)
             setProcessing(null)
           })

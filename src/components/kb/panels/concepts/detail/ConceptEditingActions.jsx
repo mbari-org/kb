@@ -7,8 +7,6 @@ import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDis
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
-
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import { hasModifiedState } from '@/lib/kb/concept'
 
@@ -20,14 +18,6 @@ const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const ConceptEditingActions = () => {
   const { editing, initialState, modifyConcept, setEditing, stagedState } = use(ConceptContext)
-
-  useUpdateTrigger('ConceptEditingActions', {
-    editing,
-    initialState,
-    modifyConcept,
-    setEditing,
-    stagedState,
-  })
 
   const stagedStateDiscard = useStagedStateDisplay(DISCARD)
   const stagedStateSave = useStagedStateDisplay(SAVE)

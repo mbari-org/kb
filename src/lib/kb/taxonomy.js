@@ -314,15 +314,16 @@ const refreshConcept = async (taxonomy, conceptName) => {
     return child
   })
 
+  const root = updatedRootWithConcept(taxonomy.root, apiConcept, true)
+
   const updatableTaxonomy = {
     ...taxonomy,
     approvedHistory,
     pendingHistory,
     names,
+    root,
   }
   updatableTaxonomy.concepts[conceptName] = apiConcept
-
-  updatableTaxonomy.root = updatedRootWithConcept(taxonomy.root, apiConcept, true)
 
   currentConcept.alternateNames.forEach(name => delete updatableTaxonomy.aliases[name])
   apiConcept.alternateNames.forEach(name => {

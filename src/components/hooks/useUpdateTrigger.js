@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { isDeepEqual } from '@/lib/util'
 
-const useUpdateTrigger = (name, props) => {
+const useUpdateTrigger = (name, props, depth = 2) => {
   const prevProps = useRef()
 
   useEffect(() => {
@@ -10,7 +10,7 @@ const useUpdateTrigger = (name, props) => {
       const allKeys = Object.keys({ ...prevProps.current, ...props })
       const changes = {}
       allKeys.forEach(key => {
-        if (!isDeepEqual(prevProps.current[key], props[key])) {
+        if (!isDeepEqual(prevProps.current[key], props[key], depth)) {
           changes[key] = {
             b4: prevProps.current[key],
             to: props[key],
@@ -24,7 +24,7 @@ const useUpdateTrigger = (name, props) => {
     }
 
     prevProps.current = props
-  })
+  }, [name, props, depth])
 }
 
 export default useUpdateTrigger
