@@ -70,7 +70,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   useArrowKeys(concept, expandConcept, expandedItems, selectConcept, setAutoExpand, sidebarRef)
 
-  useUpdateTrigger('TaxonomyTree', { concept, taxonomy })
+  useUpdateTrigger('TaxonomyTree', { concept }, 0)
 
   if (!concept || !getConcept(concept.name)) {
     return null

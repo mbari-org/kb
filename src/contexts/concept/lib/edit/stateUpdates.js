@@ -7,7 +7,7 @@ const hasStateChange = (allInitialState, allStagedState) => {
   return JSON.stringify(stagedState) !== JSON.stringify(initialState)
 }
 
-const stateChange = (initialState, stagedState) => {
+const stateUpdates = (initialState, stagedState) => {
   if (!hasStateChange(initialState, stagedState)) {
     return {}
   }
@@ -27,4 +27,12 @@ const stateChanges = (initialState, stagedState) => {
   }, [])
 }
 
-export { hasStateChange, stateChange, stateChanges }
+const updateInfo = (initialState, stagedState) => {
+  const updates = stateUpdates(initialState, stagedState)
+  const hasUpdate = field => !!updates[field]
+  const updateValue = field => updates[field]?.staged
+  const initialValue = field => updates[field]?.initial
+  return { hasUpdate, initialValue, updateValue }
+}
+
+export { hasStateChange, stateUpdates, updateInfo }

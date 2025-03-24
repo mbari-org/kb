@@ -18,6 +18,7 @@ import {
   filterTaxonomyRanks,
   load,
   loadConceptAliases,
+  loadConceptDescendants as loadTaxonomyConceptDescendants,
   loadTaxonomy,
   refreshConcept as refreshTaxonomyConcept,
   refreshHistory as refreshTaxonomyHistory,
@@ -31,12 +32,14 @@ const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { user } = use(AuthContext)
-  const { config } = use(ConfigContext)
+  const { apiFn } = use(ConfigContext)
   const { setProcessing, setModal } = use(ModalContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
 
   const initialLoad = useRef(true)
+
+  const apiPayload = apiFn.apiPayload
 
   const deleteConcept = useCallback(
     conceptName => {
@@ -86,9 +89,13 @@ const TaxonomyProvider = ({ children }) => {
 
     setProcessing(LOADING)
 
-    const { taxonomy: taxonomyWithStructure } = await load(taxonomy, conceptName)
+    const { taxonomy: taxonomyWithStructure } = await load(apiPayload, taxonomy, conceptName)
     const concept = getTaxonomyConcept(taxonomyWithStructure, conceptName)
-    const { taxonomy: taxonomyWithNames } = await loadConceptAliases(taxonomyWithStructure, concept)
+    const { taxonomy: taxonomyWithNames } = await loadConceptAliases(
+      apiPayload,
+      taxonomyWithStructure,
+      concept
+    )
 
     setTaxonomy(taxonomyWithNames)
     setProcessing(null)
@@ -98,7 +105,11 @@ const TaxonomyProvider = ({ children }) => {
   const loadConceptDescendants = async concept => {
     try {
       setProcessing(LOADING)
-      const { taxonomy: taxonomyWithDescendants } = await loadConceptDescendants(taxonomy, concept)
+      const { taxonomy: taxonomyWithDescendants } = await loadTaxonomyConceptDescendants(
+        apiPayload,
+        taxonomy,
+        concept
+      )
       setTaxonomy(taxonomyWithDescendants)
       setProcessing(null)
     } catch (error) {
@@ -107,24 +118,29 @@ const TaxonomyProvider = ({ children }) => {
     }
   }
 
-  const refreshConcept = async conceptName => {
-    const { taxonomy: refreshedTaxonomy } = await refreshTaxonomyConcept(taxonomy, conceptName)
-    setTaxonomy(refreshedTaxonomy)
+  const refreshConcept = async (concept, updateInfo) => {
+    const { taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
+      apiPayload,
+      taxonomy,
+      concept,
+      updateInfo
+    )
+    setTaxonomy(updatedTaxonomy)
 
-    return getTaxonomyConcept(refreshedTaxonomy, conceptName)
+    return getTaxonomyConcept(updatedTaxonomy, concept.name)
   }
 
   const refreshHistory = async () => {
-    const { taxonomy: refreshedTaxonomy } = await refreshTaxonomyHistory(taxonomy)
-    setTaxonomy(refreshedTaxonomy)
+    const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory({ ...taxonomy })
+    setTaxonomy(updatedTaxonomy)
   }
 
   useEffect(() => {
-    if (initialLoad.current && config) {
+    if (initialLoad.current && apiPayload) {
       initialLoad.current = false
 
       setProcessing(LOADING)
-      loadTaxonomy(config).then(
+      loadTaxonomy(apiPayload).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           setProcessing(null)
           if (taxonomyError) {
@@ -143,7 +159,7 @@ const TaxonomyProvider = ({ children }) => {
         }
       )
     }
-  }, [config, setProcessing, setModal, showBoundary])
+  }, [apiPayload, setProcessing, setModal, showBoundary])
 
   if (!taxonomy) {
     return null

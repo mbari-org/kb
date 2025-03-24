@@ -3,22 +3,22 @@ import updateDetail from './updateDetail'
 import updateMedia from './updateMedia'
 import updateStructure from './updateStructure'
 
-import { stateChange } from '@/contexts/concept/lib/edit/stateChange'
+import { updateInfo as stateUpdateInfo } from '@/contexts/concept/lib/edit/stateUpdates'
 
-const submitter = config => async (submitFn, params) => await submitFn(config, params)
+const submitUpdates = async (apiPayload, concept, initialState, stagedState) => {
+  const updateInfo = stateUpdateInfo(initialState, stagedState)
 
-const submitUpdates = async (config, concept, initialState, stagedState) => {
-  const submit = submitter(config, concept)
-  const updates = stateChange(initialState, stagedState)
+  const submitterInfo = [apiPayload, { concept, updateInfo }]
 
   const submitters = []
+  submitters.push(...updateAliases(submitterInfo))
+  submitters.push(...updateDetail(submitterInfo))
+  submitters.push(...updateMedia(submitterInfo))
+  submitters.push(...updateStructure(submitterInfo))
 
-  submitters.push(...updateAliases(concept, updates, submit))
-  submitters.push(...updateDetail(concept, updates, submit))
-  submitters.push(...updateMedia(concept, updates, submit))
-  submitters.push(...updateStructure(concept, updates, submit))
+  const results = await Promise.all(submitters)
 
-  return Promise.all(submitters.map(submitter => submitter()))
+  return { updateInfo, results }
 }
 
 export default submitUpdates

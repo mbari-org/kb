@@ -21,7 +21,7 @@ const updateConceptName = async (config, [conceptName, updates]) =>
   oniPut(config, ['names', conceptName], { newName: updates.name })
 
 const updateConceptParent = async (config, [conceptName, updates]) =>
-  oniPut(config, ['concept', conceptName], { parentName: updates.parent })
+  oniPut(config, ['concept', conceptName], updates)
 
 const updateConceptRank = async (config, [conceptName, updates]) =>
   oniPut(config, ['concept', conceptName], updates)

@@ -12,7 +12,7 @@ import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import { conceptStateReducer } from '@/contexts/concept/lib/edit/conceptStateReducer'
+import conceptStateReducer from '@/contexts/concept/lib/edit/conceptStateReducer'
 
 import conceptState, { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
@@ -42,26 +42,23 @@ const ConceptProvider = ({ children }) => {
 
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
-  // CxTBD Is this needed?
-  const resetConcept = useCallback(
-    toState => {
-      setEditing(false)
-      closeModal()
-
-      const resetConceptConcept = { ...concept, ...toState }
-      setConcept(resetConceptConcept)
-
-      dispatch({ type: CONCEPT_STATE.INITIAL, update: toState })
-    },
-    [concept, closeModal]
-  )
-
   useEffect(() => {
-    const taxonomyConcept = getConcept(concept?.name)
-    if (concept && concept !== taxonomyConcept) {
-      setConcept(taxonomyConcept)
+    if (concept) {
+      const taxonomyConcept =
+        concept === getConcept(concept.name) ? concept : getConcept(concept.name)
+
+      if (concept !== taxonomyConcept) {
+        setConcept(taxonomyConcept)
+      }
+
+      const pendingHistory = getConceptPendingHistory(concept.name)
+      setPendingHistory(pendingHistory)
+
+      const initialState = conceptState(taxonomyConcept)
+      setInitialState(initialState)
+      dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
     }
-  }, [concept, getConcept])
+  }, [concept, getConcept, getConceptPendingHistory])
 
   useEffect(() => {
     if (!selected) {
@@ -113,17 +110,6 @@ const ConceptProvider = ({ children }) => {
     stagedStateDisplay,
   ])
 
-  useEffect(() => {
-    if (concept) {
-      const pendingHistory = getConceptPendingHistory(concept.name)
-      setPendingHistory(pendingHistory)
-
-      const initialState = conceptState(concept)
-      setInitialState(initialState)
-      dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
-    }
-  }, [concept, getConceptPendingHistory])
-
   return (
     <ConceptContext
       value={{
@@ -135,7 +121,6 @@ const ConceptProvider = ({ children }) => {
         modifyConcept,
         pendingFieldDisplay,
         pendingHistory,
-        resetConcept,
         setEditing,
         stagedState,
         stagedStateDisplay,

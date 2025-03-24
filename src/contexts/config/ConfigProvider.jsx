@@ -12,6 +12,7 @@ const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
 
   const [config, setConfig] = useState(null)
+  const [apiFn, setApiFn] = useState(null)
 
   const updateConfig = async url => {
     if (url === null) {
@@ -61,7 +62,21 @@ const ConfigProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <ConfigContext value={{ config, updateConfig }}>{children}</ConfigContext>
+  useEffect(() => {
+    const apiResult = config => async (apiFn, params) => apiFn(config, params)
+
+    const apiPayload = config => async (payloadFn, params) => {
+      const { error, payload: result } = await payloadFn(config, params)
+      if (error) {
+        throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
+      }
+      return result
+    }
+
+    setApiFn({ apiPayload: apiPayload(config), apiResult: apiResult(config) })
+  }, [config])
+
+  return <ConfigContext value={{ apiFn, config, updateConfig }}>{children}</ConfigContext>
 }
 
 export default ConfigProvider

@@ -17,12 +17,12 @@ const ChangeNameContent = () => {
   const [primaryName, setPrimaryName] = useState(concept.name)
   const debouncedChangePrimaryName = useDebounceChangeName()
 
-  const fromColor = theme.concept.color.clean
+  const fromColor = 'main'
 
   const toColor =
     stagedState.name === concept.name || getNames().includes(stagedState.name)
       ? theme.palette.grey[500]
-      : theme.concept.color.pending
+      : theme.palette.primary.edit
 
   const handleChange = event => {
     setPrimaryName(event.target.value)

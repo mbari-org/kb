@@ -12,7 +12,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
-import { hasStateChange } from '@/contexts/concept/lib/edit/stateChange'
+import { hasStateChange } from '@/contexts/concept/lib/edit/stateUpdates'
 
 const ChangeStructureChoices = ({ closeChoices }) => {
   const { concept, initialState, stagedState, pendingHistory } = use(ConceptContext)

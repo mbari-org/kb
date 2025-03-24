@@ -5,7 +5,9 @@ import {
   resetAlias,
   resetAliases,
 } from '@/lib/kb/concept/state/aliases'
+
 import { resetField, setField } from '@/lib/kb/concept/state/field'
+
 import {
   addMedia,
   deleteMedia,
@@ -95,4 +97,4 @@ const conceptStateReducer = (state, { type, update }) => {
   }
 }
 
-export { conceptStateReducer }
+export default conceptStateReducer

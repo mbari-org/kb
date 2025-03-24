@@ -2,45 +2,50 @@ import { createAlias, deleteAlias, updateAlias } from '@/lib/services/oni/api/al
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import { aliasEdits } from '@/lib/kb/concept/aliases'
+const { ALIAS, NO_ACTION } = CONCEPT_STATE
 
-import { prunePick } from '@/lib/util'
+import { pick } from '@/lib/util'
 
-const { ALIAS } = CONCEPT_STATE
+const updateAliases = ([submit, { concept, updateInfo }]) => {
+  const { hasUpdate, initialValue, updateValue } = updateInfo
 
-const updateAliases = (concept, updates, submit) => {
-  const { aliases } = prunePick(updates, ['aliases'])
-  if (!aliases) {
+  if (!hasUpdate('aliases')) {
     return []
   }
 
-  const submitters = aliasEdits(aliases).map(edit => {
-    const { action, index, updates } = edit
+  const aliasUpdates = updateValue('aliases').reduce((acc, aliasUpdate, index) => {
+    if (aliasUpdate.action !== NO_ACTION) {
+      acc.push({ ...aliasUpdate, index })
+    }
+    return acc
+  }, [])
 
-    switch (action) {
+  const submitters = aliasUpdates.map(update => {
+    const alias = pick(update, ['author', 'nameType', 'name'])
+
+    switch (update.action) {
       case ALIAS.ADD: {
         const params = {
-          ...updates,
+          ...alias,
           name: concept.name,
-          newName: updates.name,
+          newName: update.name,
         }
-        return () => submit(createAlias, params)
+        return submit(createAlias, params)
       }
 
       case ALIAS.EDIT: {
-        if (updates.name) {
-          updates.newName = updates.name
-          delete updates.name
+        if (alias.name) {
+          alias.newName = alias.name
+          delete alias.name
         }
 
-        const aliasName = aliases.initial[index].name
-        const params = [aliasName, updates]
-        return () => submit(updateAlias, params)
+        const name = initialValue('aliases')[update.index].name
+        const params = [name, alias]
+        return submit(updateAlias, params)
       }
 
       case ALIAS.DELETE: {
-        const aliasName = aliases.initial[index].name
-        return () => submit(deleteAlias, aliasName)
+        return submit(deleteAlias, alias.name)
       }
 
       default:

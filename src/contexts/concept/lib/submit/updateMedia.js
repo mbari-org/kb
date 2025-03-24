@@ -4,14 +4,16 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import { prunePick } from '@/lib/util'
 
-const updateMedia = (concept, updates, submit) => {
-  const { mediaUpdates } = prunePick(updates, ['media'])
+const updateMedia = ([submit, { concept, updateInfo }]) => {
+  const { hasUpdate, updateValue } = updateInfo
 
-  if (!mediaUpdates) {
+  if (!hasUpdate('media')) {
     return []
   }
 
-  const submitters = mediaUpdates.media.staged.reduce((acc, stagedItem, index) => {
+  const mediaUpdates = updateValue('media')
+
+  const submitters = mediaUpdates.reduce((acc, stagedItem, index) => {
     const prunedItem = prunePick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
 
     switch (stagedItem.action) {
@@ -20,20 +22,20 @@ const updateMedia = (concept, updates, submit) => {
           conceptName: concept.name,
           ...prunedItem,
         }
-        acc.push(() => submit(createMediaItem, params))
+        acc.push(submit(createMediaItem, params))
         return acc
       }
 
       case CONCEPT_STATE.MEDIA.EDIT: {
         const mediaItemId = mediaUpdates.media.initial[index].id
         const params = [mediaItemId, prunedItem]
-        acc.push(() => submit(updateMediaItem, params))
+        acc.push(submit(updateMediaItem, params))
         return acc
       }
 
       case CONCEPT_STATE.MEDIA.DELETE: {
         const mediaItemId = mediaUpdates.media.initial[index].id
-        acc.push(() => submit(deleteMediaItem, mediaItemId))
+        acc.push(submit(deleteMediaItem, mediaItemId))
         return acc
       }
 

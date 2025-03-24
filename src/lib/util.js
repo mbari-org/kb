@@ -107,6 +107,29 @@ const isEqual = (obj1, obj2) => {
   return true
 }
 
+const isRefEqual = (obj1, obj2, depth = Infinity) => {
+  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+    return obj1 === obj2
+  }
+
+  const keys1 = Object.keys(obj1)
+  const keys2 = Object.keys(obj2)
+
+  if (keys1.length !== keys2.length) return false
+
+  for (let key of keys1) {
+    if (!keys2.includes(key)) return false
+
+    if (depth > 0 && typeof obj1[key] === 'object' && obj1[key] !== null) {
+      if (!isRefEqual(obj1[key], obj2[key], depth - 1)) return false
+    } else {
+      if (obj1[key] !== obj2[key]) return false
+    }
+  }
+
+  return true
+}
+
 const isValidUrl = url => {
   try {
     new URL(url)
@@ -158,6 +181,7 @@ export {
   isEmpty,
   isEqual,
   isJsonEqual,
+  isRefEqual,
   isValidUrl,
   pick,
   prettyFormat,

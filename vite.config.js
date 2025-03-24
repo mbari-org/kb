@@ -9,6 +9,9 @@ const dirname = path.dirname(filename)
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    sourcemap: true,
+  },
   resolve: {
     alias: {
       '@': path.resolve(dirname, './src'),
