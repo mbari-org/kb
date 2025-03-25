@@ -17,8 +17,6 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
-
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
@@ -69,8 +67,6 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   useTaxonomyTreeReposition(apiRef, concept)
 
   useArrowKeys(concept, expandConcept, expandedItems, selectConcept, setAutoExpand, sidebarRef)
-
-  useUpdateTrigger('TaxonomyTree', { concept }, 0)
 
   if (!concept || !getConcept(concept.name)) {
     return null

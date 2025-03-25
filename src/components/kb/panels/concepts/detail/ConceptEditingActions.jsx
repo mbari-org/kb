@@ -7,8 +7,7 @@ import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDis
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-import { hasModifiedState } from '@/lib/kb/concept'
+import { CONCEPT_STATE, hasModifiedState } from '@/lib/kb/concept/state/conceptState'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 

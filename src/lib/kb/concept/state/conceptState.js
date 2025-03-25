@@ -3,9 +3,9 @@ import { fieldState } from '@/lib/kb/concept/state/field'
 import { mediaState } from '@/lib/kb/concept/state/media'
 import { structureState } from '@/lib/kb/concept/state/structure'
 
-import { isEqual } from '@/lib/util'
+import { isEqual, isJsonEqual } from '@/lib/util'
 
-export const CONCEPT_STATE = {
+const CONCEPT_STATE = {
   ALIAS: {
     ADD: 'Alias Add',
     DELETE: 'Alias Delete',
@@ -114,6 +114,9 @@ export const isStateModified = (stagedState, initialState, field, index) => {
   }
 }
 
+const hasModifiedState = ({ initialState, stagedState }) =>
+  !!initialState && !isJsonEqual(initialState, stagedState)
+
 const conceptState = concept => {
   return {
     ...aliasesState(concept),
@@ -123,4 +126,4 @@ const conceptState = concept => {
   }
 }
 
-export default conceptState
+export { CONCEPT_STATE, conceptState, hasModifiedState }

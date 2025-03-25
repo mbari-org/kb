@@ -2,8 +2,6 @@ import { fetchConcept, fetchNames } from '@/lib/services/oni/api/concept'
 
 import { orderedAliases } from '@/lib/kb/concept/aliases'
 
-import { isJsonEqual } from '@/lib/util'
-
 const addChild = (updatableConcept, updatableChild) => {
   updatableConcept.children.push(updatableChild)
   updatableChild.parent = updatableConcept
@@ -45,8 +43,6 @@ const incompleteTaxonomy = concept => {
   )
 }
 
-const hasModifiedState = ({ initialState, stagedState }) => !isJsonEqual(initialState, stagedState)
-
 const refresh = async (apiPayload, updatableTaxonomy, concept, updateInfo) => {
   const { hasUpdate, updateValue } = updateInfo
 
@@ -60,9 +56,9 @@ const refresh = async (apiPayload, updatableTaxonomy, concept, updateInfo) => {
   }))
   updatableConcept.parent = updatableTaxonomy.concepts[concept.parent.name]
 
-  if (hasUpdate('aliases')) {
-    refreshAliases(apiPayload, updatableConcept)
-  }
+  hasUpdate('aliases')
+    ? refreshAliases(apiPayload, updatableConcept)
+    : (updatableConcept.aliases = [...concept.aliases])
 
   return updatableConcept
 }
@@ -73,4 +69,4 @@ const refreshAliases = async (apiPayload, updatableConcept) => {
   updatableConcept.alternateNames = updatableConcept.aliases.map(alias => alias.name)
 }
 
-export { addChild, getNextSibling, getPrevSibling, hasModifiedState, incompleteTaxonomy, refresh }
+export { addChild, getNextSibling, getPrevSibling, incompleteTaxonomy, refresh }

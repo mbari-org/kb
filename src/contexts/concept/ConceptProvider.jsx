@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useReducer, useState } from 'react'
+import { use, useEffect, useReducer, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
@@ -14,7 +14,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import conceptStateReducer from '@/contexts/concept/lib/edit/conceptStateReducer'
 
-import conceptState, { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE, conceptState, hasModifiedState } from '@/lib/kb/concept/state/conceptState'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
@@ -23,7 +23,7 @@ const { CONTINUE } = LABELS.ACTION
 const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
-  const { modal, closeModal } = use(ModalContext)
+  const { modal, modalData, setModalData, closeModal } = use(ModalContext)
   const { selected, selectConcept, selectPanel } = use(SelectedContext)
   const { getConcept, getConceptPendingHistory, loadConcept } = use(TaxonomyContext)
 
@@ -65,46 +65,33 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    if (!editing && selected.concept !== concept?.name) {
-      loadConcept(selected.concept).then(
-        loadedConcept => {
-          setConcept(loadedConcept)
-        },
-        error => showBoundary(error)
-      )
-      return
-    }
-
-    // if (editing && !hasModifiedState({ initialState, stagedState })) {
-    //   setEditing(false)
-    //   return
-    // }
-
-    if (
-      editing &&
-      !modal &&
-      (selected.panel !== 'Concepts' ||
-        (concept && ![concept.name, ...concept.alternateNames].includes(selected.concept)))
-    ) {
-      if (modalHasBeenDisplayed) {
-        setModalHasBeenDisplayed(false)
+    if (selected.concept !== concept?.name || selected.panel !== 'Concepts') {
+      if (hasModifiedState({ initialState, stagedState })) {
+        if (!modalData?.warning) {
+          stagedStateDisplay(CONTINUE)
+          setModalData({ warning: true })
+        }
       } else {
-        stagedStateDisplay(CONTINUE)
-        setModalHasBeenDisplayed(true)
+        setEditing(false)
+        loadConcept(selected.concept).then(
+          loadedConcept => {
+            setConcept(loadedConcept)
+          },
+          error => showBoundary(error)
+        )
       }
       return
     }
   }, [
     concept,
-    editing,
     getConcept,
     initialState,
     loadConcept,
-    modal,
-    modalHasBeenDisplayed,
-    selectConcept,
-    selectPanel,
+    modalData,
     selected,
+    setConcept,
+    setEditing,
+    setModalData,
     showBoundary,
     stagedState,
     stagedStateDisplay,
