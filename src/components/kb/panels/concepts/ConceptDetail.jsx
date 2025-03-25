@@ -22,8 +22,11 @@ const ConceptDetail = () => {
   const { user } = use(AuthContext)
   const { editing, initialState, modifyConcept, pendingHistory, stagedState } = use(ConceptContext)
 
-  const rankLevelValue = stagedState[RANK.LEVEL] || initialState[RANK.LEVEL]
-  const rankNameValue = stagedState[RANK.NAME] || initialState[RANK.NAME]
+  const rankValue = field =>
+    stagedState[field] !== undefined ? stagedState[field] : initialState[field]
+
+  const rankLevelValue = rankValue(RANK.LEVEL)
+  const rankNameValue = rankValue(RANK.NAME)
 
   const onChange = field => event => {
     modifyConcept({

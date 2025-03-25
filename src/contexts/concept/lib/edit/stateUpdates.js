@@ -29,7 +29,7 @@ const stateChanges = (initialState, stagedState) => {
 
 const updateInfo = (initialState, stagedState) => {
   const updates = stateUpdates(initialState, stagedState)
-  const hasUpdate = field => !!updates[field]
+  const hasUpdate = field => updates[field] !== undefined
   const updateValue = field => updates[field]?.staged
   const initialValue = field => updates[field]?.initial
   return { hasUpdate, initialValue, updateValue }
