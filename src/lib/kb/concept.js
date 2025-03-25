@@ -44,9 +44,9 @@ const incompleteTaxonomy = concept => {
 }
 
 const refresh = async (apiPayload, updatableTaxonomy, concept, updateInfo) => {
-  const { hasUpdate, updateValue } = updateInfo
+  const { hasUpdated, updateValue } = updateInfo
 
-  const conceptName = hasUpdate('name') ? updateValue('name') : concept.name
+  const conceptName = hasUpdated('name') ? updateValue('name') : concept.name
 
   const updatableConcept = await apiPayload(fetchConcept, conceptName)
   updatableConcept.raw = false
@@ -56,7 +56,13 @@ const refresh = async (apiPayload, updatableTaxonomy, concept, updateInfo) => {
   }))
   updatableConcept.parent = updatableTaxonomy.concepts[concept.parent.name]
 
-  hasUpdate('aliases')
+  refreshParentChild(updatableConcept.parent, concept.name, updatableConcept)
+
+  if (hasUpdated('aliases')) {
+    console.log('hasUpdated aliases')
+  }
+
+  hasUpdated('aliases')
     ? refreshAliases(apiPayload, updatableConcept)
     : (updatableConcept.aliases = [...concept.aliases])
 
@@ -67,6 +73,14 @@ const refreshAliases = async (apiPayload, updatableConcept) => {
   const rawNames = await apiPayload(fetchNames, updatableConcept.name)
   updatableConcept.aliases = orderedAliases(rawNames)
   updatableConcept.alternateNames = updatableConcept.aliases.map(alias => alias.name)
+}
+
+const refreshParentChild = (updatableParent, parentChildName, updatableConcept) => {
+  const parentChildren = updatableParent.children
+  const conceptIndex = parentChildren.findIndex(child => child.name === parentChildName)
+  if (conceptIndex !== -1) {
+    parentChildren[conceptIndex] = updatableConcept
+  }
 }
 
 export { addChild, getNextSibling, getPrevSibling, incompleteTaxonomy, refresh }

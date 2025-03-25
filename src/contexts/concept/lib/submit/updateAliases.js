@@ -7,9 +7,9 @@ const { ALIAS, NO_ACTION } = CONCEPT_STATE
 import { pick } from '@/lib/util'
 
 const updateAliases = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdate, initialValue, updateValue } = updateInfo
+  const { hasUpdated, initialValue, updateValue } = updateInfo
 
-  if (!hasUpdate('aliases')) {
+  if (!hasUpdated('aliases')) {
     return []
   }
 

@@ -55,11 +55,14 @@ const StagedStateActions = ({ intent }) => {
         setProcessing(SAVING)
         submitUpdates(apiFn.apiPayload, concept, initialState, stagedState).then(
           ({ updateInfo, results }) => {
-            refreshConcept(concept, updateInfo, results).then(refreshedConcept => {
-              console.log('Refreshed Concept:', refreshedConcept)
-              console.log('Concept:', concept)
+            refreshConcept(concept, updateInfo, results).then(updatedConcept => {
               setEditing(false)
               setProcessing(null)
+
+              const { hasUpdated } = updateInfo
+              if (hasUpdated('name')) {
+                selectConcept(updatedConcept.name)
+              }
             })
           }
         )

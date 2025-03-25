@@ -9,26 +9,26 @@ import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 const { ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
 
 const updateStructure = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdate, updateValue } = updateInfo
+  const { hasUpdated, updateValue } = updateInfo
 
   const submitters = []
 
-  if (hasUpdate('name')) {
+  if (hasUpdated('name')) {
     submitters.push(submit(updateConceptName, [concept.name, { name: updateValue('name') }]))
   }
 
-  if (hasUpdate('nameChange') && updateValue('nameChange') === ASSOCIATED_DATA) {
+  if (hasUpdated('nameChange') && updateValue('nameChange') === ASSOCIATED_DATA) {
     console.log('nameChange', updateValue('nameChange'))
     // submitters.push(submit(updateConceptName, { name: nameChange }))
   }
 
-  if (hasUpdate('parentName')) {
+  if (hasUpdated('parentName')) {
     submitters.push(
       submit(updateConceptParent, [concept.name, { parentName: updateValue('parentName') }])
     )
   }
 
-  if (hasUpdate('children')) {
+  if (hasUpdated('children')) {
     updateValue('children').reduce((acc, child) => {
       acc.push(submit(createConcept, { ...child, parentName: concept.name }))
       return acc

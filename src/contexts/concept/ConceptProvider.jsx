@@ -23,14 +23,13 @@ const { CONTINUE } = LABELS.ACTION
 const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
-  const { modal, modalData, setModalData, closeModal } = use(ModalContext)
-  const { selected, selectConcept, selectPanel } = use(SelectedContext)
+  const { modalData, setModalData } = use(ModalContext)
+  const { selected } = use(SelectedContext)
   const { getConcept, getConceptPendingHistory, loadConcept } = use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const [editing, setEditing] = useState(false)
-  const [modalHasBeenDisplayed, setModalHasBeenDisplayed] = useState(false)
   const [pendingHistory, setPendingHistory] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
@@ -47,6 +46,10 @@ const ConceptProvider = ({ children }) => {
       const taxonomyConcept =
         concept === getConcept(concept.name) ? concept : getConcept(concept.name)
 
+      if (!taxonomyConcept) {
+        return
+      }
+
       if (concept !== taxonomyConcept) {
         setConcept(taxonomyConcept)
       }
@@ -62,6 +65,14 @@ const ConceptProvider = ({ children }) => {
 
   useEffect(() => {
     if (!selected) {
+      return
+    }
+
+    // When the current Concept has a name change, concept.name (the prior name) will not be in
+    //  the taxonomy. In this case, we need set the concept to the select concpet name (which is
+    //  the new name)
+    if (!!concept && selected.concept !== concept?.name && !getConcept(concept?.name)) {
+      setConcept(getConcept(selected.concept))
       return
     }
 

@@ -5,9 +5,9 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import { prunePick } from '@/lib/util'
 
 const updateMedia = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdate, updateValue } = updateInfo
+  const { hasUpdated, updateValue } = updateInfo
 
-  if (!hasUpdate('media')) {
+  if (!hasUpdated('media')) {
     return []
   }
 

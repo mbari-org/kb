@@ -298,7 +298,7 @@ const loadConceptAliases = async (apiPayload, taxonomy, concept) => {
 }
 
 const refreshConcept = async (apiPayload, taxonomy, concept, updateInfo) => {
-  const { hasUpdate } = updateInfo
+  const { hasUpdated } = updateInfo
 
   const updatableTaxonomy = {
     aliasMap: { ...taxonomy.aliasMap },
@@ -312,11 +312,11 @@ const refreshConcept = async (apiPayload, taxonomy, concept, updateInfo) => {
 
   await refreshHistory(apiPayload, updatableTaxonomy)
 
-  if (hasUpdate('children')) {
+  if (hasUpdated('children')) {
     console.log('add children')
   }
 
-  if (hasUpdate('aliases') || hasUpdate('name')) {
+  if (hasUpdated('aliases') || hasUpdated('name')) {
     updatableTaxonomy.names = await apiPayload(fetchNames)
   } else {
     updatableTaxonomy.names = [...taxonomy.names]
@@ -325,7 +325,7 @@ const refreshConcept = async (apiPayload, taxonomy, concept, updateInfo) => {
   updatableTaxonomy.concepts[updatableConcept.name] = updatableConcept
   updatableTaxonomy.root = rootWithConcept(taxonomy, updatableConcept)
 
-  return { taxonomy: updatableTaxonomy }
+  return { concept: updatableConcept, taxonomy: updatableTaxonomy }
 }
 
 const refreshHistory = async (apiPayload, updatableTaxonomy) => {
