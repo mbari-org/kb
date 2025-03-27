@@ -7,21 +7,22 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { incompleteTaxonomy } from '@/lib/kb/concept'
 import {
   deleteConcept as deleteTaxonomyConcept,
+  filterTaxonomyRanks,
   getConcept as getTaxonomyConcept,
   getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getRoot as getTaxonomyRoot,
   getNames as getTaxonomyNames,
-  filterTaxonomyRanks,
-  load,
-  loadConceptAliases,
-  loadConceptDescendants as loadTaxonomyConceptDescendants,
+  isRoot as isTaxonomyRoot,
   loadTaxonomy,
-  refreshConcept as refreshTaxonomyConcept,
-  refreshHistory as refreshTaxonomyHistory,
+  loadTaxonomyConcept,
+  loadTaxonomyConceptDescendants,
+  mapsFromConcept,
+  refreshTaxonomyConcept,
+  refreshTaxonomyHistory,
+  cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/taxonomy'
 
 import { isAdmin } from '@/lib/auth/role'
@@ -79,27 +80,31 @@ const TaxonomyProvider = ({ children }) => {
 
   const getRoot = useCallback(() => getTaxonomyRoot(taxonomy), [taxonomy])
 
-  const loadConcept = async (conceptName, refresh = false) => {
-    if (!refresh) {
-      const alreadyLoadedConcept = getTaxonomyConcept(taxonomy, conceptName)
-      if (alreadyLoadedConcept?.aliases && !incompleteTaxonomy(alreadyLoadedConcept)) {
-        return alreadyLoadedConcept
-      }
-    }
+  const isRoot = useCallback(concept => isTaxonomyRoot(taxonomy, concept), [taxonomy])
 
+  const loadConcept = async conceptName => {
     setProcessing(LOADING)
 
-    const { taxonomy: taxonomyWithStructure } = await load(apiPayload, taxonomy, conceptName)
-    const concept = getTaxonomyConcept(taxonomyWithStructure, conceptName)
-    const { taxonomy: taxonomyWithNames } = await loadConceptAliases(
-      apiPayload,
-      taxonomyWithStructure,
-      concept
-    )
+    const { concept, wasComplete } = await loadTaxonomyConcept(taxonomy, conceptName, apiPayload)
 
-    setTaxonomy(taxonomyWithNames)
     setProcessing(null)
-    return taxonomyWithNames.concepts[conceptName]
+
+    if (!wasComplete) {
+      let rootConcept = concept
+      while (rootConcept.parent) {
+        rootConcept = rootConcept.parent
+      }
+      const { aliasMap, conceptMap } = mapsFromConcept(rootConcept)
+      const updatedTaxonomy = {
+        ...taxonomy,
+        aliasMap,
+        conceptMap,
+      }
+      // cxDebugTaxonomyIntegrity(updatedTaxonomy)
+      setTaxonomy(updatedTaxonomy)
+    }
+
+    return concept
   }
 
   const loadConceptDescendants = async concept => {
@@ -175,6 +180,7 @@ const TaxonomyProvider = ({ children }) => {
         getConceptPrimaryName,
         getNames,
         getRoot,
+        isRoot,
         loadConcept,
         loadConceptDescendants,
         refreshConcept,

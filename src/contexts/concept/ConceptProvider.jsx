@@ -69,8 +69,7 @@ const ConceptProvider = ({ children }) => {
     }
 
     // When the current Concept has a name change, concept.name (the prior name) will not be in
-    //  the taxonomy. In this case, we need set the concept to the select concpet name (which is
-    //  the new name)
+    //  the taxonomy. In this case, set the concept to the select concept name (the new name)
     if (!!concept && selected.concept !== concept?.name && !getConcept(concept?.name)) {
       setConcept(getConcept(selected.concept))
       return

@@ -1,7 +1,5 @@
 import { deleteConcept } from '@/lib/services/oni/api/concept'
 
-const submitDelete = async (config, conceptName) => {
-  return deleteConcept(config, conceptName)
-}
+const submitDelete = async (conceptName, apiResult) => apiResult(deleteConcept, conceptName)
 
 export default submitDelete
