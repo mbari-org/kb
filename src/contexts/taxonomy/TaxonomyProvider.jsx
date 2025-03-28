@@ -19,10 +19,9 @@ import {
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
-  mapsFromConcept,
   refreshTaxonomyConcept,
   refreshTaxonomyHistory,
-  cxDebugTaxonomyIntegrity,
+  // cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/taxonomy'
 
 import { isAdmin } from '@/lib/auth/role'
@@ -85,26 +84,19 @@ const TaxonomyProvider = ({ children }) => {
   const loadConcept = async conceptName => {
     setProcessing(LOADING)
 
-    const { concept, wasComplete } = await loadTaxonomyConcept(taxonomy, conceptName, apiPayload)
+    const { taxonomy: updatedTaxonomy, wasComplete } = await loadTaxonomyConcept(
+      taxonomy,
+      conceptName,
+      apiPayload
+    )
 
     setProcessing(null)
 
     if (!wasComplete) {
-      let rootConcept = concept
-      while (rootConcept.parent) {
-        rootConcept = rootConcept.parent
-      }
-      const { aliasMap, conceptMap } = mapsFromConcept(rootConcept)
-      const updatedTaxonomy = {
-        ...taxonomy,
-        aliasMap,
-        conceptMap,
-      }
-      // cxDebugTaxonomyIntegrity(updatedTaxonomy)
       setTaxonomy(updatedTaxonomy)
     }
 
-    return concept
+    return updatedTaxonomy.conceptMap[conceptName]
   }
 
   const loadConceptDescendants = async concept => {

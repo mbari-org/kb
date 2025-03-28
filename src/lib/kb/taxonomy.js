@@ -7,7 +7,6 @@ import {
   addChild as addChildConcept,
   loadChildren,
   load as loadConcept,
-  loadParent,
   refresh as refreshConcept,
 } from './concept'
 
@@ -20,6 +19,13 @@ const addChild = (updatableConcepts, updatableRoot, updatableChild) => {
 
   updatableConcepts[updatableChild.name] = updatableChild
   updatableRoot[updatableParent.name] = updatableParent
+}
+
+const addConcept = (taxonomy, concept) => {
+  taxonomy.conceptMap[concept.name] = concept
+  concept.aliases.forEach(alias => {
+    taxonomy.aliasMap[alias.name] = concept
+  })
 }
 
 const deleteConcept = (taxonomy, conceptName) => {
@@ -92,8 +98,10 @@ const getConceptPrimaryName = (taxonomy, conceptName) => {
 
 const getRoot = taxonomy => taxonomy?.conceptMap[taxonomy?.rootName]
 
-const isConceptComplete = concept =>
-  concept && concept.children && concept.children.every(child => child.children)
+const isConceptComplete = (taxonomy, concept) =>
+  concept &&
+  concept.children &&
+  concept.children.every(child => taxonomy.conceptMap[child].children)
 
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
@@ -105,13 +113,22 @@ const loadTaxonomy = async apiPayload => {
     loadTaxonomyHistory(apiPayload),
   ])
 
-  const { concept: root } = await loadTaxonomyConcept(null, rootConcept.name, apiPayload)
-  const { aliasMap, conceptMap } = mapsFromConcept(root)
+  const shellTaxonomy = {
+    aliasMap: {},
+    conceptMap: {},
+    rootName: rootConcept.name,
+  }
+
+  const { taxonomy: loadedMapsTaxonomy } = await loadTaxonomyConcept(
+    shellTaxonomy,
+    rootConcept.name,
+    apiPayload
+  )
 
   const taxonomy = {
-    aliasMap,
+    aliasMap: loadedMapsTaxonomy.aliasMap,
     approvedHistory,
-    conceptMap,
+    conceptMap: loadedMapsTaxonomy.conceptMap,
     names,
     pendingHistory,
     ranks,
@@ -143,73 +160,38 @@ const loadTaxonomy = async apiPayload => {
 //  to complete the concept.
 const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
   const taxonomyConcept = getConcept(taxonomy, conceptName)
-  if (isConceptComplete(taxonomyConcept)) {
-    return { concept: taxonomyConcept, wasComplete: true }
+  if (isConceptComplete(taxonomy, taxonomyConcept)) {
+    return { taxonomy, wasComplete: true }
   }
 
-  // If the concept is in the taxonomy, clone; o/w load
-  const concept = taxonomyConcept
-    ? { ...taxonomyConcept }
-    : await loadConcept(conceptName, apiPayload)
+  let concept
+  let updatedTaxonomy = { ...taxonomy }
+  if (!taxonomyConcept) {
+    concept = await loadConcept(conceptName, apiPayload)
+    addConcept(updatedTaxonomy, concept)
 
-  // If the taxonomy concept has children, clone; o/w load
-  concept.children = taxonomyConcept?.children
-    ? taxonomyConcept.children.map(child => ({ ...child }))
-    : await loadChildren(concept, apiPayload)
+    const children = await loadChildren(concept.name, apiPayload)
+    concept.children = children.map(child => child.name)
+    children.forEach(child => {
+      addConcept(updatedTaxonomy, child)
+    })
+  } else {
+    concept = { ...taxonomyConcept }
+  }
 
-  // grand children must always be loaded
+  // grand children are always be loaded, but their children array is undefined
   const grandChildren = await Promise.all(
     concept.children.map(child => loadChildren(child, apiPayload))
   )
-  concept.children.forEach((child, index) => {
-    child.children = grandChildren[index]
+  concept.children.forEach((childName, index) => {
+    const child = updatedTaxonomy.conceptMap[childName]
+    child.children = grandChildren[index].map(grandChild => grandChild.name)
+    grandChildren[index].forEach(grandChild => {
+      addConcept(updatedTaxonomy, grandChild)
+    })
   })
 
-  // If there is no taxonomy yet, we are loading the root concept so we're done
-  if (!taxonomy) {
-    return { concept, wasComplete: false }
-  }
-
-  // If the concept has no parent, load ancestors until we hit an existing taxonomy concept
-  let taxonomyAncestor = concept.parent
-  if (!taxonomyAncestor) {
-    taxonomyAncestor = await loadParent(concept, apiPayload)
-    while (!taxonomyAncestor.parent) {
-      taxonomyAncestor = await loadParent(ancestor, apiPayload)
-    }
-  }
-
-  // If the concept has a parent, we've cloned it from the taxonomy, so we need to updated its
-  //  ancestors before returning
-  if (concept.parent) {
-    const updatedParent = { ...concept.parent }
-    updatedParent.children = [...concept.parent.children]
-    const conceptIndex = updatedParent.children.findIndex(child => child.name === concept.name)
-    if (conceptIndex !== -1) {
-      updatedParent.children[conceptIndex] = concept
-    }
-    concept.parent = updatedParent
-
-    return { concept, wasComplete: false }
-  }
-
-  let ancestor = await loadParent(concept, apiPayload)
-  while (!ancestor.parent) {
-    ancestor = await loadParent(ancestor, apiPayload)
-  }
-
-  return { concept, wasComplete: false }
-
-  // Now we need to fit these updates into the taxonomy.
-  // const updatedConceptMap = rewireConceptAncestry(taxonomy.conceptMap, concept)
-  // const aliasMap = mapsFromConcept(updatedConceptMap, true).aliasMap
-
-  // const updatedTaxonomy = {
-  //   ...taxonomy,
-  //   aliasMap,
-  //   conceptMap: updatedConceptMap,
-  // }
-  // return { taxonomy: updatedTaxonomy, wasComplete: false }
+  return { taxonomy: updatedTaxonomy, wasComplete: false }
 }
 
 const loadTaxonomyConceptDescendants = async (concept, apiPayload) => {
@@ -340,19 +322,15 @@ const updatedRootWithConcept = (node, concept, add) => {
 export const cxDebugTaxonomyIntegrity = taxonomy => {
   const conceptMap = taxonomy.conceptMap
   const aliasMap = taxonomy.aliasMap
-  const root = conceptMap[taxonomy.rootName]
 
-  const validateConcept = concept => {
-    const conceptError = (concept, reason) => {
-      throw new Error(`Concept "${concept.name}" ${reason}`)
-    }
+  const conceptError = (concept, reason) => {
+    throw new Error(`Concept "${concept.name}" ${reason}`)
+  }
 
-    if (!conceptMap[concept.name]) {
-      conceptError(concept, 'is not in the concept map')
-    }
-
-    if (concept !== conceptMap[concept.name]) {
-      conceptError(concept, `conceptMap "${concept.name}" is not the concept`)
+  const validateConcept = conceptName => {
+    const concept = conceptMap[conceptName]
+    if (!concept) {
+      conceptError(conceptName, 'is not in the concept map')
     }
 
     concept.aliases.forEach(alias => {
@@ -365,7 +343,15 @@ export const cxDebugTaxonomyIntegrity = taxonomy => {
     })
 
     concept.children?.forEach(child => {
-      if (child.parent !== concept) {
+      const childConcept = conceptMap[child]
+      if (!childConcept) {
+        conceptError(concept, `has child "${child}" that is not in conceptMap`)
+      }
+      const childConceptParent = conceptMap[childConcept.parent]
+      if (!childConceptParent) {
+        conceptError(concept, `has parent "${childConcept.parent}" that is not in conceptMap`)
+      }
+      if (childConceptParent !== concept) {
         conceptError(concept, `has child "${child.name}" that does not have concept as parent`)
       }
     })
@@ -382,7 +368,7 @@ export const cxDebugTaxonomyIntegrity = taxonomy => {
     })
   }
 
-  validateConceptTree(root)
+  validateConceptTree(taxonomy.rootName)
   console.log('cxDebugTaxonomyIntegrity passed')
 }
 

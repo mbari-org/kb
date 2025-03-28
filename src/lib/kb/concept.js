@@ -66,20 +66,22 @@ const load = async (conceptName, apiPayload) => {
   return concept
 }
 
-const loadChildren = async (concept, apiPayload) => {
-  const children = await apiPayload(fetchChildren, concept.name)
+const loadChildren = async (conceptName, apiPayload) => {
+  const children = await apiPayload(fetchChildren, conceptName)
   await Promise.all(
     children.map(async child => {
+      child.parent = conceptName
       const names = await apiPayload(fetchNames, child.name)
       child.aliases = orderedAliases(names)
-      child.parent = concept
     })
   )
   return children
 }
 
 const loadParent = async (concept, apiPayload) => {
-  const parent = await load(concept.parent.name, apiPayload)
+  // CxDelete ?????
+  const parent = await load(concept.parent, apiPayload)
+
   parent.children = await loadChildren(parent, apiPayload)
   return parent
 }
