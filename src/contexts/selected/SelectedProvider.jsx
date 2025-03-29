@@ -35,7 +35,7 @@ const SelectedProvider = ({ children }) => {
       const storedSelected = selectedStore.get()
       const concept = taxonomy.names.includes(storedSelected?.concept)
         ? storedSelected.concept
-        : taxonomy.root.name
+        : taxonomy.rootName
       const panel = panels.map(p => p.name).includes(storedSelected?.panel)
         ? storedSelected.panel
         : panels[0].name

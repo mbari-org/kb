@@ -13,15 +13,16 @@ import {
   getConcept as getTaxonomyConcept,
   getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
-  getRoot as getTaxonomyRoot,
   getNames as getTaxonomyNames,
+  getRoot as getTaxonomyRoot,
+  isConceptComplete as isTaxonomyConceptComplete,
   isRoot as isTaxonomyRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   refreshTaxonomyConcept,
   refreshTaxonomyHistory,
-  // cxDebugTaxonomyIntegrity,
+  cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/taxonomy'
 
 import { isAdmin } from '@/lib/auth/role'
@@ -41,10 +42,15 @@ const TaxonomyProvider = ({ children }) => {
 
   const apiPayload = apiFn.apiPayload
 
+  const updateTaxonomy = taxonomy => {
+    cxDebugTaxonomyIntegrity(taxonomy)
+    setTaxonomy(taxonomy)
+  }
+
   const deleteConcept = useCallback(
     conceptName => {
       const { taxonomy: updatedTaxonomy } = deleteTaxonomyConcept(taxonomy, conceptName)
-      setTaxonomy(updatedTaxonomy)
+      updateTaxonomy(updatedTaxonomy)
     },
     [taxonomy]
   )
@@ -77,26 +83,49 @@ const TaxonomyProvider = ({ children }) => {
 
   const getNames = useCallback(() => getTaxonomyNames(taxonomy), [taxonomy])
 
-  const getRoot = useCallback(() => getTaxonomyRoot(taxonomy), [taxonomy])
+  const getRoot = useCallback(
+    () => getTaxonomyRoot(taxonomy?.conceptMap, taxonomy?.rootName),
+    [taxonomy?.conceptMap, taxonomy?.rootName]
+  )
+
+  const isConceptComplete = useCallback(
+    conceptName => isTaxonomyConceptComplete(taxonomy, conceptName),
+    [taxonomy]
+  )
 
   const isRoot = useCallback(concept => isTaxonomyRoot(taxonomy, concept), [taxonomy])
 
+  const isLoadingConcept = useRef(false)
+
   const loadConcept = async conceptName => {
-    setProcessing(LOADING)
-
-    const { taxonomy: updatedTaxonomy, wasComplete } = await loadTaxonomyConcept(
-      taxonomy,
-      conceptName,
-      apiPayload
-    )
-
-    setProcessing(null)
-
-    if (!wasComplete) {
-      setTaxonomy(updatedTaxonomy)
+    if (isTaxonomyConceptComplete(taxonomy, conceptName)) {
+      return taxonomy.conceptMap[conceptName]
     }
 
-    return updatedTaxonomy.conceptMap[conceptName]
+    if (isLoadingConcept.current) {
+      return taxonomy.conceptMap[conceptName]
+    }
+
+    try {
+      isLoadingConcept.current = true
+      setProcessing(LOADING)
+
+      const { taxonomy: updatedTaxonomy, wasComplete } = await loadTaxonomyConcept(
+        taxonomy,
+        conceptName,
+        apiPayload
+      )
+
+      setProcessing(null)
+
+      if (!wasComplete) {
+        updateTaxonomy(updatedTaxonomy)
+      }
+
+      return updatedTaxonomy.conceptMap[conceptName]
+    } finally {
+      isLoadingConcept.current = false
+    }
   }
 
   const loadConceptDescendants = async concept => {
@@ -107,7 +136,7 @@ const TaxonomyProvider = ({ children }) => {
         taxonomy,
         concept
       )
-      setTaxonomy(taxonomyWithDescendants)
+      updateTaxonomy(taxonomyWithDescendants)
       setProcessing(null)
     } catch (error) {
       setProcessing(null)
@@ -122,14 +151,14 @@ const TaxonomyProvider = ({ children }) => {
       concept,
       updateInfo
     )
-    setTaxonomy(updatedTaxonomy)
+    updateTaxonomy(updatedTaxonomy)
 
     return updatedConcept
   }
 
   const refreshHistory = async () => {
     const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory({ ...taxonomy })
-    setTaxonomy(updatedTaxonomy)
+    updateTaxonomy(updatedTaxonomy)
   }
 
   useEffect(() => {
@@ -147,7 +176,7 @@ const TaxonomyProvider = ({ children }) => {
               message: taxonomyError.message,
             })
           } else {
-            setTaxonomy(initialTaxonomy)
+            updateTaxonomy(initialTaxonomy)
           }
         },
         error => {
@@ -172,6 +201,7 @@ const TaxonomyProvider = ({ children }) => {
         getConceptPrimaryName,
         getNames,
         getRoot,
+        isConceptComplete,
         isRoot,
         loadConcept,
         loadConceptDescendants,

@@ -1,9 +1,10 @@
-import { use, useEffect, useReducer, useState } from 'react'
+import { use, useEffect, useMemo, useReducer, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
+
+import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useConceptPath from '@/contexts/concept/lib/useConceptPath'
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
 
 import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
@@ -25,7 +26,8 @@ const ConceptProvider = ({ children }) => {
 
   const { modalData, setModalData } = use(ModalContext)
   const { selected } = use(SelectedContext)
-  const { getConcept, getConceptPendingHistory, loadConcept } = use(TaxonomyContext)
+  const { getConcept, getConceptPendingHistory, isConceptComplete, loadConcept, taxonomy } =
+    use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(false)
@@ -35,7 +37,11 @@ const ConceptProvider = ({ children }) => {
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
-  const conceptPath = useConceptPath(concept)
+  // CxInc Load 'object' in fresh page, then chose 'jpg'. Looks like when conceptPath is call,
+  //  'jpg' parent 'image' has not yet assigned its parent. Look at assigning concept parent on any
+  //   api load in the manner that aliases are assigned.
+
+  const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
   const stagedStateDisplay = useStagedStateDisplay()
   const pendingFieldDisplay = usePendingFieldDisplay()
 
@@ -68,9 +74,13 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
+    // CxInc With the reworked taxonomy/concept structure, see if this is still true. Removing
+    //  the check for !getConcept(concept?.name)
+    //
     // When the current Concept has a name change, concept.name (the prior name) will not be in
     //  the taxonomy. In this case, set the concept to the select concept name (the new name)
-    if (!!concept && selected.concept !== concept?.name && !getConcept(concept?.name)) {
+    // if (!!concept && selected.concept !== concept?.name && !getConcept(concept?.name)) {
+    if (selected.concept !== concept?.name && isConceptComplete(selected.concept)) {
       setConcept(getConcept(selected.concept))
       return
     }
@@ -82,20 +92,24 @@ const ConceptProvider = ({ children }) => {
           setModalData({ warning: true })
         }
       } else {
-        setEditing(false)
-        loadConcept(selected.concept).then(
-          loadedConcept => {
-            setConcept(loadedConcept)
-          },
-          error => showBoundary(error)
-        )
+        if (isConceptComplete(selected.concept)) {
+          setConcept(getConcept(selected.concept))
+        } else {
+          setEditing(false)
+          loadConcept(selected.concept).then(
+            loadedConcept => {
+              setConcept(loadedConcept)
+            },
+            error => showBoundary(error)
+          )
+        }
       }
-      return
     }
   }, [
     concept,
     getConcept,
     initialState,
+    isConceptComplete,
     loadConcept,
     modalData,
     selected,

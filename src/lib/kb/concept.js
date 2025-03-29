@@ -1,4 +1,9 @@
-import { fetchChildren, fetchConcept, fetchNames } from '@/lib/services/oni/api/concept'
+import {
+  fetchChildren,
+  fetchConcept,
+  fetchNames,
+  fetchParent,
+} from '@/lib/services/oni/api/concept'
 
 import { orderedAliases } from '@/lib/kb/concept/aliases'
 
@@ -55,14 +60,12 @@ const incompleteConcept = concept => {
   )
 }
 
-const load = async (conceptName, apiPayload) => {
+const loadConcept = async (conceptName, apiPayload) => {
   const [concept, names] = await Promise.all([
     apiPayload(fetchConcept, conceptName),
     apiPayload(fetchNames, conceptName),
   ])
-
   concept.aliases = orderedAliases(names)
-
   return concept
 }
 
@@ -78,11 +81,10 @@ const loadChildren = async (conceptName, apiPayload) => {
   return children
 }
 
-const loadParent = async (concept, apiPayload) => {
-  // CxDelete ?????
-  const parent = await load(concept.parent, apiPayload)
-
-  parent.children = await loadChildren(parent, apiPayload)
+const loadParent = async (conceptName, apiPayload) => {
+  const parent = await apiPayload(fetchParent, conceptName)
+  const aliases = await apiPayload(fetchNames, parent.name)
+  parent.aliases = orderedAliases(aliases)
   return parent
 }
 
@@ -112,8 +114,8 @@ export {
   getNextSibling,
   getPrevSibling,
   incompleteConcept,
-  load,
   loadChildren,
+  loadConcept,
   loadParent,
   refresh,
 }

@@ -5,8 +5,6 @@ import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
 
 import ConceptTreeItem from './ConceptTreeItem'
 
-import { itemConceptLabel, itemConceptName } from './lib/taxonomyItem'
-
 import useArrowKeys from './lib/useArrowKeys'
 import useConceptAutoExpand from './lib/useConceptAutoExpand'
 import useConceptClick from './lib/useConceptClick'
@@ -17,10 +15,13 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import { conceptItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
+import { buildTree } from '@/lib/kb/taxonomy'
+
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
   const { selectConcept: updateSelectedConcept } = use(SelectedContext)
-  const { getConcept, getConceptPrimaryName, getRoot, taxonomy } = use(TaxonomyContext)
+  const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
 
@@ -31,19 +32,21 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   }, [concept])
 
   const treeItems = useMemo(() => {
-    const root = getRoot()
+    const root = buildTree(taxonomy)
     return [root]
-  }, [getRoot])
+  }, [taxonomy])
 
+  // The RichTreeView item is not provided to the ConceptTreeItem component. The slots 'item'
+  //  field designates the rendering component, but only the itemId is provided to that component.
+  //  The slotsProps 'item' field, passed to ConceptTreeItem in props, provides display data.
   const slots = { item: ConceptTreeItem }
-  const slotProps = useMemo(() => {
-    return {
-      item: {
-        concept,
-        taxonomy,
-      },
-    }
-  }, [concept, taxonomy])
+  const slotProps = {
+    item: ({ itemId }) => {
+      const item = conceptItem(taxonomy, itemId)
+      item.isSelected = itemId === concept.name
+      return { item }
+    },
+  }
 
   const selectConcept = useCallback(
     conceptName => {
@@ -55,7 +58,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems, taxonomy)
 
-  const handleConceptClick = useConceptClick(concept, expandConcept, selectConcept, setAutoExpand)
+  const handleItemClick = useConceptClick(concept, expandConcept, selectConcept, setAutoExpand)
 
   useConceptAutoExpand({
     autoExpand,
@@ -78,10 +81,9 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
         itemChildrenIndentation={8}
         apiRef={apiRef}
         expandedItems={expandedItems}
-        getItemId={itemConceptName}
-        getItemLabel={itemConceptLabel}
+        getItemId={item => item.id}
         items={treeItems}
-        onItemClick={handleConceptClick}
+        onItemClick={handleItemClick}
         selectedItems={selectedItems}
         slots={slots}
         slotProps={slotProps}
