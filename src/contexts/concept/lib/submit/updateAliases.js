@@ -7,13 +7,13 @@ const { ALIAS, NO_ACTION } = CONCEPT_STATE
 import { pick } from '@/lib/util'
 
 const updateAliases = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdated, initialValue, updateValue } = updateInfo
+  const { hasUpdated, initialValue, updatedValue } = updateInfo
 
   if (!hasUpdated('aliases')) {
     return []
   }
 
-  const aliasUpdates = updateValue('aliases').reduce((acc, aliasUpdate, index) => {
+  const aliasUpdates = updatedValue('aliases').reduce((acc, aliasUpdate, index) => {
     if (aliasUpdate.action !== NO_ACTION) {
       acc.push({ ...aliasUpdate, index })
     }

@@ -21,12 +21,6 @@ const EditAliasContent = () => {
 
   const [formAlias, setFormAlias] = useState(modalData.alias)
 
-  const [modifiedFields, setModifiedFields] = useState({
-    author: false,
-    name: false,
-    nameType: false,
-  })
-
   const stagedAlias = useMemo(
     () => ({ ...stagedState.aliases[modalData.aliasIndex] }),
     [stagedState.aliases, modalData.aliasIndex]
@@ -59,13 +53,9 @@ const EditAliasContent = () => {
     setFormAlias(updatedAlias)
 
     const fieldIsModified = updatedAlias[field] !== stagedAlias[field]
+    const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
 
-    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
-    setModifiedFields(updatedModifiedFields)
-
-    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
-
-    setModalData(prev => ({ ...prev, alias: updatedAlias, modified }))
+    setModalData(prev => ({ ...prev, alias: updatedAlias, modified: updatedModified }))
   }
 
   const handleStage = useStageAlias()
@@ -74,9 +64,9 @@ const EditAliasContent = () => {
     return !getNames().includes(formAlias.name)
   }, [formAlias.name, getNames])
 
-  const nameError = modifiedFields.name && !isValidName
+  const nameError = modalData.modified.name && !isValidName
 
-  const nameHelperText = !modifiedFields.name
+  const nameHelperText = !modalData.modified.name
     ? ''
     : formAlias.name.trim() === ''
     ? 'Name cannot be empty'

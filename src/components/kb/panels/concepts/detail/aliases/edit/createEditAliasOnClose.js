@@ -1,12 +1,13 @@
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const {  RESET } = CONCEPT_STATE
+const { RESET } = CONCEPT_STATE
 
 const createEditAliasOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
     const { modified, aliasIndex } = modalData
+    const isModified = Object.values(modified).some(isModified => isModified === true)
 
-    if (!modified) {
+    if (!isModified) {
       return true
     }
 

@@ -5,13 +5,13 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import { prunePick } from '@/lib/util'
 
 const updateMedia = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdated, updateValue } = updateInfo
+  const { hasUpdated, updatedValue } = updateInfo
 
   if (!hasUpdated('media')) {
     return []
   }
 
-  const mediaUpdates = updateValue('media')
+  const mediaUpdates = updatedValue('media')
 
   const submitters = mediaUpdates.reduce((acc, stagedItem, index) => {
     const prunedItem = prunePick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])

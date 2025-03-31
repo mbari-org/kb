@@ -25,7 +25,7 @@ const AliasActionButton = ({ Icon, action, aliasIndex, color, sx = {} }) => {
       action,
       alias,
       aliasIndex,
-      modified: false,
+      modified: { author: false, name: false, nameType: false },
     }
     setModalData(actionModalData)
 

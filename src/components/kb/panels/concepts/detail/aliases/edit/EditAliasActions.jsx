@@ -21,15 +21,15 @@ const EditAliasActions = () => {
 
   const { alias, modified } = modalData
 
-  const isValidAlias = useMemo(() => {
-    if (alias.name === '' || alias.author === '') {
-      return false
-    }
-    return !getNames().includes(alias.name)
-  }, [alias, getNames])
+  const isModified = Object.values(modified).some(isModified => isModified === true)
+
+  const validName = !modified.name || (alias.name !== '' && !getNames().includes(alias.name))
+  const validAuthor = !modified.author || alias.author !== ''
+
+  const isValidChange = validName && validAuthor
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !modified || !isValidAlias]
+  const disabled = [false, !isModified || !isValidChange]
   const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {

@@ -89,23 +89,23 @@ const loadParent = async (conceptName, apiPayload) => {
 }
 
 const refresh = async (concept, updateInfo, apiPayload) => {
-  const { hasUpdated, updateValue } = updateInfo
+  const { hasUpdated, updatedValue } = updateInfo
 
-  const conceptName = hasUpdated('name') ? updateValue('name') : concept.name
+  const updatableConcept = { ...concept }
 
-  const updatableConcept = await apiPayload(fetchConcept, conceptName)
+  for (const field of ['author', 'rankLevel', 'rankName', 'name', 'parent']) {
+    if (hasUpdated(field)) {
+      updatableConcept[field] = updatedValue(field)
+    }
+  }
 
-  hasUpdated('aliases')
-    ? refreshAliases(apiPayload, updatableConcept)
-    : (updatableConcept.aliases = [...concept.aliases])
+  if (hasUpdated('aliases')) {
+    const rawNames = await apiPayload(fetchNames, updatableConcept.name)
+    updatableConcept.aliases = orderedAliases(rawNames)
+    updatableConcept.alternateNames = updatableConcept.aliases.map(alias => alias.name)
+  }
 
   return updatableConcept
-}
-
-const refreshAliases = async (apiPayload, updatableConcept) => {
-  const rawNames = await apiPayload(fetchNames, updatableConcept.name)
-  updatableConcept.aliases = orderedAliases(rawNames)
-  updatableConcept.alternateNames = updatableConcept.aliases.map(alias => alias.name)
 }
 
 export {

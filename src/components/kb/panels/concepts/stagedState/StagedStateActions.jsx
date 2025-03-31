@@ -58,7 +58,6 @@ const StagedStateActions = ({ intent }) => {
             refreshConcept(concept, updateInfo, results).then(updatedConcept => {
               setEditing(false)
               setProcessing(null)
-
               const { hasUpdated } = updateInfo
               if (hasUpdated('name')) {
                 selectConcept(updatedConcept.name)

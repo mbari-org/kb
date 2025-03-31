@@ -146,10 +146,10 @@ const TaxonomyProvider = ({ children }) => {
 
   const refreshConcept = async (concept, updateInfo) => {
     const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
-      apiPayload,
       taxonomy,
       concept,
-      updateInfo
+      updateInfo,
+      apiPayload
     )
     updateTaxonomy(updatedTaxonomy)
 

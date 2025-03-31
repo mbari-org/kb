@@ -37,10 +37,6 @@ const ConceptProvider = ({ children }) => {
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
-  // CxInc Load 'object' in fresh page, then chose 'jpg'. Looks like when conceptPath is call,
-  //  'jpg' parent 'image' has not yet assigned its parent. Look at assigning concept parent on any
-  //   api load in the manner that aliases are assigned.
-
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
   const stagedStateDisplay = useStagedStateDisplay()
   const pendingFieldDisplay = usePendingFieldDisplay()
