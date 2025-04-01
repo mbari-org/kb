@@ -27,14 +27,12 @@ const DeleteConceptActions = () => {
     closeModal()
 
     if (label === DELETE) {
-      deleteConcept(concept.name)
-
-      const apiResult = apiFn.apiResult
-      submitDelete(concept.name, apiResult).then(() => {
-        deleteConcept(concept.name)
-        selectConcept(concept.parent.name)
-        setEditing(false)
-      })
+      submitDelete(concept.name, apiFn.apiResult)
+        .then(() => deleteConcept(concept.name))
+        .then(selectConceptName => {
+          selectConcept(selectConceptName)
+          setEditing(false)
+        })
     }
   }
 

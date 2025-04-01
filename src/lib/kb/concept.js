@@ -7,9 +7,17 @@ import {
 
 import { orderedAliases } from '@/lib/kb/concept/aliases'
 
-const addChild = (updatableConcept, updatableChild) => {
-  updatableConcept.children.push(updatableChild)
-  updatableChild.parent = updatableConcept
+const addedConcepts = (parent, updateInfo) => {
+  const { updatedValue } = updateInfo
+  return updatedValue('children').map(child => ({
+    ...child,
+    aliases: [],
+    alternateNames: [],
+    linkRealizations: [],
+    media: [],
+    parent,
+    references: [],
+  }))
 }
 
 const complete = async (concept, apiPayload) => {
@@ -91,25 +99,32 @@ const loadParent = async (conceptName, apiPayload) => {
 const refresh = async (concept, updateInfo, apiPayload) => {
   const { hasUpdated, updatedValue } = updateInfo
 
-  const updatableConcept = { ...concept }
+  const updatedConcept = { ...concept }
 
   for (const field of ['author', 'rankLevel', 'rankName', 'name', 'parent']) {
     if (hasUpdated(field)) {
-      updatableConcept[field] = updatedValue(field)
+      updatedConcept[field] = updatedValue(field)
     }
   }
 
   if (hasUpdated('aliases')) {
-    const rawNames = await apiPayload(fetchNames, updatableConcept.name)
-    updatableConcept.aliases = orderedAliases(rawNames)
-    updatableConcept.alternateNames = updatableConcept.aliases.map(alias => alias.name)
+    const rawNames = await apiPayload(fetchNames, updatedConcept.name)
+    updatedConcept.aliases = orderedAliases(rawNames)
+    updatedConcept.alternateNames = updatedConcept.aliases.map(alias => alias.name)
   }
 
-  return updatableConcept
+  if (hasUpdated('children')) {
+    updatedConcept.children = [
+      ...concept.children,
+      ...updatedValue('children').map(child => child.name),
+    ].sort()
+  }
+
+  return updatedConcept
 }
 
 export {
-  addChild,
+  addedConcepts,
   complete,
   getNextSibling,
   getPrevSibling,

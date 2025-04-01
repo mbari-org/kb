@@ -3,7 +3,13 @@ import { fetchNames, fetchRanks, fetchRoot } from '@/lib/services/oni/api/taxono
 
 import { filterRanks } from './concept/rank'
 
-import { loadChildren, loadConcept, loadParent, refresh as refreshConcept } from './concept'
+import {
+  addedConcepts,
+  loadChildren,
+  loadConcept,
+  loadParent,
+  refresh as refreshConcept,
+} from './concept'
 
 import { treeItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
@@ -30,27 +36,51 @@ const buildTree = taxonomy => {
   return taxonomyTree
 }
 
-const deleteConcept = (taxonomy, conceptName) => {
-  // const concept = getConcept(taxonomy, conceptName)
-  // if (!concept) {
-  //   throw new Error(`Concept "${conceptName}" not found in the taxonomy.`)
-  // }
-  // if (0 < concept.children.length) {
-  //   throw new Error(`Concept "${conceptName}" has children.`)
-  // }
-  // const updatedConceptMap = rewireConceptAncestry(taxonomy.conceptMap, concept)
-  // const updatedParent = updatedConceptMap[concept.parent.name]
-  // updatedParent.children = updatedParent.children.filter(child => child.name !== concept.name)
-  // const deletedNames = [concept.name, ...concept.alternateNames]
-  // const updatedNames = taxonomy.names.filter(name => !deletedNames.includes(name))
-  // const aliasMap = mapsFromConcept(updatedConceptMap, true).aliasMap
-  // const updatedTaxonomy = {
-  //   ...taxonomy,
-  //   aliasMap,
-  //   conceptMap: updatedConceptMap,
-  //   names: updatedNames,
-  // }
-  // return { taxonomy: updatedTaxonomy }
+const deleteConcept = async (taxonomy, conceptName, apiPayload) => {
+  const concept = getConcept(taxonomy, conceptName)
+  if (!concept) {
+    throw new Error(`Concept "${conceptName}" not found in the taxonomy.`)
+  }
+  if (0 < concept.children.length) {
+    throw new Error(`Concept "${conceptName}" has children.`)
+  }
+
+  const conceptMap = { ...taxonomy.conceptMap }
+  delete conceptMap[conceptName]
+
+  let aliasMap = taxonomy.aliasMap
+  if (0 < concept.aliases.length) {
+    aliasMap = { ...taxonomy.aliasMap }
+    concept.aliases.forEach(alias => {
+      delete aliasMap[alias.name]
+    })
+  }
+
+  const parent = { ...getConcept(taxonomy, concept.parent) }
+  const conceptChildIndex = parent.children.indexOf(conceptName)
+
+  parent.children = parent.children.filter(child => child !== conceptName)
+  conceptMap[parent.name] = parent
+
+  let selectConceptName
+  if (parent.children.length === 0) {
+    selectConceptName = parent.name
+  } else if (conceptChildIndex === 0) {
+    selectConceptName = parent.children[0]
+  } else {
+    selectConceptName = parent.children[conceptChildIndex - 1]
+  }
+
+  const names = await apiPayload(fetchNames)
+
+  const updatedTaxonomy = {
+    ...taxonomy,
+    aliasMap,
+    conceptMap,
+    names,
+  }
+
+  return { taxonomy: updatedTaxonomy, selectConceptName }
 }
 
 const filterTaxonomyRanks = (taxonomy, field, otherValue) =>
@@ -260,49 +290,6 @@ const loadTaxonomyConceptDescendants = async (concept, apiPayload) => {
   // return { taxonomy: updatableTaxonomy }
 }
 
-const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload) => {
-  const { hasUpdated } = updateInfo
-
-  const updatedConcept = await refreshConcept(concept, updateInfo, apiPayload)
-  const conceptMap = { ...taxonomy.conceptMap }
-  conceptMap[updatedConcept.name] = updatedConcept
-
-  const structureChanged = ['aliases', 'children', 'name', 'parent'].some(field =>
-    hasUpdated(field)
-  )
-
-  if (!structureChanged) {
-    const updatedTaxonomy = {
-      ...taxonomy,
-      conceptMap,
-    }
-    return { concept: updatedConcept, taxonomy: updatedTaxonomy }
-  }
-
-  const aliasMap = { ...taxonomy.aliasMap }
-
-  if (hasUpdated('aliases')) {
-    concept.aliases
-      .filter(alias => !updatedConcept.aliases.includes(alias))
-      .forEach(alias => delete aliasMap[alias.name])
-
-    updatedConcept.aliases.forEach(alias => {
-      aliasMap[alias.name] = updatedConcept
-    })
-  }
-
-  const updatedNames = await apiPayload(fetchNames)
-
-  const updatedTaxonomy = {
-    ...taxonomy,
-    aliasMap,
-    conceptMap,
-    names: updatedNames,
-  }
-
-  return { concept: updatedConcept, taxonomy: updatedTaxonomy }
-}
-
 const loadTaxonomyHistory = async apiPayload => {
   const [approvedHistory, pendingHistory] = await Promise.all([
     apiPayload(fetchHistory, 'approved'),
@@ -343,6 +330,55 @@ const mapsFromConcept = (topConcept, aliasMapOnly = false) => {
   return { aliasMap, conceptMap }
 }
 
+const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload) => {
+  const { hasUpdated } = updateInfo
+
+  const updatedConcept = await refreshConcept(concept, updateInfo, apiPayload)
+  const conceptMap = { ...taxonomy.conceptMap }
+  conceptMap[updatedConcept.name] = updatedConcept
+
+  const structureChanged = ['aliases', 'children', 'name', 'parent'].some(field =>
+    hasUpdated(field)
+  )
+
+  if (!structureChanged) {
+    const updatedTaxonomy = {
+      ...taxonomy,
+      conceptMap,
+    }
+    return { concept: updatedConcept, taxonomy: updatedTaxonomy }
+  }
+
+  const aliasMap = { ...taxonomy.aliasMap }
+
+  if (hasUpdated('aliases')) {
+    concept.aliases
+      .filter(alias => !updatedConcept.aliases.includes(alias))
+      .forEach(alias => delete aliasMap[alias.name])
+
+    updatedConcept.aliases.forEach(alias => {
+      aliasMap[alias.name] = updatedConcept
+    })
+  }
+
+  if (hasUpdated('children')) {
+    addedConcepts(updatedConcept.name, updateInfo).forEach(child => {
+      conceptMap[child.name] = child
+    })
+  }
+
+  const updatedNames = await apiPayload(fetchNames)
+
+  const updatedTaxonomy = {
+    ...taxonomy,
+    aliasMap,
+    conceptMap,
+    names: updatedNames,
+  }
+
+  return { concept: updatedConcept, taxonomy: updatedTaxonomy }
+}
+
 const refreshTaxonomyHistory = async (apiPayload, updatableTaxonomy) => {
   const [approvedHistory, pendingHistory] = await Promise.all([
     apiPayload(fetchHistory, 'approved'),
@@ -351,40 +387,6 @@ const refreshTaxonomyHistory = async (apiPayload, updatableTaxonomy) => {
   updatableTaxonomy.approvedHistory = approvedHistory
   updatableTaxonomy.pendingHistory = pendingHistory
 }
-
-// const rewireConceptAncestry = (conceptMap, concept) => {
-//   const updatedConceptMap = { ...conceptMap }
-//   let currentParent = concept.parent
-//   while (currentParent) {
-//     const updatedParent = { ...currentParent }
-//     if (currentParent.parent) {
-//       const parentInTree = { ...currentParent.parent }
-//       const childIndex = parentInTree.children.findIndex(child => child.name === currentParent.name)
-//       parentInTree.children = [...parentInTree.children]
-//       parentInTree.children[childIndex] = updatedParent
-//       updatedConceptMap[parentInTree.name] = parentInTree
-//     }
-//     updatedConceptMap[currentParent.name] = updatedParent
-//     currentParent = currentParent.parent
-//   }
-//   return updatedConceptMap
-// }
-
-// const rootWithConcept = (taxonomy, concept) => updatedRootWithConcept(taxonomy.root, concept, true)
-
-// const updatedRootWithConcept = (node, concept, add) => {
-//   if (node.name === concept.name) {
-//     return add ? { ...concept } : null
-//   }
-//   return {
-//     ...node,
-//     children: node.children
-//       ? node.children
-//           .map(child => updatedRootWithConcept(child, concept, add))
-//           .filter(child => child !== null)
-//       : [],
-//   }
-// }
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {
   const conceptMap = taxonomy.conceptMap

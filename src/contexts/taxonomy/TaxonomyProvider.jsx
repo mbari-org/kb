@@ -48,11 +48,16 @@ const TaxonomyProvider = ({ children }) => {
   }
 
   const deleteConcept = useCallback(
-    conceptName => {
-      const { taxonomy: updatedTaxonomy } = deleteTaxonomyConcept(taxonomy, conceptName)
+    async conceptName => {
+      const { taxonomy: updatedTaxonomy, selectConceptName } = await deleteTaxonomyConcept(
+        taxonomy,
+        conceptName,
+        apiPayload
+      )
       updateTaxonomy(updatedTaxonomy)
+      return selectConceptName
     },
-    [taxonomy]
+    [taxonomy, apiPayload]
   )
 
   const filterRanks = useCallback(
