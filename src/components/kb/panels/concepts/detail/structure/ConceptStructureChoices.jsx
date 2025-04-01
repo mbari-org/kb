@@ -23,7 +23,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
 
   const conceptHasChildren = concept.children.length > 0 || stagedState.children.length > 0
   const conceptHasNameUpdate = !!stagedState.nameChange
-  const conceptHasParentUpdate = stagedState.parentName !== concept.parent?.name
+  const conceptHasParentUpdate = stagedState.parent !== concept.parent
 
   const addChild = useAddChild(closeChoices)
   const changeName = useChangeName()

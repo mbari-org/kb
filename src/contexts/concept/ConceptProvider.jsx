@@ -70,12 +70,6 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    // CxInc With the reworked taxonomy/concept structure, see if this is still true. Removing
-    //  the check for !getConcept(concept?.name)
-    //
-    // When the current Concept has a name change, concept.name (the prior name) will not be in
-    //  the taxonomy. In this case, set the concept to the select concept name (the new name)
-    // if (!!concept && selected.concept !== concept?.name && !getConcept(concept?.name)) {
     if (selected.concept !== concept?.name && isConceptComplete(selected.concept)) {
       setConcept(getConcept(selected.concept))
       return

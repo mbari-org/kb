@@ -17,7 +17,7 @@ const ChangeParentActions = () => {
   const { closeModal } = use(ModalContext)
 
   const isDisabled = useMemo(() => {
-    return stagedState.parentName === initialState.parentName
+    return stagedState.parent === initialState.parent
   }, [stagedState, initialState])
 
   const colors = ['cancel', 'main']
@@ -28,7 +28,7 @@ const ChangeParentActions = () => {
     if (label === STAGE) {
       modifyConcept({
         type: CHANGE_PARENT,
-        update: { parentName: stagedState.parentName },
+        update: { parent: stagedState.parent },
       })
     }
 

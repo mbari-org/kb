@@ -2,7 +2,7 @@ const structureState = concept => {
   return {
     children: [],
     name: concept.name,
-    parentName: concept.parent?.name,
+    parent: concept.parent,
   }
 }
 
@@ -24,7 +24,7 @@ const changeName = (state, update) => {
 const changeParent = (state, update) => {
   return {
     ...state,
-    parentName: update.parentName,
+    parent: update.parent,
   }
 }
 

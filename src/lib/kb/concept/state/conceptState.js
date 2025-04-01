@@ -80,9 +80,9 @@ export const isStateModified = (stagedState, initialState, field, index) => {
     }
 
     case FIELDS.PARENT: {
-      const editingParentName = stagedState.parentName
-      const initialParentName = initialState.parentName
-      return editingParentName !== initialParentName
+      const editingparent = stagedState.parent
+      const initialparent = initialState.parent
+      return editingparent !== initialparent
     }
 
     case FIELDS.PRIMARY.NAME: {

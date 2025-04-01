@@ -11,35 +11,35 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const ChangeParentContent = () => {
   const theme = useTheme()
 
-  const [toParentName, setToParentName] = useState(null)
+  const [toparent, setToparent] = useState(null)
 
   const { concept, modifyConcept } = use(ConceptContext)
   const { getNames } = use(TaxonomyContext)
 
   const optionNames = useMemo(() => {
-    return getNames().filter(name => name !== concept.name && name !== concept.parent?.name)
-  }, [getNames, concept.name, concept.parent?.name])
+    return getNames().filter(name => name !== concept.name && name !== concept.parent)
+  }, [getNames, concept.name, concept.parent])
 
   const fromColor = theme.concept.color.clean
 
-  const setParentName = toName => {
-    const parentName = toName === null ? concept.parent.name : toName
+  const setparent = toName => {
+    const parent = toName === null ? concept.parent : toName
     modifyConcept({
       type: CONCEPT_STATE.STRUCTURE.CHANGE_PARENT,
-      update: { parentName: parentName },
+      update: { parent: parent },
     })
-    toName === null ? setToParentName(null) : setToParentName(toName)
+    toName === null ? setToparent(null) : setToparent(toName)
   }
 
   const handleChange = (_event, selectedName) => {
-    setParentName(selectedName)
+    setparent(selectedName)
   }
 
   const handleKeyUp = event => {
     if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
       if (optionNames.includes(conceptName)) {
-        setParentName(conceptName)
+        setparent(conceptName)
       }
     }
   }
@@ -56,7 +56,7 @@ const ChangeParentContent = () => {
             fontSize={theme.concept.updateFontSize}
             fontWeight={theme.concept.fontWeight}
           >
-            {concept.parent.name}
+            {concept.parent}
           </Typography>
         </Stack>
         <Stack direction='row' spacing={2} alignItems='center'>
@@ -91,12 +91,12 @@ const ChangeParentContent = () => {
                   },
                   ml: -2,
                 }}
-                value={toParentName}
+                value={toparent}
                 onKeyUp={handleKeyUp}
               />
             )}
             size='small'
-            value={toParentName}
+            value={toparent}
             sx={{ width: '500px' }}
           />
           <Divider sx={{ marginTop: 1 }} />

@@ -199,12 +199,12 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
       })
 
       if (concept.parent) {
-        let parentName = concept.parent
+        let parent = concept.parent
 
         // Keep loading parents if not in the taxonomy.
-        while (!updatedTaxonomy.conceptMap[parentName]) {
+        while (!updatedTaxonomy.conceptMap[parent]) {
           // Load this parent's info and children
-          const parentConcept = await loadConcept(parentName, apiPayload)
+          const parentConcept = await loadConcept(parent, apiPayload)
           const parentChildren = await loadChildren(parentConcept.name, apiPayload)
           parentConcept.children = parentChildren.map(child => child.name)
           parentChildren.forEach(child => {
@@ -220,23 +220,23 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
           // Map parent
           mapConcept(updatedTaxonomy, parentConcept)
 
-          parentName = nextParent?.name
+          parent = nextParent?.name
         }
 
         // If previously loaded as a grandchild, a concept's children have not been loaded.
-        if (updatedTaxonomy.conceptMap[parentName]?.children ?? true) {
-          const parent = { ...updatedTaxonomy.conceptMap[parentName] }
-          const children = await loadChildren(parentName, apiPayload)
-          parent.children = children.map(child => child.name)
+        if (updatedTaxonomy.conceptMap[parent]?.children ?? true) {
+          const parentConcept = { ...updatedTaxonomy.conceptMap[parent] }
+          const children = await loadChildren(parent, apiPayload)
+          parentConcept.children = children.map(child => child.name)
           children.forEach(child => {
             // Don't map the child we just loaded above.
             if (!updatedTaxonomy.conceptMap[child.name]) {
-              child.parent = parentName
+              child.parent = parent
               mapConcept(updatedTaxonomy, child)
             }
           })
           // Map the cloned parent that has children set
-          mapConcept(updatedTaxonomy, parent)
+          mapConcept(updatedTaxonomy, parentConcept)
         }
       }
       // map the concept to the taxonomy
@@ -365,6 +365,31 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
     addedConcepts(updatedConcept.name, updateInfo).forEach(child => {
       conceptMap[child.name] = child
     })
+  }
+
+  if (hasUpdated('name')) {
+    delete conceptMap[concept.name]
+    conceptMap[updatedConcept.name] = updatedConcept
+
+    const parentConcept = { ...conceptMap[updatedConcept.parent] }
+    parentConcept.children = parentConcept.children
+      .filter(child => child !== concept.name)
+      .concat(updatedConcept.name)
+      .sort()
+
+    conceptMap[parentConcept.name] = parentConcept
+  }
+
+  if (hasUpdated('parent')) {
+    const priorParentConcept = { ...taxonomy.conceptMap[concept.parent] }
+    priorParentConcept.children = priorParentConcept.children.filter(
+      child => child !== updatedConcept.name
+    )
+    conceptMap[priorParentConcept.name] = priorParentConcept
+
+    const parentConcept = { ...conceptMap[updatedConcept.parent] }
+    parentConcept.children = [...parentConcept.children, updatedConcept.name].sort()
+    conceptMap[parentConcept.name] = parentConcept
   }
 
   const updatedNames = await apiPayload(fetchNames)
