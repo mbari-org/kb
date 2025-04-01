@@ -6,18 +6,22 @@ const useArrowKeys = (
   concept,
   expandConcept,
   expandedItems,
+  getConcept,
   selectConcept,
   setAutoExpand,
   sidebarRef
 ) => {
   const isExpanded = useCallback(
-    concept => 0 < concept.children.length && expandedItems.includes(concept.name),
+    concept => {
+      return 0 < concept.children.length && expandedItems.includes(concept.name)
+    },
     [expandedItems]
   )
 
   const handleArrowKeys = useArrowNavigation(
     concept,
     expandConcept,
+    getConcept,
     isExpanded,
     selectConcept,
     setAutoExpand

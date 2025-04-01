@@ -69,7 +69,15 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   })
   useTaxonomyTreeReposition(apiRef, concept)
 
-  useArrowKeys(concept, expandConcept, expandedItems, selectConcept, setAutoExpand, sidebarRef)
+  useArrowKeys(
+    concept,
+    expandConcept,
+    expandedItems,
+    getConcept,
+    selectConcept,
+    setAutoExpand,
+    sidebarRef
+  )
 
   if (!concept || !getConcept(concept.name)) {
     return null
@@ -78,7 +86,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   return (
     <aside className='taxonomy-tree' style={{ flexGrow: 1, height: '100%' }}>
       <RichTreeView
-        itemChildrenIndentation={8}
+        itemChildrenIndentation={12}
         apiRef={apiRef}
         expandedItems={expandedItems}
         getItemId={item => item.id}

@@ -112,7 +112,8 @@ const isConceptComplete = (taxonomy, conceptName) => {
   )
 }
 
-const isLoadedGrandChild = (taxonomy, conceptName) => {
+// Was the concept loaded as a grandchild (and hence its children are unknown)?
+const wasLoadedAsGrandChild = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return concept && concept.parent && !concept.children
 }
@@ -166,13 +167,27 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
     aliasMap: { ...taxonomy.aliasMap },
   }
 
-  // Due to preloading of grand children, this common case warrants specific handling.
-  if (isLoadedGrandChild(taxonomy, conceptName)) {
-    const parentChildren = getConcept(taxonomy, taxonomyConcept.parent).children
-    const grandChildren = await Promise.all(
-      parentChildren.map(child => loadChildren(child, apiPayload))
+  // Due to preloading grand children (w/o children), this common case warrants specific handling.
+  if (wasLoadedAsGrandChild(taxonomy, conceptName)) {
+    // Load sibling children
+    const siblings = getConcept(taxonomy, taxonomyConcept.parent).children
+    const siblingChildren = await Promise.all(
+      siblings.map(sibling => loadChildren(sibling, apiPayload))
     )
-    parentChildren.forEach((childName, index) => {
+    siblings.forEach((siblingName, index) => {
+      const sibling = updatedTaxonomy.conceptMap[siblingName]
+      sibling.children = siblingChildren[index].map(child => child.name)
+      siblingChildren[index].forEach(child => {
+        mapConcept(updatedTaxonomy, child)
+      })
+    })
+
+    // Load concept grandChildren
+    const concept = updatedTaxonomy.conceptMap[conceptName]
+    const grandChildren = await Promise.all(
+      concept.children.map(child => loadChildren(child, apiPayload))
+    )
+    concept.children.forEach((childName, index) => {
       const child = updatedTaxonomy.conceptMap[childName]
       child.children = grandChildren[index].map(grandChild => grandChild.name)
       grandChildren[index].forEach(grandChild => {

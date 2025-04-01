@@ -17,7 +17,12 @@ const allLeafs = (concept, leafs = []) => {
 const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
   const { loadConceptDescendants } = use(TaxonomyContext)
 
-  const isExpanded = useCallback(concept => expandedItems.includes(concept.name), [expandedItems])
+  const isExpanded = useCallback(
+    concept => {
+      return expandedItems.includes(concept.name)
+    },
+    [expandedItems]
+  )
 
   const collapse = useCallback(
     concept => {

@@ -4,34 +4,41 @@ import { getNextSibling, getPrevSibling } from '@/lib/kb/concept'
 
 import Expand from './expandedEnum'
 
-const useArrowNavigation = (concept, expandConcept, isExpanded, selectConcept, setAutoExpand) => {
+const useArrowNavigation = (
+  concept,
+  expandConcept,
+  getConcept,
+  isExpanded,
+  selectConcept,
+  setAutoExpand
+) => {
   return useCallback(
     event => {
-      let navToConcept
+      let navToConceptName
       switch (event.key) {
         case 'ArrowDown': {
           const isConceptExpanded = isExpanded(concept)
 
           if (isConceptExpanded) {
-            navToConcept = concept.children[0]
+            navToConceptName = concept.children[0]
             break
           }
 
-          const nextSibling = getNextSibling(concept)
+          const nextSibling = getNextSibling(concept, getConcept)
           if (!isConceptExpanded && nextSibling) {
-            navToConcept = nextSibling
+            navToConceptName = nextSibling
             break
           }
 
           if (!nextSibling) {
-            let parent = concept.parent
-            while (parent) {
-              const parentNextSibling = getNextSibling(parent)
+            let parentConcept = getConcept(concept.parent)
+            while (parentConcept) {
+              const parentNextSibling = getNextSibling(parentConcept, getConcept)
               if (parentNextSibling) {
-                navToConcept = parentNextSibling
+                navToConceptName = parentNextSibling
                 break
               } else {
-                parent = parent.parent
+                parentConcept = getConcept(parentConcept.parent)
               }
             }
           }
@@ -39,15 +46,15 @@ const useArrowNavigation = (concept, expandConcept, isExpanded, selectConcept, s
         }
 
         case 'ArrowUp': {
-          const prevSibling = getPrevSibling(concept)
+          const prevSibling = getPrevSibling(concept, getConcept)
           if (prevSibling) {
-            let prevConcept = prevSibling
+            let prevConcept = getConcept(prevSibling)
             while (isExpanded(prevConcept)) {
-              prevConcept = prevConcept.children[prevConcept.children.length - 1]
+              prevConcept = getConcept(prevConcept.children[prevConcept.children.length - 1])
             }
-            navToConcept = prevConcept
+            navToConceptName = prevConcept.name
           } else {
-            navToConcept = concept.parent
+            navToConceptName = concept.parent
           }
           break
         }
@@ -56,7 +63,7 @@ const useArrowNavigation = (concept, expandConcept, isExpanded, selectConcept, s
           if (isExpanded(concept)) {
             expandConcept(concept, Expand.OFF)
           } else {
-            navToConcept = concept.parent
+            navToConceptName = concept.parent
           }
           break
         }
@@ -72,12 +79,12 @@ const useArrowNavigation = (concept, expandConcept, isExpanded, selectConcept, s
           break
       }
 
-      if (navToConcept) {
-        selectConcept(navToConcept.name)
-        setAutoExpand({ expand: false, name: navToConcept.name })
+      if (navToConceptName) {
+        selectConcept(navToConceptName)
+        setAutoExpand({ expand: false, name: navToConceptName })
       }
     },
-    [isExpanded, concept, expandConcept, setAutoExpand, selectConcept]
+    [isExpanded, concept, expandConcept, getConcept, setAutoExpand, selectConcept]
   )
 }
 
