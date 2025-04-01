@@ -199,65 +199,103 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
   } else {
     let concept
     if (!taxonomyConcept) {
+      // Load/map the concept
       concept = await loadConcept(conceptName, apiPayload)
+      mapConcept(updatedTaxonomy, concept)
+
+      // Load/map the concept's children
       const children = await loadChildren(concept.name, apiPayload)
-
-      // We load the parent just to get the name, which is not in a loaded concept.
-      const apiParent = !isRoot(taxonomy, concept)
-        ? await loadParent(concept.name, apiPayload)
-        : null
-      concept.parent = apiParent?.name
-
       concept.children = children.map(child => child.name)
       children.forEach(child => {
         mapConcept(updatedTaxonomy, child)
       })
 
-      if (concept.parent) {
-        let parent = concept.parent
+      // Load/map the concept's grand children
+      const grandChildren = await Promise.all(
+        concept.children.map(child => loadChildren(child, apiPayload))
+      )
+      concept.children.forEach((childName, index) => {
+        const child = updatedTaxonomy.conceptMap[childName]
+        child.children = grandChildren[index].map(grandChild => grandChild.name)
+        grandChildren[index].forEach(grandChild => {
+          mapConcept(updatedTaxonomy, grandChild)
+        })
+      })
 
-        // Keep loading parents if not in the taxonomy.
-        while (!updatedTaxonomy.conceptMap[parent]) {
-          // Load this parent's info and children
-          const parentConcept = await loadConcept(parent, apiPayload)
-          const parentChildren = await loadChildren(parentConcept.name, apiPayload)
-          parentConcept.children = parentChildren.map(child => child.name)
-          parentChildren.forEach(child => {
+      // We need to find an existing ancestor in the taxonomy to connect the concept into the tree.
+      //  For each ancestor, look if the ancestor is in the taxonomy. If not, load the ancestor and
+      //  look at the next ancestor.
+
+      if (!isRoot(taxonomy, concept)) {
+        // To start, load the parent to get its name, which is not part of the API concept response.
+        const apiParent = await loadParent(concept.name, apiPayload)
+        let ancestor = apiParent.name
+        concept.parent = ancestor
+
+        // Since
+
+        // Keep loading ancestors if not in the taxonomy.
+        while (!updatedTaxonomy.conceptMap[ancestor]) {
+          // Load/map ancestor and its children
+          const ancestorConcept = await loadConcept(ancestor, apiPayload)
+          const ancestorChildren = await loadChildren(ancestorConcept.name, apiPayload)
+          ancestorConcept.children = ancestorChildren.map(child => child.name)
+          ancestorChildren.forEach(child => {
             mapConcept(updatedTaxonomy, child)
           })
+          mapConcept(updatedTaxonomy, ancestorConcept)
 
-          // Get the next parent
-          const nextParent = await loadParent(parentConcept.name, apiPayload)
-          if (nextParent) {
-            parentConcept.parent = nextParent.name
+          // Get the next ancestor
+          const nextAncestor = await loadParent(ancestorConcept.name, apiPayload)
+          if (nextAncestor) {
+            ancestorConcept.parent = nextAncestor.name
           }
 
-          // Map parent
-          mapConcept(updatedTaxonomy, parentConcept)
-
-          parent = nextParent?.name
+          ancestor = nextAncestor?.name
         }
 
-        // If previously loaded as a grandchild, a concept's children have not been loaded.
-        if (updatedTaxonomy.conceptMap[parent]?.children ?? true) {
-          const parentConcept = { ...updatedTaxonomy.conceptMap[parent] }
-          const children = await loadChildren(parent, apiPayload)
-          parentConcept.children = children.map(child => child.name)
-          children.forEach(child => {
-            // Don't map the child we just loaded above.
-            if (!updatedTaxonomy.conceptMap[child.name]) {
-              child.parent = parent
-              mapConcept(updatedTaxonomy, child)
-            }
-          })
-          // Map the cloned parent that has children set
-          mapConcept(updatedTaxonomy, parentConcept)
-        }
+        // The ancestor we finally connected to the taxonomy will not have loaded children
+        const ancestorConcept = updatedTaxonomy.conceptMap[ancestor]
+        const children = await loadChildren(ancestorConcept.name, apiPayload)
+        ancestorConcept.children = children.map(child => child.name)
+        children.forEach(child => {
+          // Don't map the child we loaded above in order to get here.
+          if (!updatedTaxonomy.conceptMap[child.name]) {
+            child.parent = ancestor
+            mapConcept(updatedTaxonomy, child)
+          }
+        })
+        // Re-map the ancestor that we connected to the taxonomy.
+        mapConcept(updatedTaxonomy, ancestorConcept)
+
+        // Now we need to load the sibling children of the initial concept being loaded
+        //  since the tree display needs that information.
+        const conceptParent = updatedTaxonomy.conceptMap[concept.parent]
+        const parentGrandChildren = await Promise.all(
+          conceptParent.children.map(child => loadChildren(child, apiPayload))
+        )
+        conceptParent.children.forEach((childName, index) => {
+          if (childName !== concept.name) {
+            const child = updatedTaxonomy.conceptMap[childName]
+            child.children = parentGrandChildren[index].map(grandChild => grandChild.name)
+            parentGrandChildren[index].forEach(grandChild => {
+              mapConcept(updatedTaxonomy, grandChild)
+            })
+          }
+        })
       }
-      // map the concept to the taxonomy
-      mapConcept(updatedTaxonomy, concept)
     } else if (taxonomyConcept.children) {
       concept = taxonomyConcept
+      const grandChildren = await Promise.all(
+        concept.children.map(child => loadChildren(child, apiPayload))
+      )
+      concept.children.forEach((childName, index) => {
+        const child = updatedTaxonomy.conceptMap[childName]
+        child.children = grandChildren[index].map(grandChild => grandChild.name)
+        grandChildren[index].forEach(grandChild => {
+          mapConcept(updatedTaxonomy, grandChild)
+        })
+      })
     } else {
       concept = { ...taxonomyConcept }
       const children = await loadChildren(concept.name, apiPayload)
@@ -272,16 +310,16 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
 
     // grand children are always loaded so the taxonomy tree display knows if a concept's children
     //  have children, in which case the expanded icon will appear for that child
-    const grandChildren = await Promise.all(
-      concept.children.map(child => loadChildren(child, apiPayload))
-    )
-    concept.children.forEach((childName, index) => {
-      const child = updatedTaxonomy.conceptMap[childName]
-      child.children = grandChildren[index].map(grandChild => grandChild.name)
-      grandChildren[index].forEach(grandChild => {
-        mapConcept(updatedTaxonomy, grandChild)
-      })
-    })
+    // const grandChildren = await Promise.all(
+    //   concept.children.map(child => loadChildren(child, apiPayload))
+    // )
+    // concept.children.forEach((childName, index) => {
+    //   const child = updatedTaxonomy.conceptMap[childName]
+    //   child.children = grandChildren[index].map(grandChild => grandChild.name)
+    //   grandChildren[index].forEach(grandChild => {
+    //     mapConcept(updatedTaxonomy, grandChild)
+    //   })
+    // })
   }
 
   return { taxonomy: updatedTaxonomy, wasComplete: false }
