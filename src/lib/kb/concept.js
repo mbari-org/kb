@@ -7,6 +7,12 @@ import {
 
 import { orderedAliases } from '@/lib/kb/concept/aliases'
 
+import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+
+import { drop } from '@/lib/util'
+
+const { MEDIA, NO_ACTION } = CONCEPT_STATE
+
 const addedConcepts = (parent, updateInfo) => {
   const { updatedValue } = updateInfo
   return updatedValue('children').map(child => ({
@@ -97,7 +103,7 @@ const loadParent = async (conceptName, apiPayload) => {
   return parent
 }
 
-const refresh = async (concept, updateInfo, apiPayload) => {
+const refresh = async (concept, updateInfo, results, apiPayload) => {
   const { hasUpdated, updatedValue } = updateInfo
 
   const updatedConcept = { ...concept }
@@ -119,6 +125,27 @@ const refresh = async (concept, updateInfo, apiPayload) => {
       ...concept.children,
       ...updatedValue('children').map(child => child.name),
     ].sort()
+  }
+
+  if (hasUpdated('media')) {
+    updatedConcept.media = updatedValue('media').reduce((acc, mediaItem) => {
+      switch (mediaItem.action) {
+        case MEDIA.ADD: {
+          const mediaId = results.find(result => result.url === mediaItem.url).id
+          acc.push({ ...mediaItem, id: mediaId })
+          break
+        }
+        case MEDIA.DELETE:
+          break
+        case MEDIA.EDIT:
+        case NO_ACTION:
+          acc.push(drop(mediaItem, ['action']))
+          break
+        default:
+          break
+      }
+      return acc
+    }, [])
   }
 
   return updatedConcept

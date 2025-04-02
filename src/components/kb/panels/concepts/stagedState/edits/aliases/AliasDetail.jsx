@@ -14,6 +14,7 @@ import { drop } from '@/lib/util'
 
 const AliasDetail = ({ action, initial, updates }) => {
   let fieldValues
+
   switch (action) {
     case ADD:
       fieldValues = Object.entries(drop(updates, ['name']))

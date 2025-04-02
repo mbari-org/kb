@@ -11,10 +11,13 @@ const MediaItemDetail = ({ action, initial, updates }) => {
 
   switch (action) {
     case CONCEPT_STATE.MEDIA.ADD:
-      fieldValues = updates
+      fieldValues = ['credit', 'caption', 'isPrimary'].map(field => [
+        field,
+        field === 'isPrimary' ? (updates[field] === true ? 'true' : 'false') : updates[field],
+      ])
       break
     case CONCEPT_STATE.MEDIA.DELETE:
-      fieldValues = initial
+      fieldValues = []
       break
     case CONCEPT_STATE.MEDIA.EDIT:
       fieldValues = Object.entries(updates).map(([field, value]) => {
@@ -22,31 +25,8 @@ const MediaItemDetail = ({ action, initial, updates }) => {
           return [field, formatDelta(initial[field], value)]
         }
       })
-      // fieldValues = initial.reduce((acc, [field, initialValue], index) => {
-      //   const stagedValue = updates[index][1]
-      //   if (initialValue !== stagedValue) {
-      //     acc.push([field, formatDelta(initialValue, stagedValue)])
-      //   }
-      //   return acc
-      // }, [])
       break
   }
-  // if (initial === null) {
-  //   // Media Add
-  //   fieldValues = updates
-  // } else if (updates === null) {
-  //   // Media Delete
-  //   fieldValues = initial
-  // } else {
-  //   // Media Edit
-  //   fieldValues = initial.reduce((acc, [field, initialValue], index) => {
-  //     const stagedValue = updates[index][1]
-  //     if (initialValue !== stagedValue) {
-  //       acc.push([field, formatDelta(initialValue, stagedValue)])
-  //     }
-  //     return acc
-  //   }, [])
-  // }
 
   return (
     <Box sx={{ ml: 7 }}>

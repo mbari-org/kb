@@ -321,10 +321,10 @@ const mapsFromConcept = (topConcept, aliasMapOnly = false) => {
   return { aliasMap, conceptMap }
 }
 
-const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload) => {
+const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, results, apiPayload) => {
   const { hasUpdated } = updateInfo
 
-  const updatedConcept = await refreshConcept(concept, updateInfo, apiPayload)
+  const updatedConcept = await refreshConcept(concept, updateInfo, results, apiPayload)
   const conceptMap = { ...taxonomy.conceptMap }
   conceptMap[updatedConcept.name] = updatedConcept
 
