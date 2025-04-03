@@ -1,5 +1,5 @@
-import { fetchHistory } from '@/lib/services/oni/api/history'
-import { fetchNames, fetchRanks, fetchRoot } from '@/lib/services/oni/api/taxonomy'
+import { fetchHistory } from '@/lib/services/api/oni/history'
+import { fetchNames, fetchRanks, fetchRoot } from '@/lib/services/api/oni/taxonomy'
 
 import { filterRanks } from './concept/rank'
 

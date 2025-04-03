@@ -1,4 +1,4 @@
-import { updateConceptAuthor, updateConceptRank } from '@/lib/services/oni/api/concept'
+import { updateConceptAuthor, updateConceptRank } from '@/lib/services/api/oni/concept'
 
 const updateDetail = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, updatedValue } = updateInfo

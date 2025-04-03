@@ -2,7 +2,7 @@ import {
   createConcept,
   updateConceptName,
   updateConceptParent,
-} from '@/lib/services/oni/api/concept'
+} from '@/lib/services/api/oni/concept'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 

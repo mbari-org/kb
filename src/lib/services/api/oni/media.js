@@ -1,4 +1,4 @@
-import { oniDelete, oniGet, oniPost, oniPut } from './util'
+import { oniDelete, oniGet, oniPost, oniPut } from './methods'
 
 const createMediaItem = async (config, mediaItem) => oniPost(config, ['media'], mediaItem)
 

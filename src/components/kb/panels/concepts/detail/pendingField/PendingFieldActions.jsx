@@ -7,7 +7,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import { getFieldPendingHistory } from '@/lib/kb/util/pendingHistory'
-import { sendPendingAction } from '@/lib/services/oni/api/history'
+import { sendPendingAction } from '@/lib/services/api/oni/history'
 
 const APPROVE = 'Approve'
 const DEFER = 'Defer'

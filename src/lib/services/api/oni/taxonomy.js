@@ -1,4 +1,4 @@
-import { oniGet } from './util'
+import { oniGet } from './methods'
 
 const fetchNames = async config => {
   const { error, payload } = await oniGet(config, ['names'])

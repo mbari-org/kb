@@ -1,4 +1,4 @@
-import { deleteConcept } from '@/lib/services/oni/api/concept'
+import { deleteConcept } from '@/lib/services/api/oni/concept'
 
 const submitDelete = async (conceptName, apiResult) => apiResult(deleteConcept, conceptName)
 

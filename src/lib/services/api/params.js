@@ -1,6 +1,6 @@
 import authStore from '@/lib/store/auth'
 
-const oniParams = (method, data) => {
+const apiParams = (method, data) => {
   const { token } = authStore.get()
 
   const headers = {
@@ -16,4 +16,4 @@ const oniParams = (method, data) => {
   }
 }
 
-export default oniParams
+export default apiParams

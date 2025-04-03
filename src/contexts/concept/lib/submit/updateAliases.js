@@ -1,4 +1,4 @@
-import { createAlias, deleteAlias, updateAlias } from '@/lib/services/oni/api/aliases'
+import { createAlias, deleteAlias, updateAlias } from '@/lib/services/api/oni/aliases'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 

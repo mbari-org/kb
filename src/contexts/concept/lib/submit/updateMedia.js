@@ -1,4 +1,4 @@
-import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/services/oni/api/media'
+import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/services/api/oni/media'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 

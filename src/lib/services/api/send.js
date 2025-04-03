@@ -1,4 +1,4 @@
-const oniSend = async (url, params) => {
+const apiSend = async (url, params) => {
   try {
     const response = await fetch(url, params)
     const payload = await response.json()
@@ -41,4 +41,4 @@ const errorResponse = (url, title, message) => ({
   },
 })
 
-export default oniSend
+export default apiSend

@@ -10,7 +10,7 @@ import loginLogo from '@/assets/loginLogo.png'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { loginReadOnly } from '@/lib/services/oni/auth/login'
+import { loginReadOnly } from '@/lib/services/api/oni/auth/login'
 
 const StartUp = () => {
   const { processAuth } = use(AuthContext)

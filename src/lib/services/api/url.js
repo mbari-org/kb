@@ -1,5 +1,5 @@
-const oniUrl = (config, path) => {
-  const { error, url } = config.getServiceUrl('oni')
+const apiUrl = (config, service, path) => {
+  const { error, url } = config.getServiceUrl(service)
   if (error) {
     throw Error(error)
   }
@@ -7,4 +7,4 @@ const oniUrl = (config, path) => {
   return `${url}/${resourcePath}`
 }
 
-export default oniUrl
+export default apiUrl

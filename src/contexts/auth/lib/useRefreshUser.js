@@ -4,7 +4,7 @@ import useInvalidAuth from '@/contexts/auth/lib/useInvalidAuth'
 import useProcessAuth from '@/contexts/auth/lib/useProcessAuth'
 
 import { extract } from '@/lib/auth/refreshKey'
-import { loginUser } from '@/lib/services/oni/auth/login'
+import { loginUser } from '@/lib/services/api/oni/auth/login'
 import authStore from '@/lib/store/auth'
 
 import tokenIsExpiring from './tokenIsExpiring'

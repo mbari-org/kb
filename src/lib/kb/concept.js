@@ -3,7 +3,7 @@ import {
   fetchConcept,
   fetchNames,
   fetchParent,
-} from '@/lib/services/oni/api/concept'
+} from '@/lib/services/api/oni/concept'
 
 import { orderedAliases } from '@/lib/kb/concept/aliases'
 

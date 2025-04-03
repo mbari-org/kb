@@ -63,10 +63,10 @@ const ConfigProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    const apiResult = config => async (apiFn, params) => apiFn(config, params)
+    const apiResult = config => async (apiRequest, params) => apiRequest(config, params)
 
-    const apiPayload = config => async (payloadFn, params) => {
-      const { error, payload: result } = await payloadFn(config, params)
+    const apiPayload = config => async (payloadRequest, params) => {
+      const { error, payload: result } = await payloadRequest(config, params)
       if (error) {
         throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
       }
