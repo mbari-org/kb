@@ -11,7 +11,7 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 const ChangeParentContent = () => {
   const theme = useTheme()
 
-  const [toparent, setToparent] = useState(null)
+  const [toParent, setToParent] = useState(null)
 
   const { concept, modifyConcept } = use(ConceptContext)
   const { getNames } = use(TaxonomyContext)
@@ -20,26 +20,24 @@ const ChangeParentContent = () => {
     return getNames().filter(name => name !== concept.name && name !== concept.parent)
   }, [getNames, concept.name, concept.parent])
 
-  const fromColor = theme.concept.color.clean
-
-  const setparent = toName => {
+  const setParent = toName => {
     const parent = toName === null ? concept.parent : toName
     modifyConcept({
       type: CONCEPT_STATE.STRUCTURE.CHANGE_PARENT,
       update: { parent: parent },
     })
-    toName === null ? setToparent(null) : setToparent(toName)
+    toName === null ? setToParent(null) : setToParent(toName)
   }
 
   const handleChange = (_event, selectedName) => {
-    setparent(selectedName)
+    setParent(selectedName)
   }
 
   const handleKeyUp = event => {
     if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
       if (optionNames.includes(conceptName)) {
-        setparent(conceptName)
+        setParent(conceptName)
       }
     }
   }
@@ -51,7 +49,7 @@ const ChangeParentContent = () => {
         <Stack direction='row' spacing={2} alignItems='center'>
           <Typography minWidth={60}>From:</Typography>
           <Typography
-            color={fromColor}
+            color='main'
             fontFamily={theme.concept.fontFamily}
             fontSize={theme.concept.updateFontSize}
             fontWeight={theme.concept.fontWeight}
@@ -68,35 +66,36 @@ const ChangeParentContent = () => {
               <TextField
                 {...params}
                 fullWidth
+                onKeyUp={handleKeyUp}
                 sx={{
-                  border: 'none',
                   '& .MuiOutlinedInput-notchedOutline': {
                     border: 'none',
                   },
-                  '&:before': {
-                    border: 'none',
-                    content: '""',
+                  '& input': {
+                    color: theme.concept.color.edit,
+                    fontSize: theme.concept.updateFontSize,
+                    fontFamily: theme.concept.fontFamily,
+                    fontWeight: theme.concept.fontWeight,
                   },
                   '&:after': {
                     borderBottom: `2px solid ${theme.palette.primary.main}`,
                     content: '""',
                   },
+                  '&:before': {
+                    border: 'none',
+                    content: '""',
+                  },
+                  border: 'none',
                   fontSize: theme.concept.updateFontSize,
                   fontFamily: theme.concept.fontFamily,
                   fontWeight: theme.concept.fontWeight,
-                  '& input': {
-                    fontSize: theme.concept.updateFontSize,
-                    fontFamily: theme.concept.fontFamily,
-                    fontWeight: theme.concept.fontWeight,
-                  },
                   ml: -2,
                 }}
-                value={toparent}
-                onKeyUp={handleKeyUp}
+                value={toParent}
               />
             )}
             size='small'
-            value={toparent}
+            value={toParent}
             sx={{ width: '500px' }}
           />
           <Divider sx={{ marginTop: 1 }} />

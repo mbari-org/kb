@@ -23,14 +23,15 @@ const ConceptName = () => {
 
   const namePendingHistory = getFieldPendingHistory(pendingHistory, 'ConceptName')
   const conceptHasNameUpdate = stagedState.name !== concept?.name
+  const conceptHasParentUpdate = stagedState.parent !== concept?.parent
 
   const showApprovalButton =
     isAdmin(user) && editing && !!namePendingHistory && !showStructureChoices
   const showStructureButton = !isReadOnly(user) && editing && !showStructureChoices
 
   const conceptColor =
-    !!namePendingHistory || conceptHasNameUpdate
-      ? theme.palette.primary.pending
+    !!namePendingHistory || conceptHasNameUpdate || conceptHasParentUpdate
+      ? theme.concept.color.edit
       : theme.palette.primary.main
 
   return (
