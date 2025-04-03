@@ -33,14 +33,14 @@ const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { user } = use(AuthContext)
-  const { apiFn } = use(ConfigContext)
+  const { apiFns } = use(ConfigContext)
   const { setProcessing, setModal } = use(ModalContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
 
   const initialLoad = useRef(true)
 
-  const apiPayload = apiFn.apiPayload
+  const apiPayload = apiFns.apiPayload
 
   const updateTaxonomy = taxonomy => {
     cxDebugTaxonomyIntegrity(taxonomy)

@@ -15,7 +15,7 @@ const { CANCEL, DELETE } = LABELS.CONCEPT.ACTION
 
 const DeleteConceptActions = () => {
   const { concept, setEditing } = use(ConceptContext)
-  const { apiFn } = use(ConfigContext)
+  const { apiFns } = use(ConfigContext)
   const { closeModal } = use(ModalContext)
   const { selectConcept } = use(SelectedContext)
   const { deleteConcept } = use(TaxonomyContext)
@@ -27,7 +27,7 @@ const DeleteConceptActions = () => {
     closeModal()
 
     if (label === DELETE) {
-      submitDelete(concept.name, apiFn.apiResult)
+      submitDelete(concept.name, apiFns.apiResult)
         .then(() => deleteConcept(concept.name))
         .then(selectConceptName => {
           selectConcept(selectConceptName)

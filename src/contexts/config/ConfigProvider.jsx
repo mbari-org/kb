@@ -12,7 +12,7 @@ const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
 
   const [config, setConfig] = useState(null)
-  const [apiFn, setApiFn] = useState(null)
+  const [apiFns, setApiFns] = useState(null)
 
   const updateConfig = async url => {
     if (url === null) {
@@ -73,10 +73,10 @@ const ConfigProvider = ({ children }) => {
       return result
     }
 
-    setApiFn({ apiPayload: apiPayload(config), apiResult: apiResult(config) })
+    setApiFns({ apiPayload: apiPayload(config), apiResult: apiResult(config) })
   }, [config])
 
-  return <ConfigContext value={{ apiFn, config, updateConfig }}>{children}</ConfigContext>
+  return <ConfigContext value={{ apiFns, config, updateConfig }}>{children}</ConfigContext>
 }
 
 export default ConfigProvider

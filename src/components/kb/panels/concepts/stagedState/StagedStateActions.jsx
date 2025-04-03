@@ -20,7 +20,7 @@ const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 const SAVING = 'Saving...'
 
 const StagedStateActions = ({ intent }) => {
-  const { apiFn } = use(ConfigContext)
+  const { apiFns } = use(ConfigContext)
   const { concept, confirmReset, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
@@ -53,7 +53,7 @@ const StagedStateActions = ({ intent }) => {
       case SAVE:
         closeModal()
         setProcessing(SAVING)
-        submitUpdates(apiFn.apiPayload, concept, initialState, stagedState).then(
+        submitUpdates(apiFns.apiPayload, concept, initialState, stagedState).then(
           ({ updateInfo, results }) => {
             refreshConcept(concept, updateInfo, results).then(updatedConcept => {
               setEditing(false)
