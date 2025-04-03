@@ -18,12 +18,12 @@ const drop = (object, fields) => {
   }, {})
 }
 
-const getDeepDiff = (o1, o2) => {
+const deepDiff = (o1, o2) => {
   const diff = {}
 
   Object.keys(o1).forEach(key => {
     if (typeof o1[key] === 'object' && o1[key] !== null && !Array.isArray(o1[key])) {
-      const nestedDiff = getDeepDiff(o1[key], o2[key])
+      const nestedDiff = deepDiff(o1[key], o2[key])
       if (Object.keys(nestedDiff).length > 0) {
         diff[key] = nestedDiff
       }
@@ -34,6 +34,14 @@ const getDeepDiff = (o1, o2) => {
 
   return diff
 }
+
+const diff = (o1, o2) =>
+  Object.keys(o1).reduce((result, key) => {
+    if (!isEqual(o1[key], o2[key])) {
+      result[key] = o1[key]
+    }
+    return result
+  }, {})
 
 const isDeepEqual = (obj1, obj2, depth = Infinity) => {
   if (
@@ -174,8 +182,9 @@ const prunePick = (object, fields) => prune(pick(object, fields))
 export {
   capitalize,
   checkImageUrlExists,
+  deepDiff,
+  diff,
   drop,
-  getDeepDiff,
   isDeepEqual,
   isElementInViewport,
   isEmpty,

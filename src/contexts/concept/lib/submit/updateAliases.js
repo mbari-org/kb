@@ -2,9 +2,9 @@ import { createAlias, deleteAlias, updateAlias } from '@/lib/services/oni/api/al
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-const { ALIAS, NO_ACTION } = CONCEPT_STATE
+const { ALIAS } = CONCEPT_STATE
 
-import { pick } from '@/lib/util'
+import { diff, drop, pick } from '@/lib/util'
 
 const updateAliases = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updateInfo
@@ -13,44 +13,50 @@ const updateAliases = ([submit, { concept, updateInfo }]) => {
     return []
   }
 
-  const aliasUpdates = updatedValue('aliases').reduce((acc, aliasUpdate, index) => {
-    if (aliasUpdate.action !== NO_ACTION) {
-      acc.push({ ...aliasUpdate, index })
-    }
-    return acc
-  }, [])
+  // const aliasUpdates = updatedValue('aliases').reduce((acc, aliasUpdate, index) => {
+  //   console.log('initial aliases', initialValue('aliases'))
+  //   if (aliasUpdate.action !== NO_ACTION) {
+  //     acc.push({ ...aliasUpdate, index })
+  //   }
+  //   return acc
+  // }, [])
 
-  const submitters = aliasUpdates.map(update => {
-    const alias = pick(update, ['author', 'nameType', 'name'])
-
+  const submitters = updatedValue('aliases').reduce((acc, update, index) => {
     switch (update.action) {
       case ALIAS.ADD: {
+        const alias = pick(update, ['author', 'nameType'])
         const params = {
           ...alias,
           name: concept.name,
           newName: update.name,
         }
-        return submit(createAlias, params)
+        acc.push(submit(createAlias, params))
+        break
       }
 
       case ALIAS.EDIT: {
+        const initialAlias = initialValue('aliases')[index]
+        const updateDiff = diff(update, initialAlias)
+        const alias = drop(updateDiff, ['action'])
+
         if (alias.name) {
-          alias.newName = alias.name
+          alias.newName = update.name
           delete alias.name
         }
-
-        const name = initialValue('aliases')[update.index].name
-        const params = [name, alias]
-        return submit(updateAlias, params)
+        const params = [initialAlias.name, alias]
+        acc.push(submit(updateAlias, params))
+        break
       }
 
       case ALIAS.DELETE: {
-        return submit(deleteAlias, alias.name)
+        acc.push(submit(deleteAlias, update.name))
+        break
       }
 
       default:
-        return null
+        break
     }
+    return acc
   }, [])
 
   return submitters
