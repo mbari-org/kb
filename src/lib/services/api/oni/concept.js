@@ -9,10 +9,13 @@ const fetchChildren = async (config, conceptName) =>
 
 const fetchConcept = async (config, conceptName) => oniGet(config, ['concept', conceptName])
 
-const fetchParent = async (config, conceptName) =>
-  oniGet(config, ['concept', 'parent', conceptName])
+const fetchLinkRealizations = async (config, conceptName) =>
+  oniGet(config, ['linkrealizations', 'concept', conceptName])
 
 const fetchNames = async (config, conceptName) => oniGet(config, ['raw', 'names', conceptName])
+
+const fetchParent = async (config, conceptName) =>
+  oniGet(config, ['concept', 'parent', conceptName])
 
 const updateConceptAuthor = async (config, [conceptName, updates]) =>
   oniPut(config, ['names', conceptName], updates)
@@ -31,6 +34,7 @@ export {
   deleteConcept,
   fetchChildren,
   fetchConcept,
+  fetchLinkRealizations,
   fetchNames,
   fetchParent,
   updateConceptAuthor,

@@ -26,7 +26,7 @@ const ConceptProvider = ({ children }) => {
 
   const { modalData, setModalData } = use(ModalContext)
   const { selected } = use(SelectedContext)
-  const { getConcept, getConceptPendingHistory, isConceptComplete, loadConcept, taxonomy } =
+  const { getConcept, getConceptPendingHistory, isConceptTreeReady, loadConcept, taxonomy } =
     use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
@@ -70,7 +70,7 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    if (selected.concept !== concept?.name && isConceptComplete(selected.concept)) {
+    if (selected.concept !== concept?.name && isConceptTreeReady(selected.concept)) {
       setConcept(getConcept(selected.concept))
       return
     }
@@ -82,7 +82,7 @@ const ConceptProvider = ({ children }) => {
           setModalData({ warning: true })
         }
       } else {
-        if (isConceptComplete(selected.concept)) {
+        if (isConceptTreeReady(selected.concept)) {
           setConcept(getConcept(selected.concept))
         } else {
           setEditing(false)
@@ -99,7 +99,7 @@ const ConceptProvider = ({ children }) => {
     concept,
     getConcept,
     initialState,
-    isConceptComplete,
+    isConceptTreeReady,
     loadConcept,
     modalData,
     selected,

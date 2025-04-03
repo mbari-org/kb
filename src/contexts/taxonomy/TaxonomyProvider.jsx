@@ -16,6 +16,7 @@ import {
   getNames as getTaxonomyNames,
   getRoot as getTaxonomyRoot,
   isConceptComplete as isTaxonomyConceptComplete,
+  isConceptTreeReady as isTaxonomyConceptTreeReady,
   isRoot as isTaxonomyRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
@@ -98,12 +99,17 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
+  const isConceptTreeReady = useCallback(
+    conceptName => isTaxonomyConceptTreeReady(taxonomy, conceptName),
+    [taxonomy]
+  )
+
   const isRoot = useCallback(concept => isTaxonomyRoot(taxonomy, concept), [taxonomy])
 
   const isLoadingConcept = useRef(false)
 
   const loadConcept = async conceptName => {
-    if (isTaxonomyConceptComplete(taxonomy, conceptName)) {
+    if (isTaxonomyConceptTreeReady(taxonomy, conceptName)) {
       return taxonomy.conceptMap[conceptName]
     }
 
@@ -208,6 +214,7 @@ const TaxonomyProvider = ({ children }) => {
         getNames,
         getRoot,
         isConceptComplete,
+        isConceptTreeReady,
         isRoot,
         loadConcept,
         loadConceptDescendants,

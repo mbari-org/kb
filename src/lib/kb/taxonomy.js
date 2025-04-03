@@ -104,6 +104,11 @@ const getRoot = (conceptMap, rootName) => conceptMap[rootName]
 
 const isConceptComplete = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
+  return isConceptTreeReady(taxonomy, conceptName) && concept.linkRealizations
+}
+
+const isConceptTreeReady = (taxonomy, conceptName) => {
+  const concept = getConcept(taxonomy, conceptName)
   return (
     concept &&
     concept.children &&
@@ -153,7 +158,7 @@ const loadTaxonomy = async apiPayload => {
 const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
   const taxonomyConcept = getConcept(taxonomy, conceptName)
 
-  // If the concept is complete, there is nothing to do.
+  // If the concept is ready for display, there is nothing to do.
   if (isConceptComplete(taxonomy, taxonomyConcept)) {
     return { taxonomy, wasComplete: true }
   }
@@ -175,8 +180,10 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
     return { taxonomy: updatedTaxonomy, wasComplete: false }
   }
 
-  // If the concept is in the taxonomy (but incomplete), we load the children of the concept's
-  //  parent to load the concept and its siblings, and we load the grand children of the concept.
+  // If the concept is in the taxonomy (but not ready for display), first we make it ready to
+  //  display in the tree by loading the children of the concept's parent to load the concept and
+  //  its siblings, and then we load the grand children of the concept. Then we make it complete
+  //  by loading the linkRealizations.
   if (taxonomyConcept) {
     const parentConcept = updatedTaxonomy.conceptMap[taxonomyConcept.parent]
     await Promise.all(
@@ -193,7 +200,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
     return { taxonomy: updatedTaxonomy, wasComplete: false }
   }
 
-  // If the concept is not in the taxonomy, load the concept and its children
+  // If the concept is not in the taxonomy, make it complete
   const concept = await loadConcept(conceptName, apiPayload)
   mapConcept(updatedTaxonomy, concept)
 
@@ -467,6 +474,7 @@ export {
   getNames,
   getRoot,
   isConceptComplete,
+  isConceptTreeReady,
   isRoot,
   loadTaxonomy,
   loadTaxonomyConcept,

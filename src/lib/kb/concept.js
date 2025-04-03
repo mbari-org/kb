@@ -1,6 +1,7 @@
 import {
   fetchChildren,
   fetchConcept,
+  fetchLinkRealizations,
   fetchNames,
   fetchParent,
 } from '@/lib/services/api/oni/concept'
@@ -76,11 +77,13 @@ const incompleteConcept = concept => {
 }
 
 const loadConcept = async (conceptName, apiPayload) => {
-  const [concept, names] = await Promise.all([
+  const [concept, names, linkRealizations] = await Promise.all([
     apiPayload(fetchConcept, conceptName),
     apiPayload(fetchNames, conceptName),
+    apiPayload(fetchLinkRealizations, conceptName),
   ])
   concept.aliases = orderedAliases(names)
+  concept.linkRealizations = linkRealizations
   return concept
 }
 
