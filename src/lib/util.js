@@ -138,7 +138,7 @@ const isRefEqual = (obj1, obj2, depth = Infinity) => {
   return true
 }
 
-const isValidUrl = url => {
+const isUrlValid = url => {
   try {
     new URL(url)
     return true
@@ -191,7 +191,7 @@ export {
   isEqual,
   isJsonEqual,
   isRefEqual,
-  isValidUrl,
+  isUrlValid,
   pick,
   prettyFormat,
   prune,

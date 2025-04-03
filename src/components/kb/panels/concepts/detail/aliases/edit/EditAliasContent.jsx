@@ -58,7 +58,7 @@ const EditAliasContent = () => {
     setModalData(prev => ({ ...prev, alias: updatedAlias, modified: updatedModified }))
   }
 
-  const handleStage = useStageAlias()
+  const stageAlias = useStageAlias()
 
   const isValidName = useMemo(() => {
     return !getNames().includes(formAlias.name)
@@ -75,7 +75,7 @@ const EditAliasContent = () => {
     : ''
 
   return (
-    <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>
+    <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={stageAlias}>
       <FormControl {...inputStyle}>
         <TextField
           label='Name'

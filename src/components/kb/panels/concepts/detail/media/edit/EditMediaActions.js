@@ -10,7 +10,7 @@ import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
-import { isValidUrl } from '@/lib/util'
+import { isUrlValid } from '@/lib/util'
 
 const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
 const { CONFIRMED } = CONCEPT_STATE.RESET
@@ -22,7 +22,7 @@ const EditMediaActions = () => {
   const { mediaItem, modified } = modalData
 
   const validMediaItem = useMemo(
-    () => isValidUrl(mediaItem.url) && mediaItem.credit.trim() !== '',
+    () => isUrlValid(mediaItem.url) && mediaItem.credit.trim() !== '',
     [mediaItem]
   )
 
