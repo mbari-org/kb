@@ -39,7 +39,7 @@ const ConceptDetail = () => {
     editing && isAdmin(user) && hasPendingHistory(pendingHistory, field)
 
   return (
-    <Stack direction='row' spacing={1.5}>
+    <Stack direction='row' spacing={1.5} sx={{ height: '100%' }}>
       <ConceptMedia />
       <Stack direction='column' spacing={2} sx={{ flex: '1', ml: 1, mr: 1, textAlign: 'left' }}>
         <ConceptName />

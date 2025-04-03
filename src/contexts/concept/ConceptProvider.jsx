@@ -70,10 +70,11 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    if (selected.concept !== concept?.name && isConceptTreeReady(selected.concept)) {
-      setConcept(getConcept(selected.concept))
-      return
-    }
+    // if (selected.concept !== concept?.name && isConceptTreeReady(selected.concept)) {
+    //   setConcept(getConcept(selected.concept))
+    //   setEditing(false)
+    //   return
+    // }
 
     if (selected.concept !== concept?.name || selected.panel !== 'Concepts') {
       if (hasModifiedState({ initialState, stagedState })) {

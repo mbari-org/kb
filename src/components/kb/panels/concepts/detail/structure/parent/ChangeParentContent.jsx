@@ -4,42 +4,32 @@ import { Box, Stack, Typography, Autocomplete, TextField, Divider } from '@mui/m
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
+import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 const ChangeParentContent = () => {
   const theme = useTheme()
 
-  const [toParent, setToParent] = useState(null)
-
-  const { concept, modifyConcept } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
+  const { setModalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
+
+  const [parent, setParent] = useState(null)
 
   const optionNames = useMemo(() => {
     return getNames().filter(name => name !== concept.name && name !== concept.parent)
   }, [getNames, concept.name, concept.parent])
 
-  const setParent = toName => {
-    const parent = toName === null ? concept.parent : toName
-    modifyConcept({
-      type: CONCEPT_STATE.STRUCTURE.CHANGE_PARENT,
-      update: { parent: parent },
-    })
-    toName === null ? setToParent(null) : setToParent(toName)
-  }
-
   const handleChange = (_event, selectedName) => {
     setParent(selectedName)
+    setModalData({ parent: selectedName, modified: true })
   }
 
   const handleKeyUp = event => {
-    if (event.key === 'Enter') {
-      const conceptName = event.target.value.trim()
-      if (optionNames.includes(conceptName)) {
-        setParent(conceptName)
-      }
-    }
+    const conceptName = event.target.value.trim()
+    const modified = optionNames.includes(conceptName)
+    setParent(conceptName)
+    setModalData({ parent: conceptName, modified })
   }
 
   return (
@@ -91,11 +81,11 @@ const ChangeParentContent = () => {
                   fontWeight: theme.concept.fontWeight,
                   ml: -2,
                 }}
-                value={toParent}
+                value={parent}
               />
             )}
             size='small'
-            value={toParent}
+            value={parent}
             sx={{ width: '500px' }}
           />
           <Divider sx={{ marginTop: 1 }} />

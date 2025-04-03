@@ -4,29 +4,26 @@ import { Box, TextField, Typography, Stack } from '@mui/material' // Added Stack
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
+import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
-import useDebounceChangeName from './useDebounceChangeName'
 
 const ChangeNameContent = () => {
   const theme = useTheme()
 
-  const { concept, stagedState } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
+  const { modalData, setModalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
-  const debouncedChangePrimaryName = useDebounceChangeName()
 
   const fromColor = 'main'
-
-  const toColor =
-    stagedState.name === concept.name || getNames().includes(stagedState.name)
-      ? theme.palette.grey[500]
-      : theme.palette.primary.edit
+  const toColor = modalData.modified ? theme.palette.primary.edit : theme.palette.grey[500]
 
   const handleChange = event => {
-    setPrimaryName(event.target.value)
-    debouncedChangePrimaryName(event.target.value)
+    const { value } = event.target
+    setPrimaryName(value)
+    const modified = value !== concept.name && !getNames().includes(value)
+    setModalData({ name: value, modified })
   }
 
   return (

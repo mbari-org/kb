@@ -26,7 +26,7 @@ const StagedDetails = () => {
   )
 
   const editComponent = edit => {
-    const [field, { _initial, staged }] = edit
+    const [field, { staged }] = edit
     switch (field) {
       case 'aliases':
         return <AliasesDetail key={field} edit={edit} />

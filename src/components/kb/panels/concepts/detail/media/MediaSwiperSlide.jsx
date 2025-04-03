@@ -12,7 +12,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const slideClick = mediaIndex => swiper.slideTo(mediaIndex)
 
-  const border = fieldBorder(CONCEPT_STATE.MEDIA, mediaItem, theme, '1px', theme.palette.grey[300])
+  const border = fieldBorder(CONCEPT_STATE.MEDIA, mediaItem, theme, '2px', theme.palette.grey[300])
 
   return (
     <img

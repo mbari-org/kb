@@ -26,8 +26,8 @@ const ChangeStructureChoices = ({ closeChoices }) => {
   const conceptHasParentUpdate = stagedState.parent !== concept.parent
 
   const addChild = useAddChild(closeChoices)
-  const changeName = useChangeName()
-  const changeParent = useChangeParent()
+  const changeName = useChangeName(closeChoices)
+  const changeParent = useChangeParent(closeChoices)
   const deleteConcept = useDeleteConcept(closeChoices)
 
   const disableChangeName = isRoot || nameHasPendingHistory || conceptHasNameUpdate

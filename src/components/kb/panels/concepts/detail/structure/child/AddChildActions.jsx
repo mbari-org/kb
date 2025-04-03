@@ -38,13 +38,13 @@ const AddChildActions = () => {
 
   const onAction = label => {
     switch (label) {
-      case CONTINUE:
-        modifyConcept({ type: CONFIRMED.NO })
-        break
-
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONFIRMED.YES })
         closeModal(true)
+        break
+
+      case CONTINUE:
+        modifyConcept({ type: CONFIRMED.NO })
         break
 
       case DISCARD:

@@ -4,22 +4,24 @@ import { isResetAction, resetConceptState } from '@/contexts/concept/lib/edit/re
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
+const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
+
 const useModifyConcept = (dispatch, initialState, setConfirmReset, setEditing) => {
   const [confirmAction, setConfirmAction] = useState(null)
 
   return useCallback(
     action => {
-      if (action.type === CONCEPT_STATE.RESET.CONFIRMED.NO) {
+      if (action.type === CONFIRMED.NO) {
         setConfirmAction(null)
         setConfirmReset(false)
         return
       }
 
-      if (action.type === CONCEPT_STATE.RESET.CONFIRMED.YES) {
+      if (action.type === CONFIRMED.YES) {
         resetConceptState(confirmAction, dispatch, initialState)
         setConfirmAction(null)
         setConfirmReset(false)
-        if (confirmAction.type === CONCEPT_STATE.RESET.TO_INITIAL) {
+        if (confirmAction.type === TO_INITIAL) {
           setEditing(false)
         }
         return

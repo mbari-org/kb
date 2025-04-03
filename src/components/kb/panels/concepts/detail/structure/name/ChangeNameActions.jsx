@@ -4,40 +4,63 @@ import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
+const { CHANGE_NAME } = CONCEPT_STATE.STRUCTURE
+const { SET } = CONCEPT_STATE.FIELD
+const { CONFIRMED } = CONCEPT_STATE.RESET
+const { CONFIRM_DISCARD, CONTINUE, DISCARD } = LABELS.ACTION
 const { ASSOCIATED_DATA, NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
-const { DISCARD } = LABELS.ACTION
 
 const ChangeNameActions = () => {
-  const { concept, stagedState, modifyConcept } = use(ConceptContext)
-  const { closeModal } = use(ModalContext)
-  const { getNames } = use(TaxonomyContext)
+  const { concept, confirmReset, modifyConcept } = use(ConceptContext)
+  const { closeModal, modalData } = use(ModalContext)
 
-  const colors = ['cancel', 'main', 'main']
-  const disabled =
-    concept.name !== stagedState.name && !getNames().includes(stagedState.name)
-      ? [false, false, false]
-      : [false, true, true]
-  const labels = [DISCARD, NAME_ONLY, ASSOCIATED_DATA]
+  let colors, disabled, labels
+
+  if (confirmReset) {
+    colors = ['cancel', 'main']
+    disabled = [false, !modalData.modified]
+    labels = [CONFIRM_DISCARD, CONTINUE]
+  } else {
+    colors = ['cancel', 'main', 'main']
+    disabled = modalData.modified ? [false, false, false] : [false, true, true]
+    labels = [DISCARD, NAME_ONLY, ASSOCIATED_DATA]
+  }
 
   const onAction = label => {
-    if (label !== DISCARD) {
-      modifyConcept({
-        type: CONCEPT_STATE.STRUCTURE.CHANGE_NAME,
-        update: { field: 'nameChange', value: label },
-      })
-    } else {
-      modifyConcept({
-        type: CONCEPT_STATE.FIELD.SET,
-        update: { field: 'name', value: concept.name },
-      })
-    }
+    switch (label) {
+      case ASSOCIATED_DATA:
+      case NAME_ONLY:
+        modifyConcept({
+          type: SET,
+          update: { field: 'name', value: modalData.name },
+        })
+        modifyConcept({
+          type: CHANGE_NAME,
+          update: { field: 'nameChange', value: label },
+        })
+        closeModal(true)
+        break
 
-    closeModal()
+      case CONFIRM_DISCARD:
+        modifyConcept({
+          type: CONFIRMED.YES,
+          update: { name: concept.name },
+        })
+        closeModal(true)
+        break
+
+      case CONTINUE:
+        modifyConcept({ type: CONFIRMED.NO })
+        break
+
+      case DISCARD:
+        closeModal()
+        break
+    }
   }
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')

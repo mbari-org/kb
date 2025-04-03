@@ -1,4 +1,4 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
@@ -9,30 +9,41 @@ import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
+const { CONFIRMED } = CONCEPT_STATE.RESET
 const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
-const { DISCARD, STAGE } = LABELS.ACTION
-
 const ChangeParentActions = () => {
-  const { stagedState, initialState, modifyConcept } = use(ConceptContext)
-  const { closeModal } = use(ModalContext)
-
-  const isDisabled = useMemo(() => {
-    return stagedState.parent === initialState.parent
-  }, [stagedState, initialState])
+  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { closeModal, modalData } = use(ModalContext)
 
   const colors = ['cancel', 'main']
-  const disabled = [false, isDisabled]
-  const labels = [DISCARD, STAGE]
+  const disabled = [false, !modalData.modified]
+  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
-    if (label === STAGE) {
-      modifyConcept({
-        type: CHANGE_PARENT,
-        update: { parent: stagedState.parent },
-      })
-    }
+    switch (label) {
+      case CONFIRM_DISCARD:
+        modifyConcept({ type: CONFIRMED.YES })
+        closeModal(true)
+        break
 
-    closeModal()
+      case CONTINUE:
+        modifyConcept({ type: CONFIRMED.NO })
+        break
+
+      case DISCARD:
+        closeModal()
+        break
+
+      case STAGE:
+        modifyConcept({
+          type: CHANGE_PARENT,
+          update: { parent: modalData.parent },
+        })
+        closeModal(true)
+
+        break
+    }
   }
 
   return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
