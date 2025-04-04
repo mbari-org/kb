@@ -1,34 +1,29 @@
-import { use, useMemo, useState } from 'react'
+import { use, useState } from 'react'
 
-import { Box, Stack, Typography, Autocomplete, TextField, Divider } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import ToConceptChoice from '../ToConceptChoice'
 
 const ChangeParentContent = () => {
   const theme = useTheme()
 
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ModalContext)
-  const { getNames } = use(TaxonomyContext)
 
-  const [parent, setParent] = useState(null)
-
-  const optionNames = useMemo(() => {
-    return getNames().filter(name => name !== concept.name && name !== concept.parent)
-  }, [getNames, concept.name, concept.parent])
+  const [toConcept, setToConcept] = useState(null)
 
   const handleChange = (_event, selectedName) => {
-    setParent(selectedName)
+    setToConcept(selectedName)
     setModalData({ parent: selectedName, modified: true })
   }
 
   const handleKeyUp = event => {
     const conceptName = event.target.value.trim()
-    const modified = optionNames.includes(conceptName)
-    setParent(conceptName)
+    const modified = conceptName !== concept.parent
+    setToConcept(conceptName)
     setModalData({ parent: conceptName, modified })
   }
 
@@ -47,49 +42,14 @@ const ChangeParentContent = () => {
             {concept.parent}
           </Typography>
         </Stack>
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <Typography minWidth={60}>To:</Typography>
-          <Autocomplete
-            onChange={handleChange}
-            options={optionNames}
-            renderInput={params => (
-              <TextField
-                {...params}
-                fullWidth
-                onKeyUp={handleKeyUp}
-                sx={{
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none',
-                  },
-                  '& input': {
-                    color: theme.concept.color.edit,
-                    fontSize: theme.concept.updateFontSize,
-                    fontFamily: theme.concept.fontFamily,
-                    fontWeight: theme.concept.fontWeight,
-                  },
-                  '&:after': {
-                    borderBottom: `2px solid ${theme.palette.primary.main}`,
-                    content: '""',
-                  },
-                  '&:before': {
-                    border: 'none',
-                    content: '""',
-                  },
-                  border: 'none',
-                  fontSize: theme.concept.updateFontSize,
-                  fontFamily: theme.concept.fontFamily,
-                  fontWeight: theme.concept.fontWeight,
-                  ml: -2,
-                }}
-                value={parent}
-              />
-            )}
-            size='small'
-            value={parent}
-            sx={{ width: '500px' }}
-          />
-          <Divider sx={{ marginTop: 1 }} />
-        </Stack>
+        <ToConceptChoice
+          handleChange={handleChange}
+          handleKeyUp={handleKeyUp}
+          initialValue={null}
+          label='To'
+          omitChoices={[concept.name, concept.parent]}
+          value={toConcept}
+        />
       </Stack>
     </Box>
   )
