@@ -24,12 +24,9 @@ const EditAliasActions = () => {
   const isModified = Object.values(modified).some(isModified => isModified === true)
 
   const validName = !modified.name || (alias.name !== '' && !getNames().includes(alias.name))
-  const validAuthor = !modified.author || alias.author !== ''
-
-  const isValidChange = validName && validAuthor
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !isModified || !isValidChange]
+  const disabled = [false, !isModified || !validName]
   const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {

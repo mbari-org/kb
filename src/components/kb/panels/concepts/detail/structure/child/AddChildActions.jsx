@@ -23,7 +23,7 @@ const AddChildActions = () => {
   const { child, modified } = modalData
 
   const isValidChild = useMemo(() => {
-    if (child.name === '' || child.author === '') {
+    if (child.name === '') {
       return false
     }
     return (

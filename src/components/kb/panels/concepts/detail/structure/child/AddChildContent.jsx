@@ -103,7 +103,6 @@ const AddChildContent = () => {
           label='Author'
           name='author'
           onChange={handleFieldChange('author')}
-          required
           value={formChild.author}
         />
       </FormControl>

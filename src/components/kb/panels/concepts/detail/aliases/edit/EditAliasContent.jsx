@@ -88,13 +88,7 @@ const EditAliasContent = () => {
         />
       </FormControl>
       <FormControl {...inputStyle}>
-        <TextField
-          label='Author'
-          name='author'
-          onChange={handleChange}
-          required
-          value={formAlias.author}
-        />
+        <TextField label='Author' name='author' onChange={handleChange} value={formAlias.author} />
       </FormControl>
       <FormControl {...inputStyle}>
         <InputLabel id={`${formAlias.name}-name-type-label`}>Type</InputLabel>
