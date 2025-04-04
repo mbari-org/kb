@@ -5,11 +5,12 @@ import { Stack, Typography, Autocomplete, TextField, Divider } from '@mui/materi
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const ToConceptChoice = ({
+  error,
   handleChange,
   handleKeyUp,
-  initialValue,
   label,
   omitChoices,
+  required,
   value,
 }) => {
   const theme = useTheme()
@@ -28,8 +29,10 @@ const ToConceptChoice = ({
         renderInput={params => (
           <TextField
             {...params}
+            error={error}
             fullWidth
             onKeyUp={handleKeyUp}
+            required={required}
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
@@ -41,7 +44,9 @@ const ToConceptChoice = ({
                 fontWeight: theme.concept.fontWeight,
               },
               '&:after': {
-                borderBottom: `2px solid ${theme.palette.primary.main}`,
+                borderBottom: `2px solid ${
+                  error ? theme.palette.error.main : theme.palette.primary.main
+                }`,
                 content: '""',
               },
               '&:before': {

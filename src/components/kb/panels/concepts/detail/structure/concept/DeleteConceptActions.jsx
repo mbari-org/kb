@@ -16,12 +16,13 @@ const { CANCEL, DELETE } = LABELS.CONCEPT.ACTION
 const DeleteConceptActions = () => {
   const { concept, setEditing } = use(ConceptContext)
   const { apiFns } = use(ConfigContext)
-  const { closeModal } = use(ModalContext)
+  const { closeModal, modalData } = use(ModalContext)
   const { selectConcept } = use(SelectedContext)
   const { deleteConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
   const labels = [DELETE, CANCEL]
+  const disabled = [!modalData?.isValid, false]
 
   const onAction = label => {
     closeModal()
@@ -36,7 +37,7 @@ const DeleteConceptActions = () => {
     }
   }
 
-  return createActions({ colors, labels, onAction }, 'ConceptNameUpdateActions')
+  return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
 }
 
 export default DeleteConceptActions
