@@ -1,6 +1,6 @@
-import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/services/api/oni/media'
+import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/kb/api/media'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 import { pick } from '@/lib/util'
 

@@ -1,6 +1,6 @@
 import { capitalize } from '@/lib/util'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const NAME_TYPES = {
   COMMON: 'Common',
@@ -14,7 +14,7 @@ const ALIAS_TYPES = [NAME_TYPES.COMMON, NAME_TYPES.SYNONYM, NAME_TYPES.FORMER]
 
 const ALIAS_DISPLAY_FIELDS = ['name', 'author', 'nameType']
 
-import { fieldEdits } from '@/lib/kb/concept/field'
+import { fieldEdits } from '@/lib/kb/conceptState/field'
 
 const aliasEdits = ({ initial, staged }) =>
   fieldEdits({

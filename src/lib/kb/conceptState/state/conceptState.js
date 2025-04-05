@@ -1,7 +1,7 @@
-import { aliasesState } from '@/lib/kb/concept/state/aliases'
-import { fieldState } from '@/lib/kb/concept/state/field'
-import { mediaState } from '@/lib/kb/concept/state/media'
-import { structureState } from '@/lib/kb/concept/state/structure'
+import { aliasesState } from '@/lib/kb/conceptState/state/aliases'
+import { fieldState } from '@/lib/kb/conceptState/state/field'
+import { mediaState } from '@/lib/kb/conceptState/state/media'
+import { structureState } from '@/lib/kb/conceptState/state/structure'
 
 import { isEqual, isJsonEqual } from '@/lib/util'
 
@@ -80,9 +80,9 @@ export const isStateModified = (stagedState, initialState, field, index) => {
     }
 
     case FIELDS.PARENT: {
-      const editingparent = stagedState.parent
-      const initialparent = initialState.parent
-      return editingparent !== initialparent
+      const editingParent = stagedState.parent
+      const initialParent = initialState.parent
+      return editingParent !== initialParent
     }
 
     case FIELDS.PRIMARY.NAME: {

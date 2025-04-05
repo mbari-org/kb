@@ -1,6 +1,6 @@
-import { getPrimary, isPrimary } from '@/lib/kb/concept/media'
+import { getPrimary, isPrimary } from '@/lib/kb/conceptState/media'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const mediaState = concept => {
   const { media: conceptMedia } = concept

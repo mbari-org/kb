@@ -10,7 +10,7 @@ import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDis
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
-import { hasModifiedState } from '@/lib/kb/concept/state/conceptState'
+import { hasModifiedState } from '@/lib/kb/conceptState/state/conceptState'
 
 const { SAVE } = LABELS.ACTION
 

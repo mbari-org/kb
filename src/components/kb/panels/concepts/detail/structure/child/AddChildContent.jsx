@@ -11,8 +11,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import useInputStyle from './useInputStyle'
 import useStageChild from './useStageChild'
 
-// import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-import { RANK } from '@/lib/kb/concept/rank'
+// import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { RANK } from '@/lib/kb/conceptState/rank'
 
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 

@@ -1,4 +1,4 @@
-import { getConcept, getConceptPendingHistory } from '@/lib/kb/taxonomy'
+import { getConcept, getConceptPendingHistory } from '@/lib/kb/model/taxonomy'
 
 // conceptItem is for display needs. It is passed to the ConceptTreeItem component and contains
 //  necessary fields for custom display.

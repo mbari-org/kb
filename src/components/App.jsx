@@ -5,7 +5,7 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-d
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 
-import kbTheme from '@/lib/kb/theme'
+import kbTheme from '@/lib/theme'
 
 import AuthProvider from '@/contexts/auth/AuthProvider'
 import ConfigProvider from '@/contexts/config/ConfigProvider'

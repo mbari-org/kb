@@ -4,7 +4,7 @@ import ChildAdd from './ChildAdd'
 import ChildrenReset from './ChildrenReset'
 
 import { fieldSx } from '@/components/common/format'
-// import { childEdits } from '@/lib/kb/concept/children'
+// import { childEdits } from '@/lib/kb/conceptState/children'
 
 const ChildrenDetail = ({ edit }) => {
   const [_, children] = edit

@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 

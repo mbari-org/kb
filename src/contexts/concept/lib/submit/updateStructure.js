@@ -1,8 +1,4 @@
-import {
-  createConcept,
-  updateConceptName,
-  updateConceptParent,
-} from '@/lib/services/api/oni/concept'
+import { createConcept, updateConceptName, updateConceptParent } from '@/lib/kb/api/concept'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 

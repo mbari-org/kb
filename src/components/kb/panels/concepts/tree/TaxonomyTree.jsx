@@ -16,7 +16,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { conceptItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
-import { buildTree } from '@/lib/kb/taxonomy'
+import { buildTree } from '@/lib/kb/model/taxonomy'
 
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)

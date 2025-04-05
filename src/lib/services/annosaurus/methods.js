@@ -1,4 +1,4 @@
-import request from '@/lib/services/api/request'
+import request from '@/lib/services/request'
 
 const annosaurus = method => request('annosaurus', method)
 

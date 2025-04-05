@@ -1,4 +1,4 @@
-import { oniDelete, oniGet, oniPost, oniPut } from './methods'
+import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 
 const createAlias = async (config, alias) => oniPost(config, ['names'], alias)
 

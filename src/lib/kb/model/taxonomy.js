@@ -1,7 +1,7 @@
-import { fetchHistory } from '@/lib/services/api/oni/history'
-import { fetchNames, fetchRanks, fetchRoot } from '@/lib/services/api/oni/taxonomy'
+import { fetchHistory } from '@/lib/kb/api/history'
+import { fetchNames, fetchRanks, fetchRoot } from '@/lib/kb/api/taxonomy'
 
-import { filterRanks } from './concept/rank'
+import { filterRanks } from '@/lib/kb/conceptState/rank'
 
 import {
   addedConcepts,

@@ -14,7 +14,7 @@ import './mediaSwiper.css'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
   const { concept, stagedState, modifyConcept } = use(ConceptContext)

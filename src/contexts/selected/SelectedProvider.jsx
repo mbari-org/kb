@@ -5,7 +5,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import selectedStore from '@/lib/store/selected'
 
-import panels from '@/lib/kb/panels'
+import panels from '@/components/kb/panels/panels'
 
 const SelectedProvider = ({ children }) => {
   const { taxonomy } = use(TaxonomyContext)

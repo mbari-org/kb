@@ -4,7 +4,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { formatDelta } from '@/components/common/format'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const MediaItemDetail = ({ action, initial, updates }) => {
   let fieldValues

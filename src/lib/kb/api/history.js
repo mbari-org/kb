@@ -1,4 +1,4 @@
-import { oniGet, oniPut } from './methods'
+import { oniGet, oniPut } from '@/lib/services/oni/methods'
 
 const fetchHistory = async (config, action) => {
   const { error, payload } = await oniGet(config, ['history', action])

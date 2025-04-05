@@ -9,9 +9,9 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
-import { fieldBorder } from '@/lib/kb/concept/field'
+import { fieldBorder } from '@/lib/kb/conceptState/field'
 
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()

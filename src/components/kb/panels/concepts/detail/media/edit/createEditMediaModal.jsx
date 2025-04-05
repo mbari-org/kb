@@ -6,7 +6,7 @@ import EditMediaTitle from '@/components/kb/panels/concepts/detail/media/edit/Ed
 
 import { createModal } from '@/components/modal/factory'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const createEditMediaModal = action => {
   const createComponents = () => {

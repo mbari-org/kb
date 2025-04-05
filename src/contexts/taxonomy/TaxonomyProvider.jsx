@@ -24,7 +24,7 @@ import {
   refreshTaxonomyConcept,
   refreshTaxonomyHistory,
   cxDebugTaxonomyIntegrity,
-} from '@/lib/kb/taxonomy'
+} from '@/lib/kb/model/taxonomy'
 
 import { isAdmin } from '@/lib/auth/role'
 

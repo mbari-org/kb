@@ -1,6 +1,6 @@
-import { createAlias, deleteAlias, updateAlias } from '@/lib/services/api/oni/aliases'
+import { createAlias, deleteAlias, updateAlias } from '@/lib/kb/api/aliases'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const { ALIAS } = CONCEPT_STATE
 

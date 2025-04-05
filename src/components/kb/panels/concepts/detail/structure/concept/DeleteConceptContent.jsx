@@ -8,7 +8,8 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import { countAnnotations } from '@/lib/services/api/annosaurus/annotations'
+
+import { fetchConceptAnnotations } from '@/lib/kb/api/annotations'
 
 const DeleteConceptContent = () => {
   const { apiFns } = use(ConfigContext)
@@ -48,7 +49,7 @@ const DeleteConceptContent = () => {
   }, [concept.parent, setModalData])
 
   useEffect(() => {
-    apiFns.apiPayload(countAnnotations, concept.name).then(annotations => {
+    apiFns.apiPayload(fetchConceptAnnotations, concept.name).then(annotations => {
       setAnnotationCount(annotations.length)
     })
   }, [apiFns, concept.name])

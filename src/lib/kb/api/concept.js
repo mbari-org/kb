@@ -1,21 +1,26 @@
-import { oniDelete, oniGet, oniPost, oniPut } from './methods'
+import { annosaurusGet } from '@/lib/services/annosaurus/methods'
+import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 
 const createConcept = async (config, updates) => oniPost(config, ['concept'], updates)
 
 const deleteConcept = async (config, conceptName) => oniDelete(config, ['concept', conceptName])
 
-const fetchChildren = async (config, conceptName) =>
-  oniGet(config, ['concept', 'children', conceptName])
-
 const fetchConcept = async (config, conceptName) => oniGet(config, ['concept', conceptName])
 
-const fetchLinkRealizations = async (config, conceptName) =>
+const fetchConceptAnnotations = async (config, conceptName) =>
+  annosaurusGet(config, ['fast', 'concept', conceptName])
+
+const fetchConceptChildren = async (config, conceptName) =>
+  oniGet(config, ['concept', 'children', conceptName])
+
+const fetchConceptParent = async (config, conceptName) =>
+  oniGet(config, ['concept', 'parent', conceptName])
+
+const fetchConceptLinkRealizations = async (config, conceptName) =>
   oniGet(config, ['linkrealizations', 'concept', conceptName])
 
-const fetchNames = async (config, conceptName) => oniGet(config, ['raw', 'names', conceptName])
-
-const fetchParent = async (config, conceptName) =>
-  oniGet(config, ['concept', 'parent', conceptName])
+const fetchConceptNames = async (config, conceptName) =>
+  oniGet(config, ['raw', 'names', conceptName])
 
 const updateConceptAuthor = async (config, [conceptName, updates]) =>
   oniPut(config, ['names', conceptName], updates)
@@ -32,11 +37,12 @@ const updateConceptRank = async (config, [conceptName, updates]) =>
 export {
   createConcept,
   deleteConcept,
-  fetchChildren,
   fetchConcept,
-  fetchLinkRealizations,
-  fetchNames,
-  fetchParent,
+  fetchConceptAnnotations,
+  fetchConceptChildren,
+  fetchConceptLinkRealizations,
+  fetchConceptNames,
+  fetchConceptParent,
   updateConceptAuthor,
   updateConceptName,
   updateConceptParent,

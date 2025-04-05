@@ -4,7 +4,7 @@ import EditReset from '@/components/kb/panels/concepts/stagedState/edits/EditRes
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const { RESET } = CONCEPT_STATE
 

@@ -8,7 +8,7 @@ import SubmitError from '@/components/common/SubmitError'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { loginUser } from '@/lib/services/api/oni/auth/login'
+import { loginUser } from '@/lib/services/auth/login'
 
 const LoginForm = () => {
   const { processAuth } = use(AuthContext)

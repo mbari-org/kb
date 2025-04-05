@@ -1,6 +1,6 @@
 import { isJsonEqual, pick } from '@/lib/util'
 
-import { ALIAS_TYPES } from '@/lib/kb/concept/aliases'
+import { ALIAS_TYPES } from '@/lib/kb/conceptState/aliases'
 
 const ALIAS_FIELDS = ['author', 'name', 'nameType']
 const aliasFields = alias => pick(alias, ALIAS_FIELDS)

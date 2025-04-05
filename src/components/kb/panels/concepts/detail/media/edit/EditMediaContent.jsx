@@ -18,10 +18,10 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import useStageMedia from './useStageMedia'
 
-import { hasPrimary, isPrimary } from '@/lib/kb/concept/media'
+import { hasPrimary, isPrimary } from '@/lib/kb/conceptState/media'
 import { checkImageUrlExists, isUrlValid } from '@/lib/util'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'

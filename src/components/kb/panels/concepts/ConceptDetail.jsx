@@ -12,8 +12,8 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
-import { RANK } from '@/lib/kb/concept/rank'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { RANK } from '@/lib/kb/conceptState/rank'
 
 import { isAdmin } from '@/lib/auth/role'
 import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'

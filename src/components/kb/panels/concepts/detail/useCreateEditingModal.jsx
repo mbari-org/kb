@@ -5,7 +5,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { createModal } from '@/components/modal/factory'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const useCreateEditingModal = (components, onClose) => {
   const { setModal } = use(ModalContext)

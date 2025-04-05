@@ -5,9 +5,9 @@ import { BsInfoCircle } from 'react-icons/bs'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/concept/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
-import { fieldBorder } from '@/lib/kb/concept/field'
+import { fieldBorder } from '@/lib/kb/conceptState/field'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()

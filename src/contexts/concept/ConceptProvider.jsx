@@ -15,7 +15,11 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import conceptStateReducer from '@/contexts/concept/lib/edit/conceptStateReducer'
 
-import { CONCEPT_STATE, conceptState, hasModifiedState } from '@/lib/kb/concept/state/conceptState'
+import {
+  CONCEPT_STATE,
+  conceptState,
+  hasModifiedState,
+} from '@/lib/kb/conceptState/state/conceptState'
 
 import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
 
