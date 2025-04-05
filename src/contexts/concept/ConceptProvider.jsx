@@ -1,18 +1,18 @@
-import { use, useEffect, useMemo, useReducer, useState } from 'react'
+import { use, useEffect, useMemo, useReducer, useState, useRef } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
-
-import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
 
 import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 
+import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
 import conceptStateReducer from '@/contexts/concept/lib/edit/conceptStateReducer'
 
 import {
@@ -27,10 +27,11 @@ const { CONTINUE } = LABELS.ACTION
 
 const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
+  const isLoading = useRef(false)
 
   const { modalData, setModalData } = use(ModalContext)
   const { selected } = use(SelectedContext)
-  const { getConcept, getConceptPendingHistory, isConceptTreeReady, loadConcept, taxonomy } =
+  const { getConcept, getConceptPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
@@ -67,18 +68,12 @@ const ConceptProvider = ({ children }) => {
       setInitialState(initialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
     }
-  }, [concept, getConcept, getConceptPendingHistory])
+  }, [concept, getConcept, getConceptPendingHistory, setConcept])
 
   useEffect(() => {
     if (!selected) {
       return
     }
-
-    // if (selected.concept !== concept?.name && isConceptTreeReady(selected.concept)) {
-    //   setConcept(getConcept(selected.concept))
-    //   setEditing(false)
-    //   return
-    // }
 
     if (selected.concept !== concept?.name || selected.panel !== 'Concepts') {
       if (hasModifiedState({ initialState, stagedState })) {
@@ -87,16 +82,19 @@ const ConceptProvider = ({ children }) => {
           setModalData({ warning: true })
         }
       } else {
-        if (isConceptTreeReady(selected.concept)) {
+        if (isConceptLoaded(selected.concept)) {
           setConcept(getConcept(selected.concept))
-        } else {
+        } else if (!isLoading.current) {
+          isLoading.current = true
           setEditing(false)
-          loadConcept(selected.concept).then(
-            loadedConcept => {
+          loadConcept(selected.concept)
+            .then(loadedConcept => {
               setConcept(loadedConcept)
-            },
-            error => showBoundary(error)
-          )
+            })
+            .catch(error => showBoundary(error))
+            .finally(() => {
+              isLoading.current = false
+            })
         }
       }
     }
@@ -104,7 +102,7 @@ const ConceptProvider = ({ children }) => {
     concept,
     getConcept,
     initialState,
-    isConceptTreeReady,
+    isConceptLoaded,
     loadConcept,
     modalData,
     selected,

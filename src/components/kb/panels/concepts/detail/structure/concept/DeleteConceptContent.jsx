@@ -4,20 +4,15 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ToConceptChoice from '../ToConceptChoice'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { fetchConceptAnnotations } from '@/lib/kb/api/annotations'
-
 const DeleteConceptContent = () => {
-  const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
 
-  const [annotationCount, setAnnotationCount] = useState(0)
   const [toConcept, setToConcept] = useState(concept.parent)
   const [isValid, setIsValid] = useState(true)
 
@@ -28,6 +23,8 @@ const DeleteConceptContent = () => {
   const validateChoice = choice => {
     return choice && allowedChoices.includes(choice)
   }
+
+  const annotationCount = concept.annotations.length
 
   const handleChange = (_event, selectedName) => {
     setToConcept(selectedName)
@@ -47,12 +44,6 @@ const DeleteConceptContent = () => {
   useEffect(() => {
     setModalData({ parent: concept.parent, modified: true, isValid: true })
   }, [concept.parent, setModalData])
-
-  useEffect(() => {
-    apiFns.apiPayload(fetchConceptAnnotations, concept.name).then(annotations => {
-      setAnnotationCount(annotations.length)
-    })
-  }, [apiFns, concept.name])
 
   return (
     <Box>

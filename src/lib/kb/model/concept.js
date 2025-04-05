@@ -1,7 +1,7 @@
 import {
   fetchConcept,
+  fetchConceptAnnotations,
   fetchConceptChildren,
-  fetchConceptLinkRealizations,
   fetchConceptNames,
   fetchConceptParent,
 } from '@/lib/kb/api/concept'
@@ -27,19 +27,6 @@ const addedConcepts = (parent, updateInfo) => {
   }))
 }
 
-const complete = async (concept, apiPayload) => {
-  if (!incompleteConcept(concept)) {
-    return { concept, wasComplete: true }
-  }
-
-  const aliases = await apiPayload(fetchConceptNames, concept.name)
-
-  const updatedConcept = { ...concept }
-  updatedConcept.aliases = orderedAliases(aliases)
-  return { concept: updatedConcept, wasComplete: false }
-}
-
-// CxInc
 const getNextSibling = (concept, getConcept) => {
   const parent = getConcept(concept.parent)
   if (concept && parent) {
@@ -67,52 +54,32 @@ const getPrevSibling = (concept, getConcept) => {
   return null
 }
 
-const incompleteConcept = concept => {
-  return (
-    !concept ||
-    !concept.children ||
-    concept.children.some(child => !child.children) ||
-    !concept.parent
-  )
-}
-
 const loadChildren = async (conceptName, apiPayload) => {
   const children = await apiPayload(fetchConceptChildren, conceptName)
   await Promise.all(
     children.map(async child => {
       child.parent = conceptName
-      const names = await apiPayload(fetchConceptNames, child.name)
-      child.aliases = orderedAliases(names)
     })
   )
   return children
 }
 
 const loadConcept = async (conceptName, apiPayload) => {
-  const [concept, names, linkRealizations] = await Promise.all([
-    apiPayload(fetchConcept, conceptName),
-    apiPayload(fetchConceptNames, conceptName),
-    apiPayload(fetchConceptLinkRealizations, conceptName),
-  ])
-  concept.aliases = orderedAliases(names)
-  concept.linkRealizations = linkRealizations
+  const concept = await apiPayload(fetchConcept, conceptName)
+  await loadConceptData(concept, apiPayload)
   return concept
 }
 
-// const loadConceptData = async (conceptName, apiPayload) => {
-//   const [annotations, linkRealizations] = await Promise.all([
-//     apiPayload(fetchConceptAnnotations, conceptName),
-//     apiPayload(fetchLinkRealizations, conceptName),
-//   ])
-//   return { annotations, linkRealizations }
-// }
-
-const loadParent = async (conceptName, apiPayload) => {
-  const parent = await apiPayload(fetchConceptParent, conceptName)
-  const aliases = await apiPayload(fetchConceptNames, parent.name)
-  parent.aliases = orderedAliases(aliases)
-  return parent
+const loadConceptData = async (concept, apiPayload) => {
+  const [aliases, annotations] = await Promise.all([
+    apiPayload(fetchConceptNames, concept.name),
+    apiPayload(fetchConceptAnnotations, concept.name),
+  ])
+  concept.aliases = orderedAliases(aliases)
+  concept.annotations = annotations
 }
+
+const loadParent = async (conceptName, apiPayload) => apiPayload(fetchConceptParent, conceptName)
 
 const refresh = async (concept, updateInfo, results, apiPayload) => {
   const { hasUpdated, updatedValue } = updateInfo
@@ -164,12 +131,11 @@ const refresh = async (concept, updateInfo, results, apiPayload) => {
 
 export {
   addedConcepts,
-  complete,
   getNextSibling,
   getPrevSibling,
-  incompleteConcept,
   loadChildren,
   loadConcept,
+  loadConceptData,
   loadParent,
   refresh,
 }

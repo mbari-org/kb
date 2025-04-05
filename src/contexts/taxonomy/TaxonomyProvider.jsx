@@ -15,7 +15,7 @@ import {
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
   getRoot as getTaxonomyRoot,
-  isConceptComplete as isTaxonomyConceptComplete,
+  isConceptLoaded as isTaxonomyConceptLoaded,
   isConceptTreeReady as isTaxonomyConceptTreeReady,
   isRoot as isTaxonomyRoot,
   loadTaxonomy,
@@ -94,8 +94,8 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy?.conceptMap, taxonomy?.rootName]
   )
 
-  const isConceptComplete = useCallback(
-    conceptName => isTaxonomyConceptComplete(taxonomy, conceptName),
+  const isConceptLoaded = useCallback(
+    conceptName => isTaxonomyConceptLoaded(taxonomy, conceptName),
     [taxonomy]
   )
 
@@ -106,36 +106,29 @@ const TaxonomyProvider = ({ children }) => {
 
   const isRoot = useCallback(concept => isTaxonomyRoot(taxonomy, concept), [taxonomy])
 
-  const isLoadingConcept = useRef(false)
+  const alreadyLoadingConcept = useRef(false)
 
   const loadConcept = async conceptName => {
-    if (isTaxonomyConceptTreeReady(taxonomy, conceptName)) {
-      return taxonomy.conceptMap[conceptName]
-    }
-
-    if (isLoadingConcept.current) {
-      return taxonomy.conceptMap[conceptName]
+    if (alreadyLoadingConcept.current) {
+      return
     }
 
     try {
-      isLoadingConcept.current = true
+      alreadyLoadingConcept.current = true
       setProcessing(LOADING)
 
-      const { taxonomy: updatedTaxonomy, wasComplete } = await loadTaxonomyConcept(
+      const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(
         taxonomy,
         conceptName,
         apiPayload
       )
+      updateTaxonomy(updatedTaxonomy)
 
       setProcessing(null)
 
-      if (!wasComplete) {
-        updateTaxonomy(updatedTaxonomy)
-      }
-
       return updatedTaxonomy.conceptMap[conceptName]
     } finally {
-      isLoadingConcept.current = false
+      alreadyLoadingConcept.current = false
     }
   }
 
@@ -213,7 +206,7 @@ const TaxonomyProvider = ({ children }) => {
         getConceptPrimaryName,
         getNames,
         getRoot,
-        isConceptComplete,
+        isConceptLoaded,
         isConceptTreeReady,
         isRoot,
         loadConcept,
