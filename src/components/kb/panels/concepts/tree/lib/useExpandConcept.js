@@ -6,10 +6,11 @@ import { itemPath } from './taxonomyItem'
 
 import Expand from './expandedEnum'
 
-const allLeafs = (concept, leafs = []) => {
-  if (concept.children && 0 < concept.children.length) {
+const allLeafs = (taxonomy, conceptName, leafs = []) => {
+  const concept = taxonomy.conceptMap[conceptName]
+  if (0 < concept.children.length) {
     leafs.push(concept.name)
-    concept.children.forEach(child => allLeafs(child, leafs))
+    concept.children.forEach(child => allLeafs(taxonomy, child, leafs))
   }
   return leafs
 }
@@ -41,8 +42,8 @@ const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
 
   const descendants = useCallback(
     concept => {
-      loadConceptDescendants(concept).then(() => {
-        const leafs = allLeafs(concept)
+      loadConceptDescendants(concept).then(updatedTaxonomy => {
+        const leafs = allLeafs(updatedTaxonomy, concept.name)
         setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
       })
     },

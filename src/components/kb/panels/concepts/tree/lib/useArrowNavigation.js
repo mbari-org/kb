@@ -60,20 +60,14 @@ const useArrowNavigation = (
         }
 
         case 'ArrowLeft': {
-          if (isExpanded(concept)) {
-            expandConcept(concept, Expand.OFF)
-          } else {
-            navToConceptName = concept.parent
-          }
+          isExpanded(concept)
+            ? expandConcept(concept, Expand.OFF)
+            : (navToConceptName = concept.parent)
           break
         }
 
         case 'ArrowRight':
-          if (event.altKey && event.ctrlKey) {
-            expandConcept(concept, Expand.DESCENDANTS)
-          } else {
-            expandConcept(concept, Expand.ON)
-          }
+          expandConcept(concept, event.altKey && event.ctrlKey ? Expand.DESCENDANTS : Expand.ON)
           break
         default:
           break

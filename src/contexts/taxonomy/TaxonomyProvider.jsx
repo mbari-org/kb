@@ -135,13 +135,15 @@ const TaxonomyProvider = ({ children }) => {
   const loadConceptDescendants = async concept => {
     try {
       setProcessing(LOADING)
-      const { taxonomy: taxonomyWithDescendants } = await loadTaxonomyConceptDescendants(
-        apiPayload,
+      const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(
         taxonomy,
-        concept
+        concept,
+        apiPayload
       )
-      updateTaxonomy(taxonomyWithDescendants)
+      updateTaxonomy(updatedTaxonomy)
       setProcessing(null)
+
+      return updatedTaxonomy
     } catch (error) {
       setProcessing(null)
       showBoundary(error)

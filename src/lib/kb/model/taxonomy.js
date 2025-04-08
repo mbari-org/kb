@@ -254,22 +254,39 @@ const loadTaxonomyConceptChildren = async (taxonomy, conceptName, apiPayload) =>
   return concept.children
 }
 
-const loadTaxonomyConceptDescendants = async (concept, apiPayload) => {
-  const children = await loadChildren(concept, apiPayload)
-  concept.children = children
+const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => {
+  const updatedTaxonomy = { ...taxonomy }
+  const descendants = [...concept.children]
 
-  // for (const child of children) {
-  //   await loadConceptDescendants(child, apiPayload)
-  // }
-  // const updatableTaxonomy = updatable ? taxonomy : { ...taxonomy }
-  // const updatableConcept = { ...concept }
-  // await loadConceptChildren(apiPayload, updatableTaxonomy, updatableConcept)
-  // if (updatableConcept.children) {
-  //   for (const child of updatableConcept.children) {
-  //     await loadConceptDescendants(apiPayload, updatableTaxonomy, child, true)
-  //   }
-  // }
-  // return { taxonomy: updatableTaxonomy }
+  while (0 < descendants.length) {
+    const descendantName = descendants.shift()
+    const descendant = getConcept(updatedTaxonomy, descendantName)
+
+    if (!descendant) {
+      throw new Error(`Concept not found in taxonomy: ${descendantName}`)
+    }
+
+    if (descendant && !descendant.children) {
+      console.log('descendant:', descendant)
+      const children = await loadChildren(descendant.name, apiPayload)
+      descendant.children = children.map(c => c.name)
+      console.log('descendant children:', children)
+      children.reduce((acc, c) => {
+        mapConcept(updatedTaxonomy, c)
+        if (c.name === '') {
+          console.log('descendant has empty child:', descendant)
+        }
+
+        acc.push(c.name)
+        return acc
+      }, descendants)
+      mapConcept(updatedTaxonomy, descendant)
+    } else if (descendant?.children) {
+      descendants.push(...descendant.children)
+    }
+  }
+
+  return { taxonomy: updatedTaxonomy }
 }
 
 const loadTaxonomyHistory = async apiPayload => {
