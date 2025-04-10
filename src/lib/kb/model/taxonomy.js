@@ -106,14 +106,9 @@ const getRoot = (conceptMap, rootName) => conceptMap[rootName]
 const isConceptLoaded = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return (
-    concept && concept.aliases && concept.annotations && isConceptTreeReady(taxonomy, conceptName)
-  )
-}
-
-const isConceptTreeReady = (taxonomy, conceptName) => {
-  const concept = getConcept(taxonomy, conceptName)
-  return (
     concept &&
+    concept.aliases &&
+    concept.annotations &&
     concept.children &&
     concept.children.every(child => taxonomy.conceptMap[child].children) &&
     (concept.name === taxonomy.rootName || concept.parent)
@@ -475,7 +470,6 @@ export {
   getNames,
   getRoot,
   isConceptLoaded,
-  isConceptTreeReady,
   isRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
