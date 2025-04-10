@@ -15,7 +15,6 @@ const submitUpdates = async (apiPayload, concept, initialState, stagedState) => 
   submitters.push(...updateDetail(submitterInfo))
   submitters.push(...updateMedia(submitterInfo))
   submitters.push(...updateStructure(submitterInfo))
-
   const results = await Promise.all(submitters)
 
   return { updateInfo, results }

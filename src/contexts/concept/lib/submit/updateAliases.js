@@ -13,14 +13,6 @@ const updateAliases = ([submit, { concept, updateInfo }]) => {
     return []
   }
 
-  // const aliasUpdates = updatedValue('aliases').reduce((acc, aliasUpdate, index) => {
-  //   console.log('initial aliases', initialValue('aliases'))
-  //   if (aliasUpdate.action !== NO_ACTION) {
-  //     acc.push({ ...aliasUpdate, index })
-  //   }
-  //   return acc
-  // }, [])
-
   const submitters = updatedValue('aliases').reduce((acc, update, index) => {
     switch (update.action) {
       case ALIAS.ADD: {

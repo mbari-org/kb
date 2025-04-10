@@ -24,7 +24,7 @@ const changeName = (state, update) => {
 const changeParent = (state, update) => {
   return {
     ...state,
-    parent: update.parent,
+    ...update,
   }
 }
 

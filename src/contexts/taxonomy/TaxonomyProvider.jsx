@@ -16,6 +16,7 @@ import {
   getNames as getTaxonomyNames,
   getRoot as getTaxonomyRoot,
   isConceptLoaded as isTaxonomyConceptLoaded,
+  isDescendant as isDescendantConcept,
   isRoot as isTaxonomyRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
@@ -95,6 +96,11 @@ const TaxonomyProvider = ({ children }) => {
 
   const isConceptLoaded = useCallback(
     conceptName => isTaxonomyConceptLoaded(taxonomy, conceptName),
+    [taxonomy]
+  )
+
+  const isDescendant = useCallback(
+    (conceptName, descendantName) => isDescendantConcept(taxonomy, conceptName, descendantName),
     [taxonomy]
   )
 
@@ -203,6 +209,7 @@ const TaxonomyProvider = ({ children }) => {
         getNames,
         getRoot,
         isConceptLoaded,
+        isDescendant,
         isRoot,
         loadConcept,
         loadConceptDescendants,

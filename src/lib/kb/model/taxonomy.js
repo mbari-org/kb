@@ -115,6 +115,17 @@ const isConceptLoaded = (taxonomy, conceptName) => {
   )
 }
 
+const isDescendant = (taxonomy, conceptName, descendantName) => {
+  const concept = getConcept(taxonomy, conceptName)
+  if (!concept) {
+    return false
+  }
+  if (concept.name === descendantName) {
+    return true
+  }
+  return concept.children.some(child => isDescendant(taxonomy, child, descendantName))
+}
+
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
 const loadTaxonomy = async apiPayload => {
@@ -470,6 +481,7 @@ export {
   getNames,
   getRoot,
   isConceptLoaded,
+  isDescendant,
   isRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
