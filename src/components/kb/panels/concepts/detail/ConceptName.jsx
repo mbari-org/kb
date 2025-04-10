@@ -7,6 +7,8 @@ import ApprovalButton from '@/components/kb/panels/concepts/detail/ApprovalButto
 import ChangeStructureButton from './structure/ConceptStructureButton'
 import ChangeStructureChoices from './structure/ConceptStructureChoices'
 
+import useStructureChoices from '@/components/kb/panels/concepts/detail/structure/useStructureChoices'
+
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
@@ -19,15 +21,21 @@ const ConceptName = () => {
   const { user } = use(AuthContext)
   const { concept, editing, stagedState, pendingHistory } = use(ConceptContext)
 
-  const [showStructureChoices, setShowStructureChoices] = useState(false)
+  const { disableChangeName, disableChangeParent } = useStructureChoices()
+
+  const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
 
   const namePendingHistory = getFieldPendingHistory(pendingHistory, 'ConceptName')
   const conceptHasNameUpdate = stagedState.name !== concept?.name
   const conceptHasParentUpdate = stagedState.parent !== concept?.parent
 
   const showApprovalButton =
-    isAdmin(user) && editing && !!namePendingHistory && !showStructureChoices
-  const showStructureButton = !isReadOnly(user) && editing && !showStructureChoices
+    isAdmin(user) && editing && !!namePendingHistory && !showStructureChoicesModal
+  const showStructureButton =
+    !isReadOnly(user) &&
+    editing &&
+    !showStructureChoicesModal &&
+    (!disableChangeName || !disableChangeParent)
 
   const conceptColor =
     !!namePendingHistory || conceptHasNameUpdate || conceptHasParentUpdate
@@ -53,7 +61,7 @@ const ConceptName = () => {
       {showStructureButton && (
         <ChangeStructureButton onClick={() => setShowStructureChoices(true)} />
       )}
-      {showStructureChoices && (
+      {showStructureChoicesModal && (
         <ChangeStructureChoices closeChoices={() => setShowStructureChoices(false)} />
       )}
     </Stack>

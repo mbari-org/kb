@@ -1,5 +1,3 @@
-import { use, useMemo } from 'react'
-
 import { Box, Button, IconButton, Modal, Stack } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
@@ -8,34 +6,15 @@ import useChangeName from '@/components/kb/panels/concepts/detail/structure/name
 import useChangeParent from '@/components/kb/panels/concepts/detail/structure/parent/useChangeParent'
 import useDeleteConcept from '@/components/kb/panels/concepts/detail/structure/concept/useDeleteConcept'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
-import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
-import { hasStateChange } from '@/contexts/concept/lib/edit/stateUpdates'
+import useStructureChoices from '@/components/kb/panels/concepts/detail/structure/useStructureChoices'
 
 const ChangeStructureChoices = ({ closeChoices }) => {
-  const { concept, initialState, stagedState, pendingHistory } = use(ConceptContext)
-  const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
-
-  const isRoot = isTaxonomyRoot(concept)
-  const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
-
-  const conceptHasChildren = concept.children.length > 0 || stagedState.children.length > 0
-  const conceptHasNameUpdate = !!stagedState.nameChange
-  const conceptHasParentUpdate = stagedState.parent !== concept.parent
+  const { disableDelete, disableChangeName, disableChangeParent } = useStructureChoices()
 
   const addChild = useAddChild(closeChoices)
   const changeName = useChangeName(closeChoices)
   const changeParent = useChangeParent(closeChoices)
   const deleteConcept = useDeleteConcept(closeChoices)
-
-  const disableChangeName = isRoot || nameHasPendingHistory || conceptHasNameUpdate
-  const disableChangeParent = isRoot || conceptHasParentUpdate
-  const disableDelete = useMemo(
-    () => isRoot || conceptHasChildren || hasStateChange(initialState, stagedState),
-    [conceptHasChildren, initialState, isRoot, stagedState]
-  )
 
   return (
     <Modal open={true} onClose={closeChoices}>
