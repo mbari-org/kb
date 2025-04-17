@@ -2,7 +2,7 @@ import { oniGet, oniPut } from '@/lib/services/oni/methods'
 
 const fetchHistory = async (config, action) => {
   const { error, payload } = await oniGet(config, ['history', action])
-  return { error, payload: payload.content }
+  return { error, payload: payload?.content }
 }
 
 const sendPendingAction = async (config, action, pendingId) =>
