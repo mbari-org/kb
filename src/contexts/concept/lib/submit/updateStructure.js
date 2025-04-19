@@ -13,7 +13,7 @@ const updateStructure = ([submit, { concept, updateInfo }]) => {
     submitters.push(submit(updateConceptName, [concept.name, { name: updatedValue('name') }]))
   }
 
-  if (hasUpdated('nameChange') && updatedValue('nameChange') === ASSOCIATED_DATA) {
+  if (updatedValue('nameChange') === ASSOCIATED_DATA) {
     console.log('CxInc nameChange of associated data', updatedValue('nameChange'))
     // submitters.push(submit(updateConceptName, { name: nameChange }))
   }

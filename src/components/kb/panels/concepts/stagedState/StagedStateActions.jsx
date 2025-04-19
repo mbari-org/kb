@@ -53,18 +53,17 @@ const StagedStateActions = ({ intent }) => {
       case SAVE:
         closeModal()
         setProcessing(SAVING)
-        submitUpdates(apiFns.apiPayload, concept, initialState, stagedState).then(
-          ({ updateInfo, results }) => {
-            refreshConcept(concept, updateInfo, results).then(updatedConcept => {
-              setEditing(false)
-              setProcessing(null)
-              const { hasUpdated } = updateInfo
-              if (hasUpdated('name')) {
-                selectConcept(updatedConcept.name)
-              }
-            })
-          }
-        )
+        submitUpdates(apiFns.apiPayload, concept, initialState, stagedState).then(updateInfo => {
+          refreshConcept(concept, updateInfo).then(updatedConcept => {
+            const { hasUpdated } = updateInfo
+
+            setEditing(false)
+            setProcessing(null)
+            if (hasUpdated('name')) {
+              selectConcept(updatedConcept.name)
+            }
+          })
+        })
         break
 
       default:

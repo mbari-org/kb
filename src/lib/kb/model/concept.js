@@ -81,8 +81,8 @@ const loadConceptData = async (concept, apiPayload) => {
 
 const loadParent = async (conceptName, apiPayload) => apiPayload(fetchConceptParent, conceptName)
 
-const refresh = async (concept, updateInfo, results, apiPayload) => {
-  const { hasUpdated, updatedValue } = updateInfo
+const refresh = async (concept, updateInfo, apiPayload) => {
+  const { hasUpdated, results, updatedValue } = updateInfo
 
   const updatedConcept = { ...concept }
 
