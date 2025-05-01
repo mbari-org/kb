@@ -49,14 +49,12 @@ const ConceptProvider = ({ children }) => {
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
   useEffect(() => {
+    const taxonomyConcept = getConcept(selected.concept)
+    if (!taxonomyConcept) {
+      return
+    }
+
     if (concept) {
-      const taxonomyConcept =
-        concept === getConcept(concept.name) ? concept : getConcept(concept.name)
-
-      if (!taxonomyConcept) {
-        return
-      }
-
       if (concept !== taxonomyConcept) {
         setConcept(taxonomyConcept)
       }
@@ -68,7 +66,7 @@ const ConceptProvider = ({ children }) => {
       setInitialState(initialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
     }
-  }, [concept, getConcept, getConceptPendingHistory, setConcept])
+  }, [concept, getConcept, getConceptPendingHistory, selected.concept, setConcept])
 
   useEffect(() => {
     if (!selected) {

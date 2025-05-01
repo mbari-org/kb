@@ -98,7 +98,7 @@ const StartUp = () => {
                 textDecoration: 'none',
               }}
             >
-              Read Only
+              Read Only Access
             </Button>
           </Box>
           <LoginForm />
