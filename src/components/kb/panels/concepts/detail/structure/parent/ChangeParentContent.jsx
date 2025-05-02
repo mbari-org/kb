@@ -1,30 +1,20 @@
-import { use, useEffect, useState, useCallback, useRef } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import ToConceptChoice from '../ToConceptChoice'
 
-import { descendants } from '@/lib/kb/model/taxonomy'
-
-import { LOADING } from '@/lib/constants'
-
-// import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
-
-const ChangeParentContent = () => {
+const ChangeParentContent = ({ omitChoices }) => {
   const theme = useTheme()
-  const alreadyLoadingDescendants = useRef(false)
 
   const { concept } = use(ConceptContext)
-  const { setModalData, setProcessing } = use(ModalContext)
-  const { loadConceptDescendants } = use(TaxonomyContext)
+  const { setModalData } = use(ModalContext)
 
   const [toConcept, setToConcept] = useState(null)
-  const [omitChoices, setOmitChoices] = useState([])
 
   const handleChange = useCallback(
     (_event, selectedName) => {
@@ -43,31 +33,6 @@ const ChangeParentContent = () => {
     },
     [concept.parent, setModalData]
   )
-
-  useEffect(() => {
-    if (!concept || alreadyLoadingDescendants.current) return
-
-    const loadDescendants = async () => {
-      try {
-        alreadyLoadingDescendants.current = true
-        setProcessing(LOADING)
-        const taxonomy = await loadConceptDescendants(concept)
-
-        setOmitChoices([
-          concept.name,
-          concept.parent,
-          ...descendants(taxonomy, concept.name).map(descendant => descendant.name),
-        ])
-      } catch (error) {
-        console.error('Failed to load descendants:', error)
-      } finally {
-        alreadyLoadingDescendants.current = false
-        setProcessing(null)
-      }
-    }
-
-    loadDescendants()
-  }, [concept, loadConceptDescendants, setProcessing])
 
   return (
     <Box>
