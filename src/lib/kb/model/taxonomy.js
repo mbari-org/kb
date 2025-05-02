@@ -177,10 +177,9 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
   const concept = taxonomyConcept
     ? { ...taxonomyConcept }
     : await loadConcept(conceptName, apiPayload)
-  mapConcept(updatedTaxonomy, concept)
 
   // If the concept already has children, we only need to load the concept's grand children. This is
-  //  typical when a concept's child is selected.
+  //  typical when a child concept is selected.
   if (concept?.children) {
     await Promise.all(
       concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiPayload))
@@ -203,6 +202,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
 
   // If the concept is the root, we're done.
   if (isRoot(taxonomy, concept)) {
+    mapConcept(updatedTaxonomy, concept)
     return { taxonomy: updatedTaxonomy }
   }
 
@@ -236,6 +236,11 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
     )
   }
 
+  // Wait until here to map the primary loaded concept (by conceptName) since the above processing
+  // may have loaded that concept as a child of its parent and we would lose the "extra" data
+  // (aliases, etc) that we already loaded for it.
+  mapConcept(updatedTaxonomy, concept)
+
   return { taxonomy: updatedTaxonomy }
 }
 
@@ -257,7 +262,7 @@ const loadTaxonomyConceptChildren = async (taxonomy, conceptName, apiPayload) =>
 }
 
 const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => {
-  let updatedTaxonomy = {
+  const updatedTaxonomy = {
     ...taxonomy,
     conceptMap: { ...taxonomy.conceptMap },
     aliasMap: { ...taxonomy.aliasMap },
@@ -279,29 +284,13 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => 
         children: children.map(c => c.name),
       }
 
-      // Create new concept map with updated descendant
-      updatedTaxonomy = {
-        ...updatedTaxonomy,
-        conceptMap: {
-          ...updatedTaxonomy.conceptMap,
-          [descendantName]: updatedDescendant,
-        },
-      }
+      mapConcept(updatedTaxonomy, updatedDescendant)
 
-      // Add children to descendants list and concept map
       children.forEach(child => {
         descendants.push(child.name)
-        // Add child to concept map with proper parent reference
-        updatedTaxonomy = {
-          ...updatedTaxonomy,
-          conceptMap: {
-            ...updatedTaxonomy.conceptMap,
-            [child.name]: {
-              ...child,
-              parent: descendantName,
-              children: [], // Initialize empty children array
-            },
-          },
+        updatedTaxonomy.conceptMap[child.name] = {
+          ...child,
+          parent: descendantName,
         }
       })
     } else if (descendant?.children) {

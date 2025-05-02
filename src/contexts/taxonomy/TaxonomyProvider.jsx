@@ -147,8 +147,7 @@ const TaxonomyProvider = ({ children }) => {
           concept,
           apiPayload
         )
-        cxDebugTaxonomyIntegrity(updatedTaxonomy)
-        setTaxonomy(updatedTaxonomy)
+        updateTaxonomy(updatedTaxonomy)
         setProcessing(null)
 
         return updatedTaxonomy
@@ -157,7 +156,7 @@ const TaxonomyProvider = ({ children }) => {
         showBoundary(error)
       }
     },
-    [taxonomy, apiPayload, setProcessing, showBoundary, setTaxonomy]
+    [apiPayload, setProcessing, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const refreshConcept = useCallback(
@@ -191,7 +190,7 @@ const TaxonomyProvider = ({ children }) => {
           if (taxonomyError) {
             setModal({
               type: 'error',
-              title: 'CxInc',
+              title: 'CxTBD: Error loading taxonomy',
               message: taxonomyError.message,
             })
           } else {

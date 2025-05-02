@@ -19,7 +19,9 @@ const updateStructure = ([submit, { concept, updateInfo }]) => {
   }
 
   if (hasUpdated('parent')) {
-    submitters.push(submit(updateConceptParent, [concept.name, { parent: updatedValue('parent') }]))
+    submitters.push(
+      submit(updateConceptParent, [concept.name, { parentName: updatedValue('parent') }])
+    )
   }
 
   if (hasUpdated('children')) {

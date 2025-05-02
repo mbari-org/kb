@@ -43,12 +43,10 @@ const ConceptProvider = ({ children }) => {
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
+
   const stagedStateDisplay = useStagedStateDisplay()
-  const pendingFieldDisplay = usePendingFieldDisplay()
-
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
-
-  const memoizedConcept = useMemo(() => concept, [concept])
+  const pendingFieldDisplay = usePendingFieldDisplay()
 
   useEffect(() => {
     const taxonomyConcept = getConcept(selected.concept)
@@ -117,7 +115,7 @@ const ConceptProvider = ({ children }) => {
   return (
     <ConceptContext
       value={{
-        concept: memoizedConcept,
+        concept,
         conceptPath,
         confirmReset,
         editing,
