@@ -6,7 +6,8 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+
+import { LABELS } from '@/lib/constants'
 
 const { CHANGE_NAME } = CONCEPT_STATE.STRUCTURE
 const { SET } = CONCEPT_STATE.FIELD

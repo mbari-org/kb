@@ -9,10 +9,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import { getFieldPendingHistory } from '@/lib/kb/util/pendingHistory'
 import { sendPendingAction } from '@/lib/kb/api/history'
 
-const APPROVE = 'Approve'
-const DEFER = 'Defer'
-const REJECT = 'Reject'
-
+import { APPROVE, DEFER, REJECT } from '@/lib/constants'
 const PendingFieldActions = ({ field }) => {
   const { pendingHistory } = use(ConceptContext)
   const { config } = use(ConfigContext)

@@ -9,7 +9,8 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+
+import { LABELS } from '@/lib/constants'
 
 import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
 

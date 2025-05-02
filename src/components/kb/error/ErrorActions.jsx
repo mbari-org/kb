@@ -4,7 +4,7 @@ import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const RESET = 'Reset'
+import { RESET } from '@/lib/constants'
 
 const ErrorActions = () => {
   const { closeModal } = use(ModalContext)

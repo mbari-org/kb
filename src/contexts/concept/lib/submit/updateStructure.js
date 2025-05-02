@@ -1,6 +1,6 @@
 import { createConcept, updateConceptName, updateConceptParent } from '@/lib/kb/api/concept'
 
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+import { LABELS } from '@/lib/constants'
 
 const { ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
 

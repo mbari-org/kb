@@ -1,11 +1,8 @@
-const ADMIN = 'Admin'
-const MAINT = 'Maint'
-const READ_ONLY = 'ReadOnly'
+import { ROLES } from '@/lib/constants'
 
-// ReadOnly is the default role
-
-const isAdmin = user => user.role === ADMIN
-const isMaint = user => user.role === MAINT
-const isReadOnly = user => user.role === READ_ONLY || (user.role !== ADMIN && user.role !== MAINT)
+const isAdmin = user => user.role === ROLES.ADMIN
+const isMaint = user => user.role === ROLES.MAINT
+const isReadOnly = user =>
+  user.role === ROLES.READ_ONLY || (user.role !== ROLES.ADMIN && user.role !== ROLES.MAINT)
 
 export { isAdmin, isMaint, isReadOnly }

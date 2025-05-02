@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE, hasModifiedState } from '@/lib/kb/conceptState/state/conceptState'
 
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+import { LABELS } from '@/lib/constants'
 
 const { DISCARD, DISCARD_ALL } = LABELS.ACTION
 const { CANCEL, EDIT, SAVE, SHOW } = LABELS.CONCEPT.ACTION

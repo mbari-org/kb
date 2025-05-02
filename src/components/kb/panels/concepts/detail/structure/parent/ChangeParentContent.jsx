@@ -1,31 +1,73 @@
-import { use, useState } from 'react'
+import { use, useEffect, useState, useCallback, useRef } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
 import ToConceptChoice from '../ToConceptChoice'
+
+import { descendants } from '@/lib/kb/model/taxonomy'
+
+import { LOADING } from '@/lib/constants'
+
+// import useUpdateTrigger from '@/components/hooks/useUpdateTrigger'
 
 const ChangeParentContent = () => {
   const theme = useTheme()
+  const alreadyLoadingDescendants = useRef(false)
 
   const { concept } = use(ConceptContext)
-  const { setModalData } = use(ModalContext)
+  const { setModalData, setProcessing } = use(ModalContext)
+  const { loadConceptDescendants } = use(TaxonomyContext)
 
   const [toConcept, setToConcept] = useState(null)
+  const [omitChoices, setOmitChoices] = useState([])
 
-  const handleChange = (_event, selectedName) => {
-    setToConcept(selectedName)
-    setModalData({ parent: selectedName, modified: true })
-  }
+  const handleChange = useCallback(
+    (_event, selectedName) => {
+      setToConcept(selectedName)
+      setModalData({ parent: selectedName, modified: true })
+    },
+    [setModalData]
+  )
 
-  const handleKeyUp = event => {
-    const conceptName = event.target.value.trim()
-    const modified = conceptName !== concept.parent
-    setToConcept(conceptName)
-    setModalData({ parent: conceptName, modified })
-  }
+  const handleKeyUp = useCallback(
+    event => {
+      const conceptName = event.target.value.trim()
+      const modified = conceptName !== concept.parent
+      setToConcept(conceptName)
+      setModalData({ parent: conceptName, modified })
+    },
+    [concept.parent, setModalData]
+  )
+
+  useEffect(() => {
+    if (!concept || alreadyLoadingDescendants.current) return
+
+    const loadDescendants = async () => {
+      try {
+        alreadyLoadingDescendants.current = true
+        setProcessing(LOADING)
+        const taxonomy = await loadConceptDescendants(concept)
+
+        setOmitChoices([
+          concept.name,
+          concept.parent,
+          ...descendants(taxonomy, concept.name).map(descendant => descendant.name),
+        ])
+      } catch (error) {
+        console.error('Failed to load descendants:', error)
+      } finally {
+        alreadyLoadingDescendants.current = false
+        setProcessing(null)
+      }
+    }
+
+    loadDescendants()
+  }, [concept, loadConceptDescendants, setProcessing])
 
   return (
     <Box>
@@ -39,7 +81,7 @@ const ChangeParentContent = () => {
             fontSize={theme.concept.updateFontSize}
             fontWeight={theme.concept.fontWeight}
           >
-            {concept.parent}
+            {concept?.parent}
           </Typography>
         </Stack>
         <ToConceptChoice
@@ -47,7 +89,7 @@ const ChangeParentContent = () => {
           handleKeyUp={handleKeyUp}
           initialValue={null}
           label='To'
-          omitChoices={[concept.name, concept.parent]}
+          omitChoices={omitChoices}
           value={toConcept}
         />
       </Stack>

@@ -7,9 +7,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
-const DISCARD = 'Discard'
-const STAGE = 'Stage'
-
+import { DISCARD, STAGE } from '@/lib/constants'
 const DeleteMediaActions = () => {
   const {
     stagedState: { media, mediaIndex },

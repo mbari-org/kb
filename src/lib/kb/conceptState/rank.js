@@ -1,7 +1,4 @@
-const RANK = {
-  LEVEL: 'rankLevel',
-  NAME: 'rankName',
-}
+import { RANK } from '@/lib/constants'
 
 const filterRanks = (ranks, field, otherValue) => {
   if (!field) {
@@ -20,4 +17,4 @@ const filterRanks = (ranks, field, otherValue) => {
   return uniqueFieldValues
 }
 
-export { filterRanks, RANK }
+export { filterRanks }

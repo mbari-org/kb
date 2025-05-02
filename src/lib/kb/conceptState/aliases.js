@@ -2,15 +2,14 @@ import { capitalize } from '@/lib/util'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
-const NAME_TYPES = {
-  COMMON: 'Common',
-  FORMER: 'Former',
-  PRIMARY: 'Primary',
-  SYNONYM: 'Synonym',
-}
+import { CONCEPT_NAME_TYPES } from '@/lib/constants'
 
 // Order of types in the dropdown
-const ALIAS_TYPES = [NAME_TYPES.COMMON, NAME_TYPES.SYNONYM, NAME_TYPES.FORMER]
+const ALIAS_TYPES = [
+  CONCEPT_NAME_TYPES.COMMON,
+  CONCEPT_NAME_TYPES.SYNONYM,
+  CONCEPT_NAME_TYPES.FORMER,
+]
 
 const ALIAS_DISPLAY_FIELDS = ['name', 'author', 'nameType']
 
@@ -32,4 +31,4 @@ const orderedAliases = aliases => {
 const sortedType = (aliases, type) =>
   aliases.filter(alias => alias.nameType === type).sort((a, b) => a.name.localeCompare(b.name))
 
-export { ALIAS_TYPES, aliasEdits, NAME_TYPES, orderedAliases }
+export { ALIAS_TYPES, aliasEdits, orderedAliases }

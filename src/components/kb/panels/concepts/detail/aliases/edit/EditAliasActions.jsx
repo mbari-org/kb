@@ -9,7 +9,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+
+import { LABELS } from '@/lib/constants'
 
 const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
 const { CONFIRMED } = CONCEPT_STATE.RESET

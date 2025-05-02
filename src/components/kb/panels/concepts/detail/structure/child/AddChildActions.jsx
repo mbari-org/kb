@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+import { LABELS } from '@/lib/constants'
 
 import { ADD_CHILD_FORM_ID } from './AddChildContent'
 

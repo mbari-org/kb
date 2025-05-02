@@ -9,7 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import submitDelete from '@/contexts/concept/lib/submit/submitDelete'
 
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+import { LABELS } from '@/lib/constants'
 
 const { CANCEL, DELETE } = LABELS.CONCEPT.ACTION
 

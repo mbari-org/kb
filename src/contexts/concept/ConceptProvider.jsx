@@ -21,7 +21,7 @@ import {
   hasModifiedState,
 } from '@/lib/kb/conceptState/state/conceptState'
 
-import LABELS from '@/components/kb/panels/concepts/stagedState/labels'
+import { LABELS } from '@/lib/constants'
 
 const { CONTINUE } = LABELS.ACTION
 
@@ -47,6 +47,8 @@ const ConceptProvider = ({ children }) => {
   const pendingFieldDisplay = usePendingFieldDisplay()
 
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
+
+  const memoizedConcept = useMemo(() => concept, [concept])
 
   useEffect(() => {
     const taxonomyConcept = getConcept(selected.concept)
@@ -115,7 +117,7 @@ const ConceptProvider = ({ children }) => {
   return (
     <ConceptContext
       value={{
-        concept,
+        concept: memoizedConcept,
         conceptPath,
         confirmReset,
         editing,

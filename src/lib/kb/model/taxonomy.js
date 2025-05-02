@@ -14,17 +14,6 @@ import {
 
 import { treeItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
-// const addChild = (updatableConcepts, updatableRoot, updatableChild) => {
-//   const updatableParent = { ...updatableChild.parent }
-//   addChildConcept(updatableParent, updatableChild)
-
-//   const conceptParentInRoot = findConcept(updatableRoot, updatableParent.name)
-//   conceptParentInRoot.children = updatableParent.children
-
-//   updatableConcepts[updatableChild.name] = updatableChild
-//   updatableRoot[updatableParent.name] = updatableParent
-// }
-
 const buildTree = taxonomy => {
   const treeItems = concept => {
     const item = treeItem(concept)
@@ -84,6 +73,25 @@ const deleteConcept = async (taxonomy, conceptName, apiPayload) => {
   return { taxonomy: updatedTaxonomy, selectConceptName }
 }
 
+const descendants = (taxonomy, conceptName) => {
+  const concept = getConcept(taxonomy, conceptName)
+  if (!concept) return []
+
+  const allDescendants = []
+  const processChildren = children => {
+    children.forEach(child => {
+      const childConcept = getConcept(taxonomy, child)
+      allDescendants.push(childConcept)
+      if (childConcept.children?.length > 0) {
+        processChildren(childConcept.children)
+      }
+    })
+  }
+
+  processChildren(concept.children)
+  return allDescendants
+}
+
 const filterTaxonomyRanks = (taxonomy, field, otherValue) =>
   filterRanks(taxonomy.ranks, field, otherValue)
 
@@ -137,18 +145,6 @@ const loadTaxonomy = async apiPayload => {
   ])
 
   const rootConcept = await loadConcept(root.name, apiPayload)
-
-  // const shellTaxonomy = {
-  //   aliasMap: {},
-  //   conceptMap: { [rootConcept.name]: rootConcept },
-  //   rootName: rootConcept.name,
-  // }
-
-  // const { taxonomy: loadedMapsTaxonomy } = await loadTaxonomyConcept(
-  //   shellTaxonomy,
-  //   rootConcept.name,
-  //   apiPayload
-  // )
 
   const aliasMap = rootConcept.aliases.reduce((acc, alias) => {
     acc[alias.name] = rootConcept
@@ -261,7 +257,11 @@ const loadTaxonomyConceptChildren = async (taxonomy, conceptName, apiPayload) =>
 }
 
 const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => {
-  const updatedTaxonomy = { ...taxonomy }
+  let updatedTaxonomy = {
+    ...taxonomy,
+    conceptMap: { ...taxonomy.conceptMap },
+    aliasMap: { ...taxonomy.aliasMap },
+  }
   const descendants = [...concept.children]
 
   while (0 < descendants.length) {
@@ -273,20 +273,37 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => 
     }
 
     if (descendant && !descendant.children) {
-      console.log('descendant:', descendant)
       const children = await loadChildren(descendant.name, apiPayload)
-      descendant.children = children.map(c => c.name)
-      console.log('descendant children:', children)
-      children.reduce((acc, c) => {
-        mapConcept(updatedTaxonomy, c)
-        if (c.name === '') {
-          console.log('descendant has empty child:', descendant)
-        }
+      const updatedDescendant = {
+        ...descendant,
+        children: children.map(c => c.name),
+      }
 
-        acc.push(c.name)
-        return acc
-      }, descendants)
-      mapConcept(updatedTaxonomy, descendant)
+      // Create new concept map with updated descendant
+      updatedTaxonomy = {
+        ...updatedTaxonomy,
+        conceptMap: {
+          ...updatedTaxonomy.conceptMap,
+          [descendantName]: updatedDescendant,
+        },
+      }
+
+      // Add children to descendants list and concept map
+      children.forEach(child => {
+        descendants.push(child.name)
+        // Add child to concept map with proper parent reference
+        updatedTaxonomy = {
+          ...updatedTaxonomy,
+          conceptMap: {
+            ...updatedTaxonomy.conceptMap,
+            [child.name]: {
+              ...child,
+              parent: descendantName,
+              children: [], // Initialize empty children array
+            },
+          },
+        }
+      })
     } else if (descendant?.children) {
       descendants.push(...descendant.children)
     }
@@ -473,6 +490,7 @@ export const cxDebugTaxonomyIntegrity = taxonomy => {
 export {
   buildTree,
   deleteConcept,
+  descendants,
   filterTaxonomyRanks,
   getConcept,
   getConceptPendingHistory,
