@@ -6,7 +6,7 @@ import authUrl from './authUrl'
 const loginReadOnly = async () => {
   const refresh = await genRefresh('readonly')
 
-  // There is no reason to refresh a ReadOnly role so the token has an expiration in 2222
+  // There is no reason to refresh a ReadOnly role so the dummy token has an expiration in 2222
   // cSpell:ignore eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9
   const token =
     'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8vd3d3Lm1iYXJpLm9yZyIsImlhdCI6MTU3Nzg3NDYzMywiZXhwIjo3OTUyMzgwMjE2LCJzdWIiOiIyMzgiLCJuYW1lIjoicmVhZG9ubHkiLCJyb2xlIjoiUmVhZE9ubHkifQ.8zHQftSuItJDnkpVcd6VJEI1t26z14h3tFexZaB1UR2ju0oLldkWoWpTmJE3PwGL6aPFHODChJpsFFzi-Qui5A'
@@ -45,6 +45,9 @@ const loginUser = async (config, username, password) => {
 
     return { auth }
   } catch (error) {
+    if (error.message === 'Failed to fetch') {
+      return { error: 'Invalid Username/Password' }
+    }
     return { error: error.message }
   }
 }
