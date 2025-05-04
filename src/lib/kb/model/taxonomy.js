@@ -178,13 +178,17 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
     ? { ...taxonomyConcept }
     : await loadConcept(conceptName, apiPayload)
 
+  if (!concept.aliases) {
+    await loadConceptData(concept, apiPayload)
+  }
+
   // If the concept already has children, we only need to load the concept's grand children. This is
   //  typical when a child concept is selected.
   if (concept?.children) {
     await Promise.all(
       concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiPayload))
     )
-    await loadConceptData(concept, apiPayload)
+    mapConcept(updatedTaxonomy, concept)
     return { taxonomy: updatedTaxonomy }
   }
 
