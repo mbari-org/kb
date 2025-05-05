@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useStageAlias from './useStageAlias'
 
-import { ALIAS_TYPES } from '@/lib/kb/conceptState/aliases'
+import { ALIAS_TYPES } from '@/lib/kb/model/alias'
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 

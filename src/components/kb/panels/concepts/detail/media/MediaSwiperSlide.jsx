@@ -5,9 +5,8 @@ import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
-
-import { fieldBorder } from '@/lib/kb/conceptState/field'
+import { fieldBorder } from '@/lib/kb/model/field'
+import { fieldPendingHistory } from '@/lib/kb/model/history'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()

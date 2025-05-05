@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
+import { fieldPendingHistory } from '@/lib/kb/model/history'
 import { sendPendingAction } from '@/lib/kb/api/history'
 
 import { APPROVE, DEFER, REJECT } from '@/lib/constants'

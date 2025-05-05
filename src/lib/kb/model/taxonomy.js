@@ -1,7 +1,7 @@
 import { fetchHistory } from '@/lib/kb/api/history'
 import { fetchNames, fetchRanks, fetchRoot } from '@/lib/kb/api/taxonomy'
 
-import { filterRanks } from '@/lib/kb/conceptState/rank'
+import { filterRanks } from '@/lib/kb/model/rank'
 
 import {
   addedConcepts,

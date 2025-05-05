@@ -6,7 +6,7 @@ import ConceptAlias from '@/components/kb/panels/concepts/detail/ConceptAlias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
+import { fieldPendingHistory } from '@/lib/kb/model/history'
 
 const ConceptAliases = () => {
   const { editing, pendingHistory, stagedState } = use(ConceptContext)

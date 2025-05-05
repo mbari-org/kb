@@ -1,6 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-
-import { displayItem, fieldEdits } from '@/lib/kb/conceptState/field'
+import { displayItem, fieldEdits } from '@/lib/kb/model/field'
 
 const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
 

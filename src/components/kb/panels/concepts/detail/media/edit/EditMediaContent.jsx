@@ -18,7 +18,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import useStageMedia from './useStageMedia'
 
-import { hasPrimary, isPrimary } from '@/lib/kb/conceptState/media'
+import { hasPrimary, isPrimary } from '@/lib/kb/model/media'
 import { checkImageUrlExists, isUrlValid } from '@/lib/util'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'

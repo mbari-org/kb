@@ -3,7 +3,7 @@ import { use, useMemo } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { hasPendingHistory } from '@/lib/kb/model/pendingHistory'
+import { hasPendingHistory } from '@/lib/kb/model/history'
 
 const baseStyle = {
   fullWidth: true,

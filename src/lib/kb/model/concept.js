@@ -6,9 +6,8 @@ import {
   fetchConceptParent,
 } from '@/lib/kb/api/concept'
 
-import { orderedAliases } from '@/lib/kb/conceptState/aliases'
-
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { orderedAliases } from '@/lib/kb/model/aliases'
 
 import { drop } from '@/lib/util'
 

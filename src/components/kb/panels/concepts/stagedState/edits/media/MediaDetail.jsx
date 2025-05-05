@@ -4,7 +4,7 @@ import MediaItemEdit from './MediaItemEdit'
 import MediaReset from './MediaReset'
 
 import { fieldSx } from '@/components/common/format'
-import { mediaItemEdits } from '@/lib/kb/conceptState/media'
+import { mediaItemEdits } from '@/lib/kb/model/media'
 
 const MediaDetail = ({ edit }) => {
   const [_, media] = edit

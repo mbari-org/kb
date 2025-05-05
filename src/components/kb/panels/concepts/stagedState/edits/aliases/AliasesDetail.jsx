@@ -4,7 +4,7 @@ import AliasEdit from './AliasEdit'
 import AliasesReset from './AliasesReset'
 
 import { fieldSx } from '@/components/common/format'
-import { aliasEdits } from '@/lib/kb/conceptState/aliases'
+import { aliasEdits } from '@/lib/kb/model/alias'
 
 const AliasesDetail = ({ edit }) => {
   const [_, aliases] = edit

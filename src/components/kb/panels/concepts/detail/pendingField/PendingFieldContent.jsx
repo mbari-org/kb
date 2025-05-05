@@ -5,7 +5,7 @@ import DescriptionDetail from '@/components/common/DescriptionDetail'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { pick } from '@/lib/util'
-import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
+import { fieldPendingHistory } from '@/lib/kb/model/history'
 
 const PendingFieldContent = ({ field }) => {
   const { pendingHistory } = use(ConceptContext)

@@ -9,11 +9,10 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
-import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
+import { fieldPendingHistory } from '@/lib/kb/model/history'
 
+import { fieldBorder } from '@/lib/kb/model/field'
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-
-import { fieldBorder } from '@/lib/kb/conceptState/field'
 
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()

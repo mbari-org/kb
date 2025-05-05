@@ -1,4 +1,4 @@
-import { getPrimary, isPrimary } from '@/lib/kb/conceptState/media'
+import { getPrimary, isPrimary } from '@/lib/kb/model/media'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
