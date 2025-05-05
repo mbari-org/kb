@@ -11,6 +11,7 @@ const StyledLabel = styled('div')(({ theme, hasPendingHistory, isSelected }) => 
     nonHoverStyle.color = theme.palette.common.white
     nonHoverStyle.fontWeight = 600
   }
+
   if (hasPendingHistory) {
     nonHoverStyle.color = isSelected ? theme.palette.common.white : theme.palette.error.main
   }

@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { getFieldPendingHistory } from '@/lib/kb/util/pendingHistory'
+import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
 import { sendPendingAction } from '@/lib/kb/api/history'
 
 import { APPROVE, DEFER, REJECT } from '@/lib/constants'
@@ -15,7 +15,7 @@ const PendingFieldActions = ({ field }) => {
   const { config } = use(ConfigContext)
   const { closeModal } = use(ModalContext)
 
-  const pendingFieldHistory = getFieldPendingHistory(pendingHistory, field)
+  const pendingFieldHistory = fieldPendingHistory(pendingHistory, field)
 
   const colors = ['cancel', 'main', 'clean']
   const labels = [REJECT, DEFER, APPROVE]

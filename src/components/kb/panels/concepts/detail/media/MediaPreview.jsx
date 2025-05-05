@@ -9,15 +9,25 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 import { fieldBorder } from '@/lib/kb/conceptState/field'
 
+import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
+
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
 
-  const {
-    stagedState: { media, mediaIndex },
-  } = use(ConceptContext)
+  const { pendingHistory, stagedState } = use(ConceptContext)
+  const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
-  const border = fieldBorder(CONCEPT_STATE.MEDIA, mediaItem, theme, '3px', theme.palette.grey[300])
+  const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media')
+
+  const border = fieldBorder({
+    itemPendingHistory: mediaPendingHistory,
+    itemType: CONCEPT_STATE.MEDIA,
+    noActionBorderColor: theme.palette.grey[300],
+    stagedItem: mediaItem,
+    theme,
+    width: '3px',
+  })
 
   return (
     <>

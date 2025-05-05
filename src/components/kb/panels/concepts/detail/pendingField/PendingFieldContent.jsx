@@ -5,11 +5,11 @@ import DescriptionDetail from '@/components/common/DescriptionDetail'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { pick } from '@/lib/util'
-import { getFieldPendingHistory } from '@/lib/kb/util/pendingHistory'
+import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
 
 const PendingFieldContent = ({ field }) => {
   const { pendingHistory } = use(ConceptContext)
-  const pendingFieldHistory = getFieldPendingHistory(pendingHistory, field)
+  const pendingFieldHistory = fieldPendingHistory(pendingHistory, field)
 
   const displayValues = pick(pendingFieldHistory, [
     'action',

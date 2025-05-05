@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 
 import { hasStateChange } from '@/contexts/concept/lib/edit/stateUpdates'
-import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
+import { hasPendingHistory } from '@/lib/kb/model/pendingHistory'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'

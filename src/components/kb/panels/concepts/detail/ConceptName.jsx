@@ -11,26 +11,27 @@ import useStructureChoices from '@/components/kb/panels/concepts/detail/structur
 
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { getFieldPendingHistory } from '@/lib/kb/util/pendingHistory'
 import { isAdmin, isReadOnly } from '@/lib/auth/role'
 
 const ConceptName = () => {
   const theme = useTheme()
 
   const { user } = use(AuthContext)
-  const { concept, editing, stagedState, pendingHistory } = use(ConceptContext)
+  const { concept, editing, stagedState } = use(ConceptContext)
+  const { taxonomy } = use(TaxonomyContext)
+
+  console.log('taxonomy', taxonomy)
 
   const { disableChangeName, disableChangeParent } = useStructureChoices()
 
   const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
 
-  const namePendingHistory = getFieldPendingHistory(pendingHistory, 'ConceptName')
   const conceptHasNameUpdate = stagedState.name !== concept?.name
   const conceptHasParentUpdate = stagedState.parent !== concept?.parent
 
-  const showApprovalButton =
-    isAdmin(user) && editing && !!namePendingHistory && !showStructureChoicesModal
+  const showApprovalButton = isAdmin(user) && editing && !showStructureChoicesModal
   const showStructureButton =
     !isReadOnly(user) &&
     editing &&
@@ -38,7 +39,7 @@ const ConceptName = () => {
     (!disableChangeName || !disableChangeParent)
 
   const conceptColor =
-    !!namePendingHistory || conceptHasNameUpdate || conceptHasParentUpdate
+    conceptHasNameUpdate || conceptHasParentUpdate
       ? theme.concept.color.edit
       : theme.palette.primary.main
 

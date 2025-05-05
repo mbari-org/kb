@@ -9,6 +9,8 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
+import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
+
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 import { fieldBorder } from '@/lib/kb/conceptState/field'
@@ -16,11 +18,15 @@ import { fieldBorder } from '@/lib/kb/conceptState/field'
 const ConceptAlias = ({ aliasIndex }) => {
   const theme = useTheme()
 
-  const { editing, stagedState } = use(ConceptContext)
+  const { editing, pendingHistory, stagedState } = use(ConceptContext)
+
+  const aliasPendingHistory = fieldPendingHistory(pendingHistory, 'ConceptName')
+
   const stagedAlias = useMemo(
     () => ({ ...stagedState.aliases[aliasIndex] }),
     [stagedState.aliases, aliasIndex]
   )
+
   const detailStyle = useConceptDetailStyle('aliases')
   const infoStyle = {
     ...detailStyle,
@@ -28,7 +34,14 @@ const ConceptAlias = ({ aliasIndex }) => {
     variant: 'standard',
   }
 
-  const border = fieldBorder(CONCEPT_STATE.ALIAS, stagedAlias, theme, '2px', 'none')
+  const border = fieldBorder({
+    itemType: CONCEPT_STATE.ALIAS,
+    itemPendingHistory: aliasPendingHistory,
+    noActionBorderColor: 'none',
+    stagedItem: stagedAlias,
+    theme,
+    width: '2px',
+  })
 
   const showEdit = editing && stagedAlias.action !== CONCEPT_STATE.ALIAS.DELETE
 

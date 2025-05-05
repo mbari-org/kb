@@ -6,8 +6,13 @@ import ConceptAlias from '@/components/kb/panels/concepts/detail/ConceptAlias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
+
 const ConceptAliases = () => {
-  const { editing, stagedState } = use(ConceptContext)
+  const { editing, pendingHistory, stagedState } = use(ConceptContext)
+
+  const namesPendingHistory = fieldPendingHistory(pendingHistory, 'ConceptName')
+  console.log('names pending history:', namesPendingHistory)
 
   return (
     <Box display='flex' flexDirection='column'>

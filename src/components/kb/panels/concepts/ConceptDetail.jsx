@@ -16,7 +16,7 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 import { RANK } from '@/lib/constants'
 import { isAdmin } from '@/lib/auth/role'
-import { hasPendingHistory } from '@/lib/kb/util/pendingHistory'
+import { hasPendingHistory } from '@/lib/kb/model/pendingHistory'
 
 const ConceptDetail = () => {
   const { user } = use(AuthContext)
