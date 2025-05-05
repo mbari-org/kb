@@ -35,7 +35,6 @@ const ConceptAlias = ({ aliasIndex }) => {
   }
 
   const border = fieldBorder({
-    itemType: CONCEPT_STATE.ALIAS,
     itemPendingHistory: aliasPendingHistory,
     noActionBorderColor: 'none',
     stagedItem: stagedAlias,

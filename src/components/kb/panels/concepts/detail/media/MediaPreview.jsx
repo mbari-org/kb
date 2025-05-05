@@ -5,8 +5,6 @@ import { BsInfoCircle } from 'react-icons/bs'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-
 import { fieldBorder } from '@/lib/kb/conceptState/field'
 
 import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
@@ -22,7 +20,6 @@ const MediaPreview = ({ setPreviewOn }) => {
 
   const border = fieldBorder({
     itemPendingHistory: mediaPendingHistory,
-    itemType: CONCEPT_STATE.MEDIA,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,
     theme,

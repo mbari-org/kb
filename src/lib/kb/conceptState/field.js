@@ -33,14 +33,7 @@ const editItem = edit => {
   }
 }
 
-const fieldBorder = ({
-  itemPendingHistory,
-  itemType,
-  noActionBorderColor,
-  stagedItem,
-  theme,
-  width,
-}) => {
+const fieldBorder = ({ itemPendingHistory, noActionBorderColor, stagedItem, theme, width }) => {
   const itemAction =
     stagedItem?.action !== CONCEPT_STATE.NO_ACTION
       ? stagedItem.action.split(' ')[1].toUpperCase()

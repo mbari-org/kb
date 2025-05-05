@@ -7,14 +7,12 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { fieldPendingHistory } from '@/lib/kb/model/pendingHistory'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-
 import { fieldBorder } from '@/lib/kb/conceptState/field'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()
 
-  const { pendingHistory, stagedState } = use(ConceptContext)
+  const { pendingHistory } = use(ConceptContext)
 
   const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media')
 
@@ -24,7 +22,6 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const border = fieldBorder({
     itemPendingHistory: mediaPendingHistory,
-    itemType: CONCEPT_STATE.MEDIA,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,
     theme,
