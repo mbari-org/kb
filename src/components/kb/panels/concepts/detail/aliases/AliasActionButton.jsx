@@ -6,10 +6,10 @@ import { useTheme } from '@mui/material/styles'
 import createEditAliasModal from '@/components/kb/panels/concepts/detail/aliases/edit/createEditAliasModal'
 import createEditAliasOnClose from '@/components/kb/panels/concepts/detail/aliases/edit/createEditAliasOnClose'
 
-import { EMPTY_ALIAS, aliasFields } from '@/components/kb/panels/concepts/detail/aliases/edit/alias'
-
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
+
+import { EMPTY_ALIAS, aliasFields } from '@/lib/kb/model/alias'
 
 const AliasActionButton = ({ Icon, action, aliasIndex, color, sx = {} }) => {
   const theme = useTheme()
