@@ -13,7 +13,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const { pendingHistory } = use(ConceptContext)
 
-  const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media')
+  const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media').pop()
 
   const swiper = useSwiper()
 

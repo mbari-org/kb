@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 import { Box, Typography, Stack } from '@mui/material'
 
 import AliasAdd from '@/components/kb/panels/concepts/detail/aliases/edit/AliasAdd'
@@ -6,13 +6,25 @@ import ConceptAlias from '@/components/kb/panels/concepts/detail/ConceptAlias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { fieldPendingHistory } from '@/lib/kb/model/history'
+import { pendingDeletedAliases } from '@/lib/kb/model/alias'
+// import { orderedAliases } from '@/lib/kb/model/aliases'
 
 const ConceptAliases = () => {
   const { editing, pendingHistory, stagedState } = use(ConceptContext)
 
-  const namesPendingHistory = fieldPendingHistory(pendingHistory, 'ConceptName')
-  console.log('names pending history:', namesPendingHistory)
+  const stagedAliases = useMemo(
+    () => stagedState?.aliases?.map((alias, index) => ({ ...alias, index })) || [],
+    [stagedState?.aliases]
+  )
+
+  const cxDebug = pendingDeletedAliases(pendingHistory)
+  console.log('pending alias deletes:', cxDebug)
+
+  // const displayAliases = stagedState?.aliases || []
+  // const displayAliases = orderedAliases([
+  //   ...(stagedState?.aliases || []),
+  //   ...pendingDeletedAliases(pendingHistory),
+  // ])
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -23,8 +35,8 @@ const ConceptAliases = () => {
         {editing && <AliasAdd />}
       </Box>
       <Stack spacing={1}>
-        {stagedState?.aliases?.map((alias, index) => (
-          <ConceptAlias key={alias.name || index} aliasIndex={index} />
+        {stagedAliases.map(alias => (
+          <ConceptAlias key={alias.name || alias.index} alias={alias} />
         ))}
       </Stack>
     </Box>

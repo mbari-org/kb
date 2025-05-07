@@ -46,7 +46,7 @@ const errorResponse = (title, message, url, params) => {
     type: 'error',
   }
   console.error(error)
-  console.log('Authorization', headers?.Authorization)
+  console.error('Authorization', headers?.Authorization)
   return { error }
 }
 

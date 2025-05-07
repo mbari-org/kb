@@ -3,9 +3,11 @@ import { CONCEPT_NAME_TYPES } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 import { fieldEdits } from '@/lib/kb/model/field'
 
+import { fieldPendingHistory } from './history'
+
 import { isJsonEqual, pick } from '@/lib/util'
 
-const ALIAS_FIELDS = ['author', 'name', 'nameType']
+const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 
 // Prescribed order of types
 const ALIAS_TYPES = [
@@ -34,8 +36,13 @@ const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
 
 const aliasFields = alias => pick(alias, ALIAS_FIELDS)
 
-// const pendingAliases = pendingHistory => {
+const pendingDeletedAliases = pendingHistory =>
+  fieldPendingHistory(pendingHistory, 'ConceptName')
+    .filter(history => history.action === 'DELETE')
+    .map(history => {
+      return {
+        id: history.id,
+      }
+    })
 
-// }
-
-export { ALIAS_TYPES, aliasEdits, aliasesEqual, aliasFields, EMPTY_ALIAS }
+export { ALIAS_TYPES, aliasEdits, aliasesEqual, aliasFields, EMPTY_ALIAS, pendingDeletedAliases }

@@ -11,7 +11,6 @@ import useStructureChoices from '@/components/kb/panels/concepts/detail/structur
 
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { isAdmin, isReadOnly } from '@/lib/auth/role'
 
@@ -20,9 +19,6 @@ const ConceptName = () => {
 
   const { user } = use(AuthContext)
   const { concept, editing, stagedState } = use(ConceptContext)
-  const { taxonomy } = use(TaxonomyContext)
-
-  console.log('taxonomy', taxonomy)
 
   const { disableChangeName, disableChangeParent } = useStructureChoices()
 

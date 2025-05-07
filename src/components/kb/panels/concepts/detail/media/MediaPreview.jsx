@@ -16,7 +16,7 @@ const MediaPreview = ({ setPreviewOn }) => {
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
-  const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media')
+  const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media').pop()
 
   const border = fieldBorder({
     itemPendingHistory: mediaPendingHistory,

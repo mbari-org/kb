@@ -9,7 +9,7 @@ import { fieldPendingHistory } from '@/lib/kb/model/history'
 
 const PendingFieldContent = ({ field }) => {
   const { pendingHistory } = use(ConceptContext)
-  const pendingFieldHistory = fieldPendingHistory(pendingHistory, field)
+  const pendingFieldHistory = fieldPendingHistory(pendingHistory, field).pop()
 
   const displayValues = pick(pendingFieldHistory, [
     'action',

@@ -15,7 +15,7 @@ const PendingFieldActions = ({ field }) => {
   const { config } = use(ConfigContext)
   const { closeModal } = use(ModalContext)
 
-  const pendingFieldHistory = fieldPendingHistory(pendingHistory, field)
+  const pendingFieldHistory = fieldPendingHistory(pendingHistory, field).pop()
 
   const colors = ['cancel', 'main', 'clean']
   const labels = [REJECT, DEFER, APPROVE]
