@@ -2,7 +2,7 @@ import { use, useCallback, useMemo, useState } from 'react'
 
 import { Box, FormControl, Stack, TextField } from '@mui/material'
 
-import ConceptRank from '@/components/kb/panels/concepts/detail/ConceptRank'
+import ConceptRankField from '@/components/kb/panels/concepts/detail/ConceptRankField'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
@@ -106,21 +106,19 @@ const AddChildContent = () => {
         />
       </FormControl>
       <Stack direction='row' spacing={1} sx={{ mt: 2 }}>
-        <ConceptRank
+        <ConceptRankField
           field={RANK.NAME}
           fieldValue={formChild.rankName}
           otherValue={formChild.rankLevel}
           inputStyle={inputStyle}
           onChange={handleFieldChange('rankName')}
-          showApprovalButton={false}
         />
-        <ConceptRank
+        <ConceptRankField
           field={RANK.LEVEL}
           fieldValue={formChild.rankLevel}
           otherValue={formChild.rankName}
           inputStyle={inputStyle}
           onChange={handleFieldChange('rankLevel')}
-          showApprovalButton={false}
         />
       </Stack>
     </Box>

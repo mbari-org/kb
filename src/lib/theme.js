@@ -9,7 +9,7 @@ const light = alpha(main, 0.1)
 const pale = alpha(main, 0.3)
 
 const add = '#008800'
-const edit = '#ff941f'
+const edit = '#ee8311'
 const remove = '#af0000'
 
 const cancel = '#af0000'
@@ -28,7 +28,7 @@ const theme = createTheme({
       clean,
       detail: conceptDetail,
       edit,
-      pending: cancel,
+      pending: edit,
       pendingIcon: {
         clean: pendingIconClean,
         dirty: pendingIconDirty,

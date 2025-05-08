@@ -51,7 +51,7 @@ const ConceptAlias = ({ alias }) => {
         </Stack>
       )}
       <Stack direction='row' spacing={1} width='100%'>
-        <Box flex={1}>
+        <Box flex={1} sx={{ pl: 1 }}>
           <TextField {...infoStyle} label='Name' value={alias.name} />
         </Box>
         <Box flex={1}>

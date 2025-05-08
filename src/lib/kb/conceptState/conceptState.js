@@ -120,7 +120,7 @@ const hasModifiedState = ({ initialState, stagedState }) =>
 const initialConceptState = (concept, pendingHistory) => {
   return {
     ...aliasesState(concept, pendingHistory),
-    ...fieldState(concept, pendingHistory),
+    ...fieldState(concept),
     ...mediaState(concept, pendingHistory),
     ...structureState(concept, pendingHistory),
   }

@@ -21,6 +21,7 @@ const LABELS = {
       NAME_ONLY: 'Name Only',
     },
     ACTION: {
+      APPROVE: 'Approve',
       CANCEL: 'Cancel',
       DELETE: 'Delete Concept',
       EDIT: 'Edit',

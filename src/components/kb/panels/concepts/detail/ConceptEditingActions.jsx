@@ -5,32 +5,38 @@ import Button from '@mui/material/Button'
 
 import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
 
+import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE, hasModifiedState } from '@/lib/kb/conceptState/conceptState'
 
+import { isAdmin } from '@/lib/auth/role'
+
 import { LABELS } from '@/lib/constants'
 
 const { DISCARD, DISCARD_ALL } = LABELS.ACTION
-const { CANCEL, EDIT, SAVE, SHOW } = LABELS.CONCEPT.ACTION
+const { APPROVE, CANCEL, EDIT, SAVE, SHOW } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const ConceptEditingActions = () => {
-  const { editing, initialState, modifyConcept, setEditing, stagedState } = use(ConceptContext)
+  const { user } = use(AuthContext)
+
+  const { editing, initialState, modifyConcept, pendingHistory, setEditing, stagedState } =
+    use(ConceptContext)
 
   const stagedStateDiscard = useStagedStateDisplay(DISCARD)
   const stagedStateSave = useStagedStateDisplay(SAVE)
   const stagedStateShow = useStagedStateDisplay(SHOW)
 
-  const handleSave = useCallback(() => {
-    modifyConcept({ type: CONFIRMED.NO })
-    stagedStateSave()
-  }, [modifyConcept, stagedStateSave])
+  const editCancelDiscardButtonText = useMemo(() => {
+    if (!editing) return EDIT
+    if (hasModifiedState({ initialState, stagedState })) return DISCARD_ALL
+    return CANCEL
+  }, [editing, initialState, stagedState])
 
-  const handleShow = useCallback(() => {
-    modifyConcept({ type: CONFIRMED.NO })
-    stagedStateShow()
-  }, [modifyConcept, stagedStateShow])
+  const handleApproval = useCallback(() => {
+    console.log('approval')
+  }, [])
 
   const handleEditCancelDiscard = useCallback(() => {
     if (!editing) {
@@ -43,11 +49,20 @@ const ConceptEditingActions = () => {
     }
   }, [editing, initialState, modifyConcept, stagedState, stagedStateDiscard, setEditing])
 
-  const editCancelDiscardButtonText = useMemo(() => {
-    if (!editing) return EDIT
-    if (hasModifiedState({ initialState, stagedState })) return DISCARD_ALL
-    return CANCEL
-  }, [editing, initialState, stagedState])
+  const handleSave = useCallback(() => {
+    modifyConcept({ type: CONFIRMED.NO })
+    stagedStateSave()
+  }, [modifyConcept, stagedStateSave])
+
+  const handleShow = useCallback(() => {
+    modifyConcept({ type: CONFIRMED.NO })
+    stagedStateShow()
+  }, [modifyConcept, stagedStateShow])
+
+  const showApprovalButton = useMemo(() => {
+    const hasPendingHistory = pendingHistory.length > 0
+    return !editing && hasPendingHistory && isAdmin(user)
+  }, [editing, pendingHistory, user])
 
   return (
     <Box
@@ -71,6 +86,11 @@ const ConceptEditingActions = () => {
       {editing && hasModifiedState({ initialState, stagedState }) && (
         <Button onClick={handleShow} sx={{ margin: '0 10px' }} variant='contained'>
           {SHOW}
+        </Button>
+      )}
+      {showApprovalButton && (
+        <Button color='main' onClick={handleApproval} variant='contained'>
+          {APPROVE}
         </Button>
       )}
       <Button

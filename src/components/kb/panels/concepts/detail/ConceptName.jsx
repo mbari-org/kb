@@ -3,7 +3,6 @@ import { use, useState } from 'react'
 import { Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ApprovalButton from '@/components/kb/panels/concepts/detail/ApprovalButton'
 import ChangeStructureButton from './structure/ConceptStructureButton'
 import ChangeStructureChoices from './structure/ConceptStructureChoices'
 
@@ -12,7 +11,7 @@ import useStructureChoices from '@/components/kb/panels/concepts/detail/structur
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { isAdmin, isReadOnly } from '@/lib/auth/role'
+import { isReadOnly } from '@/lib/auth/role'
 
 const ConceptName = () => {
   const theme = useTheme()
@@ -27,7 +26,6 @@ const ConceptName = () => {
   const conceptHasNameUpdate = stagedState.name !== concept?.name
   const conceptHasParentUpdate = stagedState.parent !== concept?.parent
 
-  const showApprovalButton = isAdmin(user) && editing && !showStructureChoicesModal
   const showStructureButton =
     !isReadOnly(user) &&
     editing &&
@@ -54,7 +52,6 @@ const ConceptName = () => {
       >
         {concept?.name}
       </Typography>
-      {showApprovalButton && <ApprovalButton field={'conceptName'} />}
       {showStructureButton && (
         <ChangeStructureButton onClick={() => setShowStructureChoices(true)} />
       )}

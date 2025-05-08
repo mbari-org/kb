@@ -1,48 +1,49 @@
 import { use } from 'react'
+import { Stack } from '@mui/material'
 
-import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material'
+import ConceptRankField from '@/components/kb/panels/concepts/detail/ConceptRankField'
 
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import { RANK } from '@/lib/constants'
 
-import ApprovalButton from '@/components/kb/panels/concepts/detail/ApprovalButton'
+import ConceptContext from '@/contexts/concept/ConceptContext'
 
-const ConceptRank = ({
-  field,
-  fieldValue,
-  otherValue,
-  inputStyle,
-  onChange,
-  showApprovalButton,
-}) => {
-  const { filterRanks } = use(TaxonomyContext)
+import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
-  const rankOptions = filterRanks(field, otherValue)
-  const label = field === 'rankName' ? 'Rank' : 'Level'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+
+const ConceptRank = () => {
+  const { initialState, modifyConcept, stagedState } = use(ConceptContext)
+
+  const rankValue = field =>
+    stagedState[field] !== undefined ? stagedState[field] : initialState[field]
+
+  const rankLevelValue = rankValue(RANK.LEVEL)
+  const rankNameValue = rankValue(RANK.NAME)
+
+  const onChange = field => event => {
+    modifyConcept({
+      type: CONCEPT_STATE.FIELD.SET,
+      update: { field, value: event.target.value },
+    })
+  }
 
   return (
-    <FormControl {...inputStyle}>
-      <Box alignItems='center' display='flex' flexDirection='row' width='100%'>
-        <Box display='flex' flexDirection='column' flexGrow={1}>
-          <InputLabel id={`${field}-label`}>{label}</InputLabel>
-          <Select displayEmpty labelId={`${field}-label`} onChange={onChange} value={fieldValue}
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderTop: 'none',
-                borderLeft: 'none',
-                borderRight: 'none',
-              },
-            }}
-          >
-            {rankOptions.map(option => (
-              <MenuItem key={option} sx={{ height: '1.75em' }} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </Box>
-        {showApprovalButton && <ApprovalButton field={field} />}
-      </Box>
-    </FormControl>
+    <Stack direction='row' spacing={1.5}>
+      <ConceptRankField
+        field={RANK.NAME}
+        fieldValue={rankNameValue}
+        otherValue={rankLevelValue}
+        inputStyle={useConceptDetailStyle(RANK.NAME)}
+        onChange={onChange(RANK.NAME)}
+      />
+      <ConceptRankField
+        field={RANK.LEVEL}
+        fieldValue={rankLevelValue}
+        otherValue={rankNameValue}
+        inputStyle={useConceptDetailStyle(RANK.LEVEL)}
+        onChange={onChange(RANK.LEVEL)}
+      />
+    </Stack>
   )
 }
 

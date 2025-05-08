@@ -33,11 +33,14 @@ const useConceptDetailStyle = field => {
     ? theme.concept.color.pending
     : theme.palette.common.black
 
+  const fontWeight = fieldHasPendingHistory ? 'bold' : 'normal'
+
   const sx = useMemo(
     () => ({
       '& .MuiInputBase-input': {
         backgroundColor: theme.palette.primary.light,
         color: textColor,
+        fontWeight: fontWeight,
         WebkitTextFillColor: textColor,
       },
       '& .MuiInputBase-input.Mui-disabled': {
@@ -46,7 +49,7 @@ const useConceptDetailStyle = field => {
         WebkitTextFillColor: textColor,
       },
     }),
-    [theme, textColor]
+    [fontWeight, theme, textColor]
   )
 
   if (!editing || fieldHasPendingHistory) {
