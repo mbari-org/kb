@@ -6,25 +6,16 @@ import ConceptAlias from '@/components/kb/panels/concepts/detail/ConceptAlias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { pendingDeletedAliases } from '@/lib/kb/model/alias'
-// import { orderedAliases } from '@/lib/kb/model/aliases'
+import { stagedAlias } from '@/lib/kb/model/alias'
 
 const ConceptAliases = () => {
   const { editing, pendingHistory, stagedState } = use(ConceptContext)
 
   const stagedAliases = useMemo(
-    () => stagedState?.aliases?.map((alias, index) => ({ ...alias, index })) || [],
-    [stagedState?.aliases]
+    () =>
+      stagedState?.aliases.map((alias, index) => stagedAlias(alias, index, pendingHistory)) || [],
+    [stagedState?.aliases, pendingHistory]
   )
-
-  const cxDebug = pendingDeletedAliases(pendingHistory)
-  console.log('pending alias deletes:', cxDebug)
-
-  // const displayAliases = stagedState?.aliases || []
-  // const displayAliases = orderedAliases([
-  //   ...(stagedState?.aliases || []),
-  //   ...pendingDeletedAliases(pendingHistory),
-  // ])
 
   return (
     <Box display='flex' flexDirection='column'>

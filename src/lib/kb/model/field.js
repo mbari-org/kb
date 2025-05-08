@@ -33,37 +33,33 @@ const editItem = edit => {
   }
 }
 
-const fieldBorder = ({ itemPendingHistory, noActionBorderColor, stagedItem, theme, width }) => {
+const fieldBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
   const itemAction =
     stagedItem?.action !== CONCEPT_STATE.NO_ACTION
       ? stagedItem.action.split(' ')[1].toUpperCase()
-      : itemPendingHistory?.action
-      ? itemPendingHistory.action
       : null
 
-  // const borderWidth = stagedItem?.action === CONCEPT_STATE.NO_ACTION ? '1px' : width
-  let borderColor, borderWidth
+  const borderStyle = stagedItem.historyId ? 'solid' : 'dashed'
+  const borderWidth = itemAction ? width : '1px'
+
+  let borderColor
   switch (itemAction) {
     case 'ADD':
       borderColor = theme.palette.primary.add
-      borderWidth = width
       break
 
     case 'EDIT':
       borderColor = theme.palette.primary.edit
-      borderWidth = width
       break
 
     case 'DELETE':
       borderColor = theme.palette.primary.remove
-      borderWidth = width
       break
 
     default:
       borderColor = noActionBorderColor
-      borderWidth = '1px'
   }
-  return `${borderWidth} solid ${borderColor}`
+  return `${borderWidth} ${borderStyle} ${borderColor}`
 }
 
 const fieldEdits = ({ stateType, displayFields, initial, staged }) =>

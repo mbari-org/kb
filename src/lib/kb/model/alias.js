@@ -36,13 +36,48 @@ const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
 
 const aliasFields = alias => pick(alias, ALIAS_FIELDS)
 
-const pendingDeletedAliases = pendingHistory =>
-  fieldPendingHistory(pendingHistory, 'ConceptName')
-    .filter(history => history.action === 'DELETE')
-    .map(history => {
-      return {
-        id: history.id,
-      }
-    })
+const stagedAlias = (alias, index, pendingHistory) => {
+  const staged = {
+    ...alias,
+    index,
+  }
 
-export { ALIAS_TYPES, aliasEdits, aliasesEqual, aliasFields, EMPTY_ALIAS, pendingDeletedAliases }
+  const pendingAliasActions = fieldPendingHistory(pendingHistory, 'ConceptName')
+
+  const pendingAdd = pendingAliasActions.find(
+    history => history.action === 'ADD' && history.newValue === alias.name
+  )
+  if (pendingAdd) {
+    return {
+      ...staged,
+      action: 'PENDING ADD',
+      historyId: pendingAdd.id,
+    }
+  }
+
+  const pendingDelete = pendingAliasActions.find(
+    history => history.action === 'DELETE' && history.oldValue === alias.name
+  )
+  if (pendingDelete) {
+    return {
+      ...staged,
+      action: 'PENDING DELETE',
+      historyId: pendingDelete.id,
+    }
+  }
+
+  const pendingEdit = pendingAliasActions.find(
+    history => history.action === 'EDIT' && history.newValue === alias.name
+  )
+  if (pendingEdit) {
+    return {
+      ...staged,
+      action: 'PENDING EDIT',
+      historyId: pendingEdit.id,
+    }
+  }
+
+  return staged
+}
+
+export { ALIAS_TYPES, aliasEdits, aliasesEqual, aliasFields, EMPTY_ALIAS, stagedAlias }
