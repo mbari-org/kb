@@ -7,7 +7,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 import { LABELS } from '@/lib/constants'
 

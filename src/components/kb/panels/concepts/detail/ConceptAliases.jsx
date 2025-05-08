@@ -1,4 +1,4 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 import { Box, Typography, Stack } from '@mui/material'
 
 import AliasAdd from '@/components/kb/panels/concepts/detail/aliases/edit/AliasAdd'
@@ -6,16 +6,8 @@ import ConceptAlias from '@/components/kb/panels/concepts/detail/ConceptAlias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { stagedAlias } from '@/lib/kb/model/alias'
-
 const ConceptAliases = () => {
-  const { editing, pendingHistory, stagedState } = use(ConceptContext)
-
-  const stagedAliases = useMemo(
-    () =>
-      stagedState?.aliases.map((alias, index) => stagedAlias(alias, index, pendingHistory)) || [],
-    [stagedState?.aliases, pendingHistory]
-  )
+  const { editing, stagedState } = use(ConceptContext)
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -26,7 +18,7 @@ const ConceptAliases = () => {
         {editing && <AliasAdd />}
       </Box>
       <Stack spacing={1}>
-        {stagedAliases.map(alias => (
+        {stagedState?.aliases?.map(alias => (
           <ConceptAlias key={alias.name || alias.index} alias={alias} />
         ))}
       </Stack>

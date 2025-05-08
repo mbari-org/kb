@@ -1,6 +1,6 @@
 import { CONCEPT_NAME_TYPES } from '@/lib/constants'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 import { fieldEdits } from '@/lib/kb/model/field'
 
 import { fieldPendingHistory } from './history'
@@ -36,12 +36,7 @@ const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
 
 const aliasFields = alias => pick(alias, ALIAS_FIELDS)
 
-const stagedAlias = (alias, index, pendingHistory) => {
-  const staged = {
-    ...alias,
-    index,
-  }
-
+const stagedAlias = (alias, pendingHistory) => {
   const pendingAliasActions = fieldPendingHistory(pendingHistory, 'ConceptName')
 
   const pendingAdd = pendingAliasActions.find(
@@ -49,7 +44,7 @@ const stagedAlias = (alias, index, pendingHistory) => {
   )
   if (pendingAdd) {
     return {
-      ...staged,
+      ...alias,
       action: 'PENDING ADD',
       historyId: pendingAdd.id,
     }
@@ -60,7 +55,7 @@ const stagedAlias = (alias, index, pendingHistory) => {
   )
   if (pendingDelete) {
     return {
-      ...staged,
+      ...alias,
       action: 'PENDING DELETE',
       historyId: pendingDelete.id,
     }
@@ -71,13 +66,13 @@ const stagedAlias = (alias, index, pendingHistory) => {
   )
   if (pendingEdit) {
     return {
-      ...staged,
+      ...alias,
       action: 'PENDING EDIT',
       historyId: pendingEdit.id,
     }
   }
 
-  return staged
+  return alias
 }
 
 export { ALIAS_TYPES, aliasEdits, aliasesEqual, aliasFields, EMPTY_ALIAS, stagedAlias }

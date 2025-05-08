@@ -6,7 +6,7 @@ import EditAliasTitle from '@/components/kb/panels/concepts/detail/aliases/edit/
 
 import { createModal } from '@/components/modal/factory'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 const createEditAliasModal = action => {
   const createComponents = () => {

@@ -10,7 +10,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { LOADING } from '@/lib/constants'
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 import { descendants } from '@/lib/kb/model/taxonomy'
 
 const { RESET } = CONCEPT_STATE

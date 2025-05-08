@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { isStateModified } from '@/lib/kb/conceptState/state/conceptState'
+import { isStateModified } from '@/lib/kb/conceptState/conceptState'
 import { isJsonEqual } from '@/lib/util'
 
 const useIsModified = ({ initialState, stagedState }) => {

@@ -1,19 +1,18 @@
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
-const aliasesState = concept => {
+import { stagedAlias } from '@/lib/kb/model/alias'
+
+const aliasesState = (concept, pendingHistory) => {
   const { aliases: conceptAliases } = concept
   if (!conceptAliases) {
     return []
   }
 
-  const aliases = conceptAliases.map(alias => ({
-    ...alias,
-    action: CONCEPT_STATE.NO_ACTION,
-  }))
+  const aliases = conceptAliases.map((alias, index) =>
+    stagedAlias({ ...alias, action: CONCEPT_STATE.NO_ACTION, index }, pendingHistory)
+  )
 
-  return {
-    aliases,
-  }
+  return { aliases }
 }
 
 const addAlias = (state, update) => {

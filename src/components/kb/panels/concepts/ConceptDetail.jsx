@@ -12,7 +12,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 import { RANK } from '@/lib/constants'
 import { isAdmin } from '@/lib/auth/role'

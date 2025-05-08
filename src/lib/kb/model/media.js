@@ -1,5 +1,6 @@
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 import { displayItem, fieldEdits } from '@/lib/kb/model/field'
+import { fieldPendingHistory } from '@/lib/kb/model/history'
 
 const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
 
@@ -19,4 +20,43 @@ const mediaItemEdits = ({ initial, staged }) =>
 
 const mediaItemFields = mediaItem => displayItem(mediaItem, MEDIA_DISPLAY_FIELDS)
 
-export { getPrimary, hasPrimary, isPrimary, mediaItemEdits, mediaItemFields }
+const stagedMediaItem = (mediaItem, pendingHistory) => {
+  const pendingMediaItemActions = fieldPendingHistory(pendingHistory, 'Media')
+
+  const pendingAdd = pendingMediaItemActions.find(
+    history => history.action === 'ADD' && history.newValue === mediaItem.url
+  )
+  if (pendingAdd) {
+    return {
+      ...mediaItem,
+      action: 'PENDING ADD',
+      historyId: pendingAdd.id,
+    }
+  }
+
+  const pendingDelete = pendingMediaItemActions.find(
+    history => history.action === 'DELETE' && history.oldValue === mediaItem.url
+  )
+  if (pendingDelete) {
+    return {
+      ...mediaItem,
+      action: 'PENDING DELETE',
+      historyId: pendingDelete.id,
+    }
+  }
+
+  const pendingEdit = pendingMediaItemActions.find(
+    history => history.action === 'EDIT' && history.newValue === mediaItem.url
+  )
+  if (pendingEdit) {
+    return {
+      ...mediaItem,
+      action: 'PENDING EDIT',
+      historyId: pendingEdit.id,
+    }
+  }
+
+  return mediaItem
+}
+
+export { getPrimary, hasPrimary, isPrimary, mediaItemEdits, mediaItemFields, stagedMediaItem }

@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import useConceptDetailStyle from './useConceptDetailStyle'
 import useDebounce from '@/components/hooks/useDebounce'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 const ConceptAuthor = () => {
   const { stagedState, modifyConcept } = use(ConceptContext)

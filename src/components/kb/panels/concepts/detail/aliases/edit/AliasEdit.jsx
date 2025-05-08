@@ -2,7 +2,7 @@ import { CiEdit } from 'react-icons/ci'
 
 import AliasActionButton from '../AliasActionButton'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 const AliasEdit = ({ aliasIndex }) => {
   return (

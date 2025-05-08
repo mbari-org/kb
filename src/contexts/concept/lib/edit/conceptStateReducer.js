@@ -4,9 +4,9 @@ import {
   editAlias,
   resetAlias,
   resetAliases,
-} from '@/lib/kb/conceptState/state/aliases'
+} from '@/lib/kb/conceptState/aliases'
 
-import { resetField, setField } from '@/lib/kb/conceptState/state/field'
+import { resetField, setField } from '@/lib/kb/conceptState/field'
 
 import {
   addMedia,
@@ -14,7 +14,7 @@ import {
   editMedia,
   resetMedia,
   resetMediaItem,
-} from '@/lib/kb/conceptState/state/media'
+} from '@/lib/kb/conceptState/media'
 
 import {
   addChild,
@@ -24,9 +24,9 @@ import {
   resetAddChildren,
   resetChangeName,
   resetChangeParent,
-} from '@/lib/kb/conceptState/state/structure'
+} from '@/lib/kb/conceptState/structure'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 const { ALIAS, FIELD, MEDIA, RESET, STRUCTURE } = CONCEPT_STATE
 

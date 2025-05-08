@@ -14,7 +14,7 @@ import {
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} }) => {
   const theme = useTheme()

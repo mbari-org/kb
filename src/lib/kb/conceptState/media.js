@@ -1,17 +1,18 @@
 import { getPrimary, isPrimary } from '@/lib/kb/model/media'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
-const mediaState = concept => {
+import { stagedMediaItem } from '@/lib/kb/model/media'
+
+const mediaState = (concept, pendingHistory) => {
   const { media: conceptMedia } = concept
   const primaryMedia = getPrimary(conceptMedia)
   const otherMedia = conceptMedia.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
   const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
 
-  const media = orderedMedia.map(mediaItem => ({
-    ...mediaItem,
-    action: CONCEPT_STATE.NO_ACTION,
-  }))
+  const media = orderedMedia.map((mediaItem, index) =>
+    stagedMediaItem({ ...mediaItem, action: CONCEPT_STATE.NO_ACTION, index }, pendingHistory)
+  )
 
   return { media }
 }

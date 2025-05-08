@@ -17,9 +17,9 @@ import conceptStateReducer from '@/contexts/concept/lib/edit/conceptStateReducer
 
 import {
   CONCEPT_STATE,
-  conceptState,
   hasModifiedState,
-} from '@/lib/kb/conceptState/state/conceptState'
+  initialConceptState,
+} from '@/lib/kb/conceptState/conceptState'
 
 import { LABELS } from '@/lib/constants'
 
@@ -62,7 +62,7 @@ const ConceptProvider = ({ children }) => {
       const pendingHistory = getConceptPendingHistory(concept.name)
       setPendingHistory(pendingHistory)
 
-      const initialState = conceptState(taxonomyConcept)
+      const initialState = initialConceptState(taxonomyConcept, pendingHistory)
       setInitialState(initialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
     }

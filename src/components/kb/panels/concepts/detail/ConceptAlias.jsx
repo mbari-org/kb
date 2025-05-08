@@ -12,7 +12,6 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useCon
 import { fieldPendingHistory } from '@/lib/kb/model/history'
 
 import { fieldBorder } from '@/lib/kb/model/field'
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
 
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
@@ -36,7 +35,8 @@ const ConceptAlias = ({ alias }) => {
     width: '2px',
   })
 
-  const showEdit = editing && alias.action !== CONCEPT_STATE.ALIAS.DELETE
+  // const showEdit = editing && alias.action !== CONCEPT_STATE.ALIAS.DELETE
+  const showEdit = editing && !alias.historyId
 
   if (!alias) {
     return null

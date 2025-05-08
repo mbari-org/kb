@@ -1,6 +1,6 @@
 import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/kb/api/media'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 import { pick } from '@/lib/util'
 

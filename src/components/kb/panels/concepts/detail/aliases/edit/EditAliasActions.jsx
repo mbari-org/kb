@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 import { LABELS } from '@/lib/constants'
 

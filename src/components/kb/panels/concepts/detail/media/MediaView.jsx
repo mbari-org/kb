@@ -9,8 +9,6 @@ import MediaEdit from './edit/MediaEdit'
 import MediaPreview from './MediaPreview'
 import MediaSwiper from './MediaSwiper'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/state/conceptState'
-
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const MediaView = () => {
@@ -24,7 +22,8 @@ const MediaView = () => {
   const [previewOn, setPreviewOn] = useState(false)
   const [swiperHeight, setSwiperHeight] = useState('auto')
 
-  const showEditMedia = editing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA.DELETE
+  // const showEditMedia = editing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA.DELETE
+  const showEditMedia = editing && !media[mediaIndex]?.historyId
 
   useEffect(() => {
     if (mediaViewRef.current) {

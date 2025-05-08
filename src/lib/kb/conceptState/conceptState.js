@@ -1,7 +1,7 @@
-import { aliasesState } from '@/lib/kb/conceptState/state/aliases'
-import { fieldState } from '@/lib/kb/conceptState/state/field'
-import { mediaState } from '@/lib/kb/conceptState/state/media'
-import { structureState } from '@/lib/kb/conceptState/state/structure'
+import { aliasesState } from '@/lib/kb/conceptState/aliases'
+import { fieldState } from '@/lib/kb/conceptState/field'
+import { mediaState } from '@/lib/kb/conceptState/media'
+import { structureState } from '@/lib/kb/conceptState/structure'
 
 import { isEqual, isJsonEqual } from '@/lib/util'
 
@@ -66,7 +66,7 @@ export const FIELDS = {
   },
 }
 
-export const isStateModified = (stagedState, initialState, field, index) => {
+const isStateModified = (stagedState, initialState, field, index) => {
   switch (field) {
     case FIELDS.ALIASES: {
       const editingAlias = stagedState.aliases[index]
@@ -117,13 +117,13 @@ export const isStateModified = (stagedState, initialState, field, index) => {
 const hasModifiedState = ({ initialState, stagedState }) =>
   !!initialState && !isJsonEqual(initialState, stagedState)
 
-const conceptState = concept => {
+const initialConceptState = (concept, pendingHistory) => {
   return {
-    ...aliasesState(concept),
-    ...fieldState(concept),
-    ...mediaState(concept),
-    ...structureState(concept),
+    ...aliasesState(concept, pendingHistory),
+    ...fieldState(concept, pendingHistory),
+    ...mediaState(concept, pendingHistory),
+    ...structureState(concept, pendingHistory),
   }
 }
 
-export { CONCEPT_STATE, conceptState, hasModifiedState }
+export { CONCEPT_STATE, hasModifiedState, initialConceptState, isStateModified }
