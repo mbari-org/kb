@@ -19,6 +19,7 @@ const addAlias = (state, update) => {
   const alias = {
     ...update.alias,
     action: CONCEPT_STATE.ALIAS.ADD,
+    index: state.aliases.length,
   }
   return {
     ...state,

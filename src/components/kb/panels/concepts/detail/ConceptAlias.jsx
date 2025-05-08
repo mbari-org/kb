@@ -7,6 +7,8 @@ import AliasEdit from '@/components/kb/panels/concepts/detail/aliases/edit/Alias
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+
 import useConceptDetailStyle from '@/components/kb/panels/concepts/detail/useConceptDetailStyle'
 
 import { fieldPendingHistory } from '@/lib/kb/model/history'
@@ -16,7 +18,7 @@ import { fieldBorder } from '@/lib/kb/model/field'
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
 
-  const { editing, pendingHistory } = use(ConceptContext)
+  const { editing, pendingHistory, stagedState } = use(ConceptContext)
 
   const aliasPendingHistory = fieldPendingHistory(pendingHistory, 'ConceptName')
 
@@ -35,21 +37,19 @@ const ConceptAlias = ({ alias }) => {
     width: '2px',
   })
 
-  // const showEdit = editing && alias.action !== CONCEPT_STATE.ALIAS.DELETE
-  const showEdit = editing && !alias.historyId
-
   if (!alias) {
     return null
   }
 
+  const showEdit = editing && !alias.historyId && alias.action !== CONCEPT_STATE.ALIAS.DELETE
+  const showDelete = editing && !alias.historyId && alias.action !== CONCEPT_STATE.ALIAS.ADD
+
   return (
     <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border }}>
-      {showEdit && (
-        <Stack direction='column' spacing={-0.5}>
-          <AliasEdit aliasIndex={alias.index} />
-          <AliasDelete aliasIndex={alias.index} />
-        </Stack>
-      )}
+      <Stack direction='column' spacing={-0.5}>
+        {showEdit && <AliasEdit aliasIndex={alias.index} />}
+        {showDelete && <AliasDelete aliasIndex={alias.index} />}
+      </Stack>
       <Stack direction='row' spacing={1} width='100%'>
         <Box flex={1} sx={{ pl: 1 }}>
           <TextField {...infoStyle} label='Name' value={alias.name} />
