@@ -8,17 +8,20 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const useStagedStateDisplay = intent => {
+const useStagedStateDisplay = () => {
   const { setModal } = use(ModalContext)
 
-  return useCallback(() => {
-    const modal = createModal({
-      Actions: () => <StagedStateActions intent={intent} />,
-      Content: StagedStateContent,
-      Title: StagedStateTitle,
-    })
-    setModal(modal)
-  }, [intent, setModal])
+  return useCallback(
+    intent => {
+      const modal = createModal({
+        Actions: () => <StagedStateActions intent={intent} />,
+        Content: StagedStateContent,
+        Title: StagedStateTitle,
+      })
+      setModal(modal)
+    },
+    [setModal]
+  )
 }
 
 export default useStagedStateDisplay

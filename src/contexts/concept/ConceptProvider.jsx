@@ -1,4 +1,4 @@
-import { use, useEffect, useMemo, useReducer, useState, useRef } from 'react'
+import { use, useCallback, useEffect, useMemo, useReducer, useState, useRef } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
@@ -29,7 +29,7 @@ const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
   const isLoading = useRef(false)
 
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModal, setModalData } = use(ModalContext)
   const { selected } = use(SelectedContext)
   const { getConcept, getConceptPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)
@@ -48,25 +48,21 @@ const ConceptProvider = ({ children }) => {
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
   const pendingFieldDisplay = usePendingFieldDisplay()
 
-  useEffect(() => {
-    const taxonomyConcept = getConcept(selected.concept)
-    if (!taxonomyConcept) {
-      return
-    }
+  const handleSetConcept = useCallback(
+    selectedConcept => {
+      setModal(null)
 
-    if (concept) {
-      if (concept !== taxonomyConcept) {
-        setConcept(taxonomyConcept)
-      }
+      setConcept(selectedConcept)
 
-      const pendingHistory = getConceptPendingHistory(concept.name)
+      const pendingHistory = getConceptPendingHistory(selectedConcept.name)
       setPendingHistory(pendingHistory)
 
-      const initialState = initialConceptState(taxonomyConcept, pendingHistory)
+      const initialState = initialConceptState(selectedConcept, pendingHistory)
       setInitialState(initialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
-    }
-  }, [concept, getConcept, getConceptPendingHistory, selected.concept, setConcept])
+    },
+    [getConceptPendingHistory, setModal]
+  )
 
   useEffect(() => {
     if (!selected) {
@@ -81,13 +77,13 @@ const ConceptProvider = ({ children }) => {
         }
       } else {
         if (isConceptLoaded(selected.concept)) {
-          setConcept(getConcept(selected.concept))
+          handleSetConcept(getConcept(selected.concept))
         } else if (!isLoading.current) {
           isLoading.current = true
           setEditing(false)
           loadConcept(selected.concept)
             .then(loadedConcept => {
-              setConcept(loadedConcept)
+              handleSetConcept(loadedConcept)
             })
             .catch(error => showBoundary(error))
             .finally(() => {
@@ -99,12 +95,12 @@ const ConceptProvider = ({ children }) => {
   }, [
     concept,
     getConcept,
+    handleSetConcept,
     initialState,
     isConceptLoaded,
     loadConcept,
     modalData,
     selected,
-    setConcept,
     setEditing,
     setModalData,
     showBoundary,

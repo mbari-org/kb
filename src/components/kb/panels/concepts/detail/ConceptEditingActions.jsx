@@ -24,9 +24,7 @@ const ConceptEditingActions = () => {
   const { editing, initialState, modifyConcept, pendingHistory, setEditing, stagedState } =
     use(ConceptContext)
 
-  const stagedStateDiscard = useStagedStateDisplay(DISCARD)
-  const stagedStateSave = useStagedStateDisplay(SAVE)
-  const stagedStateShow = useStagedStateDisplay(SHOW)
+  const stagedStateDisplay = useStagedStateDisplay()
 
   const editCancelDiscardButtonText = useMemo(() => {
     if (!editing) return EDIT
@@ -38,26 +36,26 @@ const ConceptEditingActions = () => {
     console.log('approval')
   }, [])
 
-  const handleEditCancelDiscard = useCallback(() => {
+  const handleCancelDiscard = useCallback(() => {
     if (!editing) {
       setEditing(true)
     } else if (!hasModifiedState({ initialState, stagedState })) {
       setEditing(false)
     } else {
       modifyConcept({ type: TO_INITIAL })
-      stagedStateDiscard()
+      stagedStateDisplay(DISCARD)
     }
-  }, [editing, initialState, modifyConcept, stagedState, stagedStateDiscard, setEditing])
+  }, [editing, initialState, modifyConcept, setEditing, stagedState, stagedStateDisplay])
 
   const handleSave = useCallback(() => {
     modifyConcept({ type: CONFIRMED.NO })
-    stagedStateSave()
-  }, [modifyConcept, stagedStateSave])
+    stagedStateDisplay(SAVE)
+  }, [modifyConcept, stagedStateDisplay])
 
   const handleShow = useCallback(() => {
     modifyConcept({ type: CONFIRMED.NO })
-    stagedStateShow()
-  }, [modifyConcept, stagedStateShow])
+    stagedStateDisplay(SHOW)
+  }, [modifyConcept, stagedStateDisplay])
 
   const showApprovalButton = useMemo(() => {
     const hasPendingHistory = pendingHistory.length > 0
@@ -76,11 +74,7 @@ const ConceptEditingActions = () => {
         right: 15,
       }}
     >
-      <Button
-        color={editing ? 'cancel' : 'main'}
-        onClick={handleEditCancelDiscard}
-        variant='contained'
-      >
+      <Button color={editing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
         {editCancelDiscardButtonText}
       </Button>
       {editing && hasModifiedState({ initialState, stagedState }) && (
