@@ -14,7 +14,7 @@ import { LABELS } from '@/lib/constants'
 
 import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
 
-const { CONFIRM_DISCARD, CONTINUE, DISCARD_ALL } = LABELS.ACTION
+const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.ACTION
 const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
@@ -29,22 +29,26 @@ const StagedStateActions = ({ intent }) => {
   const { refreshConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
-  const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : CONTINUE]
-  const confirmLabels = [CONFIRM_DISCARD, CONTINUE]
+  const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
+  const confirmLabels = [CONFIRM_DISCARD, REJECT_DISCARD]
 
   const labels = confirmDiscard ? confirmLabels : actionLabels
 
   const onAction = label => {
     switch (label) {
-      case CONFIRM_DISCARD:
-        modifyConcept({ type: CONFIRMED.YES })
-        break
-
-      case CONTINUE:
+      case BACK_TO_EDIT:
         selectConcept(concept.name)
         selectPanel('Concepts')
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
+        break
+
+      case CONFIRM_DISCARD:
+        modifyConcept({ type: CONFIRMED.YES })
+        break
+
+      case REJECT_DISCARD:
+        modifyConcept({ type: CONFIRMED.NO })
         break
 
       case DISCARD_ALL:
