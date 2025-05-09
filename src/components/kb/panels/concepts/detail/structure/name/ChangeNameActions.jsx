@@ -16,12 +16,12 @@ const { CONFIRM_DISCARD, CONTINUE, DISCARD } = LABELS.ACTION
 const { ASSOCIATED_DATA, NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const ChangeNameActions = () => {
-  const { concept, confirmAction, modifyConcept } = use(ConceptContext)
+  const { concept, confirmDiscard, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
 
   let colors, disabled, labels
 
-  if (confirmAction) {
+  if (confirmDiscard) {
     colors = ['cancel', 'main']
     disabled = [false, !modalData.modified]
     labels = [CONFIRM_DISCARD, CONTINUE]

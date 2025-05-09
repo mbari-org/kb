@@ -9,11 +9,11 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 const { RESET } = CONCEPT_STATE
 
 const ChildReset = ({ child }) => {
-  const { confirmAction, modifyConcept, stagedState } = use(ConceptContext)
+  const { confirmDiscard, modifyConcept, stagedState } = use(ConceptContext)
 
   const resetting =
-    confirmAction?.type === RESET.ADD_CHILD ||
-    (confirmAction?.type === RESET.ADD_CHILDREN && confirmAction?.update?.child === child)
+    confirmDiscard?.type === RESET.ADD_CHILD ||
+    (confirmDiscard?.type === RESET.ADD_CHILDREN && confirmDiscard?.update?.child === child)
 
   const onClick = () => {
     // If last child, do RESET.ADD_CHILDREN
@@ -25,7 +25,7 @@ const ChildReset = ({ child }) => {
         })
   }
 
-  return <EditReset disabled={confirmAction} onClick={onClick} resetting={resetting} />
+  return <EditReset disabled={confirmDiscard} onClick={onClick} resetting={resetting} />
 }
 
 export default ChildReset

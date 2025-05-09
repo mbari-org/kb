@@ -6,20 +6,20 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
-const useModifyConcept = (dispatch, initialState, setConfirmAction, setEditing) => {
-  const [confirmingAction, setConfirmingAction] = useState(null)
+const useModifyConcept = (dispatch, initialState, setConfirmDiscard, setEditing) => {
+  const [confirmingDiscard, setConfirmingDiscard] = useState(null)
 
   return useCallback(
     action => {
       if (action.type === CONFIRMED.NO) {
-        setConfirmAction(null)
+        setConfirmDiscard(null)
         return
       }
 
       if (action.type === CONFIRMED.YES) {
-        resetConceptState(confirmingAction, dispatch, initialState)
-        setConfirmAction(null)
-        setConfirmingAction(null)
+        resetConceptState(confirmingDiscard, dispatch, initialState)
+        setConfirmDiscard(null)
+        setConfirmingDiscard(null)
         if (action.type === TO_INITIAL) {
           setEditing(false)
         }
@@ -27,14 +27,14 @@ const useModifyConcept = (dispatch, initialState, setConfirmAction, setEditing) 
       }
 
       if (isResetAction(action)) {
-        setConfirmAction(action)
-        setConfirmingAction(action)
+        setConfirmDiscard(action)
+        setConfirmingDiscard(action)
         return
       }
 
       dispatch(action)
     },
-    [confirmingAction, dispatch, initialState, setConfirmAction, setEditing]
+    [confirmingDiscard, dispatch, initialState, setConfirmDiscard, setEditing]
   )
 }
 

@@ -9,11 +9,11 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 const { NO_ACTION, RESET } = CONCEPT_STATE
 
 const AliasReset = ({ index }) => {
-  const { confirmAction, stagedState, modifyConcept } = use(ConceptContext)
+  const { confirmDiscard, stagedState, modifyConcept } = use(ConceptContext)
 
   const resetting =
-    confirmAction?.type === RESET.ALIASES ||
-    (confirmAction?.type === RESET.ALIAS && confirmAction?.update?.index === index)
+    confirmDiscard?.type === RESET.ALIASES ||
+    (confirmDiscard?.type === RESET.ALIAS && confirmDiscard?.update?.index === index)
 
   const onClick = () => {
     // If last alias, do RESET.ALIASES
@@ -26,7 +26,7 @@ const AliasReset = ({ index }) => {
         })
   }
 
-  return <EditReset disabled={confirmAction} onClick={onClick} resetting={resetting} />
+  return <EditReset disabled={confirmDiscard} onClick={onClick} resetting={resetting} />
 }
 
 export default AliasReset

@@ -19,6 +19,7 @@ const AliasesDetail = ({ edit }) => {
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <AliasesReset />
         <Typography sx={fieldSx}>Aliases</Typography>
+        {/* <Typography sx={{ ...fieldSx, color: 'text.disabled' }}>Aliases</Typography> */}
       </Box>
       <Box sx={{ ml: 3 }}>
         {aliasEdits(aliases).map(aliasEdit => {

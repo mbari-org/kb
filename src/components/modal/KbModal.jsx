@@ -17,7 +17,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 const KbModal = () => {
   const { modal, closeModal } = use(ModalContext)
-  const { confirmAction } = use(ConceptContext)
+  const { confirmDiscard } = use(ConceptContext)
 
   if (!modal) {
     return null
@@ -42,7 +42,7 @@ const KbModal = () => {
           }}
         >
           <Card sx={{ p: 2, pb: 0, position: 'relative' }}>
-            {!confirmAction && (
+            {!confirmDiscard && (
               <IconButton
                 aria-label='close'
                 onClick={() => closeModal()}

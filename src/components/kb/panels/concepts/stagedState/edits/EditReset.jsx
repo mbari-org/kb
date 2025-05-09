@@ -1,14 +1,8 @@
-import { use } from 'react'
-
 import { Button } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 import { LiaHandPointer } from 'react-icons/lia'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
-
 const EditReset = ({ disabled, onClick, resetting }) => {
-  const { confirmAction } = use(ConceptContext)
-
   if (resetting) {
     return (
       <Button
@@ -26,7 +20,7 @@ const EditReset = ({ disabled, onClick, resetting }) => {
   return (
     <Button
       color='cancel'
-      disabled={confirmAction}
+      disabled={disabled}
       onClick={onClick}
       sx={{
         mr: 0.5,
