@@ -6,7 +6,12 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 import EditReset from '../EditReset'
 
 const MediaItemReset = ({ index }) => {
-  const { stagedState, modifyConcept } = use(ConceptContext)
+  const { confirmAction, modifyConcept, stagedState } = use(ConceptContext)
+
+  const resetting =
+    confirmAction?.type === CONCEPT_STATE.RESET.MEDIA ||
+    (confirmAction?.type === CONCEPT_STATE.RESET.MEDIA_ITEM &&
+      confirmAction?.update?.index === index)
 
   const onClick = () => {
     // CxTBD Check if this is the only media item edit left, and if so, do RESET.MEDIA
@@ -19,7 +24,7 @@ const MediaItemReset = ({ index }) => {
         })
   }
 
-  return <EditReset onClick={onClick} />
+  return <EditReset disabled={confirmAction} onClick={onClick} resetting={resetting} />
 }
 
 export default MediaItemReset

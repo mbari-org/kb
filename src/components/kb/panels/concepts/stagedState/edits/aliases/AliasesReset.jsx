@@ -9,13 +9,15 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 const { RESET } = CONCEPT_STATE
 
 const AliasesReset = () => {
-  const { modifyConcept } = use(ConceptContext)
+  const { confirmAction, modifyConcept } = use(ConceptContext)
+
+  const resetting = confirmAction?.type === RESET.ALIASES
 
   const onClick = () => {
     modifyConcept({ type: RESET.ALIASES })
   }
 
-  return <EditReset onClick={onClick} />
+  return <EditReset disabled={confirmAction} onClick={onClick} resetting={resetting} />
 }
 
 export default AliasesReset

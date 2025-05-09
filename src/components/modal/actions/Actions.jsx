@@ -28,7 +28,7 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
       <Box sx={{ minHeight: '44px', display: 'flex', justifyContent: 'center' }}>
         {!!confirmAction && (
           <Typography color='cancel' sx={{ mt: 2 }}>
-            Discarding edits is final. Please confirm to discard.
+            Discarding edits is final. Please confirm you want to discard the indicated edits.
           </Typography>
         )}
       </Box>
