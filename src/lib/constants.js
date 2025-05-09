@@ -15,7 +15,7 @@ const LABELS = {
   ACTION: {
     BACK_TO_EDIT: 'Back to Edit',
     CONFIRM_DISCARD: 'Confirm Discard',
-    REJECT_DISCARD: "Don't Discard",
+    REJECT_DISCARD: 'Keep Edit',
     CONTINUE: 'Continue',
     DISCARD: 'Discard',
     DISCARD_ALL: 'Discard All',

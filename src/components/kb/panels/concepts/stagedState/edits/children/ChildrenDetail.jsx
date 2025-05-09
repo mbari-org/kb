@@ -31,6 +31,8 @@ const ChildrenDetail = ({ edit }) => {
   const childrenSx =
     resettingChild() === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
+  if (children.staged.length === 0) return null
+
   return (
     <Box
       sx={{
