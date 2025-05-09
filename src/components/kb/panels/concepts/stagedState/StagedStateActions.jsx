@@ -14,7 +14,7 @@ import { LABELS } from '@/lib/constants'
 
 import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
 
-const { CONFIRM_DISCARD, CONTINUE, DISCARD } = LABELS.ACTION
+const { CONFIRM_DISCARD, CONTINUE, DISCARD_ALL } = LABELS.ACTION
 const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
@@ -22,17 +22,17 @@ const SAVING = 'Saving...'
 
 const StagedStateActions = ({ intent }) => {
   const { apiFns } = use(ConfigContext)
-  const { concept, confirmReset, initialState, modifyConcept, setEditing, stagedState } =
+  const { concept, confirmAction, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
   const { refreshConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
-  const actionLabels = [DISCARD, intent === SAVE ? SAVE : CONTINUE]
+  const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : CONTINUE]
   const confirmLabels = [CONFIRM_DISCARD, CONTINUE]
 
-  const labels = confirmReset ? confirmLabels : actionLabels
+  const labels = confirmAction ? confirmLabels : actionLabels
 
   const onAction = label => {
     switch (label) {
@@ -47,7 +47,7 @@ const StagedStateActions = ({ intent }) => {
         closeModal()
         break
 
-      case DISCARD:
+      case DISCARD_ALL:
         modifyConcept({ type: TO_INITIAL })
         break
 

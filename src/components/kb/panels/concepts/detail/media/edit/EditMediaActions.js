@@ -17,7 +17,7 @@ const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
 const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const EditMediaActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmAction, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
 
   const { mediaItem, modified } = modalData
@@ -29,7 +29,7 @@ const EditMediaActions = () => {
 
   const colors = ['cancel', 'main']
   const disabled = [false, !modified && validMediaItem]
-  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
+  const labels = confirmAction ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
     switch (label) {

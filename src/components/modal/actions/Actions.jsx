@@ -7,7 +7,7 @@ import Action from './Action'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const Actions = ({ colors, disabled, labels, onAction }) => {
-  const { confirmReset } = use(ConceptContext)
+  const { confirmAction } = use(ConceptContext)
 
   const actionColor = index => (colors ? colors[index] : 'main')
 
@@ -26,7 +26,7 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ minHeight: '44px', display: 'flex', justifyContent: 'center' }}>
-        {confirmReset && (
+        {!!confirmAction && (
           <Typography color='cancel' sx={{ mt: 2 }}>
             Discarding edits is final. Please confirm to discard.
           </Typography>

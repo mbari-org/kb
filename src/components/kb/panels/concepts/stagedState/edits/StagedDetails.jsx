@@ -25,7 +25,7 @@ const StagedDetails = () => {
     [initialState, stagedState]
   )
 
-  const editComponent = edit => {
+  const detailComponent = edit => {
     const [field, { staged }] = edit
     switch (field) {
       case 'aliases':
@@ -56,7 +56,9 @@ const StagedDetails = () => {
   }, [stagedState, initialState, closeModal])
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{edits.map(editComponent)}</Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+      {edits.map(detailComponent)}
+    </Box>
   )
 }
 
