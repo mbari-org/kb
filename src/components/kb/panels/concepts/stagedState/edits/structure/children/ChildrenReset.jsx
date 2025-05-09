@@ -11,7 +11,8 @@ const { RESET } = CONCEPT_STATE
 const ChildrenReset = () => {
   const { confirmDiscard, modifyConcept } = use(ConceptContext)
 
-  const resetting = confirmDiscard?.type === RESET.ADD_CHILDREN
+  const resetting =
+    confirmDiscard?.type === RESET.ADD_CHILDREN || confirmDiscard?.type === RESET.TO_INITIAL
 
   const onClick = () => {
     modifyConcept({ type: RESET.ADD_CHILDREN })

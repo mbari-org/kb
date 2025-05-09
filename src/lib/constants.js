@@ -1,9 +1,13 @@
+const APPROVE = 'Approve'
+
 const CONCEPT_NAME_TYPES = {
   COMMON: 'Common',
   FORMER: 'Former',
   PRIMARY: 'Primary',
   SYNONYM: 'Synonym',
 }
+
+const DEFER = 'Defer'
 
 const DISCARD = 'Discard'
 
@@ -31,10 +35,6 @@ const LABELS = {
   },
 }
 
-const APPROVE = 'Approve'
-const DEFER = 'Defer'
-const REJECT = 'Reject'
-
 const LOADING = 'Loading...'
 
 const LOADING_DELAY = 333
@@ -44,7 +44,15 @@ const RANK = {
   NAME: 'rankName',
 }
 
+const REJECT = 'Reject'
+
 const RESET = 'Reset'
+
+const RESETTING = {
+  ME: 'Me',
+  NONE: 'None',
+  OTHER: 'Other',
+}
 
 const ROLES = {
   ADMIN: 'Admin',
@@ -67,6 +75,7 @@ export {
   RANK,
   REJECT,
   RESET,
+  RESETTING,
   ROLES,
   SAVING,
   STAGE,

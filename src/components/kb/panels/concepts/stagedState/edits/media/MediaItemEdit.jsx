@@ -5,13 +5,18 @@ import MediaItemDetail from './MediaItemDetail'
 
 import { fieldSx } from '@/components/common/format'
 
+import { RESETTING } from '@/lib/constants'
+
 const urlFile = url => url?.split('/').pop()
 
-const MediaItemEdit = ({ mediaItemEdit, initial }) => {
+const MediaItemEdit = ({ mediaItemEdit, initial, resetting }) => {
   const { action, index, updates } = mediaItemEdit
 
   const actionText = `${action.split(' ').pop()}`
   const actionFile = urlFile(initial?.url) || urlFile(updates?.url) || ''
+
+  const mediaItemSx =
+    resetting === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   return (
     <Box
@@ -25,11 +30,11 @@ const MediaItemEdit = ({ mediaItemEdit, initial }) => {
       <Box sx={{ alignItems: 'center', display: 'flex' }}>
         <MediaItemReset index={index} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={fieldSx}>{actionText}:</Typography>
-          <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
+          <Typography sx={mediaItemSx}>{actionText}:</Typography>
+          <Typography sx={{ ...mediaItemSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
         </Box>
       </Box>
-      <MediaItemDetail action={action} initial={initial} updates={updates} />
+      <MediaItemDetail action={action} initial={initial} resetting={resetting} updates={updates} />
     </Box>
   )
 }

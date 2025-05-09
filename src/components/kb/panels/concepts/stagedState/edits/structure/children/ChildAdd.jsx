@@ -8,7 +8,9 @@ import { fieldSx } from '@/components/common/format'
 
 import { drop } from '@/lib/util'
 
-const ChildAdd = ({ child }) => {
+import { RESETTING } from '@/lib/constants'
+
+const ChildAdd = ({ child, resetting }) => {
   const fields = drop(child, ['name'])
   const fieldValues = Object.entries(fields).reduce((acc, [field, value]) => {
     if (value) {
@@ -16,6 +18,8 @@ const ChildAdd = ({ child }) => {
     }
     return acc
   }, [])
+
+  const childSx = resetting === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   return (
     <Box
@@ -29,13 +33,13 @@ const ChildAdd = ({ child }) => {
       <Box sx={{ alignItems: 'center', display: 'flex' }}>
         <ChildReset child={child} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={fieldSx}>Add:</Typography>
-          <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{child.name}</Typography>
+          <Typography sx={childSx}>Add:</Typography>
+          <Typography sx={{ ...childSx, fontWeight: 'bold', ml: 1 }}>{child.name}</Typography>
         </Box>
       </Box>
       <Box sx={{ ml: 7 }}>
         {fieldValues.map(([field, value]) => (
-          <FieldValueDisplay key={field} field={field} value={value} />
+          <FieldValueDisplay key={field} field={field} resetting={resetting} value={value} />
         ))}
       </Box>
     </Box>

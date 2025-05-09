@@ -13,7 +13,8 @@ const ChildReset = ({ child }) => {
 
   const resetting =
     confirmDiscard?.type === RESET.ADD_CHILD ||
-    (confirmDiscard?.type === RESET.ADD_CHILDREN && confirmDiscard?.update?.child === child)
+    (confirmDiscard?.type === RESET.ADD_CHILDREN && confirmDiscard?.update?.child === child) ||
+    confirmDiscard?.type === RESET.TO_INITIAL
 
   const onClick = () => {
     // If last child, do RESET.ADD_CHILDREN

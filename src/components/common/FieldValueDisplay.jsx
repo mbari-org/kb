@@ -1,8 +1,20 @@
 import { Box, Typography } from '@mui/material'
 
-import { fieldSx, formatField, valueSx } from '@/components/common/format'
+import {
+  fieldSx as baseFieldSx,
+  formatField,
+  valueSx as baseValueSx,
+} from '@/components/common/format'
 
-const FieldValueDisplay = ({ field, value, sx }) => {
+import { RESETTING } from '@/lib/constants'
+
+const FieldValueDisplay = ({ field, resetting, sx, value }) => {
+  const fieldSx =
+    resetting === RESETTING.OTHER ? { ...baseFieldSx, color: 'text.disabled' } : baseFieldSx
+
+  const valueSx =
+    resetting === RESETTING.OTHER ? { ...baseValueSx, color: 'text.disabled' } : baseValueSx
+
   return (
     <Box key={field} display='flex' flexDirection='row' sx={sx}>
       <Typography sx={fieldSx}>{formatField(field)}:</Typography>

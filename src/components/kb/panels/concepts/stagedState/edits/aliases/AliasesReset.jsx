@@ -11,7 +11,8 @@ const { RESET } = CONCEPT_STATE
 const AliasesReset = () => {
   const { confirmDiscard, modifyConcept } = use(ConceptContext)
 
-  const resetting = confirmDiscard?.type === RESET.ALIASES
+  const resetting =
+    confirmDiscard?.type === RESET.ALIASES || confirmDiscard?.type === RESET.TO_INITIAL
 
   const onClick = () => {
     modifyConcept({ type: RESET.ALIASES })

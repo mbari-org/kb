@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Box } from '@mui/material'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
@@ -6,37 +7,37 @@ import { formatDelta } from '@/components/common/format'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
-const {
-  ALIAS: { ADD, DELETE, EDIT },
-} = CONCEPT_STATE
+const { ALIAS } = CONCEPT_STATE
 
 import { drop } from '@/lib/util'
 
-const AliasDetail = ({ action, initial, updates }) => {
-  let fieldValues
+const AliasDetail = ({ action, initial, resetting, updates }) => {
+  const fieldValues = useMemo(() => {
+    let fieldValues
+    switch (action) {
+      case ALIAS.ADD:
+        fieldValues = Object.entries(drop(updates, ['name']))
+        break
 
-  switch (action) {
-    case ADD:
-      fieldValues = Object.entries(drop(updates, ['name']))
-      break
+      case ALIAS.DELETE:
+        fieldValues = []
+        break
 
-    case DELETE:
-      fieldValues = []
-      break
-
-    case EDIT:
-      fieldValues = Object.entries(updates).map(([field, value]) => {
-        if (initial[field] !== value) {
-          return [field, formatDelta(initial[field], value)]
-        }
-      })
-      break
-  }
+      case ALIAS.EDIT:
+        fieldValues = Object.entries(updates).map(([field, value]) => {
+          if (initial[field] !== value) {
+            return [field, formatDelta(initial[field], value)]
+          }
+        })
+        break
+    }
+    return fieldValues
+  }, [action, initial, updates])
 
   return (
     <Box sx={{ ml: 7 }}>
       {fieldValues?.map(([field, value]) => (
-        <FieldValueDisplay key={field} field={field} value={value} />
+        <FieldValueDisplay key={field} field={field} resetting={resetting} value={value} />
       ))}
     </Box>
   )

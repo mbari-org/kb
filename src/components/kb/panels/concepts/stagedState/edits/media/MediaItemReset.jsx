@@ -11,7 +11,8 @@ const MediaItemReset = ({ index }) => {
   const resetting =
     confirmDiscard?.type === CONCEPT_STATE.RESET.MEDIA ||
     (confirmDiscard?.type === CONCEPT_STATE.RESET.MEDIA_ITEM &&
-      confirmDiscard?.update?.index === index)
+      confirmDiscard?.update?.index === index) ||
+    confirmDiscard?.type === CONCEPT_STATE.RESET.TO_INITIAL
 
   const onClick = () => {
     // CxTBD Check if this is the only media item edit left, and if so, do RESET.MEDIA

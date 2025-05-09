@@ -8,7 +8,9 @@ import EditReset from '../EditReset'
 const MediaReset = () => {
   const { confirmDiscard, modifyConcept } = use(ConceptContext)
 
-  const resetting = confirmDiscard?.type === CONCEPT_STATE.RESET.MEDIA
+  const resetting =
+    confirmDiscard?.type === CONCEPT_STATE.RESET.MEDIA ||
+    confirmDiscard?.type === CONCEPT_STATE.RESET.TO_INITIAL
 
   const onClick = () => {
     modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })

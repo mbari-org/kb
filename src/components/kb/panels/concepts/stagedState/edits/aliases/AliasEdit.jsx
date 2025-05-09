@@ -5,11 +5,15 @@ import AliasReset from './AliasReset'
 
 import { fieldSx } from '@/components/common/format'
 
-const AliasEdit = ({ aliasEdit, initial }) => {
+import { RESETTING } from '@/lib/constants'
+
+const AliasEdit = ({ aliasEdit, initial, resetting }) => {
   const { action, index, updates } = aliasEdit
 
   const actionText = `${action.split(' ').pop()}`
   const aliasName = initial?.name || updates?.name
+
+  const aliasSx = resetting === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   return (
     <Box
@@ -23,11 +27,11 @@ const AliasEdit = ({ aliasEdit, initial }) => {
       <Box sx={{ alignItems: 'center', display: 'flex' }}>
         <AliasReset index={index} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={fieldSx}>{actionText}:</Typography>
-          <Typography sx={{ ...fieldSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>
+          <Typography sx={aliasSx}>{actionText}:</Typography>
+          <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>
         </Box>
       </Box>
-      <AliasDetail action={action} initial={initial} updates={updates} />
+      <AliasDetail action={action} initial={initial} resetting={resetting} updates={updates} />
     </Box>
   )
 }

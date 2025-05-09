@@ -13,7 +13,8 @@ const AliasReset = ({ index }) => {
 
   const resetting =
     confirmDiscard?.type === RESET.ALIASES ||
-    (confirmDiscard?.type === RESET.ALIAS && confirmDiscard?.update?.index === index)
+    (confirmDiscard?.type === RESET.ALIAS && confirmDiscard?.update?.index === index) ||
+    confirmDiscard?.type === RESET.TO_INITIAL
 
   const onClick = () => {
     // If last alias, do RESET.ALIASES
