@@ -13,7 +13,7 @@ const DISCARD = 'Discard'
 
 const LABELS = {
   ACTION: {
-    BACK_TO_EDIT: 'Back to Edit',
+    BACK_TO_EDIT: 'Back to Editing',
     CONFIRM_DISCARD: 'Confirm Discard',
     REJECT_DISCARD: 'Keep Edit',
     CONTINUE: 'Continue',

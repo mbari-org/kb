@@ -68,9 +68,17 @@ const resetMedia = (state, update) => {
 
 const resetMediaItem = (state, update) => {
   const { mediaIndex, mediaItem } = update
+  if (mediaItem) {
+    return {
+      ...state,
+      media: state.media.map((item, index) => (index === mediaIndex ? mediaItem : item)),
+      mediaIndex: 0,
+    }
+  }
   return {
     ...state,
-    media: state.media.map((item, index) => (index === mediaIndex ? mediaItem : item)),
+    media: state.media.filter((_item, index) => index !== mediaIndex),
+    mediaIndex: 0,
   }
 }
 

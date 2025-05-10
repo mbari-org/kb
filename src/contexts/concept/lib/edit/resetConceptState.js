@@ -117,7 +117,7 @@ const resetToInitial = (dispatch, initialState) => {
 const resetConceptState = (action, dispatch, initialState) => {
   switch (action.type) {
     case RESET.ALIAS:
-      resetAlias(action.update.aliasIndex, dispatch, initialState)
+      resetAlias(action.update.index, dispatch, initialState)
       break
 
     case RESET.ALIASES:
@@ -153,7 +153,7 @@ const resetConceptState = (action, dispatch, initialState) => {
       break
 
     case RESET.MEDIA_ITEM:
-      resetMediaItem(action.update.mediaIndex, dispatch, initialState)
+      resetMediaItem(action.update.index, dispatch, initialState)
       break
 
     case RESET.TO_INITIAL:

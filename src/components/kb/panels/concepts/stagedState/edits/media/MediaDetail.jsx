@@ -23,7 +23,7 @@ const MediaDetail = ({ edit }) => {
   const resettingMediaItem = index => {
     if (!confirmDiscard) return RESETTING.NONE
     if (confirmDiscard.type === RESET.MEDIA) return RESETTING.ME
-    if (confirmDiscard.type === RESET.MEDIA_ITEM && confirmDiscard.index === index)
+    if (confirmDiscard.type === RESET.MEDIA_ITEM && confirmDiscard.update?.index === index)
       return RESETTING.ME
     if (confirmDiscard.type === RESET.TO_INITIAL) return RESETTING.ME
     return RESETTING.OTHER

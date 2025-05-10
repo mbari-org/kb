@@ -64,9 +64,15 @@ const isEmptyAlias = alias => {
 
 const resetAlias = (state, update) => {
   const { alias, aliasIndex } = update
+  if (alias) {
+    return {
+      ...state,
+      aliases: state.aliases.map((item, index) => (index === aliasIndex ? alias : item)),
+    }
+  }
   return {
     ...state,
-    aliases: state.aliases.map((item, index) => (index === aliasIndex ? alias : item)),
+    aliases: state.aliases.filter((_item, index) => index !== aliasIndex),
   }
 }
 
