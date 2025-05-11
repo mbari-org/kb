@@ -6,22 +6,26 @@ import PendingTitle from '@/components/kb/panels/concept/change/pending/modal/Pe
 
 import { createModal } from '@/components/modal/factory'
 
+import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const useDisplayPending = () => {
+  const { setConfirmPending } = use(ConceptContext)
   const { setModal } = use(ModalContext)
 
   return useCallback(
     intent => {
+      setConfirmPending(null)
+
       const modal = createModal({
         Actions: () => <PendingActions intent={intent} />,
         Content: PendingContent,
         Title: PendingTitle,
-        minWidth: 600,
+        minWidth: 625,
       })
       setModal(modal)
     },
-    [setModal]
+    [setConfirmPending, setModal]
   )
 }
 
