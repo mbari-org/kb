@@ -1,8 +1,8 @@
 import { use, useCallback } from 'react'
 
-import StagedStateActions from '@/components/kb/panels/concept/stagedState/StagedStateActions'
-import StagedStateContent from '@/components/kb/panels/concept/stagedState/StagedStateContent'
-import StagedStateTitle from '@/components/kb/panels/concept/stagedState/StagedStateTitle'
+import StagedStateActions from '@/components/kb/panels/concept/change/stagedState/modal/StagedStateActions'
+import StagedStateContent from '@/components/kb/panels/concept/change/stagedState/modal/StagedStateContent'
+import StagedStateTitle from '@/components/kb/panels/concept/change/stagedState/modal/StagedStateTitle'
 
 import { createModal } from '@/components/modal/factory'
 

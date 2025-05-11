@@ -2,11 +2,11 @@ import { use, useEffect, useMemo } from 'react'
 
 import { Box } from '@mui/material'
 
-import AliasesDetail from './aliases/AliasesDetail'
-import ChildrenDetail from './children/ChildrenDetail'
-import FieldDeltaDetail from './field/FieldDeltaDetail'
-import FieldValueDetail from './field/FieldValueDetail'
-import MediaDetail from './media/MediaDetail'
+import AliasesDetail from '@/components/kb/panels/concept/change/stagedState/aliases/AliasesDetail'
+import ChildrenDetail from '@/components/kb/panels/concept/change/stagedState/children/ChildrenDetail'
+import FieldDeltaDetail from '@/components/kb/panels/concept/change/stagedState/field/FieldDeltaDetail'
+import FieldValueDetail from '@/components/kb/panels/concept/change/stagedState/field/FieldValueDetail'
+import MediaDetail from '@/components/kb/panels/concept/change/stagedState/media/MediaDetail'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'

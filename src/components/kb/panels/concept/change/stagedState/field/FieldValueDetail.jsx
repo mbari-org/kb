@@ -23,7 +23,7 @@ const FieldValueDetail = ({ field, value }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <FieldReset field={field} />
-      <FieldValueDisplay field={field} resetting={resetting} value={value} />
+      <FieldValueDisplay field={field} changing={resetting} value={value} />
     </Box>
   )
 }

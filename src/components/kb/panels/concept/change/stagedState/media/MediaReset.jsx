@@ -3,7 +3,7 @@ import { use } from 'react'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
-import EditReset from '../EditReset'
+import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
 
 const MediaReset = () => {
   const { confirmDiscard, modifyConcept } = use(ConceptContext)
@@ -16,7 +16,14 @@ const MediaReset = () => {
     modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
   }
 
-  return <EditReset disabled={confirmDiscard} onClick={onClick} resetting={resetting} />
+  return (
+    <ChangeActionButton
+      changing={resetting}
+      color='cancel'
+      disabled={confirmDiscard}
+      onClick={onClick}
+    />
+  )
 }
 
 export default MediaReset

@@ -12,6 +12,7 @@ const add = '#008800'
 const edit = '#ee8311'
 const remove = '#af0000'
 
+const approve = add
 const cancel = '#af0000'
 const clean = '#008800'
 const conceptDetail = '#008800'
@@ -20,6 +21,7 @@ const navActive = '#ffffff'
 const paper = '#f0f0f0'
 const pendingIconClean = '#00dd00'
 const pendingIconDirty = '#dd0000'
+const reject = remove
 
 const theme = createTheme({
   concept: {
@@ -59,6 +61,7 @@ const theme = createTheme({
       paperDark: darken(paper, 0.1),
       paperLight: lighten(paper, 0.1),
     },
+    approve: addColor(approve),
     cancel: addColor(cancel),
     clean: addColor(clean),
     edit: addColor(edit),
@@ -67,6 +70,7 @@ const theme = createTheme({
     main: addColor(main),
     modified: addColor(modified),
     remove: addColor(remove),
+    reject: addColor(reject),
     primary: {
       add,
       cancel,

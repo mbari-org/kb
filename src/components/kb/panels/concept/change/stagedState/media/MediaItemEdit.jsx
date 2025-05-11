@@ -34,7 +34,7 @@ const MediaItemEdit = ({ mediaItemEdit, initial, resetting }) => {
           <Typography sx={{ ...mediaItemSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
         </Box>
       </Box>
-      <MediaItemDetail action={action} initial={initial} resetting={resetting} updates={updates} />
+      <MediaItemDetail action={action} initial={initial} changing={resetting} updates={updates} />
     </Box>
   )
 }

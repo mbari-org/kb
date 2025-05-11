@@ -2,11 +2,11 @@ import { Button } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 import { LiaHandPointer } from 'react-icons/lia'
 
-const EditReset = ({ disabled, onClick, resetting }) => {
-  if (resetting) {
+const ChangeActionButton = ({ changing, color, disabled, onClick }) => {
+  if (changing) {
     return (
       <Button
-        color='cancel'
+        color={color}
         onClick={onClick}
         sx={{
           minWidth: 'auto',
@@ -19,7 +19,7 @@ const EditReset = ({ disabled, onClick, resetting }) => {
 
   return (
     <Button
-      color='cancel'
+      color={color}
       disabled={disabled}
       onClick={onClick}
       sx={{
@@ -32,4 +32,4 @@ const EditReset = ({ disabled, onClick, resetting }) => {
   )
 }
 
-export default EditReset
+export default ChangeActionButton

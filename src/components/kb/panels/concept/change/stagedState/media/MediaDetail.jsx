@@ -52,7 +52,7 @@ const MediaDetail = ({ edit }) => {
               key={`${action}-${index}`}
               initial={media.initial?.[index]}
               mediaItemEdit={mediaItemEdit}
-              resetting={resettingMediaItem(index)}
+              changing={resettingMediaItem(index)}
             />
           )
         })}

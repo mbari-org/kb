@@ -31,7 +31,7 @@ const AliasEdit = ({ aliasEdit, initial, resetting }) => {
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>
         </Box>
       </Box>
-      <AliasDetail action={action} initial={initial} resetting={resetting} updates={updates} />
+      <AliasDetail action={action} initial={initial} changing={resetting} updates={updates} />
     </Box>
   )
 }

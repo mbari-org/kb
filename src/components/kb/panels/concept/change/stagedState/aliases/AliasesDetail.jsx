@@ -51,7 +51,7 @@ const AliasesDetail = ({ edit }) => {
               key={`${action}-${index}`}
               aliasEdit={aliasEdit}
               initial={aliases.initial?.[index]}
-              resetting={resettingAlias(index)}
+              changing={resettingAlias(index)}
             />
           )
         })}

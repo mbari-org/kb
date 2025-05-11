@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import EditReset from '@/components/kb/panels/concept/stagedState/edits/EditReset'
+import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
@@ -27,7 +27,14 @@ const AliasReset = ({ index }) => {
         })
   }
 
-  return <EditReset disabled={confirmDiscard} onClick={onClick} resetting={resetting} />
+  return (
+    <ChangeActionButton
+      changing={resetting}
+      color='cancel'
+      disabled={confirmDiscard}
+      onClick={onClick}
+    />
+  )
 }
 
 export default AliasReset

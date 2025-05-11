@@ -37,7 +37,7 @@ const AliasDetail = ({ action, initial, resetting, updates }) => {
   return (
     <Box sx={{ ml: 7 }}>
       {fieldValues?.map(([field, value]) => (
-        <FieldValueDisplay key={field} field={field} resetting={resetting} value={value} />
+        <FieldValueDisplay key={field} field={field} changing={resetting} value={value} />
       ))}
     </Box>
   )

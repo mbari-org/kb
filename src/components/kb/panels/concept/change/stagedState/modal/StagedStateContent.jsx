@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 
 import Description from '@/components/common/Description'
-import StagedDetails from '@/components/kb/panels/concept/stagedState/edits/StagedDetails'
+import StagedDetails from '@/components/kb/panels/concept/change/stagedState/StagedDetail'
 
 const StagedStateContent = () => {
   return (

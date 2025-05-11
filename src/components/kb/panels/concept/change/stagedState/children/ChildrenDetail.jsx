@@ -49,7 +49,7 @@ const ChildrenDetail = ({ edit }) => {
         {children.staged.map((child, index) => {
           const { name } = child
           return (
-            <ChildAdd key={`add-child-${name}`} child={child} resetting={resettingChild(index)} />
+            <ChildAdd key={`add-child-${name}`} child={child} changing={resettingChild(index)} />
           )
         })}
       </Box>

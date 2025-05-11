@@ -1,9 +1,10 @@
 import { use } from 'react'
 
+import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
+
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
-import EditReset from '../EditReset'
 
 const FieldReset = ({ field }) => {
   const { confirmDiscard, modifyConcept } = use(ConceptContext)
@@ -14,7 +15,14 @@ const FieldReset = ({ field }) => {
 
   const onClick = () => modifyConcept({ type: CONCEPT_STATE.RESET.FIELD, update: { field } })
 
-  return <EditReset disabled={confirmDiscard} onClick={onClick} resetting={resetting} />
+  return (
+    <ChangeActionButton
+      changing={resetting}
+      color='cancel'
+      disabled={confirmDiscard}
+      onClick={onClick}
+    />
+  )
 }
 
 export default FieldReset

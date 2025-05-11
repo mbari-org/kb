@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 
 import Action from './Action'
 
@@ -25,13 +25,18 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ minHeight: '44px', display: 'flex', justifyContent: 'center' }}>
+      <Stack spacing={0} sx={{ alignItems: 'center', minHeight: '60px', mt: 2 }}>
         {!!confirmDiscard && (
-          <Typography color='cancel' sx={{ mt: 2 }}>
-            Discarding edits is final. Please confirm you want to discard the indicated edits.
-          </Typography>
+          <>
+            <Typography color='cancel' sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+              Discarding edits is final.
+            </Typography>
+            <Typography color='cancel' sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+              Please confirm you want to discard the indicated edits.
+            </Typography>
+          </>
         )}
-      </Box>
+      </Stack>
       <Box
         sx={{
           backgroundColor: 'inherit',
