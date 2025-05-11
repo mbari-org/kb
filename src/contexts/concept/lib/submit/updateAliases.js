@@ -1,6 +1,6 @@
 import { createAlias, deleteAlias, updateAlias } from '@/lib/kb/api/aliases'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const { ALIAS } = CONCEPT_STATE
 

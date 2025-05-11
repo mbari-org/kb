@@ -1,0 +1,38 @@
+import { use } from 'react'
+
+import ConceptContext from '@/contexts/concept/ConceptContext'
+
+import { CONCEPT_STATE } from '@/lib/constants'
+import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
+
+const MediaItemReset = ({ index }) => {
+  const { confirmDiscard, modifyConcept, stagedState } = use(ConceptContext)
+
+  const resetting =
+    confirmDiscard?.type === CONCEPT_STATE.RESET.MEDIA ||
+    (confirmDiscard?.type === CONCEPT_STATE.RESET.MEDIA_ITEM &&
+      confirmDiscard?.update?.index === index) ||
+    confirmDiscard?.type === CONCEPT_STATE.RESET.TO_INITIAL
+
+  const onClick = () => {
+    // CxTBD Check if this is the only media item edit left, and if so, do RESET.MEDIA
+    const count = stagedState.media.filter(item => item.action !== CONCEPT_STATE.NO_ACTION).length
+    count === 1
+      ? modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
+      : modifyConcept({
+          type: CONCEPT_STATE.RESET.MEDIA_ITEM,
+          update: { index },
+        })
+  }
+
+  return (
+    <ChangeActionButton
+      changing={resetting}
+      color='cancel'
+      disabled={confirmDiscard}
+      onClick={onClick}
+    />
+  )
+}
+
+export default MediaItemReset

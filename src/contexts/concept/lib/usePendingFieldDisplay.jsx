@@ -1,9 +1,9 @@
 import { use, useCallback } from 'react'
 
 import { createModal } from '@/components/modal/factory'
-import PendingFieldActions from '@/components/kb/panels/concept/detail/pendingField/PendingFieldActions'
-import PendingFieldContent from '@/components/kb/panels/concept/detail/pendingField/PendingFieldContent'
-import PendingFieldTitle from '@/components/kb/panels/concept/detail/pendingField/PendingFieldTitle'
+import PendingFieldActions from '@/components/kb/panels/concept/change/staged/field/pending/PendingFieldActions'
+import PendingFieldContent from '@/components/kb/panels/concept/change/staged/field/pending/PendingFieldContent'
+import PendingFieldTitle from '@/components/kb/panels/concept/change/staged/field/pending/PendingFieldTitle'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 

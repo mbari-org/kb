@@ -1,6 +1,6 @@
 import { CONCEPT_NAME_TYPES } from '@/lib/constants'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+import { CONCEPT_STATE } from '@/lib/constants'
 import { fieldEdits } from '@/lib/kb/model/field'
 
 import { fieldPendingHistory } from './history'

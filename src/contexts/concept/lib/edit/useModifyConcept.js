@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { isResetAction, resetConceptState } from '@/contexts/concept/lib/edit/resetConceptState'
 
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 

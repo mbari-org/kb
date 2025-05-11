@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const deleteItem = edit => {
   const { action, index } = edit

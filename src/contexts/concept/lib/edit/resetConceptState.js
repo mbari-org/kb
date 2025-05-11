@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+import { CONCEPT_STATE } from '@/lib/constants'
 const RESET = CONCEPT_STATE.RESET
 
 const RESET_ACTIONS = [

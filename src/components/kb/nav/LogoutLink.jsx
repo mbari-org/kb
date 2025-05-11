@@ -10,7 +10,7 @@ import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDis
 
 import { LABELS } from '@/lib/constants'
 
-import { hasModifiedState } from '@/lib/kb/conceptState/conceptState'
+import { hasModifiedState } from '@/lib/kb/state/concept'
 
 const { SAVE } = LABELS.BUTTON
 

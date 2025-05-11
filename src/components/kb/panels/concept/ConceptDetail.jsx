@@ -1,10 +1,10 @@
 import { Stack } from '@mui/material'
 
-import ConceptAliases from './detail/ConceptAliases'
-import ConceptAuthor from './detail/ConceptAuthor'
-import ConceptMedia from './detail/ConceptMedia'
-import ConceptName from './detail/ConceptName'
-import ConceptRank from './detail/ConceptRank'
+import ConceptAliases from './change/staged/concept/ConceptAliases'
+import ConceptAuthor from './change/staged/concept/ConceptAuthor'
+import ConceptMedia from './change/staged/concept/ConceptMedia'
+import ConceptName from './change/staged/concept/ConceptName'
+import ConceptRank from './change/staged/concept/ConceptRank'
 
 const ConceptDetail = () => {
   return (

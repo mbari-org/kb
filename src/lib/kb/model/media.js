@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
+import { CONCEPT_STATE } from '@/lib/constants'
 import { displayItem, fieldEdits } from '@/lib/kb/model/field'
 import { fieldPendingHistory } from '@/lib/kb/model/history'
 

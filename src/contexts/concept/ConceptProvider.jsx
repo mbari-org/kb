@@ -15,13 +15,9 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import conceptStateReducer from '@/contexts/concept/lib/edit/conceptStateReducer'
 
-import {
-  CONCEPT_STATE,
-  hasModifiedState,
-  initialConceptState,
-} from '@/lib/kb/conceptState/conceptState'
+import { hasModifiedState, initialConceptState } from '@/lib/kb/state/concept'
 
-import { LABELS } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS } from '@/lib/constants'
 
 const { CONTINUE } = LABELS.BUTTON
 

@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Stack } from '@mui/material'
 
-import ConceptEditingActions from './detail/ConceptEditingActions'
+import ConceptEditingActions from './change/staged/concept/ConceptEditingActions'
 import ConceptDetail from './ConceptDetail'
 import ConceptPath from './ConceptPath'
 import ConceptViewToggle from './toggleView/ConceptViewToggle'
