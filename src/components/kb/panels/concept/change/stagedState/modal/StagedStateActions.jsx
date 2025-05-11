@@ -10,15 +10,14 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS, PROCESSING } from '@/lib/constants'
 
 import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
 
-const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.ACTION
+const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
 const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
-
-const SAVING = 'Saving...'
+const { SAVING } = PROCESSING
 
 const StagedStateActions = ({ intent }) => {
   const { apiFns } = use(ConfigContext)

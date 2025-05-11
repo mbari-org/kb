@@ -12,7 +12,7 @@ import { LABELS } from '@/lib/constants'
 
 import { hasModifiedState } from '@/lib/kb/conceptState/conceptState'
 
-const { SAVE } = LABELS.ACTION
+const { SAVE } = LABELS.BUTTON
 
 const LogoutLink = () => {
   const { logout, user } = use(AuthContext)

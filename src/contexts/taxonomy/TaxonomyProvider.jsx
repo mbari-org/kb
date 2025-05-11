@@ -28,7 +28,9 @@ import {
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { LOADING } from '@/lib/constants'
+import { PROCESSING } from '@/lib/constants'
+
+const { LOADING } = PROCESSING
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()

@@ -12,7 +12,7 @@ import { LABELS } from '@/lib/constants'
 
 import { ADD_CHILD_FORM_ID } from './AddChildContent'
 
-const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const AddChildActions = () => {

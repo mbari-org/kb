@@ -3,7 +3,9 @@ import { Backdrop, CircularProgress, Stack, Typography, useTheme } from '@mui/ma
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { LOADING_DELAY } from '@/lib/constants'
+import { PROCESSING } from '@/lib/constants'
+
+const { LOADING_DELAY } = PROCESSING
 
 const KbLoading = () => {
   const { processing } = use(ModalContext)

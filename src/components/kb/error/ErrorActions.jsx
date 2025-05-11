@@ -4,7 +4,9 @@ import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { RESET } from '@/lib/constants'
+import { LABELS } from '@/lib/constants'
+
+const { RESET } = LABELS.BUTTON
 
 const ErrorActions = () => {
   const { closeModal } = use(ModalContext)

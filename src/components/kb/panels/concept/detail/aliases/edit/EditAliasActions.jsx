@@ -12,7 +12,7 @@ import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
 import { LABELS } from '@/lib/constants'
 
-const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const EditAliasActions = () => {

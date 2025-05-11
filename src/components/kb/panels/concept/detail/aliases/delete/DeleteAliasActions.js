@@ -7,7 +7,9 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 
-import { DISCARD, STAGE } from '@/lib/constants'
+import { LABELS } from '@/lib/constants'
+
+const { DISCARD, STAGE } = LABELS.BUTTON
 
 const DeleteAliasActions = () => {
   const { modifyConcept } = use(ConceptContext)

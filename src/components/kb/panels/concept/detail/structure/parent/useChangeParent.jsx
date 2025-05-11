@@ -9,12 +9,13 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { LOADING } from '@/lib/constants'
+import { PROCESSING } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/kb/conceptState/conceptState'
 import { descendants } from '@/lib/kb/model/taxonomy'
 
-const { RESET } = CONCEPT_STATE
 const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
+const { LOADING } = PROCESSING
+const { RESET } = CONCEPT_STATE
 
 const changeParentModal = omitChoices => {
   const components = {

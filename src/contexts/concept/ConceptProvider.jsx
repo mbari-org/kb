@@ -23,7 +23,7 @@ import {
 
 import { LABELS } from '@/lib/constants'
 
-const { CONTINUE } = LABELS.ACTION
+const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()

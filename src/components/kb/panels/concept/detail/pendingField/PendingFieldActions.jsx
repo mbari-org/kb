@@ -9,7 +9,10 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import { fieldPendingHistory } from '@/lib/kb/model/history'
 import { sendPendingAction } from '@/lib/kb/api/history'
 
-import { APPROVE, DEFER, REJECT } from '@/lib/constants'
+import { LABELS } from '@/lib/constants'
+
+const { DEFER, PENDING, REJECT } = LABELS.BUTTON
+
 const PendingFieldActions = ({ field }) => {
   const { pendingHistory } = use(ConceptContext)
   const { config } = use(ConfigContext)
@@ -18,7 +21,7 @@ const PendingFieldActions = ({ field }) => {
   const pendingFieldHistory = fieldPendingHistory(pendingHistory, field).pop()
 
   const colors = ['cancel', 'main', 'clean']
-  const labels = [REJECT, DEFER, APPROVE]
+  const labels = [REJECT, DEFER, PENDING]
 
   const onAction = label => {
     switch (label) {
@@ -27,7 +30,7 @@ const PendingFieldActions = ({ field }) => {
         break
       case DEFER:
         break
-      case APPROVE:
+      case PENDING:
         sendPendingAction(config, 'approve', pendingFieldHistory.id)
         break
       default:

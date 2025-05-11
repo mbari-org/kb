@@ -14,8 +14,8 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { LABELS } from '@/lib/constants'
 
-const { DISCARD, DISCARD_ALL } = LABELS.ACTION
-const { APPROVE, CANCEL, EDIT, SAVE, SHOW } = LABELS.CONCEPT.ACTION
+const { DISCARD, DISCARD_ALL } = LABELS.BUTTON
+const { CANCEL, EDIT, PENDING, SAVE, SHOW } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const ConceptEditingActions = () => {
@@ -84,7 +84,7 @@ const ConceptEditingActions = () => {
       )}
       {showApprovalButton && (
         <Button color='main' onClick={handleApproval} variant='contained'>
-          {APPROVE}
+          {PENDING}
         </Button>
       )}
       <Button

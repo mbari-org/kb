@@ -13,7 +13,7 @@ import { LABELS } from '@/lib/constants'
 
 import { isUrlValid } from '@/lib/util'
 
-const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.ACTION
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const EditMediaActions = () => {

@@ -1,5 +1,3 @@
-const APPROVE = 'Approve'
-
 const CONCEPT_NAME_TYPES = {
   COMMON: 'Common',
   FORMER: 'Former',
@@ -7,12 +5,8 @@ const CONCEPT_NAME_TYPES = {
   SYNONYM: 'Synonym',
 }
 
-const DEFER = 'Defer'
-
-const DISCARD = 'Discard'
-
 const LABELS = {
-  ACTION: {
+  BUTTON: {
     BACK_TO_EDIT: 'Back to Editing',
     CONFIRM_DISCARD: 'Confirm Discard',
     REJECT_DISCARD: 'Keep Edit',
@@ -27,28 +21,29 @@ const LABELS = {
       NAME_ONLY: 'Name Only',
     },
     ACTION: {
-      APPROVE: 'Approve',
       CANCEL: 'Cancel',
+      DEFER: 'Defer',
       DELETE: 'Delete Concept',
+      DISCARD: 'Discard',
       EDIT: 'Edit',
+      PENDING: 'Pending',
+      REJECT: 'Reject',
       SAVE: 'Save',
       SHOW: 'Staged',
     },
   },
 }
 
-const LOADING = 'Loading...'
-
-const LOADING_DELAY = 333
+const PROCESSING = {
+  LOADING: 'Loading...',
+  LOADING_DELAY: 333,
+  SAVING: 'Saving...',
+}
 
 const RANK = {
   LEVEL: 'rankLevel',
   NAME: 'rankName',
 }
-
-const REJECT = 'Reject'
-
-const RESET = 'Reset'
 
 const RESETTING = {
   ME: 'Me',
@@ -62,23 +57,4 @@ const ROLES = {
   READ_ONLY: 'ReadOnly',
 }
 
-const SAVING = 'Saving...'
-
-const STAGE = 'Stage'
-
-export {
-  APPROVE,
-  CONCEPT_NAME_TYPES,
-  DEFER,
-  DISCARD,
-  LABELS,
-  LOADING,
-  LOADING_DELAY,
-  RANK,
-  REJECT,
-  RESET,
-  RESETTING,
-  ROLES,
-  SAVING,
-  STAGE,
-}
+export { CONCEPT_NAME_TYPES, LABELS, PROCESSING, RANK, RESETTING, ROLES }
