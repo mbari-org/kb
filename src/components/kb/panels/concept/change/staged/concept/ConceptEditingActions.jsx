@@ -3,7 +3,8 @@ import { use, useCallback, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
-import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
+import useDisplayPending from '@/components/kb/panels/concept/change/pending/modal/useDisplayPending'
+import useDisplayStaged from '@/components/kb/panels/concept/change/staged/modal/useDisplayStaged'
 
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
@@ -24,17 +25,14 @@ const ConceptEditingActions = () => {
   const { editing, initialState, modifyConcept, pendingHistory, setEditing, stagedState } =
     use(ConceptContext)
 
-  const stagedStateDisplay = useStagedStateDisplay()
+  const displayPending = useDisplayPending()
+  const displayStaged = useDisplayStaged()
 
   const editCancelDiscardButtonText = useMemo(() => {
     if (!editing) return EDIT
     if (hasModifiedState({ initialState, stagedState })) return DISCARD_ALL
     return CANCEL
   }, [editing, initialState, stagedState])
-
-  const handleApproval = useCallback(() => {
-    console.log('approval')
-  }, [])
 
   const handleCancelDiscard = useCallback(() => {
     if (!editing) {
@@ -43,21 +41,25 @@ const ConceptEditingActions = () => {
       setEditing(false)
     } else {
       modifyConcept({ type: TO_INITIAL })
-      stagedStateDisplay(DISCARD)
+      displayStaged(DISCARD)
     }
-  }, [editing, initialState, modifyConcept, setEditing, stagedState, stagedStateDisplay])
+  }, [editing, initialState, modifyConcept, setEditing, stagedState, displayStaged])
+
+  const handlePending = useCallback(() => {
+    displayPending(PENDING)
+  }, [displayPending])
 
   const handleSave = useCallback(() => {
     modifyConcept({ type: CONFIRMED.NO })
-    stagedStateDisplay(SAVE)
-  }, [modifyConcept, stagedStateDisplay])
+    displayStaged(SAVE)
+  }, [modifyConcept, displayStaged])
 
   const handleShow = useCallback(() => {
     modifyConcept({ type: CONFIRMED.NO })
-    stagedStateDisplay(SHOW)
-  }, [modifyConcept, stagedStateDisplay])
+    displayStaged(SHOW)
+  }, [modifyConcept, displayStaged])
 
-  const showApprovalButton = useMemo(() => {
+  const showPendingButton = useMemo(() => {
     const hasPendingHistory = pendingHistory.length > 0
     return !editing && hasPendingHistory && isAdmin(user)
   }, [editing, pendingHistory, user])
@@ -82,8 +84,8 @@ const ConceptEditingActions = () => {
           {SHOW}
         </Button>
       )}
-      {showApprovalButton && (
-        <Button color='main' onClick={handleApproval} variant='contained'>
+      {showPendingButton && (
+        <Button color='main' onClick={handlePending} variant='contained'>
           {PENDING}
         </Button>
       )}

@@ -12,10 +12,11 @@ const createActions = (props, name) => createComponent(Actions, props, name)()
 const createTextContent = props => createComponent(TextContent, props)
 const createTitle = (props, name) => createComponent(Title, props, name)
 
-const createModal = ({ Actions, Content, Title }) => ({
+const createModal = ({ Actions, Content, Title, minWidth }) => ({
   Title: createComponent(Title),
   Content: createComponent(Content),
   Actions: createComponent(Actions),
+  minWidth,
 })
 
 export { createActions, createComponent, createModal, createTextContent, createTitle }

@@ -6,7 +6,7 @@ import { grey } from '@mui/material/colors'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
+import useDisplayStaged from '@/components/kb/panels/concept/change/staged/modal/useDisplayStaged'
 
 import { LABELS } from '@/lib/constants'
 
@@ -18,10 +18,10 @@ const LogoutLink = () => {
   const { logout, user } = use(AuthContext)
   const { initialState, stagedState } = use(ConceptContext)
 
-  const stagedStateDisplay = useStagedStateDisplay()
+  const displayStaged = useDisplayStaged()
 
   const handleLogout = () =>
-    hasModifiedState({ initialState, stagedState }) ? stagedStateDisplay(SAVE) : logout()
+    hasModifiedState({ initialState, stagedState }) ? displayStaged(SAVE) : logout()
 
   const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`
 

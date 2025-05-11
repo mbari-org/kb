@@ -8,7 +8,7 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const useStagedStateDisplay = () => {
+const useDisplayStaged = () => {
   const { setModal } = use(ModalContext)
 
   return useCallback(
@@ -17,6 +17,7 @@ const useStagedStateDisplay = () => {
         Actions: () => <StagedActions intent={intent} />,
         Content: StagedStateContent,
         Title: StagedStateTitle,
+        minWidth: 600,
       })
       setModal(modal)
     },
@@ -24,4 +25,4 @@ const useStagedStateDisplay = () => {
   )
 }
 
-export default useStagedStateDisplay
+export default useDisplayStaged

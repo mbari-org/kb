@@ -3,9 +3,7 @@ import { useErrorBoundary } from 'react-error-boundary'
 
 import { itemPath } from '@/components/kb/panels/concept/tree/lib/taxonomyItem'
 
-import usePendingFieldDisplay from '@/contexts/concept/lib/usePendingFieldDisplay'
-
-import useStagedStateDisplay from '@/contexts/concept/lib/edit/useStagedStateDisplay'
+import useDisplayStaged from '@/components/kb/panels/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
@@ -40,9 +38,8 @@ const ConceptProvider = ({ children }) => {
 
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
 
-  const stagedStateDisplay = useStagedStateDisplay()
+  const displayStaged = useDisplayStaged()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmDiscard, setEditing)
-  const pendingFieldDisplay = usePendingFieldDisplay()
 
   const handleSetConcept = useCallback(
     selectedConcept => {
@@ -68,7 +65,7 @@ const ConceptProvider = ({ children }) => {
     if (selected.concept !== concept?.name || selected.panel !== 'Concepts') {
       if (hasModifiedState({ initialState, stagedState })) {
         if (!modalData?.warning) {
-          stagedStateDisplay(CONTINUE)
+          displayStaged(CONTINUE)
           setModalData({ warning: true })
         }
       } else {
@@ -101,7 +98,7 @@ const ConceptProvider = ({ children }) => {
     setModalData,
     showBoundary,
     stagedState,
-    stagedStateDisplay,
+    displayStaged,
   ])
 
   return (
@@ -113,11 +110,9 @@ const ConceptProvider = ({ children }) => {
         editing,
         initialState,
         modifyConcept,
-        pendingFieldDisplay,
         pendingHistory,
         setEditing,
         stagedState,
-        stagedStateDisplay,
       }}
     >
       {children}

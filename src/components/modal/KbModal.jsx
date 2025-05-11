@@ -23,7 +23,7 @@ const KbModal = () => {
     return null
   }
 
-  const { Actions, Content, Title } = modal
+  const { Actions, Content, Title, minWidth = 500 } = modal
 
   return (
     <Modal
@@ -41,7 +41,7 @@ const KbModal = () => {
             mt: 10,
           }}
         >
-          <Card sx={{ p: 2, pb: 0, position: 'relative' }}>
+          <Card sx={{ p: 2, pb: 0, position: 'relative', minWidth }}>
             {!confirmDiscard && (
               <IconButton
                 aria-label='close'
