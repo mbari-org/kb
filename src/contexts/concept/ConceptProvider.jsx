@@ -30,6 +30,7 @@ const ConceptProvider = ({ children }) => {
 
   const [concept, setConcept] = useState(null)
   const [confirmDiscard, setConfirmDiscard] = useState(null)
+  const [confirmPending, setConfirmPending] = useState(null)
   const [editing, setEditing] = useState(false)
   const [pendingHistory, setPendingHistory] = useState(null)
 
@@ -107,11 +108,13 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         confirmDiscard,
+        confirmPending,
         editing,
         initialState,
         modifyConcept,
         pendingHistory,
         setEditing,
+        setConfirmPending,
         stagedState,
       }}
     >

@@ -68,12 +68,18 @@ const CONCEPT_STATE = {
 
 const LABELS = {
   BUTTON: {
+    APPROVE: 'Approve',
+    APPROVE_ALL: 'Approve All',
     BACK_TO_EDIT: 'Back to Editing',
     CONFIRM_DISCARD: 'Confirm Discard',
-    REJECT_DISCARD: 'Keep Edit',
     CONTINUE: 'Continue',
+    DEFER: 'Defer',
+    DEFER_ALL: 'Defer All',
     DISCARD: 'Discard',
     DISCARD_ALL: 'Discard All',
+    REJECT: 'Reject',
+    REJECT_ALL: 'Reject All',
+    REJECT_DISCARD: 'Keep Edit',
     STAGE: 'Stage',
   },
   CONCEPT: {
@@ -89,6 +95,7 @@ const LABELS = {
       EDIT: 'Edit',
       PENDING: 'Pending',
       REJECT: 'Reject',
+      REJECT_ALL: 'Reject All',
       SAVE: 'Save',
       SHOW: 'Staged',
     },
