@@ -3,8 +3,8 @@ import { use, useState } from 'react'
 import { Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ChangeStructureButton from './structure/ConceptStructureButton'
-import ChangeStructureChoices from './structure/ConceptStructureChoices'
+import ChangeStructureButton from '@/components/kb/panels/concept/change/staged/concept/structure/ConceptStructureButton'
+import ChangeStructureChoices from '@/components/kb/panels/concept/change/staged/concept/structure/ConceptStructureChoices'
 
 import useStructureChoices from '@/components/kb/panels/concept/change/staged/concept/structure/useStructureChoices'
 

@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import { Stack } from '@mui/material'
 
-import ConceptEditingActions from './change/staged/concept/ConceptEditingActions'
-import ConceptDetail from './ConceptDetail'
-import ConceptPath from './ConceptPath'
-import ConceptViewToggle from './toggleView/ConceptViewToggle'
+import ConceptEditingActions from '@/components/kb/panels/concept/ConceptEditingActions'
+import ConceptDetail from '@/components/kb/panels/concept/ConceptDetail'
+import ConceptPath from '@/components/kb/panels/concept/ConceptPath'
+import ConceptViewToggle from '@/components/kb/panels/concept/toggleView/ConceptViewToggle'
 
 import { isReadOnly } from '@/lib/auth/role'
 

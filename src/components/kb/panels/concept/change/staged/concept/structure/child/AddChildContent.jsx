@@ -2,7 +2,7 @@ import { use, useCallback, useMemo, useState } from 'react'
 
 import { Box, FormControl, Stack, TextField } from '@mui/material'
 
-import ConceptRankField from '@/components/kb/panels/concept/change/staged/concept/ConceptRankField'
+import ConceptRankField from '@/components/kb/panels/concept/change/staged/concept/field/ConceptRankField'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'

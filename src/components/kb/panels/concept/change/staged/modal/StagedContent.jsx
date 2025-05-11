@@ -3,9 +3,9 @@ import { use, useEffect, useMemo } from 'react'
 import { Box } from '@mui/material'
 
 import AliasesDetail from '@/components/kb/panels/concept/change/staged/concept/aliases/AliasesDetail'
-import ChildrenDetail from '@/components/kb/panels/concept/change/staged/concept/children/ChildrenDetail'
-import FieldDeltaDetail from '@/components/kb/panels/concept/change/staged/field/FieldDeltaDetail'
-import FieldValueDetail from '@/components/kb/panels/concept/change/staged/field/FieldValueDetail'
+import ChildrenDetail from '@/components/kb/panels/concept/change/staged/concept/structure/children/ChildrenDetail'
+import FieldDeltaDetail from '@/components/kb/panels/concept/change/staged/concept/field/FieldDeltaDetail'
+import FieldValueDetail from '@/components/kb/panels/concept/change/staged/concept/field/FieldValueDetail'
 import MediaDetail from '@/components/kb/panels/concept/change/staged/concept/media/MediaDetail'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'

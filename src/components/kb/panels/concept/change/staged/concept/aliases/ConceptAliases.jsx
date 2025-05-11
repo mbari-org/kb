@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box, Typography, Stack } from '@mui/material'
 
 import AliasAdd from '@/components/kb/panels/concept/change/staged/concept/aliases/edit/AliasAdd'
-import ConceptAlias from '@/components/kb/panels/concept/change/staged/concept/ConceptAlias'
+import ConceptAlias from '@/components/kb/panels/concept/change/staged/concept/aliases/ConceptAlias'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
