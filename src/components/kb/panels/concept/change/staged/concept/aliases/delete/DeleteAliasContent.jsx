@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import DetailsContent from '@/components/common/DetailsContent'
+import DetailContent from '@/components/common/DetailContent'
 import { createComponent } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
@@ -10,8 +10,8 @@ const DeleteAliasContent = () => {
     modalData: { alias },
   } = use(ModalContext)
 
-  const Details = createComponent(DetailsContent, {
-    details: alias,
+  const Details = createComponent(DetailContent, {
+    detail: alias,
     sx: { ml: 1, mr: 1 },
   })
 

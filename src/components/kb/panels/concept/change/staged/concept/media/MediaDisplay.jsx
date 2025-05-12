@@ -1,6 +1,6 @@
 import { use } from 'react'
 import { Box, Dialog, Zoom, IconButton } from '@mui/material'
-import { IoClose } from 'react-icons/io5'
+import { IoCloseSharp } from 'react-icons/io5'
 import { useTheme } from '@mui/material/styles'
 
 import MediaSwiper from './MediaSwiper'
@@ -32,7 +32,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
           zIndex: 1301,
         }}
       >
-        <IoClose size={32} />
+        <IoCloseSharp size={32} />
       </IconButton>
       <Box
         sx={{

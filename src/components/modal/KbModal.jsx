@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { IoClose } from 'react-icons/io5'
+import { IoCloseSharp } from 'react-icons/io5'
 
 import {
   Box,
@@ -48,7 +48,7 @@ const KbModal = () => {
                 onClick={() => closeModal()}
                 sx={{ position: 'absolute', right: 8, top: 8 }}
               >
-                <IoClose />
+                <IoCloseSharp />
               </IconButton>
             )}
             <CardHeader title={<Title />} />

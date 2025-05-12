@@ -1,4 +1,4 @@
-import { capitalize, isEmpty } from '@/lib/util'
+import { capitalize, isEmpty, pick } from '@/lib/util'
 
 const fieldPendingHistory = (pendingHistory, field) => {
   const pendingField = capitalize(field)
@@ -14,4 +14,12 @@ const hasPendingHistory = (pendingHistory, field) => {
   return !isEmpty(pendingHistory)
 }
 
-export { fieldPendingHistory, hasPendingHistory }
+const pendingValues = pendingHistory =>
+  pick(pendingHistory, [
+    ['oldValue', 'before'],
+    ['newValue', 'after'],
+    ['creatorName', 'user'],
+    ['creationTimestamp', 'created'],
+  ])
+
+export { fieldPendingHistory, hasPendingHistory, pendingValues }

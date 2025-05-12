@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
-import { IoClose } from 'react-icons/io5'
-import { LiaHandPointer } from 'react-icons/lia'
+import { IoCloseSharp } from 'react-icons/io5'
+
+import HandIcon from '@/components/common/HandIcon'
 
 const ChangeActionButton = ({ changing, color, disabled, onClick }) => {
   if (changing) {
@@ -12,7 +13,7 @@ const ChangeActionButton = ({ changing, color, disabled, onClick }) => {
           minWidth: 'auto',
         }}
       >
-        <LiaHandPointer style={{ transform: 'rotate(90deg)', fontSize: '1.2rem' }} />
+        <HandIcon />
       </Button>
     )
   }
@@ -27,7 +28,7 @@ const ChangeActionButton = ({ changing, color, disabled, onClick }) => {
         minWidth: 'auto',
       }}
     >
-      <IoClose />
+      <IoCloseSharp />
     </Button>
   )
 }

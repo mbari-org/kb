@@ -1,13 +1,13 @@
 import FieldValueDisplay from './FieldValueDisplay'
 
-const DetailsContent = ({ details, sx }) => {
+const DetailContent = ({ detail, sx }) => {
   return (
     <>
-      {Object.entries(details).map(([field, value]) => (
+      {Object.entries(detail).map(([field, value]) => (
         <FieldValueDisplay key={field} field={field} value={value} sx={sx} />
       ))}
     </>
   )
 }
 
-export default DetailsContent
+export default DetailContent

@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Modal, Stack } from '@mui/material'
-import { IoClose } from 'react-icons/io5'
+import { IoCloseSharp } from 'react-icons/io5'
 
 import useAddChild from '@/components/kb/panels/concept/change/staged/concept/structure/child/useAddChild'
 import useChangeName from '@/components/kb/panels/concept/change/staged/concept/structure/name/useChangeName'
@@ -43,7 +43,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
             top: 8,
           }}
         >
-          <IoClose size={24} />
+          <IoCloseSharp size={24} />
         </IconButton>
 
         <Stack spacing={5} mt={3}>

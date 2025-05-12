@@ -170,14 +170,12 @@ const prettyFormat = object => {
 const prune = obj => {
   const pruned = { ...obj }
   Object.keys(pruned).forEach(key => {
-    if (obj[key] === undefined) {
+    if (!obj[key]) {
       delete pruned[key]
     }
   })
   return pruned
 }
-
-const prunePick = (object, fields) => prune(pick(object, fields))
 
 export {
   capitalize,
@@ -195,5 +193,4 @@ export {
   pick,
   prettyFormat,
   prune,
-  prunePick,
 }

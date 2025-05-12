@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 
@@ -6,31 +6,36 @@ import Action from './Action'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { LABELS } from '@/lib/constants'
+import { PENDING } from '@/lib/constants'
 
-const { APPROVE } = LABELS.BUTTON
+const { ACCEPT, REJECT } = PENDING.APPROVAL
 
-const WarningText = ({ text }) => (
-  <Typography color='cancel' sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+const ActionsText = ({ color = 'cancel', text }) => (
+  <Typography color={color} sx={{ fontWeight: 'bold', textAlign: 'center' }}>
     {text}
   </Typography>
 )
 
-const DiscardWarning = () => (
+const DiscardingText = () => (
   <>
-    <WarningText text='Discarding edits is final.' />
-    <WarningText text='Please confirm you want to discard the indicated edits.' />
+    <ActionsText text='Discarding edits is final.' />
+    <ActionsText text='Please confirm you want to discard the indicated edits.' />
   </>
 )
 
-const PendingWarning = ({ action }) => {
-  const line1 = action === APPROVE ? 'Approving' : 'Rejecting'
-  const line2 = action === APPROVE ? 'approve' : 'reject'
+const PendingText = ({ approval }) => {
+  const [color, line1, line2] = useMemo(() => {
+    if (approval === ACCEPT) return ['clean', 'Approving', 'approve']
+    if (approval === REJECT) return ['cancel', 'Rejecting', 'reject']
+  }, [approval])
 
   return (
     <>
-      <WarningText text={`${line1} pending edits is final.`} />
-      <WarningText text={`Please confirm you want to ${line2} the indicated pending edits.`} />
+      <ActionsText color={color} text={`${line1} pending edits is final.`} />
+      <ActionsText
+        color={color}
+        text={`Please confirm you want to ${line2} the indicated pending edits.`}
+      />
     </>
   )
 }
@@ -55,8 +60,8 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Stack spacing={0} sx={{ alignItems: 'center', minHeight: '60px', mt: 2 }}>
-        {!!confirmDiscard && <DiscardWarning />}
-        {!!confirmPending && <PendingWarning action={confirmPending.action} />}
+        {!!confirmDiscard && <DiscardingText />}
+        {!!confirmPending && <PendingText approval={confirmPending.approval} />}
       </Stack>
       <Box
         sx={{

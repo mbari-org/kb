@@ -1,10 +1,10 @@
 import { createComponent } from '@/components/modal/factory'
 
-import DetailsContent from '@/components/common/DetailsContent'
+import DetailContent from '@/components/common/DetailContent'
 
 const Detail = props => {
   const { detail } = props
-  const Component = createComponent(DetailsContent, {
+  const Component = createComponent(DetailContent, {
     detail,
     ...props,
   })
