@@ -6,14 +6,9 @@ import {
   valueSx as baseValueSx,
 } from '@/components/common/format'
 
-import { RESETTING } from '@/lib/constants'
-
-const FieldValueDisplay = ({ field, resetting, sx, value }) => {
-  const fieldSx =
-    resetting === RESETTING.OTHER ? { ...baseFieldSx, color: 'text.disabled' } : baseFieldSx
-
-  const valueSx =
-    resetting === RESETTING.OTHER ? { ...baseValueSx, color: 'text.disabled' } : baseValueSx
+const FieldValueDisplay = ({ disabled, field, sx, value }) => {
+  const fieldSx = disabled ? { ...baseFieldSx, color: 'text.disabled' } : baseFieldSx
+  const valueSx = disabled ? { ...baseValueSx, color: 'text.disabled' } : baseValueSx
 
   return (
     <Box key={field} display='flex' flexDirection='row' sx={sx}>

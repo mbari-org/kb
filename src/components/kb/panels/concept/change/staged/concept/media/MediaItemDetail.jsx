@@ -6,7 +6,7 @@ import { formatDelta } from '@/components/common/format'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const MediaItemDetail = ({ action, initial, resetting, updates }) => {
+const MediaItemDetail = ({ action, disabled, initial, updates }) => {
   let fieldValues
 
   switch (action) {
@@ -31,7 +31,7 @@ const MediaItemDetail = ({ action, initial, resetting, updates }) => {
   return (
     <Box sx={{ ml: 7 }}>
       {fieldValues.map(([field, value]) => (
-        <FieldValueDisplay key={field} field={field} changing={resetting} value={value} />
+        <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
       ))}
     </Box>
   )

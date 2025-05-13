@@ -6,19 +6,19 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
-const useModifyConcept = (dispatch, initialState, setConfirmDiscard, setEditing) => {
+const useModifyConcept = (dispatch, initialState, setConfirmReset, setEditing) => {
   const [confirmingDiscard, setConfirmingDiscard] = useState(null)
 
   return useCallback(
     action => {
       if (action.type === CONFIRMED.NO) {
-        setConfirmDiscard(null)
+        setConfirmReset(null)
         return
       }
 
       if (action.type === CONFIRMED.YES) {
         resetConceptState(confirmingDiscard, dispatch, initialState)
-        setConfirmDiscard(null)
+        setConfirmReset(null)
         setConfirmingDiscard(null)
         if (action.type === TO_INITIAL) {
           setEditing(false)
@@ -27,14 +27,14 @@ const useModifyConcept = (dispatch, initialState, setConfirmDiscard, setEditing)
       }
 
       if (isResetAction(action)) {
-        setConfirmDiscard(action)
+        setConfirmReset(action)
         setConfirmingDiscard(action)
         return
       }
 
       dispatch(action)
     },
-    [confirmingDiscard, dispatch, initialState, setConfirmDiscard, setEditing]
+    [confirmingDiscard, dispatch, initialState, setConfirmReset, setEditing]
   )
 }
 

@@ -1,5 +1,7 @@
 import { CONCEPT_STATE } from '@/lib/constants'
 
+const { RESET } = CONCEPT_STATE
+
 const deleteItem = edit => {
   const { action, index } = edit
   return {

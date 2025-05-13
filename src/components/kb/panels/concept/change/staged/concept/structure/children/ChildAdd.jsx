@@ -21,6 +21,8 @@ const ChildAdd = ({ child, resetting }) => {
 
   const childSx = resetting === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
+  const disabled = resetting === RESETTING.OTHER
+
   return (
     <Box
       sx={{
@@ -39,7 +41,7 @@ const ChildAdd = ({ child, resetting }) => {
       </Box>
       <Box sx={{ ml: 7 }}>
         {fieldValues.map(([field, value]) => (
-          <FieldValueDisplay key={field} field={field} changing={resetting} value={value} />
+          <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
         ))}
       </Box>
     </Box>

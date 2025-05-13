@@ -1,29 +1,30 @@
 import { use } from 'react'
 
-import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
+import ResettingButton from '@/components/kb/panels/concept/change/ResettingButton'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { childResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+
+import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
 const { RESET } = CONCEPT_STATE
 
 const ChildrenReset = () => {
-  const { confirmDiscard, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
 
-  const resetting =
-    confirmDiscard?.type === RESET.ADD_CHILDREN || confirmDiscard?.type === RESET.TO_INITIAL
+  const resetting = childResetting(confirmReset) === RESETTING.ME
 
   const onClick = () => {
     modifyConcept({ type: RESET.ADD_CHILDREN })
   }
 
   return (
-    <ChangeActionButton
-      changing={resetting}
+    <ResettingButton
       color='cancel'
-      disabled={confirmDiscard}
+      disabled={confirmReset}
       onClick={onClick}
+      resetting={resetting}
     />
   )
 }

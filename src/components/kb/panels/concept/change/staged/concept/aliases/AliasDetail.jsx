@@ -11,7 +11,7 @@ const { ALIAS } = CONCEPT_STATE
 
 import { drop } from '@/lib/util'
 
-const AliasDetail = ({ action, initial, resetting, updates }) => {
+const AliasDetail = ({ action, disabled, initial, updates }) => {
   const fieldValues = useMemo(() => {
     let fieldValues
     switch (action) {
@@ -37,7 +37,7 @@ const AliasDetail = ({ action, initial, resetting, updates }) => {
   return (
     <Box sx={{ ml: 7 }}>
       {fieldValues?.map(([field, value]) => (
-        <FieldValueDisplay key={field} field={field} changing={resetting} value={value} />
+        <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
       ))}
     </Box>
   )

@@ -1,6 +1,7 @@
-import { CONCEPT_STATE } from '@/lib/constants'
 import { displayItem, fieldEdits } from '@/lib/kb/model/field'
 import { fieldPendingHistory } from '@/lib/kb/model/history'
+
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
 

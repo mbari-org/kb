@@ -16,7 +16,7 @@ const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const EditAliasActions = () => {
-  const { confirmDiscard, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
 
@@ -28,7 +28,7 @@ const EditAliasActions = () => {
 
   const colors = ['cancel', 'main']
   const disabled = [false, !isModified || !validName]
-  const labels = confirmDiscard ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
+  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
     switch (label) {

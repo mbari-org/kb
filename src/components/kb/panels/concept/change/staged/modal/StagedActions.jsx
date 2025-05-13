@@ -21,7 +21,7 @@ const { SAVING } = PROCESSING
 
 const StagedActions = ({ intent }) => {
   const { apiFns } = use(ConfigContext)
-  const { concept, confirmDiscard, initialState, modifyConcept, setEditing, stagedState } =
+  const { concept, confirmReset, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
@@ -31,7 +31,7 @@ const StagedActions = ({ intent }) => {
   const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
   const confirmLabels = [CONFIRM_DISCARD, REJECT_DISCARD]
 
-  const labels = confirmDiscard ? confirmLabels : actionLabels
+  const labels = confirmReset ? confirmLabels : actionLabels
 
   const onAction = label => {
     switch (label) {

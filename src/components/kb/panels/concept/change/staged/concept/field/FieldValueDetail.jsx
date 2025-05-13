@@ -8,22 +8,17 @@ import { RESETTING } from '@/lib/constants'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
-
-const { RESET } = CONCEPT_STATE
+import { fieldResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
 
 const FieldValueDetail = ({ field, value }) => {
-  const { confirmDiscard } = use(ConceptContext)
+  const { confirmReset } = use(ConceptContext)
 
-  const resetting =
-    confirmDiscard?.type === RESET.NAME_CHANGE || confirmDiscard?.type === RESET.TO_INITIAL
-      ? RESETTING.ME
-      : RESETTING.OTHER
+  const disabled = fieldResetting(confirmReset, field) === RESETTING.OTHER
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <FieldReset field={field} />
-      <FieldValueDisplay field={field} changing={resetting} value={value} />
+      <FieldValueDisplay disabled={disabled} field={field} value={value} />
     </Box>
   )
 }

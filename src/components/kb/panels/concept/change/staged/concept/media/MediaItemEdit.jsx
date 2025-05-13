@@ -5,18 +5,15 @@ import MediaItemDetail from './MediaItemDetail'
 
 import { fieldSx } from '@/components/common/format'
 
-import { RESETTING } from '@/lib/constants'
-
 const urlFile = url => url?.split('/').pop()
 
-const MediaItemEdit = ({ mediaItemEdit, initial, resetting }) => {
+const MediaItemEdit = ({ disabled, initial, mediaItemEdit }) => {
   const { action, index, updates } = mediaItemEdit
 
   const actionText = `${action.split(' ').pop()}`
   const actionFile = urlFile(initial?.url) || urlFile(updates?.url) || ''
 
-  const mediaItemSx =
-    resetting === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+  const mediaItemSx = disabled ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   return (
     <Box
@@ -34,7 +31,7 @@ const MediaItemEdit = ({ mediaItemEdit, initial, resetting }) => {
           <Typography sx={{ ...mediaItemSx, fontWeight: 'bold', ml: 1 }}>{actionFile}</Typography>
         </Box>
       </Box>
-      <MediaItemDetail action={action} initial={initial} changing={resetting} updates={updates} />
+      <MediaItemDetail action={action} disabled={disabled} initial={initial} updates={updates} />
     </Box>
   )
 }

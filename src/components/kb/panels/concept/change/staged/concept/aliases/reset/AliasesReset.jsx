@@ -1,29 +1,30 @@
 import { use } from 'react'
 
-import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
+import ResettingButton from '@/components/kb/panels/concept/change/ResettingButton'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { aliasResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+
+import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
 const { RESET } = CONCEPT_STATE
 
 const AliasesReset = () => {
-  const { confirmDiscard, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
 
-  const resetting =
-    confirmDiscard?.type === RESET.ALIASES || confirmDiscard?.type === RESET.TO_INITIAL
+  const resetting = aliasResetting(confirmReset) === RESETTING.ME
 
   const onClick = () => {
     modifyConcept({ type: RESET.ALIASES })
   }
 
   return (
-    <ChangeActionButton
-      changing={resetting}
+    <ResettingButton
       color='cancel'
-      disabled={confirmDiscard}
+      disabled={confirmReset}
       onClick={onClick}
+      resetting={resetting}
     />
   )
 }

@@ -3,8 +3,8 @@ import { IoCloseSharp } from 'react-icons/io5'
 
 import HandIcon from '@/components/common/HandIcon'
 
-const ChangeActionButton = ({ changing, color, disabled, onClick }) => {
-  if (changing) {
+const ResettingButton = ({ color, disabled, resetting, onClick }) => {
+  if (resetting) {
     return (
       <Button
         color={color}
@@ -33,4 +33,4 @@ const ChangeActionButton = ({ changing, color, disabled, onClick }) => {
   )
 }
 
-export default ChangeActionButton
+export default ResettingButton

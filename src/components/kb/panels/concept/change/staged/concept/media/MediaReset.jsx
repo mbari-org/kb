@@ -1,27 +1,27 @@
 import { use } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
+import ResettingButton from '@/components/kb/panels/concept/change/ResettingButton'
 
-import { CONCEPT_STATE } from '@/lib/constants'
-import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
+import { mediaResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+
+import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
 const MediaReset = () => {
-  const { confirmDiscard, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
 
-  const resetting =
-    confirmDiscard?.type === CONCEPT_STATE.RESET.MEDIA ||
-    confirmDiscard?.type === CONCEPT_STATE.RESET.TO_INITIAL
+  const resetting = mediaResetting(confirmReset) === RESETTING.ME
 
   const onClick = () => {
     modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
   }
 
   return (
-    <ChangeActionButton
-      changing={resetting}
+    <ResettingButton
       color='cancel'
-      disabled={confirmDiscard}
+      disabled={confirmReset}
       onClick={onClick}
+      resetting={resetting}
     />
   )
 }

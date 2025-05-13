@@ -1,10 +1,10 @@
-import { drop } from '@/lib/util'
+import { drop, isJsonEqual } from '@/lib/util'
 
 const hasStateChange = (allInitialState, allStagedState) => {
   // Drop fields that are not relevant to state change comparison
   const initialState = drop(allInitialState, ['aliasIndex', 'mediaIndex'])
   const stagedState = drop(allStagedState, ['aliasIndex', 'mediaIndex'])
-  return JSON.stringify(stagedState) !== JSON.stringify(initialState)
+  return !isJsonEqual(stagedState, initialState)
 }
 
 const stateUpdates = (initialState, stagedState) => {
@@ -20,7 +20,7 @@ const stateUpdates = (initialState, stagedState) => {
 
 const stateChanges = (initialState, stagedState) => {
   return Object.keys(stagedState).reduce((changes, field) => {
-    if (stagedState[field] !== initialState[field]) {
+    if (!isJsonEqual(stagedState[field], initialState[field])) {
       changes.push([field, initialState[field], stagedState[field]])
     }
     return changes

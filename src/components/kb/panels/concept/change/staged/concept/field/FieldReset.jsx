@@ -1,26 +1,26 @@
 import { use } from 'react'
 
-import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
+import ResettingButton from '@/components/kb/panels/concept/change/ResettingButton'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { fieldResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+
+import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
 const FieldReset = ({ field }) => {
-  const { confirmDiscard, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
 
-  const resetting =
-    confirmDiscard?.type === CONCEPT_STATE.RESET.TO_INITIAL ||
-    (confirmDiscard?.type === CONCEPT_STATE.RESET.FIELD && confirmDiscard?.update?.field === field)
+  const resetting = fieldResetting(confirmReset, field) === RESETTING.ME
 
   const onClick = () => modifyConcept({ type: CONCEPT_STATE.RESET.FIELD, update: { field } })
 
   return (
-    <ChangeActionButton
-      changing={resetting}
+    <ResettingButton
       color='cancel'
-      disabled={confirmDiscard}
+      disabled={confirmReset}
       onClick={onClick}
+      resetting={resetting}
     />
   )
 }

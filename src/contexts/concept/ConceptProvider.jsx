@@ -29,7 +29,7 @@ const ConceptProvider = ({ children }) => {
     use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
-  const [confirmDiscard, setConfirmDiscard] = useState(null)
+  const [confirmReset, setConfirmReset] = useState(null)
   const [confirmPending, setConfirmPending] = useState(null)
   const [editing, setEditing] = useState(false)
   const [pendingHistory, setPendingHistory] = useState(null)
@@ -40,7 +40,7 @@ const ConceptProvider = ({ children }) => {
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
 
   const displayStaged = useDisplayStaged()
-  const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmDiscard, setEditing)
+  const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
   const handleSetConcept = useCallback(
     selectedConcept => {
@@ -107,8 +107,8 @@ const ConceptProvider = ({ children }) => {
       value={{
         concept,
         conceptPath,
-        confirmDiscard,
         confirmPending,
+        confirmReset,
         editing,
         initialState,
         modifyConcept,

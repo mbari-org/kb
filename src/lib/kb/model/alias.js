@@ -1,11 +1,10 @@
-import { CONCEPT_NAME_TYPES } from '@/lib/constants'
-
-import { CONCEPT_STATE } from '@/lib/constants'
 import { fieldEdits } from '@/lib/kb/model/field'
 
 import { fieldPendingHistory } from './history'
 
 import { isJsonEqual, pick } from '@/lib/util'
+
+import { CONCEPT_NAME_TYPES, CONCEPT_STATE } from '@/lib/constants'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 

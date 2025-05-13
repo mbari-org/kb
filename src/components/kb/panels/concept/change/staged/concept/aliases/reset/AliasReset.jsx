@@ -1,20 +1,19 @@
 import { use } from 'react'
 
-import ChangeActionButton from '@/components/kb/panels/concept/change/ChangeActionButton'
+import ResettingButton from '@/components/kb/panels/concept/change/ResettingButton'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { aliasResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+
+import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
 const { NO_ACTION, RESET } = CONCEPT_STATE
 
 const AliasReset = ({ index }) => {
-  const { confirmDiscard, stagedState, modifyConcept } = use(ConceptContext)
+  const { confirmReset, stagedState, modifyConcept } = use(ConceptContext)
 
-  const resetting =
-    confirmDiscard?.type === RESET.ALIASES ||
-    (confirmDiscard?.type === RESET.ALIAS && confirmDiscard?.update?.index === index) ||
-    confirmDiscard?.type === RESET.TO_INITIAL
+  const resetting = aliasResetting(confirmReset, index) === RESETTING.ME
 
   const onClick = () => {
     // If last alias, do RESET.ALIASES
@@ -28,11 +27,11 @@ const AliasReset = ({ index }) => {
   }
 
   return (
-    <ChangeActionButton
-      changing={resetting}
+    <ResettingButton
       color='cancel'
-      disabled={confirmDiscard}
+      disabled={confirmReset}
       onClick={onClick}
+      resetting={resetting}
     />
   )
 }

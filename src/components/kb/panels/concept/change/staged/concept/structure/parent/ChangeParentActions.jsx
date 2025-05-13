@@ -13,12 +13,12 @@ const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = CONCEPT_STATE.RESET
 const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
 const ChangeParentActions = () => {
-  const { confirmDiscard, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
 
   const colors = ['cancel', 'main']
   const disabled = [false, !modalData.modified]
-  const labels = confirmDiscard ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
+  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
     switch (label) {

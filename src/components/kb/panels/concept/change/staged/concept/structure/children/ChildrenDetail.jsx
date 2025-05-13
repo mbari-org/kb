@@ -17,19 +17,18 @@ const { RESET } = CONCEPT_STATE
 const ChildrenDetail = ({ edit }) => {
   const [_, children] = edit
 
-  const { confirmDiscard } = use(ConceptContext)
+  const { confirmReset } = use(ConceptContext)
 
-  const resettingChild = index => {
-    if (!confirmDiscard) return RESETTING.NONE
-    if (confirmDiscard.type === RESET.ADD_CHILDREN) return RESETTING.ME
-    if (confirmDiscard.type === RESET.ADD_CHILD && confirmDiscard.index === index)
-      return RESETTING.ME
-    if (confirmDiscard.type === RESET.TO_INITIAL) return RESETTING.ME
+  const changingChild = index => {
+    if (!confirmReset) return RESETTING.NONE
+    if (confirmReset.type === RESET.ADD_CHILDREN) return RESETTING.ME
+    if (confirmReset.type === RESET.ADD_CHILD && confirmReset.index === index) return RESETTING.ME
+    if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
     return RESETTING.OTHER
   }
 
   const childrenSx =
-    resettingChild() === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+    changingChild() === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   if (children.staged.length === 0) return null
 
@@ -49,7 +48,7 @@ const ChildrenDetail = ({ edit }) => {
         {children.staged.map((child, index) => {
           const { name } = child
           return (
-            <ChildAdd key={`add-child-${name}`} child={child} changing={resettingChild(index)} />
+            <ChildAdd key={`add-child-${name}`} child={child} changing={changingChild(index)} />
           )
         })}
       </Box>

@@ -6,31 +6,23 @@ import MediaItemEdit from './MediaItemEdit'
 import MediaReset from './MediaReset'
 
 import { fieldSx } from '@/components/common/format'
-import { mediaItemEdits } from '@/lib/kb/model/media'
-
-import { RESETTING } from '@/lib/constants'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { mediaResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
 
-const { RESET } = CONCEPT_STATE
+import { mediaItemEdits } from '@/lib/kb/model/media'
+import { RESETTING } from '@/lib/constants'
+
 const MediaDetail = ({ edit }) => {
   const [_, media] = edit
 
-  const { confirmDiscard } = use(ConceptContext)
-
-  const resettingMediaItem = index => {
-    if (!confirmDiscard) return RESETTING.NONE
-    if (confirmDiscard.type === RESET.MEDIA) return RESETTING.ME
-    if (confirmDiscard.type === RESET.MEDIA_ITEM && confirmDiscard.update?.index === index)
-      return RESETTING.ME
-    if (confirmDiscard.type === RESET.TO_INITIAL) return RESETTING.ME
-    return RESETTING.OTHER
-  }
+  const { confirmReset } = use(ConceptContext)
 
   const mediaSx =
-    resettingMediaItem() === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+    mediaResetting(confirmReset) === RESETTING.OTHER
+      ? { ...fieldSx, color: 'text.disabled' }
+      : fieldSx
 
   return (
     <Box
@@ -52,7 +44,7 @@ const MediaDetail = ({ edit }) => {
               key={`${action}-${index}`}
               initial={media.initial?.[index]}
               mediaItemEdit={mediaItemEdit}
-              changing={resettingMediaItem(index)}
+              disabled={mediaResetting(confirmReset, index) === RESETTING.OTHER}
             />
           )
         })}

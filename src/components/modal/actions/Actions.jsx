@@ -41,7 +41,7 @@ const PendingText = ({ approval }) => {
 }
 
 const Actions = ({ colors, disabled, labels, onAction }) => {
-  const { confirmDiscard, confirmPending } = use(ConceptContext)
+  const { confirmPending, confirmReset } = use(ConceptContext)
 
   const actionColor = index => (colors ? colors[index] : 'main')
 
@@ -60,7 +60,7 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Stack spacing={0} sx={{ alignItems: 'center', minHeight: '60px', mt: 2 }}>
-        {!!confirmDiscard && <DiscardingText />}
+        {!!confirmReset && <DiscardingText />}
         {!!confirmPending && <PendingText approval={confirmPending.approval} />}
       </Stack>
       <Box
