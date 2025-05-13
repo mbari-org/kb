@@ -12,7 +12,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
 
-import submitUpdates from '@/contexts/concept/lib/submit/submitUpdates'
+import saveStaged from '@/contexts/concept/lib/staged/saveStaged'
 
 const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
 const { SAVE } = LABELS.CONCEPT.ACTION
@@ -57,7 +57,7 @@ const StagedActions = ({ intent }) => {
       case SAVE:
         closeModal()
         setProcessing(SAVING)
-        submitUpdates(apiFns.apiPayload, concept, initialState, stagedState).then(updateInfo => {
+        saveStaged(apiFns.apiPayload, concept, initialState, stagedState).then(updateInfo => {
           refreshConcept(concept, updateInfo).then(updatedConcept => {
             const { hasUpdated } = updateInfo
 

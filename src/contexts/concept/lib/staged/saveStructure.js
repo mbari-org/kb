@@ -4,7 +4,7 @@ import { LABELS } from '@/lib/constants'
 
 const { ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
 
-const updateStructure = ([submit, { concept, updateInfo }]) => {
+const saveStructure = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, updatedValue } = updateInfo
 
   const submitters = []
@@ -34,4 +34,4 @@ const updateStructure = ([submit, { concept, updateInfo }]) => {
   return submitters
 }
 
-export default updateStructure
+export default saveStructure

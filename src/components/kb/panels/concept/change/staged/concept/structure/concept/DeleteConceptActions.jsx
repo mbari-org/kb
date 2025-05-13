@@ -7,7 +7,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import submitDelete from '@/contexts/concept/lib/submit/submitDelete'
+import saveDelete from '@/contexts/concept/lib/staged/saveDelete'
 
 import { LABELS } from '@/lib/constants'
 
@@ -28,7 +28,7 @@ const DeleteConceptActions = () => {
     closeModal()
 
     if (label === DELETE) {
-      submitDelete(concept.name, apiFns.apiResult)
+      saveDelete(concept.name, apiFns.apiResult)
         .then(() => deleteConcept(concept.name))
         .then(selectConceptName => {
           selectConcept(selectConceptName)

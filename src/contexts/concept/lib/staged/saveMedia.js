@@ -4,7 +4,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { pick } from '@/lib/util'
 
-const updateMedia = ([submit, { concept, updateInfo }]) => {
+const saveMedia = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, updatedValue } = updateInfo
 
   if (!hasUpdated('media')) {
@@ -45,4 +45,4 @@ const updateMedia = ([submit, { concept, updateInfo }]) => {
   return submitters
 }
 
-export default updateMedia
+export default saveMedia

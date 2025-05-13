@@ -1,6 +1,6 @@
 import { updateConceptAuthor, updateConceptRank } from '@/lib/kb/api/concept'
 
-const updateDetail = ([submit, { concept, updateInfo }]) => {
+const saveDetail = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, updatedValue } = updateInfo
 
   const submitters = []
@@ -23,4 +23,4 @@ const updateDetail = ([submit, { concept, updateInfo }]) => {
   return submitters
 }
 
-export default updateDetail
+export default saveDetail
