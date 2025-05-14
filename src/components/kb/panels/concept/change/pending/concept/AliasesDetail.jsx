@@ -20,7 +20,7 @@ const AliasesDetail = ({ pendingAliases }) => {
     if (!confirmPending) {
       return null
     }
-    if (confirmPending?.group === ALIASES) {
+    if (confirmPending?.pending === ALIASES) {
       return confirmPending.approval
     }
     return OTHER
@@ -37,7 +37,7 @@ const AliasesDetail = ({ pendingAliases }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} group={ALIASES} />
+        <PendingButtons approval={approval} pending={ALIASES} />
         <Typography sx={aliasesSx}>Aliases</Typography>
       </Box>
       <Stack direction='column' spacing={1}>

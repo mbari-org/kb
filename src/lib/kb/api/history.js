@@ -12,7 +12,7 @@ const fetchHistory = async (config, action) => {
   return { payload: payload?.content }
 }
 
-const sendPendingAction = async (config, action, pendingId) =>
-  oniPut(config, ['history', action, pendingId])
+const updatePendingHistory = async (config, approval, pendingId) =>
+  oniPut(config, ['history', approval, pendingId])
 
-export { fetchHistory, sendPendingAction }
+export { fetchHistory, updatePendingHistory }

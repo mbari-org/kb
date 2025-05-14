@@ -2,17 +2,23 @@ import { use, useMemo, useCallback } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { LABELS, PENDING } from '@/lib/constants'
+import { LABELS, PENDING, PROCESSING } from '@/lib/constants'
+
+import updatePending from '@/contexts/concept/pending/updatePending'
 
 const { APPROVE, APPROVE_ALL, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABELS.BUTTON
 const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
-  const { confirmPending, setConfirmPending } = use(ConceptContext)
-  const { closeModal } = use(ModalContext)
+  const { config } = use(ConfigContext)
+  const { confirmPending, pendingHistory, setConfirmPending } = use(ConceptContext)
+  const { closeModal, setProcessing } = use(ModalContext)
+  const { refreshHistory } = use(TaxonomyContext)
 
   const [disabled, labels] = useMemo(() => {
     if (!confirmPending) {
@@ -54,13 +60,18 @@ const PendingActions = () => {
   const onAction = useCallback(
     label => {
       switch (label) {
-        case APPROVE:
-          setConfirmPending(null)
-          closeModal()
-          break
-
         case APPROVE_ALL:
           setConfirmPending({ approval: APPROVAL.ACCEPT, change: GROUP.ALL })
+          break
+
+        case CONFIRM:
+          setProcessing(PROCESSING.UPDATING)
+          updatePending({ config, confirmPending, pendingHistory }).then(() => {
+            refreshHistory().then(() => {
+              setConfirmPending(null)
+              setProcessing(null)
+            })
+          })
           break
 
         case DEFER:
@@ -68,11 +79,6 @@ const PendingActions = () => {
             closeModal()
           }
           setConfirmPending(null)
-          break
-
-        case REJECT:
-          setConfirmPending(null)
-          closeModal()
           break
 
         case REJECT_ALL:
@@ -85,7 +91,15 @@ const PendingActions = () => {
           break
       }
     },
-    [closeModal, confirmPending, setConfirmPending]
+    [
+      closeModal,
+      config,
+      confirmPending,
+      pendingHistory,
+      refreshHistory,
+      setConfirmPending,
+      setProcessing,
+    ]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')

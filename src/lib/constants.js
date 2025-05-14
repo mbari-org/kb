@@ -104,9 +104,9 @@ const LABELS = {
 
 const PENDING = {
   APPROVAL: {
-    ACCEPT: 'Accept',
-    OTHER: 'Other',
-    REJECT: 'Reject',
+    ACCEPT: 'approve',
+    OTHER: 'other',
+    REJECT: 'reject',
   },
   GROUP: {
     ALIASES: 'Aliases',
@@ -121,6 +121,7 @@ const PROCESSING = {
   LOADING: 'Loading...',
   LOADING_DELAY: 333,
   SAVING: 'Saving...',
+  UPDATING: 'Updating...',
 }
 
 const RANK = {

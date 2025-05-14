@@ -177,9 +177,11 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const refreshHistory = useCallback(async () => {
-    const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory({ ...taxonomy })
+    const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(apiPayload, {
+      ...taxonomy,
+    })
     updateTaxonomy(updatedTaxonomy)
-  }, [taxonomy, updateTaxonomy])
+  }, [apiPayload, taxonomy, updateTaxonomy])
 
   useEffect(() => {
     if (initialLoad.current && apiPayload) {

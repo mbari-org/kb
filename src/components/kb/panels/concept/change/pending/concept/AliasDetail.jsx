@@ -24,7 +24,7 @@ const AliasDetail = ({ pendingAlias }) => {
     if (!confirmPending) {
       return null
     }
-    if (confirmPending?.group === ALIASES || confirmPending?.pendingItemId === pendingAlias.id) {
+    if (confirmPending?.pending === ALIASES || confirmPending?.pending === pendingAlias.id) {
       return confirmPending.approval
     }
     return OTHER
@@ -65,7 +65,7 @@ const AliasDetail = ({ pendingAlias }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
-        <PendingButtons approval={approval} pendingItemId={pendingAlias.id} />
+        <PendingButtons approval={approval} pending={pendingAlias.id} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={aliasSx}>{pendingAction}:</Typography>
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>

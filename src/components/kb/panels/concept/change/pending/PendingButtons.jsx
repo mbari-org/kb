@@ -14,7 +14,7 @@ import { PENDING } from '@/lib/constants'
 
 const { ACCEPT, OTHER, REJECT } = PENDING.APPROVAL
 
-const PendingButtons = ({ approval, group, pendingItemId }) => {
+const PendingButtons = ({ approval, pending }) => {
   const { setConfirmPending } = use(ConceptContext)
 
   const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
@@ -25,10 +25,10 @@ const PendingButtons = ({ approval, group, pendingItemId }) => {
   }, [approval])
 
   const handleClick = useCallback(
-    clickedApproval => {
-      setConfirmPending({ approval: clickedApproval, group, pendingItemId })
+    clicked => {
+      setConfirmPending({ approval: clicked, pending })
     },
-    [group, pendingItemId, setConfirmPending]
+    [pending, setConfirmPending]
   )
 
   return (
