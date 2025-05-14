@@ -8,7 +8,9 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { capitalize, pick } from '@/lib/util'
+import { pendingValues } from '@/components/kb/panels/concept/change/pending/util'
+
+import { capitalize } from '@/lib/util'
 
 import { PENDING } from '@/lib/constants'
 
@@ -43,18 +45,6 @@ const MediaItemDetail = ({ pendingMediaItem }) => {
     return ''
   }, [pendingMediaItem])
 
-  const aliasValues = useMemo(() => {
-    const values = Object.entries(pick(pendingMediaItem, ['creatorName', 'creationTimestamp']))
-    return values
-    // if (pendingAlias.action === 'ADD') {
-    //   return { ...values, newValue: pendingAlias.newValue }
-    // }
-    // if (pendingAlias.action === 'DELETE') {
-    //   return pick(pendingAlias, ['oldValue'])
-    // }
-    // return pick(pendingAlias, ['oldValue', 'newValue'])
-  }, [pendingMediaItem])
-
   return (
     <Box
       sx={{
@@ -71,8 +61,8 @@ const MediaItemDetail = ({ pendingMediaItem }) => {
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>
         </Box>
       </Box>
-      <Box sx={{ ml: 8.5 }}>
-        {aliasValues?.map(([field, value]) => (
+      <Box sx={{ ml: 11.5 }}>
+        {pendingValues(pendingMediaItem)?.map(([field, value]) => (
           <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
         ))}
       </Box>

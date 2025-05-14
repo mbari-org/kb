@@ -43,6 +43,17 @@ const diff = (o1, o2) =>
     return result
   }, {})
 
+const humanTimestamp = timestamp => {
+  const date = new Date(timestamp)
+  const month = date.toLocaleString('default', { month: 'long' })
+  const day = date.getDate()
+  const year = date.getFullYear()
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+
+  return `${month} ${day}, ${year} ${hours}:${minutes}`
+}
+
 const isDeepEqual = (obj1, obj2, depth = Infinity) => {
   if (
     depth === 0 ||
@@ -183,6 +194,7 @@ export {
   deepDiff,
   diff,
   drop,
+  humanTimestamp,
   isDeepEqual,
   isElementInViewport,
   isEmpty,

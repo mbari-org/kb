@@ -6,6 +6,8 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import { pendingValues } from '@/components/kb/panels/concept/change/pending/util'
+
 import { formatDelta, formatField } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants'
@@ -42,6 +44,11 @@ const FieldDetail = ({ pendingField }) => {
       <Box sx={{ alignItems: 'center', display: 'flex' }}>
         <PendingButtons approval={approval} pending={pendingField.id} />
         <FieldValueDisplay disabled={disabled} field={fieldName} value={fieldDelta} />
+      </Box>
+      <Box sx={{ ml: 8 }}>
+        {pendingValues(pendingField)?.map(([field, value]) => (
+          <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
+        ))}
       </Box>
     </Box>
   )

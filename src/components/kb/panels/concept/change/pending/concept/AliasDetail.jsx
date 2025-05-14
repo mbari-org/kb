@@ -8,7 +8,9 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { capitalize, pick } from '@/lib/util'
+import { pendingValues } from '@/components/kb/panels/concept/change/pending/util'
+
+import { capitalize } from '@/lib/util'
 
 import { PENDING } from '@/lib/constants'
 
@@ -33,26 +35,20 @@ const AliasDetail = ({ pendingAlias }) => {
   const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
 
-  const aliasName = useMemo(() => {
-    if (pendingAlias.action === 'ADD') {
-      return pendingAlias.newValue
-    }
-    if (pendingAlias.action === 'DELETE') {
-      return pendingAlias.oldValue
-    }
-    return ''
-  }, [pendingAlias])
+  const aliasTitle = useMemo(() => {
+    switch (pendingAlias.action) {
+      case 'ADD':
+        return pendingAlias.newValue
 
-  const aliasValues = useMemo(() => {
-    const values = Object.entries(pick(pendingAlias, ['creatorName', 'creationTimestamp']))
-    return values
-    // if (pendingAlias.action === 'ADD') {
-    //   return { ...values, newValue: pendingAlias.newValue }
-    // }
-    // if (pendingAlias.action === 'DELETE') {
-    //   return pick(pendingAlias, ['oldValue'])
-    // }
-    // return pick(pendingAlias, ['oldValue', 'newValue'])
+      case 'DELETE':
+        return pendingAlias.oldValue
+
+      case 'REPLACE':
+        return `${pendingAlias.oldValue} --> ${pendingAlias.newValue}`
+
+      default:
+        return ''
+    }
   }, [pendingAlias])
 
   return (
@@ -68,11 +64,11 @@ const AliasDetail = ({ pendingAlias }) => {
         <PendingButtons approval={approval} pending={pendingAlias.id} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={aliasSx}>{pendingAction}:</Typography>
-          <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasName}</Typography>
+          <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasTitle}</Typography>
         </Box>
       </Box>
-      <Box sx={{ ml: 8.5 }}>
-        {aliasValues?.map(([field, value]) => (
+      <Box sx={{ ml: 11.5 }}>
+        {pendingValues(pendingAlias)?.map(([field, value]) => (
           <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
         ))}
       </Box>
