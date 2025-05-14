@@ -3,11 +3,10 @@ import { useCallback, useState } from 'react'
 import ModalContext from './ModalContext'
 
 const ModalProvider = ({ children }) => {
-  const [processing, setProcessing] = useState(null)
-
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState(null)
   const [onClose, setOnClose] = useState(null)
+  const [processing, setProcessing] = useState(null)
 
   const closeModal = useCallback(
     confirmed => {

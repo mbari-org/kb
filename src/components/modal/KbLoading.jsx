@@ -34,7 +34,7 @@ const KbLoading = () => {
       sx={{
         backgroundColor: 'rgba(0, 0, 0, 0.25)',
         color: theme.palette.primary.main,
-        zIndex: theme.zIndex.drawer + 1,
+        zIndex: theme.zIndex.drawer + 2,
       }}
       open={active}
     >
