@@ -9,9 +9,11 @@ import {
 import { CONCEPT_STATE } from '@/lib/constants'
 import { orderedAliases } from '@/lib/kb/model/aliases'
 
+import { isStagedAction } from '@/components/kb/panels/concept/change/staged/concept/util'
+
 import { drop } from '@/lib/util'
 
-const { MEDIA, NO_ACTION } = CONCEPT_STATE
+const { MEDIA } = CONCEPT_STATE
 
 const addedConcepts = (parent, updateInfo) => {
   const { updatedValue } = updateInfo
@@ -112,13 +114,18 @@ const refresh = async (concept, updateInfo, apiPayload) => {
           acc.push({ ...mediaItem, id: mediaId })
           break
         }
+
         case MEDIA.DELETE:
           break
+
         case MEDIA.EDIT:
-        case NO_ACTION:
           acc.push(drop(mediaItem, ['action']))
           break
+
         default:
+          if (isStagedAction(mediaItem.action)) {
+            acc.push(drop(mediaItem, ['action']))
+          }
           break
       }
       return acc

@@ -1,6 +1,6 @@
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 
-import MediaActionButton from '../MediaActionButton'
+import MediaActionButton from '@/components/kb/panels/concept/change/staged/concept/media/MediaActionButton'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

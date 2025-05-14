@@ -8,7 +8,7 @@ import { RESETTING } from '@/lib/constants'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { fieldResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+import { fieldResetting } from '@/components/kb/panels/concept/change/staged/concept/util'
 
 const FieldValueDetail = ({ field, value }) => {
   const { confirmReset } = use(ConceptContext)

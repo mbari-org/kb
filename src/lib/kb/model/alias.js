@@ -44,7 +44,7 @@ const stagedAlias = (alias, pendingHistory) => {
   if (pendingAdd) {
     return {
       ...alias,
-      action: 'PENDING ADD',
+      action: 'Pending Add',
       historyId: pendingAdd.id,
     }
   }
@@ -55,7 +55,7 @@ const stagedAlias = (alias, pendingHistory) => {
   if (pendingDelete) {
     return {
       ...alias,
-      action: 'PENDING DELETE',
+      action: 'Pending Delete',
       historyId: pendingDelete.id,
     }
   }
@@ -66,7 +66,7 @@ const stagedAlias = (alias, pendingHistory) => {
   if (pendingEdit) {
     return {
       ...alias,
-      action: 'PENDING EDIT',
+      action: 'Pending Edit',
       historyId: pendingEdit.id,
     }
   }

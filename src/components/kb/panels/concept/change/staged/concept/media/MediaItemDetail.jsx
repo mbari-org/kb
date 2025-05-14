@@ -16,9 +16,11 @@ const MediaItemDetail = ({ action, disabled, initial, updates }) => {
         field === 'isPrimary' ? (updates[field] === true ? 'true' : 'false') : updates[field],
       ])
       break
+
     case CONCEPT_STATE.MEDIA.DELETE:
       fieldValues = []
       break
+
     case CONCEPT_STATE.MEDIA.EDIT:
       fieldValues = Object.entries(updates).map(([field, value]) => {
         if (initial[field] !== value) {

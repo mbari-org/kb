@@ -1,6 +1,6 @@
-import { CONCEPT_STATE } from '@/lib/constants'
+import { isStagedAction } from '@/components/kb/panels/concept/change/staged/concept/util'
 
-const { RESET } = CONCEPT_STATE
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const deleteItem = edit => {
   const { action, index } = edit
@@ -38,10 +38,10 @@ const editItem = edit => {
 const fieldBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
   const itemAction =
     stagedItem?.action !== CONCEPT_STATE.NO_ACTION
-      ? stagedItem.action.split(' ')[1].toUpperCase()
+      ? stagedItem?.action.split(' ')[1].toUpperCase()
       : null
 
-  const borderStyle = stagedItem.historyId ? 'solid' : 'dashed'
+  const borderStyle = stagedItem?.historyId ? 'solid' : 'dashed'
   const borderWidth = itemAction ? width : '1px'
 
   let borderColor
@@ -79,7 +79,7 @@ const fieldEdits = ({ stateType, displayFields, initial, staged }) =>
 const itemEdit = (stateType, index, initialItem, stagedItem, displayFields) => {
   const { action } = stagedItem
 
-  if (action === CONCEPT_STATE.NO_ACTION) {
+  if (!isStagedAction(action)) {
     return null
   }
 

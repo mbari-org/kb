@@ -4,7 +4,7 @@ import ResettingButton from '@/components/kb/panels/concept/change/ResettingButt
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { aliasResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+import { aliasResetting } from '@/components/kb/panels/concept/change/staged/concept/util'
 
 import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 

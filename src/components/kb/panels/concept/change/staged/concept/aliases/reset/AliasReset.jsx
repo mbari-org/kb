@@ -4,11 +4,14 @@ import ResettingButton from '@/components/kb/panels/concept/change/ResettingButt
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { aliasResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+import {
+  aliasResetting,
+  isStagedAction,
+} from '@/components/kb/panels/concept/change/staged/concept/util'
 
 import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
-const { NO_ACTION, RESET } = CONCEPT_STATE
+const { RESET } = CONCEPT_STATE
 
 const AliasReset = ({ index }) => {
   const { confirmReset, stagedState, modifyConcept } = use(ConceptContext)
@@ -17,7 +20,7 @@ const AliasReset = ({ index }) => {
 
   const onClick = () => {
     // If last alias, do RESET.ALIASES
-    const count = stagedState.aliases.filter(item => item.action !== NO_ACTION).length
+    const count = stagedState.aliases.filter(item => isStagedAction(item.action)).length
     count === 1
       ? modifyConcept({ type: RESET.ALIASES })
       : modifyConcept({

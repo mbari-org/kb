@@ -49,4 +49,7 @@ const mediaResetting = (confirmReset, index) => {
   return RESETTING.OTHER
 }
 
-export { aliasResetting, childResetting, fieldResetting, mediaResetting }
+const isStagedAction = action =>
+  action !== CONCEPT_STATE.NO_ACTION && !action.toLowerCase().startsWith('pending')
+
+export { aliasResetting, childResetting, fieldResetting, isStagedAction, mediaResetting }

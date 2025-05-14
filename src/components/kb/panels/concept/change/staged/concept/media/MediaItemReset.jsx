@@ -3,7 +3,10 @@ import { use } from 'react'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ResettingButton from '@/components/kb/panels/concept/change/ResettingButton'
 
-import { mediaResetting } from '@/components/kb/panels/concept/change/staged/concept/confirmReset'
+import {
+  mediaResetting,
+  isStagedAction,
+} from '@/components/kb/panels/concept/change/staged/concept/util'
 
 import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
@@ -14,7 +17,7 @@ const MediaItemReset = ({ index }) => {
 
   const onClick = () => {
     // CxTBD Check if this is the only media item edit left, and if so, do RESET.MEDIA
-    const count = stagedState.media.filter(item => item.action !== CONCEPT_STATE.NO_ACTION).length
+    const count = stagedState.media.filter(item => isStagedAction(item.action)).length
     count === 1
       ? modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
       : modifyConcept({

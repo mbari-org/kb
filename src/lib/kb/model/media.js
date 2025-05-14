@@ -30,7 +30,7 @@ const stagedMediaItem = (mediaItem, pendingHistory) => {
   if (pendingAdd) {
     return {
       ...mediaItem,
-      action: 'PENDING ADD',
+      action: 'Pending Add',
       historyId: pendingAdd.id,
     }
   }
@@ -41,7 +41,7 @@ const stagedMediaItem = (mediaItem, pendingHistory) => {
   if (pendingDelete) {
     return {
       ...mediaItem,
-      action: 'PENDING DELETE',
+      action: 'Pending Delete',
       historyId: pendingDelete.id,
     }
   }
@@ -52,7 +52,7 @@ const stagedMediaItem = (mediaItem, pendingHistory) => {
   if (pendingEdit) {
     return {
       ...mediaItem,
-      action: 'PENDING EDIT',
+      action: 'Pending Edit',
       historyId: pendingEdit.id,
     }
   }
