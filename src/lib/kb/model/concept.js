@@ -9,7 +9,7 @@ import {
 import { CONCEPT_STATE } from '@/lib/constants'
 import { orderedAliases } from '@/lib/kb/model/aliases'
 
-import { isStagedAction } from '@/components/kb/panels/concept/change/staged/concept/util'
+import { isStagedAction } from '@/components/kb/panels/concept/change/staged/concept/staged'
 
 import { drop } from '@/lib/util'
 

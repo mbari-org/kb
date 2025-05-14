@@ -9,7 +9,7 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { mediaResetting } from '@/components/kb/panels/concept/change/staged/concept/util'
+import { mediaResetting } from '@/components/kb/panels/concept/change/staged/concept/staged'
 
 import { mediaItemEdits } from '@/lib/kb/model/media'
 import { RESETTING } from '@/lib/constants'
