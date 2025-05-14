@@ -12,7 +12,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
 
-import saveStaged from '@/contexts/concept/lib/staged/saveStaged'
+import saveStaged from '@/contexts/concept/staged/save/saveStaged'
 
 const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
 const { SAVE } = LABELS.CONCEPT.ACTION

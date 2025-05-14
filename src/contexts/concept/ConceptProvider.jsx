@@ -4,14 +4,14 @@ import { useErrorBoundary } from 'react-error-boundary'
 import { itemPath } from '@/components/kb/panels/concept/tree/lib/taxonomyItem'
 
 import useDisplayStaged from '@/components/kb/panels/concept/change/staged/modal/useDisplayStaged'
-import useModifyConcept from '@/contexts/concept/lib/edit/useModifyConcept'
+import useModifyConcept from '@/contexts/concept/staged/edit/useModifyConcept'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import conceptStateReducer from '@/contexts/concept/lib/edit/conceptStateReducer'
+import conceptStateReducer from '@/contexts/concept/staged/edit/conceptStateReducer'
 
 import { hasModifiedState, initialConceptState } from '@/lib/kb/state/concept'
 

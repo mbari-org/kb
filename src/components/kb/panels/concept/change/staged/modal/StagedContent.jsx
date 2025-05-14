@@ -11,7 +11,7 @@ import MediaDetail from '@/components/kb/panels/concept/change/staged/concept/me
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { hasStateChange, stateUpdates } from '@/contexts/concept/lib/edit/stateUpdates'
+import { hasStateChange, stateUpdates } from '@/contexts/concept/staged/edit/stateUpdates'
 
 const StagedContent = () => {
   const { stagedState, initialState } = use(ConceptContext)

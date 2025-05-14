@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { isResetAction, resetConceptState } from '@/contexts/concept/lib/edit/resetConceptState'
+import { isResetAction, resetConceptState } from '@/contexts/concept/staged/edit/resetConceptState'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

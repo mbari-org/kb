@@ -7,7 +7,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import saveDelete from '@/contexts/concept/lib/staged/saveDelete'
+import saveDelete from '@/contexts/concept/staged/save/saveDelete'
 
 import { LABELS } from '@/lib/constants'
 

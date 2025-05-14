@@ -3,7 +3,7 @@ import saveDetail from './saveDetail'
 import saveMedia from './saveMedia'
 import saveStructure from './saveStructure'
 
-import { updateInfo as stateUpdateInfo } from '@/contexts/concept/lib/edit/stateUpdates'
+import { updateInfo as stateUpdateInfo } from '@/contexts/concept/staged/edit/stateUpdates'
 
 const saveStaged = async (apiPayload, concept, initialState, stagedState) => {
   const updateInfo = stateUpdateInfo(initialState, stagedState)
