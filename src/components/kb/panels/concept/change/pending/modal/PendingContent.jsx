@@ -34,10 +34,10 @@ const PendingContent = () => {
   return (
     <Stack direction='column' spacing={1}>
       {pendingAliases && <AliasesDetail pendingAliases={pendingAliases} />}
-      {/* {pendingChildren && <ChildrenDetail pendingChildren={pendingChildren} />}
+      {pendingChildren && <ChildrenDetail pendingChildren={pendingChildren} />}
       {pendingMedia && <MediaDetail pendingMedia={pendingMedia} />}
       {pendingNameChange && <NameDetail pendingNameChange={pendingNameChange} />}
-      {pendingRankChanges && <RankDetail pendingRankChanges={pendingRankChanges} />} */}
+      {pendingRankChanges && <RankDetail pendingRankChanges={pendingRankChanges} />}
     </Stack>
   )
 }

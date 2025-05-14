@@ -8,10 +8,10 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { fieldSx } from '@/components/common/format'
 
+import { PENDING } from '@/lib/constants'
+
 const { OTHER } = PENDING.APPROVAL
 const { ALIASES } = PENDING.GROUP
-
-import { PENDING } from '@/lib/constants'
 
 const AliasesDetail = ({ pendingAliases }) => {
   const { confirmPending } = use(ConceptContext)
