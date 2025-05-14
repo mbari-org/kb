@@ -1,0 +1,50 @@
+import { use, useMemo } from 'react'
+import { Box } from '@mui/material'
+
+import PendingButtons from '@/components/kb/panels/concept/change/pending/PendingButtons'
+import FieldValueDisplay from '@/components/common/FieldValueDisplay'
+
+import ConceptContext from '@/contexts/concept/ConceptContext'
+
+import { formatDelta, formatField } from '@/components/common/format'
+
+import { PENDING } from '@/lib/constants'
+
+const { OTHER } = PENDING.APPROVAL
+
+const FieldDetail = ({ pendingField }) => {
+  const { confirmPending } = use(ConceptContext)
+
+  const approval = useMemo(() => {
+    if (!confirmPending) {
+      return null
+    }
+    if (confirmPending?.pending === pendingField.id) {
+      return confirmPending.approval
+    }
+    return OTHER
+  }, [confirmPending, pendingField.id])
+
+  const disabled = approval === OTHER
+
+  const fieldName = formatField(pendingField.field)
+  const fieldDelta = formatDelta(pendingField.oldValue, pendingField.newValue)
+
+  return (
+    <Box
+      sx={{
+        alignItems: 'flex-start',
+        display: 'flex',
+        flexDirection: 'column',
+        mt: 0.5,
+      }}
+    >
+      <Box sx={{ alignItems: 'center', display: 'flex' }}>
+        <PendingButtons approval={approval} pending={pendingField.id} />
+        <FieldValueDisplay disabled={disabled} field={fieldName} value={fieldDelta} />
+      </Box>
+    </Box>
+  )
+}
+
+export default FieldDetail

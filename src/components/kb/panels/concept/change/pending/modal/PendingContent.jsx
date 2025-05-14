@@ -5,7 +5,7 @@ import AliasesDetail from '@/components/kb/panels/concept/change/pending/concept
 import ChildrenDetail from '@/components/kb/panels/concept/change/pending/concept/ChildrenDetail'
 import MediaDetail from '@/components/kb/panels/concept/change/pending/concept/MediaDetail'
 import NameDetail from '@/components/kb/panels/concept/change/pending/concept/NameDetail'
-import RankDetail from '@/components/kb/panels/concept/change/pending/concept/RankDetail'
+import FieldDetail from '@/components/kb/panels/concept/change/pending/concept/FieldDetail'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
@@ -37,7 +37,9 @@ const PendingContent = () => {
       {pendingChildren && <ChildrenDetail pendingChildren={pendingChildren} />}
       {pendingMedia && <MediaDetail pendingMedia={pendingMedia} />}
       {pendingNameChange && <NameDetail pendingNameChange={pendingNameChange} />}
-      {pendingRankChanges && <RankDetail pendingRankChanges={pendingRankChanges} />}
+      {pendingRankChanges.map(pendingRankChange => (
+        <FieldDetail key={pendingRankChange.id} pendingField={pendingRankChange} />
+      ))}
     </Stack>
   )
 }
