@@ -137,11 +137,11 @@ const isDescendant = (taxonomy, conceptName, descendantName) => {
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
 const loadTaxonomy = async apiPayload => {
-  const [root, names, ranks, { approvedHistory, pendingHistory }] = await Promise.all([
+  const [root, names, ranks, pendingHistory] = await Promise.all([
     apiPayload(fetchRoot),
     apiPayload(fetchNames),
     apiPayload(fetchRanks),
-    loadTaxonomyHistory(apiPayload),
+    apiPayload(fetchHistory, 'pending'),
   ])
 
   const rootConcept = await loadConcept(root.name, apiPayload)
@@ -154,7 +154,6 @@ const loadTaxonomy = async apiPayload => {
 
   const taxonomy = {
     aliasMap,
-    approvedHistory,
     conceptMap,
     names,
     pendingHistory,
@@ -305,17 +304,6 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => 
   return { taxonomy: updatedTaxonomy }
 }
 
-const loadTaxonomyHistory = async apiPayload => {
-  const [approvedHistory, pendingHistory] = await Promise.all([
-    apiPayload(fetchHistory, 'approved'),
-    apiPayload(fetchHistory, 'pending'),
-  ])
-  return {
-    approvedHistory,
-    pendingHistory,
-  }
-}
-
 const mapConcept = (taxonomy, concept) => {
   taxonomy.conceptMap[concept.name] = concept
   concept.alternateNames.forEach(alternateName => {
@@ -408,23 +396,23 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
 
   const updatedNames = await apiPayload(fetchNames)
 
+  const pendingHistory = await apiPayload(fetchHistory, 'pending')
+
   const updatedTaxonomy = {
     ...taxonomy,
     aliasMap,
     conceptMap,
     names: updatedNames,
+    pendingHistory,
   }
 
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }
 }
 
-const refreshTaxonomyHistory = async (apiPayload, updatableTaxonomy) => {
-  const [approvedHistory, pendingHistory] = await Promise.all([
-    apiPayload(fetchHistory, 'approved'),
-    apiPayload(fetchHistory, 'pending'),
-  ])
-  updatableTaxonomy.approvedHistory = approvedHistory
+const refreshTaxonomyPendingHistory = async (apiPayload, updatableTaxonomy) => {
+  const pendingHistory = await apiPayload(fetchHistory, 'pending')
   updatableTaxonomy.pendingHistory = pendingHistory
+  return updatableTaxonomy
 }
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {
@@ -498,5 +486,5 @@ export {
   loadTaxonomyConceptDescendants,
   mapsFromConcept,
   refreshTaxonomyConcept,
-  refreshTaxonomyHistory,
+  refreshTaxonomyPendingHistory,
 }

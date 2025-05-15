@@ -22,7 +22,7 @@ import {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   refreshTaxonomyConcept,
-  refreshTaxonomyHistory,
+  refreshTaxonomyPendingHistory,
   cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/model/taxonomy'
 
@@ -169,6 +169,7 @@ const TaxonomyProvider = ({ children }) => {
         updateInfo,
         apiPayload
       )
+
       updateTaxonomy(updatedTaxonomy)
 
       return updatedConcept
@@ -177,7 +178,7 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const refreshHistory = useCallback(async () => {
-    const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(apiPayload, {
+    const { taxonomy: updatedTaxonomy } = await refreshTaxonomyPendingHistory(apiPayload, {
       ...taxonomy,
     })
     updateTaxonomy(updatedTaxonomy)

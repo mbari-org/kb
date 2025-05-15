@@ -1,9 +1,8 @@
-import { capitalize, isEmpty, pick } from '@/lib/util'
+import { isEmpty, pick } from '@/lib/util'
 
 const fieldPendingHistory = (pendingHistory, field) => {
-  const pendingField = capitalize(field)
   return pendingHistory
-    ?.filter(pending => pending.field === pendingField)
+    ?.filter(pending => pending.field.toLowerCase() === field.toLowerCase())
     .sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
 }
 

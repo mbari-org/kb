@@ -59,13 +59,14 @@ const StagedActions = ({ intent }) => {
         setProcessing(SAVING)
         saveStaged(apiFns.apiPayload, concept, initialState, stagedState).then(updateInfo => {
           refreshConcept(concept, updateInfo).then(updatedConcept => {
-            const { hasUpdated } = updateInfo
+            // const { hasUpdated } = updateInfo
 
             setEditing(false)
             setProcessing(null)
-            if (hasUpdated('name')) {
-              selectConcept(updatedConcept.name)
-            }
+            selectConcept(updatedConcept.name)
+            // if (hasUpdated('name')) {
+            //   selectConcept(updatedConcept.name)
+            // }
           })
         })
         break
