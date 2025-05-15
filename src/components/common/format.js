@@ -1,12 +1,11 @@
 const formatDelta = (initialValue, stagedValue) =>
   `${stringDisplay(initialValue)} --> ${stringDisplay(stagedValue)}`
 
-const formatField = field => {
-  return field
+const formatField = field =>
+  field
     .replace(/([A-Z])/g, ' $1')
     .replace(/^./, str => str.toUpperCase())
     .trim()
-}
 
 const fieldSx = {
   fontSize: '1.25rem',

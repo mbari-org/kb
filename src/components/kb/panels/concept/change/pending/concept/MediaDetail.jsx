@@ -13,7 +13,9 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 const { MEDIA } = PENDING.GROUP
 
-const MediaDetail = ({ pendingMedia }) => {
+const MediaDetail = ({ pending }) => {
+  const pendingMedia = pending('Media')
+
   const { confirmPending } = use(ConceptContext)
 
   const approval = useMemo(() => {
@@ -27,6 +29,10 @@ const MediaDetail = ({ pendingMedia }) => {
   }, [confirmPending])
 
   const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+
+  if (pendingMedia.length === 0) {
+    return null
+  }
 
   return (
     <Box

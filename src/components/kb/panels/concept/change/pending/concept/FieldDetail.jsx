@@ -1,8 +1,8 @@
 import { use, useMemo } from 'react'
 import { Box } from '@mui/material'
 
-import PendingButtons from '@/components/kb/panels/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
+import PendingButtons from '@/components/kb/panels/concept/change/pending/PendingButtons'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 

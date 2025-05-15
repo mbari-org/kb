@@ -13,8 +13,10 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 const { ALIASES } = PENDING.GROUP
 
-const AliasesDetail = ({ pendingAliases }) => {
-  const { confirmPending } = use(ConceptContext)
+const AliasesDetail = ({ pending }) => {
+  const { concept, confirmPending } = use(ConceptContext)
+
+  const pendingAliases = pending('ConceptName').filter(alias => alias.newValue !== concept.name)
 
   const approval = useMemo(() => {
     if (!confirmPending) {
@@ -27,6 +29,10 @@ const AliasesDetail = ({ pendingAliases }) => {
   }, [confirmPending])
 
   const aliasesSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+
+  if (pendingAliases.length === 0) {
+    return null
+  }
 
   return (
     <Box

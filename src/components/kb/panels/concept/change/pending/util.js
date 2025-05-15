@@ -1,12 +1,7 @@
 import { fieldPendingHistory } from '@/lib/kb/model/history'
 import { humanTimestamp } from '@/lib/util'
 
-const pendingAliases = (concept, pendingHistory) => {
-  const pendingConceptNames = fieldPendingHistory(pendingHistory, 'ConceptName')
-  return pendingConceptNames.filter(
-    pendingConceptName => pendingConceptName.newValue !== concept.name
-  )
-}
+const pendingChange = pendingHistory => field => fieldPendingHistory(pendingHistory, field)
 
 const pendingValues = pending => {
   return [
@@ -15,4 +10,4 @@ const pendingValues = pending => {
   ]
 }
 
-export { pendingValues }
+export { pendingChange, pendingValues }
