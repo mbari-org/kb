@@ -42,20 +42,26 @@ const ConceptProvider = ({ children }) => {
   const displayStaged = useDisplayStaged()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
-  const handleSetConcept = useCallback(
-    selectedConcept => {
+  const refreshConcept = useCallback(
+    refreshedConcept => {
       setModal(null)
 
-      setConcept(selectedConcept)
+      const refreshedPendingHistory = getConceptPendingHistory(refreshedConcept.name)
+      setPendingHistory(refreshedPendingHistory)
 
-      const pendingHistory = getConceptPendingHistory(selectedConcept.name)
-      setPendingHistory(pendingHistory)
-
-      const initialState = initialConceptState(selectedConcept, pendingHistory)
-      setInitialState(initialState)
-      dispatch({ type: CONCEPT_STATE.INITIAL, update: initialState })
+      const refreshedInitialState = initialConceptState(refreshedConcept, refreshedPendingHistory)
+      setInitialState(refreshedInitialState)
+      dispatch({ type: CONCEPT_STATE.INITIAL, update: refreshedInitialState })
     },
     [getConceptPendingHistory, setModal]
+  )
+
+  const handleSetConcept = useCallback(
+    selectedConcept => {
+      setConcept(selectedConcept)
+      refreshConcept(selectedConcept)
+    },
+    [refreshConcept]
   )
 
   useEffect(() => {
@@ -113,6 +119,7 @@ const ConceptProvider = ({ children }) => {
         initialState,
         modifyConcept,
         pendingHistory,
+        refreshConcept,
         setEditing,
         setConfirmPending,
         stagedState,
