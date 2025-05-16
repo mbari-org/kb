@@ -21,11 +21,18 @@ const { SAVING } = PROCESSING
 
 const StagedActions = ({ intent }) => {
   const { apiFns } = use(ConfigContext)
-  const { concept, confirmReset, initialState, modifyConcept, setEditing, stagedState } =
-    use(ConceptContext)
+  const {
+    concept,
+    confirmReset,
+    initialState,
+    modifyConcept,
+    refreshConcept,
+    setEditing,
+    stagedState,
+  } = use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
-  const { refreshConcept } = use(TaxonomyContext)
+  const { refreshConcept: refreshTaxonomyConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
   const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
@@ -58,15 +65,14 @@ const StagedActions = ({ intent }) => {
         closeModal()
         setProcessing(SAVING)
         saveStaged(apiFns.apiPayload, concept, initialState, stagedState).then(updateInfo => {
-          refreshConcept(concept, updateInfo).then(updatedConcept => {
-            // const { hasUpdated } = updateInfo
-
+          refreshTaxonomyConcept(concept, updateInfo).then(updatedConcept => {
             setEditing(false)
             setProcessing(null)
-            selectConcept(updatedConcept.name)
-            // if (hasUpdated('name')) {
-            //   selectConcept(updatedConcept.name)
-            // }
+            if (updateInfo.hasUpdated('name')) {
+              selectConcept(updatedConcept.name)
+            } else {
+              refreshConcept(updatedConcept)
+            }
           })
         })
         break

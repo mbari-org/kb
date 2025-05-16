@@ -409,10 +409,9 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }
 }
 
-const refreshTaxonomyPendingHistory = async (apiPayload, updatableTaxonomy) => {
+const refreshTaxonomyPendingHistory = async (taxonomy, apiPayload) => {
   const pendingHistory = await apiPayload(fetchHistory, 'pending')
-  updatableTaxonomy.pendingHistory = pendingHistory
-  return updatableTaxonomy
+  return { taxonomy: { ...taxonomy, pendingHistory } }
 }
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {
