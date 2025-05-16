@@ -396,11 +396,14 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
 
   const updatedNames = await apiPayload(fetchNames)
 
+  const pendingHistory = await apiPayload(fetchHistory, 'pending')
+
   const updatedTaxonomy = {
     ...taxonomy,
     aliasMap,
     conceptMap,
     names: updatedNames,
+    pendingHistory,
   }
 
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }

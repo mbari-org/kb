@@ -1,6 +1,5 @@
 import {
   fetchConcept,
-  fetchConceptAnnotations,
   fetchConceptChildren,
   fetchConceptNames,
   fetchConceptParent,
@@ -72,12 +71,9 @@ const loadConcept = async (conceptName, apiPayload) => {
 }
 
 const loadConceptData = async (concept, apiPayload) => {
-  const [aliases, annotations] = await Promise.all([
-    apiPayload(fetchConceptNames, concept.name),
-    apiPayload(fetchConceptAnnotations, concept.name),
-  ])
+  const aliases = await apiPayload(fetchConceptNames, concept.name)
   concept.aliases = orderedAliases(aliases)
-  concept.annotations = annotations
+  return concept
 }
 
 const loadParent = async (conceptName, apiPayload) => apiPayload(fetchConceptParent, conceptName)

@@ -169,6 +169,7 @@ const TaxonomyProvider = ({ children }) => {
         updateInfo,
         apiPayload
       )
+
       updateTaxonomy(updatedTaxonomy)
 
       return updatedConcept
