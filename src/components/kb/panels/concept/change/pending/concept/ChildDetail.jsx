@@ -10,40 +10,39 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { pendingValues } from '@/components/kb/panels/concept/change/pending/util'
 
+import { PENDING } from '@/lib/constants'
 import { capitalize } from '@/lib/util'
 
-import { PENDING } from '@/lib/constants'
-
 const { OTHER } = PENDING.APPROVAL
-const { MEDIA } = PENDING.GROUP
+const { CHILDREN } = PENDING.GROUP
 
-const MediaItemDetail = ({ pendingMediaItem }) => {
+const ChildDetail = ({ pendingChild }) => {
   const { confirmPending } = use(ConceptContext)
 
-  const pendingAction = capitalize(pendingMediaItem.action.toLowerCase())
+  const pendingAction = capitalize(pendingChild.action.toLowerCase())
 
   const approval = useMemo(() => {
     if (!confirmPending) {
       return null
     }
-    if (confirmPending?.pending === MEDIA || confirmPending?.pending === pendingMediaItem.id) {
+    if (confirmPending?.pending === CHILDREN || confirmPending?.pending === pendingChild.id) {
       return confirmPending.approval
     }
     return OTHER
-  }, [confirmPending, pendingMediaItem.id])
+  }, [confirmPending, pendingChild.id])
 
-  const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+  const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
 
-  const mediaName = useMemo(() => {
-    if (pendingMediaItem.action === 'ADD') {
-      return pendingMediaItem.newValue
+  const childName = useMemo(() => {
+    if (pendingChild.action === 'ADD') {
+      return pendingChild.newValue
     }
-    if (pendingMediaItem.action === 'DELETE') {
-      return pendingMediaItem.oldValue
+    if (pendingChild.action === 'DELETE') {
+      return pendingChild.oldValue
     }
     return ''
-  }, [pendingMediaItem])
+  }, [pendingChild])
 
   return (
     <Box
@@ -55,14 +54,14 @@ const MediaItemDetail = ({ pendingMediaItem }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
-        <PendingButtons approval={approval} pending={pendingMediaItem.id} />
+        <PendingButtons approval={approval} pending={pendingChild.id} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={mediaSx}>{pendingAction}:</Typography>
-          <Typography sx={{ ...mediaSx, fontWeight: 'bold', ml: 1 }}>{mediaName}</Typography>
+          <Typography sx={aliasSx}>{pendingAction}:</Typography>
+          <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{childName}</Typography>
         </Box>
       </Box>
       <Box sx={{ ml: 11.5 }}>
-        {pendingValues(pendingMediaItem)?.map(([field, value]) => (
+        {pendingValues(pendingChild)?.map(([field, value]) => (
           <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
         ))}
       </Box>
@@ -70,4 +69,4 @@ const MediaItemDetail = ({ pendingMediaItem }) => {
   )
 }
 
-export default MediaItemDetail
+export default ChildDetail
