@@ -11,21 +11,30 @@ const useStructureChoices = () => {
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
   const isRoot = isTaxonomyRoot(concept)
-  const nameHasPendingHistory = hasPendingHistory(pendingHistory, 'ConceptName')
+  const hasPendingName = hasPendingHistory(pendingHistory, 'ConceptName')
 
-  const conceptHasChildren = concept.children.length > 0 || stagedState.children.length > 0
-  const conceptHasNameUpdate = !!stagedState.nameChange
-  const conceptHasParentUpdate = stagedState.parent !== concept.parent
+  const hasStagedChildren = stagedState.children.length > 0
+  const hasStagedName = !!stagedState.nameChange
+  const hasStagedParent = stagedState.parent !== concept.parent
+  const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
 
-  const disableChangeName =
-    isRoot || nameHasPendingHistory || conceptHasNameUpdate || conceptHasParentUpdate
-  const disableChangeParent = isRoot || conceptHasParentUpdate || conceptHasNameUpdate
+  const hasChildren = concept.children.length > 0
+
   const disableDelete = useMemo(
-    () => isRoot || conceptHasChildren || hasStateChange(initialState, stagedState),
-    [conceptHasChildren, initialState, isRoot, stagedState]
+    () => isRoot || hasChildren || hasStagedChildren || hasStateChange(initialState, stagedState),
+    [hasChildren, hasStagedChildren, initialState, isRoot, stagedState]
   )
+  const disableChangeName = isRoot || hasPendingName || hasStagedStructure
+  const disableChangeParent = isRoot || hasStagedStructure
 
-  return { disableDelete, disableChangeName, disableChangeParent }
+  return {
+    hasStagedChildren,
+    hasStagedName,
+    hasStagedParent,
+    disableDelete,
+    disableChangeName,
+    disableChangeParent,
+  }
 }
 
 export default useStructureChoices

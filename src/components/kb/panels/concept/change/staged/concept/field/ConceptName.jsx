@@ -17,25 +17,16 @@ const ConceptName = () => {
   const theme = useTheme()
 
   const { user } = use(AuthContext)
-  const { concept, editing, stagedState } = use(ConceptContext)
+  const { concept, editing } = use(ConceptContext)
 
-  const { disableChangeName, disableChangeParent } = useStructureChoices()
+  const { hasStagedChildren, hasStagedName, hasStagedParent } = useStructureChoices()
+  const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
 
   const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
 
-  const conceptHasNameUpdate = stagedState.name !== concept?.name
-  const conceptHasParentUpdate = stagedState.parent !== concept?.parent
+  const showStructureButton = editing && !showStructureChoicesModal && !isReadOnly(user)
 
-  const showStructureButton =
-    !isReadOnly(user) &&
-    editing &&
-    !showStructureChoicesModal &&
-    (!disableChangeName || !disableChangeParent)
-
-  const conceptColor =
-    conceptHasNameUpdate || conceptHasParentUpdate
-      ? theme.concept.color.edit
-      : theme.palette.primary.main
+  const conceptColor = hasStagedStructure ? theme.concept.color.edit : theme.palette.primary.main
 
   return (
     <Stack direction='row' alignItems='center' sx={{ position: 'relative' }}>

@@ -18,7 +18,7 @@ import { fieldBorder } from '@/lib/kb/model/field'
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
 
-  const { editing, pendingHistory, stagedState } = use(ConceptContext)
+  const { editing, pendingHistory } = use(ConceptContext)
 
   const aliasPendingHistory = fieldPendingHistory(pendingHistory, 'ConceptName')
 
