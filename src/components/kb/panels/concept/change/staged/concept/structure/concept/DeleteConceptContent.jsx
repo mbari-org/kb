@@ -24,8 +24,6 @@ const DeleteConceptContent = () => {
     return choice && allowedChoices.includes(choice)
   }
 
-  const annotationCount = concept.annotations.length
-
   const handleChange = (_event, selectedName) => {
     setToConcept(selectedName)
     const valid = validateChoice(selectedName)
@@ -55,20 +53,16 @@ const DeleteConceptContent = () => {
         <Typography align='center'>
           Nancy has a ruler and will crack your knuckles if you mess this up.
         </Typography>
-        <Typography align='center'>
-          And BTW, this concept has {annotationCount} annotations.
-        </Typography>
-        {annotationCount > 0 && (
-          <ToConceptChoice
-            error={!isValid}
-            handleChange={handleChange}
-            handleKeyUp={handleKeyUp}
-            label='Assign To'
-            omitChoices={[concept.name]}
-            required
-            value={toConcept}
-          />
-        )}
+        <ToConceptChoice
+          error={!isValid}
+          handleChange={handleChange}
+          handleKeyUp={handleKeyUp}
+          label='Assign To'
+          omitChoices={[concept.name]}
+          required
+          value={toConcept}
+        />
+
         {!isValid && (
           <Typography color='error' variant='caption'>
             Please select a valid concept to assign the annotations to
