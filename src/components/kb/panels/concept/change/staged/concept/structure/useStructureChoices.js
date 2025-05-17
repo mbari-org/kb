@@ -21,11 +21,11 @@ const useStructureChoices = () => {
   const hasChildren = concept.children.length > 0
 
   const disableDelete = useMemo(
-    () => isRoot || hasChildren || hasStagedChildren || hasStateChange(initialState, stagedState),
-    [hasChildren, hasStagedChildren, initialState, isRoot, stagedState]
+    () => isRoot || hasChildren || hasStagedStructure || hasStateChange(initialState, stagedState),
+    [hasChildren, hasStagedStructure, initialState, isRoot, stagedState]
   )
   const disableChangeName = isRoot || hasPendingName || hasStagedStructure
-  const disableChangeParent = isRoot || hasStagedStructure
+  const disableChangeParent = isRoot || hasStagedName || hasStagedParent
 
   return {
     hasStagedChildren,
