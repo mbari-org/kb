@@ -9,43 +9,20 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { LABELS } from '@/lib/constants'
 
-const { CHANGE_NAME } = CONCEPT_STATE.STRUCTURE
 const { SET } = CONCEPT_STATE.FIELD
 const { CONFIRMED } = CONCEPT_STATE.RESET
-const { CONFIRM_DISCARD, CONTINUE, DISCARD } = LABELS.BUTTON
-const { ASSOCIATED_DATA, NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
+const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 
 const ChangeNameActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ModalContext)
 
-  let colors, disabled, labels
-
-  if (confirmReset) {
-    colors = ['cancel', 'main']
-    disabled = [false, !modalData.modified]
-    labels = [CONFIRM_DISCARD, CONTINUE]
-  } else {
-    colors = ['cancel', 'main', 'main']
-    disabled = modalData.modified ? [false, false, false] : [false, true, true]
-    labels = [DISCARD, NAME_ONLY, ASSOCIATED_DATA]
-  }
+  const colors = ['cancel', 'main']
+  const disabled = [false, !modalData.modified]
+  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
     switch (label) {
-      case ASSOCIATED_DATA:
-      case NAME_ONLY:
-        modifyConcept({
-          type: SET,
-          update: { field: 'name', value: modalData.name },
-        })
-        modifyConcept({
-          type: CHANGE_NAME,
-          update: { field: 'nameChange', value: label },
-        })
-        closeModal(true)
-        break
-
       case CONFIRM_DISCARD:
         modifyConcept({
           type: CONFIRMED.YES,
@@ -60,6 +37,14 @@ const ChangeNameActions = () => {
 
       case DISCARD:
         closeModal()
+        break
+
+      case STAGE:
+        modifyConcept({
+          type: SET,
+          update: { field: 'name', value: modalData.name },
+        })
+        closeModal(true)
         break
     }
   }

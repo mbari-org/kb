@@ -24,7 +24,8 @@ const ConceptName = () => {
 
   const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
 
-  const showStructureButton = editing && !showStructureChoicesModal && !isReadOnly(user)
+  const showStructureButton =
+    editing && !showStructureChoicesModal && !hasStagedName && !isReadOnly(user)
 
   const conceptColor = hasStagedStructure ? theme.concept.color.edit : theme.palette.primary.main
 
