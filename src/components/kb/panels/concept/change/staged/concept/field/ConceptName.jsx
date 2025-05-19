@@ -12,12 +12,13 @@ import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { isReadOnly } from '@/lib/auth/role'
+import { hasPendingHistory } from '@/lib/kb/model/history'
 
 const ConceptName = () => {
   const theme = useTheme()
 
   const { user } = use(AuthContext)
-  const { concept, editing } = use(ConceptContext)
+  const { concept, conceptPendingHistory, editing } = use(ConceptContext)
 
   const { hasStagedChildren, hasStagedName, hasStagedParent } = useStructureChoices()
   const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
@@ -27,7 +28,14 @@ const ConceptName = () => {
   const showStructureButton =
     editing && !showStructureChoicesModal && !hasStagedName && !isReadOnly(user)
 
-  const conceptColor = hasStagedStructure ? theme.concept.color.edit : theme.palette.primary.main
+  const hasStructurePendingHistory = ['ConceptName', 'Parent', 'Concept.child'].some(field =>
+    hasPendingHistory(conceptPendingHistory, field)
+  )
+
+  const conceptColor =
+    hasStagedStructure || hasStructurePendingHistory
+      ? theme.concept.color.edit
+      : theme.palette.primary.main
 
   return (
     <Stack direction='row' alignItems='center' sx={{ position: 'relative' }}>
