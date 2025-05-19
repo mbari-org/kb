@@ -12,9 +12,9 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import { pendingChange } from '@/components/kb/panels/concept/change/pending/util'
 
 const PendingContent = () => {
-  const { pendingHistory } = use(ConceptContext)
+  const { conceptPendingHistory } = use(ConceptContext)
 
-  const pending = useMemo(() => pendingChange(pendingHistory), [pendingHistory])
+  const pending = useMemo(() => pendingChange(conceptPendingHistory), [conceptPendingHistory])
 
   return (
     <Stack direction='column' spacing={1}>

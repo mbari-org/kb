@@ -12,11 +12,11 @@ import { fieldPendingHistory } from '@/lib/kb/model/history'
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
 
-  const { pendingHistory, stagedState } = use(ConceptContext)
+  const { conceptPendingHistory, stagedState } = use(ConceptContext)
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
-  const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media').pop()
+  const mediaPendingHistory = fieldPendingHistory(conceptPendingHistory, 'Media').pop()
 
   const border = fieldBorder({
     itemPendingHistory: mediaPendingHistory,

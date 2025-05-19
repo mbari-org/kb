@@ -11,9 +11,9 @@ import { fieldPendingHistory } from '@/lib/kb/model/history'
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()
 
-  const { pendingHistory } = use(ConceptContext)
+  const { conceptPendingHistory } = use(ConceptContext)
 
-  const mediaPendingHistory = fieldPendingHistory(pendingHistory, 'Media').pop()
+  const mediaPendingHistory = fieldPendingHistory(conceptPendingHistory, 'Media').pop()
 
   const swiper = useSwiper()
 

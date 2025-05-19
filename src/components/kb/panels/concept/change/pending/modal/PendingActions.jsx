@@ -16,9 +16,10 @@ const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
   const { config } = use(ConfigContext)
-  const { confirmPending, pendingHistory, setConfirmPending } = use(ConceptContext)
+  const { concept, confirmPending, conceptPendingHistory, refreshConcept, setConfirmPending } =
+    use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
-  const { refreshHistory } = use(TaxonomyContext)
+  const { refreshConceptHistory } = use(TaxonomyContext)
 
   const [disabled, labels] = useMemo(() => {
     if (!confirmPending) {
@@ -66,10 +67,11 @@ const PendingActions = () => {
 
         case CONFIRM:
           setProcessing(PROCESSING.UPDATING)
-          updatePending({ config, confirmPending, pendingHistory }).then(() => {
-            refreshHistory().then(() => {
+          updatePending({ config, confirmPending, conceptPendingHistory }).then(() => {
+            refreshConceptHistory(concept.name).then(refreshedConcept => {
               setConfirmPending(null)
               setProcessing(null)
+              refreshConcept(refreshedConcept)
             })
           })
           break
@@ -93,10 +95,12 @@ const PendingActions = () => {
     },
     [
       closeModal,
+      concept.name,
       config,
       confirmPending,
-      pendingHistory,
-      refreshHistory,
+      conceptPendingHistory,
+      refreshConcept,
+      refreshConceptHistory,
       setConfirmPending,
       setProcessing,
     ]
