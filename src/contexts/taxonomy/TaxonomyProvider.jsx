@@ -177,10 +177,17 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy, apiPayload, updateTaxonomy]
   )
 
-  const refreshHistory = useCallback(async () => {
-    const { taxonomy: updatedTaxonomy } = await refreshTaxonomyPendingHistory(taxonomy, apiPayload)
-    updateTaxonomy(updatedTaxonomy)
-  }, [apiPayload, taxonomy, updateTaxonomy])
+  const refreshConceptHistory = useCallback(
+    async conceptName => {
+      const { taxonomy: updatedTaxonomy } = await refreshTaxonomyPendingHistory(
+        taxonomy,
+        apiPayload
+      )
+      updateTaxonomy(updatedTaxonomy)
+      return getTaxonomyConcept(updatedTaxonomy, conceptName)
+    },
+    [apiPayload, taxonomy, updateTaxonomy]
+  )
 
   useEffect(() => {
     if (initialLoad.current && apiPayload) {
@@ -228,7 +235,7 @@ const TaxonomyProvider = ({ children }) => {
         loadConcept,
         loadConceptDescendants,
         refreshConcept,
-        refreshHistory,
+        refreshConceptHistory,
         taxonomy,
       }}
     >

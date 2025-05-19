@@ -61,7 +61,7 @@ const stagedAlias = (alias, pendingHistory) => {
   }
 
   const pendingEdit = pendingAliasActions.find(
-    history => history.action === 'EDIT' && history.newValue === alias.name
+    history => history.action === 'REPLACE' && history.newValue === alias.name
   )
   if (pendingEdit) {
     return {
