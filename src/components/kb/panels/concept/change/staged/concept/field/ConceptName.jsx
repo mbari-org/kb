@@ -17,7 +17,7 @@ const ConceptName = () => {
   const theme = useTheme()
 
   const { user } = use(AuthContext)
-  const { concept, editing, pendingHistory } = use(ConceptContext)
+  const { concept, editing } = use(ConceptContext)
 
   const { hasStagedChildren, hasStagedName, hasStagedParent } = useStructureChoices()
   const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent

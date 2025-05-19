@@ -32,7 +32,7 @@ const ConceptProvider = ({ children }) => {
   const [confirmReset, setConfirmReset] = useState(null)
   const [confirmPending, setConfirmPending] = useState(null)
   const [editing, setEditing] = useState(false)
-  const [pendingHistory, setPendingHistory] = useState(null)
+  const [conceptPendingHistory, setConceptPendingHistory] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
@@ -47,7 +47,7 @@ const ConceptProvider = ({ children }) => {
       setModal(null)
 
       const refreshedPendingHistory = getConceptPendingHistory(refreshedConcept.name)
-      setPendingHistory(refreshedPendingHistory)
+      setConceptPendingHistory(refreshedPendingHistory)
 
       const refreshedInitialState = initialConceptState(refreshedConcept, refreshedPendingHistory)
       setInitialState(refreshedInitialState)
@@ -114,11 +114,12 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         confirmPending,
+        conceptPendingHistory,
         confirmReset,
         editing,
         initialState,
         modifyConcept,
-        pendingHistory,
+
         refreshConcept,
         setEditing,
         setConfirmPending,

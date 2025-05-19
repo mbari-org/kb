@@ -25,9 +25,9 @@ const standardStyle = {
 const useConceptDetailStyle = field => {
   const theme = useTheme()
 
-  const { editing, pendingHistory } = use(ConceptContext)
+  const { editing, conceptPendingHistory } = use(ConceptContext)
 
-  const fieldHasPendingHistory = hasPendingHistory(pendingHistory, field)
+  const fieldHasPendingHistory = hasPendingHistory(conceptPendingHistory, field)
 
   const textColor = fieldHasPendingHistory
     ? theme.concept.color.pending

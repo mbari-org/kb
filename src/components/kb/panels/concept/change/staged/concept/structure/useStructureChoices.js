@@ -7,11 +7,11 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const useStructureChoices = () => {
-  const { concept, initialState, stagedState, pendingHistory } = use(ConceptContext)
+  const { concept, initialState, stagedState, conceptPendingHistory } = use(ConceptContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
   const isRoot = isTaxonomyRoot(concept)
-  const hasPendingName = hasPendingHistory(pendingHistory, 'ConceptName')
+  const hasPendingName = hasPendingHistory(conceptPendingHistory, 'ConceptName')
 
   const hasStagedChildren = stagedState.children.length > 0
   const hasStagedName = !!stagedState.nameChange

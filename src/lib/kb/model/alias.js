@@ -35,8 +35,8 @@ const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
 
 const aliasFields = alias => pick(alias, ALIAS_FIELDS)
 
-const stagedAlias = (alias, pendingHistory) => {
-  const pendingAliasActions = fieldPendingHistory(pendingHistory, 'ConceptName')
+const stagedAlias = (alias, conceptPendingHistory) => {
+  const pendingAliasActions = fieldPendingHistory(conceptPendingHistory, 'ConceptName')
 
   const pendingAdd = pendingAliasActions.find(
     history => history.action === 'ADD' && history.newValue === alias.name

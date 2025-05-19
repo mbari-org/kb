@@ -22,7 +22,7 @@ const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 const ConceptEditingActions = () => {
   const { user } = use(AuthContext)
 
-  const { editing, initialState, modifyConcept, pendingHistory, setEditing, stagedState } =
+  const { conceptPendingHistory, editing, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
 
   const displayPending = useDisplayPending()
@@ -60,9 +60,9 @@ const ConceptEditingActions = () => {
   }, [modifyConcept, displayStaged])
 
   const showPendingButton = useMemo(() => {
-    const hasPendingHistory = pendingHistory.length > 0
+    const hasPendingHistory = conceptPendingHistory.length > 0
     return !editing && hasPendingHistory && isAdmin(user)
-  }, [editing, pendingHistory, user])
+  }, [editing, conceptPendingHistory, user])
 
   return (
     <Box

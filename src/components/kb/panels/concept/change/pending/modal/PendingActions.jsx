@@ -16,7 +16,7 @@ const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
   const { config } = use(ConfigContext)
-  const { concept, confirmPending, pendingHistory, refreshConcept, setConfirmPending } =
+  const { concept, confirmPending, conceptPendingHistory, refreshConcept, setConfirmPending } =
     use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
   const { refreshConceptHistory } = use(TaxonomyContext)
@@ -67,7 +67,7 @@ const PendingActions = () => {
 
         case CONFIRM:
           setProcessing(PROCESSING.UPDATING)
-          updatePending({ config, confirmPending, pendingHistory }).then(() => {
+          updatePending({ config, confirmPending, conceptPendingHistory }).then(() => {
             refreshConceptHistory(concept.name).then(refreshedConcept => {
               setConfirmPending(null)
               setProcessing(null)
@@ -98,7 +98,7 @@ const PendingActions = () => {
       concept.name,
       config,
       confirmPending,
-      pendingHistory,
+      conceptPendingHistory,
       refreshConcept,
       refreshConceptHistory,
       setConfirmPending,

@@ -11,10 +11,10 @@ const updateId = async (config, approval, id) => {
 const updateIds = async (config, approval, ids) =>
   Promise.all(ids.map(id => updatePendingHistory(config, approval, id)))
 
-const updatePending = async ({ config, confirmPending, pendingHistory }) => {
+const updatePending = async ({ conceptPendingHistory, confirmPending, config }) => {
   switch (confirmPending.pending) {
     case ALL: {
-      const pendingIds = pendingHistory.map(pending => pending.id)
+      const pendingIds = conceptPendingHistory.map(pending => pending.id)
       await updateIds(config, confirmPending.approval, pendingIds)
       break
     }
