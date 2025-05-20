@@ -23,7 +23,7 @@ const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
   const isLoading = useRef(false)
 
-  const { modalData, setModal, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(ModalContext)
   const { selected } = use(SelectedContext)
   const { getConcept, getConceptPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)
@@ -44,8 +44,6 @@ const ConceptProvider = ({ children }) => {
 
   const refreshConcept = useCallback(
     refreshedConcept => {
-      setModal(null)
-
       const refreshedPendingHistory = getConceptPendingHistory(refreshedConcept.name)
       setConceptPendingHistory(refreshedPendingHistory)
 
@@ -53,7 +51,7 @@ const ConceptProvider = ({ children }) => {
       setInitialState(refreshedInitialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: refreshedInitialState })
     },
-    [getConceptPendingHistory, setModal]
+    [getConceptPendingHistory]
   )
 
   const handleSetConcept = useCallback(

@@ -5,7 +5,7 @@ import saveStructure from './saveStructure'
 
 import { updateInfo as stateUpdateInfo } from '@/contexts/concept/staged/edit/stateUpdates'
 
-const saveStaged = async (apiPayload, concept, initialState, stagedState) => {
+const commitStaged = async (apiPayload, concept, initialState, stagedState) => {
   const updateInfo = stateUpdateInfo(initialState, stagedState)
 
   const submitterInfo = [apiPayload, { concept, updateInfo }]
@@ -20,4 +20,4 @@ const saveStaged = async (apiPayload, concept, initialState, stagedState) => {
   return updateInfo
 }
 
-export default saveStaged
+export default commitStaged
