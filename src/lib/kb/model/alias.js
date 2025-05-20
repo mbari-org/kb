@@ -1,6 +1,6 @@
 import { fieldEdits } from '@/lib/kb/model/field'
 
-import { fieldPendingHistory } from './history'
+import { fieldPending } from './history'
 
 import { isJsonEqual, pick } from '@/lib/util'
 
@@ -35,8 +35,8 @@ const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
 
 const aliasFields = alias => pick(alias, ALIAS_FIELDS)
 
-const stagedAlias = (alias, conceptPendingHistory) => {
-  const pendingAliasActions = fieldPendingHistory(conceptPendingHistory, 'ConceptName')
+const stagedAlias = (alias, conceptPending) => {
+  const pendingAliasActions = fieldPending(conceptPending, 'ConceptName')
 
   const pendingAdd = pendingAliasActions.find(
     history => history.action === 'ADD' && history.newValue === alias.name

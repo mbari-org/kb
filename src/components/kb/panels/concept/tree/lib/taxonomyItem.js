@@ -1,14 +1,17 @@
-import { getConcept, getConceptPendingHistory } from '@/lib/kb/model/taxonomy'
+import { isPendingChild } from '@/lib/kb/model/history'
+import { getConcept, getPendingHistory } from '@/lib/kb/model/taxonomy'
 
 // conceptItem is for display needs. It is passed to the ConceptTreeItem component and contains
-//  necessary fields for custom display.
+//  necessary fields for custom tree item display.
 const conceptItem = (taxonomy, itemId) => {
   const concept = getConcept(taxonomy, itemId)
-  const hasPendingHistory = 0 < getConceptPendingHistory(taxonomy, concept.name).length
+  const conceptPending = getPendingHistory(taxonomy, concept.name)
+  const parentPending = getPendingHistory(taxonomy, concept.parent)
+  const hasPending = 0 < conceptPending.length || isPendingChild(parentPending, concept.name)
   return {
     id: treeItemId(concept),
     label: itemLabel(concept),
-    hasPendingHistory,
+    hasPending,
     mediaCount: concept.media?.length || 0,
     parent: concept.parent,
   }

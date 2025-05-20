@@ -101,8 +101,10 @@ const getConcept = (taxonomy, conceptName) => {
 
 const getNames = taxonomy => taxonomy?.names
 
-const getConceptPendingHistory = (taxonomy, conceptName) =>
-  taxonomy.pendingHistory.filter(history => history.concept === conceptName)
+const getPendingHistory = (taxonomy, conceptName) =>
+  conceptName
+    ? taxonomy.pendingHistory.filter(history => history.concept === conceptName)
+    : taxonomy.pendingHistory
 
 const getConceptPrimaryName = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
@@ -472,9 +474,9 @@ export {
   descendants,
   filterTaxonomyRanks,
   getConcept,
-  getConceptPendingHistory,
   getConceptPrimaryName,
   getNames,
+  getPendingHistory,
   getRoot,
   isConceptLoaded,
   isDescendant,

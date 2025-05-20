@@ -3,36 +3,24 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
-import ConfigContext from '@/contexts/config/ConfigContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
+import { LABELS } from '@/lib/constants'
 
-import { LABELS, PROCESSING } from '@/lib/constants'
-
-import saveStaged from '@/contexts/concept/staged/save/saveStaged'
+import useSaveStaged from '@/contexts/concept/staged/save/useSaveStaged'
 
 const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
 const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
-const { SAVING } = PROCESSING
 
 const StagedActions = ({ intent }) => {
-  const { apiFns } = use(ConfigContext)
-  const {
-    concept,
-    confirmReset,
-    initialState,
-    modifyConcept,
-    refreshConcept,
-    setEditing,
-    stagedState,
-  } = use(ConceptContext)
-  const { closeModal, setProcessing } = use(ModalContext)
+  const { concept, confirmReset, modifyConcept } = use(ConceptContext)
+  const { closeModal } = use(ModalContext)
   const { selectConcept, selectPanel } = use(SelectedContext)
-  const { refreshConcept: refreshTaxonomyConcept } = use(TaxonomyContext)
+
+  const saveStaged = useSaveStaged()
 
   const colors = ['cancel', 'main']
   const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
@@ -62,19 +50,7 @@ const StagedActions = ({ intent }) => {
         break
 
       case SAVE:
-        closeModal()
-        setProcessing(SAVING)
-        saveStaged(apiFns.apiPayload, concept, initialState, stagedState).then(updateInfo => {
-          refreshTaxonomyConcept(concept, updateInfo).then(updatedConcept => {
-            setEditing(false)
-            setProcessing(null)
-            if (updateInfo.hasUpdated('name')) {
-              selectConcept(updatedConcept.name)
-            } else {
-              refreshConcept(updatedConcept)
-            }
-          })
-        })
+        saveStaged()
         break
 
       default:

@@ -8,7 +8,7 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { pendingValues } from '@/components/kb/panels/concept/change/pending/util'
+import { pendingInfo } from '@/lib/kb/model/history'
 
 import { capitalize } from '@/lib/util'
 
@@ -62,7 +62,7 @@ const MediaItemDetail = ({ pendingMediaItem }) => {
         </Box>
       </Box>
       <Box sx={{ ml: 11.5 }}>
-        {pendingValues(pendingMediaItem)?.map(([field, value]) => (
+        {pendingInfo(pendingMediaItem)?.map(([field, value]) => (
           <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
         ))}
       </Box>

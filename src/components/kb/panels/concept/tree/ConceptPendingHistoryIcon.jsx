@@ -1,10 +1,10 @@
 import { Box } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-const ConceptPendingHistoryIcon = ({ hasPendingHistory }) => {
+const ConceptPendingHistoryIcon = ({ hasPending }) => {
   const { concept: conceptTheme } = useTheme()
 
-  const dotColor = hasPendingHistory
+  const dotColor = hasPending
     ? conceptTheme.color.pendingIcon.dirty
     : conceptTheme.color.pendingIcon.clean
 

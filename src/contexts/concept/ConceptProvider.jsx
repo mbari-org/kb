@@ -23,16 +23,15 @@ const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
   const isLoading = useRef(false)
 
-  const { modalData, setModal, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(ModalContext)
   const { selected } = use(SelectedContext)
-  const { getConcept, getConceptPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
+  const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
   const [confirmPending, setConfirmPending] = useState(null)
   const [editing, setEditing] = useState(false)
-  const [conceptPendingHistory, setConceptPendingHistory] = useState(null)
 
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
@@ -44,16 +43,13 @@ const ConceptProvider = ({ children }) => {
 
   const refreshConcept = useCallback(
     refreshedConcept => {
-      setModal(null)
+      const conceptPending = getPendingHistory(refreshedConcept.name)
 
-      const refreshedPendingHistory = getConceptPendingHistory(refreshedConcept.name)
-      setConceptPendingHistory(refreshedPendingHistory)
-
-      const refreshedInitialState = initialConceptState(refreshedConcept, refreshedPendingHistory)
+      const refreshedInitialState = initialConceptState(refreshedConcept, conceptPending)
       setInitialState(refreshedInitialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: refreshedInitialState })
     },
-    [getConceptPendingHistory, setModal]
+    [getPendingHistory]
   )
 
   const handleSetConcept = useCallback(
@@ -114,12 +110,10 @@ const ConceptProvider = ({ children }) => {
         concept,
         conceptPath,
         confirmPending,
-        conceptPendingHistory,
         confirmReset,
         editing,
         initialState,
         modifyConcept,
-
         refreshConcept,
         setEditing,
         setConfirmPending,

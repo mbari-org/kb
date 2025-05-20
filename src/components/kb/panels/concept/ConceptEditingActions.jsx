@@ -10,6 +10,8 @@ import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { hasModifiedState } from '@/lib/kb/state/concept'
+import { isPendingChild } from '@/lib/kb/model/history'
+import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -22,8 +24,11 @@ const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 const ConceptEditingActions = () => {
   const { user } = use(AuthContext)
 
-  const { conceptPendingHistory, editing, initialState, modifyConcept, setEditing, stagedState } =
+  const { concept, editing, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
+
+  const conceptPending = useConceptPending(concept.name)
+  const parentPending = useConceptPending(concept.parent)
 
   const displayPending = useDisplayPending()
   const displayStaged = useDisplayStaged()
@@ -60,9 +65,9 @@ const ConceptEditingActions = () => {
   }, [modifyConcept, displayStaged])
 
   const showPendingButton = useMemo(() => {
-    const hasPendingHistory = conceptPendingHistory.length > 0
-    return !editing && hasPendingHistory && isAdmin(user)
-  }, [editing, conceptPendingHistory, user])
+    const hasPending = conceptPending.length > 0 || isPendingChild(parentPending, concept.name)
+    return !editing && hasPending && isAdmin(user)
+  }, [conceptPending.length, parentPending, concept.name, editing, user])
 
   return (
     <Box
@@ -76,7 +81,12 @@ const ConceptEditingActions = () => {
         right: 15,
       }}
     >
-      <Button color={editing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
+      <Button
+        color={editing ? 'cancel' : 'main'}
+        disabled={isPendingChild(parentPending, concept.name)}
+        onClick={handleCancelDiscard}
+        variant='contained'
+      >
         {editCancelDiscardButtonText}
       </Button>
       {editing && hasModifiedState({ initialState, stagedState }) && (

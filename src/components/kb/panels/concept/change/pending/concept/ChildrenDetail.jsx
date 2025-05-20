@@ -13,8 +13,8 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 const { CHILDREN } = PENDING.GROUP
 
-const ChildrenDetail = ({ pending }) => {
-  const pendingChildren = pending('Concept.child')
+const ChildrenDetail = ({ pendingField }) => {
+  const pendingChildren = pendingField('Concept.child')
 
   const { confirmPending } = use(ConceptContext)
 

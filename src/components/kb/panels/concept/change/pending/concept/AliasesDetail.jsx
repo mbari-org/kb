@@ -13,10 +13,12 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 const { ALIASES } = PENDING.GROUP
 
-const AliasesDetail = ({ pending }) => {
+const AliasesDetail = ({ pendingField }) => {
   const { concept, confirmPending } = use(ConceptContext)
 
-  const pendingAliases = pending('ConceptName').filter(alias => alias.newValue !== concept.name)
+  const pendingAliases = pendingField('ConceptName').filter(
+    alias => alias.newValue !== concept.name
+  )
 
   const approval = useMemo(() => {
     if (!confirmPending) {

@@ -2,24 +2,21 @@ import { use, useMemo, useCallback } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { LABELS, PENDING, PROCESSING } from '@/lib/constants'
+import { LABELS, PENDING } from '@/lib/constants'
 
-import updatePending from '@/contexts/concept/pending/updatePending'
+import useUpdatePending from '@/contexts/concept/pending/useUpdatePending'
 
 const { APPROVE, APPROVE_ALL, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABELS.BUTTON
 const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
-  const { config } = use(ConfigContext)
-  const { concept, confirmPending, conceptPendingHistory, refreshConcept, setConfirmPending } =
-    use(ConceptContext)
-  const { closeModal, setProcessing } = use(ModalContext)
-  const { refreshConceptHistory } = use(TaxonomyContext)
+  const { confirmPending, setConfirmPending } = use(ConceptContext)
+  const { closeModal } = use(ModalContext)
+
+  const updatePending = useUpdatePending()
 
   const [disabled, labels] = useMemo(() => {
     if (!confirmPending) {
@@ -66,14 +63,7 @@ const PendingActions = () => {
           break
 
         case CONFIRM:
-          setProcessing(PROCESSING.UPDATING)
-          updatePending({ config, confirmPending, conceptPendingHistory }).then(() => {
-            refreshConceptHistory(concept.name).then(refreshedConcept => {
-              setConfirmPending(null)
-              setProcessing(null)
-              refreshConcept(refreshedConcept)
-            })
-          })
+          updatePending()
           break
 
         case DEFER:
@@ -93,17 +83,7 @@ const PendingActions = () => {
           break
       }
     },
-    [
-      closeModal,
-      concept.name,
-      config,
-      confirmPending,
-      conceptPendingHistory,
-      refreshConcept,
-      refreshConceptHistory,
-      setConfirmPending,
-      setProcessing,
-    ]
+    [confirmPending, closeModal, setConfirmPending, updatePending]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')

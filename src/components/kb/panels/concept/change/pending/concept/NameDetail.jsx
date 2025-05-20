@@ -4,10 +4,10 @@ import FieldDetail from '@/components/kb/panels/concept/change/pending/concept/F
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-const NameDetail = ({ pending }) => {
+const NameDetail = ({ pendingField }) => {
   const { concept } = use(ConceptContext)
 
-  const pendingName = pending('ConceptName').find(name => name.newValue === concept.name)
+  const pendingName = pendingField('ConceptName').find(name => name.newValue === concept.name)
 
   if (!pendingName) {
     return null

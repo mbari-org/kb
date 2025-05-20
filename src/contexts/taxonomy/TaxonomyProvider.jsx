@@ -11,9 +11,9 @@ import {
   deleteConcept as deleteTaxonomyConcept,
   filterTaxonomyRanks,
   getConcept as getTaxonomyConcept,
-  getConceptPendingHistory as getTaxonomyConceptPendingHistory,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
+  getPendingHistory as getTaxonomyPendingHistory,
   getRoot as getTaxonomyRoot,
   isConceptLoaded as isTaxonomyConceptLoaded,
   isDescendant as isDescendantConcept,
@@ -22,7 +22,6 @@ import {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   refreshTaxonomyConcept,
-  refreshTaxonomyPendingHistory,
   cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/model/taxonomy'
 
@@ -82,17 +81,17 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getConceptPendingHistory = useCallback(
-    conceptName => getTaxonomyConceptPendingHistory(taxonomy, conceptName),
-    [taxonomy]
-  )
-
   const getConceptPrimaryName = useCallback(
     conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
     [taxonomy]
   )
 
   const getNames = useCallback(() => getTaxonomyNames(taxonomy), [taxonomy])
+
+  const getPendingHistory = useCallback(
+    conceptName => getTaxonomyPendingHistory(taxonomy, conceptName),
+    [taxonomy]
+  )
 
   const getRoot = useCallback(
     () => getTaxonomyRoot(taxonomy?.conceptMap, taxonomy?.rootName),
@@ -177,17 +176,17 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy, apiPayload, updateTaxonomy]
   )
 
-  const refreshConceptHistory = useCallback(
-    async conceptName => {
-      const { taxonomy: updatedTaxonomy } = await refreshTaxonomyPendingHistory(
-        taxonomy,
-        apiPayload
-      )
-      updateTaxonomy(updatedTaxonomy)
-      return getTaxonomyConcept(updatedTaxonomy, conceptName)
-    },
-    [apiPayload, taxonomy, updateTaxonomy]
-  )
+  // const refreshConceptHistory = useCallback(
+  //   async conceptName => {
+  //     const { taxonomy: updatedTaxonomy } = await refreshTaxonomyPendingHistory(
+  //       taxonomy,
+  //       apiPayload
+  //     )
+  //     updateTaxonomy(updatedTaxonomy)
+  //     return getTaxonomyConcept(updatedTaxonomy, conceptName)
+  //   },
+  //   [apiPayload, taxonomy, updateTaxonomy]
+  // )
 
   useEffect(() => {
     if (initialLoad.current && apiPayload) {
@@ -225,9 +224,9 @@ const TaxonomyProvider = ({ children }) => {
         deleteConcept,
         filterRanks,
         getConcept,
-        getConceptPendingHistory,
         getConceptPrimaryName,
         getNames,
+        getPendingHistory,
         getRoot,
         isConceptLoaded,
         isDescendant,
@@ -235,7 +234,6 @@ const TaxonomyProvider = ({ children }) => {
         loadConcept,
         loadConceptDescendants,
         refreshConcept,
-        refreshConceptHistory,
         taxonomy,
       }}
     >

@@ -3,7 +3,9 @@ import { use, useMemo } from 'react'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { hasPendingHistory } from '@/lib/kb/model/history'
+import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+
+import { hasPending } from '@/lib/kb/model/history'
 
 const baseStyle = {
   fullWidth: true,
@@ -25,15 +27,15 @@ const standardStyle = {
 const useConceptDetailStyle = field => {
   const theme = useTheme()
 
-  const { editing, conceptPendingHistory } = use(ConceptContext)
+  const { concept, editing } = use(ConceptContext)
 
-  const fieldHasPendingHistory = hasPendingHistory(conceptPendingHistory, field)
+  const conceptPending = useConceptPending(concept.name)
 
-  const textColor = fieldHasPendingHistory
-    ? theme.concept.color.pending
-    : theme.palette.common.black
+  const fieldHasPending = hasPending(conceptPending, field)
 
-  const fontWeight = fieldHasPendingHistory ? 'bold' : 'normal'
+  const textColor = fieldHasPending ? theme.concept.color.pending : theme.palette.common.black
+
+  const fontWeight = fieldHasPending ? 'bold' : 'normal'
 
   const sx = useMemo(
     () => ({
@@ -52,7 +54,7 @@ const useConceptDetailStyle = field => {
     [fontWeight, theme, textColor]
   )
 
-  if (!editing || fieldHasPendingHistory) {
+  if (!editing || fieldHasPending) {
     return {
       ...standardStyle,
       sx: sx,
