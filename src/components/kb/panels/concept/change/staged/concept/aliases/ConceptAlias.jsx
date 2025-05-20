@@ -22,7 +22,7 @@ const ConceptAlias = ({ alias }) => {
 
   const { concept, editing } = use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
   const aliasPending = fieldPending(conceptPending, 'ConceptName')
 

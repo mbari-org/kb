@@ -20,7 +20,7 @@ const useUpdatePending = () => {
   const { setProcessing } = use(ModalContext)
   const { refreshConceptHistory } = use(TaxonomyContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
   const updateId = useCallback(
     async (approval, id) => {
@@ -35,6 +35,10 @@ const useUpdatePending = () => {
   )
 
   const updatePending = useCallback(async () => {
+    if (!confirmPending) {
+      return
+    }
+
     setProcessing(UPDATING)
     try {
       switch (confirmPending.pending) {
@@ -66,8 +70,7 @@ const useUpdatePending = () => {
   }, [
     concept.name,
     conceptPending,
-    confirmPending.approval,
-    confirmPending.pending,
+    confirmPending,
     refreshConcept,
     refreshConceptHistory,
     setConfirmPending,

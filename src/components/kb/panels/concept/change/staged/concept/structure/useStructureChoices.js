@@ -12,7 +12,7 @@ const useStructureChoices = () => {
   const { concept, initialState, stagedState } = use(ConceptContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
   const isRoot = isTaxonomyRoot(concept)
   const hasPendingName = hasPending(conceptPending, 'ConceptName')

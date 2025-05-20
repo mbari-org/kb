@@ -16,7 +16,7 @@ const MediaPreview = ({ setPreviewOn }) => {
 
   const { concept } = use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
   const { stagedState } = use(ConceptContext)
   const { media, mediaIndex } = stagedState

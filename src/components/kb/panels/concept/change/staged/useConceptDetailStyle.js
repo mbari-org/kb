@@ -29,7 +29,7 @@ const useConceptDetailStyle = field => {
 
   const { concept, editing } = use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
   const fieldHasPending = hasPending(conceptPending, field)
 

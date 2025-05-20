@@ -2,12 +2,12 @@ import { use, useMemo } from 'react'
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-const useConceptPending = concept => {
+const useConceptPending = conceptName => {
   const { getPendingHistory } = use(TaxonomyContext)
 
   const conceptPending = useMemo(
-    () => getPendingHistory(concept.name),
-    [concept.name, getPendingHistory]
+    () => getPendingHistory(conceptName),
+    [conceptName, getPendingHistory]
   )
 
   return conceptPending

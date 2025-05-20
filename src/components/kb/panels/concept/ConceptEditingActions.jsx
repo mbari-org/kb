@@ -27,7 +27,7 @@ const ConceptEditingActions = () => {
   const { concept, editing, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
   const displayPending = useDisplayPending()
   const displayStaged = useDisplayStaged()

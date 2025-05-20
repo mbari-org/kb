@@ -15,7 +15,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const { concept } = use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
   const mediaPending = fieldPending(conceptPending, 'Media').pop()
 

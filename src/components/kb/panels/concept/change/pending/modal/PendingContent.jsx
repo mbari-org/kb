@@ -16,9 +16,9 @@ import { fieldPending } from '@/lib/kb/model/history'
 const PendingContent = () => {
   const { concept } = use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept)
+  const conceptPending = useConceptPending(concept.name)
 
-  const pending = useMemo(() => fieldPending(conceptPending, 'ConceptName'), [conceptPending])
+  const pending = useMemo(() => field => fieldPending(conceptPending, field), [conceptPending])
 
   return (
     <Stack direction='column' spacing={1}>
