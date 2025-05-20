@@ -20,7 +20,7 @@ const updatePending = async ({ conceptPendingHistory, confirmPending, config }) 
     }
 
     case ALIASES: {
-      const pendingIds = fieldPendingHistory(pendingHistory, 'ConceptName').map(
+      const pendingIds = fieldPendingHistory(conceptPendingHistory, 'ConceptName').map(
         pending => pending.id
       )
       await updateIds(config, confirmPending.approval, pendingIds)

@@ -9,12 +9,15 @@ import RankDetail from '@/components/kb/panels/concept/change/pending/concept/Ra
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import { pendingChange } from '@/components/kb/panels/concept/change/pending/util'
+import { fieldPendingHistory } from '@/lib/kb/model/history'
 
 const PendingContent = () => {
   const { conceptPendingHistory } = use(ConceptContext)
 
-  const pending = useMemo(() => pendingChange(conceptPendingHistory), [conceptPendingHistory])
+  const pending = useMemo(
+    () => fieldPendingHistory(conceptPendingHistory, 'ConceptName'),
+    [conceptPendingHistory]
+  )
 
   return (
     <Stack direction='column' spacing={1}>

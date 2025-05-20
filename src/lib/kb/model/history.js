@@ -1,4 +1,4 @@
-import { isEmpty, pick } from '@/lib/util'
+import { humanTimestamp, isEmpty, pick } from '@/lib/util'
 
 const fieldPendingHistory = (pendingHistory, field) => {
   return pendingHistory
@@ -13,6 +13,13 @@ const hasPendingHistory = (pendingHistory, field) => {
   return !isEmpty(pendingHistory)
 }
 
+const pendingInfo = pending => {
+  return [
+    ['creator', pending.creatorName],
+    ['created', humanTimestamp(pending.creationTimestamp)],
+  ]
+}
+
 const pendingValues = pendingHistory =>
   pick(pendingHistory, [
     ['oldValue', 'before'],
@@ -21,4 +28,4 @@ const pendingValues = pendingHistory =>
     ['creationTimestamp', 'created'],
   ])
 
-export { fieldPendingHistory, hasPendingHistory, pendingValues }
+export { fieldPendingHistory, hasPendingHistory, pendingInfo, pendingValues }
