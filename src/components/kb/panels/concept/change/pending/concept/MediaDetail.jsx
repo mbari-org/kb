@@ -13,8 +13,8 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 const { MEDIA } = PENDING.GROUP
 
-const MediaDetail = ({ pending }) => {
-  const pendingMedia = pending('Media')
+const MediaDetail = ({ pendingField }) => {
+  const pendingMedia = pendingField('Media')
 
   const { confirmPending } = use(ConceptContext)
 

@@ -8,10 +8,10 @@ import { PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
 
-const RankDetail = ({ pending }) => {
+const RankDetail = ({ pendingField }) => {
   const { confirmPending } = use(ConceptContext)
 
-  const pendingRanks = [...(pending('RankLevel') || []), ...(pending('RankName') || [])]
+  const pendingRanks = [...(pendingField('RankLevel') || []), ...(pendingField('RankName') || [])]
 
   const approval = useMemo(() => {
     if (!confirmPending) {
