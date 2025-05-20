@@ -1,17 +1,21 @@
 import { use, useMemo } from 'react'
 
 import { hasStateChange } from '@/contexts/concept/staged/edit/stateUpdates'
-import { hasPendingHistory } from '@/lib/kb/model/history'
+import { hasPending } from '@/lib/kb/model/history'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+
 const useStructureChoices = () => {
-  const { concept, initialState, stagedState, conceptPendingHistory } = use(ConceptContext)
+  const { concept, initialState, stagedState } = use(ConceptContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
+  const conceptPending = useConceptPending(concept)
+
   const isRoot = isTaxonomyRoot(concept)
-  const hasPendingName = hasPendingHistory(conceptPendingHistory, 'ConceptName')
+  const hasPendingName = hasPending(conceptPending, 'ConceptName')
 
   const hasStagedChildren = stagedState.children.length > 0
   const hasStagedName = !!stagedState.nameChange

@@ -5,22 +5,26 @@ import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+
 import { fieldBorder } from '@/lib/kb/model/field'
-import { fieldPendingHistory } from '@/lib/kb/model/history'
+import { fieldPending } from '@/lib/kb/model/history'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()
 
-  const { conceptPendingHistory } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
 
-  const mediaPendingHistory = fieldPendingHistory(conceptPendingHistory, 'Media').pop()
+  const conceptPending = useConceptPending(concept)
+
+  const mediaPending = fieldPending(conceptPending, 'Media').pop()
 
   const swiper = useSwiper()
 
   const slideClick = mediaIndex => swiper.slideTo(mediaIndex)
 
   const border = fieldBorder({
-    itemPendingHistory: mediaPendingHistory,
+    itemPending: mediaPending,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,
     theme,

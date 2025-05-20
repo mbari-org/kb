@@ -7,20 +7,24 @@ import AliasEdit from '@/components/kb/panels/concept/change/staged/concept/alia
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+
 import { CONCEPT_STATE } from '@/lib/constants'
 
 import useConceptDetailStyle from '@/components/kb/panels/concept/change/staged/useConceptDetailStyle'
 
-import { fieldPendingHistory } from '@/lib/kb/model/history'
+import { fieldPending } from '@/lib/kb/model/history'
 
 import { fieldBorder } from '@/lib/kb/model/field'
 
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
 
-  const { editing, conceptPendingHistory } = use(ConceptContext)
+  const { concept, editing } = use(ConceptContext)
 
-  const aliasPendingHistory = fieldPendingHistory(conceptPendingHistory, 'ConceptName')
+  const conceptPending = useConceptPending(concept)
+
+  const aliasPending = fieldPending(conceptPending, 'ConceptName')
 
   const detailStyle = useConceptDetailStyle('aliases')
   const infoStyle = {
@@ -30,7 +34,7 @@ const ConceptAlias = ({ alias }) => {
   }
 
   const border = fieldBorder({
-    itemPendingHistory: aliasPendingHistory,
+    itemPending: aliasPending,
     noActionBorderColor: 'none',
     stagedItem: alias,
     theme,

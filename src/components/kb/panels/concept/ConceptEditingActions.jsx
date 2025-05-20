@@ -11,6 +11,8 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { hasModifiedState } from '@/lib/kb/state/concept'
 
+import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+
 import { isAdmin } from '@/lib/auth/role'
 
 import { CONCEPT_STATE, LABELS } from '@/lib/constants'
@@ -22,8 +24,10 @@ const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 const ConceptEditingActions = () => {
   const { user } = use(AuthContext)
 
-  const { conceptPendingHistory, editing, initialState, modifyConcept, setEditing, stagedState } =
+  const { concept, editing, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
+
+  const conceptPending = useConceptPending(concept)
 
   const displayPending = useDisplayPending()
   const displayStaged = useDisplayStaged()
@@ -60,9 +64,9 @@ const ConceptEditingActions = () => {
   }, [modifyConcept, displayStaged])
 
   const showPendingButton = useMemo(() => {
-    const hasPendingHistory = conceptPendingHistory.length > 0
-    return !editing && hasPendingHistory && isAdmin(user)
-  }, [editing, conceptPendingHistory, user])
+    const hasPending = conceptPending.length > 0
+    return !editing && hasPending && isAdmin(user)
+  }, [editing, conceptPending, user])
 
   return (
     <Box

@@ -7,19 +7,25 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { fieldBorder } from '@/lib/kb/model/field'
 
-import { fieldPendingHistory } from '@/lib/kb/model/history'
+import { fieldPending } from '@/lib/kb/model/history'
+
+import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
 
-  const { conceptPendingHistory, stagedState } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
+
+  const conceptPending = useConceptPending(concept)
+
+  const { stagedState } = use(ConceptContext)
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
-  const mediaPendingHistory = fieldPendingHistory(conceptPendingHistory, 'Media').pop()
+  const mediaPending = fieldPending(conceptPending, 'Media').pop()
 
   const border = fieldBorder({
-    itemPendingHistory: mediaPendingHistory,
+    itemPending: mediaPending,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,
     theme,

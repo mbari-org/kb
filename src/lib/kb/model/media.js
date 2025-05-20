@@ -1,5 +1,5 @@
 import { displayItem, fieldEdits } from '@/lib/kb/model/field'
-import { fieldPendingHistory } from '@/lib/kb/model/history'
+import { fieldPending } from '@/lib/kb/model/history'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -21,8 +21,8 @@ const mediaItemEdits = ({ initial, staged }) =>
 
 const mediaItemFields = mediaItem => displayItem(mediaItem, MEDIA_DISPLAY_FIELDS)
 
-const stagedMediaItem = (mediaItem, conceptPendingHistory) => {
-  const pendingMediaItemActions = fieldPendingHistory(conceptPendingHistory, 'Media')
+const stagedMediaItem = (mediaItem, conceptPending) => {
+  const pendingMediaItemActions = fieldPending(conceptPending, 'Media')
 
   const pendingAdd = pendingMediaItemActions.find(
     history => history.action === 'ADD' && history.newValue === mediaItem.url

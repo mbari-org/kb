@@ -1,14 +1,14 @@
 import { humanTimestamp, isEmpty, pick } from '@/lib/util'
 
-const fieldPendingHistory = (pendingHistory, field) => {
+const fieldPending = (pendingHistory, field) => {
   return pendingHistory
     ?.filter(pending => pending.field.toLowerCase() === field.toLowerCase())
     .sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
 }
 
-const hasPendingHistory = (pendingHistory, field) => {
+const hasPending = (pendingHistory, field) => {
   if (field) {
-    return !isEmpty(fieldPendingHistory(pendingHistory, field))
+    return !isEmpty(fieldPending(pendingHistory, field))
   }
   return !isEmpty(pendingHistory)
 }
@@ -28,4 +28,4 @@ const pendingValues = pendingHistory =>
     ['creationTimestamp', 'created'],
   ])
 
-export { fieldPendingHistory, hasPendingHistory, pendingInfo, pendingValues }
+export { fieldPending, hasPending, pendingInfo, pendingValues }
