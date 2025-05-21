@@ -13,7 +13,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
-import { fieldPending, isPendingChild } from '@/lib/kb/model/history'
+import { fieldPending, pendingChild as getPendingChild } from '@/lib/kb/model/history'
 
 import { isEmpty } from '@/lib/util'
 
@@ -26,10 +26,10 @@ const PendingContent = () => {
 
   const pendingField = useMemo(() => field => fieldPending(conceptPending, field), [conceptPending])
 
-  const pendingChild =
-    conceptPending.length === 0 && isPendingChild(parentPending, concept.name)
-      ? parentPending[0]
-      : null
+  const pendingChild = useMemo(
+    () => (conceptPending.length === 0 ? getPendingChild(parentPending, concept.name) : null),
+    [concept.name, conceptPending, parentPending]
+  )
 
   if (isEmpty(conceptPending) && !pendingChild) {
     setModal(null)

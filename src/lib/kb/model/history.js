@@ -8,8 +8,8 @@ const fieldPending = (pending, field) =>
 const hasPending = (pending, field) =>
   field ? !isEmpty(fieldPending(pending, field)) : !isEmpty(pending)
 
-const isPendingChild = (pending, childName) =>
-  pending.some(
+const pendingChild = (pending, childName) =>
+  pending.find(
     pending =>
       pending.field === 'Concept.child' &&
       ((pending.action === 'ADD' && pending.newValue === childName) ||
@@ -31,4 +31,4 @@ const pendingValues = pending =>
     ['creationTimestamp', 'created'],
   ])
 
-export { fieldPending, hasPending, isPendingChild, pendingInfo, pendingValues }
+export { fieldPending, hasPending, pendingChild, pendingInfo, pendingValues }

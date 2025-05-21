@@ -14,7 +14,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
 import { isReadOnly } from '@/lib/auth/role'
-import { hasPending, isPendingChild } from '@/lib/kb/model/history'
+import { hasPending, pendingChild } from '@/lib/kb/model/history'
 
 const ConceptName = () => {
   const theme = useTheme()
@@ -35,7 +35,7 @@ const ConceptName = () => {
 
   const hasPendingStructure =
     ['ConceptName', 'Parent', 'Concept.child'].some(field => hasPending(conceptPending, field)) ||
-    isPendingChild(parentPending, concept.name)
+    !!pendingChild(parentPending, concept.name)
 
   const conceptColor =
     hasStagedStructure || hasPendingStructure

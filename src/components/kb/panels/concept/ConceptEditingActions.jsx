@@ -10,7 +10,7 @@ import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { hasModifiedState } from '@/lib/kb/state/concept'
-import { isPendingChild } from '@/lib/kb/model/history'
+import { pendingChild } from '@/lib/kb/model/history'
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
 import { isAdmin } from '@/lib/auth/role'
@@ -65,7 +65,7 @@ const ConceptEditingActions = () => {
   }, [modifyConcept, displayStaged])
 
   const showPendingButton = useMemo(() => {
-    const hasPending = conceptPending.length > 0 || isPendingChild(parentPending, concept.name)
+    const hasPending = conceptPending.length > 0 || pendingChild(parentPending, concept.name)
     return !editing && hasPending && isAdmin(user)
   }, [conceptPending.length, parentPending, concept.name, editing, user])
 
@@ -83,7 +83,7 @@ const ConceptEditingActions = () => {
     >
       <Button
         color={editing ? 'cancel' : 'main'}
-        disabled={isPendingChild(parentPending, concept.name)}
+        disabled={pendingChild(parentPending, concept.name)}
         onClick={handleCancelDiscard}
         variant='contained'
       >

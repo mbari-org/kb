@@ -14,7 +14,11 @@ const { OTHER } = PENDING.APPROVAL
 const { CHILDREN } = PENDING.GROUP
 
 const ChildrenDetail = ({ pendingField }) => {
-  const pendingChildren = pendingField('Concept.child')
+  const pendingChildren = pendingField('Concept.child').sort((a, b) => {
+    const aValue = a.newValue ?? a.oldValue
+    const bValue = b.newValue ?? b.oldValue
+    return aValue.localeCompare(bValue)
+  })
 
   const { confirmPending } = use(ConceptContext)
 
