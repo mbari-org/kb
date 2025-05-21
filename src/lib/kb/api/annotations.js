@@ -8,7 +8,7 @@ const getConceptAnnotationCount = async (config, conceptName) => {
     concepts: [conceptName],
   }
   const { error, payload } = await annosaurusPost(config, ['fast', 'count'], params)
-  return { error, count: payload.content.count }
+  return { error, count: payload?.content?.count }
 }
 
 export { fetchConceptAnnotations, getConceptAnnotationCount }

@@ -342,8 +342,14 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
   const { hasUpdated } = updateInfo
 
   const updatedConcept = await refreshConcept(concept, updateInfo, apiPayload)
+
   const conceptMap = { ...taxonomy.conceptMap }
+  const aliasMap = { ...taxonomy.aliasMap }
+
   conceptMap[updatedConcept.name] = updatedConcept
+  updatedConcept.alternateNames.forEach(alternateName => {
+    aliasMap[alternateName] = updatedConcept
+  })
 
   const structureChanged = ['aliases', 'children', 'name', 'parent'].some(field =>
     hasUpdated(field)
@@ -356,8 +362,6 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
     }
     return { concept: updatedConcept, taxonomy: updatedTaxonomy }
   }
-
-  const aliasMap = { ...taxonomy.aliasMap }
 
   if (hasUpdated('aliases')) {
     concept.aliases
@@ -438,7 +442,10 @@ export const cxDebugTaxonomyIntegrity = taxonomy => {
         conceptError(concept, `has alias "${alternateName}" that is not in aliasMap`)
       }
       if (concept !== aliasMap[alternateName]) {
-        conceptError(concept, `aliasMap "${alternateName}" is not the concept`)
+        conceptError(
+          concept,
+          `the concept in aliasMap "${alternateName}" is not the concept in conceptMap "${concept.name}"  `
+        )
       }
     })
 
