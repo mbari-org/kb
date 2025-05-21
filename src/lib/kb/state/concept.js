@@ -58,12 +58,12 @@ const isStateModified = (stagedState, initialState, field, index) => {
 const hasModifiedState = ({ initialState, stagedState }) =>
   !!initialState && !isJsonEqual(initialState, stagedState)
 
-const initialConceptState = (concept, pendingHistory) => {
+const initialConceptState = (concept, pending) => {
   return {
-    ...aliasesState(concept, pendingHistory),
+    ...aliasesState(concept, pending),
     ...fieldState(concept),
-    ...mediaState(concept, pendingHistory),
-    ...structureState(concept, pendingHistory),
+    ...mediaState(concept, pending),
+    ...structureState(concept, pending),
   }
 }
 

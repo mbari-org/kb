@@ -43,13 +43,15 @@ const ConceptProvider = ({ children }) => {
 
   const refreshConcept = useCallback(
     refreshedConcept => {
-      const conceptPending = getPendingHistory(refreshedConcept.name)
+      const conceptToRefresh = refreshedConcept || concept
 
-      const refreshedInitialState = initialConceptState(refreshedConcept, conceptPending)
+      const conceptPending = getPendingHistory(conceptToRefresh.name)
+
+      const refreshedInitialState = initialConceptState(conceptToRefresh, conceptPending)
       setInitialState(refreshedInitialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: refreshedInitialState })
     },
-    [getPendingHistory]
+    [concept, getPendingHistory]
   )
 
   const handleSetConcept = useCallback(

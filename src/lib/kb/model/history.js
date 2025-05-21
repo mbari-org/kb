@@ -1,15 +1,15 @@
 import { humanTimestamp, isEmpty, pick } from '@/lib/util'
 
-const fieldPending = (pendingHistory, field) =>
-  pendingHistory
+const fieldPending = (pending, field) =>
+  pending
     ?.filter(pending => pending.field.toLowerCase() === field.toLowerCase())
     .sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
 
-const hasPending = (pendingHistory, field) =>
-  field ? !isEmpty(fieldPending(pendingHistory, field)) : !isEmpty(pendingHistory)
+const hasPending = (pending, field) =>
+  field ? !isEmpty(fieldPending(pending, field)) : !isEmpty(pending)
 
-const isPendingChild = (pendingHistory, childName) =>
-  pendingHistory.some(
+const isPendingChild = (pending, childName) =>
+  pending.some(
     pending =>
       pending.field === 'Concept.child' &&
       ((pending.action === 'ADD' && pending.newValue === childName) ||
@@ -23,8 +23,8 @@ const pendingInfo = pending => {
   ]
 }
 
-const pendingValues = pendingHistory =>
-  pick(pendingHistory, [
+const pendingValues = pending =>
+  pick(pending, [
     ['oldValue', 'before'],
     ['newValue', 'after'],
     ['creatorName', 'user'],

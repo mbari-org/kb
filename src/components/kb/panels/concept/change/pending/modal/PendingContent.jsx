@@ -9,13 +9,17 @@ import NameDetail from '@/components/kb/panels/concept/change/pending/concept/Na
 import RankDetail from '@/components/kb/panels/concept/change/pending/concept/RankDetail'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
+import ModalContext from '@/contexts/modal/ModalContext'
 
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
 import { fieldPending, isPendingChild } from '@/lib/kb/model/history'
 
+import { isEmpty } from '@/lib/util'
+
 const PendingContent = () => {
   const { concept } = use(ConceptContext)
+  const { setModal } = use(ModalContext)
 
   const conceptPending = useConceptPending(concept.name)
   const parentPending = useConceptPending(concept.parent)
@@ -26,6 +30,11 @@ const PendingContent = () => {
     conceptPending.length === 0 && isPendingChild(parentPending, concept.name)
       ? parentPending[0]
       : null
+
+  if (isEmpty(conceptPending) && !pendingChild) {
+    setModal(null)
+    return null
+  }
 
   return pendingChild ? (
     <ChildDetail pendingChild={pendingChild} />

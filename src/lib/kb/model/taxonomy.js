@@ -103,8 +103,8 @@ const getNames = taxonomy => taxonomy?.names
 
 const getPendingHistory = (taxonomy, conceptName) =>
   conceptName
-    ? taxonomy.pendingHistory.filter(history => history.concept === conceptName)
-    : taxonomy.pendingHistory
+    ? taxonomy.pending.filter(history => history.concept === conceptName)
+    : taxonomy.pending
 
 const getConceptPrimaryName = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
@@ -138,7 +138,7 @@ const isDescendant = (taxonomy, conceptName, descendantName) => {
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
 const loadTaxonomy = async apiPayload => {
-  const [root, names, ranks, pendingHistory] = await Promise.all([
+  const [root, names, ranks, pending] = await Promise.all([
     apiPayload(fetchRoot),
     apiPayload(fetchNames),
     apiPayload(fetchRanks),
@@ -157,7 +157,7 @@ const loadTaxonomy = async apiPayload => {
     aliasMap,
     conceptMap,
     names,
-    pendingHistory,
+    pending,
     ranks,
     rootName: rootConcept.name,
   }
@@ -397,22 +397,22 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
 
   const updatedNames = await apiPayload(fetchNames)
 
-  const pendingHistory = await apiPayload(fetchHistory, 'pending')
+  const pending = await apiPayload(fetchHistory, 'pending')
 
   const updatedTaxonomy = {
     ...taxonomy,
     aliasMap,
     conceptMap,
     names: updatedNames,
-    pendingHistory,
+    pending,
   }
 
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }
 }
 
-const refreshTaxonomyPendingHistory = async (taxonomy, apiPayload) => {
-  const pendingHistory = await apiPayload(fetchHistory, 'pending')
-  return { taxonomy: { ...taxonomy, pendingHistory } }
+const refreshHistory = async (taxonomy, historyType, apiPayload) => {
+  const history = await apiPayload(fetchHistory, historyType)
+  return { taxonomy: { ...taxonomy, [historyType]: history } }
 }
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {
@@ -485,6 +485,6 @@ export {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   mapsFromConcept,
+  refreshHistory,
   refreshTaxonomyConcept,
-  refreshTaxonomyPendingHistory,
 }

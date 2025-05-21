@@ -2,14 +2,14 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { stagedAlias } from '@/lib/kb/model/alias'
 
-const aliasesState = (concept, pendingHistory) => {
+const aliasesState = (concept, pending) => {
   const { aliases: conceptAliases } = concept
   if (!conceptAliases) {
     return []
   }
 
   const aliases = conceptAliases.map((alias, index) =>
-    stagedAlias({ ...alias, action: CONCEPT_STATE.NO_ACTION, index }, pendingHistory)
+    stagedAlias({ ...alias, action: CONCEPT_STATE.NO_ACTION, index }, pending)
   )
 
   return { aliases }

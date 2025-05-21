@@ -11,6 +11,8 @@ import { fieldPending } from '@/lib/kb/model/history'
 
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
+import { isEmpty } from '@/lib/util'
+
 const { ALL, ALIASES } = PENDING
 const { UPDATING } = PROCESSING
 
@@ -18,9 +20,12 @@ const useUpdatePending = () => {
   const { config } = use(ConfigContext)
   const { concept, confirmPending, refreshConcept, setConfirmPending } = use(ConceptContext)
   const { setProcessing } = use(ModalContext)
-  const { refreshConceptHistory } = use(TaxonomyContext)
+  const { refreshHistory } = use(TaxonomyContext)
 
   const conceptPending = useConceptPending(concept.name)
+  const parentPending = useConceptPending(concept.parent)
+
+  const pendingActions = isEmpty(conceptPending) ? parentPending : conceptPending
 
   const updateId = useCallback(
     async (approval, id) => {
@@ -43,13 +48,13 @@ const useUpdatePending = () => {
     try {
       switch (confirmPending.pending) {
         case ALL: {
-          const pendingIds = conceptPending.map(pending => pending.id)
+          const pendingIds = pendingActions.map(pending => pending.id)
           await updateIds(confirmPending.approval, pendingIds)
           break
         }
 
         case ALIASES: {
-          const pendingIds = fieldPending(conceptPending, 'ConceptName').map(pending => pending.id)
+          const pendingIds = fieldPending(pendingActions, 'ConceptName').map(pending => pending.id)
           await updateIds(confirmPending.approval, pendingIds)
           break
         }
@@ -59,20 +64,19 @@ const useUpdatePending = () => {
           break
       }
 
-      const refreshedConcept = await refreshConceptHistory(concept.name)
+      await refreshHistory('pending')
+      refreshConcept()
       setConfirmPending(null)
       setProcessing(null)
-      refreshConcept(refreshedConcept)
     } catch (error) {
       setProcessing(null)
       console.error('Error confirming pending changes:', error)
     }
   }, [
-    concept.name,
-    conceptPending,
     confirmPending,
+    pendingActions,
     refreshConcept,
-    refreshConceptHistory,
+    refreshHistory,
     setConfirmPending,
     setProcessing,
     updateId,

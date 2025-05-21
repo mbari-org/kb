@@ -4,14 +4,14 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { stagedMediaItem } from '@/lib/kb/model/media'
 
-const mediaState = (concept, pendingHistory) => {
+const mediaState = (concept, pending) => {
   const { media: conceptMedia } = concept
   const primaryMedia = getPrimary(conceptMedia)
   const otherMedia = conceptMedia.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
   const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
 
   const media = orderedMedia.map((mediaItem, index) =>
-    stagedMediaItem({ ...mediaItem, action: CONCEPT_STATE.NO_ACTION, index }, pendingHistory)
+    stagedMediaItem({ ...mediaItem, action: CONCEPT_STATE.NO_ACTION, index }, pending)
   )
 
   return { media }

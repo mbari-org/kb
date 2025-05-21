@@ -21,6 +21,7 @@ import {
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
+  refreshHistory as refreshTaxonomyHistory,
   refreshTaxonomyConcept,
   cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/model/taxonomy'
@@ -176,17 +177,18 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy, apiPayload, updateTaxonomy]
   )
 
-  // const refreshConceptHistory = useCallback(
-  //   async conceptName => {
-  //     const { taxonomy: updatedTaxonomy } = await refreshTaxonomyPendingHistory(
-  //       taxonomy,
-  //       apiPayload
-  //     )
-  //     updateTaxonomy(updatedTaxonomy)
-  //     return getTaxonomyConcept(updatedTaxonomy, conceptName)
-  //   },
-  //   [apiPayload, taxonomy, updateTaxonomy]
-  // )
+  const refreshHistory = useCallback(
+    async historyType => {
+      const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(
+        taxonomy,
+        historyType,
+        apiPayload
+      )
+      updateTaxonomy(updatedTaxonomy)
+      return updatedTaxonomy
+    },
+    [apiPayload, taxonomy, updateTaxonomy]
+  )
 
   useEffect(() => {
     if (initialLoad.current && apiPayload) {
@@ -234,6 +236,7 @@ const TaxonomyProvider = ({ children }) => {
         loadConcept,
         loadConceptDescendants,
         refreshConcept,
+        refreshHistory,
         taxonomy,
       }}
     >
