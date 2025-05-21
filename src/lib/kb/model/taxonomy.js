@@ -61,13 +61,17 @@ const deleteConcept = async (taxonomy, conceptName, apiPayload) => {
     selectConceptName = parent.children[conceptChildIndex - 1]
   }
 
-  const names = await apiPayload(fetchNames)
+  const [names, pending] = await Promise.all([
+    apiPayload(fetchNames),
+    apiPayload(fetchHistory, 'pending'),
+  ])
 
   const updatedTaxonomy = {
     ...taxonomy,
     aliasMap,
     conceptMap,
     names,
+    pending,
   }
 
   return { taxonomy: updatedTaxonomy, selectConceptName }

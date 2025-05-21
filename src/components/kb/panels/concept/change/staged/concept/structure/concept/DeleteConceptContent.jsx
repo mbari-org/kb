@@ -4,17 +4,22 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ToConceptChoice from '../ToConceptChoice'
 
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import { getConceptAnnotationCount } from '@/lib/kb/api/annotations'
+
 const DeleteConceptContent = () => {
+  const { config } = use(ConfigContext)
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
 
-  const [toConcept, setToConcept] = useState(concept.parent)
+  const [annotationCount, setAnnotationCount] = useState(0)
   const [isValid, setIsValid] = useState(true)
+  const [toConcept, setToConcept] = useState(concept.parent)
 
   const allowedChoices = useMemo(() => {
     return getNames().filter(name => name !== concept.name)
@@ -40,6 +45,18 @@ const DeleteConceptContent = () => {
   }
 
   useEffect(() => {
+    const fetchCount = async () => {
+      const { error, count } = await getConceptAnnotationCount(config, concept.name)
+      if (error) {
+        console.error(error)
+      } else {
+        setAnnotationCount(count)
+      }
+    }
+    fetchCount()
+  }, [concept.name, config])
+
+  useEffect(() => {
     setModalData({ parent: concept.parent, modified: true, isValid: true })
   }, [concept.parent, setModalData])
 
@@ -53,15 +70,23 @@ const DeleteConceptContent = () => {
         <Typography align='center'>
           Nancy has a ruler and will crack your knuckles if you mess this up.
         </Typography>
-        <ToConceptChoice
-          error={!isValid}
-          handleChange={handleChange}
-          handleKeyUp={handleKeyUp}
-          label='Assign To'
-          omitChoices={[concept.name]}
-          required
-          value={toConcept}
-        />
+
+        {annotationCount > 0 && (
+          <>
+            <Typography align='center' sx={{ mb: 1 }}>
+              This concept has {annotationCount} annotation{annotationCount !== 1 ? 's' : ''}
+            </Typography>
+            <ToConceptChoice
+              error={!isValid}
+              handleChange={handleChange}
+              handleKeyUp={handleKeyUp}
+              label='Assign Annotations To'
+              omitChoices={[concept.name]}
+              required
+              value={toConcept}
+            />
+          </>
+        )}
 
         {!isValid && (
           <Typography color='error' variant='caption'>
