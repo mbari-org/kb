@@ -108,6 +108,10 @@ const PENDING = {
     OTHER: 'other',
     REJECT: 'reject',
   },
+  CHANGE_NAME: {
+    ASSOCIATED_DATA: 'Associated Data',
+    NAME_ONLY: 'Name Only',
+  },
   GROUP: {
     ALIASES: 'Aliases',
     ALL: 'All',

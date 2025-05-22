@@ -10,10 +10,11 @@ import { updatePendingHistory } from '@/lib/kb/api/history'
 import { fieldPending } from '@/lib/kb/model/history'
 
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+import useUpdateNameAssociatedData from '@/contexts/concept/pending/useUpdateNameAssociatedData'
 
 import { isEmpty } from '@/lib/util'
 
-const { ALL, ALIASES } = PENDING
+const { ALL, ALIASES, APPROVAL } = PENDING
 const { UPDATING } = PROCESSING
 
 const useUpdatePending = () => {
@@ -27,11 +28,16 @@ const useUpdatePending = () => {
 
   const pendingActions = isEmpty(conceptPending) ? parentPending : conceptPending
 
+  const updateNameAssociatedData = useUpdateNameAssociatedData(pendingActions)
+
   const updateId = useCallback(
     async (approval, id) => {
       await updatePendingHistory(config, approval, id)
+      if (approval === APPROVAL.ACCEPT) {
+        await updateNameAssociatedData(id)
+      }
     },
-    [config]
+    [config, updateNameAssociatedData]
   )
 
   const updateIds = useCallback(
