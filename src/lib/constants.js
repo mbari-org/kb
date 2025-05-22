@@ -71,6 +71,7 @@ const LABELS = {
     APPROVE: 'Approve',
     APPROVE_ALL: 'Approve All',
     BACK_TO_EDIT: 'Back to Editing',
+    CANCEL: 'Cancel',
     CONFIRM: 'Confirm',
     CONFIRM_DISCARD: 'Confirm',
     CONTINUE: 'Continue',
@@ -80,6 +81,7 @@ const LABELS = {
     REJECT: 'Reject',
     REJECT_ALL: 'Reject All',
     REJECT_DISCARD: 'Keep',
+    SAVE: 'Save',
     STAGE: 'Stage',
   },
   CONCEPT: {
@@ -143,6 +145,7 @@ const ROLES = {
   ADMIN: 'Admin',
   MAINT: 'Maint',
   READ_ONLY: 'ReadOnly',
+  USER: 'User',
 }
 
 export {

@@ -7,9 +7,8 @@ import NoMedia from '@/components/kb/panels/concept/change/staged/concept/media/
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const ConceptMedia = () => {
-  const {
-    stagedState: { media },
-  } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
+  const { media } = stagedState
 
   return (
     <Box

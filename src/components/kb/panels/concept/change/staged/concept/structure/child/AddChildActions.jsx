@@ -6,9 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
-
-import { LABELS } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS } from '@/lib/constants'
 
 import { ADD_CHILD_FORM_ID } from './AddChildContent'
 
