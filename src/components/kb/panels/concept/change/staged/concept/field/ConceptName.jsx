@@ -34,8 +34,9 @@ const ConceptName = () => {
     editing && !showStructureChoicesModal && !hasStagedName && !isReadOnly(user)
 
   const hasPendingStructure =
-    ['ConceptName', 'Parent', 'Concept.child'].some(field => hasPending(conceptPending, field)) ||
-    !!pendingChild(parentPending, concept.name)
+    ['ConceptName', 'Parent', 'Concept.child', 'Concept.parent'].some(field =>
+      hasPending(conceptPending, field)
+    ) || !!pendingChild(parentPending, concept.name)
 
   const conceptColor =
     hasStagedStructure || hasPendingStructure

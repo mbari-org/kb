@@ -6,6 +6,7 @@ import ChildDetail from '@/components/kb/panels/concept/change/pending/concept/C
 import ChildrenDetail from '@/components/kb/panels/concept/change/pending/concept/ChildrenDetail'
 import MediaDetail from '@/components/kb/panels/concept/change/pending/concept/MediaDetail'
 import NameDetail from '@/components/kb/panels/concept/change/pending/concept/NameDetail'
+import ParentDetail from '@/components/kb/panels/concept/change/pending/concept/ParentDetail'
 import RankDetail from '@/components/kb/panels/concept/change/pending/concept/RankDetail'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
@@ -44,6 +45,7 @@ const PendingContent = () => {
       <ChildrenDetail pendingField={pendingField} />
       <MediaDetail pendingField={pendingField} />
       <NameDetail pendingField={pendingField} />
+      <ParentDetail pendingField={pendingField} />
       <RankDetail pendingField={pendingField} />
     </Stack>
   )
