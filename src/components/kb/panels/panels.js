@@ -6,6 +6,7 @@ import ImportExport from '@/components/kb/panels/ImportExport'
 import Notes from '@/components/kb/panels/Notes'
 import References from '@/components/kb/panels/References'
 import Templates from '@/components/kb/panels/Templates'
+import Users from '@/components/kb/panels/Users'
 
 const panels = [
   { mod: Concepts, name: 'Concepts' },
@@ -15,6 +16,7 @@ const panels = [
   { mod: History, name: 'History' },
   { mod: Notes, name: 'Notes' },
   { mod: ImportExport, name: 'Import/Export' },
+  { mod: Users, name: 'Users' },
   { mod: AboutHelp, name: 'About/Help' },
 ]
 
