@@ -22,6 +22,7 @@ const { CONTINUE } = LABELS.BUTTON
 const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
   const isLoading = useRef(false)
+  const previousConceptName = useRef(null)
 
   const { modalData, setModalData } = use(ModalContext)
   const { selected } = use(SelectedContext)
@@ -56,8 +57,11 @@ const ConceptProvider = ({ children }) => {
 
   const handleSetConcept = useCallback(
     selectedConcept => {
-      setConcept(selectedConcept)
-      refreshConcept(selectedConcept)
+      if (selectedConcept?.name !== previousConceptName.current) {
+        previousConceptName.current = selectedConcept?.name
+        setConcept(selectedConcept)
+        refreshConcept(selectedConcept)
+      }
     },
     [refreshConcept]
   )
@@ -67,11 +71,14 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    if (selected.concept !== concept?.name || selected.panel !== 'Concepts') {
+    const shouldUpdateConcept =
+      selected.concept !== previousConceptName.current && selected.panel === 'Concepts'
+
+    if (shouldUpdateConcept) {
       if (hasModifiedState({ initialState, stagedState })) {
         if (!modalData?.warning) {
           displayStaged(CONTINUE)
-          setModalData({ warning: true })
+          setModalData(prev => ({ ...prev, warning: true }))
         }
       } else {
         if (isConceptLoaded(selected.concept)) {
@@ -91,19 +98,18 @@ const ConceptProvider = ({ children }) => {
       }
     }
   }, [
-    concept,
+    selected,
     getConcept,
     handleSetConcept,
-    initialState,
     isConceptLoaded,
     loadConcept,
-    modalData,
-    selected,
     setEditing,
     setModalData,
     showBoundary,
-    stagedState,
     displayStaged,
+    initialState,
+    stagedState,
+    modalData?.warning,
   ])
 
   return (
