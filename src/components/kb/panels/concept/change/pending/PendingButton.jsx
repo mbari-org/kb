@@ -1,5 +1,6 @@
 import { Box, IconButton, useTheme } from '@mui/material'
-const PendingButton = ({ Icon, color, disabled, onClick }) => {
+
+const PendingButton = ({ Icon, color, disabled, determined, onClick }) => {
   const theme = useTheme()
 
   return (
@@ -14,21 +15,18 @@ const PendingButton = ({ Icon, color, disabled, onClick }) => {
       }}
     >
       <IconButton
-        color={color}
         disabled={disabled}
         onClick={onClick}
         sx={{
-          '&:hover': {
-            ...theme.kb.icon.hover,
-          },
-          '& .MuiIconButton-root': {
-            backgroundColor: color,
-            '&:hover': {
-              backgroundColor: `${color} !important`,
-            },
-            mb: 1,
-          },
+          '&:hover': determined
+            ? {}
+            : {
+                ...theme.kb.icon.hover,
+                color: `${color}.main`,
+                transform: 'scale(1.25)',
+              },
           backgroundColor: theme.palette.background.paper,
+          color: determined ? `${color}.main` : undefined,
           padding: 0.5,
         }}
       >

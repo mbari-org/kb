@@ -18,10 +18,16 @@ const PendingButtons = ({ approval, pending }) => {
   const { setConfirmPending } = use(ConceptContext)
 
   const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
-    if (!approval) return [false, false, RejectIcon, AcceptIcon]
-    if (approval === OTHER) return [true, true, RejectIcon, AcceptIcon]
-    if (approval === ACCEPT) return [true, false, RejectIcon, HandIcon]
-    if (approval === REJECT) return [false, true, HandIcon, AcceptIcon]
+    switch (approval) {
+      case OTHER:
+        return [true, true, RejectIcon, AcceptIcon]
+      case ACCEPT:
+        return [true, false, RejectIcon, HandIcon]
+      case REJECT:
+        return [false, true, HandIcon, AcceptIcon]
+      default:
+        return [false, false, RejectIcon, AcceptIcon]
+    }
   }, [approval])
 
   const handleClick = useCallback(
@@ -31,18 +37,24 @@ const PendingButtons = ({ approval, pending }) => {
     [pending, setConfirmPending]
   )
 
+  const [acceptApproved, rejectApproved] = approval
+    ? [true, true]
+    : [!disableAccept, !disableReject]
+
   return (
     <Stack direction='row' sx={{ ml: 0.5, mr: 0.5 }}>
       <PendingButton
         Icon={acceptIcon}
-        disabled={disableAccept}
         color='clean'
+        determined={acceptApproved}
+        disabled={disableAccept}
         onClick={() => handleClick(ACCEPT)}
       />
       <PendingButton
         Icon={rejectIcon}
-        disabled={disableReject}
         color='remove'
+        determined={rejectApproved}
+        disabled={disableReject}
         onClick={() => handleClick(REJECT)}
       />
     </Stack>

@@ -4,7 +4,7 @@ import MediaActionButton from '@/components/kb/panels/concept/change/staged/conc
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const MediaAdd = ({ bgColor, sx }) => {
+const MediaAdd = ({ sx }) => {
   return (
     <MediaActionButton
       action={CONCEPT_STATE.MEDIA.ADD}
@@ -12,12 +12,6 @@ const MediaAdd = ({ bgColor, sx }) => {
       Icon={props => <MdOutlineAddPhotoAlternate {...props} size={24} />}
       sx={{
         ...sx,
-        '& .MuiIconButton-root': {
-          backgroundColor: bgColor,
-          '&:hover': {
-            backgroundColor: `${bgColor} !important`,
-          },
-        },
         backgroundColor: 'transparent',
         bottom: 'unset',
         left: '50%',

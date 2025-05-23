@@ -49,17 +49,11 @@ const AliasActionButton = ({ Icon, action, aliasIndex, color, sx = {} }) => {
     >
       <IconButton
         onClick={handleClick}
-        color={color}
         sx={{
           '&:hover': {
             ...theme.kb.icon.hover,
-          },
-          '& .MuiIconButton-root': {
-            backgroundColor: color,
-            '&:hover': {
-              backgroundColor: `${color} !important`,
-            },
-            mb: 1,
+            color: `${color}.main`,
+            transform: 'scale(1.25)',
           },
           backgroundColor: theme.palette.background.paper,
           padding: 0.5,

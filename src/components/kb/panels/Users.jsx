@@ -85,18 +85,18 @@ const Users = () => {
               },
             }}
           >
-            <IoCloseSharp size={20} />
+            <IoCloseSharp size={24} />
           </IconButton>
           <IconButton
             size='small'
             onClick={() => editUser(params.row)}
             sx={{
               '&:hover': {
-                color: 'primary.main',
+                color: 'edit.main',
               },
             }}
           >
-            <CiEdit size={20} />
+            <CiEdit size={24} />
           </IconButton>
         </Box>
       ),

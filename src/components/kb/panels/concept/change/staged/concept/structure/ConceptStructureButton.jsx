@@ -9,7 +9,6 @@ const ChangeStructureButton = ({ onClick }) => {
   return (
     <IconButton
       aria-label='Edit concept name'
-      color='edit'
       onClick={onClick}
       sx={{
         mb: 2,
@@ -17,6 +16,8 @@ const ChangeStructureButton = ({ onClick }) => {
         padding: 0,
         '&:hover': {
           ...theme.kb.icon.hover,
+          color: 'edit.main',
+          transform: 'scale(1.25)',
         },
       }}
     >

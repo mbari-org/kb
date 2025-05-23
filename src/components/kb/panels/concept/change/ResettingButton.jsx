@@ -7,10 +7,13 @@ const ResettingButton = ({ color, disabled, resetting, onClick }) => {
   if (resetting) {
     return (
       <Button
-        color={color}
         onClick={onClick}
         sx={{
           minWidth: 'auto',
+          '&:hover': {
+            color: `${color}.main`,
+            transform: 'scale(1.25)',
+          },
         }}
       >
         <HandIcon />
@@ -20,12 +23,16 @@ const ResettingButton = ({ color, disabled, resetting, onClick }) => {
 
   return (
     <Button
-      color={color}
       disabled={disabled}
       onClick={onClick}
       sx={{
         mr: 0.5,
         minWidth: 'auto',
+        color: 'text.disabled',
+        '&:hover': {
+          color: `${color}.main`,
+          transform: 'scale(1.25)',
+        },
       }}
     >
       <IoCloseSharp />

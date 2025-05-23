@@ -59,10 +59,11 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
     >
       <IconButton
         onClick={handleClick}
-        color={color}
         sx={{
           '&:hover': {
             ...theme.kb.icon.hover,
+            color: `${color}.main`,
+            transform: 'scale(1.25)',
           },
           backgroundColor: theme.palette.background.paper,
           padding: 0.5,
