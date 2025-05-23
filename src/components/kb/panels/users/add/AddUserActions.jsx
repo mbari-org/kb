@@ -5,18 +5,15 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { LABELS } from '@/lib/constants'
 
-const ADD_USER_FORM_ID = 'add-user-form'
-
-const { CANCEL, SAVE } = LABELS.BUTTON
+const { CANCEL, ADD } = LABELS.BUTTON
 
 const AddUserActions = () => {
   const { closeModal, modalData } = use(ModalContext)
+  const { user } = modalData
 
-  const { modified } = modalData
-
-  const colors = ['cancel', 'main']
-  const disabled = [false, !modified]
-  const labels = [CANCEL, SAVE]
+  const colors = ['cancel', 'primary']
+  const disabled = [false, !user.isValid]
+  const labels = [CANCEL, ADD]
 
   const onAction = label => {
     switch (label) {
@@ -24,9 +21,7 @@ const AddUserActions = () => {
         closeModal()
         break
 
-      case SAVE:
-        // Need to go through the form to trigger required and validation checks
-        document.querySelector(`#${ADD_USER_FORM_ID}`)?.requestSubmit()
+      case ADD:
         closeModal(true)
         break
     }
