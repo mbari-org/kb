@@ -2,6 +2,7 @@ import { use, useEffect, useState } from 'react'
 
 import { Typography, Button, Box, IconButton } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
+import { CiEdit } from 'react-icons/ci'
 import { DataGrid } from '@mui/x-data-grid'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -12,6 +13,7 @@ import { ROLES } from '@/lib/constants'
 
 import useAddUser from './users/add/useAddUser'
 import useDeleteUser from './users/delete/useDeleteUser'
+import useEditUser from './users/edit/useEditUser'
 
 const Users = () => {
   const { apiFns } = use(ConfigContext)
@@ -25,6 +27,10 @@ const Users = () => {
 
   const handleDeleteUser = userToDelete => {
     setUsers(prevUsers => prevUsers.filter(user => user.id !== userToDelete.id))
+  }
+
+  const handleEditUser = editedUser => {
+    setUsers(prevUsers => prevUsers.map(user => (user.id === editedUser.id ? editedUser : user)))
   }
 
   useEffect(() => {
@@ -43,26 +49,40 @@ const Users = () => {
   }, [apiFns])
 
   const deleteUser = useDeleteUser(handleDeleteUser)
+  const editUser = useEditUser(handleEditUser)
 
   const columns = [
     {
       field: 'actions',
       headerName: '',
-      width: 50,
+      width: 100,
       sortable: false,
       renderCell: params => (
-        <IconButton
-          size='small'
-          onClick={() => deleteUser(params.row)}
-          sx={{
-            ml: 1,
-            '&:hover': {
-              color: 'error.main',
-            },
-          }}
-        >
-          <IoCloseSharp size={20} />
-        </IconButton>
+        <Box>
+          <IconButton
+            size='small'
+            onClick={() => deleteUser(params.row)}
+            sx={{
+              mr: 1,
+              '&:hover': {
+                color: 'error.main',
+              },
+            }}
+          >
+            <IoCloseSharp size={20} />
+          </IconButton>
+          <IconButton
+            size='small'
+            onClick={() => editUser(params.row)}
+            sx={{
+              '&:hover': {
+                color: 'primary.main',
+              },
+            }}
+          >
+            <CiEdit size={20} />
+          </IconButton>
+        </Box>
       ),
     },
     { field: 'username', headerName: 'Username', width: 130 },
