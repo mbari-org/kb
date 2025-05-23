@@ -66,6 +66,8 @@ const CONCEPT_STATE = {
   },
 }
 
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+
 const LABELS = {
   BUTTON: {
     APPROVE: 'Approve',
@@ -153,6 +155,7 @@ export {
   CONCEPT_FIELDS,
   CONCEPT_NAME_TYPES,
   CONCEPT_STATE,
+  EMAIL_REGEX,
   LABELS,
   PENDING,
   PROCESSING,

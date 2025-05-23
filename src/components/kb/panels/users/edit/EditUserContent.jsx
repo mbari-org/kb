@@ -7,14 +7,29 @@ const EditUserContent = () => {
   const { modalData, setModalData } = use(ModalContext)
   const { user } = modalData
 
-  const handleChange = updatedUser => {
-    setModalData({
-      ...modalData,
-      user: updatedUser,
-    })
+  console.log('EditUserContent user:', user)
+
+  const onChange = updatedUser => {
+    console.log('EditUserContent onChange updatedUser:', updatedUser)
+    // Ensure both password fields are always present
+    const userData = {
+      ...updatedUser,
+      password: updatedUser.password || '',
+      confirmPassword: updatedUser.confirmPassword || '',
+    }
+    console.log('EditUserContent userData:', userData)
+    setModalData({ ...modalData, user: userData })
   }
 
-  return <UserForm user={user} onChange={handleChange} isEdit={true} />
+  // Ensure confirmPassword is present in the initial user data
+  const userWithConfirmPassword = {
+    ...user,
+    password: user.password || '',
+    confirmPassword: user.confirmPassword || '',
+  }
+  console.log('EditUserContent userWithConfirmPassword:', userWithConfirmPassword)
+
+  return <UserForm user={userWithConfirmPassword} onChange={onChange} isEdit />
 }
 
 export default EditUserContent

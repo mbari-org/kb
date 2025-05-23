@@ -17,9 +17,10 @@ const addUserModal = () => {
   return createModal(components)
 }
 
-const initialModalData = {
+const initialUserData = {
   user: {
     username: '',
+    password: '',
     role: '',
     affiliation: '',
     firstName: '',
@@ -34,14 +35,14 @@ const useAddUser = (onAdd, existingUsers) => {
 
   return useCallback(() => {
     const modal = addUserModal()
-    const onClose = (modalData, confirmed) => {
-      if (confirmed && modalData.modified) {
-        onAdd(modalData.user)
+    const onClose = (modalData, confirmed, createdUser) => {
+      if (confirmed && createdUser) {
+        onAdd(createdUser)
       }
       return true
     }
     setModal(modal, onClose)
-    setModalData({ ...initialModalData, existingUsers })
+    setModalData({ ...initialUserData, existingUsers })
   }, [onAdd, setModal, setModalData, existingUsers])
 }
 

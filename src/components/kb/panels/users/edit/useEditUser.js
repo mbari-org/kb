@@ -23,14 +23,22 @@ const useEditUser = onEdit => {
   return useCallback(
     user => {
       const modal = editUserModal()
-      const onClose = (modalData, confirmed) => {
-        if (confirmed) {
-          onEdit(modalData.user)
+      const onClose = (modalData, confirmed, updatedUser) => {
+        if (confirmed && updatedUser) {
+          onEdit(updatedUser)
         }
         return true
       }
       setModal(modal, onClose)
-      setModalData({ user })
+      setModalData({
+        user: {
+          ...user,
+          originalUser: user,
+          password: '',
+          confirmPassword: '',
+        },
+        modified: false,
+      })
     },
     [onEdit, setModal, setModalData]
   )
