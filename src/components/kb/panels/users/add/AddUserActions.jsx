@@ -5,7 +5,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { LABELS } from '@/lib/constants'
 
-import { ADD_USER_FORM_ID } from './AddUserContent'
+const ADD_USER_FORM_ID = 'add-user-form'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 
