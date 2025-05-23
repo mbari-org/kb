@@ -6,8 +6,7 @@ import { CiEdit } from 'react-icons/ci'
 import { DataGrid } from '@mui/x-data-grid'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import ModalContext from '@/contexts/modal/ModalContext'
-import { fetchUsers } from '@/lib/kb/api/users'
+import { fetchUsers, createUser, deleteUser as removeUser, updateUser } from '@/lib/kb/api/users'
 
 import { ROLES } from '@/lib/constants'
 
@@ -17,20 +16,36 @@ import useEditUser from './users/edit/useEditUser'
 
 const Users = () => {
   const { apiFns } = use(ConfigContext)
-  const { setModal } = use(ModalContext)
 
   const [users, setUsers] = useState([])
 
-  const handleAddUser = newUser => {
-    setUsers(prevUsers => [...prevUsers, { ...newUser, id: prevUsers.length }])
+  const handleAddUser = async newUser => {
+    try {
+      const createdUser = await apiFns.apiPayload(createUser, newUser)
+      setUsers(prevUsers => [...prevUsers, { ...createdUser, id: prevUsers.length }])
+    } catch (err) {
+      console.error('Error adding user:', err)
+    }
   }
 
-  const handleDeleteUser = userToDelete => {
-    setUsers(prevUsers => prevUsers.filter(user => user.id !== userToDelete.id))
+  const handleDeleteUser = async userToDelete => {
+    try {
+      await apiFns.apiPayload(removeUser, userToDelete.id)
+      setUsers(prevUsers => prevUsers.filter(user => user.id !== userToDelete.id))
+    } catch (err) {
+      console.error('Error deleting user:', err)
+    }
   }
 
-  const handleEditUser = editedUser => {
-    setUsers(prevUsers => prevUsers.map(user => (user.id === editedUser.id ? editedUser : user)))
+  const handleEditUser = async editedUser => {
+    try {
+      const updatedUser = await apiFns.apiPayload(updateUser, [editedUser.id, editedUser])
+      setUsers(prevUsers =>
+        prevUsers.map(user => (user.id === updatedUser.id ? { ...updatedUser, id: user.id } : user))
+      )
+    } catch (err) {
+      console.error('Error updating user:', err)
+    }
   }
 
   useEffect(() => {
@@ -41,7 +56,7 @@ const Users = () => {
         const usersWithIds = users.map((user, index) => ({ ...user, id: index }))
         setUsers(usersWithIds)
       } catch (err) {
-        console.error(err)
+        console.error('Error loading users:', err)
       }
     }
 
@@ -57,6 +72,7 @@ const Users = () => {
       headerName: '',
       width: 100,
       sortable: false,
+      headerClassName: 'bold-header',
       renderCell: params => (
         <Box>
           <IconButton
@@ -85,18 +101,19 @@ const Users = () => {
         </Box>
       ),
     },
-    { field: 'username', headerName: 'Username', width: 130 },
+    { field: 'username', headerName: 'Username', width: 130, headerClassName: 'bold-header' },
     {
       field: 'role',
       headerName: 'Role',
       width: 130,
       type: 'singleSelect',
       valueOptions: Object.values(ROLES),
+      headerClassName: 'bold-header',
     },
-    { field: 'affiliation', headerName: 'Affiliation', width: 130 },
-    { field: 'firstName', headerName: 'First Name', width: 130 },
-    { field: 'lastName', headerName: 'Last Name', width: 130 },
-    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'affiliation', headerName: 'Affiliation', width: 130, headerClassName: 'bold-header' },
+    { field: 'firstName', headerName: 'First Name', width: 130, headerClassName: 'bold-header' },
+    { field: 'lastName', headerName: 'Last Name', width: 130, headerClassName: 'bold-header' },
+    { field: 'email', headerName: 'Email', width: 200, headerClassName: 'bold-header' },
   ]
 
   const addUser = useAddUser(handleAddUser, users)
@@ -118,6 +135,17 @@ const Users = () => {
           pageSize={5}
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
+          sx={{
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: 'background.paper',
+              '& .MuiDataGrid-columnHeader': {
+                '& .MuiDataGrid-columnHeaderTitle': {
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                },
+              },
+            },
+          }}
         />
       </div>
     </>

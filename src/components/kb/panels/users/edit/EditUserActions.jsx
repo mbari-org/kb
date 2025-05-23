@@ -8,7 +8,7 @@ import { LABELS } from '@/lib/constants'
 const { CANCEL, SAVE } = LABELS.BUTTON
 
 const EditUserActions = () => {
-  const { closeModal, modalData } = use(ModalContext)
+  const { closeModal } = use(ModalContext)
 
   const colors = ['cancel', 'primary']
   const disabled = [false, false]
