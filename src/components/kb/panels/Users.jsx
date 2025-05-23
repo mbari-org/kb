@@ -1,6 +1,7 @@
 import { use, useEffect, useState } from 'react'
 
-import { Typography, Button, Box } from '@mui/material'
+import { Typography, Button, Box, IconButton } from '@mui/material'
+import { IoCloseSharp } from 'react-icons/io5'
 import { DataGrid } from '@mui/x-data-grid'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -10,6 +11,7 @@ import { fetchUsers } from '@/lib/kb/api/users'
 import { ROLES } from '@/lib/constants'
 
 import useAddUser from './users/add/useAddUser'
+import useDeleteUser from './users/delete/useDeleteUser'
 
 const Users = () => {
   const { apiFns } = use(ConfigContext)
@@ -17,17 +19,12 @@ const Users = () => {
 
   const [users, setUsers] = useState([])
 
-  const handleCellEditCommit = params => {
-    const { id, field, value } = params
-    setUsers(prevUsers =>
-      prevUsers.map(user => (user.id === id ? { ...user, [field]: value } : user))
-    )
-    // TODO: Implement actual API call to save changes
-    console.log('Cell edit:', { id, field, value })
-  }
-
   const handleAddUser = newUser => {
     setUsers(prevUsers => [...prevUsers, { ...newUser, id: prevUsers.length }])
+  }
+
+  const handleDeleteUser = userToDelete => {
+    setUsers(prevUsers => prevUsers.filter(user => user.id !== userToDelete.id))
   }
 
   useEffect(() => {
@@ -45,20 +42,41 @@ const Users = () => {
     loadUsers()
   }, [apiFns])
 
+  const deleteUser = useDeleteUser(handleDeleteUser)
+
   const columns = [
-    { field: 'username', headerName: 'Username', width: 130, editable: false },
+    {
+      field: 'actions',
+      headerName: '',
+      width: 50,
+      sortable: false,
+      renderCell: params => (
+        <IconButton
+          size='small'
+          onClick={() => deleteUser(params.row)}
+          sx={{
+            ml: 1,
+            '&:hover': {
+              color: 'error.main',
+            },
+          }}
+        >
+          <IoCloseSharp size={20} />
+        </IconButton>
+      ),
+    },
+    { field: 'username', headerName: 'Username', width: 130 },
     {
       field: 'role',
       headerName: 'Role',
       width: 130,
-      editable: true,
       type: 'singleSelect',
       valueOptions: Object.values(ROLES),
     },
-    { field: 'affiliation', headerName: 'Affiliation', width: 130, editable: true },
-    { field: 'firstName', headerName: 'First Name', width: 130, editable: true },
-    { field: 'lastName', headerName: 'Last Name', width: 130, editable: true },
-    { field: 'email', headerName: 'Email', width: 200, editable: true },
+    { field: 'affiliation', headerName: 'Affiliation', width: 130 },
+    { field: 'firstName', headerName: 'First Name', width: 130 },
+    { field: 'lastName', headerName: 'Last Name', width: 130 },
+    { field: 'email', headerName: 'Email', width: 200 },
   ]
 
   const addUser = useAddUser(handleAddUser, users)
@@ -80,8 +98,6 @@ const Users = () => {
           pageSize={5}
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
-          onCellEditCommit={handleCellEditCommit}
-          editMode='cell'
         />
       </div>
     </>

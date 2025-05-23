@@ -76,6 +76,7 @@ const LABELS = {
     CONFIRM_DISCARD: 'Confirm',
     CONTINUE: 'Continue',
     DEFER: 'Defer',
+    DELETE: 'Delete',
     DISCARD: 'Discard',
     DISCARD_ALL: 'Discard All',
     REJECT: 'Reject',
