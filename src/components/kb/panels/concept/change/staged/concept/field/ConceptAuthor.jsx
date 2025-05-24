@@ -1,11 +1,12 @@
 import { use, useCallback, useEffect, useState } from 'react'
 
-import { FormControl, TextField } from '@mui/material'
+import { Box, FormControl, TextField } from '@mui/material'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concept/change/staged/useConceptDetailStyle'
 import useDebounce from '@/components/hooks/useDebounce'
+import useStagedField from '@/components/kb/panels/concept/change/staged/concept/field/useStagedField'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -13,6 +14,8 @@ const ConceptAuthor = () => {
   const { stagedState, modifyConcept } = use(ConceptContext)
 
   const [author, setAuthor] = useState('')
+
+  const { borderStyle, borderColor } = useStagedField('author')
 
   const modifyAuthor = useCallback(
     author => {
@@ -42,7 +45,9 @@ const ConceptAuthor = () => {
 
   return (
     <FormControl>
-      <TextField {...infoStyle} label='Author' onChange={handleChange} value={author} />
+      <Box sx={{ borderStyle, borderColor }}>
+        <TextField {...infoStyle} label='Author' onChange={handleChange} value={author} />
+      </Box>
     </FormControl>
   )
 }

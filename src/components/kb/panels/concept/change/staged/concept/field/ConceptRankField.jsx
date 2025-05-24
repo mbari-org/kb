@@ -4,16 +4,20 @@ import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material'
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import useStagedField from '@/components/kb/panels/concept/change/staged/concept/field/useStagedField'
+
 const ConceptRankField = ({ field, fieldValue, otherValue, inputStyle, onChange }) => {
   const { filterRanks } = use(TaxonomyContext)
 
   const rankOptions = filterRanks(field, otherValue)
   const label = field === 'rankName' ? 'Rank' : 'Level'
 
+  const { borderStyle, borderColor } = useStagedField(field)
+
   return (
     <FormControl {...inputStyle}>
       <Box alignItems='center' display='flex' flexDirection='row' width='100%'>
-        <Box display='flex' flexDirection='column' flexGrow={1}>
+        <Box display='flex' flexDirection='column' flexGrow={1} sx={{ borderStyle, borderColor }}>
           <InputLabel id={`${field}-label`}>{label}</InputLabel>
           <Select
             displayEmpty
