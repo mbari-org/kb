@@ -9,8 +9,11 @@ const ResettingButton = ({ color, disabled, resetting, onClick }) => {
       <Button
         onClick={onClick}
         sx={{
-          color: `${color}.main`,
           minWidth: 'auto',
+          '&:hover': {
+            color: `${color}.main`,
+            transform: 'scale(1.25)',
+          },
         }}
       >
         <HandIcon />
