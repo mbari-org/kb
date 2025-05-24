@@ -37,8 +37,8 @@ const PendingButtons = ({ approval, pending }) => {
     [pending, setConfirmPending]
   )
 
-  const [acceptApproved, rejectApproved] = approval
-    ? [true, true]
+  const [acceptApproved, rejectApproved] = !approval
+    ? [false, false]
     : [!disableAccept, !disableReject]
 
   return (

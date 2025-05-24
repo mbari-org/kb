@@ -8,6 +8,8 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
+import usePendingApproval from '@/components/kb/panels/concept/change/pending/usePendingApproval'
+
 import { pendingInfo } from '@/lib/kb/model/history'
 
 import { capitalize } from '@/lib/util'
@@ -18,19 +20,9 @@ const { OTHER } = PENDING.APPROVAL
 const { ALIASES } = PENDING.GROUP
 
 const AliasDetail = ({ pendingAlias }) => {
-  const { confirmPending } = use(ConceptContext)
-
   const pendingAction = capitalize(pendingAlias.action.toLowerCase())
 
-  const approval = useMemo(() => {
-    if (!confirmPending) {
-      return null
-    }
-    if (confirmPending?.pending === ALIASES || confirmPending?.pending === pendingAlias.id) {
-      return confirmPending.approval
-    }
-    return OTHER
-  }, [confirmPending, pendingAlias.id])
+  const approval = usePendingApproval(pending => pending === ALIASES || pending === pendingAlias.id)
 
   const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER

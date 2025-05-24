@@ -1,10 +1,12 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 
 import AliasDetail from '@/components/kb/panels/concept/change/pending/concept/AliasDetail'
 import PendingButtons from '@/components/kb/panels/concept/change/pending/PendingButtons'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
+
+import usePendingApproval from '@/components/kb/panels/concept/change/pending/usePendingApproval'
 
 import { fieldSx } from '@/components/common/format'
 
@@ -14,21 +16,13 @@ const { OTHER } = PENDING.APPROVAL
 const { ALIASES } = PENDING.GROUP
 
 const AliasesDetail = ({ pendingField }) => {
-  const { concept, confirmPending } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
 
   const pendingAliases = pendingField('ConceptName').filter(
     alias => alias.newValue !== concept.name
   )
 
-  const approval = useMemo(() => {
-    if (!confirmPending) {
-      return null
-    }
-    if (confirmPending?.pending === ALIASES) {
-      return confirmPending.approval
-    }
-    return OTHER
-  }, [confirmPending])
+  const approval = usePendingApproval(pending => pending === ALIASES)
 
   const aliasesSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 

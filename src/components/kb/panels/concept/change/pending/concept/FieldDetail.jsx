@@ -1,10 +1,9 @@
-import { use, useMemo } from 'react'
 import { Box } from '@mui/material'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import PendingButtons from '@/components/kb/panels/concept/change/pending/PendingButtons'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import usePendingApproval from '@/components/kb/panels/concept/change/pending/usePendingApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -15,17 +14,7 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 
 const FieldDetail = ({ pendingField }) => {
-  const { confirmPending } = use(ConceptContext)
-
-  const approval = useMemo(() => {
-    if (!confirmPending) {
-      return null
-    }
-    if (confirmPending?.pending === pendingField.id) {
-      return confirmPending.approval
-    }
-    return OTHER
-  }, [confirmPending, pendingField.id])
+  const approval = usePendingApproval(pending => pending === pendingField.id)
 
   const disabled = approval === OTHER
 

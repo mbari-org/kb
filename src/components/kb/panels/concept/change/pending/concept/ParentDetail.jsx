@@ -1,10 +1,9 @@
-import { use, useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 
 import PendingButtons from '@/components/kb/panels/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import usePendingApproval from '@/components/kb/panels/concept/change/pending/usePendingApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -15,17 +14,7 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 
 const ParentDetail = ({ pendingField }) => {
-  const { confirmPending } = use(ConceptContext)
-
-  const approval = useMemo(() => {
-    if (!confirmPending) {
-      return null
-    }
-    if (confirmPending?.pending === 'Concept.parent') {
-      return confirmPending.approval
-    }
-    return OTHER
-  }, [confirmPending])
+  const approval = usePendingApproval(pending => pending === 'Concept.parent')
 
   const pendingParent = pendingField('Concept.parent')?.pop()
   if (!pendingParent) {

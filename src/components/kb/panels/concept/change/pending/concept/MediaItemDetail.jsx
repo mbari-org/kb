@@ -1,4 +1,5 @@
-import { use, useMemo } from 'react'
+import { useMemo } from 'react'
+
 import { Box, Typography } from '@mui/material'
 
 import PendingButtons from '@/components/kb/panels/concept/change/pending/PendingButtons'
@@ -6,7 +7,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { fieldSx } from '@/components/common/format'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import usePendingApproval from '@/components/kb/panels/concept/change/pending/usePendingApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -18,19 +19,11 @@ const { OTHER } = PENDING.APPROVAL
 const { MEDIA } = PENDING.GROUP
 
 const MediaItemDetail = ({ pendingMediaItem }) => {
-  const { confirmPending } = use(ConceptContext)
-
   const pendingAction = capitalize(pendingMediaItem.action.toLowerCase())
 
-  const approval = useMemo(() => {
-    if (!confirmPending) {
-      return null
-    }
-    if (confirmPending?.pending === MEDIA || confirmPending?.pending === pendingMediaItem.id) {
-      return confirmPending.approval
-    }
-    return OTHER
-  }, [confirmPending, pendingMediaItem.id])
+  const approval = usePendingApproval(
+    pending => pending === MEDIA || pending === pendingMediaItem.id
+  )
 
   const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
