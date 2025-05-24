@@ -13,8 +13,12 @@ import { PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
 
-const FieldDetail = ({ pendingField }) => {
-  const approval = usePendingApproval(pending => pending === pendingField.id)
+// CxNote: pendingFieldApproval allows custom approval for fields beyond the field id
+
+const FieldDetail = ({ pendingField, pendingFieldApproval = () => false }) => {
+  const approval = usePendingApproval(
+    pending => pending === pendingField.id || pendingFieldApproval(pending)
+  )
 
   const disabled = approval === OTHER
 
