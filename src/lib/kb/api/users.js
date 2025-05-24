@@ -6,6 +6,7 @@ const deleteUser = async (config, userId) => oniDelete(config, ['users', userId]
 
 const fetchUsers = async config => oniGet(config, ['users'])
 
-const updateUser = async (config, [userId, user]) => oniPut(config, ['users', userId], user)
+const updateUser = async (config, [username, updatedData]) =>
+  oniPut(config, ['users', username], updatedData)
 
 export { createUser, deleteUser, fetchUsers, updateUser }

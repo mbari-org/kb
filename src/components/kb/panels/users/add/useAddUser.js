@@ -1,10 +1,11 @@
-import { use, useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 
 import AddUserActions from './AddUserActions'
 import AddUserContent from './AddUserContent'
 import AddUserTitle from './AddUserTitle'
 
 import { createModal } from '@/components/modal/factory'
+
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const addUserModal = () => {
@@ -30,20 +31,13 @@ const initialUserData = {
   modified: false,
 }
 
-const useAddUser = (onAdd, existingUsers) => {
-  const { setModal, setModalData } = use(ModalContext)
+const useAddUser = () => {
+  const { setModal, setModalData } = useContext(ModalContext)
 
   return useCallback(() => {
-    const modal = addUserModal()
-    const onClose = (modalData, confirmed, createdUser) => {
-      if (confirmed && createdUser) {
-        onAdd(createdUser)
-      }
-      return true
-    }
-    setModal(modal, onClose)
-    setModalData({ ...initialUserData, existingUsers })
-  }, [onAdd, setModal, setModalData, existingUsers])
+    setModal(addUserModal())
+    setModalData({ ...initialUserData })
+  }, [setModal, setModalData])
 }
 
 export default useAddUser

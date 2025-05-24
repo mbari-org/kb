@@ -1,10 +1,11 @@
-import { use, useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 
 import DeleteUserActions from './DeleteUserActions'
 import DeleteUserContent from './DeleteUserContent'
 import DeleteUserTitle from './DeleteUserTitle'
 
 import { createModal } from '@/components/modal/factory'
+
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const deleteUserModal = () => {
@@ -17,22 +18,15 @@ const deleteUserModal = () => {
   return createModal(components)
 }
 
-const useDeleteUser = onDelete => {
-  const { setModal, setModalData } = use(ModalContext)
+const useDeleteUser = () => {
+  const { setModal, setModalData } = useContext(ModalContext)
 
   return useCallback(
     user => {
-      const modal = deleteUserModal()
-      const onClose = (modalData, confirmed) => {
-        if (confirmed) {
-          onDelete(user)
-        }
-        return true
-      }
-      setModal(modal, onClose)
+      setModal(deleteUserModal())
       setModalData({ user })
     },
-    [onDelete, setModal, setModalData]
+    [setModal, setModalData]
   )
 }
 

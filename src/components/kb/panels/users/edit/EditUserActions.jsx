@@ -2,9 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 import ModalContext from '@/contexts/modal/ModalContext'
-import ConfigContext from '@/contexts/config/ConfigContext'
-
-import { updateUser } from '@/lib/kb/api/users'
+import UsersContext from '@/contexts/users/UsersContext'
 
 import { LABELS } from '@/lib/constants'
 
@@ -14,7 +12,7 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 
 const EditUserActions = () => {
   const { closeModal, modalData } = use(ModalContext)
-  const { apiFns } = use(ConfigContext)
+  const { editUser } = use(UsersContext)
   const { user } = modalData
 
   const colors = ['cancel', 'primary']
@@ -29,11 +27,21 @@ const EditUserActions = () => {
 
       case SAVE:
         try {
-          const updatedUser = await apiFns.apiPayload(updateUser, [
-            user.id,
-            drop(user, ['confirmPassword', 'isValid', 'hasChanges', 'originalUser']),
+          const userData = drop(user, [
+            'confirmPassword',
+            'hasChanges',
+            'isEncrypted',
+            'isValid',
+            'originalUser',
           ])
-          closeModal(true, updatedUser)
+          const updatedUserData = Object.fromEntries(
+            Object.entries(userData).filter(([key, value]) => value !== user.originalUser[key])
+          )
+          if (user.password === '') {
+            delete updatedUserData.password
+          }
+          await editUser(user.username, updatedUserData)
+          closeModal()
         } catch (error) {
           console.error('Error updating user:', error)
           // TODO: Show error message to user

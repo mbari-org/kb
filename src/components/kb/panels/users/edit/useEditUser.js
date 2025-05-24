@@ -1,10 +1,11 @@
-import { use, useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 
 import EditUserActions from './EditUserActions'
 import EditUserContent from './EditUserContent'
 import EditUserTitle from './EditUserTitle'
 
 import { createModal } from '@/components/modal/factory'
+
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const editUserModal = () => {
@@ -17,19 +18,12 @@ const editUserModal = () => {
   return createModal(components)
 }
 
-const useEditUser = onEdit => {
-  const { setModal, setModalData } = use(ModalContext)
+const useEditUser = () => {
+  const { setModal, setModalData } = useContext(ModalContext)
 
   return useCallback(
     user => {
-      const modal = editUserModal()
-      const onClose = (modalData, confirmed, updatedUser) => {
-        if (confirmed && updatedUser) {
-          onEdit(updatedUser)
-        }
-        return true
-      }
-      setModal(modal, onClose)
+      setModal(editUserModal())
       setModalData({
         user: {
           ...user,
@@ -40,7 +34,7 @@ const useEditUser = onEdit => {
         modified: false,
       })
     },
-    [onEdit, setModal, setModalData]
+    [setModal, setModalData]
   )
 }
 

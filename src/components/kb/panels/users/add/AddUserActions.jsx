@@ -3,9 +3,7 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
-import ConfigContext from '@/contexts/config/ConfigContext'
-
-import { createUser } from '@/lib/kb/api/users'
+import UsersContext from '@/contexts/users/UsersContext'
 
 import { LABELS } from '@/lib/constants'
 
@@ -15,7 +13,8 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 
 const AddUserActions = () => {
   const { closeModal, modalData } = use(ModalContext)
-  const { apiFns } = use(ConfigContext)
+  const { addUser } = use(UsersContext)
+
   const { user } = modalData
 
   const colors = ['cancel', 'primary']
@@ -30,11 +29,9 @@ const AddUserActions = () => {
 
       case SAVE:
         try {
-          const createdUser = await apiFns.apiPayload(
-            createUser,
-            drop(user, ['confirmPassword', 'hasChanges', 'isValid'])
-          )
-          closeModal(true, createdUser)
+          const newUser = drop(user, ['confirmPassword', 'hasChanges', 'isValid'])
+          await addUser(newUser)
+          closeModal()
         } catch (error) {
           console.error('Error creating user:', error)
           // TODO: Show error message to user

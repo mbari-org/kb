@@ -1,12 +1,11 @@
-import { use, useEffect, useState } from 'react'
+import { useContext } from 'react'
 
 import { Typography, Button, Box, IconButton } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
 import { CiEdit } from 'react-icons/ci'
 import { DataGrid } from '@mui/x-data-grid'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
-import { fetchUsers, createUser, deleteUser as removeUser, updateUser } from '@/lib/kb/api/users'
+import UsersContext from '@/contexts/users/UsersContext'
 
 import { ROLES } from '@/lib/constants'
 
@@ -15,56 +14,11 @@ import useDeleteUser from './users/delete/useDeleteUser'
 import useEditUser from './users/edit/useEditUser'
 
 const Users = () => {
-  const { apiFns } = use(ConfigContext)
+  const { users } = useContext(UsersContext)
 
-  const [users, setUsers] = useState([])
-
-  const handleAddUser = async newUser => {
-    try {
-      const createdUser = await apiFns.apiPayload(createUser, newUser)
-      setUsers(prevUsers => [...prevUsers, { ...createdUser, id: prevUsers.length }])
-    } catch (err) {
-      console.error('Error adding user:', err)
-    }
-  }
-
-  const handleDeleteUser = async userToDelete => {
-    try {
-      await apiFns.apiPayload(removeUser, userToDelete.id)
-      setUsers(prevUsers => prevUsers.filter(user => user.id !== userToDelete.id))
-    } catch (err) {
-      console.error('Error deleting user:', err)
-    }
-  }
-
-  const handleEditUser = async editedUser => {
-    try {
-      const updatedUser = await apiFns.apiPayload(updateUser, [editedUser.id, editedUser])
-      setUsers(prevUsers =>
-        prevUsers.map(user => (user.id === updatedUser.id ? { ...updatedUser, id: user.id } : user))
-      )
-    } catch (err) {
-      console.error('Error updating user:', err)
-    }
-  }
-
-  useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        const users = await apiFns.apiPayload(fetchUsers)
-        // Add id field required by DataGrid
-        const usersWithIds = users.map((user, index) => ({ ...user, id: index }))
-        setUsers(usersWithIds)
-      } catch (err) {
-        console.error('Error loading users:', err)
-      }
-    }
-
-    loadUsers()
-  }, [apiFns])
-
-  const deleteUser = useDeleteUser(handleDeleteUser)
-  const editUser = useEditUser(handleEditUser)
+  const addUser = useAddUser()
+  const deleteUser = useDeleteUser()
+  const editUser = useEditUser()
 
   const columns = [
     {
@@ -115,8 +69,6 @@ const Users = () => {
     { field: 'lastName', headerName: 'Last Name', width: 130, headerClassName: 'bold-header' },
     { field: 'email', headerName: 'Email', width: 200, headerClassName: 'bold-header' },
   ]
-
-  const addUser = useAddUser(handleAddUser, users)
 
   return (
     <>
