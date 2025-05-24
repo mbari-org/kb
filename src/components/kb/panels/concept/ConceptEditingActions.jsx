@@ -6,14 +6,11 @@ import Button from '@mui/material/Button'
 import useDisplayPending from '@/components/kb/panels/concept/change/pending/modal/useDisplayPending'
 import useDisplayStaged from '@/components/kb/panels/concept/change/staged/modal/useDisplayStaged'
 
-import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { hasModifiedState } from '@/lib/kb/state/concept'
 import { pendingChild } from '@/lib/kb/model/history'
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
-
-import { isAdmin } from '@/lib/auth/role'
 
 import { CONCEPT_STATE, LABELS } from '@/lib/constants'
 
@@ -22,8 +19,6 @@ const { CANCEL, EDIT, PENDING, SAVE, SHOW } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const ConceptEditingActions = () => {
-  const { user } = use(AuthContext)
-
   const { concept, editing, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
 
@@ -66,8 +61,8 @@ const ConceptEditingActions = () => {
 
   const showPendingButton = useMemo(() => {
     const hasPending = conceptPending.length > 0 || pendingChild(parentPending, concept.name)
-    return !editing && hasPending && isAdmin(user)
-  }, [conceptPending.length, parentPending, concept.name, editing, user])
+    return !editing && hasPending
+  }, [conceptPending.length, parentPending, concept.name, editing])
 
   return (
     <Box

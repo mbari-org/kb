@@ -74,6 +74,7 @@ const LABELS = {
     APPROVE_ALL: 'Approve All',
     BACK_TO_EDIT: 'Back to Editing',
     CANCEL: 'Cancel',
+    CLOSE: 'Close',
     CONFIRM: 'Confirm',
     CONFIRM_DISCARD: 'Confirm',
     CONTINUE: 'Continue',

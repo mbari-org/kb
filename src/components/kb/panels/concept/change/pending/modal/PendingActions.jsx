@@ -2,23 +2,34 @@ import { use, useMemo, useCallback } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
+import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { LABELS, PENDING } from '@/lib/constants'
-
 import useUpdatePending from '@/contexts/concept/pending/useUpdatePending'
 
-const { APPROVE, APPROVE_ALL, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABELS.BUTTON
+import { isAdmin } from '@/lib/auth/role'
+
+import { LABELS, PENDING } from '@/lib/constants'
+
+const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABELS.BUTTON
 const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
+  const { user } = use(AuthContext)
   const { confirmPending, setConfirmPending } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
 
   const updatePending = useUpdatePending()
 
   const [disabled, labels] = useMemo(() => {
+    if (!isAdmin(user)) {
+      return [
+        [true, false, true],
+        [APPROVE_ALL, CLOSE, REJECT_ALL],
+      ]
+    }
+
     if (!confirmPending) {
       return [
         [false, false, false],
@@ -51,7 +62,7 @@ const PendingActions = () => {
         [APPROVE, DEFER, CONFIRM],
       ]
     }
-  }, [confirmPending])
+  }, [confirmPending, user])
 
   const colors = ['clean', 'main', 'cancel']
 

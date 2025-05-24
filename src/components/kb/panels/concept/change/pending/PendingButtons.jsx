@@ -8,16 +8,24 @@ import PendingButton from './PendingButton'
 
 import HandIcon from '@/components/common/HandIcon'
 
+import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
+
+import { isAdmin } from '@/lib/auth/role'
 
 import { PENDING } from '@/lib/constants'
 
 const { ACCEPT, OTHER, REJECT } = PENDING.APPROVAL
 
 const PendingButtons = ({ approval, pending }) => {
+  const { user } = use(AuthContext)
   const { setConfirmPending } = use(ConceptContext)
 
   const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
+    if (!isAdmin(user)) {
+      return [true, true, RejectIcon, AcceptIcon]
+    }
+
     switch (approval) {
       case OTHER:
         return [true, true, RejectIcon, AcceptIcon]
@@ -28,7 +36,7 @@ const PendingButtons = ({ approval, pending }) => {
       default:
         return [false, false, RejectIcon, AcceptIcon]
     }
-  }, [approval])
+  }, [approval, user])
 
   const handleClick = useCallback(
     clicked => {
