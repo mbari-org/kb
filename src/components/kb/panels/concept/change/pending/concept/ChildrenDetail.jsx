@@ -12,7 +12,7 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 const { CHILDREN } = PENDING.GROUP
 
-const ChildrenDetail = ({ pendingField }) => {
+const ChildrenDetail = ({ leftMargin, pendingField }) => {
   const pendingChildren = pendingField('Concept.child').sort((a, b) => {
     const aValue = a.newValue ?? a.oldValue
     const bValue = b.newValue ?? b.oldValue
@@ -41,7 +41,7 @@ const ChildrenDetail = ({ pendingField }) => {
       </Box>
       <Stack direction='column' spacing={1}>
         {pendingChildren.map(pendingChild => (
-          <ChildDetail key={pendingChild.id} pendingChild={pendingChild} />
+          <ChildDetail key={pendingChild.id} pendingChild={pendingChild} leftMargin={leftMargin} />
         ))}
       </Stack>
     </Box>

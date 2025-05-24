@@ -17,7 +17,7 @@ import { capitalize } from '@/lib/util'
 const { OTHER } = PENDING.APPROVAL
 const { CHILDREN } = PENDING.GROUP
 
-const ChildDetail = ({ pendingChild }) => {
+const ChildDetail = ({ pendingChild, leftMargin }) => {
   const pendingAction = capitalize(pendingChild.action.toLowerCase())
 
   const approval = usePendingApproval(
@@ -46,14 +46,14 @@ const ChildDetail = ({ pendingChild }) => {
         mt: 0.5,
       }}
     >
-      <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
+      <Box sx={{ alignItems: 'center', display: 'flex', ml: leftMargin.title }}>
         <PendingButtons approval={approval} pending={pendingChild.id} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={aliasSx}>{pendingAction}:</Typography>
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{childName}</Typography>
         </Box>
       </Box>
-      <Box sx={{ ml: 11.5 }}>
+      <Box sx={{ ml: leftMargin.detail }}>
         {pendingInfo(pendingChild)?.map(([field, value]) => (
           <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
         ))}

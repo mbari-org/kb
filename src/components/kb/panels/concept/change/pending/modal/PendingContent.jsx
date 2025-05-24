@@ -27,22 +27,20 @@ const PendingContent = () => {
 
   const pendingField = useMemo(() => field => fieldPending(conceptPending, field), [conceptPending])
 
-  const pendingChild = useMemo(
-    () => (conceptPending.length === 0 ? getPendingChild(parentPending, concept.name) : null),
-    [concept.name, conceptPending, parentPending]
-  )
+  const pendingChild = getPendingChild(parentPending, concept.name)
 
   if (isEmpty(conceptPending) && !pendingChild) {
     setModal(null)
     return null
   }
 
-  return pendingChild ? (
-    <ChildDetail pendingChild={pendingChild} />
-  ) : (
+  return (
     <Stack direction='column' spacing={1}>
+      {pendingChild && (
+        <ChildDetail pendingChild={pendingChild} leftMargin={{ title: 0, detail: 8 }} />
+      )}
       <AliasesDetail pendingField={pendingField} />
-      <ChildrenDetail pendingField={pendingField} />
+      <ChildrenDetail pendingField={pendingField} leftMargin={{ title: 3.5, detail: 11.5 }} />
       <MediaDetail pendingField={pendingField} />
       <NameDetail pendingField={pendingField} />
       <ParentDetail pendingField={pendingField} />

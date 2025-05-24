@@ -81,12 +81,7 @@ const ConceptEditingActions = () => {
         right: 15,
       }}
     >
-      <Button
-        color={editing ? 'cancel' : 'main'}
-        disabled={pendingChild(parentPending, concept.name)}
-        onClick={handleCancelDiscard}
-        variant='contained'
-      >
+      <Button color={editing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
         {editCancelDiscardButtonText}
       </Button>
       {editing && hasModifiedState({ initialState, stagedState }) && (
