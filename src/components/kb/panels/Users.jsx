@@ -1,17 +1,15 @@
 import { useContext } from 'react'
 
-import { Typography, Button, Box, IconButton } from '@mui/material'
-import { IoCloseSharp } from 'react-icons/io5'
-import { CiEdit } from 'react-icons/ci'
+import { Typography, Button, Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 import UsersContext from '@/contexts/users/UsersContext'
 
-import { ROLES } from '@/lib/constants'
-
 import useAddUser from './users/add/useAddUser'
 import useDeleteUser from './users/delete/useDeleteUser'
 import useEditUser from './users/edit/useEditUser'
+import useExportUsers from './users/useExportUsers'
+import useUserColumns from './users/useUserColumns'
 
 const Users = () => {
   const { users } = useContext(UsersContext)
@@ -19,65 +17,25 @@ const Users = () => {
   const addUser = useAddUser()
   const deleteUser = useDeleteUser()
   const editUser = useEditUser()
-
-  const columns = [
-    {
-      field: 'actions',
-      headerName: '',
-      width: 100,
-      sortable: false,
-      headerClassName: 'bold-header',
-      renderCell: params => (
-        <Box>
-          <IconButton
-            size='small'
-            onClick={() => deleteUser(params.row)}
-            sx={{
-              mr: 1,
-              '&:hover': {
-                color: 'error.main',
-              },
-            }}
-          >
-            <IoCloseSharp size={24} />
-          </IconButton>
-          <IconButton
-            size='small'
-            onClick={() => editUser(params.row)}
-            sx={{
-              '&:hover': {
-                color: 'edit.main',
-              },
-            }}
-          >
-            <CiEdit size={24} />
-          </IconButton>
-        </Box>
-      ),
-    },
-    { field: 'username', headerName: 'Username', width: 130, headerClassName: 'bold-header' },
-    {
-      field: 'role',
-      headerName: 'Role',
-      width: 130,
-      type: 'singleSelect',
-      valueOptions: Object.values(ROLES),
-      headerClassName: 'bold-header',
-    },
-    { field: 'affiliation', headerName: 'Affiliation', width: 130, headerClassName: 'bold-header' },
-    { field: 'firstName', headerName: 'First Name', width: 130, headerClassName: 'bold-header' },
-    { field: 'lastName', headerName: 'Last Name', width: 130, headerClassName: 'bold-header' },
-    { field: 'email', headerName: 'Email', width: 200, headerClassName: 'bold-header' },
-  ]
+  const { exportToCsv } = useExportUsers()
+  const columns = useUserColumns({ deleteUser, editUser })
 
   return (
     <>
       <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h3'>
         Users
       </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2, mt: -2 }}>
-        <Button variant='contained' color='primary' onClick={addUser} sx={{ mr: 2.5 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>
+        <Button variant='contained' color='primary' onClick={addUser} sx={{ ml: 2 }}>
           Add User
+        </Button>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => exportToCsv(users)}
+          sx={{ mr: 2 }}
+        >
+          Export CSV
         </Button>
       </Box>
       <div style={{ height: 400, width: '100%' }}>
