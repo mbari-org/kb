@@ -15,7 +15,7 @@ const useSaveStaged = () => {
   const { apiFns } = use(ConfigContext)
   const { concept, initialState, refreshConcept, setEditing, stagedState } = use(ConceptContext)
   const { closeModal, setProcessing } = use(ModalContext)
-  const { selectConcept } = use(SelectedContext)
+  const { select } = use(SelectedContext)
   const { refreshConcept: refreshTaxonomyConcept } = use(TaxonomyContext)
 
   const saveStaged = useCallback(async () => {
@@ -28,7 +28,7 @@ const useSaveStaged = () => {
       setEditing(false)
       setProcessing(null)
       updateInfo.hasUpdated('name')
-        ? selectConcept(updatedConcept.name)
+        ? select({ concept: updatedConcept.name })
         : refreshConcept(updatedConcept)
     } catch (error) {
       setProcessing(null)
@@ -36,15 +36,15 @@ const useSaveStaged = () => {
     }
   }, [
     apiFns.apiPayload,
+    closeModal,
     concept,
     initialState,
-    stagedState,
+    refreshConcept,
     refreshTaxonomyConcept,
+    select,
     setEditing,
     setProcessing,
-    selectConcept,
-    refreshConcept,
-    closeModal,
+    stagedState,
   ])
 
   return saveStaged

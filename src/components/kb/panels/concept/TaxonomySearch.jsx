@@ -14,7 +14,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   const theme = useTheme()
 
   const { concept } = use(ConceptContext)
-  const { selectConcept } = use(SelectedContext)
+  const { select } = use(SelectedContext)
   const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
 
   const [value, setValue] = useState('')
@@ -24,7 +24,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
   const handleConceptChange = (_event, selectedName) => {
     if (selectedName) {
       setAutoExpand({ expand: true, name: selectedName })
-      selectConcept(selectedName)
+      select({ concept: selectedName })
     }
   }
 
@@ -33,7 +33,7 @@ const TaxonomySearch = ({ setAutoExpand }) => {
       const conceptName = event.target.value.trim()
       if (taxonomyNames.includes(conceptName)) {
         setAutoExpand({ expand: true, name: conceptName })
-        selectConcept(conceptName)
+        select({ concept: conceptName })
         document.activeElement.blur()
       }
     }

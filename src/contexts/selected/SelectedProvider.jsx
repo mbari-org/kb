@@ -12,26 +12,13 @@ const SelectedProvider = ({ children }) => {
 
   const [selected, setSelected] = useState(null)
 
-  const updateSelected = update => {
-    const updated = selected ? { ...selected, ...update } : update
+  const select = ({ concept, panel }) => {
+    const updated = {
+      concept: concept || selected?.concept,
+      panel: panel || selected?.panel,
+    }
     selectedStore.set(updated)
     setSelected(updated)
-  }
-
-  const select = ({ concept, panel }) => {
-    updateSelected({ concept, panel })
-  }
-
-  const selectPanel = panel => {
-    if (panel !== selected.panel) {
-      updateSelected({ panel })
-    }
-  }
-
-  const selectConcept = conceptName => {
-    if (conceptName !== selected.concept) {
-      updateSelected({ concept: conceptName })
-    }
   }
 
   useEffect(() => {
@@ -53,11 +40,7 @@ const SelectedProvider = ({ children }) => {
     return null
   }
 
-  return (
-    <SelectedContext value={{ select, selected, selectConcept, selectPanel }}>
-      {children}
-    </SelectedContext>
-  )
+  return <SelectedContext value={{ select, selected }}>{children}</SelectedContext>
 }
 
 export default SelectedProvider

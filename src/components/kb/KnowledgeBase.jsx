@@ -12,15 +12,13 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const KnowledgeBase = () => {
   const { modal, processing } = use(ModalContext)
-  const { selected, selectPanel: updateSelectedPanel } = use(SelectedContext)
+  const { select, selected } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
 
   const selectPanel = panelName => {
     if (panelName !== selected.panel) {
-      startTransition(() => {
-        updateSelectedPanel(panelName)
-      })
+      startTransition(() => select({ panel: panelName }))
     }
   }
 

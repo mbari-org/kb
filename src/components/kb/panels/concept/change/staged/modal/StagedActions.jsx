@@ -18,7 +18,7 @@ const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 const StagedActions = ({ intent }) => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ModalContext)
-  const { selectConcept, selectPanel } = use(SelectedContext)
+  const { select } = use(SelectedContext)
 
   const saveStaged = useSaveStaged()
 
@@ -31,8 +31,7 @@ const StagedActions = ({ intent }) => {
   const onAction = label => {
     switch (label) {
       case BACK_TO_EDIT:
-        selectConcept(concept.name)
-        selectPanel('Concepts')
+        select({ concept: concept.name, panel: 'Concepts' })
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break

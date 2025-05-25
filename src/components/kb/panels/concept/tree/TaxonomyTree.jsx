@@ -20,7 +20,7 @@ import { buildTree } from '@/lib/kb/model/taxonomy'
 
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
-  const { selectConcept: updateSelectedConcept } = use(SelectedContext)
+  const { select } = use(SelectedContext)
   const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
@@ -50,10 +50,10 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   const selectConcept = useCallback(
     conceptName => {
-      updateSelectedConcept(conceptName)
+      select({ concept: conceptName })
       setAutoExpand({ expand: true, name: conceptName })
     },
-    [setAutoExpand, updateSelectedConcept]
+    [select, setAutoExpand]
   )
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems, taxonomy)
@@ -86,15 +86,15 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   return (
     <aside className='taxonomy-tree' style={{ flexGrow: 1, height: '100%' }}>
       <RichTreeView
-        itemChildrenIndentation={12}
         apiRef={apiRef}
         expandedItems={expandedItems}
         getItemId={item => item.id}
+        itemChildrenIndentation={12}
         items={treeItems}
         onItemClick={handleItemClick}
         selectedItems={selectedItems}
-        slots={slots}
         slotProps={slotProps}
+        slots={slots}
         style={{ flexGrow: 1, height: '100%' }}
       />
     </aside>
