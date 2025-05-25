@@ -1,12 +1,21 @@
-import { use } from 'react'
-import { Box, Stack, Typography } from '@mui/material'
+import { use, useEffect } from 'react'
+import { Box, Typography } from '@mui/material'
+
 import ConceptSearch from '@/components/common/ConceptSearch'
+
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
+import useLoadConceptHistory from './useLoadConceptHistory'
 
 const ConceptHistory = () => {
   const { select, selected } = use(SelectedContext)
-  const { getNames } = use(TaxonomyContext)
+  const { history, loadConceptHistory } = useLoadConceptHistory()
+
+  useEffect(() => {
+    if (selected.concept) {
+      loadConceptHistory(selected.concept)
+    }
+  }, [selected.concept, loadConceptHistory])
 
   const handleConceptSelect = (_event, selectedName) => {
     if (selectedName) {
@@ -41,7 +50,9 @@ const ConceptHistory = () => {
       <Box sx={{ flexGrow: 1, minHeight: 0, px: 2 }}>
         {/* TODO: Add history listing component here */}
         {selected.concept ? (
-          <div>History for {selected.concept}</div>
+          <div>
+            History for {selected.concept}: {history.length} entries
+          </div>
         ) : (
           <div>Select a concept to view its history</div>
         )}

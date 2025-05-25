@@ -9,7 +9,9 @@ const DEFAULT_OFFSET = 0
 
 const useLoadHistory = type => {
   const { apiFns } = use(ConfigContext)
+
   const [history, setHistory] = useState([])
+
   const paginationRef = useRef({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
 
   const loadHistory = useCallback(async () => {
