@@ -12,10 +12,11 @@ const SelectedProvider = ({ children }) => {
 
   const [selected, setSelected] = useState(null)
 
-  const select = ({ concept, panel }) => {
+  const select = ({ concept, panel, history }) => {
     const updated = {
       concept: concept || selected?.concept,
       panel: panel || selected?.panel,
+      history: history || selected?.history,
     }
     selectedStore.set(updated)
     setSelected(updated)
@@ -30,7 +31,8 @@ const SelectedProvider = ({ children }) => {
       const panel = panels.map(p => p.name).includes(storedSelected?.panel)
         ? storedSelected.panel
         : panels[0].name
-      const initialSelected = { concept, panel }
+      const history = storedSelected?.history || 'pending'
+      const initialSelected = { concept, panel, history }
       selectedStore.set(initialSelected)
       setSelected(initialSelected)
     }
