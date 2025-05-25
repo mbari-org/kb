@@ -3,29 +3,34 @@ import { ToggleButtonGroup, Box } from '@mui/material'
 
 import HistoryToggleButton from '@/components/kb/panels/history/HistoryToggleButton'
 import TypeHistory from '@/components/kb/panels/history/TypeHistory'
+import ConceptHistory from '@/components/kb/panels/history/ConceptHistory'
 
 const History = () => {
-  const [type, setType] = useState('pending')
+  const [historySelection, setHistorySelection] = useState('pending')
 
-  const handleTypeChange = (_, newType) => !!newType && setType(newType)
+  const isTypeHistory = historySelection === 'pending' || historySelection === 'approved'
+
+  const handleHistorySelection = (_, newSelection) =>
+    !!newSelection && setHistorySelection(newSelection)
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2, mt: 2 }}>
         <ToggleButtonGroup
-          value={type}
+          value={historySelection}
           exclusive
-          onChange={handleTypeChange}
+          onChange={handleHistorySelection}
           aria-label='history type'
           size='small'
           sx={{ mr: 2 }}
         >
           <HistoryToggleButton value='pending' />
           <HistoryToggleButton value='approved' />
+          <HistoryToggleButton value='concept' />
         </ToggleButtonGroup>
       </Box>
       <Box sx={{ flexGrow: 1, minHeight: 0, mt: -8 }}>
-        <TypeHistory type={type} />
+        {isTypeHistory ? <TypeHistory type={historySelection} /> : <ConceptHistory />}
       </Box>
     </Box>
   )
