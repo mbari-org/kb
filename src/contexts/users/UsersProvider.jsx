@@ -16,23 +16,6 @@ const UsersProvider = ({ children }) => {
 
   const [users, setUsers] = useState([])
 
-  useEffect(() => {
-    console.log('UsersProvider effect - state:', { user, config, apiFns })
-    if (!user) return
-    if (!config?.valid) return
-    if (!apiFns) return
-
-    const loadUsers = async () => {
-      try {
-        const fetchedUsers = await apiFns.apiPayload(fetchUsers)
-        setUsers(fetchedUsers.map(user => drop(user, ['password'])))
-      } catch (error) {
-        console.error('Error loading users:', error)
-      }
-    }
-    if (isAdmin(user)) loadUsers()
-  }, [apiFns, config, user])
-
   const addUser = async newUser => {
     try {
       const createdUser = await apiFns.apiPayload(createUser, newUser)
@@ -64,6 +47,17 @@ const UsersProvider = ({ children }) => {
       console.error('Error removing user:', error)
     }
   }
+
+  useEffect(() => {
+    if (!config?.valid || !user) return
+
+    const loadUsers = async () => {
+      const { error, payload: fetchedUsers } = await fetchUsers(config)
+      if (error) throw error
+      setUsers(fetchedUsers.map(user => drop(user, ['password'])))
+    }
+    if (isAdmin(user)) loadUsers()
+  }, [config, user])
 
   return (
     <UsersContext.Provider value={{ users, addUser, deleteUser, editUser }}>
