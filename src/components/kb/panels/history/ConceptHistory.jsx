@@ -1,19 +1,34 @@
-import { use, useEffect } from 'react'
-import { Box, Typography } from '@mui/material'
+import { use, useEffect, useState } from 'react'
+import { Box } from '@mui/material'
 
 import ConceptSearch from '@/components/common/ConceptSearch'
 
+import ConceptContext from '@/contexts/concept/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useLoadConceptHistory from './useLoadConceptHistory'
+import useHistoryColumns from './useHistoryColumns'
+import HistoryTable from './HistoryTable'
 
 const ConceptHistory = () => {
+  const { concept } = use(ConceptContext)
   const { select, selected } = use(SelectedContext)
-  const { history, loadConceptHistory } = useLoadConceptHistory()
+
+  const [count, setCount] = useState(0)
+  const [data, setData] = useState([])
+
+  const columns = useHistoryColumns({ type: 'concept' })
+  const loadConceptHistory = useLoadConceptHistory()
 
   useEffect(() => {
     if (selected.concept) {
-      loadConceptHistory(selected.concept)
+      loadConceptHistory(selected.concept).then(({ data, count }) => {
+        setData(data)
+        setCount(count)
+      })
+    } else {
+      setData([])
+      setCount(0)
     }
   }, [selected.concept, loadConceptHistory])
 
@@ -35,10 +50,7 @@ const ConceptHistory = () => {
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h3'>
-        Concept History
-      </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -12, px: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
         <Box sx={{ width: 400 }}>
           <ConceptSearch
             conceptName={selected.concept}
@@ -47,15 +59,14 @@ const ConceptHistory = () => {
           />
         </Box>
       </Box>
-      <Box sx={{ flexGrow: 1, minHeight: 0, px: 2 }}>
-        {/* TODO: Add history listing component here */}
-        {selected.concept ? (
-          <div>
-            History for {selected.concept}: {history.length} entries
-          </div>
-        ) : (
-          <div>Select a concept to view its history</div>
-        )}
+      <Box sx={{ flexGrow: 1, minHeight: 0, mt: 0 }}>
+        <HistoryTable
+          columns={columns}
+          count={count}
+          data={data}
+          title={selected.concept || 'Concept History'}
+          titleTopMargin={-8}
+        />
       </Box>
     </Box>
   )

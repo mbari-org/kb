@@ -1,18 +1,18 @@
 import { Typography, Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
-const HistoryTable = ({ title, count, history, columns }) => {
+const HistoryTable = ({ columns, count, data, title, titleTopMargin = 0 }) => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h3'>
+      <Typography align='center' sx={{ mt: titleTopMargin, mb: 1 }} variant='h4'>
         {title}
       </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>
-        <Typography sx={{ ml: 2, mt: -2 }}>Total: {count}</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Typography sx={{ ml: 2 }}>Total: {count}</Typography>
       </Box>
       <Box sx={{ flexGrow: 1, minHeight: 0 }}>
         <DataGrid
-          rows={history}
+          rows={data}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}

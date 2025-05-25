@@ -13,7 +13,7 @@ const useHistoryColumns = ({ type }) => {
     select({ concept: row.concept, panel: 'Concepts' })
   }
 
-  const columns = [
+  const baseColumns = [
     {
       field: 'inspect',
       headerName: '',
@@ -41,7 +41,6 @@ const useHistoryColumns = ({ type }) => {
         </Box>
       ),
     },
-    { field: 'concept', headerName: 'Concept', width: 200, headerClassName: 'bold-header' },
     { field: 'field', headerName: 'Field', width: 130, headerClassName: 'bold-header' },
     { field: 'action', headerName: 'Action', width: 130, headerClassName: 'bold-header' },
     { field: 'creatorName', headerName: 'Creator', width: 130, headerClassName: 'bold-header' },
@@ -54,6 +53,28 @@ const useHistoryColumns = ({ type }) => {
     { field: 'oldValue', headerName: 'Old Value', width: 200, headerClassName: 'bold-header' },
     { field: 'newValue', headerName: 'New Value', width: 200, headerClassName: 'bold-header' },
   ]
+
+  const conceptColumn = {
+    field: 'concept',
+    headerName: 'Concept',
+    width: 200,
+    headerClassName: 'bold-header',
+  }
+
+  const approvedColumn = {
+    field: 'approved',
+    headerName: 'Approved',
+    width: 100,
+    headerClassName: 'bold-header',
+    valueFormatter: params => (params ? 'Yes' : 'Pending'),
+  }
+
+  const columns =
+    type === 'concept'
+      ? [baseColumns[0], approvedColumn, ...baseColumns.slice(1)]
+      : type === 'pending'
+      ? [baseColumns[0], conceptColumn, ...baseColumns.slice(1)]
+      : [baseColumns[0], conceptColumn, ...baseColumns.slice(1)]
 
   return columns
 }

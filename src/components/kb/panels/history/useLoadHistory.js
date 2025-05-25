@@ -10,7 +10,7 @@ const DEFAULT_OFFSET = 0
 const useLoadHistory = type => {
   const { apiFns } = use(ConfigContext)
 
-  const [history, setHistory] = useState([])
+  const [data, setData] = useState([])
 
   const paginationRef = useRef({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
 
@@ -22,7 +22,7 @@ const useLoadHistory = type => {
       limit: newLimit,
       offset: newOffset,
     } = await apiFns.apiPagination(getHistory, type, paginationRef.current)
-    setHistory(result)
+    setData(result)
     paginationRef.current = { limit: newLimit, offset: newOffset }
   }, [apiFns, type])
 
@@ -50,7 +50,7 @@ const useLoadHistory = type => {
   }
 
   return {
-    history,
+    data,
     limit: paginationRef.current.limit,
     offset: paginationRef.current.offset,
     nextPage,
