@@ -6,7 +6,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { PENDING, PROCESSING } from '@/lib/constants'
-import { updatePendingHistory } from '@/lib/kb/api/history'
+import { updatePendingHistoryItem } from '@/lib/kb/api/history'
 import { fieldPending } from '@/lib/kb/model/history'
 
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
@@ -32,7 +32,7 @@ const useUpdatePending = () => {
 
   const updateId = useCallback(
     async (approval, id) => {
-      await updatePendingHistory(config, approval, id)
+      await updatePendingHistoryItem(config, approval, id)
       if (approval === APPROVAL.ACCEPT) {
         await updateNameAssociatedData(id)
       }
@@ -41,7 +41,8 @@ const useUpdatePending = () => {
   )
 
   const updateIds = useCallback(
-    async (approval, ids) => Promise.all(ids.map(id => updatePendingHistory(config, approval, id))),
+    async (approval, ids) =>
+      Promise.all(ids.map(id => updatePendingHistoryItem(config, approval, id))),
     [config]
   )
 

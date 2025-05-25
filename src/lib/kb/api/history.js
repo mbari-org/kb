@@ -5,7 +5,12 @@ const fetchHistory = async (config, type, params) => {
   return { error, payload: payload?.content }
 }
 
-const updatePendingHistory = async (config, approval, pendingId) =>
+const getHistoryCount = async (config, type) => {
+  const { error, payload } = await oniGet(config, ['history', type, 'count'])
+  return { error, count: payload?.count }
+}
+
+const updatePendingHistoryItem = async (config, approval, pendingId) =>
   oniPut(config, ['history', approval, pendingId])
 
-export { fetchHistory, updatePendingHistory }
+export { fetchHistory, getHistoryCount, updatePendingHistoryItem }

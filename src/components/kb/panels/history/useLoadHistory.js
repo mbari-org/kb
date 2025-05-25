@@ -14,6 +14,7 @@ const useLoadHistory = type => {
 
   const loadHistory = useCallback(async () => {
     if (!apiFns) return
+
     const {
       result,
       limit: newLimit,
