@@ -21,7 +21,7 @@ const Users = () => {
   const columns = useUserColumns({ deleteUser, editUser })
 
   return (
-    <>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h3'>
         Users
       </Typography>
@@ -38,7 +38,7 @@ const Users = () => {
           Export CSV
         </Button>
       </Box>
-      <div style={{ height: 400, width: '100%' }}>
+      <Box sx={{ flexGrow: 1, minHeight: 0 }}>
         <DataGrid
           rows={users}
           columns={columns}
@@ -46,6 +46,7 @@ const Users = () => {
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
           sx={{
+            height: '100%',
             '& .MuiDataGrid-columnHeaders': {
               backgroundColor: 'background.paper',
               '& .MuiDataGrid-columnHeader': {
@@ -57,8 +58,8 @@ const Users = () => {
             },
           }}
         />
-      </div>
-    </>
+      </Box>
+    </Box>
   )
 }
 

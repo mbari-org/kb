@@ -21,7 +21,7 @@ const History = () => {
   const handleTypeChange = (_, newType) => !!newType && setType(newType)
 
   return (
-    <Box>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h3'>
         History
       </Typography>
@@ -39,7 +39,7 @@ const History = () => {
           <HistoryToggleButton value='approved' />
         </ToggleButtonGroup>
       </Box>
-      <div style={{ height: 400, width: '100%' }}>
+      <Box sx={{ flexGrow: 1, minHeight: 0 }}>
         <DataGrid
           rows={history.history}
           columns={columns}
@@ -47,6 +47,7 @@ const History = () => {
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
           sx={{
+            height: '100%',
             '& .MuiDataGrid-columnHeaders': {
               backgroundColor: 'background.paper',
               '& .MuiDataGrid-columnHeader': {
@@ -58,7 +59,7 @@ const History = () => {
             },
           }}
         />
-      </div>
+      </Box>
     </Box>
   )
 }
