@@ -18,6 +18,10 @@ const SelectedProvider = ({ children }) => {
     setSelected(updated)
   }
 
+  const select = ({ concept, panel }) => {
+    updateSelected({ concept, panel })
+  }
+
   const selectPanel = panel => {
     if (panel !== selected.panel) {
       updateSelected({ panel })
@@ -50,7 +54,9 @@ const SelectedProvider = ({ children }) => {
   }
 
   return (
-    <SelectedContext value={{ selected, selectConcept, selectPanel }}>{children}</SelectedContext>
+    <SelectedContext value={{ select, selected, selectConcept, selectPanel }}>
+      {children}
+    </SelectedContext>
   )
 }
 

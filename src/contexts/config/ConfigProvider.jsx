@@ -73,7 +73,19 @@ const ConfigProvider = ({ children }) => {
       return result
     }
 
-    setApiFns({ apiPayload: apiPayload(config), apiResult: apiResult(config) })
+    const apiPagination = config => async (paginationRequest, params) => {
+      const { error, payload: result, limit, offset } = await paginationRequest(config, params)
+      if (error) {
+        throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
+      }
+      return { result, limit, offset }
+    }
+
+    setApiFns({
+      apiPayload: apiPayload(config),
+      apiResult: apiResult(config),
+      apiPagination: apiPagination(config),
+    })
   }, [config])
 
   return <ConfigContext value={{ apiFns, config, updateConfig }}>{children}</ConfigContext>
