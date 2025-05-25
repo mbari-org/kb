@@ -1,4 +1,4 @@
-import { fetchHistory } from '@/lib/kb/api/history'
+import { getHistory } from '@/lib/kb/api/history'
 import { fetchNames, fetchRanks, fetchRoot } from '@/lib/kb/api/taxonomy'
 
 import { filterRanks } from '@/lib/kb/model/rank'
@@ -62,7 +62,7 @@ const deleteConcept = async (taxonomy, conceptName, apiPayload) => {
 
   const [names, pending] = await Promise.all([
     apiPayload(fetchNames),
-    apiPayload(fetchHistory, 'pending'),
+    apiPayload(getHistory, 'pending'),
   ])
 
   const updatedTaxonomy = {
@@ -145,7 +145,7 @@ const loadTaxonomy = async apiPayload => {
     apiPayload(fetchRoot),
     apiPayload(fetchNames),
     apiPayload(fetchRanks),
-    apiPayload(fetchHistory, 'pending'),
+    apiPayload(getHistory, 'pending'),
   ])
 
   const rootConcept = await loadConcept(root.name, apiPayload)
@@ -388,7 +388,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
 
   const updatedNames = await apiPayload(fetchNames)
 
-  const pending = await apiPayload(fetchHistory, 'pending')
+  const pending = await apiPayload(getHistory, 'pending')
 
   const updatedTaxonomy = {
     ...taxonomy,
@@ -402,7 +402,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
 }
 
 const refreshHistory = async (taxonomy, historyType, apiPayload) => {
-  const history = await apiPayload(fetchHistory, historyType)
+  const history = await apiPayload(getHistory, historyType)
   return { taxonomy: { ...taxonomy, [historyType]: history } }
 }
 

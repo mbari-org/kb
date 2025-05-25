@@ -1,19 +1,15 @@
-import { useState, use } from 'react'
+import { use } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import ConceptSearch from '@/components/common/ConceptSearch'
-import ConceptContext from '@/contexts/concept/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const ConceptHistory = () => {
-  const [selectedConcept, setSelectedConcept] = useState(null)
-  const { concept } = use(ConceptContext)
-  const { select } = use(SelectedContext)
+  const { select, selected } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
 
   const handleConceptSelect = (_event, selectedName) => {
     if (selectedName) {
-      setSelectedConcept(selectedName)
       select({ concept: selectedName })
     }
   }
@@ -22,7 +18,6 @@ const ConceptHistory = () => {
     if (event.key === 'Enter') {
       const conceptName = event.target.value.trim()
       if (taxonomyNames.includes(conceptName)) {
-        setSelectedConcept(conceptName)
         select({ concept: conceptName })
         document.activeElement.blur()
       }
@@ -37,7 +32,7 @@ const ConceptHistory = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -12, px: 2 }}>
         <Box sx={{ width: 400 }}>
           <ConceptSearch
-            conceptName={selectedConcept}
+            conceptName={selected.concept}
             handleConceptSelect={handleConceptSelect}
             handleKeyUp={handleKeyUp}
           />
@@ -45,8 +40,8 @@ const ConceptHistory = () => {
       </Box>
       <Box sx={{ flexGrow: 1, minHeight: 0, px: 2 }}>
         {/* TODO: Add history listing component here */}
-        {selectedConcept ? (
-          <div>History for {selectedConcept}</div>
+        {selected.concept ? (
+          <div>History for {selected.concept}</div>
         ) : (
           <div>Select a concept to view its history</div>
         )}

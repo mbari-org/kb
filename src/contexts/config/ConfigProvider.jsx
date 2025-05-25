@@ -62,22 +62,26 @@ const ConfigProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const barfOnError = error => {
+    if (error) throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
+  }
+
   useEffect(() => {
-    const apiResult = config => async (apiRequest, params) => apiRequest(config, params)
+    const apiResult = config => async (apiRequest, params) => {
+      const { error, result } = await apiRequest(config, params)
+      barfOnError(error)
+      return result
+    }
 
     const apiPayload = config => async (payloadRequest, params) => {
       const { error, payload: result } = await payloadRequest(config, params)
-      if (error) {
-        throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
-      }
+      barfOnError(error)
       return result
     }
 
     const apiPagination = config => async (paginationRequest, params) => {
       const { error, payload: result, limit, offset } = await paginationRequest(config, params)
-      if (error) {
-        throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
-      }
+      barfOnError(error)
       return { result, limit, offset }
     }
 

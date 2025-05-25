@@ -6,9 +6,9 @@ import useHistoryCount from './useHistoryCount'
 import useLoadHistory from './useLoadHistory'
 
 const TypeHistory = ({ type }) => {
-  const history = useLoadHistory(type)
   const columns = useHistoryColumns({ type })
   const count = useHistoryCount(type)
+  const history = useLoadHistory(type)
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>

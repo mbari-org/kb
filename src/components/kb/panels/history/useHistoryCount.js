@@ -13,14 +13,11 @@ const useHistoryCount = type => {
     const loadCount = async () => {
       if (!apiFns) return
 
-      const { error, count } = await apiFns.apiResult(getHistoryCount, type)
-      if (error) {
-        throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
-      }
+      const count = await apiFns.apiResult(getHistoryCount, type)
       setCount(count)
     }
     loadCount()
-  }, [type])
+  }, [apiFns, type])
 
   return count
 }
