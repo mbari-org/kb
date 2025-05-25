@@ -9,11 +9,20 @@ const apiParams = (method, data) => {
     'Content-Type': 'application/json',
   }
 
-  return {
+  const params = {
     method,
     headers,
-    body: data ? JSON.stringify(data) : undefined,
   }
+
+  if (data) {
+    if (method === 'GET') {
+      params.qs = new URLSearchParams(data).toString()
+    } else {
+      params.body = JSON.stringify(data)
+    }
+  }
+
+  return params
 }
 
 export default apiParams
