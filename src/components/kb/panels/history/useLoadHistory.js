@@ -4,7 +4,9 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { getHistory } from '@/lib/kb/api/history'
 
-const DEFAULT_LIMIT = 50
+import { HISTORY } from '@/lib/constants'
+
+const DEFAULT_LIMIT = HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
 const useLoadHistory = type => {
@@ -21,9 +23,11 @@ const useLoadHistory = type => {
     setData(pageData)
   }, [apiFns, type])
 
+  // Reset pagination when type changes
   useEffect(() => {
+    paginationRef.current.offset = DEFAULT_OFFSET
     loadHistory()
-  }, [loadHistory])
+  }, [type, loadHistory])
 
   const nextPage = () => {
     paginationRef.current.offset += paginationRef.current.limit

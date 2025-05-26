@@ -22,7 +22,7 @@ const useHistoryColumns = ({ type }) => {
       headerClassName: 'bold-header',
       renderCell: params => (
         <Box>
-          {type === 'pending' && (
+          {(type === 'pending' || (type === 'concept' && !params.row.approved)) && (
             <IconButton
               size='small'
               onClick={() => handleInspect(params.row)}
