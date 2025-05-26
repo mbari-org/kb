@@ -1,19 +1,9 @@
 import { Typography, Box, TextField, IconButton } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
-import { HISTORY } from '@/lib/constants'
+const PAGE_SIZE_OPTIONS = [5, 10, 25, 50]
 
-const PAGE_SIZE_OPTIONS = HISTORY.PAGE_SIZE_OPTIONS
-
-const HistoryPagination = ({
-  limit,
-  offset,
-  count,
-  nextPage,
-  prevPage,
-  setPageSize,
-  hideFooter = false,
-}) => {
+const UsersPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize }) => {
   const currentPage = Math.floor(offset / limit) + 1 // Convert to 1-based index
   const totalPages = Math.ceil(count / limit)
 
@@ -59,8 +49,6 @@ const HistoryPagination = ({
     )
   }
 
-  if (hideFooter) return null
-
   return (
     <Box
       sx={{
@@ -87,7 +75,7 @@ const HistoryPagination = ({
       </Box>
       <Box sx={{ flex: 1, textAlign: 'center' }}>
         <Typography>
-          History {offset + 1} - {Math.min(offset + limit, count)}
+          Users {offset + 1} - {Math.min(offset + limit, count)} of {count}
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -105,4 +93,4 @@ const HistoryPagination = ({
   )
 }
 
-export default HistoryPagination
+export default UsersPagination

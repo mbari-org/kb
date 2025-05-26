@@ -40,7 +40,7 @@ const KbLoading = () => {
     >
       <Stack alignItems='center' direction='row' spacing={2}>
         <CircularProgress color='inherit' />
-        <Typography variant='h3'>{processing}</Typography>
+        <Typography variant='h4'>{processing}</Typography>
       </Stack>
     </Backdrop>
   )
