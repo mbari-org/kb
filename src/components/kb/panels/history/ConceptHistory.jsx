@@ -2,16 +2,14 @@ import { use, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 
 import ConceptSearch from '@/components/common/ConceptSearch'
-
-import ConceptContext from '@/contexts/concept/ConceptContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import HistoryTable from './HistoryTable'
 
 import useLoadConceptHistory from './useLoadConceptHistory'
 import useHistoryColumns from './useHistoryColumns'
-import HistoryTable from './HistoryTable'
+
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ConceptHistory = () => {
-  const { concept } = use(ConceptContext)
   const { select, selected } = use(SelectedContext)
 
   const [count, setCount] = useState(0)
@@ -48,6 +46,13 @@ const ConceptHistory = () => {
     }
   }
 
+  // Fixed pagination values for ConceptHistory
+  const limit = 50
+  const offset = 0
+  const nextPage = () => {} // No-op since ConceptHistory doesn't support pagination
+  const prevPage = () => {} // No-op since ConceptHistory doesn't support pagination
+  const setPageSize = () => {} // No-op since ConceptHistory doesn't support pagination
+
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
@@ -66,6 +71,12 @@ const ConceptHistory = () => {
           data={data}
           title={selected.concept || 'Concept History'}
           titleTopMargin={-8}
+          limit={limit}
+          offset={offset}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          setPageSize={setPageSize}
+          hideFooter={true}
         />
       </Box>
     </Box>

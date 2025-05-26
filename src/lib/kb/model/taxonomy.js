@@ -140,15 +140,15 @@ const isDescendant = (taxonomy, conceptName, descendantName) => {
 
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
-const loadTaxonomy = async apiPayload => {
+const loadTaxonomy = async apiFns => {
   const [root, names, ranks, pending] = await Promise.all([
-    apiPayload(fetchRoot),
-    apiPayload(fetchNames),
-    apiPayload(fetchRanks),
-    apiPayload(getHistory, 'pending'),
+    apiFns.apiPayload(fetchRoot),
+    apiFns.apiPayload(fetchNames),
+    apiFns.apiPayload(fetchRanks),
+    apiFns.apiPagination(getHistory, ['pending']),
   ])
 
-  const rootConcept = await loadConcept(root.name, apiPayload)
+  const rootConcept = await loadConcept(root.name, apiFns.apiPayload)
 
   const aliasMap = rootConcept.aliases.reduce((acc, alias) => {
     acc[alias.name] = rootConcept
@@ -401,9 +401,9 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }
 }
 
-const refreshHistory = async (taxonomy, historyType, apiPayload) => {
-  const history = await apiPayload(getHistory, historyType)
-  return { taxonomy: { ...taxonomy, [historyType]: history } }
+const refreshHistory = async (taxonomy, historyType, apiFns) => {
+  const { data } = await apiFns.apiResult(getHistory, historyType)
+  return { taxonomy: { ...taxonomy, [historyType]: data } }
 }
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {

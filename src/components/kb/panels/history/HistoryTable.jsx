@@ -1,7 +1,31 @@
 import { Typography, Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
-const HistoryTable = ({ columns, count, data, title, titleTopMargin = 0 }) => {
+const HistoryTable = ({
+  columns,
+  count,
+  data,
+  title,
+  titleTopMargin = 0,
+  limit,
+  offset,
+  nextPage,
+  prevPage,
+  setPageSize,
+  hideFooter = false,
+}) => {
+  const handlePaginationModelChange = model => {
+    const currentPage = Math.floor(offset / limit)
+    if (model.page > currentPage) {
+      nextPage()
+    } else if (model.page < currentPage) {
+      prevPage()
+    }
+    if (model.pageSize !== limit) {
+      setPageSize(model.pageSize)
+    }
+  }
+
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Typography align='center' sx={{ mt: titleTopMargin, mb: 1 }} variant='h4'>
@@ -14,8 +38,15 @@ const HistoryTable = ({ columns, count, data, title, titleTopMargin = 0 }) => {
         <DataGrid
           rows={data}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          paginationModel={{
+            pageSize: limit,
+            page: Math.floor(offset / limit),
+          }}
+          rowCount={count}
+          onPaginationModelChange={handlePaginationModelChange}
+          pageSizeOptions={[5, 10, 25, 50]}
+          paginationMode='server'
+          hideFooter={hideFooter}
           disableSelectionOnClick
           sx={{
             height: '100%',

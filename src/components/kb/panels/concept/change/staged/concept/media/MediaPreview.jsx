@@ -11,6 +11,8 @@ import { fieldPending } from '@/lib/kb/model/history'
 
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'
 
+import { checkImageUrlExists, isUrlValid } from '@/lib/util'
+
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
 
@@ -32,8 +34,13 @@ const MediaPreview = ({ setPreviewOn }) => {
     width: '3px',
   })
 
+  if (!isUrlValid(mediaItem?.url)) console.error('Invalid media URL:', mediaItem?.url)
+  checkImageUrlExists(mediaItem?.url).then(exists => {
+    if (!exists) console.error('Media image not found:', mediaItem?.url)
+  })
+
   return (
-    <>
+    <Box>
       <Box
         sx={{
           border,
@@ -45,7 +52,7 @@ const MediaPreview = ({ setPreviewOn }) => {
         }}
       >
         <img
-          alt={`Unable to Display Media: ${mediaItem?.url}`}
+          alt={`Unable to display Media! Check console for URL.`}
           onClick={() => setPreviewOn(true)}
           src={mediaItem?.url}
           style={{
@@ -110,7 +117,7 @@ const MediaPreview = ({ setPreviewOn }) => {
           </Tooltip>
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 

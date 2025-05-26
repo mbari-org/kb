@@ -43,8 +43,6 @@ const TaxonomyProvider = ({ children }) => {
 
   const initialLoad = useRef(true)
 
-  const apiPayload = apiFns.apiPayload
-
   const updateTaxonomy = useCallback(
     taxonomy => {
       cxDebugTaxonomyIntegrity(taxonomy)
@@ -58,12 +56,12 @@ const TaxonomyProvider = ({ children }) => {
       const { taxonomy: updatedTaxonomy, selectConceptName } = await deleteTaxonomyConcept(
         taxonomy,
         conceptName,
-        apiPayload
+        apiFns.apiPayload
       )
       updateTaxonomy(updatedTaxonomy)
       return selectConceptName
     },
-    [taxonomy, apiPayload, updateTaxonomy]
+    [taxonomy, apiFns.apiPayload, updateTaxonomy]
   )
 
   const filterRanks = useCallback(
@@ -126,7 +124,7 @@ const TaxonomyProvider = ({ children }) => {
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(
           taxonomy,
           conceptName,
-          apiPayload
+          apiFns.apiPayload
         )
         updateTaxonomy(updatedTaxonomy)
 
@@ -137,7 +135,7 @@ const TaxonomyProvider = ({ children }) => {
         alreadyLoadingConcept.current = false
       }
     },
-    [apiPayload, setProcessing, taxonomy, updateTaxonomy]
+    [apiFns.apiPayload, setProcessing, taxonomy, updateTaxonomy]
   )
 
   const loadConceptDescendants = useCallback(
@@ -147,7 +145,7 @@ const TaxonomyProvider = ({ children }) => {
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(
           taxonomy,
           concept,
-          apiPayload
+          apiFns.apiPayload
         )
         updateTaxonomy(updatedTaxonomy)
         setProcessing(null)
@@ -158,7 +156,7 @@ const TaxonomyProvider = ({ children }) => {
         showBoundary(error)
       }
     },
-    [apiPayload, setProcessing, showBoundary, taxonomy, updateTaxonomy]
+    [apiFns.apiPayload, setProcessing, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const refreshConcept = useCallback(
@@ -167,14 +165,14 @@ const TaxonomyProvider = ({ children }) => {
         taxonomy,
         concept,
         updateInfo,
-        apiPayload
+        apiFns.apiPayload
       )
 
       updateTaxonomy(updatedTaxonomy)
 
       return updatedConcept
     },
-    [taxonomy, apiPayload, updateTaxonomy]
+    [apiFns, taxonomy, updateTaxonomy]
   )
 
   const refreshHistory = useCallback(
@@ -182,20 +180,20 @@ const TaxonomyProvider = ({ children }) => {
       const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(
         taxonomy,
         historyType,
-        apiPayload
+        apiFns
       )
       updateTaxonomy(updatedTaxonomy)
       return updatedTaxonomy
     },
-    [apiPayload, taxonomy, updateTaxonomy]
+    [apiFns, taxonomy, updateTaxonomy]
   )
 
   useEffect(() => {
-    if (initialLoad.current && apiPayload) {
+    if (initialLoad.current && apiFns) {
       initialLoad.current = false
 
       setProcessing(LOADING)
-      loadTaxonomy(apiPayload).then(
+      loadTaxonomy(apiFns).then(
         ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
           setProcessing(null)
           if (taxonomyError) {
@@ -214,7 +212,7 @@ const TaxonomyProvider = ({ children }) => {
         }
       )
     }
-  }, [apiPayload, setModal, setProcessing, showBoundary, updateTaxonomy])
+  }, [apiFns, setModal, setProcessing, showBoundary, updateTaxonomy])
 
   if (!taxonomy) {
     return null

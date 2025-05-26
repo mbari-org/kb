@@ -4,7 +4,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { getHistory } from '@/lib/kb/api/history'
 
-const DEFAULT_LIMIT = 100
+const DEFAULT_LIMIT = 50
 const DEFAULT_OFFSET = 0
 
 const useLoadHistory = type => {
@@ -17,13 +17,8 @@ const useLoadHistory = type => {
   const loadHistory = useCallback(async () => {
     if (!apiFns) return
 
-    const {
-      result,
-      limit: newLimit,
-      offset: newOffset,
-    } = await apiFns.apiPagination(getHistory, type, paginationRef.current)
-    setData(result)
-    paginationRef.current = { limit: newLimit, offset: newOffset }
+    const pageData = await apiFns.apiPagination(getHistory, [type, paginationRef.current])
+    setData(pageData)
   }, [apiFns, type])
 
   useEffect(() => {
@@ -45,7 +40,6 @@ const useLoadHistory = type => {
 
   const setPageSize = newLimit => {
     paginationRef.current.limit = newLimit
-    paginationRef.current.offset = 0
     loadHistory()
   }
 
