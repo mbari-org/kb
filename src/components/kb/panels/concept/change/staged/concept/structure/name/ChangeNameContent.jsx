@@ -1,11 +1,18 @@
 import { use, useState } from 'react'
 
-import { Box, TextField, Typography, Stack } from '@mui/material' // Added Stack
+import { Box, TextField, Typography, Stack } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import NameChangeExtent from '@/components/common/NameChangeExtent'
+import AuthContext from '@/contexts/auth/AuthContext'
+
+import { LABELS } from '@/lib/constants'
+import { isAdmin } from '@/lib/auth/role'
+
+const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -13,17 +20,27 @@ const ChangeNameContent = () => {
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
+  const { user } = use(AuthContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
+  const [nameChangeType, setNameChangeType] = useState(isAdmin(user) ? NAME_ONLY : null)
 
   const fromColor = 'main'
   const toColor = modalData.modified ? theme.palette.primary.edit : theme.palette.grey[500]
 
-  const handleChange = event => {
+  const handleNameChange = event => {
     const { value } = event.target
     setPrimaryName(value)
     const modified = value !== concept.name && !getNames().includes(value)
     setModalData({ name: value, modified })
+  }
+
+  const handleNameChangeType = event => {
+    setNameChangeType(event.target.value)
+    setModalData(prevData => ({
+      ...prevData,
+      nameChangeType: event.target.value,
+    }))
   }
 
   return (
@@ -45,7 +62,7 @@ const ChangeNameContent = () => {
           <Typography minWidth={60}>To:</Typography>
           <TextField
             fullWidth
-            onChange={handleChange}
+            onChange={handleNameChange}
             slotProps={{
               input: {
                 sx: {
@@ -66,6 +83,9 @@ const ChangeNameContent = () => {
           />
         </Stack>
       </Stack>
+
+      <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+
       <Box sx={{ borderTop: '1px solid #000000' }}>
         <Box sx={{ mt: 2 }}>
           <div>{`Updating the name of concept will affect CxTBD link realizations.`}</div>

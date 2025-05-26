@@ -49,7 +49,7 @@ const useHistoryColumns = ({ type }) => {
     {
       field: 'creationTimestamp',
       headerName: 'Created',
-      width: 160,
+      width: 165,
       headerClassName: 'bold-header',
       valueFormatter: params => humanTimestamp(params),
     },
@@ -77,7 +77,7 @@ const useHistoryColumns = ({ type }) => {
     {
       field: 'processedTimestamp',
       headerName: 'Processed',
-      width: 160,
+      width: 165,
       headerClassName: 'bold-header',
       valueFormatter: params => humanTimestamp(params),
     },

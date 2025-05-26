@@ -1,14 +1,15 @@
 import { use, useState, useEffect } from 'react'
 
-import { FormControlLabel, Radio, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import FieldDetail from '@/components/kb/panels/concept/change/pending/concept/FieldDetail'
+import NameChangeExtent from '@/components/common/NameChangeExtent'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { PENDING } from '@/lib/constants'
+import { LABELS } from '@/lib/constants'
 
-const { NAME_ONLY, ASSOCIATED_DATA } = PENDING.CHANGE_NAME
+const { NAME_ONLY, ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingField }) => {
   const { concept } = use(ConceptContext)
@@ -40,30 +41,7 @@ const NameDetail = ({ pendingField }) => {
   return (
     <Stack direction='column' spacing={0}>
       <FieldDetail key={pendingName.id} pendingField={pendingName} />
-      <Stack direction='row' sx={{ ml: 8 }}>
-        <FormControlLabel
-          control={
-            <Radio
-              name='nameChangeType'
-              value={NAME_ONLY}
-              checked={nameChangeType === NAME_ONLY}
-              onChange={handleNameChangeType}
-            />
-          }
-          label={NAME_ONLY}
-        />
-        <FormControlLabel
-          control={
-            <Radio
-              name='nameChangeType'
-              value={ASSOCIATED_DATA}
-              checked={nameChangeType === ASSOCIATED_DATA}
-              onChange={handleNameChangeType}
-            />
-          }
-          label={ASSOCIATED_DATA}
-        />
-      </Stack>
+      <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
     </Stack>
   )
 }

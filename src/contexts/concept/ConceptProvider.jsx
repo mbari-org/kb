@@ -60,6 +60,7 @@ const ConceptProvider = ({ children }) => {
       if (selectedConcept?.name !== previousConceptName.current) {
         previousConceptName.current = selectedConcept?.name
         setConcept(selectedConcept)
+        setEditing(false)
         refreshConcept(selectedConcept)
       }
     },
