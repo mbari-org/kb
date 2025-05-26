@@ -1,6 +1,6 @@
 import { annosaurusPut } from '@/lib/services/annosaurus/methods'
 
-const updateObservations = async (config, payload) =>
-  annosaurusPut(config, ['observations', 'concept'], payload)
+const renameConceptObservations = async (config, payload) =>
+  annosaurusPut(config, ['observations', 'concept', 'rename'], payload)
 
-export { updateObservations }
+export { renameConceptObservations }

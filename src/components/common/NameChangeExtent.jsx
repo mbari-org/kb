@@ -11,7 +11,7 @@ const NameChangeExtent = ({ nameChangeType, onChange }) => {
   const isUserAdmin = isAdmin(user)
 
   return (
-    <Stack direction='row' sx={{ ml: 8 }}>
+    <Stack direction='row'>
       <FormControlLabel
         control={
           <Radio

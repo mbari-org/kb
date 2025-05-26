@@ -1,6 +1,6 @@
 import { use, useState, useEffect } from 'react'
 
-import { Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import FieldDetail from '@/components/kb/panels/concept/change/pending/concept/FieldDetail'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 
@@ -41,7 +41,9 @@ const NameDetail = ({ pendingField }) => {
   return (
     <Stack direction='column' spacing={0}>
       <FieldDetail key={pendingName.id} pendingField={pendingName} />
-      <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+      <Box sx={{ ml: 8 }}>
+        <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+      </Box>
     </Stack>
   )
 }

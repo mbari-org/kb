@@ -1,6 +1,6 @@
 import { use, useState } from 'react'
 
-import { Box, TextField, Typography, Stack } from '@mui/material'
+import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
@@ -84,7 +84,9 @@ const ChangeNameContent = () => {
         </Stack>
       </Stack>
 
-      <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+      <Box sx={{ mt: -1, ml: 12 }}>
+        <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+      </Box>
 
       <Box sx={{ borderTop: '1px solid #000000' }}>
         <Box sx={{ mt: 2 }}>
