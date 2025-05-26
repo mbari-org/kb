@@ -44,8 +44,15 @@ const diff = (o1, o2) =>
   }, {})
 
 const humanTimestamp = timestamp => {
+  if (!timestamp) return ''
+
   const date = new Date(timestamp)
-  const month = date.toLocaleString('default', { month: 'long' })
+  if (isNaN(date.getTime())) {
+    console.error('Invalid timestamp:', timestamp)
+    return `Invalid timestamp: ${timestamp}`
+  }
+
+  const month = date.toLocaleString('default', { month: 'short' })
   const day = date.getDate()
   const year = date.getFullYear()
   const hours = date.getHours().toString().padStart(2, '0')

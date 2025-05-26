@@ -6,6 +6,8 @@ import InspectIcon from '@/components/common/InspectIcon'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
+import { humanTimestamp } from '@/lib/util'
+
 const useHistoryColumns = ({ type }) => {
   const { select } = use(SelectedContext)
 
@@ -49,6 +51,7 @@ const useHistoryColumns = ({ type }) => {
       headerName: 'Created',
       width: 180,
       headerClassName: 'bold-header',
+      valueFormatter: params => humanTimestamp(params),
     },
     { field: 'oldValue', headerName: 'Old Value', width: 200, headerClassName: 'bold-header' },
     { field: 'newValue', headerName: 'New Value', width: 200, headerClassName: 'bold-header' },
@@ -69,11 +72,24 @@ const useHistoryColumns = ({ type }) => {
     valueFormatter: params => (params ? 'Yes' : 'Pending'),
   }
 
+  const processorColumns = [
+    { field: 'processorName', headerName: 'Processor', width: 130, headerClassName: 'bold-header' },
+    {
+      field: 'processedTimestamp',
+      headerName: 'Processed',
+      width: 180,
+      headerClassName: 'bold-header',
+      valueFormatter: params => humanTimestamp(params),
+    },
+  ]
+
   const columns =
     type === 'concept'
-      ? [baseColumns[0], approvedColumn, ...baseColumns.slice(1)]
+      ? [baseColumns[0], approvedColumn, ...baseColumns.slice(1), ...processorColumns]
       : type === 'pending'
       ? [baseColumns[0], conceptColumn, ...baseColumns.slice(1)]
+      : type === 'approved'
+      ? [baseColumns[0], conceptColumn, ...baseColumns.slice(1), ...processorColumns]
       : [baseColumns[0], conceptColumn, ...baseColumns.slice(1)]
 
   return columns
