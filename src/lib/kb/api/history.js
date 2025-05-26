@@ -3,9 +3,9 @@ import { oniGet, oniPut } from '@/lib/services/oni/methods'
 const getConceptHistory = async (config, conceptName) =>
   oniGet(config, ['history', 'concept', conceptName])
 
-const getHistory = async (config, type, params) => {
+const getHistory = async (config, [type, params]) => {
   const { error, payload } = await oniGet(config, ['history', type], params)
-  return { error, payload: payload?.content }
+  return { error, data: payload?.content }
 }
 
 const getHistoryCount = async (config, type) => {
