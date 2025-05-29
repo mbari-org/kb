@@ -1,4 +1,4 @@
-import { Typography, Box, TextField, IconButton } from '@mui/material'
+import { Typography, Box, TextField, IconButton, Select, MenuItem } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
 import { HISTORY } from '@/lib/constants'
@@ -39,22 +39,29 @@ const HistoryPagination = ({
 
   const CustomPagination = () => {
     return (
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 2 }}>
-        <Typography>Page</Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1 }}>
+        <Typography variant='body2'>Page</Typography>
         <TextField
           size='small'
           defaultValue={currentPage}
           onBlur={handlePageCommit}
-          onKeyPress={e => {
+          onKeyDown={e => {
             if (e.key === 'Enter') {
               e.target.blur()
             }
           }}
-          inputProps={{
-            style: { textAlign: 'center', width: '60px' },
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              height: '24px',
+            },
+            '& .MuiInputBase-input': {
+              textAlign: 'center',
+              width: '32px',
+              padding: '2px 4px',
+            },
           }}
         />
-        <Typography>of {totalPages}</Typography>
+        <Typography variant='body2'>of {totalPages}</Typography>
       </Box>
     )
   }
@@ -72,21 +79,29 @@ const HistoryPagination = ({
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Typography>Rows per page:</Typography>
-        <select
+        <Typography variant='body2'>Rows per page:</Typography>
+        <Select
           value={limit}
           onChange={e => setPageSize(Number(e.target.value))}
-          style={{ margin: '0 8px' }}
+          size='small'
+          sx={{
+            height: '24px',
+            '& .MuiSelect-select': {
+              padding: '2px 4px',
+              width: '32px',
+              textAlign: 'center',
+            },
+          }}
         >
           {PAGE_SIZE_OPTIONS.map(size => (
-            <option key={size} value={size}>
+            <MenuItem key={size} value={size}>
               {size}
-            </option>
+            </MenuItem>
           ))}
-        </select>
+        </Select>
       </Box>
       <Box sx={{ flex: 1, textAlign: 'center' }}>
-        <Typography>
+        <Typography variant='body2'>
           History {offset + 1} - {Math.min(offset + limit, count)}
         </Typography>
       </Box>

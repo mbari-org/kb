@@ -51,6 +51,7 @@ const useHistoryColumns = ({ type }) => {
       headerName: 'Created',
       width: 165,
       headerClassName: 'bold-header',
+      sortable: false,
       valueFormatter: params => humanTimestamp(params),
     },
     { field: 'oldValue', headerName: 'Old Value', width: 200, headerClassName: 'bold-header' },

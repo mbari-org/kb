@@ -8,20 +8,23 @@ import { capitalize } from '@/lib/util'
 const TypeHistory = ({ type }) => {
   const columns = useHistoryColumns({ type })
   const count = useHistoryCount(type)
-  const { data, limit, offset, nextPage, prevPage, setPageSize } = useLoadHistory(type)
+  const { data, limit, offset, nextPage, prevPage, setPageSize, handleSortChange, sortOrder } =
+    useLoadHistory(type, count)
 
   return (
     <HistoryTable
       columns={columns}
       count={count}
       data={data}
-      title={capitalize(type)}
-      titleTopMargin={3}
+      handleSortChange={handleSortChange}
       limit={limit}
-      offset={offset}
       nextPage={nextPage}
+      offset={offset}
       prevPage={prevPage}
       setPageSize={setPageSize}
+      sortOrder={sortOrder}
+      title={capitalize(type)}
+      titleTopMargin={3}
     />
   )
 }
