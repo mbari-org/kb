@@ -6,7 +6,6 @@ const HistoryCreatedOrder = ({ sortOrder = 'desc', handleSortChange }) => {
       <Typography>History Created Data:</Typography>
       <RadioGroup row value={sortOrder || 'desc'} onChange={e => handleSortChange(e.target.value)}>
         <FormControlLabel
-          value='desc'
           control={<Radio size='small' />}
           label='↓'
           sx={{
@@ -19,9 +18,9 @@ const HistoryCreatedOrder = ({ sortOrder = 'desc', handleSortChange }) => {
               p: 0,
             },
           }}
+          value='desc'
         />
         <FormControlLabel
-          value='asc'
           control={<Radio size='small' />}
           label='↑'
           sx={{
@@ -34,6 +33,7 @@ const HistoryCreatedOrder = ({ sortOrder = 'desc', handleSortChange }) => {
               p: 0,
             },
           }}
+          value='asc'
         />
       </RadioGroup>
     </Stack>

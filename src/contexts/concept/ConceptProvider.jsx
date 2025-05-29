@@ -1,9 +1,9 @@
 import { use, useCallback, useEffect, useMemo, useReducer, useState, useRef } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
-import { itemPath } from '@/components/kb/panels/concept/tree/lib/taxonomyItem'
+import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
-import useDisplayStaged from '@/components/kb/panels/concept/change/staged/modal/useDisplayStaged'
+import useDisplayStaged from '@/components/kb/panels/concepts/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/concept/staged/edit/useModifyConcept'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'

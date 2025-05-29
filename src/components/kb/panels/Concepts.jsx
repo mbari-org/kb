@@ -2,9 +2,9 @@ import { useState } from 'react'
 
 import Box from '@mui/material/Box'
 
-import Concept from '@/components/kb/panels/concept/Concept'
-import ConceptDivider from './concept/ConceptDivider'
-import TaxonomySidebar from '@/components/kb/panels/concept/TaxonomySidebar'
+import Concept from '@/components/kb/panels/concepts/Concept'
+import ConceptDivider from './concepts/ConceptDivider'
+import TaxonomySidebar from '@/components/kb/panels/concepts/TaxonomySidebar'
 
 const Concepts = () => {
   const [sidebarWidth, setSidebarWidth] = useState(0)

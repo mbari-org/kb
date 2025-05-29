@@ -16,7 +16,7 @@ import {
   refresh as refreshConcept,
 } from './concept'
 
-import { treeItem } from '@/components/kb/panels/concept/tree/lib/taxonomyItem'
+import { treeItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
 const buildTree = taxonomy => {
   const treeItems = concept => {
