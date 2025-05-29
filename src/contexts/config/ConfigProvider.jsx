@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import ConfigContext from './ConfigContext'
 
 import createServiceLookup from '@/lib/services/config/createServiceLookup'
-import fetchEndpoints from '@/lib/services/config/fetchEndpoints'
+import getEndpoints from '@/lib/services/config/getEndpoints'
 
 import configUrlStore from '@/lib/store/configUrl'
 
@@ -22,7 +22,7 @@ const ConfigProvider = ({ children }) => {
     }
 
     configUrlStore.set(url)
-    const { endpoints, error } = await fetchEndpoints(url)
+    const { endpoints, error } = await getEndpoints(url)
     if (error) {
       setConfig({
         error,
@@ -43,7 +43,7 @@ const ConfigProvider = ({ children }) => {
   useEffect(() => {
     const storedConfigUrl = configUrlStore.get()
     if (storedConfigUrl) {
-      fetchEndpoints(storedConfigUrl).then(({ endpoints, error }) => {
+      getEndpoints(storedConfigUrl).then(({ endpoints, error }) => {
         if (error) {
           updateConfig(null)
         } else {

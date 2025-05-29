@@ -1,4 +1,4 @@
-const fetchEndpoints = async url => {
+const getEndpoints = async url => {
   try {
     // This allows the user's input for config server URL to be slashed or slashless
     const slashlessUrl = url.replace(/\/+$/, '')
@@ -18,4 +18,4 @@ const fetchEndpoints = async url => {
   }
 }
 
-export default fetchEndpoints
+export default getEndpoints

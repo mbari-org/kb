@@ -1,11 +1,11 @@
 import { oniGet } from '@/lib/services/oni/methods'
 
-const fetchNames = async config => {
+const getNames = async config => {
   const { error, payload } = await oniGet(config, ['names'])
   return { error, payload: payload?.content }
 }
 
-const fetchRanks = async config => {
+const getRanks = async config => {
   const { error, payload: ranks } = await oniGet(config, ['concept', 'ranks'])
   return {
     error,
@@ -16,6 +16,6 @@ const fetchRanks = async config => {
   }
 }
 
-const fetchRoot = async config => oniGet(config, ['concept', 'query', 'root'])
+const getRoot = async config => oniGet(config, ['concept', 'query', 'root'])
 
-export { fetchNames, fetchRanks, fetchRoot }
+export { getNames, getRanks, getRoot }

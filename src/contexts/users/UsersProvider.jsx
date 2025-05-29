@@ -6,7 +6,7 @@ import UsersContext from '@/contexts/users/UsersContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { fetchUsers, createUser, deleteUser as removeUser, updateUser } from '@/lib/kb/api/users'
+import { getUsers, createUser, deleteUser as removeUser, updateUser } from '@/lib/kb/api/users'
 
 import { drop } from '@/lib/util'
 
@@ -52,9 +52,9 @@ const UsersProvider = ({ children }) => {
     if (!config?.valid || !user) return
 
     const loadUsers = async () => {
-      const { error, payload: fetchedUsers } = await fetchUsers(config)
+      const { error, payload: users } = await getUsers(config)
       if (error) throw error
-      setUsers(fetchedUsers.map(user => drop(user, ['password'])))
+      setUsers(users.map(user => drop(user, ['password'])))
     }
     if (isAdmin(user)) loadUsers()
   }, [config, user])

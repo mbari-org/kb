@@ -45,7 +45,7 @@ const DeleteConceptContent = () => {
   }
 
   useEffect(() => {
-    const fetchCount = async () => {
+    const getCount = async () => {
       const { error, count } = await getConceptAnnotationCount(config, concept.name)
       if (error) {
         console.error(error)
@@ -53,7 +53,7 @@ const DeleteConceptContent = () => {
         setAnnotationCount(count)
       }
     }
-    fetchCount()
+    getCount()
   }, [concept.name, config])
 
   useEffect(() => {

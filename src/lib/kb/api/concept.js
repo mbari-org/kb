@@ -5,22 +5,18 @@ const createConcept = async (config, updates) => oniPost(config, ['concept'], up
 
 const deleteConcept = async (config, conceptName) => oniDelete(config, ['concept', conceptName])
 
-const fetchConcept = async (config, conceptName) => oniGet(config, ['concept', conceptName])
+const getConcept = async (config, conceptName) => oniGet(config, ['concept', conceptName])
 
 const getConceptAnnotations = async (config, conceptName) =>
   annosaurusGet(config, ['fast', 'concept', conceptName])
 
-const fetchConceptChildren = async (config, conceptName) =>
+const getConceptChildren = async (config, conceptName) =>
   oniGet(config, ['concept', 'children', conceptName])
 
-const fetchConceptParent = async (config, conceptName) =>
+const getConceptParent = async (config, conceptName) =>
   oniGet(config, ['concept', 'parent', conceptName])
 
-const fetchConceptLinkRealizations = async (config, conceptName) =>
-  oniGet(config, ['linkrealizations', 'concept', conceptName])
-
-const fetchConceptNames = async (config, conceptName) =>
-  oniGet(config, ['raw', 'names', conceptName])
+const getConceptNames = async (config, conceptName) => oniGet(config, ['raw', 'names', conceptName])
 
 const updateConceptAuthor = async (config, [conceptName, updates]) =>
   oniPut(config, ['names', conceptName], updates)
@@ -37,12 +33,11 @@ const updateConceptRank = async (config, [conceptName, updates]) =>
 export {
   createConcept,
   deleteConcept,
-  fetchConcept,
-  fetchConceptChildren,
-  fetchConceptLinkRealizations,
-  fetchConceptNames,
-  fetchConceptParent,
+  getConcept,
   getConceptAnnotations,
+  getConceptChildren,
+  getConceptNames,
+  getConceptParent,
   updateConceptAuthor,
   updateConceptName,
   updateConceptParent,

@@ -1,8 +1,8 @@
 import {
-  fetchConcept,
-  fetchConceptChildren,
-  fetchConceptNames,
-  fetchConceptParent,
+  getConcept as fetchConcept,
+  getConceptChildren as fetchConceptChildren,
+  getConceptNames as fetchConceptNames,
+  getConceptParent as fetchConceptParent,
 } from '@/lib/kb/api/concept'
 
 import { CONCEPT_STATE } from '@/lib/constants'
