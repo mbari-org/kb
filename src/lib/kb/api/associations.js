@@ -1,10 +1,10 @@
-import { renameConceptAnnotations } from '@/lib/kb/api/annotations'
-import { renameConceptObservations } from '@/lib/kb/api/observations'
+import { renameToConceptAnnotations } from '@/lib/kb/api/annotations'
+import { renameToConceptObservations } from '@/lib/kb/api/observations'
 
 const renameConceptAssociations = async (config, payload) =>
   Promise.all([
-    renameConceptAnnotations(config, payload),
-    renameConceptObservations(config, payload),
+    renameToConceptAnnotations(config, payload),
+    renameToConceptObservations(config, payload),
   ])
 
 export { renameConceptAssociations }

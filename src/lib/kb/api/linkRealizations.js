@@ -1,6 +1,6 @@
 import { oniGet } from '@/lib/services/oni/methods'
 
-const fetchLinkRealizations = async (conceptName, config) =>
-  oniGet(config, ['linkRealizations', 'concept', conceptName])
+const getConceptLinkRealizations = async (config, conceptName) =>
+  oniGet(config, ['linkrealizations', 'concept', conceptName])
 
-export { fetchLinkRealizations }
+export { getConceptLinkRealizations }

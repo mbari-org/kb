@@ -7,7 +7,7 @@ const deleteConcept = async (config, conceptName) => oniDelete(config, ['concept
 
 const fetchConcept = async (config, conceptName) => oniGet(config, ['concept', conceptName])
 
-const fetchConceptAnnotations = async (config, conceptName) =>
+const getConceptAnnotations = async (config, conceptName) =>
   annosaurusGet(config, ['fast', 'concept', conceptName])
 
 const fetchConceptChildren = async (config, conceptName) =>
@@ -38,11 +38,11 @@ export {
   createConcept,
   deleteConcept,
   fetchConcept,
-  fetchConceptAnnotations,
   fetchConceptChildren,
   fetchConceptLinkRealizations,
   fetchConceptNames,
   fetchConceptParent,
+  getConceptAnnotations,
   updateConceptAuthor,
   updateConceptName,
   updateConceptParent,
