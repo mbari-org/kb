@@ -1,5 +1,7 @@
-import { Typography, Box, TextField, IconButton, Select, MenuItem } from '@mui/material'
+import { Typography, Box, IconButton, Select, MenuItem } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
+
+import HistoryPageControl from './HistoryPageControl'
 
 import { HISTORY } from '@/lib/constants'
 
@@ -35,35 +37,6 @@ const HistoryPagination = ({
     }
     // Reset the input value to current page
     event.target.value = currentPage
-  }
-
-  const CustomPagination = () => {
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1 }}>
-        <Typography variant='body2'>Page</Typography>
-        <TextField
-          size='small'
-          defaultValue={currentPage}
-          onBlur={handlePageCommit}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              e.target.blur()
-            }
-          }}
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              height: '24px',
-            },
-            '& .MuiInputBase-input': {
-              textAlign: 'center',
-              width: '32px',
-              padding: '2px 4px',
-            },
-          }}
-        />
-        <Typography variant='body2'>of {totalPages}</Typography>
-      </Box>
-    )
   }
 
   if (hideFooter) return null
@@ -106,7 +79,11 @@ const HistoryPagination = ({
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <CustomPagination />
+        <HistoryPageControl
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageCommit={handlePageCommit}
+        />
         <Box sx={{ display: 'flex', gap: 1 }}>
           <IconButton onClick={prevPage} disabled={offset === 0} size='small'>
             <IoIosArrowBack />
