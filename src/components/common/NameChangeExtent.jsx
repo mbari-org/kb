@@ -15,11 +15,11 @@ const NameChangeExtent = ({ nameChangeType, onChange }) => {
       <FormControlLabel
         control={
           <Radio
-            name='nameChangeType'
-            value={NAME_ONLY}
             checked={nameChangeType === NAME_ONLY}
-            onChange={onChange}
             disabled={!isUserAdmin}
+            name='nameChangeType'
+            onChange={onChange}
+            value={NAME_ONLY}
           />
         }
         label={NAME_ONLY}
@@ -27,11 +27,11 @@ const NameChangeExtent = ({ nameChangeType, onChange }) => {
       <FormControlLabel
         control={
           <Radio
-            name='nameChangeType'
-            value={ASSOCIATED_DATA}
             checked={nameChangeType === ASSOCIATED_DATA}
-            onChange={onChange}
             disabled={!isUserAdmin}
+            name='nameChangeType'
+            onChange={onChange}
+            value={ASSOCIATED_DATA}
           />
         }
         label={ASSOCIATED_DATA}

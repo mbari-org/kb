@@ -9,10 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 import AuthContext from '@/contexts/auth/AuthContext'
 
-import { LABELS } from '@/lib/constants'
 import { isAdmin } from '@/lib/auth/role'
-
-const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -23,7 +20,6 @@ const ChangeNameContent = () => {
   const { user } = use(AuthContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
-  const [nameChangeType, setNameChangeType] = useState(isAdmin(user) ? NAME_ONLY : null)
 
   const fromColor = 'main'
   const toColor = modalData.modified ? theme.palette.primary.edit : theme.palette.grey[500]
@@ -32,14 +28,21 @@ const ChangeNameContent = () => {
     const { value } = event.target
     setPrimaryName(value)
     const modified = value !== concept.name && !getNames().includes(value)
-    setModalData({ name: value, modified })
+    const isNameChangeTypeOK = !isAdmin(user) || (isAdmin(user) && modalData.nameChangeType)
+    setModalData(prevData => ({
+      ...prevData,
+      name: value,
+      modified,
+      isValid: modified && isNameChangeTypeOK,
+    }))
   }
 
   const handleNameChangeType = event => {
-    setNameChangeType(event.target.value)
+    const value = event.target.value
     setModalData(prevData => ({
       ...prevData,
-      nameChangeType: event.target.value,
+      nameChangeType: value,
+      isValid: prevData.modified && value,
     }))
   }
 
@@ -85,14 +88,26 @@ const ChangeNameContent = () => {
       </Stack>
 
       <Box sx={{ mt: -1, ml: 12 }}>
-        <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+        <NameChangeExtent
+          nameChangeType={modalData.nameChangeType}
+          onChange={handleNameChangeType}
+        />
       </Box>
 
-      <Box sx={{ borderTop: '1px solid #000000' }}>
-        <Box sx={{ mt: 2 }}>
-          <div>{`Updating the name of concept will affect CxTBD link realizations.`}</div>
-          <div>{`Proceed with caution.`}</div>
-        </Box>
+      <Box sx={{ borderTop: '1px solid #000000', mt: 2 }}>
+        <Typography variant='body1' color='text.secondary' sx={{ mt: 2 }}>
+          {`Updating the name of concept will affect CxTBD link realizations.`}
+        </Typography>
+        {!isAdmin(user) && (
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography variant='body1' color='text.secondary'>
+              {`Please communicate with an admin regarding this change as`}
+            </Typography>
+            <Typography variant='body1' color='text.secondary'>
+              {`only admins can specify the extent of a Concept name change.`}
+            </Typography>{' '}
+          </Box>
+        )}
       </Box>
     </Box>
   )

@@ -9,13 +9,13 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { LABELS } from '@/lib/constants'
 
-const { NAME_ONLY, ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
+const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingField }) => {
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ModalContext)
 
-  const [nameChangeType, setNameChangeType] = useState(NAME_ONLY)
+  const nameChangeType = modalData.nameChangeType
 
   const pendingName = pendingField('ConceptName').find(name => name.newValue === concept.name)
 
@@ -27,7 +27,6 @@ const NameDetail = ({ pendingField }) => {
   }, [setModalData])
 
   const handleNameChangeType = event => {
-    setNameChangeType(event.target.value)
     setModalData({
       ...modalData,
       nameChangeType: event.target.value,

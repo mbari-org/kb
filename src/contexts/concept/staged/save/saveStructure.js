@@ -1,3 +1,4 @@
+import { renameConceptAssociations } from '@/lib/kb/api/associations'
 import { createConcept, updateConceptName, updateConceptParent } from '@/lib/kb/api/concept'
 
 import { LABELS } from '@/lib/constants'
@@ -14,8 +15,12 @@ const saveStructure = ([submit, { concept, updateInfo }]) => {
   }
 
   if (updatedValue('nameChange') === ASSOCIATED_DATA) {
-    console.log('CxInc nameChange of associated data', updatedValue('nameChange'))
-    // submitters.push(submit(updateConceptName, { name: nameChange }))
+    submitters.push(
+      submit(renameConceptAssociations, {
+        new: updatedValue('name'),
+        old: concept.name,
+      })
+    )
   }
 
   if (hasUpdated('parent')) {

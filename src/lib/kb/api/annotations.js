@@ -1,4 +1,4 @@
-import { annosaurusGet, annosaurusPost } from '@/lib/services/annosaurus/methods'
+import { annosaurusGet, annosaurusPost, annosaurusPut } from '@/lib/services/annosaurus/methods'
 
 const fetchConceptAnnotations = async (config, conceptName) =>
   annosaurusGet(config, ['fast', 'concept', conceptName])
@@ -11,4 +11,7 @@ const getConceptAnnotationCount = async (config, conceptName) => {
   return { error, count: payload?.content?.count }
 }
 
-export { fetchConceptAnnotations, getConceptAnnotationCount }
+const renameConceptAnnotations = async (config, payload) =>
+  annosaurusPut(config, ['associations', 'toconcept', 'rename'], payload)
+
+export { fetchConceptAnnotations, getConceptAnnotationCount, renameConceptAnnotations }

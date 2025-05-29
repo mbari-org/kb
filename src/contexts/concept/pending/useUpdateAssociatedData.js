@@ -6,7 +6,6 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import { PENDING } from '@/lib/constants'
 
 import { renameConceptAssociations } from '@/lib/kb/api/associations'
-import { renameConceptObservations } from '@/lib/kb/api/observations'
 const { CHANGE_NAME } = PENDING
 
 const useUpdateAssociatedData = pendingActions => {
@@ -22,15 +21,10 @@ const useUpdateAssociatedData = pendingActions => {
         pendingAction.field === 'ConceptName' &&
         modalData.nameChangeType === CHANGE_NAME.ASSOCIATED_DATA
       ) {
-        const payload = {
+        await renameConceptAssociations(config, {
           new: pendingAction.newValue,
           old: pendingAction.oldValue,
-        }
-
-        await Promise.all([
-          renameConceptAssociations(config, payload),
-          renameConceptObservations(config, payload),
-        ])
+        })
       }
     },
     [config, modalData?.nameChangeType, pendingActions]

@@ -18,7 +18,7 @@ const ChangeNameActions = () => {
   const { closeModal, modalData } = use(ModalContext)
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !modalData.modified]
+  const disabled = [false, !modalData.isValid]
   const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
@@ -42,7 +42,17 @@ const ChangeNameActions = () => {
       case STAGE:
         modifyConcept({
           type: SET,
-          update: { field: 'name', value: modalData.name },
+          update: {
+            field: 'name',
+            value: modalData.name,
+          },
+        })
+        modifyConcept({
+          type: SET,
+          update: {
+            field: 'nameChange',
+            value: modalData.nameChangeType,
+          },
         })
         closeModal(true)
         break
