@@ -30,7 +30,7 @@ const buildTree = taxonomy => {
   return taxonomyTree
 }
 
-const deleteConcept = async (taxonomy, conceptName, apiPayload) => {
+const deleteConcept = async (taxonomy, conceptName, apiFns) => {
   const concept = getConcept(taxonomy, conceptName)
   if (!concept) {
     throw new Error(`Concept "${conceptName}" not found in the taxonomy.`)
@@ -65,8 +65,8 @@ const deleteConcept = async (taxonomy, conceptName, apiPayload) => {
   }
 
   const [names, pending] = await Promise.all([
-    apiPayload(fetchNames),
-    apiPayload(getHistory, 'pending'),
+    apiFns.apiPayload(fetchNames),
+    apiFns.apiPagination(getHistory, ['pending']),
   ])
 
   const updatedTaxonomy = {
@@ -329,13 +329,13 @@ const mapConcept = (concept, conceptMap, aliasMap) => {
   })
 }
 
-const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload) => {
+const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => {
   const { hasUpdated } = updateInfo
 
   const conceptMap = { ...taxonomy.conceptMap }
   const aliasMap = { ...taxonomy.aliasMap }
 
-  const updatedConcept = await refreshConcept(concept, updateInfo, apiPayload)
+  const updatedConcept = await refreshConcept(concept, updateInfo, apiFns.apiPayload)
   mapConcept(updatedConcept, conceptMap, aliasMap)
 
   const structureChanged = ['aliases', 'children', 'name', 'parent'].some(field =>
@@ -390,9 +390,10 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
     mapConcept(parentConcept, conceptMap, aliasMap)
   }
 
-  const updatedNames = await apiPayload(fetchNames)
-
-  const pending = await apiPayload(getHistory, 'pending')
+  const [updatedNames, pending] = await Promise.all([
+    apiFns.apiPayload(fetchNames),
+    apiFns.apiPagination(getHistory, ['pending']),
+  ])
 
   const updatedTaxonomy = {
     ...taxonomy,
@@ -406,7 +407,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiPayload)
 }
 
 const refreshHistory = async (taxonomy, historyType, apiFns) => {
-  const { data } = await apiFns.apiResult(getHistory, historyType)
+  const data = await apiFns.apiPagination(getHistory, [historyType])
   return { taxonomy: { ...taxonomy, [historyType]: data } }
 }
 
