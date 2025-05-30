@@ -4,20 +4,18 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import { updateInfo } from '@/contexts/concept/staged/edit/stateUpdates'
 
-const useStagedField = field => {
+const useStagedFieldBorder = field => {
   const { initialState, stagedState } = use(ConceptContext)
 
   const { hasUpdated } = updateInfo(initialState, stagedState)
 
   const hasUpdatedField = hasUpdated(field)
 
-  const borderStyle = hasUpdatedField ? 'dashed' : 'none'
   const borderColor = hasUpdatedField ? 'edit.main' : 'transparent'
+  const borderStyle = hasUpdatedField ? 'dashed' : 'none'
+  const borderWidth = hasUpdatedField ? '2px' : '0px'
 
-  return {
-    borderStyle,
-    borderColor,
-  }
+  return { borderColor, borderStyle, borderWidth }
 }
 
-export default useStagedField
+export default useStagedFieldBorder

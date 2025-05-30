@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/change/staged/useConceptDetailStyle'
 import useDebounce from '@/components/hooks/useDebounce'
-import useStagedField from '@/components/kb/panels/concepts/change/staged/concept/field/useStagedField'
+import useStagedFieldBorder from '@/components/kb/panels/concepts/change/staged/concept/field/useStagedFieldBorder'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -15,7 +15,7 @@ const ConceptAuthor = () => {
 
   const [author, setAuthor] = useState('')
 
-  const { borderStyle, borderColor } = useStagedField('author')
+  const border = useStagedFieldBorder('author')
 
   const modifyAuthor = useCallback(
     author => {
@@ -45,7 +45,7 @@ const ConceptAuthor = () => {
 
   return (
     <FormControl>
-      <Box sx={{ borderStyle, borderColor }}>
+      <Box sx={{ ...border }}>
         <TextField {...infoStyle} label='Author' onChange={handleChange} value={author} />
       </Box>
     </FormControl>
