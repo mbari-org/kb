@@ -106,17 +106,17 @@ const getConcept = (taxonomy, conceptName) => {
   return taxonomy?.conceptMap[conceptName] || taxonomy?.aliasMap[conceptName] || null
 }
 
+const getConceptPrimaryName = (taxonomy, conceptName) => {
+  const concept = getConcept(taxonomy, conceptName)
+  return concept?.name
+}
+
 const getNames = taxonomy => taxonomy?.names
 
 const getPendingHistory = (taxonomy, conceptName) =>
   conceptName
     ? taxonomy.pending.filter(history => history.concept === conceptName)
     : taxonomy.pending
-
-const getConceptPrimaryName = (taxonomy, conceptName) => {
-  const concept = getConcept(taxonomy, conceptName)
-  return concept?.name
-}
 
 const getRoot = (conceptMap, rootName) => conceptMap[rootName]
 

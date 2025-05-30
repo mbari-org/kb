@@ -11,19 +11,15 @@ import useStructureChoices from '@/components/kb/panels/concepts/change/staged/c
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
-import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+import useHasPendingStructure from '@/contexts/concept/pending/useHasPendingStructure'
 
 import { isReadOnly } from '@/lib/auth/role'
-import { hasPending, pendingChild } from '@/lib/kb/model/history'
 
 const ConceptName = () => {
   const theme = useTheme()
 
   const { user } = use(AuthContext)
   const { concept, editing } = use(ConceptContext)
-
-  const conceptPending = useConceptPending(concept.name)
-  const parentPending = useConceptPending(concept?.parent)
 
   const { hasStagedChildren, hasStagedName, hasStagedParent } = useStructureChoices()
   const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
@@ -33,10 +29,7 @@ const ConceptName = () => {
   const showStructureButton =
     editing && !showStructureChoicesModal && !hasStagedName && !isReadOnly(user)
 
-  const hasPendingStructure =
-    ['ConceptName', 'Parent', 'Concept.child', 'Concept.parent'].some(field =>
-      hasPending(conceptPending, field)
-    ) || !!pendingChild(parentPending, concept.name)
+  const hasPendingStructure = useHasPendingStructure()
 
   const conceptColor =
     hasStagedStructure || hasPendingStructure
