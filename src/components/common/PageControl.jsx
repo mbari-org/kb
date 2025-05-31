@@ -1,11 +1,10 @@
-import { Typography, Box, TextField } from '@mui/material'
+import { Box, TextField, Typography } from '@mui/material'
 
-const HistoryPageControl = ({ currentPage, totalPages, handlePageCommit }) => {
+const PageControl = ({ currentPage, totalPages, handlePageCommit }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1 }}>
       <Typography variant='body2'>Page</Typography>
       <TextField
-        size='small'
         defaultValue={currentPage}
         onBlur={handlePageCommit}
         onKeyDown={e => {
@@ -13,6 +12,7 @@ const HistoryPageControl = ({ currentPage, totalPages, handlePageCommit }) => {
             e.target.blur()
           }
         }}
+        size='small'
         sx={{
           '& .MuiOutlinedInput-root': {
             height: '24px',
@@ -29,4 +29,4 @@ const HistoryPageControl = ({ currentPage, totalPages, handlePageCommit }) => {
   )
 }
 
-export default HistoryPageControl
+export default PageControl

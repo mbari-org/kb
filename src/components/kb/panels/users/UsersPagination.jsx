@@ -1,5 +1,7 @@
-import { Typography, Box, TextField, IconButton, Select, MenuItem } from '@mui/material'
+import { Typography, Box, IconButton, Select, MenuItem } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
+
+import PageControl from '@/components/common/PageControl'
 
 const PAGE_SIZE_OPTIONS = [5, 10, 25, 50]
 
@@ -25,35 +27,6 @@ const UsersPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize
     }
     // Reset the input value to current page
     event.target.value = currentPage
-  }
-
-  const CustomPagination = () => {
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1 }}>
-        <Typography variant='body2'>Page</Typography>
-        <TextField
-          defaultValue={currentPage}
-          onBlur={handlePageCommit}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              e.target.blur()
-            }
-          }}
-          size='small'
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              height: '24px',
-            },
-            '& .MuiInputBase-input': {
-              textAlign: 'center',
-              width: '32px',
-              padding: '2px 4px',
-            },
-          }}
-        />
-        <Typography variant='body2'>of {totalPages}</Typography>
-      </Box>
-    )
   }
 
   return (
@@ -93,9 +66,13 @@ const UsersPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize
           Users {offset + 1} - {Math.min(offset + limit, count)}
         </Typography>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <CustomPagination />
-        <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <PageControl
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageCommit={handlePageCommit}
+        />
+        <Box>
           <IconButton onClick={prevPage} disabled={offset === 0} size='small'>
             <IoIosArrowBack />
           </IconButton>

@@ -1,7 +1,7 @@
 import { Typography, Box, IconButton, Select, MenuItem } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
-import HistoryPageControl from './HistoryPageControl'
+import PageControl from '@/components/common/PageControl'
 
 import { HISTORY } from '@/lib/constants'
 
@@ -78,13 +78,13 @@ const HistoryPagination = ({
           History {offset + 1} - {Math.min(offset + limit, count)}
         </Typography>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <HistoryPageControl
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <PageControl
           currentPage={currentPage}
           totalPages={totalPages}
           handlePageCommit={handlePageCommit}
         />
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box>
           <IconButton onClick={prevPage} disabled={offset === 0} size='small'>
             <IoIosArrowBack />
           </IconButton>
