@@ -148,7 +148,7 @@ const RESETTING = {
   OTHER: 'Other',
 }
 
-const ROLES = {
+const USER_ROLES = {
   ADMIN: 'Admin',
   MAINT: 'Maint',
   READ_ONLY: 'ReadOnly',
@@ -166,5 +166,5 @@ export {
   PROCESSING,
   RANK,
   RESETTING,
-  ROLES,
+  USER_ROLES,
 }

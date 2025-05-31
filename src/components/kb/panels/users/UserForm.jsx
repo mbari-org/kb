@@ -1,7 +1,7 @@
 import { Box, TextField, MenuItem } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { EMAIL_REGEX, ROLES } from '@/lib/constants'
+import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
 
 const REQUIRED_FIELDS = ['username', 'role', 'affiliation', 'firstName', 'lastName', 'email']
 const REQUIRED_FIELDS_ADD = [...REQUIRED_FIELDS, 'password', 'confirmPassword']
@@ -148,7 +148,7 @@ const UserForm = ({ user, onChange, isEdit = false, existingUsers = [] }) => {
         error={showError('role')}
         helperText={getHelperText('role')}
       >
-        {Object.values(ROLES).map(role => (
+        {Object.values(USER_ROLES).map(role => (
           <MenuItem key={role} value={role}>
             {role}
           </MenuItem>

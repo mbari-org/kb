@@ -4,7 +4,7 @@ import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
 
 import { useTheme } from '@mui/material/styles'
 
-import { ROLES } from '@/lib/constants'
+import { USER_ROLES } from '@/lib/constants'
 
 const useUserColumns = ({ lockUser, editUser }) => {
   const theme = useTheme()
@@ -52,7 +52,7 @@ const useUserColumns = ({ lockUser, editUser }) => {
       headerName: 'Role',
       width: 130,
       type: 'singleSelect',
-      valueOptions: Object.values(ROLES),
+      valueOptions: Object.values(USER_ROLES),
       headerClassName: 'bold-header',
     },
     { field: 'affiliation', headerName: 'Affiliation', width: 130, headerClassName: 'bold-header' },
