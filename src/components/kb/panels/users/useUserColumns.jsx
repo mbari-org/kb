@@ -21,6 +21,8 @@ const useUserColumns = ({ deleteUser, editUser }) => {
               mr: 1,
               '&:hover': {
                 color: 'error.main',
+                transform: 'scale(1.2)',
+                transition: 'transform 0.2s',
               },
             }}
           >
@@ -32,6 +34,8 @@ const useUserColumns = ({ deleteUser, editUser }) => {
             sx={{
               '&:hover': {
                 color: 'edit.main',
+                transform: 'scale(1.2)',
+                transition: 'transform 0.2s',
               },
             }}
           >

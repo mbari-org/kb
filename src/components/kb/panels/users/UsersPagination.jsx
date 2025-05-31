@@ -32,16 +32,19 @@ const UsersPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 2 }}>
         <Typography>Page</Typography>
         <TextField
-          size='small'
           defaultValue={currentPage}
           onBlur={handlePageCommit}
-          onKeyPress={e => {
+          onKeyDown={e => {
             if (e.key === 'Enter') {
               e.target.blur()
             }
           }}
-          inputProps={{
-            style: { textAlign: 'center', width: '60px' },
+          size='small'
+          sx={{
+            '& input': {
+              textAlign: 'center',
+              width: '60px',
+            },
           }}
         />
         <Typography>of {totalPages}</Typography>
@@ -75,7 +78,7 @@ const UsersPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize
       </Box>
       <Box sx={{ flex: 1, textAlign: 'center' }}>
         <Typography>
-          Users {offset + 1} - {Math.min(offset + limit, count)} of {count}
+          Users {offset + 1} - {Math.min(offset + limit, count)}
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
