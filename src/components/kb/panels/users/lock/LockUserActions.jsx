@@ -1,21 +1,23 @@
 import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
+
 import ModalContext from '@/contexts/modal/ModalContext'
 import UsersContext from '@/contexts/users/UsersContext'
 
 import { LABELS } from '@/lib/constants'
 
-const { CANCEL, DELETE } = LABELS.BUTTON
+const { CANCEL, LOCK, UNLOCK } = LABELS.BUTTON
 
-const DeleteUserActions = () => {
+const LockUserActions = () => {
   const { closeModal, modalData } = use(ModalContext)
-  const { deleteUser } = use(UsersContext)
+  const { lockUser } = use(UsersContext)
+
   const { user } = modalData
 
   const colors = ['main', 'cancel']
   const disabled = [false, false]
-  const labels = [CANCEL, DELETE]
+  const labels = [CANCEL, user.locked ? UNLOCK : LOCK]
 
   const onAction = async label => {
     switch (label) {
@@ -23,13 +25,13 @@ const DeleteUserActions = () => {
         closeModal()
         break
 
-      case DELETE:
+      case LOCK:
+      case UNLOCK:
         try {
-          await deleteUser(user.username)
+          await lockUser(user.username, !user.locked)
           closeModal()
         } catch (error) {
-          console.error('Error deleting user:', error)
-          // TODO: Show error message to user
+          console.error('Error locking/unlocking user:', error)
         }
         break
     }
@@ -38,4 +40,4 @@ const DeleteUserActions = () => {
   return createActions({ colors, disabled, labels, onAction }, 'DeleteUserActions')
 }
 
-export default DeleteUserActions
+export default LockUserActions

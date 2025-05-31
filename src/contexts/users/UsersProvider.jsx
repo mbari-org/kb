@@ -6,7 +6,7 @@ import UsersContext from '@/contexts/users/UsersContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { getUsers, createUser, deleteUser as removeUser, updateUser } from '@/lib/kb/api/users'
+import { getUsers, createUser, updateUser } from '@/lib/kb/api/users'
 
 import { drop } from '@/lib/util'
 
@@ -39,12 +39,15 @@ const UsersProvider = ({ children }) => {
     }
   }
 
-  const deleteUser = async username => {
+  const lockUser = async (username, lock) => {
     try {
-      await apiFns.apiPayload(removeUser, username)
-      setUsers(prevUsers => prevUsers.filter(user => user.username !== username))
+      // CxTmp until locked is implemented in the backend
+      // await apiFns.apiPayload(updateUser, [username, { locked: lock }])
+      setUsers(prevUsers =>
+        prevUsers.map(user => (user.username === username ? { ...user, locked: lock } : user))
+      )
     } catch (error) {
-      console.error('Error removing user:', error)
+      console.error('Error locking user:', error)
     }
   }
 
@@ -54,13 +57,15 @@ const UsersProvider = ({ children }) => {
     const loadUsers = async () => {
       const { error, payload: users } = await getUsers(config)
       if (error) throw error
-      setUsers(users.map(user => drop(user, ['password'])))
+      // CxTmp until locked is implemented in the backend
+      const cxTmpUsers = users.map(user => ({ ...user, locked: false }))
+      setUsers(cxTmpUsers.map(user => drop(user, ['password'])))
     }
     if (isAdmin(user)) loadUsers()
   }, [config, user])
 
   return (
-    <UsersContext.Provider value={{ users, addUser, deleteUser, editUser }}>
+    <UsersContext.Provider value={{ users, addUser, editUser, lockUser }}>
       {children}
     </UsersContext.Provider>
   )

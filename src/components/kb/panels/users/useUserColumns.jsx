@@ -1,10 +1,14 @@
 import { Box, IconButton } from '@mui/material'
 import { CiEdit } from 'react-icons/ci'
-import { IoCloseSharp } from 'react-icons/io5'
+import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
+
+import { useTheme } from '@mui/material/styles'
 
 import { ROLES } from '@/lib/constants'
 
-const useUserColumns = ({ deleteUser, editUser }) => {
+const useUserColumns = ({ lockUser, editUser }) => {
+  const theme = useTheme()
+
   const columns = [
     {
       field: 'actions',
@@ -16,17 +20,16 @@ const useUserColumns = ({ deleteUser, editUser }) => {
         <Box>
           <IconButton
             size='small'
-            onClick={() => deleteUser(params.row)}
+            onClick={() => lockUser(params.row)}
             sx={{
               mr: 1,
               '&:hover': {
                 color: 'error.main',
-                transform: 'scale(1.2)',
-                transition: 'transform 0.2s',
+                ...theme.kb.icon.hover,
               },
             }}
           >
-            <IoCloseSharp size={24} />
+            {params.row.locked ? <AiOutlineLock size={22} /> : <AiOutlineUnlock size={22} />}
           </IconButton>
           <IconButton
             size='small'
@@ -34,8 +37,7 @@ const useUserColumns = ({ deleteUser, editUser }) => {
             sx={{
               '&:hover': {
                 color: 'edit.main',
-                transform: 'scale(1.2)',
-                transition: 'transform 0.2s',
+                ...theme.kb.icon.hover,
               },
             }}
           >

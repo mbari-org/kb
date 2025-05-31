@@ -87,11 +87,13 @@ const LABELS = {
     DELETE: 'Delete',
     DISCARD: 'Discard',
     DISCARD_ALL: 'Discard All',
+    LOCK: 'Lock',
     REJECT: 'Reject',
     REJECT_ALL: 'Reject All',
     REJECT_DISCARD: 'Keep',
     SAVE: 'Save',
     STAGE: 'Stage',
+    UNLOCK: 'Unlock',
   },
   CONCEPT: {
     CHANGE_NAME: {

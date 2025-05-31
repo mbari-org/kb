@@ -4,7 +4,7 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import UsersPagination from './UsersPagination'
 
-import useDeleteUser from '@/components/kb/panels/users/delete/useDeleteUser'
+import useLockUser from '@/components/kb/panels/users/lock/useLockUser'
 import useEditUser from '@/components/kb/panels/users/edit/useEditUser'
 import useUserColumns from '@/components/kb/panels/users/useUserColumns'
 
@@ -15,9 +15,9 @@ const UsersTable = ({ users }) => {
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)
 
-  const deleteUser = useDeleteUser()
+  const lockUser = useLockUser()
   const editUser = useEditUser()
-  const columns = useUserColumns({ deleteUser, editUser })
+  const columns = useUserColumns({ lockUser, editUser })
 
   const nextPage = () => setOffset(prev => prev + limit)
   const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
