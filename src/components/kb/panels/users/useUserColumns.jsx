@@ -59,6 +59,13 @@ const useUserColumns = ({ lockUser, editUser }) => {
     { field: 'firstName', headerName: 'First Name', width: 130, headerClassName: 'bold-header' },
     { field: 'lastName', headerName: 'Last Name', width: 130, headerClassName: 'bold-header' },
     { field: 'email', headerName: 'Email', width: 200, headerClassName: 'bold-header' },
+    {
+      field: 'locked',
+      headerName: 'Locked',
+      width: 100,
+      headerClassName: 'bold-header',
+      valueGetter: params => (params ? 'Yes' : 'No'),
+    },
   ]
 
   return columns
