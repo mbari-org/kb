@@ -34,6 +34,7 @@ const useUserColumns = ({ lockUser, editUser }) => {
           <IconButton
             size='small'
             onClick={() => editUser(params.row)}
+            disabled={params.row.locked}
             sx={{
               '&:hover': {
                 color: 'edit.main',
@@ -46,7 +47,13 @@ const useUserColumns = ({ lockUser, editUser }) => {
         </Box>
       ),
     },
-    { field: 'username', headerName: 'Username', width: 130, headerClassName: 'bold-header' },
+    {
+      field: 'username',
+      headerName: 'Username',
+      width: 130,
+      headerClassName: 'bold-header',
+      cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
+    },
     {
       field: 'role',
       headerName: 'Role',
@@ -54,11 +61,36 @@ const useUserColumns = ({ lockUser, editUser }) => {
       type: 'singleSelect',
       valueOptions: Object.values(USER_ROLES),
       headerClassName: 'bold-header',
+      cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
-    { field: 'affiliation', headerName: 'Affiliation', width: 130, headerClassName: 'bold-header' },
-    { field: 'firstName', headerName: 'First Name', width: 130, headerClassName: 'bold-header' },
-    { field: 'lastName', headerName: 'Last Name', width: 130, headerClassName: 'bold-header' },
-    { field: 'email', headerName: 'Email', width: 200, headerClassName: 'bold-header' },
+    {
+      field: 'affiliation',
+      headerName: 'Affiliation',
+      width: 130,
+      headerClassName: 'bold-header',
+      cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
+    },
+    {
+      field: 'firstName',
+      headerName: 'First Name',
+      width: 130,
+      headerClassName: 'bold-header',
+      cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
+    },
+    {
+      field: 'lastName',
+      headerName: 'Last Name',
+      width: 130,
+      headerClassName: 'bold-header',
+      cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 200,
+      headerClassName: 'bold-header',
+      cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
+    },
     {
       field: 'locked',
       headerName: 'Locked',

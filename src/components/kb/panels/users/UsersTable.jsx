@@ -62,6 +62,10 @@ const UsersTable = ({ users }) => {
               },
             },
           },
+          '& .disabled-cell': {
+            color: 'text.disabled',
+            opacity: 0.85,
+          },
         }}
       />
     </Box>
