@@ -4,10 +4,12 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import ReferencesPagination from './ReferencesPagination'
 
-const DEFAULT_LIMIT = 25
+import { PAGINATION } from '@/lib/constants'
+
+const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const ReferencesTable = () => {
+const ReferencesTable = ({ references, onAddReference }) => {
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)
 
@@ -21,27 +23,32 @@ const ReferencesTable = () => {
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>
       <DataGrid
-        rows={[]}
-        columns={[]}
+        columns={[
+          { field: 'citation', headerName: 'Citation', width: 400 },
+          { field: 'doi', headerName: 'DOI', width: 200 },
+        ]}
+        disableColumnFilter
+        disableColumnMenu
+        disableSelectionOnClick
+        getRowId={row => row.id}
+        pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
+        paginationMode='server'
         paginationModel={{
           pageSize: limit,
           page: Math.floor(offset / limit),
         }}
-        rowCount={0}
-        pageSizeOptions={[5, 10, 25, 50]}
-        paginationMode='server'
-        disableSelectionOnClick
-        disableColumnMenu
-        disableColumnFilter
+        rowCount={references.length}
+        rows={references}
         slots={{
           pagination: () => (
             <ReferencesPagination
-              count={0}
+              count={references.length}
               limit={limit}
               nextPage={nextPage}
               offset={offset}
               prevPage={prevPage}
               setPageSize={setPageSize}
+              onAddReference={onAddReference}
             />
           ),
         }}

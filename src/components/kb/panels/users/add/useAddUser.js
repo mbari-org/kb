@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { use, useCallback } from 'react'
 
 import AddUserActions from './AddUserActions'
 import AddUserContent from './AddUserContent'
@@ -32,7 +32,7 @@ const initialUserData = {
 }
 
 const useAddUser = () => {
-  const { setModal, setModalData } = useContext(ModalContext)
+  const { setModal, setModalData } = use(ModalContext)
 
   return useCallback(() => {
     setModal(addUserModal())

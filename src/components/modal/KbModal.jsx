@@ -41,7 +41,7 @@ const KbModal = () => {
             mt: 10,
           }}
         >
-          <Card sx={{ p: 2, pb: 0, position: 'relative', minWidth }}>
+          <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth }}>
             {!confirmReset && (
               <IconButton
                 aria-label='close'

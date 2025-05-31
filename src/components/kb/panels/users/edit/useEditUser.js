@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { use, useCallback } from 'react'
 
 import EditUserActions from './EditUserActions'
 import EditUserContent from './EditUserContent'
@@ -19,7 +19,7 @@ const editUserModal = () => {
 }
 
 const useEditUser = () => {
-  const { setModal, setModalData } = useContext(ModalContext)
+  const { setModal, setModalData } = use(ModalContext)
 
   return useCallback(
     user => {

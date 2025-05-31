@@ -15,7 +15,7 @@ const AddUserContent = () => {
   }
 
   return (
-    <UserForm user={user} onChange={handleChange} isEdit={false} existingUsers={existingUsers} />
+    <UserForm existingUsers={existingUsers} isEdit={false} onChange={handleChange} user={user} />
   )
 }
 

@@ -1,8 +1,16 @@
+import { use } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 
 import PanelTitle from '@/components/common/PanelTitle'
+import useAddUser from '@/components/kb/panels/users/add/useAddUser'
 
-const UsersHeader = ({ onAddUser, users }) => {
+import UsersContext from '@/contexts/users/UsersContext'
+
+const UsersHeader = () => {
+  const { users } = use(UsersContext)
+
+  const addUser = useAddUser()
+
   return (
     <Box>
       <PanelTitle title='Users' />
@@ -10,7 +18,7 @@ const UsersHeader = ({ onAddUser, users }) => {
         <Typography variant='body1' sx={{ ml: 2 }}>
           Total: {users?.length || 0}
         </Typography>
-        <Button variant='contained' color='primary' onClick={onAddUser} sx={{ mr: 2 }}>
+        <Button variant='contained' color='primary' onClick={addUser} sx={{ mr: 2 }}>
           Add
         </Button>
       </Box>

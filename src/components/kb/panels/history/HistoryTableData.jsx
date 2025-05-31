@@ -3,9 +3,9 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import HistoryPagination from './HistoryPagination'
 
-import { HISTORY } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants'
 
-const PAGE_SIZE_OPTIONS = HISTORY.PAGE_SIZE_OPTIONS
+const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableData = ({
   columns,

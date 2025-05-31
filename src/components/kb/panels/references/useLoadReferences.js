@@ -5,17 +5,18 @@ import { getReferences } from '@/lib/kb/api/references'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
 const useLoadReferences = () => {
-  const { config } = use(ConfigContext)
+  const { apiFns } = use(ConfigContext)
   const [references, setReferences] = useState([])
 
   useEffect(() => {
     const fetchReferences = async () => {
-      const references = await getReferences(config)
-      setReferences(references)
+      const { data, count } = await apiFns.apiPagination(getReferences)
+      setReferences(data)
+      // setCount(count)
     }
 
     fetchReferences()
-  }, [config])
+  }, [apiFns])
 
   return { references }
 }

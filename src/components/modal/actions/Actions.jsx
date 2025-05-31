@@ -59,7 +59,7 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stack spacing={0} sx={{ alignItems: 'center', minHeight: '60px', mt: 2 }}>
+      <Stack spacing={0} sx={{ alignItems: 'center', mt: 1 }}>
         {!!confirmReset && <DiscardingText />}
         {!!confirmPending && <PendingText approval={confirmPending.approval} />}
       </Stack>
@@ -68,7 +68,7 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
           backgroundColor: 'inherit',
           display: 'flex',
           justifyContent: 'space-between',
-          mt: 2,
+          mt: 1,
           padding: 1,
           width: '100%',
         }}

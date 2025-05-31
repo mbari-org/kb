@@ -4,9 +4,9 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { getHistory } from '@/lib/kb/api/history'
 
-import { HISTORY } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants'
 
-const DEFAULT_LIMIT = HISTORY.DEFAULT_LIMIT
+const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
 const useLoadHistory = (type, totalCount) => {

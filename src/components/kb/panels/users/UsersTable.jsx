@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { use, useState } from 'react'
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
@@ -8,16 +8,22 @@ import useLockUser from '@/components/kb/panels/users/lock/useLockUser'
 import useEditUser from '@/components/kb/panels/users/edit/useEditUser'
 import useUserColumns from '@/components/kb/panels/users/useUserColumns'
 
-const DEFAULT_LIMIT = 25
+import UsersContext from '@/contexts/users/UsersContext'
+
+import { PAGINATION } from '@/lib/constants'
+
+const DEFAULT_LIMIT = PAGINATION.USERS.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const UsersTable = ({ users }) => {
+const UsersTable = () => {
+  const { users } = use(UsersContext)
+
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)
 
   const lockUser = useLockUser()
   const editUser = useEditUser()
-  const columns = useUserColumns({ lockUser, editUser })
+  const columns = useUserColumns({ editUser, lockUser })
 
   const nextPage = () => setOffset(prev => prev + limit)
   const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
@@ -29,18 +35,18 @@ const UsersTable = ({ users }) => {
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>
       <DataGrid
-        rows={users}
         columns={columns}
+        disableColumnFilter
+        disableColumnMenu
+        disableSelectionOnClick
+        pageSizeOptions={PAGINATION.USERS.PAGE_SIZE_OPTIONS}
+        paginationMode='server'
         paginationModel={{
           pageSize: limit,
           page: Math.floor(offset / limit),
         }}
         rowCount={users.length}
-        pageSizeOptions={[5, 10, 25, 50]}
-        paginationMode='server'
-        disableSelectionOnClick
-        disableColumnMenu
-        disableColumnFilter
+        rows={users}
         slots={{
           pagination: () => (
             <UsersPagination

@@ -100,7 +100,7 @@ const UserForm = ({ user, onChange, isEdit = false, existingUsers = [] }) => {
   const showConfirmPassword = !isEdit || showConfirm
 
   return (
-    <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ p: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
       <TextField
         label='Username'
         value={user.username || ''}

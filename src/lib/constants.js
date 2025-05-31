@@ -68,11 +68,6 @@ const CONCEPT_STATE = {
 
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 
-const HISTORY = {
-  DEFAULT_LIMIT: 50,
-  PAGE_SIZE_OPTIONS: [5, 10, 25, 50],
-}
-
 const LABELS = {
   BUTTON: {
     APPROVE: 'Approve',
@@ -112,6 +107,21 @@ const LABELS = {
       SAVE: 'Save',
       SHOW: 'Staged',
     },
+  },
+}
+
+const PAGINATION = {
+  HISTORY: {
+    DEFAULT_LIMIT: 50,
+    PAGE_SIZE_OPTIONS: [5, 10, 25, 50],
+  },
+  REFERENCES: {
+    DEFAULT_LIMIT: 50,
+    PAGE_SIZE_OPTIONS: [5, 10, 25, 50],
+  },
+  USERS: {
+    DEFAULT_LIMIT: 25,
+    PAGE_SIZE_OPTIONS: [5, 10, 25, 50],
   },
 }
 
@@ -160,8 +170,8 @@ export {
   CONCEPT_NAME_TYPES,
   CONCEPT_STATE,
   EMAIL_REGEX,
-  HISTORY,
   LABELS,
+  PAGINATION,
   PENDING,
   PROCESSING,
   RANK,

@@ -8,9 +8,9 @@ import useLoadConceptHistory from './useLoadConceptHistory'
 import useHistoryColumns from './useHistoryColumns'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import { HISTORY } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants'
 
-const DEFAULT_LIMIT = HISTORY.DEFAULT_LIMIT
+const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
 const ConceptHistory = () => {
   const { select, selected } = use(SelectedContext)
