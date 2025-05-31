@@ -1,20 +1,20 @@
-import { Typography, Button, Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
+
+import PanelTitle from '@/components/common/PanelTitle'
 
 const UsersHeader = ({ onAddUser, onExportCsv, users }) => {
   return (
     <Box>
-      <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h4'>
-        Users
-      </Typography>
+      <PanelTitle title='Users' />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>
         <Button variant='contained' color='primary' onClick={onAddUser} sx={{ ml: 2 }}>
           Add User
         </Button>
         <Button
-          variant='contained'
           color='primary'
           onClick={() => onExportCsv(users)}
           sx={{ mr: 2 }}
+          variant='contained'
         >
           Export CSV
         </Button>

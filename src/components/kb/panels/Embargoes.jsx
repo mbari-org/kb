@@ -1,13 +1,7 @@
-import { Typography } from '@mui/material'
+import PanelTitle from '@/components/common/PanelTitle'
 
 const Embargoes = () => {
-  return (
-    <>
-      <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h4'>
-        Embargoes
-      </Typography>
-    </>
-  )
+  return <PanelTitle title='Embargoes' />
 }
 
 export default Embargoes

@@ -1,13 +1,7 @@
-import { Typography } from '@mui/material'
+import PanelTitle from '@/components/common/PanelTitle'
 
 const Notes = () => {
-  return (
-    <>
-      <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h4'>
-        Notes
-      </Typography>
-    </>
-  )
+  return <PanelTitle title='Notes' />
 }
 
 export default Notes

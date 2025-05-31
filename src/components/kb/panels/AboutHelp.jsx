@@ -1,12 +1,6 @@
-import { Typography } from '@mui/material'
+import PanelTitle from '@/components/common/PanelTitle'
 
 const AboutHelp = () => {
-  return (
-    <>
-      <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h4'>
-        AboutHelp
-      </Typography>
-    </>
-  )
+  return <PanelTitle title='AboutHelp' />
 }
 export default AboutHelp
