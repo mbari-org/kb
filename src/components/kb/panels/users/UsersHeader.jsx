@@ -11,7 +11,7 @@ const UsersHeader = ({ onAddUser, users }) => {
           Total: {users?.length || 0}
         </Typography>
         <Button variant='contained' color='primary' onClick={onAddUser} sx={{ mr: 2 }}>
-          Add User
+          Add
         </Button>
       </Box>
     </Box>
