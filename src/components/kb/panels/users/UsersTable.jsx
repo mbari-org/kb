@@ -3,9 +3,10 @@ import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 import UsersPagination from './UsersPagination'
-import useDeleteUser from './delete/useDeleteUser'
-import useEditUser from './edit/useEditUser'
-import useUserColumns from './useUserColumns'
+
+import useDeleteUser from '@/components/kb/panels/users/delete/useDeleteUser'
+import useEditUser from '@/components/kb/panels/users/edit/useEditUser'
+import useUserColumns from '@/components/kb/panels/users/useUserColumns'
 
 const DEFAULT_LIMIT = 25
 const DEFAULT_OFFSET = 0
@@ -19,12 +20,10 @@ const UsersTable = ({ users }) => {
   const columns = useUserColumns({ deleteUser, editUser })
 
   const nextPage = () => setOffset(prev => prev + limit)
-
   const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
-
   const setPageSize = newLimit => {
     setLimit(newLimit)
-    setOffset(0) // Reset to first page when changing page size
+    setOffset(0)
   }
 
   return (

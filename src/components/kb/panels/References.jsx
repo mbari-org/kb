@@ -1,12 +1,18 @@
-import { Typography } from '@mui/material'
+import { Box } from '@mui/material'
+
+import ReferencesHeader from '@/components/kb/panels/references/ReferencesHeader'
+import ReferencesTable from '@/components/kb/panels/references/ReferencesTable'
+
+import useLoadReferences from '@/components/kb/panels/references/useLoadReferences'
 
 const References = () => {
+  const { references } = useLoadReferences()
+
   return (
-    <>
-      <Typography align='center' sx={{ mt: 3, mb: 1 }} variant='h4'>
-        References
-      </Typography>
-    </>
+    <Box>
+      <ReferencesHeader />
+      <ReferencesTable references={references} />
+    </Box>
   )
 }
 
