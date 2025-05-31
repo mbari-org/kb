@@ -39,6 +39,8 @@ const UsersTable = ({ users }) => {
         pageSizeOptions={[5, 10, 25, 50]}
         paginationMode='server'
         disableSelectionOnClick
+        disableColumnMenu
+        disableColumnFilter
         slots={{
           pagination: () => (
             <UsersPagination
