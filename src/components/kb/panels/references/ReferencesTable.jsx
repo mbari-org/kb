@@ -1,21 +1,22 @@
+import { use } from 'react'
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 import ReferencesPagination from './ReferencesPagination'
 
-import useReferences from './useReferences'
+import ReferencesContext from '@/contexts/references/ReferencesContext'
 
 import { PAGINATION } from '@/lib/constants'
 
 const ReferencesTable = () => {
-  const { references, limit, offset, setLimit, setOffset } = useReferences()
+  const { references } = use(ReferencesContext)
 
-  const nextPage = () => setOffset(prev => prev + limit)
-  const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
-  const setPageSize = newLimit => {
-    setLimit(newLimit)
-    setOffset(0)
-  }
+  const limit = 10
+  const offset = 0
+
+  const nextPage = () => console.log('nextPage called')
+  const prevPage = () => console.log('prevPage called')
+  const setPageSize = newLimit => console.log('setPageSize called with:', newLimit)
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>

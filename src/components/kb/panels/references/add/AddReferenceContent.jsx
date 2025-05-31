@@ -3,12 +3,13 @@ import { use } from 'react'
 import { Box, TextField } from '@mui/material'
 
 import ModalContext from '@/contexts/modal/ModalContext'
-import useReferences from '../useReferences'
+import ReferencesContext from '@/contexts/references/ReferencesContext'
 
 const AddReferenceContent = () => {
   const { modalData, setModalData } = use(ModalContext)
+  const { references } = use(ReferencesContext)
+
   const { reference } = modalData
-  const { references } = useReferences()
 
   const isDoiUnique = doi => {
     if (!doi) return true

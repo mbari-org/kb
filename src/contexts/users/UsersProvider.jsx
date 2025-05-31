@@ -64,11 +64,14 @@ const UsersProvider = ({ children }) => {
     if (isAdmin(user)) loadUsers()
   }, [config, user])
 
-  return (
-    <UsersContext.Provider value={{ users, addUser, editUser, lockUser }}>
-      {children}
-    </UsersContext.Provider>
-  )
+  const value = {
+    users,
+    addUser,
+    editUser,
+    lockUser,
+  }
+
+  return <UsersContext.Provider value={value}>{children}</UsersContext.Provider>
 }
 
 export default UsersProvider

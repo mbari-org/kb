@@ -1,13 +1,12 @@
+import { use } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 
 import PanelTitle from '@/components/common/PanelTitle'
 
-import useAddReference from './add/useAddReference'
-import useReferences from './useReferences'
+import ReferencesContext from '@/contexts/references/ReferencesContext'
 
 const ReferencesHeader = () => {
-  const { references } = useReferences()
-  const addReference = useAddReference()
+  const { addReference, references } = use(ReferencesContext)
 
   return (
     <Box>
