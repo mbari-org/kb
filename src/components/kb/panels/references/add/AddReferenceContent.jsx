@@ -3,10 +3,17 @@ import { use } from 'react'
 import { Box, TextField } from '@mui/material'
 
 import ModalContext from '@/contexts/modal/ModalContext'
+import useReferences from '../useReferences'
 
 const AddReferenceContent = () => {
   const { modalData, setModalData } = use(ModalContext)
   const { reference } = modalData
+  const { references } = useReferences()
+
+  const isDoiUnique = doi => {
+    if (!doi) return true
+    return !references.some(ref => ref.doi === doi)
+  }
 
   const handleChange = field => event => {
     const newValue = event.target.value
@@ -35,6 +42,8 @@ const AddReferenceContent = () => {
         onChange={handleChange('doi')}
         fullWidth
         required
+        error={!isDoiUnique(reference.doi)}
+        helperText={!isDoiUnique(reference.doi) ? 'DOI already exists' : ''}
       />
     </Box>
   )

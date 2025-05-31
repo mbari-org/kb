@@ -3,6 +3,7 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
+import useReferences from '../useReferences'
 
 import { LABELS } from '@/lib/constants'
 
@@ -10,10 +11,16 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 
 const AddReferenceActions = () => {
   const { closeModal, modalData } = use(ModalContext)
-  const { reference, onAddReference } = modalData
+  const { reference } = modalData
+  const { addReference, references } = useReferences()
+
+  const isDoiUnique = doi => {
+    if (!doi) return true
+    return !references.some(ref => ref.doi === doi)
+  }
 
   const colors = ['cancel', 'primary']
-  const disabled = [false, !reference.citation || !reference.doi]
+  const disabled = [false, !reference.citation || !reference.doi || !isDoiUnique(reference.doi)]
   const labels = [CANCEL, SAVE]
 
   const onAction = async label => {
@@ -24,7 +31,7 @@ const AddReferenceActions = () => {
 
       case SAVE:
         try {
-          onAddReference(reference)
+          await addReference(reference)
           closeModal()
         } catch (error) {
           console.error('Error creating reference:', error)

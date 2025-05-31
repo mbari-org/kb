@@ -22,17 +22,18 @@ const initialReferenceData = {
   reference: {
     citation: '',
     doi: '',
+    concepts: [],
   },
   modified: false,
 }
 
-const useAddReference = onAddReference => {
+const useAddReference = () => {
   const { setModal, setModalData } = use(ModalContext)
 
   return useCallback(() => {
     setModal(addReferenceModal())
-    setModalData({ ...initialReferenceData, onAddReference })
-  }, [setModal, setModalData, onAddReference])
+    setModalData({ ...initialReferenceData })
+  }, [setModal, setModalData])
 }
 
 export default useAddReference

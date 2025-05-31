@@ -1,17 +1,14 @@
-import { useState } from 'react'
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 import ReferencesPagination from './ReferencesPagination'
 
+import useReferences from './useReferences'
+
 import { PAGINATION } from '@/lib/constants'
 
-const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
-const DEFAULT_OFFSET = 0
-
-const ReferencesTable = ({ references, onAddReference }) => {
-  const [limit, setLimit] = useState(DEFAULT_LIMIT)
-  const [offset, setOffset] = useState(DEFAULT_OFFSET)
+const ReferencesTable = () => {
+  const { references, limit, offset, setLimit, setOffset } = useReferences()
 
   const nextPage = () => setOffset(prev => prev + limit)
   const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
@@ -48,7 +45,6 @@ const ReferencesTable = ({ references, onAddReference }) => {
               offset={offset}
               prevPage={prevPage}
               setPageSize={setPageSize}
-              onAddReference={onAddReference}
             />
           ),
         }}

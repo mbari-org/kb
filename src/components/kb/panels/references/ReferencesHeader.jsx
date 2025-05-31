@@ -1,10 +1,13 @@
 import { Box, Button, Typography } from '@mui/material'
 
 import PanelTitle from '@/components/common/PanelTitle'
-import useAddReference from './add/useAddReference'
 
-const ReferencesHeader = ({ references, onAddReference }) => {
-  const addReference = useAddReference(onAddReference)
+import useAddReference from './add/useAddReference'
+import useReferences from './useReferences'
+
+const ReferencesHeader = () => {
+  const { references } = useReferences()
+  const addReference = useAddReference()
 
   return (
     <Box>
