@@ -10,7 +10,6 @@ const EditUserContent = () => {
   console.log('EditUserContent user:', user)
 
   const onChange = updatedUser => {
-    console.log('EditUserContent onChange updatedUser:', updatedUser)
     // Ensure both password fields are always present
     const userData = {
       ...updatedUser,

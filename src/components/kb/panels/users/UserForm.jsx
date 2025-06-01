@@ -114,7 +114,6 @@ const UserForm = ({ user, onChange, isEdit = false, existingUsers = [] }) => {
       />
       <TextField
         label='Password'
-        type='password'
         value={user.password || ''}
         onChange={handleChange('password')}
         onBlur={handleBlur('password')}
@@ -127,7 +126,6 @@ const UserForm = ({ user, onChange, isEdit = false, existingUsers = [] }) => {
       {showConfirmPassword && (
         <TextField
           label='Confirm Password'
-          type='password'
           value={user.confirmPassword || ''}
           onChange={handleChange('confirmPassword')}
           onBlur={handleBlur('confirmPassword')}

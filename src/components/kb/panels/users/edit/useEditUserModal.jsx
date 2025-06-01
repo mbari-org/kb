@@ -8,9 +8,9 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const editUserModal = () => {
+const editUserModal = editUser => {
   const components = {
-    Actions: EditUserActions,
+    Actions: () => <EditUserActions editUser={editUser} />,
     Content: EditUserContent,
     Title: EditUserTitle,
   }
@@ -18,12 +18,12 @@ const editUserModal = () => {
   return createModal(components)
 }
 
-const useEditUser = () => {
+const useEditUserModal = editUser => {
   const { setModal, setModalData } = use(ModalContext)
 
   return useCallback(
     user => {
-      setModal(editUserModal())
+      setModal(editUserModal(editUser))
       setModalData({
         user: {
           ...user,
@@ -38,4 +38,4 @@ const useEditUser = () => {
   )
 }
 
-export default useEditUser
+export default useEditUserModal

@@ -2,14 +2,14 @@ import { use } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 
 import PanelTitle from '@/components/common/PanelTitle'
-import useAddUser from '@/components/kb/panels/users/add/useAddUser'
+import useAddUserModal from '@/components/kb/panels/users/add/useAddUserModal'
 
 import UsersContext from '@/contexts/users/UsersContext'
 
 const UsersHeader = () => {
-  const { users } = use(UsersContext)
+  const { addUser, users } = use(UsersContext)
 
-  const addUser = useAddUser()
+  const addUserModal = useAddUserModal(addUser)
 
   return (
     <Box>
@@ -18,7 +18,7 @@ const UsersHeader = () => {
         <Typography variant='body1' sx={{ ml: 2 }}>
           Total: {users?.length || 0}
         </Typography>
-        <Button variant='contained' color='primary' onClick={addUser} sx={{ mr: 2 }}>
+        <Button variant='contained' color='primary' onClick={addUserModal} sx={{ mr: 2 }}>
           Add
         </Button>
       </Box>

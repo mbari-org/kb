@@ -1,12 +1,12 @@
 import { Box, IconButton } from '@mui/material'
-import { CiEdit } from 'react-icons/ci'
-import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
-
 import { useTheme } from '@mui/material/styles'
+
+import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
+import { CiEdit } from 'react-icons/ci'
 
 import { USER_ROLES } from '@/lib/constants'
 
-const useUserColumns = ({ lockUser, editUser }) => {
+const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const theme = useTheme()
 
   const columns = [
@@ -20,7 +20,7 @@ const useUserColumns = ({ lockUser, editUser }) => {
         <Box>
           <IconButton
             size='small'
-            onClick={() => lockUser(params.row)}
+            onClick={() => lockUserModal(params.row)}
             sx={{
               mr: 1,
               '&:hover': {
@@ -33,7 +33,7 @@ const useUserColumns = ({ lockUser, editUser }) => {
           </IconButton>
           <IconButton
             size='small'
-            onClick={() => editUser(params.row)}
+            onClick={() => editUserModal(params.row)}
             disabled={params.row.locked}
             sx={{
               '&:hover': {

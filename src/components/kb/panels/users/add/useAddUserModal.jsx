@@ -8,9 +8,9 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const addUserModal = () => {
+const addUserModal = addUser => {
   const components = {
-    Actions: AddUserActions,
+    Actions: () => <AddUserActions addUser={addUser} />,
     Content: AddUserContent,
     Title: AddUserTitle,
   }
@@ -31,13 +31,13 @@ const initialUserData = {
   modified: false,
 }
 
-const useAddUser = () => {
+const useAddUserModal = addUser => {
   const { setModal, setModalData } = use(ModalContext)
 
   return useCallback(() => {
-    setModal(addUserModal())
+    setModal(addUserModal(addUser))
     setModalData({ ...initialUserData })
-  }, [setModal, setModalData])
+  }, [addUser, setModal, setModalData])
 }
 
-export default useAddUser
+export default useAddUserModal

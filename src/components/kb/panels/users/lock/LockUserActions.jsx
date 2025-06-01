@@ -3,19 +3,17 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
-import UsersContext from '@/contexts/users/UsersContext'
 
 import { LABELS } from '@/lib/constants'
 
 const { CANCEL, LOCK, UNLOCK } = LABELS.BUTTON
 
-const LockUserActions = () => {
+const LockUserActions = ({ lockUser }) => {
   const { closeModal, modalData } = use(ModalContext)
-  const { lockUser } = use(UsersContext)
 
   const { user } = modalData
 
-  const colors = ['main', 'cancel']
+  const colors = ['cancel', 'main']
   const disabled = [false, false]
   const labels = [CANCEL, user.locked ? UNLOCK : LOCK]
 

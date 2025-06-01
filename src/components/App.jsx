@@ -9,7 +9,6 @@ import kbTheme from '@/lib/theme'
 
 import AuthProvider from '@/contexts/auth/AuthProvider'
 import ConfigProvider from '@/contexts/config/ConfigProvider'
-import UsersProvider from '@/contexts/users/UsersProvider'
 
 import AuthRoute from '@/components/auth/AuthRoute'
 
@@ -26,15 +25,13 @@ const App = () => {
           <Whoops>
             <ConfigProvider>
               <AuthProvider>
-                <UsersProvider>
-                  <Routes>
-                    <Route path='/login' element={<StartUp />} />
-                    <Route element={<AuthRoute />}>
-                      <Route path='/kb' element={<KbContainer />}></Route>
-                    </Route>
-                    <Route path='*' element={<Navigate to='/login' replace />} />
-                  </Routes>
-                </UsersProvider>
+                <Routes>
+                  <Route path='/login' element={<StartUp />} />
+                  <Route element={<AuthRoute />}>
+                    <Route path='/kb' element={<KbContainer />}></Route>
+                  </Route>
+                  <Route path='*' element={<Navigate to='/login' replace />} />
+                </Routes>
               </AuthProvider>
             </ConfigProvider>
           </Whoops>

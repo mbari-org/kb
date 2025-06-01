@@ -11,13 +11,12 @@ import LastAdminTitle from './LastAdminTitle'
 import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
-import UsersContext from '@/contexts/users/UsersContext'
 
 import { USER_ROLES } from '@/lib/constants'
 
-const lockUserModal = () => {
+const lockUserModal = lockUser => {
   const components = {
-    Actions: LockUserActions,
+    Actions: () => <LockUserActions lockUser={lockUser} />,
     Content: LockUserContent,
     Title: LockUserTitle,
   }
@@ -35,9 +34,8 @@ const lastAdminModal = () => {
   return createModal(components)
 }
 
-const useLockUser = () => {
+const useLockUserModal = (lockUser, users) => {
   const { setModal, setModalData } = use(ModalContext)
-  const { users } = use(UsersContext)
 
   return useCallback(
     user => {
@@ -52,11 +50,11 @@ const useLockUser = () => {
         return
       }
 
-      setModal(lockUserModal())
+      setModal(lockUserModal(lockUser))
       setModalData({ user })
     },
-    [setModal, setModalData, users]
+    [lockUser, setModal, setModalData, users]
   )
 }
 
-export default useLockUser
+export default useLockUserModal

@@ -3,7 +3,6 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
-import UsersContext from '@/contexts/users/UsersContext'
 
 import { LABELS } from '@/lib/constants'
 
@@ -11,13 +10,12 @@ import { drop } from '@/lib/util'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 
-const AddUserActions = () => {
+const AddUserActions = ({ addUser }) => {
   const { closeModal, modalData } = use(ModalContext)
-  const { addUser } = use(UsersContext)
 
   const { user } = modalData
 
-  const colors = ['cancel', 'primary']
+  const colors = ['main', 'cancel']
   const disabled = [false, !user.isValid]
   const labels = [CANCEL, SAVE]
 
