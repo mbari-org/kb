@@ -20,7 +20,7 @@ const addReferenceModal = (addReference, references) => {
     Title: AddReferenceTitle,
   }
 
-  return createModal(components)
+  return createModal({ ...components, minWidth: '75vw' })
 }
 
 const initialReferenceData = {

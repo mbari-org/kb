@@ -36,6 +36,9 @@ const EditReferenceContent = ({ isDoiUnique }) => {
         onChange={handleChange('citation')}
         fullWidth
         required
+        multiline
+        minRows={3}
+        maxRows={10}
       />
       <TextField
         label='DOI'

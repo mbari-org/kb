@@ -41,6 +41,7 @@ const ReferencesTable = () => {
         disableColumnMenu
         disableSelectionOnClick
         getRowId={row => row.id}
+        getRowHeight={() => 'auto'}
         pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
         paginationMode='server'
         paginationModel={{

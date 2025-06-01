@@ -49,12 +49,32 @@ const useReferenceColumns = ({ editReferenceModal, deleteReferenceModal }) => {
       headerName: 'DOI',
       width: 200,
       headerClassName: 'bold-header',
+      renderCell: params => (
+        <Box
+          sx={{
+            py: 1,
+          }}
+        >
+          {params.value}
+        </Box>
+      ),
     },
     {
       field: 'citation',
       headerName: 'Citation',
       flex: 0.4,
       headerClassName: 'bold-header',
+      renderCell: params => (
+        <Box
+          sx={{
+            whiteSpace: 'normal',
+            wordWrap: 'break-word',
+            py: 1,
+          }}
+        >
+          {params.value}
+        </Box>
+      ),
     },
     {
       field: 'concepts',
@@ -62,6 +82,17 @@ const useReferenceColumns = ({ editReferenceModal, deleteReferenceModal }) => {
       flex: 0.4,
       headerClassName: 'bold-header',
       valueGetter: params => params.concepts?.join(', ') || '',
+      renderCell: params => (
+        <Box
+          sx={{
+            whiteSpace: 'normal',
+            wordWrap: 'break-word',
+            py: 1,
+          }}
+        >
+          {params.value}
+        </Box>
+      ),
     },
   ]
 

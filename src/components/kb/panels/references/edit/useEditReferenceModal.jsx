@@ -22,7 +22,7 @@ const editReferenceModal = (editReference, references) => {
     Title: EditReferenceTitle,
   }
 
-  return createModal(components)
+  return createModal({ ...components, minWidth: '75vw' })
 }
 
 const useEditReferenceModal = (editReference, references) => {
