@@ -45,16 +45,23 @@ const useReferenceColumns = ({ editReferenceModal, deleteReferenceModal }) => {
       ),
     },
     {
-      field: 'citation',
-      headerName: 'Citation',
-      width: 400,
-      headerClassName: 'bold-header',
-    },
-    {
       field: 'doi',
       headerName: 'DOI',
       width: 200,
       headerClassName: 'bold-header',
+    },
+    {
+      field: 'citation',
+      headerName: 'Citation',
+      flex: 0.4,
+      headerClassName: 'bold-header',
+    },
+    {
+      field: 'concepts',
+      headerName: 'Concepts',
+      flex: 0.4,
+      headerClassName: 'bold-header',
+      valueGetter: params => params.concepts?.join(', ') || '',
     },
   ]
 
