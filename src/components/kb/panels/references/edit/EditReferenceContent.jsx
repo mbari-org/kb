@@ -4,7 +4,7 @@ import { Box, TextField } from '@mui/material'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const AddReferenceContent = ({ isDoiUnique }) => {
+const EditReferenceContent = ({ isDoiUnique }) => {
   const { modalData, setModalData } = use(ModalContext)
   const { reference } = modalData
 
@@ -14,9 +14,17 @@ const AddReferenceContent = ({ isDoiUnique }) => {
       ...reference,
       [field]: newValue,
     }
+    const modified =
+      field === 'citation'
+        ? newValue !== reference.originalReference.citation
+        : field === 'doi'
+        ? newValue !== reference.originalReference.doi
+        : false
+
     setModalData({
       ...modalData,
       reference: updatedReference,
+      modified,
     })
   }
 
@@ -35,11 +43,11 @@ const AddReferenceContent = ({ isDoiUnique }) => {
         onChange={handleChange('doi')}
         fullWidth
         required
-        error={!isDoiUnique(reference.doi)}
-        helperText={!isDoiUnique(reference.doi) ? 'DOI already exists' : ''}
+        error={!isDoiUnique(reference.doi, reference.id)}
+        helperText={!isDoiUnique(reference.doi, reference.id) ? 'DOI already exists' : ''}
       />
     </Box>
   )
 }
 
-export default AddReferenceContent
+export default EditReferenceContent

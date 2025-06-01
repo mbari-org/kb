@@ -1,50 +1,62 @@
-import { use, useCallback, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 
-import { createReference, getReferences, updateReference } from '@/lib/kb/api/references'
+import {
+  createReference,
+  deleteReference as removeReference,
+  getReferences,
+  updateReference,
+} from '@/lib/kb/api/references'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ReferencesContext from '@/contexts/references/ReferencesContext'
 
 export const ReferencesProvider = ({ children }) => {
-  const [references, setReferences] = useState([])
   const { apiFns } = use(ConfigContext)
 
-  const loadReferences = useCallback(async () => {
-    const data = await apiFns.apiPayload(getReferences)
-    setReferences(data)
-  }, [apiFns])
+  const [references, setReferences] = useState([])
 
   const addReference = useCallback(
     async referenceData => {
-      try {
-        const newReference = await apiFns.apiResult(createReference, referenceData)
-        setReferences(prev => [...prev, newReference])
-      } catch (error) {
-        console.error('Error creating reference:', error)
-        throw error
-      }
+      const createdReference = await apiFns.apiPayload(createReference, referenceData)
+      setReferences(prev => [...prev, createdReference])
+    },
+    [apiFns]
+  )
+
+  const deleteReference = useCallback(
+    async referenceId => {
+      await apiFns.apiPayload(removeReference, referenceId)
+      setReferences(prev => prev.filter(reference => reference.id !== referenceId))
     },
     [apiFns]
   )
 
   const editReference = useCallback(
-    async referenceData => {
-      try {
-        await apiFns.apiResult(updateReference, referenceData)
-        await loadReferences() // Refresh the list after updating
-      } catch (error) {
-        console.error('Error updating reference:', error)
-        throw error
-      }
+    async (referenceId, updatedData) => {
+      const updatedReference = await apiFns.apiResult(updateReference, [referenceId, updatedData])
+      setReferences(prev =>
+        prev.map(reference => (reference.id === updatedReference.id ? updatedReference : reference))
+      )
     },
-    [apiFns, loadReferences]
+    [apiFns]
   )
 
+  useEffect(() => {
+    // if (!user) return
+
+    const loadReferences = async () => {
+      const data = await apiFns.apiPayload(getReferences)
+      setReferences(data)
+    }
+
+    loadReferences()
+  }, [apiFns])
+
   const value = {
-    references,
     addReference,
+    deleteReference,
     editReference,
-    loadReferences,
+    references,
   }
 
   return <ReferencesContext.Provider value={value}>{children}</ReferencesContext.Provider>

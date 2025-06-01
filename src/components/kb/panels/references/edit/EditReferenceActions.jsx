@@ -8,13 +8,18 @@ import { LABELS } from '@/lib/constants'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 
-const AddReferenceActions = ({ addReference, isDoiUnique }) => {
+const EditReferenceActions = ({ editReference, isDoiUnique }) => {
   const { closeModal, modalData } = use(ModalContext)
-
   const { reference } = modalData
 
-  const colors = ['cancel', 'primary']
-  const disabled = [false, !reference.citation || !reference.doi || !isDoiUnique(reference.doi)]
+  const colors = ['main', 'cancel']
+  const disabled = [
+    false,
+    !reference.citation ||
+      !reference.doi ||
+      !isDoiUnique(reference.doi, reference.id) ||
+      !modalData.modified,
+  ]
   const labels = [CANCEL, SAVE]
 
   const onAction = async label => {
@@ -25,17 +30,21 @@ const AddReferenceActions = ({ addReference, isDoiUnique }) => {
 
       case SAVE:
         try {
-          await addReference(reference)
+          const updatedData = {
+            citation: reference.citation,
+            doi: reference.doi,
+          }
+          await editReference(reference.id, updatedData)
           closeModal()
         } catch (error) {
-          console.error('Error creating reference:', error)
+          console.error('Error updating reference:', error)
           // TODO: Show error message to user
         }
         break
     }
   }
 
-  return createActions({ colors, disabled, labels, onAction }, 'AddReferenceActions')
+  return createActions({ colors, disabled, labels, onAction }, 'EditReferenceActions')
 }
 
-export default AddReferenceActions
+export default EditReferenceActions

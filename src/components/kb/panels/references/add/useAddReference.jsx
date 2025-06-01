@@ -8,10 +8,15 @@ import { createModal } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const addReferenceModal = () => {
+const addReferenceModal = (addReference, references) => {
+  const isDoiUnique = doi => {
+    if (!doi) return true
+    return !references.some(ref => ref.doi?.toLowerCase() === doi.toLowerCase())
+  }
+
   const components = {
-    Actions: AddReferenceActions,
-    Content: AddReferenceContent,
+    Actions: () => <AddReferenceActions addReference={addReference} isDoiUnique={isDoiUnique} />,
+    Content: () => <AddReferenceContent isDoiUnique={isDoiUnique} />,
     Title: AddReferenceTitle,
   }
 
@@ -27,13 +32,13 @@ const initialReferenceData = {
   modified: false,
 }
 
-const useAddReference = () => {
+const useAddReferenceModal = (addReference, references) => {
   const { setModal, setModalData } = use(ModalContext)
 
   return useCallback(() => {
-    setModal(addReferenceModal())
+    setModal(addReferenceModal(addReference, references))
     setModalData({ ...initialReferenceData })
-  }, [setModal, setModalData])
+  }, [addReference, references, setModal, setModalData])
 }
 
-export default useAddReference
+export default useAddReferenceModal

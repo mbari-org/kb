@@ -6,16 +6,15 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { LABELS } from '@/lib/constants'
 
-const { CANCEL, LOCK, UNLOCK } = LABELS.BUTTON
+const { CANCEL, DELETE } = LABELS.BUTTON
 
-const LockUserActions = ({ lockUser }) => {
+const DeleteReferenceActions = ({ deleteReference }) => {
   const { closeModal, modalData } = use(ModalContext)
-
-  const { user } = modalData
+  const { reference } = modalData
 
   const colors = ['main', 'cancel']
   const disabled = [false, false]
-  const labels = [CANCEL, user.locked ? UNLOCK : LOCK]
+  const labels = [CANCEL, DELETE]
 
   const onAction = async label => {
     switch (label) {
@@ -23,19 +22,19 @@ const LockUserActions = ({ lockUser }) => {
         closeModal()
         break
 
-      case LOCK:
-      case UNLOCK:
+      case DELETE:
         try {
-          await lockUser(user.username, !user.locked)
+          await deleteReference(reference.id)
           closeModal()
         } catch (error) {
-          console.error('Error locking/unlocking user:', error)
+          console.error('Error deleting reference:', error)
+          // TODO: Show error message to user
         }
         break
     }
   }
 
-  return createActions({ colors, disabled, labels, onAction }, 'DeleteUserActions')
+  return createActions({ colors, disabled, labels, onAction }, 'DeleteReferenceActions')
 }
 
-export default LockUserActions
+export default DeleteReferenceActions

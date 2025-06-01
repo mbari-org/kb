@@ -12,37 +12,28 @@ import { drop } from '@/lib/util'
 
 const UsersProvider = ({ children }) => {
   const { user } = use(AuthContext)
-  const { apiFns, config } = use(ConfigContext)
+  const { apiFns } = use(ConfigContext)
 
   const [users, setUsers] = useState([])
 
   const addUser = useCallback(
-    async newUser => {
-      try {
-        const createdUser = await apiFns.apiPayload(createUser, newUser)
-        setUsers(prevUsers => {
-          const newUsers = [...prevUsers, createdUser]
-          return newUsers.sort((a, b) => a.username.localeCompare(b.username))
-        })
-      } catch (error) {
-        console.error('Error adding user:', error)
-      }
+    async userData => {
+      const createdUser = await apiFns.apiPayload(createUser, userData)
+      setUsers(prevUsers =>
+        [...prevUsers, createdUser].sort((a, b) => a.username.localeCompare(b.username))
+      )
     },
     [apiFns]
   )
 
   const editUser = useCallback(
     async (username, updatedData) => {
-      try {
-        const updatedUser = await apiFns.apiPayload(updateUser, [username, updatedData])
-        setUsers(prevUsers =>
-          prevUsers
-            .map(user => (user.username === username ? updatedUser : user))
-            .sort((a, b) => a.username.localeCompare(b.username))
-        )
-      } catch (error) {
-        console.error('Error updating user:', error)
-      }
+      const updatedUser = await apiFns.apiPayload(updateUser, [username, updatedData])
+      setUsers(prevUsers =>
+        prevUsers
+          .map(user => (user.username === username ? updatedUser : user))
+          .sort((a, b) => a.username.localeCompare(b.username))
+      )
     },
     [apiFns]
   )
@@ -60,11 +51,11 @@ const UsersProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (!config?.valid || !user) return
+    if (!user) return
 
     const loadUsers = async () => {
-      const { error, payload: users } = await getUsers(config)
-      if (error) throw error
+      const users = await apiFns.apiPayload(getUsers)
+
       // CxTmp until locked is implemented in the backend
       const cxTmpUsers = users.map(user => ({ ...user, locked: false }))
       setUsers(
@@ -74,7 +65,7 @@ const UsersProvider = ({ children }) => {
       )
     }
     if (isAdmin(user)) loadUsers()
-  }, [config, user])
+  }, [apiFns, user])
 
   const value = {
     addUser,

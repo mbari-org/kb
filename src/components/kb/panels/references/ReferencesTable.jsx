@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useState } from 'react'
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
@@ -6,25 +6,37 @@ import ReferencesPagination from './ReferencesPagination'
 
 import ReferencesContext from '@/contexts/references/ReferencesContext'
 
+import useEditReferenceModal from '@/components/kb/panels/references/edit/useEditReferenceModal'
+import useDeleteReferenceModal from '@/components/kb/panels/references/delete/useDeleteReferenceModal'
+import useReferenceColumns from '@/components/kb/panels/references/useReferenceColumns'
+
 import { PAGINATION } from '@/lib/constants'
 
+const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
+const DEFAULT_OFFSET = 0
+
 const ReferencesTable = () => {
-  const { references } = use(ReferencesContext)
+  const { editReference, deleteReference, references } = use(ReferencesContext)
 
-  const limit = 10
-  const offset = 0
+  const editReferenceModal = useEditReferenceModal(editReference, references)
+  const deleteReferenceModal = useDeleteReferenceModal(deleteReference)
 
-  const nextPage = () => console.log('nextPage called')
-  const prevPage = () => console.log('prevPage called')
-  const setPageSize = newLimit => console.log('setPageSize called with:', newLimit)
+  const [limit, setLimit] = useState(DEFAULT_LIMIT)
+  const [offset, setOffset] = useState(DEFAULT_OFFSET)
+
+  const columns = useReferenceColumns({ editReferenceModal, deleteReferenceModal })
+
+  const nextPage = () => setOffset(prev => prev + limit)
+  const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
+  const setPageSize = newLimit => {
+    setLimit(newLimit)
+    setOffset(0)
+  }
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>
       <DataGrid
-        columns={[
-          { field: 'citation', headerName: 'Citation', width: 400 },
-          { field: 'doi', headerName: 'DOI', width: 200 },
-        ]}
+        columns={columns}
         disableColumnFilter
         disableColumnMenu
         disableSelectionOnClick
