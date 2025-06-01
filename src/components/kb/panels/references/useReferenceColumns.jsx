@@ -81,7 +81,7 @@ const useReferenceColumns = ({ editReferenceModal, deleteReferenceModal }) => {
       headerName: 'Concepts',
       flex: 0.4,
       headerClassName: 'bold-header',
-      valueGetter: params => params.concepts?.join(', ') || '',
+      valueGetter: params => params.join(', ') || '',
       renderCell: params => (
         <Box
           sx={{

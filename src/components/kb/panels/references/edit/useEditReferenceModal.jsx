@@ -32,10 +32,8 @@ const useEditReferenceModal = (editReference, references) => {
     reference => {
       setModal(editReferenceModal(editReference, references))
       setModalData({
-        reference: {
-          ...reference,
-          originalReference: reference,
-        },
+        reference,
+        originalReference: reference,
         modified: false,
       })
     },

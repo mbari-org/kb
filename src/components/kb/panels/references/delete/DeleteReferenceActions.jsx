@@ -24,7 +24,7 @@ const DeleteReferenceActions = ({ deleteReference }) => {
 
       case DELETE:
         try {
-          await deleteReference(reference.id)
+          await deleteReference(reference)
           closeModal()
         } catch (error) {
           console.error('Error deleting reference:', error)

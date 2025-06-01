@@ -40,13 +40,13 @@ const ReferencesTable = () => {
         disableColumnFilter
         disableColumnMenu
         disableSelectionOnClick
-        getRowId={row => row.id}
+        getRowId={reference => reference.id}
         getRowHeight={() => 'auto'}
         pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
         paginationMode='server'
         paginationModel={{
-          pageSize: limit,
           page: Math.floor(offset / limit),
+          pageSize: limit,
         }}
         rowCount={references.length}
         rows={references}

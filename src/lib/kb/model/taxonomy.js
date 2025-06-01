@@ -464,7 +464,7 @@ export const cxDebugTaxonomyIntegrity = taxonomy => {
   }
 
   validateConceptTree(taxonomy.rootName)
-  console.log('cxDebugTaxonomyIntegrity passed')
+  console.log('cxDebug Taxonomy Integrity passed')
 }
 
 export {

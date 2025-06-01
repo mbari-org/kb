@@ -10,15 +10,18 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 
 const EditReferenceActions = ({ editReference, isDoiUnique }) => {
   const { closeModal, modalData } = use(ModalContext)
+
   const { reference } = modalData
 
-  const colors = ['main', 'cancel']
+  const colors = ['cancel', 'main']
   const disabled = [
     false,
     !reference.citation ||
       !reference.doi ||
       !isDoiUnique(reference.doi, reference.id) ||
-      !modalData.modified,
+      !modalData.modified ||
+      modalData.hasSearchInput ||
+      modalData.reference.selectedConcept,
   ]
   const labels = [CANCEL, SAVE]
 
@@ -29,17 +32,8 @@ const EditReferenceActions = ({ editReference, isDoiUnique }) => {
         break
 
       case SAVE:
-        try {
-          const updatedData = {
-            citation: reference.citation,
-            doi: reference.doi,
-          }
-          await editReference(reference.id, updatedData)
-          closeModal()
-        } catch (error) {
-          console.error('Error updating reference:', error)
-          // TODO: Show error message to user
-        }
+        await editReference(modalData.originalReference, reference)
+        closeModal()
         break
     }
   }

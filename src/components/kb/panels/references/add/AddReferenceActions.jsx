@@ -24,13 +24,8 @@ const AddReferenceActions = ({ addReference, isDoiUnique }) => {
         break
 
       case SAVE:
-        try {
-          await addReference(reference)
-          closeModal()
-        } catch (error) {
-          console.error('Error creating reference:', error)
-          // TODO: Show error message to user
-        }
+        await addReference(reference)
+        closeModal()
         break
     }
   }

@@ -11,6 +11,7 @@ const DeleteReferenceContent = () => {
   const fields = [
     { label: 'Citation', value: reference.citation },
     { label: 'DOI', value: reference.doi },
+    { label: 'Concepts', value: reference.concepts?.join(', ') || '' },
   ]
 
   return (

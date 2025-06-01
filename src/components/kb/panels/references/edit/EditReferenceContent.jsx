@@ -6,11 +6,12 @@ const EditReferenceContent = ({ isDoiUnique }) => {
   const { modalData, setModalData } = use(ModalContext)
   const { reference } = modalData
 
-  const handleChange = (updatedReference, modified) => {
+  const handleChange = (updatedReference, modified, hasSearchInput) => {
     setModalData({
       ...modalData,
       reference: updatedReference,
       modified,
+      hasSearchInput,
     })
   }
 

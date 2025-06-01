@@ -25,8 +25,9 @@ const ConceptSearch = ({ conceptName, handleConceptSelect, handleKeyUp }) => {
         <Stack>
           <Typography
             sx={{
-              fontSize: theme => theme.typography.fontSize * 1.4,
+              fontSize: theme => theme.typography.fontSize * 1.2,
               fontWeight: 'bold',
+              ml: 0.5,
             }}
           >
             Search

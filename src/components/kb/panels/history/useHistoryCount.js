@@ -6,7 +6,6 @@ import { getHistoryCount } from '@/lib/kb/api/history'
 
 const useHistoryCount = type => {
   const { apiFns } = use(ConfigContext)
-
   const [count, setCount] = useState(0)
 
   useEffect(() => {
