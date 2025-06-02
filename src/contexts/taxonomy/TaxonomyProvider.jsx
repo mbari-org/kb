@@ -53,6 +53,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const deleteConcept = useCallback(
     async conceptName => {
+      if (!apiFns) return
       const { taxonomy: updatedTaxonomy, selectConceptName } = await deleteTaxonomyConcept(
         taxonomy,
         conceptName,
@@ -113,7 +114,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const loadConcept = useCallback(
     async conceptName => {
-      if (alreadyLoadingConcept.current) {
+      if (!apiFns || alreadyLoadingConcept.current) {
         return
       }
 
@@ -135,11 +136,12 @@ const TaxonomyProvider = ({ children }) => {
         alreadyLoadingConcept.current = false
       }
     },
-    [apiFns.apiPayload, setProcessing, taxonomy, updateTaxonomy]
+    [apiFns, setProcessing, taxonomy, updateTaxonomy]
   )
 
   const loadConceptDescendants = useCallback(
     async concept => {
+      if (!apiFns) return
       try {
         setProcessing(LOADING)
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(
@@ -156,11 +158,12 @@ const TaxonomyProvider = ({ children }) => {
         showBoundary(error)
       }
     },
-    [apiFns.apiPayload, setProcessing, showBoundary, taxonomy, updateTaxonomy]
+    [apiFns, setProcessing, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const refreshConcept = useCallback(
     async (concept, updateInfo) => {
+      if (!apiFns) return
       const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
         taxonomy,
         concept,
@@ -177,6 +180,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const refreshHistory = useCallback(
     async historyType => {
+      if (!apiFns) return
       const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(
         taxonomy,
         historyType,

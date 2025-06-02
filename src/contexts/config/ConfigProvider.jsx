@@ -67,6 +67,11 @@ const ConfigProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    if (!config) {
+      setApiFns(null)
+      return
+    }
+
     const apiResult = config => async (apiRequest, params) => {
       const { error, result } = await apiRequest(config, params)
       barfOnError(error)
