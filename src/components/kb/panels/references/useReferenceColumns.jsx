@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles'
 import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 
-const useReferenceColumns = ({ editReferenceModal, deleteReferenceModal }) => {
+const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
   const theme = useTheme()
 
   const columns = [

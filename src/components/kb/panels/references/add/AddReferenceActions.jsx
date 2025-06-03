@@ -4,12 +4,13 @@ import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS, PROCESSING } from '@/lib/constants'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
+const { SAVING } = PROCESSING
 
 const AddReferenceActions = ({ addReference, isDoiUnique }) => {
-  const { closeModal, modalData } = use(ModalContext)
+  const { closeModal, modalData, setProcessing } = use(ModalContext)
 
   const { reference } = modalData
 
@@ -24,8 +25,10 @@ const AddReferenceActions = ({ addReference, isDoiUnique }) => {
         break
 
       case SAVE:
-        await addReference(reference)
         closeModal()
+        setProcessing(SAVING)
+        await addReference(reference)
+        setProcessing(false)
         break
     }
   }

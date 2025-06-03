@@ -141,6 +141,7 @@ const PENDING = {
 }
 
 const PROCESSING = {
+  DELETING: 'Deleting...',
   LOADING: 'Loading...',
   LOADING_DELAY: 333,
   SAVING: 'Saving...',

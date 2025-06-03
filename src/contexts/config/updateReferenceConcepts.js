@@ -1,4 +1,4 @@
-import { addConcept, getReference, removeConcept } from '@/lib/kb/api/references'
+import { addConcept, removeConcept } from '@/lib/kb/api/references'
 
 import { isEmpty } from '@/lib/util'
 
@@ -11,13 +11,13 @@ const updateReferenceConcepts = async (oldReference, newReference, apiFns) => {
 
   newConcepts.forEach(concept => {
     if (!oldConcepts.includes(concept)) {
-      promises.push(apiFns.apiResult(addConcept, [referenceId, concept]))
+      promises.push(() => apiFns.apiPayload(addConcept, [referenceId, concept]))
     }
   })
 
   oldConcepts.forEach(concept => {
     if (!newConcepts.includes(concept)) {
-      promises.push(apiFns.apiResult(removeConcept, [referenceId, concept]))
+      promises.push(() => apiFns.apiPayload(removeConcept, [referenceId, concept]))
     }
   })
 
@@ -25,10 +25,15 @@ const updateReferenceConcepts = async (oldReference, newReference, apiFns) => {
     return oldReference
   }
 
-  for (const promise of promises) {
-    await promise
+  let lastUpdatedReference
+  for (const promiseFn of promises) {
+    lastUpdatedReference = await promiseFn()
   }
-  return apiFns.apiPayload(getReference, referenceId)
+
+  return {
+    ...lastUpdatedReference,
+    concepts: (lastUpdatedReference.concepts || []).sort((a, b) => a.localeCompare(b)),
+  }
 }
 
 export default updateReferenceConcepts

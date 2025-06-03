@@ -4,12 +4,13 @@ import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS, PROCESSING } from '@/lib/constants'
 
 const { CANCEL, DELETE } = LABELS.BUTTON
+const { DELETING } = PROCESSING
 
 const DeleteReferenceActions = ({ deleteReference }) => {
-  const { closeModal, modalData } = use(ModalContext)
+  const { closeModal, modalData, setProcessing } = use(ModalContext)
   const { reference } = modalData
 
   const colors = ['main', 'cancel']
@@ -23,13 +24,14 @@ const DeleteReferenceActions = ({ deleteReference }) => {
         break
 
       case DELETE:
-        try {
-          await deleteReference(reference)
-          closeModal()
-        } catch (error) {
-          console.error('Error deleting reference:', error)
-          // TODO: Show error message to user
-        }
+        closeModal()
+        setProcessing(DELETING)
+        await deleteReference(reference)
+        setProcessing(false)
+        break
+
+      default:
+        closeModal()
         break
     }
   }
