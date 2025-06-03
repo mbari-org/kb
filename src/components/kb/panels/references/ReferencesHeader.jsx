@@ -9,6 +9,8 @@ import useAddReferenceModal from '@/components/kb/panels/references/add/useAddRe
 import ReferencesContext from '@/contexts/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
+const SEARCH_WIDTH = 400
+
 const ReferencesHeader = () => {
   const { addReference, references } = use(ReferencesContext)
   const { select, selected } = use(SelectedContext)
@@ -42,7 +44,7 @@ const ReferencesHeader = () => {
   return (
     <Box>
       <PanelTitle title='References' />
-      <Box sx={{ ml: 1, mt: -9, width: 400 }}>
+      <Box sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}>
         <ConceptSearch
           conceptName={selected.concept}
           handleConceptSelect={handleConceptSelect}
@@ -51,14 +53,22 @@ const ReferencesHeader = () => {
         />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', ml: 2, mt: 1, gap: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            ml: 2,
+            mt: 1,
+            width: SEARCH_WIDTH,
+            justifyContent: 'space-between',
+          }}
+        >
           <Typography variant='body1'>Total: {references?.length || 0}</Typography>
           <FormControlLabel
             control={
               <Switch size='small' checked={selected.byConcept} onChange={handleToggleChange} />
             }
             label='By Concept'
-            sx={{ ml: 2 }}
           />
         </Box>
         <Button variant='contained' color='primary' onClick={addReferenceModal} sx={{ mr: 2 }}>

@@ -5,6 +5,7 @@ import ConceptAuthor from '@/components/kb/panels/concepts/change/staged/concept
 import ConceptMedia from '@/components/kb/panels/concepts/change/staged/concept/media/ConceptMedia'
 import ConceptName from '@/components/kb/panels/concepts/change/staged/concept/field/ConceptName'
 import ConceptRank from '@/components/kb/panels/concepts/change/staged/concept/field/ConceptRank'
+import ConceptReferences from '@/components/kb/panels/concepts/ConceptReferences'
 
 const ConceptDetail = () => {
   return (
@@ -15,6 +16,7 @@ const ConceptDetail = () => {
         <ConceptAuthor />
         <ConceptRank />
         <ConceptAliases />
+        <ConceptReferences />
       </Stack>
     </Stack>
   )
