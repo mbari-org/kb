@@ -1,4 +1,6 @@
 import ModalContext from '@/contexts/modal/ModalContext'
+import { createReference } from '@/lib/kb/model/reference'
+import { isEqual } from '@/lib/util'
 import { use, useState } from 'react'
 
 const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
@@ -9,16 +11,13 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
   const checkModification = updatedReference => {
     if (!isEdit) return false
 
-    const originalConcepts = (modalData.originalReference?.concepts || [])
-      .slice()
-      .sort((a, b) => a.localeCompare(b))
-
-    const currentConcepts = updatedReference.concepts || []
+    const originalReference = createReference(modalData.originalReference)
+    const currentReference = createReference(updatedReference)
 
     return (
-      updatedReference.citation !== (modalData.originalReference?.citation || '') ||
-      updatedReference.doi !== (modalData.originalReference?.doi || '') ||
-      JSON.stringify(currentConcepts) !== JSON.stringify(originalConcepts)
+      currentReference.citation !== originalReference.citation ||
+      currentReference.doi !== originalReference.doi ||
+      !isEqual(currentReference.concepts, originalReference.concepts)
     )
   }
 
@@ -32,14 +31,13 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
 
     // Convert comma-separated concepts string to array
     if (field === 'concepts') {
-      updatedReference = {
+      updatedReference = createReference({
         ...updatedReference,
         concepts: newValue
           .split(',')
           .map(c => c.trim())
-          .filter(Boolean)
-          .sort((a, b) => a.localeCompare(b)),
-      }
+          .filter(Boolean),
+      })
     }
 
     onChange(updatedReference, checkModification(updatedReference), hasSearchInput)
@@ -59,11 +57,11 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
     if (selectedConcept) {
       const concepts = reference.concepts || []
       if (!concepts.includes(selectedConcept)) {
-        const updatedReference = {
+        const updatedReference = createReference({
           ...reference,
-          concepts: [...concepts, selectedConcept].sort((a, b) => a.localeCompare(b)),
+          concepts: [...concepts, selectedConcept],
           selectedConcept: '',
-        }
+        })
         onChange(updatedReference, checkModification(updatedReference), false)
       }
       setSelectedConcept('')
@@ -73,11 +71,11 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
   const handleDeleteConcept = () => {
     if (selectedConcept) {
       const concepts = reference.concepts || []
-      const updatedReference = {
+      const updatedReference = createReference({
         ...reference,
-        concepts: concepts.filter(c => c !== selectedConcept).sort((a, b) => a.localeCompare(b)),
+        concepts: concepts.filter(c => c !== selectedConcept),
         selectedConcept: '',
-      }
+      })
       onChange(updatedReference, checkModification(updatedReference), false)
       setSelectedConcept('')
     }

@@ -1,5 +1,5 @@
 import { addConcept, removeConcept } from '@/lib/kb/api/references'
-
+import { createReference } from '@/lib/kb/model/reference'
 import { isEmpty } from '@/lib/util'
 
 const updateReferenceConcepts = async (oldReference, newReference, apiFns) => {
@@ -30,10 +30,7 @@ const updateReferenceConcepts = async (oldReference, newReference, apiFns) => {
     lastUpdatedReference = await promiseFn()
   }
 
-  return {
-    ...lastUpdatedReference,
-    concepts: (lastUpdatedReference.concepts || []).sort((a, b) => a.localeCompare(b)),
-  }
+  return createReference(lastUpdatedReference)
 }
 
 export default updateReferenceConcepts
