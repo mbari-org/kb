@@ -20,6 +20,15 @@ const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
       <TextField
+        error={!isDoiUnique(reference.doi, reference.id)}
+        fullWidth
+        helperText={!isDoiUnique(reference.doi, reference.id) ? 'DOI already exists' : ''}
+        label='DOI'
+        onChange={handleChange('doi')}
+        required
+        value={reference.doi || ''}
+      />
+      <TextField
         fullWidth
         label='Citation'
         maxRows={10}
@@ -28,15 +37,6 @@ const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => 
         onChange={handleChange('citation')}
         required
         value={reference.citation || ''}
-      />
-      <TextField
-        error={!isDoiUnique(reference.doi, reference.id)}
-        fullWidth
-        helperText={!isDoiUnique(reference.doi, reference.id) ? 'DOI already exists' : ''}
-        label='DOI'
-        onChange={handleChange('doi')}
-        required
-        value={reference.doi || ''}
       />
       <TextField
         fullWidth
