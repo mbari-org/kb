@@ -1,7 +1,8 @@
+import HistoryTable from './HistoryTable'
+
 import useHistoryColumns from './useHistoryColumns'
 import useHistoryCount from './useHistoryCount'
 import useLoadHistory from './useLoadHistory'
-import HistoryTable from './HistoryTable'
 
 import { capitalize } from '@/lib/util'
 

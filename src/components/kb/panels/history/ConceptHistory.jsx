@@ -89,7 +89,7 @@ const ConceptHistory = () => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
-        <Box sx={{ width: 400 }}>
+        <Box sx={{ mt: 0.75, width: 400 }}>
           <ConceptSearch
             conceptName={selected.concept}
             handleConceptSelect={handleConceptSelect}

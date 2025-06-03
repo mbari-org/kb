@@ -15,8 +15,8 @@ import { PAGINATION } from '@/lib/constants'
 const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const ReferencesTable = () => {
-  const { editReference, deleteReference, references } = use(ReferencesContext)
+const ReferencesTable = ({ references }) => {
+  const { editReference, deleteReference } = use(ReferencesContext)
 
   const editReferenceModal = useEditReferenceModal(editReference, references)
   const deleteReferenceModal = useDeleteReferenceModal(deleteReference)

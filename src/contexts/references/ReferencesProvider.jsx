@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState, useMemo } from 'react'
 
 import {
   createReference as createReferenceApi,
@@ -8,6 +8,7 @@ import {
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ReferencesContext from '@/contexts/references/ReferencesContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 import { createReference } from '@/lib/kb/model/reference'
 
 import updateReferenceFields from '@/contexts/config/updateReferenceFields'
@@ -15,8 +16,10 @@ import updateReferenceConcepts from '@/contexts/config/updateReferenceConcepts'
 
 export const ReferencesProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
+  const { selected } = use(SelectedContext)
 
   const [references, setReferences] = useState([])
+  const [byConcept, setByConcept] = useState(false)
 
   const addReference = useCallback(
     async referenceData => {
@@ -61,11 +64,19 @@ export const ReferencesProvider = ({ children }) => {
     loadReferences()
   }, [apiFns])
 
+  const filteredReferences = useMemo(() => {
+    if (!byConcept || !selected.concept) {
+      return references
+    }
+    return references.filter(ref => ref.concepts.includes(selected.concept))
+  }, [references, byConcept, selected.concept])
+
   const value = {
     addReference,
     deleteReference,
     editReference,
-    references,
+    references: filteredReferences,
+    setByConcept,
   }
 
   return <ReferencesContext.Provider value={value}>{children}</ReferencesContext.Provider>

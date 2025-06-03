@@ -5,10 +5,12 @@ import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-const ConceptSearch = ({ conceptName, handleConceptSelect, handleKeyUp }) => {
+const ConceptSearch = ({ conceptName, handleConceptSelect, handleKeyUp, disabled = false }) => {
   const theme = useTheme()
-  const [value, setValue] = useState('')
+
   const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
+
+  const [value, setValue] = useState('')
 
   const taxonomyNames = useMemo(() => getNames(), [getNames])
 
@@ -19,6 +21,7 @@ const ConceptSearch = ({ conceptName, handleConceptSelect, handleKeyUp }) => {
 
   return (
     <Autocomplete
+      disabled={disabled}
       onChange={handleConceptSelect}
       options={taxonomyNames}
       renderInput={params => (
@@ -28,14 +31,19 @@ const ConceptSearch = ({ conceptName, handleConceptSelect, handleKeyUp }) => {
               fontSize: theme => theme.typography.fontSize * 1.2,
               fontWeight: 'bold',
               ml: 0.5,
+              color: disabled ? 'text.disabled' : 'text.primary',
             }}
           >
             Search
           </Typography>
           <TextField
             {...params}
+            disabled={disabled}
             sx={{
-              backgroundColor: theme.palette.primary.pale,
+              backgroundColor: disabled ? 'action.disabledBackground' : theme.palette.primary.pale,
+              '& .MuiInputBase-input.Mui-disabled': {
+                WebkitTextFillColor: theme.palette.text.disabled,
+              },
             }}
             onKeyUp={event => handleKeyUp(event, taxonomyNames)}
           />

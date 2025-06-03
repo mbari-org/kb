@@ -1,7 +1,9 @@
 import { Box, TextField, IconButton, Stack } from '@mui/material'
 import { BiAddToQueue } from 'react-icons/bi'
 import { MdOutlineDeleteForever } from 'react-icons/md'
+
 import ConceptSearch from '@/components/common/ConceptSearch'
+
 import useReferenceForm from '@/hooks/useReferenceForm'
 
 const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => {
