@@ -2,32 +2,50 @@ import { getUsers } from '@/lib/kb/api/users'
 
 const userDataHeaders = ['Username', 'Role', 'Affiliation', 'First Name', 'Last Name', 'Email']
 
-const usersExport = ({ apiFns }) => {
-  apiFns
-    .apiPayload(getUsers)
-    .then(users => {
-      const csvRows = users.map(user => [
-        user.username,
-        user.role,
-        user.affiliation,
-        user.firstName,
-        user.lastName,
-        user.email,
-      ])
+const usersExport = async ({ apiFns }) => {
+  try {
+    const users = await apiFns.apiPayload(getUsers)
 
-      const csvContent = [userDataHeaders.join(','), ...csvRows.map(row => row.join(','))].join(
-        '\n'
-      )
+    const csvRows = users.map(user => [
+      user.username,
+      user.role,
+      user.affiliation,
+      user.firstName,
+      user.lastName,
+      user.email,
+    ])
 
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = 'KB-Users.csv'
-      link.click()
-    })
-    .catch(error => {
-      console.error('Error exporting users:', error)
-    })
+    const csvContent = [userDataHeaders.join(','), ...csvRows.map(row => row.join(','))].join('\n')
+
+    // Create a File object
+    const file = new File([csvContent], 'KB-Users.csv', { type: 'text/csv' })
+
+    try {
+      // Request a file handle
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'KB-Users.csv',
+        types: [
+          {
+            description: 'CSV Files',
+            accept: { 'text/csv': ['.csv'] },
+          },
+        ],
+      })
+
+      // Create a FileSystemWritableFileStream to write to
+      const writable = await handle.createWritable()
+      // Write the contents
+      await writable.write(file)
+      // Close the file and write the contents to disk
+      await writable.close()
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Error saving file:', err)
+      }
+    }
+  } catch (error) {
+    console.error('Error exporting users:', error)
+  }
 }
 
 export default usersExport
