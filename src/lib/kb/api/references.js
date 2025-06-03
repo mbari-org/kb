@@ -1,21 +1,24 @@
 import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 
 const addConcept = async (config, [referenceId, conceptName]) =>
-  oniPut(config, ['reference', 'add', referenceId, 'to', conceptName])
+  oniPut(config, ['references', 'add', referenceId, 'to', conceptName])
 
-const createReference = async (config, payload) => oniPost(config, ['reference'], payload)
+const createReference = async (config, payload) => oniPost(config, ['references'], payload)
 
-const deleteReference = async (config, referenceId) => oniDelete(config, ['reference', referenceId])
+const deleteReference = async (config, referenceId) =>
+  oniDelete(config, ['references', referenceId])
 
-const getReference = async (config, referenceId) => oniGet(config, ['reference', referenceId])
+const getReference = async (config, referenceId) => oniGet(config, ['references', referenceId])
 
-const getReferences = async (config, params) => oniGet(config, ['reference'], params)
-
+const getReferences = async (config, params) => {
+  const { error, payload } = await oniGet(config, ['references'], params)
+  return { error, data: payload?.content }
+}
 const removeConcept = async (config, [referenceId, conceptName]) =>
-  oniPut(config, ['reference', 'remove', referenceId, 'from', conceptName])
+  oniPut(config, ['references', 'remove', referenceId, 'from', conceptName])
 
 const updateReference = async (config, [referenceId, payload]) =>
-  oniPut(config, ['reference', referenceId], payload)
+  oniPut(config, ['references', referenceId], payload)
 
 export {
   addConcept,

@@ -3,7 +3,6 @@ import { use, useCallback, useEffect, useState } from 'react'
 import {
   createReference,
   deleteReference as removeReference,
-  getReference,
   getReferences,
 } from '@/lib/kb/api/references'
 
@@ -54,8 +53,15 @@ export const ReferencesProvider = ({ children }) => {
 
   useEffect(() => {
     const loadReferences = async () => {
-      const data = await apiFns.apiPayload(getReferences)
-      setReferences(data)
+      const data = await apiFns.apiPagination(getReferences)
+
+      // Sort concepts array in each reference
+      const sortedData = data.map(reference => ({
+        ...reference,
+        concepts: [...reference.concepts].sort((a, b) => a.localeCompare(b)),
+      }))
+
+      setReferences(sortedData)
     }
 
     loadReferences()

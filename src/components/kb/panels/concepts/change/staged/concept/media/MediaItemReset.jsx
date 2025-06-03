@@ -16,7 +16,7 @@ const MediaItemReset = ({ index }) => {
   const resetting = mediaResetting(confirmReset, index) === RESETTING.ME
 
   const onClick = () => {
-    // CxTBD Check if this is the only media item edit left, and if so, do RESET.MEDIA
+    // Check if this is the only media item edit left, and if so, do RESET.MEDIA
     const count = stagedState.media.filter(item => isStagedAction(item.action)).length
     count === 1
       ? modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
