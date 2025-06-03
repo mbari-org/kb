@@ -26,6 +26,7 @@ const HistoryTableData = ({
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>
       <DataGrid
         columns={columns}
+        disableRowSelectionOnClick
         disableSelectionOnClick
         hideFooter={hideFooter}
         rows={displayData}

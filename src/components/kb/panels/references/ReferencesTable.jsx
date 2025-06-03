@@ -39,6 +39,7 @@ const ReferencesTable = () => {
         columns={columns}
         disableColumnFilter
         disableColumnMenu
+        disableRowSelectionOnClick
         disableSelectionOnClick
         getRowId={reference => reference.id}
         getRowHeight={() => 'auto'}
