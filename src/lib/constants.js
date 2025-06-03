@@ -159,6 +159,19 @@ const RESETTING = {
   OTHER: 'Other',
 }
 
+const SELECTED = {
+  HISTORY: {
+    TYPE: {
+      APPROVED: 'approved',
+      CONCEPT: 'concept',
+      PENDING: 'pending',
+    },
+  },
+  REFERENCES: {
+    BY_CONCEPT: 'byConcept',
+  },
+}
+
 const USER_ROLES = {
   ADMIN: 'Admin',
   MAINT: 'Maint',
@@ -177,5 +190,6 @@ export {
   PROCESSING,
   RANK,
   RESETTING,
+  SELECTED,
   USER_ROLES,
 }

@@ -1,4 +1,4 @@
-import { use, useState, useMemo } from 'react'
+import { use, useMemo } from 'react'
 import { Box } from '@mui/material'
 
 import ReferencesHeader from '@/components/kb/panels/references/ReferencesHeader'
@@ -10,19 +10,18 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ReferencesContent = () => {
   const { references } = use(ReferencesContext)
-  const { selected } = use(SelectedContext)
-  const [byConcept, setByConcept] = useState(false)
+  const { selected, select } = use(SelectedContext)
 
   const filteredReferences = useMemo(() => {
-    if (!byConcept || !selected.concept) {
+    if (!selected.byConcept || !selected.concept) {
       return references
     }
     return references.filter(ref => ref.concepts.includes(selected.concept))
-  }, [references, byConcept, selected.concept])
+  }, [references, selected.byConcept, selected.concept])
 
   return (
     <Box>
-      <ReferencesHeader byConcept={byConcept} setByConcept={setByConcept} />
+      <ReferencesHeader />
       <ReferencesTable references={filteredReferences} />
     </Box>
   )

@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { Box, Button, Stack, Typography, Switch, FormControlLabel } from '@mui/material'
+import { Box, Button, Typography, Switch, FormControlLabel } from '@mui/material'
 
 import ConceptSearch from '@/components/common/ConceptSearch'
 import PanelTitle from '@/components/common/PanelTitle'
@@ -9,7 +9,7 @@ import useAddReferenceModal from '@/components/kb/panels/references/add/useAddRe
 import ReferencesContext from '@/contexts/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-const ReferencesHeader = ({ byConcept, setByConcept }) => {
+const ReferencesHeader = () => {
   const { addReference, references } = use(ReferencesContext)
   const { select, selected } = use(SelectedContext)
 
@@ -33,10 +33,10 @@ const ReferencesHeader = ({ byConcept, setByConcept }) => {
 
   const handleToggleChange = event => {
     const newValue = event.target.checked
-    setByConcept(newValue)
-    if (!newValue) {
-      select({ concept: null })
-    }
+    select({
+      byConcept: newValue,
+      concept: newValue ? selected.concept : null,
+    })
   }
 
   return (
@@ -47,14 +47,16 @@ const ReferencesHeader = ({ byConcept, setByConcept }) => {
           conceptName={selected.concept}
           handleConceptSelect={handleConceptSelect}
           handleKeyUp={handleKeyUp}
-          disabled={!byConcept}
+          disabled={!selected.byConcept}
         />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', ml: 2, mt: 1, gap: 2 }}>
           <Typography variant='body1'>Total: {references?.length || 0}</Typography>
           <FormControlLabel
-            control={<Switch size='small' checked={byConcept} onChange={handleToggleChange} />}
+            control={
+              <Switch size='small' checked={selected.byConcept} onChange={handleToggleChange} />
+            }
             label='By Concept'
             sx={{ ml: 2 }}
           />

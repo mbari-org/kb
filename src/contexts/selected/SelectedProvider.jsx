@@ -4,6 +4,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import selectedStore from '@/lib/store/selected'
+import { SELECTED } from '@/lib/constants'
 
 import panels from '@/components/kb/panels/panels'
 
@@ -12,11 +13,12 @@ const SelectedProvider = ({ children }) => {
 
   const [selected, setSelected] = useState(null)
 
-  const select = ({ concept, panel, history }) => {
+  const select = ({ concept, panel, history, byConcept }) => {
     const updated = {
       concept: concept || selected?.concept,
       panel: panel || selected?.panel,
-      history: history || selected?.history,
+      history: history ? { type: history } : selected?.history,
+      byConcept: byConcept !== undefined ? byConcept : selected?.byConcept,
     }
     selectedStore.set(updated)
     setSelected(updated)
@@ -31,8 +33,9 @@ const SelectedProvider = ({ children }) => {
       const panel = panels.map(p => p.name).includes(storedSelected?.panel)
         ? storedSelected.panel
         : panels[0].name
-      const history = storedSelected?.history || 'pending'
-      const initialSelected = { concept, panel, history }
+      const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
+      const byConcept = storedSelected?.byConcept || false
+      const initialSelected = { concept, panel, history, byConcept }
       selectedStore.set(initialSelected)
       setSelected(initialSelected)
     }
