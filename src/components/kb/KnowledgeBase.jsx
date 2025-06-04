@@ -16,17 +16,17 @@ const KnowledgeBase = () => {
 
   const [_isPending, startTransition] = useTransition()
 
-  const selectPanel = panelName => {
-    if (panelName !== selected.panel) {
-      startTransition(() => select({ panel: panelName }))
+  const selectPanel = name => {
+    if (name !== selected.panel.name) {
+      startTransition(() => select({ panel: name }))
     }
   }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <NavBar activePanel={selected.panel} selectPanel={selectPanel} />
+      <NavBar activePanel={selected.panel.name} selectPanel={selectPanel} />
       <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
-        <Panel name={selected.panel} />
+        <Panel name={selected.panel.name} />
       </Box>
       {!processing && modal && <KbModal />}
       {processing && <KbLoading />}

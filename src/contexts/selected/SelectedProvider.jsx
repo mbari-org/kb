@@ -16,7 +16,7 @@ const SelectedProvider = ({ children }) => {
   const select = ({ concept, panel, history, byConcept }) => {
     const updated = {
       concept: concept || selected?.concept,
-      panel: panel || selected?.panel,
+      panel: panel ? { name: panel } : selected?.panel,
       history: history ? { type: history } : selected?.history,
       byConcept: byConcept !== undefined ? byConcept : selected?.byConcept,
     }
@@ -27,17 +27,22 @@ const SelectedProvider = ({ children }) => {
   useEffect(() => {
     if (taxonomy) {
       const storedSelected = selectedStore.get()
+
+      const panelName = panels.map(p => p.name).includes(storedSelected?.panel?.name)
+        ? storedSelected.panel.name
+        : panels[0].name
+
+      const byConcept = storedSelected?.byConcept || false
       const concept = taxonomy.names.includes(storedSelected?.concept)
         ? storedSelected.concept
         : taxonomy.rootName
-      const panel = panels.map(p => p.name).includes(storedSelected?.panel)
-        ? storedSelected.panel
-        : panels[0].name
       const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
-      const byConcept = storedSelected?.byConcept || false
-      const initialSelected = { concept, panel, history, byConcept }
-      selectedStore.set(initialSelected)
-      setSelected(initialSelected)
+      const panel = { name: panelName }
+
+      const initialValue = { concept, panel, history, byConcept }
+
+      selectedStore.set(initialValue)
+      setSelected(initialValue)
     }
   }, [taxonomy])
 

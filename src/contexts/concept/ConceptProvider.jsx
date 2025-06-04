@@ -73,7 +73,7 @@ const ConceptProvider = ({ children }) => {
     }
 
     const shouldUpdateConcept =
-      selected.concept !== previousConceptName.current && selected.panel === 'Concepts'
+      selected.concept !== previousConceptName.current && selected.panel.name === 'Concepts'
 
     if (shouldUpdateConcept) {
       if (hasModifiedState({ initialState, stagedState })) {
