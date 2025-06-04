@@ -21,8 +21,8 @@ const ToConceptChoice = ({
   }, [getNames, omitChoices])
 
   return (
-    <Stack direction='row' spacing={2} alignItems='center'>
-      <Typography minWidth={60}>{label}:</Typography>
+    <Stack direction='row' spacing={3} alignItems='center'>
+      <Typography align='center'>{label}:</Typography>
       <Autocomplete
         onChange={handleChange}
         options={optionNames}

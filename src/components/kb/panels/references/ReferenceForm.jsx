@@ -8,13 +8,13 @@ import useReferenceForm from '@/hooks/useReferenceForm'
 
 const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => {
   const {
-    selectedConcept,
+    handleAddConcept,
     handleChange,
     handleConceptSelect,
-    handleAddConcept,
     handleDeleteConcept,
     handleKeyUp,
     handleSearchInput,
+    selectedConcept,
   } = useReferenceForm({ isEdit, onChange, reference })
 
   return (
@@ -44,8 +44,10 @@ const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => 
         onChange={handleChange('concepts')}
         placeholder='Enter concept names using the search box below'
         value={reference.concepts?.join(', ') || ''}
-        InputProps={{
-          readOnly: true,
+        slotProps={{
+          input: {
+            readOnly: true,
+          },
         }}
       />
       <Stack alignItems='center' direction='row' justifyContent='center' spacing={1}>

@@ -12,7 +12,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { getConceptAnnotationCount } from '@/lib/kb/api/annotations'
 
 const DeleteConceptContent = () => {
-  const { config } = use(ConfigContext)
+  const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ModalContext)
   const { getNames } = use(TaxonomyContext)
@@ -46,15 +46,12 @@ const DeleteConceptContent = () => {
 
   useEffect(() => {
     const getCount = async () => {
-      const { error, count } = await getConceptAnnotationCount(config, concept.name)
-      if (error) {
-        console.error(error)
-      } else {
-        setAnnotationCount(count)
-      }
+      const payload = await apiFns.apiPayload(getConceptAnnotationCount, concept.name)
+      const { count } = payload.content
+      setAnnotationCount(count)
     }
     getCount()
-  }, [concept.name, config])
+  }, [apiFns, concept.name])
 
   useEffect(() => {
     setModalData({ parent: concept.parent, modified: true, isValid: true })
@@ -62,30 +59,29 @@ const DeleteConceptContent = () => {
 
   return (
     <Box>
-      <Typography align='center' color='cancel' variant='h5' sx={{ mt: 1, mb: 2 }}>
+      <Typography align='center' color='cancel' variant='h5' sx={{ mt: 1 }}>
         WARNING
       </Typography>
-      <Stack direction='column' spacing={0.5} alignItems='center'>
-        <Typography align='center'>Be sure you really want to delete this concept.</Typography>
-        <Typography align='center'>
-          Nancy has a ruler and will crack your knuckles if you mess this up.
-        </Typography>
-
+      <Typography align='center'>Be sure you really want to delete this concept.</Typography>
+      <Stack direction='column' spacing={1} alignItems='center' sx={{ mt: 5 }}>
         {annotationCount > 0 && (
-          <>
-            <Typography align='center' sx={{ mb: 1 }}>
-              This concept has {annotationCount} annotation{annotationCount !== 1 ? 's' : ''}
+          <Box>
+            <Typography align='center'>
+              This concept has {annotationCount} annotation{annotationCount !== 1 ? 's' : ''} which
+              must be reassigned.
             </Typography>
-            <ToConceptChoice
-              error={!isValid}
-              handleChange={handleChange}
-              handleKeyUp={handleKeyUp}
-              label='Assign Annotations To'
-              omitChoices={[concept.name]}
-              required
-              value={toConcept}
-            />
-          </>
+            <Box sx={{ width: '80%', mx: 'auto', mt: 2 }}>
+              <ToConceptChoice
+                error={!isValid}
+                handleChange={handleChange}
+                handleKeyUp={handleKeyUp}
+                label='Assign To'
+                omitChoices={[concept.name]}
+                required
+                value={toConcept}
+              />
+            </Box>
+          </Box>
         )}
 
         {!isValid && (

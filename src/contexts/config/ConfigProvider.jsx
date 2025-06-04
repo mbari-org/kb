@@ -79,9 +79,9 @@ const ConfigProvider = ({ children }) => {
     }
 
     const apiPayload = config => async (payloadRequest, params) => {
-      const { error, payload: result } = await payloadRequest(config, params)
+      const { error, payload } = await payloadRequest(config, params)
       barfOnError(error)
-      return result
+      return payload
     }
 
     const apiPagination = config => async (paginationRequest, params) => {
