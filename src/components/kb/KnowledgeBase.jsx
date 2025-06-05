@@ -6,6 +6,7 @@ import KbLoading from '@/components/modal/KbLoading'
 import KbModal from '@/components/modal/KbModal'
 import NavBar from '@/components/kb/nav/NavBar'
 import Panel from '@/components/kb/panels/Panel'
+import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -17,6 +18,8 @@ const KnowledgeBase = () => {
   const [_isPending, startTransition] = useTransition()
 
   const selectPanel = name => startTransition(() => panel.push(name))
+
+  useBrowserBack()
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
