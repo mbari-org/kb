@@ -12,21 +12,17 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const KnowledgeBase = () => {
   const { modal, processing } = use(ModalContext)
-  const { select, selected } = use(SelectedContext)
+  const { panel } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
 
-  const selectPanel = name => {
-    if (name !== selected.panel.name) {
-      startTransition(() => select({ panel: name }))
-    }
-  }
+  const selectPanel = name => startTransition(() => panel.push(name))
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <NavBar activePanel={selected.panel.name} selectPanel={selectPanel} />
+      <NavBar selectPanel={selectPanel} />
       <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
-        <Panel name={selected.panel.name} />
+        <Panel name={panel.current()} />
       </Box>
       {!processing && modal && <KbModal />}
       {processing && <KbLoading />}

@@ -10,16 +10,16 @@ import Templates from '@/components/kb/panels/Templates'
 import Users from '@/components/kb/panels/Users'
 
 const panels = [
-  { mod: Concepts, name: 'Concepts' },
-  { mod: Templates, name: 'Templates' },
-  { mod: References, name: 'References' },
-  { mod: Embargoes, name: 'Embargoes' },
-  { mod: History, name: 'History' },
-  { mod: Notes, name: 'Notes' },
-  { mod: Import, name: 'Import' },
-  { mod: Export, name: 'Export' },
-  { mod: Users, name: 'Users' },
-  { mod: AboutHelp, name: 'About/Help' },
+  { module: Concepts, name: 'Concepts' },
+  { module: Templates, name: 'Templates' },
+  { module: References, name: 'References' },
+  { module: Embargoes, name: 'Embargoes' },
+  { module: History, name: 'History' },
+  { module: Notes, name: 'Notes' },
+  { module: Import, name: 'Import' },
+  { module: Export, name: 'Export' },
+  { module: Users, name: 'Users' },
+  { module: AboutHelp, name: 'About/Help' },
 ]
 
 export default panels

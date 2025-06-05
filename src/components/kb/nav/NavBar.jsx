@@ -1,18 +1,23 @@
-import { use } from 'react'
+import { use, useTransition } from 'react'
 
 import { AppBar, Box, Toolbar } from '@mui/material'
 
 import LogoutLink from './LogoutLink'
 import PanelLink from './PanelLink'
+import PanelNavLinks from './PanelNavLinks'
 
 import panels from '@/components/kb/panels/panels'
 
 import AuthContext from '@/contexts/auth/AuthContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
-const NavBar = ({ activePanel, selectPanel }) => {
+const NavBar = ({ selectPanel }) => {
   const { user } = use(AuthContext)
+  const { panel } = use(SelectedContext)
+
+  const activePanel = panel.current()
 
   const panelNames = isAdmin(user)
     ? panels.map(({ name }) => name)
@@ -27,6 +32,7 @@ const NavBar = ({ activePanel, selectPanel }) => {
       }}
     >
       <Toolbar>
+        <PanelNavLinks />
         {panelNames.map(name => (
           <PanelLink
             id={`nav-link-${name}`}

@@ -1,9 +1,14 @@
+import { use, useState } from 'react'
 import { useTheme } from '@emotion/react'
-import { useState } from 'react'
 
 import { Button } from '@mui/material'
 
+import SelectedContext from '@/contexts/selected/SelectedContext'
+
 const PanelLink = ({ isActive, name, selectPanel }) => {
+  const { panel } = use(SelectedContext)
+  const currentPanel = panel.current()
+
   const [isHovering, setIsHovering] = useState(false)
 
   const theme = useTheme()
@@ -25,7 +30,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
 
   return (
     <Button
-      onClick={() => selectPanel(name)}
+      onClick={() => name !== currentPanel && selectPanel(name)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       sx={getSx()}

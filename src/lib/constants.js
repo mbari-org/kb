@@ -172,6 +172,17 @@ const SELECTED = {
   },
 }
 
+const STORE = {
+  CONCEPT: {
+    KEY: 'kb:concepts',
+    MAX_SIZE: 50,
+  },
+  PANEL: {
+    KEY: 'kb:panels',
+    MAX_SIZE: 50,
+  },
+}
+
 const USER_ROLES = {
   ADMIN: 'Admin',
   MAINT: 'Maint',
@@ -191,5 +202,6 @@ export {
   RANK,
   RESETTING,
   SELECTED,
+  STORE,
   USER_ROLES,
 }

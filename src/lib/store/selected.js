@@ -1,3 +1,3 @@
 import localStore from '@/lib/store/localStore'
 
-export default localStore('app:selected')
+export default localStore('kb:selected')

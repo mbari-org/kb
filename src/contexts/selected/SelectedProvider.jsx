@@ -4,19 +4,20 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import selectedStore from '@/lib/store/selected'
+import useSelectedPanel from '@/contexts/selected/useSelectedPanel'
+
 import { SELECTED } from '@/lib/constants'
 
-import panels from '@/components/kb/panels/panels'
-
 const SelectedProvider = ({ children }) => {
-  const { taxonomy } = use(TaxonomyContext)
+  const { getRoot } = use(TaxonomyContext)
 
   const [selected, setSelected] = useState(null)
 
-  const select = ({ concept, panel, history, byConcept }) => {
+  const panel = useSelectedPanel()
+
+  const select = ({ byConcept, concept, history }) => {
     const updated = {
-      concept: concept || selected?.concept,
-      panel: panel ? { name: panel } : selected?.panel,
+      concept: concept ?? selected?.concept,
       history: history ? { type: history } : selected?.history,
       byConcept: byConcept !== undefined ? byConcept : selected?.byConcept,
     }
@@ -25,32 +26,23 @@ const SelectedProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (taxonomy) {
-      const storedSelected = selectedStore.get()
+    const storedSelected = selectedStore.get()
 
-      const panelName = panels.map(p => p.name).includes(storedSelected?.panel?.name)
-        ? storedSelected.panel.name
-        : panels[0].name
+    const byConcept = storedSelected?.byConcept || false
+    const concept = storedSelected?.concept || getRoot().name
+    const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
 
-      const byConcept = storedSelected?.byConcept || false
-      const concept = taxonomy.names.includes(storedSelected?.concept)
-        ? storedSelected.concept
-        : taxonomy.rootName
-      const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
-      const panel = { name: panelName }
+    const initialValue = { concept, history, byConcept }
 
-      const initialValue = { concept, panel, history, byConcept }
-
-      selectedStore.set(initialValue)
-      setSelected(initialValue)
-    }
-  }, [taxonomy])
+    selectedStore.set(initialValue)
+    setSelected(initialValue)
+  }, [getRoot])
 
   if (!selected) {
     return null
   }
 
-  return <SelectedContext value={{ select, selected }}>{children}</SelectedContext>
+  return <SelectedContext value={{ panel, select, selected }}>{children}</SelectedContext>
 }
 
 export default SelectedProvider
