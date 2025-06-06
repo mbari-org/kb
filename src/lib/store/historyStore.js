@@ -19,6 +19,11 @@ const historyStore = (store, maxSize, defaultEntry) => {
       return history.state[history.position]
     },
 
+    backItems: () => {
+      const { position, state } = store.get()
+      return state.slice(0, position).reverse()
+    },
+
     canGoBack: () => store.get().position > 0,
 
     canGoForward: () => {
@@ -42,9 +47,29 @@ const historyStore = (store, maxSize, defaultEntry) => {
       return history.state[history.position]
     },
 
+    forwardItems: () => {
+      const history = store.get()
+      const { position } = history
+      return history.state.slice(position + 1)
+    },
+
     getPosition: () => store.get().position,
 
     getState: () => store.get().state,
+
+    goBack: delta => {
+      const history = store.get()
+      const newPosition = Math.max(0, history.position - delta)
+      store.set({ ...history, position: newPosition })
+      return history.state[newPosition]
+    },
+
+    goForward: delta => {
+      const history = store.get()
+      const newPosition = Math.min(history.state.length - 1, history.position + delta)
+      store.set({ ...history, position: newPosition })
+      return history.state[newPosition]
+    },
 
     push: entry => {
       const { state, position } = store.get()

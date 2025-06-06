@@ -1,38 +1,11 @@
-import { use, useState } from 'react'
-
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
+import useHistorySelect from '@/hooks/useHistorySelect'
 import { createConceptStore } from '@/lib/store/conceptStore'
+import { use } from 'react'
 
 const useSelectedConcept = () => {
-  const { getRoot } = use(TaxonomyContext)
-
-  const conceptStore = createConceptStore(getRoot().name)
-
-  const [currentConcept, setCurrentConcept] = useState(conceptStore.current())
-
-  return {
-    ...conceptStore,
-
-    back: () => {
-      const result = conceptStore.back()
-      setCurrentConcept(conceptStore.current())
-      return result
-    },
-
-    current: () => currentConcept,
-
-    forward: () => {
-      const result = conceptStore.forward()
-      setCurrentConcept(conceptStore.current())
-      return result
-    },
-
-    push: concept => {
-      conceptStore.push(concept)
-      setCurrentConcept(concept)
-    },
-  }
+  const { getRootName } = use(TaxonomyContext)
+  return useHistorySelect(createConceptStore, getRootName)
 }
 
 export default useSelectedConcept

@@ -4,19 +4,26 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 import HistoryNavButton from './HistoryNavButton'
 
 const HistoryNavLinks = ({ history }) => {
+  const historyGoBack = delta => history.goBack(delta + 1)
+  const historyGoForward = delta => history.goForward(delta + 1)
+
   return (
     <Stack direction='row'>
       <HistoryNavButton
         disabled={!history.canGoBack()}
+        dropItems={history.backItems()}
         icon={IoChevronBack}
         label='previous'
         onClick={history.back}
+        onItemSelect={historyGoBack}
       />
       <HistoryNavButton
         disabled={!history.canGoForward()}
+        dropItems={history.forwardItems()}
         icon={IoChevronForward}
         label='next'
         onClick={history.forward}
+        onItemSelect={historyGoForward}
       />
     </Stack>
   )

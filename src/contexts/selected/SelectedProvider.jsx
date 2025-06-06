@@ -1,7 +1,6 @@
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import settingsStore from '@/lib/store/settingsStore'
 import usePanelSelect from '@/contexts/selected/usePanelSelect'
@@ -10,8 +9,6 @@ import useSelectedConcept from '@/contexts/selected/useConceptSelect'
 import { SELECTED } from '@/lib/constants'
 
 const SelectedProvider = ({ children }) => {
-  const { getRoot } = use(TaxonomyContext)
-
   const [settings, setSettings] = useState(null)
 
   const conceptSelect = useSelectedConcept()
@@ -55,7 +52,7 @@ const SelectedProvider = ({ children }) => {
 
     settingsStore.set(initialValue)
     setSettings(initialValue)
-  }, [getRoot])
+  }, [])
 
   if (!settings) {
     return null

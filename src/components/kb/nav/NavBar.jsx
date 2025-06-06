@@ -32,7 +32,7 @@ const NavBar = ({ selectPanel }) => {
       }}
     >
       <Toolbar>
-        <Box sx={{ mt: -1.5 }}>
+        <Box sx={{ mb: 1.5 }}>
           <HistoryNavLinks history={panels} />
         </Box>
         {panelNames.map(name => (
@@ -45,7 +45,7 @@ const NavBar = ({ selectPanel }) => {
           />
         ))}
         <Box style={{ flexGrow: 1 }} />
-        <LogoutLink sx={{ mt: -1.5 }} />
+        <LogoutLink sx={{ mb: 1.5 }} />
       </Toolbar>
     </AppBar>
   )

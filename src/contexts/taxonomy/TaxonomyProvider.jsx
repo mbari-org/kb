@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import AuthContext from '@/contexts/auth/AuthContext'
@@ -14,7 +14,6 @@ import {
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
   getPendingHistory as getTaxonomyPendingHistory,
-  getRoot as getTaxonomyRoot,
   isConceptLoaded as isTaxonomyConceptLoaded,
   isDescendant as isDescendantConcept,
   isRoot as isTaxonomyRoot,
@@ -93,10 +92,7 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getRoot = useCallback(
-    () => getTaxonomyRoot(taxonomy?.conceptMap, taxonomy?.rootName),
-    [taxonomy?.conceptMap, taxonomy?.rootName]
-  )
+  const getRootName = useMemo(() => taxonomy?.rootName, [taxonomy?.rootName])
 
   const isConceptLoaded = useCallback(
     conceptName => isTaxonomyConceptLoaded(taxonomy, conceptName),
@@ -232,7 +228,7 @@ const TaxonomyProvider = ({ children }) => {
         getConceptPrimaryName,
         getNames,
         getPendingHistory,
-        getRoot,
+        getRootName,
         isConceptLoaded,
         isDescendant,
         isRoot,

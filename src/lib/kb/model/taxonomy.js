@@ -118,8 +118,6 @@ const getPendingHistory = (taxonomy, conceptName) =>
     ? taxonomy.pending.filter(history => history.concept === conceptName)
     : taxonomy.pending
 
-const getRoot = (conceptMap, rootName) => conceptMap[rootName]
-
 const isConceptLoaded = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return (
@@ -476,7 +474,6 @@ export {
   getConceptPrimaryName,
   getNames,
   getPendingHistory,
-  getRoot,
   isConceptLoaded,
   isDescendant,
   isRoot,
