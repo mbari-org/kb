@@ -34,8 +34,6 @@ export const ReferencesProvider = ({ children }) => {
 
   const deleteReference = useCallback(
     async reference => {
-      const emptyReference = { ...reference, concepts: [] }
-      await updateReferenceConcepts(reference, emptyReference, apiFns)
       await apiFns.apiPayload(removeReference, reference.id)
       setReferences(prev => prev.filter(r => r.id !== reference.id))
     },
