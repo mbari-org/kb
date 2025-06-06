@@ -3,11 +3,10 @@ import { use } from 'react'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ConceptReferences = () => {
-  const { panel, select } = use(SelectedContext)
+  const { select } = use(SelectedContext)
 
   const handleClick = () => {
-    panel.push('References')
-    select({ byConcept: true })
+    select({ byConcept: true, panel: 'References' })
   }
 
   return (

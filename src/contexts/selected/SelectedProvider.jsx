@@ -17,7 +17,7 @@ const SelectedProvider = ({ children }) => {
   const panel = useSelectedPanel()
   const concept = useSelectedConcept()
 
-  const select = ({ byConcept, concept: newConcept, history }) => {
+  const select = ({ byConcept, concept: newConcept, history, panel: panelName }) => {
     const updated = {
       concept: newConcept ?? selected?.concept,
       history: history ? { type: history } : selected?.history,
@@ -25,6 +25,10 @@ const SelectedProvider = ({ children }) => {
     }
     selectedStore.set(updated)
     setSelected(updated)
+
+    if (panelName) {
+      panel.push(panelName)
+    }
   }
 
   useEffect(() => {

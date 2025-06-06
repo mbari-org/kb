@@ -13,11 +13,11 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const KnowledgeBase = () => {
   const { modal, processing } = use(ModalContext)
-  const { panel } = use(SelectedContext)
+  const { panel, select } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
 
-  const selectPanel = name => startTransition(() => panel.push(name))
+  const selectPanel = name => startTransition(() => select({ panel: name }))
 
   useBrowserBack()
 

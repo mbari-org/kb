@@ -7,7 +7,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ConceptPath = () => {
   const { conceptPath } = use(ConceptContext)
-  const { panel, select } = use(SelectedContext)
+  const { select } = use(SelectedContext)
 
   return (
     <Breadcrumbs
@@ -30,8 +30,7 @@ const ConceptPath = () => {
           color={index === conceptPath.length - 1 ? 'primary' : 'inherit'}
           onClick={() => {
             if (index === conceptPath.length - 1) return
-            select({ concept: path })
-            panel.push('Concepts')
+            select({ concept: path, panel: 'Concepts' })
           }}
         >
           {path}
