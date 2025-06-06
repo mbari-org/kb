@@ -5,7 +5,7 @@ import useProcessAuth from '@/contexts/auth/lib/useProcessAuth'
 
 import { extract } from '@/lib/auth/refreshKey'
 import { loginUser } from '@/lib/services/auth/login'
-import authStore from '@/lib/store/auth'
+import authStore from '@/lib/store/authStore'
 
 import tokenIsExpiring from './tokenIsExpiring'
 

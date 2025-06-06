@@ -1,7 +1,7 @@
-import panels from '@/components/kb/panels/panels'
+import panelMods from '@/components/kb/panels/modules'
 
 const Panel = ({ name }) => {
-  const panel = panels.find(p => p.name === name)
+  const panel = panelMods.find(p => p.name === name)
   return <panel.module id={`kb-panel-${name}`} />
 }
 

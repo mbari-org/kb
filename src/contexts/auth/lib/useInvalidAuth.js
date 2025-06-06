@@ -1,6 +1,6 @@
+import authStore from '@/lib/store/authStore'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import authStore from '@/lib/store/auth'
 
 const useInvalidAuth = setUser => {
   const navigate = useNavigate()

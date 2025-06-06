@@ -1,36 +1,53 @@
 import localStore from './localStore'
 
-const historyStore = (name, maxSize, defaultEntry) => {
-  const store = localStore(name)
-
-  // Initialize store with default entry if empty
-  const history = store.get()
-  if (!history || !history.state || !Array.isArray(history.state) || history.state.length === 0) {
+const historyStore = (store, maxSize, defaultEntry) => {
+  const initStore = () => {
     store.set({ state: [defaultEntry], position: 0 })
   }
 
-  const getCurrent = () => {
-    const { state, position } = getData()
-    return state[position]
+  if (!store.get()) {
+    initStore()
   }
-
-  const getData = () => {
-    const history = store.get()
-    if (!history || !history.state || !Array.isArray(history.state) || history.state.length === 0) {
-      const initialData = { state: [defaultEntry], position: 0 }
-      store.set(initialData)
-      return initialData
-    }
-    return history
-  }
-
-  const getHistory = () => getData().state
-  const getPosition = () => getData().position
 
   return {
+    back: () => {
+      const history = store.get()
+      const { position } = history
+      if (position > 0) {
+        store.set({ ...history, position: position - 1 })
+      }
+      return history.state[history.position]
+    },
+
+    canGoBack: () => store.get().position > 0,
+
+    canGoForward: () => {
+      const { state, position } = store.get()
+      return position < state.length - 1
+    },
+
+    clear: () => initStore(),
+
+    current: () => {
+      const { state, position } = store.get()
+      return state[position]
+    },
+
+    forward: () => {
+      const history = store.get()
+      const { position } = history
+      if (position < history.state.length - 1) {
+        store.set({ ...history, position: position + 1 })
+      }
+      return history.state[history.position]
+    },
+
+    getPosition: () => store.get().position,
+
+    getState: () => store.get().state,
+
     push: entry => {
-      const history = getData()
-      const { state, position } = history
+      const { state, position } = store.get()
 
       // Remove forward history
       const newState = state.slice(0, position + 1)
@@ -38,7 +55,7 @@ const historyStore = (name, maxSize, defaultEntry) => {
       // Add new entry
       newState.push(entry)
 
-      // Trim history if it exceeds maxSize
+      // Trim length
       if (newState.length > maxSize) {
         newState.shift()
       }
@@ -46,37 +63,15 @@ const historyStore = (name, maxSize, defaultEntry) => {
       store.set({ state: newState, position: newState.length - 1 })
     },
 
-    get: () => getHistory(),
-
-    current: () => getCurrent(),
-
-    back: () => {
-      const { position } = getData()
-      if (position > 0) {
-        store.set({ ...getData(), position: position - 1 })
-      }
-      return getCurrent()
-    },
-
-    forward: () => {
-      const { state, position } = getData()
-      if (position < state.length - 1) {
-        store.set({ ...getData(), position: position + 1 })
-      }
-      return getCurrent()
-    },
-
-    canGoBack: () => getPosition() > 0,
-
-    canGoForward: () => {
-      const { state, position } = getData()
-      return position < state.length - 1
-    },
-
-    clear: () => {
-      store.set({ state: [defaultEntry], position: 0 })
-    },
+    remove: () => store.remove(),
   }
 }
 
-export default historyStore
+const createHistoryStore = (name, maxSize, defaultEntry) => {
+  const store = localStore(name)
+  return historyStore(store, maxSize, defaultEntry)
+}
+
+const getHistoryStore = name => localStore(name)
+
+export { createHistoryStore, getHistoryStore }

@@ -13,7 +13,10 @@ const SEARCH_WIDTH = 400
 
 const ReferencesHeader = () => {
   const { addReference, references } = use(ReferencesContext)
-  const { select, selected } = use(SelectedContext)
+  const { getSelected, select } = use(SelectedContext)
+
+  const selectedConcept = getSelected('concept')
+  const selectedByConcept = getSelected('byConcept')
 
   const addReferenceModal = useAddReferenceModal(addReference, references)
 
@@ -37,7 +40,7 @@ const ReferencesHeader = () => {
     const newValue = event.target.checked
     select({
       byConcept: newValue,
-      concept: newValue ? selected.concept : null,
+      concept: newValue ? selectedConcept : null,
     })
   }
 
@@ -46,10 +49,10 @@ const ReferencesHeader = () => {
       <PanelTitle title='References' />
       <Box sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}>
         <ConceptSearch
-          conceptName={selected.concept}
+          conceptName={selectedConcept}
           handleConceptSelect={handleConceptSelect}
           handleKeyUp={handleKeyUp}
-          disabled={!selected.byConcept}
+          disabled={!selectedByConcept}
         />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>
@@ -66,7 +69,7 @@ const ReferencesHeader = () => {
           <Typography variant='body1'>Total: {references?.length || 0}</Typography>
           <FormControlLabel
             control={
-              <Switch size='small' checked={selected.byConcept} onChange={handleToggleChange} />
+              <Switch size='small' checked={selectedByConcept} onChange={handleToggleChange} />
             }
             label='By Concept'
           />

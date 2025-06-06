@@ -1,8 +1,8 @@
 const localStore = (key, json = true) => {
   const stringStore = {
     get: () => localStorage.getItem(key),
+    remove: () => localStorage.removeItem(key),
     set: value => localStorage.setItem(key, value),
-    clear: () => localStorage.removeItem(key),
   }
 
   if (json) {
@@ -11,8 +11,8 @@ const localStore = (key, json = true) => {
         const value = stringStore.get(key)
         return value ? JSON.parse(value) : null
       },
+      remove: () => localStorage.removeItem(key),
       set: value => stringStore.set(JSON.stringify(value)),
-      clear: () => localStorage.removeItem(key),
     }
   }
   return stringStore

@@ -3,9 +3,9 @@ import { use, useEffect, useState } from 'react'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import selectedStore from '@/lib/store/selected'
-import useSelectedPanel from '@/contexts/selected/useSelectedPanel'
-import useSelectedConcept from '@/contexts/selected/useSelectedConcept'
+import settingsStore from '@/lib/store/settingsStore'
+import usePanelSelect from '@/contexts/selected/usePanelSelect'
+import useSelectedConcept from '@/contexts/selected/useConceptSelect'
 
 import { SELECTED } from '@/lib/constants'
 
@@ -14,33 +14,46 @@ const SelectedProvider = ({ children }) => {
 
   const [selected, setSelected] = useState(null)
 
-  const panel = useSelectedPanel()
-  const concept = useSelectedConcept()
+  const conceptSelect = useSelectedConcept()
+  const panelSelect = usePanelSelect()
 
-  const select = ({ byConcept, concept: newConcept, history, panel: panelName }) => {
+  const getSelected = field => {
+    switch (field) {
+      case 'concept':
+        return conceptSelect.current()
+      case 'panel':
+        return panelSelect.current()
+      default:
+        return selected[field]
+    }
+  }
+
+  const select = ({ byConcept, concept: conceptName, history, panel: panelName }) => {
     const updated = {
-      concept: newConcept ?? selected?.concept,
       history: history ? { type: history } : selected?.history,
       byConcept: byConcept !== undefined ? byConcept : selected?.byConcept,
     }
-    selectedStore.set(updated)
+    settingsStore.set(updated)
     setSelected(updated)
 
+    if (conceptName) {
+      conceptSelect.push(conceptName)
+    }
+
     if (panelName) {
-      panel.push(panelName)
+      panelSelect.push(panelName)
     }
   }
 
   useEffect(() => {
-    const storedSelected = selectedStore.get()
+    const storedSelected = settingsStore.get()
 
     const byConcept = storedSelected?.byConcept || false
-    const initialConcept = storedSelected?.concept || getRoot().name
     const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
 
-    const initialValue = { concept: initialConcept, history, byConcept }
+    const initialValue = { history, byConcept }
 
-    selectedStore.set(initialValue)
+    settingsStore.set(initialValue)
     setSelected(initialValue)
   }, [getRoot])
 
@@ -48,7 +61,11 @@ const SelectedProvider = ({ children }) => {
     return null
   }
 
-  return <SelectedContext value={{ concept, panel, select, selected }}>{children}</SelectedContext>
+  return (
+    <SelectedContext value={{ concepts: conceptSelect, getSelected, panels: panelSelect, select }}>
+      {children}
+    </SelectedContext>
+  )
 }
 
 export default SelectedProvider

@@ -16,7 +16,9 @@ import updateReferenceConcepts from '@/contexts/config/updateReferenceConcepts'
 
 export const ReferencesProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
-  const { selected } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
+
+  const selectedConcept = getSelected('concept')
 
   const [references, setReferences] = useState([])
   const [byConcept, setByConcept] = useState(false)
@@ -58,18 +60,18 @@ export const ReferencesProvider = ({ children }) => {
   useEffect(() => {
     const loadReferences = async () => {
       const data = await apiFns.apiPagination(getReferences)
-      setReferences(data.map(ref => createReference(ref)))
+      setReferences(data.map(reference => createReference(reference)))
     }
 
     loadReferences()
   }, [apiFns])
 
   const filteredReferences = useMemo(() => {
-    if (!byConcept || !selected.concept) {
+    if (!byConcept || !selectedConcept) {
       return references
     }
-    return references.filter(ref => ref.concepts.includes(selected.concept))
-  }, [references, byConcept, selected.concept])
+    return references.filter(reference => reference.concepts.includes(selectedConcept))
+  }, [references, byConcept, selectedConcept])
 
   const value = {
     addReference,

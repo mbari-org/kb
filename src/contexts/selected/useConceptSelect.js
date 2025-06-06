@@ -1,7 +1,8 @@
 import { use, useState } from 'react'
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import createConceptStore from '@/lib/store/concepts'
+
+import { createConceptStore } from '@/lib/store/conceptStore'
 
 const useSelectedConcept = () => {
   const { getRoot } = use(TaxonomyContext)

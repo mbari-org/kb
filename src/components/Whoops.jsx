@@ -7,8 +7,6 @@ import { useTheme } from '@mui/material/styles'
 import whoops from '@/assets/whoops.jpg'
 import styled from '@emotion/styled'
 
-import selectedStore from '@/lib/store/selected'
-
 const WhoopsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,8 +45,7 @@ const Whoops = ({ children }) => {
   )
 
   const resetToRoot = () => {
-    const currentSelected = selectedStore.get()
-    selectedStore.set({ ...currentSelected, concept: null })
+    console.log('CxINC reset to root and clear stores?')
     navigate('/')
   }
 

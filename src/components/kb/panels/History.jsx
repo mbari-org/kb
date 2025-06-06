@@ -8,10 +8,13 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import { SELECTED } from '@/lib/constants'
 
 const History = () => {
-  const { selected, select } = use(SelectedContext)
+  const { getSelected, select } = use(SelectedContext)
+
+  const selectedHistoryType = getSelected('history').type
+
   const isTypeHistory =
-    selected.history.type === SELECTED.HISTORY.TYPE.PENDING ||
-    selected.history.type === SELECTED.HISTORY.TYPE.APPROVED
+    selectedHistoryType === SELECTED.HISTORY.TYPE.PENDING ||
+    selectedHistoryType === SELECTED.HISTORY.TYPE.APPROVED
 
   const handleHistorySelection = (_, newSelection) =>
     !!newSelection && select({ history: newSelection })
@@ -19,10 +22,10 @@ const History = () => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2, mt: 2 }}>
-        <HistoryTableToggle selected={selected.history.type} onChange={handleHistorySelection} />
+        <HistoryTableToggle selected={selectedHistoryType} onChange={handleHistorySelection} />
       </Box>
       <Box sx={{ flexGrow: 1, minHeight: 0, mt: -9 }}>
-        {isTypeHistory ? <TypeHistory type={selected.history.type} /> : <ConceptHistory />}
+        {isTypeHistory ? <TypeHistory type={selectedHistoryType} /> : <ConceptHistory />}
       </Box>
     </Box>
   )

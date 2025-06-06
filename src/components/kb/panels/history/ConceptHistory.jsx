@@ -13,7 +13,7 @@ import { PAGINATION } from '@/lib/constants'
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
 const ConceptHistory = () => {
-  const { select, selected } = use(SelectedContext)
+  const { getSelected, select } = use(SelectedContext)
 
   const [count, setCount] = useState(0)
   const [data, setData] = useState([])
@@ -24,8 +24,9 @@ const ConceptHistory = () => {
   const loadConceptHistory = useLoadConceptHistory()
 
   useEffect(() => {
-    if (selected.concept) {
-      loadConceptHistory(selected.concept).then(({ data, count }) => {
+    const selectedConcept = getSelected('concept')
+    if (selectedConcept) {
+      loadConceptHistory(selectedConcept).then(({ data, count }) => {
         setData(data)
         setCount(count)
         // Reset pagination when new data is loaded
@@ -36,7 +37,7 @@ const ConceptHistory = () => {
       setCount(0)
       setPageState({ limit: DEFAULT_LIMIT, offset: 0 })
     }
-  }, [selected.concept, loadConceptHistory])
+  }, [getSelected, loadConceptHistory])
 
   const handleConceptSelect = (_event, selectedName) => {
     if (selectedName) {
@@ -86,12 +87,14 @@ const ConceptHistory = () => {
   // Get the current page of data
   const currentPageData = data.slice(pageState.offset, pageState.offset + pageState.limit)
 
+  const selectedConcept = getSelected('concept')
+
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
         <Box sx={{ mt: 0.75, width: 400 }}>
           <ConceptSearch
-            conceptName={selected.concept}
+            conceptName={selectedConcept}
             handleConceptSelect={handleConceptSelect}
             handleKeyUp={handleKeyUp}
           />
@@ -109,7 +112,7 @@ const ConceptHistory = () => {
           prevPage={prevPage}
           setPageSize={setPageSize}
           sortOrder={sortOrder}
-          title={selected.concept || 'Concept History'}
+          title={selectedConcept || 'Concept History'}
           titleTopMargin={-8}
         />
       </Box>

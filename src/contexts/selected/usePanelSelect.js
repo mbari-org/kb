@@ -1,8 +1,14 @@
 import { useState } from 'react'
 
-import panelStore from '@/lib/store/panels'
+import { createPanelStore } from '@/lib/store/panelStore'
 
-const useSelectedPanel = () => {
+import panelMods from '@/components/kb/panels/modules'
+
+const usePanelSelect = () => {
+  const defaultPanel = panelMods[0].name
+
+  const panelStore = createPanelStore(defaultPanel)
+
   const [currentPanel, setCurrentPanel] = useState(panelStore.current())
 
   return {
@@ -29,4 +35,4 @@ const useSelectedPanel = () => {
   }
 }
 
-export default useSelectedPanel
+export default usePanelSelect

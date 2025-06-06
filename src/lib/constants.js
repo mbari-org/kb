@@ -173,6 +173,9 @@ const SELECTED = {
 }
 
 const STORE = {
+  AUTH: {
+    KEY: 'kb:auth',
+  },
   CONCEPT: {
     KEY: 'kb:concepts',
     MAX_SIZE: 50,
@@ -180,6 +183,9 @@ const STORE = {
   PANEL: {
     KEY: 'kb:panels',
     MAX_SIZE: 50,
+  },
+  SETTINGS: {
+    KEY: 'kb:settings',
   },
 }
 

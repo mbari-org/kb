@@ -8,21 +8,21 @@ import PanelNavButton from './PanelNavButton'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const PanelNavLinks = () => {
-  const { panel } = use(SelectedContext)
+  const { panels } = use(SelectedContext)
 
   return (
     <Box>
       <PanelNavButton
-        disabled={!panel.canGoBack()}
+        disabled={!panels.canGoBack()}
         icon={IoChevronBack}
         label='previous panel'
-        onClick={panel.back}
+        onClick={panels.back}
       />
       <PanelNavButton
-        disabled={!panel.canGoForward()}
+        disabled={!panels.canGoForward()}
         icon={IoChevronForward}
         label='next panel'
-        onClick={panel.forward}
+        onClick={panels.forward}
       />
     </Box>
   )

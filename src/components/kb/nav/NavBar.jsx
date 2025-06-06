@@ -1,4 +1,4 @@
-import { use, useTransition } from 'react'
+import { use } from 'react'
 
 import { AppBar, Box, Toolbar } from '@mui/material'
 
@@ -6,7 +6,7 @@ import LogoutLink from './LogoutLink'
 import PanelLink from './PanelLink'
 import PanelNavLinks from './PanelNavLinks'
 
-import panels from '@/components/kb/panels/panels'
+import panelMods from '@/components/kb/panels/modules'
 
 import AuthContext from '@/contexts/auth/AuthContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -15,13 +15,13 @@ import { isAdmin } from '@/lib/auth/role'
 
 const NavBar = ({ selectPanel }) => {
   const { user } = use(AuthContext)
-  const { panel } = use(SelectedContext)
+  const { panels } = use(SelectedContext)
 
-  const activePanel = panel.current()
+  const activePanel = panels.current()
 
   const panelNames = isAdmin(user)
-    ? panels.map(({ name }) => name)
-    : panels.map(({ name }) => name).filter(name => name !== 'Users')
+    ? panelMods.map(({ name }) => name)
+    : panelMods.map(({ name }) => name).filter(name => name !== 'Users')
 
   return (
     <AppBar

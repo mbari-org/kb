@@ -10,14 +10,17 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ReferencesContent = () => {
   const { references } = use(ReferencesContext)
-  const { selected, select } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
+
+  const selectedConcept = getSelected('concept')
+  const selectedByConcept = getSelected('byConcept')
 
   const filteredReferences = useMemo(() => {
-    if (!selected.byConcept || !selected.concept) {
+    if (!selectedByConcept || !selectedConcept) {
       return references
     }
-    return references.filter(ref => ref.concepts.includes(selected.concept))
-  }, [references, selected.byConcept, selected.concept])
+    return references.filter(reference => reference.concepts.includes(selectedConcept))
+  }, [references, selectedByConcept, selectedConcept])
 
   return (
     <Box>

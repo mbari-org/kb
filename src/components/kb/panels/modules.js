@@ -9,7 +9,7 @@ import References from '@/components/kb/panels/References'
 import Templates from '@/components/kb/panels/Templates'
 import Users from '@/components/kb/panels/Users'
 
-const panels = [
+const modules = [
   { module: Concepts, name: 'Concepts' },
   { module: Templates, name: 'Templates' },
   { module: References, name: 'References' },
@@ -22,4 +22,4 @@ const panels = [
   { module: AboutHelp, name: 'About/Help' },
 ]
 
-export default panels
+export default modules

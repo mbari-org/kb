@@ -1,5 +1,5 @@
 import { genRefresh } from '@/lib/auth/refreshKey'
-import authStore from '@/lib/store/auth'
+import authStore from '@/lib/store/authStore'
 
 import authUrl from './authUrl'
 

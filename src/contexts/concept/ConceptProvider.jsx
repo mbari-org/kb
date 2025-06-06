@@ -25,7 +25,7 @@ const ConceptProvider = ({ children }) => {
   const previousConceptName = useRef(null)
 
   const { modalData, setModalData } = use(ModalContext)
-  const { panel, selected } = use(SelectedContext)
+  const { getSelected, panels } = use(SelectedContext)
   const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)
 
@@ -68,12 +68,13 @@ const ConceptProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (!selected) {
+    const selectedConcept = getSelected('concept')
+    if (!selectedConcept) {
       return
     }
 
     const shouldUpdateConcept =
-      selected.concept !== previousConceptName.current && panel.current() === 'Concepts'
+      selectedConcept !== previousConceptName.current && panels.current() === 'Concepts'
 
     if (shouldUpdateConcept) {
       if (hasModifiedState({ initialState, stagedState })) {
@@ -82,12 +83,12 @@ const ConceptProvider = ({ children }) => {
           setModalData(prev => ({ ...prev, warning: true }))
         }
       } else {
-        if (isConceptLoaded(selected.concept)) {
-          handleSetConcept(getConcept(selected.concept))
+        if (isConceptLoaded(selectedConcept)) {
+          handleSetConcept(getConcept(selectedConcept))
         } else if (!isLoading.current) {
           isLoading.current = true
           setEditing(false)
-          loadConcept(selected.concept)
+          loadConcept(selectedConcept)
             .then(loadedConcept => {
               handleSetConcept(loadedConcept)
             })
@@ -101,13 +102,13 @@ const ConceptProvider = ({ children }) => {
   }, [
     displayStaged,
     getConcept,
+    getSelected,
     handleSetConcept,
     initialState,
     isConceptLoaded,
     loadConcept,
     modalData?.warning,
-    panel,
-    selected,
+    panels,
     setEditing,
     setModalData,
     showBoundary,

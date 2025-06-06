@@ -6,8 +6,8 @@ import { Button } from '@mui/material'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
-  const { panel } = use(SelectedContext)
-  const currentPanel = panel.current()
+  const { panels } = use(SelectedContext)
+  const currentPanel = panels.current()
 
   const [isHovering, setIsHovering] = useState(false)
 
