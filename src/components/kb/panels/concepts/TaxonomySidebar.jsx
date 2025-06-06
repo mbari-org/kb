@@ -3,7 +3,7 @@ import { useRef, useState, use } from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 
-import ConceptSearch from '@/components/common/ConceptSearch'
+import ConceptSelect from '@/components/common/ConceptSelect'
 import TaxonomyTree from '@/components/kb/panels/concepts/tree/TaxonomyTree'
 
 import useConceptSelect from '@/components/kb/panels/concepts/useConceptSelect'
@@ -23,7 +23,7 @@ const TaxonomySidebar = () => {
   return (
     <Stack sx={{ height: '100%' }}>
       <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
-        <ConceptSearch
+        <ConceptSelect
           conceptName={concept.name}
           handleConceptSelect={handleConceptSelect}
           handleKeyUp={handleKeyUp}

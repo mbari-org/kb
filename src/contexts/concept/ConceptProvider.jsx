@@ -26,7 +26,7 @@ const ConceptProvider = ({ children }) => {
 
   const { modalData, setModalData } = use(ModalContext)
   const { getSelected, panels } = use(SelectedContext)
-  const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
+  const { getConcept, getPendingHistory, getRoot, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)
 
   const [concept, setConcept] = useState(null)

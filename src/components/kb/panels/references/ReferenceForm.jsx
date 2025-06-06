@@ -2,7 +2,7 @@ import { Box, TextField, IconButton, Stack } from '@mui/material'
 import { BiAddToQueue } from 'react-icons/bi'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 
-import ConceptSearch from '@/components/common/ConceptSearch'
+import ConceptSelect from '@/components/common/ConceptSelect'
 
 import useReferenceForm from '@/hooks/useReferenceForm'
 
@@ -89,7 +89,7 @@ const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => 
         </Box>
         <Box sx={{ width: 8 }} />
         <Box sx={{ width: '50%' }}>
-          <ConceptSearch
+          <ConceptSelect
             conceptName={selectedConcept}
             handleConceptSelect={handleConceptSelect}
             handleKeyUp={handleKeyUp}

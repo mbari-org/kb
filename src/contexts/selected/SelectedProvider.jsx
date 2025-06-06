@@ -12,7 +12,7 @@ import { SELECTED } from '@/lib/constants'
 const SelectedProvider = ({ children }) => {
   const { getRoot } = use(TaxonomyContext)
 
-  const [selected, setSelected] = useState(null)
+  const [settings, setSettings] = useState(null)
 
   const conceptSelect = useSelectedConcept()
   const panelSelect = usePanelSelect()
@@ -24,17 +24,17 @@ const SelectedProvider = ({ children }) => {
       case 'panel':
         return panelSelect.current()
       default:
-        return selected[field]
+        return settings[field]
     }
   }
 
   const select = ({ byConcept, concept: conceptName, history, panel: panelName }) => {
-    const updated = {
-      history: history ? { type: history } : selected?.history,
-      byConcept: byConcept !== undefined ? byConcept : selected?.byConcept,
+    const updatedSettings = {
+      history: history ? { type: history } : settings?.history,
+      byConcept: byConcept !== undefined ? byConcept : settings?.byConcept,
     }
-    settingsStore.set(updated)
-    setSelected(updated)
+    settingsStore.set(updatedSettings)
+    setSettings(updatedSettings)
 
     if (conceptName) {
       conceptSelect.push(conceptName)
@@ -54,10 +54,10 @@ const SelectedProvider = ({ children }) => {
     const initialValue = { history, byConcept }
 
     settingsStore.set(initialValue)
-    setSelected(initialValue)
+    setSettings(initialValue)
   }, [getRoot])
 
-  if (!selected) {
+  if (!settings) {
     return null
   }
 

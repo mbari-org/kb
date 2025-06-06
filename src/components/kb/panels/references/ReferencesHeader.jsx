@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { Box, Button, Typography, Switch, FormControlLabel } from '@mui/material'
 
-import ConceptSearch from '@/components/common/ConceptSearch'
+import ConceptSelect from '@/components/common/ConceptSelect'
 import PanelTitle from '@/components/common/PanelTitle'
 
 import useAddReferenceModal from '@/components/kb/panels/references/add/useAddReference'
@@ -48,7 +48,7 @@ const ReferencesHeader = () => {
     <Box>
       <PanelTitle title='References' />
       <Box sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}>
-        <ConceptSearch
+        <ConceptSelect
           conceptName={selectedConcept}
           handleConceptSelect={handleConceptSelect}
           handleKeyUp={handleKeyUp}

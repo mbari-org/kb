@@ -129,9 +129,10 @@ const TaxonomyProvider = ({ children }) => {
         )
         updateTaxonomy(updatedTaxonomy)
 
+        const updatedConcept = getTaxonomyConcept(updatedTaxonomy, conceptName)
         setProcessing(null)
 
-        return updatedTaxonomy.conceptMap[conceptName]
+        return updatedConcept
       } finally {
         alreadyLoadingConcept.current = false
       }

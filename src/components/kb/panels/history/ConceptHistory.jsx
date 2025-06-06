@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 
-import ConceptSearch from '@/components/common/ConceptSearch'
+import ConceptSelect from '@/components/common/ConceptSelect'
 import HistoryTable from './HistoryTable'
 
 import useLoadConceptHistory from './useLoadConceptHistory'
@@ -93,7 +93,7 @@ const ConceptHistory = () => {
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
         <Box sx={{ mt: 0.75, width: 400 }}>
-          <ConceptSearch
+          <ConceptSelect
             conceptName={selectedConcept}
             handleConceptSelect={handleConceptSelect}
             handleKeyUp={handleKeyUp}
