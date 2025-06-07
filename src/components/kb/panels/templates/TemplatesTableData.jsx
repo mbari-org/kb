@@ -5,14 +5,30 @@ import { DataGrid } from '@mui/x-data-grid'
 import TemplatesContext from '@/contexts/templates/TemplatesContext'
 import useTemplateColumns from './useTemplateColumns'
 import TemplatesPagination from './TemplatesPagination'
+import useDeleteTemplateModal from './delete/useDeleteTemplateModal'
+import useEditTemplateModal from './edit/useEditTemplateModal'
 
 import { PAGINATION } from '@/lib/constants'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.TEMPLATES.PAGE_SIZE_OPTIONS
 
 const TemplatesTableData = () => {
-  const { templates, count, limit, offset, nextPage, prevPage, setPageSize } = use(TemplatesContext)
-  const columns = useTemplateColumns()
+  const {
+    templates,
+    count,
+    limit,
+    offset,
+    nextPage,
+    prevPage,
+    setPageSize,
+    deleteTemplate,
+    editTemplate,
+  } = use(TemplatesContext)
+
+  const deleteTemplateModal = useDeleteTemplateModal(deleteTemplate)
+  const editTemplateModal = useEditTemplateModal(editTemplate, templates)
+
+  const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>

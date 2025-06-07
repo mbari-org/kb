@@ -1,38 +1,46 @@
 import { Box, IconButton } from '@mui/material'
-import InspectIcon from '@/components/common/InspectIcon'
 import { use } from 'react'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import { CiEdit } from 'react-icons/ci'
+import { MdOutlineDeleteForever } from 'react-icons/md'
+import { useTheme } from '@mui/material/styles'
 import { humanTimestamp } from '@/lib/util'
 
-const useTemplateColumns = () => {
-  const { select } = use(SelectedContext)
-
-  const handleInspect = row => {
-    select({ concept: row.concept, panel: 'Concepts' })
-  }
+const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
+  const theme = useTheme()
 
   const columns = [
     {
-      field: 'inspect',
+      field: 'actions',
       headerName: '',
-      width: 50,
+      width: 100,
       sortable: false,
       headerClassName: 'bold-header',
       renderCell: params => (
         <Box>
           <IconButton
             size='small'
-            onClick={() => handleInspect(params.row)}
+            onClick={() => deleteTemplateModal(params.row)}
             sx={{
+              mr: 1,
               '&:hover': {
-                color: 'primary.main',
-                '& svg': {
-                  transform: 'scale(1.2)',
-                },
+                color: 'error.main',
+                ...theme.kb.icon.hover,
               },
             }}
           >
-            <InspectIcon />
+            <MdOutlineDeleteForever size={24} />
+          </IconButton>
+          <IconButton
+            size='small'
+            onClick={() => editTemplateModal(params.row)}
+            sx={{
+              '&:hover': {
+                color: 'edit.main',
+                ...theme.kb.icon.hover,
+              },
+            }}
+          >
+            <CiEdit size={24} />
           </IconButton>
         </Box>
       ),
