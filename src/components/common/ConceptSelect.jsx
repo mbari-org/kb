@@ -10,7 +10,13 @@ import HistoryNavLinks from '@/components/common/HistoryNavLinks'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-const ConceptSelect = ({ disabled = false, conceptName, handleConceptSelect, handleKeyUp }) => {
+const ConceptSelect = ({
+  disabled = false,
+  conceptName,
+  handleConceptSelect,
+  handleKeyUp,
+  navigation = true,
+}) => {
   const theme = useTheme()
 
   const { concepts } = use(SelectedContext)
@@ -38,9 +44,11 @@ const ConceptSelect = ({ disabled = false, conceptName, handleConceptSelect, han
         >
           Concept
         </Typography>
-        <Box sx={{ ml: -2 }}>
-          <HistoryNavLinks history={concepts} />
-        </Box>
+        {navigation && (
+          <Box sx={{ ml: -2 }}>
+            <HistoryNavLinks history={concepts} />
+          </Box>
+        )}
       </Stack>
       <Autocomplete
         disabled={disabled}

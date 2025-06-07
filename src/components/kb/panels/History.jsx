@@ -1,10 +1,12 @@
 import { use } from 'react'
 import { Box } from '@mui/material'
 
+import ConceptHistory from '@/components/kb/panels/history/ConceptHistory'
 import HistoryTableToggle from '@/components/kb/panels/history/HistoryTableToggle'
 import TypeHistory from '@/components/kb/panels/history/TypeHistory'
-import ConceptHistory from '@/components/kb/panels/history/ConceptHistory'
+
 import SelectedContext from '@/contexts/selected/SelectedContext'
+
 import { SELECTED } from '@/lib/constants'
 
 const History = () => {

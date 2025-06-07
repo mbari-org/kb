@@ -6,6 +6,10 @@ const createConceptLinkTemplate = async (config, payload) =>
 const deleteConceptLinkTemplate = async (config, templateId) =>
   oniDelete(config, ['linktemplates', templateId])
 
+const getLinkTemplateCount = async config => oniGet(config, ['linktemplates', 'count'])
+
+const getLinkTemplates = async config => oniGet(config, ['linktemplates'])
+
 const getConceptLinkTemplates = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'concept', conceptName])
 
@@ -25,6 +29,8 @@ export {
   createConceptLinkTemplate,
   deleteConceptLinkTemplate,
   getConceptLinkTemplates,
+  getLinkTemplateCount,
+  getLinkTemplates,
   getToConceptLinkTemplateCount,
   getToConceptLinkTemplates,
   renameToConceptLinkTemplates,

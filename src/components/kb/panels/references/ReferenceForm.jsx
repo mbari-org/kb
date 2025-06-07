@@ -93,6 +93,7 @@ const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => 
             conceptName={selectedConcept}
             handleConceptSelect={handleConceptSelect}
             handleKeyUp={handleKeyUp}
+            navigation={false}
             onInputChange={handleSearchInput}
           />
         </Box>
