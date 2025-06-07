@@ -10,10 +10,8 @@ const deleteReference = async (config, referenceId) =>
 
 const getReference = async (config, referenceId) => oniGet(config, ['references', referenceId])
 
-const getReferences = async (config, params) => {
-  const { error, payload } = await oniGet(config, ['references'], params)
-  return { error, data: payload?.content }
-}
+const getReferences = async (config, params) => oniGet(config, ['references'], params)
+
 const removeConcept = async (config, [referenceId, conceptName]) =>
   oniPut(config, ['references', 'remove', referenceId, 'from', conceptName])
 

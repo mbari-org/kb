@@ -66,7 +66,7 @@ const deleteConcept = async (taxonomy, conceptName, apiFns) => {
 
   const [names, pending] = await Promise.all([
     apiFns.apiPayload(fetchNames),
-    apiFns.apiPagination(getHistory, ['pending']),
+    apiFns.apiPaginated(getHistory, ['pending']),
   ])
 
   const updatedTaxonomy = {
@@ -147,7 +147,7 @@ const loadTaxonomy = async apiFns => {
     apiFns.apiPayload(fetchRoot),
     apiFns.apiPayload(fetchNames),
     apiFns.apiPayload(fetchRanks),
-    apiFns.apiPagination(getHistory, ['pending']),
+    apiFns.apiPaginated(getHistory, ['pending']),
   ])
 
   const rootConcept = await loadConcept(root.name, apiFns.apiPayload)
@@ -390,7 +390,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => 
 
   const [updatedNames, pending] = await Promise.all([
     apiFns.apiPayload(fetchNames),
-    apiFns.apiPagination(getHistory, ['pending']),
+    apiFns.apiPaginated(getHistory, ['pending']),
   ])
 
   const updatedTaxonomy = {
@@ -405,8 +405,8 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => 
 }
 
 const refreshHistory = async (taxonomy, historyType, apiFns) => {
-  const data = await apiFns.apiPagination(getHistory, [historyType])
-  return { taxonomy: { ...taxonomy, [historyType]: data } }
+  const historyData = await apiFns.apiPaginated(getHistory, [historyType])
+  return { taxonomy: { ...taxonomy, [historyType]: historyData } }
 }
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {

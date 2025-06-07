@@ -57,8 +57,8 @@ export const ReferencesProvider = ({ children }) => {
 
   useEffect(() => {
     const loadReferences = async () => {
-      const data = await apiFns.apiPagination(getReferences)
-      setReferences(data.map(reference => createReference(reference)))
+      const referenceData = await apiFns.apiPaginated(getReferences)
+      setReferences(referenceData.map(reference => createReference(reference)))
     }
 
     loadReferences()

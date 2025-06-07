@@ -30,7 +30,7 @@ const useLoadHistory = (type, totalCount) => {
       )
     }
 
-    const pageData = await apiFns.apiPagination(getHistory, [
+    const pageData = await apiFns.apiPaginated(getHistory, [
       type,
       { ...paginationRef.current, offset: actualOffset },
     ])

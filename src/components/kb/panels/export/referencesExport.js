@@ -4,7 +4,7 @@ const referenceDataHeaders = ['DOI', 'Citation', 'Concepts']
 
 const referencesExport = async ({ apiFns }) => {
   try {
-    const references = await apiFns.apiPagination(getReferences)
+    const references = await apiFns.apiPaginated(getReferences)
 
     const csvRows = references.map(reference => [
       reference.doi,

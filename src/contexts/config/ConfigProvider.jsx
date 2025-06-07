@@ -84,20 +84,19 @@ const ConfigProvider = ({ children }) => {
       return payload
     }
 
-    const apiPagination = config => async (paginationRequest, params) => {
-      // Even though the API returns limit and offset values, they are not useful as they simply
-      // echo the values sent by the client. The values for limit and offset are maintained
-      // internally by the client itself.
-
-      const { error, data } = await paginationRequest(config, params)
+    const apiPaginated = config => async (paginationRequest, params) => {
+      // Even though the API returns limit and offset values, they simply echo the values sent by
+      // the client. The values for limit and offset are maintained internally by the client itself.
+      // So we can just return the payload content.
+      const { error, payload } = await paginationRequest(config, params)
       barfOnError(error)
-      return data
+      return payload.content
     }
 
     setApiFns({
       apiPayload: apiPayload(config),
       apiResult: apiResult(config),
-      apiPagination: apiPagination(config),
+      apiPaginated: apiPaginated(config),
     })
   }, [config])
 
