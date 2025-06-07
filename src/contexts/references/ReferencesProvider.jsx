@@ -4,7 +4,7 @@ import {
   createReference as createReferenceApi,
   deleteReference as removeReference,
   getReferences,
-} from '@/lib/kb/api/references'
+} from '@/lib/api/references'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ReferencesContext from '@/contexts/references/ReferencesContext'

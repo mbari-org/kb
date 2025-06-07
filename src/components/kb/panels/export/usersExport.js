@@ -1,4 +1,4 @@
-import { getUsers } from '@/lib/kb/api/users'
+import { getUsers } from '@/lib/api/users'
 
 const userDataHeaders = ['Username', 'Role', 'Affiliation', 'First Name', 'Last Name', 'Email']
 

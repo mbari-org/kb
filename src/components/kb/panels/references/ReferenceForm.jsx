@@ -4,7 +4,7 @@ import { MdOutlineDeleteForever } from 'react-icons/md'
 
 import ConceptSelect from '@/components/common/ConceptSelect'
 
-import useReferenceForm from '@/hooks/useReferenceForm'
+import useReferenceForm from '@/components/kb/panels/references/useReferenceForm'
 
 const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => {
   const {

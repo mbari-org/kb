@@ -1,4 +1,4 @@
-import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/kb/api/media'
+import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/api/media'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

@@ -1,4 +1,4 @@
-import { deleteConcept } from '@/lib/kb/api/concept'
+import { deleteConcept } from '@/lib/api/concept'
 
 const saveDelete = async (conceptName, apiResult) => apiResult(deleteConcept, conceptName)
 

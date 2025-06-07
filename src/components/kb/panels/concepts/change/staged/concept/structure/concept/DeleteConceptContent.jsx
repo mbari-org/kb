@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { getConceptAnnotationCount } from '@/lib/kb/api/annotations'
+import { getConceptAnnotationCount } from '@/lib/api/annotations'
 
 const DeleteConceptContent = () => {
   const { apiFns } = use(ConfigContext)

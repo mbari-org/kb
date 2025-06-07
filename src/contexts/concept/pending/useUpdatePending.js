@@ -5,8 +5,8 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import { updatePendingHistoryItem } from '@/lib/api/history'
 import { PENDING, PROCESSING } from '@/lib/constants'
-import { updatePendingHistoryItem } from '@/lib/kb/api/history'
 import { fieldPending } from '@/lib/kb/model/history'
 
 import useConceptPending from '@/contexts/concept/pending/useConceptPending'

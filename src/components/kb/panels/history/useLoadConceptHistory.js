@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { getConceptHistory } from '@/lib/kb/api/history'
+import { getConceptHistory } from '@/lib/api/history'
 
 const useLoadConceptHistory = () => {
   const { apiFns } = use(ConfigContext)

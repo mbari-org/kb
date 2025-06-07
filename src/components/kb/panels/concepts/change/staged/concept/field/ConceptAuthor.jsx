@@ -5,7 +5,7 @@ import { Box, FormControl, TextField } from '@mui/material'
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/change/staged/useConceptDetailStyle'
-import useDebounce from '@/components/hooks/useDebounce'
+import useDebounce from '@/hooks/useDebounce'
 import useStagedFieldBorder from '@/components/kb/panels/concepts/change/staged/concept/field/useStagedFieldBorder'
 
 import { CONCEPT_STATE } from '@/lib/constants'

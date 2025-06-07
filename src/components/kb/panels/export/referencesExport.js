@@ -1,4 +1,4 @@
-import { getReferences } from '@/lib/kb/api/references'
+import { getReferences } from '@/lib/api/references'
 
 const referenceDataHeaders = ['DOI', 'Citation', 'Concepts']
 

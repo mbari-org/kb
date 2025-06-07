@@ -1,5 +1,5 @@
 import panelMods from '@/components/kb/panels/modules'
-import useHistorySelect from '@/hooks/useHistorySelect'
+import useHistorySelect from '@/contexts/selected/useHistorySelect'
 import { createPanelStore } from '@/lib/store/panelStore'
 
 const usePanelSelect = () => {

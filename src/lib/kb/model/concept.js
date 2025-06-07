@@ -3,7 +3,7 @@ import {
   getConceptChildren as fetchConceptChildren,
   getConceptNames as fetchConceptNames,
   getConceptParent as fetchConceptParent,
-} from '@/lib/kb/api/concept'
+} from '@/lib/api/concept'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { orderedAliases } from '@/lib/kb/model/aliases'

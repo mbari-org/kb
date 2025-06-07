@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useRef, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { getHistory } from '@/lib/kb/api/history'
+import { getHistory } from '@/lib/api/history'
 
 import { PAGINATION } from '@/lib/constants'
 

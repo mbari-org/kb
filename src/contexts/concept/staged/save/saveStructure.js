@@ -1,5 +1,5 @@
-import { renameConceptAssociations } from '@/lib/kb/api/associations'
-import { createConcept, updateConceptName, updateConceptParent } from '@/lib/kb/api/concept'
+import { renameConceptAssociations } from '@/lib/api/associations'
+import { createConcept, updateConceptName, updateConceptParent } from '@/lib/api/concept'
 
 import { LABELS } from '@/lib/constants'
 

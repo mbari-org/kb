@@ -5,7 +5,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { PENDING } from '@/lib/constants'
 
-import { renameConceptAssociations } from '@/lib/kb/api/associations'
+import { renameConceptAssociations } from '@/lib/api/associations'
 const { CHANGE_NAME } = PENDING
 
 const useUpdateAssociatedData = pendingActions => {

@@ -1,9 +1,11 @@
+import { Box } from '@mui/material'
+
 const render = ({ error }) => {
   return (
-    <div role='alert'>
+    <Box role='alert'>
       <p>Whoops:</p>
       <pre style={{ color: 'red' }}>{error.message}</pre>
-    </div>
+    </Box>
   )
 }
 

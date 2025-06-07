@@ -1,4 +1,4 @@
-import { updateConceptAuthor, updateConceptRank } from '@/lib/kb/api/concept'
+import { updateConceptAuthor, updateConceptRank } from '@/lib/api/concept'
 
 const saveDetail = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, updatedValue } = updateInfo

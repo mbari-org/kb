@@ -1,4 +1,4 @@
-import { updateReference } from '@/lib/kb/api/references'
+import { updateReference } from '@/lib/api/references'
 
 import { isEmpty } from '@/lib/util'
 

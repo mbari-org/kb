@@ -2,7 +2,7 @@ import { use, useEffect, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { getHistoryCount } from '@/lib/kb/api/history'
+import { getHistoryCount } from '@/lib/api/history'
 
 const useHistoryCount = type => {
   const { apiFns } = use(ConfigContext)

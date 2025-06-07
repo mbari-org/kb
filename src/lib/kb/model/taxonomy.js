@@ -1,9 +1,9 @@
-import { getHistory } from '@/lib/kb/api/history'
+import { getHistory } from '@/lib/api/history'
 import {
   getNames as fetchNames,
   getRanks as fetchRanks,
   getRoot as fetchRoot,
-} from '@/lib/kb/api/taxonomy'
+} from '@/lib/api/taxonomy'
 
 import { filterRanks } from '@/lib/kb/model/rank'
 
