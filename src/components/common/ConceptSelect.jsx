@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, use } from 'react'
+import { use, useMemo } from 'react'
 import { Stack, Typography, Box } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
@@ -7,13 +7,8 @@ import TextField from '@mui/material/TextField'
 
 import HistoryNavLinks from '@/components/common/HistoryNavLinks'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
-import { getConceptNames } from '@/lib/api/concept'
-
-import { CONCEPT_NAME_TYPES } from '@/lib/constants'
 
 const ConceptSelect = ({
   conceptName,
@@ -25,26 +20,22 @@ const ConceptSelect = ({
 }) => {
   const theme = useTheme()
 
-  const {
-    apiFns: { apiPayload },
-  } = use(ConfigContext)
   const { concepts } = use(SelectedContext)
-  const { getConceptPrimaryName, getNames, loadConcept } = use(TaxonomyContext)
-
-  const [value, setValue] = useState('')
+  const { getNames } = use(TaxonomyContext)
 
   const taxonomyNames = useMemo(() => getNames(), [getNames])
 
-  useEffect(() => {
-    const primaryName = getConceptPrimaryName(conceptName)
-    if (!primaryName && conceptName) {
-      loadConcept(conceptName).then(concept => {
-        concept && setValue(concept.name)
-      })
-    } else {
-      setValue(primaryName || '')
-    }
-  }, [apiPayload, conceptName, getConceptPrimaryName, loadConcept])
+  // CxNote Keep this for now. Not sure why I thought it was needed.
+  // useEffect(() => {
+  //   const primaryName = getConceptPrimaryName(conceptName)
+  //   if (!primaryName && conceptName) {
+  //     loadConcept(conceptName).then(concept => {
+  //       concept && setValue(concept.name)
+  //     })
+  //   } else {
+  //     setValue(primaryName || '')
+  //   }
+  // }, [apiPayload, conceptName, getConceptPrimaryName, loadConcept])
 
   return (
     <Stack spacing={0}>
@@ -97,7 +88,7 @@ const ConceptSelect = ({
             },
           },
         }}
-        value={value}
+        value={conceptName}
       />
       <hr />
     </Stack>

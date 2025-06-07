@@ -1,38 +1,57 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup, IconButton } from '@mui/material'
+import { Box, Button, Stack } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 import theme from '@/lib/theme'
 
-const ToConceptSpecial = ({ value, onChange }) => {
-  const handleChange = event => {
-    onChange(event.target.value)
+const ToConceptSpecial = ({ onChange, value }) => {
+  const handleClick = specialValue => {
+    onChange(specialValue)
   }
 
   const handleClear = () => {
     onChange(null)
   }
 
+  const buttonStyle = {
+    minWidth: '32px',
+    p: 0.5,
+    textTransform: 'none',
+    fontSize: '1rem',
+    color: 'text.secondary',
+    '&:hover': {
+      ...theme.kb.icon.hover,
+      color: theme.palette.primary.main,
+    },
+  }
+
+  const activeStyle = {
+    color: 'primary.main',
+    fontWeight: 500,
+  }
+
   return (
-    <FormControl>
-      <RadioGroup row value={value || ''} onChange={handleChange}>
-        {value && (
-          <IconButton
-            size='small'
-            onClick={handleClear}
-            sx={{
-              mr: 1,
-              '&:hover': {
-                ...theme.kb.icon.hover,
-                color: theme.concept.color.remove,
-              },
-            }}
-          >
-            <IoClose size={16} />
-          </IconButton>
-        )}
-        <FormControlLabel value='self' control={<Radio size='small' />} label='self' />
-        <FormControlLabel value='nil' control={<Radio size='small' />} label='nil' />
-      </RadioGroup>
-    </FormControl>
+    <Stack direction='row' spacing={1} sx={{ mt: 0.5 }}>
+      <Button
+        size='small'
+        variant='text'
+        onClick={() => handleClick('self')}
+        sx={{ ...buttonStyle, ...(value === 'self' ? activeStyle : {}) }}
+      >
+        self
+      </Button>
+      <Button
+        size='small'
+        variant='text'
+        onClick={() => handleClick('nil')}
+        sx={{ ...buttonStyle, ...(value === 'nil' ? activeStyle : {}) }}
+      >
+        nil
+      </Button>
+      {value && (
+        <Button size='small' variant='text' onClick={handleClear} sx={buttonStyle}>
+          <IoClose />
+        </Button>
+      )}
+    </Stack>
   )
 }
 

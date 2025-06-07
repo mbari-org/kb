@@ -6,7 +6,7 @@ import ToConceptSpecial from './ToConceptSpecial'
 import useTemplateForm from '@/components/kb/panels/templates/useTemplateForm'
 
 const TemplateForm = ({ isEdit = false, onChange, template }) => {
-  const { handleChange } = useTemplateForm({ isEdit, onChange, template })
+  const { handleChange, isSpecialValue } = useTemplateForm({ isEdit, onChange, template })
 
   const handleConceptSelect = (event, newValue) => {
     handleChange('concept')({ target: { value: newValue } })
@@ -22,23 +22,23 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
     handleChange('toConcept')({ target: { value: value === null ? '' : value } })
   }
 
-  // Check if current toConcept value is a special value
-  const isSpecialValue = template.toConcept === 'self' || template.toConcept === 'nil'
-
   return (
     <Stack spacing={2} sx={{ p: 2 }}>
       <ConceptSelect
         conceptName={template.concept}
+        disabled={isEdit}
         handleConceptSelect={handleConceptSelect}
         navigation={false}
+        required
       />
       <Box>
         <TextField
           fullWidth
           label='Link Name'
-          value={template.linkName}
           onChange={handleChange('linkName')}
+          required
           size='small'
+          value={template.linkName}
         />
       </Box>
       <Box sx={{ position: 'relative' }}>
@@ -50,10 +50,11 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
         </Box>
         <ConceptSelect
           conceptName={isSpecialValue ? '' : template.toConcept}
+          disabled={isSpecialValue}
           handleConceptSelect={handleToConceptSelect}
           label='To Concept'
           navigation={false}
-          disabled={isSpecialValue}
+          required
         />
       </Box>
       <Box>
@@ -63,6 +64,7 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
           value={template.linkValue}
           onChange={handleChange('linkValue')}
           size='small'
+          required
         />
       </Box>
     </Stack>
