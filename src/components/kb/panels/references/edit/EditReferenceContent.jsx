@@ -1,5 +1,5 @@
 import { use } from 'react'
-import ReferenceForm from '../ReferenceForm'
+import ReferenceForm from '../form/ReferenceForm'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const EditReferenceContent = ({ isDoiUnique }) => {
@@ -10,8 +10,8 @@ const EditReferenceContent = ({ isDoiUnique }) => {
     setModalData({
       ...modalData,
       reference: updatedReference,
-      modified,
-      hasSearchInput,
+      modified: modified || false,
+      hasSearchInput: hasSearchInput || false,
     })
   }
 

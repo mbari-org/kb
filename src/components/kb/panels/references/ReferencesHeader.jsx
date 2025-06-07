@@ -50,9 +50,9 @@ const ReferencesHeader = () => {
       <Box sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}>
         <ConceptSelect
           conceptName={selectedConcept}
+          disabled={!selectedByConcept}
           handleConceptSelect={handleConceptSelect}
           handleKeyUp={handleKeyUp}
-          disabled={!selectedByConcept}
         />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>

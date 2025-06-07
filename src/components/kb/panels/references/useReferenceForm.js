@@ -17,7 +17,7 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
     return (
       currentReference.citation !== originalReference.citation ||
       currentReference.doi !== originalReference.doi ||
-      !isEqual(currentReference.concepts, originalReference.concepts)
+      !isEqual(currentReference.concepts?.sort(), originalReference.concepts?.sort())
     )
   }
 

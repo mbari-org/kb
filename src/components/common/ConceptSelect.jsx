@@ -11,8 +11,8 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const ConceptSelect = ({
-  disabled = false,
   conceptName,
+  disabled = false,
   handleConceptSelect,
   handleKeyUp,
   navigation = true,

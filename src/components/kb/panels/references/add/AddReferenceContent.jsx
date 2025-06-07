@@ -1,5 +1,5 @@
 import { use } from 'react'
-import ReferenceForm from '../ReferenceForm'
+import ReferenceForm from '../form/ReferenceForm'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const AddReferenceContent = ({ isDoiUnique }) => {
