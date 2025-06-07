@@ -20,6 +20,7 @@ const ConceptSelect = ({
   disabled = false,
   handleConceptSelect,
   handleKeyUp,
+  label = 'Concept',
   navigation = true,
 }) => {
   const theme = useTheme()
@@ -61,7 +62,7 @@ const ConceptSelect = ({
             ml: 1.5,
           }}
         >
-          Concept
+          {label}
         </Typography>
         <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>
           {navigation && !disabled && <HistoryNavLinks history={concepts} />}

@@ -1,31 +1,70 @@
 import { Stack } from '@mui/material'
 import { Box, TextField } from '@mui/material'
+import ConceptSelect from '@/components/common/ConceptSelect'
+import ToConceptSpecial from './ToConceptSpecial'
 
 import useTemplateForm from '@/components/kb/panels/templates/useTemplateForm'
 
 const TemplateForm = ({ isEdit = false, onChange, template }) => {
   const { handleChange } = useTemplateForm({ isEdit, onChange, template })
 
-  const fields = [
-    { label: 'Concept', field: 'concept' },
-    { label: 'Link Name', field: 'linkName' },
-    { label: 'To Concept', field: 'toConcept' },
-    { label: 'Link Value', field: 'linkValue' },
-  ]
+  const handleConceptSelect = (event, newValue) => {
+    handleChange('concept')({ target: { value: newValue } })
+  }
+
+  const handleToConceptSelect = (event, newValue) => {
+    handleChange('toConcept')({ target: { value: newValue } })
+  }
+
+  const handleToConceptSpecial = value => {
+    // When a special value is selected, use it as the toConcept value
+    // When null, use the current concept value
+    handleChange('toConcept')({ target: { value: value === null ? '' : value } })
+  }
+
+  // Check if current toConcept value is a special value
+  const isSpecialValue = template.toConcept === 'self' || template.toConcept === 'nil'
 
   return (
     <Stack spacing={2} sx={{ p: 2 }}>
-      {fields.map(({ label, field }) => (
-        <Box key={field}>
-          <TextField
-            fullWidth
-            label={label}
-            value={template[field]}
-            onChange={handleChange(field)}
-            size='small'
+      <ConceptSelect
+        conceptName={template.concept}
+        handleConceptSelect={handleConceptSelect}
+        navigation={false}
+      />
+      <Box>
+        <TextField
+          fullWidth
+          label='Link Name'
+          value={template.linkName}
+          onChange={handleChange('linkName')}
+          size='small'
+        />
+      </Box>
+      <Box sx={{ position: 'relative' }}>
+        <Box sx={{ position: 'absolute', right: 0, top: 0, zIndex: 1 }}>
+          <ToConceptSpecial
+            value={isSpecialValue ? template.toConcept : ''}
+            onChange={handleToConceptSpecial}
           />
         </Box>
-      ))}
+        <ConceptSelect
+          conceptName={isSpecialValue ? '' : template.toConcept}
+          handleConceptSelect={handleToConceptSelect}
+          label='To Concept'
+          navigation={false}
+          disabled={isSpecialValue}
+        />
+      </Box>
+      <Box>
+        <TextField
+          fullWidth
+          label='Link Value'
+          value={template.linkValue}
+          onChange={handleChange('linkValue')}
+          size='small'
+        />
+      </Box>
     </Stack>
   )
 }

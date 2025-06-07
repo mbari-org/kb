@@ -10,7 +10,6 @@ const pale = alpha(main, 0.3)
 
 const add = '#008800'
 const edit = '#ee8311'
-const remove = '#af0000'
 
 const approve = add
 const cancel = '#af0000'
@@ -21,7 +20,8 @@ const navActive = '#ffffff'
 const paper = '#f0f0f0'
 const pendingIconClean = '#00dd00'
 const pendingIconDirty = '#dd0000'
-const reject = remove
+const reject = cancel
+const remove = cancel
 
 const theme = createTheme({
   concept: {
