@@ -7,8 +7,13 @@ import TextField from '@mui/material/TextField'
 
 import HistoryNavLinks from '@/components/common/HistoryNavLinks'
 
+import ConfigContext from '@/contexts/config/ConfigContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
+import { getConceptNames } from '@/lib/api/concept'
+
+import { CONCEPT_NAME_TYPES } from '@/lib/constants'
 
 const ConceptSelect = ({
   conceptName,
@@ -19,8 +24,11 @@ const ConceptSelect = ({
 }) => {
   const theme = useTheme()
 
+  const {
+    apiFns: { apiPayload },
+  } = use(ConfigContext)
   const { concepts } = use(SelectedContext)
-  const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
+  const { getConceptPrimaryName, getNames, loadConcept } = use(TaxonomyContext)
 
   const [value, setValue] = useState('')
 
@@ -28,8 +36,14 @@ const ConceptSelect = ({
 
   useEffect(() => {
     const primaryName = getConceptPrimaryName(conceptName)
-    setValue(primaryName || '')
-  }, [conceptName, getConceptPrimaryName])
+    if (!primaryName && conceptName) {
+      loadConcept(conceptName).then(concept => {
+        setValue(concept.name)
+      })
+    } else {
+      setValue(primaryName || '')
+    }
+  }, [apiPayload, conceptName, getConceptPrimaryName, loadConcept])
 
   return (
     <Stack spacing={0}>
@@ -44,7 +58,7 @@ const ConceptSelect = ({
         >
           Concept
         </Typography>
-        {navigation && (
+        {navigation && !disabled && (
           <Box sx={{ ml: -2 }}>
             <HistoryNavLinks history={concepts} />
           </Box>

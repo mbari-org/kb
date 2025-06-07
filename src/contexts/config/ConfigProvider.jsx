@@ -40,6 +40,10 @@ const ConfigProvider = ({ children }) => {
     })
   }
 
+  const barfOnError = error => {
+    if (error) throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
+  }
+
   useEffect(() => {
     const storedConfigUrl = configUrlStore.get()
     if (storedConfigUrl) {
@@ -61,10 +65,6 @@ const ConfigProvider = ({ children }) => {
     // navigate does not change, so no need to include it in the dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const barfOnError = error => {
-    if (error) throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
-  }
 
   useEffect(() => {
     if (!config) {

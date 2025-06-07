@@ -38,10 +38,7 @@ const ReferencesHeader = () => {
 
   const handleToggleChange = event => {
     const newValue = event.target.checked
-    select({
-      byConcept: newValue,
-      concept: newValue ? selectedConcept : null,
-    })
+    select({ byConcept: newValue })
   }
 
   return (
