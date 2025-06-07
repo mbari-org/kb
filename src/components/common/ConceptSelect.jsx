@@ -38,7 +38,7 @@ const ConceptSelect = ({
     const primaryName = getConceptPrimaryName(conceptName)
     if (!primaryName && conceptName) {
       loadConcept(conceptName).then(concept => {
-        setValue(concept.name)
+        concept && setValue(concept.name)
       })
     } else {
       setValue(primaryName || '')
@@ -47,22 +47,25 @@ const ConceptSelect = ({
 
   return (
     <Stack spacing={0}>
-      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+      <Stack
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
+        sx={{ minHeight: '40px' }}
+      >
         <Typography
           sx={{
+            color: disabled ? 'text.disabled' : 'text.primary',
             fontSize: theme => theme.typography.fontSize * 1.2,
             fontWeight: 'bold',
             ml: 1.5,
-            color: disabled ? 'text.disabled' : 'text.primary',
           }}
         >
           Concept
         </Typography>
-        {navigation && !disabled && (
-          <Box sx={{ ml: -2 }}>
-            <HistoryNavLinks history={concepts} />
-          </Box>
-        )}
+        <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>
+          {navigation && !disabled && <HistoryNavLinks history={concepts} />}
+        </Box>
       </Stack>
       <Autocomplete
         disabled={disabled}
