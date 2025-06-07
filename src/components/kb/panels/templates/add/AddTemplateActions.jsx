@@ -1,8 +1,11 @@
 import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
-import ModalContext from '@/contexts/modal/ModalContext'
-import { LABELS, PROCESSING } from '@/lib/constants'
 
+import ModalContext from '@/contexts/modal/ModalContext'
+
+import { isValidTemplate } from '@/components/kb/panels/templates/utils'
+
+import { LABELS, PROCESSING } from '@/lib/constants'
 const { CANCEL, SAVE } = LABELS.BUTTON
 const { SAVING } = PROCESSING
 
@@ -11,10 +14,7 @@ const AddTemplateActions = ({ addTemplate }) => {
   const { template } = modalData
 
   const colors = ['cancel', 'primary']
-  const disabled = [
-    false,
-    !template.concept || !template.linkName || !template.toConcept || !modalData.modified,
-  ]
+  const disabled = [false, !isValidTemplate(template) || !modalData.modified]
   const labels = [CANCEL, SAVE]
 
   const onAction = async label => {

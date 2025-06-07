@@ -6,7 +6,15 @@ const useTemplateForm = ({ isEdit = false, onChange, template }) => {
   const [hasSearchInput, setHasSearchInput] = useState(false)
 
   const checkModification = updatedTemplate => {
-    if (!isEdit) return false
+    if (!isEdit) {
+      // In add mode, consider it modified if any field has a value
+      return Boolean(
+        updatedTemplate.concept?.trim() ||
+          updatedTemplate.linkName?.trim() ||
+          updatedTemplate.toConcept?.trim() ||
+          updatedTemplate.linkValue?.trim()
+      )
+    }
 
     const originalTemplate = modalData.originalTemplate
     const currentTemplate = updatedTemplate
@@ -34,9 +42,9 @@ const useTemplateForm = ({ isEdit = false, onChange, template }) => {
   }
 
   return {
-    hasSearchInput,
     handleChange,
     handleSearchInput,
+    hasSearchInput,
   }
 }
 
