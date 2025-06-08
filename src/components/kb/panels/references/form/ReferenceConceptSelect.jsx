@@ -17,23 +17,22 @@ const ReferenceConceptSelect = ({ reference, onChange }) => {
   const isConceptSelected = selectedConcept && reference.concepts?.includes(selectedConcept)
 
   return (
-    <Stack alignItems='center' direction='row' justifyContent='center' spacing={1}>
+    <Stack alignItems='center' direction='row' justifyContent='left' spacing={1}>
+      <ConceptSelect
+        conceptName={selectedConcept}
+        handleConceptSelect={handleConceptSelect}
+        handleKeyUp={handleKeyUp}
+        navigation={false}
+        onInputChange={handleSearchInput}
+        sx={{ width: '400px' }}
+      />
+      <Box sx={{ width: 6 }} />
       <ReferenceConceptSelectButtons
         handleAddConcept={handleAddConcept}
         handleDeleteConcept={handleDeleteConcept}
         isConceptSelected={isConceptSelected}
         selectedConcept={selectedConcept}
       />
-      <Box sx={{ width: 8 }} />
-      <Box sx={{ width: '50%' }}>
-        <ConceptSelect
-          conceptName={selectedConcept}
-          handleConceptSelect={handleConceptSelect}
-          handleKeyUp={handleKeyUp}
-          navigation={false}
-          onInputChange={handleSearchInput}
-        />
-      </Box>
     </Stack>
   )
 }

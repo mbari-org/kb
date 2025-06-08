@@ -44,14 +44,13 @@ const ReferencesHeader = () => {
   return (
     <Box>
       <PanelTitle title='References' />
-      <Box sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}>
-        <ConceptSelect
-          conceptName={selectedConcept}
-          disabled={!selectedByConcept}
-          handleConceptSelect={handleConceptSelect}
-          handleKeyUp={handleKeyUp}
-        />
-      </Box>
+      <ConceptSelect
+        conceptName={selectedConcept}
+        disabled={!selectedByConcept}
+        handleConceptSelect={handleConceptSelect}
+        handleKeyUp={handleKeyUp}
+        sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}
+      />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>
         <Box
           sx={{

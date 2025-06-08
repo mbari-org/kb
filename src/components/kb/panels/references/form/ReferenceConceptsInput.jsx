@@ -27,7 +27,7 @@ const ReferenceConceptsInput = ({ reference, handleChange, onChange }) => {
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={0.5}>
       <TextField
         fullWidth
         label='Concepts'

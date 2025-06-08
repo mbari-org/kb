@@ -22,13 +22,12 @@ const TaxonomySidebar = () => {
 
   return (
     <Stack sx={{ height: '100%' }}>
-      <Box sx={{ ml: 1, mt: 1, mr: 1 }}>
-        <ConceptSelect
-          conceptName={concept.name}
-          handleConceptSelect={handleConceptSelect}
-          handleKeyUp={handleKeyUp}
-        />
-      </Box>
+      <ConceptSelect
+        conceptName={concept.name}
+        handleConceptSelect={handleConceptSelect}
+        handleKeyUp={handleKeyUp}
+        sx={{ ml: 1, mt: 1, mr: 1 }}
+      />
       <Box
         ref={sidebarRef}
         sx={{

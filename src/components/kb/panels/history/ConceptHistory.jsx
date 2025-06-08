@@ -92,13 +92,12 @@ const ConceptHistory = () => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
-        <Box sx={{ mt: 0.75, width: 400 }}>
-          <ConceptSelect
-            conceptName={selectedConcept}
-            handleConceptSelect={handleConceptSelect}
-            handleKeyUp={handleKeyUp}
-          />
-        </Box>
+        <ConceptSelect
+          conceptName={selectedConcept}
+          handleConceptSelect={handleConceptSelect}
+          handleKeyUp={handleKeyUp}
+          sx={{ mt: 0.75, width: 400 }}
+        />
       </Box>
       <Box sx={{ flexGrow: 1, minHeight: 0, mt: 0 }}>
         <HistoryTable

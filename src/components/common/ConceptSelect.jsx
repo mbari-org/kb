@@ -17,6 +17,7 @@ const ConceptSelect = ({
   handleKeyUp,
   label = 'Concept',
   navigation = true,
+  sx = {},
 }) => {
   const theme = useTheme()
 
@@ -25,20 +26,8 @@ const ConceptSelect = ({
 
   const taxonomyNames = useMemo(() => getNames(), [getNames])
 
-  // CxNote Keep this for now. Not sure why I thought it was needed.
-  // useEffect(() => {
-  //   const primaryName = getConceptPrimaryName(conceptName)
-  //   if (!primaryName && conceptName) {
-  //     loadConcept(conceptName).then(concept => {
-  //       concept && setValue(concept.name)
-  //     })
-  //   } else {
-  //     setValue(primaryName || '')
-  //   }
-  // }, [apiPayload, conceptName, getConceptPrimaryName, loadConcept])
-
   return (
-    <Stack spacing={0}>
+    <Stack spacing={0} sx={sx}>
       <Stack
         direction='row'
         justifyContent='space-between'
