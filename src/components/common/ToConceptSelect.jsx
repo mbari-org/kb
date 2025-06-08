@@ -6,6 +6,7 @@ const ToConceptSelect = ({
   conceptName,
   disabled,
   handleConceptSelect,
+  handleKeyUp,
   required = true,
   width = '100%',
 }) => {
@@ -18,6 +19,7 @@ const ToConceptSelect = ({
         conceptName={conceptName}
         disabled={disabled}
         handleConceptSelect={handleConceptSelect}
+        handleKeyUp={handleKeyUp}
         label='To Concept'
         navigation={false}
         required={required}

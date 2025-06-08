@@ -18,8 +18,8 @@ const getConceptTemplates = async (config, conceptName) =>
 const getToConceptTemplateCount = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'toconcept', 'count', conceptName])
 
-const getToConceptTemplates = async (config, conceptName) =>
-  oniGet(config, ['linktemplates', 'toconcept', conceptName])
+const getToConceptTemplates = async (config, [conceptName, pageParams]) =>
+  oniGet(config, ['linktemplates', 'toconcept', conceptName], pageParams)
 
 const renameToConceptTemplates = async (config, payload) =>
   oniPost(config, ['linktemplates', 'toconcept', 'rename'], payload)

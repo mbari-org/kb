@@ -2,12 +2,7 @@ import { use, useCallback, useEffect, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import TemplatesContext from './TemplatesContext'
-
-import {
-  getConceptTemplates,
-  getToConceptTemplateCount,
-  getToConceptTemplates,
-} from '@/lib/api/linkTemplates'
+import { useFilterTemplates } from './useFilterTemplates'
 
 import {
   createConceptTemplate,
@@ -20,70 +15,49 @@ import {
 import { PAGINATION } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.TEMPLATES.DEFAULT_LIMIT
-const DEFAULT_OFFSET = 0
 
 const TemplatesProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
 
   const [count, setCount] = useState(0)
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
-  const [offset, setOffset] = useState(DEFAULT_OFFSET)
+  const [offset, setOffset] = useState(0)
 
   const [filterConcept, setFilterConcept] = useState(null)
   const [filterToConcept, setFilterToConcept] = useState(null)
 
   const [templates, setTemplates] = useState([])
 
-  const filterTemplates = useCallback(
-    async (concept, toConcept) => {
-      if (concept && toConcept) {
-        const conceptTemplates = await apiFns.apiPayload(getConceptTemplates, concept)
-        const toConceptTemplates = conceptTemplates.filter(
-          template => template.toConcept === toConcept
-        )
-        setTemplates(toConceptTemplates)
-        setCount(toConceptTemplates.length)
-      } else if (concept) {
-        const conceptTemplates = await apiFns.apiPayload(getConceptTemplates, concept)
-        setTemplates(conceptTemplates)
-        setCount(conceptTemplates.length)
-      } else if (toConcept) {
-        const [toConceptTemplates, toConceptTemplateCount] = await Promise.all([
-          apiFns.apiPayload(getToConceptTemplates, toConcept),
-          apiFns.apiPayload(getToConceptTemplateCount, toConcept),
-        ])
-        setCount(toConceptTemplateCount)
-        setTemplates(toConceptTemplates)
-      } else {
-        const [count, templates] = await Promise.all([
-          apiFns.apiResult(getTemplatesCount),
-          apiFns.apiPaginated(getTemplates, { limit, offset }),
-        ])
-        setCount(count)
-        setTemplates(templates)
-      }
-    },
-    [apiFns, limit, offset]
-  )
+  const filterTemplates = useFilterTemplates({
+    apiFns,
+    setCount,
+    setTemplates,
+  })
 
   const handleConceptFilter = useCallback(
     conceptName => {
       setFilterConcept(conceptName)
-      filterTemplates(conceptName, filterToConcept)
+      filterTemplates(conceptName, filterToConcept, { limit, offset })
     },
-    [filterTemplates, filterToConcept]
+    [filterTemplates, filterToConcept, limit, offset]
   )
 
   const handleToConceptFilter = useCallback(
     toConceptName => {
       setFilterToConcept(toConceptName)
-      filterTemplates(filterConcept, toConceptName)
+      filterTemplates(filterConcept, toConceptName, { limit, offset })
     },
-    [filterTemplates, filterConcept]
+    [filterTemplates, filterConcept, limit, offset]
   )
 
   const loadData = useCallback(async () => {
     if (!apiFns) return
+
+    // If we have any filters active, use filterTemplates instead
+    if (filterConcept || filterToConcept) {
+      filterTemplates(filterConcept, filterToConcept, { limit, offset })
+      return
+    }
 
     const [count, templates] = await Promise.all([
       apiFns.apiResult(getTemplatesCount),
@@ -92,7 +66,7 @@ const TemplatesProvider = ({ children }) => {
 
     setCount(count)
     setTemplates(templates)
-  }, [apiFns, limit, offset])
+  }, [apiFns, limit, offset, filterConcept, filterToConcept, filterTemplates])
 
   useEffect(() => {
     loadData()
