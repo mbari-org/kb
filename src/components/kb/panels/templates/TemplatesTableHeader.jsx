@@ -3,6 +3,7 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 
 import ConceptSelect from '@/components/common/ConceptSelect'
 import PanelTitle from '@/components/common/PanelTitle'
+import ToConceptSelect from '@/components/common/ToConceptSelect'
 
 import useAddTemplateModal from './add/useAddTemplateModal'
 
@@ -51,13 +52,11 @@ const TemplatesHeader = () => {
           navigation={false}
           sx={{ width: 400 }}
         />
-        <ConceptSelect
+        <ToConceptSelect
           conceptName={filterToConcept}
           handleConceptSelect={handleConceptSelect(handleToConceptFilter)}
           handleKeyUp={handleKeyUp}
-          label='To Concept'
-          navigation={false}
-          sx={{ width: 400 }}
+          width={400}
         />
       </Stack>
     </Box>

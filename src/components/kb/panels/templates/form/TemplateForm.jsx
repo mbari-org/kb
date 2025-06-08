@@ -1,12 +1,12 @@
 import { Stack } from '@mui/material'
 import { Box, TextField } from '@mui/material'
 import ConceptSelect from '@/components/common/ConceptSelect'
-import ToConceptSpecial from './ToConceptSpecial'
+import ToConceptSelect from '@/components/common/ToConceptSelect'
 
 import useTemplateForm from '@/components/kb/panels/templates/useTemplateForm'
 
 const TemplateForm = ({ isEdit = false, onChange, template }) => {
-  const { handleChange, isSpecialValue } = useTemplateForm({ isEdit, onChange, template })
+  const { handleChange } = useTemplateForm({ isEdit, onChange, template })
 
   const handleConceptSelect = (event, newValue) => {
     handleChange('concept')({ target: { value: newValue } })
@@ -41,22 +41,11 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
           value={template.linkName}
         />
       </Box>
-      <Box sx={{ position: 'relative' }}>
-        <Box sx={{ position: 'absolute', right: 0, top: 0, zIndex: 1 }}>
-          <ToConceptSpecial
-            value={isSpecialValue ? template.toConcept : ''}
-            onChange={handleToConceptSpecial}
-          />
-        </Box>
-        <ConceptSelect
-          conceptName={isSpecialValue ? '' : template.toConcept}
-          disabled={isSpecialValue}
-          handleConceptSelect={handleToConceptSelect}
-          label='To Concept'
-          navigation={false}
-          required
-        />
-      </Box>
+      <ToConceptSelect
+        conceptName={template.toConcept}
+        handleConceptSelect={handleToConceptSelect}
+        onSpecialChange={handleToConceptSpecial}
+      />
       <Box>
         <TextField
           fullWidth
