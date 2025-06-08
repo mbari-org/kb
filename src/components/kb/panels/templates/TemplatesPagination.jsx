@@ -2,6 +2,7 @@ import { Typography, Box, IconButton, Select, MenuItem } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
 import PageControl from '@/components/common/PageControl'
+import usePageCommit from '@/hooks/usePageCommit'
 
 import { PAGINATION } from '@/lib/constants'
 
@@ -12,25 +13,7 @@ const TemplatesPagination = ({ limit, offset, count, nextPage, prevPage, setPage
   const currentPage = Math.max(1, Math.floor(offset / limit) + 1) // Convert to 1-based index, minimum 1
   const totalPages = Math.max(1, Math.ceil(count / limit)) // Ensure at least 1 page
 
-  const handlePageCommit = event => {
-    const newPage = parseInt(event.target.value)
-    if (!isNaN(newPage) && newPage >= 1 && newPage <= totalPages) {
-      const pageDiff = newPage - currentPage
-      if (pageDiff > 0) {
-        // Move forward by pageDiff pages
-        for (let i = 0; i < pageDiff; i++) {
-          nextPage()
-        }
-      } else if (pageDiff < 0) {
-        // Move backward by |pageDiff| pages
-        for (let i = 0; i < -pageDiff; i++) {
-          prevPage()
-        }
-      }
-    }
-    // Reset the input value to current page
-    event.target.value = currentPage
-  }
+  const handlePageCommit = usePageCommit(currentPage, totalPages, nextPage, prevPage)
 
   return (
     <Box
