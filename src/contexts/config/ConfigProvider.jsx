@@ -72,12 +72,6 @@ const ConfigProvider = ({ children }) => {
       return
     }
 
-    const apiResult = config => async (apiRequest, params) => {
-      const { error, result } = await apiRequest(config, params)
-      barfOnError(error)
-      return result
-    }
-
     const apiPayload = config => async (payloadRequest, params) => {
       const { error, payload } = await payloadRequest(config, params)
       barfOnError(error)
@@ -91,6 +85,12 @@ const ConfigProvider = ({ children }) => {
       const { error, payload } = await paginationRequest(config, params)
       barfOnError(error)
       return payload.content
+    }
+
+    const apiResult = config => async (apiRequest, params) => {
+      const { error, result } = await apiRequest(config, params)
+      barfOnError(error)
+      return result
     }
 
     setApiFns({

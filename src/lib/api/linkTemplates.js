@@ -1,41 +1,40 @@
 import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 
-const createConceptLinkTemplate = async (config, payload) =>
-  oniPost(config, ['linktemplates'], payload)
+const createConceptTemplate = async (config, payload) => oniPost(config, ['linktemplates'], payload)
 
-const deleteConceptLinkTemplate = async (config, templateId) =>
+const deleteConceptTemplate = async (config, templateId) =>
   oniDelete(config, ['linktemplates', templateId])
 
-const getLinkTemplatesCount = async config => {
+const getTemplatesCount = async config => {
   const { error, payload } = await oniGet(config, ['linktemplates', 'count'])
   return { error, result: payload?.count }
 }
 
-const getLinkTemplates = async (config, params) => oniGet(config, ['linktemplates'], params)
+const getTemplates = async (config, params) => oniGet(config, ['linktemplates'], params)
 
-const getConceptLinkTemplates = async (config, conceptName) =>
+const getConceptTemplates = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'concept', conceptName])
 
-const getToConceptLinkTemplateCount = async (config, conceptName) =>
+const getToConceptTemplateCount = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'toconcept', 'count', conceptName])
 
-const getToConceptLinkTemplates = async (config, conceptName) =>
+const getToConceptTemplates = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'toconcept', conceptName])
 
-const renameToConceptLinkTemplates = async (config, payload) =>
+const renameToConceptTemplates = async (config, payload) =>
   oniPost(config, ['linktemplates', 'toconcept', 'rename'], payload)
 
-const updateConceptLinkTemplate = async (config, [templateId, payload]) =>
+const updateTemplate = async (config, [templateId, payload]) =>
   oniPut(config, ['linktemplates', templateId], payload)
 
 export {
-  createConceptLinkTemplate,
-  deleteConceptLinkTemplate,
-  getConceptLinkTemplates,
-  getLinkTemplates,
-  getLinkTemplatesCount,
-  getToConceptLinkTemplateCount,
-  getToConceptLinkTemplates,
-  renameToConceptLinkTemplates,
-  updateConceptLinkTemplate,
+  createConceptTemplate,
+  deleteConceptTemplate,
+  getConceptTemplates,
+  getTemplates,
+  getTemplatesCount,
+  getToConceptTemplateCount,
+  getToConceptTemplates,
+  renameToConceptTemplates,
+  updateTemplate,
 }
