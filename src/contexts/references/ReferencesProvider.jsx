@@ -13,8 +13,11 @@ import { createReference } from '@/lib/kb/model/reference'
 import updateReferenceFields from '@/contexts/config/updateReferenceFields'
 import updateReferenceConcepts from '@/contexts/config/updateReferenceConcepts'
 
+import SelectedContext from '@/contexts/selected/SelectedContext'
+
 export const ReferencesProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
+  const { getSelected } = use(SelectedContext)
 
   const [references, setReferences] = useState([])
 
@@ -50,11 +53,8 @@ export const ReferencesProvider = ({ children }) => {
     [apiFns]
   )
 
-  const getReferences = useCallback(
+  const getConceptReferences = useCallback(
     concept => {
-      if (!concept) {
-        return references
-      }
       return references.filter(reference => reference.concepts.includes(concept))
     },
     [references]
@@ -84,8 +84,9 @@ export const ReferencesProvider = ({ children }) => {
     addReference,
     deleteReference,
     editReference,
-    getReferences,
+    getConceptReferences,
     isDoiUnique,
+    references,
   }
 
   return <ReferencesContext.Provider value={value}>{children}</ReferencesContext.Provider>

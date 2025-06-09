@@ -4,7 +4,7 @@ import ConceptSelect from '@/components/common/ConceptSelect'
 import ReferenceConceptSelectButtons from './ReferenceConceptSelectButtons'
 import useReferenceForm from '@/components/kb/panels/references/useReferenceForm'
 
-const ReferenceConceptSelect = ({ reference, onChange }) => {
+const ReferenceConceptSelect = ({ onChange, reference }) => {
   const {
     handleAddConcept,
     handleDeleteConcept,

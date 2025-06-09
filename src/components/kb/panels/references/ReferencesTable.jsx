@@ -17,12 +17,15 @@ const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
 const ReferencesTable = () => {
-  const { editReference, deleteReference, getReferences } = use(ReferencesContext)
-
+  const { editReference, deleteReference, references } = use(ReferencesContext)
   const { getSelected } = use(SelectedContext)
 
-  const selectedByConcept = getSelected('byConcept')
-  const references = getReferences(selectedByConcept ? getSelected('concept') : null)
+  const selectedConcept = getSelected('concept')
+  const byConcept = getSelected('byConcept')
+
+  const selectedReferences = byConcept
+    ? references.filter(reference => reference.concepts.includes(selectedConcept))
+    : references
 
   const editReferenceModal = useEditReferenceModal(editReference)
   const deleteReferenceModal = useDeleteReferenceModal(deleteReference)
@@ -55,12 +58,12 @@ const ReferencesTable = () => {
           page: Math.floor(offset / limit),
           pageSize: limit,
         }}
-        rowCount={references.length}
-        rows={references}
+        rowCount={selectedReferences.length}
+        rows={selectedReferences}
         slots={{
           pagination: () => (
             <ReferencesPagination
-              count={references.length}
+              count={selectedReferences.length}
               limit={limit}
               nextPage={nextPage}
               offset={offset}

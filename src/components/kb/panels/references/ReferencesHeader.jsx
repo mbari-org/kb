@@ -16,10 +16,13 @@ const ReferencesHeader = () => {
   const { getSelected, select } = use(SelectedContext)
 
   const selectedConcept = getSelected('concept')
+  const byConcept = getSelected('byConcept')
 
-  const [byConcept, setByConcept] = useState(getSelected('byConcept'))
+  const total = byConcept
+    ? references.filter(reference => reference.concepts.includes(selectedConcept)).length
+    : references.length
 
-  const addReferenceModal = useAddReferenceModal(addReference, references)
+  const addReferenceModal = useAddReferenceModal(addReference)
 
   const handleConceptSelect = (_event, selectedName) => {
     if (selectedName) {
@@ -40,7 +43,6 @@ const ReferencesHeader = () => {
   const handleToggleChange = event => {
     const newValue = event.target.checked
     select({ byConcept: newValue })
-    setByConcept(newValue)
   }
 
   return (
@@ -64,7 +66,7 @@ const ReferencesHeader = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Typography variant='body1'>Total: {references?.length || 0}</Typography>
+          <Typography variant='body1'>Total: {total}</Typography>
           <FormControlLabel
             control={<Switch size='small' checked={byConcept} onChange={handleToggleChange} />}
             label='By Concept'

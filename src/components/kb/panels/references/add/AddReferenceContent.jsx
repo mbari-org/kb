@@ -2,7 +2,7 @@ import { use } from 'react'
 import ReferenceForm from '../form/ReferenceForm'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-const AddReferenceContent = ({ isDoiUnique }) => {
+const AddReferenceContent = () => {
   const { modalData, setModalData } = use(ModalContext)
   const { reference } = modalData
 
@@ -13,7 +13,7 @@ const AddReferenceContent = ({ isDoiUnique }) => {
     })
   }
 
-  return <ReferenceForm reference={reference} onChange={handleChange} isDoiUnique={isDoiUnique} />
+  return <ReferenceForm reference={reference} onChange={handleChange} />
 }
 
 export default AddReferenceContent

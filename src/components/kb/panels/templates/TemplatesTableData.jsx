@@ -14,15 +14,15 @@ const PAGE_SIZE_OPTIONS = PAGINATION.TEMPLATES.PAGE_SIZE_OPTIONS
 
 const TemplatesTableData = () => {
   const {
-    templates,
     count,
-    limit,
-    offset,
-    nextPage,
-    prevPage,
-    setPageSize,
     deleteTemplate,
     editTemplate,
+    limit,
+    nextPage,
+    offset,
+    prevPage,
+    setPageSize,
+    templates,
   } = use(TemplatesContext)
 
   const deleteTemplateModal = useDeleteTemplateModal(deleteTemplate)
