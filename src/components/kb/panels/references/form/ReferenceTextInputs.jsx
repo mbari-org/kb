@@ -1,6 +1,11 @@
+import { use } from 'react'
 import { Box, TextField } from '@mui/material'
 
-const ReferenceTextInputs = ({ isDoiUnique, reference, handleChange }) => {
+import ReferencesContext from '@/contexts/references/ReferencesContext'
+
+const ReferenceTextInputs = ({ reference, handleChange }) => {
+  const { isDoiUnique } = use(ReferencesContext)
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <TextField

@@ -3,14 +3,16 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
+import ReferencesContext from '@/contexts/references/ReferencesContext'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 const { SAVING } = PROCESSING
 
-const AddReferenceActions = ({ addReference, isDoiUnique }) => {
+const AddReferenceActions = ({ addReference }) => {
   const { closeModal, modalData, setProcessing } = use(ModalContext)
+  const { isDoiUnique } = use(ReferencesContext)
 
   const { reference } = modalData
 

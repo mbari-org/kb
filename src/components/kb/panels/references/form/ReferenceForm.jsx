@@ -5,16 +5,12 @@ import ReferenceConceptsInput from './ReferenceConceptsInput'
 
 import useReferenceForm from '@/components/kb/panels/references/useReferenceForm'
 
-const ReferenceForm = ({ isDoiUnique, isEdit = false, onChange, reference }) => {
+const ReferenceForm = ({ isEdit = false, onChange, reference }) => {
   const { handleChange } = useReferenceForm({ isEdit, onChange, reference })
 
   return (
     <Stack spacing={2} sx={{ p: 2 }}>
-      <ReferenceTextInputs
-        isDoiUnique={isDoiUnique}
-        reference={reference}
-        handleChange={handleChange}
-      />
+      <ReferenceTextInputs reference={reference} handleChange={handleChange} />
       <ReferenceConceptsInput
         reference={reference}
         handleChange={handleChange}

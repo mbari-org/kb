@@ -1,14 +1,13 @@
-import { use, useCallback, useEffect, useState, useMemo } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 
 import {
   createReference as createReferenceApi,
   deleteReference as removeReference,
-  getReferences,
+  getReferences as getReferencesApi,
 } from '@/lib/api/references'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ReferencesContext from '@/contexts/references/ReferencesContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
 import { createReference } from '@/lib/kb/model/reference'
 
 import updateReferenceFields from '@/contexts/config/updateReferenceFields'
@@ -16,12 +15,8 @@ import updateReferenceConcepts from '@/contexts/config/updateReferenceConcepts'
 
 export const ReferencesProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
-  const { getSelected } = use(SelectedContext)
-
-  const selectedConcept = getSelected('concept')
 
   const [references, setReferences] = useState([])
-  const [byConcept, setByConcept] = useState(false)
 
   const addReference = useCallback(
     async referenceData => {
@@ -55,28 +50,42 @@ export const ReferencesProvider = ({ children }) => {
     [apiFns]
   )
 
+  const getReferences = useCallback(
+    concept => {
+      if (!concept) {
+        return references
+      }
+      return references.filter(reference => reference.concepts.includes(concept))
+    },
+    [references]
+  )
+
+  const isDoiUnique = useCallback(
+    (doi, currentId) => {
+      if (!doi) return true
+      return !references.some(
+        reference =>
+          reference.id !== currentId && reference.doi?.toLowerCase() === doi.toLowerCase()
+      )
+    },
+    [references]
+  )
+
   useEffect(() => {
     const loadReferences = async () => {
-      const referenceData = await apiFns.apiPaginated(getReferences)
+      const referenceData = await apiFns.apiPaginated(getReferencesApi)
       setReferences(referenceData.map(reference => createReference(reference)))
     }
 
     loadReferences()
   }, [apiFns])
 
-  const filteredReferences = useMemo(() => {
-    if (!byConcept || !selectedConcept) {
-      return references
-    }
-    return references.filter(reference => reference.concepts.includes(selectedConcept))
-  }, [references, byConcept, selectedConcept])
-
   const value = {
     addReference,
     deleteReference,
     editReference,
-    references: filteredReferences,
-    setByConcept,
+    getReferences,
+    isDoiUnique,
   }
 
   return <ReferencesContext.Provider value={value}>{children}</ReferencesContext.Provider>

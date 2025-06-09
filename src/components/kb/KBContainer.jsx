@@ -4,18 +4,21 @@ import KnowledgeBase from '@/components/kb/KnowledgeBase'
 
 import ConceptProvider from '@/contexts/concept/ConceptProvider'
 import ModalProvider from '@/contexts/modal/ModalProvider'
+import ReferencesProvider from '@/contexts/references/ReferencesProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 
-const Container = () => {
+const KBContainer = () => {
   return (
     <Box sx={{ height: '100vh' }}>
       <ModalProvider>
         <TaxonomyProvider>
           <SelectedProvider>
-            <ConceptProvider>
-              <KnowledgeBase />
-            </ConceptProvider>
+            <ReferencesProvider>
+              <ConceptProvider>
+                <KnowledgeBase />
+              </ConceptProvider>
+            </ReferencesProvider>
           </SelectedProvider>
         </TaxonomyProvider>
       </ModalProvider>
@@ -23,4 +26,4 @@ const Container = () => {
   )
 }
 
-export default Container
+export default KBContainer

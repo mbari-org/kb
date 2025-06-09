@@ -4,21 +4,27 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import ReferencesPagination from './ReferencesPagination'
 
-import ReferencesContext from '@/contexts/references/ReferencesContext'
-
 import useEditReferenceModal from '@/components/kb/panels/references/edit/useEditReferenceModal'
 import useDeleteReferenceModal from '@/components/kb/panels/references/delete/useDeleteReferenceModal'
 import useReferenceColumns from '@/components/kb/panels/references/useReferenceColumns'
+
+import ReferencesContext from '@/contexts/references/ReferencesContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { PAGINATION } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const ReferencesTable = ({ references }) => {
-  const { editReference, deleteReference } = use(ReferencesContext)
+const ReferencesTable = () => {
+  const { editReference, deleteReference, getReferences } = use(ReferencesContext)
 
-  const editReferenceModal = useEditReferenceModal(editReference, references)
+  const { getSelected } = use(SelectedContext)
+
+  const selectedByConcept = getSelected('byConcept')
+  const references = getReferences(selectedByConcept ? getSelected('concept') : null)
+
+  const editReferenceModal = useEditReferenceModal(editReference)
   const deleteReferenceModal = useDeleteReferenceModal(deleteReference)
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT)

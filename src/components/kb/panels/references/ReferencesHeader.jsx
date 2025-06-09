@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useState } from 'react'
 import { Box, Button, Typography, Switch, FormControlLabel } from '@mui/material'
 
 import ConceptSelect from '@/components/common/ConceptSelect'
@@ -16,7 +16,8 @@ const ReferencesHeader = () => {
   const { getSelected, select } = use(SelectedContext)
 
   const selectedConcept = getSelected('concept')
-  const selectedByConcept = getSelected('byConcept')
+
+  const [byConcept, setByConcept] = useState(getSelected('byConcept'))
 
   const addReferenceModal = useAddReferenceModal(addReference, references)
 
@@ -39,6 +40,7 @@ const ReferencesHeader = () => {
   const handleToggleChange = event => {
     const newValue = event.target.checked
     select({ byConcept: newValue })
+    setByConcept(newValue)
   }
 
   return (
@@ -46,7 +48,7 @@ const ReferencesHeader = () => {
       <PanelTitle title='References' />
       <ConceptSelect
         conceptName={selectedConcept}
-        disabled={!selectedByConcept}
+        disabled={!byConcept}
         handleConceptSelect={handleConceptSelect}
         handleKeyUp={handleKeyUp}
         sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}
@@ -64,9 +66,7 @@ const ReferencesHeader = () => {
         >
           <Typography variant='body1'>Total: {references?.length || 0}</Typography>
           <FormControlLabel
-            control={
-              <Switch size='small' checked={selectedByConcept} onChange={handleToggleChange} />
-            }
+            control={<Switch size='small' checked={byConcept} onChange={handleToggleChange} />}
             label='By Concept'
           />
         </Box>
