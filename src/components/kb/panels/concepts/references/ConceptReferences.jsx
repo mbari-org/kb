@@ -12,6 +12,8 @@ const ConceptReferences = () => {
   const selectedConcept = getSelected('concept')
   const conceptReferences = getReferences(selectedConcept)
 
+  const hasReferences = conceptReferences?.length > 0
+
   const linkToReferences = () => {
     select({ byConcept: true, panel: 'References' })
   }
@@ -19,12 +21,12 @@ const ConceptReferences = () => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-        References DOIs
+        References ({conceptReferences?.length ? `${conceptReferences?.length}` : 'None'})
       </Typography>
       <IconButton
         onClick={linkToReferences}
         size='small'
-        disabled={!conceptReferences?.length}
+        disabled={!hasReferences}
         sx={{
           '&:hover': {
             color: 'primary.main',
