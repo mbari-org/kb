@@ -37,17 +37,19 @@ const TemplatesProvider = ({ children }) => {
   const handleConceptFilter = useCallback(
     conceptName => {
       setFilterConcept(conceptName)
-      filterTemplates(conceptName, filterToConcept, { limit, offset })
+      setOffset(0) // Reset to first page when changing filters
+      filterTemplates(conceptName, filterToConcept, { limit, offset: 0 })
     },
-    [filterTemplates, filterToConcept, limit, offset]
+    [filterTemplates, filterToConcept, limit]
   )
 
   const handleToConceptFilter = useCallback(
     toConceptName => {
       setFilterToConcept(toConceptName)
-      filterTemplates(filterConcept, toConceptName, { limit, offset })
+      setOffset(0) // Reset to first page when changing filters
+      filterTemplates(filterConcept, toConceptName, { limit, offset: 0 })
     },
-    [filterTemplates, filterConcept, limit, offset]
+    [filterTemplates, filterConcept, limit]
   )
 
   const loadData = useCallback(async () => {

@@ -193,6 +193,8 @@ const STORE = {
   },
 }
 
+const TO_CONCEPT_SPECIAL_VALUES = ['self', 'nil']
+
 const USER_ROLES = {
   ADMIN: 'Admin',
   MAINT: 'Maint',
@@ -213,5 +215,6 @@ export {
   RESETTING,
   SELECTED,
   STORE,
+  TO_CONCEPT_SPECIAL_VALUES,
   USER_ROLES,
 }
