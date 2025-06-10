@@ -8,11 +8,8 @@ import ToConceptSelect from '@/components/common/ToConceptSelect'
 import useAddTemplateModal from './add/useAddTemplateModal'
 
 import TemplatesContext from '@/contexts/templates/TemplatesContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const TemplatesHeader = () => {
-  const { getNames } = use(TaxonomyContext)
-
   const {
     addTemplate,
     count,
@@ -24,15 +21,9 @@ const TemplatesHeader = () => {
 
   const addTemplateModal = useAddTemplateModal(addTemplate)
 
-  const handleConceptSelect = selector => (_event, conceptName) => selector(conceptName)
-
-  const handleKeyUp = event => {
-    if (event.key === 'Enter') {
-      const conceptName = event.target.value.trim()
-      if (getNames().includes(conceptName)) {
-        document.activeElement.blur()
-      }
-    }
+  const handleConceptSelect = selector => conceptName => {
+    selector(conceptName)
+    return false
   }
 
   return (
@@ -47,15 +38,13 @@ const TemplatesHeader = () => {
       <Stack direction='row' spacing={5} sx={{ ml: 2, mb: 1 }}>
         <ConceptSelect
           conceptName={filterConcept}
-          handleConceptSelect={handleConceptSelect(handleConceptFilter)}
-          handleKeyUp={handleKeyUp}
+          doConceptSelect={handleConceptSelect(handleConceptFilter)}
           navigation={false}
           sx={{ width: 400 }}
         />
         <ToConceptSelect
           conceptName={filterToConcept}
-          handleConceptSelect={handleConceptSelect(handleToConceptFilter)}
-          handleKeyUp={handleKeyUp}
+          doConceptSelect={handleConceptSelect(handleToConceptFilter)}
           width={400}
         />
       </Stack>

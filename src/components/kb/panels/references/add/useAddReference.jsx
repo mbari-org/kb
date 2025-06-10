@@ -20,20 +20,17 @@ const addReferenceModal = addReference => {
 }
 
 const initialReferenceData = {
+  action: 'add',
+  modified: false,
   reference: {
     citation: '',
     doi: '',
     concepts: [],
   },
-  modified: false,
 }
 
 const useAddReferenceModal = addReference => {
   const { setModal, setModalData } = use(ModalContext)
-  const { getSelected } = use(SelectedContext)
-
-  const selectedConcept = getSelected('concept')
-  const byConcept = getSelected('byConcept')
 
   return useCallback(() => {
     setModal(addReferenceModal(addReference))

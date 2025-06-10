@@ -2,20 +2,28 @@ import { use } from 'react'
 import { Box, TextField } from '@mui/material'
 
 import ReferencesContext from '@/contexts/references/ReferencesContext'
+import useDebouncedField from '@/hooks/useDebouncedField'
 
-const ReferenceTextInputs = ({ reference, handleChange }) => {
+const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
   const { isDoiUnique } = use(ReferencesContext)
+
+  const [doiValue, handleDoiChange] = useDebouncedField(reference.doi, 'doi', handleFieldChange)
+  const [citationValue, handleCitationChange] = useDebouncedField(
+    reference.citation,
+    'citation',
+    handleFieldChange
+  )
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <TextField
-        error={!isDoiUnique(reference.doi, reference.id)}
+        error={!isDoiUnique(doiValue, reference.id)}
         fullWidth
-        helperText={!isDoiUnique(reference.doi, reference.id) ? 'DOI already exists' : ''}
+        helperText={!isDoiUnique(doiValue, reference.id) ? 'DOI already exists' : ''}
         label='DOI'
-        onChange={handleChange('doi')}
+        onChange={handleDoiChange}
         required
-        value={reference.doi || ''}
+        value={doiValue}
       />
       <TextField
         fullWidth
@@ -23,9 +31,9 @@ const ReferenceTextInputs = ({ reference, handleChange }) => {
         maxRows={10}
         minRows={3}
         multiline
-        onChange={handleChange('citation')}
+        onChange={handleCitationChange}
         required
-        value={reference.citation || ''}
+        value={citationValue}
       />
     </Box>
   )

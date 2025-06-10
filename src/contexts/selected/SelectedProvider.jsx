@@ -4,14 +4,14 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import settingsStore from '@/lib/store/settingsStore'
 import usePanelSelect from '@/contexts/selected/usePanelSelect'
-import useSelectedConcept from '@/contexts/selected/useConceptSelect'
+import useConceptSelect from '@/contexts/selected/useConceptSelect'
 
 import { SELECTED } from '@/lib/constants'
 
 const SelectedProvider = ({ children }) => {
   const [settings, setSettings] = useState(null)
 
-  const conceptSelect = useSelectedConcept()
+  const conceptSelect = useConceptSelect()
   const panelSelect = usePanelSelect()
 
   const getSelected = field => {

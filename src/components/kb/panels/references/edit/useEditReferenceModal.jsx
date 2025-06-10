@@ -27,9 +27,10 @@ const useEditReferenceModal = editReference => {
     reference => {
       setModal(editReferenceModal(editReference, isDoiUnique))
       setModalData({
-        reference,
-        originalReference: reference,
+        action: 'edit',
         modified: false,
+        originalReference: reference,
+        reference,
       })
     },
     [editReference, isDoiUnique, setModal, setModalData]

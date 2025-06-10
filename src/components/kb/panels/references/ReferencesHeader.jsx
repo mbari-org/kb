@@ -30,16 +30,6 @@ const ReferencesHeader = () => {
     }
   }
 
-  const handleKeyUp = (event, taxonomyNames) => {
-    if (event.key === 'Enter') {
-      const conceptName = event.target.value.trim()
-      if (taxonomyNames.includes(conceptName)) {
-        select({ concept: conceptName })
-        document.activeElement.blur()
-      }
-    }
-  }
-
   const handleToggleChange = event => {
     const newValue = event.target.checked
     select({ byConcept: newValue })
@@ -52,7 +42,6 @@ const ReferencesHeader = () => {
         conceptName={selectedConcept}
         disabled={!byConcept}
         handleConceptSelect={handleConceptSelect}
-        handleKeyUp={handleKeyUp}
         sx={{ ml: 1, mt: -9, width: SEARCH_WIDTH }}
       />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: -2 }}>

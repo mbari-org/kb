@@ -1,11 +1,15 @@
-import ModalContext from '@/contexts/modal/ModalContext'
-import { createReference } from '@/lib/kb/model/reference'
-import { isEqual } from '@/lib/util'
 import { use, useState } from 'react'
+
+import ModalContext from '@/contexts/modal/ModalContext'
+
+import { createReference } from '@/lib/kb/model/reference'
+
+import { isEqual } from '@/lib/util'
 
 const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
   const { modalData } = use(ModalContext)
-  const [selectedConcept, setSelectedConcept] = useState('')
+
+  const [selectedConcept, setSelectedConcept] = useState(null)
   const [hasSearchInput, setHasSearchInput] = useState(false)
 
   const checkModification = updatedReference => {
@@ -21,30 +25,25 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
     )
   }
 
-  const handleChange = field => event => {
-    const newValue = event.target.value
-    let updatedReference = {
-      ...reference,
-      [field]: newValue,
-      selectedConcept,
-    }
+  const handleFieldChange = field => value => {
+    const fieldValue =
+      field === 'concepts'
+        ? value
+            .split(',')
+            .map(c => c.trim())
+            .filter(Boolean)
+        : value
 
-    // Convert comma-separated concepts string to array
-    if (field === 'concepts') {
-      updatedReference = createReference({
-        ...updatedReference,
-        concepts: newValue
-          .split(',')
-          .map(c => c.trim())
-          .filter(Boolean),
-      })
+    const updatedReference = {
+      ...reference,
+      [field]: fieldValue,
     }
 
     onChange(updatedReference, checkModification(updatedReference), hasSearchInput)
   }
 
   const handleConceptSelect = (_event, selectedName) => {
-    setSelectedConcept(selectedName || '')
+    setSelectedConcept(selectedName || null)
     setHasSearchInput(false)
     const updatedReference = {
       ...reference,
@@ -53,43 +52,38 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
     onChange(updatedReference, checkModification(updatedReference), false)
   }
 
-  const handleAddConcept = () => {
-    if (selectedConcept) {
+  const handleAddConcept = addConcept => {
+    if (addConcept) {
       const concepts = reference.concepts || []
-      if (!concepts.includes(selectedConcept)) {
+      if (!concepts.includes(addConcept)) {
         const updatedReference = createReference({
           ...reference,
-          concepts: [...concepts, selectedConcept],
+          concepts: [...concepts, addConcept],
           selectedConcept: '',
         })
         onChange(updatedReference, checkModification(updatedReference), false)
       }
-      setSelectedConcept('')
     }
+    setSelectedConcept(null)
+    document.activeElement.blur()
+    return false
   }
 
-  const handleDeleteConcept = () => {
-    if (selectedConcept) {
+  const handleDeleteConcept = deleteConcept => {
+    if (deleteConcept) {
       const concepts = reference.concepts || []
       const updatedReference = createReference({
         ...reference,
-        concepts: concepts.filter(c => c !== selectedConcept),
+        concepts: concepts.filter(c => c !== deleteConcept),
         selectedConcept: '',
       })
       onChange(updatedReference, checkModification(updatedReference), false)
-      setSelectedConcept('')
+      setSelectedConcept(null)
     }
   }
 
-  const handleKeyUp = (event, taxonomyNames) => {
-    if (event.key === 'Enter') {
-      const conceptName = event.target.value.trim()
-      if (taxonomyNames.includes(conceptName)) {
-        setSelectedConcept(conceptName)
-        setHasSearchInput(false)
-        document.activeElement.blur()
-      }
-    }
+  const onEnter = () => {
+    setHasSearchInput(false)
   }
 
   const handleSearchInput = event => {
@@ -97,14 +91,14 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
   }
 
   return {
-    selectedConcept,
-    hasSearchInput,
-    handleChange,
+    handleFieldChange,
     handleConceptSelect,
     handleAddConcept,
     handleDeleteConcept,
-    handleKeyUp,
     handleSearchInput,
+    hasSearchInput,
+    selectedConcept,
+    onEnter,
   }
 }
 

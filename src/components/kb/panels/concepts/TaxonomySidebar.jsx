@@ -6,17 +6,19 @@ import Stack from '@mui/material/Stack'
 import ConceptSelect from '@/components/common/ConceptSelect'
 import TaxonomyTree from '@/components/kb/panels/concepts/tree/TaxonomyTree'
 
-import useConceptSelect from '@/components/kb/panels/concepts/useConceptSelect'
-
 import ConceptContext from '@/contexts/concept/ConceptContext'
 
 const TaxonomySidebar = () => {
   const sidebarRef = useRef(null)
 
+  const { concept } = use(ConceptContext)
+
   const [autoExpand, setAutoExpand] = useState(null)
 
-  const { concept } = use(ConceptContext)
-  const { handleConceptSelect, handleKeyUp } = useConceptSelect(setAutoExpand)
+  const doConceptSelect = selectedName => {
+    setAutoExpand?.({ expand: true, name: selectedName })
+    return true
+  }
 
   if (!concept) return null
 
@@ -24,8 +26,7 @@ const TaxonomySidebar = () => {
     <Stack sx={{ height: '100%' }}>
       <ConceptSelect
         conceptName={concept.name}
-        handleConceptSelect={handleConceptSelect}
-        handleKeyUp={handleKeyUp}
+        doConceptSelect={doConceptSelect}
         sx={{ ml: 1, mt: 1, mr: 1 }}
       />
       <Box

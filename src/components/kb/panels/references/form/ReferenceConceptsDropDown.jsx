@@ -25,7 +25,7 @@ const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick
           borderColor: 'divider',
         }}
       >
-        Select a concept to remove from the list
+        Select to Remove Concept
       </ListSubheader>
       {concepts?.map(concept => (
         <MenuItem key={concept} onClick={() => onConceptClick(concept)}>

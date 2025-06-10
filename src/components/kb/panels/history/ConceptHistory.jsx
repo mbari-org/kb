@@ -45,16 +45,6 @@ const ConceptHistory = () => {
     }
   }
 
-  const handleKeyUp = (event, taxonomyNames) => {
-    if (event.key === 'Enter') {
-      const conceptName = event.target.value.trim()
-      if (taxonomyNames.includes(conceptName)) {
-        select({ concept: conceptName })
-        document.activeElement.blur()
-      }
-    }
-  }
-
   // Client-side pagination handlers
   const nextPage = () => {
     setPageState(prev => ({
@@ -92,12 +82,7 @@ const ConceptHistory = () => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
-        <ConceptSelect
-          conceptName={selectedConcept}
-          handleConceptSelect={handleConceptSelect}
-          handleKeyUp={handleKeyUp}
-          sx={{ mt: 0.75, width: 400 }}
-        />
+        <ConceptSelect conceptName={selectedConcept} sx={{ mt: 0.75, width: 400 }} />
       </Box>
       <Box sx={{ flexGrow: 1, minHeight: 0, mt: 0 }}>
         <HistoryTable

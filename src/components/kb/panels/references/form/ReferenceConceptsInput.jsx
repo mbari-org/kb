@@ -1,10 +1,16 @@
 import { TextField, Stack } from '@mui/material'
 import { useState } from 'react'
 
+import ConceptSelect from '@/components/common/ConceptSelect'
 import ReferenceConceptsDropDown from './ReferenceConceptsDropDown'
-import ReferenceConceptSelect from './ReferenceConceptSelect'
 
-const ReferenceConceptsInput = ({ reference, handleChange, onChange }) => {
+const ReferenceConceptsInput = ({
+  handleAddConcept,
+  handleDeleteConcept,
+  handleSearchInput,
+  selectedConcept,
+  reference,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleTextFieldClick = event => {
@@ -13,16 +19,10 @@ const ReferenceConceptsInput = ({ reference, handleChange, onChange }) => {
     }
   }
 
-  const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
+  const handleMenuClose = () => setAnchorEl(null)
 
-  const handleConceptClick = concept => {
-    const updatedReference = {
-      ...reference,
-      concepts: reference.concepts.filter(c => c !== concept),
-    }
-    handleChange('concepts')({ target: { value: updatedReference.concepts.join(', ') } })
+  const handleClickedConcept = concept => {
+    handleDeleteConcept(concept)
     handleMenuClose()
   }
 
@@ -31,9 +31,9 @@ const ReferenceConceptsInput = ({ reference, handleChange, onChange }) => {
       <TextField
         fullWidth
         label='Concepts'
-        onChange={handleChange('concepts')}
+        onChange={handleDeleteConcept}
         onClick={handleTextFieldClick}
-        placeholder='Enter concept names using the search box below'
+        placeholder='Add concepts using the search box below'
         slotProps={{
           input: {
             readOnly: true,
@@ -45,9 +45,17 @@ const ReferenceConceptsInput = ({ reference, handleChange, onChange }) => {
         anchorEl={anchorEl}
         concepts={reference.concepts}
         onClose={handleMenuClose}
-        onConceptClick={handleConceptClick}
+        onConceptClick={handleClickedConcept}
       />
-      <ReferenceConceptSelect reference={reference} onChange={onChange} />
+      <ConceptSelect
+        conceptName={selectedConcept}
+        doConceptSelect={handleAddConcept}
+        label='Add Concept'
+        keepFocus={true}
+        navigation={false}
+        onInputChange={handleSearchInput}
+        sx={{ width: '400px' }}
+      />
     </Stack>
   )
 }

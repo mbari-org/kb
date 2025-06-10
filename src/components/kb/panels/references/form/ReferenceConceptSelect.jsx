@@ -2,17 +2,12 @@ import { Box, Stack } from '@mui/material'
 
 import ConceptSelect from '@/components/common/ConceptSelect'
 import ReferenceConceptSelectButtons from './ReferenceConceptSelectButtons'
+
 import useReferenceForm from '@/components/kb/panels/references/useReferenceForm'
 
 const ReferenceConceptSelect = ({ onChange, reference }) => {
-  const {
-    handleAddConcept,
-    handleDeleteConcept,
-    handleConceptSelect,
-    handleKeyUp,
-    handleSearchInput,
-    selectedConcept,
-  } = useReferenceForm({ reference, onChange, isEdit: true })
+  const { handleAddConcept, handleDeleteConcept, handleSearchInput, selectedConcept } =
+    useReferenceForm({ reference, onChange, isEdit: true })
 
   const isConceptSelected = selectedConcept && reference.concepts?.includes(selectedConcept)
 
@@ -20,8 +15,7 @@ const ReferenceConceptSelect = ({ onChange, reference }) => {
     <Stack alignItems='center' direction='row' justifyContent='left' spacing={1}>
       <ConceptSelect
         conceptName={selectedConcept}
-        handleConceptSelect={handleConceptSelect}
-        handleKeyUp={handleKeyUp}
+        label='Add Concept'
         navigation={false}
         onInputChange={handleSearchInput}
         sx={{ width: '400px' }}

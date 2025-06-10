@@ -6,15 +6,23 @@ import ReferenceConceptsInput from './ReferenceConceptsInput'
 import useReferenceForm from '@/components/kb/panels/references/useReferenceForm'
 
 const ReferenceForm = ({ isEdit = false, onChange, reference }) => {
-  const { handleChange } = useReferenceForm({ isEdit, onChange, reference })
+  const {
+    handleAddConcept,
+    handleDeleteConcept,
+    handleFieldChange,
+    handleConceptSelect,
+    selectedConcept,
+  } = useReferenceForm({ isEdit, onChange, reference })
 
   return (
     <Stack spacing={2} sx={{ p: 2 }}>
-      <ReferenceTextInputs reference={reference} handleChange={handleChange} />
+      <ReferenceTextInputs handleFieldChange={handleFieldChange} reference={reference} />
       <ReferenceConceptsInput
+        handleAddConcept={handleAddConcept}
+        handleConceptSelect={handleConceptSelect}
+        handleDeleteConcept={handleDeleteConcept}
+        selectedConcept={selectedConcept}
         reference={reference}
-        handleChange={handleChange}
-        onChange={onChange}
       />
     </Stack>
   )

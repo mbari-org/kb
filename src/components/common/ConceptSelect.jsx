@@ -1,4 +1,4 @@
-import { use, useMemo } from 'react'
+import { use, useMemo, useState, useRef } from 'react'
 import { Stack, Typography, Box } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
@@ -13,18 +13,44 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 const ConceptSelect = ({
   conceptName,
   disabled = false,
-  handleConceptSelect,
-  handleKeyUp,
+  doConceptSelect,
+  keepFocus = false,
   label = 'Concept',
   navigation = true,
   sx = {},
 }) => {
   const theme = useTheme()
+  const inputRef = useRef(null)
 
-  const { concepts } = use(SelectedContext)
+  const { concepts, select } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
 
   const taxonomyNames = useMemo(() => getNames(), [getNames])
+
+  const handleConceptSelect = selectedName => {
+    if (selectedName) {
+      if (taxonomyNames.includes(selectedName)) {
+        const doSelection = doConceptSelect ? doConceptSelect(selectedName) : true
+        if (doSelection) {
+          select({ concept: selectedName })
+        }
+        return true
+      }
+      return false
+    }
+
+    doConceptSelect?.(null)
+    return false
+  }
+
+  const handleKeyUp = event => {
+    if (event.key === 'Enter') {
+      const selectedName = event.target.value.trim()
+      handleConceptSelect(selectedName)
+      const inputField = inputRef.current?.querySelector('input')
+      keepFocus ? inputField?.focus() : inputField?.blur()
+    }
+  }
 
   return (
     <Stack spacing={0} sx={sx}>
@@ -50,8 +76,9 @@ const ConceptSelect = ({
       </Stack>
       <Autocomplete
         disabled={disabled}
-        onChange={handleConceptSelect}
+        onChange={(_event, selectedName) => handleConceptSelect(selectedName)}
         options={taxonomyNames}
+        ref={inputRef}
         renderInput={params => (
           <TextField
             {...params}
@@ -62,7 +89,7 @@ const ConceptSelect = ({
                 WebkitTextFillColor: theme.palette.text.disabled,
               },
             }}
-            onKeyUp={event => handleKeyUp(event, taxonomyNames)}
+            onKeyUp={handleKeyUp}
           />
         )}
         size='small'
