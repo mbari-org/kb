@@ -125,7 +125,7 @@ const TaxonomyProvider = ({ children }) => {
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(
           taxonomy,
           conceptName,
-          apiFns.apiPayload
+          apiFns
         )
         updateTaxonomy(updatedTaxonomy)
 
@@ -148,7 +148,7 @@ const TaxonomyProvider = ({ children }) => {
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(
           taxonomy,
           concept,
-          apiFns.apiPayload
+          apiFns
         )
         updateTaxonomy(updatedTaxonomy)
         setProcessing(null)

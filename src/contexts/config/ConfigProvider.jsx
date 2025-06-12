@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
 import ConfigContext from './ConfigContext'
@@ -10,7 +11,7 @@ import configUrlStore from '@/lib/store/configUrl'
 
 const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
-
+  const { showBoundary } = useErrorBoundary()
   const [config, setConfig] = useState(null)
   const [apiFns, setApiFns] = useState(null)
 
@@ -38,10 +39,6 @@ const ConfigProvider = ({ children }) => {
       url,
       valid: true,
     })
-  }
-
-  const barfOnError = error => {
-    if (error) throw new Error(`${error.title}: ${error.message}\n${error.detail}`)
   }
 
   useEffect(() => {
@@ -74,7 +71,9 @@ const ConfigProvider = ({ children }) => {
 
     const apiPayload = config => async (payloadRequest, params) => {
       const { error, payload } = await payloadRequest(config, params)
-      barfOnError(error)
+      if (error) {
+        showBoundary(error)
+      }
       return payload
     }
 
@@ -83,22 +82,29 @@ const ConfigProvider = ({ children }) => {
       // the client. The values for limit and offset are maintained internally by the client itself.
       // So we can just return the payload content.
       const { error, payload } = await paginationRequest(config, params)
-      barfOnError(error)
+      if (error) {
+        showBoundary(error)
+      }
       return payload.content
     }
 
+    const apiRaw = config => async (apiRequest, params) => apiRequest(config, params)
+
     const apiResult = config => async (apiRequest, params) => {
       const { error, result } = await apiRequest(config, params)
-      barfOnError(error)
+      if (error) {
+        showBoundary(error)
+      }
       return result
     }
 
     setApiFns({
       apiPayload: apiPayload(config),
+      apiRaw: apiRaw(config),
       apiResult: apiResult(config),
       apiPaginated: apiPaginated(config),
     })
-  }, [config])
+  }, [config, showBoundary])
 
   return <ConfigContext value={{ apiFns, config, updateConfig }}>{children}</ConfigContext>
 }

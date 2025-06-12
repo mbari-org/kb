@@ -1,5 +1,3 @@
-import { drop } from '@/lib/util'
-
 const apiSend = async (url, params) => {
   try {
     const response = await fetch(url, params)
@@ -8,12 +6,18 @@ const apiSend = async (url, params) => {
       return { payload }
     }
     if (response.status === 401) {
-      return errorResponse(errorTitle(response.status), 'Unauthorized: Invalid token', url, params)
+      return errorResponse(
+        null,
+        errorTitle(response.status),
+        'Unauthorized: Invalid token',
+        url,
+        params
+      )
     }
 
-    return errorResponse(errorTitle(response.status), payload.message, url, params)
+    return errorResponse(null, errorTitle(response.status), payload.message, url, params)
   } catch (error) {
-    return errorResponse('Unknown Error', error.message, url, params)
+    return errorResponse(error, 'Error', error.message, url, params)
   }
 }
 
@@ -34,20 +38,22 @@ const errorTitle = status => {
   }
 }
 
-const errorResponse = (title, message, url, params) => {
-  const { headers, ...rest } = params
-  const detailParams = { headers: drop(headers, 'Authorization'), ...rest }
-
-  const detail = `URL: ${url}\nParams: ${JSON.stringify(detailParams)}`
-  const error = {
-    detail,
+const errorResponse = (error, title, message, url, params) => {
+  const whoops = {
     message,
+    method: params.method,
     title,
-    type: 'error',
+    url,
   }
-  console.error(error)
-  console.error('Authorization', headers?.Authorization)
-  return { error }
+  console.error(whoops)
+  console.error('Authorization', params?.headers?.Authorization)
+
+  const wrappedError = {
+    original: error,
+    whoops,
+  }
+
+  return { error: wrappedError }
 }
 
 export default apiSend

@@ -54,8 +54,8 @@ const getPrevSibling = (concept, getConcept) => {
   return null
 }
 
-const loadChildren = async (conceptName, apiPayload) => {
-  const children = await apiPayload(fetchConceptChildren, conceptName)
+const loadChildren = async (conceptName, apiFns) => {
+  const children = await apiFns.apiPayload(fetchConceptChildren, conceptName)
   await Promise.all(
     children.map(async child => {
       child.parent = conceptName
@@ -64,21 +64,24 @@ const loadChildren = async (conceptName, apiPayload) => {
   return children
 }
 
-const loadConcept = async (conceptName, apiPayload) => {
-  const concept = await apiPayload(fetchConcept, conceptName)
-  await loadConceptData(concept, apiPayload)
+const loadConcept = async (conceptName, apiFns) => {
+  const { error, payload: concept } = await apiFns.apiRaw(fetchConcept, conceptName)
+  if (error) throw error
+
+  await loadConceptData(concept, apiFns)
+
   return concept
 }
 
-const loadConceptData = async (concept, apiPayload) => {
-  const aliases = await apiPayload(fetchConceptNames, concept.name)
+const loadConceptData = async (concept, apiFns) => {
+  const aliases = await apiFns.apiPayload(fetchConceptNames, concept.name)
   concept.aliases = orderedAliases(aliases)
   return concept
 }
 
-const loadParent = async (conceptName, apiPayload) => apiPayload(fetchConceptParent, conceptName)
+const loadParent = async (conceptName, apiFns) => apiFns.apiPayload(fetchConceptParent, conceptName)
 
-const refresh = async (concept, updateInfo, apiPayload) => {
+const refresh = async (concept, updateInfo, apiFns) => {
   const { hasUpdated, results, updatedValue } = updateInfo
 
   const updatedConcept = { ...concept }
@@ -90,7 +93,7 @@ const refresh = async (concept, updateInfo, apiPayload) => {
   }
 
   if (hasUpdated('aliases')) {
-    const rawNames = await apiPayload(fetchConceptNames, updatedConcept.name)
+    const rawNames = await apiFns.apiPayload(fetchConceptNames, updatedConcept.name)
     updatedConcept.aliases = orderedAliases(rawNames)
     updatedConcept.alternateNames = updatedConcept.aliases.map(alias => alias.name)
   }

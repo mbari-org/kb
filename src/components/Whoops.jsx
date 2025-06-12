@@ -1,56 +1,102 @@
 import { ErrorBoundary } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
-import { Button } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import whoops from '@/assets/whoops.jpg'
-import styled from '@emotion/styled'
-
-const WhoopsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`
-
-const WhoopsImage = styled.img`
-  width: 50%;
-  max-width: 350px;
-  margin-bottom: 20px;
-`
-
-const ErrorMessage = styled.p`
-  font-size: 18px;
-  color: #666;
-  text-align: center;
-`
+import whoopsImage from '@/assets/whoops.jpg'
 
 const Whoops = ({ children }) => {
   const navigate = useNavigate()
   const theme = useTheme()
 
-  const renderWhoops = ({ error, resetErrorBoundary }) => (
-    <WhoopsContainer>
-      <WhoopsImage src={whoops} alt='Whoops!' />
-      <ErrorMessage>{error.message}</ErrorMessage>
-      <Button
-        onClick={() => resetErrorBoundary()}
-        sx={{ fontSize: `calc(${theme.typography.fontSize} * 1.5)` }}
-      >
-        Reset
-      </Button>
-    </WhoopsContainer>
-  )
+  const renderWhoops = ({ error, resetErrorBoundary }) => {
+    console.log('error', error)
 
-  const resetToRoot = () => {
-    console.log('CxINC reset to root and clear stores?')
+    const responseMessage = error.whoops
+      ? `
+      ${error.whoops?.title}: ${error.whoops?.message}
+      ${error.whoops?.method}
+      ${error.whoops?.url}
+      `
+      : 'An unexpected error occurred'
+
+    const stack = error.original?.stack
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+        }}
+      >
+        <Box
+          component='img'
+          src={whoopsImage}
+          alt='Whoops!'
+          sx={{
+            marginBottom: '20px',
+            maxWidth: '350px',
+            width: '50%',
+          }}
+        />
+        {error.info && (
+          <Typography
+            sx={{
+              fontSize: '18px',
+              textAlign: 'center',
+            }}
+          >
+            {error.info}
+          </Typography>
+        )}
+        {!stack && (
+          <Typography
+            sx={{
+              fontSize: '18px',
+              textAlign: 'center',
+            }}
+          >
+            {responseMessage}
+          </Typography>
+        )}
+        {stack && (
+          <Stack sx={{ mt: 4, width: '80%' }}>
+            <Typography variant='body2'>{responseMessage}</Typography>
+            <Typography
+              variant='body2'
+              component='pre'
+              sx={{
+                color: theme.palette.primary.cancel,
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                margin: '10px 0',
+                maxHeight: '200px',
+                overflow: 'auto',
+                textAlign: 'left',
+                whiteSpace: 'pre-wrap',
+                width: '80%',
+              }}
+            >
+              {stack}
+            </Typography>
+          </Stack>
+        )}
+        <Button onClick={() => resetErrorBoundary()} sx={{ fontSize: '24px', mt: 4 }}>
+          Reset
+        </Button>
+      </Box>
+    )
+  }
+
+  const handleReset = () => {
     navigate('/')
   }
 
   return (
-    <ErrorBoundary fallbackRender={renderWhoops} onReset={resetToRoot}>
+    <ErrorBoundary fallbackRender={renderWhoops} onReset={handleReset}>
       {children}
     </ErrorBoundary>
   )

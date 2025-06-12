@@ -1,10 +1,10 @@
 import { use, useCallback, useEffect, useMemo, useReducer, useState, useRef } from 'react'
-import { useErrorBoundary } from 'react-error-boundary'
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/concept/staged/edit/useModifyConcept'
+import useLoadConceptError from '@/contexts/concept/useLoadConceptError'
 
 import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
@@ -20,7 +20,6 @@ import { CONCEPT_STATE, LABELS } from '@/lib/constants'
 const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
-  const { showBoundary } = useErrorBoundary()
   const isLoading = useRef(false)
   const previousConceptName = useRef(null)
 
@@ -40,6 +39,7 @@ const ConceptProvider = ({ children }) => {
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
 
   const displayStaged = useDisplayStaged()
+  const handleLoadConceptError = useLoadConceptError()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
   const refreshConcept = useCallback(
@@ -92,7 +92,9 @@ const ConceptProvider = ({ children }) => {
             .then(loadedConcept => {
               handleSetConcept(loadedConcept)
             })
-            .catch(error => showBoundary(error))
+            .catch(error => {
+              handleLoadConceptError({ ...error, conceptName: selectedConcept })
+            })
             .finally(() => {
               isLoading.current = false
             })
@@ -103,6 +105,7 @@ const ConceptProvider = ({ children }) => {
     displayStaged,
     getConcept,
     getSelected,
+    handleLoadConceptError,
     handleSetConcept,
     initialState,
     isConceptLoaded,
@@ -111,7 +114,6 @@ const ConceptProvider = ({ children }) => {
     panels,
     setEditing,
     setModalData,
-    showBoundary,
     stagedState,
   ])
 

@@ -150,7 +150,7 @@ const loadTaxonomy = async apiFns => {
     apiFns.apiPaginated(getHistory, ['pending']),
   ])
 
-  const rootConcept = await loadConcept(root.name, apiFns.apiPayload)
+  const rootConcept = await loadConcept(root.name, apiFns)
 
   const aliasMap = rootConcept.aliases.reduce((acc, alias) => {
     acc[alias.name] = rootConcept
@@ -171,7 +171,7 @@ const loadTaxonomy = async apiFns => {
 }
 
 // Taxonomy concepts are look-ahead loaded for tree display.
-const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
+const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   const updatedTaxonomy = {
     ...taxonomy,
     conceptMap: { ...taxonomy.conceptMap },
@@ -182,26 +182,24 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
   const aliasMap = updatedTaxonomy.aliasMap
 
   const taxonomyConcept = getConcept(taxonomy, conceptName)
-  const concept = taxonomyConcept
-    ? { ...taxonomyConcept }
-    : await loadConcept(conceptName, apiPayload)
+  const concept = taxonomyConcept ? { ...taxonomyConcept } : await loadConcept(conceptName, apiFns)
 
   if (!concept.aliases) {
-    await loadConceptData(concept, apiPayload)
+    await loadConceptData(concept, apiFns)
   }
 
   // If the concept already has children, we only need to load the concept's grand children. This is
   //  typical when a child concept is selected.
   if (concept?.children) {
     await Promise.all(
-      concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiPayload))
+      concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
     )
     mapConcept(concept, conceptMap, aliasMap)
     return { taxonomy: updatedTaxonomy }
   }
 
   // Load the concept's children
-  const children = await loadChildren(concept.name, apiPayload)
+  const children = await loadChildren(concept.name, apiFns)
   concept.children = children.map(child => child.name)
   children.forEach(child => {
     mapConcept(child, conceptMap, aliasMap)
@@ -209,7 +207,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
 
   // Load the concept's grandchildren
   await Promise.all(
-    concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiPayload))
+    concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
   )
 
   // If the concept is the root, we're done.
@@ -224,27 +222,27 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
   //  taxonomy, fetch the parent to get the necessary name. Then walk the chain from the top and
   //  load each concept, children and grandchildren not already loaded.
 
-  let nextAncestor = await loadParent(concept.name, apiPayload)
+  let nextAncestor = await loadParent(concept.name, apiFns)
   concept.parent = nextAncestor.name
   const conceptAncestry = [concept.name]
 
   while (!updatedTaxonomy.conceptMap[nextAncestor.name]) {
     conceptAncestry.push(nextAncestor.name)
-    nextAncestor = await loadParent(nextAncestor.name, apiPayload)
+    nextAncestor = await loadParent(nextAncestor.name, apiFns)
   }
   conceptAncestry.push(nextAncestor.name)
 
   while (!isRoot(taxonomy, nextAncestor)) {
-    const parent = await loadParent(nextAncestor.name, apiPayload)
+    const parent = await loadParent(nextAncestor.name, apiFns)
     nextAncestor = updatedTaxonomy.conceptMap[parent.name]
     conceptAncestry.push(nextAncestor.name)
   }
   conceptAncestry.reverse()
 
   for (const name of conceptAncestry) {
-    const children = await loadTaxonomyConceptChildren(updatedTaxonomy, name, apiPayload)
+    const children = await loadTaxonomyConceptChildren(updatedTaxonomy, name, apiFns)
     await Promise.all(
-      children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiPayload))
+      children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
     )
   }
 
@@ -256,7 +254,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiPayload) => {
   return { taxonomy: updatedTaxonomy }
 }
 
-const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiPayload) => {
+const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiFns) => {
   const concept = getConcept(updatableTaxonomy, conceptName)
 
   const conceptMap = updatableTaxonomy.conceptMap
@@ -264,7 +262,7 @@ const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiPa
 
   if (concept && !concept.children) {
     const updatedConcept = { ...concept }
-    const children = await loadChildren(concept.name, apiPayload)
+    const children = await loadChildren(concept.name, apiFns)
     updatedConcept.children = children.map(child => child.name)
     children.forEach(child => {
       mapConcept(child, conceptMap, aliasMap)
@@ -276,7 +274,7 @@ const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiPa
   return concept.children
 }
 
-const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => {
+const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
   const updatedTaxonomy = {
     ...taxonomy,
     conceptMap: { ...taxonomy.conceptMap },
@@ -296,7 +294,7 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiPayload) => 
     }
 
     if (descendant && !descendant.children) {
-      const children = await loadChildren(descendant.name, apiPayload)
+      const children = await loadChildren(descendant.name, apiFns)
       const updatedDescendant = {
         ...descendant,
         children: children.map(c => c.name),
@@ -333,7 +331,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => 
   const conceptMap = { ...taxonomy.conceptMap }
   const aliasMap = { ...taxonomy.aliasMap }
 
-  const updatedConcept = await refreshConcept(concept, updateInfo, apiFns.apiPayload)
+  const updatedConcept = await refreshConcept(concept, updateInfo, apiFns)
   mapConcept(updatedConcept, conceptMap, aliasMap)
 
   const structureChanged = ['aliases', 'children', 'name', 'parent'].some(field =>

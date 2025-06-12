@@ -31,7 +31,9 @@ const historyStore = (store, maxSize, defaultEntry) => {
       return position < state.length - 1
     },
 
-    clear: () => initStore(),
+    clear: () => store.set({ state: [], position: -1 }),
+
+    init: () => initStore(),
 
     current: () => {
       const { state, position } = store.get()
