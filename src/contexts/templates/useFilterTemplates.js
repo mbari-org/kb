@@ -1,4 +1,6 @@
-import { useCallback } from 'react'
+import { use, useCallback } from 'react'
+
+import ConfigContext from '@/contexts/config/ConfigContext'
 
 import {
   getConceptTemplates,
@@ -7,7 +9,17 @@ import {
   getToConceptTemplates,
 } from '@/lib/api/linkTemplates'
 
-export const useFilterTemplates = ({ apiFns, setCount, setTemplates }) => {
+const useFilterTemplates = ({
+  setFilterConcept,
+  setFilterToConcept,
+  setOffset,
+  limit,
+  loadTemplateData,
+  setCount,
+  setTemplates,
+}) => {
+  const { apiFns } = use(ConfigContext)
+
   const filterAndPaginateTemplates = useCallback(
     async (templates, pageParams) => {
       // Apply pagination to the filtered results
@@ -23,6 +35,8 @@ export const useFilterTemplates = ({ apiFns, setCount, setTemplates }) => {
 
   const filterTemplates = useCallback(
     async (concept, toConcept, pageParams) => {
+      if (!apiFns) return
+
       const loadTemplates = async () => {
         if (concept && toConcept) {
           // If both filters are active, get concept templates and filter by toConcept
@@ -62,5 +76,51 @@ export const useFilterTemplates = ({ apiFns, setCount, setTemplates }) => {
     [apiFns, filterAndPaginateTemplates, setCount, setTemplates]
   )
 
-  return filterTemplates
+  const handleConceptFilter = useCallback(
+    conceptName => {
+      setFilterConcept(conceptName)
+      setOffset(0) // Reset to first page when changing filters
+      if (conceptName) {
+        filterTemplates(conceptName, null, { limit, offset: 0 })
+      } else {
+        loadTemplateData({ limit, offset: 0 }).then(({ count, templates }) => {
+          setCount(count)
+          setTemplates(templates)
+        })
+      }
+    },
+    [filterTemplates, loadTemplateData, limit, setFilterConcept, setOffset, setCount, setTemplates]
+  )
+
+  const handleToConceptFilter = useCallback(
+    toConceptName => {
+      setFilterToConcept(toConceptName)
+      setOffset(0) // Reset to first page when changing filters
+      if (toConceptName) {
+        filterTemplates(null, toConceptName, { limit, offset: 0 })
+      } else {
+        loadTemplateData({ limit, offset: 0 }).then(({ count, templates }) => {
+          setCount(count)
+          setTemplates(templates)
+        })
+      }
+    },
+    [
+      filterTemplates,
+      loadTemplateData,
+      limit,
+      setFilterToConcept,
+      setOffset,
+      setCount,
+      setTemplates,
+    ]
+  )
+
+  return {
+    handleConceptFilter,
+    handleToConceptFilter,
+    filterTemplates,
+  }
 }
+
+export default useFilterTemplates

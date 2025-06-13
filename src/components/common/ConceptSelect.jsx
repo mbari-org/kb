@@ -1,4 +1,4 @@
-import { use, useMemo, useState, useRef } from 'react'
+import { use, useMemo, useRef } from 'react'
 import { Stack, Typography, Box } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
@@ -17,6 +17,7 @@ const ConceptSelect = ({
   keepFocus = false,
   label = 'Concept',
   navigation = true,
+  selectables,
   sx = {},
 }) => {
   const theme = useTheme()
@@ -25,11 +26,11 @@ const ConceptSelect = ({
   const { concepts, select } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
 
-  const taxonomyNames = useMemo(() => getNames(), [getNames])
+  const options = useMemo(() => (selectables ? selectables : getNames()), [getNames, selectables])
 
   const handleConceptSelect = selectedName => {
     if (selectedName) {
-      if (taxonomyNames.includes(selectedName)) {
+      if (options.includes(selectedName)) {
         const doSelection = doConceptSelect ? doConceptSelect(selectedName) : true
         if (doSelection) {
           select({ concept: selectedName })
@@ -77,7 +78,7 @@ const ConceptSelect = ({
       <Autocomplete
         disabled={disabled}
         onChange={(_event, selectedName) => handleConceptSelect(selectedName)}
-        options={taxonomyNames}
+        options={options}
         ref={inputRef}
         renderInput={params => (
           <TextField

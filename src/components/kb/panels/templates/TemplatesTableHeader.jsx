@@ -17,6 +17,7 @@ const TemplatesHeader = () => {
     filterToConcept,
     handleConceptFilter,
     handleToConceptFilter,
+    selectableConcepts,
   } = use(TemplatesContext)
 
   const addTemplateModal = useAddTemplateModal(addTemplate)
@@ -40,6 +41,7 @@ const TemplatesHeader = () => {
           conceptName={filterConcept}
           doConceptSelect={handleConceptSelect(handleConceptFilter)}
           navigation={false}
+          selectables={selectableConcepts}
           sx={{ width: 400 }}
         />
         <ToConceptSelect

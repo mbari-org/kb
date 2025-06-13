@@ -2,13 +2,14 @@ import { use, useCallback, useEffect, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import TemplatesContext from './TemplatesContext'
-import { useFilterTemplates } from './useFilterTemplates'
+
+import useFilterTemplates from './useFilterTemplates'
+import useLoadTemplateData from './useLoadTemplateData'
+import useTemplateConcepts from './useTemplateConcepts'
 
 import {
   createConceptTemplate,
   deleteConceptTemplate,
-  getTemplates,
-  getTemplatesCount,
   updateTemplate,
 } from '@/lib/api/linkTemplates'
 
@@ -27,52 +28,20 @@ const TemplatesProvider = ({ children }) => {
   const [filterToConcept, setFilterToConcept] = useState(null)
 
   const [templates, setTemplates] = useState([])
+  const [selectableConcepts, setSelectableConcepts] = useState([])
 
-  const filterTemplates = useFilterTemplates({
-    apiFns,
+  const loadConceptsList = useTemplateConcepts()
+  const loadTemplateData = useLoadTemplateData()
+  const { filterTemplates, handleConceptFilter, handleToConceptFilter } = useFilterTemplates({
+    count,
+    limit,
+    loadTemplateData,
     setCount,
+    setFilterConcept,
+    setFilterToConcept,
+    setOffset,
     setTemplates,
   })
-
-  const handleConceptFilter = useCallback(
-    conceptName => {
-      setFilterConcept(conceptName)
-      setOffset(0) // Reset to first page when changing filters
-      filterTemplates(conceptName, filterToConcept, { limit, offset: 0 })
-    },
-    [filterTemplates, filterToConcept, limit]
-  )
-
-  const handleToConceptFilter = useCallback(
-    toConceptName => {
-      setFilterToConcept(toConceptName)
-      setOffset(0) // Reset to first page when changing filters
-      filterTemplates(filterConcept, toConceptName, { limit, offset: 0 })
-    },
-    [filterTemplates, filterConcept, limit]
-  )
-
-  const loadData = useCallback(async () => {
-    if (!apiFns) return
-
-    // If we have any filters active, use filterTemplates instead
-    if (filterConcept || filterToConcept) {
-      filterTemplates(filterConcept, filterToConcept, { limit, offset })
-      return
-    }
-
-    const [count, templates] = await Promise.all([
-      apiFns.apiResult(getTemplatesCount),
-      apiFns.apiPaginated(getTemplates, { limit, offset }),
-    ])
-
-    setCount(count)
-    setTemplates(templates)
-  }, [apiFns, limit, offset, filterConcept, filterToConcept, filterTemplates])
-
-  useEffect(() => {
-    loadData()
-  }, [loadData])
 
   const nextPage = () => {
     setOffset(prev => prev + limit)
@@ -90,26 +59,63 @@ const TemplatesProvider = ({ children }) => {
   const deleteTemplate = useCallback(
     async template => {
       await apiFns.apiPayload(deleteConceptTemplate, template.id)
-      await loadData() // Reload data after deletion
+      const [newConcepts, { count, templates }] = await Promise.all([
+        loadConceptsList(),
+        loadTemplateData({ limit, offset }),
+      ])
+      setSelectableConcepts(newConcepts)
+      setCount(count)
+      setTemplates(templates)
     },
-    [apiFns, loadData]
+    [apiFns, loadConceptsList, loadTemplateData, limit, offset]
   )
 
   const editTemplate = useCallback(
     async (oldTemplate, newTemplate) => {
       await apiFns.apiPayload(updateTemplate, [oldTemplate.id, newTemplate])
-      await loadData() // Reload data after edit
+      const [newConcepts, { count, templates }] = await Promise.all([
+        loadConceptsList(),
+        loadTemplateData({ limit, offset }),
+      ])
+      setSelectableConcepts(newConcepts)
+      setCount(count)
+      setTemplates(templates)
     },
-    [apiFns, loadData]
+    [apiFns, loadConceptsList, loadTemplateData, limit, offset]
   )
 
   const addTemplate = useCallback(
     async template => {
       await apiFns.apiPayload(createConceptTemplate, template)
-      await loadData() // Reload data after adding
+      const [newConcepts, { count, templates }] = await Promise.all([
+        loadConceptsList(),
+        loadTemplateData({ limit, offset }),
+      ])
+      setSelectableConcepts(newConcepts)
+      setCount(count)
+      setTemplates(templates)
     },
-    [apiFns, loadData]
+    [apiFns, loadConceptsList, loadTemplateData, limit, offset]
   )
+
+  useEffect(() => {
+    const loadConcepts = async () => {
+      const concepts = await loadConceptsList()
+      setSelectableConcepts(concepts)
+    }
+    loadConcepts()
+  }, [loadConceptsList])
+
+  useEffect(() => {
+    if (filterConcept || filterToConcept) {
+      filterTemplates(filterConcept, filterToConcept, { limit, offset })
+    } else {
+      loadTemplateData({ limit, offset }).then(({ count, templates }) => {
+        setCount(count)
+        setTemplates(templates)
+      })
+    }
+  }, [filterConcept, filterToConcept, filterTemplates, limit, loadTemplateData, offset])
 
   const value = {
     addTemplate,
@@ -124,6 +130,7 @@ const TemplatesProvider = ({ children }) => {
     nextPage,
     offset,
     prevPage,
+    selectableConcepts,
     setPageSize,
     templates,
   }
