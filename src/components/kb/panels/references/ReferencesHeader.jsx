@@ -1,10 +1,11 @@
-import { use, useState } from 'react'
+import { use } from 'react'
 import { Box, Button, Typography, Switch, FormControlLabel } from '@mui/material'
 
 import ConceptSelect from '@/components/common/ConceptSelect'
 import PanelTitle from '@/components/common/PanelTitle'
 
 import useAddReferenceModal from '@/components/kb/panels/references/add/useAddReference'
+import useReferencesExport from '@/components/kb/panels/references/useReferencesExport'
 
 import ReferencesContext from '@/contexts/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -23,6 +24,7 @@ const ReferencesHeader = () => {
     : references.length
 
   const addReferenceModal = useAddReferenceModal(addReference)
+  const referencesExport = useReferencesExport()
 
   const handleConceptSelect = (_event, selectedName) => {
     if (selectedName) {
@@ -55,7 +57,12 @@ const ReferencesHeader = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Typography variant='body1'>Total: {total}</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant='body1'>Total: {total}</Typography>
+            <Button onClick={referencesExport} sx={{ ml: 2 }}>
+              Export
+            </Button>
+          </Box>
           <FormControlLabel
             control={<Switch size='small' checked={byConcept} onChange={handleToggleChange} />}
             label='By Concept'

@@ -43,6 +43,15 @@ const diff = (o1, o2) =>
     return result
   }, {})
 
+const escapeCSV = field => {
+  if (field == null) return ''
+  const stringField = String(field)
+  // If field contains comma, quote, or newline, wrap in quotes and escape existing quotes
+  if (stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
+    return `"${stringField.replace(/"/g, '""')}"`
+  }
+  return stringField
+}
 const humanTimestamp = timestamp => {
   if (!timestamp) return ''
 
@@ -195,12 +204,19 @@ const prune = obj => {
   return pruned
 }
 
+const writeCSVContent = async (writable, dataRows) => {
+  const csvRows = dataRows.map(row => row.map(escapeCSV))
+  const csvContent = csvRows.map(row => row.join(',')).join('\n')
+  await writable.write(csvContent + '\n')
+}
+
 export {
   capitalize,
   checkImageUrlExists,
   deepDiff,
   diff,
   drop,
+  escapeCSV,
   humanTimestamp,
   isDeepEqual,
   isElementInViewport,
@@ -212,4 +228,5 @@ export {
   pick,
   prettyFormat,
   prune,
+  writeCSVContent,
 }

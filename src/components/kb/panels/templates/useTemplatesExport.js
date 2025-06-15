@@ -11,41 +11,18 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { PAGINATION } from '@/lib/constants'
 
-import { humanTimestamp } from '@/lib/util'
+import { escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/util'
 
 const templateDataHeaders = ['Concept', 'Link Name', 'To Concept', 'Link Value', 'Last Updated']
 
-const escapeCSV = field => {
-  if (field == null) return ''
-  const stringField = String(field)
-  // If field contains comma, quote, or newline, wrap in quotes and escape existing quotes
-  if (stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
-    return `"${stringField.replace(/"/g, '""')}"`
-  }
-  return stringField
-}
-
-const processTemplates = templates => {
-  if (!templates || !Array.isArray(templates)) {
-    console.error('Invalid templates data:', templates)
-    return []
-  }
-  return templates.map(template =>
-    [
-      template.concept,
-      template.linkName,
-      template.toConcept,
-      template.linkValue,
-      humanTimestamp(template.lastUpdated),
-    ].map(escapeCSV)
-  )
-}
-
-const writeCSVContent = async (writable, templates, isLastPage = false) => {
-  const csvRows = processTemplates(templates)
-  const csvContent = csvRows.map(row => row.join(',')).join('\n')
-  await writable.write(csvContent + (isLastPage ? '' : '\n'))
-}
+const templateRows = templates =>
+  templates.map(template => [
+    template.concept,
+    template.linkName,
+    template.toConcept,
+    template.linkValue,
+    humanTimestamp(template.lastUpdated),
+  ])
 
 const fetchTemplatesByPage = async (apiFns, pageIndex, templatesPerPage) => {
   return apiFns.apiPaginated(getTemplates, {
@@ -88,7 +65,7 @@ const useTemplatesExport = () => {
 
     try {
       const handle = await window.showSaveFilePicker({
-        suggestedName: `KBTemplates_${filterName}.csv`,
+        suggestedName: `KB-Templates_${filterName}.csv`,
         types: [
           {
             description: 'CSV Files',
@@ -104,7 +81,7 @@ const useTemplatesExport = () => {
         // Fetch all templates for the current filter
         const filteredTemplates = await fetchFilteredTemplates(data, apiFns)
         if (filteredTemplates) {
-          await writeCSVContent(writable, filteredTemplates, true)
+          await writeCSVContent(writable, templateRows(filteredTemplates))
         }
       } else {
         const totalCount = await apiFns.apiResult(getTemplatesCount)
@@ -116,7 +93,7 @@ const useTemplatesExport = () => {
 
         for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
           const templates = await fetchTemplatesByPage(apiFns, pageIndex, templatesPerPage)
-          await writeCSVContent(writable, templates, pageIndex === totalPages - 1)
+          await writeCSVContent(writable, templateRows(templates))
         }
       }
 

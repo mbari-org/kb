@@ -43,7 +43,12 @@ const TemplatesHeader = () => {
     <Box>
       <PanelTitle title='Templates' />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.25 }}>
-        <Typography sx={{ ml: 2 }}>Total: {count}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+          <Typography>Total: {count}</Typography>
+          <Button disabled={disableExport} onClick={() => templatesExport(data)} sx={{ ml: 2 }}>
+            Export
+          </Button>
+        </Box>
         <Button variant='contained' color='primary' onClick={addTemplateModal} sx={{ mr: 2 }}>
           Add
         </Button>
@@ -61,15 +66,6 @@ const TemplatesHeader = () => {
           doConceptSelect={handleConceptSelect(handleToConceptFilter)}
           width={400}
         />
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button
-            disabled={disableExport}
-            onClick={() => templatesExport(data)}
-            sx={{ fontSize: '1.25rem', ml: -3, mt: 2 }}
-          >
-            Export
-          </Button>
-        </Box>
       </Stack>
     </Box>
   )
