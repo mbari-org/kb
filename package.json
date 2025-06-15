@@ -38,10 +38,11 @@
   },
   "packageManager": "yarn@4.5.1",
   "scripts": {
-    "dev": "vite --port 5174",
+    "dev": "vite",
     "build": "vite build",
     "kb": "yarn build && yarn preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "version:generate": "node scripts/generate-version.js"
   }
 }

@@ -1,0 +1,11 @@
+#!/bin/sh
+# Pre-commit hook to generate version information
+
+echo "Generating version information..."
+node scripts/generate-version.js
+
+# Note: version.js is gitignored and should not be committed
+# It will be regenerated during build/dev processes
+
+exit 0
+

@@ -31,10 +31,10 @@ const LogoutLink = () => {
       height='50px'
       justifyContent='center'
       padding={0}
-      sx={{ padding: 0, margin: 0, mt: '-15px' }}
+      sx={{ padding: 0, mt: -3 }}
     >
       <Typography
-        style={{
+        sx={{
           color: grey[300],
           fontSize: '0.75rem',
           paddingRight: '3px',
@@ -54,7 +54,6 @@ const LogoutLink = () => {
             fontStyle: 'italic',
           },
           fontSize: '0.875rem',
-          // margin: 0,
           padding: 0,
         }}
       >

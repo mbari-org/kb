@@ -1,9 +1,11 @@
 import { use, useCallback, useEffect, useState, useTransition } from 'react'
 
 import { Box, Button } from '@mui/material'
+import { grey } from '@mui/material/colors'
 
-import ConfigForm from '@/components/config/ConfigForm'
 import LoginForm from '@/components/auth/LoginForm'
+import ConfigForm from '@/components/config/ConfigForm'
+import VersionDisplay from '@/components/common/VersionDisplay'
 
 import loginLogo from '@/assets/loginLogo.png'
 
@@ -102,6 +104,9 @@ const StartUp = () => {
             </Button>
           </Box>
           <LoginForm />
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <VersionDisplay variant='caption' color={grey[800]} />
         </Box>
       </Box>
     </Box>

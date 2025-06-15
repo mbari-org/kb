@@ -5,8 +5,11 @@ import { AppBar, Box, Toolbar } from '@mui/material'
 import LogoutLink from './LogoutLink'
 import PanelLink from './PanelLink'
 import HistoryNavLinks from '../../common/HistoryNavLinks'
+import VersionDisplay from '../../common/VersionDisplay'
 
 import panelMods from '@/components/kb/panels/modules'
+
+const isDev = import.meta.env.DEV
 
 import AuthContext from '@/contexts/auth/AuthContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -45,7 +48,12 @@ const NavBar = ({ selectPanel }) => {
           />
         ))}
         <Box style={{ flexGrow: 1 }} />
-        <LogoutLink sx={{ mb: 1.5 }} />
+        {isDev && (
+          <Box>
+            <VersionDisplay />
+          </Box>
+        )}
+        <LogoutLink />
       </Toolbar>
     </AppBar>
   )
