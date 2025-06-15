@@ -16,11 +16,9 @@ const referencesExport = async ({ apiFns }) => {
       '\n'
     )
 
-    // Create a File object
     const file = new File([csvContent], 'KB-References.csv', { type: 'text/csv' })
 
     try {
-      // Request a file handle
       const handle = await window.showSaveFilePicker({
         suggestedName: 'KB-References.csv',
         types: [
@@ -31,11 +29,8 @@ const referencesExport = async ({ apiFns }) => {
         ],
       })
 
-      // Create a FileSystemWritableFileStream to write to
       const writable = await handle.createWritable()
-      // Write the contents
       await writable.write(file)
-      // Close the file and write the contents to disk
       await writable.close()
     } catch (err) {
       if (err.name !== 'AbortError') {

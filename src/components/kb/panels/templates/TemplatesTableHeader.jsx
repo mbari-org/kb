@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 
 import ConceptSelect from '@/components/common/ConceptSelect'
@@ -6,6 +6,7 @@ import PanelTitle from '@/components/common/PanelTitle'
 import ToConceptSelect from '@/components/common/ToConceptSelect'
 
 import useAddTemplateModal from './add/useAddTemplateModal'
+import useTemplatesExport from './useTemplatesExport'
 
 import TemplatesContext from '@/contexts/templates/TemplatesContext'
 
@@ -18,14 +19,25 @@ const TemplatesHeader = () => {
     handleConceptFilter,
     handleToConceptFilter,
     selectableConcepts,
+    templates,
   } = use(TemplatesContext)
 
   const addTemplateModal = useAddTemplateModal(addTemplate)
+  const templatesExport = useTemplatesExport()
 
   const handleConceptSelect = selector => conceptName => {
     selector(conceptName)
     return false
   }
+
+  const data = useMemo(() => {
+    if (!filterConcept && !filterToConcept) return null
+    if (!filterConcept) return { filterToConcept, templates }
+    if (!filterToConcept) return { filterConcept, templates }
+    return { filterConcept, filterToConcept, templates }
+  }, [filterConcept, filterToConcept, templates])
+
+  const disableExport = data && data.templates.length === 0
 
   return (
     <Box>
@@ -49,6 +61,15 @@ const TemplatesHeader = () => {
           doConceptSelect={handleConceptSelect(handleToConceptFilter)}
           width={400}
         />
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Button
+            disabled={disableExport}
+            onClick={() => templatesExport(data)}
+            sx={{ fontSize: '1.25rem', ml: -3, mt: 2 }}
+          >
+            Export
+          </Button>
+        </Box>
       </Stack>
     </Box>
   )
