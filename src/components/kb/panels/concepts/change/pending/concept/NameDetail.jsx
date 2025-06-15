@@ -4,7 +4,7 @@ import { Box, Stack } from '@mui/material'
 import FieldDetail from '@/components/kb/panels/concepts/change/pending/concept/FieldDetail'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import { LABELS } from '@/lib/constants'

@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import Title from '@/components/modal/Title'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const EditAliasTitle = () => {

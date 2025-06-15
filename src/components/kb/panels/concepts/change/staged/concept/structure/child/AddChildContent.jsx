@@ -4,7 +4,7 @@ import { Box, FormControl, Stack, TextField } from '@mui/material'
 
 import ConceptRankField from '@/components/kb/panels/concepts/change/staged/concept/field/ConceptRankField'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 

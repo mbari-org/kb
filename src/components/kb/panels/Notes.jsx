@@ -1,4 +1,4 @@
-import PanelTitle from '@/components/common/PanelTitle'
+import PanelTitle from '@/components/common/panel/PanelTitle'
 
 const Notes = () => {
   return <PanelTitle title='Notes' />

@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 
 import MediaSwiper from './MediaSwiper'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()

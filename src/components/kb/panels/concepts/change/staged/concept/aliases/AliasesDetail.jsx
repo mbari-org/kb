@@ -6,7 +6,7 @@ import AliasesReset from './reset/AliasesReset'
 
 import { fieldSx } from '@/components/common/format'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { aliasResetting } from '@/components/kb/panels/concepts/change/staged/concept/util'
 

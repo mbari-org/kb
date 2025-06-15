@@ -5,9 +5,9 @@ import { useTheme } from '@mui/material/styles'
 import AliasDelete from '@/components/kb/panels/concepts/change/staged/concept/aliases/delete/AliasDelete'
 import AliasEdit from '@/components/kb/panels/concepts/change/staged/concept/aliases/edit/AliasEdit'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

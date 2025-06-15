@@ -4,7 +4,7 @@ import InspectIcon from '@/components/common/InspectIcon'
 import ConceptReferencesList from './ConceptReferencesList'
 import ConceptReferencesNavButtons from './ConceptReferencesNavButtons'
 
-import ReferencesContext from '@/contexts/references/ReferencesContext'
+import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ITEMS_PER_PAGE = 5

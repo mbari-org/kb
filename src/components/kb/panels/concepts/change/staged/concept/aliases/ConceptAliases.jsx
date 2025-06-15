@@ -4,7 +4,7 @@ import { Box, Typography, Stack } from '@mui/material'
 import AliasAdd from '@/components/kb/panels/concepts/change/staged/concept/aliases/edit/AliasAdd'
 import ConceptAlias from '@/components/kb/panels/concepts/change/staged/concept/aliases/ConceptAlias'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const ConceptAliases = () => {
   const { editing, stagedState } = use(ConceptContext)

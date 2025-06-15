@@ -1,24 +1,31 @@
 import { use, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 
-import ConceptSelect from '@/components/common/ConceptSelect'
-import HistoryTable from './HistoryTable'
+import ConceptSelect from '@/components/common/concept/ConceptSelect'
+import HistoryTable from './table/data/HistoryTable'
 
 import useLoadConceptHistory from './useLoadConceptHistory'
 import useHistoryColumns from './useHistoryColumns'
+import useConceptHistoryPagination from './useConceptHistoryPagination'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import { PAGINATION } from '@/lib/constants'
 
-const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
-
 const ConceptHistory = () => {
-  const { getSelected, select } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
 
   const [count, setCount] = useState(0)
   const [data, setData] = useState([])
-  const [pageState, setPageState] = useState({ limit: DEFAULT_LIMIT, offset: 0 })
-  const [sortOrder, setSortOrder] = useState('desc')
+
+  const {
+    pageState,
+    sortOrder,
+    nextPage,
+    prevPage,
+    setPageSize,
+    handleSortChange,
+    resetPagination,
+  } = useConceptHistoryPagination(count)
 
   const columns = useHistoryColumns({ type: 'concept' })
   const loadConceptHistory = useLoadConceptHistory()
@@ -30,49 +37,14 @@ const ConceptHistory = () => {
         setData(data)
         setCount(count)
         // Reset pagination when new data is loaded
-        setPageState({ limit: DEFAULT_LIMIT, offset: 0 })
+        resetPagination()
       })
     } else {
       setData([])
       setCount(0)
-      setPageState({ limit: DEFAULT_LIMIT, offset: 0 })
+      resetPagination()
     }
-  }, [getSelected, loadConceptHistory])
-
-  const handleConceptSelect = (_event, selectedName) => {
-    if (selectedName) {
-      select({ concept: selectedName })
-    }
-  }
-
-  // Client-side pagination handlers
-  const nextPage = () => {
-    setPageState(prev => ({
-      ...prev,
-      offset: Math.min(prev.offset + prev.limit, count - prev.limit),
-    }))
-  }
-
-  const prevPage = () => {
-    setPageState(prev => ({
-      ...prev,
-      offset: Math.max(0, prev.offset - prev.limit),
-    }))
-  }
-
-  const setPageSize = newLimit => {
-    setPageState(_prev => ({
-      limit: newLimit,
-      offset: 0,
-    }))
-  }
-
-  // Handle sort order change
-  const handleSortChange = newSortOrder => {
-    setSortOrder(newSortOrder)
-    // Reset to first page when sort order changes
-    setPageState(prev => ({ ...prev, offset: 0 }))
-  }
+  }, [getSelected, loadConceptHistory, resetPagination])
 
   // Get the current page of data
   const currentPageData = data.slice(pageState.offset, pageState.offset + pageState.limit)
@@ -82,7 +54,7 @@ const ConceptHistory = () => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
-        <ConceptSelect conceptName={selectedConcept} sx={{ mt: 0.75, width: 400 }} />
+        <ConceptSelect conceptName={selectedConcept} sx={{ mt: 1, width: 400 }} />
       </Box>
       <Box sx={{ flexGrow: 1, minHeight: 0, mt: 0 }}>
         <HistoryTable
@@ -98,6 +70,7 @@ const ConceptHistory = () => {
           sortOrder={sortOrder}
           title={selectedConcept || 'Concept History'}
           titleTopMargin={-8}
+          hasConceptSelect={true}
         />
       </Box>
     </Box>

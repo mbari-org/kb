@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 
-import PanelTitle from '@/components/common/PanelTitle'
+import PanelTitle from '@/components/common/panel/PanelTitle'
 
 const Export = () => {
   return (

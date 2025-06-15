@@ -3,7 +3,7 @@ import { use, useCallback, useState } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import ToConceptChoice from '../ToConceptChoice'

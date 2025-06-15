@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Breadcrumbs, Button } from '@mui/material'
 import { MdNavigateNext } from 'react-icons/md'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ConceptPath = () => {

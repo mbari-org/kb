@@ -4,7 +4,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import Action from './Action'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { PENDING } from '@/lib/constants'
 

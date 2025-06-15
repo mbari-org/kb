@@ -3,10 +3,10 @@ import { use, useMemo, useCallback } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import AuthContext from '@/contexts/auth/AuthContext'
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import useUpdatePending from '@/contexts/concept/pending/useUpdatePending'
+import useUpdatePending from '@/contexts/panels/concepts/pending/useUpdatePending'
 
 import { isAdmin } from '@/lib/auth/role'
 

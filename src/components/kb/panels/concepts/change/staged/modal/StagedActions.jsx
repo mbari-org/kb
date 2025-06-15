@@ -2,14 +2,14 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { LABELS } from '@/lib/constants'
 
-import useSaveStaged from '@/contexts/concept/staged/save/useSaveStaged'
+import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
 const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
 const { SAVE } = LABELS.CONCEPT.ACTION

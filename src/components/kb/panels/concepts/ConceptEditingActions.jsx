@@ -6,11 +6,11 @@ import Button from '@mui/material/Button'
 import useDisplayPending from '@/components/kb/panels/concepts/change/pending/modal/useDisplayPending'
 import useDisplayStaged from '@/components/kb/panels/concepts/change/staged/modal/useDisplayStaged'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { hasModifiedState } from '@/lib/kb/state/concept'
 import { pendingChild } from '@/lib/kb/model/history'
-import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
 import { CONCEPT_STATE, LABELS } from '@/lib/constants'
 

@@ -9,10 +9,10 @@ import NameDetail from '@/components/kb/panels/concepts/change/pending/concept/N
 import ParentDetail from '@/components/kb/panels/concepts/change/pending/concept/ParentDetail'
 import RankDetail from '@/components/kb/panels/concepts/change/pending/concept/RankDetail'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
 import { fieldPending, pendingChild as getPendingChild } from '@/lib/kb/model/history'
 

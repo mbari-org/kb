@@ -5,7 +5,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import ToConceptChoice from '../ToConceptChoice'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 

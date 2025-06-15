@@ -1,9 +1,9 @@
 import { Box, Stack } from '@mui/material'
 
-import ConceptSelect from '@/components/common/ConceptSelect'
+import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ReferenceConceptSelectButtons from './ReferenceConceptSelectButtons'
 
-import useReferenceForm from '@/components/kb/panels/references/useReferenceForm'
+import useReferenceForm from '@/components/kb/panels/references/form/useReferenceForm'
 
 const ReferenceConceptSelect = ({ onChange, reference }) => {
   const { handleAddConcept, handleDeleteConcept, handleSearchInput, selectedConcept } =

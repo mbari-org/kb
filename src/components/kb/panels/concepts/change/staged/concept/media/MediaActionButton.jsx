@@ -11,7 +11,7 @@ import {
   mediaItemFields,
 } from '@/components/kb/panels/concepts/change/staged/concept/media/edit/mediaItem'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'

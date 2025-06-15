@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import ResettingButton from '@/components/kb/panels/concepts/change/ResettingButton'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { childResetting } from '@/components/kb/panels/concepts/change/staged/concept/util'
 

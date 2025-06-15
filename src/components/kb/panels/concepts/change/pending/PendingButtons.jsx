@@ -9,7 +9,7 @@ import PendingButton from './PendingButton'
 import HandIcon from '@/components/common/HandIcon'
 
 import AuthContext from '@/contexts/auth/AuthContext'
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { isAdmin } from '@/lib/auth/role'
 

@@ -4,7 +4,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import AliasDetail from '@/components/kb/panels/concepts/change/pending/concept/AliasDetail'
 import PendingButtons from '@/components/kb/panels/concepts/change/pending/PendingButtons'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import usePendingApproval from '@/components/kb/panels/concepts/change/pending/usePendingApproval'
 

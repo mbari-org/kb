@@ -1,4 +1,5 @@
-import HistoryTable from './HistoryTable'
+import { Box } from '@mui/material'
+import HistoryTable from './table/data/HistoryTable'
 
 import useHistoryColumns from './useHistoryColumns'
 import useHistoryCount from './useHistoryCount'
@@ -13,20 +14,24 @@ const TypeHistory = ({ type }) => {
     useLoadHistory(type, count)
 
   return (
-    <HistoryTable
-      columns={columns}
-      count={count}
-      data={data}
-      handleSortChange={handleSortChange}
-      limit={limit}
-      nextPage={nextPage}
-      offset={offset}
-      prevPage={prevPage}
-      setPageSize={setPageSize}
-      sortOrder={sortOrder}
-      title={capitalize(type)}
-      titleTopMargin={3}
-    />
+    <Box>
+      <Box sx={{ height: 24 }} /> {/* Spacer to match ConceptSelect height */}
+      <HistoryTable
+        columns={columns}
+        count={count}
+        data={data}
+        handleSortChange={handleSortChange}
+        limit={limit}
+        nextPage={nextPage}
+        offset={offset}
+        prevPage={prevPage}
+        setPageSize={setPageSize}
+        sortOrder={sortOrder}
+        title={capitalize(type)}
+        titleTopMargin={3}
+        hasConceptSelect={false}
+      />
+    </Box>
   )
 }
 

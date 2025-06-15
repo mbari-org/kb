@@ -11,7 +11,7 @@ import useConceptClick from './lib/useConceptClick'
 import useExpandConcept from './lib/useExpandConcept'
 import useTaxonomyTreeReposition from './lib/useTaxonomyTreeReposition'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 

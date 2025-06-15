@@ -1,6 +1,6 @@
 import { use, useMemo } from 'react'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { PENDING } from '@/lib/constants'
 

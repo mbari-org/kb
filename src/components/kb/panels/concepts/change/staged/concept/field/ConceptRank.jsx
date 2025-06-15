@@ -5,7 +5,7 @@ import ConceptRankField from '@/components/kb/panels/concepts/change/staged/conc
 
 import { RANK } from '@/lib/constants'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/change/staged/useConceptDetailStyle'
 

@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useState } from 'react'
 
 import { Box, FormControl, TextField } from '@mui/material'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/change/staged/useConceptDetailStyle'
 import useStagedFieldBorder from '@/components/kb/panels/concepts/change/staged/concept/field/useStagedFieldBorder'

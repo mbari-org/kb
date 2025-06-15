@@ -1,0 +1,31 @@
+import { use } from 'react'
+
+import { ToggleButtonGroup } from '@mui/material'
+import HistoryToggleButton from './HistoryToggleButton'
+
+import HistoryContext from '@/contexts/panels/history/HistoryContext'
+
+import { SELECTED } from '@/lib/constants'
+
+const { PENDING, APPROVED, CONCEPT } = SELECTED.HISTORY.TYPE
+
+const HistoryHeaderToggle = ({ onChange }) => {
+  const { selectedType } = use(HistoryContext)
+
+  return (
+    <ToggleButtonGroup
+      value={selectedType}
+      exclusive
+      onChange={onChange}
+      aria-label='history type'
+      size='small'
+      sx={{ mr: 2 }}
+    >
+      <HistoryToggleButton value={PENDING} />
+      <HistoryToggleButton value={APPROVED} />
+      <HistoryToggleButton value={CONCEPT} />
+    </ToggleButtonGroup>
+  )
+}
+
+export default HistoryHeaderToggle

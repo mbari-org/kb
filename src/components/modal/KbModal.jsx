@@ -12,7 +12,7 @@ import {
   Modal,
 } from '@mui/material'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const KbModal = () => {

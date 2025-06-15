@@ -10,7 +10,7 @@ import ConceptViewToggle from '@/components/kb/panels/concepts/toggleView/Concep
 import { isReadOnly } from '@/lib/auth/role'
 
 import AuthContext from '@/contexts/auth/AuthContext'
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const Concept = () => {
   const { user } = use(AuthContext)

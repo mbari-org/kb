@@ -25,6 +25,11 @@ const CONCEPT_NAME_TYPES = {
   SYNONYM: 'Synonym',
 }
 
+const CONCEPT_SELECT = {
+  LABEL: 'Concept',
+  WIDTH: 350,
+}
+
 const CONCEPT_STATE = {
   ALIAS: {
     ADD: 'Alias Add',
@@ -166,9 +171,9 @@ const RESETTING = {
 const SELECTED = {
   HISTORY: {
     TYPE: {
-      APPROVED: 'approved',
-      CONCEPT: 'concept',
-      PENDING: 'pending',
+      APPROVED: 'Approved',
+      CONCEPT: 'Concept',
+      PENDING: 'Pending',
     },
   },
   REFERENCES: {
@@ -205,6 +210,7 @@ const USER_ROLES = {
 export {
   CONCEPT_FIELDS,
   CONCEPT_NAME_TYPES,
+  CONCEPT_SELECT,
   CONCEPT_STATE,
   EMAIL_REGEX,
   LABELS,

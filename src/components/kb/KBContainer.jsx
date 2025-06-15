@@ -2,9 +2,9 @@ import Box from '@mui/material/Box'
 
 import KnowledgeBase from '@/components/kb/KnowledgeBase'
 
-import ConceptProvider from '@/contexts/concept/ConceptProvider'
+import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
 import ModalProvider from '@/contexts/modal/ModalProvider'
-import ReferencesProvider from '@/contexts/references/ReferencesProvider'
+import ReferencesProvider from '@/contexts/panels/references/ReferencesProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 

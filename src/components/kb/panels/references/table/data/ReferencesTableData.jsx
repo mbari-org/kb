@@ -1,0 +1,92 @@
+import { use, useState } from 'react'
+import { Box } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
+
+import ReferencesPagination from './ReferencesPagination'
+
+import useEditReferenceModal from '@/components/kb/panels/references/form/edit/useEditReferenceModal'
+import useDeleteReferenceModal from '@/components/kb/panels/references/form/delete/useDeleteReferenceModal'
+import useReferenceColumns from '@/components/kb/panels/references/table/data/useReferenceColumns'
+
+import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
+
+import { PAGINATION } from '@/lib/constants'
+
+const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
+const DEFAULT_OFFSET = 0
+
+const ReferencesTableData = () => {
+  const { editReference, deleteReference, references } = use(ReferencesContext)
+  const { getSelected } = use(SelectedContext)
+
+  const selectedConcept = getSelected('concept')
+  const byConcept = getSelected('byConcept')
+
+  const selectedReferences = byConcept
+    ? references.filter(reference => reference.concepts.includes(selectedConcept))
+    : references
+
+  const editReferenceModal = useEditReferenceModal(editReference)
+  const deleteReferenceModal = useDeleteReferenceModal(deleteReference)
+
+  const [limit, setLimit] = useState(DEFAULT_LIMIT)
+  const [offset, setOffset] = useState(DEFAULT_OFFSET)
+
+  const columns = useReferenceColumns({ editReferenceModal, deleteReferenceModal })
+
+  const nextPage = () => setOffset(prev => prev + limit)
+  const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
+  const setPageSize = newLimit => {
+    setLimit(newLimit)
+    setOffset(0)
+  }
+
+  return (
+    <Box sx={{ flexGrow: 1, minHeight: 0 }}>
+      <DataGrid
+        columns={columns}
+        disableColumnFilter
+        disableColumnMenu
+        disableRowSelectionOnClick
+        disableSelectionOnClick
+        getRowId={reference => reference.id}
+        getRowHeight={() => 'auto'}
+        pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
+        paginationMode='server'
+        paginationModel={{
+          page: Math.floor(offset / limit),
+          pageSize: limit,
+        }}
+        rowCount={selectedReferences.length}
+        rows={selectedReferences}
+        slots={{
+          pagination: () => (
+            <ReferencesPagination
+              count={selectedReferences.length}
+              limit={limit}
+              nextPage={nextPage}
+              offset={offset}
+              prevPage={prevPage}
+              setPageSize={setPageSize}
+            />
+          ),
+        }}
+        sx={{
+          height: '100%',
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: 'background.paper',
+            '& .MuiDataGrid-columnHeader': {
+              '& .MuiDataGrid-columnHeaderTitle': {
+                fontWeight: 700,
+                fontSize: '1rem',
+              },
+            },
+          },
+        }}
+      />
+    </Box>
+  )
+}
+
+export default ReferencesTableData

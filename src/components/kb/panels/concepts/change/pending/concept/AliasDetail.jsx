@@ -6,7 +6,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { fieldSx } from '@/components/common/format'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import usePendingApproval from '@/components/kb/panels/concepts/change/pending/usePendingApproval'
 

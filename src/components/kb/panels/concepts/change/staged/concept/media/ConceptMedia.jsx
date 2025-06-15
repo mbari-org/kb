@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import MediaView from '@/components/kb/panels/concepts/change/staged/concept/media/MediaView'
 import NoMedia from '@/components/kb/panels/concepts/change/staged/concept/media/NoMedia'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const ConceptMedia = () => {
   const { stagedState } = use(ConceptContext)

@@ -4,7 +4,7 @@ import { Button, Stack, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import AuthContext from '@/contexts/auth/AuthContext'
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/change/staged/modal/useDisplayStaged'
 

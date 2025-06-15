@@ -6,7 +6,7 @@ import FieldReset from './FieldReset'
 
 import { RESETTING } from '@/lib/constants'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { fieldResetting } from '@/components/kb/panels/concepts/change/staged/concept/util'
 

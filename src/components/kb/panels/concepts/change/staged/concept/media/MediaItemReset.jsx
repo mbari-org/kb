@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ResettingButton from '@/components/kb/panels/concepts/change/ResettingButton'
 
 import {

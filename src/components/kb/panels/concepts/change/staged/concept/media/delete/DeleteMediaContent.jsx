@@ -3,7 +3,7 @@ import { use } from 'react'
 import DetailContent from '@/components/common/DetailContent'
 import { createComponent } from '@/components/modal/factory'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { drop } from '@/lib/util'
 

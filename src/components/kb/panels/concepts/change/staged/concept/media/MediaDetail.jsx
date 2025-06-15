@@ -7,7 +7,7 @@ import MediaReset from './MediaReset'
 
 import { fieldSx } from '@/components/common/format'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { mediaResetting } from '@/components/kb/panels/concepts/change/staged/concept/util'
 

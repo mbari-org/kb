@@ -1,12 +1,12 @@
 import { use, useMemo } from 'react'
 
-import { hasStateChange } from '@/contexts/concept/staged/edit/stateUpdates'
+import { hasStateChange } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { hasPending } from '@/lib/kb/model/history'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
 const useStructureChoices = () => {
   const { concept, initialState, stagedState } = use(ConceptContext)

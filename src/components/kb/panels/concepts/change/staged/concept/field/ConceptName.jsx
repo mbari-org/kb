@@ -9,9 +9,9 @@ import ChangeStructureChoices from '@/components/kb/panels/concepts/change/stage
 import useStructureChoices from '@/components/kb/panels/concepts/change/staged/concept/structure/useStructureChoices'
 
 import AuthContext from '@/contexts/auth/AuthContext'
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useHasPendingStructure from '@/contexts/concept/pending/useHasPendingStructure'
+import useHasPendingStructure from '@/contexts/panels/concepts/pending/useHasPendingStructure'
 
 import { isReadOnly } from '@/lib/auth/role'
 

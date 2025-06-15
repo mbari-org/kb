@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 
 import MediaAdd from './edit/MediaAdd'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const NoMedia = () => {
   const { editing } = use(ConceptContext)

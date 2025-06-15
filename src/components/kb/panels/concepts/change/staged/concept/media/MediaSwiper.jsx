@@ -12,7 +12,7 @@ import 'swiper/css/navigation'
 
 import './mediaSwiper.css'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

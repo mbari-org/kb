@@ -1,8 +1,8 @@
 import { use } from 'react'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { updateInfo } from '@/contexts/concept/staged/edit/stateUpdates'
+import { updateInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
 const useStagedFieldBorder = field => {
   const { initialState, stagedState } = use(ConceptContext)

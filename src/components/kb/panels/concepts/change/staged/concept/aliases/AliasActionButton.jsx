@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import createEditAliasModal from '@/components/kb/panels/concepts/change/staged/concept/aliases/edit/createEditAliasModal'
 import createEditAliasOnClose from '@/components/kb/panels/concepts/change/staged/concept/aliases/edit/createEditAliasOnClose'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import { EMPTY_ALIAS, aliasFields } from '@/lib/kb/model/alias'

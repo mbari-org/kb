@@ -1,9 +1,9 @@
 import { Stack } from '@mui/material'
 import { Box, TextField } from '@mui/material'
-import ConceptSelect from '@/components/common/ConceptSelect'
-import ToConceptSelect from '@/components/common/ToConceptSelect'
+import ConceptSelect from '@/components/common/concept/ConceptSelect'
+import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 
-import useTemplateForm from '@/components/kb/panels/templates/useTemplateForm'
+import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateForm'
 
 const TemplateForm = ({ isEdit = false, onChange, template }) => {
   const { handleChange } = useTemplateForm({ isEdit, onChange, template })

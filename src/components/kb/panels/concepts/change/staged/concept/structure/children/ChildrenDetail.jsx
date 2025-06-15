@@ -8,7 +8,7 @@ import { fieldSx } from '@/components/common/format'
 
 import { RESETTING } from '@/lib/constants'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

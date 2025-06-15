@@ -13,7 +13,7 @@ import { MdOutlinePhoto } from 'react-icons/md'
 
 import MediaDisplay from '@/components/kb/panels/concepts/change/staged/concept/media/MediaDisplay'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import useStageMedia from './useStageMedia'

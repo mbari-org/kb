@@ -1,6 +1,6 @@
 import { Typography, Box } from '@mui/material'
 
-import HistoryCreatedOrder from './HistoryCreatedOrder'
+import HistoryCreatedOrder from './table/header/HistoryCreatedOrder'
 
 const HistoryTableHeader = ({
   count,

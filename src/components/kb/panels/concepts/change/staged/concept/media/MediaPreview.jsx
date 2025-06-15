@@ -3,13 +3,13 @@ import { Box, Typography, IconButton, Tooltip } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { BsInfoCircle } from 'react-icons/bs'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { fieldBorder } from '@/lib/kb/model/field'
 
 import { fieldPending } from '@/lib/kb/model/history'
 
-import useConceptPending from '@/contexts/concept/pending/useConceptPending'
+import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
 import { checkImageUrlExists, isUrlValid } from '@/lib/util'
 

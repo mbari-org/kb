@@ -1,7 +1,7 @@
 import { TextField, Stack } from '@mui/material'
 import { useState } from 'react'
 
-import ConceptSelect from '@/components/common/ConceptSelect'
+import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ReferenceConceptsDropDown from './ReferenceConceptsDropDown'
 
 const ReferenceConceptsInput = ({

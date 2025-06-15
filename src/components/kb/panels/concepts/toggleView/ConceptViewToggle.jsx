@@ -8,7 +8,7 @@ import { SlGrid } from 'react-icons/sl'
 
 import ConceptViewToggleButton from './ConceptViewToggleButton'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const ConceptViewToggle = ({ sx }) => {
   const { editing } = use(ConceptContext)

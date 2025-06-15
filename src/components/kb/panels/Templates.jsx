@@ -1,10 +1,10 @@
-import TemplatesProvider from '@/contexts/templates/TemplatesProvider'
-import TemplatesContent from '@/components/kb/panels/templates/TemplatesContent'
+import TemplatesPanel from '@/components/kb/panels/templates/TemplatesPanel'
+import TemplatesProvider from '@/contexts/panels/templates/TemplatesProvider'
 
 const Templates = () => {
   return (
     <TemplatesProvider>
-      <TemplatesContent />
+      <TemplatesPanel />
     </TemplatesProvider>
   )
 }

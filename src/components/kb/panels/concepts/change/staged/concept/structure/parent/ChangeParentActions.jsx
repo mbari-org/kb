@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'

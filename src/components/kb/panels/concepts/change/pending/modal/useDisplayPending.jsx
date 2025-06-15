@@ -6,7 +6,7 @@ import PendingTitle from '@/components/kb/panels/concepts/change/pending/modal/P
 
 import { createModal } from '@/components/modal/factory'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
 const useDisplayPending = () => {

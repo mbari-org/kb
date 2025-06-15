@@ -9,7 +9,7 @@ import MediaEdit from './edit/MediaEdit'
 import MediaPreview from './MediaPreview'
 import MediaSwiper from './MediaSwiper'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const MediaView = () => {
   const mediaViewRef = useRef(null)

@@ -1,15 +1,7 @@
-import { Box } from '@mui/material'
+import ReferencesPanel from '@/components/kb/panels/references/ReferencesPanel'
 
-import ReferencesHeader from '@/components/kb/panels/references/ReferencesHeader'
-import ReferencesTable from '@/components/kb/panels/references/ReferencesTable'
+// CxNote the ReferencesProvider is higher up the component tree for use in the ConceptPanel
 
-const References = () => {
-  return (
-    <Box>
-      <ReferencesHeader />
-      <ReferencesTable />
-    </Box>
-  )
-}
+const References = () => <ReferencesPanel />
 
 export default References

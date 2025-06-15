@@ -6,8 +6,8 @@ import ChangeNameTitle from './ChangeNameTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

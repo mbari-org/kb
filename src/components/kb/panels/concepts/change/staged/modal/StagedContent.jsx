@@ -8,10 +8,10 @@ import FieldDeltaDetail from '@/components/kb/panels/concepts/change/staged/conc
 import FieldValueDetail from '@/components/kb/panels/concepts/change/staged/concept/field/FieldValueDetail'
 import MediaDetail from '@/components/kb/panels/concepts/change/staged/concept/media/MediaDetail'
 
-import ConceptContext from '@/contexts/concept/ConceptContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { hasStateChange, stateUpdates } from '@/contexts/concept/staged/edit/stateUpdates'
+import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
 const StagedContent = () => {
   const { stagedState, initialState } = use(ConceptContext)

@@ -3,7 +3,7 @@ import { Stack } from '@mui/material'
 import ReferenceTextInputs from './ReferenceTextInputs'
 import ReferenceConceptsInput from './ReferenceConceptsInput'
 
-import useReferenceForm from '@/components/kb/panels/references/useReferenceForm'
+import useReferenceForm from '@/components/kb/panels/references/form/useReferenceForm'
 
 const ReferenceForm = ({ isEdit = false, onChange, reference }) => {
   const {
