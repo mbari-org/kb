@@ -118,18 +118,22 @@ const LABELS = {
 const PAGINATION = {
   HISTORY: {
     DEFAULT_LIMIT: 50,
+    EXPORT_PAGE_SIZE: 100,
     PAGE_SIZE_OPTIONS: [10, 25, 50, 100],
   },
   REFERENCES: {
     DEFAULT_LIMIT: 50,
+    EXPORT_PAGE_SIZE: 100,
     PAGE_SIZE_OPTIONS: [10, 25, 50, 100],
   },
   TEMPLATES: {
     DEFAULT_LIMIT: 50,
+    EXPORT_PAGE_SIZE: 100,
     PAGE_SIZE_OPTIONS: [10, 25, 50, 100],
   },
   USERS: {
     DEFAULT_LIMIT: 25,
+    EXPORT_PAGE_SIZE: 100,
     PAGE_SIZE_OPTIONS: [10, 25, 50, 100],
   },
 }
@@ -171,9 +175,9 @@ const RESETTING = {
 const SELECTED = {
   HISTORY: {
     TYPE: {
-      APPROVED: 'Approved',
-      CONCEPT: 'Concept',
-      PENDING: 'Pending',
+      APPROVED: 'approved',
+      CONCEPT: 'concept',
+      PENDING: 'pending',
     },
   },
   REFERENCES: {

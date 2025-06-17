@@ -7,11 +7,15 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
 
 const TemplatesTableHeaderLeft = () => {
-  const { count } = use(TemplatesContext)
+  const { count, filterConcept, filterToConcept } = use(TemplatesContext)
 
   const templatesExport = useTemplatesExport()
 
-  return <PanelTotalExport count={count} exportFn={templatesExport} />
+  const handleExport = () => {
+    templatesExport({ filterConcept, filterToConcept })
+  }
+
+  return <PanelTotalExport count={count} exportFn={handleExport} />
 }
 
 export default TemplatesTableHeaderLeft

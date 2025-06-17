@@ -51,6 +51,7 @@ const PanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} }) => {
         }}
       >
         <Typography
+          component='div'
           sx={{
             overflow: 'hidden',
             textAlign: 'center',

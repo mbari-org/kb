@@ -5,7 +5,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
 import { PAGINATION } from '@/lib/constants'
 
-const PAGE_SIZE_OPTIONS = PAGINATION.TEMPLATES.PAGE_SIZE_OPTIONS
+const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
 const useTemplateConcepts = () => {
   const { apiFns } = use(ConfigContext)
@@ -16,7 +16,7 @@ const useTemplateConcepts = () => {
     const totalCount = await apiFns.apiResult(getTemplatesCount)
     if (!totalCount) return []
 
-    const templatesPerPage = PAGE_SIZE_OPTIONS[PAGE_SIZE_OPTIONS.length - 1]
+    const templatesPerPage = EXPORT_PAGE_SIZE
     const totalPages = Math.ceil(totalCount / templatesPerPage)
 
     const pageIndices = Array.from({ length: totalPages }, (_, i) => i)
