@@ -1,26 +1,21 @@
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
+import { use } from 'react'
 
+import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryPagination from './HistoryPagination'
 
 import { PAGINATION } from '@/lib/constants'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
-const HistoryTableData = ({
-  columns,
-  count,
-  data,
-  hideFooter = false,
-  limit,
-  nextPage,
-  offset,
-  prevPage,
-  setPageSize,
-  sortOrder = 'desc',
-}) => {
-  // Reverse the data array if sortOrder is 'asc'
-  const displayData = sortOrder === 'asc' ? [...data].reverse() : data
+const HistoryTableTypeData = ({ columns, hideFooter = false }) => {
+  const { count, typeData, typeState, sortOrder, nextPage, prevPage, setPageSize } =
+    use(HistoryContext)
+  const { limit, offset } = typeState
+
+  // Ensure rowCount is at least 1 to prevent MUI X error
+  const rowCount = Math.max(1, count)
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>
@@ -29,8 +24,9 @@ const HistoryTableData = ({
         disableRowSelectionOnClick
         disableSelectionOnClick
         hideFooter={hideFooter}
-        rows={displayData}
-        rowCount={count}
+        getRowHeight={() => 'auto'}
+        rows={typeData}
+        rowCount={rowCount}
         paginationMode='server'
         paginationModel={{
           pageSize: limit,
@@ -67,4 +63,4 @@ const HistoryTableData = ({
   )
 }
 
-export default HistoryTableData
+export default HistoryTableTypeData
