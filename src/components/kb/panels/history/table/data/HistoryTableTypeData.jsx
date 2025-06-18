@@ -9,12 +9,10 @@ import { PAGINATION } from '@/lib/constants'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
-const HistoryTableData = ({ columns, hideFooter = false }) => {
-  const { count, data, pageState, sortOrder, nextPage, prevPage, setPageSize } = use(HistoryContext)
-  const { limit, offset } = pageState
-
-  // Reverse the data array if sortOrder is 'asc'
-  const displayData = sortOrder === 'asc' ? [...data].reverse() : data
+const HistoryTableTypeData = ({ columns, hideFooter = false }) => {
+  const { count, typeData, typeState, sortOrder, nextPage, prevPage, setPageSize } =
+    use(HistoryContext)
+  const { limit, offset } = typeState
 
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, count)
@@ -27,7 +25,7 @@ const HistoryTableData = ({ columns, hideFooter = false }) => {
         disableSelectionOnClick
         hideFooter={hideFooter}
         getRowHeight={() => 'auto'}
-        rows={displayData}
+        rows={typeData}
         rowCount={rowCount}
         paginationMode='server'
         paginationModel={{
@@ -65,4 +63,4 @@ const HistoryTableData = ({ columns, hideFooter = false }) => {
   )
 }
 
-export default HistoryTableData
+export default HistoryTableTypeData

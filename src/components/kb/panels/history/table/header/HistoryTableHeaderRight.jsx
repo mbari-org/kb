@@ -5,7 +5,12 @@ import { RadioGroup, FormControlLabel, Radio, Stack, Typography, Tooltip } from 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 const HistoryTableHeaderRight = () => {
-  const { handleSortChange, sortOrder } = use(HistoryContext)
+  const { handleSortChange, sortOrder, selectedType } = use(HistoryContext)
+
+  // Don't show the Created Order controls for concept history
+  if (selectedType === 'concept') {
+    return null
+  }
 
   return (
     <Stack direction='row' spacing={3} alignItems='center' sx={{ mr: 0.5 }}>

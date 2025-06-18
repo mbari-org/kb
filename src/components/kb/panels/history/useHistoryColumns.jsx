@@ -15,6 +15,9 @@ const useHistoryColumns = ({ type }) => {
     select({ concept: row.concept, panel: 'Concepts' })
   }
 
+  // Determine if columns should be sortable based on history type
+  const isSortable = type === 'concept'
+
   const baseColumns = [
     {
       field: 'inspect',
@@ -43,19 +46,49 @@ const useHistoryColumns = ({ type }) => {
         </Box>
       ),
     },
-    { field: 'field', headerName: 'Field', width: 130, headerClassName: 'bold-header' },
-    { field: 'action', headerName: 'Action', width: 130, headerClassName: 'bold-header' },
-    { field: 'creatorName', headerName: 'Creator', width: 130, headerClassName: 'bold-header' },
+    {
+      field: 'field',
+      headerName: 'Field',
+      width: 130,
+      headerClassName: 'bold-header',
+      sortable: isSortable,
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 130,
+      headerClassName: 'bold-header',
+      sortable: isSortable,
+    },
+    {
+      field: 'creatorName',
+      headerName: 'Creator',
+      width: 130,
+      headerClassName: 'bold-header',
+      sortable: isSortable,
+    },
     {
       field: 'creationTimestamp',
       headerName: 'Created',
       width: 165,
       headerClassName: 'bold-header',
-      sortable: false,
+      sortable: isSortable,
       valueFormatter: params => humanTimestamp(params),
     },
-    { field: 'oldValue', headerName: 'Old Value', width: 200, headerClassName: 'bold-header' },
-    { field: 'newValue', headerName: 'New Value', width: 200, headerClassName: 'bold-header' },
+    {
+      field: 'oldValue',
+      headerName: 'Old Value',
+      width: 200,
+      headerClassName: 'bold-header',
+      sortable: isSortable,
+    },
+    {
+      field: 'newValue',
+      headerName: 'New Value',
+      width: 200,
+      headerClassName: 'bold-header',
+      sortable: isSortable,
+    },
   ]
 
   const conceptColumn = {
@@ -63,6 +96,7 @@ const useHistoryColumns = ({ type }) => {
     headerName: 'Concept',
     width: 200,
     headerClassName: 'bold-header',
+    sortable: isSortable,
   }
 
   const approvedColumn = {
@@ -70,16 +104,24 @@ const useHistoryColumns = ({ type }) => {
     headerName: 'Approved',
     width: 100,
     headerClassName: 'bold-header',
+    sortable: isSortable,
     valueFormatter: params => (params ? 'Yes' : 'Pending'),
   }
 
   const processorColumns = [
-    { field: 'processorName', headerName: 'Processor', width: 100, headerClassName: 'bold-header' },
+    {
+      field: 'processorName',
+      headerName: 'Processor',
+      width: 100,
+      headerClassName: 'bold-header',
+      sortable: isSortable,
+    },
     {
       field: 'processedTimestamp',
       headerName: 'Processed',
       width: 165,
       headerClassName: 'bold-header',
+      sortable: isSortable,
       valueFormatter: params => humanTimestamp(params),
     },
   ]
