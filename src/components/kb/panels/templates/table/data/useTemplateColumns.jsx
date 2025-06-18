@@ -45,10 +45,10 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
         </Box>
       ),
     },
-    { field: 'concept', headerName: 'Concept', width: 200, headerClassName: 'bold-header' },
-    { field: 'linkName', headerName: 'Link Name', width: 150, headerClassName: 'bold-header' },
-    { field: 'toConcept', headerName: 'To Concept', width: 150, headerClassName: 'bold-header' },
-    { field: 'linkValue', headerName: 'Link Value', width: 150, headerClassName: 'bold-header' },
+    { field: 'concept', headerName: 'Concept', width: 175, headerClassName: 'bold-header' },
+    { field: 'linkName', headerName: 'Link Name', width: 175, headerClassName: 'bold-header' },
+    { field: 'toConcept', headerName: 'To Concept', width: 175, headerClassName: 'bold-header' },
+    { field: 'linkValue', headerName: 'Link Value', width: 250, headerClassName: 'bold-header' },
     {
       field: 'lastUpdated',
       headerName: 'Last Updated',

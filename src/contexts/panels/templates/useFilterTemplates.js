@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
@@ -10,19 +10,23 @@ import {
 } from '@/lib/api/linkTemplates'
 
 const useFilterTemplates = ({
-  setFilterConcept,
-  setFilterToConcept,
-  setOffset,
+  resetPagination,
   limit,
   loadTemplateData,
   setCount,
   setTemplates,
+  setConceptTemplates,
 }) => {
   const { apiFns } = use(ConfigContext)
 
+  const [filterConcept, setFilterConcept] = useState(null)
+  const [filterToConcept, setFilterToConcept] = useState(null)
+  const [conceptTemplatesCache, setConceptTemplatesCache] = useState([])
+
   const filterAndPaginateTemplates = useCallback(
     async (templates, pageParams) => {
-      // Apply pagination to the filtered results
+      setConceptTemplates(templates)
+
       const start = pageParams.offset
       const end = start + pageParams.limit
       const paginatedTemplates = templates.slice(start, end)
@@ -30,7 +34,7 @@ const useFilterTemplates = ({
       setCount(templates.length)
       setTemplates(paginatedTemplates)
     },
-    [setCount, setTemplates]
+    [setCount, setTemplates, setConceptTemplates]
   )
 
   const filterTemplates = useCallback(
@@ -38,88 +42,150 @@ const useFilterTemplates = ({
       if (!apiFns) return
 
       const loadTemplates = async () => {
+        // Case 1: Both concept and toConcept filters are active
         if (concept && toConcept) {
-          // If both filters are active, get concept templates and filter by toConcept
-          const conceptTemplates = await apiFns.apiPayload(getConceptTemplates, concept)
-          const filteredTemplates = conceptTemplates.filter(
-            template => template.toConcept === toConcept
-          )
-          await filterAndPaginateTemplates(filteredTemplates, pageParams)
+          // Check if we already have the concept templates cached
+          if (conceptTemplatesCache.length > 0 && filterConcept === concept) {
+            // Use cached concept templates and filter by toConcept
+            const filteredTemplates = conceptTemplatesCache.filter(
+              template => template.toConcept === toConcept
+            )
+            await filterAndPaginateTemplates(filteredTemplates, pageParams)
+          } else {
+            // Fetch concept templates and cache them
+            const conceptTemplates = await apiFns.apiPayload(getConceptTemplates, concept)
+            setConceptTemplatesCache(conceptTemplates)
+            const filteredTemplates = conceptTemplates.filter(
+              template => template.toConcept === toConcept
+            )
+            await filterAndPaginateTemplates(filteredTemplates, pageParams)
+          }
           return
         }
 
+        // Case 2: Only concept filter is active
         if (concept) {
-          // Get templates for concept
-          const conceptTemplates = await apiFns.apiPayload(getConceptTemplates, concept)
-          await filterAndPaginateTemplates(conceptTemplates, pageParams)
+          // Check if we already have the concept templates cached
+          if (conceptTemplatesCache.length > 0 && filterConcept === concept) {
+            await filterAndPaginateTemplates(conceptTemplatesCache, pageParams)
+          } else {
+            // Fetch concept templates and cache them
+            const conceptTemplates = await apiFns.apiPayload(getConceptTemplates, concept)
+            setConceptTemplatesCache(conceptTemplates)
+            await filterAndPaginateTemplates(conceptTemplates, pageParams)
+          }
           return
         }
 
+        // Case 3: Only toConcept filter is active
         if (toConcept) {
-          // Get templates for toConcept
+          // No cached concept templates when only toConcept is active, so fetch toConcept templates
           const toConceptTemplates = await apiFns.apiPayload(getToConceptTemplates, toConcept)
           await filterAndPaginateTemplates(toConceptTemplates, pageParams)
           return
         }
 
-        // No filters - use regular paginated endpoint
+        // Case 4: No filters - use regular paginated endpoint
         const [count, templates] = await Promise.all([
           apiFns.apiResult(getTemplatesCount),
           apiFns.apiPaginated(getTemplates, pageParams),
         ])
         setCount(count)
         setTemplates(templates)
+        setConceptTemplates([])
+        setConceptTemplatesCache([]) // Clear cache when no filters
       }
 
       await loadTemplates()
     },
-    [apiFns, filterAndPaginateTemplates, setCount, setTemplates]
+    [
+      apiFns,
+      filterAndPaginateTemplates,
+      setCount,
+      setTemplates,
+      setConceptTemplates,
+      conceptTemplatesCache,
+      filterConcept,
+      setConceptTemplatesCache,
+    ]
   )
 
   const handleConceptFilter = useCallback(
     conceptName => {
       setFilterConcept(conceptName)
-      setOffset(0) // Reset to first page when changing filters
-      if (conceptName) {
-        filterTemplates(conceptName, null, { limit, offset: 0 })
-      } else {
-        loadTemplateData({ limit, offset: 0 }).then(({ count, templates }) => {
-          setCount(count)
-          setTemplates(templates)
-        })
+      resetPagination()
+      setConceptTemplates([])
+      // Clear cache when concept changes
+      if (conceptName !== filterConcept) {
+        setConceptTemplatesCache([])
       }
-    },
-    [filterTemplates, loadTemplateData, limit, setFilterConcept, setOffset, setCount, setTemplates]
-  )
-
-  const handleToConceptFilter = useCallback(
-    toConceptName => {
-      setFilterToConcept(toConceptName)
-      setOffset(0) // Reset to first page when changing filters
-      if (toConceptName) {
-        filterTemplates(null, toConceptName, { limit, offset: 0 })
+      if (conceptName) {
+        filterTemplates(conceptName, filterToConcept, { limit, offset: 0 })
       } else {
-        loadTemplateData({ limit, offset: 0 }).then(({ count, templates }) => {
-          setCount(count)
-          setTemplates(templates)
-        })
+        // If concept is deselected, check if toConcept is still active
+        if (filterToConcept) {
+          filterTemplates(null, filterToConcept, { limit, offset: 0 })
+        } else {
+          // No filters active - load regular paginated data
+          loadTemplateData({ limit, offset: 0 }).then(({ count, templates }) => {
+            setCount(count)
+            setTemplates(templates)
+          })
+        }
       }
     },
     [
       filterTemplates,
       loadTemplateData,
       limit,
-      setFilterToConcept,
-      setOffset,
+      resetPagination,
       setCount,
       setTemplates,
+      setConceptTemplates,
+      filterConcept,
+      filterToConcept,
+      setConceptTemplatesCache,
+    ]
+  )
+
+  const handleToConceptFilter = useCallback(
+    toConceptName => {
+      setFilterToConcept(toConceptName)
+      resetPagination()
+      setConceptTemplates([])
+      if (toConceptName) {
+        // Pass current concept filter to avoid unnecessary fetching
+        filterTemplates(filterConcept, toConceptName, { limit, offset: 0 })
+      } else {
+        // If clearing toConcept filter, show all templates for current concept
+        if (filterConcept) {
+          filterTemplates(filterConcept, null, { limit, offset: 0 })
+        } else {
+          loadTemplateData({ limit, offset: 0 }).then(({ count, templates }) => {
+            setCount(count)
+            setTemplates(templates)
+          })
+        }
+      }
+    },
+    [
+      filterTemplates,
+      loadTemplateData,
+      limit,
+      resetPagination,
+      setCount,
+      setTemplates,
+      setConceptTemplates,
+      filterConcept,
     ]
   )
 
   return {
+    filterConcept,
+    filterTemplates,
+    filterToConcept,
     handleConceptFilter,
     handleToConceptFilter,
-    filterTemplates,
   }
 }
 
