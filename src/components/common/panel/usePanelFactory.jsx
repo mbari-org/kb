@@ -4,18 +4,19 @@ import { Box } from '@mui/material'
 import PanelHeader from './PanelHeader'
 import PanelTable from './PanelTable'
 import PanelTableHeader from './PanelTableHeader'
+import PanelTitle from './PanelTitle'
 import TablePanel from './TablePanel'
 
 /**
  * Hook that provides factory methods for creating panel table components
  * @returns {Object} Factory methods for creating panel components
  */
-const useTablePanel = () => {
+const usePanelFactory = () => {
   return useMemo(() => {
     const createPanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} } = {}) => (
       <PanelHeader
         headerLeft={headerLeft}
-        headerTitle={headerTitle}
+        headerTitle={<PanelTitle title={headerTitle} />}
         headerRight={headerRight}
         sx={sx}
       />
@@ -51,4 +52,4 @@ const useTablePanel = () => {
   }, [])
 }
 
-export default useTablePanel
+export default usePanelFactory

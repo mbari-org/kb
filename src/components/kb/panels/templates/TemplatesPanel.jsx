@@ -6,10 +6,10 @@ import TemplatesTableData from '@/components/kb/panels/templates/table/data/Temp
 import TemplatesTableHeaderLeft from '@/components/kb/panels/templates/table/header/TemplatesTableHeaderLeft'
 import TemplatesTableHeaderRight from '@/components/kb/panels/templates/table/header/TemplatesTableHeaderRight'
 
-import useTablePanel from '@/components/common/panel/useTablePanel'
+import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
 const TemplatesPanel = () => {
-  const { createTablePanel } = useTablePanel()
+  const { createTablePanel } = usePanelFactory()
 
   return createTablePanel({
     header: {

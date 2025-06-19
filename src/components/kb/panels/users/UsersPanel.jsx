@@ -4,10 +4,10 @@ import UsersTableHeaderLeft from './table/header/UsersTableHeaderLeft'
 import UsersTableHeaderRight from './table/header/UsersTableHeaderRight'
 import UsersTableData from './table/data/UsersTableData'
 
-import useTablePanel from '@/components/common/panel/useTablePanel'
+import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
 const UsersPanel = () => {
-  const { createTablePanel } = useTablePanel()
+  const { createTablePanel } = usePanelFactory()
 
   return createTablePanel({
     header: {

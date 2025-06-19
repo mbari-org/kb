@@ -5,10 +5,10 @@ import ReferencesTableHeaderLeft from '@/components/kb/panels/references/table/h
 import ReferencesTableHeaderRight from '@/components/kb/panels/references/table/header/ReferencesTableHeaderRight'
 import ReferencesTableData from '@/components/kb/panels/references/table/data/ReferencesTableData'
 
-import useTablePanel from '@/components/common/panel/useTablePanel'
+import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
 const ReferencesPanel = () => {
-  const { createTablePanel } = useTablePanel()
+  const { createTablePanel } = usePanelFactory()
 
   return createTablePanel({
     header: {

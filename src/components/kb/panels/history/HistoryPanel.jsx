@@ -7,12 +7,12 @@ import HistoryTableTypeData from '@/components/kb/panels/history/table/data/Hist
 import HistoryTableConceptData from '@/components/kb/panels/history/table/data/HistoryTableConceptData'
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
-import useTablePanel from '@/components/common/panel/useTablePanel'
+import usePanelFactory from '@/components/common/panel/usePanelFactory'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import { use } from 'react'
 
 const HistoryPanel = () => {
-  const { createTablePanel } = useTablePanel()
+  const { createTablePanel } = usePanelFactory()
   const { selectedType } = use(HistoryContext)
   const columns = useHistoryColumns({ type: selectedType })
 

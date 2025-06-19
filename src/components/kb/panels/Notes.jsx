@@ -1,7 +1,7 @@
-import PanelTitle from '@/components/common/panel/PanelTitle'
+import EmptyPanel from '@/components/common/panel/EmptyPanel'
 
 const Notes = () => {
-  return <PanelTitle title='Notes' />
+  return <EmptyPanel title='Notes' />
 }
 
 export default Notes
