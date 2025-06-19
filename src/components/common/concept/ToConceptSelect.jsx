@@ -1,24 +1,20 @@
-import { Box } from '@mui/material'
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
-import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 
 import { CONCEPT_SELECT } from '@/lib/constants'
 
-const ToConceptSelect = ({ conceptName, disabled, doConceptSelect, required = true, sx }) => {
+const { TO_CONCEPT_LABEL, RIGHT_COMPONENT } = CONCEPT_SELECT
+const { SPECIAL } = RIGHT_COMPONENT
+
+const ToConceptSelect = ({ conceptName, disabled, doConceptSelect, required = true }) => {
   return (
-    <Box sx={{ position: 'relative', ...sx }}>
-      <Box sx={{ position: 'absolute', right: 0, top: 0, zIndex: 1 }}>
-        <ToConceptSpecial onChange={specialName => doConceptSelect(specialName)} />
-      </Box>
-      <ConceptSelect
-        conceptName={conceptName}
-        disabled={disabled}
-        doConceptSelect={doConceptSelect}
-        label={CONCEPT_SELECT.TO_CONCEPT_LABEL}
-        navigation={false}
-        required={required}
-      />
-    </Box>
+    <ConceptSelect
+      conceptName={conceptName}
+      disabled={disabled}
+      doConceptSelect={doConceptSelect}
+      label={TO_CONCEPT_LABEL}
+      rightComponent={SPECIAL}
+      required={required}
+    />
   )
 }
 

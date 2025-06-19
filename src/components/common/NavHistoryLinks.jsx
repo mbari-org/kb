@@ -1,15 +1,15 @@
 import { Stack } from '@mui/material'
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 
-import HistoryNavButton from './HistoryNavButton'
+import NavHistoryButton from './NavHistoryButton'
 
-const HistoryNavLinks = ({ history }) => {
+const NavHistoryLinks = ({ history }) => {
   const historyGoBack = delta => history.goBack(delta + 1)
   const historyGoForward = delta => history.goForward(delta + 1)
 
   return (
     <Stack direction='row'>
-      <HistoryNavButton
+      <NavHistoryButton
         disabled={!history.canGoBack()}
         dropItems={history.backItems()}
         icon={IoChevronBack}
@@ -17,7 +17,7 @@ const HistoryNavLinks = ({ history }) => {
         onClick={history.back}
         onItemSelect={historyGoBack}
       />
-      <HistoryNavButton
+      <NavHistoryButton
         disabled={!history.canGoForward()}
         dropItems={history.forwardItems()}
         icon={IoChevronForward}
@@ -29,4 +29,4 @@ const HistoryNavLinks = ({ history }) => {
   )
 }
 
-export default HistoryNavLinks
+export default NavHistoryLinks

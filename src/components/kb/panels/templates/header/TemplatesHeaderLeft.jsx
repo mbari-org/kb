@@ -16,7 +16,6 @@ const TemplatesHeaderLeft = () => {
     <ConceptSelect
       conceptName={filterConcept}
       doConceptSelect={handleConceptSelect(handleConceptFilter)}
-      navigation={false}
       selectables={selectableConcepts}
     />
   )

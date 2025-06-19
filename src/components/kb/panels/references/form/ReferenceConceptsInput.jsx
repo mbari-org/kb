@@ -52,7 +52,6 @@ const ReferenceConceptsInput = ({
         doConceptSelect={handleAddConcept}
         label='Add Concept'
         keepFocus={true}
-        navigation={false}
         onInputChange={handleSearchInput}
       />
     </Stack>

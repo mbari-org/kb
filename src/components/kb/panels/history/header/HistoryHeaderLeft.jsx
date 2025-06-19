@@ -5,9 +5,10 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/constants'
+import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
 
 const { CONCEPT } = SELECTED.HISTORY.TYPE
+const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
 
 const HistoryHeaderLeft = () => {
   const { selectedType } = use(HistoryContext)
@@ -17,7 +18,7 @@ const HistoryHeaderLeft = () => {
 
   if (selectedType !== CONCEPT) return null
 
-  return <ConceptSelect conceptName={selectedConcept} />
+  return <ConceptSelect conceptName={selectedConcept} rightComponent={NAV_HISTORY} />
 }
 
 export default HistoryHeaderLeft

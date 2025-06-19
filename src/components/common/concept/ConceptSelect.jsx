@@ -5,22 +5,26 @@ import { useTheme } from '@mui/material/styles'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
-import HistoryNavLinks from '@/components/common/HistoryNavLinks'
+import NavHistoryLinks from '@/components/common/NavHistoryLinks'
+import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_SELECT } from '@/lib/constants'
 
+const { CONCEPT_LABEL, RIGHT_COMPONENT, WIDTH } = CONCEPT_SELECT
+const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
+
 const ConceptSelect = ({
   conceptName,
   disabled = false,
   doConceptSelect,
   keepFocus = false,
-  label = CONCEPT_SELECT.CONCEPT_LABEL,
-  navigation = true,
+  label = CONCEPT_LABEL,
+  rightComponent = NONE,
   selectables,
-  sx = { width: CONCEPT_SELECT.WIDTH },
+  width = WIDTH,
 }) => {
   const theme = useTheme()
   const inputRef = useRef(null)
@@ -56,7 +60,7 @@ const ConceptSelect = ({
   }
 
   return (
-    <Stack spacing={0} sx={sx}>
+    <Stack spacing={0} sx={{ width }}>
       <Stack
         direction='row'
         justifyContent='space-between'
@@ -73,9 +77,14 @@ const ConceptSelect = ({
         >
           {label}
         </Typography>
-        <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>
-          {navigation && !disabled && <HistoryNavLinks history={concepts} />}
-        </Box>
+        {rightComponent !== NONE && !disabled && (
+          <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>
+            {rightComponent === NAV_HISTORY && <NavHistoryLinks history={concepts} />}
+            {rightComponent === SPECIAL && (
+              <ToConceptSpecial onChange={specialName => doConceptSelect(specialName)} />
+            )}
+          </Box>
+        )}
       </Stack>
       <Autocomplete
         disabled={disabled}

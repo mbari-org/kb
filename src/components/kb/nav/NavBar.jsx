@@ -4,7 +4,7 @@ import { AppBar, Box, Toolbar } from '@mui/material'
 
 import LogoutLink from './LogoutLink'
 import PanelLink from './PanelLink'
-import HistoryNavLinks from '../../common/HistoryNavLinks'
+import NavHistoryLinks from '../../common/NavHistoryLinks'
 import VersionDisplay from '../../common/VersionDisplay'
 
 import panelMods from '@/components/kb/panels/modules'
@@ -36,7 +36,7 @@ const NavBar = ({ selectPanel }) => {
     >
       <Toolbar>
         <Box sx={{ mb: 1.5 }}>
-          <HistoryNavLinks history={panels} />
+          <NavHistoryLinks history={panels} />
         </Box>
         {panelNames.map(name => (
           <PanelLink

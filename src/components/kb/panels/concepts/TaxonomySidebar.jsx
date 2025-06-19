@@ -8,6 +8,10 @@ import TaxonomyTree from '@/components/kb/panels/concepts/tree/TaxonomyTree'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
+import { CONCEPT_SELECT } from '@/lib/constants'
+
+const NAV_HISTORY = CONCEPT_SELECT.RIGHT_COMPONENT.NAV_HISTORY
+
 const TaxonomySidebar = () => {
   const sidebarRef = useRef(null)
 
@@ -24,7 +28,12 @@ const TaxonomySidebar = () => {
 
   return (
     <Stack sx={{ height: '100%', ml: 2, mr: 1 }}>
-      <ConceptSelect conceptName={concept.name} doConceptSelect={doConceptSelect} sx={{ mt: 1 }} />
+      <ConceptSelect
+        conceptName={concept.name}
+        doConceptSelect={doConceptSelect}
+        rightComponent={NAV_HISTORY}
+        width='auto'
+      />
       <Box
         ref={sidebarRef}
         sx={{

@@ -27,6 +27,11 @@ const CONCEPT_NAME_TYPES = {
 
 const CONCEPT_SELECT = {
   CONCEPT_LABEL: 'Concept',
+  RIGHT_COMPONENT: {
+    NAV_HISTORY: 'nav',
+    NONE: 'none',
+    SPECIAL: 'special',
+  },
   TO_CONCEPT_LABEL: 'To Concept',
   WIDTH: 350,
 }

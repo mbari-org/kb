@@ -4,6 +4,10 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
+import { CONCEPT_SELECT } from '@/lib/constants'
+
+const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
+
 const ReferencesHeaderLeft = () => {
   const { getSelected, select } = use(SelectedContext)
 
@@ -21,6 +25,7 @@ const ReferencesHeaderLeft = () => {
       conceptName={selectedConcept}
       disabled={!byConcept}
       handleConceptSelect={handleConceptSelect}
+      rightComponent={NAV_HISTORY}
     />
   )
 }

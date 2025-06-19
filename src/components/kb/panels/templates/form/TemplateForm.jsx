@@ -18,7 +18,6 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
 
   const handleToConceptSpecial = value => {
     // When a special value is selected, use it as the toConcept value
-    // When null, use the current concept value
     handleChange('toConcept')({ target: { value: value === null ? '' : value } })
   }
 
@@ -28,7 +27,6 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
         conceptName={template.concept}
         disabled={isEdit}
         handleConceptSelect={handleConceptSelect}
-        navigation={false}
         required
       />
       <Box>

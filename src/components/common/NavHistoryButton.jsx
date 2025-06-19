@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 
-const HistoryNavButton = ({ dropItems, icon: Icon, label, onClick, onItemSelect, ...props }) => {
+const NavHistoryButton = ({ dropItems, icon: Icon, label, onClick, onItemSelect, ...props }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const pressTimer = useRef(null)
@@ -105,4 +105,4 @@ const HistoryNavButton = ({ dropItems, icon: Icon, label, onClick, onItemSelect,
   )
 }
 
-export default HistoryNavButton
+export default NavHistoryButton
