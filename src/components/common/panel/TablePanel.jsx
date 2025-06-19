@@ -15,6 +15,7 @@ const TablePanel = ({ header, panelTable, sx = {} }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        mt: 2,
         width: '100%',
         ...sx,
       }}
@@ -23,16 +24,14 @@ const TablePanel = ({ header, panelTable, sx = {} }) => {
         direction='column'
         spacing={0}
         sx={{
-          height: '100%',
           display: 'flex',
           flexDirection: 'column',
+          height: '100%',
         }}
       >
         {header && (
           <Box
             sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
               flexShrink: 0,
             }}
           >

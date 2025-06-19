@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import PropTypes from 'prop-types'
 
-const HEADER_HEIGHT = 120
+const HEADER_HEIGHT = 100
 
 /**
  * A header component for panels that provides a consistent layout with left, center, and right sections.
@@ -57,7 +57,7 @@ const PanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} }) => {
             textAlign: 'center',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
-            width: '90%',
+            width: '60%',
           }}
         >
           {headerTitle}

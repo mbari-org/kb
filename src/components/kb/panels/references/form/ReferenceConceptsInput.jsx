@@ -54,7 +54,6 @@ const ReferenceConceptsInput = ({
         keepFocus={true}
         navigation={false}
         onInputChange={handleSearchInput}
-        sx={{ width: '400px' }}
       />
     </Stack>
   )

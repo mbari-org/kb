@@ -2,6 +2,8 @@ import { Box } from '@mui/material'
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 
+import { CONCEPT_SELECT } from '@/lib/constants'
+
 const ToConceptSelect = ({ conceptName, disabled, doConceptSelect, required = true, sx }) => {
   return (
     <Box sx={{ position: 'relative', ...sx }}>
@@ -12,7 +14,7 @@ const ToConceptSelect = ({ conceptName, disabled, doConceptSelect, required = tr
         conceptName={conceptName}
         disabled={disabled}
         doConceptSelect={doConceptSelect}
-        label='To Concept'
+        label={CONCEPT_SELECT.TO_CONCEPT_LABEL}
         navigation={false}
         required={required}
       />

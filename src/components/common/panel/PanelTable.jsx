@@ -20,10 +20,11 @@ const PanelTable = ({ tableHeader, tableData, sx = {} }) => {
     >
       <Box
         sx={{
-          borderBottom: 1,
-          borderColor: 'divider',
           flexShrink: 0,
-          p: 2,
+          pt: 0,
+          pl: 2,
+          pr: 2,
+          pb: 0,
         }}
       >
         {tableHeader}
@@ -34,7 +35,8 @@ const PanelTable = ({ tableHeader, tableData, sx = {} }) => {
           flex: '1 1 auto',
           minHeight: 0, // Important for proper flex behavior
           overflow: 'auto',
-          p: 2,
+          pl: 2,
+          pr: 2,
         }}
       >
         {tableData}

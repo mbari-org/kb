@@ -15,6 +15,9 @@ const PanelTableHeader = ({ headerLeft, headerRight, sx = {} }) => {
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'space-between',
+        pb: 1,
+        pl: 1,
+        pr: 1,
         ...sx,
       }}
     >

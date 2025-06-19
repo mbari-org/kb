@@ -13,9 +13,6 @@ const HistoryTableConceptData = ({ columns, hideFooter = false }) => {
   const { count, conceptData, typeState, nextPage, prevPage, setPageSize } = use(HistoryContext)
   const { limit, offset } = typeState
 
-  // Ensure rowCount is at least 1 to prevent MUI X error
-  const rowCount = Math.max(1, count)
-
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0 }}>
       <DataGrid
@@ -25,7 +22,6 @@ const HistoryTableConceptData = ({ columns, hideFooter = false }) => {
         hideFooter={hideFooter}
         getRowHeight={() => 'auto'}
         rows={conceptData}
-        rowCount={rowCount}
         paginationMode='client'
         paginationModel={{
           pageSize: limit,

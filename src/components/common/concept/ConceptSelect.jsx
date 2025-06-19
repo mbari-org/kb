@@ -17,7 +17,7 @@ const ConceptSelect = ({
   disabled = false,
   doConceptSelect,
   keepFocus = false,
-  label = 'Concept',
+  label = CONCEPT_SELECT.CONCEPT_LABEL,
   navigation = true,
   selectables,
   sx = { width: CONCEPT_SELECT.WIDTH },

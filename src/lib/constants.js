@@ -26,7 +26,8 @@ const CONCEPT_NAME_TYPES = {
 }
 
 const CONCEPT_SELECT = {
-  LABEL: 'Concept',
+  CONCEPT_LABEL: 'Concept',
+  TO_CONCEPT_LABEL: 'To Concept',
   WIDTH: 350,
 }
 
