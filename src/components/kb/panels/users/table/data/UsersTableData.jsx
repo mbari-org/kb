@@ -1,7 +1,6 @@
 import { use, useState } from 'react'
-import { Box } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
 
+import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import UsersPagination from './UsersPagination'
 
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -33,53 +32,41 @@ const UsersTableData = () => {
     setOffset(0)
   }
 
+  const paginationComponent = (
+    <UsersPagination
+      count={users.length}
+      limit={limit}
+      nextPage={nextPage}
+      offset={offset}
+      prevPage={prevPage}
+      setPageSize={setPageSize}
+    />
+  )
+
   return (
-    <Box sx={{ flexGrow: 1, minHeight: 0 }}>
-      <DataGrid
-        columns={columns}
-        disableColumnFilter
-        disableColumnMenu
-        disableRowSelectionOnClick
-        disableSelectionOnClick
-        getRowHeight={() => 'auto'}
-        pageSizeOptions={PAGINATION.USERS.PAGE_SIZE_OPTIONS}
-        paginationMode='server'
-        paginationModel={{
-          pageSize: limit,
-          page: Math.floor(offset / limit),
-        }}
-        rowCount={users.length}
-        rows={users}
-        slots={{
-          pagination: () => (
-            <UsersPagination
-              count={users.length}
-              limit={limit}
-              nextPage={nextPage}
-              offset={offset}
-              prevPage={prevPage}
-              setPageSize={setPageSize}
-            />
-          ),
-        }}
-        sx={{
-          height: '100%',
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: 'background.paper',
-            '& .MuiDataGrid-columnHeader': {
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontWeight: 700,
-                fontSize: '1rem',
-              },
-            },
-          },
-          '& .disabled-cell': {
-            color: 'text.disabled',
-            opacity: 0.85,
-          },
-        }}
-      />
-    </Box>
+    <PanelDataGrid
+      columns={columns}
+      rows={users}
+      rowCount={users.length}
+      paginationModel={{
+        pageSize: limit,
+        page: Math.floor(offset / limit),
+      }}
+      pageSizeOptions={PAGINATION.USERS.PAGE_SIZE_OPTIONS}
+      paginationMode='server'
+      paginationComponent={paginationComponent}
+      dataGridProps={{
+        disableColumnFilter: true,
+        disableColumnMenu: true,
+        getRowId: undefined, // Use default row ID
+      }}
+      sx={{
+        '& .disabled-cell': {
+          color: 'text.disabled',
+          opacity: 0.85,
+        },
+      }}
+    />
   )
 }
 

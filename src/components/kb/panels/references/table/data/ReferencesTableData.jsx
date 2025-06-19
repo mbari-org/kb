@@ -1,7 +1,6 @@
 import { use, useState } from 'react'
-import { Box } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
 
+import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import ReferencesPagination from './ReferencesPagination'
 
 import useEditReferenceModal from '@/components/kb/panels/references/form/edit/useEditReferenceModal'
@@ -42,50 +41,35 @@ const ReferencesTableData = () => {
     setOffset(0)
   }
 
+  const paginationComponent = (
+    <ReferencesPagination
+      count={selectedReferences.length}
+      limit={limit}
+      nextPage={nextPage}
+      offset={offset}
+      prevPage={prevPage}
+      setPageSize={setPageSize}
+    />
+  )
+
   return (
-    <Box sx={{ flexGrow: 1, minHeight: 0 }}>
-      <DataGrid
-        columns={columns}
-        disableColumnFilter
-        disableColumnMenu
-        disableRowSelectionOnClick
-        disableSelectionOnClick
-        getRowId={reference => reference.id}
-        getRowHeight={() => 'auto'}
-        pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
-        paginationMode='server'
-        paginationModel={{
-          page: Math.floor(offset / limit),
-          pageSize: limit,
-        }}
-        rowCount={selectedReferences.length}
-        rows={selectedReferences}
-        slots={{
-          pagination: () => (
-            <ReferencesPagination
-              count={selectedReferences.length}
-              limit={limit}
-              nextPage={nextPage}
-              offset={offset}
-              prevPage={prevPage}
-              setPageSize={setPageSize}
-            />
-          ),
-        }}
-        sx={{
-          height: '100%',
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: 'background.paper',
-            '& .MuiDataGrid-columnHeader': {
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontWeight: 700,
-                fontSize: '1rem',
-              },
-            },
-          },
-        }}
-      />
-    </Box>
+    <PanelDataGrid
+      columns={columns}
+      rows={selectedReferences}
+      rowCount={selectedReferences.length}
+      paginationModel={{
+        page: Math.floor(offset / limit),
+        pageSize: limit,
+      }}
+      pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
+      paginationMode='server'
+      paginationComponent={paginationComponent}
+      dataGridProps={{
+        disableColumnFilter: true,
+        disableColumnMenu: true,
+        getRowId: reference => reference.id,
+      }}
+    />
   )
 }
 

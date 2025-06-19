@@ -1,7 +1,6 @@
-import { Box } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
 import { use } from 'react'
 
+import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryPagination from './HistoryPagination'
 
@@ -17,49 +16,32 @@ const HistoryTableTypeData = ({ columns, hideFooter = false }) => {
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, count)
 
+  const paginationComponent = (
+    <HistoryPagination
+      count={count}
+      hideFooter={hideFooter}
+      limit={limit}
+      nextPage={nextPage}
+      offset={offset}
+      prevPage={prevPage}
+      setPageSize={setPageSize}
+    />
+  )
+
   return (
-    <Box sx={{ flexGrow: 1, minHeight: 0 }}>
-      <DataGrid
-        columns={columns}
-        disableRowSelectionOnClick
-        disableSelectionOnClick
-        hideFooter={hideFooter}
-        getRowHeight={() => 'auto'}
-        rows={typeData}
-        rowCount={rowCount}
-        paginationMode='server'
-        paginationModel={{
-          pageSize: limit,
-          page: Math.floor(offset / limit),
-        }}
-        pageSizeOptions={PAGE_SIZE_OPTIONS}
-        slots={{
-          pagination: () => (
-            <HistoryPagination
-              count={count}
-              hideFooter={hideFooter}
-              limit={limit}
-              nextPage={nextPage}
-              offset={offset}
-              prevPage={prevPage}
-              setPageSize={setPageSize}
-            />
-          ),
-        }}
-        sx={{
-          height: '100%',
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: 'background.paper',
-            '& .MuiDataGrid-columnHeader': {
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontWeight: 700,
-                fontSize: '1rem',
-              },
-            },
-          },
-        }}
-      />
-    </Box>
+    <PanelDataGrid
+      columns={columns}
+      rows={typeData}
+      rowCount={rowCount}
+      paginationModel={{
+        pageSize: limit,
+        page: Math.floor(offset / limit),
+      }}
+      pageSizeOptions={PAGE_SIZE_OPTIONS}
+      paginationMode='server'
+      paginationComponent={paginationComponent}
+      hideFooter={hideFooter}
+    />
   )
 }
 

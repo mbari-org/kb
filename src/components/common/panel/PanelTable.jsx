@@ -37,6 +37,7 @@ const PanelTable = ({ tableHeader, tableData, sx = {} }) => {
           overflow: 'auto',
           pl: 2,
           pr: 2,
+          mb: 2,
         }}
       >
         {tableData}

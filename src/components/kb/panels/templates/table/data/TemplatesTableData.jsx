@@ -1,14 +1,13 @@
 import { use } from 'react'
-import { Box } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
 
-import useTemplateColumns from './useTemplateColumns'
+import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import TemplatesPagination from './TemplatesPagination'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import useDeleteTemplateModal from '@/components/kb/panels/templates/form/delete/useDeleteTemplateModal'
 import useEditTemplateModal from '@/components/kb/panels/templates/form/edit/useEditTemplateModal'
+import useTemplateColumns from './useTemplateColumns'
 
 import { PAGINATION } from '@/lib/constants'
 
@@ -32,47 +31,30 @@ const TemplatesTableData = () => {
 
   const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
 
+  const paginationComponent = (
+    <TemplatesPagination
+      count={count}
+      limit={limit}
+      nextPage={nextPage}
+      offset={offset}
+      prevPage={prevPage}
+      setPageSize={setPageSize}
+    />
+  )
+
   return (
-    <Box sx={{ flexGrow: 1, minHeight: 0 }}>
-      <DataGrid
-        columns={columns}
-        disableRowSelectionOnClick
-        disableSelectionOnClick
-        getRowHeight={() => 'auto'}
-        pageSizeOptions={PAGE_SIZE_OPTIONS}
-        paginationMode='server'
-        paginationModel={{
-          pageSize: limit,
-          page: Math.floor(offset / limit),
-        }}
-        rowCount={count}
-        rows={templates}
-        slots={{
-          pagination: () => (
-            <TemplatesPagination
-              count={count}
-              limit={limit}
-              nextPage={nextPage}
-              offset={offset}
-              prevPage={prevPage}
-              setPageSize={setPageSize}
-            />
-          ),
-        }}
-        sx={{
-          height: '100%',
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: 'background.paper',
-            '& .MuiDataGrid-columnHeader': {
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontWeight: 700,
-                fontSize: '1rem',
-              },
-            },
-          },
-        }}
-      />
-    </Box>
+    <PanelDataGrid
+      columns={columns}
+      rows={templates}
+      rowCount={count}
+      paginationModel={{
+        pageSize: limit,
+        page: Math.floor(offset / limit),
+      }}
+      pageSizeOptions={PAGE_SIZE_OPTIONS}
+      paginationMode='server'
+      paginationComponent={paginationComponent}
+    />
   )
 }
 
