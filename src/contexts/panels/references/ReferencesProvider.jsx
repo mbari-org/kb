@@ -7,14 +7,18 @@ import {
 } from '@/lib/api/references'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import ModalContext from '@/contexts/modal/ModalContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import { createReference } from '@/lib/kb/model/reference'
 
 import updateReferenceFields from '@/contexts/config/updateReferenceFields'
 import updateReferenceConcepts from '@/contexts/config/updateReferenceConcepts'
 
+import { PAGINATION } from '@/lib/constants'
+
 export const ReferencesProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
+  const { setProcessing } = use(ModalContext)
 
   const [references, setReferences] = useState([])
 
@@ -70,12 +74,34 @@ export const ReferencesProvider = ({ children }) => {
 
   useEffect(() => {
     const loadReferences = async () => {
-      const referenceData = await apiFns.apiPaginated(getReferencesApi)
-      setReferences(referenceData.map(reference => createReference(reference)))
+      setProcessing(true)
+
+      const EXPORT_PAGE_SIZE = PAGINATION.REFERENCES.EXPORT_PAGE_SIZE
+      let allReferences = []
+      let pageIndex = 0
+      let hasMoreData = true
+
+      while (hasMoreData) {
+        const referenceData = await apiFns.apiPaginated(getReferencesApi, {
+          limit: EXPORT_PAGE_SIZE,
+          offset: pageIndex * EXPORT_PAGE_SIZE,
+        })
+
+        if (!referenceData || referenceData.length === 0) {
+          hasMoreData = false
+          continue
+        }
+
+        allReferences.push(...referenceData)
+        pageIndex++
+      }
+
+      setReferences(allReferences.map(reference => createReference(reference)))
+      setProcessing(false)
     }
 
     loadReferences()
-  }, [apiFns])
+  }, [apiFns, setProcessing])
 
   const value = {
     addReference,

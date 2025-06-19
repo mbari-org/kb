@@ -52,6 +52,9 @@ const escapeCSV = field => {
   }
   return stringField
 }
+
+const formatConceptNameForFilename = str => (str || 'all').replace(/\s+/g, '-')
+
 const humanTimestamp = timestamp => {
   if (!timestamp) return ''
 
@@ -217,6 +220,7 @@ export {
   diff,
   drop,
   escapeCSV,
+  formatConceptNameForFilename,
   humanTimestamp,
   isDeepEqual,
   isElementInViewport,

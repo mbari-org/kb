@@ -1,10 +1,4 @@
-import { use } from 'react'
-
-import { getReferences } from '@/lib/api/references'
-
-import ConfigContext from '@/contexts/config/ConfigContext'
-
-import { escapeCSV, writeCSVContent } from '@/lib/util'
+import { escapeCSV, formatConceptNameForFilename, writeCSVContent } from '@/lib/util'
 
 const referenceDataHeaders = ['DOI', 'Citation', 'Concepts']
 
@@ -12,12 +6,14 @@ const referenceRows = references =>
   references.map(reference => [reference.doi, reference.citation, reference.concepts])
 
 const useReferencesExport = () => {
-  const { apiFns } = use(ConfigContext)
+  const referencesExport = async (references, byConceptName) => {
+    const suggestName = `KB-References_${
+      byConceptName ? formatConceptNameForFilename(byConceptName) : 'all'
+    }.csv`
 
-  const referencesExport = async () => {
     try {
       const handle = await window.showSaveFilePicker({
-        suggestedName: 'KB-References.csv',
+        suggestedName: suggestName,
         types: [
           {
             description: 'CSV Files',
@@ -25,8 +21,6 @@ const useReferencesExport = () => {
           },
         ],
       })
-
-      const references = await apiFns.apiPaginated(getReferences)
 
       const writable = await handle.createWritable()
       await writable.write(referenceDataHeaders.map(escapeCSV).join(',') + '\n')

@@ -12,7 +12,12 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { PAGINATION } from '@/lib/constants'
 
-import { escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/util'
+import {
+  escapeCSV,
+  formatConceptNameForFilename,
+  humanTimestamp,
+  writeCSVContent,
+} from '@/lib/util'
 
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
@@ -33,8 +38,6 @@ const fetchTemplatesByPage = async (apiFns, pageIndex) => {
     offset: pageIndex * EXPORT_PAGE_SIZE,
   })
 }
-
-const formatName = str => (str || 'all').replace(/\s+/g, '-')
 
 const fetchFilteredTemplates = async (data, apiFns) => {
   if (!data) return null
@@ -65,13 +68,15 @@ const useTemplatesExport = () => {
   const templatesExport = async data => {
     const filterName =
       data?.filterConcept || data?.filterToConcept
-        ? formatName(data.filterConcept) + '_to_' + formatName(data.filterToConcept)
-        : ''
+        ? formatConceptNameForFilename(data.filterConcept) +
+          '_to_' +
+          formatConceptNameForFilename(data.filterToConcept)
+        : 'all'
 
     try {
       setProcessing(true)
       const handle = await window.showSaveFilePicker({
-        suggestedName: `KB-Templates${filterName ? '_' + filterName : ''}.csv`,
+        suggestedName: `KB-Templates_${filterName}.csv`,
         types: [
           {
             description: 'CSV Files',

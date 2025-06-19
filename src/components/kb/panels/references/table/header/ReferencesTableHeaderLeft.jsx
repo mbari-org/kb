@@ -14,14 +14,17 @@ const ReferencesTableHeaderLeft = () => {
   const { references } = use(ReferencesContext)
   const { getSelected, select } = use(SelectedContext)
 
-  const referencesExport = useReferencesExport()
-
   const selectedConcept = getSelected('concept')
   const byConcept = getSelected('byConcept')
+  const byConceptName = byConcept ? selectedConcept : null
 
-  const total = byConcept
-    ? references.filter(reference => reference.concepts.includes(selectedConcept)).length
-    : references.length
+  const referencesExport = useReferencesExport()
+
+  const filteredReferences = byConcept
+    ? references.filter(reference => reference.concepts.includes(selectedConcept))
+    : references
+
+  const total = filteredReferences.length
 
   const handleToggleChange = event => {
     const newValue = event.target.checked
@@ -37,7 +40,10 @@ const ReferencesTableHeaderLeft = () => {
         width: CONCEPT_SELECT.WIDTH,
       }}
     >
-      <PanelTotalExport count={total} exportFn={referencesExport} />
+      <PanelTotalExport
+        count={total}
+        exportFn={() => referencesExport(filteredReferences, byConceptName)}
+      />
       <Box>
         <FormControlLabel
           sx={{ margin: 0 }}
