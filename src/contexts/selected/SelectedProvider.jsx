@@ -33,11 +33,11 @@ const SelectedProvider = ({ children }) => {
     settingsStore.set(updatedSettings)
     setSettings(updatedSettings)
 
-    if (conceptName) {
+    if (conceptName && conceptName !== conceptSelect.current()) {
       conceptSelect.push(conceptName)
     }
 
-    if (panelName) {
+    if (panelName && panelName !== panelSelect.current()) {
       panelSelect.push(panelName)
     }
   }
