@@ -17,6 +17,7 @@ const ReferenceConceptSelect = ({ onChange, reference }) => {
         conceptName={selectedConcept}
         label='Add Concept'
         onInputChange={handleSearchInput}
+        updateConceptSelected={false}
       />
       <Box sx={{ width: 6 }} />
       <ReferenceConceptSelectButtons

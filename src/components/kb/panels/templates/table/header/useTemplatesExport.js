@@ -83,7 +83,7 @@ const useTemplatesExport = () => {
       const writable = await handle.createWritable()
       await writable.write(templateDataHeaders.map(escapeCSV).join(',') + '\n')
 
-      if (data) {
+      if (data.filterConcept || data.filterToConcept) {
         // Fetch all templates for the current filter
         setProcessing('Writing templates to CSV file...')
         const filteredTemplates = await fetchFilteredTemplates(data, apiFns)

@@ -14,7 +14,7 @@ const ReferencesHeaderLeft = () => {
   const selectedConcept = getSelected('concept')
   const byConcept = getSelected('byConcept')
 
-  const handleConceptSelect = (_event, selectedName) => {
+  const handleConceptSelect = selectedName => {
     if (selectedName) {
       select({ concept: selectedName })
     }
@@ -24,7 +24,7 @@ const ReferencesHeaderLeft = () => {
     <ConceptSelect
       conceptName={selectedConcept}
       disabled={!byConcept}
-      handleConceptSelect={handleConceptSelect}
+      doConceptSelected={handleConceptSelect}
       rightComponent={NAV_HISTORY}
     />
   )

@@ -51,11 +51,11 @@ const ToConceptChoice = ({ error, handleChange, label, omitChoices, onEnter, req
               fontWeight: theme.concept.fontWeight,
               ml: -2,
             }}
-            value={value}
+            value={value || null}
           />
         )}
         size='small'
-        value={value}
+        value={value || null}
         sx={{ width: '500px' }}
       />
       <Divider sx={{ marginTop: 1 }} />

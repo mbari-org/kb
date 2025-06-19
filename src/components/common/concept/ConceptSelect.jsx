@@ -11,7 +11,7 @@ import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_SELECT } from '@/lib/constants'
+import { CONCEPT_SELECT, TO_CONCEPT_SPECIAL_VALUES } from '@/lib/constants'
 
 const { CONCEPT_LABEL, RIGHT_COMPONENT, WIDTH } = CONCEPT_SELECT
 const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
@@ -19,11 +19,13 @@ const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
 const ConceptSelect = ({
   conceptName,
   disabled = false,
-  doConceptSelect,
+  doConceptSelected,
   keepFocus = false,
   label = CONCEPT_LABEL,
+  onInputChange,
   rightComponent = NONE,
   selectables,
+  updateConceptSelected = true,
   width = WIDTH,
 }) => {
   const theme = useTheme()
@@ -32,13 +34,27 @@ const ConceptSelect = ({
   const { concepts, select } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
 
-  const options = useMemo(() => (selectables ? selectables : getNames()), [getNames, selectables])
+  const options = useMemo(() => {
+    const baseOptions = selectables ? selectables : getNames()
+
+    // If this is a special component (ToConcept), include special values in options
+    if (rightComponent === SPECIAL) {
+      return [...baseOptions, ...TO_CONCEPT_SPECIAL_VALUES]
+    }
+
+    return baseOptions
+  }, [getNames, selectables, rightComponent])
 
   const handleConceptSelect = selectedName => {
     if (selectedName) {
-      if (options.includes(selectedName)) {
-        const doSelection = doConceptSelect ? doConceptSelect(selectedName) : true
-        if (doSelection) {
+      // Check if the selected name is valid (either in options or a special value)
+      const isValidSelection =
+        options.includes(selectedName) ||
+        (rightComponent === SPECIAL && TO_CONCEPT_SPECIAL_VALUES.includes(selectedName))
+
+      if (isValidSelection) {
+        const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true
+        if (doSelection && updateConceptSelected) {
           select({ concept: selectedName })
         }
         return true
@@ -46,7 +62,7 @@ const ConceptSelect = ({
       return false
     }
 
-    doConceptSelect?.(null)
+    doConceptSelected?.(null)
     return false
   }
 
@@ -81,7 +97,7 @@ const ConceptSelect = ({
           <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>
             {rightComponent === NAV_HISTORY && <NavHistoryLinks history={concepts} />}
             {rightComponent === SPECIAL && (
-              <ToConceptSpecial onChange={specialName => doConceptSelect(specialName)} />
+              <ToConceptSpecial onChange={specialName => doConceptSelected(specialName)} />
             )}
           </Box>
         )}
@@ -89,6 +105,7 @@ const ConceptSelect = ({
       <Autocomplete
         disabled={disabled}
         onChange={(_event, selectedName) => handleConceptSelect(selectedName)}
+        onInputChange={onInputChange}
         options={options}
         ref={inputRef}
         renderInput={params => (
@@ -116,7 +133,7 @@ const ConceptSelect = ({
             },
           },
         }}
-        value={conceptName}
+        value={conceptName || null}
       />
       <hr />
     </Stack>

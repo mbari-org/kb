@@ -19,7 +19,7 @@ const TaxonomySidebar = () => {
 
   const [autoExpand, setAutoExpand] = useState(null)
 
-  const doConceptSelect = selectedName => {
+  const doConceptSelected = selectedName => {
     setAutoExpand?.({ expand: true, name: selectedName })
     return true
   }
@@ -30,7 +30,7 @@ const TaxonomySidebar = () => {
     <Stack sx={{ height: '100%', ml: 2, mr: 1 }}>
       <ConceptSelect
         conceptName={concept.name}
-        doConceptSelect={doConceptSelect}
+        doConceptSelected={doConceptSelected}
         rightComponent={NAV_HISTORY}
         width='auto'
       />

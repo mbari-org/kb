@@ -8,11 +8,11 @@ import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateFo
 const TemplateForm = ({ isEdit = false, onChange, template }) => {
   const { handleChange } = useTemplateForm({ isEdit, onChange, template })
 
-  const handleConceptSelect = (event, newValue) => {
+  const handleConceptSelect = newValue => {
     handleChange('concept')({ target: { value: newValue } })
   }
 
-  const handleToConceptSelect = (event, newValue) => {
+  const handleToConceptSelect = newValue => {
     handleChange('toConcept')({ target: { value: newValue } })
   }
 
@@ -26,8 +26,9 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
       <ConceptSelect
         conceptName={template.concept}
         disabled={isEdit}
-        handleConceptSelect={handleConceptSelect}
+        doConceptSelected={handleConceptSelect}
         required
+        updateConceptSelected={false}
       />
       <Box>
         <TextField
@@ -41,7 +42,7 @@ const TemplateForm = ({ isEdit = false, onChange, template }) => {
       </Box>
       <ToConceptSelect
         conceptName={template.toConcept}
-        handleConceptSelect={handleToConceptSelect}
+        doConceptSelected={handleToConceptSelect}
         onSpecialChange={handleToConceptSpecial}
       />
       <Box>

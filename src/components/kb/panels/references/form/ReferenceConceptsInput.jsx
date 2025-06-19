@@ -49,10 +49,11 @@ const ReferenceConceptsInput = ({
       />
       <ConceptSelect
         conceptName={selectedConcept}
-        doConceptSelect={handleAddConcept}
+        doConceptSelected={handleAddConcept}
         label='Add Concept'
         keepFocus={true}
         onInputChange={handleSearchInput}
+        updateConceptSelected={false}
       />
     </Stack>
   )
