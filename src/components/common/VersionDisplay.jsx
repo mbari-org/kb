@@ -5,7 +5,14 @@ import { IoInformationCircleOutline } from 'react-icons/io5'
 import { Typography, Box, Tooltip, IconButton } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
-import { getBranchName, getBuildDate, getCommitDate, getVersion, isDirty } from '@/lib/version'
+import {
+  getBranchName,
+  getBuildDate,
+  getCommitDate,
+  getCommitMessage,
+  getVersion,
+  isDirty,
+} from '@/lib/version'
 
 /**
  * VersionDisplay component - shows application version info
@@ -24,6 +31,7 @@ const VersionDisplay = ({ color = grey[300], display = 'text', variant = 'captio
   const buildDate = getBuildDate()
   const branchName = getBranchName()
   const commitDate = getCommitDate()
+  const commitMessage = getCommitMessage()
   const dirty = isDirty()
 
   const isDev = import.meta.env.DEV
@@ -82,6 +90,14 @@ const VersionDisplay = ({ color = grey[300], display = 'text', variant = 'captio
         </Typography>
         <Typography variant='body2' sx={{ color: grey[200] }}>
           {formatDate(commitDate)}
+        </Typography>
+      </Box>
+      <Box sx={{ display: 'flex', mb: 1 }}>
+        <Typography variant='body2' sx={{ width: 100, flexShrink: 0, color: grey[200] }}>
+          <strong>Message:</strong>
+        </Typography>
+        <Typography variant='body2' sx={{ color: grey[200], wordBreak: 'break-word' }}>
+          {commitMessage}
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', mb: 1 }}>
