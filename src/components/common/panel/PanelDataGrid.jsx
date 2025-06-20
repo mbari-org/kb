@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
  * @param {Object} props
  * @param {Array} props.columns - DataGrid columns configuration
  * @param {Array} props.rows - Data to display in the grid
- * @param {number} props.rowCount - Total number of rows for pagination
+ * @param {number} props.rowCount - Total number of rows for pagination (only used with server pagination)
  * @param {Object} props.paginationModel - Current pagination state
  * @param {Array} props.pageSizeOptions - Available page size options
  * @param {string} props.paginationMode - 'client' or 'server' pagination mode
@@ -30,6 +30,12 @@ const PanelDataGrid = ({
   dataGridProps = {},
   sx = {},
 }) => {
+  // Only pass rowCount when using server pagination
+  const dataGridPropsWithRowCount =
+    paginationMode === 'server' && rowCount !== undefined
+      ? { ...dataGridProps, rowCount }
+      : dataGridProps
+
   return (
     <Box
       sx={{
@@ -50,7 +56,6 @@ const PanelDataGrid = ({
         <DataGrid
           columns={columns}
           rows={rows}
-          rowCount={rowCount}
           paginationModel={paginationModel}
           pageSizeOptions={pageSizeOptions}
           paginationMode={paginationMode}
@@ -74,7 +79,7 @@ const PanelDataGrid = ({
               display: 'none',
             },
           }}
-          {...dataGridProps}
+          {...dataGridPropsWithRowCount}
         />
       </Box>
 
@@ -100,7 +105,7 @@ const PanelDataGrid = ({
 PanelDataGrid.propTypes = {
   columns: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
-  rowCount: PropTypes.number.isRequired,
+  rowCount: PropTypes.number,
   paginationModel: PropTypes.object.isRequired,
   pageSizeOptions: PropTypes.array.isRequired,
   paginationMode: PropTypes.oneOf(['client', 'server']),

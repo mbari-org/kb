@@ -28,7 +28,6 @@ const HistoryTableConceptData = ({ columns, hideFooter = false }) => {
     <PanelDataGrid
       columns={columns}
       rows={conceptData}
-      rowCount={count}
       paginationModel={{
         pageSize: limit,
         page: Math.floor(offset / limit),
