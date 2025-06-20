@@ -10,6 +10,10 @@ import useReferencesExport from '@/components/kb/panels/references/table/header/
 
 import { CONCEPT_SELECT } from '@/lib/constants'
 
+import { EXPORT } from '@/lib/tooltips'
+
+const REFERENCES = EXPORT.REFERENCES
+
 const ReferencesTableHeaderLeft = () => {
   const { references } = use(ReferencesContext)
   const { getSelected, select } = use(SelectedContext)
@@ -25,6 +29,8 @@ const ReferencesTableHeaderLeft = () => {
     : references
 
   const total = filteredReferences.length
+
+  const toolTip = byConcept ? REFERENCES.BY_CONCEPT : REFERENCES.ALL
 
   const handleToggleChange = event => {
     const newValue = event.target.checked
@@ -43,6 +49,7 @@ const ReferencesTableHeaderLeft = () => {
       <PanelTotalExport
         count={total}
         exportFn={() => referencesExport(filteredReferences, byConceptName)}
+        toolTip={toolTip}
       />
       <Box>
         <FormControlLabel
