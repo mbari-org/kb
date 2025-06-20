@@ -26,6 +26,11 @@ export function versionPlugin() {
       // Get commit date
       const commitDate = execSync('git show -s --format=%ci HEAD', { encoding: 'utf8' }).trim();
       
+      // Get commit message (first line only)
+      const commitMessage = execSync('git log -1 --pretty=%B', { encoding: 'utf8' })
+        .trim()
+        .split('\n')[0];
+      
       // Check if working directory is clean
       const isWorkingDirClean = execSync('git status --porcelain', { encoding: 'utf8' }).trim() === '';
       
@@ -36,6 +41,7 @@ export function versionPlugin() {
         commitHash: commitHash,
         branchName: branchName,
         commitDate: commitDate,
+        commitMessage: commitMessage,
         isDirty: !isWorkingDirClean
       };
 
@@ -50,6 +56,7 @@ export function versionPlugin() {
         commitHash: 'unknown',
         branchName: 'unknown',
         commitDate: 'unknown',
+        commitMessage: 'unknown',
         isDirty: false
       };
     }
@@ -65,6 +72,7 @@ export const getBuildDate = () => VERSION_INFO.buildDate;
 export const getCommitHash = () => VERSION_INFO.commitHash;
 export const getBranchName = () => VERSION_INFO.branchName;
 export const getCommitDate = () => VERSION_INFO.commitDate;
+export const getCommitMessage = () => VERSION_INFO.commitMessage;
 export const isDirty = () => VERSION_INFO.isDirty;
 `;
 
