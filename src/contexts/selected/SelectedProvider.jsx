@@ -54,16 +54,18 @@ const SelectedProvider = ({ children }) => {
   useEffect(() => {
     const storedSelected = settingsStore.get()
 
-    const byConcept = storedSelected?.references?.byConcept || storedSelected?.byConcept || false
     const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
+    const references = storedSelected?.references || { byConcept: false }
+    const templates = storedSelected?.templates || { available: false }
 
-    const initialValue = {
+    const initialSettings = {
       history,
-      references: { byConcept },
+      references,
+      templates,
     }
 
-    settingsStore.set(initialValue)
-    setSettings(initialValue)
+    settingsStore.set(initialSettings)
+    setSettings(initialSettings)
   }, [])
 
   if (!settings) {
