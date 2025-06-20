@@ -32,18 +32,22 @@ const ReferencesTableHeaderLeft = () => {
   const exportToolTip = byConcept ? EXPORT.BY_CONCEPT : EXPORT.ALL
   const switchToolTip = byConcept ? SWITCH.BY_CONCEPT : SWITCH.ALL
 
-  const handleToggleChange = event => {
+  const switchFn = event => {
     const newValue = event.target.checked
     select({ byConcept: newValue })
+  }
+
+  const exportFn = () => {
+    referencesExport(filteredReferences, byConceptName)
   }
 
   return (
     <PanelTotalExportSwitch
       checked={byConcept}
       count={total}
-      exportFn={() => referencesExport(filteredReferences, byConceptName)}
+      exportFn={exportFn}
       exportToolTip={exportToolTip}
-      handleToggleChange={handleToggleChange}
+      switchFn={switchFn}
       switchLabel='By Concept'
       switchToolTip={switchToolTip}
       width={CONCEPT_SELECT.WIDTH}

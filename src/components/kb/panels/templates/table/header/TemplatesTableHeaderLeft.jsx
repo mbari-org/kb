@@ -1,11 +1,13 @@
 import { use } from 'react'
 
-import PanelTotalExport from '@/components/common/panel/PanelTotalExport'
+import PanelTotalExportSwitch from '@/components/common/panel/PanelTotalExportSwitch'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
+import TemplatesTableHeaderLeftSwitchTooltip from '@/components/kb/panels/templates/table/header/TemplatesTableHeaderLeftSwitchTooltip'
 
+import { CONCEPT_SELECT } from '@/lib/constants'
 import { TEMPLATES } from '@/lib/tooltips'
 
 const { EXPORT } = TEMPLATES
@@ -15,22 +17,36 @@ const TemplatesTableHeaderLeft = () => {
 
   const templatesExport = useTemplatesExport()
 
-  const handleExport = () => {
+  const exportFn = () => {
     templatesExport({ filterConcept, filterToConcept })
   }
 
-  let toolTip
-  if (filterConcept && filterToConcept) {
-    toolTip = EXPORT.CONCEPT_TO_CONCEPT
-  } else if (filterConcept) {
-    toolTip = EXPORT.CONCEPT
-  } else if (filterToConcept) {
-    toolTip = EXPORT.TO_CONCEPT
-  } else {
-    toolTip = EXPORT.ALL
+  const switchFn = () => {
+    console.log('switchFn')
   }
 
-  return <PanelTotalExport count={count} exportFn={handleExport} toolTip={toolTip} />
+  let exportToolTip
+  if (filterConcept && filterToConcept) {
+    exportToolTip = EXPORT.CONCEPT_TO_CONCEPT
+  } else if (filterConcept) {
+    exportToolTip = EXPORT.CONCEPT
+  } else if (filterToConcept) {
+    exportToolTip = EXPORT.TO_CONCEPT
+  } else {
+    exportToolTip = EXPORT.ALL
+  }
+
+  return (
+    <PanelTotalExportSwitch
+      count={count}
+      exportFn={exportFn}
+      exportToolTip={exportToolTip}
+      switchFn={switchFn}
+      switchLabel='Available'
+      switchToolTip={<TemplatesTableHeaderLeftSwitchTooltip />}
+      width={CONCEPT_SELECT.WIDTH}
+    />
+  )
 }
 
 export default TemplatesTableHeaderLeft

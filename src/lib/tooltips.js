@@ -3,6 +3,10 @@ const TOOLTIPS = {
     onEnter: 500,
     onLeave: 0,
   },
+  FONT: {
+    SIZE: '1em',
+    FAMILY: 'Arial, sans-serif',
+  },
   HISTORY: {
     EXPORT: {
       APPROVED: 'Export Approved History',
@@ -38,6 +42,6 @@ const TOOLTIPS = {
   },
 }
 
-export const { DELAY, HISTORY, TEMPLATES, REFERENCES, USERS } = TOOLTIPS
+export const { DELAY, FONT, HISTORY, TEMPLATES, REFERENCES, USERS } = TOOLTIPS
 
 export default TOOLTIPS

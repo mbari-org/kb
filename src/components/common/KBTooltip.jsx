@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/material'
 import PropTypes from 'prop-types'
 
-import { DELAY } from '@/lib/tooltips'
+import { DELAY, FONT } from '@/lib/tooltips'
 
 /**
  * KBTooltip component - a wrapper around MUI Tooltip with consistent styling and behavior
@@ -13,7 +13,20 @@ import { DELAY } from '@/lib/tooltips'
  */
 const KBTooltip = ({ children, title, ...props }) => {
   return (
-    <Tooltip enterDelay={DELAY.onEnter} leaveDelay={DELAY.onLeave} title={title} {...props}>
+    <Tooltip
+      slotProps={{
+        tooltip: {
+          sx: {
+            fontSize: FONT.SIZE,
+            fontFamily: FONT.FAMILY,
+          },
+        },
+      }}
+      enterDelay={DELAY.onEnter}
+      leaveDelay={DELAY.onLeave}
+      title={title}
+      {...props}
+    >
       {children}
     </Tooltip>
   )
