@@ -17,12 +17,13 @@ const { TEMPLATES } = SELECTED.SETTINGS
 
 const TemplatesTableHeaderLeft = () => {
   const { select } = use(SelectedContext)
-  const { count, filterConcept, filterToConcept } = use(TemplatesContext)
+  const { available, count, filterConcept, filterToConcept, displayTemplates } =
+    use(TemplatesContext)
 
   const templatesExport = useTemplatesExport()
 
   const exportFn = () => {
-    templatesExport({ filterConcept, filterToConcept })
+    templatesExport({ available, filterConcept, filterToConcept, displayTemplates })
   }
 
   const switchFn = event => {
@@ -43,6 +44,7 @@ const TemplatesTableHeaderLeft = () => {
 
   return (
     <PanelTotalExportSwitch
+      checked={available}
       count={count}
       exportFn={exportFn}
       exportToolTip={exportToolTip}

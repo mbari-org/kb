@@ -7,10 +7,11 @@ import { PAGINATION } from '@/lib/constants'
 
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
-const useTemplateConcepts = () => {
+const useExplicitConcepts = () => {
   const { apiFns } = use(ConfigContext)
 
-  const loadConceptsList = useCallback(async () => {
+  // Concepts with explicit Templates defined
+  const loadExplicitConcepts = useCallback(async () => {
     if (!apiFns) return []
 
     const totalCount = await apiFns.apiResult(getTemplatesCount)
@@ -35,7 +36,7 @@ const useTemplateConcepts = () => {
     return Array.from(uniqueConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
   }, [apiFns])
 
-  return loadConceptsList
+  return loadExplicitConcepts
 }
 
-export default useTemplateConcepts
+export default useExplicitConcepts

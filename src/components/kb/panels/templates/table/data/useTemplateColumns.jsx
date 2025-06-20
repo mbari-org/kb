@@ -1,8 +1,8 @@
+import { useTheme } from '@mui/material/styles'
 import { Box, IconButton } from '@mui/material'
-import { use } from 'react'
 import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
-import { useTheme } from '@mui/material/styles'
+
 import { humanTimestamp } from '@/lib/utils'
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {

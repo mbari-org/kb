@@ -12,7 +12,10 @@ const getTemplatesCount = async config => {
 
 const getTemplates = async (config, params) => oniGet(config, ['linktemplates'], params)
 
-const getConceptTemplates = async (config, conceptName) =>
+const getAvailableTemplates = async (config, conceptName) =>
+  oniGet(config, ['linktemplates', 'query', 'for', conceptName])
+
+const getExplicitTemplates = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'concept', conceptName])
 
 const getToConceptTemplateCount = async (config, conceptName) =>
@@ -30,7 +33,8 @@ const updateTemplate = async (config, [templateId, payload]) =>
 export {
   createConceptTemplate,
   deleteConceptTemplate,
-  getConceptTemplates,
+  getAvailableTemplates,
+  getExplicitTemplates,
   getTemplates,
   getTemplatesCount,
   getToConceptTemplateCount,

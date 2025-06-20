@@ -8,10 +8,10 @@ import { PAGINATION } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.TEMPLATES.DEFAULT_LIMIT
 
-const useLoadTemplateData = () => {
+const useLoadTemplates = () => {
   const { apiFns } = use(ConfigContext)
 
-  const loadTemplateData = useCallback(
+  const loadTemplates = useCallback(
     async ({ limit = DEFAULT_LIMIT, offset = 0 }) => {
       if (!apiFns) return { count: 0, templates: [] }
 
@@ -25,7 +25,7 @@ const useLoadTemplateData = () => {
     [apiFns]
   )
 
-  return loadTemplateData
+  return loadTemplates
 }
 
-export default useLoadTemplateData
+export default useLoadTemplates

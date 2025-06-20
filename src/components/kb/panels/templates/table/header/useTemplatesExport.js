@@ -1,7 +1,8 @@
 import { use } from 'react'
 
 import {
-  getConceptTemplates,
+  getAvailableTemplates,
+  getExplicitTemplates,
   getTemplates,
   getTemplatesCount,
   getToConceptTemplates,
@@ -46,12 +47,18 @@ const fetchFilteredTemplates = async (data, apiFns) => {
   const hasToConceptFilter = data.filterToConcept && data.filterToConcept !== 'all'
 
   if (hasConceptFilter && hasToConceptFilter) {
-    const conceptTemplates = await apiFns.apiPayload(getConceptTemplates, data.filterConcept)
+    const conceptTemplates = await apiFns.apiPayload(
+      data.available ? getAvailableTemplates : getExplicitTemplates,
+      data.filterConcept
+    )
     return conceptTemplates.filter(template => template.toConcept === data.filterToConcept)
   }
 
   if (hasConceptFilter) {
-    return apiFns.apiPayload(getConceptTemplates, data.filterConcept)
+    return apiFns.apiPayload(
+      data.available ? getAvailableTemplates : getExplicitTemplates,
+      data.filterConcept
+    )
   }
 
   if (hasToConceptFilter) {
@@ -69,14 +76,18 @@ const useTemplatesExport = () => {
     const filterName =
       data?.filterConcept || data?.filterToConcept
         ? formatConceptNameForFilename(data.filterConcept) +
-          '_to_' +
+          '-to-' +
           formatConceptNameForFilename(data.filterToConcept)
         : 'all'
+
+    // Add '_Available' suffix when available flag is on
+    const availableSuffix = data?.available ? '-Available' : ''
+    const suggestedName = `KB-Templates_${filterName}${availableSuffix}.csv`
 
     try {
       setProcessing(true)
       const handle = await window.showSaveFilePicker({
-        suggestedName: `KB-Templates_${filterName}.csv`,
+        suggestedName,
         types: [
           {
             description: 'CSV Files',
@@ -88,7 +99,11 @@ const useTemplatesExport = () => {
       const writable = await handle.createWritable()
       await writable.write(templateDataHeaders.map(escapeCSV).join(',') + '\n')
 
-      if (data.filterConcept || data.filterToConcept) {
+      // If displayTemplates are provided, use them directly (matches what user sees in table)
+      if (data.displayTemplates && data.displayTemplates.length > 0) {
+        setProcessing('Writing templates to CSV file...')
+        await writeCSVContent(writable, templateRows(data.displayTemplates))
+      } else if (data.filterConcept || data.filterToConcept) {
         // Fetch all templates for the current filter
         setProcessing('Writing templates to CSV file...')
         const filteredTemplates = await fetchFilteredTemplates(data, apiFns)

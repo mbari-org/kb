@@ -2,72 +2,69 @@ import { use } from 'react'
 
 import { Stack, Typography } from '@mui/material'
 
-import SelectedContext from '@/contexts/selected/SelectedContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { SELECTED } from '@/lib/constants'
 import { FONT } from '@/lib/tooltips'
 
-const { TEMPLATES } = SELECTED.SETTINGS
+const selectedAvailableMessaging = (available, filterConcept) => {
+  const noConceptSelectedDescription = 'With no Concept selected, all Templates are displayed.'
+  const selectAnyConceptDescription = 'Any Concept can be selected.'
+  const selectExplicitConceptsDescription = 'Only Concepts with explicit Templates can be selected.'
+
+  if (filterConcept && available) {
+    return [
+      'Available Concept Templates',
+      selectAnyConceptDescription,
+      'All Templates available for use with the selected Concept are displayed.',
+    ]
+  }
+  if (filterConcept && !available) {
+    return [
+      'Explicit Concept Templates',
+      selectExplicitConceptsDescription,
+      'Only Templates explicitly defined for the selected Concept are displayed.',
+    ]
+  }
+  if (!filterConcept && available) {
+    return ['All Available Templates', selectAnyConceptDescription, noConceptSelectedDescription]
+  }
+  return ['All Explicit Templates', selectExplicitConceptsDescription, noConceptSelectedDescription]
+}
 
 const TemplatesTableHeaderLeftSwitchTooltip = () => {
-  const { getSelected } = use(SelectedContext)
-  const { filterConcept } = use(TemplatesContext)
+  const { available, filterConcept } = use(TemplatesContext)
 
-  const available = getSelected(TEMPLATES.KEY)[TEMPLATES.AVAILABLE]
-
-  const colorOn = 'common.white'
-  const colorOff = 'grey.400'
-
-  const conceptColor = filterConcept ? colorOn : colorOff
-  const noConceptColor = !filterConcept ? colorOn : colorOff
-  const offColor = !available ? colorOn : colorOff
-  const onColor = available ? colorOn : colorOff
+  const descriptionProps = {
+    ml: '0.75em !important',
+  }
 
   const fontProps = {
     fontSize: FONT.SIZE,
     fontFamily: FONT.FAMILY,
   }
 
+  const titleProps = {
+    mb: '0.5em !important',
+    mt: '0.25em !important',
+    textAlign: 'center',
+  }
+
+  const [title, selectionDescription, displayDescription] = selectedAvailableMessaging(
+    available,
+    filterConcept
+  )
+
   return (
-    <Stack direction='column' spacing={1} sx={fontProps}>
-      <Stack direction='column' spacing={0.5} sx={{ ml: '0.5em !important', mt: '1em !important' }}>
-        <Typography sx={{ textAlign: 'center' }}>Concept</Typography>
-        <Stack
-          direction='column'
-          spacing={0.5}
-          sx={{ ml: '0.5em !important', color: conceptColor }}
-        >
-          <Typography>Selected</Typography>
-          <Typography sx={{ ml: '1em !important' }}>
-            With a Concept selected, Templates available for that Concept are displayed.
-          </Typography>
+    <Stack direction='column' spacing={0} sx={fontProps}>
+      <Typography sx={titleProps}>{title}</Typography>
+      <Stack direction='column' spacing={1}>
+        <Stack direction='column' spacing={0.25}>
+          <Typography>Selection</Typography>
+          <Typography sx={descriptionProps}>{selectionDescription}</Typography>
         </Stack>
-        <Stack
-          direction='column'
-          spacing={0.5}
-          sx={{ ml: '0.5em !important', color: noConceptColor }}
-        >
-          <Typography>No Selection</Typography>
-          <Typography sx={{ ml: '1em !important' }}>
-            With no Concept selected, all Templates are displayed.
-          </Typography>
-        </Stack>
-      </Stack>
-      <Stack direction='column' spacing={0.5} sx={{ ml: '0.5em !important', mt: '1em !important' }}>
-        <Typography sx={{ textAlign: 'center' }}>Available</Typography>
-        <Stack direction='column' spacing={0.5} sx={{ ml: '0.5em !important', color: offColor }}>
-          <Typography>Off</Typography>
-          <Typography sx={{ ml: '1em !important' }}>
-            Concept selection is limited to Concepts on which a Template is explicitly defined.
-          </Typography>
-        </Stack>
-        <Stack direction='column' spacing={0.5} sx={{ ml: '0.5em !important', color: onColor }}>
-          <Typography>On</Typography>
-          <Typography sx={{ ml: '1em !important' }}>
-            Any Concept may be selected, and the displayed Templates are those available for use
-            with that selected Concept.
-          </Typography>
+        <Stack direction='column' spacing={0.25}>
+          <Typography>Display</Typography>
+          <Typography sx={descriptionProps}>{displayDescription}</Typography>
         </Stack>
       </Stack>
     </Stack>

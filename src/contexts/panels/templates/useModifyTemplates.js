@@ -5,8 +5,8 @@ import {
   updateTemplate,
 } from '@/lib/api/linkTemplates'
 import { use, useCallback } from 'react'
-import useLoadTemplateData from './useLoadTemplateData'
-import useTemplateConcepts from './useTemplateConcepts'
+import useExplicitConcepts from './useExplicitConcepts'
+import useLoadTemplateData from './useLoadTemplates'
 import useTemplatePagination from './useTemplatePagination'
 
 const useModifyTemplates = ({
@@ -14,12 +14,12 @@ const useModifyTemplates = ({
   filterToConcept,
   filterTemplates,
   setCount,
-  setSelectableConcepts,
-  setTemplates,
+  setTemplateConcepts,
+  setDisplayTemplates,
 }) => {
   const { apiFns } = use(ConfigContext)
-  const loadConceptsList = useTemplateConcepts()
-  const loadTemplateData = useLoadTemplateData()
+  const loadConceptsList = useExplicitConcepts()
+  const loadTemplates = useLoadTemplateData()
   const { limit, offset } = useTemplatePagination()
 
   const refreshData = useCallback(async () => {
@@ -28,23 +28,23 @@ const useModifyTemplates = ({
     } else {
       const [newConcepts, { count, templates }] = await Promise.all([
         loadConceptsList(),
-        loadTemplateData({ limit, offset }),
+        loadTemplates({ limit, offset }),
       ])
-      setSelectableConcepts(newConcepts)
+      setTemplateConcepts(newConcepts)
       setCount(count)
-      setTemplates(templates)
+      setDisplayTemplates(templates)
     }
   }, [
     filterConcept,
     filterToConcept,
     filterTemplates,
     loadConceptsList,
-    loadTemplateData,
+    loadTemplates,
     limit,
     offset,
     setCount,
-    setSelectableConcepts,
-    setTemplates,
+    setTemplateConcepts,
+    setDisplayTemplates,
   ])
 
   const deleteTemplate = useCallback(

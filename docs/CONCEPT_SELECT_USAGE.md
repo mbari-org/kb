@@ -44,7 +44,7 @@ The `ConceptSelect` component is a versatile autocomplete component used through
 <ConceptSelect
   conceptName={filterConcept}
   doConceptSelected={handleFilter}
-  selectables={selectableConcepts}
+  selectables={templateConcepts}
   updateConceptSelected={false}
 />
 ```

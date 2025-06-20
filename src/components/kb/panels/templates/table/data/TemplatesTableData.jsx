@@ -17,17 +17,17 @@ const TemplatesTableData = () => {
   const {
     count,
     deleteTemplate,
+    displayTemplates,
     editTemplate,
     limit,
     nextPage,
     offset,
     prevPage,
     setPageSize,
-    templates,
   } = use(TemplatesContext)
 
   const deleteTemplateModal = useDeleteTemplateModal(deleteTemplate)
-  const editTemplateModal = useEditTemplateModal(editTemplate, templates)
+  const editTemplateModal = useEditTemplateModal(editTemplate, displayTemplates)
 
   const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
 
@@ -45,7 +45,7 @@ const TemplatesTableData = () => {
   return (
     <PanelDataGrid
       columns={columns}
-      rows={templates}
+      rows={displayTemplates}
       rowCount={count}
       paginationModel={{
         pageSize: limit,
