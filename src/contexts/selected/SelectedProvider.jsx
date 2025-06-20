@@ -16,19 +16,25 @@ const SelectedProvider = ({ children }) => {
 
   const getSelected = field => {
     switch (field) {
-      case 'concept':
+      case SELECTED.CONCEPT:
         return conceptSelect.current()
-      case 'panel':
+      case SELECTED.PANEL:
         return panelSelect.current()
+      case SELECTED.SETTINGS.REFERENCES.BY_CONCEPT:
+        return settings?.references?.byConcept || false
       default:
         return settings[field]
     }
   }
 
-  const select = ({ byConcept, concept: conceptName, history, panel: panelName }) => {
+  const select = ({ byConcept, concept: conceptName, history, panel: panelName, references }) => {
     const updatedSettings = {
       history: history ? { type: history } : settings?.history,
-      byConcept: byConcept !== undefined ? byConcept : settings?.byConcept,
+      references: {
+        ...settings?.references,
+        ...(references || {}),
+        ...(byConcept !== undefined ? { byConcept } : {}),
+      },
     }
     settingsStore.set(updatedSettings)
     setSettings(updatedSettings)
@@ -45,10 +51,13 @@ const SelectedProvider = ({ children }) => {
   useEffect(() => {
     const storedSelected = settingsStore.get()
 
-    const byConcept = storedSelected?.byConcept || false
+    const byConcept = storedSelected?.references?.byConcept || storedSelected?.byConcept || false
     const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
 
-    const initialValue = { history, byConcept }
+    const initialValue = {
+      history,
+      references: { byConcept },
+    }
 
     settingsStore.set(initialValue)
     setSettings(initialValue)

@@ -179,15 +179,26 @@ export const RESETTING = {
 }
 
 export const SELECTED = {
-  HISTORY: {
-    TYPE: {
-      APPROVED: 'approved',
-      CONCEPT: 'concept',
-      PENDING: 'pending',
-    },
+  CONCEPT: 'concept',
+  PANEL: 'panel',
+  PANELS: {
+    CONCEPTS: 'Concepts',
+    REFERENCES: 'References',
   },
-  REFERENCES: {
-    BY_CONCEPT: 'byConcept',
+  SETTINGS: {
+    HISTORY: {
+      KEY: 'history',
+      TYPE: 'type',
+      TYPES: {
+        APPROVED: 'approved',
+        CONCEPT: 'concept',
+        PENDING: 'pending',
+      },
+    },
+    REFERENCES: {
+      KEY: 'references',
+      BY_CONCEPT: 'byConcept',
+    },
   },
 }
 

@@ -7,6 +7,8 @@ import ConceptReferencesNavButtons from './ConceptReferencesNavButtons'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
+import { SELECTED } from '@/lib/constants'
+
 const ITEMS_PER_PAGE = 5
 
 const ConceptReferences = () => {
@@ -14,7 +16,7 @@ const ConceptReferences = () => {
   const { getSelected, select } = use(SelectedContext)
   const [currentPage, setCurrentPage] = useState(0)
 
-  const selectedConcept = getSelected('concept')
+  const selectedConcept = getSelected(SELECTED.CONCEPT)
   const conceptReferences = references.filter(reference =>
     reference.concepts.includes(selectedConcept)
   )
@@ -35,7 +37,10 @@ const ConceptReferences = () => {
   }
 
   const linkToReferences = () => {
-    select({ byConcept: true, panel: 'References' })
+    select({
+      references: { [SELECTED.SETTINGS.REFERENCES.BY_CONCEPT]: true },
+      [SELECTED.PANEL]: SELECTED.PANELS.REFERENCES,
+    })
   }
 
   return (

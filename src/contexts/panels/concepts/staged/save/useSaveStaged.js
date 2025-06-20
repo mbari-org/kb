@@ -7,7 +7,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import commitStaged from '@/contexts/panels/concepts/staged/save/commitStaged'
-import { PROCESSING } from '@/lib/constants'
+import { PROCESSING, SELECTED } from '@/lib/constants'
 
 const { SAVING } = PROCESSING
 
@@ -28,7 +28,7 @@ const useSaveStaged = () => {
       setEditing(false)
       setProcessing(null)
       updateInfo.hasUpdated('name')
-        ? select({ concept: updatedConcept.name })
+        ? select({ [SELECTED.CONCEPT]: updatedConcept.name })
         : refreshConcept(updatedConcept)
     } catch (error) {
       setProcessing(null)

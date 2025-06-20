@@ -8,11 +8,13 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { humanTimestamp } from '@/lib/utils'
 
+import { SELECTED } from '@/lib/constants'
+
 const useHistoryColumns = ({ type }) => {
   const { select } = use(SelectedContext)
 
-  const handleInspect = row => {
-    select({ concept: row.concept, panel: 'Concepts' })
+  const handleConceptClick = row => {
+    select({ [SELECTED.CONCEPT]: row.concept, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
   }
 
   // Determine if columns should be sortable based on history type
@@ -30,7 +32,7 @@ const useHistoryColumns = ({ type }) => {
           {(type === 'pending' || (type === 'concept' && !params.row.approved)) && (
             <IconButton
               size='small'
-              onClick={() => handleInspect(params.row)}
+              onClick={() => handleConceptClick(params.row)}
               sx={{
                 '&:hover': {
                   color: 'primary.main',

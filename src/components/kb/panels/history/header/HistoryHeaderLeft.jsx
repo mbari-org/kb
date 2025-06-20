@@ -7,14 +7,14 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
 
-const { CONCEPT } = SELECTED.HISTORY.TYPE
+const { CONCEPT } = SELECTED.SETTINGS.HISTORY.TYPES
 const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
 
 const HistoryHeaderLeft = () => {
   const { selectedType } = use(HistoryContext)
   const { getSelected } = use(SelectedContext)
 
-  const selectedConcept = getSelected('concept')
+  const selectedConcept = getSelected(SELECTED.CONCEPT)
 
   if (selectedType !== CONCEPT) return null
 

@@ -5,9 +5,15 @@ import { MdNavigateNext } from 'react-icons/md'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
+import { SELECTED } from '@/lib/constants'
+
 const ConceptPath = () => {
   const { conceptPath } = use(ConceptContext)
   const { select } = use(SelectedContext)
+
+  const handlePathClick = path => {
+    select({ [SELECTED.CONCEPT]: path, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
+  }
 
   return (
     <Breadcrumbs
@@ -30,7 +36,7 @@ const ConceptPath = () => {
           color={index === conceptPath.length - 1 ? 'primary' : 'inherit'}
           onClick={() => {
             if (index === conceptPath.length - 1) return
-            select({ concept: path, panel: 'Concepts' })
+            handlePathClick(path)
           }}
         >
           {path}

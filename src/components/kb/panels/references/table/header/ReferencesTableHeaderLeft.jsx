@@ -7,18 +7,21 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useReferencesExport from '@/components/kb/panels/references/table/header/useReferencesExport'
 
-import { CONCEPT_SELECT } from '@/lib/constants'
+import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
 
-import { REFERENCES } from '@/lib/tooltips'
+import { REFERENCES as REFERENCES_TOOLTIPS } from '@/lib/tooltips'
 
-const { EXPORT, SWITCH } = REFERENCES
+const { EXPORT, SWITCH } = REFERENCES_TOOLTIPS
+
+const { CONCEPT } = SELECTED
+const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesTableHeaderLeft = () => {
   const { references } = use(ReferencesContext)
   const { getSelected, select } = use(SelectedContext)
 
-  const selectedConcept = getSelected('concept')
-  const byConcept = getSelected('byConcept')
+  const selectedConcept = getSelected(CONCEPT)
+  const byConcept = getSelected(REFERENCES.BY_CONCEPT)
   const byConceptName = byConcept ? selectedConcept : null
 
   const referencesExport = useReferencesExport()
@@ -34,7 +37,7 @@ const ReferencesTableHeaderLeft = () => {
 
   const switchFn = event => {
     const newValue = event.target.checked
-    select({ byConcept: newValue })
+    select({ references: { [REFERENCES.BY_CONCEPT]: newValue } })
   }
 
   const exportFn = () => {

@@ -7,7 +7,7 @@ import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import { SELECTED } from '@/lib/constants'
 
-const { PENDING, APPROVED, CONCEPT } = SELECTED.HISTORY.TYPE
+const { PENDING, APPROVED, CONCEPT } = SELECTED.SETTINGS.HISTORY.TYPES
 
 const HistoryHeaderToggle = ({ onChange }) => {
   const { selectedType } = use(HistoryContext)

@@ -17,6 +17,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { conceptItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 import { buildTree } from '@/lib/kb/model/taxonomy'
+import { SELECTED } from '@/lib/constants'
 
 const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
@@ -48,17 +49,21 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     },
   }
 
-  const selectConcept = useCallback(
+  const handleConceptSelect = useCallback(
     conceptName => {
-      select({ concept: conceptName })
-      setAutoExpand({ expand: true, name: conceptName })
+      select({ [SELECTED.CONCEPT]: conceptName })
     },
-    [select, setAutoExpand]
+    [select]
   )
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems, taxonomy)
 
-  const handleItemClick = useConceptClick(concept, expandConcept, selectConcept, setAutoExpand)
+  const handleItemClick = useConceptClick(
+    concept,
+    expandConcept,
+    handleConceptSelect,
+    setAutoExpand
+  )
 
   useConceptAutoExpand({
     autoExpand,
@@ -74,7 +79,7 @@ const TaxonomyTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     expandConcept,
     expandedItems,
     getConcept,
-    selectConcept,
+    handleConceptSelect,
     setAutoExpand,
     sidebarRef
   )

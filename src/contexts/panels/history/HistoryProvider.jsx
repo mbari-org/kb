@@ -5,17 +5,20 @@ import HistoryContext from './HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
-import { PAGINATION } from '@/lib/constants'
+import { PAGINATION, SELECTED } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
+
+const { CONCEPT } = SELECTED
+const { HISTORY } = SELECTED.SETTINGS
 
 const HistoryProvider = ({ children }) => {
   const { getSelected } = use(SelectedContext)
   const { apiFns } = use(ConfigContext)
 
-  const selectedType = getSelected('history').type
-  const selectedConcept = getSelected('concept')
+  const selectedType = getSelected(HISTORY)[HISTORY.TYPE]
+  const selectedConcept = getSelected(CONCEPT)
 
   const [count, setCount] = useState(0)
   const [conceptData, setConceptData] = useState([])

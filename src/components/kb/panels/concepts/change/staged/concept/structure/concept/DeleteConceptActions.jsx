@@ -9,7 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import saveDelete from '@/contexts/panels/concepts/staged/save/saveDelete'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS, SELECTED } from '@/lib/constants'
 
 const { CANCEL, DELETE } = LABELS.CONCEPT.ACTION
 
@@ -31,7 +31,7 @@ const DeleteConceptActions = () => {
       saveDelete(concept.name, apiFns.apiResult)
         .then(() => deleteConcept(concept.name))
         .then(selectConceptName => {
-          select({ concept: selectConceptName })
+          select({ [SELECTED.CONCEPT]: selectConceptName })
           setEditing(false)
         })
     }

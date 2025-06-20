@@ -15,7 +15,7 @@ import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptS
 
 import { hasModifiedState, initialConceptState } from '@/lib/kb/state/concept'
 
-import { CONCEPT_STATE, LABELS } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 
 const { CONTINUE } = LABELS.BUTTON
 
@@ -68,13 +68,14 @@ const ConceptProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    const selectedConcept = getSelected('concept')
+    const selectedConcept = getSelected(SELECTED.CONCEPT)
     if (!selectedConcept) {
       return
     }
 
     const shouldUpdateConcept =
-      selectedConcept !== previousConceptName.current && panels.current() === 'Concepts'
+      selectedConcept !== previousConceptName.current &&
+      panels.current() === SELECTED.PANELS.CONCEPTS
 
     if (shouldUpdateConcept) {
       if (hasModifiedState({ initialState, stagedState })) {

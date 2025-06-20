@@ -10,17 +10,20 @@ import useReferenceColumns from '@/components/kb/panels/references/table/data/us
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { PAGINATION } from '@/lib/constants'
+import { PAGINATION, SELECTED } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
+
+const { CONCEPT } = SELECTED
+const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesTableData = () => {
   const { editReference, deleteReference, references } = use(ReferencesContext)
   const { getSelected } = use(SelectedContext)
 
-  const selectedConcept = getSelected('concept')
-  const byConcept = getSelected('byConcept')
+  const selectedConcept = getSelected(CONCEPT)
+  const byConcept = getSelected(REFERENCES.BY_CONCEPT)
 
   const selectedReferences = byConcept
     ? references.filter(reference => reference.concepts.includes(selectedConcept))
