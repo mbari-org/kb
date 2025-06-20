@@ -9,10 +9,6 @@ const TOOLTIPS = {
       CONCEPT: 'Export History for selected Concept',
       PENDING: 'Export Pending History',
     },
-    REFERENCES: {
-      ALL: 'Export All References',
-      BY_CONCEPT: 'Export References associated with selected Concept',
-    },
     TEMPLATES: {
       ALL: 'Export All Templates',
       CONCEPT: 'Export Templates for selected Concept',
@@ -23,6 +19,16 @@ const TOOLTIPS = {
       ALL: 'Export All Users',
     },
   },
+  REFERENCES: {
+    EXPORT: {
+      BY_CONCEPT: 'Export References associated with selected Concept',
+      ALL: 'Export All References',
+    },
+    SWITCH: {
+      BY_CONCEPT: 'References associated with selected Concept',
+      ALL: 'All References',
+    },
+  },
   USERS: {
     EDIT: 'Edit User details',
     LOCK: 'Lock User to prevent login',
@@ -30,6 +36,6 @@ const TOOLTIPS = {
   },
 }
 
-export const { DELAY, EXPORT, USERS } = TOOLTIPS
+export const { DELAY, EXPORT, REFERENCES, USERS } = TOOLTIPS
 
 export default TOOLTIPS

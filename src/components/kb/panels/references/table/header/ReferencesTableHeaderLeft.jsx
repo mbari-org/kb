@@ -1,7 +1,6 @@
 import { use } from 'react'
-import { Box, FormControlLabel, Switch } from '@mui/material'
 
-import PanelTotalExport from '@/components/common/panel/PanelTotalExport'
+import PanelTotalExportSwitch from '@/components/common/panel/PanelTotalExportSwitch'
 
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -10,9 +9,9 @@ import useReferencesExport from '@/components/kb/panels/references/table/header/
 
 import { CONCEPT_SELECT } from '@/lib/constants'
 
-import { EXPORT } from '@/lib/tooltips'
+import { REFERENCES } from '@/lib/tooltips'
 
-const REFERENCES = EXPORT.REFERENCES
+const { EXPORT, SWITCH } = REFERENCES
 
 const ReferencesTableHeaderLeft = () => {
   const { references } = use(ReferencesContext)
@@ -30,7 +29,8 @@ const ReferencesTableHeaderLeft = () => {
 
   const total = filteredReferences.length
 
-  const toolTip = byConcept ? REFERENCES.BY_CONCEPT : REFERENCES.ALL
+  const exportToolTip = byConcept ? EXPORT.BY_CONCEPT : EXPORT.ALL
+  const switchToolTip = byConcept ? SWITCH.BY_CONCEPT : SWITCH.ALL
 
   const handleToggleChange = event => {
     const newValue = event.target.checked
@@ -38,27 +38,16 @@ const ReferencesTableHeaderLeft = () => {
   }
 
   return (
-    <Box
-      sx={{
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'space-between',
-        width: CONCEPT_SELECT.WIDTH,
-      }}
-    >
-      <PanelTotalExport
-        count={total}
-        exportFn={() => referencesExport(filteredReferences, byConceptName)}
-        toolTip={toolTip}
-      />
-      <Box>
-        <FormControlLabel
-          sx={{ margin: 0 }}
-          control={<Switch size='small' checked={byConcept} onChange={handleToggleChange} />}
-          label='By Concept'
-        />
-      </Box>
-    </Box>
+    <PanelTotalExportSwitch
+      checked={byConcept}
+      count={total}
+      exportFn={() => referencesExport(filteredReferences, byConceptName)}
+      exportToolTip={exportToolTip}
+      handleToggleChange={handleToggleChange}
+      switchLabel='By Concept'
+      switchToolTip={switchToolTip}
+      width={CONCEPT_SELECT.WIDTH}
+    />
   )
 }
 
