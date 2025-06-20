@@ -15,8 +15,7 @@ const TemplatesTableHeaderLeftSwitchTooltip = () => {
         <Stack direction='column' spacing={0.5} sx={{ ml: '0.5em !important' }}>
           <Typography>Off</Typography>
           <Typography sx={{ ml: '1em !important' }}>
-            The Concept select options are limited to Concept on which a Template is explicitly
-            defined.
+            The Concept options are limited to Concepts on which a Template is explicitly defined.
           </Typography>
         </Stack>
         <Stack direction='column' spacing={0.5} sx={{ ml: '0.5em !important' }}>

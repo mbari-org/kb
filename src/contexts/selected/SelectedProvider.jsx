@@ -8,6 +8,9 @@ import useConceptSelect from '@/contexts/selected/useConceptSelect'
 
 import { SELECTED } from '@/lib/constants'
 
+const { CONCEPT, PANEL } = SELECTED
+const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
+
 const SelectedProvider = ({ children }) => {
   const [settings, setSettings] = useState(null)
 
@@ -16,25 +19,25 @@ const SelectedProvider = ({ children }) => {
 
   const getSelected = field => {
     switch (field) {
-      case SELECTED.CONCEPT:
+      case CONCEPT:
         return conceptSelect.current()
-      case SELECTED.PANEL:
+      case PANEL:
         return panelSelect.current()
-      case SELECTED.SETTINGS.REFERENCES.BY_CONCEPT:
+      case REFERENCES.BY_CONCEPT:
         return settings?.references?.byConcept || false
+      case TEMPLATES.AVAILABLE:
+        return settings?.templates?.available || false
       default:
         return settings[field]
     }
   }
 
-  const select = ({ byConcept, concept: conceptName, history, panel: panelName, references }) => {
+  const select = ({ concept: conceptName, history, panel: panelName, references, templates }) => {
     const updatedSettings = {
-      history: history ? { type: history } : settings?.history,
-      references: {
-        ...settings?.references,
-        ...(references || {}),
-        ...(byConcept !== undefined ? { byConcept } : {}),
-      },
+      ...settings,
+      ...(history && { [HISTORY.KEY]: { ...settings?.history, ...history } }),
+      ...(references && { [REFERENCES.KEY]: { ...settings?.references, ...references } }),
+      ...(templates && { [TEMPLATES.KEY]: { ...settings?.templates, ...templates } }),
     }
     settingsStore.set(updatedSettings)
     setSettings(updatedSettings)

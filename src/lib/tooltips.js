@@ -14,14 +14,6 @@ const TOOLTIPS = {
       PENDING: 'Export Pending History',
     },
   },
-  TEMPLATES: {
-    EXPORT: {
-      ALL: 'Export All Templates',
-      CONCEPT: 'Export Templates for selected Concept',
-      CONCEPT_TO_CONCEPT: 'Export Templates for selected Concept to selected To Concept',
-      TO_CONCEPT: 'Export Templates for selected To Concept',
-    },
-  },
   REFERENCES: {
     EXPORT: {
       BY_CONCEPT: 'Export References associated with selected Concept',
@@ -30,6 +22,14 @@ const TOOLTIPS = {
     SWITCH: {
       BY_CONCEPT: 'References associated with selected Concept',
       ALL: 'All References',
+    },
+  },
+  TEMPLATES: {
+    EXPORT: {
+      ALL: 'Export All Templates',
+      CONCEPT: 'Export Templates for selected Concept',
+      CONCEPT_TO_CONCEPT: 'Export Templates for selected Concept to selected To Concept',
+      TO_CONCEPT: 'Export Templates for selected To Concept',
     },
   },
   USERS: {

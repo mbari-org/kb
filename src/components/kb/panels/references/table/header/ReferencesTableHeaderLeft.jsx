@@ -37,7 +37,7 @@ const ReferencesTableHeaderLeft = () => {
 
   const switchFn = event => {
     const newValue = event.target.checked
-    select({ references: { [REFERENCES.BY_CONCEPT]: newValue } })
+    select({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: newValue } })
   }
 
   const exportFn = () => {

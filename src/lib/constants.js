@@ -199,6 +199,10 @@ export const SELECTED = {
       KEY: 'references',
       BY_CONCEPT: 'byConcept',
     },
+    TEMPLATES: {
+      KEY: 'templates',
+      AVAILABLE: 'available',
+    },
   },
 }
 
