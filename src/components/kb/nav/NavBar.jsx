@@ -48,11 +48,7 @@ const NavBar = ({ selectPanel }) => {
           />
         ))}
         <Box style={{ flexGrow: 1 }} />
-        {isDev && (
-          <Box>
-            <VersionDisplay />
-          </Box>
-        )}
+        {isDev && <VersionDisplay />}
         <LogoutLink />
       </Toolbar>
     </AppBar>
