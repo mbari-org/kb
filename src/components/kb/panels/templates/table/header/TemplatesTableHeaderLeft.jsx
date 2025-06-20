@@ -6,9 +6,9 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
 
-import { EXPORT } from '@/lib/tooltips'
+import { TEMPLATES } from '@/lib/tooltips'
 
-const TEMPLATES = EXPORT.TEMPLATES
+const { EXPORT } = TEMPLATES
 
 const TemplatesTableHeaderLeft = () => {
   const { count, filterConcept, filterToConcept } = use(TemplatesContext)
@@ -21,13 +21,13 @@ const TemplatesTableHeaderLeft = () => {
 
   let toolTip
   if (filterConcept && filterToConcept) {
-    toolTip = TEMPLATES.CONCEPT_TO_CONCEPT
+    toolTip = EXPORT.CONCEPT_TO_CONCEPT
   } else if (filterConcept) {
-    toolTip = TEMPLATES.CONCEPT
+    toolTip = EXPORT.CONCEPT
   } else if (filterToConcept) {
-    toolTip = TEMPLATES.TO_CONCEPT
+    toolTip = EXPORT.TO_CONCEPT
   } else {
-    toolTip = TEMPLATES.ALL
+    toolTip = EXPORT.ALL
   }
 
   return <PanelTotalExport count={count} exportFn={handleExport} toolTip={toolTip} />

@@ -3,20 +3,19 @@ const TOOLTIPS = {
     onEnter: 500,
     onLeave: 0,
   },
-  EXPORT: {
-    HISTORY: {
+  HISTORY: {
+    EXPORT: {
       APPROVED: 'Export Approved History',
       CONCEPT: 'Export History for selected Concept',
       PENDING: 'Export Pending History',
     },
-    TEMPLATES: {
+  },
+  TEMPLATES: {
+    EXPORT: {
       ALL: 'Export All Templates',
       CONCEPT: 'Export Templates for selected Concept',
       CONCEPT_TO_CONCEPT: 'Export Templates for selected Concept to selected To Concept',
       TO_CONCEPT: 'Export Templates for selected To Concept',
-    },
-    USERS: {
-      ALL: 'Export All Users',
     },
   },
   REFERENCES: {
@@ -31,11 +30,14 @@ const TOOLTIPS = {
   },
   USERS: {
     EDIT: 'Edit User details',
+    EXPORT: {
+      ALL: 'Export All Users',
+    },
     LOCK: 'Lock User to prevent login',
     UNLOCK: 'Unlock User to allow login',
   },
 }
 
-export const { DELAY, EXPORT, REFERENCES, USERS } = TOOLTIPS
+export const { DELAY, HISTORY, TEMPLATES, REFERENCES, USERS } = TOOLTIPS
 
 export default TOOLTIPS
