@@ -9,7 +9,7 @@ import { PAGINATION } from '@/lib/constants'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableTypeData = ({ columns, hideFooter = false }) => {
-  const { count, typeData, typeState, sortOrder, nextPage, prevPage, setPageSize } =
+  const { count, typeData, typeState, nextPage, prevPage, setPageSize } =
     use(HistoryContext)
   const { limit, offset } = typeState
 

@@ -1,7 +1,6 @@
 import { forwardRef } from 'react'
 
-import { TreeItem2Provider } from '@mui/x-tree-view'
-import { TreeItem2 } from '@mui/x-tree-view/TreeItem2'
+import { TreeItemProvider, TreeItem } from '@mui/x-tree-view'
 
 import ConceptTreeLabel from './ConceptTreeLabel'
 import ConceptsExpand from './ConceptsExpand'
@@ -18,8 +17,8 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
   const hasMedia = mediaCount > 0
 
   return (
-    <TreeItem2Provider itemId={itemId}>
-      <TreeItem2
+    <TreeItemProvider itemId={itemId}>
+      <TreeItem
         {...props}
         ref={ref}
         slotProps={{
@@ -37,7 +36,7 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
           label: ConceptTreeLabel,
         }}
       />
-    </TreeItem2Provider>
+    </TreeItemProvider>
   )
 })
 

@@ -34,7 +34,7 @@ const useEditUserModal = editUser => {
         modified: false,
       })
     },
-    [setModal, setModalData]
+    [setModal, setModalData, editUser]
   )
 }
 

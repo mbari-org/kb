@@ -15,14 +15,13 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const StagedActions = () => {
   const { concept, modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData, setProcessing } = use(ModalContext)
+  const { closeModal, setProcessing } = use(ModalContext)
   const { select } = use(SelectedContext)
 
   const saveStaged = useSaveStaged()
 
   const colors = ['cancel', 'main']
   const labels = [SAVE, CANCEL]
-  const disabled = [!modalData?.isValid, false]
 
   const onAction = label => {
     closeModal()

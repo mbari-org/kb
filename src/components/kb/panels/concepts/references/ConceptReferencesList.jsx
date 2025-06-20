@@ -2,7 +2,7 @@ import { Box, Typography, Stack } from '@mui/material'
 
 const ITEMS_PER_PAGE = 5
 
-const ConceptReferencesList = ({ references, currentPage, totalPages, onPrevious, onNext }) => {
+const ConceptReferencesList = ({ references, currentPage, _totalPages, _onPrevious, _onNext }) => {
   const startIndex = currentPage * ITEMS_PER_PAGE
   const endIndex = startIndex + ITEMS_PER_PAGE
   const currentReferences = references?.slice(startIndex, endIndex) || []

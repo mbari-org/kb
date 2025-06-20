@@ -1,12 +1,10 @@
-import { use, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 
 import PendingButtons from '@/components/kb/panels/concepts/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { fieldSx } from '@/components/common/format'
-
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import usePendingApproval from '@/components/kb/panels/concepts/change/pending/usePendingApproval'
 
