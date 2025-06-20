@@ -4,7 +4,7 @@ import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
-import { capitalize } from '@/lib/util'
+import { capitalize } from '@/lib/utils'
 
 const HistoryHeaderTitle = () => {
   const { selectedType } = use(HistoryContext)

@@ -1,6 +1,6 @@
 import { ALIAS_TYPES } from './alias'
 
-import { capitalize } from '@/lib/util'
+import { capitalize } from '@/lib/utils'
 
 const orderedAliases = aliases => {
   const capNameTypes = aliases.map(alias => ({ ...alias, nameType: capitalize(alias.nameType) }))

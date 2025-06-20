@@ -4,7 +4,7 @@ import { getUsers } from '@/lib/api/users'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/util'
+import { escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/utils'
 
 const userDataHeaders = [
   'Username',

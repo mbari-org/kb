@@ -11,7 +11,7 @@ import usePendingApproval from '@/components/kb/panels/concepts/change/pending/u
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { capitalize } from '@/lib/util'
+import { capitalize } from '@/lib/utils'
 
 import { PENDING } from '@/lib/constants'
 

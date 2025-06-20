@@ -12,7 +12,7 @@ import usePendingApproval from '@/components/kb/panels/concepts/change/pending/u
 import { pendingInfo } from '@/lib/kb/model/history'
 
 import { PENDING } from '@/lib/constants'
-import { capitalize } from '@/lib/util'
+import { capitalize } from '@/lib/utils'
 
 const { OTHER } = PENDING.APPROVAL
 const { CHILDREN } = PENDING.GROUP

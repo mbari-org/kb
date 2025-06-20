@@ -5,7 +5,7 @@ import { createComponent } from '@/components/modal/factory'
 
 import ModalContext from '@/contexts/modal/ModalContext'
 
-import { drop } from '@/lib/util'
+import { drop } from '@/lib/utils'
 
 const DeleteAliasContent = () => {
   const { modalData } = use(ModalContext)

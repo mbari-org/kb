@@ -8,7 +8,7 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { getUsers, createUser, updateUser } from '@/lib/api/users'
 
-import { drop } from '@/lib/util'
+import { drop } from '@/lib/utils'
 
 const UsersProvider = ({ children }) => {
   const { user } = use(AuthContext)

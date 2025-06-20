@@ -16,7 +16,7 @@ import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPend
 
 import { fieldPending, pendingChild as getPendingChild } from '@/lib/kb/model/history'
 
-import { isEmpty } from '@/lib/util'
+import { isEmpty } from '@/lib/utils'
 
 const PendingContent = () => {
   const { concept } = use(ConceptContext)

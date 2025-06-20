@@ -1,6 +1,6 @@
 import { updateReference } from '@/lib/api/references'
 
-import { isEmpty } from '@/lib/util'
+import { isEmpty } from '@/lib/utils'
 
 const updateReferenceFields = async (oldReference, newReference, apiFns) => {
   if (newReference.id !== oldReference.id) {

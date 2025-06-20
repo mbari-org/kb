@@ -2,7 +2,7 @@ import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/api/med
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-import { pick } from '@/lib/util'
+import { pick } from '@/lib/utils'
 
 const saveMedia = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, updatedValue } = updateInfo

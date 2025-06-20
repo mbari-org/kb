@@ -4,7 +4,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const { ALIAS } = CONCEPT_STATE
 
-import { diff, drop, pick } from '@/lib/util'
+import { diff, drop, pick } from '@/lib/utils'
 
 const saveAliases = ([submit, { concept, updateInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updateInfo

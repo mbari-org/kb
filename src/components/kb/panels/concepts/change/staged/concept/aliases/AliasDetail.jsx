@@ -9,7 +9,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const { ALIAS } = CONCEPT_STATE
 
-import { drop } from '@/lib/util'
+import { drop } from '@/lib/utils'
 
 const AliasDetail = ({ action, disabled, initial, updates }) => {
   const fieldValues = useMemo(() => {

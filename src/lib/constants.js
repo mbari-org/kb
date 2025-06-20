@@ -1,14 +1,14 @@
-const CONCEPT_FIELDS = {
+export const CONCEPT_FIELDS = {
   ALIASES: 'aliases',
   MEDIA: 'media',
   PARENT: 'parent',
   PRIMARY: {
-    NAME: 'name',
     AUTHOR: 'author',
+    NAME: 'name',
   },
   RANK: {
-    NAME: 'name',
     LEVEL: 'level',
+    NAME: 'name',
   },
   STRUCTURE: {
     CHILD: 'child',
@@ -18,14 +18,14 @@ const CONCEPT_FIELDS = {
   },
 }
 
-const CONCEPT_NAME_TYPES = {
+export const CONCEPT_NAME_TYPES = {
   COMMON: 'Common',
   FORMER: 'Former',
   PRIMARY: 'Primary',
   SYNONYM: 'Synonym',
 }
 
-const CONCEPT_SELECT = {
+export const CONCEPT_SELECT = {
   CONCEPT_LABEL: 'Concept',
   RIGHT_COMPONENT: {
     NAV_HISTORY: 'nav',
@@ -36,7 +36,7 @@ const CONCEPT_SELECT = {
   WIDTH: 350,
 }
 
-const CONCEPT_STATE = {
+export const CONCEPT_STATE = {
   ALIAS: {
     ADD: 'Alias Add',
     DELETE: 'Alias Delete',
@@ -53,16 +53,16 @@ const CONCEPT_STATE = {
   },
   NO_ACTION: 'None',
   RESET: {
-    CONFIRMED: {
-      NO: 'Discard Reset',
-      YES: 'Perform Reset',
-    },
     ADD_CHILD: 'Reset Add Child',
     ADD_CHILDREN: 'Reset Add Children',
     ALIAS: 'Reset Alias',
     ALIASES: 'Reset Aliases',
     CHANGE_NAME: 'Reset Change Name',
     CHANGE_PARENT: 'Reset Change Parent',
+    CONFIRMED: {
+      NO: 'Discard Reset',
+      YES: 'Perform Reset',
+    },
     DELETE_CONCEPT: 'Reset Delete Concept',
     FIELD: 'Reset Field',
     MEDIA: 'Reset Media',
@@ -77,9 +77,9 @@ const CONCEPT_STATE = {
   },
 }
 
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+export const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 
-const LABELS = {
+export const LABELS = {
   BUTTON: {
     APPROVE: 'Approve',
     APPROVE_ALL: 'Approve All',
@@ -102,10 +102,6 @@ const LABELS = {
     UNLOCK: 'Unlock',
   },
   CONCEPT: {
-    CHANGE_NAME: {
-      ASSOCIATED_DATA: 'Associated Data',
-      NAME_ONLY: 'Name Only',
-    },
     ACTION: {
       CANCEL: 'Cancel',
       DEFER: 'Defer',
@@ -118,10 +114,14 @@ const LABELS = {
       SAVE: 'Save',
       SHOW: 'Staged',
     },
+    CHANGE_NAME: {
+      ASSOCIATED_DATA: 'Associated Data',
+      NAME_ONLY: 'Name Only',
+    },
   },
 }
 
-const PAGINATION = {
+export const PAGINATION = {
   HISTORY: {
     DEFAULT_LIMIT: 50,
     EXPORT_PAGE_SIZE: 100,
@@ -144,7 +144,7 @@ const PAGINATION = {
   },
 }
 
-const PENDING = {
+export const PENDING = {
   APPROVAL: {
     ACCEPT: 'approve',
     OTHER: 'other',
@@ -159,7 +159,7 @@ const PENDING = {
   },
 }
 
-const PROCESSING = {
+export const PROCESSING = {
   DELETING: 'Deleting...',
   LOADING: 'Loading...',
   LOADING_DELAY: 333,
@@ -167,18 +167,18 @@ const PROCESSING = {
   UPDATING: 'Updating...',
 }
 
-const RANK = {
+export const RANK = {
   LEVEL: 'rankLevel',
   NAME: 'rankName',
 }
 
-const RESETTING = {
+export const RESETTING = {
   ME: 'Me',
   NONE: 'None',
   OTHER: 'Other',
 }
 
-const SELECTED = {
+export const SELECTED = {
   HISTORY: {
     TYPE: {
       APPROVED: 'approved',
@@ -191,7 +191,7 @@ const SELECTED = {
   },
 }
 
-const STORE = {
+export const STORE = {
   AUTH: {
     KEY: 'kb:auth',
   },
@@ -208,29 +208,11 @@ const STORE = {
   },
 }
 
-const TO_CONCEPT_SPECIAL_VALUES = ['self', 'nil']
+export const TO_CONCEPT_SPECIAL_VALUES = ['self', 'nil']
 
-const USER_ROLES = {
+export const USER_ROLES = {
   ADMIN: 'Admin',
   MAINT: 'Maint',
   READ_ONLY: 'ReadOnly',
   USER: 'User',
-}
-
-export {
-  CONCEPT_FIELDS,
-  CONCEPT_NAME_TYPES,
-  CONCEPT_SELECT,
-  CONCEPT_STATE,
-  EMAIL_REGEX,
-  LABELS,
-  PAGINATION,
-  PENDING,
-  PROCESSING,
-  RANK,
-  RESETTING,
-  SELECTED,
-  STORE,
-  TO_CONCEPT_SPECIAL_VALUES,
-  USER_ROLES,
 }

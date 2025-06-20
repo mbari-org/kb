@@ -1,6 +1,6 @@
 import { addConcept, removeConcept } from '@/lib/api/references'
 import { createReference } from '@/lib/kb/model/reference'
-import { isEmpty } from '@/lib/util'
+import { isEmpty } from '@/lib/utils'
 
 const updateReferenceConcepts = async (oldReference, newReference, apiFns) => {
   const promises = []

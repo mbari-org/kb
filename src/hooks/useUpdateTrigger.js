@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { isRefEqual } from '@/lib/util'
+import { isRefEqual } from '@/lib/utils'
 
 const useUpdateTrigger = (name, props, depth = 2) => {
   const prevProps = useRef()

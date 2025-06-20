@@ -1,4 +1,4 @@
-import { escapeCSV, formatConceptNameForFilename, writeCSVContent } from '@/lib/util'
+import { escapeCSV, formatConceptNameForFilename, writeCSVContent } from '@/lib/utils'
 
 const referenceDataHeaders = ['DOI', 'Citation', 'Concepts']
 

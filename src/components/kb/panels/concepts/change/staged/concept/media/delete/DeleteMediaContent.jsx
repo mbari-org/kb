@@ -5,7 +5,7 @@ import { createComponent } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { drop } from '@/lib/util'
+import { drop } from '@/lib/utils'
 
 const DeleteMediaContent = () => {
   const {

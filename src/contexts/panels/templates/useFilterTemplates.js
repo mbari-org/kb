@@ -135,16 +135,16 @@ const useFilterTemplates = ({
       }
     },
     [
-      filterTemplates,
-      loadTemplateData,
-      limit,
-      resetPagination,
-      setCount,
-      setTemplates,
-      setConceptTemplates,
       filterConcept,
       filterToConcept,
+      filterTemplates,
+      limit,
+      loadTemplateData,
+      resetPagination,
+      setConceptTemplates,
       setConceptTemplatesCache,
+      setCount,
+      setTemplates,
     ]
   )
 
@@ -169,14 +169,14 @@ const useFilterTemplates = ({
       }
     },
     [
+      filterConcept,
       filterTemplates,
-      loadTemplateData,
       limit,
+      loadTemplateData,
       resetPagination,
+      setConceptTemplates,
       setCount,
       setTemplates,
-      setConceptTemplates,
-      filterConcept,
     ]
   )
 

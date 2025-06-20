@@ -8,7 +8,7 @@ import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import { PAGINATION } from '@/lib/constants'
 
-import { capitalize, escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/util'
+import { capitalize, escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/utils'
 
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 

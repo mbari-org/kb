@@ -3,7 +3,7 @@ import { fieldState } from '@/lib/kb/state/field'
 import { mediaState } from '@/lib/kb/state/media'
 import { structureState } from '@/lib/kb/state/structure'
 
-import { isEqual, isJsonEqual } from '@/lib/util'
+import { isEqual, isJsonEqual } from '@/lib/utils'
 
 import { CONCEPT_FIELDS } from '@/lib/constants'
 

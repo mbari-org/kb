@@ -3,7 +3,7 @@ import { use } from 'react'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ResettingButton from '@/components/kb/panels/concepts/change/ResettingButton'
 
-import { mediaResetting } from '@/components/kb/panels/concepts/change/staged/concept/util'
+import { mediaResetting } from '@/components/kb/panels/concepts/change/staged/concept/reset'
 
 import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 

@@ -12,7 +12,7 @@ import { fieldPending } from '@/lib/kb/model/history'
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 import useUpdateAssociatedData from '@/contexts/panels/concepts/pending/useUpdateAssociatedData'
 
-import { isEmpty } from '@/lib/util'
+import { isEmpty } from '@/lib/utils'
 
 const { ALL, ALIASES, APPROVAL } = PENDING
 const { UPDATING } = PROCESSING

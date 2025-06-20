@@ -11,7 +11,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { LABELS } from '@/lib/constants'
 
-import { isUrlValid } from '@/lib/util'
+import { isUrlValid } from '@/lib/utils'
 
 const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = CONCEPT_STATE.RESET

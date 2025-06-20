@@ -1,4 +1,4 @@
-import { drop, isJsonEqual } from '@/lib/util'
+import { drop, isJsonEqual } from '@/lib/utils'
 
 const hasStateChange = (allInitialState, allStagedState) => {
   // Drop fields that are not relevant to state change comparison

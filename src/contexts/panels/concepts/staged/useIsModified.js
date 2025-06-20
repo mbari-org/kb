@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import { isStateModified } from '@/lib/constants'
-import { isJsonEqual } from '@/lib/util'
+import { isJsonEqual } from '@/lib/utils'
 
 const useIsModified = ({ initialState, stagedState }) => {
   const isModified = useCallback(

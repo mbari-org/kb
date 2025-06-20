@@ -6,7 +6,7 @@ import ResettingButton from '@/components/kb/panels/concepts/change/ResettingBut
 import {
   mediaResetting,
   isStagedAction,
-} from '@/components/kb/panels/concepts/change/staged/concept/util'
+} from '@/components/kb/panels/concepts/change/staged/concept/reset'
 
 import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 

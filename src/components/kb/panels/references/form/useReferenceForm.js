@@ -4,7 +4,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { createReference } from '@/lib/kb/model/reference'
 
-import { isEqual } from '@/lib/util'
+import { isEqual } from '@/lib/utils'
 
 const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
   const { modalData } = use(ModalContext)

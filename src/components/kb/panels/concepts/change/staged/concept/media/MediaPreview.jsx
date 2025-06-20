@@ -11,7 +11,7 @@ import { fieldPending } from '@/lib/kb/model/history'
 
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
-import { checkImageUrlExists, isUrlValid } from '@/lib/util'
+import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()

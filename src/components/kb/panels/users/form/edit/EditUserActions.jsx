@@ -5,7 +5,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 
 import { LABELS } from '@/lib/constants'
 
-import { drop } from '@/lib/util'
+import { drop } from '@/lib/utils'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 

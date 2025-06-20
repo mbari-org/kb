@@ -1,4 +1,4 @@
-import { isJsonEqual, pick } from '@/lib/util'
+import { isJsonEqual, pick } from '@/lib/utils'
 
 const mediaItemFields = mediaItem =>
   pick(mediaItem, ['id', 'caption', 'credit', 'isPrimary', 'url'])

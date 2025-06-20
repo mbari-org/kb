@@ -6,7 +6,7 @@ import ChildReset from './ChildReset'
 
 import { fieldSx } from '@/components/common/format'
 
-import { drop } from '@/lib/util'
+import { drop } from '@/lib/utils'
 
 import { RESETTING } from '@/lib/constants'
 

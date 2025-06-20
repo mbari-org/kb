@@ -2,7 +2,7 @@ import { fieldEdits } from '@/lib/kb/model/field'
 
 import { fieldPending } from './history'
 
-import { isJsonEqual, pick } from '@/lib/util'
+import { isJsonEqual, pick } from '@/lib/utils'
 
 import { CONCEPT_NAME_TYPES, CONCEPT_STATE } from '@/lib/constants'
 

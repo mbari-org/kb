@@ -19,7 +19,7 @@ import ModalContext from '@/contexts/modal/ModalContext'
 import useStageMedia from './useStageMedia'
 
 import { hasPrimary, isPrimary } from '@/lib/kb/model/media'
-import { checkImageUrlExists, isUrlValid } from '@/lib/util'
+import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'

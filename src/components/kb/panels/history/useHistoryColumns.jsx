@@ -6,7 +6,7 @@ import InspectIcon from '@/components/common/InspectIcon'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { humanTimestamp } from '@/lib/util'
+import { humanTimestamp } from '@/lib/utils'
 
 const useHistoryColumns = ({ type }) => {
   const { select } = use(SelectedContext)
