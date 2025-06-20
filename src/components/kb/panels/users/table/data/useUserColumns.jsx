@@ -4,10 +4,20 @@ import { useTheme } from '@mui/material/styles'
 import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
 import { CiEdit } from 'react-icons/ci'
 
+import KBTooltip from '@/components/common/KBTooltip'
+
 import { USER_ROLES } from '@/lib/constants'
+import { USERS } from '@/lib/tooltips'
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const theme = useTheme()
+
+  const lockToolTip = role => {
+    if (role === USER_ROLES.READ_ONLY) {
+      return USERS.UNLOCK
+    }
+    return USERS.LOCK
+  }
 
   const columns = [
     {
@@ -18,32 +28,37 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
       headerClassName: 'bold-header',
       renderCell: params => (
         <Box>
-          <IconButton
-            size='small'
-            onClick={() => lockUserModal(params.row)}
-            sx={{
-              mr: 1,
-              '&:hover': {
-                color: 'error.main',
-                ...theme.kb.icon.hover,
-              },
-            }}
-          >
-            {params.row.locked ? <AiOutlineLock size={22} /> : <AiOutlineUnlock size={22} />}
-          </IconButton>
-          <IconButton
-            size='small'
-            onClick={() => editUserModal(params.row)}
-            disabled={params.row.locked}
-            sx={{
-              '&:hover': {
-                color: 'edit.main',
-                ...theme.kb.icon.hover,
-              },
-            }}
-          >
-            <CiEdit size={24} />
-          </IconButton>
+          <KBTooltip title={lockToolTip(params.row.role)}>
+            <IconButton
+              size='small'
+              onClick={() => lockUserModal(params.row)}
+              sx={{
+                mr: 1,
+                '&:hover': {
+                  color: 'error.main',
+                  ...theme.kb.icon.hover,
+                },
+              }}
+            >
+              {params.row.locked ? <AiOutlineLock size={22} /> : <AiOutlineUnlock size={22} />}
+            </IconButton>
+          </KBTooltip>
+
+          <KBTooltip title={USERS.EDIT}>
+            <IconButton
+              size='small'
+              onClick={() => editUserModal(params.row)}
+              disabled={params.row.locked}
+              sx={{
+                '&:hover': {
+                  color: 'edit.main',
+                  ...theme.kb.icon.hover,
+                },
+              }}
+            >
+              <CiEdit size={24} />
+            </IconButton>
+          </KBTooltip>
         </Box>
       ),
     },

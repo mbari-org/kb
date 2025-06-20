@@ -1,7 +1,7 @@
 const TOOLTIPS = {
   DELAY: {
     onEnter: 500,
-    onLeave: 100,
+    onLeave: 0,
   },
   EXPORT: {
     HISTORY: {
@@ -23,9 +23,13 @@ const TOOLTIPS = {
       ALL: 'Export All Users',
     },
   },
+  USERS: {
+    EDIT: 'Edit User details',
+    LOCK: 'Lock User to prevent login',
+    UNLOCK: 'Unlock User to allow login',
+  },
 }
 
-export const { DELAY } = TOOLTIPS
-export const { EXPORT } = TOOLTIPS
+export const { DELAY, EXPORT, USERS } = TOOLTIPS
 
 export default TOOLTIPS
