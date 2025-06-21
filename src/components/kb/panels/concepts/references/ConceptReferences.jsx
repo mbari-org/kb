@@ -47,7 +47,7 @@ const ConceptReferences = () => {
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-          References DOIs
+          References DOI
         </Typography>
         <IconButton
           onClick={linkToReferences}
@@ -91,6 +91,11 @@ const ConceptReferences = () => {
             onPrevious={handlePrevious}
             onNext={handleNext}
           />
+        </Box>
+      )}
+      {!hasReferences && (
+        <Box sx={{ ml: 2 }}>
+          <Typography>None</Typography>
         </Box>
       )}
     </Box>
