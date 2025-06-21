@@ -3,6 +3,7 @@ import { Box, Typography, Stack } from '@mui/material'
 
 import AliasAdd from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/AliasAdd'
 import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases/ConceptAlias'
+import ConceptDetailNone from '@/components/kb/panels/concepts/concept/detail/ConceptDetailNone'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -26,11 +27,7 @@ const ConceptAliases = () => {
           ))}
         </Stack>
       )}
-      {!hasAliases && (
-        <Box sx={{ ml: 2 }}>
-          <Typography>None</Typography>
-        </Box>
-      )}
+      <ConceptDetailNone display={!hasAliases} />
     </Box>
   )
 }

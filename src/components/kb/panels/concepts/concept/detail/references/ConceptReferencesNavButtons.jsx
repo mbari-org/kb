@@ -8,7 +8,6 @@ const ConceptReferencesNavButtons = ({ currentPage, totalPages, onPrevious, onNe
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        mb: 1,
       }}
     >
       <Box>

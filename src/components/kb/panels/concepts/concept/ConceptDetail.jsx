@@ -6,6 +6,7 @@ import ConceptMedia from '@/components/kb/panels/concepts/concept/detail/Concept
 import ConceptName from '@/components/kb/panels/concepts/concept/detail/ConceptName'
 import ConceptRank from '@/components/kb/panels/concepts/concept/detail/ConceptRank'
 import ConceptReferences from '@/components/kb/panels/concepts/concept/detail/ConceptReferences'
+import ConceptTemplates from '@/components/kb/panels/concepts/concept/detail/ConceptTemplates'
 
 const ConceptDetail = () => {
   return (
@@ -17,6 +18,7 @@ const ConceptDetail = () => {
         <ConceptRank />
         <ConceptAliases />
         <ConceptReferences />
+        <ConceptTemplates />
       </Stack>
     </Stack>
   )
