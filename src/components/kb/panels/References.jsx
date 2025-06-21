@@ -1,7 +1,30 @@
-import ReferencesPanel from '@/components/kb/panels/references/ReferencesPanel'
+import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
+
+import ReferencesHeaderLeft from '@/components/kb/panels/references/header/ReferencesHeaderLeft'
+import ReferencesTableHeaderLeft from '@/components/kb/panels/references/table/header/ReferencesTableHeaderLeft'
+import ReferencesTableHeaderRight from '@/components/kb/panels/references/table/header/ReferencesTableHeaderRight'
+import ReferencesTableData from '@/components/kb/panels/references/table/data/ReferencesTableData'
+
+import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
 // CxNote the ReferencesProvider is higher up the component tree for use in the ConceptPanel
 
-const References = () => <ReferencesPanel />
+const References = () => {
+  const { createTablePanel } = usePanelFactory()
+
+  return createTablePanel({
+    header: {
+      headerLeft: <ReferencesHeaderLeft />,
+      headerTitle: <PanelHeaderTitle title='References' />,
+    },
+    tableHeader: {
+      headerLeft: <ReferencesTableHeaderLeft />,
+      headerRight: <ReferencesTableHeaderRight />,
+    },
+    tableData: {
+      content: <ReferencesTableData />,
+    },
+  })
+}
 
 export default References
