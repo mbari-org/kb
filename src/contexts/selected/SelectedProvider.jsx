@@ -21,12 +21,14 @@ const SelectedProvider = ({ children }) => {
     switch (field) {
       case CONCEPT:
         return conceptSelect.current()
+      case HISTORY.TYPE:
+        return settings.history.type
       case PANEL:
         return panelSelect.current()
       case REFERENCES.BY_CONCEPT:
-        return settings?.references?.byConcept || false
+        return settings.references.byConcept
       case TEMPLATES.AVAILABLE:
-        return settings?.templates?.available || false
+        return settings.templates.available
       default:
         return settings[field]
     }
@@ -54,7 +56,7 @@ const SelectedProvider = ({ children }) => {
   useEffect(() => {
     const storedSelected = settingsStore.get()
 
-    const history = storedSelected?.history || { type: SELECTED.HISTORY.TYPE.PENDING }
+    const history = storedSelected?.history || { type: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }
     const references = storedSelected?.references || { byConcept: false }
     const templates = storedSelected?.templates || { available: false }
 
