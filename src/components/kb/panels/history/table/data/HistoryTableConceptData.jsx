@@ -4,13 +4,18 @@ import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryPagination from './HistoryPagination'
 
+import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
+
 import { PAGINATION } from '@/lib/constants'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
-const HistoryTableConceptData = ({ columns, hideFooter = false }) => {
-  const { count, conceptData, typeState, nextPage, prevPage, setPageSize } = use(HistoryContext)
+const HistoryTableConceptData = ({ hideFooter = false }) => {
+  const { count, conceptData, typeState, nextPage, prevPage, selectedType, setPageSize } =
+    use(HistoryContext)
+
   const { limit, offset } = typeState
+  const columns = useHistoryColumns({ type: selectedType })
 
   const paginationComponent = (
     <HistoryPagination

@@ -17,7 +17,7 @@ const HistoryProvider = ({ children }) => {
   const { getSelected } = use(SelectedContext)
   const { apiFns } = use(ConfigContext)
 
-  const selectedType = getSelected(HISTORY)[HISTORY.TYPE]
+  const selectedType = getSelected(HISTORY.TYPE)
   const selectedConcept = getSelected(CONCEPT)
 
   const [count, setCount] = useState(0)

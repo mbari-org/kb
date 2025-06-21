@@ -1,3 +1,5 @@
+import { use } from 'react'
+
 import HistoryHeaderLeft from '@/components/kb/panels/history/header/HistoryHeaderLeft'
 import HistoryHeaderRight from '@/components/kb/panels/history/header/HistoryHeaderRight'
 import HistoryHeaderTitle from '@/components/kb/panels/history/header/HistoryHeaderTitle'
@@ -5,19 +7,16 @@ import HistoryTableHeaderLeft from '@/components/kb/panels/history/table/header/
 import HistoryTableHeaderRight from '@/components/kb/panels/history/table/header/HistoryTableHeaderRight'
 import HistoryTableTypeData from '@/components/kb/panels/history/table/data/HistoryTableTypeData'
 import HistoryTableConceptData from '@/components/kb/panels/history/table/data/HistoryTableConceptData'
-import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
+
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
-import { use } from 'react'
 
 const HistoryPanel = () => {
   const { createTablePanel } = usePanelFactory()
   const { selectedType } = use(HistoryContext)
-  const columns = useHistoryColumns({ type: selectedType })
 
-  // Choose the appropriate table data component based on the selected type
-  const TableDataComponent =
+  const HistoryTableDataComponent =
     selectedType === 'concept' ? HistoryTableConceptData : HistoryTableTypeData
 
   return createTablePanel({
@@ -31,7 +30,7 @@ const HistoryPanel = () => {
       headerRight: <HistoryTableHeaderRight />,
     },
     tableData: {
-      content: <TableDataComponent columns={columns} />,
+      content: <HistoryTableDataComponent />,
     },
   })
 }
