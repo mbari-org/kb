@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useMemo, useReducer, useState, useRef } fr
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
-import useDisplayStaged from '@/components/kb/panels/concepts/change/staged/modal/useDisplayStaged'
+import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import useLoadConceptError from '@/contexts/panels/concepts/useLoadConceptError'
 
