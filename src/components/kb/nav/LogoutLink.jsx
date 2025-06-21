@@ -6,7 +6,7 @@ import { grey } from '@mui/material/colors'
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useDisplayStaged from '@/components/kb/panels/concepts/change/staged/modal/useDisplayStaged'
+import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 
 import { LABELS } from '@/lib/constants'
 
