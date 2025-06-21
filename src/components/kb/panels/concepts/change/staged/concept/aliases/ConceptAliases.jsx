@@ -9,6 +9,8 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 const ConceptAliases = () => {
   const { editing, stagedState } = use(ConceptContext)
 
+  const hasAliases = stagedState?.aliases?.length > 0
+
   return (
     <Box display='flex' flexDirection='column'>
       <Box display='flex' alignItems='center'>
@@ -17,11 +19,18 @@ const ConceptAliases = () => {
         </Typography>
         {editing && <AliasAdd />}
       </Box>
-      <Stack spacing={1}>
-        {stagedState?.aliases?.map(alias => (
-          <ConceptAlias key={alias.name || alias.index} alias={alias} />
-        ))}
-      </Stack>
+      {hasAliases && (
+        <Stack spacing={1}>
+          {stagedState?.aliases?.map(alias => (
+            <ConceptAlias key={alias.name || alias.index} alias={alias} />
+          ))}
+        </Stack>
+      )}
+      {!hasAliases && (
+        <Box sx={{ ml: 2 }}>
+          <Typography>None</Typography>
+        </Box>
+      )}
     </Box>
   )
 }
