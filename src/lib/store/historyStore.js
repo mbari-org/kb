@@ -11,12 +11,10 @@ const historyStore = (store, maxSize, defaultEntry) => {
 
   return {
     back: () => {
-      const history = store.get()
-      const { position } = history
-      if (position > 0) {
-        store.set({ ...history, position: position - 1 })
-      }
-      return history.state[history.position]
+      const { position, state } = store.get()
+      const newPosition = position > 0 ? position - 1 : 0
+      store.set({ state, position: newPosition })
+      return state[newPosition]
     },
 
     backItems: () => {
@@ -41,18 +39,15 @@ const historyStore = (store, maxSize, defaultEntry) => {
     },
 
     forward: () => {
-      const history = store.get()
-      const { position } = history
-      if (position < history.state.length - 1) {
-        store.set({ ...history, position: position + 1 })
-      }
-      return history.state[history.position]
+      const { position, state } = store.get()
+      const newPosition = position < state.length - 1 ? position + 1 : position
+      store.set({ state, position: newPosition })
+      return state[newPosition]
     },
 
     forwardItems: () => {
-      const history = store.get()
-      const { position } = history
-      return history.state.slice(position + 1)
+      const { position, state } = store.get()
+      return state.slice(position + 1)
     },
 
     getPosition: () => store.get().position,
@@ -60,33 +55,28 @@ const historyStore = (store, maxSize, defaultEntry) => {
     getState: () => store.get().state,
 
     goBack: delta => {
-      const history = store.get()
-      const newPosition = Math.max(0, history.position - delta)
-      store.set({ ...history, position: newPosition })
-      return history.state[newPosition]
+      const { position, state } = store.get()
+      const newPosition = Math.max(0, position - delta)
+      store.set({ state, position: newPosition })
+      return state[newPosition]
     },
 
     goForward: delta => {
-      const history = store.get()
-      const newPosition = Math.min(history.state.length - 1, history.position + delta)
-      store.set({ ...history, position: newPosition })
-      return history.state[newPosition]
+      const { position, state } = store.get()
+      const newPosition = Math.min(state.length - 1, position + delta)
+      store.set({ state, position: newPosition })
+      return state[newPosition]
     },
 
     push: entry => {
       const { state, position } = store.get()
 
-      // Remove forward history
+      // Remove forward history, add new entry, trim length
       const newState = state.slice(0, position + 1)
-
-      // Add new entry
       newState.push(entry)
-
-      // Trim length
       if (newState.length > maxSize) {
         newState.shift()
       }
-
       store.set({ state: newState, position: newState.length - 1 })
     },
 

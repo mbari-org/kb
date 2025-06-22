@@ -57,13 +57,10 @@ const ConceptSelect = ({
         if (doSelection && updateConceptSelected) {
           select({ [SELECTED.CONCEPT]: selectedName })
         }
-        return true
       }
-      return false
+    } else {
+      doConceptSelected?.(null)
     }
-
-    doConceptSelected?.(null)
-    return false
   }
 
   const handleKeyUp = event => {
