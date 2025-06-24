@@ -6,7 +6,7 @@ import ConceptDetailNone from '@/components/kb/panels/concepts/concept/detail/Co
 import ConceptReferencesList from '@/components/kb/panels/concepts/concept/detail/references/ConceptReferencesList'
 import ConceptReferencesNavButtons from '@/components/kb/panels/concepts/concept/detail/references/ConceptReferencesNavButtons'
 
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import KBDataContext from '@/contexts/KBDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
@@ -14,15 +14,13 @@ import { SELECTED } from '@/lib/constants'
 const ITEMS_PER_PAGE = 5
 
 const ConceptReferences = () => {
-  const { references } = use(ReferencesContext)
+  const { getConceptReferences } = use(KBDataContext)
   const { getSelected, select } = use(SelectedContext)
 
   const [currentPage, setCurrentPage] = useState(0)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const conceptReferences = references.filter(reference =>
-    reference.concepts.includes(selectedConcept)
-  )
+  const conceptReferences = getConceptReferences(selectedConcept)
   const totalPages = Math.ceil((conceptReferences?.length || 0) / ITEMS_PER_PAGE)
 
   const hasReferences = conceptReferences?.length > 0
