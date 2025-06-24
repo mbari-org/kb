@@ -5,7 +5,6 @@ import KnowledgeBase from '@/components/kb/KnowledgeBase'
 import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
 import KBDataProvider from '@/contexts/KBDataProvider'
 import ModalProvider from '@/contexts/modal/ModalProvider'
-import ReferencesProvider from '@/contexts/panels/references/ReferencesProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 
@@ -16,11 +15,9 @@ const KBContainer = () => {
         <KBDataProvider>
           <TaxonomyProvider>
             <SelectedProvider>
-              <ReferencesProvider>
-                <ConceptProvider>
-                  <KnowledgeBase />
-                </ConceptProvider>
-              </ReferencesProvider>
+              <ConceptProvider>
+                <KnowledgeBase />
+              </ConceptProvider>
             </SelectedProvider>
           </TaxonomyProvider>
         </KBDataProvider>
