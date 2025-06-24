@@ -1,53 +1,26 @@
 import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import commitStaged from '@/contexts/panels/concepts/staged/save/commitStaged'
-import { PROCESSING, SELECTED } from '@/lib/constants'
-
-const { SAVING } = PROCESSING
+import commitStaged from './commitStaged'
 
 const useSaveStaged = () => {
+  const { closeModal, setProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
-  const { concept, initialState, refreshConcept, setEditing, stagedState } = use(ConceptContext)
-  const { closeModal, setProcessing } = use(ModalContext)
-  const { select } = use(SelectedContext)
-  const { refreshConcept: refreshTaxonomyConcept } = use(TaxonomyContext)
+  const { concept, initialState, stagedState } = use(ConceptContext)
 
-  const saveStaged = useCallback(async () => {
-    closeModal()
-    setProcessing(SAVING)
-
+  return useCallback(async () => {
     try {
-      const updateInfo = await commitStaged(apiFns.apiPayload, concept, initialState, stagedState)
-      const updatedConcept = await refreshTaxonomyConcept(concept, updateInfo)
-      setEditing(false)
-      setProcessing(null)
-      updateInfo.hasUpdated('name')
-        ? select({ [SELECTED.CONCEPT]: updatedConcept.name })
-        : refreshConcept(updatedConcept)
+      setProcessing('Saving concept...')
+      await commitStaged(apiFns.apiPayload, concept, initialState, stagedState)
+      closeModal()
     } catch (error) {
+      console.error('Error saving concept:', error)
       setProcessing(null)
-      console.error('Error saving staged changes:', error)
     }
-  }, [
-    apiFns.apiPayload,
-    closeModal,
-    concept,
-    initialState,
-    refreshConcept,
-    refreshTaxonomyConcept,
-    select,
-    setEditing,
-    setProcessing,
-    stagedState,
-  ])
-
-  return saveStaged
+  }, [apiFns, closeModal, concept, initialState, setProcessing, stagedState])
 }
 
 export default useSaveStaged

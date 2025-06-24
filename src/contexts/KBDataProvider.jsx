@@ -4,7 +4,6 @@ import { getReferences as getReferencesApi } from '@/lib/api/references'
 import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import ModalContext from '@/contexts/modal/ModalContext'
 import KBDataContext from '@/contexts/KBDataContext'
 
 import { createReference } from '@/lib/kb/model/reference'
@@ -15,14 +14,11 @@ const { REFERENCES, TEMPLATES } = PAGINATION
 
 export const KBDataProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
-  const { setProcessing } = use(ModalContext)
 
   const [references, setReferences] = useState([])
   const [templates, setTemplates] = useState([])
-  const [explicitConcepts, setExplicitConcepts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-  // Load all references
   const loadReferences = useCallback(async () => {
     const EXPORT_PAGE_SIZE = REFERENCES.EXPORT_PAGE_SIZE
     let allReferences = []
@@ -47,12 +43,11 @@ export const KBDataProvider = ({ children }) => {
     return allReferences.map(reference => createReference(reference))
   }, [apiFns])
 
-  // Load all templates and extract explicit concepts
   const loadTemplates = useCallback(async () => {
     const EXPORT_PAGE_SIZE = TEMPLATES.EXPORT_PAGE_SIZE
 
     const totalCount = await apiFns.apiResult(getTemplatesCount)
-    if (!totalCount) return { templates: [], explicitConcepts: [] }
+    if (!totalCount) return []
 
     const templatesPerPage = EXPORT_PAGE_SIZE
     const totalPages = Math.ceil(totalCount / templatesPerPage)
@@ -69,36 +64,36 @@ export const KBDataProvider = ({ children }) => {
       return acc
     }, Promise.resolve([]))
 
-    // Extract unique concepts that have explicit templates
-    const uniqueConcepts = new Set()
-    allTemplates.forEach(template => uniqueConcepts.add(template.concept))
-    const explicitConceptsList = Array.from(uniqueConcepts).sort((a, b) =>
-      a.toLowerCase().localeCompare(b.toLowerCase())
-    )
-
-    return { templates: allTemplates, explicitConcepts: explicitConceptsList }
+    return allTemplates
   }, [apiFns])
 
-  // Refresh all data
+  const isDoiUnique = useCallback(
+    (doi, currentId) => {
+      if (!doi) return true
+      return !references.some(
+        reference =>
+          reference.id !== currentId && reference.doi?.toLowerCase() === doi.toLowerCase()
+      )
+    },
+    [references]
+  )
+
   const refreshData = useCallback(async () => {
     if (!apiFns) return
 
-    setProcessing(true)
     setIsLoading(true)
 
     try {
       const [referencesData, templatesData] = await Promise.all([loadReferences(), loadTemplates()])
 
       setReferences(referencesData)
-      setTemplates(templatesData.templates)
-      setExplicitConcepts(templatesData.explicitConcepts)
+      setTemplates(templatesData)
     } catch (error) {
       console.error('Error refreshing KB data:', error)
     } finally {
-      setProcessing(false)
       setIsLoading(false)
     }
-  }, [apiFns, setProcessing, loadReferences, loadTemplates])
+  }, [apiFns, loadReferences, loadTemplates])
 
   // Initial load
   useEffect(() => {
@@ -108,20 +103,9 @@ export const KBDataProvider = ({ children }) => {
   const value = {
     references,
     templates,
-    explicitConcepts,
     isLoading,
     refreshData,
-    // Helper functions
-    getConceptReferences: concept => {
-      return references.filter(reference => reference.concepts.includes(concept))
-    },
-    isDoiUnique: (doi, currentId) => {
-      if (!doi) return true
-      return !references.some(
-        reference =>
-          reference.id !== currentId && reference.doi?.toLowerCase() === doi.toLowerCase()
-      )
-    },
+    isDoiUnique,
   }
 
   return <KBDataContext.Provider value={value}>{children}</KBDataContext.Provider>

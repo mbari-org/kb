@@ -5,8 +5,8 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ReferenceConceptsDropDown from './ReferenceConceptsDropDown'
 
 const ReferenceConceptsInput = ({
-  handleAddConcept,
-  handleDeleteConcept,
+  handleConceptAdd,
+  handleConceptDelete,
   handleSearchInput,
   selectedConcept,
   reference,
@@ -22,7 +22,7 @@ const ReferenceConceptsInput = ({
   const handleMenuClose = () => setAnchorEl(null)
 
   const handleClickedConcept = concept => {
-    handleDeleteConcept(concept)
+    handleConceptDelete(concept)
     handleMenuClose()
   }
 
@@ -31,7 +31,7 @@ const ReferenceConceptsInput = ({
       <TextField
         fullWidth
         label='Concepts'
-        onChange={handleDeleteConcept}
+        onChange={handleConceptDelete}
         onClick={handleTextFieldClick}
         placeholder='Add concepts using the search box below'
         slotProps={{
@@ -49,7 +49,7 @@ const ReferenceConceptsInput = ({
       />
       <ConceptSelect
         conceptName={selectedConcept}
-        doConceptSelected={handleAddConcept}
+        doConceptSelected={handleConceptAdd}
         label='Add Concept'
         keepFocus={true}
         onInputChange={handleSearchInput}

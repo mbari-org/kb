@@ -6,8 +6,8 @@ import EditReferenceTitle from './EditReferenceTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import KBDataContext from '@/contexts/KBDataContext'
 
 const editReferenceModal = editReference => {
   const components = {
@@ -20,12 +20,12 @@ const editReferenceModal = editReference => {
 }
 
 const useEditReferenceModal = editReference => {
-  const { setModal, setModalData } = use(ModalContext)
-  const { isDoiUnique } = use(ReferencesContext)
+  const { setModal, setModalData } = use(PanelModalContext)
+  // isDoiUnique is now available via KBDataContext in the content/actions
 
   return useCallback(
     reference => {
-      setModal(editReferenceModal(editReference, isDoiUnique))
+      setModal(editReferenceModal(editReference))
       setModalData({
         action: 'edit',
         modified: false,
@@ -33,7 +33,7 @@ const useEditReferenceModal = editReference => {
         reference,
       })
     },
-    [editReference, isDoiUnique, setModal, setModalData]
+    [editReference, setModal, setModalData]
   )
 }
 

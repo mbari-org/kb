@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { use, useState, useMemo } from 'react'
 import { Box, Typography, IconButton } from '@mui/material'
 import InspectIcon from '@/components/common/InspectIcon'
 
@@ -14,13 +14,17 @@ import { SELECTED } from '@/lib/constants'
 const ITEMS_PER_PAGE = 5
 
 const ConceptReferences = () => {
-  const { getConceptReferences } = use(KBDataContext)
+  const { references } = use(KBDataContext)
   const { getSelected, select } = use(SelectedContext)
 
   const [currentPage, setCurrentPage] = useState(0)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const conceptReferences = getConceptReferences(selectedConcept)
+
+  const conceptReferences = useMemo(() => {
+    return references.filter(reference => reference.concepts.includes(selectedConcept))
+  }, [references, selectedConcept])
+
   const totalPages = Math.ceil((conceptReferences?.length || 0) / ITEMS_PER_PAGE)
 
   const hasReferences = conceptReferences?.length > 0

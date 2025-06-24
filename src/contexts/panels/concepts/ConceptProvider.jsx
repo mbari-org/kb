@@ -7,7 +7,7 @@ import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyCo
 import useLoadConceptError from '@/contexts/panels/concepts/useLoadConceptError'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -23,7 +23,7 @@ const ConceptProvider = ({ children }) => {
   const isLoading = useRef(false)
   const previousConceptName = useRef(null)
 
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(AppModalContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)

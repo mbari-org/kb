@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import AuthContext from '@/contexts/auth/AuthContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -36,7 +36,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const { user } = use(AuthContext)
   const { apiFns } = use(ConfigContext)
-  const { setProcessing, setModal } = use(ModalContext)
+  const { setProcessing, setModal } = use(AppModalContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
 

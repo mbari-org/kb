@@ -7,11 +7,11 @@ import PendingTitle from '@/components/kb/panels/concepts/concept/change/pending
 import { createModal } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 const useDisplayPending = () => {
   const { setConfirmPending } = use(ConceptContext)
-  const { setModal } = use(ModalContext)
+  const { setModal } = use(AppModalContext)
 
   return useCallback(
     intent => {

@@ -2,14 +2,14 @@ import { use, useEffect } from 'react'
 
 import { createModal } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 import LogoutActions from '@/components/kb/browserBack/LogoutActions'
 import LogoutContent from '@/components/kb/browserBack/LogoutContent'
 import LogoutTitle from '@/components/kb/browserBack/LogoutTitle'
 
 const useBrowserBack = () => {
-  const { setModal } = use(ModalContext)
+  const { setModal } = use(AppModalContext)
 
   useEffect(() => {
     const handlePopState = event => {

@@ -2,7 +2,7 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
@@ -15,7 +15,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const StagedActions = () => {
   const { concept, modifyConcept } = use(ConceptContext)
-  const { closeModal, setProcessing } = use(ModalContext)
+  const { closeModal, setProcessing } = use(AppModalContext)
   const { select } = use(SelectedContext)
 
   const saveStaged = useSaveStaged()

@@ -1,43 +1,44 @@
 import { use, useCallback } from 'react'
 
-import AddUserActions from './AddUserActions'
-import AddUserContent from './AddUserContent'
-import AddUserTitle from './AddUserTitle'
-
 import { createModal } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
-const addUserModal = addUser => {
-  const components = {
-    Actions: () => <AddUserActions addUser={addUser} />,
-    Content: AddUserContent,
-    Title: AddUserTitle,
-  }
+import AddUserActions from './AddUserActions'
+import AddUserContent from './AddUserContent'
 
-  return createModal(components)
-}
+const useAddUserModal = () => {
+  const { setModal, setModalData } = use(PanelModalContext)
 
-const initialUserData = {
-  user: {
-    username: '',
-    password: '',
-    role: '',
-    affiliation: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-  },
-  modified: false,
-}
+  const showAddUserModal = useCallback(
+    (existingUsers = []) => {
+      const initialUser = {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        role: 'USER',
+        isValid: false,
+        hasChanges: false,
+      }
 
-const useAddUserModal = addUser => {
-  const { setModal, setModalData } = use(ModalContext)
+      setModalData({
+        user: initialUser,
+        existingUsers,
+      })
 
-  return useCallback(() => {
-    setModal(addUserModal(addUser))
-    setModalData({ ...initialUserData })
-  }, [addUser, setModal, setModalData])
+      const modal = createModal({
+        Actions: AddUserActions,
+        Content: AddUserContent,
+        Title: () => 'Add User',
+      })
+
+      setModal(modal)
+    },
+    [setModal, setModalData]
+  )
+
+  return showAddUserModal
 }
 
 export default useAddUserModal

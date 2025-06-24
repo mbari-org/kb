@@ -1,13 +1,13 @@
 import { use, useState } from 'react'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { createReference } from '@/lib/kb/model/reference'
 
 import { isEqual } from '@/lib/utils'
 
 const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
-  const { modalData } = use(ModalContext)
+  const { modalData } = use(PanelModalContext)
 
   const [selectedConcept, setSelectedConcept] = useState(null)
   const [hasSearchInput, setHasSearchInput] = useState(false)
@@ -52,53 +52,40 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
     onChange(updatedReference, checkModification(updatedReference), false)
   }
 
-  const handleAddConcept = addConcept => {
-    if (addConcept) {
-      const concepts = reference.concepts || []
-      if (!concepts.includes(addConcept)) {
-        const updatedReference = createReference({
-          ...reference,
-          concepts: [...concepts, addConcept],
-          selectedConcept: '',
-        })
-        onChange(updatedReference, checkModification(updatedReference), false)
-      }
-    }
-    setSelectedConcept(null)
-    document.activeElement.blur()
-    return false
-  }
-
-  const handleDeleteConcept = deleteConcept => {
-    if (deleteConcept) {
-      const concepts = reference.concepts || []
-      const updatedReference = createReference({
-        ...reference,
-        concepts: concepts.filter(c => c !== deleteConcept),
-        selectedConcept: '',
-      })
-      onChange(updatedReference, checkModification(updatedReference), false)
-      setSelectedConcept(null)
-    }
-  }
-
-  const onEnter = () => {
-    setHasSearchInput(false)
-  }
-
-  const handleSearchInput = event => {
+  const handleConceptSearchInput = event => {
     setHasSearchInput(event.target.value.trim() !== '')
   }
 
+  const handleConceptDelete = conceptToDelete => {
+    const updatedConcepts = reference.concepts.filter(c => c !== conceptToDelete)
+    const updatedReference = {
+      ...reference,
+      concepts: updatedConcepts,
+    }
+    onChange(updatedReference, checkModification(updatedReference), hasSearchInput)
+  }
+
+  const handleConceptAdd = conceptToAdd => {
+    if (!reference.concepts.includes(conceptToAdd)) {
+      const updatedConcepts = [...reference.concepts, conceptToAdd]
+      const updatedReference = {
+        ...reference,
+        concepts: updatedConcepts,
+        selectedConcept: '',
+      }
+      setSelectedConcept(null)
+      onChange(updatedReference, checkModification(updatedReference), false)
+    }
+  }
+
   return {
-    handleFieldChange,
+    handleConceptAdd,
+    handleConceptDelete,
+    handleConceptSearchInput,
     handleConceptSelect,
-    handleAddConcept,
-    handleDeleteConcept,
-    handleSearchInput,
+    handleFieldChange,
     hasSearchInput,
     selectedConcept,
-    onEnter,
   }
 }
 

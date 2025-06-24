@@ -4,7 +4,7 @@ import { createActions } from '@/components/modal/factory'
 
 import AuthContext from '@/contexts/auth/AuthContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 import useUpdatePending from '@/contexts/panels/concepts/pending/useUpdatePending'
 
@@ -18,7 +18,7 @@ const { APPROVAL, GROUP } = PENDING
 const PendingActions = () => {
   const { user } = use(AuthContext)
   const { confirmPending, setConfirmPending } = use(ConceptContext)
-  const { closeModal } = use(ModalContext)
+  const { closeModal } = use(AppModalContext)
 
   const updatePending = useUpdatePending()
 

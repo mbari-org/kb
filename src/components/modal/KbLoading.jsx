@@ -1,48 +1,22 @@
-import { use, useEffect, useRef, useState } from 'react'
-import { Backdrop, CircularProgress, Stack, Typography, useTheme } from '@mui/material'
+import { use } from 'react'
 
-import ModalContext from '@/contexts/modal/ModalContext'
-
-import { PROCESSING } from '@/lib/constants'
-
-const { LOADING_DELAY } = PROCESSING
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 const KbLoading = () => {
-  const { processing } = use(ModalContext)
+  const { processing } = use(AppModalContext)
 
-  const timerRef = useRef(undefined)
-  const [active, setActive] = useState(false)
-  const theme = useTheme()
-
-  useEffect(() => {
-    if (processing) {
-      timerRef.current = setTimeout(() => {
-        setActive(true)
-      }, LOADING_DELAY)
-    } else {
-      clearTimeout(timerRef.current)
-      setActive(false)
-    }
-  }, [processing])
-
-  if (!processing) {
-    return null
-  }
+  if (!processing) return null
 
   return (
-    <Backdrop
-      sx={{
-        backgroundColor: 'rgba(0, 0, 0, 0.25)',
-        color: theme.palette.primary.main,
-        zIndex: theme.zIndex.drawer + 2,
-      }}
-      open={active}
-    >
-      <Stack alignItems='center' direction='row' spacing={2}>
-        <CircularProgress color='inherit' />
-        <Typography variant='h4'>{processing}</Typography>
-      </Stack>
-    </Backdrop>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
+      <div className='rounded-lg bg-white p-6 shadow-lg'>
+        <div className='flex items-center space-x-3'>
+          <div className='h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent'></div>
+          <span className='text-lg font-medium text-gray-900'>Processing...</span>
+        </div>
+      </div>
+    </div>
   )
 }
+
 export default KbLoading

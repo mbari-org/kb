@@ -2,8 +2,8 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import KBDataContext from '@/contexts/KBDataContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
 
@@ -11,8 +11,8 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 const { UPDATING } = PROCESSING
 
 const EditReferenceActions = ({ editReference }) => {
-  const { closeModal, modalData, setProcessing } = use(ModalContext)
-  const { isDoiUnique } = use(ReferencesContext)
+  const { closeModal, modalData, setProcessing } = use(PanelModalContext)
+  const { isDoiUnique } = use(KBDataContext)
 
   const { reference } = modalData
 

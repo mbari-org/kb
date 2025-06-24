@@ -1,9 +1,9 @@
 import { use, useEffect, useRef } from 'react'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 const useTaxonomyTreeReposition = (apiRef, concept) => {
-  const { processing } = use(ModalContext)
+  const { processing } = use(AppModalContext)
 
   const timeoutRef = useRef(null)
 

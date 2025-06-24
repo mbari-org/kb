@@ -2,16 +2,15 @@ import { use } from 'react'
 
 import { Box, Typography, Stack } from '@mui/material'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 const DeleteReferenceContent = () => {
-  const { modalData } = use(ModalContext)
-  const { reference } = modalData
+  const { modalData } = use(PanelModalContext)
 
   const fields = [
-    { label: 'Citation', value: reference.citation },
-    { label: 'DOI', value: reference.doi },
-    { label: 'Concepts', value: reference.concepts?.join(', ') || '' },
+    { label: 'Citation', value: modalData?.reference?.citation },
+    { label: 'DOI', value: modalData?.reference?.doi },
+    { label: 'Concepts', value: modalData?.reference?.concepts?.join(', ') || '' },
   ]
 
   return (

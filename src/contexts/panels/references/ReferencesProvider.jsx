@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use } from 'react'
 
 import KBDataContext from '@/contexts/KBDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
@@ -6,7 +6,7 @@ import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import useModifyReferences from './useModifyReferences'
 
 export const ReferencesProvider = ({ children }) => {
-  const { references, getConceptReferences, isDoiUnique, refreshData } = use(KBDataContext)
+  const { references, refreshData } = use(KBDataContext)
 
   const { addReference, editReference, deleteReference } = useModifyReferences({
     setReferences: refreshData,
@@ -16,8 +16,6 @@ export const ReferencesProvider = ({ children }) => {
     addReference,
     deleteReference,
     editReference,
-    getConceptReferences,
-    isDoiUnique,
     references,
   }
 

@@ -5,7 +5,7 @@ import FieldDetail from '@/components/kb/panels/concepts/concept/change/pending/
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 import { LABELS } from '@/lib/constants'
 
@@ -13,7 +13,7 @@ const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingField }) => {
   const { concept } = use(ConceptContext)
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(AppModalContext)
 
   const nameChangeType = modalData?.nameChangeType
 

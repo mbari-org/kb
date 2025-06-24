@@ -1,25 +1,28 @@
 import { use } from 'react'
 
-import { createActions } from '@/components/modal/factory'
+import { Button, Stack } from '@mui/material'
 
-import AuthContext from '@/contexts/auth/AuthContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 const LogoutActions = () => {
-  const { logout } = use(AuthContext)
-  const { closeModal } = use(ModalContext)
+  const { closeModal } = use(AppModalContext)
 
-  const colors = ['main', 'cancel']
-  const labels = ['Cancel', 'Logout']
-
-  const onAction = label => {
-    if (label === 'Logout') {
-      logout()
-    }
-    closeModal()
-  }
-
-  return createActions({ colors, labels, onAction }, 'LogoutActions')
+  return (
+    <Stack direction='row' spacing={1}>
+      <Button onClick={closeModal} variant='outlined'>
+        Cancel
+      </Button>
+      <Button
+        onClick={() => {
+          closeModal()
+          window.location.href = '/logout'
+        }}
+        variant='contained'
+      >
+        Logout
+      </Button>
+    </Stack>
+  )
 }
 
 export default LogoutActions

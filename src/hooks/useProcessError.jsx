@@ -1,26 +1,26 @@
-import { use, useCallback } from 'react'
+import { use, useEffect } from 'react'
+
+import { createModal } from '@/components/modal/factory'
+
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 import ErrorActions from '@/components/kb/error/ErrorActions'
 import ErrorContent from '@/components/kb/error/ErrorContent'
-import ErrorTitle from '@/components/kb/Error/ErrorTitle'
-import { createModal } from '@/components/modal/factory'
+import ErrorTitle from '@/components/kb/error/ErrorTitle'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+const useProcessError = error => {
+  const { setModal } = use(AppModalContext)
 
-const useProcessError = () => {
-  const { setModal } = use(ModalContext)
-
-  return useCallback(
-    error => {
+  useEffect(() => {
+    if (error) {
       const modal = createModal({
         Actions: ErrorActions,
-        Content: () => <ErrorContent error={error} />,
+        Content: ErrorContent,
         Title: ErrorTitle,
       })
       setModal(modal)
-    },
-    [setModal]
-  )
+    }
+  }, [error, setModal])
 }
 
 export default useProcessError

@@ -1,44 +1,29 @@
 import { use } from 'react'
 
-import { createActions } from '@/components/modal/factory'
+import { Button, Stack } from '@mui/material'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
-import { LABELS } from '@/lib/constants'
+const AddUserActions = () => {
+  const { closeModal, modalData } = use(PanelModalContext)
 
-import { drop } from '@/lib/utils'
-
-const { CANCEL, SAVE } = LABELS.BUTTON
-
-const AddUserActions = ({ addUser }) => {
-  const { closeModal, modalData } = use(ModalContext)
-
-  const { user } = modalData
-
-  const colors = ['main', 'cancel']
-  const disabled = [false, !user.isValid]
-  const labels = [CANCEL, SAVE]
-
-  const onAction = async label => {
-    switch (label) {
-      case CANCEL:
-        closeModal()
-        break
-
-      case SAVE:
-        try {
-          const newUser = drop(user, ['confirmPassword', 'hasChanges', 'isValid'])
-          await addUser(newUser)
+  return (
+    <Stack direction='row' spacing={1}>
+      <Button onClick={closeModal} variant='outlined'>
+        Cancel
+      </Button>
+      <Button
+        onClick={() => {
+          // Handle add user logic here
+          console.log('Adding user:', modalData)
           closeModal()
-        } catch (error) {
-          console.error('Error creating user:', error)
-          // TODO: Show error message to user
-        }
-        break
-    }
-  }
-
-  return createActions({ colors, disabled, labels, onAction }, 'AddUserActions')
+        }}
+        variant='contained'
+      >
+        Add User
+      </Button>
+    </Stack>
+  )
 }
 
 export default AddUserActions

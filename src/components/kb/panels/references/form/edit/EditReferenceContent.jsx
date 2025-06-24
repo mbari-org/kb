@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
-const EditReferenceContent = ({ isDoiUnique }) => {
-  const { modalData, setModalData } = use(ModalContext)
+const EditReferenceContent = () => {
+  const { modalData, setModalData } = use(PanelModalContext)
   const { reference } = modalData
 
   const handleChange = (updatedReference, modified, hasSearchInput) => {
@@ -17,14 +17,7 @@ const EditReferenceContent = ({ isDoiUnique }) => {
     })
   }
 
-  return (
-    <ReferenceForm
-      reference={reference}
-      onChange={handleChange}
-      isDoiUnique={isDoiUnique}
-      isEdit={true}
-    />
-  )
+  return <ReferenceForm reference={reference} onChange={handleChange} isEdit={true} />
 }
 
 export default EditReferenceContent

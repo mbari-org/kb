@@ -1,10 +1,10 @@
 import { use } from 'react'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import UserForm from '../UserForm'
 
 const AddUserContent = () => {
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(PanelModalContext)
   const { user, existingUsers } = modalData
 
   const handleChange = updatedUser => {
@@ -15,7 +15,11 @@ const AddUserContent = () => {
   }
 
   return (
-    <UserForm existingUsers={existingUsers} isEdit={false} onChange={handleChange} user={user} />
+    <div>
+      <h3>Add User</h3>
+      <p>User data: {JSON.stringify(modalData)}</p>
+      <UserForm existingUsers={existingUsers} isEdit={false} onChange={handleChange} user={user} />
+    </div>
   )
 }
 
