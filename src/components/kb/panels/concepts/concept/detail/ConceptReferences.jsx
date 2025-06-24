@@ -57,7 +57,6 @@ const ConceptReferences = () => {
         <IconButton
           onClick={linkToReferences}
           size='small'
-          disabled={!hasReferences}
           sx={{
             '&:hover': {
               color: 'primary.main',

@@ -184,6 +184,7 @@ export const SELECTED = {
   PANELS: {
     CONCEPTS: 'Concepts',
     REFERENCES: 'References',
+    TEMPLATES: 'Templates',
   },
   SETTINGS: {
     HISTORY: {

@@ -55,7 +55,6 @@ const ConceptTemplates = () => {
         <IconButton
           onClick={linkToTemplates}
           size='small'
-          disabled={!hasTemplates}
           sx={{
             '&:hover': {
               color: 'primary.main',
