@@ -1,23 +1,15 @@
-import { use, useState, useMemo } from 'react'
-import { Box, Typography, IconButton } from '@mui/material'
-import InspectIcon from '@/components/common/InspectIcon'
+import { use, useMemo } from 'react'
 
-import ConceptDetailNone from '@/components/kb/panels/concepts/concept/detail/ConceptDetailNone'
-import ConceptReferencesList from '@/components/kb/panels/concepts/concept/detail/references/ConceptReferencesList'
-import ConceptReferencesNavButtons from '@/components/kb/panels/concepts/concept/detail/references/ConceptReferencesNavButtons'
+import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
 
 import KBDataContext from '@/contexts/KBDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
 
-const ITEMS_PER_PAGE = 5
-
 const ConceptReferences = () => {
   const { references } = use(KBDataContext)
   const { getSelected, select } = use(SelectedContext)
-
-  const [currentPage, setCurrentPage] = useState(0)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
 
@@ -25,20 +17,9 @@ const ConceptReferences = () => {
     return references.filter(reference => reference.concepts.includes(selectedConcept))
   }, [references, selectedConcept])
 
-  const totalPages = Math.ceil((conceptReferences?.length || 0) / ITEMS_PER_PAGE)
-
-  const hasReferences = conceptReferences?.length > 0
-
-  const handleNext = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(prev => prev + 1)
-    }
-  }
-
-  const handlePrevious = () => {
-    if (currentPage > 0) {
-      setCurrentPage(prev => prev - 1)
-    }
+  const renderItem = {
+    key: (reference, index) => reference.doi || index,
+    content: reference => reference.doi,
   }
 
   const linkToReferences = () => {
@@ -49,56 +30,12 @@ const ConceptReferences = () => {
   }
 
   return (
-    <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-          References DOI
-        </Typography>
-        <IconButton
-          onClick={linkToReferences}
-          size='small'
-          sx={{
-            '&:hover': {
-              color: 'primary.main',
-            },
-          }}
-        >
-          <InspectIcon />
-        </IconButton>
-        {hasReferences && (
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              flex: 1,
-              gap: 1,
-              justifyContent: 'flex-end',
-            }}
-          >
-            <Typography>
-              {`${currentPage * ITEMS_PER_PAGE + 1}-${Math.min(
-                (currentPage + 1) * ITEMS_PER_PAGE,
-                conceptReferences.length
-              )} of ${conceptReferences.length}`}
-            </Typography>
-            <Box>
-              <ConceptReferencesNavButtons
-                currentPage={currentPage}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
-                totalPages={totalPages}
-              />
-            </Box>
-          </Box>
-        )}
-      </Box>
-      {hasReferences && (
-        <Box sx={{ ml: 1 }}>
-          <ConceptReferencesList references={conceptReferences} currentPage={currentPage} />
-        </Box>
-      )}
-      <ConceptDetailNone display={!hasReferences} />
-    </Box>
+    <ConceptPropertiesSection
+      items={conceptReferences}
+      onInspect={linkToReferences}
+      renderItem={renderItem}
+      title='References DOI'
+    />
   )
 }
 
