@@ -9,6 +9,9 @@ import {
   getTemplatesCount,
   getToConceptTemplates,
 } from '@/lib/api/linkTemplates'
+import { SELECTED } from '@/lib/constants'
+
+const { TEMPLATES } = SELECTED.SETTINGS
 
 const useFilterTemplates = ({
   available,
@@ -18,6 +21,7 @@ const useFilterTemplates = ({
   setCount,
   setDisplayTemplates,
   setConceptTemplates,
+  select,
 }) => {
   const { apiFns } = use(ConfigContext)
 
@@ -118,6 +122,8 @@ const useFilterTemplates = ({
       setFilterConcept(conceptName)
       resetPagination()
       setConceptTemplates([])
+      // Store the filter concept in settings
+      select({ [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: conceptName } })
       // Clear cache when concept changes
       if (conceptName !== filterConcept) {
         setConceptTemplatesCache([])
@@ -144,6 +150,7 @@ const useFilterTemplates = ({
       limit,
       loadTemplates,
       resetPagination,
+      select,
       setConceptTemplates,
       setConceptTemplatesCache,
       setCount,

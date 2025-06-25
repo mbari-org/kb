@@ -31,7 +31,7 @@ const TemplatesProvider = ({ children }) => {
   const loadExplicitConcepts = useExplicitConcepts()
   const loadTemplates = useLoadTemplates()
 
-  const available = getSelected(TEMPLATES.KEY)[TEMPLATES.AVAILABLE]
+  const available = getSelected(TEMPLATES.AVAILABLE)
   const setAvailable = bool => {
     select({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: bool } })
   }
@@ -51,6 +51,7 @@ const TemplatesProvider = ({ children }) => {
     limit,
     loadTemplates,
     resetPagination,
+    select,
     setCount,
     setConceptTemplates,
     setDisplayTemplates,
@@ -64,6 +65,14 @@ const TemplatesProvider = ({ children }) => {
     setExplicitConcepts,
     setDisplayTemplates,
   })
+
+  // Check for stored filter concept on mount
+  useEffect(() => {
+    const storedFilterConcept = getSelected(TEMPLATES.CONCEPT)
+    if (storedFilterConcept && !filterConcept) {
+      handleConceptFilter(storedFilterConcept)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const loadConcepts = async () => {

@@ -203,6 +203,7 @@ export const SELECTED = {
     TEMPLATES: {
       KEY: 'templates',
       AVAILABLE: 'available',
+      CONCEPT: 'concept',
     },
   },
 }

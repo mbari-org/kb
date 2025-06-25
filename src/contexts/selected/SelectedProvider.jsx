@@ -17,48 +17,56 @@ const SelectedProvider = ({ children }) => {
   const conceptSelect = useConceptSelect()
   const panelSelect = usePanelSelect()
 
-  const getSelected = useCallback(field => {
-    switch (field) {
-      case CONCEPT:
-        return conceptSelect.current()
-      case HISTORY.TYPE:
-        return settings.history.type
-      case PANEL:
-        return panelSelect.current()
-      case REFERENCES.BY_CONCEPT:
-        return settings.references.byConcept
-      case TEMPLATES.AVAILABLE:
-        return settings.templates.available
-      default:
-        return settings[field]
-    }
-  }, [conceptSelect, panelSelect, settings])
+  const getSelected = useCallback(
+    field => {
+      switch (field) {
+        case CONCEPT:
+          return conceptSelect.current()
+        case HISTORY.TYPE:
+          return settings.history.type
+        case PANEL:
+          return panelSelect.current()
+        case REFERENCES.BY_CONCEPT:
+          return settings.references.byConcept
+        case TEMPLATES.AVAILABLE:
+          return settings.templates.available
+        case TEMPLATES.CONCEPT:
+          return settings.templates.filterConcept
+        default:
+          return settings[field]
+      }
+    },
+    [conceptSelect, panelSelect, settings]
+  )
 
-  const select = useCallback(({ concept: conceptName, history, panel: panelName, references, templates }) => {
-    const updatedSettings = {
-      ...settings,
-      ...(history && { [HISTORY.KEY]: { ...settings?.history, ...history } }),
-      ...(references && { [REFERENCES.KEY]: { ...settings?.references, ...references } }),
-      ...(templates && { [TEMPLATES.KEY]: { ...settings?.templates, ...templates } }),
-    }
-    settingsStore.set(updatedSettings)
-    setSettings(updatedSettings)
+  const select = useCallback(
+    ({ concept: conceptName, history, panel: panelName, references, templates }) => {
+      const updatedSettings = {
+        ...settings,
+        ...(history && { [HISTORY.KEY]: { ...settings?.history, ...history } }),
+        ...(references && { [REFERENCES.KEY]: { ...settings?.references, ...references } }),
+        ...(templates && { [TEMPLATES.KEY]: { ...settings?.templates, ...templates } }),
+      }
+      settingsStore.set(updatedSettings)
+      setSettings(updatedSettings)
 
-    if (conceptName && conceptName !== conceptSelect.current()) {
-      conceptSelect.push(conceptName)
-    }
+      if (conceptName && conceptName !== conceptSelect.current()) {
+        conceptSelect.push(conceptName)
+      }
 
-    if (panelName && panelName !== panelSelect.current()) {
-      panelSelect.push(panelName)
-    }
-  }, [conceptSelect, panelSelect, settings])
+      if (panelName && panelName !== panelSelect.current()) {
+        panelSelect.push(panelName)
+      }
+    },
+    [conceptSelect, panelSelect, settings]
+  )
 
   useEffect(() => {
     const storedSelected = settingsStore.get()
 
     const history = storedSelected?.history || { type: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }
     const references = storedSelected?.references || { byConcept: false }
-    const templates = storedSelected?.templates || { available: false }
+    const templates = storedSelected?.templates || { available: false, filterConcept: null }
 
     const initialSettings = {
       history,
