@@ -7,9 +7,11 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
 
+const { REFERENCES } = SELECTED.SETTINGS
+
 const ConceptReferences = () => {
   const { references } = use(KBDataContext)
-  const { getSelected, select } = use(SelectedContext)
+  const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
 
@@ -23,10 +25,8 @@ const ConceptReferences = () => {
   }
 
   const linkToReferences = () => {
-    select({
-      references: { [SELECTED.SETTINGS.REFERENCES.BY_CONCEPT]: true },
-      [SELECTED.PANEL]: SELECTED.PANELS.REFERENCES,
-    })
+    updateSelected({ [SELECTED.PANEL]: SELECTED.PANELS.REFERENCES })
+    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
   }
 
   return (

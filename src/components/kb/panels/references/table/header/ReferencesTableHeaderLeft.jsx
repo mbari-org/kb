@@ -18,10 +18,10 @@ const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesTableHeaderLeft = () => {
   const { references } = use(ReferencesContext)
-  const { getSelected, select } = use(SelectedContext)
+  const { getSelected, getSettings, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(CONCEPT)
-  const byConcept = getSelected(REFERENCES.BY_CONCEPT)
+  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
   const byConceptName = byConcept ? selectedConcept : null
 
   const referencesExport = useReferencesExport()
@@ -37,7 +37,7 @@ const ReferencesTableHeaderLeft = () => {
 
   const switchFn = event => {
     const newValue = event.target.checked
-    select({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: newValue } })
+    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: newValue } })
   }
 
   const exportFn = () => {

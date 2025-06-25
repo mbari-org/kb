@@ -13,7 +13,7 @@ import { SELECTED } from '@/lib/constants'
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const TemplatesProvider = ({ children }) => {
-  const { getSelected, select } = use(SelectedContext)
+  const { getSettings, updateSelected, updateSettings } = use(SelectedContext)
   const {
     templates: allTemplates,
     templateConcepts,
@@ -33,30 +33,35 @@ const TemplatesProvider = ({ children }) => {
   // Flag to track if initial data has been loaded
   const [initialDataLoaded, setInitialDataLoaded] = useState(false)
 
-  const available = getSelected(TEMPLATES.AVAILABLE)
+  const available = getSettings(TEMPLATES.KEY, TEMPLATES.AVAILABLE)
+  const filterConcept = getSettings(TEMPLATES.KEY, TEMPLATES.CONCEPT)
+  const filterToConcept = getSettings(TEMPLATES.KEY, TEMPLATES.TO_CONCEPT)
+
   const setAvailable = bool => {
-    select({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: bool } })
+    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: bool } })
   }
 
   // Track previous available value to detect changes
   const prevAvailableRef = useRef(available)
 
-  const {
-    filterConcept,
-    filterToConcept,
-    filterTemplates,
-    handleConceptFilter,
-    handleToConceptFilter,
-    refreshCurrentConcept,
-  } = useFilterTemplates({
-    available,
-    limit,
-    resetPagination,
-    select,
-    setCount,
-    setConceptTemplates,
-    setDisplayTemplates,
-  })
+  // Watch for changes in templates settings
+  useEffect(() => {
+    // Handle available setting changes
+  }, [filterConcept, filterToConcept])
+
+  const { filterTemplates, handleConceptFilter, handleToConceptFilter, refreshCurrentConcept } =
+    useFilterTemplates({
+      available,
+      limit,
+      resetPagination,
+      updateSelected,
+      updateSettings,
+      setCount,
+      setConceptTemplates,
+      setDisplayTemplates,
+      filterConcept,
+      filterToConcept,
+    })
 
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates({
     filterConcept,
@@ -72,9 +77,11 @@ const TemplatesProvider = ({ children }) => {
 
   // Check for stored filter concept on mount
   useEffect(() => {
-    const storedFilterConcept = getSelected(TEMPLATES.CONCEPT)
-    if (storedFilterConcept && !filterConcept) {
-      handleConceptFilter(storedFilterConcept)
+    const storedFilterConcept = getSettings(TEMPLATES.KEY, TEMPLATES.CONCEPT)
+
+    // Clear the stored templates concept if it's not null, so it starts fresh
+    if (storedFilterConcept) {
+      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: null } })
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

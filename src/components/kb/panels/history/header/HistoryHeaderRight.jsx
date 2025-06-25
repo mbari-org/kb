@@ -9,10 +9,10 @@ import { SELECTED } from '@/lib/constants'
 const { HISTORY } = SELECTED.SETTINGS
 
 const HistoryHeaderRight = () => {
-  const { select } = use(SelectedContext)
+  const { updateSettings } = use(SelectedContext)
 
   const handleHistorySelection = (_, newSelection) =>
-    !!newSelection && select({ [HISTORY.KEY]: { [HISTORY.TYPE]: newSelection } })
+    !!newSelection && updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: newSelection } })
 
   return <HistoryHeaderToggle onChange={handleHistorySelection} />
 }

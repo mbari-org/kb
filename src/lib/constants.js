@@ -204,6 +204,7 @@ export const SELECTED = {
       KEY: 'templates',
       AVAILABLE: 'available',
       CONCEPT: 'concept',
+      TO_CONCEPT: 'toConcept',
     },
   },
 }

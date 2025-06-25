@@ -11,7 +11,7 @@ import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_SELECT, SELECTED, TO_CONCEPT_SPECIAL_VALUES } from '@/lib/constants'
+import { CONCEPT_SELECT, TO_CONCEPT_SPECIAL_VALUES } from '@/lib/constants'
 
 const { CONCEPT_LABEL, RIGHT_COMPONENT, WIDTH } = CONCEPT_SELECT
 const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
@@ -31,7 +31,7 @@ const ConceptSelect = ({
   const theme = useTheme()
   const inputRef = useRef(null)
 
-  const { concepts, select } = use(SelectedContext)
+  const { concepts, updateSelected } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
 
   const options = useMemo(() => {
@@ -55,7 +55,7 @@ const ConceptSelect = ({
       if (isValidSelection) {
         const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true
         if (doSelection && updateConceptSelected) {
-          select({ [SELECTED.CONCEPT]: selectedName })
+          updateSelected({ concept: selectedName })
         }
       }
     } else {

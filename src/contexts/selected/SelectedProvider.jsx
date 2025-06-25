@@ -18,38 +18,23 @@ const SelectedProvider = ({ children }) => {
   const panelSelect = usePanelSelect()
 
   const getSelected = useCallback(
-    field => {
-      switch (field) {
+    key => {
+      switch (key) {
         case CONCEPT:
           return conceptSelect.current()
-        case HISTORY.TYPE:
-          return settings.history.type
         case PANEL:
           return panelSelect.current()
-        case REFERENCES.BY_CONCEPT:
-          return settings.references.byConcept
-        case TEMPLATES.AVAILABLE:
-          return settings.templates.available
-        case TEMPLATES.CONCEPT:
-          return settings.templates.concept
         default:
-          return settings[field]
+          throw new Error(`select unknown key: ${key}`)
       }
     },
-    [conceptSelect, panelSelect, settings]
+    [conceptSelect, panelSelect]
   )
 
-  const select = useCallback(
-    ({ concept: conceptName, history, panel: panelName, references, templates }) => {
-      const updatedSettings = {
-        ...settings,
-        ...(history && { [HISTORY.KEY]: { ...settings?.history, ...history } }),
-        ...(references && { [REFERENCES.KEY]: { ...settings?.references, ...references } }),
-        ...(templates && { [TEMPLATES.KEY]: { ...settings?.templates, ...templates } }),
-      }
-      settingsStore.set(updatedSettings)
-      setSettings(updatedSettings)
+  const getSettings = useCallback((key, field) => settings[key][field], [settings])
 
+  const updateSelected = useCallback(
+    ({ concept: conceptName, panel: panelName }) => {
       if (conceptName && conceptName !== conceptSelect.current()) {
         conceptSelect.push(conceptName)
       }
@@ -58,15 +43,42 @@ const SelectedProvider = ({ children }) => {
         panelSelect.push(panelName)
       }
     },
-    [conceptSelect, panelSelect, settings]
+    [conceptSelect, panelSelect]
+  )
+
+  const updateSettings = useCallback(
+    ({ history, references, templates }) => {
+      const updatedSettings = {
+        ...settings,
+        ...(history && { [HISTORY.KEY]: { ...settings?.history, ...history } }),
+        ...(references && { [REFERENCES.KEY]: { ...settings?.references, ...references } }),
+        ...(templates && { [TEMPLATES.KEY]: { ...settings?.templates, ...templates } }),
+      }
+
+      settingsStore.set(updatedSettings)
+      setSettings(updatedSettings)
+    },
+    [settings]
+  )
+
+  const select = useCallback(
+    ({ concept: conceptName, history, panel: panelName, references, templates }) => {
+      updateSelected({ concept: conceptName, panel: panelName })
+      updateSettings({ history, references, templates })
+    },
+    [updateSelected, updateSettings]
   )
 
   useEffect(() => {
     const storedSelected = settingsStore.get()
 
-    const history = storedSelected?.history || { type: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }
-    const references = storedSelected?.references || { byConcept: false }
-    const templates = storedSelected?.templates || { available: false, concept: null }
+    const history = storedSelected?.[HISTORY.KEY] || { [HISTORY.TYPE]: HISTORY.TYPES.PENDING }
+    const references = storedSelected?.[REFERENCES.KEY] || { [REFERENCES.BY_CONCEPT]: false }
+    const templates = storedSelected?.[TEMPLATES.KEY] || {
+      [TEMPLATES.AVAILABLE]: false,
+      [TEMPLATES.CONCEPT]: null,
+      [TEMPLATES.TO_CONCEPT]: null,
+    }
 
     const initialSettings = {
       history,
@@ -79,8 +91,16 @@ const SelectedProvider = ({ children }) => {
   }, [])
 
   const value = useMemo(
-    () => ({ concepts: conceptSelect, getSelected, panels: panelSelect, select }),
-    [conceptSelect, getSelected, panelSelect, select]
+    () => ({
+      concepts: conceptSelect,
+      getSelected,
+      getSettings,
+      panels: panelSelect,
+      select,
+      updateSelected,
+      updateSettings,
+    }),
+    [conceptSelect, getSelected, getSettings, panelSelect, select, updateSelected, updateSettings]
   )
 
   // Don't render children until settings are loaded

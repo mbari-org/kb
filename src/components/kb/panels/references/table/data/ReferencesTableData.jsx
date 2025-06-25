@@ -20,10 +20,10 @@ const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesTableData = () => {
   const { editReference, deleteReference, references } = use(ReferencesContext)
-  const { getSelected } = use(SelectedContext)
+  const { getSelected, getSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(CONCEPT)
-  const byConcept = getSelected(REFERENCES.BY_CONCEPT)
+  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
 
   const selectedReferences = byConcept
     ? references.filter(reference => reference.concepts.includes(selectedConcept))

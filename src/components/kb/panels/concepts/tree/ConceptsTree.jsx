@@ -21,7 +21,7 @@ import { SELECTED } from '@/lib/constants'
 
 const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { concept } = use(ConceptContext)
-  const { select } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
   const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
   const [expandedItems, setExpandedItems] = useState([])
@@ -51,9 +51,9 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   const handleConceptSelect = useCallback(
     conceptName => {
-      select({ [SELECTED.CONCEPT]: conceptName })
+      updateSelected({ [SELECTED.CONCEPT]: conceptName })
     },
-    [select]
+    [updateSelected]
   )
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems, taxonomy)

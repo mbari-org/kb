@@ -9,10 +9,10 @@ import { SELECTED } from '@/lib/constants'
 
 const ConceptPath = () => {
   const { conceptPath } = use(ConceptContext)
-  const { select } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
 
   const handlePathClick = path => {
-    select({ [SELECTED.CONCEPT]: path, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
+    updateSelected({ [SELECTED.CONCEPT]: path, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
   }
 
   return (

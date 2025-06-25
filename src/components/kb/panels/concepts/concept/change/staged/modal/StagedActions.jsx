@@ -16,7 +16,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 const StagedActions = () => {
   const { concept, modifyConcept } = use(ConceptContext)
   const { closeModal, setProcessing } = use(AppModalContext)
-  const { select } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
 
   const saveStaged = useSaveStaged()
 
@@ -32,12 +32,18 @@ const StagedActions = () => {
         saveStaged()
         break
       case BACK_TO_EDIT:
-        select({ [SELECTED.CONCEPT]: concept.name, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
+        updateSelected({
+          [SELECTED.CONCEPT]: concept.name,
+          [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS,
+        })
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break
       case CONTINUE:
-        select({ [SELECTED.CONCEPT]: concept.name, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
+        updateSelected({
+          [SELECTED.CONCEPT]: concept.name,
+          [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS,
+        })
         modifyConcept({ type: CONFIRMED.YES })
         closeModal()
         break

@@ -16,7 +16,7 @@ const TemplatesHeaderLeft = () => {
       conceptName={filterConcept}
       doConceptSelected={handleConceptFilter}
       selectables={selectables}
-      updateConceptSelected={false}
+      updateConceptSelected={true}
     />
   )
 }

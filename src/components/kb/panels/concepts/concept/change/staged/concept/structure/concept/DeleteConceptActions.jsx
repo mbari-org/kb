@@ -17,7 +17,7 @@ const DeleteConceptActions = () => {
   const { concept, setEditing } = use(ConceptContext)
   const { apiFns } = use(ConfigContext)
   const { closeModal, modalData } = use(PanelModalContext)
-  const { select } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
   const { deleteConcept } = use(TaxonomyContext)
 
   const colors = ['cancel', 'main']
@@ -31,7 +31,7 @@ const DeleteConceptActions = () => {
       saveDelete(concept.name, apiFns.apiResult)
         .then(() => deleteConcept(concept.name))
         .then(selectConceptName => {
-          select({ [SELECTED.CONCEPT]: selectConceptName })
+          updateSelected({ [SELECTED.CONCEPT]: selectConceptName })
           setEditing(false)
         })
     }

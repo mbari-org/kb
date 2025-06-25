@@ -11,10 +11,10 @@ import { humanTimestamp } from '@/lib/utils'
 import { SELECTED } from '@/lib/constants'
 
 const useHistoryColumns = ({ type }) => {
-  const { select } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
 
   const handleConceptClick = row => {
-    select({ [SELECTED.CONCEPT]: row.concept, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
+    updateSelected({ [SELECTED.CONCEPT]: row.concept, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
   }
 
   // Determine if columns should be sortable based on history type

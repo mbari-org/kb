@@ -19,13 +19,14 @@ const useFilterTemplates = ({
   setCount,
   setDisplayTemplates,
   setConceptTemplates,
-  select,
+  updateSelected,
+  updateSettings,
+  filterConcept,
+  filterToConcept,
 }) => {
   const { apiFns } = use(ConfigContext)
   const { templates: allTemplates } = use(KBDataContext)
 
-  const [filterConcept, setFilterConcept] = useState(null)
-  const [filterToConcept, setFilterToConcept] = useState(null)
   const [conceptTemplatesCache, setConceptTemplatesCache] = useState([])
 
   const filterAndPaginateTemplates = useCallback(
@@ -120,11 +121,13 @@ const useFilterTemplates = ({
 
   const handleConceptFilter = useCallback(
     conceptName => {
-      setFilterConcept(conceptName)
-      resetPagination()
       setConceptTemplates([])
       // Store the filter concept in settings
-      select({ [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: conceptName } })
+      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: conceptName } })
+      // Also update the global concept selection
+      if (conceptName) {
+        updateSelected({ [SELECTED.CONCEPT]: conceptName })
+      }
       // Clear cache when concept changes
       if (conceptName !== filterConcept) {
         setConceptTemplatesCache([])
@@ -152,8 +155,8 @@ const useFilterTemplates = ({
       filterToConcept,
       filterTemplates,
       limit,
-      resetPagination,
-      select,
+      updateSelected,
+      updateSettings,
       setConceptTemplates,
       setConceptTemplatesCache,
       setCount,
@@ -164,9 +167,9 @@ const useFilterTemplates = ({
 
   const handleToConceptFilter = useCallback(
     toConceptName => {
-      setFilterToConcept(toConceptName)
-      resetPagination()
       setConceptTemplates([])
+      // Store the filter toConcept in settings
+      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.TO_CONCEPT]: toConceptName } })
       if (toConceptName) {
         // Pass current concept filter to avoid unnecessary fetching
         filterTemplates(filterConcept, toConceptName, { limit, offset: 0 })
@@ -190,11 +193,11 @@ const useFilterTemplates = ({
       filterConcept,
       filterTemplates,
       limit,
-      resetPagination,
       setConceptTemplates,
       setCount,
       setDisplayTemplates,
       allTemplates,
+      updateSettings,
     ]
   )
 
@@ -212,9 +215,7 @@ const useFilterTemplates = ({
 
   return {
     clearCache,
-    filterConcept,
     filterTemplates,
-    filterToConcept,
     handleConceptFilter,
     handleToConceptFilter,
     refreshCurrentConcept,

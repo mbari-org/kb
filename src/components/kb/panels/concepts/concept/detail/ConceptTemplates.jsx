@@ -9,13 +9,15 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { SELECTED } from '@/lib/constants'
 
+const { TEMPLATES } = SELECTED.SETTINGS
+
 const ConceptTemplates = () => {
-  const { getSelected, select } = use(SelectedContext)
+  const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
   const { templates: allTemplates, isLoading } = use(KBDataContext)
   const { getAncestors } = use(TaxonomyContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const available = getSelected(SELECTED.SETTINGS.TEMPLATES.AVAILABLE)
+  const available = getSettings(TEMPLATES.KEY, TEMPLATES.AVAILABLE)
 
   const [filteredTemplates, setFilteredTemplates] = useState([])
 
@@ -38,17 +40,13 @@ const ConceptTemplates = () => {
 
   const handleAvailableChange = event => {
     const newValue = event.target.checked
-    select({
-      [SELECTED.SETTINGS.TEMPLATES.KEY]: { [SELECTED.SETTINGS.TEMPLATES.AVAILABLE]: newValue },
-    })
+    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: newValue } })
   }
 
   const linkToTemplates = () => {
-    select({
-      templates: {
-        [SELECTED.SETTINGS.TEMPLATES.CONCEPT]: selectedConcept,
-      },
-      [SELECTED.PANEL]: SELECTED.PANELS.TEMPLATES,
+    updateSelected({ [SELECTED.PANEL]: SELECTED.PANELS.TEMPLATES })
+    updateSettings({
+      [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: selectedConcept },
     })
   }
 

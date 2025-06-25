@@ -12,14 +12,14 @@ const { CONCEPT } = SELECTED
 const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesHeaderLeft = () => {
-  const { getSelected, select } = use(SelectedContext)
+  const { getSelected, getSettings, updateSelected } = use(SelectedContext)
 
   const selectedConcept = getSelected(CONCEPT)
-  const byConcept = getSelected(REFERENCES.BY_CONCEPT)
+  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
 
   const handleConceptSelect = selectedName => {
     if (selectedName) {
-      select({ [CONCEPT]: selectedName })
+      updateSelected({ [CONCEPT]: selectedName })
     }
   }
 

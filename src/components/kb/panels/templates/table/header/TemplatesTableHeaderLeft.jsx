@@ -16,7 +16,7 @@ const { EXPORT } = TEMPLATES_TOOLTIPS
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const TemplatesTableHeaderLeft = () => {
-  const { select } = use(SelectedContext)
+  const { updateSettings } = use(SelectedContext)
   const { available, count, filterConcept, filterToConcept, displayTemplates } =
     use(TemplatesContext)
 
@@ -28,7 +28,7 @@ const TemplatesTableHeaderLeft = () => {
 
   const switchFn = event => {
     const newValue = event.target.checked
-    select({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: newValue } })
+    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: newValue } })
   }
 
   let exportToolTip

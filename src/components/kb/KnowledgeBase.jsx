@@ -15,11 +15,11 @@ import { SELECTED } from '@/lib/constants'
 
 const KnowledgeBase = () => {
   const { modal, processing } = use(AppModalContext)
-  const { panels, select } = use(SelectedContext)
+  const { panels, updateSelected } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
 
-  const selectPanel = name => startTransition(() => select({ [SELECTED.PANEL]: name }))
+  const selectPanel = name => startTransition(() => updateSelected({ [SELECTED.PANEL]: name }))
 
   useBrowserBack()
 
