@@ -31,7 +31,7 @@ const SelectedProvider = ({ children }) => {
         case TEMPLATES.AVAILABLE:
           return settings.templates.available
         case TEMPLATES.CONCEPT:
-          return settings.templates.filterConcept
+          return settings.templates.concept
         default:
           return settings[field]
       }
@@ -66,7 +66,7 @@ const SelectedProvider = ({ children }) => {
 
     const history = storedSelected?.history || { type: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }
     const references = storedSelected?.references || { byConcept: false }
-    const templates = storedSelected?.templates || { available: false, filterConcept: null }
+    const templates = storedSelected?.templates || { available: false, concept: null }
 
     const initialSettings = {
       history,

@@ -166,12 +166,15 @@ const TemplatesProvider = ({ children }) => {
         filterTemplates(filterConcept, filterToConcept, { limit, offset })
       }
     }
-    // Disable the dependency check because including conceptTemplates results in an infinite
-    // re-render loop. Fortunately the checks on filterConcepts and filterToConcepts sufficiently
-    // "cover" the missing conceptTemplates dependency.
-    //
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterConcept, filterToConcept, filterTemplates, limit, offset, initialDataLoaded])
+  }, [
+    filterConcept,
+    filterToConcept,
+    filterTemplates,
+    limit,
+    offset,
+    initialDataLoaded,
+    conceptTemplates,
+  ])
 
   const value = {
     addTemplate,

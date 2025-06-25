@@ -47,18 +47,18 @@ function generateVersion() {
       isDirty: !isWorkingDirClean,
     }
 
-    // Write to src/lib/version.js
-    const versionFilePath = path.join(process.cwd(), 'src', 'lib', 'version.js')
+    // Write to src/version.js
+    const versionFilePath = path.join(process.cwd(), 'src', 'version.js')
     const versionFileContent = `// This file is auto-generated during build. Do not edit manually.
-export const VERSION_INFO = ${JSON.stringify(versionInfo, null, 2)};
+export const VERSION_INFO = ${JSON.stringify(versionInfo, null, 2)}
 
-export const getVersion = () => VERSION_INFO.version;
-export const getBuildDate = () => VERSION_INFO.buildDate;
-export const getCommitHash = () => VERSION_INFO.commitHash;
-export const getBranchName = () => VERSION_INFO.branchName;
-export const getCommitDate = () => VERSION_INFO.commitDate;
-export const getCommitMessage = () => VERSION_INFO.commitMessage;
-export const isDirty = () => VERSION_INFO.isDirty;
+export const getVersion = () => VERSION_INFO.version
+export const getBuildDate = () => VERSION_INFO.buildDate
+export const getCommitHash = () => VERSION_INFO.commitHash
+export const getBranchName = () => VERSION_INFO.branchName
+export const getCommitDate = () => VERSION_INFO.commitDate
+export const getCommitMessage = () => VERSION_INFO.commitMessage
+export const isDirty = () => VERSION_INFO.isDirty
 `
 
     fs.writeFileSync(versionFilePath, versionFileContent)
@@ -85,17 +85,17 @@ export const isDirty = () => VERSION_INFO.isDirty;
       isDirty: false,
     }
 
-    const versionFilePath = path.join(process.cwd(), 'src', 'lib', 'version.js')
+    const versionFilePath = path.join(process.cwd(), 'src', 'version.js')
     const versionFileContent = `// This file is auto-generated during build. Do not edit manually.
-export const VERSION_INFO = ${JSON.stringify(fallbackVersion, null, 2)};
+export const VERSION_INFO = ${JSON.stringify(fallbackVersion, null, 2)}
 
-export const getVersion = () => VERSION_INFO.version;
-export const getBuildDate = () => VERSION_INFO.buildDate;
-export const getCommitHash = () => VERSION_INFO.commitHash;
-export const getBranchName = () => VERSION_INFO.branchName;
-export const getCommitDate = () => VERSION_INFO.commitDate;
-export const getCommitMessage = () => VERSION_INFO.commitMessage;
-export const isDirty = () => VERSION_INFO.isDirty;
+export const getVersion = () => VERSION_INFO.version
+export const getBuildDate = () => VERSION_INFO.buildDate
+export const getCommitHash = () => VERSION_INFO.commitHash
+export const getBranchName = () => VERSION_INFO.branchName
+export const getCommitDate = () => VERSION_INFO.commitDate
+export const getCommitMessage = () => VERSION_INFO.commitMessage
+export const isDirty = () => VERSION_INFO.isDirty
 `
 
     fs.writeFileSync(versionFilePath, versionFileContent)

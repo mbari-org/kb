@@ -12,7 +12,7 @@ import {
   getCommitMessage,
   getVersion,
   isDirty,
-} from '@/lib/version'
+} from '@/version'
 
 /**
  * VersionDisplay component - shows application version info
