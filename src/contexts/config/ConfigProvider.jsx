@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,7 +15,7 @@ const ConfigProvider = ({ children }) => {
   const [config, setConfig] = useState(null)
   const [apiFns, setApiFns] = useState(null)
 
-  const updateConfig = async url => {
+  const updateConfig = useCallback(async url => {
     if (url === null) {
       setConfig(null)
       configUrlStore.clear()
@@ -39,7 +39,7 @@ const ConfigProvider = ({ children }) => {
       url,
       valid: true,
     })
-  }
+  }, [])
 
   useEffect(() => {
     const storedConfigUrl = configUrlStore.get()

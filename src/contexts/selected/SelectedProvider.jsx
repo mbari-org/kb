@@ -70,14 +70,15 @@ const SelectedProvider = ({ children }) => {
     setSettings(initialSettings)
   }, [])
 
-  if (!settings) {
-    return null
-  }
-
   const value = useMemo(
     () => ({ concepts: conceptSelect, getSelected, panels: panelSelect, select }),
     [conceptSelect, getSelected, panelSelect, select]
   )
+
+  // Don't render children until settings are loaded
+  if (!settings) {
+    return <SelectedContext value={value}>{null}</SelectedContext>
+  }
 
   return <SelectedContext value={value}>{children}</SelectedContext>
 }

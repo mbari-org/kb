@@ -219,10 +219,6 @@ const TaxonomyProvider = ({ children }) => {
     }
   }, [apiFns, setModal, setProcessing, showBoundary, updateTaxonomy])
 
-  if (!taxonomy) {
-    return null
-  }
-
   const value = useMemo(
     () => ({
       deleteConcept,
@@ -259,6 +255,11 @@ const TaxonomyProvider = ({ children }) => {
       taxonomy,
     ]
   )
+
+  // Don't render children until taxonomy is loaded
+  if (!taxonomy) {
+    return <TaxonomyContext value={value}>{null}</TaxonomyContext>
+  }
 
   return <TaxonomyContext value={value}>{children}</TaxonomyContext>
 }

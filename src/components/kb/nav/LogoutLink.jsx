@@ -5,10 +5,11 @@ import { grey } from '@mui/material/colors'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS, SELECTED } from '@/lib/constants'
 
 import { hasModifiedState } from '@/lib/kb/state/concept'
 
@@ -17,11 +18,17 @@ const { SAVE } = LABELS.BUTTON
 const LogoutLink = () => {
   const { logout, user } = use(UserContext)
   const { initialState, stagedState } = use(ConceptContext)
+  const { panels } = use(SelectedContext)
 
   const displayStaged = useDisplayStaged()
 
-  const handleLogout = () =>
-    hasModifiedState({ initialState, stagedState }) ? displayStaged(SAVE) : logout()
+  const handleLogout = () => {
+    // Only check for modified state if we're currently on the concepts panel
+    const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
+    const hasModifications = isOnConceptsPanel && hasModifiedState({ initialState, stagedState })
+    
+    return hasModifications ? displayStaged(SAVE) : logout()
+  }
 
   const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`
 

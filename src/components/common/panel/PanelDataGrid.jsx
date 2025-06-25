@@ -18,6 +18,7 @@ import PropTypes from 'prop-types'
  * @param {Object} props.dataGridProps - Additional props to pass to DataGrid
  * @param {Object} props.sx - Additional styles for the container
  */
+
 const PanelDataGrid = ({
   columns,
   rows,
@@ -42,7 +43,8 @@ const PanelDataGrid = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        minHeight: 0,
+        minHeight: 400, // Ensure minimum height for DataGrid as per MUI docs
+        maxHeight: '100vh', // Prevent overflow
         ...sx,
       }}
     >
@@ -51,6 +53,8 @@ const PanelDataGrid = ({
           flex: '1 1 auto',
           minHeight: 0,
           overflow: 'hidden',
+          // Ensure this container has intrinsic dimensions for DataGrid
+          height: '100%',
         }}
       >
         <DataGrid

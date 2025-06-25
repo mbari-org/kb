@@ -7,7 +7,7 @@ import useLogout from '@/contexts/auth/lib/useLogout'
 import useProcessAuth from '@/contexts/auth/lib/useProcessAuth'
 import useRefreshUser from '@/contexts/auth/lib/useRefreshUser'
 
-import UserContext from '@/contexts/user/UserContext'
+import AuthContext from '@/contexts/auth/AuthContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
 const AuthProvider = ({ children }) => {

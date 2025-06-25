@@ -9,7 +9,7 @@ import { updatePendingHistoryItem } from '@/lib/api/history'
 
 import { PENDING } from '@/lib/constants'
 
-const { APPROVAL, GROUP } = PENDING
+const { APPROVAL: _APPROVAL, GROUP } = PENDING
 
 const useUpdatePending = () => {
   const { setProcessing } = use(AppModalContext)

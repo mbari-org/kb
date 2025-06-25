@@ -1,3 +1,4 @@
+// Direct imports - all panels loaded upfront but hidden when not active
 import AboutHelp from '@/components/kb/panels/AboutHelp'
 import Concepts from '@/components/kb/panels/Concepts'
 import Embargoes from '@/components/kb/panels/Embargoes'

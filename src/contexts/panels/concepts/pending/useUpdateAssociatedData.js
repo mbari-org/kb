@@ -5,7 +5,7 @@ import AppModalContext from '@/contexts/modal/AppModalContext'
 import { updateAssociatedData } from '@/lib/api/concepts'
 
 const useUpdateAssociatedData = () => {
-  const { modalData } = use(AppModalContext)
+  const { modalData: _modalData } = use(AppModalContext)
 
   return useCallback(async data => {
     try {
