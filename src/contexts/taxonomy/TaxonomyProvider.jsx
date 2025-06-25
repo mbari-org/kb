@@ -223,29 +223,44 @@ const TaxonomyProvider = ({ children }) => {
     return null
   }
 
-  return (
-    <TaxonomyContext
-      value={{
-        deleteConcept,
-        filterRanks,
-        getConcept,
-        getConceptPrimaryName,
-        getNames,
-        getPendingHistory,
-        getRootName,
-        isConceptLoaded,
-        isDescendant,
-        isRoot,
-        loadConcept,
-        loadConceptDescendants,
-        refreshConcept,
-        refreshHistory,
-        taxonomy,
-      }}
-    >
-      {children}
-    </TaxonomyContext>
+  const value = useMemo(
+    () => ({
+      deleteConcept,
+      filterRanks,
+      getConcept,
+      getConceptPrimaryName,
+      getNames,
+      getPendingHistory,
+      getRootName,
+      isConceptLoaded,
+      isDescendant,
+      isRoot,
+      loadConcept,
+      loadConceptDescendants,
+      refreshConcept,
+      refreshHistory,
+      taxonomy,
+    }),
+    [
+      deleteConcept,
+      filterRanks,
+      getConcept,
+      getConceptPrimaryName,
+      getNames,
+      getPendingHistory,
+      getRootName,
+      isConceptLoaded,
+      isDescendant,
+      isRoot,
+      loadConcept,
+      loadConceptDescendants,
+      refreshConcept,
+      refreshHistory,
+      taxonomy,
+    ]
   )
+
+  return <TaxonomyContext value={value}>{children}</TaxonomyContext>
 }
 
 export default TaxonomyProvider

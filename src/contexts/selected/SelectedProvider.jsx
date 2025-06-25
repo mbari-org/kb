@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -17,7 +17,7 @@ const SelectedProvider = ({ children }) => {
   const conceptSelect = useConceptSelect()
   const panelSelect = usePanelSelect()
 
-  const getSelected = field => {
+  const getSelected = useCallback(field => {
     switch (field) {
       case CONCEPT:
         return conceptSelect.current()
@@ -32,9 +32,9 @@ const SelectedProvider = ({ children }) => {
       default:
         return settings[field]
     }
-  }
+  }, [conceptSelect, panelSelect, settings])
 
-  const select = ({ concept: conceptName, history, panel: panelName, references, templates }) => {
+  const select = useCallback(({ concept: conceptName, history, panel: panelName, references, templates }) => {
     const updatedSettings = {
       ...settings,
       ...(history && { [HISTORY.KEY]: { ...settings?.history, ...history } }),
@@ -51,7 +51,7 @@ const SelectedProvider = ({ children }) => {
     if (panelName && panelName !== panelSelect.current()) {
       panelSelect.push(panelName)
     }
-  }
+  }, [conceptSelect, panelSelect, settings])
 
   useEffect(() => {
     const storedSelected = settingsStore.get()
@@ -74,11 +74,12 @@ const SelectedProvider = ({ children }) => {
     return null
   }
 
-  return (
-    <SelectedContext value={{ concepts: conceptSelect, getSelected, panels: panelSelect, select }}>
-      {children}
-    </SelectedContext>
+  const value = useMemo(
+    () => ({ concepts: conceptSelect, getSelected, panels: panelSelect, select }),
+    [conceptSelect, getSelected, panelSelect, select]
   )
+
+  return <SelectedContext value={value}>{children}</SelectedContext>
 }
 
 export default SelectedProvider

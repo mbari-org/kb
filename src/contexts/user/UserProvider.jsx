@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useErrorBoundary } from 'react-error-boundary'
 
@@ -39,7 +39,17 @@ const UserProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshUser, user])
 
-  return <UserContext value={{ logout, processAuth, refreshUser, user }}>{children}</UserContext>
+  const value = useMemo(
+    () => ({
+      logout,
+      processAuth,
+      refreshUser,
+      user,
+    }),
+    [logout, processAuth, refreshUser, user]
+  )
+
+  return <UserContext value={value}>{children}</UserContext>
 }
 
 export default UserProvider

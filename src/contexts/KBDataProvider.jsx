@@ -1,4 +1,4 @@
-import { use, useEffect, useState, useCallback } from 'react'
+import { use, useEffect, useState, useCallback, useMemo } from 'react'
 
 import { getReferences as getReferencesApi } from '@/lib/api/references'
 import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
@@ -100,13 +100,16 @@ export const KBDataProvider = ({ children }) => {
     refreshData()
   }, [refreshData])
 
-  const value = {
-    references,
-    templates,
-    isLoading,
-    refreshData,
-    isDoiUnique,
-  }
+  const value = useMemo(
+    () => ({
+      references,
+      templates,
+      isLoading,
+      refreshData,
+      isDoiUnique,
+    }),
+    [references, templates, isLoading, refreshData, isDoiUnique]
+  )
 
   return <KBDataContext.Provider value={value}>{children}</KBDataContext.Provider>
 }

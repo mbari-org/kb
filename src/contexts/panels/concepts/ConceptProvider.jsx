@@ -118,25 +118,36 @@ const ConceptProvider = ({ children }) => {
     stagedState,
   ])
 
-  return (
-    <ConceptContext
-      value={{
-        concept,
-        conceptPath,
-        confirmPending,
-        confirmReset,
-        editing,
-        initialState,
-        modifyConcept,
-        refreshConcept,
-        setEditing,
-        setConfirmPending,
-        stagedState,
-      }}
-    >
-      {children}
-    </ConceptContext>
+  const value = useMemo(
+    () => ({
+      concept,
+      conceptPath,
+      confirmPending,
+      confirmReset,
+      editing,
+      initialState,
+      modifyConcept,
+      refreshConcept,
+      setEditing,
+      setConfirmPending,
+      stagedState,
+    }),
+    [
+      concept,
+      conceptPath,
+      confirmPending,
+      confirmReset,
+      editing,
+      initialState,
+      modifyConcept,
+      refreshConcept,
+      setEditing,
+      setConfirmPending,
+      stagedState,
+    ]
   )
+
+  return <ConceptContext value={value}>{children}</ConceptContext>
 }
 
 export default ConceptProvider

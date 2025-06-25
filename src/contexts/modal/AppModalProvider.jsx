@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 
 import AppModalContext from './AppModalContext'
 
@@ -26,21 +26,20 @@ const AppModalProvider = ({ children }) => {
     setOnClose(() => onCloseCallback || null)
   }
 
-  return (
-    <AppModalContext
-      value={{
-        closeModal,
-        processing,
-        modal,
-        modalData,
-        setModalData,
-        setModal: handleSetModal,
-        setProcessing,
-      }}
-    >
-      {children}
-    </AppModalContext>
+  const value = useMemo(
+    () => ({
+      closeModal,
+      processing,
+      modal,
+      modalData,
+      setModalData,
+      setModal: handleSetModal,
+      setProcessing,
+    }),
+    [closeModal, processing, modal, modalData, setModalData, setProcessing]
   )
+
+  return <AppModalContext value={value}>{children}</AppModalContext>
 }
 
 export default AppModalProvider

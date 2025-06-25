@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
@@ -106,7 +106,12 @@ const ConfigProvider = ({ children }) => {
     })
   }, [config, showBoundary])
 
-  return <ConfigContext value={{ apiFns, config, updateConfig }}>{children}</ConfigContext>
+  const value = useMemo(
+    () => ({ apiFns, config, updateConfig }),
+    [apiFns, config, updateConfig]
+  )
+
+  return <ConfigContext value={value}>{children}</ConfigContext>
 }
 
 export default ConfigProvider
