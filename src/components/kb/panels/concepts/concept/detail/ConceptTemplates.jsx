@@ -37,7 +37,7 @@ const ConceptTemplates = () => {
 
   const linkToTemplates = () => {
     select({
-      templates: { [SELECTED.SETTINGS.TEMPLATES.AVAILABLE]: false },
+      templates: { [SELECTED.SETTINGS.TEMPLATES.AVAILABLE]: true },
       [SELECTED.PANEL]: SELECTED.PANELS.TEMPLATES,
     })
   }
