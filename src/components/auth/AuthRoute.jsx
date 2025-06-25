@@ -1,10 +1,10 @@
 import { use } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 
 const AuthRoute = () => {
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
 
   return <>{user ? <Outlet /> : <Navigate to='/login' />}</>
 }

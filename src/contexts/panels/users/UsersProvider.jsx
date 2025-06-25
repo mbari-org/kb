@@ -1,6 +1,6 @@
 import { use, useCallback, useEffect, useState } from 'react'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
@@ -11,7 +11,7 @@ import { getUsers, createUser, updateUser } from '@/lib/api/users'
 import { drop } from '@/lib/utils'
 
 const UsersProvider = ({ children }) => {
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
   const { apiFns } = use(ConfigContext)
 
   const [users, setUsers] = useState([])

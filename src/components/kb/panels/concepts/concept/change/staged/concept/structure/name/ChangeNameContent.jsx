@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -17,7 +17,7 @@ const ChangeNameContent = () => {
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(PanelModalContext)
   const { getNames } = use(TaxonomyContext)
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
 
   const [primaryName, setPrimaryName] = useState(concept.name)
 

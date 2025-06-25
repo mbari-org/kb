@@ -3,7 +3,7 @@ import { use } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
@@ -15,7 +15,7 @@ import { hasModifiedState } from '@/lib/kb/state/concept'
 const { SAVE } = LABELS.BUTTON
 
 const LogoutLink = () => {
-  const { logout, user } = use(AuthContext)
+  const { logout, user } = use(UserContext)
   const { initialState, stagedState } = use(ConceptContext)
 
   const displayStaged = useDisplayStaged()

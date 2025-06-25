@@ -2,7 +2,7 @@ import { use, useMemo, useCallback } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import AppModalContext from '@/contexts/modal/AppModalContext'
 
@@ -16,7 +16,7 @@ const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABE
 const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
   const { confirmPending, setConfirmPending } = use(ConceptContext)
   const { closeModal } = use(AppModalContext)
 

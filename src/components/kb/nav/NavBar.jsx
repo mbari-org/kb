@@ -11,13 +11,13 @@ import panelMods from '@/components/kb/panels/modules'
 
 const isDev = import.meta.env.DEV
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
 const NavBar = ({ selectPanel }) => {
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
   const { panels } = use(SelectedContext)
 
   const activePanel = panels.current()

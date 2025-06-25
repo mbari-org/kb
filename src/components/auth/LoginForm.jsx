@@ -5,13 +5,13 @@ import { Box, Card, CardActions, CardContent, FormControl, TextField } from '@mu
 import SubmitButton from '@/components/common/SubmitButton'
 import SubmitError from '@/components/common/SubmitError'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { loginUser } from '@/lib/services/auth/login'
 
 const LoginForm = () => {
-  const { processAuth } = use(AuthContext)
+  const { processAuth } = use(UserContext)
   const { config } = use(ConfigContext)
 
   const usernameRef = useRef(null)

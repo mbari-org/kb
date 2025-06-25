@@ -9,13 +9,13 @@ import VersionDisplay from '@/components/common/VersionDisplay'
 
 import loginLogo from '@/assets/loginLogo.png'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { loginReadOnly } from '@/lib/services/auth/login'
 
 const StartUp = () => {
-  const { processAuth } = use(AuthContext)
+  const { processAuth } = use(UserContext)
   const { config } = use(ConfigContext)
 
   const [configIsDirty, setConfigIsDirty] = useState(true)

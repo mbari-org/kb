@@ -2,15 +2,15 @@ import { use, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useErrorBoundary } from 'react-error-boundary'
 
-import useAuthUser from '@/contexts/auth/lib/useAuthUser'
-import useLogout from '@/contexts/auth/lib/useLogout'
-import useProcessAuth from '@/contexts/auth/lib/useProcessAuth'
-import useRefreshUser from '@/contexts/auth/lib/useRefreshUser'
+import useAuthUser from '@/contexts/user/lib/useAuthUser'
+import useLogout from '@/contexts/user/lib/useLogout'
+import useProcessAuth from '@/contexts/user/lib/useProcessAuth'
+import useRefreshUser from '@/contexts/user/lib/useRefreshUser'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-const AuthProvider = ({ children }) => {
+const UserProvider = ({ children }) => {
   const navigate = useNavigate()
   const { showBoundary } = useErrorBoundary()
 
@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshUser, user])
 
-  return <AuthContext value={{ logout, processAuth, refreshUser, user }}>{children}</AuthContext>
+  return <UserContext value={{ logout, processAuth, refreshUser, user }}>{children}</UserContext>
 }
 
-export default AuthProvider
+export default UserProvider

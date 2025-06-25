@@ -9,11 +9,11 @@ import ConceptViewToggle from '@/components/kb/panels/concepts/concept/toggleVie
 
 import { isReadOnly } from '@/lib/auth/role'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const Concept = () => {
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
   const { stagedState } = use(ConceptContext)
 
   if (stagedState && Object.keys(stagedState).length === 0) {

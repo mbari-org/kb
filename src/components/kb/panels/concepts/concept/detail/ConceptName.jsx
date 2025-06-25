@@ -8,7 +8,7 @@ import ChangeStructureChoices from '@/components/kb/panels/concepts/concept/chan
 
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/concept/structure/useStructureChoices'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useHasPendingStructure from '@/contexts/panels/concepts/pending/useHasPendingStructure'
@@ -18,7 +18,7 @@ import { isReadOnly } from '@/lib/auth/role'
 const ConceptName = () => {
   const theme = useTheme()
 
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
   const { concept, editing } = use(ConceptContext)
 
   const { hasStagedChildren, hasStagedName, hasStagedParent } = useStructureChoices()

@@ -7,7 +7,7 @@ import { ThemeProvider } from '@mui/material/styles'
 
 import kbTheme from '@/lib/theme'
 
-import AuthProvider from '@/contexts/auth/AuthProvider'
+import UserProvider from '@/contexts/user/UserProvider'
 import ConfigProvider from '@/contexts/config/ConfigProvider'
 
 import AuthRoute from '@/components/auth/AuthRoute'
@@ -24,7 +24,7 @@ const App = () => {
         <Router basename='/kbeditor/'>
           <Whoops>
             <ConfigProvider>
-              <AuthProvider>
+              <UserProvider>
                 <Routes>
                   <Route path='/login' element={<StartUp />} />
                   <Route element={<AuthRoute />}>
@@ -32,7 +32,7 @@ const App = () => {
                   </Route>
                   <Route path='*' element={<Navigate to='/login' replace />} />
                 </Routes>
-              </AuthProvider>
+              </UserProvider>
             </ConfigProvider>
           </Whoops>
         </Router>

@@ -1,13 +1,13 @@
 import { FormControlLabel, Radio, Stack } from '@mui/material'
 import { LABELS } from '@/lib/constants'
 import { use } from 'react'
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import { isAdmin } from '@/lib/auth/role'
 
 const { NAME_ONLY, ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
 
 const NameChangeExtent = ({ nameChangeType, onChange }) => {
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
   const isUserAdmin = isAdmin(user)
 
   return (

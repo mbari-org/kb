@@ -1,7 +1,7 @@
 import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
-import AuthContext from '@/contexts/auth/AuthContext'
+import UserContext from '@/contexts/user/UserContext'
 import AppModalContext from '@/contexts/modal/AppModalContext'
 import TaxonomyContext from './TaxonomyContext'
 
@@ -34,7 +34,7 @@ const { LOADING } = PROCESSING
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
-  const { user } = use(AuthContext)
+  const { user } = use(UserContext)
   const { apiFns } = use(ConfigContext)
   const { setProcessing, setModal } = use(AppModalContext)
 
