@@ -1,10 +1,10 @@
 import { use } from 'react'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import UserForm from '../UserForm'
 
 const EditUserContent = () => {
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(PanelModalContext)
   const { user } = modalData
 
   const onChange = updatedUser => {

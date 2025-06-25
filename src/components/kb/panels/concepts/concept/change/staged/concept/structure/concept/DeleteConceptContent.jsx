@@ -6,7 +6,7 @@ import ToConceptChoice from '../ToConceptChoice'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { getConceptAnnotationCount } from '@/lib/api/annotations'
@@ -14,7 +14,7 @@ import { getConceptAnnotationCount } from '@/lib/api/annotations'
 const DeleteConceptContent = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
-  const { setModalData } = use(ModalContext)
+  const { setModalData } = use(PanelModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const [annotationCount, setAnnotationCount] = useState(0)

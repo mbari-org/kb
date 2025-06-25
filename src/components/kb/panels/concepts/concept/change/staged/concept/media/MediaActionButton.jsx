@@ -12,7 +12,7 @@ import {
 } from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/mediaItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -20,7 +20,7 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
   const theme = useTheme()
 
   const { stagedState, initialState, modifyConcept } = use(ConceptContext)
-  const { setModal, setModalData } = use(ModalContext)
+  const { setModal, setModalData } = use(PanelModalContext)
 
   const handleClick = useCallback(() => {
     const mediaIndex =

@@ -2,14 +2,14 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { LABELS } from '@/lib/constants'
 
 const { CANCEL, LOCK, UNLOCK } = LABELS.BUTTON
 
 const LockUserActions = ({ lockUser }) => {
-  const { closeModal, modalData } = use(ModalContext)
+  const { closeModal, modalData } = use(PanelModalContext)
 
   const { user } = modalData
 

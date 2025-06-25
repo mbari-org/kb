@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
@@ -16,7 +16,7 @@ const DeleteMediaActions = () => {
     stagedState: { media, mediaIndex },
     modifyConcept,
   } = use(ConceptContext)
-  const { closeModal } = use(ModalContext)
+  const { closeModal } = use(PanelModalContext)
 
   const colors = ['cancel', 'main']
   const labels = [DISCARD, STAGE]

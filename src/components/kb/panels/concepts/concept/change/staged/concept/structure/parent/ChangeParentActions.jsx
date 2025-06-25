@@ -3,7 +3,7 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -14,7 +14,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
 const ChangeParentActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(ModalContext)
+  const { closeModal, modalData } = use(PanelModalContext)
 
   const colors = ['cancel', 'main']
   const disabled = [false, !modalData.modified]

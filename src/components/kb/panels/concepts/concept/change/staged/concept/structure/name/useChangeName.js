@@ -6,7 +6,7 @@ import ChangeNameTitle from './ChangeNameTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
@@ -46,7 +46,7 @@ const initialModalData = {
 
 const useChangeName = closeChoices => {
   const { modifyConcept } = use(ConceptContext)
-  const { setModal, setModalData } = use(ModalContext)
+  const { setModal, setModalData } = use(PanelModalContext)
 
   return useCallback(() => {
     closeChoices()

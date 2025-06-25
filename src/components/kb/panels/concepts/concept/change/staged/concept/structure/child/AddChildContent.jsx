@@ -5,7 +5,7 @@ import { Box, FormControl, Stack, TextField } from '@mui/material'
 import ConceptRankField from '@/components/kb/panels/concepts/concept/change/staged/concept/field/ConceptRankField'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useInputStyle from './useInputStyle'
@@ -19,7 +19,7 @@ const AddChildContent = () => {
   const inputStyle = useInputStyle()
 
   const { stagedState } = use(ConceptContext)
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(PanelModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const { child } = modalData

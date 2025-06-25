@@ -10,7 +10,7 @@ import LastAdminTitle from './LastAdminTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { USER_ROLES } from '@/lib/constants'
 
@@ -35,7 +35,7 @@ const lastAdminModal = () => {
 }
 
 const useLockUserModal = (lockUser, users) => {
-  const { setModal, setModalData } = use(ModalContext)
+  const { setModal, setModalData } = use(PanelModalContext)
 
   return useCallback(
     user => {

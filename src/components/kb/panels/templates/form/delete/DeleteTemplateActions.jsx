@@ -1,13 +1,13 @@
 import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import { LABELS, PROCESSING } from '@/lib/constants'
 
 const { CANCEL, DELETE } = LABELS.BUTTON
 const { DELETING } = PROCESSING
 
 const DeleteTemplateActions = ({ deleteTemplate }) => {
-  const { closeModal, modalData, setProcessing } = use(ModalContext)
+  const { closeModal, modalData, setProcessing } = use(PanelModalContext)
   const { template } = modalData
 
   const colors = ['main', 'cancel']

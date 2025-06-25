@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import { Box, Typography, Stack } from '@mui/material'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 const LockUserContent = () => {
-  const { modalData } = use(ModalContext)
+  const { modalData } = use(PanelModalContext)
   const { user } = modalData
 
   const fields = [

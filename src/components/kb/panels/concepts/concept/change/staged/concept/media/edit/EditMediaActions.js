@@ -2,7 +2,7 @@ import { use, useMemo } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
@@ -18,7 +18,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const EditMediaActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(ModalContext)
+  const { closeModal, modalData } = use(PanelModalContext)
 
   const { mediaItem, modified } = modalData
 

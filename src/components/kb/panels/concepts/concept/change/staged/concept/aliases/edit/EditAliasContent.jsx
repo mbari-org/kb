@@ -3,7 +3,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useStageAlias from './useStageAlias'
@@ -16,7 +16,7 @@ const EditAliasContent = () => {
   const theme = useTheme()
 
   const { stagedState } = use(ConceptContext)
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(PanelModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const [formAlias, setFormAlias] = useState(modalData.alias)

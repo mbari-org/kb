@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import TemplateForm from '@/components/kb/panels/templates/form/TemplateForm'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 const EditTemplateContent = () => {
-  const { modalData, setModalData } = use(ModalContext)
+  const { modalData, setModalData } = use(PanelModalContext)
   const { template } = modalData
 
   const handleChange = (updatedTemplate, isModified, hasSearchInput) => {

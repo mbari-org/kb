@@ -1,13 +1,13 @@
 import { use } from 'react'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const useStageAlias = () => {
   const { modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(ModalContext)
+  const { closeModal, modalData } = use(PanelModalContext)
 
   const stageAlias = async event => {
     event.preventDefault()

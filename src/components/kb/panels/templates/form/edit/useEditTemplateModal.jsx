@@ -3,7 +3,7 @@ import EditTemplateActions from './EditTemplateActions'
 import EditTemplateContent from './EditTemplateContent'
 import EditTemplateTitle from './EditTemplateTitle'
 import { createModal } from '@/components/modal/factory'
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 const editTemplateModal = editTemplate => {
   const components = {
@@ -16,7 +16,7 @@ const editTemplateModal = editTemplate => {
 }
 
 const useEditTemplateModal = editTemplate => {
-  const { setModal, setModalData } = use(ModalContext)
+  const { setModal, setModalData } = use(PanelModalContext)
 
   return useCallback(
     template => {

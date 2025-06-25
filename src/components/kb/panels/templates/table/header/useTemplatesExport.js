@@ -9,7 +9,7 @@ import {
 } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import ModalContext from '@/contexts/modal/ModalContext'
+import AppModalContext from '@/contexts/modal/AppModalContext'
 
 import { PAGINATION } from '@/lib/constants'
 
@@ -70,7 +70,7 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 
 const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { setProcessing } = use(ModalContext)
+  const { setProcessing } = use(AppModalContext)
 
   const templatesExport = async data => {
     const filterName =

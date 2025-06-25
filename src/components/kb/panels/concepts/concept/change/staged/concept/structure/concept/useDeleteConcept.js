@@ -6,7 +6,7 @@ import DeleteConceptTitle from './DeleteConceptTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 const deleteConceptModal = () => {
   const components = {
@@ -19,7 +19,7 @@ const deleteConceptModal = () => {
 }
 
 const useDeleteConcept = closeChoices => {
-  const { setModal } = use(ModalContext)
+  const { setModal } = use(PanelModalContext)
 
   return useCallback(() => {
     closeChoices()

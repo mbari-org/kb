@@ -2,14 +2,14 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import ModalContext from '@/contexts/modal/ModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { LABELS } from '@/lib/constants'
 
 const { CLOSE } = LABELS.BUTTON
 
 const LastAdminActions = () => {
-  const { closeModal } = use(ModalContext)
+  const { closeModal } = use(PanelModalContext)
 
   const colors = ['main']
   const disabled = [false]
