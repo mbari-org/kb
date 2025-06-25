@@ -1,12 +1,11 @@
 import { use, useCallback, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import KBDataContext from '@/contexts/KBDataContext'
 
 import {
   getAvailableTemplates,
   getExplicitTemplates,
-  getTemplates,
-  getTemplatesCount,
   getToConceptTemplates,
 } from '@/lib/api/linkTemplates'
 import { SELECTED } from '@/lib/constants'
@@ -17,13 +16,13 @@ const useFilterTemplates = ({
   available,
   resetPagination,
   limit,
-  loadTemplates,
   setCount,
   setDisplayTemplates,
   setConceptTemplates,
   select,
 }) => {
   const { apiFns } = use(ConfigContext)
+  const { templates: allTemplates } = use(KBDataContext)
 
   const [filterConcept, setFilterConcept] = useState(null)
   const [filterToConcept, setFilterToConcept] = useState(null)
@@ -91,15 +90,16 @@ const useFilterTemplates = ({
           return
         }
 
-        // Case 4: No filters - use regular paginated endpoint
-        const [count, templates] = await Promise.all([
-          apiFns.apiResult(getTemplatesCount),
-          apiFns.apiPaginated(getTemplates, pageParams),
-        ])
-        setCount(count)
-        setDisplayTemplates(templates)
-        setConceptTemplates([])
-        setConceptTemplatesCache([]) // Clear cache when no filters
+        // Case 4: No filters - use data from KBDataProvider
+        if (allTemplates) {
+          setCount(allTemplates.length)
+          const start = pageParams.offset
+          const end = start + pageParams.limit
+          const paginatedTemplates = allTemplates.slice(start, end)
+          setDisplayTemplates(paginatedTemplates)
+          setConceptTemplates([])
+          setConceptTemplatesCache([]) // Clear cache when no filters
+        }
       }
 
       await loadTemplates()
@@ -114,6 +114,7 @@ const useFilterTemplates = ({
       conceptTemplatesCache,
       filterConcept,
       setConceptTemplatesCache,
+      allTemplates,
     ]
   )
 
@@ -135,11 +136,14 @@ const useFilterTemplates = ({
         if (filterToConcept) {
           filterTemplates(null, filterToConcept, { limit, offset: 0 })
         } else {
-          // No filters active - load regular paginated data
-          loadTemplates({ limit, offset: 0 }).then(({ count, templates }) => {
-            setCount(count)
-            setDisplayTemplates(templates)
-          })
+          // No filters active - use data from KBDataProvider
+          if (allTemplates) {
+            setCount(allTemplates.length)
+            const start = 0
+            const end = start + limit
+            const paginatedTemplates = allTemplates.slice(start, end)
+            setDisplayTemplates(paginatedTemplates)
+          }
         }
       }
     },
@@ -148,13 +152,13 @@ const useFilterTemplates = ({
       filterToConcept,
       filterTemplates,
       limit,
-      loadTemplates,
       resetPagination,
       select,
       setConceptTemplates,
       setConceptTemplatesCache,
       setCount,
       setDisplayTemplates,
+      allTemplates,
     ]
   )
 
@@ -171,10 +175,14 @@ const useFilterTemplates = ({
         if (filterConcept) {
           filterTemplates(filterConcept, null, { limit, offset: 0 })
         } else {
-          loadTemplates({ limit, offset: 0 }).then(({ count, templates }) => {
-            setCount(count)
-            setDisplayTemplates(templates)
-          })
+          // No filters active - use data from KBDataProvider
+          if (allTemplates) {
+            setCount(allTemplates.length)
+            const start = 0
+            const end = start + limit
+            const paginatedTemplates = allTemplates.slice(start, end)
+            setDisplayTemplates(paginatedTemplates)
+          }
         }
       }
     },
@@ -182,11 +190,11 @@ const useFilterTemplates = ({
       filterConcept,
       filterTemplates,
       limit,
-      loadTemplates,
       resetPagination,
       setConceptTemplates,
       setCount,
       setDisplayTemplates,
+      allTemplates,
     ]
   )
 

@@ -1,53 +1,40 @@
-import { use, useState, useEffect, useCallback } from 'react'
+import { use, useState, useEffect } from 'react'
 import { FormControlLabel, Switch, Tooltip } from '@mui/material'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import KBDataContext from '@/contexts/KBDataContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { getAvailableTemplates, getExplicitTemplates } from '@/lib/api/linkTemplates'
 import { SELECTED } from '@/lib/constants'
 
 const ConceptTemplates = () => {
-  const { apiFns } = use(ConfigContext)
   const { getSelected, select } = use(SelectedContext)
-
-  const [templates, setTemplates] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const { templates: allTemplates, isLoading } = use(KBDataContext)
+  const { getAncestors } = use(TaxonomyContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
   const available = getSelected(SELECTED.SETTINGS.TEMPLATES.AVAILABLE)
+
+  const [filteredTemplates, setFilteredTemplates] = useState([])
+
+  useEffect(() => {
+    if (selectedConcept && allTemplates) {
+      const conceptsToInclude = available
+        ? [selectedConcept, ...(getAncestors(selectedConcept) || [])]
+        : [selectedConcept]
+      const filtered = allTemplates.filter(template => conceptsToInclude.includes(template.concept))
+      setFilteredTemplates(filtered)
+    } else {
+      setFilteredTemplates([])
+    }
+  }, [allTemplates, selectedConcept, available, getAncestors])
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,
     content: template => `${template.linkName}: ${template.toConcept} → ${template.linkValue}`,
   }
-
-  const loadTemplates = useCallback(async () => {
-    if (!apiFns || !selectedConcept) {
-      setTemplates([])
-      return
-    }
-
-    setIsLoading(true)
-    try {
-      const conceptTemplates = await apiFns.apiPayload(
-        available ? getAvailableTemplates : getExplicitTemplates,
-        selectedConcept
-      )
-      setTemplates(conceptTemplates)
-    } catch (error) {
-      console.error('Error loading concept templates:', error)
-      setTemplates([])
-    } finally {
-      setIsLoading(false)
-    }
-  }, [apiFns, selectedConcept, available])
-
-  useEffect(() => {
-    loadTemplates()
-  }, [loadTemplates])
 
   const handleAvailableChange = event => {
     const newValue = event.target.checked
@@ -68,7 +55,7 @@ const ConceptTemplates = () => {
   return (
     <ConceptPropertiesSection
       isLoading={isLoading}
-      items={templates}
+      items={filteredTemplates}
       loadingText='Loading templates...'
       onInspect={linkToTemplates}
       renderItem={renderItem}

@@ -15,9 +15,10 @@ const { REFERENCES, TEMPLATES } = PAGINATION
 export const KBDataProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
 
+  const [isLoading, setIsLoading] = useState(true)
   const [references, setReferences] = useState([])
   const [templates, setTemplates] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [templateConcepts, setTemplateConcepts] = useState([])
 
   const loadReferences = useCallback(async () => {
     const EXPORT_PAGE_SIZE = REFERENCES.EXPORT_PAGE_SIZE
@@ -67,6 +68,14 @@ export const KBDataProvider = ({ children }) => {
     return allTemplates
   }, [apiFns])
 
+  const calcTemplateConcepts = useCallback(templatesData => {
+    if (!templatesData || templatesData.length === 0) return []
+
+    const uniqueConcepts = new Set()
+    templatesData.forEach(template => uniqueConcepts.add(template.concept))
+    return Array.from(uniqueConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+  }, [])
+
   const isDoiUnique = useCallback(
     (doi, currentId) => {
       if (!doi) return true
@@ -88,12 +97,13 @@ export const KBDataProvider = ({ children }) => {
 
       setReferences(referencesData)
       setTemplates(templatesData)
+      setTemplateConcepts(calcTemplateConcepts(templatesData))
     } catch (error) {
       console.error('Error refreshing KB data:', error)
     } finally {
       setIsLoading(false)
     }
-  }, [apiFns, loadReferences, loadTemplates])
+  }, [apiFns, calcTemplateConcepts, loadReferences, loadTemplates])
 
   // Initial load
   useEffect(() => {
@@ -102,13 +112,14 @@ export const KBDataProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      references,
-      templates,
-      isLoading,
-      refreshData,
       isDoiUnique,
+      isLoading,
+      references,
+      refreshData,
+      templateConcepts,
+      templates,
     }),
-    [references, templates, isLoading, refreshData, isDoiUnique]
+    [references, templates, templateConcepts, isLoading, refreshData, isDoiUnique]
   )
 
   return <KBDataContext.Provider value={value}>{children}</KBDataContext.Provider>

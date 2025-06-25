@@ -22,9 +22,9 @@ const Panel = memo(({ PanelComponent, name, isActive, hasBeenMounted }) => {
   // Determine if panel should render based on panel type and mount/visibility state
   let shouldRender
   if (isDataGridPanel) {
-    // DataGrid panels: render when active (allowing initial mount to set hasBeenVisible)
-    // but ensure container has proper flex layout to prevent zero-height
-    shouldRender = isActive
+    // DataGrid panels: render if currently active OR has been mounted before
+    // This prevents re-mounting and unnecessary API calls
+    shouldRender = isActive || hasBeenMounted
   } else {
     // Non-DataGrid panels: render if currently active OR has been mounted before
     shouldRender = isActive || hasBeenMounted
@@ -34,11 +34,19 @@ const Panel = memo(({ PanelComponent, name, isActive, hasBeenMounted }) => {
     <Box
       id={`kb-panel-${name}`}
       sx={{
-        display: isActive ? 'flex' : 'none',
+        // Always occupy space to preserve intrinsic height for DataGrid
+        display: 'flex',
         flexDirection: 'column',
         height: '100%',
         minHeight: isDataGridPanel ? '400px' : 'auto',
         overflow: 'hidden',
+        // Visually hide inactive panels without collapsing height
+        visibility: isActive ? 'visible' : 'hidden',
+        position: isActive ? 'relative' : 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        pointerEvents: isActive ? 'auto' : 'none',
       }}
     >
       {shouldRender && <PanelComponent />}

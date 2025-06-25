@@ -7,9 +7,9 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 const TemplatesHeaderLeft = () => {
   const { getNames } = use(TaxonomyContext)
-  const { available, filterConcept, handleConceptFilter, explicitConcepts } = use(TemplatesContext)
+  const { available, filterConcept, handleConceptFilter, templateConcepts } = use(TemplatesContext)
 
-  const selectables = available ? getNames() : explicitConcepts
+  const selectables = available ? getNames() : templateConcepts
 
   return (
     <ConceptSelect

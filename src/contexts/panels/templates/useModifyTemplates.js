@@ -5,46 +5,46 @@ import {
   updateTemplate,
 } from '@/lib/api/linkTemplates'
 import { use, useCallback } from 'react'
-import useExplicitConcepts from './useExplicitConcepts'
-import useLoadTemplateData from './useLoadTemplates'
-import useTemplatePagination from './useTemplatePagination'
 
 const useModifyTemplates = ({
   filterConcept,
   filterToConcept,
   filterTemplates,
   setCount,
-  setTemplateConcepts,
   setDisplayTemplates,
+  refreshKBData,
+  allTemplates,
+  limit,
+  offset,
 }) => {
   const { apiFns } = use(ConfigContext)
-  const loadConceptsList = useExplicitConcepts()
-  const loadTemplates = useLoadTemplateData()
-  const { limit, offset } = useTemplatePagination()
 
   const refreshData = useCallback(async () => {
     if (filterConcept || filterToConcept) {
       await filterTemplates(filterConcept, filterToConcept, { limit, offset })
     } else {
-      const [newConcepts, { count, templates }] = await Promise.all([
-        loadConceptsList(),
-        loadTemplates({ limit, offset }),
-      ])
-      setTemplateConcepts(newConcepts)
-      setCount(count)
-      setDisplayTemplates(templates)
+      // Refresh KBDataProvider data and update local state
+      await refreshKBData()
+
+      // Update local state with fresh data from KBDataProvider
+      if (allTemplates) {
+        setCount(allTemplates.length)
+        const start = offset
+        const end = start + limit
+        const paginatedTemplates = allTemplates.slice(start, end)
+        setDisplayTemplates(paginatedTemplates)
+      }
     }
   }, [
     filterConcept,
     filterToConcept,
     filterTemplates,
-    loadConceptsList,
-    loadTemplates,
     limit,
     offset,
     setCount,
-    setTemplateConcepts,
     setDisplayTemplates,
+    refreshKBData,
+    allTemplates,
   ])
 
   const deleteTemplate = useCallback(
