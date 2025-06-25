@@ -142,6 +142,26 @@ const isDescendant = (taxonomy, conceptName, descendantName) => {
 
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
+const getAncestors = (taxonomy, conceptName) => {
+  const concept = getConcept(taxonomy, conceptName)
+  if (!concept) return []
+
+  const ancestors = []
+  let currentConcept = concept
+
+  while (currentConcept.parent && !isRoot(taxonomy, currentConcept)) {
+    const parent = getConcept(taxonomy, currentConcept.parent)
+    if (parent) {
+      ancestors.push(parent.name)
+      currentConcept = parent
+    } else {
+      break
+    }
+  }
+
+  return ancestors
+}
+
 const loadTaxonomy = async apiFns => {
   const [root, names, ranks, pending] = await Promise.all([
     apiFns.apiPayload(fetchRoot),
@@ -468,6 +488,7 @@ export {
   deleteConcept,
   descendants,
   filterTaxonomyRanks,
+  getAncestors,
   getConcept,
   getConceptPrimaryName,
   getNames,

@@ -10,6 +10,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import {
   deleteConcept as deleteTaxonomyConcept,
   filterTaxonomyRanks,
+  getAncestors as getTaxonomyAncestors,
   getConcept as getTaxonomyConcept,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
@@ -82,6 +83,11 @@ const TaxonomyProvider = ({ children }) => {
 
   const getConceptPrimaryName = useCallback(
     conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
+    [taxonomy]
+  )
+
+  const getAncestors = useCallback(
+    conceptName => getTaxonomyAncestors(taxonomy, conceptName),
     [taxonomy]
   )
 
@@ -225,6 +231,7 @@ const TaxonomyProvider = ({ children }) => {
       filterRanks,
       getConcept,
       getConceptPrimaryName,
+      getAncestors,
       getNames,
       getPendingHistory,
       getRootName,
@@ -242,6 +249,7 @@ const TaxonomyProvider = ({ children }) => {
       filterRanks,
       getConcept,
       getConceptPrimaryName,
+      getAncestors,
       getNames,
       getPendingHistory,
       getRootName,
