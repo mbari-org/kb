@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/factory'
 
-import KBDataContext from '@/contexts/KBDataContext'
+import KBDataContext from '@/contexts/kbData/KBDataContext'
 import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import { LABELS, PROCESSING } from '@/lib/constants'

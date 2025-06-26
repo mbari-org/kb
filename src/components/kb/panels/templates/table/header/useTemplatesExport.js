@@ -81,8 +81,8 @@ const useTemplatesExport = () => {
         : 'all'
 
     // Add '_Available' suffix when available flag is on
-    const availableSuffix = data?.available ? '-Available' : ''
-    const suggestedName = `KB-Templates_${filterName}${availableSuffix}.csv`
+    const availableTag = data?.available ? 'Available_' : 'Explicit_'
+    const suggestedName = `KB-Templates-${availableTag}${filterName}.csv`
 
     try {
       setProcessing(true)

@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import KBDataContext from '@/contexts/KBDataContext'
+import KBDataContext from '@/contexts/kbData/KBDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
 import useModifyReferences from './useModifyReferences'

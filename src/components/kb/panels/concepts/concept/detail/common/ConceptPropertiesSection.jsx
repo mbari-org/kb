@@ -9,13 +9,13 @@ import ConceptPropertiesNavButtons from '@/components/kb/panels/concepts/concept
 const ITEMS_PER_PAGE = 5
 
 const ConceptPropertiesSection = ({
-  title,
-  items = [],
-  renderItem,
-  onInspect,
+  children,
   isLoading = false,
+  items = [],
   loadingText = 'Loading...',
-  children, // For additional header content (like the Available switch in Templates)
+  onInspect,
+  renderItem,
+  title,
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 

@@ -1,7 +1,7 @@
 import { use, useCallback, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import KBDataContext from '@/contexts/KBDataContext'
+import KBDataContext from '@/contexts/kbData/KBDataContext'
 
 import {
   getAvailableTemplates,

@@ -4,7 +4,7 @@ import KnowledgeBase from '@/components/kb/KnowledgeBase'
 
 import AppModalProvider from '@/contexts/modal/AppModalProvider'
 import PanelModalProvider from '@/contexts/modal/PanelModalProvider'
-import KBDataProvider from '@/contexts/KBDataProvider'
+import KBDataProvider from '@/contexts/kbData/KBDataProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'

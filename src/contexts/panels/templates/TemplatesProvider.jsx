@@ -1,7 +1,7 @@
 import { use, useEffect, useState, useRef } from 'react'
 
+import KBDataContext from '@/contexts/kbData/KBDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import KBDataContext from '@/contexts/KBDataContext'
 import TemplatesContext from './TemplatesContext'
 
 import useFilterTemplates from './useFilterTemplates'

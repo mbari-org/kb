@@ -4,7 +4,7 @@ import { getReferences as getReferencesApi } from '@/lib/api/references'
 import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import KBDataContext from '@/contexts/KBDataContext'
+import KBDataContext from '@/contexts/kbData/KBDataContext'
 
 import { createReference } from '@/lib/kb/model/reference'
 

@@ -247,9 +247,9 @@ const TaxonomyProvider = ({ children }) => {
     [
       deleteConcept,
       filterRanks,
+      getAncestors,
       getConcept,
       getConceptPrimaryName,
-      getAncestors,
       getNames,
       getPendingHistory,
       getRootName,

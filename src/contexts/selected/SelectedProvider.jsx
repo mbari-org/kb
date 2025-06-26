@@ -31,7 +31,13 @@ const SelectedProvider = ({ children }) => {
     [conceptSelect, panelSelect]
   )
 
-  const getSettings = useCallback((key, field) => settings[key][field], [settings])
+  const getSettings = useCallback(
+    (key, field) => {
+      const keySettings = settings[key]
+      return field ? keySettings[field] : keySettings
+    },
+    [settings]
+  )
 
   const updateSelected = useCallback(
     ({ concept: conceptName, panel: panelName }) => {
