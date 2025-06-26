@@ -14,7 +14,6 @@ const { TEMPLATES } = SELECTED.SETTINGS
 
 const useFilterTemplates = ({
   available,
-  resetPagination,
   limit,
   setCount,
   setDisplayTemplates,

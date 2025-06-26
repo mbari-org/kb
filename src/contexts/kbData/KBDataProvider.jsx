@@ -18,7 +18,7 @@ export const KBDataProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [references, setReferences] = useState([])
   const [templates, setTemplates] = useState([])
-  const [templateConcepts, setTemplateConcepts] = useState([])
+  const [explicitConcepts, setExplicitConcepts] = useState([])
 
   const loadReferences = useCallback(async () => {
     const EXPORT_PAGE_SIZE = REFERENCES.EXPORT_PAGE_SIZE
@@ -68,7 +68,7 @@ export const KBDataProvider = ({ children }) => {
     return allTemplates
   }, [apiFns])
 
-  const calcTemplateConcepts = useCallback(templatesData => {
+  const calcExplicitConcepts = useCallback(templatesData => {
     if (!templatesData || templatesData.length === 0) return []
 
     const uniqueConcepts = new Set()
@@ -97,13 +97,13 @@ export const KBDataProvider = ({ children }) => {
 
       setReferences(referencesData)
       setTemplates(templatesData)
-      setTemplateConcepts(calcTemplateConcepts(templatesData))
+      setExplicitConcepts(calcExplicitConcepts(templatesData))
     } catch (error) {
       console.error('Error refreshing KB data:', error)
     } finally {
       setIsLoading(false)
     }
-  }, [apiFns, calcTemplateConcepts, loadReferences, loadTemplates])
+  }, [apiFns, calcExplicitConcepts, loadReferences, loadTemplates])
 
   // Initial load
   useEffect(() => {
@@ -112,14 +112,14 @@ export const KBDataProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      explicitConcepts,
       isDoiUnique,
       isLoading,
       references,
       refreshData,
-      templateConcepts,
       templates,
     }),
-    [references, templates, templateConcepts, isLoading, refreshData, isDoiUnique]
+    [references, templates, explicitConcepts, isLoading, refreshData, isDoiUnique]
   )
 
   return <KBDataContext.Provider value={value}>{children}</KBDataContext.Provider>

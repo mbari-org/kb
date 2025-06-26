@@ -7,9 +7,7 @@ export const filterTemplates = (templates, concepts, toConcept) => {
     return templates.filter(template => template.toConcept === toConcept)
   }
 
-  const conceptTemplates = Array.isArray(concepts)
-    ? templates.filter(template => concepts.includes(template.concept))
-    : templates.filter(template => template.concept === concepts)
+  const conceptTemplates = templates.filter(template => concepts.includes(template.concept))
 
   if (toConcept) {
     return conceptTemplates.filter(template => template.toConcept === toConcept)

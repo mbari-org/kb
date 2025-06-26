@@ -5,9 +5,9 @@ import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 const TemplatesHeaderRight = () => {
-  const { filterToConcept, handleToConceptFilter } = use(TemplatesContext)
+  const { toConcept, setToConcept } = use(TemplatesContext)
 
-  return <ToConceptSelect conceptName={filterToConcept} doConceptSelected={handleToConceptFilter} />
+  return <ToConceptSelect conceptName={toConcept} doConceptSelected={setToConcept} />
 }
 
 export default TemplatesHeaderRight

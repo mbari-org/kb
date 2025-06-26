@@ -3,71 +3,73 @@ import { use, useEffect, useState } from 'react'
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import TemplatesPagination from './TemplatesPagination'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import useDeleteTemplateModal from '@/components/kb/panels/templates/form/delete/useDeleteTemplateModal'
 import useEditTemplateModal from '@/components/kb/panels/templates/form/edit/useEditTemplateModal'
 import useTemplateColumns from './useTemplateColumns'
 
-import { filterTemplates } from '@/components/kb/panels/templates/utils'
-
-import { PAGINATION, SELECTED } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants'
 
 const { PAGE_SIZE_OPTIONS } = PAGINATION.TEMPLATES
-const { TEMPLATES } = SELECTED.SETTINGS
 
 const TemplatesTableData = () => {
-  const { templates } = use(KBDataContext)
-  const { getSettings } = use(SelectedContext)
-  const { getAncestors } = use(TaxonomyContext)
-  const { count, deleteTemplate, editTemplate, limit, nextPage, offset, prevPage, setPageSize } =
-    use(TemplatesContext)
-
-  const templatesSettings = getSettings(TEMPLATES.KEY)
-  const { available, concept, toConcept } = templatesSettings
+  const { deleteTemplate, editTemplate, filteredTemplates } = use(TemplatesContext)
 
   const [displayTemplates, setDisplayTemplates] = useState([])
+
+  // Local pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0])
 
   const deleteTemplateModal = useDeleteTemplateModal(deleteTemplate)
   const editTemplateModal = useEditTemplateModal(editTemplate, displayTemplates)
 
   const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
 
+  // Paginate the filtered templates
+  useEffect(() => {
+    if (!filteredTemplates || filteredTemplates.length === 0) {
+      setDisplayTemplates([])
+      return
+    }
+
+    const startIndex = (currentPage - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    const paginated = filteredTemplates.slice(startIndex, endIndex)
+    setDisplayTemplates(paginated)
+  }, [filteredTemplates, currentPage, pageSize])
+
+  const handlePageChange = newPage => {
+    setCurrentPage(newPage)
+  }
+
+  const handlePageSizeChange = newPageSize => {
+    setPageSize(newPageSize)
+    setCurrentPage(1) // Reset to first page when page size changes
+  }
+
   const paginationComponent = (
     <TemplatesPagination
-      count={count}
-      limit={limit}
-      nextPage={nextPage}
-      offset={offset}
-      prevPage={prevPage}
-      setPageSize={setPageSize}
+      displayTemplates={filteredTemplates}
+      pageSize={pageSize}
+      currentPage={currentPage}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
     />
   )
-
-  useEffect(() => {
-    const concepts = concept
-      ? available
-        ? [concept, ...(getAncestors(concept) || [])]
-        : [concept]
-      : null
-
-    setDisplayTemplates(filterTemplates(templates, concepts, toConcept))
-  }, [available, concept, getAncestors, templates, toConcept])
 
   return (
     <PanelDataGrid
       columns={columns}
       rows={displayTemplates}
-      rowCount={count}
+      rowCount={filteredTemplates.length}
       paginationModel={{
-        pageSize: limit,
-        page: Math.floor(offset / limit),
+        pageSize: pageSize,
+        page: currentPage - 1, // MUI DataGrid uses 0-based indexing
       }}
       pageSizeOptions={PAGE_SIZE_OPTIONS}
-      paginationMode='server'
+      paginationMode='client'
       paginationComponent={paginationComponent}
     />
   )

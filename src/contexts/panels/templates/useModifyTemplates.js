@@ -1,51 +1,17 @@
-import ConfigContext from '@/contexts/config/ConfigContext'
+import { use, useCallback } from 'react'
+
 import {
   createConceptTemplate,
   deleteConceptTemplate,
   updateTemplate,
 } from '@/lib/api/linkTemplates'
-import { use, useCallback } from 'react'
 
-const useModifyTemplates = ({
-  filterConcept,
-  filterToConcept,
-  filterTemplates,
-  setCount,
-  setDisplayTemplates,
-  refreshKBData,
-  allTemplates,
-  limit,
-  offset,
-}) => {
+import ConfigContext from '@/contexts/config/ConfigContext'
+import KBDataContext from '@/contexts/kbData/KBDataContext'
+
+const useModifyTemplates = () => {
   const { apiFns } = use(ConfigContext)
-
-  const refreshData = useCallback(async () => {
-    if (filterConcept || filterToConcept) {
-      await filterTemplates(filterConcept, filterToConcept, { limit, offset })
-    } else {
-      // Refresh KBDataProvider data and update local state
-      await refreshKBData()
-
-      // Update local state with fresh data from KBDataProvider
-      if (allTemplates) {
-        setCount(allTemplates.length)
-        const start = offset
-        const end = start + limit
-        const paginatedTemplates = allTemplates.slice(start, end)
-        setDisplayTemplates(paginatedTemplates)
-      }
-    }
-  }, [
-    filterConcept,
-    filterToConcept,
-    filterTemplates,
-    limit,
-    offset,
-    setCount,
-    setDisplayTemplates,
-    refreshKBData,
-    allTemplates,
-  ])
+  const { refreshData } = use(KBDataContext)
 
   const deleteTemplate = useCallback(
     async template => {

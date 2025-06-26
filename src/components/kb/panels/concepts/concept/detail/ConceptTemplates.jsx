@@ -41,9 +41,9 @@ const ConceptTemplates = () => {
   }
 
   useEffect(() => {
-    const concepts = available
-      ? [selectedConcept, ...(getAncestors(selectedConcept) || [])]
-      : selectedConcept
+    const ancestors = available ? getAncestors(selectedConcept) : []
+    const concepts = selectedConcept ? [selectedConcept, ...ancestors] : null
+
     setFilteredTemplates(filterTemplates(templates, concepts))
   }, [available, getAncestors, selectedConcept, templates])
 

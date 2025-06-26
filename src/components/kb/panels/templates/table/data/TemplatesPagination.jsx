@@ -8,12 +8,46 @@ import { PAGINATION } from '@/lib/constants'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.TEMPLATES.PAGE_SIZE_OPTIONS
 
-const TemplatesPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize }) => {
-  // Ensure we have valid numbers for pagination calculations
-  const currentPage = Math.max(1, Math.floor(offset / limit) + 1) // Convert to 1-based index, minimum 1
-  const totalPages = Math.max(1, Math.ceil(count / limit)) // Ensure at least 1 page
+const TemplatesPagination = ({
+  displayTemplates,
+  pageSize,
+  currentPage,
+  onPageChange,
+  onPageSizeChange,
+}) => {
+  // Calculate pagination values based on displayTemplates
+  const totalCount = displayTemplates.length
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
-  const handlePageCommit = usePageCommit(currentPage, totalPages, nextPage, prevPage)
+  // Ensure currentPage is within valid range
+  const validCurrentPage = Math.min(Math.max(1, currentPage), totalPages)
+
+  // Calculate start and end indices for current page
+  const startIndex = (validCurrentPage - 1) * pageSize
+  const endIndex = Math.min(startIndex + pageSize, totalCount)
+
+  const handleNextPage = () => {
+    if (validCurrentPage < totalPages) {
+      onPageChange(validCurrentPage + 1)
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (validCurrentPage > 1) {
+      onPageChange(validCurrentPage - 1)
+    }
+  }
+
+  const handlePageCommit = usePageCommit(
+    validCurrentPage,
+    totalPages,
+    handleNextPage,
+    handlePrevPage
+  )
+
+  const handlePageSizeChange = newPageSize => {
+    onPageSizeChange(newPageSize)
+  }
 
   return (
     <Box
@@ -28,8 +62,8 @@ const TemplatesPagination = ({ limit, offset, count, nextPage, prevPage, setPage
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <Typography variant='body2'>Rows per page:</Typography>
         <Select
-          value={limit}
-          onChange={e => setPageSize(Number(e.target.value))}
+          value={pageSize}
+          onChange={e => handlePageSizeChange(Number(e.target.value))}
           size='small'
           sx={{
             height: '24px',
@@ -49,20 +83,24 @@ const TemplatesPagination = ({ limit, offset, count, nextPage, prevPage, setPage
       </Box>
       <Box sx={{ flex: 1, textAlign: 'center' }}>
         <Typography variant='body2'>
-          Templates {offset + 1} - {Math.min(offset + limit, count)}
+          Templates {totalCount > 0 ? startIndex + 1 : 0} - {endIndex} of {totalCount}
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <PageControl
-          currentPage={currentPage}
+          currentPage={validCurrentPage}
           totalPages={totalPages}
           handlePageCommit={handlePageCommit}
         />
         <Box>
-          <IconButton onClick={prevPage} disabled={offset === 0} size='small'>
+          <IconButton onClick={handlePrevPage} disabled={validCurrentPage <= 1} size='small'>
             <IoIosArrowBack />
           </IconButton>
-          <IconButton onClick={nextPage} disabled={offset + limit >= count} size='small'>
+          <IconButton
+            onClick={handleNextPage}
+            disabled={validCurrentPage >= totalPages}
+            size='small'
+          >
             <IoIosArrowForward />
           </IconButton>
         </Box>
