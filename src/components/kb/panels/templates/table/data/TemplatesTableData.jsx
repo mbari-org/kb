@@ -11,7 +11,7 @@ import useTemplateColumns from './useTemplateColumns'
 
 import { PAGINATION } from '@/lib/constants'
 
-const { PAGE_SIZE_OPTIONS } = PAGINATION.TEMPLATES
+const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.TEMPLATES
 
 const TemplatesTableData = () => {
   const { deleteTemplate, editTemplate, filteredTemplates } = use(TemplatesContext)
@@ -20,7 +20,7 @@ const TemplatesTableData = () => {
 
   // Local pagination state
   const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0])
+  const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
 
   const deleteTemplateModal = useDeleteTemplateModal(deleteTemplate)
   const editTemplateModal = useEditTemplateModal(editTemplate, displayTemplates)

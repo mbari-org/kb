@@ -4,7 +4,7 @@ import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
-import useLoadConceptError from '@/contexts/panels/concepts/useLoadConceptError'
+import useLoadConceptError from '@/hooks/useLoadConceptError'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import AppModalContext from '@/contexts/modal/AppModalContext'
@@ -20,7 +20,7 @@ import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
-  const isLoading = useRef(false)
+  const isLoadingConcept = useRef(false)
   const previousConceptName = useRef(null)
 
   const { modalData, setModalData } = use(AppModalContext)
@@ -86,8 +86,8 @@ const ConceptProvider = ({ children }) => {
       } else {
         if (isConceptLoaded(selectedConcept)) {
           handleSetConcept(getConcept(selectedConcept))
-        } else if (!isLoading.current) {
-          isLoading.current = true
+        } else if (!isLoadingConcept.current) {
+          isLoadingConcept.current = true
           setEditing(false)
           loadConcept(selectedConcept)
             .then(loadedConcept => {
@@ -97,7 +97,7 @@ const ConceptProvider = ({ children }) => {
               handleLoadConceptError({ ...error, conceptName: selectedConcept })
             })
             .finally(() => {
-              isLoading.current = false
+              isLoadingConcept.current = false
             })
         }
       }
