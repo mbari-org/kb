@@ -19,6 +19,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
   const { concept, stagedState, modifyConcept } = use(ConceptContext)
   const swiperRef = useRef(null)
+  const isProgrammaticChange = useRef(false)
 
   const { media: editingMedia, mediaIndex: editingMediaIndex } = stagedState
 
@@ -30,17 +31,28 @@ const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
   }
 
   const handleSlideChange = change => {
-    modifyConcept({
-      type: CONCEPT_STATE.FIELD.SET,
-      update: { field: 'mediaIndex', value: change.snapIndex },
-    })
+    // Only update state if this is not a programmatic change
+    if (!isProgrammaticChange.current) {
+      modifyConcept({
+        type: CONCEPT_STATE.FIELD.SET,
+        update: { field: 'mediaIndex', value: change.snapIndex },
+      })
+    }
   }
 
+  // Sync swiper position with external state changes (e.g., from other components)
+  // The isProgrammaticChange flag prevents infinite loops by blocking state updates
+  // when the swiper position is changed programmatically
   useEffect(() => {
-    if (swiperRef.current) {
+    if (swiperRef.current && swiperRef.current.activeIndex !== editingMediaIndex) {
+      isProgrammaticChange.current = true
       swiperRef.current.slideTo(editingMediaIndex)
+      // Reset the flag after a short delay to allow the slide change to complete
+      setTimeout(() => {
+        isProgrammaticChange.current = false
+      }, 100)
     }
-  }, [concept, editingMediaIndex])
+  }, [editingMediaIndex])
 
   return (
     <Swiper
