@@ -17,6 +17,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelModalContext from '@/contexts/modal/PanelModalContext'
 
 import useStageMedia from './useStageMedia'
+import useDebounce from '@/hooks/useDebounce'
 
 import { hasPrimary, isPrimary } from '@/lib/kb/model/media'
 import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
@@ -44,33 +45,6 @@ const EditMediaContent = () => {
   const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
 
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true, isDuplicate: false })
-  const [urlCheckTimeout, setUrlCheckTimeout] = useState(null)
-
-  const handleChange = event => {
-    const { name: field, value, type, checked } = event.target
-
-    const updatedMediaItem = {
-      ...formMediaItem,
-      [field]: type === 'checkbox' ? checked : value,
-    }
-    setFormMediaItem(updatedMediaItem)
-
-    const fieldIsModified =
-      action === CONCEPT_STATE.MEDIA.ADD
-        ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
-        : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
-
-    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
-    setModifiedFields(updatedModifiedFields)
-
-    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
-
-    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified }))
-
-    if (field === 'url') {
-      checkUrlChange(value)
-    }
-  }
 
   const isUrlDuplicate = useCallback(
     url => {
@@ -79,26 +53,52 @@ const EditMediaContent = () => {
     [concept.media]
   )
 
-  const checkUrlChange = value => {
-    // Delay URL validation check
-    if (isUrlValid(value)) {
-      // Clear any existing timeout
-      if (urlCheckTimeout) {
-        clearTimeout(urlCheckTimeout)
-      }
+  // Debounced function to update form state and modal data
+  const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field) => {
+    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
+    setModifiedFields(updatedModifiedFields)
 
-      // Set loading state immediately
+    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
+
+    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified }))
+  }, 300)
+
+  // Debounced function to check URL validity
+  const debouncedUrlCheck = useDebounce(value => {
+    if (isUrlValid(value)) {
       setUrlStatus({ loading: true, valid: true, isDuplicate: false })
 
-      // Create new timeout for URL check
-      const timeoutId = setTimeout(() => {
-        checkImageUrlExists(value).then(exists => {
-          const isDuplicate = value !== mediaItem.url && isUrlDuplicate(value)
-          setUrlStatus({ loading: false, valid: exists, isDuplicate })
-        })
-      }, 500)
+      checkImageUrlExists(value).then(exists => {
+        const isDuplicate = value !== mediaItem.url && isUrlDuplicate(value)
+        setUrlStatus({ loading: false, valid: exists, isDuplicate })
+      })
+    } else {
+      setUrlStatus({ loading: false, valid: false, isDuplicate: false })
+    }
+  }, 500)
 
-      setUrlCheckTimeout(timeoutId)
+  const handleChange = event => {
+    const { name: field, value, type, checked } = event.target
+
+    const updatedMediaItem = {
+      ...formMediaItem,
+      [field]: type === 'checkbox' ? checked : value,
+    }
+
+    // Update form state immediately for responsive UI
+    setFormMediaItem(updatedMediaItem)
+
+    const fieldIsModified =
+      action === CONCEPT_STATE.MEDIA.ADD
+        ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
+        : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
+
+    // Debounce the form state update and modal data changes
+    debouncedUpdateForm(updatedMediaItem, fieldIsModified, field)
+
+    // Handle URL validation with debouncing
+    if (field === 'url') {
+      debouncedUrlCheck(value)
     }
   }
 
@@ -112,15 +112,6 @@ const EditMediaContent = () => {
   useEffect(() => {
     setShowPrimaryCheckbox(!hasPrimary(stagedState.media) || isPrimary(mediaItem))
   }, [stagedState.media, mediaIndex, mediaItem])
-
-  // Clean up timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (urlCheckTimeout) {
-        clearTimeout(urlCheckTimeout)
-      }
-    }
-  }, [urlCheckTimeout])
 
   if (!mediaItem) {
     return null
