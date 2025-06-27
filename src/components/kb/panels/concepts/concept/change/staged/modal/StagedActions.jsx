@@ -2,49 +2,56 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import PanelModalContext from '@/contexts/modal/PanelModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
-import { LABELS, SELECTED } from '@/lib/constants'
+import { LABELS } from '@/lib/constants'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
-const { BACK_TO_EDIT, CANCEL, CONTINUE, SAVE } = LABELS.BUTTON
-const { CONFIRMED } = CONCEPT_STATE.RESET
+const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
+const { SAVE } = LABELS.CONCEPT.ACTION
+const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
-const StagedActions = () => {
-  const { concept, modifyConcept } = use(ConceptContext)
-  const { closeModal, setProcessing } = use(AppModalContext)
+const StagedActions = ({ intent }) => {
+  const { concept, confirmReset, modifyConcept } = use(ConceptContext)
+  const { closeModal } = use(PanelModalContext)
   const { updateSelected } = use(SelectedContext)
 
   const saveStaged = useSaveStaged()
 
   const colors = ['cancel', 'main']
-  const labels = [SAVE, CANCEL]
+  const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
+  const confirmLabels = [CONFIRM_DISCARD, REJECT_DISCARD]
+
+  const labels = confirmReset ? confirmLabels : actionLabels
 
   const onAction = label => {
-    closeModal()
-
     switch (label) {
-      case SAVE:
-        setProcessing('Saving...')
-        saveStaged()
-        break
       case BACK_TO_EDIT:
-        updateSelected({
-          [SELECTED.CONCEPT]: concept.name,
-          [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS,
-        })
+        updateSelected({ concept: concept.name, panel: 'Concepts' })
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break
-      case CONTINUE:
-        updateSelected({
-          [SELECTED.CONCEPT]: concept.name,
-          [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS,
-        })
+
+      case CONFIRM_DISCARD:
         modifyConcept({ type: CONFIRMED.YES })
+        break
+
+      case REJECT_DISCARD:
+        modifyConcept({ type: CONFIRMED.NO })
+        break
+
+      case DISCARD_ALL:
+        modifyConcept({ type: TO_INITIAL })
+        break
+
+      case SAVE:
+        saveStaged()
+        break
+
+      default:
         closeModal()
         break
     }
