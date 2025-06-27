@@ -21,32 +21,24 @@ const MediaView = () => {
   const { media, mediaIndex } = stagedState
 
   const [previewOn, setPreviewOn] = useState(false)
-  const [swiperHeight, setSwiperHeight] = useState('auto')
 
   // const showEditMedia = editing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA.DELETE
   const showEditMedia = editing && !media[mediaIndex]?.historyId
 
-  useEffect(() => {
-    if (mediaViewRef.current) {
-      const width = mediaViewRef.current.offsetWidth
-      setSwiperHeight(`${width / 4}px`)
-    }
-  }, [media])
-
   return (
-    <>
+    <Box>
       <Box ref={mediaViewRef} sx={{ position: 'relative' }}>
         <MediaPreview setPreviewOn={setPreviewOn} />
         <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} />
         {showEditMedia && (
-          <>
+          <Box>
             <MediaDelete />
             <MediaEdit />
-          </>
+          </Box>
         )}
       </Box>
       <Box sx={{ mt: 0.5, position: 'relative', overflow: 'visible' }}>
-        <MediaSwiper height={swiperHeight} />
+        <MediaSwiper height='auto' />
         {editing && (
           <MediaAdd
             bgColor={theme.palette.background.paperLight}
@@ -56,7 +48,7 @@ const MediaView = () => {
           />
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 
