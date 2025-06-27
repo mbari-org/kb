@@ -33,6 +33,7 @@ const SelectedProvider = ({ children }) => {
 
   const getSettings = useCallback(
     (key, field) => {
+      if (!settings) return undefined
       const keySettings = settings[key]
       return field ? keySettings[field] : keySettings
     },
@@ -52,20 +53,21 @@ const SelectedProvider = ({ children }) => {
     [conceptSelect, panelSelect]
   )
 
-  const updateSettings = useCallback(
-    ({ history, references, templates }) => {
+  const updateSettings = useCallback(({ history, references, templates }) => {
+    setSettings(prevSettings => {
+      if (!prevSettings) return prevSettings
+
       const updatedSettings = {
-        ...settings,
-        ...(history && { [HISTORY.KEY]: { ...settings?.history, ...history } }),
-        ...(references && { [REFERENCES.KEY]: { ...settings?.references, ...references } }),
-        ...(templates && { [TEMPLATES.KEY]: { ...settings?.templates, ...templates } }),
+        ...prevSettings,
+        ...(history && { [HISTORY.KEY]: { ...prevSettings[HISTORY.KEY], ...history } }),
+        ...(references && { [REFERENCES.KEY]: { ...prevSettings[REFERENCES.KEY], ...references } }),
+        ...(templates && { [TEMPLATES.KEY]: { ...prevSettings[TEMPLATES.KEY], ...templates } }),
       }
 
       settingsStore.set(updatedSettings)
-      setSettings(updatedSettings)
-    },
-    [settings]
-  )
+      return updatedSettings
+    })
+  }, [])
 
   const select = useCallback(
     ({ concept: conceptName, history, panel: panelName, references, templates }) => {
@@ -111,7 +113,7 @@ const SelectedProvider = ({ children }) => {
 
   // Don't render children until settings are loaded
   if (!settings) {
-    return <SelectedContext value={value}>{null}</SelectedContext>
+    return null
   }
 
   return <SelectedContext value={value}>{children}</SelectedContext>
