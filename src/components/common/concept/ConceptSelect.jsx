@@ -130,7 +130,7 @@ const ConceptSelect = ({
             },
           },
         }}
-        value={conceptName || null}
+        value={conceptName || ''}
       />
       <hr />
     </Stack>

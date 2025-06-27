@@ -41,13 +41,13 @@ const ConceptAuthor = () => {
   )
 
   useEffect(() => {
-    setAuthor(stagedState.author)
+    setAuthor(stagedState.author || '')
   }, [stagedState.author])
 
   return (
     <FormControl>
       <Box sx={{ ...border }}>
-        <TextField {...infoStyle} label='Author' onChange={handleChange} value={author} />
+        <TextField {...infoStyle} label='Author' onChange={handleChange} value={author || ''} />
       </Box>
     </FormControl>
   )

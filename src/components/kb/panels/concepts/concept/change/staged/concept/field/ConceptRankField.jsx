@@ -23,7 +23,7 @@ const ConceptRankField = ({ field, fieldValue, otherValue, inputStyle, onChange 
             displayEmpty
             labelId={`${field}-label`}
             onChange={onChange}
-            value={fieldValue}
+            value={fieldValue || ''}
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 borderTop: 'none',
