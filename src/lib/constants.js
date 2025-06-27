@@ -112,7 +112,7 @@ export const LABELS = {
       REJECT: 'Reject',
       REJECT_ALL: 'Reject All',
       SAVE: 'Save',
-      SHOW: 'Staged',
+      STAGED: 'Staged',
     },
     CHANGE_NAME: {
       ASSOCIATED_DATA: 'Associated Data',

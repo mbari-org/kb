@@ -15,7 +15,7 @@ import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPend
 import { CONCEPT_STATE, LABELS } from '@/lib/constants'
 
 const { DISCARD, DISCARD_ALL } = LABELS.BUTTON
-const { CANCEL, EDIT, PENDING, SAVE, SHOW } = LABELS.CONCEPT.ACTION
+const { CANCEL, EDIT, PENDING, SAVE, STAGED } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const ConceptEditingActions = () => {
@@ -54,9 +54,9 @@ const ConceptEditingActions = () => {
     displayStaged(SAVE)
   }, [modifyConcept, displayStaged])
 
-  const handleShow = useCallback(() => {
+  const handleStaged = useCallback(() => {
     modifyConcept({ type: CONFIRMED.NO })
-    displayStaged(SHOW)
+    displayStaged(STAGED)
   }, [modifyConcept, displayStaged])
 
   const showPendingButton = useMemo(() => {
@@ -80,8 +80,8 @@ const ConceptEditingActions = () => {
         {editCancelDiscardButtonText}
       </Button>
       {editing && hasModifiedState({ initialState, stagedState }) && (
-        <Button onClick={handleShow} sx={{ margin: '0 10px' }} variant='contained'>
-          {SHOW}
+        <Button onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
+          {STAGED}
         </Button>
       )}
       {showPendingButton && (
