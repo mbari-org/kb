@@ -27,7 +27,7 @@ const ConceptsSidebar = () => {
   if (!concept) return null
 
   return (
-    <Stack sx={{ height: '100%', ml: 2, mr: 1 }}>
+    <Stack sx={{ height: '100%', ml: 2, mr: 1, mt: 1.75 }}>
       <ConceptSelect
         conceptName={concept.name}
         doConceptSelected={doConceptSelected}

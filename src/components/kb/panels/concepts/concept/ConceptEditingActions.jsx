@@ -68,7 +68,7 @@ const ConceptEditingActions = () => {
     <Box
       sx={{
         alignItems: 'center',
-        bottom: 65,
+        bottom: 70,
         display: 'flex',
         justifyContent: 'space-between',
         left: 10,
