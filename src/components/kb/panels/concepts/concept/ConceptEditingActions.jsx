@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
 import useDisplayPending from '@/components/kb/panels/concepts/concept/change/pending/modal/useDisplayPending'
-import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
+import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -26,7 +26,7 @@ const ConceptEditingActions = () => {
   const parentPending = useConceptPending(concept.parent)
 
   const displayPending = useDisplayPending()
-  const displayStaged = useDisplayStaged()
+  const displayStaged = useStagedModal()
 
   const editCancelDiscardButtonText = useMemo(() => {
     if (!editing) return EDIT

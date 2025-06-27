@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useMemo, useReducer, useState, useRef } fr
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
-import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
+import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import useLoadConceptError from '@/hooks/useLoadConceptError'
 
@@ -38,7 +38,7 @@ const ConceptProvider = ({ children }) => {
 
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
 
-  const displayStaged = useDisplayStaged()
+  const displayStaged = useStagedModal()
   const handleLoadConceptError = useLoadConceptError()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 

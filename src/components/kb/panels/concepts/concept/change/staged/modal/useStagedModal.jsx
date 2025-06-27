@@ -8,7 +8,7 @@ import { createModal } from '@/components/modal/factory'
 
 import AppModalContext from '@/contexts/modal/AppModalContext'
 
-const useDisplayStaged = () => {
+const useStagedModal = () => {
   const { setModal } = use(AppModalContext)
 
   return useCallback(
@@ -25,4 +25,4 @@ const useDisplayStaged = () => {
   )
 }
 
-export default useDisplayStaged
+export default useStagedModal

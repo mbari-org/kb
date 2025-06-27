@@ -7,7 +7,7 @@ import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
+import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
 
 import { LABELS, SELECTED } from '@/lib/constants'
 
@@ -20,13 +20,13 @@ const LogoutLink = () => {
   const { initialState, stagedState } = use(ConceptContext)
   const { panels } = use(SelectedContext)
 
-  const displayStaged = useDisplayStaged()
+  const displayStaged = useStagedModal()
 
   const handleLogout = () => {
     // Only check for modified state if we're currently on the concepts panel
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
     const hasModifications = isOnConceptsPanel && hasModifiedState({ initialState, stagedState })
-    
+
     return hasModifications ? displayStaged(SAVE) : logout()
   }
 
