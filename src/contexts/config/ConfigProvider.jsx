@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,6 +14,46 @@ const ConfigProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
   const [config, setConfig] = useState(null)
   const [apiFns, setApiFns] = useState(null)
+  const mountedRef = useRef(true)
+
+  const loadConfig = useCallback(async (url, onError) => {
+    try {
+      const { endpoints, error } = await getEndpoints(url)
+      
+      if (!mountedRef.current) return
+      
+      if (error) {
+        if (onError) {
+          onError(error)
+        } else {
+          setConfig({
+            error,
+            url,
+            valid: false,
+          })
+        }
+        return
+      }
+
+      const getServiceUrl = createServiceLookup(endpoints)
+      setConfig({
+        getServiceUrl,
+        url,
+        valid: true,
+      })
+    } catch (err) {
+      if (!mountedRef.current) return
+      if (onError) {
+        onError(err)
+      } else {
+        setConfig({
+          error: err,
+          url,
+          valid: false,
+        })
+      }
+    }
+  }, [])
 
   const updateConfig = useCallback(async url => {
     if (url === null) {
@@ -23,53 +63,29 @@ const ConfigProvider = ({ children }) => {
     }
 
     configUrlStore.set(url)
-    const { endpoints, error } = await getEndpoints(url)
-    if (error) {
-      setConfig({
-        error,
-        url,
-        valid: false,
-      })
-      return
-    }
-
-    const getServiceUrl = createServiceLookup(endpoints)
-    setConfig({
-      getServiceUrl,
-      url,
-      valid: true,
-    })
-  }, [])
+    await loadConfig(url)
+  }, [loadConfig])
 
   useEffect(() => {
     const storedConfigUrl = configUrlStore.get()
     if (storedConfigUrl) {
-      getEndpoints(storedConfigUrl).then(({ endpoints, error }) => {
-        if (error) {
-          updateConfig(null)
-        } else {
-          const getServiceUrl = createServiceLookup(endpoints)
-          setConfig({
-            getServiceUrl,
-            url: storedConfigUrl,
-            valid: true,
-          })
+      loadConfig(storedConfigUrl, () => {
+        // On error, clear config and navigate to login
+        if (mountedRef.current) {
+          setConfig(null)
+          configUrlStore.clear()
+          navigate('/login')
         }
       })
     } else {
       navigate('/login')
     }
-    // navigate does not change, so no need to include it in the dependency array
+    // navigate and loadConfig are stable, no need to include in dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (!config) {
-      setApiFns(null)
-      return
-    }
-
-    const apiPayload = config => async (payloadRequest, params) => {
+  const createApiFns = useCallback((config, showBoundary) => {
+    const apiPayload = async (payloadRequest, params) => {
       const { error, payload } = await payloadRequest(config, params)
       if (error) {
         showBoundary(error)
@@ -77,7 +93,7 @@ const ConfigProvider = ({ children }) => {
       return payload
     }
 
-    const apiPaginated = config => async (paginationRequest, params) => {
+    const apiPaginated = async (paginationRequest, params) => {
       // Even though the API returns limit and offset values, they simply echo the values sent by
       // the client. The values for limit and offset are maintained internally by the client itself.
       // So we can just return the payload content.
@@ -88,9 +104,9 @@ const ConfigProvider = ({ children }) => {
       return payload.content
     }
 
-    const apiRaw = config => async (apiRequest, params) => apiRequest(config, params)
+    const apiRaw = async (apiRequest, params) => apiRequest(config, params)
 
-    const apiResult = config => async (apiRequest, params) => {
+    const apiResult = async (apiRequest, params) => {
       const { error, result } = await apiRequest(config, params)
       if (error) {
         showBoundary(error)
@@ -98,13 +114,28 @@ const ConfigProvider = ({ children }) => {
       return result
     }
 
-    setApiFns({
-      apiPayload: apiPayload(config),
-      apiRaw: apiRaw(config),
-      apiResult: apiResult(config),
-      apiPaginated: apiPaginated(config),
-    })
-  }, [config, showBoundary])
+    return {
+      apiPayload,
+      apiRaw,
+      apiResult,
+      apiPaginated,
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!config) {
+      setApiFns(null)
+      return
+    }
+
+    setApiFns(createApiFns(config, showBoundary))
+  }, [config, showBoundary, createApiFns])
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
 
   const value = useMemo(
     () => ({ apiFns, config, updateConfig }),
