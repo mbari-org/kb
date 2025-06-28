@@ -35,7 +35,9 @@ const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
   const expand = useCallback(
     concept => {
       const path = itemPath(taxonomy, concept)
-      setExpandedItems(prevItems => [...new Set([...prevItems, ...path])])
+      if (path) {
+        setExpandedItems(prevItems => [...new Set([...prevItems, ...path])])
+      }
     },
     [setExpandedItems, taxonomy]
   )

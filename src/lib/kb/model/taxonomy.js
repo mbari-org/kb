@@ -124,7 +124,7 @@ const isConceptLoaded = (taxonomy, conceptName) => {
     concept &&
     concept.aliases &&
     concept.children &&
-    concept.children.every(child => taxonomy.conceptMap[child].children) &&
+    concept.children.every(child => taxonomy.conceptMap[child]?.children) &&
     (concept.name === taxonomy.rootName || concept.parent)
   )
 }

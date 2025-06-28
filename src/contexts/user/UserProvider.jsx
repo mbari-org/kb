@@ -1,5 +1,5 @@
 import { use, useEffect, useState, useMemo, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import useAuthUser from '@/contexts/user/lib/useAuthUser'
 import useLogout from '@/contexts/user/lib/useLogout'
@@ -11,6 +11,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 const UserProvider = ({ children }) => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { config } = use(ConfigContext)
 
@@ -32,7 +33,7 @@ const UserProvider = ({ children }) => {
 
     refreshUser()
       .then(() => {
-        if (mountedRef.current) {
+        if (mountedRef.current && location.pathname !== '/kb') {
           navigate('/kb')
         }
       })
@@ -44,7 +45,7 @@ const UserProvider = ({ children }) => {
       .finally(() => {
         refreshingRef.current = false
       })
-  }, [config, refreshUser, user, navigate])
+  }, [config, refreshUser, user, navigate, location.pathname])
 
   useEffect(() => {
     return () => {

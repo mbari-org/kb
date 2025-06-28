@@ -84,9 +84,12 @@ const ConceptProvider = ({ children }) => {
           setModalData(prev => ({ ...prev, warning: true }))
         }
       } else {
+        // Since TaxonomyProvider now loads the root concept upfront,
+        // most concepts should already be loaded
         if (isConceptLoaded(selectedConcept)) {
           handleSetConcept(getConcept(selectedConcept))
         } else if (!isLoadingConcept.current) {
+          // Only load if concept is not already loaded (rare case)
           isLoadingConcept.current = true
           setEditing(false)
           loadConcept(selectedConcept)

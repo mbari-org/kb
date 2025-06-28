@@ -32,6 +32,25 @@ import { PROCESSING } from '@/lib/constants'
 
 const { LOADING } = PROCESSING
 
+// Load initial taxonomy with root concept and its children
+const loadInitialTaxonomy = async apiFns => {
+  try {
+    // First load the basic taxonomy
+    const { taxonomy: basicTaxonomy } = await loadTaxonomy(apiFns)
+    
+    // Then load the root concept with its children
+    const { taxonomy: taxonomyWithRoot } = await loadTaxonomyConcept(
+      basicTaxonomy,
+      basicTaxonomy.rootName,
+      apiFns
+    )
+    
+    return { taxonomy: taxonomyWithRoot }
+  } catch (error) {
+    return { error }
+  }
+}
+
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
@@ -41,32 +60,32 @@ const TaxonomyProvider = ({ children }) => {
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const initialLoad = useRef(true)
-
-  const updateTaxonomy = useCallback(
-    taxonomy => {
-      cxDebugTaxonomyIntegrity(taxonomy)
-      setTaxonomy(taxonomy)
-    },
-    [setTaxonomy]
-  )
+  const updateTaxonomy = useCallback(taxonomy => {
+    cxDebugTaxonomyIntegrity(taxonomy)
+    setTaxonomy(taxonomy)
+  }, [])
 
   const deleteConcept = useCallback(
     async conceptName => {
-      if (!apiFns) return
-      const { taxonomy: updatedTaxonomy, selectConceptName } = await deleteTaxonomyConcept(
-        taxonomy,
-        conceptName,
-        apiFns
-      )
-      updateTaxonomy(updatedTaxonomy)
-      return selectConceptName
+      if (!apiFns || !taxonomy) return
+      try {
+        const { taxonomy: updatedTaxonomy, selectConceptName } = await deleteTaxonomyConcept(
+          taxonomy,
+          conceptName,
+          apiFns
+        )
+        updateTaxonomy(updatedTaxonomy)
+        return selectConceptName
+      } catch (error) {
+        showBoundary(error)
+      }
     },
-    [taxonomy, apiFns, updateTaxonomy]
+    [taxonomy, apiFns, updateTaxonomy, showBoundary]
   )
 
   const filterRanks = useCallback(
     (field, otherValue) => {
+      if (!taxonomy) return []
       const taxonomyRanks = filterTaxonomyRanks(taxonomy, field, otherValue)
       if (isAdmin(user)) {
         return taxonomyRanks
@@ -77,51 +96,80 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const getConcept = useCallback(
-    conceptName => getTaxonomyConcept(taxonomy, conceptName),
+    conceptName => {
+      if (!taxonomy) return null
+      return getTaxonomyConcept(taxonomy, conceptName)
+    },
     [taxonomy]
   )
 
   const getConceptPrimaryName = useCallback(
-    conceptName => getTaxonomyConceptPrimaryName(taxonomy, conceptName),
+    conceptName => {
+      if (!taxonomy) return null
+      return getTaxonomyConceptPrimaryName(taxonomy, conceptName)
+    },
     [taxonomy]
   )
 
   const getAncestors = useCallback(
-    conceptName => getTaxonomyAncestors(taxonomy, conceptName),
+    conceptName => {
+      if (!taxonomy) return []
+      return getTaxonomyAncestors(taxonomy, conceptName)
+    },
     [taxonomy]
   )
 
-  const getNames = useCallback(() => getTaxonomyNames(taxonomy), [taxonomy])
+  const getNames = useCallback(() => {
+    if (!taxonomy) return []
+    return getTaxonomyNames(taxonomy)
+  }, [taxonomy])
 
   const getPendingHistory = useCallback(
-    conceptName => getTaxonomyPendingHistory(taxonomy, conceptName),
+    conceptName => {
+      if (!taxonomy) return []
+      return getTaxonomyPendingHistory(taxonomy, conceptName)
+    },
     [taxonomy]
   )
 
   const getRootName = useMemo(() => taxonomy?.rootName, [taxonomy?.rootName])
 
   const isConceptLoaded = useCallback(
-    conceptName => isTaxonomyConceptLoaded(taxonomy, conceptName),
+    conceptName => {
+      if (!taxonomy) return false
+      return isTaxonomyConceptLoaded(taxonomy, conceptName)
+    },
     [taxonomy]
   )
 
   const isDescendant = useCallback(
-    (conceptName, descendantName) => isDescendantConcept(taxonomy, conceptName, descendantName),
+    (conceptName, descendantName) => {
+      if (!taxonomy) return false
+      return isDescendantConcept(taxonomy, conceptName, descendantName)
+    },
     [taxonomy]
   )
 
-  const isRoot = useCallback(concept => isTaxonomyRoot(taxonomy, concept), [taxonomy])
+  const isRoot = useCallback(
+    concept => {
+      if (!taxonomy) return false
+      return isTaxonomyRoot(taxonomy, concept)
+    },
+    [taxonomy]
+  )
 
   const alreadyLoadingConcept = useRef(false)
 
   const loadConcept = useCallback(
     async conceptName => {
+      if (!taxonomy || !apiFns) return null
+
       if (isConceptLoaded(conceptName)) {
         return getConcept(conceptName)
       }
 
-      if (!apiFns || alreadyLoadingConcept.current) {
-        return
+      if (alreadyLoadingConcept.current) {
+        return null
       }
 
       try {
@@ -133,22 +181,25 @@ const TaxonomyProvider = ({ children }) => {
           conceptName,
           apiFns
         )
+
         updateTaxonomy(updatedTaxonomy)
+        setProcessing(false)
 
         const updatedConcept = getTaxonomyConcept(updatedTaxonomy, conceptName)
-        setProcessing(null)
-
         return updatedConcept
+      } catch (error) {
+        setProcessing(false)
+        showBoundary(error)
       } finally {
         alreadyLoadingConcept.current = false
       }
     },
-    [apiFns, getConcept, isConceptLoaded, setProcessing, taxonomy, updateTaxonomy]
+    [apiFns, getConcept, isConceptLoaded, setProcessing, taxonomy, updateTaxonomy, showBoundary]
   )
 
   const loadConceptDescendants = useCallback(
     async concept => {
-      if (!apiFns) return
+      if (!apiFns || !taxonomy) return null
       try {
         setProcessing(LOADING)
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(
@@ -157,11 +208,11 @@ const TaxonomyProvider = ({ children }) => {
           apiFns
         )
         updateTaxonomy(updatedTaxonomy)
-        setProcessing(null)
+        setProcessing(false)
 
         return updatedTaxonomy
       } catch (error) {
-        setProcessing(null)
+        setProcessing(false)
         showBoundary(error)
       }
     },
@@ -170,60 +221,67 @@ const TaxonomyProvider = ({ children }) => {
 
   const refreshConcept = useCallback(
     async (concept, updateInfo) => {
-      if (!apiFns) return
-      const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
-        taxonomy,
-        concept,
-        updateInfo,
-        apiFns
-      )
+      if (!apiFns || !taxonomy) return null
+      try {
+        const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
+          taxonomy,
+          concept,
+          updateInfo,
+          apiFns
+        )
 
-      updateTaxonomy(updatedTaxonomy)
+        updateTaxonomy(updatedTaxonomy)
 
-      return updatedConcept
+        return updatedConcept
+      } catch (error) {
+        showBoundary(error)
+      }
     },
-    [apiFns, taxonomy, updateTaxonomy]
+    [apiFns, taxonomy, updateTaxonomy, showBoundary]
   )
 
   const refreshHistory = useCallback(
     async historyType => {
-      if (!apiFns) return
-      const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(
-        taxonomy,
-        historyType,
-        apiFns
-      )
-      updateTaxonomy(updatedTaxonomy)
-      return updatedTaxonomy
+      if (!apiFns || !taxonomy) return null
+      try {
+        const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(
+          taxonomy,
+          historyType,
+          apiFns
+        )
+        updateTaxonomy(updatedTaxonomy)
+        return updatedTaxonomy
+      } catch (error) {
+        showBoundary(error)
+      }
     },
-    [apiFns, taxonomy, updateTaxonomy]
+    [apiFns, taxonomy, updateTaxonomy, showBoundary]
   )
 
   useEffect(() => {
-    if (initialLoad.current && apiFns) {
-      initialLoad.current = false
+    if (!apiFns || taxonomy) return
 
-      setProcessing(LOADING)
-      loadTaxonomy(apiFns).then(
-        ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
-          setProcessing(null)
-          if (taxonomyError) {
-            setModal({
-              type: 'error',
-              title: 'CxTBD: Error loading taxonomy',
-              message: taxonomyError.message,
-            })
-          } else {
-            updateTaxonomy(initialTaxonomy)
-          }
-        },
-        error => {
-          setProcessing(null)
-          showBoundary(error)
+    setProcessing(LOADING)
+
+    loadInitialTaxonomy(apiFns).then(
+      ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
+        setProcessing(false)
+        if (taxonomyError) {
+          setModal({
+            type: 'error',
+            title: 'CxTBD: Error loading taxonomy',
+            message: taxonomyError.message,
+          })
+        } else {
+          setTaxonomy(initialTaxonomy)
         }
-      )
-    }
-  }, [apiFns, setModal, setProcessing, showBoundary, updateTaxonomy])
+      },
+      error => {
+        setProcessing(false)
+        showBoundary(error)
+      }
+    )
+  }, [apiFns, taxonomy, setModal, setProcessing, showBoundary])
 
   const value = useMemo(
     () => ({

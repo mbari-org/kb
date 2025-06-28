@@ -37,9 +37,9 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     return [root]
   }, [taxonomy])
 
-  // The RichTreeView item is not provided to the ConceptTreeItem component. The slots 'item'
-  //  field designates the rendering component, but only the itemId is provided to that component.
-  //  The slotsProps 'item' field, passed to ConceptTreeItem in props, provides display data.
+  // The slots 'item' field designates the rendering component, but only the itemId is provided,
+  //  not the item itself. The slotsProps 'item' field, passed to ConceptTreeItem in props,
+  //  provides display data.
   const slots = { item: ConceptTreeItem }
   const slotProps = {
     item: ({ itemId }) => {
