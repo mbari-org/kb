@@ -58,6 +58,8 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems, taxonomy)
 
+  const getItemId = useCallback(item => item.id, [])
+
   const handleItemClick = useConceptClick(
     concept,
     expandConcept,
@@ -93,7 +95,7 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
       <RichTreeView
         apiRef={apiRef}
         expandedItems={expandedItems}
-        getItemId={item => item.id}
+        getItemId={getItemId}
         itemChildrenIndentation={12}
         items={treeItems}
         onItemClick={handleItemClick}
