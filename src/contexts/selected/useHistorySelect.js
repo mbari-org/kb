@@ -10,40 +10,43 @@ const useHistorySelect = (createStore, initialValue) => {
   const store = useMemo(() => createStore(initialValue), [createStore, initialValue])
   const [current, setCurrent] = useState(store.current())
 
-  return {
-    ...store,
+  return useMemo(
+    () => ({
+      ...store,
 
-    back: () => {
-      const result = store.back()
-      setCurrent(store.current())
-      return result
-    },
+      back: () => {
+        const result = store.back()
+        setCurrent(store.current())
+        return result
+      },
 
-    current: () => current,
+      current: () => current,
 
-    forward: () => {
-      const result = store.forward()
-      setCurrent(store.current())
-      return result
-    },
+      forward: () => {
+        const result = store.forward()
+        setCurrent(store.current())
+        return result
+      },
 
-    goBack: delta => {
-      const result = store.goBack(delta)
-      setCurrent(store.current())
-      return result
-    },
+      goBack: delta => {
+        const result = store.goBack(delta)
+        setCurrent(store.current())
+        return result
+      },
 
-    goForward: delta => {
-      const result = store.goForward(delta)
-      setCurrent(store.current())
-      return result
-    },
+      goForward: delta => {
+        const result = store.goForward(delta)
+        setCurrent(store.current())
+        return result
+      },
 
-    push: value => {
-      store.push(value)
-      setCurrent(value)
-    },
-  }
+      push: value => {
+        store.push(value)
+        setCurrent(value)
+      },
+    }),
+    [store, current]
+  )
 }
 
 export default useHistorySelect

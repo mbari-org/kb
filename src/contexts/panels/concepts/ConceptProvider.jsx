@@ -1,10 +1,11 @@
-import { use, useCallback, useEffect, useMemo, useReducer, useState, useRef } from 'react'
+import { use, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
 import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import useLoadConceptError from '@/hooks/useLoadConceptError'
+import useConceptLoader from './useConceptLoader'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import AppModalContext from '@/contexts/modal/AppModalContext'
@@ -20,9 +21,6 @@ import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
-  const isLoadingConcept = useRef(false)
-  const previousConceptName = useRef(null)
-
   const { modalData, setModalData } = use(AppModalContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
@@ -57,15 +55,22 @@ const ConceptProvider = ({ children }) => {
 
   const handleSetConcept = useCallback(
     selectedConcept => {
-      if (selectedConcept?.name !== previousConceptName.current) {
-        previousConceptName.current = selectedConcept?.name
-        setConcept(selectedConcept)
-        setEditing(false)
-        refreshConcept(selectedConcept)
-      }
+      setConcept(selectedConcept)
+      setEditing(false)
+      refreshConcept(selectedConcept)
     },
     [refreshConcept]
   )
+
+  const conceptLoader = useConceptLoader({
+    isConceptLoaded,
+    getConcept,
+    loadConcept,
+    handleSetConcept,
+    handleLoadConceptError,
+    getSelected,
+    setEditing,
+  })
 
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
@@ -73,50 +78,30 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    const shouldUpdateConcept =
-      selectedConcept !== previousConceptName.current &&
-      panels.current() === SELECTED.PANELS.CONCEPTS
+    const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
+    const isNewConceptSelected = selectedConcept !== concept?.name
+    const shouldUpdateConcept = isNewConceptSelected && isConceptPanelActive
 
     if (shouldUpdateConcept) {
-      if (hasModifiedState({ initialState, stagedState })) {
+      const hasUnsavedChanges = hasModifiedState({ initialState, stagedState })
+
+      if (hasUnsavedChanges) {
         if (!modalData?.warning) {
           displayStaged(CONTINUE)
           setModalData(prev => ({ ...prev, warning: true }))
         }
       } else {
-        // Since TaxonomyProvider now loads the root concept upfront,
-        // most concepts should already be loaded
-        if (isConceptLoaded(selectedConcept)) {
-          handleSetConcept(getConcept(selectedConcept))
-        } else if (!isLoadingConcept.current) {
-          // Only load if concept is not already loaded (rare case)
-          isLoadingConcept.current = true
-          setEditing(false)
-          loadConcept(selectedConcept)
-            .then(loadedConcept => {
-              handleSetConcept(loadedConcept)
-            })
-            .catch(error => {
-              handleLoadConceptError({ ...error, conceptName: selectedConcept })
-            })
-            .finally(() => {
-              isLoadingConcept.current = false
-            })
-        }
+        conceptLoader(selectedConcept)
       }
     }
   }, [
+    concept,
     displayStaged,
-    getConcept,
     getSelected,
-    handleLoadConceptError,
-    handleSetConcept,
     initialState,
-    isConceptLoaded,
-    loadConcept,
+    conceptLoader,
     modalData?.warning,
     panels,
-    setEditing,
     setModalData,
     stagedState,
   ])
@@ -144,8 +129,6 @@ const ConceptProvider = ({ children }) => {
       initialState,
       modifyConcept,
       refreshConcept,
-      setEditing,
-      setConfirmPending,
       stagedState,
     ]
   )
