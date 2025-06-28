@@ -6,25 +6,38 @@ const AppModalProvider = ({ children }) => {
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState(null)
   const [onClose, setOnClose] = useState(null)
-  const [processing, setProcessing] = useState(null)
+  const [processing, setProcessing] = useState(false)
 
   const closeModal = useCallback(
     confirmed => {
-      const closeConfirmed = !!confirmed || onClose?.(modalData) !== false
-
-      if (closeConfirmed) {
-        setOnClose(null)
-        setModalData(null)
-        setModal(null)
+      // if processing, don't close unless forced
+      if (processing && !confirmed) {
+        return false
       }
+
+      // If we have an onClose callback, call it and check if it prevents closing
+      if (onClose && !confirmed) {
+        const shouldClose = onClose(modalData)
+        // If callback explicitly returns false, prevent closing
+        if (shouldClose === false) {
+          return false
+        }
+      }
+
+      setOnClose(null)
+      setModalData(null)
+      setModal(null)
+      setProcessing(false)
+
+      return true
     },
-    [onClose, modalData]
+    [onClose, modalData, processing]
   )
 
-  const handleSetModal = (modal, onCloseCallback) => {
+  const handleSetModal = useCallback((modal, onCloseCallback) => {
     setModal(modal)
-    setOnClose(() => onCloseCallback || null)
-  }
+    setOnClose(typeof onCloseCallback === 'function' ? onCloseCallback : null)
+  }, [])
 
   const value = useMemo(
     () => ({
@@ -36,7 +49,7 @@ const AppModalProvider = ({ children }) => {
       setModal: handleSetModal,
       setProcessing,
     }),
-    [closeModal, processing, modal, modalData, setModalData, setProcessing]
+    [closeModal, processing, modal, modalData, handleSetModal]
   )
 
   return <AppModalContext value={value}>{children}</AppModalContext>
