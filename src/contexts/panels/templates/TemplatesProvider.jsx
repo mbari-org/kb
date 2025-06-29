@@ -26,6 +26,7 @@ const TemplatesProvider = ({ children }) => {
   const handleLoadConceptError = useLoadConceptError()
 
   const [filteredTemplates, setFilteredTemplates] = useState([])
+  const [linkFilter, setLinkFilter] = useState({ name: null, value: null })
 
   const templatesSettings = getSettings(TEMPLATES.KEY)
   const { available, concept, toConcept } = templatesSettings
@@ -44,6 +45,11 @@ const TemplatesProvider = ({ children }) => {
   )
 
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates()
+
+  const updateLinkFilter = useCallback(
+    (key, filterValue) => setLinkFilter(prevFilter => ({ ...prevFilter, [key]: filterValue })),
+    []
+  )
 
   useEffect(() => {
     if (!concept) {
@@ -89,12 +95,14 @@ const TemplatesProvider = ({ children }) => {
       concept,
       explicitConcepts,
       filteredTemplates,
+      linkFilter,
       toConcept,
       deleteTemplate,
       editTemplate,
       setAvailable,
       setConcept,
       setToConcept,
+      updateLinkFilter,
     }),
     [
       addTemplate,
@@ -102,12 +110,14 @@ const TemplatesProvider = ({ children }) => {
       concept,
       explicitConcepts,
       filteredTemplates,
+      linkFilter,
       toConcept,
       deleteTemplate,
       editTemplate,
       setAvailable,
       setConcept,
       setToConcept,
+      updateLinkFilter,
     ]
   )
 

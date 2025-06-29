@@ -5,7 +5,7 @@ import PanelTotalExportSwitch from '@/components/common/panel/PanelTotalExportSw
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
-import TemplatesTableHeaderLeftSwitchTooltip from '@/components/kb/panels/templates/table/header/TemplatesTableHeaderLeftSwitchTooltip'
+import TemplatesTableHeaderLeftSwitchTooltip from '@/components/kb/panels/templates/table/header/left/TemplatesTableHeaderLeftSwitchTooltip'
 
 import { CONCEPT_SELECT } from '@/lib/constants'
 import { TEMPLATES as TEMPLATES_TOOLTIPS } from '@/lib/tooltips'

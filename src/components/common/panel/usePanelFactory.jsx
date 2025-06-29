@@ -22,8 +22,13 @@ const usePanelFactory = () => {
       />
     )
 
-    const createTableHeader = ({ headerLeft, headerRight, sx = {} } = {}) => (
-      <PanelTableHeader headerLeft={headerLeft} headerRight={headerRight} sx={sx} />
+    const createTableHeader = ({ headerLeft, headerMiddle, headerRight, sx = {} } = {}) => (
+      <PanelTableHeader
+        headerLeft={headerLeft}
+        headerMiddle={headerMiddle}
+        headerRight={headerRight}
+        sx={sx}
+      />
     )
 
     const createTableData = ({ content, sx = {} } = {}) => (
