@@ -7,30 +7,37 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
 import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
-import { CONCEPT_SELECT } from '@/lib/constants'
+import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
 import { TEMPLATES as TEMPLATES_TOOLTIPS } from '@/lib/tooltips'
 
 const { EXPORT } = TEMPLATES_TOOLTIPS
+const { TEMPLATES } = SELECTED.SETTINGS
 
 const TemplatesTableHeaderLeft = () => {
-  const { available, concept, filteredTemplates, setAvailable, toConcept } = use(TemplatesContext)
+  const { available, filteredTemplates, setAvailable, filters } = use(TemplatesContext)
 
   const templatesExport = useTemplatesExport()
 
-  const exportFn = () => templatesExport({ available, concept, filteredTemplates, toConcept })
+  const exportFn = () =>
+    templatesExport({
+      available,
+      concept: filters[TEMPLATES.FILTERS.CONCEPT],
+      filteredTemplates,
+      toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
+    })
 
   const switchFn = event => setAvailable(event.target.checked)
 
   // Disable switch when concept is null and set available to false
-  const isDisabled = !concept
+  const isDisabled = !filters[TEMPLATES.FILTERS.CONCEPT]
   const effectiveAvailable = isDisabled ? false : available
 
   let exportToolTip
-  if (concept && toConcept) {
+  if (filters[TEMPLATES.FILTERS.CONCEPT] && filters[TEMPLATES.FILTERS.TO_CONCEPT]) {
     exportToolTip = EXPORT.CONCEPT_TO_CONCEPT
-  } else if (concept) {
+  } else if (filters[TEMPLATES.FILTERS.CONCEPT]) {
     exportToolTip = EXPORT.CONCEPT
-  } else if (toConcept) {
+  } else if (filters[TEMPLATES.FILTERS.TO_CONCEPT]) {
     exportToolTip = EXPORT.TO_CONCEPT
   } else {
     exportToolTip = EXPORT.ALL

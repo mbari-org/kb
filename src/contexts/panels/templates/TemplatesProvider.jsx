@@ -9,6 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import useLoadConceptError from '@/hooks/useLoadConceptError'
 
 import useModifyTemplates from './useModifyTemplates'
+import useUpdateFilters from './useUpdateFilters'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
@@ -26,68 +27,60 @@ const TemplatesProvider = ({ children }) => {
   const handleLoadConceptError = useLoadConceptError()
 
   const [filteredTemplates, setFilteredTemplates] = useState([])
-  const [linkFilter, setLinkFilter] = useState({ linkName: '', linkValue: '' })
 
   const templatesSettings = getSettings(TEMPLATES.KEY)
-  const { available, concept, toConcept } = templatesSettings
+  const { available, filters = {} } = templatesSettings
 
   const setAvailable = useCallback(
     bool => updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: bool } }),
     [updateSettings]
   )
-  const setConcept = useCallback(
-    conceptName => updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: conceptName } }),
-    [updateSettings]
-  )
-  const setToConcept = useCallback(
-    toConceptName => updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.TO_CONCEPT]: toConceptName } }),
-    [updateSettings]
-  )
+
+  const { updateFilters } = useUpdateFilters(filters, updateSettings)
 
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates()
 
-  const updateLinkFilter = useCallback(
-    (key, filterValue) => setLinkFilter(prevFilter => ({ ...prevFilter, [key]: filterValue })),
-    []
-  )
-
   // Set available to false when concept is null
   useEffect(() => {
+    const concept = filters[TEMPLATES.FILTERS.CONCEPT]
     if (!concept && available) {
       setAvailable(false)
     }
-  }, [concept, available, setAvailable])
+  }, [filters, available, setAvailable])
 
   useEffect(() => {
-    if (!concept) {
+    if (!filters[TEMPLATES.FILTERS.CONCEPT]) {
       const filtered = filterTemplates(templates || [], {
-        linkName: linkFilter.linkName,
-        linkValue: linkFilter.linkValue,
+        toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
+        linkName: filters[TEMPLATES.FILTERS.LINK_NAME] || '',
+        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE] || '',
       })
       setFilteredTemplates(filtered)
       return
     }
 
     const updateFilteredTemplates = () => {
-      const ancestors = available ? getAncestors(concept) : []
-      const concepts = concept ? [concept, ...ancestors] : null
+      const ancestors = available ? getAncestors(filters[TEMPLATES.FILTERS.CONCEPT]) : []
+      const allConcepts = filters[TEMPLATES.FILTERS.CONCEPT]
+        ? [filters[TEMPLATES.FILTERS.CONCEPT], ...ancestors]
+        : null
       const filtered = filterTemplates(templates || [], {
-        concepts,
-        toConcept,
-        linkName: linkFilter.linkName,
-        linkValue: linkFilter.linkValue,
+        concepts: allConcepts,
+        toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
+        linkName: filters[TEMPLATES.FILTERS.LINK_NAME] || '',
+        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE] || '',
       })
       setFilteredTemplates(filtered)
     }
 
-    if (isConceptLoaded(concept)) {
+    if (isConceptLoaded(filters[TEMPLATES.FILTERS.CONCEPT])) {
       updateFilteredTemplates()
     } else if (!isLoadingConcept.current) {
       isLoadingConcept.current = true
-      loadConcept(concept)
+      loadConcept(filters[TEMPLATES.FILTERS.CONCEPT])
         .then(updateFilteredTemplates)
         .catch(error => {
-          handleLoadConceptError({ ...error, conceptName: concept })
+          handleLoadConceptError({ ...error, conceptName: filters[TEMPLATES.FILTERS.CONCEPT] })
         })
         .finally(() => {
           isLoadingConcept.current = false
@@ -95,46 +88,36 @@ const TemplatesProvider = ({ children }) => {
     }
   }, [
     available,
-    concept,
+    filters,
     getAncestors,
     handleLoadConceptError,
     isConceptLoaded,
     loadConcept,
     templates,
-    toConcept,
-    linkFilter,
   ])
 
   const value = useMemo(
     () => ({
       addTemplate,
       available,
-      concept,
       explicitConcepts,
       filteredTemplates,
-      linkFilter,
-      toConcept,
+      filters,
       deleteTemplate,
       editTemplate,
       setAvailable,
-      setConcept,
-      setToConcept,
-      updateLinkFilter,
+      updateFilters,
     }),
     [
       addTemplate,
       available,
-      concept,
       explicitConcepts,
       filteredTemplates,
-      linkFilter,
-      toConcept,
+      filters,
       deleteTemplate,
       editTemplate,
       setAvailable,
-      setConcept,
-      setToConcept,
-      updateLinkFilter,
+      updateFilters,
     ]
   )
 

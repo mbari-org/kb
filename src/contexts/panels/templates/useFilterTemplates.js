@@ -22,6 +22,7 @@ const useFilterTemplates = ({
   setConceptTemplates,
   updateSelected,
   updateSettings,
+  getSettings,
 }) => {
   const { apiFns } = use(ConfigContext)
   const { templates: allTemplates } = use(KBDataContext)
@@ -122,7 +123,13 @@ const useFilterTemplates = ({
     conceptName => {
       setConceptTemplates([])
       // Store the filter concept in settings
-      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: conceptName } })
+      const newFilters = { ...getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY) }
+      if (conceptName) {
+        newFilters[TEMPLATES.FILTERS.CONCEPT] = conceptName
+      } else {
+        delete newFilters[TEMPLATES.FILTERS.CONCEPT]
+      }
+      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.FILTERS.KEY]: newFilters } })
       // Also update the global concept selection
       if (conceptName) {
         updateSelected({ [SELECTED.CONCEPT]: conceptName })
@@ -156,6 +163,7 @@ const useFilterTemplates = ({
       limit,
       updateSelected,
       updateSettings,
+      getSettings,
       setConceptTemplates,
       setConceptTemplatesCache,
       setCount,
@@ -168,7 +176,13 @@ const useFilterTemplates = ({
     toConceptName => {
       setConceptTemplates([])
       // Store the filter toConcept in settings
-      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.TO_CONCEPT]: toConceptName } })
+      const newFilters = { ...getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY) }
+      if (toConceptName) {
+        newFilters[TEMPLATES.FILTERS.TO_CONCEPT] = toConceptName
+      } else {
+        delete newFilters[TEMPLATES.FILTERS.TO_CONCEPT]
+      }
+      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.FILTERS.KEY]: newFilters } })
       if (toConceptName) {
         // Pass current concept filter to avoid unnecessary fetching
         filterTemplates(filterConcept, toConceptName, { limit, offset: 0 })
@@ -197,6 +211,7 @@ const useFilterTemplates = ({
       setDisplayTemplates,
       allTemplates,
       updateSettings,
+      getSettings,
     ]
   )
 

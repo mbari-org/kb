@@ -5,35 +5,42 @@ import { Stack, Typography } from '@mui/material'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { FONT } from '@/lib/tooltips'
+import { SELECTED } from '@/lib/constants'
+
+const { TEMPLATES } = SELECTED.SETTINGS
+const { FILTERS } = TEMPLATES
+
+const noConceptSelectedDescription = 'With no Concept selected, all Templates are displayed.'
+const selectAnyConceptDescription = 'Any Concept can be selected.'
+const selectExplicitConceptsDescription =
+  'With Available off, only explicit Concept Templates are displayed.'
+const availableTemplatesDescription =
+  'All Templates available for use with the selected Concept are displayed.'
+const explicitTemplatesDescription =
+  'Only Templates explicitly defined for the selected Concept are displayed.'
 
 const selectedAvailableMessaging = (available, concept) => {
-  const noConceptSelectedDescription = 'With no Concept selected, all Templates are displayed.'
-  const selectAnyConceptDescription = 'Any Concept can be selected.'
-  const selectExplicitConceptsDescription =
-    'With no Concept selected, only Concepts with explicit Templates are listed.'
+  if (!concept) {
+    return ['All Templates', selectAnyConceptDescription, noConceptSelectedDescription]
+  }
 
-  if (concept && available) {
+  if (available) {
     return [
       'Available Concept Templates',
       selectAnyConceptDescription,
-      'All Templates available for use with the selected Concept are displayed.',
+      availableTemplatesDescription,
     ]
-  }
-  if (concept && !available) {
+  } else {
     return [
       'Explicit Concept Templates',
       selectExplicitConceptsDescription,
-      'Only Templates explicitly defined for the selected Concept are displayed.',
+      explicitTemplatesDescription,
     ]
   }
-  if (!concept && available) {
-    return ['All Available Templates', selectAnyConceptDescription, noConceptSelectedDescription]
-  }
-  return ['All Explicit Templates', selectExplicitConceptsDescription, noConceptSelectedDescription]
 }
 
 const TemplatesConceptAvailableTooltip = () => {
-  const { available, filterConcept } = use(TemplatesContext)
+  const { available, filters } = use(TemplatesContext)
 
   const descriptionProps = {
     ml: '0.75em !important',
@@ -52,7 +59,7 @@ const TemplatesConceptAvailableTooltip = () => {
 
   const [title, selectionDescription, displayDescription] = selectedAvailableMessaging(
     available,
-    filterConcept
+    filters[FILTERS.CONCEPT]
   )
 
   return (

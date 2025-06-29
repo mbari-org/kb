@@ -31,6 +31,7 @@ const KBTooltip = ({ children, title, tooltipSx, ...props }) => {
       }}
       enterDelay={DELAY.onEnter}
       leaveDelay={DELAY.onLeave}
+      disableInteractive={true}
       title={title}
       {...props}
     >

@@ -6,12 +6,12 @@ import TableHeaderLinkFilter from '@/components/kb/panels/templates/table/header
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-const TemplatesTableHeaderMiddle = () => {
-  const { linkFilter, updateLinkFilter } = use(TemplatesContext)
+import { SELECTED } from '@/lib/constants'
 
-  if (!linkFilter) {
-    return null
-  }
+const { TEMPLATES } = SELECTED.SETTINGS
+
+const TemplatesTableHeaderMiddle = () => {
+  const { filters, updateFilters } = use(TemplatesContext)
 
   return (
     <Box
@@ -22,14 +22,14 @@ const TemplatesTableHeaderMiddle = () => {
       }}
     >
       <TableHeaderLinkFilter
-        name='linkName'
-        value={linkFilter.linkName}
-        onChange={updateLinkFilter}
+        name={TEMPLATES.FILTERS.LINK_NAME}
+        value={filters[TEMPLATES.FILTERS.LINK_NAME] || ''}
+        onChange={(key, value) => updateFilters({ [key]: value })}
       />
       <TableHeaderLinkFilter
-        name='linkValue'
-        value={linkFilter.linkValue}
-        onChange={updateLinkFilter}
+        name={TEMPLATES.FILTERS.LINK_VALUE}
+        value={filters[TEMPLATES.FILTERS.LINK_VALUE] || ''}
+        onChange={(key, value) => updateFilters({ [key]: value })}
       />
     </Box>
   )

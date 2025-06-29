@@ -7,16 +7,20 @@ import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/T
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
+import { SELECTED } from '@/lib/constants'
+
+const { TEMPLATES } = SELECTED.SETTINGS
+
 const TemplatesHeaderLeft = () => {
   const { getNames } = use(TaxonomyContext)
-  const { available, concept, explicitConcepts, setConcept } = use(TemplatesContext)
+  const { available, explicitConcepts, filters, updateFilters } = use(TemplatesContext)
 
   const selectables = available ? getNames() : explicitConcepts
 
   return (
     <ConceptSelect
-      conceptName={concept}
-      doConceptSelected={conceptName => setConcept(conceptName)}
+      conceptName={filters[TEMPLATES.FILTERS.CONCEPT]}
+      doConceptSelected={conceptName => updateFilters({ [TEMPLATES.FILTERS.CONCEPT]: conceptName })}
       selectables={selectables}
       tooltip={<TemplatesConceptAvailableTooltip />}
       updateConceptSelected={true}

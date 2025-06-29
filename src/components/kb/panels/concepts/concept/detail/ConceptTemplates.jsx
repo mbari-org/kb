@@ -37,7 +37,9 @@ const ConceptTemplates = () => {
   const linkToTemplates = () => {
     updateSelected({ [SELECTED.PANEL]: SELECTED.PANELS.TEMPLATES })
     updateSettings({
-      [TEMPLATES.KEY]: { [TEMPLATES.CONCEPT]: selectedConcept },
+      [TEMPLATES.KEY]: {
+        [TEMPLATES.FILTERS.KEY]: { [TEMPLATES.FILTERS.CONCEPT]: selectedConcept },
+      },
     })
   }
 

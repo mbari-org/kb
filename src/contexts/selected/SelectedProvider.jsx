@@ -84,8 +84,7 @@ const SelectedProvider = ({ children }) => {
     const references = storedSelected?.[REFERENCES.KEY] || { [REFERENCES.BY_CONCEPT]: false }
     const templates = storedSelected?.[TEMPLATES.KEY] || {
       [TEMPLATES.AVAILABLE]: false,
-      [TEMPLATES.CONCEPT]: null,
-      [TEMPLATES.TO_CONCEPT]: null,
+      [TEMPLATES.FILTERS.KEY]: {},
     }
 
     const initialSettings = {

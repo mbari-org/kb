@@ -203,8 +203,13 @@ export const SELECTED = {
     TEMPLATES: {
       KEY: 'templates',
       AVAILABLE: 'available',
-      CONCEPT: 'concept',
-      TO_CONCEPT: 'toConcept',
+      FILTERS: {
+        KEY: 'filters',
+        CONCEPT: 'concept',
+        TO_CONCEPT: 'toConcept',
+        LINK_NAME: 'linkName',
+        LINK_VALUE: 'linkValue',
+      },
     },
   },
 }

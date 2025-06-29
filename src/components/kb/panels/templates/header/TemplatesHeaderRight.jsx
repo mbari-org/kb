@@ -4,10 +4,19 @@ import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-const TemplatesHeaderRight = () => {
-  const { toConcept, setToConcept } = use(TemplatesContext)
+import { SELECTED } from '@/lib/constants'
 
-  return <ToConceptSelect conceptName={toConcept} doConceptSelected={setToConcept} />
+const { TEMPLATES } = SELECTED.SETTINGS
+
+const TemplatesHeaderRight = () => {
+  const { filters, updateFilters } = use(TemplatesContext)
+
+  return (
+    <ToConceptSelect
+      conceptName={filters[TEMPLATES.FILTERS.TO_CONCEPT]}
+      doConceptSelected={toConcept => updateFilters({ [TEMPLATES.FILTERS.TO_CONCEPT]: toConcept })}
+    />
+  )
 }
 
 export default TemplatesHeaderRight

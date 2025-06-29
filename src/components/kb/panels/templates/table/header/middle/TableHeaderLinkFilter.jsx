@@ -24,8 +24,8 @@ const TableHeaderLinkFilter = ({ name, value, onChange }) => {
 
   const handleClear = useCallback(() => {
     setInputValue('')
-    onChange(name, '')
-  }, [onChange, name])
+    debouncedOnChange(name, '')
+  }, [debouncedOnChange, name])
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
