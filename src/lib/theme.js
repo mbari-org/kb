@@ -15,7 +15,6 @@ const approve = add
 const cancel = '#af0000'
 const clean = '#008800'
 const conceptDetail = '#008800'
-const modified = '#ff941f'
 const navActive = '#ffffff'
 const paper = '#f0f0f0'
 const pendingIconClean = '#00dd00'
@@ -68,7 +67,6 @@ const theme = createTheme({
     light: addColor(light),
     pale: addColor(pale),
     main: addColor(main),
-    modified: addColor(modified),
     remove: addColor(remove),
     reject: addColor(reject),
     primary: {
@@ -78,7 +76,6 @@ const theme = createTheme({
       edit,
       light,
       main,
-      modified,
       pale,
       remove,
     },

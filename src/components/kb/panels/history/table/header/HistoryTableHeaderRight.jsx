@@ -1,6 +1,8 @@
 import { use } from 'react'
 
-import { RadioGroup, FormControlLabel, Radio, Stack, Typography, Tooltip } from '@mui/material'
+import { RadioGroup, FormControlLabel, Radio, Stack, Typography } from '@mui/material'
+
+import KBTooltip from '@/components/common/KBTooltip'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
@@ -16,7 +18,7 @@ const HistoryTableHeaderRight = () => {
     <Stack direction='row' spacing={3} alignItems='center' sx={{ mr: 0.5 }}>
       <Typography>Created Order:</Typography>
       <RadioGroup row value={sortOrder || 'desc'} onChange={e => handleSortChange(e.target.value)}>
-        <Tooltip title='Newest First' enterDelay={50}>
+        <KBTooltip title='Newest First' enterDelay={50}>
           <FormControlLabel
             control={<Radio size='small' />}
             label='↓'
@@ -32,8 +34,8 @@ const HistoryTableHeaderRight = () => {
             }}
             value='desc'
           />
-        </Tooltip>
-        <Tooltip title='Oldest First' enterDelay={50}>
+        </KBTooltip>
+        <KBTooltip title='Oldest First' enterDelay={50}>
           <FormControlLabel
             control={<Radio size='small' />}
             label='↑'
@@ -49,7 +51,7 @@ const HistoryTableHeaderRight = () => {
             }}
             value='asc'
           />
-        </Tooltip>
+        </KBTooltip>
       </RadioGroup>
     </Stack>
   )

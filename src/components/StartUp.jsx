@@ -1,7 +1,6 @@
 import { use, useCallback, useEffect, useState, useTransition } from 'react'
 
-import { Box, Button } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { Box, Button, useTheme } from '@mui/material'
 
 import LoginForm from '@/components/auth/LoginForm'
 import ConfigForm from '@/components/config/ConfigForm'
@@ -15,6 +14,8 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { loginReadOnly } from '@/lib/services/auth/login'
 
 const StartUp = () => {
+  const theme = useTheme()
+
   const { processAuth } = use(UserContext)
   const { config } = use(ConfigContext)
 
@@ -53,6 +54,7 @@ const StartUp = () => {
     >
       <Box
         sx={{
+          backgroundColor: theme.palette.grey[300],
           borderRadius: '8px',
           boxShadow: '0 0 20px rgba(0,0,0,0.3)',
           maxWidth: '500px',
@@ -106,7 +108,7 @@ const StartUp = () => {
           <LoginForm />
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-          <VersionDisplay variant='caption' color={grey[800]} />
+          <VersionDisplay color={theme.palette.primary.main} variant='caption' />
         </Box>
       </Box>
     </Box>

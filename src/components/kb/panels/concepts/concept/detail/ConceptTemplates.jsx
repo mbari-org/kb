@@ -1,7 +1,8 @@
 import { use, useEffect, useState } from 'react'
-import { FormControlLabel, Switch, Tooltip } from '@mui/material'
+import { FormControlLabel, Switch } from '@mui/material'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
+import KBTooltip from '@/components/common/KBTooltip'
 
 import KBDataContext from '@/contexts/kbData/KBDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -56,7 +57,7 @@ const ConceptTemplates = () => {
       renderItem={renderItem}
       title='Templates'
     >
-      <Tooltip
+      <KBTooltip
         title={
           available
             ? 'Show available templates that can be used with this concept'
@@ -74,7 +75,7 @@ const ConceptTemplates = () => {
             },
           }}
         />
-      </Tooltip>
+      </KBTooltip>
     </ConceptPropertiesSection>
   )
 }

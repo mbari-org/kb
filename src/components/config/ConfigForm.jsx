@@ -31,7 +31,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
 
   return (
     <Box component='form' action={configAction}>
-      <Card>
+      <Card sx={{ bgcolor: 'transparent' }}>
         <CardContent>
           <TextField
             id='config-service-url'

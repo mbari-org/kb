@@ -231,7 +231,7 @@ Ensure the `scripts` directory and files have proper permissions.
 function AppFooter() {
   return (
     <Box component="footer" sx={{ p: 2, textAlign: 'center' }}>
-      <VersionDisplay color="text.secondary" />
+      <VersionDisplay />
     </Box>
   );
 }
@@ -262,7 +262,7 @@ function NavBar() {
       <Toolbar>
         {/* Other nav items */}
         <Box sx={{ flexGrow: 1 }} />
-        <VersionDisplay color="common.white" />
+        <VersionDisplay />
       </Toolbar>
     </AppBar>
   );

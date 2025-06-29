@@ -36,7 +36,7 @@ const LoginForm = () => {
 
   return (
     <Box component='form' action={loginAction} sx={{ minHeight: '300px' }}>
-      <Card>
+      <Card sx={{ bgcolor: 'transparent' }}>
         <CardContent>
           <FormControl fullWidth>
             <TextField
