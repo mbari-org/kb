@@ -16,8 +16,11 @@ const ChangeParentActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(PanelModalContext)
 
+  // Handle case where modalData might be undefined
+  const { modified = false, parent = '' } = modalData || {}
+
   const colors = ['cancel', 'main']
-  const disabled = [false, !modalData.modified]
+  const disabled = [false, !modified]
   const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
@@ -38,7 +41,7 @@ const ChangeParentActions = () => {
       case STAGE:
         modifyConcept({
           type: CHANGE_PARENT,
-          update: { parent: modalData.parent },
+          update: { parent },
         })
         closeModal(true)
 

@@ -28,6 +28,10 @@ const changeParentModal = omitChoices => {
 
 const changeParentOnClose = modifyConcept => {
   return modalData => {
+    if (!modalData) {
+      return true
+    }
+
     if (modalData.modified) {
       modifyConcept({
         type: RESET.CHANGE_PARENT,

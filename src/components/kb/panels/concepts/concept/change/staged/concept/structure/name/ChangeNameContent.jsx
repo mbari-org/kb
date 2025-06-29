@@ -21,14 +21,17 @@ const ChangeNameContent = () => {
 
   const [primaryName, setPrimaryName] = useState(concept.name)
 
+  // Handle case where modalData might be undefined
+  const { modified = false, nameChangeType = '' } = modalData || {}
+
   const fromColor = 'main'
-  const toColor = modalData.modified ? theme.palette.primary.edit : theme.palette.grey[500]
+  const toColor = modified ? theme.palette.primary.edit : theme.palette.grey[500]
 
   const handleNameChange = event => {
     const { value } = event.target
     setPrimaryName(value)
     const modified = value !== concept.name && !getNames().includes(value)
-    const isNameChangeTypeOK = !isAdmin(user) || (isAdmin(user) && modalData.nameChangeType)
+    const isNameChangeTypeOK = !isAdmin(user) || (isAdmin(user) && nameChangeType)
     setModalData(prevData => ({
       ...prevData,
       name: value,
@@ -88,10 +91,7 @@ const ChangeNameContent = () => {
       </Stack>
 
       <Box sx={{ mt: -1, ml: 12 }}>
-        <NameChangeExtent
-          nameChangeType={modalData.nameChangeType}
-          onChange={handleNameChangeType}
-        />
+        <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
       </Box>
 
       <Box sx={{ borderTop: '1px solid #000000', mt: 2 }}>

@@ -15,6 +15,7 @@ const commitStaged = async (apiPayload, concept, initialState, stagedState) => {
   submitters.push(...saveDetail(submitterInfo))
   submitters.push(...saveMedia(submitterInfo))
   submitters.push(...saveStructure(submitterInfo))
+
   updateInfo.results = await Promise.all(submitters)
 
   return updateInfo

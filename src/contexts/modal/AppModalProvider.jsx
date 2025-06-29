@@ -4,7 +4,7 @@ import AppModalContext from './AppModalContext'
 
 const AppModalProvider = ({ children }) => {
   const [modal, setModal] = useState(null)
-  const [modalData, setModalData] = useState(null)
+  const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
   const [processing, setProcessing] = useState(false)
 
@@ -25,7 +25,7 @@ const AppModalProvider = ({ children }) => {
       }
 
       setOnClose(null)
-      setModalData(null)
+      setModalData({})
       setModal(null)
       setProcessing(false)
 

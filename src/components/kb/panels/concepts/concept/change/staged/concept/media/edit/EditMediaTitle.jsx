@@ -8,7 +8,7 @@ const EditMediaTitle = () => {
   const { concept } = use(ConceptContext)
 
   const { modalData } = use(PanelModalContext)
-  const actionText = modalData.action.split(' ').pop()
+  const actionText = modalData?.action?.split(' ').pop() || 'Edit'
 
   return <Title title={`${actionText} Media: ${concept.name}`} />
 }

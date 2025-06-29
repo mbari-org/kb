@@ -26,6 +26,11 @@ const addChildModal = () => {
 
 const addChildOnClose = modifyConcept => {
   return modalData => {
+    // Handle case where modalData is null (defensive programming)
+    if (!modalData) {
+      return true
+    }
+
     if (modalData.modified) {
       modifyConcept({
         type: RESET.ADD_CHILD,

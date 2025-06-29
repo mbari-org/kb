@@ -11,9 +11,7 @@ const MediaDelete = () => {
       color='cancel'
       Icon={MdOutlineDeleteForever}
       position='left'
-      sx={{
-        mb: 1,
-      }}
+      sx={{ mb: 1.25 }}
     />
   )
 }

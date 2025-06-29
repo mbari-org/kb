@@ -4,6 +4,11 @@ const { RESET } = CONCEPT_STATE
 
 const createEditAliasOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
+    // Handle case where modalData is null (defensive programming)
+    if (!modalData) {
+      return true
+    }
+
     const { modified, aliasIndex } = modalData
     const isModified = Object.values(modified).some(isModified => isModified === true)
 

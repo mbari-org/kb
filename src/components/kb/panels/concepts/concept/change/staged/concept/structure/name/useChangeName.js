@@ -25,6 +25,11 @@ const changeNameModal = () => {
 
 const changeNameOnClose = modifyConcept => {
   return modalData => {
+    // Handle case where modalData is null (defensive programming)
+    if (!modalData) {
+      return true
+    }
+
     if (modalData.modified) {
       modifyConcept({
         type: RESET.CHANGE_NAME,

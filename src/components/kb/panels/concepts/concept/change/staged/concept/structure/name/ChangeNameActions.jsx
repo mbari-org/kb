@@ -17,8 +17,11 @@ const ChangeNameActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(PanelModalContext)
 
+  // Handle case where modalData might be undefined
+  const { isValid = false, name = '', nameChangeType = '' } = modalData || {}
+
   const colors = ['cancel', 'main']
-  const disabled = [false, !modalData.isValid]
+  const disabled = [false, !isValid]
   const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
@@ -44,14 +47,14 @@ const ChangeNameActions = () => {
           type: SET,
           update: {
             field: 'name',
-            value: modalData.name,
+            value: name,
           },
         })
         modifyConcept({
           type: SET,
           update: {
             field: 'nameChange',
-            value: modalData.nameChangeType,
+            value: nameChangeType,
           },
         })
         closeModal(true)

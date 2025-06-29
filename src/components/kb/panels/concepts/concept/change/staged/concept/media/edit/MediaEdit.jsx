@@ -11,9 +11,7 @@ const MediaEdit = () => {
       color='edit'
       Icon={CiEdit}
       position='right'
-      sx={{
-        mb: 1,
-      }}
+      sx={{ mb: 1.25 }}
     />
   )
 }

@@ -20,10 +20,11 @@ const EditMediaActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(PanelModalContext)
 
-  const { mediaItem, modified } = modalData
+  // Handle case where modalData might be empty or undefined
+  const { mediaItem = { url: '', credit: '' }, modified = false } = modalData || {}
 
   const validMediaItem = useMemo(
-    () => isUrlValid(mediaItem.url) && mediaItem.credit.trim() !== '',
+    () => isUrlValid(mediaItem?.url || '') && (mediaItem?.credit || '').trim() !== '',
     [mediaItem]
   )
 

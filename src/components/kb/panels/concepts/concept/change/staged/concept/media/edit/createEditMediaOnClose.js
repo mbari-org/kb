@@ -2,7 +2,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const createEditMediaOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
-    // Handle case where modalData is null
+    // Handle case where modalData is null (defensive programming)
     if (!modalData) {
       return true
     }
