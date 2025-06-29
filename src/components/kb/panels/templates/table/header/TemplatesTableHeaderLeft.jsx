@@ -21,6 +21,10 @@ const TemplatesTableHeaderLeft = () => {
 
   const switchFn = event => setAvailable(event.target.checked)
 
+  // Disable switch when concept is null and set available to false
+  const isDisabled = !concept
+  const effectiveAvailable = isDisabled ? false : available
+
   let exportToolTip
   if (concept && toConcept) {
     exportToolTip = EXPORT.CONCEPT_TO_CONCEPT
@@ -34,7 +38,7 @@ const TemplatesTableHeaderLeft = () => {
 
   return (
     <PanelTotalExportSwitch
-      checked={available}
+      checked={effectiveAvailable}
       count={filteredTemplates.length}
       exportFn={exportFn}
       exportToolTip={exportToolTip}
@@ -42,6 +46,7 @@ const TemplatesTableHeaderLeft = () => {
       switchLabel='Available'
       switchToolTip={<TemplatesTableHeaderLeftSwitchTooltip />}
       width={CONCEPT_SELECT.WIDTH}
+      disabled={isDisabled}
     />
   )
 }

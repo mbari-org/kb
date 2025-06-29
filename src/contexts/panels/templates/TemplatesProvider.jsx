@@ -51,6 +51,13 @@ const TemplatesProvider = ({ children }) => {
     []
   )
 
+  // Set available to false when concept is null
+  useEffect(() => {
+    if (!concept && available) {
+      setAvailable(false)
+    }
+  }, [concept, available, setAvailable])
+
   useEffect(() => {
     if (!concept) {
       const filtered = filterTemplates(templates || [], {

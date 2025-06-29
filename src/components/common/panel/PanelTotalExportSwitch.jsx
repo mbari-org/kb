@@ -12,6 +12,7 @@ const PanelTotalExportSwitch = ({
   switchLabel,
   switchToolTip = '',
   width,
+  disabled = false,
 }) => {
   return (
     <Box
@@ -26,7 +27,9 @@ const PanelTotalExportSwitch = ({
       <Box>
         <KBTooltip title={switchToolTip}>
           <FormControlLabel
-            control={<Switch size='small' checked={checked} onChange={switchFn} />}
+            control={
+              <Switch size='small' checked={checked} onChange={switchFn} disabled={disabled} />
+            }
             label={switchLabel}
           />
         </KBTooltip>
