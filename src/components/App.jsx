@@ -13,7 +13,7 @@ import ConfigProvider from '@/contexts/config/ConfigProvider'
 import AuthRoute from '@/components/auth/AuthRoute'
 
 import KbContainer from '@/components/kb/KBContainer'
-import StartUp from '@/components/StartUp'
+import StartUp from '@/components/startup/StartUp'
 import Whoops from '@/components/Whoops'
 
 const App = () => {

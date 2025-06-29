@@ -1,9 +1,10 @@
 import { use, useActionState, useEffect, useRef } from 'react'
 
-import { Box, Card, CardActions, CardContent, FormControl, TextField } from '@mui/material'
+import { Box, Card, CardActions, CardContent } from '@mui/material'
 
 import SubmitButton from '@/components/common/SubmitButton'
 import SubmitError from '@/components/common/SubmitError'
+import LoginInput from '@/components/startup/LoginInput'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -35,24 +36,15 @@ const LoginForm = () => {
   }, [])
 
   return (
-    <Box component='form' action={loginAction} sx={{ minHeight: '300px' }}>
+    <Box component='form' action={loginAction}>
       <Card sx={{ bgcolor: 'transparent' }}>
         <CardContent>
-          <TextField
-            id='login-user'
-            inputRef={usernameRef}
-            label='Username'
-            name='username'
-            required
-            fullWidth
-          />
-          <TextField
+          <LoginInput id='login-user' ref={usernameRef} label='Username' name='username' />
+          <LoginInput
             id='login-password'
             label='Password'
             name='password'
-            required
             type='password'
-            fullWidth
             sx={{ mt: 2 }}
           />
           <SubmitError errorText={loginState?.error} />

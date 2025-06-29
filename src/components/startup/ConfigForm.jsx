@@ -35,8 +35,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
         <CardContent>
           <TextField
             id='config-service-url'
-            className='field'
-            fullWidth={true}
+            fullWidth
             label='Config Service URL'
             name='configUrl'
             onChange={handleConfigChange}
