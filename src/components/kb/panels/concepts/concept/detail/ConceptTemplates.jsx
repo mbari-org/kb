@@ -1,8 +1,7 @@
 import { use, useEffect, useState } from 'react'
-import { FormControlLabel, Switch } from '@mui/material'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
-import KBTooltip from '@/components/common/KBTooltip'
+import TemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableToggle'
 
 import KBDataContext from '@/contexts/kbData/KBDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -27,11 +26,6 @@ const ConceptTemplates = () => {
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,
     content: template => `${template.linkName}: ${template.toConcept} → ${template.linkValue}`,
-  }
-
-  const handleAvailableChange = event => {
-    const newValue = event.target.checked
-    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: newValue } })
   }
 
   const linkToTemplates = () => {
@@ -62,25 +56,7 @@ const ConceptTemplates = () => {
       renderItem={renderItem}
       title='Templates'
     >
-      <KBTooltip
-        title={
-          available
-            ? 'Show available templates that can be used with this concept'
-            : 'Show templates that are explicitly defined for this concept'
-        }
-        placement='top'
-      >
-        <FormControlLabel
-          control={<Switch checked={available} onChange={handleAvailableChange} size='small' />}
-          label='Available'
-          sx={{
-            fontSize: '0.875rem',
-            '& .MuiFormControlLabel-label': {
-              fontSize: '0.875rem',
-            },
-          }}
-        />
-      </KBTooltip>
+      <TemplatesAvailableToggle />
     </ConceptPropertiesSection>
   )
 }
