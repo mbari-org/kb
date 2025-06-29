@@ -60,7 +60,7 @@ const TemplatesProvider = ({ children }) => {
     const updateFilteredTemplates = () => {
       const ancestors = available ? getAncestors(concept) : []
       const concepts = concept ? [concept, ...ancestors] : null
-      const filtered = filterTemplates(templates || [], concepts, toConcept)
+      const filtered = filterTemplates(templates || [], { concepts, toConcept })
       setFilteredTemplates(filtered)
     }
 

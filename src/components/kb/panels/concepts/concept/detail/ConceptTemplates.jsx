@@ -45,7 +45,7 @@ const ConceptTemplates = () => {
     const ancestors = available ? getAncestors(selectedConcept) : []
     const concepts = selectedConcept ? [selectedConcept, ...ancestors] : null
 
-    setFilteredTemplates(filterTemplates(templates, concepts))
+    setFilteredTemplates(filterTemplates(templates, { concepts }))
   }, [available, getAncestors, selectedConcept, templates])
 
   return (

@@ -1,19 +1,37 @@
-export const filterTemplates = (templates, concepts, toConcept) => {
-  if (!concepts && !toConcept) {
+export const filterTemplates = (templates, filters = {}) => {
+  const { concepts, toConcept, linkName, linkValue } = filters
+
+  if (!concepts && !toConcept && !linkName && !linkValue) {
     return templates
   }
 
-  if (!concepts) {
-    return templates.filter(template => template.toConcept === toConcept)
+  let filteredTemplates = templates
+
+  // Filter by concepts
+  if (concepts) {
+    filteredTemplates = filteredTemplates.filter(template => concepts.includes(template.concept))
   }
 
-  const conceptTemplates = templates.filter(template => concepts.includes(template.concept))
-
+  // Filter by toConcept
   if (toConcept) {
-    return conceptTemplates.filter(template => template.toConcept === toConcept)
+    filteredTemplates = filteredTemplates.filter(template => template.toConcept === toConcept)
   }
 
-  return conceptTemplates
+  // Filter by linkName
+  if (linkName) {
+    filteredTemplates = filteredTemplates.filter(template =>
+      template.linkName?.toLowerCase().includes(linkName.toLowerCase())
+    )
+  }
+
+  // Filter by linkValue
+  if (linkValue) {
+    filteredTemplates = filteredTemplates.filter(template =>
+      template.linkValue?.toLowerCase().includes(linkValue.toLowerCase())
+    )
+  }
+
+  return filteredTemplates
 }
 
 export const isValidTemplate = template =>

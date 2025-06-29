@@ -17,7 +17,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
-  const { concept, stagedState, modifyConcept } = use(ConceptContext)
+  const { stagedState, modifyConcept } = use(ConceptContext)
   const swiperRef = useRef(null)
   const isProgrammaticChange = useRef(false)
 
