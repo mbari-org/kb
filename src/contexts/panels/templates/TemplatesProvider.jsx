@@ -26,7 +26,7 @@ const TemplatesProvider = ({ children }) => {
   const handleLoadConceptError = useLoadConceptError()
 
   const [filteredTemplates, setFilteredTemplates] = useState([])
-  const [linkFilter, setLinkFilter] = useState({ name: null, value: null })
+  const [linkFilter, setLinkFilter] = useState({ linkName: '', linkValue: '' })
 
   const templatesSettings = getSettings(TEMPLATES.KEY)
   const { available, concept, toConcept } = templatesSettings
@@ -53,14 +53,23 @@ const TemplatesProvider = ({ children }) => {
 
   useEffect(() => {
     if (!concept) {
-      setFilteredTemplates(templates)
+      const filtered = filterTemplates(templates || [], {
+        linkName: linkFilter.linkName,
+        linkValue: linkFilter.linkValue,
+      })
+      setFilteredTemplates(filtered)
       return
     }
 
     const updateFilteredTemplates = () => {
       const ancestors = available ? getAncestors(concept) : []
       const concepts = concept ? [concept, ...ancestors] : null
-      const filtered = filterTemplates(templates || [], { concepts, toConcept })
+      const filtered = filterTemplates(templates || [], {
+        concepts,
+        toConcept,
+        linkName: linkFilter.linkName,
+        linkValue: linkFilter.linkValue,
+      })
       setFilteredTemplates(filtered)
     }
 
@@ -86,6 +95,7 @@ const TemplatesProvider = ({ children }) => {
     loadConcept,
     templates,
     toConcept,
+    linkFilter,
   ])
 
   const value = useMemo(

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { Box, TextField, Typography, IconButton } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
@@ -8,13 +8,18 @@ const TableHeaderLinkFilter = ({ name, value, onChange }) => {
   const [inputValue, setInputValue] = useState(value || '')
   const debouncedOnChange = useDebounce(onChange, 300)
 
+  // Sync local state with prop value
+  useEffect(() => {
+    setInputValue(value || '')
+  }, [value])
+
   const handleInputChange = useCallback(
     event => {
       const newValue = event.target.value
       setInputValue(newValue)
-      debouncedOnChange(newValue)
+      debouncedOnChange(name, newValue)
     },
-    [debouncedOnChange]
+    [debouncedOnChange, name]
   )
 
   const handleClear = useCallback(() => {
@@ -24,11 +29,19 @@ const TableHeaderLinkFilter = ({ name, value, onChange }) => {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <Typography sx={{ whiteSpace: 'nowrap' }}>Link {name}:</Typography>
+      <Typography sx={{ whiteSpace: 'nowrap' }}>
+        {name === 'linkName'
+          ? 'Link Name:'
+          : name === 'linkValue'
+          ? 'Link Value:'
+          : `Link ${name}:`}
+      </Typography>
       <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
         <TextField
           size='small'
-          placeholder={`Filter by ${name}`}
+          placeholder={`Filter by ${
+            name === 'linkName' ? 'link name' : name === 'linkValue' ? 'link value' : name
+          }`}
           value={inputValue}
           onChange={handleInputChange}
           sx={{ minWidth: 100 }}

@@ -21,8 +21,16 @@ const TemplatesTableHeaderMiddle = () => {
         gap: 20,
       }}
     >
-      <TableHeaderLinkFilter name='name' value={linkFilter.name} onChange={updateLinkFilter} />
-      <TableHeaderLinkFilter name='value' value={linkFilter.value} onChange={updateLinkFilter} />
+      <TableHeaderLinkFilter
+        name='linkName'
+        value={linkFilter.linkName}
+        onChange={updateLinkFilter}
+      />
+      <TableHeaderLinkFilter
+        name='linkValue'
+        value={linkFilter.linkValue}
+        onChange={updateLinkFilter}
+      />
     </Box>
   )
 }
