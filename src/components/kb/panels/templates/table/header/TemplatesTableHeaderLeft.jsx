@@ -5,7 +5,7 @@ import PanelTotalExportSwitch from '@/components/common/panel/PanelTotalExportSw
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
-import TemplatesTableHeaderLeftSwitchTooltip from '@/components/kb/panels/templates/table/header/left/TemplatesTableHeaderLeftSwitchTooltip'
+import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
 import { CONCEPT_SELECT } from '@/lib/constants'
 import { TEMPLATES as TEMPLATES_TOOLTIPS } from '@/lib/tooltips'
@@ -44,7 +44,7 @@ const TemplatesTableHeaderLeft = () => {
       exportToolTip={exportToolTip}
       switchFn={switchFn}
       switchLabel='Available'
-      switchToolTip={<TemplatesTableHeaderLeftSwitchTooltip />}
+      switchToolTip={<TemplatesConceptAvailableTooltip />}
       width={CONCEPT_SELECT.WIDTH}
       disabled={isDisabled}
     />

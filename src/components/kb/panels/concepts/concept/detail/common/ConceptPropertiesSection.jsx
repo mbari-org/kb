@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Box, Typography, IconButton } from '@mui/material'
 import InspectIcon from '@/components/common/InspectIcon'
+import KBTooltip from '@/components/common/KBTooltip'
 
 import ConceptDetailNone from '@/components/kb/panels/concepts/concept/detail/ConceptDetailNone'
 import ConceptPropertiesList from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesList'
@@ -14,6 +15,7 @@ const ConceptPropertiesSection = ({
   items = [],
   loadingText = 'Loading...',
   onInspect,
+  onInspectTooltip,
   renderItem,
   title,
 }) => {
@@ -53,17 +55,33 @@ const ConceptPropertiesSection = ({
           <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
             {title}
           </Typography>
-          <IconButton
-            onClick={onInspect}
-            size='small'
-            sx={{
-              '&:hover': {
-                color: 'primary.main',
-              },
-            }}
-          >
-            <InspectIcon />
-          </IconButton>
+          {onInspectTooltip ? (
+            <KBTooltip title={onInspectTooltip} placement="top">
+              <IconButton
+                onClick={onInspect}
+                size='small'
+                sx={{
+                  '&:hover': {
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                <InspectIcon />
+              </IconButton>
+            </KBTooltip>
+          ) : (
+            <IconButton
+              onClick={onInspect}
+              size='small'
+              sx={{
+                '&:hover': {
+                  color: 'primary.main',
+                },
+              }}
+            >
+              <InspectIcon />
+            </IconButton>
+          )}
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

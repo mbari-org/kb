@@ -9,7 +9,8 @@ import { FONT } from '@/lib/tooltips'
 const selectedAvailableMessaging = (available, filterConcept) => {
   const noConceptSelectedDescription = 'With no Concept selected, all Templates are displayed.'
   const selectAnyConceptDescription = 'Any Concept can be selected.'
-  const selectExplicitConceptsDescription = 'Only Concepts with explicit Templates can be selected.'
+  const selectExplicitConceptsDescription =
+    'With no Concept selected, only Concepts with explicit Templates are listed.'
 
   if (filterConcept && available) {
     return [
@@ -31,7 +32,7 @@ const selectedAvailableMessaging = (available, filterConcept) => {
   return ['All Explicit Templates', selectExplicitConceptsDescription, noConceptSelectedDescription]
 }
 
-const TemplatesTableHeaderLeftSwitchTooltip = () => {
+const TemplatesConceptAvailableTooltip = () => {
   const { available, filterConcept } = use(TemplatesContext)
 
   const descriptionProps = {
@@ -71,4 +72,4 @@ const TemplatesTableHeaderLeftSwitchTooltip = () => {
   )
 }
 
-export default TemplatesTableHeaderLeftSwitchTooltip
+export default TemplatesConceptAvailableTooltip

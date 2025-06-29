@@ -2,6 +2,8 @@ import { use } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
+import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
+
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
@@ -16,6 +18,7 @@ const TemplatesHeaderLeft = () => {
       conceptName={concept}
       doConceptSelected={conceptName => setConcept(conceptName)}
       selectables={selectables}
+      tooltip={<TemplatesConceptAvailableTooltip />}
       updateConceptSelected={true}
     />
   )

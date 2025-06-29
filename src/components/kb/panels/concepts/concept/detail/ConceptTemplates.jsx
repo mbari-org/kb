@@ -54,6 +54,9 @@ const ConceptTemplates = () => {
       items={filteredTemplates}
       loadingText='Loading templates...'
       onInspect={linkToTemplates}
+      onInspectTooltip={`Link to ${
+        available ? 'Available' : 'Explicit'
+      } Templates for this concept`}
       renderItem={renderItem}
       title='Templates'
     >

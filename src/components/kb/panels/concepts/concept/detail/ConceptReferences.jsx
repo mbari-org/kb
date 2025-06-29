@@ -33,6 +33,7 @@ const ConceptReferences = () => {
     <ConceptPropertiesSection
       items={conceptReferences}
       onInspect={linkToReferences}
+      onInspectTooltip='Link to References for this Concept'
       renderItem={renderItem}
       title='References DOI'
     />
