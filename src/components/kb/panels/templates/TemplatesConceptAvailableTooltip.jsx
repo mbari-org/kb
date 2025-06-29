@@ -6,27 +6,27 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { FONT } from '@/lib/tooltips'
 
-const selectedAvailableMessaging = (available, filterConcept) => {
+const selectedAvailableMessaging = (available, concept) => {
   const noConceptSelectedDescription = 'With no Concept selected, all Templates are displayed.'
   const selectAnyConceptDescription = 'Any Concept can be selected.'
   const selectExplicitConceptsDescription =
     'With no Concept selected, only Concepts with explicit Templates are listed.'
 
-  if (filterConcept && available) {
+  if (concept && available) {
     return [
       'Available Concept Templates',
       selectAnyConceptDescription,
       'All Templates available for use with the selected Concept are displayed.',
     ]
   }
-  if (filterConcept && !available) {
+  if (concept && !available) {
     return [
       'Explicit Concept Templates',
       selectExplicitConceptsDescription,
       'Only Templates explicitly defined for the selected Concept are displayed.',
     ]
   }
-  if (!filterConcept && available) {
+  if (!concept && available) {
     return ['All Available Templates', selectAnyConceptDescription, noConceptSelectedDescription]
   }
   return ['All Explicit Templates', selectExplicitConceptsDescription, noConceptSelectedDescription]
@@ -60,11 +60,11 @@ const TemplatesConceptAvailableTooltip = () => {
       <Typography sx={titleProps}>{title}</Typography>
       <Stack direction='column' spacing={1}>
         <Stack direction='column' spacing={0.25}>
-          <Typography>Selection</Typography>
+          <Typography>Concept Selection</Typography>
           <Typography sx={descriptionProps}>{selectionDescription}</Typography>
         </Stack>
         <Stack direction='column' spacing={0.25}>
-          <Typography>Display</Typography>
+          <Typography>Templates Display</Typography>
           <Typography sx={descriptionProps}>{displayDescription}</Typography>
         </Stack>
       </Stack>

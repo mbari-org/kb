@@ -14,14 +14,14 @@ const { TEMPLATES } = SELECTED.SETTINGS
 
 const useFilterTemplates = ({
   available,
+  filterConcept,
+  filterToConcept,
   limit,
   setCount,
   setDisplayTemplates,
   setConceptTemplates,
   updateSelected,
   updateSettings,
-  filterConcept,
-  filterToConcept,
 }) => {
   const { apiFns } = use(ConfigContext)
   const { templates: allTemplates } = use(KBDataContext)

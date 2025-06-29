@@ -1,9 +1,8 @@
 import { use } from 'react'
-import { Box, Typography, IconButton } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { BsInfoCircle } from 'react-icons/bs'
 
-import KBTooltip from '@/components/common/KBTooltip'
+import KBInfoIcon from '@/components/common/KBInfoIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -91,22 +90,13 @@ const MediaPreview = ({ setPreviewOn }) => {
           {mediaItem?.caption}
         </Typography>
         {mediaItem?.credit && (
-          <KBTooltip title={mediaItem?.credit} placement='top'>
-            <IconButton
-              sx={{
-                backgroundColor: theme.palette.primary.main,
-                color: 'white',
-                padding: 0,
-                marginLeft: 1,
-                '&:hover': {
-                  ...theme.kb.icon.hover,
-                  backgroundColor: theme.palette.primary.main,
-                },
-              }}
-            >
-              <BsInfoCircle size='18' />
-            </IconButton>
-          </KBTooltip>
+          <Box sx={{ marginLeft: 1 }}>
+            <KBInfoIcon
+              tooltip={mediaItem?.credit}
+              placement="top"
+              size={18}
+            />
+          </Box>
         )}
       </Box>
     </Box>
