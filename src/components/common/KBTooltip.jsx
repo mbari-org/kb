@@ -21,7 +21,7 @@ const KBTooltip = ({ children, title, tooltipSx, ...props }) => {
       slotProps={{
         tooltip: {
           sx: {
-            backgroundColor: theme.palette.primary.dark,
+            backgroundColor: theme.palette.primary.main,
             color: theme.palette.grey[200],
             fontSize: FONT.SIZE,
             fontFamily: FONT.FAMILY,

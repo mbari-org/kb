@@ -1,10 +1,11 @@
+import { grey } from '@mui/material/colors'
 import { alpha, createTheme, darken, lighten } from '@mui/material/styles'
 
 const { palette } = createTheme()
 const { augmentColor } = palette
 const addColor = color => augmentColor({ color: { main: color } })
 
-const main = '#0077be'
+const main = '#005385'
 const light = alpha(main, 0.1)
 const pale = alpha(main, 0.3)
 
@@ -15,12 +16,13 @@ const approve = add
 const cancel = '#af0000'
 const clean = '#008800'
 const conceptDetail = '#008800'
-const navActive = '#ffffff'
 const paper = '#f0f0f0'
 const pendingIconClean = '#00dd00'
 const pendingIconDirty = '#dd0000'
 const reject = cancel
 const remove = cancel
+const selectorActive = grey[100]
+const selectorInactive = grey[400]
 
 const theme = createTheme({
   concept: {
@@ -46,11 +48,11 @@ const theme = createTheme({
       hover: { backgroundColor: `transparent !important`, transform: 'scale(1.25)' },
     },
   },
-  nav: {
-    active: navActive,
+  selector: {
+    active: selectorActive,
     fontSize: 12,
-    hover: navActive,
-    inactive: darken(navActive, 0.33),
+    hover: selectorActive,
+    inactive: selectorInactive,
   },
   palette: {
     add: addColor(add),

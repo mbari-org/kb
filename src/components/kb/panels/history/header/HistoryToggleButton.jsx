@@ -4,24 +4,26 @@ import { useTheme } from '@mui/material/styles'
 const HistoryToggleButton = ({ value }) => {
   const theme = useTheme()
 
+  const backgroundColor = theme.palette.grey[800]
+
   return (
     <ToggleButton
       value={value}
       aria-label={value}
       sx={{
-        backgroundColor: theme.palette.grey[800],
-        color: theme.palette.grey[200],
+        backgroundColor: backgroundColor,
+        color: theme.selector.inactive,
         '&.Mui-selected': {
           backgroundColor: theme.palette.primary.main,
-          color: theme.palette.common.white,
+          color: theme.selector.active,
         },
         '&:hover': {
-          backgroundColor: theme.palette.grey[800],
-          color: theme.palette.grey[200],
+          backgroundColor: backgroundColor,
+          color: theme.selector.hover,
         },
         '&.Mui-selected:hover': {
           backgroundColor: theme.palette.primary.main,
-          color: theme.palette.common.white,
+          color: theme.selector.active,
         },
       }}
     >

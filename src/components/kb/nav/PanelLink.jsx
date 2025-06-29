@@ -13,9 +13,9 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
 
   const theme = useTheme()
   const getSx = () => {
-    const activeColor = theme.nav.active
-    const hoverColor = theme.nav.hover
-    const inactiveColor = theme.nav.inactive
+    const activeColor = theme.selector.active
+    const hoverColor = theme.selector.hover
+    const inactiveColor = theme.selector.inactive
 
     const color = isActive ? activeColor : isHovering ? hoverColor : inactiveColor
 

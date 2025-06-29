@@ -31,7 +31,7 @@ const NavBar = ({ selectPanel }) => {
       position='static'
       sx={{
         height: '50px',
-        backgroundColor: theme => theme.palette.primary.dark,
+        backgroundColor: theme => theme.palette.primary.main,
       }}
     >
       <Toolbar>
