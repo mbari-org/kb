@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/panelModalFactory'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
@@ -12,7 +12,7 @@ const { SAVING } = PROCESSING
 
 const AddReferenceActions = ({ addReference }) => {
   const { closeModal, modalData, setProcessing } = use(PanelModalContext)
-  const { isDoiUnique } = use(KBDataContext)
+  const { isDoiUnique } = use(PanelDataContext)
 
   const { reference } = modalData
 

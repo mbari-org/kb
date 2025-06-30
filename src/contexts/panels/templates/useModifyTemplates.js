@@ -7,11 +7,11 @@ import {
 } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
 const useModifyTemplates = () => {
   const { apiFns } = use(ConfigContext)
-  const { refreshData } = use(KBDataContext)
+  const { refreshData } = use(PanelDataContext)
 
   const deleteTemplate = useCallback(
     async template => {

@@ -2,7 +2,7 @@ import { use, useMemo } from 'react'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
@@ -10,7 +10,7 @@ import { SELECTED } from '@/lib/constants'
 const { REFERENCES } = SELECTED.SETTINGS
 
 const ConceptReferences = () => {
-  const { references } = use(KBDataContext)
+  const { references } = use(PanelDataContext)
   const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)

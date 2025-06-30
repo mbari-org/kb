@@ -1,8 +1,8 @@
 import { useCallback, useState, useMemo } from 'react'
 
-import ConceptModalContext from './ConceptModalContext'
+import PanelModalContext from './PanelModalContext'
 
-const ConceptModalProvider = ({ children }) => {
+const PanelModalProvider = ({ children }) => {
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
@@ -52,7 +52,7 @@ const ConceptModalProvider = ({ children }) => {
     [closeModal, processing, modal, modalData, handleSetModal]
   )
 
-  return <ConceptModalContext value={value}>{children}</ConceptModalContext>
+  return <PanelModalContext value={value}>{children}</PanelModalContext>
 }
 
-export default ConceptModalProvider
+export default PanelModalProvider

@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-const ConceptModalContext = createContext()
-ConceptModalContext.displayName = 'App Modal Context'
+const PanelModalContext = createContext()
+PanelModalContext.displayName = 'App Modal Context'
 
-export default ConceptModalContext
+export default PanelModalContext

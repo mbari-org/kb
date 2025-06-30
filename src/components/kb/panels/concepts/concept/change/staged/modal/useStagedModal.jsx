@@ -6,10 +6,10 @@ import StagedStateTitle from '@/components/kb/panels/concepts/concept/change/sta
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const useStagedModal = () => {
-  const { setModal } = use(ConceptModalContext)
+  const { setModal } = use(PanelModalContext)
 
   return useCallback(
     intent => {

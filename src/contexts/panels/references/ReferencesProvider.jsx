@@ -1,12 +1,12 @@
 import { use } from 'react'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
 import useModifyReferences from './useModifyReferences'
 
 export const ReferencesProvider = ({ children }) => {
-  const { references, refreshData } = use(KBDataContext)
+  const { references, refreshData } = use(PanelDataContext)
 
   const { addReference, editReference, deleteReference } = useModifyReferences({
     setReferences: refreshData,

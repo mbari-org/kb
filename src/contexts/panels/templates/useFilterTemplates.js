@@ -1,7 +1,7 @@
 import { use, useCallback, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
 import {
   getAvailableTemplates,
@@ -25,7 +25,7 @@ const useFilterTemplates = ({
   getSettings,
 }) => {
   const { apiFns } = use(ConfigContext)
-  const { templates: allTemplates } = use(KBDataContext)
+  const { templates: allTemplates } = use(PanelDataContext)
 
   const [conceptTemplatesCache, setConceptTemplatesCache] = useState([])
 

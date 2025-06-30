@@ -9,7 +9,7 @@ import {
 } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
 import { PAGINATION } from '@/lib/constants'
 
@@ -70,7 +70,7 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 
 const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { setExporting } = use(KBDataContext)
+  const { setExporting } = use(PanelDataContext)
 
   const templatesExport = async data => {
     const filterName =

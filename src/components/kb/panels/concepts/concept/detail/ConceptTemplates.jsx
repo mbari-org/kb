@@ -3,7 +3,7 @@ import { use, useEffect, useState } from 'react'
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
 import TemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableToggle'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -14,7 +14,7 @@ import { SELECTED } from '@/lib/constants'
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const ConceptTemplates = () => {
-  const { isLoading, templates } = use(KBDataContext)
+  const { isLoading, templates } = use(PanelDataContext)
   const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
   const { getAncestors } = use(TaxonomyContext)
 

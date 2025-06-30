@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import TemplatesContext from './TemplatesContext'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -20,7 +20,7 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const TemplatesProvider = ({ children }) => {
   const isLoadingConcept = useRef(false)
 
-  const { explicitConcepts, templates } = use(KBDataContext)
+  const { explicitConcepts, templates } = use(PanelDataContext)
   const { getSettings, updateSettings } = use(SelectedContext)
   const { getAncestors, isConceptLoaded, loadConcept } = use(TaxonomyContext)
 

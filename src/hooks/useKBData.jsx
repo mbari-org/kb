@@ -1,9 +1,9 @@
 import { use } from 'react'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
 const useKBData = () => {
-  return use(KBDataContext)
+  return use(PanelDataContext)
 }
 
 export default useKBData

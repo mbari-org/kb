@@ -1,11 +1,11 @@
 import { use } from 'react'
 import { Box, TextField } from '@mui/material'
 
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import useDebouncedField from '@/hooks/useDebouncedField'
 
 const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
-  const { isDoiUnique } = use(KBDataContext)
+  const { isDoiUnique } = use(PanelDataContext)
 
   const [doiValue, handleDoiChange] = useDebouncedField(reference.doi, 'doi', handleFieldChange)
   const [citationValue, handleCitationChange] = useDebouncedField(

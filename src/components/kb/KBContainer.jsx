@@ -3,8 +3,7 @@ import Box from '@mui/material/Box'
 import KnowledgeBase from '@/components/kb/KnowledgeBase'
 import AppModal from '@/components/modal/AppModal'
 
-import ConceptModalProvider from '@/contexts/modal/concept/ConceptModalProvider'
-import KBDataProvider from '@/contexts/kbData/KBDataProvider'
+import PanelDataProvider from '@/contexts/panels/PanelDataProvider'
 import PanelModalProvider from '@/contexts/modal/panel/PanelModalProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import AppModalProvider from '@/contexts/modal/app/AppModalProvider'
@@ -17,15 +16,13 @@ const KBContainer = () => {
       <AppModalProvider>
         <TaxonomyProvider>
           <SelectedProvider>
-            <KBDataProvider>
-              <ConceptModalProvider>
+            <PanelDataProvider>
+              <PanelModalProvider>
                 <ConceptProvider>
-                  <PanelModalProvider>
-                    <KnowledgeBase />
-                  </PanelModalProvider>
+                  <KnowledgeBase />
                 </ConceptProvider>
-              </ConceptModalProvider>
-            </KBDataProvider>
+              </PanelModalProvider>
+            </PanelDataProvider>
           </SelectedProvider>
         </TaxonomyProvider>
         <AppModal />

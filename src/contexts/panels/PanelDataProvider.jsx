@@ -5,7 +5,7 @@ import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import AppModalContext from '@/contexts/modal/app/AppModalContext'
-import KBDataContext from '@/contexts/kbData/KBDataContext'
+import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
 import { createReference } from '@/lib/kb/model/reference'
 
@@ -13,7 +13,7 @@ import { PAGINATION } from '@/lib/constants'
 
 const { REFERENCES, TEMPLATES } = PAGINATION
 
-export const KBDataProvider = ({ children }) => {
+export const PanelDataProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
   const { setProcessing } = use(AppModalContext)
 
@@ -133,7 +133,7 @@ export const KBDataProvider = ({ children }) => {
     [references, templates, explicitConcepts, isLoading, refreshData, isDoiUnique, setExporting]
   )
 
-  return <KBDataContext value={value}>{children}</KBDataContext>
+  return <PanelDataContext value={value}>{children}</PanelDataContext>
 }
 
-export default KBDataProvider
+export default PanelDataProvider
