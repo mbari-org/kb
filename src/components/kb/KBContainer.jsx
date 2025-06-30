@@ -9,6 +9,7 @@ import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import AppModalProvider from '@/contexts/modal/app/AppModalProvider'
 import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
+import UsersProvider from '@/contexts/panels/users/UsersProvider'
 
 const KBContainer = () => {
   return (
@@ -16,13 +17,15 @@ const KBContainer = () => {
       <AppModalProvider>
         <TaxonomyProvider>
           <SelectedProvider>
-            <PanelDataProvider>
-              <PanelModalProvider>
-                <ConceptProvider>
-                  <KnowledgeBase />
-                </ConceptProvider>
-              </PanelModalProvider>
-            </PanelDataProvider>
+            <UsersProvider>
+              <PanelDataProvider>
+                <PanelModalProvider>
+                  <ConceptProvider>
+                    <KnowledgeBase />
+                  </ConceptProvider>
+                </PanelModalProvider>
+              </PanelDataProvider>
+            </UsersProvider>
           </SelectedProvider>
         </TaxonomyProvider>
         <AppModal />

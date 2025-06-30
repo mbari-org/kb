@@ -1,5 +1,7 @@
 import { use, useCallback } from 'react'
 
+import { createTitle } from '@/components/common/factory/createComponent'
+
 import { createModal } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
@@ -17,7 +19,7 @@ const useAddUserModal = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'USER',
+        role: '',
         isValid: false,
         hasChanges: false,
       }
@@ -30,7 +32,7 @@ const useAddUserModal = () => {
       const modal = createModal({
         Actions: AddUserActions,
         Content: AddUserContent,
-        Title: () => 'Add User',
+        Title: createTitle({ title: 'Add User' }),
       })
 
       setModal(modal)

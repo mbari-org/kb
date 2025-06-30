@@ -6,8 +6,6 @@ import UsersTableData from '@/components/kb/panels/users/table/data/UsersTableDa
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
-import UsersProvider from '@/contexts/panels/users/UsersProvider'
-
 const Users = () => {
   const { createTablePanel } = usePanelFactory()
 
@@ -24,7 +22,7 @@ const Users = () => {
     },
   })
 
-  return <UsersProvider>{usersPanel}</UsersProvider>
+  return usersPanel
 }
 
 export default Users

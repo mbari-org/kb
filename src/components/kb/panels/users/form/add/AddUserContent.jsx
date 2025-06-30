@@ -15,10 +15,7 @@ const AddUserContent = () => {
   }
 
   return (
-    <div>
-      <h3>Add User</h3>
-      <UserForm existingUsers={existingUsers} isEdit={false} onChange={handleChange} user={user} />
-    </div>
+    <UserForm existingUsers={existingUsers} isEdit={false} onChange={handleChange} user={user} />
   )
 }
 
