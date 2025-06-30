@@ -17,7 +17,6 @@ const AddUserContent = () => {
   return (
     <div>
       <h3>Add User</h3>
-      <p>User data: {JSON.stringify(modalData)}</p>
       <UserForm existingUsers={existingUsers} isEdit={false} onChange={handleChange} user={user} />
     </div>
   )

@@ -3,20 +3,20 @@ import { use, useTransition } from 'react'
 import { Box } from '@mui/material'
 
 import KbLoading from '@/components/modal/KbLoading'
-import KbModal from '@/components/modal/KbModal'
+import PanelModal from '@/components/modal/PanelModal'
 import NavBar from '@/components/kb/nav/NavBar'
 import PanelWrapper from '@/components/kb/panels/PanelWrapper'
 import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
 import AppModalContext from '@/contexts/modal/app/AppModalContext'
-import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
 
 const KnowledgeBase = () => {
-  const { processing: systemProcessing } = use(AppModalContext)
-  const { modal, processing } = use(ConceptModalContext)
+  const { processing: appProcessing } = use(AppModalContext)
+  const { modal: panelModal, processing: panelProcessing } = use(PanelModalContext)
   const { panels, updateSelected } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
@@ -31,8 +31,8 @@ const KnowledgeBase = () => {
       <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <PanelWrapper activePanel={panels.current()} />
       </Box>
-      {!processing && modal && <KbModal />}
-      {(processing || systemProcessing) && <KbLoading />}
+      {!panelProcessing && panelModal && <PanelModal />}
+      {(panelProcessing || appProcessing) && <KbLoading />}
     </Box>
   )
 }

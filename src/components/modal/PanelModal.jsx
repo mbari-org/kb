@@ -12,12 +12,10 @@ import {
   Modal,
 } from '@mui/material'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
-const KbModal = () => {
-  const { modal, closeModal } = use(ConceptModalContext)
-  const { confirmReset } = use(ConceptContext)
+const PanelModal = () => {
+  const { modal, closeModal } = use(PanelModalContext)
 
   if (!modal) {
     return null
@@ -42,15 +40,13 @@ const KbModal = () => {
           }}
         >
           <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth }}>
-            {!confirmReset && (
-              <IconButton
-                aria-label='close'
-                onClick={() => closeModal()}
-                sx={{ position: 'absolute', right: 8, top: 8 }}
-              >
-                <IoCloseSharp />
-              </IconButton>
-            )}
+            <IconButton
+              aria-label='close'
+              onClick={() => closeModal()}
+              sx={{ position: 'absolute', right: 8, top: 8 }}
+            >
+              <IoCloseSharp />
+            </IconButton>
             <CardHeader title={<Title />} />
             <CardContent sx={{ pb: 0, pt: 0 }}>
               <Content />
@@ -65,4 +61,4 @@ const KbModal = () => {
   )
 }
 
-export default KbModal
+export default PanelModal
