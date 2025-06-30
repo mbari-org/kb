@@ -3,7 +3,7 @@ import { use } from 'react'
 import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import SystemModalContext from '@/contexts/modal/SystemModalContext'
+import KBDataContext from '@/contexts/kbData/KBDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import { PAGINATION } from '@/lib/constants'
@@ -101,12 +101,12 @@ const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
 const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
   const { selectedType, selectedConcept, sortOrder } = use(HistoryContext)
-  const { setProcessing } = use(SystemModalContext)
+  const { setExporting } = use(KBDataContext)
 
   const historyExport = async () => {
     let writable = null
     try {
-      setProcessing(true)
+      setExporting(true)
       const handle = await window.showSaveFilePicker({
         suggestedName:
           selectedType === 'concept'
@@ -147,7 +147,7 @@ const useHistoryExport = () => {
         const estimatedTotalPages = totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : '?'
 
         while (hasMoreData) {
-          setProcessing(`Exporting page ${pageIndex} of ${estimatedTotalPages} to CSV file...`)
+          setExporting(`Exporting page ${pageIndex} of ${estimatedTotalPages} to CSV file...`)
           const historyItems = await fetchHistoryByPage(
             selectedType,
             pageIndex,
@@ -179,7 +179,7 @@ const useHistoryExport = () => {
         }
       }
     } finally {
-      setProcessing(false)
+      setExporting(false)
     }
   }
 

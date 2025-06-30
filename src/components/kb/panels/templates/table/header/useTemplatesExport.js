@@ -9,7 +9,7 @@ import {
 } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import SystemModalContext from '@/contexts/modal/SystemModalContext'
+import KBDataContext from '@/contexts/kbData/KBDataContext'
 
 import { PAGINATION } from '@/lib/constants'
 
@@ -70,7 +70,7 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 
 const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { setProcessing } = use(SystemModalContext)
+  const { setExporting } = use(KBDataContext)
 
   const templatesExport = async data => {
     const filterName =
@@ -85,7 +85,7 @@ const useTemplatesExport = () => {
     const suggestedName = `KB-Templates-${availableTag}${filterName}.csv`
 
     try {
-      setProcessing(true)
+      setExporting(true)
       const handle = await window.showSaveFilePicker({
         suggestedName,
         types: [
@@ -101,11 +101,11 @@ const useTemplatesExport = () => {
 
       // If displayTemplates are provided, use them directly (matches what user sees in table)
       if (data.displayTemplates && data.displayTemplates.length > 0) {
-        setProcessing('Writing templates to CSV file...')
+        setExporting('Writing templates to CSV file...')
         await writeCSVContent(writable, templateRows(data.displayTemplates))
       } else if (data.filterConcept || data.filterToConcept) {
         // Fetch all templates for the current filter
-        setProcessing('Writing templates to CSV file...')
+        setExporting('Writing templates to CSV file...')
         const filteredTemplates = await fetchFilteredTemplates(data, apiFns)
         if (filteredTemplates) {
           await writeCSVContent(writable, templateRows(filteredTemplates))
@@ -119,7 +119,7 @@ const useTemplatesExport = () => {
         let hasMoreData = true
 
         while (hasMoreData) {
-          setProcessing(`Writing page ${pageIndex + 1} of ${estimatedTotalPages} to CSV file...`)
+          setExporting(`Writing page ${pageIndex + 1} of ${estimatedTotalPages} to CSV file...`)
           const templates = await fetchTemplatesByPage(apiFns, pageIndex)
           if (!templates || templates.length === 0) {
             hasMoreData = false
@@ -136,7 +136,7 @@ const useTemplatesExport = () => {
         console.error('Error saving file:', error)
       }
     } finally {
-      setProcessing(false)
+      setExporting(false)
     }
   }
 

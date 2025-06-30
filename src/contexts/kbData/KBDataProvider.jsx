@@ -4,6 +4,7 @@ import { getReferences as getReferencesApi } from '@/lib/api/references'
 import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import SystemModalContext from '@/contexts/modal/SystemModalContext'
 import KBDataContext from '@/contexts/kbData/KBDataContext'
 
 import { createReference } from '@/lib/kb/model/reference'
@@ -14,6 +15,7 @@ const { REFERENCES, TEMPLATES } = PAGINATION
 
 export const KBDataProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
+  const { setProcessing } = use(SystemModalContext)
 
   const [isLoading, setIsLoading] = useState(true)
   const [references, setReferences] = useState([])
@@ -110,6 +112,11 @@ export const KBDataProvider = ({ children }) => {
     refreshData()
   }, [refreshData])
 
+  // Export processing function that wraps SystemModalContext setProcessing
+  const setExporting = useCallback((state) => {
+    setProcessing(state)
+  }, [setProcessing])
+
   const value = useMemo(
     () => ({
       explicitConcepts,
@@ -117,9 +124,10 @@ export const KBDataProvider = ({ children }) => {
       isLoading,
       references,
       refreshData,
+      setExporting,
       templates,
     }),
-    [references, templates, explicitConcepts, isLoading, refreshData, isDoiUnique]
+    [references, templates, explicitConcepts, isLoading, refreshData, isDoiUnique, setExporting]
   )
 
   return <KBDataContext value={value}>{children}</KBDataContext>
