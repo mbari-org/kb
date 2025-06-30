@@ -4,7 +4,7 @@ import EditReferenceActions from './EditReferenceActions'
 import EditReferenceContent from './EditReferenceContent'
 import EditReferenceTitle from './EditReferenceTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import KBDataContext from '@/contexts/kbData/KBDataContext' // eslint-disable-line no-unused-vars

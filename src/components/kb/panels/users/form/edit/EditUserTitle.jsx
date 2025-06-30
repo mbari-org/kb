@@ -1,4 +1,4 @@
-import Title from '@/components/modal/Title'
+import Title from '@/components/common/factory/Title'
 
 const EditUserTitle = () => {
   return <Title title='Edit User' />

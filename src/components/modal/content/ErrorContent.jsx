@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { createTextContent } from '@/components/modal/factory'
+import { createTextContent } from '@/components/modal/panelModalFactory'
 
 const ErrorContent = ({ error }) => {
   const theme = useTheme()

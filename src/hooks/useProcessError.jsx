@@ -1,6 +1,6 @@
 import { use, useEffect } from 'react'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import AppModalContext from '@/contexts/modal/app/AppModalContext'
 

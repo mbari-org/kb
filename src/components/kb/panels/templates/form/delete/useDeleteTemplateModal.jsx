@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 import DeleteTemplateActions from './DeleteTemplateActions'
 import DeleteTemplateContent from './DeleteTemplateContent'
 import DeleteTemplateTitle from './DeleteTemplateTitle'
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const deleteTemplateModal = deleteTemplate => {

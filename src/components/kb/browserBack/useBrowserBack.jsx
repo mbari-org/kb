@@ -1,6 +1,6 @@
 import { use, useEffect } from 'react'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import LogoutActions from '@/components/kb/browserBack/LogoutActions'
 import LogoutContent from '@/components/kb/browserBack/LogoutContent'

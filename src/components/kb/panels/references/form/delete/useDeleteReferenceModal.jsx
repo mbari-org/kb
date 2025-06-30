@@ -4,7 +4,7 @@ import DeleteReferenceActions from './DeleteReferenceActions'
 import DeleteReferenceContent from './DeleteReferenceContent'
 import DeleteReferenceTitle from './DeleteReferenceTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 

@@ -1,6 +1,6 @@
 import Actions from '@/components/modal/actions/Actions'
-import TextContent from '@/components/modal/content/TextContent'
-import Title from '@/components/modal/Title'
+import Text from '@/components/common/factory/Text'
+import Title from '@/components/common/factory/Title'
 
 const createComponent = (Component, props, name) => {
   const NamedComponent = () => <Component {...props} />
@@ -9,7 +9,7 @@ const createComponent = (Component, props, name) => {
 }
 
 const createActions = (props, name) => createComponent(Actions, props, name)()
-const createTextContent = props => createComponent(TextContent, props)
+const createTextContent = props => createComponent(Text, props)
 const createTitle = (props, name) => createComponent(Title, props, name)
 
 const createModal = ({ Actions, Content, Title, minWidth }) => ({

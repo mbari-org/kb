@@ -4,7 +4,7 @@ import PendingActions from '@/components/kb/panels/concepts/concept/change/pendi
 import PendingContent from '@/components/kb/panels/concepts/concept/change/pending/modal/PendingContent'
 import PendingTitle from '@/components/kb/panels/concepts/concept/change/pending/modal/PendingTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'

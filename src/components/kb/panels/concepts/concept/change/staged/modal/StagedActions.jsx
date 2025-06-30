@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { createActions } from '@/components/modal/factory'
+import { createActions } from '@/components/modal/panelModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'

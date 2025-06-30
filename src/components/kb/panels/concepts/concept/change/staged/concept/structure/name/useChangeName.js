@@ -4,7 +4,7 @@ import ChangeNameActions from './ChangeNameActions'
 import ChangeNameContent from './ChangeNameContent'
 import ChangeNameTitle from './ChangeNameTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'

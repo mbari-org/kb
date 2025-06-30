@@ -4,7 +4,7 @@ import AddReferenceActions from './AddReferenceActions'
 import AddReferenceContent from './AddReferenceContent'
 import AddReferenceTitle from './AddReferenceTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 

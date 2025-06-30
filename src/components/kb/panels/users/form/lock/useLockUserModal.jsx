@@ -8,7 +8,7 @@ import LastAdminActions from './LastAdminActions'
 import LastAdminContent from './LastAdminContent'
 import LastAdminTitle from './LastAdminTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 

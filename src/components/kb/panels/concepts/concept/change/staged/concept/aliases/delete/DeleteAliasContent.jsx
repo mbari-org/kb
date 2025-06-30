@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import DetailContent from '@/components/common/DetailContent'
-import { createComponent } from '@/components/modal/factory'
+import { createComponent } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 

@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 import EditTemplateActions from './EditTemplateActions'
 import EditTemplateContent from './EditTemplateContent'
 import EditTemplateTitle from './EditTemplateTitle'
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const editTemplateModal = editTemplate => {

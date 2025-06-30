@@ -3,7 +3,7 @@ import ChangeParentActions from './ChangeParentActions'
 import ChangeParentContent from './ChangeParentContent'
 import ChangeParentTitle from './ChangeParentTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'

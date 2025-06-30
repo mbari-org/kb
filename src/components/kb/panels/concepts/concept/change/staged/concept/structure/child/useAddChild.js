@@ -4,7 +4,7 @@ import AddChildActions from './AddChildActions'
 import AddChildContent from './AddChildContent'
 import AddChildTitle from './AddChildTitle'
 
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'

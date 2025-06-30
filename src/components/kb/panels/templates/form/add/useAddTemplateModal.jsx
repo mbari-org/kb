@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 import AddTemplateActions from './AddTemplateActions'
 import AddTemplateContent from './AddTemplateContent'
 import AddTemplateTitle from './AddTemplateTitle'
-import { createModal } from '@/components/modal/factory'
+import { createModal } from '@/components/modal/panelModalFactory'
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const addTemplateModal = addTemplate => {

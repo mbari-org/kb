@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-const TextContent = ({ sx, text }) => {
+const Text = ({ sx, text }) => {
   const theme = useTheme()
 
   return (
@@ -9,11 +9,11 @@ const TextContent = ({ sx, text }) => {
       id='text-content'
       variant='h6'
       component='h4'
-      sx={{ ...sx, color: theme.palette.common.black }}
+      sx={{ color: theme.palette.common.black, ...sx }}
     >
       {text}
     </Typography>
   )
 }
 
-export default TextContent
+export default Text
