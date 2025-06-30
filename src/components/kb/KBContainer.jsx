@@ -12,19 +12,19 @@ import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
 const KBContainer = () => {
   return (
     <Box sx={{ height: '100vh' }}>
-      <AppModalProvider>
-        <TaxonomyProvider>
-          <SelectedProvider>
-            <KBDataProvider>
+      <TaxonomyProvider>
+        <SelectedProvider>
+          <KBDataProvider>
+            <AppModalProvider>
               <ConceptProvider>
                 <PanelModalProvider>
                   <KnowledgeBase />
                 </PanelModalProvider>
               </ConceptProvider>
-            </KBDataProvider>
-          </SelectedProvider>
-        </TaxonomyProvider>
-      </AppModalProvider>
+            </AppModalProvider>
+          </KBDataProvider>
+        </SelectedProvider>
+      </TaxonomyProvider>
     </Box>
   )
 }

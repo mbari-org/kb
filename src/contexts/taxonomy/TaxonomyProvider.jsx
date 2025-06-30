@@ -2,7 +2,6 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import UserContext from '@/contexts/user/UserContext'
-import AppModalContext from '@/contexts/modal/AppModalContext'
 import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -28,23 +27,19 @@ import {
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { PROCESSING } from '@/lib/constants'
-
-const { LOADING } = PROCESSING
-
 // Load initial taxonomy with root concept and its children
 const loadInitialTaxonomy = async apiFns => {
   try {
     // First load the basic taxonomy
     const { taxonomy: basicTaxonomy } = await loadTaxonomy(apiFns)
-    
+
     // Then load the root concept with its children
     const { taxonomy: taxonomyWithRoot } = await loadTaxonomyConcept(
       basicTaxonomy,
       basicTaxonomy.rootName,
       apiFns
     )
-    
+
     return { taxonomy: taxonomyWithRoot }
   } catch (error) {
     return { error }
@@ -56,7 +51,6 @@ const TaxonomyProvider = ({ children }) => {
 
   const { user } = use(UserContext)
   const { apiFns } = use(ConfigContext)
-  const { setProcessing, setModal } = use(AppModalContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
 
@@ -174,7 +168,6 @@ const TaxonomyProvider = ({ children }) => {
 
       try {
         alreadyLoadingConcept.current = true
-        setProcessing(LOADING)
 
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(
           taxonomy,
@@ -183,40 +176,35 @@ const TaxonomyProvider = ({ children }) => {
         )
 
         updateTaxonomy(updatedTaxonomy)
-        setProcessing(false)
 
         const updatedConcept = getTaxonomyConcept(updatedTaxonomy, conceptName)
         return updatedConcept
       } catch (error) {
-        setProcessing(false)
         showBoundary(error)
       } finally {
         alreadyLoadingConcept.current = false
       }
     },
-    [apiFns, getConcept, isConceptLoaded, setProcessing, taxonomy, updateTaxonomy, showBoundary]
+    [apiFns, getConcept, isConceptLoaded, taxonomy, updateTaxonomy, showBoundary]
   )
 
   const loadConceptDescendants = useCallback(
     async concept => {
       if (!apiFns || !taxonomy) return null
       try {
-        setProcessing(LOADING)
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(
           taxonomy,
           concept,
           apiFns
         )
         updateTaxonomy(updatedTaxonomy)
-        setProcessing(false)
 
         return updatedTaxonomy
       } catch (error) {
-        setProcessing(false)
         showBoundary(error)
       }
     },
-    [apiFns, setProcessing, showBoundary, taxonomy, updateTaxonomy]
+    [apiFns, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const refreshConcept = useCallback(
@@ -261,27 +249,19 @@ const TaxonomyProvider = ({ children }) => {
   useEffect(() => {
     if (!apiFns || taxonomy) return
 
-    setProcessing(LOADING)
-
     loadInitialTaxonomy(apiFns).then(
       ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
-        setProcessing(false)
         if (taxonomyError) {
-          setModal({
-            type: 'error',
-            title: 'CxTBD: Error loading taxonomy',
-            message: taxonomyError.message,
-          })
+          showBoundary(taxonomyError)
         } else {
           setTaxonomy(initialTaxonomy)
         }
       },
       error => {
-        setProcessing(false)
         showBoundary(error)
       }
     )
-  }, [apiFns, taxonomy, setModal, setProcessing, showBoundary])
+  }, [apiFns, taxonomy, showBoundary])
 
   const value = useMemo(
     () => ({
