@@ -9,13 +9,13 @@ import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/sta
 import MediaDetail from '@/components/kb/panels/concepts/concept/change/staged/concept/media/MediaDetail'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 
 import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
 const StagedContent = () => {
   const { stagedState, initialState } = use(ConceptContext)
-  const { closeModal } = use(AppModalContext)
+  const { closeModal } = use(ConceptModalContext)
 
   const edits = useMemo(
     () =>

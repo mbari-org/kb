@@ -2,14 +2,14 @@ import { use, useEffect } from 'react'
 
 import { createModal } from '@/components/modal/factory'
 
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import SystemModalContext from '@/contexts/modal/SystemModalContext'
 
 import ErrorActions from '@/components/kb/error/ErrorActions'
 import ErrorContent from '@/components/kb/error/ErrorContent'
 import ErrorTitle from '@/components/kb/error/ErrorTitle'
 
 const useProcessError = error => {
-  const { setModal } = use(AppModalContext)
+  const { setModal } = use(SystemModalContext)
 
   useEffect(() => {
     if (error) {

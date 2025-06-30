@@ -1,9 +1,9 @@
 import { use } from 'react'
 
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 
 const KbLoading = () => {
-  const { processing } = use(AppModalContext)
+  const { processing } = use(ConceptModalContext)
 
   if (!processing) return null
 

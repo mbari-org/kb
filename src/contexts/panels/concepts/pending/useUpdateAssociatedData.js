@@ -1,11 +1,11 @@
 import { use, useCallback } from 'react'
 
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 
 import { updateAssociatedData } from '@/lib/api/concepts'
 
 const useUpdateAssociatedData = () => {
-  const { modalData: _modalData } = use(AppModalContext)
+  const { modalData: _modalData } = use(ConceptModalContext)
 
   return useCallback(async data => {
     try {

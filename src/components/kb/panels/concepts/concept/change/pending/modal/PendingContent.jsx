@@ -10,7 +10,7 @@ import ParentDetail from '@/components/kb/panels/concepts/concept/change/pending
 import RankDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RankDetail'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
@@ -20,7 +20,7 @@ import { isEmpty } from '@/lib/utils'
 
 const PendingContent = () => {
   const { concept } = use(ConceptContext)
-  const { setModal } = use(AppModalContext)
+  const { setModal } = use(ConceptModalContext)
 
   const conceptPending = useConceptPending(concept.name)
   const parentPending = useConceptPending(concept.parent)

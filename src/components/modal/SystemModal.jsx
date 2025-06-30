@@ -12,12 +12,10 @@ import {
   Modal,
 } from '@mui/material'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import SystemModalContext from '@/contexts/modal/SystemModalContext'
 
-const KbModal = () => {
-  const { modal, closeModal } = use(ConceptModalContext)
-  const { confirmReset } = use(ConceptContext)
+const SystemModal = () => {
+  const { modal, closeModal } = use(SystemModalContext)
 
   if (!modal) {
     return null
@@ -27,8 +25,8 @@ const KbModal = () => {
 
   return (
     <Modal
-      aria-labelledby='modal-alert'
-      aria-describedby='modal-alert-description'
+      aria-labelledby='system-modal-alert'
+      aria-describedby='system-modal-alert-description'
       open
       closeAfterTransition
     >
@@ -42,15 +40,13 @@ const KbModal = () => {
           }}
         >
           <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth }}>
-            {!confirmReset && (
-              <IconButton
-                aria-label='close'
-                onClick={() => closeModal()}
-                sx={{ position: 'absolute', right: 8, top: 8 }}
-              >
-                <IoCloseSharp />
-              </IconButton>
-            )}
+            <IconButton
+              aria-label='close'
+              onClick={() => closeModal()}
+              sx={{ position: 'absolute', right: 8, top: 8 }}
+            >
+              <IoCloseSharp />
+            </IconButton>
             <CardHeader title={<Title />} />
             <CardContent sx={{ pb: 0, pt: 0 }}>
               <Content />
@@ -65,4 +61,4 @@ const KbModal = () => {
   )
 }
 
-export default KbModal
+export default SystemModal

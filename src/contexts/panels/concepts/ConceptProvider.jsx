@@ -8,7 +8,7 @@ import useLoadConceptError from '@/hooks/useLoadConceptError'
 import useConceptLoader from './useConceptLoader'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -21,7 +21,7 @@ import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
-  const { modalData, setModalData } = use(AppModalContext)
+  const { modalData, setModalData } = use(ConceptModalContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)

@@ -8,13 +8,13 @@ import NavBar from '@/components/kb/nav/NavBar'
 import PanelWrapper from '@/components/kb/panels/PanelWrapper'
 import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
-import AppModalContext from '@/contexts/modal/AppModalContext'
+import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
 
 const KnowledgeBase = () => {
-  const { modal, processing } = use(AppModalContext)
+  const { modal, processing } = use(ConceptModalContext)
   const { panels, updateSelected } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
