@@ -12,10 +12,10 @@ import {
   Modal,
 } from '@mui/material'
 
-import SystemModalContext from '@/contexts/modal/app/SystemModalContext'
+import AppModalContext from '@/contexts/modal/app/AppModalContext'
 
-const SystemModal = () => {
-  const { modal, closeModal } = use(SystemModalContext)
+const AppModal = () => {
+  const { modal, closeModal } = use(AppModalContext)
 
   if (!modal) {
     return null
@@ -61,4 +61,4 @@ const SystemModal = () => {
   )
 }
 
-export default SystemModal
+export default AppModal

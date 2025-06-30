@@ -1,8 +1,8 @@
 import { useCallback, useState, useMemo } from 'react'
 
-import SystemModalContext from './SystemModalContext'
+import AppModalContext from './AppModalContext'
 
-const SystemModalProvider = ({ children }) => {
+const AppModalProvider = ({ children }) => {
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
@@ -52,7 +52,7 @@ const SystemModalProvider = ({ children }) => {
     [closeModal, processing, modal, modalData, handleSetModal]
   )
 
-  return <SystemModalContext value={value}>{children}</SystemModalContext>
+  return <AppModalContext value={value}>{children}</AppModalContext>
 }
 
-export default SystemModalProvider
+export default AppModalProvider

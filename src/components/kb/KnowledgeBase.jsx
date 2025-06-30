@@ -8,14 +8,14 @@ import NavBar from '@/components/kb/nav/NavBar'
 import PanelWrapper from '@/components/kb/panels/PanelWrapper'
 import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
-import SystemModalContext from '@/contexts/modal/app/SystemModalContext'
+import AppModalContext from '@/contexts/modal/app/AppModalContext'
 import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
 
 const KnowledgeBase = () => {
-  const { processing: systemProcessing } = use(SystemModalContext)
+  const { processing: systemProcessing } = use(AppModalContext)
   const { modal, processing } = use(ConceptModalContext)
   const { panels, updateSelected } = use(SelectedContext)
 
