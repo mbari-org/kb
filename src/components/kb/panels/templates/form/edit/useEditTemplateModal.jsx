@@ -3,7 +3,7 @@ import EditTemplateActions from './EditTemplateActions'
 import EditTemplateContent from './EditTemplateContent'
 import EditTemplateTitle from './EditTemplateTitle'
 import { createModal } from '@/components/modal/factory'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const editTemplateModal = editTemplate => {
   const components = {

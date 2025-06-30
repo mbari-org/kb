@@ -6,7 +6,7 @@ import EditUserTitle from './EditUserTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const editUserModal = editUser => {
   const components = {

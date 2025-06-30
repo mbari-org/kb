@@ -3,7 +3,7 @@ import { use, useMemo } from 'react'
 import { createActions } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE, LABELS } from '@/lib/constants'

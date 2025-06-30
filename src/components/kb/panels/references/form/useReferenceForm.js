@@ -1,6 +1,6 @@
 import { use, useState } from 'react'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import { createReference } from '@/lib/kb/model/reference'
 

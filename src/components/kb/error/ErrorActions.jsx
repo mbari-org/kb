@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Button } from '@mui/material'
 
-import SystemModalContext from '@/contexts/modal/SystemModalContext'
+import SystemModalContext from '@/contexts/modal/app/SystemModalContext'
 
 const ErrorActions = () => {
   const { closeModal } = use(SystemModalContext)

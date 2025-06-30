@@ -6,7 +6,7 @@ import DeleteConceptTitle from './DeleteConceptTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const deleteConceptModal = () => {
   const components = {

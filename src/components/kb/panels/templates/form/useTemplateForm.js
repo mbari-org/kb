@@ -1,4 +1,4 @@
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import { use, useState } from 'react'
 
 const useTemplateForm = ({ isEdit = false, onChange, template }) => {

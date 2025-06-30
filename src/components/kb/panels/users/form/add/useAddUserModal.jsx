@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 
 import { createModal } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import AddUserActions from './AddUserActions'
 import AddUserContent from './AddUserContent'

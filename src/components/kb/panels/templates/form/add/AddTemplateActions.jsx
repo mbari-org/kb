@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { createActions } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import { isValidTemplate } from '@/components/kb/panels/templates/utils'
 

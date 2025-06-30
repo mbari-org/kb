@@ -6,7 +6,7 @@ import EditReferenceTitle from './EditReferenceTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import KBDataContext from '@/contexts/kbData/KBDataContext' // eslint-disable-line no-unused-vars
 
 const editReferenceModal = editReference => {

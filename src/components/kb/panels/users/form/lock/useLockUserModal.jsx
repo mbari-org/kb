@@ -10,7 +10,7 @@ import LastAdminTitle from './LastAdminTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import { USER_ROLES } from '@/lib/constants'
 

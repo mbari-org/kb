@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Button, Stack } from '@mui/material'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const AddUserActions = () => {
   const { closeModal, modalData } = use(PanelModalContext)

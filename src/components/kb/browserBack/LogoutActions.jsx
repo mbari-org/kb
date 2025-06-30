@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Button, Stack } from '@mui/material'
 
-import SystemModalContext from '@/contexts/modal/SystemModalContext'
+import SystemModalContext from '@/contexts/modal/app/SystemModalContext'
 
 const LogoutActions = () => {
   const { closeModal } = use(SystemModalContext)

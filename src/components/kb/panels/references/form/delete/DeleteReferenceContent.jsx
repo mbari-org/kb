@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Box, Typography, Stack } from '@mui/material'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const DeleteReferenceContent = () => {
   const { modalData } = use(PanelModalContext)

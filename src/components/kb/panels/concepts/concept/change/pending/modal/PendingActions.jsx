@@ -4,7 +4,7 @@ import { createActions } from '@/components/modal/factory'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 
 import useUpdatePending from '@/contexts/panels/concepts/pending/useUpdatePending'
 

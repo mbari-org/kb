@@ -2,7 +2,7 @@ import { use, useEffect } from 'react'
 
 import { createModal } from '@/components/modal/factory'
 
-import SystemModalContext from '@/contexts/modal/SystemModalContext'
+import SystemModalContext from '@/contexts/modal/app/SystemModalContext'
 
 import ErrorActions from '@/components/kb/error/ErrorActions'
 import ErrorContent from '@/components/kb/error/ErrorContent'

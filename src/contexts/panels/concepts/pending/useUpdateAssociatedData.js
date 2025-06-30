@@ -1,6 +1,6 @@
 import { use, useCallback } from 'react'
 
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 
 import { updateAssociatedData } from '@/lib/api/concepts'
 

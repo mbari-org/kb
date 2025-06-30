@@ -6,7 +6,7 @@ import DeleteReferenceTitle from './DeleteReferenceTitle'
 
 import { createModal } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const deleteReferenceModal = deleteReference => {
   const components = {

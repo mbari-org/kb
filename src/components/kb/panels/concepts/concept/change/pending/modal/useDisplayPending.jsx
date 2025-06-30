@@ -7,7 +7,7 @@ import PendingTitle from '@/components/kb/panels/concepts/concept/change/pending
 import { createModal } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 
 const useDisplayPending = () => {
   const { setConfirmPending } = use(ConceptContext)

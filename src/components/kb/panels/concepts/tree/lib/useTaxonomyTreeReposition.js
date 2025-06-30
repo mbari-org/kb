@@ -1,6 +1,6 @@
 import { use, useEffect, useRef } from 'react'
 
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 
 const useTaxonomyTreeReposition = (apiRef, concept) => {
   const { processing } = use(ConceptModalContext)

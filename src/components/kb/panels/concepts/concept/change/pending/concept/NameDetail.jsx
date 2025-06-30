@@ -5,7 +5,7 @@ import FieldDetail from '@/components/kb/panels/concepts/concept/change/pending/
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 
 import { LABELS } from '@/lib/constants'
 

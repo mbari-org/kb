@@ -3,7 +3,7 @@ import { use } from 'react'
 import DetailContent from '@/components/common/DetailContent'
 import { createComponent } from '@/components/modal/factory'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import { drop } from '@/lib/utils'
 

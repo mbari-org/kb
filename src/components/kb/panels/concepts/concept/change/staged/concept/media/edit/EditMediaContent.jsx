@@ -14,7 +14,7 @@ import { MdOutlinePhoto } from 'react-icons/md'
 import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/MediaDisplay'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import useStageMedia from './useStageMedia'
 import useDebounce from '@/hooks/useDebounce'

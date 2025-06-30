@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 
-import ConceptModalContext from './ConceptModalContext'
-import PanelModalContext from './PanelModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const PanelModalProvider = ({ children }) => {
   const conceptModalValue = use(ConceptModalContext)

@@ -12,7 +12,7 @@ import {
 } from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/mediaItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

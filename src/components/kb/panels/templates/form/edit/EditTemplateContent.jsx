@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import TemplateForm from '@/components/kb/panels/templates/form/TemplateForm'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const EditTemplateContent = () => {
   const { modalData, setModalData } = use(PanelModalContext)

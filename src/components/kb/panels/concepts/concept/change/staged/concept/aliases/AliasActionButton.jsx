@@ -7,7 +7,7 @@ import createEditAliasModal from '@/components/kb/panels/concepts/concept/change
 import createEditAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasOnClose'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 import { EMPTY_ALIAS, aliasFields } from '@/lib/kb/model/alias'
 

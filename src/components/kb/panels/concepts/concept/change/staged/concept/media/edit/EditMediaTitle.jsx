@@ -3,7 +3,7 @@ import { use } from 'react'
 import Title from '@/components/modal/Title'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 const EditMediaTitle = () => {
   const { concept } = use(ConceptContext)
 

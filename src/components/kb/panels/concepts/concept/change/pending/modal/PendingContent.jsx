@@ -10,7 +10,7 @@ import ParentDetail from '@/components/kb/panels/concepts/concept/change/pending
 import RankDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RankDetail'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 

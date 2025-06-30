@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import UserForm from '../UserForm'
 
 const AddUserContent = () => {

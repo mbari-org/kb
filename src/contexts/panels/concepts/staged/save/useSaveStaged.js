@@ -1,7 +1,7 @@
 import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import commitStaged from './commitStaged'

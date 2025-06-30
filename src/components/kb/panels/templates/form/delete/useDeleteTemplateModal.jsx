@@ -3,7 +3,7 @@ import DeleteTemplateActions from './DeleteTemplateActions'
 import DeleteTemplateContent from './DeleteTemplateContent'
 import DeleteTemplateTitle from './DeleteTemplateTitle'
 import { createModal } from '@/components/modal/factory'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const deleteTemplateModal = deleteTemplate => {
   const components = {

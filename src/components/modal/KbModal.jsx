@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 
 const KbModal = () => {
   const { modal, closeModal } = use(ConceptModalContext)

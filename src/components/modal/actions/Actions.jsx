@@ -17,10 +17,10 @@ const ActionsText = ({ color = 'cancel', text }) => (
 )
 
 const DiscardingText = () => (
-  <>
+  <Box>
     <ActionsText text='Discarding edits is final.' />
     <ActionsText text='Please confirm you want to discard the indicated edits.' />
-  </>
+  </Box>
 )
 
 const PendingText = ({ approval }) => {
@@ -30,13 +30,13 @@ const PendingText = ({ approval }) => {
   }, [approval])
 
   return (
-    <>
+    <Box>
       <ActionsText color={color} text={`${line1} pending edits is final.`} />
       <ActionsText
         color={color}
         text={`Please confirm you want to ${line2} the indicated pending edits.`}
       />
-    </>
+    </Box>
   )
 }
 

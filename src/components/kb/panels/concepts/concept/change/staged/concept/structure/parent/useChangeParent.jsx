@@ -6,7 +6,7 @@ import ChangeParentTitle from './ChangeParentTitle'
 import { createModal } from '@/components/modal/factory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { PROCESSING } from '@/lib/constants'

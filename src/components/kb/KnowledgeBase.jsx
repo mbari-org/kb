@@ -8,8 +8,8 @@ import NavBar from '@/components/kb/nav/NavBar'
 import PanelWrapper from '@/components/kb/panels/PanelWrapper'
 import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
-import SystemModalContext from '@/contexts/modal/SystemModalContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import SystemModalContext from '@/contexts/modal/app/SystemModalContext'
+import ConceptModalContext from '@/contexts/modal/concept/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'

@@ -3,7 +3,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useStageAlias from './useStageAlias'

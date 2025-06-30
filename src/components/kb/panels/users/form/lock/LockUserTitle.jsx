@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import Title from '@/components/modal/Title'
 
-import PanelModalContext from '@/contexts/modal/PanelModalContext'
+import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
 const LockUserTitle = () => {
   const { modalData } = use(PanelModalContext)

@@ -3,13 +3,13 @@ import Box from '@mui/material/Box'
 import KnowledgeBase from '@/components/kb/KnowledgeBase'
 import SystemModal from '@/components/modal/SystemModal'
 
-import SystemModalProvider from '@/contexts/modal/SystemModalProvider'
-import ConceptModalProvider from '@/contexts/modal/ConceptModalProvider'
-import PanelModalProvider from '@/contexts/modal/PanelModalProvider'
+import ConceptModalProvider from '@/contexts/modal/concept/ConceptModalProvider'
 import KBDataProvider from '@/contexts/kbData/KBDataProvider'
+import PanelModalProvider from '@/contexts/modal/panel/PanelModalProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
-import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
+import SystemModalProvider from '@/contexts/modal/app/SystemModalProvider'
 import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
+import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 
 const KBContainer = () => {
   return (
