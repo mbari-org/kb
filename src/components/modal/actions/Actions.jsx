@@ -1,44 +1,12 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 
 import Action from './Action'
+import DiscardingText from './DiscardingText'
+import PendingText from './PendingText'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-
-import { PENDING } from '@/lib/constants'
-
-const { ACCEPT, REJECT } = PENDING.APPROVAL
-
-const ActionsText = ({ color = 'cancel', text }) => (
-  <Typography color={color} sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-    {text}
-  </Typography>
-)
-
-const DiscardingText = () => (
-  <Box>
-    <ActionsText text='Discarding edits is final.' />
-    <ActionsText text='Please confirm you want to discard the indicated edits.' />
-  </Box>
-)
-
-const PendingText = ({ approval }) => {
-  const [color, line1, line2] = useMemo(() => {
-    if (approval === ACCEPT) return ['clean', 'Approving', 'approve']
-    if (approval === REJECT) return ['cancel', 'Rejecting', 'reject']
-  }, [approval])
-
-  return (
-    <Box>
-      <ActionsText color={color} text={`${line1} pending edits is final.`} />
-      <ActionsText
-        color={color}
-        text={`Please confirm you want to ${line2} the indicated pending edits.`}
-      />
-    </Box>
-  )
-}
 
 const Actions = ({ colors, disabled, labels, onAction }) => {
   const { confirmPending, confirmReset } = use(ConceptContext)
