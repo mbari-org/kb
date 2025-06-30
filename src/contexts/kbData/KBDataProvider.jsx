@@ -113,9 +113,12 @@ export const KBDataProvider = ({ children }) => {
   }, [refreshData])
 
   // Export processing function that wraps SystemModalContext setProcessing
-  const setExporting = useCallback((state) => {
-    setProcessing(state)
-  }, [setProcessing])
+  const setExporting = useCallback(
+    state => {
+      setProcessing(state)
+    },
+    [setProcessing]
+  )
 
   const value = useMemo(
     () => ({

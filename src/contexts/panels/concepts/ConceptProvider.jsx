@@ -11,6 +11,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 
@@ -25,6 +26,7 @@ const ConceptProvider = ({ children }) => {
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
     use(TaxonomyContext)
+  const { setHasUnsavedChanges } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
@@ -72,9 +74,22 @@ const ConceptProvider = ({ children }) => {
     setEditing,
   })
 
+  // Sync hasUnsavedChanges whenever staged state changes
+  useEffect(() => {
+    const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
+    if (isConceptPanelActive && initialState) {
+      const hasModifications = hasModifiedState({ initialState, stagedState })
+      setHasUnsavedChanges(hasModifications)
+    } else {
+      // Clear unsaved data flag when not on concepts panel
+      setHasUnsavedChanges(false)
+    }
+  }, [initialState, stagedState, panels, setHasUnsavedChanges])
+
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
     if (!selectedConcept) {
+      setHasUnsavedChanges(false)
       return
     }
 
@@ -83,14 +98,16 @@ const ConceptProvider = ({ children }) => {
     const shouldUpdateConcept = isNewConceptSelected && isConceptPanelActive
 
     if (shouldUpdateConcept) {
-      const hasUnsavedChanges = hasModifiedState({ initialState, stagedState })
+      const hasModifications = hasModifiedState({ initialState, stagedState })
 
-      if (hasUnsavedChanges) {
+      if (hasModifications) {
         if (!modalData?.warning) {
           displayStaged(CONTINUE)
           setModalData(prev => ({ ...prev, warning: true }))
         }
+        setHasUnsavedChanges(true)
       } else {
+        setHasUnsavedChanges(false)
         conceptLoader(selectedConcept)
       }
     }
@@ -104,6 +121,7 @@ const ConceptProvider = ({ children }) => {
     panels,
     setModalData,
     stagedState,
+    setHasUnsavedChanges,
   ])
 
   const value = useMemo(

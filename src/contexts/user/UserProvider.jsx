@@ -16,6 +16,7 @@ const UserProvider = ({ children }) => {
   const { config } = use(ConfigContext)
 
   const [user, setUser] = useState(null)
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const mountedRef = useRef(true)
   const refreshingRef = useRef(false)
 
@@ -59,8 +60,10 @@ const UserProvider = ({ children }) => {
       processAuth,
       refreshUser,
       user,
+      hasUnsavedChanges,
+      setHasUnsavedChanges,
     }),
-    [logout, processAuth, refreshUser, user]
+    [logout, processAuth, refreshUser, user, hasUnsavedChanges]
   )
 
   return <UserContext value={value}>{children}</UserContext>

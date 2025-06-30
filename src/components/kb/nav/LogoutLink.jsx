@@ -4,28 +4,24 @@ import { Button, Stack, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import UserContext from '@/contexts/user/UserContext'
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
 
 import { LABELS, SELECTED } from '@/lib/constants'
 
-import { hasModifiedState } from '@/lib/kb/state/concept'
-
 const { SAVE } = LABELS.BUTTON
 
 const LogoutLink = () => {
-  const { logout, user } = use(UserContext)
-  const { initialState, stagedState } = use(ConceptContext)
+  const { logout, user, hasUnsavedChanges } = use(UserContext)
   const { panels } = use(SelectedContext)
 
   const displayStaged = useStagedModal()
 
   const handleLogout = () => {
-    // Only check for modified state if we're currently on the concepts panel
+    // Only check for unsaved data if we're currently on the concepts panel
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
-    const hasModifications = isOnConceptsPanel && hasModifiedState({ initialState, stagedState })
+    const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
     return hasModifications ? displayStaged(SAVE) : logout()
   }
