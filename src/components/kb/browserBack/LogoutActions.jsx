@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import { Button, Stack } from '@mui/material'
 
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import SystemModalContext from '@/contexts/modal/SystemModalContext'
 
 const LogoutActions = () => {
-  const { closeModal } = use(ConceptModalContext)
+  const { closeModal } = use(SystemModalContext)
 
   return (
     <Stack direction='row' spacing={1}>

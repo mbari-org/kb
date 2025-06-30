@@ -121,7 +121,7 @@ const TemplatesProvider = ({ children }) => {
     ]
   )
 
-  return <TemplatesContext.Provider value={value}>{children}</TemplatesContext.Provider>
+  return <TemplatesContext value={value}>{children}</TemplatesContext>
 }
 
 export default TemplatesProvider

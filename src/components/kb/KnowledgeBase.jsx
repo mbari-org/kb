@@ -8,12 +8,14 @@ import NavBar from '@/components/kb/nav/NavBar'
 import PanelWrapper from '@/components/kb/panels/PanelWrapper'
 import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
+import SystemModalContext from '@/contexts/modal/SystemModalContext'
 import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
 
 const KnowledgeBase = () => {
+  const { processing: systemProcessing } = use(SystemModalContext)
   const { modal, processing } = use(ConceptModalContext)
   const { panels, updateSelected } = use(SelectedContext)
 
@@ -30,7 +32,7 @@ const KnowledgeBase = () => {
         <PanelWrapper activePanel={panels.current()} />
       </Box>
       {!processing && modal && <KbModal />}
-      {processing && <KbLoading />}
+      {(processing || systemProcessing) && <KbLoading />}
     </Box>
   )
 }

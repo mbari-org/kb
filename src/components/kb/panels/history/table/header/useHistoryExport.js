@@ -3,7 +3,7 @@ import { use } from 'react'
 import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import SystemModalContext from '@/contexts/modal/SystemModalContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import { PAGINATION } from '@/lib/constants'
@@ -101,7 +101,7 @@ const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
 const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
   const { selectedType, selectedConcept, sortOrder } = use(HistoryContext)
-  const { setProcessing } = use(ConceptModalContext)
+  const { setProcessing } = use(SystemModalContext)
 
   const historyExport = async () => {
     let writable = null

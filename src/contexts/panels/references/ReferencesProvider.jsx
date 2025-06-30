@@ -19,7 +19,7 @@ export const ReferencesProvider = ({ children }) => {
     references,
   }
 
-  return <ReferencesContext.Provider value={value}>{children}</ReferencesContext.Provider>
+  return <ReferencesContext value={value}>{children}</ReferencesContext>
 }
 
 export default ReferencesProvider

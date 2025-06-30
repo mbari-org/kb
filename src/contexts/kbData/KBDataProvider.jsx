@@ -122,7 +122,7 @@ export const KBDataProvider = ({ children }) => {
     [references, templates, explicitConcepts, isLoading, refreshData, isDoiUnique]
   )
 
-  return <KBDataContext.Provider value={value}>{children}</KBDataContext.Provider>
+  return <KBDataContext value={value}>{children}</KBDataContext>
 }
 
 export default KBDataProvider

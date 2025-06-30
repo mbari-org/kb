@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import { Button } from '@mui/material'
 
-import ConceptModalContext from '@/contexts/modal/ConceptModalContext'
+import SystemModalContext from '@/contexts/modal/SystemModalContext'
 
 const ErrorActions = () => {
-  const { closeModal } = use(ConceptModalContext)
+  const { closeModal } = use(SystemModalContext)
 
   return (
     <Button onClick={closeModal} variant='contained'>

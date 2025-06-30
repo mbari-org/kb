@@ -126,7 +126,7 @@ const HistoryProvider = ({ children }) => {
     sortOrder,
   }
 
-  return <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
+  return <HistoryContext value={value}>{children}</HistoryContext>
 }
 
 export default HistoryProvider

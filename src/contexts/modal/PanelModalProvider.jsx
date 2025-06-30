@@ -4,19 +4,19 @@ import ConceptModalContext from './ConceptModalContext'
 import PanelModalContext from './PanelModalContext'
 
 const PanelModalProvider = ({ children }) => {
-  const appModalValue = use(ConceptModalContext)
+  const conceptModalValue = use(ConceptModalContext)
 
   // This provider acts as a bridge, providing the same modal functionality
   // but also ensuring modal content has access to panel-specific contexts
   const value = useMemo(
     () => ({
-      ...appModalValue,
+      ...conceptModalValue,
       // We can add panel-specific modal functionality here if needed
     }),
-    [appModalValue]
+    [conceptModalValue]
   )
 
-  return <PanelModalContext.Provider value={value}>{children}</PanelModalContext.Provider>
+  return <PanelModalContext value={value}>{children}</PanelModalContext>
 }
 
 export default PanelModalProvider
