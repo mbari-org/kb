@@ -5,7 +5,7 @@ import UsersPagination from './UsersPagination'
 
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
-import useEditUserModal from '@/components/kb/panels/users/form/edit/useEditUserModal'
+import useEditUserButton from '@/components/kb/panels/users/useEditUserButton'
 import useLockUserModal from '@/components/kb/panels/users/form/lock/useLockUserModal'
 import useUserColumns from '@/components/kb/panels/users/table/data/useUserColumns'
 
@@ -15,15 +15,15 @@ const DEFAULT_LIMIT = PAGINATION.USERS.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
 const UsersTableData = () => {
-  const { editUser, lockUser, users } = use(UsersContext)
+  const { lockUser, users } = use(UsersContext)
 
-  const editUserModal = useEditUserModal(editUser)
+  const editUserModal = useEditUserButton()
   const lockUserModal = useLockUserModal(lockUser, users)
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)
 
-  const columns = useUserColumns({ editUserModal, lockUserModal, users })
+  const columns = useUserColumns({ editUserModal, lockUserModal })
 
   const nextPage = () => setOffset(prev => prev + limit)
   const prevPage = () => setOffset(prev => Math.max(0, prev - limit))

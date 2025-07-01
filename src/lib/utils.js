@@ -207,6 +207,12 @@ const prune = obj => {
   return pruned
 }
 
+const filterObject = (obj, predicate) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key, value]) => predicate(key, value))
+  )
+}
+
 const writeCSVContent = async (writable, dataRows) => {
   const csvRows = dataRows.map(row => row.map(escapeCSV))
   const csvContent = csvRows.map(row => row.join(',')).join('\n')
@@ -220,6 +226,7 @@ export {
   diff,
   drop,
   escapeCSV,
+  filterObject,
   formatConceptNameForFilename,
   humanTimestamp,
   isDeepEqual,

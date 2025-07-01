@@ -5,6 +5,10 @@ import UsersTableHeaderRight from '@/components/kb/panels/users/table/header/Use
 import UsersTableData from '@/components/kb/panels/users/table/data/UsersTableData'
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
+<<<<<<< Updated upstream
+=======
+import useAddUserButton from '@/components/kb/panels/users/useAddUserButton'
+>>>>>>> Stashed changes
 
 const Users = () => {
   const { createTablePanel } = usePanelFactory()

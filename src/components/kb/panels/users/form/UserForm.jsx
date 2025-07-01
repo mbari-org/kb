@@ -1,25 +1,30 @@
+import { useCallback, useState } from 'react'
 import { Box, TextField, MenuItem } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
 
+<<<<<<< Updated upstream
 const REQUIRED_FIELDS = ['username', 'role', 'affiliation', 'firstName', 'lastName', 'email']
 const REQUIRED_FIELDS_ADD = [...REQUIRED_FIELDS, 'password', 'confirmPassword']
 
 const UserForm = ({ user, onChange, isEdit = false, existingUsers = [] }) => {
   const [touched, setTouched] = useState({})
+=======
+const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
+>>>>>>> Stashed changes
   const [showConfirm, setShowConfirm] = useState(false)
+  const [touched, setTouched] = useState({})
 
   const handleChange = field => event => {
-    const newValue = event.target.value
     const updatedUser = {
       ...user,
-      [field]: newValue,
+      [field]: event.target.value,
     }
     if (field === 'password') {
       setShowConfirm(true)
     }
-    onChange(updatedUser)
+
+    onChange(updatedUser, originalUser)
   }
 
   const handleBlur = field => () => {
@@ -27,43 +32,17 @@ const UserForm = ({ user, onChange, isEdit = false, existingUsers = [] }) => {
   }
 
   const isUsernameUnique = useCallback(
+<<<<<<< Updated upstream
     username => {
       if (!username) return true
       return !existingUsers.some(u => u.username === username)
     },
     [existingUsers]
+=======
+    username => isEdit || !username || !users.some(u => u.username === username),
+    [users, isEdit]
+>>>>>>> Stashed changes
   )
-
-  const isValid = useMemo(() => {
-    const isEmailValid = EMAIL_REGEX.test(user.email || '')
-    const requiredFields = isEdit ? REQUIRED_FIELDS : REQUIRED_FIELDS_ADD
-    const allFieldsFilled = requiredFields.every(field => {
-      const value = user[field] || ''
-      return value.trim() !== ''
-    })
-    const usernameUnique = isUsernameUnique(user.username)
-    const passwordsMatch = isEdit
-      ? user.password
-        ? user.password === user.confirmPassword
-        : true
-      : user.password === user.confirmPassword
-    return allFieldsFilled && isEmailValid && usernameUnique && passwordsMatch
-  }, [user, isUsernameUnique, isEdit])
-
-  const hasChanges = useMemo(() => {
-    if (!isEdit) return true
-    const fieldsToCompare = ['role', 'affiliation', 'firstName', 'lastName', 'email']
-    return (
-      fieldsToCompare.some(field => user[field] !== user.originalUser?.[field]) ||
-      (user.password && user.password !== user.originalUser?.password)
-    )
-  }, [user, isEdit])
-
-  useEffect(() => {
-    if (user.isValid !== isValid || user.hasChanges !== hasChanges) {
-      onChange({ ...user, isValid, hasChanges })
-    }
-  }, [isValid, hasChanges, user, onChange])
 
   const showError = field => {
     if (!touched[field]) return false
