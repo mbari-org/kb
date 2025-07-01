@@ -3,8 +3,8 @@ import { use, useState } from 'react'
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import ReferencesPagination from './ReferencesPagination'
 
-import useEditReferenceModal from '@/components/kb/panels/references/form/edit/useEditReferenceModal'
-import useDeleteReferenceModal from '@/components/kb/panels/references/form/delete/useDeleteReferenceModal'
+import useEditReferenceButton from '@/components/kb/panels/references/form/useEditReferenceButton'
+import useDeleteReferenceButton from '@/components/kb/panels/references/form/useDeleteReferenceButton'
 import useReferenceColumns from '@/components/kb/panels/references/table/data/useReferenceColumns'
 
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
@@ -19,7 +19,7 @@ const { CONCEPT } = SELECTED
 const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesTableData = () => {
-  const { editReference, deleteReference, references } = use(ReferencesContext)
+  const { references } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(CONCEPT)
@@ -29,8 +29,8 @@ const ReferencesTableData = () => {
     ? references.filter(reference => reference.concepts.includes(selectedConcept))
     : references
 
-  const editReferenceModal = useEditReferenceModal(editReference)
-  const deleteReferenceModal = useDeleteReferenceModal(deleteReference)
+  const editReferenceModal = useEditReferenceButton()
+  const deleteReferenceModal = useDeleteReferenceButton()
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)

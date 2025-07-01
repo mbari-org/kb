@@ -23,9 +23,9 @@ const useEditUserButton = () => {
   )
 
   const handleCommit = useCallback(
-    async (user, originalUser) => {
+    async (user, original) => {
       try {
-        const updatedData = processEditUserData(user, originalUser)
+        const updatedData = processEditUserData(user, original)
 
         if (!updatedData) {
           closeModal()
@@ -62,7 +62,7 @@ const useEditUserButton = () => {
         title: 'Edit User',
         data: {
           user: modalUser,
-          originalUser: userToEdit,
+          original: userToEdit,
           isValid: true,
           hasChanges: false,
         },

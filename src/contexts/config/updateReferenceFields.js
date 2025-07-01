@@ -12,6 +12,7 @@ const updateReferenceFields = async (oldReference, newReference, apiFns) => {
   if (newReference.citation !== oldReference.citation) {
     updatedData.citation = newReference.citation
   }
+
   if (newReference.doi !== oldReference.doi) {
     updatedData.doi = newReference.doi
   }

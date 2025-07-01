@@ -4,7 +4,7 @@ import { Box, TextField, MenuItem } from '@mui/material'
 import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
 import useDebounce from '@/hooks/useDebounce'
 
-const UserForm = memo(({ user, originalUser, onChange, isEdit = false, users }) => {
+const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
   const [showConfirm, setShowConfirm] = useState(false)
   const [touched, setTouched] = useState({})
   const [localUser, setLocalUser] = useState(user)
@@ -28,7 +28,7 @@ const UserForm = memo(({ user, originalUser, onChange, isEdit = false, users }) 
       setShowConfirm(true)
     }
 
-    debouncedOnChange(updatedUser, originalUser)
+    debouncedOnChange(updatedUser, original)
   }
 
   const handleBlur = field => () => {

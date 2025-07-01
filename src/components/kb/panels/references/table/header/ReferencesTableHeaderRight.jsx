@@ -1,15 +1,9 @@
-import { use } from 'react'
-
-import PanelAddButton from '@/components/common/panel/PanelAddButton'
-
-import useAddReferenceModal from '@/components/kb/panels/references/form/add/useAddReferenceModal'
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import useAddReferenceButton from '@/components/kb/panels/references/form/useAddReferenceButton'
 
 const ReferencesTableHeaderRight = () => {
-  const { addReference } = use(ReferencesContext)
-  const addReferenceModal = useAddReferenceModal(addReference)
+  const AddReferenceButton = useAddReferenceButton()
 
-  return <PanelAddButton onClick={addReferenceModal} />
+  return <AddReferenceButton />
 }
 
 export default ReferencesTableHeaderRight

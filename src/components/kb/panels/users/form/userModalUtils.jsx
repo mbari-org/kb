@@ -35,7 +35,7 @@ export const createUserValidator =
 
 export const createChangeDetector =
   (isEdit = false) =>
-  (userData, originalUser = null) => {
+  (userData, original = null) => {
     if (!isEdit) {
       // For add mode, any non-empty field means changes
       const fieldsToCheck = USER_FIELDS.REQUIRED_ADD
@@ -48,7 +48,7 @@ export const createChangeDetector =
     // For edit mode, compare with original
     const fieldsToCompare = USER_FIELDS.EDITABLE
     return (
-      fieldsToCompare.some(field => userData[field] !== originalUser[field]) ||
+      fieldsToCompare.some(field => userData[field] !== original[field]) ||
       (userData.password && userData.password.trim() !== '')
     )
   }
@@ -57,7 +57,7 @@ export const createFormChangeHandler = (updateModalData, isEdit = false) => {
   const validateUser = createUserValidator(isEdit)
   const calculateHasChanges = createChangeDetector(isEdit)
 
-  return (updatedUser, originalUser = null) => {
+  return (updatedUser, original = null) => {
     const user = {
       ...updatedUser,
       password: updatedUser.password ?? '',
@@ -65,7 +65,7 @@ export const createFormChangeHandler = (updateModalData, isEdit = false) => {
     }
 
     const isValid = validateUser(user)
-    const hasChanges = calculateHasChanges(user, originalUser)
+    const hasChanges = calculateHasChanges(user, original)
 
     updateModalData({
       user,
@@ -89,7 +89,7 @@ export const createModalActions =
         color: 'primary',
         disabled: !currentModalData.isValid || !currentModalData.hasChanges,
         label: saveLabel,
-        onClick: () => handleCommit(currentModalData.user, currentModalData.originalUser),
+        onClick: () => handleCommit(currentModalData.user, currentModalData.original),
       },
     ]
 
@@ -107,7 +107,7 @@ export const createModalContent = (handleFormChange, users, isEdit) => {
       <UserForm
         key={formKey}
         user={userWithConfirmPassword}
-        originalUser={modalData.originalUser}
+        original={modalData.original}
         onChange={handleFormChange}
         isEdit={isEdit}
         users={users}
@@ -130,8 +130,8 @@ export const createInitialUser = () => ({
   username: '',
 })
 
-export const processEditUserData = (user, originalUser) => {
-  const hasFieldChanges = USER_FIELDS.EDITABLE.some(field => user[field] !== originalUser[field])
+export const processEditUserData = (user, original) => {
+  const hasFieldChanges = USER_FIELDS.EDITABLE.some(field => user[field] !== original[field])
   const hasPasswordChange = user.password != null && user.password.trim() !== ''
 
   if (!hasFieldChanges && !hasPasswordChange) {
@@ -140,7 +140,7 @@ export const processEditUserData = (user, originalUser) => {
 
   // Get updates, excluding empty password
   return filterObject(
-    diff(pick(user, [...USER_FIELDS.EDITABLE, 'password']), originalUser),
+    diff(pick(user, [...USER_FIELDS.EDITABLE, 'password']), original),
     (key, value) => !(key === 'password' && (!value || value.trim() === ''))
   )
 }
@@ -153,9 +153,9 @@ export const processAddUserData = user => {
 }
 
 export const createHandlers = (updateModalData, closeModal, isEdit) => {
-  const handleFormChange = (updatedUser, originalUser) => {
+  const handleFormChange = (updatedUser, original) => {
     const formChangeHandler = createFormChangeHandler(updateModalData, isEdit)
-    return formChangeHandler(updatedUser, originalUser)
+    return formChangeHandler(updatedUser, original)
   }
 
   const handleCancel = () => {

@@ -1,29 +1,8 @@
-import { use, useState } from 'react'
+import { useState } from 'react'
 
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
-
-import { createReference } from '@/lib/kb/model/reference'
-
-import { isEqual } from '@/lib/utils'
-
-const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
-  const { modalData } = use(HOLDModalContext)
-
+const useReferenceForm = ({ isEdit = false, onChange, reference, original }) => {
   const [selectedConcept, setSelectedConcept] = useState(null)
   const [hasSearchInput, setHasSearchInput] = useState(false)
-
-  const checkModification = updatedReference => {
-    if (!isEdit) return false
-
-    const originalReference = createReference(modalData.originalReference)
-    const currentReference = createReference(updatedReference)
-
-    return (
-      currentReference.citation !== originalReference.citation ||
-      currentReference.doi !== originalReference.doi ||
-      !isEqual(currentReference.concepts?.sort(), originalReference.concepts?.sort())
-    )
-  }
 
   const handleFieldChange = field => value => {
     const fieldValue =
@@ -39,7 +18,7 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
       [field]: fieldValue,
     }
 
-    onChange(updatedReference, checkModification(updatedReference), hasSearchInput)
+    onChange(updatedReference, original)
   }
 
   const handleConceptSelect = (_event, selectedName) => {
@@ -49,32 +28,38 @@ const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
       ...reference,
       selectedConcept: selectedName || '',
     }
-    onChange(updatedReference, checkModification(updatedReference), false)
+    onChange(updatedReference, original)
   }
 
-  const handleConceptSearchInput = event => {
-    setHasSearchInput(event.target.value.trim() !== '')
+  const handleConceptSearchInput = (event, value) => {
+    // ConceptSelect onInputChange passes (event, value)
+    // We need to check if there's actual input text
+    const inputValue = typeof value === 'string' ? value : (event?.target?.value || '')
+    setHasSearchInput(inputValue.trim() !== '')
   }
 
   const handleConceptDelete = conceptToDelete => {
-    const updatedConcepts = reference.concepts.filter(c => c !== conceptToDelete)
+    const currentConcepts = reference.concepts || []
+    const updatedConcepts = currentConcepts.filter(c => c !== conceptToDelete)
     const updatedReference = {
       ...reference,
       concepts: updatedConcepts,
     }
-    onChange(updatedReference, checkModification(updatedReference), hasSearchInput)
+    onChange(updatedReference, original)
   }
 
   const handleConceptAdd = conceptToAdd => {
-    if (!reference.concepts.includes(conceptToAdd)) {
-      const updatedConcepts = [...reference.concepts, conceptToAdd]
+    const currentConcepts = reference.concepts || []
+    
+    if (!currentConcepts.includes(conceptToAdd)) {
+      const updatedConcepts = [...currentConcepts, conceptToAdd]
       const updatedReference = {
         ...reference,
         concepts: updatedConcepts,
         selectedConcept: '',
       }
       setSelectedConcept(null)
-      onChange(updatedReference, checkModification(updatedReference), false)
+      onChange(updatedReference, original)
     }
   }
 
