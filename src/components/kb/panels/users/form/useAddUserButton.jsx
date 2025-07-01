@@ -11,9 +11,9 @@ import {
   createUserValidator,
   createInitialUser,
   processAddUserData,
-  createSharedHandlers,
-  createSharedContent,
-} from './userModalUtils.jsx'
+  createHandlers,
+  createModalContent,
+} from '@/components/kb/panels/users/form/userModalUtils'
 
 const { SAVING } = PROCESSING
 
@@ -22,7 +22,7 @@ const useAddUserButton = () => {
   const { addUser, users } = use(UsersContext)
 
   const { handleCancel, handleFormChange } = useMemo(
-    () => createSharedHandlers(updateModalData, closeModal, false),
+    () => createHandlers(updateModalData, closeModal, false),
     [updateModalData, closeModal]
   )
 
@@ -48,7 +48,7 @@ const useAddUserButton = () => {
   )
 
   const content = useCallback(
-    createSharedContent(handleFormChange, users, false),
+    currentModalData => createModalContent(handleFormChange, users, false)(currentModalData),
     [handleFormChange, users]
   )
 

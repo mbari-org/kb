@@ -4,7 +4,7 @@ import UsersTableHeaderLeft from '@/components/kb/panels/users/table/header/User
 import UsersTableData from '@/components/kb/panels/users/table/data/UsersTableData'
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
-import useAddUserButton from '@/components/kb/panels/users/useAddUserButton'
+import useAddUserButton from '@/components/kb/panels/users/form/useAddUserButton'
 
 const Users = () => {
   const { createTablePanel } = usePanelFactory()

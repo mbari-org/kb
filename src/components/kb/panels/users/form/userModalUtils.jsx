@@ -1,10 +1,10 @@
 import { EMAIL_REGEX, LABELS } from '@/lib/constants'
 import { diff, filterObject, pick } from '@/lib/utils'
 import UserForm from '@/components/kb/panels/users/form/UserForm'
+import { Box, Stack, Typography } from '@mui/material'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 
-// Common field definitions
 export const USER_FIELDS = {
   EDITABLE: ['affiliation', 'email', 'firstName', 'lastName', 'role'],
   REQUIRED_BASE: ['affiliation', 'email', 'firstName', 'lastName', 'role', 'username'],
@@ -93,19 +93,21 @@ export const createModalActions =
       },
     ]
 
-export const createModalContent = (FormComponent, handleFormChange, users, isEdit, formKey) => {
-  const UserModalContent = (user, originalUser = null) => {
+export const createModalContent = (handleFormChange, users, isEdit) => {
+  const formKey = isEdit ? 'edit-user-form' : 'add-user-form'
+
+  const UserModalContent = modalData => {
     const userWithConfirmPassword = {
-      ...user,
-      password: user.password ?? '',
-      confirmPassword: user.confirmPassword ?? '',
+      ...modalData.user,
+      password: modalData.user.password ?? '',
+      confirmPassword: modalData.user.confirmPassword ?? '',
     }
 
     return (
-      <FormComponent
+      <UserForm
         key={formKey}
         user={userWithConfirmPassword}
-        originalUser={originalUser}
+        originalUser={modalData.originalUser}
         onChange={handleFormChange}
         isEdit={isEdit}
         users={users}
@@ -113,6 +115,7 @@ export const createModalContent = (FormComponent, handleFormChange, users, isEdi
     )
   }
 
+  UserModalContent.displayName = 'UserModalContent'
   return UserModalContent
 }
 
@@ -149,8 +152,7 @@ export const processAddUserData = user => {
   )
 }
 
-// Shared hook utilities to eliminate duplication
-export const createSharedHandlers = (updateModalData, closeModal, isEdit) => {
+export const createHandlers = (updateModalData, closeModal, isEdit) => {
   const handleFormChange = (updatedUser, originalUser) => {
     const formChangeHandler = createFormChangeHandler(updateModalData, isEdit)
     return formChangeHandler(updatedUser, originalUser)
@@ -163,11 +165,102 @@ export const createSharedHandlers = (updateModalData, closeModal, isEdit) => {
   return { handleCancel, handleFormChange }
 }
 
-export const createSharedContent = (handleFormChange, users, isEdit) => {
-  const formKey = isEdit ? 'edit-user-form' : 'add-user-form'
+// Lock user specific utilities
+export const createLockUserActions = (handleCancel, handleLockToggle) => currentModalData => {
+  const { user, isLastAdmin } = currentModalData
+  const { CANCEL, LOCK, UNLOCK, CLOSE } = LABELS.BUTTON
 
-  return modalData => {
-    const modalContent = createModalContent(UserForm, handleFormChange, users, isEdit, formKey)
-    return modalContent(modalData.user, modalData.originalUser)
+  if (isLastAdmin) {
+    return [
+      {
+        color: 'primary',
+        disabled: false,
+        label: CLOSE,
+        onClick: handleCancel,
+      },
+    ]
   }
+
+  return [
+    {
+      color: 'cancel',
+      disabled: false,
+      label: CANCEL,
+      onClick: handleCancel,
+    },
+    {
+      color: 'primary',
+      disabled: false,
+      label: user?.locked ? UNLOCK : LOCK,
+      onClick: () => handleLockToggle(user),
+    },
+  ]
+}
+
+export const createLockUserTitle = currentModalData => {
+  const { user, isLastAdmin } = currentModalData
+
+  if (isLastAdmin) {
+    return "Can't Lock Last Admin"
+  }
+
+  return user?.locked ? 'Unlock User' : 'Lock User'
+}
+
+export const createLockUserContent = () => {
+  const LockUserContent = currentModalData => {
+    const { user, isLastAdmin } = currentModalData
+
+    if (isLastAdmin) {
+      return (
+        <Stack spacing={0} sx={{ textAlign: 'center' }}>
+          <Typography variant='body1' color='text.secondary'>
+            You cannot lock the last unlocked admin.
+          </Typography>
+          <Typography variant='body1' color='text.secondary'>
+            Please unlock another admin first.
+          </Typography>
+        </Stack>
+      )
+    }
+
+    const fields = [
+      { label: 'Username', value: user.username },
+      { label: 'Role', value: user.role },
+      { label: 'Affiliation', value: user.affiliation },
+      { label: 'First Name', value: user.firstName },
+      { label: 'Last Name', value: user.lastName },
+      { label: 'Email', value: user.email },
+    ]
+
+    const lockedText = `A ${user.locked ? 'unlocked' : 'locked'} user will ${
+      user.locked ? '' : 'not'
+    } be able to log in to the Knowledge Base.`
+
+    return (
+      <Stack spacing={3}>
+        <Stack spacing={2} sx={{ p: 2 }}>
+          {fields.map(({ label, value }) => (
+            <Box key={label}>
+              <Typography variant='subtitle2' color='text.secondary'>
+                {label}
+              </Typography>
+              <Typography variant='body1'>{value}</Typography>
+            </Box>
+          ))}
+        </Stack>
+        <Stack spacing={0} sx={{ textAlign: 'center' }}>
+          <Typography variant='body1' color='text.secondary'>
+            {lockedText}
+          </Typography>
+          <Typography variant='body1' color='text.secondary'>
+            No other changes are made.
+          </Typography>
+        </Stack>
+      </Stack>
+    )
+  }
+
+  LockUserContent.displayName = 'LockUserContent'
+  return LockUserContent
 }

@@ -7,9 +7,9 @@ import { PROCESSING } from '@/lib/constants'
 import {
   createModalActions,
   processEditUserData,
-  createSharedHandlers,
-  createSharedContent,
-} from './userModalUtils.jsx'
+  createHandlers,
+  createModalContent,
+} from '@/components/kb/panels/users/form/userModalUtils'
 
 const { UPDATING } = PROCESSING
 
@@ -18,7 +18,7 @@ const useEditUserButton = () => {
   const { editUser, users } = use(UsersContext)
 
   const { handleCancel, handleFormChange } = useMemo(
-    () => createSharedHandlers(updateModalData, closeModal, true),
+    () => createHandlers(updateModalData, closeModal, true),
     [updateModalData, closeModal]
   )
 
@@ -44,7 +44,7 @@ const useEditUserButton = () => {
   )
 
   const content = useCallback(
-    createSharedContent(handleFormChange, users, true),
+    currentModalData => createModalContent(handleFormChange, users, true)(currentModalData),
     [handleFormChange, users]
   )
 
