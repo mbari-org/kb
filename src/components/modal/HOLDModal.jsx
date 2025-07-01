@@ -12,10 +12,10 @@ import {
   Modal,
 } from '@mui/material'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
-const PanelModal = () => {
-  const { modal, closeModal } = use(PanelModalContext)
+const HOLDModal = () => {
+  const { modal, closeModal } = use(HOLDModalContext)
 
   if (!modal) {
     return null
@@ -61,4 +61,4 @@ const PanelModal = () => {
   )
 }
 
-export default PanelModal
+export default HOLDModal

@@ -3,12 +3,12 @@ import { use } from 'react'
 import DetailContent from '@/components/common/DetailContent'
 import { createComponent } from '@/components/common/factory/createComponent'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { drop } from '@/lib/utils'
 
 const DeleteAliasContent = () => {
-  const { modalData } = use(PanelModalContext)
+  const { modalData } = use(HOLDModalContext)
   const { alias } = modalData
   const detailAlias = drop(alias, 'id')
 

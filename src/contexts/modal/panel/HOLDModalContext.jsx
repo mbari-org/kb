@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
 const HOLDModalContext = createContext()
-HOLDModalContext.displayName = 'App Modal Context'
+HOLDModalContext.displayName = 'Panel Modal Context'
 
 export default HOLDModalContext

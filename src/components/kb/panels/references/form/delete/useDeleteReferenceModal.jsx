@@ -6,7 +6,7 @@ import DeleteReferenceTitle from './DeleteReferenceTitle'
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const deleteReferenceModal = deleteReference => {
   const components = {
@@ -19,7 +19,7 @@ const deleteReferenceModal = deleteReference => {
 }
 
 const useDeleteReferenceModal = deleteReference => {
-  const { setModal, setModalData } = use(PanelModalContext)
+  const { setModal, setModalData } = use(HOLDModalContext)
 
   return useCallback(
     reference => {

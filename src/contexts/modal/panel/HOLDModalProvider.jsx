@@ -1,8 +1,8 @@
 import { useCallback, useState, useMemo } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
-const PanelModalProvider = ({ children }) => {
+const HOLDModalProvider = ({ children }) => {
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
@@ -52,7 +52,7 @@ const PanelModalProvider = ({ children }) => {
     [closeModal, processing, modal, modalData, handleSetModal]
   )
 
-  return <PanelModalContext value={value}>{children}</PanelModalContext>
+  return <HOLDModalContext value={value}>{children}</HOLDModalContext>
 }
 
-export default PanelModalProvider
+export default HOLDModalProvider

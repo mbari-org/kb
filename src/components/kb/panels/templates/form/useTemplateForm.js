@@ -1,8 +1,8 @@
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import { use, useState } from 'react'
 
 const useTemplateForm = ({ isEdit = false, onChange, template }) => {
-  const { modalData } = use(PanelModalContext)
+  const { modalData } = use(HOLDModalContext)
   const [hasSearchInput, setHasSearchInput] = useState(false)
 
   const checkModification = updatedTemplate => {

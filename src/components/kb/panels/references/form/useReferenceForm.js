@@ -1,13 +1,13 @@
 import { use, useState } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { createReference } from '@/lib/kb/model/reference'
 
 import { isEqual } from '@/lib/utils'
 
 const useReferenceForm = ({ isEdit = false, onChange, reference }) => {
-  const { modalData } = use(PanelModalContext)
+  const { modalData } = use(HOLDModalContext)
 
   const [selectedConcept, setSelectedConcept] = useState(null)
   const [hasSearchInput, setHasSearchInput] = useState(false)

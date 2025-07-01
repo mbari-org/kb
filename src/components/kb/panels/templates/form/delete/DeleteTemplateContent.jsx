@@ -1,10 +1,10 @@
 import { use } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const DeleteTemplateContent = () => {
-  const { modalData } = use(PanelModalContext)
+  const { modalData } = use(HOLDModalContext)
   const { template } = modalData
 
   const fields = [

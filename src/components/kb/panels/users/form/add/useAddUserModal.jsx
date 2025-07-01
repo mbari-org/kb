@@ -4,13 +4,13 @@ import { createTitle } from '@/components/common/factory/createComponent'
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import AddUserActions from './AddUserActions'
 import AddUserContent from './AddUserContent'
 
 const useAddUserModal = () => {
-  const { setModal, setModalData } = use(PanelModalContext)
+  const { setModal, setModalData } = use(HOLDModalContext)
 
   const showAddUserModal = useCallback(
     (existingUsers = []) => {

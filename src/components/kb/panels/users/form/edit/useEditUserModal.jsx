@@ -6,7 +6,7 @@ import EditUserTitle from './EditUserTitle'
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const editUserModal = editUser => {
   const components = {
@@ -19,7 +19,7 @@ const editUserModal = editUser => {
 }
 
 const useEditUserModal = editUser => {
-  const { setModal, setModalData } = use(PanelModalContext)
+  const { setModal, setModalData } = use(HOLDModalContext)
 
   return useCallback(
     user => {

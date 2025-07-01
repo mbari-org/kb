@@ -3,7 +3,7 @@ import AddTemplateActions from './AddTemplateActions'
 import AddTemplateContent from './AddTemplateContent'
 import AddTemplateTitle from './AddTemplateTitle'
 import { createModal } from '@/components/modal/panelModalFactory'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const addTemplateModal = addTemplate => {
   const components = {
@@ -26,7 +26,7 @@ const initialTemplateData = {
 }
 
 const useAddTemplateModal = addTemplate => {
-  const { setModal, setModalData } = use(PanelModalContext)
+  const { setModal, setModalData } = use(HOLDModalContext)
 
   return useCallback(() => {
     setModal(addTemplateModal(addTemplate))

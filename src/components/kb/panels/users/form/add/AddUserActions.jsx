@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/common/factory/createComponent'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
@@ -11,7 +11,7 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 const { SAVING } = PROCESSING
 
 const AddUserActions = () => {
-  const { closeModal, modalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, modalData, setProcessing } = use(HOLDModalContext)
   const { addUser } = use(UsersContext)
 
   const { user } = modalData

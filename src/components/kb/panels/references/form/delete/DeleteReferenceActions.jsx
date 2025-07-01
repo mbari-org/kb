@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
 
@@ -10,7 +10,7 @@ const { CANCEL, DELETE } = LABELS.BUTTON
 const { DELETING } = PROCESSING
 
 const DeleteReferenceActions = ({ deleteReference }) => {
-  const { closeModal, modalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, modalData, setProcessing } = use(HOLDModalContext)
   const { reference } = modalData
 
   const colors = ['main', 'cancel']

@@ -6,7 +6,7 @@ import ChangeParentTitle from './ChangeParentTitle'
 import { createModal } from '@/components/modal/panelModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { PROCESSING } from '@/lib/constants'
@@ -53,7 +53,7 @@ const initialModalData = {
 
 const useChangeParent = closeChoices => {
   const { concept, modifyConcept } = use(ConceptContext)
-  const { setModal, setModalData, setProcessing } = use(PanelModalContext)
+  const { setModal, setModalData, setProcessing } = use(HOLDModalContext)
   const { loadConceptDescendants } = use(TaxonomyContext)
   const alreadyLoadingDescendants = useRef(false)
 

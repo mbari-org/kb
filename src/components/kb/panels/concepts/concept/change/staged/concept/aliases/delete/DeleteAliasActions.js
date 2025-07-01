@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createActions } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
@@ -13,7 +13,7 @@ const { DISCARD, STAGE } = LABELS.BUTTON
 
 const DeleteAliasActions = () => {
   const { modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(PanelModalContext)
+  const { closeModal, modalData } = use(HOLDModalContext)
   const { alias, aliasIndex } = modalData
 
   const colors = ['cancel', 'main']

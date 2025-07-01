@@ -1,11 +1,11 @@
 import { use, useCallback } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { updateAssociatedData } from '@/lib/api/concepts'
 
 const useUpdateAssociatedData = () => {
-  const { modalData: _modalData } = use(PanelModalContext)
+  const { modalData: _modalData } = use(HOLDModalContext)
 
   return useCallback(async data => {
     try {

@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import Title from '@/components/common/factory/Title'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const LockUserTitle = () => {
-  const { modalData } = use(PanelModalContext)
+  const { modalData } = use(HOLDModalContext)
   const { user } = modalData
 
   return <Title title={user.locked ? 'Unlock User' : 'Lock User'} />

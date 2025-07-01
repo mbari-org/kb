@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import { createActions } from '@/components/modal/panelModalFactory'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { LABELS } from '@/lib/constants'
 
@@ -10,7 +10,7 @@ import { drop } from '@/lib/utils'
 const { CANCEL, SAVE } = LABELS.BUTTON
 
 const EditUserActions = ({ editUser }) => {
-  const { closeModal, modalData } = use(PanelModalContext)
+  const { closeModal, modalData } = use(HOLDModalContext)
   const { user } = modalData
 
   const colors = ['main', 'cancel']

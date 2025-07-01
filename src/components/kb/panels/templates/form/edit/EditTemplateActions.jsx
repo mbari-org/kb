@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { createActions } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { isValidTemplate } from '@/components/kb/panels/templates/utils'
 
@@ -11,7 +11,7 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 const { UPDATING } = PROCESSING
 
 const EditTemplateActions = ({ editTemplate }) => {
-  const { closeModal, modalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, modalData, setProcessing } = use(HOLDModalContext)
   const { template, originalTemplate } = modalData
 
   const colors = ['cancel', 'main']

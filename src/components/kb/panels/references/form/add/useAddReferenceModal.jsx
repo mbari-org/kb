@@ -6,7 +6,7 @@ import AddReferenceTitle from './AddReferenceTitle'
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const addReferenceModal = addReference => {
   const components = {
@@ -29,7 +29,7 @@ const initialReferenceData = {
 }
 
 const useAddReferenceModal = addReference => {
-  const { setModal, setModalData } = use(PanelModalContext)
+  const { setModal, setModalData } = use(HOLDModalContext)
 
   return useCallback(() => {
     setModal(addReferenceModal(addReference))

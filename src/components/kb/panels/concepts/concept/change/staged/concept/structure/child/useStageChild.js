@@ -1,11 +1,11 @@
 import { use } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const useStageChild = () => {
   const { modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(PanelModalContext)
+  const { closeModal, modalData } = use(HOLDModalContext)
 
   const stageChild = async event => {
     event.preventDefault()

@@ -3,7 +3,7 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/panelModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -15,7 +15,7 @@ const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 
 const ChangeNameActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(PanelModalContext)
+  const { closeModal, modalData } = use(HOLDModalContext)
 
   // Handle case where modalData might be undefined
   const { isValid = false, name = '', nameChangeType = '' } = modalData || {}

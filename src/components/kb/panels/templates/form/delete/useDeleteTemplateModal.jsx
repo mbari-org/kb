@@ -3,7 +3,7 @@ import DeleteTemplateActions from './DeleteTemplateActions'
 import DeleteTemplateContent from './DeleteTemplateContent'
 import DeleteTemplateTitle from './DeleteTemplateTitle'
 import { createModal } from '@/components/modal/panelModalFactory'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const deleteTemplateModal = deleteTemplate => {
   const components = {
@@ -16,7 +16,7 @@ const deleteTemplateModal = deleteTemplate => {
 }
 
 const useDeleteTemplateModal = deleteTemplate => {
-  const { setModal, setModalData } = use(PanelModalContext)
+  const { setModal, setModalData } = use(HOLDModalContext)
 
   return useCallback(
     template => {

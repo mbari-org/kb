@@ -3,7 +3,7 @@ import { use, useMemo } from 'react'
 import { createActions } from '@/components/modal/panelModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE, LABELS } from '@/lib/constants'
@@ -15,7 +15,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const AddChildActions = () => {
   const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
-  const { closeModal, modalData } = use(PanelModalContext)
+  const { closeModal, modalData } = use(HOLDModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const { child, modified } = modalData

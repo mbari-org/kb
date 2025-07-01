@@ -1,10 +1,10 @@
 import { use } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import UserForm from '../UserForm'
 
 const AddUserContent = () => {
-  const { modalData, setModalData } = use(PanelModalContext)
+  const { modalData, setModalData } = use(HOLDModalContext)
   const { user, existingUsers } = modalData
 
   const handleChange = updatedUser => {

@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 const AddReferenceContent = () => {
-  const { modalData, setModalData } = use(PanelModalContext)
+  const { modalData, setModalData } = use(HOLDModalContext)
   const { reference } = modalData
 
   const handleChange = updatedReference => {

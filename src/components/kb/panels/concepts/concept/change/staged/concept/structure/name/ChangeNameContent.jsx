@@ -4,7 +4,7 @@ import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 import UserContext from '@/contexts/user/UserContext'
@@ -15,7 +15,7 @@ const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept } = use(ConceptContext)
-  const { modalData, setModalData } = use(PanelModalContext)
+  const { modalData, setModalData } = use(HOLDModalContext)
   const { getNames } = use(TaxonomyContext)
   const { user } = use(UserContext)
 

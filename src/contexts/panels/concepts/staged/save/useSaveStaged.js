@@ -1,13 +1,13 @@
 import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import commitStaged from './commitStaged'
 
 const useSaveStaged = () => {
-  const { closeModal, setProcessing } = use(PanelModalContext)
+  const { closeModal, setProcessing } = use(HOLDModalContext)
   const { apiFns } = use(ConfigContext)
   const { concept, initialState, stagedState } = use(ConceptContext)
 

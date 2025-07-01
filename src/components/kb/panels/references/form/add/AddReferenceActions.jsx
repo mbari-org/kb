@@ -3,7 +3,7 @@ import { use } from 'react'
 import { createActions } from '@/components/modal/panelModalFactory'
 
 import PanelDataContext from '@/contexts/panels/PanelDataContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 
 import { LABELS, PROCESSING } from '@/lib/constants'
 
@@ -11,7 +11,7 @@ const { CANCEL, SAVE } = LABELS.BUTTON
 const { SAVING } = PROCESSING
 
 const AddReferenceActions = ({ addReference }) => {
-  const { closeModal, modalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, modalData, setProcessing } = use(HOLDModalContext)
   const { isDoiUnique } = use(PanelDataContext)
 
   const { reference } = modalData

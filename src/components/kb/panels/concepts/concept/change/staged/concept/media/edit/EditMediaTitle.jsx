@@ -3,11 +3,11 @@ import { use } from 'react'
 import Title from '@/components/common/factory/Title'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 const EditMediaTitle = () => {
   const { concept } = use(ConceptContext)
 
-  const { modalData } = use(PanelModalContext)
+  const { modalData } = use(HOLDModalContext)
   const actionText = modalData?.action?.split(' ').pop() || 'Edit'
 
   return <Title title={`${actionText} Media: ${concept.name}`} />

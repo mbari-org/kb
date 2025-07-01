@@ -6,7 +6,7 @@ import EditReferenceTitle from './EditReferenceTitle'
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import PanelDataContext from '@/contexts/panels/PanelDataContext' // eslint-disable-line no-unused-vars
 
 const editReferenceModal = editReference => {
@@ -20,7 +20,7 @@ const editReferenceModal = editReference => {
 }
 
 const useEditReferenceModal = editReference => {
-  const { setModal, setModalData } = use(PanelModalContext)
+  const { setModal, setModalData } = use(HOLDModalContext)
   // isDoiUnique is now available via KBDataContext in the content/actions
 
   return useCallback(
