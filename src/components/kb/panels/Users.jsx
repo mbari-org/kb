@@ -4,14 +4,7 @@ import UsersTableHeaderLeft from '@/components/kb/panels/users/table/header/User
 import UsersTableData from '@/components/kb/panels/users/table/data/UsersTableData'
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
 import useAddUserButton from '@/components/kb/panels/users/useAddUserButton'
->>>>>>> Stashed changes
-=======
-import useAddUserButton from '@/components/kb/panels/users/form/add/useAddUserButton'
->>>>>>> Stashed changes
 
 const Users = () => {
   const { createTablePanel } = usePanelFactory()

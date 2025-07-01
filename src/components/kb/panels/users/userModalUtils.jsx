@@ -1,5 +1,6 @@
 import { EMAIL_REGEX, LABELS } from '@/lib/constants'
 import { diff, filterObject, pick } from '@/lib/utils'
+import UserForm from '@/components/kb/panels/users/form/UserForm'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 
@@ -11,7 +12,6 @@ export const USER_FIELDS = {
   ADD_SUBMIT: ['affiliation', 'email', 'firstName', 'lastName', 'password', 'role', 'username'],
 }
 
-// Shared validation logic
 export const createUserValidator =
   (isEdit = false) =>
   userData => {
@@ -33,7 +33,6 @@ export const createUserValidator =
     return allFieldsFilled && isEmailValid && passwordsMatch
   }
 
-// Shared change detection logic
 export const createChangeDetector =
   (isEdit = false) =>
   (userData, originalUser = null) => {
@@ -54,7 +53,6 @@ export const createChangeDetector =
     )
   }
 
-// Shared form change handler factory
 export const createFormChangeHandler = (updateModalData, isEdit = false) => {
   const validateUser = createUserValidator(isEdit)
   const calculateHasChanges = createChangeDetector(isEdit)
@@ -77,12 +75,6 @@ export const createFormChangeHandler = (updateModalData, isEdit = false) => {
   }
 }
 
-// Shared cancel handler
-export const createCancelHandler = closeModal => () => {
-  closeModal()
-}
-
-// Shared action factory
 export const createModalActions =
   (handleCancel, handleCommit, saveLabel = SAVE) =>
   currentModalData =>
@@ -101,32 +93,29 @@ export const createModalActions =
       },
     ]
 
-// Shared content factory
 export const createModalContent = (FormComponent, handleFormChange, users, isEdit, formKey) => {
-  return useCallback(
-    (user, originalUser = null) => {
-      const userWithConfirmPassword = {
-        ...user,
-        password: user.password ?? '',
-        confirmPassword: user.confirmPassword ?? '',
-      }
+  const UserModalContent = (user, originalUser = null) => {
+    const userWithConfirmPassword = {
+      ...user,
+      password: user.password ?? '',
+      confirmPassword: user.confirmPassword ?? '',
+    }
 
-      return (
-        <FormComponent
-          key={formKey}
-          user={userWithConfirmPassword}
-          originalUser={originalUser}
-          onChange={handleFormChange}
-          isEdit={isEdit}
-          users={users}
-        />
-      )
-    },
-    [handleFormChange, users, isEdit, formKey]
-  )
+    return (
+      <FormComponent
+        key={formKey}
+        user={userWithConfirmPassword}
+        originalUser={originalUser}
+        onChange={handleFormChange}
+        isEdit={isEdit}
+        users={users}
+      />
+    )
+  }
+
+  return UserModalContent
 }
 
-// Initial user data
 export const createInitialUser = () => ({
   affiliation: '',
   confirmPassword: '',
@@ -138,7 +127,6 @@ export const createInitialUser = () => ({
   username: '',
 })
 
-// Data processing utilities for edit mode
 export const processEditUserData = (user, originalUser) => {
   const hasFieldChanges = USER_FIELDS.EDITABLE.some(field => user[field] !== originalUser[field])
   const hasPasswordChange = user.password != null && user.password.trim() !== ''
@@ -154,10 +142,32 @@ export const processEditUserData = (user, originalUser) => {
   )
 }
 
-// Data processing utilities for add mode
 export const processAddUserData = user => {
   return filterObject(
     pick(user, USER_FIELDS.ADD_SUBMIT),
     (key, value) => value && value.trim() !== ''
   )
+}
+
+// Shared hook utilities to eliminate duplication
+export const createSharedHandlers = (updateModalData, closeModal, isEdit) => {
+  const handleFormChange = (updatedUser, originalUser) => {
+    const formChangeHandler = createFormChangeHandler(updateModalData, isEdit)
+    return formChangeHandler(updatedUser, originalUser)
+  }
+
+  const handleCancel = () => {
+    closeModal()
+  }
+
+  return { handleCancel, handleFormChange }
+}
+
+export const createSharedContent = (handleFormChange, users, isEdit) => {
+  const formKey = isEdit ? 'edit-user-form' : 'add-user-form'
+
+  return modalData => {
+    const modalContent = createModalContent(UserForm, handleFormChange, users, isEdit, formKey)
+    return modalContent(modalData.user, modalData.originalUser)
+  }
 }

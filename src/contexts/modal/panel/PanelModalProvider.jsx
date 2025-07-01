@@ -1,11 +1,8 @@
 import { useCallback, useMemo, useState, useRef } from 'react'
 
-import PanelModal from '@/components/modal/PanelModal'
-import Actions from '@/components/common/factory/Actions'
-
-import { createTitle } from '@/components/common/factory/createComponent'
-
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+
+import usePanelModal from '@/contexts/modal/panel/usePanelModal.jsx'
 
 const PanelModalProvider = ({ children }) => {
   const [modalConfig, setModalConfig] = useState(null)
@@ -74,59 +71,7 @@ const PanelModalProvider = ({ children }) => {
   // Keep ref in sync with state
   modalDataRef.current = modalData
 
-  // Memoize Actions component separately to avoid unnecessary re-creation
-  const ActionsComponent = useMemo(() => {
-    if (!modalConfig) return null
-    
-    return () => {
-      const { actions } = modalConfig
-      
-      // Support both static actions array and dynamic actions function
-      const currentActions = typeof actions === 'function' ? actions(modalDataRef.current) : actions
-      
-      const colors = currentActions.map(action => action.color || 'main')
-      const disabled = currentActions.map(action => action.disabled || false)
-      const labels = currentActions.map(action => action.label)
-
-      const onAction = label => {
-        const action = currentActions.find(a => a.label === label)
-        if (action && action.onClick) {
-          action.onClick()
-        }
-      }
-
-      return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
-    }
-  }, [modalConfig, modalData?.isValid, modalData?.hasChanges])
-
-  // Memoize Content component to only recreate when modalConfig changes, not modalData
-  const ContentComponent = useMemo(() => {
-    if (!modalConfig) return null
-    
-    return () => {
-      return modalConfig.content(modalDataRef.current)
-    }
-  }, [modalConfig])
-
-  // Create the modal function when needed
-  const modal = useMemo(() => {
-    if (!modalConfig) return null
-
-    const Title = createTitle({ title: modalConfig.title })
-
-    const ModalComponent = () => (
-      <PanelModal
-        Actions={ActionsComponent}
-        Content={ContentComponent}
-        Title={Title}
-        closeModal={closeModalRef.current}
-        minWidth={modalConfig.minWidth}
-      />
-    )
-    ModalComponent.displayName = 'PanelModalComponent'
-
-    return ModalComponent
-  }, [modalConfig, ActionsComponent, ContentComponent])
+  const modal = usePanelModal(modalConfig, modalDataRef, closeModalRef)
 
   const value = useMemo(
     () => ({

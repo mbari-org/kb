@@ -1,18 +1,15 @@
-import { use, useCallback } from 'react'
-
-import UserForm from '@/components/kb/panels/users/form/UserForm'
+import { use, useCallback, useMemo } from 'react'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import { PROCESSING } from '@/lib/constants'
 import {
-  createFormChangeHandler,
-  createCancelHandler,
   createModalActions,
-  createModalContent,
   processEditUserData,
-} from './userModalUtils'
+  createSharedHandlers,
+  createSharedContent,
+} from './userModalUtils.jsx'
 
 const { UPDATING } = PROCESSING
 
@@ -20,21 +17,16 @@ const useEditUserButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } = use(PanelModalContext)
   const { editUser, users } = use(UsersContext)
 
-  // Create shared handlers using utilities
-  const handleCancel = useCallback(
-    createCancelHandler(closeModal),
-    [closeModal]
-  )
-  const handleFormChange = useCallback(
-    createFormChangeHandler(updateModalData, true), // isEdit = true
-    [updateModalData]
+  const { handleCancel, handleFormChange } = useMemo(
+    () => createSharedHandlers(updateModalData, closeModal, true),
+    [updateModalData, closeModal]
   )
 
   const handleCommit = useCallback(
     async (user, originalUser) => {
       try {
         const updatedData = processEditUserData(user, originalUser)
-        
+
         if (!updatedData) {
           closeModal()
           return
@@ -51,9 +43,8 @@ const useEditUserButton = () => {
     [editUser, closeModal, setProcessing]
   )
 
-  // Create shared content using utility
   const content = useCallback(
-    createModalContent(UserForm, handleFormChange, users, true, 'edit-user-form'),
+    createSharedContent(handleFormChange, users, true),
     [handleFormChange, users]
   )
 
@@ -67,7 +58,7 @@ const useEditUserButton = () => {
 
       createModal({
         actions: createModalActions(handleCancel, handleCommit),
-        content: currentModalData => content(currentModalData.user, currentModalData.originalUser),
+        content,
         title: 'Edit User',
         data: {
           user: modalUser,

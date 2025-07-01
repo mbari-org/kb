@@ -1,22 +1,34 @@
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState, useEffect } from 'react'
 import { Box, TextField, MenuItem } from '@mui/material'
 
 import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
+import useDebounce from '@/hooks/useDebounce'
 
-const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
+const UserForm = memo(({ user, originalUser, onChange, isEdit = false, users }) => {
   const [showConfirm, setShowConfirm] = useState(false)
   const [touched, setTouched] = useState({})
+  const [localUser, setLocalUser] = useState(user)
+
+  useEffect(() => {
+    setLocalUser(user)
+  }, [user])
+
+  const debouncedOnChange = useDebounce(onChange, 300)
 
   const handleChange = field => event => {
+    const value = event.target.value
     const updatedUser = {
-      ...user,
-      [field]: event.target.value,
+      ...localUser,
+      [field]: value,
     }
+
+    setLocalUser(updatedUser)
+
     if (field === 'password') {
       setShowConfirm(true)
     }
 
-    onChange(updatedUser, originalUser)
+    debouncedOnChange(updatedUser, originalUser)
   }
 
   const handleBlur = field => () => {
@@ -31,21 +43,21 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
   const showError = field => {
     if (!touched[field]) return false
     if (field === 'email') {
-      return !user.email || !EMAIL_REGEX.test(user.email)
+      return !localUser.email || !EMAIL_REGEX.test(localUser.email)
     }
     if (field === 'username' && !isEdit) {
-      return !user.username || !isUsernameUnique(user.username)
+      return !localUser.username || !isUsernameUnique(localUser.username)
     }
     if (field === 'password') {
       if (isEdit) return false
-      return !user.password
+      return !localUser.password
     }
     if (field === 'confirmPassword') {
-      if (isEdit && !user.password) return false
-      if (!user.confirmPassword) return true
-      return user.password !== user.confirmPassword
+      if (isEdit && !localUser.password) return false
+      if (!localUser.confirmPassword) return true
+      return localUser.password !== localUser.confirmPassword
     }
-    return !user[field]
+    return !localUser[field]
   }
 
   const getHelperText = field => {
@@ -54,7 +66,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
     if (field === 'username' && !isEdit) return 'Username already exists'
     if (field === 'password' && !isEdit) return 'Password is required'
     if (field === 'confirmPassword') {
-      if (!user.confirmPassword) return 'Please confirm your password'
+      if (!localUser.confirmPassword) return 'Please confirm your password'
       return 'Passwords do not match'
     }
     return `${field.charAt(0).toUpperCase() + field.slice(1)} is required`
@@ -66,7 +78,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
     <Box sx={{ p: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
       <TextField
         label='Username'
-        value={user.username || ''}
+        value={localUser.username || ''}
         onChange={handleChange('username')}
         onBlur={handleBlur('username')}
         disabled={isEdit}
@@ -77,7 +89,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       />
       <TextField
         label='Password'
-        value={user.password || ''}
+        value={localUser.password || ''}
         onChange={handleChange('password')}
         onBlur={handleBlur('password')}
         fullWidth
@@ -89,11 +101,11 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       {showConfirmPassword && (
         <TextField
           label='Confirm Password'
-          value={user.confirmPassword || ''}
+          value={localUser.confirmPassword || ''}
           onChange={handleChange('confirmPassword')}
           onBlur={handleBlur('confirmPassword')}
           fullWidth
-          required={!isEdit || (isEdit && user.password)}
+          required={!isEdit || (isEdit && localUser.password)}
           error={showError('confirmPassword')}
           helperText={getHelperText('confirmPassword')}
         />
@@ -101,7 +113,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       <TextField
         select
         label='Role'
-        value={user.role || ''}
+        value={localUser.role || ''}
         onChange={handleChange('role')}
         onBlur={handleBlur('role')}
         fullWidth
@@ -117,7 +129,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       </TextField>
       <TextField
         label='Affiliation'
-        value={user.affiliation || ''}
+        value={localUser.affiliation || ''}
         onChange={handleChange('affiliation')}
         onBlur={handleBlur('affiliation')}
         fullWidth
@@ -127,7 +139,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       />
       <TextField
         label='First Name'
-        value={user.firstName || ''}
+        value={localUser.firstName || ''}
         onChange={handleChange('firstName')}
         onBlur={handleBlur('firstName')}
         fullWidth
@@ -137,7 +149,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       />
       <TextField
         label='Last Name'
-        value={user.lastName || ''}
+        value={localUser.lastName || ''}
         onChange={handleChange('lastName')}
         onBlur={handleBlur('lastName')}
         fullWidth
@@ -147,7 +159,7 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       />
       <TextField
         label='Email'
-        value={user.email || ''}
+        value={localUser.email || ''}
         onChange={handleChange('email')}
         onBlur={handleBlur('email')}
         fullWidth
@@ -158,6 +170,8 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
       />
     </Box>
   )
-}
+})
+
+UserForm.displayName = 'UserForm'
 
 export default UserForm

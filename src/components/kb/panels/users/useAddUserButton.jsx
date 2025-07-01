@@ -1,21 +1,19 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
-import UserForm from '@/components/kb/panels/users/form/UserForm'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import { PROCESSING } from '@/lib/constants'
 import {
-  createFormChangeHandler,
-  createCancelHandler,
   createModalActions,
-  createModalContent,
   createUserValidator,
   createInitialUser,
   processAddUserData,
-} from './userModalUtils'
+  createSharedHandlers,
+  createSharedContent,
+} from './userModalUtils.jsx'
 
 const { SAVING } = PROCESSING
 
@@ -23,14 +21,9 @@ const useAddUserButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } = use(PanelModalContext)
   const { addUser, users } = use(UsersContext)
 
-  // Create shared handlers using utilities
-  const handleCancel = useCallback(
-    createCancelHandler(closeModal),
-    [closeModal]
-  )
-  const handleFormChange = useCallback(
-    createFormChangeHandler(updateModalData, false), // isEdit = false
-    [updateModalData]
+  const { handleCancel, handleFormChange } = useMemo(
+    () => createSharedHandlers(updateModalData, closeModal, false),
+    [updateModalData, closeModal]
   )
 
   const handleCommit = useCallback(
@@ -42,7 +35,7 @@ const useAddUserButton = () => {
         }
 
         setProcessing(SAVING)
-        
+
         const userData = processAddUserData(user)
         await addUser(userData)
         closeModal()
@@ -54,16 +47,15 @@ const useAddUserButton = () => {
     [addUser, closeModal, setProcessing]
   )
 
-  // Create shared content using utility
   const content = useCallback(
-    createModalContent(UserForm, handleFormChange, users, false, 'add-user-form'),
+    createSharedContent(handleFormChange, users, false),
     [handleFormChange, users]
   )
 
   const addUserModal = useCallback(() => {
     createModal({
       actions: createModalActions(handleCancel, handleCommit),
-      content: currentModalData => content(currentModalData.user),
+      content,
       title: 'Add User',
       data: {
         user: createInitialUser(),
@@ -73,9 +65,7 @@ const useAddUserButton = () => {
     })
   }, [createModal, content, handleCancel, handleCommit])
 
-  const AddUserButton = useCallback(() => (
-    <PanelAddButton onClick={addUserModal} />
-  ), [addUserModal])
+  const AddUserButton = useCallback(() => <PanelAddButton onClick={addUserModal} />, [addUserModal])
 
   return AddUserButton
 }
