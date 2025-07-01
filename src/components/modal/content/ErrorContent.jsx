@@ -1,19 +1,12 @@
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-
-import { createTextContent } from '@/components/modal/panelModalFactory'
 
 const ErrorContent = ({ error }) => {
   const theme = useTheme()
 
-  const modalTextMessage = createTextContent({
-    sx: { mt: 2, mb: 2 },
-    text: error.message,
-    type: 'error',
-  })
   return (
-    <>
-      {modalTextMessage}
+    <Box>
+      <Typography variant='body1'>{error.message}</Typography>
       <Typography
         id='modal-error-detail'
         variant='h6'
@@ -22,7 +15,7 @@ const ErrorContent = ({ error }) => {
       >
         {error.url}
       </Typography>
-    </>
+    </Box>
   )
 }
 

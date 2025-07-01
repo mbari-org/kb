@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import { createActions } from '@/components/modal/panelModalFactory'
+import { createActions } from '@/components/common/factory/createComponent'
 
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -35,7 +35,7 @@ const AddUserActions = () => {
     }
   }
 
-  return createActions({ colors, disabled, labels, onAction }, 'AddUserActions')
+  return createActions({ colors, disabled, labels, onAction })
 }
 
 export default AddUserActions
