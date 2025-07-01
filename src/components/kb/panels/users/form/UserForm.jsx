@@ -3,15 +3,7 @@ import { Box, TextField, MenuItem } from '@mui/material'
 
 import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
 
-<<<<<<< Updated upstream
-const REQUIRED_FIELDS = ['username', 'role', 'affiliation', 'firstName', 'lastName', 'email']
-const REQUIRED_FIELDS_ADD = [...REQUIRED_FIELDS, 'password', 'confirmPassword']
-
-const UserForm = ({ user, onChange, isEdit = false, existingUsers = [] }) => {
-  const [touched, setTouched] = useState({})
-=======
 const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
->>>>>>> Stashed changes
   const [showConfirm, setShowConfirm] = useState(false)
   const [touched, setTouched] = useState({})
 
@@ -32,16 +24,8 @@ const UserForm = ({ user, originalUser, onChange, isEdit = false, users }) => {
   }
 
   const isUsernameUnique = useCallback(
-<<<<<<< Updated upstream
-    username => {
-      if (!username) return true
-      return !existingUsers.some(u => u.username === username)
-    },
-    [existingUsers]
-=======
     username => isEdit || !username || !users.some(u => u.username === username),
     [users, isEdit]
->>>>>>> Stashed changes
   )
 
   const showError = field => {

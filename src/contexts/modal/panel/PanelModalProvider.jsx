@@ -134,6 +134,7 @@ const PanelModalProvider = ({ children }) => {
       createModal,
       modal,
       modalData,
+      modalDataRef,
       processing,
       setProcessing,
       updateModalData,

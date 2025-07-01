@@ -1,17 +1,22 @@
 import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
 import UsersTableHeaderLeft from '@/components/kb/panels/users/table/header/UsersTableHeaderLeft'
-import UsersTableHeaderRight from '@/components/kb/panels/users/table/header/UsersTableHeaderRight'
 import UsersTableData from '@/components/kb/panels/users/table/data/UsersTableData'
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 import useAddUserButton from '@/components/kb/panels/users/useAddUserButton'
+>>>>>>> Stashed changes
+=======
+import useAddUserButton from '@/components/kb/panels/users/form/add/useAddUserButton'
 >>>>>>> Stashed changes
 
 const Users = () => {
   const { createTablePanel } = usePanelFactory()
+
+  const AddUserButton = useAddUserButton()
 
   const usersPanel = createTablePanel({
     header: {
@@ -19,7 +24,7 @@ const Users = () => {
     },
     tableHeader: {
       headerLeft: <UsersTableHeaderLeft />,
-      headerRight: <UsersTableHeaderRight />,
+      headerRight: <AddUserButton />,
     },
     tableData: {
       content: <UsersTableData />,
