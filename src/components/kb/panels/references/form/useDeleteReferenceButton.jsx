@@ -1,6 +1,6 @@
 import { use, useCallback, useMemo } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
 import { PROCESSING } from '@/lib/constants'
@@ -13,7 +13,7 @@ import {
 const { DELETING } = PROCESSING
 
 const useDeleteReferenceButton = () => {
-  const { createModal, closeModal, setProcessing } = use(PanelModalContext)
+  const { createModal, closeModal, setProcessing } = useReferencesModalOperationsContext()
   const { deleteReference } = use(ReferencesContext)
 
   const handleCancel = useCallback(() => {

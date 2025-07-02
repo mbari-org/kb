@@ -2,6 +2,7 @@ import { use } from 'react'
 
 import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import { ReferencesModalProvider } from './modal'
 
 import useModifyReferences from './useModifyReferences'
 
@@ -19,7 +20,13 @@ export const ReferencesProvider = ({ children }) => {
     references,
   }
 
-  return <ReferencesContext value={value}>{children}</ReferencesContext>
+  return (
+    <ReferencesContext value={value}>
+      <ReferencesModalProvider>
+        {children}
+      </ReferencesModalProvider>
+    </ReferencesContext>
+  )
 }
 
 export default ReferencesProvider

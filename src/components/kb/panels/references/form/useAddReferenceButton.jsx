@@ -2,7 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
@@ -19,7 +19,7 @@ import {
 const { SAVING } = PROCESSING
 
 const useAddReferenceButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, createModal, updateModalData, setProcessing } = useReferencesModalOperationsContext()
   const { addReference } = use(ReferencesContext)
   const { isDoiUnique } = use(PanelDataContext)
 

@@ -1,6 +1,6 @@
 import { use, useCallback, useMemo } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
@@ -15,7 +15,7 @@ import {
 const { UPDATING } = PROCESSING
 
 const useEditReferenceButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, createModal, updateModalData, setProcessing } = useReferencesModalOperationsContext()
   const { editReference } = use(ReferencesContext)
   const { isDoiUnique } = use(PanelDataContext)
 

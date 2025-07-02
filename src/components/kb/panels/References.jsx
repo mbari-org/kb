@@ -7,11 +7,22 @@ import ReferencesTableData from '@/components/kb/panels/references/table/data/Re
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 import ReferencesProvider from '@/contexts/panels/references/ReferencesProvider'
+import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 
-const References = () => {
+const ReferencesModalRenderer = () => {
+  const { modal: referencesModal, processing: referencesProcessing } = useReferencesModalOperationsContext()
+  return (
+    !referencesProcessing &&
+    referencesModal &&
+    typeof referencesModal === 'function' &&
+    referencesModal()
+  )
+}
+
+const ReferencesContent = () => {
   const { createTablePanel } = usePanelFactory()
 
-  const referencesPanel = createTablePanel({
+  return createTablePanel({
     header: {
       headerLeft: <ReferencesHeaderLeft />,
       headerTitle: <PanelHeaderTitle title='References' />,
@@ -24,8 +35,15 @@ const References = () => {
       content: <ReferencesTableData />,
     },
   })
+}
 
-  return <ReferencesProvider>{referencesPanel}</ReferencesProvider>
+const References = () => {
+  return (
+    <ReferencesProvider>
+      <ReferencesContent />
+      <ReferencesModalRenderer />
+    </ReferencesProvider>
+  )
 }
 
 export default References
