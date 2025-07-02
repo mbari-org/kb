@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { forwardRef, memo } from 'react'
 
 import { TreeItemProvider, TreeItem } from '@mui/x-tree-view'
 
@@ -37,4 +37,4 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
   )
 })
 
-export default ConceptTreeItem
+export default memo(ConceptTreeItem)

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { alpha } from '@mui/material/styles'
@@ -9,7 +10,7 @@ const StyledLabel = styled('div')(({ theme, hasPending, isSelected }) => {
   const baseStyle = {
     borderRadius: theme.spacing(0.8),
     display: 'flex',
-    padding: theme.spacing(0.05, 1),  // Reduced from 0.1 to 0.05
+    padding: theme.spacing(0.05, 1), // Reduced from 0.1 to 0.05
     width: '100%',
     color: theme.palette.common.black,
     fontWeight: 500,
@@ -46,4 +47,4 @@ const ConceptTreeLabel = ({ children, hasPending, isSelected, mediaCount }) => {
   )
 }
 
-export default ConceptTreeLabel
+export default memo(ConceptTreeLabel)

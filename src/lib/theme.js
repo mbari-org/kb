@@ -112,12 +112,28 @@ const theme = createTheme({
         root: {
           backgroundColor: 'transparent',
           '& .MuiTreeItem-content': {
-            backgroundColor: 'transparent',
+            backgroundColor: 'transparent !important',
             paddingTop: '1px',
             paddingBottom: '0px',
             minHeight: 'auto',
+            // Remove default hover/selection backgrounds
+            '&:hover': {
+              backgroundColor: 'transparent !important',
+            },
+            '&.Mui-selected': {
+              backgroundColor: 'transparent !important',
+            },
+            '&.Mui-selected:hover': {
+              backgroundColor: 'transparent !important',
+            },
+            '&.Mui-focused': {
+              backgroundColor: 'transparent !important',
+            },
           },
-          '& .MuiTreeItem-label': { padding: '0px' },
+          '& .MuiTreeItem-label': {
+            backgroundColor: 'transparent !important',
+            padding: '0px',
+          },
         },
       },
     },

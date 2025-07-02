@@ -1,4 +1,4 @@
-import { use, useCallback, useMemo, useState } from 'react'
+import { use, useCallback, useMemo, useState, memo } from 'react'
 
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
@@ -29,8 +29,8 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const apiRef = useTreeViewApiRef()
 
   const selectedItems = useMemo(() => {
-    return concept ? [concept] : []
-  }, [concept])
+    return concept?.name ? [concept.name] : []
+  }, [concept?.name])
 
   const treeItems = useMemo(() => {
     const root = buildTree(taxonomy)
@@ -40,14 +40,20 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   // The slots 'item' field designates the rendering component, but only the itemId is provided,
   //  not the item itself. The slotsProps 'item' field, passed to ConceptTreeItem in props,
   //  provides display data.
-  const slots = { item: ConceptTreeItem }
-  const slotProps = {
+  const slots = useMemo(() => ({ item: ConceptTreeItem }), [])
+  
+  const selectedConceptName = concept?.name
+  const slotProps = useMemo(() => ({
     item: ({ itemId }) => {
       const item = conceptItem(taxonomy, itemId)
-      item.isSelected = itemId === concept.name
-      return { item }
+      return { 
+        item: {
+          ...item,
+          isSelected: itemId === selectedConceptName
+        }
+      }
     },
-  }
+  }), [taxonomy, selectedConceptName])
 
   const handleConceptSelect = useCallback(
     conceptName => {
@@ -108,4 +114,4 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   )
 }
 
-export default ConceptsTree
+export default memo(ConceptsTree)
