@@ -3,11 +3,11 @@ import Box from '@mui/material/Box'
 import KnowledgeBase from '@/components/kb/KnowledgeBase'
 import AppModal from '@/components/modal/AppModal'
 
-import PanelDataProvider from '@/contexts/panels/PanelDataProvider'
-import HOLDModalProvider from '@/contexts/modal/panel/HOLDModalProvider'
-import SelectedProvider from '@/contexts/selected/SelectedProvider'
-import AppModalProvider from '@/contexts/modal/app/AppModalProvider'
+import AppModalProvider from '@/contexts/app/AppModalProvider'
+import ConceptModalProvider from '@/contexts/panels/concepts/modal/ConceptModalProvider'
 import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
+import PanelDataProvider from '@/contexts/panels/PanelDataProvider'
+import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 import UsersProvider from '@/contexts/panels/users/UsersProvider'
 
@@ -19,11 +19,11 @@ const KBContainer = () => {
           <SelectedProvider>
             <UsersProvider>
               <PanelDataProvider>
-                <HOLDModalProvider>
+                <ConceptModalProvider>
                   <ConceptProvider>
                     <KnowledgeBase />
                   </ConceptProvider>
-                </HOLDModalProvider>
+                </ConceptModalProvider>
               </PanelDataProvider>
             </UsersProvider>
           </SelectedProvider>

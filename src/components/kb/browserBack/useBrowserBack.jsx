@@ -6,7 +6,7 @@ import LogoutActions from '@/components/kb/browserBack/LogoutActions'
 import LogoutContent from '@/components/kb/browserBack/LogoutContent'
 import LogoutTitle from '@/components/kb/browserBack/LogoutTitle'
 
-import AppModalContext from '@/contexts/modal/app/AppModalContext'
+import AppModalContext from '@/contexts/app/AppModalContext'
 
 const useBrowserBack = () => {
   const { setModal } = use(AppModalContext)

@@ -2,8 +2,8 @@ import { use, useMemo } from 'react'
 
 import { createActions } from '@/components/modal/panelModalFactory'
 
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
 
@@ -18,7 +18,7 @@ const { CONFIRMED } = CONCEPT_STATE.RESET
 
 const EditMediaActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(HOLDModalContext)
+  const { closeModal, modalData } = use(ConceptModalContext)
 
   // Handle case where modalData might be empty or undefined
   const { mediaItem = { url: '', credit: '' }, modified = false } = modalData || {}

@@ -12,7 +12,7 @@ import {
   Modal,
 } from '@mui/material'
 
-import AppModalContext from '@/contexts/modal/app/AppModalContext'
+import AppModalContext from '@/contexts/app/AppModalContext'
 
 const AppModal = () => {
   const { modal, closeModal } = use(AppModalContext)

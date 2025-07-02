@@ -7,7 +7,7 @@ import createEditAliasModal from '@/components/kb/panels/concepts/concept/change
 import createEditAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasOnClose'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EMPTY_ALIAS, aliasFields } from '@/lib/kb/model/alias'
 
@@ -15,7 +15,7 @@ const AliasActionButton = ({ Icon, action, aliasIndex, color, sx = {} }) => {
   const theme = useTheme()
 
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
-  const { setModal, setModalData } = use(HOLDModalContext)
+  const { setModal, setModalData } = use(ConceptModalContext)
 
   const handleClick = useCallback(() => {
     const stagedAliasItem = stagedState.aliases[aliasIndex]

@@ -12,10 +12,10 @@ import {
   Modal,
 } from '@mui/material'
 
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-const HOLDModal = () => {
-  const { modal, closeModal } = use(HOLDModalContext)
+const ConceptModal = () => {
+  const { modal, closeModal } = use(ConceptModalContext)
 
   if (!modal) {
     return null
@@ -61,4 +61,4 @@ const HOLDModal = () => {
   )
 }
 
-export default HOLDModal
+export default ConceptModal

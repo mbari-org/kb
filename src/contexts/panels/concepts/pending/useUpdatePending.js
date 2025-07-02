@@ -1,8 +1,8 @@
 import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { updatePendingHistoryItem } from '@/lib/api/history'
@@ -12,7 +12,7 @@ import { PENDING } from '@/lib/constants'
 const { APPROVAL: _APPROVAL, GROUP } = PENDING
 
 const useUpdatePending = () => {
-  const { setProcessing } = use(HOLDModalContext)
+  const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
   const { confirmPending, setConfirmPending, refreshConcept } = use(ConceptContext)
   const { refreshHistory } = use(TaxonomyContext)

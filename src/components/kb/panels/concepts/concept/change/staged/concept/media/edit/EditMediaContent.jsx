@@ -14,7 +14,7 @@ import { MdOutlinePhoto } from 'react-icons/md'
 import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/MediaDisplay'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useStageMedia from './useStageMedia'
 import useDebounce from '@/hooks/useDebounce'
@@ -29,7 +29,7 @@ export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
 const EditMediaContent = () => {
   const { concept, stagedState } = use(ConceptContext)
-  const { modalData, setModalData } = use(HOLDModalContext)
+  const { modalData, setModalData } = use(ConceptModalContext)
 
   const { action, mediaIndex, mediaItem } = modalData
 

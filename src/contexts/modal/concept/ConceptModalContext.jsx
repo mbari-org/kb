@@ -1,6 +1,0 @@
-import { createContext } from 'react'
-
-const HOLDModalContext = createContext()
-HOLDModalContext.displayName = 'App Modal Context'
-
-export default HOLDModalContext

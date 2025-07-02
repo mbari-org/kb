@@ -3,7 +3,7 @@ import { createActions } from '@/components/modal/panelModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -16,7 +16,7 @@ const { CANCEL, DELETE } = LABELS.CONCEPT.ACTION
 const DeleteConceptActions = () => {
   const { concept, setEditing } = use(ConceptContext)
   const { apiFns } = use(ConfigContext)
-  const { closeModal, modalData } = use(HOLDModalContext)
+  const { closeModal, modalData } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { deleteConcept } = use(TaxonomyContext)
 

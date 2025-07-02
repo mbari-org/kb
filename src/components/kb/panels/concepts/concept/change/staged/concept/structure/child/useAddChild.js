@@ -6,8 +6,8 @@ import AddChildTitle from './AddChildTitle'
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -57,7 +57,7 @@ const initialModalData = {
 
 const useAddChild = closeChoices => {
   const { modifyConcept } = use(ConceptContext)
-  const { setModal, setModalData } = use(HOLDModalContext)
+  const { setModal, setModalData } = use(ConceptModalContext)
 
   return useCallback(() => {
     closeChoices()

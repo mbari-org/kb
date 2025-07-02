@@ -2,7 +2,7 @@ import { use, useEffect } from 'react'
 
 import { createModal } from '@/components/modal/panelModalFactory'
 
-import AppModalContext from '@/contexts/modal/app/AppModalContext'
+import AppModalContext from '@/contexts/app/AppModalContext'
 
 import ErrorActions from '@/components/kb/error/ErrorActions'
 import ErrorContent from '@/components/kb/error/ErrorContent'

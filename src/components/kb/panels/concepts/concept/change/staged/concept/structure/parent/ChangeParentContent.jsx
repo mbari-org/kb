@@ -4,7 +4,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import ToConceptChoice from '../ToConceptChoice'
 
@@ -12,7 +12,7 @@ const ChangeParentContent = ({ omitChoices }) => {
   const theme = useTheme()
 
   const { concept } = use(ConceptContext)
-  const { setModalData } = use(HOLDModalContext)
+  const { setModalData } = use(ConceptModalContext)
 
   const [toConcept, setToConcept] = useState(null)
 

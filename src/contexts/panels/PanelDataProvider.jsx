@@ -4,7 +4,7 @@ import { getReferences as getReferencesApi } from '@/lib/api/references'
 import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import AppModalContext from '@/contexts/modal/app/AppModalContext'
+import AppModalContext from '@/contexts/app/AppModalContext'
 import PanelDataContext from '@/contexts/panels/PanelDataContext'
 
 import { createReference } from '@/lib/kb/model/reference'
