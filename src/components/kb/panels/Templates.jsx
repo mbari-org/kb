@@ -1,3 +1,5 @@
+import { use } from 'react'
+
 import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
 import TemplatesHeaderLeft from '@/components/kb/panels/templates/header/TemplatesHeaderLeft'
@@ -10,11 +12,24 @@ import TemplatesTableHeaderRight from '@/components/kb/panels/templates/table/he
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
 import TemplatesProvider from '@/contexts/panels/templates/TemplatesProvider'
+import TemplatesModalOperationsContext from '@/contexts/panels/templates/TemplatesModalOperationsContext'
 
-const Templates = () => {
+const TemplatesModalRenderer = () => {
+  const { modal: templatesModal, processing: templatesProcessing } = use(
+    TemplatesModalOperationsContext
+  )
+  return (
+    !templatesProcessing &&
+    templatesModal &&
+    typeof templatesModal === 'function' &&
+    templatesModal()
+  )
+}
+
+const TemplatesContent = () => {
   const { createTablePanel } = usePanelFactory()
 
-  const templatesPanel = createTablePanel({
+  return createTablePanel({
     header: {
       headerLeft: <TemplatesHeaderLeft />,
       headerTitle: <PanelHeaderTitle title='Templates' />,
@@ -29,8 +44,15 @@ const Templates = () => {
       content: <TemplatesTableData />,
     },
   })
+}
 
-  return <TemplatesProvider>{templatesPanel}</TemplatesProvider>
+const Templates = () => {
+  return (
+    <TemplatesProvider>
+      <TemplatesContent />
+      <TemplatesModalRenderer />
+    </TemplatesProvider>
+  )
 }
 
 export default Templates

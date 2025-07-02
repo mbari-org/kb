@@ -1,6 +1,6 @@
 import { use, useCallback, useMemo } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import TemplatesModalOperationsContext from '@/contexts/panels/templates/TemplatesModalOperationsContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { PROCESSING } from '@/lib/constants'
@@ -14,7 +14,7 @@ import {
 const { UPDATING } = PROCESSING
 
 const useEditTemplateButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, createModal, updateModalData, setProcessing } = use(TemplatesModalOperationsContext)
   const { editTemplate } = use(TemplatesContext)
 
   const { handleCancel, handleFormChange } = useMemo(
