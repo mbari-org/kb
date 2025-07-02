@@ -100,6 +100,27 @@ const theme = createTheme({
         },
       },
     },
+    MuiTreeView: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'transparent',
+        },
+      },
+    },
+    MuiTreeItem: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'transparent',
+          '& .MuiTreeItem-content': {
+            backgroundColor: 'transparent',
+            paddingTop: '1px',
+            paddingBottom: '0px',
+            minHeight: 'auto',
+          },
+          '& .MuiTreeItem-label': { padding: '0px' },
+        },
+      },
+    },
   },
 })
 

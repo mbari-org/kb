@@ -96,7 +96,7 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
         apiRef={apiRef}
         expandedItems={expandedItems}
         getItemId={getItemId}
-        itemChildrenIndentation={12}
+        itemChildrenIndentation={8}
         items={treeItems}
         onItemClick={handleItemClick}
         selectedItems={selectedItems}

@@ -4,7 +4,6 @@ import { TreeItemProvider, TreeItem } from '@mui/x-tree-view'
 
 import ConceptTreeLabel from './ConceptTreeLabel'
 import ConceptsExpand from './ConceptsExpand'
-import ConceptTreeItemContent from './ConceptTreeItemContent'
 
 const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
   const { item, itemId } = props
@@ -22,7 +21,6 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
         {...props}
         ref={ref}
         slotProps={{
-          content: { isSelected: item.isSelected },
           label: {
             hasMedia,
             hasPending: item.hasPending,
@@ -31,7 +29,6 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
           },
         }}
         slots={{
-          content: ConceptTreeItemContent,
           groupTransition: ConceptsExpand,
           label: ConceptTreeLabel,
         }}
