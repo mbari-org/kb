@@ -55,21 +55,7 @@ const ConceptPropertiesSection = ({
           <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
             {title}
           </Typography>
-          {onInspectTooltip ? (
-            <KBTooltip title={onInspectTooltip} placement="top">
-              <IconButton
-                onClick={onInspect}
-                size='small'
-                sx={{
-                  '&:hover': {
-                    color: 'primary.main',
-                  },
-                }}
-              >
-                <InspectIcon />
-              </IconButton>
-            </KBTooltip>
-          ) : (
+          <KBTooltip title={onInspectTooltip} placement='top'>
             <IconButton
               onClick={onInspect}
               size='small'
@@ -81,11 +67,11 @@ const ConceptPropertiesSection = ({
             >
               <InspectIcon />
             </IconButton>
-          )}
+          </KBTooltip>
+          {children && <Box sx={{ ml: 2 }}>{children}</Box>}
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {children && <Box sx={{ display: 'flex', alignItems: 'center' }}>{children}</Box>}
           {hasItems && (
             <Box
               sx={{

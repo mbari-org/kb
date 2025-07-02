@@ -10,33 +10,27 @@ import { SELECTED } from '@/lib/constants'
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
 
-const noConceptSelectedDescription = 'With no Concept selected, all Templates are displayed.'
-const selectAnyConceptDescription = 'Any Concept can be selected.'
-const selectExplicitConceptsDescription =
-  'With Available off, only explicit Concept Templates are displayed.'
-const availableTemplatesDescription =
+const SELECTED_NONE = 'With no Concept selected, all Templates are displayed.'
+const SELECT_ANY = 'For Available Templates, any Concept can be selected.'
+const SELECT_RESTRICTED =
+  'With Available off, only Concept with explicit Templates can be selected.'
+const SELECTED_AVAILABLE =
   'All Templates available for use with the selected Concept are displayed.'
-const explicitTemplatesDescription =
+const SELECTED_EXPLICIT =
   'Only Templates explicitly defined for the selected Concept are displayed.'
+
+const TEMPLATES_ALL = 'All Templates'
+const TEMPLATES_AVAILABLE = 'Available Concept Templates'
+const TEMPLATES_EXPLICIT = 'Explicit Concept Templates'
 
 const selectedAvailableMessaging = (available, concept) => {
   if (!concept) {
-    return ['All Templates', selectAnyConceptDescription, noConceptSelectedDescription]
+    return [TEMPLATES_ALL, SELECT_RESTRICTED, SELECTED_NONE]
   }
 
-  if (available) {
-    return [
-      'Available Concept Templates',
-      selectAnyConceptDescription,
-      availableTemplatesDescription,
-    ]
-  } else {
-    return [
-      'Explicit Concept Templates',
-      selectExplicitConceptsDescription,
-      explicitTemplatesDescription,
-    ]
-  }
+  return available
+    ? [TEMPLATES_AVAILABLE, SELECT_ANY, SELECTED_AVAILABLE]
+    : [TEMPLATES_EXPLICIT, SELECT_RESTRICTED, SELECTED_EXPLICIT]
 }
 
 const TemplatesConceptAvailableTooltip = () => {

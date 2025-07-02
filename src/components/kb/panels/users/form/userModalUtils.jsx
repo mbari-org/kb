@@ -8,13 +8,13 @@ import { diff, filterObject, pick } from '@/lib/utils'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 
-const USER_FIELDS_BASE = ['affiliation', 'email', 'firstName', 'lastName', 'role', 'username']
-const USER_FIELDS_EDITABLE = ['affiliation', 'email', 'firstName', 'lastName', 'role']
+const EDITABLE = ['affiliation', 'email', 'firstName', 'lastName', 'role']
+const EDITABLE_ADD = [...EDITABLE, 'username']
 
 export const createUserValidator =
   (isEdit = false) =>
   userData => {
-    const requiredFields = isEdit ? USER_FIELDS_BASE : [...USER_FIELDS_BASE, 'password']
+    const requiredFields = isEdit ? EDITABLE_ADD : [...EDITABLE_ADD, 'password']
 
     const allFieldsFilled = requiredFields.every(field => {
       const value = userData[field] || ''
@@ -37,7 +37,7 @@ const createChangeDetector =
   (userData, original = null) => {
     if (!isEdit) {
       // For add mode, any non-empty field means changes
-      const fieldsToCheck = [...USER_FIELDS_BASE, 'password']
+      const fieldsToCheck = [...EDITABLE_ADD, 'password']
       return fieldsToCheck.some(field => {
         const value = userData[field] || ''
         return value.trim() !== ''
@@ -45,7 +45,7 @@ const createChangeDetector =
     }
 
     // For edit mode, compare with original
-    const fieldsToCompare = USER_FIELDS_EDITABLE
+    const fieldsToCompare = EDITABLE
     return (
       fieldsToCompare.some(field => userData[field] !== original[field]) ||
       (userData.password && userData.password.trim() !== '')
@@ -53,7 +53,6 @@ const createChangeDetector =
   }
 
 const createFormChangeHandler = (updateModalData, isEdit = false) => {
-  // Create validators once, not on every change
   const validateUser = createUserValidator(isEdit)
   const calculateHasChanges = createChangeDetector(isEdit)
 
@@ -131,7 +130,7 @@ export const createInitialUser = () => ({
 })
 
 export const processEditUserData = (user, original) => {
-  const hasFieldChanges = USER_FIELDS_EDITABLE.some(field => user[field] !== original[field])
+  const hasFieldChanges = EDITABLE.some(field => user[field] !== original[field])
   const hasPasswordChange = user.password != null && user.password.trim() !== ''
 
   if (!hasFieldChanges && !hasPasswordChange) {
@@ -140,14 +139,14 @@ export const processEditUserData = (user, original) => {
 
   // Get updates, excluding empty password
   return filterObject(
-    diff(pick(user, [...USER_FIELDS_EDITABLE, 'password']), original),
+    diff(pick(user, [...EDITABLE, 'password']), original),
     (key, value) => !(key === 'password' && (!value || value.trim() === ''))
   )
 }
 
 export const processAddUserData = user => {
   return filterObject(
-    pick(user, [...USER_FIELDS_BASE, 'password']),
+    pick(user, [...EDITABLE_ADD, 'password']),
     (key, value) => value && value.trim() !== ''
   )
 }
