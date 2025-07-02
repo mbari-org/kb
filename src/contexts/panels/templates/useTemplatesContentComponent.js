@@ -1,17 +1,17 @@
-import { use, useMemo } from 'react'
-import TemplatesModalDataContext from './TemplatesModalDataContext'
+import { useMemo } from 'react'
+import { useTemplatesModalDataContext } from './modal'
 
-const useTemplatesContentComponent = (modalConfig, modalDataRef) => {
+const useTemplatesContentComponent = (modalConfig) => {
   return useMemo(() => {
     if (!modalConfig) return null
 
     const TemplatesModalContent = () => {
-      const { modalData } = use(TemplatesModalDataContext)
+      const { modalData } = useTemplatesModalDataContext()
       return modalConfig.content(modalData)
     }
 
     return TemplatesModalContent
-  }, [modalConfig, modalDataRef])
+  }, [modalConfig])
 }
 
 export default useTemplatesContentComponent

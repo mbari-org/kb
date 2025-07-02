@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 
-const useContentComponent = (modalConfig, modalDataRef) => {
+const useContentComponent = (modalConfig, _modalDataRef) => {
   return useMemo(() => {
     if (!modalConfig) return null
 
@@ -11,7 +11,7 @@ const useContentComponent = (modalConfig, modalDataRef) => {
     }
 
     return PanelModalContent
-  }, [modalConfig, modalDataRef])
+  }, [modalConfig])
 }
 
 export default useContentComponent

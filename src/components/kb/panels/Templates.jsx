@@ -1,4 +1,3 @@
-import { use } from 'react'
 
 import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
@@ -12,12 +11,10 @@ import TemplatesTableHeaderRight from '@/components/kb/panels/templates/table/he
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
 import TemplatesProvider from '@/contexts/panels/templates/TemplatesProvider'
-import TemplatesModalOperationsContext from '@/contexts/panels/templates/TemplatesModalOperationsContext'
+import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 
 const TemplatesModalRenderer = () => {
-  const { modal: templatesModal, processing: templatesProcessing } = use(
-    TemplatesModalOperationsContext
-  )
+  const { modal: templatesModal, processing: templatesProcessing } = useTemplatesModalOperationsContext()
   return (
     !templatesProcessing &&
     templatesModal &&

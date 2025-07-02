@@ -5,8 +5,8 @@ import useTemplatesContentComponent from './useTemplatesContentComponent'
 import { useMemo } from 'react'
 
 const useTemplatesModal = (modalConfig, modalDataRef, closeModalRef) => {
-  const ActionsComponent = useTemplatesActionsComponent(modalConfig, modalDataRef)
-  const ContentComponent = useTemplatesContentComponent(modalConfig, modalDataRef)
+  const ActionsComponent = useTemplatesActionsComponent(modalConfig)
+  const ContentComponent = useTemplatesContentComponent(modalConfig)
 
   return useMemo(() => {
     if (!modalConfig) return null

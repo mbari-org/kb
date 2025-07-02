@@ -1,7 +1,7 @@
 import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import TemplatesContext from './TemplatesContext'
-import TemplatesModalProvider from './TemplatesModalProvider'
+import { TemplatesModalProvider } from './modal'
 
 import PanelDataContext from '@/contexts/panels/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'

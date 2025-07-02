@@ -1,6 +1,6 @@
 import { use, useCallback, useMemo } from 'react'
 
-import TemplatesModalOperationsContext from '@/contexts/panels/templates/TemplatesModalOperationsContext'
+import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { PROCESSING } from '@/lib/constants'
@@ -13,7 +13,7 @@ import {
 const { DELETING } = PROCESSING
 
 const useDeleteTemplateButton = () => {
-  const { closeModal, createModal, setProcessing } = use(TemplatesModalOperationsContext)
+  const { closeModal, createModal, setProcessing } = useTemplatesModalOperationsContext()
   const { deleteTemplate } = use(TemplatesContext)
 
   const handleCancel = useCallback(() => {
