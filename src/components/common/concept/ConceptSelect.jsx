@@ -24,6 +24,7 @@ const ConceptSelect = ({
   keepFocus = false,
   label = CONCEPT_LABEL,
   onInputChange,
+  onSpecialChange,
   rightComponent = NONE,
   selectables,
   tooltip,
@@ -107,7 +108,7 @@ const ConceptSelect = ({
           <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>
             {rightComponent === NAV_HISTORY && <NavHistoryLinks history={concepts} />}
             {rightComponent === SPECIAL && (
-              <ToConceptSpecial onChange={specialName => doConceptSelected(specialName)} />
+              <ToConceptSpecial onChange={onSpecialChange || doConceptSelected} />
             )}
           </Box>
         )}

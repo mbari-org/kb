@@ -1,31 +1,7 @@
-import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
-import { use, useState } from 'react'
+import { useState } from 'react'
 
-const useTemplateForm = ({ isEdit = false, onChange, template }) => {
-  const { modalData } = use(HOLDModalContext)
+const useTemplateForm = ({ isEdit = false, onChange, template, original }) => {
   const [hasSearchInput, setHasSearchInput] = useState(false)
-
-  const checkModification = updatedTemplate => {
-    if (!isEdit) {
-      // In add mode, consider it modified if any field has a value
-      return Boolean(
-        updatedTemplate.concept?.trim() ||
-          updatedTemplate.linkName?.trim() ||
-          updatedTemplate.toConcept?.trim() ||
-          updatedTemplate.linkValue?.trim()
-      )
-    }
-
-    const originalTemplate = modalData.originalTemplate
-    const currentTemplate = updatedTemplate
-
-    return (
-      currentTemplate.concept !== originalTemplate.concept ||
-      currentTemplate.linkName !== originalTemplate.linkName ||
-      currentTemplate.toConcept !== originalTemplate.toConcept ||
-      currentTemplate.linkValue !== originalTemplate.linkValue
-    )
-  }
 
   const handleChange = field => event => {
     const newValue = event.target.value
@@ -34,7 +10,7 @@ const useTemplateForm = ({ isEdit = false, onChange, template }) => {
       [field]: newValue,
     }
 
-    onChange(updatedTemplate, checkModification(updatedTemplate), hasSearchInput)
+    onChange(updatedTemplate, original)
   }
 
   const handleSearchInput = event => {

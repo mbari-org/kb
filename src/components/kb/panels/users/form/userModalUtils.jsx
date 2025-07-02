@@ -5,17 +5,14 @@ import { Box, Stack, Typography } from '@mui/material'
 
 const { CANCEL, SAVE } = LABELS.BUTTON
 
-export const USER_FIELDS = {
-  EDITABLE: ['affiliation', 'email', 'firstName', 'lastName', 'role'],
-  REQUIRED_BASE: ['affiliation', 'email', 'firstName', 'lastName', 'role', 'username'],
-  REQUIRED_ADD: ['affiliation', 'email', 'firstName', 'lastName', 'password', 'role', 'username'],
-  ADD_SUBMIT: ['affiliation', 'email', 'firstName', 'lastName', 'password', 'role', 'username'],
-}
+const EDITABLE = ['affiliation', 'email', 'firstName', 'lastName', 'role']
+const REQUIRED = [...EDITABLE, 'username']
+const REQUIRED_ADD = [...REQUIRED, 'password']
 
 export const createUserValidator =
   (isEdit = false) =>
   userData => {
-    const requiredFields = isEdit ? USER_FIELDS.REQUIRED_BASE : USER_FIELDS.REQUIRED_ADD
+    const requiredFields = isEdit ? REQUIRED : REQUIRED_ADD
 
     const allFieldsFilled = requiredFields.every(field => {
       const value = userData[field] || ''
@@ -33,12 +30,12 @@ export const createUserValidator =
     return allFieldsFilled && isEmailValid && passwordsMatch
   }
 
-export const createChangeDetector =
+const createChangeDetector =
   (isEdit = false) =>
   (userData, original = null) => {
     if (!isEdit) {
       // For add mode, any non-empty field means changes
-      const fieldsToCheck = USER_FIELDS.REQUIRED_ADD
+      const fieldsToCheck = REQUIRED_ADD
       return fieldsToCheck.some(field => {
         const value = userData[field] || ''
         return value.trim() !== ''
@@ -46,14 +43,14 @@ export const createChangeDetector =
     }
 
     // For edit mode, compare with original
-    const fieldsToCompare = USER_FIELDS.EDITABLE
+    const fieldsToCompare = EDITABLE
     return (
       fieldsToCompare.some(field => userData[field] !== original[field]) ||
       (userData.password && userData.password.trim() !== '')
     )
   }
 
-export const createFormChangeHandler = (updateModalData, isEdit = false) => {
+const createFormChangeHandler = (updateModalData, isEdit = false) => {
   const validateUser = createUserValidator(isEdit)
   const calculateHasChanges = createChangeDetector(isEdit)
 
@@ -131,7 +128,7 @@ export const createInitialUser = () => ({
 })
 
 export const processEditUserData = (user, original) => {
-  const hasFieldChanges = USER_FIELDS.EDITABLE.some(field => user[field] !== original[field])
+  const hasFieldChanges = EDITABLE.some(field => user[field] !== original[field])
   const hasPasswordChange = user.password != null && user.password.trim() !== ''
 
   if (!hasFieldChanges && !hasPasswordChange) {
@@ -140,16 +137,13 @@ export const processEditUserData = (user, original) => {
 
   // Get updates, excluding empty password
   return filterObject(
-    diff(pick(user, [...USER_FIELDS.EDITABLE, 'password']), original),
+    diff(pick(user, [...EDITABLE, 'password']), original),
     (key, value) => !(key === 'password' && (!value || value.trim() === ''))
   )
 }
 
 export const processAddUserData = user => {
-  return filterObject(
-    pick(user, USER_FIELDS.ADD_SUBMIT),
-    (key, value) => value && value.trim() !== ''
-  )
+  return filterObject(pick(user, REQUIRED_ADD), (key, value) => value && value.trim() !== '')
 }
 
 export const createHandlers = (updateModalData, closeModal, isEdit) => {

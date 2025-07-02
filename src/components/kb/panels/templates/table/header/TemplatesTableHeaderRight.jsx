@@ -1,16 +1,9 @@
-import { use } from 'react'
-
-import PanelAddButton from '@/components/common/panel/PanelAddButton'
-
-import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
-
-import useAddTemplateModal from '@/components/kb/panels/templates/form/add/useAddTemplateModal'
+import useAddTemplateButton from '@/components/kb/panels/templates/form/useAddTemplateButton'
 
 const TemplatesTableHeaderRight = () => {
-  const { addTemplate } = use(TemplatesContext)
-  const addTemplateModal = useAddTemplateModal(addTemplate)
+  const AddTemplateButton = useAddTemplateButton()
 
-  return <PanelAddButton onClick={addTemplateModal} />
+  return <AddTemplateButton />
 }
 
 export default TemplatesTableHeaderRight

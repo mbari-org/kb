@@ -5,8 +5,8 @@ import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 
 import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateForm'
 
-const TemplateForm = ({ isEdit = false, onChange, template }) => {
-  const { handleChange } = useTemplateForm({ isEdit, onChange, template })
+const TemplateForm = ({ isEdit = false, onChange, template, original }) => {
+  const { handleChange } = useTemplateForm({ isEdit, onChange, template, original })
 
   const handleConceptSelect = newValue => {
     handleChange('concept')({ target: { value: newValue } })

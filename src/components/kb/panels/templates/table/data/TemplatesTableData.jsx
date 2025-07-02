@@ -5,8 +5,8 @@ import TemplatesPagination from './TemplatesPagination'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import useDeleteTemplateModal from '@/components/kb/panels/templates/form/delete/useDeleteTemplateModal'
-import useEditTemplateModal from '@/components/kb/panels/templates/form/edit/useEditTemplateModal'
+import useEditTemplateButton from '@/components/kb/panels/templates/form/useEditTemplateButton'
+import useDeleteTemplateButton from '@/components/kb/panels/templates/form/useDeleteTemplateButton'
 import useTemplateColumns from './useTemplateColumns'
 
 import { PAGINATION } from '@/lib/constants'
@@ -14,7 +14,7 @@ import { PAGINATION } from '@/lib/constants'
 const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.TEMPLATES
 
 const TemplatesTableData = () => {
-  const { deleteTemplate, editTemplate, filteredTemplates } = use(TemplatesContext)
+  const { filteredTemplates } = use(TemplatesContext)
 
   const [displayTemplates, setDisplayTemplates] = useState([])
 
@@ -22,8 +22,8 @@ const TemplatesTableData = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
 
-  const deleteTemplateModal = useDeleteTemplateModal(deleteTemplate)
-  const editTemplateModal = useEditTemplateModal(editTemplate, displayTemplates)
+  const editTemplateModal = useEditTemplateButton()
+  const deleteTemplateModal = useDeleteTemplateButton()
 
   const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
 
