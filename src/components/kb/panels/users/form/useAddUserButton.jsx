@@ -2,7 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import { PROCESSING } from '@/lib/constants'
@@ -18,7 +18,7 @@ import {
 const { SAVING } = PROCESSING
 
 const useAddUserButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = use(PanelModalContext)
+  const { closeModal, createModal, updateModalData, setProcessing } = useUsersModalOperationsContext()
   const { addUser, users } = use(UsersContext)
 
   const { handleCancel, handleFormChange } = useMemo(

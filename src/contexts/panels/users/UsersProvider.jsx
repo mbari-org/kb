@@ -3,6 +3,7 @@ import { use, useCallback, useEffect, useState } from 'react'
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
+import { UsersModalProvider } from './modal'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -74,7 +75,13 @@ const UsersProvider = ({ children }) => {
     users,
   }
 
-  return <UsersContext value={value}>{children}</UsersContext>
+  return (
+    <UsersContext value={value}>
+      <UsersModalProvider>
+        {children}
+      </UsersModalProvider>
+    </UsersContext>
+  )
 }
 
 export default UsersProvider

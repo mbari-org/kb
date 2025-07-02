@@ -1,6 +1,6 @@
 import { use, useCallback, useMemo } from 'react'
 
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
+import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import { USER_ROLES } from '@/lib/constants'
@@ -11,7 +11,7 @@ import {
 } from '@/components/kb/panels/users/form/userModalUtils'
 
 const useLockUserButton = () => {
-  const { createModal, closeModal } = use(PanelModalContext)
+  const { createModal, closeModal } = useUsersModalOperationsContext()
   const { lockUser, users } = use(UsersContext)
 
   const handleCancel = useCallback(() => {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTemplatesModalDataContext } from './modal'
 
-const useTemplatesContentComponent = (modalConfig) => {
+const useTemplatesContentComponent = modalConfig => {
   return useMemo(() => {
     if (!modalConfig) return null
 

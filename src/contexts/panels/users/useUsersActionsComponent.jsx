@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import Actions from '@/components/common/factory/Actions'
-import { useTemplatesModalDataContext } from './modal'
+import { useUsersModalDataContext } from './modal'
 
-const useTemplatesActionsComponent = modalConfig => {
+const useUsersActionsComponent = modalConfig => {
   return useMemo(() => {
     if (!modalConfig) return null
 
-    const TemplatesModalActions = () => {
-      const { modalData } = useTemplatesModalDataContext()
+    const UsersModalActions = () => {
+      const { modalData } = useUsersModalDataContext()
       const { actions } = modalConfig
 
       // Support both static actions array and dynamic actions function
@@ -27,8 +27,8 @@ const useTemplatesActionsComponent = modalConfig => {
       return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
     }
 
-    return TemplatesModalActions
+    return UsersModalActions
   }, [modalConfig])
 }
 
-export default useTemplatesActionsComponent
+export default useUsersActionsComponent

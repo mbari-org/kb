@@ -5,13 +5,25 @@ import UsersTableData from '@/components/kb/panels/users/table/data/UsersTableDa
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 import useAddUserButton from '@/components/kb/panels/users/form/useAddUserButton'
+import UsersProvider from '@/contexts/panels/users/UsersProvider'
+import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 
-const Users = () => {
+const UsersModalRenderer = () => {
+  const { modal: usersModal, processing: usersProcessing } = useUsersModalOperationsContext()
+  return (
+    !usersProcessing &&
+    usersModal &&
+    typeof usersModal === 'function' &&
+    usersModal()
+  )
+}
+
+const UsersContent = () => {
   const { createTablePanel } = usePanelFactory()
 
   const AddUserButton = useAddUserButton()
 
-  const usersPanel = createTablePanel({
+  return createTablePanel({
     header: {
       headerTitle: <PanelHeaderTitle title='Users' />,
     },
@@ -23,8 +35,15 @@ const Users = () => {
       content: <UsersTableData />,
     },
   })
+}
 
-  return usersPanel
+const Users = () => {
+  return (
+    <UsersProvider>
+      <UsersContent />
+      <UsersModalRenderer />
+    </UsersProvider>
+  )
 }
 
 export default Users
