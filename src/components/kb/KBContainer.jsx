@@ -4,7 +4,6 @@ import KnowledgeBase from '@/components/kb/KnowledgeBase'
 import AppModal from '@/components/modal/AppModal'
 
 import PanelDataProvider from '@/contexts/panels/PanelDataProvider'
-import PanelModalProvider from '@/contexts/modal/panel/PanelModalProvider'
 import HOLDModalProvider from '@/contexts/modal/panel/HOLDModalProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import AppModalProvider from '@/contexts/modal/app/AppModalProvider'
@@ -20,13 +19,11 @@ const KBContainer = () => {
           <SelectedProvider>
             <UsersProvider>
               <PanelDataProvider>
-                <PanelModalProvider>
-                  <HOLDModalProvider>
-                    <ConceptProvider>
-                      <KnowledgeBase />
-                    </ConceptProvider>
-                  </HOLDModalProvider>
-                </PanelModalProvider>
+                <HOLDModalProvider>
+                  <ConceptProvider>
+                    <KnowledgeBase />
+                  </ConceptProvider>
+                </HOLDModalProvider>
               </PanelDataProvider>
             </UsersProvider>
           </SelectedProvider>

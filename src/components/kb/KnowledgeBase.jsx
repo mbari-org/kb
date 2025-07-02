@@ -10,7 +10,6 @@ import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
 import AppModalContext from '@/contexts/modal/app/AppModalContext'
 import HOLDModalContext from '@/contexts/modal/panel/HOLDModalContext'
-import PanelModalContext from '@/contexts/modal/panel/PanelModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'
@@ -18,7 +17,6 @@ import { SELECTED } from '@/lib/constants'
 const KnowledgeBase = () => {
   const { processing: appProcessing } = use(AppModalContext)
   const { modal: holdModal, processing: holdProcessing } = use(HOLDModalContext)
-  const { modal: panelModal, processing: panelProcessing } = use(PanelModalContext)
   const { panels, updateSelected } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
@@ -34,8 +32,7 @@ const KnowledgeBase = () => {
         <PanelWrapper activePanel={panels.current()} />
       </Box>
       {!holdProcessing && holdModal && <HOLDModal />}
-      {!panelProcessing && panelModal && typeof panelModal === 'function' && panelModal()}
-      {(holdProcessing || panelProcessing || appProcessing) && <KbLoading />}
+      {(holdProcessing || appProcessing) && <KbLoading />}
     </Box>
   )
 }
