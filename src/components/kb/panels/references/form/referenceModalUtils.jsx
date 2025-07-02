@@ -1,7 +1,10 @@
-import { LABELS } from '@/lib/constants'
-import { diff, filterObject, pick } from '@/lib/utils'
-import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 import { Box, Stack, Typography } from '@mui/material'
+
+import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
+
+import { LABELS } from '@/lib/constants'
+
+import { diff, filterObject, pick } from '@/lib/utils'
 
 const { CANCEL, SAVE, DELETE } = LABELS.BUTTON
 
@@ -165,8 +168,10 @@ export const processAddReferenceData = reference => {
 }
 
 export const createHandlers = (updateModalData, closeModal, isEdit, isDoiUnique = () => true) => {
+  // Create the form change handler once, not on every form change
+  const formChangeHandler = createFormChangeHandler(updateModalData, isEdit, isDoiUnique)
+
   const handleFormChange = (updatedReference, original) => {
-    const formChangeHandler = createFormChangeHandler(updateModalData, isEdit, isDoiUnique)
     return formChangeHandler(updatedReference, original)
   }
 

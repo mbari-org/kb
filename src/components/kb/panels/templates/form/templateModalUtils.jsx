@@ -1,7 +1,10 @@
-import { LABELS } from '@/lib/constants'
-import { diff, filterObject, pick } from '@/lib/utils'
-import TemplateForm from '@/components/kb/panels/templates/form/TemplateForm'
 import { Box, Stack, Typography } from '@mui/material'
+
+import TemplateForm from '@/components/kb/panels/templates/form/TemplateForm'
+
+import { LABELS } from '@/lib/constants'
+
+import { diff, filterObject, pick } from '@/lib/utils'
 
 const { CANCEL, SAVE, DELETE } = LABELS.BUTTON
 
@@ -107,9 +110,7 @@ export const createInitialTemplate = () => ({
 })
 
 export const processEditTemplateData = (template, original) => {
-  const hasFieldChanges = TEMPLATE_FIELDS.some(
-    field => template[field] !== original[field]
-  )
+  const hasFieldChanges = TEMPLATE_FIELDS.some(field => template[field] !== original[field])
 
   if (!hasFieldChanges) {
     return null // No changes
@@ -123,15 +124,14 @@ export const processEditTemplateData = (template, original) => {
 }
 
 export const processAddTemplateData = template => {
-  return filterObject(
-    pick(template, TEMPLATE_FIELDS),
-    (key, value) => value && value.trim() !== ''
-  )
+  return filterObject(pick(template, TEMPLATE_FIELDS), (key, value) => value && value.trim() !== '')
 }
 
 export const createHandlers = (updateModalData, closeModal, isEdit) => {
+  // Create the form change handler once, not on every form change
+  const formChangeHandler = createFormChangeHandler(updateModalData, isEdit)
+
   const handleFormChange = (updatedTemplate, original) => {
-    const formChangeHandler = createFormChangeHandler(updateModalData, isEdit)
     return formChangeHandler(updatedTemplate, original)
   }
 
