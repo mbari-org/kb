@@ -48,8 +48,6 @@ export const PanelDataProvider = ({ children }) => {
 
       setIsLoading(true)
 
-      console.log('refresh panel data', type)
-
       try {
         switch (type) {
           case 'all': {
@@ -58,31 +56,39 @@ export const PanelDataProvider = ({ children }) => {
               loadTemplates(),
               loadPendingHistory(),
             ])
+            const explicitConceptsData = calcExplicitConcepts(templatesData)
 
             setReferences(referencesData)
             setTemplates(templatesData)
             setPendingHistory(pendingHistoryData)
-            setExplicitConcepts(calcExplicitConcepts(templatesData))
-            break
+            setExplicitConcepts(explicitConceptsData)
+
+            return {
+              references: referencesData,
+              templates: templatesData,
+              pendingHistory: pendingHistoryData,
+              explicitConcepts: explicitConceptsData,
+            }
           }
 
           case 'references': {
             const referencesData = await loadReferences()
             setReferences(referencesData)
-            break
+            return { references: referencesData }
           }
 
           case 'templates': {
             const templatesData = await loadTemplates()
+            const explicitConceptsData = calcExplicitConcepts(templatesData)
             setTemplates(templatesData)
-            setExplicitConcepts(calcExplicitConcepts(templatesData))
-            break
+            setExplicitConcepts(explicitConceptsData)
+            return { templates: templatesData, explicitConcepts: explicitConceptsData }
           }
 
-          case 'history': {
+          case 'pendingHistory': {
             const pendingHistoryData = await loadPendingHistory()
             setPendingHistory(pendingHistoryData)
-            break
+            return { pendingHistory: pendingHistoryData }
           }
         }
       } finally {
@@ -106,7 +112,6 @@ export const PanelDataProvider = ({ children }) => {
     },
     [setProcessing]
   )
-
 
   const value = useMemo(
     () => ({

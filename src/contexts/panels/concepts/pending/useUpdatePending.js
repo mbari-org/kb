@@ -43,10 +43,7 @@ const useUpdatePending = () => {
         }
       }
 
-      await refreshHistory('pending')
-      refreshConcept()
-      setConfirmPending(null)
-      setProcessing(null)
+      throw new Error('useUpdatePending Not implemented')
     } catch (error) {
       console.error('Error updating pending changes:', error)
       setProcessing(null)
