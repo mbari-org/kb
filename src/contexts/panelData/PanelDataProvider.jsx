@@ -107,6 +107,7 @@ export const PanelDataProvider = ({ children }) => {
     [setProcessing]
   )
 
+
   const value = useMemo(
     () => ({
       explicitConcepts,
@@ -119,14 +120,14 @@ export const PanelDataProvider = ({ children }) => {
       templates,
     }),
     [
-      references,
-      templates,
-      history,
       explicitConcepts,
-      isLoading,
-      refreshData,
+      history,
       isDoiUnique,
+      isLoading,
+      references,
+      refreshData,
       setExporting,
+      templates,
     ]
   )
 
