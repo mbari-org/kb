@@ -2,6 +2,7 @@ import { use, useCallback, useEffect, useState, useRef } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import HistoryContext from './HistoryContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
@@ -16,6 +17,7 @@ const { HISTORY } = SELECTED.SETTINGS
 const HistoryProvider = ({ children }) => {
   const { getSelected, getSettings } = use(SelectedContext)
   const { apiFns } = use(ConfigContext)
+  const { pendingHistory } = use(PanelDataContext)
 
   const selectedConcept = getSelected(CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
@@ -39,6 +41,10 @@ const HistoryProvider = ({ children }) => {
         setCount(data.length)
         setConceptData(data)
         setTypeData(data.slice(0, DEFAULT_LIMIT))
+      } else if (selectedType === 'pending') {
+        // Use pre-loaded pendingHistory from PanelDataContext
+        setCount(pendingHistory.length)
+        setConceptData([])
       } else {
         const result = await apiFns.apiResult(getHistoryCount, selectedType)
         setCount(result)
@@ -50,7 +56,7 @@ const HistoryProvider = ({ children }) => {
       isTypeChanging.current = false
     }
     loadCount()
-  }, [apiFns, selectedType, selectedConcept])
+  }, [apiFns, selectedType, selectedConcept, pendingHistory])
 
   useEffect(() => {
     const loadData = async () => {
@@ -60,6 +66,15 @@ const HistoryProvider = ({ children }) => {
         const start = typeState.offset
         const end = start + typeState.limit
         setTypeData(conceptData.slice(start, end))
+      } else if (selectedType === 'pending') {
+        // Use pre-loaded pendingHistory from PanelDataContext
+        const sortedData = sortOrder === 'asc' 
+          ? [...pendingHistory].sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
+          : [...pendingHistory].sort((a, b) => new Date(b.creationTimestamp) - new Date(a.creationTimestamp))
+        
+        const start = typeState.offset
+        const end = start + typeState.limit
+        setTypeData(sortedData.slice(start, end))
       } else {
         let actualOffset = typeState.offset
         if (sortOrder === 'asc') {
@@ -76,7 +91,7 @@ const HistoryProvider = ({ children }) => {
       }
     }
     loadData()
-  }, [apiFns, conceptData, count, selectedConcept, selectedType, sortOrder, typeState])
+  }, [apiFns, conceptData, count, selectedConcept, selectedType, sortOrder, typeState, pendingHistory])
 
   const nextPage = useCallback(() => {
     setTypeState(prev => ({

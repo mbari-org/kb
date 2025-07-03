@@ -18,7 +18,7 @@ const HistoryTableHeaderRight = () => {
     <Stack direction='row' spacing={3} alignItems='center' sx={{ mr: 0.5 }}>
       <Typography>Created Order:</Typography>
       <RadioGroup row value={sortOrder || 'desc'} onChange={e => handleSortChange(e.target.value)}>
-        <KBTooltip title='Oldest First' enterDelay={50}>
+        <KBTooltip title='Newest First' enterDelay={50}>
           <FormControlLabel
             control={<Radio size='small' />}
             label='↓'
@@ -35,7 +35,7 @@ const HistoryTableHeaderRight = () => {
             value='desc'
           />
         </KBTooltip>
-        <KBTooltip title='Newest First' enterDelay={50}>
+        <KBTooltip title='Oldest First' enterDelay={50}>
           <FormControlLabel
             control={<Radio size='small' />}
             label='↑'
