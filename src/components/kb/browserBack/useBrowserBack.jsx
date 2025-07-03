@@ -1,6 +1,6 @@
 import { use, useEffect } from 'react'
 
-import { createModal } from '@/components/modal/panelModalFactory'
+import createAppModal from '@/components/modal/app/createAppModal'
 
 import LogoutActions from '@/components/kb/browserBack/LogoutActions'
 import LogoutContent from '@/components/kb/browserBack/LogoutContent'
@@ -16,7 +16,7 @@ const useBrowserBack = () => {
       event.preventDefault()
       window.history.pushState(null, '', window.location.href)
 
-      const modal = createModal({
+      const modal = createAppModal({
         Actions: LogoutActions,
         Content: LogoutContent,
         Title: LogoutTitle,

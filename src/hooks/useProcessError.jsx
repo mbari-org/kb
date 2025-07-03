@@ -1,6 +1,6 @@
 import { use, useEffect } from 'react'
 
-import { createModal } from '@/components/modal/panelModalFactory'
+import createAppModal from '@/components/modal/app/createAppModal'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 
@@ -13,7 +13,7 @@ const useProcessError = error => {
 
   useEffect(() => {
     if (error) {
-      const modal = createModal({
+      const modal = createAppModal({
         Actions: ErrorActions,
         Content: ErrorContent,
         Title: ErrorTitle,
