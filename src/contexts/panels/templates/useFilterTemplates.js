@@ -1,7 +1,7 @@
 import { use, useCallback, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panels/PanelDataContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
 import {
   getAvailableTemplates,

@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import PanelDataContext from '@/contexts/panels/PanelDataContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import { ReferencesModalProvider } from './modal'
 
@@ -22,9 +22,7 @@ export const ReferencesProvider = ({ children }) => {
 
   return (
     <ReferencesContext value={value}>
-      <ReferencesModalProvider>
-        {children}
-      </ReferencesModalProvider>
+      <ReferencesModalProvider>{children}</ReferencesModalProvider>
     </ReferencesContext>
   )
 }

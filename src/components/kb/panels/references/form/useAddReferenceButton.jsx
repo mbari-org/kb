@@ -4,7 +4,7 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 
 import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
-import PanelDataContext from '@/contexts/panels/PanelDataContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -19,7 +19,8 @@ import {
 const { SAVING } = PROCESSING
 
 const useAddReferenceButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = useReferencesModalOperationsContext()
+  const { closeModal, createModal, updateModalData, setProcessing } =
+    useReferencesModalOperationsContext()
   const { addReference } = use(ReferencesContext)
   const { isDoiUnique } = use(PanelDataContext)
 

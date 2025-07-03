@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import PanelDataContext from '@/contexts/panels/PanelDataContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
 const useKBData = () => {
   return use(PanelDataContext)

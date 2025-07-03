@@ -12,9 +12,9 @@ import { PENDING } from '@/lib/constants'
 const { APPROVAL: _APPROVAL, GROUP } = PENDING
 
 const useUpdatePending = () => {
+  const { confirmPending, setConfirmPending, refreshConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
-  const { confirmPending, setConfirmPending, refreshConcept } = use(ConceptContext)
   const { refreshHistory } = use(TaxonomyContext)
 
   return useCallback(async () => {

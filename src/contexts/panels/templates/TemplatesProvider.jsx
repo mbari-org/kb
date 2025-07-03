@@ -3,7 +3,7 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import TemplatesContext from './TemplatesContext'
 import { TemplatesModalProvider } from './modal'
 
-import PanelDataContext from '@/contexts/panels/PanelDataContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -124,9 +124,7 @@ const TemplatesProvider = ({ children }) => {
 
   return (
     <TemplatesContext value={value}>
-      <TemplatesModalProvider>
-        {children}
-      </TemplatesModalProvider>
+      <TemplatesModalProvider>{children}</TemplatesModalProvider>
     </TemplatesContext>
   )
 }

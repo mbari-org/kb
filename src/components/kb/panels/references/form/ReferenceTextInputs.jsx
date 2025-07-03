@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { Box, TextField } from '@mui/material'
 
-import PanelDataContext from '@/contexts/panels/PanelDataContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import useDebouncedField from '@/hooks/useDebouncedField'
 
 const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
