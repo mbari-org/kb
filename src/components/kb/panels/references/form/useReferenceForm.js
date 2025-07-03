@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const useReferenceForm = ({ isEdit = false, onChange, reference, original }) => {
+const useReferenceForm = ({ onChange, reference, original }) => {
   const [selectedConcept, setSelectedConcept] = useState(null)
   const [hasSearchInput, setHasSearchInput] = useState(false)
 
@@ -34,7 +34,7 @@ const useReferenceForm = ({ isEdit = false, onChange, reference, original }) => 
   const handleConceptSearchInput = (event, value) => {
     // ConceptSelect onInputChange passes (event, value)
     // We need to check if there's actual input text
-    const inputValue = typeof value === 'string' ? value : (event?.target?.value || '')
+    const inputValue = typeof value === 'string' ? value : event?.target?.value || ''
     setHasSearchInput(inputValue.trim() !== '')
   }
 
@@ -50,7 +50,7 @@ const useReferenceForm = ({ isEdit = false, onChange, reference, original }) => 
 
   const handleConceptAdd = conceptToAdd => {
     const currentConcepts = reference.concepts || []
-    
+
     if (!currentConcepts.includes(conceptToAdd)) {
       const updatedConcepts = [...currentConcepts, conceptToAdd]
       const updatedReference = {

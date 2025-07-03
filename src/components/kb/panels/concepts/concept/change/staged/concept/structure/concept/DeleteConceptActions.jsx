@@ -1,5 +1,6 @@
 import { use } from 'react'
-import { createActions } from '@/components/modal/conceptModalFactory'
+
+import { createConceptActions } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -20,24 +21,28 @@ const DeleteConceptActions = () => {
   const { updateSelected } = use(SelectedContext)
   const { deleteConcept } = use(TaxonomyContext)
 
-  const colors = ['cancel', 'main']
-  const labels = [DELETE, CANCEL]
-  const disabled = [!modalData?.isValid, false]
-
-  const onAction = label => {
+  const handleCancel = () => {
     closeModal()
-
-    if (label === DELETE) {
-      saveDelete(concept.name, apiFns.apiResult)
-        .then(() => deleteConcept(concept.name))
-        .then(selectConceptName => {
-          updateSelected({ [SELECTED.CONCEPT]: selectConceptName })
-          setEditing(false)
-        })
-    }
   }
 
-  return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
+  const handleDelete = () => {
+    closeModal()
+    saveDelete(concept.name, apiFns.apiResult)
+      .then(() => deleteConcept(concept.name))
+      .then(selectConceptName => {
+        updateSelected({ [SELECTED.CONCEPT]: selectConceptName })
+        setEditing(false)
+      })
+  }
+
+  // Custom action configuration for delete confirmation
+  return createConceptActions({
+    onDiscard: handleCancel,  // Cancel button
+    onStage: handleDelete,    // Delete button 
+    stageDisabled: !modalData?.isValid,
+    confirmReset: false,
+    name: 'DeleteConceptActions'
+  })
 }
 
 export default DeleteConceptActions

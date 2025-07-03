@@ -15,6 +15,8 @@ import { LABELS, PENDING } from '@/lib/constants'
 const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABELS.BUTTON
 const { APPROVAL, GROUP } = PENDING
 
+// Note: PendingActions uses createActions directly due to its complex multi-state behavior
+// that doesn't fit the standard concept action patterns
 const PendingActions = () => {
   const { user } = use(UserContext)
   const { confirmPending, setConfirmPending } = use(ConceptContext)

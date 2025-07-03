@@ -36,7 +36,8 @@ const ConceptModalProvider = ({ children }) => {
 
   const handleSetModal = useCallback((modal, onCloseCallback) => {
     setModal(modal)
-    setOnClose(typeof onCloseCallback === 'function' ? onCloseCallback : null)
+    // Use function wrapper to properly store function in useState
+    setOnClose(() => onCloseCallback)
   }, [])
 
   const value = useMemo(

@@ -1,4 +1,5 @@
 import { use } from 'react'
+
 import { createActions } from '@/components/modal/conceptModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -14,6 +15,8 @@ const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BU
 const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
+// Note: StagedActions uses createActions directly due to its unique dual-mode behavior
+// that doesn't fit the standard concept action patterns
 const StagedActions = ({ intent }) => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)

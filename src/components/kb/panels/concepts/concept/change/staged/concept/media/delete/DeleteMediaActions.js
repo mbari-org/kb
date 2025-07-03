@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import { createActions } from '@/components/modal/conceptModalFactory'
+import { createStageDiscardHandlers, createConceptActions } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -18,23 +18,25 @@ const DeleteMediaActions = () => {
   } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
 
-  const colors = ['cancel', 'main']
-  const labels = [DISCARD, STAGE]
-
-  const onAction = label => {
-    if (label === STAGE) {
-      modifyConcept({
-        type: CONCEPT_STATE.MEDIA.DELETE,
-        update: {
-          mediaIndex,
-          mediaItem: { ...media[mediaIndex], action: CONCEPT_STATE.MEDIA.DELETE },
-        },
-      })
-    }
-    closeModal()
+  const stageAction = {
+    type: CONCEPT_STATE.MEDIA.DELETE,
+    update: {
+      mediaIndex,
+      mediaItem: { ...media[mediaIndex], action: CONCEPT_STATE.MEDIA.DELETE },
+    },
   }
 
-  return createActions({ colors, labels, onAction }, 'DeleteMediaActions')
+  const { handleDiscard, handleStage } = createStageDiscardHandlers({
+    modifyConcept,
+    closeModal,
+    stageAction
+  })
+
+  return createConceptActions({
+    onDiscard: handleDiscard,
+    onStage: handleStage,
+    name: 'DeleteMediaActions'
+  })
 }
 
 export default DeleteMediaActions

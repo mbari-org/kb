@@ -10,18 +10,16 @@ const { CANCEL, SAVE, DELETE } = LABELS.BUTTON
 
 const TEMPLATE_FIELDS = ['concept', 'linkName', 'toConcept', 'linkValue']
 
-export const createTemplateValidator =
-  (isEdit = false) =>
-  templateData => {
-    const requiredFields = TEMPLATE_FIELDS
+export const createTemplateValidator = () => templateData => {
+  const requiredFields = TEMPLATE_FIELDS
 
-    const allFieldsFilled = requiredFields.every(field => {
-      const value = templateData[field] || ''
-      return value.trim() !== ''
-    })
+  const allFieldsFilled = requiredFields.every(field => {
+    const value = templateData[field] || ''
+    return value.trim() !== ''
+  })
 
-    return allFieldsFilled
-  }
+  return allFieldsFilled
+}
 
 const createChangeDetector =
   (isEdit = false) =>

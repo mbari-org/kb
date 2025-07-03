@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import { createActions } from '@/components/modal/conceptModalFactory'
+import { createConceptActions, createConfirmationHandlers } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -13,43 +13,35 @@ const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = CONCEPT_STATE.RESET
 const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
 const ChangeParentActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
   // Handle case where modalData might be undefined
   const { modified = false, parent = '' } = modalData || {}
 
-  const colors = ['cancel', 'main']
-  const disabled = [false, !modified]
-  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
+  const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
+    modifyConcept,
+    closeModal,
+    concept
+  })
 
-  const onAction = label => {
-    switch (label) {
-      case CONFIRM_DISCARD:
-        modifyConcept({ type: CONFIRMED.YES })
-        closeModal(true)
-        break
-
-      case CONTINUE:
-        modifyConcept({ type: CONFIRMED.NO })
-        break
-
-      case DISCARD:
-        closeModal()
-        break
-
-      case STAGE:
-        modifyConcept({
-          type: CHANGE_PARENT,
-          update: { parent },
-        })
-        closeModal(true)
-
-        break
-    }
+  const handleStage = () => {
+    modifyConcept({
+      type: CHANGE_PARENT,
+      update: { parent },
+    })
+    closeModal(true)
   }
 
-  return createActions({ colors, disabled, labels, onAction }, 'ConceptNameUpdateActions')
+  return createConceptActions({
+    onDiscard: handleDiscard,
+    onStage: handleStage,
+    stageDisabled: !modified,
+    confirmReset,
+    onConfirmDiscard: handleConfirmDiscard,
+    onContinue: handleContinue,
+    name: 'ChangeParentActions'
+  })
 }
 
 export default ChangeParentActions
