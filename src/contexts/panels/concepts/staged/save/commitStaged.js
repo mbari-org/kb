@@ -18,6 +18,10 @@ const commitStaged = async (apiPayload, concept, initialState, stagedState) => {
 
   updateInfo.results = await Promise.all(submitters)
 
+  if (updateInfo.results.some(result => result.error)) {
+    throw new Error('Failed to save concept changes')
+  }
+
   return updateInfo
 }
 
