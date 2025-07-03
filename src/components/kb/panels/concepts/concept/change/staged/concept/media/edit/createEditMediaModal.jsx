@@ -4,7 +4,7 @@ import EditMediaActions from '@/components/kb/panels/concepts/concept/change/sta
 import EditMediaContent from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/EditMediaContent'
 import EditMediaTitle from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/EditMediaTitle'
 
-import { createModal } from '@/components/modal/panelModalFactory'
+import { createModal } from '@/components/modal/conceptModalFactory'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

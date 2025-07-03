@@ -4,7 +4,7 @@ import DeleteConceptActions from './DeleteConceptActions'
 import DeleteConceptContent from './DeleteConceptContent'
 import DeleteConceptTitle from './DeleteConceptTitle'
 
-import { createModal } from '@/components/modal/panelModalFactory'
+import { createModal } from '@/components/modal/conceptModalFactory'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 

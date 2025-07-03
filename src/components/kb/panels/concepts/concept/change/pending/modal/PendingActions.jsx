@@ -1,6 +1,6 @@
 import { use, useMemo, useCallback } from 'react'
 
-import { createActions } from '@/components/modal/panelModalFactory'
+import { createActions } from '@/components/modal/conceptModalFactory'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'

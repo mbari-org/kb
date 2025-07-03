@@ -4,7 +4,7 @@ import StagedActions from '@/components/kb/panels/concepts/concept/change/staged
 import StagedStateContent from '@/components/kb/panels/concepts/concept/change/staged/modal/StagedContent'
 import StagedStateTitle from '@/components/kb/panels/concepts/concept/change/staged/modal/StagedTitle'
 
-import { createModal } from '@/components/modal/panelModalFactory'
+import { createModal } from '@/components/modal/conceptModalFactory'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 

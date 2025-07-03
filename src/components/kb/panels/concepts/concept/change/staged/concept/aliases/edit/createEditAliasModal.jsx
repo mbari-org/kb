@@ -4,7 +4,7 @@ import EditAliasActions from '@/components/kb/panels/concepts/concept/change/sta
 import EditAliasContent from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/EditAliasContent'
 import EditAliasTitle from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/EditAliasTitle'
 
-import { createModal } from '@/components/modal/panelModalFactory'
+import { createModal } from '@/components/modal/conceptModalFactory'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
