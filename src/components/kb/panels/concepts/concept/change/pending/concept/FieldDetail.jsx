@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 
-import usePendingApproval from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { useFieldPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -16,9 +16,7 @@ const { OTHER } = PENDING.APPROVAL
 // CxNote: pendingFieldApproval allows custom approval for fields beyond the field id
 
 const FieldDetail = ({ pendingField, pendingFieldApproval = () => false }) => {
-  const approval = usePendingApproval(
-    pending => pending === pendingField.id || pendingFieldApproval(pending)
-  )
+  const approval = useFieldPendingApproval(pendingField.id)
 
   const disabled = approval === OTHER
 

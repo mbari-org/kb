@@ -1,54 +1,37 @@
 import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { updatePendingHistoryItem } from '@/lib/api/history'
 
-import { PENDING } from '@/lib/constants'
-
-const { APPROVAL: _APPROVAL, GROUP } = PENDING
+import { capitalize } from '@/lib/utils'
 
 const useUpdatePending = () => {
-  const { confirmPending, setConfirmPending, refreshConcept } = use(ConceptContext)
+  const { refreshConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
-  const { refreshHistory } = use(TaxonomyContext)
+  const { refreshData: refreshPanelData } = use(PanelDataContext)
 
-  return useCallback(async () => {
-    if (!confirmPending) {
-      return
-    }
+  return useCallback(
+    async confirmPending => {
+      const { approval, pendingIds } = confirmPending
+      setProcessing(`${capitalize(approval)} pending changes...`)
+      await Promise.all(
+        pendingIds.map(pendingId =>
+          apiFns.apiPayload(updatePendingHistoryItem, [approval, pendingId])
+        )
+      )
 
-    try {
-      setProcessing('Updating pending changes...')
+      const { pendingHistory } = await refreshPanelData('pendingHistory')
+      refreshConcept(null, pendingHistory)
 
-      switch (confirmPending.change) {
-        case GROUP.ALL: {
-          // Handle all pending changes for the concept
-          // This would need to get all pending items and update them
-          // For now, just close the modal
-          break
-        }
-        default: {
-          // Handle individual pending item
-          await updatePendingHistoryItem(
-            apiFns.apiPayload,
-            confirmPending.approval,
-            confirmPending.pending
-          )
-          break
-        }
-      }
-
-      throw new Error('useUpdatePending Not implemented')
-    } catch (error) {
-      console.error('Error updating pending changes:', error)
-      setProcessing(null)
-    }
-  }, [apiFns, confirmPending, refreshConcept, refreshHistory, setConfirmPending, setProcessing])
+      setProcessing(false)
+    },
+    [apiFns, refreshConcept, refreshPanelData, setProcessing]
+  )
 }
 
 export default useUpdatePending

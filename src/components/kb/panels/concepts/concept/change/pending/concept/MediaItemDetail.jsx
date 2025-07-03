@@ -7,7 +7,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { fieldSx } from '@/components/common/format'
 
-import usePendingApproval from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { useItemPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -21,9 +21,7 @@ const { MEDIA } = PENDING.GROUP
 const MediaItemDetail = ({ pendingMediaItem }) => {
   const pendingAction = capitalize(pendingMediaItem.action.toLowerCase())
 
-  const approval = usePendingApproval(
-    pending => pending === MEDIA || pending === pendingMediaItem.id
-  )
+  const approval = useItemPendingApproval(pendingMediaItem.id)
 
   const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER

@@ -10,7 +10,7 @@ const getHistoryCount = async (config, type) => {
   return { error, result: payload?.count }
 }
 
-const updatePendingHistoryItem = async (config, approval, pendingId) =>
+const updatePendingHistoryItem = async (config, [approval, pendingId]) =>
   oniPut(config, ['history', approval, pendingId])
 
 export { getConceptHistory, getHistory, getHistoryCount, updatePendingHistoryItem }

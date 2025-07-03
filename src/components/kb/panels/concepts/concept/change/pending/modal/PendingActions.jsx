@@ -2,11 +2,15 @@ import { use, useMemo, useCallback } from 'react'
 
 import { createActions } from '@/components/modal/conceptModalFactory'
 
-import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import UserContext from '@/contexts/user/UserContext'
 
+import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 import useUpdatePending from '@/contexts/panels/concepts/pending/useUpdatePending'
+
+import { getPendingIds } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -15,14 +19,14 @@ import { LABELS, PENDING } from '@/lib/constants'
 const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABELS.BUTTON
 const { APPROVAL, GROUP } = PENDING
 
-// Note: PendingActions uses createActions directly due to its complex multi-state behavior
-// that doesn't fit the standard concept action patterns
 const PendingActions = () => {
-  const { user } = use(UserContext)
-  const { confirmPending, setConfirmPending } = use(ConceptContext)
+  const { concept, confirmPending, setConfirmPending } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
+  use(PanelDataContext)
+  const { user } = use(UserContext)
 
   const updatePending = useUpdatePending()
+  const conceptPending = useConceptPending(concept.name)
 
   const [disabled, labels] = useMemo(() => {
     if (!isAdmin(user)) {
@@ -71,13 +75,21 @@ const PendingActions = () => {
   const onAction = useCallback(
     label => {
       switch (label) {
-        case APPROVE_ALL:
-          setConfirmPending({ approval: APPROVAL.ACCEPT, change: GROUP.ALL })
+        case APPROVE_ALL: {
+          const pendingIds = getPendingIds(conceptPending, GROUP.ALL)
+          setConfirmPending({ approval: APPROVAL.ACCEPT, change: GROUP.ALL, pendingIds })
           break
+        }
 
-        case CONFIRM:
-          updatePending()
+        case CONFIRM: {
+          updatePending(confirmPending).then(() => {
+            if (confirmPending.change === PENDING.GROUP.ALL) {
+              setConfirmPending(null)
+              closeModal()
+            }
+          })
           break
+        }
 
         case DEFER:
           if (!confirmPending) {
@@ -86,9 +98,11 @@ const PendingActions = () => {
           setConfirmPending(null)
           break
 
-        case REJECT_ALL:
-          setConfirmPending({ approval: APPROVAL.REJECT, change: GROUP.ALL })
+        case REJECT_ALL: {
+          const pendingIds = getPendingIds(conceptPending, GROUP.ALL)
+          setConfirmPending({ approval: APPROVAL.REJECT, change: GROUP.ALL, pendingIds })
           break
+        }
 
         default:
           setConfirmPending(null)
@@ -96,7 +110,7 @@ const PendingActions = () => {
           break
       }
     },
-    [confirmPending, closeModal, setConfirmPending, updatePending]
+    [setConfirmPending, confirmPending, closeModal, conceptPending, updatePending]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')

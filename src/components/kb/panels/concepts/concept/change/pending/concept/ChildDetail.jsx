@@ -7,7 +7,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { fieldSx } from '@/components/common/format'
 
-import usePendingApproval from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { useItemPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -20,9 +20,7 @@ const { CHILDREN } = PENDING.GROUP
 const ChildDetail = ({ pendingChild, leftMargin }) => {
   const pendingAction = capitalize(pendingChild.action.toLowerCase())
 
-  const approval = usePendingApproval(
-    pending => pending === CHILDREN || pending === pendingChild.id
-  )
+  const approval = useItemPendingApproval(pendingChild.id)
 
   const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER

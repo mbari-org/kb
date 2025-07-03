@@ -10,6 +10,9 @@ import HandIcon from '@/components/common/HandIcon'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+
+import { getPendingIds } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -19,7 +22,12 @@ const { ACCEPT, OTHER, REJECT } = PENDING.APPROVAL
 
 const PendingButtons = ({ approval, pending }) => {
   const { user } = use(UserContext)
-  const { setConfirmPending } = use(ConceptContext)
+  const { setConfirmPending, concept } = use(ConceptContext)
+  const { pendingHistory } = use(PanelDataContext)
+
+  const conceptPending = useMemo(() => {
+    return pendingHistory.filter(history => history.concept === concept.name)
+  }, [pendingHistory, concept.name])
 
   const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
     if (!isAdmin(user)) {
@@ -40,9 +48,10 @@ const PendingButtons = ({ approval, pending }) => {
 
   const handleClick = useCallback(
     clicked => {
-      setConfirmPending({ approval: clicked, pending })
+      const pendingIds = getPendingIds(conceptPending, pending)
+      setConfirmPending({ approval: clicked, pending, pendingIds })
     },
-    [pending, setConfirmPending]
+    [pending, setConfirmPending, conceptPending]
   )
 
   const [acceptApproved, rejectApproved] = !approval

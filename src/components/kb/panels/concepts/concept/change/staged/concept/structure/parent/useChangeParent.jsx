@@ -81,7 +81,7 @@ const useChangeParent = closeChoices => {
       console.error('Failed to load descendants:', error)
     } finally {
       alreadyLoadingDescendants.current = false
-      setProcessing(null)
+      setProcessing(false)
     }
   }, [
     closeChoices,

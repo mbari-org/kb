@@ -10,13 +10,13 @@ const { ACCEPT, REJECT } = PENDING.APPROVAL
 
 const PendingText = ({ approval }) => {
   const [color, line1, line2] = useMemo(() => {
-    if (approval === ACCEPT) return ['clean', 'Approving', 'approve']
-    if (approval === REJECT) return ['cancel', 'Rejecting', 'reject']
+    if (approval === ACCEPT) return ['clean', 'approval', 'approve']
+    if (approval === REJECT) return ['cancel', 'rejection', 'reject']
   }, [approval])
 
   return (
     <Box>
-      <ActionsText color={color} text={`${line1} pending edits is final.`} />
+      <ActionsText color={color} text={`Pending edit ${line1} is final.`} />
       <ActionsText
         color={color}
         text={`Please confirm you want to ${line2} the indicated pending edits.`}

@@ -6,7 +6,7 @@ import PendingButtons from '@/components/kb/panels/concepts/concept/change/pendi
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import usePendingApproval from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { useAliasesPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { fieldSx } from '@/components/common/format'
 
@@ -22,7 +22,7 @@ const AliasesDetail = ({ pendingField }) => {
     alias => alias.newValue !== concept.name
   )
 
-  const approval = usePendingApproval(pending => pending === ALIASES)
+  const approval = useAliasesPendingApproval()
 
   const aliasesSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
