@@ -10,7 +10,7 @@ import { pendingChild } from '@/lib/kb/model/history'
  * Migrated from taxonomyItem.js to use PanelDataContext for history
  */
 const useConceptItem = () => {
-  const { history } = use(PanelDataContext)
+  const { pendingHistory } = use(PanelDataContext)
   const { getConcept } = use(TaxonomyContext)
 
   const createConceptItem = useCallback(
@@ -18,8 +18,8 @@ const useConceptItem = () => {
       const concept = getConcept(itemId)
       if (!concept) return null
 
-      const conceptPending = history.pending.filter(h => h.concept === concept.name)
-      const parentPending = history.pending.filter(h => h.concept === concept.parent)
+      const conceptPending = pendingHistory.filter(h => h.concept === concept.name)
+      const parentPending = pendingHistory.filter(h => h.concept === concept.parent)
       const hasPending = 0 < conceptPending.length || !!pendingChild(parentPending, concept.name)
 
       return {
@@ -32,7 +32,7 @@ const useConceptItem = () => {
         parent: concept.parent,
       }
     },
-    [getConcept, history.pending]
+    [getConcept, pendingHistory]
   )
 
   return createConceptItem

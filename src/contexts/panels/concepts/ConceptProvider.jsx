@@ -9,6 +9,7 @@ import useConceptLoader from './useConceptLoader'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
@@ -23,9 +24,9 @@ const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
   const { modalData, setModalData } = use(ConceptModalContext)
+  const { pendingHistory } = use(PanelDataContext)
   const { getSelected, panels } = use(SelectedContext)
-  const { getConcept, getPendingHistory, isConceptLoaded, loadConcept, taxonomy } =
-    use(TaxonomyContext)
+  const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { setHasUnsavedChanges } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
@@ -46,13 +47,15 @@ const ConceptProvider = ({ children }) => {
     refreshedConcept => {
       const conceptToRefresh = refreshedConcept || concept
 
-      const conceptPending = getPendingHistory(conceptToRefresh.name)
+      const conceptPending = pendingHistory.filter(
+        history => history.concept === conceptToRefresh.name
+      )
 
       const refreshedInitialState = initialConceptState(conceptToRefresh, conceptPending)
       setInitialState(refreshedInitialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: refreshedInitialState })
     },
-    [concept, getPendingHistory]
+    [concept, pendingHistory]
   )
 
   const handleSetConcept = useCallback(

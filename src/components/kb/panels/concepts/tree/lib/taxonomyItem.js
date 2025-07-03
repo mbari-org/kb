@@ -1,21 +1,4 @@
-import { pendingChild } from '@/lib/kb/model/history'
-import { getConcept, getPendingHistory } from '@/lib/kb/model/taxonomy'
-// conceptItem is for display needs. It is passed to the ConceptTreeItem component and contains
-//  necessary fields for custom tree item display.
-const conceptItem = (taxonomy, itemId) => {
-  const concept = getConcept(taxonomy, itemId)
-  const conceptPending = getPendingHistory(taxonomy, concept.name)
-  const parentPending = getPendingHistory(taxonomy, concept.parent)
-  const hasPending = 0 < conceptPending.length || !!pendingChild(parentPending, concept.name)
-
-  return {
-    id: treeItemId(concept),
-    label: itemLabel(concept),
-    hasPending,
-    mediaCount: concept.media?.length || 0,
-    parent: concept.parent,
-  }
-}
+import { getConcept } from '@/lib/kb/model/taxonomy'
 
 const treeItemId = concept => concept.name
 
@@ -46,4 +29,4 @@ const treeItem = concept => {
   }
 }
 
-export { conceptItem, itemPath, treeItem }
+export { itemPath, treeItem }

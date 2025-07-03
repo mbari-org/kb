@@ -13,14 +13,12 @@ import {
   getConcept as getTaxonomyConcept,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
-  getPendingHistory as getTaxonomyPendingHistory,
   isConceptLoaded as isTaxonomyConceptLoaded,
   isDescendant as isDescendantConcept,
   isRoot as isTaxonomyRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
-  refreshHistory as refreshTaxonomyHistory,
   refreshTaxonomyConcept,
   cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/model/taxonomy'
@@ -118,13 +116,6 @@ const TaxonomyProvider = ({ children }) => {
     return getTaxonomyNames(taxonomy)
   }, [taxonomy])
 
-  const getPendingHistory = useCallback(
-    conceptName => {
-      if (!taxonomy) return []
-      return getTaxonomyPendingHistory(taxonomy, conceptName)
-    },
-    [taxonomy]
-  )
 
   const getRootName = useMemo(() => taxonomy?.rootName, [taxonomy?.rootName])
 
@@ -229,23 +220,6 @@ const TaxonomyProvider = ({ children }) => {
     [apiFns, taxonomy, updateTaxonomy, showBoundary]
   )
 
-  const refreshHistory = useCallback(
-    async historyType => {
-      if (!apiFns || !taxonomy) return null
-      try {
-        const { taxonomy: updatedTaxonomy } = await refreshTaxonomyHistory(
-          taxonomy,
-          historyType,
-          apiFns
-        )
-        updateTaxonomy(updatedTaxonomy)
-        return updatedTaxonomy
-      } catch (error) {
-        showBoundary(error)
-      }
-    },
-    [apiFns, taxonomy, updateTaxonomy, showBoundary]
-  )
 
   useEffect(() => {
     if (!apiFns || taxonomy) return
@@ -272,7 +246,6 @@ const TaxonomyProvider = ({ children }) => {
       getConceptPrimaryName,
       getAncestors,
       getNames,
-      getPendingHistory,
       getRootName,
       isConceptLoaded,
       isDescendant,
@@ -280,7 +253,6 @@ const TaxonomyProvider = ({ children }) => {
       loadConcept,
       loadConceptDescendants,
       refreshConcept,
-      refreshHistory,
       taxonomy,
     }),
     [
@@ -290,7 +262,6 @@ const TaxonomyProvider = ({ children }) => {
       getConcept,
       getConceptPrimaryName,
       getNames,
-      getPendingHistory,
       getRootName,
       isConceptLoaded,
       isDescendant,
@@ -298,7 +269,6 @@ const TaxonomyProvider = ({ children }) => {
       loadConcept,
       loadConceptDescendants,
       refreshConcept,
-      refreshHistory,
       taxonomy,
     ]
   )

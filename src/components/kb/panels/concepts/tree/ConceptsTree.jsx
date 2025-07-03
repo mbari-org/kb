@@ -15,7 +15,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { conceptItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
+import useConceptItem from '@/components/kb/panels/concepts/tree/lib/useConceptItem'
 import { buildTree } from '@/lib/kb/model/taxonomy'
 import { SELECTED } from '@/lib/constants'
 
@@ -37,6 +37,8 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     return [root]
   }, [taxonomy])
 
+  const createConceptItem = useConceptItem()
+
   // The slots 'item' field designates the rendering component, but only the itemId is provided,
   //  not the item itself. The slotsProps 'item' field, passed to ConceptTreeItem in props,
   //  provides display data.
@@ -45,7 +47,7 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const selectedConceptName = concept?.name
   const slotProps = useMemo(() => ({
     item: ({ itemId }) => {
-      const item = conceptItem(taxonomy, itemId)
+      const item = createConceptItem(taxonomy, itemId)
       return { 
         item: {
           ...item,
@@ -53,7 +55,7 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
         }
       }
     },
-  }), [taxonomy, selectedConceptName])
+  }), [taxonomy, selectedConceptName, createConceptItem])
 
   const handleConceptSelect = useCallback(
     conceptName => {

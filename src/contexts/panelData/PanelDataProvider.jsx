@@ -6,7 +6,7 @@ import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
 import useLoadReferences from '@/contexts/panelData/useLoadReferences'
 import useLoadTemplates from '@/contexts/panelData/useLoadTemplates'
-import useLoadHistory from '@/contexts/panelData/useLoadHistory'
+import useLoadPendingHistory from '@/contexts/panelData/useLoadPendingHistory'
 
 export const PanelDataProvider = ({ children }) => {
   const { setProcessing } = use(AppModalContext)
@@ -15,13 +15,13 @@ export const PanelDataProvider = ({ children }) => {
   const [explicitConcepts, setExplicitConcepts] = useState([])
   const [references, setReferences] = useState([])
   const [templates, setTemplates] = useState([])
-  const [history, setHistory] = useState({ approved: [], pending: [] })
+  const [pendingHistory, setPendingHistory] = useState([])
 
   const [isLoading, setIsLoading] = useState(true)
 
   const loadReferences = useLoadReferences(apiFns)
   const loadTemplates = useLoadTemplates(apiFns)
-  const loadHistory = useLoadHistory(apiFns)
+  const loadPendingHistory = useLoadPendingHistory(apiFns)
 
   const calcExplicitConcepts = useCallback(templatesData => {
     if (!templatesData || templatesData.length === 0) return []
@@ -53,15 +53,15 @@ export const PanelDataProvider = ({ children }) => {
       try {
         switch (type) {
           case 'all': {
-            const [referencesData, templatesData, historyData] = await Promise.all([
+            const [referencesData, templatesData, pendingHistoryData] = await Promise.all([
               loadReferences(),
               loadTemplates(),
-              loadHistory(),
+              loadPendingHistory(),
             ])
 
             setReferences(referencesData)
             setTemplates(templatesData)
-            setHistory(historyData)
+            setPendingHistory(pendingHistoryData)
             setExplicitConcepts(calcExplicitConcepts(templatesData))
             break
           }
@@ -80,8 +80,8 @@ export const PanelDataProvider = ({ children }) => {
           }
 
           case 'history': {
-            const historyData = await loadHistory()
-            setHistory(historyData)
+            const pendingHistoryData = await loadPendingHistory()
+            setPendingHistory(pendingHistoryData)
             break
           }
         }
@@ -89,7 +89,7 @@ export const PanelDataProvider = ({ children }) => {
         setIsLoading(false)
       }
     },
-    [apiFns, calcExplicitConcepts, loadReferences, loadTemplates, loadHistory]
+    [apiFns, calcExplicitConcepts, loadReferences, loadTemplates, loadPendingHistory]
   )
 
   // Initial load
@@ -111,7 +111,7 @@ export const PanelDataProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       explicitConcepts,
-      history,
+      pendingHistory,
       isDoiUnique,
       isLoading,
       references,
@@ -121,7 +121,7 @@ export const PanelDataProvider = ({ children }) => {
     }),
     [
       explicitConcepts,
-      history,
+      pendingHistory,
       isDoiUnique,
       isLoading,
       references,

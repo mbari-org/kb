@@ -1,4 +1,3 @@
-import { getHistory } from '@/lib/api/history'
 import {
   getNames as fetchNames,
   getRanks as fetchRanks,
@@ -64,17 +63,13 @@ const deleteConcept = async (taxonomy, conceptName, apiFns) => {
     selectConceptName = parent.children[conceptChildIndex - 1]
   }
 
-  const [names, pending] = await Promise.all([
-    apiFns.apiPayload(fetchNames),
-    apiFns.apiPaginated(getHistory, ['pending']),
-  ])
+  const names = await apiFns.apiPayload(fetchNames)
 
   const updatedTaxonomy = {
     ...taxonomy,
     aliasMap,
     conceptMap,
     names,
-    pending,
   }
 
   return { taxonomy: updatedTaxonomy, selectConceptName }
@@ -113,10 +108,6 @@ const getConceptPrimaryName = (taxonomy, conceptName) => {
 
 const getNames = taxonomy => taxonomy?.names
 
-const getPendingHistory = (taxonomy, conceptName) =>
-  conceptName
-    ? taxonomy.pending.filter(history => history.concept === conceptName)
-    : taxonomy.pending
 
 const isConceptLoaded = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
@@ -163,11 +154,10 @@ const getAncestors = (taxonomy, conceptName) => {
 }
 
 const loadTaxonomy = async apiFns => {
-  const [root, names, ranks, pending] = await Promise.all([
+  const [root, names, ranks] = await Promise.all([
     apiFns.apiPayload(fetchRoot),
     apiFns.apiPayload(fetchNames),
     apiFns.apiPayload(fetchRanks),
-    apiFns.apiPaginated(getHistory, ['pending']),
   ])
 
   const rootConcept = await loadConcept(root.name, apiFns)
@@ -182,7 +172,6 @@ const loadTaxonomy = async apiFns => {
     aliasMap,
     conceptMap,
     names,
-    pending,
     ranks,
     rootName: rootConcept.name,
   }
@@ -406,26 +395,18 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => 
     mapConcept(parentConcept, conceptMap, aliasMap)
   }
 
-  const [updatedNames, pending] = await Promise.all([
-    apiFns.apiPayload(fetchNames),
-    apiFns.apiPaginated(getHistory, ['pending']),
-  ])
+  const updatedNames = await apiFns.apiPayload(fetchNames)
 
   const updatedTaxonomy = {
     ...taxonomy,
     aliasMap,
     conceptMap,
     names: updatedNames,
-    pending,
   }
 
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }
 }
 
-const refreshHistory = async (taxonomy, historyType, apiFns) => {
-  const historyData = await apiFns.apiPaginated(getHistory, [historyType])
-  return { taxonomy: { ...taxonomy, [historyType]: historyData } }
-}
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {
   const conceptMap = taxonomy.conceptMap
@@ -492,13 +473,11 @@ export {
   getConcept,
   getConceptPrimaryName,
   getNames,
-  getPendingHistory,
   isConceptLoaded,
   isDescendant,
   isRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
-  refreshHistory,
   refreshTaxonomyConcept,
 }
