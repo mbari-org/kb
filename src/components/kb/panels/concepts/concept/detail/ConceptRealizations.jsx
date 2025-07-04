@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from 'react'
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 
-import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
+import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/CollapsibleConceptPropertiesSection'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -56,7 +56,7 @@ const ConceptRealizations = () => {
   }, [selectedConcept, apiFns])
 
   return (
-    <ConceptPropertiesSection
+    <CollapsibleConceptPropertiesSection
       isLoading={isLoading}
       items={realizations}
       loadingText='Loading realizations...'

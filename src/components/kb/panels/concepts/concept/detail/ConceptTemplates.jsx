@@ -1,7 +1,8 @@
 import { use, useEffect, useState } from 'react'
 
-import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
+import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/CollapsibleConceptPropertiesSection'
 import TemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableToggle'
+import InspectIcon from '@/components/common/InspectIcon'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -45,7 +46,7 @@ const ConceptTemplates = () => {
   }, [available, getAncestors, selectedConcept, templates])
 
   return (
-    <ConceptPropertiesSection
+    <CollapsibleConceptPropertiesSection
       isLoading={isLoading}
       items={filteredTemplates}
       loadingText='Loading templates...'
@@ -55,9 +56,10 @@ const ConceptTemplates = () => {
       } Templates for this concept`}
       renderItem={renderItem}
       title='Templates'
+      IconComponent={InspectIcon}
     >
       <TemplatesAvailableToggle />
-    </ConceptPropertiesSection>
+    </CollapsibleConceptPropertiesSection>
   )
 }
 

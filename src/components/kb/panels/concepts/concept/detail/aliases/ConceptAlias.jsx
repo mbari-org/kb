@@ -49,13 +49,13 @@ const ConceptAlias = ({ alias }) => {
   const showDelete = editing && !alias.historyId && alias.action !== CONCEPT_STATE.ALIAS.ADD
 
   return (
-    <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border }}>
+    <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
         {showEdit && <AliasEdit aliasIndex={alias.index} />}
         {showDelete && <AliasDelete aliasIndex={alias.index} />}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>
-        <Box flex={1} sx={{ pl: 1 }}>
+        <Box flex={1} sx={{ pl: 0 }}>
           <TextField {...infoStyle} label='Name' value={alias.name || ''} />
         </Box>
         <Box flex={1}>

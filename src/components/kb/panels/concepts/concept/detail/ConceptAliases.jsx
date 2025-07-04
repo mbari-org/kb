@@ -4,12 +4,12 @@ import { MdOutlinePlaylistAdd } from 'react-icons/md'
 import createEditAliasModal from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasModal'
 import createEditAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasOnClose'
 import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases/ConceptAlias'
-import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesSection'
+import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/CollapsibleConceptPropertiesSection'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EMPTY_ALIAS, aliasFields } from '@/lib/kb/model/alias'
+import { EMPTY_ALIAS } from '@/lib/kb/model/alias'
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const ConceptAliases = () => {
@@ -23,7 +23,7 @@ const ConceptAliases = () => {
     content: `${alias.name || ''} | ${alias.author || ''} | ${alias.nameType || ''}`,
   })
 
-  const renderAliasComponent = (alias, index) => <ConceptAlias alias={alias} />
+  const renderAliasComponent = (alias, _index) => <ConceptAlias alias={alias} />
 
   const AddIcon = () => <MdOutlinePlaylistAdd size={24} />
 
@@ -46,7 +46,7 @@ const ConceptAliases = () => {
   }, [aliases.length, initialState, modifyConcept, setModal, setModalData])
 
   return (
-    <ConceptPropertiesSection
+    <CollapsibleConceptPropertiesSection
       items={aliases}
       disablePagination={true}
       onInspect={editing ? handleAddClick : undefined}

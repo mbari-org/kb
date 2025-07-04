@@ -25,9 +25,9 @@ const NoMedia = () => {
         align='center'
         sx={{
           position: 'absolute',
-          top: '50%',
+          top: '10%',
           left: '50%',
-          transform: 'translate(-50%, -50%) rotate(-45deg)',
+          transform: 'translateX(-50%) rotate(-45deg)',
           opacity: 0.2,
           color: '#888',
           fontWeight: 'bold',
