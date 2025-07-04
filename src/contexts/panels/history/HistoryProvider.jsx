@@ -59,6 +59,7 @@ const HistoryProvider = ({ children }) => {
   }, [apiFns, selectedType, selectedConcept, pendingHistory])
 
   useEffect(() => {
+    // CxNote Server returns data in ascending order
     const loadData = async () => {
       if (!apiFns || isTypeChanging.current) return
 
@@ -66,32 +67,50 @@ const HistoryProvider = ({ children }) => {
         const start = typeState.offset
         const end = start + typeState.limit
         setTypeData(conceptData.slice(start, end))
-      } else if (selectedType === 'pending') {
-        // Use pre-loaded pendingHistory from PanelDataContext
-        const sortedData = sortOrder === 'asc' 
-          ? [...pendingHistory].sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
-          : [...pendingHistory].sort((a, b) => new Date(b.creationTimestamp) - new Date(a.creationTimestamp))
-        
+        return
+      }
+
+      if (selectedType === 'pending') {
+        const sortedData =
+          sortOrder === 'desc'
+            ? [...pendingHistory].sort(
+                (a, b) => new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
+              )
+            : pendingHistory
+
         const start = typeState.offset
         const end = start + typeState.limit
         setTypeData(sortedData.slice(start, end))
-      } else {
-        let actualOffset = typeState.offset
-        if (sortOrder === 'asc') {
-          actualOffset = Math.max(0, count - typeState.limit - typeState.offset)
-        }
-        const data = await apiFns.apiPaginated(getHistory, [
-          selectedType,
-          { ...typeState, offset: actualOffset },
-        ])
-
-        const sortedData = sortOrder === 'asc' ? [...data].reverse() : data
-
-        setTypeData(sortedData)
+        return
       }
+
+      let actualOffset = typeState.offset
+      if (sortOrder === 'desc') {
+        const page = Math.floor(typeState.offset / typeState.limit)
+        const totalPages = Math.ceil(count / typeState.limit)
+        const reversePage = totalPages - 1 - page
+        actualOffset = reversePage * typeState.limit
+      }
+      const data = await apiFns.apiPaginated(getHistory, [
+        selectedType,
+        { ...typeState, offset: actualOffset },
+      ])
+
+      const sortedData = sortOrder === 'desc' ? [...data].reverse() : data
+
+      setTypeData(sortedData)
     }
     loadData()
-  }, [apiFns, conceptData, count, selectedConcept, selectedType, sortOrder, typeState, pendingHistory])
+  }, [
+    apiFns,
+    conceptData,
+    count,
+    selectedConcept,
+    selectedType,
+    sortOrder,
+    typeState,
+    pendingHistory,
+  ])
 
   const nextPage = useCallback(() => {
     setTypeState(prev => ({
