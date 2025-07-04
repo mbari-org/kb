@@ -18,6 +18,7 @@ const ConceptPropertiesSection = ({
   onInspectTooltip,
   renderItem,
   title,
+  IconComponent = InspectIcon,
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -65,7 +66,7 @@ const ConceptPropertiesSection = ({
                 },
               }}
             >
-              <InspectIcon />
+              <IconComponent />
             </IconButton>
           </KBTooltip>
           {children && <Box sx={{ ml: 2 }}>{children}</Box>}
