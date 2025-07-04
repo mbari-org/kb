@@ -1,13 +1,8 @@
 import { Stack } from '@mui/material'
 
-import ConceptAliases from '@/components/kb/panels/concepts/concept/detail/ConceptAliases'
-import ConceptAuthor from '@/components/kb/panels/concepts/concept/detail/ConceptAuthor'
 import ConceptMedia from '@/components/kb/panels/concepts/concept/detail/ConceptMedia'
 import ConceptName from '@/components/kb/panels/concepts/concept/detail/ConceptName'
-import ConceptRank from '@/components/kb/panels/concepts/concept/detail/ConceptRank'
-import ConceptRealizations from '@/components/kb/panels/concepts/concept/detail/ConceptRealizations'
-import ConceptReferences from '@/components/kb/panels/concepts/concept/detail/ConceptReferences'
-import ConceptTemplates from '@/components/kb/panels/concepts/concept/detail/ConceptTemplates'
+import ConceptProperties from '@/components/kb/panels/concepts/concept/detail/ConceptProperties'
 
 const ConceptDetail = () => {
   return (
@@ -15,12 +10,7 @@ const ConceptDetail = () => {
       <ConceptMedia />
       <Stack direction='column' spacing={2} sx={{ flex: '1', ml: 1, mr: 1, textAlign: 'left' }}>
         <ConceptName />
-        <ConceptAuthor />
-        <ConceptRank />
-        <ConceptAliases />
-        <ConceptReferences />
-        <ConceptTemplates />
-        <ConceptRealizations />
+        <ConceptProperties />
       </Stack>
     </Stack>
   )
