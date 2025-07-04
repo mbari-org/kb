@@ -8,8 +8,8 @@ import useLoadConceptError from '@/hooks/useLoadConceptError'
 import useConceptLoader from './useConceptLoader'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
@@ -24,6 +24,7 @@ const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
   const { modalData, setModalData } = use(ConceptModalContext)
+  const { pendingHistory } = use(PanelDataContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { setHasUnsavedChanges } = use(UserContext)
@@ -44,6 +45,8 @@ const ConceptProvider = ({ children }) => {
 
   const refreshConcept = useCallback(
     (refreshedConcept = null, conceptPendingHistory = []) => {
+      setEditing(false)
+
       const conceptToRefresh = refreshedConcept || concept
 
       const refreshedInitialState = initialConceptState(conceptToRefresh, conceptPendingHistory)
@@ -57,18 +60,22 @@ const ConceptProvider = ({ children }) => {
     selectedConcept => {
       setConcept(selectedConcept)
       setEditing(false)
-      refreshConcept(selectedConcept)
+
+      const conceptPendingHistory = pendingHistory.filter(
+        history => history.concept === selectedConcept.name
+      )
+      refreshConcept(selectedConcept, conceptPendingHistory)
     },
-    [refreshConcept]
+    [pendingHistory, refreshConcept]
   )
 
   const conceptLoader = useConceptLoader({
-    isConceptLoaded,
     getConcept,
-    loadConcept,
-    handleSetConcept,
-    handleLoadConceptError,
     getSelected,
+    handleLoadConceptError,
+    handleSetConcept,
+    isConceptLoaded,
+    loadConcept,
     setEditing,
   })
 
@@ -111,15 +118,15 @@ const ConceptProvider = ({ children }) => {
     }
   }, [
     concept,
+    conceptLoader,
     displayStaged,
     getSelected,
     initialState,
-    conceptLoader,
     modalData?.warning,
     panels,
+    setHasUnsavedChanges,
     setModalData,
     stagedState,
-    setHasUnsavedChanges,
   ])
 
   const value = useMemo(
