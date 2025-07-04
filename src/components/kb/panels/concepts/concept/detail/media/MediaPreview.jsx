@@ -79,6 +79,11 @@ const MediaPreview = ({ setPreviewOn }) => {
           minHeight: '24px',
         }}
       >
+        {mediaItem?.credit && (
+          <Box sx={{ marginRight: 1 }}>
+            <KBInfoIcon tooltip={mediaItem?.credit} placement='top' size={18} />
+          </Box>
+        )}
         <Typography
           align='center'
           sx={{
@@ -89,15 +94,6 @@ const MediaPreview = ({ setPreviewOn }) => {
         >
           {mediaItem?.caption}
         </Typography>
-        {mediaItem?.credit && (
-          <Box sx={{ marginLeft: 1 }}>
-            <KBInfoIcon
-              tooltip={mediaItem?.credit}
-              placement="top"
-              size={18}
-            />
-          </Box>
-        )}
       </Box>
     </Box>
   )

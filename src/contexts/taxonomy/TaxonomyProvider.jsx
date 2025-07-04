@@ -116,7 +116,6 @@ const TaxonomyProvider = ({ children }) => {
     return getTaxonomyNames(taxonomy)
   }, [taxonomy])
 
-
   const getRootName = useMemo(() => taxonomy?.rootName, [taxonomy?.rootName])
 
   const isConceptLoaded = useCallback(
@@ -219,7 +218,6 @@ const TaxonomyProvider = ({ children }) => {
     },
     [apiFns, taxonomy, updateTaxonomy, showBoundary]
   )
-
 
   useEffect(() => {
     if (!apiFns || taxonomy) return

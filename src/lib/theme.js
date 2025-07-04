@@ -54,6 +54,25 @@ const theme = createTheme({
     hover: selectorActive,
     inactive: selectorInactive,
   },
+  toggleButton: {
+    backgroundColor: grey[600],
+    color: selectorInactive,
+    '&.Mui-selected': {
+      backgroundColor: main,
+      color: selectorActive,
+    },
+    '&:hover': {
+      backgroundColor: grey[800],
+      color: selectorActive,
+    },
+    '&.Mui-selected:hover': {
+      backgroundColor: main,
+      color: selectorActive,
+    },
+    '&:not(:last-child)': {
+      borderRight: '3px solid rgba(255, 255, 255, 0.5)',
+    },
+  },
   palette: {
     add: addColor(add),
     background: {

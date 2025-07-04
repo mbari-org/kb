@@ -19,7 +19,7 @@ const HistoryHeaderToggle = ({ onChange }) => {
       onChange={onChange}
       aria-label='history type'
       size='small'
-      sx={{ mr: 2 }}
+      sx={{ mr: 1 }}
     >
       <HistoryToggleButton value={PENDING} />
       <HistoryToggleButton value={APPROVED} />
