@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Box, Typography, IconButton } from '@mui/material'
+import { Box, Typography, IconButton, Stack } from '@mui/material'
 import InspectIcon from '@/components/common/InspectIcon'
 import KBTooltip from '@/components/common/KBTooltip'
 
@@ -19,6 +19,8 @@ const ConceptPropertiesSection = ({
   renderItem,
   title,
   IconComponent = InspectIcon,
+  disablePagination = false,
+  renderComponent = null,
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -56,24 +58,28 @@ const ConceptPropertiesSection = ({
           <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
             {title}
           </Typography>
-          <KBTooltip title={onInspectTooltip} placement='top'>
-            <IconButton
-              onClick={onInspect}
-              size='small'
-              sx={{
-                '&:hover': {
-                  color: 'primary.main',
-                },
-              }}
-            >
-              <IconComponent />
-            </IconButton>
-          </KBTooltip>
+          {onInspect && IconComponent && (
+            <KBTooltip title={onInspectTooltip} placement='top'>
+              <IconButton
+                onClick={onInspect}
+                size='small'
+                sx={{
+                  '&:hover': {
+                    color: 'primary.main',
+                  },
+                  ml: -1,
+                  mt: -1,
+                }}
+              >
+                <IconComponent />
+              </IconButton>
+            </KBTooltip>
+          )}
           {children && <Box sx={{ ml: 2 }}>{children}</Box>}
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {hasItems && (
+          {hasItems && !disablePagination && (
             <Box
               sx={{
                 alignItems: 'center',
@@ -106,7 +112,25 @@ const ConceptPropertiesSection = ({
       )}
       {hasItems && !isLoading && (
         <Box sx={{ ml: 1 }}>
-          <ConceptPropertiesList items={items} currentPage={currentPage} renderItem={renderItem} />
+          {disablePagination ? (
+            <Stack spacing={1}>
+              {items.map((item, index) => (
+                <Box key={renderItem.key ? renderItem.key(item, index) : index}>
+                  {renderComponent
+                    ? renderComponent(item, index)
+                    : typeof renderItem.content === 'function'
+                    ? renderItem.content(item, index)
+                    : renderItem.content}
+                </Box>
+              ))}
+            </Stack>
+          ) : (
+            <ConceptPropertiesList
+              items={items}
+              currentPage={currentPage}
+              renderItem={renderItem}
+            />
+          )}
         </Box>
       )}
       <ConceptDetailNone display={!hasItems && !isLoading} />

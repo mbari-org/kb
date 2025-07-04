@@ -5,6 +5,7 @@ import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/de
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { getConceptLinkRealizations } from '@/lib/api/linkRealizations'
 
@@ -13,6 +14,7 @@ import { SELECTED } from '@/lib/constants'
 const ConceptRealizations = () => {
   const { apiFns } = use(ConfigContext)
   const { getSelected } = use(SelectedContext)
+  const { editing } = use(ConceptContext)
 
   const [realizations, setRealizations] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -58,11 +60,11 @@ const ConceptRealizations = () => {
       isLoading={isLoading}
       items={realizations}
       loadingText='Loading realizations...'
-      onInspect={handleAddClick}
-      onInspectTooltip='Add new realization for this concept'
+      onInspect={editing ? handleAddClick : undefined}
+      onInspectTooltip={editing ? 'Add new realization for this concept' : undefined}
       renderItem={renderItem}
       title='Realizations'
-      IconComponent={AddIcon}
+      IconComponent={editing ? AddIcon : undefined}
     />
   )
 }
