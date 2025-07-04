@@ -41,14 +41,6 @@ const TemplatesProvider = ({ children }) => {
 
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates()
 
-  // Set available to false when concept is null
-  useEffect(() => {
-    const concept = filters[TEMPLATES.FILTERS.CONCEPT]
-    if (!concept && available) {
-      setAvailable(false)
-    }
-  }, [filters, available, setAvailable])
-
   useEffect(() => {
     if (!filters[TEMPLATES.FILTERS.CONCEPT]) {
       const filtered = filterTemplates(templates || [], {

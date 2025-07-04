@@ -24,13 +24,19 @@ const TEMPLATES_AVAILABLE = 'Available Concept Templates'
 const TEMPLATES_EXPLICIT = 'Explicit Concept Templates'
 
 const selectedAvailableMessaging = (available, concept) => {
-  if (!concept) {
+  if (!concept && !available) {
     return [TEMPLATES_ALL, SELECT_RESTRICTED, SELECTED_NONE]
   }
 
-  return available
-    ? [TEMPLATES_AVAILABLE, SELECT_ANY, SELECTED_AVAILABLE]
-    : [TEMPLATES_EXPLICIT, SELECT_RESTRICTED, SELECTED_EXPLICIT]
+  if (!concept && available) {
+    return [TEMPLATES_ALL, SELECT_ANY, SELECTED_NONE]
+  }
+
+  if (concept && !available) {
+    return [TEMPLATES_EXPLICIT, SELECT_RESTRICTED, SELECTED_EXPLICIT]
+  }
+
+  return [TEMPLATES_AVAILABLE, SELECT_ANY, SELECTED_AVAILABLE]
 }
 
 const TemplatesConceptAvailableTooltip = () => {

@@ -25,7 +25,7 @@ const ConceptTemplates = () => {
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,
-    content: template => `${template.linkName}: ${template.toConcept} → ${template.linkValue}`,
+    content: template => `${template.linkName} | ${template.toConcept} | ${template.linkValue}`,
   }
 
   const linkToTemplates = () => {
