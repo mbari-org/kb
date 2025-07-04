@@ -1,8 +1,6 @@
 import { use } from 'react'
 
-import { RadioGroup, FormControlLabel, Radio, Stack, Typography } from '@mui/material'
-
-import KBTooltip from '@/components/common/KBTooltip'
+import { ToggleButtonGroup, ToggleButton, Stack, Typography } from '@mui/material'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
@@ -15,44 +13,21 @@ const HistoryTableHeaderRight = () => {
   }
 
   return (
-    <Stack direction='row' spacing={3} alignItems='center' sx={{ mr: 0.5 }}>
-      <Typography>Created Order:</Typography>
-      <RadioGroup row value={sortOrder || 'desc'} onChange={e => handleSortChange(e.target.value)}>
-        <KBTooltip title='Newest First' enterDelay={50}>
-          <FormControlLabel
-            control={<Radio size='small' />}
-            label='↓'
-            sx={{
-              mr: 2,
-              '& .MuiFormControlLabel-label': {
-                ml: 0,
-                pl: 0,
-              },
-              '& .MuiRadio-root': {
-                p: 0,
-              },
-            }}
-            value='desc'
-          />
-        </KBTooltip>
-        <KBTooltip title='Oldest First' enterDelay={50}>
-          <FormControlLabel
-            control={<Radio size='small' />}
-            label='↑'
-            sx={{
-              mr: 2,
-              '& .MuiFormControlLabel-label': {
-                ml: 0,
-                pl: 0,
-              },
-              '& .MuiRadio-root': {
-                p: 0,
-              },
-            }}
-            value='asc'
-          />
-        </KBTooltip>
-      </RadioGroup>
+    <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
+      <Typography>Created:</Typography>
+      <ToggleButtonGroup
+        value={sortOrder || 'desc'}
+        exclusive
+        onChange={(e, newValue) => {
+          if (newValue !== null) {
+            handleSortChange(newValue)
+          }
+        }}
+        size='small'
+      >
+        <ToggleButton value='desc'>Newest</ToggleButton>
+        <ToggleButton value='asc'>Oldest</ToggleButton>
+      </ToggleButtonGroup>
     </Stack>
   )
 }
