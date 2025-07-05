@@ -8,6 +8,7 @@ import {
   IconButton,
 } from '@mui/material'
 import { IoChevronDown } from 'react-icons/io5'
+import { RxEyeNone } from 'react-icons/rx'
 
 import ConceptPropertiesSection from './ConceptPropertiesSection'
 import ConceptPropertiesNavButtons from './ConceptPropertiesNavButtons'
@@ -31,8 +32,22 @@ const CollapsibleConceptPropertiesSection = ({
   const [page, setPage] = useState(0)
   const rowsPerPage = 5
 
+  // Check if there are no items and not loading
+  const hasItems = items?.length > 0
+  const showEmptyIcon = !hasItems && !isLoading
+
+  // Force collapsed state when no items
+  useEffect(() => {
+    if (showEmptyIcon) {
+      setExpanded(false)
+    }
+  }, [showEmptyIcon])
+
   const handleToggle = () => {
-    setExpanded(!expanded)
+    // Only allow toggle if there are items
+    if (hasItems) {
+      setExpanded(!expanded)
+    }
   }
 
   // Reset page when items change
@@ -124,14 +139,20 @@ const CollapsibleConceptPropertiesSection = ({
           </Box>
         )}
         {/* Custom expand/collapse button */}
-        <IconButton onClick={handleToggle} size='small' sx={{ mr: 1 }}>
-          <IoChevronDown
-            style={{
-              transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s ease',
-            }}
-          />
-        </IconButton>
+        {showEmptyIcon ? (
+          <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
+            <RxEyeNone style={{ color: 'text.secondary' }} />
+          </Box>
+        ) : (
+          <IconButton onClick={handleToggle} size='small' sx={{ mr: 1 }}>
+            <IoChevronDown
+              style={{
+                transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.2s ease',
+              }}
+            />
+          </IconButton>
+        )}
       </AccordionSummary>
       <AccordionDetails sx={{ pt: 0, pb: 1, pl: 2, mt: -2 }}>
         <ConceptPropertiesSection
@@ -142,6 +163,7 @@ const CollapsibleConceptPropertiesSection = ({
           renderComponent={renderComponent}
           renderItem={renderItem}
           title=''
+          hideEmptyState={true}
         />
       </AccordionDetails>
     </Accordion>

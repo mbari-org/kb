@@ -21,6 +21,7 @@ const ConceptPropertiesSection = ({
   IconComponent = InspectIcon,
   disablePagination = false,
   renderComponent = null,
+  hideEmptyState = false,
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -133,7 +134,7 @@ const ConceptPropertiesSection = ({
           )}
         </Box>
       )}
-      <ConceptDetailNone display={!hasItems && !isLoading} />
+      {!hideEmptyState && <ConceptDetailNone display={!hasItems && !isLoading} />}
     </Box>
   )
 }
