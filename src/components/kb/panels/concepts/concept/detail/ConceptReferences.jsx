@@ -1,6 +1,6 @@
 import { use, useMemo } from 'react'
 
-import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/common/CollapsibleConceptPropertiesSection'
+import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/CollapsibleConceptPropertiesSection'
 import InspectIcon from '@/components/common/InspectIcon'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'

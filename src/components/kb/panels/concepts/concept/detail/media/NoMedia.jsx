@@ -11,29 +11,29 @@ const NoMedia = () => {
   return (
     <Box
       sx={{
+        alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         justifyContent: 'center',
-        height: '100%',
-        textAlign: 'center',
         position: 'relative',
+        mt: 8,
+        textAlign: 'center',
       }}
     >
       <Typography
         variant='h4'
         align='center'
         sx={{
-          position: 'absolute',
-          top: '10%',
-          left: '50%',
-          transform: 'translateX(-50%) rotate(-45deg)',
-          opacity: 0.2,
           color: '#888',
           fontWeight: 'bold',
-          textTransform: 'uppercase',
+          left: '50%',
           letterSpacing: '0.1em',
+          opacity: 0.2,
           pointerEvents: 'none',
+          position: 'absolute',
+          textTransform: 'uppercase',
+          top: '10%',
+          transform: 'translateX(-50%) rotate(-45deg)',
           zIndex: 1,
         }}
       >

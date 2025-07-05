@@ -3,25 +3,23 @@ import { Box, Typography, IconButton, Stack } from '@mui/material'
 import InspectIcon from '@/components/common/InspectIcon'
 import KBTooltip from '@/components/common/KBTooltip'
 
-import ConceptDetailNone from '@/components/kb/panels/concepts/concept/detail/ConceptDetailNone'
-import ConceptPropertiesList from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesList'
-import ConceptPropertiesNavButtons from '@/components/kb/panels/concepts/concept/detail/common/ConceptPropertiesNavButtons'
+import ConceptPropertiesList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesList'
+import ConceptPropertiesPageButtons from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesPageButtons'
 
 const ITEMS_PER_PAGE = 5
 
 const ConceptPropertiesSection = ({
   children,
+  disablePagination = false,
+  IconComponent = InspectIcon,
   isLoading = false,
   items = [],
   loadingText = 'Loading...',
   onInspect,
   onInspectTooltip,
+  renderComponent = null,
   renderItem,
   title,
-  IconComponent = InspectIcon,
-  disablePagination = false,
-  renderComponent = null,
-  hideEmptyState = false,
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -96,7 +94,7 @@ const ConceptPropertiesSection = ({
                   items.length
                 )} of ${items.length}`}
               </Typography>
-              <ConceptPropertiesNavButtons
+              <ConceptPropertiesPageButtons
                 currentPage={currentPage}
                 onNext={handleNext}
                 onPrevious={handlePrevious}
@@ -112,8 +110,8 @@ const ConceptPropertiesSection = ({
         </Typography>
       )}
       {hasItems && !isLoading && (
-        <Box sx={{ ml: 1 }}>
-          {disablePagination ? (
+        <Box sx={{ ml: 1.5, mt: 1 }}>
+          {disablePagination && (
             <Stack spacing={1}>
               {items.map((item, index) => (
                 <Box key={renderItem.key ? renderItem.key(item, index) : index}>
@@ -125,7 +123,8 @@ const ConceptPropertiesSection = ({
                 </Box>
               ))}
             </Stack>
-          ) : (
+          )}
+          {!disablePagination && (
             <ConceptPropertiesList
               items={items}
               currentPage={currentPage}
@@ -134,7 +133,6 @@ const ConceptPropertiesSection = ({
           )}
         </Box>
       )}
-      {!hideEmptyState && <ConceptDetailNone display={!hasItems && !isLoading} />}
     </Box>
   )
 }

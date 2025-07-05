@@ -7,11 +7,12 @@ import {
   Typography,
   IconButton,
 } from '@mui/material'
+
 import { IoChevronDown } from 'react-icons/io5'
 import { RxEyeNone } from 'react-icons/rx'
 
 import ConceptPropertiesSection from './ConceptPropertiesSection'
-import ConceptPropertiesNavButtons from './ConceptPropertiesNavButtons'
+import ConceptPropertiesPageButtons from './ConceptPropertiesPageButtons'
 import KBTooltip from '@/components/common/KBTooltip'
 
 const CollapsibleConceptPropertiesSection = ({
@@ -32,11 +33,10 @@ const CollapsibleConceptPropertiesSection = ({
   const [page, setPage] = useState(0)
   const rowsPerPage = 5
 
-  // Check if there are no items and not loading
   const hasItems = items?.length > 0
   const showEmptyIcon = !hasItems && !isLoading
 
-  // Force collapsed state when no items
+  // collapsed when no items
   useEffect(() => {
     if (showEmptyIcon) {
       setExpanded(false)
@@ -55,7 +55,7 @@ const CollapsibleConceptPropertiesSection = ({
     setPage(0)
   }, [items])
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (_event, newPage) => {
     setPage(newPage)
   }
 
@@ -72,25 +72,22 @@ const CollapsibleConceptPropertiesSection = ({
           display: 'none',
         },
         boxShadow: 'none',
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 1,
       }}
     >
       <AccordionSummary
         onClick={e => e.stopPropagation()} // Prevent default toggle
         sx={{
-          minHeight: '48px',
           '& .MuiAccordionSummary-content': {
-            margin: '8px 0',
+            m: 0,
           },
+          px: 0,
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
           <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
             {title}
           </Typography>
-          {onInspect && IconComponent && (
+          {onInspect && (
             <KBTooltip title={onInspectTooltip} placement='top'>
               <IconButton
                 onClick={e => {
@@ -110,9 +107,9 @@ const CollapsibleConceptPropertiesSection = ({
               </IconButton>
             </KBTooltip>
           )}
-          {children && <Box sx={{ ml: 2 }}>{children}</Box>}
+          <Box sx={{ ml: 2 }}>{children}</Box>
         </Box>
-        {!disablePagination && items.length > 0 && (
+        {!disablePagination && hasItems && (
           <Box
             sx={{ display: 'flex', alignItems: 'center', gap: 2, mr: 2 }}
             onClick={e => e.stopPropagation()} // Prevent accordion interference
@@ -129,7 +126,7 @@ const CollapsibleConceptPropertiesSection = ({
               <Typography variant='body2' sx={{ whiteSpace: 'nowrap' }}>
                 {`${startIndex + 1}-${Math.min(endIndex, items.length)} of ${items.length}`}
               </Typography>
-              <ConceptPropertiesNavButtons
+              <ConceptPropertiesPageButtons
                 currentPage={page}
                 totalPages={Math.ceil(items.length / rowsPerPage)}
                 onPrevious={() => handleChangePage(null, page - 1)}
@@ -138,14 +135,15 @@ const CollapsibleConceptPropertiesSection = ({
             </Box>
           </Box>
         )}
-        {/* Custom expand/collapse button */}
-        {showEmptyIcon ? (
+        {showEmptyIcon && (
           <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
-            <RxEyeNone style={{ color: 'text.secondary' }} />
+            <RxEyeNone size={16} sx={{ color: 'text.secondary' }} />
           </Box>
-        ) : (
-          <IconButton onClick={handleToggle} size='small' sx={{ mr: 1 }}>
+        )}
+        {!showEmptyIcon && (
+          <IconButton onClick={handleToggle} sx={{ mr: -0.5 }}>
             <IoChevronDown
+              size={24}
               style={{
                 transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
                 transition: 'transform 0.2s ease',
@@ -154,16 +152,16 @@ const CollapsibleConceptPropertiesSection = ({
           </IconButton>
         )}
       </AccordionSummary>
-      <AccordionDetails sx={{ pt: 0, pb: 1, pl: 2, mt: -2 }}>
+      <AccordionDetails sx={{ pt: 0, pb: 1, px: 0, mt: -2 }}>
         <ConceptPropertiesSection
           disablePagination={true}
+          hideEmptyState={true}
           isLoading={isLoading}
           items={paginatedItems}
           loadingText={loadingText}
           renderComponent={renderComponent}
           renderItem={renderItem}
           title=''
-          hideEmptyState={true}
         />
       </AccordionDetails>
     </Accordion>
