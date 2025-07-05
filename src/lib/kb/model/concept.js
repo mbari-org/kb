@@ -4,6 +4,7 @@ import {
   getConceptNames as fetchConceptNames,
   getConceptParent as fetchConceptParent,
 } from '@/lib/api/concept'
+import { getConceptLinkRealizations as fetchConceptLinkRealizations } from '@/lib/api/linkRealizations'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { orderedAliases } from '@/lib/kb/model/aliases'
@@ -20,7 +21,7 @@ const addedConcepts = (parent, updateInfo) => {
     ...child,
     aliases: [],
     alternateNames: [],
-    linkRealizations: [],
+    realizations: [],
     media: [],
     parent,
     references: [],
@@ -74,8 +75,12 @@ const loadConcept = async (conceptName, apiFns) => {
 }
 
 const loadConceptData = async (concept, apiFns) => {
-  const aliases = await apiFns.apiPayload(fetchConceptNames, concept.name)
+  const [aliases, realizations] = await Promise.all([
+    apiFns.apiPayload(fetchConceptNames, concept.name),
+    apiFns.apiPayload(fetchConceptLinkRealizations, concept.name),
+  ])
   concept.aliases = orderedAliases(aliases)
+  concept.realizations = realizations || []
   return concept
 }
 
@@ -96,6 +101,14 @@ const refresh = async (concept, updateInfo, apiFns) => {
     const rawNames = await apiFns.apiPayload(fetchConceptNames, updatedConcept.name)
     updatedConcept.aliases = orderedAliases(rawNames)
     updatedConcept.alternateNames = updatedConcept.aliases.map(alias => alias.name)
+  }
+
+  if (hasUpdated('realizations')) {
+    const rawRealizations = await apiFns.apiPayload(
+      fetchConceptLinkRealizations,
+      updatedConcept.name
+    )
+    updatedConcept.realizations = rawRealizations || []
   }
 
   if (hasUpdated('children')) {

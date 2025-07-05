@@ -1,94 +1,33 @@
-import { use, useEffect, useState } from 'react'
-import { Box, IconButton } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
-import { MdOutlinePlaylistAdd } from 'react-icons/md'
+import { use } from 'react'
 
+import ConceptRealization from '@/components/kb/panels/concepts/concept/detail/realizations/ConceptRealization'
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
+import RealizationAdd from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/RealizationAdd'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { getConceptLinkRealizations } from '@/lib/api/linkRealizations'
-
-import { SELECTED } from '@/lib/constants'
-
 const ConceptRealizations = () => {
-  const theme = useTheme()
-  const { apiFns } = use(ConfigContext)
-  const { getSelected } = use(SelectedContext)
-  const { editing } = use(ConceptContext)
+  const { editing, stagedState } = use(ConceptContext)
 
-  const [realizations, setRealizations] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const realizations = stagedState?.realizations || []
 
-  const selectedConcept = getSelected(SELECTED.CONCEPT)
+  const renderItem = (realization, index) => ({
+    key: `${realization.linkName}-${realization.toConcept}-${index}`,
+    content: `${realization.linkName} | ${realization.toConcept} | ${realization.linkValue}`,
+  })
 
-  const renderItem = {
-    key: (realization, index) => `${realization.linkName}-${realization.toConcept}-${index}`,
-    content: realization =>
-      `${realization.linkName} | ${realization.toConcept} | ${realization.linkValue}`,
-  }
-
-  const handleAddClick = () => {
-    console.log('Add realization clicked for concept:', selectedConcept)
-  }
-
-  const AddIcon = () => (
-    <Box
-      sx={{
-        alignItems: 'flex-start',
-        backgroundColor: theme.palette.background.paper,
-        cursor: 'pointer',
-        display: 'flex',
-        justifyContent: 'center',
-        zIndex: 1,
-      }}
-    >
-      <IconButton
-        onClick={handleAddClick}
-        sx={{
-          '&:hover': {
-            ...theme.kb.icon.hover,
-            color: 'add.main',
-          },
-          backgroundColor: theme.palette.background.paper,
-          padding: 0.5,
-        }}
-      >
-        <MdOutlinePlaylistAdd size={24} />
-      </IconButton>
-    </Box>
+  const renderRealizationComponent = (realization, _index) => (
+    <ConceptRealization realization={realization} />
   )
 
-  useEffect(() => {
-    const loadRealizations = async () => {
-      if (!selectedConcept || !apiFns) {
-        setRealizations([])
-        return
-      }
-
-      setIsLoading(true)
-      try {
-        const data = await apiFns.apiPayload(getConceptLinkRealizations, selectedConcept)
-        setRealizations(data || [])
-      } catch (error) {
-        console.error('Error loading realizations:', error)
-        setRealizations([])
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadRealizations()
-  }, [selectedConcept, apiFns])
+  const AddIcon = () => <RealizationAdd />
 
   return (
     <ConceptPropertiesSection
-      isLoading={isLoading}
       items={realizations}
-      loadingText='Loading realizations...'
+      disablePagination={true}
       renderItem={renderItem}
+      renderComponent={renderRealizationComponent}
       title='Realizations'
       IconComponent={editing ? AddIcon : undefined}
     />

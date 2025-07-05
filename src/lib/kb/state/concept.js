@@ -1,6 +1,7 @@
 import { aliasesState } from '@/lib/kb/state/aliases'
 import { fieldState } from '@/lib/kb/state/field'
 import { mediaState } from '@/lib/kb/state/media'
+import { realizationsState } from '@/lib/kb/state/realizations'
 import { structureState } from '@/lib/kb/state/structure'
 
 import { isEqual, isJsonEqual } from '@/lib/utils'
@@ -63,6 +64,7 @@ const initialConceptState = (concept, pending) => {
     ...aliasesState(concept, pending),
     ...fieldState(concept),
     ...mediaState(concept, pending),
+    ...realizationsState(concept, pending),
     ...structureState(concept, pending),
   }
 }

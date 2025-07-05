@@ -5,6 +5,14 @@ import { resetField, setField } from '@/lib/kb/state/field'
 import { addMedia, deleteMedia, editMedia, resetMedia, resetMediaItem } from '@/lib/kb/state/media'
 
 import {
+  addRealization,
+  deleteRealization,
+  editRealization,
+  resetRealization,
+  resetRealizations,
+} from '@/lib/kb/state/realizations'
+
+import {
   addChild,
   changeName,
   changeParent,
@@ -16,7 +24,7 @@ import {
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ALIAS, FIELD, MEDIA, RESET, STRUCTURE } = CONCEPT_STATE
+const { ALIAS, FIELD, MEDIA, REALIZATION, RESET, STRUCTURE } = CONCEPT_STATE
 
 const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
@@ -44,6 +52,15 @@ const conceptStateReducer = (state, { type, update }) => {
     case MEDIA.EDIT:
       return editMedia(state, update)
 
+    case REALIZATION.ADD:
+      return addRealization(state, update)
+
+    case REALIZATION.DELETE:
+      return deleteRealization(state, update)
+
+    case REALIZATION.EDIT:
+      return editRealization(state, update)
+
     case RESET.ADD_CHILD:
       return resetAddChild(state, update)
 
@@ -70,6 +87,12 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case RESET.MEDIA_ITEM:
       return resetMediaItem(state, update)
+
+    case RESET.REALIZATION_ITEM:
+      return resetRealization(state, update)
+
+    case RESET.REALIZATIONS:
+      return resetRealizations(state, update)
 
     case STRUCTURE.ADD_CHILD:
       return addChild(state, update)

@@ -23,6 +23,9 @@ const getFieldNameForGroup = group => {
     case PENDING.GROUP.MEDIA:
       return 'Media'
 
+    case PENDING.GROUP.REALIZATIONS:
+      return 'LinkRealization'
+
     case 'Concept.parent':
       return 'Concept.parent'
 
@@ -141,6 +144,7 @@ export const getPendingIds = (conceptPending, target, conceptName) => {
 export const useAliasesPendingApproval = createPendingApprovalHook(PENDING.GROUP.ALIASES)
 export const useChildrenPendingApproval = createPendingApprovalHook(PENDING.GROUP.CHILDREN)
 export const useMediaPendingApproval = createPendingApprovalHook(PENDING.GROUP.MEDIA)
+export const useRealizationsPendingApproval = createPendingApprovalHook(PENDING.GROUP.REALIZATIONS)
 export const useParentPendingApproval = createPendingApprovalHook('Concept.parent')
 export const useFieldPendingApproval = createParametrizedPendingApprovalHook()
 export const useItemPendingApproval = createParametrizedPendingApprovalHook()

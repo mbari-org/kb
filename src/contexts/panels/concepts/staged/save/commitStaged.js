@@ -1,6 +1,7 @@
 import saveAliases from './saveAliases'
 import saveDetail from './saveDetail'
 import saveMedia from './saveMedia'
+import saveRealizations from './saveRealizations'
 import saveStructure from './saveStructure'
 
 import { updateInfo as stateUpdateInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
@@ -14,6 +15,7 @@ const commitStaged = async (apiPayload, concept, initialState, stagedState) => {
   submitters.push(...saveAliases(submitterInfo))
   submitters.push(...saveDetail(submitterInfo))
   submitters.push(...saveMedia(submitterInfo))
+  submitters.push(...saveRealizations(submitterInfo))
   submitters.push(...saveStructure(submitterInfo))
 
   updateInfo.results = await Promise.all(submitters)

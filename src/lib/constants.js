@@ -55,6 +55,11 @@ export const CONCEPT_STATE = {
     DELETE: 'Media Delete',
     EDIT: 'Media Edit',
   },
+  REALIZATION: {
+    ADD: 'Realization Add',
+    DELETE: 'Realization Delete',
+    EDIT: 'Realization Edit',
+  },
   NO_ACTION: 'None',
   RESET: {
     ADD_CHILD: 'Reset Add Child',
@@ -71,6 +76,8 @@ export const CONCEPT_STATE = {
     FIELD: 'Reset Field',
     MEDIA: 'Reset Media',
     MEDIA_ITEM: 'Reset Media Item',
+    REALIZATION_ITEM: 'Reset Realization Item',
+    REALIZATIONS: 'Reset Realizations',
     TO_INITIAL: 'Reset To Initial',
   },
   STRUCTURE: {
@@ -160,6 +167,7 @@ export const PENDING = {
     CONCEPT_NAME: 'ConceptName',
     MEDIA: 'Media',
     RANK: 'Rank',
+    REALIZATIONS: 'Realizations',
   },
 }
 
