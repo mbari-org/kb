@@ -48,10 +48,10 @@ const PendingButtons = ({ approval, pending }) => {
 
   const handleClick = useCallback(
     clicked => {
-      const pendingIds = getPendingIds(conceptPending, pending)
+      const pendingIds = getPendingIds(conceptPending, pending, concept.name)
       setConfirmPending({ approval: clicked, pending, pendingIds })
     },
-    [pending, setConfirmPending, conceptPending]
+    [pending, setConfirmPending, conceptPending, concept.name]
   )
 
   const [acceptApproved, rejectApproved] = !approval

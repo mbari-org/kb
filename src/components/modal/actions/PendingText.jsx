@@ -8,14 +8,18 @@ import { PENDING } from '@/lib/constants'
 
 const { ACCEPT, REJECT } = PENDING.APPROVAL
 
-const PendingText = ({ approval }) => {
+const PendingText = ({ confirmPending }) => {
+  const { approval } = confirmPending
+
   const [color, line1, line2] = useMemo(() => {
     if (approval === ACCEPT) return ['clean', 'approval', 'approve']
     if (approval === REJECT) return ['cancel', 'rejection', 'reject']
   }, [approval])
 
   return (
-    <Box>
+    <Box
+      sx={{ height: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+    >
       <ActionsText color={color} text={`Pending edit ${line1} is final.`} />
       <ActionsText
         color={color}

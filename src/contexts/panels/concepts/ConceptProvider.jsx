@@ -1,7 +1,6 @@
 import { use, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
-import useUpdateTrigger from '@/hooks/useUpdateTrigger'
 
 import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
@@ -30,18 +29,6 @@ const ConceptProvider = ({ children }) => {
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { setHasUnsavedChanges } = use(UserContext)
 
-  useUpdateTrigger('ConceptProvider', {
-    modalData,
-    pendingHistory,
-    getSelected,
-    panels,
-    getConcept,
-    isConceptLoaded,
-    loadConcept,
-    taxonomy,
-    setHasUnsavedChanges,
-  })
-
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
   const [confirmPending, setConfirmPending] = useState(null)
@@ -58,8 +45,6 @@ const ConceptProvider = ({ children }) => {
 
   const refreshConcept = useCallback(
     (refreshedConcept = null, conceptPendingHistory = []) => {
-      setEditing(false)
-
       const conceptToRefresh = refreshedConcept || concept
 
       const refreshedInitialState = initialConceptState(conceptToRefresh, conceptPendingHistory)

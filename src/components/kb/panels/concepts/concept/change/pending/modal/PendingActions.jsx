@@ -4,7 +4,6 @@ import { createActions } from '@/components/modal/conceptModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
@@ -22,7 +21,6 @@ const { APPROVAL, GROUP } = PENDING
 const PendingActions = () => {
   const { concept, confirmPending, setConfirmPending } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
-  use(PanelDataContext)
   const { user } = use(UserContext)
 
   const updatePending = useUpdatePending()
@@ -76,7 +74,7 @@ const PendingActions = () => {
     label => {
       switch (label) {
         case APPROVE_ALL: {
-          const pendingIds = getPendingIds(conceptPending, GROUP.ALL)
+          const pendingIds = getPendingIds(conceptPending, GROUP.ALL, concept.name)
           setConfirmPending({ approval: APPROVAL.ACCEPT, change: GROUP.ALL, pendingIds })
           break
         }
@@ -99,7 +97,7 @@ const PendingActions = () => {
           break
 
         case REJECT_ALL: {
-          const pendingIds = getPendingIds(conceptPending, GROUP.ALL)
+          const pendingIds = getPendingIds(conceptPending, GROUP.ALL, concept.name)
           setConfirmPending({ approval: APPROVAL.REJECT, change: GROUP.ALL, pendingIds })
           break
         }

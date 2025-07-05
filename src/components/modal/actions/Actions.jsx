@@ -25,20 +25,47 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
     />
   ))
 
+  // Determine grid layout based on number of actions
+  const getGridLayout = () => {
+    switch (labels.length) {
+      case 1:
+        return {
+          gridTemplateColumns: '1fr',
+          justifyContent: 'center',
+        }
+      case 2:
+        return {
+          gridTemplateColumns: '1fr 1fr 1fr',
+          '& > *:nth-of-type(2)': {
+            gridColumn: '3',
+          },
+        }
+      case 3:
+        return {
+          gridTemplateColumns: '1fr 1fr 1fr',
+        }
+      default:
+        return {
+          gridTemplateColumns: '1fr 1fr 1fr',
+        }
+    }
+  }
+
   return (
-    <Box sx={{ width: '100%' }}>
-      <Stack spacing={0} sx={{ alignItems: 'center', mt: 1 }}>
+    <Box sx={{ height: '100%', width: '100%' }}>
+      <Stack spacing={0} sx={{ alignItems: 'center', mt: 1, height: 60, justifyContent: 'center' }}>
         {!!confirmReset && <DiscardingText />}
-        {!!confirmPending && <PendingText approval={confirmPending.approval} />}
+        {!!confirmPending && <PendingText confirmPending={confirmPending} />}
       </Stack>
       <Box
         sx={{
           backgroundColor: 'inherit',
-          display: 'flex',
-          justifyContent: 'space-between',
+          display: 'grid',
+          alignItems: 'center',
           mt: 1,
           padding: 1,
           width: '100%',
+          ...getGridLayout(),
         }}
       >
         {actions}

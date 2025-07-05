@@ -89,22 +89,29 @@ const CollapsibleConceptPropertiesSection = ({
           </Typography>
           {onInspect && (
             <KBTooltip title={onInspectTooltip} placement='top'>
-              <IconButton
+              <Box
                 onClick={e => {
                   e.stopPropagation() // Prevent accordion toggle
                   onInspect()
                 }}
-                size='small'
                 sx={{
-                  '&:hover': {
-                    color: 'primary.main',
-                  },
                   ml: -0.5,
                   mt: -1,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 30,
+                  height: 32,
+                  borderRadius: '50%',
+                  '&:hover': {
+                    color: 'primary.main',
+                    backgroundColor: 'action.hover',
+                  },
                 }}
               >
                 <IconComponent />
-              </IconButton>
+              </Box>
             </KBTooltip>
           )}
           <Box sx={{ ml: 2 }}>{children}</Box>
@@ -141,7 +148,22 @@ const CollapsibleConceptPropertiesSection = ({
           </Box>
         )}
         {!showEmptyIcon && (
-          <IconButton onClick={handleToggle} sx={{ mr: -0.5 }}>
+          <Box
+            onClick={handleToggle}
+            sx={{
+              mr: -0.5,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              '&:hover': {
+                backgroundColor: 'action.hover',
+              },
+            }}
+          >
             <IoChevronDown
               size={24}
               style={{
@@ -149,7 +171,7 @@ const CollapsibleConceptPropertiesSection = ({
                 transition: 'transform 0.2s ease',
               }}
             />
-          </IconButton>
+          </Box>
         )}
       </AccordionSummary>
       <AccordionDetails sx={{ pt: 0, pb: 1, px: 0, mt: -2 }}>

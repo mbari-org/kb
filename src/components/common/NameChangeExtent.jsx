@@ -1,22 +1,16 @@
 import { FormControlLabel, Radio, Stack } from '@mui/material'
 import { LABELS } from '@/lib/constants'
-import { use } from 'react'
-import UserContext from '@/contexts/user/UserContext'
-import { isAdmin } from '@/lib/auth/role'
 
 const { NAME_ONLY, ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
 
-const NameChangeExtent = ({ nameChangeType, onChange }) => {
-  const { user } = use(UserContext)
-  const isUserAdmin = isAdmin(user)
-
+const NameChangeExtent = ({ disabled, nameChangeType, onChange }) => {
   return (
     <Stack direction='row'>
       <FormControlLabel
         control={
           <Radio
             checked={nameChangeType === NAME_ONLY}
-            disabled={!isUserAdmin}
+            disabled={disabled}
             name='nameChangeType'
             onChange={onChange}
             value={NAME_ONLY}
@@ -28,7 +22,7 @@ const NameChangeExtent = ({ nameChangeType, onChange }) => {
         control={
           <Radio
             checked={nameChangeType === ASSOCIATED_DATA}
-            disabled={!isUserAdmin}
+            disabled={disabled}
             name='nameChangeType'
             onChange={onChange}
             value={ASSOCIATED_DATA}
