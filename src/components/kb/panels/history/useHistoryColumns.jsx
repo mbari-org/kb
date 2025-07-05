@@ -1,8 +1,8 @@
 import { use } from 'react'
 
-import { Box, IconButton } from '@mui/material'
+import { Box } from '@mui/material'
 
-import InspectIcon from '@/components/common/InspectIcon'
+import InspectButton from '@/components/common/InspectButton'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -30,20 +30,10 @@ const useHistoryColumns = ({ type }) => {
       renderCell: params => (
         <Box>
           {(type === 'pending' || (type === 'concept' && !params.row.approved)) && (
-            <IconButton
-              size='small'
+            <InspectButton
               onClick={() => handleConceptClick(params.row)}
-              sx={{
-                '&:hover': {
-                  color: 'primary.main',
-                  '& svg': {
-                    transform: 'scale(1.2)',
-                  },
-                },
-              }}
-            >
-              <InspectIcon />
-            </IconButton>
+              tooltip='View this Concept'
+            />
           )}
         </Box>
       ),

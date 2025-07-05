@@ -18,6 +18,10 @@ export const CONCEPT_FIELDS = {
   },
 }
 
+export const CONCEPT_PROPERTIES = {
+  ITEMS_PER_PAGE: 5,
+}
+
 export const CONCEPT_NAME_TYPES = {
   COMMON: 'Common',
   FORMER: 'Former',

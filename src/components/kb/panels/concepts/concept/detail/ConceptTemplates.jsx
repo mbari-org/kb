@@ -1,8 +1,8 @@
 import { use, useEffect, useState } from 'react'
 
-import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/CollapsibleConceptPropertiesSection'
+import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 import TemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableToggle'
-import InspectIcon from '@/components/common/InspectIcon'
+import ConceptPropertiesInspectButton from '@/components/kb/panels/concepts/concept/detail/ConceptPropertiesInspectButton'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -45,21 +45,21 @@ const ConceptTemplates = () => {
     setFilteredTemplates(filterTemplates(templates, { concepts }))
   }, [available, getAncestors, selectedConcept, templates])
 
+  const tooltip = `View ${available ? 'Available' : 'Explicit'} Templates for this Concept`
+
   return (
-    <CollapsibleConceptPropertiesSection
+    <ConceptPropertiesSection
       isLoading={isLoading}
       items={filteredTemplates}
       loadingText='Loading templates...'
-      onInspect={linkToTemplates}
-      onInspectTooltip={`Link to ${
-        available ? 'Available' : 'Explicit'
-      } Templates for this concept`}
       renderItem={renderItem}
       title='Templates'
-      IconComponent={InspectIcon}
+      IconComponent={() => (
+        <ConceptPropertiesInspectButton onClick={linkToTemplates} tooltip={tooltip} />
+      )}
     >
       <TemplatesAvailableToggle />
-    </CollapsibleConceptPropertiesSection>
+    </ConceptPropertiesSection>
   )
 }
 

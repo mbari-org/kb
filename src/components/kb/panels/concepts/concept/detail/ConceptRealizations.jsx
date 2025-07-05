@@ -1,7 +1,8 @@
 import { use, useEffect, useState } from 'react'
+import { Box } from '@mui/material'
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 
-import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/CollapsibleConceptPropertiesSection'
+import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -31,7 +32,23 @@ const ConceptRealizations = () => {
     console.log('Add realization clicked for concept:', selectedConcept)
   }
 
-  const AddIcon = () => <MdOutlinePlaylistAdd size={24} />
+  const AddIcon = () => (
+    <Box
+      onClick={handleAddClick}
+      sx={{
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '50%',
+        '&:hover': {
+          backgroundColor: 'action.hover',
+        },
+      }}
+    >
+      <MdOutlinePlaylistAdd size={24} />
+    </Box>
+  )
 
   useEffect(() => {
     const loadRealizations = async () => {
@@ -56,12 +73,10 @@ const ConceptRealizations = () => {
   }, [selectedConcept, apiFns])
 
   return (
-    <CollapsibleConceptPropertiesSection
+    <ConceptPropertiesSection
       isLoading={isLoading}
       items={realizations}
       loadingText='Loading realizations...'
-      onInspect={editing ? handleAddClick : undefined}
-      onInspectTooltip={editing ? 'Add new realization for this concept' : undefined}
       renderItem={renderItem}
       title='Realizations'
       IconComponent={editing ? AddIcon : undefined}

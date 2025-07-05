@@ -7,8 +7,12 @@ const DescriptionDetail = props => {
 
   const Description = createText({
     id: 'modal-content-description',
-    description,
-    sx: { mb: 1 },
+    text: description,
+    sx: {
+      mb: 1,
+      variant: 'h6',
+      component: 'h4',
+    },
   })
 
   const Detail = createDetail({
@@ -19,7 +23,11 @@ const DescriptionDetail = props => {
 
   return (
     <Box>
-      <Description id='modal-content-description' description={description} sx={{ mb: 1 }} />
+      <Description
+        id='modal-content-description'
+        text={description}
+        sx={{ mb: 1, variant: 'h6', component: 'h4' }}
+      />
       <Detail id='modal-content-detail' detail={detail} sx={{ mb: 1, ml: 2 }} />
     </Box>
   )

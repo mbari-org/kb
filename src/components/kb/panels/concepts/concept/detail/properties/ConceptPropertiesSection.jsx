@@ -1,84 +1,118 @@
 import { useState, useEffect } from 'react'
-import { Box, Typography, IconButton, Stack } from '@mui/material'
-import InspectIcon from '@/components/common/InspectIcon'
-import KBTooltip from '@/components/common/KBTooltip'
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+  Typography,
+  Stack,
+} from '@mui/material'
 
-import ConceptPropertiesList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesList'
-import ConceptPropertiesPageButtons from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesPageButtons'
+import { IoChevronDown } from 'react-icons/io5'
 
-const ITEMS_PER_PAGE = 5
+import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
+import ConceptPropertiesPageButtons from './ConceptPropertiesPageButtons'
+
+import { CONCEPT_PROPERTIES } from '@/lib/constants'
+
+const { ITEMS_PER_PAGE } = CONCEPT_PROPERTIES
 
 const ConceptPropertiesSection = ({
   children,
+  defaultExpanded = true,
   disablePagination = false,
-  IconComponent = InspectIcon,
+  IconComponent,
   isLoading = false,
   items = [],
   loadingText = 'Loading...',
-  onInspect,
-  onInspectTooltip,
   renderComponent = null,
   renderItem,
   title,
 }) => {
-  const [currentPage, setCurrentPage] = useState(0)
+  const [expanded, setExpanded] = useState(defaultExpanded)
+  const [page, setPage] = useState(0)
+  const rowsPerPage = ITEMS_PER_PAGE
 
-  const totalPages = Math.ceil((items?.length || 0) / ITEMS_PER_PAGE)
   const hasItems = items?.length > 0
+  const showEmptyIcon = !hasItems && !isLoading
 
-  const handleNext = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(prev => prev + 1)
-    }
-  }
-
-  const handlePrevious = () => {
-    if (currentPage > 0) {
-      setCurrentPage(prev => prev - 1)
-    }
-  }
-
-  // Reset to page 0 when items change
+  // collapsed when no items
   useEffect(() => {
-    setCurrentPage(0)
+    if (showEmptyIcon) {
+      setExpanded(false)
+    }
+  }, [showEmptyIcon])
+
+  const handleToggle = () => {
+    // Only allow toggle if there are items
+    if (hasItems) {
+      setExpanded(!expanded)
+    }
+  }
+
+  // Reset page when items change
+  useEffect(() => {
+    setPage(0)
   }, [items])
 
+  const handleChangePage = (_event, newPage) => {
+    setPage(newPage)
+    // Ensure accordion is expanded when pagination buttons are clicked
+    if (!expanded) {
+      setExpanded(true)
+    }
+  }
+
+  const startIndex = page * rowsPerPage
+  const endIndex = startIndex + rowsPerPage
+  const paginatedItems = items.slice(startIndex, endIndex)
+
   return (
-    <Box>
-      <Box
+    <Accordion
+      expanded={expanded}
+      onChange={() => {}} // Disable default accordion behavior
+      sx={{
+        boxShadow: 'none',
+        '&:before': {
+          display: 'none',
+        },
+      }}
+    >
+      <AccordionSummary
+        onClick={e => e.stopPropagation()} // Prevent default toggle
         sx={{
-          alignItems: 'center',
-          display: 'flex',
-          gap: 2,
-          justifyContent: 'space-between',
+          '& .MuiAccordionSummary-content': {
+            m: 0,
+          },
+          px: 0,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
           <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
             {title}
           </Typography>
-          {onInspect && IconComponent && (
-            <KBTooltip title={onInspectTooltip} placement='top'>
-              <IconButton
-                onClick={onInspect}
-                size='small'
-                sx={{
-                  '&:hover': {
-                    color: 'primary.main',
-                  },
-                  ml: -1,
-                  mt: -1,
-                }}
-              >
-                <IconComponent />
-              </IconButton>
-            </KBTooltip>
+          {IconComponent && (
+            <Box
+              onClick={e => e.stopPropagation()} // Prevent accordion toggle
+              sx={{
+                alignItems: 'center',
+                borderRadius: '50%',
+                display: 'flex',
+                justifyContent: 'center',
+                ml: -0.5,
+                mt: -1,
+              }}
+            >
+              <IconComponent />
+            </Box>
           )}
-          {children && <Box sx={{ ml: 2 }}>{children}</Box>}
+          <Box sx={{ ml: 2 }}>{children}</Box>
         </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {hasItems && !disablePagination && (
+        {!disablePagination && hasItems && (
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', gap: 2, mr: 2 }}
+            onClick={e => e.stopPropagation()} // Prevent accordion interference
+          >
             <Box
               sx={{
                 alignItems: 'center',
@@ -88,32 +122,69 @@ const ConceptPropertiesSection = ({
                 minWidth: 175,
               }}
             >
-              <Typography variant='body2' sx={{ whiteSpace: 'nowrap' }}>
-                {`${currentPage * ITEMS_PER_PAGE + 1}-${Math.min(
-                  (currentPage + 1) * ITEMS_PER_PAGE,
-                  items.length
-                )} of ${items.length}`}
+              <Typography
+                variant='body2'
+                sx={{ whiteSpace: 'nowrap' }}
+                onClick={() => {
+                  // Ensure accordion is expanded when pagination text is clicked
+                  if (!expanded) {
+                    setExpanded(true)
+                  }
+                }}
+              >
+                {`${startIndex + 1}-${Math.min(endIndex, items.length)} of ${items.length}`}
               </Typography>
               <ConceptPropertiesPageButtons
-                currentPage={currentPage}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
-                totalPages={totalPages}
+                currentPage={page}
+                totalPages={Math.ceil(items.length / rowsPerPage)}
+                onPrevious={() => handleChangePage(null, page - 1)}
+                onNext={() => handleChangePage(null, page + 1)}
               />
             </Box>
-          )}
-        </Box>
-      </Box>
-      {isLoading && (
-        <Typography variant='body2' sx={{ color: 'text.secondary', py: 1 }}>
-          {loadingText}
-        </Typography>
-      )}
-      {hasItems && !isLoading && (
-        <Box sx={{ ml: 1.5, mt: 1 }}>
-          {disablePagination && (
+          </Box>
+        )}
+        {showEmptyIcon && (
+          <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
+            <ConceptPropertiesEmpty />
+          </Box>
+        )}
+        {!showEmptyIcon && (
+          <Box
+            onClick={handleToggle}
+            sx={{
+              alignItems: 'center',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              display: 'flex',
+              height: 32,
+              justifyContent: 'center',
+              mr: -0.5,
+              width: 32,
+              '&:hover': {
+                backgroundColor: 'action.hover',
+              },
+            }}
+          >
+            <IoChevronDown
+              size={24}
+              style={{
+                transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.2s ease',
+              }}
+            />
+          </Box>
+        )}
+      </AccordionSummary>
+      <AccordionDetails sx={{ pt: 0, pb: 1, px: 0, mt: -2 }}>
+        {isLoading && (
+          <Typography variant='body2' sx={{ color: 'text.secondary', py: 1 }}>
+            {loadingText}
+          </Typography>
+        )}
+        {hasItems && !isLoading && (
+          <Box sx={{ ml: 1.5, mt: 1 }}>
             <Stack spacing={1}>
-              {items.map((item, index) => (
+              {paginatedItems.map((item, index) => (
                 <Box key={renderItem.key ? renderItem.key(item, index) : index}>
                   {renderComponent
                     ? renderComponent(item, index)
@@ -123,17 +194,10 @@ const ConceptPropertiesSection = ({
                 </Box>
               ))}
             </Stack>
-          )}
-          {!disablePagination && (
-            <ConceptPropertiesList
-              items={items}
-              currentPage={currentPage}
-              renderItem={renderItem}
-            />
-          )}
-        </Box>
-      )}
-    </Box>
+          </Box>
+        )}
+      </AccordionDetails>
+    </Accordion>
   )
 }
 

@@ -4,7 +4,7 @@ import { MdOutlinePlaylistAdd } from 'react-icons/md'
 import createEditAliasModal from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasModal'
 import createEditAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasOnClose'
 import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases/ConceptAlias'
-import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/CollapsibleConceptPropertiesSection'
+import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -46,7 +46,7 @@ const ConceptAliases = () => {
   }, [aliases.length, initialState, modifyConcept, setModal, setModalData])
 
   return (
-    <CollapsibleConceptPropertiesSection
+    <ConceptPropertiesSection
       items={aliases}
       disablePagination={true}
       onInspect={editing ? handleAddClick : undefined}

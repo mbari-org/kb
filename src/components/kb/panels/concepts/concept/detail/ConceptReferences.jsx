@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 
-import CollapsibleConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/CollapsibleConceptPropertiesSection'
-import InspectIcon from '@/components/common/InspectIcon'
+import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
+import ConceptPropertiesInspectButton from '@/components/kb/panels/concepts/concept/detail/ConceptPropertiesInspectButton'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -30,14 +30,16 @@ const ConceptReferences = () => {
     updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
   }
 
+  const tooltip = 'View References for this Concept'
+
   return (
-    <CollapsibleConceptPropertiesSection
+    <ConceptPropertiesSection
       items={conceptReferences}
-      onInspect={linkToReferences}
-      onInspectTooltip='View References for this Concept'
       renderItem={renderItem}
       title='References DOI'
-      IconComponent={InspectIcon}
+      IconComponent={() => (
+        <ConceptPropertiesInspectButton onClick={linkToReferences} tooltip={tooltip} />
+      )}
     />
   )
 }
