@@ -1,4 +1,6 @@
 import { use, useCallback } from 'react'
+import { Box, IconButton } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 
 import createEditAliasModal from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasModal'
@@ -13,6 +15,7 @@ import { EMPTY_ALIAS } from '@/lib/kb/model/alias'
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const ConceptAliases = () => {
+  const theme = useTheme()
   const { editing, stagedState, initialState, modifyConcept } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
@@ -25,7 +28,32 @@ const ConceptAliases = () => {
 
   const renderAliasComponent = (alias, _index) => <ConceptAlias alias={alias} />
 
-  const AddIcon = () => <MdOutlinePlaylistAdd size={24} />
+  const AddIcon = () => (
+    <Box
+      sx={{
+        alignItems: 'flex-start',
+        backgroundColor: theme.palette.background.paper,
+        cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'center',
+        zIndex: 1,
+      }}
+    >
+      <IconButton
+        onClick={handleAddClick}
+        sx={{
+          '&:hover': {
+            ...theme.kb.icon.hover,
+            color: 'add.main',
+          },
+          backgroundColor: theme.palette.background.paper,
+          padding: 0.5,
+        }}
+      >
+        <MdOutlinePlaylistAdd size={24} />
+      </IconButton>
+    </Box>
+  )
 
   const handleAddClick = useCallback(() => {
     const aliasIndex = aliases.length

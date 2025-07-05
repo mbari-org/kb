@@ -1,5 +1,6 @@
 import { use, useEffect, useState } from 'react'
-import { Box } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
@@ -13,6 +14,7 @@ import { getConceptLinkRealizations } from '@/lib/api/linkRealizations'
 import { SELECTED } from '@/lib/constants'
 
 const ConceptRealizations = () => {
+  const theme = useTheme()
   const { apiFns } = use(ConfigContext)
   const { getSelected } = use(SelectedContext)
   const { editing } = use(ConceptContext)
@@ -34,19 +36,28 @@ const ConceptRealizations = () => {
 
   const AddIcon = () => (
     <Box
-      onClick={handleAddClick}
       sx={{
+        alignItems: 'flex-start',
+        backgroundColor: theme.palette.background.paper,
         cursor: 'pointer',
         display: 'flex',
-        alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '50%',
-        '&:hover': {
-          backgroundColor: 'action.hover',
-        },
+        zIndex: 1,
       }}
     >
-      <MdOutlinePlaylistAdd size={24} />
+      <IconButton
+        onClick={handleAddClick}
+        sx={{
+          '&:hover': {
+            ...theme.kb.icon.hover,
+            color: 'add.main',
+          },
+          backgroundColor: theme.palette.background.paper,
+          padding: 0.5,
+        }}
+      >
+        <MdOutlinePlaylistAdd size={24} />
+      </IconButton>
     </Box>
   )
 
