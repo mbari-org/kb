@@ -3,7 +3,7 @@ import { Box, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import AliasDelete from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/delete/AliasDelete'
-import AliasEdit from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/AliasEdit'
+import AliasEditIcon from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/AliasEditIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -16,6 +16,8 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 import { fieldPending } from '@/lib/kb/model/history'
 
 import { fieldBorder } from '@/lib/kb/model/field'
+
+const ALIAS = CONCEPT_STATE.ALIAS
 
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
@@ -45,13 +47,13 @@ const ConceptAlias = ({ alias }) => {
     return null
   }
 
-  const showEdit = editing && !alias.historyId && alias.action !== CONCEPT_STATE.ALIAS.DELETE
-  const showDelete = editing && !alias.historyId && alias.action !== CONCEPT_STATE.ALIAS.ADD
+  const showEdit = editing && !alias.historyId && alias.action !== ALIAS.DELETE
+  const showDelete = editing && !alias.historyId && alias.action !== ALIAS.ADD
 
   return (
     <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
-        {showEdit && <AliasEdit aliasIndex={alias.index} />}
+        {showEdit && <AliasEditIcon action={ALIAS.EDIT} aliasIndex={alias.index} size={20} />}
         {showDelete && <AliasDelete aliasIndex={alias.index} />}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>

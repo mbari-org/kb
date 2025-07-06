@@ -45,7 +45,10 @@ const theme = createTheme({
   },
   kb: {
     icon: {
-      hover: { backgroundColor: `transparent !important`, transform: 'scale(1.25)' },
+      hover: {
+        backgroundColor: 'background.paper',
+        transform: 'scale(1.25)',
+      },
     },
   },
   selector: {

@@ -1,24 +1,33 @@
 import { use } from 'react'
 
-import AliasAdd from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/AliasAdd'
+import AliasEditIcon from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/AliasEditIcon'
 import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases/ConceptAlias'
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+
+import { CONCEPT_STATE } from '@/lib/constants'
+
+const ADD = CONCEPT_STATE.ALIAS.ADD
 
 const ConceptAliases = () => {
   const { editing, stagedState } = use(ConceptContext)
 
   const aliases = stagedState?.aliases || []
 
+  const aliasContent = aliases.map(alias => {
+    const { author, name, nameType } = alias
+    return [name, author, nameType].map(item => item || '').join('  |  ')
+  })
+
   const renderAliasItem = (alias, index) => ({
     key: alias.name || alias.index || index,
-    content: `${alias.name || ''} | ${alias.author || ''} | ${alias.nameType || ''}`,
+    content: aliasContent,
   })
 
   const renderAliasComponent = (alias, _index) => <ConceptAlias alias={alias} />
 
-  const AddIcon = () => <AliasAdd aliasIndex={aliases.length} />
+  const IconComponent = () => <AliasEditIcon action={ADD} aliasIndex={aliases.length} />
 
   return (
     <ConceptPropertiesSection
@@ -27,7 +36,7 @@ const ConceptAliases = () => {
       renderItem={renderAliasItem}
       renderComponent={renderAliasComponent}
       title='Alternate Names'
-      IconComponent={editing ? AddIcon : undefined}
+      IconComponent={editing ? IconComponent : null}
     />
   )
 }

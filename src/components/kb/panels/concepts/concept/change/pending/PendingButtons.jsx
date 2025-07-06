@@ -6,7 +6,7 @@ import { IoCheckmarkSharp as AcceptIcon, IoCloseSharp as RejectIcon } from 'reac
 
 import PendingButton from './PendingButton'
 
-import HandIcon from '@/components/common/HandIcon'
+import HandIcon from '@/components/common/icon/HandIcon'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'

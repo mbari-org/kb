@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
 
-import HandIcon from '@/components/common/HandIcon'
+import HandIcon from '@/components/common/icon/HandIcon'
 
 const ResettingButton = ({ color, disabled, resetting, onClick }) => {
   if (resetting) {
