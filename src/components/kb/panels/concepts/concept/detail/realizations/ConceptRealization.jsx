@@ -2,8 +2,7 @@ import { use } from 'react'
 import { Box, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import RealizationDelete from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/delete/RealizationDelete'
-import RealizationEdit from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/RealizationEdit'
+import RealizationModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/RealizationModifyIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -50,11 +49,15 @@ const ConceptRealization = ({ realization }) => {
   const showDelete =
     editing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
 
+  const realizationIcon = action => {
+    return <RealizationModifyIcon action={action} realizationIndex={realization.index} size={20} />
+  }
+
   return (
     <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
-        {showEdit && <RealizationEdit realizationIndex={realization.index} />}
-        {showDelete && <RealizationDelete realizationIndex={realization.index} />}
+        {showEdit && realizationIcon(CONCEPT_STATE.REALIZATION.EDIT)}
+        {showDelete && realizationIcon(CONCEPT_STATE.REALIZATION.DELETE)}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>
         <Box flex={1} sx={{ pl: 0 }}>

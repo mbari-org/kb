@@ -2,9 +2,11 @@ import { use } from 'react'
 
 import ConceptRealization from '@/components/kb/panels/concepts/concept/detail/realizations/ConceptRealization'
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
-import RealizationAdd from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/RealizationAdd'
+import RealizationModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/RealizationModifyIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const ConceptRealizations = () => {
   const { editing, stagedState } = use(ConceptContext)
@@ -20,7 +22,12 @@ const ConceptRealizations = () => {
     <ConceptRealization realization={realization} />
   )
 
-  const AddIcon = () => <RealizationAdd />
+  const AddIcon = () => (
+    <RealizationModifyIcon
+      action={CONCEPT_STATE.REALIZATION.ADD}
+      realizationIndex={realizations.length}
+    />
+  )
 
   return (
     <ConceptPropertiesSection

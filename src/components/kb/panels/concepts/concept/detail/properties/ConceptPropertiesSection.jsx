@@ -11,7 +11,6 @@ import {
 import { IoChevronDown } from 'react-icons/io5'
 
 import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
-import ConceptPropertiesPageControls from './ConceptPropertiesPageControls'
 
 import { CONCEPT_PROPERTIES } from '@/lib/constants'
 
@@ -102,7 +101,7 @@ const ConceptPropertiesSection = ({
           </Typography>
           {IconComponent && (
             <Box
-              className="clickable-element"
+              className='clickable-element'
               sx={{
                 alignItems: 'center',
                 borderRadius: '50%',
@@ -123,7 +122,7 @@ const ConceptPropertiesSection = ({
         </Box>
         {!disablePagination && hasItems && (
           <Box
-            className="clickable-element"
+            className='clickable-element'
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -143,7 +142,7 @@ const ConceptPropertiesSection = ({
               }}
             >
               <Typography
-                className="clickable-element"
+                className='clickable-element'
                 variant='body2'
                 sx={{ whiteSpace: 'nowrap', cursor: 'pointer' }}
                 onClick={() => {
@@ -171,7 +170,7 @@ const ConceptPropertiesSection = ({
         )}
         {!showEmptyIcon && (
           <Box
-            className="clickable-element"
+            className='clickable-element'
             onClick={handleToggle}
             sx={{
               alignItems: 'center',
