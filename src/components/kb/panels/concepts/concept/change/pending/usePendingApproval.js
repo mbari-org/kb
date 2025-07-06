@@ -23,6 +23,9 @@ const getFieldNameForGroup = group => {
     case PENDING.GROUP.MEDIA:
       return 'Media'
 
+    case PENDING.GROUP.RANK:
+      return ['RankLevel', 'RankName']
+
     case PENDING.GROUP.REALIZATIONS:
       return 'LinkRealization'
 
@@ -51,6 +54,16 @@ const isTargetInGroup = (target, group, conceptPending, conceptName) => {
       // For concept name, only include the concept name itself
       return fieldItems.some(history => history.id === target && history.newValue === conceptName)
     }
+  }
+
+  // Special handling for RANK group which includes both RankLevel and RankName fields
+  if (group === PENDING.GROUP.RANK) {
+    const rankLevelItems = fieldPending(conceptPending, 'RankLevel')
+    const rankNameItems = fieldPending(conceptPending, 'RankName')
+    return (
+      rankLevelItems.some(history => history.id === target) ||
+      rankNameItems.some(history => history.id === target)
+    )
   }
 
   return fieldPending(conceptPending, fieldName).some(history => history.id === target)
@@ -117,21 +130,28 @@ export const getPendingIds = (conceptPending, target, conceptName) => {
   if (target === PENDING.GROUP.ALL) {
     pendingIds = conceptPending.map(history => history.id)
   } else if (fieldName) {
-    const fieldItems = fieldPending(conceptPending, fieldName)
-
-    // Special handling for ALIASES and CONCEPT_NAME groups since they share the same field
-    if (target === PENDING.GROUP.ALIASES) {
-      // For aliases, exclude the concept name itself
-      pendingIds = fieldItems
-        .filter(history => history.newValue !== conceptName)
-        .map(history => history.id)
-    } else if (target === PENDING.GROUP.CONCEPT_NAME) {
-      // For concept name, only include the concept name itself
-      pendingIds = fieldItems
-        .filter(history => history.newValue === conceptName)
-        .map(history => history.id)
+    // Special handling for RANK group which includes both RankLevel and RankName fields
+    if (target === PENDING.GROUP.RANK) {
+      const rankLevelItems = fieldPending(conceptPending, 'RankLevel')
+      const rankNameItems = fieldPending(conceptPending, 'RankName')
+      pendingIds = [...rankLevelItems, ...rankNameItems].map(history => history.id)
     } else {
-      pendingIds = fieldItems.map(history => history.id)
+      const fieldItems = fieldPending(conceptPending, fieldName)
+
+      // Special handling for ALIASES and CONCEPT_NAME groups since they share the same field
+      if (target === PENDING.GROUP.ALIASES) {
+        // For aliases, exclude the concept name itself
+        pendingIds = fieldItems
+          .filter(history => history.newValue !== conceptName)
+          .map(history => history.id)
+      } else if (target === PENDING.GROUP.CONCEPT_NAME) {
+        // For concept name, only include the concept name itself
+        pendingIds = fieldItems
+          .filter(history => history.newValue === conceptName)
+          .map(history => history.id)
+      } else {
+        pendingIds = fieldItems.map(history => history.id)
+      }
     }
   } else {
     // For individual items, the target is the history ID itself
@@ -144,6 +164,7 @@ export const getPendingIds = (conceptPending, target, conceptName) => {
 export const useAliasesPendingApproval = createPendingApprovalHook(PENDING.GROUP.ALIASES)
 export const useChildrenPendingApproval = createPendingApprovalHook(PENDING.GROUP.CHILDREN)
 export const useMediaPendingApproval = createPendingApprovalHook(PENDING.GROUP.MEDIA)
+export const useRankPendingApproval = createPendingApprovalHook(PENDING.GROUP.RANK)
 export const useRealizationsPendingApproval = createPendingApprovalHook(PENDING.GROUP.REALIZATIONS)
 export const useParentPendingApproval = createPendingApprovalHook('Concept.parent')
 export const useFieldPendingApproval = createParametrizedPendingApprovalHook()
