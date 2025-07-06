@@ -2,7 +2,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const { RESET } = CONCEPT_STATE
 
-const createEditAliasOnClose = ({ initialState, modifyConcept }) => {
+const createAliasOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
     // Handle case where modalData is null (defensive programming)
     if (!modalData) {
@@ -24,4 +24,4 @@ const createEditAliasOnClose = ({ initialState, modifyConcept }) => {
   }
 }
 
-export default createEditAliasOnClose
+export default createAliasOnClose

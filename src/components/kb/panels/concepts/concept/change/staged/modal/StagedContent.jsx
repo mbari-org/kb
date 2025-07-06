@@ -2,7 +2,7 @@ import { use, useEffect, useMemo } from 'react'
 
 import { Box } from '@mui/material'
 
-import AliasesDetail from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/AliasesDetail'
+import AliasesDetail from '@/components/kb/panels/concepts/concept/change/staged/aliases/AliasesDetail'
 import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/staged/concept/structure/children/ChildrenDetail'
 import FieldDeltaDetail from '@/components/kb/panels/concepts/concept/change/staged/concept/field/FieldDeltaDetail'
 import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/staged/concept/field/FieldValueDetail'

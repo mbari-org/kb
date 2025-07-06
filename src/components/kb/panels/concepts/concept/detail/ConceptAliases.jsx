@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import AliasEditIcon from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/AliasEditIcon'
+import AliasModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/aliases/AliasModifyIcon'
 import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases/ConceptAlias'
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 
@@ -27,7 +27,7 @@ const ConceptAliases = () => {
 
   const renderAliasComponent = (alias, _index) => <ConceptAlias alias={alias} />
 
-  const IconComponent = () => <AliasEditIcon action={ADD} aliasIndex={aliases.length} />
+  const IconComponent = () => <AliasModifyIcon action={ADD} aliasIndex={aliases.length} />
 
   return (
     <ConceptPropertiesSection

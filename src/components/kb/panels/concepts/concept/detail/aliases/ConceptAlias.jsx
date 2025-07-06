@@ -2,8 +2,7 @@ import { use } from 'react'
 import { Box, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import AliasDelete from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/delete/AliasDelete'
-import AliasEditIcon from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/AliasEditIcon'
+import AliasModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/aliases/AliasModifyIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -50,11 +49,15 @@ const ConceptAlias = ({ alias }) => {
   const showEdit = editing && !alias.historyId && alias.action !== ALIAS.DELETE
   const showDelete = editing && !alias.historyId && alias.action !== ALIAS.ADD
 
+  const aliasIcon = action => {
+    return <AliasModifyIcon action={action} aliasIndex={alias.index} size={20} />
+  }
+
   return (
     <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
-        {showEdit && <AliasEditIcon action={ALIAS.EDIT} aliasIndex={alias.index} size={20} />}
-        {showDelete && <AliasDelete aliasIndex={alias.index} />}
+        {showEdit && aliasIcon(ALIAS.EDIT)}
+        {showDelete && aliasIcon(ALIAS.DELETE)}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>
         <Box flex={1} sx={{ pl: 0 }}>

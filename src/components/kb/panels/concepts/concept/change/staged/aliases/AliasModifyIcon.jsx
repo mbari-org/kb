@@ -1,27 +1,28 @@
 import { use, useCallback } from 'react'
 
 import PropertyAddIcon from '@/components/common/icon/property/PropertyAddIcon'
+import PropertyDeleteIcon from '@/components/common/icon/property/PropertyDeleteIcon'
 import PropertyEditIcon from '@/components/common/icon/property/PropertyEditIcon'
 
-import createEditAliasModal from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasModal'
-import createEditAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/concept/aliases/edit/createEditAliasOnClose'
+import createAliasModal from '@/components/kb/panels/concepts/concept/change/staged/aliases/createAliasModal'
+import createAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/aliases/createAliasOnClose'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EMPTY_ALIAS, aliasFields } from '@/lib/kb/model/alias'
+import { aliasFields, EMPTY_ALIAS } from '@/lib/kb/model/alias'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const EDIT = CONCEPT_STATE.ALIAS.EDIT
+const ADD = CONCEPT_STATE.ALIAS.ADD
+const DELETE = CONCEPT_STATE.ALIAS.DELETE
 
-const AliasEditIcon = ({ action, aliasIndex, size }) => {
+const AliasModifyIcon = ({ action, aliasIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
   const onClick = useCallback(() => {
-    const stagedAliasItem = stagedState.aliases[aliasIndex]
-    const alias = stagedAliasItem ? aliasFields(stagedAliasItem) : EMPTY_ALIAS
+    const alias = action === ADD ? EMPTY_ALIAS : aliasFields(stagedState.aliases[aliasIndex])
 
     const actionModalData = {
       action,
@@ -31,15 +32,16 @@ const AliasEditIcon = ({ action, aliasIndex, size }) => {
     }
     setModalData(actionModalData)
 
-    const modal = createEditAliasModal(action)
-    const onClose = createEditAliasOnClose({ initialState, modifyConcept })
+    const modal = createAliasModal(action)
+    const onClose = createAliasOnClose({ initialState, modifyConcept })
 
     setModal(modal, onClose)
   }, [action, aliasIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
-  const IconComponent = action === EDIT ? PropertyEditIcon : PropertyAddIcon
+  const IconComponent =
+    action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
   return <IconComponent onClick={onClick} size={size} />
 }
 
-export default AliasEditIcon
+export default AliasModifyIcon

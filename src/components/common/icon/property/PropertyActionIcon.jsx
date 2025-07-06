@@ -7,14 +7,6 @@ const PropertyActionIcon = ({ color, Icon, onClick, size = 24, sx = {} }) => {
   return (
     <Box
       onClick={onClick}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onClick()
-        }
-      }}
-      role='button'
-      tabIndex={0}
       sx={{
         alignItems: 'flex-start',
         backgroundColor: theme.palette.background.paper,
@@ -25,11 +17,6 @@ const PropertyActionIcon = ({ color, Icon, onClick, size = 24, sx = {} }) => {
         padding: 0.5,
         position: 'static',
         zIndex: 1,
-        '&:focus': {
-          outline: '2px solid',
-          outlineColor: color,
-          outlineOffset: '1px',
-        },
         '&:hover': {
           ...theme.kb.icon.hover,
           color,
