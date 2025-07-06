@@ -8,13 +8,13 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { useFieldPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { useConceptNamePendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { isAdmin } from '@/lib/auth/role'
 
 import { LABELS, PENDING } from '@/lib/constants'
 
-const { APPROVAL } = PENDING
+const { APPROVAL, OTHER } = PENDING.APPROVAL
 const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingField }) => {
@@ -26,8 +26,8 @@ const NameDetail = ({ pendingField }) => {
 
   const pendingName = pendingField('ConceptName').find(name => name.newValue === concept.name)
 
-  // Use the specific field approval for this concept name field (or null if no pending name)
-  const conceptNameApproval = useFieldPendingApproval(pendingName?.id)
+  // Use the concept name approval hook that handles the shared field with aliases
+  const conceptNameApproval = useConceptNamePendingApproval()
 
   useEffect(() => {
     setModalData(prevData => ({
@@ -48,11 +48,20 @@ const NameDetail = ({ pendingField }) => {
   }
 
   // Enable extent when concept name is approved (either specifically or via ALL)
-  const enableExtent = conceptNameApproval === APPROVAL.ACCEPT && isAdmin(user)
+  const enableExtent = conceptNameApproval === PENDING.APPROVAL.ACCEPT && isAdmin(user)
+
+  // Custom approval function for FieldDetail that uses concept name approval logic
+  const pendingFieldApproval = fieldId => {
+    return fieldId === pendingName.id && conceptNameApproval !== OTHER
+  }
 
   return (
     <Stack direction='column' spacing={0}>
-      <FieldDetail key={pendingName.id} pendingField={pendingName} />
+      <FieldDetail
+        key={pendingName.id}
+        pendingField={pendingName}
+        pendingFieldApproval={pendingFieldApproval}
+      />
       <Box sx={{ ml: 16 }}>
         <NameChangeExtent
           disabled={!enableExtent}
