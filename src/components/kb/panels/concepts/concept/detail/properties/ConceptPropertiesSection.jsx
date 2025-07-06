@@ -11,6 +11,7 @@ import {
 import { IoChevronDown } from 'react-icons/io5'
 
 import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
+import ConceptPropertiesPageControls from './ConceptPropertiesPageControls'
 
 import { CONCEPT_PROPERTIES } from '@/lib/constants'
 
@@ -154,12 +155,12 @@ const ConceptPropertiesSection = ({
               >
                 {`${startIndex + 1}-${Math.min(endIndex, items.length)} of ${items.length}`}
               </Typography>
-              {/* <ConceptPropertiesPageControls
+              <ConceptPropertiesPageControls
                 currentPage={page}
                 totalPages={Math.ceil(items.length / rowsPerPage)}
                 onPrevious={() => handleChangePage(null, page - 1)}
                 onNext={() => handleChangePage(null, page + 1)}
-              /> */}
+              />
             </Box>
           </Box>
         )}
