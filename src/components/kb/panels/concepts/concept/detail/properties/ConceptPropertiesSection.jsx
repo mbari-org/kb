@@ -11,7 +11,7 @@ import {
 import { IoChevronDown } from 'react-icons/io5'
 
 import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
-import ConceptPropertiesPageButtons from './ConceptPropertiesPageButtons'
+import ConceptPropertiesPageControls from './ConceptPropertiesPageControls'
 
 import { CONCEPT_PROPERTIES } from '@/lib/constants'
 
@@ -79,12 +79,21 @@ const ConceptPropertiesSection = ({
       }}
     >
       <AccordionSummary
-        onClick={e => e.stopPropagation()} // Prevent default toggle
+        onClick={e => {
+          // Only handle accordion toggle if click is not on interactive elements
+          if (!e.target.closest('.clickable-element')) {
+            e.stopPropagation()
+          }
+        }}
         sx={{
           '& .MuiAccordionSummary-content': {
             m: 0,
           },
           px: 0,
+          cursor: 'default !important', // Override Material-UI's default pointer cursor
+          '&:hover': {
+            cursor: 'default !important', // Ensure hover doesn't change cursor
+          },
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
@@ -93,7 +102,7 @@ const ConceptPropertiesSection = ({
           </Typography>
           {IconComponent && (
             <Box
-              onClick={e => e.stopPropagation()} // Prevent accordion toggle
+              className="clickable-element"
               sx={{
                 alignItems: 'center',
                 borderRadius: '50%',
@@ -101,6 +110,10 @@ const ConceptPropertiesSection = ({
                 justifyContent: 'center',
                 ml: -0.5,
                 mt: -1,
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'action.hover',
+                },
               }}
             >
               <IconComponent />
@@ -110,7 +123,14 @@ const ConceptPropertiesSection = ({
         </Box>
         {!disablePagination && hasItems && (
           <Box
-            sx={{ display: 'flex', alignItems: 'center', gap: 2, mr: 2 }}
+            className="clickable-element"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              mr: 2,
+              cursor: 'default', // Ensure no pointer cursor on pagination area
+            }}
             onClick={e => e.stopPropagation()} // Prevent accordion interference
           >
             <Box
@@ -123,8 +143,9 @@ const ConceptPropertiesSection = ({
               }}
             >
               <Typography
+                className="clickable-element"
                 variant='body2'
-                sx={{ whiteSpace: 'nowrap' }}
+                sx={{ whiteSpace: 'nowrap', cursor: 'pointer' }}
                 onClick={() => {
                   // Ensure accordion is expanded when pagination text is clicked
                   if (!expanded) {
@@ -134,12 +155,12 @@ const ConceptPropertiesSection = ({
               >
                 {`${startIndex + 1}-${Math.min(endIndex, items.length)} of ${items.length}`}
               </Typography>
-              <ConceptPropertiesPageButtons
+              {/* <ConceptPropertiesPageControls
                 currentPage={page}
                 totalPages={Math.ceil(items.length / rowsPerPage)}
                 onPrevious={() => handleChangePage(null, page - 1)}
                 onNext={() => handleChangePage(null, page + 1)}
-              />
+              /> */}
             </Box>
           </Box>
         )}
@@ -150,11 +171,12 @@ const ConceptPropertiesSection = ({
         )}
         {!showEmptyIcon && (
           <Box
+            className="clickable-element"
             onClick={handleToggle}
             sx={{
               alignItems: 'center',
               borderRadius: '50%',
-              cursor: 'pointer',
+              cursor: 'pointer !important',
               display: 'flex',
               height: 32,
               justifyContent: 'center',
@@ -162,6 +184,10 @@ const ConceptPropertiesSection = ({
               width: 32,
               '&:hover': {
                 backgroundColor: 'action.hover',
+                cursor: 'pointer !important',
+              },
+              '& *': {
+                cursor: 'pointer !important', // Ensure child elements also have pointer cursor
               },
             }}
           >
