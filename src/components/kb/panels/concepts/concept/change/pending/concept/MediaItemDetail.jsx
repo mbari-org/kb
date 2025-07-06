@@ -16,7 +16,6 @@ import { capitalize } from '@/lib/utils'
 import { PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
-const { MEDIA } = PENDING.GROUP
 
 const MediaItemDetail = ({ pendingMediaItem }) => {
   const pendingAction = capitalize(pendingMediaItem.action.toLowerCase())

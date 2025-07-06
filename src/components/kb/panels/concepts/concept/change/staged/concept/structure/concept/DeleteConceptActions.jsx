@@ -10,9 +10,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import saveDelete from '@/contexts/panels/concepts/staged/save/saveDelete'
 
-import { LABELS, SELECTED } from '@/lib/constants'
-
-const { CANCEL, DELETE } = LABELS.CONCEPT.ACTION
+import { SELECTED } from '@/lib/constants'
 
 const DeleteConceptActions = () => {
   const { concept, setEditing } = use(ConceptContext)
@@ -35,13 +33,12 @@ const DeleteConceptActions = () => {
       })
   }
 
-  // Custom action configuration for delete confirmation
   return createConceptActions({
-    onDiscard: handleCancel,  // Cancel button
-    onStage: handleDelete,    // Delete button 
+    onDiscard: handleCancel,
+    onStage: handleDelete,
     stageDisabled: !modalData?.isValid,
     confirmReset: false,
-    name: 'DeleteConceptActions'
+    name: 'DeleteConceptActions',
   })
 }
 

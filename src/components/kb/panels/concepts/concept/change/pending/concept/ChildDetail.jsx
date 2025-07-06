@@ -15,7 +15,6 @@ import { PENDING } from '@/lib/constants'
 import { capitalize } from '@/lib/utils'
 
 const { OTHER } = PENDING.APPROVAL
-const { CHILDREN } = PENDING.GROUP
 
 const ChildDetail = ({ pendingChild, leftMargin }) => {
   const pendingAction = capitalize(pendingChild.action.toLowerCase())

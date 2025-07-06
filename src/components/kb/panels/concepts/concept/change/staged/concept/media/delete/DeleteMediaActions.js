@@ -1,15 +1,14 @@
 import { use } from 'react'
 
-import { createStageDiscardHandlers, createConceptActions } from '@/components/modal/concept/conceptModalUtils'
+import {
+  createConceptActions,
+  createStageDiscardHandlers,
+} from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
-
-import { LABELS } from '@/lib/constants'
-
-const { DISCARD, STAGE } = LABELS.BUTTON
 
 const DeleteMediaActions = () => {
   const {
@@ -29,13 +28,13 @@ const DeleteMediaActions = () => {
   const { handleDiscard, handleStage } = createStageDiscardHandlers({
     modifyConcept,
     closeModal,
-    stageAction
+    stageAction,
   })
 
   return createConceptActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
-    name: 'DeleteMediaActions'
+    name: 'DeleteMediaActions',
   })
 }
 

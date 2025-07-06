@@ -6,8 +6,6 @@ import { pick } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const REALIZATION_FIELDS = ['id', 'linkName', 'toConcept', 'linkValue']
-
 const EMPTY_REALIZATION = {
   linkName: '',
   toConcept: '',

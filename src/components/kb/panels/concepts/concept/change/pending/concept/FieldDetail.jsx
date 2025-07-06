@@ -16,7 +16,11 @@ const { OTHER } = PENDING.APPROVAL
 // CxNote: pendingFieldApproval allows custom approval for fields beyond the field id
 
 const FieldDetail = ({ pendingField, pendingFieldApproval = () => false }) => {
-  const approval = useFieldPendingApproval(pendingField.id)
+  const individualApproval = useFieldPendingApproval(pendingField.id)
+
+  // If pendingFieldApproval returns true for this field, use the individual approval
+  // Otherwise, this field is not part of the custom approval group
+  const approval = pendingFieldApproval(pendingField.id) ? individualApproval : OTHER
 
   const disabled = approval === OTHER
 

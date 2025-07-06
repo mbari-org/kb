@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const useTemplateForm = ({ isEdit = false, onChange, template, original }) => {
+const useTemplateForm = ({ onChange, template, original }) => {
   const [hasSearchInput, setHasSearchInput] = useState(false)
 
   const handleChange = field => event => {

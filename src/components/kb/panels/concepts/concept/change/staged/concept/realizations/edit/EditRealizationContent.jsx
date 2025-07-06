@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useState } from 'react'
 import { Box, FormControl, TextField } from '@mui/material'
 
 import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
@@ -15,7 +15,7 @@ import { EMPTY_REALIZATION_ITEM } from './realizationItem'
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
 const EditRealizationContent = () => {
-  const { concept, stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
 
   const { action, realizationIndex, realizationItem } = modalData

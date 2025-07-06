@@ -1,10 +1,7 @@
-import { use } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 
 import RealizationItemDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationItemDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
-
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { useRealizationsPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
@@ -16,8 +13,6 @@ const { OTHER } = PENDING.APPROVAL
 const { REALIZATIONS } = PENDING.GROUP
 
 const RealizationsDetail = ({ pendingField }) => {
-  const { concept } = use(ConceptContext)
-
   const pendingRealizations = pendingField('LinkRealization')
 
   const approval = useRealizationsPendingApproval()

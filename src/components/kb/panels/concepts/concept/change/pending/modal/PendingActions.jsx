@@ -108,7 +108,7 @@ const PendingActions = () => {
           break
       }
     },
-    [setConfirmPending, confirmPending, closeModal, conceptPending, updatePending]
+    [confirmPending, setConfirmPending, closeModal, conceptPending, concept.name, updatePending]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')
