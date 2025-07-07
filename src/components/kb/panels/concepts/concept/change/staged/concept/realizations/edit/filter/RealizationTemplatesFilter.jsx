@@ -5,27 +5,29 @@ import RealizationTemplate from './RealizationTemplate'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
 const RealizationTemplatesFilter = ({ onTemplateSelect, linkNameFilter }) => {
   const { isLoading, templates } = use(PanelDataContext)
   const { concept } = use(ConceptContext)
+  const { getAncestors } = use(TaxonomyContext)
 
-  // Filter templates for current concept and by linkName
+  // Filter templates for current concept and by linkName (using available logic like Templates panel)
   const availableTemplates = useMemo(() => {
     if (!concept || !templates) return []
 
-    // First filter by concept
-    const conceptTemplates = templates.filter(template => template.concept === concept.name)
+    // Get all available concepts (current concept + ancestors) like Templates panel does when Available=true
+    const ancestors = getAncestors(concept.name)
+    const allConcepts = [concept.name, ...ancestors]
 
-    // Then apply linkName filter if provided
-    if (linkNameFilter) {
-      return filterTemplates(conceptTemplates, { linkName: linkNameFilter })
-    }
-
-    return conceptTemplates
-  }, [templates, concept, linkNameFilter])
+    // Use the same filterTemplates utility as Templates panel
+    return filterTemplates(templates, {
+      concepts: allConcepts,
+      linkName: linkNameFilter
+    })
+  }, [templates, concept, linkNameFilter, getAncestors])
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,
