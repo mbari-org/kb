@@ -13,7 +13,7 @@ const ConceptMedia = () => {
   return (
     <Box
       sx={{
-        flexBasis: '33.33%',
+        flexBasis: '25%',
         flexShrink: 0,
         maxHeight: '50%',
         overflow: 'hidden',

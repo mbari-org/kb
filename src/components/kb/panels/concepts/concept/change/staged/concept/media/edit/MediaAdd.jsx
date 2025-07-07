@@ -13,11 +13,6 @@ const MediaAdd = ({ sx }) => {
       sx={{
         ...sx,
         backgroundColor: 'transparent',
-        bottom: 'unset',
-        left: '50%',
-        right: 'unset',
-        top: 0,
-        transform: 'translateX(-50%)',
       }}
     />
   )

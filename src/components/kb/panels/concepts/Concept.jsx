@@ -3,7 +3,7 @@ import { use } from 'react'
 import { Stack } from '@mui/material'
 
 import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
-import ConceptDetail from '@/components/kb/panels/concepts/concept/ConceptDetail'
+import ConceptView from '@/components/kb/panels/concepts/concept/ConceptView'
 import ConceptPath from '@/components/kb/panels/concepts/concept/ConceptPath'
 import ConceptViewToggle from '@/components/kb/panels/concepts/concept/toggleView/ConceptViewToggle'
 
@@ -35,7 +35,7 @@ const Concept = () => {
         <ConceptPath />
         <ConceptViewToggle />
       </Stack>
-      <ConceptDetail />
+      <ConceptView />
       {!isReadOnly(user) && <ConceptEditingActions />}
     </Stack>
   )

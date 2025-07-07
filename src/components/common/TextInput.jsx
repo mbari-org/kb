@@ -55,6 +55,7 @@ const TextInput = ({
         size={size}
         sx={sx}
         value={inputValue}
+        fullWidth
       />
       {showClearButton && inputValue && (
         <IconButton
@@ -62,10 +63,10 @@ const TextInput = ({
           onClick={handleClear}
           sx={{
             position: 'absolute',
-            right: 4,
+            right: 0,
             top: '50%',
             transform: 'translateY(-50%)',
-            padding: 0.5,
+            paddingRight: 0.25,
             '&:hover': {
               backgroundColor: 'rgba(0, 0, 0, 0.04)',
             },

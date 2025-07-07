@@ -49,3 +49,7 @@
 .swiper-button-prev:hover {
   color: #ddd;
 }
+
+.swiper-pagination {
+  bottom: 0px !important;
+}

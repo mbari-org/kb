@@ -4,7 +4,7 @@ import ConceptMedia from '@/components/kb/panels/concepts/concept/detail/Concept
 import ConceptName from '@/components/kb/panels/concepts/concept/detail/ConceptName'
 import ConceptProperties from '@/components/kb/panels/concepts/concept/detail/properties/ConceptProperties'
 
-const ConceptDetail = () => {
+const ConceptView = () => {
   return (
     <Stack direction='row' spacing={1.5} sx={{ height: '100%' }}>
       <ConceptMedia />
@@ -16,4 +16,4 @@ const ConceptDetail = () => {
   )
 }
 
-export default ConceptDetail
+export default ConceptView

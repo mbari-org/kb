@@ -33,20 +33,25 @@ const MediaView = () => {
         {showEditMedia && (
           <Box>
             <MediaDelete />
+            {editing && (
+              <MediaAdd
+                bgColor={theme.palette.background.paperLight}
+                sx={{
+                  position: 'absolute',
+                  bottom: 28,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  zIndex: 1,
+                  mb: 1.25,
+                }}
+              />
+            )}
             <MediaEdit />
           </Box>
         )}
       </Box>
       <Box sx={{ mt: 0.5, position: 'relative', overflow: 'visible' }}>
         <MediaSwiper height='auto' />
-        {editing && (
-          <MediaAdd
-            bgColor={theme.palette.background.paperLight}
-            sx={{
-              mt: 1,
-            }}
-          />
-        )}
       </Box>
     </Box>
   )

@@ -37,16 +37,18 @@ const RealizationForm = ({
           </FormControl>
         </Box>
       </Stack>
-      <FormControl fullWidth margin='normal'>
-        <TextInput
-          label='Link Value'
-          name='linkValue'
-          onChange={handleChange}
-          required
-          size='small'
-          value={formRealizationItem.linkValue}
-        />
-      </FormControl>
+      <Box sx={{ width: '100%' }}>
+        <FormControl fullWidth margin='normal'>
+          <TextInput
+            label='Link Value'
+            name='linkValue'
+            onChange={handleChange}
+            required
+            size='small'
+            value={formRealizationItem.linkValue}
+          />
+        </FormControl>
+      </Box>
     </Box>
   )
 }
