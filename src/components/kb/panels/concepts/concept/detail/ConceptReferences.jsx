@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
-import ConceptPropertiesInspect from '@/components/kb/panels/concepts/concept/detail/ConceptPropertiesInspectButton'
+import ConceptPropertiesInspect from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesInspectButton'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'

@@ -2,7 +2,7 @@ import { Stack } from '@mui/material'
 
 import ConceptMedia from '@/components/kb/panels/concepts/concept/detail/ConceptMedia'
 import ConceptName from '@/components/kb/panels/concepts/concept/detail/ConceptName'
-import ConceptProperties from '@/components/kb/panels/concepts/concept/detail/ConceptProperties'
+import ConceptProperties from '@/components/kb/panels/concepts/concept/detail/properties/ConceptProperties'
 
 const ConceptDetail = () => {
   return (

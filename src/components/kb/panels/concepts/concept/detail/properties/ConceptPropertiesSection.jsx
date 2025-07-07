@@ -4,14 +4,12 @@ import {
   AccordionSummary,
   AccordionDetails,
   Box,
-  Typography,
   Stack,
+  Typography,
 } from '@mui/material'
 
-import { IoChevronDown } from 'react-icons/io5'
-
-import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
-import ConceptPropertiesPageControls from './ConceptPropertiesPageControls'
+import ConceptPropertiesDetails from './ConceptPropertiesDetails'
+import ConceptPropertiesSummary from './ConceptPropertiesSummary'
 
 import { CONCEPT_PROPERTIES } from '@/lib/constants'
 
@@ -55,17 +53,13 @@ const ConceptPropertiesSection = ({
     setPage(0)
   }, [items])
 
-  const handleChangePage = (_event, newPage) => {
+  const handleChangePage = newPage => {
     setPage(newPage)
     // Ensure accordion is expanded when pagination buttons are clicked
     if (!expanded) {
       setExpanded(true)
     }
   }
-
-  const startIndex = page * rowsPerPage
-  const endIndex = startIndex + rowsPerPage
-  const paginatedItems = items.slice(startIndex, endIndex)
 
   return (
     <Accordion
@@ -96,132 +90,38 @@ const ConceptPropertiesSection = ({
           },
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
-          <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-            {title}
-          </Typography>
-          {IconComponent && (
-            <Box
-              className='clickable-element'
-              sx={{
-                alignItems: 'center',
-                borderRadius: '50%',
-                display: 'flex',
-                justifyContent: 'center',
-                ml: -0.5,
-                mt: -1,
-                cursor: 'pointer',
-                '&:hover': {
-                  backgroundColor: 'action.hover',
-                },
-              }}
-            >
-              <IconComponent />
-            </Box>
-          )}
-          <Box sx={{ ml: 2 }}>{children}</Box>
-        </Box>
-        {!disablePagination && hasItems && (
-          <Box
-            className='clickable-element'
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              mr: 2,
-              cursor: 'default', // Ensure no pointer cursor on pagination area
-            }}
-            onClick={e => e.stopPropagation()} // Prevent accordion interference
-          >
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                gap: 1,
-                justifyContent: 'flex-end',
-                minWidth: 175,
-              }}
-            >
-              <Typography
-                className='clickable-element'
-                variant='body2'
-                sx={{ whiteSpace: 'nowrap', cursor: 'pointer' }}
-                onClick={() => {
-                  // Ensure accordion is expanded when pagination text is clicked
-                  if (!expanded) {
-                    setExpanded(true)
-                  }
-                }}
-              >
-                {`${startIndex + 1}-${Math.min(endIndex, items.length)} of ${items.length}`}
-              </Typography>
-              <ConceptPropertiesPageControls
-                currentPage={page}
-                totalPages={Math.ceil(items.length / rowsPerPage)}
-                onPrevious={() => handleChangePage(null, page - 1)}
-                onNext={() => handleChangePage(null, page + 1)}
-              />
-            </Box>
-          </Box>
-        )}
-        {showEmptyIcon && (
-          <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
-            <ConceptPropertiesEmpty />
-          </Box>
-        )}
-        {!showEmptyIcon && (
-          <Box
-            className='clickable-element'
-            onClick={handleToggle}
-            sx={{
-              alignItems: 'center',
-              borderRadius: '50%',
-              cursor: 'pointer !important',
-              display: 'flex',
-              height: 32,
-              justifyContent: 'center',
-              mr: -0.5,
-              width: 32,
-              '&:hover': {
-                backgroundColor: 'action.hover',
-                cursor: 'pointer !important',
-              },
-              '& *': {
-                cursor: 'pointer !important', // Ensure child elements also have pointer cursor
-              },
-            }}
-          >
-            <IoChevronDown
-              size={24}
-              style={{
-                transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s ease',
-              }}
-            />
-          </Box>
-        )}
+        <ConceptPropertiesSummary
+          expanded={expanded}
+          handleToggle={handleToggle}
+          IconComponent={IconComponent}
+          showEmptyIcon={showEmptyIcon}
+          title={title}
+          currentPage={page}
+          disablePagination={disablePagination}
+          hasItems={hasItems}
+          itemsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          onPageTextClick={() => {
+            if (!expanded) {
+              setExpanded(true)
+            }
+          }}
+          totalItems={items.length}
+        >
+          {children}
+        </ConceptPropertiesSummary>
       </AccordionSummary>
       <AccordionDetails sx={{ pt: 0, pb: 1, px: 0, mt: -2 }}>
-        {isLoading && (
-          <Typography variant='body2' sx={{ color: 'text.secondary', py: 1 }}>
-            {loadingText}
-          </Typography>
-        )}
-        {hasItems && !isLoading && (
-          <Box sx={{ ml: 1.5, mt: 1 }}>
-            <Stack spacing={1}>
-              {paginatedItems.map((item, index) => (
-                <Box key={renderItem.key ? renderItem.key(item, index) : index}>
-                  {renderComponent
-                    ? renderComponent(item, index)
-                    : typeof renderItem.content === 'function'
-                    ? renderItem.content(item, index)
-                    : renderItem.content}
-                </Box>
-              ))}
-            </Stack>
-          </Box>
-        )}
+        <ConceptPropertiesDetails
+          isLoading={isLoading}
+          loadingText={loadingText}
+          hasItems={hasItems}
+          items={items}
+          currentPage={page}
+          itemsPerPage={rowsPerPage}
+          renderComponent={renderComponent}
+          renderItem={renderItem}
+        />
       </AccordionDetails>
     </Accordion>
   )
