@@ -23,7 +23,11 @@ const EditRealizationContent = () => {
   const debouncedUpdateForm = useDebounce((updatedRealizationItem, fieldIsModified, field) => {
     const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
 
-    setModalData(prev => ({ ...prev, realizationItem: updatedRealizationItem, modified: updatedModified }))
+    setModalData(prev => ({
+      ...prev,
+      realizationItem: updatedRealizationItem,
+      modified: updatedModified,
+    }))
   }, 300)
 
   const handleChange = event => {
@@ -88,11 +92,11 @@ const EditRealizationContent = () => {
 
   return (
     <Box>
-      <RealizationTemplatesFilter 
-        onTemplateSelect={handleChange} 
+      <RealizationTemplatesFilter
+        onTemplateSelect={handleChange}
         linkNameFilter={formRealizationItem.linkName}
       />
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 1 }} />
       <RealizationForm
         formRealizationItem={formRealizationItem}
         handleChange={handleChange}

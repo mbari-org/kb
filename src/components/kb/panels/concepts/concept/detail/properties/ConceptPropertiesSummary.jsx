@@ -4,9 +4,9 @@ import ConceptPropertiesCount from './ConceptPropertiesCount'
 import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 
 const ConceptPropertiesSummary = ({
-  alwaysExpanded = false,
   children,
   expanded,
+  fixedHeight,
   handleToggle,
   IconComponent,
   showEmptyIcon,
@@ -55,7 +55,7 @@ const ConceptPropertiesSummary = ({
         showEmptyIcon={showEmptyIcon}
         totalItems={totalItems}
       />
-      {!showEmptyIcon && !alwaysExpanded && (
+      {!showEmptyIcon && fixedHeight === undefined && (
         <ConceptPropertiesDisclosure expanded={expanded} onToggle={handleToggle} />
       )}
     </Box>

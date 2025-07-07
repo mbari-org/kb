@@ -25,7 +25,7 @@ const RealizationTemplatesFilter = ({ onTemplateSelect, linkNameFilter }) => {
     // Use the same filterTemplates utility as Templates panel
     return filterTemplates(templates, {
       concepts: allConcepts,
-      linkName: linkNameFilter
+      linkName: linkNameFilter,
     })
   }, [templates, concept, linkNameFilter, getAncestors])
 
@@ -38,7 +38,7 @@ const RealizationTemplatesFilter = ({ onTemplateSelect, linkNameFilter }) => {
 
   return (
     <ConceptPropertiesSection
-      alwaysExpanded={true}
+      fixedHeight={160}
       isLoading={isLoading}
       items={availableTemplates}
       loadingText='Loading templates...'

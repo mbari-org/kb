@@ -9,10 +9,10 @@ import { CONCEPT_PROPERTIES } from '@/lib/constants'
 const { ITEMS_PER_PAGE } = CONCEPT_PROPERTIES
 
 const ConceptPropertiesSection = ({
-  alwaysExpanded = false,
   children,
   defaultExpanded = true,
   disablePagination = false,
+  fixedHeight,
   IconComponent,
   isLoading = false,
   items = [],
@@ -21,23 +21,23 @@ const ConceptPropertiesSection = ({
   renderItem,
   title,
 }) => {
-  const [expanded, setExpanded] = useState(alwaysExpanded || defaultExpanded)
+  const [expanded, setExpanded] = useState(fixedHeight !== undefined || defaultExpanded)
   const [page, setPage] = useState(0)
   const rowsPerPage = ITEMS_PER_PAGE
 
   const hasItems = items?.length > 0
   const showEmptyIcon = !hasItems && !isLoading
 
-  // collapsed when no items (unless alwaysExpanded is true)
+  // collapsed when no items (unless fixedHeight is set)
   useEffect(() => {
-    if (showEmptyIcon && !alwaysExpanded) {
+    if (showEmptyIcon && fixedHeight === undefined) {
       setExpanded(false)
     }
-  }, [showEmptyIcon, alwaysExpanded])
+  }, [showEmptyIcon, fixedHeight])
 
   const handleToggle = () => {
-    // Only allow toggle if there are items and alwaysExpanded is false
-    if (hasItems && !alwaysExpanded) {
+    // Only allow toggle if there are items and fixedHeight is not set
+    if (hasItems && fixedHeight === undefined) {
       setExpanded(!expanded)
     }
   }
@@ -49,15 +49,15 @@ const ConceptPropertiesSection = ({
 
   const handleChangePage = newPage => {
     setPage(newPage)
-    // Ensure accordion is expanded when pagination buttons are clicked (unless alwaysExpanded is true)
-    if (!expanded && !alwaysExpanded) {
+    // Ensure accordion is expanded when pagination buttons are clicked (unless fixedHeight is set)
+    if (!expanded && fixedHeight === undefined) {
       setExpanded(true)
     }
   }
 
   return (
     <Accordion
-      expanded={alwaysExpanded || expanded}
+      expanded={fixedHeight !== undefined || expanded}
       onChange={() => {}} // Disable default accordion behavior
       sx={{
         boxShadow: 'none',
@@ -82,10 +82,13 @@ const ConceptPropertiesSection = ({
           '&:hover': {
             cursor: 'default !important', // Ensure hover doesn't change cursor
           },
+          ...(fixedHeight !== undefined && {
+            minHeight: 'auto', // Prevent height changes when content changes
+          }),
         }}
       >
         <ConceptPropertiesSummary
-          alwaysExpanded={alwaysExpanded}
+          fixedHeight={fixedHeight}
           expanded={expanded}
           handleToggle={handleToggle}
           IconComponent={IconComponent}
@@ -97,7 +100,7 @@ const ConceptPropertiesSection = ({
           itemsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           onPageTextClick={() => {
-            if (!expanded && !alwaysExpanded) {
+            if (!expanded && fixedHeight === undefined) {
               setExpanded(true)
             }
           }}
@@ -106,8 +109,22 @@ const ConceptPropertiesSection = ({
           {children}
         </ConceptPropertiesSummary>
       </AccordionSummary>
-      <AccordionDetails sx={{ pt: 0, pb: 1, px: 0, mt: -2 }}>
+      <AccordionDetails 
+        sx={{ 
+          pt: 0, 
+          pb: 1, 
+          px: 0, 
+          mt: -2,
+          ...(fixedHeight !== undefined && {
+            height: fixedHeight,
+            overflow: 'auto',
+            display: 'flex',
+            flexDirection: 'column'
+          })
+        }}
+      >
         <ConceptPropertiesDetails
+          fixedHeight={fixedHeight}
           isLoading={isLoading}
           loadingText={loadingText}
           hasItems={hasItems}

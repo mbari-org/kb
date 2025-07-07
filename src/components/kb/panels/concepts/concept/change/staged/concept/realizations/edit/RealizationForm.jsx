@@ -15,8 +15,8 @@ const RealizationForm = ({
   return (
     <Box component='form' id={EDIT_REALIZATION_FORM_ID} onSubmit={stageChange}>
       <Stack direction='row' spacing={1} width='100%' alignItems='center'>
-        <Box sx={{ width: 200, flexShrink: 0, pt: 2.5 }}>
-          <FormControl fullWidth margin='normal'>
+        <Box sx={{ width: 200, flexShrink: 0, pt: 4.5 }}>
+          <FormControl fullWidth margin='normal' sx={{ mt: 0 }}>
             <TextInput
               label='Link Name'
               name='linkName'
