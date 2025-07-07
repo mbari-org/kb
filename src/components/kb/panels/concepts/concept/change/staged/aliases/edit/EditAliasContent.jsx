@@ -78,36 +78,47 @@ const EditAliasContent = () => {
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={stageAlias}>
       <FormControl {...inputStyle}>
         <TextField
+          error={nameError}
+          helperText={nameHelperText}
           label='Name'
           name='name'
           onChange={handleChange}
           required
+          size='small'
           value={formAlias.name}
-          error={nameError}
-          helperText={nameHelperText}
         />
       </FormControl>
-      <FormControl {...inputStyle}>
-        <TextField label='Author' name='author' onChange={handleChange} value={formAlias.author} />
-      </FormControl>
-      <FormControl {...inputStyle}>
-        <InputLabel id={`${formAlias.name}-name-type-label`}>Type</InputLabel>
-        <Select
-          displayEmpty
-          label='Type'
-          name='nameType'
-          labelId={`${formAlias.name}-name-type-label`}
-          onChange={handleChange}
-          required
-          value={formAlias.nameType}
-        >
-          {ALIAS_TYPES.map(value => (
-            <MenuItem key={value} value={value}>
-              {value}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Box sx={{ display: 'flex', gap: 2 }}>
+        <FormControl {...inputStyle} sx={{ flex: 1 }}>
+          <TextField
+            label='Author'
+            name='author'
+            onChange={handleChange}
+            size='small'
+            value={formAlias.author}
+          />
+        </FormControl>
+        <FormControl {...inputStyle} sx={{ width: 130 }}>
+          <InputLabel id={`${formAlias.name}-name-type-label`}>Type</InputLabel>
+          <Select
+            displayEmpty
+            label='Type'
+            name='nameType'
+            labelId={`${formAlias.name}-name-type-label`}
+            onChange={handleChange}
+            required
+            size='small'
+            sx={{ height: 43.2812 }}
+            value={formAlias.nameType}
+          >
+            {ALIAS_TYPES.map(value => (
+              <MenuItem key={value} value={value}>
+                {value}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
     </Box>
   )
 }
