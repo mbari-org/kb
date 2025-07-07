@@ -1,18 +1,14 @@
 import { use, useState } from 'react'
-import { Box, FormControl, TextField } from '@mui/material'
-
-import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useStageRealization from './useStageRealization'
 import useDebounce from '@/hooks/useDebounce'
+import EditRealizationForm from './EditRealizationForm'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { EMPTY_REALIZATION_ITEM } from './realizationItem'
-
-export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
 const EditRealizationContent = () => {
   const { stagedState } = use(ConceptContext)
@@ -28,7 +24,6 @@ const EditRealizationContent = () => {
     linkValue: false,
   })
 
-  // Debounced function to update form state and modal data
   const debouncedUpdateForm = useDebounce((updatedRealizationItem, fieldIsModified, field) => {
     const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
     setModifiedFields(updatedModifiedFields)
@@ -46,7 +41,6 @@ const EditRealizationContent = () => {
       [field]: value,
     }
 
-    // Update form state immediately for responsive UI
     setFormRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
@@ -54,7 +48,6 @@ const EditRealizationContent = () => {
         ? updatedRealizationItem[field] !== EMPTY_REALIZATION_ITEM[field]
         : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
 
-    // Debounce the form state update and modal data changes
     debouncedUpdateForm(updatedRealizationItem, fieldIsModified, field)
   }
 
@@ -101,33 +94,13 @@ const EditRealizationContent = () => {
   }
 
   return (
-    <Box component='form' id={EDIT_REALIZATION_FORM_ID} onSubmit={stageChange}>
-      <FormControl fullWidth margin='normal'>
-        <TextField
-          label='Link Name'
-          name='linkName'
-          onChange={handleChange}
-          required
-          value={formRealizationItem.linkName}
-        />
-      </FormControl>
-      <FormControl fullWidth margin='normal'>
-        <ToConceptSelect
-          conceptName={formRealizationItem.toConcept}
-          doConceptSelected={handleToConceptSelect}
-          onSpecialChange={handleToConceptSpecial}
-        />
-      </FormControl>
-      <FormControl fullWidth margin='normal'>
-        <TextField
-          label='Link Value'
-          name='linkValue'
-          onChange={handleChange}
-          required
-          value={formRealizationItem.linkValue}
-        />
-      </FormControl>
-    </Box>
+    <EditRealizationForm
+      formRealizationItem={formRealizationItem}
+      handleChange={handleChange}
+      handleToConceptSelect={handleToConceptSelect}
+      handleToConceptSpecial={handleToConceptSpecial}
+      stageChange={stageChange}
+    />
   )
 }
 

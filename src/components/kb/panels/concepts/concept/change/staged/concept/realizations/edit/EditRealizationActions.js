@@ -8,7 +8,7 @@ import {
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EDIT_REALIZATION_FORM_ID } from './EditRealizationContent'
+import { EDIT_REALIZATION_FORM_ID } from './EditRealizationForm'
 
 const EditRealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)

@@ -53,7 +53,6 @@ const EditMediaContent = () => {
     [concept.media]
   )
 
-  // Debounced function to update form state and modal data
   const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field) => {
     const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
     setModifiedFields(updatedModifiedFields)
@@ -63,7 +62,6 @@ const EditMediaContent = () => {
     setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified }))
   }, 300)
 
-  // Debounced function to check URL validity
   const debouncedUrlCheck = useDebounce(value => {
     if (isUrlValid(value)) {
       setUrlStatus({ loading: true, valid: true, isDuplicate: false })
@@ -85,7 +83,6 @@ const EditMediaContent = () => {
       [field]: type === 'checkbox' ? checked : value,
     }
 
-    // Update form state immediately for responsive UI
     setFormMediaItem(updatedMediaItem)
 
     const fieldIsModified =
@@ -93,10 +90,8 @@ const EditMediaContent = () => {
         ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
         : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
 
-    // Debounce the form state update and modal data changes
     debouncedUpdateForm(updatedMediaItem, fieldIsModified, field)
 
-    // Handle URL validation with debouncing
     if (field === 'url') {
       debouncedUrlCheck(value)
     }

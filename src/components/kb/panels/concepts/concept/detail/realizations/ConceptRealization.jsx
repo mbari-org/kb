@@ -60,13 +60,13 @@ const ConceptRealization = ({ realization }) => {
         {showDelete && realizationIcon(CONCEPT_STATE.REALIZATION.DELETE)}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>
-        <Box flex={1} sx={{ pl: 0 }}>
+        <Box sx={{ pl: 0, width: 200, flexShrink: 0 }}>
           <TextField {...infoStyle} label='Link Name' value={realization.linkName || ''} />
         </Box>
-        <Box flex={1}>
+        <Box sx={{ flex: 1 }}>
           <TextField {...infoStyle} label='To Concept' value={realization.toConcept || ''} />
         </Box>
-        <Box flex={1}>
+        <Box sx={{ flex: 1.5 }}>
           <TextField {...infoStyle} label='Link Value' value={realization.linkValue || ''} />
         </Box>
       </Stack>
