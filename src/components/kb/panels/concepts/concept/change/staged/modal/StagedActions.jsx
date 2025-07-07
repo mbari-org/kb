@@ -40,7 +40,10 @@ const StagedActions = ({ intent }) => {
     } else if (targetConcept) {
       updateSelected({ concept: targetConcept })
     } else if (isLogout) {
-      logout()
+      // Close modal and wait for React to complete cleanup before logging out
+      closeModal(true, () => {
+        logout()
+      })
     }
   }
 

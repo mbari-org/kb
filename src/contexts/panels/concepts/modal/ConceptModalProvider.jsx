@@ -1,4 +1,5 @@
 import { useCallback, useState, useMemo } from 'react'
+import { flushSync } from 'react-dom'
 
 import ConceptModalContext from './ConceptModalContext'
 
@@ -9,7 +10,7 @@ const ConceptModalProvider = ({ children }) => {
   const [processing, setProcessing] = useState(false)
 
   const closeModal = useCallback(
-    confirmed => {
+    (confirmed, onComplete) => {
       // if processing, don't close unless forced
       if (processing && !confirmed) {
         return false
@@ -24,10 +25,19 @@ const ConceptModalProvider = ({ children }) => {
         }
       }
 
-      setOnClose(null)
-      setModalData({})
-      setModal(null)
-      setProcessing(false)
+      // Use flushSync to ensure all state updates are committed synchronously
+      flushSync(() => {
+        setOnClose(null)
+        setModalData({})
+        setModal(null)
+        setProcessing(false)
+      })
+
+      // Execute completion callback after React has completed all updates
+      if (onComplete) {
+        // Use setTimeout to ensure we're outside the current render cycle
+        setTimeout(onComplete, 0)
+      }
 
       return true
     },

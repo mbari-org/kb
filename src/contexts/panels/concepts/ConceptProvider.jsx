@@ -121,7 +121,6 @@ const ConceptProvider = ({ children }) => {
   }, [
     concept,
     conceptLoader,
-    displayStaged,
     getSelected,
     hasUnsavedChanges,
     panels,
