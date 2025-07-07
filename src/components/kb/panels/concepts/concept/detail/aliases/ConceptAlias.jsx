@@ -60,13 +60,13 @@ const ConceptAlias = ({ alias }) => {
         {showDelete && aliasIcon(ALIAS.DELETE)}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>
-        <Box flex={1} sx={{ pl: 0 }}>
+        <Box sx={{ flex: 1.5, pl: 0 }}>
           <TextField {...infoStyle} label='Name' value={alias.name || ''} />
         </Box>
-        <Box flex={1}>
+        <Box sx={{ flex: 1 }}>
           <TextField {...infoStyle} label='Author' value={alias.author || ''} />
         </Box>
-        <Box flex={0.5}>
+        <Box sx={{ width: 90, flexShrink: 0 }}>
           <TextField {...infoStyle} label='Type' value={alias.nameType || ''} />
         </Box>
       </Stack>
