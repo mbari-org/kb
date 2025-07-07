@@ -3,10 +3,23 @@ import { useTheme } from '@emotion/react'
 
 import { Button } from '@mui/material'
 
+import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+
+import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
+
+import { LABELS, SELECTED } from '@/lib/constants'
+
+const { CONTINUE } = LABELS.BUTTON
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
   const { panels } = use(SelectedContext)
+  const { hasUnsavedChanges } = use(UserContext)
+  const { setModalData } = use(ConceptModalContext)
+
+  const displayStaged = useStagedModal()
+
   const currentPanel = panels.current()
 
   const [isHovering, setIsHovering] = useState(false)
@@ -28,9 +41,24 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
     }
   }
 
+  const handleClick = () => {
+    if (name === currentPanel) return
+
+    // Check if we're switching away from Concepts panel with unsaved changes
+    const isOnConceptsPanel = currentPanel === SELECTED.PANELS.CONCEPTS
+    const hasModifications = isOnConceptsPanel && hasUnsavedChanges
+
+    if (hasModifications) {
+      displayStaged(CONTINUE)
+      setModalData(prev => ({ ...prev, panel: name }))
+    } else {
+      selectPanel(name)
+    }
+  }
+
   return (
     <Button
-      onClick={() => name !== currentPanel && selectPanel(name)}
+      onClick={handleClick}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       sx={getSx()}

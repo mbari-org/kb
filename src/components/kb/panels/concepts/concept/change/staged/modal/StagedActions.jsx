@@ -5,6 +5,7 @@ import { createActions } from '@/components/modal/conceptModalFactory'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { LABELS } from '@/lib/constants'
@@ -19,8 +20,9 @@ const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 // that doesn't fit the standard concept action patterns
 const StagedActions = ({ intent }) => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
-  const { closeModal } = use(ConceptModalContext)
+  const { closeModal, modalData } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
+  const { logout } = use(UserContext)
 
   const saveStaged = useSaveStaged()
 
@@ -30,16 +32,29 @@ const StagedActions = ({ intent }) => {
 
   const labels = confirmReset ? confirmLabels : actionLabels
 
+  const handleProceedWithAction = () => {
+    const { panel, concept: targetConcept, logout: isLogout } = modalData || {}
+
+    if (panel) {
+      updateSelected({ panel })
+    } else if (targetConcept) {
+      updateSelected({ concept: targetConcept })
+    } else if (isLogout) {
+      logout()
+    }
+  }
+
   const onAction = label => {
     switch (label) {
       case BACK_TO_EDIT:
-        updateSelected({ concept: concept.name, panel: 'Concepts' })
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break
 
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONFIRMED.YES })
+        handleProceedWithAction()
+        closeModal()
         break
 
       case REJECT_DISCARD:
@@ -52,6 +67,7 @@ const StagedActions = ({ intent }) => {
 
       case SAVE:
         saveStaged()
+        handleProceedWithAction()
         break
 
       default:

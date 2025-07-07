@@ -23,11 +23,11 @@ import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
   const { pendingHistory } = use(PanelDataContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { setHasUnsavedChanges } = use(UserContext)
+  const { setHasUnsavedChanges, hasUnsavedChanges } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
@@ -89,6 +89,14 @@ const ConceptProvider = ({ children }) => {
     }
   }, [initialState, stagedState, panels, setHasUnsavedChanges])
 
+  // Reset editing state when leaving Concepts panel
+  useEffect(() => {
+    const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
+    if (!isConceptPanelActive && editing) {
+      setEditing(false)
+    }
+  }, [panels, editing])
+
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
     if (!selectedConcept) {
@@ -101,13 +109,9 @@ const ConceptProvider = ({ children }) => {
     const shouldUpdateConcept = isNewConceptSelected && isConceptPanelActive
 
     if (shouldUpdateConcept) {
-      const hasModifications = hasModifiedState({ initialState, stagedState })
-
-      if (hasModifications) {
-        if (!modalData?.warning) {
-          displayStaged(CONTINUE)
-          setModalData(prev => ({ ...prev, warning: true }))
-        }
+      if (hasUnsavedChanges) {
+        displayStaged(CONTINUE)
+        setModalData(prev => ({ ...prev, concept: selectedConcept }))
         setHasUnsavedChanges(true)
       } else {
         setHasUnsavedChanges(false)
@@ -119,12 +123,10 @@ const ConceptProvider = ({ children }) => {
     conceptLoader,
     displayStaged,
     getSelected,
-    initialState,
-    modalData?.warning,
+    hasUnsavedChanges,
     panels,
     setHasUnsavedChanges,
     setModalData,
-    stagedState,
   ])
 
   const value = useMemo(

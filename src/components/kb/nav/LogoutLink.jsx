@@ -5,6 +5,7 @@ import { grey } from '@mui/material/colors'
 
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
 
@@ -15,6 +16,7 @@ const { SAVE } = LABELS.BUTTON
 const LogoutLink = () => {
   const { logout, user, hasUnsavedChanges } = use(UserContext)
   const { panels } = use(SelectedContext)
+  const { setModalData } = use(ConceptModalContext)
 
   const displayStaged = useStagedModal()
 
@@ -23,7 +25,12 @@ const LogoutLink = () => {
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
-    return hasModifications ? displayStaged(SAVE) : logout()
+    if (hasModifications) {
+      displayStaged(SAVE)
+      setModalData(prev => ({ ...prev, logout: true }))
+    } else {
+      logout()
+    }
   }
 
   const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`

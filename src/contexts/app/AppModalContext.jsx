@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
 const AppModalContext = createContext()
-AppModalContext.displayName = 'System Modal Context'
+AppModalContext.displayName = 'App Modal Context'
 
 export default AppModalContext
