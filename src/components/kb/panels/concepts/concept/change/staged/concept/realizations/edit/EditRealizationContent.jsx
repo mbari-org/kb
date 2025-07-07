@@ -88,7 +88,10 @@ const EditRealizationContent = () => {
 
   return (
     <Box>
-      <RealizationTemplatesFilter onTemplateSelect={handleChange} />
+      <RealizationTemplatesFilter 
+        onTemplateSelect={handleChange} 
+        linkNameFilter={formRealizationItem.linkName}
+      />
       <Divider sx={{ my: 2 }} />
       <RealizationForm
         formRealizationItem={formRealizationItem}
