@@ -1,5 +1,6 @@
-import { Box, FormControl, TextField, Stack } from '@mui/material'
+import { Box, FormControl, Stack } from '@mui/material'
 
+import TextInput from '@/components/common/TextInput'
 import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
@@ -16,7 +17,7 @@ const RealizationForm = ({
       <Stack direction='row' spacing={1} width='100%' alignItems='center'>
         <Box sx={{ width: 200, flexShrink: 0, pt: 2.5 }}>
           <FormControl fullWidth margin='normal'>
-            <TextField
+            <TextInput
               label='Link Name'
               name='linkName'
               onChange={handleChange}
@@ -37,7 +38,7 @@ const RealizationForm = ({
         </Box>
       </Stack>
       <FormControl fullWidth margin='normal'>
-        <TextField
+        <TextInput
           label='Link Value'
           name='linkValue'
           onChange={handleChange}

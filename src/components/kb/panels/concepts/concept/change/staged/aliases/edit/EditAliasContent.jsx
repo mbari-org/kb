@@ -1,10 +1,11 @@
 import { use, useMemo, useState } from 'react'
-import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import TextInput from '@/components/common/TextInput'
 
 import useStageAlias from './useStageAlias'
 
@@ -77,8 +78,9 @@ const EditAliasContent = () => {
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={stageAlias}>
       <FormControl {...inputStyle}>
-        <TextField
+        <TextInput
           error={nameError}
+          fullWidth
           helperText={nameHelperText}
           label='Name'
           name='name'
@@ -90,7 +92,8 @@ const EditAliasContent = () => {
       </FormControl>
       <Box sx={{ display: 'flex', gap: 2 }}>
         <FormControl {...inputStyle} sx={{ flex: 1 }}>
-          <TextField
+          <TextInput
+            fullWidth
             label='Author'
             name='author'
             onChange={handleChange}

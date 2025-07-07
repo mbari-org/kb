@@ -1,13 +1,13 @@
 import { use, useCallback, useEffect, useState } from 'react'
 
-import { Box, FormControl, TextField } from '@mui/material'
+import { Box, FormControl } from '@mui/material'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 import useStagedFieldBorder from '@/components/kb/panels/concepts/concept/change/staged/concept/field/useStagedFieldBorder'
 
-import useDebounce from '@/hooks/useDebounce'
+import TextInput from '@/components/common/TextInput'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -28,16 +28,14 @@ const ConceptAuthor = () => {
     [modifyConcept]
   )
 
-  const debouncedAuthor = useDebounce(modifyAuthor)
-
   const infoStyle = useConceptDetailStyle('Author')
 
   const handleChange = useCallback(
     event => {
       setAuthor(event.target.value)
-      debouncedAuthor(event.target.value)
+      modifyAuthor(event.target.value)
     },
-    [debouncedAuthor]
+    [modifyAuthor]
   )
 
   useEffect(() => {
@@ -47,7 +45,13 @@ const ConceptAuthor = () => {
   return (
     <FormControl>
       <Box sx={{ ...border }}>
-        <TextField {...infoStyle} label='Author' onChange={handleChange} value={author || ''} />
+        <TextInput
+          {...infoStyle}
+          label='Author'
+          onChange={handleChange}
+          value={author || ''}
+          debounceMs={300}
+        />
       </Box>
     </FormControl>
   )
