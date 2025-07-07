@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react'
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Box,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 
 import ConceptPropertiesDetails from './ConceptPropertiesDetails'
 import ConceptPropertiesSummary from './ConceptPropertiesSummary'
@@ -16,6 +9,7 @@ import { CONCEPT_PROPERTIES } from '@/lib/constants'
 const { ITEMS_PER_PAGE } = CONCEPT_PROPERTIES
 
 const ConceptPropertiesSection = ({
+  alwaysExpanded = false,
   children,
   defaultExpanded = true,
   disablePagination = false,
@@ -27,23 +21,23 @@ const ConceptPropertiesSection = ({
   renderItem,
   title,
 }) => {
-  const [expanded, setExpanded] = useState(defaultExpanded)
+  const [expanded, setExpanded] = useState(alwaysExpanded || defaultExpanded)
   const [page, setPage] = useState(0)
   const rowsPerPage = ITEMS_PER_PAGE
 
   const hasItems = items?.length > 0
   const showEmptyIcon = !hasItems && !isLoading
 
-  // collapsed when no items
+  // collapsed when no items (unless alwaysExpanded is true)
   useEffect(() => {
-    if (showEmptyIcon) {
+    if (showEmptyIcon && !alwaysExpanded) {
       setExpanded(false)
     }
-  }, [showEmptyIcon])
+  }, [showEmptyIcon, alwaysExpanded])
 
   const handleToggle = () => {
-    // Only allow toggle if there are items
-    if (hasItems) {
+    // Only allow toggle if there are items and alwaysExpanded is false
+    if (hasItems && !alwaysExpanded) {
       setExpanded(!expanded)
     }
   }
@@ -55,15 +49,15 @@ const ConceptPropertiesSection = ({
 
   const handleChangePage = newPage => {
     setPage(newPage)
-    // Ensure accordion is expanded when pagination buttons are clicked
-    if (!expanded) {
+    // Ensure accordion is expanded when pagination buttons are clicked (unless alwaysExpanded is true)
+    if (!expanded && !alwaysExpanded) {
       setExpanded(true)
     }
   }
 
   return (
     <Accordion
-      expanded={expanded}
+      expanded={alwaysExpanded || expanded}
       onChange={() => {}} // Disable default accordion behavior
       sx={{
         boxShadow: 'none',
@@ -91,6 +85,7 @@ const ConceptPropertiesSection = ({
         }}
       >
         <ConceptPropertiesSummary
+          alwaysExpanded={alwaysExpanded}
           expanded={expanded}
           handleToggle={handleToggle}
           IconComponent={IconComponent}
@@ -102,7 +97,7 @@ const ConceptPropertiesSection = ({
           itemsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           onPageTextClick={() => {
-            if (!expanded) {
+            if (!expanded && !alwaysExpanded) {
               setExpanded(true)
             }
           }}
