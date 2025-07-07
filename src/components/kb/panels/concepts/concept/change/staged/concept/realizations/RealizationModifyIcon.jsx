@@ -29,7 +29,7 @@ const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
       action,
       realizationIndex,
       realizationItem: realization,
-      modified: false,
+      modified: { linkName: false, toConcept: false, linkValue: false },
     }
     setModalData(actionModalData)
 

@@ -16,7 +16,7 @@ const createEditRealizationModal = action => {
       case CONCEPT_STATE.REALIZATION.ADD: {
         return {
           Actions: EditRealizationActions,
-          Content: () => <EditRealizationContent />,
+          Content: EditRealizationContent,
           Title,
         }
       }
@@ -30,7 +30,7 @@ const createEditRealizationModal = action => {
       case CONCEPT_STATE.REALIZATION.EDIT: {
         return {
           Actions: EditRealizationActions,
-          Content: () => <EditRealizationContent />,
+          Content: EditRealizationContent,
           Title,
         }
       }

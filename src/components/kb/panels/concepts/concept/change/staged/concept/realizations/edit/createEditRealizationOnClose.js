@@ -8,8 +8,9 @@ const createEditRealizationOnClose = ({ initialState, modifyConcept }) => {
     }
 
     const { modified, realizationIndex } = modalData
+    const isModified = Object.values(modified).some(isModified => isModified === true)
 
-    if (!modified) {
+    if (!isModified) {
       return true
     }
 

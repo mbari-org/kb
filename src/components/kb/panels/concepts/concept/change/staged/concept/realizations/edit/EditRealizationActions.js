@@ -8,18 +8,23 @@ import {
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EDIT_REALIZATION_FORM_ID } from './EditRealizationForm'
+import { EDIT_REALIZATION_FORM_ID } from './RealizationForm'
 
 const EditRealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  // Handle case where modalData might be empty or undefined
-  const { realizationItem = { linkName: '', toConcept: '', linkValue: '' }, modified = false } =
+  // Handle case where modalData might be empty or undefined  
+  const { realizationItem = { linkName: '', toConcept: '', linkValue: '' }, modified = { linkName: false, toConcept: false, linkValue: false } } =
     modalData || {}
 
+  const isModified = useMemo(
+    () => Object.values(modified).some(isModified => isModified === true),
+    [modified]
+  )
+
   const validRealizationItem = useMemo(
-    () =>
+    () => 
       (realizationItem?.linkName || '').trim() !== '' &&
       (realizationItem?.toConcept || '').trim() !== '' &&
       (realizationItem?.linkValue || '').trim() !== '',
@@ -37,7 +42,7 @@ const EditRealizationActions = () => {
     document.querySelector(`#${EDIT_REALIZATION_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !modified && validRealizationItem
+  const stageDisabled = !isModified || !validRealizationItem
 
   return createConceptActions({
     onDiscard: handleDiscard,

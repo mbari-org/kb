@@ -1,11 +1,13 @@
 import { use, useState } from 'react'
+import { Box, Divider } from '@mui/material'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useStageRealization from './useStageRealization'
 import useDebounce from '@/hooks/useDebounce'
-import EditRealizationForm from './EditRealizationForm'
+import RealizationForm from './RealizationForm'
+import RealizationTemplatesFilter from './filter/RealizationTemplatesFilter'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { EMPTY_REALIZATION_ITEM } from './realizationItem'
@@ -18,19 +20,10 @@ const EditRealizationContent = () => {
 
   const [formRealizationItem, setFormRealizationItem] = useState(realizationItem)
 
-  const [modifiedFields, setModifiedFields] = useState({
-    linkName: false,
-    toConcept: false,
-    linkValue: false,
-  })
-
   const debouncedUpdateForm = useDebounce((updatedRealizationItem, fieldIsModified, field) => {
-    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
-    setModifiedFields(updatedModifiedFields)
+    const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
 
-    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
-
-    setModalData(prev => ({ ...prev, realizationItem: updatedRealizationItem, modified }))
+    setModalData(prev => ({ ...prev, realizationItem: updatedRealizationItem, modified: updatedModified }))
   }, 300)
 
   const handleChange = event => {
@@ -94,13 +87,17 @@ const EditRealizationContent = () => {
   }
 
   return (
-    <EditRealizationForm
-      formRealizationItem={formRealizationItem}
-      handleChange={handleChange}
-      handleToConceptSelect={handleToConceptSelect}
-      handleToConceptSpecial={handleToConceptSpecial}
-      stageChange={stageChange}
-    />
+    <Box>
+      <RealizationTemplatesFilter onTemplateSelect={handleChange} />
+      <Divider sx={{ my: 2 }} />
+      <RealizationForm
+        formRealizationItem={formRealizationItem}
+        handleChange={handleChange}
+        handleToConceptSelect={handleToConceptSelect}
+        handleToConceptSpecial={handleToConceptSpecial}
+        stageChange={stageChange}
+      />
+    </Box>
   )
 }
 

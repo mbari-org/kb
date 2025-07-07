@@ -1,11 +1,10 @@
-import { Box, FormControl, TextField, Divider, Stack } from '@mui/material'
+import { Box, FormControl, TextField, Stack } from '@mui/material'
 
 import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
-import RealizationTemplatesFilter from './filter/RealizationTemplatesFilter'
 
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
-const EditRealizationForm = ({
+const RealizationForm = ({
   formRealizationItem,
   handleChange,
   handleToConceptSelect,
@@ -14,8 +13,6 @@ const EditRealizationForm = ({
 }) => {
   return (
     <Box component='form' id={EDIT_REALIZATION_FORM_ID} onSubmit={stageChange}>
-      <RealizationTemplatesFilter />
-      <Divider sx={{ my: 2 }} />
       <Stack direction='row' spacing={1} width='100%' alignItems='center'>
         <Box sx={{ width: 200, flexShrink: 0, pt: 2.5 }}>
           <FormControl fullWidth margin='normal'>
@@ -53,4 +50,4 @@ const EditRealizationForm = ({
   )
 }
 
-export default EditRealizationForm
+export default RealizationForm

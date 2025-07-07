@@ -68,10 +68,22 @@ const editRealization = (state, update) => {
 const resetRealization = (state, update) => {
   const { realizationIndex, realizationItem } = update
   const newRealizations = [...state.realizations]
-  newRealizations[realizationIndex] = {
-    ...realizationItem,
-    action: CONCEPT_STATE.NO_ACTION,
-    index: realizationIndex,
+  
+  // If realizationItem is null/undefined, this was an ADD action
+  // and we should remove the item entirely
+  if (!realizationItem) {
+    newRealizations.splice(realizationIndex, 1)
+    // Update indices for subsequent realizations
+    for (let i = realizationIndex; i < newRealizations.length; i++) {
+      newRealizations[i].index = i
+    }
+  } else {
+    // This was an EDIT action, reset to original state
+    newRealizations[realizationIndex] = {
+      ...realizationItem,
+      action: CONCEPT_STATE.NO_ACTION,
+      index: realizationIndex,
+    }
   }
 
   return {
