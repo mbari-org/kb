@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ResettingButton from '@/components/kb/panels/concepts/concept/change/ResettingButton'
+import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/ResettingButton'
 
 import { mediaResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
