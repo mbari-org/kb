@@ -32,7 +32,7 @@ const ConceptRealizations = () => {
   return (
     <ConceptPropertiesSection
       items={realizations}
-      disablePagination={true}
+      disablePagination={false}
       renderItem={renderItem}
       renderComponent={renderRealizationComponent}
       title='Realizations'

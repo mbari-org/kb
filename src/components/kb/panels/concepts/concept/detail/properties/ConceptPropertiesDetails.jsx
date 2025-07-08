@@ -1,5 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material'
 
+import PaginatedContainer from '@/components/common/PaginatedContainer'
+
 const ConceptPropertiesDetails = ({
   fixedHeight,
   isLoading,
@@ -11,13 +13,9 @@ const ConceptPropertiesDetails = ({
   renderComponent,
   renderItem,
 }) => {
-  const startIndex = currentPage * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const paginatedItems = items.slice(startIndex, endIndex)
-  
   const shouldShowItems = hasItems && !isLoading
   const shouldShowEmptyPlaceholder = !hasItems && !isLoading && fixedHeight !== undefined
-  
+
   return (
     <Box>
       {isLoading && (
@@ -26,25 +24,36 @@ const ConceptPropertiesDetails = ({
         </Typography>
       )}
       {!isLoading && (
-        <Box sx={{ ml: 1.5, mt: 1, ...(fixedHeight !== undefined && { flex: 1 }) }}>
-          <Stack spacing={1}>
-            {shouldShowItems && (
-              paginatedItems.map((item, index) => (
-                <Box key={renderItem.key ? renderItem.key(item, index) : index}>
-                  {renderComponent
-                    ? renderComponent(item, index)
-                    : typeof renderItem.content === 'function'
-                    ? renderItem.content(item, index)
-                    : renderItem.content}
-                </Box>
-              ))
+        <Box
+          sx={{
+            ml: 1.5,
+            mt: 1,
+            ...(fixedHeight !== undefined && { flex: 1 }),
+          }}
+        >
+          <PaginatedContainer
+            items={items}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            shouldShowItems={shouldShowItems}
+          >
+            {paginatedItems => (
+              <Stack spacing={1}>
+                {paginatedItems.map((item, index) => (
+                  <Box key={renderItem.key ? renderItem.key(item, index) : index} sx={{ mb: 1 }}>
+                    {renderComponent
+                      ? renderComponent(item, index)
+                      : typeof renderItem.content === 'function'
+                      ? renderItem.content(item, index)
+                      : renderItem.content}
+                  </Box>
+                ))}
+                {shouldShowEmptyPlaceholder && (
+                  <Box sx={{ height: 0 }}>{/* Empty placeholder when fixedHeight is set */}</Box>
+                )}
+              </Stack>
             )}
-            {shouldShowEmptyPlaceholder && (
-              <Box sx={{ height: 0 }}>
-                {/* Empty placeholder when fixedHeight is set */}
-              </Box>
-            )}
-          </Stack>
+          </PaginatedContainer>
         </Box>
       )}
     </Box>

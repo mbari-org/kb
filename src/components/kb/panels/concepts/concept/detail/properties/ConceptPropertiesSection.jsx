@@ -93,8 +93,10 @@ const ConceptPropertiesSection = ({
           '&:hover': {
             cursor: 'default !important', // Ensure hover doesn't change cursor
           },
+          minHeight: '56px !important', // Fixed height for consistent appearance
+          height: '56px',
           ...(fixedHeight !== undefined && {
-            minHeight: 'auto', // Prevent height changes when content changes
+            height: '56px', // Keep consistent height even with fixedHeight
           }),
         }}
       >
@@ -120,18 +122,17 @@ const ConceptPropertiesSection = ({
           {children}
         </ConceptPropertiesSummary>
       </AccordionSummary>
-      <AccordionDetails 
-        sx={{ 
-          pt: 0, 
-          pb: 1, 
-          px: 0, 
-          mt: -2,
+      <AccordionDetails
+        sx={{
+          pt: 0,
+          pb: 1,
+          px: 0,
           ...(fixedHeight !== undefined && {
             height: fixedHeight,
             overflow: 'auto',
             display: 'flex',
-            flexDirection: 'column'
-          })
+            flexDirection: 'column',
+          }),
         }}
       >
         <ConceptPropertiesDetails
