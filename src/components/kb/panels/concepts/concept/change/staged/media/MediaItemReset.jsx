@@ -1,37 +1,19 @@
-import { use } from 'react'
+import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/StagedReset'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/ResettingButton'
+import { mediaResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import {
-  mediaResetting,
-  isStagedAction,
-} from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import { CONCEPT_STATE } from '@/lib/constants'
 
-import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
+const { RESET } = CONCEPT_STATE
 
 const MediaItemReset = ({ index }) => {
-  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
-
-  const resetting = mediaResetting(confirmReset, index) === RESETTING.ME
-
-  const onClick = () => {
-    // Check if this is the only media item edit left, and if so, do RESET.MEDIA
-    const count = stagedState.media.filter(item => isStagedAction(item.action)).length
-    count === 1
-      ? modifyConcept({ type: CONCEPT_STATE.RESET.MEDIA })
-      : modifyConcept({
-          type: CONCEPT_STATE.RESET.MEDIA_ITEM,
-          update: { index },
-        })
-  }
-
   return (
-    <ResettingButton
-      color='cancel'
-      disabled={confirmReset}
-      onClick={onClick}
-      resetting={resetting}
+    <StagedReset
+      index={index}
+      resettingFunction={mediaResetting}
+      collectionKey='media'
+      resetAllType={RESET.MEDIA}
+      resetItemType={RESET.MEDIA_ITEM}
     />
   )
 }

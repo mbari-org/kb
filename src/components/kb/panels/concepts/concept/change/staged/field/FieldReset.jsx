@@ -1,27 +1,14 @@
-import { use } from 'react'
-
-import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/ResettingButton'
-
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/StagedReset'
 
 import { fieldResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants'
+
+const { RESET } = CONCEPT_STATE
 
 const FieldReset = ({ field }) => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
-
-  const resetting = fieldResetting(confirmReset, field) === RESETTING.ME
-
-  const onClick = () => modifyConcept({ type: CONCEPT_STATE.RESET.FIELD, update: { field } })
-
   return (
-    <ResettingButton
-      color='cancel'
-      disabled={confirmReset}
-      onClick={onClick}
-      resetting={resetting}
-    />
+    <StagedReset field={field} resettingFunction={fieldResetting} resetFieldType={RESET.FIELD} />
   )
 }
 

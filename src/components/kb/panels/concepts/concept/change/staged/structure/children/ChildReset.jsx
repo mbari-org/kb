@@ -1,36 +1,18 @@
-import { use } from 'react'
-
-import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/ResettingButton'
-
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/StagedReset'
 
 import { childResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const { RESET } = CONCEPT_STATE
 
 const ChildReset = ({ child }) => {
-  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
-
-  const resetting = childResetting(confirmReset, child) === RESETTING.ME
-
-  const onClick = () => {
-    // If last child, do RESET.ADD_CHILDREN
-    stagedState.children.length === 1
-      ? modifyConcept({ type: RESET.ADD_CHILDREN })
-      : modifyConcept({
-          type: RESET.ADD_CHILD,
-          update: { child },
-        })
-  }
-
   return (
-    <ResettingButton
-      color='cancel'
-      disabled={confirmReset}
-      onClick={onClick}
-      resetting={resetting}
+    <StagedReset
+      child={child}
+      resettingFunction={childResetting}
+      resetAllType={RESET.ADD_CHILDREN}
+      resetChildType={RESET.ADD_CHILD}
     />
   )
 }

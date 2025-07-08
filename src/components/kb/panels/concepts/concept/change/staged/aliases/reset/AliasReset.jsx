@@ -1,40 +1,19 @@
-import { use } from 'react'
+import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/StagedReset'
 
-import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/ResettingButton'
+import { aliasResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-
-import {
-  aliasResetting,
-  isStagedAction,
-} from '@/components/kb/panels/concepts/concept/change/staged/reset'
-
-import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const { RESET } = CONCEPT_STATE
 
 const AliasReset = ({ index }) => {
-  const { confirmReset, stagedState, modifyConcept } = use(ConceptContext)
-
-  const resetting = aliasResetting(confirmReset, index) === RESETTING.ME
-
-  const onClick = () => {
-    // If last alias, do RESET.ALIASES
-    const count = stagedState.aliases.filter(item => isStagedAction(item.action)).length
-    count === 1
-      ? modifyConcept({ type: RESET.ALIASES })
-      : modifyConcept({
-          type: RESET.ALIAS_ITEM,
-          update: { index },
-        })
-  }
-
   return (
-    <ResettingButton
-      color='cancel'
-      disabled={confirmReset}
-      onClick={onClick}
-      resetting={resetting}
+    <StagedReset
+      index={index}
+      resettingFunction={aliasResetting}
+      collectionKey='aliases'
+      resetAllType={RESET.ALIASES}
+      resetItemType={RESET.ALIAS_ITEM}
     />
   )
 }
