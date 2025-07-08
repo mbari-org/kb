@@ -10,7 +10,7 @@ import RealizationForm from './RealizationForm'
 import RealizationTemplatesFilter from './filter/RealizationTemplatesFilter'
 
 import { CONCEPT_STATE } from '@/lib/constants'
-import { EMPTY_REALIZATION_ITEM } from './realizationItem'
+import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
 const EditRealizationContent = () => {
   const { stagedState } = use(ConceptContext)
@@ -42,7 +42,7 @@ const EditRealizationContent = () => {
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION.ADD
-        ? updatedRealizationItem[field] !== EMPTY_REALIZATION_ITEM[field]
+        ? updatedRealizationItem[field] !== EMPTY_REALIZATION[field]
         : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
 
     debouncedUpdateForm(updatedRealizationItem, fieldIsModified, field)
@@ -58,7 +58,7 @@ const EditRealizationContent = () => {
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION.ADD
-        ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION_ITEM.toConcept
+        ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
         : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
 
     debouncedUpdateForm(updatedRealizationItem, fieldIsModified, 'toConcept')
@@ -75,7 +75,7 @@ const EditRealizationContent = () => {
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION.ADD
-        ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION_ITEM.toConcept
+        ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
         : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
 
     debouncedUpdateForm(updatedRealizationItem, fieldIsModified, 'toConcept')

@@ -1,6 +1,6 @@
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const createEditRealizationOnClose = ({ initialState, modifyConcept }) => {
+const createRealizationOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
     // Handle case where modalData is null (defensive programming)
     if (!modalData) {
@@ -22,4 +22,4 @@ const createEditRealizationOnClose = ({ initialState, modifyConcept }) => {
   }
 }
 
-export default createEditRealizationOnClose
+export default createRealizationOnClose

@@ -7,6 +7,7 @@ import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/stage
 import FieldDeltaDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldDeltaDetail'
 import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldValueDetail'
 import MediaDetail from '@/components/kb/panels/concepts/concept/change/staged/media/MediaDetail'
+import RealizationsDetail from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationsDetail'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -33,6 +34,7 @@ const StagedContent = () => {
 
       case 'aliasIndex':
       case 'mediaIndex':
+      case 'realizationIndex':
         return null
 
       case 'children':
@@ -43,6 +45,9 @@ const StagedContent = () => {
 
       case 'nameChange':
         return <FieldValueDetail key={field} field={field} value={staged} />
+
+      case 'realizations':
+        return <RealizationsDetail key={field} edit={edit} />
 
       default:
         return <FieldDeltaDetail key={field} edit={edit} />

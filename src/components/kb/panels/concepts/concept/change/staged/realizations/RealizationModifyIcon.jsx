@@ -4,13 +4,13 @@ import PropertyAddIcon from '@/components/common/icon/property/PropertyAddIcon'
 import PropertyDeleteIcon from '@/components/common/icon/property/PropertyDeleteIcon'
 import PropertyEditIcon from '@/components/common/icon/property/PropertyEditIcon'
 
-import createEditRealizationModal from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/createEditRealizationModal'
-import createEditRealizationOnClose from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/createEditRealizationOnClose'
+import createRealizationModal from '@/components/kb/panels/concepts/concept/change/staged/realizations/createRealizationModal'
+import createRealizationOnClose from '@/components/kb/panels/concepts/concept/change/staged/realizations/createRealizationOnClose'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EMPTY_REALIZATION_ITEM } from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/realizationItem'
+import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -23,7 +23,7 @@ const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
 
   const onClick = useCallback(() => {
     const realizationItem =
-      action === ADD ? EMPTY_REALIZATION_ITEM : stagedState.realizations[realizationIndex]
+      action === ADD ? EMPTY_REALIZATION : stagedState.realizations[realizationIndex]
 
     const actionModalData = {
       action,
@@ -33,8 +33,8 @@ const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
     }
     setModalData(actionModalData)
 
-    const modal = createEditRealizationModal(action)
-    const onClose = createEditRealizationOnClose({ initialState, modifyConcept })
+    const modal = createRealizationModal(action)
+    const onClose = createRealizationOnClose({ initialState, modifyConcept })
 
     setModal(modal, onClose)
   }, [action, realizationIndex, initialState, modifyConcept, setModal, setModalData, stagedState])

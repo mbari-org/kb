@@ -64,7 +64,7 @@ export const CONCEPT_STATE = {
   RESET: {
     ADD_CHILD: 'Reset Add Child',
     ADD_CHILDREN: 'Reset Add Children',
-    ALIAS: 'Reset Alias',
+    ALIAS_ITEM: 'Reset Alias Item',
     ALIASES: 'Reset Aliases',
     CHANGE_NAME: 'Reset Change Name',
     CHANGE_PARENT: 'Reset Change Parent',

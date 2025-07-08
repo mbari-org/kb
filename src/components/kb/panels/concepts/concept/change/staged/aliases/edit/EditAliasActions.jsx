@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 
 import {
   createConceptActions,
@@ -18,7 +18,11 @@ const EditAliasActions = () => {
 
   const { aliasItem, modified } = modalData
 
-  const isModified = Object.values(modified).some(isModified => isModified === true)
+  const isModified = useMemo(
+    () => Object.values(modified).some(isModified => isModified === true),
+    [modified]
+  )
+
   const validName =
     !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
 

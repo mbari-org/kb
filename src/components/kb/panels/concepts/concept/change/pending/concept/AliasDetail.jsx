@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { fieldSx } from '@/components/common/format'
+import { fieldSx, formatDelta } from '@/components/common/format'
 
 import { useItemPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
@@ -33,7 +33,7 @@ const AliasDetail = ({ pendingAlias }) => {
         return pendingAlias.oldValue
 
       case 'REPLACE':
-        return `${pendingAlias.oldValue} --> ${pendingAlias.newValue}`
+        return formatDelta(pendingAlias.oldValue, pendingAlias.newValue)
 
       default:
         return ''

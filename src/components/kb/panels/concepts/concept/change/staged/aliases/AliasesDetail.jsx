@@ -25,9 +25,9 @@ const AliasesDetail = ({ edit }) => {
   return (
     <Box
       sx={{
+        alignItems: 'flex-start',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start',
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -41,8 +41,8 @@ const AliasesDetail = ({ edit }) => {
             <AliasEdit
               key={`${action}-${index}`}
               aliasEdit={aliasEdit}
-              initial={aliases.initial?.[index]}
               disabled={aliasResetting(confirmReset, index) === RESETTING.OTHER}
+              initial={aliases.initial?.[index]}
             />
           )
         })}

@@ -8,7 +8,7 @@ import { createModal } from '@/components/modal/conceptModalFactory'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const createEditRealizationModal = action => {
+const createRealizationModal = action => {
   const createComponents = () => {
     const Title = () => <EditRealizationTitle action={action} />
 
@@ -44,4 +44,4 @@ const createEditRealizationModal = action => {
   return createModal(components)
 }
 
-export default createEditRealizationModal
+export default createRealizationModal

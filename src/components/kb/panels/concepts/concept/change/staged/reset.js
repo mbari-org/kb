@@ -7,7 +7,8 @@ const aliasResetting = (confirmReset, index) => {
   if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
 
   if (confirmReset.type === RESET.ALIASES) return RESETTING.ME
-  if (confirmReset.type === RESET.ALIAS && confirmReset.update?.index === index) return RESETTING.ME
+  if (confirmReset.type === RESET.ALIAS_ITEM && confirmReset.update?.index === index)
+    return RESETTING.ME
 
   return RESETTING.OTHER
 }
@@ -49,7 +50,25 @@ const mediaResetting = (confirmReset, index) => {
   return RESETTING.OTHER
 }
 
+const realizationResetting = (confirmReset, index) => {
+  if (!confirmReset) return RESETTING.NONE
+  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
+
+  if (confirmReset.type === RESET.REALIZATIONS) return RESETTING.ME
+  if (confirmReset.type === RESET.REALIZATION_ITEM && confirmReset.update?.index === index)
+    return RESETTING.ME
+
+  return RESETTING.OTHER
+}
+
 const isStagedAction = action =>
   action !== CONCEPT_STATE.NO_ACTION && !action.toLowerCase().startsWith('pending')
 
-export { aliasResetting, childResetting, fieldResetting, isStagedAction, mediaResetting }
+export {
+  aliasResetting,
+  childResetting,
+  fieldResetting,
+  isStagedAction,
+  mediaResetting,
+  realizationResetting,
+}

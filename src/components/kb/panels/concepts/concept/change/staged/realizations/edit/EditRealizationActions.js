@@ -14,22 +14,17 @@ const EditRealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  // Handle case where modalData might be empty or undefined  
-  const { realizationItem = { linkName: '', toConcept: '', linkValue: '' }, modified = { linkName: false, toConcept: false, linkValue: false } } =
-    modalData || {}
+  const { realizationItem, modified } = modalData || {}
 
   const isModified = useMemo(
     () => Object.values(modified).some(isModified => isModified === true),
     [modified]
   )
 
-  const validRealizationItem = useMemo(
-    () => 
-      (realizationItem?.linkName || '').trim() !== '' &&
-      (realizationItem?.toConcept || '').trim() !== '' &&
-      (realizationItem?.linkValue || '').trim() !== '',
-    [realizationItem]
-  )
+  const validRealizationItem =
+    realizationItem.linkName.trim() !== '' &&
+    realizationItem.toConcept.trim() !== '' &&
+    realizationItem.linkValue.trim() !== ''
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,

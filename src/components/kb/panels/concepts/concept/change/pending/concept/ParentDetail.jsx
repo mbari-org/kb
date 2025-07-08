@@ -7,7 +7,7 @@ import { useParentPendingApproval } from '@/components/kb/panels/concepts/concep
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { fieldSx } from '@/components/common/format'
+import { fieldSx, formatDelta } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants'
 
@@ -21,7 +21,7 @@ const ParentDetail = ({ pendingField }) => {
     return null
   }
 
-  const parentValue = `${pendingParent.oldValue} --> ${pendingParent.newValue}`
+  const parentValue = formatDelta(pendingParent.oldValue, pendingParent.newValue)
 
   const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER

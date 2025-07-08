@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material'
 
-import RealizationItemDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationItemDetail'
+import RealizationDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 
 import { useRealizationsPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
@@ -37,10 +37,7 @@ const RealizationsDetail = ({ pendingField }) => {
       </Box>
       <Stack direction='column' spacing={1}>
         {pendingRealizations.map(pendingRealization => (
-          <RealizationItemDetail
-            key={pendingRealization.id}
-            pendingRealization={pendingRealization}
-          />
+          <RealizationDetail key={pendingRealization.id} pendingRealization={pendingRealization} />
         ))}
       </Stack>
     </Box>

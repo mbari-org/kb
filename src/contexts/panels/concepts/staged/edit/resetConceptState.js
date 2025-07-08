@@ -4,7 +4,7 @@ const RESET = CONCEPT_STATE.RESET
 const RESET_ACTIONS = [
   RESET.ADD_CHILD,
   RESET.ADD_CHILDREN,
-  RESET.ALIAS,
+  RESET.ALIAS_ITEM,
   RESET.ALIASES,
   RESET.CHANGE_NAME,
   RESET.CHANGE_PARENT,
@@ -20,7 +20,7 @@ const isResetAction = action => RESET_ACTIONS.includes(action.type)
 
 const resetAlias = (aliasIndex, dispatch, initialState) => {
   dispatch({
-    type: RESET.ALIAS,
+    type: RESET.ALIAS_ITEM,
     update: { aliasIndex, aliasItem: initialState.aliases[aliasIndex] },
   })
 }
@@ -124,7 +124,7 @@ const resetToInitial = (dispatch, initialState) => {
 
 const resetConceptState = (action, dispatch, initialState) => {
   switch (action.type) {
-    case RESET.ALIAS:
+    case RESET.ALIAS_ITEM:
       resetAlias(action.update.aliasIndex, dispatch, initialState)
       break
 

@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { fieldSx } from '@/components/common/format'
+import { fieldSx, formatDelta } from '@/components/common/format'
 
 import { useItemPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
@@ -16,7 +16,7 @@ import { PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
 
-const RealizationItemDetail = ({ pendingRealization }) => {
+const RealizationDetail = ({ pendingRealization }) => {
   const pendingAction = capitalize(pendingRealization.action.toLowerCase())
 
   const approval = useItemPendingApproval(pendingRealization.id)
@@ -33,7 +33,9 @@ const RealizationItemDetail = ({ pendingRealization }) => {
         return `${pendingRealization.oldValue} (${pendingRealization.toConcept})`
 
       case 'REPLACE':
-        return `${pendingRealization.oldValue} --> ${pendingRealization.newValue} (${pendingRealization.toConcept})`
+        return `${formatDelta(pendingRealization.oldValue, pendingRealization.newValue)} (${
+          pendingRealization.toConcept
+        })`
 
       default:
         return ''
@@ -67,4 +69,4 @@ const RealizationItemDetail = ({ pendingRealization }) => {
   )
 }
 
-export default RealizationItemDetail
+export default RealizationDetail
