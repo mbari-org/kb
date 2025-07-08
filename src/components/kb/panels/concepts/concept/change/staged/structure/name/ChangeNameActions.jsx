@@ -1,6 +1,9 @@
 import { use } from 'react'
 
-import { createConceptActions, createConfirmationHandlers } from '@/components/modal/concept/conceptModalUtils'
+import {
+  createStagedActions,
+  createConfirmationHandlers,
+} from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -19,7 +22,7 @@ const ChangeNameActions = () => {
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
     closeModal,
-    concept
+    concept,
   })
 
   const handleStage = () => {
@@ -40,14 +43,14 @@ const ChangeNameActions = () => {
     closeModal(true)
   }
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled: !isValid,
     confirmReset,
     onConfirmDiscard: handleConfirmDiscard,
     onContinue: handleContinue,
-    name: 'ChangeNameActions'
+    name: 'ChangeNameActions',
   })
 }
 

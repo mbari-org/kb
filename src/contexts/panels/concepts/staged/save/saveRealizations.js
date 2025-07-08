@@ -2,7 +2,7 @@ import { createRealization, deleteRealization, updateRealization } from '@/lib/a
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { REALIZATION } = CONCEPT_STATE
+const { REALIZATION_ITEM: REALIZATION } = CONCEPT_STATE
 
 import { diff, drop, pick } from '@/lib/utils'
 

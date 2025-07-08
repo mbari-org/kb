@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import { createConceptActions } from '@/components/modal/concept/conceptModalUtils'
+import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -33,7 +33,7 @@ const DeleteConceptActions = () => {
       })
   }
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleCancel,
     onStage: handleDelete,
     stageDisabled: !modalData?.isValid,

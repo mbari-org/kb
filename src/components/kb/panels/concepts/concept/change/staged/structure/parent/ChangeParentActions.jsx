@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import {
-  createConceptActions,
+  createStagedActions,
   createConfirmationHandlers,
 } from '@/components/modal/concept/conceptModalUtils'
 
@@ -32,7 +32,7 @@ const ChangeParentActions = () => {
     closeModal(true)
   }
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled: !modified,

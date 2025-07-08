@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 
 import {
-  createConceptActions,
+  createStagedActions,
   createConfirmationHandlers,
 } from '@/components/modal/concept/conceptModalUtils'
 
@@ -39,14 +39,14 @@ const EditAliasActions = () => {
 
   const stageDisabled = !isModified || !validName
 
-  return createConceptActions({
+  return createStagedActions({
+    confirmReset,
+    name: 'EditAliasActions',
+    onConfirmDiscard: handleConfirmDiscard,
+    onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
-    confirmReset,
-    onConfirmDiscard: handleConfirmDiscard,
-    onContinue: handleContinue,
-    name: 'EditAliasActions',
   })
 }
 

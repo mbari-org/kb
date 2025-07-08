@@ -14,8 +14,8 @@ import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const ADD = CONCEPT_STATE.REALIZATION.ADD
-const DELETE = CONCEPT_STATE.REALIZATION.DELETE
+const ADD = CONCEPT_STATE.REALIZATION_ITEM.ADD
+const DELETE = CONCEPT_STATE.REALIZATION_ITEM.DELETE
 
 const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)

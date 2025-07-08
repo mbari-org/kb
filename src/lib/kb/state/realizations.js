@@ -16,86 +16,81 @@ const realizationsState = (concept, pending) => {
 }
 
 const addRealization = (state, update) => {
-  const { realizationIndex, realizationItem } = update
-  const newRealizations = [...state.realizations]
-  newRealizations.splice(realizationIndex, 0, {
-    ...realizationItem,
-    action: CONCEPT_STATE.REALIZATION.ADD,
-    index: realizationIndex,
-  })
-
-  // Update indices for subsequent realizations
-  for (let i = realizationIndex + 1; i < newRealizations.length; i++) {
-    newRealizations[i].index = i
+  const realizationItem = {
+    ...update.realizationItem,
+    action: CONCEPT_STATE.REALIZATION_ITEM.ADD,
+    index: state.realizations.length,
   }
-
   return {
     ...state,
-    realizations: newRealizations,
-    realizationIndex,
+    realizations: [...state.realizations, realizationItem],
   }
 }
 
 const deleteRealization = (state, update) => {
-  const { realizationIndex, realizationItem } = update
-  const newRealizations = [...state.realizations]
-  newRealizations[realizationIndex] = {
-    ...realizationItem,
-    action: CONCEPT_STATE.REALIZATION.DELETE,
+  const realizationItem = state.realizations[update.realizationIndex]
+  // If realization is an add, just remove it from state
+  if (realizationItem?.action === CONCEPT_STATE.REALIZATION_ITEM.ADD) {
+    const updatedRealizations = state.realizations.filter(
+      (_item, index) => index !== update.realizationIndex
+    )
+    return {
+      ...state,
+      realizations: updatedRealizations,
+    }
   }
-
-  return {
-    ...state,
-    realizations: newRealizations,
-  }
+  return updateState(state, { type: CONCEPT_STATE.REALIZATION_ITEM.DELETE, update })
 }
 
 const editRealization = (state, update) => {
-  const { realizationIndex, realizationItem } = update
-  const newRealizations = [...state.realizations]
-  newRealizations[realizationIndex] = {
-    ...realizationItem,
-    action: CONCEPT_STATE.REALIZATION.EDIT,
-    index: realizationIndex,
+  const realizationItem = state.realizations[update.realizationIndex]
+  // If editing an added realization, don't change the action
+  if (realizationItem.action === CONCEPT_STATE.REALIZATION_ITEM.ADD) {
+    const updatedItem = {
+      ...update.realizationItem,
+      action: CONCEPT_STATE.REALIZATION_ITEM.ADD,
+    }
+    return {
+      ...state,
+      realizations: state.realizations.map((item, index) =>
+        index === update.realizationIndex ? updatedItem : item
+      ),
+    }
   }
-
-  return {
-    ...state,
-    realizations: newRealizations,
-  }
+  return updateState(state, { type: CONCEPT_STATE.REALIZATION_ITEM.EDIT, update })
 }
 
 const resetRealization = (state, update) => {
-  const { realizationIndex, realizationItem } = update
-  const newRealizations = [...state.realizations]
-  
-  // If realizationItem is null/undefined, this was an ADD action
-  // and we should remove the item entirely
-  if (!realizationItem) {
-    newRealizations.splice(realizationIndex, 1)
-    // Update indices for subsequent realizations
-    for (let i = realizationIndex; i < newRealizations.length; i++) {
-      newRealizations[i].index = i
-    }
-  } else {
-    // This was an EDIT action, reset to original state
-    newRealizations[realizationIndex] = {
-      ...realizationItem,
-      action: CONCEPT_STATE.NO_ACTION,
-      index: realizationIndex,
+  const { realizationItem, realizationIndex } = update
+  if (realizationItem) {
+    return {
+      ...state,
+      realizations: state.realizations.map((item, index) =>
+        index === realizationIndex ? realizationItem : item
+      ),
     }
   }
-
   return {
     ...state,
-    realizations: newRealizations,
+    realizations: state.realizations.filter((_item, index) => index !== realizationIndex),
   }
 }
 
 const resetRealizations = (state, update) => {
   return {
     ...state,
-    realizations: update.realizations || [],
+    realizations: update.realizations,
+  }
+}
+
+const updateState = (state, { type, update }) => {
+  const { realizationIndex, realizationItem } = update
+  const updatedItem = { ...state.realizations[realizationIndex], ...realizationItem, action: type }
+  return {
+    ...state,
+    realizations: state.realizations.map((item, index) =>
+      index === realizationIndex ? updatedItem : item
+    ),
   }
 }
 

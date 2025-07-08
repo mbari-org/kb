@@ -41,7 +41,7 @@ export const CONCEPT_SELECT = {
 }
 
 export const CONCEPT_STATE = {
-  ALIAS: {
+  ALIAS_ITEM: {
     ADD: 'Alias Add',
     DELETE: 'Alias Delete',
     EDIT: 'Alias Edit',
@@ -50,12 +50,12 @@ export const CONCEPT_STATE = {
     SET: 'Field Set',
   },
   INITIAL: 'Initial State',
-  MEDIA: {
+  MEDIA_ITEM: {
     ADD: 'Media Add',
     DELETE: 'Media Delete',
     EDIT: 'Media Edit',
   },
-  REALIZATION: {
+  REALIZATION_ITEM: {
     ADD: 'Realization Add',
     DELETE: 'Realization Delete',
     EDIT: 'Realization Edit',

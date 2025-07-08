@@ -14,21 +14,21 @@ const createAliasModal = action => {
     const Title = () => <EditAliasTitle action={action} />
 
     switch (action) {
-      case CONCEPT_STATE.ALIAS.ADD: {
+      case CONCEPT_STATE.ALIAS_ITEM.ADD: {
         return {
           Actions: EditAliasActions,
           Content: EditAliasContent,
           Title,
         }
       }
-      case CONCEPT_STATE.ALIAS.DELETE: {
+      case CONCEPT_STATE.ALIAS_ITEM.DELETE: {
         return {
           Actions: DeleteAliasActions,
           Content: DeleteAliasContent,
           Title,
         }
       }
-      case CONCEPT_STATE.ALIAS.EDIT: {
+      case CONCEPT_STATE.ALIAS_ITEM.EDIT: {
         return {
           Actions: EditAliasActions,
           Content: EditAliasContent,

@@ -22,7 +22,7 @@ const useStageMedia = () => {
       },
     })
 
-    if (action === CONCEPT_STATE.MEDIA.ADD) {
+    if (action === CONCEPT_STATE.MEDIA_ITEM.ADD) {
       modifyConcept({
         type: CONCEPT_STATE.FIELD.SET,
         update: { field: 'mediaIndex', value: mediaIndex },

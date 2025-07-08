@@ -22,7 +22,7 @@ const useStageRealization = () => {
       },
     })
 
-    if (action === CONCEPT_STATE.REALIZATION.ADD) {
+    if (action === CONCEPT_STATE.REALIZATION_ITEM.ADD) {
       modifyConcept({
         type: CONCEPT_STATE.FIELD.SET,
         update: { field: 'realizationIndex', value: realizationIndex },

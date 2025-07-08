@@ -41,7 +41,7 @@ const EditRealizationContent = () => {
     setFormRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
-      action === CONCEPT_STATE.REALIZATION.ADD
+      action === CONCEPT_STATE.REALIZATION_ITEM.ADD
         ? updatedRealizationItem[field] !== EMPTY_REALIZATION[field]
         : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
 
@@ -57,7 +57,7 @@ const EditRealizationContent = () => {
     setFormRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
-      action === CONCEPT_STATE.REALIZATION.ADD
+      action === CONCEPT_STATE.REALIZATION_ITEM.ADD
         ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
         : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
 
@@ -74,7 +74,7 @@ const EditRealizationContent = () => {
     setFormRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
-      action === CONCEPT_STATE.REALIZATION.ADD
+      action === CONCEPT_STATE.REALIZATION_ITEM.ADD
         ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
         : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
 

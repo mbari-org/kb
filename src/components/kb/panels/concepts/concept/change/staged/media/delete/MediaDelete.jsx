@@ -7,7 +7,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const MediaDelete = () => {
   return (
     <MediaActionButton
-      action={CONCEPT_STATE.MEDIA.DELETE}
+      action={CONCEPT_STATE.MEDIA_ITEM.DELETE}
       color='cancel'
       Icon={MdOutlineDeleteForever}
       position='left'

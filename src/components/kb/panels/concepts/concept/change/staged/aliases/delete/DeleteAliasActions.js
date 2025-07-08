@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import {
-  createConceptActions,
+  createStagedActions,
   createStageDiscardHandlers,
 } from '@/components/modal/concept/conceptModalUtils'
 
@@ -16,10 +16,10 @@ const DeleteAliasActions = () => {
   const { aliasItem, aliasIndex } = modalData
 
   const stageAction = {
-    type: CONCEPT_STATE.ALIAS.DELETE,
+    type: CONCEPT_STATE.ALIAS_ITEM.DELETE,
     update: {
       aliasIndex,
-      aliasItem: { ...aliasItem, action: CONCEPT_STATE.ALIAS.DELETE },
+      aliasItem: { ...aliasItem, action: CONCEPT_STATE.ALIAS_ITEM.DELETE },
     },
   }
 
@@ -29,7 +29,7 @@ const DeleteAliasActions = () => {
     stageAction,
   })
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     name: 'DeleteAliasActions',

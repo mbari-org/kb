@@ -24,7 +24,7 @@ const ConceptRealizations = () => {
 
   const AddIcon = () => (
     <RealizationModifyIcon
-      action={CONCEPT_STATE.REALIZATION.ADD}
+      action={CONCEPT_STATE.REALIZATION_ITEM.ADD}
       realizationIndex={realizations.length}
     />
   )

@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import {
-  createConceptActions,
+  createStagedActions,
   createStageDiscardHandlers,
 } from '@/components/modal/concept/conceptModalUtils'
 
@@ -18,12 +18,12 @@ const DeleteRealizationActions = () => {
   const { closeModal } = use(ConceptModalContext)
 
   const stageAction = {
-    type: CONCEPT_STATE.REALIZATION.DELETE,
+    type: CONCEPT_STATE.REALIZATION_ITEM.DELETE,
     update: {
       realizationIndex,
       realizationItem: {
         ...realizations[realizationIndex],
-        action: CONCEPT_STATE.REALIZATION.DELETE,
+        action: CONCEPT_STATE.REALIZATION_ITEM.DELETE,
       },
     },
   }
@@ -34,7 +34,7 @@ const DeleteRealizationActions = () => {
     stageAction,
   })
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     name: 'DeleteRealizationActions',

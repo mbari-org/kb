@@ -1,8 +1,8 @@
 import { use, useMemo } from 'react'
 
 import {
-  createConceptActions,
   createConfirmationHandlers,
+  createStagedActions,
 } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -22,9 +22,9 @@ const EditRealizationActions = () => {
   )
 
   const validRealizationItem =
-    realizationItem.linkName.trim() !== '' &&
-    realizationItem.toConcept.trim() !== '' &&
-    realizationItem.linkValue.trim() !== ''
+    realizationItem.linkName?.trim() !== '' &&
+    realizationItem.toConcept?.trim() !== '' &&
+    realizationItem.linkValue?.trim() !== ''
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
@@ -39,7 +39,7 @@ const EditRealizationActions = () => {
 
   const stageDisabled = !isModified || !validRealizationItem
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,

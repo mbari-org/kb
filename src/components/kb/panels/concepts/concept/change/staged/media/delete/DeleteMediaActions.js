@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import {
-  createConceptActions,
+  createStagedActions,
   createStageDiscardHandlers,
 } from '@/components/modal/concept/conceptModalUtils'
 
@@ -18,10 +18,10 @@ const DeleteMediaActions = () => {
   const { closeModal } = use(ConceptModalContext)
 
   const stageAction = {
-    type: CONCEPT_STATE.MEDIA.DELETE,
+    type: CONCEPT_STATE.MEDIA_ITEM.DELETE,
     update: {
       mediaIndex,
-      mediaItem: { ...media[mediaIndex], action: CONCEPT_STATE.MEDIA.DELETE },
+      mediaItem: { ...media[mediaIndex], action: CONCEPT_STATE.MEDIA_ITEM.DELETE },
     },
   }
 
@@ -31,7 +31,7 @@ const DeleteMediaActions = () => {
     stageAction,
   })
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     name: 'DeleteMediaActions',

@@ -16,7 +16,7 @@ const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
 const realizationEdits = ({ initial, staged }) =>
   fieldEdits({
-    stateType: CONCEPT_STATE.REALIZATION,
+    stateType: CONCEPT_STATE.REALIZATION_ITEM,
     displayFields: REALIZATION_DISPLAY_FIELDS,
     initial,
     staged,

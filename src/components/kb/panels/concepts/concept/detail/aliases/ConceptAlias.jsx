@@ -16,7 +16,7 @@ import { fieldPending } from '@/lib/kb/model/history'
 
 import { fieldBorder } from '@/lib/kb/model/field'
 
-const ALIAS = CONCEPT_STATE.ALIAS
+const ALIAS = CONCEPT_STATE.ALIAS_ITEM
 
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()

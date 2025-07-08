@@ -45,9 +45,11 @@ const ConceptRealization = ({ realization }) => {
   }
 
   const showEdit =
-    editing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.DELETE
+    editing &&
+    !realization.historyId &&
+    realization.action !== CONCEPT_STATE.REALIZATION_ITEM.DELETE
   const showDelete =
-    editing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
+    editing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION_ITEM.ADD
 
   const realizationIcon = action => {
     return <RealizationModifyIcon action={action} realizationIndex={realization.index} size={20} />
@@ -56,8 +58,8 @@ const ConceptRealization = ({ realization }) => {
   return (
     <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
-        {showEdit && realizationIcon(CONCEPT_STATE.REALIZATION.EDIT)}
-        {showDelete && realizationIcon(CONCEPT_STATE.REALIZATION.DELETE)}
+        {showEdit && realizationIcon(CONCEPT_STATE.REALIZATION_ITEM.EDIT)}
+        {showDelete && realizationIcon(CONCEPT_STATE.REALIZATION_ITEM.DELETE)}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>
         <Box sx={{ pl: 0, width: 200, flexShrink: 0 }}>

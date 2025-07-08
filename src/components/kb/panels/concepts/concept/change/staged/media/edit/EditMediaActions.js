@@ -1,6 +1,9 @@
 import { use, useMemo } from 'react'
 
-import { createConceptActions, createConfirmationHandlers } from '@/components/modal/concept/conceptModalUtils'
+import {
+  createConfirmationHandlers,
+  createStagedActions,
+} from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -24,7 +27,7 @@ const EditMediaActions = () => {
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
     closeModal,
-    concept
+    concept,
   })
 
   const handleStage = () => {
@@ -34,14 +37,14 @@ const EditMediaActions = () => {
 
   const stageDisabled = !modified && validMediaItem
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
     confirmReset,
     onConfirmDiscard: handleConfirmDiscard,
     onContinue: handleContinue,
-    name: 'EditMediaActions'
+    name: 'EditMediaActions',
   })
 }
 

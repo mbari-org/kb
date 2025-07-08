@@ -2,7 +2,7 @@ import { createAlias, deleteAlias, updateAlias } from '@/lib/api/aliases'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ALIAS } = CONCEPT_STATE
+const { ALIAS_ITEM: ALIAS } = CONCEPT_STATE
 
 import { diff, drop, pick } from '@/lib/utils'
 
@@ -16,9 +16,9 @@ const saveAliases = ([submit, { concept, updateInfo }]) => {
   const submitters = updatedValue('aliases').reduce((acc, update, index) => {
     switch (update.action) {
       case ALIAS.ADD: {
-        const alias = pick(update, ['author', 'nameType'])
+        const aliasUpdate = pick(update, ['author', 'nameType'])
         const params = {
-          ...alias,
+          ...aliasUpdate,
           name: concept.name,
           newName: update.name,
         }
@@ -29,13 +29,13 @@ const saveAliases = ([submit, { concept, updateInfo }]) => {
       case ALIAS.EDIT: {
         const initialAlias = initialValue('aliases')[index]
         const updateDiff = diff(update, initialAlias)
-        const alias = drop(updateDiff, ['action'])
+        const aliasUpdate = drop(updateDiff, ['action'])
 
-        if (alias.name) {
-          alias.newName = update.name
-          delete alias.name
+        if (aliasUpdate.name) {
+          aliasUpdate.newName = update.name
+          delete aliasUpdate.name
         }
-        const params = [initialAlias.name, alias]
+        const params = [initialAlias.name, aliasUpdate]
         acc.push(submit(updateAlias, params))
         break
       }

@@ -14,8 +14,8 @@ import { aliasFields, EMPTY_ALIAS } from '@/lib/kb/model/alias'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const ADD = CONCEPT_STATE.ALIAS.ADD
-const DELETE = CONCEPT_STATE.ALIAS.DELETE
+const ADD = CONCEPT_STATE.ALIAS_ITEM.ADD
+const DELETE = CONCEPT_STATE.ALIAS_ITEM.DELETE
 
 const AliasModifyIcon = ({ action, aliasIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)

@@ -17,7 +17,7 @@ const saveMedia = ([submit, { concept, updateInfo }]) => {
     const mediaItem = pick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
 
     switch (stagedItem.action) {
-      case CONCEPT_STATE.MEDIA.ADD: {
+      case CONCEPT_STATE.MEDIA_ITEM.ADD: {
         const params = {
           conceptName: concept.name,
           ...mediaItem,
@@ -26,13 +26,13 @@ const saveMedia = ([submit, { concept, updateInfo }]) => {
         return acc
       }
 
-      case CONCEPT_STATE.MEDIA.EDIT: {
+      case CONCEPT_STATE.MEDIA_ITEM.EDIT: {
         const params = [stagedItem.id, mediaItem]
         acc.push(submit(updateMediaItem, params))
         return acc
       }
 
-      case CONCEPT_STATE.MEDIA.DELETE: {
+      case CONCEPT_STATE.MEDIA_ITEM.DELETE: {
         acc.push(submit(deleteMediaItem, stagedItem.id))
         return acc
       }

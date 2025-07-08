@@ -1,6 +1,10 @@
 import { use, useMemo } from 'react'
 
-import { createConceptActions, createConfirmationHandlers, validateChildName } from '@/components/modal/concept/conceptModalUtils'
+import {
+  createStagedActions,
+  createConfirmationHandlers,
+  validateChildName,
+} from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -22,7 +26,7 @@ const AddChildActions = () => {
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
     closeModal,
-    concept
+    concept,
   })
 
   const handleStage = () => {
@@ -32,14 +36,14 @@ const AddChildActions = () => {
 
   const stageDisabled = !confirmReset && (!modified || !isValidChild)
 
-  return createConceptActions({
+  return createStagedActions({
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
     confirmReset,
     onConfirmDiscard: handleConfirmDiscard,
     onContinue: handleContinue,
-    name: 'AddChildActions'
+    name: 'AddChildActions',
   })
 }
 

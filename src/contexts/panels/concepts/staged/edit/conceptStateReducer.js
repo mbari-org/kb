@@ -24,7 +24,14 @@ import {
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ALIAS, FIELD, MEDIA, REALIZATION, RESET, STRUCTURE } = CONCEPT_STATE
+const {
+  ALIAS_ITEM: ALIAS,
+  FIELD,
+  MEDIA_ITEM: MEDIA,
+  REALIZATION_ITEM: REALIZATION,
+  RESET,
+  STRUCTURE,
+} = CONCEPT_STATE
 
 const conceptStateReducer = (state, { type, update }) => {
   switch (type) {

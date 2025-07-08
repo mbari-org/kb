@@ -16,37 +16,37 @@ const aliasesState = (concept, pending) => {
 }
 
 const addAlias = (state, update) => {
-  const alias = {
-    ...update.alias,
-    action: CONCEPT_STATE.ALIAS.ADD,
+  const aliasItem = {
+    ...update.aliasItem,
+    action: CONCEPT_STATE.ALIAS_ITEM.ADD,
     index: state.aliases.length,
   }
   return {
     ...state,
-    aliases: [...state.aliases, alias],
+    aliases: [...state.aliases, aliasItem],
   }
 }
 
 const deleteAlias = (state, update) => {
   const aliasItem = state.aliases[update.aliasIndex]
   // If alias is an add, just remove it from state
-  if (aliasItem?.action === CONCEPT_STATE.ALIAS.ADD) {
+  if (aliasItem?.action === CONCEPT_STATE.ALIAS_ITEM.ADD) {
     const updatedAliases = state.aliases.filter((_item, index) => index !== update.aliasIndex)
     return {
       ...state,
       aliases: updatedAliases,
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.ALIAS.DELETE, update })
+  return updateState(state, { type: CONCEPT_STATE.ALIAS_ITEM.DELETE, update })
 }
 
 const editAlias = (state, update) => {
   const aliasItem = state.aliases[update.aliasIndex]
   // If editing an added alias, don't change the action
-  if (aliasItem.action === CONCEPT_STATE.ALIAS.ADD) {
+  if (aliasItem.action === CONCEPT_STATE.ALIAS_ITEM.ADD) {
     const updatedItem = {
       ...update.aliasItem,
-      action: CONCEPT_STATE.ALIAS.ADD,
+      action: CONCEPT_STATE.ALIAS_ITEM.ADD,
     }
     return {
       ...state,
@@ -55,11 +55,7 @@ const editAlias = (state, update) => {
       ),
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.ALIAS.EDIT, update })
-}
-
-const isEmptyAlias = alias => {
-  return !alias.name && !alias.author && !alias.nameType
+  return updateState(state, { type: CONCEPT_STATE.ALIAS_ITEM.EDIT, update })
 }
 
 const resetAlias = (state, update) => {
@@ -92,4 +88,4 @@ const updateState = (state, { type, update }) => {
   }
 }
 
-export { addAlias, aliasesState, deleteAlias, editAlias, isEmptyAlias, resetAlias, resetAliases }
+export { addAlias, aliasesState, deleteAlias, editAlias, resetAlias, resetAliases }
