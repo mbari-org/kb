@@ -9,8 +9,8 @@ import { drop } from '@/lib/utils'
 
 const DeleteAliasContent = () => {
   const { modalData } = use(ConceptModalContext)
-  const { alias } = modalData
-  const detailAlias = drop(alias, 'id')
+  const { aliasItem } = modalData
+  const detailAlias = drop(aliasItem, 'id')
 
   const Details = createComponent(DetailContent, {
     detail: detailAlias,

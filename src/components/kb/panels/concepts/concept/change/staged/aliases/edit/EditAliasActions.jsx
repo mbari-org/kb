@@ -1,6 +1,9 @@
 import { use } from 'react'
 
-import { createConceptActions, createConfirmationHandlers } from '@/components/modal/concept/conceptModalUtils'
+import {
+  createConceptActions,
+  createConfirmationHandlers,
+} from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -13,15 +16,16 @@ const EditAliasActions = () => {
   const { closeModal, modalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 
-  const { alias, modified } = modalData
+  const { aliasItem, modified } = modalData
 
   const isModified = Object.values(modified).some(isModified => isModified === true)
-  const validName = !modified.name || (alias.name !== '' && !getNames().includes(alias.name))
+  const validName =
+    !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
     closeModal,
-    concept
+    concept,
   })
 
   const handleStage = () => {
@@ -38,7 +42,7 @@ const EditAliasActions = () => {
     confirmReset,
     onConfirmDiscard: handleConfirmDiscard,
     onContinue: handleContinue,
-    name: 'EditAliasActions'
+    name: 'EditAliasActions',
   })
 }
 

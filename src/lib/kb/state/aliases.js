@@ -28,9 +28,9 @@ const addAlias = (state, update) => {
 }
 
 const deleteAlias = (state, update) => {
-  const alias = state.aliases[update.aliasIndex]
+  const aliasItem = state.aliases[update.aliasIndex]
   // If alias is an add, just remove it from state
-  if (alias.action === CONCEPT_STATE.ALIAS.ADD) {
+  if (aliasItem?.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedAliases = state.aliases.filter((_item, index) => index !== update.aliasIndex)
     return {
       ...state,
@@ -41,11 +41,11 @@ const deleteAlias = (state, update) => {
 }
 
 const editAlias = (state, update) => {
-  const alias = state.aliases[update.aliasIndex]
+  const aliasItem = state.aliases[update.aliasIndex]
   // If editing an added alias, don't change the action
-  if (alias.action === CONCEPT_STATE.ALIAS.ADD) {
+  if (aliasItem.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedItem = {
-      ...update.alias,
+      ...update.aliasItem,
       action: CONCEPT_STATE.ALIAS.ADD,
     }
     return {
@@ -63,11 +63,11 @@ const isEmptyAlias = alias => {
 }
 
 const resetAlias = (state, update) => {
-  const { alias, aliasIndex } = update
-  if (alias) {
+  const { aliasItem, aliasIndex } = update
+  if (aliasItem) {
     return {
       ...state,
-      aliases: state.aliases.map((item, index) => (index === aliasIndex ? alias : item)),
+      aliases: state.aliases.map((item, index) => (index === aliasIndex ? aliasItem : item)),
     }
   }
   return {
@@ -84,8 +84,8 @@ const resetAliases = (state, update) => {
 }
 
 const updateState = (state, { type, update }) => {
-  const { aliasIndex, alias } = update
-  const updatedItem = { ...state.aliases[aliasIndex], ...alias, action: type }
+  const { aliasIndex, aliasItem } = update
+  const updatedItem = { ...state.aliases[aliasIndex], ...aliasItem, action: type }
   return {
     ...state,
     aliases: state.aliases.map((item, index) => (index === aliasIndex ? updatedItem : item)),

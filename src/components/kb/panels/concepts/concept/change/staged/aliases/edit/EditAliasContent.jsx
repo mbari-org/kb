@@ -20,7 +20,7 @@ const EditAliasContent = () => {
   const { modalData, setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 
-  const [formAlias, setFormAlias] = useState(modalData.alias)
+  const [formAlias, setFormAlias] = useState(modalData.aliasItem)
 
   const stagedAlias = useMemo(
     () => ({ ...stagedState.aliases[modalData.aliasIndex] }),
@@ -56,7 +56,7 @@ const EditAliasContent = () => {
     const fieldIsModified = updatedAlias[field] !== stagedAlias[field]
     const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
 
-    setModalData(prev => ({ ...prev, alias: updatedAlias, modified: updatedModified }))
+    setModalData(prev => ({ ...prev, aliasItem: updatedAlias, modified: updatedModified }))
   }
 
   const stageAlias = useStageAlias()

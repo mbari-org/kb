@@ -12,13 +12,13 @@ const useStageAlias = () => {
   const stageAlias = async event => {
     event.preventDefault()
 
-    const { action, alias, aliasIndex } = modalData
+    const { action, aliasIndex, aliasItem } = modalData
 
     modifyConcept({
       type: action,
       update: {
-        alias,
         aliasIndex,
+        aliasItem,
       },
     })
 

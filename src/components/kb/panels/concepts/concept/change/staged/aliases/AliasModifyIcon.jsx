@@ -22,11 +22,11 @@ const AliasModifyIcon = ({ action, aliasIndex, size }) => {
   const { setModal, setModalData } = use(ConceptModalContext)
 
   const onClick = useCallback(() => {
-    const alias = action === ADD ? EMPTY_ALIAS : aliasFields(stagedState.aliases[aliasIndex])
+    const aliasItem = action === ADD ? EMPTY_ALIAS : aliasFields(stagedState.aliases[aliasIndex])
 
     const actionModalData = {
       action,
-      alias,
+      aliasItem,
       aliasIndex,
       modified: { author: false, name: false, nameType: false },
     }

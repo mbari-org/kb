@@ -22,13 +22,13 @@ const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
   const { setModal, setModalData } = use(ConceptModalContext)
 
   const onClick = useCallback(() => {
-    const realization =
+    const realizationItem =
       action === ADD ? EMPTY_REALIZATION_ITEM : stagedState.realizations[realizationIndex]
 
     const actionModalData = {
       action,
       realizationIndex,
-      realizationItem: realization,
+      realizationItem,
       modified: { linkName: false, toConcept: false, linkValue: false },
     }
     setModalData(actionModalData)
