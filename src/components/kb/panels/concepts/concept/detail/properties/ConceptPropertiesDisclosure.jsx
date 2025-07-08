@@ -13,7 +13,6 @@ const ConceptPropertiesDisclosure = ({ expanded, onToggle }) => {
         display: 'flex',
         height: 32,
         justifyContent: 'center',
-        mr: -0.5,
         width: 32,
         '&:hover': {
           backgroundColor: 'action.hover',

@@ -6,6 +6,7 @@ const fieldState = concept => {
     mediaIndex: 0,
     rankLevel: rankLevel || '',
     rankName: rankName || '',
+    realizationIndex: 0,
   }
 }
 

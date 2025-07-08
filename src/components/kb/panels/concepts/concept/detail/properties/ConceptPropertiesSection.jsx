@@ -28,12 +28,23 @@ const ConceptPropertiesSection = ({
   const hasItems = items?.length > 0
   const showEmptyIcon = !hasItems && !isLoading
 
+  // Track previous items state to detect transitions
+  const [prevHasItems, setPrevHasItems] = useState(hasItems)
+
   // collapsed when no items (unless fixedHeight is set)
   useEffect(() => {
     if (showEmptyIcon && fixedHeight === undefined) {
       setExpanded(false)
     }
   }, [showEmptyIcon, fixedHeight])
+
+  // Auto-expand when items go from empty to non-empty
+  useEffect(() => {
+    if (!prevHasItems && hasItems && fixedHeight === undefined) {
+      setExpanded(true)
+    }
+    setPrevHasItems(hasItems)
+  }, [hasItems, prevHasItems, fixedHeight])
 
   const handleToggle = () => {
     // Only allow toggle if there are items and fixedHeight is not set

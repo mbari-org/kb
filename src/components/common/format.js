@@ -1,5 +1,5 @@
 const formatDelta = (initialValue, stagedValue) =>
-  `${stringDisplay(initialValue)} ——> ${stringDisplay(stagedValue)}`
+  `${stringDisplay(initialValue)} \u27F9 ${stringDisplay(stagedValue)}`
 
 const formatField = field =>
   field

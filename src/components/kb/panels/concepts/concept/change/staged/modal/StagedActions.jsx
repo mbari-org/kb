@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useEffect, useRef } from 'react'
 
 import { createActions } from '@/components/modal/conceptModalFactory'
 
@@ -9,6 +9,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 import { LABELS } from '@/lib/constants'
+import { hasModifiedState } from '@/lib/kb/state/concept'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
@@ -16,15 +17,22 @@ const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BU
 const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
-// Note: StagedActions uses createActions directly due to its unique dual-mode behavior
-// that doesn't fit the standard concept action patterns
 const StagedActions = ({ intent }) => {
-  const { concept, confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { logout } = use(UserContext)
 
   const saveStaged = useSaveStaged()
+  const resetConfirmedRef = useRef(false)
+
+  // Monitor state changes after reset confirmation to close modal if no modifications remain
+  useEffect(() => {
+    if (resetConfirmedRef.current && !hasModifiedState({ initialState, stagedState })) {
+      closeModal()
+      resetConfirmedRef.current = false
+    }
+  }, [initialState, stagedState, closeModal])
 
   const colors = ['cancel', 'main']
   const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
@@ -57,7 +65,7 @@ const StagedActions = ({ intent }) => {
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONFIRMED.YES })
         handleProceedWithAction()
-        closeModal()
+        resetConfirmedRef.current = true
         break
 
       case REJECT_DISCARD:
