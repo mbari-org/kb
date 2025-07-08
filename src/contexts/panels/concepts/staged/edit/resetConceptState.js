@@ -13,7 +13,8 @@ const RESET_ACTIONS = [
   RESET.MEDIA,
   RESET.MEDIA_ITEM,
   RESET.TO_INITIAL,
-  RESET.REALIZATION_ITEM, // Add realization item reset
+  RESET.REALIZATION_ITEM,
+  RESET.REALIZATIONS,
 ]
 
 const isResetAction = action => RESET_ACTIONS.includes(action.type)
@@ -115,6 +116,13 @@ const resetRealizationItem = (realizationIndex, dispatch, initialState) => {
   })
 }
 
+const resetRealizations = (dispatch, initialState) => {
+  dispatch({
+    type: RESET.REALIZATIONS,
+    update: { realizations: initialState.realizations },
+  })
+}
+
 const resetToInitial = (dispatch, initialState) => {
   dispatch({
     type: CONCEPT_STATE.INITIAL,
@@ -166,6 +174,10 @@ const resetConceptState = (action, dispatch, initialState) => {
 
     case RESET.REALIZATION_ITEM:
       resetRealizationItem(action.update.realizationIndex, dispatch, initialState)
+      break
+
+    case RESET.REALIZATIONS:
+      resetRealizations(dispatch, initialState)
       break
 
     case RESET.TO_INITIAL:

@@ -14,7 +14,7 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { LABELS, PENDING } from '@/lib/constants'
 
-const { APPROVAL, OTHER } = PENDING.APPROVAL
+const { OTHER } = PENDING.APPROVAL
 const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingField }) => {
