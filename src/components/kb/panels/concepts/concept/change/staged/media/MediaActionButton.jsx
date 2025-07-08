@@ -3,13 +3,13 @@ import { use, useCallback } from 'react'
 import { Box, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import createEditMediaModal from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/createEditMediaModal'
-import createEditMediaOnClose from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/createEditMediaOnClose'
+import createEditMediaModal from '@/components/kb/panels/concepts/concept/change/staged/media/edit/createEditMediaModal'
+import createEditMediaOnClose from '@/components/kb/panels/concepts/concept/change/staged/media/edit/createEditMediaOnClose'
 
 import {
   EMPTY_MEDIA_ITEM,
   mediaItemFields,
-} from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/mediaItem'
+} from '@/components/kb/panels/concepts/concept/change/staged/media/edit/mediaItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'

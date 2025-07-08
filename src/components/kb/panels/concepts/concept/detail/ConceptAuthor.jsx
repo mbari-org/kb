@@ -5,7 +5,7 @@ import { Box, FormControl } from '@mui/material'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
-import useStagedFieldBorder from '@/components/kb/panels/concepts/concept/change/staged/concept/field/useStagedFieldBorder'
+import useStagedFieldBorder from '@/components/kb/panels/concepts/concept/change/staged/field/useStagedFieldBorder'
 
 import TextInput from '@/components/common/TextInput'
 

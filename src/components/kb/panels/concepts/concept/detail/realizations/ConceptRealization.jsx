@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import RealizationModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/RealizationModifyIcon'
+import RealizationModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationModifyIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 

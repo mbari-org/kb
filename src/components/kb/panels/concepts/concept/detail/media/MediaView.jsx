@@ -6,9 +6,9 @@ import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/M
 import MediaPreview from '@/components/kb/panels/concepts/concept/detail/media/MediaPreview'
 import MediaSwiper from '@/components/kb/panels/concepts/concept/detail/media/MediaSwiper'
 
-import MediaAdd from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/MediaAdd'
-import MediaDelete from '@/components/kb/panels/concepts/concept/change/staged/concept/media/delete/MediaDelete'
-import MediaEdit from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/MediaEdit'
+import MediaAdd from '@/components/kb/panels/concepts/concept/change/staged/media/edit/MediaAdd'
+import MediaDelete from '@/components/kb/panels/concepts/concept/change/staged/media/delete/MediaDelete'
+import MediaEdit from '@/components/kb/panels/concepts/concept/change/staged/media/edit/MediaEdit'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 

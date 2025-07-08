@@ -8,7 +8,7 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { aliasResetting } from '@/components/kb/panels/concepts/concept/change/staged/concept/reset'
+import { aliasResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { aliasEdits } from '@/lib/kb/model/alias'
 import { RESETTING } from '@/lib/constants'

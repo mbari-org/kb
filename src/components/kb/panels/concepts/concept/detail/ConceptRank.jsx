@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { Stack } from '@mui/material'
 
-import ConceptRankField from '@/components/kb/panels/concepts/concept/change/staged/concept/field/ConceptRankField'
+import ConceptRankField from '@/components/kb/panels/concepts/concept/change/staged/field/ConceptRankField'
 
 import { RANK } from '@/lib/constants'
 

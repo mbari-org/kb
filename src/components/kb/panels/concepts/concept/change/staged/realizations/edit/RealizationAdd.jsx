@@ -2,10 +2,10 @@ import { use, useCallback } from 'react'
 
 import PropertyAddIcon from '@/components/common/icon/property/PropertyAddIcon'
 
-import createEditRealizationModal from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/createEditRealizationModal'
-import createEditRealizationOnClose from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/createEditRealizationOnClose'
+import createEditRealizationModal from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/createEditRealizationModal'
+import createEditRealizationOnClose from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/createEditRealizationOnClose'
 
-import { EMPTY_REALIZATION_ITEM } from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/realizationItem'
+import { EMPTY_REALIZATION_ITEM } from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/realizationItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'

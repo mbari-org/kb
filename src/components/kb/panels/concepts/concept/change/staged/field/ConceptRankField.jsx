@@ -4,7 +4,7 @@ import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material'
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useStagedFieldBorder from '@/components/kb/panels/concepts/concept/change/staged/concept/field/useStagedFieldBorder'
+import useStagedFieldBorder from '@/components/kb/panels/concepts/concept/change/staged/field/useStagedFieldBorder'
 
 const ConceptRankField = ({ field, fieldValue, otherValue, inputStyle, onChange }) => {
   const { filterRanks } = use(TaxonomyContext)

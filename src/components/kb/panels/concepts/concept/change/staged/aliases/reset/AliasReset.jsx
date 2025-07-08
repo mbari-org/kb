@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import {
   aliasResetting,
   isStagedAction,
-} from '@/components/kb/panels/concepts/concept/change/staged/concept/reset'
+} from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 

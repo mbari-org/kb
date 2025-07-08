@@ -1,4 +1,4 @@
-import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/concept/reset'
+import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

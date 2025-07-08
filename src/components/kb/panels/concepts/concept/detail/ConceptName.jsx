@@ -3,10 +3,10 @@ import { use, useState } from 'react'
 import { Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ChangeStructureButton from '@/components/kb/panels/concepts/concept/change/staged/concept/structure/ConceptStructureButton'
-import ChangeStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/concept/structure/ConceptStructureChoices'
+import ChangeStructureButton from '@/components/kb/panels/concepts/concept/change/staged/structure/ConceptStructureButton'
+import ChangeStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/ConceptStructureChoices'
 
-import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/concept/structure/useStructureChoices'
+import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'

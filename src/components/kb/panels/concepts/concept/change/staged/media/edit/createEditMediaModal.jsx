@@ -1,8 +1,8 @@
-import DeleteMediaActions from '@/components/kb/panels/concepts/concept/change/staged/concept/media/delete/DeleteMediaActions'
-import DeleteMediaContent from '@/components/kb/panels/concepts/concept/change/staged/concept/media/delete/DeleteMediaContent'
-import EditMediaActions from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/EditMediaActions'
-import EditMediaContent from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/EditMediaContent'
-import EditMediaTitle from '@/components/kb/panels/concepts/concept/change/staged/concept/media/edit/EditMediaTitle'
+import DeleteMediaActions from '@/components/kb/panels/concepts/concept/change/staged/media/delete/DeleteMediaActions'
+import DeleteMediaContent from '@/components/kb/panels/concepts/concept/change/staged/media/delete/DeleteMediaContent'
+import EditMediaActions from '@/components/kb/panels/concepts/concept/change/staged/media/edit/EditMediaActions'
+import EditMediaContent from '@/components/kb/panels/concepts/concept/change/staged/media/edit/EditMediaContent'
+import EditMediaTitle from '@/components/kb/panels/concepts/concept/change/staged/media/edit/EditMediaTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 

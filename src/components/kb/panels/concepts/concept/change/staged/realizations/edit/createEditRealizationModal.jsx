@@ -1,8 +1,8 @@
-import DeleteRealizationActions from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/delete/DeleteRealizationActions'
-import DeleteRealizationContent from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/delete/DeleteRealizationContent'
-import EditRealizationActions from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/EditRealizationActions'
-import EditRealizationContent from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/EditRealizationContent'
-import EditRealizationTitle from '@/components/kb/panels/concepts/concept/change/staged/concept/realizations/edit/EditRealizationTitle'
+import DeleteRealizationActions from '@/components/kb/panels/concepts/concept/change/staged/realizations/delete/DeleteRealizationActions'
+import DeleteRealizationContent from '@/components/kb/panels/concepts/concept/change/staged/realizations/delete/DeleteRealizationContent'
+import EditRealizationActions from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/EditRealizationActions'
+import EditRealizationContent from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/EditRealizationContent'
+import EditRealizationTitle from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/EditRealizationTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
