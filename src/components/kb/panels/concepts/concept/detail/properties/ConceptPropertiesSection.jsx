@@ -23,10 +23,14 @@ const ConceptPropertiesSection = ({
 }) => {
   const [expanded, setExpanded] = useState(fixedHeight !== undefined || defaultExpanded)
   const [page, setPage] = useState(0)
+  const [animationDirection, setAnimationDirection] = useState('up')
   const rowsPerPage = ITEMS_PER_PAGE
 
   const hasItems = items?.length > 0
   const showEmptyIcon = !hasItems && !isLoading
+
+  // Track previous items state to detect transitions
+  const [prevHasItems, setPrevHasItems] = useState(hasItems)
 
   // collapsed when no items (unless fixedHeight is set)
   useEffect(() => {
@@ -34,6 +38,14 @@ const ConceptPropertiesSection = ({
       setExpanded(false)
     }
   }, [showEmptyIcon, fixedHeight])
+
+  // Auto-expand when items go from empty to non-empty
+  useEffect(() => {
+    if (!prevHasItems && hasItems && fixedHeight === undefined) {
+      setExpanded(true)
+    }
+    setPrevHasItems(hasItems)
+  }, [hasItems, prevHasItems, fixedHeight])
 
   const handleToggle = () => {
     // Only allow toggle if there are items and fixedHeight is not set
@@ -47,7 +59,14 @@ const ConceptPropertiesSection = ({
     setPage(0)
   }, [items])
 
-  const handleChangePage = newPage => {
+  const handleChangePage = (newPage, direction) => {
+    if (direction) {
+      setAnimationDirection(direction)
+    } else {
+      // Fallback to calculating direction if not provided
+      const calculatedDirection = newPage > page ? 'down' : 'up'
+      setAnimationDirection(calculatedDirection)
+    }
     setPage(newPage)
     // Ensure accordion is expanded when pagination buttons are clicked (unless fixedHeight is set)
     if (!expanded && fixedHeight === undefined) {
@@ -73,17 +92,20 @@ const ConceptPropertiesSection = ({
             e.stopPropagation()
           }
         }}
+        // This CSS overrides the default accordion summary
         sx={{
           '& .MuiAccordionSummary-content': {
             m: 0,
           },
           px: 0,
-          cursor: 'default !important', // Override Material-UI's default pointer cursor
+          cursor: 'default !important',
           '&:hover': {
-            cursor: 'default !important', // Ensure hover doesn't change cursor
+            cursor: 'default !important',
           },
+          minHeight: '56px !important',
+          height: '56px',
           ...(fixedHeight !== undefined && {
-            minHeight: 'auto', // Prevent height changes when content changes
+            height: '56px',
           }),
         }}
       >
@@ -109,18 +131,15 @@ const ConceptPropertiesSection = ({
           {children}
         </ConceptPropertiesSummary>
       </AccordionSummary>
-      <AccordionDetails 
-        sx={{ 
-          pt: 0, 
-          pb: 1, 
-          px: 0, 
-          mt: -2,
+      <AccordionDetails
+        sx={{
+          p: 0,
           ...(fixedHeight !== undefined && {
             height: fixedHeight,
             overflow: 'auto',
             display: 'flex',
-            flexDirection: 'column'
-          })
+            flexDirection: 'column',
+          }),
         }}
       >
         <ConceptPropertiesDetails
@@ -133,6 +152,7 @@ const ConceptPropertiesSection = ({
           itemsPerPage={rowsPerPage}
           renderComponent={renderComponent}
           renderItem={renderItem}
+          animationDirection={animationDirection}
         />
       </AccordionDetails>
     </Accordion>

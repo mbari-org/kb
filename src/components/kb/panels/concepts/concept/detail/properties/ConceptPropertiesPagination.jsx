@@ -37,7 +37,6 @@ const ConceptPropertiesPagination = ({
           display: 'flex',
           gap: 1,
           justifyContent: 'flex-end',
-          minWidth: 175,
         }}
       >
         <ConceptPropertiesPageControls
@@ -49,7 +48,12 @@ const ConceptPropertiesPagination = ({
         <Typography
           className='clickable-element'
           variant='body2'
-          sx={{ whiteSpace: 'nowrap', cursor: 'pointer' }}
+          sx={{
+            whiteSpace: 'nowrap',
+            cursor: 'pointer',
+            minWidth: '110px',
+            textAlign: 'center',
+          }}
           onClick={onPageTextClick}
         >
           {`${startIndex + 1}-${Math.min(endIndex, totalItems || 0)} of ${totalItems || 0}`}

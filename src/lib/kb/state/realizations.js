@@ -5,7 +5,7 @@ import { stagedRealization } from '@/lib/kb/model/realization'
 const realizationsState = (concept, pending) => {
   const { realizations: conceptRealizations } = concept
   if (!conceptRealizations) {
-    return []
+    return { realizations: [] }
   }
 
   const realizations = conceptRealizations.map((realization, index) =>

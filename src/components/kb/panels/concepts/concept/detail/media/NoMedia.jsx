@@ -39,7 +39,18 @@ const NoMedia = () => {
       >
         No Media
       </Typography>
-      {editing && <MediaAdd bgColor='transparent' sx={{ mt: 10 }} />}
+      {editing && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 30,
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <MediaAdd bgColor='transparent' />
+        </Box>
+      )}
     </Box>
   )
 }

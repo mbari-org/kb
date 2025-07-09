@@ -5,7 +5,7 @@ import { stagedAlias } from '@/lib/kb/model/alias'
 const aliasesState = (concept, pending) => {
   const { aliases: conceptAliases } = concept
   if (!conceptAliases) {
-    return []
+    return { aliases: [] }
   }
 
   const aliases = conceptAliases.map((alias, index) =>

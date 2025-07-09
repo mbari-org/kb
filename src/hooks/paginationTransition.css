@@ -1,0 +1,29 @@
+/* Gradient overlay styles for pagination indicators */
+
+.pagination-container {
+  position: relative;
+}
+
+.pagination-container.has-previous::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to bottom, var(--paper-color) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pagination-container.has-more::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to top, var(--paper-color) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
