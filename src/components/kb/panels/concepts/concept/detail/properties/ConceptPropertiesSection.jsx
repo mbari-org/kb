@@ -23,6 +23,7 @@ const ConceptPropertiesSection = ({
 }) => {
   const [expanded, setExpanded] = useState(fixedHeight !== undefined || defaultExpanded)
   const [page, setPage] = useState(0)
+  const [animationDirection, setAnimationDirection] = useState('up')
   const rowsPerPage = ITEMS_PER_PAGE
 
   const hasItems = items?.length > 0
@@ -58,7 +59,14 @@ const ConceptPropertiesSection = ({
     setPage(0)
   }, [items])
 
-  const handleChangePage = newPage => {
+  const handleChangePage = (newPage, direction) => {
+    if (direction) {
+      setAnimationDirection(direction)
+    } else {
+      // Fallback to calculating direction if not provided
+      const calculatedDirection = newPage > page ? 'down' : 'up'
+      setAnimationDirection(calculatedDirection)
+    }
     setPage(newPage)
     // Ensure accordion is expanded when pagination buttons are clicked (unless fixedHeight is set)
     if (!expanded && fixedHeight === undefined) {
@@ -84,19 +92,20 @@ const ConceptPropertiesSection = ({
             e.stopPropagation()
           }
         }}
+        // This CSS overrides the default accordion summary
         sx={{
           '& .MuiAccordionSummary-content': {
             m: 0,
           },
           px: 0,
-          cursor: 'default !important', // Override Material-UI's default pointer cursor
+          cursor: 'default !important',
           '&:hover': {
-            cursor: 'default !important', // Ensure hover doesn't change cursor
+            cursor: 'default !important',
           },
-          minHeight: '56px !important', // Fixed height for consistent appearance
+          minHeight: '56px !important',
           height: '56px',
           ...(fixedHeight !== undefined && {
-            height: '56px', // Keep consistent height even with fixedHeight
+            height: '56px',
           }),
         }}
       >
@@ -124,9 +133,7 @@ const ConceptPropertiesSection = ({
       </AccordionSummary>
       <AccordionDetails
         sx={{
-          pt: 0,
-          pb: 1,
-          px: 0,
+          p: 0,
           ...(fixedHeight !== undefined && {
             height: fixedHeight,
             overflow: 'auto',
@@ -145,6 +152,7 @@ const ConceptPropertiesSection = ({
           itemsPerPage={rowsPerPage}
           renderComponent={renderComponent}
           renderItem={renderItem}
+          animationDirection={animationDirection}
         />
       </AccordionDetails>
     </Accordion>

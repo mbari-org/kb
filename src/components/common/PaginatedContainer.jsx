@@ -13,8 +13,10 @@ const PaginatedContainer = ({
   children,
   ...boxProps
 }) => {
-  const { paginatedItems, hasMoreItems, hasPreviousItems, getTransitionStyles } =
-    usePaginationTransition(currentPage, itemsPerPage, items)
+  const { paginatedItems } = usePaginationTransition(currentPage, itemsPerPage, items)
+
+  const hasMoreItems = items && items.length > (currentPage + 1) * itemsPerPage
+  const hasPreviousItems = currentPage > 0
 
   return (
     <Box
@@ -27,11 +29,13 @@ const PaginatedContainer = ({
       {...boxProps}
     >
       {shouldShowItems && (
-        <Box sx={getTransitionStyles()}>
+        <Box>
           {typeof children === 'function' ? children(paginatedItems) : children}
         </Box>
       )}
-      {!shouldShowItems && children}
+      {!shouldShowItems && (
+        typeof children === 'function' ? children([]) : children
+      )}
     </Box>
   )
 }

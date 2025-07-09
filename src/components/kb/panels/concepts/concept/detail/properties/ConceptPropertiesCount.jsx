@@ -20,8 +20,8 @@ const ConceptPropertiesCount = ({
           currentPage={currentPage}
           totalItems={totalItems}
           itemsPerPage={itemsPerPage}
-          onPrevious={() => onPageChange((currentPage || 0) - 1)}
-          onNext={() => onPageChange((currentPage || 0) + 1)}
+          onPrevious={() => onPageChange((currentPage || 0) - 1, 'down')}
+          onNext={() => onPageChange((currentPage || 0) + 1, 'up')}
           onPageTextClick={onPageTextClick}
           disablePagination={disablePagination}
           hasItems={hasItems}
