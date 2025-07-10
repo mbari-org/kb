@@ -18,11 +18,9 @@ const RealizationTemplatesFilter = ({ onTemplateSelect, linkNameFilter }) => {
   const availableTemplates = useMemo(() => {
     if (!concept || !templates) return []
 
-    // Get all available concepts (current concept + ancestors) like Templates panel does when Available=true
     const ancestors = getAncestors(concept.name)
     const allConcepts = [concept.name, ...ancestors]
 
-    // Use the same filterTemplates utility as Templates panel
     return filterTemplates(templates, {
       concepts: allConcepts,
       linkName: linkNameFilter,

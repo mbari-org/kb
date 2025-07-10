@@ -10,7 +10,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { EDIT_REALIZATION_FORM_ID } from './RealizationForm'
 
-const EditRealizationActions = () => {
+const RealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
@@ -50,4 +50,4 @@ const EditRealizationActions = () => {
   })
 }
 
-export default EditRealizationActions
+export default RealizationActions

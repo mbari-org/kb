@@ -5,7 +5,7 @@ import Title from '@/components/common/factory/Title'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-const EditRealizationTitle = () => {
+const RealizationTitle = () => {
   const { concept } = use(ConceptContext)
 
   const { modalData } = use(ConceptModalContext)
@@ -14,6 +14,6 @@ const EditRealizationTitle = () => {
   return <Title title={`${actionText} Realization: ${concept.name}`} />
 }
 
-EditRealizationTitle.displayName = 'EditRealizationTitle'
+RealizationTitle.displayName = 'EditRealizationTitle'
 
-export default EditRealizationTitle
+export default RealizationTitle

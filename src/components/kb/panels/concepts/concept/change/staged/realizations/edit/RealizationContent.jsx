@@ -12,7 +12,7 @@ import RealizationTemplatesFilter from './filter/RealizationTemplatesFilter'
 import { CONCEPT_STATE } from '@/lib/constants'
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
-const EditRealizationContent = () => {
+const RealizationContent = () => {
   const { stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
 
@@ -108,4 +108,4 @@ const EditRealizationContent = () => {
   )
 }
 
-export default EditRealizationContent
+export default RealizationContent
