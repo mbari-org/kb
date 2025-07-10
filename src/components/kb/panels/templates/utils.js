@@ -1,4 +1,6 @@
 export const filterTemplates = (templates, filters = {}) => {
+  if (!templates) return []
+
   const { concepts, toConcept, linkName, linkValue } = filters
 
   const trimmedLinkName = linkName?.trim()

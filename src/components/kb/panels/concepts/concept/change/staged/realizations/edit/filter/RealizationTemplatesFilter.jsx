@@ -1,31 +1,15 @@
-import { use, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 import RealizationTemplate from './RealizationTemplate'
+import useAvailableLinkTemplates from '../useAvailableLinkTemplates'
 
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+const RealizationTemplatesFilter = ({ isLoading, linkName, onTemplateSelect }) => {
+  const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
-import { filterTemplates } from '@/components/kb/panels/templates/utils'
-
-const RealizationTemplatesFilter = ({ onTemplateSelect, linkNameFilter }) => {
-  const { isLoading, templates } = use(PanelDataContext)
-  const { concept } = use(ConceptContext)
-  const { getAncestors } = use(TaxonomyContext)
-
-  // Filter templates for current concept and by linkName (using available logic like Templates panel)
   const availableTemplates = useMemo(() => {
-    if (!concept || !templates) return []
-
-    const ancestors = getAncestors(concept.name)
-    const allConcepts = [concept.name, ...ancestors]
-
-    return filterTemplates(templates, {
-      concepts: allConcepts,
-      linkName: linkNameFilter,
-    })
-  }, [templates, concept, linkNameFilter, getAncestors])
+    return getAvailableLinkTemplates(linkName)
+  }, [getAvailableLinkTemplates, linkName])
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,
@@ -37,8 +21,8 @@ const RealizationTemplatesFilter = ({ onTemplateSelect, linkNameFilter }) => {
   return (
     <ConceptPropertiesSection
       fixedHeight={160}
-      isLoading={isLoading}
       items={availableTemplates}
+      isLoading={isLoading}
       loadingText='Loading templates...'
       renderItem={renderItem}
       title='Available Templates'

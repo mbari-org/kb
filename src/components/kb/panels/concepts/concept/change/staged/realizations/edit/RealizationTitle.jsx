@@ -11,7 +11,7 @@ const RealizationTitle = () => {
   const { modalData } = use(ConceptModalContext)
   const actionText = modalData?.action?.split(' ').pop() || 'Edit'
 
-  return <Title title={`${actionText} Realization: ${concept.name}`} />
+  return <Title sx={{ pt: 2 }} title={`${actionText} Realization: ${concept.name}`} />
 }
 
 RealizationTitle.displayName = 'EditRealizationTitle'

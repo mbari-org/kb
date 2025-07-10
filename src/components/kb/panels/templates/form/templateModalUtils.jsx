@@ -100,13 +100,6 @@ export const createModalContent = (handleFormChange, isEdit) => {
   return TemplateModalContent
 }
 
-export const createInitialTemplate = () => ({
-  concept: '',
-  linkName: '',
-  toConcept: '',
-  linkValue: '',
-})
-
 export const processEditTemplateData = (template, original) => {
   const hasFieldChanges = TEMPLATE_FIELDS.some(field => template[field] !== original[field])
 

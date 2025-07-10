@@ -1,0 +1,94 @@
+import { useCallback, useMemo, useState } from 'react'
+import { use } from 'react'
+import { FormControl, TextField, Autocomplete } from '@mui/material'
+
+import ConfigContext from '@/contexts/config/ConfigContext'
+import { getConceptTaxa } from '@/lib/api/concept'
+
+const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLinkName }) => {
+  const { apiFns } = use(ConfigContext)
+
+  const [taxaNames, setTaxaNames] = useState([])
+
+  const toConcept = realizationItem.toConcept
+
+  // a toConcept with only one option cannot be changed
+  const isSelfOrNil = useMemo(() => {
+    return toConcept === 'self' || toConcept === 'nil'
+  }, [toConcept])
+
+  const handleToConceptChange = useCallback(
+    (event, value) => {
+      if (isSelfOrNil) {
+        return
+      }
+      const updatedRealizationItem = {
+        ...realizationItem,
+        toConcept: value,
+      }
+      onRealizationChange(updatedRealizationItem, 'toConcept')
+    },
+    [realizationItem, onRealizationChange, isSelfOrNil]
+  )
+
+  useMemo(() => {
+    if (!apiFns || !toConcept) return
+
+    const specialMap = {
+      self: ['self'],
+      nil: ['nil'],
+    }
+    if (specialMap[toConcept]) {
+      setTaxaNames(specialMap[toConcept])
+      return
+    }
+
+    const fetchTaxa = async () => {
+      const taxa = await apiFns.apiPayload(getConceptTaxa, toConcept)
+
+      const names = taxa
+        .flatMap(item =>
+          item.alternativeNames ? [item.name].concat(item.alternativeNames) : [item.name]
+        )
+        .sort()
+
+      setTaxaNames(names)
+    }
+
+    fetchTaxa()
+  }, [toConcept, apiFns])
+
+  const renderImmutableField = () => (
+    <TextField
+      label='To Concept'
+      value={toConcept}
+      size='small'
+      slotProps={{
+        input: {
+          readOnly: true,
+        },
+      }}
+    />
+  )
+
+  const renderEditableField = () => (
+    <Autocomplete
+      options={taxaNames}
+      value={toConcept}
+      onChange={handleToConceptChange}
+      onInputChange={(event, value) => handleToConceptChange(event, value)}
+      size='small'
+      disabled={!isValidLinkName}
+      disableClearable={true}
+      renderInput={params => <TextField {...params} label='To Concept' size='small' />}
+    />
+  )
+
+  return (
+    <FormControl fullWidth margin='normal'>
+      {isSelfOrNil ? renderImmutableField() : renderEditableField()}
+    </FormControl>
+  )
+}
+
+export default RealizationToConcept
