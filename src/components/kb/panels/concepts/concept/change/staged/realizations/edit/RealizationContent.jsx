@@ -1,26 +1,45 @@
-import { use, useState } from 'react'
+import { use, useState, useMemo } from 'react'
 import { Box, Divider } from '@mui/material'
+
+import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/RealizationForm'
+import RealizationTemplatesFilter from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesFilter'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useStageRealization from './useStageRealization'
-import useDebounce from '@/hooks/useDebounce'
-import RealizationForm from './RealizationForm'
-import RealizationTemplatesFilter from './filter/RealizationTemplatesFilter'
-
-import { CONCEPT_STATE } from '@/lib/constants'
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
+import useStageRealization from './useStageRealization'
+
+import useDebounce from '@/hooks/useDebounce'
+
+import { filterTemplates } from '@/components/kb/panels/templates/utils'
+
+import { CONCEPT_STATE } from '@/lib/constants'
+
 const RealizationContent = () => {
-  const { stagedState } = use(ConceptContext)
+  const { stagedState, concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
+  const { isLoading, templates } = use(PanelDataContext)
+  const { getAncestors } = use(TaxonomyContext)
 
-  const { action, realizationIndex, realizationItem } = modalData
+  const { action, realizationIndex, modalRealizationItem } = modalData
 
-  const [formRealizationItem, setFormRealizationItem] = useState(realizationItem)
+  const [realizationItem, setRealizationItem] = useState(modalRealizationItem)
 
-  const debouncedUpdateForm = useDebounce((updatedRealizationItem, fieldIsModified, field) => {
+  const conceptNames = useMemo(() => {
+    return concept ? [concept.name, ...getAncestors(concept.name)] : []
+  }, [concept, getAncestors])
+
+  const availableLinkTemplates = linkName =>
+    filterTemplates(templates, {
+      concepts: conceptNames,
+      linkName: linkName,
+    })
+
+  const debouncedInput = useDebounce((updatedRealizationItem, fieldIsModified, field) => {
     const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
 
     setModalData(prev => ({
@@ -30,55 +49,48 @@ const RealizationContent = () => {
     }))
   }, 300)
 
-  const handleChange = event => {
-    const { name: field, value } = event.target
-
-    const updatedRealizationItem = {
-      ...formRealizationItem,
-      [field]: value,
-    }
-
-    setFormRealizationItem(updatedRealizationItem)
+  const handleRealizationChange = (updatedRealizationItem, field) => {
+    setRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION_ITEM.ADD
         ? updatedRealizationItem[field] !== EMPTY_REALIZATION[field]
         : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
 
-    debouncedUpdateForm(updatedRealizationItem, fieldIsModified, field)
+    debouncedInput(updatedRealizationItem, fieldIsModified, field)
   }
 
   const handleToConceptSelect = newValue => {
     const updatedRealizationItem = {
-      ...formRealizationItem,
+      ...realizationItem,
       toConcept: newValue,
     }
 
-    setFormRealizationItem(updatedRealizationItem)
+    setRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION_ITEM.ADD
         ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
         : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
 
-    debouncedUpdateForm(updatedRealizationItem, fieldIsModified, 'toConcept')
+    debouncedInput(updatedRealizationItem, fieldIsModified, 'toConcept')
   }
 
   const handleToConceptSpecial = value => {
     // When a special value is selected, use it as the toConcept value
     const updatedRealizationItem = {
-      ...formRealizationItem,
+      ...realizationItem,
       toConcept: value === null ? '' : value,
     }
 
-    setFormRealizationItem(updatedRealizationItem)
+    setRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION_ITEM.ADD
         ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
         : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
 
-    debouncedUpdateForm(updatedRealizationItem, fieldIsModified, 'toConcept')
+    debouncedInput(updatedRealizationItem, fieldIsModified, 'toConcept')
   }
 
   const stageRealization = useStageRealization()
@@ -93,13 +105,16 @@ const RealizationContent = () => {
   return (
     <Box>
       <RealizationTemplatesFilter
-        onTemplateSelect={handleChange}
-        linkNameFilter={formRealizationItem.linkName}
+        availableLinkTemplates={availableLinkTemplates}
+        isLoading={isLoading}
+        linkName={realizationItem.linkName}
+        onTemplateSelect={handleRealizationChange}
       />
       <Divider sx={{ my: 1 }} />
       <RealizationForm
-        formRealizationItem={formRealizationItem}
-        handleChange={handleChange}
+        availableLinkTemplates={availableLinkTemplates}
+        realizationItem={realizationItem}
+        onRealizationChange={handleRealizationChange}
         handleToConceptSelect={handleToConceptSelect}
         handleToConceptSpecial={handleToConceptSpecial}
         stageChange={stageChange}

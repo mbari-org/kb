@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Box, FormControl, Stack } from '@mui/material'
 
 import TextInput from '@/components/common/TextInput'
@@ -6,12 +7,36 @@ import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
 const RealizationForm = ({
-  formRealizationItem,
-  handleChange,
+  realizationItem,
+  onRealizationChange,
   handleToConceptSelect,
   handleToConceptSpecial,
   stageChange,
 }) => {
+  const handleLinkNameChange = useCallback(
+    event => {
+      const { name: field, value } = event.target
+      const updatedRealizationItem = {
+        ...realizationItem,
+        [field]: value,
+      }
+      onRealizationChange(updatedRealizationItem, field)
+    },
+    [realizationItem, onRealizationChange]
+  )
+
+  const handleLinkValueChange = useCallback(
+    event => {
+      const { name: field, value } = event.target
+      const updatedRealizationItem = {
+        ...realizationItem,
+        [field]: value,
+      }
+      onRealizationChange(updatedRealizationItem, field)
+    },
+    [realizationItem, onRealizationChange]
+  )
+
   return (
     <Box component='form' id={EDIT_REALIZATION_FORM_ID} onSubmit={stageChange}>
       <Stack direction='row' spacing={1} width='100%' alignItems='center'>
@@ -20,17 +45,17 @@ const RealizationForm = ({
             <TextInput
               label='Link Name'
               name='linkName'
-              onChange={handleChange}
+              onChange={handleLinkNameChange}
               required
               size='small'
-              value={formRealizationItem.linkName}
+              value={realizationItem.linkName}
             />
           </FormControl>
         </Box>
         <Box sx={{ flex: 1 }}>
           <FormControl fullWidth margin='normal'>
             <ToConceptSelect
-              conceptName={formRealizationItem.toConcept}
+              conceptName={realizationItem.toConcept}
               doConceptSelected={handleToConceptSelect}
               onSpecialChange={handleToConceptSpecial}
             />
@@ -42,10 +67,10 @@ const RealizationForm = ({
           <TextInput
             label='Link Value'
             name='linkValue'
-            onChange={handleChange}
+            onChange={handleLinkValueChange}
             required
             size='small'
-            value={formRealizationItem.linkValue}
+            value={realizationItem.linkValue}
           />
         </FormControl>
       </Box>
