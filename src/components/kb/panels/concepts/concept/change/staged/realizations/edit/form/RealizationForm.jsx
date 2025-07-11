@@ -33,7 +33,7 @@ const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) 
     return linkNameOptions.includes(currentLinkName)
   }, [linkNameOptions, realizationItem.linkName])
 
-  const { handleLinkNameSelect, handleLinkNameInputChange, handleLinkValueChange, handleKeyDown } =
+  const { handleLinkNameSelect, handleLinkNameInputChange, handleLinkValueChange, handleKeyDown, handleLinkValueKeyDown } =
     useRealizationFormHandlers({
       realizationItem,
       onRealizationChange,
@@ -83,6 +83,7 @@ const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) 
           label='Link Value'
           name='linkValue'
           onChange={handleLinkValueChange}
+          onKeyDown={handleLinkValueKeyDown}
           required
           size='small'
           value={realizationItem.linkValue}
