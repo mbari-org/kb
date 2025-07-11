@@ -33,61 +33,66 @@ const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) 
     return linkNameOptions.includes(currentLinkName)
   }, [linkNameOptions, realizationItem.linkName])
 
-  const { handleLinkNameSelect, handleLinkNameInputChange, handleLinkValueChange, handleKeyDown, handleLinkValueKeyDown } =
-    useRealizationFormHandlers({
-      realizationItem,
-      onRealizationChange,
-      allAvailableTemplates,
-      filteredOptions,
-      focusLinkValue: () => {
-        const linkValueInput = document.querySelector('input[name="linkValue"]')
-        linkValueInput?.focus()
-      },
-    })
+  const {
+    handleLinkNameSelect,
+    handleLinkNameInputChange,
+    handleLinkValueChange,
+    handleKeyDown,
+    handleLinkValueKeyDown,
+  } = useRealizationFormHandlers({
+    allAvailableTemplates,
+    filteredOptions,
+    focusLinkValue: () => {
+      const linkValueInput = document.querySelector('input[name="linkValue"]')
+      linkValueInput?.focus()
+    },
+    onRealizationChange,
+    realizationItem,
+  })
 
   return (
     <Stack
       component='form'
+      direction='column'
       id={EDIT_REALIZATION_FORM_ID}
       onSubmit={stageChange}
-      direction='column'
       spacing={2}
       sx={{ mt: 2.5 }}
       width='100%'
     >
       <FormControl fullWidth margin='normal'>
         <Autocomplete
-          options={linkNameOptions}
-          value={realizationItem.linkName || ''}
           onChange={handleLinkNameSelect}
           onInputChange={handleLinkNameInputChange}
-          size='small'
+          options={linkNameOptions}
           renderInput={params => (
             <TextField
               {...params}
               label='Link Name'
+              onKeyDown={handleKeyDown}
               required
               size='small'
-              onKeyDown={handleKeyDown}
             />
           )}
+          size='small'
+          value={realizationItem.linkName || ''}
         />
       </FormControl>
       <RealizationToConcept
-        realizationItem={realizationItem}
-        onRealizationChange={onRealizationChange}
         isValidLinkName={isValidLinkName}
+        onRealizationChange={onRealizationChange}
+        realizationItem={realizationItem}
       />
       <FormControl fullWidth margin='normal'>
         <TextInput
+          disabled={!isValidLinkName}
           label='Link Value'
           name='linkValue'
           onChange={handleLinkValueChange}
-          onKeyDown={handleLinkValueKeyDown}
+          onKeyDown={handleKeyDown}
           required
           size='small'
           value={realizationItem.linkValue}
-          disabled={!isValidLinkName}
         />
       </FormControl>
     </Stack>
