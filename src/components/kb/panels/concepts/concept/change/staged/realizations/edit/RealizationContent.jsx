@@ -1,43 +1,53 @@
 import { use, useState, useMemo } from 'react'
 import { Box, Divider } from '@mui/material'
 
-import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/RealizationForm'
+import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/form/RealizationForm'
 import RealizationTemplatesFilter from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesFilter'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+import { isSame } from '@/lib/kb/model/realization'
 
 import useStageRealization from './useStageRealization'
 
 import useDebounce from '@/hooks/useDebounce'
 
-import { filterTemplates } from '@/components/kb/panels/templates/utils'
-
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const RealizationContent = () => {
-  const { stagedState, concept } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
-  const { isLoading, templates } = use(PanelDataContext)
-  const { getAncestors } = use(TaxonomyContext)
+  const { isLoading } = use(PanelDataContext)
 
   const { action, realizationIndex, modalRealizationItem } = modalData
 
-  const [realizationItem, setRealizationItem] = useState(modalRealizationItem)
+  const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
 
-  const conceptNames = useMemo(() => {
-    return concept ? [concept.name, ...getAncestors(concept.name)] : []
-  }, [concept, getAncestors])
+  const isDuplicate = useMemo(() => {
+    // Don't check for duplicates if form is incomplete
+    if (!realizationItem.linkName || !realizationItem.toConcept || !realizationItem.linkValue) {
+      return false
+    }
 
-  const availableLinkTemplates = linkName =>
-    filterTemplates(templates, {
-      concepts: conceptNames,
-      linkName: linkName,
-    })
+    // For editing existing realizations, exclude the current realization from the check
+    const realizationsToCheck =
+      action === CONCEPT_STATE.REALIZATION_ITEM.ADD
+        ? stagedState.realizations
+        : stagedState.realizations.filter((_, index) => index !== realizationIndex)
+
+    return realizationsToCheck.some(existing => isSame(realizationItem, existing))
+  }, [realizationItem, stagedState.realizations, action, realizationIndex])
+
+  // Update modal context with duplicate state
+  useMemo(() => {
+    setModalData(prev => ({
+      ...prev,
+      isDuplicate,
+    }))
+  }, [isDuplicate, setModalData])
 
   const debouncedInput = useDebounce((updatedRealizationItem, fieldIsModified, field) => {
     const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
@@ -54,47 +64,45 @@ const RealizationContent = () => {
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION_ITEM.ADD
-        ? updatedRealizationItem[field] !== EMPTY_REALIZATION[field]
+        ? updatedRealizationItem[field] !== EMPTY_TEMPLATE[field]
         : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
 
     debouncedInput(updatedRealizationItem, fieldIsModified, field)
   }
 
-  const handleToConceptSelect = newValue => {
+  const handleTemplateSelect = template => {
+    // Auto-populate all fields from the selected template
     const updatedRealizationItem = {
       ...realizationItem,
-      toConcept: newValue,
+      linkName: template.linkName,
+      toConcept: template.toConcept,
+      linkValue: template.linkValue,
+      templateId: template.id, // Store the template ID for reference
     }
 
     setRealizationItem(updatedRealizationItem)
 
-    const fieldIsModified =
-      action === CONCEPT_STATE.REALIZATION_ITEM.ADD
-        ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
-        : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
-
-    debouncedInput(updatedRealizationItem, fieldIsModified, 'toConcept')
-  }
-
-  const handleToConceptSpecial = value => {
-    // When a special value is selected, use it as the toConcept value
-    const updatedRealizationItem = {
-      ...realizationItem,
-      toConcept: value === null ? '' : value,
+    // Mark all populated fields as modified
+    const updatedModified = {
+      ...modalData.modified,
+      linkName: true,
+      toConcept: true,
+      linkValue: true,
     }
 
-    setRealizationItem(updatedRealizationItem)
-
-    const fieldIsModified =
-      action === CONCEPT_STATE.REALIZATION_ITEM.ADD
-        ? updatedRealizationItem.toConcept !== EMPTY_REALIZATION.toConcept
-        : stagedState.realizations[realizationIndex].toConcept !== updatedRealizationItem.toConcept
-
-    debouncedInput(updatedRealizationItem, fieldIsModified, 'toConcept')
+    setModalData(prev => ({
+      ...prev,
+      realizationItem: updatedRealizationItem,
+      modified: updatedModified,
+    }))
   }
 
   const stageRealization = useStageRealization()
   const stageChange = event => {
+    if (isDuplicate) {
+      event.preventDefault()
+      return
+    }
     stageRealization(event)
   }
 
@@ -105,18 +113,14 @@ const RealizationContent = () => {
   return (
     <Box>
       <RealizationTemplatesFilter
-        availableLinkTemplates={availableLinkTemplates}
         isLoading={isLoading}
         linkName={realizationItem.linkName}
-        onTemplateSelect={handleRealizationChange}
+        onTemplateSelect={handleTemplateSelect}
       />
       <Divider sx={{ my: 1 }} />
       <RealizationForm
-        availableLinkTemplates={availableLinkTemplates}
         realizationItem={realizationItem}
         onRealizationChange={handleRealizationChange}
-        handleToConceptSelect={handleToConceptSelect}
-        handleToConceptSpecial={handleToConceptSpecial}
         stageChange={stageChange}
       />
     </Box>

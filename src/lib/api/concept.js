@@ -18,6 +18,9 @@ const getConceptParent = async (config, conceptName) =>
 
 const getConceptNames = async (config, conceptName) => oniGet(config, ['raw', 'names', conceptName])
 
+const getConceptTaxa = async (config, conceptName) =>
+  oniGet(config, ['phylogeny', 'taxa', conceptName])
+
 const updateConceptAuthor = async (config, [conceptName, updates]) =>
   oniPut(config, ['names', conceptName], updates)
 
@@ -38,6 +41,7 @@ export {
   getConceptChildren,
   getConceptNames,
   getConceptParent,
+  getConceptTaxa,
   updateConceptAuthor,
   updateConceptName,
   updateConceptParent,

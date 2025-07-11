@@ -2,16 +2,14 @@ import { useMemo } from 'react'
 
 import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 import RealizationTemplate from './RealizationTemplate'
+import useAvailableLinkTemplates from '../useAvailableLinkTemplates'
 
-const RealizationTemplatesFilter = ({
-  availableLinkTemplates,
-  isLoading,
-  linkName,
-  onTemplateSelect,
-}) => {
+const RealizationTemplatesFilter = ({ isLoading, linkName, onTemplateSelect }) => {
+  const getAvailableLinkTemplates = useAvailableLinkTemplates()
+
   const availableTemplates = useMemo(() => {
-    return availableLinkTemplates(linkName)
-  }, [availableLinkTemplates, linkName])
+    return getAvailableLinkTemplates(linkName)
+  }, [getAvailableLinkTemplates, linkName])
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,

@@ -6,13 +6,10 @@ import { pick } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const EMPTY_REALIZATION = {
-  linkName: '',
-  toConcept: '',
-  linkValue: '',
-}
-
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
+
+const isSame = (a, b) =>
+  a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
 
 const realizationEdits = ({ initial, staged }) =>
   fieldEdits({
@@ -64,7 +61,7 @@ const stagedRealization = (realization, conceptPending) => {
 }
 
 export {
-  EMPTY_REALIZATION,
+  isSame,
   REALIZATION_DISPLAY_FIELDS,
   realizationEdits,
   realizationFields,

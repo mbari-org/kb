@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-const Title = ({ title, type }) => {
+const Title = ({ title, type, sx = {} }) => {
   const theme = useTheme()
 
   let color
@@ -28,6 +28,7 @@ const Title = ({ title, type }) => {
         pb: 1,
         textAlign: 'center',
         width: '100%',
+        ...sx,
       }}
     >
       {title}

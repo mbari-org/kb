@@ -19,7 +19,7 @@ const saveRealizations = ([submit, { concept, updateInfo }]) => {
         const realization = pick(update, ['linkName', 'toConcept', 'linkValue'])
         const params = {
           ...realization,
-          fromConcept: concept.name,
+          concept: concept.name,
         }
         acc.push(submit(createRealization, params))
         break

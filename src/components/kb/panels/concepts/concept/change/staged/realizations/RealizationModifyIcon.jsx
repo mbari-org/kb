@@ -10,7 +10,7 @@ import createRealizationOnClose from '@/components/kb/panels/concepts/concept/ch
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -23,7 +23,7 @@ const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
 
   const onClick = useCallback(() => {
     const realizationItem =
-      action === ADD ? EMPTY_REALIZATION : stagedState.realizations[realizationIndex]
+      action === ADD ? EMPTY_TEMPLATE : stagedState.realizations[realizationIndex]
 
     const actionModalData = {
       action,
