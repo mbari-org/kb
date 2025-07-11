@@ -5,11 +5,13 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+
 import { PROCESSING } from '@/lib/constants'
+
 import {
   createModalActions,
   createTemplateValidator,
-  createInitialTemplate,
   processAddTemplateData,
   createHandlers,
   createModalContent,
@@ -18,7 +20,8 @@ import {
 const { SAVING } = PROCESSING
 
 const useAddTemplateButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = useTemplatesModalOperationsContext()
+  const { closeModal, createModal, updateModalData, setProcessing } =
+    useTemplatesModalOperationsContext()
   const { addTemplate } = use(TemplatesContext)
 
   const { handleCancel, handleFormChange } = useMemo(
@@ -58,14 +61,17 @@ const useAddTemplateButton = () => {
       content,
       title: 'Add Template',
       data: {
-        template: createInitialTemplate(),
+        template: EMPTY_TEMPLATE,
         isValid: false,
         hasChanges: false,
       },
     })
   }, [createModal, content, handleCancel, handleCommit])
 
-  const AddTemplateButton = useCallback(() => <PanelAddButton onClick={addTemplateModal} />, [addTemplateModal])
+  const AddTemplateButton = useCallback(
+    () => <PanelAddButton onClick={addTemplateModal} />,
+    [addTemplateModal]
+  )
 
   return AddTemplateButton
 }

@@ -8,13 +8,13 @@ import {
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EDIT_REALIZATION_FORM_ID } from './RealizationForm'
+import { EDIT_REALIZATION_FORM_ID } from './form/RealizationForm'
 
-const EditRealizationActions = () => {
+const RealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  const { realizationItem, modified } = modalData || {}
+  const { isDuplicate, modified, realizationItem } = modalData || {}
 
   const isModified = useMemo(
     () => Object.values(modified).some(isModified => isModified === true),
@@ -27,27 +27,33 @@ const EditRealizationActions = () => {
     realizationItem.linkValue?.trim() !== ''
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
-    modifyConcept,
     closeModal,
     concept,
+    modifyConcept,
   })
+
+  // Use normal discard flow regardless of duplicate state
+  const handleDiscardAction = handleDiscard
+
+  // Use normal confirmReset flow regardless of duplicate state
+  const shouldShowConfirmReset = confirmReset
 
   const handleStage = () => {
     // go through form to trigger required and validation checks
     document.querySelector(`#${EDIT_REALIZATION_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !isModified || !validRealizationItem
+  const stageDisabled = !isModified || !validRealizationItem || isDuplicate
 
   return createStagedActions({
-    onDiscard: handleDiscard,
+    onDiscard: handleDiscardAction,
     onStage: handleStage,
     stageDisabled,
-    confirmReset,
+    confirmReset: shouldShowConfirmReset,
     onConfirmDiscard: handleConfirmDiscard,
     onContinue: handleContinue,
     name: 'EditRealizationActions',
   })
 }
 
-export default EditRealizationActions
+export default RealizationActions

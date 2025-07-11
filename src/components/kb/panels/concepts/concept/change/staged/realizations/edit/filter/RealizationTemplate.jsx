@@ -3,14 +3,8 @@ import { Box, Typography, Link } from '@mui/material'
 const RealizationTemplate = ({ template, onTemplateSelect }) => {
   const handleLinkNameClick = () => {
     if (onTemplateSelect) {
-      // Create a synthetic event to match the form's handleChange interface
-      const syntheticEvent = {
-        target: {
-          name: 'linkName',
-          value: template.linkName,
-        },
-      }
-      onTemplateSelect(syntheticEvent)
+      // Pass the complete template data for auto-population
+      onTemplateSelect(template)
     }
   }
 

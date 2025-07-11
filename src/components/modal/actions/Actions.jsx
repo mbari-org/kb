@@ -3,13 +3,18 @@ import { use } from 'react'
 import { Box, Stack } from '@mui/material'
 
 import Action from './Action'
-import DiscardingText from './DiscardingText'
-import PendingText from './PendingText'
+import DiscardingAlert from './DiscardingAlert'
+import PendingAlert from './PendingAlert'
+import DuplicateAlert from './DuplicateAlert'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 const Actions = ({ colors, disabled, labels, onAction }) => {
   const { confirmPending, confirmReset } = use(ConceptContext)
+  const { modalData } = use(ConceptModalContext)
+  
+  const { isDuplicate } = modalData || {}
 
   const actionColor = index => (colors ? colors[index] : 'main')
 
@@ -54,8 +59,9 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       <Stack spacing={0} sx={{ alignItems: 'center', mt: 1, height: 60, justifyContent: 'center' }}>
-        {!!confirmReset && <DiscardingText />}
-        {!!confirmPending && <PendingText confirmPending={confirmPending} />}
+        {!!confirmReset && <DiscardingAlert />}
+        {!!confirmPending && <PendingAlert confirmPending={confirmPending} />}
+        {!!isDuplicate && !confirmReset && <DuplicateAlert />}
       </Stack>
       <Box
         sx={{
