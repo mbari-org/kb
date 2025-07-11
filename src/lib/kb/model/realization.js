@@ -8,9 +8,8 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
-const isUnique = (a, b) => {
-  return a.linkName !== b.linkName || a.toConcept !== b.toConcept || a.linkValue !== b.linkValue
-}
+const isSame = (a, b) =>
+  a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
 
 const realizationEdits = ({ initial, staged }) =>
   fieldEdits({
@@ -62,7 +61,7 @@ const stagedRealization = (realization, conceptPending) => {
 }
 
 export {
-  isUnique,
+  isSame,
   REALIZATION_DISPLAY_FIELDS,
   realizationEdits,
   realizationFields,

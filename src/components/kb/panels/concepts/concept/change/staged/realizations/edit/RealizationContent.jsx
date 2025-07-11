@@ -1,5 +1,5 @@
 import { use, useState, useMemo } from 'react'
-import { Box, Divider, Alert } from '@mui/material'
+import { Box, Divider } from '@mui/material'
 
 import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/form/RealizationForm'
 import RealizationTemplatesFilter from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesFilter'
@@ -9,7 +9,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
 import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
-import { isUnique } from '@/lib/kb/model/realization'
+import { isSame } from '@/lib/kb/model/realization'
 
 import useStageRealization from './useStageRealization'
 
@@ -38,7 +38,7 @@ const RealizationContent = () => {
         ? stagedState.realizations
         : stagedState.realizations.filter((_, index) => index !== realizationIndex)
 
-    return realizationsToCheck.some(existing => !isUnique(realizationItem, existing))
+    return realizationsToCheck.some(existing => isSame(realizationItem, existing))
   }, [realizationItem, stagedState.realizations, action, realizationIndex])
 
   // Update modal context with duplicate state
@@ -118,28 +118,11 @@ const RealizationContent = () => {
         onTemplateSelect={handleTemplateSelect}
       />
       <Divider sx={{ my: 1 }} />
-      <Box sx={{ position: 'relative' }}>
-        <RealizationForm
-          realizationItem={realizationItem}
-          onRealizationChange={handleRealizationChange}
-          stageChange={stageChange}
-        />
-        {isDuplicate && (
-          <Alert
-            severity='error'
-            sx={{
-              position: 'absolute',
-              top: '100%',
-              left: 0,
-              right: 0,
-              zIndex: 1000,
-              mt: 1,
-            }}
-          >
-            This realization matches an existing one
-          </Alert>
-        )}
-      </Box>
+      <RealizationForm
+        realizationItem={realizationItem}
+        onRealizationChange={handleRealizationChange}
+        stageChange={stageChange}
+      />
     </Box>
   )
 }

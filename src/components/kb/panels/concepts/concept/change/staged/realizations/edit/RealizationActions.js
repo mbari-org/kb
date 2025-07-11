@@ -27,16 +27,16 @@ const RealizationActions = () => {
     realizationItem.linkValue?.trim() !== ''
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
-    modifyConcept,
     closeModal,
     concept,
+    modifyConcept,
   })
 
-  // When duplicate is detected, discard without confirmation
-  const handleDiscardAction = isDuplicate ? closeModal : handleDiscard
-  
-  // Override confirmReset when duplicate is detected
-  const shouldShowConfirmReset = isDuplicate ? null : confirmReset
+  // Use normal discard flow regardless of duplicate state
+  const handleDiscardAction = handleDiscard
+
+  // Use normal confirmReset flow regardless of duplicate state
+  const shouldShowConfirmReset = confirmReset
 
   const handleStage = () => {
     // go through form to trigger required and validation checks
