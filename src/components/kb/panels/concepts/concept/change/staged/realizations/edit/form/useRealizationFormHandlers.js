@@ -66,15 +66,14 @@ const useRealizationFormHandlers = ({
     event => {
       if (event.key === 'Enter') {
         const currentInput = realizationItem.linkName || ''
-        
+
         // Check if current input exactly matches an available template linkName
         const exactMatch = allAvailableTemplates.find(
           template => template.linkName === currentInput
         )
-        
-        // Check if there's only one filtered option
+
         const singleFilteredOption = filteredOptions.length === 1 ? filteredOptions[0] : null
-        
+
         if (exactMatch || singleFilteredOption) {
           event.preventDefault()
           const selectedOption = exactMatch ? currentInput : singleFilteredOption
@@ -87,40 +86,47 @@ const useRealizationFormHandlers = ({
         }
       }
     },
-    [realizationItem.linkName, allAvailableTemplates, filteredOptions, handleLinkNameSelect, focusLinkValue]
+    [
+      realizationItem.linkName,
+      allAvailableTemplates,
+      filteredOptions,
+      handleLinkNameSelect,
+      focusLinkValue,
+    ]
   )
 
   const handleLinkValueKeyDown = useCallback(
     event => {
       if (event.key === 'Enter') {
         event.preventDefault()
-        
+
         // Find all templates that match the current linkName
         const matchingTemplates = allAvailableTemplates.filter(
           template => template.linkName === realizationItem.linkName
         )
-        
+
         // Only cycle if there are multiple matching templates AND current form exactly matches a template
         if (matchingTemplates.length > 1) {
           // Find the current template index (must be exact match)
-          const currentIndex = matchingTemplates.findIndex(template => 
-            template.toConcept === realizationItem.toConcept && 
-            template.linkValue === realizationItem.linkValue
+          const currentIndex = matchingTemplates.findIndex(
+            template =>
+              template.toConcept === realizationItem.toConcept &&
+              template.linkValue === realizationItem.linkValue
           )
-          
+
           // Only cycle if current form exactly matches an existing template
           if (currentIndex >= 0) {
             // Get the next template (cycle to 0 if at end)
             const nextIndex = (currentIndex + 1) % matchingTemplates.length
             const nextTemplate = matchingTemplates[nextIndex]
-            
+
             const updatedRealizationItem = {
               ...realizationItem,
               toConcept: nextTemplate.toConcept,
               linkValue: nextTemplate.linkValue,
               templateId: nextTemplate.id,
             }
-            
+
             onRealizationChange(updatedRealizationItem, 'linkValue')
           }
           // If currentIndex is -1 (no exact match), do nothing - let the user's input stand

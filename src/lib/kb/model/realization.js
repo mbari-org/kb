@@ -60,7 +60,19 @@ const stagedRealization = (realization, conceptPending) => {
   return realization
 }
 
+const checkForDuplicate = (realizations, realization, excludeIndex = null) => {
+  if (!realization.linkName || !realization.toConcept || !realization.linkValue) {
+    return false
+  }
+
+  const realizationsToCheck =
+    excludeIndex !== null ? realizations.filter((_, index) => index !== excludeIndex) : realizations
+
+  return realizationsToCheck.some(existing => isSame(realization, existing))
+}
+
 export {
+  checkForDuplicate,
   isSame,
   REALIZATION_DISPLAY_FIELDS,
   realizationEdits,

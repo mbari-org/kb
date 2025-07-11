@@ -32,7 +32,18 @@ const useStageRealization = () => {
     closeModal(true)
   }
 
-  return stageRealization
+  const stageChange = event => {
+    const { isDuplicate } = modalData
+
+    if (isDuplicate) {
+      event.preventDefault()
+      return
+    }
+
+    stageRealization(event)
+  }
+
+  return stageChange
 }
 
 export default useStageRealization
