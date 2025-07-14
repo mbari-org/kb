@@ -18,7 +18,7 @@ const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const StagedActions = ({ intent }) => {
-  const { confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { concept, confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { logout } = use(UserContext)
@@ -40,31 +40,36 @@ const StagedActions = ({ intent }) => {
 
   const labels = confirmReset ? confirmLabels : actionLabels
 
-  const handleProceedWithAction = () => {
-    const { panel, concept: targetConcept, logout: isLogout } = modalData || {}
+  // special triggers that require further action
+  const handleFurtherAction = () => {
+    const { panel: selectPanel, concept: selectConcept, logout: isLogout } = modalData || {}
 
-    if (panel) {
-      updateSelected({ panel })
-    } else if (targetConcept) {
-      updateSelected({ concept: targetConcept })
-    } else if (isLogout) {
-      // Close modal and wait for React to complete cleanup before logging out
-      closeModal(true, () => {
-        logout()
-      })
+    if (selectPanel) {
+      updateSelected({ panel: selectPanel })
+      return
+    }
+
+    if (selectConcept) {
+      updateSelected({ concept: selectConcept })
+      return
+    }
+
+    if (isLogout) {
+      closeModal(true, () => logout())
     }
   }
 
   const onAction = label => {
     switch (label) {
       case BACK_TO_EDIT:
+        updateSelected({ concept: concept.name })
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break
 
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONFIRMED.YES })
-        handleProceedWithAction()
+        handleFurtherAction()
         resetConfirmedRef.current = true
         break
 
@@ -78,7 +83,7 @@ const StagedActions = ({ intent }) => {
 
       case SAVE:
         saveStaged()
-        handleProceedWithAction()
+        handleFurtherAction()
         break
 
       default:

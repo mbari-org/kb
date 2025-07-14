@@ -27,15 +27,13 @@ const RealizationDetail = ({ pendingRealization }) => {
   const realizationTitle = useMemo(() => {
     switch (pendingRealization.action) {
       case 'ADD':
-        return `${pendingRealization.newValue} (${pendingRealization.toConcept})`
+        return pendingRealization.newValue
 
       case 'DELETE':
-        return `${pendingRealization.oldValue} (${pendingRealization.toConcept})`
+        return pendingRealization.oldValue
 
       case 'REPLACE':
-        return `${formatDelta(pendingRealization.oldValue, pendingRealization.newValue)} (${
-          pendingRealization.toConcept
-        })`
+        return formatDelta(pendingRealization.oldValue, pendingRealization.newValue)
 
       default:
         return ''

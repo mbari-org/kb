@@ -17,7 +17,8 @@ export const PanelDataProvider = ({ children }) => {
   const [templates, setTemplates] = useState([])
   const [pendingHistory, setPendingHistory] = useState([])
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
 
   const loadReferences = useLoadReferences(apiFns)
   const loadTemplates = useLoadTemplates(apiFns)
@@ -93,6 +94,7 @@ export const PanelDataProvider = ({ children }) => {
         }
       } finally {
         setIsLoading(false)
+        setIsInitialLoad(false)
       }
     },
     [apiFns, calcExplicitConcepts, loadReferences, loadTemplates, loadPendingHistory]
@@ -136,6 +138,12 @@ export const PanelDataProvider = ({ children }) => {
     ]
   )
 
+  // Don't render children until initial data is loaded to prevent race conditions
+  if (isInitialLoad) {
+    return <PanelDataContext value={value}>{null}</PanelDataContext>
+  }
+
+  // After initial load, always render children (refreshes won't cause unmounting)
   return <PanelDataContext value={value}>{children}</PanelDataContext>
 }
 

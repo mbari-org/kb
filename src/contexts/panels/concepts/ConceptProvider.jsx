@@ -44,7 +44,7 @@ const ConceptProvider = ({ children }) => {
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
   const refreshConcept = useCallback(
-    (refreshedConcept = null, conceptPendingHistory = []) => {
+    (refreshedConcept, conceptPendingHistory) => {
       const conceptToRefresh = refreshedConcept || concept
 
       const refreshedInitialState = initialConceptState(conceptToRefresh, conceptPendingHistory)

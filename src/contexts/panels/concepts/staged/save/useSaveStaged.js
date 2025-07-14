@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import commitStaged from './commitStaged'
+import submitStaged from './submitStaged'
 
 const useSaveStaged = () => {
   const { apiFns } = use(ConfigContext)
@@ -16,16 +16,14 @@ const useSaveStaged = () => {
   const { refreshConcept: refreshTaxonomyConcept } = use(TaxonomyContext)
 
   return useCallback(async () => {
-    closeModal()
-
     setProcessing('Saving concept...')
 
-    const updateInfo = await commitStaged(apiFns.apiPayload, concept, initialState, stagedState)
-
+    const updateInfo = await submitStaged(apiFns.apiPayload, concept, initialState, stagedState)
     const { pendingHistory } = await refreshPanelData('pendingHistory')
-
     const updatedConcept = await refreshTaxonomyConcept(concept, updateInfo)
+
     refreshConcept(updatedConcept, pendingHistory)
+    closeModal()
 
     setProcessing(false)
   }, [

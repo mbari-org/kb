@@ -6,13 +6,9 @@ import AliasModifyIcon from '@/components/kb/panels/concepts/concept/change/stag
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
-
 import { CONCEPT_STATE } from '@/lib/constants'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
-
-import { fieldPending } from '@/lib/kb/model/history'
 
 import { fieldBorder } from '@/lib/kb/model/field'
 
@@ -21,13 +17,14 @@ const ALIAS = CONCEPT_STATE.ALIAS_ITEM
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
 
-  const { concept, editing } = use(ConceptContext)
-
-  const conceptPending = useConceptPending(concept.name)
-
-  const aliasPending = fieldPending(conceptPending, 'ConceptName')
+  const { editing } = use(ConceptContext)
 
   const detailStyle = useConceptDetailStyle('aliases')
+
+  if (!alias) {
+    return null
+  }
+
   const infoStyle = {
     ...detailStyle,
     disabled: true,
@@ -35,16 +32,11 @@ const ConceptAlias = ({ alias }) => {
   }
 
   const border = fieldBorder({
-    itemPending: aliasPending,
     noActionBorderColor: 'none',
     stagedItem: alias,
     theme,
     width: '2px',
   })
-
-  if (!alias) {
-    return null
-  }
 
   const showEdit = editing && !alias.historyId && alias.action !== ALIAS.DELETE
   const showDelete = editing && !alias.historyId && alias.action !== ALIAS.ADD

@@ -11,7 +11,7 @@ import useStagedModal from '@/components/kb/panels/concepts/concept/change/stage
 
 import { LABELS, SELECTED } from '@/lib/constants'
 
-const { SAVE } = LABELS.BUTTON
+const { CONTINUE } = LABELS.BUTTON
 
 const LogoutLink = () => {
   const { logout, user, hasUnsavedChanges } = use(UserContext)
@@ -26,7 +26,7 @@ const LogoutLink = () => {
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
     if (hasModifications) {
-      displayStaged(SAVE)
+      displayStaged(CONTINUE)
       setModalData(prev => ({ ...prev, logout: true }))
     } else {
       logout()
