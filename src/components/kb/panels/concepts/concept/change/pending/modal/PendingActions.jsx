@@ -84,6 +84,19 @@ const PendingActions = () => {
             if (confirmPending.change === PENDING.GROUP.ALL) {
               setConfirmPending(null)
               closeModal()
+            } else {
+              // For individual items, reset to initial state if more pending items remain
+              // The conceptPending will be updated after the updatePending call
+              const remainingPending = conceptPending.filter(
+                history => !confirmPending.pendingIds.includes(history.id)
+              )
+
+              if (remainingPending.length > 0) {
+                setConfirmPending(null)
+              } else {
+                setConfirmPending(null)
+                closeModal()
+              }
             }
           })
           break
