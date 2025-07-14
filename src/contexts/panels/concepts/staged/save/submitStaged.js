@@ -6,7 +6,7 @@ import saveStructure from './saveStructure'
 
 import { updateInfo as stateUpdateInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
-const commitStaged = async (apiPayload, concept, initialState, stagedState) => {
+const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
   const updateInfo = stateUpdateInfo(initialState, stagedState)
 
   const submitterInfo = [apiPayload, { concept, updateInfo }]
@@ -27,4 +27,4 @@ const commitStaged = async (apiPayload, concept, initialState, stagedState) => {
   return updateInfo
 }
 
-export default commitStaged
+export default submitStaged

@@ -40,18 +40,22 @@ const StagedActions = ({ intent }) => {
 
   const labels = confirmReset ? confirmLabels : actionLabels
 
-  const handleProceedWithAction = () => {
-    const { panel, concept: targetConcept, logout: isLogout } = modalData || {}
+  // special triggers that require further action
+  const handleFurtherAction = () => {
+    const { panel: selectPanel, concept: selectConcept, logout: isLogout } = modalData || {}
 
-    if (panel) {
-      updateSelected({ panel })
-    } else if (targetConcept) {
-      updateSelected({ concept: targetConcept })
-    } else if (isLogout) {
-      // Close modal and wait for React to complete cleanup before logging out
-      closeModal(true, () => {
-        logout()
-      })
+    if (selectPanel) {
+      updateSelected({ panel: selectPanel })
+      return
+    }
+
+    if (selectConcept) {
+      updateSelected({ concept: selectConcept })
+      return
+    }
+
+    if (isLogout) {
+      closeModal(true, () => logout())
     }
   }
 
@@ -64,7 +68,7 @@ const StagedActions = ({ intent }) => {
 
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONFIRMED.YES })
-        handleProceedWithAction()
+        handleFurtherAction()
         resetConfirmedRef.current = true
         break
 
@@ -78,7 +82,7 @@ const StagedActions = ({ intent }) => {
 
       case SAVE:
         saveStaged()
-        handleProceedWithAction()
+        handleFurtherAction()
         break
 
       default:

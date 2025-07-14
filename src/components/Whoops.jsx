@@ -72,12 +72,15 @@ const Whoops = ({ children }) => {
         {stack && (
           <Stack sx={{ mt: 1, width: '80%' }}>
             <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              {responseMessage}
+              💥 {responseMessage} 💥
             </Typography>
-            <Typography variant='body2' sx={{ mt: 4 }}>
-              The info below will be useful to the app developers:
+            <Typography variant='body2' sx={{ textAlign: 'center', mt: 1 }}>
+              The app has encountered an error and will not proceed to minimize the risk of
+              corrupting data.
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 1 }}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', mt: 1 }}
+            >
               <Button
                 onClick={() => handleCopyInfo(error)}
                 sx={{
@@ -96,6 +99,9 @@ const Whoops = ({ children }) => {
               >
                 Copy Info
               </Button>
+              <Typography variant='body2' sx={{ textAlign: 'center' }}>
+                (to send to app developers)
+              </Typography>
             </Box>
             <Typography
               variant='body2'
@@ -115,10 +121,6 @@ const Whoops = ({ children }) => {
             </Typography>
           </Stack>
         )}
-        <Typography variant='body2' sx={{ textAlign: 'center', mt: 3 }}>
-          Apologies, the app has encountered an error and will not proceed in fear of corrupting
-          data.
-        </Typography>
         <Box sx={{ mt: 2 }} />
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box sx={{ textAlign: 'left' }}>
