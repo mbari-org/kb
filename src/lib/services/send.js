@@ -1,10 +1,12 @@
 const apiSend = async (url, params) => {
   try {
     const response = await fetch(url, params)
-    const payload = await response.json()
+
     if (response.status === 200) {
+      const payload = await response.json()
       return { payload }
     }
+
     if (response.status === 401) {
       return errorResponse(
         null,
@@ -15,7 +17,15 @@ const apiSend = async (url, params) => {
       )
     }
 
-    return errorResponse(null, errorTitle(response.status), payload.message, url, params)
+    let errorMessage = `HTTP ${response.status}`
+    try {
+      const payload = await response.json()
+      errorMessage = payload.message || errorMessage
+    } catch {
+      errorMessage = response.statusText || errorMessage
+    }
+
+    return errorResponse(null, errorTitle(response.status), errorMessage, url, params)
   } catch (error) {
     return errorResponse(error, 'Error', error.message, url, params)
   }
