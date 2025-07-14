@@ -24,9 +24,20 @@ const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_F
 const stagedRealization = (realization, conceptPending) => {
   const pendingRealizationActions = fieldPending(conceptPending, 'LinkRealization')
 
-  const pendingAdd = pendingRealizationActions.find(
-    history => history.action === 'ADD' && history.newValue === realization.linkName
-  )
+  const addRealizationMatch = history => {
+    if (history.action !== 'ADD') {
+      return false
+    }
+
+    const [newLinkName, newLinkToConcept, newLinkValue] = history.newValue.split(' | ')
+    return (
+      newLinkName === realization.linkName &&
+      newLinkToConcept === realization.toConcept &&
+      newLinkValue === realization.linkValue
+    )
+  }
+
+  const pendingAdd = pendingRealizationActions.find(addRealizationMatch)
   if (pendingAdd) {
     return {
       ...realization,

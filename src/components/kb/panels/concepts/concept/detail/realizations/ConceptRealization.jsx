@@ -6,26 +6,23 @@ import RealizationModifyIcon from '@/components/kb/panels/concepts/concept/chang
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
-
 import { CONCEPT_STATE } from '@/lib/constants'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
-
-import { fieldPending } from '@/lib/kb/model/history'
 
 import { fieldBorder } from '@/lib/kb/model/field'
 
 const ConceptRealization = ({ realization }) => {
   const theme = useTheme()
 
-  const { concept, editing } = use(ConceptContext)
-
-  const conceptPending = useConceptPending(concept.name)
-
-  const realizationPending = fieldPending(conceptPending, 'LinkRealization')
+  const { editing } = use(ConceptContext)
 
   const detailStyle = useConceptDetailStyle('realizations')
+
+  if (!realization) {
+    return null
+  }
+
   const infoStyle = {
     ...detailStyle,
     disabled: true,
@@ -33,16 +30,11 @@ const ConceptRealization = ({ realization }) => {
   }
 
   const border = fieldBorder({
-    itemPending: realizationPending,
     noActionBorderColor: 'none',
     stagedItem: realization,
     theme,
     width: '2px',
   })
-
-  if (!realization) {
-    return null
-  }
 
   const showEdit =
     editing &&
