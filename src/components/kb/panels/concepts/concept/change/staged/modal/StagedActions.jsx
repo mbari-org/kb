@@ -18,7 +18,7 @@ const { SAVE } = LABELS.CONCEPT.ACTION
 const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
 
 const StagedActions = ({ intent }) => {
-  const { confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { concept, confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { logout } = use(UserContext)
@@ -62,6 +62,7 @@ const StagedActions = ({ intent }) => {
   const onAction = label => {
     switch (label) {
       case BACK_TO_EDIT:
+        updateSelected({ concept: concept.name })
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break
