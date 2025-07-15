@@ -198,14 +198,14 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const refreshConcept = useCallback(
-    async (concept, updateInfo) => {
+    async (concept, updatesInfo) => {
       if (!apiFns || !taxonomy) return null
 
       try {
         const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
           taxonomy,
           concept,
-          updateInfo,
+          updatesInfo,
           apiFns
         )
 

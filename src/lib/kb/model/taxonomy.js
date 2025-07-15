@@ -108,7 +108,6 @@ const getConceptPrimaryName = (taxonomy, conceptName) => {
 
 const getNames = taxonomy => taxonomy?.names
 
-
 const isConceptLoaded = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return (
@@ -334,13 +333,20 @@ const mapConcept = (concept, conceptMap, aliasMap) => {
   })
 }
 
-const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => {
-  const { hasUpdated } = updateInfo
+const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) => {
+  const { forceLoad, hasUpdated } = updatesInfo
 
   const conceptMap = { ...taxonomy.conceptMap }
   const aliasMap = { ...taxonomy.aliasMap }
 
-  const updatedConcept = await refreshConcept(concept, updateInfo, apiFns)
+  let updatedConcept
+  if (forceLoad) {
+    updatedConcept = await loadConcept(concept.name, apiFns)
+    updatedConcept.parent = concept.parent
+  } else {
+    updatedConcept = await refreshConcept(concept, updatesInfo, apiFns)
+  }
+
   mapConcept(updatedConcept, conceptMap, aliasMap)
 
   const structureChanged = ['aliases', 'children', 'name', 'parent'].some(field =>
@@ -366,7 +372,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => 
   }
 
   if (hasUpdated('children')) {
-    addedConcepts(updatedConcept.name, updateInfo).forEach(child => {
+    addedConcepts(updatedConcept.name, updatesInfo).forEach(child => {
       mapConcept(child, conceptMap, aliasMap)
     })
   }
@@ -406,7 +412,6 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updateInfo, apiFns) => 
 
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }
 }
-
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {
   const conceptMap = taxonomy.conceptMap

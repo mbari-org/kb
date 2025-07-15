@@ -18,9 +18,9 @@ const useSaveStaged = () => {
   return useCallback(async () => {
     setProcessing('Saving concept...')
 
-    const updateInfo = await submitStaged(apiFns.apiPayload, concept, initialState, stagedState)
+    const updatesInfo = await submitStaged(apiFns.apiPayload, concept, initialState, stagedState)
     const { pendingHistory } = await refreshPanelData('pendingHistory')
-    const updatedConcept = await refreshTaxonomyConcept(concept, updateInfo)
+    const updatedConcept = await refreshTaxonomyConcept(concept, updatesInfo)
 
     refreshConcept(updatedConcept, pendingHistory)
     closeModal()

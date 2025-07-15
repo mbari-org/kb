@@ -4,8 +4,8 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { pick } from '@/lib/utils'
 
-const saveMedia = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdated, updatedValue } = updateInfo
+const saveMedia = ([submit, { concept, updatesInfo }]) => {
+  const { hasUpdated, updatedValue } = updatesInfo
 
   if (!hasUpdated('media')) {
     return []

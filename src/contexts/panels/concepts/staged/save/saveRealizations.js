@@ -6,8 +6,8 @@ const { REALIZATION_ITEM: REALIZATION } = CONCEPT_STATE
 
 import { diff, drop, pick } from '@/lib/utils'
 
-const saveRealizations = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdated, initialValue, updatedValue } = updateInfo
+const saveRealizations = ([submit, { concept, updatesInfo }]) => {
+  const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
   if (!hasUpdated('realizations')) {
     return []

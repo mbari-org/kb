@@ -7,7 +7,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import UserContext from '@/contexts/user/UserContext'
 
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
-import useUpdatePending from '@/contexts/panels/concepts/pending/useUpdatePending'
+import usePendingApproval from '@/contexts/panels/concepts/pending/usePendingApproval'
 
 import { getPendingIds } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
@@ -23,7 +23,7 @@ const PendingActions = () => {
   const { closeModal } = use(ConceptModalContext)
   const { user } = use(UserContext)
 
-  const updatePending = useUpdatePending()
+  const updatePending = usePendingApproval()
   const conceptPending = useConceptPending(concept.name)
 
   const [disabled, labels] = useMemo(() => {

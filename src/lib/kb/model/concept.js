@@ -15,8 +15,8 @@ import { drop } from '@/lib/utils'
 
 const { MEDIA_ITEM: MEDIA } = CONCEPT_STATE
 
-const addedConcepts = (parent, updateInfo) => {
-  const { updatedValue } = updateInfo
+const addedConcepts = (parent, updatesInfo) => {
+  const { updatedValue } = updatesInfo
   return updatedValue('children').map(child => ({
     ...child,
     aliases: [],
@@ -86,8 +86,8 @@ const loadConceptData = async (concept, apiFns) => {
 
 const loadParent = async (conceptName, apiFns) => apiFns.apiPayload(fetchConceptParent, conceptName)
 
-const refresh = async (concept, updateInfo, apiFns) => {
-  const { hasUpdated, results, updatedValue } = updateInfo
+const refresh = async (concept, updatesInfo, apiFns) => {
+  const { hasUpdated, results, updatedValue } = updatesInfo
 
   const updatedConcept = { ...concept }
 

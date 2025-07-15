@@ -6,8 +6,8 @@ const { ALIAS_ITEM: ALIAS } = CONCEPT_STATE
 
 import { diff, drop, pick } from '@/lib/utils'
 
-const saveAliases = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdated, initialValue, updatedValue } = updateInfo
+const saveAliases = ([submit, { concept, updatesInfo }]) => {
+  const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
   if (!hasUpdated('aliases')) {
     return []

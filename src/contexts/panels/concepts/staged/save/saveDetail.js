@@ -1,7 +1,7 @@
 import { updateConceptAuthor, updateConceptRank } from '@/lib/api/concept'
 
-const saveDetail = ([submit, { concept, updateInfo }]) => {
-  const { hasUpdated, updatedValue } = updateInfo
+const saveDetail = ([submit, { concept, updatesInfo }]) => {
+  const { hasUpdated, updatedValue } = updatesInfo
 
   const submitters = []
   if (hasUpdated('author')) {

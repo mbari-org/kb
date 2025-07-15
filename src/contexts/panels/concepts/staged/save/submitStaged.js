@@ -4,12 +4,12 @@ import saveMedia from './saveMedia'
 import saveRealizations from './saveRealizations'
 import saveStructure from './saveStructure'
 
-import { updateInfo as stateUpdateInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
 const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
-  const updateInfo = stateUpdateInfo(initialState, stagedState)
+  const updatesInfo = createUpdatesInfo(initialState, stagedState)
 
-  const submitterInfo = [apiPayload, { concept, updateInfo }]
+  const submitterInfo = [apiPayload, { concept, updatesInfo }]
 
   const submitters = []
   submitters.push(...saveAliases(submitterInfo))
@@ -18,13 +18,13 @@ const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
   submitters.push(...saveRealizations(submitterInfo))
   submitters.push(...saveStructure(submitterInfo))
 
-  updateInfo.results = await Promise.all(submitters)
+  updatesInfo.results = await Promise.all(submitters)
 
-  if (updateInfo.results.some(result => result.error)) {
+  if (updatesInfo.results.some(result => result.error)) {
     throw new Error('Failed to save concept changes')
   }
 
-  return updateInfo
+  return updatesInfo
 }
 
 export default submitStaged

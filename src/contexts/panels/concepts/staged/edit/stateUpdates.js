@@ -2,8 +2,8 @@ import { drop, isJsonEqual } from '@/lib/utils'
 
 const hasStateChange = (allInitialState, allStagedState) => {
   // Drop fields that are not relevant to state change comparison
-  const initialState = drop(allInitialState, ['aliasIndex', 'mediaIndex'])
-  const stagedState = drop(allStagedState, ['aliasIndex', 'mediaIndex'])
+  const initialState = drop(allInitialState, ['aliasIndex', 'mediaIndex', 'realizationIndex'])
+  const stagedState = drop(allStagedState, ['aliasIndex', 'mediaIndex', 'realizationIndex'])
   return !isJsonEqual(stagedState, initialState)
 }
 
@@ -27,12 +27,13 @@ const stateChanges = (initialState, stagedState) => {
   }, [])
 }
 
-const updateInfo = (initialState, stagedState) => {
+const createUpdatesInfo = (initialState, stagedState) => {
+  const forceLoad = false
   const updates = stateUpdates(initialState, stagedState)
   const hasUpdated = field => updates[field] !== undefined
-  const updatedValue = field => updates[field]?.staged
   const initialValue = field => updates[field]?.initial
-  return { hasUpdated, initialValue, updatedValue }
+  const updatedValue = field => updates[field]?.staged
+  return { forceLoad, hasUpdated, initialValue, updatedValue }
 }
 
-export { hasStateChange, stateUpdates, updateInfo }
+export { createUpdatesInfo, hasStateChange, stateUpdates }
