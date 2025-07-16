@@ -7,9 +7,9 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import UserContext from '@/contexts/user/UserContext'
 
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
-import usePendingApproval from '@/contexts/panels/concepts/pending/usePendingApproval'
+import useUpdatedPending from '@/contexts/panels/concepts/pending/useUpdatePending'
 
-import { getPendingIds } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { pendingChild as getPendingChild } from '@/lib/kb/model/history'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -21,10 +21,18 @@ const { APPROVAL, GROUP } = PENDING
 const PendingActions = () => {
   const { concept, confirmPending, setConfirmPending } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
+
   const { user } = use(UserContext)
 
-  const updatePending = usePendingApproval()
   const conceptPending = useConceptPending(concept.name)
+  const parentPending = useConceptPending(concept.parent)
+
+  const updatePending = useUpdatedPending()
+
+  const pendingChild = getPendingChild(parentPending, concept.name)
+  const pendingItems = useMemo(() => {
+    return pendingChild ? [pendingChild] : conceptPending
+  }, [conceptPending, pendingChild])
 
   const [disabled, labels] = useMemo(() => {
     if (!isAdmin(user)) {
@@ -74,30 +82,20 @@ const PendingActions = () => {
     label => {
       switch (label) {
         case APPROVE_ALL: {
-          const pendingIds = getPendingIds(conceptPending, GROUP.ALL, concept.name)
-          setConfirmPending({ approval: APPROVAL.ACCEPT, change: GROUP.ALL, pendingIds })
+          setConfirmPending({ approval: APPROVAL.ACCEPT, change: GROUP.ALL, pendingItems })
           break
         }
 
         case CONFIRM: {
           updatePending(confirmPending).then(() => {
-            if (confirmPending.change === PENDING.GROUP.ALL) {
-              setConfirmPending(null)
+            const morePending = pendingItems.filter(
+              history => !confirmPending.pendingItems.some(item => item.id === history.id)
+            )
+            if (morePending.length === 0) {
               closeModal()
-            } else {
-              // For individual items, reset to initial state if more pending items remain
-              // The conceptPending will be updated after the updatePending call
-              const remainingPending = conceptPending.filter(
-                history => !confirmPending.pendingIds.includes(history.id)
-              )
-
-              if (remainingPending.length > 0) {
-                setConfirmPending(null)
-              } else {
-                setConfirmPending(null)
-                closeModal()
-              }
             }
+
+            setConfirmPending(null)
           })
           break
         }
@@ -110,8 +108,7 @@ const PendingActions = () => {
           break
 
         case REJECT_ALL: {
-          const pendingIds = getPendingIds(conceptPending, GROUP.ALL, concept.name)
-          setConfirmPending({ approval: APPROVAL.REJECT, change: GROUP.ALL, pendingIds })
+          setConfirmPending({ approval: APPROVAL.REJECT, change: GROUP.ALL, pendingItems })
           break
         }
 
@@ -121,7 +118,7 @@ const PendingActions = () => {
           break
       }
     },
-    [confirmPending, setConfirmPending, closeModal, conceptPending, concept.name, updatePending]
+    [closeModal, confirmPending, pendingItems, setConfirmPending, updatePending]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')

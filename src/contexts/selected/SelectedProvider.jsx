@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import settingsStore from '@/lib/store/settingsStore'
 import usePanelSelect from '@/contexts/selected/usePanelSelect'
@@ -12,6 +13,8 @@ const { CONCEPT, PANEL } = SELECTED
 const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
 
 const SelectedProvider = ({ children }) => {
+  const { deleteConcept } = use(TaxonomyContext)
+
   const [settings, setSettings] = useState(null)
 
   const conceptSelect = useConceptSelect()
@@ -41,7 +44,15 @@ const SelectedProvider = ({ children }) => {
   )
 
   const updateSelected = useCallback(
-    ({ concept: conceptName, panel: panelName }) => {
+    ({ concept: conceptName, panel: panelName, removeConcept: removeConceptName }) => {
+      if (removeConceptName) {
+        deleteConcept(removeConceptName).then(selectConceptName => {
+          conceptSelect.push(selectConceptName)
+          conceptSelect.removeName(removeConceptName)
+        })
+        return
+      }
+
       if (conceptName && conceptName !== conceptSelect.current()) {
         conceptSelect.push(conceptName)
       }
@@ -50,7 +61,7 @@ const SelectedProvider = ({ children }) => {
         panelSelect.push(panelName)
       }
     },
-    [conceptSelect, panelSelect]
+    [conceptSelect, deleteConcept, panelSelect]
   )
 
   const updateSettings = useCallback(({ history, references, templates }) => {
@@ -69,13 +80,13 @@ const SelectedProvider = ({ children }) => {
     })
   }, [])
 
-  const select = useCallback(
-    ({ concept: conceptName, history, panel: panelName, references, templates }) => {
-      updateSelected({ concept: conceptName, panel: panelName })
-      updateSettings({ history, references, templates })
-    },
-    [updateSelected, updateSettings]
-  )
+  // const select = useCallback(
+  //   ({ concept: conceptName, history, panel: panelName, references, templates }) => {
+  //     updateSelected({ concept: conceptName, panel: panelName })
+  //     updateSettings({ history, references, templates })
+  //   },
+  //   [updateSelected, updateSettings]
+  // )
 
   useEffect(() => {
     const storedSelected = settingsStore.get()
@@ -103,11 +114,10 @@ const SelectedProvider = ({ children }) => {
       getSelected,
       getSettings,
       panels: panelSelect,
-      select,
       updateSelected,
       updateSettings,
     }),
-    [conceptSelect, getSelected, getSettings, panelSelect, select, updateSelected, updateSettings]
+    [conceptSelect, getSelected, getSettings, panelSelect, updateSelected, updateSettings]
   )
 
   // Don't render children until settings are loaded
