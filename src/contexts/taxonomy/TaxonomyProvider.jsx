@@ -6,6 +6,8 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
+import { loadConcept as apiLoadConcept } from '@/lib/kb/model/concept'
+
 import {
   deleteConcept as deleteTaxonomyConcept,
   filterTaxonomyRanks,
@@ -19,7 +21,9 @@ import {
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
+  mapConcept,
   refreshTaxonomyConcept,
+  removeTaxonomyConcept,
   cxDebugTaxonomyIntegrity,
 } from '@/lib/kb/model/taxonomy'
 
@@ -59,20 +63,11 @@ const TaxonomyProvider = ({ children }) => {
 
   const deleteConcept = useCallback(
     async conceptName => {
-      if (!apiFns || !taxonomy) return
-      try {
-        const { taxonomy: updatedTaxonomy, selectConceptName } = await deleteTaxonomyConcept(
-          taxonomy,
-          conceptName,
-          apiFns
-        )
-        updateTaxonomy(updatedTaxonomy)
-        return selectConceptName
-      } catch (error) {
-        showBoundary(error)
-      }
+      const result = await deleteTaxonomyConcept(taxonomy, conceptName, apiFns)
+      updateTaxonomy(result.updatedTaxonomy)
+      return result
     },
-    [taxonomy, apiFns, updateTaxonomy, showBoundary]
+    [apiFns, taxonomy, updateTaxonomy]
   )
 
   const filterRanks = useCallback(
@@ -201,22 +196,55 @@ const TaxonomyProvider = ({ children }) => {
     async (concept, updatesInfo) => {
       if (!apiFns || !taxonomy) return null
 
-      try {
-        const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
-          taxonomy,
-          concept,
-          updatesInfo,
-          apiFns
-        )
+      const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
+        taxonomy,
+        concept,
+        updatesInfo,
+        apiFns
+      )
 
-        updateTaxonomy(updatedTaxonomy)
+      updateTaxonomy(updatedTaxonomy)
 
-        return updatedConcept
-      } catch (error) {
-        showBoundary(error)
-      }
+      return { concept: updatedConcept, taxonomy: updatedTaxonomy }
     },
-    [apiFns, taxonomy, updateTaxonomy, showBoundary]
+    [apiFns, taxonomy, updateTaxonomy]
+  )
+
+  const renameConcept = useCallback(
+    async (concept, updatesInfo) => {
+      const { updatedValue } = updatesInfo
+
+      const { taxonomy: taxonomySansConcept } = removeTaxonomyConcept(taxonomy, concept)
+
+      const newConceptName = updatedValue('name')
+
+      const loadedConcept = await apiLoadConcept(newConceptName, apiFns)
+      loadedConcept.parent = concept.parent
+      mapConcept(loadedConcept, taxonomySansConcept.conceptMap, taxonomySansConcept.aliasMap)
+
+      const parent = { ...getTaxonomyConcept(taxonomySansConcept, concept.parent) }
+      parent.children = parent.children.filter(child => child !== concept.name)
+      parent.children.push(newConceptName)
+      mapConcept(parent, taxonomySansConcept.conceptMap, taxonomySansConcept.aliasMap)
+
+      concept.children.forEach(child => {
+        const childConcept = { ...getTaxonomyConcept(taxonomySansConcept, child) }
+        childConcept.parent = newConceptName
+        mapConcept(childConcept, taxonomySansConcept.conceptMap, taxonomySansConcept.aliasMap)
+      })
+
+      const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
+        taxonomySansConcept,
+        loadedConcept,
+        updatesInfo,
+        apiFns
+      )
+
+      updateTaxonomy(updatedTaxonomy)
+
+      return { concept: updatedConcept, taxonomy: updatedTaxonomy }
+    },
+    [apiFns, taxonomy, updateTaxonomy]
   )
 
   useEffect(() => {
@@ -251,6 +279,7 @@ const TaxonomyProvider = ({ children }) => {
       loadConcept,
       loadConceptDescendants,
       refreshConcept,
+      renameConcept,
       taxonomy,
     }),
     [
@@ -267,6 +296,7 @@ const TaxonomyProvider = ({ children }) => {
       loadConcept,
       loadConceptDescendants,
       refreshConcept,
+      renameConcept,
       taxonomy,
     ]
   )

@@ -1,6 +1,5 @@
 import { use, useCallback } from 'react'
 
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -8,8 +7,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { SELECTED } from '@/lib/constants'
 
 const useRejectPending = () => {
-  const { concept, refreshConcept } = use(ConceptContext)
-  const { refreshData: refreshPanelData } = use(PanelDataContext)
+  const { concept, resetConcept } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { refreshConcept: refreshTaxonomyConcept } = use(TaxonomyContext)
 
@@ -34,13 +32,10 @@ const useRejectPending = () => {
 
   return useCallback(
     async (pendingItems, approvalUpdates) => {
-      const { pendingHistory } = await refreshPanelData('pendingHistory')
-
       if (isAddChild(pendingItems)) {
-        updateSelected({
-          [SELECTED.CONCEPT]: concept.parent,
-          [SELECTED.REMOVE_CONCEPT]: concept.name,
-        })
+        // updateSelected({
+        //   [SELECTED.REMOVE_CONCEPT]: concept.name,
+        // })
         return
       }
 
@@ -58,20 +53,13 @@ const useRejectPending = () => {
         return acc
       }, [])
 
-      const updatedConcept = await refreshTaxonomyConcept(concept, {
+      const { concept: updatedConcept } = await refreshTaxonomyConcept(concept, {
         forceLoad: true,
         hasUpdated: field => updatedFields.includes(field),
       })
-      refreshConcept(updatedConcept, pendingHistory)
+      resetConcept(updatedConcept)
     },
-    [
-      concept,
-      fieldChanged,
-      refreshConcept,
-      refreshPanelData,
-      refreshTaxonomyConcept,
-      updateSelected,
-    ]
+    [concept, fieldChanged, refreshTaxonomyConcept, resetConcept, updateSelected]
   )
 }
 

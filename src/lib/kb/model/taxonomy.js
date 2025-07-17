@@ -54,13 +54,13 @@ const deleteConcept = async (taxonomy, conceptName, apiFns) => {
   parent.children = parent.children.filter(child => child !== conceptName)
   mapConcept(parent, conceptMap, aliasMap)
 
-  let selectConceptName
+  let closestConceptName
   if (parent.children.length === 0) {
-    selectConceptName = parent.name
+    closestConceptName = parent.name
   } else if (conceptChildIndex === 0) {
-    selectConceptName = parent.children[0]
+    closestConceptName = parent.children[0]
   } else {
-    selectConceptName = parent.children[conceptChildIndex - 1]
+    closestConceptName = parent.children[conceptChildIndex - 1]
   }
 
   const names = await apiFns.apiPayload(fetchNames)
@@ -72,7 +72,7 @@ const deleteConcept = async (taxonomy, conceptName, apiFns) => {
     names,
   }
 
-  return { taxonomy: updatedTaxonomy, selectConceptName }
+  return { closestConceptName, taxonomy: updatedTaxonomy }
 }
 
 const descendants = (taxonomy, conceptName) => {
@@ -190,38 +190,42 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   const aliasMap = updatedTaxonomy.aliasMap
 
   const taxonomyConcept = getConcept(taxonomy, conceptName)
-  const concept = taxonomyConcept ? { ...taxonomyConcept } : await loadConcept(conceptName, apiFns)
+  const loadedConcept = taxonomyConcept
+    ? { ...taxonomyConcept }
+    : await loadConcept(conceptName, apiFns)
 
-  if (!concept.aliases) {
-    await loadConceptData(concept, apiFns)
+  if (!loadedConcept.aliases) {
+    await loadConceptData(loadedConcept, apiFns)
   }
 
   // If the concept already has children, we only need to load the concept's grand children. This is
   //  typical when a child concept is selected.
-  if (concept?.children) {
+  if (loadedConcept?.children) {
     await Promise.all(
-      concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
+      loadedConcept.children.map(child =>
+        loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns)
+      )
     )
-    mapConcept(concept, conceptMap, aliasMap)
-    return { taxonomy: updatedTaxonomy }
+    mapConcept(loadedConcept, conceptMap, aliasMap)
+    return { concept: loadedConcept, taxonomy: updatedTaxonomy }
   }
 
   // Load the concept's children
-  const children = await loadChildren(concept.name, apiFns)
-  concept.children = children.map(child => child.name)
+  const children = await loadChildren(loadedConcept.name, apiFns)
+  loadedConcept.children = children.map(child => child.name)
   children.forEach(child => {
     mapConcept(child, conceptMap, aliasMap)
   })
 
   // Load the concept's grandchildren
   await Promise.all(
-    concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
+    loadedConcept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
   )
 
   // If the concept is the root, we're done.
-  if (isRoot(taxonomy, concept)) {
-    mapConcept(concept, conceptMap, aliasMap)
-    return { taxonomy: updatedTaxonomy }
+  if (isRoot(taxonomy, loadedConcept)) {
+    mapConcept(loadedConcept, conceptMap, aliasMap)
+    return { concept: loadedConcept, taxonomy: updatedTaxonomy }
   }
 
   // We're loading a concept the taxonomy knows nothing about (from either a name search or an
@@ -230,9 +234,9 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   //  taxonomy, fetch the parent to get the necessary name. Then walk the chain from the top and
   //  load each concept, children and grandchildren not already loaded.
 
-  let nextAncestor = await loadParent(concept.name, apiFns)
-  concept.parent = nextAncestor.name
-  const conceptAncestry = [concept.name]
+  let nextAncestor = await loadParent(loadedConcept.name, apiFns)
+  loadedConcept.parent = nextAncestor.name
+  const conceptAncestry = [loadedConcept.name]
 
   while (!updatedTaxonomy.conceptMap[nextAncestor.name]) {
     conceptAncestry.push(nextAncestor.name)
@@ -257,9 +261,9 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   // Wait until here to map the primary loaded concept (by conceptName) since the above processing
   // may have loaded that concept as a child of its parent and we would lose the "extra" data
   // (aliases, etc) that we already loaded for it.
-  mapConcept(concept, conceptMap, aliasMap)
+  mapConcept(loadedConcept, conceptMap, aliasMap)
 
-  return { taxonomy: updatedTaxonomy }
+  return { concept: loadedConcept, taxonomy: updatedTaxonomy }
 }
 
 const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiFns) => {
@@ -334,18 +338,12 @@ const mapConcept = (concept, conceptMap, aliasMap) => {
 }
 
 const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) => {
-  const { forceLoad, hasUpdated } = updatesInfo
+  const { hasUpdated } = updatesInfo
 
   const conceptMap = { ...taxonomy.conceptMap }
   const aliasMap = { ...taxonomy.aliasMap }
 
-  let updatedConcept
-  if (forceLoad) {
-    updatedConcept = await loadConcept(concept.name, apiFns)
-    updatedConcept.parent = concept.parent
-  } else {
-    updatedConcept = await refreshConcept(concept, updatesInfo, apiFns)
-  }
+  const updatedConcept = await refreshConcept(concept, updatesInfo, apiFns)
 
   mapConcept(updatedConcept, conceptMap, aliasMap)
 
@@ -377,18 +375,6 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
     })
   }
 
-  if (hasUpdated('name')) {
-    delete conceptMap[concept.name]
-
-    const parentConcept = { ...conceptMap[updatedConcept.parent] }
-    parentConcept.children = parentConcept.children
-      .filter(child => child !== concept.name)
-      .concat(updatedConcept.name)
-      .sort()
-
-    mapConcept(parentConcept, conceptMap, aliasMap)
-  }
-
   if (hasUpdated('parent')) {
     const priorParentConcept = { ...taxonomy.conceptMap[concept.parent] }
     priorParentConcept.children = priorParentConcept.children.filter(
@@ -411,6 +397,29 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
   }
 
   return { concept: updatedConcept, taxonomy: updatedTaxonomy }
+}
+
+const removeTaxonomyConcept = (taxonomy, concept) => {
+  const conceptMap = { ...taxonomy.conceptMap }
+  delete conceptMap[concept.name]
+
+  let aliasMap
+  if (concept.alternateNames.length > 0) {
+    aliasMap = { ...taxonomy.aliasMap }
+    concept.alternateNames.forEach(alternateName => {
+      delete aliasMap[alternateName]
+    })
+  } else {
+    aliasMap = taxonomy.aliasMap
+  }
+
+  const updatedTaxonomy = {
+    ...taxonomy,
+    conceptMap,
+    aliasMap,
+  }
+
+  return { taxonomy: updatedTaxonomy }
 }
 
 export const cxDebugTaxonomyIntegrity = taxonomy => {
@@ -484,5 +493,7 @@ export {
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
+  mapConcept,
   refreshTaxonomyConcept,
+  removeTaxonomyConcept,
 }

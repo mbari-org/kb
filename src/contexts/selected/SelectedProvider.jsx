@@ -1,7 +1,6 @@
-import { use, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import settingsStore from '@/lib/store/settingsStore'
 import usePanelSelect from '@/contexts/selected/usePanelSelect'
@@ -13,8 +12,6 @@ const { CONCEPT, PANEL } = SELECTED
 const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
 
 const SelectedProvider = ({ children }) => {
-  const { deleteConcept } = use(TaxonomyContext)
-
   const [settings, setSettings] = useState(null)
 
   const conceptSelect = useConceptSelect()
@@ -44,15 +41,7 @@ const SelectedProvider = ({ children }) => {
   )
 
   const updateSelected = useCallback(
-    ({ concept: conceptName, panel: panelName, removeConcept: removeConceptName }) => {
-      if (removeConceptName) {
-        deleteConcept(removeConceptName).then(selectConceptName => {
-          conceptSelect.push(selectConceptName)
-          conceptSelect.removeName(removeConceptName)
-        })
-        return
-      }
-
+    ({ concept: conceptName, panel: panelName }) => {
       if (conceptName && conceptName !== conceptSelect.current()) {
         conceptSelect.push(conceptName)
       }
@@ -61,7 +50,7 @@ const SelectedProvider = ({ children }) => {
         panelSelect.push(panelName)
       }
     },
-    [conceptSelect, deleteConcept, panelSelect]
+    [conceptSelect, panelSelect]
   )
 
   const updateSettings = useCallback(({ history, references, templates }) => {

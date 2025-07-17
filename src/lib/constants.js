@@ -198,7 +198,6 @@ export const SELECTED = {
     REFERENCES: 'References',
     TEMPLATES: 'Templates',
   },
-  REMOVE_CONCEPT: 'removeConcept',
   SETTINGS: {
     HISTORY: {
       KEY: 'history',

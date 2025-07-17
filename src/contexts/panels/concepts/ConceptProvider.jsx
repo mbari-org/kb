@@ -24,7 +24,7 @@ const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
   const { setModalData } = use(ConceptModalContext)
-  const { pendingHistory } = use(PanelDataContext)
+  const { refreshData: refreshPanelData } = use(PanelDataContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { setHasUnsavedChanges, hasUnsavedChanges } = use(UserContext)
@@ -43,15 +43,18 @@ const ConceptProvider = ({ children }) => {
   const handleLoadConceptError = useLoadConceptError()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
-  const refreshConcept = useCallback(
-    (refreshedConcept, conceptPendingHistory) => {
-      const conceptToRefresh = refreshedConcept || concept
+  const resetConcept = useCallback(
+    async resettingConcept => {
+      const { pendingHistory } = await refreshPanelData('pendingHistory')
+      const conceptPendingHistory = pendingHistory.filter(
+        history => history.concept === resettingConcept.name
+      )
 
-      const refreshedInitialState = initialConceptState(conceptToRefresh, conceptPendingHistory)
+      const refreshedInitialState = initialConceptState(resettingConcept, conceptPendingHistory)
       setInitialState(refreshedInitialState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: refreshedInitialState })
     },
-    [concept]
+    [refreshPanelData]
   )
 
   const handleSetConcept = useCallback(
@@ -59,12 +62,9 @@ const ConceptProvider = ({ children }) => {
       setConcept(selectedConcept)
       setEditing(false)
 
-      const conceptPendingHistory = pendingHistory.filter(
-        history => history.concept === selectedConcept.name
-      )
-      refreshConcept(selectedConcept, conceptPendingHistory)
+      resetConcept(selectedConcept)
     },
-    [pendingHistory, refreshConcept]
+    [resetConcept]
   )
 
   const conceptLoader = useConceptLoader({
@@ -138,7 +138,7 @@ const ConceptProvider = ({ children }) => {
       editing,
       initialState,
       modifyConcept,
-      refreshConcept,
+      resetConcept,
       setEditing,
       setConfirmPending,
       stagedState,
@@ -151,7 +151,7 @@ const ConceptProvider = ({ children }) => {
       editing,
       initialState,
       modifyConcept,
-      refreshConcept,
+      resetConcept,
       stagedState,
     ]
   )

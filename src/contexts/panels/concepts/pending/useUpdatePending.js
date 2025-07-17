@@ -1,7 +1,6 @@
 import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -14,10 +13,9 @@ import { capitalize } from '@/lib/utils'
 import { PENDING } from '@/lib/constants'
 
 const useUpdatedPending = () => {
-  const { concept, refreshConcept } = use(ConceptContext)
+  const { concept, resetConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
-  const { refreshData: refreshPanelData } = use(PanelDataContext)
 
   const rejectPending = useRejectPending()
 
@@ -36,13 +34,12 @@ const useUpdatedPending = () => {
       if (approval === PENDING.APPROVAL.REJECT) {
         await rejectPending(pendingItems, approvalUpdates)
       } else {
-        const { pendingHistory } = await refreshPanelData('pendingHistory')
-        refreshConcept(concept, pendingHistory)
+        resetConcept(concept)
       }
 
       setProcessing(false)
     },
-    [apiFns, concept, refreshConcept, refreshPanelData, setProcessing, rejectPending]
+    [apiFns, concept, resetConcept, setProcessing, rejectPending]
   )
 }
 
