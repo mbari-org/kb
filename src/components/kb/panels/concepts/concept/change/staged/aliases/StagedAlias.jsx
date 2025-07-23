@@ -1,4 +1,4 @@
-import ItemReset from '@/components/kb/panels/concepts/concept/change/staged/reset/ItemReset'
+import StagedItemReset from '@/components/kb/panels/concepts/concept/change/staged/reset/StagedItemReset'
 import StagedItem from '@/components/kb/panels/concepts/concept/change/staged/StagedItem'
 
 import StagedAliasDetail from './StagedAliasDetail'
@@ -6,29 +6,21 @@ import StagedAliasHeader from './StagedAliasHeader'
 
 import { RESETTING } from '@/lib/constants'
 
-const StagedAlias = ({ disabled, initialAlias, stagedAlias }) => {
-  const itemDetail = () => (
-    <StagedAliasDetail initialAlias={initialAlias} stagedAlias={stagedAlias} />
-  )
+const StagedAlias = ({ initialItem, resetting, stagedItem }) => {
+  const group = RESETTING.GROUP.ALIASES
 
-  const itemHeader = () => (
-    <StagedAliasHeader initialAlias={initialAlias} stagedAlias={stagedAlias} />
-  )
-
+  const itemDetail = () => <StagedAliasDetail initialAlias={initialItem} stagedAlias={stagedItem} />
+  const itemHeader = () => <StagedAliasHeader initialAlias={initialItem} stagedAlias={stagedItem} />
   const itemReset = () => (
-    <ItemReset
-      group={RESETTING.GROUP.ALIASES}
-      initialItem={initialAlias}
-      stagedItem={stagedAlias}
-    />
+    <StagedItemReset group={group} resetting={resetting} stagedItem={stagedItem} />
   )
 
   return (
     <StagedItem
-      disabled={disabled}
       ItemDetail={itemDetail}
       ItemHeader={itemHeader}
       ItemReset={itemReset}
+      resetting={resetting}
     />
   )
 }

@@ -23,7 +23,7 @@ import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants'
 const { GROUP } = CONCEPT_STATE
 
 const StagedContent = () => {
-  const { initialState, stagedState } = use(ConceptContext)
+  const { confirmReset, initialState, stagedState } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
 
   const stagedEdits = useMemo(
@@ -38,7 +38,7 @@ const StagedContent = () => {
     const [field, { staged }] = stagedEdit
     switch (field) {
       case CONCEPT_FIELD.ALIASES:
-        return <StagedAliases key={field} stagedEdit={stagedEdit} />
+        return <StagedAliases key={field} confirmReset={confirmReset} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.AUTHOR:
         return <StagedAuthor key={field} stagedEdit={stagedEdit} />

@@ -1,14 +1,18 @@
 import { Box } from '@mui/material'
 
-const StagedItem = ({ disabled, ItemDetail, ItemHeader, ItemReset }) => {
+import { RESETTING } from '@/lib/constants'
+
+const StagedItem = ({ ItemDetail, ItemHeader, ItemReset, resetting }) => {
+  const disabled = resetting === RESETTING.EXTENT.OTHER
+
   return (
     <Box sx={{ opacity: disabled ? 0.5 : 1 }}>
       <Box sx={{ alignItems: 'center', display: 'flex' }}>
-        <ItemReset />
-        <ItemHeader />
+        <ItemReset resetting={resetting} />
+        <ItemHeader resetting={resetting} />
       </Box>
       <Box sx={{ ml: 6 }}>
-        <ItemDetail />
+        <ItemDetail resetting={resetting} />
       </Box>
     </Box>
   )

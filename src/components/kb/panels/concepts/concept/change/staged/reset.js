@@ -20,10 +20,11 @@ const resettingGroup = (confirmReset, group) => {
 
 const resettingItem = (confirmReset, group, index) => {
   const resetGroup = resettingGroup(confirmReset, group)
-  if (resetGroup !== RESETTING.EXTENT.OTHER) return resetGroup
+  if (resetGroup === RESETTING.EXTENT.ME) {
+    return confirmReset.update?.index === index ? RESETTING.EXTENT.ME : RESETTING.EXTENT.OTHER
+  }
 
-  if (confirmReset.type === group && confirmReset.update?.index === index)
-    return RESETTING.EXTENT.OTHER
+  return resetGroup
 }
 
 const resettingAlias = (confirmReset, index) => {

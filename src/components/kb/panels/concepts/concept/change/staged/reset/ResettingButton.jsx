@@ -3,8 +3,10 @@ import { IoCloseSharp } from 'react-icons/io5'
 
 import HandIcon from '@/components/common/icon/HandIcon'
 
+import { RESETTING } from '@/lib/constants'
+
 const ResettingButton = ({ color, disabled, resetting, onClick }) => {
-  if (resetting) {
+  if (resetting === RESETTING.EXTENT.ME) {
     return (
       <Button
         onClick={onClick}

@@ -23,13 +23,16 @@ const EMPTY_ALIAS = {
 
 const ALIAS_DISPLAY_FIELDS = ['name', 'author', 'nameType']
 
-const stagedAliases = ({ initial, staged }) =>
-  stagedEdits({
+const stagedAliases = stagedEdit => {
+  const [_field, aliases] = stagedEdit
+
+  return stagedEdits({
     stateTypes: CONCEPT_STATE.ALIAS,
     displayFields: ALIAS_DISPLAY_FIELDS,
-    initial,
-    staged,
+    initial: aliases.initial,
+    staged: aliases.staged,
   })
+}
 
 const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
 

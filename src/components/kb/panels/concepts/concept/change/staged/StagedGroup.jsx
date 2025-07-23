@@ -3,25 +3,37 @@ import { Box, Typography } from '@mui/material'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import { formatDelta } from '@/components/common/format'
-import GroupReset from '@/components/kb/panels/concepts/concept/change/staged/reset/GroupReset'
+import StagedGroupReset from '@/components/kb/panels/concepts/concept/change/staged/reset/StagedGroupReset'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { RESETTING } from '@/lib/constants'
 
-import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import {
+  resettingGroup,
+  resettingItem,
+} from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-const StagedGroup = ({ children, group, initial, stagedEdit }) => {
+const StagedGroup = ({ fieldItem = false, group, stagedEdit, StagedGroupItem, stagedItems }) => {
   const { confirmReset } = use(ConceptContext)
 
-  const resetting = resettingGroup(confirmReset, group)
+  const [field, items] = stagedEdit
 
-  const disabled = resetting === RESETTING.EXTENT.OTHER
+  let itemsResetting = items.staged.map((_stagedItem, index) =>
+    resettingItem(confirmReset, group, index)
+  )
+  const groupResetting = itemsResetting.some(resetting => resetting === RESETTING.EXTENT.ME)
+    ? RESETTING.EXTENT.OTHER
+    : resettingGroup(confirmReset, group)
+
+  if (groupResetting === RESETTING.EXTENT.ME) {
+    itemsResetting = itemsResetting.map(() => RESETTING.EXTENT.ME)
+  }
+
+  const disabled = groupResetting === RESETTING.EXTENT.OTHER
 
   const fieldValueDisplay = () => {
-    if (!stagedEdit) return null
-
-    const [field, { initial, staged }] = stagedEdit
+    const { initial, staged } = items
     const value = formatDelta(initial, staged)
     return <FieldValueDisplay disabled={disabled} field={field} value={value} />
   }
@@ -36,13 +48,26 @@ const StagedGroup = ({ children, group, initial, stagedEdit }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <GroupReset group={group} initial={initial} resetting={resetting} />
-        {!stagedEdit && (
+        <StagedGroupReset group={group} initial={items.initial} resetting={groupResetting} />
+        {!fieldItem && (
           <Typography sx={{ fontSize: '1.25rem', opacity: disabled ? 0.5 : 1 }}>{group}</Typography>
         )}
-        {stagedEdit && fieldValueDisplay()}
+        {fieldItem && fieldValueDisplay()}
       </Box>
-      <Box sx={{ ml: 3 }}>{children}</Box>
+      {!fieldItem && (
+        <Box sx={{ ml: 3 }}>
+          {stagedItems.map((stagedItem, index) => {
+            return (
+              <StagedGroupItem
+                key={`${group}-item-${index}`}
+                initialItem={items.initial?.[index]}
+                resetting={itemsResetting[index]}
+                stagedItem={stagedItem}
+              />
+            )
+          })}
+        </Box>
+      )}
     </Box>
   )
 }

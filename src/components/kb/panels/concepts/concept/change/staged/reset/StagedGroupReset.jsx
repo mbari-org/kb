@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const GroupReset = ({ group, resetting }) => {
+const StagedGroupReset = ({ group, resetting }) => {
   const { modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
@@ -23,4 +23,4 @@ const GroupReset = ({ group, resetting }) => {
   )
 }
 
-export default GroupReset
+export default StagedGroupReset

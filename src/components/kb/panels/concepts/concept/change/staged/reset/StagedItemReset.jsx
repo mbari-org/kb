@@ -3,22 +3,19 @@ import { use } from 'react'
 import { Box } from '@mui/material'
 
 import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/reset/ResettingButton'
-import { resettingItem } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const ItemReset = ({ group, initialItem, stagedItem }) => {
+const StagedItemReset = ({ group, resetting, stagedItem }) => {
   const { index } = stagedItem
 
-  const { confirmReset, modifyConcept } = use(ConceptContext)
-
-  const resetting = resettingItem(confirmReset, group, index)
+  const { modifyConcept } = use(ConceptContext)
 
   const onClick = () => {
     modifyConcept({
-      type: `${CONCEPT_STATE.RESET.GROUP[group.toUpperCase()]} Item`,
+      type: CONCEPT_STATE.RESET.GROUP[group.toUpperCase()],
       update: { index },
     })
   }
@@ -30,4 +27,4 @@ const ItemReset = ({ group, initialItem, stagedItem }) => {
   )
 }
 
-export default ItemReset
+export default StagedItemReset
