@@ -55,24 +55,22 @@ const editAlias = (state, update) => {
   return updateAlias(state, { type: CONCEPT_STATE.ALIAS.EDIT, update })
 }
 
-const resetAlias = (state, update) => {
-  const { aliasIndex, aliasItem } = update
-  if (aliasItem) {
+const resetAliases = (state, update) => {
+  const { aliases, index: resetIndex } = update
+
+  if (resetIndex !== undefined) {
+    const alias = aliases[resetIndex]
     return {
       ...state,
-      aliases: state.aliases.map((item, index) => (index === aliasIndex ? aliasItem : item)),
+      aliases: state.aliases.reduce((acc, item, index) => {
+        index === resetIndex ? alias != null && acc.push(alias) : acc.push(item)
+        return acc
+      }, []),
     }
   }
   return {
     ...state,
-    aliases: state.aliases.filter((_item, index) => index !== aliasIndex),
-  }
-}
-
-const resetAliases = (state, update) => {
-  return {
-    ...state,
-    aliases: update.aliases,
+    aliases,
   }
 }
 
@@ -83,4 +81,4 @@ const updateAlias = (state, { type, update }) => {
   return { ...state, aliases }
 }
 
-export { addAlias, aliasesState, deleteAlias, editAlias, resetAlias, resetAliases }
+export { addAlias, aliasesState, deleteAlias, editAlias, resetAliases }

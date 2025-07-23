@@ -23,6 +23,14 @@ const resetAddChildren = dispatch => {
   })
 }
 
+const resetAliases = (dispatch, aliases, index) => {
+  const update = index !== undefined ? { aliases, index } : { aliases }
+  dispatch({
+    type: RESET.GROUP.ALIASES,
+    update,
+  })
+}
+
 const resetChangeName = (dispatch, name) => {
   dispatch({
     type: RESET.CHANGE_NAME,
@@ -116,15 +124,15 @@ const resetToInitial = (dispatch, initialState) => {
 
 const resetConceptState = (action, dispatch, initialState) => {
   switch (action.type) {
-    case RESET.ALIAS:
-      {
-        const aliasIndex = action.update.index
-        dispatch({
-          type: RESET.ALIAS,
-          update: { aliasIndex, aliasItem: initialState.aliases[aliasIndex] },
-        })
-      }
-      break
+    // case RESET.ALIAS:
+    //   {
+    //     const aliasIndex = action.update.index
+    //     dispatch({
+    //       type: RESET.ALIAS,
+    //       update: { aliasIndex, aliasItem: initialState.aliases[aliasIndex] },
+    //     })
+    //   }
+    //   break
 
     case RESET.ADD_CHILD:
       resetAddChild(dispatch, action.update.child)
@@ -160,7 +168,7 @@ const resetConceptState = (action, dispatch, initialState) => {
     case RESET.GROUP.ALIASES:
       dispatch({
         type: RESET.GROUP.ALIASES,
-        update: { aliases: initialState.aliases },
+        update: { aliases: initialState.aliases, index: action.update.index },
       })
       break
 

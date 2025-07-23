@@ -27,17 +27,6 @@ const resettingItem = (confirmReset, group, index) => {
   return resetGroup
 }
 
-const resettingAlias = (confirmReset, index) => {
-  if (!confirmReset) return RESETTING.EXTENT.NONE
-  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
-
-  if (confirmReset.type === RESET.GROUP.ALIASES) return RESETTING.EXTENT.ME
-  if (confirmReset.type === RESET.ALIAS && confirmReset.update?.groupIndex === index)
-    return RESETTING.EXTENT.ME
-
-  return RESETTING.EXTENT.OTHER
-}
-
 const resettingChild = (confirmReset, index) => {
   if (!confirmReset) return RESETTING.EXTENT.NONE
   if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
@@ -92,7 +81,6 @@ const isStagedAction = action =>
 
 export {
   isStagedAction,
-  resettingAlias,
   resettingChild,
   resettingField,
   resettingGroup,
