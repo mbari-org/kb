@@ -56,10 +56,10 @@ const editAlias = (state, update) => {
 }
 
 const resetAliases = (state, update) => {
-  const { aliases, index: resetIndex } = update
+  const { index: resetIndex } = update
 
-  if (resetIndex !== undefined) {
-    const alias = aliases[resetIndex]
+  if (1 < state.aliases.length && resetIndex !== undefined) {
+    const alias = update.aliases[resetIndex]
     return {
       ...state,
       aliases: state.aliases.reduce((acc, item, index) => {
@@ -70,7 +70,7 @@ const resetAliases = (state, update) => {
   }
   return {
     ...state,
-    aliases,
+    aliases: update.aliases,
   }
 }
 

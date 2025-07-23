@@ -65,9 +65,6 @@ const conceptStateReducer = (state, { type, update }) => {
     case RESET.ADD_CHILDREN:
       return resetAddChildren(state)
 
-    // case RESET.ALIAS:
-    //   return resetAlias(state, update)
-
     case RESET.AUTHOR:
       return resetAuthor(state, update)
 

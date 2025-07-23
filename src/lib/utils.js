@@ -103,7 +103,8 @@ const isDeepEqual = (obj1, obj2, depth = Infinity) => {
 }
 
 // quick comparison of simple, JSON serializable objects
-const isJsonEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2)
+const isJsonEqual = (obj1, obj2) =>
+  obj1 == null || obj2 == null ? false : JSON.stringify(obj1) === JSON.stringify(obj2)
 
 const isElementInViewport = element => {
   const rect = element.getBoundingClientRect()
@@ -208,9 +209,7 @@ const prune = obj => {
 }
 
 const filterObject = (obj, predicate) => {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([key, value]) => predicate(key, value))
-  )
+  return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
 
 const writeCSVContent = async (writable, dataRows) => {

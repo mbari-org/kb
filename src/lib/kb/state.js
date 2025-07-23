@@ -4,7 +4,7 @@ import { rankState } from '@/lib/kb/state/rank'
 import { realizationsState } from '@/lib/kb/state/realizations'
 import { structureState } from '@/lib/kb/state/structure'
 
-import { isJsonEqual } from '@/lib/utils'
+import { drop, isJsonEqual } from '@/lib/utils'
 
 const authorState = concept => {
   const { author } = concept
@@ -19,26 +19,10 @@ const indexState = {
   realizationIndex: 0,
 }
 
-// const isFieldModified = (stagedState, initialState, field) => {
-//   const editingField = stagedState[field]
-//   const initialField = initialState[field]
-//   return !isJsonEqual(editingField, initialField)
-// }
-
-// const isGroupModified = (stagedState, initialState, group) => {
-//   const editingGroup = stagedState[group]
-//   const initialGroup = initialState[group]
-//   return !isJsonEqual(editingGroup, initialGroup)
-// }
-
-// const isItemModified = (stagedState, initialState, field, index) => {
-//   const editingItem = stagedState[field][index]
-//   const initialItem = initialState[field][index]
-//   return editingItem !== initialItem
-// }
+const indexStateKeys = Object.keys(indexState)
 
 const isStateModified = ({ initialState, stagedState }) => {
-  return !!initialState && !isJsonEqual(initialState, stagedState)
+  return !isJsonEqual(drop(initialState, indexStateKeys), drop(stagedState, indexStateKeys))
 }
 
 const initialConceptState = (concept, pending) => {
