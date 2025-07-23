@@ -1,20 +1,11 @@
-import { use } from 'react'
 import { Box } from '@mui/material'
 
 import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/reset/ResettingButton'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-
-import { CONCEPT_STATE } from '@/lib/constants'
+import useOnReset from './useOnReset'
 
 const StagedGroupReset = ({ group, resetting }) => {
-  const { modifyConcept } = use(ConceptContext)
-
-  const onClick = () => {
-    modifyConcept({
-      type: CONCEPT_STATE.RESET.GROUP[group.toUpperCase()],
-    })
-  }
+  const onClick = useOnReset(group)
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
