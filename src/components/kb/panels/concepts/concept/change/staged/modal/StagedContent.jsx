@@ -20,8 +20,6 @@ import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/
 
 import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants'
 
-const { GROUP } = CONCEPT_STATE
-
 const StagedContent = () => {
   const { confirmReset, initialState, stagedState } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)

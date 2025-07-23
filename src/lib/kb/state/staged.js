@@ -79,4 +79,4 @@ const itemEdit = (stateTypes, index, initialItem, stagedItem, displayFields) => 
   return { action, index, initial, staged }
 }
 
-export { deleteItem, displayItem, editItem, stagedBorder, stagedEdits }
+export { deleteItem, displayItem, editItem, itemEdit, stagedBorder, stagedEdits }

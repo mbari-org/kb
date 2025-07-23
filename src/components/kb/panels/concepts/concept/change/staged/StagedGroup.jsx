@@ -14,11 +14,7 @@ import {
   resettingItem,
 } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-const StagedGroup = ({ fieldItem = false, group, stagedEdit, StagedGroupItem, stagedItems }) => {
-  const { confirmReset } = use(ConceptContext)
-
-  const [field, items] = stagedEdit
-
+const resetting = (confirmReset, group, items) => {
   let itemsResetting = items.staged.map((_stagedItem, index) =>
     resettingItem(confirmReset, group, index)
   )
@@ -29,6 +25,18 @@ const StagedGroup = ({ fieldItem = false, group, stagedEdit, StagedGroupItem, st
   if (groupResetting === RESETTING.EXTENT.ME) {
     itemsResetting = itemsResetting.map(() => RESETTING.EXTENT.ME)
   }
+
+  return { groupResetting, itemsResetting }
+}
+
+const StagedGroup = ({ fieldItem = false, group, stagedEdit, StagedGroupItem, stagedItems }) => {
+  const { confirmReset } = use(ConceptContext)
+
+  const [field, items] = stagedEdit
+
+  const { groupResetting, itemsResetting } = fieldItem
+    ? { groupResetting: resettingGroup(confirmReset, group), itemsResetting: [] }
+    : resetting(confirmReset, group, items)
 
   const disabled = groupResetting === RESETTING.EXTENT.OTHER
 

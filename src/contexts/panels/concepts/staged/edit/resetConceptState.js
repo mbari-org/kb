@@ -23,13 +23,6 @@ const resetAddChildren = dispatch => {
   })
 }
 
-const resetAuthor = (dispatch, author) => {
-  dispatch({
-    type: RESET.AUTHOR,
-    update: { author },
-  })
-}
-
 const resetChangeName = (dispatch, name) => {
   dispatch({
     type: RESET.CHANGE_NAME,
@@ -142,7 +135,10 @@ const resetConceptState = (action, dispatch, initialState) => {
       break
 
     case RESET.AUTHOR:
-      resetAuthor(dispatch, action.update.initial)
+      dispatch({
+        type: RESET.AUTHOR,
+        update: { author: initialState.author },
+      })
       break
 
     case RESET.CHANGE_NAME:
