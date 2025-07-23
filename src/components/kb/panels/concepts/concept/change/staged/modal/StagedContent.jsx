@@ -3,13 +3,12 @@ import { use, useEffect, useMemo } from 'react'
 import { Box } from '@mui/material'
 
 import StagedAliases from '@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAliases'
-import StagedAuthor from '@/components/kb/panels/concepts/concept/change/staged/author/StagedAuthor'
-import StagedRank from '@/components/kb/panels/concepts/concept/change/staged/rank/StagedRank'
 import StagedRealizations from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealizations'
 
+import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
+import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
+
 import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/staged/structure/children/ChildrenDetail'
-import ConceptRankDetail from '@/components/kb/panels/concepts/concept/change/staged/rank/ConceptRankDetail'
-import FieldDeltaDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldDeltaDetail'
 import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldValueDetail'
 import MediaDetail from '@/components/kb/panels/concepts/concept/change/staged/media/MediaDetail'
 
@@ -18,7 +17,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
-import { CONCEPT_FIELD } from '@/lib/constants'
+import { CONCEPT_FIELD, RESETTING } from '@/lib/constants'
 
 const StagedContent = () => {
   const { confirmReset, initialState, stagedState } = use(ConceptContext)
@@ -39,10 +38,10 @@ const StagedContent = () => {
         return <StagedAliases key={field} confirmReset={confirmReset} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.AUTHOR:
-        return <StagedAuthor key={field} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.RANK:
-        return <StagedRank key={field} stagedEdit={stagedEdit} />
+        return <StagedObject key={field} group={RESETTING.GROUP.RANK} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.REALIZATIONS:
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />
