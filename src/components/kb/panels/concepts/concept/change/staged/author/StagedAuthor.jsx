@@ -1,19 +1,11 @@
-import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
+import StagedField from '@/components/kb/panels/concepts/concept/change/staged/StagedField'
 
 import { RESETTING } from '@/lib/constants'
 
 const { GROUP } = RESETTING
 
 const StagedAuthor = ({ stagedEdit }) => {
-  return (
-    <StagedGroup
-      fieldItem
-      group={GROUP.AUTHOR}
-      stagedEdit={stagedEdit}
-      StagedGroupItem={() => null}
-      stagedItems={[]}
-    />
-  )
+  return <StagedField group={GROUP.AUTHOR} stagedEdit={stagedEdit} />
 }
 
 export default StagedAuthor

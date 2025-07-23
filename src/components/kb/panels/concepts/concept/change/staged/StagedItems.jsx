@@ -27,7 +27,7 @@ const resetting = (confirmReset, group, items) => {
   return { groupResetting, itemsResetting }
 }
 
-const StagedGroup = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
+const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
   const { confirmReset } = use(ConceptContext)
 
   const [_field, items] = stagedEdit
@@ -37,14 +37,7 @@ const StagedGroup = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
   const disabled = groupResetting === RESETTING.EXTENT.OTHER
 
   return (
-    <Box
-      sx={{
-        alignItems: 'flex-start',
-        display: 'flex',
-        flexDirection: 'column',
-        mt: 0.5,
-      }}
-    >
+    <Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <StagedGroupReset group={group} initial={items.initial} resetting={groupResetting} />
         <Typography sx={{ fontSize: '1.25rem', opacity: disabled ? 0.5 : 1 }}>{group}</Typography>
@@ -65,4 +58,4 @@ const StagedGroup = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
   )
 }
 
-export default StagedGroup
+export default StagedItems
