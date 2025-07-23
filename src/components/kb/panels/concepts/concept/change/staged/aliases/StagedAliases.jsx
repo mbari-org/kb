@@ -1,5 +1,5 @@
 import StagedAlias from './StagedAlias'
-import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
+import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/StagedItems'
 
 import { stagedAliases } from '@/lib/kb/model/alias'
 
@@ -7,7 +7,7 @@ import { RESETTING } from '@/lib/constants'
 
 const StagedAliases = ({ stagedEdit }) => {
   return (
-    <StagedGroup
+    <StagedItems
       group={RESETTING.GROUP.ALIASES}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedAlias}

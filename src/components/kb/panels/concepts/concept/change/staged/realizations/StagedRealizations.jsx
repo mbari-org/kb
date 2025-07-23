@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 
-import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
+import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/StagedItems'
 import StagedRealization from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealization'
 
 import { stagedRealizations } from '@/lib/kb/model/realization'
@@ -14,7 +14,7 @@ const StagedRealizations = ({ confirmReset, stagedEdit }) => {
   const [_, realizations] = stagedEdit
 
   return (
-    <StagedGroup group={GROUP.REALIZATIONS} initial={realizations.initial}>
+    <StagedItems group={GROUP.REALIZATIONS} initial={realizations.initial}>
       <Box>
         {stagedRealizations(realizations).map(stagedRealization => {
           const { index } = stagedRealization
@@ -31,7 +31,7 @@ const StagedRealizations = ({ confirmReset, stagedEdit }) => {
           )
         })}
       </Box>
-    </StagedGroup>
+    </StagedItems>
   )
 }
 

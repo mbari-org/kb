@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
-import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
+import StagedGroup_HOLD from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup_HOLD'
 
 import { CONCEPT_RANK, RESETTING } from '@/lib/constants'
 
@@ -31,12 +31,12 @@ const StagedRank = ({ stagedEdit }) => {
   const levelValue = fieldValue(CONCEPT_RANK.LEVEL)
 
   return (
-    <StagedGroup group={GROUP.RANK} initial={initial}>
+    <StagedGroup_HOLD group={GROUP.RANK} initial={initial}>
       <Box sx={{ ml: 4 }}>
         {nameValue && <FieldValueDisplay {...nameValue} />}
         {levelValue && <FieldValueDisplay {...levelValue} />}
       </Box>
-    </StagedGroup>
+    </StagedGroup_HOLD>
   )
 }
 

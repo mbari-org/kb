@@ -29,7 +29,7 @@ const resetting = (confirmReset, group, items) => {
   return { groupResetting, itemsResetting }
 }
 
-const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
+const StagedGroup_HOLD = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
   const { confirmReset } = use(ConceptContext)
 
   const [_field, items] = stagedEdit
@@ -60,4 +60,4 @@ const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
   )
 }
 
-export default StagedItems
+export default StagedGroup_HOLD

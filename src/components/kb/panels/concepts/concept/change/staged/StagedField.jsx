@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { Box } from '@mui/material'
 
-import StagedSection from '@/components/kb/panels/concepts/concept/change/staged/StagedSection'
+import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import { formatDelta } from '@/components/common/format'
@@ -29,12 +29,12 @@ const StagedField = ({ stagedEdit }) => {
   }
 
   return (
-    <StagedSection>
+    <StagedGroup>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <StagedGroupReset group={field} initial={items.initial} resetting={groupResetting} />
         {fieldValueDisplay()}
       </Box>
-    </StagedSection>
+    </StagedGroup>
   )
 }
 

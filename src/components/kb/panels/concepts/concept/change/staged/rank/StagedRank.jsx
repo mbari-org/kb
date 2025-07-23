@@ -1,4 +1,4 @@
-import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
+import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/StagedItems'
 
 import { RESETTING } from '@/lib/constants'
 
@@ -6,7 +6,7 @@ const { GROUP } = RESETTING
 
 const StagedRank = ({ stagedEdit }) => {
   return (
-    <StagedGroup
+    <StagedItems
       group={GROUP.RANK}
       stagedEdit={stagedEdit}
       StagedGroupItem={() => null}
