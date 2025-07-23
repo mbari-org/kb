@@ -38,12 +38,14 @@ const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
 
   const disabled = groupResetting === RESETTING.EXTENT.OTHER
 
-  return (
-    <StagedGroup>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <StagedGroupReset group={group} initial={items.initial} resetting={groupResetting} />
-        <Typography sx={{ fontSize: '1.25rem', opacity: disabled ? 0.5 : 1 }}>{group}</Typography>
-      </Box>
+  const GroupHeader = () => {
+    return (
+      <Typography sx={{ fontSize: '1.25rem', opacity: disabled ? 0.5 : 1 }}>{group}</Typography>
+    )
+  }
+
+  const GroupBody = () => {
+    return (
       <Box sx={{ ml: 3 }}>
         {stagedItems.map((stagedItem, index) => {
           return (
@@ -56,7 +58,17 @@ const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
           )
         })}
       </Box>
-    </StagedGroup>
+    )
+  }
+
+  return (
+    <StagedGroup
+      group={group}
+      GroupBody={GroupBody}
+      GroupHeader={GroupHeader}
+      initial={items.initial}
+      resetting={groupResetting}
+    />
   )
 }
 

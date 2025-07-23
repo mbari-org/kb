@@ -1,6 +1,8 @@
 import { Box } from '@mui/material'
 
-const StagedGroup = ({ children }) => {
+import StagedGroupReset from '@/components/kb/panels/concepts/concept/change/staged/reset/StagedGroupReset'
+
+const StagedGroup = ({ group, GroupBody, GroupHeader, initial, resetting }) => {
   return (
     <Box
       sx={{
@@ -10,7 +12,11 @@ const StagedGroup = ({ children }) => {
         mt: 0.5,
       }}
     >
-      {children}
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <StagedGroupReset group={group} initial={initial} resetting={resetting} />
+        <GroupHeader />
+      </Box>
+      <GroupBody />
     </Box>
   )
 }
