@@ -16,7 +16,9 @@ const StagedGroup = ({ group, GroupBody, GroupHeader, initial, resetting }) => {
         <StagedGroupReset group={group} initial={initial} resetting={resetting} />
         <GroupHeader />
       </Box>
-      <GroupBody />
+      <Box sx={{ ml: 3 }}>
+        <GroupBody />
+      </Box>
     </Box>
   )
 }

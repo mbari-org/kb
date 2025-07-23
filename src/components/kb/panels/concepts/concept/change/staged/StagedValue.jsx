@@ -11,12 +11,12 @@ import { RESETTING } from '@/lib/constants'
 
 import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-const StagedField = ({ stagedEdit }) => {
+const StagedValue = ({ group, stagedEdit }) => {
   const { confirmReset } = use(ConceptContext)
 
   const [field, item] = stagedEdit
 
-  const groupResetting = resettingGroup(confirmReset, field)
+  const groupResetting = resettingGroup(confirmReset, group)
 
   const disabled = groupResetting === RESETTING.EXTENT.OTHER
 
@@ -41,4 +41,4 @@ const StagedField = ({ stagedEdit }) => {
   )
 }
 
-export default StagedField
+export default StagedValue

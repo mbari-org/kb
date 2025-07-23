@@ -46,7 +46,7 @@ const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
 
   const GroupBody = () => {
     return (
-      <Box sx={{ ml: 3 }}>
+      <Box>
         {stagedItems.map((stagedItem, index) => {
           return (
             <StagedGroupItem
