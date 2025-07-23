@@ -4,26 +4,38 @@ import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material'
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useStagedFieldBorder from '@/components/kb/panels/concepts/concept/change/staged/field/useStagedFieldBorder'
+import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 
-const ConceptRankField = ({ field, fieldValue, otherValue, inputStyle, onChange }) => {
+import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/stagedBorder'
+
+import { CONCEPT_RANK } from '@/lib/constants'
+
+import { capitalize } from '@/lib/utils'
+
+const RankFieldInput = ({ field, initialRank, stagedRank, onChange }) => {
+  const inputStyle = useConceptDetailStyle(field)
   const { filterRanks } = use(TaxonomyContext)
 
-  const rankOptions = filterRanks(field, otherValue)
-  const label = field === 'rankName' ? 'Rank' : 'Level'
+  const rankValue = field =>
+    stagedRank[field] !== undefined ? stagedRank[field] : initialRank[field]
 
-  const border = useStagedFieldBorder(field)
+  const fieldValue = rankValue(field)
+  const otherValue =
+    field === CONCEPT_RANK.NAME ? rankValue(CONCEPT_RANK.LEVEL) : rankValue(CONCEPT_RANK.NAME)
+
+  const rankOptions = filterRanks(`rank${capitalize(field)}`, otherValue)
+
+  const border = stagedBorder(initialRank[field], stagedRank[field])
 
   return (
     <FormControl {...inputStyle}>
       <Box alignItems='center' display='flex' flexDirection='row' width='100%'>
         <Box display='flex' flexDirection='column' flexGrow={1} sx={{ ...border }}>
-          <InputLabel id={`${field}-label`}>{label}</InputLabel>
+          <InputLabel id={`${field}-label`}>{capitalize(field)}</InputLabel>
           <Select
             displayEmpty
             labelId={`${field}-label`}
             onChange={onChange}
-            value={fieldValue || ''}
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 borderTop: 'none',
@@ -31,6 +43,7 @@ const ConceptRankField = ({ field, fieldValue, otherValue, inputStyle, onChange 
                 borderRight: 'none',
               },
             }}
+            value={fieldValue || ''}
           >
             {rankOptions.map(option => (
               <MenuItem key={option} sx={{ height: '1.75em' }} value={option}>
@@ -44,4 +57,4 @@ const ConceptRankField = ({ field, fieldValue, otherValue, inputStyle, onChange 
   )
 }
 
-export default ConceptRankField
+export default RankFieldInput

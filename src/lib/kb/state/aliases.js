@@ -3,50 +3,47 @@ import { CONCEPT_STATE } from '@/lib/constants'
 import { stagedAlias } from '@/lib/kb/model/alias'
 
 const aliasesState = (concept, pending) => {
-  const { aliases: conceptAliases } = concept
-  if (!conceptAliases) {
-    return { aliases: [] }
-  }
-
-  const aliases = conceptAliases.map((alias, index) =>
+  const { aliases } = concept
+  const stagedAliases = aliases.map((alias, index) =>
     stagedAlias({ ...alias, action: CONCEPT_STATE.NO_ACTION, index }, pending)
   )
-
-  return { aliases }
+  return { aliases: stagedAliases }
 }
 
 const addAlias = (state, update) => {
+  const aliasIndex = state.aliases.length
   const aliasItem = {
     ...update.aliasItem,
-    action: CONCEPT_STATE.ALIAS_ITEM.ADD,
-    index: state.aliases.length,
+    action: CONCEPT_STATE.ALIAS.ADD,
+    index: aliasIndex,
   }
   return {
     ...state,
     aliases: [...state.aliases, aliasItem],
+    aliasIndex,
   }
 }
 
 const deleteAlias = (state, update) => {
   const aliasItem = state.aliases[update.aliasIndex]
   // If alias is an add, just remove it from state
-  if (aliasItem?.action === CONCEPT_STATE.ALIAS_ITEM.ADD) {
+  if (aliasItem?.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedAliases = state.aliases.filter((_item, index) => index !== update.aliasIndex)
     return {
       ...state,
       aliases: updatedAliases,
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.ALIAS_ITEM.DELETE, update })
+  return updateAlias(state, { type: CONCEPT_STATE.ALIAS.DELETE, update })
 }
 
 const editAlias = (state, update) => {
   const aliasItem = state.aliases[update.aliasIndex]
   // If editing an added alias, don't change the action
-  if (aliasItem.action === CONCEPT_STATE.ALIAS_ITEM.ADD) {
+  if (aliasItem.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedItem = {
       ...update.aliasItem,
-      action: CONCEPT_STATE.ALIAS_ITEM.ADD,
+      action: CONCEPT_STATE.ALIAS.ADD,
     }
     return {
       ...state,
@@ -55,11 +52,11 @@ const editAlias = (state, update) => {
       ),
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.ALIAS_ITEM.EDIT, update })
+  return updateAlias(state, { type: CONCEPT_STATE.ALIAS.EDIT, update })
 }
 
 const resetAlias = (state, update) => {
-  const { aliasItem, aliasIndex } = update
+  const { aliasIndex, aliasItem } = update
   if (aliasItem) {
     return {
       ...state,
@@ -79,13 +76,11 @@ const resetAliases = (state, update) => {
   }
 }
 
-const updateState = (state, { type, update }) => {
+const updateAlias = (state, { type, update }) => {
   const { aliasIndex, aliasItem } = update
   const updatedItem = { ...state.aliases[aliasIndex], ...aliasItem, action: type }
-  return {
-    ...state,
-    aliases: state.aliases.map((item, index) => (index === aliasIndex ? updatedItem : item)),
-  }
+  const aliases = state.aliases.map((item, index) => (index === aliasIndex ? updatedItem : item))
+  return { ...state, aliases }
 }
 
 export { addAlias, aliasesState, deleteAlias, editAlias, resetAlias, resetAliases }

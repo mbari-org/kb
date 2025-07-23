@@ -14,7 +14,7 @@ const createEditMediaOnClose = ({ initialState, modifyConcept }) => {
     }
 
     modifyConcept({
-      type: CONCEPT_STATE.RESET.MEDIA_ITEM,
+      type: CONCEPT_STATE.RESET.MEDIA,
       update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
     })
     return false

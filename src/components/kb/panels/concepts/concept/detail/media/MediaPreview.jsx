@@ -6,7 +6,7 @@ import KBInfoIcon from '@/components/common/KBInfoIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { fieldBorder } from '@/lib/kb/model/field'
+import { stagedBorder } from '@/lib/kb/state/staged'
 
 import { fieldPending } from '@/lib/kb/model/history'
 
@@ -27,7 +27,7 @@ const MediaPreview = ({ setPreviewOn }) => {
 
   const mediaPending = fieldPending(conceptPending, 'Media').pop()
 
-  const border = fieldBorder({
+  const border = stagedBorder({
     itemPending: mediaPending,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,

@@ -9,6 +9,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { loadConcept as apiLoadConcept } from '@/lib/kb/model/concept'
 
 import {
+  closestConcept as closestTaxonomyConcept,
   deleteConcept as deleteTaxonomyConcept,
   filterTaxonomyRanks,
   getAncestors as getTaxonomyAncestors,
@@ -61,9 +62,14 @@ const TaxonomyProvider = ({ children }) => {
     setTaxonomy(taxonomy)
   }, [])
 
+  const closestConcept = useCallback(
+    concept => closestTaxonomyConcept(taxonomy, concept),
+    [taxonomy]
+  )
+
   const deleteConcept = useCallback(
-    async conceptName => {
-      const result = await deleteTaxonomyConcept(taxonomy, conceptName, apiFns)
+    async concept => {
+      const result = await deleteTaxonomyConcept(taxonomy, concept, apiFns)
       updateTaxonomy(result.updatedTaxonomy)
       return result
     },
@@ -247,6 +253,15 @@ const TaxonomyProvider = ({ children }) => {
     [apiFns, taxonomy, updateTaxonomy]
   )
 
+  const removeConcept = useCallback(
+    async conceptName => {
+      const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(taxonomy, conceptName)
+      updateTaxonomy(updatedTaxonomy)
+      return updatedTaxonomy
+    },
+    [taxonomy, updateTaxonomy]
+  )
+
   useEffect(() => {
     if (!apiFns || taxonomy) return
 
@@ -266,6 +281,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      closestConcept,
       deleteConcept,
       filterRanks,
       getConcept,
@@ -280,9 +296,11 @@ const TaxonomyProvider = ({ children }) => {
       loadConceptDescendants,
       refreshConcept,
       renameConcept,
+      removeConcept,
       taxonomy,
     }),
     [
+      closestConcept,
       deleteConcept,
       filterRanks,
       getAncestors,
@@ -297,6 +315,7 @@ const TaxonomyProvider = ({ children }) => {
       loadConceptDescendants,
       refreshConcept,
       renameConcept,
+      removeConcept,
       taxonomy,
     ]
   )

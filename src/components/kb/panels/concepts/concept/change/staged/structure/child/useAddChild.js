@@ -12,7 +12,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const { RESET } = CONCEPT_STATE
-const { ADD_CHILD } = CONCEPT_STATE.STRUCTURE
+const { ADD_CHILD } = CONCEPT_STATE.CONCEPT
 
 const addChildModal = () => {
   const components = {

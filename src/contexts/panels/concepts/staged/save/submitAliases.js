@@ -2,11 +2,11 @@ import { createAlias, deleteAlias, updateAlias } from '@/lib/api/aliases'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ALIAS_ITEM: ALIAS } = CONCEPT_STATE
+const { ALIAS: ALIAS } = CONCEPT_STATE
 
 import { diff, drop, pick } from '@/lib/utils'
 
-const saveAliases = ([submit, { concept, updatesInfo }]) => {
+const submitAliases = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
   if (!hasUpdated('aliases')) {
@@ -54,4 +54,4 @@ const saveAliases = ([submit, { concept, updatesInfo }]) => {
   return submitters
 }
 
-export default saveAliases
+export default submitAliases

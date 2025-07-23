@@ -13,21 +13,21 @@ const createRealizationModal = action => {
     const Title = () => <RealizationTitle action={action} />
 
     switch (action) {
-      case CONCEPT_STATE.REALIZATION_ITEM.ADD: {
+      case CONCEPT_STATE.REALIZATION.ADD: {
         return {
           Actions: RealizationActions,
           Content: RealizationContent,
           Title,
         }
       }
-      case CONCEPT_STATE.REALIZATION_ITEM.DELETE: {
+      case CONCEPT_STATE.REALIZATION.DELETE: {
         return {
           Actions: DeleteRealizationActions,
           Content: DeleteRealizationContent,
           Title,
         }
       }
-      case CONCEPT_STATE.REALIZATION_ITEM.EDIT: {
+      case CONCEPT_STATE.REALIZATION.EDIT: {
         return {
           Actions: RealizationActions,
           Content: RealizationContent,

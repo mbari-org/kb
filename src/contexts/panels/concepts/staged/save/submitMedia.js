@@ -4,7 +4,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import { pick } from '@/lib/utils'
 
-const saveMedia = ([submit, { concept, updatesInfo }]) => {
+const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo
 
   if (!hasUpdated('media')) {
@@ -17,7 +17,7 @@ const saveMedia = ([submit, { concept, updatesInfo }]) => {
     const mediaItem = pick(stagedItem, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
 
     switch (stagedItem.action) {
-      case CONCEPT_STATE.MEDIA_ITEM.ADD: {
+      case CONCEPT_STATE.MEDIA.ADD: {
         const params = {
           conceptName: concept.name,
           ...mediaItem,
@@ -26,13 +26,13 @@ const saveMedia = ([submit, { concept, updatesInfo }]) => {
         return acc
       }
 
-      case CONCEPT_STATE.MEDIA_ITEM.EDIT: {
+      case CONCEPT_STATE.MEDIA.EDIT: {
         const params = [stagedItem.id, mediaItem]
         acc.push(submit(updateMediaItem, params))
         return acc
       }
 
-      case CONCEPT_STATE.MEDIA_ITEM.DELETE: {
+      case CONCEPT_STATE.MEDIA.DELETE: {
         acc.push(submit(deleteMediaItem, stagedItem.id))
         return acc
       }
@@ -45,4 +45,4 @@ const saveMedia = ([submit, { concept, updatesInfo }]) => {
   return submitters
 }
 
-export default saveMedia
+export default submitMedia

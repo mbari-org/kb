@@ -16,10 +16,10 @@ const DeleteAliasActions = () => {
   const { aliasItem, aliasIndex } = modalData
 
   const stageAction = {
-    type: CONCEPT_STATE.ALIAS_ITEM.DELETE,
+    type: CONCEPT_STATE.ALIAS.DELETE,
     update: {
       aliasIndex,
-      aliasItem: { ...aliasItem, action: CONCEPT_STATE.ALIAS_ITEM.DELETE },
+      aliasItem: { ...aliasItem, action: CONCEPT_STATE.ALIAS.DELETE },
     },
   }
 

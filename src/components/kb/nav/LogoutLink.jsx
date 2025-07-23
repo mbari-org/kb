@@ -7,7 +7,7 @@ import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
+import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 
 import { LABELS, SELECTED } from '@/lib/constants'
 
@@ -18,7 +18,7 @@ const LogoutLink = () => {
   const { panels } = use(SelectedContext)
   const { setModalData } = use(ConceptModalContext)
 
-  const displayStaged = useStagedModal()
+  const displayStaged = useDisplayStaged()
 
   const handleLogout = () => {
     // Only check for unsaved data if we're currently on the concepts panel

@@ -2,7 +2,7 @@ import { use, useCallback, useMemo, useState } from 'react'
 
 import { Box, FormControl, Stack, TextField } from '@mui/material'
 
-import ConceptRankField from '@/components/kb/panels/concepts/concept/change/staged/field/ConceptRankField'
+import ConceptRankField from '@/components/kb/panels/concepts/concept/change/staged/rank/ConceptRankDetail'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -11,7 +11,9 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import useInputStyle from './useInputStyle'
 import useStageChild from './useStageChild'
 
-import { RANK } from '@/lib/constants'
+import { CONCEPT_FIELD } from '@/lib/constants'
+
+const { RANK } = CONCEPT_FIELD
 
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 

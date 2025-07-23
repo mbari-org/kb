@@ -2,18 +2,28 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
-
 const useStagedFieldBorder = field => {
   const { initialState, stagedState } = use(ConceptContext)
 
-  const { hasUpdated } = createUpdatesInfo(initialState, stagedState)
+  const isStaged = field => {
+    switch (field) {
+      case 'author':
+        return initialState.author !== stagedState.author
 
-  const hasUpdatedField = hasUpdated(field)
+      case 'rankName':
+        return initialState.rank.name !== stagedState.rank.name
 
-  const borderColor = hasUpdatedField ? 'edit.main' : 'transparent'
-  const borderStyle = hasUpdatedField ? 'dashed' : 'none'
-  const borderWidth = hasUpdatedField ? '2px' : '0px'
+      case 'rankLevel':
+        return initialState.rank.level !== stagedState.rank.level
+
+      default:
+        return false
+    }
+  }
+
+  const [borderColor, borderStyle, borderWidth] = isStaged(field)
+    ? ['edit.main', 'dashed', '2px']
+    : ['transparent', 'none', '0px']
 
   return { borderColor, borderStyle, borderWidth }
 }

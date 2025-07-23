@@ -1,4 +1,4 @@
-import { fieldEdits } from '@/lib/kb/model/field'
+import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from './history'
 
@@ -23,9 +23,9 @@ const EMPTY_ALIAS = {
 
 const ALIAS_DISPLAY_FIELDS = ['name', 'author', 'nameType']
 
-const aliasEdits = ({ initial, staged }) =>
-  fieldEdits({
-    stateType: CONCEPT_STATE.ALIAS_ITEM,
+const stagedAliases = ({ initial, staged }) =>
+  stagedEdits({
+    stateTypes: CONCEPT_STATE.ALIAS,
     displayFields: ALIAS_DISPLAY_FIELDS,
     initial,
     staged,
@@ -74,4 +74,4 @@ const stagedAlias = (aliasItem, conceptPending) => {
   return aliasItem
 }
 
-export { ALIAS_TYPES, aliasEdits, aliasesEqual, aliasFields, EMPTY_ALIAS, stagedAlias }
+export { ALIAS_TYPES, aliasesEqual, aliasFields, EMPTY_ALIAS, stagedAlias, stagedAliases }

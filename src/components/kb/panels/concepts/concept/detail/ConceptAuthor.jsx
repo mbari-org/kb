@@ -1,28 +1,28 @@
 import { use, useCallback, useEffect, useState } from 'react'
-
 import { Box, FormControl } from '@mui/material'
+
+import TextInput from '@/components/common/TextInput'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
-import useStagedFieldBorder from '@/components/kb/panels/concepts/concept/change/staged/field/useStagedFieldBorder'
 
-import TextInput from '@/components/common/TextInput'
+import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/stagedBorder'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants'
 
 const ConceptAuthor = () => {
-  const { stagedState, modifyConcept } = use(ConceptContext)
+  const { initialState, modifyConcept, stagedState } = use(ConceptContext)
 
-  const [author, setAuthor] = useState('')
+  const [author, setAuthor] = useState(stagedState.author)
 
-  const border = useStagedFieldBorder('author')
+  const border = stagedBorder(initialState.author, stagedState.author)
 
   const modifyAuthor = useCallback(
     author => {
       modifyConcept({
-        type: CONCEPT_STATE.FIELD.SET,
-        update: { field: 'author', value: author },
+        type: CONCEPT_STATE.GROUP.AUTHOR,
+        update: { field: CONCEPT_FIELD.AUTHOR, value: author },
       })
     },
     [modifyConcept]
@@ -32,8 +32,9 @@ const ConceptAuthor = () => {
 
   const handleChange = useCallback(
     event => {
-      setAuthor(event.target.value)
-      modifyAuthor(event.target.value)
+      const newValue = event.target.value
+      setAuthor(newValue)
+      modifyAuthor(newValue)
     },
     [modifyAuthor]
   )
@@ -47,10 +48,10 @@ const ConceptAuthor = () => {
       <Box sx={{ ...border }}>
         <TextInput
           {...infoStyle}
+          debounceMs={333}
           label='Author'
           onChange={handleChange}
           value={author || ''}
-          debounceMs={300}
         />
       </Box>
     </FormControl>

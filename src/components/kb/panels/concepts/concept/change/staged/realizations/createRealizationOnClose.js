@@ -15,7 +15,7 @@ const createRealizationOnClose = ({ initialState, modifyConcept }) => {
     }
 
     modifyConcept({
-      type: CONCEPT_STATE.RESET.REALIZATION_ITEM,
+      type: CONCEPT_STATE.RESET.REALIZATION,
       update: { realizationIndex, realizationItem: initialState.realizations[realizationIndex] },
     })
     return false

@@ -19,44 +19,47 @@ const mediaState = (concept, pending) => {
 
 const addMedia = (state, update) => {
   const isPrimaryMedia = isPrimary(update.mediaItem)
+  const mediaIndex = state.media.length
   const mediaItem = {
     ...update.mediaItem,
+    action: CONCEPT_STATE.MEDIA.ADD,
     isPrimary: isPrimaryMedia,
-    action: CONCEPT_STATE.MEDIA_ITEM.ADD,
+    index: mediaIndex,
   }
   return {
     ...state,
     media: [...state.media, mediaItem],
+    mediaIndex,
   }
 }
 
 const deleteMedia = (state, update) => {
   const mediaItem = state.media[update.mediaIndex]
   // If media is an add, just remove it from state
-  if (mediaItem.action === CONCEPT_STATE.MEDIA_ITEM.ADD) {
+  if (mediaItem.action === CONCEPT_STATE.MEDIA.ADD) {
     const updatedMedia = state.media.filter((_item, index) => index !== update.mediaIndex)
     return {
       ...state,
       media: updatedMedia,
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.MEDIA_ITEM.DELETE, update })
+  return updateState(state, { type: CONCEPT_STATE.MEDIA.DELETE, update })
 }
 
 const editMedia = (state, update) => {
   const mediaItem = state.media[update.mediaIndex]
   // If editing an added media item, don't change the action
-  if (mediaItem.action === CONCEPT_STATE.MEDIA_ITEM.ADD) {
+  if (mediaItem.action === CONCEPT_STATE.MEDIA.ADD) {
     const updatedItem = {
       ...update.mediaItem,
-      action: CONCEPT_STATE.MEDIA_ITEM.ADD,
+      action: CONCEPT_STATE.MEDIA.ADD,
     }
     return {
       ...state,
       media: state.media.map((item, index) => (index === update.mediaIndex ? updatedItem : item)),
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.MEDIA_ITEM.EDIT, update })
+  return updateState(state, { type: CONCEPT_STATE.MEDIA.EDIT, update })
 }
 
 const resetMedia = (state, update) => {
@@ -88,7 +91,6 @@ const updateState = (state, { type, update }) => {
   const updatedMedia = state.media.map((stateItem, stateIndex) =>
     stateIndex === mediaIndex ? updatedItem : stateItem
   )
-
   return { ...state, media: updatedMedia }
 }
 

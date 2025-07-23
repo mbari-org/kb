@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useMemo, useReducer, useState } from 'reac
 
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
-import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
+import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import useLoadConceptError from '@/hooks/useLoadConceptError'
 import useConceptLoader from './useConceptLoader'
@@ -16,7 +16,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 
-import { hasModifiedState, initialConceptState } from '@/lib/kb/state/concept'
+import { initialConceptState, isStateModified } from '@/lib/kb/state'
 
 import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 
@@ -39,7 +39,7 @@ const ConceptProvider = ({ children }) => {
 
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
 
-  const displayStaged = useStagedModal()
+  const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
 
@@ -50,9 +50,9 @@ const ConceptProvider = ({ children }) => {
         history => history.concept === resettingConcept.name
       )
 
-      const refreshedInitialState = initialConceptState(resettingConcept, conceptPendingHistory)
-      setInitialState(refreshedInitialState)
-      dispatch({ type: CONCEPT_STATE.INITIAL, update: refreshedInitialState })
+      const conceptState = initialConceptState(resettingConcept, conceptPendingHistory)
+      setInitialState(conceptState)
+      dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
     },
     [refreshPanelData]
   )
@@ -81,7 +81,7 @@ const ConceptProvider = ({ children }) => {
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
     if (isConceptPanelActive && initialState) {
-      const hasModifications = hasModifiedState({ initialState, stagedState })
+      const hasModifications = isStateModified({ initialState, stagedState })
       setHasUnsavedChanges(hasModifications)
     } else {
       // Clear unsaved data flag when not on concepts panel

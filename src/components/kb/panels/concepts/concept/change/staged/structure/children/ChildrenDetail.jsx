@@ -20,15 +20,16 @@ const ChildrenDetail = ({ edit }) => {
   const { confirmReset } = use(ConceptContext)
 
   const changingChild = index => {
-    if (!confirmReset) return RESETTING.NONE
-    if (confirmReset.type === RESET.ADD_CHILDREN) return RESETTING.ME
-    if (confirmReset.type === RESET.ADD_CHILD && confirmReset.index === index) return RESETTING.ME
-    if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
-    return RESETTING.OTHER
+    if (!confirmReset) return RESETTING.EXTENT.NONE
+    if (confirmReset.type === RESET.ADD_CHILDREN) return RESETTING.EXTENT.ME
+    if (confirmReset.type === RESET.ADD_CHILD && confirmReset.index === index)
+      return RESETTING.EXTENT.ME
+    if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
+    return RESETTING.EXTENT.OTHER
   }
 
   const childrenSx =
-    changingChild() === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+    changingChild() === RESETTING.EXTENT.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   if (children.staged.length === 0) return null
 

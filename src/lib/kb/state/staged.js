@@ -3,12 +3,7 @@ import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/s
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const deleteItem = edit => {
-  const { action, index } = edit
-  return {
-    action,
-    index,
-    updates: {},
-  }
+  return { ...edit, updates: {} }
 }
 
 const displayItem = (item, fields) => {
@@ -35,7 +30,7 @@ const editItem = edit => {
   }
 }
 
-const fieldBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
+const stagedBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
   const itemAction =
     stagedItem?.action !== CONCEPT_STATE.NO_ACTION
       ? stagedItem?.action.split(' ')[1].toUpperCase()
@@ -64,29 +59,24 @@ const fieldBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
   return `${borderWidth} ${borderStyle} ${borderColor}`
 }
 
-const fieldEdits = ({ stateType, displayFields, initial, staged }) =>
+const stagedEdits = ({ displayFields, initial, staged, stateTypes }) =>
   staged
     .reduce((acc, item, index) => {
-      const edit = itemEdit(stateType, index, initial[index], item, displayFields)
-      if (edit === null) {
-        return acc
-      }
+      const edit = itemEdit(stateTypes, index, initial[index], item, displayFields)
+      if (edit === null) return acc
       acc.push(edit)
       return acc
     }, [])
-    .map(edit => (edit.action === stateType.DELETE ? deleteItem(edit) : editItem(edit)))
+    .map(edit => (edit.action === stateTypes.DELETE ? deleteItem(edit) : editItem(edit)))
 
-const itemEdit = (stateType, index, initialItem, stagedItem, displayFields) => {
+const itemEdit = (stateTypes, index, initialItem, stagedItem, displayFields) => {
   const { action } = stagedItem
+  if (!isStagedAction(action)) return null
 
-  if (!isStagedAction(action)) {
-    return null
-  }
-
-  const initial = action === stateType.ADD ? null : displayItem(initialItem, displayFields)
-  const staged = action === stateType.DELETE ? null : displayItem(stagedItem, displayFields)
+  const initial = action === stateTypes.ADD ? null : displayItem(initialItem, displayFields)
+  const staged = action === stateTypes.DELETE ? null : displayItem(stagedItem, displayFields)
 
   return { action, index, initial, staged }
 }
 
-export { deleteItem, displayItem, editItem, fieldBorder, fieldEdits, itemEdit }
+export { deleteItem, displayItem, editItem, stagedBorder, stagedEdits }

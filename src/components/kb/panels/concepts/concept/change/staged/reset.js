@@ -2,73 +2,100 @@ import { CONCEPT_STATE, RESETTING } from '@/lib/constants'
 
 const { RESET } = CONCEPT_STATE
 
-const aliasResetting = (confirmReset, index) => {
-  if (!confirmReset) return RESETTING.NONE
-  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
+const resettingAll = confirmReset => {
+  if (!confirmReset) return RESETTING.EXTENT.NONE
+  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
 
-  if (confirmReset.type === RESET.ALIASES) return RESETTING.ME
-  if (confirmReset.type === RESET.ALIAS_ITEM && confirmReset.update?.index === index)
-    return RESETTING.ME
-
-  return RESETTING.OTHER
+  return null
 }
 
-const childResetting = (confirmReset, index) => {
-  if (!confirmReset) return RESETTING.NONE
-  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
+const resettingGroup = (confirmReset, group) => {
+  const resetAll = resettingAll(confirmReset)
+  if (resetAll) return resetAll
 
-  if (confirmReset.type === RESET.ADD_CHILDREN) return RESETTING.ME
-  if (confirmReset.type === RESET.ADD_CHILD && confirmReset.index === index) return RESETTING.ME
+  if (confirmReset.type === RESET.GROUP[group.toUpperCase()]) return RESETTING.EXTENT.ME
 
-  return RESETTING.OTHER
+  return RESETTING.EXTENT.OTHER
 }
 
-const fieldResetting = (confirmReset, field) => {
-  if (!confirmReset) return RESETTING.NONE
-  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
+const resettingItem = (confirmReset, group, index) => {
+  const resetGroup = resettingGroup(confirmReset, group)
+  if (resetGroup !== RESETTING.EXTENT.OTHER) return resetGroup
 
-  if (confirmReset.type !== RESET.FIELD) return RESETTING.OTHER
-  if (confirmReset.update?.field === field) return RESETTING.ME
-
-  if (field === 'name' && confirmReset.update?.field === 'nameChange') return RESETTING.ME
-  if (field === 'nameChange' && confirmReset.update?.field === 'name') return RESETTING.ME
-
-  if (field === 'rankLevel' && confirmReset.update?.field === 'rankName') return RESETTING.ME
-  if (field === 'rankName' && confirmReset.update?.field === 'rankLevel') return RESETTING.ME
-
-  return RESETTING.OTHER
+  if (confirmReset.type === group && confirmReset.update?.index === index)
+    return RESETTING.EXTENT.OTHER
 }
 
-const mediaResetting = (confirmReset, index) => {
-  if (!confirmReset) return RESETTING.NONE
-  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
+const resettingAlias = (confirmReset, index) => {
+  if (!confirmReset) return RESETTING.EXTENT.NONE
+  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
 
-  if (confirmReset.type === RESET.MEDIA) return RESETTING.ME
-  if (confirmReset.type === RESET.MEDIA_ITEM && confirmReset.update?.index === index)
-    return RESETTING.ME
+  if (confirmReset.type === RESET.GROUP.ALIASES) return RESETTING.EXTENT.ME
+  if (confirmReset.type === RESET.ALIAS && confirmReset.update?.groupIndex === index)
+    return RESETTING.EXTENT.ME
 
-  return RESETTING.OTHER
+  return RESETTING.EXTENT.OTHER
 }
 
-const realizationResetting = (confirmReset, index) => {
-  if (!confirmReset) return RESETTING.NONE
-  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.ME
+const resettingChild = (confirmReset, index) => {
+  if (!confirmReset) return RESETTING.EXTENT.NONE
+  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
 
-  if (confirmReset.type === RESET.REALIZATIONS) return RESETTING.ME
-  if (confirmReset.type === RESET.REALIZATION_ITEM && confirmReset.update?.index === index)
-    return RESETTING.ME
+  if (confirmReset.type === RESET.ADD_CHILDREN) return RESETTING.EXTENT.ME
+  if (confirmReset.type === RESET.ADD_CHILD && confirmReset.index === index)
+    return RESETTING.EXTENT.ME
 
-  return RESETTING.OTHER
+  return RESETTING.EXTENT.OTHER
+}
+
+const resettingField = (confirmReset, field) => {
+  if (!confirmReset) return RESETTING.EXTENT.NONE
+  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
+
+  if (confirmReset.type !== RESET.FIELD) return RESETTING.EXTENT.OTHER
+  if (confirmReset.update?.field === field) return RESETTING.EXTENT.ME
+
+  if (field === 'name' && confirmReset.update?.field === 'nameChange') return RESETTING.EXTENT.ME
+  if (field === 'nameChange' && confirmReset.update?.field === 'name') return RESETTING.EXTENT.ME
+
+  if (field === 'rankLevel' && confirmReset.update?.field === 'rankName') return RESETTING.EXTENT.ME
+  if (field === 'rankName' && confirmReset.update?.field === 'rankLevel') return RESETTING.EXTENT.ME
+
+  return RESETTING.EXTENT.OTHER
+}
+
+const resettingMedia = (confirmReset, index) => {
+  if (!confirmReset) return RESETTING.EXTENT.NONE
+  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
+
+  if (confirmReset.type === RESET.GROUP.MEDIA) return RESETTING.EXTENT.ME
+  if (confirmReset.type === RESET.MEDIA && confirmReset.update?.groupIndex === index)
+    return RESETTING.EXTENT.ME
+
+  return RESETTING.EXTENT.OTHER
+}
+
+const resettingRealization = (confirmReset, index) => {
+  if (!confirmReset) return RESETTING.EXTENT.NONE
+  if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
+
+  if (confirmReset.type === RESET.GROUP.REALIZATIONS) return RESETTING.EXTENT.ME
+  if (confirmReset.type === RESET.REALIZATION && confirmReset.update?.groupIndex === index)
+    return RESETTING.EXTENT.ME
+
+  return RESETTING.EXTENT.OTHER
 }
 
 const isStagedAction = action =>
   action !== CONCEPT_STATE.NO_ACTION && !action.toLowerCase().startsWith('pending')
 
 export {
-  aliasResetting,
-  childResetting,
-  fieldResetting,
   isStagedAction,
-  mediaResetting,
-  realizationResetting,
+  resettingAlias,
+  resettingChild,
+  resettingField,
+  resettingGroup,
+  resettingItem,
+  resettingMedia,
+  resettingRealization,
 }

@@ -3,8 +3,6 @@ import { use } from 'react'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
-
 const useStageMedia = () => {
   const { modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
@@ -21,13 +19,6 @@ const useStageMedia = () => {
         mediaItem,
       },
     })
-
-    if (action === CONCEPT_STATE.MEDIA_ITEM.ADD) {
-      modifyConcept({
-        type: CONCEPT_STATE.FIELD.SET,
-        update: { field: 'mediaIndex', value: mediaIndex },
-      })
-    }
 
     closeModal(true)
   }

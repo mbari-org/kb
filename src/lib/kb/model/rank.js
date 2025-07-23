@@ -1,4 +1,7 @@
-import { RANK } from '@/lib/constants'
+const RANK = {
+  LEVEL: 'rankLevel',
+  NAME: 'rankName',
+}
 
 const filterRanks = (ranks, field, otherValue) => {
   if (!field) {

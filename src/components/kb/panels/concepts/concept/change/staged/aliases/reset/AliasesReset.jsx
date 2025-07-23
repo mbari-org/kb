@@ -1,18 +1,18 @@
 import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/StagedReset'
 
-import { aliasResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import { resettingAlias } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { RESET } = CONCEPT_STATE
+const { GROUP, RESET } = CONCEPT_STATE
 
 const AliasesReset = () => {
   return (
     <StagedReset
-      resettingFunction={aliasResetting}
-      collectionKey='aliases'
-      resetAllType={RESET.ALIASES}
-      resetItemType={RESET.ALIAS_ITEM}
+      group={GROUP.ALIASES}
+      resetGroupType={RESET.GROUP.ALIASES}
+      resetItemType={RESET.ALIAS}
+      resettingFunction={resettingAlias}
     />
   )
 }

@@ -1,6 +1,6 @@
 import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/StagedReset'
 
-import { childResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import { resettingChild } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -9,8 +9,8 @@ const { RESET } = CONCEPT_STATE
 const ChildrenReset = () => {
   return (
     <StagedReset
-      resettingFunction={childResetting}
-      resetAllType={RESET.ADD_CHILDREN}
+      resettingFunction={resettingChild}
+      resetGroupType={RESET.ADD_CHILDREN}
       resetChildType={RESET.ADD_CHILD}
     />
   )

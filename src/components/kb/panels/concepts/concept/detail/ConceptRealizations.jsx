@@ -11,7 +11,8 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const ConceptRealizations = () => {
   const { editing, stagedState } = use(ConceptContext)
 
-  const realizations = stagedState?.realizations || []
+  const realizations =
+    stagedState?.realizations.sort((a, b) => a.linkName.localeCompare(b.linkName)) || []
 
   const renderItem = (realization, index) => ({
     key: `${realization.linkName}-${realization.toConcept}-${index}`,
@@ -24,7 +25,7 @@ const ConceptRealizations = () => {
 
   const AddIcon = () => (
     <RealizationModifyIcon
-      action={CONCEPT_STATE.REALIZATION_ITEM.ADD}
+      action={CONCEPT_STATE.REALIZATION.ADD}
       realizationIndex={realizations.length}
     />
   )

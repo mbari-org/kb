@@ -13,21 +13,21 @@ const createEditMediaModal = action => {
     const Title = () => <EditMediaTitle action={action} />
 
     switch (action) {
-      case CONCEPT_STATE.MEDIA_ITEM.ADD: {
+      case CONCEPT_STATE.MEDIA.ADD: {
         return {
           Actions: EditMediaActions,
           Content: () => <EditMediaContent />,
           Title,
         }
       }
-      case CONCEPT_STATE.MEDIA_ITEM.DELETE: {
+      case CONCEPT_STATE.MEDIA.DELETE: {
         return {
           Actions: DeleteMediaActions,
           Content: DeleteMediaContent,
           Title,
         }
       }
-      case CONCEPT_STATE.MEDIA_ITEM.EDIT: {
+      case CONCEPT_STATE.MEDIA.EDIT: {
         return {
           Actions: EditMediaActions,
           Content: () => <EditMediaContent />,

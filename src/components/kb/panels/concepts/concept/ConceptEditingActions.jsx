@@ -1,24 +1,27 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
 import useDisplayPending from '@/components/kb/panels/concepts/concept/change/pending/modal/useDisplayPending'
-import useStagedModal from '@/components/kb/panels/concepts/concept/change/staged/modal/useStagedModal'
+import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { hasModifiedState } from '@/lib/kb/state/concept'
+import { isStateModified } from '@/lib/kb/state'
 import { pendingChild } from '@/lib/kb/model/history'
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
-import { CONCEPT_STATE, LABELS } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS, RESETTING } from '@/lib/constants'
 
 const { DISCARD, DISCARD_ALL } = LABELS.BUTTON
 const { CANCEL, EDIT, PENDING, SAVE, STAGED } = LABELS.CONCEPT.ACTION
-const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
+const { TO_INITIAL } = CONCEPT_STATE.RESET
+const { CONFIRMED } = RESETTING
 
 const ConceptEditingActions = () => {
+  const [isModified, setIsModified] = useState(false)
+
   const { concept, editing, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
 
@@ -26,24 +29,28 @@ const ConceptEditingActions = () => {
   const parentPending = useConceptPending(concept.parent)
 
   const displayPending = useDisplayPending()
-  const displayStaged = useStagedModal()
+  const displayStaged = useDisplayStaged()
+
+  useEffect(() => {
+    setIsModified(isStateModified({ initialState, stagedState }))
+  }, [initialState, stagedState])
 
   const editCancelDiscardButtonText = useMemo(() => {
     if (!editing) return EDIT
-    if (hasModifiedState({ initialState, stagedState })) return DISCARD_ALL
+    if (isModified) return DISCARD_ALL
     return CANCEL
-  }, [editing, initialState, stagedState])
+  }, [editing, isModified])
 
   const handleCancelDiscard = useCallback(() => {
     if (!editing) {
       setEditing(true)
-    } else if (!hasModifiedState({ initialState, stagedState })) {
+    } else if (!isModified) {
       setEditing(false)
     } else {
       modifyConcept({ type: TO_INITIAL })
       displayStaged(DISCARD)
     }
-  }, [editing, initialState, modifyConcept, setEditing, stagedState, displayStaged])
+  }, [editing, isModified, modifyConcept, setEditing, displayStaged])
 
   const handlePending = useCallback(() => {
     displayPending(PENDING)
@@ -79,7 +86,7 @@ const ConceptEditingActions = () => {
       <Button color={editing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
         {editCancelDiscardButtonText}
       </Button>
-      {editing && hasModifiedState({ initialState, stagedState }) && (
+      {editing && isModified && (
         <Button onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
           {STAGED}
         </Button>
@@ -89,11 +96,7 @@ const ConceptEditingActions = () => {
           {PENDING}
         </Button>
       )}
-      <Button
-        disabled={!editing || !hasModifiedState({ initialState, stagedState })}
-        onClick={handleSave}
-        variant='contained'
-      >
+      <Button disabled={!editing || !isModified} onClick={handleSave} variant='contained'>
         {SAVE}
       </Button>
     </Box>

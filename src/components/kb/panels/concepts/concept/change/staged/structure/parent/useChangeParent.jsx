@@ -13,7 +13,7 @@ import { PROCESSING } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants'
 import { descendants } from '@/lib/kb/model/taxonomy'
 
-const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
+const { CHANGE_PARENT } = CONCEPT_STATE.CONCEPT
 const { LOADING } = PROCESSING
 const { RESET } = CONCEPT_STATE
 

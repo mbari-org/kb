@@ -9,7 +9,7 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { mediaResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import { resettingMedia } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { mediaItemEdits } from '@/lib/kb/model/media'
 import { RESETTING } from '@/lib/constants'
@@ -20,7 +20,7 @@ const MediaDetail = ({ edit }) => {
   const { confirmReset } = use(ConceptContext)
 
   const mediaSx =
-    mediaResetting(confirmReset) === RESETTING.OTHER
+    resettingMedia(confirmReset) === RESETTING.EXTENT.OTHER
       ? { ...fieldSx, color: 'text.disabled' }
       : fieldSx
 
@@ -44,7 +44,7 @@ const MediaDetail = ({ edit }) => {
               key={`${action}-${index}`}
               initial={media.initial?.[index]}
               mediaItemEdit={mediaItemEdit}
-              disabled={mediaResetting(confirmReset, index) === RESETTING.OTHER}
+              disabled={resettingMedia(confirmReset, index) === RESETTING.EXTENT.OTHER}
             />
           )
         })}

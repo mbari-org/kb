@@ -1,4 +1,4 @@
-import { fieldEdits } from '@/lib/kb/model/field'
+import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from './history'
 
@@ -11,12 +11,12 @@ const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 const isSame = (a, b) =>
   a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
 
-const realizationEdits = ({ initial, staged }) =>
-  fieldEdits({
-    stateType: CONCEPT_STATE.REALIZATION_ITEM,
+const stagedRealizations = ({ initial, staged }) =>
+  stagedEdits({
     displayFields: REALIZATION_DISPLAY_FIELDS,
     initial,
     staged,
+    stateTypes: CONCEPT_STATE.REALIZATION,
   })
 
 const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_FIELDS)
@@ -86,7 +86,7 @@ export {
   checkForDuplicate,
   isSame,
   REALIZATION_DISPLAY_FIELDS,
-  realizationEdits,
   realizationFields,
   stagedRealization,
+  stagedRealizations,
 }

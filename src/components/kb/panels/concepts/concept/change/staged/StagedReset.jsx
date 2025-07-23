@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/ResettingButton'
+import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/reset/ResettingButton'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -10,30 +10,29 @@ import { RESETTING } from '@/lib/constants'
 
 const StagedReset = ({
   child,
-  collectionKey,
   field,
+  group,
   index,
-  resetAllType,
   resetChildType,
   resetFieldType,
+  resetGroupType,
   resetItemType,
   resettingFunction,
 }) => {
-  const { confirmReset, stagedState, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
 
-  const resetting = resettingFunction(confirmReset, index || field || child) === RESETTING.ME
+  const arg = child ?? field ?? index
+  const resetting = resettingFunction(confirmReset, arg) === RESETTING.EXTENT.ME
 
   const onClick = () => {
-    if (field !== undefined) {
-      // Field-specific reset
-      modifyConcept({ type: resetFieldType, update: { field } })
+    if (arg === undefined) {
+      modifyConcept({ type: resetGroupType })
       return
     }
 
-    if (child !== undefined) {
-      // Child-specific reset
+    if (arg === child) {
       stagedState.children.length === 1
-        ? modifyConcept({ type: resetAllType })
+        ? modifyConcept({ type: resetGroupType })
         : modifyConcept({
             type: resetChildType,
             update: { child },
@@ -41,20 +40,21 @@ const StagedReset = ({
       return
     }
 
-    if (index !== undefined) {
-      // Item-specific reset
-      const count = stagedState[collectionKey].filter(item => isStagedAction(item.action)).length
-      count === 1
-        ? modifyConcept({ type: resetAllType })
-        : modifyConcept({
-            type: resetItemType,
-            update: { index },
-          })
+    if (arg === field) {
+      modifyConcept({ type: resetFieldType, update: { field } })
       return
     }
 
-    // Collection reset
-    modifyConcept({ type: resetAllType })
+    if (arg === index) {
+      const count = stagedState[group].filter(item => isStagedAction(item.action)).length
+      count === 1
+        ? modifyConcept({ type: resetGroupType })
+        : modifyConcept({
+            type: resetItemType,
+            update: { groupIndex: index },
+          })
+      return
+    }
   }
 
   return (

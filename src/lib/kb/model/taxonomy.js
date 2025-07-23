@@ -29,39 +29,43 @@ const buildTree = taxonomy => {
   return taxonomyTree
 }
 
-const deleteConcept = async (taxonomy, conceptName, apiFns) => {
-  const concept = getConcept(taxonomy, conceptName)
-  if (!concept) {
-    throw new Error(`Concept "${conceptName}" not found in the taxonomy.`)
+const closestConcept = (taxonomy, concept) => {
+  const parent = getConcept(taxonomy, concept.parent)
+
+  if (parent.children.length === 1) {
+    return parent
   }
+
+  const childIndex = parent.children.indexOf(concept.name)
+  if (childIndex === 0) {
+    return getConcept(taxonomy, parent.children[1])
+  }
+
+  return getConcept(taxonomy, parent.children[childIndex - 1])
+}
+
+const deleteConcept = async (taxonomy, concept, apiFns) => {
   if (0 < concept.children.length) {
-    throw new Error(`Concept "${conceptName}" has children.`)
+    throw new Error(`Concept "${concept.name}" has children.`)
   }
 
   const conceptMap = { ...taxonomy.conceptMap }
-  delete conceptMap[conceptName]
+  delete conceptMap[concept.name]
 
-  const aliasMap = { ...taxonomy.aliasMap }
+  let aliasMap
   if (0 < concept.alternateNames.length) {
+    aliasMap = { ...taxonomy.aliasMap }
     concept.alternateNames.forEach(alternateName => {
       delete aliasMap[alternateName]
     })
+  } else {
+    aliasMap = taxonomy.aliasMap
   }
 
   const parent = { ...getConcept(taxonomy, concept.parent) }
-  const conceptChildIndex = parent.children.indexOf(conceptName)
 
-  parent.children = parent.children.filter(child => child !== conceptName)
+  parent.children = parent.children.filter(child => child !== concept.name)
   mapConcept(parent, conceptMap, aliasMap)
-
-  let closestConceptName
-  if (parent.children.length === 0) {
-    closestConceptName = parent.name
-  } else if (conceptChildIndex === 0) {
-    closestConceptName = parent.children[0]
-  } else {
-    closestConceptName = parent.children[conceptChildIndex - 1]
-  }
 
   const names = await apiFns.apiPayload(fetchNames)
 
@@ -72,7 +76,7 @@ const deleteConcept = async (taxonomy, conceptName, apiFns) => {
     names,
   }
 
-  return { closestConceptName, taxonomy: updatedTaxonomy }
+  return { closestConcept: closestConcept(taxonomy, concept), taxonomy: updatedTaxonomy }
 }
 
 const descendants = (taxonomy, conceptName) => {
@@ -480,6 +484,7 @@ export const cxDebugTaxonomyIntegrity = taxonomy => {
 
 export {
   buildTree,
+  closestConcept,
   deleteConcept,
   descendants,
   filterTaxonomyRanks,

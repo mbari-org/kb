@@ -7,7 +7,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const MediaEdit = () => {
   return (
     <MediaActionButton
-      action={CONCEPT_STATE.MEDIA_ITEM.EDIT}
+      action={CONCEPT_STATE.MEDIA.EDIT}
       color='edit'
       Icon={CiEdit}
       position='right'

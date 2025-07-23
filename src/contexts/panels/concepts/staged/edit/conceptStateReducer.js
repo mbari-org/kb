@@ -1,9 +1,7 @@
 import { addAlias, deleteAlias, editAlias, resetAlias, resetAliases } from '@/lib/kb/state/aliases'
-
-import { resetField, setField } from '@/lib/kb/state/field'
-
+import { editAuthor, resetAuthor } from '@/lib/kb/state/author'
 import { addMedia, deleteMedia, editMedia, resetMedia, resetMediaItem } from '@/lib/kb/state/media'
-
+import { editRank, resetRank } from '@/lib/kb/state/rank'
 import {
   addRealization,
   deleteRealization,
@@ -11,27 +9,11 @@ import {
   resetRealization,
   resetRealizations,
 } from '@/lib/kb/state/realizations'
-
-import {
-  addChild,
-  changeName,
-  changeParent,
-  resetAddChild,
-  resetAddChildren,
-  resetChangeName,
-  resetChangeParent,
-} from '@/lib/kb/state/structure'
+import { addChild, resetAddChild, resetAddChildren, setStructure } from '@/lib/kb/state/structure'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const {
-  ALIAS_ITEM: ALIAS,
-  FIELD,
-  MEDIA_ITEM: MEDIA,
-  REALIZATION_ITEM: REALIZATION,
-  RESET,
-  STRUCTURE,
-} = CONCEPT_STATE
+const { ALIAS, AUTHOR, CONCEPT, MEDIA, RANK, REALIZATION, RESET } = CONCEPT_STATE
 
 const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
@@ -47,8 +29,14 @@ const conceptStateReducer = (state, { type, update }) => {
     case ALIAS.EDIT:
       return editAlias(state, update)
 
-    case FIELD.SET:
-      return setField(state, update)
+    case AUTHOR:
+      return editAuthor(state, update)
+
+    case CONCEPT.ADD_CHILD:
+      return addChild(state, update)
+
+    case CONCEPT.STRUCTURE:
+      return setStructure(state, update)
 
     case MEDIA.ADD:
       return addMedia(state, update)
@@ -58,6 +46,9 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case MEDIA.EDIT:
       return editMedia(state, update)
+
+    case RANK:
+      return editRank(state, update)
 
     case REALIZATION.ADD:
       return addRealization(state, update)
@@ -74,41 +65,32 @@ const conceptStateReducer = (state, { type, update }) => {
     case RESET.ADD_CHILDREN:
       return resetAddChildren(state)
 
-    case RESET.ALIAS_ITEM:
+    case RESET.ALIAS:
       return resetAlias(state, update)
 
-    case RESET.ALIASES:
+    case RESET.AUTHOR:
+      return resetAuthor(state, update)
+
+    case RESET.GROUP.ALIASES:
       return resetAliases(state, update)
 
-    case RESET.CHANGE_NAME:
-      return resetChangeName(state, update)
-
-    case RESET.CHANGE_PARENT:
-      return resetChangeParent(state, update)
-
-    case RESET.FIELD:
-      return resetField(state, update)
-
-    case RESET.MEDIA:
+    case RESET.GROUP.MEDIA:
       return resetMedia(state, update)
 
-    case RESET.MEDIA_ITEM:
-      return resetMediaItem(state, update)
-
-    case RESET.REALIZATION_ITEM:
-      return resetRealization(state, update)
-
-    case RESET.REALIZATIONS:
+    case RESET.GROUP.REALIZATIONS:
       return resetRealizations(state, update)
 
-    case STRUCTURE.ADD_CHILD:
-      return addChild(state, update)
+    case RESET.MEDIA:
+      return resetMediaItem(state, update)
 
-    case STRUCTURE.CHANGE_NAME:
-      return changeName(state, update)
+    case RESET.RANK:
+      return resetRank(state, update)
 
-    case STRUCTURE.CHANGE_PARENT:
-      return changeParent(state, update)
+    case RESET.REALIZATION:
+      return resetRealization(state, update)
+
+    case RESET.STRUCTURE:
+      return setStructure(state, update)
 
     default:
       return state

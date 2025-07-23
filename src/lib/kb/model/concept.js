@@ -13,7 +13,7 @@ import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/s
 
 import { drop } from '@/lib/utils'
 
-const { MEDIA_ITEM: MEDIA } = CONCEPT_STATE
+const { MEDIA } = CONCEPT_STATE
 
 const addedConcepts = (parent, updatesInfo) => {
   const { updatedValue } = updatesInfo

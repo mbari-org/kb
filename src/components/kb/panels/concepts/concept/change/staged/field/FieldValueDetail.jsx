@@ -8,12 +8,12 @@ import { RESETTING } from '@/lib/constants'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { fieldResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import { resettingField } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 const FieldValueDetail = ({ field, value }) => {
   const { confirmReset } = use(ConceptContext)
 
-  const disabled = fieldResetting(confirmReset, field) === RESETTING.OTHER
+  const disabled = resettingField(confirmReset, field) === RESETTING.EXTENT.OTHER
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>

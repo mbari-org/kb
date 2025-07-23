@@ -1,5 +1,5 @@
-import { displayItem, fieldEdits } from '@/lib/kb/model/field'
 import { fieldPending } from '@/lib/kb/model/history'
+import { displayItem, stagedEdits } from '@/lib/kb/state/staged'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
@@ -12,8 +12,8 @@ const hasPrimary = media => !!getPrimary(media)
 const isPrimary = mediaItem => mediaItem.isPrimary || /.*_01\..*/.test(mediaItem.url)
 
 const mediaItemEdits = ({ initial, staged }) =>
-  fieldEdits({
-    stateType: CONCEPT_STATE.MEDIA_ITEM,
+  stagedEdits({
+    stateTypes: CONCEPT_STATE.MEDIA,
     displayFields: MEDIA_DISPLAY_FIELDS,
     initial,
     staged,

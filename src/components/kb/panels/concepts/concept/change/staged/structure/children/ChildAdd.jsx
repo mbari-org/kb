@@ -19,9 +19,10 @@ const ChildAdd = ({ child, resetting }) => {
     return acc
   }, [])
 
-  const childSx = resetting === RESETTING.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+  const childSx =
+    resetting === RESETTING.EXTENT.OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
-  const disabled = resetting === RESETTING.OTHER
+  const disabled = resetting === RESETTING.EXTENT.OTHER
 
   return (
     <Box

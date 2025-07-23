@@ -26,7 +26,7 @@ const RealizationContent = () => {
   const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
 
   const isDuplicate = useMemo(() => {
-    const excludeIndex = action === CONCEPT_STATE.REALIZATION_ITEM.ADD ? null : realizationIndex
+    const excludeIndex = action === CONCEPT_STATE.REALIZATION.ADD ? null : realizationIndex
     return checkForDuplicate(stagedState.realizations, realizationItem, excludeIndex)
   }, [realizationItem, stagedState.realizations, action, realizationIndex])
 

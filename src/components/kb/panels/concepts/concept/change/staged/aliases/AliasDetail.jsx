@@ -7,7 +7,7 @@ import { formatDelta } from '@/components/common/format'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ALIAS_ITEM: ALIAS } = CONCEPT_STATE
+const { ALIAS: ALIAS } = CONCEPT_STATE
 
 import { drop } from '@/lib/utils'
 

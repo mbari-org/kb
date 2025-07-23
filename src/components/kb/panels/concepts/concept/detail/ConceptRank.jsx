@@ -1,47 +1,41 @@
 import { use } from 'react'
 import { Stack } from '@mui/material'
 
-import ConceptRankField from '@/components/kb/panels/concepts/concept/change/staged/field/ConceptRankField'
-
-import { RANK } from '@/lib/constants'
+import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
-
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_RANK, CONCEPT_STATE } from '@/lib/constants'
 
 const ConceptRank = () => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
 
-  const rankValue = field =>
-    stagedState[field] !== undefined ? stagedState[field] : initialState[field]
-
-  const rankLevelValue = rankValue(RANK.LEVEL)
-  const rankNameValue = rankValue(RANK.NAME)
+  const initialRank = initialState.rank
+  const stagedRank = stagedState.rank
 
   const onChange = field => event => {
     modifyConcept({
-      type: CONCEPT_STATE.FIELD.SET,
-      update: { field, value: event.target.value },
+      type: CONCEPT_STATE.RANK,
+      update: {
+        field,
+        value: event.target.value,
+      },
     })
   }
 
   return (
     <Stack direction='row' spacing={1.5}>
-      <ConceptRankField
-        field={RANK.NAME}
-        fieldValue={rankNameValue}
-        otherValue={rankLevelValue}
-        inputStyle={useConceptDetailStyle(RANK.NAME)}
-        onChange={onChange(RANK.NAME)}
+      <RankFieldInput
+        field={CONCEPT_RANK.NAME}
+        initialRank={initialRank}
+        stagedRank={stagedRank}
+        onChange={onChange(CONCEPT_RANK.NAME)}
       />
-      <ConceptRankField
-        field={RANK.LEVEL}
-        fieldValue={rankLevelValue}
-        otherValue={rankNameValue}
-        inputStyle={useConceptDetailStyle(RANK.LEVEL)}
-        onChange={onChange(RANK.LEVEL)}
+      <RankFieldInput
+        field={CONCEPT_RANK.LEVEL}
+        initialRank={initialRank}
+        stagedRank={stagedRank}
+        onChange={onChange(CONCEPT_RANK.LEVEL)}
       />
     </Stack>
   )

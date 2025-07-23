@@ -18,10 +18,10 @@ const DeleteMediaActions = () => {
   const { closeModal } = use(ConceptModalContext)
 
   const stageAction = {
-    type: CONCEPT_STATE.MEDIA_ITEM.DELETE,
+    type: CONCEPT_STATE.MEDIA.DELETE,
     update: {
       mediaIndex,
-      mediaItem: { ...media[mediaIndex], action: CONCEPT_STATE.MEDIA_ITEM.DELETE },
+      mediaItem: { ...media[mediaIndex], action: CONCEPT_STATE.MEDIA.DELETE },
     },
   }
 

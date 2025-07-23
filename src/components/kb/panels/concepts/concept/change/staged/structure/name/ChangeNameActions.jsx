@@ -10,7 +10,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { SET } = CONCEPT_STATE.FIELD
+const { CHANGE_NAME, CHANGE_NAME_EXTENT } = CONCEPT_STATE.CONCEPT
 
 const ChangeNameActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
@@ -27,14 +27,14 @@ const ChangeNameActions = () => {
 
   const handleStage = () => {
     modifyConcept({
-      type: SET,
+      type: CHANGE_NAME,
       update: {
         field: 'name',
         value: name,
       },
     })
     modifyConcept({
-      type: SET,
+      type: CHANGE_NAME_EXTENT,
       update: {
         field: 'nameChange',
         value: nameChangeType,

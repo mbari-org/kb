@@ -4,10 +4,10 @@
  */
 
 import { createActions } from '@/components/modal/conceptModalFactory'
-import { CONCEPT_STATE, LABELS } from '@/lib/constants'
+import { LABELS, RESETTING } from '@/lib/constants'
 
 const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
-const { CONFIRMED } = CONCEPT_STATE.RESET
+const { CONFIRMED } = RESETTING
 
 /**
  * Creates standard action configuration for concept modals

@@ -86,7 +86,7 @@ const EditMediaContent = () => {
     setFormMediaItem(updatedMediaItem)
 
     const fieldIsModified =
-      action === CONCEPT_STATE.MEDIA_ITEM.ADD
+      action === CONCEPT_STATE.MEDIA.ADD
         ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
         : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
 

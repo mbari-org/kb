@@ -7,18 +7,20 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
-import { LABELS } from '@/lib/constants'
-import { hasModifiedState } from '@/lib/kb/state/concept'
+import { isStateModified } from '@/lib/kb/state'
+
+import { CONCEPT_STATE, LABELS, RESETTING } from '@/lib/constants'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
 const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
 const { SAVE } = LABELS.CONCEPT.ACTION
-const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
+const { TO_INITIAL } = CONCEPT_STATE.RESET
+const { CONFIRMED } = RESETTING
 
 const StagedActions = ({ intent }) => {
-  const { concept, confirmReset, initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { concept, confirmReset, initialState, modifyConcept, setEditing, stagedState } =
+    use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { logout } = use(UserContext)
@@ -28,11 +30,12 @@ const StagedActions = ({ intent }) => {
 
   // Monitor state changes after reset confirmation to close modal if no modifications remain
   useEffect(() => {
-    if (resetConfirmedRef.current && !hasModifiedState({ initialState, stagedState })) {
+    if (resetConfirmedRef.current && !isStateModified({ initialState, stagedState })) {
       closeModal()
+      setEditing(false)
       resetConfirmedRef.current = false
     }
-  }, [initialState, stagedState, closeModal])
+  }, [closeModal, initialState, setEditing, stagedState])
 
   const colors = ['cancel', 'main']
   const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
@@ -41,7 +44,7 @@ const StagedActions = ({ intent }) => {
   const labels = confirmReset ? confirmLabels : actionLabels
 
   // special triggers that require further action
-  const handleFurtherAction = () => {
+  const handleSpecialAction = () => {
     const { panel: selectPanel, concept: selectConcept, logout: isLogout } = modalData || {}
 
     if (selectPanel) {
@@ -69,7 +72,7 @@ const StagedActions = ({ intent }) => {
 
       case CONFIRM_DISCARD:
         modifyConcept({ type: CONFIRMED.YES })
-        handleFurtherAction()
+        handleSpecialAction()
         resetConfirmedRef.current = true
         break
 
@@ -83,7 +86,7 @@ const StagedActions = ({ intent }) => {
 
       case SAVE:
         saveStaged()
-        handleFurtherAction()
+        handleSpecialAction()
         break
 
       default:

@@ -8,7 +8,7 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { realizationResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import { resettingRealization } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { realizationEdits } from '@/lib/kb/model/realization'
 import { RESETTING } from '@/lib/constants'
@@ -17,7 +17,7 @@ const RealizationsDetail = ({ edit }) => {
   const { confirmReset } = use(ConceptContext)
 
   const realizationsSx =
-    realizationResetting(confirmReset) === RESETTING.OTHER
+    resettingRealization(confirmReset) === RESETTING.EXTENT.OTHER
       ? { ...fieldSx, color: 'text.disabled' }
       : fieldSx
 
@@ -40,9 +40,9 @@ const RealizationsDetail = ({ edit }) => {
           return (
             <RealizationEdit
               key={`${action}-${index}`}
-              realizationEdit={realizationEdit}
-              disabled={realizationResetting(confirmReset, index) === RESETTING.OTHER}
+              disabled={resettingRealization(confirmReset, index) === RESETTING.EXTENT.OTHER}
               initial={realizations.initial?.[index]}
+              realizationEdit={realizationEdit}
             />
           )
         })}
@@ -52,4 +52,3 @@ const RealizationsDetail = ({ edit }) => {
 }
 
 export default RealizationsDetail
-

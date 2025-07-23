@@ -7,7 +7,7 @@ import { formatDelta } from '@/components/common/format'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { REALIZATION_ITEM: REALIZATION } = CONCEPT_STATE
+const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
 import { drop } from '@/lib/utils'
 

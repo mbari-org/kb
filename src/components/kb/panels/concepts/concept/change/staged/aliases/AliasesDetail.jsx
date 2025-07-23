@@ -8,7 +8,7 @@ import { fieldSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { aliasResetting } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+import { resettingAlias } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { aliasEdits } from '@/lib/kb/model/alias'
 import { RESETTING } from '@/lib/constants'
@@ -17,7 +17,7 @@ const AliasesDetail = ({ edit }) => {
   const { confirmReset } = use(ConceptContext)
 
   const aliasesSx =
-    aliasResetting(confirmReset) === RESETTING.OTHER
+    resettingAlias(confirmReset) === RESETTING.EXTENT.OTHER
       ? { ...fieldSx, color: 'text.disabled' }
       : fieldSx
 
@@ -41,7 +41,7 @@ const AliasesDetail = ({ edit }) => {
             <AliasEdit
               key={`${action}-${index}`}
               aliasEdit={aliasEdit}
-              disabled={aliasResetting(confirmReset, index) === RESETTING.OTHER}
+              disabled={resettingAlias(confirmReset, index) === RESETTING.EXTENT.OTHER}
               initial={aliases.initial?.[index]}
             />
           )

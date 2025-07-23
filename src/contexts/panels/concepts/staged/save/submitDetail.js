@@ -1,6 +1,6 @@
 import { updateConceptAuthor, updateConceptRank } from '@/lib/api/concept'
 
-const saveDetail = ([submit, { concept, updatesInfo }]) => {
+const submitDetail = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo
 
   const submitters = []
@@ -23,4 +23,4 @@ const saveDetail = ([submit, { concept, updatesInfo }]) => {
   return submitters
 }
 
-export default saveDetail
+export default submitDetail

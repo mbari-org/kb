@@ -2,11 +2,11 @@ import { createRealization, deleteRealization, updateRealization } from '@/lib/a
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { REALIZATION_ITEM: REALIZATION } = CONCEPT_STATE
+const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
 import { diff, drop, pick } from '@/lib/utils'
 
-const saveRealizations = ([submit, { concept, updatesInfo }]) => {
+const submitRealizations = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
   if (!hasUpdated('realizations')) {
@@ -49,4 +49,4 @@ const saveRealizations = ([submit, { concept, updatesInfo }]) => {
   return submitters
 }
 
-export default saveRealizations
+export default submitRealizations

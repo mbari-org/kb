@@ -3,34 +3,31 @@ import { CONCEPT_STATE } from '@/lib/constants'
 import { stagedRealization } from '@/lib/kb/model/realization'
 
 const realizationsState = (concept, pending) => {
-  const { realizations: conceptRealizations } = concept
-  if (!conceptRealizations) {
-    return { realizations: [] }
-  }
-
-  const realizations = conceptRealizations.map((realization, index) =>
+  const { realizations } = concept
+  const stagedRealizations = realizations.map((realization, index) =>
     stagedRealization({ ...realization, action: CONCEPT_STATE.NO_ACTION, index }, pending)
   )
-
-  return { realizations }
+  return { realizations: stagedRealizations }
 }
 
 const addRealization = (state, update) => {
+  const realizationIndex = state.realizations.length
   const realizationItem = {
     ...update.realizationItem,
-    action: CONCEPT_STATE.REALIZATION_ITEM.ADD,
-    index: state.realizations.length,
+    action: CONCEPT_STATE.REALIZATION.ADD,
+    index: realizationIndex,
   }
   return {
     ...state,
     realizations: [...state.realizations, realizationItem],
+    realizationIndex,
   }
 }
 
 const deleteRealization = (state, update) => {
   const realizationItem = state.realizations[update.realizationIndex]
   // If realization is an add, just remove it from state
-  if (realizationItem?.action === CONCEPT_STATE.REALIZATION_ITEM.ADD) {
+  if (realizationItem?.action === CONCEPT_STATE.REALIZATION.ADD) {
     const updatedRealizations = state.realizations.filter(
       (_item, index) => index !== update.realizationIndex
     )
@@ -39,16 +36,16 @@ const deleteRealization = (state, update) => {
       realizations: updatedRealizations,
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.REALIZATION_ITEM.DELETE, update })
+  return updateState(state, { type: CONCEPT_STATE.REALIZATION.DELETE, update })
 }
 
 const editRealization = (state, update) => {
   const realizationItem = state.realizations[update.realizationIndex]
   // If editing an added realization, don't change the action
-  if (realizationItem.action === CONCEPT_STATE.REALIZATION_ITEM.ADD) {
+  if (realizationItem.action === CONCEPT_STATE.REALIZATION.ADD) {
     const updatedItem = {
       ...update.realizationItem,
-      action: CONCEPT_STATE.REALIZATION_ITEM.ADD,
+      action: CONCEPT_STATE.REALIZATION.ADD,
     }
     return {
       ...state,
@@ -57,7 +54,7 @@ const editRealization = (state, update) => {
       ),
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.REALIZATION_ITEM.EDIT, update })
+  return updateState(state, { type: CONCEPT_STATE.REALIZATION.EDIT, update })
 }
 
 const resetRealization = (state, update) => {

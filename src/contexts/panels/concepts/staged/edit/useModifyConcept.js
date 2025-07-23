@@ -1,12 +1,15 @@
 import { useCallback, useState } from 'react'
 
-import { isResetAction, resetConceptState } from '@/contexts/panels/concepts/staged/edit/resetConceptState'
+import {
+  isResetAction,
+  resetConceptState,
+} from '@/contexts/panels/concepts/staged/edit/resetConceptState'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { RESETTING } from '@/lib/constants'
 
-const { CONFIRMED, TO_INITIAL } = CONCEPT_STATE.RESET
+const { CONFIRMED } = RESETTING
 
-const useModifyConcept = (dispatch, initialState, setConfirmReset, setEditing) => {
+const useModifyConcept = (dispatch, initialState, setConfirmReset) => {
   const [confirmingDiscard, setConfirmingDiscard] = useState(null)
 
   return useCallback(
@@ -17,12 +20,11 @@ const useModifyConcept = (dispatch, initialState, setConfirmReset, setEditing) =
       }
 
       if (action.type === CONFIRMED.YES) {
-        resetConceptState(confirmingDiscard, dispatch, initialState)
+        if (confirmingDiscard) {
+          resetConceptState(confirmingDiscard, dispatch, initialState)
+        }
         setConfirmReset(null)
         setConfirmingDiscard(null)
-        if (action.type === TO_INITIAL) {
-          setEditing(false)
-        }
         return
       }
 
@@ -34,7 +36,7 @@ const useModifyConcept = (dispatch, initialState, setConfirmReset, setEditing) =
 
       dispatch(action)
     },
-    [confirmingDiscard, dispatch, initialState, setConfirmReset, setEditing]
+    [confirmingDiscard, dispatch, initialState, setConfirmReset]
   )
 }
 

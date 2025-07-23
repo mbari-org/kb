@@ -1,37 +1,14 @@
 import { CONCEPT_STATE } from '@/lib/constants'
 const RESET = CONCEPT_STATE.RESET
 
-const RESET_ACTIONS = [
-  RESET.ADD_CHILD,
-  RESET.ADD_CHILDREN,
-  RESET.ALIAS_ITEM,
-  RESET.ALIASES,
-  RESET.CHANGE_NAME,
-  RESET.CHANGE_PARENT,
-  RESET.DELETE_CONCEPT,
-  RESET.FIELD,
-  RESET.MEDIA,
-  RESET.MEDIA_ITEM,
-  RESET.TO_INITIAL,
-  RESET.REALIZATION_ITEM,
-  RESET.REALIZATIONS,
-]
+const stringValues = o => {
+  return Object.values(o).flatMap(v =>
+    typeof v === 'string' ? v : typeof v === 'object' && v !== null ? stringValues(v) : []
+  )
+}
+const RESET_ACTIONS = stringValues(RESET)
 
 const isResetAction = action => RESET_ACTIONS.includes(action.type)
-
-const resetAlias = (aliasIndex, dispatch, initialState) => {
-  dispatch({
-    type: RESET.ALIAS_ITEM,
-    update: { aliasIndex, aliasItem: initialState.aliases[aliasIndex] },
-  })
-}
-
-const resetAliases = (dispatch, initialState) => {
-  dispatch({
-    type: RESET.ALIASES,
-    update: { aliases: initialState.aliases },
-  })
-}
 
 const resetAddChild = (dispatch, child) => {
   dispatch({
@@ -43,6 +20,13 @@ const resetAddChild = (dispatch, child) => {
 const resetAddChildren = dispatch => {
   dispatch({
     type: RESET.ADD_CHILDREN,
+  })
+}
+
+const resetAuthor = (dispatch, author) => {
+  dispatch({
+    type: RESET.AUTHOR,
+    update: { author },
   })
 }
 
@@ -104,21 +88,28 @@ const resetMedia = (dispatch, initialState) => {
 
 const resetMediaItem = (mediaIndex, dispatch, initialState) => {
   dispatch({
-    type: RESET.MEDIA_ITEM,
+    type: RESET.MEDIA,
     update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
+  })
+}
+
+const resetRank = (dispatch, initialState) => {
+  dispatch({
+    type: RESET.RANK,
+    update: { rank: initialState.rank },
   })
 }
 
 const resetRealizationItem = (realizationIndex, dispatch, initialState) => {
   dispatch({
-    type: RESET.REALIZATION_ITEM,
+    type: RESET.REALIZATION,
     update: { realizationIndex, realizationItem: initialState.realizations[realizationIndex] },
   })
 }
 
 const resetRealizations = (dispatch, initialState) => {
   dispatch({
-    type: RESET.REALIZATIONS,
+    type: RESET.GROUP.REALIZATIONS,
     update: { realizations: initialState.realizations },
   })
 }
@@ -132,12 +123,14 @@ const resetToInitial = (dispatch, initialState) => {
 
 const resetConceptState = (action, dispatch, initialState) => {
   switch (action.type) {
-    case RESET.ALIAS_ITEM:
-      resetAlias(action.update.aliasIndex, dispatch, initialState)
-      break
-
-    case RESET.ALIASES:
-      resetAliases(dispatch, initialState)
+    case RESET.ALIAS:
+      {
+        const aliasIndex = action.update.index
+        dispatch({
+          type: RESET.ALIAS,
+          update: { aliasIndex, aliasItem: initialState.aliases[aliasIndex] },
+        })
+      }
       break
 
     case RESET.ADD_CHILD:
@@ -146,6 +139,10 @@ const resetConceptState = (action, dispatch, initialState) => {
 
     case RESET.ADD_CHILDREN:
       resetAddChildren(dispatch)
+      break
+
+    case RESET.AUTHOR:
+      resetAuthor(dispatch, action.update.initial)
       break
 
     case RESET.CHANGE_NAME:
@@ -164,20 +161,31 @@ const resetConceptState = (action, dispatch, initialState) => {
       resetField(action.update.field, dispatch, initialState)
       break
 
-    case RESET.MEDIA:
+    case RESET.GROUP.ALIASES:
+      dispatch({
+        type: RESET.GROUP.ALIASES,
+        update: { aliases: initialState.aliases },
+      })
+      break
+
+    case RESET.GROUP.RANK:
+      resetRank(dispatch, initialState)
+      break
+
+    case RESET.GROUP.MEDIA:
       resetMedia(dispatch, initialState)
       break
 
-    case RESET.MEDIA_ITEM:
-      resetMediaItem(action.update.mediaIndex, dispatch, initialState)
-      break
-
-    case RESET.REALIZATION_ITEM:
-      resetRealizationItem(action.update.realizationIndex, dispatch, initialState)
-      break
-
-    case RESET.REALIZATIONS:
+    case RESET.GROUP.REALIZATIONS:
       resetRealizations(dispatch, initialState)
+      break
+
+    case RESET.MEDIA:
+      resetMediaItem(action.update.groupIndex, dispatch, initialState)
+      break
+
+    case RESET.REALIZATION:
+      resetRealizationItem(action.update.groupIndex, dispatch, initialState)
       break
 
     case RESET.TO_INITIAL:

@@ -1,25 +1,13 @@
-export const CONCEPT_FIELDS = {
+export const CONCEPT_FIELD = {
   ALIASES: 'aliases',
+  AUTHOR: 'author',
+  CHILDREN: 'children',
+  DELETE: 'delete',
   MEDIA: 'media',
+  NAME: 'name',
   PARENT: 'parent',
-  PRIMARY: {
-    AUTHOR: 'author',
-    NAME: 'name',
-  },
-  RANK: {
-    LEVEL: 'level',
-    NAME: 'name',
-  },
-  STRUCTURE: {
-    CHILD: 'child',
-    CONCEPT: 'concept',
-    NAME: 'name',
-    PARENT: 'parent',
-  },
-}
-
-export const CONCEPT_PROPERTIES = {
-  ITEMS_PER_PAGE: 5,
+  RANK: 'rank',
+  REALIZATIONS: 'realizations',
 }
 
 export const CONCEPT_NAME_TYPES = {
@@ -27,6 +15,15 @@ export const CONCEPT_NAME_TYPES = {
   FORMER: 'Former',
   PRIMARY: 'Primary',
   SYNONYM: 'Synonym',
+}
+
+export const CONCEPT_PROPERTIES = {
+  ITEMS_PER_PAGE: 5,
+}
+
+export const CONCEPT_RANK = {
+  LEVEL: 'level',
+  NAME: 'name',
 }
 
 export const CONCEPT_SELECT = {
@@ -41,21 +38,31 @@ export const CONCEPT_SELECT = {
 }
 
 export const CONCEPT_STATE = {
-  ALIAS_ITEM: {
+  ALIAS: {
     ADD: 'Alias Add',
     DELETE: 'Alias Delete',
     EDIT: 'Alias Edit',
   },
-  FIELD: {
-    SET: 'Field Set',
+  AUTHOR: 'Author',
+  CONCEPT: {
+    ADD_CHILD: 'Add Child',
+  },
+  GROUP: {
+    ALIASES: 'Aliases',
+    AUTHOR: 'Author',
+    CHILDREN: 'Children',
+    MEDIA: 'Media',
+    RANK: 'Rank',
+    REALIZATIONS: 'Realizations',
   },
   INITIAL: 'Initial State',
-  MEDIA_ITEM: {
+  MEDIA: {
     ADD: 'Media Add',
     DELETE: 'Media Delete',
     EDIT: 'Media Edit',
   },
-  REALIZATION_ITEM: {
+  RANK: 'Rank',
+  REALIZATION: {
     ADD: 'Realization Add',
     DELETE: 'Realization Delete',
     EDIT: 'Realization Edit',
@@ -64,27 +71,23 @@ export const CONCEPT_STATE = {
   RESET: {
     ADD_CHILD: 'Reset Add Child',
     ADD_CHILDREN: 'Reset Add Children',
-    ALIAS_ITEM: 'Reset Alias Item',
-    ALIASES: 'Reset Aliases',
+    ALIAS: 'Reset Aliases Item',
+    AUTHOR: 'Reset Author',
     CHANGE_NAME: 'Reset Change Name',
     CHANGE_PARENT: 'Reset Change Parent',
-    CONFIRMED: {
-      NO: 'Discard Reset',
-      YES: 'Perform Reset',
-    },
     DELETE_CONCEPT: 'Reset Delete Concept',
-    FIELD: 'Reset Field',
+    GROUP: {
+      ALIASES: 'Reset Aliases',
+      AUTHOR: 'Reset Author',
+      MEDIA: 'Reset Media',
+      RANK: 'Reset Rank',
+      REALIZATIONS: 'Reset Realizations',
+    },
     MEDIA: 'Reset Media',
-    MEDIA_ITEM: 'Reset Media Item',
-    REALIZATION_ITEM: 'Reset Realization Item',
-    REALIZATIONS: 'Reset Realizations',
+    RANK: 'Reset Rank',
+    REALIZATION: 'Reset Realization Item',
+    STRUCTURE: 'Reset Structure',
     TO_INITIAL: 'Reset To Initial',
-  },
-  STRUCTURE: {
-    ADD_CHILD: 'Add Child',
-    CHANGE_NAME: 'Change Name',
-    CHANGE_PARENT: 'Change Parent',
-    DELETE_CONCEPT: 'Delete Concept',
   },
 }
 
@@ -98,7 +101,7 @@ export const LABELS = {
     CANCEL: 'Cancel',
     CLOSE: 'Close',
     CONFIRM: 'Confirm',
-    CONFIRM_DISCARD: 'Confirm',
+    CONFIRM_DISCARD: 'Discard',
     CONTINUE: 'Continue',
     DEFER: 'Defer',
     DELETE: 'Delete',
@@ -179,15 +182,24 @@ export const PROCESSING = {
   UPDATING: 'Updating...',
 }
 
-export const RANK = {
-  LEVEL: 'rankLevel',
-  NAME: 'rankName',
-}
-
 export const RESETTING = {
-  ME: 'Me',
-  NONE: 'None',
-  OTHER: 'Other',
+  CONFIRMED: {
+    NO: 'Discard Reset',
+    YES: 'Perform Reset',
+  },
+  EXTENT: {
+    ME: 'Me',
+    NONE: 'None',
+    OTHER: 'Other',
+  },
+  GROUP: {
+    ALIASES: 'Aliases',
+    AUTHOR: 'Author',
+    CHILDREN: 'Children',
+    MEDIA: 'Media',
+    RANK: 'Rank',
+    REALIZATIONS: 'Realizations',
+  },
 }
 
 export const SELECTED = {

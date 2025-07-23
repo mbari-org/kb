@@ -8,7 +8,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const ADD = CONCEPT_STATE.ALIAS_ITEM.ADD
+const ADD = CONCEPT_STATE.ALIAS.ADD
 
 const ConceptAliases = () => {
   const { editing, stagedState } = use(ConceptContext)

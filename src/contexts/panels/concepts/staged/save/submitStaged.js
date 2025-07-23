@@ -1,8 +1,8 @@
-import saveAliases from './saveAliases'
-import saveDetail from './saveDetail'
-import saveMedia from './saveMedia'
-import saveRealizations from './saveRealizations'
-import saveStructure from './saveStructure'
+import submitAliases from './submitAliases'
+import submitDetail from './submitDetail'
+import submitMedia from './submitMedia'
+import submitRealizations from './submitRealizations'
+import submitStructure from './submtiStructure'
 
 import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
@@ -12,11 +12,11 @@ const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
   const submitterInfo = [apiPayload, { concept, updatesInfo }]
 
   const submitters = []
-  submitters.push(...saveAliases(submitterInfo))
-  submitters.push(...saveDetail(submitterInfo))
-  submitters.push(...saveMedia(submitterInfo))
-  submitters.push(...saveRealizations(submitterInfo))
-  submitters.push(...saveStructure(submitterInfo))
+  submitters.push(...submitAliases(submitterInfo))
+  submitters.push(...submitDetail(submitterInfo))
+  submitters.push(...submitMedia(submitterInfo))
+  submitters.push(...submitRealizations(submitterInfo))
+  submitters.push(...submitStructure(submitterInfo))
 
   updatesInfo.results = await Promise.all(submitters)
 

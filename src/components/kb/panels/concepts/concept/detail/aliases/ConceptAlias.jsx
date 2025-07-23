@@ -10,9 +10,9 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 
-import { fieldBorder } from '@/lib/kb/model/field'
+import { stagedBorder } from '@/lib/kb/state/staged'
 
-const ALIAS = CONCEPT_STATE.ALIAS_ITEM
+const ALIAS = CONCEPT_STATE.ALIAS
 
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
@@ -31,7 +31,7 @@ const ConceptAlias = ({ alias }) => {
     variant: 'standard',
   }
 
-  const border = fieldBorder({
+  const border = stagedBorder({
     noActionBorderColor: 'none',
     stagedItem: alias,
     theme,

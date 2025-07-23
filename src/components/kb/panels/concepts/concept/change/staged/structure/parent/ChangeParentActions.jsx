@@ -10,7 +10,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { CHANGE_PARENT } = CONCEPT_STATE.STRUCTURE
+const { CHANGE_PARENT } = CONCEPT_STATE.CONCEPT
 const ChangeParentActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)

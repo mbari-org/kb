@@ -25,8 +25,8 @@ const ResettingButton = ({ color, disabled, resetting, onClick }) => {
       sx={{
         mr: 0.5,
         minWidth: 'auto',
-        color: 'text.disabled',
         '&:hover': {
+          backgroundColor: 'transparent',
           color: `${color}.main`,
           transform: 'scale(1.25)',
         },

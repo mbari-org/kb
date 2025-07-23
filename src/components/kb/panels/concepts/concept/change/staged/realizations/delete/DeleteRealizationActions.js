@@ -18,12 +18,12 @@ const DeleteRealizationActions = () => {
   const { closeModal } = use(ConceptModalContext)
 
   const stageAction = {
-    type: CONCEPT_STATE.REALIZATION_ITEM.DELETE,
+    type: CONCEPT_STATE.REALIZATION.DELETE,
     update: {
       realizationIndex,
       realizationItem: {
         ...realizations[realizationIndex],
-        action: CONCEPT_STATE.REALIZATION_ITEM.DELETE,
+        action: CONCEPT_STATE.REALIZATION.DELETE,
       },
     },
   }

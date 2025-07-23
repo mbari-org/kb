@@ -27,7 +27,7 @@ const useRealizationContentHandlers = ({
     setRealizationItem(updatedRealizationItem)
 
     const fieldIsModified =
-      action === CONCEPT_STATE.REALIZATION_ITEM.ADD
+      action === CONCEPT_STATE.REALIZATION.ADD
         ? updatedRealizationItem[field] !== EMPTY_TEMPLATE[field]
         : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
 

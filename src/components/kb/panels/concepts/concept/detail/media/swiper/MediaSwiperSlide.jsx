@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
-import { fieldBorder } from '@/lib/kb/model/field'
+import { stagedBorder } from '@/lib/kb/state/staged'
 import { fieldPending } from '@/lib/kb/model/history'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
@@ -23,7 +23,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const slideClick = mediaIndex => swiper.slideTo(mediaIndex)
 
-  const border = fieldBorder({
+  const border = stagedBorder({
     itemPending: mediaPending,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,

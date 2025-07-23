@@ -10,18 +10,18 @@ const MediaItemDetail = ({ action, disabled, initial, updates }) => {
   let fieldValues
 
   switch (action) {
-    case CONCEPT_STATE.MEDIA_ITEM.ADD:
+    case CONCEPT_STATE.MEDIA.ADD:
       fieldValues = ['credit', 'caption', 'isPrimary'].map(field => [
         field,
         field === 'isPrimary' ? (updates[field] === true ? 'true' : 'false') : updates[field],
       ])
       break
 
-    case CONCEPT_STATE.MEDIA_ITEM.DELETE:
+    case CONCEPT_STATE.MEDIA.DELETE:
       fieldValues = []
       break
 
-    case CONCEPT_STATE.MEDIA_ITEM.EDIT:
+    case CONCEPT_STATE.MEDIA.EDIT:
       fieldValues = Object.entries(updates).map(([field, value]) => {
         if (initial[field] !== value) {
           return [field, formatDelta(initial[field], value)]
