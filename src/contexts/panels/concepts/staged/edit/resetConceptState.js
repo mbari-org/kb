@@ -23,14 +23,6 @@ const resetAddChildren = dispatch => {
   })
 }
 
-const resetAliases = (dispatch, aliases, index) => {
-  const update = index !== undefined ? { aliases, index } : { aliases }
-  dispatch({
-    type: RESET.GROUP.ALIASES,
-    update,
-  })
-}
-
 const resetChangeName = (dispatch, name) => {
   dispatch({
     type: RESET.CHANGE_NAME,
@@ -38,12 +30,12 @@ const resetChangeName = (dispatch, name) => {
   })
 }
 
-const resetChangeParent = (dispatch, parent) => {
-  dispatch({
-    type: RESET.CHANGE_PARENT,
-    update: { parent },
-  })
-}
+// const resetChangeParent = (dispatch, parent) => {
+//   dispatch({
+//     type: RESET.CHANGE_PARENT,
+//     update: { parent },
+//   })
+// }
 
 const resetDeleteConcept = (dispatch, concept) => {
   dispatch({
@@ -124,16 +116,6 @@ const resetToInitial = (dispatch, initialState) => {
 
 const resetConceptState = (action, dispatch, initialState) => {
   switch (action.type) {
-    // case RESET.ALIAS:
-    //   {
-    //     const aliasIndex = action.update.index
-    //     dispatch({
-    //       type: RESET.ALIAS,
-    //       update: { aliasIndex, aliasItem: initialState.aliases[aliasIndex] },
-    //     })
-    //   }
-    //   break
-
     case RESET.ADD_CHILD:
       resetAddChild(dispatch, action.update.child)
       break
@@ -182,6 +164,13 @@ const resetConceptState = (action, dispatch, initialState) => {
 
     case RESET.GROUP.REALIZATIONS:
       resetRealizations(dispatch, initialState)
+      break
+
+    case RESET.PARENT:
+      dispatch({
+        type: RESET.PARENT,
+        update: { parent: initialState.parent },
+      })
       break
 
     case RESET.MEDIA:

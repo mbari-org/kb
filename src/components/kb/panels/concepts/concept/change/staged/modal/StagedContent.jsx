@@ -38,7 +38,10 @@ const StagedContent = () => {
         return <StagedAliases key={field} confirmReset={confirmReset} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.AUTHOR:
-        return <StagedValue key={field} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} group={RESETTING.GROUP.AUTHOR} stagedEdit={stagedEdit} />
+
+      case CONCEPT_FIELD.PARENT:
+        return <StagedValue key={field} group={RESETTING.GROUP.PARENT} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.RANK:
         return <StagedObject key={field} group={RESETTING.GROUP.RANK} stagedEdit={stagedEdit} />
