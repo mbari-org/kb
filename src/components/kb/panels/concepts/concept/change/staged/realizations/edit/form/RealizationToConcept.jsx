@@ -1,14 +1,21 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useRef, useEffect } from 'react'
 import { use } from 'react'
 import { FormControl, TextField, Autocomplete } from '@mui/material'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConceptTaxa } from '@/lib/api/concept'
 
-const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLinkName, isEditMode = false }) => {
+const RealizationToConcept = ({
+  realizationItem,
+  onRealizationChange,
+  isValidLinkName,
+  isEditMode = false,
+  onValidationChange,
+}) => {
   const { apiFns } = use(ConfigContext)
 
   const [taxaNames, setTaxaNames] = useState([])
+  const hasFetchedTaxaRef = useRef(false)
 
   const toConcept = realizationItem.toConcept
 
@@ -16,6 +23,19 @@ const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLin
   const isSelfOrNil = useMemo(() => {
     return toConcept === 'self' || toConcept === 'nil'
   }, [toConcept])
+
+  // Check if current toConcept value is valid (in the taxa list)
+  const isValidToConcept = useMemo(() => {
+    if (!toConcept || isSelfOrNil) return true
+    return taxaNames.length === 0 || taxaNames.includes(toConcept)
+  }, [toConcept, taxaNames, isSelfOrNil])
+
+  // Notify parent of validation status
+  useEffect(() => {
+    if (onValidationChange) {
+      onValidationChange(isValidToConcept)
+    }
+  }, [isValidToConcept, onValidationChange])
 
   const handleToConceptChange = useCallback(
     (event, value) => {
@@ -31,7 +51,14 @@ const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLin
     [realizationItem, onRealizationChange, isSelfOrNil]
   )
 
-  useMemo(() => {
+  // Reset taxa fetch flag when template changes (indicated by templateId change)
+  const templateId = realizationItem.templateId
+  useEffect(() => {
+    hasFetchedTaxaRef.current = false
+    setTaxaNames([])
+  }, [templateId])
+
+  useEffect(() => {
     if (!apiFns || !toConcept) return
 
     const specialMap = {
@@ -40,22 +67,27 @@ const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLin
     }
     if (specialMap[toConcept]) {
       setTaxaNames(specialMap[toConcept])
+      hasFetchedTaxaRef.current = true
       return
     }
 
-    const fetchTaxa = async () => {
-      const taxa = await apiFns.apiPayload(getConceptTaxa, toConcept)
+    // Only fetch taxa once when form is initially populated
+    if (!hasFetchedTaxaRef.current) {
+      const fetchTaxa = async () => {
+        const taxa = await apiFns.apiPayload(getConceptTaxa, toConcept)
 
-      const names = taxa
-        .flatMap(item =>
-          item.alternativeNames ? [item.name].concat(item.alternativeNames) : [item.name]
-        )
-        .sort()
+        const names = taxa
+          .flatMap(item =>
+            item.alternativeNames ? [item.name].concat(item.alternativeNames) : [item.name]
+          )
+          .sort()
 
-      setTaxaNames(names)
+        setTaxaNames(names)
+        hasFetchedTaxaRef.current = true
+      }
+
+      fetchTaxa()
     }
-
-    fetchTaxa()
   }, [toConcept, apiFns])
 
   const renderImmutableField = () => (
@@ -84,10 +116,10 @@ const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLin
       options={taxaNames}
       value={toConcept}
       onChange={handleToConceptChange}
-      onInputChange={(event, value) => handleToConceptChange(event, value)}
       size='small'
       disabled={!isValidLinkName}
       disableClearable={true}
+      freeSolo={false}
       renderInput={params => <TextField {...params} label='To Concept' size='small' />}
     />
   )

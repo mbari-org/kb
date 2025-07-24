@@ -14,7 +14,7 @@ const RealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  const { isDuplicate, modified, realizationItem } = modalData || {}
+  const { isDuplicate, modified, realizationItem, isValidToConcept = true } = modalData || {}
 
   const isModified = useMemo(
     () => Object.values(modified).some(isModified => isModified === true),
@@ -43,7 +43,7 @@ const RealizationActions = () => {
     document.querySelector(`#${EDIT_REALIZATION_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !isModified || !validRealizationItem || isDuplicate
+  const stageDisabled = !isModified || !validRealizationItem || isDuplicate || !isValidToConcept
 
   return createStagedActions({
     onDiscard: handleDiscardAction,

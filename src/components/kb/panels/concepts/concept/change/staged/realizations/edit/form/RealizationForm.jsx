@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useState } from 'react'
 import { FormControl, Stack } from '@mui/material'
 
 import TextInput from '@/components/common/TextInput'
@@ -12,8 +12,11 @@ const RealizationForm = ({
   realizationItem,
   stageChange,
   isEditMode = false,
+  onValidationChange,
 }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
+
+  const [isValidToConcept, setIsValidToConcept] = useState(true)
 
   const allAvailableTemplates = useMemo(() => {
     return getAvailableLinkTemplates()
@@ -28,6 +31,13 @@ const RealizationForm = ({
     const currentLinkName = realizationItem.linkName || ''
     return linkNameOptions.includes(currentLinkName)
   }, [linkNameOptions, realizationItem.linkName])
+
+  const handleToConceptValidationChange = useCallback((isValid) => {
+    setIsValidToConcept(isValid)
+    if (onValidationChange) {
+      onValidationChange({ isValidToConcept: isValid })
+    }
+  }, [onValidationChange])
 
   // Handler for link value (linkName is now read-only)
   const handleLinkValueChange = useCallback(
@@ -78,6 +88,8 @@ const RealizationForm = ({
         isValidLinkName={isValidLinkName}
         onRealizationChange={onRealizationChange}
         realizationItem={realizationItem}
+        isEditMode={isEditMode}
+        onValidationChange={handleToConceptValidationChange}
       />
       <FormControl fullWidth margin='normal'>
         <TextInput

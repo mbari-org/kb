@@ -28,6 +28,7 @@ const RealizationContent = () => {
   const isEditMode = modalData?.action === 'Realization Edit'
 
   const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
+  const [isValidToConcept, setIsValidToConcept] = useState(true)
   
   // Ensure form is populated with realization data in edit mode
   useEffect(() => {
@@ -81,8 +82,9 @@ const RealizationContent = () => {
     setModalData(prev => ({
       ...prev,
       isDuplicate,
+      isValidToConcept,
     }))
-  }, [isDuplicate, setModalData])
+  }, [isDuplicate, isValidToConcept, setModalData])
 
   const stageChange = useStageRealization()
 
@@ -133,6 +135,13 @@ const RealizationContent = () => {
     setCurrentPage(newPage)
   }, [])
 
+  // Handle validation changes from RealizationForm
+  const handleValidationChange = useCallback((validationData) => {
+    if (validationData.isValidToConcept !== undefined) {
+      setIsValidToConcept(validationData.isValidToConcept)
+    }
+  }, [])
+
   if (!realizationItem) {
     return null
   }
@@ -177,6 +186,7 @@ const RealizationContent = () => {
         realizationItem={realizationItem}
         stageChange={stageChange}
         isEditMode={isEditMode}
+        onValidationChange={handleValidationChange}
       />
     </Box>
   )
