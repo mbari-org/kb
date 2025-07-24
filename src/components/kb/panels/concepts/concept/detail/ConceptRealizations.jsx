@@ -19,9 +19,7 @@ const ConceptRealizations = () => {
     content: `${realization.linkName} | ${realization.toConcept} | ${realization.linkValue}`,
   })
 
-  const renderRealizationComponent = (realization, _index) => (
-    <ConceptRealization realization={realization} />
-  )
+  const renderRealizationComponent = realization => <ConceptRealization realization={realization} />
 
   const AddIcon = () => (
     <RealizationModifyIcon
@@ -32,12 +30,12 @@ const ConceptRealizations = () => {
 
   return (
     <ConceptPropertiesSection
-      items={realizations}
       disablePagination={false}
-      renderItem={renderItem}
-      renderComponent={renderRealizationComponent}
-      title='Realizations'
       IconComponent={editing ? AddIcon : undefined}
+      items={realizations}
+      renderComponent={renderRealizationComponent}
+      renderItem={renderItem}
+      title='Realizations'
     />
   )
 }

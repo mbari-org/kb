@@ -7,7 +7,12 @@ import RealizationToConcept from './RealizationToConcept'
 
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
-const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) => {
+const RealizationForm = ({
+  onRealizationChange,
+  realizationItem,
+  stageChange,
+  isEditMode = false,
+}) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
   const allAvailableTemplates = useMemo(() => {
@@ -51,11 +56,22 @@ const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) 
         <TextInput
           label='Link Name'
           name='linkName'
-          required
           size='small'
           value={realizationItem.linkName || ''}
-          InputProps={{ readOnly: true }}
+          disabled
           showClearButton={false}
+          sx={{
+            '& .MuiInputBase-input.Mui-disabled': {
+              WebkitTextFillColor: 'rgba(0, 0, 0, 0.87)',
+              color: 'rgba(0, 0, 0, 0.87)',
+            },
+            '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'rgba(0, 0, 0, 0.23)',
+            },
+            '& .MuiInputLabel-root.Mui-disabled': {
+              color: 'rgba(0, 0, 0, 0.6)',
+            },
+          }}
         />
       </FormControl>
       <RealizationToConcept

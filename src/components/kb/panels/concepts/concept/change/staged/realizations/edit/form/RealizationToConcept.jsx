@@ -5,7 +5,7 @@ import { FormControl, TextField, Autocomplete } from '@mui/material'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConceptTaxa } from '@/lib/api/concept'
 
-const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLinkName }) => {
+const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLinkName, isEditMode = false }) => {
   const { apiFns } = use(ConfigContext)
 
   const [taxaNames, setTaxaNames] = useState([])
@@ -63,9 +63,17 @@ const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLin
       label='To Concept'
       value={toConcept}
       size='small'
-      slotProps={{
-        input: {
-          readOnly: true,
+      disabled
+      sx={{
+        '& .MuiInputBase-input.Mui-disabled': {
+          WebkitTextFillColor: 'rgba(0, 0, 0, 0.87)',
+          color: 'rgba(0, 0, 0, 0.87)',
+        },
+        '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+          borderColor: 'rgba(0, 0, 0, 0.23)',
+        },
+        '& .MuiInputLabel-root.Mui-disabled': {
+          color: 'rgba(0, 0, 0, 0.6)',
         },
       }}
     />
@@ -86,7 +94,7 @@ const RealizationToConcept = ({ realizationItem, onRealizationChange, isValidLin
 
   return (
     <FormControl fullWidth margin='normal'>
-      {isSelfOrNil ? renderImmutableField() : renderEditableField()}
+      {isEditMode || isSelfOrNil ? renderImmutableField() : renderEditableField()}
     </FormControl>
   )
 }

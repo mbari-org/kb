@@ -25,31 +25,41 @@ const RealizationContent = () => {
   const { isLoading } = use(PanelDataContext)
 
   const { action, realizationIndex, modalRealizationItem } = modalData
+  const isEditMode = modalData?.action === 'Realization Edit'
+
+  // Debug logging
+  useEffect(() => {
+    console.log('RealizationContent - modalData:', modalData)
+    console.log('RealizationContent - isEditMode:', isEditMode)
+    console.log('RealizationContent - modalRealizationItem:', modalRealizationItem)
+    console.log('RealizationContent - realizationIndex:', realizationIndex)
+  }, [modalData, isEditMode, modalRealizationItem, realizationIndex])
 
   const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
+  
+  // Ensure form is populated with realization data in edit mode
+  useEffect(() => {
+    if (isEditMode) {
+      // In edit mode, get the realization from stagedState using the index
+      const editRealization = stagedState?.realizations?.[realizationIndex]
+      console.log('Edit mode - realization from stagedState:', editRealization)
+      console.log('Edit mode - realizationIndex:', realizationIndex)
+      
+      if (editRealization) {
+        console.log('Setting realizationItem to editRealization:', editRealization)
+        setRealizationItem(editRealization)
+      } else if (modalRealizationItem) {
+        console.log('Fallback - setting realizationItem to modalRealizationItem:', modalRealizationItem)
+        setRealizationItem(modalRealizationItem)
+      }
+    }
+  }, [isEditMode, modalRealizationItem, stagedState?.realizations, realizationIndex])
   const [filterLinkName, setFilterLinkName] = useState('')
   const [currentCycleIndex, setCurrentCycleIndex] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
 
   // Template logic for filter auto-population
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
-  
-  const allAvailableTemplates = useMemo(() => {
-    return getAvailableLinkTemplates()
-  }, [getAvailableLinkTemplates])
-
-  const linkNameOptions = useMemo(() => {
-    const uniqueLinkNames = [...new Set(allAvailableTemplates.map(template => template.linkName))]
-    return uniqueLinkNames.sort()
-  }, [allAvailableTemplates])
-
-  const filteredOptions = useMemo(() => {
-    const currentInput = filterLinkName || ''
-    if (!currentInput) return linkNameOptions
-    return linkNameOptions.filter(option =>
-      option.toLowerCase().includes(currentInput.toLowerCase())
-    )
-  }, [linkNameOptions, filterLinkName])
 
   // Get all templates that match the current filter (for cycling)
   const filteredTemplates = useMemo(() => {
@@ -99,40 +109,6 @@ const RealizationContent = () => {
     stageChange,
   })
 
-  // Filter auto-population handlers
-  const handleFilterLinkNameSelect = useCallback(
-    (_event, newValue) => {
-      setFilterLinkName(newValue || '')
-      
-      if (newValue) {
-        // Auto-populate the form with the first template that matches
-        const selectedTemplate = allAvailableTemplates.find(
-          template => template.linkName === newValue
-        )
-
-        if (selectedTemplate) {
-          const updatedRealizationItem = {
-            ...realizationItem,
-            linkName: newValue,
-            toConcept: selectedTemplate.toConcept,
-            linkValue: selectedTemplate.linkValue,
-            templateId: selectedTemplate.id,
-          }
-          handleRealizationChange(updatedRealizationItem, 'linkName')
-        }
-      } else {
-        // Clear the form when filter is cleared
-        const updatedRealizationItem = {
-          ...realizationItem,
-          ...EMPTY_TEMPLATE,
-          templateId: null,
-        }
-        handleRealizationChange(updatedRealizationItem, 'linkName')
-      }
-    },
-    [filterLinkName, allAvailableTemplates, realizationItem, handleRealizationChange]
-  )
-
   const handleFilterKeyDown = useCallback(
     event => {
       if (event.key === 'Enter') {
@@ -140,10 +116,10 @@ const RealizationContent = () => {
 
         if (currentInput && filteredTemplates.length > 0) {
           event.preventDefault()
-          
+
           // Get the current template to populate the form with
           const templateToUse = filteredTemplates[currentCycleIndex]
-          
+
           if (templateToUse) {
             // Auto-populate the form with the current cycle template
             const updatedRealizationItem = {
@@ -154,11 +130,9 @@ const RealizationContent = () => {
               templateId: templateToUse.id,
             }
             handleRealizationChange(updatedRealizationItem, 'linkName')
-            
+
             // Advance to next template for next Enter press (cycle back to 0 if at end)
-            setCurrentCycleIndex((prevIndex) => 
-              (prevIndex + 1) % filteredTemplates.length
-            )
+            setCurrentCycleIndex(prevIndex => (prevIndex + 1) % filteredTemplates.length)
           }
         }
       }
@@ -167,7 +141,7 @@ const RealizationContent = () => {
   )
 
   // Handle manual page changes (when user clicks pagination buttons)
-  const handlePageChange = useCallback((newPage) => {
+  const handlePageChange = useCallback(newPage => {
     setCurrentPage(newPage)
   }, [])
 
@@ -177,40 +151,44 @@ const RealizationContent = () => {
 
   return (
     <Box>
-      <RealizationTemplatesFilter
-        isLoading={isLoading}
-        linkName={filterLinkName}
-        onTemplateSelect={handleTemplateSelect}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
-      <TextField
-        label='Filter Link Name'
-        size='small'
-        value={filterLinkName}
-        onChange={event => {
-          const newValue = event.target.value
-          setFilterLinkName(newValue)
-          
-          // Clear form immediately when filter changes
-          const updatedRealizationItem = {
-            ...realizationItem,
-            ...EMPTY_TEMPLATE,
-            templateId: null,
-          }
-          handleRealizationChange(updatedRealizationItem, 'linkName')
-        }}
-        onKeyDown={handleFilterKeyDown}
-        sx={{ mb: 2 }}
-        fullWidth
-      />
+      {!isEditMode && (
+        <>
+          <RealizationTemplatesFilter
+            isLoading={isLoading}
+            linkName={filterLinkName}
+            onTemplateSelect={handleTemplateSelect}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+          <TextField
+            label='Filter Link Name'
+            size='small'
+            value={filterLinkName}
+            onChange={event => {
+              const newValue = event.target.value
+              setFilterLinkName(newValue)
 
-      <Divider sx={{ my: 1 }} />
+              // Clear form immediately when filter changes
+              const updatedRealizationItem = {
+                ...realizationItem,
+                ...EMPTY_TEMPLATE,
+                templateId: null,
+              }
+              handleRealizationChange(updatedRealizationItem, 'linkName')
+            }}
+            onKeyDown={handleFilterKeyDown}
+            sx={{ mb: 2 }}
+            fullWidth
+          />
+          <Divider sx={{ my: 1 }} />
+        </>
+      )}
       <Typography variant='h6'>{actionText} Realization</Typography>
       <RealizationForm
         onRealizationChange={handleRealizationChange}
         realizationItem={realizationItem}
         stageChange={stageChange}
+        isEditMode={isEditMode}
       />
     </Box>
   )
