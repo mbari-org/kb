@@ -30,46 +30,11 @@ const resetChangeName = (dispatch, name) => {
   })
 }
 
-// const resetChangeParent = (dispatch, parent) => {
-//   dispatch({
-//     type: RESET.CHANGE_PARENT,
-//     update: { parent },
-//   })
-// }
-
 const resetDeleteConcept = (dispatch, concept) => {
   dispatch({
     type: RESET.DELETE_CONCEPT,
     update: { concept },
   })
-}
-
-const resetField = (field, dispatch, initialState) => {
-  const resetFieldValue = field => {
-    dispatch({
-      type: RESET.FIELD,
-      update: { field, value: initialState[field] },
-    })
-  }
-
-  // Certain field resets are grouped together.
-  switch (field) {
-    case 'name':
-    case 'nameChange':
-      resetFieldValue('name')
-      resetFieldValue('nameChange')
-      break
-
-    case 'rankLevel':
-    case 'rankName':
-      resetFieldValue('rankLevel')
-      resetFieldValue('rankName')
-      break
-
-    default:
-      resetFieldValue(field)
-      break
-  }
 }
 
 const resetMedia = (dispatch, initialState) => {
@@ -90,20 +55,6 @@ const resetRank = (dispatch, initialState) => {
   dispatch({
     type: RESET.RANK,
     update: { rank: initialState.rank },
-  })
-}
-
-const resetRealizationItem = (realizationIndex, dispatch, initialState) => {
-  dispatch({
-    type: RESET.REALIZATION,
-    update: { realizationIndex, realizationItem: initialState.realizations[realizationIndex] },
-  })
-}
-
-const resetRealizations = (dispatch, initialState) => {
-  dispatch({
-    type: RESET.GROUP.REALIZATIONS,
-    update: { realizations: initialState.realizations },
   })
 }
 
@@ -135,16 +86,8 @@ const resetConceptState = (action, dispatch, initialState) => {
       resetChangeName(dispatch, action.update.name)
       break
 
-    case RESET.CHANGE_PARENT:
-      resetChangeParent(dispatch, action.update.parent)
-      break
-
     case RESET.DELETE_CONCEPT:
       resetDeleteConcept(dispatch, action.update.concept)
-      break
-
-    case RESET.FIELD:
-      resetField(action.update.field, dispatch, initialState)
       break
 
     case RESET.GROUP.ALIASES:
@@ -163,7 +106,10 @@ const resetConceptState = (action, dispatch, initialState) => {
       break
 
     case RESET.GROUP.REALIZATIONS:
-      resetRealizations(dispatch, initialState)
+      dispatch({
+        type: RESET.GROUP.REALIZATIONS,
+        update: { realizations: initialState.realizations, index: action.update.index },
+      })
       break
 
     case RESET.PARENT:
@@ -175,10 +121,6 @@ const resetConceptState = (action, dispatch, initialState) => {
 
     case RESET.MEDIA:
       resetMediaItem(action.update.groupIndex, dispatch, initialState)
-      break
-
-    case RESET.REALIZATION:
-      resetRealizationItem(action.update.groupIndex, dispatch, initialState)
       break
 
     case RESET.TO_INITIAL:

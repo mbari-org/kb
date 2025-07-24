@@ -1,40 +1,32 @@
 import StagedItem from '@/components/kb/panels/concepts/concept/change/staged/StagedItem'
 import StagedItemReset from '@/components/kb/panels/concepts/concept/change/staged/reset/StagedItemReset'
 
-import StagedRealizationDetail from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealizationDetail'
-import StagedRealizationHeader from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealizationHeader'
+import StagedRealizationDetail from './StagedRealizationDetail'
+import StagedRealizationHeader from './StagedRealizationHeader'
 
 import { RESETTING } from '@/lib/constants'
 
-const StagedRealization = ({ disabled, initialRealization, stagedRealization }) => {
+const StagedRealization = ({ initialItem, resetting, stagedItem }) => {
+  const group = RESETTING.REALIZATIONS
+
   const itemDetail = () => (
-    <StagedRealizationDetail
-      initialRealization={initialRealization}
-      stagedRealization={stagedRealization}
-    />
+    <StagedRealizationDetail initialRealization={initialItem} stagedRealization={stagedItem} />
   )
 
   const itemHeader = () => (
-    <StagedRealizationHeader
-      initialRealization={initialRealization}
-      stagedRealization={stagedRealization}
-    />
+    <StagedRealizationHeader initialRealization={initialItem} stagedRealization={stagedItem} />
   )
 
   const itemReset = () => (
-    <StagedItemReset
-      group={RESETTING.GROUP.REALIZATIONS}
-      initialItem={initialRealization}
-      stagedItem={stagedRealization}
-    />
+    <StagedItemReset group={group} resetting={resetting} stagedItem={stagedItem} />
   )
 
   return (
     <StagedItem
-      disabled={disabled}
       ItemDetail={itemDetail}
       ItemHeader={itemHeader}
       ItemReset={itemReset}
+      resetting={resetting}
     />
   )
 }

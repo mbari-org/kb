@@ -57,23 +57,19 @@ const editRealization = (state, update) => {
   return updateState(state, { type: CONCEPT_STATE.REALIZATION.EDIT, update })
 }
 
-const resetRealization = (state, update) => {
-  const { realizationItem, realizationIndex } = update
-  if (realizationItem) {
+const resetRealizations = (state, update) => {
+  const { index: resetIndex } = update
+
+  if (1 < state.realizations.length && resetIndex !== undefined) {
+    const realization = update.realizations[resetIndex]
     return {
       ...state,
-      realizations: state.realizations.map((item, index) =>
-        index === realizationIndex ? realizationItem : item
-      ),
+      realizations: state.realizations.reduce((acc, item, index) => {
+        index === resetIndex ? realization != null && acc.push(realization) : acc.push(item)
+        return acc
+      }, []),
     }
   }
-  return {
-    ...state,
-    realizations: state.realizations.filter((_item, index) => index !== realizationIndex),
-  }
-}
-
-const resetRealizations = (state, update) => {
   return {
     ...state,
     realizations: update.realizations,
@@ -91,11 +87,4 @@ const updateState = (state, { type, update }) => {
   }
 }
 
-export {
-  addRealization,
-  deleteRealization,
-  editRealization,
-  realizationsState,
-  resetRealization,
-  resetRealizations,
-}
+export { addRealization, deleteRealization, editRealization, realizationsState, resetRealizations }

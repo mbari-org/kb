@@ -20,7 +20,7 @@ import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/
 import { CONCEPT_FIELD, RESETTING } from '@/lib/constants'
 
 const StagedContent = () => {
-  const { confirmReset, initialState, stagedState } = use(ConceptContext)
+  const { initialState, stagedState } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
 
   const stagedEdits = useMemo(
@@ -35,16 +35,16 @@ const StagedContent = () => {
     const [field, { staged }] = stagedEdit
     switch (field) {
       case CONCEPT_FIELD.ALIASES:
-        return <StagedAliases key={field} confirmReset={confirmReset} stagedEdit={stagedEdit} />
+        return <StagedAliases key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.AUTHOR:
-        return <StagedValue key={field} group={RESETTING.GROUP.AUTHOR} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} group={RESETTING.AUTHOR} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.PARENT:
-        return <StagedValue key={field} group={RESETTING.GROUP.PARENT} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} group={RESETTING.PARENT} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.RANK:
-        return <StagedObject key={field} group={RESETTING.GROUP.RANK} stagedEdit={stagedEdit} />
+        return <StagedObject key={field} group={RESETTING.RANK} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.REALIZATIONS:
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />

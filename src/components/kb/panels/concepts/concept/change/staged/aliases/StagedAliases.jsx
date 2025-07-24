@@ -8,7 +8,7 @@ import { RESETTING } from '@/lib/constants'
 const StagedAliases = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={RESETTING.GROUP.ALIASES}
+      group={RESETTING.ALIASES}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedAlias}
       stagedItems={stagedAliases(stagedEdit)}

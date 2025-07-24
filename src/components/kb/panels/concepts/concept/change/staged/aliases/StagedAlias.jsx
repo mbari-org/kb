@@ -7,7 +7,7 @@ import StagedAliasHeader from './StagedAliasHeader'
 import { RESETTING } from '@/lib/constants'
 
 const StagedAlias = ({ initialItem, resetting, stagedItem }) => {
-  const group = RESETTING.GROUP.ALIASES
+  const group = RESETTING.ALIASES
 
   const itemDetail = () => <StagedAliasDetail initialAlias={initialItem} stagedAlias={stagedItem} />
   const itemHeader = () => <StagedAliasHeader initialAlias={initialItem} stagedAlias={stagedItem} />

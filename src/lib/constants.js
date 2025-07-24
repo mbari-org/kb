@@ -194,15 +194,13 @@ export const RESETTING = {
     NONE: 'None',
     OTHER: 'Other',
   },
-  GROUP: {
-    ALIASES: 'Aliases',
-    AUTHOR: 'Author',
-    CHILDREN: 'Children',
-    MEDIA: 'Media',
-    PARENT: 'Parent',
-    RANK: 'Rank',
-    REALIZATIONS: 'Realizations',
-  },
+  ALIASES: 'Aliases',
+  AUTHOR: 'Author',
+  CHILDREN: 'Children',
+  MEDIA: 'Media',
+  PARENT: 'Parent',
+  RANK: 'Rank',
+  REALIZATIONS: 'Realizations',
 }
 
 export const SELECTED = {

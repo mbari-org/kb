@@ -7,7 +7,6 @@ import {
   addRealization,
   deleteRealization,
   editRealization,
-  resetRealization,
   resetRealizations,
 } from '@/lib/kb/state/realizations'
 import { addChild, resetAddChild, resetAddChildren, setStructure } from '@/lib/kb/state/structure'
@@ -89,9 +88,6 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case RESET.RANK:
       return resetRank(state, update)
-
-    case RESET.REALIZATION:
-      return resetRealization(state, update)
 
     case RESET.STRUCTURE:
       return setStructure(state, update)

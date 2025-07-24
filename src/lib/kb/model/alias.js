@@ -27,10 +27,10 @@ const stagedAliases = stagedEdit => {
   const [_field, aliases] = stagedEdit
 
   return stagedEdits({
-    stateTypes: CONCEPT_STATE.ALIAS,
     displayFields: ALIAS_DISPLAY_FIELDS,
     initial: aliases.initial,
     staged: aliases.staged,
+    stateTypes: CONCEPT_STATE.ALIAS,
   })
 }
 

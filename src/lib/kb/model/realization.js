@@ -11,13 +11,16 @@ const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 const isSame = (a, b) =>
   a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
 
-const stagedRealizations = ({ initial, staged }) =>
-  stagedEdits({
+const stagedRealizations = stagedEdit => {
+  const [_field, realizations] = stagedEdit
+
+  return stagedEdits({
     displayFields: REALIZATION_DISPLAY_FIELDS,
-    initial,
-    staged,
+    initial: realizations.initial,
+    staged: realizations.staged,
     stateTypes: CONCEPT_STATE.REALIZATION,
   })
+}
 
 const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_FIELDS)
 
