@@ -36,19 +36,13 @@ const ChangeParentContent = ({ omitChoices }) => {
 
   return (
     <Box>
-      <Typography variant='h6'>Change Parent</Typography>
-      <Stack spacing={2} sx={{ mt: 2, ml: 3, mb: 2 }}>
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <Typography minWidth={60}>From:</Typography>
-          <Typography
-            color='main'
-            fontFamily={theme.concept.fontFamily}
-            fontSize={theme.concept.updateFontSize}
-            fontWeight={theme.concept.fontWeight}
-          >
-            {concept?.parent}
-          </Typography>
-        </Stack>
+      <Stack alignItems='center' direction='row' spacing={1}>
+        <Typography variant='h6'>Change Parent:</Typography>
+        <Typography sx={{ fontWeight: 'bold' }} variant='h6'>
+          {concept.parent}
+        </Typography>
+      </Stack>
+      <Box sx={{ mt: 1, ml: 3 }}>
         <ToConceptChoice
           handleChange={handleChange}
           handleKeyUp={handleKeyUp}
@@ -57,7 +51,7 @@ const ChangeParentContent = ({ omitChoices }) => {
           omitChoices={omitChoices}
           value={toConcept}
         />
-      </Stack>
+      </Box>
     </Box>
   )
 }

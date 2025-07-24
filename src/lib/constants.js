@@ -10,6 +10,14 @@ export const CONCEPT_FIELD = {
   REALIZATIONS: 'realizations',
 }
 
+export const CONCEPT_NAME = {
+  VALUE: 'name',
+  EXTENT: {
+    NAME: 'Name Only',
+    DATA: 'Associated Data',
+  },
+}
+
 export const CONCEPT_NAME_TYPES = {
   COMMON: 'Common',
   FORMER: 'Former',
@@ -80,6 +88,7 @@ export const CONCEPT_STATE = {
       ALIASES: 'Reset Aliases',
       AUTHOR: 'Reset Author',
       MEDIA: 'Reset Media',
+      NAME: 'Reset Name',
       PARENT: 'Reset Parent',
       RANK: 'Reset Rank',
       REALIZATIONS: 'Reset Realizations',

@@ -1,5 +1,6 @@
 import { aliasesState } from '@/lib/kb/state/aliases'
 import { mediaState } from '@/lib/kb/state/media'
+import { nameState } from '@/lib/kb/state/name'
 import { rankState } from '@/lib/kb/state/rank'
 import { realizationsState } from '@/lib/kb/state/realizations'
 import { structureState } from '@/lib/kb/state/structure'
@@ -31,6 +32,7 @@ const initialConceptState = (concept, pending) => {
     ...authorState(concept),
     ...indexState,
     ...mediaState(concept, pending),
+    ...nameState(concept),
     ...rankState(concept),
     ...realizationsState(concept, pending),
     ...structureState(concept),

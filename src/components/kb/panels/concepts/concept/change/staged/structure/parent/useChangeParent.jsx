@@ -1,7 +1,8 @@
 import { use, useCallback, useRef } from 'react'
+
 import ChangeParentActions from './ChangeParentActions'
 import ChangeParentContent from './ChangeParentContent'
-import ChangeParentTitle from './ChangeParentTitle'
+import ConceptTitle from '@/components/common/ConceptTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -21,7 +22,7 @@ const changeParentModal = omitChoices => {
   const components = {
     Actions: ChangeParentActions,
     Content: () => <ChangeParentContent omitChoices={omitChoices} />,
-    Title: ChangeParentTitle,
+    Title: ConceptTitle,
   }
   return createModal(components)
 }

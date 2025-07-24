@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { use, useState, useRef, useEffect } from 'react'
 
 import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -6,13 +6,13 @@ import { useTheme } from '@mui/material/styles'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import NameChangeExtent from '@/components/common/NameChangeExtent'
 import UserContext from '@/contexts/user/UserContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
 const ChangeNameContent = () => {
   const theme = useTheme()
+  const textFieldRef = useRef(null)
 
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
@@ -27,6 +27,12 @@ const ChangeNameContent = () => {
   const fromColor = 'main'
   const toColor = modified ? theme.palette.primary.edit : theme.palette.grey[500]
 
+  useEffect(() => {
+    if (textFieldRef.current) {
+      textFieldRef.current.focus()
+    }
+  }, [])
+
   const handleNameChange = event => {
     const { value } = event.target
     setPrimaryName(value)
@@ -40,61 +46,36 @@ const ChangeNameContent = () => {
     }))
   }
 
-  const handleNameChangeType = event => {
-    const value = event.target.value
-    setModalData(prevData => ({
-      ...prevData,
-      nameChangeType: value,
-      isValid: prevData.modified && value,
-    }))
-  }
-
   return (
     <Box>
-      <Stack spacing={2} sx={{ mt: 2, ml: 3, mb: 2 }}>
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <Typography minWidth={60}>From:</Typography>
-          <Typography
-            color={fromColor}
-            fontFamily={theme.concept.fontFamily}
-            fontSize={theme.concept.updateFontSize}
-            fontWeight={theme.concept.fontWeight}
-            variant='h6'
-          >
-            {concept.name}
-          </Typography>
-        </Stack>
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <Typography minWidth={60}>To:</Typography>
-          <TextField
-            fullWidth
-            onChange={handleNameChange}
-            slotProps={{
-              input: {
-                sx: {
-                  color: toColor,
-                  cursor: 'text',
-                  fontFamily: theme.concept.fontFamily,
-                  fontSize: theme.concept.updateFontSize,
-                  fontWeight: theme.concept.fontWeight,
-                  height: 'auto',
-                  borderBottom: 'none',
-                  '&::before': { borderBottom: 'none' },
-                  '&::after': { borderBottom: 'none' },
-                },
+      <Typography variant='h6'>Change Name</Typography>
+      <Stack alignItems='center' direction='row' spacing={1} sx={{ ml: 3 }}>
+        <Typography>To:</Typography>
+        <TextField
+          inputRef={textFieldRef}
+          fullWidth
+          onChange={handleNameChange}
+          slotProps={{
+            input: {
+              sx: {
+                color: toColor,
+                cursor: 'text',
+                fontFamily: theme.concept.fontFamily,
+                fontSize: theme.concept.updateFontSize,
+                fontWeight: theme.concept.fontWeight,
+                height: 'auto',
+                borderBottom: 'none',
+                '&::before': { borderBottom: 'none' },
+                '&::after': { borderBottom: 'none' },
               },
-            }}
-            value={primaryName}
-            variant='standard'
-          />
-        </Stack>
+            },
+          }}
+          value={primaryName}
+          variant='standard'
+        />
       </Stack>
 
-      <Box sx={{ mt: -1, ml: 12 }}>
-        <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
-      </Box>
-
-      <Box sx={{ borderTop: '1px solid #000000', mt: 2 }}>
+      <Box sx={{ mt: 2 }}>
         <Typography variant='body1' color='text.secondary' sx={{ mt: 2 }}>
           {`Updating the name of concept will affect CxTBD link realizations.`}
         </Typography>

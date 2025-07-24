@@ -1,8 +1,8 @@
 import { use, useCallback } from 'react'
 
+import ConceptTitle from '@/components/common/ConceptTitle'
 import ChangeNameActions from './ChangeNameActions'
 import ChangeNameContent from './ChangeNameContent'
-import ChangeNameTitle from './ChangeNameTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -18,7 +18,7 @@ const changeNameModal = () => {
   const components = {
     Actions: ChangeNameActions,
     Content: ChangeNameContent,
-    Title: ChangeNameTitle,
+    Title: ConceptTitle,
   }
   return createModal(components)
 }
