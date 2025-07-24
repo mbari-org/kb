@@ -5,7 +5,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import ToConceptChoice from '../ToConceptChoice'
+import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
 const ChangeParentContent = ({ omitChoices }) => {
   const { concept } = use(ConceptContext)

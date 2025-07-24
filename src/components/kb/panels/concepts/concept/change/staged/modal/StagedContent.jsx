@@ -8,7 +8,7 @@ import StagedRealizations from '@/components/kb/panels/concepts/concept/change/s
 import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
 
-import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/staged/structure/children/ChildrenDetail'
+import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/staged/children/ChildrenDetail'
 import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldValueDetail'
 import MediaDetail from '@/components/kb/panels/concepts/concept/change/staged/media/MediaDetail'
 

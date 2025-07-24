@@ -2,7 +2,7 @@ import { use, useEffect, useState, useMemo } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 
-import ToConceptChoice from '../ToConceptChoice'
+import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'

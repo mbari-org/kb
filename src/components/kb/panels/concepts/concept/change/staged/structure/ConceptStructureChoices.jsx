@@ -1,9 +1,9 @@
 import { Box, Button, IconButton, Modal, Stack } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
 
-import useAddChild from '@/components/kb/panels/concepts/concept/change/staged/structure/child/useAddChild'
-import useChangeName from '@/components/kb/panels/concepts/concept/change/staged/structure/name/useChangeName'
-import useChangeParent from '@/components/kb/panels/concepts/concept/change/staged/structure/parent/useChangeParent'
+import useAddChild from '@/components/kb/panels/concepts/concept/change/staged/children/useAddChild'
+import useChangeName from '@/components/kb/panels/concepts/concept/change/staged/name/useChangeName'
+import useChangeParent from '@/components/kb/panels/concepts/concept/change/staged/parent/useChangeParent'
 import useDeleteConcept from '@/components/kb/panels/concepts/concept/change/staged/structure/concept/useDeleteConcept'
 
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
