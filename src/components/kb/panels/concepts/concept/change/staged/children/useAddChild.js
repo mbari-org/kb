@@ -1,8 +1,9 @@
 import { use, useCallback } from 'react'
 
+import ConceptTitle from '@/components/common/ConceptTitle'
+
 import AddChildActions from './AddChildActions'
 import AddChildContent from './AddChildContent'
-import AddChildTitle from './AddChildTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -11,14 +12,13 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { RESET } = CONCEPT_STATE
-const { ADD_CHILD } = CONCEPT_STATE.CONCEPT
+const { ADD_CHILD, RESET } = CONCEPT_STATE
 
 const addChildModal = () => {
   const components = {
     Actions: AddChildActions,
     Content: AddChildContent,
-    Title: AddChildTitle,
+    Title: ConceptTitle,
   }
 
   return createModal(components)
@@ -33,7 +33,7 @@ const addChildOnClose = modifyConcept => {
 
     if (modalData.modified) {
       modifyConcept({
-        type: RESET.ADD_CHILD,
+        type: RESET.CHILD,
         update: {
           child: modalData.child,
         },

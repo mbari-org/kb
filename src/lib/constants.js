@@ -48,6 +48,7 @@ export const CONCEPT_SELECT = {
 }
 
 export const CONCEPT_STATE = {
+  ADD_CHILD: 'Add Child',
   ALIAS: {
     ADD: 'Alias Add',
     DELETE: 'Alias Delete',
@@ -56,9 +57,7 @@ export const CONCEPT_STATE = {
   ALIASES: 'Aliases',
   AUTHOR: 'Author',
   CHILDREN: 'Children',
-  CONCEPT: {
-    ADD_CHILD: 'Add Child',
-  },
+  DELETE_CONCEPT: 'Delete Concept',
   INITIAL: 'Initial State',
   MEDIA: 'Media',
   MEDIA_ITEM: {
@@ -76,8 +75,7 @@ export const CONCEPT_STATE = {
   },
   REALIZATIONS: 'Realizations',
   RESET: {
-    ADD_CHILD: 'Reset Add Child',
-    ADD_CHILDREN: 'Reset Add Children',
+    CHILDREN: 'Reset Children',
     ALIASES: 'Reset Aliases',
     AUTHOR: 'Reset Author',
     DELETE_CONCEPT: 'Reset Delete Concept',

@@ -11,8 +11,8 @@ const ChildReset = ({ child }) => {
     <StagedReset
       child={child}
       resettingFunction={resettingChild}
-      resetGroupType={RESET.ADD_CHILDREN}
-      resetChildType={RESET.ADD_CHILD}
+      resetGroupType={RESET.CHILDREN}
+      resetChildType={RESET.CHILD}
     />
   )
 }

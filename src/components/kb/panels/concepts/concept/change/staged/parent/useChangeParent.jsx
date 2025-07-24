@@ -14,9 +14,8 @@ import { PROCESSING } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants'
 import { descendants } from '@/lib/kb/model/taxonomy'
 
-const { CHANGE_PARENT } = CONCEPT_STATE.CONCEPT
 const { LOADING } = PROCESSING
-const { RESET } = CONCEPT_STATE
+const { PARENT, RESET } = CONCEPT_STATE
 
 const changeParentModal = omitChoices => {
   const components = {
@@ -47,7 +46,7 @@ const changeParentOnClose = modifyConcept => {
 }
 
 const initialModalData = {
-  action: CHANGE_PARENT,
+  action: PARENT,
   modified: false,
   parent: '',
 }

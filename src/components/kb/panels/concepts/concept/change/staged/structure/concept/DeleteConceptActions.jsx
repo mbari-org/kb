@@ -17,7 +17,7 @@ const DeleteConceptActions = () => {
 
   const handleCancel = () => {
     modifyConcept({
-      type: CONCEPT_STATE.CONCEPT.DELETE_CONCEPT,
+      type: CONCEPT_STATE.DELETE_CONCEPT,
       update: { delete: false },
     })
     closeModal()
@@ -25,7 +25,7 @@ const DeleteConceptActions = () => {
 
   const handleStage = () => {
     modifyConcept({
-      type: CONCEPT_STATE.CONCEPT.DELETE_CONCEPT,
+      type: CONCEPT_STATE.DELETE_CONCEPT,
       update: { delete: true },
     })
     closeModal(true)

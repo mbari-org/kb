@@ -52,7 +52,7 @@ const StagedContent = () => {
       case CONCEPT_FIELD.REALIZATIONS:
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />
 
-      case 'children':
+      case CONCEPT_FIELD.CHILDREN:
         return <ChildrenDetail key={field} edit={stagedEdit} />
 
       case CONCEPT_FIELD.MEDIA:

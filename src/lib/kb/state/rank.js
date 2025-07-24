@@ -1,3 +1,7 @@
+import { capitalize } from '@/lib/utils'
+
+const rankField = field => `rank${capitalize(field)}`
+
 const rankState = concept => {
   const { rankLevel, rankName } = concept
   return {
@@ -27,4 +31,4 @@ const resetRank = (state, update) => {
   }
 }
 
-export { editRank, rankState, resetRank }
+export { editRank, rankField, rankState, resetRank }

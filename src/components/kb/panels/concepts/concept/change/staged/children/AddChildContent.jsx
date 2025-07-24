@@ -1,8 +1,8 @@
 import { use, useCallback, useMemo, useState } from 'react'
 
-import { Box, FormControl, Stack, TextField } from '@mui/material'
+import { Box, FormControl, Stack, TextField, Typography } from '@mui/material'
 
-import ConceptRankField from '@/components/kb/panels/concepts/concept/change/staged/rank/ConceptRankDetail'
+import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -11,9 +11,9 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import useInputStyle from './useInputStyle'
 import useStageChild from './useStageChild'
 
-import { CONCEPT_FIELD } from '@/lib/constants'
+import { rankField } from '@/lib/kb/state/rank'
 
-const { RANK } = CONCEPT_FIELD
+import { CONCEPT_RANK } from '@/lib/constants'
 
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 
@@ -35,7 +35,21 @@ const AddChildContent = () => {
     rankName: false,
   })
 
-  const stagedChild = useMemo(() => ({ ...stagedState.child }), [stagedState.child])
+  const initialRank = useMemo(
+    () => ({
+      name: child.rankName,
+      level: child.rankLevel,
+    }),
+    [child]
+  )
+
+  const formRank = useMemo(
+    () => ({
+      name: formChild.rankName,
+      level: formChild.rankLevel,
+    }),
+    [formChild]
+  )
 
   const handleStage = useStageChild()
 
@@ -67,7 +81,7 @@ const AddChildContent = () => {
       }
       setFormChild(updatedChild)
 
-      const fieldIsModified = updatedChild[field] !== stagedChild[field]
+      const fieldIsModified = updatedChild[field] !== child[field]
 
       const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
       setModifiedFields(updatedModifiedFields)
@@ -76,7 +90,7 @@ const AddChildContent = () => {
 
       setModalData(prev => ({ ...prev, child: updatedChild, modified }))
     },
-    [formChild, stagedChild, modifiedFields, setModalData]
+    [child, formChild, modifiedFields, setModalData]
   )
 
   const handleFieldChange = useCallback(
@@ -88,6 +102,7 @@ const AddChildContent = () => {
 
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>
+      <Typography variant='h6'>Add Child</Typography>
       <FormControl {...inputStyle}>
         <TextField
           label='Name'
@@ -107,20 +122,18 @@ const AddChildContent = () => {
           value={formChild.author}
         />
       </FormControl>
-      <Stack direction='row' spacing={1} sx={{ mt: 2 }}>
-        <ConceptRankField
-          field={RANK.NAME}
-          fieldValue={formChild.rankName}
-          otherValue={formChild.rankLevel}
-          inputStyle={inputStyle}
-          onChange={handleFieldChange('rankName')}
+      <Stack direction='row' spacing={1.5}>
+        <RankFieldInput
+          field={CONCEPT_RANK.NAME}
+          initialRank={initialRank}
+          rank={formRank}
+          onChange={handleFieldChange(rankField(CONCEPT_RANK.NAME))}
         />
-        <ConceptRankField
-          field={RANK.LEVEL}
-          fieldValue={formChild.rankLevel}
-          otherValue={formChild.rankName}
-          inputStyle={inputStyle}
-          onChange={handleFieldChange('rankLevel')}
+        <RankFieldInput
+          field={CONCEPT_RANK.LEVEL}
+          initialRank={initialRank}
+          rank={formRank}
+          onChange={handleFieldChange(rankField(CONCEPT_RANK.LEVEL))}
         />
       </Stack>
     </Box>

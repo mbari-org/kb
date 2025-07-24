@@ -12,14 +12,14 @@ const isResetAction = action => RESET_ACTIONS.includes(action.type)
 
 const resetAddChild = (dispatch, child) => {
   dispatch({
-    type: RESET.ADD_CHILD,
+    type: RESET.CHILD,
     update: { child },
   })
 }
 
 const resetAddChildren = dispatch => {
   dispatch({
-    type: RESET.ADD_CHILDREN,
+    type: RESET.CHILDREN,
   })
 }
 
@@ -67,11 +67,11 @@ const resetToInitial = (dispatch, initialState) => {
 
 const resetConceptState = (action, dispatch, initialState) => {
   switch (action.type) {
-    case RESET.ADD_CHILD:
+    case RESET.CHILD:
       resetAddChild(dispatch, action.update.child)
       break
 
-    case RESET.ADD_CHILDREN:
+    case RESET.CHILDREN:
       resetAddChildren(dispatch)
       break
 

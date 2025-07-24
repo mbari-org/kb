@@ -6,12 +6,9 @@ import { stagedRealizations } from '@/lib/kb/model/realization'
 import { RESETTING } from '@/lib/constants'
 
 const StagedRealizations = ({ stagedEdit }) => {
-  const [_, realizations] = stagedEdit
-
   return (
     <StagedItems
       group={RESETTING.REALIZATIONS}
-      initial={realizations.initial}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedRealization}
       stagedItems={stagedRealizations(stagedEdit)}

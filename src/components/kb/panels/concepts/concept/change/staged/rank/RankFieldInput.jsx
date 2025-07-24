@@ -10,22 +10,22 @@ import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/
 
 import { CONCEPT_RANK } from '@/lib/constants'
 
+import { rankField } from '@/lib/kb/state/rank'
 import { capitalize } from '@/lib/utils'
 
-const RankFieldInput = ({ field, initialRank, stagedRank, onChange }) => {
+const RankFieldInput = ({ field, initialRank, rank, onChange }) => {
   const inputStyle = useConceptDetailStyle(field)
   const { filterRanks } = use(TaxonomyContext)
 
-  const rankValue = field =>
-    stagedRank[field] !== undefined ? stagedRank[field] : initialRank[field]
+  const rankValue = field => (rank[field] !== undefined ? rank[field] : initialRank[field])
 
   const fieldValue = rankValue(field)
   const otherValue =
     field === CONCEPT_RANK.NAME ? rankValue(CONCEPT_RANK.LEVEL) : rankValue(CONCEPT_RANK.NAME)
 
-  const rankOptions = filterRanks(`rank${capitalize(field)}`, otherValue)
+  const rankOptions = filterRanks(rankField(field), otherValue)
 
-  const border = stagedBorder(initialRank[field], stagedRank[field])
+  const border = stagedBorder(initialRank[field], rank[field])
 
   return (
     <FormControl {...inputStyle}>

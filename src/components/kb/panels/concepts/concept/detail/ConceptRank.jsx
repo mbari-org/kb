@@ -28,13 +28,13 @@ const ConceptRank = () => {
       <RankFieldInput
         field={CONCEPT_RANK.NAME}
         initialRank={initialRank}
-        stagedRank={stagedRank}
+        rank={stagedRank}
         onChange={onChange(CONCEPT_RANK.NAME)}
       />
       <RankFieldInput
         field={CONCEPT_RANK.LEVEL}
         initialRank={initialRank}
-        stagedRank={stagedRank}
+        rank={stagedRank}
         onChange={onChange(CONCEPT_RANK.LEVEL)}
       />
     </Stack>

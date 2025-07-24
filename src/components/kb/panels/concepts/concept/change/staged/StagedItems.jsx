@@ -3,8 +3,6 @@ import { Box, Typography } from '@mui/material'
 
 import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
 
-import StagedGroupReset from '@/components/kb/panels/concepts/concept/change/staged/reset/StagedGroupReset'
-
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { RESETTING } from '@/lib/constants'

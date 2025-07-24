@@ -21,8 +21,8 @@ const ChildrenDetail = ({ edit }) => {
 
   const changingChild = index => {
     if (!confirmReset) return RESETTING.EXTENT.NONE
-    if (confirmReset.type === RESET.ADD_CHILDREN) return RESETTING.EXTENT.ME
-    if (confirmReset.type === RESET.ADD_CHILD && confirmReset.index === index)
+    if (confirmReset.type === RESET.CHILDREN) return RESETTING.EXTENT.ME
+    if (confirmReset.type === RESET.CHILD && confirmReset.index === index)
       return RESETTING.EXTENT.ME
     if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
     return RESETTING.EXTENT.OTHER

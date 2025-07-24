@@ -11,8 +11,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { RESET } = CONCEPT_STATE
-const { CHANGE_NAME } = CONCEPT_STATE.CONCEPT
+const { NAME, RESET } = CONCEPT_STATE
 
 const changeNameModal = () => {
   const components = {
@@ -44,7 +43,7 @@ const changeNameOnClose = modifyConcept => {
 }
 
 const initialModalData = {
-  action: CHANGE_NAME,
+  action: NAME,
   modified: false,
   name: '',
 }

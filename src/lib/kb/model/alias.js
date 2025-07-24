@@ -2,7 +2,7 @@ import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from './history'
 
-import { isJsonEqual, pick } from '@/lib/utils'
+import { drop, isJsonEqual, pick } from '@/lib/utils'
 
 import { CONCEPT_NAME_TYPES, CONCEPT_STATE } from '@/lib/constants'
 
@@ -21,13 +21,11 @@ const EMPTY_ALIAS = {
   nameType: ALIAS_TYPES[0],
 }
 
-const ALIAS_DISPLAY_FIELDS = ['name', 'author', 'nameType']
-
 const stagedAliases = stagedEdit => {
   const [_field, aliases] = stagedEdit
 
   return stagedEdits({
-    displayFields: ALIAS_DISPLAY_FIELDS,
+    displayFields: drop(ALIAS_FIELDS, ['id']),
     initial: aliases.initial,
     staged: aliases.staged,
     stateTypes: CONCEPT_STATE.ALIAS,
