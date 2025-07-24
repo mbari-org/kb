@@ -27,14 +27,6 @@ const RealizationContent = () => {
   const { action, realizationIndex, modalRealizationItem } = modalData
   const isEditMode = modalData?.action === 'Realization Edit'
 
-  // Debug logging
-  useEffect(() => {
-    console.log('RealizationContent - modalData:', modalData)
-    console.log('RealizationContent - isEditMode:', isEditMode)
-    console.log('RealizationContent - modalRealizationItem:', modalRealizationItem)
-    console.log('RealizationContent - realizationIndex:', realizationIndex)
-  }, [modalData, isEditMode, modalRealizationItem, realizationIndex])
-
   const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
   
   // Ensure form is populated with realization data in edit mode
@@ -42,14 +34,10 @@ const RealizationContent = () => {
     if (isEditMode) {
       // In edit mode, get the realization from stagedState using the index
       const editRealization = stagedState?.realizations?.[realizationIndex]
-      console.log('Edit mode - realization from stagedState:', editRealization)
-      console.log('Edit mode - realizationIndex:', realizationIndex)
       
       if (editRealization) {
-        console.log('Setting realizationItem to editRealization:', editRealization)
         setRealizationItem(editRealization)
       } else if (modalRealizationItem) {
-        console.log('Fallback - setting realizationItem to modalRealizationItem:', modalRealizationItem)
         setRealizationItem(modalRealizationItem)
       }
     }

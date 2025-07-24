@@ -11,20 +11,34 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const ConceptRealizations = () => {
   const { editing, stagedState } = use(ConceptContext)
 
-  const realizations =
-    stagedState?.realizations.sort((a, b) => a.linkName.localeCompare(b.linkName)) || []
+  // Create a sorted array with original indices preserved
+  const originalRealizations = stagedState?.realizations || []
+  const realizationsWithOriginalIndex = originalRealizations.map((realization, originalIndex) => ({
+    ...realization,
+    originalIndex,
+  }))
+  const sortedRealizations = realizationsWithOriginalIndex.sort((a, b) => 
+    a.linkName.localeCompare(b.linkName)
+  )
 
   const renderItem = (realization, index) => ({
     key: `${realization.linkName}-${realization.toConcept}-${index}`,
     content: `${realization.linkName} | ${realization.toConcept} | ${realization.linkValue}`,
   })
 
-  const renderRealizationComponent = realization => <ConceptRealization realization={realization} />
+  const renderRealizationComponent = realization => {
+    // Use the original index for actions, not the sorted display index
+    const realizationWithCorrectIndex = {
+      ...realization,
+      index: realization.originalIndex,
+    }
+    return <ConceptRealization realization={realizationWithCorrectIndex} />
+  }
 
   const AddIcon = () => (
     <RealizationModifyIcon
       action={CONCEPT_STATE.REALIZATION.ADD}
-      realizationIndex={realizations.length}
+      realizationIndex={originalRealizations.length}
     />
   )
 
@@ -32,7 +46,7 @@ const ConceptRealizations = () => {
     <ConceptPropertiesSection
       disablePagination={false}
       IconComponent={editing ? AddIcon : undefined}
-      items={realizations}
+      items={sortedRealizations}
       renderComponent={renderRealizationComponent}
       renderItem={renderItem}
       title='Realizations'
