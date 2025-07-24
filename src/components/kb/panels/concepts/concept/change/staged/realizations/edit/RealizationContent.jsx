@@ -1,5 +1,5 @@
 import { use, useState, useMemo, useEffect } from 'react'
-import { Box, Divider } from '@mui/material'
+import { Box, Divider, Typography } from '@mui/material'
 
 import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/form/RealizationForm'
 import RealizationTemplatesFilter from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesFilter'
@@ -29,6 +29,8 @@ const RealizationContent = () => {
     const excludeIndex = action === CONCEPT_STATE.REALIZATION.ADD ? null : realizationIndex
     return checkForDuplicate(stagedState.realizations, realizationItem, excludeIndex)
   }, [realizationItem, stagedState.realizations, action, realizationIndex])
+
+  const actionText = modalData?.action?.split(' ').pop() || 'Edit'
 
   useEffect(() => {
     setModalData(prev => ({
@@ -61,7 +63,9 @@ const RealizationContent = () => {
         linkName={realizationItem.linkName}
         onTemplateSelect={handleTemplateSelect}
       />
+      <Typography>Filter Link Name</Typography>
       <Divider sx={{ my: 1 }} />
+      <Typography variant='h6'>{actionText} Realization</Typography>
       <RealizationForm
         onRealizationChange={handleRealizationChange}
         realizationItem={realizationItem}

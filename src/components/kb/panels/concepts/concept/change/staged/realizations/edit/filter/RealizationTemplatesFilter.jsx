@@ -20,7 +20,7 @@ const RealizationTemplatesFilter = ({ isLoading, linkName, onTemplateSelect }) =
 
   return (
     <ConceptPropertiesSection
-      fixedHeight={160}
+      fixedHeight={180}
       items={availableTemplates}
       isLoading={isLoading}
       loadingText='Loading templates...'

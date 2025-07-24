@@ -110,15 +110,13 @@ const ConceptPropertiesSection = ({
         }}
       >
         <ConceptPropertiesSummary
-          fixedHeight={fixedHeight}
-          expanded={expanded}
-          handleToggle={handleToggle}
-          IconComponent={IconComponent}
-          showEmptyIcon={showEmptyIcon}
-          title={title}
           currentPage={page}
           disablePagination={disablePagination}
+          expanded={expanded}
+          fixedHeight={fixedHeight}
+          handleToggle={handleToggle}
           hasItems={hasItems}
+          IconComponent={IconComponent}
           itemsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           onPageTextClick={() => {
@@ -126,6 +124,8 @@ const ConceptPropertiesSection = ({
               setExpanded(true)
             }
           }}
+          showEmptyIcon={showEmptyIcon}
+          title={title}
           totalItems={items.length}
         >
           {children}
@@ -143,16 +143,16 @@ const ConceptPropertiesSection = ({
         }}
       >
         <ConceptPropertiesDetails
-          fixedHeight={fixedHeight}
-          isLoading={isLoading}
-          loadingText={loadingText}
-          hasItems={hasItems}
-          items={items}
+          animationDirection={animationDirection}
           currentPage={page}
+          fixedHeight={fixedHeight}
+          hasItems={hasItems}
+          isLoading={isLoading}
+          items={items}
           itemsPerPage={rowsPerPage}
+          loadingText={loadingText}
           renderComponent={renderComponent}
           renderItem={renderItem}
-          animationDirection={animationDirection}
         />
       </AccordionDetails>
     </Accordion>

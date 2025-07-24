@@ -1,8 +1,9 @@
+import ConceptTitle from '@/components/common/ConceptTitle'
+
 import DeleteRealizationActions from '@/components/kb/panels/concepts/concept/change/staged/realizations/delete/DeleteRealizationActions'
 import DeleteRealizationContent from '@/components/kb/panels/concepts/concept/change/staged/realizations/delete/DeleteRealizationContent'
 import RealizationActions from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/RealizationActions'
 import RealizationContent from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/RealizationContent'
-import RealizationTitle from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/RealizationTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -10,7 +11,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const createRealizationModal = action => {
   const createComponents = () => {
-    const Title = () => <RealizationTitle action={action} />
+    const Title = () => <ConceptTitle action={action} />
 
     switch (action) {
       case CONCEPT_STATE.REALIZATION.ADD: {
