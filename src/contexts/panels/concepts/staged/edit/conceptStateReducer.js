@@ -13,7 +13,7 @@ import { editValue, resetValue } from '@/lib/kb/state/value'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ADD_CHILD, ALIAS, AUTHOR, CONCEPT, MEDIA, NAME, PARENT, RANK, REALIZATION, RESET } =
+const { ADD_CHILD, ALIAS, AUTHOR, MEDIA, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } =
   CONCEPT_STATE
 
 const conceptStateReducer = (state, { type, update }) => {
@@ -36,13 +36,10 @@ const conceptStateReducer = (state, { type, update }) => {
     case AUTHOR:
       return editValue(state, update)
 
-    case CONCEPT.STRUCTURE:
-      return setStructure(state, update)
-
-    case MEDIA.ADD:
+    case MEDIA_ITEM.ADD:
       return addMedia(state, update)
 
-    case MEDIA.DELETE:
+    case MEDIA_ITEM.DELETE:
       return deleteMedia(state, update)
 
     case MEDIA.EDIT:

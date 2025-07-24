@@ -1,9 +1,8 @@
-import { useMemo } from 'react'
-import { FormControl, Stack, Autocomplete, TextField } from '@mui/material'
+import { useMemo, useCallback } from 'react'
+import { FormControl, Stack } from '@mui/material'
 
 import TextInput from '@/components/common/TextInput'
 import useAvailableLinkTemplates from '../useAvailableLinkTemplates'
-import useRealizationFormHandlers from './useRealizationFormHandlers'
 import RealizationToConcept from './RealizationToConcept'
 
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
@@ -20,35 +19,23 @@ const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) 
     return uniqueLinkNames.sort()
   }, [allAvailableTemplates])
 
-  const filteredOptions = useMemo(() => {
-    const currentInput = realizationItem.linkName || ''
-    if (!currentInput) return linkNameOptions
-    return linkNameOptions.filter(option =>
-      option.toLowerCase().includes(currentInput.toLowerCase())
-    )
-  }, [linkNameOptions, realizationItem.linkName])
-
   const isValidLinkName = useMemo(() => {
     const currentLinkName = realizationItem.linkName || ''
     return linkNameOptions.includes(currentLinkName)
   }, [linkNameOptions, realizationItem.linkName])
 
-  const {
-    handleLinkNameSelect,
-    handleLinkNameInputChange,
-    handleLinkValueChange,
-    handleKeyDown,
-    handleLinkValueKeyDown,
-  } = useRealizationFormHandlers({
-    allAvailableTemplates,
-    filteredOptions,
-    focusLinkValue: () => {
-      const linkValueInput = document.querySelector('input[name="linkValue"]')
-      linkValueInput?.focus()
+  // Handler for link value (linkName is now read-only)
+  const handleLinkValueChange = useCallback(
+    event => {
+      const { name: field, value } = event.target
+      const updatedRealizationItem = {
+        ...realizationItem,
+        [field]: value,
+      }
+      onRealizationChange(updatedRealizationItem, field)
     },
-    onRealizationChange,
-    realizationItem,
-  })
+    [realizationItem, onRealizationChange]
+  )
 
   return (
     <Stack
@@ -61,21 +48,14 @@ const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) 
       width='100%'
     >
       <FormControl fullWidth margin='normal'>
-        <Autocomplete
-          onChange={handleLinkNameSelect}
-          onInputChange={handleLinkNameInputChange}
-          options={linkNameOptions}
-          renderInput={params => (
-            <TextField
-              {...params}
-              label='Link Name'
-              onKeyDown={handleKeyDown}
-              required
-              size='small'
-            />
-          )}
+        <TextInput
+          label='Link Name'
+          name='linkName'
+          required
           size='small'
           value={realizationItem.linkName || ''}
+          InputProps={{ readOnly: true }}
+          showClearButton={false}
         />
       </FormControl>
       <RealizationToConcept
@@ -89,7 +69,6 @@ const RealizationForm = ({ onRealizationChange, realizationItem, stageChange }) 
           label='Link Value'
           name='linkValue'
           onChange={handleLinkValueChange}
-          onKeyDown={handleKeyDown}
           required
           size='small'
           value={realizationItem.linkValue}
