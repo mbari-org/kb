@@ -9,7 +9,7 @@ const useOnReset = (group, index) => {
 
   return useCallback(() => {
     modifyConcept({
-      type: CONCEPT_STATE.RESET.GROUP[group.toUpperCase()],
+      type: CONCEPT_STATE.RESET[group.toUpperCase()],
       update: { index },
     })
   }, [group, index, modifyConcept])

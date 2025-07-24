@@ -13,7 +13,7 @@ const resettingGroup = (confirmReset, group) => {
   const resetAll = resettingAll(confirmReset)
   if (resetAll) return resetAll
 
-  if (confirmReset.type === RESET.GROUP[group.toUpperCase()]) return RESETTING.EXTENT.ME
+  if (confirmReset.type === RESET[group.toUpperCase()]) return RESETTING.EXTENT.ME
 
   return RESETTING.EXTENT.OTHER
 }
@@ -58,7 +58,7 @@ const resettingMedia = (confirmReset, index) => {
   if (!confirmReset) return RESETTING.EXTENT.NONE
   if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
 
-  if (confirmReset.type === RESET.GROUP.MEDIA) return RESETTING.EXTENT.ME
+  if (confirmReset.type === RESET.MEDIA) return RESETTING.EXTENT.ME
   if (confirmReset.type === RESET.MEDIA && confirmReset.update?.groupIndex === index)
     return RESETTING.EXTENT.ME
 
@@ -69,7 +69,7 @@ const resettingRealization = (confirmReset, index) => {
   if (!confirmReset) return RESETTING.EXTENT.NONE
   if (confirmReset.type === RESET.TO_INITIAL) return RESETTING.EXTENT.ME
 
-  if (confirmReset.type === RESET.GROUP.REALIZATIONS) return RESETTING.EXTENT.ME
+  if (confirmReset.type === RESET.REALIZATIONS) return RESETTING.EXTENT.ME
   if (confirmReset.type === RESET.REALIZATION && confirmReset.update?.groupIndex === index)
     return RESETTING.EXTENT.ME
 

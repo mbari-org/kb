@@ -12,7 +12,7 @@ const MediaItemReset = ({ index }) => {
       index={index}
       resettingFunction={resettingMedia}
       group='media'
-      resetGroupType={RESET.GROUP.MEDIA}
+      resetGroupType={RESET.MEDIA}
       resetItemType={RESET.MEDIA}
     />
   )

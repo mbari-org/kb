@@ -44,12 +44,12 @@ const resetMedia = (dispatch, initialState) => {
   })
 }
 
-const resetMediaItem = (mediaIndex, dispatch, initialState) => {
-  dispatch({
-    type: RESET.MEDIA,
-    update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
-  })
-}
+// const resetMediaItem = (mediaIndex, dispatch, initialState) => {
+//   dispatch({
+//     type: RESET.MEDIA,
+//     update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
+//   })
+// }
 
 const resetRank = (dispatch, initialState) => {
   dispatch({
@@ -90,24 +90,31 @@ const resetConceptState = (action, dispatch, initialState) => {
       resetDeleteConcept(dispatch, action.update.concept)
       break
 
-    case RESET.GROUP.ALIASES:
+    case RESET.ALIASES:
       dispatch({
-        type: RESET.GROUP.ALIASES,
+        type: RESET.ALIASES,
         update: { aliases: initialState.aliases, index: action.update.index },
       })
       break
 
-    case RESET.GROUP.RANK:
-      resetRank(dispatch, initialState)
-      break
-
-    case RESET.GROUP.MEDIA:
+    case RESET.MEDIA:
       resetMedia(dispatch, initialState)
       break
 
-    case RESET.GROUP.REALIZATIONS:
+    case RESET.NAME:
       dispatch({
-        type: RESET.GROUP.REALIZATIONS,
+        type: RESET.NAME,
+        update: { name: initialState.name },
+      })
+      break
+
+    case RESET.RANK:
+      resetRank(dispatch, initialState)
+      break
+
+    case RESET.REALIZATIONS:
+      dispatch({
+        type: RESET.REALIZATIONS,
         update: { realizations: initialState.realizations, index: action.update.index },
       })
       break
@@ -119,16 +126,16 @@ const resetConceptState = (action, dispatch, initialState) => {
       })
       break
 
-    case RESET.MEDIA:
-      resetMediaItem(action.update.groupIndex, dispatch, initialState)
-      break
+    // case RESET.MEDIA:
+    //   resetMediaItem(action.update.groupIndex, dispatch, initialState)
+    //   break
 
     case RESET.TO_INITIAL:
       resetToInitial(dispatch, initialState)
       break
 
     default:
-      break
+      throw new Error(`Unknown reset action: ${action.type}`)
   }
 }
 

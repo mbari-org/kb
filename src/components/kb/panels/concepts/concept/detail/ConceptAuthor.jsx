@@ -21,7 +21,7 @@ const ConceptAuthor = () => {
   const modifyAuthor = useCallback(
     author => {
       modifyConcept({
-        type: CONCEPT_STATE.GROUP.AUTHOR,
+        type: CONCEPT_STATE.AUTHOR,
         update: { field: CONCEPT_FIELD.AUTHOR, value: author },
       })
     },

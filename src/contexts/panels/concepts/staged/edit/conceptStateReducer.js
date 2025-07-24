@@ -1,5 +1,5 @@
 import { addAlias, deleteAlias, editAlias, resetAliases } from '@/lib/kb/state/aliases'
-import { addMedia, deleteMedia, editMedia, resetMedia, resetMediaItem } from '@/lib/kb/state/media'
+import { addMedia, deleteMedia, editMedia, resetMedia } from '@/lib/kb/state/media'
 import { editName, resetName } from '@/lib/kb/state/name'
 import { editRank, resetRank } from '@/lib/kb/state/rank'
 import {
@@ -74,17 +74,17 @@ const conceptStateReducer = (state, { type, update }) => {
     case RESET.AUTHOR:
       return resetValue(state, update)
 
-    case RESET.GROUP.ALIASES:
+    case RESET.ALIASES:
       return resetAliases(state, update)
 
-    case RESET.GROUP.MEDIA:
+    case RESET.MEDIA:
       return resetMedia(state, update)
 
-    case RESET.GROUP.REALIZATIONS:
+    case RESET.REALIZATIONS:
       return resetRealizations(state, update)
 
-    case RESET.MEDIA:
-      return resetMediaItem(state, update)
+    // case RESET.MEDIA:
+    //   return resetMediaItem(state, update)
 
     case RESET.NAME:
       return resetName(state, update)

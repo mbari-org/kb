@@ -10,7 +10,7 @@ const RealizationsReset = () => {
   return (
     <StagedReset
       group='realizations'
-      resetGroupType={RESET.GROUP.REALIZATIONS}
+      resetGroupType={RESET.REALIZATIONS}
       resetItemType={RESET.REALIZATION}
       resettingFunction={resettingRealization}
     />
