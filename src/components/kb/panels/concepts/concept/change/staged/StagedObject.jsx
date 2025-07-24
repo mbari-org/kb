@@ -27,15 +27,17 @@ const StagedObject = ({ group, stagedEdit }) => {
   }
 
   const GroupBody = () => {
-    const levelChanged = initial.level !== staged.level
-    const nameChanged = initial.name !== staged.name
-
-    const levelValue = formatDelta(initial.level, staged.level)
-    const nameValue = formatDelta(initial.name, staged.name)
     return (
       <Box sx={{ ml: 3 }}>
-        {nameChanged && <FieldValueDisplay field='name' value={nameValue} />}
-        {levelChanged && <FieldValueDisplay field='level' value={levelValue} />}
+        {Object.keys(initial).map(field => {
+          const hasChanged = initial[field] !== staged[field]
+          if (!hasChanged) return null
+          
+          const deltaValue = formatDelta(initial[field], staged[field])
+          return (
+            <FieldValueDisplay key={field} field={field} value={deltaValue} />
+          )
+        })}
       </Box>
     )
   }

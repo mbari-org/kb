@@ -10,14 +10,11 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { CHANGE_NAME, CHANGE_NAME_EXTENT } = CONCEPT_STATE.CONCEPT
-
 const ChangeNameActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  // Handle case where modalData might be undefined
-  const { isValid = false, name = '', nameChangeType = '' } = modalData || {}
+  const { isValid, name } = modalData
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
@@ -27,30 +24,21 @@ const ChangeNameActions = () => {
 
   const handleStage = () => {
     modifyConcept({
-      type: CHANGE_NAME,
-      update: {
-        field: 'name',
-        value: name,
-      },
+      type: CONCEPT_STATE.NAME,
+      update: name,
     })
-    modifyConcept({
-      type: CHANGE_NAME_EXTENT,
-      update: {
-        field: 'nameChange',
-        value: nameChangeType,
-      },
-    })
+
     closeModal(true)
   }
 
   return createStagedActions({
+    confirmReset,
+    name: 'ChangeNameActions',
+    onConfirmDiscard: handleConfirmDiscard,
+    onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled: !isValid,
-    confirmReset,
-    onConfirmDiscard: handleConfirmDiscard,
-    onContinue: handleContinue,
-    name: 'ChangeNameActions',
   })
 }
 

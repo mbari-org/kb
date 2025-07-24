@@ -41,7 +41,7 @@ const StagedContent = () => {
         return <StagedValue key={field} group={RESETTING.AUTHOR} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.NAME:
-        return <StagedValue key={field} group={RESETTING.NAME} stagedEdit={stagedEdit} />
+        return <StagedObject key={field} group={RESETTING.NAME} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.PARENT:
         return <StagedValue key={field} group={RESETTING.PARENT} stagedEdit={stagedEdit} />

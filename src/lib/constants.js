@@ -12,10 +12,12 @@ export const CONCEPT_FIELD = {
 
 export const CONCEPT_NAME = {
   VALUE: 'name',
-  EXTENT: {
-    NAME: 'Name Only',
-    DATA: 'Associated Data',
-  },
+  EXTENT: 'nameExtent',
+}
+
+export const CONCEPT_NAME_EXTENT = {
+  ASSOCIATED_DATA: 'Associated Data',
+  NAME_ONLY: 'Name Only',
 }
 
 export const CONCEPT_NAME_TYPES = {
@@ -25,7 +27,7 @@ export const CONCEPT_NAME_TYPES = {
   SYNONYM: 'Synonym',
 }
 
-export const CONCEPT_PROPERTIES = {
+export const CONCEPT_PROPERTY_LIST = {
   ITEMS_PER_PAGE: 5,
 }
 
@@ -69,6 +71,7 @@ export const CONCEPT_STATE = {
     DELETE: 'Media Delete',
     EDIT: 'Media Edit',
   },
+  NAME: 'Name',
   RANK: 'Rank',
   REALIZATION: {
     ADD: 'Realization Add',
@@ -79,24 +82,18 @@ export const CONCEPT_STATE = {
   RESET: {
     ADD_CHILD: 'Reset Add Child',
     ADD_CHILDREN: 'Reset Add Children',
-    ALIAS: 'Reset Aliases Item',
-    AUTHOR: 'Reset Author',
     CHANGE_NAME: 'Reset Change Name',
     CHANGE_PARENT: 'Reset Change Parent',
     DELETE_CONCEPT: 'Reset Delete Concept',
     GROUP: {
       ALIASES: 'Reset Aliases',
       AUTHOR: 'Reset Author',
-      MEDIA: 'Reset Media',
       NAME: 'Reset Name',
       PARENT: 'Reset Parent',
+      MEDIA: 'Reset Media',
       RANK: 'Reset Rank',
       REALIZATIONS: 'Reset Realizations',
     },
-    MEDIA: 'Reset Media',
-    PARENT: 'Reset Parent',
-    RANK: 'Reset Rank',
-    REALIZATION: 'Reset Realization Item',
     STRUCTURE: 'Reset Structure',
     TO_INITIAL: 'Reset To Initial',
   },
@@ -207,6 +204,7 @@ export const RESETTING = {
   AUTHOR: 'Author',
   CHILDREN: 'Children',
   MEDIA: 'Media',
+  NAME: 'Name',
   PARENT: 'Parent',
   RANK: 'Rank',
   REALIZATIONS: 'Realizations',

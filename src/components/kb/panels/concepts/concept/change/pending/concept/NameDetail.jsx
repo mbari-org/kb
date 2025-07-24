@@ -12,10 +12,10 @@ import { useConceptNamePendingApproval } from '@/components/kb/panels/concepts/c
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { LABELS, PENDING } from '@/lib/constants'
+import { CONCEPT_NAME_EXTENT, PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
-const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
+const { NAME_ONLY } = CONCEPT_NAME_EXTENT
 
 const NameDetail = ({ pendingField }) => {
   const { concept } = use(ConceptContext)

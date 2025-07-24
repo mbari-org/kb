@@ -1,11 +1,9 @@
 import { pick } from '@/lib/utils'
 
-const structureState = concept => {
+const structureState = () => {
   return {
     children: [],
     delete: false,
-    name: concept.name,
-    nameExtent: '',
   }
 }
 
@@ -17,7 +15,7 @@ const addChild = (state, update) => {
 }
 
 const setStructure = (state, update) => {
-  const structureUpdate = pick(update, ['delete', 'name', 'nameExtent'])
+  const structureUpdate = pick(update, ['delete'])
   return {
     ...state,
     ...structureUpdate,

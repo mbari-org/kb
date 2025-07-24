@@ -15,42 +15,56 @@ const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept, stagedState } = use(ConceptContext)
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
   const { user } = use(UserContext)
 
-  const [name, setName] = useState(concept.name)
+  const [name, setName] = useState({ value: concept.name, extent: '' })
 
-  // Handle case where modalData might be undefined
-  const { modified = false, nameChangeType = '' } = modalData || {}
-
-  const toColor = modified ? theme.palette.primary.edit : theme.palette.grey[500]
+  const toColor =
+    name.value !== concept.name && !getNames().includes(name.value)
+      ? theme.palette.primary.edit
+      : theme.palette.grey[500]
 
   const isAdminUser = isAdmin(user)
 
+  const realizationCount = stagedState?.realizations.length
+
+  const isChangeValid = (nameValue, extentValue) => {
+    const modified = nameValue !== concept.name && !getNames().includes(nameValue)
+    return modified && (!isAdminUser || (isAdminUser && extentValue !== ''))
+  }
+
   const handleNameChange = event => {
     const { value } = event.target
-    setName(value)
-    const modified = value !== concept.name && !getNames().includes(value)
-    const isNameChangeTypeOK = !isAdmin(user) || (isAdmin(user) && nameChangeType)
+    setName(prevName => ({ ...prevName, value }))
+
+    const isValid = isChangeValid(value, name.extent)
     setModalData(prevData => ({
       ...prevData,
-      name: value,
-      modified,
-      isValid: modified && isNameChangeTypeOK,
+      name: { ...prevData.name, value },
+      isValid,
     }))
   }
 
-  const handleNameChangeType = event => {
+  const handleNameExtentChange = event => {
     const value = event.target.value
+    setName(prevName => ({ ...prevName, extent: value }))
+
+    const isValid = isChangeValid(name.value, value)
     setModalData(prevData => ({
       ...prevData,
-      nameChangeType: value,
-      isValid: prevData.modified && value,
+      name: { ...prevData.name, extent: value },
+      isValid,
     }))
   }
 
-  const realizationCount = stagedState?.realizations.length
+  useEffect(() => {
+    setModalData({
+      name: { value: concept.name, extent: '' },
+      isValid: false,
+    })
+  }, [concept, setModalData])
 
   return (
     <Box>
@@ -75,14 +89,14 @@ const ChangeNameContent = () => {
               },
             },
           }}
-          value={name}
+          value={name.value}
           variant='standard'
         />
       </Stack>
 
       <Box sx={{ ml: 6.75 }}>
         {isAdminUser && (
-          <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+          <NameChangeExtent nameChangeType={name.extent} onChange={handleNameExtentChange} />
         )}
       </Box>
 

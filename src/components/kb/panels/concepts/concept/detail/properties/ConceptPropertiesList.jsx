@@ -1,8 +1,8 @@
 import { Box, Typography, Stack } from '@mui/material'
 
-import { CONCEPT_PROPERTIES } from '@/lib/constants'
+import { CONCEPT_PROPERTY_LIST } from '@/lib/constants'
 
-const { ITEMS_PER_PAGE } = CONCEPT_PROPERTIES
+const { ITEMS_PER_PAGE } = CONCEPT_PROPERTY_LIST
 
 const ConceptPropertiesList = ({ items, currentPage, renderItem }) => {
   const startIndex = currentPage * ITEMS_PER_PAGE

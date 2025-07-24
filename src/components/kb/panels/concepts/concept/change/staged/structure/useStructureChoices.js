@@ -18,7 +18,7 @@ const useStructureChoices = () => {
   const hasPendingName = hasPending(conceptPending, 'ConceptName')
 
   const hasStagedChildren = stagedState.children.length > 0
-  const hasStagedName = !!stagedState.nameChange
+  const hasStagedName = stagedState.name.value !== concept.name
   const hasStagedParent = stagedState.parent !== concept.parent
   const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
 

@@ -1,7 +1,8 @@
 import { FormControlLabel, Radio, Stack } from '@mui/material'
-import { LABELS } from '@/lib/constants'
 
-const { NAME_ONLY, ASSOCIATED_DATA } = LABELS.CONCEPT.CHANGE_NAME
+import { CONCEPT_NAME_EXTENT } from '@/lib/constants'
+
+const { NAME_ONLY, ASSOCIATED_DATA } = CONCEPT_NAME_EXTENT
 
 const textSx = {
   '& .MuiFormControlLabel-label': {

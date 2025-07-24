@@ -4,9 +4,9 @@ import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ConceptPropertiesDetails from './ConceptPropertiesDetails'
 import ConceptPropertiesSummary from './ConceptPropertiesSummary'
 
-import { CONCEPT_PROPERTIES } from '@/lib/constants'
+import { CONCEPT_PROPERTY_LIST } from '@/lib/constants'
 
-const { ITEMS_PER_PAGE } = CONCEPT_PROPERTIES
+const { ITEMS_PER_PAGE } = CONCEPT_PROPERTY_LIST
 
 const ConceptPropertiesSection = ({
   children,
