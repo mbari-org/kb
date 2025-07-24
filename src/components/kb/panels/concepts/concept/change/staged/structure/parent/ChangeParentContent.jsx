@@ -1,7 +1,6 @@
 import { use, useCallback, useState } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -9,8 +8,6 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import ToConceptChoice from '../ToConceptChoice'
 
 const ChangeParentContent = ({ omitChoices }) => {
-  const theme = useTheme()
-
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ConceptModalContext)
 

@@ -1,4 +1,4 @@
-import { use, useState, useRef, useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 
 import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -6,36 +6,31 @@ import { useTheme } from '@mui/material/styles'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import NameChangeExtent from '@/components/common/NameChangeExtent'
 import UserContext from '@/contexts/user/UserContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
 const ChangeNameContent = () => {
   const theme = useTheme()
-  const textFieldRef = useRef(null)
 
-  const { concept } = use(ConceptContext)
+  const { concept, stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
   const { user } = use(UserContext)
 
-  const [primaryName, setPrimaryName] = useState(concept.name)
+  const [name, setName] = useState(concept.name)
 
   // Handle case where modalData might be undefined
   const { modified = false, nameChangeType = '' } = modalData || {}
 
-  const fromColor = 'main'
   const toColor = modified ? theme.palette.primary.edit : theme.palette.grey[500]
 
-  useEffect(() => {
-    if (textFieldRef.current) {
-      textFieldRef.current.focus()
-    }
-  }, [])
+  const isAdminUser = isAdmin(user)
 
   const handleNameChange = event => {
     const { value } = event.target
-    setPrimaryName(value)
+    setName(value)
     const modified = value !== concept.name && !getNames().includes(value)
     const isNameChangeTypeOK = !isAdmin(user) || (isAdmin(user) && nameChangeType)
     setModalData(prevData => ({
@@ -46,13 +41,23 @@ const ChangeNameContent = () => {
     }))
   }
 
+  const handleNameChangeType = event => {
+    const value = event.target.value
+    setModalData(prevData => ({
+      ...prevData,
+      nameChangeType: value,
+      isValid: prevData.modified && value,
+    }))
+  }
+
+  const realizationCount = stagedState?.realizations.length
+
   return (
     <Box>
       <Typography variant='h6'>Change Name</Typography>
-      <Stack alignItems='center' direction='row' spacing={1} sx={{ ml: 3 }}>
+      <Stack direction='row' spacing={2} alignItems='center' sx={{ mt: 1, ml: 3 }}>
         <Typography>To:</Typography>
         <TextField
-          inputRef={textFieldRef}
           fullWidth
           onChange={handleNameChange}
           slotProps={{
@@ -70,26 +75,37 @@ const ChangeNameContent = () => {
               },
             },
           }}
-          value={primaryName}
+          value={name}
           variant='standard'
         />
       </Stack>
 
-      <Box sx={{ mt: 2 }}>
-        <Typography variant='body1' color='text.secondary' sx={{ mt: 2 }}>
-          {`Updating the name of concept will affect CxTBD link realizations.`}
-        </Typography>
-        {!isAdmin(user) && (
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Typography variant='body1' color='text.secondary'>
-              {`Please communicate with an admin regarding this change as`}
-            </Typography>
-            <Typography variant='body1' color='text.secondary'>
-              {`only admins can specify the extent of a Concept name change.`}
-            </Typography>{' '}
-          </Box>
+      <Box sx={{ ml: 6.75 }}>
+        {isAdminUser && (
+          <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         )}
       </Box>
+
+      {realizationCount > 0 && (
+        <Box sx={{ borderTop: '1px solid #000000', mt: 2, textAlign: 'center' }}>
+          <Typography variant='body1' color='text.secondary' sx={{ mt: 2 }}>
+            {`Updating the name of concept will affect ${realizationCount} link realizations.`}
+          </Typography>
+          {!isAdminUser && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant='body1' color='text.secondary'>
+                {'Please communicate with an admin regarding this change since'}
+              </Typography>
+              <Typography variant='body1' color='text.secondary'>
+                {'when approving, an admin must specify whether to modify the'}
+              </Typography>
+              <Typography variant='body1' color='text.secondary'>
+                {'associated link realizations.'}
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      )}
     </Box>
   )
 }

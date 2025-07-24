@@ -6,7 +6,6 @@ const structureState = concept => {
     delete: false,
     name: concept.name,
     nameExtent: '',
-    parent: concept.parent,
   }
 }
 
@@ -18,7 +17,7 @@ const addChild = (state, update) => {
 }
 
 const setStructure = (state, update) => {
-  const structureUpdate = pick(update, ['delete', 'name', 'nameExtent', 'parent'])
+  const structureUpdate = pick(update, ['delete', 'name', 'nameExtent'])
   return {
     ...state,
     ...structureUpdate,
