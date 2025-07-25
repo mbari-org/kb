@@ -11,7 +11,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
-import { hasTrueValue } from '@/lib/utils'
+import { hasTrueField } from '@/lib/utils'
 
 const EditAliasActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
@@ -34,7 +34,7 @@ const EditAliasActions = () => {
     document.querySelector(`#${ADD_ALIAS_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !validName || !hasTrueValue(modified)
+  const stageDisabled = !validName || !hasTrueField(modified)
 
   return createStagedActions({
     confirmReset,

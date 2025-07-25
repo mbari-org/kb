@@ -51,7 +51,7 @@ const initialModalData = {
   parent: '',
 }
 
-const useChangeParent = closeChoices => {
+const useChangeParentModal = () => {
   const { concept, modifyConcept } = use(ConceptContext)
   const { setModal, setModalData, setProcessing } = use(ConceptModalContext)
   const { loadConceptDescendants } = use(TaxonomyContext)
@@ -63,7 +63,6 @@ const useChangeParent = closeChoices => {
     try {
       alreadyLoadingDescendants.current = true
       setProcessing(LOADING)
-      closeChoices()
 
       const taxonomy = await loadConceptDescendants(concept)
       const omitChoices = [
@@ -83,15 +82,7 @@ const useChangeParent = closeChoices => {
       alreadyLoadingDescendants.current = false
       setProcessing(false)
     }
-  }, [
-    closeChoices,
-    concept,
-    loadConceptDescendants,
-    modifyConcept,
-    setModal,
-    setModalData,
-    setProcessing,
-  ])
+  }, [concept, loadConceptDescendants, modifyConcept, setModal, setModalData, setProcessing])
 }
 
-export default useChangeParent
+export default useChangeParentModal

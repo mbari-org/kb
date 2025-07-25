@@ -18,25 +18,18 @@ const ConceptAuthor = () => {
 
   const border = stagedBorder(initialState.author, stagedState.author)
 
-  const modifyAuthor = useCallback(
-    author => {
-      modifyConcept({
-        type: CONCEPT_STATE.AUTHOR,
-        update: { field: CONCEPT_FIELD.AUTHOR, value: author },
-      })
-    },
-    [modifyConcept]
-  )
-
   const infoStyle = useConceptDetailStyle('Author')
 
   const handleChange = useCallback(
     event => {
-      const newValue = event.target.value
-      setAuthor(newValue)
-      modifyAuthor(newValue)
+      const value = event.target.value
+      setAuthor(value)
+      modifyConcept({
+        type: CONCEPT_STATE.AUTHOR,
+        update: { field: CONCEPT_FIELD.AUTHOR, value },
+      })
     },
-    [modifyAuthor]
+    [modifyConcept]
   )
 
   useEffect(() => {

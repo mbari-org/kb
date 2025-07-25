@@ -1,9 +1,8 @@
 import { use, useCallback } from 'react'
 
 import ConceptTitle from '@/components/common/ConceptTitle'
-
-import AddChildActions from './AddChildActions'
-import AddChildContent from './AddChildContent'
+import ChangeNameActions from './ChangeNameActions'
+import ChangeNameContent from './ChangeNameContent'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -12,30 +11,24 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ADD_CHILD, RESET } = CONCEPT_STATE
+const { NAME, RESET } = CONCEPT_STATE
 
-const addChildModal = () => {
+const changeNameModal = () => {
   const components = {
-    Actions: AddChildActions,
-    Content: AddChildContent,
+    Actions: ChangeNameActions,
+    Content: ChangeNameContent,
     Title: ConceptTitle,
   }
-
   return createModal(components)
 }
 
-const addChildOnClose = modifyConcept => {
+const changeNameOnClose = modifyConcept => {
   return modalData => {
-    // Handle case where modalData is null (defensive programming)
-    if (!modalData) {
-      return true
-    }
-
     if (modalData.modified) {
       modifyConcept({
-        type: RESET.CHILD,
+        type: RESET.CHANGE_NAME,
         update: {
-          child: modalData.child,
+          name: modalData.name,
         },
       })
       return false
@@ -45,29 +38,22 @@ const addChildOnClose = modifyConcept => {
 }
 
 const initialModalData = {
-  action: ADD_CHILD,
-  child: {
-    author: '',
-    name: '',
-    rankLevel: '',
-    rankName: '',
-  },
+  action: NAME,
   modified: false,
+  name: '',
 }
 
-const useAddChild = closeChoices => {
+const useChangeNameModal = () => {
   const { modifyConcept } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
   return useCallback(() => {
-    closeChoices()
-
-    const modal = addChildModal()
-    const onClose = addChildOnClose(modifyConcept)
+    const modal = changeNameModal()
+    const onClose = changeNameOnClose(modifyConcept)
     setModal(modal, onClose)
 
     setModalData(initialModalData)
-  }, [closeChoices, modifyConcept, setModal, setModalData])
+  }, [modifyConcept, setModal, setModalData])
 }
 
-export default useAddChild
+export default useChangeNameModal

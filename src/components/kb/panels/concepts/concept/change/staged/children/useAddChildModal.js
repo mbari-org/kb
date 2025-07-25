@@ -1,8 +1,9 @@
 import { use, useCallback } from 'react'
 
 import ConceptTitle from '@/components/common/ConceptTitle'
-import ChangeNameActions from './ChangeNameActions'
-import ChangeNameContent from './ChangeNameContent'
+
+import AddChildActions from './AddChildActions'
+import AddChildContent from './AddChildContent'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -11,18 +12,19 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { NAME, RESET } = CONCEPT_STATE
+const { ADD_CHILD, RESET } = CONCEPT_STATE
 
-const changeNameModal = () => {
+const addChildModal = () => {
   const components = {
-    Actions: ChangeNameActions,
-    Content: ChangeNameContent,
+    Actions: AddChildActions,
+    Content: AddChildContent,
     Title: ConceptTitle,
   }
+
   return createModal(components)
 }
 
-const changeNameOnClose = modifyConcept => {
+const addChildOnClose = modifyConcept => {
   return modalData => {
     // Handle case where modalData is null (defensive programming)
     if (!modalData) {
@@ -31,9 +33,9 @@ const changeNameOnClose = modifyConcept => {
 
     if (modalData.modified) {
       modifyConcept({
-        type: RESET.CHANGE_NAME,
+        type: RESET.CHILD,
         update: {
-          name: modalData.name,
+          child: modalData.child,
         },
       })
       return false
@@ -43,24 +45,27 @@ const changeNameOnClose = modifyConcept => {
 }
 
 const initialModalData = {
-  action: NAME,
+  action: ADD_CHILD,
+  child: {
+    author: '',
+    name: '',
+    rankLevel: '',
+    rankName: '',
+  },
   modified: false,
-  name: '',
 }
 
-const useChangeName = closeChoices => {
+const useAddChildModal = () => {
   const { modifyConcept } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
   return useCallback(() => {
-    closeChoices()
-
-    const modal = changeNameModal()
-    const onClose = changeNameOnClose(modifyConcept)
+    const modal = addChildModal()
+    const onClose = addChildOnClose(modifyConcept)
     setModal(modal, onClose)
 
     setModalData(initialModalData)
-  }, [closeChoices, modifyConcept, setModal, setModalData])
+  }, [modifyConcept, setModal, setModalData])
 }
 
-export default useChangeName
+export default useAddChildModal

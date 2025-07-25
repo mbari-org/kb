@@ -18,15 +18,13 @@ const deleteConceptModal = () => {
   return createModal(components)
 }
 
-const useDeleteConcept = closeChoices => {
+const useDeleteConceptModal = () => {
   const { setModal } = use(ConceptModalContext)
 
   return useCallback(() => {
-    closeChoices()
-
     const modal = deleteConceptModal()
     setModal(modal)
-  }, [closeChoices, setModal])
+  }, [setModal])
 }
 
-export default useDeleteConcept
+export default useDeleteConceptModal

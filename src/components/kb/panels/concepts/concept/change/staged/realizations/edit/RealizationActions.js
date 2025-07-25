@@ -9,7 +9,7 @@ import { EDIT_REALIZATION_FORM_ID } from './form/RealizationForm'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { hasTrueValue } from '@/lib/utils'
+import { hasTrueField } from '@/lib/utils'
 
 const RealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
@@ -40,7 +40,7 @@ const RealizationActions = () => {
   const stageDisabled =
     isDuplicate ||
     !isValidToConcept ||
-    !hasTrueValue(modified) ||
+    !hasTrueField(modified) ||
     !validRealization(realizationItem)
 
   return createStagedActions({
