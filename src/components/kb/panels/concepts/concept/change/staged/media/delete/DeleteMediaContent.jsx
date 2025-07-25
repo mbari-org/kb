@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import DetailContent from '@/components/common/DetailContent'
+import Detail from '@/components/common/factory/Detail'
 import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -16,7 +16,7 @@ const DeleteMediaContent = () => {
 
   const detail = drop(mediaItem, ['action', 'conceptName', 'id', 'mimeType'])
 
-  const Details = createComponent(DetailContent, {
+  const Details = createComponent(Detail, {
     detail,
     sx: { ml: 1, mr: 1 },
   })

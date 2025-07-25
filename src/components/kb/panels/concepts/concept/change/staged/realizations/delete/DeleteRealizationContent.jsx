@@ -1,23 +1,31 @@
 import { use } from 'react'
+import { Box, Typography } from '@mui/material'
 
-import DetailContent from '@/components/common/DetailContent'
+import Detail from '@/components/common/factory/Detail'
 import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { drop } from '@/lib/utils'
-
 const DeleteRealizationContent = () => {
   const { modalData } = use(ConceptModalContext)
   const { realizationItem } = modalData
-  const detailRealization = drop(realizationItem, 'id')
 
-  const Details = createComponent(DetailContent, {
-    detail: detailRealization,
-    sx: { ml: 1, mr: 1 },
+  const actionText = modalData.action.split(' ').pop()
+
+  const keys = ['linkName', 'toConcept', 'linkValue']
+  const Details = createComponent(Detail, {
+    detail: realizationItem,
+    keys,
   })
 
-  return <Details id='delete-realization-content-detail' />
+  return (
+    <Box>
+      <Typography variant='h6'>{actionText} Realization</Typography>
+      <Box sx={{ ml: 2, mt: 1 }}>
+        <Details id='delete-realization-content-detail' />
+      </Box>
+    </Box>
+  )
 }
 
 export default DeleteRealizationContent

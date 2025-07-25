@@ -1,5 +1,5 @@
 import { use, useMemo, useState } from 'react'
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -21,6 +21,8 @@ const EditAliasContent = () => {
   const { getNames } = use(TaxonomyContext)
 
   const [formAlias, setFormAlias] = useState(modalData.aliasItem)
+
+  const actionText = modalData.action.split(' ').pop()
 
   const stagedAlias = useMemo(
     () => ({ ...stagedState.aliases[modalData.aliasIndex] }),
@@ -77,6 +79,7 @@ const EditAliasContent = () => {
 
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={stageAlias}>
+      <Typography variant='h6'>{actionText} Alias</Typography>
       <FormControl {...inputStyle}>
         <TextInput
           error={nameError}
