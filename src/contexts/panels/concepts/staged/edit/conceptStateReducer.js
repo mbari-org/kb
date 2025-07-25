@@ -42,7 +42,7 @@ const conceptStateReducer = (state, { type, update }) => {
     case MEDIA_ITEM.DELETE:
       return deleteMedia(state, update)
 
-    case MEDIA.EDIT:
+    case MEDIA_ITEM.EDIT:
       return editMedia(state, update)
 
     case NAME:

@@ -121,16 +121,16 @@ const refresh = async (concept, updatesInfo, apiFns) => {
   if (hasUpdated('media')) {
     updatedConcept.media = updatedValue('media').reduce((acc, mediaItem) => {
       switch (mediaItem.action) {
-        case MEDIA.ADD: {
+        case MEDIA_ITEM.ADD: {
           const mediaId = results.find(result => result.url === mediaItem.url).id
           acc.push({ ...mediaItem, id: mediaId })
           break
         }
 
-        case MEDIA.DELETE:
+        case MEDIA_ITEM.DELETE:
           break
 
-        case MEDIA.EDIT:
+        case MEDIA_ITEM.EDIT:
           acc.push(drop(mediaItem, ['action']))
           break
 

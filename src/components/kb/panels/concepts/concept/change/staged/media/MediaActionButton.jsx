@@ -24,7 +24,7 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
 
   const handleClick = useCallback(() => {
     const mediaIndex =
-      action === CONCEPT_STATE.MEDIA.ADD ? stagedState.media.length : stagedState.mediaIndex
+      action === CONCEPT_STATE.MEDIA_ITEM.ADD ? stagedState.media.length : stagedState.mediaIndex
     const stagedMediaItem = stagedState.media[mediaIndex]
     const mediaItem = stagedMediaItem ? mediaItemFields(stagedMediaItem) : EMPTY_MEDIA_ITEM
 

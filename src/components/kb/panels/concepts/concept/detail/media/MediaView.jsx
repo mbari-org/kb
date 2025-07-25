@@ -22,7 +22,7 @@ const MediaView = () => {
 
   const [previewOn, setPreviewOn] = useState(false)
 
-  // const showEditMedia = editing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA.DELETE
+  // const showEditMedia = editing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA_ITEM.DELETE
   const showEditMedia = editing && !media[mediaIndex]?.historyId
 
   return (
