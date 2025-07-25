@@ -6,7 +6,7 @@
 import { createActions } from '@/components/modal/conceptModalFactory'
 import { LABELS, RESETTING } from '@/lib/constants'
 
-const { CONFIRM_DISCARD, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
+const { CONFIRM, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
 const { CONFIRMED } = RESETTING
 
 /**
@@ -22,21 +22,21 @@ const { CONFIRMED } = RESETTING
  * @returns {Component} Actions component
  */
 export const createStagedActions = ({
+  confirmReset = false,
+  name = 'StagedActions',
+  onConfirmDiscard,
+  onContinue,
   onDiscard,
   onStage,
   stageDisabled = false,
-  confirmReset = false,
-  onConfirmDiscard,
-  onContinue,
-  name = 'ConceptActions',
 }) => {
   const colors = ['cancel', 'main']
   const disabled = [false, stageDisabled]
-  const labels = confirmReset ? [CONFIRM_DISCARD, CONTINUE] : [DISCARD, STAGE]
+  const labels = confirmReset ? [CONFIRM, CONTINUE] : [DISCARD, STAGE]
 
   const onAction = label => {
     switch (label) {
-      case CONFIRM_DISCARD:
+      case CONFIRM:
         onConfirmDiscard()
         break
       case CONTINUE:
@@ -68,15 +68,17 @@ export const createConfirmationHandlers = ({ modifyConcept, closeModal, concept 
       type: CONFIRMED.YES,
       update: { name: concept.name, ...update },
     })
-    closeModal(true) // Force close, bypassing onClose
+    // Force close, bypassing onClose
+    closeModal(true)
   }
 
   const handleContinue = () => {
     modifyConcept({ type: CONFIRMED.NO })
   }
 
+  // Let onClose handle reset
   const handleDiscard = () => {
-    closeModal() // Let onClose handle any reset logic
+    closeModal()
   }
 
   return {

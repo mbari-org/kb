@@ -17,8 +17,8 @@ const createAliasOnClose = ({ initialState, modifyConcept }) => {
     }
 
     modifyConcept({
-      type: RESET.ALIAS,
-      update: { aliasIndex, aliasItem: initialState.aliases[aliasIndex] },
+      type: RESET.ALIASES,
+      update: { aliases: initialState.aliases, index: aliasIndex },
     })
     return false
   }
