@@ -15,7 +15,13 @@ import { CONCEPT_STATE } from '@/lib/constants'
 import { descendants } from '@/lib/kb/model/taxonomy'
 
 const { LOADING } = PROCESSING
-const { PARENT, RESET } = CONCEPT_STATE
+const { RESET } = CONCEPT_STATE
+
+const initialModalData = {
+  action: CONCEPT_STATE.PARENT,
+  modified: false,
+  parent: '',
+}
 
 const changeParentModal = omitChoices => {
   const components = {
@@ -28,13 +34,9 @@ const changeParentModal = omitChoices => {
 
 const changeParentOnClose = modifyConcept => {
   return modalData => {
-    if (!modalData) {
-      return true
-    }
-
     if (modalData.modified) {
       modifyConcept({
-        type: RESET.CHANGE_PARENT,
+        type: RESET.PARENT,
         update: {
           name: modalData.name,
         },
@@ -45,16 +47,11 @@ const changeParentOnClose = modifyConcept => {
   }
 }
 
-const initialModalData = {
-  action: PARENT,
-  modified: false,
-  parent: '',
-}
-
 const useChangeParentModal = () => {
   const { concept, modifyConcept } = use(ConceptContext)
   const { setModal, setModalData, setProcessing } = use(ConceptModalContext)
   const { loadConceptDescendants } = use(TaxonomyContext)
+
   const alreadyLoadingDescendants = useRef(false)
 
   return useCallback(async () => {
@@ -73,11 +70,11 @@ const useChangeParentModal = () => {
 
       const modal = changeParentModal(omitChoices)
       const onClose = changeParentOnClose(modifyConcept)
-      setModal(modal, onClose)
 
+      setModal(modal, onClose)
       setModalData(initialModalData)
     } catch (error) {
-      console.error('Failed to load descendants:', error)
+      throw new Error(`Failed to load descendants: ${error}`)
     } finally {
       alreadyLoadingDescendants.current = false
       setProcessing(false)

@@ -16,10 +16,8 @@ const ConceptModalProvider = ({ children }) => {
         return false
       }
 
-      // If we have an onClose callback, call it and check if it prevents closing
       if (onClose && !confirmed) {
         const shouldClose = onClose(modalData)
-        // If callback explicitly returns false, prevent closing
         if (shouldClose === false) {
           return false
         }
@@ -46,7 +44,6 @@ const ConceptModalProvider = ({ children }) => {
 
   const handleSetModal = useCallback((modal, onCloseCallback) => {
     setModal(modal)
-    // Use function wrapper to properly store function in useState
     setOnClose(() => onCloseCallback)
   }, [])
 
