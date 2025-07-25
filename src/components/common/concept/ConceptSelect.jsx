@@ -12,7 +12,7 @@ import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_SELECT, TO_CONCEPT_SPECIAL_VALUES } from '@/lib/constants'
+import { CONCEPT_SELECT, TO_CONCEPT_SPECIAL } from '@/lib/constants'
 
 const { CONCEPT_LABEL, RIGHT_COMPONENT, WIDTH } = CONCEPT_SELECT
 const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
@@ -42,7 +42,7 @@ const ConceptSelect = ({
 
     // If this is a special component (ToConcept), include special values in options
     if (rightComponent === SPECIAL) {
-      return [...baseOptions, ...TO_CONCEPT_SPECIAL_VALUES]
+      return [...baseOptions, ...TO_CONCEPT_SPECIAL]
     }
 
     return baseOptions
@@ -53,7 +53,7 @@ const ConceptSelect = ({
       // Check if the selected name is valid (either in options or a special value)
       const isValidSelection =
         options.includes(selectedName) ||
-        (rightComponent === SPECIAL && TO_CONCEPT_SPECIAL_VALUES.includes(selectedName))
+        (rightComponent === SPECIAL && TO_CONCEPT_SPECIAL.includes(selectedName))
 
       if (isValidSelection) {
         const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true

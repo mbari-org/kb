@@ -252,7 +252,7 @@ export const STORE = {
   },
 }
 
-export const TO_CONCEPT_SPECIAL_VALUES = ['self', 'nil']
+export const TO_CONCEPT_SPECIAL = ['self', 'nil']
 
 export const USER_ROLES = {
   ADMIN: 'Admin',

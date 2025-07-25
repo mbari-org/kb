@@ -43,7 +43,6 @@
     "build": "vite build",
     "kb": "yarn build && yarn preview",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "version:generate": "node scripts/generate-version.js"
+    "preview": "vite preview"
   }
 }

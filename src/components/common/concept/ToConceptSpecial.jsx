@@ -1,7 +1,7 @@
 import { Button, Stack } from '@mui/material'
 import theme from '@/lib/theme'
 
-import { TO_CONCEPT_SPECIAL_VALUES } from '@/lib/constants'
+import { TO_CONCEPT_SPECIAL } from '@/lib/constants'
 
 const ToConceptSpecial = ({ onChange }) => {
   const buttonStyle = {
@@ -18,7 +18,7 @@ const ToConceptSpecial = ({ onChange }) => {
 
   return (
     <Stack direction='row' spacing={1} sx={{ mt: 0.5 }}>
-      {TO_CONCEPT_SPECIAL_VALUES.map(value => (
+      {TO_CONCEPT_SPECIAL.map(value => (
         <Button
           key={value}
           onClick={() => onChange(value)}

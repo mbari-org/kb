@@ -5,6 +5,8 @@ import { FormControl, TextField, Autocomplete } from '@mui/material'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConceptTaxa } from '@/lib/api/concept'
 
+import { TO_CONCEPT_SPECIAL } from '@/lib/constants'
+
 const RealizationToConcept = ({
   realizationItem,
   onRealizationChange,
@@ -14,21 +16,21 @@ const RealizationToConcept = ({
 }) => {
   const { apiFns } = use(ConfigContext)
 
-  const [taxaNames, setTaxaNames] = useState([])
   const hasFetchedTaxaRef = useRef(false)
+
+  const [taxaNames, setTaxaNames] = useState([])
 
   const toConcept = realizationItem.toConcept
 
-  // a toConcept with only one option cannot be changed
-  const isSelfOrNil = useMemo(() => {
+  const isSpecial = useMemo(() => {
     return toConcept === 'self' || toConcept === 'nil'
   }, [toConcept])
 
-  // Check if current toConcept value is valid (in the taxa list)
-  const isValidToConcept = useMemo(() => {
-    if (!toConcept || isSelfOrNil) return true
-    return taxaNames.length === 0 || taxaNames.includes(toConcept)
-  }, [toConcept, taxaNames, isSelfOrNil])
+  // Check if current toConcept is descendant of the current concept
+  const isValidToConcept = useMemo(
+    () => !toConcept || isSpecial || taxaNames.length === 0 || taxaNames.includes(toConcept),
+    [toConcept, taxaNames, isSpecial]
+  )
 
   // Notify parent of validation status
   useEffect(() => {
@@ -38,8 +40,8 @@ const RealizationToConcept = ({
   }, [isValidToConcept, onValidationChange])
 
   const handleToConceptChange = useCallback(
-    (event, value) => {
-      if (isSelfOrNil) {
+    (_event, value) => {
+      if (isSpecial) {
         return
       }
       const updatedRealizationItem = {
@@ -48,7 +50,7 @@ const RealizationToConcept = ({
       }
       onRealizationChange(updatedRealizationItem, 'toConcept')
     },
-    [realizationItem, onRealizationChange, isSelfOrNil]
+    [realizationItem, onRealizationChange, isSpecial]
   )
 
   // Reset taxa fetch flag when template changes (indicated by templateId change)
@@ -61,10 +63,10 @@ const RealizationToConcept = ({
   useEffect(() => {
     if (!apiFns || !toConcept) return
 
-    const specialMap = {
-      self: ['self'],
-      nil: ['nil'],
-    }
+    const specialMap = TO_CONCEPT_SPECIAL.reduce((acc, val) => {
+      acc[val] = [val]
+      return acc
+    }, {})
     if (specialMap[toConcept]) {
       setTaxaNames(specialMap[toConcept])
       hasFetchedTaxaRef.current = true
@@ -126,7 +128,7 @@ const RealizationToConcept = ({
 
   return (
     <FormControl fullWidth margin='normal'>
-      {isEditMode || isSelfOrNil ? renderImmutableField() : renderEditableField()}
+      {isEditMode || isSpecial ? renderImmutableField() : renderEditableField()}
     </FormControl>
   )
 }

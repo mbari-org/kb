@@ -10,32 +10,25 @@ export function versionPlugin() {
 
   function generateVersionInfo() {
     try {
-      // Get current date in YYYY.MM.DD format
       const now = new Date()
       const year = now.getFullYear()
       const month = String(now.getMonth() + 1).padStart(2, '0')
       const day = String(now.getDate()).padStart(2, '0')
       const dateString = `${year}.${month}.${day}`
 
-      // Get current commit hash (short version)
       const commitHash = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim()
-
-      // Get current branch name
       const branchName = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim()
-
-      // Get commit date
       const commitDate = execSync('git show -s --format=%ci HEAD', { encoding: 'utf8' }).trim()
 
-      // Get commit message (first line only)
+      // first line of commit message
       const commitMessage = execSync('git log -1 --pretty=%B', { encoding: 'utf8' })
         .trim()
-        .split('\n')[0]
+        .split('\n')
+        .pop()
 
-      // Check if working directory is clean
       const isWorkingDirClean =
         execSync('git status --porcelain', { encoding: 'utf8' }).trim() === ''
 
-      // Create version object
       const versionInfo = {
         version: `${dateString}-${commitHash}`,
         buildDate: now.toISOString(),
@@ -50,7 +43,6 @@ export function versionPlugin() {
     } catch (error) {
       console.error('❌ Error generating version:', error.message)
 
-      // Fallback version if git is not available or fails
       return {
         version: 'unknown',
         buildDate: new Date().toISOString(),
@@ -85,7 +77,6 @@ export const isDirty = () => VERSION_INFO.isDirty
     name: 'version-plugin',
 
     buildStart() {
-      // Generate version file at build start
       const versionInfo = generateVersionInfo()
       const filePath = writeVersionFile(versionInfo)
 
@@ -104,7 +95,6 @@ export const isDirty = () => VERSION_INFO.isDirty
     configureServer(viteServer) {
       server = viteServer
 
-      // Add a middleware to regenerate version on demand
       server.middlewares.use('/api/regenerate-version', (req, res) => {
         if (req.method === 'POST') {
           try {

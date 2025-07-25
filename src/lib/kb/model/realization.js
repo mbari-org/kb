@@ -2,11 +2,18 @@ import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from './history'
 
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+
 import { pick } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
+
+const EMPTY_REALIZATION = {
+  ...EMPTY_TEMPLATE,
+  templateId: null,
+}
 
 const isSame = (a, b) =>
   a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
@@ -87,6 +94,7 @@ const checkForDuplicate = (realizations, realization, excludeIndex = null) => {
 
 export {
   checkForDuplicate,
+  EMPTY_REALIZATION,
   isSame,
   REALIZATION_DISPLAY_FIELDS,
   realizationFields,

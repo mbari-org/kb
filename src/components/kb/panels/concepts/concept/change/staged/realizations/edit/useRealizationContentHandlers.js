@@ -4,14 +4,13 @@ import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
 import useDebounce from '@/hooks/useDebounce'
 
 const useRealizationContentHandlers = ({
-  realizationItem,
-  setRealizationItem,
-  modalData,
-  setModalData,
-  stagedState,
   action,
+  modalData,
   realizationIndex,
-  stageChange,
+  realizationItem,
+  setModalData,
+  setRealizationItem,
+  stagedState,
 }) => {
   const debouncedInput = useDebounce((updatedRealizationItem, fieldIsModified, field) => {
     const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
@@ -23,8 +22,9 @@ const useRealizationContentHandlers = ({
     }))
   })
 
-  const handleRealizationChange = (updatedRealizationItem, field) => {
+  const handleRealizationChange = updatedRealizationItem => {
     setRealizationItem(updatedRealizationItem)
+    const field = 'linkName'
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION.ADD
@@ -35,7 +35,6 @@ const useRealizationContentHandlers = ({
   }
 
   const handleTemplateSelect = template => {
-    // Auto-populate all fields from the selected template
     const updatedRealizationItem = {
       ...realizationItem,
       linkName: template.linkName,
