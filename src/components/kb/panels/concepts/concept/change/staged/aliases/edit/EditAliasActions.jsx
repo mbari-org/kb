@@ -11,17 +11,14 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
+import { hasTrueValue } from '@/lib/utils'
+
 const EditAliasActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const { aliasItem, modified } = modalData
-
-  const isModified = useMemo(
-    () => Object.values(modified).some(isModified => isModified === true),
-    [modified]
-  )
 
   const validName =
     !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
@@ -33,11 +30,11 @@ const EditAliasActions = () => {
   })
 
   const handleStage = () => {
-    // Need to go through the form to trigger required and validation checks
+    // go through the form to trigger required/validation checks
     document.querySelector(`#${ADD_ALIAS_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !isModified || !validName
+  const stageDisabled = !validName || !hasTrueValue(modified)
 
   return createStagedActions({
     confirmReset,

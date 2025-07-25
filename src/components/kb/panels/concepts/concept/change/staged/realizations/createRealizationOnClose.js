@@ -1,4 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/constants'
+import { hasTrueValue } from '@/lib/utils'
 
 const createRealizationOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
@@ -8,15 +9,15 @@ const createRealizationOnClose = ({ initialState, modifyConcept }) => {
     }
 
     const { modified, realizationIndex } = modalData
-    const isModified = Object.values(modified).some(isModified => isModified === true)
+    const isModified = hasTrueValue(modified)
 
     if (!isModified) {
       return true
     }
 
     modifyConcept({
-      type: CONCEPT_STATE.RESET.REALIZATION,
-      update: { realizationIndex, realizationItem: initialState.realizations[realizationIndex] },
+      type: CONCEPT_STATE.RESET.REALIZATIONS,
+      update: { realizations: initialState.realizations, index: realizationIndex },
     })
     return false
   }

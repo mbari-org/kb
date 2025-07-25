@@ -1,14 +1,15 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 
 import {
   createConfirmationHandlers,
   createStagedActions,
 } from '@/components/modal/concept/conceptModalUtils'
+import { EDIT_REALIZATION_FORM_ID } from './form/RealizationForm'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EDIT_REALIZATION_FORM_ID } from './form/RealizationForm'
+import { hasTrueValue } from '@/lib/utils'
 
 const RealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
@@ -16,15 +17,8 @@ const RealizationActions = () => {
 
   const { isDuplicate, modified, realizationItem, isValidToConcept = true } = modalData || {}
 
-  const isModified = useMemo(
-    () => Object.values(modified).some(isModified => isModified === true),
-    [modified]
-  )
-
-  const validRealizationItem =
-    realizationItem.linkName?.trim() !== '' &&
-    realizationItem.toConcept?.trim() !== '' &&
-    realizationItem.linkValue?.trim() !== ''
+  const validRealization = item =>
+    item.linkName?.trim() !== '' && item.toConcept?.trim() !== '' && item.linkValue?.trim() !== ''
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     closeModal,
@@ -43,7 +37,11 @@ const RealizationActions = () => {
     document.querySelector(`#${EDIT_REALIZATION_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !isModified || !validRealizationItem || isDuplicate || !isValidToConcept
+  const stageDisabled =
+    isDuplicate ||
+    !isValidToConcept ||
+    !hasTrueValue(modified) ||
+    !validRealization(realizationItem)
 
   return createStagedActions({
     onDiscard: handleDiscardAction,

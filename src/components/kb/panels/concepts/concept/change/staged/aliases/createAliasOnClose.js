@@ -1,6 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/constants'
-
-const { RESET } = CONCEPT_STATE
+import { hasTrueValue } from '@/lib/utils'
 
 const createAliasOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
@@ -10,14 +9,14 @@ const createAliasOnClose = ({ initialState, modifyConcept }) => {
     }
 
     const { modified, aliasIndex } = modalData
-    const isModified = Object.values(modified).some(isModified => isModified === true)
+    const isModified = hasTrueValue(modified)
 
     if (!isModified) {
       return true
     }
 
     modifyConcept({
-      type: RESET.ALIASES,
+      type: CONCEPT_STATE.RESET.ALIASES,
       update: { aliases: initialState.aliases, index: aliasIndex },
     })
     return false
