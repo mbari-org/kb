@@ -10,8 +10,22 @@ const checkImageUrlExists = url => {
 }
 
 const drop = (object, fields) => {
+  if (Array.isArray(object)) return dropElements(object, fields)
+  if (typeof object === 'object') return dropFields(object, fields)
+  return object
+}
+
+const dropElements = (array, elements) => {
+  return array.filter(element => !elements.includes(element))
+}
+
+const dropFields = (object, fields) => {
+  if (object == null) return null
+
+  const fieldsArray = typeof fields === 'string' ? [fields] : fields
+
   return Object.keys(object).reduce((result, key) => {
-    if (!fields.includes(key)) {
+    if (!fieldsArray.includes(key)) {
       result[key] = object[key]
     }
     return result
