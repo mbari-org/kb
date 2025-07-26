@@ -22,7 +22,7 @@ const ChangeParentActions = () => {
 
   const isModified = hasTrue(modified)
 
-  const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
+  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
     closeModal,
     concept,
@@ -39,7 +39,7 @@ const ChangeParentActions = () => {
   return createStagedActions({
     confirmReset,
     name: 'ChangeParentActions',
-    onConfirmDiscard: handleConfirmDiscard,
+    onConfirm: handleConfirm,
     onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,

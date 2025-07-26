@@ -20,7 +20,7 @@ const RealizationActions = () => {
   const validRealization = item =>
     item.linkName?.trim() !== '' && item.toConcept?.trim() !== '' && item.linkValue?.trim() !== ''
 
-  const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
+  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
     closeModal,
     concept,
     modifyConcept,
@@ -45,7 +45,7 @@ const RealizationActions = () => {
     onStage: handleStage,
     stageDisabled,
     confirmReset: shouldShowConfirmReset,
-    onConfirmDiscard: handleConfirmDiscard,
+    onConfirm: handleConfirm,
     onContinue: handleContinue,
     name: 'EditRealizationActions',
   })

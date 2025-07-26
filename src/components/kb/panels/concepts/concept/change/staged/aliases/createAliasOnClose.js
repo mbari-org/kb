@@ -3,11 +3,6 @@ import { hasTrue } from '@/lib/utils'
 
 const createAliasOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
-    // Handle case where modalData is null (defensive programming)
-    if (!modalData) {
-      return true
-    }
-
     const { modified, aliasIndex } = modalData
     const isModified = hasTrue(modified)
 

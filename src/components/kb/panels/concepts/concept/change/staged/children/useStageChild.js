@@ -10,11 +10,11 @@ const useStageChild = () => {
   const stageChild = async event => {
     event.preventDefault()
 
-    const { action, child } = modalData
+    const { action, child, index } = modalData
 
     modifyConcept({
       type: action,
-      update: { child },
+      update: { child, index },
     })
 
     closeModal(true)

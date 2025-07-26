@@ -23,7 +23,7 @@ const EditAliasActions = () => {
   const validName =
     !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
 
-  const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
+  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
     closeModal,
     concept,
@@ -39,7 +39,7 @@ const EditAliasActions = () => {
   return createStagedActions({
     confirmReset,
     name: 'EditAliasActions',
-    onConfirmDiscard: handleConfirmDiscard,
+    onConfirm: handleConfirm,
     onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,

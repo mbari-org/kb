@@ -8,7 +8,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const ADD = CONCEPT_STATE.ALIAS.ADD
+const ALIAS = CONCEPT_STATE.ALIAS
 
 const ConceptAliases = () => {
   const { editing, stagedState } = use(ConceptContext)
@@ -27,7 +27,7 @@ const ConceptAliases = () => {
 
   const renderAliasComponent = (alias, _index) => <ConceptAlias alias={alias} />
 
-  const IconComponent = () => <AliasModifyIcon action={ADD} aliasIndex={aliases.length} />
+  const IconComponent = () => <AliasModifyIcon action={ALIAS.ADD} aliasIndex={aliases.length} />
 
   return (
     <ConceptPropertiesSection

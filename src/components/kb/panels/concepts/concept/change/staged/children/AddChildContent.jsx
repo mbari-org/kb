@@ -1,6 +1,7 @@
 import { use, useCallback, useMemo, useState } from 'react'
 
 import { Box, FormControl, Stack, TextField, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
 import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'
 
@@ -15,9 +16,12 @@ import { rankField } from '@/lib/kb/state/rank'
 
 import { CONCEPT_RANK } from '@/lib/constants'
 
+import { hasTrue } from '@/lib/utils'
+
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 
 const AddChildContent = () => {
+  const theme = useTheme()
   const inputStyle = useInputStyle()
 
   const { stagedState } = use(ConceptContext)
@@ -61,7 +65,8 @@ const AddChildContent = () => {
     return !stagedState.children.some(stagedChild => stagedChild.name === formChild.name)
   }, [formChild?.name, stagedState.children])
 
-  const nameError = modifiedFields.name && (!isValidName || !isValidAddition)
+  const nameError =
+    modifiedFields.name && (formChild.name.trim() === '' || !isValidName || !isValidAddition)
 
   const nameHelperText = !modifiedFields.name
     ? ''
@@ -86,7 +91,7 @@ const AddChildContent = () => {
       const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
       setModifiedFields(updatedModifiedFields)
 
-      const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
+      const modified = hasTrue(updatedModifiedFields)
 
       setModalData(prev => ({ ...prev, child: updatedChild, modified }))
     },
@@ -105,13 +110,20 @@ const AddChildContent = () => {
       <Typography variant='h6'>Add Child</Typography>
       <FormControl {...inputStyle}>
         <TextField
+          error={false}
+          helperText={nameError ? nameHelperText : ' '}
           label='Name'
           name='name'
           onChange={handleFieldChange('name')}
           required
+          sx={{
+            '& .MuiFormHelperText-root': {
+              color: nameError ? theme.palette.cancel.main : 'transparent',
+              margin: '15px 0 0 10px',
+              lineHeight: '0',
+            },
+          }}
           value={formChild.name}
-          error={nameError}
-          helperText={nameHelperText}
         />
       </FormControl>
       <FormControl {...inputStyle}>
@@ -122,7 +134,7 @@ const AddChildContent = () => {
           value={formChild.author}
         />
       </FormControl>
-      <Stack direction='row' spacing={1.5}>
+      <Stack direction='row' spacing={1.5} sx={{ mt: 4 }}>
         <RankFieldInput
           field={CONCEPT_RANK.NAME}
           initialRank={initialRank}

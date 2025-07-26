@@ -3,11 +3,6 @@ import { hasTrue } from '@/lib/utils'
 
 const createRealizationOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
-    // Handle case where modalData is null (defensive programming)
-    if (!modalData) {
-      return true
-    }
-
     const { modified, realizationIndex } = modalData
     const isModified = hasTrue(modified)
 

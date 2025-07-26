@@ -3,7 +3,6 @@ import { mediaState } from '@/lib/kb/state/media'
 import { nameState } from '@/lib/kb/state/name'
 import { rankState } from '@/lib/kb/state/rank'
 import { realizationsState } from '@/lib/kb/state/realizations'
-import { structureState } from '@/lib/kb/state/structure'
 import { valueState } from '@/lib/kb/state/value'
 
 import { drop, isJsonEqual } from '@/lib/utils'
@@ -23,17 +22,14 @@ const isStateModified = ({ initialState, stagedState }) => {
 const initialConceptState = (concept, pending) => {
   return {
     ...aliasesState(concept, pending),
-    ...valueState(concept, 'author'),
     ...indexState,
     ...mediaState(concept, pending),
     ...nameState(concept),
-    ...valueState(concept, 'parent'),
     ...rankState(concept),
     ...realizationsState(concept, pending),
-    ...structureState(concept),
+    ...valueState(concept, 'author'),
+    ...valueState(concept, 'parent'),
   }
 }
-
-// export { initialConceptState, isFieldModified, isGroupModified, isItemModified, isStateModified }
 
 export { initialConceptState, isStateModified }

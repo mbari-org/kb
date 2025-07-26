@@ -24,7 +24,7 @@ const EditMediaActions = () => {
     [mediaItem]
   )
 
-  const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
+  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
     closeModal,
     concept,
@@ -42,7 +42,7 @@ const EditMediaActions = () => {
     onStage: handleStage,
     stageDisabled,
     confirmReset,
-    onConfirmDiscard: handleConfirmDiscard,
+    onConfirm: handleConfirm,
     onContinue: handleContinue,
     name: 'EditMediaActions',
   })

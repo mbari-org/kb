@@ -10,9 +10,13 @@ import { createModal } from '@/components/modal/conceptModalFactory'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
+import { EMPTY_CHILD } from '@/lib/kb/model/children'
+
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ADD_CHILD, RESET } = CONCEPT_STATE
+import { hasTrue } from '@/lib/utils'
+
+const { CHILD, RESET } = CONCEPT_STATE
 
 const addChildModal = () => {
   const components = {
@@ -24,18 +28,13 @@ const addChildModal = () => {
   return createModal(components)
 }
 
-const addChildOnClose = modifyConcept => {
+const addChildOnClose = (modifyConcept, stagedChildren) => {
   return modalData => {
-    // Handle case where modalData is null (defensive programming)
-    if (!modalData) {
-      return true
-    }
-
-    if (modalData.modified) {
+    if (hasTrue(modalData.modified)) {
       modifyConcept({
-        type: RESET.CHILD,
+        type: RESET.CHILDREN,
         update: {
-          child: modalData.child,
+          index: stagedChildren.length,
         },
       })
       return false
@@ -44,28 +43,22 @@ const addChildOnClose = modifyConcept => {
   }
 }
 
-const initialModalData = {
-  action: ADD_CHILD,
-  child: {
-    author: '',
-    name: '',
-    rankLevel: '',
-    rankName: '',
-  },
-  modified: false,
-}
-
 const useAddChildModal = () => {
-  const { modifyConcept } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
   return useCallback(() => {
     const modal = addChildModal()
-    const onClose = addChildOnClose(modifyConcept)
+    const onClose = addChildOnClose(modifyConcept, stagedState.children)
     setModal(modal, onClose)
 
-    setModalData(initialModalData)
-  }, [modifyConcept, setModal, setModalData])
+    setModalData({
+      action: CHILD.ADD,
+      child: EMPTY_CHILD,
+      index: stagedState.children.length,
+      modified: false,
+    })
+  }, [modifyConcept, setModal, setModalData, stagedState.children])
 }
 
 export default useAddChildModal

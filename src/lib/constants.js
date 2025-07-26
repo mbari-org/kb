@@ -48,7 +48,9 @@ export const CONCEPT_SELECT = {
 }
 
 export const CONCEPT_STATE = {
-  ADD_CHILD: 'Add Child',
+  CHILD: {
+    ADD: 'Child Add',
+  },
   ALIAS: {
     ADD: 'Alias Add',
     DELETE: 'Alias Delete',

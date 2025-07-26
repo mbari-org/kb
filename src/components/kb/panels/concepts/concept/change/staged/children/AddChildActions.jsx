@@ -23,10 +23,10 @@ const AddChildActions = () => {
     return validateChildName(child?.name, getNames(), stagedState.children)
   }, [child?.name, getNames, stagedState.children])
 
-  const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
-    modifyConcept,
+  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
     closeModal,
     concept,
+    modifyConcept,
   })
 
   const handleStage = () => {
@@ -37,13 +37,13 @@ const AddChildActions = () => {
   const stageDisabled = !confirmReset && (!modified || !isValidChild)
 
   return createStagedActions({
+    confirmReset,
+    name: 'AddChildActions',
+    onConfirm: handleConfirm,
+    onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
-    confirmReset,
-    onConfirmDiscard: handleConfirmDiscard,
-    onContinue: handleContinue,
-    name: 'AddChildActions',
   })
 }
 

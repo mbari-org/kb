@@ -3,12 +3,12 @@ import { use, useEffect, useMemo } from 'react'
 import { Box } from '@mui/material'
 
 import StagedAliases from '@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAliases'
+import StagedChildren from '@/components/kb/panels/concepts/concept/change/staged/children/StagedChildren'
 import StagedRealizations from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealizations'
 
 import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
 
-import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/staged/children/ChildrenDetail'
 import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldValueDetail'
 import MediaDetail from '@/components/kb/panels/concepts/concept/change/staged/media/MediaDetail'
 
@@ -40,6 +40,9 @@ const StagedContent = () => {
       case CONCEPT_FIELD.AUTHOR:
         return <StagedValue key={field} group={RESETTING.AUTHOR} stagedEdit={stagedEdit} />
 
+      case CONCEPT_FIELD.CHILDREN:
+        return <StagedChildren key={field} stagedEdit={stagedEdit} />
+
       case CONCEPT_FIELD.NAME:
         return <StagedObject key={field} group={RESETTING.NAME} stagedEdit={stagedEdit} />
 
@@ -51,9 +54,6 @@ const StagedContent = () => {
 
       case CONCEPT_FIELD.REALIZATIONS:
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />
-
-      case CONCEPT_FIELD.CHILDREN:
-        return <ChildrenDetail key={field} edit={stagedEdit} />
 
       case CONCEPT_FIELD.MEDIA:
         return <MediaDetail key={field} edit={stagedEdit} />

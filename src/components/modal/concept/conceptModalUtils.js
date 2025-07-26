@@ -16,7 +16,7 @@ const { CONFIRMED } = RESETTING
  * @param {Function} config.onStage - Called when stage is clicked
  * @param {boolean} config.stageDisabled - Whether stage button is disabled
  * @param {boolean} config.confirmReset - Whether in confirmation reset mode
- * @param {Function} config.onConfirmDiscard - Called when confirm discard is clicked
+ * @param {Function} config.onConfirm - Called when confirm discard is clicked
  * @param {Function} config.onContinue - Called when continue is clicked
  * @param {string} config.name - Component name for debugging
  * @returns {Component} Actions component
@@ -24,7 +24,7 @@ const { CONFIRMED } = RESETTING
 export const createStagedActions = ({
   confirmReset = false,
   name = 'StagedActions',
-  onConfirmDiscard,
+  onConfirm,
   onContinue,
   onDiscard,
   onStage,
@@ -37,7 +37,7 @@ export const createStagedActions = ({
   const onAction = label => {
     switch (label) {
       case CONFIRM:
-        onConfirmDiscard()
+        onConfirm()
         break
       case CONTINUE:
         onContinue()
@@ -62,11 +62,11 @@ export const createStagedActions = ({
  * @param {Object} config.concept - Current concept
  * @returns {Object} Confirmation handlers
  */
-export const createConfirmationHandlers = ({ modifyConcept, closeModal, concept }) => {
-  const handleConfirmDiscard = (update = {}) => {
+export const createConfirmationHandlers = ({ closeModal, concept, modifyConcept }) => {
+  const handleConfirm = (update = {}) => {
     modifyConcept({
       type: CONFIRMED.YES,
-      update: { name: concept.name, ...update },
+      update,
     })
     // Force close, bypassing onClose
     closeModal(true)
@@ -82,7 +82,7 @@ export const createConfirmationHandlers = ({ modifyConcept, closeModal, concept 
   }
 
   return {
-    handleConfirmDiscard,
+    handleConfirm,
     handleContinue,
     handleDiscard,
   }
@@ -96,10 +96,8 @@ export const createConfirmationHandlers = ({ modifyConcept, closeModal, concept 
  * @param {Object} config.stageAction - Action to dispatch when staging
  * @returns {Object} Basic action handlers
  */
-export const createStageDiscardHandlers = ({ modifyConcept, closeModal, stageAction }) => {
-  const handleDiscard = () => {
-    closeModal()
-  }
+export const createStageDiscardHandlers = ({ closeModal, modifyConcept, stageAction }) => {
+  const handleDiscard = closeModal()
 
   const handleStage = () => {
     if (stageAction) {
