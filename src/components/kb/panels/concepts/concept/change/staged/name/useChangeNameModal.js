@@ -11,6 +11,8 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
+import { hasTrue } from '@/lib/utils'
+
 const { NAME, RESET } = CONCEPT_STATE
 
 const changeNameModal = () => {
@@ -24,9 +26,9 @@ const changeNameModal = () => {
 
 const changeNameOnClose = modifyConcept => {
   return modalData => {
-    if (modalData.modified) {
+    if (hasTrue(modalData.modified)) {
       modifyConcept({
-        type: RESET.CHANGE_NAME,
+        type: RESET.NAME,
         update: {
           name: modalData.name,
         },

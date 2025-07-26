@@ -17,19 +17,6 @@ const resetAddChild = (dispatch, child) => {
   })
 }
 
-const resetAddChildren = dispatch => {
-  dispatch({
-    type: RESET.CHILDREN,
-  })
-}
-
-const resetChangeName = (dispatch, name) => {
-  dispatch({
-    type: RESET.CHANGE_NAME,
-    update: { name },
-  })
-}
-
 const resetDeleteConcept = (dispatch, concept) => {
   dispatch({
     type: RESET.DELETE_CONCEPT,
@@ -71,8 +58,11 @@ const resetConceptState = (action, dispatch, initialState) => {
       resetAddChild(dispatch, action.update.child)
       break
 
-    case RESET.CHILDREN:
-      resetAddChildren(dispatch)
+    case RESET.ALIASES:
+      dispatch({
+        type: RESET.ALIASES,
+        update: { aliases: initialState.aliases, index: action.update.index },
+      })
       break
 
     case RESET.AUTHOR:
@@ -82,19 +72,15 @@ const resetConceptState = (action, dispatch, initialState) => {
       })
       break
 
-    case RESET.CHANGE_NAME:
-      resetChangeName(dispatch, action.update.name)
+    case RESET.CHILDREN:
+      dispatch({
+        type: RESET.CHILDREN,
+        update: { children: initialState.children, index: action.update.index },
+      })
       break
 
     case RESET.DELETE_CONCEPT:
       resetDeleteConcept(dispatch, action.update.concept)
-      break
-
-    case RESET.ALIASES:
-      dispatch({
-        type: RESET.ALIASES,
-        update: { aliases: initialState.aliases, index: action.update.index },
-      })
       break
 
     case RESET.MEDIA:
@@ -108,6 +94,13 @@ const resetConceptState = (action, dispatch, initialState) => {
       })
       break
 
+    case RESET.PARENT:
+      dispatch({
+        type: RESET.PARENT,
+        update: { parent: initialState.parent },
+      })
+      break
+
     case RESET.RANK:
       resetRank(dispatch, initialState)
       break
@@ -116,13 +109,6 @@ const resetConceptState = (action, dispatch, initialState) => {
       dispatch({
         type: RESET.REALIZATIONS,
         update: { realizations: initialState.realizations, index: action.update.index },
-      })
-      break
-
-    case RESET.PARENT:
-      dispatch({
-        type: RESET.PARENT,
-        update: { parent: initialState.parent },
       })
       break
 

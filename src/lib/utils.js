@@ -69,9 +69,10 @@ const escapeCSV = field => {
 
 const formatConceptNameForFilename = str => (str || 'all').replace(/\s+/g, '-')
 
-const hasTrueField = object => {
-  if (typeof object === 'boolean') return object
-  return Object.values(object).some(value => value === true)
+const hasTrue = arg => {
+  if (typeof arg === 'boolean') return arg
+  const values = Array.isArray(arg) ? arg : Object.values(arg)
+  return values.some(value => value === true || value === 'true')
 }
 
 const humanTimestamp = timestamp => {
@@ -246,7 +247,7 @@ export {
   escapeCSV,
   filterObject,
   formatConceptNameForFilename,
-  hasTrueField,
+  hasTrue,
   humanTimestamp,
   isDeepEqual,
   isElementInViewport,

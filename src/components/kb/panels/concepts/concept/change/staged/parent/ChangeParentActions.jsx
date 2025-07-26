@@ -9,6 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
+import { hasTrue } from '@/lib/utils'
 
 const { PARENT } = CONCEPT_STATE
 
@@ -18,6 +19,8 @@ const ChangeParentActions = () => {
 
   // Handle case where modalData might be undefined
   const { modified = false, parent = '' } = modalData || {}
+
+  const isModified = hasTrue(modified)
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
     modifyConcept,
@@ -34,13 +37,13 @@ const ChangeParentActions = () => {
   }
 
   return createStagedActions({
-    onDiscard: handleDiscard,
-    onStage: handleStage,
-    stageDisabled: !modified,
     confirmReset,
+    name: 'ChangeParentActions',
     onConfirmDiscard: handleConfirmDiscard,
     onContinue: handleContinue,
-    name: 'ChangeParentActions',
+    onDiscard: handleDiscard,
+    onStage: handleStage,
+    stageDisabled: !isModified,
   })
 }
 

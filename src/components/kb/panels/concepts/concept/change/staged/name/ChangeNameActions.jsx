@@ -17,9 +17,9 @@ const ChangeNameActions = () => {
   const { isValid, name } = modalData
 
   const { handleConfirmDiscard, handleContinue, handleDiscard } = createConfirmationHandlers({
-    modifyConcept,
     closeModal,
     concept,
+    modifyConcept,
   })
 
   const handleStage = () => {

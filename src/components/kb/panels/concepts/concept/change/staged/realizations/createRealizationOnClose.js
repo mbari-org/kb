@@ -1,5 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/constants'
-import { hasTrueField } from '@/lib/utils'
+import { hasTrue } from '@/lib/utils'
 
 const createRealizationOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
@@ -9,7 +9,7 @@ const createRealizationOnClose = ({ initialState, modifyConcept }) => {
     }
 
     const { modified, realizationIndex } = modalData
-    const isModified = hasTrueField(modified)
+    const isModified = hasTrue(modified)
 
     if (!isModified) {
       return true

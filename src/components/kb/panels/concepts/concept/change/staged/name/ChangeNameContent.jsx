@@ -30,39 +30,58 @@ const ChangeNameContent = () => {
 
   const realizationCount = stagedState?.realizations.length
 
-  const isChangeValid = (nameValue, extentValue) => {
-    const modified = nameValue !== concept.name && !getNames().includes(nameValue)
-    return modified && (!isAdminUser || (isAdminUser && extentValue !== ''))
+  const isValidModified = updatedName => {
+    const { extent, value } = updatedName
+
+    const isNameModified = value !== concept.name
+    const isNameValid = isNameModified && !getNames().includes(value)
+    if (isAdminUser) {
+      return {
+        isValid: isNameValid && extent !== '',
+        modified: isNameValid || extent !== '',
+      }
+    } else {
+      return {
+        isValid: isNameValid,
+        modified: isNameModified,
+      }
+    }
   }
 
   const handleNameChange = event => {
-    const { value } = event.target
-    setName(prevName => ({ ...prevName, value }))
+    const updatedName = {
+      extent: '',
+      value: event.target.value,
+    }
+    setName(prevName => ({ ...prevName, ...updatedName }))
 
-    const isValid = isChangeValid(value, name.extent)
+    const { isValid, modified } = isValidModified(updatedName)
     setModalData(prevData => ({
       ...prevData,
-      name: { ...prevData.name, value },
       isValid,
+      modified,
+      name: updatedName,
     }))
   }
 
   const handleNameExtentChange = event => {
-    const value = event.target.value
-    setName(prevName => ({ ...prevName, extent: value }))
+    const updatedExtent = event.target.value
+    setName(prevName => ({ ...prevName, extent: updatedExtent }))
 
-    const isValid = isChangeValid(name.value, value)
+    const { isValid, modified } = isValidModified({ ...name, extent: updatedExtent })
     setModalData(prevData => ({
       ...prevData,
-      name: { ...prevData.name, extent: value },
       isValid,
+      modified,
+      name: { ...prevData.name, extent: updatedExtent },
     }))
   }
 
   useEffect(() => {
     setModalData({
-      name: { value: concept.name, extent: '' },
       isValid: false,
+      modified: false,
+      name: { value: concept.name, extent: '' },
     })
   }, [concept, setModalData])
 
