@@ -6,7 +6,7 @@ import StructureChoiceButton from './StructureChoiceButton'
 import useAddChildModal from '@/components/kb/panels/concepts/concept/change/staged/children/useAddChildModal'
 import useChangeNameModal from '@/components/kb/panels/concepts/concept/change/staged/name/useChangeNameModal'
 import useChangeParentModal from '@/components/kb/panels/concepts/concept/change/staged/parent/useChangeParentModal'
-import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/change/staged/structure/concept/useDeleteConceptModal'
+import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/change/staged/delete/useDeleteConceptModal'
 
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
 
@@ -73,7 +73,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
             />
           </Stack>
           <StructureChoiceButton
-            color='error'
+            color='cancel'
             disabled={disableDelete}
             onClick={handleClick(deleteConcept)}
             text='Delete Concept'

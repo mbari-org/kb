@@ -1,8 +1,8 @@
 import { use, useCallback } from 'react'
 
+import ConceptTitle from '@/components/common/ConceptTitle'
 import DeleteConceptActions from './DeleteConceptActions'
 import DeleteConceptContent from './DeleteConceptContent'
-import DeleteConceptTitle from './DeleteConceptTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -12,7 +12,7 @@ const deleteConceptModal = () => {
   const components = {
     Actions: DeleteConceptActions,
     Content: DeleteConceptContent,
-    Title: DeleteConceptTitle,
+    Title: ConceptTitle,
   }
 
   return createModal(components)

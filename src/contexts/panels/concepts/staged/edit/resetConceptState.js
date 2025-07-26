@@ -19,7 +19,7 @@ const resetAddChild = (dispatch, child) => {
 
 const resetDeleteConcept = (dispatch, concept) => {
   dispatch({
-    type: RESET.DELETE_CONCEPT,
+    type: RESET.DELETE,
     update: { concept },
   })
 }
@@ -79,7 +79,7 @@ const resetConceptState = (action, dispatch, initialState) => {
       })
       break
 
-    case RESET.DELETE_CONCEPT:
+    case RESET.DELETE:
       resetDeleteConcept(dispatch, action.update.concept)
       break
 

@@ -15,21 +15,27 @@ const useStructureChoices = () => {
   const conceptPending = useConceptPending(concept.name)
 
   const isRoot = isTaxonomyRoot(concept)
+
   const hasPendingName = hasPending(conceptPending, 'ConceptName')
+  const hasPendingParent = hasPending(conceptPending, 'ConceptParent')
 
   const hasStagedChildren = stagedState.children.length > 0
   const hasStagedName = stagedState.name.value !== concept.name
   const hasStagedParent = stagedState.parent !== concept.parent
-  const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
+  const hasStagedChange = hasStagedChildren || hasStagedName || hasStagedParent
 
   const hasChildren = concept.children.length > 0
 
   const disableDelete = useMemo(
-    () => isRoot || hasChildren || hasStagedStructure || hasStateChange(initialState, stagedState),
-    [hasChildren, hasStagedStructure, initialState, isRoot, stagedState]
+    () =>
+      isRoot ||
+      hasChildren ||
+      hasStateChange(initialState, stagedState) ||
+      hasPending(conceptPending),
+    [conceptPending, hasChildren, initialState, isRoot, stagedState]
   )
-  const disableChangeName = isRoot || hasPendingName || hasStagedStructure
-  const disableChangeParent = isRoot || hasStagedName || hasStagedParent
+  const disableChangeName = isRoot || hasPendingName || hasStagedChange
+  const disableChangeParent = isRoot || hasPendingParent || hasStagedChange
 
   return {
     hasStagedChildren,

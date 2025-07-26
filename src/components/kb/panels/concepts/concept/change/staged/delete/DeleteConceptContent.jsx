@@ -57,19 +57,22 @@ const DeleteConceptContent = () => {
     setModalData({ parent: concept.parent, modified: true, isValid: true })
   }, [concept.parent, setModalData])
 
+  const annotationsMessage =
+    annotationCount === 0
+      ? 'This concept has no annotations'
+      : `This concept has ${annotationCount} annotation${
+          annotationCount !== 1 ? 's' : ''
+        } which must be reassigned.`
+
   return (
     <Box>
-      <Typography align='center' color='cancel' variant='h5' sx={{ mt: 1 }}>
-        WARNING
+      <Typography align='center' color='cancel' variant='h6'>
+        DELETE
       </Typography>
-      <Typography align='center'>Be sure you really want to delete this concept.</Typography>
+      <Typography align='center'>{annotationsMessage}</Typography>
       <Stack direction='column' spacing={1} alignItems='center' sx={{ mt: 5 }}>
-        {annotationCount > 0 && (
-          <Box>
-            <Typography align='center'>
-              This concept has {annotationCount} annotation{annotationCount !== 1 ? 's' : ''} which
-              must be reassigned.
-            </Typography>
+        <Box>
+          {annotationCount > 0 && (
             <Box sx={{ width: '80%', mx: 'auto', mt: 2 }}>
               <ToConceptChoice
                 error={!isValid}
@@ -81,8 +84,8 @@ const DeleteConceptContent = () => {
                 value={toConcept}
               />
             </Box>
-          </Box>
-        )}
+          )}
+        </Box>
 
         {!isValid && (
           <Typography color='error' variant='caption'>

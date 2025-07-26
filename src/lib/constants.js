@@ -57,7 +57,7 @@ export const CONCEPT_STATE = {
   ALIASES: 'Aliases',
   AUTHOR: 'Author',
   CHILDREN: 'Children',
-  DELETE_CONCEPT: 'Delete Concept',
+  DELETE: 'Delete Concept',
   INITIAL: 'Initial State',
   MEDIA: 'Media',
   MEDIA_ITEM: {
@@ -78,7 +78,7 @@ export const CONCEPT_STATE = {
     CHILDREN: 'Reset Children',
     ALIASES: 'Reset Aliases',
     AUTHOR: 'Reset Author',
-    DELETE_CONCEPT: 'Reset Delete Concept',
+    DELETE: 'Reset Delete Concept',
     MEDIA: 'Reset Media',
     NAME: 'Reset Name',
     PARENT: 'Reset Parent',
