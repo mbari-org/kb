@@ -10,7 +10,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { resettingRealization } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import { realizationEdits } from '@/lib/kb/model/realization'
+import { realizationEdits } from '@/lib/kb/state/realizations'
 import { RESETTING } from '@/lib/constants'
 
 const RealizationsDetail = ({ edit }) => {

@@ -1,13 +1,86 @@
 import { CONCEPT_STATE } from '@/lib/constants'
+import { stagedEdits } from '@/lib/kb/state/staged'
 
-import { stagedRealization } from '@/lib/kb/model/realization'
+import { fieldPending } from '@/lib/kb/model/history'
+
+const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
+
+const stagedRealizations = stagedEdit => {
+  const [_field, realizations] = stagedEdit
+
+  return stagedEdits({
+    displayFields: REALIZATION_DISPLAY_FIELDS,
+    initial: realizations.initial,
+    staged: realizations.staged,
+    stateTypes: CONCEPT_STATE.REALIZATION,
+  })
+}
+
+const realizationEdits = realizations => {
+  return stagedEdits({
+    displayFields: REALIZATION_DISPLAY_FIELDS,
+    initial: realizations.initial,
+    staged: realizations.staged,
+    stateTypes: CONCEPT_STATE.REALIZATION,
+  })
+}
+
+const stagedRealization = (realization, conceptPending) => {
+  const pendingRealizationActions = fieldPending(conceptPending, 'LinkRealization')
+
+  const addRealizationMatch = history => {
+    if (history.action !== 'ADD') {
+      return false
+    }
+
+    const [newLinkName, newLinkToConcept, newLinkValue] = history.newValue.split(' | ')
+    return (
+      newLinkName === realization.linkName &&
+      newLinkToConcept === realization.toConcept &&
+      newLinkValue === realization.linkValue
+    )
+  }
+
+  const pendingAdd = pendingRealizationActions.find(addRealizationMatch)
+  if (pendingAdd) {
+    return {
+      ...realization,
+      action: 'Pending Add',
+      historyId: pendingAdd.id,
+    }
+  }
+
+  const pendingDelete = pendingRealizationActions.find(
+    history => history.action === 'DELETE' && history.oldValue === realization.linkName
+  )
+  if (pendingDelete) {
+    return {
+      ...realization,
+      action: 'Pending Delete',
+      historyId: pendingDelete.id,
+    }
+  }
+
+  const pendingEdit = pendingRealizationActions.find(
+    history => history.action === 'REPLACE' && history.newValue === realization.linkName
+  )
+  if (pendingEdit) {
+    return {
+      ...realization,
+      action: 'Pending Edit',
+      historyId: pendingEdit.id,
+    }
+  }
+
+  return realization
+}
 
 const realizationsState = (concept, pending) => {
   const { realizations } = concept
-  const stagedRealizations = realizations.map((realization, index) =>
+  const stagedRealizationsList = realizations.map((realization, index) =>
     stagedRealization({ ...realization, action: CONCEPT_STATE.NO_ACTION, index }, pending)
   )
-  return { realizations: stagedRealizations }
+  return { realizations: stagedRealizationsList }
 }
 
 const addRealization = (state, update) => {
@@ -87,4 +160,13 @@ const updateState = (state, { type, update }) => {
   }
 }
 
-export { addRealization, deleteRealization, editRealization, realizationsState, resetRealizations }
+export {
+  addRealization,
+  deleteRealization,
+  editRealization,
+  realizationEdits,
+  realizationsState,
+  resetRealizations,
+  stagedRealization,
+  stagedRealizations,
+}

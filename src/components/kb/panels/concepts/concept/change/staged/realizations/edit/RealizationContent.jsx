@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
-import { checkForDuplicate, EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { hasDuplicate, EMPTY_REALIZATION } from '@/lib/kb/model/realizations'
 
 import useStageRealization from './useStageRealization'
 import useRealizationContentHandlers from './useRealizationContentHandlers'
@@ -66,7 +66,7 @@ const RealizationContent = () => {
 
   const isDuplicate = useMemo(() => {
     const excludeIndex = action === CONCEPT_STATE.REALIZATION.ADD ? null : realizationIndex
-    return checkForDuplicate(stagedState.realizations, realizationItem, excludeIndex)
+    return hasDuplicate(stagedState.realizations, realizationItem, excludeIndex)
   }, [action, realizationIndex, realizationItem, stagedState.realizations])
 
   useEffect(() => {

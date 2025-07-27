@@ -1,0 +1,28 @@
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+
+import { pick } from '@/lib/utils'
+
+const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
+
+const EMPTY_REALIZATION = {
+  ...EMPTY_TEMPLATE,
+  templateId: null,
+}
+
+const isSame = (a, b) =>
+  a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
+
+const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_FIELDS)
+
+const hasDuplicate = (realizations, realization, excludeIndex = null) => {
+  if (!realization.linkName || !realization.toConcept || !realization.linkValue) {
+    return false
+  }
+
+  const realizationsToCheck =
+    excludeIndex !== null ? realizations.filter((_, index) => index !== excludeIndex) : realizations
+
+  return realizationsToCheck.some(existing => isSame(realization, existing))
+}
+
+export { EMPTY_REALIZATION, hasDuplicate, isSame, REALIZATION_DISPLAY_FIELDS, realizationFields }
