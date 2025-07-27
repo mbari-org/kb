@@ -1,6 +1,59 @@
 import { CONCEPT_STATE } from '@/lib/constants'
+import { fieldPending } from '@/lib/kb/model/history'
+import { stagedEdits } from '@/lib/kb/state/staged'
+import { drop } from '@/lib/utils'
 
-import { stagedAlias } from '@/lib/kb/model/alias'
+const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
+
+const stagedAliases = stagedEdit => {
+  const [_field, aliases] = stagedEdit
+
+  return stagedEdits({
+    displayFields: drop(ALIAS_FIELDS, ['id']),
+    initial: aliases.initial,
+    staged: aliases.staged,
+    stateTypes: CONCEPT_STATE.ALIAS,
+  })
+}
+
+const stagedAlias = (aliasItem, conceptPending) => {
+  const pendingAliasActions = fieldPending(conceptPending, 'ConceptName')
+
+  const pendingAdd = pendingAliasActions.find(
+    history => history.action === 'ADD' && history.newValue === aliasItem.name
+  )
+  if (pendingAdd) {
+    return {
+      ...aliasItem,
+      action: 'Pending Add',
+      historyId: pendingAdd.id,
+    }
+  }
+
+  const pendingDelete = pendingAliasActions.find(
+    history => history.action === 'DELETE' && history.oldValue === aliasItem.name
+  )
+  if (pendingDelete) {
+    return {
+      ...aliasItem,
+      action: 'Pending Delete',
+      historyId: pendingDelete.id,
+    }
+  }
+
+  const pendingEdit = pendingAliasActions.find(
+    history => history.action === 'REPLACE' && history.newValue === aliasItem.name
+  )
+  if (pendingEdit) {
+    return {
+      ...aliasItem,
+      action: 'Pending Edit',
+      historyId: pendingEdit.id,
+    }
+  }
+
+  return aliasItem
+}
 
 const aliasesState = (concept, pending) => {
   const { aliases } = concept
@@ -81,4 +134,4 @@ const updateAlias = (state, { type, update }) => {
   return { ...state, aliases }
 }
 
-export { addAlias, aliasesState, deleteAlias, editAlias, resetAliases }
+export { addAlias, aliasesState, deleteAlias, editAlias, resetAliases, stagedAlias, stagedAliases }

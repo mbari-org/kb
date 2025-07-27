@@ -9,7 +9,7 @@ import TextInput from '@/components/common/TextInput'
 
 import useStageAlias from './useStageAlias'
 
-import { ALIAS_TYPES } from '@/lib/kb/model/alias'
+import { ALIAS_TYPES } from '@/lib/kb/model/aliases'
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 

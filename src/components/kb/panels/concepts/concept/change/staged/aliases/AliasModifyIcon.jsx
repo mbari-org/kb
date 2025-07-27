@@ -10,7 +10,7 @@ import createAliasOnClose from '@/components/kb/panels/concepts/concept/change/s
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { aliasFields, EMPTY_ALIAS } from '@/lib/kb/model/alias'
+import { aliasFields, EMPTY_ALIAS } from '@/lib/kb/model/aliases'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
