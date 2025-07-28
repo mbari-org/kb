@@ -1,6 +1,8 @@
 import { use, useMemo } from 'react'
 import { Stack } from '@mui/material'
 
+import ModalActionText from '@/components/common/ModalActionText'
+
 import AliasesDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/AliasesDetail'
 import ChildDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ChildDetail'
 import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ChildrenDetail'
@@ -37,6 +39,7 @@ const PendingContent = () => {
 
   return (
     <Stack direction='column' spacing={1}>
+      <ModalActionText text='Pending Changes' />
       {pendingChild && (
         <ChildDetail pendingChild={pendingChild} leftMargin={{ title: 0, detail: 8 }} />
       )}

@@ -1,8 +1,9 @@
 import { use, useCallback } from 'react'
 
+import ConceptTitle from '@/components/common/ConceptTitle'
+
 import PendingActions from '@/components/kb/panels/concepts/concept/change/pending/modal/PendingActions'
 import PendingContent from '@/components/kb/panels/concepts/concept/change/pending/modal/PendingContent'
-import PendingTitle from '@/components/kb/panels/concepts/concept/change/pending/modal/PendingTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -20,7 +21,7 @@ const useDisplayPending = () => {
       const modal = createModal({
         Actions: () => <PendingActions intent={intent} />,
         Content: PendingContent,
-        Title: PendingTitle,
+        Title: () => <ConceptTitle />,
         minWidth: 625,
       })
       setModal(modal)
