@@ -9,7 +9,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import useInputStyle from './useInputStyle'
 import useAddChildHandlers from './useAddChildHandlers'
-import useNameValidate from './useNameValidate'
+import useNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useNameValidate'
 
 import { rankField } from '@/lib/kb/state/rank'
 

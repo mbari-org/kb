@@ -8,7 +8,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useEditAliasHandlers from './useEditAliasHandlers'
-import useAliasValidate from './useAliasValidate'
+import useNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useNameValidate'
 
 import { ALIAS_TYPES } from '@/lib/kb/model/aliases'
 
@@ -48,7 +48,7 @@ const EditAliasContent = () => {
 
   const { handleStage, handleChange } = useEditAliasHandlers(formAlias, setFormAlias, stagedAlias)
 
-  const { nameError, nameHelperText } = useAliasValidate(formAlias)
+  const { nameError, nameHelperText } = useNameValidate(formAlias, modalData.modified)
 
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>

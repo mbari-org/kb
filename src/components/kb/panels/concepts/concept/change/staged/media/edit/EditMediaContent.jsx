@@ -48,11 +48,19 @@ const EditMediaContent = () => {
 
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true, isDuplicate: false })
 
-  const isUrlDuplicate = useCallback(
+  const isDuplicateURL = useCallback(
     url => {
-      return concept.media.some(item => item.url === url)
+      const inInitialMedia = concept.media.some(item => item.url === url)
+      const inStagedMedia = stagedState.media.some((item, index) => {
+        if (action === CONCEPT_STATE.MEDIA_ITEM.EDIT && index === mediaIndex) {
+          return false
+        }
+        return item.url === url
+      })
+
+      return inInitialMedia || inStagedMedia
     },
-    [concept.media]
+    [concept.media, stagedState.media, action, mediaIndex]
   )
 
   const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field) => {
@@ -69,7 +77,7 @@ const EditMediaContent = () => {
       setUrlStatus({ loading: true, valid: true, isDuplicate: false })
 
       checkImageUrlExists(value).then(exists => {
-        const isDuplicate = value !== mediaItem.url && isUrlDuplicate(value)
+        const isDuplicate = value !== mediaItem.url && isDuplicateURL(value)
         setUrlStatus({ loading: false, valid: exists, isDuplicate })
       })
     } else {
