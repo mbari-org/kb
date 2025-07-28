@@ -1,8 +1,9 @@
 import { use, useState, useMemo, useEffect, useCallback } from 'react'
-import { Box, Divider, Typography, TextField } from '@mui/material'
+import { Box, TextField, Divider, Typography } from '@mui/material'
 
 import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/form/RealizationForm'
 import RealizationTemplatesFilter from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesFilter'
+import ModalActionText from '@/components/common/ModalActionText'
 import useAvailableLinkTemplates from './useAvailableLinkTemplates'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -142,7 +143,7 @@ const RealizationContent = () => {
           <Divider sx={{ my: 1 }} />
         </Box>
       )}
-      <Typography variant='h6'>{actionText} Realization</Typography>
+      <ModalActionText text={`${actionText} Realization`} />
       <RealizationForm
         isEditMode={isEdit}
         onRealizationChange={handleRealizationChange}

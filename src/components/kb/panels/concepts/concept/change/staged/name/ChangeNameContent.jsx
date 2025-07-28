@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
+import ModalActionText from '@/components/common/ModalActionText'
 import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
@@ -43,7 +44,7 @@ const ChangeNameContent = () => {
 
   return (
     <Box>
-      <Typography variant='h6'>Change Name</Typography>
+      <ModalActionText text='Change Name' />
       <Stack direction='row' spacing={2} alignItems='center' sx={{ mt: 1, ml: 3 }}>
         <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>To:</Typography>
         <TextField

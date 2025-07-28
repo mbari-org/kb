@@ -4,6 +4,7 @@ import { Box, FormControl, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'
+import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -62,7 +63,7 @@ const AddChildContent = () => {
 
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>
-      <Typography variant='h6'>Add Child</Typography>
+      <ModalActionText text='Add Child' />
       <FormControl {...inputStyle}>
         <TextField
           error={false}

@@ -2,6 +2,7 @@ import { use } from 'react'
 import { Box, Typography } from '@mui/material'
 
 import Detail from '@/components/common/factory/Detail'
+import ModalActionText from '@/components/common/ModalActionText'
 import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -20,7 +21,7 @@ const DeleteRealizationContent = () => {
 
   return (
     <Box>
-      <Typography variant='h6'>{actionText} Realization</Typography>
+      <ModalActionText text={`${actionText} Realization`} />
       <Box sx={{ ml: 2, mt: 1 }}>
         <Details id='delete-realization-content-detail' />
       </Box>

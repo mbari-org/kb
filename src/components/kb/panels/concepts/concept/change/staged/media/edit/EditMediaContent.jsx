@@ -13,6 +13,7 @@ import {
 import { MdOutlinePhoto } from 'react-icons/md'
 
 import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/MediaDisplay'
+import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -164,7 +165,7 @@ const EditMediaContent = () => {
 
   return (
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
-      <Typography variant='h6'>{actionText} Media</Typography>
+      <ModalActionText text={`${actionText} Media`} />
       <FormControl fullWidth margin='normal'>
         <TextField
           error={urlError}

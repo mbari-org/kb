@@ -3,6 +3,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui
 import { useTheme } from '@mui/material/styles'
 
 import TextInput from '@/components/common/TextInput'
+import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -52,7 +53,7 @@ const EditAliasContent = () => {
 
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>
-      <Typography variant='h6'>{actionText} Alias</Typography>
+      <ModalActionText text={`${actionText} Alias`} />
       <FormControl {...inputStyle}>
         <TextInput
           error={nameError}

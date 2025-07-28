@@ -4,6 +4,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ModalActionText from '@/components/common/ModalActionText'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
@@ -34,7 +35,7 @@ const ChangeParentContent = ({ omitChoices }) => {
   return (
     <Box>
       <Stack alignItems='center' direction='row' spacing={1}>
-        <Typography variant='h6'>Change Parent:</Typography>
+        <ModalActionText text='Change Parent:' />
         <Typography sx={{ fontWeight: 'bold' }} variant='h6'>
           {concept.parent}
         </Typography>
