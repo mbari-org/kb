@@ -5,19 +5,6 @@ import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { stagedMediaItem } from '@/lib/kb/model/media'
 
-const mediaState = (concept, pending) => {
-  const { media: conceptMedia } = concept
-  const primaryMedia = getPrimary(conceptMedia)
-  const otherMedia = conceptMedia.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
-  const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
-
-  const media = orderedMedia.map((mediaItem, index) =>
-    stagedMediaItem({ ...mediaItem, action: CONCEPT_STATE.NO_ACTION, index }, pending)
-  )
-
-  return { media }
-}
-
 const addMedia = (state, update) => {
   const isPrimaryMedia = isPrimary(update.mediaItem)
   const mediaIndex = state.media.length
@@ -63,6 +50,19 @@ const editMedia = (state, update) => {
   return updateState(state, { type: CONCEPT_STATE.MEDIA_ITEM.EDIT, update })
 }
 
+const mediaState = (concept, pending) => {
+  const { media: conceptMedia } = concept
+  const primaryMedia = getPrimary(conceptMedia)
+  const otherMedia = conceptMedia.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
+  const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
+
+  const media = orderedMedia.map((mediaItem, index) =>
+    stagedMediaItem({ ...mediaItem, action: CONCEPT_STATE.NO_ACTION, index }, pending)
+  )
+
+  return { media }
+}
+
 const resetMedia = (state, update) => {
   const { index: resetIndex } = update
 
@@ -82,15 +82,6 @@ const resetMedia = (state, update) => {
   }
 }
 
-const updateState = (state, { type, update }) => {
-  const { mediaIndex, mediaItem } = update
-  const updatedItem = { ...mediaItem, action: type }
-  const updatedMedia = state.media.map((stateItem, stateIndex) =>
-    stateIndex === mediaIndex ? updatedItem : stateItem
-  )
-  return { ...state, media: updatedMedia }
-}
-
 const stagedMedia = stagedEdit => {
   const [_field, media] = stagedEdit
 
@@ -100,6 +91,15 @@ const stagedMedia = stagedEdit => {
     staged: media.staged,
     stateTypes: CONCEPT_STATE.MEDIA_ITEM,
   })
+}
+
+const updateState = (state, { type, update }) => {
+  const { mediaIndex, mediaItem } = update
+  const updatedItem = { ...mediaItem, action: type }
+  const updatedMedia = state.media.map((stateItem, stateIndex) =>
+    stateIndex === mediaIndex ? updatedItem : stateItem
+  )
+  return { ...state, media: updatedMedia }
 }
 
 export { addMedia, deleteMedia, editMedia, mediaState, resetMedia, stagedMedia }
