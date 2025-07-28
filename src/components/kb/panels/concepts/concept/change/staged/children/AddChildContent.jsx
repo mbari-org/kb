@@ -9,7 +9,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import useInputStyle from './useInputStyle'
 import useAddChildHandlers from './useAddChildHandlers'
-import useNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useNameValidate'
+import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { rankField } from '@/lib/kb/state/rank'
 
@@ -58,7 +58,7 @@ const AddChildContent = () => {
     child
   )
 
-  const { nameError, nameHelperText } = useNameValidate(formChild, modifiedFields)
+  const { nameError, nameHelperText } = useConceptNameValidate(formChild, modifiedFields)
 
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>

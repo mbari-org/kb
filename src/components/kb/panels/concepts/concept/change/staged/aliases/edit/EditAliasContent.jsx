@@ -8,7 +8,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useEditAliasHandlers from './useEditAliasHandlers'
-import useNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useNameValidate'
+import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { ALIAS_TYPES } from '@/lib/kb/model/aliases'
 
@@ -48,7 +48,7 @@ const EditAliasContent = () => {
 
   const { handleStage, handleChange } = useEditAliasHandlers(formAlias, setFormAlias, stagedAlias)
 
-  const { nameError, nameHelperText } = useNameValidate(formAlias, modalData.modified)
+  const { nameError, nameHelperText } = useConceptNameValidate(formAlias, modalData.modified)
 
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>
@@ -57,12 +57,19 @@ const EditAliasContent = () => {
         <TextInput
           error={nameError}
           fullWidth
-          helperText={nameHelperText}
+          helperText={nameError ? nameHelperText : ' '}
           label='Name'
           name='name'
           onChange={handleChange('name')}
           required
           size='small'
+          sx={{
+            '& .MuiFormHelperText-root': {
+              color: nameError ? theme.palette.cancel.main : 'transparent',
+              margin: '15px 0 0 10px',
+              lineHeight: '0',
+            },
+          }}
           value={formAlias.name}
         />
       </FormControl>
