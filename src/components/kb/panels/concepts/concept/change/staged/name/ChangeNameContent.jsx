@@ -10,6 +10,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
+import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -17,25 +18,23 @@ const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept, stagedState } = use(ConceptContext)
-  const { getNames } = use(TaxonomyContext)
   const { user } = use(UserContext)
 
   const [name, setName] = useState({ value: concept.name, extent: '' })
+  const [modifiedFields, setModifiedFields] = useState({ name: false })
 
-  const { handleNameChange, handleNameExtentChange, nameError, nameHelperText } =
-    useChangeNameHandlers(name, setName)
+  const { nameError, nameHelperText } = useConceptNameValidate(name, modifiedFields)
+  const { handleNameChange, handleNameExtentChange } = useChangeNameHandlers(
+    name,
+    setName,
+    nameError,
+    setModifiedFields
+  )
 
   const toColor = () => {
-    // If there's a 'Concept name already exists' error, show grey
-    if (nameError && nameHelperText === 'Concept name already exists') {
-      return theme.palette.grey[500]
-    }
-    // If name is different from original and not in taxonomy, show edit color
-    if (name.value !== concept.name && !getNames().includes(name.value)) {
-      return theme.palette.primary.edit
-    }
-    // Default to grey
-    return theme.palette.grey[500]
+    return name.value !== concept.name && !nameError
+      ? theme.palette.primary.edit
+      : theme.palette.grey[500]
   }
 
   const isAdminUser = isAdmin(user)

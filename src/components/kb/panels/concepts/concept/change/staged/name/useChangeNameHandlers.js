@@ -4,18 +4,12 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
-
 import { isAdmin } from '@/lib/auth/role'
 
-const useChangeNameHandlers = (name, setName) => {
+const useChangeNameHandlers = (name, setName, nameError, setModifiedFields) => {
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ConceptModalContext)
   const { user } = use(UserContext)
-
-  const [modifiedFields, setModifiedFields] = useState({ name: false })
-  
-  const { nameError, nameHelperText } = useConceptNameValidate(name, modifiedFields)
 
   const isAdminUser = isAdmin(user)
 
@@ -82,8 +76,6 @@ const useChangeNameHandlers = (name, setName) => {
   return {
     handleNameChange,
     handleNameExtentChange,
-    nameError,
-    nameHelperText,
   }
 }
 
