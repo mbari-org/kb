@@ -6,11 +6,11 @@ import StagedItemReset from '@/components/kb/panels/concepts/concept/change/stag
 
 import { RESETTING } from '@/lib/constants'
 
-const StagedChild = ({ initialChild, resetting, stagedItem }) => {
+const StagedChild = ({ initialItem, resetting, stagedItem }) => {
   const group = RESETTING.CHILDREN
 
-  const itemDetail = () => <StagedChildDetail initialChild={initialChild} stagedItem={stagedItem} />
-  const itemHeader = () => <StagedChildHeader initialChild={initialChild} stagedItem={stagedItem} />
+  const itemDetail = () => <StagedChildDetail initialChild={initialItem} stagedChild={stagedItem} />
+  const itemHeader = () => <StagedChildHeader initialChild={initialItem} stagedChild={stagedItem} />
   const itemReset = () => (
     <StagedItemReset group={group} resetting={resetting} stagedItem={stagedItem} />
   )

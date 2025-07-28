@@ -2,12 +2,13 @@ import { use, useMemo, useState } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TextInput from '@/components/common/TextInput'
 
-import useStageAlias from './useStageAlias'
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+
+import useEditAliasHandlers from './useEditAliasHandlers'
+import useAliasValidate from './useAliasValidate'
 
 import { ALIAS_TYPES } from '@/lib/kb/model/aliases'
 
@@ -17,8 +18,7 @@ const EditAliasContent = () => {
   const theme = useTheme()
 
   const { stagedState } = use(ConceptContext)
-  const { modalData, setModalData } = use(ConceptModalContext)
-  const { getNames } = use(TaxonomyContext)
+  const { modalData } = use(ConceptModalContext)
 
   const [formAlias, setFormAlias] = useState(modalData.aliasItem)
 
@@ -46,39 +46,12 @@ const EditAliasContent = () => {
     [theme]
   )
 
-  const handleChange = event => {
-    const { name: field, value } = event.target
+  const { handleStage, handleChange } = useEditAliasHandlers(formAlias, setFormAlias, stagedAlias)
 
-    const updatedAlias = {
-      ...formAlias,
-      [field]: value,
-    }
-    setFormAlias(updatedAlias)
-
-    const fieldIsModified = updatedAlias[field] !== stagedAlias[field]
-    const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
-
-    setModalData(prev => ({ ...prev, aliasItem: updatedAlias, modified: updatedModified }))
-  }
-
-  const stageAlias = useStageAlias()
-
-  const isValidName = useMemo(() => {
-    return !getNames().includes(formAlias.name)
-  }, [formAlias.name, getNames])
-
-  const nameError = modalData.modified.name && !isValidName
-
-  const nameHelperText = !modalData.modified.name
-    ? ''
-    : formAlias.name.trim() === ''
-    ? 'Name cannot be empty'
-    : !isValidName
-    ? 'Concept name already exists'
-    : ''
+  const { nameError, nameHelperText } = useAliasValidate(formAlias)
 
   return (
-    <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={stageAlias}>
+    <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>
       <Typography variant='h6'>{actionText} Alias</Typography>
       <FormControl {...inputStyle}>
         <TextInput
@@ -87,7 +60,7 @@ const EditAliasContent = () => {
           helperText={nameHelperText}
           label='Name'
           name='name'
-          onChange={handleChange}
+          onChange={handleChange('name')}
           required
           size='small'
           value={formAlias.name}
@@ -99,7 +72,7 @@ const EditAliasContent = () => {
             fullWidth
             label='Author'
             name='author'
-            onChange={handleChange}
+            onChange={handleChange('author')}
             size='small'
             value={formAlias.author}
           />
@@ -111,7 +84,7 @@ const EditAliasContent = () => {
             label='Type'
             name='nameType'
             labelId={`${formAlias.name}-name-type-label`}
-            onChange={handleChange}
+            onChange={handleChange('nameType')}
             required
             size='small'
             sx={{ height: 43.2812 }}

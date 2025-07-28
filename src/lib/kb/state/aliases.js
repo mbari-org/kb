@@ -5,64 +5,6 @@ import { drop } from '@/lib/utils'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 
-const stagedAliases = stagedEdit => {
-  const [_field, aliases] = stagedEdit
-
-  return stagedEdits({
-    displayFields: drop(ALIAS_FIELDS, ['id']),
-    initial: aliases.initial,
-    staged: aliases.staged,
-    stateTypes: CONCEPT_STATE.ALIAS,
-  })
-}
-
-const stagedAlias = (aliasItem, conceptPending) => {
-  const pendingAliasActions = fieldPending(conceptPending, 'ConceptName')
-
-  const pendingAdd = pendingAliasActions.find(
-    history => history.action === 'ADD' && history.newValue === aliasItem.name
-  )
-  if (pendingAdd) {
-    return {
-      ...aliasItem,
-      action: 'Pending Add',
-      historyId: pendingAdd.id,
-    }
-  }
-
-  const pendingDelete = pendingAliasActions.find(
-    history => history.action === 'DELETE' && history.oldValue === aliasItem.name
-  )
-  if (pendingDelete) {
-    return {
-      ...aliasItem,
-      action: 'Pending Delete',
-      historyId: pendingDelete.id,
-    }
-  }
-
-  const pendingEdit = pendingAliasActions.find(
-    history => history.action === 'REPLACE' && history.newValue === aliasItem.name
-  )
-  if (pendingEdit) {
-    return {
-      ...aliasItem,
-      action: 'Pending Edit',
-      historyId: pendingEdit.id,
-    }
-  }
-
-  return aliasItem
-}
-
-const aliasesState = (concept, pending) => {
-  const { aliases } = concept
-  const stagedAliases = aliases.map((alias, index) =>
-    stagedAlias({ ...alias, action: CONCEPT_STATE.NO_ACTION, index }, pending)
-  )
-  return { aliases: stagedAliases }
-}
-
 const addAlias = (state, update) => {
   const aliasIndex = state.aliases.length
   const aliasItem = {
@@ -75,6 +17,14 @@ const addAlias = (state, update) => {
     aliases: [...state.aliases, aliasItem],
     aliasIndex,
   }
+}
+
+const aliasesState = (concept, pending) => {
+  const { aliases } = concept
+  const stagedAliases = aliases.map((alias, index) =>
+    stagedAlias({ ...alias, action: CONCEPT_STATE.NO_ACTION, index }, pending)
+  )
+  return { aliases: stagedAliases }
 }
 
 const deleteAlias = (state, update) => {
@@ -125,6 +75,56 @@ const resetAliases = (state, update) => {
     ...state,
     aliases: update.aliases,
   }
+}
+
+const stagedAlias = (alias, conceptPending) => {
+  const pendingAliasActions = fieldPending(conceptPending, 'ConceptName')
+
+  const pendingAdd = pendingAliasActions.find(
+    history => history.action === 'ADD' && history.newValue === alias.name
+  )
+  if (pendingAdd) {
+    return {
+      ...alias,
+      action: 'Pending Add',
+      historyId: pendingAdd.id,
+    }
+  }
+
+  const pendingDelete = pendingAliasActions.find(
+    history => history.action === 'DELETE' && history.oldValue === alias.name
+  )
+  if (pendingDelete) {
+    return {
+      ...alias,
+      action: 'Pending Delete',
+      historyId: pendingDelete.id,
+    }
+  }
+
+  const pendingEdit = pendingAliasActions.find(
+    history => history.action === 'REPLACE' && history.newValue === alias.name
+  )
+  if (pendingEdit) {
+    return {
+      ...alias,
+      action: 'Pending Edit',
+      historyId: pendingEdit.id,
+    }
+  }
+
+  return alias
+}
+
+const stagedAliases = stagedEdit => {
+  const [_field, aliases] = stagedEdit
+
+  return stagedEdits({
+    displayFields: drop(ALIAS_FIELDS, ['id']),
+    initial: aliases.initial,
+    staged: aliases.staged,
+    stateTypes: CONCEPT_STATE.ALIAS,
+  })
 }
 
 const updateAlias = (state, { type, update }) => {

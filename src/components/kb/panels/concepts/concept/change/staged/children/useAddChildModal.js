@@ -50,14 +50,16 @@ const useAddChildModal = () => {
   return useCallback(() => {
     const modal = addChildModal()
     const onClose = addChildOnClose(modifyConcept, stagedState.children)
-    setModal(modal, onClose)
-
+    
+    // Set modal data first, then render the modal
     setModalData({
       action: CHILD.ADD,
       child: EMPTY_CHILD,
       index: stagedState.children.length,
       modified: false,
     })
+    
+    setModal(modal, onClose)
   }, [modifyConcept, setModal, setModalData, stagedState.children])
 }
 
