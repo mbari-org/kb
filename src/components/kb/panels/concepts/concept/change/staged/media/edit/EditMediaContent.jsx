@@ -8,6 +8,7 @@ import {
   IconButton,
   InputAdornment,
   TextField,
+  Typography,
 } from '@mui/material'
 import { MdOutlinePhoto } from 'react-icons/md'
 
@@ -34,6 +35,7 @@ const EditMediaContent = () => {
   const { action, mediaIndex, mediaItem } = modalData
 
   const [formMediaItem, setFormMediaItem] = useState(mediaItem)
+  const actionText = action.split(' ').pop()
 
   const [modifiedFields, setModifiedFields] = useState({
     caption: false,
@@ -154,6 +156,7 @@ const EditMediaContent = () => {
 
   return (
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
+      <Typography variant='h6'>{actionText} Media</Typography>
       <FormControl fullWidth margin='normal'>
         <TextField
           error={urlError}
