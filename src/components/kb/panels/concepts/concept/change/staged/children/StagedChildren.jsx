@@ -1,7 +1,7 @@
 import StagedChild from './StagedChild'
 import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/StagedItems'
 
-import { stagedChildren } from '@/lib/kb/model/children'
+import { stagedChildren } from '@/lib/kb/state/children'
 
 import { RESETTING } from '@/lib/constants'
 
