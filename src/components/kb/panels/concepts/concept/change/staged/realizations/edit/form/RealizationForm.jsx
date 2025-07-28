@@ -16,7 +16,7 @@ const RealizationForm = ({
 }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
-  const [isValidToConcept, setIsValidToConcept] = useState(true)
+  const [_isValidToConcept, setIsValidToConcept] = useState(true)
 
   const allAvailableTemplates = useMemo(() => {
     return getAvailableLinkTemplates()
@@ -32,7 +32,7 @@ const RealizationForm = ({
     return linkNameOptions.includes(currentLinkName)
   }, [linkNameOptions, realizationItem.linkName])
 
-  const handleToConceptValidationChange = useCallback((isValid) => {
+  const handleToConceptValidationChange = useCallback(isValid => {
     setIsValidToConcept(isValid)
     if (onValidationChange) {
       onValidationChange({ isValidToConcept: isValid })

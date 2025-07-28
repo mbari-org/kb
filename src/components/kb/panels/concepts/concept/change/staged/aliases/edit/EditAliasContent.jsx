@@ -1,5 +1,5 @@
 import { use, useMemo, useState } from 'react'
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import TextInput from '@/components/common/TextInput'

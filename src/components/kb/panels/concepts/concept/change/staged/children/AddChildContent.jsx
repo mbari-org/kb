@@ -1,6 +1,6 @@
 import { use, useMemo, useState } from 'react'
 
-import { Box, FormControl, Stack, TextField, Typography } from '@mui/material'
+import { Box, FormControl, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'

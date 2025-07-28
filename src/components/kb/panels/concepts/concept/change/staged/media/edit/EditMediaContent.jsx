@@ -8,7 +8,6 @@ import {
   IconButton,
   InputAdornment,
   TextField,
-  Typography,
 } from '@mui/material'
 import { MdOutlinePhoto } from 'react-icons/md'
 

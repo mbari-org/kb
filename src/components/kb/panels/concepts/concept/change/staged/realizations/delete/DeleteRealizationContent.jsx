@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 
 import Detail from '@/components/common/factory/Detail'
 import ModalActionText from '@/components/common/ModalActionText'

@@ -62,7 +62,7 @@ export const createStagedActions = ({
  * @param {Object} config.concept - Current concept
  * @returns {Object} Confirmation handlers
  */
-export const createConfirmationHandlers = ({ closeModal, concept, modifyConcept }) => {
+export const createConfirmationHandlers = ({ closeModal, _concept, modifyConcept }) => {
   const handleConfirm = (update = {}) => {
     modifyConcept({
       type: CONFIRMED.YES,

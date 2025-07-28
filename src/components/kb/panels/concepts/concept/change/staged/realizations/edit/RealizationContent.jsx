@@ -1,5 +1,5 @@
 import { use, useState, useMemo, useEffect, useCallback } from 'react'
-import { Box, TextField, Divider, Typography } from '@mui/material'
+import { Box, TextField, Divider } from '@mui/material'
 
 import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/form/RealizationForm'
 import RealizationTemplatesFilter from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesFilter'

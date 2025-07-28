@@ -52,7 +52,7 @@ const useEditAliasHandlers = (formAlias, setFormAlias, stagedAlias) => {
       const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
 
       // Check if any field is modified
-      const modified = hasTrue(updatedModified)
+      const _modified = hasTrue(updatedModified)
 
       // Debounced modalData update (for validation, Actions component, etc.)
       debouncedUpdateModalData(updatedAlias, updatedModified)

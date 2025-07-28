@@ -6,7 +6,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const NAME_ERROR = {
+const _NAME_ERROR = {
   EMPTY: 'Name cannot be empty',
   EXISTS: 'Concept name already exists',
 }

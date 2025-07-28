@@ -4,7 +4,7 @@ import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import _TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 import ModalActionText from '@/components/common/ModalActionText'
 import UserContext from '@/contexts/user/UserContext'

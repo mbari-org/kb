@@ -24,7 +24,7 @@ const resetDeleteConcept = (dispatch, concept) => {
   })
 }
 
-const resetMedia = (dispatch, initialState) => {
+const _resetMedia = (dispatch, initialState) => {
   dispatch({
     type: RESET.MEDIA,
     update: { media: initialState.media },
