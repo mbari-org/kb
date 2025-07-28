@@ -4,13 +4,13 @@ import { Box } from '@mui/material'
 
 import StagedAliases from '@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAliases'
 import StagedChildren from '@/components/kb/panels/concepts/concept/change/staged/children/StagedChildren'
+import StagedMedia from '@/components/kb/panels/concepts/concept/change/staged/media/StagedMedia'
 import StagedRealizations from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealizations'
 
 import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
 
 import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldValueDetail'
-import MediaDetail from '@/components/kb/panels/concepts/concept/change/staged/media/MediaDetail'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -56,7 +56,7 @@ const StagedContent = () => {
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.MEDIA:
-        return <MediaDetail key={field} edit={stagedEdit} />
+        return <StagedMedia key={field} stagedEdit={stagedEdit} />
 
       case 'nameChange':
         return <FieldValueDetail key={field} field={field} value={staged} />

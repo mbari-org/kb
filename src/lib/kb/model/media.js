@@ -13,7 +13,7 @@ const isPrimary = mediaItem => mediaItem.isPrimary || /.*_01\..*/.test(mediaItem
 
 const mediaItemEdits = ({ initial, staged }) =>
   stagedEdits({
-    stateTypes: CONCEPT_STATE.MEDIA,
+    stateTypes: CONCEPT_STATE.MEDIA_ITEM,
     displayFields: MEDIA_DISPLAY_FIELDS,
     initial,
     staged,

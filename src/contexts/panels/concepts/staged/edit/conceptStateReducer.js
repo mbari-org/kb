@@ -81,9 +81,6 @@ const conceptStateReducer = (state, { type, update }) => {
     case RESET.REALIZATIONS:
       return resetRealizations(state, update)
 
-    // case RESET.MEDIA:
-    //   return resetMediaItem(state, update)
-
     case RESET.NAME:
       return resetName(state, update)
 
@@ -92,9 +89,6 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case RESET.RANK:
       return resetRank(state, update)
-
-    case RESET.STRUCTURE:
-      return setStructure(state, update)
 
     default:
       return state

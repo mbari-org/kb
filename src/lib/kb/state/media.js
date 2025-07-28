@@ -1,6 +1,7 @@
 import { getPrimary, isPrimary } from '@/lib/kb/model/media'
 
 import { CONCEPT_STATE } from '@/lib/constants'
+import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { stagedMediaItem } from '@/lib/kb/model/media'
 
@@ -63,25 +64,21 @@ const editMedia = (state, update) => {
 }
 
 const resetMedia = (state, update) => {
-  return {
-    ...state,
-    media: update.media,
-  }
-}
+  const { index: resetIndex } = update
 
-const resetMediaItem = (state, update) => {
-  const { mediaIndex, mediaItem } = update
-  if (mediaItem) {
+  if (1 < state.media.length && resetIndex !== undefined) {
+    const mediaItem = update.media[resetIndex]
     return {
       ...state,
-      media: state.media.map((item, index) => (index === mediaIndex ? mediaItem : item)),
-      mediaIndex: 0,
+      media: state.media.reduce((acc, item, index) => {
+        index === resetIndex ? mediaItem != null && acc.push(mediaItem) : acc.push(item)
+        return acc
+      }, []),
     }
   }
   return {
     ...state,
-    media: state.media.filter((_item, index) => index !== mediaIndex),
-    mediaIndex: 0,
+    media: update.media,
   }
 }
 
@@ -94,4 +91,15 @@ const updateState = (state, { type, update }) => {
   return { ...state, media: updatedMedia }
 }
 
-export { addMedia, deleteMedia, editMedia, mediaState, resetMedia, resetMediaItem }
+const stagedMedia = stagedEdit => {
+  const [_field, media] = stagedEdit
+
+  return stagedEdits({
+    displayFields: ['url', 'credit', 'caption', 'isPrimary'],
+    initial: media.initial,
+    staged: media.staged,
+    stateTypes: CONCEPT_STATE.MEDIA_ITEM,
+  })
+}
+
+export { addMedia, deleteMedia, editMedia, mediaState, resetMedia, stagedMedia }

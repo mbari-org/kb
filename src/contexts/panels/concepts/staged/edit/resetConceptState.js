@@ -31,12 +31,6 @@ const resetMedia = (dispatch, initialState) => {
   })
 }
 
-// const resetMediaItem = (mediaIndex, dispatch, initialState) => {
-//   dispatch({
-//     type: RESET.MEDIA,
-//     update: { mediaIndex, mediaItem: initialState.media[mediaIndex] },
-//   })
-// }
 
 const resetRank = (dispatch, initialState) => {
   dispatch({
@@ -84,7 +78,10 @@ const resetConceptState = (action, dispatch, initialState) => {
       break
 
     case RESET.MEDIA:
-      resetMedia(dispatch, initialState)
+      dispatch({
+        type: RESET.MEDIA,
+        update: { media: initialState.media, index: action.update.index },
+      })
       break
 
     case RESET.NAME:
@@ -112,9 +109,6 @@ const resetConceptState = (action, dispatch, initialState) => {
       })
       break
 
-    // case RESET.MEDIA:
-    //   resetMediaItem(action.update.groupIndex, dispatch, initialState)
-    //   break
 
     case RESET.TO_INITIAL:
       resetToInitial(dispatch, initialState)

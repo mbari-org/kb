@@ -7,34 +7,35 @@ import { formatDelta } from '@/components/common/format'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { REALIZATION: REALIZATION } = CONCEPT_STATE
+const { MEDIA_ITEM: MEDIA_ITEM } = CONCEPT_STATE
 
-import { drop } from '@/lib/utils'
-
-const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {
-  const { action, updates } = stagedRealization
+const StagedMediaItemDetail = ({ initialMediaItem, stagedMediaItem }) => {
+  const { action, updates } = stagedMediaItem
 
   const fieldValues = useMemo(() => {
     let fieldValues
     switch (action) {
-      case REALIZATION.ADD:
-        fieldValues = Object.entries(drop(updates, ['name']))
+      case MEDIA_ITEM.ADD:
+        fieldValues = ['credit', 'caption', 'isPrimary'].map(field => [
+          field,
+          field === 'isPrimary' ? (updates[field] === true ? 'true' : 'false') : updates[field],
+        ])
         break
 
-      case REALIZATION.DELETE:
+      case MEDIA_ITEM.DELETE:
         fieldValues = []
         break
 
-      case REALIZATION.EDIT:
+      case MEDIA_ITEM.EDIT:
         fieldValues = Object.entries(updates).map(([field, value]) => {
-          if (initialRealization[field] !== value) {
-            return [field, formatDelta(initialRealization[field], value)]
+          if (initialMediaItem[field] !== value) {
+            return [field, formatDelta(initialMediaItem[field], value)]
           }
         })
         break
     }
     return fieldValues
-  }, [action, initialRealization, updates])
+  }, [action, initialMediaItem, updates])
 
   return (
     <Box>
@@ -45,4 +46,4 @@ const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {
   )
 }
 
-export default StagedRealizationDetail
+export default StagedMediaItemDetail
