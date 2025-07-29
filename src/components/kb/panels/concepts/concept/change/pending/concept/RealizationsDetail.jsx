@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import RealizationDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 
-import { useRealizationsPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { usePendingRealizationsApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { fieldSx } from '@/components/common/format'
 
@@ -15,7 +15,7 @@ const { REALIZATIONS } = PENDING.GROUP
 const RealizationsDetail = ({ pendingField }) => {
   const pendingRealizations = pendingField('LinkRealization')
 
-  const approval = useRealizationsPendingApproval()
+  const approval = usePendingRealizationsApproval()
 
   const realizationsSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 

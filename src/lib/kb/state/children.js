@@ -44,8 +44,8 @@ const resetChildren = (state, update) => {
   }
 }
 
-const stagedChild = (child, conceptPending) => {
-  const pendingChildActions = fieldPending(conceptPending, 'ConceptName')
+const stagedChild = (child, pendingConcept) => {
+  const pendingChildActions = fieldPending(pendingConcept, 'ConceptName')
 
   const pendingAdd = pendingChildActions.find(
     history => history.action === 'ADD' && history.newValue === child.name

@@ -6,14 +6,13 @@ import PendingButtons from '@/components/kb/panels/concepts/concept/change/pendi
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { useAliasesPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
 import { fieldSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
-const { ALIASES } = PENDING.GROUP
 
 const AliasesDetail = ({ pendingField }) => {
   const { concept } = use(ConceptContext)
@@ -22,13 +21,13 @@ const AliasesDetail = ({ pendingField }) => {
     alias => alias.newValue !== concept.name
   )
 
-  const approval = useAliasesPendingApproval()
-
-  const aliasesSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+  const approval = usePendingGroupApproval(PENDING.GROUP.ALIASES)
 
   if (pendingAliases.length === 0) {
     return null
   }
+
+  const aliasesSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   return (
     <Box
@@ -39,7 +38,7 @@ const AliasesDetail = ({ pendingField }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} pending={ALIASES} />
+        <PendingButtons approval={approval} group={PENDING.GROUP.ALIASES} />
         <Typography sx={aliasesSx}>Aliases</Typography>
       </Box>
       <Stack direction='column' spacing={1}>

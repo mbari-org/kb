@@ -6,7 +6,6 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 import useUpdatedPending from '@/contexts/panels/concepts/pending/useUpdatePending'
 
 import { pendingChild as getPendingChild } from '@/lib/kb/model/history'
@@ -19,20 +18,21 @@ const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABE
 const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
-  const { concept, confirmPending, setConfirmPending } = use(ConceptContext)
+  const { concept, pending, setPendingConfirm } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
 
   const { user } = use(UserContext)
 
-  const conceptPending = useConceptPending(concept.name)
-  const parentPending = useConceptPending(concept.parent)
+  const pendingConcept = pending(PENDING.DATA.CONCEPT)
+  const pendingParent = pending(PENDING.DATA.PARENT)
+  const pendingConfirm = pending(PENDING.DATA.CONFIRM)
 
   const updatePending = useUpdatedPending()
 
-  const pendingChild = getPendingChild(parentPending, concept.name)
+  const pendingChild = getPendingChild(pendingParent, concept.name)
   const pendingItems = useMemo(() => {
-    return pendingChild ? [pendingChild] : conceptPending
-  }, [conceptPending, pendingChild])
+    return pendingChild ? [pendingChild] : pendingConcept
+  }, [pendingConcept, pendingChild])
 
   const [disabled, labels] = useMemo(() => {
     if (!isAdmin(user)) {
@@ -42,39 +42,41 @@ const PendingActions = () => {
       ]
     }
 
-    if (!confirmPending) {
+    if (!pendingConfirm) {
       return [
         [false, false, false],
         [APPROVE_ALL, DEFER, REJECT_ALL],
       ]
     }
-    if (confirmPending.approval === APPROVAL.ACCEPT && confirmPending.change === GROUP.ALL) {
+
+    if (pendingConfirm.approval === APPROVAL.ACCEPT && pendingConfirm.group === GROUP.ALL) {
       return [
         [false, false, true],
         [CONFIRM, DEFER, REJECT_ALL],
       ]
     }
-    if (confirmPending.approval === APPROVAL.REJECT && confirmPending.change === GROUP.ALL) {
+
+    if (pendingConfirm.approval === APPROVAL.REJECT && pendingConfirm.group === GROUP.ALL) {
       return [
         [true, false, false],
         [APPROVE_ALL, DEFER, CONFIRM],
       ]
     }
 
-    if (confirmPending.approval === APPROVAL.ACCEPT) {
+    if (pendingConfirm.approval === APPROVAL.ACCEPT) {
       return [
         [false, false, true],
         [CONFIRM, DEFER, REJECT],
       ]
     }
 
-    if (confirmPending.approval === APPROVAL.REJECT) {
+    if (pendingConfirm.approval === APPROVAL.REJECT) {
       return [
         [true, false, false],
         [APPROVE, DEFER, CONFIRM],
       ]
     }
-  }, [confirmPending, user])
+  }, [pendingConfirm, user])
 
   const colors = ['clean', 'main', 'cancel']
 
@@ -82,43 +84,43 @@ const PendingActions = () => {
     label => {
       switch (label) {
         case APPROVE_ALL: {
-          setConfirmPending({ approval: APPROVAL.ACCEPT, change: GROUP.ALL, pendingItems })
+          setPendingConfirm({ approval: APPROVAL.ACCEPT, group: GROUP.ALL, pendingItems })
           break
         }
 
         case CONFIRM: {
-          updatePending(confirmPending).then(() => {
+          updatePending(pendingConfirm).then(() => {
             const morePending = pendingItems.filter(
-              history => !confirmPending.pendingItems.some(item => item.id === history.id)
+              history => !pendingConfirm.pendingItems.some(item => item.id === history.id)
             )
             if (morePending.length === 0) {
               closeModal()
             }
 
-            setConfirmPending(null)
+            setPendingConfirm(null)
           })
           break
         }
 
         case DEFER:
-          if (!confirmPending) {
+          if (!pendingConfirm) {
             closeModal()
           }
-          setConfirmPending(null)
+          setPendingConfirm(null)
           break
 
         case REJECT_ALL: {
-          setConfirmPending({ approval: APPROVAL.REJECT, change: GROUP.ALL, pendingItems })
+          setPendingConfirm({ approval: APPROVAL.REJECT, group: GROUP.ALL, pendingItems })
           break
         }
 
         default:
-          setConfirmPending(null)
+          setPendingConfirm(null)
           closeModal()
           break
       }
     },
-    [closeModal, confirmPending, pendingItems, setConfirmPending, updatePending]
+    [closeModal, pendingConfirm, pendingItems, setPendingConfirm, updatePending]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')

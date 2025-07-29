@@ -21,8 +21,8 @@ const mediaItemEdits = ({ initial, staged }) =>
 
 const mediaItemFields = mediaItem => displayItem(mediaItem, MEDIA_DISPLAY_FIELDS)
 
-const stagedMediaItem = (mediaItem, conceptPending) => {
-  const pendingMediaItemActions = fieldPending(conceptPending, 'Media')
+const stagedMediaItem = (mediaItem, pendingConcept) => {
+  const pendingMediaItemActions = fieldPending(pendingConcept, 'Media')
 
   const pendingAdd = pendingMediaItemActions.find(
     history => history.action === 'ADD' && history.newValue === mediaItem.url

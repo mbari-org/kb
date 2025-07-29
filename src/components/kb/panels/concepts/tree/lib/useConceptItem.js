@@ -18,15 +18,16 @@ const useConceptItem = () => {
       const concept = getConcept(itemId)
       if (!concept) return null
 
-      const conceptPending = pendingHistory.filter(h => h.concept === concept.name)
-      const parentPending = pendingHistory.filter(h => h.concept === concept.parent)
-      const hasPending = 0 < conceptPending.length || !!pendingChild(parentPending, concept.name)
+      const pendingConcept = pendingHistory.filter(h => h.concept === concept.name)
+      const pendingParent = pendingHistory.filter(h => h.concept === concept.parent)
+      const hasPending = 0 < pendingConcept.length || !!pendingChild(pendingParent, concept.name)
 
       return {
         id: concept.name,
-        label: concept.alternateNames.length === 0
-          ? concept.name
-          : `${concept.name} (${concept.alternateNames.join(', ')})`,
+        label:
+          concept.alternateNames.length === 0
+            ? concept.name
+            : `${concept.name} (${concept.alternateNames.join(', ')})`,
         hasPending,
         mediaCount: concept.media?.length || 0,
         parent: concept.parent,

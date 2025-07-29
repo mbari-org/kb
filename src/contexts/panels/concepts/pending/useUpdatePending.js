@@ -13,16 +13,15 @@ import { capitalize } from '@/lib/utils'
 import { PENDING } from '@/lib/constants'
 
 const useUpdatedPending = () => {
-  const { concept, resetConcept } = use(ConceptContext)
+  const { concept, pending, resetConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
 
   const rejectPending = useRejectPending()
 
   return useCallback(
-    async confirmPending => {
-      const { approval, pendingItems } = confirmPending
-      const pendingIds = pendingItems.map(item => item.id)
+    async pendingConfirm => {
+      const { approval, pendingIds } = pendingConfirm
 
       setProcessing(`${capitalize(approval)} pending changes...`)
       const approvalUpdates = await Promise.all(
@@ -32,6 +31,10 @@ const useUpdatedPending = () => {
       )
 
       if (approval === PENDING.APPROVAL.REJECT) {
+        const pendingConcept = pending(PENDING.DATA.CONCEPT)
+        const pendingItems = pendingIds.map(pendingId =>
+          pendingConcept.find(item => item.id === pendingId)
+        )
         await rejectPending(pendingItems, approvalUpdates)
       } else {
         resetConcept(concept)
@@ -39,7 +42,7 @@ const useUpdatedPending = () => {
 
       setProcessing(false)
     },
-    [apiFns, concept, resetConcept, setProcessing, rejectPending]
+    [apiFns, concept, pending, resetConcept, setProcessing, rejectPending]
   )
 }
 

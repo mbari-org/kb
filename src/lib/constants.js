@@ -163,6 +163,11 @@ export const PENDING = {
     OTHER: 'other',
     REJECT: 'reject',
   },
+  DATA: {
+    CONCEPT: 'concept',
+    CONFIRM: 'confirm',
+    PARENT: 'parent',
+  },
   GROUP: {
     ALIASES: 'Aliases',
     ALL: 'All',

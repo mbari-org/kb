@@ -10,23 +10,22 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { isStateModified } from '@/lib/kb/state'
 import { pendingChild } from '@/lib/kb/model/history'
-import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
-import { CONCEPT_STATE, LABELS, RESETTING } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS, PENDING, RESETTING } from '@/lib/constants'
 
 const { DISCARD, DISCARD_ALL } = LABELS.BUTTON
-const { CANCEL, EDIT, PENDING, SAVE, STAGED } = LABELS.CONCEPT.ACTION
+const { CANCEL, EDIT, PENDING: PENDING_ACTION, SAVE, STAGED } = LABELS.CONCEPT.ACTION
 const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 
 const ConceptEditingActions = () => {
   const [isModified, setIsModified] = useState(false)
 
-  const { concept, editing, initialState, modifyConcept, setEditing, stagedState } =
+  const { concept, editing, initialState, modifyConcept, pending, setEditing, stagedState } =
     use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept.name)
-  const parentPending = useConceptPending(concept.parent)
+  const pendingConcept = pending(PENDING.DATA.CONCEPT)
+  const pendingParent = pending(PENDING.DATA.PARENT)
 
   const displayPending = useDisplayPending()
   const displayStaged = useDisplayStaged()
@@ -53,7 +52,7 @@ const ConceptEditingActions = () => {
   }, [editing, isModified, modifyConcept, setEditing, displayStaged])
 
   const handlePending = useCallback(() => {
-    displayPending(PENDING)
+    displayPending(PENDING_ACTION)
   }, [displayPending])
 
   const handleSave = useCallback(() => {
@@ -67,9 +66,9 @@ const ConceptEditingActions = () => {
   }, [modifyConcept, displayStaged])
 
   const showPendingButton = useMemo(() => {
-    const hasPending = conceptPending.length > 0 || pendingChild(parentPending, concept.name)
+    const hasPending = pendingConcept.length > 0 || pendingChild(pendingParent, concept.name)
     return !editing && hasPending
-  }, [conceptPending.length, parentPending, concept.name, editing])
+  }, [pendingConcept.length, pendingParent, concept.name, editing])
 
   return (
     <Box
@@ -93,7 +92,7 @@ const ConceptEditingActions = () => {
       )}
       {showPendingButton && (
         <Button color='main' onClick={handlePending} variant='contained'>
-          {PENDING}
+          {PENDING_ACTION}
         </Button>
       )}
       <Button disabled={!editing || !isModified} onClick={handleSave} variant='contained'>

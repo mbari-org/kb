@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import ChildDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ChildDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 
-import { useChildrenPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { usePendingChildrenApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { fieldSx } from '@/components/common/format'
 
@@ -19,7 +19,7 @@ const ChildrenDetail = ({ leftMargin, pendingField }) => {
     return aValue.localeCompare(bValue)
   })
 
-  const approval = useChildrenPendingApproval()
+  const approval = usePendingChildrenApproval()
 
   const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 

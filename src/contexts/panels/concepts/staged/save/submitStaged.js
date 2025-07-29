@@ -1,8 +1,8 @@
 import submitAliases from './submitAliases'
-import submitDetail from './submitDetail'
+import submitAuthor from './submitAuthor'
 import submitMedia from './submitMedia'
+import submitRank from './submitRank'
 import submitRealizations from './submitRealizations'
-import submitStructure from './submtiStructure'
 
 import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
@@ -13,10 +13,10 @@ const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
 
   const submitters = []
   submitters.push(...submitAliases(submitterInfo))
-  submitters.push(...submitDetail(submitterInfo))
+  submitters.push(...submitAuthor(submitterInfo))
+  submitters.push(...submitRank(submitterInfo))
   submitters.push(...submitMedia(submitterInfo))
   submitters.push(...submitRealizations(submitterInfo))
-  submitters.push(...submitStructure(submitterInfo))
 
   updatesInfo.results = await Promise.all(submitters)
 

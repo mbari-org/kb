@@ -77,8 +77,8 @@ const resetAliases = (state, update) => {
   }
 }
 
-const stagedAlias = (alias, conceptPending) => {
-  const pendingAliasActions = fieldPending(conceptPending, 'ConceptName')
+const stagedAlias = (alias, pendingConcept) => {
+  const pendingAliasActions = fieldPending(pendingConcept, 'ConceptName')
 
   const pendingAdd = pendingAliasActions.find(
     history => history.action === 'ADD' && history.newValue === alias.name

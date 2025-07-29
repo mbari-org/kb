@@ -6,7 +6,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { fieldSx, formatDelta } from '@/components/common/format'
 
-import { useItemPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -19,7 +19,7 @@ const { OTHER } = PENDING.APPROVAL
 const AliasDetail = ({ pendingAlias }) => {
   const pendingAction = capitalize(pendingAlias.action.toLowerCase())
 
-  const approval = useItemPendingApproval(pendingAlias.id)
+  const approval = usePendingItemApproval(pendingAlias)
 
   const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
@@ -50,7 +50,7 @@ const AliasDetail = ({ pendingAlias }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
-        <PendingButtons approval={approval} pending={pendingAlias.id} />
+        <PendingButtons approval={approval} group={PENDING.GROUP.ALIASES} item={pendingAlias} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={aliasSx}>{pendingAction}:</Typography>
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasTitle}</Typography>

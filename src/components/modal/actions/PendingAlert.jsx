@@ -5,9 +5,7 @@ import { PENDING } from '@/lib/constants'
 
 const { ACCEPT, REJECT } = PENDING.APPROVAL
 
-const PendingAlert = ({ confirmPending }) => {
-  const { approval } = confirmPending
-
+const PendingAlert = ({ approval }) => {
   const [severity, line1, line2] = useMemo(() => {
     if (approval === ACCEPT) return ['info', 'approval', 'approve']
     if (approval === REJECT) return ['error', 'rejection', 'reject']

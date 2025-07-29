@@ -1,12 +1,13 @@
 import { use } from 'react'
 
 import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 
-import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/stagedBorder'
+import { stagedBorder } from '@/lib/kb/state/staged'
 
 import { CONCEPT_RANK } from '@/lib/constants'
 
@@ -14,6 +15,8 @@ import { rankField } from '@/lib/kb/state/rank'
 import { capitalize } from '@/lib/utils'
 
 const RankFieldInput = ({ field, initialRank, rank, onChange }) => {
+  const theme = useTheme()
+
   const inputStyle = useConceptDetailStyle(field)
   const { filterRanks } = use(TaxonomyContext)
 
@@ -25,12 +28,17 @@ const RankFieldInput = ({ field, initialRank, rank, onChange }) => {
 
   const rankOptions = filterRanks(rankField(field), otherValue)
 
-  const border = stagedBorder(initialRank[field], rank[field])
+  const border = stagedBorder({
+    noActionBorderColor: 'none',
+    stagedItem: rank,
+    theme,
+    width: '2px',
+  })
 
   return (
     <FormControl {...inputStyle}>
       <Box alignItems='center' display='flex' flexDirection='row' width='100%'>
-        <Box display='flex' flexDirection='column' flexGrow={1} sx={{ ...border }}>
+        <Box display='flex' flexDirection='column' flexGrow={1} sx={{ border }}>
           <InputLabel id={`${field}-label`}>{capitalize(field)}</InputLabel>
           <Select
             displayEmpty

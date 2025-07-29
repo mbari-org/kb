@@ -11,12 +11,12 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 const useDisplayPending = () => {
-  const { setConfirmPending } = use(ConceptContext)
+  const { setPendingConfirm } = use(ConceptContext)
   const { setModal } = use(ConceptModalContext)
 
   return useCallback(
     intent => {
-      setConfirmPending(null)
+      setPendingConfirm(null)
 
       const modal = createModal({
         Actions: () => <PendingActions intent={intent} />,
@@ -26,7 +26,7 @@ const useDisplayPending = () => {
       })
       setModal(modal)
     },
-    [setConfirmPending, setModal]
+    [setPendingConfirm, setModal]
   )
 }
 

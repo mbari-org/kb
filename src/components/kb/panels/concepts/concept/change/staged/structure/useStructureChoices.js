@@ -6,20 +6,19 @@ import { hasPending } from '@/lib/kb/model/history'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
+import { PENDING } from '@/lib/constants'
 
 const useStructureChoices = () => {
-  const { concept, initialState, stagedState } = use(ConceptContext)
+  const { concept, initialState, pending, stagedState } = use(ConceptContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
-  const conceptPending = useConceptPending(concept.name)
+  const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
   const isRoot = isTaxonomyRoot(concept)
 
-  const hasPendingName = hasPending(conceptPending, 'ConceptName')
-  const hasPendingParent = hasPending(conceptPending, 'ConceptParent')
+  const hasPendingName = hasPending(pendingConcept, 'ConceptName')
+  const hasPendingParent = hasPending(pendingConcept, 'ConceptParent')
 
-  // const hasStagedChildren = stagedState.children.length > 0
   const hasStagedChildren = false
   const hasStagedName = stagedState.name.value !== concept.name
   const hasStagedParent = stagedState.parent !== concept.parent
@@ -32,8 +31,8 @@ const useStructureChoices = () => {
       isRoot ||
       hasChildren ||
       hasStateChange(initialState, stagedState) ||
-      hasPending(conceptPending),
-    [conceptPending, hasChildren, initialState, isRoot, stagedState]
+      hasPending(pendingConcept),
+    [pendingConcept, hasChildren, initialState, isRoot, stagedState]
   )
   const disableChangeName = isRoot || hasPendingName || hasStagedChange
   const disableChangeParent = isRoot || hasPendingParent || hasStagedChange

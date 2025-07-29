@@ -15,31 +15,31 @@ import RealizationsDetail from '@/components/kb/panels/concepts/concept/change/p
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
-
 import { fieldPending, pendingChild as getPendingChild } from '@/lib/kb/model/history'
+
+import { PENDING } from '@/lib/constants'
 
 import { isEmpty } from '@/lib/utils'
 
 const PendingContent = () => {
-  const { concept } = use(ConceptContext)
+  const { concept, pending } = use(ConceptContext)
   const { setModal } = use(ConceptModalContext)
 
-  const conceptPending = useConceptPending(concept.name)
-  const parentPending = useConceptPending(concept.parent)
+  const pendingConcept = pending(PENDING.DATA.CONCEPT)
+  const pendingParent = pending(PENDING.DATA.PARENT)
 
-  const pendingField = useMemo(() => field => fieldPending(conceptPending, field), [conceptPending])
+  const pendingField = useMemo(() => field => fieldPending(pendingConcept, field), [pendingConcept])
 
-  const pendingChild = getPendingChild(parentPending, concept.name)
+  const pendingChild = getPendingChild(pendingParent, concept.name)
 
-  if (isEmpty(conceptPending) && !pendingChild) {
+  if (isEmpty(pendingConcept) && !pendingChild) {
     setModal(null)
     return null
   }
 
   return (
     <Stack direction='column' spacing={1}>
-      <ModalActionText text='Pending Changes' />
+      <ModalActionText text='Pending History' />
       {pendingChild && (
         <ChildDetail pendingChild={pendingChild} leftMargin={{ title: 0, detail: 8 }} />
       )}

@@ -1,6 +1,5 @@
 import { use, useMemo } from 'react'
 
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { fieldPending } from '@/lib/kb/model/history'
@@ -37,7 +36,7 @@ const getFieldNameForGroup = group => {
   }
 }
 
-const isTargetInGroup = (target, group, conceptPending, conceptName) => {
+const isTargetInGroup = (target, group, pendingConcept, conceptName) => {
   const fieldName = getFieldNameForGroup(group)
   if (!fieldName) {
     return false
@@ -45,11 +44,13 @@ const isTargetInGroup = (target, group, conceptPending, conceptName) => {
 
   // Special handling for ALIASES and CONCEPT_NAME groups since they share the same field
   if (group === PENDING.GROUP.ALIASES || group === PENDING.GROUP.CONCEPT_NAME) {
-    const fieldItems = fieldPending(conceptPending, fieldName)
+    const fieldItems = fieldPending(pendingConcept, fieldName)
 
     if (group === PENDING.GROUP.ALIASES) {
       // For aliases, exclude the concept name itself
-      return fieldItems.some(history => history.id === target && history.newValue !== conceptName)
+      return fieldItems.some(
+        history => history.id === target.id && history.newValue !== conceptName
+      )
     } else if (group === PENDING.GROUP.CONCEPT_NAME) {
       // For concept name, only include the concept name itself
       return fieldItems.some(history => history.id === target && history.newValue === conceptName)
@@ -58,93 +59,94 @@ const isTargetInGroup = (target, group, conceptPending, conceptName) => {
 
   // Special handling for RANK group which includes both RankLevel and RankName fields
   if (group === PENDING.GROUP.RANK) {
-    const rankLevelItems = fieldPending(conceptPending, 'RankLevel')
-    const rankNameItems = fieldPending(conceptPending, 'RankName')
+    const rankLevelItems = fieldPending(pendingConcept, 'RankLevel')
+    const rankNameItems = fieldPending(pendingConcept, 'RankName')
     return (
       rankLevelItems.some(history => history.id === target) ||
       rankNameItems.some(history => history.id === target)
     )
   }
 
-  return fieldPending(conceptPending, fieldName).some(history => history.id === target)
+  return pendingConcept.some(history => history.id === target)
+  // return fieldPending(pendingConcept, fieldName).some(history => history.id === target)
 }
 
-const createPendingApprovalHook = targetPending => {
+export const createPendingGroupApprovalHook = group => {
   return () => {
-    const { confirmPending } = use(ConceptContext)
+    const { pending } = use(ConceptContext)
+
+    const pendingConfirm = pending(PENDING.DATA.CONFIRM)
 
     return useMemo(() => {
-      if (!confirmPending) {
+      if (!pendingConfirm) {
         return null
       }
 
-      if (confirmPending?.change === PENDING.GROUP.ALL) {
-        return confirmPending.approval
+      if (pendingConfirm?.change === PENDING.GROUP.ALL) {
+        return pendingConfirm.approval
       }
 
-      if (confirmPending.pending === targetPending) {
-        return confirmPending.approval
+      if (pendingConfirm.group === group) {
+        return pendingConfirm.approval
       }
 
       return OTHER
-    }, [confirmPending])
+    }, [pendingConfirm])
   }
 }
 
 const createParametrizedPendingApprovalHook = () => {
   return target => {
-    const { confirmPending, concept } = use(ConceptContext)
-    const { pendingHistory } = use(PanelDataContext)
+    const { concept, pending } = use(ConceptContext)
 
-    const conceptPending = useMemo(() => {
-      return pendingHistory.filter(history => history.concept === concept.name)
-    }, [pendingHistory, concept.name])
+    const pendingConcept = pending(PENDING.DATA.CONCEPT)
+    const pendingConfirm = pending(PENDING.DATA.CONFIRM)
 
     return useMemo(() => {
-      if (!confirmPending) {
+      if (!pendingConfirm) {
         return null
       }
 
-      if (confirmPending?.change === PENDING.GROUP.ALL) {
-        return confirmPending.approval
+      if (pendingConfirm?.group === PENDING.GROUP.ALL) {
+        return pendingConfirm.approval
       }
 
-      if (confirmPending.pending === target) {
-        return confirmPending.approval
+      if (pendingConfirm.group === target) {
+        return pendingConfirm.approval
       }
 
-      // Check if this target is part of a selected group
-      if (isTargetInGroup(target, confirmPending.pending, conceptPending, concept.name)) {
-        return confirmPending.approval
+      // Check if this target is part of a selected group or is an individual item that is pending
+      if (isTargetInGroup(target, pendingConfirm.group, pendingConcept, concept.name)) {
+        return pendingConfirm.approval
       }
 
       return OTHER
-    }, [confirmPending, target, conceptPending, concept.name])
+    }, [pendingConfirm, target, pendingConcept, concept.name])
   }
 }
 
-export const getPendingIds = (conceptPending, target, conceptName) => {
-  const fieldName = getFieldNameForGroup(target)
+export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
+  const fieldName = getFieldNameForGroup(targetGroup)
 
   let pendingIds
-  if (target === PENDING.GROUP.ALL) {
-    pendingIds = conceptPending.map(history => history.id)
+  if (targetGroup === PENDING.GROUP.ALL) {
+    pendingIds = pendingConcept.map(history => history.id)
   } else if (fieldName) {
     // Special handling for RANK group which includes both RankLevel and RankName fields
-    if (target === PENDING.GROUP.RANK) {
-      const rankLevelItems = fieldPending(conceptPending, 'RankLevel')
-      const rankNameItems = fieldPending(conceptPending, 'RankName')
+    if (targetGroup === PENDING.GROUP.RANK) {
+      const rankLevelItems = fieldPending(pendingConcept, 'RankLevel')
+      const rankNameItems = fieldPending(pendingConcept, 'RankName')
       pendingIds = [...rankLevelItems, ...rankNameItems].map(history => history.id)
     } else {
-      const fieldItems = fieldPending(conceptPending, fieldName)
+      const fieldItems = fieldPending(pendingConcept, fieldName)
 
       // Special handling for ALIASES and CONCEPT_NAME groups since they share the same field
-      if (target === PENDING.GROUP.ALIASES) {
+      if (targetGroup === PENDING.GROUP.ALIASES) {
         // For aliases, exclude the concept name itself
         pendingIds = fieldItems
           .filter(history => history.newValue !== conceptName)
           .map(history => history.id)
-      } else if (target === PENDING.GROUP.CONCEPT_NAME) {
+      } else if (targetGroup === PENDING.GROUP.CONCEPT_NAME) {
         // For concept name, only include the concept name itself
         pendingIds = fieldItems
           .filter(history => history.newValue === conceptName)
@@ -155,55 +157,57 @@ export const getPendingIds = (conceptPending, target, conceptName) => {
     }
   } else {
     // For individual items, the target is the history ID itself
-    pendingIds = [target]
+    pendingIds = [targetGroup]
   }
 
   return pendingIds
 }
 
-export const useAliasesPendingApproval = createPendingApprovalHook(PENDING.GROUP.ALIASES)
-export const useChildrenPendingApproval = createPendingApprovalHook(PENDING.GROUP.CHILDREN)
-export const useMediaPendingApproval = createPendingApprovalHook(PENDING.GROUP.MEDIA)
-export const useRankPendingApproval = createPendingApprovalHook(PENDING.GROUP.RANK)
-export const useRealizationsPendingApproval = createPendingApprovalHook(PENDING.GROUP.REALIZATIONS)
-export const useParentPendingApproval = createPendingApprovalHook('Concept.parent')
+export const usePendingAliasesApproval = createPendingGroupApprovalHook(PENDING.GROUP.ALIASES)
+export const usePendingChildrenApproval = createPendingGroupApprovalHook(PENDING.GROUP.CHILDREN)
+export const usePendingItemApproval = createParametrizedPendingApprovalHook()
+export const usePendingMediaApproval = createPendingGroupApprovalHook(PENDING.GROUP.MEDIA)
+export const usePendingParentApproval = createPendingGroupApprovalHook('Concept.parent')
+export const usePendingRankApproval = createPendingGroupApprovalHook(PENDING.GROUP.RANK)
+export const usePendingRealizationsApproval = createPendingGroupApprovalHook(
+  PENDING.GROUP.REALIZATIONS
+)
+
+// CxTBD ?????
 export const useFieldPendingApproval = createParametrizedPendingApprovalHook()
-export const useItemPendingApproval = createParametrizedPendingApprovalHook()
 
 // Special hook for concept name that can handle both group and individual field approval
 export const useConceptNamePendingApproval = () => {
-  const { confirmPending, concept } = use(ConceptContext)
-  const { pendingHistory } = use(PanelDataContext)
+  const { concept, pending } = use(ConceptContext)
 
-  const conceptPending = useMemo(() => {
-    return pendingHistory.filter(history => history.concept === concept.name)
-  }, [pendingHistory, concept.name])
+  const pendingConfirm = pending(PENDING.DATA.CONFIRM)
+  const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
   return useMemo(() => {
-    if (!confirmPending) {
+    if (!pendingConfirm) {
       return null
     }
 
-    if (confirmPending?.change === PENDING.GROUP.ALL) {
-      return confirmPending.approval
+    if (pendingConfirm?.group === PENDING.GROUP.ALL) {
+      return pendingConfirm.approval
     }
 
-    if (confirmPending.pending === PENDING.GROUP.CONCEPT_NAME) {
-      return confirmPending.approval
+    if (pendingConfirm.group === PENDING.GROUP.CONCEPT_NAME) {
+      return pendingConfirm.approval
     }
 
     // Check if this is an individual concept name field being approved
-    if (typeof confirmPending.pending === 'string' || typeof confirmPending.pending === 'number') {
+    if (typeof pendingConfirm.group === 'string' || typeof pendingConfirm.group === 'number') {
       // It's a field ID, check if it's a concept name field
-      const fieldItems = fieldPending(conceptPending, 'ConceptName')
+      const fieldItems = fieldPending(pendingConcept, 'ConceptName')
       const isConceptNameField = fieldItems.some(
-        history => history.id === confirmPending.pending && history.newValue === concept.name
+        history => history.id === pendingConfirm.group && history.newValue === concept.name
       )
       if (isConceptNameField) {
-        return confirmPending.approval
+        return pendingConfirm.approval
       }
     }
 
     return OTHER
-  }, [confirmPending, conceptPending, concept.name])
+  }, [pendingConfirm, pendingConcept, concept.name])
 }

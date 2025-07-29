@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import MediaItemDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/MediaItemDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 
-import { useMediaPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { usePendingMediaApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { fieldSx } from '@/components/common/format'
 
@@ -15,7 +15,7 @@ const { MEDIA } = PENDING.GROUP
 const MediaDetail = ({ pendingField }) => {
   const pendingMedia = pendingField('Media')
 
-  const approval = useMediaPendingApproval()
+  const approval = usePendingMediaApproval()
   const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
 
   if (pendingMedia.length === 0) {

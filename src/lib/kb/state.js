@@ -27,7 +27,7 @@ const initialConceptState = (concept, pending) => {
     ...indexState,
     ...mediaState(concept, pending),
     ...nameState(concept),
-    ...rankState(concept),
+    ...rankState(concept, pending),
     ...realizationsState(concept, pending),
     ...valueState(concept, 'author'),
     ...valueState(concept, 'parent'),

@@ -88,8 +88,8 @@ const resetRealizations = (state, update) => {
   }
 }
 
-const stagedRealization = (realization, conceptPending) => {
-  const pendingRealizationActions = fieldPending(conceptPending, 'LinkRealization')
+const stagedRealization = (realization, pendingConcept) => {
+  const pendingRealizationActions = fieldPending(pendingConcept, 'LinkRealization')
 
   const addRealizationMatch = history => {
     if (history.action !== 'ADD') {

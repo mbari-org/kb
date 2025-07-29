@@ -10,10 +10,14 @@ import DuplicateAlert from './DuplicateAlert'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
+import { PENDING } from '@/lib/constants'
+
 const Actions = ({ colors, disabled, labels, onAction }) => {
-  const { confirmPending, confirmReset } = use(ConceptContext)
+  const { confirmReset, pending } = use(ConceptContext)
   const { modalData } = use(ConceptModalContext)
-  
+
+  const pendingConfirm = pending(PENDING.DATA.CONFIRM)
+
   const { isDuplicate } = modalData || {}
 
   const actionColor = index => (colors ? colors[index] : 'main')
@@ -60,7 +64,7 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
     <Box sx={{ height: '100%', width: '100%' }}>
       <Stack spacing={0} sx={{ alignItems: 'center', mt: 1, height: 60, justifyContent: 'center' }}>
         {!!confirmReset && <DiscardingAlert />}
-        {!!confirmPending && <PendingAlert confirmPending={confirmPending} />}
+        {!!pendingConfirm && <PendingAlert approval={pendingConfirm.approval} />}
         {!!isDuplicate && !confirmReset && <DuplicateAlert />}
       </Stack>
       <Box

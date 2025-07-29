@@ -6,6 +6,7 @@ import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/sta
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import useLoadConceptError from '@/hooks/useLoadConceptError'
 import useConceptLoader from './useConceptLoader'
+import useConceptPending from './pending/useConceptPending'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
@@ -31,7 +32,6 @@ const ConceptProvider = ({ children }) => {
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
-  const [confirmPending, setConfirmPending] = useState(null)
   const [editing, setEditing] = useState(false)
 
   const [initialState, setInitialState] = useState(null)
@@ -42,6 +42,8 @@ const ConceptProvider = ({ children }) => {
   const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
+
+  const { pending, setPendingConfirm } = useConceptPending(concept)
 
   const resetConcept = useCallback(
     async resettingConcept => {
@@ -133,25 +135,27 @@ const ConceptProvider = ({ children }) => {
     () => ({
       concept,
       conceptPath,
-      confirmPending,
       confirmReset,
       editing,
       initialState,
       modifyConcept,
+      pending,
       resetConcept,
       setEditing,
-      setConfirmPending,
+      setPendingConfirm,
       stagedState,
     }),
     [
       concept,
       conceptPath,
-      confirmPending,
       confirmReset,
       editing,
       initialState,
       modifyConcept,
+      pending,
       resetConcept,
+      setEditing,
+      setPendingConfirm,
       stagedState,
     ]
   )

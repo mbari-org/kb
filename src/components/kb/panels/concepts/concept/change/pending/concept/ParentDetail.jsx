@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { useParentPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { usePendingParentApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
@@ -14,7 +14,7 @@ import { PENDING } from '@/lib/constants'
 const { OTHER } = PENDING.APPROVAL
 
 const ParentDetail = ({ pendingField }) => {
-  const approval = useParentPendingApproval()
+  const approval = usePendingParentApproval()
 
   const pendingParent = pendingField('Concept.parent')?.pop()
   if (!pendingParent) {

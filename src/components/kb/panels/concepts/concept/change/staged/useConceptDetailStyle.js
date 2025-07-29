@@ -3,9 +3,9 @@ import { use, useMemo } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
-
 import { hasPending } from '@/lib/kb/model/history'
+
+import { PENDING } from '@/lib/constants'
 
 const baseStyle = {
   fullWidth: true,
@@ -27,11 +27,11 @@ const standardStyle = {
 const useConceptDetailStyle = field => {
   const theme = useTheme()
 
-  const { concept, editing } = use(ConceptContext)
+  const { editing, pending } = use(ConceptContext)
 
-  const conceptPending = useConceptPending(concept.name)
+  const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
-  const fieldHasPending = hasPending(conceptPending, field)
+  const fieldHasPending = hasPending(pendingConcept, field)
 
   const textColor = fieldHasPending ? theme.concept.color.pending : theme.palette.common.black
 
