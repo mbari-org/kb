@@ -17,7 +17,10 @@ const nameState = (concept, pendingConcept) => {
 const editName = (state, update) => {
   return {
     ...state,
-    name: update,
+    name: {
+      ...state.name,
+      ...update,
+    },
   }
 }
 
