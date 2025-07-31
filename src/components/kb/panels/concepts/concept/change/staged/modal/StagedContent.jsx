@@ -1,6 +1,8 @@
 import { use, useEffect, useMemo } from 'react'
 
-import { Box } from '@mui/material'
+import { Box, Stack } from '@mui/material'
+
+import ModalActionText from '@/components/common/ModalActionText'
 
 import StagedAliases from '@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAliases'
 import StagedChildren from '@/components/kb/panels/concepts/concept/change/staged/children/StagedChildren'
@@ -73,9 +75,12 @@ const StagedContent = () => {
   }, [closeModal, initialState, stagedState])
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-      {stagedEdits.map(stagedComponent)}
-    </Box>
+    <Stack direction='column' spacing={1}>
+      <ModalActionText text='Staged Edits' />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        {stagedEdits.map(stagedComponent)}
+      </Box>
+    </Stack>
   )
 }
 

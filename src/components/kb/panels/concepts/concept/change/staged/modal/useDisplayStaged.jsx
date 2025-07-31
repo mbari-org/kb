@@ -1,8 +1,9 @@
 import { use, useCallback } from 'react'
 
+import ConceptTitle from '@/components/common/ConceptTitle'
+
 import StagedActions from '@/components/kb/panels/concepts/concept/change/staged/modal/StagedActions'
 import StagedContent from '@/components/kb/panels/concepts/concept/change/staged/modal/StagedContent'
-import StagedTitle from '@/components/kb/panels/concepts/concept/change/staged/modal/StagedTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -16,7 +17,7 @@ const useDisplayStaged = () => {
       const modal = createModal({
         Actions: () => <StagedActions intent={intent} />,
         Content: StagedContent,
-        Title: StagedTitle,
+        Title: ConceptTitle,
         minWidth: 600,
       })
       setModal(modal)
