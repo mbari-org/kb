@@ -1,6 +1,7 @@
 import submitAliases from './submitAliases'
 import submitAuthor from './submitAuthor'
 import submitMedia from './submitMedia'
+import submitName from './submitName'
 import submitRank from './submitRank'
 import submitRealizations from './submitRealizations'
 
@@ -14,8 +15,9 @@ const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
   const submitters = []
   submitters.push(...submitAliases(submitterInfo))
   submitters.push(...submitAuthor(submitterInfo))
-  submitters.push(...submitRank(submitterInfo))
   submitters.push(...submitMedia(submitterInfo))
+  submitters.push(...submitName(submitterInfo))
+  submitters.push(...submitRank(submitterInfo))
   submitters.push(...submitRealizations(submitterInfo))
 
   updatesInfo.results = await Promise.all(submitters)

@@ -6,16 +6,16 @@ import { capitalize } from '@/lib/utils'
 
 const rankField = field => `rank${capitalize(field)}`
 
-const rankState = (concept, pending) => {
+const rankState = (concept, pendingConcept) => {
   const { rankLevel, rankName } = concept
 
-  const conceptRank = {
+  const stateRank = {
     action: CONCEPT_STATE.NO_ACTION,
     level: rankLevel || '',
     name: rankName || '',
   }
 
-  return stagedRank(conceptRank, pending)
+  return stagedRank(stateRank, pendingConcept)
 }
 
 const editRank = (state, update) => {
@@ -72,22 +72,22 @@ const resetRank = (state, update) => {
   }
 }
 
-const stagedRank = (conceptRank, pendingConcept) => {
+const stagedRank = (stateRank, pendingConcept) => {
   const pending = pendingRank(pendingConcept)
 
   if (!pending)
     return {
-      rank: conceptRank,
+      rank: stateRank,
     }
 
   return {
     rank: {
       action: 'Pending Edit',
       historyId: pending.historyId,
-      level: pending.level || conceptRank.level,
-      name: pending.name || conceptRank.name,
+      level: pending.level || stateRank.level,
+      name: pending.name || stateRank.name,
     },
   }
 }
 
-export { editRank, pendingChange, pendingRank, rankField, rankState, resetRank, stagedRank }
+export { editRank, pendingChange, pendingRank, rankField, rankState, resetRank }

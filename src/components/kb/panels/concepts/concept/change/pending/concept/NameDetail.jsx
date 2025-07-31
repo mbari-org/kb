@@ -48,7 +48,8 @@ const NameDetail = ({ pendingField }) => {
   }
 
   // Enable extent when concept name is approved (either specifically or via ALL)
-  const enableExtent = conceptNameApproval === PENDING.APPROVAL.ACCEPT && isAdmin(user)
+  const enableExtent = conceptNameApproval === PENDING.APPROVAL.ACCEPT
+  const isAdminUser = isAdmin(user)
 
   // Custom approval function for FieldDetail that uses concept name approval logic
   const pendingFieldApproval = fieldId => {
@@ -62,13 +63,15 @@ const NameDetail = ({ pendingField }) => {
         pendingField={pendingName}
         pendingFieldApproval={pendingFieldApproval}
       />
-      <Box sx={{ ml: 16 }}>
-        <NameChangeExtent
-          disabled={!enableExtent}
-          nameChangeType={nameChangeType}
-          onChange={handleNameChangeType}
-        />
-      </Box>
+      {isAdminUser && (
+        <Box sx={{ ml: 16 }}>
+          <NameChangeExtent
+            disabled={!enableExtent}
+            nameChangeType={nameChangeType}
+            onChange={handleNameChangeType}
+          />
+        </Box>
+      )}
     </Stack>
   )
 }

@@ -32,6 +32,7 @@ const RankDetail = ({ pendingField }) => {
   if (!rankField) return null
 
   const rank = pendingRank(rankField)
+  if (!rank) return null
 
   const initialRank = initialState.rank
 

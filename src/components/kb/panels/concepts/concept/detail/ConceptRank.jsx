@@ -28,9 +28,9 @@ const ConceptRank = () => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const rankChange = pendingChange(pendingConcept)
 
-  // Since rank is a composite field of concept state, mimic individual pending changes
+  // Since rank is a composite field of concept state, mimic individual pending rank changes
   const stagedRankField = field => {
-    if (rankChange.new[field] === rankChange.old[field]) {
+    if (rankChange?.new?.[field] === rankChange?.old?.[field]) {
       return {
         ...stagedRank,
         action: CONCEPT_STATE.NO_ACTION,
