@@ -8,7 +8,7 @@ import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 const ConceptPropertyList = ({
   IconComponent,
   items = [],
-  renderComponent,
+  RenderComponent,
   title,
 }) => {
   const [expanded, setExpanded] = useState(true)
@@ -79,7 +79,9 @@ const ConceptPropertyList = ({
       >
         {hasItems && (
           <Stack direction='column' spacing={1}>
-            {items.map((item, index) => renderComponent(item, index))}
+            {items.map((item, index) => (
+              <RenderComponent key={index} item={item} />
+            ))}
           </Stack>
         )}
       </motion.div>

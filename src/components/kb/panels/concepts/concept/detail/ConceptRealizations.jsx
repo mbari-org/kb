@@ -13,21 +13,20 @@ const ConceptRealizations = () => {
 
   const realizations = stagedState?.realizations || []
 
-  const renderRealizationComponent = (realization, _index) => <ConceptRealization realization={realization} />
-
   const IconComponent = () => (
     <RealizationModifyIcon
       action={CONCEPT_STATE.REALIZATION.ADD}
       realizationIndex={realizations.length}
     />
   )
+  const RealizationComponent = ({ item }) => <ConceptRealization realization={item} />
 
   return (
     <ConceptPropertyList
-      items={realizations}
-      renderComponent={renderRealizationComponent}
-      title='Realizations'
       IconComponent={editing ? IconComponent : null}
+      RenderComponent={RealizationComponent}
+      items={realizations}
+      title='Realizations'
     />
   )
 }

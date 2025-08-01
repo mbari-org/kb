@@ -15,16 +15,15 @@ const ConceptAliases = () => {
 
   const aliases = stagedState?.aliases || []
 
-  const renderAliasComponent = (alias, _index) => <ConceptAlias alias={alias} />
-
   const IconComponent = () => <AliasModifyIcon action={ALIAS.ADD} aliasIndex={aliases.length} />
+  const AliasComponent = ({ item }) => <ConceptAlias alias={item} />
 
   return (
     <ConceptPropertyList
-      items={aliases}
-      renderComponent={renderAliasComponent}
-      title='Alternate Names'
       IconComponent={editing ? IconComponent : null}
+      items={aliases}
+      RenderComponent={AliasComponent}
+      title='Alternate Names'
     />
   )
 }
