@@ -31,7 +31,7 @@ const ChangeParentActions = () => {
   const handleStage = () => {
     modifyConcept({
       type: PARENT,
-      update: { parent },
+      update: { field: 'parent', value: parent },
     })
     closeModal(true)
   }
