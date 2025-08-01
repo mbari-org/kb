@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import AliasModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/aliases/AliasModifyIcon'
 import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases/ConceptAlias'
-import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
+import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyList'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -15,25 +15,13 @@ const ConceptAliases = () => {
 
   const aliases = stagedState?.aliases || []
 
-  const aliasContent = aliases.map(alias => {
-    const { author, name, nameType } = alias
-    return [name, author, nameType].map(item => item || '').join('  |  ')
-  })
-
-  const renderAliasItem = (alias, index) => ({
-    key: alias.name || alias.index || index,
-    content: aliasContent,
-  })
-
   const renderAliasComponent = (alias, _index) => <ConceptAlias alias={alias} />
 
   const IconComponent = () => <AliasModifyIcon action={ALIAS.ADD} aliasIndex={aliases.length} />
 
   return (
-    <ConceptPropertiesSection
+    <ConceptPropertyList
       items={aliases}
-      disablePagination={true}
-      renderItem={renderAliasItem}
       renderComponent={renderAliasComponent}
       title='Alternate Names'
       IconComponent={editing ? IconComponent : null}

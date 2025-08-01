@@ -1,6 +1,6 @@
 import { use, useEffect, useState } from 'react'
 
-import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
+import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
 import TemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableToggle'
 import ConceptPropertiesInspectButton from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesInspectButton'
 
@@ -48,7 +48,7 @@ const ConceptTemplates = () => {
   const tooltip = `View ${available ? 'Available' : 'Explicit'} Templates for this Concept`
 
   return (
-    <ConceptPropertiesSection
+    <ConceptPropertyPages
       isLoading={isLoading}
       items={filteredTemplates}
       loadingText='Loading templates...'
@@ -59,7 +59,7 @@ const ConceptTemplates = () => {
       )}
     >
       <TemplatesAvailableToggle />
-    </ConceptPropertiesSection>
+    </ConceptPropertyPages>
   )
 }
 

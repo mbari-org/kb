@@ -8,7 +8,7 @@ import { CONCEPT_PROPERTY_LIST } from '@/lib/constants'
 
 const { ITEMS_PER_PAGE } = CONCEPT_PROPERTY_LIST
 
-const ConceptPropertiesSection = ({
+const ConceptPropertyPages = ({
   children,
   defaultExpanded = true,
   disablePagination = false,
@@ -159,4 +159,4 @@ const ConceptPropertiesSection = ({
   )
 }
 
-export default ConceptPropertiesSection
+export default ConceptPropertyPages
