@@ -1,7 +1,7 @@
 import { use } from 'react'
+import { Box, Stack, Typography } from '@mui/material'
 
 import ConceptRealization from '@/components/kb/panels/concepts/concept/detail/realizations/ConceptRealization'
-import ConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesSection'
 import RealizationModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationModifyIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -11,46 +11,50 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const ConceptRealizations = () => {
   const { editing, stagedState } = use(ConceptContext)
 
-  // Create a sorted array with original indices preserved
-  const originalRealizations = stagedState?.realizations || []
-  const realizationsWithOriginalIndex = originalRealizations.map((realization, originalIndex) => ({
-    ...realization,
-    originalIndex,
-  }))
-  const sortedRealizations = realizationsWithOriginalIndex.sort((a, b) => 
+  const realizations = stagedState?.realizations || []
+
+  // Sort realizations by linkName for consistent display
+  const sortedRealizations = [...realizations].sort((a, b) => 
     a.linkName.localeCompare(b.linkName)
   )
 
-  const renderItem = (realization, index) => ({
-    key: `${realization.linkName}-${realization.toConcept}-${index}`,
-    content: `${realization.linkName} | ${realization.toConcept} | ${realization.linkValue}`,
-  })
-
-  const renderRealizationComponent = realization => {
-    // Use the original index for actions, not the sorted display index
-    const realizationWithCorrectIndex = {
-      ...realization,
-      index: realization.originalIndex,
-    }
-    return <ConceptRealization realization={realizationWithCorrectIndex} />
-  }
-
-  const AddIcon = () => (
+  const IconComponent = () => (
     <RealizationModifyIcon
       action={CONCEPT_STATE.REALIZATION.ADD}
-      realizationIndex={originalRealizations.length}
+      realizationIndex={realizations.length}
+      size={20}
     />
   )
 
   return (
-    <ConceptPropertiesSection
-      disablePagination={false}
-      IconComponent={editing ? AddIcon : undefined}
-      items={sortedRealizations}
-      renderComponent={renderRealizationComponent}
-      renderItem={renderItem}
-      title='Realizations'
-    />
+    <Box>
+      <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ mb: 1 }}>
+        <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+          Realizations
+        </Typography>
+        {editing && <IconComponent />}
+      </Stack>
+      <Stack direction='column' spacing={1}>
+        {sortedRealizations.map((realization, sortedIndex) => {
+          // Find the original index for proper action handling
+          const originalIndex = realizations.findIndex(r => 
+            r.linkName === realization.linkName && 
+            r.toConcept === realization.toConcept && 
+            r.linkValue === realization.linkValue
+          )
+          const realizationWithCorrectIndex = {
+            ...realization,
+            index: originalIndex,
+          }
+          return (
+            <ConceptRealization 
+              key={`${realization.linkName}-${realization.toConcept}-${sortedIndex}`}
+              realization={realizationWithCorrectIndex} 
+            />
+          )
+        })}
+      </Stack>
+    </Box>
   )
 }
 
