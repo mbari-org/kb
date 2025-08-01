@@ -31,6 +31,9 @@ const PendingContent = () => {
   const pendingField = useMemo(() => field => fieldPending(pendingConcept, field), [pendingConcept])
 
   const pendingChild = getPendingChild(pendingParent, concept.name)
+  if (pendingChild) {
+    pendingChild.parent = concept.parent
+  }
 
   if (isEmpty(pendingConcept) && !pendingChild) {
     setModal(null)
@@ -44,7 +47,9 @@ const PendingContent = () => {
         <ChildDetail pendingChild={pendingChild} leftMargin={{ title: 0, detail: 8 }} />
       )}
       <AliasesDetail pendingField={pendingField} />
-      <ChildrenDetail pendingField={pendingField} leftMargin={{ title: 3.5, detail: 11.5 }} />
+      {!pendingChild && (
+        <ChildrenDetail pendingField={pendingField} leftMargin={{ title: 3.5, detail: 11.5 }} />
+      )}
       <MediaDetail pendingField={pendingField} />
       <NameDetail pendingField={pendingField} />
       <ParentDetail pendingField={pendingField} />

@@ -34,6 +34,15 @@ const ChildDetail = ({ pendingChild, leftMargin }) => {
     return ''
   }, [pendingChild])
 
+  const childInfo = useMemo(() => {
+    const info = []
+    if (pendingChild.parent) {
+      info.push(['parent', pendingChild.parent])
+    }
+    info.push(...pendingInfo(pendingChild))
+    return info
+  }, [pendingChild])
+
   return (
     <Box
       sx={{
@@ -51,7 +60,7 @@ const ChildDetail = ({ pendingChild, leftMargin }) => {
         </Box>
       </Box>
       <Box sx={{ ml: leftMargin.detail }}>
-        {pendingInfo(pendingChild)?.map(([field, value]) => (
+        {childInfo.map(([field, value]) => (
           <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
         ))}
       </Box>
