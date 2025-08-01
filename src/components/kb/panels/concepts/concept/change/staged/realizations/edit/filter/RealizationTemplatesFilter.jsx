@@ -5,11 +5,11 @@ import RealizationTemplate from './RealizationTemplate'
 import useAvailableLinkTemplates from '../useAvailableLinkTemplates'
 
 const RealizationTemplatesFilter = ({
+  currentPage,
   isLoading,
   linkName,
-  onTemplateSelect,
-  currentPage,
   onPageChange,
+  onTemplateSelect,
 }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 

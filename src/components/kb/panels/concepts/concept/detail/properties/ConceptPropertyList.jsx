@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
+import { motion } from 'framer-motion'
 
 import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
 import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
@@ -62,11 +63,26 @@ const ConceptPropertyList = ({
           <ConceptPropertiesDisclosure expanded={expanded} onToggle={handleToggle} />
         )}
       </Box>
-      {hasItems && expanded && (
-        <Stack direction='column' spacing={1}>
-          {items.map((item, index) => renderComponent(item, index))}
-        </Stack>
-      )}
+      <motion.div
+        animate={{
+          height: expanded ? 'auto' : 0,
+        }}
+        initial={false}
+        style={{
+          overflow: 'hidden',
+        }}
+        transition={{
+          type: 'tween',
+          duration: 0.3,
+          ease: 'easeOut',
+        }}
+      >
+        {hasItems && (
+          <Stack direction='column' spacing={1}>
+            {items.map((item, index) => renderComponent(item, index))}
+          </Stack>
+        )}
+      </motion.div>
     </Box>
   )
 }
