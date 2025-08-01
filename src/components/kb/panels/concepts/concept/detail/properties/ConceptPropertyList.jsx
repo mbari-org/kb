@@ -8,6 +8,7 @@ import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 const ConceptPropertyList = ({
   IconComponent,
   items = [],
+  maxHeight = '300px',
   RenderComponent,
   title,
 }) => {
@@ -78,11 +79,21 @@ const ConceptPropertyList = ({
         }}
       >
         {hasItems && (
-          <Stack direction='column' spacing={1}>
-            {items.map((item, index) => (
-              <RenderComponent key={index} item={item} />
-            ))}
-          </Stack>
+          <Box
+            sx={{
+              ...(maxHeight && {
+                maxHeight,
+                overflowY: 'auto',
+                pr: 1, // Add padding for scrollbar
+              }),
+            }}
+          >
+            <Stack direction='column' spacing={1}>
+              {items.map((item, index) => (
+                <RenderComponent key={index} item={item} />
+              ))}
+            </Stack>
+          </Box>
         )}
       </motion.div>
     </Box>
