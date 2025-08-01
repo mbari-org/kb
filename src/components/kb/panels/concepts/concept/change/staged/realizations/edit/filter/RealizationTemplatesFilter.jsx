@@ -1,17 +1,23 @@
 import { useMemo, useState, useEffect } from 'react'
 
-import ControlledConceptPropertiesSection from '@/components/kb/panels/concepts/concept/detail/properties/ControlledConceptPropertiesSection'
+import ControlledConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ControlledConceptPropertyPages'
 import RealizationTemplate from './RealizationTemplate'
 import useAvailableLinkTemplates from '../useAvailableLinkTemplates'
 
-const RealizationTemplatesFilter = ({ isLoading, linkName, onTemplateSelect, currentPage, onPageChange }) => {
+const RealizationTemplatesFilter = ({
+  isLoading,
+  linkName,
+  onTemplateSelect,
+  currentPage,
+  onPageChange,
+}) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
-  
-  // Use controlled pagination if provided, otherwise use internal state  
+
+  // Use controlled pagination if provided, otherwise use internal state
   const [internalPage, setInternalPage] = useState(0)
   const isControlled = currentPage !== undefined && onPageChange !== undefined
   const activePage = isControlled ? currentPage : internalPage
-  
+
   const availableTemplates = useMemo(() => {
     return getAvailableLinkTemplates(linkName)
   }, [getAvailableLinkTemplates, linkName])
@@ -31,15 +37,15 @@ const RealizationTemplatesFilter = ({ isLoading, linkName, onTemplateSelect, cur
   }
 
   return (
-    <ControlledConceptPropertiesSection
+    <ControlledConceptPropertyPages
+      currentPage={activePage}
       fixedHeight={180}
-      items={availableTemplates}
       isLoading={isLoading}
+      items={availableTemplates}
       loadingText='Loading templates...'
+      onPageChange={isControlled ? onPageChange : setInternalPage}
       renderItem={renderItem}
       title='Available Templates'
-      currentPage={activePage}
-      onPageChange={isControlled ? onPageChange : setInternalPage}
     />
   )
 }

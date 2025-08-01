@@ -8,7 +8,7 @@ import { CONCEPT_PROPERTY_LIST } from '@/lib/constants'
 
 const { ITEMS_PER_PAGE } = CONCEPT_PROPERTY_LIST
 
-const ControlledConceptPropertiesSection = ({
+const ControlledConceptPropertyPages = ({
   children,
   currentPage = 0,
   defaultExpanded = true,
@@ -159,4 +159,4 @@ const ControlledConceptPropertiesSection = ({
   )
 }
 
-export default ControlledConceptPropertiesSection
+export default ControlledConceptPropertyPages
