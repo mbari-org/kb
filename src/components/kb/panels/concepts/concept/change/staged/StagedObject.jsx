@@ -29,15 +29,15 @@ const StagedObject = ({ group, stagedEdit }) => {
   const GroupBody = () => {
     return (
       <Box sx={{ ml: 3 }}>
-        {Object.keys(initial).map(field => {
-          const hasChanged = initial[field] !== staged[field]
-          if (!hasChanged) return null
-          
-          const deltaValue = formatDelta(initial[field], staged[field])
-          return (
-            <FieldValueDisplay key={field} field={field} value={deltaValue} />
-          )
-        })}
+        {Object.keys(initial)
+          .filter(field => field !== 'action')
+          .map(field => {
+            const hasChanged = initial[field] !== staged[field]
+            if (!hasChanged) return null
+
+            const deltaValue = formatDelta(initial[field], staged[field])
+            return <FieldValueDisplay key={field} field={field} value={deltaValue} />
+          })}
       </Box>
     )
   }

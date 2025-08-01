@@ -25,7 +25,10 @@ const ChangeNameActions = () => {
   const handleStage = () => {
     modifyConcept({
       type: CONCEPT_STATE.NAME,
-      update: name,
+      update: {
+        ...name,
+        action: CONCEPT_STATE.NAME,
+      },
     })
 
     closeModal(true)

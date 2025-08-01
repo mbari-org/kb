@@ -67,9 +67,10 @@ export const CONCEPT_STATE = {
     DELETE: 'Media Delete',
     EDIT: 'Media Edit',
   },
-  NAME: 'Name',
+  NAME: 'Name Edit',
   NO_ACTION: 'None',
-  RANK: 'Rank',
+  PARENT: 'Parent Edit',
+  RANK: 'Rank Edit',
   REALIZATION: {
     ADD: 'Realization Add',
     DELETE: 'Realization Delete',

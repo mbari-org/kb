@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useCallback } from 'react'
 import { Stack } from '@mui/material'
 
 import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'
@@ -16,42 +16,55 @@ const ConceptRank = () => {
   const stagedRank = stagedState.rank
 
   const onChange = field => event => {
+    const value = event.target.value
+    const action = value === initialState.rank[field] ? CONCEPT_STATE.NO_ACTION : CONCEPT_STATE.RANK
     modifyConcept({
-      type: CONCEPT_STATE.RANK,
+      type: action,
       update: {
-        field,
-        value: event.target.value,
+        action,
+        [field]: value,
       },
     })
   }
 
-  const pendingConcept = pending(PENDING.DATA.CONCEPT)
-  const rankChange = pendingChange(pendingConcept)
-
   // Since rank is a composite field of concept state, mimic individual pending rank changes
-  const stagedRankField = field => {
-    if (rankChange?.new?.[field] === rankChange?.old?.[field]) {
-      return {
-        ...stagedRank,
-        action: CONCEPT_STATE.NO_ACTION,
-        historyId: undefined,
+  const stagedField = useCallback(
+    field => {
+      const pendingConcept = pending(PENDING.DATA.CONCEPT)
+      const pendingRankChange = pendingChange(pendingConcept)
+
+      if (pendingRankChange && pendingRankChange.new[field] === pendingRankChange.old[field]) {
+        return {
+          ...stagedRank,
+          action: CONCEPT_STATE.NO_ACTION,
+          historyId: undefined,
+        }
       }
-    }
-    return stagedRank
-  }
+
+      if (stagedRank[field] === initialRank[field]) {
+        return {
+          ...stagedRank,
+          action: CONCEPT_STATE.NO_ACTION,
+        }
+      }
+
+      return stagedRank
+    },
+    [initialRank, pending, stagedRank]
+  )
 
   return (
     <Stack direction='row' spacing={1.5}>
       <RankFieldInput
         field={CONCEPT_RANK.NAME}
         initialRank={initialRank}
-        rank={stagedRankField(CONCEPT_RANK.NAME)}
+        rank={stagedField(CONCEPT_RANK.NAME)}
         onChange={onChange(CONCEPT_RANK.NAME)}
       />
       <RankFieldInput
         field={CONCEPT_RANK.LEVEL}
         initialRank={initialRank}
-        rank={stagedRankField(CONCEPT_RANK.LEVEL)}
+        rank={stagedField(CONCEPT_RANK.LEVEL)}
         onChange={onChange(CONCEPT_RANK.LEVEL)}
       />
     </Stack>

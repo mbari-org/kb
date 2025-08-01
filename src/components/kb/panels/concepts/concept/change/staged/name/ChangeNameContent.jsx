@@ -38,7 +38,6 @@ const ChangeNameContent = () => {
   }
 
   const isAdminUser = isAdmin(user)
-
   const realizationCount = stagedState?.realizations.length
 
   return (

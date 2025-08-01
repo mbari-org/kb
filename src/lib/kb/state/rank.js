@@ -19,13 +19,11 @@ const rankState = (concept, pendingConcept) => {
 }
 
 const editRank = (state, update) => {
-  const { field, value } = update
-
   return {
     ...state,
     rank: {
       ...state.rank,
-      [field]: value,
+      ...update,
     },
   }
 }
