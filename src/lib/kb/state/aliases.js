@@ -1,7 +1,8 @@
 import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 import { fieldPending } from '@/lib/kb/model/history'
 import { stagedEdits } from '@/lib/kb/state/staged'
-import { drop } from '@/lib/utils'
+
+import { capitalize, drop } from '@/lib/utils'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 
@@ -78,38 +79,19 @@ const resetAliases = (state, update) => {
 }
 
 const stagedAlias = (alias, pendingConcept) => {
-  const pendingAliasActions = fieldPending(pendingConcept, 'ConceptName')
+  const pendingHistories = fieldPending(pendingConcept, 'ConceptName')
 
-  const pendingAdd = pendingAliasActions.find(
-    history => history.action === ACTION.ADD && history.newValue === alias.name
-  )
-  if (pendingAdd) {
-    return {
-      ...alias,
-      action: 'Pending Add',
-      historyId: pendingAdd.id,
-    }
-  }
-
-  const pendingDelete = pendingAliasActions.find(
-    history => history.action === ACTION.DELETE && history.oldValue === alias.name
-  )
-  if (pendingDelete) {
-    return {
-      ...alias,
-      action: 'Pending Delete',
-      historyId: pendingDelete.id,
-    }
-  }
-
-  const pendingEdit = pendingAliasActions.find(
-    history => history.action === 'REPLACE' && history.newValue === alias.name
-  )
-  if (pendingEdit) {
-    return {
-      ...alias,
-      action: 'Pending Edit',
-      historyId: pendingEdit.id,
+  for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
+    const pendingItem = pendingHistories.find(history => {
+      const historyValue = verb === ACTION.DELETE ? history.oldValue : history.newValue
+      return capitalize(history.action) === verb && historyValue === alias.name
+    })
+    if (pendingItem) {
+      return {
+        ...alias,
+        action: verb + ' Pending',
+        historyId: pendingItem.id,
+      }
     }
   }
 

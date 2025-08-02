@@ -3,7 +3,29 @@ import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from '@/lib/kb/model/history'
 
+import { capitalize } from '@/lib/utils'
+
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
+
+const actionPredicate = (verb, realization) => {
+  const addPredicate = history => {
+    if (capitalize(history.action) !== ACTION.ADD) return false
+    const [newLinkName, newLinkToConcept, newLinkValue] = history.newValue.split(' | ')
+    return (
+      newLinkName === realization.linkName &&
+      newLinkToConcept === realization.toConcept &&
+      newLinkValue === realization.linkValue
+    )
+  }
+
+  const otherPredicate = (history, verb) => {
+    if (capitalize(history.action) !== verb) return false
+    const historyValue = verb === ACTION.DELETE ? history.oldValue : history.newValue
+    return historyValue === realization.linkName
+  }
+
+  return verb === ACTION.ADD ? addPredicate : otherPredicate
+}
 
 const addRealization = (state, update) => {
   const realizationIndex = state.realizations.length
@@ -89,49 +111,17 @@ const resetRealizations = (state, update) => {
 }
 
 const stagedRealization = (realization, pendingConcept) => {
-  const pendingRealizationActions = fieldPending(pendingConcept, 'LinkRealization')
+  const pendingHistories = fieldPending(pendingConcept, 'LinkRealization')
 
-  const addRealizationMatch = history => {
-    if (history.action !== ACTION.ADD) {
-      return false
-    }
-
-    const [newLinkName, newLinkToConcept, newLinkValue] = history.newValue.split(' | ')
-    return (
-      newLinkName === realization.linkName &&
-      newLinkToConcept === realization.toConcept &&
-      newLinkValue === realization.linkValue
-    )
-  }
-
-  const pendingAdd = pendingRealizationActions.find(addRealizationMatch)
-  if (pendingAdd) {
-    return {
-      ...realization,
-      action: 'Pending Add',
-      historyId: pendingAdd.id,
-    }
-  }
-
-  const pendingDelete = pendingRealizationActions.find(
-    history => history.action === ACTION.DELETE && history.oldValue === realization.linkName
-  )
-  if (pendingDelete) {
-    return {
-      ...realization,
-      action: 'Pending Delete',
-      historyId: pendingDelete.id,
-    }
-  }
-
-  const pendingEdit = pendingRealizationActions.find(
-    history => history.action === 'REPLACE' && history.newValue === realization.linkName
-  )
-  if (pendingEdit) {
-    return {
-      ...realization,
-      action: 'Pending Edit',
-      historyId: pendingEdit.id,
+  for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
+    const predicate = actionPredicate(verb, realization)
+    const pendingItem = pendingHistories.find(predicate)
+    if (pendingItem) {
+      return {
+        ...realization,
+        action: verb + ' Pending',
+        historyId: pendingItem.id,
+      }
     }
   }
 

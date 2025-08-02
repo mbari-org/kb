@@ -1,4 +1,7 @@
-const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
+const capitalize = string => {
+  const lower = string.toLowerCase()
+  return lower.charAt(0).toUpperCase() + lower.slice(1)
+}
 
 const checkImageUrlExists = url => {
   return new Promise(resolve => {
