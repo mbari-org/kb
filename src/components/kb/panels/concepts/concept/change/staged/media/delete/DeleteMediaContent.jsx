@@ -10,6 +10,8 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { drop } from '@/lib/utils'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
+
 const DeleteMediaContent = () => {
   const {
     stagedState: { media, mediaIndex },
@@ -17,7 +19,7 @@ const DeleteMediaContent = () => {
   const { modalData } = use(ConceptModalContext)
 
   const mediaItem = media[mediaIndex]
-  const actionText = modalData.action.split(' ').pop()
+  const actionText = actionVerb(modalData.action)
 
   const detail = drop(mediaItem, ['action', 'conceptName', 'id', 'mimeType'])
 
@@ -27,7 +29,7 @@ const DeleteMediaContent = () => {
 
   return (
     <Box>
-      <ModalActionText text={`${actionText} Media`} />
+      <ModalActionText text={actionText + ' Media'} />
       <Box sx={{ ml: 2, mt: 1 }}>
         <Details id='delete-media-content-detail' />
       </Box>

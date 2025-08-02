@@ -1,3 +1,11 @@
+export const ACTION = {
+  ADD: 'Add',
+  DELETE: 'Delete',
+  EDIT: 'Edit',
+  NONE: 'None',
+  RESET: 'Reset',
+}
+
 export const CONCEPT_FIELD = {
   ALIASES: 'aliases',
   AUTHOR: 'author',
@@ -49,12 +57,12 @@ export const CONCEPT_SELECT = {
 
 export const CONCEPT_STATE = {
   CHILD: {
-    ADD: 'Child Add',
+    ADD: 'Add Child',
   },
   ALIAS: {
-    ADD: 'Alias Add',
-    DELETE: 'Alias Delete',
-    EDIT: 'Alias Edit',
+    ADD: 'Add Alias',
+    DELETE: 'Delete Alias',
+    EDIT: 'Edit Alias',
   },
   ALIASES: 'Aliases',
   AUTHOR: 'Author',
@@ -63,18 +71,18 @@ export const CONCEPT_STATE = {
   INITIAL: 'Initial State',
   MEDIA: 'Media',
   MEDIA_ITEM: {
-    ADD: 'Media Add',
-    DELETE: 'Media Delete',
-    EDIT: 'Media Edit',
+    ADD: 'Add Media',
+    DELETE: 'Delete Media',
+    EDIT: 'Edit Media',
   },
-  NAME: 'Name Edit',
+  NAME: 'Edit Name',
   NO_ACTION: 'None',
-  PARENT: 'Parent Edit',
-  RANK: 'Rank Edit',
+  PARENT: 'Edit Parent',
+  RANK: 'Edit Rank',
   REALIZATION: {
-    ADD: 'Realization Add',
-    DELETE: 'Realization Delete',
-    EDIT: 'Realization Edit',
+    ADD: 'Add Realization',
+    DELETE: 'Delete Realization',
+    EDIT: 'Edit Realization',
   },
   REALIZATIONS: 'Realizations',
   RESET: {

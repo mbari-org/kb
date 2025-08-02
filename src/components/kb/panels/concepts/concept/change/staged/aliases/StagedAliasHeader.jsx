@@ -1,8 +1,10 @@
 import { Box, Typography } from '@mui/material'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
+
 const StagedAliasHeader = ({ initialAlias, stagedAlias }) => {
   const { action, updates } = stagedAlias
-  const actionText = `${action.split(' ').pop()}`
+  const actionText = actionVerb(action)
   const aliasName = initialAlias?.name || updates?.name
 
   return (

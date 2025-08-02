@@ -7,13 +7,14 @@ import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 import { drop } from '@/lib/utils'
 
 const DeleteAliasContent = () => {
   const { modalData } = use(ConceptModalContext)
   const { aliasItem } = modalData
 
-  const actionText = modalData.action.split(' ').pop()
+  const actionText = actionVerb(modalData.action)
 
   const Details = createComponent(Detail, {
     detail: drop(aliasItem, 'id'),
@@ -21,7 +22,7 @@ const DeleteAliasContent = () => {
 
   return (
     <Box>
-      <ModalActionText text={`${actionText} Alias`} />
+      <ModalActionText text={actionText + ' Alias'} />
       <Box sx={{ ml: 2, mt: 1 }}>
         <Details id='delete-alias-content-detail' />
       </Box>

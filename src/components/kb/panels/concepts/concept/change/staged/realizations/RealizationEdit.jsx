@@ -3,12 +3,13 @@ import { Box, Typography } from '@mui/material'
 import RealizationDetail from './RealizationDetail'
 import RealizationReset from './reset/RealizationReset'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 import { fieldSx } from '@/components/common/format'
 
 const RealizationEdit = ({ realizationEdit, disabled, initial }) => {
   const { action, index, updates } = realizationEdit
 
-  const actionText = `${action.split(' ').pop()}`
+  const actionText = actionVerb(action)
   const realizationName = initial?.name || updates?.name
 
   const realizationSx = disabled ? { ...fieldSx, color: 'text.disabled' } : fieldSx

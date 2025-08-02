@@ -20,6 +20,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import useStageMedia from './useStageMedia'
 import useDebounce from '@/hooks/useDebounce'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 import { hasPrimary, isPrimary } from '@/lib/kb/model/media'
 import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 
@@ -35,7 +36,7 @@ const EditMediaContent = () => {
   const { action, mediaIndex, mediaItem } = modalData
 
   const [formMediaItem, setFormMediaItem] = useState(mediaItem)
-  const actionText = action.split(' ').pop()
+  const actionText = actionVerb(action)
 
   const [modifiedFields, setModifiedFields] = useState({
     caption: false,
@@ -164,7 +165,7 @@ const EditMediaContent = () => {
 
   return (
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
-      <ModalActionText text={`${actionText} Media`} />
+      <ModalActionText text={actionText + ' Media'} />
       <FormControl fullWidth margin='normal'>
         <TextField
           error={urlError}

@@ -7,11 +7,13 @@ import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
+
 const DeleteRealizationContent = () => {
   const { modalData } = use(ConceptModalContext)
   const { realizationItem } = modalData
 
-  const actionText = modalData.action.split(' ').pop()
+  const actionText = actionVerb(modalData.action)
 
   const keys = ['linkName', 'toConcept', 'linkValue']
   const Details = createComponent(Detail, {
@@ -21,7 +23,7 @@ const DeleteRealizationContent = () => {
 
   return (
     <Box>
-      <ModalActionText text={`${actionText} Realization`} />
+      <ModalActionText text={actionText + ' Realization'} />
       <Box sx={{ ml: 2, mt: 1 }}>
         <Details id='delete-realization-content-detail' />
       </Box>

@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material'
 import MediaItemReset from './MediaItemReset'
 import MediaItemDetail from './MediaItemDetail'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 import { fieldSx } from '@/components/common/format'
 
 const urlFile = url => url?.split('/').pop()
@@ -10,7 +11,7 @@ const urlFile = url => url?.split('/').pop()
 const MediaItemEdit = ({ disabled, initial, mediaItemEdit }) => {
   const { action, index, updates } = mediaItemEdit
 
-  const actionText = `${action.split(' ').pop()}`
+  const actionText = actionVerb(action)
   const actionFile = urlFile(initial?.url) || urlFile(updates?.url) || ''
 
   const mediaItemSx = disabled ? { ...fieldSx, color: 'text.disabled' } : fieldSx

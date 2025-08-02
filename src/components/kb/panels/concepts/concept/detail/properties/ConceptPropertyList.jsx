@@ -40,9 +40,7 @@ const ConceptPropertyList = ({
               <ConceptPropertiesEmpty />
             </Box>
           )}
-          {hasItems && (
-            <ConceptPropertiesDisclosure expanded={expanded} onToggle={handleToggle} />
-          )}
+          {hasItems && <ConceptPropertiesDisclosure expanded={expanded} onToggle={handleToggle} />}
         </ConceptSectionTitle>
       </Box>
       <motion.div

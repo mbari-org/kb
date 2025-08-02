@@ -6,19 +6,18 @@ import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 
 const ConceptPropertiesSummary = ({
   children,
+  currentPage,
+  disablePagination,
   expanded,
   fixedHeight,
   handleToggle,
-  IconComponent,
-  showEmptyIcon,
-  title,
-  // ConceptPropertiesCount props
-  currentPage,
-  disablePagination,
   hasItems,
+  IconComponent,
   itemsPerPage,
   onPageChange,
   onPageTextClick,
+  showEmptyIcon,
+  title,
   totalItems,
 }) => {
   return (

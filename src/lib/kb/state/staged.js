@@ -1,3 +1,4 @@
+import { actionColor } from '@/components/kb/panels/concepts/concept/change/action'
 import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { CONCEPT_STATE } from '@/lib/constants'
@@ -39,23 +40,9 @@ const stagedBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
   const borderStyle = stagedItem?.historyId ? 'solid' : 'dashed'
   const borderWidth = itemAction ? width : '1px'
 
-  let borderColor
-  switch (itemAction) {
-    case 'ADD':
-      borderColor = theme.palette.primary.add
-      break
-
-    case 'EDIT':
-      borderColor = theme.palette.primary.edit
-      break
-
-    case 'DELETE':
-      borderColor = theme.palette.primary.remove
-      break
-
-    default:
-      borderColor = noActionBorderColor
-  }
+  const itemActionColor = itemAction ? actionColor(itemAction) : noActionBorderColor
+  const borderColor =
+    itemActionColor !== theme.palette.common.black ? itemActionColor : noActionBorderColor
   return `${borderWidth} ${borderStyle} ${borderColor}`
 }
 
