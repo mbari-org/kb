@@ -1,5 +1,6 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 
+import ConceptSectionTitle from '@/components/common/ConceptSectionTitle'
 import ConceptPropertiesCount from './ConceptPropertiesCount'
 import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 
@@ -21,29 +22,7 @@ const ConceptPropertiesSummary = ({
   totalItems,
 }) => {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
-      <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-        {title}
-      </Typography>
-      {IconComponent && (
-        <Box
-          className='clickable-element'
-          sx={{
-            alignItems: 'center',
-            borderRadius: '50%',
-            display: 'flex',
-            justifyContent: 'center',
-            ml: -0.5,
-            mt: -1,
-            cursor: 'pointer',
-            '&:hover': {
-              backgroundColor: 'action.hover',
-            },
-          }}
-        >
-          <IconComponent />
-        </Box>
-      )}
+    <ConceptSectionTitle title={title} IconComponent={IconComponent}>
       <Box sx={{ ml: 2, flex: 1 }}>{children}</Box>
       <ConceptPropertiesCount
         currentPage={currentPage}
@@ -58,7 +37,7 @@ const ConceptPropertiesSummary = ({
       {!showEmptyIcon && fixedHeight === undefined && (
         <ConceptPropertiesDisclosure expanded={expanded} onToggle={handleToggle} />
       )}
-    </Box>
+    </ConceptSectionTitle>
   )
 }
 
