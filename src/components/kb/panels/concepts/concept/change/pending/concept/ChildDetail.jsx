@@ -11,24 +11,21 @@ import { usePendingItemApproval } from '@/components/kb/panels/concepts/concept/
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { PENDING } from '@/lib/constants'
-import { capitalize } from '@/lib/utils'
+import { ACTION, PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
 
 const ChildDetail = ({ pendingChild, leftMargin }) => {
-  const pendingAction = capitalize(pendingChild.action.toLowerCase())
-
   const approval = usePendingItemApproval(pendingChild.id)
 
   const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
 
   const childName = useMemo(() => {
-    if (pendingChild.action === 'ADD') {
+    if (pendingChild.action === ACTION.ADD) {
       return pendingChild.newValue
     }
-    if (pendingChild.action === 'DELETE') {
+    if (pendingChild.action === ACTION.DELETE) {
       return pendingChild.oldValue
     }
     return ''
@@ -55,7 +52,7 @@ const ChildDetail = ({ pendingChild, leftMargin }) => {
       <Box sx={{ alignItems: 'center', display: 'flex', ml: leftMargin.title }}>
         <PendingButtons approval={approval} pending={pendingChild.id} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={aliasSx}>{pendingAction}:</Typography>
+          <Typography sx={aliasSx}>{pendingChild.action}:</Typography>
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{childName}</Typography>
         </Box>
       </Box>

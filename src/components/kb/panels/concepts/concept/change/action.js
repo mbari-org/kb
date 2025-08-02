@@ -1,5 +1,7 @@
-import { ACTION } from '@/lib/constants'
+import { formatDelta } from '@/components/common/format'
 import theme from '@/lib/theme'
+
+import { ACTION } from '@/lib/constants'
 
 const actionVerb = action => action.split(' ').shift()
 
@@ -20,4 +22,20 @@ const actionColor = action => {
   }
 }
 
-export { actionColor, actionVerb }
+const pendingActionValue = pending => {
+  switch (pending.action) {
+    case ACTION.ADD:
+      return pending.newValue
+
+    case ACTION.DELETE:
+      return pending.oldValue
+
+    case ACTION.REPLACE:
+      return formatDelta(pending.oldValue, pending.newValue)
+
+    default:
+      return ''
+  }
+}
+
+export { actionColor, actionVerb, pendingActionValue }

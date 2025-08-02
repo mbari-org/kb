@@ -1,4 +1,5 @@
 import { humanTimestamp, isEmpty, pick } from '@/lib/utils'
+import { ACTION } from '@/lib/constants'
 
 const fieldPending = (pending, field) =>
   pending
@@ -12,8 +13,8 @@ const pendingChild = (pending, childName) =>
   pending.find(
     pending =>
       pending.field === 'Concept.child' &&
-      ((pending.action === 'ADD' && pending.newValue === childName) ||
-        (pending.action === 'DELETE' && pending.oldValue === childName))
+      ((pending.action === ACTION.ADD && pending.newValue === childName) ||
+        (pending.action === ACTION.DELETE && pending.oldValue === childName))
   )
 
 const pendingInfo = pending => {

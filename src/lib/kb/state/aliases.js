@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 import { fieldPending } from '@/lib/kb/model/history'
 import { stagedEdits } from '@/lib/kb/state/staged'
 import { drop } from '@/lib/utils'
@@ -81,7 +81,7 @@ const stagedAlias = (alias, pendingConcept) => {
   const pendingAliasActions = fieldPending(pendingConcept, 'ConceptName')
 
   const pendingAdd = pendingAliasActions.find(
-    history => history.action === 'ADD' && history.newValue === alias.name
+    history => history.action === ACTION.ADD && history.newValue === alias.name
   )
   if (pendingAdd) {
     return {
@@ -92,7 +92,7 @@ const stagedAlias = (alias, pendingConcept) => {
   }
 
   const pendingDelete = pendingAliasActions.find(
-    history => history.action === 'DELETE' && history.oldValue === alias.name
+    history => history.action === ACTION.DELETE && history.oldValue === alias.name
   )
   if (pendingDelete) {
     return {

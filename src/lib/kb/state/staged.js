@@ -1,6 +1,8 @@
 import { actionColor } from '@/components/kb/panels/concepts/concept/change/action'
 import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
+
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const deleteItem = edit => {
@@ -33,9 +35,7 @@ const editItem = edit => {
 
 const stagedBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
   const itemAction =
-    stagedItem?.action !== CONCEPT_STATE.NO_ACTION
-      ? stagedItem?.action.split(' ')[1].toUpperCase()
-      : null
+    stagedItem?.action !== CONCEPT_STATE.NO_ACTION ? actionVerb(stagedItem?.action) : null
 
   const borderStyle = stagedItem?.historyId ? 'solid' : 'dashed'
   const borderWidth = itemAction ? width : '1px'

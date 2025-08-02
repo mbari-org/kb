@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from '@/lib/kb/model/history'
@@ -92,7 +92,7 @@ const stagedRealization = (realization, pendingConcept) => {
   const pendingRealizationActions = fieldPending(pendingConcept, 'LinkRealization')
 
   const addRealizationMatch = history => {
-    if (history.action !== 'ADD') {
+    if (history.action !== ACTION.ADD) {
       return false
     }
 
@@ -114,7 +114,7 @@ const stagedRealization = (realization, pendingConcept) => {
   }
 
   const pendingDelete = pendingRealizationActions.find(
-    history => history.action === 'DELETE' && history.oldValue === realization.linkName
+    history => history.action === ACTION.DELETE && history.oldValue === realization.linkName
   )
   if (pendingDelete) {
     return {

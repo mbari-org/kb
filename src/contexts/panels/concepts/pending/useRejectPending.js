@@ -4,7 +4,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { SELECTED } from '@/lib/constants'
+import { ACTION, SELECTED } from '@/lib/constants'
 
 const useRejectPending = () => {
   const { concept, resetConcept } = use(ConceptContext)
@@ -14,7 +14,7 @@ const useRejectPending = () => {
   const fieldChanged = useCallback(approvalUpdate => {
     switch (approvalUpdate.field) {
       case 'ConceptName':
-        if (approvalUpdate.action === 'ADD') return 'aliases'
+        if (approvalUpdate.action === ACTION.ADD) return 'aliases'
         return 'name'
 
       default:
@@ -24,7 +24,7 @@ const useRejectPending = () => {
 
   const isAddChild = pendingItems =>
     pendingItems.length === 1 &&
-    pendingItems[0].action === 'ADD' &&
+    pendingItems[0].action === ACTION.ADD &&
     pendingItems[0].field === 'Concept.child'
 
   const pendingRenameConcept = pendingItems =>

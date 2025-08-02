@@ -11,25 +11,21 @@ import { usePendingItemApproval } from '@/components/kb/panels/concepts/concept/
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { capitalize } from '@/lib/utils'
-
-import { PENDING } from '@/lib/constants'
+import { ACTION, PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
 
 const MediaItemDetail = ({ pendingMediaItem }) => {
-  const pendingAction = capitalize(pendingMediaItem.action.toLowerCase())
-
   const approval = usePendingItemApproval(pendingMediaItem.id)
 
   const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
 
   const mediaName = useMemo(() => {
-    if (pendingMediaItem.action === 'ADD') {
+    if (pendingMediaItem.action === ACTION.ADD) {
       return pendingMediaItem.newValue
     }
-    if (pendingMediaItem.action === 'DELETE') {
+    if (pendingMediaItem.action === ACTION.DELETE) {
       return pendingMediaItem.oldValue
     }
     return ''
@@ -47,7 +43,7 @@ const MediaItemDetail = ({ pendingMediaItem }) => {
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
         <PendingButtons approval={approval} pending={pendingMediaItem.id} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={mediaSx}>{pendingAction}:</Typography>
+          <Typography sx={mediaSx}>{pendingMediaItem.action}:</Typography>
           <Typography sx={{ ...mediaSx, fontWeight: 'bold', ml: 1 }}>{mediaName}</Typography>
         </Box>
       </Box>

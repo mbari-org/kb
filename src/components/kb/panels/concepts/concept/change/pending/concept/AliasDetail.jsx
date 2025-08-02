@@ -1,44 +1,27 @@
-import { useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { fieldSx, formatDelta } from '@/components/common/format'
+import { fieldSx } from '@/components/common/format'
+
+import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
 
 import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
-
-import { capitalize } from '@/lib/utils'
 
 import { PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
 
 const AliasDetail = ({ pendingAlias }) => {
-  const pendingAction = capitalize(pendingAlias.action.toLowerCase())
-
   const approval = usePendingItemApproval(pendingAlias)
 
   const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
 
-  const aliasTitle = useMemo(() => {
-    switch (pendingAlias.action) {
-      case 'ADD':
-        return pendingAlias.newValue
-
-      case 'DELETE':
-        return pendingAlias.oldValue
-
-      case 'REPLACE':
-        return formatDelta(pendingAlias.oldValue, pendingAlias.newValue)
-
-      default:
-        return ''
-    }
-  }, [pendingAlias])
+  const aliasTitle = pendingActionValue(pendingAlias)
 
   return (
     <Box
@@ -52,7 +35,7 @@ const AliasDetail = ({ pendingAlias }) => {
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
         <PendingButtons approval={approval} group={PENDING.GROUP.ALIASES} item={pendingAlias} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={aliasSx}>{pendingAction}:</Typography>
+          <Typography sx={aliasSx}>{pendingAlias.action}:</Typography>
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasTitle}</Typography>
         </Box>
       </Box>

@@ -1,44 +1,27 @@
-import { useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { fieldSx, formatDelta } from '@/components/common/format'
+import { fieldSx } from '@/components/common/format'
 
 import { usePendingItemApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
-import { pendingInfo } from '@/lib/kb/model/history'
+import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
 
-import { capitalize } from '@/lib/utils'
+import { pendingInfo } from '@/lib/kb/model/history'
 
 import { PENDING } from '@/lib/constants'
 
 const { OTHER } = PENDING.APPROVAL
 
 const RealizationDetail = ({ pendingRealization }) => {
-  const pendingAction = capitalize(pendingRealization.action.toLowerCase())
-
   const approval = usePendingItemApproval(pendingRealization.id)
 
   const realizationSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
   const disabled = approval === OTHER
 
-  const realizationTitle = useMemo(() => {
-    switch (pendingRealization.action) {
-      case 'ADD':
-        return pendingRealization.newValue
-
-      case 'DELETE':
-        return pendingRealization.oldValue
-
-      case 'REPLACE':
-        return formatDelta(pendingRealization.oldValue, pendingRealization.newValue)
-
-      default:
-        return ''
-    }
-  }, [pendingRealization])
+  const realizationTitle = pendingActionValue(pendingRealization)
 
   return (
     <Box
@@ -52,7 +35,7 @@ const RealizationDetail = ({ pendingRealization }) => {
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
         <PendingButtons approval={approval} pending={pendingRealization.id} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={realizationSx}>{pendingAction}:</Typography>
+          <Typography sx={realizationSx}>{pendingRealization.action}:</Typography>
           <Typography sx={{ ...realizationSx, fontWeight: 'bold', ml: 1 }}>
             {realizationTitle}
           </Typography>

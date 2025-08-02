@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useState } from 'react'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
-import { PENDING } from '@/lib/constants'
+import { ACTION, PENDING } from '@/lib/constants'
 
 const useConceptPending = concept => {
   const { pendingHistory } = use(PanelDataContext)
@@ -15,7 +15,7 @@ const useConceptPending = concept => {
     const pendingConcept = pendingHistory.filter(historyItem => historyItem.concept === conceptName)
     const childPending = pendingHistory.find(
       historyItem =>
-        historyItem.action === 'ADD' &&
+        historyItem.action === ACTION.ADD &&
         historyItem.field === 'Concept.child' &&
         historyItem.newValue === conceptName
     )

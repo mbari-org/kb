@@ -1,15 +1,9 @@
 import { Box, Typography } from '@mui/material'
 
-const ConceptSectionTitle = ({
-  children,
-  color = 'text.primary',
-  IconComponent,
-  sx = {},
-  title,
-}) => {
+const ConceptSectionTitle = ({ children, color, IconComponent, sx = {}, title }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, ...sx }}>
-      <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+      <Typography variant='h6' sx={{ color, fontWeight: 'bold' }}>
         {title}
       </Typography>
       {IconComponent && (
@@ -18,7 +12,6 @@ const ConceptSectionTitle = ({
           sx={{
             alignItems: 'center',
             borderRadius: '50%',
-            color,
             cursor: 'pointer',
             display: 'flex',
             justifyContent: 'center',

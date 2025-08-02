@@ -1,7 +1,7 @@
 import { fieldPending } from '@/lib/kb/model/history'
 import { displayItem, stagedEdits } from '@/lib/kb/state/staged'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 
 const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
 
@@ -25,7 +25,7 @@ const stagedMediaItem = (mediaItem, pendingConcept) => {
   const pendingMediaItemActions = fieldPending(pendingConcept, 'Media')
 
   const pendingAdd = pendingMediaItemActions.find(
-    history => history.action === 'ADD' && history.newValue === mediaItem.url
+    history => history.action === ACTION.ADD && history.newValue === mediaItem.url
   )
   if (pendingAdd) {
     return {
@@ -36,7 +36,7 @@ const stagedMediaItem = (mediaItem, pendingConcept) => {
   }
 
   const pendingDelete = pendingMediaItemActions.find(
-    history => history.action === 'DELETE' && history.oldValue === mediaItem.url
+    history => history.action === ACTION.DELETE && history.oldValue === mediaItem.url
   )
   if (pendingDelete) {
     return {
@@ -47,7 +47,7 @@ const stagedMediaItem = (mediaItem, pendingConcept) => {
   }
 
   const pendingEdit = pendingMediaItemActions.find(
-    history => history.action === 'EDIT' && history.newValue === mediaItem.url
+    history => history.action === ACTION.EDIT && history.newValue === mediaItem.url
   )
   if (pendingEdit) {
     return {

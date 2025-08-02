@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+
 import { motion } from 'framer-motion'
 
 import ConceptSectionTitle from '@/components/common/ConceptSectionTitle'
 import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
 import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
+
+import { ACTION } from '@/lib/constants'
 
 const ConceptPropertyList = ({
   IconComponent,
@@ -13,9 +17,13 @@ const ConceptPropertyList = ({
   RenderComponent,
   title,
 }) => {
+  const theme = useTheme()
+
   const [expanded, setExpanded] = useState(true)
 
   const hasItems = items?.length > 0
+  const hasPending = items?.some(item => item.action !== ACTION.NONE)
+  const titleColor = hasPending ? theme.palette.primary.edit : theme.palette.common.black
 
   const handleToggle = () => {
     if (hasItems) {
@@ -26,7 +34,7 @@ const ConceptPropertyList = ({
   return (
     <Box>
       <Box sx={{ minHeight: '56px', height: '56px', mb: 1 }}>
-        <ConceptSectionTitle title={title} IconComponent={IconComponent}>
+        <ConceptSectionTitle color={titleColor} title={title} IconComponent={IconComponent}>
           <Box sx={{ ml: 2, flex: 1 }} />
           {hasItems && (
             <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>

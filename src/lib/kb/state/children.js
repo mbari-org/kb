@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 import { CHILD_FIELDS } from '@/lib/kb/model/children'
 
 import { fieldPending } from '@/lib/kb/model/history'
@@ -48,7 +48,7 @@ const stagedChild = (child, pendingConcept) => {
   const pendingChildActions = fieldPending(pendingConcept, 'ConceptName')
 
   const pendingAdd = pendingChildActions.find(
-    history => history.action === 'ADD' && history.newValue === child.name
+    history => history.action === ACTION.ADD && history.newValue === child.name
   )
   if (pendingAdd) {
     return {
