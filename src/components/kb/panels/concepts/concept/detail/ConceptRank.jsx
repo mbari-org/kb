@@ -33,12 +33,15 @@ const ConceptRank = () => {
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
       const pendingRankChange = pendingChange(pendingConcept)
 
-      if (pendingRankChange && pendingRankChange.new[field] === pendingRankChange.old[field]) {
-        return {
-          ...stagedRank,
-          action: CONCEPT_STATE.NO_ACTION,
-          historyId: undefined,
+      if (pendingRankChange) {
+        if (pendingRankChange.new[field] === pendingRankChange.old[field]) {
+          return {
+            ...stagedRank,
+            action: CONCEPT_STATE.NO_ACTION,
+            historyId: undefined,
+          }
         }
+        return stagedRank
       }
 
       if (stagedRank[field] === initialRank[field]) {

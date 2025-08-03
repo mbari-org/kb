@@ -80,7 +80,7 @@ const stagedRank = (stateRank, pendingConcept) => {
 
   return {
     rank: {
-      action: 'Pending Edit',
+      action: 'Edit Pending',
       historyId: pending.historyId,
       level: pending.level || stateRank.level,
       name: pending.name || stateRank.name,

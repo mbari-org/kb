@@ -53,7 +53,7 @@ const stagedChild = (child, pendingConcept) => {
   if (pendingAdd) {
     return {
       ...child,
-      action: 'Pending Add',
+      action: 'Add Pending',
       historyId: pendingAdd.id,
     }
   }

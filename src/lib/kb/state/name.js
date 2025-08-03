@@ -44,7 +44,7 @@ const stagedName = (stateName, pendingConcept) => {
   return {
     name: {
       ...stateName,
-      action: 'Pending Edit',
+      action: 'Edit Pending',
       historyId: pendingReplace.id,
       value: pendingReplace.value,
       extent: pendingReplace.extent,
