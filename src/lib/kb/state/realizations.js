@@ -3,13 +3,11 @@ import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from '@/lib/kb/model/history'
 
-import { capitalize } from '@/lib/utils'
-
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
 const actionPredicate = (verb, realization) => {
   const addPredicate = history => {
-    if (capitalize(history.action) !== ACTION.ADD) return false
+    if (history.action !== ACTION.ADD) return false
     const [newLinkName, newLinkToConcept, newLinkValue] = history.newValue.split(' | ')
     return (
       newLinkName === realization.linkName &&
@@ -19,7 +17,7 @@ const actionPredicate = (verb, realization) => {
   }
 
   const otherPredicate = (history, verb) => {
-    if (capitalize(history.action) !== verb) return false
+    if (history.action !== verb) return false
     const historyValue = verb === ACTION.DELETE ? history.oldValue : history.newValue
     return historyValue === realization.linkName
   }

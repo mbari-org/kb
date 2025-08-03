@@ -2,7 +2,6 @@ import { use } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
-import FieldDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/FieldDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 

@@ -2,7 +2,7 @@ import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 import { fieldPending } from '@/lib/kb/model/history'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
-import { capitalize, drop } from '@/lib/utils'
+import { drop } from '@/lib/utils'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 
@@ -84,7 +84,7 @@ const stagedAlias = (alias, pendingConcept) => {
   for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
     const pendingItem = pendingHistories.find(history => {
       const historyValue = verb === ACTION.DELETE ? history.oldValue : history.newValue
-      return capitalize(history.action) === verb && historyValue === alias.name
+      return history.action === verb && historyValue === alias.name
     })
     if (pendingItem) {
       return {

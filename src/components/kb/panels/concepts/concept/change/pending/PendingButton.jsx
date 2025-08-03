@@ -1,6 +1,6 @@
 import { Box, IconButton, useTheme } from '@mui/material'
 
-const PendingButton = ({ Icon, color, disabled, determined, onClick }) => {
+const PendingButton = ({ Icon, color, determined, disabled, onClick }) => {
   const theme = useTheme()
 
   return (

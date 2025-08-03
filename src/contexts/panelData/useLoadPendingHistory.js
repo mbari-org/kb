@@ -4,6 +4,8 @@ import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import { PAGINATION } from '@/lib/constants'
 
+import { capitalize } from '@/lib/utils'
+
 const { HISTORY } = PAGINATION
 
 export const useLoadPendingHistory = apiFns => {
@@ -20,15 +22,21 @@ export const useLoadPendingHistory = apiFns => {
 
     const allPendingHistory = await pageIndices.reduce(async (accPromise, pageIndex) => {
       const acc = await accPromise
-      const pagePendingHistory = await apiFns.apiPaginated(getHistory, ['pending', {
-        limit: historyPerPage,
-        offset: pageIndex * historyPerPage,
-      }])
+      const pagePendingHistory = await apiFns.apiPaginated(getHistory, [
+        'pending',
+        {
+          limit: historyPerPage,
+          offset: pageIndex * historyPerPage,
+        },
+      ])
       acc.push(...pagePendingHistory)
       return acc
     }, Promise.resolve([]))
 
-    return allPendingHistory
+    return allPendingHistory.map(history => ({
+      ...history,
+      action: capitalize(history.action),
+    }))
   }, [apiFns])
 
   return loadPendingHistory
