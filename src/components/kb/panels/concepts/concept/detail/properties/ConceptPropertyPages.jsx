@@ -102,10 +102,10 @@ const ConceptPropertyPages = ({
           '&:hover': {
             cursor: 'default !important',
           },
-          minHeight: '56px !important',
-          height: '56px',
+          minHeight: '42px !important',
+          height: '42px',
           ...(fixedHeight !== undefined && {
-            height: '56px',
+            height: '42px',
           }),
         }}
       >

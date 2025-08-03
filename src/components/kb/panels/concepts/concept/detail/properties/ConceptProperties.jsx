@@ -1,8 +1,6 @@
 import { Stack } from '@mui/material'
 
 import ConceptAliases from '@/components/kb/panels/concepts/concept/detail/ConceptAliases'
-import ConceptAuthor from '@/components/kb/panels/concepts/concept/detail/ConceptAuthor'
-import ConceptRank from '@/components/kb/panels/concepts/concept/detail/ConceptRank'
 import ConceptRealizations from '@/components/kb/panels/concepts/concept/detail/ConceptRealizations'
 import ConceptReferences from '@/components/kb/panels/concepts/concept/detail/ConceptReferences'
 import ConceptTemplates from '@/components/kb/panels/concepts/concept/detail/ConceptTemplates'
@@ -18,8 +16,6 @@ const ConceptProperties = () => {
         pr: 1, // Add some padding for the scrollbar
       }}
     >
-      <ConceptAuthor />
-      <ConceptRank />
       <ConceptAliases />
       <ConceptReferences />
       <ConceptTemplates />

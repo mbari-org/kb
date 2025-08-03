@@ -1,4 +1,5 @@
 import { use } from 'react'
+import { Box } from '@mui/material'
 
 import AliasModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/aliases/AliasModifyIcon'
 import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases/ConceptAlias'

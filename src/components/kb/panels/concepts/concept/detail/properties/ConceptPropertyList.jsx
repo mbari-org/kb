@@ -33,7 +33,7 @@ const ConceptPropertyList = ({
 
   return (
     <Box>
-      <Box sx={{ minHeight: '56px', height: '56px', mb: 1 }}>
+      <Box sx={{ minHeight: '42px', height: '42px' }}>
         <ConceptSectionTitle color={titleColor} title={title} IconComponent={IconComponent}>
           <Box sx={{ ml: 2, flex: 1 }} />
           {hasItems && (
