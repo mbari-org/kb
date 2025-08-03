@@ -6,30 +6,30 @@ import { fieldPending } from '@/lib/kb/model/history'
 
 import { PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
+const { APPROVAL, GROUP } = PENDING
 
-const getFieldNameForGroup = group => {
+const apiFieldNameForGroup = group => {
   switch (group) {
-    case PENDING.GROUP.ALIASES:
+    case GROUP.ALIASES:
       return 'ConceptName'
 
-    case PENDING.GROUP.CHILDREN:
+    case GROUP.CHILDREN:
       return 'Concept.child'
 
-    case PENDING.GROUP.CONCEPT_NAME:
-      return 'ConceptName'
-
-    case PENDING.GROUP.MEDIA:
+    case GROUP.MEDIA:
       return 'Media'
 
-    case PENDING.GROUP.RANK:
-      return ['RankLevel', 'RankName']
+    case GROUP.NAME:
+      return 'ConceptName'
 
-    case PENDING.GROUP.REALIZATIONS:
-      return 'LinkRealization'
-
-    case 'Concept.parent':
+    case GROUP.PARENT:
       return 'Concept.parent'
+
+    case GROUP.RANK:
+      return 'Rank'
+
+    case GROUP.REALIZATIONS:
+      return 'LinkRealization'
 
     default:
       return null
@@ -37,28 +37,28 @@ const getFieldNameForGroup = group => {
 }
 
 const isTargetInGroup = (target, group, pendingConcept, conceptName) => {
-  const fieldName = getFieldNameForGroup(group)
+  const fieldName = apiFieldNameForGroup(group)
   if (!fieldName) {
     return false
   }
 
   // Special handling for ALIASES and CONCEPT_NAME groups since they share the same field
-  if (group === PENDING.GROUP.ALIASES || group === PENDING.GROUP.CONCEPT_NAME) {
+  if (group === GROUP.ALIASES || group === GROUP.CONCEPT_NAME) {
     const fieldItems = fieldPending(pendingConcept, fieldName)
 
-    if (group === PENDING.GROUP.ALIASES) {
+    if (group === GROUP.ALIASES) {
       // For aliases, exclude the concept name itself
       return fieldItems.some(
         history => history.id === target.id && history.newValue !== conceptName
       )
-    } else if (group === PENDING.GROUP.CONCEPT_NAME) {
+    } else if (group === GROUP.CONCEPT_NAME) {
       // For concept name, only include the concept name itself
       return fieldItems.some(history => history.id === target && history.newValue === conceptName)
     }
   }
 
   // Special handling for RANK group which includes both RankLevel and RankName fields
-  if (group === PENDING.GROUP.RANK) {
+  if (group === GROUP.RANK) {
     const rankLevelItems = fieldPending(pendingConcept, 'RankLevel')
     const rankNameItems = fieldPending(pendingConcept, 'RankName')
     return (
@@ -90,7 +90,7 @@ export const createPendingGroupApprovalHook = group => {
         return pendingConfirm.approval
       }
 
-      return OTHER
+      return APPROVAL.OTHER
     }, [pendingConfirm])
   }
 }
@@ -120,13 +120,13 @@ const createParametrizedPendingApprovalHook = () => {
         return pendingConfirm.approval
       }
 
-      return OTHER
+      return APPROVAL.OTHER
     }, [pendingConfirm, target, pendingConcept, concept.name])
   }
 }
 
 export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
-  const fieldName = getFieldNameForGroup(targetGroup)
+  const fieldName = apiFieldNameForGroup(targetGroup)
 
   let pendingIds
   if (targetGroup === PENDING.GROUP.ALL) {
@@ -163,15 +163,13 @@ export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
   return pendingIds
 }
 
-export const usePendingAliasesApproval = createPendingGroupApprovalHook(PENDING.GROUP.ALIASES)
-export const usePendingChildrenApproval = createPendingGroupApprovalHook(PENDING.GROUP.CHILDREN)
-export const usePendingItemApproval = createParametrizedPendingApprovalHook()
-export const usePendingMediaApproval = createPendingGroupApprovalHook(PENDING.GROUP.MEDIA)
-export const usePendingParentApproval = createPendingGroupApprovalHook('Concept.parent')
-export const usePendingRankApproval = createPendingGroupApprovalHook(PENDING.GROUP.RANK)
-export const usePendingRealizationsApproval = createPendingGroupApprovalHook(
-  PENDING.GROUP.REALIZATIONS
-)
+export const usePendingAliasesApproval = createPendingGroupApprovalHook(GROUP.ALIASES)
+export const usePendingChildrenApproval = createPendingGroupApprovalHook(GROUP.CHILDREN)
+export const usePendingMediaApproval = createPendingGroupApprovalHook(GROUP.MEDIA)
+export const usePendingNameApproval = createPendingGroupApprovalHook(GROUP.NAME)
+export const usePendingParentApproval = createPendingGroupApprovalHook(GROUP.PARENT)
+export const usePendingRankApproval = createPendingGroupApprovalHook(GROUP.RANK)
+export const usePendingRealizationsApproval = createPendingGroupApprovalHook(GROUP.REALIZATIONS)
 
 // CxTBD ?????
 export const useFieldPendingApproval = createParametrizedPendingApprovalHook()
@@ -208,6 +206,6 @@ export const useConceptNamePendingApproval = () => {
       }
     }
 
-    return OTHER
+    return APPROVAL.OTHER
   }, [pendingConfirm, pendingConcept, concept.name])
 }

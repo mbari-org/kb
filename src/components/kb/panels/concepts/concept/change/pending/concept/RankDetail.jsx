@@ -12,14 +12,11 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { pendingInfo } from '@/lib/kb/model/history'
 import { pendingRank } from '@/lib/kb/state/rank'
 
-import { formatDelta, formatField } from '@/components/common/format'
-
-import { fieldSx } from '@/components/common/format'
+import { formatDelta, formatField, otherApprovalSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
-const { RANK } = PENDING.GROUP
+const { APPROVAL, GROUP } = PENDING
 
 const RankDetail = ({ pendingField }) => {
   const { initialState } = use(ConceptContext)
@@ -62,7 +59,7 @@ const RankDetail = ({ pendingField }) => {
     return null
   }
 
-  const rankSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+  const rankSx = otherApprovalSx(approval)
 
   return (
     <Box
@@ -73,14 +70,14 @@ const RankDetail = ({ pendingField }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} pending={RANK} />
+        <PendingButtons approval={approval} group={GROUP.RANK} />
         <Typography sx={rankSx}>Rank</Typography>
       </Box>
       <Box sx={{ ml: 8 }}>
         {pendingRanks.map(pendingRank => {
           const fieldName = formatField(pendingRank.field)
           const fieldDelta = formatDelta(pendingRank.oldValue, pendingRank.newValue)
-          const disabled = approval === OTHER
+          const disabled = approval === APPROVAL.OTHER
 
           return (
             <Box

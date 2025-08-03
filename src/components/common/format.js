@@ -1,3 +1,12 @@
+import { PENDING } from '@/lib/constants'
+
+const fieldColorSx = predicate => {
+  if (predicate) {
+    return { ...fieldSx, color: 'text.disabled' }
+  }
+  return fieldSx
+}
+
 const formatDelta = (initialValue, stagedValue) =>
   `${stringDisplay(initialValue)} \u27F9 ${stringDisplay(stagedValue)}`
 
@@ -12,6 +21,8 @@ const fieldSx = {
   whiteSpace: 'pre-wrap',
 }
 
+const otherApprovalSx = approval => fieldColorSx(approval === PENDING.APPROVAL.OTHER)
+
 const valueSx = {
   ...fieldSx,
   fontFamily: 'monospace',
@@ -20,4 +31,4 @@ const valueSx = {
 
 const stringDisplay = field => (field !== '' ? field : '""')
 
-export { fieldSx, formatDelta, formatField, valueSx }
+export { fieldColorSx, fieldSx, formatDelta, formatField, otherApprovalSx, valueSx }

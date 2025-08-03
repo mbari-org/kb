@@ -180,8 +180,10 @@ export const PENDING = {
   GROUP: {
     ALIASES: 'Aliases',
     ALL: 'All',
-    CONCEPT_NAME: 'ConceptName',
+    CHILDREN: 'Children',
     MEDIA: 'Media',
+    NAME: 'Name',
+    PARENT: 'Parent',
     RANK: 'Rank',
     REALIZATIONS: 'Realizations',
   },

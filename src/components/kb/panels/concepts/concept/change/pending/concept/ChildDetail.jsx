@@ -5,25 +5,25 @@ import { Box, Typography } from '@mui/material'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { fieldSx } from '@/components/common/format'
+import { otherApprovalSx } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { usePendingItemApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
 import { ACTION, PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
+const { APPROVAL, GROUP } = PENDING
 
 const ChildDetail = ({ pendingChild, leftMargin }) => {
   const { concept } = use(ConceptContext)
 
-  const approval = usePendingItemApproval(pendingChild.id)
+  const approval = usePendingItemApproval(pendingChild)
 
-  const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
-  const disabled = approval === OTHER
+  const aliasSx = otherApprovalSx(approval)
+  const disabled = approval === APPROVAL.OTHER
 
   const childName = useMemo(() => {
     if (pendingChild.action === ACTION.ADD) {
@@ -54,7 +54,7 @@ const ChildDetail = ({ pendingChild, leftMargin }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex', ml: leftMargin.title }}>
-        <PendingButtons approval={approval} pending={pendingChild.id} />
+        <PendingButtons approval={approval} group={GROUP.CHILDREN} item={pendingChild} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={aliasSx}>{pendingChild.action}</Typography>
           {childName !== concept.name && (

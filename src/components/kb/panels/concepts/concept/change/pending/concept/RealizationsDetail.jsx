@@ -5,19 +5,17 @@ import PendingButtons from '@/components/kb/panels/concepts/concept/change/pendi
 
 import { usePendingRealizationsApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
-import { fieldSx } from '@/components/common/format'
+import { otherApprovalSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
-const { REALIZATIONS } = PENDING.GROUP
+const { GROUP } = PENDING
 
 const RealizationsDetail = ({ pendingField }) => {
   const pendingRealizations = pendingField('LinkRealization')
 
   const approval = usePendingRealizationsApproval()
-
-  const realizationsSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+  const realizationsSx = otherApprovalSx(approval)
 
   if (pendingRealizations.length === 0) {
     return null
@@ -32,7 +30,7 @@ const RealizationsDetail = ({ pendingField }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} pending={REALIZATIONS} />
+        <PendingButtons approval={approval} group={GROUP.REALIZATIONS} />
         <Typography sx={realizationsSx}>Realizations</Typography>
       </Box>
       <Stack direction='column' spacing={1}>

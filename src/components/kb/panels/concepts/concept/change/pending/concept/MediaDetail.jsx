@@ -5,18 +5,17 @@ import PendingButtons from '@/components/kb/panels/concepts/concept/change/pendi
 
 import { usePendingMediaApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
-import { fieldSx } from '@/components/common/format'
+import { otherApprovalSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
 const { MEDIA } = PENDING.GROUP
 
 const MediaDetail = ({ pendingField }) => {
   const pendingMedia = pendingField('Media')
 
   const approval = usePendingMediaApproval()
-  const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
+  const mediaSx = otherApprovalSx(approval)
 
   if (pendingMedia.length === 0) {
     return null
@@ -31,7 +30,7 @@ const MediaDetail = ({ pendingField }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} pending={MEDIA} />
+        <PendingButtons approval={approval} group={MEDIA} />
         <Typography sx={mediaSx}>Media</Typography>
       </Box>
       <Stack direction='column' spacing={1}>

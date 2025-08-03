@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { fieldSx } from '@/components/common/format'
+import { otherApprovalSx } from '@/components/common/format'
 
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
 
@@ -13,13 +13,13 @@ import { pendingInfo } from '@/lib/kb/model/history'
 
 import { PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
+const { APPROVAL, GROUP } = PENDING
 
 const AliasDetail = ({ pendingAlias }) => {
   const approval = usePendingItemApproval(pendingAlias)
 
-  const aliasSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
-  const disabled = approval === OTHER
+  const aliasSx = otherApprovalSx(approval)
+  const disabled = approval === APPROVAL.OTHER
 
   const aliasTitle = pendingActionValue(pendingAlias)
 
@@ -33,7 +33,7 @@ const AliasDetail = ({ pendingAlias }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
-        <PendingButtons approval={approval} group={PENDING.GROUP.ALIASES} item={pendingAlias} />
+        <PendingButtons approval={approval} group={GROUP.ALIASES} item={pendingAlias} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={aliasSx}>{pendingAlias.action}:</Typography>
           <Typography sx={{ ...aliasSx, fontWeight: 'bold', ml: 1 }}>{aliasTitle}</Typography>

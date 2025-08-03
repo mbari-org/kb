@@ -5,21 +5,21 @@ import { Box, Typography } from '@mui/material'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { fieldSx } from '@/components/common/format'
+import { otherApprovalSx } from '@/components/common/format'
 
-import { usePendingItemApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
 import { pendingInfo } from '@/lib/kb/model/history'
 
 import { ACTION, PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
+const { APPROVAL, GROUP } = PENDING
 
 const MediaItemDetail = ({ pendingMediaItem }) => {
-  const approval = usePendingItemApproval(pendingMediaItem.id)
+  const approval = usePendingItemApproval(pendingMediaItem)
 
-  const mediaSx = approval === OTHER ? { ...fieldSx, color: 'text.disabled' } : fieldSx
-  const disabled = approval === OTHER
+  const mediaSx = otherApprovalSx(approval)
+  const disabled = approval === APPROVAL.OTHER
 
   const mediaName = useMemo(() => {
     if (pendingMediaItem.action === ACTION.ADD) {
@@ -41,7 +41,7 @@ const MediaItemDetail = ({ pendingMediaItem }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex', ml: 3.4 }}>
-        <PendingButtons approval={approval} pending={pendingMediaItem.id} />
+        <PendingButtons approval={approval} group={GROUP.MEDIA} item={pendingMediaItem} />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={mediaSx}>{pendingMediaItem.action}:</Typography>
           <Typography sx={{ ...mediaSx, fontWeight: 'bold', ml: 1 }}>{mediaName}</Typography>
