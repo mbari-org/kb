@@ -53,7 +53,7 @@ const PendingContent = () => {
       <MediaDetail pendingField={pendingField} />
       <NameDetail pendingField={pendingField} />
       <ParentDetail pendingField={pendingField} />
-      <RankDetail pendingField={pendingField} />
+      <RankDetail pendingConcept={pendingConcept} />
       <RealizationsDetail pendingField={pendingField} />
     </Stack>
   )

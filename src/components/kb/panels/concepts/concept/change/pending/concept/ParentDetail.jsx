@@ -16,7 +16,8 @@ const { OTHER } = PENDING.APPROVAL
 const ParentDetail = ({ pendingField }) => {
   const approval = usePendingParentApproval()
 
-  const pendingParent = pendingField('Concept.parent')?.pop()
+  const pendingParentArray = pendingField('Concept.parent')
+  const pendingParent = pendingParentArray?.[pendingParentArray.length - 1]
   if (!pendingParent) {
     return null
   }

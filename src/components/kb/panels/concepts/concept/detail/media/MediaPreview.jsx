@@ -12,8 +12,6 @@ import { fieldPending } from '@/lib/kb/model/history'
 
 import { PENDING } from '@/lib/constants'
 
-import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
-
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
 
@@ -25,7 +23,8 @@ const MediaPreview = ({ setPreviewOn }) => {
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
-  const mediaPending = fieldPending(pendingConcept, 'Media').pop()
+  const mediaPendingArray = fieldPending(pendingConcept, 'Media')
+  const mediaPending = mediaPendingArray[mediaPendingArray.length - 1]
 
   const border = stagedBorder({
     itemPending: mediaPending,
@@ -33,11 +32,6 @@ const MediaPreview = ({ setPreviewOn }) => {
     stagedItem: mediaItem,
     theme,
     width: '3px',
-  })
-
-  if (!isUrlValid(mediaItem?.url)) console.error('Invalid media URL:', mediaItem?.url)
-  checkImageUrlExists(mediaItem?.url).then(exists => {
-    if (!exists) console.error('Media image not found:', mediaItem?.url)
   })
 
   return (

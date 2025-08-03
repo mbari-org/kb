@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
-import { usePendingRankApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -18,16 +18,12 @@ import { PENDING } from '@/lib/constants'
 
 const { APPROVAL, GROUP } = PENDING
 
-const RankDetail = ({ pendingField }) => {
+const RankDetail = ({ pendingConcept }) => {
   const { initialState } = use(ConceptContext)
 
-  const approval = usePendingRankApproval()
+  const approval = usePendingGroupApproval(GROUP.RANK)
 
-  const rankField = pendingField('Rank')
-
-  if (!rankField) return null
-
-  const rank = pendingRank(rankField)
+  const rank = pendingRank(pendingConcept)
   if (!rank) return null
 
   const initialRank = initialState.rank

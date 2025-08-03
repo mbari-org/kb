@@ -163,13 +163,9 @@ export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
   return pendingIds
 }
 
-export const usePendingAliasesApproval = createPendingGroupApprovalHook(GROUP.ALIASES)
-export const usePendingChildrenApproval = createPendingGroupApprovalHook(GROUP.CHILDREN)
-export const usePendingMediaApproval = createPendingGroupApprovalHook(GROUP.MEDIA)
 export const usePendingNameApproval = createPendingGroupApprovalHook(GROUP.NAME)
 export const usePendingParentApproval = createPendingGroupApprovalHook(GROUP.PARENT)
 export const usePendingRankApproval = createPendingGroupApprovalHook(GROUP.RANK)
-export const usePendingRealizationsApproval = createPendingGroupApprovalHook(GROUP.REALIZATIONS)
 
 // CxTBD ?????
 export const useFieldPendingApproval = createParametrizedPendingApprovalHook()

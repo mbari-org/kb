@@ -17,7 +17,8 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
-  const mediaPending = fieldPending(pendingConcept, 'Media').pop()
+  const mediaPendingArray = fieldPending(pendingConcept, 'Media')
+  const mediaPending = mediaPendingArray[mediaPendingArray.length - 1]
 
   const swiper = useSwiper()
 

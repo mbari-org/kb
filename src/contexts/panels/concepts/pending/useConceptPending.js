@@ -4,6 +4,8 @@ import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
 import { ACTION, PENDING } from '@/lib/constants'
 
+const { CONCEPT, CONFIRM, PARENT } = PENDING.DATA
+
 const useConceptPending = concept => {
   const { pendingHistory } = use(PanelDataContext)
 
@@ -29,25 +31,28 @@ const useConceptPending = concept => {
 
   useEffect(() => {
     if (concept) {
-      setPendingData(prev => ({
-        ...prev,
-        [PENDING.DATA.CONCEPT]: conceptPendingHistory(concept.name, pendingHistory),
-        [PENDING.DATA.CONFIRM]: null,
-        [PENDING.DATA.PARENT]: parentPendingHistory(concept.parent, pendingHistory),
-      }))
+      const newConceptData = conceptPendingHistory(concept.name, pendingHistory)
+      setPendingData({
+        [CONCEPT]: newConceptData,
+        [CONFIRM]: null,
+        [PARENT]: parentPendingHistory(concept.parent, pendingHistory),
+      })
     }
   }, [concept, pendingHistory])
 
-  // Public function to get pending data by field
-  const pending = useCallback(field => pendingData?.[field], [pendingData])
+  const pending = useCallback(field => {
+    return pendingData?.[field]
+  }, [pendingData])
 
-  // Public function to set only the CONFIRM field
-  const setPendingConfirm = useCallback(confirmData => {
-    setPendingData(prev => ({
-      ...prev,
-      [PENDING.DATA.CONFIRM]: confirmData,
-    }))
-  }, [])
+  const setPendingConfirm = useCallback(
+    confirmData => {
+      setPendingData(prev => ({
+        ...prev,
+        [CONFIRM]: confirmData,
+      }))
+    },
+    []
+  )
 
   return {
     pending,

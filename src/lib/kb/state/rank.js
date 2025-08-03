@@ -34,7 +34,8 @@ const pendingValues = (pendingRank, type) => {
 }
 
 const pendingChange = pendingConcept => {
-  const pendingRank = fieldPending(pendingConcept, 'Rank').pop()
+  const pendingRanks = fieldPending(pendingConcept, 'Rank')
+  const pendingRank = pendingRanks[pendingRanks.length - 1]
   if (!pendingRank) return null
 
   const [newLevel, newName] = pendingValues(pendingRank, 'newValue')
@@ -57,7 +58,7 @@ const pendingRank = pendingConcept => {
   if (!pending) return null
 
   return {
-    historyId: pendingConcept.pop().id,
+    historyId: pendingConcept[pendingConcept.length - 1].id,
     level: pending.new.level,
     name: pending.new.name,
   }

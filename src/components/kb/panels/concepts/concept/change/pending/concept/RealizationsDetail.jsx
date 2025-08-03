@@ -3,18 +3,18 @@ import { Box, Stack, Typography } from '@mui/material'
 import RealizationDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 
-import { usePendingRealizationsApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
 import { otherApprovalSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants'
 
-const { GROUP } = PENDING
+const { REALIZATIONS } = PENDING.GROUP
 
 const RealizationsDetail = ({ pendingField }) => {
   const pendingRealizations = pendingField('LinkRealization')
 
-  const approval = usePendingRealizationsApproval()
+  const approval = usePendingGroupApproval(REALIZATIONS)
   const realizationsSx = otherApprovalSx(approval)
 
   if (pendingRealizations.length === 0) {
@@ -30,7 +30,7 @@ const RealizationsDetail = ({ pendingField }) => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} group={GROUP.REALIZATIONS} />
+        <PendingButtons approval={approval} group={REALIZATIONS} />
         <Typography sx={realizationsSx}>Realizations</Typography>
       </Box>
       <Stack direction='column' spacing={1}>
