@@ -1,20 +1,28 @@
 import { use, useEffect } from 'react'
 
-import { Box, Stack } from '@mui/material'
-import FieldDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/FieldDetail'
+import { Box, Typography } from '@mui/material'
+
+// import FieldDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/FieldDetail'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
+import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
+import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending/PendingGroup'
+import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { useConceptNamePendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { otherApprovalSx } from '@/components/common/format'
+
+import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
 import { isAdmin } from '@/lib/auth/role'
 
+import { pendingInfo } from '@/lib/kb/model/history'
+
 import { CONCEPT_NAME_EXTENT, PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
+const { APPROVAL, GROUP } = PENDING
 const { NAME_ONLY } = CONCEPT_NAME_EXTENT
 
 const NameDetail = ({ pendingField }) => {
@@ -22,19 +30,8 @@ const NameDetail = ({ pendingField }) => {
   const { modalData, setModalData } = use(ConceptModalContext)
   const { user } = use(UserContext)
 
+  const approval = usePendingGroupApproval(GROUP.NAME)
   const nameChangeType = modalData?.nameChangeType
-
-  const pendingName = pendingField('ConceptName').find(name => name.newValue === concept.name)
-
-  // Use the concept name approval hook that handles the shared field with aliases
-  const conceptNameApproval = useConceptNamePendingApproval()
-
-  useEffect(() => {
-    setModalData(prevData => ({
-      ...prevData,
-      nameChangeType: NAME_ONLY,
-    }))
-  }, [setModalData])
 
   const handleNameChangeType = event => {
     setModalData(prevData => ({
@@ -43,25 +40,36 @@ const NameDetail = ({ pendingField }) => {
     }))
   }
 
+  useEffect(() => {
+    setModalData(prevData => ({
+      ...prevData,
+      nameChangeType: NAME_ONLY,
+    }))
+  }, [setModalData])
+
+  const pendingName = pendingField('ConceptName').find(name => name.newValue === concept.name)
   if (!pendingName) {
     return null
   }
 
-  // Enable extent when concept name is approved (either specifically or via ALL)
-  const enableExtent = conceptNameApproval === PENDING.APPROVAL.ACCEPT
+  const enableExtent = approval === APPROVAL.ACCEPT
   const isAdminUser = isAdmin(user)
 
-  // Custom approval function for FieldDetail that uses concept name approval logic
-  const pendingFieldApproval = fieldId => {
-    return fieldId === pendingName.id && conceptNameApproval !== OTHER
-  }
+  const nameSx = otherApprovalSx(approval)
 
-  return (
-    <Stack direction='column' spacing={0}>
-      <FieldDetail
-        key={pendingName.id}
-        pendingField={pendingName}
-        pendingFieldApproval={pendingFieldApproval}
+  const pendingGroupTitle = (
+    <>
+      <PendingButtons approval={approval} group={GROUP.NAME} />
+      <Typography sx={nameSx}>Name: </Typography>
+      <Typography sx={{ ...nameSx, fontWeight: 'bold' }}>{pendingName.newValue}</Typography>
+    </>
+  )
+
+  const pendingGroupDetail = (
+    <>
+      <PendingValues
+        disabled={approval === APPROVAL.OTHER}
+        pendingValues={pendingInfo(pendingName)}
       />
       {isAdminUser && (
         <Box sx={{ ml: 16 }}>
@@ -72,7 +80,11 @@ const NameDetail = ({ pendingField }) => {
           />
         </Box>
       )}
-    </Stack>
+    </>
+  )
+
+  return (
+    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
   )
 }
 

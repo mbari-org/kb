@@ -43,13 +43,9 @@ const PendingContent = () => {
   return (
     <Stack direction='column' spacing={1}>
       <ModalActionText text='Pending History' />
-      {pendingChild && (
-        <ChildDetail pendingChild={pendingChild} leftMargin={{ title: 0, detail: 8 }} />
-      )}
+      {pendingChild && <ChildDetail pendingChild={pendingChild} />}
       <AliasesDetail pendingField={pendingField} />
-      {!pendingChild && (
-        <ChildrenDetail pendingField={pendingField} leftMargin={{ title: 3.5, detail: 11.5 }} />
-      )}
+      {!pendingChild && <ChildrenDetail pendingField={pendingField} />}
       <MediaDetail pendingField={pendingField} />
       <NameDetail pendingField={pendingField} />
       <ParentDetail pendingField={pendingField} />

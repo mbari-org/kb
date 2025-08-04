@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
+import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
 
 import { useFieldPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
@@ -40,11 +41,7 @@ const FieldDetail = ({ pendingField, pendingFieldApproval = () => false }) => {
         <PendingButtons approval={approval} pending={pendingField.id} />
         <FieldValueDisplay disabled={disabled} field={fieldName} value={fieldDelta} />
       </Box>
-      <Box sx={{ ml: 8 }}>
-        {pendingInfo(pendingField)?.map(([field, value]) => (
-          <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
-        ))}
-      </Box>
+      <PendingValues pendingValues={pendingInfo(pendingField)} disabled={disabled} />
     </Box>
   )
 }

@@ -3,7 +3,8 @@ import { use, useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
-import FieldValueDisplay from '@/components/common/FieldValueDisplay'
+import PendingDetail from '@/components/kb/panels/concepts/concept/change/pending/PendingDetail'
+import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
 
 import { otherApprovalSx } from '@/components/common/format'
 
@@ -17,7 +18,7 @@ import { ACTION, PENDING } from '@/lib/constants'
 
 const { APPROVAL, GROUP } = PENDING
 
-const ChildDetail = ({ pendingChild, leftMargin }) => {
+const ChildDetail = ({ pendingChild }) => {
   const { concept } = use(ConceptContext)
 
   const approval = usePendingItemApproval(pendingChild)
@@ -44,30 +45,25 @@ const ChildDetail = ({ pendingChild, leftMargin }) => {
     return info
   }, [pendingChild])
 
+  const pendingDetailTitle = (
+    <>
+      <PendingButtons approval={approval} group={GROUP.CHILDREN} item={pendingChild} />
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography sx={aliasSx}>{pendingChild.action}</Typography>
+        {childName !== concept.name && (
+          <Typography sx={{ ...aliasSx, fontWeight: 'bold' }}>: {childName}</Typography>
+        )}
+      </Box>
+    </>
+  )
+
+  const pendingDetailValues = <PendingValues pendingValues={childInfo} disabled={disabled} />
+
   return (
-    <Box
-      sx={{
-        alignItems: 'flex-start',
-        display: 'flex',
-        flexDirection: 'column',
-        mt: 0.5,
-      }}
-    >
-      <Box sx={{ alignItems: 'center', display: 'flex', ml: leftMargin.title }}>
-        <PendingButtons approval={approval} group={GROUP.CHILDREN} item={pendingChild} />
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={aliasSx}>{pendingChild.action}</Typography>
-          {childName !== concept.name && (
-            <Typography sx={{ ...aliasSx, fontWeight: 'bold' }}>: {childName}</Typography>
-          )}
-        </Box>
-      </Box>
-      <Box sx={{ ml: leftMargin.detail }}>
-        {childInfo.map(([field, value]) => (
-          <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
-        ))}
-      </Box>
-    </Box>
+    <PendingDetail
+      pendingDetailTitle={pendingDetailTitle}
+      pendingDetailValues={pendingDetailValues}
+    />
   )
 }
 

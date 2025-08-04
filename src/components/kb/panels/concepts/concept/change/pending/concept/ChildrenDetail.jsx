@@ -1,7 +1,8 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 
 import ChildDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ChildDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
+import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending/PendingGroup'
 
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
@@ -11,7 +12,7 @@ import { PENDING } from '@/lib/constants'
 
 const { CHILDREN } = PENDING.GROUP
 
-const ChildrenDetail = ({ leftMargin, pendingField }) => {
+const ChildrenDetail = ({ pendingField }) => {
   const pendingChildren = pendingField('Concept.child').sort((a, b) => {
     const aValue = a.newValue ?? a.oldValue
     const bValue = b.newValue ?? b.oldValue
@@ -26,24 +27,23 @@ const ChildrenDetail = ({ leftMargin, pendingField }) => {
     return null
   }
 
+  const pendingGroupTitle = (
+    <>
+      <PendingButtons approval={approval} group={CHILDREN} />
+      <Typography sx={childrenSx}>Children</Typography>
+    </>
+  )
+
+  const pendingGroupDetail = (
+    <Stack direction='column' spacing={1}>
+      {pendingChildren.map(pendingChild => (
+        <ChildDetail key={pendingChild.id} pendingChild={pendingChild} />
+      ))}
+    </Stack>
+  )
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} group={CHILDREN} />
-        <Typography sx={childrenSx}>Children</Typography>
-      </Box>
-      <Stack direction='column' spacing={1}>
-        {pendingChildren.map(pendingChild => (
-          <ChildDetail key={pendingChild.id} pendingChild={pendingChild} leftMargin={leftMargin} />
-        ))}
-      </Stack>
-    </Box>
+    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
   )
 }
 

@@ -1,9 +1,9 @@
-import { use } from 'react'
-
 import { Box, Typography } from '@mui/material'
 
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
+import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
+import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending/PendingGroup'
 
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
@@ -18,6 +18,8 @@ const { APPROVAL, GROUP } = PENDING
 
 const RankDetail = ({ pendingConcept }) => {
   const approval = usePendingGroupApproval(GROUP.RANK)
+
+  console.log('rank approval', approval)
 
   const rank = pendingRank(pendingConcept)
   if (!rank) return null
@@ -49,45 +51,44 @@ const RankDetail = ({ pendingConcept }) => {
 
   const rankSx = otherApprovalSx(approval)
 
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} group={GROUP.RANK} />
-        <Typography sx={rankSx}>Rank</Typography>
-      </Box>
-      <Box sx={{ ml: 10 }}>
-        {pendingRanks.map(pendingRank => {
-          const fieldName = formatField(pendingRank.field)
-          const fieldDelta = formatDelta(pendingRank.oldValue, pendingRank.newValue)
-          const disabled = approval === APPROVAL.OTHER
+  const pendingGroupTitle = (
+    <>
+      <PendingButtons approval={approval} group={GROUP.RANK} />
+      <Typography sx={rankSx}>Rank</Typography>
+    </>
+  )
 
-          return (
-            <Box
-              key={pendingRank.id}
-              sx={{
-                alignItems: 'flex-start',
-                display: 'flex',
-                flexDirection: 'column',
-                mt: 0.5,
-              }}
-            >
-              <FieldValueDisplay disabled={disabled} field={fieldName} value={fieldDelta} />
-              <Box sx={{ ml: 2 }}>
-                {pendingInfo(pendingRank)?.map(([field, value]) => (
-                  <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
-                ))}
-              </Box>
-            </Box>
-          )
-        })}
-      </Box>
+  const pendingGroupDetail = (
+    <Box sx={{ ml: 11.5 }}>
+      {pendingRanks.map(pendingRank => {
+        const fieldName = formatField(pendingRank.field)
+        const fieldDelta = formatDelta(pendingRank.oldValue, pendingRank.newValue)
+        const disabled = approval === APPROVAL.OTHER
+
+        return (
+          <Box
+            key={pendingRank.id}
+            sx={{
+              alignItems: 'flex-start',
+              display: 'flex',
+              flexDirection: 'column',
+              mt: 0.5,
+            }}
+          >
+            <FieldValueDisplay disabled={disabled} field={fieldName} value={fieldDelta} />
+            <PendingValues
+              leftMargin={2}
+              pendingValues={pendingInfo(pendingRank)}
+              disabled={disabled}
+            />
+          </Box>
+        )
+      })}
     </Box>
+  )
+
+  return (
+    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
   )
 }
 

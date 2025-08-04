@@ -1,7 +1,8 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 
 import RealizationDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
+import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending/PendingGroup'
 
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
@@ -21,24 +22,23 @@ const RealizationsDetail = ({ pendingField }) => {
     return null
   }
 
+  const pendingGroupTitle = (
+    <>
+      <PendingButtons approval={approval} group={REALIZATIONS} />
+      <Typography sx={realizationsSx}>Realizations</Typography>
+    </>
+  )
+
+  const pendingGroupDetail = (
+    <Stack direction='column' spacing={1}>
+      {pendingRealizations.map(pendingRealization => (
+        <RealizationDetail key={pendingRealization.id} pendingRealization={pendingRealization} />
+      ))}
+    </Stack>
+  )
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} group={REALIZATIONS} />
-        <Typography sx={realizationsSx}>Realizations</Typography>
-      </Box>
-      <Stack direction='column' spacing={1}>
-        {pendingRealizations.map(pendingRealization => (
-          <RealizationDetail key={pendingRealization.id} pendingRealization={pendingRealization} />
-        ))}
-      </Stack>
-    </Box>
+    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
   )
 }
 

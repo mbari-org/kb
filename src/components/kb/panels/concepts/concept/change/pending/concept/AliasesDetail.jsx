@@ -1,8 +1,9 @@
 import { use } from 'react'
-import { Box, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 
 import AliasDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/AliasDetail'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
+import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending/PendingGroup'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -28,24 +29,23 @@ const AliasesDetail = ({ pendingField }) => {
     return null
   }
 
+  const pendingGroupTitle = (
+    <>
+      <PendingButtons approval={approval} group={ALIASES} />
+      <Typography sx={aliasesSx}>Aliases</Typography>
+    </>
+  )
+
+  const pendingGroupDetail = (
+    <Stack direction='column' spacing={1}>
+      {pendingAliases.map(pendingAlias => (
+        <AliasDetail key={pendingAlias.id} pendingAlias={pendingAlias} />
+      ))}
+    </Stack>
+  )
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <PendingButtons approval={approval} group={ALIASES} />
-        <Typography sx={aliasesSx}>Aliases</Typography>
-      </Box>
-      <Stack direction='column' spacing={1}>
-        {pendingAliases.map(pendingAlias => (
-          <AliasDetail key={pendingAlias.id} pendingAlias={pendingAlias} />
-        ))}
-      </Stack>
-    </Box>
+    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
   )
 }
 
