@@ -34,12 +34,11 @@ const pendingValues = (pendingRank, type) => {
 }
 
 const pendingChange = pendingConcept => {
-  const pendingRanks = fieldPending(pendingConcept, 'Rank')
-  const pendingRank = pendingRanks[pendingRanks.length - 1]
-  if (!pendingRank) return null
+  const rank = fieldPending(pendingConcept, 'Rank')[0]
+  if (!rank) return null
 
-  const [newLevel, newName] = pendingValues(pendingRank, 'newValue')
-  const [oldLevel, oldName] = pendingValues(pendingRank, 'oldValue')
+  const [newLevel, newName] = pendingValues(rank, 'newValue')
+  const [oldLevel, oldName] = pendingValues(rank, 'oldValue')
 
   return {
     new: {
@@ -54,13 +53,17 @@ const pendingChange = pendingConcept => {
 }
 
 const pendingRank = pendingConcept => {
-  const pending = pendingChange(pendingConcept)
-  if (!pending) return null
+  const rankChange = pendingChange(pendingConcept)
+  if (!rankChange) return null
+
+  const rank = fieldPending(pendingConcept, 'Rank')[0]
 
   return {
-    historyId: pendingConcept[pendingConcept.length - 1].id,
-    level: pending.new.level,
-    name: pending.new.name,
+    creatorName: rank.creatorName,
+    creationTimestamp: rank.creationTimestamp,
+    historyId: rank.id,
+    level: rankChange.new.level,
+    name: rankChange.new.name,
   }
 }
 

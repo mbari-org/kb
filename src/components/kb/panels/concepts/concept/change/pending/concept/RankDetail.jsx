@@ -7,10 +7,8 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-
 import { pendingInfo } from '@/lib/kb/model/history'
-import { pendingRank } from '@/lib/kb/state/rank'
+import { pendingChange, pendingRank } from '@/lib/kb/state/rank'
 
 import { formatDelta, formatField, otherApprovalSx } from '@/components/common/format'
 
@@ -19,34 +17,28 @@ import { PENDING } from '@/lib/constants'
 const { APPROVAL, GROUP } = PENDING
 
 const RankDetail = ({ pendingConcept }) => {
-  const { initialState } = use(ConceptContext)
-
   const approval = usePendingGroupApproval(GROUP.RANK)
 
   const rank = pendingRank(pendingConcept)
   if (!rank) return null
 
-  const initialRank = initialState.rank
+  const rankChange = pendingChange(pendingConcept)
 
-  const pendingLevel =
-    rank.level !== initialRank.level
+  const pendingField = field => {
+    return rankChange.new[field] !== rankChange.old[field]
       ? {
-          field: 'RankLevel',
-          id: rank.id,
-          newValue: rank.level,
-          oldValue: initialRank.level,
+          field,
+          id: rank.historyId,
+          creatorName: rank.creatorName,
+          creationTimestamp: rank.creationTimestamp,
+          newValue: rankChange.new[field],
+          oldValue: rankChange.old[field],
         }
       : null
+  }
 
-  const pendingName =
-    rank.name !== initialRank.name
-      ? {
-          field: 'RankName',
-          id: rank.id,
-          newValue: rank.name,
-          oldValue: initialRank.name,
-        }
-      : null
+  const pendingLevel = pendingField('level')
+  const pendingName = pendingField('name')
 
   const pendingRanks = []
   if (pendingLevel) pendingRanks.push(pendingLevel)
@@ -69,7 +61,7 @@ const RankDetail = ({ pendingConcept }) => {
         <PendingButtons approval={approval} group={GROUP.RANK} />
         <Typography sx={rankSx}>Rank</Typography>
       </Box>
-      <Box sx={{ ml: 8 }}>
+      <Box sx={{ ml: 10 }}>
         {pendingRanks.map(pendingRank => {
           const fieldName = formatField(pendingRank.field)
           const fieldDelta = formatDelta(pendingRank.oldValue, pendingRank.newValue)
@@ -86,7 +78,7 @@ const RankDetail = ({ pendingConcept }) => {
               }}
             >
               <FieldValueDisplay disabled={disabled} field={fieldName} value={fieldDelta} />
-              <Box sx={{ ml: 8 }}>
+              <Box sx={{ ml: 2 }}>
                 {pendingInfo(pendingRank)?.map(([field, value]) => (
                   <FieldValueDisplay key={field} disabled={disabled} field={field} value={value} />
                 ))}
