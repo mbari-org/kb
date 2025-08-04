@@ -13,7 +13,7 @@ import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/s
 
 import { drop } from '@/lib/utils'
 
-const { MEDIA: _MEDIA, MEDIA_ITEM } = CONCEPT_STATE
+const { CHILD, MEDIA_ITEM } = CONCEPT_STATE
 
 const addedConcepts = (parent, updatesInfo) => {
   const { updatedValue } = updatesInfo
@@ -112,10 +112,10 @@ const refresh = async (concept, updatesInfo, apiFns) => {
   }
 
   if (hasUpdated('children')) {
-    updatedConcept.children = [
-      ...concept.children,
-      ...updatedValue('children').map(child => child.name),
-    ].sort()
+    const updatedChildren = updatedValue('children')
+      .filter(child => child.action === CHILD.ADD)
+      .map(child => child.name)
+    updatedConcept.children = [...concept.children, ...updatedChildren].sort()
   }
 
   if (hasUpdated('media')) {

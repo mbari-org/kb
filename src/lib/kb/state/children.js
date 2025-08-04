@@ -19,8 +19,8 @@ const addChild = (state, update) => {
 
 const childrenState = (concept, pending) => {
   const { children } = concept
-  const stagedChildren = children.map((child, index) =>
-    stagedChild({ ...child, action: CONCEPT_STATE.NO_ACTION, index }, pending)
+  const stagedChildren = children.map((childName, index) =>
+    stagedChild({ name: childName, action: CONCEPT_STATE.NO_ACTION, index }, pending)
   )
   return { children: stagedChildren }
 }
