@@ -89,14 +89,10 @@ const PendingActions = () => {
         }
 
         case CONFIRM: {
-          updatePending(pendingConfirm).then(() => {
-            const morePending = pendingItems.filter(
-              history => !pendingConfirm.pendingItems.some(item => item.id === history.id)
-            )
-            if (morePending.length === 0) {
+          updatePending(pendingConfirm).then(isMorePending => {
+            if (!isMorePending) {
               closeModal()
             }
-
             setPendingConfirm(null)
           })
           break

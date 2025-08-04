@@ -19,8 +19,6 @@ const { APPROVAL, GROUP } = PENDING
 const RankDetail = ({ pendingConcept }) => {
   const approval = usePendingGroupApproval(GROUP.RANK)
 
-  console.log('rank approval', approval)
-
   const rank = pendingRank(pendingConcept)
   if (!rank) return null
 

@@ -21,28 +21,31 @@ const useUpdatedPending = () => {
 
   return useCallback(
     async pendingConfirm => {
-      const { approval, pendingIds } = pendingConfirm
+      const { approval, pendingIds: propIds, pendingItems: propItems } = pendingConfirm
+
+      const pendingConcept = pending(PENDING.DATA.CONCEPT)
+
+      const pendingItems = propItems
+        ? propItems
+        : propIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
 
       setProcessing(`${capitalize(approval)} pending changes...`)
       const approvalUpdates = await Promise.all(
-        pendingIds.map(pendingId =>
-          apiFns.apiPayload(updatePendingHistoryItem, [approval, pendingId])
+        pendingItems.map(pendingItem =>
+          apiFns.apiPayload(updatePendingHistoryItem, [approval, pendingItem.id])
         )
       )
 
       if (approval === PENDING.APPROVAL.REJECT) {
-        const pendingConcept = pending(PENDING.DATA.CONCEPT)
-        const pendingItems = pendingIds.map(pendingId =>
-          pendingConcept.find(item => item.id === pendingId)
-        )
         await rejectPending(pendingItems, approvalUpdates)
-      } else {
-        resetConcept(concept)
       }
 
+      resetConcept(concept)
       setProcessing(false)
+
+      return pendingConfirm.pendingItems.length === pendingItems.length
     },
-    [apiFns, concept, pending, resetConcept, setProcessing, rejectPending]
+    [apiFns, concept, pending, rejectPending, resetConcept, setProcessing]
   )
 }
 

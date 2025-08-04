@@ -4,7 +4,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { PENDING } from '@/lib/constants'
 
-const { OTHER } = PENDING.APPROVAL
+const { APPROVAL, GROUP } = PENDING
 
 const usePendingItemApproval = item => {
   const { pending } = use(ConceptContext)
@@ -14,7 +14,11 @@ const usePendingItemApproval = item => {
     return null
   }
 
-  return pendingConfirm.pendingIds.includes(item.id) ? pendingConfirm.approval : OTHER
+  if (pendingConfirm.group === GROUP.ALL) {
+    return pendingConfirm.approval
+  }
+
+  return pendingConfirm.pendingIds.includes(item.id) ? pendingConfirm.approval : APPROVAL.OTHER
 }
 
 export default usePendingItemApproval
