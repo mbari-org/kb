@@ -254,8 +254,8 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const removeConcept = useCallback(
-    async conceptName => {
-      const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(taxonomy, conceptName)
+    concept => {
+      const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(taxonomy, concept)
       updateTaxonomy(updatedTaxonomy)
       return updatedTaxonomy
     },

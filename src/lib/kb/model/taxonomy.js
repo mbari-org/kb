@@ -417,6 +417,10 @@ const removeTaxonomyConcept = (taxonomy, concept) => {
     aliasMap = taxonomy.aliasMap
   }
 
+  const parentConcept = { ...taxonomy.conceptMap[concept.parent] }
+  parentConcept.children = parentConcept.children.filter(child => child !== concept.name)
+  mapConcept(parentConcept, conceptMap, aliasMap)
+
   const updatedTaxonomy = {
     ...taxonomy,
     conceptMap,
