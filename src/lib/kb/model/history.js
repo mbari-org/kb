@@ -1,35 +1,62 @@
-import { humanTimestamp, isEmpty, pick } from '@/lib/utils'
-import { ACTION } from '@/lib/constants'
+import { isPendingName } from '@/lib/kb/state/name'
 
-const fieldPending = (pending, field) =>
-  pending
-    ?.filter(pending => pending.field.toLowerCase() === field.toLowerCase())
-    .sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
+import { ACTION, PENDING } from '@/lib/constants'
+
+import { humanTimestamp, isEmpty, pick } from '@/lib/utils'
 
 const hasPending = (pending, field) =>
   field ? !isEmpty(fieldPending(pending, field)) : !isEmpty(pending)
 
-const pendingChild = (pending, childName) =>
-  pending.find(
-    pending =>
-      pending.field === 'Concept.child' &&
-      ((pending.action === ACTION.ADD && pending.newValue === childName) ||
-        (pending.action === ACTION.DELETE && pending.oldValue === childName))
+const fieldPending = (pendingConcept, field) => {
+  if (!pendingConcept) return []
+
+  return pendingConcept
+    ?.filter(pendingItem => pendingItem.field.toLowerCase() === field.toLowerCase())
+    .sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
+}
+
+const pendingChild = (pendingConcept, childName) => {
+  return pendingConcept?.find(
+    pendingItem =>
+      pendingItem.field === 'Concept.child' &&
+      ((pendingItem.action === ACTION.ADD && pendingItem.newValue === childName) ||
+        (pendingItem.action === ACTION.DELETE && pendingItem.oldValue === childName))
+  )
+}
+
+const hasPendingStructure = pending => {
+  const pendingConcept = pending(PENDING.DATA.CONCEPT)
+  const pendingParent = pending(PENDING.DATA.PARENT)
+
+  const pendingNames = fieldPending(pendingConcept, 'ConceptName')
+  const hasPendingName = pendingNames.some(isPendingName)
+  const hasPendingParent = !isEmpty(pendingParent)
+
+  const hasPendingChildren = pendingConcept.some(
+    pendingItem => pendingItem.field === 'Concept.child'
   )
 
-const pendingInfo = pending => {
+  return {
+    any: hasPendingName || hasPendingChildren || hasPendingParent,
+    children: hasPendingChildren,
+    name: hasPendingName,
+    parent: hasPendingParent,
+  }
+}
+
+const pendingInfo = pendingItem => {
   return [
-    ['creator', pending.creatorName],
-    ['created', humanTimestamp(pending.creationTimestamp)],
+    ['creator', pendingItem.creatorName],
+    ['created', humanTimestamp(pendingItem.creationTimestamp)],
   ]
 }
 
-const pendingValues = pending =>
-  pick(pending, [
+const pendingValues = pendingItem =>
+  pick(pendingItem, [
     ['oldValue', 'before'],
     ['newValue', 'after'],
     ['creatorName', 'user'],
     ['creationTimestamp', 'created'],
   ])
 
-export { fieldPending, hasPending, pendingChild, pendingInfo, pendingValues }
+export { fieldPending, hasPending, hasPendingStructure, pendingChild, pendingInfo, pendingValues }

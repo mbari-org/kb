@@ -11,15 +11,15 @@ import useStructureChoices from '@/components/kb/panels/concepts/concept/change/
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import useHasPendingStructure from '@/contexts/panels/concepts/pending/useHasPendingStructure'
-
 import { isReadOnly } from '@/lib/auth/role'
+
+import { hasPendingStructure } from '@/lib/kb/model/history'
 
 const ConceptName = () => {
   const theme = useTheme()
 
   const { user } = use(UserContext)
-  const { concept, editing } = use(ConceptContext)
+  const { concept, editing, pending } = use(ConceptContext)
 
   const { hasStagedChildren, hasStagedName, hasStagedParent } = useStructureChoices()
   const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
@@ -29,12 +29,10 @@ const ConceptName = () => {
   const showStructureButton =
     editing && !showStructureChoicesModal && !hasStagedName && !isReadOnly(user)
 
-  const hasPendingStructure = useHasPendingStructure()
+  const hasPending = hasPendingStructure(pending)
 
   const conceptColor =
-    hasStagedStructure || hasPendingStructure
-      ? theme.concept.color.edit
-      : theme.palette.primary.main
+    hasStagedStructure || hasPending.any ? theme.concept.color.edit : theme.palette.primary.main
 
   return (
     <Stack direction='row' alignItems='center' sx={{ position: 'relative' }}>

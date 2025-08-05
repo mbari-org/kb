@@ -9,7 +9,11 @@ const { CONCEPT, CONFIRM, PARENT } = PENDING.DATA
 const useConceptPending = concept => {
   const { pendingHistory } = use(PanelDataContext)
 
-  const [pendingData, setPendingData] = useState(null)
+  const [pendingData, setPendingData] = useState({
+    [CONCEPT]: [],
+    [CONFIRM]: null,
+    [PARENT]: [],
+  })
 
   const conceptPendingHistory = (conceptName, pendingHistory) => {
     if (!conceptName || !pendingHistory) return []
@@ -40,19 +44,14 @@ const useConceptPending = concept => {
     }
   }, [concept, pendingHistory])
 
-  const pending = useCallback(field => {
-    return pendingData?.[field]
-  }, [pendingData])
+  const pending = useCallback(field => pendingData[field], [pendingData])
 
-  const setPendingConfirm = useCallback(
-    confirmData => {
-      setPendingData(prev => ({
-        ...prev,
-        [CONFIRM]: confirmData,
-      }))
-    },
-    []
-  )
+  const setPendingConfirm = useCallback(confirmData => {
+    setPendingData(prev => ({
+      ...prev,
+      [CONFIRM]: confirmData,
+    }))
+  }, [])
 
   return {
     pending,

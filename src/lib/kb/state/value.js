@@ -1,7 +1,7 @@
 const valueState = (concept, field) => {
   const { [field]: value } = concept
   return {
-    [field]: value || '',
+    [field]: value,
   }
 }
 

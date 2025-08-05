@@ -43,7 +43,7 @@ const useUpdatedPending = () => {
       resetConcept(concept)
       setProcessing(false)
 
-      return pendingConfirm.pendingItems.length === pendingItems.length
+      return pendingConcept.length === pendingItems.length
     },
     [apiFns, concept, pending, rejectPending, resetConcept, setProcessing]
   )

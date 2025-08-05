@@ -66,9 +66,9 @@ const ConceptEditingActions = () => {
   }, [modifyConcept, displayStaged])
 
   const showPendingButton = useMemo(() => {
-    const hasPending = pendingConcept.length > 0 || pendingChild(pendingParent, concept.name)
+    const hasPending = pendingConcept?.length > 0 || pendingChild(pendingParent, concept.name)
     return !editing && hasPending
-  }, [pendingConcept.length, pendingParent, concept.name, editing])
+  }, [pendingConcept, pendingParent, concept.name, editing])
 
   return (
     <Box

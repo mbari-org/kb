@@ -1,44 +1,50 @@
 import { use, useMemo } from 'react'
 
 import { hasStateChange } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
-import { fieldPending, hasPending } from '@/lib/kb/model/history'
-
-import { isPendingName } from '@/lib/kb/state/name'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { PENDING } from '@/lib/constants'
+import { hasPendingStructure } from '@/lib/kb/model/history'
+
+import { ACTION } from '@/lib/constants'
+
+const hasStagedStructure = (concept, stagedState) => {
+  const hasStagedChildren = stagedState.children.some(child => child.action !== ACTION.NONE)
+  const hasStagedName = stagedState.name.action !== ACTION.NONE
+  const hasStagedParent =
+    stagedState.parent !== concept.parent && stagedState.parent.action !== ACTION.NONE
+
+  return {
+    hasStagedChildren,
+    hasStagedName,
+    hasStagedParent,
+  }
+}
 
 const useStructureChoices = () => {
   const { concept, initialState, pending, stagedState } = use(ConceptContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
-  const pendingConcept = pending(PENDING.DATA.CONCEPT)
+  const pendingStructure = hasPendingStructure(pending)
+
+  const { hasStagedChildren, hasStagedName, hasStagedParent } = hasStagedStructure(
+    concept,
+    stagedState
+  )
 
   const isRoot = isTaxonomyRoot(concept)
-
-  const pendingNames = fieldPending(pendingConcept, 'ConceptName')
-  const hasPendingName = pendingNames.some(isPendingName)
-  const hasPendingParent = hasPending(pendingConcept, 'ConceptParent')
-
-  const hasStagedChildren = stagedState.children.length > 0
-  const hasStagedName = stagedState.name.value !== concept.name
-  const hasStagedParent = stagedState.parent !== concept.parent
-  const hasStagedChange = hasStagedChildren || hasStagedName || hasStagedParent
-
-  const hasChildren = concept.children.length > 0
 
   const disableDelete = useMemo(
     () =>
       isRoot ||
-      hasChildren ||
+      hasStagedChildren ||
       hasStateChange(initialState, stagedState) ||
-      hasPending(pendingConcept),
-    [pendingConcept, hasChildren, initialState, isRoot, stagedState]
+      pendingStructure.any,
+    [hasStagedChildren, initialState, isRoot, pendingStructure.any, stagedState]
   )
-  const disableChangeName = isRoot || hasPendingName || hasStagedChange
-  const disableChangeParent = isRoot || hasPendingParent || hasStagedChange
+  const disableChangeName = isRoot || pendingStructure.name || hasStagedName
+  const disableChangeParent = isRoot || pendingStructure.parent || hasStagedParent
 
   return {
     hasStagedChildren,

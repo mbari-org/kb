@@ -61,10 +61,15 @@ const ConceptProvider = ({ children }) => {
 
   const handleSetConcept = useCallback(
     selectedConcept => {
-      setConcept(selectedConcept)
-      setEditing(false)
+      resetConcept(selectedConcept).then(() => {
+        setConcept(selectedConcept)
+        setEditing(false)
+      })
 
-      resetConcept(selectedConcept)
+      // setConcept(selectedConcept)
+      // setEditing(false)
+
+      // resetConcept(selectedConcept)
     },
     [resetConcept]
   )
