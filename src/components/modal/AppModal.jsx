@@ -21,7 +21,7 @@ const AppModal = () => {
     return null
   }
 
-  const { Actions, Content, Title, minWidth = 500 } = modal
+  const { actions, content, title, minWidth = 500 } = modal
 
   return (
     <Modal
@@ -47,12 +47,12 @@ const AppModal = () => {
             >
               <IoCloseSharp />
             </IconButton>
-            <CardHeader title={<Title />} />
+            <CardHeader title={title()} />
             <CardContent sx={{ pb: 0, pt: 0 }}>
-              <Content />
+              {content()}
             </CardContent>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-              <Actions />
+              {actions()}
             </CardActions>
           </Card>
         </Box>

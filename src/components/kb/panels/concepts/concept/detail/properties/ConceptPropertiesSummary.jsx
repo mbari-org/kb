@@ -12,7 +12,7 @@ const ConceptPropertiesSummary = ({
   fixedHeight,
   handleToggle,
   hasItems,
-  IconComponent,
+  iconComponent,
   itemsPerPage,
   onPageChange,
   onPageTextClick,
@@ -21,7 +21,7 @@ const ConceptPropertiesSummary = ({
   totalItems,
 }) => {
   return (
-    <ConceptSectionTitle title={title} IconComponent={IconComponent}>
+    <ConceptSectionTitle title={title} iconComponent={iconComponent}>
       <Box sx={{ ml: 2, flex: 1 }}>{children}</Box>
       <ConceptPropertiesCount
         currentPage={currentPage}

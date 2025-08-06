@@ -23,8 +23,8 @@ const ConceptRealizations = () => {
 
   return (
     <ConceptPropertyList
-      IconComponent={editing ? IconComponent : null}
-      RenderComponent={RealizationComponent}
+      iconComponent={editing ? IconComponent : null}
+      renderComponent={RealizationComponent}
       items={realizations}
       title='Realizations'
     />

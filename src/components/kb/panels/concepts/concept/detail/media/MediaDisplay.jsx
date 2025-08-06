@@ -18,7 +18,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const imageUrl = url || mediaItem?.url
 
   return (
-    <Dialog fullScreen open={previewOn} TransitionComponent={Zoom}>
+    <Dialog fullScreen open={previewOn} slotProps={{ backdrop: { TransitionComponent: Zoom } }}>
       <IconButton
         onClick={() => setPreviewOn(false)}
         sx={{

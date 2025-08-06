@@ -54,7 +54,7 @@ const ConceptTemplates = () => {
       loadingText='Loading templates...'
       renderItem={renderItem}
       title='Templates'
-      IconComponent={() => (
+      iconComponent={() => (
         <ConceptPropertiesInspectButton onClick={linkToTemplates} tooltip={tooltip} />
       )}
     >

@@ -37,7 +37,7 @@ const ConceptReferences = () => {
       items={conceptReferences}
       renderItem={renderItem}
       title='References DOI'
-      IconComponent={() => (
+      iconComponent={() => (
         <ConceptPropertiesInspect onClick={linkToReferences} tooltip={tooltip} />
       )}
     />

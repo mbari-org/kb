@@ -6,7 +6,7 @@ import panelMods from '@/components/kb/panels/modules'
 // List of panel names that contain DataGrid components
 const DATA_GRID_PANELS = ['References', 'History', 'Templates', 'Users']
 
-const Panel = memo(({ PanelComponent, name, isActive, hasBeenMounted }) => {
+const Panel = memo(({ panelComponent, name, isActive, hasBeenMounted }) => {
   const [hasBeenVisible, setHasBeenVisible] = useState(false)
 
   // Check if this is a DataGrid panel
@@ -49,7 +49,7 @@ const Panel = memo(({ PanelComponent, name, isActive, hasBeenMounted }) => {
         pointerEvents: isActive ? 'auto' : 'none',
       }}
     >
-      {shouldRender && <PanelComponent />}
+      {shouldRender && panelComponent()}
     </Box>
   )
 })
@@ -68,7 +68,7 @@ const PanelWrapper = memo(({ activePanel }) => {
       {panelMods.map(({ module: PanelComponent, name }) => (
         <Panel
           key={name}
-          PanelComponent={PanelComponent}
+          panelComponent={PanelComponent}
           name={name}
           isActive={activePanel === name}
           hasBeenMounted={mountedPanels.has(name)}

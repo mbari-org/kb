@@ -15,9 +15,9 @@ const useReferencesModal = (modalConfig, modalDataRef, closeModalRef) => {
 
     const ReferencesModalComponent = () => (
       <PanelModal
-        Actions={ActionsComponent}
-        Content={ContentComponent}
-        Title={Title}
+        actions={ActionsComponent}
+        content={ContentComponent}
+        title={Title}
         closeModal={closeModalRef.current}
         minWidth={modalConfig.minWidth}
       />

@@ -15,9 +15,9 @@ const useTemplatesModal = (modalConfig, modalDataRef, closeModalRef) => {
 
     const TemplatesModalComponent = () => (
       <PanelModal
-        Actions={ActionsComponent}
-        Content={ContentComponent}
-        Title={Title}
+        actions={ActionsComponent}
+        content={ContentComponent}
+        title={Title}
         closeModal={closeModalRef.current}
         minWidth={modalConfig.minWidth}
       />

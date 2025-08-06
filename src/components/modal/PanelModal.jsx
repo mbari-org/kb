@@ -11,7 +11,7 @@ import {
   Modal,
 } from '@mui/material'
 
-const PanelModal = ({ Actions, Content, Title, closeModal, minWidth }) => {
+const PanelModal = ({ actions, content, title, closeModal, minWidth }) => {
   return (
     <Modal
       aria-labelledby='modal-alert'
@@ -36,12 +36,12 @@ const PanelModal = ({ Actions, Content, Title, closeModal, minWidth }) => {
             >
               <IoCloseSharp />
             </IconButton>
-            <CardHeader title={<Title />} />
+            <CardHeader title={title()} />
             <CardContent sx={{ pb: 0, pt: 0 }}>
-              <Content />
+              {content()}
             </CardContent>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-              <Actions />
+              {actions()}
             </CardActions>
           </Card>
         </Box>

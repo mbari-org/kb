@@ -11,10 +11,10 @@ import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 import { ACTION } from '@/lib/constants'
 
 const ConceptPropertyList = ({
-  IconComponent,
+  iconComponent,
   items = [],
   maxHeight = '300px',
-  RenderComponent,
+  renderComponent,
   title,
 }) => {
   const theme = useTheme()
@@ -34,7 +34,7 @@ const ConceptPropertyList = ({
   return (
     <Box>
       <Box sx={{ minHeight: '42px', height: '42px' }}>
-        <ConceptSectionTitle color={titleColor} title={title} IconComponent={IconComponent}>
+        <ConceptSectionTitle color={titleColor} title={title} iconComponent={iconComponent}>
           <Box sx={{ ml: 2, flex: 1 }} />
           {hasItems && (
             <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
@@ -76,9 +76,10 @@ const ConceptPropertyList = ({
             }}
           >
             <Stack direction='column' spacing={1}>
-              {items.map((item, index) => (
-                <RenderComponent key={index} item={item} />
-              ))}
+              {items.map((item, index) => {
+                const Component = renderComponent
+                return <Component key={index} item={item} />
+              })}
             </Stack>
           </Box>
         )}
