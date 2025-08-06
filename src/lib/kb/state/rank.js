@@ -1,10 +1,6 @@
-import { fieldPending } from '@/lib/kb/model/history'
-
-import { CONCEPT_STATE } from '@/lib/constants'
-
 import { capitalize } from '@/lib/utils'
 
-const rankField = field => `rank${capitalize(field)}`
+import { CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const rankState = (concept, pendingConcept) => {
   const { rankLevel, rankName } = concept
@@ -28,13 +24,15 @@ const editRank = (state, update) => {
   }
 }
 
+const isPendingRank = pendingConcept => pendingConcept.field === HISTORY_FIELD.RANK
+
 const pendingValues = (pendingRank, type) => {
   const values = pendingRank[type].split(' ')
   return values.length === 1 ? [null, values[0]] : values
 }
 
 const pendingChange = pendingConcept => {
-  const rank = fieldPending(pendingConcept, 'Rank')[0]
+  const rank = pendingConcept.find(isPendingRank)
   if (!rank) return null
 
   const [newLevel, newName] = pendingValues(rank, 'newValue')
@@ -56,7 +54,7 @@ const pendingRank = pendingConcept => {
   const rankChange = pendingChange(pendingConcept)
   if (!rankChange) return null
 
-  const rank = fieldPending(pendingConcept, 'Rank')[0]
+  const rank = pendingConcept.find(isPendingRank)
 
   return {
     creatorName: rank.creatorName,
@@ -66,6 +64,8 @@ const pendingRank = pendingConcept => {
     name: rankChange.new.name,
   }
 }
+
+const rankField = field => `rank${capitalize(field)}`
 
 const resetRank = (state, update) => {
   return {

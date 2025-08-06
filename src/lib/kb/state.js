@@ -20,15 +20,15 @@ const isStateModified = ({ initialState, stagedState }) => {
   return !isJsonEqual(drop(initialState, indexStateKeys), drop(stagedState, indexStateKeys))
 }
 
-const initialConceptState = (concept, pending) => {
+const initialConceptState = (concept, pendingConcept) => {
   return {
-    ...aliasesState(concept, pending),
-    ...childrenState(concept, pending),
+    ...aliasesState(concept, pendingConcept),
+    ...childrenState(concept, pendingConcept),
     ...indexState,
-    ...mediaState(concept, pending),
-    ...nameState(concept, pending),
-    ...rankState(concept, pending),
-    ...realizationsState(concept, pending),
+    ...mediaState(concept, pendingConcept),
+    ...nameState(concept, pendingConcept),
+    ...rankState(concept, pendingConcept),
+    ...realizationsState(concept, pendingConcept),
     ...valueState(concept, 'author'),
     ...valueState(concept, 'parent'),
   }

@@ -1,6 +1,7 @@
+import { isPendingChild } from '@/lib/kb/state/children'
 import { isPendingName } from '@/lib/kb/state/name'
 
-import { ACTION, PENDING } from '@/lib/constants'
+import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
 
 import { humanTimestamp, isEmpty, pick } from '@/lib/utils'
 
@@ -18,7 +19,7 @@ const fieldPending = (pendingConcept, field) => {
 const pendingChild = (pendingConcept, childName) => {
   return pendingConcept?.find(
     pendingItem =>
-      pendingItem.field === 'Concept.child' &&
+      pendingItem.field === HISTORY_FIELD.CHILD &&
       ((pendingItem.action === ACTION.ADD && pendingItem.newValue === childName) ||
         (pendingItem.action === ACTION.DELETE && pendingItem.oldValue === childName))
   )
@@ -28,13 +29,10 @@ const hasPendingStructure = pending => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
 
-  const pendingNames = fieldPending(pendingConcept, 'ConceptName')
-  const hasPendingName = pendingNames.some(isPendingName)
+  const hasPendingName = pendingConcept.some(isPendingName)
   const hasPendingParent = !isEmpty(pendingParent)
 
-  const hasPendingChildren = pendingConcept.some(
-    pendingItem => pendingItem.field === 'Concept.child'
-  )
+  const hasPendingChildren = pendingConcept.some(isPendingChild)
 
   return {
     any: hasPendingName || hasPendingChildren || hasPendingParent,

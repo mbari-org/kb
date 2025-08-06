@@ -10,7 +10,7 @@ import { stagedBorder } from '@/lib/kb/state/staged'
 
 import { fieldPending } from '@/lib/kb/model/history'
 
-import { PENDING } from '@/lib/constants'
+import { HISTORY_FIELD, PENDING } from '@/lib/constants'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
@@ -23,7 +23,7 @@ const MediaPreview = ({ setPreviewOn }) => {
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
-  const mediaPendingArray = fieldPending(pendingConcept, 'Media')
+  const mediaPendingArray = fieldPending(pendingConcept, HISTORY_FIELD.MEDIA)
   const mediaPending = mediaPendingArray[mediaPendingArray.length - 1]
 
   const border = stagedBorder({

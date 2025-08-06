@@ -30,7 +30,7 @@ const useRejectPending = () => {
   const isAddChild = rejectingItems =>
     rejectingItems.length === 1 &&
     rejectingItems[0].action === ACTION.ADD &&
-    rejectingItems[0].field === 'Concept.child'
+    rejectingItems[0].field === HISTORY_FIELD.CHILD
 
   return useCallback(
     async rejectingItems => {
@@ -45,7 +45,7 @@ const useRejectPending = () => {
       }
 
       rejectingItems
-        .filter(item => item.action === ACTION.ADD && item.field === 'Concept.child')
+        .filter(item => item.action === ACTION.ADD && item.field === HISTORY_FIELD.CHILD)
         .forEach(rejectedChild => {
           removeConcept(rejectedChild.newValue)
         })

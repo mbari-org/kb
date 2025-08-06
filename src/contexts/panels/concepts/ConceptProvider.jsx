@@ -48,11 +48,11 @@ const ConceptProvider = ({ children }) => {
   const resetConcept = useCallback(
     async resettingConcept => {
       const { pendingHistory } = await refreshPanelData('pendingHistory')
-      const conceptPendingHistory = pendingHistory.filter(
+      const pendingConcept = pendingHistory.filter(
         history => history.concept === resettingConcept.name
       )
 
-      const conceptState = initialConceptState(resettingConcept, conceptPendingHistory)
+      const conceptState = initialConceptState(resettingConcept, pendingConcept)
       setInitialState(conceptState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
     },

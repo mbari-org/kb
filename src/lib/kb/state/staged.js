@@ -34,6 +34,7 @@ const editItem = edit => {
 }
 
 const stagedBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
+  console.log('stagedItem', stagedItem)
   const itemAction =
     stagedItem?.action !== CONCEPT_STATE.NO_ACTION ? actionVerb(stagedItem?.action) : null
 

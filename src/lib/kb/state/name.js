@@ -38,11 +38,13 @@ const stagedName = (name, pendingConcept) => {
   const pendingName = pendingConcept.find(isPendingName)
   if (pendingName) {
     return {
-      ...name,
-      action: 'Edit Pending',
-      historyId: pendingName.id,
-      value: pendingName.value,
-      extent: pendingName.extent,
+      name: {
+        ...name,
+        action: 'Edit Pending',
+        historyId: pendingName.id,
+        value: pendingName.value,
+        extent: pendingName.extent,
+      },
     }
   }
   return { name }

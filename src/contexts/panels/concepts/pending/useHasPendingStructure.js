@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { PENDING } from '@/lib/constants'
-import { fieldPending, hasPending, pendingChild } from '@/lib/kb/model/history'
-
+import { hasPending, pendingChild } from '@/lib/kb/model/history'
 import { isPendingName } from '@/lib/kb/state/name'
+
+import { PENDING } from '@/lib/constants'
 
 const useHasPendingStructure = () => {
   const { concept, pending } = use(ConceptContext)
@@ -22,8 +22,7 @@ const useHasPendingStructure = () => {
 
   if (!pendingConcept || !pendingParent) return pendingStructure
 
-  const pendingNames = fieldPending(pendingConcept, 'ConceptName')
-  const hasPendingName = pendingNames.some(isPendingName)
+  const hasPendingName = pendingConcept.some(isPendingName)
 
   return {
     any: hasPending(pendingConcept),

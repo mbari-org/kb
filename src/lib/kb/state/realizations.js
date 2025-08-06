@@ -1,29 +1,39 @@
 import { stagedEdits } from '@/lib/kb/state/staged'
 
-import { fieldPending } from '@/lib/kb/model/history'
-
 import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
-const actionPredicate = (verb, realization) => {
-  const addPredicate = history => {
-    if (history.action !== ACTION.ADD) return false
-    const [newLinkName, newLinkToConcept, newLinkValue] = history.newValue.split(' | ')
-    return (
-      newLinkName === realization.linkName &&
-      newLinkToConcept === realization.toConcept &&
-      newLinkValue === realization.linkValue
-    )
-  }
+const isActionRealization = (realization, pendingRealization) => {
+  switch (pendingRealization.action) {
+    case ACTION.ADD: {
+      const [newLinkName, newLinkToConcept, newLinkValue] = pendingRealization.newValue.split(' | ')
+      return (
+        newLinkName === realization.linkName &&
+        newLinkToConcept === realization.toConcept &&
+        newLinkValue === realization.linkValue
+      )
+    }
 
-  const otherPredicate = (history, verb) => {
-    if (history.action !== verb) return false
-    const historyValue = verb === ACTION.DELETE ? history.oldValue : history.newValue
-    return historyValue === realization.linkName
-  }
+    case ACTION.DELETE: {
+      const [oldLinkName, oldLinkToConcept, oldLinkValue] = pendingRealization.oldValue.split(' | ')
+      return (
+        oldLinkName === realization.linkName &&
+        oldLinkToConcept === realization.toConcept &&
+        oldLinkValue === realization.linkValue
+      )
+    }
 
-  return verb === ACTION.ADD ? addPredicate : otherPredicate
+    case ACTION.EDIT: {
+      const [oldLinkName, oldLinkToConcept, _oldLinkValue] =
+        pendingRealization.oldValue.split(' | ')
+
+      return oldLinkName === realization.linkName && oldLinkToConcept === realization.toConcept
+    }
+
+    default:
+      return false
+  }
 }
 
 const addRealization = (state, update) => {
@@ -84,12 +94,28 @@ const realizationEdits = realizations => {
   })
 }
 
-const realizationsState = (concept, pending) => {
-  const { realizations } = concept
-  const stagedRealizationsList = realizations.map((realization, index) =>
-    stagedRealization({ ...realization, action: CONCEPT_STATE.NO_ACTION, index }, pending)
+const realizationState = (realization, pendingRealizations) => {
+  // for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
+  const pendingRealization = pendingRealizations.find(pendingItem =>
+    isActionRealization(realization, pendingItem)
   )
-  return { realizations: stagedRealizationsList }
+  if (pendingRealization) {
+    return {
+      ...realization,
+      action: pendingRealization.action + ' Pending',
+      historyId: pendingRealization.id,
+    }
+  }
+  return { ...realization, action: CONCEPT_STATE.NO_ACTION }
+}
+
+const realizationsState = (concept, pendingConcept) => {
+  const { realizations } = concept
+  const pendingRealizations = pendingConcept.filter(isPendingRealization)
+  const stagedRealizations = realizations.map((realization, index) =>
+    realizationState({ ...realization, index }, pendingRealizations)
+  )
+  return { realizations: stagedRealizations }
 }
 
 const resetRealizations = (state, update) => {
@@ -109,24 +135,6 @@ const resetRealizations = (state, update) => {
     ...state,
     realizations: update.realizations,
   }
-}
-
-const stagedRealization = (realization, pendingConcept) => {
-  const pendingHistories = fieldPending(pendingConcept, 'LinkRealization')
-
-  for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
-    const predicate = actionPredicate(verb, realization)
-    const pendingItem = pendingHistories.find(predicate)
-    if (pendingItem) {
-      return {
-        ...realization,
-        action: verb + ' Pending',
-        historyId: pendingItem.id,
-      }
-    }
-  }
-
-  return realization
 }
 
 const stagedRealizations = stagedEdit => {
@@ -159,6 +167,6 @@ export {
   realizationEdits,
   realizationsState,
   resetRealizations,
-  stagedRealization,
+  realizationState as stagedRealization,
   stagedRealizations,
 }
