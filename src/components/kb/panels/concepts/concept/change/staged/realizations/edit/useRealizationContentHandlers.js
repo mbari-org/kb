@@ -22,9 +22,8 @@ const useRealizationContentHandlers = ({
     }))
   })
 
-  const handleRealizationChange = updatedRealizationItem => {
+  const handleRealizationChange = (updatedRealizationItem, field = 'linkName') => {
     setRealizationItem(updatedRealizationItem)
-    const field = 'linkName'
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION.ADD

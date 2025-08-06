@@ -11,7 +11,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { hasTrue } from '@/lib/utils'
 
-const RealizationActions = () => {
+const EditRealizationActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
@@ -26,12 +26,6 @@ const RealizationActions = () => {
     modifyConcept,
   })
 
-  // Use normal discard flow regardless of duplicate state
-  const handleDiscardAction = handleDiscard
-
-  // Use normal confirmReset flow regardless of duplicate state
-  const shouldShowConfirmReset = confirmReset
-
   const handleStage = () => {
     // go through form to trigger required and validation checks
     document.querySelector(`#${EDIT_REALIZATION_FORM_ID}`)?.requestSubmit()
@@ -41,14 +35,14 @@ const RealizationActions = () => {
     isDuplicate || !isValidToConcept || !hasTrue(modified) || !validRealization(realizationItem)
 
   return createStagedActions({
-    onDiscard: handleDiscardAction,
+    onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
-    confirmReset: shouldShowConfirmReset,
+    confirmReset,
+    name: 'EditRealizationActions',
     onConfirm: handleConfirm,
     onContinue: handleContinue,
-    name: 'EditRealizationActions',
   })
 }
 
-export default RealizationActions
+export default EditRealizationActions

@@ -2,8 +2,8 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 
 import DeleteRealizationActions from '@/components/kb/panels/concepts/concept/change/staged/realizations/delete/DeleteRealizationActions'
 import DeleteRealizationContent from '@/components/kb/panels/concepts/concept/change/staged/realizations/delete/DeleteRealizationContent'
-import RealizationActions from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/RealizationActions'
-import RealizationContent from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/RealizationContent'
+import EditRealizationActions from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/EditRealizationActions'
+import EditRealizationContent from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/EditRealizationContent'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
@@ -11,13 +11,13 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const createRealizationModal = action => {
   const createComponents = () => {
-    const Title = () => <ConceptTitle action={action} />
+    const Title = () => <ConceptTitle />
 
     switch (action) {
       case CONCEPT_STATE.REALIZATION.ADD: {
         return {
-          Actions: RealizationActions,
-          Content: RealizationContent,
+          Actions: EditRealizationActions,
+          Content: EditRealizationContent,
           Title,
         }
       }
@@ -30,8 +30,8 @@ const createRealizationModal = action => {
       }
       case CONCEPT_STATE.REALIZATION.EDIT: {
         return {
-          Actions: RealizationActions,
-          Content: RealizationContent,
+          Actions: EditRealizationActions,
+          Content: EditRealizationContent,
           Title,
         }
       }

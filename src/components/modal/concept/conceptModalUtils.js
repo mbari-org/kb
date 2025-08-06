@@ -97,7 +97,7 @@ export const createConfirmationHandlers = ({ closeModal, _concept, modifyConcept
  * @returns {Object} Basic action handlers
  */
 export const createStageDiscardHandlers = ({ closeModal, modifyConcept, stageAction }) => {
-  const handleDiscard = closeModal()
+  const handleDiscard = () => closeModal()
 
   const handleStage = () => {
     if (stageAction) {

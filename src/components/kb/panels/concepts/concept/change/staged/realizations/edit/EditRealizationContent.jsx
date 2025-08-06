@@ -16,11 +16,13 @@ import useStageRealization from './useStageRealization'
 import useRealizationContentHandlers from './useRealizationContentHandlers'
 import useFilterLinkName from './useFilterLinkName'
 
+import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
+
 import { CONCEPT_STATE, CONCEPT_PROPERTY_LIST } from '@/lib/constants'
 
 const { ITEMS_PER_PAGE } = CONCEPT_PROPERTY_LIST
 
-const RealizationContent = () => {
+const EditRealizationContent = () => {
   const { stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
   const { isLoading } = use(PanelDataContext)
@@ -34,7 +36,7 @@ const RealizationContent = () => {
   const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_REALIZATION)
 
   const isEdit = modalData?.action === CONCEPT_STATE.REALIZATION.EDIT
-  const actionText = modalData?.action?.split(' ').pop()
+  const actionText = actionVerb(modalData.action)
 
   // populated form when editing
   useEffect(() => {
@@ -155,4 +157,4 @@ const RealizationContent = () => {
   )
 }
 
-export default RealizationContent
+export default EditRealizationContent

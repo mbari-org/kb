@@ -54,7 +54,7 @@ const EditAliasContent = () => {
 
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>
-      <ModalActionText text={actionText + ' Alias'} />
+      <ModalActionText text={`${actionText} Alias`} />
       <FormControl {...inputStyle}>
         <TextInput
           error={nameError}
