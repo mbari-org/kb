@@ -8,12 +8,14 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { otherApprovalSx } from '@/components/common/format'
 
+import { isPendingMedia } from '@/lib/kb/state/media'
+
 import { PENDING } from '@/lib/constants'
 
 const { MEDIA } = PENDING.GROUP
 
-const MediaDetail = ({ pendingField }) => {
-  const pendingMedia = pendingField('Media')
+const MediaDetail = ({ pendingConcept }) => {
+  const pendingMedia = pendingConcept.filter(isPendingMedia)
 
   const approval = usePendingGroupApproval(MEDIA)
   const mediaSx = otherApprovalSx(approval)

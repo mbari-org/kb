@@ -33,10 +33,13 @@ export const useLoadPendingHistory = apiFns => {
       return acc
     }, Promise.resolve([]))
 
-    return allPendingHistory.map(history => ({
-      ...history,
-      action: capitalize(history.action),
-    }))
+    return allPendingHistory.map(history => {
+      const action = history.action !== 'REPLACE' ? history.action : 'Edit'
+      return {
+        ...history,
+        action: capitalize(action),
+      }
+    })
   }, [apiFns])
 
   return loadPendingHistory

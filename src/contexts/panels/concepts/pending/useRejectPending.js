@@ -4,76 +4,75 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { ACTION, SELECTED } from '@/lib/constants'
+import { ACTION, HISTORY_FIELD, SELECTED } from '@/lib/constants'
+
+const conceptFieldForItem = (item, concept) => {
+  // HISTORY_FIELD NAME and ALIAS are the same. Check for name before checking for alias.
+  if (
+    item.field === HISTORY_FIELD.NAME &&
+    item.action === ACTION.EDIT &&
+    item.newValue !== concept.name
+  )
+    return 'name'
+
+  if (item.field === HISTORY_FIELD.ALIAS) return 'aliases'
+  if (item.field === HISTORY_FIELD.CHILD) return 'children'
+  if (item.field === HISTORY_FIELD.MEDIA) return 'media'
+
+  if (item.field === HISTORY_FIELD.PARENT) return 'parent'
+}
 
 const useRejectPending = () => {
-  const { concept, resetConcept } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
-  const {
-    closestConcept,
-    refreshConcept: refreshTaxonomyConcept,
-    removeConcept,
-  } = use(TaxonomyContext)
+  const { closestConcept, refreshConcept, removeConcept } = use(TaxonomyContext)
 
-  const fieldChanged = useCallback(approvalUpdate => {
-    switch (approvalUpdate.field) {
-      case 'ConceptName':
-        if (approvalUpdate.action === ACTION.ADD) return 'aliases'
-        return 'name'
-
-      default:
-        return null
-    }
-  }, [])
-
-  const isAddChild = rejectedItems =>
-    rejectedItems.length === 1 &&
-    rejectedItems[0].action === ACTION.ADD &&
-    rejectedItems[0].field === 'Concept.child'
+  const isAddChild = rejectingItems =>
+    rejectingItems.length === 1 &&
+    rejectingItems[0].action === ACTION.ADD &&
+    rejectingItems[0].field === 'Concept.child'
 
   return useCallback(
-    async (rejectedItems, approvalUpdates) => {
-      if (isAddChild(rejectedItems)) {
-        const gotoConcept = closestConcept(concept, rejectedItems[0].value)
-        removeConcept(concept)
+    async rejectingItems => {
+      if (isAddChild(rejectingItems)) {
+        const gotoConcept = closestConcept(concept, rejectingItems[0].value)
+        removeConcept(concept.name)
         updateSelected({
           [SELECTED.CONCEPT]: gotoConcept.name,
         })
-
+        // a rejected child will always be the only item, so
         return
       }
 
-      const rejectedRename = rejectedItems.find(
-        item => item.action === 'REPLACE' && item.field === 'ConceptName'
-      )
-      if (rejectedRename) {
-        updateSelected({
-          [SELECTED.CONCEPT]: rejectedRename.value,
+      rejectingItems
+        .filter(item => item.action === ACTION.ADD && item.field === 'Concept.child')
+        .forEach(rejectedChild => {
+          removeConcept(rejectedChild.newValue)
         })
-        return
-      }
 
-      const updatedFields = approvalUpdates.reduce((acc, approvalUpdate) => {
-        const field = fieldChanged(approvalUpdate)
-        if (field) acc.push(field)
-        return acc
-      }, [])
+      const updatedFields = rejectingItems.map(item => conceptFieldForItem(item, concept))
+      console.log('updatedFields:', updatedFields)
 
-      const { concept: updatedConcept } = await refreshTaxonomyConcept(concept, {
+      const { concept: updatedConcept } = await refreshConcept(concept, {
         forceLoad: true,
         hasUpdated: field => updatedFields.includes(field),
       })
-      resetConcept(updatedConcept)
+
+      const rejectedRename = rejectingItems.find(
+        item =>
+          item.field === HISTORY_FIELD.NAME &&
+          item.action === ACTION.EDIT &&
+          item.newValue !== concept.name
+      )
+      if (rejectedRename) {
+        updateSelected({
+          [SELECTED.CONCEPT]: rejectedRename.oldValue,
+        })
+      }
+
+      return updatedConcept
     },
-    [
-      concept,
-      closestConcept,
-      fieldChanged,
-      removeConcept,
-      refreshTaxonomyConcept,
-      resetConcept,
-      updateSelected,
-    ]
+    [concept, closestConcept, refreshConcept, removeConcept, updateSelected]
   )
 }
 

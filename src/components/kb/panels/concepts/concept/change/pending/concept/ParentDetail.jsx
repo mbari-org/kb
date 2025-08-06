@@ -10,14 +10,16 @@ import { pendingInfo } from '@/lib/kb/model/history'
 
 import { formatDelta, otherApprovalSx } from '@/components/common/format'
 
+import { isPendingValue } from '@/lib/kb/state/value'
+
 import { PENDING } from '@/lib/constants'
 
 const { APPROVAL, GROUP } = PENDING
 
-const ParentDetail = ({ pendingField }) => {
+const ParentDetail = ({ pendingConcept }) => {
   const approval = usePendingGroupApproval(GROUP.PARENT)
 
-  const pendingParentArray = pendingField('Concept.parent')
+  const pendingParentArray = pendingConcept.filter(isPendingValue)
   const pendingParent = pendingParentArray?.[pendingParentArray.length - 1]
   if (!pendingParent) {
     return null

@@ -8,12 +8,14 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { otherApprovalSx } from '@/components/common/format'
 
+import { isPendingRealization } from '@/lib/kb/state/realizations'
+
 import { PENDING } from '@/lib/constants'
 
 const { REALIZATIONS } = PENDING.GROUP
 
-const RealizationsDetail = ({ pendingField }) => {
-  const pendingRealizations = pendingField('LinkRealization')
+const RealizationsDetail = ({ pendingConcept }) => {
+  const pendingRealizations = pendingConcept.filter(isPendingRealization)
 
   const approval = usePendingGroupApproval(REALIZATIONS)
   const realizationsSx = otherApprovalSx(approval)

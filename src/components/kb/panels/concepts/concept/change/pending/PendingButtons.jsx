@@ -42,8 +42,8 @@ const PendingButtons = ({ approval, group, item }) => {
 
   const handleClick = useCallback(
     clicked => {
-      const conceptPending = pending(PENDING.DATA.CONCEPT)
-      const pendingIds = item ? [item.id] : getPendingIds(conceptPending, group, concept.name)
+      const pendingConcept = pending(PENDING.DATA.CONCEPT)
+      const pendingIds = item ? [item.id] : getPendingIds(pendingConcept, group, concept.name)
       setPendingConfirm({ approval: clicked, group, pendingIds })
     },
     [concept.name, group, pending, item, setPendingConfirm]

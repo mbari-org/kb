@@ -1,31 +1,31 @@
 import { fieldPending } from '@/lib/kb/model/history'
 
-import { PENDING } from '@/lib/constants'
+import { HISTORY_FIELD, PENDING } from '@/lib/constants'
 
 const { GROUP } = PENDING
 
-const apiFieldNameForGroup = group => {
+const historyFieldForGroup = group => {
   switch (group) {
     case GROUP.ALIASES:
-      return 'ConceptName'
+      return HISTORY_FIELD.ALIAS
 
     case GROUP.CHILDREN:
-      return 'Concept.child'
+      return HISTORY_FIELD.CHILD
 
     case GROUP.MEDIA:
-      return 'Media'
+      return HISTORY_FIELD.MEDIA
 
     case GROUP.NAME:
-      return 'ConceptName'
+      return HISTORY_FIELD.NAME
 
     case GROUP.PARENT:
-      return 'Concept.parent'
+      return HISTORY_FIELD.PARENT
 
     case GROUP.RANK:
-      return 'Rank'
+      return HISTORY_FIELD.RANK
 
     case GROUP.REALIZATIONS:
-      return 'LinkRealization'
+      return HISTORY_FIELD.REALIZATION
 
     default:
       return null
@@ -33,7 +33,7 @@ const apiFieldNameForGroup = group => {
 }
 
 export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
-  const fieldName = apiFieldNameForGroup(targetGroup)
+  const fieldName = historyFieldForGroup(targetGroup)
 
   let pendingIds
   if (targetGroup === GROUP.ALL) {

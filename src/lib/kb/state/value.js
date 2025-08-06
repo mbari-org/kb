@@ -10,8 +10,10 @@ const editValue = (state, update) => {
   return { ...state, [field]: value }
 }
 
+const isPendingValue = (pendingItem, field) => pendingItem.field === field
+
 const resetValue = (state, update) => {
   return { ...state, ...update }
 }
 
-export { editValue, resetValue, valueState }
+export { editValue, isPendingValue, resetValue, valueState }

@@ -1,7 +1,8 @@
-import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { fieldPending } from '@/lib/kb/model/history'
+
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
@@ -71,6 +72,8 @@ const editRealization = (state, update) => {
   }
   return updateState(state, { type: CONCEPT_STATE.REALIZATION.EDIT, update })
 }
+
+const isPendingRealization = pendingItem => pendingItem.field === HISTORY_FIELD.REALIZATION
 
 const realizationEdits = realizations => {
   return stagedEdits({
@@ -152,6 +155,7 @@ export {
   addRealization,
   deleteRealization,
   editRealization,
+  isPendingRealization,
   realizationEdits,
   realizationsState,
   resetRealizations,

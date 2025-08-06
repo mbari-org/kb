@@ -101,6 +101,16 @@ export const CONCEPT_STATE = {
 
 export const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 
+export const HISTORY_FIELD = {
+  ALIAS: 'ConceptName',
+  CHILD: 'Concept.child',
+  MEDIA: 'Media',
+  NAME: 'ConceptName',
+  PARENT: 'Concept.parent',
+  RANK: 'Rank',
+  REALIZATION: 'LinkRealization',
+}
+
 export const LABELS = {
   BUTTON: {
     APPROVE: 'Approve',

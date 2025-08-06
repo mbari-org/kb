@@ -8,16 +8,20 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { otherApprovalSx } from '@/components/common/format'
 
+import { isPendingChild } from '@/lib/kb/state/children'
+
 import { PENDING } from '@/lib/constants'
 
 const { CHILDREN } = PENDING.GROUP
 
-const ChildrenDetail = ({ pendingField }) => {
-  const pendingChildren = pendingField('Concept.child').sort((a, b) => {
-    const aValue = a.newValue ?? a.oldValue
-    const bValue = b.newValue ?? b.oldValue
-    return aValue.localeCompare(bValue)
-  })
+const sortChildren = (a, b) => {
+  const aValue = a.newValue ?? a.oldValue
+  const bValue = b.newValue ?? b.oldValue
+  return aValue.localeCompare(bValue)
+}
+
+const ChildrenDetail = ({ pendingConcept }) => {
+  const pendingChildren = pendingConcept.filter(isPendingChild).sort(sortChildren)
 
   const approval = usePendingGroupApproval(CHILDREN)
 

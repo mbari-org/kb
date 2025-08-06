@@ -1,6 +1,4 @@
-import { fieldPending } from '@/lib/kb/model/history'
-
-import { CONCEPT_STATE } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const nameState = (concept, pendingConcept) => {
   const { name } = concept
@@ -24,10 +22,10 @@ const editName = (state, update) => {
   }
 }
 
-const isPendingName = pendingChange =>
-  pendingChange.field === 'ConceptName' &&
-  pendingChange.action === 'REPLACE' &&
-  pendingChange.concept === pendingChange.newValue
+const isPendingName = pendingItem =>
+  pendingItem.field === HISTORY_FIELD.NAME &&
+  pendingItem.action === ACTION.EDIT &&
+  pendingItem.concept === pendingItem.newValue
 
 const resetName = (state, update) => {
   return {
@@ -36,20 +34,18 @@ const resetName = (state, update) => {
   }
 }
 
-const stagedName = (stateName, pendingConcept) => {
-  const pendingNames = fieldPending(pendingConcept, 'ConceptName')
-  const pendingReplace = pendingNames.find(pending => pending.action === 'REPLACE')
-  if (!pendingReplace) return { name: stateName }
-
-  return {
-    name: {
-      ...stateName,
+const stagedName = (name, pendingConcept) => {
+  const pendingName = pendingConcept.find(isPendingName)
+  if (pendingName) {
+    return {
+      ...name,
       action: 'Edit Pending',
-      historyId: pendingReplace.id,
-      value: pendingReplace.value,
-      extent: pendingReplace.extent,
-    },
+      historyId: pendingName.id,
+      value: pendingName.value,
+      extent: pendingName.extent,
+    }
   }
+  return { name }
 }
 
 export { editName, isPendingName, nameState, resetName }

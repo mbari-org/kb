@@ -1,4 +1,4 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 import { Stack } from '@mui/material'
 
 import ModalActionText from '@/components/common/ModalActionText'
@@ -15,7 +15,7 @@ import RealizationsDetail from '@/components/kb/panels/concepts/concept/change/p
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { fieldPending, pendingChild as getPendingChild } from '@/lib/kb/model/history'
+import { pendingChild as getPendingChild } from '@/lib/kb/model/history'
 
 import { PENDING } from '@/lib/constants'
 
@@ -27,8 +27,6 @@ const PendingContent = () => {
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
-
-  const pendingField = useMemo(() => field => fieldPending(pendingConcept, field), [pendingConcept])
 
   const pendingChild = getPendingChild(pendingParent, concept.name)
   if (pendingChild) {
@@ -44,13 +42,13 @@ const PendingContent = () => {
     <Stack direction='column' spacing={1}>
       <ModalActionText text='Pending History' />
       {pendingChild && <ChildDetail pendingChild={pendingChild} />}
-      <AliasesDetail pendingField={pendingField} />
-      {!pendingChild && <ChildrenDetail pendingField={pendingField} />}
-      <MediaDetail pendingField={pendingField} />
-      <NameDetail pendingField={pendingField} />
-      <ParentDetail pendingField={pendingField} />
+      <AliasesDetail pendingConcept={pendingConcept} />
+      {!pendingChild && <ChildrenDetail pendingConcept={pendingConcept} />}
+      <MediaDetail pendingConcept={pendingConcept} />
+      <NameDetail pendingConcept={pendingConcept} />
+      <ParentDetail pendingConcept={pendingConcept} />
       <RankDetail pendingConcept={pendingConcept} />
-      <RealizationsDetail pendingField={pendingField} />
+      <RealizationsDetail pendingConcept={pendingConcept} />
     </Stack>
   )
 }

@@ -1,8 +1,7 @@
-import { ACTION, CONCEPT_STATE } from '@/lib/constants'
 import { CHILD_FIELDS } from '@/lib/kb/model/children'
-
-import { fieldPending } from '@/lib/kb/model/history'
 import { stagedEdits } from '@/lib/kb/state/staged'
+
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const addChild = (state, update) => {
   const childIndex = state.children.length
@@ -25,6 +24,8 @@ const childrenState = (concept, pending) => {
   return { children: stagedChildren }
 }
 
+const isPendingChild = pendingItem => pendingItem.field === HISTORY_FIELD.CHILD
+
 const resetChildren = (state, update) => {
   const { index: resetIndex } = update
 
@@ -45,9 +46,9 @@ const resetChildren = (state, update) => {
 }
 
 const stagedChild = (child, pendingConcept) => {
-  const pendingChildActions = fieldPending(pendingConcept, 'ConceptName')
+  const pendingChildren = pendingConcept.filter(isPendingChild)
 
-  const pendingAdd = pendingChildActions.find(
+  const pendingAdd = pendingChildren.find(
     history => history.action === ACTION.ADD && history.newValue === child.name
   )
   if (pendingAdd) {
@@ -72,4 +73,4 @@ const stagedChildren = stagedEdit => {
   })
 }
 
-export { addChild, childrenState, resetChildren, stagedChildren }
+export { addChild, childrenState, isPendingChild, resetChildren, stagedChildren }

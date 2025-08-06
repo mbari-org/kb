@@ -1,5 +1,4 @@
-import { ACTION, CONCEPT_STATE } from '@/lib/constants'
-import { fieldPending } from '@/lib/kb/model/history'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { drop } from '@/lib/utils'
@@ -20,10 +19,32 @@ const addAlias = (state, update) => {
   }
 }
 
-const aliasesState = (concept, pending) => {
+const aliasState = (alias, pendingAliases) => {
+  for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
+    const pendingItem = pendingAliases.find(pendingAlias => {
+      const pendingAliasValue =
+        verb === ACTION.DELETE ? pendingAlias.oldValue : pendingAlias.newValue
+      return pendingAlias.action === verb && pendingAliasValue === alias.name
+    })
+    if (pendingItem) {
+      return {
+        ...alias,
+        action: verb + ' Pending',
+        historyId: pendingItem.id,
+      }
+    }
+  }
+
+  return { ...alias, action: CONCEPT_STATE.NO_ACTION }
+}
+
+const aliasesState = (concept, pendingConcept) => {
   const { aliases } = concept
+
+  const pendingAliases = pendingConcept.filter(isPendingAlias)
+
   const stagedAliases = aliases.map((alias, index) =>
-    stagedAlias({ ...alias, action: CONCEPT_STATE.NO_ACTION, index }, pending)
+    aliasState({ ...alias, index }, pendingAliases)
   )
   return { aliases: stagedAliases }
 }
@@ -59,6 +80,10 @@ const editAlias = (state, update) => {
   return updateAlias(state, { type: CONCEPT_STATE.ALIAS.EDIT, update })
 }
 
+const isPendingAlias = pendingItem =>
+  pendingItem.field === HISTORY_FIELD.ALIAS &&
+  !(pendingItem.action === ACTION.EDIT && pendingItem.concept === pendingItem.newValue)
+
 const resetAliases = (state, update) => {
   const { index: resetIndex } = update
 
@@ -76,26 +101,6 @@ const resetAliases = (state, update) => {
     ...state,
     aliases: update.aliases,
   }
-}
-
-const stagedAlias = (alias, pendingConcept) => {
-  const pendingHistories = fieldPending(pendingConcept, 'ConceptName')
-
-  for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
-    const pendingItem = pendingHistories.find(history => {
-      const historyValue = verb === ACTION.DELETE ? history.oldValue : history.newValue
-      return history.action === verb && historyValue === alias.name
-    })
-    if (pendingItem) {
-      return {
-        ...alias,
-        action: verb + ' Pending',
-        historyId: pendingItem.id,
-      }
-    }
-  }
-
-  return alias
 }
 
 const stagedAliases = stagedEdit => {
@@ -116,4 +121,12 @@ const updateAlias = (state, { type, update }) => {
   return { ...state, aliases }
 }
 
-export { addAlias, aliasesState, deleteAlias, editAlias, resetAliases, stagedAlias, stagedAliases }
+export {
+  addAlias,
+  aliasesState,
+  deleteAlias,
+  editAlias,
+  isPendingAlias,
+  resetAliases,
+  stagedAliases,
+}

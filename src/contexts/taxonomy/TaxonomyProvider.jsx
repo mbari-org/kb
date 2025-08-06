@@ -254,12 +254,13 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const removeConcept = useCallback(
-    concept => {
+    conceptName => {
+      const concept = getConcept(conceptName)
       const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(taxonomy, concept)
       updateTaxonomy(updatedTaxonomy)
       return updatedTaxonomy
     },
-    [taxonomy, updateTaxonomy]
+    [getConcept, taxonomy, updateTaxonomy]
   )
 
   useEffect(() => {

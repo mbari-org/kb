@@ -1,9 +1,10 @@
 import { getPrimary, isPrimary } from '@/lib/kb/model/media'
 
-import { CONCEPT_STATE } from '@/lib/constants'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { stagedMediaItem } from '@/lib/kb/model/media'
+
+import { CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const addMedia = (state, update) => {
   const isPrimaryMedia = isPrimary(update.mediaItem)
@@ -49,6 +50,8 @@ const editMedia = (state, update) => {
   }
   return updateState(state, { type: CONCEPT_STATE.MEDIA_ITEM.EDIT, update })
 }
+
+const isPendingMedia = pendingItem => pendingItem.field === HISTORY_FIELD.MEDIA
 
 const mediaState = (concept, pending) => {
   const { media: conceptMedia } = concept
@@ -102,4 +105,4 @@ const updateState = (state, { type, update }) => {
   return { ...state, media: updatedMedia }
 }
 
-export { addMedia, deleteMedia, editMedia, mediaState, resetMedia, stagedMedia }
+export { addMedia, deleteMedia, editMedia, isPendingMedia, mediaState, resetMedia, stagedMedia }

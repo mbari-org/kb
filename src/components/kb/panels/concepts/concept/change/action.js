@@ -30,7 +30,7 @@ const pendingActionValue = pending => {
     case ACTION.DELETE:
       return pending.oldValue
 
-    case ACTION.REPLACE:
+    case ACTION.EDIT:
       return formatDelta(pending.oldValue, pending.newValue)
 
     default:
