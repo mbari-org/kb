@@ -4,12 +4,14 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import { isPendingName } from '@/lib/kb/state/name'
+
 import { ACTION, HISTORY_FIELD, SELECTED } from '@/lib/constants'
 
 const useRejectPending = () => {
   const { concept, resetConcept } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
-  const { closestConcept, refreshConcept, removeConcept } = use(TaxonomyContext)
+  const { closestConcept, refreshConcept, removeConcept, renameConcept } = use(TaxonomyContext)
 
   const isAddChild = rejectingItems =>
     rejectingItems.length === 1 &&
@@ -28,7 +30,11 @@ const useRejectPending = () => {
         return
       }
 
-      const { concept: freshConcept } = await refreshConcept(concept)
+      const rejectedRename = rejectingItems.find(isPendingName)
+
+      const { concept: freshConcept } = rejectedRename
+        ? await renameConcept(concept, rejectedRename.oldValue)
+        : await refreshConcept(concept)
 
       const rejectedChildren = rejectingItems.filter(
         item => item.action === ACTION.ADD && item.field === HISTORY_FIELD.CHILD
@@ -39,12 +45,6 @@ const useRejectPending = () => {
         })
       }
 
-      const rejectedRename = rejectingItems.find(
-        item =>
-          item.field === HISTORY_FIELD.NAME &&
-          item.action === ACTION.EDIT &&
-          item.newValue !== concept.name
-      )
       if (rejectedRename) {
         updateSelected({
           [SELECTED.CONCEPT]: rejectedRename.oldValue,
@@ -55,7 +55,15 @@ const useRejectPending = () => {
 
       return freshConcept
     },
-    [concept, closestConcept, refreshConcept, removeConcept, resetConcept, updateSelected]
+    [
+      concept,
+      closestConcept,
+      refreshConcept,
+      removeConcept,
+      renameConcept,
+      resetConcept,
+      updateSelected,
+    ]
   )
 }
 
