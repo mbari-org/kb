@@ -9,6 +9,9 @@ import getEndpoints from '@/lib/services/config/getEndpoints'
 
 import configUrlStore from '@/lib/store/configUrl'
 
+// const isDev = import.meta.env.DEV
+const isDev = true
+
 const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
   const { showBoundary } = useErrorBoundary()
@@ -19,9 +22,9 @@ const ConfigProvider = ({ children }) => {
   const loadConfig = useCallback(async (url, onError) => {
     try {
       const { endpoints, error } = await getEndpoints(url)
-      
+
       if (!mountedRef.current) return
-      
+
       if (error) {
         if (onError) {
           onError(error)
@@ -55,16 +58,19 @@ const ConfigProvider = ({ children }) => {
     }
   }, [])
 
-  const updateConfig = useCallback(async url => {
-    if (url === null) {
-      setConfig(null)
-      configUrlStore.clear()
-      return
-    }
+  const updateConfig = useCallback(
+    async url => {
+      if (url === null) {
+        setConfig(null)
+        configUrlStore.clear()
+        return
+      }
 
-    configUrlStore.set(url)
-    await loadConfig(url)
-  }, [loadConfig])
+      configUrlStore.set(url)
+      await loadConfig(url)
+    },
+    [loadConfig]
+  )
 
   useEffect(() => {
     const storedConfigUrl = configUrlStore.get()
@@ -138,8 +144,8 @@ const ConfigProvider = ({ children }) => {
   }, [])
 
   const value = useMemo(
-    () => ({ apiFns, config, updateConfig }),
-    [apiFns, config, updateConfig]
+    () => ({ apiFns, config, isDev, updateConfig }),
+    [apiFns, config, isDev, updateConfig]
   )
 
   return <ConfigContext value={value}>{children}</ConfigContext>

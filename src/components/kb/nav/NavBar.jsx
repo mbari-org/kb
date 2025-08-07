@@ -9,14 +9,14 @@ import VersionDisplay from '../../common/VersionDisplay'
 
 import panelMods from '@/components/kb/panels/modules'
 
-const isDev = import.meta.env.DEV
-
+import ConfigContext from '@/contexts/config/ConfigContext'
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { isAdmin } from '@/lib/auth/role'
 
 const NavBar = ({ selectPanel }) => {
+  const { isDev } = use(ConfigContext)
   const { user } = use(UserContext)
   const { panels } = use(SelectedContext)
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, use } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { MdRefresh } from 'react-icons/md'
 import { IoInformationCircleOutline } from 'react-icons/io5'
@@ -6,6 +6,7 @@ import { IoInformationCircleOutline } from 'react-icons/io5'
 import { Typography, Box, IconButton } from '@mui/material'
 
 import KBTooltip from '@/components/common/KBTooltip'
+import ConfigContext from '@/contexts/config/ConfigContext'
 
 import {
   getBranchName,
@@ -28,6 +29,7 @@ import {
  */
 const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'caption' }) => {
   const theme = useTheme()
+  const { isDev } = use(ConfigContext)
 
   const [isRefreshing, setIsRefreshing] = useState(false)
 
@@ -39,8 +41,6 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
   const branchName = getBranchName()
   const commitDate = getCommitDate()
   const commitMessage = getCommitMessage()
-
-  const isDev = import.meta.env.DEV
 
   const handleRefreshVersion = async () => {
     if (!isDev || isRefreshing) return
