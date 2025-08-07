@@ -4,38 +4,6 @@ import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
-const isActionRealization = (realization, pendingRealization) => {
-  switch (pendingRealization.action) {
-    case ACTION.ADD: {
-      const [newLinkName, newLinkToConcept, newLinkValue] = pendingRealization.newValue.split(' | ')
-      return (
-        newLinkName === realization.linkName &&
-        newLinkToConcept === realization.toConcept &&
-        newLinkValue === realization.linkValue
-      )
-    }
-
-    case ACTION.DELETE: {
-      const [oldLinkName, oldLinkToConcept, oldLinkValue] = pendingRealization.oldValue.split(' | ')
-      return (
-        oldLinkName === realization.linkName &&
-        oldLinkToConcept === realization.toConcept &&
-        oldLinkValue === realization.linkValue
-      )
-    }
-
-    case ACTION.EDIT: {
-      const [oldLinkName, oldLinkToConcept, _oldLinkValue] =
-        pendingRealization.oldValue.split(' | ')
-
-      return oldLinkName === realization.linkName && oldLinkToConcept === realization.toConcept
-    }
-
-    default:
-      return false
-  }
-}
-
 const addRealization = (state, update) => {
   const realizationIndex = state.realizations.length
   const realizationItem = {
@@ -83,6 +51,38 @@ const editRealization = (state, update) => {
   return updateState(state, { type: CONCEPT_STATE.REALIZATION.EDIT, update })
 }
 
+const isMatching = (realization, pendingRealization) => {
+  switch (pendingRealization.action) {
+    case ACTION.ADD: {
+      const [newLinkName, newLinkToConcept, newLinkValue] = pendingRealization.newValue.split(' | ')
+      return (
+        newLinkName === realization.linkName &&
+        newLinkToConcept === realization.toConcept &&
+        newLinkValue === realization.linkValue
+      )
+    }
+
+    case ACTION.DELETE: {
+      const [oldLinkName, oldLinkToConcept, oldLinkValue] = pendingRealization.oldValue.split(' | ')
+      return (
+        oldLinkName === realization.linkName &&
+        oldLinkToConcept === realization.toConcept &&
+        oldLinkValue === realization.linkValue
+      )
+    }
+
+    case ACTION.EDIT: {
+      const [oldLinkName, oldLinkToConcept, _oldLinkValue] =
+        pendingRealization.oldValue.split(' | ')
+
+      return oldLinkName === realization.linkName && oldLinkToConcept === realization.toConcept
+    }
+
+    default:
+      return false
+  }
+}
+
 const isPendingRealization = pendingItem => pendingItem.field === HISTORY_FIELD.REALIZATION
 
 const realizationEdits = realizations => {
@@ -95,9 +95,8 @@ const realizationEdits = realizations => {
 }
 
 const realizationState = (realization, pendingRealizations) => {
-  // for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
   const pendingRealization = pendingRealizations.find(pendingItem =>
-    isActionRealization(realization, pendingItem)
+    isMatching(realization, pendingItem)
   )
   if (pendingRealization) {
     return {

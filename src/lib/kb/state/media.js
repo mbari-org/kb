@@ -2,9 +2,7 @@ import { getPrimary, isPrimary } from '@/lib/kb/model/media'
 
 import { stagedEdits } from '@/lib/kb/state/staged'
 
-import { stagedMediaItem } from '@/lib/kb/model/media'
-
-import { CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const addMedia = (state, update) => {
   const isPrimaryMedia = isPrimary(update.mediaItem)
@@ -51,19 +49,43 @@ const editMedia = (state, update) => {
   return updateState(state, { type: CONCEPT_STATE.MEDIA_ITEM.EDIT, update })
 }
 
+const isMatching = (mediaItem, pendingMediaItem) => {
+  const pendingMediaValue =
+    pendingMediaItem.action === ACTION.DELETE
+      ? pendingMediaItem.oldValue
+      : pendingMediaItem.newValue
+  return pendingMediaValue === mediaItem.url
+}
+
 const isPendingMedia = pendingItem => pendingItem.field === HISTORY_FIELD.MEDIA
 
-const mediaState = (concept, pending) => {
-  const { media: conceptMedia } = concept
-  const primaryMedia = getPrimary(conceptMedia)
-  const otherMedia = conceptMedia.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
+const mediaItemState = (mediaItem, pendingMedia) => {
+  const pendingMediaItem = pendingMedia.find(pendingMediaItem =>
+    isMatching(mediaItem, pendingMediaItem)
+  )
+  if (pendingMediaItem) {
+    return {
+      ...mediaItem,
+      action: pendingMediaItem.action + ' Pending',
+      historyId: pendingMediaItem.id,
+    }
+  }
+  return { ...mediaItem, action: CONCEPT_STATE.NO_ACTION }
+}
+
+const mediaState = (concept, pendingConcept) => {
+  const { media } = concept
+  const primaryMedia = getPrimary(media)
+  const otherMedia = media.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
   const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
 
-  const media = orderedMedia.map((mediaItem, index) =>
-    stagedMediaItem({ ...mediaItem, action: CONCEPT_STATE.NO_ACTION, index }, pending)
+  const pendingMedia = pendingConcept.filter(isPendingMedia)
+
+  const stagedMedia = orderedMedia.map((mediaItem, index) =>
+    mediaItemState({ ...mediaItem, index }, pendingMedia)
   )
 
-  return { media }
+  return { media: stagedMedia }
 }
 
 const resetMedia = (state, update) => {

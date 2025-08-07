@@ -3,7 +3,7 @@ import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { drop } from '@/lib/utils'
 
-const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
+const ALIAS_FIELDS = ['id', 'name', 'nameType', 'author']
 
 const addAlias = (state, update) => {
   const aliasIndex = state.aliases.length
@@ -20,21 +20,14 @@ const addAlias = (state, update) => {
 }
 
 const aliasState = (alias, pendingAliases) => {
-  for (const verb of [ACTION.ADD, ACTION.DELETE, ACTION.EDIT]) {
-    const pendingItem = pendingAliases.find(pendingAlias => {
-      const pendingAliasValue =
-        verb === ACTION.DELETE ? pendingAlias.oldValue : pendingAlias.newValue
-      return pendingAlias.action === verb && pendingAliasValue === alias.name
-    })
-    if (pendingItem) {
-      return {
-        ...alias,
-        action: verb + ' Pending',
-        historyId: pendingItem.id,
-      }
+  const pendingAlias = pendingAliases.find(pendingAlias => isMatching(alias, pendingAlias))
+  if (pendingAlias) {
+    return {
+      ...alias,
+      action: pendingAlias.action + ' Pending',
+      historyId: pendingAlias.id,
     }
   }
-
   return { ...alias, action: CONCEPT_STATE.NO_ACTION }
 }
 
@@ -76,6 +69,12 @@ const editAlias = (state, update) => {
     }
   }
   return updateAlias(state, { type: CONCEPT_STATE.ALIAS.EDIT, update })
+}
+
+const isMatching = (alias, pendingAlias) => {
+  const pendingAliasValue =
+    pendingAlias.action === ACTION.DELETE ? pendingAlias.oldValue : pendingAlias.newValue
+  return pendingAliasValue === alias.name
 }
 
 const isPendingAlias = pendingItem =>
