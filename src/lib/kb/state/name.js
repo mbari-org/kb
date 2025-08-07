@@ -39,11 +39,10 @@ const stagedName = (name, pendingConcept) => {
   if (pendingName) {
     return {
       name: {
-        ...name,
         action: 'Edit Pending',
         historyId: pendingName.id,
-        value: pendingName.value,
-        extent: pendingName.extent,
+        value: pendingName.newValue,
+        extent: '',
       },
     }
   }

@@ -22,7 +22,7 @@ const useSaveStaged = () => {
     const { hasUpdated } = updatesInfo
 
     const { concept: updatedConcept } = hasUpdated('name')
-      ? await renameConcept(concept, updatesInfo)
+      ? await renameConcept(concept, updatesInfo.updatedValue('name').value)
       : await refreshConcept(concept)
 
     await resetConcept(updatedConcept)

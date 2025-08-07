@@ -6,10 +6,7 @@ import {
 } from '@/lib/api/concept'
 import { getConceptLinkRealizations as fetchConceptLinkRealizations } from '@/lib/api/linkRealizations'
 
-import { CONCEPT_STATE } from '@/lib/constants'
 import { orderedAliases } from '@/lib/kb/model/aliases'
-
-const { CHILD, MEDIA_ITEM } = CONCEPT_STATE
 
 const addedConcepts = (parent, updatesInfo) => {
   const { updatedValue } = updatesInfo
@@ -82,11 +79,11 @@ const loadConceptData = async (concept, apiFns) => {
 
 const loadParent = async (conceptName, apiFns) => apiFns.apiPayload(fetchConceptParent, conceptName)
 
-const refresh = async (concept, apiFns) => {
-  const freshConcept = await loadConcept(concept.name, apiFns)
-  const parent = await loadParent(concept.name, apiFns)
+const refresh = async (conceptName, apiFns) => {
+  const freshConcept = await loadConcept(conceptName, apiFns)
+  const parent = await loadParent(conceptName, apiFns)
   freshConcept.parent = parent.name
-  const children = await loadChildren(concept.name, apiFns)
+  const children = await loadChildren(conceptName, apiFns)
   freshConcept.children = children.map(child => child.name)
   await loadConceptData(freshConcept, apiFns)
 

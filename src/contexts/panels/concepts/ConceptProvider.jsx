@@ -28,7 +28,7 @@ const ConceptProvider = ({ children }) => {
   const { refreshData: refreshPanelData } = use(PanelDataContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { setHasUnsavedChanges, hasUnsavedChanges } = use(UserContext)
+  const { hasUnsavedChanges, setHasUnsavedChanges } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
@@ -84,18 +84,6 @@ const ConceptProvider = ({ children }) => {
     setEditing,
   })
 
-  // Sync hasUnsavedChanges whenever staged state changes
-  useEffect(() => {
-    const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
-    if (isConceptPanelActive && initialState) {
-      const hasModifications = isStateModified({ initialState, stagedState })
-      setHasUnsavedChanges(hasModifications)
-    } else {
-      // Clear unsaved data flag when not on concepts panel
-      setHasUnsavedChanges(false)
-    }
-  }, [initialState, stagedState, panels, setHasUnsavedChanges])
-
   // Reset editing state when leaving Concepts panel
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
@@ -119,7 +107,7 @@ const ConceptProvider = ({ children }) => {
       if (hasUnsavedChanges) {
         displayStaged(CONTINUE)
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
-        setHasUnsavedChanges(true)
+        // setHasUnsavedChanges(true)
       } else {
         setHasUnsavedChanges(false)
         conceptLoader(selectedConcept)
@@ -135,6 +123,18 @@ const ConceptProvider = ({ children }) => {
     setHasUnsavedChanges,
     setModalData,
   ])
+
+  // Sync hasUnsavedChanges whenever staged state changes
+  useEffect(() => {
+    const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
+    if (isConceptPanelActive && initialState) {
+      const hasModifications = isStateModified({ initialState, stagedState })
+      setHasUnsavedChanges(hasModifications)
+    } else {
+      // Clear unsaved data flag when not on concepts panel
+      setHasUnsavedChanges(false)
+    }
+  }, [initialState, stagedState, panels, setHasUnsavedChanges])
 
   const value = useMemo(
     () => ({
