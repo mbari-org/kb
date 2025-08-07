@@ -21,16 +21,11 @@ const useSaveStaged = () => {
     const updatesInfo = await submitStaged(apiFns.apiPayload, concept, initialState, stagedState)
     const { hasUpdated } = updatesInfo
 
-    let updatedConcept
-    if (hasUpdated('name')) {
-      const { concept: renamedConcept } = await renameConcept(concept, updatesInfo)
-      updatedConcept = renamedConcept
-    } else {
-      const { concept: refreshedConcept } = await refreshConcept(concept, updatesInfo)
-      updatedConcept = refreshedConcept
-    }
+    const { concept: updatedConcept } = hasUpdated('name')
+      ? await renameConcept(concept, updatesInfo)
+      : await refreshConcept(concept)
 
-    resetConcept(updatedConcept)
+    await resetConcept(updatedConcept)
 
     updateSelected({ concept: updatedConcept.name })
 

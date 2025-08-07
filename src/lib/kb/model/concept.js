@@ -9,10 +9,6 @@ import { getConceptLinkRealizations as fetchConceptLinkRealizations } from '@/li
 import { CONCEPT_STATE } from '@/lib/constants'
 import { orderedAliases } from '@/lib/kb/model/aliases'
 
-import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/reset'
-
-import { drop } from '@/lib/utils'
-
 const { CHILD, MEDIA_ITEM } = CONCEPT_STATE
 
 const addedConcepts = (parent, updatesInfo) => {
@@ -86,65 +82,15 @@ const loadConceptData = async (concept, apiFns) => {
 
 const loadParent = async (conceptName, apiFns) => apiFns.apiPayload(fetchConceptParent, conceptName)
 
-const refresh = async (concept, updatesInfo, apiFns) => {
-  const { hasUpdated, results, updatedValue } = updatesInfo
+const refresh = async (concept, apiFns) => {
+  const freshConcept = await loadConcept(concept.name, apiFns)
+  const parent = await loadParent(concept.name, apiFns)
+  freshConcept.parent = parent.name
+  const children = await loadChildren(concept.name, apiFns)
+  freshConcept.children = children.map(child => child.name)
+  await loadConceptData(freshConcept, apiFns)
 
-  const updatedConcept = { ...concept }
-
-  for (const field of ['author', 'rankLevel', 'rankName', 'name', 'parent']) {
-    if (hasUpdated(field)) {
-      updatedConcept[field] = updatedValue(field)
-    }
-  }
-
-  if (hasUpdated('aliases')) {
-    const rawNames = await apiFns.apiPayload(fetchConceptNames, updatedConcept.name)
-    updatedConcept.aliases = orderedAliases(rawNames)
-    updatedConcept.alternateNames = updatedConcept.aliases.map(alias => alias.name)
-  }
-
-  if (hasUpdated('realizations')) {
-    const rawRealizations = await apiFns.apiPayload(
-      fetchConceptLinkRealizations,
-      updatedConcept.name
-    )
-    updatedConcept.realizations = rawRealizations || []
-  }
-
-  if (hasUpdated('children')) {
-    const updatedChildren = updatedValue('children')
-      .filter(child => child.action === CHILD.ADD)
-      .map(child => child.name)
-    updatedConcept.children = [...concept.children, ...updatedChildren].sort()
-  }
-
-  if (hasUpdated('media')) {
-    updatedConcept.media = updatedValue('media').reduce((acc, mediaItem) => {
-      switch (mediaItem.action) {
-        case MEDIA_ITEM.ADD: {
-          const mediaId = results.find(result => result.url === mediaItem.url).id
-          acc.push({ ...mediaItem, id: mediaId })
-          break
-        }
-
-        case MEDIA_ITEM.DELETE:
-          break
-
-        case MEDIA_ITEM.EDIT:
-          acc.push(drop(mediaItem, ['action']))
-          break
-
-        default:
-          if (isStagedAction(mediaItem.action)) {
-            acc.push(drop(mediaItem, ['action']))
-          }
-          break
-      }
-      return acc
-    }, [])
-  }
-
-  return updatedConcept
+  return freshConcept
 }
 
 export {

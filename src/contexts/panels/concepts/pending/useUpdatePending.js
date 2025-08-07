@@ -30,17 +30,16 @@ const useUpdatedPending = () => {
         : propIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
 
       setProcessing(`${capitalize(approval)} pending changes...`)
-      await Promise.all(
+      const apiUpdates = await Promise.all(
         pendingItems.map(pendingItem =>
           apiFns.apiPayload(updatePendingHistoryItem, [approval, pendingItem.id])
         )
       )
 
       if (approval === PENDING.APPROVAL.REJECT) {
-        const updatedConcept = await rejectPending(pendingItems)
-        resetConcept(updatedConcept)
+        await rejectPending(pendingItems, apiUpdates)
       } else {
-        resetConcept(concept)
+        await resetConcept(concept)
       }
 
       setProcessing(false)

@@ -6,7 +6,7 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { loadConcept as apiLoadConcept } from '@/lib/kb/model/concept'
+import { loadConcept as apiLoadConcept, refresh as apiRefreshConcept } from '@/lib/kb/model/concept'
 
 import {
   closestConcept as closestTaxonomyConcept,
@@ -198,22 +198,41 @@ const TaxonomyProvider = ({ children }) => {
     [apiFns, showBoundary, taxonomy, updateTaxonomy]
   )
 
+  const replaceConcept = useCallback(
+    (concept, freshConcept) => {
+      const { taxonomy: freshTaxonomy } = removeTaxonomyConcept(taxonomy, concept)
+
+      mapConcept(freshConcept, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
+
+      const parent = { ...getTaxonomyConcept(freshTaxonomy, freshConcept.parent) }
+      parent.children = parent.children.filter(child => child !== freshConcept.name)
+      parent.children.push(freshConcept.name)
+      parent.children.sort()
+      mapConcept(parent, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
+
+      freshConcept.children.forEach(child => {
+        const childConcept = { ...getTaxonomyConcept(freshTaxonomy, child) }
+        childConcept.parent = freshConcept.name
+        mapConcept(childConcept, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
+      })
+
+      return { taxonomy: freshTaxonomy }
+    },
+    [taxonomy]
+  )
+
   const refreshConcept = useCallback(
-    async (concept, updatesInfo) => {
+    async concept => {
       if (!apiFns || !taxonomy) return null
 
-      const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
-        taxonomy,
-        concept,
-        updatesInfo,
-        apiFns
-      )
+      const freshConcept = await apiRefreshConcept(concept, apiFns)
+      const { taxonomy: freshTaxonomy } = replaceConcept(concept, freshConcept)
 
-      updateTaxonomy(updatedTaxonomy)
+      updateTaxonomy(freshTaxonomy)
 
-      return { concept: updatedConcept, taxonomy: updatedTaxonomy }
+      return { concept: freshConcept, taxonomy: freshTaxonomy }
     },
-    [apiFns, taxonomy, updateTaxonomy]
+    [apiFns, replaceConcept, taxonomy, updateTaxonomy]
   )
 
   const renameConcept = useCallback(
@@ -242,7 +261,6 @@ const TaxonomyProvider = ({ children }) => {
       const { concept: updatedConcept, taxonomy: updatedTaxonomy } = await refreshTaxonomyConcept(
         taxonomySansConcept,
         loadedConcept,
-        updatesInfo,
         apiFns
       )
 
@@ -298,6 +316,7 @@ const TaxonomyProvider = ({ children }) => {
       refreshConcept,
       renameConcept,
       removeConcept,
+      replaceConcept,
       taxonomy,
     }),
     [
@@ -317,6 +336,7 @@ const TaxonomyProvider = ({ children }) => {
       refreshConcept,
       renameConcept,
       removeConcept,
+      replaceConcept,
       taxonomy,
     ]
   )

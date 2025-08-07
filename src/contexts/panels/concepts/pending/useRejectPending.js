@@ -6,24 +6,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { ACTION, HISTORY_FIELD, SELECTED } from '@/lib/constants'
 
-const conceptFieldForItem = (item, concept) => {
-  // HISTORY_FIELD NAME and ALIAS are the same. Check for name before checking for alias.
-  if (
-    item.field === HISTORY_FIELD.NAME &&
-    item.action === ACTION.EDIT &&
-    item.newValue !== concept.name
-  )
-    return 'name'
-
-  if (item.field === HISTORY_FIELD.ALIAS) return 'aliases'
-  if (item.field === HISTORY_FIELD.CHILD) return 'children'
-  if (item.field === HISTORY_FIELD.MEDIA) return 'media'
-
-  if (item.field === HISTORY_FIELD.PARENT) return 'parent'
-}
-
 const useRejectPending = () => {
-  const { concept } = use(ConceptContext)
+  const { concept, resetConcept } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { closestConcept, refreshConcept, removeConcept } = use(TaxonomyContext)
 
@@ -40,23 +24,20 @@ const useRejectPending = () => {
         updateSelected({
           [SELECTED.CONCEPT]: gotoConcept.name,
         })
-        // a rejected child will always be the only item, so
+        // a rejected child will always be the only item
         return
       }
 
-      rejectingItems
-        .filter(item => item.action === ACTION.ADD && item.field === HISTORY_FIELD.CHILD)
-        .forEach(rejectedChild => {
-          removeConcept(rejectedChild.newValue)
+      const { concept: freshConcept } = await refreshConcept(concept)
+
+      const rejectedChildren = rejectingItems.filter(
+        item => item.action === ACTION.ADD && item.field === HISTORY_FIELD.CHILD
+      )
+      if (rejectedChildren.length > 0) {
+        throw new Error('Not implemented: remove rejected children', {
+          cause: rejectedChildren,
         })
-
-      const updatedFields = rejectingItems.map(item => conceptFieldForItem(item, concept))
-      console.log('updatedFields:', updatedFields)
-
-      const { concept: updatedConcept } = await refreshConcept(concept, {
-        forceLoad: true,
-        hasUpdated: field => updatedFields.includes(field),
-      })
+      }
 
       const rejectedRename = rejectingItems.find(
         item =>
@@ -68,11 +49,13 @@ const useRejectPending = () => {
         updateSelected({
           [SELECTED.CONCEPT]: rejectedRename.oldValue,
         })
+      } else {
+        await resetConcept(freshConcept)
       }
 
-      return updatedConcept
+      return freshConcept
     },
-    [concept, closestConcept, refreshConcept, removeConcept, updateSelected]
+    [concept, closestConcept, refreshConcept, removeConcept, resetConcept, updateSelected]
   )
 }
 
