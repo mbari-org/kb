@@ -100,7 +100,7 @@ const resetAliases = (state, update) => {
   }
 }
 
-const stagedAliases = stagedEdit => {
+const stagedAliasesEdits = stagedEdit => {
   const [_field, aliases] = stagedEdit
 
   return stagedEdits({
@@ -125,5 +125,5 @@ export {
   editAlias,
   isPendingAlias,
   resetAliases,
-  stagedAliases,
+  stagedAliasesEdits,
 }

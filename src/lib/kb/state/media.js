@@ -107,7 +107,7 @@ const resetMedia = (state, update) => {
   }
 }
 
-const stagedMedia = stagedEdit => {
+const stagedMediaEdits = stagedEdit => {
   const [_field, media] = stagedEdit
 
   return stagedEdits({
@@ -127,4 +127,12 @@ const updateState = (state, { type, update }) => {
   return { ...state, media: updatedMedia }
 }
 
-export { addMedia, deleteMedia, editMedia, isPendingMedia, mediaState, resetMedia, stagedMedia }
+export {
+  addMedia,
+  deleteMedia,
+  editMedia,
+  isPendingMedia,
+  mediaState,
+  resetMedia,
+  stagedMediaEdits,
+}

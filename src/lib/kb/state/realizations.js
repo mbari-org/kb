@@ -136,7 +136,7 @@ const resetRealizations = (state, update) => {
   }
 }
 
-const stagedRealizations = stagedEdit => {
+const stagedRealizationEdits = stagedEdit => {
   const [_field, realizations] = stagedEdit
 
   return stagedEdits({
@@ -165,7 +165,7 @@ export {
   isPendingRealization,
   realizationEdits,
   realizationsState,
+  realizationState,
   resetRealizations,
-  realizationState as stagedRealization,
-  stagedRealizations,
+  stagedRealizationEdits,
 }
