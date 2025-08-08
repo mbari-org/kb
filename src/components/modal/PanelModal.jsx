@@ -36,12 +36,12 @@ const PanelModal = ({ actions, content, title, closeModal, minWidth }) => {
             >
               <IoCloseSharp />
             </IconButton>
-            <CardHeader title={title()} />
+            <CardHeader title={title} />
             <CardContent sx={{ pb: 0, pt: 0 }}>
-              {content()}
+              {content}
             </CardContent>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-              {actions()}
+              {actions}
             </CardActions>
           </Card>
         </Box>

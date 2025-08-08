@@ -35,27 +35,13 @@ const historyFieldForGroup = group => {
 export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
   const fieldName = historyFieldForGroup(targetGroup)
 
-  let pendingIds
   if (targetGroup === GROUP.ALL) {
-    pendingIds = pendingConcept.map(history => history.id)
-  } else if (fieldName) {
-    const fieldItems = fieldPending(pendingConcept, fieldName)
-
-    // Special handling for ALIASES and NAME since they share the same API field
-    // if (targetGroup === GROUP.ALIASES) {
-    //   pendingIds = fieldItems
-    //     .filter(history => history.newValue !== conceptName)
-    //     .map(history => history.id)
-    // } else if (targetGroup === GROUP.NAME) {
-    //   pendingIds = fieldItems
-    //     .filter(history => history.newValue === conceptName)
-    //     .map(history => history.id)
-    // } else {
-    pendingIds = fieldItems.map(history => history.id)
-    // }
-  } else {
-    pendingIds = [targetGroup]
+    return pendingConcept.map(history => history.id)
   }
 
-  return pendingIds
+  if (fieldName) {
+    return fieldPending(pendingConcept, fieldName).map(history => history.id)
+  }
+
+  return [targetGroup]
 }

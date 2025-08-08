@@ -15,16 +15,16 @@ const useReferencesModal = (modalConfig, modalDataRef, closeModalRef) => {
 
     const ReferencesModalComponent = () => (
       <PanelModal
-        actions={ActionsComponent}
-        content={ContentComponent}
-        title={Title}
+        actions={<ActionsComponent />}
+        content={<ContentComponent />}
+        title={<Title />}
         closeModal={closeModalRef.current}
         minWidth={modalConfig.minWidth}
       />
     )
 
     return ReferencesModalComponent
-  }, [modalConfig, ActionsComponent, ContentComponent, closeModalRef])
+  }, [modalConfig, closeModalRef])
 }
 
 export default useReferencesModal

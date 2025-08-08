@@ -31,8 +31,8 @@ const KnowledgeBase = () => {
       <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <PanelWrapper activePanel={panels.current()} />
       </Box>
-      {!holdProcessing && holdModal && <ConceptModal />}
-      {(holdProcessing || appProcessing) && <KbLoading />}
+      {holdModal && <ConceptModal />}
+      {appProcessing && <KbLoading />}
     </Box>
   )
 }

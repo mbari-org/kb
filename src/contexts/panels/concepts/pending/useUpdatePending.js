@@ -37,13 +37,15 @@ const useUpdatedPending = () => {
         )
       )
 
+      await new Promise(resolve => setTimeout(resolve, 3000))
+
       approval === PENDING.APPROVAL.REJECT
         ? await rejectPending(pendingItems)
         : await resetConcept(concept)
 
       setProcessing(false)
 
-      return pendingConcept.length === pendingItems.length
+      return pendingConcept.length !== pendingItems.length
     },
     [apiFns, concept, pending, rejectPending, resetConcept, setProcessing]
   )
