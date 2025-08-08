@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ProcessingMessage from '@/components/common/ProcessingMessage'
 
 const ConceptModal = () => {
   const { modal, closeModal, processing } = use(ConceptModalContext)
@@ -52,43 +53,11 @@ const ConceptModal = () => {
               <IoCloseSharp />
             </IconButton>
             <CardHeader title={title()} />
-            <CardContent sx={{ pb: 0, pt: 0, position: 'relative' }}>
-              {content()}
-            </CardContent>
+            <CardContent sx={{ pb: 0, pt: 0, position: 'relative' }}>{content()}</CardContent>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
               {actions()}
             </CardActions>
-
-            {isProcessing && (
-              <Box
-                className='kb-modal-processing-overlay'
-                sx={{
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  bottom: 0,
-                  color: 'white',
-                  display: 'flex',
-                  fontSize: 16,
-                  fontWeight: 500,
-                  inset: 0,
-                  justifyContent: 'center',
-                  left: 0,
-                  position: 'absolute',
-                  right: 0,
-                  top: 0,
-                  zIndex: 2,
-                }}
-              >
-                <Box sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  gap: 1,
-                }}>
-                  <span className='h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent' />
-                  <span>{processingMessage}</span>
-                </Box>
-              </Box>
-            )}
+            {isProcessing && <ProcessingMessage message={processingMessage} />}
           </Card>
         </Box>
       </Fade>
