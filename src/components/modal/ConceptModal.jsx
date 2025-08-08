@@ -52,10 +52,10 @@ const ConceptModal = () => {
             >
               <IoCloseSharp />
             </IconButton>
-            <CardHeader title={title()} />
-            <CardContent sx={{ pb: 0, pt: 0, position: 'relative' }}>{content()}</CardContent>
+            <CardHeader title={title} />
+            <CardContent sx={{ pb: 0, pt: 0, position: 'relative' }}>{content}</CardContent>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-              {actions()}
+              {actions}
             </CardActions>
             {isProcessing && <ProcessingMessage message={processingMessage} />}
           </Card>

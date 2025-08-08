@@ -12,6 +12,5 @@ const createComponent = (Component, props, name) => {
 const createActions = (props, name) => createComponent(Actions, props, name)()
 const createDetail = props => createComponent(Detail, props)
 const createText = props => createComponent(Text, props)
-const createTitle = (props, name) => createComponent(Title, props, name)
 
-export { createActions, createComponent, createDetail, createText, createTitle }
+export { createActions, createComponent, createDetail, createText }

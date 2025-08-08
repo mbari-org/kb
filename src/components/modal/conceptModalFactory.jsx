@@ -4,11 +4,18 @@ import { createComponent } from '@/components/common/factory/createComponent'
 
 const createActions = (props, name) => createComponent(Actions, props, name)()
 
-const createModal = ({ Actions, Content, Title, minWidth }) => ({
-  title: createComponent(Title),
-  content: createComponent(Content),
-  actions: createComponent(Actions),
-  minWidth,
-})
+// Return React nodes for title/content/actions so presenters render them directly
+const createModal = ({ Actions, Content, Title, minWidth }) => {
+  const TitleComponent = createComponent(Title)
+  const ContentComponent = createComponent(Content)
+  const ActionsComponent = createComponent(Actions)
+
+  return {
+    title: <TitleComponent />,
+    content: <ContentComponent />,
+    actions: <ActionsComponent />,
+    minWidth,
+  }
+}
 
 export { createActions, createModal }

@@ -5,7 +5,7 @@ import { Box } from '@mui/material'
 import KbLoading from '@/components/modal/KbLoading'
 import ConceptModal from '@/components/modal/ConceptModal'
 import NavBar from '@/components/kb/nav/NavBar'
-import PanelWrapper from '@/components/kb/panels/PanelWrapper'
+import Panels from '@/components/kb/Panels'
 import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
@@ -28,9 +28,7 @@ const KnowledgeBase = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <NavBar selectPanel={selectPanel} />
-      <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
-        <PanelWrapper activePanel={panels.current()} />
-      </Box>
+      <Panels />
       {holdModal && <ConceptModal />}
       {appProcessing && <KbLoading />}
     </Box>

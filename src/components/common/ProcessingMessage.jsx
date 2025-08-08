@@ -5,7 +5,7 @@ const ProcessingMessage = ({ message = 'Processing...' }) => (
     className='kb-modal-processing-overlay'
     sx={{
       alignItems: 'center',
-      backgroundColor: 'rgba(0,0,0,0.4)',
+      backgroundColor: 'rgba(0,0,0,0.5)',
       bottom: 0,
       color: 'white',
       display: 'flex',

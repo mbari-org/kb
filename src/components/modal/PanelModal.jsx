@@ -10,8 +10,11 @@ import {
   IconButton,
   Modal,
 } from '@mui/material'
+import Title from '@/components/common/factory/Title'
 
-const PanelModal = ({ actions, content, title, closeModal, minWidth }) => {
+const PanelModal = ({ actions, content, titleText, closeModal, minWidth }) => {
+  const headerTitle = <Title title={titleText} />
+
   return (
     <Modal
       aria-labelledby='modal-alert'
@@ -36,10 +39,8 @@ const PanelModal = ({ actions, content, title, closeModal, minWidth }) => {
             >
               <IoCloseSharp />
             </IconButton>
-            <CardHeader title={title} />
-            <CardContent sx={{ pb: 0, pt: 0 }}>
-              {content}
-            </CardContent>
+            <CardHeader title={headerTitle} />
+            <CardContent sx={{ pb: 0, pt: 0 }}>{content}</CardContent>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
               {actions}
             </CardActions>

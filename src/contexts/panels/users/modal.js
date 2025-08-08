@@ -1,4 +1,4 @@
-import createPanelModalProvider from '../../common/createPanelModalProvider.jsx'
+import createPanelModalProvider from '../../common/createPanelModalProvider'
 import useUsersModal from './useUsersModal'
 
 // Create the complete modal provider setup for users

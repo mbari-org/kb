@@ -37,7 +37,7 @@ const useUpdatedPending = () => {
         )
       )
 
-      await new Promise(resolve => setTimeout(resolve, 3000))
+      // await new Promise(resolve => setTimeout(resolve, 3000))
 
       approval === PENDING.APPROVAL.REJECT
         ? await rejectPending(pendingItems)

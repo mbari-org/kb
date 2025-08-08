@@ -29,6 +29,8 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'array-bracket-spacing': ['error', 'never'],
       'arrow-parens': ['error', 'as-needed'],
+      'no-irregular-whitespace': 'error',
+      'unicode-bom': ['error', 'never'],
       'no-unused-vars': [
         'warn',
         {

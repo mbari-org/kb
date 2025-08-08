@@ -1,7 +1,6 @@
-import createPanelModalProvider from '../../common/createPanelModalProvider.jsx'
+import createPanelModalProvider from '../../common/createPanelModalProvider'
 import useTemplatesModal from './useTemplatesModal'
 
-// Create the complete modal provider setup for templates
 const {
   DataContext: TemplatesModalDataContext,
   OperationsContext: TemplatesModalOperationsContext,

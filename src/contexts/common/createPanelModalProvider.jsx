@@ -1,21 +1,12 @@
 import { createContext, useCallback, useMemo, useState, useRef, useContext } from 'react'
 
-/**
- * Factory function to create a complete modal provider setup for a panel
- * @param {string} panelName - Name of the panel (e.g., 'Templates', 'Concepts')
- * @param {Function} useModalHook - Panel-specific useModal hook
- * @returns {Object} Complete modal provider setup with contexts, provider, and hooks
- */
 const createPanelModalProvider = (panelName, useModalHook) => {
-  // Create unique contexts for this panel
   const DataContext = createContext()
   const OperationsContext = createContext()
 
-  // Set display names for better debugging
   DataContext.displayName = `${panelName}ModalDataContext`
   OperationsContext.displayName = `${panelName}ModalOperationsContext`
 
-  // Create the provider component
   const Provider = ({ children }) => {
     const [modalConfig, setModalConfig] = useState(null)
     const [modalData, setModalData] = useState({})
@@ -50,7 +41,6 @@ const createPanelModalProvider = (panelName, useModalHook) => {
       [onClose, processing]
     )
 
-    // Store the current closeModal function in a ref
     closeModalRef.current = closeModal
 
     const createModal = useCallback(
@@ -80,7 +70,6 @@ const createPanelModalProvider = (panelName, useModalHook) => {
       })
     }, [])
 
-    // Keep ref in sync with state
     modalDataRef.current = modalData
 
     const modal = useModalHook(modalConfig, modalDataRef, closeModalRef)
@@ -113,14 +102,14 @@ const createPanelModalProvider = (panelName, useModalHook) => {
     )
   }
 
-  // Set display name for the provider
   Provider.displayName = `${panelName}ModalProvider`
 
-  // Create custom hooks for accessing the contexts
   const useDataContext = () => {
     const context = useContext(DataContext)
     if (context === undefined) {
-      throw new Error(`use${panelName}ModalDataContext must be used within a ${panelName}ModalProvider`)
+      throw new Error(
+        `use${panelName}ModalDataContext must be used within a ${panelName}ModalProvider`
+      )
     }
     return context
   }
@@ -128,12 +117,13 @@ const createPanelModalProvider = (panelName, useModalHook) => {
   const useOperationsContext = () => {
     const context = useContext(OperationsContext)
     if (context === undefined) {
-      throw new Error(`use${panelName}ModalOperationsContext must be used within a ${panelName}ModalProvider`)
+      throw new Error(
+        `use${panelName}ModalOperationsContext must be used within a ${panelName}ModalProvider`
+      )
     }
     return context
   }
 
-  // Set display names for the hooks
   useDataContext.displayName = `use${panelName}ModalDataContext`
   useOperationsContext.displayName = `use${panelName}ModalOperationsContext`
 

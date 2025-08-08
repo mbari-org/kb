@@ -1,4 +1,4 @@
-import createPanelModalProvider from '../../common/createPanelModalProvider.jsx'
+import createPanelModalProvider from '../../common/createPanelModalProvider'
 import useReferencesModal from './useReferencesModal'
 
 // Create the complete modal provider setup for references

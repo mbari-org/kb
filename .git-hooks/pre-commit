@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Pre-commit hook to block non-ASCII/control characters in staged JS/TS/CSS/MD files.
+# Allows tabs (0x09), LF (0x0A), CR (0x0D), and printable ASCII (0x20-0x7E).
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx|json|css|scss|md)$')
+
+if [ -z "$FILES" ]; then
+  exit 0
+fi
+
+# Try grep -P first (GNU grep). If not available, fall back to perl.
+if command -v grep >/dev/null 2>&1 && grep -P "" </dev/null >/dev/null 2>&1; then
+  if grep -nI -P '[^\x09\x0A\x0D\x20-\x7E]' $FILES; then
+    echo "Error: Non-ASCII/control characters detected in the files above. Commit aborted."
+    exit 1
+  fi
+else
+  # macOS/BSD fallback using perl
+  BAD=false
+  for f in $FILES; do
+    perl -ne 'if (/[^\x09\x0A\x0D\x20-\x7E]/) { print "$ARGV:$.: $_"; $bad=1 } END { exit $bad ? 1 : 0 }' "$f"
+    if [ $? -ne 0 ]; then
+      BAD=true
+    fi
+  done
+  if [ "$BAD" = true ]; then
+    echo "Error: Non-ASCII/control characters detected in the files above. Commit aborted."
+    exit 1
+  fi
+fi
+
+exit 0
+
