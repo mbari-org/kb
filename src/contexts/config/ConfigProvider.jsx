@@ -129,7 +129,7 @@ const ConfigProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (!config) {
+    if (!config?.valid) {
       setApiFns(null)
       return
     }

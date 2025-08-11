@@ -1,13 +1,3 @@
-import {
-  getConcept as fetchConcept,
-  getConceptChildren as fetchConceptChildren,
-  getConceptNames as fetchConceptNames,
-  getConceptParent as fetchConceptParent,
-} from '@/lib/api/concept'
-import { getConceptLinkRealizations as fetchConceptLinkRealizations } from '@/lib/api/linkRealizations'
-
-import { orderedAliases } from '@/lib/kb/model/aliases'
-
 const addedConcepts = (parent, updatesInfo) => {
   const { updatedValue } = updatesInfo
   return updatedValue('children').map(child => ({
@@ -20,6 +10,28 @@ const addedConcepts = (parent, updatesInfo) => {
     references: [],
   }))
 }
+
+// const fetchChildren = async (conceptName, apiFns) => {
+//   const children = await apiFns.apiPayload(getConceptChildren, conceptName)
+//   await Promise.all(
+//     children.map(async child => {
+//       child.parent = conceptName
+//     })
+//   )
+//   return children
+// }
+
+// const fetchConcept = async (conceptName, apiFns) => {
+//   const concept = await apiFns.apiPayload(getConcept, conceptName)
+//   return concept
+// }
+
+// const fetchConceptNames = async (concept, apiFns) => {
+//   const conceptNames = await apiFns.apiPayload(getConceptNames, concept.name)
+//   return conceptNames
+// }
+
+// const fetchParent = async (conceptName, apiFns) => apiFns.apiPayload(getConceptParent, conceptName)
 
 const getNextSibling = (concept, getConcept) => {
   const parent = getConcept(concept.parent)
@@ -48,55 +60,23 @@ const getPrevSibling = (concept, getConcept) => {
   return null
 }
 
-const loadChildren = async (conceptName, apiFns) => {
-  const children = await apiFns.apiPayload(fetchConceptChildren, conceptName)
-  await Promise.all(
-    children.map(async child => {
-      child.parent = conceptName
-    })
-  )
-  return children
-}
+// const refresh = async (conceptName, apiFns) => {
+//   const freshConcept = await fetchConcept(conceptName, apiFns)
+//   const parent = await loadParent(conceptName, apiFns)
+//   freshConcept.parent = parent.name
+//   const children = await loadChildren(conceptName, apiFns)
+//   freshConcept.children = children.map(child => child.name)
+//   await loadConceptData(freshConcept, apiFns)
 
-const loadConcept = async (conceptName, apiFns) => {
-  const { error, payload: concept } = await apiFns.apiRaw(fetchConcept, conceptName)
-  if (error) throw error
-
-  await loadConceptData(concept, apiFns)
-
-  return concept
-}
-
-const loadConceptData = async (concept, apiFns) => {
-  const [aliases, realizations] = await Promise.all([
-    apiFns.apiPayload(fetchConceptNames, concept.name),
-    apiFns.apiPayload(fetchConceptLinkRealizations, concept.name),
-  ])
-  concept.aliases = orderedAliases(aliases)
-  concept.realizations = realizations || []
-  return concept
-}
-
-const loadParent = async (conceptName, apiFns) => apiFns.apiPayload(fetchConceptParent, conceptName)
-
-const refresh = async (conceptName, apiFns) => {
-  const freshConcept = await loadConcept(conceptName, apiFns)
-  const parent = await loadParent(conceptName, apiFns)
-  freshConcept.parent = parent.name
-  const children = await loadChildren(conceptName, apiFns)
-  freshConcept.children = children.map(child => child.name)
-  await loadConceptData(freshConcept, apiFns)
-
-  return freshConcept
-}
+//   return freshConcept
+// }
 
 export {
   addedConcepts,
+  // fetchChildren,
+  // fetchConcept,
+  // fetchConceptNames,
+  // fetchParent,
   getNextSibling,
   getPrevSibling,
-  loadChildren,
-  loadConcept,
-  loadConceptData,
-  loadParent,
-  refresh,
 }

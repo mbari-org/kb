@@ -1,0 +1,24 @@
+import { updateConceptParent } from '@/lib/api/concept'
+import { CONCEPT_STATE } from '@/lib/constants'
+
+const submitParent = ([submit, { concept, updatesInfo }]) => {
+  const { hasUpdated, updatedValue } = updatesInfo
+
+  const submitters = []
+  if (hasUpdated('parent')) {
+    const parent = updatedValue('parent')
+    const params = [concept.name, { parentName: parent }]
+    submitters.push(
+      submit(updateConceptParent, params).then(response => ({
+        field: 'parent',
+        action: CONCEPT_STATE.PARENT,
+        params,
+        update: { parentName: parent },
+        response,
+      }))
+    )
+  }
+  return submitters
+}
+
+export default submitParent

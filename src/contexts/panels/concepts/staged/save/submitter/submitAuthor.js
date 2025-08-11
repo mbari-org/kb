@@ -1,4 +1,5 @@
 import { updateConceptAuthor } from '@/lib/api/concept'
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const submitAuthor = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo
@@ -6,7 +7,16 @@ const submitAuthor = ([submit, { concept, updatesInfo }]) => {
   const submitters = []
   if (hasUpdated('author')) {
     const author = updatedValue('author')
-    submitters.push(submit(updateConceptAuthor, [concept.name, { author }]))
+    const params = [concept.name, { author }]
+    submitters.push(
+      submit(updateConceptAuthor, params).then(response => ({
+        field: 'author',
+        action: CONCEPT_STATE.AUTHOR,
+        params,
+        update: { author },
+        response,
+      }))
+    )
   }
   return submitters
 }

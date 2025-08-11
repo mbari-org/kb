@@ -6,10 +6,7 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import {
-  loadConcept as _apiLoadConcept,
-  refresh as apiRefreshConcept,
-} from '@/lib/kb/model/concept'
+import { getConcept as apiConcept } from '@/lib/api/concept'
 
 import {
   closestConcept as closestTaxonomyConcept,
@@ -33,6 +30,8 @@ import {
 
 import { isAdmin } from '@/lib/auth/role'
 
+import { isEqual } from '@/lib/utils'
+
 // Load initial taxonomy with root concept and its children
 const loadInitialTaxonomy = async apiFns => {
   try {
@@ -40,13 +39,7 @@ const loadInitialTaxonomy = async apiFns => {
     const { taxonomy: basicTaxonomy } = await loadTaxonomy(apiFns)
 
     // Then load the root concept with its children
-    const { taxonomy: taxonomyWithRoot } = await loadTaxonomyConcept(
-      basicTaxonomy,
-      basicTaxonomy.rootName,
-      apiFns
-    )
-
-    return { taxonomy: taxonomyWithRoot }
+    return loadTaxonomyConcept(basicTaxonomy, basicTaxonomy.rootName, apiFns)
   } catch (error) {
     return { error }
   }
@@ -201,51 +194,117 @@ const TaxonomyProvider = ({ children }) => {
     [apiFns, showBoundary, taxonomy, updateTaxonomy]
   )
 
-  const replaceConcept = useCallback(
-    (concept, freshConcept) => {
-      const { taxonomy: freshTaxonomy } = removeTaxonomyConcept(taxonomy, concept)
+  // const replaceConcept = useCallback(
+  //   (concept, freshConcept) => {
+  //     if (freshConcept.name === concept.name) {
+  //       let aliasMap = taxonomy.aliasMap
+  //       if (!isEqual(freshConcept.alternateNames, concept.alternateNames)) {
+  //         aliasMap = { ...taxonomy.aliasMap }
+  //         concept.alternateNames.forEach(alternateName => {
+  //           delete aliasMap[alternateName]
+  //         })
+  //         freshConcept.alternateNames.forEach(alternateName => {
+  //           aliasMap[alternateName] = freshConcept.name
+  //         })
+  //       }
+  //       const conceptMap = { ...taxonomy.conceptMap }
+  //       conceptMap[freshConcept.name] = freshConcept
+  //       return { taxonomy: { ...taxonomy, aliasMap, conceptMap } }
+  //     }
 
-      mapConcept(freshConcept, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
+  //     const { taxonomy: freshTaxonomy } = removeTaxonomyConcept(taxonomy, concept)
 
-      const parent = { ...getTaxonomyConcept(freshTaxonomy, freshConcept.parent) }
-      parent.children = parent.children.filter(child => child !== freshConcept.name)
-      parent.children.push(freshConcept.name)
-      parent.children.sort()
-      mapConcept(parent, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
+  //     mapConcept(freshConcept, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
 
-      freshConcept.children.forEach(child => {
-        const childConcept = { ...getTaxonomyConcept(freshTaxonomy, child) }
-        childConcept.parent = freshConcept.name
-        mapConcept(childConcept, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
-      })
+  //     const parent = { ...getTaxonomyConcept(freshTaxonomy, freshConcept.parent) }
+  //     parent.children = parent.children.filter(child => child !== freshConcept.name)
+  //     parent.children.push(freshConcept.name)
+  //     parent.children.sort()
+  //     mapConcept(parent, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
 
-      return { taxonomy: freshTaxonomy }
-    },
-    [taxonomy]
-  )
+  //     freshConcept.children.forEach(child => {
+  //       const childConcept = { ...getTaxonomyConcept(freshTaxonomy, child) }
+  //       childConcept.parent = freshConcept.name
+  //       mapConcept(childConcept, freshTaxonomy.conceptMap, freshTaxonomy.aliasMap)
+  //     })
+
+  //     return { taxonomy: freshTaxonomy }
+  //   },
+  //   [taxonomy]
+  // )
 
   const refreshConcept = useCallback(
-    async concept => {
-      const freshConcept = await apiRefreshConcept(concept.name, apiFns)
-      const { taxonomy: freshTaxonomy } = replaceConcept(concept, freshConcept)
+    async (staleConcept, freshConcept) => {
+      const aliasMap = { ...taxonomy.aliasMap }
+      const conceptMap = { ...taxonomy.conceptMap }
 
-      updateTaxonomy(freshTaxonomy)
+      delete conceptMap[staleConcept.name]
+      staleConcept.alternateNames.forEach(alternateName => {
+        delete aliasMap[alternateName]
+      })
 
-      return { concept: freshConcept, taxonomy: freshTaxonomy }
+      mapConcept(freshConcept, conceptMap, aliasMap)
+
+      if (freshConcept.name !== staleConcept.name) {
+        delete conceptMap[staleConcept.name]
+        staleConcept.alternateNames.forEach(alternateName => {
+          delete aliasMap[alternateName]
+        })
+        const freshParent = { ...conceptMap[freshConcept.parent] }
+        freshParent.children = freshParent.children.filter(child => child !== staleConcept.name)
+        freshParent.children.push(freshConcept.name)
+        freshParent.children.sort()
+        mapConcept(freshParent, conceptMap, aliasMap)
+      }
+
+      if (freshConcept.parent !== staleConcept.parent) {
+        const freshParent = { ...conceptMap[freshConcept.parent] }
+        freshParent.children.push(freshConcept.name)
+        freshParent.children.sort()
+        mapConcept(freshParent, conceptMap, aliasMap)
+
+        const staleParent = { ...conceptMap[staleConcept.parent] }
+        staleParent.children = staleParent.children.filter(child => child !== staleConcept.name)
+        mapConcept(staleParent, conceptMap, aliasMap)
+      }
+
+      if (!isEqual(freshConcept.children, staleConcept.children)) {
+        await Promise.all(
+          freshConcept.children
+            .filter(childName => childName !== staleConcept.name)
+            .map(async childName => {
+              const child = await apiFns.apiPayload(apiConcept, childName)
+              child.parent = freshConcept.name
+              mapConcept(child, conceptMap, aliasMap)
+            })
+        )
+      }
+
+      const updatedTaxonomy = { ...taxonomy, aliasMap, conceptMap }
+
+      updateTaxonomy(updatedTaxonomy)
+
+      return { concept: freshConcept, taxonomy: updatedTaxonomy }
     },
-    [apiFns, replaceConcept, updateTaxonomy]
+    [apiFns, taxonomy, updateTaxonomy]
   )
 
   const renameConcept = useCallback(
-    async (concept, conceptName) => {
-      const freshConcept = await apiRefreshConcept(conceptName, apiFns)
-      const { taxonomy: freshTaxonomy } = replaceConcept(concept, freshConcept)
+    async (oldConcept, newConcept) => {
+      const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(taxonomy, oldConcept)
 
-      updateTaxonomy(freshTaxonomy)
+      mapConcept(newConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
 
-      return { concept: freshConcept, taxonomy: freshTaxonomy }
+      const parent = getTaxonomyConcept(updatedTaxonomy, newConcept.parent)
+      parent.children.push(newConcept.name)
+      parent.children.sort()
+      mapConcept(parent, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+
+      updateTaxonomy(updatedTaxonomy)
+
+      return { concept: newConcept, taxonomy: updatedTaxonomy }
     },
-    [apiFns, replaceConcept, updateTaxonomy]
+    [taxonomy, updateTaxonomy]
   )
 
   const removeConcept = useCallback(
@@ -293,7 +352,6 @@ const TaxonomyProvider = ({ children }) => {
       refreshConcept,
       renameConcept,
       removeConcept,
-      replaceConcept,
       taxonomy,
     }),
     [
@@ -313,7 +371,6 @@ const TaxonomyProvider = ({ children }) => {
       refreshConcept,
       renameConcept,
       removeConcept,
-      replaceConcept,
       taxonomy,
     ]
   )

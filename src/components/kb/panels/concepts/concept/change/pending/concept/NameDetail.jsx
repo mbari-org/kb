@@ -14,9 +14,10 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
+import { formatDelta } from '@/components/common/format'
 import { isAdmin } from '@/lib/auth/role'
-import { pendingInfo } from '@/lib/kb/model/history'
 import { isPendingName } from '@/lib/kb/state/name'
+import { pendingInfo } from '@/lib/kb/model/history'
 
 import { CONCEPT_NAME_EXTENT, PENDING } from '@/lib/constants'
 
@@ -55,11 +56,13 @@ const NameDetail = ({ pendingConcept }) => {
 
   const nameSx = otherApprovalSx(approval)
 
+  const nameDelta = formatDelta(pendingName.oldValue, pendingName.newValue)
+
   const pendingGroupTitle = (
     <>
       <PendingButtons approval={approval} group={GROUP.NAME} />
       <Typography sx={nameSx}>Name: </Typography>
-      <Typography sx={{ ...nameSx, fontWeight: 'bold' }}>{pendingName.newValue}</Typography>
+      <Typography sx={{ ...nameSx, fontWeight: 'bold' }}>{nameDelta}</Typography>
     </>
   )
 

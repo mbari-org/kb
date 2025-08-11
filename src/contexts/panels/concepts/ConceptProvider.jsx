@@ -46,13 +46,15 @@ const ConceptProvider = ({ children }) => {
   const { pending, setPendingConfirm } = useConceptPending(concept)
 
   const resetConcept = useCallback(
-    async resettingConcept => {
+    async updatedConcept => {
+      setEditing(false)
+
       const { pendingHistory } = await refreshPanelData('pendingHistory')
       const pendingConcept = pendingHistory.filter(
-        history => history.concept === resettingConcept.name
+        history => history.concept === updatedConcept.name
       )
 
-      const conceptState = initialConceptState(resettingConcept, pendingConcept)
+      const conceptState = initialConceptState(updatedConcept, pendingConcept)
       setInitialState(conceptState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
     },

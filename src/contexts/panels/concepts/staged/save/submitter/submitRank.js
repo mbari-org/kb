@@ -1,4 +1,5 @@
 import { updateConceptRank } from '@/lib/api/concept'
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const submitRank = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo
@@ -10,7 +11,16 @@ const submitRank = ([submit, { concept, updatesInfo }]) => {
       rankLevel: rankUpdateValue.level,
       rankName: rankUpdateValue.name,
     }
-    submitters.push(submit(updateConceptRank, [concept.name, rankUpdate]))
+    const params = [concept.name, rankUpdate]
+    submitters.push(
+      submit(updateConceptRank, params).then(response => ({
+        field: 'rank',
+        action: CONCEPT_STATE.RANK,
+        params,
+        update: rankUpdate,
+        response,
+      }))
+    )
   }
 
   return submitters
