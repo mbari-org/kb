@@ -12,6 +12,8 @@ import { capitalize } from '@/lib/utils'
 
 import { PENDING } from '@/lib/constants'
 
+import { sleep } from '@/lib/utils'
+
 const useUpdatedPending = () => {
   const { concept, pending, resetConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
@@ -37,7 +39,8 @@ const useUpdatedPending = () => {
         )
       )
 
-      // await new Promise(resolve => setTimeout(resolve, 3000))
+      // CxInc Tmp Fix until server is updated
+      await sleep(1000)
 
       approval === PENDING.APPROVAL.REJECT
         ? await rejectPending(pendingItems)

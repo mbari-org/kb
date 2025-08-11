@@ -1,3 +1,5 @@
+const after = (ms, fn) => new Promise(resolve => setTimeout(resolve, ms)).then(fn)
+
 const capitalize = string => {
   const lower = string.toLowerCase()
   return lower.charAt(0).toUpperCase() + lower.slice(1)
@@ -235,6 +237,8 @@ const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 const writeCSVContent = async (writable, dataRows) => {
   const csvRows = dataRows.map(row => row.map(escapeCSV))
   const csvContent = csvRows.map(row => row.join(',')).join('\n')
@@ -242,6 +246,7 @@ const writeCSVContent = async (writable, dataRows) => {
 }
 
 export {
+  after,
   capitalize,
   checkImageUrlExists,
   deepDiff,
@@ -262,5 +267,6 @@ export {
   pick,
   prettyFormat,
   prune,
+  sleep,
   writeCSVContent,
 }

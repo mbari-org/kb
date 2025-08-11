@@ -6,11 +6,10 @@ import KBInfoIcon from '@/components/common/KBInfoIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
+import { isPendingMedia } from '@/lib/kb/state/media'
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-import { fieldPending } from '@/lib/kb/model/history'
-
-import { HISTORY_FIELD, PENDING } from '@/lib/constants'
+import { PENDING } from '@/lib/constants'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
@@ -23,11 +22,9 @@ const MediaPreview = ({ setPreviewOn }) => {
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
-  const mediaPendingArray = fieldPending(pendingConcept, HISTORY_FIELD.MEDIA)
-  const mediaPending = mediaPendingArray[mediaPendingArray.length - 1]
-
+  const pendingMedia = pendingConcept.filter(isPendingMedia)
   const border = stagedBorder({
-    itemPending: mediaPending,
+    itemPending: pendingMedia,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,
     theme,

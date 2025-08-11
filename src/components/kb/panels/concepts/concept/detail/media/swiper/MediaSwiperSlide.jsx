@@ -5,10 +5,10 @@ import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { HISTORY_FIELD, PENDING } from '@/lib/constants'
-
+import { isPendingMedia } from '@/lib/kb/state/media'
 import { stagedBorder } from '@/lib/kb/state/staged'
-import { fieldPending } from '@/lib/kb/model/history'
+
+import { PENDING } from '@/lib/constants'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()
@@ -17,15 +17,13 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
-  const mediaPendingArray = fieldPending(pendingConcept, HISTORY_FIELD.MEDIA)
-  const mediaPending = mediaPendingArray[mediaPendingArray.length - 1]
-
   const swiper = useSwiper()
 
   const slideClick = mediaIndex => swiper.slideTo(mediaIndex)
 
+  const pendingMedia = pendingConcept.filter(isPendingMedia)
   const border = stagedBorder({
-    itemPending: mediaPending,
+    itemPending: pendingMedia,
     noActionBorderColor: theme.palette.grey[300],
     stagedItem: mediaItem,
     theme,

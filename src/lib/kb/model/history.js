@@ -6,9 +6,9 @@ import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
 import { humanTimestamp, isEmpty, pick } from '@/lib/utils'
 
 const hasPending = (pending, field) =>
-  field ? !isEmpty(fieldPending(pending, field)) : !isEmpty(pending)
+  field ? !isEmpty(pendingItems(pending, field)) : !isEmpty(pending)
 
-const fieldPending = (pendingConcept, field) => {
+const pendingItems = (pendingConcept, field) => {
   if (!pendingConcept) return []
 
   return pendingConcept
@@ -57,4 +57,4 @@ const pendingValues = pendingItem =>
     ['creationTimestamp', 'created'],
   ])
 
-export { fieldPending, hasPending, hasPendingStructure, pendingChild, pendingInfo, pendingValues }
+export { hasPending, hasPendingStructure, pendingChild, pendingInfo, pendingItems, pendingValues }

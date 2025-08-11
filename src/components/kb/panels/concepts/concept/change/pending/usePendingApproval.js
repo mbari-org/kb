@@ -1,4 +1,4 @@
-import { fieldPending } from '@/lib/kb/model/history'
+import { pendingItems } from '@/lib/kb/model/history'
 
 import { HISTORY_FIELD, PENDING } from '@/lib/constants'
 
@@ -32,7 +32,7 @@ const historyFieldForGroup = group => {
   }
 }
 
-export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
+export const getPendingIds = (pendingConcept, targetGroup) => {
   const fieldName = historyFieldForGroup(targetGroup)
 
   if (targetGroup === GROUP.ALL) {
@@ -40,7 +40,7 @@ export const getPendingIds = (pendingConcept, targetGroup, conceptName) => {
   }
 
   if (fieldName) {
-    return fieldPending(pendingConcept, fieldName).map(history => history.id)
+    return pendingItems(pendingConcept, fieldName).map(history => history.id)
   }
 
   return [targetGroup]

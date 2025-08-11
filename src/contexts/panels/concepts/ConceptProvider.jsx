@@ -65,11 +65,6 @@ const ConceptProvider = ({ children }) => {
         setConcept(selectedConcept)
         setEditing(false)
       })
-
-      // setConcept(selectedConcept)
-      // setEditing(false)
-
-      // resetConcept(selectedConcept)
     },
     [resetConcept]
   )
