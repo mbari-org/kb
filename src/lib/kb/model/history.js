@@ -25,12 +25,17 @@ const pendingChild = (pendingConcept, childName) => {
   )
 }
 
-const hasPendingStructure = pending => {
+const hasPendingStructure = (pending, conceptName) => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
 
   const hasPendingName = pendingConcept.some(isPendingName)
-  const hasPendingParent = !isEmpty(pendingParent)
+  const hasPendingParent = pendingParent.some(
+    pendingItem =>
+      pendingItem.action === ACTION.DELETE &&
+      pendingItem.field === HISTORY_FIELD.CHILD &&
+      pendingItem.oldValue === conceptName
+  )
 
   const hasPendingChildren = pendingConcept.some(isPendingChild)
 

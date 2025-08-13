@@ -28,7 +28,7 @@ const useStructureChoices = () => {
   const { concept, initialState, pending, stagedState } = use(ConceptContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
-  const pendingStructure = hasPendingStructure(pending)
+  const pendingStructure = hasPendingStructure(pending, concept.name)
 
   const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = hasStagedStructure(
     concept,

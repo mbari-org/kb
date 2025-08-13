@@ -31,7 +31,7 @@ const ConceptName = () => {
   const showStructureButton =
     editing && !showStructureChoicesModal && !hasStagedDelete && !isReadOnly(user)
 
-  const hasPending = hasPendingStructure(pending)
+  const hasPending = hasPendingStructure(pending, concept.name)
 
   const conceptColor =
     hasStagedStructure || hasPending.any ? theme.concept.color.edit : theme.palette.primary.main
