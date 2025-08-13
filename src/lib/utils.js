@@ -72,6 +72,10 @@ const escapeCSV = field => {
   return stringField
 }
 
+const filterObject = (obj, predicate) => {
+  return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
+}
+
 const formatConceptNameForFilename = str => (str || 'all').replace(/\s+/g, '-')
 
 const hasTrue = arg => {
@@ -233,11 +237,25 @@ const prune = obj => {
   return pruned
 }
 
-const filterObject = (obj, predicate) => {
-  return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
-}
-
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+// Trim the ending cycle of an array.
+//   ['A','B','C','C'] -> ['A','B','C']
+//   ['A', 'B', 'C', 'A', 'B', 'A', 'B'] -> ['A', 'B', 'C', 'A', 'B']
+//   ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D'] -> ['A', 'B', 'C', 'D']
+const trimEndingCycle = array => {
+  const n = array.length
+  const maxLen = Math.floor(n / 2)
+
+  const isMatch = len => array.slice(n - 2 * len, n - len).every((v, i) => v === array[n - len + i])
+
+  const k = Array.from({ length: maxLen }, (_, i) => i + 1).reduce(
+    (acc, len) => (isMatch(len) ? len : acc),
+    0
+  )
+
+  return array.slice(0, n - k)
+}
 
 const writeCSVContent = async (writable, dataRows) => {
   const csvRows = dataRows.map(row => row.map(escapeCSV))
@@ -268,5 +286,6 @@ export {
   prettyFormat,
   prune,
   sleep,
+  trimEndingCycle,
   writeCSVContent,
 }

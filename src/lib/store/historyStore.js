@@ -1,5 +1,7 @@
 import localStore from './localStore'
 
+import { trimEndingCycle } from '@/lib/utils'
+
 const historyStore = (store, maxSize, defaultEntry) => {
   const initStore = () => {
     store.set({ state: [defaultEntry], position: 0 })
@@ -72,12 +74,15 @@ const historyStore = (store, maxSize, defaultEntry) => {
       const { state, position } = store.get()
 
       // Remove forward history, add new entry, trim length
-      const newState = state.slice(0, position + 1)
-      newState.push(entry)
-      if (newState.length > maxSize) {
-        newState.shift()
+      const pushState = state.slice(0, position + 1)
+      pushState.push(entry)
+      if (pushState.length > maxSize) {
+        pushState.shift()
       }
-      store.set({ state: newState, position: newState.length - 1 })
+
+      const trimState = trimEndingCycle(pushState)
+
+      store.set({ state: trimState, position: trimState.length - 1 })
     },
 
     remove: () => store.remove(),
