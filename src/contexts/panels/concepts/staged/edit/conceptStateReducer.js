@@ -1,5 +1,5 @@
 import { addAlias, deleteAlias, editAlias, resetAliases } from '@/lib/kb/state/aliases'
-import { addChild, resetChildren } from '@/lib/kb/state/children'
+import { addChild, resetChild, resetChildren } from '@/lib/kb/state/children'
 import { addMedia, deleteMedia, editMedia, resetMedia } from '@/lib/kb/state/media'
 import { editName, resetName } from '@/lib/kb/state/name'
 import { editRank, resetRank } from '@/lib/kb/state/rank'
@@ -65,6 +65,9 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case REALIZATION.EDIT:
       return editRealization(state, update)
+
+    case RESET.CHILD:
+      return resetChild(state, update)
 
     case RESET.CHILDREN:
       return resetChildren(state, update)

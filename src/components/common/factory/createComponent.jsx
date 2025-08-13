@@ -1,7 +1,6 @@
 import Actions from '@/components/common/factory/Actions'
 import Detail from '@/components/common/factory/Detail'
 import Text from '@/components/common/factory/Text'
-import Title from '@/components/common/factory/Title'
 
 const createComponent = (Component, props, name) => {
   const NamedComponent = () => <Component {...props} />

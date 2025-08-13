@@ -45,6 +45,17 @@ const resetChildren = (state, update) => {
   }
 }
 
+// Reset a single child at its index, using the provided child object
+const resetChild = (state, update) => {
+  const { child } = update
+  const resetIndex = child?.index
+  if (resetIndex === undefined) return state
+  return {
+    ...state,
+    children: state.children.map((item, index) => (index === resetIndex ? child : item)),
+  }
+}
+
 const stagedChild = (child, pendingConcept) => {
   const pendingChildren = pendingConcept.filter(isPendingChild)
 
@@ -73,4 +84,4 @@ const stagedChildren = stagedEdit => {
   })
 }
 
-export { addChild, childrenState, isPendingChild, resetChildren, stagedChildren }
+export { addChild, childrenState, isPendingChild, resetChild, resetChildren, stagedChildren }

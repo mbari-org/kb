@@ -26,9 +26,7 @@ const StagedValue = ({ group, stagedEdit }) => {
     return <FieldValueDisplay disabled={disabled} field={field} value={value} />
   }
 
-  const GroupBody = () => {
-    return null
-  }
+  const GroupBody = () => null
 
   return (
     <StagedGroup
