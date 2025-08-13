@@ -11,12 +11,14 @@ import { ACTION } from '@/lib/constants'
 
 const hasStagedStructure = (concept, stagedState) => {
   const hasStagedChildren = stagedState.children.some(child => child.action !== ACTION.NONE)
+  const hasStagedDelete = stagedState.delete
   const hasStagedName = stagedState.name.action !== ACTION.NONE
   const hasStagedParent =
     stagedState.parent !== concept.parent && stagedState.parent.action !== ACTION.NONE
 
   return {
     hasStagedChildren,
+    hasStagedDelete,
     hasStagedName,
     hasStagedParent,
   }
@@ -28,7 +30,7 @@ const useStructureChoices = () => {
 
   const pendingStructure = hasPendingStructure(pending)
 
-  const { hasStagedChildren, hasStagedName, hasStagedParent } = hasStagedStructure(
+  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = hasStagedStructure(
     concept,
     stagedState
   )
@@ -39,15 +41,19 @@ const useStructureChoices = () => {
     () =>
       isRoot ||
       hasStagedChildren ||
+      hasStagedDelete ||
       hasStateChange(initialState, stagedState) ||
       pendingStructure.any,
-    [hasStagedChildren, initialState, isRoot, pendingStructure.any, stagedState]
+    [hasStagedChildren, hasStagedDelete, initialState, isRoot, pendingStructure.any, stagedState]
   )
-  const disableChangeName = isRoot || pendingStructure.name || hasStagedName
-  const disableChangeParent = isRoot || pendingStructure.parent || hasStagedParent
+  const disableChangeName =
+    isRoot || pendingStructure.name || hasStagedDelete || hasStagedName || hasStagedChildren
+  const disableChangeParent =
+    isRoot || pendingStructure.parent || hasStagedDelete || hasStagedParent || hasStagedChildren
 
   return {
     hasStagedChildren,
+    hasStagedDelete,
     hasStagedName,
     hasStagedParent,
     disableDelete,

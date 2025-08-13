@@ -4,21 +4,19 @@ import { createStagedActions } from '@/components/modal/concept/conceptModalUtil
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_STATE, SELECTED } from '@/lib/constants'
+import { editValue } from '@/lib/kb/state/value'
+
+import { CONCEPT_STATE } from '@/lib/constants'
 
 const DeleteConceptActions = () => {
-  const { concept, modifyConcept, setEditing } = use(ConceptContext)
+  const { concept, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
-  const { updateSelected } = use(SelectedContext)
-  const { deleteConcept } = use(TaxonomyContext)
 
   const handleCancel = () => {
     modifyConcept({
       type: CONCEPT_STATE.DELETE,
-      update: { delete: false },
+      update: editValue(concept, { field: 'delete', value: false }),
     })
     closeModal()
   }
@@ -26,21 +24,17 @@ const DeleteConceptActions = () => {
   const handleStage = () => {
     modifyConcept({
       type: CONCEPT_STATE.DELETE,
-      update: { delete: true },
+      update: editValue(concept, { field: 'delete', value: true }),
     })
     closeModal(true)
-    deleteConcept(concept).then(selectConcept => {
-      updateSelected({ [SELECTED.CONCEPT]: selectConcept.name })
-      setEditing(false)
-    })
   }
 
   return createStagedActions({
+    confirmReset: false,
+    name: 'DeleteConceptActions',
     onDiscard: handleCancel,
     onStage: handleStage,
     stageDisabled: !modalData?.isValid,
-    confirmReset: false,
-    name: 'DeleteConceptActions',
   })
 }
 

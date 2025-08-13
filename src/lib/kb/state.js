@@ -30,6 +30,7 @@ const initialConceptState = (concept, pendingConcept) => {
     ...rankState(concept, pendingConcept),
     ...realizationsState(concept, pendingConcept),
     ...valueState(concept, 'author'),
+    ...valueState(concept, 'delete', false),
     ...valueState(concept, 'parent'),
   }
 }

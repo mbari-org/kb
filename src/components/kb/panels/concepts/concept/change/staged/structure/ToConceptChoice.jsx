@@ -23,7 +23,11 @@ const ToConceptChoice = ({ error, handleChange, label, omitChoices, onEnter, req
             {...params}
             error={error}
             fullWidth
-            onEnter={onEnter}
+            onKeyDown={event => {
+              if (event.key === 'Enter' && onEnter) {
+                onEnter(event)
+              }
+            }}
             required={required}
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {

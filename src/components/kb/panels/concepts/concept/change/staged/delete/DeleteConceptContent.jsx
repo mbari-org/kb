@@ -59,7 +59,7 @@ const DeleteConceptContent = () => {
 
   const annotationsMessage =
     annotationCount === 0
-      ? 'This concept has no annotations'
+      ? 'This concept has no annotations.'
       : `This concept has ${annotationCount} annotation${
           annotationCount !== 1 ? 's' : ''
         } which must be reassigned.`

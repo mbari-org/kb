@@ -201,6 +201,11 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
     ? { ...taxonomyConcept }
     : await apiFns.apiPayload(fetchConcept, conceptName)
 
+  if (concept.name !== taxonomy.rootName && !concept.parent) {
+    const parent = await apiFns.apiPayload(fetchParent, concept.name)
+    concept.parent = parent.name
+  }
+
   if (!concept.aliases) {
     const conceptNames = await apiFns.apiPayload(fetchConceptNames, concept.name)
     concept.aliases = orderedAliases(conceptNames)
@@ -284,6 +289,7 @@ const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiFn
     const children = await apiFns.apiPayload(fetchChildren, concept.name)
     updatedConcept.children = children.map(child => child.name)
     children.forEach(child => {
+      child.parent = concept.name
       mapConcept(child, conceptMap, aliasMap)
     })
     mapConcept(updatedConcept, conceptMap, aliasMap)
@@ -430,66 +436,6 @@ const removeTaxonomyConcept = (taxonomy, concept) => {
   }
 
   return { taxonomy: updatedTaxonomy }
-}
-
-export const cxDebugTaxonomyIntegrity = taxonomy => {
-  const conceptMap = taxonomy.conceptMap
-  const aliasMap = taxonomy.aliasMap
-
-  const conceptError = (concept, reason) => {
-    throw new Error(`Concept "${concept.name}" ${reason}`)
-  }
-
-  const validateConcept = conceptName => {
-    const concept = conceptMap[conceptName]
-    if (!concept) {
-      conceptError(conceptName, 'is not in the concept map')
-    }
-
-    concept.alternateNames.forEach(alternateName => {
-      if (!aliasMap[alternateName]) {
-        conceptError(concept, `has alias "${alternateName}" that is not in aliasMap`)
-      }
-      if (concept !== aliasMap[alternateName]) {
-        conceptError(
-          concept,
-          `in the conceptMap is not the concept "${alternateName}" in the aliasMap`
-        )
-      }
-    })
-
-    concept.children?.forEach(child => {
-      const childConcept = conceptMap[child]
-      if (!childConcept) {
-        conceptError(concept, `has child "${child}" that is not in conceptMap`)
-      }
-      if (childConcept.parent !== concept.name) {
-        conceptError(concept, `has child "${child}" that has parent "${childConcept.parent}"`)
-      }
-
-      const childConceptParent = conceptMap[childConcept.parent]
-      if (!childConceptParent) {
-        conceptError(concept, `has parent "${childConcept.parent}" that is not in conceptMap`)
-      }
-      if (childConceptParent !== concept) {
-        conceptError(concept, `has child "${child.name}" that does not have concept as parent`)
-      }
-    })
-
-    if (!concept.parent && !isRoot(taxonomy, concept)) {
-      conceptError(concept, 'has no parent')
-    }
-  }
-
-  const validateConceptTree = concept => {
-    validateConcept(concept)
-    concept.children?.forEach(child => {
-      validateConceptTree(child)
-    })
-  }
-
-  validateConceptTree(taxonomy.rootName)
-  console.log('cxDebug Taxonomy Integrity passed')
 }
 
 export {

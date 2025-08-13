@@ -21,13 +21,15 @@ const ConceptName = () => {
   const { user } = use(UserContext)
   const { concept, editing, pending } = use(ConceptContext)
 
-  const { hasStagedChildren, hasStagedName, hasStagedParent } = useStructureChoices()
-  const hasStagedStructure = hasStagedChildren || hasStagedName || hasStagedParent
+  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } =
+    useStructureChoices()
+  const hasStagedStructure =
+    hasStagedChildren || hasStagedDelete || hasStagedName || hasStagedParent
 
   const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
 
   const showStructureButton =
-    editing && !showStructureChoicesModal && !hasStagedName && !isReadOnly(user)
+    editing && !showStructureChoicesModal && !hasStagedDelete && !isReadOnly(user)
 
   const hasPending = hasPendingStructure(pending)
 
