@@ -33,7 +33,7 @@ const DeleteConceptContent = () => {
     setToConcept(selectedName)
     const valid = validateChoice(selectedName)
     setIsValid(valid)
-    setModalData({ parent: selectedName, modified: valid, isValid: valid })
+    setModalData(prev => ({ ...prev, parent: selectedName, modified: valid, isValid: valid }))
   }
 
   const handleKeyUp = event => {
@@ -41,7 +41,7 @@ const DeleteConceptContent = () => {
     setToConcept(conceptName)
     const valid = validateChoice(conceptName)
     setIsValid(valid)
-    setModalData({ parent: conceptName, modified: valid, isValid: valid })
+    setModalData(prev => ({ ...prev, parent: conceptName, modified: valid, isValid: valid }))
   }
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const DeleteConceptContent = () => {
   }, [apiFns, concept.name])
 
   useEffect(() => {
-    setModalData({ parent: concept.parent, modified: true, isValid: true })
+    setModalData(prev => ({ ...prev, parent: concept.parent, modified: true, isValid: true }))
   }, [concept.parent, setModalData])
 
   const annotationsMessage =

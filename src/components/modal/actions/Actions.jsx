@@ -6,6 +6,8 @@ import Action from './Action'
 import DiscardingAlert from './DiscardingAlert'
 import PendingAlert from './PendingAlert'
 import DuplicateAlert from './DuplicateAlert'
+import ActionsAlert from './ActionsAlert'
+import DeleteAlert from './DeleteAlert'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -65,7 +67,17 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
       <Stack spacing={0} sx={{ alignItems: 'center', mt: 1, height: 60, justifyContent: 'center' }}>
         {!!confirmReset && <DiscardingAlert />}
         {!!pendingConfirm && <PendingAlert approval={pendingConfirm.approval} />}
-        {!!isDuplicate && !confirmReset && <DuplicateAlert />}
+        {!!modalData?.alertType && modalData.alertType === 'delete' && !confirmReset && (
+          <DeleteAlert />
+        )}
+        {!!modalData?.alert && !confirmReset && !modalData?.alertType && (
+          <ActionsAlert
+            line1={modalData.alert.line1}
+            line2={modalData.alert.line2}
+            severity={modalData.alert.severity || 'info'}
+          />
+        )}
+        {!!isDuplicate && !confirmReset && !modalData?.alert && !modalData?.alertType && <DuplicateAlert />}
       </Stack>
       <Box
         sx={{

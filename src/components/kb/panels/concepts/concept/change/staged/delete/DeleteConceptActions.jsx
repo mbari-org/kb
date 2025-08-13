@@ -1,41 +1,62 @@
 import { use } from 'react'
 
-import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
+import { createActions } from '@/components/modal/conceptModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { editValue } from '@/lib/kb/state/value'
-
-import { CONCEPT_STATE } from '@/lib/constants'
+import { deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
 
 const DeleteConceptActions = () => {
-  const { concept, modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { concept } = use(ConceptContext)
+  const { closeModal, modalData, setModalData, setProcessing } = use(ConceptModalContext)
+  const { updateSelected } = use(SelectedContext)
+  const { deleteConcept } = use(TaxonomyContext)
+  const { apiFns } = use(ConfigContext)
 
-  const handleCancel = () => {
-    modifyConcept({
-      type: CONCEPT_STATE.DELETE,
-      update: editValue(concept, { field: 'delete', value: false }),
-    })
-    closeModal()
+  const isConfirm = modalData?.alertType === 'delete'
+
+  if (!isConfirm) {
+    const colors = ['main', 'cancel']
+    const labels = ['Discard', 'Delete']
+    const onAction = label => {
+      if (label === 'Discard') {
+        closeModal()
+        return
+      }
+      if (label === 'Delete') {
+        setModalData(prev => ({ ...prev, alertType: 'delete' }))
+      }
+    }
+    return createActions({ colors, labels, onAction }, 'DeleteConceptActions:Primary')
   }
 
-  const handleStage = () => {
-    modifyConcept({
-      type: CONCEPT_STATE.DELETE,
-      update: editValue(concept, { field: 'delete', value: true }),
-    })
-    closeModal(true)
+  const colors = ['main', 'cancel']
+  const labels = ['Cancel', 'Confirm']
+  const onAction = label => {
+    if (label === 'Cancel') {
+      closeModal()
+      return
+    }
+    if (label === 'Confirm') {
+      setProcessing('Deleting concept...')
+      apiFns
+        .apiPayload(apiDeleteConcept, concept.name)
+        .then(() => deleteConcept(concept))
+        .then(result => {
+          closeModal(true, () => {
+            updateSelected({ concept: result.closestConcept.name })
+          })
+        })
+        .finally(() => {
+          setProcessing(null)
+        })
+    }
   }
-
-  return createStagedActions({
-    confirmReset: false,
-    name: 'DeleteConceptActions',
-    onDiscard: handleCancel,
-    onStage: handleStage,
-    stageDisabled: !modalData?.isValid,
-  })
+  return createActions({ colors, labels, onAction }, 'DeleteConceptActions:Confirm')
 }
 
 export default DeleteConceptActions
