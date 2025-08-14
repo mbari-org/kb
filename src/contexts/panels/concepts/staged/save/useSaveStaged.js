@@ -12,7 +12,6 @@ import applyAliases from '@/contexts/panels/concepts/staged/save/applier/applyAl
 import applyAuthor from '@/contexts/panels/concepts/staged/save/applier/applyAuthor'
 import applyChildren from '@/contexts/panels/concepts/staged/save/applier/applyChildren'
 import applyMedia from '@/contexts/panels/concepts/staged/save/applier/applyMedia'
-import applyName from '@/contexts/panels/concepts/staged/save/applier/applyName'
 import applyParent from '@/contexts/panels/concepts/staged/save/applier/applyParent'
 import applyRank from '@/contexts/panels/concepts/staged/save/applier/applyRank'
 import applyRealizations from '@/contexts/panels/concepts/staged/save/applier/applyRealizations'
@@ -43,20 +42,18 @@ const useSaveStaged = () => {
 
     const freshConcept = await apiFns.apiPayload(apiConcept, conceptName)
 
-    // Initialize from stale for fields we might not touch
-    freshConcept.parent = staleConcept.parent
     freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
     freshConcept.alternateNames = [...staleConcept.alternateNames]
     freshConcept.children = [...staleConcept.children]
+    freshConcept.parent = staleConcept.parent
 
     const appliers = {
-      author: (concept, tracker) => applyAuthor(concept, tracker),
-      name: (concept, tracker) => applyName(concept, tracker),
-      parent: (concept, tracker) => applyParent(concept, tracker),
-      rank: (concept, tracker) => applyRank(concept, tracker),
       aliases: (concept, tracker) => applyAliases(concept, tracker),
+      author: (concept, tracker) => applyAuthor(concept, tracker),
       children: (concept, tracker) => applyChildren(concept, tracker),
       media: (concept, tracker) => applyMedia(concept, tracker),
+      parent: (concept, tracker) => applyParent(concept, tracker),
+      rank: (concept, tracker) => applyRank(concept, tracker),
       realizations: (concept, tracker) => applyRealizations(concept, tracker),
     }
 

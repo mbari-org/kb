@@ -68,7 +68,6 @@ export const createConfirmationHandlers = ({ closeModal, _concept, modifyConcept
       type: CONFIRMED.YES,
       update,
     })
-    // Force close, bypassing onClose
     closeModal(true)
   }
 
@@ -76,7 +75,6 @@ export const createConfirmationHandlers = ({ closeModal, _concept, modifyConcept
     modifyConcept({ type: CONFIRMED.NO })
   }
 
-  // Let onClose handle reset
   const handleDiscard = () => {
     closeModal()
   }

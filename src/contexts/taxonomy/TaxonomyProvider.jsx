@@ -206,35 +206,18 @@ const TaxonomyProvider = ({ children }) => {
     async (staleConcept, freshConcept) => {
       const aliasMap = { ...taxonomy.aliasMap }
       const conceptMap = { ...taxonomy.conceptMap }
+      let names = taxonomy.names
 
       delete conceptMap[staleConcept.name]
       staleConcept.alternateNames.forEach(alternateName => {
         delete aliasMap[alternateName]
       })
-
       mapConcept(freshConcept, conceptMap, aliasMap)
 
-      if (freshConcept.name !== staleConcept.name) {
-        delete conceptMap[staleConcept.name]
-        staleConcept.alternateNames.forEach(alternateName => {
-          delete aliasMap[alternateName]
-        })
-        const freshParent = { ...conceptMap[freshConcept.parent] }
-        freshParent.children = freshParent.children.filter(child => child !== staleConcept.name)
-        freshParent.children.push(freshConcept.name)
-        freshParent.children.sort()
-        mapConcept(freshParent, conceptMap, aliasMap)
-      }
-
-      if (freshConcept.parent !== staleConcept.parent) {
-        const freshParent = { ...conceptMap[freshConcept.parent] }
-        freshParent.children.push(freshConcept.name)
-        freshParent.children.sort()
-        mapConcept(freshParent, conceptMap, aliasMap)
-
-        const staleParent = { ...conceptMap[staleConcept.parent] }
-        staleParent.children = staleParent.children.filter(child => child !== staleConcept.name)
-        mapConcept(staleParent, conceptMap, aliasMap)
+      if (!isEqual(freshConcept.alternateNames, staleConcept.alternateNames)) {
+        names = names.filter(name => !staleConcept.alternateNames.includes(name))
+        names.push(...freshConcept.alternateNames)
+        names.sort()
       }
 
       if (!isEqual(freshConcept.children, staleConcept.children)) {
@@ -249,7 +232,30 @@ const TaxonomyProvider = ({ children }) => {
         )
       }
 
-      const updatedTaxonomy = { ...taxonomy, aliasMap, conceptMap }
+      if (freshConcept.name !== staleConcept.name) {
+        const freshParent = { ...conceptMap[freshConcept.parent] }
+        freshParent.children = freshParent.children.filter(child => child !== staleConcept.name)
+        freshParent.children.push(freshConcept.name)
+        freshParent.children.sort()
+        mapConcept(freshParent, conceptMap, aliasMap)
+
+        names = names.filter(name => name !== staleConcept.name)
+        names.push(freshConcept.name)
+        names.sort()
+      }
+
+      if (freshConcept.parent !== staleConcept.parent) {
+        const freshParent = { ...conceptMap[freshConcept.parent] }
+        freshParent.children.push(freshConcept.name)
+        freshParent.children.sort()
+        mapConcept(freshParent, conceptMap, aliasMap)
+
+        const staleParent = { ...conceptMap[staleConcept.parent] }
+        staleParent.children = staleParent.children.filter(child => child !== staleConcept.name)
+        mapConcept(staleParent, conceptMap, aliasMap)
+      }
+
+      const updatedTaxonomy = { ...taxonomy, aliasMap, conceptMap, names }
 
       updateTaxonomy(updatedTaxonomy)
 
