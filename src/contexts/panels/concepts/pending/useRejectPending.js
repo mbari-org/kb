@@ -1,69 +1,80 @@
 import { use, useCallback } from 'react'
 
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { isPendingName } from '@/lib/kb/state/name'
+import { getConcept as apiConcept } from '@/lib/api/concept'
 
-import { ACTION, HISTORY_FIELD, SELECTED } from '@/lib/constants'
+import { HISTORY_FIELD } from '@/lib/constants'
+
+import rejectAlias from '@/contexts/panels/concepts/pending/reject/rejectAlias'
+import rejectChild from '@/contexts/panels/concepts/pending/reject/rejectChild'
+import rejectMedia from '@/contexts/panels/concepts/pending/reject/rejectMedia'
+import rejectRank from '@/contexts/panels/concepts/pending/reject/rejectRank'
+import rejectRealization from '@/contexts/panels/concepts/pending/reject/rejectRealization'
+import rejectValue from '@/contexts/panels/concepts/pending/reject/rejectValue'
 
 const useRejectPending = () => {
-  const { concept, resetConcept } = use(ConceptContext)
-  const { updateSelected } = use(SelectedContext)
-  const { closestConcept, refreshConcept, removeConcept, renameConcept } = use(TaxonomyContext)
-
-  const isAddChild = rejectingItems =>
-    rejectingItems.length === 1 &&
-    rejectingItems[0].action === ACTION.ADD &&
-    rejectingItems[0].field === HISTORY_FIELD.CHILD
+  const { concept: staleConcept } = use(ConceptContext)
+  const { apiFns } = use(ConfigContext)
 
   return useCallback(
     async rejectingItems => {
-      if (isAddChild(rejectingItems)) {
-        const gotoConcept = closestConcept(concept, rejectingItems[0].value)
-        removeConcept(concept.name)
-        updateSelected({
-          [SELECTED.CONCEPT]: gotoConcept.name,
-        })
-        // a rejected child will always be the only item
-        return
-      }
+      const freshConcept = await apiFns.apiPayload(apiConcept, staleConcept.name)
 
-      const rejectedRename = rejectingItems.find(isPendingName)
+      freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
+      freshConcept.alternateNames = [...staleConcept.alternateNames]
+      freshConcept.children = [...staleConcept.children]
+      freshConcept.parent = staleConcept.parent
+      freshConcept.rankLevel = staleConcept.rankLevel
+      freshConcept.rankName = staleConcept.rankName
+      freshConcept.media = (staleConcept.media || []).map(media => ({ ...media }))
+      freshConcept.linkRealizations = (staleConcept.linkRealizations || []).map(realization => ({
+        ...realization,
+      }))
 
-      const { concept: freshConcept } = rejectedRename
-        ? await renameConcept(concept, rejectedRename.oldValue)
-        : await refreshConcept(concept)
+      rejectingItems.forEach(pendingItem => {
+        let rejectFn = rejectValue
 
-      const rejectedChildren = rejectingItems.filter(
-        item => item.action === ACTION.ADD && item.field === HISTORY_FIELD.CHILD
-      )
-      if (rejectedChildren.length > 0) {
-        throw new Error('Not implemented: remove rejected children', {
-          cause: rejectedChildren,
-        })
-      }
+        switch (pendingItem.field) {
+          case HISTORY_FIELD.ALIAS:
+            rejectFn = rejectAlias
+            break
 
-      if (rejectedRename) {
-        updateSelected({
-          [SELECTED.CONCEPT]: rejectedRename.oldValue,
-        })
-      } else {
-        await resetConcept(freshConcept)
-      }
+          case HISTORY_FIELD.CHILD:
+            rejectFn = rejectChild
+            break
+
+          case HISTORY_FIELD.MEDIA:
+            rejectFn = rejectMedia
+            break
+
+          case HISTORY_FIELD.NAME:
+            rejectFn = rejectValue
+            break
+
+          case HISTORY_FIELD.PARENT:
+            rejectFn = rejectValue
+            break
+
+          case HISTORY_FIELD.RANK:
+            rejectFn = rejectRank
+            break
+
+          case HISTORY_FIELD.REALIZATION:
+            rejectFn = rejectRealization
+            break
+
+          default:
+            break
+        }
+
+        rejectFn(freshConcept, pendingItem, rejectingItems)
+      })
 
       return freshConcept
     },
-    [
-      concept,
-      closestConcept,
-      refreshConcept,
-      removeConcept,
-      renameConcept,
-      resetConcept,
-      updateSelected,
-    ]
+    [apiFns, staleConcept]
   )
 }
 

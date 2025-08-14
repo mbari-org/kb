@@ -3,21 +3,23 @@ import { use, useCallback } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useRejectPending from './useRejectPending'
 
-import { updatePendingHistoryItem } from '@/lib/api/history'
+import { updatePendingItem } from '@/lib/api/history'
 
 import { capitalize } from '@/lib/utils'
 
 import { PENDING } from '@/lib/constants'
 
-import { sleep } from '@/lib/utils'
-
 const useUpdatedPending = () => {
-  const { concept, pending, resetConcept } = use(ConceptContext)
+  const { concept: staleConcept, pending, resetConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
+  const { updateSelected } = use(SelectedContext)
+  const { refreshConcept } = use(TaxonomyContext)
 
   const rejectPending = useRejectPending()
 
@@ -35,22 +37,36 @@ const useUpdatedPending = () => {
 
       await Promise.all(
         pendingItems.map(pendingItem =>
-          apiFns.apiPayload(updatePendingHistoryItem, [approval, pendingItem.id])
+          apiFns.apiPayload(updatePendingItem, [approval, pendingItem.id])
         )
       )
 
-      // CxInc Tmp Fix until server is updated
-      await sleep(1000)
+      // CxTmp until server is updated
+      // await sleep(1000)
 
-      approval === PENDING.APPROVAL.REJECT
-        ? await rejectPending(pendingItems)
-        : await resetConcept(concept)
+      const freshConcept =
+        approval === PENDING.APPROVAL.REJECT ? await rejectPending(pendingItems) : staleConcept
+
+      const { concept: updatedConcept } = await refreshConcept(freshConcept, staleConcept)
+
+      await resetConcept(updatedConcept)
+
+      updateSelected({ concept: updatedConcept.name })
 
       setProcessing(false)
 
       return pendingConcept.length !== pendingItems.length
     },
-    [apiFns, concept, pending, rejectPending, resetConcept, setProcessing]
+    [
+      pending,
+      setProcessing,
+      rejectPending,
+      staleConcept,
+      refreshConcept,
+      resetConcept,
+      updateSelected,
+      apiFns,
+    ]
   )
 }
 

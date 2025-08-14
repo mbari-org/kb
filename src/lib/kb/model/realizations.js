@@ -9,11 +9,6 @@ const EMPTY_REALIZATION = {
   templateId: null,
 }
 
-const isSame = (a, b) =>
-  a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
-
-const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_FIELDS)
-
 const hasDuplicate = (realizations, realization, excludeIndex = null) => {
   if (!realization.linkName || !realization.toConcept || !realization.linkValue) {
     return false
@@ -25,4 +20,27 @@ const hasDuplicate = (realizations, realization, excludeIndex = null) => {
   return realizationsToCheck.some(existing => isSame(realization, existing))
 }
 
-export { EMPTY_REALIZATION, hasDuplicate, isSame, REALIZATION_DISPLAY_FIELDS, realizationFields }
+const isSame = (a, b) =>
+  a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
+
+const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_FIELDS)
+
+const parseRealization = str => {
+  const [linkName, toConcept, linkValue] = (str || '').split(' | ')
+  return { linkName, toConcept, linkValue }
+}
+
+const sameRealization = (realization, str) => {
+  const parsedRealization = parseRealization(str)
+  return isSame(realization, parsedRealization)
+}
+
+export {
+  EMPTY_REALIZATION,
+  hasDuplicate,
+  isSame,
+  parseRealization,
+  REALIZATION_DISPLAY_FIELDS,
+  realizationFields,
+  sameRealization,
+}

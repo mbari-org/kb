@@ -67,7 +67,10 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const closestConcept = useCallback(
-    concept => closestTaxonomyConcept(taxonomy, concept),
+    conceptName => {
+      const concept = getTaxonomyConcept(taxonomy, conceptName)
+      return closestTaxonomyConcept(taxonomy, concept)
+    },
     [taxonomy]
   )
 
@@ -203,7 +206,11 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const refreshConcept = useCallback(
-    async (staleConcept, freshConcept) => {
+    async (freshConcept, staleConcept) => {
+      if (freshConcept === staleConcept) {
+        return { concept: freshConcept, taxonomy }
+      }
+
       const aliasMap = { ...taxonomy.aliasMap }
       const conceptMap = { ...taxonomy.conceptMap }
       let names = taxonomy.names
@@ -221,8 +228,15 @@ const TaxonomyProvider = ({ children }) => {
       }
 
       if (!isEqual(freshConcept.children, staleConcept.children)) {
+        const addedChildren = freshConcept.children.filter(
+          name => !staleConcept.children.includes(name)
+        )
+        const removedChildren = staleConcept.children.filter(
+          name => !freshConcept.children.includes(name)
+        )
+
         await Promise.all(
-          freshConcept.children
+          addedChildren
             .filter(childName => childName !== staleConcept.name)
             .map(async childName => {
               const child = await apiFns.apiPayload(apiConcept, childName)
@@ -230,6 +244,25 @@ const TaxonomyProvider = ({ children }) => {
               mapConcept(child, conceptMap, aliasMap)
             })
         )
+
+        removedChildren.forEach(childName => {
+          const removed = conceptMap[childName]
+          if (removed) {
+            if (Array.isArray(removed.alternateNames)) {
+              removed.alternateNames.forEach(aliasName => {
+                delete aliasMap[aliasName]
+              })
+            }
+            delete conceptMap[childName]
+          }
+        })
+
+        if (addedChildren.length > 0 || removedChildren.length > 0) {
+          names = names
+            .filter(name => !removedChildren.includes(name))
+            .concat(addedChildren)
+            .sort()
+        }
       }
 
       if (freshConcept.name !== staleConcept.name) {
