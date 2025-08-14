@@ -1,4 +1,5 @@
 import {
+  deleteConcept as apiDeleteConcept,
   getConceptChildren as fetchChildren,
   getConcept as fetchConcept,
   getConceptNames as fetchConceptNames,
@@ -49,6 +50,8 @@ const deleteConcept = async (taxonomy, concept, apiFns) => {
   if (0 < concept.children.length) {
     throw new Error(`Concept "${concept.name}" has children.`)
   }
+
+  await apiFns.apiPayload(apiDeleteConcept, concept.name)
 
   const conceptMap = { ...taxonomy.conceptMap }
   delete conceptMap[concept.name]

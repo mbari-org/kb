@@ -70,7 +70,7 @@ const DeleteConceptContent = () => {
         DELETE
       </Typography>
       <Typography align='center'>{annotationsMessage}</Typography>
-      <Stack direction='column' spacing={1} alignItems='center' sx={{ mt: 5 }}>
+      <Stack direction='column' spacing={1} alignItems='center'>
         <Box>
           {annotationCount > 0 && (
             <Box sx={{ width: '80%', mx: 'auto', mt: 2 }}>

@@ -8,8 +8,6 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
-
 const DeleteConceptActions = () => {
   const { concept } = use(ConceptContext)
   const { closeModal, modalData, setModalData, setProcessing } = use(ConceptModalContext)
@@ -43,9 +41,7 @@ const DeleteConceptActions = () => {
     }
     if (label === 'Confirm') {
       setProcessing('Deleting concept...')
-      apiFns
-        .apiPayload(apiDeleteConcept, concept.name)
-        .then(() => deleteConcept(concept))
+      deleteConcept(concept)
         .then(result => {
           closeModal(true, () => {
             updateSelected({ concept: result.closestConcept.name })
