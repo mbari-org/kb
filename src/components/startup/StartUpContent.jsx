@@ -29,7 +29,7 @@ const StartUpContent = ({ configIsDirty, handleConfigChange }) => {
           transition: 'opacity 300ms ease-out',
         }}
       >
-        <LoginForm />
+        <LoginForm isVisible={!configIsDirty} />
       </Box>
       <StartUpVersion />
     </Box>

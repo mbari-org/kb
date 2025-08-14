@@ -11,7 +11,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { loginUser } from '@/lib/services/auth/login'
 
-const LoginForm = () => {
+const LoginForm = ({ isVisible = true }) => {
   const { processAuth } = use(UserContext)
   const { config } = use(ConfigContext)
 
@@ -30,10 +30,10 @@ const LoginForm = () => {
   }, [loginState, processAuth])
 
   useEffect(() => {
-    if (usernameRef.current) {
+    if (isVisible && usernameRef.current) {
       usernameRef.current.focus()
     }
-  }, [])
+  }, [isVisible])
 
   return (
     <Box component='form' action={loginAction}>
