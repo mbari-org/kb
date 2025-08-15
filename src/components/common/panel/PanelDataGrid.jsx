@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import PropTypes from 'prop-types'
 
 /**
  * A reusable DataGrid component with pagination controls pinned to the bottom.
@@ -104,19 +103,6 @@ const PanelDataGrid = ({
       )}
     </Box>
   )
-}
-
-PanelDataGrid.propTypes = {
-  columns: PropTypes.array.isRequired,
-  rows: PropTypes.array.isRequired,
-  rowCount: PropTypes.number,
-  paginationModel: PropTypes.object.isRequired,
-  pageSizeOptions: PropTypes.array.isRequired,
-  paginationMode: PropTypes.oneOf(['client', 'server']),
-  paginationComponent: PropTypes.node,
-  hideFooter: PropTypes.bool,
-  dataGridProps: PropTypes.object,
-  sx: PropTypes.object,
 }
 
 export default PanelDataGrid

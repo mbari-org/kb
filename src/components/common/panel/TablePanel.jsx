@@ -1,5 +1,4 @@
 import { Box, Stack } from '@mui/material'
-import PropTypes from 'prop-types'
 
 /**
  * A standard panel component that provides consistent layout and styling for table-based panel content.
@@ -50,12 +49,6 @@ const TablePanel = ({ header, panelTable, sx = {} }) => {
       </Stack>
     </Box>
   )
-}
-
-TablePanel.propTypes = {
-  header: PropTypes.node,
-  panelTable: PropTypes.node.isRequired,
-  sx: PropTypes.object,
 }
 
 export default TablePanel

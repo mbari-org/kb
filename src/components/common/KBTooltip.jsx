@@ -1,6 +1,5 @@
 import { Tooltip } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import PropTypes from 'prop-types'
 
 import { DELAY, FONT } from '@/lib/tooltips'
 
@@ -38,12 +37,6 @@ const KBTooltip = ({ children, title, tooltipSx, ...props }) => {
       {children}
     </Tooltip>
   )
-}
-
-KBTooltip.propTypes = {
-  children: PropTypes.node.isRequired,
-  title: PropTypes.node.isRequired,
-  tooltipSx: PropTypes.object,
 }
 
 export default KBTooltip

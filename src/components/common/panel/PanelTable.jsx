@@ -1,5 +1,4 @@
 import { Box } from '@mui/material'
-import PropTypes from 'prop-types'
 
 /**
  * A table component for panels that provides a consistent layout with header and data sections.
@@ -44,12 +43,6 @@ const PanelTable = ({ tableHeader, tableData, sx = {} }) => {
       </Box>
     </Box>
   )
-}
-
-PanelTable.propTypes = {
-  tableHeader: PropTypes.node.isRequired,
-  tableData: PropTypes.node.isRequired,
-  sx: PropTypes.object,
 }
 
 export default PanelTable

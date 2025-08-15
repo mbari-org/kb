@@ -1,5 +1,4 @@
 import { Box } from '@mui/material'
-import PropTypes from 'prop-types'
 
 /**
  * A header component for panel tables that provides a consistent layout with left, middle, and right sections.
@@ -60,13 +59,6 @@ const PanelTableHeader = ({ headerLeft, headerMiddle, headerRight, sx = {} }) =>
       </Box>
     </Box>
   )
-}
-
-PanelTableHeader.propTypes = {
-  headerLeft: PropTypes.node.isRequired,
-  headerMiddle: PropTypes.node,
-  headerRight: PropTypes.node.isRequired,
-  sx: PropTypes.object,
 }
 
 export default PanelTableHeader

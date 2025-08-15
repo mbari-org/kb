@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material'
-import PropTypes from 'prop-types'
 
 const HEADER_HEIGHT = 100
 
@@ -77,13 +76,6 @@ const PanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} }) => {
       </Box>
     </Box>
   )
-}
-
-PanelHeader.propTypes = {
-  headerLeft: PropTypes.node,
-  headerTitle: PropTypes.node.isRequired,
-  headerRight: PropTypes.node,
-  sx: PropTypes.object,
 }
 
 export default PanelHeader
