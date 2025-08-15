@@ -3,7 +3,7 @@ import { FaRegEye } from 'react-icons/fa'
 
 import KBTooltip from '@/components/common/KBTooltip'
 
-const InspectButton = ({
+const InspectIcon = ({
   onClick,
   tooltip,
   size = 16,
@@ -85,4 +85,4 @@ const InspectButton = ({
   return button
 }
 
-export default InspectButton
+export default InspectIcon

@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
-import KBInfoIcon from '@/components/common/KBInfoIcon'
+import KBInfoIcon from '@/components/common/icon/KBInfoIcon'
 import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 

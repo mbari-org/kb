@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Box } from '@mui/material'
 
-import InspectButton from '@/components/common/InspectButton'
+import InspectIcon from '@/components/common/icon/InspectIcon'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -13,7 +13,7 @@ import { SELECTED } from '@/lib/constants'
 const useHistoryColumns = ({ type }) => {
   const { updateSelected } = use(SelectedContext)
 
-  const handleConceptClick = row => {
+  const handleConceptInspect = row => {
     updateSelected({ [SELECTED.CONCEPT]: row.concept, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
   }
 
@@ -30,8 +30,8 @@ const useHistoryColumns = ({ type }) => {
       renderCell: params => (
         <Box>
           {(type === 'pending' || (type === 'concept' && !params.row.approved)) && (
-            <InspectButton
-              onClick={() => handleConceptClick(params.row)}
+            <InspectIcon
+              onClick={() => handleConceptInspect(params.row)}
               tooltip='View this Concept'
             />
           )}
