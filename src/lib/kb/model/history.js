@@ -3,7 +3,7 @@ import { isPendingName } from '@/lib/kb/state/name'
 
 import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
 
-import { humanTimestamp, isEmpty, pick } from '@/lib/utils'
+import { capitalize, humanTimestamp, isEmpty, pick } from '@/lib/utils'
 
 const hasPending = (pending, field) =>
   field ? !isEmpty(pendingItems(pending, field)) : !isEmpty(pending)
@@ -47,6 +47,11 @@ const hasPendingStructure = (pending, conceptName) => {
   }
 }
 
+const pendingActionText = action => {
+  const actionText = action !== 'REPLACE' ? action : 'Edit'
+  return capitalize(actionText)
+}
+
 const pendingInfo = pendingItem => {
   return [
     ['creator', pendingItem.creatorName],
@@ -62,4 +67,12 @@ const pendingValues = pendingItem =>
     ['creationTimestamp', 'created'],
   ])
 
-export { hasPending, hasPendingStructure, pendingChild, pendingInfo, pendingItems, pendingValues }
+export {
+  hasPending,
+  hasPendingStructure,
+  pendingActionText,
+  pendingChild,
+  pendingInfo,
+  pendingItems,
+  pendingValues,
+}

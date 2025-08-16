@@ -8,7 +8,6 @@ import UserContext from '@/contexts/user/UserContext'
 
 import useUpdatedPending from '@/contexts/panels/concepts/pending/useUpdatePending'
 
-import { pendingChild as getPendingChild } from '@/lib/kb/model/history'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -18,21 +17,25 @@ const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABE
 const { APPROVAL, GROUP } = PENDING
 
 const PendingActions = () => {
-  const { concept, pending, setPendingConfirm } = use(ConceptContext)
+  const { pending, setPendingConfirm } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
 
   const { user } = use(UserContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
-  const pendingParent = pending(PENDING.DATA.PARENT)
   const pendingConfirm = pending(PENDING.DATA.CONFIRM)
 
   const updatePending = useUpdatedPending()
 
-  const pendingChild = getPendingChild(pendingParent, concept.name)
   const pendingItems = useMemo(() => {
-    return pendingChild ? [pendingChild] : pendingConcept
-  }, [pendingConcept, pendingChild])
+    const ids = pendingConfirm?.pendingIds
+    if (Array.isArray(ids) && ids.length > 0) {
+      return ids
+        .map(id => pendingConcept.find(item => item.id === id))
+        .filter(Boolean)
+    }
+    return pendingConcept
+  }, [pendingConcept, pendingConfirm])
 
   const [disabled, labels] = useMemo(() => {
     if (!isAdmin(user)) {

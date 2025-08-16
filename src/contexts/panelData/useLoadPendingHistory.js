@@ -4,7 +4,7 @@ import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import { PAGINATION } from '@/lib/constants'
 
-import { capitalize } from '@/lib/utils'
+import { pendingActionText } from '@/lib/kb/model/history'
 
 const { HISTORY } = PAGINATION
 
@@ -34,10 +34,9 @@ export const useLoadPendingHistory = apiFns => {
     }, Promise.resolve([]))
 
     return allPendingHistory.map(history => {
-      const action = history.action !== 'REPLACE' ? history.action : 'Edit'
       return {
         ...history,
-        action: capitalize(action),
+        action: pendingActionText(history.action),
       }
     })
   }, [apiFns])

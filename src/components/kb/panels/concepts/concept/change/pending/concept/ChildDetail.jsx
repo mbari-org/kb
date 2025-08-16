@@ -1,4 +1,4 @@
-import { use, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
@@ -7,8 +7,6 @@ import PendingDetail from '@/components/kb/panels/concepts/concept/change/pendin
 import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
 
 import { otherApprovalSx } from '@/components/common/format'
-
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
@@ -19,8 +17,6 @@ import { ACTION, PENDING } from '@/lib/constants'
 const { APPROVAL, GROUP } = PENDING
 
 const ChildDetail = ({ pendingChild }) => {
-  const { concept } = use(ConceptContext)
-
   const approval = usePendingItemApproval(pendingChild)
 
   const aliasSx = otherApprovalSx(approval)
@@ -50,7 +46,7 @@ const ChildDetail = ({ pendingChild }) => {
       <PendingButtons approval={approval} group={GROUP.CHILDREN} item={pendingChild} />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography sx={aliasSx}>{pendingChild.action}</Typography>
-        {childName !== concept.name && (
+        {childName !== pendingChild.concept && (
           <Typography sx={{ ...aliasSx, fontWeight: 'bold' }}>: {childName}</Typography>
         )}
       </Box>

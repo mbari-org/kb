@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 
 import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
-import ConceptPropertiesInspect from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesInspectButton'
+import InspectIcon from '@/components/common/icon/InspectIcon'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -38,7 +38,7 @@ const ConceptReferences = () => {
       renderItem={renderItem}
       title='References DOI'
       iconComponent={() => (
-        <ConceptPropertiesInspect onClick={linkToReferences} tooltip={tooltip} />
+        <InspectIcon onClick={linkToReferences} tooltip={tooltip} asDiv={true} />
       )}
     />
   )

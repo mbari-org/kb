@@ -2,7 +2,7 @@ import { use, useEffect, useState } from 'react'
 
 import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
 import TemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableToggle'
-import ConceptPropertiesInspectButton from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertiesInspectButton'
+import InspectIcon from '@/components/common/icon/InspectIcon'
 
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -54,9 +54,7 @@ const ConceptTemplates = () => {
       loadingText='Loading templates...'
       renderItem={renderItem}
       title='Templates'
-      iconComponent={() => (
-        <ConceptPropertiesInspectButton onClick={linkToTemplates} tooltip={tooltip} />
-      )}
+      iconComponent={() => <InspectIcon onClick={linkToTemplates} tooltip={tooltip} asDiv={true} />}
     >
       <TemplatesAvailableToggle />
     </ConceptPropertyPages>

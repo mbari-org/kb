@@ -47,6 +47,7 @@ const theme = createTheme({
     icon: {
       hover: {
         backgroundColor: 'background.paper',
+        color: 'primary.main',
         transform: 'scale(1.25)',
       },
     },

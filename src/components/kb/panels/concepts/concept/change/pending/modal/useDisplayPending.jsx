@@ -15,8 +15,13 @@ const useDisplayPending = () => {
   const { setModal } = use(ConceptModalContext)
 
   return useCallback(
-    intent => {
-      setPendingConfirm(null)
+    (intent, options = {}) => {
+      const { pendingIds } = options
+      if (pendingIds && pendingIds.length > 0) {
+        setPendingConfirm({ pendingIds })
+      } else {
+        setPendingConfirm(null)
+      }
 
       const modal = createModal({
         Actions: () => <PendingActions intent={intent} />,

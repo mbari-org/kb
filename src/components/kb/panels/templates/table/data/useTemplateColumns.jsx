@@ -54,7 +54,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       headerName: 'Last Updated',
       width: 165,
       headerClassName: 'bold-header',
-      valueFormatter: params => humanTimestamp(params),
+      valueFormatter: value => humanTimestamp(value),
     },
   ]
 
