@@ -4,14 +4,14 @@ import { parseRealization, sameRealization } from '@/lib/kb/model/realizations'
 const rejectRealization = (concept, pendingItem) => {
   switch (pendingItem.action) {
     case ACTION.ADD: {
-      concept.linkRealizations = (concept.linkRealizations || []).filter(
+      concept.realizations = (concept.realizations || []).filter(
         realization => !sameRealization(realization, pendingItem.newValue)
       )
       break
     }
 
     case ACTION.DELETE: {
-      const exists = (concept.linkRealizations || []).some(realization =>
+      const exists = (concept.realizations || []).some(realization =>
         sameRealization(realization, pendingItem.oldValue)
       )
       if (!exists) {
@@ -21,7 +21,7 @@ const rejectRealization = (concept, pendingItem) => {
           toConcept: parsed.toConcept,
           linkValue: parsed.linkValue,
         }
-        concept.linkRealizations = [...(concept.linkRealizations || []), newRealization]
+        concept.realizations = [...(concept.realizations || []), newRealization]
       }
       break
     }
@@ -29,7 +29,7 @@ const rejectRealization = (concept, pendingItem) => {
     case ACTION.EDIT: {
       const oldParsed = parseRealization(pendingItem.oldValue)
       const newParsed = parseRealization(pendingItem.newValue)
-      concept.linkRealizations = (concept.linkRealizations || []).map(realization => {
+      concept.realizations = (concept.realizations || []).map(realization => {
         if (
           realization.linkName === newParsed.linkName &&
           realization.toConcept === newParsed.toConcept

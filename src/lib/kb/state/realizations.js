@@ -109,9 +109,9 @@ const realizationState = (realization, pendingRealizations) => {
 }
 
 const realizationsState = (concept, pendingConcept) => {
-  const { linkRealizations } = concept
+  const { realizations } = concept
   const pendingRealizations = pendingConcept.filter(isPendingRealization)
-  const stagedRealizations = linkRealizations.map((realization, index) =>
+  const stagedRealizations = realizations.map((realization, index) =>
     realizationState({ ...realization, index }, pendingRealizations)
   )
   return { realizations: stagedRealizations }

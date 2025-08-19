@@ -11,28 +11,6 @@ const addedConcepts = (parent, updatesInfo) => {
   }))
 }
 
-// const fetchChildren = async (conceptName, apiFns) => {
-//   const children = await apiFns.apiPayload(getConceptChildren, conceptName)
-//   await Promise.all(
-//     children.map(async child => {
-//       child.parent = conceptName
-//     })
-//   )
-//   return children
-// }
-
-// const fetchConcept = async (conceptName, apiFns) => {
-//   const concept = await apiFns.apiPayload(getConcept, conceptName)
-//   return concept
-// }
-
-// const fetchConceptNames = async (concept, apiFns) => {
-//   const conceptNames = await apiFns.apiPayload(getConceptNames, concept.name)
-//   return conceptNames
-// }
-
-// const fetchParent = async (conceptName, apiFns) => apiFns.apiPayload(getConceptParent, conceptName)
-
 const getNextSibling = (concept, getConcept) => {
   const parent = getConcept(concept.parent)
   if (concept && parent) {
@@ -60,23 +38,4 @@ const getPrevSibling = (concept, getConcept) => {
   return null
 }
 
-// const refresh = async (conceptName, apiFns) => {
-//   const freshConcept = await fetchConcept(conceptName, apiFns)
-//   const parent = await loadParent(conceptName, apiFns)
-//   freshConcept.parent = parent.name
-//   const children = await loadChildren(conceptName, apiFns)
-//   freshConcept.children = children.map(child => child.name)
-//   await loadConceptData(freshConcept, apiFns)
-
-//   return freshConcept
-// }
-
-export {
-  addedConcepts,
-  // fetchChildren,
-  // fetchConcept,
-  // fetchConceptNames,
-  // fetchParent,
-  getNextSibling,
-  getPrevSibling,
-}
+export { addedConcepts, getNextSibling, getPrevSibling }

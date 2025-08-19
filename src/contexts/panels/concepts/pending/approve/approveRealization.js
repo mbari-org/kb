@@ -10,25 +10,23 @@ const approveRealization = (concept, item) => {
         toConcept: parsed.toConcept,
         linkValue: parsed.linkValue,
       }
-      const exists = (concept.linkRealizations || []).some(realization =>
+      const exists = (concept.realizations || []).some(realization =>
         sameRealization(realization, newRealization)
       )
-      if (!exists) concept.linkRealizations = [...(concept.linkRealizations || []), newRealization]
+      if (!exists) concept.realizations = [...(concept.realizations || []), newRealization]
       break
     }
 
     case ACTION.DELETE: {
       const parsed = parseRealization(item.oldValue)
-      concept.linkRealizations = (concept.linkRealizations || []).filter(
-        r => !sameRealization(r, parsed)
-      )
+      concept.realizations = (concept.realizations || []).filter(r => !sameRealization(r, parsed))
       break
     }
 
     case HISTORY_FIELD.REALIZATION: {
       const oldParsed = parseRealization(item.oldValue)
       const newParsed = parseRealization(item.newValue)
-      concept.linkRealizations = (concept.linkRealizations || []).map(realization => {
+      concept.realizations = (concept.realizations || []).map(realization => {
         if (
           realization.linkName === oldParsed.linkName &&
           realization.toConcept === oldParsed.toConcept

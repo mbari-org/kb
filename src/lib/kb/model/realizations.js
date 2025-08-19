@@ -35,6 +35,14 @@ const sameRealization = (realization, str) => {
   return isSame(realization, parsedRealization)
 }
 
+const sortRealizations = realizations =>
+  realizations.sort(
+    (a, b) =>
+      a.linkName.localeCompare(b.linkName) ||
+      a.toConcept.localeCompare(b.toConcept) ||
+      a.linkValue.localeCompare(b.linkValue)
+  )
+
 export {
   EMPTY_REALIZATION,
   hasDuplicate,
@@ -43,4 +51,5 @@ export {
   REALIZATION_DISPLAY_FIELDS,
   realizationFields,
   sameRealization,
+  sortRealizations,
 }

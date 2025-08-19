@@ -16,7 +16,7 @@ export const cloneStale = async (apiFns, staleConcept, useServerBase = true) => 
   freshConcept.alternateNames = [...(staleConcept.alternateNames || [])]
   freshConcept.children = [...(staleConcept.children || [])]
   freshConcept.media = (staleConcept.media || []).map(m => ({ ...m }))
-  freshConcept.linkRealizations = (staleConcept.linkRealizations || []).map(r => ({ ...r }))
+  freshConcept.realizations = (staleConcept.realizations || []).map(r => ({ ...r }))
 
   return freshConcept
 }

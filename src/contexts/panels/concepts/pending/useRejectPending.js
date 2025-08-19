@@ -28,8 +28,8 @@ const useRejectPending = () => {
       freshConcept.parent = staleConcept.parent
       freshConcept.rankLevel = staleConcept.rankLevel
       freshConcept.rankName = staleConcept.rankName
-      freshConcept.media = (staleConcept.media || []).map(media => ({ ...media }))
-      freshConcept.linkRealizations = (staleConcept.linkRealizations || []).map(realization => ({
+      freshConcept.media = (staleConcept.media || []).map(media => ({ ...media }))
+      freshConcept.realizations = (staleConcept.realizations || []).map(realization => ({
         ...realization,
       }))
 

@@ -1,19 +1,16 @@
 import {
-  deleteConcept as apiDeleteConcept,
-  getConceptChildren as fetchChildren,
-  getConcept as fetchConcept,
-  getConceptNames as fetchConceptNames,
-  getConceptParent as fetchParent,
+  getConceptChildren as apiChildren,
+  getConcept as apiConcept,
+  getConceptNames as apiConceptNames,
+  deleteConcept as apiDelete,
+  getConceptParent as apiParent,
 } from '@/lib/api/concept'
 
-import {
-  getNames as fetchNames,
-  getRanks as fetchRanks,
-  getRoot as fetchRoot,
-} from '@/lib/api/taxonomy'
+import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 
 import { orderedAliases } from '@/lib/kb/model/aliases'
 import { filterRanks } from '@/lib/kb/model/rank'
+import { sortRealizations } from '@/lib/kb/model/realizations'
 
 import { addedConcepts } from './concept'
 
@@ -51,7 +48,7 @@ const deleteConcept = async (taxonomy, concept, apiFns) => {
     throw new Error(`Concept "${concept.name}" has children.`)
   }
 
-  await apiFns.apiPayload(apiDeleteConcept, concept.name)
+  await apiFns.apiPayload(apiDelete, concept.name)
 
   const conceptMap = { ...taxonomy.conceptMap }
   delete conceptMap[concept.name]
@@ -71,7 +68,7 @@ const deleteConcept = async (taxonomy, concept, apiFns) => {
   parent.children = parent.children.filter(child => child !== concept.name)
   mapConcept(parent, conceptMap, aliasMap)
 
-  const names = await apiFns.apiPayload(fetchNames)
+  const names = await apiFns.apiPayload(apiNames)
 
   const updatedTaxonomy = {
     ...taxonomy,
@@ -160,15 +157,22 @@ const getAncestors = (taxonomy, conceptName) => {
   return ancestors
 }
 
+const fetchConcept = async (apiFns, conceptName) => {
+  const concept = await apiFns.apiPayload(apiConcept, conceptName)
+  concept.realizations = sortRealizations(concept.linkRealizations)
+  delete concept.linkRealizations
+  return concept
+}
+
 const loadTaxonomy = async apiFns => {
   const [root, names, ranks] = await Promise.all([
-    apiFns.apiPayload(fetchRoot),
-    apiFns.apiPayload(fetchNames),
-    apiFns.apiPayload(fetchRanks),
+    apiFns.apiPayload(apiRoot),
+    apiFns.apiPayload(apiNames),
+    apiFns.apiPayload(apiRanks),
   ])
 
-  const rootConcept = await apiFns.apiPayload(fetchConcept, root.name)
-  const rootConceptNames = await apiFns.apiPayload(fetchConceptNames, rootConcept.name)
+  const rootConcept = await fetchConcept(apiFns, root.name)
+  const rootConceptNames = await apiFns.apiPayload(apiConceptNames, rootConcept.name)
   rootConcept.aliases = orderedAliases(rootConceptNames)
 
   const aliasMap = rootConcept.aliases.reduce((acc, alias) => {
@@ -200,17 +204,15 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   const aliasMap = updatedTaxonomy.aliasMap
 
   const taxonomyConcept = getConcept(taxonomy, conceptName)
-  const concept = taxonomyConcept
-    ? { ...taxonomyConcept }
-    : await apiFns.apiPayload(fetchConcept, conceptName)
+  const concept = taxonomyConcept ? { ...taxonomyConcept } : await fetchConcept(apiFns, conceptName)
 
   if (concept.name !== taxonomy.rootName && !concept.parent) {
-    const parent = await apiFns.apiPayload(fetchParent, concept.name)
+    const parent = await apiFns.apiPayload(apiParent, concept.name)
     concept.parent = parent.name
   }
 
   if (!concept.aliases) {
-    const conceptNames = await apiFns.apiPayload(fetchConceptNames, concept.name)
+    const conceptNames = await apiFns.apiPayload(apiConceptNames, concept.name)
     concept.aliases = orderedAliases(conceptNames)
   }
 
@@ -224,7 +226,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
     return { concept: concept, taxonomy: updatedTaxonomy }
   }
 
-  const children = await apiFns.apiPayload(fetchChildren, concept.name)
+  const children = await apiFns.apiPayload(apiChildren, concept.name)
   concept.children = children.map(child => child.name)
   children.forEach(child => {
     child.parent = concept.name
@@ -246,18 +248,18 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   //  taxonomy, fetch the parent to get the necessary name. Then walk the chain from the top and
   //  load each concept, children and grandchildren not already loaded.
 
-  let nextAncestor = await apiFns.apiPayload(fetchParent, concept.name)
+  let nextAncestor = await apiFns.apiPayload(apiParent, concept.name)
   concept.parent = nextAncestor.name
   const conceptAncestry = [concept.name]
 
   while (!updatedTaxonomy.conceptMap[nextAncestor.name]) {
     conceptAncestry.push(nextAncestor.name)
-    nextAncestor = await apiFns.apiPayload(fetchParent, nextAncestor.name)
+    nextAncestor = await apiFns.apiPayload(apiParent, nextAncestor.name)
   }
   conceptAncestry.push(nextAncestor.name)
 
   while (!isRoot(taxonomy, nextAncestor)) {
-    const parent = await apiFns.apiPayload(fetchParent, nextAncestor.name)
+    const parent = await apiFns.apiPayload(apiParent, nextAncestor.name)
     nextAncestor = updatedTaxonomy.conceptMap[parent.name]
     conceptAncestry.push(nextAncestor.name)
   }
@@ -288,7 +290,7 @@ const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiFn
 
   if (concept && !concept.children) {
     const updatedConcept = { ...concept }
-    const children = await apiFns.apiPayload(fetchChildren, concept.name)
+    const children = await apiFns.apiPayload(apiChildren, concept.name)
     updatedConcept.children = children.map(child => child.name)
     children.forEach(child => {
       child.parent = concept.name
@@ -321,7 +323,7 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
     }
 
     if (descendant && !descendant.children) {
-      const children = await apiFns.apiPayload(fetchChildren, descendant.name)
+      const children = await apiFns.apiPayload(apiChildren, descendant.name)
       const updatedDescendant = {
         ...descendant,
         children: children.map(c => c.name),
@@ -358,7 +360,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
   const conceptMap = { ...taxonomy.conceptMap }
   const aliasMap = { ...taxonomy.aliasMap }
 
-  const updatedConcept = await apiFns.apiPayload(fetchConcept, concept.name)
+  const updatedConcept = await fetchConcept(apiFns, concept.name)
 
   mapConcept(updatedConcept, conceptMap, aliasMap)
 
@@ -420,7 +422,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
     mapConcept(parentConcept, conceptMap, aliasMap)
   }
 
-  const updatedNames = await apiFns.apiPayload(fetchNames)
+  const updatedNames = await apiFns.apiPayload(apiNames)
 
   const updatedTaxonomy = {
     ...taxonomy,
