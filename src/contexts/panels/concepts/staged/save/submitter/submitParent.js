@@ -6,7 +6,7 @@ const submitParent = ([submit, { concept, updatesInfo }]) => {
 
   const submitters = []
   if (hasUpdated('parent')) {
-    const parent = updatedValue('parent')
+    const parent = updatedValue('parent')?.value ?? updatedValue('parent')
     const params = [concept.name, { parentName: parent }]
     submitters.push(
       submit(updateConceptParent, params).then(response => ({

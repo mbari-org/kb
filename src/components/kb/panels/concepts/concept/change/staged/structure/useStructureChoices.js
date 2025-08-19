@@ -13,8 +13,7 @@ const hasStagedStructure = (concept, stagedState) => {
   const hasStagedChildren = stagedState.children.some(child => child.action !== ACTION.NONE)
   const hasStagedDelete = stagedState.delete
   const hasStagedName = stagedState.name.action !== ACTION.NONE
-  const hasStagedParent =
-    stagedState.parent !== concept.parent && stagedState.parent.action !== ACTION.NONE
+  const hasStagedParent = stagedState.parent.action !== ACTION.NONE
 
   return {
     hasStagedChildren,

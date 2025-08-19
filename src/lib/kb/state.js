@@ -2,6 +2,7 @@ import { aliasesState } from '@/lib/kb/state/aliases'
 import { childrenState } from '@/lib/kb/state/children'
 import { mediaState } from '@/lib/kb/state/media'
 import { nameState } from '@/lib/kb/state/name'
+import { parentState } from '@/lib/kb/state/parent'
 import { rankState } from '@/lib/kb/state/rank'
 import { realizationsState } from '@/lib/kb/state/realizations'
 import { valueState } from '@/lib/kb/state/value'
@@ -31,7 +32,7 @@ const initialConceptState = (concept, pendingConcept) => {
     ...realizationsState(concept, pendingConcept),
     ...valueState(concept, 'author'),
     ...valueState(concept, 'delete', false),
-    ...valueState(concept, 'parent'),
+    ...parentState(concept, pendingConcept),
   }
 }
 

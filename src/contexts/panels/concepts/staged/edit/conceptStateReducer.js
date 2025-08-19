@@ -2,6 +2,7 @@ import { addAlias, deleteAlias, editAlias, resetAliases } from '@/lib/kb/state/a
 import { addChild, resetChild, resetChildren } from '@/lib/kb/state/children'
 import { addMedia, deleteMedia, editMedia, resetMedia } from '@/lib/kb/state/media'
 import { editName, resetName } from '@/lib/kb/state/name'
+import { editParent, resetParent } from '@/lib/kb/state/parent'
 import { editRank, resetRank } from '@/lib/kb/state/rank'
 import {
   addRealization,
@@ -52,7 +53,7 @@ const conceptStateReducer = (state, { type, update }) => {
       return editName(state, update)
 
     case PARENT:
-      return editValue(state, update)
+      return editParent(state, update)
 
     case RANK:
       return editRank(state, update)
@@ -88,7 +89,7 @@ const conceptStateReducer = (state, { type, update }) => {
       return resetName(state, update)
 
     case RESET.PARENT:
-      return resetValue(state, update)
+      return resetParent(state, update)
 
     case RESET.RANK:
       return resetRank(state, update)

@@ -1,11 +1,19 @@
 import { CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const editParent = (state, update) => {
-  const { field, value } = update
-  return { ...state, [field]: value }
+  // update: { field: 'parent', value: newParentName }
+  const { value } = update
+  return {
+    ...state,
+    parent: {
+      ...state.parent,
+      action: CONCEPT_STATE.PARENT,
+      value,
+    },
+  }
 }
 
-const isPendingParent = pendingConcept => pendingConcept.field === HISTORY_FIELD.PARENT
+const isPendingParent = pendingItem => pendingItem.field === HISTORY_FIELD.PARENT
 
 const parentState = (concept, pendingConcept) => {
   const { parent } = concept
@@ -19,20 +27,26 @@ const parentState = (concept, pendingConcept) => {
 }
 
 const resetParent = (state, update) => {
-  return { ...state, ...update }
+  // update: { parent: { action, value, historyId? } }
+  return {
+    ...state,
+    parent: update.parent,
+  }
 }
 
 const stagedParent = (stateParent, pendingConcept) => {
   const pendingParent = pendingConcept.find(isPendingParent)
   if (pendingParent) {
     return {
-      action: 'Edit Parent',
-      historyId: pendingParent.id,
-      value: pendingParent.newValue,
+      parent: {
+        action: 'Edit Pending',
+        historyId: pendingParent.id,
+        value: pendingParent.newValue,
+      },
     }
   }
 
-  return { parent: { ...stateParent, action: CONCEPT_STATE.NO_ACTION } }
+  return { parent: stateParent }
 }
 
 export { editParent, isPendingParent, parentState, resetParent, stagedParent }
