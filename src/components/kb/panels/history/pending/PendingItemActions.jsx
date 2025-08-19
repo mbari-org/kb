@@ -11,6 +11,7 @@ import PendingAlert from '@/components/modal/actions/PendingAlert'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { updatePendingItem } from '@/lib/api/history'
 import { LABELS, PENDING } from '@/lib/constants'
@@ -20,6 +21,7 @@ const { APPROVE, CONFIRM, DEFER, REJECT } = LABELS.BUTTON
 const HistoryPendingActions = props => {
   const { apiFns } = use(ConfigContext)
   const { refreshData } = use(PanelDataContext)
+  const { setDirtyConcept } = use(SelectedContext)
   const { modalData } = usePanelsModalDataContext()
   const { closeModal, setProcessing } = usePanelsModalOperationsContext()
 
@@ -77,6 +79,7 @@ const HistoryPendingActions = props => {
         setProcessing('Updating pending...')
         await apiFns.apiPayload(updatePendingItem, [pendingConfirm, item.id])
         await refreshData('pendingHistory')
+        setDirtyConcept(true)
       } finally {
         setProcessing(false)
         closeModal(true)

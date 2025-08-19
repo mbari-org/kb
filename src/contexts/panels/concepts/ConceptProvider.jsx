@@ -26,7 +26,7 @@ const { CONTINUE } = LABELS.BUTTON
 const ConceptProvider = ({ children }) => {
   const { setModalData } = use(ConceptModalContext)
   const { refreshData: refreshPanelData } = use(PanelDataContext)
-  const { getSelected, panels } = use(SelectedContext)
+  const { dirtyConcept, getSelected, panels, setDirtyConcept } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { hasUnsavedChanges, setHasUnsavedChanges } = use(UserContext)
 
@@ -81,7 +81,6 @@ const ConceptProvider = ({ children }) => {
     setEditing,
   })
 
-  // Reset editing state when leaving Concepts panel
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
     if (!isConceptPanelActive && editing) {
@@ -100,11 +99,18 @@ const ConceptProvider = ({ children }) => {
     const isNewConceptSelected = selectedConcept !== concept?.name
     const shouldUpdateConcept = isNewConceptSelected && isConceptPanelActive
 
+    if (isConceptPanelActive && dirtyConcept) {
+      setDirtyConcept(false)
+      if (concept && selectedConcept === concept.name) {
+        resetConcept(concept)
+        return
+      }
+    }
+
     if (shouldUpdateConcept) {
       if (hasUnsavedChanges) {
         displayStaged(CONTINUE)
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
-        // setHasUnsavedChanges(true)
       } else {
         setHasUnsavedChanges(false)
         conceptLoader(selectedConcept)
@@ -113,22 +119,23 @@ const ConceptProvider = ({ children }) => {
   }, [
     concept,
     conceptLoader,
+    dirtyConcept,
+    setDirtyConcept,
     displayStaged,
     getSelected,
     hasUnsavedChanges,
     panels,
     setHasUnsavedChanges,
     setModalData,
+    resetConcept,
   ])
 
-  // Sync hasUnsavedChanges whenever staged state changes
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
     if (isConceptPanelActive && initialState) {
       const hasModifications = isStateModified({ initialState, stagedState })
       setHasUnsavedChanges(hasModifications)
     } else {
-      // Clear unsaved data flag when not on concepts panel
       setHasUnsavedChanges(false)
     }
   }, [initialState, stagedState, panels, setHasUnsavedChanges])

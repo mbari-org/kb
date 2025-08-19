@@ -96,17 +96,29 @@ const SelectedProvider = ({ children }) => {
     settingsStore.set(initialSettings)
     setSettings(initialSettings)
   }, [])
+  const [dirtyConcept, setDirtyConcept] = useState(false)
 
   const value = useMemo(
     () => ({
       concepts: conceptSelect,
+      dirtyConcept,
       getSelected,
       getSettings,
       panels: panelSelect,
+      setDirtyConcept,
       updateSelected,
       updateSettings,
     }),
-    [conceptSelect, getSelected, getSettings, panelSelect, updateSelected, updateSettings]
+    [
+      conceptSelect,
+      dirtyConcept,
+      getSelected,
+      getSettings,
+      panelSelect,
+      setDirtyConcept,
+      updateSelected,
+      updateSettings,
+    ]
   )
 
   // Don't render children until settings are loaded
