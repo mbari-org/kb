@@ -6,14 +6,12 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import ConfigContext from '@/contexts/config/ConfigContext'
 
 const DeleteConceptActions = () => {
   const { concept } = use(ConceptContext)
   const { closeModal, modalData, setModalData, setProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
-  const { deleteConcept } = use(TaxonomyContext)
-  const { apiFns } = use(ConfigContext)
+  const { deleteConcept, loadConcept } = use(TaxonomyContext)
 
   const isConfirm = modalData?.alertType === 'delete'
 
@@ -44,6 +42,7 @@ const DeleteConceptActions = () => {
       deleteConcept(concept)
         .then(result => {
           closeModal(true, () => {
+            loadConcept(result.closestConcept.name, true)
             updateSelected({ concept: result.closestConcept.name })
           })
         })

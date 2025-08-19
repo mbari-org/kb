@@ -12,8 +12,6 @@ import StagedRealizations from '@/components/kb/panels/concepts/concept/change/s
 import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
 
-import FieldValueDetail from '@/components/kb/panels/concepts/concept/change/staged/field/FieldValueDetail'
-
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -45,10 +43,6 @@ const StagedContent = () => {
       case CONCEPT_FIELD.CHILDREN:
         return <StagedChildren key={field} stagedEdit={stagedEdit} />
 
-      case CONCEPT_FIELD.DELETE:
-        // CxNote: Delete is not staged.
-        return null
-
       case CONCEPT_FIELD.MEDIA:
         return <StagedMedia key={field} stagedEdit={stagedEdit} />
 
@@ -65,7 +59,7 @@ const StagedContent = () => {
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />
 
       default:
-        throw new Error(`Invalid staged state field: ${field}`)
+        return null
     }
   }
 

@@ -224,7 +224,6 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
     return { concept: concept, taxonomy: updatedTaxonomy }
   }
 
-  // Load the concept's children
   const children = await apiFns.apiPayload(fetchChildren, concept.name)
   concept.children = children.map(child => child.name)
   children.forEach(child => {
@@ -232,12 +231,10 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
     mapConcept(child, conceptMap, aliasMap)
   })
 
-  // Load the concept's grandchildren
   await Promise.all(
     concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
   )
 
-  // If the concept is the root, we're done.
   if (isRoot(taxonomy, concept)) {
     mapConcept(concept, conceptMap, aliasMap)
     return { concept: concept, taxonomy: updatedTaxonomy }
@@ -283,6 +280,8 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
 
 const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiFns) => {
   const concept = getConcept(updatableTaxonomy, conceptName)
+
+  // if (!concept) return []
 
   const conceptMap = updatableTaxonomy.conceptMap
   const aliasMap = updatableTaxonomy.aliasMap
@@ -386,12 +385,10 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
   }
 
   if (hasUpdated('children')) {
-    // Add any newly added children into the maps
     addedConcepts(updatedConcept.name, updatesInfo).forEach(child => {
       mapConcept(child, conceptMap, aliasMap)
     })
 
-    // Remove any children that were removed from this concept
     const priorChildren = Array.isArray(concept.children) ? concept.children : []
     const currentChildren = Array.isArray(updatedConcept.children) ? updatedConcept.children : []
     const removedChildren = priorChildren.filter(name => !currentChildren.includes(name))

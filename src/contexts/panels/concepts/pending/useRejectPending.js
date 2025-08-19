@@ -3,7 +3,7 @@ import { use, useCallback } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { getConcept as apiConcept } from '@/lib/api/concept'
+import { getConcept } from '@/lib/api/concept'
 
 import { HISTORY_FIELD } from '@/lib/constants'
 
@@ -20,7 +20,7 @@ const useRejectPending = () => {
 
   return useCallback(
     async rejectingItems => {
-      const freshConcept = await apiFns.apiPayload(apiConcept, staleConcept.name)
+      const freshConcept = await apiFns.apiPayload(getConcept, staleConcept.name)
 
       freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
       freshConcept.alternateNames = [...staleConcept.alternateNames]

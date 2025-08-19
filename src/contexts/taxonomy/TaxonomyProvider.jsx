@@ -23,7 +23,6 @@ import {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   mapConcept,
-  // refreshTaxonomyConcept,
   removeTaxonomyConcept,
 } from '@/lib/kb/model/taxonomy'
 
@@ -33,7 +32,6 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { isEqual } from '@/lib/utils'
 
-// Load initial taxonomy with root concept and its children
 const loadInitialTaxonomy = async apiFns => {
   try {
     const { taxonomy: rootTaxonomy } = await loadTaxonomy(apiFns)

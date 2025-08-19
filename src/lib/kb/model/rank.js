@@ -20,4 +20,14 @@ const filterRanks = (ranks, field, otherValue) => {
   return uniqueFieldValues
 }
 
-export { filterRanks }
+const rankValues = value => {
+  const parts = String(value ?? '')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+  const level = parts.length === 1 ? '' : parts[0] || ''
+  const name = parts.length === 1 ? parts[0] || '' : parts.slice(1).join(' ')
+  return { level, name }
+}
+
+export { filterRanks, rankValues }

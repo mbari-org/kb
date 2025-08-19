@@ -16,12 +16,12 @@ import applyParent from '@/contexts/panels/concepts/staged/save/applier/applyPar
 import applyRank from '@/contexts/panels/concepts/staged/save/applier/applyRank'
 import applyRealizations from '@/contexts/panels/concepts/staged/save/applier/applyRealizations'
 
-import { getConcept as apiConcept } from '@/lib/api/concept'
+import { getConcept } from '@/lib/api/concept'
 
 const useSaveStaged = () => {
   const { apiFns } = use(ConfigContext)
   const { closeModal, setProcessing } = use(ConceptModalContext)
-  const { concept: staleConcept, initialState, resetConcept, stagedState } = use(ConceptContext)
+  const { concept: staleConcept, initialState, setConcept, stagedState } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { refreshConcept } = use(TaxonomyContext)
 
@@ -40,7 +40,7 @@ const useSaveStaged = () => {
       ? updatesInfo.updatedValue('name').value
       : staleConcept.name
 
-    const freshConcept = await apiFns.apiPayload(apiConcept, conceptName)
+    const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
 
     freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
     freshConcept.alternateNames = [...staleConcept.alternateNames]
@@ -66,7 +66,7 @@ const useSaveStaged = () => {
 
     const { concept: updatedConcept } = await refreshConcept(freshConcept, staleConcept)
 
-    await resetConcept(updatedConcept)
+    await setConcept(updatedConcept)
 
     updateSelected({ concept: updatedConcept.name })
 
@@ -74,15 +74,15 @@ const useSaveStaged = () => {
 
     setProcessing(false)
   }, [
-    setProcessing,
     apiFns,
-    staleConcept,
-    initialState,
-    stagedState,
-    refreshConcept,
-    resetConcept,
-    updateSelected,
     closeModal,
+    initialState,
+    refreshConcept,
+    setConcept,
+    setProcessing,
+    stagedState,
+    staleConcept,
+    updateSelected,
   ])
 }
 

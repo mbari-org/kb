@@ -1,6 +1,5 @@
+import { useCallback } from 'react'
 
-// Hook to validate taxonomy integrity during development/debugging.
-// Throws an Error aggregating all detected issues when the taxonomy is invalid.
 const useTaxonomyIntegrity = () => {
   const checkIntegrity = useCallback(taxonomy => {
     if (!taxonomy) return
@@ -22,7 +21,6 @@ const useTaxonomyIntegrity = () => {
 
     const conceptNames = Object.keys(conceptMap)
 
-    // Per-concept validation
     conceptNames.forEach(name => {
       const concept = conceptMap[name]
       if (!concept) {
@@ -34,7 +32,6 @@ const useTaxonomyIntegrity = () => {
         addError(`Concept map key "${name}" does not match concept.name "${concept.name}"`)
       }
 
-      // Invariants: arrays must exist
       if (!Array.isArray(concept.children)) {
         addError(`Concept "${name}" has invalid children; expected an array`)
       }
@@ -42,7 +39,6 @@ const useTaxonomyIntegrity = () => {
         addError(`Concept "${name}" has invalid alternateNames; expected an array`)
       }
 
-      // Parent invariants
       if (name === rootName) {
         if (concept.parent !== undefined) {
           addError(
@@ -54,9 +50,7 @@ const useTaxonomyIntegrity = () => {
       } else {
         if (typeof concept.parent !== 'string' || concept.parent.length === 0) {
           addError(
-            `Concept "${name}" must have a parent string; found ${JSON.stringify(
-              concept.parent
-            )}`
+            `Concept "${name}" must have a parent string; found ${JSON.stringify(concept.parent)}`
           )
         } else if (!conceptMap[concept.parent]) {
           addError(`Concept "${name}" references missing parent "${concept.parent}"`)
@@ -70,7 +64,6 @@ const useTaxonomyIntegrity = () => {
         }
       }
 
-      // Children integrity
       if (Array.isArray(concept.children)) {
         const seen = new Set()
         concept.children.forEach(childName => {
@@ -90,14 +83,11 @@ const useTaxonomyIntegrity = () => {
             return
           }
           if (child.parent !== name) {
-            addError(
-              `Child "${childName}" has parent "${child.parent}" but expected "${name}"`
-            )
+            addError(`Child "${childName}" has parent "${child.parent}" but expected "${name}"`)
           }
         })
       }
 
-      // Alias forward mapping
       concept.alternateNames.forEach(alternateName => {
         const owner = aliasMap[alternateName]
         if (!owner) {
@@ -112,7 +102,6 @@ const useTaxonomyIntegrity = () => {
       })
     })
 
-    // Alias inverse mapping
     Object.keys(aliasMap).forEach(alias => {
       const owner = aliasMap[alias]
       if (!owner) {
@@ -148,7 +137,6 @@ const useTaxonomyIntegrity = () => {
       }
     })
 
-    // Reachability and cycle detection
     if (rootName && conceptMap[rootName]) {
       const visited = new Set()
       const visiting = new Set()
@@ -170,9 +158,7 @@ const useTaxonomyIntegrity = () => {
         } else {
           children.forEach(childName => {
             if (!conceptMap[childName]) {
-              addError(
-                `Concept "${name}" has child "${childName}" not present in conceptMap`
-              )
+              addError(`Concept "${name}" has child "${childName}" not present in conceptMap`)
               return
             }
             dfs(childName)
@@ -203,4 +189,3 @@ const useTaxonomyIntegrity = () => {
 }
 
 export default useTaxonomyIntegrity
-

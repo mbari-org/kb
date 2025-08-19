@@ -26,7 +26,7 @@ const { CONTINUE } = LABELS.BUTTON
 const ConceptProvider = ({ children }) => {
   const { setModalData } = use(ConceptModalContext)
   const { refreshData: refreshPanelData } = use(PanelDataContext)
-  const { dirtyConcept, getSelected, panels, setDirtyConcept } = use(SelectedContext)
+  const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { hasUnsavedChanges, setHasUnsavedChanges } = use(UserContext)
 
@@ -45,7 +45,7 @@ const ConceptProvider = ({ children }) => {
 
   const { pending, setPendingConfirm } = useConceptPending(concept)
 
-  const resetConcept = useCallback(
+  const handleSetConcept = useCallback(
     async updatedConcept => {
       setEditing(false)
 
@@ -57,18 +57,10 @@ const ConceptProvider = ({ children }) => {
       const conceptState = initialConceptState(updatedConcept, pendingConcept)
       setInitialState(conceptState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
+
+      setConcept(updatedConcept)
     },
     [refreshPanelData]
-  )
-
-  const handleSetConcept = useCallback(
-    selectedConcept => {
-      resetConcept(selectedConcept).then(() => {
-        setConcept(selectedConcept)
-        setEditing(false)
-      })
-    },
-    [resetConcept]
   )
 
   const conceptLoader = useConceptLoader({
@@ -99,19 +91,7 @@ const ConceptProvider = ({ children }) => {
     const isNewConceptSelected = selectedConcept !== concept?.name
     const shouldUpdateConcept = isNewConceptSelected && isConceptPanelActive
 
-    if (isConceptPanelActive && dirtyConcept) {
-      setDirtyConcept(false)
-      if (selectedConcept) {
-        // Force reload the selected concept from server to sync taxonomy/state
-        loadConcept(selectedConcept, true).then(refreshed => {
-          if (refreshed) {
-            resetConcept(refreshed)
-          }
-        })
-        return
-      }
-      // If different concept is selected, fall through to normal loader path
-    }
+    // Otherwise follow selection-change path
     if (shouldUpdateConcept) {
       if (hasUnsavedChanges) {
         displayStaged(CONTINUE)
@@ -124,16 +104,31 @@ const ConceptProvider = ({ children }) => {
   }, [
     concept,
     conceptLoader,
-    dirtyConcept,
-    setDirtyConcept,
     displayStaged,
+    getConcept,
     getSelected,
     hasUnsavedChanges,
+    isConceptLoaded,
+    loadConcept,
     panels,
+    setConcept,
     setHasUnsavedChanges,
     setModalData,
-    resetConcept,
+    taxonomy,
   ])
+
+  // On any taxonomy change, if a concept is selected,
+  // reset local state to the latest taxonomy concept.
+  useEffect(() => {
+    const selectedConcept = getSelected(SELECTED.CONCEPT)
+    // if (!selectedConcept) return
+
+    const taxonomyConcept = getConcept(selectedConcept)
+    if (taxonomyConcept === concept) return
+    // if (!taxonomyConcept) return
+
+    handleSetConcept(taxonomyConcept)
+  }, [concept, taxonomy, getSelected, getConcept, handleSetConcept])
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
@@ -154,7 +149,7 @@ const ConceptProvider = ({ children }) => {
       initialState,
       modifyConcept,
       pending,
-      resetConcept,
+      setConcept: handleSetConcept,
       setEditing,
       setPendingConfirm,
       stagedState,
@@ -164,10 +159,10 @@ const ConceptProvider = ({ children }) => {
       conceptPath,
       confirmReset,
       editing,
+      handleSetConcept,
       initialState,
       modifyConcept,
       pending,
-      resetConcept,
       setEditing,
       setPendingConfirm,
       stagedState,

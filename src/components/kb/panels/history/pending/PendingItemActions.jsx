@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { useState } from 'react'
 import { Box, Stack } from '@mui/material'
 
 import {
@@ -9,21 +9,16 @@ import {
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
-
-import { updatePendingItem } from '@/lib/api/history'
 import { LABELS, PENDING } from '@/lib/constants'
+import useHistoryUpdatePending from '@/contexts/panels/history/useUpdatePending'
 
 const { APPROVE, CONFIRM, DEFER, REJECT } = LABELS.BUTTON
 
 const HistoryPendingActions = props => {
-  const { apiFns } = use(ConfigContext)
-  const { refreshData } = use(PanelDataContext)
-  const { setDirtyConcept } = use(SelectedContext)
   const { modalData } = usePanelsModalDataContext()
   const { closeModal, setProcessing } = usePanelsModalOperationsContext()
+
+  const updatePending = useHistoryUpdatePending()
 
   const { item } = { ...modalData, ...props }
 
@@ -32,69 +27,61 @@ const HistoryPendingActions = props => {
   const colors = ['clean', 'main', 'cancel']
 
   const [disabled, labels] = (() => {
-    if (!pendingConfirm) {
-      return [
-        [false, false, false],
-        [APPROVE, DEFER, REJECT],
-      ]
-    }
+    switch (pendingConfirm) {
+      case PENDING.APPROVAL.ACCEPT:
+        return [
+          [false, false, true],
+          [CONFIRM, DEFER, REJECT],
+        ]
 
-    if (pendingConfirm === PENDING.APPROVAL.ACCEPT) {
-      return [
-        [false, false, true],
-        [CONFIRM, DEFER, REJECT],
-      ]
-    }
+      case PENDING.APPROVAL.REJECT:
+        return [
+          [true, false, false],
+          [APPROVE, DEFER, CONFIRM],
+        ]
 
-    if (pendingConfirm === PENDING.APPROVAL.REJECT) {
-      return [
-        [true, false, false],
-        [APPROVE, DEFER, CONFIRM],
-      ]
+      default:
+        return [
+          [false, false, false],
+          [APPROVE, DEFER, REJECT],
+        ]
     }
-
-    return [
-      [false, false, false],
-      [APPROVE, DEFER, REJECT],
-    ]
   })()
 
   const onAction = async label => {
-    const isApprove = label === APPROVE
-    const isReject = label === REJECT
-    const isConfirm = label === CONFIRM
-    const isDefer = label === DEFER
-
-    if (isDefer) {
-      if (pendingConfirm) {
-        setPendingConfirm(null)
-      } else {
-        closeModal()
+    switch (label) {
+      case APPROVE: {
+        setPendingConfirm(PENDING.APPROVAL.ACCEPT)
+        return
       }
-      return
-    }
 
-    if (isConfirm) {
-      try {
-        setProcessing('Updating pending...')
-        await apiFns.apiPayload(updatePendingItem, [pendingConfirm, item.id])
-        await refreshData('pendingHistory')
-        setDirtyConcept(true)
-      } finally {
-        setProcessing(false)
-        closeModal(true)
+      case CONFIRM: {
+        try {
+          setProcessing('Updating pending...')
+          await updatePending({ approval: pendingConfirm, item })
+        } finally {
+          setProcessing(false)
+          closeModal(true)
+        }
+        return
       }
-      return
-    }
 
-    if (isApprove) {
-      setPendingConfirm(PENDING.APPROVAL.ACCEPT)
-      return
-    }
+      case DEFER: {
+        if (pendingConfirm) {
+          setPendingConfirm(null)
+        } else {
+          closeModal()
+        }
+        return
+      }
 
-    if (isReject) {
-      setPendingConfirm(PENDING.APPROVAL.REJECT)
-      return
+      case REJECT: {
+        setPendingConfirm(PENDING.APPROVAL.REJECT)
+        return
+      }
+
+      default:
+        throw new Error(`Invalid pending item action: ${label}`)
     }
   }
 

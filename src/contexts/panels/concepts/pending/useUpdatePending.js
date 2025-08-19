@@ -6,22 +6,17 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useRejectPending from './useRejectPending'
-
-import { updatePendingItem } from '@/lib/api/history'
-
 import { capitalize } from '@/lib/utils'
 
 import { PENDING } from '@/lib/constants'
+import processPendingApproval from '@/lib/kb/pending/processPendingApproval'
 
 const useUpdatedPending = () => {
-  const { concept: staleConcept, pending, resetConcept } = use(ConceptContext)
+  const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
   const { updateSelected } = use(SelectedContext)
-  const { refreshConcept } = use(TaxonomyContext)
-
-  const rejectPending = useRejectPending()
+  const { getConcept, refreshConcept } = use(TaxonomyContext)
 
   return useCallback(
     async pendingConfirm => {
@@ -29,43 +24,47 @@ const useUpdatedPending = () => {
 
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
-      const pendingItems = propItems
-        ? propItems
-        : propIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
+      const items = (
+        propItems
+          ? propItems
+          : propIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
+      ).filter(Boolean)
 
       setProcessing(`${capitalize(approval)} pending changes...`)
 
-      await Promise.all(
-        pendingItems.map(pendingItem =>
-          apiFns.apiPayload(updatePendingItem, [approval, pendingItem.id])
+      const { updated } = await processPendingApproval({
+        approval,
+        deps: {
+          apiFns,
+          getConcept,
+          refreshConcept,
+          refreshHistory: null,
+          updateSelected,
+        },
+        items,
+      })
+
+      if (updated.includes(staleConcept.name)) {
+        const { concept: updatedConcept } = await refreshConcept(
+          getConcept(staleConcept.name),
+          staleConcept
         )
-      )
-
-      // CxTmp until server is updated
-      // await sleep(1000)
-
-      const freshConcept =
-        approval === PENDING.APPROVAL.REJECT ? await rejectPending(pendingItems) : staleConcept
-
-      const { concept: updatedConcept } = await refreshConcept(freshConcept, staleConcept)
-
-      await resetConcept(updatedConcept)
-
-      updateSelected({ concept: updatedConcept.name })
+        await setConcept(updatedConcept)
+      }
 
       setProcessing(false)
 
-      return pendingConcept.length !== pendingItems.length
+      return pendingConcept.length !== items.length
     },
     [
-      pending,
-      setProcessing,
-      rejectPending,
-      staleConcept,
-      refreshConcept,
-      resetConcept,
-      updateSelected,
       apiFns,
+      getConcept,
+      pending,
+      refreshConcept,
+      setConcept,
+      setProcessing,
+      staleConcept,
+      updateSelected,
     ]
   )
 }
