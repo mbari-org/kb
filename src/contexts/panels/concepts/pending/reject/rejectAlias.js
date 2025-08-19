@@ -23,6 +23,7 @@ const rejectAlias = (concept, pendingItem) => {
     default:
       break
   }
+  concept.alternateNames = concept.aliases.map(alias => alias.name).sort()
 }
 
 export default rejectAlias

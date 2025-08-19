@@ -34,7 +34,7 @@ const useRejectPending = () => {
       }))
 
       rejectingItems.forEach(pendingItem => {
-        let rejectFn = rejectValue
+        let rejectFn
 
         switch (pendingItem.field) {
           case HISTORY_FIELD.ALIAS:
@@ -66,7 +66,7 @@ const useRejectPending = () => {
             break
 
           default:
-            break
+            throw new Error(`Invalid reject pending field: ${pendingItem.field}`)
         }
 
         rejectFn(freshConcept, pendingItem, rejectingItems)

@@ -153,10 +153,10 @@ const TaxonomyProvider = ({ children }) => {
   const alreadyLoadingConcept = useRef(false)
 
   const loadConcept = useCallback(
-    async conceptName => {
+    async (conceptName, force = false) => {
       if (!taxonomy || !apiFns) return null
 
-      if (isConceptLoaded(conceptName)) {
+      if (!force && isConceptLoaded(conceptName)) {
         return getConcept(conceptName)
       }
 

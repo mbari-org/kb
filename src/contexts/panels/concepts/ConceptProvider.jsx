@@ -101,12 +101,17 @@ const ConceptProvider = ({ children }) => {
 
     if (isConceptPanelActive && dirtyConcept) {
       setDirtyConcept(false)
-      if (concept && selectedConcept === concept.name) {
-        resetConcept(concept)
+      if (selectedConcept) {
+        // Force reload the selected concept from server to sync taxonomy/state
+        loadConcept(selectedConcept, true).then(refreshed => {
+          if (refreshed) {
+            resetConcept(refreshed)
+          }
+        })
         return
       }
+      // If different concept is selected, fall through to normal loader path
     }
-
     if (shouldUpdateConcept) {
       if (hasUnsavedChanges) {
         displayStaged(CONTINUE)
