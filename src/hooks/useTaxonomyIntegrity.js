@@ -21,19 +21,19 @@ const useTaxonomyIntegrity = () => {
 
     const conceptNames = Object.keys(conceptMap)
 
-    // names must be a superset of all keys in conceptMap and aliasMap (order-independent)
-    if (!Array.isArray(taxonomy.names)) {
-      addError('taxonomy.names is missing or not an array')
-    } else {
-      const expected = new Set([...Object.keys(conceptMap), ...Object.keys(aliasMap)])
-      const actual = new Set(taxonomy.names)
+    // CxNote due to the caching on ONI we cannot depend on this validation
+    // if (!Array.isArray(taxonomy.names)) {
+    //   addError('taxonomy.names is missing or not an array')
+    // } else {
+    //   const expected = new Set([...Object.keys(conceptMap), ...Object.keys(aliasMap)])
+    //   const actual = new Set(taxonomy.names)
 
-      const missingInNames = [...expected].filter(n => !actual.has(n))
-      if (missingInNames.length > 0) {
-        addError(`taxonomy.names is missing entries: ${missingInNames.join(', ')}`)
-      }
-      // Extra entries in taxonomy.names are allowed.
-    }
+    //   const missingInNames = [...expected].filter(n => !actual.has(n))
+    //   if (missingInNames.length > 0) {
+    //     addError(`taxonomy.names is missing entries: ${missingInNames.join(', ')}`)
+    //   }
+    //   // Extra entries in taxonomy.names are allowed.
+    // }
 
     // Per-concept validation
     conceptNames.forEach(name => {
@@ -59,11 +59,17 @@ const useTaxonomyIntegrity = () => {
       // Parent invariants
       if (name === rootName) {
         if (concept.parent !== undefined) {
-          addError(`Root concept "${name}" must have parent === undefined, found ${JSON.stringify(concept.parent)}`)
+          addError(
+            `Root concept "${name}" must have parent === undefined, found ${JSON.stringify(
+              concept.parent
+            )}`
+          )
         }
       } else {
         if (typeof concept.parent !== 'string' || concept.parent.length === 0) {
-          addError(`Concept "${name}" must have a parent string; found ${JSON.stringify(concept.parent)}`)
+          addError(
+            `Concept "${name}" must have a parent string; found ${JSON.stringify(concept.parent)}`
+          )
         } else if (!conceptMap[concept.parent]) {
           addError(`Concept "${name}" references missing parent "${concept.parent}"`)
         } else {
@@ -113,7 +119,9 @@ const useTaxonomyIntegrity = () => {
           return
         }
         if (owner !== concept) {
-          addError(`Alias "${alternateName}" in aliasMap points to a different concept than conceptMap["${name}"]`)
+          addError(
+            `Alias "${alternateName}" in aliasMap points to a different concept than conceptMap["${name}"]`
+          )
         }
       })
     })
@@ -127,15 +135,23 @@ const useTaxonomyIntegrity = () => {
       }
       const ownerByName = conceptMap[owner.name]
       if (!ownerByName) {
-        addError(`aliasMap alias "${alias}" points to concept "${owner?.name}" not found in conceptMap`)
+        addError(
+          `aliasMap alias "${alias}" points to concept "${owner?.name}" not found in conceptMap`
+        )
         return
       }
       if (ownerByName !== owner) {
-        addError(`aliasMap alias "${alias}" points to a concept object that differs from conceptMap["${owner.name}"]`)
+        addError(
+          `aliasMap alias "${alias}" points to a concept object that differs from conceptMap["${owner.name}"]`
+        )
       }
-      const hasAlias = Array.isArray(owner.alternateNames) ? owner.alternateNames.includes(alias) : false
+      const hasAlias = Array.isArray(owner.alternateNames)
+        ? owner.alternateNames.includes(alias)
+        : false
       if (!hasAlias) {
-        addError(`aliasMap contains alias "${alias}" for concept "${owner.name}" not present in that concept's alternateNames`)
+        addError(
+          `aliasMap contains alias "${alias}" for concept "${owner.name}" not present in that concept's alternateNames`
+        )
       }
 
       const nameConflict = conceptMap[alias]
@@ -188,7 +204,9 @@ const useTaxonomyIntegrity = () => {
     }
 
     if (errors.length > 0) {
-      const message = `Taxonomy integrity check failed (found ${errors.length} issue${errors.length === 1 ? '' : 's'}):\n- ${errors.join('\n- ')}`
+      const message = `Taxonomy integrity check failed (found ${errors.length} issue${
+        errors.length === 1 ? '' : 's'
+      }):\n- ${errors.join('\n- ')}`
       throw new Error(message)
     }
   }, [])
@@ -197,4 +215,3 @@ const useTaxonomyIntegrity = () => {
 }
 
 export default useTaxonomyIntegrity
-
