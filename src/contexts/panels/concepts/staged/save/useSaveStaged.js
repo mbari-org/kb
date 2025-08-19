@@ -64,7 +64,7 @@ const useSaveStaged = () => {
       }
     })
 
-    const { concept: updatedConcept } = await refreshConcept(staleConcept, freshConcept)
+    const { concept: updatedConcept } = await refreshConcept(freshConcept, staleConcept)
 
     await resetConcept(updatedConcept)
 

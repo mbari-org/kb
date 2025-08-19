@@ -74,10 +74,14 @@ const Whoops = ({ children }) => {
             <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               💥 {responseMessage} 💥
             </Typography>
-            <Typography variant='body2' sx={{ textAlign: 'center', mt: 1 }}>
-              The app has encountered an error and will not proceed to minimize the risk of
-              corrupting data.
+            <Typography variant='body1' sx={{ textAlign: 'center', fontWeight: 'bold', mt: 1 }}>
+              しまった!
             </Typography>
+            <Typography variant='body2' sx={{ textAlign: 'center', mt: 1 }}>
+              We encountered the following error. 😣 To minimize the risk of corrupting data, we
+              won&apos;t proceed.
+            </Typography>
+
             <Box
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', mt: 1 }}
             >
@@ -124,19 +128,30 @@ const Whoops = ({ children }) => {
         <Box sx={{ mt: 2 }} />
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box sx={{ textAlign: 'left' }}>
-            <Typography variant='body2'>
-              Logout: Remove user settings and return to the login screen
-            </Typography>
-            <Typography variant='body2'>
-              Reset: Keep user settings and attempt to reload the app
-            </Typography>
+            <Stack direction='row' spacing={1}>
+              <Typography sx={{ fontWeight: 'bold' }} variant='body2'>
+                Logout:
+              </Typography>
+              <Typography variant='body2'>
+                Remove user settings and return to the login screen
+              </Typography>
+            </Stack>
+
+            <Stack direction='row' spacing={1}>
+              <Typography sx={{ fontWeight: 'bold' }} variant='body2'>
+                Reset:
+              </Typography>
+              <Typography variant='body2'>
+                Keep user settings and attempt to reload the app
+              </Typography>
+            </Stack>
           </Box>
         </Box>
         <Box sx={{ mt: 2 }} />
         <Typography variant='body2' sx={{ textAlign: 'center' }}>
-          Either way, any unsaved changes have been lost. 🫣
+          Either way, any unsaved changes are lost. 🫣
         </Typography>
-        <Stack direction='row' spacing={15} sx={{ mt: 4 }}>
+        <Stack direction='row' spacing={15} sx={{ mt: 2 }}>
           <Button onClick={handleForcedLogout} sx={{ fontSize: '24px' }}>
             Logout
           </Button>

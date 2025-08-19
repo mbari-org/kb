@@ -86,8 +86,9 @@ const stagedRank = (stateRank, pendingConcept) => {
     rank: {
       action: 'Edit Pending',
       historyId: pending.historyId,
-      level: pending.level || stateRank.level,
-      name: pending.name || stateRank.name,
+      // Use nullish coalescing semantics so empty strings are respected (admins may set '')
+      level: pending.level ?? stateRank.level,
+      name: pending.name ?? stateRank.name,
     },
   }
 }
