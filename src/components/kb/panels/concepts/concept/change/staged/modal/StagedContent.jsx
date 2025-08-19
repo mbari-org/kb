@@ -34,7 +34,7 @@ const StagedContent = () => {
   )
 
   const stagedComponent = stagedEdit => {
-    const [field, { staged }] = stagedEdit
+    const [field, _] = stagedEdit
     switch (field) {
       case CONCEPT_FIELD.ALIASES:
         return <StagedAliases key={field} stagedEdit={stagedEdit} />
@@ -44,6 +44,13 @@ const StagedContent = () => {
 
       case CONCEPT_FIELD.CHILDREN:
         return <StagedChildren key={field} stagedEdit={stagedEdit} />
+
+      case CONCEPT_FIELD.DELETE:
+        // CxNote: Delete is not staged.
+        return null
+
+      case CONCEPT_FIELD.MEDIA:
+        return <StagedMedia key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT_FIELD.NAME:
         return <StagedObject key={field} group={RESETTING.NAME} stagedEdit={stagedEdit} />
@@ -57,14 +64,8 @@ const StagedContent = () => {
       case CONCEPT_FIELD.REALIZATIONS:
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />
 
-      case CONCEPT_FIELD.MEDIA:
-        return <StagedMedia key={field} stagedEdit={stagedEdit} />
-
-      case 'nameChange':
-        return <FieldValueDetail key={field} field={field} value={staged} />
-
       default:
-        return null
+        throw new Error(`Invalid staged state field: ${field}`)
     }
   }
 

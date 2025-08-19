@@ -44,8 +44,7 @@ const resettingField = (confirmReset, field) => {
   if (confirmReset.type !== RESET.FIELD) return RESETTING.EXTENT.OTHER
   if (confirmReset.update?.field === field) return RESETTING.EXTENT.ME
 
-  if (field === 'name' && confirmReset.update?.field === 'nameChange') return RESETTING.EXTENT.ME
-  if (field === 'nameChange' && confirmReset.update?.field === 'name') return RESETTING.EXTENT.ME
+  // nameChange legacy handled removed
 
   if (field === 'rankLevel' && confirmReset.update?.field === 'rankName') return RESETTING.EXTENT.ME
   if (field === 'rankName' && confirmReset.update?.field === 'rankLevel') return RESETTING.EXTENT.ME

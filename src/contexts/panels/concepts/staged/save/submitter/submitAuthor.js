@@ -6,7 +6,7 @@ const submitAuthor = ([submit, { concept, updatesInfo }]) => {
 
   const submitters = []
   if (hasUpdated('author')) {
-    const author = updatedValue('author')
+    const author = updatedValue('author')?.value ?? updatedValue('author')
     const params = [concept.name, { author }]
     submitters.push(
       submit(updateConceptAuthor, params).then(response => ({

@@ -22,7 +22,12 @@ const StagedValue = ({ group, stagedEdit }) => {
 
   const GroupHeader = () => {
     const { initial, staged } = item
-    const value = formatDelta(initial, staged)
+
+    const normalize = v => (v && typeof v === 'object' && 'value' in v ? v.value : v)
+    const initialValue = normalize(initial)
+    const stagedValue = normalize(staged)
+
+    const value = formatDelta(initialValue, stagedValue)
     return <FieldValueDisplay disabled={disabled} field={field} value={value} />
   }
 
