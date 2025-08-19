@@ -14,7 +14,7 @@ import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants'
 const ConceptAuthor = () => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
 
-  const [author, setAuthor] = useState(stagedState.author)
+  const [author, setAuthor] = useState(stagedState.author?.value)
 
   const border = stagedBorder(initialState.author, stagedState.author)
 
@@ -33,7 +33,7 @@ const ConceptAuthor = () => {
   )
 
   useEffect(() => {
-    setAuthor(stagedState.author || '')
+    setAuthor(stagedState.author?.value || '')
   }, [stagedState.author])
 
   return (

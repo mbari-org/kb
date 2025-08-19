@@ -11,8 +11,4 @@ const editValue = (state, update) => {
   return { ...state, [field]: value }
 }
 
-const resetValue = (state, update) => {
-  return { ...state, ...update }
-}
-
-export { editValue, resetValue, valueState }
+export { editValue, valueState }

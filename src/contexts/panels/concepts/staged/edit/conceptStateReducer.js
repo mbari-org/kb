@@ -1,4 +1,5 @@
 import { addAlias, deleteAlias, editAlias, resetAliases } from '@/lib/kb/state/aliases'
+import { editAuthor, resetAuthor } from '@/lib/kb/state/author'
 import { addChild, resetChild, resetChildren } from '@/lib/kb/state/children'
 import { addMedia, deleteMedia, editMedia, resetMedia } from '@/lib/kb/state/media'
 import { editName, resetName } from '@/lib/kb/state/name'
@@ -10,12 +11,23 @@ import {
   editRealization,
   resetRealizations,
 } from '@/lib/kb/state/realizations'
-import { editValue, resetValue } from '@/lib/kb/state/value'
+import { editValue } from '@/lib/kb/state/value'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ALIAS, AUTHOR, CHILD, DELETE, MEDIA: _MEDIA, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } =
-  CONCEPT_STATE
+const {
+  ALIAS,
+  AUTHOR,
+  CHILD,
+  DELETE,
+  MEDIA: _MEDIA,
+  MEDIA_ITEM,
+  NAME,
+  PARENT,
+  RANK,
+  REALIZATION,
+  RESET,
+} = CONCEPT_STATE
 
 const conceptStateReducer = (state, { type, update }) => {
   switch (type) {
@@ -32,7 +44,7 @@ const conceptStateReducer = (state, { type, update }) => {
       return editAlias(state, update)
 
     case AUTHOR:
-      return editValue(state, update)
+      return editAuthor(state, update)
 
     case CHILD.ADD:
       return addChild(state, update)
@@ -74,7 +86,7 @@ const conceptStateReducer = (state, { type, update }) => {
       return resetChildren(state, update)
 
     case RESET.AUTHOR:
-      return resetValue(state, update)
+      return resetAuthor(state, update)
 
     case RESET.ALIASES:
       return resetAliases(state, update)

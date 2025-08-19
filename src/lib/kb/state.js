@@ -1,4 +1,5 @@
 import { aliasesState } from '@/lib/kb/state/aliases'
+import { authorState } from '@/lib/kb/state/author'
 import { childrenState } from '@/lib/kb/state/children'
 import { mediaState } from '@/lib/kb/state/media'
 import { nameState } from '@/lib/kb/state/name'
@@ -24,15 +25,15 @@ const isStateModified = ({ initialState, stagedState }) => {
 const initialConceptState = (concept, pendingConcept) => {
   return {
     ...aliasesState(concept, pendingConcept),
+    ...authorState(concept, pendingConcept),
     ...childrenState(concept, pendingConcept),
     ...indexState,
     ...mediaState(concept, pendingConcept),
     ...nameState(concept, pendingConcept),
+    ...parentState(concept, pendingConcept),
     ...rankState(concept, pendingConcept),
     ...realizationsState(concept, pendingConcept),
-    ...valueState(concept, 'author'),
     ...valueState(concept, 'delete', false),
-    ...parentState(concept, pendingConcept),
   }
 }
 

@@ -16,7 +16,6 @@ const ActionIcon = ({
 }) => {
   const theme = useTheme()
 
-  // Render the icon component with consistent size
   const sizedIcon = <Icon size={SIZE} />
 
   if (asDiv) {
@@ -33,7 +32,6 @@ const ActionIcon = ({
           '&:hover': theme.kb?.icon?.hover,
           ...sx,
         }}
-        title={tooltip}
         {...props}
       >
         {sizedIcon}
