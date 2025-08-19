@@ -4,13 +4,27 @@ import { Stack, Typography, Autocomplete, TextField, Divider } from '@mui/materi
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-const ToConceptChoice = ({ error, handleChange, label, omitChoices, onEnter, required, value }) => {
+const ToConceptChoice = ({
+  error,
+  handleChange,
+  handleKeyUp,
+  label,
+  omitChoices,
+  onEnter,
+  required,
+  value,
+}) => {
   const theme = useTheme()
   const { getNames } = use(TaxonomyContext)
 
   const optionNames = useMemo(() => {
     return getNames().filter(name => !omitChoices.includes(name))
   }, [getNames, omitChoices])
+
+  const isValidSelection = useMemo(() => {
+    const v = (value || '').trim()
+    return v.length > 0 && optionNames.includes(v)
+  }, [optionNames, value])
 
   return (
     <Stack direction='row' spacing={3} alignItems='center'>
@@ -28,13 +42,14 @@ const ToConceptChoice = ({ error, handleChange, label, omitChoices, onEnter, req
                 onEnter(event)
               }
             }}
+            onChange={handleKeyUp}
             required={required}
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
               },
               '& input': {
-                color: theme.concept.color.edit,
+                color: isValidSelection ? theme.concept.color.add : theme.palette.grey[700],
                 fontSize: theme.concept.updateFontSize,
                 fontFamily: theme.concept.fontFamily,
                 fontWeight: theme.concept.fontWeight,

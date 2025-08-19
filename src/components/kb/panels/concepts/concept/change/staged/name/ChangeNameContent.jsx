@@ -33,8 +33,8 @@ const ChangeNameContent = () => {
 
   const toColor = () => {
     return name.value !== concept.name && !nameError
-      ? theme.palette.primary.edit
-      : theme.palette.grey[500]
+      ? theme.concept.color.add
+      : theme.palette.grey[700]
   }
 
   const isAdminUser = isAdmin(user)
@@ -50,6 +50,7 @@ const ChangeNameContent = () => {
           fullWidth
           helperText={nameError ? nameHelperText : ' '}
           onChange={handleNameChange}
+          onKeyUp={handleNameChange}
           slotProps={{
             input: {
               sx: {
