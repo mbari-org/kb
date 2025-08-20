@@ -1,6 +1,10 @@
 import { stagedEdits } from '@/lib/kb/state/staged'
 
-import { matchingRealizationString } from '@/lib/kb/model/realizations'
+import {
+  matchingRealizationString,
+  parseRealization,
+  sortRealizations,
+} from '@/lib/kb/model/realizations'
 
 import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
@@ -13,9 +17,11 @@ const addRealization = (state, update) => {
     action: CONCEPT_STATE.REALIZATION.ADD,
     index: realizationIndex,
   }
+
+  const updatedRealizations = [...state.realizations, realizationItem]
   return {
     ...state,
-    realizations: [...state.realizations, realizationItem],
+    realizations: sortRealizations(updatedRealizations),
     realizationIndex,
   }
 }
@@ -60,23 +66,6 @@ const isMatching = (realization, pendingRealization) => {
       : pendingRealization.oldValue
 
   return matchingRealizationString(realization, realizationString)
-
-  // switch (pendingRealization.action) {
-  //   case ACTION.ADD: {
-  //     return matchingRealizationString(realization, pendingRealization.newValue)
-  //   }
-
-  //   case ACTION.DELETE: {
-  //     return matchingRealizationString(realization, pendingRealization.oldValue)
-  //   }
-
-  //   case ACTION.EDIT: {
-  //     return matchingRealizationString(realization, pendingRealization.newValue)
-  //   }
-
-  //   default:
-  //     return false
-  // }
 }
 
 const isPendingRealization = pendingItem => pendingItem.field === HISTORY_FIELD.REALIZATION
@@ -106,10 +95,29 @@ const realizationState = (realization, pendingRealizations) => {
 
 const realizationsState = (concept, pendingConcept) => {
   const pendingRealizations = pendingConcept.filter(isPendingRealization)
+
+  // First, annotate existing realizations with any matching pending state
   const stagedRealizations = concept.realizations.map((realization, index) =>
     realizationState({ ...realization, index }, pendingRealizations)
   )
-  return { realizations: stagedRealizations }
+
+  // Then, for pending Delete items that no longer exist on the server (non-admin delete),
+  // synthesize a ghost realization so it still shows in the list as "Delete Pending".
+  const stagedHistoryIds = new Set(stagedRealizations.map(r => r.historyId).filter(Boolean))
+  const pendingDeletes = pendingRealizations
+    .filter(item => item.action === ACTION.DELETE)
+    .filter(item => !stagedHistoryIds.has(item.id))
+    .map((item, index) => {
+      const parsed = parseRealization(item.oldValue)
+      return {
+        ...parsed,
+        action: item.action + ' Pending',
+        historyId: item.id,
+        index: concept.realizations.length + index,
+      }
+    })
+
+  return { realizations: [...stagedRealizations, ...pendingDeletes] }
 }
 
 const resetRealizations = (state, update) => {

@@ -9,6 +9,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
+import { REALIZATION_DISPLAY_FIELDS } from '@/lib/kb/model/realizations'
 import { drop } from '@/lib/utils'
 
 const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {
@@ -22,7 +23,8 @@ const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {
         break
 
       case REALIZATION.DELETE:
-        fieldValues = []
+        // Show the values of the realization being deleted
+        fieldValues = REALIZATION_DISPLAY_FIELDS.map(field => [field, initialRealization?.[field]])
         break
 
       case REALIZATION.EDIT:

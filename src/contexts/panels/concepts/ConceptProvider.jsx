@@ -117,18 +117,16 @@ const ConceptProvider = ({ children }) => {
     taxonomy,
   ])
 
-  // On any taxonomy change, if a concept is selected,
-  // reset local state to the latest taxonomy concept.
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
-    // if (!selectedConcept) return
+    if (!selectedConcept) return
+    if (!isConceptLoaded(selectedConcept)) return
 
     const taxonomyConcept = getConcept(selectedConcept)
-    if (taxonomyConcept === concept) return
-    // if (!taxonomyConcept) return
+    if (!taxonomyConcept) return
 
     handleSetConcept(taxonomyConcept)
-  }, [concept, taxonomy, getSelected, getConcept, handleSetConcept])
+  }, [concept, getConcept, getSelected, handleSetConcept, isConceptLoaded, taxonomy])
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS

@@ -12,17 +12,20 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const DeleteRealizationActions = () => {
   const {
-    stagedState: { realizations, realizationIndex },
+    stagedState: { realizations },
     modifyConcept,
   } = use(ConceptContext)
-  const { closeModal } = use(ConceptModalContext)
+  const { closeModal, modalData } = use(ConceptModalContext)
+
+  const realizationIndex = modalData?.realizationIndex ?? 0
+  const realization = realizations?.[realizationIndex]
 
   const stageAction = {
     type: CONCEPT_STATE.REALIZATION.DELETE,
     update: {
       realizationIndex,
       realizationItem: {
-        ...realizations[realizationIndex],
+        ...realization,
         action: CONCEPT_STATE.REALIZATION.DELETE,
       },
     },

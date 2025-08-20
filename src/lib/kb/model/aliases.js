@@ -22,8 +22,8 @@ const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
 const aliasFields = alias => pick(alias, ALIAS_FIELDS)
 
 const orderedAliases = aliases => {
-  const capNameTypes = aliases.map(alias => ({ ...alias, nameType: capitalize(alias.nameType) }))
-  return ALIAS_TYPES.flatMap(type => sortedType(capNameTypes, type))
+  const nameTypes = aliases.map(alias => ({ ...alias, nameType: capitalize(alias.nameType) }))
+  return ALIAS_TYPES.flatMap(type => sortedType(nameTypes, type))
 }
 
 const sortedType = (aliases, type) =>

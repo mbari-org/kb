@@ -1,6 +1,8 @@
 import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
+import { orderedAliases } from '@/lib/kb/model/aliases'
+
 import { drop } from '@/lib/utils'
 
 const ALIAS_FIELDS = ['id', 'name', 'nameType', 'author']
@@ -32,12 +34,13 @@ const aliasState = (alias, pendingAliases) => {
 }
 
 const aliasesState = (concept, pendingConcept) => {
-  const { aliases } = concept
   const pendingAliases = pendingConcept.filter(isPendingAlias)
-  const stagedAliases = aliases.map((alias, index) =>
+
+  const stagedAliases = concept.aliases.map((alias, index) =>
     aliasState({ ...alias, index }, pendingAliases)
   )
-  return { aliases: stagedAliases }
+
+  return { aliases: orderedAliases(stagedAliases) }
 }
 
 const deleteAlias = (state, update) => {

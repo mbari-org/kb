@@ -17,7 +17,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const ADD = CONCEPT_STATE.REALIZATION.ADD
 const DELETE = CONCEPT_STATE.REALIZATION.DELETE
 
-const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
+const RealizationEditIcon = ({ action, realizationIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
@@ -25,13 +25,13 @@ const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
     const realizationItem =
       action === ADD ? EMPTY_TEMPLATE : stagedState.realizations[realizationIndex]
 
-    const actionModalData = {
+    const modalData = {
       action,
+      modified: { linkName: false, toConcept: false, linkValue: false },
       realizationIndex,
       realizationItem,
-      modified: { linkName: false, toConcept: false, linkValue: false },
     }
-    setModalData(actionModalData)
+    setModalData(modalData)
 
     const modal = createRealizationModal(action)
     const onClose = createRealizationOnClose({ initialState, modifyConcept })
@@ -45,4 +45,4 @@ const RealizationModifyIcon = ({ action, realizationIndex, size }) => {
   return <IconComponent onClick={onClick} size={size} />
 }
 
-export default RealizationModifyIcon
+export default RealizationEditIcon

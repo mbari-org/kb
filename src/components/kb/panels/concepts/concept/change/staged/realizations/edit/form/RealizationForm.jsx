@@ -8,11 +8,11 @@ import RealizationToConcept from './RealizationToConcept'
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
 const RealizationForm = ({
+  isEditMode = false,
   onRealizationChange,
+  onValidationChange,
   realizationItem,
   stageChange,
-  isEditMode = false,
-  onValidationChange,
 }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
@@ -32,12 +32,15 @@ const RealizationForm = ({
     return linkNameOptions.includes(currentLinkName)
   }, [linkNameOptions, realizationItem.linkName])
 
-  const handleToConceptValidationChange = useCallback(isValid => {
-    setIsValidToConcept(isValid)
-    if (onValidationChange) {
-      onValidationChange({ isValidToConcept: isValid })
-    }
-  }, [onValidationChange])
+  const handleToConceptValidationChange = useCallback(
+    isValid => {
+      setIsValidToConcept(isValid)
+      if (onValidationChange) {
+        onValidationChange({ isValidToConcept: isValid })
+      }
+    },
+    [onValidationChange]
+  )
 
   // Handler for link value (linkName is now read-only)
   const handleLinkValueChange = useCallback(

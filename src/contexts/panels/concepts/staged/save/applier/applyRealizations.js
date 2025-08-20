@@ -1,19 +1,21 @@
 import { CONCEPT_STATE } from '@/lib/constants'
+import { sortRealizations } from '@/lib/kb/model/realizations'
 
 const applyRealizations = (concept, tracker) => {
-  if (!Array.isArray(concept.realizations)) concept.realizations = []
   const add = item => {
-    concept.realizations = [...concept.realizations, item]
+    concept.realizations = sortRealizations([...concept.realizations, item])
   }
   const edit = (id, updates) => {
     const idx = concept.realizations.findIndex(m => m.id === id)
     if (idx >= 0) {
       const next = { ...concept.realizations[idx], ...updates }
-      concept.realizations = concept.realizations.toSpliced(idx, 1, next)
+      const updated = concept.realizations.toSpliced(idx, 1, next)
+      concept.realizations = sortRealizations(updated)
     }
   }
   const remove = id => {
-    concept.realizations = concept.realizations.filter(m => m.id !== id)
+    const updated = concept.realizations.filter(m => m.id !== id)
+    concept.realizations = sortRealizations(updated)
   }
 
   switch (tracker.action) {

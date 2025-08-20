@@ -1,7 +1,6 @@
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const applyMedia = (concept, tracker) => {
-  if (!Array.isArray(concept.media)) concept.media = []
   const add = item => {
     concept.media = [...concept.media, item]
   }

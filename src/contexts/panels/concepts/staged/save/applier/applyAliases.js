@@ -1,9 +1,6 @@
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const applyAliases = (concept, tracker) => {
-  if (!Array.isArray(concept.aliases)) concept.aliases = []
-  if (!Array.isArray(concept.alternateNames)) concept.alternateNames = []
-
   const addAlias = alias => {
     concept.aliases = [...concept.aliases, alias]
     concept.alternateNames = [...concept.alternateNames, alias.name]
@@ -44,8 +41,7 @@ const applyAliases = (concept, tracker) => {
       break
     }
     case CONCEPT_STATE.ALIAS.EDIT: {
-      const priorName = Array.isArray(tracker.params) ? tracker.params[0] : undefined
-      const updates = Array.isArray(tracker.params) ? tracker.params[1] : {}
+      const [priorName, updates] = tracker.params
       editAlias(priorName, updates)
       break
     }

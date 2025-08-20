@@ -22,7 +22,7 @@ import {
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
-  mapConcept,
+  insertConcept,
   removeTaxonomyConcept,
 } from '@/lib/kb/model/taxonomy'
 
@@ -217,7 +217,7 @@ const TaxonomyProvider = ({ children }) => {
       staleConcept.alternateNames.forEach(alternateName => {
         delete aliasMap[alternateName]
       })
-      mapConcept(freshConcept, conceptMap, aliasMap)
+      insertConcept(freshConcept, conceptMap, aliasMap)
 
       if (!isEqual(freshConcept.alternateNames, staleConcept.alternateNames)) {
         names = names.filter(name => !staleConcept.alternateNames.includes(name))
@@ -239,7 +239,7 @@ const TaxonomyProvider = ({ children }) => {
             .map(async childName => {
               const child = await apiFns.apiPayload(apiConcept, childName)
               child.parent = freshConcept.name
-              mapConcept(child, conceptMap, aliasMap)
+              insertConcept(child, conceptMap, aliasMap)
             })
         )
 
@@ -268,7 +268,7 @@ const TaxonomyProvider = ({ children }) => {
         freshParent.children = freshParent.children.filter(child => child !== staleConcept.name)
         freshParent.children.push(freshConcept.name)
         freshParent.children.sort()
-        mapConcept(freshParent, conceptMap, aliasMap)
+        insertConcept(freshParent, conceptMap, aliasMap)
 
         names = names.filter(name => name !== staleConcept.name)
         names.push(freshConcept.name)
@@ -279,11 +279,11 @@ const TaxonomyProvider = ({ children }) => {
         const freshParent = { ...conceptMap[freshConcept.parent] }
         freshParent.children.push(freshConcept.name)
         freshParent.children.sort()
-        mapConcept(freshParent, conceptMap, aliasMap)
+        insertConcept(freshParent, conceptMap, aliasMap)
 
         const staleParent = { ...conceptMap[staleConcept.parent] }
         staleParent.children = staleParent.children.filter(child => child !== staleConcept.name)
-        mapConcept(staleParent, conceptMap, aliasMap)
+        insertConcept(staleParent, conceptMap, aliasMap)
       }
 
       const updatedTaxonomy = { ...taxonomy, aliasMap, conceptMap, names }
