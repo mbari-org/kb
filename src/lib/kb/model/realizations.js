@@ -25,13 +25,13 @@ const isSame = (a, b) =>
 
 const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_FIELDS)
 
-const parseRealization = str => {
-  const [linkName, toConcept, linkValue] = (str || '').split(' | ')
+const parseRealization = realization => {
+  const [linkName, toConcept, linkValue] = realization.split(' | ')
   return { linkName, toConcept, linkValue }
 }
 
-const sameRealization = (realization, str) => {
-  const parsedRealization = parseRealization(str)
+const matchingRealizationString = (realization, realizationStr) => {
+  const parsedRealization = parseRealization(realizationStr)
   return isSame(realization, parsedRealization)
 }
 
@@ -47,9 +47,9 @@ export {
   EMPTY_REALIZATION,
   hasDuplicate,
   isSame,
+  matchingRealizationString,
   parseRealization,
   REALIZATION_DISPLAY_FIELDS,
   realizationFields,
-  sameRealization,
   sortRealizations,
 }

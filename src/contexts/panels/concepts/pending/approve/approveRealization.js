@@ -1,5 +1,5 @@
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
-import { parseRealization, sameRealization } from '@/lib/kb/model/realizations'
+import { matchingRealizationString, parseRealization } from '@/lib/kb/model/realizations'
 
 const approveRealization = (concept, item) => {
   switch (item.action) {
@@ -11,7 +11,7 @@ const approveRealization = (concept, item) => {
         linkValue: parsed.linkValue,
       }
       const exists = (concept.realizations || []).some(realization =>
-        sameRealization(realization, newRealization)
+        matchingRealizationString(realization, newRealization)
       )
       if (!exists) concept.realizations = [...(concept.realizations || []), newRealization]
       break
@@ -19,7 +19,9 @@ const approveRealization = (concept, item) => {
 
     case ACTION.DELETE: {
       const parsed = parseRealization(item.oldValue)
-      concept.realizations = (concept.realizations || []).filter(r => !sameRealization(r, parsed))
+      concept.realizations = (concept.realizations || []).filter(
+        r => !matchingRealizationString(r, parsed)
+      )
       break
     }
 

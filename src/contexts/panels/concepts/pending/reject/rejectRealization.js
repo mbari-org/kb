@@ -1,18 +1,18 @@
 import { ACTION } from '@/lib/constants'
-import { parseRealization, sameRealization } from '@/lib/kb/model/realizations'
+import { matchingRealizationString, parseRealization } from '@/lib/kb/model/realizations'
 
 const rejectRealization = (concept, pendingItem) => {
   switch (pendingItem.action) {
     case ACTION.ADD: {
       concept.realizations = (concept.realizations || []).filter(
-        realization => !sameRealization(realization, pendingItem.newValue)
+        realization => !matchingRealizationString(realization, pendingItem.newValue)
       )
       break
     }
 
     case ACTION.DELETE: {
       const exists = (concept.realizations || []).some(realization =>
-        sameRealization(realization, pendingItem.oldValue)
+        matchingRealizationString(realization, pendingItem.oldValue)
       )
       if (!exists) {
         const parsed = parseRealization(pendingItem.oldValue)

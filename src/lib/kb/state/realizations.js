@@ -1,5 +1,7 @@
 import { stagedEdits } from '@/lib/kb/state/staged'
 
+import { matchingRealizationString } from '@/lib/kb/model/realizations'
+
 import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
@@ -52,35 +54,29 @@ const editRealization = (state, update) => {
 }
 
 const isMatching = (realization, pendingRealization) => {
-  switch (pendingRealization.action) {
-    case ACTION.ADD: {
-      const [newLinkName, newLinkToConcept, newLinkValue] = pendingRealization.newValue.split(' | ')
-      return (
-        newLinkName === realization.linkName &&
-        newLinkToConcept === realization.toConcept &&
-        newLinkValue === realization.linkValue
-      )
-    }
+  const realizationString =
+    pendingRealization.action !== ACTION.DELETE
+      ? pendingRealization.newValue
+      : pendingRealization.oldValue
 
-    case ACTION.DELETE: {
-      const [oldLinkName, oldLinkToConcept, oldLinkValue] = pendingRealization.oldValue.split(' | ')
-      return (
-        oldLinkName === realization.linkName &&
-        oldLinkToConcept === realization.toConcept &&
-        oldLinkValue === realization.linkValue
-      )
-    }
+  return matchingRealizationString(realization, realizationString)
 
-    case ACTION.EDIT: {
-      const [oldLinkName, oldLinkToConcept, _oldLinkValue] =
-        pendingRealization.oldValue.split(' | ')
+  // switch (pendingRealization.action) {
+  //   case ACTION.ADD: {
+  //     return matchingRealizationString(realization, pendingRealization.newValue)
+  //   }
 
-      return oldLinkName === realization.linkName && oldLinkToConcept === realization.toConcept
-    }
+  //   case ACTION.DELETE: {
+  //     return matchingRealizationString(realization, pendingRealization.oldValue)
+  //   }
 
-    default:
-      return false
-  }
+  //   case ACTION.EDIT: {
+  //     return matchingRealizationString(realization, pendingRealization.newValue)
+  //   }
+
+  //   default:
+  //     return false
+  // }
 }
 
 const isPendingRealization = pendingItem => pendingItem.field === HISTORY_FIELD.REALIZATION
@@ -109,9 +105,8 @@ const realizationState = (realization, pendingRealizations) => {
 }
 
 const realizationsState = (concept, pendingConcept) => {
-  const { realizations } = concept
   const pendingRealizations = pendingConcept.filter(isPendingRealization)
-  const stagedRealizations = realizations.map((realization, index) =>
+  const stagedRealizations = concept.realizations.map((realization, index) =>
     realizationState({ ...realization, index }, pendingRealizations)
   )
   return { realizations: stagedRealizations }
