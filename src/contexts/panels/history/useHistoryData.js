@@ -7,33 +7,39 @@ const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
 const useHistoryData = ({
   apiFns,
-  selectedType,
-  selectedConcept,
-  pendingHistory,
-  typeState,
-  sortOrder,
-  count,
   conceptData,
+  count,
+  pendingHistory,
+  selectedConcept,
+  selectedType,
+  sortOrder,
+  typeState,
 }) => {
   const loadCount = useCallback(
     async ({ setCount, setConceptData, setTypeData, setTypeState }) => {
       if (!apiFns) return
+
+      setTypeState({ limit: DEFAULT_LIMIT, offset: 0 })
 
       if (selectedType === 'concept' && selectedConcept) {
         const data = await apiFns.apiPayload(getConceptHistory, selectedConcept)
         setCount(data.length)
         setConceptData(data)
         setTypeData(data.slice(0, DEFAULT_LIMIT))
-      } else if (selectedType === 'pending') {
-        setCount(pendingHistory.length)
-        setConceptData([])
-      } else {
-        const result = await apiFns.apiResult(getHistoryCount, selectedType)
-        setCount(result)
-        setConceptData([])
+        return
       }
 
-      setTypeState({ limit: DEFAULT_LIMIT, offset: 0 })
+      if (selectedType === 'pending') {
+        setCount(pendingHistory.length)
+        setConceptData([])
+        setTypeData([])
+        return
+      }
+
+      const result = await apiFns.apiResult(getHistoryCount, selectedType)
+      setCount(result)
+      setConceptData([])
+      setTypeData([])
     },
     [apiFns, pendingHistory.length, selectedConcept, selectedType]
   )

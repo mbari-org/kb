@@ -7,6 +7,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { PAGINATION, SELECTED } from '@/lib/constants'
 import useHistoryData from '@/contexts/panels/history/useHistoryData'
+import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
@@ -74,23 +75,10 @@ const HistoryProvider = ({ children }) => {
     loadData,
   ])
 
-  const nextPage = useCallback(() => {
-    setTypeState(prev => ({
-      ...prev,
-      offset: Math.min(prev.offset + prev.limit, count - prev.limit),
-    }))
-  }, [count])
-
-  const prevPage = useCallback(() => {
-    setTypeState(prev => ({
-      ...prev,
-      offset: Math.max(0, prev.offset - prev.limit),
-    }))
-  }, [])
-
-  const setPageSize = useCallback(newLimit => {
-    setTypeState({ limit: newLimit, offset: 0 })
-  }, [])
+  const { nextPage, prevPage, setPageSize, resetPagination } = usePageHistory({
+    count,
+    setTypeState,
+  })
 
   const handleSortChange = useCallback(
     newSortOrder => {
@@ -102,9 +90,6 @@ const HistoryProvider = ({ children }) => {
     [selectedType]
   )
 
-  const resetPagination = useCallback(() => {
-    setTypeState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
-  }, [])
 
   const value = {
     conceptHistoryExtent,
