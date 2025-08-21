@@ -1,6 +1,6 @@
 import { Typography, Box } from '@mui/material'
 
-import HistoryTableHeaderRight from './table/header/HistoryTableHeaderRight'
+import HistoryTableHeaderTypeRight from './table/header/HistoryTableHeaderTypeRight'
 
 const HistoryTableHeader = ({
   count,
@@ -24,7 +24,7 @@ const HistoryTableHeader = ({
         }}
       >
         <Typography sx={{ ml: 2 }}>Total: {count}</Typography>
-        <HistoryTableHeaderRight handleSortChange={handleSortChange} sortOrder={sortOrder} />
+        <HistoryTableHeaderTypeRight handleSortChange={handleSortChange} sortOrder={sortOrder} />
       </Box>
     </Box>
   )

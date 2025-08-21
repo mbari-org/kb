@@ -5,14 +5,9 @@ import { useTheme } from '@mui/material/styles'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
-const HistoryTableHeaderRight = () => {
-  const { handleSortChange, sortOrder, selectedType } = use(HistoryContext)
+const HistoryTableHeaderTypeRight = () => {
+  const { handleSortChange, sortOrder } = use(HistoryContext)
   const theme = useTheme()
-
-  // Don't show the Created Order controls for concept history
-  if (selectedType === 'concept') {
-    return null
-  }
 
   const toggleButtonSx = {
     ...theme.toggleButton,
@@ -44,4 +39,4 @@ const HistoryTableHeaderRight = () => {
   )
 }
 
-export default HistoryTableHeaderRight
+export default HistoryTableHeaderTypeRight

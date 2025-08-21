@@ -1,8 +1,8 @@
 import { use } from 'react'
 
-import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryPagination from './HistoryPagination'
+import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
@@ -11,7 +11,7 @@ import { PAGINATION } from '@/lib/constants'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableConceptData = ({ hideFooter = false }) => {
-  const { count, conceptData, typeState, nextPage, prevPage, selectedType, setPageSize } =
+  const { conceptData, count, nextPage, prevPage, selectedType, setPageSize, typeState } =
     use(HistoryContext)
 
   const { limit, offset } = typeState
@@ -32,15 +32,15 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
   return (
     <PanelDataGrid
       columns={columns}
-      rows={conceptData}
+      hideFooter={hideFooter}
+      pageSizeOptions={PAGE_SIZE_OPTIONS}
+      paginationComponent={paginationComponent}
+      paginationMode='client'
       paginationModel={{
         pageSize: limit,
         page: Math.floor(offset / limit),
       }}
-      pageSizeOptions={PAGE_SIZE_OPTIONS}
-      paginationMode='client'
-      paginationComponent={paginationComponent}
-      hideFooter={hideFooter}
+      rows={conceptData}
     />
   )
 }
