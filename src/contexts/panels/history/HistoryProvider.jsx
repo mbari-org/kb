@@ -5,8 +5,8 @@ import HistoryContext from './HistoryContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
 import { PAGINATION, SELECTED } from '@/lib/constants'
+import useHistoryData from '@/contexts/panels/history/useHistoryData'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
@@ -35,76 +35,33 @@ const HistoryProvider = ({ children }) => {
     setConceptHistoryExtent(null)
   }, [selectedConcept])
 
+  const { loadCount, loadData } = useHistoryData({
+    apiFns,
+    conceptData,
+    count,
+    pendingHistory,
+    selectedConcept,
+    selectedType,
+    sortOrder,
+    typeState,
+  })
+
   useEffect(() => {
-    const loadCount = async () => {
+    const run = async () => {
       if (!apiFns) return
-
       isTypeChanging.current = true
-
-      if (selectedType === 'concept' && selectedConcept) {
-        const data = await apiFns.apiPayload(getConceptHistory, selectedConcept)
-        setCount(data.length)
-        setConceptData(data)
-        setTypeData(data.slice(0, DEFAULT_LIMIT))
-      } else if (selectedType === 'pending') {
-        // Use pre-loaded pendingHistory from PanelDataContext
-        setCount(pendingHistory.length)
-        setConceptData([])
-      } else {
-        const result = await apiFns.apiResult(getHistoryCount, selectedType)
-        setCount(result)
-        setConceptData([])
-      }
-
-      setTypeState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
-
+      await loadCount({ setCount, setConceptData, setTypeData, setTypeState })
       isTypeChanging.current = false
     }
-    loadCount()
-  }, [apiFns, selectedType, selectedConcept, pendingHistory])
+    run()
+  }, [apiFns, selectedType, selectedConcept, pendingHistory, loadCount])
 
   useEffect(() => {
-    const loadData = async () => {
+    const run = async () => {
       if (!apiFns || isTypeChanging.current) return
-
-      if (selectedType === 'concept' && selectedConcept) {
-        const start = typeState.offset
-        const end = start + typeState.limit
-        setTypeData(conceptData.slice(start, end))
-        return
-      }
-
-      if (selectedType === 'pending') {
-        const sortedData =
-          sortOrder === 'desc'
-            ? [...pendingHistory].sort(
-                (a, b) => new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
-              )
-            : pendingHistory
-
-        const start = typeState.offset
-        const end = start + typeState.limit
-        setTypeData(sortedData.slice(start, end))
-        return
-      }
-
-      let actualOffset = typeState.offset
-      if (sortOrder === 'desc') {
-        const page = Math.floor(typeState.offset / typeState.limit)
-        const totalPages = Math.ceil(count / typeState.limit)
-        const reversePage = totalPages - 1 - page
-        actualOffset = reversePage * typeState.limit
-      }
-      const data = await apiFns.apiPaginated(getHistory, [
-        selectedType,
-        { ...typeState, offset: actualOffset },
-      ])
-
-      const sortedData = sortOrder === 'desc' ? [...data].reverse() : data
-
-      setTypeData(sortedData)
+      await loadData({ setTypeData })
     }
-    loadData()
+    run()
   }, [
     apiFns,
     conceptData,
@@ -114,6 +71,7 @@ const HistoryProvider = ({ children }) => {
     sortOrder,
     typeState,
     pendingHistory,
+    loadData,
   ])
 
   const nextPage = useCallback(() => {
