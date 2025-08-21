@@ -75,6 +75,13 @@ const useHistoryColumns = ({ type }) => {
 
   const baseColumns = [
     {
+      field: 'concept',
+      headerClassName: 'bold-header',
+      headerName: 'Concept',
+      sortable: isSortable,
+      width: 200,
+    },
+    {
       field: 'field',
       headerClassName: 'bold-header',
       headerName: 'Field',
@@ -119,14 +126,6 @@ const useHistoryColumns = ({ type }) => {
     },
   ]
 
-  const conceptColumn = {
-    field: 'concept',
-    headerClassName: 'bold-header',
-    headerName: 'Concept',
-    sortable: isSortable,
-    width: 200,
-  }
-
   const approvedColumn = {
     field: 'approved',
     headerClassName: 'bold-header',
@@ -156,9 +155,9 @@ const useHistoryColumns = ({ type }) => {
 
   const columns =
     type === 'pending'
-      ? [inspectColumn(), conceptColumn, ...baseColumns]
+      ? [inspectColumn(), ...baseColumns]
       : type === 'approved'
-      ? [inspectColumn(), conceptColumn, ...baseColumns, ...processorColumns]
+      ? [inspectColumn(), ...baseColumns, ...processorColumns]
       : [approvedColumn, ...baseColumns, ...processorColumns]
 
   return columns
