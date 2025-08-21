@@ -7,7 +7,8 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
 import { PAGINATION, PROCESSING, SELECTED } from '@/lib/constants'
-import useHistoryData from '@/contexts/panels/history/useHistoryData'
+import useLoadData from '@/contexts/panels/history/useLoadData'
+import usePageData from '@/contexts/panels/history/usePageData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
@@ -40,12 +41,22 @@ const HistoryProvider = ({ children }) => {
     setConceptHistoryExtent(null)
   }, [selectedConcept])
 
-  const { loadData, pageData } = useHistoryData({
+  const loadData = useLoadData({
     apiFns,
     conceptData,
     conceptHistoryExtent,
     count,
     pendingHistory,
+    selectedConcept,
+    selectedType,
+    sortOrder,
+    typeState,
+  })
+
+  const pageData = usePageData({
+    apiFns,
+    conceptData,
+    count,
     selectedConcept,
     selectedType,
     sortOrder,
