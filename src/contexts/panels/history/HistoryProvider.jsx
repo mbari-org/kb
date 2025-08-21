@@ -8,6 +8,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import { PAGINATION, SELECTED } from '@/lib/constants'
 import useHistoryData from '@/contexts/panels/history/useHistoryData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
@@ -36,9 +37,10 @@ const HistoryProvider = ({ children }) => {
     setConceptHistoryExtent(null)
   }, [selectedConcept])
 
-  const { loadCount, loadData } = useHistoryData({
+  const { loadData, pageData } = useHistoryData({
     apiFns,
     conceptData,
+    conceptHistoryExtent,
     count,
     pendingHistory,
     selectedConcept,
@@ -51,16 +53,16 @@ const HistoryProvider = ({ children }) => {
     const run = async () => {
       if (!apiFns) return
       isTypeChanging.current = true
-      await loadCount({ setCount, setConceptData, setTypeData, setTypeState })
+      await loadData({ setCount, setConceptData, setTypeData, setTypeState })
       isTypeChanging.current = false
     }
     run()
-  }, [apiFns, selectedType, selectedConcept, pendingHistory, loadCount])
+  }, [apiFns, selectedType, selectedConcept, pendingHistory, loadData])
 
   useEffect(() => {
     const run = async () => {
       if (!apiFns || isTypeChanging.current) return
-      await loadData({ setTypeData })
+      await pageData({ setTypeData })
     }
     run()
   }, [
@@ -72,7 +74,7 @@ const HistoryProvider = ({ children }) => {
     sortOrder,
     typeState,
     pendingHistory,
-    loadData,
+    pageData,
   ])
 
   const { nextPage, prevPage, setPageSize, resetPagination } = usePageHistory({
@@ -89,7 +91,6 @@ const HistoryProvider = ({ children }) => {
     },
     [selectedType]
   )
-
 
   const value = {
     conceptHistoryExtent,

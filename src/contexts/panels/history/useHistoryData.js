@@ -1,6 +1,9 @@
-import { useCallback } from 'react'
+import { use, useCallback, useMemo } from 'react'
 
 import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
+
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
 import { PAGINATION } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
@@ -8,6 +11,7 @@ const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const useHistoryData = ({
   apiFns,
   conceptData,
+  conceptHistoryExtent,
   count,
   pendingHistory,
   selectedConcept,
@@ -15,13 +19,32 @@ const useHistoryData = ({
   sortOrder,
   typeState,
 }) => {
-  const loadCount = useCallback(
+  const { getConcept } = use(TaxonomyContext)
+
+  const conceptChildren = useMemo(() => {
+    if (!selectedConcept || conceptHistoryExtent !== 'children') return []
+    const concept = getConcept(selectedConcept)
+    return concept?.children || []
+  }, [conceptHistoryExtent, getConcept, selectedConcept])
+
+  const loadData = useCallback(
     async ({ setCount, setConceptData, setTypeData, setTypeState }) => {
       if (!apiFns) return
 
       setTypeState({ limit: DEFAULT_LIMIT, offset: 0 })
 
       if (selectedType === 'concept' && selectedConcept) {
+        if (conceptHistoryExtent === 'children') {
+          const names = [selectedConcept, ...conceptChildren]
+          const lists = await Promise.all(
+            names.map(name => apiFns.apiPayload(getConceptHistory, name))
+          )
+          const merged = lists.flat()
+          setCount(merged.length)
+          setConceptData(merged)
+          setTypeData(merged.slice(0, DEFAULT_LIMIT))
+          return
+        }
         const data = await apiFns.apiPayload(getConceptHistory, selectedConcept)
         setCount(data.length)
         setConceptData(data)
@@ -41,10 +64,17 @@ const useHistoryData = ({
       setConceptData([])
       setTypeData([])
     },
-    [apiFns, pendingHistory.length, selectedConcept, selectedType]
+    [
+      apiFns,
+      pendingHistory.length,
+      selectedConcept,
+      selectedType,
+      conceptHistoryExtent,
+      conceptChildren,
+    ]
   )
 
-  const loadData = useCallback(
+  const pageData = useCallback(
     async ({ setTypeData }) => {
       if (!apiFns) return
 
@@ -97,7 +127,7 @@ const useHistoryData = ({
     ]
   )
 
-  return { loadCount, loadData }
+  return { loadData, pageData }
 }
 
 export default useHistoryData
