@@ -390,8 +390,8 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
       insertConcept(child, conceptMap, aliasMap)
     })
 
-    const priorChildren = Array.isArray(concept.children) ? concept.children : []
-    const currentChildren = Array.isArray(updatedConcept.children) ? updatedConcept.children : []
+    const priorChildren = concept.children
+    const currentChildren = updatedConcept.children
     const removedChildren = priorChildren.filter(name => !currentChildren.includes(name))
 
     removedChildren.forEach(childName => {
@@ -400,11 +400,9 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
         // Drop the child concept from conceptMap
         delete conceptMap[childName]
         // Drop all alias names that pointed to that child
-        if (Array.isArray(childConcept.alternateNames)) {
-          childConcept.alternateNames.forEach(alternateName => {
-            if (aliasMap[alternateName]) delete aliasMap[alternateName]
-          })
-        }
+        childConcept.alternateNames.forEach(alternateName => {
+          if (aliasMap[alternateName]) delete aliasMap[alternateName]
+        })
       }
     })
   }

@@ -176,12 +176,16 @@ const useTaxonomyIntegrity = () => {
         visited.add(name)
 
         const concept = conceptMap[name]
-        let children = concept?.children
+        const children = concept?.children
         if (children === undefined) {
-          children = []
-        } else if (!Array.isArray(children)) {
+          // no children loaded, treat as empty but do not mutate or coerce
+          visiting.delete(name)
+          return
+        }
+        if (!Array.isArray(children)) {
           addError(`Concept "${name}" has invalid children; expected an array or undefined`)
-          children = []
+          visiting.delete(name)
+          return
         }
         children.forEach(childName => {
           if (!conceptMap[childName]) {

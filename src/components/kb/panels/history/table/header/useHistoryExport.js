@@ -92,9 +92,6 @@ const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
     type,
     { limit: EXPORT_PAGE_SIZE, offset },
   ])
-  if (!Array.isArray(response)) {
-    return []
-  }
   return response
 }
 

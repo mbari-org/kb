@@ -43,10 +43,10 @@ const TemplatesProvider = ({ children }) => {
 
   useEffect(() => {
     if (!filters[TEMPLATES.FILTERS.CONCEPT]) {
-      const filtered = filterTemplates(templates || [], {
+      const filtered = filterTemplates(templates, {
         toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
-        linkName: filters[TEMPLATES.FILTERS.LINK_NAME] || '',
-        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE] || '',
+        linkName: filters[TEMPLATES.FILTERS.LINK_NAME],
+        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE],
       })
       setFilteredTemplates(filtered)
       return
@@ -57,11 +57,11 @@ const TemplatesProvider = ({ children }) => {
       const allConcepts = filters[TEMPLATES.FILTERS.CONCEPT]
         ? [filters[TEMPLATES.FILTERS.CONCEPT], ...ancestors]
         : null
-      const filtered = filterTemplates(templates || [], {
+      const filtered = filterTemplates(templates, {
         concepts: allConcepts,
         toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
-        linkName: filters[TEMPLATES.FILTERS.LINK_NAME] || '',
-        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE] || '',
+        linkName: filters[TEMPLATES.FILTERS.LINK_NAME],
+        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE],
       })
       setFilteredTemplates(filtered)
     }
