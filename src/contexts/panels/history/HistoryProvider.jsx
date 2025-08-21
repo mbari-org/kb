@@ -24,11 +24,16 @@ const HistoryProvider = ({ children }) => {
 
   const [count, setCount] = useState(0)
   const [conceptData, setConceptData] = useState([])
+  const [conceptHistoryExtent, setConceptHistoryExtent] = useState(null)
   const [typeData, setTypeData] = useState([])
   const [typeState, setTypeState] = useState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
   const [sortOrder, setSortOrder] = useState('desc')
 
   const isTypeChanging = useRef(false)
+
+  useEffect(() => {
+    setConceptHistoryExtent(null)
+  }, [selectedConcept])
 
   useEffect(() => {
     const loadCount = async () => {
@@ -144,6 +149,7 @@ const HistoryProvider = ({ children }) => {
   }, [])
 
   const value = {
+    conceptHistoryExtent,
     count,
     data: typeData,
     conceptData,
@@ -155,6 +161,7 @@ const HistoryProvider = ({ children }) => {
     resetPagination,
     selectedConcept,
     selectedType,
+    setConceptHistoryExtent,
     setPageSize,
     sortOrder,
   }
