@@ -5,6 +5,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 
@@ -17,6 +18,7 @@ import applyRank from '@/contexts/panels/concepts/staged/save/applier/applyRank'
 import applyRealizations from '@/contexts/panels/concepts/staged/save/applier/applyRealizations'
 
 import { getConcept } from '@/lib/api/concept'
+import { isAdmin } from '@/lib/auth/role'
 
 const useSaveStaged = () => {
   const { apiFns } = use(ConfigContext)
@@ -24,6 +26,7 @@ const useSaveStaged = () => {
   const { concept: staleConcept, initialState, setConcept, stagedState } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { refreshConcept } = use(TaxonomyContext)
+  const { user } = use(UserContext)
 
   return useCallback(async () => {
     setProcessing('Saving concept...')
@@ -60,7 +63,8 @@ const useSaveStaged = () => {
     results.forEach(tracker => {
       const apply = appliers[tracker.field]
       if (apply) {
-        apply(freshConcept, tracker)
+        const trackerWithRole = { ...tracker, isAdmin: isAdmin(user) }
+        apply(freshConcept, trackerWithRole)
       }
     })
 
@@ -83,6 +87,7 @@ const useSaveStaged = () => {
     stagedState,
     staleConcept,
     updateSelected,
+    user,
   ])
 }
 

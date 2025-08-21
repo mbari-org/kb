@@ -35,11 +35,9 @@ const aliasState = (alias, pendingAliases) => {
 
 const aliasesState = (concept, pendingConcept) => {
   const pendingAliases = pendingConcept.filter(isPendingAlias)
-
   const stagedAliases = concept.aliases.map((alias, index) =>
     aliasState({ ...alias, index }, pendingAliases)
   )
-
   return { aliases: orderedAliases(stagedAliases) }
 }
 

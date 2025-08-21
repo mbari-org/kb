@@ -5,10 +5,10 @@ const applyMedia = (concept, tracker) => {
     concept.media = [...concept.media, item]
   }
   const edit = (id, updates) => {
-    const idx = concept.media.findIndex(m => m.id === id)
-    if (idx >= 0) {
-      const next = { ...concept.media[idx], ...updates }
-      concept.media = concept.media.toSpliced(idx, 1, next)
+    const index = concept.media.findIndex(m => m.id === id)
+    if (index >= 0) {
+      const next = { ...concept.media[index], ...updates }
+      concept.media = concept.media.toSpliced(index, 1, next)
     }
   }
   const remove = id => {
