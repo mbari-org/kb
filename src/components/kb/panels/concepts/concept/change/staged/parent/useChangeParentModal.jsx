@@ -12,7 +12,6 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { PROCESSING } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants'
-import { descendants } from '@/lib/kb/model/taxonomy'
 
 const { LOADING } = PROCESSING
 const { RESET } = CONCEPT_STATE
@@ -50,7 +49,7 @@ const changeParentOnClose = modifyConcept => {
 const useChangeParentModal = () => {
   const { concept, modifyConcept } = use(ConceptContext)
   const { setModal, setModalData, setProcessing } = use(ConceptModalContext)
-  const { loadConceptDescendants } = use(TaxonomyContext)
+  const { getDescendantNames } = use(TaxonomyContext)
 
   const alreadyLoadingDescendants = useRef(false)
 
@@ -61,12 +60,8 @@ const useChangeParentModal = () => {
       alreadyLoadingDescendants.current = true
       setProcessing(LOADING)
 
-      const taxonomy = await loadConceptDescendants(concept)
-      const omitChoices = [
-        concept.name,
-        concept.parent,
-        ...descendants(taxonomy, concept.name).map(descendant => descendant.name),
-      ]
+      const descendantNames = await getDescendantNames(concept.name)
+      const omitChoices = [concept.name, concept.parent, ...descendantNames]
 
       const modal = changeParentModal(omitChoices)
       const onClose = changeParentOnClose(modifyConcept)
@@ -79,7 +74,7 @@ const useChangeParentModal = () => {
       alreadyLoadingDescendants.current = false
       setProcessing(false)
     }
-  }, [concept, loadConceptDescendants, modifyConcept, setModal, setModalData, setProcessing])
+  }, [concept, getDescendantNames, modifyConcept, setModal, setModalData, setProcessing])
 }
 
 export default useChangeParentModal

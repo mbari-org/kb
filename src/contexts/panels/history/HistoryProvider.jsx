@@ -4,11 +4,11 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import HistoryContext from './HistoryContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import AppModalContext from '@/contexts/app/AppModalContext'
 
 import { PAGINATION, SELECTED } from '@/lib/constants'
 import useHistoryData from '@/contexts/panels/history/useHistoryData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
@@ -17,9 +17,10 @@ const { CONCEPT } = SELECTED
 const { HISTORY } = SELECTED.SETTINGS
 
 const HistoryProvider = ({ children }) => {
-  const { getSelected, getSettings } = use(SelectedContext)
   const { apiFns } = use(ConfigContext)
   const { pendingHistory } = use(PanelDataContext)
+  const { setProcessing, setModalData } = use(AppModalContext)
+  const { getSelected, getSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
@@ -53,11 +54,33 @@ const HistoryProvider = ({ children }) => {
     const run = async () => {
       if (!apiFns) return
       isTypeChanging.current = true
-      await loadData({ setCount, setConceptData, setTypeData, setTypeState })
-      isTypeChanging.current = false
+      setProcessing(true)
+      const loadingMsg =
+        conceptHistoryExtent === 'children'
+          ? 'Loading children...'
+          : conceptHistoryExtent === 'descendants'
+          ? 'Loading descendants...'
+          : 'Loading data...'
+      setModalData({ processingMessage: loadingMsg })
+      try {
+        await loadData({ setCount, setConceptData, setTypeData, setTypeState })
+      } finally {
+        setProcessing(false)
+        setModalData({})
+        isTypeChanging.current = false
+      }
     }
     run()
-  }, [apiFns, selectedType, selectedConcept, pendingHistory, loadData])
+  }, [
+    apiFns,
+    conceptHistoryExtent,
+    loadData,
+    pendingHistory,
+    selectedConcept,
+    selectedType,
+    setModalData,
+    setProcessing,
+  ])
 
   useEffect(() => {
     const run = async () => {
@@ -69,12 +92,12 @@ const HistoryProvider = ({ children }) => {
     apiFns,
     conceptData,
     count,
+    pageData,
+    pendingHistory,
     selectedConcept,
     selectedType,
     sortOrder,
     typeState,
-    pendingHistory,
-    pageData,
   ])
 
   const { nextPage, prevPage, setPageSize, resetPagination } = usePageHistory({

@@ -23,7 +23,7 @@ const TemplatesProvider = ({ children }) => {
 
   const { explicitConcepts, templates } = use(PanelDataContext)
   const { getSettings, updateSettings } = use(SelectedContext)
-  const { getAncestors, isConceptLoaded, loadConcept } = use(TaxonomyContext)
+  const { getAncestorNames, isConceptLoaded, loadConcept } = use(TaxonomyContext)
 
   const handleLoadConceptError = useLoadConceptError()
 
@@ -53,9 +53,9 @@ const TemplatesProvider = ({ children }) => {
     }
 
     const updateFilteredTemplates = () => {
-      const ancestors = available ? getAncestors(filters[TEMPLATES.FILTERS.CONCEPT]) : []
+      const ancestorNames = available ? getAncestorNames(filters[TEMPLATES.FILTERS.CONCEPT]) : []
       const allConcepts = filters[TEMPLATES.FILTERS.CONCEPT]
-        ? [filters[TEMPLATES.FILTERS.CONCEPT], ...ancestors]
+        ? [filters[TEMPLATES.FILTERS.CONCEPT], ...ancestorNames]
         : null
       const filtered = filterTemplates(templates, {
         concepts: allConcepts,
@@ -82,7 +82,7 @@ const TemplatesProvider = ({ children }) => {
   }, [
     available,
     filters,
-    getAncestors,
+    getAncestorNames,
     handleLoadConceptError,
     isConceptLoaded,
     loadConcept,

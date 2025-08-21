@@ -12,7 +12,7 @@ import {
   closestConcept as closestTaxonomyConcept,
   deleteConcept as deleteTaxonomyConcept,
   filterTaxonomyRanks,
-  getAncestors as getTaxonomyAncestors,
+  getAncestorNames as getTaxonomyAncestorNames,
   getConcept as getTaxonomyConcept,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
@@ -109,12 +109,25 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
-  const getAncestors = useCallback(
+  const getAncestorNames = useCallback(
     conceptName => {
       if (!taxonomy) return []
-      return getTaxonomyAncestors(taxonomy, conceptName)
+      return getTaxonomyAncestorNames(taxonomy, conceptName)
     },
     [taxonomy]
+  )
+
+  const getDescendantNames = useCallback(
+    async conceptName => {
+      if (!taxonomy) return []
+
+      const concept = getTaxonomyConcept(taxonomy, conceptName)
+      if (!concept) return []
+
+      const { descendantNames } = await loadTaxonomyConceptDescendants(taxonomy, concept, apiFns)
+      return descendantNames
+    },
+    [apiFns, taxonomy]
   )
 
   const getNames = useCallback(() => {
@@ -329,7 +342,8 @@ const TaxonomyProvider = ({ children }) => {
       filterRanks,
       getConcept,
       getConceptPrimaryName,
-      getAncestors,
+      getAncestorNames,
+      getDescendantNames,
       getNames,
       getRootName,
       isConceptLoaded,
@@ -345,7 +359,8 @@ const TaxonomyProvider = ({ children }) => {
       closestConcept,
       deleteConcept,
       filterRanks,
-      getAncestors,
+      getAncestorNames,
+      getDescendantNames,
       getConcept,
       getConceptPrimaryName,
       getNames,

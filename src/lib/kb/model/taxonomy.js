@@ -137,7 +137,7 @@ const isDescendant = (taxonomy, conceptName, descendantName) => {
 
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
-const getAncestors = (taxonomy, conceptName) => {
+const getAncestorNames = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   if (!concept) return []
 
@@ -304,13 +304,15 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
     conceptMap: { ...taxonomy.conceptMap },
     aliasMap: { ...taxonomy.aliasMap },
   }
-  const descendants = [...concept.children]
+  const toVisit = [...concept.children]
+  const descendantNames = []
 
   const conceptMap = updatedTaxonomy.conceptMap
   const aliasMap = updatedTaxonomy.aliasMap
 
-  while (0 < descendants.length) {
-    const descendantName = descendants.shift()
+  while (0 < toVisit.length) {
+    const descendantName = toVisit.shift()
+    descendantNames.push(descendantName)
     const descendant = getConcept(updatedTaxonomy, descendantName)
 
     if (!descendant) {
@@ -324,10 +326,11 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
         children: children.map(child => child.name),
       }
 
+      console.log('inserting descendant', updatedDescendant.name)
       insertConcept(updatedDescendant, conceptMap, aliasMap)
 
       children.forEach(child => {
-        descendants.push(child.name)
+        toVisit.push(child.name)
         const updatedChild = {
           ...child,
           parent: descendantName,
@@ -335,11 +338,11 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
         insertConcept(updatedChild, conceptMap, aliasMap)
       })
     } else if (descendant?.children) {
-      descendants.push(...descendant.children)
+      toVisit.push(...descendant.children)
     }
   }
 
-  return { taxonomy: updatedTaxonomy }
+  return { descendantNames, taxonomy: updatedTaxonomy }
 }
 
 const insertConcept = (concept, conceptMap, aliasMap) => {
@@ -463,7 +466,7 @@ export {
   deleteConcept,
   descendants,
   filterTaxonomyRanks,
-  getAncestors,
+  getAncestorNames,
   getConcept,
   getConceptPrimaryName,
   getNames,

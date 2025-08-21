@@ -17,7 +17,7 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const ConceptTemplates = () => {
   const { isLoading, templates } = use(PanelDataContext)
   const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
-  const { getAncestors } = use(TaxonomyContext)
+  const { getAncestorNames } = use(TaxonomyContext)
 
   const [filteredTemplates, setFilteredTemplates] = useState([])
 
@@ -39,11 +39,11 @@ const ConceptTemplates = () => {
   }
 
   useEffect(() => {
-    const ancestors = available ? getAncestors(selectedConcept) : []
-    const concepts = selectedConcept ? [selectedConcept, ...ancestors] : null
+    const ancestorNames = available ? getAncestorNames(selectedConcept) : []
+    const concepts = selectedConcept ? [selectedConcept, ...ancestorNames] : null
 
     setFilteredTemplates(filterTemplates(templates, { concepts }))
-  }, [available, getAncestors, selectedConcept, templates])
+  }, [available, getAncestorNames, selectedConcept, templates])
 
   const tooltip = `View ${available ? 'Available' : 'Explicit'} Templates for this Concept`
 

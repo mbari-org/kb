@@ -9,28 +9,31 @@ import { filterTemplates } from '@/components/kb/panels/templates/utils'
 const useAvailableLinkTemplates = () => {
   const { concept } = use(ConceptContext)
   const { templates } = use(PanelDataContext)
-  const { getAncestors } = use(TaxonomyContext)
+  const { getAncestorNames } = use(TaxonomyContext)
 
   const conceptNames = useMemo(() => {
-    return concept ? [concept.name, ...getAncestors(concept.name)] : []
-  }, [concept, getAncestors])
+    return concept ? [concept.name, ...getAncestorNames(concept.name)] : []
+  }, [concept, getAncestorNames])
 
-  const getAvailableLinkTemplates = useCallback(linkName => {
-    if (!templates || !conceptNames.length) return []
+  const getAvailableLinkTemplates = useCallback(
+    linkName => {
+      if (!templates || !conceptNames.length) return []
 
-    // If no linkName is provided, return all available templates
-    if (!linkName) {
+      // If no linkName is provided, return all available templates
+      if (!linkName) {
+        return filterTemplates(templates, {
+          concepts: conceptNames,
+        })
+      }
+
+      // If linkName is provided, filter by both concepts and linkName
       return filterTemplates(templates, {
         concepts: conceptNames,
+        linkName: linkName,
       })
-    }
-
-    // If linkName is provided, filter by both concepts and linkName
-    return filterTemplates(templates, {
-      concepts: conceptNames,
-      linkName: linkName,
-    })
-  }, [templates, conceptNames])
+    },
+    [templates, conceptNames]
+  )
 
   return getAvailableLinkTemplates
 }

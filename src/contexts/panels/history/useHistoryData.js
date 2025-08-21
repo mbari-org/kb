@@ -19,7 +19,7 @@ const useHistoryData = ({
   sortOrder,
   typeState,
 }) => {
-  const { getConcept } = use(TaxonomyContext)
+  const { getConcept, getDescendantNames } = use(TaxonomyContext)
 
   const conceptChildren = useMemo(() => {
     if (!selectedConcept || conceptHistoryExtent !== 'children') return []
@@ -36,6 +36,17 @@ const useHistoryData = ({
       if (selectedType === 'concept' && selectedConcept) {
         if (conceptHistoryExtent === 'children') {
           const names = [selectedConcept, ...conceptChildren]
+          const lists = await Promise.all(
+            names.map(name => apiFns.apiPayload(getConceptHistory, name))
+          )
+          const merged = lists.flat()
+          setCount(merged.length)
+          setConceptData(merged)
+          setTypeData(merged.slice(0, DEFAULT_LIMIT))
+          return
+        }
+        if (conceptHistoryExtent === 'descendants') {
+          const names = [selectedConcept, ...(await getDescendantNames(selectedConcept))]
           const lists = await Promise.all(
             names.map(name => apiFns.apiPayload(getConceptHistory, name))
           )
@@ -71,6 +82,7 @@ const useHistoryData = ({
       selectedType,
       conceptHistoryExtent,
       conceptChildren,
+      getDescendantNames,
     ]
   )
 
