@@ -6,14 +6,14 @@ import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
-import { PAGINATION, SELECTED } from '@/lib/constants'
+import { PAGINATION, PROCESSING, SELECTED } from '@/lib/constants'
 import useHistoryData from '@/contexts/panels/history/useHistoryData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const { CONCEPT } = SELECTED
+const { CONCEPT, PANEL } = SELECTED
 const { HISTORY } = SELECTED.SETTINGS
 
 const HistoryProvider = ({ children }) => {
@@ -24,6 +24,8 @@ const HistoryProvider = ({ children }) => {
 
   const selectedConcept = getSelected(CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
+  const activePanel = getSelected(PANEL)
+  const isActive = activePanel === 'History'
 
   const [count, setCount] = useState(0)
   const [conceptData, setConceptData] = useState([])
@@ -52,19 +54,25 @@ const HistoryProvider = ({ children }) => {
 
   useEffect(() => {
     const run = async () => {
-      if (!apiFns) return
+      if (!apiFns || !isActive) return
       isTypeChanging.current = true
-      setProcessing(true)
       const loadingMsg =
         conceptHistoryExtent === 'children'
-          ? 'Loading children...'
+          ? 'Loading children history...'
           : conceptHistoryExtent === 'descendants'
-          ? 'Loading descendants...'
+          ? 'Loading descendants history...'
           : 'Loading data...'
-      setModalData({ processingMessage: loadingMsg })
+
+      // Delay showing the overlay to avoid UI flash on fast operations
+      const timer = setTimeout(() => {
+        setProcessing(true)
+        setModalData({ processingMessage: loadingMsg })
+      }, PROCESSING.LOADING_DELAY)
+
       try {
         await loadData({ setCount, setConceptData, setTypeData, setTypeState })
       } finally {
+        clearTimeout(timer)
         setProcessing(false)
         setModalData({})
         isTypeChanging.current = false
@@ -74,6 +82,7 @@ const HistoryProvider = ({ children }) => {
   }, [
     apiFns,
     conceptHistoryExtent,
+    isActive,
     loadData,
     pendingHistory,
     selectedConcept,
@@ -84,7 +93,7 @@ const HistoryProvider = ({ children }) => {
 
   useEffect(() => {
     const run = async () => {
-      if (!apiFns || isTypeChanging.current) return
+      if (!apiFns || !isActive || isTypeChanging.current) return
       await pageData({ setTypeData })
     }
     run()
@@ -92,6 +101,7 @@ const HistoryProvider = ({ children }) => {
     apiFns,
     conceptData,
     count,
+    isActive,
     pageData,
     pendingHistory,
     selectedConcept,

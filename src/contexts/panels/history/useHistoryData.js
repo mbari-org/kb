@@ -4,9 +4,13 @@ import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/histor
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import { sleep } from '@/lib/utils'
+
 import { PAGINATION } from '@/lib/constants'
 
+const CONCURRENCY = 8
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
+const RETRIES = 2
 
 const useHistoryData = ({
   apiFns,
@@ -47,10 +51,40 @@ const useHistoryData = ({
         }
         if (conceptHistoryExtent === 'descendants') {
           const names = [selectedConcept, ...(await getDescendantNames(selectedConcept))]
-          const lists = await Promise.all(
-            names.map(name => apiFns.apiPayload(getConceptHistory, name))
-          )
-          const merged = lists.flat()
+
+          const isNetworkError = err =>
+            err?.original?.name === 'TypeError' || err?.whoops?.message === 'Failed to fetch'
+
+          const results = []
+          for (let i = 0; i < names.length; i += CONCURRENCY) {
+            const batch = names.slice(i, i + CONCURRENCY)
+            const batchLists = await Promise.all(
+              batch.map(async name => {
+                for (let attempt = 0; attempt <= RETRIES; attempt++) {
+                  const { error, payload } = await apiFns.apiRaw(getConceptHistory, name)
+                  if (!error) return payload
+
+                  if (!isNetworkError(error)) {
+                    await apiFns.apiPayload(getConceptHistory, name)
+                    throw error?.original || new Error('History request failed')
+                  }
+
+                  if (attempt < RETRIES) {
+                    const backoff = 200 * (attempt + 1) + Math.floor(Math.random() * 100)
+                    await sleep(backoff)
+                    continue
+                  }
+
+                  // final escalation after retries
+                  await apiFns.apiPayload(getConceptHistory, name)
+                  throw error?.original || new Error('History request failed')
+                }
+              })
+            )
+            results.push(...batchLists)
+          }
+
+          const merged = results.flat()
           setCount(merged.length)
           setConceptData(merged)
           setTypeData(merged.slice(0, DEFAULT_LIMIT))

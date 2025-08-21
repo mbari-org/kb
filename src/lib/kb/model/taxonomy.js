@@ -326,7 +326,6 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
         children: children.map(child => child.name),
       }
 
-      console.log('inserting descendant', updatedDescendant.name)
       insertConcept(updatedDescendant, conceptMap, aliasMap)
 
       children.forEach(child => {
