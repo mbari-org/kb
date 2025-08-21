@@ -20,7 +20,7 @@ const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
       const labels = currentActions.map(action => action.label)
 
       const onAction = label => {
-        const action = currentActions.find(a => a.label === label)
+        const action = currentActions.find(currentAction => currentAction.label === label)
         if (action && action.onClick) action.onClick()
       }
 
@@ -29,8 +29,10 @@ const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
 
     const ContentComponent = () => {
       const modalData = modalDataRef.current
-      // modalConfig.content is expected to be a function(modalData) that returns JSX
-      return typeof modalConfig.content === 'function' ? modalConfig.content(modalData) : modalConfig.content
+      // CxTBD Fix this
+      return typeof modalConfig.content === 'function'
+        ? modalConfig.content(modalData)
+        : modalConfig.content
     }
 
     const PanelResolvedModal = () => (
@@ -48,4 +50,3 @@ const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
 }
 
 export default usePanelModal
-

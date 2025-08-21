@@ -18,8 +18,8 @@ const useConceptItem = () => {
       const concept = getConcept(itemId)
       if (!concept) return null
 
-      const pendingConcept = pendingHistory.filter(h => h.concept === concept.name)
-      const pendingParent = pendingHistory.filter(h => h.concept === concept.parent)
+      const pendingConcept = pendingHistory.filter(history => history.concept === concept.name)
+      const pendingParent = pendingHistory.filter(history => history.concept === concept.parent)
       const hasPending = 0 < pendingConcept.length || !!pendingChild(pendingParent, concept.name)
 
       return {

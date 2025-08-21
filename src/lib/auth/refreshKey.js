@@ -11,7 +11,7 @@ const subtleKey = async iv => {
 const genRefresh = async value => {
   const iv = crypto.getRandomValues(new Uint8Array(IVL))
   const ivStr = Array.from(iv)
-    .map(b => String.fromCharCode(b))
+    .map(byte => String.fromCharCode(byte))
     .join('')
 
   const key = await subtleKey(iv)

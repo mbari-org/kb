@@ -7,8 +7,8 @@ const applyAliases = (concept, tracker) => {
   }
 
   const deleteAlias = name => {
-    concept.aliases = concept.aliases.filter(a => a.name !== name)
-    concept.alternateNames = concept.alternateNames.filter(n => n !== name)
+    concept.aliases = concept.aliases.filter(alias => alias.name !== name)
+    concept.alternateNames = concept.alternateNames.filter(alternateName => alternateName !== name)
   }
 
   const editAlias = (priorName, updates) => {

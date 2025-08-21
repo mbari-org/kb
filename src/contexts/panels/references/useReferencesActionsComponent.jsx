@@ -18,7 +18,7 @@ const useReferencesActionsComponent = modalConfig => {
       const labels = currentActions.map(action => action.label)
 
       const onAction = label => {
-        const action = currentActions.find(a => a.label === label)
+        const action = currentActions.find(currentAction => currentAction.label === label)
         if (action && action.onClick) {
           action.onClick()
         }

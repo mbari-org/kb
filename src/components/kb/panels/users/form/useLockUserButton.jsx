@@ -40,7 +40,7 @@ const useLockUserButton = () => {
   return useCallback(
     user => {
       // Check if this is the last unlocked admin
-      const unlockedAdmins = users.filter(u => u.role === USER_ROLES.ADMIN && !u.locked)
+      const unlockedAdmins = users.filter(user => user.role === USER_ROLES.ADMIN && !user.locked)
       const isLastAdmin =
         unlockedAdmins.length === 1 && unlockedAdmins[0].username === user.username
 

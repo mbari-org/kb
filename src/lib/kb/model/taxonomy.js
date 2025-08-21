@@ -321,7 +321,7 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
       const children = await apiFns.apiPayload(apiChildren, descendant.name)
       const updatedDescendant = {
         ...descendant,
-        children: children.map(c => c.name),
+        children: children.map(child => child.name),
       }
 
       insertConcept(updatedDescendant, conceptMap, aliasMap)

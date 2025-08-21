@@ -3,13 +3,13 @@ import { ACTION } from '@/lib/constants'
 const approveChild = (concept, item) => {
   switch (item.action) {
     case ACTION.ADD: {
-      const next = [...(concept.children || []), item.newValue]
+      const next = [...concept.children, item.newValue]
       concept.children = Array.from(new Set(next)).sort()
       break
     }
 
     case ACTION.DELETE: {
-      concept.children = (concept.children || []).filter(c => c !== item.oldValue)
+      concept.children = concept.children.filter(child => child !== item.oldValue)
       break
     }
 

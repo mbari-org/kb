@@ -9,7 +9,7 @@ const useReferenceForm = ({ onChange, reference, original }) => {
       field === 'concepts'
         ? value
             .split(',')
-            .map(c => c.trim())
+            .map(concept => concept.trim())
             .filter(Boolean)
         : value
 
@@ -40,7 +40,7 @@ const useReferenceForm = ({ onChange, reference, original }) => {
 
   const handleConceptDelete = conceptToDelete => {
     const currentConcepts = reference.concepts || []
-    const updatedConcepts = currentConcepts.filter(c => c !== conceptToDelete)
+    const updatedConcepts = currentConcepts.filter(concept => concept !== conceptToDelete)
     const updatedReference = {
       ...reference,
       concepts: updatedConcepts,

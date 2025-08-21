@@ -31,7 +31,7 @@ const useModifyReferences = ({ setReferences }) => {
   const deleteReference = useCallback(
     async reference => {
       await apiFns.apiPayload(removeReference, reference.id)
-      setReferences(prev => prev.filter(r => r.id !== reference.id))
+      setReferences(prev => prev.filter(prevReference => prevReference.id !== reference.id))
     },
     [apiFns, setReferences]
   )
@@ -45,7 +45,9 @@ const useModifyReferences = ({ setReferences }) => {
         apiFns
       )
       setReferences(prev =>
-        prev.map(r => (r.id === oldReference.id ? createReference(updatedReference) : r))
+        prev.map(prevReference =>
+          prevReference.id === oldReference.id ? createReference(updatedReference) : prevReference
+        )
       )
     },
     [apiFns, setReferences]

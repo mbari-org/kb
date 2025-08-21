@@ -10,7 +10,7 @@ const useTemplatesActionsComponent = modalConfig => {
       const { modalData } = useTemplatesModalDataContext()
       const { actions } = modalConfig
 
-      // Support both static actions array and dynamic actions function
+      // CxTBD Fix this
       const currentActions = typeof actions === 'function' ? actions(modalData) : actions
 
       const colors = currentActions.map(action => action.color || 'main')
@@ -18,7 +18,7 @@ const useTemplatesActionsComponent = modalConfig => {
       const labels = currentActions.map(action => action.label)
 
       const onAction = label => {
-        const action = currentActions.find(a => a.label === label)
+        const action = currentActions.find(currentAction => currentAction.label === label)
         if (action && action.onClick) {
           action.onClick()
         }

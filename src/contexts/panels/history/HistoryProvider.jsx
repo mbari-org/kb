@@ -59,7 +59,6 @@ const HistoryProvider = ({ children }) => {
   }, [apiFns, selectedType, selectedConcept, pendingHistory])
 
   useEffect(() => {
-    // CxNote Server returns data in ascending order
     const loadData = async () => {
       if (!apiFns || isTypeChanging.current) return
 
