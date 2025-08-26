@@ -1,19 +1,4 @@
-import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
-import usePanelModal from './usePanelModal'
+import { PanelModalProvider } from '@/contexts/panels/PanelModal.shared'
 
-const {
-  DataContext: PanelsModalDataContext,
-  OperationsContext: PanelsModalOperationsContext,
-  Provider: PanelsModalProvider,
-  useDataContext: usePanelsModalDataContext,
-  useOperationsContext: usePanelsModalOperationsContext,
-} = createPanelModalProvider('Panels', usePanelModal)
-
-export {
-  PanelsModalDataContext,
-  PanelsModalOperationsContext,
-  PanelsModalProvider,
-  usePanelsModalDataContext,
-  usePanelsModalOperationsContext,
-}
+export { PanelModalProvider }
 

@@ -1,5 +1,4 @@
 import PanelModal from '@/components/modal/PanelModal'
-import Title from '@/components/common/factory/Title'
 import useReferencesActionsComponent from './useReferencesActionsComponent'
 import useReferencesContentComponent from './useReferencesContentComponent'
 import { useMemo } from 'react'

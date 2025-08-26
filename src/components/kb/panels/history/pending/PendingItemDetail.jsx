@@ -10,14 +10,14 @@ import PendingRealizationItem from '@/components/kb/panels/history/pending/Pendi
 
 import { isPendingName } from '@/lib/kb/state/name'
 
-import { usePanelsModalDataContext } from '@/contexts/panels/PanelModalProvider'
+import { usePanelModalDataContext } from '@/contexts/panels/PanelModalContexts'
 
 import UserContext from '@/contexts/user/UserContext'
 
 import { HISTORY_FIELD } from '@/lib/constants'
 
 const PendingItemDetail = props => {
-  const { modalData } = usePanelsModalDataContext()
+  const { modalData } = usePanelModalDataContext()
   const { user } = use(UserContext)
   const { item } = { ...modalData, ...props }
 

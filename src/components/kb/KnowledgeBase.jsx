@@ -16,8 +16,8 @@ import { SELECTED } from '@/lib/constants'
 
 const KnowledgeBase = () => {
   const { processing: appProcessing } = use(AppModalContext)
-  const { modal: holdModal, processing: holdProcessing } = use(ConceptModalContext)
-  const { panels, updateSelected } = use(SelectedContext)
+  const { modal: holdModal } = use(ConceptModalContext)
+  const { updateSelected } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()
 

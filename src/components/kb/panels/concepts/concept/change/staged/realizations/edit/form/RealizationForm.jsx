@@ -8,7 +8,6 @@ import RealizationToConcept from './RealizationToConcept'
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
 const RealizationForm = ({
-  isDuplicate = false,
   isEdit = false,
   onRealizationChange,
   onValidationChange,

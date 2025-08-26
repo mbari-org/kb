@@ -3,15 +3,13 @@ import { Box } from '@mui/material'
 
 import panelMods from '@/components/kb/panels/modules'
 import Panel from '@/components/kb/panels/Panel'
-import {
-  PanelsModalProvider,
-  usePanelsModalOperationsContext,
-} from '@/contexts/panels/PanelModalProvider'
+import { PanelModalProvider } from '@/contexts/panels/PanelModalProvider'
+import { usePanelModalOperationsContext } from '@/contexts/panels/PanelModalContexts'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const PanelsModalMount = () => {
-  const { modal, processing } = usePanelsModalOperationsContext()
+  const { modal, processing } = usePanelModalOperationsContext()
   return !processing && modal && typeof modal === 'function' ? modal() : null
 }
 
@@ -27,7 +25,7 @@ const Panels = () => {
 
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
-      <PanelsModalProvider>
+      <PanelModalProvider>
         {panelMods.map(({ module: PanelComponent, name }) => (
           <Panel
             key={name}
@@ -38,7 +36,7 @@ const Panels = () => {
           />
         ))}
         <PanelsModalMount />
-      </PanelsModalProvider>
+      </PanelModalProvider>
     </Box>
   )
 }

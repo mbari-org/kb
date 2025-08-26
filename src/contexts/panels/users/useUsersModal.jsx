@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import PanelModal from '@/components/modal/PanelModal'
-import Title from '@/components/common/factory/Title'
 
 import useUsersActionsComponent from './useUsersActionsComponent'
 import useUsersContentComponent from './useUsersContentComponent'

@@ -145,7 +145,7 @@ const ConfigProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({ apiFns, config, isDev, updateConfig }),
-    [apiFns, config, isDev, updateConfig]
+    [apiFns, config, updateConfig]
   )
 
   return <ConfigContext value={value}>{children}</ConfigContext>

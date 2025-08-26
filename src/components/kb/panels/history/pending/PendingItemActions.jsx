@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { Box, Stack } from '@mui/material'
 
 import {
-  usePanelsModalDataContext,
-  usePanelsModalOperationsContext,
-} from '@/contexts/panels/PanelModalProvider'
+  usePanelModalDataContext,
+  usePanelModalOperationsContext,
+} from '@/contexts/panels/PanelModalContexts'
 
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'
@@ -15,8 +15,8 @@ import useHistoryUpdatePending from '@/contexts/panels/history/useUpdatePending'
 const { APPROVE, CONFIRM, DEFER, REJECT } = LABELS.BUTTON
 
 const HistoryPendingActions = props => {
-  const { modalData } = usePanelsModalDataContext()
-  const { closeModal, setProcessing } = usePanelsModalOperationsContext()
+  const { modalData } = usePanelModalDataContext()
+  const { closeModal, setProcessing } = usePanelModalOperationsContext()
 
   const updatePending = useHistoryUpdatePending()
 

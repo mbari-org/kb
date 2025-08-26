@@ -1,11 +1,11 @@
-import { usePanelsModalOperationsContext } from '@/contexts/panels/PanelModalProvider'
+import { usePanelModalOperationsContext } from '@/contexts/panels/PanelModalContexts'
 import PendingItemDetail from '@/components/kb/panels/history/pending/PendingItemDetail'
 import PendingItemActions from '@/components/kb/panels/history/pending/PendingItemActions'
 
 import { pendingActionText } from '@/lib/kb/model/history'
 
 const usePendingItemModal = () => {
-  const { createModal } = usePanelsModalOperationsContext()
+  const { createModal } = usePanelModalOperationsContext()
 
   const open = ({ conceptName, item }) => {
     if (!item) return
