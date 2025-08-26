@@ -8,12 +8,12 @@ import RealizationToConcept from './RealizationToConcept'
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
 const RealizationForm = ({
-  isEditMode = false,
+  isDuplicate = false,
+  isEdit = false,
   onRealizationChange,
   onValidationChange,
   realizationItem,
   stageChange,
-  isDuplicate = false,
 }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
@@ -88,7 +88,7 @@ const RealizationForm = ({
         />
       </FormControl>
       <RealizationToConcept
-        isEditMode={isEditMode}
+        isEdit={isEdit}
         isValidLinkName={isValidLinkName}
         onRealizationChange={onRealizationChange}
         onValidationChange={handleToConceptValidationChange}
@@ -97,8 +97,6 @@ const RealizationForm = ({
       <FormControl fullWidth margin='normal'>
         <TextInput
           disabled={!isValidLinkName}
-          error={Boolean(isDuplicate)}
-          helperText={isDuplicate ? 'Duplicate realization' : undefined}
           label='Link Value'
           name='linkValue'
           onChange={handleLinkValueChange}

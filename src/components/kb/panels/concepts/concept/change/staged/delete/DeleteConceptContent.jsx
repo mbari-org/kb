@@ -88,7 +88,7 @@ const DeleteConceptContent = () => {
         </Box>
 
         {!isValid && (
-          <Typography color='error' variant='caption'>
+          <Typography color='cancel' variant='caption'>
             Please select a valid concept to assign the annotations to
           </Typography>
         )}

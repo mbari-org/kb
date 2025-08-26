@@ -146,7 +146,7 @@ const EditRealizationContent = () => {
       <ModalActionText text={`${actionText} Realization`} />
       <RealizationForm
         isDuplicate={isDuplicate}
-        isEditMode={isEdit}
+        isEdit={isEdit}
         onRealizationChange={handleRealizationChange}
         onValidationChange={handleValidationChange}
         realizationItem={realizationItem}

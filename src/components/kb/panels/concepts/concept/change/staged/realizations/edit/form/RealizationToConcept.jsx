@@ -11,7 +11,7 @@ const RealizationToConcept = ({
   realizationItem,
   onRealizationChange,
   isValidLinkName,
-  isEditMode = false,
+  isEdit = false,
   onValidationChange,
 }) => {
   const { apiFns } = use(ConfigContext)
@@ -128,7 +128,7 @@ const RealizationToConcept = ({
 
   return (
     <FormControl fullWidth margin='normal'>
-      {isEditMode || isSpecial ? renderImmutableField() : renderEditableField()}
+      {isEdit || isSpecial ? renderImmutableField() : renderEditableField()}
     </FormControl>
   )
 }
