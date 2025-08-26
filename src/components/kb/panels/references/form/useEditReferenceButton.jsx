@@ -4,6 +4,7 @@ import { useReferencesModalOperationsContext } from '@/contexts/panels/reference
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
+import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -59,10 +60,14 @@ const useEditReferenceButton = () => {
         concepts: referenceToEdit.concepts || [],
       }
 
+      const ActionView = createActionView(() => createModalActions(handleCancel, handleCommit))
+      const ContentView = createContentView(content)
+      const TitleView = () => <Title title='Edit Reference' />
+
       createModal({
-        actions: createModalActions(handleCancel, handleCommit),
-        content,
-        titleComponent: () => <Title title='Edit Reference' />,
+        actionsComponent: ActionView,
+        contentComponent: ContentView,
+        titleComponent: TitleView,
         data: {
           reference: modalReference,
           original: referenceToEdit,

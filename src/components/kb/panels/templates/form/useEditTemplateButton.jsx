@@ -4,6 +4,7 @@ import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptTitle from '@/components/common/ConceptTitle'
+import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -65,9 +66,15 @@ const useEditTemplateButton = () => {
     templateToEdit => {
       const onClose = createTemplateOnClose(updateModalData)
 
+      const ActionView = createActionView(() =>
+        createModalActions(handleCancel, handleCommit, updateModalData)
+      )
+      const ContentView = createContentView(content)
+
       createModal({
-        actions: createModalActions(handleCancel, handleCommit, updateModalData),
-        content,
+        actionsComponent: ActionView,
+        contentComponent: ContentView,
+        titleComponent: ConceptTitle,
         data: {
           confirmDiscard: false,
           hasChanges: false,
@@ -75,7 +82,6 @@ const useEditTemplateButton = () => {
           original: templateToEdit,
           template: { ...templateToEdit },
         },
-        titleComponent: ConceptTitle,
         onClose,
       })
     },

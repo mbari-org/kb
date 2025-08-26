@@ -1,51 +1,28 @@
 import { useMemo } from 'react'
 import PanelModal from '@/components/modal/PanelModal'
-import Actions from '@/components/common/factory/Actions'
 
-// Generic modal hook for the panel area. It receives modalConfig, a ref to modalData, and a ref to closeModal.
 const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
   return useMemo(() => {
     if (!modalConfig) return null
 
-    const ActionsComponent = () => {
-      const actions = modalConfig.actions
-      const modalData = modalDataRef.current
-      const currentActions = typeof actions === 'function' ? actions(modalData) : actions
-
-      if (!Array.isArray(currentActions)) return currentActions
-
-      const colors = currentActions.map(action => action.color || 'main')
-      const disabled = currentActions.map(action => action.disabled || false)
-      const labels = currentActions.map(action => action.label)
-
-      const onAction = label => {
-        const action = currentActions.find(currentAction => currentAction.label === label)
-        if (action && action.onClick) action.onClick()
+    const ResolvedPanelModal = () => {
+      if (!modalConfig.contentComponent) {
+        throw new Error('modalConfig.contentComponent is required')
       }
 
-      return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+      return (
+        <PanelModal
+          actions={<modalConfig.actionsComponent />}
+          content={<modalConfig.contentComponent />}
+          titleComponent={modalConfig.titleComponent ? <modalConfig.titleComponent /> : undefined}
+          closeModal={closeModalRef.current}
+          minWidth={modalConfig.minWidth}
+        />
+      )
     }
 
-    const ContentComponent = () => {
-      const modalData = modalDataRef.current
-      // CxTBD Fix this
-      return typeof modalConfig.content === 'function'
-        ? modalConfig.content(modalData)
-        : modalConfig.content
-    }
-
-    const PanelResolvedModal = () => (
-      <PanelModal
-        actions={<ActionsComponent />}
-        content={<ContentComponent />}
-        titleComponent={modalConfig.titleComponent ? <modalConfig.titleComponent /> : undefined}
-        closeModal={closeModalRef.current}
-        minWidth={modalConfig.minWidth}
-      />
-    )
-
-    return PanelResolvedModal
-  }, [modalConfig, modalDataRef, closeModalRef])
+    return ResolvedPanelModal
+  }, [modalConfig, closeModalRef])
 }
 
 export default usePanelModal

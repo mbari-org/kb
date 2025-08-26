@@ -32,9 +32,9 @@ const MyComponent = () => {
   
   const showModal = () => {
     const modal = createAppModal({
-      Title: MyTitleComponent,
-      Content: MyContentComponent, 
       Actions: MyActionsComponent,
+      Content: MyContentComponent, 
+      Title: MyTitleComponent,
       minWidth: 600
     })
     setModal(modal)

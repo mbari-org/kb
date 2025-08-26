@@ -2,6 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import ConceptTitle from '@/components/common/ConceptTitle'
+import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
 
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
@@ -71,9 +72,15 @@ const useAddTemplateButton = () => {
   const addTemplateModal = useCallback(() => {
     const onClose = createTemplateOnClose(updateModalData)
 
+    const ActionView = createActionView(() =>
+      createModalActions(handleCancel, handleCommit, updateModalData)
+    )
+    const ContentView = createContentView(content)
+
     createModal({
-      content,
-      actions: createModalActions(handleCancel, handleCommit, updateModalData),
+      actionsComponent: ActionView,
+      contentComponent: ContentView,
+      titleComponent: ConceptTitle,
       data: {
         confirmDiscard: false,
         hasChanges: false,
@@ -83,7 +90,6 @@ const useAddTemplateButton = () => {
           concept: filters[SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT],
         },
       },
-      titleComponent: ConceptTitle,
       onClose,
     })
   }, [content, createModal, filters, handleCancel, handleCommit, updateModalData])

@@ -6,6 +6,7 @@ import { useReferencesModalOperationsContext } from '@/contexts/panels/reference
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
+import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -57,10 +58,14 @@ const useAddReferenceButton = () => {
   )
 
   const addReferenceModal = useCallback(() => {
+    const ActionView = createActionView(() => createModalActions(handleCancel, handleCommit))
+    const ContentView = createContentView(content)
+    const TitleView = () => <Title title='Add Reference' />
+
     createModal({
-      actions: createModalActions(handleCancel, handleCommit),
-      content,
-      titleComponent: () => <Title title='Add Reference' />,
+      actionsComponent: ActionView,
+      contentComponent: ContentView,
+      titleComponent: TitleView,
       data: {
         reference: createInitialReference(),
         isValid: false,

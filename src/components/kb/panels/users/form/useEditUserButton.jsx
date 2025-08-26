@@ -3,6 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
+import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -15,7 +16,8 @@ import {
 const { UPDATING } = PROCESSING
 
 const useEditUserButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = useUsersModalOperationsContext()
+  const { closeModal, createModal, updateModalData, setProcessing } =
+    useUsersModalOperationsContext()
   const { editUser, users } = use(UsersContext)
 
   const { handleCancel, handleFormChange } = useMemo(
@@ -57,10 +59,14 @@ const useEditUserButton = () => {
         confirmPassword: '',
       }
 
+      const ActionView = createActionView(() => createModalActions(handleCancel, handleCommit))
+      const ContentView = createContentView(content)
+      const TitleView = () => <Title title='Edit User' />
+
       createModal({
-        actions: createModalActions(handleCancel, handleCommit),
-        content,
-        titleComponent: () => <Title title='Edit User' />,
+        actionsComponent: ActionView,
+        contentComponent: ContentView,
+        titleComponent: TitleView,
         data: {
           user: modalUser,
           original: userToEdit,

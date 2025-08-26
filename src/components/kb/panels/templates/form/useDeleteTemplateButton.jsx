@@ -3,6 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import ConceptTitle from '@/components/common/ConceptTitle'
+import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -47,9 +48,14 @@ const useDeleteTemplateButton = () => {
         template,
       }
 
+      const ContentView = () => {
+        const { modalData } = usePanelModalDataContext()
+        return memoizedContent(modalData)
+      }
+
       createModal({
         actions: memoizedActions,
-        content: memoizedContent,
+        contentComponent: ContentView,
         data: modalData,
         titleComponent: ConceptTitle,
       })

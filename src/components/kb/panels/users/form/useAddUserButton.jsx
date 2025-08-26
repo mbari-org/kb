@@ -2,6 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import Title from '@/components/common/factory/Title'
+import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
 
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -19,7 +20,8 @@ import {
 const { SAVING } = PROCESSING
 
 const useAddUserButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = useUsersModalOperationsContext()
+  const { closeModal, createModal, updateModalData, setProcessing } =
+    useUsersModalOperationsContext()
   const { addUser, users } = use(UsersContext)
 
   const { handleCancel, handleFormChange } = useMemo(
@@ -54,10 +56,14 @@ const useAddUserButton = () => {
   )
 
   const addUserModal = useCallback(() => {
+    const ActionView = createActionView(() => createModalActions(handleCancel, handleCommit))
+    const ContentView = createContentView(content)
+    const TitleView = () => <Title title='Add User' />
+
     createModal({
-      actions: createModalActions(handleCancel, handleCommit),
-      content,
-      titleComponent: () => <Title title='Add User' />,
+      actionsComponent: ActionView,
+      contentComponent: ContentView,
+      titleComponent: TitleView,
       data: {
         user: createInitialUser(),
         isValid: false,

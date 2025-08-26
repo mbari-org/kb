@@ -12,8 +12,8 @@ const createModal = ({ Actions, Content, Title, minWidth }) => {
   return {
     actions: <ActionsComponent />,
     content: <ContentComponent />,
-    minWidth,
     title: <TitleComponent />,
+    minWidth,
   }
 }
 

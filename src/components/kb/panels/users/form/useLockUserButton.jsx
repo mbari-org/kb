@@ -3,6 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
+import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
 
 import { USER_ROLES } from '@/lib/constants'
 import {
@@ -50,14 +51,21 @@ const useLockUserButton = () => {
         isLastAdmin,
       }
 
+      const ContentView = () => {
+        const { modalData } = usePanelModalDataContext()
+        return memoizedContent(modalData)
+      }
+
+      const TitleView = () => <Title title={memoizedTitle(modalData)} />
+
       createModal({
         actions: memoizedActions,
-        content: memoizedContent,
-        titleComponent: () => <Title title={memoizedTitle(modalData)} />,
+        contentComponent: ContentView,
+        titleComponent: TitleView,
         data: modalData,
       })
     },
-    [users, createModal, memoizedActions, memoizedContent, memoizedTitle]
+    [users, createModal, memoizedActions, memoizedTitle, memoizedContent]
   )
 }
 

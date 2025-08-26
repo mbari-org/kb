@@ -1,6 +1,10 @@
 import { usePanelModalOperationsContext } from '@/contexts/panel/modal/Context'
-import PendingItemDetail from '@/components/kb/panels/history/pending/PendingItemDetail'
+
+import ConceptTitle from '@/components/common/ConceptTitle'
 import PendingItemActions from '@/components/kb/panels/history/pending/PendingItemActions'
+import PendingItemDetail from '@/components/kb/panels/history/pending/PendingItemDetail'
+
+import { createContentView } from '@/contexts/panel/modal/factories'
 
 import { pendingActionText } from '@/lib/kb/model/history'
 
@@ -10,12 +14,14 @@ const usePendingItemModal = () => {
   const open = ({ conceptName, item }) => {
     if (!item) return
 
+    const ContentView = createContentView(data => <PendingItemDetail {...data} />)
+
     createModal({
-      title: `Concept: ${conceptName}`,
-      content: data => <PendingItemDetail {...data} />,
-      actions: data => <PendingItemActions {...data} />,
-      minWidth: 625,
+      actionComponent: PendingItemActions,
+      contentComponent: ContentView,
+      titleComponent: ConceptTitle,
       data: { conceptName, item: { ...item, action: pendingActionText(item.action) } },
+      minWidth: 625,
     })
   }
 

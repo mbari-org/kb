@@ -3,6 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import Title from '@/components/common/factory/Title'
+import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -23,14 +24,9 @@ const useDeleteReferenceButton = () => {
 
   const handleDeleteConfirm = useCallback(
     async reference => {
-      try {
-        setProcessing(DELETING)
-        await deleteReference(reference)
-        closeModal()
-      } catch (error) {
-        setProcessing(false)
-        console.error('Error deleting reference:', error)
-      }
+      setProcessing(DELETING)
+      await deleteReference(reference)
+      closeModal()
     },
     [deleteReference, closeModal, setProcessing]
   )
@@ -48,11 +44,18 @@ const useDeleteReferenceButton = () => {
         reference,
       }
 
+      const ContentView = () => {
+        const { modalData } = usePanelModalDataContext()
+        return memoizedContent(modalData)
+      }
+
+      const TitleView = () => <Title title={memoizedTitle()} />
+
       createModal({
         actions: memoizedActions,
-        content: memoizedContent,
+        contentComponent: ContentView,
+        titleComponent: TitleView,
         data: modalData,
-        titleComponent: () => <Title title={memoizedTitle()} />,
       })
     },
     [createModal, memoizedActions, memoizedContent, memoizedTitle]

@@ -3,4 +3,4 @@ export {
   PanelModalOperationsContext,
   usePanelModalDataContext,
   usePanelModalOperationsContext,
-} from './_shared'
+} from './factory'

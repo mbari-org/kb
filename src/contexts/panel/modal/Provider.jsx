@@ -1,1 +1,1 @@
-export { PanelModalProvider } from './_shared'
+export { PanelModalProvider } from './factory'
