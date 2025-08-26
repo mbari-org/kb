@@ -1,6 +1,6 @@
 import { use, useCallback, useMemo } from 'react'
 
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 

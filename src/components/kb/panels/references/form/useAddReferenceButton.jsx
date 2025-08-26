@@ -4,7 +4,7 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 
 import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
 
 import { PROCESSING } from '@/lib/constants'

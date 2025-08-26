@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useState, useRef } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import HistoryContext from './HistoryContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 

@@ -3,8 +3,8 @@ import { Box } from '@mui/material'
 
 import panelMods from '@/components/kb/panels/modules'
 import Panel from '@/components/kb/panels/Panel'
-import { PanelModalProvider } from '@/contexts/panels/PanelModalProvider'
-import { usePanelModalOperationsContext } from '@/contexts/panels/PanelModalContexts'
+import { PanelModalProvider } from '@/contexts/panel/modal'
+import { usePanelModalOperationsContext } from '@/contexts/panel/modal/Context'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 

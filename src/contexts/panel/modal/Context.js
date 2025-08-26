@@ -3,5 +3,4 @@ export {
   PanelModalOperationsContext,
   usePanelModalDataContext,
   usePanelModalOperationsContext,
-} from '@/contexts/panels/PanelModal.shared'
-
+} from './_shared'

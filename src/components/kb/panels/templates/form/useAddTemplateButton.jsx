@@ -5,7 +5,7 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
 

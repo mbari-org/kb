@@ -8,7 +8,7 @@ import useAvailableLinkTemplates from './useAvailableLinkTemplates'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { hasDuplicate, EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 

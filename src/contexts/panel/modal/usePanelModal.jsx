@@ -12,7 +12,6 @@ const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
       const modalData = modalDataRef.current
       const currentActions = typeof actions === 'function' ? actions(modalData) : actions
 
-      // If actions is already a React node, just return it
       if (!Array.isArray(currentActions)) return currentActions
 
       const colors = currentActions.map(action => action.color || 'main')

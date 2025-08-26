@@ -3,7 +3,7 @@ import { use } from 'react'
 import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'

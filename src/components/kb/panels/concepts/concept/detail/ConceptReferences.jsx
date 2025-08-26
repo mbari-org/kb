@@ -3,7 +3,7 @@ import { use, useMemo } from 'react'
 import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
 import InspectIcon from '@/components/common/icon/InspectIcon'
 
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants'

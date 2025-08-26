@@ -2,11 +2,11 @@ import { use, useEffect, useState, useCallback, useMemo } from 'react'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import useLoadReferences from '@/contexts/panelData/useLoadReferences'
-import useLoadTemplates from '@/contexts/panelData/useLoadTemplates'
-import useLoadPendingHistory from '@/contexts/panelData/useLoadPendingHistory'
+import useLoadReferences from '@/contexts/panel/data/useLoadReferences'
+import useLoadTemplates from '@/contexts/panel/data/useLoadTemplates'
+import useLoadPendingHistory from '@/contexts/panel/data/useLoadPendingHistory'
 
 export const PanelDataProvider = ({ children }) => {
   const { setProcessing } = use(AppModalContext)

@@ -1,4 +1,4 @@
-import { usePanelModalOperationsContext } from '@/contexts/panels/PanelModalContexts'
+import { usePanelModalOperationsContext } from '@/contexts/panel/modal/Context'
 import PendingItemDetail from '@/components/kb/panels/history/pending/PendingItemDetail'
 import PendingItemActions from '@/components/kb/panels/history/pending/PendingItemActions'
 

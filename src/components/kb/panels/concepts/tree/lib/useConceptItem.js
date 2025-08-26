@@ -1,6 +1,6 @@
 import { use, useCallback } from 'react'
 
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { pendingChild } from '@/lib/kb/model/history'

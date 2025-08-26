@@ -9,7 +9,7 @@ import useConceptLoader from './useConceptLoader'
 import useConceptPending from './pending/useConceptPending'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'

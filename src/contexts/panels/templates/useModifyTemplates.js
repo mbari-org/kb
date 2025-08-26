@@ -7,7 +7,7 @@ import {
 } from '@/lib/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 const useModifyTemplates = () => {
   const { apiFns } = use(ConfigContext)

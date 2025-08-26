@@ -4,7 +4,7 @@ import { Box, Stack } from '@mui/material'
 import {
   usePanelModalDataContext,
   usePanelModalOperationsContext,
-} from '@/contexts/panels/PanelModalContexts'
+} from '@/contexts/panel/modal/Context'
 
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'

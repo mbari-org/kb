@@ -10,7 +10,7 @@ import PendingRealizationItem from '@/components/kb/panels/history/pending/Pendi
 
 import { isPendingName } from '@/lib/kb/state/name'
 
-import { usePanelModalDataContext } from '@/contexts/panels/PanelModalContexts'
+import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
 
 import UserContext from '@/contexts/user/UserContext'
 

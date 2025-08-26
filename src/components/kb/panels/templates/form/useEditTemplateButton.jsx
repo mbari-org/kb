@@ -2,7 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptTitle from '@/components/common/ConceptTitle'
 
 import { PROCESSING } from '@/lib/constants'

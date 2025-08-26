@@ -3,7 +3,7 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import TemplatesContext from './TemplatesContext'
 import { TemplatesModalProvider } from './modal'
 
-import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
