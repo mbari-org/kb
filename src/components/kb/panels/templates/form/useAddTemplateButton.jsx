@@ -7,7 +7,7 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
 
-import { PROCESSING } from '@/lib/constants'
+import { PROCESSING, SELECTED } from '@/lib/constants'
 
 import {
   createModalActions,
@@ -22,7 +22,7 @@ const { SAVING } = PROCESSING
 const useAddTemplateButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =
     useTemplatesModalOperationsContext()
-  const { addTemplate } = use(TemplatesContext)
+  const { addTemplate, filters } = use(TemplatesContext)
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, false),
@@ -68,10 +68,11 @@ const useAddTemplateButton = () => {
     })
   }, [createModal, content, handleCancel, handleCommit])
 
-  const AddTemplateButton = useCallback(
-    () => <PanelAddButton onClick={addTemplateModal} />,
-    [addTemplateModal]
-  )
+  const AddTemplateButton = useCallback(() => {
+    const { TEMPLATES } = SELECTED.SETTINGS
+    const conceptSelected = Boolean(filters?.[TEMPLATES.FILTERS.CONCEPT])
+    return <PanelAddButton onClick={addTemplateModal} disabled={!conceptSelected} />
+  }, [addTemplateModal, filters])
 
   return AddTemplateButton
 }

@@ -5,10 +5,10 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { PROCESSING } from '@/lib/constants'
 import {
-  createModalActions,
-  processEditTemplateData,
   createHandlers,
+  createModalActions,
   createModalContent,
+  processEditTemplateData,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 const { UPDATING } = PROCESSING
@@ -54,13 +54,13 @@ const useEditTemplateButton = () => {
       createModal({
         actions: createModalActions(handleCancel, handleCommit),
         content,
-        title: 'Edit Template',
         data: {
-          template: { ...templateToEdit },
-          original: templateToEdit,
-          isValid: true,
           hasChanges: false,
+          isValid: true,
+          original: templateToEdit,
+          template: { ...templateToEdit },
         },
+        title: 'Edit Template',
       })
     },
     [createModal, content, handleCancel, handleCommit]

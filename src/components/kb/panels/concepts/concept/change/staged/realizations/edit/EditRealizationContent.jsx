@@ -102,12 +102,10 @@ const EditRealizationContent = () => {
     setCycleIndex,
   })
 
-  // Handle manual page changes (when user clicks pagination buttons)
   const handlePageChange = useCallback(newPage => {
     setCurrentPage(newPage)
   }, [])
 
-  // Handle validation changes from RealizationForm
   const handleValidationChange = useCallback(validationData => {
     if (validationData.isValidToConcept !== undefined) {
       setIsValidToConcept(validationData.isValidToConcept)
