@@ -1,5 +1,7 @@
 import { drop, isJsonEqual } from '@/lib/utils'
 
+// const STATE_INDEXES = ['aliasIndex', 'mediaIndex', 'realizationIndex']
+
 const hasStateChange = (allInitialState, allStagedState) => {
   // Drop fields that are not relevant to state change comparison
   const initialState = drop(allInitialState, ['aliasIndex', 'mediaIndex', 'realizationIndex'])

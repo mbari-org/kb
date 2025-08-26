@@ -16,6 +16,8 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
+const { MEDIA_ITEM } = CONCEPT_STATE
+
 const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
   const { stagedState, modifyConcept } = use(ConceptContext)
   const swiperRef = useRef(null)
@@ -34,7 +36,7 @@ const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
     // Only update state if this is not a programmatic change
     if (!isProgrammaticChange.current) {
       modifyConcept({
-        type: CONCEPT_STATE.FIELD.SET,
+        type: MEDIA_ITEM.INDEX,
         update: { field: 'mediaIndex', value: change.snapIndex },
       })
     }
