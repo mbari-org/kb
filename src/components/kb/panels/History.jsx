@@ -14,15 +14,18 @@ import usePanelFactory from '@/components/common/panel/usePanelFactory'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryProvider from '@/contexts/panels/history/HistoryProvider'
 
+import { CONCEPT_HISTORY } from '@/lib/constants'
+const { TYPE } = CONCEPT_HISTORY
+
 const HistoryContent = () => {
   const { createTablePanel } = usePanelFactory()
   const { selectedType } = use(HistoryContext)
 
   const dataContent =
-    selectedType === 'concept' ? <HistoryTableConceptData /> : <HistoryTableTypeData />
+    selectedType === TYPE.CONCEPT ? <HistoryTableConceptData /> : <HistoryTableTypeData />
 
   const headerRight =
-    selectedType === 'concept' ? (
+    selectedType === TYPE.CONCEPT ? (
       <HistoryTableHeaderConceptRight />
     ) : (
       <HistoryTableHeaderTypeRight />

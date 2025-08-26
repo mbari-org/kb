@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import PanelTotalExport from '@/components/common/panel/PanelTotalExport'
+import PanelDataExport from '@/components/common/panel/PanelDataExport'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
@@ -15,7 +15,7 @@ const HistoryTableHeaderLeft = () => {
 
   const toolTip = HISTORY.EXPORT[selectedType.toUpperCase()]
 
-  return <PanelTotalExport count={count} exportFn={historyExport} toolTip={toolTip} />
+  return <PanelDataExport count={count} exportFn={historyExport} toolTip={toolTip} />
 }
 
 export default HistoryTableHeaderLeft

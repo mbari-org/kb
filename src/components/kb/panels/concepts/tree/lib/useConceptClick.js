@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 
-import Expand from './expandedEnum'
+import { CONCEPT_EXPAND } from '@/lib/constants'
 
 const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand) => {
   return useCallback(
     (_event, conceptName) => {
       if (conceptName === concept.name) {
         setAutoExpand({ expand: false, name: null })
-        expandConcept(concept, Expand.TOGGLE)
+        expandConcept(concept, CONCEPT_EXPAND.TOGGLE)
       } else {
         selectConcept(conceptName)
         setAutoExpand({ expand: true, name: conceptName })

@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import PanelTotalExportSwitch from '@/components/common/panel/PanelTotalExportSwitch'
+import PanelDataExportSwitch from '@/components/common/panel/PanelDataExportSwitch'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
@@ -40,7 +40,7 @@ const TemplatesTableHeaderLeft = () => {
   }
 
   return (
-    <PanelTotalExportSwitch
+    <PanelDataExportSwitch
       checked={available}
       count={filteredTemplates.length}
       exportFn={exportFn}

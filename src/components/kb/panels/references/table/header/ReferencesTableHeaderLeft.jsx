@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import PanelTotalExportSwitch from '@/components/common/panel/PanelTotalExportSwitch'
+import PanelDataExportSwitch from '@/components/common/panel/PanelDataExportSwitch'
 
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -45,7 +45,7 @@ const ReferencesTableHeaderLeft = () => {
   }
 
   return (
-    <PanelTotalExportSwitch
+    <PanelDataExportSwitch
       checked={byConcept}
       count={total}
       exportFn={exportFn}

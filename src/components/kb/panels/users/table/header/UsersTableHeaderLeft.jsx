@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import PanelTotalExport from '@/components/common/panel/PanelTotalExport'
+import PanelDataExport from '@/components/common/panel/PanelDataExport'
 
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
@@ -16,7 +16,7 @@ const UsersTableHeaderLeft = () => {
 
   const toolTip = EXPORT.ALL
 
-  return <PanelTotalExport count={users?.length || 0} exportFn={usersExport} toolTip={toolTip} />
+  return <PanelDataExport count={users?.length || 0} exportFn={usersExport} toolTip={toolTip} />
 }
 
 export default UsersTableHeaderLeft

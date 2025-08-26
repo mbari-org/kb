@@ -11,7 +11,7 @@ import { PAGINATION } from '@/lib/constants'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableTypeData = ({ hideFooter = false }) => {
-  const { count, typeData, typeState, nextPage, prevPage, selectedType, setPageSize } =
+  const { count, nextPage, prevPage, selectedType, setPageSize, typeData, typeState } =
     use(HistoryContext)
 
   const { limit, offset } = typeState
@@ -35,16 +35,16 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   return (
     <PanelDataGrid
       columns={columns}
-      rows={typeData}
-      rowCount={rowCount}
+      hideFooter={hideFooter}
+      pageSizeOptions={PAGE_SIZE_OPTIONS}
+      paginationComponent={paginationComponent}
+      paginationMode='server'
       paginationModel={{
         pageSize: limit,
         page: Math.floor(offset / limit),
       }}
-      pageSizeOptions={PAGE_SIZE_OPTIONS}
-      paginationMode='server'
-      paginationComponent={paginationComponent}
-      hideFooter={hideFooter}
+      rowCount={rowCount}
+      rows={typeData}
     />
   )
 }

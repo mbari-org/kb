@@ -14,6 +14,8 @@ const checkImageUrlExists = url => {
   })
 }
 
+const conceptFileName = conceptName => conceptName.replace(/ /g, '_')
+
 const drop = (object, fields) => {
   if (Array.isArray(object)) return dropElements(object, fields)
   if (typeof object === 'object') return dropFields(object, fields)
@@ -267,6 +269,7 @@ export {
   after,
   capitalize,
   checkImageUrlExists,
+  conceptFileName,
   deepDiff,
   diff,
   drop,

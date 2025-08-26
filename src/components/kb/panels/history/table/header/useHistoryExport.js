@@ -6,81 +6,71 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
-import { PAGINATION } from '@/lib/constants'
+import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
-import { capitalize, escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/utils'
+import {
+  capitalize,
+  conceptFileName,
+  escapeCSV,
+  humanTimestamp,
+  writeCSVContent,
+} from '@/lib/utils'
 
+const { EXTENT, TYPE } = CONCEPT_HISTORY
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
+
+const headers = [
+  'Concept',
+  'Field',
+  'Action',
+  'Creator',
+  'Created',
+  'Old Value',
+  'New Value',
+  'Processor',
+  'Processed',
+]
 
 const getHeaders = type => {
   switch (type) {
-    case 'concept':
-      return [
-        'Approved',
-        'Field',
-        'Action',
-        'Creator',
-        'Created',
-        'Old Value',
-        'New Value',
-        'Processor',
-        'Processed',
-      ]
-    case 'pending':
-      return ['Concept', 'Field', 'Action', 'Creator', 'Created', 'Old Value', 'New Value']
-    case 'approved':
-      return [
-        'Concept',
-        'Field',
-        'Action',
-        'Creator',
-        'Created',
-        'Old Value',
-        'New Value',
-        'Processor',
-        'Processed',
-      ]
+    case TYPE.CONCEPT:
+      return ['Approved', ...headers]
+
+    case TYPE.PENDING:
+      return headers.slice(0, 7)
+
+    case TYPE.APPROVED:
+      return headers
     default:
       return []
   }
 }
 
 const getRowData = (item, type) => {
+  const rowData = [
+    item.concept,
+    item.field,
+    item.action,
+    item.creatorName,
+    humanTimestamp(item.creationTimestamp),
+    item.oldValue,
+    item.newValue,
+  ]
+
   switch (type) {
-    case 'concept':
+    case TYPE.CONCEPT:
       return [
         item.approved ? 'Yes' : 'Pending',
-        item.field,
-        item.action,
-        item.creatorName,
-        humanTimestamp(item.creationTimestamp),
-        item.oldValue,
-        item.newValue,
+        ...rowData,
         item.processorName,
         humanTimestamp(item.processedTimestamp),
       ]
-    case 'pending':
-      return [
-        item.concept,
-        item.field,
-        item.action,
-        item.creatorName,
-        humanTimestamp(item.creationTimestamp),
-        item.oldValue,
-        item.newValue,
-      ]
-    case 'approved':
-      return [
-        item.concept,
-        item.field,
-        item.action,
-        item.creatorName,
-        humanTimestamp(item.creationTimestamp),
-        item.oldValue,
-        item.newValue,
-        item.processorName,
-        humanTimestamp(item.processedTimestamp),
-      ]
+
+    case TYPE.PENDING:
+      return rowData
+
+    case TYPE.APPROVED:
+      return [...rowData, item.processorName, humanTimestamp(item.processedTimestamp)]
     default:
       return []
   }
@@ -95,9 +85,23 @@ const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
   return response
 }
 
+const getFileName = (selectedType, selectedConcept, conceptHistoryExtent) => {
+  if (selectedType === TYPE.CONCEPT) {
+    const extent =
+      conceptHistoryExtent === null
+        ? ''
+        : conceptHistoryExtent === EXTENT.CHILDREN
+        ? '-and-Children'
+        : '-and-Descendants'
+    return `KB-${conceptFileName(selectedConcept)}${extent}-History.csv`
+  }
+
+  return `KB-${capitalize(selectedType)}-History.csv`
+}
+
 const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { selectedType, selectedConcept, sortOrder } = use(HistoryContext)
+  const { conceptHistoryExtent, selectedType, selectedConcept, sortOrder } = use(HistoryContext)
   const { setExporting } = use(PanelDataContext)
 
   const historyExport = async () => {
@@ -105,10 +109,7 @@ const useHistoryExport = () => {
     try {
       setExporting(true)
       const handle = await window.showSaveFilePicker({
-        suggestedName:
-          selectedType === 'concept'
-            ? `KB-${selectedConcept}-History.csv`
-            : `KB-${capitalize(selectedType)}-History.csv`,
+        suggestedName: getFileName(selectedType, selectedConcept, conceptHistoryExtent),
         types: [
           {
             description: 'CSV Files',
@@ -121,13 +122,12 @@ const useHistoryExport = () => {
       const headers = getHeaders(selectedType)
       await writable.write(headers.map(escapeCSV).join(',') + '\n')
 
-      if (selectedType === 'concept' && selectedConcept) {
-        // For concept history, get all data at once
+      if (selectedType === TYPE.CONCEPT && selectedConcept) {
         const data = await apiFns.apiPayload(getConceptHistory, selectedConcept)
         if (!data) {
           return
         }
-        // Sort the data based on the current sort order
+
         const sortedData = [...data].sort((a, b) => {
           const comparison = new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
           return sortOrder === 'asc' ? -comparison : comparison
@@ -135,11 +135,9 @@ const useHistoryExport = () => {
         const rows = sortedData.map(item => getRowData(item, selectedType))
         await writeCSVContent(writable, rows)
       } else {
-        // For type history, paginate through all data
         let pageIndex = 0
         let hasMoreData = true
 
-        // Get count just for display purposes
         const totalCount = await apiFns.apiResult(getHistoryCount, selectedType)
         const estimatedTotalPages = totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : '?'
 

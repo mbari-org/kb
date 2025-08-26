@@ -6,7 +6,9 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { sleep } from '@/lib/utils'
 
-import { PAGINATION } from '@/lib/constants'
+import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
+
+const { EXTENT, TYPE } = CONCEPT_HISTORY
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
@@ -20,7 +22,7 @@ const useLoadData = ({
   const { getConcept, getDescendantNames } = use(TaxonomyContext)
 
   const conceptChildren = useMemo(() => {
-    if (!selectedConcept || conceptHistoryExtent !== 'children') return []
+    if (!selectedConcept || conceptHistoryExtent !== EXTENT.CHILDREN) return []
     const concept = getConcept(selectedConcept)
     return concept?.children || []
   }, [conceptHistoryExtent, getConcept, selectedConcept])
@@ -95,11 +97,12 @@ const useLoadData = ({
 
   const loadPendingData = useCallback(
     async ({ setCount, setConceptData, setTypeData }) => {
+      // Use pendingHistory for both count and data so pagination works
       setCount(pendingHistory.length)
-      setConceptData([])
-      setTypeData([])
+      setConceptData(pendingHistory)
+      setTypeData(pendingHistory.slice(0, DEFAULT_LIMIT))
     },
-    [pendingHistory.length]
+    [pendingHistory]
   )
 
   const loadApprovedData = useCallback(
@@ -118,18 +121,18 @@ const useLoadData = ({
 
       setTypeState({ limit: DEFAULT_LIMIT, offset: 0 })
 
-      if (selectedType === 'concept' && selectedConcept) {
-        if (conceptHistoryExtent === 'children') {
+      if (selectedType === TYPE.CONCEPT && selectedConcept) {
+        if (conceptHistoryExtent === EXTENT.CHILDREN) {
           return loadConceptChildrenData({ setCount, setConceptData, setTypeData })
         }
 
-        if (conceptHistoryExtent === 'descendants') {
+        if (conceptHistoryExtent === EXTENT.DESCENDANTS) {
           return loadConceptDescendantsData({ setCount, setConceptData, setTypeData })
         }
         return loadConceptData({ setCount, setConceptData, setTypeData })
       }
 
-      if (selectedType === 'pending') {
+      if (selectedType === TYPE.PENDING) {
         return loadPendingData({ setCount, setConceptData, setTypeData })
       }
 

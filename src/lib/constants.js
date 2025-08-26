@@ -6,6 +6,13 @@ export const ACTION = {
   RESET: 'Reset',
 }
 
+export const CONCEPT_EXPAND = {
+  DESCENDANTS: 'descendants',
+  OFF: 'off',
+  ON: 'on',
+  TOGGLE: 'toggle',
+}
+
 export const CONCEPT_FIELD = {
   ALIASES: 'aliases',
   AUTHOR: 'author',
@@ -18,6 +25,17 @@ export const CONCEPT_FIELD = {
   REALIZATIONS: 'realizations',
 }
 
+export const CONCEPT_HISTORY = {
+  EXTENT: {
+    CHILDREN: 'children',
+    DESCENDANTS: 'descendants',
+  },
+  TYPE: {
+    APPROVED: 'approved',
+    CONCEPT: 'concept',
+    PENDING: 'pending',
+  },
+}
 export const CONCEPT_NAME = {
   VALUE: 'name',
   EXTENT: 'nameExtent',
@@ -240,9 +258,9 @@ export const SELECTED = {
       KEY: 'history',
       TYPE: 'type',
       TYPES: {
-        APPROVED: 'approved',
-        CONCEPT: 'concept',
-        PENDING: 'pending',
+        APPROVED: CONCEPT_HISTORY.TYPE.APPROVED,
+        CONCEPT: CONCEPT_HISTORY.TYPE.CONCEPT,
+        PENDING: CONCEPT_HISTORY.TYPE.PENDING,
       },
     },
     REFERENCES: {

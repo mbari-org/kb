@@ -2,7 +2,7 @@ import { Button, Stack, Typography, Box } from '@mui/material'
 
 import KBTooltip from '@/components/common/KBTooltip'
 
-const PanelTotalExport = ({ count, exportFn, toolTip = 'Export' }) => {
+const PanelDataExport = ({ count, exportFn, toolTip = 'Export' }) => {
   return (
     <Stack direction='row' spacing={1} alignItems='center'>
       <Box sx={{ minWidth: '100px' }}>
@@ -15,4 +15,4 @@ const PanelTotalExport = ({ count, exportFn, toolTip = 'Export' }) => {
   )
 }
 
-export default PanelTotalExport
+export default PanelDataExport

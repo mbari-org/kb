@@ -1,9 +1,9 @@
 import { Box, FormControlLabel, Switch } from '@mui/material'
 
 import KBTooltip from '@/components/common/KBTooltip'
-import PanelTotalExport from '@/components/common/panel/PanelTotalExport'
+import PanelDataExport from '@/components/common/panel/PanelDataExport'
 
-const PanelTotalExportSwitch = ({
+const PanelDataExportSwitch = ({
   checked,
   count,
   exportFn,
@@ -23,7 +23,7 @@ const PanelTotalExportSwitch = ({
         width: width,
       }}
     >
-      <PanelTotalExport count={count} exportFn={exportFn} toolTip={exportToolTip} />
+      <PanelDataExport count={count} exportFn={exportFn} toolTip={exportToolTip} />
       <Box>
         <KBTooltip title={switchToolTip}>
           <FormControlLabel
@@ -38,4 +38,4 @@ const PanelTotalExportSwitch = ({
   )
 }
 
-export default PanelTotalExportSwitch
+export default PanelDataExportSwitch

@@ -14,7 +14,9 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { humanTimestamp } from '@/lib/utils'
 
-import { SELECTED } from '@/lib/constants'
+import { CONCEPT_HISTORY, SELECTED } from '@/lib/constants'
+
+const { TYPE } = CONCEPT_HISTORY
 
 const useHistoryColumns = ({ type }) => {
   const openPendingItem = usePendingItemModal()
@@ -32,7 +34,7 @@ const useHistoryColumns = ({ type }) => {
     }
   }
 
-  const isSortable = type === 'concept'
+  const isSortable = type === TYPE.CONCEPT
 
   const approvedCell = params => {
     const isPending = !params.row.processedTimestamp
@@ -154,9 +156,9 @@ const useHistoryColumns = ({ type }) => {
   ]
 
   const columns =
-    type === 'pending'
+    type === TYPE.PENDING
       ? [inspectColumn(), ...baseColumns]
-      : type === 'approved'
+      : type === TYPE.APPROVED
       ? [inspectColumn(), ...baseColumns, ...processorColumns]
       : [approvedColumn, ...baseColumns, ...processorColumns]
 

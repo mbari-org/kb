@@ -3,6 +3,10 @@ import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/materia
 import { useTheme } from '@mui/material/styles'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
+import { CONCEPT_HISTORY } from '@/lib/constants'
+
+const { EXTENT } = CONCEPT_HISTORY
+
 const HistoryTableHeaderConceptRight = () => {
   const { conceptHistoryExtent, setConceptHistoryExtent } = use(HistoryContext)
   const theme = useTheme()
@@ -24,10 +28,10 @@ const HistoryTableHeaderConceptRight = () => {
         onChange={handleChange}
         size='small'
       >
-        <ToggleButton value='children' sx={toggleButtonSx}>
+        <ToggleButton value={EXTENT.CHILDREN} sx={toggleButtonSx}>
           children
         </ToggleButton>
-        <ToggleButton value='descendants' sx={toggleButtonSx}>
+        <ToggleButton value={EXTENT.DESCENDANTS} sx={toggleButtonSx}>
           descendants
         </ToggleButton>
       </ToggleButtonGroup>

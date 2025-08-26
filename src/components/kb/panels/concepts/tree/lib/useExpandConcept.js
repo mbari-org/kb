@@ -4,7 +4,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { itemPath } from './taxonomyItem'
 
-import Expand from './expandedEnum'
+import { CONCEPT_EXPAND } from '@/lib/constants'
 
 const allLeafs = (taxonomy, conceptName, leafs = []) => {
   const concept = taxonomy.conceptMap[conceptName]
@@ -62,19 +62,19 @@ const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
   return useCallback(
     (concept, expanded) => {
       switch (expanded) {
-        case Expand.DESCENDANTS:
+        case CONCEPT_EXPAND.DESCENDANTS:
           descendants(concept)
           break
 
-        case Expand.OFF:
+        case CONCEPT_EXPAND.OFF:
           collapse(concept)
           break
 
-        case Expand.ON:
+        case CONCEPT_EXPAND.ON:
           expand(concept)
           break
 
-        case Expand.TOGGLE:
+        case CONCEPT_EXPAND.TOGGLE:
           toggle(concept)
           break
       }

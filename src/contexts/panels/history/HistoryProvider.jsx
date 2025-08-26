@@ -11,11 +11,14 @@ import useLoadData from '@/contexts/panels/history/useLoadData'
 import usePageData from '@/contexts/panels/history/usePageData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
+import { CONCEPT_HISTORY } from '@/lib/constants'
+
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const { CONCEPT, PANEL } = SELECTED
-const { HISTORY } = SELECTED.SETTINGS
+const { EXTENT, TYPE } = CONCEPT_HISTORY
+const { CONCEPT, PANEL, SETTINGS } = SELECTED
+const { HISTORY } = SETTINGS
 
 const HistoryProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
@@ -68,9 +71,9 @@ const HistoryProvider = ({ children }) => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
       const loadingMsg =
-        conceptHistoryExtent === 'children'
+        conceptHistoryExtent === EXTENT.CHILDREN
           ? 'Loading children history...'
-          : conceptHistoryExtent === 'descendants'
+          : conceptHistoryExtent === EXTENT.DESCENDANTS
           ? 'Loading descendants history...'
           : 'Loading data...'
 
@@ -128,7 +131,7 @@ const HistoryProvider = ({ children }) => {
 
   const handleSortChange = useCallback(
     newSortOrder => {
-      if (selectedType !== 'concept') {
+      if (selectedType !== TYPE.CONCEPT) {
         setSortOrder(newSortOrder)
         setTypeState(prev => ({ ...prev, offset: 0 }))
       }
