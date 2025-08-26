@@ -5,6 +5,7 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import Title from '@/components/common/factory/Title'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -59,7 +60,7 @@ const useAddReferenceButton = () => {
     createModal({
       actions: createModalActions(handleCancel, handleCommit),
       content,
-      title: 'Add Reference',
+      titleComponent: () => <Title title='Add Reference' />,
       data: {
         reference: createInitialReference(),
         isValid: false,

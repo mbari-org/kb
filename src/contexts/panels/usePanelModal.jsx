@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import PanelModal from '@/components/modal/PanelModal'
 import Actions from '@/components/common/factory/Actions'
+import Title from '@/components/common/factory/Title'
 
 // Generic modal hook for the panel area. It receives modalConfig, a ref to modalData, and a ref to closeModal.
 const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
@@ -39,7 +40,7 @@ const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
       <PanelModal
         actions={<ActionsComponent />}
         content={<ContentComponent />}
-        titleText={modalConfig.title}
+        titleComponent={modalConfig.titleComponent ? <modalConfig.titleComponent /> : undefined}
         closeModal={closeModalRef.current}
         minWidth={modalConfig.minWidth}
       />

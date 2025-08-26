@@ -24,9 +24,9 @@ const EditAliasActions = () => {
     !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
 
   const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
-    modifyConcept,
     closeModal,
     concept,
+    modifyConcept,
   })
 
   const handleStage = () => {

@@ -2,19 +2,20 @@ import { use, useCallback, useMemo } from 'react'
 
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
+import ConceptTitle from '@/components/common/ConceptTitle'
 
 import { PROCESSING } from '@/lib/constants'
 import {
   createDeleteTemplateActions,
   createDeleteTemplateContent,
-  createDeleteTemplateTitle,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 const { DELETING } = PROCESSING
 
 const useDeleteTemplateButton = () => {
-  const { closeModal, createModal, setProcessing } = useTemplatesModalOperationsContext()
   const { deleteTemplate } = use(TemplatesContext)
+
+  const { closeModal, createModal, setProcessing } = useTemplatesModalOperationsContext()
 
   const handleCancel = useCallback(() => {
     closeModal()
@@ -39,7 +40,6 @@ const useDeleteTemplateButton = () => {
     [handleCancel, handleDeleteConfirm]
   )
   const memoizedContent = useMemo(() => createDeleteTemplateContent(), [])
-  const memoizedTitle = useMemo(() => createDeleteTemplateTitle, [])
 
   return useCallback(
     template => {
@@ -50,11 +50,11 @@ const useDeleteTemplateButton = () => {
       createModal({
         actions: memoizedActions,
         content: memoizedContent,
-        title: memoizedTitle(),
         data: modalData,
+        titleComponent: ConceptTitle,
       })
     },
-    [createModal, memoizedActions, memoizedContent, memoizedTitle]
+    [createModal, memoizedActions, memoizedContent]
   )
 }
 

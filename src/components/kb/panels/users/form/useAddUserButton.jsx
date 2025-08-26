@@ -1,6 +1,7 @@
 import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
+import Title from '@/components/common/factory/Title'
 
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -56,7 +57,7 @@ const useAddUserButton = () => {
     createModal({
       actions: createModalActions(handleCancel, handleCommit),
       content,
-      title: 'Add User',
+      titleComponent: () => <Title title='Add User' />,
       data: {
         user: createInitialUser(),
         isValid: false,

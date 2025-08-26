@@ -1,46 +1,33 @@
 import { Box, Stack, Typography } from '@mui/material'
 
 import TemplateForm from '@/components/kb/panels/templates/form/TemplateForm'
+import ModalActionText from '@/components/common/ModalActionText'
 
 import { LABELS } from '@/lib/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, SAVE, DELETE } = LABELS.BUTTON
+const { CANCEL, CONFIRM_DISCARD, DELETE, DISCARD, REJECT_DISCARD, SAVE } = LABELS.BUTTON
 
 const TEMPLATE_FIELDS = ['concept', 'linkName', 'toConcept', 'linkValue']
 
-export const createTemplateValidator = () => templateData => {
-  const requiredFields = TEMPLATE_FIELDS
+const hasInput = (templateData, field) => templateData[field]?.trim() !== ''
 
-  const allFieldsFilled = requiredFields.every(field => {
-    const value = templateData[field] || ''
-    return value.trim() !== ''
-  })
-
-  return allFieldsFilled
-}
+export const createTemplateValidator = () => templateData =>
+  TEMPLATE_FIELDS.every(field => hasInput(templateData, field))
 
 const createChangeDetector =
   (isEdit = false) =>
   (templateData, original = null) => {
     if (!isEdit) {
-      // For add mode, any non-empty field means changes
-      const fieldsToCheck = TEMPLATE_FIELDS
-      return fieldsToCheck.some(field => {
-        const value = templateData[field] || ''
-        return value.trim() !== ''
-      })
+      return TEMPLATE_FIELDS.some(field => hasInput(templateData, field))
     }
 
-    // For edit mode, compare with original
     if (!original) {
-      // If no original template, consider any data as changes
       return true
     }
 
-    const fieldsToCompare = TEMPLATE_FIELDS
-    return fieldsToCompare.some(field => templateData[field] !== original[field])
+    return TEMPLATE_FIELDS.some(field => templateData[field] !== original[field])
   }
 
 const createFormChangeHandler = (updateModalData, isEdit = false) => {
@@ -59,19 +46,42 @@ const createFormChangeHandler = (updateModalData, isEdit = false) => {
       template,
       isValid,
       hasChanges,
+      alert: null,
     })
   }
 }
 
 export const createModalActions =
-  (handleCancel, handleCommit, saveLabel = SAVE) =>
-  currentModalData =>
-    [
+  (handleCancel, handleCommit, updateModalData, saveLabel = SAVE) =>
+  currentModalData => {
+    const { confirmDiscard = false, hasChanges = false } = currentModalData || {}
+
+    if (confirmDiscard) {
+      return [
+        {
+          color: 'cancel',
+          disabled: false,
+          label: CONFIRM_DISCARD,
+          onClick: handleCancel,
+        },
+        {
+          color: 'main',
+          disabled: false,
+          label: REJECT_DISCARD,
+          onClick: () => updateModalData({ confirmDiscard: false, alert: null }),
+        },
+      ]
+    }
+
+    return [
       {
         color: 'cancel',
         disabled: false,
-        label: CANCEL,
-        onClick: handleCancel,
+        label: DISCARD,
+        onClick: () =>
+          hasChanges
+            ? updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
+            : handleCancel(),
       },
       {
         color: 'primary',
@@ -80,6 +90,7 @@ export const createModalActions =
         onClick: () => handleCommit(currentModalData.template, currentModalData.original),
       },
     ]
+  }
 
 export const createModalContent = (handleFormChange, isEdit) => {
   const formKey = isEdit ? 'edit-template-form' : 'add-template-form'
@@ -92,6 +103,7 @@ export const createModalContent = (handleFormChange, isEdit) => {
         original={modalData.original}
         onChange={handleFormChange}
         isEdit={isEdit}
+        alert={modalData.alert}
       />
     )
   }
@@ -104,47 +116,36 @@ export const processEditTemplateData = (template, original) => {
   const hasFieldChanges = TEMPLATE_FIELDS.some(field => template[field] !== original[field])
 
   if (!hasFieldChanges) {
-    return null // No changes
+    return null
   }
 
-  // Get updates
   return filterObject(
     diff(pick(template, TEMPLATE_FIELDS), original),
-    (key, value) => value !== undefined && value !== null
+    (_key, value) => value !== undefined && value !== null
   )
 }
 
-export const processAddTemplateData = template => {
-  return filterObject(pick(template, TEMPLATE_FIELDS), (key, value) => value && value.trim() !== '')
-}
+export const processAddTemplateData = template =>
+  filterObject(pick(template, TEMPLATE_FIELDS), (_key, value) => value && value.trim() !== '')
 
 export const createHandlers = (updateModalData, closeModal, isEdit) => {
-  // Create the form change handler once, not on every form change
-  const formChangeHandler = createFormChangeHandler(updateModalData, isEdit)
-
-  const handleFormChange = (updatedTemplate, original) => {
-    return formChangeHandler(updatedTemplate, original)
-  }
-
-  const handleCancel = () => {
-    closeModal()
-  }
+  const handleCancel = () => closeModal(false)
+  const handleFormChange = createFormChangeHandler(updateModalData, isEdit)
 
   return { handleCancel, handleFormChange }
 }
 
-// Delete template specific utilities
 export const createDeleteTemplateActions =
   (handleCancel, handleDeleteConfirm) => currentModalData => {
     return [
       {
-        color: 'cancel',
+        color: 'main',
         disabled: false,
         label: CANCEL,
         onClick: handleCancel,
       },
       {
-        color: 'error',
+        color: 'cancel',
         disabled: false,
         label: DELETE,
         onClick: () => handleDeleteConfirm(currentModalData.template),
@@ -152,21 +153,19 @@ export const createDeleteTemplateActions =
     ]
   }
 
-export const createDeleteTemplateTitle = () => 'Delete Template'
-
 export const createDeleteTemplateContent = () => {
   const DeleteTemplateContent = currentModalData => {
     const { template } = currentModalData
 
     const fields = [
-      { label: 'Concept', value: template.concept },
       { label: 'Link Name', value: template.linkName },
       { label: 'To Concept', value: template.toConcept },
       { label: 'Link Value', value: template.linkValue },
     ]
 
     return (
-      <Stack spacing={3}>
+      <Stack spacing={1}>
+        <ModalActionText text='Delete Template' />
         <Stack spacing={2} sx={{ p: 2 }}>
           {fields.map(({ label, value }) => (
             <Box key={label}>
@@ -177,11 +176,11 @@ export const createDeleteTemplateContent = () => {
             </Box>
           ))}
         </Stack>
-        <Stack spacing={0} sx={{ textAlign: 'center' }}>
-          <Typography variant='body1' color='text.secondary'>
+        <Stack sx={{ textAlign: 'center' }}>
+          <Typography variant='body1' color='cancel'>
             This template will be permanently deleted.
           </Typography>
-          <Typography variant='body1' color='text.secondary'>
+          <Typography variant='body1' color='cancel'>
             This action cannot be undone.
           </Typography>
         </Stack>
@@ -192,3 +191,35 @@ export const createDeleteTemplateContent = () => {
   DeleteTemplateContent.displayName = 'DeleteTemplateContent'
   return DeleteTemplateContent
 }
+
+export const createTemplateOnClose = updateModalData => data => {
+  if (data?.hasChanges && !data?.confirmDiscard) {
+    updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
+    return false
+  }
+  return true
+}
+
+export const discardEditsAlert = () => ({
+  line1: 'Discarding edits is final.',
+  line2: 'Please confirm you want to discard the indicated edits.',
+  severity: 'warning',
+})
+
+export const isDuplicateTemplate = (templates, template, excludeId = null) => {
+  const list = Array.isArray(templates) ? templates : []
+  return list.some(
+    existing =>
+      (excludeId ? existing.id !== excludeId : true) &&
+      template.concept === existing.concept &&
+      template.linkName === existing.linkName &&
+      template.toConcept === existing.toConcept &&
+      template.linkValue === existing.linkValue
+  )
+}
+
+export const duplicateTemplateAlert = () => ({
+  line1: 'A template with these values already exists for this concept.',
+  line2: 'Please modify the values to create a unique template.',
+  severity: 'error',
+})

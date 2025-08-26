@@ -42,15 +42,13 @@ const AppModal = () => {
           <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth }}>
             <IconButton
               aria-label='close'
-              onClick={() => closeModal()}
+              onClick={() => closeModal(false)}
               sx={{ position: 'absolute', right: 8, top: 8 }}
             >
               <IoCloseSharp />
             </IconButton>
             <CardHeader title={title()} />
-            <CardContent sx={{ pb: 0, pt: 0 }}>
-              {content()}
-            </CardContent>
+            <CardContent sx={{ pb: 0, pt: 0 }}>{content()}</CardContent>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
               {actions()}
             </CardActions>

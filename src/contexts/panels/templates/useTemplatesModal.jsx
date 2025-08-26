@@ -16,7 +16,7 @@ const useTemplatesModal = (modalConfig, modalDataRef, closeModalRef) => {
       <PanelModal
         actions={<ActionsComponent />}
         content={<ContentComponent />}
-        titleText={modalConfig.title}
+        titleComponent={modalConfig.titleComponent ? <modalConfig.titleComponent /> : undefined}
         closeModal={closeModalRef.current}
         minWidth={modalConfig.minWidth}
       />

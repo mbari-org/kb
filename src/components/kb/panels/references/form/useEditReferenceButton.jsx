@@ -3,6 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import Title from '@/components/common/factory/Title'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -61,7 +62,7 @@ const useEditReferenceButton = () => {
       createModal({
         actions: createModalActions(handleCancel, handleCommit),
         content,
-        title: 'Edit Reference',
+        titleComponent: () => <Title title='Edit Reference' />,
         data: {
           reference: modalReference,
           original: referenceToEdit,

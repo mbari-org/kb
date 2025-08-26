@@ -2,6 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
+import Title from '@/components/common/factory/Title'
 
 import { USER_ROLES } from '@/lib/constants'
 import {
@@ -52,7 +53,7 @@ const useLockUserButton = () => {
       createModal({
         actions: memoizedActions,
         content: memoizedContent,
-        title: memoizedTitle(modalData),
+        titleComponent: () => <Title title={memoizedTitle(modalData)} />,
         data: modalData,
       })
     },

@@ -2,6 +2,8 @@ import { use, useCallback, useMemo } from 'react'
 
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
+import ConceptTitle from '@/components/common/ConceptTitle'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -9,6 +11,9 @@ import {
   createModalActions,
   createModalContent,
   processEditTemplateData,
+  createTemplateOnClose,
+  duplicateTemplateAlert,
+  isDuplicateTemplate,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 const { UPDATING } = PROCESSING
@@ -17,6 +22,7 @@ const useEditTemplateButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =
     useTemplatesModalOperationsContext()
   const { editTemplate } = use(TemplatesContext)
+  const { templates: allTemplates } = use(PanelDataContext)
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, true),
@@ -33,6 +39,12 @@ const useEditTemplateButton = () => {
           return
         }
 
+        // Duplicate check (exclude the original template by id)
+        if (isDuplicateTemplate(allTemplates, template, original.id)) {
+          updateModalData({ alert: duplicateTemplateAlert() })
+          return
+        }
+
         setProcessing(UPDATING)
         await editTemplate(original, template)
         closeModal()
@@ -41,7 +53,7 @@ const useEditTemplateButton = () => {
         throw error
       }
     },
-    [editTemplate, closeModal, setProcessing]
+    [allTemplates, editTemplate, closeModal, setProcessing, updateModalData]
   )
 
   const content = useCallback(
@@ -51,19 +63,23 @@ const useEditTemplateButton = () => {
 
   const editTemplateModal = useCallback(
     templateToEdit => {
+      const onClose = createTemplateOnClose(updateModalData)
+
       createModal({
-        actions: createModalActions(handleCancel, handleCommit),
+        actions: createModalActions(handleCancel, handleCommit, updateModalData),
         content,
         data: {
+          confirmDiscard: false,
           hasChanges: false,
           isValid: true,
           original: templateToEdit,
           template: { ...templateToEdit },
         },
-        title: 'Edit Template',
+        titleComponent: ConceptTitle,
+        onClose,
       })
     },
-    [createModal, content, handleCancel, handleCommit]
+    [createModal, content, handleCancel, handleCommit, updateModalData]
   )
 
   return editTemplateModal

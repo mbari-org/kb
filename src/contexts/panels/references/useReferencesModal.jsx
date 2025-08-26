@@ -1,4 +1,5 @@
 import PanelModal from '@/components/modal/PanelModal'
+import Title from '@/components/common/factory/Title'
 import useReferencesActionsComponent from './useReferencesActionsComponent'
 import useReferencesContentComponent from './useReferencesContentComponent'
 import { useMemo } from 'react'
@@ -14,7 +15,7 @@ const useReferencesModal = (modalConfig, modalDataRef, closeModalRef) => {
       <PanelModal
         actions={<ActionsComponent />}
         content={<ContentComponent />}
-        titleText={modalConfig.title}
+        titleComponent={modalConfig.titleComponent ? <modalConfig.titleComponent /> : undefined}
         closeModal={closeModalRef.current}
         minWidth={modalConfig.minWidth}
       />

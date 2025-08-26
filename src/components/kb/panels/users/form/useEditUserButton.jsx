@@ -2,6 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
+import Title from '@/components/common/factory/Title'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -59,7 +60,7 @@ const useEditUserButton = () => {
       createModal({
         actions: createModalActions(handleCancel, handleCommit),
         content,
-        title: 'Edit User',
+        titleComponent: () => <Title title='Edit User' />,
         data: {
           user: modalUser,
           original: userToEdit,

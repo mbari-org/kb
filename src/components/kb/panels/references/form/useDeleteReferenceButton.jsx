@@ -2,6 +2,7 @@ import { use, useCallback, useMemo } from 'react'
 
 import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import Title from '@/components/common/factory/Title'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -50,8 +51,8 @@ const useDeleteReferenceButton = () => {
       createModal({
         actions: memoizedActions,
         content: memoizedContent,
-        title: memoizedTitle(),
         data: modalData,
+        titleComponent: () => <Title title={memoizedTitle()} />,
       })
     },
     [createModal, memoizedActions, memoizedContent, memoizedTitle]

@@ -1,9 +1,11 @@
 import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
+import ConceptTitle from '@/components/common/ConceptTitle'
 
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
+import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
 import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
 
@@ -15,14 +17,19 @@ import {
   processAddTemplateData,
   createHandlers,
   createModalContent,
+  createTemplateOnClose,
+  duplicateTemplateAlert,
+  isDuplicateTemplate,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 const { SAVING } = PROCESSING
 
 const useAddTemplateButton = () => {
+  const { addTemplate, filters } = use(TemplatesContext)
+  const { templates: allTemplates } = use(PanelDataContext)
+
   const { closeModal, createModal, updateModalData, setProcessing } =
     useTemplatesModalOperationsContext()
-  const { addTemplate, filters } = use(TemplatesContext)
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, false),
@@ -37,6 +44,12 @@ const useAddTemplateButton = () => {
           return
         }
 
+        // Duplicate check: exact match on concept + linkName + toConcept + linkValue
+        if (isDuplicateTemplate(allTemplates, template)) {
+          updateModalData({ alert: duplicateTemplateAlert() })
+          return
+        }
+
         setProcessing(SAVING)
 
         const templateData = processAddTemplateData(template)
@@ -47,7 +60,7 @@ const useAddTemplateButton = () => {
         throw error
       }
     },
-    [addTemplate, closeModal, setProcessing]
+    [addTemplate, allTemplates, closeModal, setProcessing, updateModalData]
   )
 
   const content = useCallback(
@@ -56,22 +69,35 @@ const useAddTemplateButton = () => {
   )
 
   const addTemplateModal = useCallback(() => {
+    const onClose = createTemplateOnClose(updateModalData)
+
     createModal({
-      actions: createModalActions(handleCancel, handleCommit),
       content,
-      title: 'Add Template',
+      actions: createModalActions(handleCancel, handleCommit, updateModalData),
       data: {
-        template: EMPTY_TEMPLATE,
-        isValid: false,
+        confirmDiscard: false,
         hasChanges: false,
+        isValid: false,
+        template: {
+          ...EMPTY_TEMPLATE,
+          concept: filters[SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT],
+        },
       },
+      titleComponent: ConceptTitle,
+      onClose,
     })
-  }, [createModal, content, handleCancel, handleCommit])
+  }, [content, createModal, filters, handleCancel, handleCommit, updateModalData])
 
   const AddTemplateButton = useCallback(() => {
     const { TEMPLATES } = SELECTED.SETTINGS
     const conceptSelected = Boolean(filters?.[TEMPLATES.FILTERS.CONCEPT])
-    return <PanelAddButton onClick={addTemplateModal} disabled={!conceptSelected} />
+    const tooltip = conceptSelected
+      ? 'Add Template to Selected Concept'
+      : 'Select Concept to Add Template'
+
+    return (
+      <PanelAddButton disabled={!conceptSelected} onClick={addTemplateModal} tooltip={tooltip} />
+    )
   }, [addTemplateModal, filters])
 
   return AddTemplateButton

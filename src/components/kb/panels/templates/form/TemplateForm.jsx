@@ -1,16 +1,13 @@
 import { Stack } from '@mui/material'
 import { Box, TextField } from '@mui/material'
-import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
+import ModalActionText from '@/components/common/ModalActionText'
+import ActionsAlert from '@/components/modal/actions/ActionsAlert'
 
 import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateForm'
 
-const TemplateForm = ({ isEdit = false, onChange, template, original }) => {
+const TemplateForm = ({ alert = null, isEdit = false, onChange, original, template }) => {
   const { handleChange } = useTemplateForm({ isEdit, onChange, template, original })
-
-  const handleConceptSelect = newValue => {
-    handleChange('concept')({ target: { value: newValue } })
-  }
 
   const handleToConceptSelect = newValue => {
     handleChange('toConcept')({ target: { value: newValue } })
@@ -22,14 +19,8 @@ const TemplateForm = ({ isEdit = false, onChange, template, original }) => {
   }
 
   return (
-    <Stack spacing={2} sx={{ p: 2 }}>
-      <ConceptSelect
-        conceptName={template.concept}
-        disabled={isEdit}
-        doConceptSelected={handleConceptSelect}
-        required
-        updateConceptSelected={false}
-      />
+    <Stack spacing={2}>
+      <ModalActionText text={`${isEdit ? 'Edit' : 'Add'} Template`} />
       <Box>
         <TextField
           fullWidth
@@ -44,17 +35,26 @@ const TemplateForm = ({ isEdit = false, onChange, template, original }) => {
         conceptName={template.toConcept}
         doConceptSelected={handleToConceptSelect}
         onSpecialChange={handleToConceptSpecial}
+        width='100%'
       />
       <Box>
         <TextField
           fullWidth
           label='Link Value'
-          value={template.linkValue}
           onChange={handleChange('linkValue')}
-          size='small'
           required
+          size='small'
+          value={template.linkValue}
         />
       </Box>
+      <Stack
+        spacing={0}
+        sx={{ alignItems: 'center', mt: 1, minHeight: 68, justifyContent: 'center' }}
+      >
+        {alert && (
+          <ActionsAlert line1={alert.line1} line2={alert.line2} severity={alert.severity} />
+        )}
+      </Stack>
     </Stack>
   )
 }
