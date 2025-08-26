@@ -10,7 +10,7 @@ import createRealizationOnClose from '@/components/kb/panels/concepts/concept/ch
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

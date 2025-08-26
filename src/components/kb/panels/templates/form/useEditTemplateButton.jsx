@@ -14,7 +14,8 @@ import {
 const { UPDATING } = PROCESSING
 
 const useEditTemplateButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } = useTemplatesModalOperationsContext()
+  const { closeModal, createModal, updateModalData, setProcessing } =
+    useTemplatesModalOperationsContext()
   const { editTemplate } = use(TemplatesContext)
 
   const { handleCancel, handleFormChange } = useMemo(

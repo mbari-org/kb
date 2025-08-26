@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
 
 const useRealizationFormHandlers = ({
   realizationItem,

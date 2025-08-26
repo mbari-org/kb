@@ -10,7 +10,7 @@ import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '
 
 import { orderedAliases } from '@/lib/kb/model/aliases'
 import { filterRanks } from '@/lib/kb/model/rank'
-import { sortRealizations } from '@/lib/kb/model/realizations'
+import { sortRealizations } from '@/lib/kb/model/realization'
 
 import { addedConcepts } from './concept'
 

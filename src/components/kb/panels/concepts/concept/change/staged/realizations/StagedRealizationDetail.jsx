@@ -9,7 +9,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
-import { REALIZATION_DISPLAY_FIELDS } from '@/lib/kb/model/realizations'
+import { REALIZATION_DISPLAY_FIELDS } from '@/lib/kb/model/realization'
 import { drop } from '@/lib/utils'
 
 const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {

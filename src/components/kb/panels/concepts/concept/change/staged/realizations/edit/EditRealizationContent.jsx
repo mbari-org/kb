@@ -10,7 +10,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panelData/PanelDataContext'
 
-import { hasDuplicate, EMPTY_REALIZATION } from '@/lib/kb/model/realizations'
+import { hasDuplicate, EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
 import useStageRealization from './useStageRealization'
 import useRealizationContentHandlers from './useRealizationContentHandlers'
@@ -147,6 +147,7 @@ const EditRealizationContent = () => {
       )}
       <ModalActionText text={`${actionText} Realization`} />
       <RealizationForm
+        isDuplicate={isDuplicate}
         isEditMode={isEdit}
         onRealizationChange={handleRealizationChange}
         onValidationChange={handleValidationChange}

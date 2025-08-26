@@ -27,7 +27,7 @@ const EditRealizationActions = () => {
   })
 
   const handleStage = () => {
-    // go through form to trigger required and validation checks
+    // go through form to trigger required / validation checks
     document.querySelector(`#${EDIT_REALIZATION_FORM_ID}`)?.requestSubmit()
   }
 

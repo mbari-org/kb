@@ -31,7 +31,7 @@ const EditMediaActions = () => {
   })
 
   const handleStage = () => {
-    // go through form to trigger required and validation checks
+    // go through form to trigger required / validation checks
     document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
   }
 

@@ -1,5 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/constants'
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
 
 import useDebounce from '@/hooks/useDebounce'
 

@@ -5,7 +5,7 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
 
 import { PROCESSING } from '@/lib/constants'
 

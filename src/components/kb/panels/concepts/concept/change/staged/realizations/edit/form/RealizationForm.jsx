@@ -13,6 +13,7 @@ const RealizationForm = ({
   onValidationChange,
   realizationItem,
   stageChange,
+  isDuplicate = false,
 }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
@@ -42,7 +43,6 @@ const RealizationForm = ({
     [onValidationChange]
   )
 
-  // Handler for link value (linkName is now read-only)
   const handleLinkValueChange = useCallback(
     event => {
       const { name: field, value } = event.target
@@ -67,12 +67,11 @@ const RealizationForm = ({
     >
       <FormControl fullWidth margin='normal'>
         <TextInput
+          disabled
           label='Link Name'
           name='linkName'
-          size='small'
-          value={realizationItem.linkName || ''}
-          disabled
           showClearButton={false}
+          size='small'
           sx={{
             '& .MuiInputBase-input.Mui-disabled': {
               WebkitTextFillColor: 'rgba(0, 0, 0, 0.87)',
@@ -85,18 +84,21 @@ const RealizationForm = ({
               color: 'rgba(0, 0, 0, 0.6)',
             },
           }}
+          value={realizationItem.linkName || ''}
         />
       </FormControl>
       <RealizationToConcept
+        isEditMode={isEditMode}
         isValidLinkName={isValidLinkName}
         onRealizationChange={onRealizationChange}
-        realizationItem={realizationItem}
-        isEditMode={isEditMode}
         onValidationChange={handleToConceptValidationChange}
+        realizationItem={realizationItem}
       />
       <FormControl fullWidth margin='normal'>
         <TextInput
           disabled={!isValidLinkName}
+          error={Boolean(isDuplicate)}
+          helperText={isDuplicate ? 'Duplicate realization' : undefined}
           label='Link Value'
           name='linkValue'
           onChange={handleLinkValueChange}

@@ -1,8 +1,13 @@
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/template'
-
 import { pick } from '@/lib/utils'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
+
+export const EMPTY_TEMPLATE = {
+  concept: '',
+  linkName: '',
+  toConcept: '',
+  linkValue: '',
+}
 
 const EMPTY_REALIZATION = {
   ...EMPTY_TEMPLATE,
