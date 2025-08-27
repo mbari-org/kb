@@ -68,23 +68,20 @@ const conceptStateReducer = (state, { type, update }) => {
     case REALIZATION.EDIT:
       return editRealization(state, update)
 
+    case RESET.ALIASES:
+      return resetAliases(state, update)
+
+    case RESET.AUTHOR:
+      return resetAuthor(state, update)
+
     case RESET.CHILD:
       return resetChild(state, update)
 
     case RESET.CHILDREN:
       return resetChildren(state, update)
 
-    case RESET.AUTHOR:
-      return resetAuthor(state, update)
-
-    case RESET.ALIASES:
-      return resetAliases(state, update)
-
     case RESET.MEDIA:
       return resetMedia(state, update)
-
-    case RESET.REALIZATIONS:
-      return resetRealizations(state, update)
 
     case RESET.NAME:
       return resetName(state, update)
@@ -94,6 +91,9 @@ const conceptStateReducer = (state, { type, update }) => {
 
     case RESET.RANK:
       return resetRank(state, update)
+
+    case RESET.REALIZATIONS:
+      return resetRealizations(state, update)
 
     default:
       return state

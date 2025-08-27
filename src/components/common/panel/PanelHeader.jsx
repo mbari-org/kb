@@ -2,16 +2,6 @@ import { Box, Typography } from '@mui/material'
 
 const HEADER_HEIGHT = 100
 
-/**
- * A header component for panels that provides a consistent layout with left, center, and right sections.
- * The title is centered both vertically and horizontally, independent of the left and right sections.
- * The title will take up 90% of the remaining space between the left and right components.
- * @param {Object} props
- * @param {React.ReactNode} props.headerLeft - Optional content for the left section
- * @param {React.ReactNode} props.headerTitle - Content for the centered title
- * @param {React.ReactNode} props.headerRight - Optional content for the right section
- * @param {Object} props.sx - Additional styles to be applied to the header container
- */
 const PanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} }) => {
   return (
     <Box
@@ -52,6 +42,7 @@ const PanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} }) => {
         <Typography
           component='div'
           sx={{
+            mt: -2,
             overflow: 'hidden',
             textAlign: 'center',
             textOverflow: 'ellipsis',

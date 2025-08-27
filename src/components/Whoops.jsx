@@ -70,15 +70,15 @@ const Whoops = ({ children }) => {
           </Typography>
         )}
         {stack && (
-          <Stack sx={{ mt: 1, width: '80%' }}>
-            <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              💥 {responseMessage} 💥
-            </Typography>
-            <Typography variant='body1' sx={{ textAlign: 'center', fontWeight: 'bold', mt: 1 }}>
+          <Stack sx={{ width: '80%' }}>
+            <Typography variant='body1' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               しまった!
             </Typography>
-            <Typography variant='body2' sx={{ textAlign: 'center', mt: 1 }}>
-              We encountered the following error. 😣 To minimize the risk of corrupting data, we
+            <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 'bold', mt: 2 }}>
+              💥 {responseMessage} 💥
+            </Typography>
+            <Typography variant='body2' sx={{ textAlign: 'center', mt: 1, mb: 1 }}>
+              We encountered a processing error. 😣 To minimize the risk of corrupting data, we
               won&apos;t proceed.
             </Typography>
 

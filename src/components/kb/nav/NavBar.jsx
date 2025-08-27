@@ -2,10 +2,9 @@ import { use } from 'react'
 
 import { AppBar, Box, Toolbar } from '@mui/material'
 
-import LogoutLink from './LogoutLink'
-import PanelLink from './PanelLink'
-import NavHistoryLinks from '../../common/NavHistoryLinks'
-import VersionDisplay from '../../common/VersionDisplay'
+import LogoutLink from '@/components/kb/nav/LogoutLink'
+import NavHistoryLinks from '@/components/common/NavHistoryLinks'
+import PanelLink from '@/components/kb/nav/PanelLink'
 
 import panelMods from '@/components/kb/panels/modules'
 
@@ -16,7 +15,6 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import { isAdmin } from '@/lib/auth/role'
 
 const NavBar = ({ selectPanel }) => {
-  const { isDev } = use(ConfigContext)
   const { user } = use(UserContext)
   const { panels } = use(SelectedContext)
 
@@ -48,7 +46,6 @@ const NavBar = ({ selectPanel }) => {
           />
         ))}
         <Box style={{ flexGrow: 1 }} />
-        {isDev && <VersionDisplay />}
         <LogoutLink />
       </Toolbar>
     </AppBar>

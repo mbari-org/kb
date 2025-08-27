@@ -6,7 +6,7 @@ const EmptyPanel = ({ title }) => {
 
   const header = createPanelHeader({ headerTitle: title })
 
-  return <Box sx={{ mt: 2 }}>{header}</Box>
+  return <Box sx={{ mt: 1 }}>{header}</Box>
 }
 
 export default EmptyPanel

@@ -17,16 +17,6 @@ import {
   isDirty,
 } from '@/version'
 
-/**
- * VersionDisplay component - shows application version info
- *
- * @param {Object} props
- * @param {string} props.variant - Typography variant (default: 'caption')
- * @param {'text'|'icon'} props.display - Display mode (default: 'text')
- * @param {string} props.color - Text color (default: grey[300])
- *
- * Note: KBTooltip is automatically shown when current branch is not 'main'
- */
 const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'caption' }) => {
   const theme = useTheme()
   const { isDev } = use(ConfigContext)

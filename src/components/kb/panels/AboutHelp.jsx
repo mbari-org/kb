@@ -7,18 +7,15 @@ const AboutHelp = () => {
   const theme = useTheme()
 
   return (
-    <Box sx={{ position: 'relative' }}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 10,
-          right: 0,
-          zIndex: 1,
-        }}
-      >
+    <Box
+      sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    >
+      <Box sx={{ width: '100%' }}>
+        <EmptyPanel title='About / Help' />
+      </Box>
+      <Box sx={{ mt: -4, position: 'relative', zIndex: 2 }}>
         <VersionDisplay color={theme.palette.primary.main} />
       </Box>
-      <EmptyPanel title='About / Help' />
     </Box>
   )
 }
