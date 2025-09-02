@@ -1,16 +1,19 @@
 import { CiEdit } from 'react-icons/ci'
 
-import MediaActionButton from '../MediaActionButton'
+import MediaAction from '../MediaAction'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
+const MEDIA_EDIT = 'Edit Media'
+
 const MediaEdit = () => {
   return (
-    <MediaActionButton
+    <MediaAction
       action={CONCEPT_STATE.MEDIA_ITEM.EDIT}
       color='edit'
       Icon={CiEdit}
       position='right'
+      tooltip={MEDIA_EDIT}
       sx={{ mb: 1.25 }}
     />
   )

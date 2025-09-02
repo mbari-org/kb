@@ -3919,6 +3919,7 @@ __metadata:
     framer-motion: "npm:^12.23.11"
     globals: "npm:^16.3.0"
     jwt-decode: "npm:^4.0.0"
+    puid-js: "npm:^2.0.0"
     react: "npm:^19.1.1"
     react-dom: "npm:^19.1.1"
     react-error-boundary: "npm:^6.0.0"
@@ -4515,6 +4516,13 @@ __metadata:
   version: 1.1.0
   resolution: "proxy-from-env@npm:1.1.0"
   checksum: 10c0/fe7dd8b1bdbbbea18d1459107729c3e4a2243ca870d26d34c2c1bcd3e4425b7bcc5112362df2d93cc7fb9746f6142b5e272fd1cc5c86ddf8580175186f6ad42b
+  languageName: node
+  linkType: hard
+
+"puid-js@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "puid-js@npm:2.0.0"
+  checksum: 10c0/d109f329c42fa40f7f3bb4323a808cf9ae52f9f3c0dbc35a0f2221612d819433ff912d408b4df7e414a8df061d031c0991e33d563c6f5959171cd4ae529adc89
   languageName: node
   linkType: hard
 

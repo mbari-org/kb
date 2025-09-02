@@ -2,8 +2,8 @@ import { use } from 'react'
 
 import { Box } from '@mui/material'
 
-import InspectIcon from '@/components/common/icon/InspectIcon'
-import StampIcon from '@/components/common/icon/StampIcon'
+import InspectIcon from '@/components/icon/InspectIcon'
+import StampIcon from '@/components/icon/StampIcon'
 
 import usePendingItemModal from '@/components/kb/panels/history/pending/usePendingItemModal'
 

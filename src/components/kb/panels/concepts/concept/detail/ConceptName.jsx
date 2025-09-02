@@ -3,7 +3,7 @@ import { use, useState } from 'react'
 import { Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ChangeStructureButton from '@/components/kb/panels/concepts/concept/change/staged/structure/ConceptStructureButton'
+import ConceptStructureIcon from '@/components/icon/ConceptStructureIcon'
 import ChangeStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/ConceptStructureChoices'
 
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
@@ -52,7 +52,7 @@ const ConceptName = () => {
         {concept?.name}
       </Typography>
       {showStructureButton && (
-        <ChangeStructureButton onClick={() => setShowStructureChoices(true)} />
+        <ConceptStructureIcon onClick={() => setShowStructureChoices(true)} />
       )}
       {showStructureChoicesModal && (
         <ChangeStructureChoices closeChoices={() => setShowStructureChoices(false)} />

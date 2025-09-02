@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import ConceptRealization from '@/components/kb/panels/concepts/concept/detail/realizations/ConceptRealization'
 import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyList'
-import RealizationEditIcon from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationEditIcon'
+import RealizationActionIcon from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationActionIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -14,7 +14,7 @@ const ConceptRealizations = () => {
   const realizations = stagedState?.realizations || []
 
   const IconComponent = () => (
-    <RealizationEditIcon
+    <RealizationActionIcon
       action={CONCEPT_STATE.REALIZATION.ADD}
       realizationIndex={realizations.length}
     />

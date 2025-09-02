@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import KBInfoIcon from '@/components/common/icon/KBInfoIcon'
+import KBInfoIcon from '@/components/icon/KBInfoIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 

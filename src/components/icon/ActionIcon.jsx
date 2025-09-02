@@ -7,8 +7,10 @@ const BUTTON_SIZE = 'small'
 
 const ActionIcon = ({
   asDiv = false,
+  color,
   Icon,
   onClick,
+  size = SIZE,
   sx = {},
   tooltip,
   tooltipPlacement = 'top',
@@ -16,7 +18,11 @@ const ActionIcon = ({
 }) => {
   const theme = useTheme()
 
-  const sizedIcon = <Icon size={SIZE} />
+  const hoverColor = color
+    ? theme.palette[color]?.main || theme.palette.primary.main
+    : theme.palette.primary.main
+
+  const sizedIcon = <Icon size={size} />
 
   if (asDiv) {
     const divElement = (
@@ -29,7 +35,10 @@ const ActionIcon = ({
           display: 'flex',
           justifyContent: 'center',
           padding: '4px',
-          '&:hover': theme.kb?.icon?.hover,
+          '&:hover': {
+            ...theme.kb?.icon?.hover,
+            ...(color && { color: hoverColor }),
+          },
           ...sx,
         }}
         {...props}
@@ -54,8 +63,11 @@ const ActionIcon = ({
       size={BUTTON_SIZE}
       onClick={onClick}
       sx={{
+        '&:hover': {
+          ...theme.kb?.icon?.hover,
+          ...(color && { color: hoverColor }),
+        },
         ...sx,
-        '&:hover': theme.kb?.icon?.hover,
       }}
       {...props}
     >

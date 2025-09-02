@@ -1,8 +1,8 @@
 import { use, useEffect, useState } from 'react'
 
 import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
-import TemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableToggle'
-import InspectIcon from '@/components/common/icon/InspectIcon'
+import ConceptTemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/ConceptTemplatesAvailableToggle'
+import InspectIcon from '@/components/icon/InspectIcon'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -45,7 +45,7 @@ const ConceptTemplates = () => {
     setFilteredTemplates(filterTemplates(templates, { concepts }))
   }, [available, getAncestorNames, selectedConcept, templates])
 
-  const tooltip = `View ${available ? 'Available' : 'Explicit'} Templates for this Concept`
+  const tooltip = `Go to ${available ? 'Available' : 'Explicit'} Templates for this Concept`
 
   return (
     <ConceptPropertyPages
@@ -54,9 +54,9 @@ const ConceptTemplates = () => {
       loadingText='Loading templates...'
       renderItem={renderItem}
       title='Templates'
-      iconComponent={() => <InspectIcon onClick={linkToTemplates} tooltip={tooltip} asDiv={true} />}
+      iconComponent={() => <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />}
     >
-      <TemplatesAvailableToggle />
+      <ConceptTemplatesAvailableToggle />
     </ConceptPropertyPages>
   )
 }

@@ -1,6 +1,5 @@
 import { use, useRef, useState } from 'react'
 import { Box } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
 
 import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/MediaDisplay'
 import MediaPreview from '@/components/kb/panels/concepts/concept/detail/media/MediaPreview'
@@ -14,8 +13,6 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const MediaView = () => {
   const mediaViewRef = useRef(null)
-
-  const theme = useTheme()
 
   const { editing, stagedState } = use(ConceptContext)
   const { media, mediaIndex } = stagedState
@@ -35,14 +32,9 @@ const MediaView = () => {
             <MediaDelete />
             {editing && (
               <MediaAdd
-                bgColor={theme.palette.background.paperLight}
                 sx={{
-                  position: 'absolute',
-                  bottom: 28,
                   left: '50%',
                   transform: 'translateX(-50%)',
-                  zIndex: 1,
-                  mb: 1.25,
                 }}
               />
             )}

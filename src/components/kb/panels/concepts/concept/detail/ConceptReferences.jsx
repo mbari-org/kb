@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react'
 
 import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
-import InspectIcon from '@/components/common/icon/InspectIcon'
+import InspectIcon from '@/components/icon/InspectIcon'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -30,7 +30,7 @@ const ConceptReferences = () => {
     updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
   }
 
-  const tooltip = 'View References for this Concept'
+  const tooltip = 'Go to References for this Concept'
 
   return (
     <ConceptPropertyPages

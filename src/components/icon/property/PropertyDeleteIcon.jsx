@@ -2,15 +2,16 @@ import { MdOutlineDeleteForever } from 'react-icons/md'
 
 import PropertyActionIcon from './PropertyActionIcon'
 
-const PropertyAddIcon = ({ onClick, size }) => {
+const PropertyDeleteIcon = ({ onClick, size, tooltip }) => {
   return (
     <PropertyActionIcon
       color='remove.main'
       Icon={MdOutlineDeleteForever}
       onClick={onClick}
       size={size}
+      tooltip={tooltip}
     />
   )
 }
 
-export default PropertyAddIcon
+export default PropertyDeleteIcon

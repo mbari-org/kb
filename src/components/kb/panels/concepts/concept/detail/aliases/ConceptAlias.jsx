@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import AliasModifyIcon from '@/components/kb/panels/concepts/concept/change/staged/aliases/AliasModifyIcon'
+import AliasActionIcon from '@/components/kb/panels/concepts/concept/change/staged/aliases/AliasActionIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -42,7 +42,7 @@ const ConceptAlias = ({ alias }) => {
   const showDelete = editing && !alias.historyId && alias.action !== ALIAS.ADD
 
   const aliasIcon = action => {
-    return <AliasModifyIcon action={action} aliasIndex={alias.index} size={20} />
+    return <AliasActionIcon action={action} aliasIndex={alias.index} size={20} />
   }
 
   return (

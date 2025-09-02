@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
 
-import HandIcon from '@/components/common/icon/HandIcon'
+import HandIcon from '@/components/icon/HandIcon'
 
 import { RESETTING } from '@/lib/constants'
 

@@ -46,9 +46,20 @@ const NoMedia = () => {
             top: 30,
             left: '50%',
             transform: 'translateX(-50%)',
+            zIndex: 2,
           }}
         >
-          <MediaAdd bgColor='transparent' />
+          <MediaAdd
+            position='left'
+            sx={{
+              position: 'relative',
+              bottom: 'auto',
+              left: 'auto',
+              right: 'auto',
+              backgroundColor: 'transparent',
+              opacity: 1,
+            }}
+          />
         </Box>
       )}
     </Box>

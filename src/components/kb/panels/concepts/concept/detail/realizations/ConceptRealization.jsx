@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import RealizationEditIcon from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationEditIcon'
+import RealizationActionIcon from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationActionIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -42,7 +42,7 @@ const ConceptRealization = ({ realization }) => {
     editing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
 
   const realizationIcon = action => {
-    return <RealizationEditIcon action={action} realizationIndex={realization.index} size={20} />
+    return <RealizationActionIcon action={action} realizationIndex={realization.index} size={20} />
   }
 
   return (

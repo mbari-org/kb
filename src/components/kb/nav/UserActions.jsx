@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import { Button, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import UserContext from '@/contexts/user/UserContext'
@@ -10,10 +10,15 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 
 import { LABELS, SELECTED } from '@/lib/constants'
+import LogoutIcon from '@/components/icon/LogoutIcon'
+import RefreshAppIcon from '@/components/icon/RefreshAppIcon'
+import RefreshContext from '@/contexts/refresh/RefreshContext'
 
 const { CONTINUE } = LABELS.BUTTON
 
-const LogoutLink = () => {
+const ICON_SIZE = 22
+
+const UserActions = () => {
   const { logout, user, hasUnsavedChanges } = use(UserContext)
   const { panels } = use(SelectedContext)
   const { setModalData } = use(ConceptModalContext)
@@ -35,42 +40,37 @@ const LogoutLink = () => {
 
   const loggedInUser = user.name === 'readonly' ? '' : `${user.name} |`
 
+  const { refresh } = use(RefreshContext)
+
+  const handleRefresh = () => {
+    refresh()
+  }
+
   return (
     <Stack
       alignItems='flex-end'
       height='50px'
       justifyContent='center'
       padding={0}
-      sx={{ padding: 0, mt: -3 }}
+      spacing={-0.5}
+      sx={{ padding: 0, mt: -2 }}
     >
       <Typography
         sx={{
           color: grey[300],
           fontSize: '0.75rem',
-          paddingRight: '3px',
-          mt: 1,
           textAlign: 'right',
         }}
         variant='caption'
       >
         {loggedInUser} {user.role}
       </Typography>
-      <Button
-        color='inherit'
-        size='small'
-        onClick={handleLogout}
-        sx={{
-          '&:hover': {
-            fontStyle: 'italic',
-          },
-          fontSize: '0.875rem',
-          padding: 0,
-        }}
-      >
-        Logout
-      </Button>
+      <Stack alignItems='center' direction='row' spacing={2}>
+        <RefreshAppIcon onClick={handleRefresh} size={ICON_SIZE} tooltip='Refresh Data' />
+        <LogoutIcon onClick={handleLogout} size={ICON_SIZE} tooltip='Logout' />
+      </Stack>
     </Stack>
   )
 }
 
-export default LogoutLink
+export default UserActions

@@ -14,7 +14,7 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const onText = 'On: Show available templates that can be used with this concept'
 const offText = 'Off: Show templates explicitly defined for this concept'
 
-const TemplatesAvailableTooltip = ({ children }) => {
+const ConceptTemplatesAvailableTooltip = ({ children }) => {
   const { getSettings } = use(SelectedContext)
 
   const available = getSettings(TEMPLATES.KEY, TEMPLATES.AVAILABLE)
@@ -55,4 +55,4 @@ const TemplatesAvailableTooltip = ({ children }) => {
   )
 }
 
-export default TemplatesAvailableTooltip
+export default ConceptTemplatesAvailableTooltip

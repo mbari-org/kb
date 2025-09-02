@@ -2,13 +2,12 @@ import { use } from 'react'
 
 import { AppBar, Box, Toolbar } from '@mui/material'
 
-import LogoutLink from '@/components/kb/nav/LogoutLink'
 import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 import PanelLink from '@/components/kb/nav/PanelLink'
+import UserActions from '@/components/kb/nav/UserActions'
 
 import panelMods from '@/components/kb/panels/modules'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -46,7 +45,7 @@ const NavBar = ({ selectPanel }) => {
           />
         ))}
         <Box style={{ flexGrow: 1 }} />
-        <LogoutLink />
+        <UserActions />
       </Toolbar>
     </AppBar>
   )

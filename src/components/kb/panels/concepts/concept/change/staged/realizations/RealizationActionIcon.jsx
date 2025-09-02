@@ -1,8 +1,8 @@
 import { use, useCallback } from 'react'
 
-import PropertyAddIcon from '@/components/common/icon/property/PropertyAddIcon'
-import PropertyDeleteIcon from '@/components/common/icon/property/PropertyDeleteIcon'
-import PropertyEditIcon from '@/components/common/icon/property/PropertyEditIcon'
+import PropertyAddIcon from '@/components/icon/property/PropertyAddIcon'
+import PropertyDeleteIcon from '@/components/icon/property/PropertyDeleteIcon'
+import PropertyEditIcon from '@/components/icon/property/PropertyEditIcon'
 
 import createRealizationModal from '@/components/kb/panels/concepts/concept/change/staged/realizations/createRealizationModal'
 import createRealizationOnClose from '@/components/kb/panels/concepts/concept/change/staged/realizations/createRealizationOnClose'
@@ -17,9 +17,16 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const ADD = CONCEPT_STATE.REALIZATION.ADD
 const DELETE = CONCEPT_STATE.REALIZATION.DELETE
 
-const RealizationEditIcon = ({ action, realizationIndex, size }) => {
+const RealizationActionIcon = ({ action, realizationIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
+
+  const tooltip =
+    action === ADD
+      ? 'Add Realization'
+      : action === DELETE
+      ? 'Delete Realization'
+      : 'Edit Realization'
 
   const onClick = useCallback(() => {
     const realizationItem =
@@ -42,7 +49,7 @@ const RealizationEditIcon = ({ action, realizationIndex, size }) => {
   const IconComponent =
     action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
-  return <IconComponent onClick={onClick} size={size} />
+  return <IconComponent onClick={onClick} size={size} tooltip={tooltip} />
 }
 
-export default RealizationEditIcon
+export default RealizationActionIcon

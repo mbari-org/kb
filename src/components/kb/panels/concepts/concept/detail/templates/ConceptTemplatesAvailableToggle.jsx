@@ -1,7 +1,7 @@
 import { use } from 'react'
 import { FormControlLabel, Switch } from '@mui/material'
 
-import TemplatesAvailableTooltip from '@/components/kb/panels/concepts/concept/detail/templates/TemplatesAvailableTooltip'
+import ConceptTemplatesAvailableTooltip from '@/components/kb/panels/concepts/concept/detail/templates/ConceptTemplatesAvailableTooltip'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -9,7 +9,7 @@ import { SELECTED } from '@/lib/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
-const TemplatesAvailableToggle = () => {
+const ConceptTemplatesAvailableToggle = () => {
   const { getSelected, getSettings, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
@@ -32,13 +32,13 @@ const TemplatesAvailableToggle = () => {
   }
 
   return (
-    <TemplatesAvailableTooltip>
+    <ConceptTemplatesAvailableTooltip>
       <FormControlLabel
         control={<Switch checked={available} onChange={handleAvailableChange} size='small' />}
         label='Available'
       />
-    </TemplatesAvailableTooltip>
+    </ConceptTemplatesAvailableTooltip>
   )
 }
 
-export default TemplatesAvailableToggle
+export default ConceptTemplatesAvailableToggle

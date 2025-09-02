@@ -1,8 +1,8 @@
 import { use, useCallback } from 'react'
 
-import PropertyAddIcon from '@/components/common/icon/property/PropertyAddIcon'
-import PropertyDeleteIcon from '@/components/common/icon/property/PropertyDeleteIcon'
-import PropertyEditIcon from '@/components/common/icon/property/PropertyEditIcon'
+import PropertyAddIcon from '@/components/icon/property/PropertyAddIcon'
+import PropertyDeleteIcon from '@/components/icon/property/PropertyDeleteIcon'
+import PropertyEditIcon from '@/components/icon/property/PropertyEditIcon'
 
 import createEditMediaModal from '@/components/kb/panels/concepts/concept/change/staged/media/edit/createEditMediaModal'
 import createEditMediaOnClose from '@/components/kb/panels/concepts/concept/change/staged/media/edit/createEditMediaOnClose'
@@ -25,7 +25,8 @@ const MediaModifyIcon = ({ action, mediaIndex, size }) => {
   const { setModal, setModalData } = use(ConceptModalContext)
 
   const onClick = useCallback(() => {
-    const mediaItem = action === ADD ? EMPTY_MEDIA_ITEM : mediaItemFields(stagedState.media[mediaIndex])
+    const mediaItem =
+      action === ADD ? EMPTY_MEDIA_ITEM : mediaItemFields(stagedState.media[mediaIndex])
 
     const actionModalData = {
       action,

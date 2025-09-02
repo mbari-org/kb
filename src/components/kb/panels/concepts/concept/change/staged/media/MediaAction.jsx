@@ -1,8 +1,6 @@
 import { use, useCallback } from 'react'
 
-import { Box, IconButton } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
-
+import MediaIcon from '@/components/icon/MediaIcon'
 import createEditMediaModal from '@/components/kb/panels/concepts/concept/change/staged/media/edit/createEditMediaModal'
 import createEditMediaOnClose from '@/components/kb/panels/concepts/concept/change/staged/media/edit/createEditMediaOnClose'
 
@@ -16,9 +14,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} }) => {
-  const theme = useTheme()
-
+const MediaAction = ({ Icon, action, color, position = 'right', size, tooltip, sx = {} }) => {
   const { stagedState, initialState, modifyConcept } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
@@ -43,36 +39,16 @@ const MediaActionButton = ({ Icon, action, color, position = 'right', sx = {} })
   }, [action, stagedState, initialState, modifyConcept, setModal, setModalData])
 
   return (
-    <Box
-      sx={{
-        alignItems: 'flex-start',
-        backgroundColor: theme.palette.background.paper,
-        bottom: 28,
-        cursor: 'pointer',
-        display: 'flex',
-        justifyContent: 'center',
-        [position]: 2,
-        position: 'absolute',
-        zIndex: 1,
-        ...sx,
-      }}
-    >
-      <IconButton
-        onClick={handleClick}
-        sx={{
-          '&:hover': {
-            ...theme.kb.icon.hover,
-            color: `${color}.main`,
-            transform: 'scale(1.25)',
-          },
-          backgroundColor: theme.palette.background.paper,
-          padding: 0.5,
-        }}
-      >
-        <Icon />
-      </IconButton>
-    </Box>
+    <MediaIcon
+      Icon={Icon}
+      color={color}
+      position={position}
+      size={size}
+      tooltip={tooltip}
+      onClick={handleClick}
+      sx={sx}
+    />
   )
 }
 
-export default MediaActionButton
+export default MediaAction

@@ -1,8 +1,8 @@
 import { use, useCallback } from 'react'
 
-import PropertyAddIcon from '@/components/common/icon/property/PropertyAddIcon'
-import PropertyDeleteIcon from '@/components/common/icon/property/PropertyDeleteIcon'
-import PropertyEditIcon from '@/components/common/icon/property/PropertyEditIcon'
+import PropertyAddIcon from '@/components/icon/property/PropertyAddIcon'
+import PropertyDeleteIcon from '@/components/icon/property/PropertyDeleteIcon'
+import PropertyEditIcon from '@/components/icon/property/PropertyEditIcon'
 
 import createAliasModal from '@/components/kb/panels/concepts/concept/change/staged/aliases/createAliasModal'
 import createAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/aliases/createAliasOnClose'
@@ -17,9 +17,11 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const ADD = CONCEPT_STATE.ALIAS.ADD
 const DELETE = CONCEPT_STATE.ALIAS.DELETE
 
-const AliasModifyIcon = ({ action, aliasIndex, size }) => {
+const AliasActionIcon = ({ action, aliasIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
+
+  const tooltip = action === ADD ? 'Add Alias' : action === DELETE ? 'Delete Alias' : 'Edit Alias'
 
   const onClick = useCallback(() => {
     const aliasItem = action === ADD ? EMPTY_ALIAS : aliasFields(stagedState.aliases[aliasIndex])
@@ -41,7 +43,7 @@ const AliasModifyIcon = ({ action, aliasIndex, size }) => {
   const IconComponent =
     action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
-  return <IconComponent onClick={onClick} size={size} />
+  return <IconComponent onClick={onClick} size={size} tooltip={tooltip} />
 }
 
-export default AliasModifyIcon
+export default AliasActionIcon
