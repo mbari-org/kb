@@ -7,7 +7,7 @@ import settingsStore from '@/lib/store/settingsStore'
 import usePanelSelect from '@/contexts/selected/usePanelSelect'
 import useConceptSelect from '@/contexts/selected/useConceptSelect'
 
-import { SELECTED } from '@/lib/constants'
+import { SELECTED, UNSAFE_ACTION } from '@/lib/constants'
 
 const { CONCEPT, PANEL } = SELECTED
 const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
@@ -46,7 +46,7 @@ const SelectedProvider = ({ children }) => {
     ({ concept: conceptName, panel: panelName, force = false }) => {
       if (conceptName && conceptName !== conceptSelect.current()) {
         if (!force && hasUnsavedChanges && panelSelect.current() === SELECTED.PANELS.CONCEPTS) {
-          setUnsafeAction({ type: 'concept', payload: { concept: conceptName } })
+          setUnsafeAction({ type: UNSAFE_ACTION.CONCEPT, payload: { concept: conceptName } })
           return
         }
         conceptSelect.push(conceptName)

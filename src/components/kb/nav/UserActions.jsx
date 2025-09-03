@@ -5,34 +5,24 @@ import { grey } from '@mui/material/colors'
 
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
-
-import { LABELS, SELECTED } from '@/lib/constants'
+import { SELECTED, UNSAFE_ACTION } from '@/lib/constants'
 import LogoutIcon from '@/components/icon/LogoutIcon'
 import RefreshAppIcon from '@/components/icon/RefreshAppIcon'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 
-const { CONTINUE } = LABELS.BUTTON
-
 const ICON_SIZE = 22
 
 const UserActions = () => {
-  const { logout, user, hasUnsavedChanges } = use(UserContext)
+  const { logout, user, hasUnsavedChanges, setUnsafeAction } = use(UserContext)
   const { panels } = use(SelectedContext)
-  const { setModalData } = use(ConceptModalContext)
-
-  const displayStaged = useDisplayStaged()
 
   const handleLogout = () => {
-    // Only check for unsaved data if we're currently on the concepts panel
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
     if (hasModifications) {
-      displayStaged(CONTINUE)
-      setModalData(prev => ({ ...prev, logout: true }))
+      setUnsafeAction({ type: UNSAFE_ACTION.LOGOUT, payload: {} })
     } else {
       logout()
     }
@@ -43,7 +33,14 @@ const UserActions = () => {
   const { refresh } = use(RefreshContext)
 
   const handleRefresh = () => {
-    refresh()
+    const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
+    const hasModifications = isOnConceptsPanel && hasUnsavedChanges
+
+    if (hasModifications) {
+      setUnsafeAction({ type: UNSAFE_ACTION.REFRESH, payload: {} })
+    } else {
+      refresh()
+    }
   }
 
   return (

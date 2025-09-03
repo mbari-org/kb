@@ -300,6 +300,13 @@ export const STORE = {
 
 export const TO_CONCEPT_SPECIAL = ['self', 'nil']
 
+export const UNSAFE_ACTION = {
+  CONCEPT: 'concept',
+  PANEL: 'panel',
+  LOGOUT: 'logout',
+  REFRESH: 'refresh',
+}
+
 export const USER_ROLES = {
   ADMIN: 'Admin',
   MAINT: 'Maint',

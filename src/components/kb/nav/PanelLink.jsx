@@ -5,20 +5,12 @@ import { Button } from '@mui/material'
 
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
-
-import { LABELS, SELECTED } from '@/lib/constants'
-
-const { CONTINUE } = LABELS.BUTTON
+import { SELECTED, UNSAFE_ACTION } from '@/lib/constants'
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
   const { panels } = use(SelectedContext)
-  const { hasUnsavedChanges } = use(UserContext)
-  const { setModalData } = use(ConceptModalContext)
-
-  const displayStaged = useDisplayStaged()
+  const { hasUnsavedChanges, setUnsafeAction } = use(UserContext)
 
   const currentPanel = panels.current()
 
@@ -44,13 +36,11 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
   const handleClick = () => {
     if (name === currentPanel) return
 
-    // Check if we're switching away from Concepts panel with unsaved changes
     const isOnConceptsPanel = currentPanel === SELECTED.PANELS.CONCEPTS
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
     if (hasModifications) {
-      displayStaged(CONTINUE)
-      setModalData(prev => ({ ...prev, panel: name }))
+      setUnsafeAction({ type: UNSAFE_ACTION.PANEL, payload: { panel: name } })
     } else {
       selectPanel(name)
     }
