@@ -5,7 +5,7 @@ import { Stack } from '@mui/material'
 import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
 import ConceptView from '@/components/kb/panels/concepts/concept/ConceptView'
 import ConceptPath from '@/components/kb/panels/concepts/concept/ConceptPath'
-import ConceptViewToggle from '@/components/kb/panels/concepts/concept/toggleView/ConceptViewToggle'
+// import ConceptViewToggle from '@/components/kb/panels/concepts/concept/toggleView/ConceptViewToggle'
 
 import { isReadOnly } from '@/lib/auth/role'
 
@@ -33,7 +33,7 @@ const Concept = () => {
     >
       <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <ConceptPath />
-        <ConceptViewToggle />
+        {/* <ConceptViewToggle /> */}
       </Stack>
       <ConceptView />
       {!isReadOnly(user) && <ConceptEditingActions />}
