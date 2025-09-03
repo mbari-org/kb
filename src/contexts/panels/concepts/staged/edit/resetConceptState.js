@@ -31,7 +31,6 @@ const _resetMedia = (dispatch, initialState) => {
   })
 }
 
-
 const resetRank = (dispatch, initialState) => {
   dispatch({
     type: RESET.RANK,
@@ -108,7 +107,6 @@ const resetConceptState = (action, dispatch, initialState) => {
         update: { realizations: initialState.realizations, index: action.update.index },
       })
       break
-
 
     case RESET.TO_INITIAL:
       resetToInitial(dispatch, initialState)

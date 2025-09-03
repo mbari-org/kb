@@ -17,51 +17,51 @@ export const REFERENCE_FIELDS = {
 
 export const createReferenceValidator =
   (isEdit = false, isDoiUnique = () => true) =>
-  referenceData => {
-    const requiredFields = isEdit ? REFERENCE_FIELDS.REQUIRED_BASE : REFERENCE_FIELDS.REQUIRED_ADD
+    referenceData => {
+      const requiredFields = isEdit ? REFERENCE_FIELDS.REQUIRED_BASE : REFERENCE_FIELDS.REQUIRED_ADD
 
-    const allFieldsFilled = requiredFields.every(field => {
-      const value = referenceData[field] || ''
-      return value.trim() !== ''
-    })
+      const allFieldsFilled = requiredFields.every(field => {
+        const value = referenceData[field] || ''
+        return value.trim() !== ''
+      })
 
-    const isDoiValid = isDoiUnique(referenceData.doi, referenceData.id)
+      const isDoiValid = isDoiUnique(referenceData.doi, referenceData.id)
 
-    return allFieldsFilled && isDoiValid
-  }
+      return allFieldsFilled && isDoiValid
+    }
 
 export const createChangeDetector =
   (isEdit = false) =>
-  (referenceData, original = null) => {
-    if (!isEdit) {
+    (referenceData, original = null) => {
+      if (!isEdit) {
       // For add mode, any non-empty field means changes
-      const fieldsToCheck = REFERENCE_FIELDS.REQUIRED_ADD
-      return (
-        fieldsToCheck.some(field => {
-          const value = referenceData[field] || ''
-          return value.trim() !== ''
-        }) ||
+        const fieldsToCheck = REFERENCE_FIELDS.REQUIRED_ADD
+        return (
+          fieldsToCheck.some(field => {
+            const value = referenceData[field] || ''
+            return value.trim() !== ''
+          }) ||
         (referenceData.concepts && referenceData.concepts.length > 0)
-      )
-    }
-
-    // For edit mode, compare with original
-    if (!original) {
-      // If no original reference, consider any data as changes
-      return true
-    }
-
-    const fieldsToCompare = REFERENCE_FIELDS.EDITABLE
-    return fieldsToCompare.some(field => {
-      if (field === 'concepts') {
-        // Compare arrays
-        const originalConcepts = original[field] || []
-        const currentConcepts = referenceData[field] || []
-        return JSON.stringify(originalConcepts.sort()) !== JSON.stringify(currentConcepts.sort())
+        )
       }
-      return referenceData[field] !== original[field]
-    })
-  }
+
+      // For edit mode, compare with original
+      if (!original) {
+      // If no original reference, consider any data as changes
+        return true
+      }
+
+      const fieldsToCompare = REFERENCE_FIELDS.EDITABLE
+      return fieldsToCompare.some(field => {
+        if (field === 'concepts') {
+        // Compare arrays
+          const originalConcepts = original[field] || []
+          const currentConcepts = referenceData[field] || []
+          return JSON.stringify(originalConcepts.sort()) !== JSON.stringify(currentConcepts.sort())
+        }
+        return referenceData[field] !== original[field]
+      })
+    }
 
 export const createFormChangeHandler = (
   updateModalData,
@@ -90,21 +90,21 @@ export const createFormChangeHandler = (
 
 export const createModalActions =
   (handleCancel, handleCommit, saveLabel = SAVE) =>
-  currentModalData =>
-    [
-      {
-        color: 'cancel',
-        disabled: false,
-        label: CANCEL,
-        onClick: handleCancel,
-      },
-      {
-        color: 'primary',
-        disabled: !currentModalData.isValid || !currentModalData.hasChanges,
-        label: saveLabel,
-        onClick: () => handleCommit(currentModalData.reference, currentModalData.original),
-      },
-    ]
+    currentModalData =>
+      [
+        {
+          color: 'cancel',
+          disabled: false,
+          label: CANCEL,
+          onClick: handleCancel,
+        },
+        {
+          color: 'primary',
+          disabled: !currentModalData.isValid || !currentModalData.hasChanges,
+          label: saveLabel,
+          onClick: () => handleCommit(currentModalData.reference, currentModalData.original),
+        },
+      ]
 
 export const createModalContent = (handleFormChange, isEdit) => {
   const formKey = isEdit ? 'edit-reference-form' : 'add-reference-form'

@@ -13,44 +13,44 @@ const EDITABLE_ADD = [...EDITABLE, 'username']
 
 export const createUserValidator =
   (isEdit = false) =>
-  userData => {
-    const requiredFields = isEdit ? EDITABLE_ADD : [...EDITABLE_ADD, 'password']
+    userData => {
+      const requiredFields = isEdit ? EDITABLE_ADD : [...EDITABLE_ADD, 'password']
 
-    const allFieldsFilled = requiredFields.every(field => {
-      const value = userData[field] || ''
-      return value.trim() !== ''
-    })
-
-    const isEmailValid = EMAIL_REGEX.test(userData.email || '')
-
-    const passwordsMatch = isEdit
-      ? userData.password
-        ? userData.password === userData.confirmPassword
-        : true
-      : userData.password === userData.confirmPassword
-
-    return allFieldsFilled && isEmailValid && passwordsMatch
-  }
-
-const createChangeDetector =
-  (isEdit = false) =>
-  (userData, original = null) => {
-    if (!isEdit) {
-      // For add mode, any non-empty field means changes
-      const fieldsToCheck = [...EDITABLE_ADD, 'password']
-      return fieldsToCheck.some(field => {
+      const allFieldsFilled = requiredFields.every(field => {
         const value = userData[field] || ''
         return value.trim() !== ''
       })
+
+      const isEmailValid = EMAIL_REGEX.test(userData.email || '')
+
+      const passwordsMatch = isEdit
+        ? userData.password
+          ? userData.password === userData.confirmPassword
+          : true
+        : userData.password === userData.confirmPassword
+
+      return allFieldsFilled && isEmailValid && passwordsMatch
     }
 
-    // For edit mode, compare with original
-    const fieldsToCompare = EDITABLE
-    return (
-      fieldsToCompare.some(field => userData[field] !== original[field]) ||
+const createChangeDetector =
+  (isEdit = false) =>
+    (userData, original = null) => {
+      if (!isEdit) {
+      // For add mode, any non-empty field means changes
+        const fieldsToCheck = [...EDITABLE_ADD, 'password']
+        return fieldsToCheck.some(field => {
+          const value = userData[field] || ''
+          return value.trim() !== ''
+        })
+      }
+
+      // For edit mode, compare with original
+      const fieldsToCompare = EDITABLE
+      return (
+        fieldsToCompare.some(field => userData[field] !== original[field]) ||
       (userData.password && userData.password.trim() !== '')
-    )
-  }
+      )
+    }
 
 const createFormChangeHandler = (updateModalData, isEdit = false) => {
   const validateUser = createUserValidator(isEdit)
@@ -76,21 +76,21 @@ const createFormChangeHandler = (updateModalData, isEdit = false) => {
 
 export const createModalActions =
   (handleCancel, handleCommit, saveLabel = SAVE) =>
-  currentModalData =>
-    [
-      {
-        color: 'cancel',
-        disabled: false,
-        label: CANCEL,
-        onClick: handleCancel,
-      },
-      {
-        color: 'primary',
-        disabled: !currentModalData.isValid || !currentModalData.hasChanges,
-        label: saveLabel,
-        onClick: () => handleCommit(currentModalData.user, currentModalData.original),
-      },
-    ]
+    currentModalData =>
+      [
+        {
+          color: 'cancel',
+          disabled: false,
+          label: CANCEL,
+          onClick: handleCancel,
+        },
+        {
+          color: 'primary',
+          disabled: !currentModalData.isValid || !currentModalData.hasChanges,
+          label: saveLabel,
+          onClick: () => handleCommit(currentModalData.user, currentModalData.original),
+        },
+      ]
 
 export const createModalContent = (handleFormChange, users, isEdit) => {
   const formKey = isEdit ? 'edit-user-form' : 'add-user-form'
@@ -202,7 +202,7 @@ export const createLockUserTitle = currentModalData => {
   const { user, isLastAdmin } = currentModalData
 
   if (isLastAdmin) {
-    return "Can't Lock Last Admin"
+    return 'Can\'t Lock Last Admin'
   }
 
   return user?.locked ? 'Unlock User' : 'Lock User'

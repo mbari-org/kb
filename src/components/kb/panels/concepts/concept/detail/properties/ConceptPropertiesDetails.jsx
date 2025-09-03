@@ -65,8 +65,8 @@ const ConceptPropertiesDetails = ({
                       {renderComponent
                         ? renderComponent(item, index)
                         : typeof renderItem.content === 'function'
-                        ? renderItem.content(item, index)
-                        : renderItem.content}
+                          ? renderItem.content(item, index)
+                          : renderItem.content}
                     </Box>
                   ))}
                 {shouldShowEmptyPlaceholder && (

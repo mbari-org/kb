@@ -15,7 +15,7 @@ import { editValue } from '@/lib/kb/state/value'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET, VALUE } =
+const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } =
   CONCEPT_STATE
 
 const conceptStateReducer = (state, { type, update }) => {

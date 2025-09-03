@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 
 import PanelModal from '@/components/modal/PanelModal'
 
-
 const useUsersModal = (modalConfig, modalDataRef, closeModalRef) => {
   return useMemo(() => {
     if (!modalConfig) return null

@@ -25,8 +25,8 @@ const RealizationActionIcon = ({ action, realizationIndex, size }) => {
     action === ADD
       ? 'Add Realization'
       : action === DELETE
-      ? 'Delete Realization'
-      : 'Edit Realization'
+        ? 'Delete Realization'
+        : 'Edit Realization'
 
   const onClick = useCallback(() => {
     const realizationItem =

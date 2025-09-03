@@ -36,7 +36,7 @@ const usePanelPreloader = (currentPanel, onPreload) => {
       // Preload next and previous panels
       const nextPanel = panelMods[currentIndex + 1]
       const prevPanel = panelMods[currentIndex - 1]
-      
+
       if (nextPanel) onPreload(nextPanel.name)
       if (prevPanel) onPreload(prevPanel.name)
     }

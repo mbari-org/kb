@@ -44,7 +44,7 @@ const MediaPreview = ({ setPreviewOn }) => {
         }}
       >
         <img
-          alt={`Unable to display Media! Check console for URL.`}
+          alt={'Unable to display Media! Check console for URL.'}
           onClick={() => setPreviewOn(true)}
           src={mediaItem?.url}
           style={{

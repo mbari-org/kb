@@ -43,16 +43,16 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   //  not the item itself. The slotsProps 'item' field, passed to ConceptTreeItem in props,
   //  provides display data.
   const slots = useMemo(() => ({ item: ConceptTreeItem }), [])
-  
+
   const selectedConceptName = concept?.name
   const slotProps = useMemo(() => ({
     item: ({ itemId }) => {
       const item = createConceptItem(taxonomy, itemId)
-      return { 
+      return {
         item: {
           ...item,
-          isSelected: itemId === selectedConceptName
-        }
+          isSelected: itemId === selectedConceptName,
+        },
       }
     },
   }), [taxonomy, selectedConceptName, createConceptItem])

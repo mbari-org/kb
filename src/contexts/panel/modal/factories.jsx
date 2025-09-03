@@ -31,4 +31,3 @@ export const createContentView = contentFactory => {
   }
   return ContentView
 }
-

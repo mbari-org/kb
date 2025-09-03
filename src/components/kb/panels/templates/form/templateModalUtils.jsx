@@ -18,17 +18,17 @@ export const createTemplateValidator = () => templateData =>
 
 const createChangeDetector =
   (isEdit = false) =>
-  (templateData, original = null) => {
-    if (!isEdit) {
-      return TEMPLATE_FIELDS.some(field => hasInput(templateData, field))
-    }
+    (templateData, original = null) => {
+      if (!isEdit) {
+        return TEMPLATE_FIELDS.some(field => hasInput(templateData, field))
+      }
 
-    if (!original) {
-      return true
-    }
+      if (!original) {
+        return true
+      }
 
-    return TEMPLATE_FIELDS.some(field => templateData[field] !== original[field])
-  }
+      return TEMPLATE_FIELDS.some(field => templateData[field] !== original[field])
+    }
 
 const createFormChangeHandler = (updateModalData, isEdit = false) => {
   const validateTemplate = createTemplateValidator(isEdit)
@@ -53,44 +53,44 @@ const createFormChangeHandler = (updateModalData, isEdit = false) => {
 
 export const createModalActions =
   (handleCancel, handleCommit, updateModalData, saveLabel = SAVE) =>
-  currentModalData => {
-    const { confirmDiscard = false, hasChanges = false } = currentModalData || {}
+    currentModalData => {
+      const { confirmDiscard = false, hasChanges = false } = currentModalData || {}
 
-    if (confirmDiscard) {
+      if (confirmDiscard) {
+        return [
+          {
+            color: 'cancel',
+            disabled: false,
+            label: CONFIRM_DISCARD,
+            onClick: handleCancel,
+          },
+          {
+            color: 'main',
+            disabled: false,
+            label: REJECT_DISCARD,
+            onClick: () => updateModalData({ confirmDiscard: false, alert: null }),
+          },
+        ]
+      }
+
       return [
         {
           color: 'cancel',
           disabled: false,
-          label: CONFIRM_DISCARD,
-          onClick: handleCancel,
+          label: DISCARD,
+          onClick: () =>
+            hasChanges
+              ? updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
+              : handleCancel(),
         },
         {
-          color: 'main',
-          disabled: false,
-          label: REJECT_DISCARD,
-          onClick: () => updateModalData({ confirmDiscard: false, alert: null }),
+          color: 'primary',
+          disabled: !currentModalData.isValid || !currentModalData.hasChanges,
+          label: saveLabel,
+          onClick: () => handleCommit(currentModalData.template, currentModalData.original),
         },
       ]
     }
-
-    return [
-      {
-        color: 'cancel',
-        disabled: false,
-        label: DISCARD,
-        onClick: () =>
-          hasChanges
-            ? updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
-            : handleCancel(),
-      },
-      {
-        color: 'primary',
-        disabled: !currentModalData.isValid || !currentModalData.hasChanges,
-        label: saveLabel,
-        onClick: () => handleCommit(currentModalData.template, currentModalData.original),
-      },
-    ]
-  }
 
 export const createModalContent = (handleFormChange, isEdit) => {
   const formKey = isEdit ? 'edit-template-form' : 'add-template-form'

@@ -159,8 +159,8 @@ const useHistoryColumns = ({ type }) => {
     type === TYPE.PENDING
       ? [inspectColumn(), ...baseColumns]
       : type === TYPE.APPROVED
-      ? [inspectColumn(), ...baseColumns, ...processorColumns]
-      : [approvedColumn, ...baseColumns, ...processorColumns]
+        ? [inspectColumn(), ...baseColumns, ...processorColumns]
+        : [approvedColumn, ...baseColumns, ...processorColumns]
 
   return columns
 }

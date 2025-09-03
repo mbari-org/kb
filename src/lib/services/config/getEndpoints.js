@@ -14,7 +14,7 @@ const getEndpoints = async url => {
 
     return { endpoints: await response.json() }
   } catch {
-    return { error: `Config service: Failed access`, url }
+    return { error: 'Config service: Failed access', url }
   }
 }
 

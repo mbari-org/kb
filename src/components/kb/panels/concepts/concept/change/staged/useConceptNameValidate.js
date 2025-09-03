@@ -51,10 +51,10 @@ const useConceptNameValidate = (formData, modifiedFields) => {
   const nameHelperText = !modifiedFields.name
     ? ''
     : (formData.name || formData.value || '').trim() === ''
-    ? 'Name cannot be empty'
-    : !isValidName
-    ? 'Concept name already exists'
-    : ''
+        ? 'Name cannot be empty'
+        : !isValidName
+            ? 'Concept name already exists'
+            : ''
 
   return {
     nameError,

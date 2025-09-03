@@ -91,8 +91,8 @@ const getFileName = (selectedType, selectedConcept, conceptHistoryExtent) => {
       conceptHistoryExtent === null
         ? ''
         : conceptHistoryExtent === EXTENT.CHILDREN
-        ? '-and-Children'
-        : '-and-Descendants'
+          ? '-and-Children'
+          : '-and-Descendants'
     return `KB-${conceptFileName(selectedConcept)}${extent}-History.csv`
   }
 

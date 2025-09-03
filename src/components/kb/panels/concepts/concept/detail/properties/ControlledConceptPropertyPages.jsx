@@ -63,11 +63,11 @@ const ControlledConceptPropertyPages = ({
       const calculatedDirection = newPage > currentPage ? 'down' : 'up'
       setAnimationDirection(calculatedDirection)
     }
-    
+
     if (onPageChange) {
       onPageChange(newPage, direction)
     }
-    
+
     // Ensure accordion is expanded when pagination buttons are clicked (unless fixedHeight is set)
     if (!expanded && fixedHeight === undefined) {
       setExpanded(true)

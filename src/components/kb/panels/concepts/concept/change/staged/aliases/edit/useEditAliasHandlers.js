@@ -43,7 +43,7 @@ const useEditAliasHandlers = (formAlias, setFormAlias, stagedAlias) => {
         ...formAlias,
         [field]: value,
       }
-      
+
       // Immediate UI update
       setFormAlias(updatedAlias)
 

@@ -74,8 +74,8 @@ const HistoryProvider = ({ children }) => {
         conceptHistoryExtent === EXTENT.CHILDREN
           ? 'Loading children history...'
           : conceptHistoryExtent === EXTENT.DESCENDANTS
-          ? 'Loading descendants history...'
-          : 'Loading data...'
+            ? 'Loading descendants history...'
+            : 'Loading data...'
 
       // Delay showing the overlay to avoid UI flash on fast operations
       const timer = setTimeout(() => {

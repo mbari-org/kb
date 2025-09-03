@@ -38,7 +38,7 @@ const useChangeNameHandlers = (name, setName, nameError, setModifiedFields) => {
       value: event.target.value,
     }
     setName(prevName => ({ ...prevName, ...updatedName }))
-    
+
     // Only mark as modified if the value is actually different from the original
     const isActuallyModified = updatedName.value !== concept.name
     setModifiedFields({ name: isActuallyModified })

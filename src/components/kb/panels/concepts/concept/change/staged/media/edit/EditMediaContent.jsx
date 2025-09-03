@@ -134,14 +134,14 @@ const EditMediaContent = () => {
     formMediaItem.url.trim() === ''
       ? 'URL cannot be empty'
       : !isUrlValid(formMediaItem.url)
-      ? 'Please enter a valid URL'
-      : urlStatus.loading
-      ? 'Checking URL...'
-      : !urlStatus.valid
-      ? 'URL is not accessible'
-      : urlStatus.isDuplicate
-      ? 'This media is already being used'
-      : ''
+          ? 'Please enter a valid URL'
+          : urlStatus.loading
+            ? 'Checking URL...'
+            : !urlStatus.valid
+                ? 'URL is not accessible'
+                : urlStatus.isDuplicate
+                  ? 'This media is already being used'
+                  : ''
 
   const urlSlotProps = {
     input: {
@@ -150,10 +150,10 @@ const EditMediaContent = () => {
           {!urlStatus.loading &&
             urlStatus.valid &&
             isUrlValid(formMediaItem.url) &&
-            formMediaItem.url.trim() !== '' && (
-              <IconButton onClick={() => setPreviewOn(true)} edge='end'>
-                <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
-              </IconButton>
+            formMediaItem.url.trim() !== '' &&
+            (<IconButton onClick={() => setPreviewOn(true)} edge='end'>
+              <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
+            </IconButton>
             )}
         </InputAdornment>
       ),
