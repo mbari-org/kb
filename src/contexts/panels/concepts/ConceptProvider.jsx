@@ -26,9 +26,9 @@ const { CONTINUE } = LABELS.BUTTON
 const ConceptProvider = ({ children }) => {
   const { setModalData } = use(ConceptModalContext)
   const { refreshData: refreshPanelData } = use(PanelDataContext)
-  const { getSelected, panels } = use(SelectedContext)
+  const { getSelected, panels, updateSelected } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { hasUnsavedChanges, setHasUnsavedChanges } = use(UserContext)
+  const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction, setUnsafeAction } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
@@ -137,6 +137,13 @@ const ConceptProvider = ({ children }) => {
       setHasUnsavedChanges(false)
     }
   }, [initialState, stagedState, panels, setHasUnsavedChanges])
+
+  useEffect(() => {
+    if (!unsafeAction) return
+
+    displayStaged(CONTINUE)
+    setModalData(prev => ({ ...prev, unsafeAction }))
+  }, [unsafeAction, displayStaged, setModalData])
 
   const value = useMemo(
     () => ({

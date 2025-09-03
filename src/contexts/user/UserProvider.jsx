@@ -15,8 +15,10 @@ const UserProvider = ({ children }) => {
 
   const { config } = use(ConfigContext)
 
-  const [user, setUser] = useState(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [unsafeAction, setUnsafeAction] = useState(null)
+  const [user, setUser] = useState(null)
+
   const mountedRef = useRef(true)
   const refreshingRef = useRef(false)
 
@@ -56,14 +58,16 @@ const UserProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      hasUnsavedChanges,
       logout,
       processAuth,
       refreshUser,
-      user,
-      hasUnsavedChanges,
       setHasUnsavedChanges,
+      setUnsafeAction,
+      unsafeAction,
+      user,
     }),
-    [logout, processAuth, refreshUser, user, hasUnsavedChanges]
+    [logout, processAuth, refreshUser, user, hasUnsavedChanges, unsafeAction]
   )
 
   return <UserContext value={value}>{children}</UserContext>

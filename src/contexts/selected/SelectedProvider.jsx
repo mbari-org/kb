@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import settingsStore from '@/lib/store/settingsStore'
 import usePanelSelect from '@/contexts/selected/usePanelSelect'
@@ -13,6 +14,7 @@ const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
 
 const SelectedProvider = ({ children }) => {
   const [settings, setSettings] = useState(null)
+  const { hasUnsavedChanges, setUnsafeAction } = use(UserContext)
 
   const conceptSelect = useConceptSelect()
   const panelSelect = usePanelSelect()
@@ -41,8 +43,12 @@ const SelectedProvider = ({ children }) => {
   )
 
   const updateSelected = useCallback(
-    ({ concept: conceptName, panel: panelName }) => {
+    ({ concept: conceptName, panel: panelName, force = false }) => {
       if (conceptName && conceptName !== conceptSelect.current()) {
+        if (!force && hasUnsavedChanges && panelSelect.current() === SELECTED.PANELS.CONCEPTS) {
+          setUnsafeAction({ type: 'concept', payload: { concept: conceptName } })
+          return
+        }
         conceptSelect.push(conceptName)
       }
 
@@ -50,7 +56,7 @@ const SelectedProvider = ({ children }) => {
         panelSelect.push(panelName)
       }
     },
-    [conceptSelect, panelSelect]
+    [conceptSelect, panelSelect, hasUnsavedChanges, setUnsafeAction]
   )
 
   const updateSettings = useCallback(({ history, references, templates }) => {
