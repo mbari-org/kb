@@ -36,14 +36,17 @@ const useStructureChoices = () => {
 
   const isRoot = isTaxonomyRoot(concept)
 
+  const hasChildren = concept?.children?.length > 0
+
   const disableDelete = useMemo(
     () =>
       isRoot ||
+      hasChildren ||
       hasStagedChildren ||
       hasStagedDelete ||
       hasStateChange(initialState, stagedState) ||
       pendingStructure.any,
-    [hasStagedChildren, hasStagedDelete, initialState, isRoot, pendingStructure.any, stagedState]
+    [hasChildren, hasStagedChildren, hasStagedDelete, initialState, isRoot, pendingStructure.any, stagedState]
   )
   const disableChangeName =
     isRoot || pendingStructure.name || hasStagedDelete || hasStagedName || hasStagedChildren
