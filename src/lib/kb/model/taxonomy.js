@@ -1,6 +1,9 @@
+import { putConceptAnnotation as apiPutConceptAnnotation } from '@/lib/api/annotations'
+
 import {
   getConceptChildren as apiChildren,
   getConcept as apiConcept,
+  getConceptAnnotations as apiConceptAnnotations,
   getConceptNames as apiConceptNames,
   deleteConcept as apiDelete,
   getConceptParent as apiParent,
@@ -43,10 +46,22 @@ const closestConcept = (taxonomy, concept) => {
   return getConcept(taxonomy, parent.children[childIndex - 1])
 }
 
-const deleteConcept = async (taxonomy, concept, apiFns) => {
+const deleteConcept = async (taxonomy, concept, reassignTo, apiFns) => {
   if (0 < concept.children.length) {
     throw new Error(`Concept "${concept.name}" has children.`)
   }
+
+  const conceptAnnotations = await apiFns.apiPayload(apiConceptAnnotations, concept.name)
+
+  const annotationUpdateResults = await Promise.all(
+    conceptAnnotations.map(annotation =>
+      apiFns.apiRaw(apiPutConceptAnnotation, { ...annotation, concept: reassignTo })
+    )
+  )
+
+  // CxTBD Should we attempt to revert any successful updates here?
+  const error = annotationUpdateResults.find(result => result.error)
+  if (error) throw error.error.original || new Error('Failed to update annotations')
 
   await apiFns.apiPayload(apiDelete, concept.name)
 

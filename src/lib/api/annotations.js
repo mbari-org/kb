@@ -8,7 +8,10 @@ const getConceptAnnotationCount = async (config, conceptName) =>
     concepts: [conceptName],
   })
 
+const putConceptAnnotation = async (config, payload) =>
+  annosaurusPut(config, ['annotations', payload.observation_uuid], payload)
+
 const renameToConceptAnnotations = async (config, payload) =>
   annosaurusPut(config, ['associations', 'toconcept', 'rename'], payload)
 
-export { getConceptAnnotationCount, getConceptAnnotations, renameToConceptAnnotations }
+export { getConceptAnnotationCount, getConceptAnnotations, putConceptAnnotation, renameToConceptAnnotations }

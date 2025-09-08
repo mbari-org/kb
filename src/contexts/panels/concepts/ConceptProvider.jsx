@@ -26,9 +26,9 @@ const { CONTINUE } = LABELS.BUTTON
 const ConceptProvider = ({ children }) => {
   const { setModalData } = use(ConceptModalContext)
   const { refreshData: refreshPanelData } = use(PanelDataContext)
-  const { getSelected, panels, updateSelected } = use(SelectedContext)
+  const { getSelected, panels  } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction, setUnsafeAction } = use(UserContext)
+  const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction  } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)

@@ -20,7 +20,7 @@ const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 
 const StagedActions = ({ intent }) => {
-  const { concept, confirmReset, initialState, modifyConcept, setEditing, stagedState } =
+  const { confirmReset, initialState, modifyConcept, setEditing, stagedState } =
     use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { refresh } = use(RefreshContext)

@@ -16,7 +16,7 @@ const useDeleteConceptModal = () => {
   return useCallback(() => {
     setModalData(prev => ({
       ...prev,
-      parent: concept.parent,
+      reassignTo: concept.parent,
       modified: true,
       isValid: true,
       alert: null,

@@ -19,7 +19,7 @@ const DeleteConceptContent = () => {
 
   const [annotationCount, setAnnotationCount] = useState(0)
   const [isValid, setIsValid] = useState(true)
-  const [toConcept, setToConcept] = useState(concept.parent)
+  const [reassignTo, setReassignTo] = useState(concept.parent)
 
   const allowedChoices = useMemo(() => {
     return getNames().filter(name => name !== concept.name)
@@ -30,18 +30,18 @@ const DeleteConceptContent = () => {
   }
 
   const handleChange = (_event, selectedName) => {
-    setToConcept(selectedName)
+    setReassignTo(selectedName)
     const valid = validateChoice(selectedName)
     setIsValid(valid)
-    setModalData(prev => ({ ...prev, parent: selectedName, modified: valid, isValid: valid }))
+    setModalData(prev => ({ ...prev, toConcept: selectedName, modified: valid, isValid: valid }))
   }
 
   const handleKeyUp = event => {
-    const conceptName = event.target.value.trim()
-    setToConcept(conceptName)
-    const valid = validateChoice(conceptName)
+    const reassignTo = event.target.value.trim()
+    setReassignTo(reassignTo)
+    const valid = validateChoice(reassignTo)
     setIsValid(valid)
-    setModalData(prev => ({ ...prev, parent: conceptName, modified: valid, isValid: valid }))
+    setModalData(prev => ({ ...prev, reassignTo: reassignTo, modified: valid, isValid: valid }))
   }
 
   useEffect(() => {
@@ -52,10 +52,6 @@ const DeleteConceptContent = () => {
     }
     getCount()
   }, [apiFns, concept.name])
-
-  useEffect(() => {
-    setModalData(prev => ({ ...prev, parent: concept.parent, modified: true, isValid: true }))
-  }, [concept.parent, setModalData])
 
   const annotationsMessage =
     annotationCount === 0
@@ -81,7 +77,7 @@ const DeleteConceptContent = () => {
                 label='Assign To'
                 omitChoices={[concept.name]}
                 required
-                value={toConcept}
+                value={reassignTo}
               />
             </Box>
           )}
@@ -89,7 +85,7 @@ const DeleteConceptContent = () => {
 
         {!isValid && (
           <Typography color='cancel' variant='caption'>
-            Please select a valid concept to assign the annotations to
+            Please select a valid concept to reassign annotations
           </Typography>
         )}
       </Stack>

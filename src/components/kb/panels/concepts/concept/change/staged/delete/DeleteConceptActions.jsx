@@ -27,7 +27,8 @@ const DeleteConceptActions = () => {
         setModalData(prev => ({ ...prev, alertType: 'delete' }))
       }
     }
-    return createActions({ colors, labels, onAction }, 'DeleteConceptActions:Primary')
+    const disabled = [false, !modalData.isValid]
+    return createActions({ colors, disabled, labels, onAction }, 'DeleteConceptActions:Primary')
   }
 
   const colors = ['main', 'cancel']
@@ -39,7 +40,8 @@ const DeleteConceptActions = () => {
     }
     if (label === 'Confirm') {
       setProcessing('Deleting concept...')
-      deleteConcept(concept)
+      console.log('Deleting concept...', modalData)
+      deleteConcept(concept, modalData.reassignTo)
         .then(result => {
           closeModal(true, () => {
             loadConcept(result.closestConcept.name, true)

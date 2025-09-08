@@ -73,8 +73,8 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const deleteConcept = useCallback(
-    async concept => {
-      const result = await deleteTaxonomyConcept(taxonomy, concept, apiFns)
+    async (concept, reassignTo) => {
+      const result = await deleteTaxonomyConcept(taxonomy, concept, reassignTo, apiFns)
       updateTaxonomy(result.updatedTaxonomy)
       return result
     },
