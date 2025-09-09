@@ -14,6 +14,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
+import AppModalContext from '@/contexts/app/AppModalContext'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 
@@ -26,6 +27,7 @@ const { CONTINUE } = LABELS.BUTTON
 const ConceptProvider = ({ children }) => {
   const { setModalData } = use(ConceptModalContext)
   const { refreshData: refreshPanelData } = use(PanelDataContext)
+  const { setProcessing: setAppProcessing, setModalData: setAppModalData } = use(AppModalContext)
   const { getSelected, panels  } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction  } = use(UserContext)
@@ -59,8 +61,10 @@ const ConceptProvider = ({ children }) => {
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
 
       setConcept(updatedConcept)
+      // End app-level processing overlay when concept is fully set
+      setAppProcessing(false)
     },
-    [refreshPanelData]
+    [refreshPanelData, setAppProcessing]
   )
 
   const conceptLoader = useConceptLoader({
@@ -98,24 +102,15 @@ const ConceptProvider = ({ children }) => {
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
       } else {
         setHasUnsavedChanges(false)
+
+        // Show app-level processing overlay
+        setAppModalData({ processingMessage: 'Loading concept...' })
+        setAppProcessing(true)
+
         conceptLoader(selectedConcept)
       }
     }
-  }, [
-    concept,
-    conceptLoader,
-    displayStaged,
-    getConcept,
-    getSelected,
-    hasUnsavedChanges,
-    isConceptLoaded,
-    loadConcept,
-    panels,
-    setConcept,
-    setHasUnsavedChanges,
-    setModalData,
-    taxonomy,
-  ])
+  }, [concept, conceptLoader, displayStaged, getConcept, getSelected, hasUnsavedChanges, isConceptLoaded, loadConcept, panels, setAppModalData, setAppProcessing, setConcept, setHasUnsavedChanges, setModalData, taxonomy])
 
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
