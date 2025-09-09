@@ -1,9 +1,9 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useCallback } from 'react'
 
-import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
+import { useUsersModalOperationsContext, useUsersModalDataContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
-import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
+import Actions from '@/components/common/factory/Actions'
 
 import { USER_ROLES } from '@/lib/constants'
 import {
@@ -32,13 +32,6 @@ const useLockUserButton = () => {
     [lockUser, closeModal]
   )
 
-  const memoizedActions = useMemo(
-    () => createLockUserActions(handleCancel, handleLockToggle),
-    [handleCancel, handleLockToggle]
-  )
-  const memoizedContent = useMemo(() => createLockUserContent(), [])
-  const memoizedTitle = useMemo(() => createLockUserTitle, [])
-
   return useCallback(
     user => {
       // Check if this is the last unlocked admin
@@ -46,26 +39,45 @@ const useLockUserButton = () => {
       const isLastAdmin =
         unlockedAdmins.length === 1 && unlockedAdmins[0].username === user.username
 
-      const modalData = {
-        user,
-        isLastAdmin,
+      const ActionView = () => {
+        const { modalData } = useUsersModalDataContext()
+        const actions = createLockUserActions(handleCancel, handleLockToggle)(modalData)
+        if (!Array.isArray(actions)) return null
+        
+        const colors = actions.map(a => a.color || 'main')
+        const disabled = actions.map(a => a.disabled || false)
+        const labels = actions.map(a => a.label)
+        
+        const onAction = label => {
+          const a = actions.find(x => x.label === label)
+          if (a && a.onClick) a.onClick()
+        }
+        
+        return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
       }
 
       const ContentView = () => {
-        const { modalData } = usePanelModalDataContext()
-        return memoizedContent(modalData)
+        const { modalData } = useUsersModalDataContext()
+        const LockUserContent = createLockUserContent()
+        return LockUserContent(modalData)
       }
 
-      const TitleView = () => <Title title={memoizedTitle(modalData)} />
+      const TitleView = () => {
+        const { modalData } = useUsersModalDataContext()
+        return <Title title={createLockUserTitle(modalData)} />
+      }
 
       createModal({
-        actions: memoizedActions,
+        actionsComponent: ActionView,
         contentComponent: ContentView,
         titleComponent: TitleView,
-        data: modalData,
+        data: {
+          user,
+          isLastAdmin,
+        },
       })
     },
-    [users, createModal, memoizedActions, memoizedTitle, memoizedContent]
+    [users, createModal, handleCancel, handleLockToggle]
   )
 }
 

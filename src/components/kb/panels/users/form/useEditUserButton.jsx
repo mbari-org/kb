@@ -1,9 +1,9 @@
 import { use, useCallback, useMemo } from 'react'
 
-import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
+import { useUsersModalOperationsContext, useUsersModalDataContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
-import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
+import Actions from '@/components/common/factory/Actions'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -46,11 +46,6 @@ const useEditUserButton = () => {
     [editUser, closeModal, setProcessing]
   )
 
-  const content = useCallback(
-    currentModalData => createModalContent(handleFormChange, users, true)(currentModalData),
-    [handleFormChange, users]
-  )
-
   const editUserModal = useCallback(
     userToEdit => {
       const modalUser = {
@@ -59,8 +54,29 @@ const useEditUserButton = () => {
         confirmPassword: '',
       }
 
-      const ActionView = createActionView(() => createModalActions(handleCancel, handleCommit))
-      const ContentView = createContentView(content)
+      const ActionView = () => {
+        const { modalData } = useUsersModalDataContext()
+        const actions = createModalActions(handleCancel, handleCommit)(modalData)
+        if (!Array.isArray(actions)) return null
+        
+        const colors = actions.map(a => a.color || 'main')
+        const disabled = actions.map(a => a.disabled || false)
+        const labels = actions.map(a => a.label)
+        
+        const onAction = label => {
+          const a = actions.find(x => x.label === label)
+          if (a && a.onClick) a.onClick()
+        }
+        
+        return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+      }
+      
+      const ContentView = () => {
+        const { modalData } = useUsersModalDataContext()
+        const UserModalContent = createModalContent(handleFormChange, users, true)
+        return UserModalContent(modalData)
+      }
+      
       const TitleView = () => <Title title='Edit User' />
 
       createModal({
@@ -75,7 +91,7 @@ const useEditUserButton = () => {
         },
       })
     },
-    [createModal, content, handleCancel, handleCommit]
+    [createModal, handleFormChange, users, handleCancel, handleCommit]
   )
 
   return editUserModal
