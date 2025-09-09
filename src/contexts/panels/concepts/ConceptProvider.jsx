@@ -61,7 +61,6 @@ const ConceptProvider = ({ children }) => {
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
 
       setConcept(updatedConcept)
-      // End app-level processing overlay when concept is fully set
       setAppProcessing(false)
     },
     [refreshPanelData, setAppProcessing]
@@ -103,7 +102,6 @@ const ConceptProvider = ({ children }) => {
       } else {
         setHasUnsavedChanges(false)
 
-        // Show app-level processing overlay
         setAppModalData({ processingMessage: 'Loading concept...' })
         setAppProcessing(true)
 

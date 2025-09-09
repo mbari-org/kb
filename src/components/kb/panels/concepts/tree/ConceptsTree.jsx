@@ -1,9 +1,10 @@
-import { use, useCallback, useMemo, useState, memo } from 'react'
+import { use, useCallback, useEffect, useMemo, useState, memo } from 'react'
 
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
 
 import ConceptTreeItem from './ConceptTreeItem'
+import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
 import useArrowKeys from './lib/useArrowKeys'
 import useConceptAutoExpand from './lib/useConceptAutoExpand'
@@ -82,7 +83,7 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     getConceptPrimaryName,
     setAutoExpand,
   })
-  useTaxonomyTreeReposition(apiRef, concept)
+  useTaxonomyTreeReposition(apiRef, concept, expandedItems, sidebarRef)
 
   useArrowKeys(
     concept,
@@ -93,6 +94,15 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     setAutoExpand,
     sidebarRef
   )
+
+  useEffect(() => {
+    if (concept && taxonomy) {
+      const path = itemPath(taxonomy, concept)
+      if (path && path.length > 0) {
+        setExpandedItems(prev => [...new Set([...prev, ...path])])
+      }
+    }
+  }, [concept, taxonomy])
 
   if (!concept || !getConcept(concept.name)) {
     return null
