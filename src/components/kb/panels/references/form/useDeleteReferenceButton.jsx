@@ -1,9 +1,9 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useCallback } from 'react'
 
-import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
+import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import Title from '@/components/common/factory/Title'
-import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
+import Actions from '@/components/common/factory/Actions'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -31,34 +31,46 @@ const useDeleteReferenceButton = () => {
     [deleteReference, closeModal, setProcessing]
   )
 
-  const memoizedActions = useMemo(
-    () => createDeleteReferenceActions(handleCancel, handleDeleteConfirm),
-    [handleCancel, handleDeleteConfirm]
-  )
-  const memoizedContent = useMemo(() => createDeleteReferenceContent(), [])
-  const memoizedTitle = useMemo(() => createDeleteReferenceTitle, [])
-
   return useCallback(
     reference => {
-      const modalData = {
-        reference,
+      const ActionView = () => {
+        const { modalData } = useReferencesModalDataContext()
+        const actions = createDeleteReferenceActions(handleCancel, handleDeleteConfirm)(modalData)
+        if (!Array.isArray(actions)) return null
+        
+        const colors = actions.map(a => a.color || 'main')
+        const disabled = actions.map(a => a.disabled || false)
+        const labels = actions.map(a => a.label)
+        
+        const onAction = label => {
+          const a = actions.find(x => x.label === label)
+          if (a && a.onClick) a.onClick()
+        }
+        
+        return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
       }
 
       const ContentView = () => {
-        const { modalData } = usePanelModalDataContext()
-        return memoizedContent(modalData)
+        const { modalData } = useReferencesModalDataContext()
+        const DeleteReferenceContent = createDeleteReferenceContent()
+        return DeleteReferenceContent(modalData)
       }
 
-      const TitleView = () => <Title title={memoizedTitle()} />
+      const TitleView = () => {
+        const { modalData } = useReferencesModalDataContext()
+        return <Title title={createDeleteReferenceTitle(modalData)} />
+      }
 
       createModal({
-        actions: memoizedActions,
+        actionsComponent: ActionView,
         contentComponent: ContentView,
         titleComponent: TitleView,
-        data: modalData,
+        data: {
+          reference,
+        },
       })
     },
-    [createModal, memoizedActions, memoizedContent, memoizedTitle]
+    [createModal, handleCancel, handleDeleteConfirm]
   )
 }
 

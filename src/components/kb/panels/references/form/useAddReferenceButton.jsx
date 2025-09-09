@@ -2,11 +2,11 @@ import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
 
-import { useReferencesModalOperationsContext } from '@/contexts/panels/references/modal'
+import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
-import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
+import Actions from '@/components/common/factory/Actions'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -52,14 +52,30 @@ const useAddReferenceButton = () => {
     [addReference, closeModal, setProcessing, isDoiUnique]
   )
 
-  const content = useCallback(
-    currentModalData => createModalContent(handleFormChange, false)(currentModalData),
-    [handleFormChange]
-  )
-
   const addReferenceModal = useCallback(() => {
-    const ActionView = createActionView(() => createModalActions(handleCancel, handleCommit))
-    const ContentView = createContentView(content)
+    const ActionView = () => {
+      const { modalData } = useReferencesModalDataContext()
+      const actions = createModalActions(handleCancel, handleCommit)(modalData)
+      if (!Array.isArray(actions)) return null
+      
+      const colors = actions.map(a => a.color || 'main')
+      const disabled = actions.map(a => a.disabled || false)
+      const labels = actions.map(a => a.label)
+      
+      const onAction = label => {
+        const a = actions.find(x => x.label === label)
+        if (a && a.onClick) a.onClick()
+      }
+      
+      return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+    }
+    
+    const ContentView = () => {
+      const { modalData } = useReferencesModalDataContext()
+      const ReferenceModalContent = createModalContent(handleFormChange, false)
+      return ReferenceModalContent(modalData)
+    }
+    
     const TitleView = () => <Title title='Add Reference' />
 
     createModal({
@@ -72,7 +88,7 @@ const useAddReferenceButton = () => {
         hasChanges: false,
       },
     })
-  }, [createModal, content, handleCancel, handleCommit])
+  }, [createModal, handleFormChange, handleCancel, handleCommit])
 
   const AddReferenceButton = useCallback(
     () => <PanelAddButton onClick={addReferenceModal} />,
