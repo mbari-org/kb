@@ -18,11 +18,13 @@ import { SELECTED } from '@/lib/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
+const FILTERS = TEMPLATES.FILTERS
+
 const TemplatesProvider = ({ children }) => {
   const isLoadingConcept = useRef(false)
 
   const { explicitConcepts, templates } = use(PanelDataContext)
-  const { getSettings, updateSettings } = use(SelectedContext)
+  const { getSelected, getSettings, updateSettings } = use(SelectedContext)
   const { getAncestorNames, isConceptLoaded, loadConcept } = use(TaxonomyContext)
 
   const handleLoadConceptError = useLoadConceptError()
@@ -42,38 +44,48 @@ const TemplatesProvider = ({ children }) => {
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates()
 
   useEffect(() => {
-    if (!filters[TEMPLATES.FILTERS.CONCEPT]) {
+    if (getSelected(SELECTED.PANEL) === SELECTED.PANELS.TEMPLATES) {
+      const selectedConcept = getSelected(SELECTED.CONCEPT)
+
+      if (selectedConcept && selectedConcept !== filters[FILTERS.CONCEPT]) {
+        updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
+      }
+    }
+  }, [filters, getSelected, updateFilters])
+
+  useEffect(() => {
+    if (!filters[FILTERS.CONCEPT]) {
       const filtered = filterTemplates(templates, {
-        toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
-        linkName: filters[TEMPLATES.FILTERS.LINK_NAME],
-        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE],
+        linkName: filters[FILTERS.LINK_NAME],
+        toConcept: filters[FILTERS.TO_CONCEPT],
+        linkValue: filters[FILTERS.LINK_VALUE],
       })
       setFilteredTemplates(filtered)
       return
     }
 
     const updateFilteredTemplates = () => {
-      const ancestorNames = available ? getAncestorNames(filters[TEMPLATES.FILTERS.CONCEPT]) : []
-      const allConcepts = filters[TEMPLATES.FILTERS.CONCEPT]
+      const ancestorNames = available ? getAncestorNames(filters[FILTERS.CONCEPT]) : []
+      const allConcepts = filters[FILTERS.CONCEPT]
         ? [filters[TEMPLATES.FILTERS.CONCEPT], ...ancestorNames]
         : null
       const filtered = filterTemplates(templates, {
         concepts: allConcepts,
-        toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
-        linkName: filters[TEMPLATES.FILTERS.LINK_NAME],
-        linkValue: filters[TEMPLATES.FILTERS.LINK_VALUE],
+        linkName: filters[FILTERS.LINK_NAME],
+        toConcept: filters[FILTERS.TO_CONCEPT],
+        linkValue: filters[FILTERS.LINK_VALUE],
       })
       setFilteredTemplates(filtered)
     }
 
-    if (isConceptLoaded(filters[TEMPLATES.FILTERS.CONCEPT])) {
+    if (isConceptLoaded(filters[FILTERS.CONCEPT])) {
       updateFilteredTemplates()
     } else if (!isLoadingConcept.current) {
       isLoadingConcept.current = true
-      loadConcept(filters[TEMPLATES.FILTERS.CONCEPT])
+      loadConcept(filters[FILTERS.CONCEPT])
         .then(updateFilteredTemplates)
         .catch(error => {
-          handleLoadConceptError({ ...error, conceptName: filters[TEMPLATES.FILTERS.CONCEPT] })
+          handleLoadConceptError({ ...error, conceptName: filters[FILTERS.CONCEPT] })
         })
         .finally(() => {
           isLoadingConcept.current = false
@@ -104,11 +116,11 @@ const TemplatesProvider = ({ children }) => {
     [
       addTemplate,
       available,
+      deleteTemplate,
+      editTemplate,
       explicitConcepts,
       filteredTemplates,
       filters,
-      deleteTemplate,
-      editTemplate,
       setAvailable,
       updateFilters,
     ]
