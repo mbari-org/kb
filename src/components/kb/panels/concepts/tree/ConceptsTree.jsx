@@ -3,14 +3,14 @@ import { use, useCallback, useEffect, useMemo, useState, memo } from 'react'
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
 
-import ConceptTreeItem from './ConceptTreeItem'
+import ConceptTreeItem from '@/components/kb/panels/concepts/tree/ConceptTreeItem'
 import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
-import useArrowKeys from './lib/useArrowKeys'
-import useConceptAutoExpand from './lib/useConceptAutoExpand'
-import useConceptClick from './lib/useConceptClick'
-import useExpandConcept from './lib/useExpandConcept'
-import useTaxonomyTreeReposition from './lib/useTaxonomyTreeReposition'
+import useArrowKeys from '@/components/kb/panels/concepts/tree/lib/useArrowKeys'
+import useConceptAutoExpand from '@/components/kb/panels/concepts/tree/lib/useConceptAutoExpand'
+import useConceptClick from '@/components/kb/panels/concepts/tree/lib/useConceptClick'
+import useExpandConcept from '@/components/kb/panels/concepts/tree/lib/useExpandConcept'
+import useConceptsTreeScroll from '@/components/kb/panels/concepts/tree/lib/useConceptsTreeScroll'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -21,7 +21,7 @@ import { buildTree } from '@/lib/kb/model/taxonomy'
 import { SELECTED } from '@/lib/constants'
 
 const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
-  const { concept } = use(ConceptContext)
+  const { concept, onConceptTreeReady } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
@@ -83,7 +83,6 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     getConceptPrimaryName,
     setAutoExpand,
   })
-  useTaxonomyTreeReposition(apiRef, concept, expandedItems, sidebarRef)
 
   useArrowKeys(
     concept,
@@ -95,14 +94,19 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     sidebarRef
   )
 
+  const { needsToScroll, scrollToNode } = useConceptsTreeScroll(apiRef, concept, sidebarRef)
+
   useEffect(() => {
     if (concept && taxonomy) {
       const path = itemPath(taxonomy, concept)
       if (path && path.length > 0) {
         setExpandedItems(prev => [...new Set([...prev, ...path])])
       }
+      setTimeout(() => {
+        needsToScroll() ? scrollToNode(() => onConceptTreeReady()) : onConceptTreeReady()
+      }, 100)
     }
-  }, [concept, taxonomy])
+  }, [concept, taxonomy, needsToScroll, scrollToNode, onConceptTreeReady])
 
   if (!concept || !getConcept(concept.name)) {
     return null

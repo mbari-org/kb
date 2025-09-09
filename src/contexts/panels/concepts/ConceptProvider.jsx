@@ -41,6 +41,10 @@ const ConceptProvider = ({ children }) => {
 
   const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
 
+  const onConceptTreeReady = useCallback(() => {
+    setAppProcessing(false)
+  }, [setAppProcessing])
+
   const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
   const modifyConcept = useModifyConcept(dispatch, initialState, setConfirmReset, setEditing)
@@ -61,9 +65,8 @@ const ConceptProvider = ({ children }) => {
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
 
       setConcept(updatedConcept)
-      setAppProcessing(false)
     },
-    [refreshPanelData, setAppProcessing]
+    [refreshPanelData]
   )
 
   const conceptLoader = useConceptLoader({
@@ -146,6 +149,7 @@ const ConceptProvider = ({ children }) => {
       editing,
       initialState,
       modifyConcept,
+      onConceptTreeReady,
       pending,
       setConcept: handleSetConcept,
       setEditing,
@@ -160,6 +164,7 @@ const ConceptProvider = ({ children }) => {
       handleSetConcept,
       initialState,
       modifyConcept,
+      onConceptTreeReady,
       pending,
       setEditing,
       setPendingConfirm,
