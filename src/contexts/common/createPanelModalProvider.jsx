@@ -44,17 +44,16 @@ const createPanelModalProvider = (panelName, useModalHook) => {
     closeModalRef.current = closeModal
 
     const createModal = useCallback(
-      ({ actions, content, titleComponent, data = {}, minWidth = 500, onClose = null }) => {
+      ({ actionsComponent, contentComponent, titleComponent, data = {}, minWidth = 500, onClose = null }) => {
         const modalConfig = {
-          actions,
-          content,
+          actionsComponent,
+          contentComponent,
           minWidth,
           titleComponent,
         }
 
         setModalConfig(modalConfig)
         setModalData(data)
-        // Store function value without invoking it (avoid React treating it as updater)
         setOnClose(() => onClose)
         setProcessing(false)
       },

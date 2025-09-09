@@ -17,7 +17,7 @@ const usePendingItemModal = () => {
     const ContentView = createContentView(data => <PendingItemDetail {...data} />)
 
     createModal({
-      actionComponent: PendingItemActions,
+      actionsComponent: PendingItemActions,
       contentComponent: ContentView,
       titleComponent: ConceptTitle,
       data: { conceptName, item: { ...item, action: pendingActionText(item.action) } },

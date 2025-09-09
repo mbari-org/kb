@@ -8,7 +8,7 @@ const useTemplatesModal = (modalConfig, modalDataRef, closeModalRef) => {
 
     const TemplatesModalComponent = () => (
       <PanelModal
-        actions={modalConfig.actionComponent ? <modalConfig.actionComponent /> : null}
+        actions={modalConfig.actionsComponent ? <modalConfig.actionsComponent /> : null}
         content={modalConfig.contentComponent ? <modalConfig.contentComponent /> : null}
         titleComponent={modalConfig.titleComponent ? <modalConfig.titleComponent /> : undefined}
         closeModal={closeModalRef.current}

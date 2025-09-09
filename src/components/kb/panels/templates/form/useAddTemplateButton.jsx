@@ -45,7 +45,6 @@ const useAddTemplateButton = () => {
           return
         }
 
-        // Duplicate check: exact match on concept + linkName + toConcept + linkValue
         if (isDuplicateTemplate(allTemplates, template)) {
           updateModalData({ alert: duplicateTemplateAlert() })
           return
@@ -65,7 +64,7 @@ const useAddTemplateButton = () => {
   )
 
   const content = useCallback(
-    currentModalData => createModalContent(handleFormChange, false)(currentModalData),
+    modalData => createModalContent(handleFormChange, false)(modalData),
     [handleFormChange]
   )
 
