@@ -1,9 +1,9 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useCallback } from 'react'
 
-import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
+import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import ConceptTitle from '@/components/common/ConceptTitle'
-import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
+import Actions from '@/components/common/factory/Actions'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -36,31 +36,41 @@ const useDeleteTemplateButton = () => {
     [deleteTemplate, closeModal, setProcessing]
   )
 
-  const memoizedActions = useMemo(
-    () => createDeleteTemplateActions(handleCancel, handleDeleteConfirm),
-    [handleCancel, handleDeleteConfirm]
-  )
-  const memoizedContent = useMemo(() => createDeleteTemplateContent(), [])
-
   return useCallback(
     template => {
-      const modalData = {
-        template,
+      const ActionView = () => {
+        const { modalData } = useTemplatesModalDataContext()
+        const actions = createDeleteTemplateActions(handleCancel, handleDeleteConfirm)(modalData)
+        if (!Array.isArray(actions)) return null
+        
+        const colors = actions.map(a => a.color || 'main')
+        const disabled = actions.map(a => a.disabled || false)
+        const labels = actions.map(a => a.label)
+        
+        const onAction = label => {
+          const a = actions.find(x => x.label === label)
+          if (a && a.onClick) a.onClick()
+        }
+        
+        return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
       }
 
       const ContentView = () => {
-        const { modalData } = usePanelModalDataContext()
-        return memoizedContent(modalData)
+        const { modalData } = useTemplatesModalDataContext()
+        const DeleteTemplateContent = createDeleteTemplateContent()
+        return DeleteTemplateContent(modalData)
       }
 
       createModal({
-        actions: memoizedActions,
+        actionsComponent: ActionView,
         contentComponent: ContentView,
-        data: modalData,
+        data: {
+          template,
+        },
         titleComponent: ConceptTitle,
       })
     },
-    [createModal, memoizedActions, memoizedContent]
+    [createModal, handleCancel, handleDeleteConfirm]
   )
 }
 

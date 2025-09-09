@@ -2,9 +2,9 @@ import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import ConceptTitle from '@/components/common/ConceptTitle'
-import { createActionView, createContentView } from '@/contexts/panel/modal/factories'
+import Actions from '@/components/common/factory/Actions'
 
-import { useTemplatesModalOperationsContext } from '@/contexts/panels/templates/modal'
+import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
@@ -63,18 +63,31 @@ const useAddTemplateButton = () => {
     [addTemplate, allTemplates, closeModal, setProcessing, updateModalData]
   )
 
-  const content = useCallback(
-    modalData => createModalContent(handleFormChange, false)(modalData),
-    [handleFormChange]
-  )
-
   const addTemplateModal = useCallback(() => {
     const onClose = createTemplateOnClose(updateModalData)
 
-    const ActionView = createActionView(() =>
-      createModalActions(handleCancel, handleCommit, updateModalData)
-    )
-    const ContentView = createContentView(content)
+    const ActionView = () => {
+      const { modalData } = useTemplatesModalDataContext()
+      const actions = createModalActions(handleCancel, handleCommit, updateModalData)(modalData)
+      if (!Array.isArray(actions)) return null
+      
+      const colors = actions.map(a => a.color || 'main')
+      const disabled = actions.map(a => a.disabled || false)
+      const labels = actions.map(a => a.label)
+      
+      const onAction = label => {
+        const a = actions.find(x => x.label === label)
+        if (a && a.onClick) a.onClick()
+      }
+      
+      return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+    }
+    
+    const ContentView = () => {
+      const { modalData } = useTemplatesModalDataContext()
+      const TemplateModalContent = createModalContent(handleFormChange, false)
+      return TemplateModalContent(modalData)
+    }
 
     createModal({
       actionsComponent: ActionView,
@@ -91,7 +104,7 @@ const useAddTemplateButton = () => {
       },
       onClose,
     })
-  }, [content, createModal, filters, handleCancel, handleCommit, updateModalData])
+  }, [createModal, filters, handleFormChange, handleCancel, handleCommit, updateModalData])
 
   const AddTemplateButton = useCallback(() => {
     const { TEMPLATES } = SELECTED.SETTINGS
