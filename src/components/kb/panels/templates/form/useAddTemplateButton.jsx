@@ -70,19 +70,19 @@ const useAddTemplateButton = () => {
       const { modalData } = useTemplatesModalDataContext()
       const actions = createModalActions(handleCancel, handleCommit, updateModalData)(modalData)
       if (!Array.isArray(actions)) return null
-      
+
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
       const labels = actions.map(a => a.label)
-      
+
       const onAction = label => {
         const a = actions.find(x => x.label === label)
         if (a && a.onClick) a.onClick()
       }
-      
+
       return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
     }
-    
+
     const ContentView = () => {
       const { modalData } = useTemplatesModalDataContext()
       const TemplateModalContent = createModalContent(handleFormChange, false)

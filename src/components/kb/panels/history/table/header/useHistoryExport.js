@@ -1,15 +1,17 @@
 import { use } from 'react'
 
-import { getConceptHistory, getHistory, getHistoryCount } from '@/lib/api/history'
+import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
+import UserContext from '@/contexts/user/UserContext'
+
+import { capitalize } from '@/lib/utils'
 
 import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
 import {
-  capitalize,
   conceptFileName,
   escapeCSV,
   humanTimestamp,
@@ -19,19 +21,28 @@ import {
 const { EXTENT, TYPE } = CONCEPT_HISTORY
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 
-const headers = [
-  'Concept',
-  'Field',
-  'Action',
-  'Creator',
-  'Created',
-  'Old Value',
-  'New Value',
-  'Processor',
-  'Processed',
-]
+const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
+  const offset = pageIndex * pageSize
+  const response = await apiFns.apiPaginated(getHistory, [
+    type,
+    { limit: EXPORT_PAGE_SIZE, offset },
+  ])
+  return response
+}
 
-const getHeaders = type => {
+const columnHeaders = type => {
+  const headers = [
+    'Concept',
+    'Field',
+    'Action',
+    'Creator',
+    'Created',
+    'Old Value',
+    'New Value',
+    'Processor',
+    'Processed',
+  ]
+
   switch (type) {
     case TYPE.CONCEPT:
       return ['Approved', ...headers]
@@ -46,8 +57,30 @@ const getHeaders = type => {
   }
 }
 
-const getRowData = (item, type) => {
-  const rowData = [
+const fileComments = ({ concept, historyExtent, historyType, user }) => {
+  var comments = '# Knowledge Base History Export\n'
+  comments += `#   Type: ${capitalize(historyType)}\n`
+  if (historyExtent) {
+    comments += `#   Concept: ${concept}\n`
+    comments += `#   History Extent: ${capitalize(historyExtent)}\n`
+  }
+  comments += `#   Exported By: ${user.name}\n`
+  comments += `#   Date: ${humanTimestamp(new Date())}\n`
+  comments += '#\n'
+  return comments
+}
+
+const fileName = ({ conceptName, historyExtent, type }) => {
+  if (type === TYPE.CONCEPT) {
+    const extent =
+      historyExtent === EXTENT.CONCEPT ? '' : `-and-${historyExtent}`
+    return `KB-History-${conceptFileName(conceptName)}${extent}.csv`
+  }
+  return `KB-History-${capitalize(type)}.csv`
+}
+
+const rowData = (item, type) => {
+  const itemData = [
     item.concept,
     item.field,
     item.action,
@@ -61,55 +94,37 @@ const getRowData = (item, type) => {
     case TYPE.CONCEPT:
       return [
         item.approved ? 'Yes' : 'Pending',
-        ...rowData,
+        ...itemData,
         item.processorName,
         humanTimestamp(item.processedTimestamp),
       ]
 
     case TYPE.PENDING:
-      return rowData
+      return itemData
 
     case TYPE.APPROVED:
-      return [...rowData, item.processorName, humanTimestamp(item.processedTimestamp)]
+      return [...itemData, item.processorName, humanTimestamp(item.processedTimestamp)]
     default:
       return []
   }
 }
 
-const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
-  const offset = pageIndex * pageSize
-  const response = await apiFns.apiPaginated(getHistory, [
-    type,
-    { limit: EXPORT_PAGE_SIZE, offset },
-  ])
-  return response
-}
-
-const getFileName = (selectedType, selectedConcept, conceptHistoryExtent) => {
-  if (selectedType === TYPE.CONCEPT) {
-    const extent =
-      conceptHistoryExtent === null
-        ? ''
-        : conceptHistoryExtent === EXTENT.CHILDREN
-          ? '-and-Children'
-          : '-and-Descendants'
-    return `KB-${conceptFileName(selectedConcept)}${extent}-History.csv`
-  }
-
-  return `KB-${capitalize(selectedType)}-History.csv`
-}
-
 const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { conceptHistoryExtent, selectedType, selectedConcept, sortOrder } = use(HistoryContext)
+  const { conceptData, conceptHistoryExtent, selectedType, selectedConcept, sortOrder } = use(HistoryContext)
   const { setExporting } = use(PanelDataContext)
+  const { user } = use(UserContext)
 
   const historyExport = async () => {
     let writable = null
     try {
-      setExporting(true)
+      setExporting('Exporting history to CSV file...')
       const handle = await window.showSaveFilePicker({
-        suggestedName: getFileName(selectedType, selectedConcept, conceptHistoryExtent),
+        suggestedName: fileName({
+          type: selectedType,
+          conceptName: selectedConcept,
+          historyExtent: conceptHistoryExtent,
+        }),
         types: [
           {
             description: 'CSV Files',
@@ -119,20 +134,26 @@ const useHistoryExport = () => {
       })
 
       writable = await handle.createWritable()
-      const headers = getHeaders(selectedType)
-      await writable.write(headers.map(escapeCSV).join(',') + '\n')
+      await writable.write(
+        fileComments({
+          concept: selectedConcept,
+          historyExtent: conceptHistoryExtent,
+          historyType: selectedType,
+          user,
+        })
+      )
 
+      await writable.write(columnHeaders(selectedType).map(escapeCSV).join(',') + '\n')
       if (selectedType === TYPE.CONCEPT && selectedConcept) {
-        const data = await apiFns.apiPayload(getConceptHistory, selectedConcept)
-        if (!data) {
+        if (!conceptData) {
           return
         }
 
-        const sortedData = [...data].sort((a, b) => {
+        const sortedData = [...conceptData].sort((a, b) => {
           const comparison = new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
           return sortOrder === 'asc' ? -comparison : comparison
         })
-        const rows = sortedData.map(item => getRowData(item, selectedType))
+        const rows = sortedData.map(item => rowData(item, selectedType))
         await writeCSVContent(writable, rows)
       } else {
         let pageIndex = 0
@@ -155,7 +176,7 @@ const useHistoryExport = () => {
             continue
           }
 
-          const rows = historyItems.map(item => getRowData(item, selectedType))
+          const rows = historyItems.map(item => rowData(item, selectedType))
           await writeCSVContent(writable, rows)
           pageIndex++
         }

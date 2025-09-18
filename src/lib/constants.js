@@ -28,6 +28,7 @@ export const CONCEPT_FIELD = {
 export const CONCEPT_HISTORY = {
   EXTENT: {
     CHILDREN: 'children',
+    CONCEPT: 'concept',
     DESCENDANTS: 'descendants',
   },
   TYPE: {

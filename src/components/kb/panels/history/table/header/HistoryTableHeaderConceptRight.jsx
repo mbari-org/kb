@@ -17,7 +17,7 @@ const HistoryTableHeaderConceptRight = () => {
     padding: '4px 8px',
   }
 
-  const handleChange = (_event, newValue) => setConceptHistoryExtent(newValue)
+  const handleChange = (_event, newValue) => setConceptHistoryExtent(newValue || EXTENT.CONCEPT)
 
   return (
     <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
