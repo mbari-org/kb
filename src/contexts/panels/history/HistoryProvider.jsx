@@ -79,8 +79,7 @@ const HistoryProvider = ({ children }) => {
 
       // Delay showing the overlay to avoid UI flash on fast operations
       const timer = setTimeout(() => {
-        setProcessing(true)
-        setModalData({ processingMessage: loadingMsg })
+        setProcessing(loadingMsg)
       }, PROCESSING.LOADING_DELAY)
 
       try {
@@ -88,7 +87,6 @@ const HistoryProvider = ({ children }) => {
       } finally {
         clearTimeout(timer)
         setProcessing(false)
-        setModalData({})
         isTypeChanging.current = false
       }
     }
@@ -140,10 +138,10 @@ const HistoryProvider = ({ children }) => {
   )
 
   const value = {
+    conceptData,
     conceptHistoryExtent,
     count,
     data: typeData,
-    conceptData,
     typeData,
     typeState,
     handleSortChange,

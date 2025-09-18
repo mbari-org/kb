@@ -4,11 +4,11 @@ import { Box, CircularProgress, Fade, Modal, Typography } from '@mui/material'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
 const KbLoading = () => {
-  const { modalData, processing } = use(AppModalContext)
+  const { processing, processingMessage } = use(AppModalContext)
 
   if (!processing) return null
 
-  const message = modalData?.processingMessage || 'Processing...'
+  const message = processingMessage
 
   return (
     <Modal open aria-labelledby='kb-processing-overlay' closeAfterTransition>
