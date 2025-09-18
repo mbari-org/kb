@@ -12,7 +12,7 @@ import { capitalize } from '@/lib/utils'
 import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
 import {
-  conceptFileName,
+  conceptNameInFilename,
   csvHeaders,
   humanTimestamp,
   writeCSVContent,
@@ -81,7 +81,7 @@ const fileName = ({ conceptName, historyExtent, type }) => {
   if (type === TYPE.CONCEPT) {
     const extent =
       historyExtent === EXTENT.CONCEPT ? '' : `-and-${historyExtent}`
-    return `KB-History-${conceptFileName(conceptName)}${extent}.csv`
+    return `KB-History-${conceptNameInFilename(conceptName)}${extent}.csv`
   }
   return `KB-History-${capitalize(type)}.csv`
 }

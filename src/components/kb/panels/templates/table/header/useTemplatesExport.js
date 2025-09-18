@@ -10,21 +10,38 @@ import {
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import { PAGINATION } from '@/lib/constants'
 
 import {
-  csvEscape,
-  formatConceptNameForFilename,
+  conceptNameInFilename,
+  csvHeaders,
   humanTimestamp,
   writeCSVContent,
 } from '@/lib/utils'
 
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
-const templateDataHeaders = ['Concept', 'Link Name', 'To Concept', 'Link Value', 'Last Updated']
+const csvComments = ({ data, user }) => {
+  var comments = '# Knowledge Base Templates Export\n'
+  comments += `#   Type: ${data.available ? 'Available' : 'Explicit'}\n`
+  if (data.filterConcept) {
+    comments += `#   Concept: ${data.filterConcept}\n`
+  }
+  if (data.filterToConcept) {
+    comments += `#   To Concept: ${data.filterToConcept}\n`
+  }
+  comments += `#   Templates: ${data.templates.length}\n`
+  comments += `#   Exported By: ${user.name}\n`
+  comments += `#   Date: ${humanTimestamp(new Date())}\n`
+  comments += '#\n'
+  return comments
+}
 
-const templateRows = templates =>
+const dataHeaders = ['Concept', 'Link Name', 'To Concept', 'Link Value', 'Last Updated']
+
+const dataRows = templates =>
   templates.map(template => [
     template.concept,
     template.linkName,
@@ -71,16 +88,15 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
   const { setExporting } = use(PanelDataContext)
-
+  const { user } = use(UserContext)
   const templatesExport = async data => {
     const filterName =
       data?.filterConcept || data?.filterToConcept
-        ? formatConceptNameForFilename(data.filterConcept) +
+        ? conceptNameInFilename(data.filterConcept) +
           '-to-' +
-          formatConceptNameForFilename(data.filterToConcept)
+          conceptNameInFilename(data.filterToConcept)
         : 'all'
 
-    // Add '_Available' suffix when available flag is on
     const availableTag = data?.available ? 'Available_' : 'Explicit_'
     const suggestedName = `KB-Templates-${availableTag}${filterName}.csv`
 
@@ -97,18 +113,19 @@ const useTemplatesExport = () => {
       })
 
       const writable = await handle.createWritable()
-      await writable.write(templateDataHeaders.map(csvEscape).join(',') + '\n')
+      await writable.write(csvComments({ data, user }))
+      await writable.write(csvHeaders(dataHeaders))
 
       // If displayTemplates are provided, use them directly (matches what user sees in table)
       if (data.displayTemplates && data.displayTemplates.length > 0) {
         setExporting('Writing templates to CSV file...')
-        await writeCSVContent(writable, templateRows(data.displayTemplates))
+        await writeCSVContent(writable, dataRows(data.displayTemplates))
       } else if (data.filterConcept || data.filterToConcept) {
         // Fetch all templates for the current filter
         setExporting('Writing templates to CSV file...')
         const filteredTemplates = await fetchFilteredTemplates(data, apiFns)
         if (filteredTemplates) {
-          await writeCSVContent(writable, templateRows(filteredTemplates))
+          await writeCSVContent(writable, dataRows(filteredTemplates))
         }
       } else {
         // Get count just for display purposes
@@ -125,7 +142,7 @@ const useTemplatesExport = () => {
             hasMoreData = false
             continue
           }
-          await writeCSVContent(writable, templateRows(templates))
+          await writeCSVContent(writable, dataRows(templates))
           pageIndex++
         }
       }

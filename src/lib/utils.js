@@ -14,8 +14,6 @@ const checkImageUrlExists = url => {
   })
 }
 
-const conceptFileName = conceptName => conceptName.replace(/ /g, '_')
-
 const csvEscape = field => {
   if (field == null) return ''
   const stringField = String(field)
@@ -80,7 +78,7 @@ const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
 
-const formatConceptNameForFilename = str => (str || 'all').replace(/\s+/g, '-')
+const conceptNameInFilename = str => (str || 'all').replace(/\s+/g, '-')
 
 const hasTrue = arg => {
   if (typeof arg === 'boolean') return arg
@@ -271,14 +269,11 @@ export {
   after,
   capitalize,
   checkImageUrlExists,
-  conceptFileName,
-  csvEscape,
+  conceptNameInFilename,
   csvHeaders,
   deepDiff,
   diff,
-  drop, filterObject,
-  formatConceptNameForFilename,
-  hasTrue,
+  drop, filterObject, hasTrue,
   humanTimestamp,
   isDeepEqual,
   isElementInViewport,

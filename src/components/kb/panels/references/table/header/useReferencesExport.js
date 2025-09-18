@@ -1,4 +1,4 @@
-import { csvEscape, formatConceptNameForFilename, writeCSVContent } from '@/lib/utils'
+import { conceptNameInFilename, csvHeaders, writeCSVContent } from '@/lib/utils'
 
 const referenceDataHeaders = ['DOI', 'Citation', 'Concepts']
 
@@ -8,7 +8,7 @@ const referenceRows = references =>
 const useReferencesExport = () => {
   const referencesExport = async (references, byConceptName) => {
     const suggestName = `KB-References_${
-      byConceptName ? formatConceptNameForFilename(byConceptName) : 'all'
+      byConceptName ? conceptNameInFilename(byConceptName) : 'all'
     }.csv`
 
     try {
@@ -23,7 +23,7 @@ const useReferencesExport = () => {
       })
 
       const writable = await handle.createWritable()
-      await writable.write(referenceDataHeaders.map(csvEscape).join(',') + '\n')
+      await writable.write(csvHeaders(referenceDataHeaders))
 
       await writeCSVContent(writable, referenceRows(references))
       await writable.close()
