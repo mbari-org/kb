@@ -32,7 +32,7 @@ const csvComments = ({ data, user }) => {
   if (data.filterToConcept) {
     comments += `#   To Concept: ${data.filterToConcept}\n`
   }
-  comments += `#   Templates: ${data.templates.length}\n`
+  comments += `#   Total: ${data.templates.length}\n`
   comments += `#   Exported By: ${user.name}\n`
   comments += `#   Date: ${humanTimestamp(new Date())}\n`
   comments += '#\n'

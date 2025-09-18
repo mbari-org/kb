@@ -5,7 +5,8 @@ import { getHistory, getHistoryCount } from '@/lib/api/history'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
-import UserContext from '@/contexts/user/UserContext'
+
+import useCsvComments from '@/hooks/useCsvComments'
 
 import { capitalize } from '@/lib/utils'
 
@@ -21,17 +22,13 @@ import {
 const { EXTENT, TYPE } = CONCEPT_HISTORY
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 
-const csvComments = ({ concept, historyExtent, historyType, user }) => {
-  var comments = '# Knowledge Base History Export\n'
-  comments += `#   Type: ${capitalize(historyType)}\n`
+const commentsContent = ({ concept, historyExtent, historyType }) => {
+  let content = [`Type: ${capitalize(historyType)}`]
   if (historyExtent) {
-    comments += `#   Concept: ${concept}\n`
-    comments += `#   History Extent: ${capitalize(historyExtent)}\n`
+    content.push(`Concept: ${concept}`)
+    content.push(`Extent: ${capitalize(historyExtent)}`)
   }
-  comments += `#   Exported By: ${user.name}\n`
-  comments += `#   Date: ${humanTimestamp(new Date())}\n`
-  comments += '#\n'
-  return comments
+  return content
 }
 
 const dataHeaders = type => {
@@ -120,7 +117,18 @@ const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
   const { conceptData, conceptHistoryExtent, selectedType, selectedConcept, sortOrder } = use(HistoryContext)
   const { setExporting } = use(PanelDataContext)
-  const { user } = use(UserContext)
+
+  const content = commentsContent({
+    concept: selectedConcept,
+    historyExtent: conceptHistoryExtent,
+    historyType: selectedType,
+  })
+
+  const csvComments = useCsvComments({
+    content,
+    count: conceptData.length,
+    title: 'Knowledge Base History',
+  })
 
   const historyExport = async () => {
     let writable = null
@@ -141,17 +149,9 @@ const useHistoryExport = () => {
       })
 
       writable = await handle.createWritable()
-      await writable.write(
-        csvComments({
-          concept: selectedConcept,
-          historyExtent: conceptHistoryExtent,
-          historyType: selectedType,
-          user,
-        })
-      )
-
+      await writable.write(csvComments())
       await writable.write(csvHeaders(dataHeaders(selectedType)))
-      if (selectedType === TYPE.CONCEPT && selectedConcept) {
+      if (selectedType === TYPE.CONCEPT && selectedConcept && conceptData) {
         if (!conceptData) {
           return
         }
