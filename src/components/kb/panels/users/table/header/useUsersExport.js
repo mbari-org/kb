@@ -3,10 +3,19 @@ import { use } from 'react'
 import { getUsers } from '@/lib/api/users'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import UserContext from '@/contexts/user/UserContext'
 
-import { escapeCSV, humanTimestamp, writeCSVContent } from '@/lib/utils'
+import { csvHeaders, humanTimestamp, writeCSVContent } from '@/lib/utils'
 
-const userDataHeaders = [
+const csvComments = ({ user }) => {
+  var comments = '# Knowledge Base Users Export\n'
+  comments += `#   Exported By: ${user.name}\n`
+  comments += `#   Date: ${humanTimestamp(new Date())}\n`
+  comments += '#\n'
+  return comments
+}
+
+const dataHeaders = [
   'Username',
   'Role',
   'Affiliation',
@@ -16,7 +25,7 @@ const userDataHeaders = [
   'Last Updated',
 ]
 
-const userRows = users =>
+const userData = users =>
   users.map(user => [
     user.username,
     user.role,
@@ -29,7 +38,7 @@ const userRows = users =>
 
 const useUsersExport = () => {
   const { apiFns } = use(ConfigContext)
-
+  const { user } = use(UserContext)
   const usersExport = async () => {
     try {
       const handle = await window.showSaveFilePicker({
@@ -45,9 +54,9 @@ const useUsersExport = () => {
       const users = await apiFns.apiPayload(getUsers)
 
       const writable = await handle.createWritable()
-      await writable.write(userDataHeaders.map(escapeCSV).join(',') + '\n')
-
-      await writeCSVContent(writable, userRows(users))
+      await writable.write(csvComments({ user }))
+      await writable.write(csvHeaders(dataHeaders))
+      await writeCSVContent(writable, userData(users))
       await writable.close()
     } catch (error) {
       if (error.name !== 'AbortError') {

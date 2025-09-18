@@ -13,7 +13,7 @@ import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
 import {
   conceptFileName,
-  escapeCSV,
+  csvHeaders,
   humanTimestamp,
   writeCSVContent,
 } from '@/lib/utils'
@@ -21,17 +21,21 @@ import {
 const { EXTENT, TYPE } = CONCEPT_HISTORY
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 
-const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
-  const offset = pageIndex * pageSize
-  const response = await apiFns.apiPaginated(getHistory, [
-    type,
-    { limit: EXPORT_PAGE_SIZE, offset },
-  ])
-  return response
+const csvComments = ({ concept, historyExtent, historyType, user }) => {
+  var comments = '# Knowledge Base History Export\n'
+  comments += `#   Type: ${capitalize(historyType)}\n`
+  if (historyExtent) {
+    comments += `#   Concept: ${concept}\n`
+    comments += `#   History Extent: ${capitalize(historyExtent)}\n`
+  }
+  comments += `#   Exported By: ${user.name}\n`
+  comments += `#   Date: ${humanTimestamp(new Date())}\n`
+  comments += '#\n'
+  return comments
 }
 
-const columnHeaders = type => {
-  const headers = [
+const dataHeaders = type => {
+  const columnHeaders = [
     'Concept',
     'Field',
     'Action',
@@ -43,31 +47,34 @@ const columnHeaders = type => {
     'Processed',
   ]
 
+  let headers
   switch (type) {
     case TYPE.CONCEPT:
-      return ['Approved', ...headers]
+      headers = ['Approved', ...columnHeaders]
+      break
 
     case TYPE.PENDING:
-      return headers.slice(0, 7)
+      headers = columnHeaders.slice(0, 7)
+      break
 
     case TYPE.APPROVED:
-      return headers
+      headers = columnHeaders
+      break
+
     default:
-      return []
+      throw new Error(`HistoryExport dataHeaders invalid type: ${type}`)
   }
+
+  return headers
 }
 
-const fileComments = ({ concept, historyExtent, historyType, user }) => {
-  var comments = '# Knowledge Base History Export\n'
-  comments += `#   Type: ${capitalize(historyType)}\n`
-  if (historyExtent) {
-    comments += `#   Concept: ${concept}\n`
-    comments += `#   History Extent: ${capitalize(historyExtent)}\n`
-  }
-  comments += `#   Exported By: ${user.name}\n`
-  comments += `#   Date: ${humanTimestamp(new Date())}\n`
-  comments += '#\n'
-  return comments
+const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
+  const offset = pageIndex * pageSize
+  const response = await apiFns.apiPaginated(getHistory, [
+    type,
+    { limit: EXPORT_PAGE_SIZE, offset },
+  ])
+  return response
 }
 
 const fileName = ({ conceptName, historyExtent, type }) => {
@@ -135,7 +142,7 @@ const useHistoryExport = () => {
 
       writable = await handle.createWritable()
       await writable.write(
-        fileComments({
+        csvComments({
           concept: selectedConcept,
           historyExtent: conceptHistoryExtent,
           historyType: selectedType,
@@ -143,7 +150,7 @@ const useHistoryExport = () => {
         })
       )
 
-      await writable.write(columnHeaders(selectedType).map(escapeCSV).join(',') + '\n')
+      await writable.write(csvHeaders(dataHeaders(selectedType)))
       if (selectedType === TYPE.CONCEPT && selectedConcept) {
         if (!conceptData) {
           return

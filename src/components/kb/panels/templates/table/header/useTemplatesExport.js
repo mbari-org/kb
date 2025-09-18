@@ -14,7 +14,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import { PAGINATION } from '@/lib/constants'
 
 import {
-  escapeCSV,
+  csvEscape,
   formatConceptNameForFilename,
   humanTimestamp,
   writeCSVContent,
@@ -97,7 +97,7 @@ const useTemplatesExport = () => {
       })
 
       const writable = await handle.createWritable()
-      await writable.write(templateDataHeaders.map(escapeCSV).join(',') + '\n')
+      await writable.write(templateDataHeaders.map(csvEscape).join(',') + '\n')
 
       // If displayTemplates are provided, use them directly (matches what user sees in table)
       if (data.displayTemplates && data.displayTemplates.length > 0) {

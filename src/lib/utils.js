@@ -16,6 +16,18 @@ const checkImageUrlExists = url => {
 
 const conceptFileName = conceptName => conceptName.replace(/ /g, '_')
 
+const csvEscape = field => {
+  if (field == null) return ''
+  const stringField = String(field)
+  // If field contains comma, quote, or newline, wrap in quotes and escape existing quotes
+  if (stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
+    return `"${stringField.replace(/"/g, '""')}"`
+  }
+  return stringField
+}
+
+const csvHeaders = headers => headers.map(csvEscape).join(',') + '\n'
+
 const drop = (object, fields) => {
   if (Array.isArray(object)) return dropElements(object, fields)
   if (typeof object === 'object') return dropFields(object, fields)
@@ -63,16 +75,6 @@ const diff = (o1, o2) =>
     }
     return result
   }, {})
-
-const escapeCSV = field => {
-  if (field == null) return ''
-  const stringField = String(field)
-  // If field contains comma, quote, or newline, wrap in quotes and escape existing quotes
-  if (stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
-    return `"${stringField.replace(/"/g, '""')}"`
-  }
-  return stringField
-}
 
 const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
@@ -260,7 +262,7 @@ const trimEndingCycle = array => {
 }
 
 const writeCSVContent = async (writable, dataRows) => {
-  const csvRows = dataRows.map(row => row.map(escapeCSV))
+  const csvRows = dataRows.map(row => row.map(csvEscape))
   const csvContent = csvRows.map(row => row.join(',')).join('\n')
   await writable.write(csvContent + '\n')
 }
@@ -270,11 +272,11 @@ export {
   capitalize,
   checkImageUrlExists,
   conceptFileName,
+  csvEscape,
+  csvHeaders,
   deepDiff,
   diff,
-  drop,
-  escapeCSV,
-  filterObject,
+  drop, filterObject,
   formatConceptNameForFilename,
   hasTrue,
   humanTimestamp,

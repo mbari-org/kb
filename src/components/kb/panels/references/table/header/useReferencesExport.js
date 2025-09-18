@@ -1,4 +1,4 @@
-import { escapeCSV, formatConceptNameForFilename, writeCSVContent } from '@/lib/utils'
+import { csvEscape, formatConceptNameForFilename, writeCSVContent } from '@/lib/utils'
 
 const referenceDataHeaders = ['DOI', 'Citation', 'Concepts']
 
@@ -23,7 +23,7 @@ const useReferencesExport = () => {
       })
 
       const writable = await handle.createWritable()
-      await writable.write(referenceDataHeaders.map(escapeCSV).join(',') + '\n')
+      await writable.write(referenceDataHeaders.map(csvEscape).join(',') + '\n')
 
       await writeCSVContent(writable, referenceRows(references))
       await writable.close()
