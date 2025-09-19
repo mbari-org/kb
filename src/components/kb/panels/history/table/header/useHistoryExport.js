@@ -73,8 +73,8 @@ const fetchHistory = async (type, pageIndex, pageSize, apiFns) => {
 const fileName = ({ conceptName, historyExtent, type }) => {
   if (type === TYPE.CONCEPT) {
     const extent =
-      historyExtent === EXTENT.CONCEPT ? '' : `-and-${historyExtent}`
-    return `KB-History-${conceptNameForFilename(conceptName)}${extent}.csv`
+      historyExtent === EXTENT.CONCEPT ? '' : `_and_${historyExtent}`
+    return `KB-History_${conceptNameForFilename(conceptName)}${extent}.csv`
   }
   return `KB-History-${capitalize(type)}.csv`
 }

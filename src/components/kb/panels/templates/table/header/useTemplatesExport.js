@@ -12,7 +12,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import createCsvExport from '@/lib/csvExport'
+import csvExport from '@/lib/csvExport'
 
 import { PAGINATION } from '@/lib/constants'
 
@@ -101,9 +101,9 @@ const useTemplatesExport = () => {
     const availableTag = normalizedFilters.available ? 'Available_' : 'Explicit_'
     const suggestedName = `KB-Templates-${availableTag}${filterName}.csv`
 
-    const requiresPagination = !normalizedFilters.displayTemplates && 
-      !normalizedFilters.filterConcept && 
-      !normalizedFilters.filterToConcept
+    const requiresPagination = !normalizedFilters.displayTemplates &&
+     !normalizedFilters.filterConcept &&
+     !normalizedFilters.filterToConcept
 
     let estimatedTotalPages = null
     let totalCount = 0
@@ -132,7 +132,7 @@ const useTemplatesExport = () => {
       return pagedTemplates?.length > 0 ? dataRows(pagedTemplates) : null
     }
 
-    const exportFn = createCsvExport({
+    const templatesExport = csvExport({
       comments: buildComments(normalizedFilters),
       count: totalCount,
       estimatedTotalPages,
@@ -145,7 +145,7 @@ const useTemplatesExport = () => {
       user,
     })
 
-    return exportFn()
+    return templatesExport()
   }
 
   return templatesExport

@@ -1,41 +1,39 @@
-import { csvHeaders, csvOut } from '@/lib/csv'
+import { use } from 'react'
+
+import UserContext from '@/contexts/user/UserContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+
+import createCsvExport from '@/lib/csvExport'
 import { conceptNameForFilename } from '@/lib/utils'
 
-const referenceDataHeaders = ['DOI', 'Citation', 'Concepts']
+const dataHeaders = ['DOI', 'Citation', 'Concepts']
 
-const referenceRows = references =>
+const dataRows = references =>
   references.map(reference => [reference.doi, reference.citation, reference.concepts])
 
-const useReferencesExport = () => {
-  const referencesExport = async (references, byConceptName) => {
-    const suggestName = `KB-References_${
-      byConceptName ? conceptNameForFilename(byConceptName) : 'all'
-    }.csv`
-
-    try {
-      const handle = await window.showSaveFilePicker({
-        suggestedName: suggestName,
-        types: [
-          {
-            description: 'CSV Files',
-            accept: { 'text/csv': ['.csv'] },
-          },
-        ],
-      })
-
-      const writable = await handle.createWritable()
-      await writable.write(csvHeaders(referenceDataHeaders))
-
-      await csvOut(writable, referenceRows(references))
-      await writable.close()
-    } catch (error) {
-      if (error.name !== 'AbortError') {
-        console.error('Error saving file:', error)
-      }
-    }
+const buildComments = byConceptName => {
+  const comments = []
+  if (byConceptName) {
+    comments.push(`Concept: ${byConceptName}`)
   }
+  return comments
+}
 
-  return referencesExport
+const useReferencesExport = () => {
+  const { user } = use(UserContext)
+  const { setExporting } = use(PanelDataContext)
+
+  return (references, byConceptName) => createCsvExport({
+    comments: buildComments(byConceptName),
+    count: references.length,
+    getData: () => dataRows(references),
+    headers: dataHeaders,
+    onProgress: setExporting,
+    paginated: false,
+    suggestedName: () => `KB-References_${byConceptName ? conceptNameForFilename(byConceptName) : 'all'}.csv`,
+    title: 'Knowledge Base References',
+    user,
+  })()
 }
 
 export default useReferencesExport
