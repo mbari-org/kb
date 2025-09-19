@@ -21,14 +21,24 @@ import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
 const buildComments = data => {
-  const comments = []
-  comments.push(`Type: ${data.available ? 'Available' : 'Explicit'}`)
-  if (data.filterConcept) {
-    comments.push(`Concept: ${data.filterConcept}`)
+  const { available, filterConcept, filterToConcept, linkName, linkValue } = data
+
+  const comments = [`Type: ${available ? 'Available' : 'Explicit'}`]
+
+  if (!filterConcept && !filterToConcept && !linkName && !linkValue) {
+    return comments
   }
-  if (data.filterToConcept) {
-    comments.push(`To Concept: ${data.filterToConcept}`)
+
+  if (filterConcept && !filterToConcept && !linkName && !linkValue) {
+    comments.push(`Concept: ${filterConcept}`)
+    return comments
   }
+
+  filterConcept && comments.push(`Concept: ${filterConcept}`)
+  linkName && comments.push(`Link Name: ${linkName}`)
+  filterToConcept && comments.push(`To Concept: ${filterToConcept}`)
+  linkValue && comments.push(`Link Value: ${linkValue}`)
+
   return comments
 }
 
@@ -85,6 +95,8 @@ const useTemplatesExport = () => {
     available,
     concept,
     toConcept,
+    linkName,
+    linkValue,
     filteredTemplates,
   } = use(TemplatesContext)
   const { user } = use(UserContext)
@@ -93,18 +105,41 @@ const useTemplatesExport = () => {
     available,
     filterConcept: concept,
     filterToConcept: toConcept,
+    linkName,
+    linkValue,
     displayTemplates: filteredTemplates,
   }
 
-  const filterName =
-    normalizedFilters.filterConcept || normalizedFilters.filterToConcept
-      ? conceptNameForFilename(normalizedFilters.filterConcept) +
-        '-to-' +
-        conceptNameForFilename(normalizedFilters.filterToConcept)
-      : 'all'
+  const filterName = (() => {
+    const { filterConcept, filterToConcept, linkName, linkValue } = normalizedFilters
 
-  const availableTag = normalizedFilters.available ? 'Available_' : 'Explicit_'
-  const suggestName = () => `KB-Templates-${availableTag}${filterName}.csv`
+    if (!filterConcept && !filterToConcept && !linkName && !linkValue) {
+      return ''
+    }
+
+    if (filterConcept && !filterToConcept && !linkName && !linkValue) {
+      return `_${conceptNameForFilename(filterConcept)}`
+    }
+
+    const conceptName = filterConcept ? conceptNameForFilename(filterConcept) : 'X'
+    const linkNameValue = linkName || 'X'
+    const toConceptName = filterToConcept ? conceptNameForFilename(filterToConcept) : 'X'
+    const linkValueValue = linkValue || 'X'
+
+    return `${conceptName}_${linkNameValue}_${toConceptName}_${linkValueValue}`
+  })()
+
+  const availableTag = normalizedFilters.available ? 'Available' : 'Explicit'
+  const suggestName = () => {
+    const baseName = `KB-Templates-${availableTag}`
+    if (!filterName) {
+      return `${baseName}.csv`
+    }
+    // If filterName starts with underscore, don't add extra underscore
+    return filterName.startsWith('_')
+      ? `${baseName}${filterName}.csv`
+      : `${baseName}_${filterName}.csv`
+  }
 
   const paginated = !normalizedFilters.displayTemplates &&
     !normalizedFilters.filterConcept &&
