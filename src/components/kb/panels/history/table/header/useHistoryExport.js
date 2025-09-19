@@ -1,18 +1,18 @@
-import { use } from 'react'
+import { use, useEffect, useState } from 'react'
 
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
+import UserContext from '@/contexts/user/UserContext'
 
-import useCsvComments from '@/hooks/useCsvComments'
+import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
 import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
-import { csvHeaders, csvOut } from '@/lib/csv'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 const { EXTENT, TYPE } = CONCEPT_HISTORY
@@ -61,7 +61,7 @@ const dataHeaders = type => {
   return headers
 }
 
-const fetchHistoryByPage = async (type, pageIndex, pageSize, apiFns) => {
+const fetchHistory = async (type, pageIndex, pageSize, apiFns) => {
   const offset = pageIndex * pageSize
   const response = await apiFns.apiPaginated(getHistory, [
     type,
@@ -113,6 +113,7 @@ const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
   const { conceptData, conceptHistoryExtent, selectedType, selectedConcept, sortOrder } = use(HistoryContext)
   const { setExporting } = use(PanelDataContext)
+  const { user } = use(UserContext)
 
   const content = commentsContent({
     concept: selectedConcept,
@@ -120,87 +121,63 @@ const useHistoryExport = () => {
     historyType: selectedType,
   })
 
-  const csvComments = useCsvComments({
-    content,
-    count: conceptData.length,
-    title: 'Knowledge Base History',
-  })
-
-  const historyExport = async () => {
-    let writable = null
-    try {
-      setExporting('Exporting history to CSV file...')
-      const handle = await window.showSaveFilePicker({
-        suggestedName: fileName({
-          type: selectedType,
-          conceptName: selectedConcept,
-          historyExtent: conceptHistoryExtent,
-        }),
-        types: [
-          {
-            description: 'CSV Files',
-            accept: { 'text/csv': ['.csv'] },
-          },
-        ],
-      })
-
-      writable = await handle.createWritable()
-      await writable.write(csvComments())
-      await writable.write(csvHeaders(dataHeaders(selectedType)))
-      if (selectedType === TYPE.CONCEPT && selectedConcept && conceptData) {
-        if (!conceptData) {
-          return
-        }
-
-        const sortedData = [...conceptData].sort((a, b) => {
-          const comparison = new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
-          return sortOrder === 'asc' ? -comparison : comparison
-        })
-        const rows = sortedData.map(item => rowData(item, selectedType))
-        await csvOut(writable, rows)
-      } else {
-        let pageIndex = 0
-        let hasMoreData = true
-
-        const totalCount = await apiFns.apiResult(getHistoryCount, selectedType)
-        const estimatedTotalPages = totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : '?'
-
-        while (hasMoreData) {
-          setExporting(`Exporting page ${pageIndex} of ${estimatedTotalPages} to CSV file...`)
-          const historyItems = await fetchHistoryByPage(
-            selectedType,
-            pageIndex,
-            EXPORT_PAGE_SIZE,
-            apiFns
-          )
-
-          if (!historyItems || historyItems.length === 0) {
-            hasMoreData = false
-            continue
-          }
-
-          const rows = historyItems.map(item => rowData(item, selectedType))
-          await csvOut(writable, rows)
-          pageIndex++
-        }
-      }
-
-      await writable.close()
-    } catch (error) {
-      if (error.name !== 'AbortError') {
-        console.error('Error saving file:', error)
-      }
-      if (writable) {
-        try {
-          await writable.close()
-        } catch (closeError) {
-          console.error('Error closing writable:', closeError)
-        }
-      }
-    } finally {
-      setExporting(false)
-    }
+  const getConceptData = async () => {
+    const sortedData = [...conceptData].sort((a, b) => {
+      const comparison = new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
+      return sortOrder === 'asc' ? -comparison : comparison
+    })
+    return sortedData.map(item => rowData(item, selectedType))
   }
+
+  const getPaginatedData = async pageIndex => {
+    const historyItems = await fetchHistory(
+      selectedType,
+      pageIndex,
+      EXPORT_PAGE_SIZE,
+      apiFns
+    )
+
+    if (!historyItems || historyItems.length === 0) {
+      return null
+    }
+
+    return historyItems.map(item => rowData(item, selectedType))
+  }
+
+  const getEstimatedPages = async () => {
+    if (selectedType === TYPE.CONCEPT && selectedConcept && conceptData) {
+      return null
+    }
+    const totalCount = await apiFns.apiResult(getHistoryCount, selectedType)
+    return totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : '?'
+  }
+
+  const isConceptExport = selectedType === TYPE.CONCEPT && selectedConcept && conceptData
+  const [estimatedPages, setEstimatedPages] = useState(null)
+
+  useEffect(() => {
+    if (!isConceptExport) {
+      getEstimatedPages().then(setEstimatedPages)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedType, isConceptExport])
+
+  const historyExport = csvExport({
+    comments: content,
+    count: conceptData?.length || 0,
+    estimatedTotalPages: estimatedPages,
+    getData: isConceptExport ? getConceptData : getPaginatedData,
+    headers: dataHeaders(selectedType),
+    onProgress: setExporting,
+    paginated: !isConceptExport,
+    suggestedName: () => fileName({
+      type: selectedType,
+      conceptName: selectedConcept,
+      historyExtent: conceptHistoryExtent,
+    }),
+    title: 'Knowledge Base History',
+    user,
+  })
 
   return historyExport
 }

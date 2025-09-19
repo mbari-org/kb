@@ -33,7 +33,7 @@ const HistoryProvider = ({ children }) => {
 
   const [count, setCount] = useState(0)
   const [conceptData, setConceptData] = useState([])
-  const [conceptHistoryExtent, setConceptHistoryExtent] = useState(null)
+  const [conceptHistoryExtent, setConceptHistoryExtent] = useState(EXTENT.CONCEPT)
   const [typeData, setTypeData] = useState([])
   const [typeState, setTypeState] = useState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
   const [sortOrder, setSortOrder] = useState('desc')
@@ -41,7 +41,7 @@ const HistoryProvider = ({ children }) => {
   const isTypeChanging = useRef(false)
 
   useEffect(() => {
-    setConceptHistoryExtent(null)
+    setConceptHistoryExtent(EXTENT.CONCEPT)
   }, [selectedConcept])
 
   const loadData = useLoadData({
