@@ -9,11 +9,10 @@ const csvExport = ({
   headers,
   onProgress,
   paginated = false,
-  suggestedName,
+  suggestName,
   title,
   user,
 }) => {
-
   const csvComments = () => {
     let commentText = `# ${title}\n`
     if (comments) {
@@ -33,7 +32,7 @@ const csvExport = ({
 
     try {
       handle = await window.showSaveFilePicker({
-        suggestedName: suggestedName(),
+        suggestedName: suggestName(),
         types: [
           {
             description: 'CSV Files',

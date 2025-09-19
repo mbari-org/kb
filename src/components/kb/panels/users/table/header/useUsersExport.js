@@ -1,5 +1,6 @@
 import { use } from 'react'
 
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -17,7 +18,7 @@ const dataHeaders = [
   'Last Updated',
 ]
 
-const userData = users =>
+const dataRows = users =>
   users.map(user => [
     user.username,
     user.role,
@@ -28,21 +29,27 @@ const userData = users =>
     humanTimestamp(user.lastUpdated),
   ])
 
+const buildComments = () => {
+  return []
+}
+
+const suggestName = () => 'KB-Users.csv'
+
 const useUsersExport = () => {
   const { users } = use(UsersContext)
   const { user } = use(UserContext)
+  const { setExporting } = use(PanelDataContext)
 
-  const getUsersData = async () => userData(users)
-
-  const usersExport = csvExport({
+  return csvExport({
+    comments: buildComments(),
     count: users.length,
-    getData: getUsersData,
+    getData: async () => dataRows(users),
     headers: dataHeaders,
-    suggestedName: () => 'KB-Users.csv',
+    onProgress: setExporting,
+    paginated: false,
+    suggestName,
     title: 'Knowledge Base Users',
     user,
   })
-
-  return usersExport
 }
 export default useUsersExport

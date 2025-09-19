@@ -155,6 +155,12 @@ const useHistoryExport = () => {
   const isConceptExport = selectedType === TYPE.CONCEPT && selectedConcept && conceptData
   const [estimatedPages, setEstimatedPages] = useState(null)
 
+  const suggestName = () => fileName({
+    type: selectedType,
+    conceptName: selectedConcept,
+    historyExtent: conceptHistoryExtent,
+  })
+
   useEffect(() => {
     if (!isConceptExport) {
       getEstimatedPages().then(setEstimatedPages)
@@ -162,7 +168,7 @@ const useHistoryExport = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType, isConceptExport])
 
-  const historyExport = csvExport({
+  return csvExport({
     comments: content,
     count: conceptData?.length || 0,
     estimatedTotalPages: estimatedPages,
@@ -170,16 +176,10 @@ const useHistoryExport = () => {
     headers: dataHeaders(selectedType),
     onProgress: setExporting,
     paginated: !isConceptExport,
-    suggestedName: () => fileName({
-      type: selectedType,
-      conceptName: selectedConcept,
-      historyExtent: conceptHistoryExtent,
-    }),
+    suggestName,
     title: 'Knowledge Base History',
     user,
   })
-
-  return historyExport
 }
 
 export default useHistoryExport

@@ -4,7 +4,6 @@ import {
   getAvailableTemplates,
   getExplicitTemplates,
   getTemplates,
-  getTemplatesCount,
   getToConceptTemplates,
 } from '@/lib/api/linkTemplates'
 
@@ -83,7 +82,7 @@ const useTemplatesExport = () => {
   const { setExporting } = use(PanelDataContext)
   const { user } = use(UserContext)
 
-  const templatesExport = async data => {
+  return data => {
     const normalizedFilters = {
       available: data.available,
       filterConcept: data.concept,
@@ -99,25 +98,14 @@ const useTemplatesExport = () => {
         : 'all'
 
     const availableTag = normalizedFilters.available ? 'Available_' : 'Explicit_'
-    const suggestedName = `KB-Templates-${availableTag}${filterName}.csv`
+    const suggestName = () => `KB-Templates-${availableTag}${filterName}.csv`
 
-    const requiresPagination = !normalizedFilters.displayTemplates &&
-     !normalizedFilters.filterConcept &&
-     !normalizedFilters.filterToConcept
+    const paginated = !normalizedFilters.displayTemplates &&
+      !normalizedFilters.filterConcept &&
+      !normalizedFilters.filterToConcept
 
-    let estimatedTotalPages = null
-    let totalCount = 0
-    let filteredTemplates = null
-
-    if (requiresPagination) {
-      totalCount = await apiFns.apiResult(getTemplatesCount)
-      estimatedTotalPages = totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : null
-    } else if (normalizedFilters.displayTemplates) {
-      totalCount = normalizedFilters.displayTemplates.length
-    } else {
-      filteredTemplates = await fetchFilteredTemplates(normalizedFilters, apiFns)
-      totalCount = filteredTemplates ? filteredTemplates.length : 0
-    }
+    const count = normalizedFilters.displayTemplates?.length ?? '?'
+    const estimatedTotalPages = null
 
     const getData = async (pageIndex = 0) => {
       if (normalizedFilters.displayTemplates?.length > 0) {
@@ -125,30 +113,27 @@ const useTemplatesExport = () => {
       }
 
       if (normalizedFilters.filterConcept || normalizedFilters.filterToConcept) {
-        return filteredTemplates ? dataRows(filteredTemplates) : []
+        const filtered = await fetchFilteredTemplates(normalizedFilters, apiFns)
+        return filtered ? dataRows(filtered) : []
       }
 
       const pagedTemplates = await fetchTemplatesByPage(apiFns, pageIndex)
       return pagedTemplates?.length > 0 ? dataRows(pagedTemplates) : null
     }
 
-    const templatesExport = csvExport({
+    return csvExport({
       comments: buildComments(normalizedFilters),
-      count: totalCount,
+      count,
       estimatedTotalPages,
       getData,
       headers: dataHeaders,
       onProgress: setExporting,
-      paginated: requiresPagination,
-      suggestedName: () => suggestedName,
+      paginated,
+      suggestName,
       title: 'Knowledge Base Templates Export',
       user,
     })
-
-    return templatesExport()
   }
-
-  return templatesExport
 }
 
 export default useTemplatesExport

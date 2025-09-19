@@ -22,15 +22,12 @@ const ReferencesTableHeaderLeft = () => {
 
   const selectedConcept = getSelected(CONCEPT)
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
-  const byConceptName = byConcept ? selectedConcept : null
 
   const referencesExport = useReferencesExport()
 
-  const filteredReferences = byConcept
-    ? references.filter(reference => reference.concepts.includes(selectedConcept))
-    : references
-
-  const total = filteredReferences.length
+  const total = byConcept
+    ? references.filter(reference => reference.concepts.includes(selectedConcept)).length
+    : references.length
 
   const exportToolTip = byConcept ? EXPORT.BY_CONCEPT : EXPORT.ALL
   const switchToolTip = byConcept ? SWITCH.BY_CONCEPT : SWITCH.ALL
@@ -40,15 +37,11 @@ const ReferencesTableHeaderLeft = () => {
     updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: newValue } })
   }
 
-  const exportFn = () => {
-    referencesExport(filteredReferences, byConceptName)
-  }
-
   return (
     <PanelDataExportSwitch
       checked={byConcept}
       count={total}
-      exportFn={exportFn}
+      exportFn={referencesExport}
       exportToolTip={exportToolTip}
       switchFn={switchFn}
       switchLabel='By Concept'
