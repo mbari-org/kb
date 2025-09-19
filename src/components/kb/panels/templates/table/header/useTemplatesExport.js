@@ -85,8 +85,6 @@ const useTemplatesExport = () => {
     available,
     concept,
     toConcept,
-    linkName: _linkName,
-    linkValue: _linkValue,
     filteredTemplates,
   } = use(TemplatesContext)
   const { user } = use(UserContext)

@@ -16,7 +16,7 @@ const UsersTableHeaderLeft = () => {
 
   const toolTip = EXPORT.ALL
 
-  return <PanelDataExport count={users?.length || 0} exportFn={usersExport} toolTip={toolTip} />
+  return <PanelDataExport count={users?.length || 0} exportFn={usersExport} exportToolTip={toolTip} width='auto' />
 }
 
 export default UsersTableHeaderLeft
