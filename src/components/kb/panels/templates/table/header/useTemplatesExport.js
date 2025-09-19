@@ -12,26 +12,23 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
+import createCsvExport from '@/lib/csvExport'
+
 import { PAGINATION } from '@/lib/constants'
 
-import { csvHeaders, csvOut } from '@/lib/csv'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
-const csvComments = ({ data, user }) => {
-  var comments = '# Knowledge Base Templates Export\n'
-  comments += `#   Type: ${data.available ? 'Available' : 'Explicit'}\n`
+const buildComments = data => {
+  const comments = []
+  comments.push(`Type: ${data.available ? 'Available' : 'Explicit'}`)
   if (data.filterConcept) {
-    comments += `#   Concept: ${data.filterConcept}\n`
+    comments.push(`Concept: ${data.filterConcept}`)
   }
   if (data.filterToConcept) {
-    comments += `#   To Concept: ${data.filterToConcept}\n`
+    comments.push(`To Concept: ${data.filterToConcept}`)
   }
-  comments += `#   Total: ${data.templates.length}\n`
-  comments += `#   Exported By: ${user.name}\n`
-  comments += `#   Date: ${humanTimestamp(new Date())}\n`
-  comments += '#\n'
   return comments
 }
 
@@ -85,72 +82,70 @@ const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
   const { setExporting } = use(PanelDataContext)
   const { user } = use(UserContext)
+
   const templatesExport = async data => {
+    const normalizedFilters = {
+      available: data.available,
+      filterConcept: data.concept,
+      filterToConcept: data.toConcept,
+      displayTemplates: data.filteredTemplates,
+    }
+
     const filterName =
-      data?.filterConcept || data?.filterToConcept
-        ? conceptNameForFilename(data.filterConcept) +
+      normalizedFilters.filterConcept || normalizedFilters.filterToConcept
+        ? conceptNameForFilename(normalizedFilters.filterConcept) +
           '-to-' +
-          conceptNameForFilename(data.filterToConcept)
+          conceptNameForFilename(normalizedFilters.filterToConcept)
         : 'all'
 
-    const availableTag = data?.available ? 'Available_' : 'Explicit_'
+    const availableTag = normalizedFilters.available ? 'Available_' : 'Explicit_'
     const suggestedName = `KB-Templates-${availableTag}${filterName}.csv`
 
-    try {
-      setExporting(true)
-      const handle = await window.showSaveFilePicker({
-        suggestedName,
-        types: [
-          {
-            description: 'CSV Files',
-            accept: { 'text/csv': ['.csv'] },
-          },
-        ],
-      })
+    const requiresPagination = !normalizedFilters.displayTemplates && 
+      !normalizedFilters.filterConcept && 
+      !normalizedFilters.filterToConcept
 
-      const writable = await handle.createWritable()
-      await writable.write(csvComments({ data, user }))
-      await writable.write(csvHeaders(dataHeaders))
+    let estimatedTotalPages = null
+    let totalCount = 0
+    let filteredTemplates = null
 
-      // If displayTemplates are provided, use them directly (matches what user sees in table)
-      if (data.displayTemplates && data.displayTemplates.length > 0) {
-        setExporting('Writing templates to CSV file...')
-        await csvOut(writable, dataRows(data.displayTemplates))
-      } else if (data.filterConcept || data.filterToConcept) {
-        // Fetch all templates for the current filter
-        setExporting('Writing templates to CSV file...')
-        const filteredTemplates = await fetchFilteredTemplates(data, apiFns)
-        if (filteredTemplates) {
-          await csvOut(writable, dataRows(filteredTemplates))
-        }
-      } else {
-        // Get count just for display purposes
-        const totalCount = await apiFns.apiResult(getTemplatesCount)
-        const estimatedTotalPages = totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : '?'
-
-        let pageIndex = 0
-        let hasMoreData = true
-
-        while (hasMoreData) {
-          setExporting(`Writing page ${pageIndex + 1} of ${estimatedTotalPages} to CSV file...`)
-          const templates = await fetchTemplatesByPage(apiFns, pageIndex)
-          if (!templates || templates.length === 0) {
-            hasMoreData = false
-            continue
-          }
-          await csvOut(writable, dataRows(templates))
-          pageIndex++
-        }
-      }
-
-      await writable.close()
-    } catch (error) {
-      if (error.name !== 'AbortError') {
-        console.error('Error saving file:', error)
-      }
-    } finally {
-      setExporting(false)
+    if (requiresPagination) {
+      totalCount = await apiFns.apiResult(getTemplatesCount)
+      estimatedTotalPages = totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : null
+    } else if (normalizedFilters.displayTemplates) {
+      totalCount = normalizedFilters.displayTemplates.length
+    } else {
+      filteredTemplates = await fetchFilteredTemplates(normalizedFilters, apiFns)
+      totalCount = filteredTemplates ? filteredTemplates.length : 0
     }
+
+    const getData = async (pageIndex = 0) => {
+      if (normalizedFilters.displayTemplates?.length > 0) {
+        return dataRows(normalizedFilters.displayTemplates)
+      }
+
+      if (normalizedFilters.filterConcept || normalizedFilters.filterToConcept) {
+        return filteredTemplates ? dataRows(filteredTemplates) : []
+      }
+
+      const pagedTemplates = await fetchTemplatesByPage(apiFns, pageIndex)
+      return pagedTemplates?.length > 0 ? dataRows(pagedTemplates) : null
+    }
+
+    const exportFn = createCsvExport({
+      comments: buildComments(normalizedFilters),
+      count: totalCount,
+      estimatedTotalPages,
+      getData,
+      headers: dataHeaders,
+      onProgress: setExporting,
+      paginated: requiresPagination,
+      suggestedName: () => suggestedName,
+      title: 'Knowledge Base Templates Export',
+      user,
+    })
+
+    return exportFn()
   }
 
   return templatesExport
