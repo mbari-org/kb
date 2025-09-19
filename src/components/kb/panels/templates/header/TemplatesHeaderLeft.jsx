@@ -20,8 +20,12 @@ const TemplatesHeaderLeft = () => {
   const selectables = available ? getNames() : explicitConcepts
 
   const doConceptSelected = conceptName => {
-    updateSelected({ [SELECTED.CONCEPT]: conceptName })
-    updateFilters({ [TEMPLATES.FILTERS.CONCEPT]: conceptName })
+    if (conceptName) {
+      updateSelected({ [SELECTED.CONCEPT]: conceptName })
+      updateFilters({ [TEMPLATES.FILTERS.CONCEPT]: conceptName })
+    } else {
+      updateFilters({ [TEMPLATES.FILTERS.CONCEPT]: '' })
+    }
   }
 
   return (

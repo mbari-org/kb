@@ -9,12 +9,12 @@ export default function useUpdateFilters(filters, updateSettings) {
     updates => {
       const newFilters = { ...filters }
 
-      // Use the constants for all keys
       if (updates[FILTERS.CONCEPT] !== undefined) {
-        if (updates[FILTERS.CONCEPT] && updates[FILTERS.CONCEPT].trim()) {
-          newFilters[FILTERS.CONCEPT] = updates[FILTERS.CONCEPT]
+        const next = updates[FILTERS.CONCEPT]
+        if (next && next.trim()) {
+          newFilters[FILTERS.CONCEPT] = next
         } else {
-          delete newFilters[FILTERS.CONCEPT]
+          newFilters[FILTERS.CONCEPT] = ''
         }
       }
 

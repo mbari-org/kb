@@ -47,7 +47,10 @@ const TemplatesProvider = ({ children }) => {
     if (getSelected(SELECTED.PANEL) === SELECTED.PANELS.TEMPLATES) {
       const selectedConcept = getSelected(SELECTED.CONCEPT)
 
-      if (selectedConcept && selectedConcept !== filters[FILTERS.CONCEPT]) {
+      if (
+        typeof filters[FILTERS.CONCEPT] === 'undefined' &&
+        selectedConcept
+      ) {
         updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
       }
     }
@@ -105,12 +108,16 @@ const TemplatesProvider = ({ children }) => {
     () => ({
       addTemplate,
       available,
+      concept: filters[FILTERS.CONCEPT],
+      deleteTemplate,
+      editTemplate,
       explicitConcepts,
       filteredTemplates,
       filters,
-      deleteTemplate,
-      editTemplate,
+      linkName: filters[FILTERS.LINK_NAME],
+      linkValue: filters[FILTERS.LINK_VALUE],
       setAvailable,
+      toConcept: filters[FILTERS.TO_CONCEPT],
       updateFilters,
     }),
     [

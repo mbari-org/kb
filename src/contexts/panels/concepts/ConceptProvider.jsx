@@ -111,7 +111,23 @@ const ConceptProvider = ({ children }) => {
         conceptLoader(selectedConcept)
       }
     }
-  }, [concept, conceptLoader, displayStaged, getConcept, getSelected, hasUnsavedChanges, isConceptLoaded, loadConcept, panels, setAppModalData, setAppProcessing, setConcept, setHasUnsavedChanges, setModalData, taxonomy])
+  }, [
+    concept,
+    conceptLoader,
+    displayStaged,
+    getConcept,
+    getSelected,
+    hasUnsavedChanges,
+    isConceptLoaded,
+    loadConcept,
+    panels,
+    setAppModalData,
+    setAppProcessing,
+    setConcept,
+    setHasUnsavedChanges,
+    setModalData,
+    taxonomy,
+  ])
 
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
