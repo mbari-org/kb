@@ -18,14 +18,6 @@ const TemplatesTableHeaderLeft = () => {
 
   const templatesExport = useTemplatesExport()
 
-  const exportFn = () =>
-    templatesExport({
-      available,
-      concept: filters[TEMPLATES.FILTERS.CONCEPT],
-      filteredTemplates,
-      toConcept: filters[TEMPLATES.FILTERS.TO_CONCEPT],
-    })
-
   const switchFn = event => setAvailable(event.target.checked)
 
   let exportToolTip
@@ -43,7 +35,7 @@ const TemplatesTableHeaderLeft = () => {
     <PanelDataExportSwitch
       checked={available}
       count={filteredTemplates.length}
-      exportFn={exportFn}
+      exportFn={templatesExport}
       exportToolTip={exportToolTip}
       switchFn={switchFn}
       switchLabel='Available'

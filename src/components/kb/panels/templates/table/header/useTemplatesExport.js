@@ -9,6 +9,7 @@ import {
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
@@ -80,60 +81,66 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
   const { setExporting } = use(PanelDataContext)
+  const {
+    available,
+    concept,
+    toConcept,
+    linkName: _linkName,
+    linkValue: _linkValue,
+    filteredTemplates,
+  } = use(TemplatesContext)
   const { user } = use(UserContext)
 
-  return data => {
-    const normalizedFilters = {
-      available: data.available,
-      filterConcept: data.concept,
-      filterToConcept: data.toConcept,
-      displayTemplates: data.filteredTemplates,
-    }
-
-    const filterName =
-      normalizedFilters.filterConcept || normalizedFilters.filterToConcept
-        ? conceptNameForFilename(normalizedFilters.filterConcept) +
-          '-to-' +
-          conceptNameForFilename(normalizedFilters.filterToConcept)
-        : 'all'
-
-    const availableTag = normalizedFilters.available ? 'Available_' : 'Explicit_'
-    const suggestName = () => `KB-Templates-${availableTag}${filterName}.csv`
-
-    const paginated = !normalizedFilters.displayTemplates &&
-      !normalizedFilters.filterConcept &&
-      !normalizedFilters.filterToConcept
-
-    const count = normalizedFilters.displayTemplates?.length ?? '?'
-    const estimatedTotalPages = null
-
-    const getData = async (pageIndex = 0) => {
-      if (normalizedFilters.displayTemplates?.length > 0) {
-        return dataRows(normalizedFilters.displayTemplates)
-      }
-
-      if (normalizedFilters.filterConcept || normalizedFilters.filterToConcept) {
-        const filtered = await fetchFilteredTemplates(normalizedFilters, apiFns)
-        return filtered ? dataRows(filtered) : []
-      }
-
-      const pagedTemplates = await fetchTemplatesByPage(apiFns, pageIndex)
-      return pagedTemplates?.length > 0 ? dataRows(pagedTemplates) : null
-    }
-
-    return csvExport({
-      comments: buildComments(normalizedFilters),
-      count,
-      estimatedTotalPages,
-      getData,
-      headers: dataHeaders,
-      onProgress: setExporting,
-      paginated,
-      suggestName,
-      title: 'Knowledge Base Templates Export',
-      user,
-    })
+  const normalizedFilters = {
+    available,
+    filterConcept: concept,
+    filterToConcept: toConcept,
+    displayTemplates: filteredTemplates,
   }
+
+  const filterName =
+    normalizedFilters.filterConcept || normalizedFilters.filterToConcept
+      ? conceptNameForFilename(normalizedFilters.filterConcept) +
+        '-to-' +
+        conceptNameForFilename(normalizedFilters.filterToConcept)
+      : 'all'
+
+  const availableTag = normalizedFilters.available ? 'Available_' : 'Explicit_'
+  const suggestName = () => `KB-Templates-${availableTag}${filterName}.csv`
+
+  const paginated = !normalizedFilters.displayTemplates &&
+    !normalizedFilters.filterConcept &&
+    !normalizedFilters.filterToConcept
+
+  const count = normalizedFilters.displayTemplates?.length ?? '?'
+  const estimatedTotalPages = null
+
+  const getData = async (pageIndex = 0) => {
+    if (normalizedFilters.displayTemplates?.length > 0) {
+      return dataRows(normalizedFilters.displayTemplates)
+    }
+
+    if (normalizedFilters.filterConcept || normalizedFilters.filterToConcept) {
+      const filtered = await fetchFilteredTemplates(normalizedFilters, apiFns)
+      return filtered ? dataRows(filtered) : []
+    }
+
+    const pagedTemplates = await fetchTemplatesByPage(apiFns, pageIndex)
+    return pagedTemplates?.length > 0 ? dataRows(pagedTemplates) : null
+  }
+
+  return csvExport({
+    comments: buildComments(normalizedFilters),
+    count,
+    estimatedTotalPages,
+    getData,
+    headers: dataHeaders,
+    onProgress: setExporting,
+    paginated,
+    suggestName,
+    title: 'Knowledge Base Templates Export',
+    user,
+  })
 }
 
 export default useTemplatesExport
