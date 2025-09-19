@@ -6,7 +6,7 @@ import KBTooltip from '@/components/common/KBTooltip'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { FONT } from '@/lib/tooltips'
+import { FONT } from '@/lib/constants'
 import { SELECTED } from '@/lib/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS

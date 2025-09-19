@@ -14,12 +14,8 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { PAGINATION } from '@/lib/constants'
 
-import {
-  conceptNameInFilename,
-  csvHeaders,
-  humanTimestamp,
-  writeCSVContent,
-} from '@/lib/utils'
+import { csvHeaders, csvOut } from '@/lib/csv'
+import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
@@ -92,9 +88,9 @@ const useTemplatesExport = () => {
   const templatesExport = async data => {
     const filterName =
       data?.filterConcept || data?.filterToConcept
-        ? conceptNameInFilename(data.filterConcept) +
+        ? conceptNameForFilename(data.filterConcept) +
           '-to-' +
-          conceptNameInFilename(data.filterToConcept)
+          conceptNameForFilename(data.filterToConcept)
         : 'all'
 
     const availableTag = data?.available ? 'Available_' : 'Explicit_'
@@ -119,13 +115,13 @@ const useTemplatesExport = () => {
       // If displayTemplates are provided, use them directly (matches what user sees in table)
       if (data.displayTemplates && data.displayTemplates.length > 0) {
         setExporting('Writing templates to CSV file...')
-        await writeCSVContent(writable, dataRows(data.displayTemplates))
+        await csvOut(writable, dataRows(data.displayTemplates))
       } else if (data.filterConcept || data.filterToConcept) {
         // Fetch all templates for the current filter
         setExporting('Writing templates to CSV file...')
         const filteredTemplates = await fetchFilteredTemplates(data, apiFns)
         if (filteredTemplates) {
-          await writeCSVContent(writable, dataRows(filteredTemplates))
+          await csvOut(writable, dataRows(filteredTemplates))
         }
       } else {
         // Get count just for display purposes
@@ -142,7 +138,7 @@ const useTemplatesExport = () => {
             hasMoreData = false
             continue
           }
-          await writeCSVContent(writable, dataRows(templates))
+          await csvOut(writable, dataRows(templates))
           pageIndex++
         }
       }

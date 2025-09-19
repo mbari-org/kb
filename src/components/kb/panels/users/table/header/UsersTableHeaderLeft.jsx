@@ -6,7 +6,7 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import useUsersExport from '@/components/kb/panels/users/table/header/useUsersExport'
 
-import { USERS } from '@/lib/tooltips'
+import { USERS } from '@/lib/constants'
 
 const { EXPORT } = USERS
 

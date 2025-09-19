@@ -1,6 +1,22 @@
 import localStore from './localStore'
 
-import { trimEndingCycle } from '@/lib/utils'
+// Trim the ending cycle of an array.
+//   ['A','B','C','C'] -> ['A','B','C']
+//   ['A', 'B', 'C', 'A', 'B', 'A', 'B'] -> ['A', 'B', 'C', 'A', 'B']
+//   ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D'] -> ['A', 'B', 'C', 'D']
+const trimEndingCycle = array => {
+  const n = array.length
+  const maxLen = Math.floor(n / 2)
+
+  const isMatch = len => array.slice(n - 2 * len, n - len).every((v, i) => v === array[n - len + i])
+
+  const k = Array.from({ length: maxLen }, (_, i) => i + 1).reduce(
+    (acc, len) => (isMatch(len) ? len : acc),
+    0
+  )
+
+  return array.slice(0, n - k)
+}
 
 const historyStore = (store, maxSize, defaultEntry) => {
   const initStore = () => {

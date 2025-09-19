@@ -14,18 +14,6 @@ const checkImageUrlExists = url => {
   })
 }
 
-const csvEscape = field => {
-  if (field == null) return ''
-  const stringField = String(field)
-  // If field contains comma, quote, or newline, wrap in quotes and escape existing quotes
-  if (stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
-    return `"${stringField.replace(/"/g, '""')}"`
-  }
-  return stringField
-}
-
-const csvHeaders = headers => headers.map(csvEscape).join(',') + '\n'
-
 const drop = (object, fields) => {
   if (Array.isArray(object)) return dropElements(object, fields)
   if (typeof object === 'object') return dropFields(object, fields)
@@ -78,7 +66,7 @@ const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
 
-const conceptNameInFilename = str => (str || 'all').replace(/\s+/g, '-')
+const conceptNameForFilename = str => (str || 'all').replace(/\s+/g, '-')
 
 const hasTrue = arg => {
   if (typeof arg === 'boolean') return arg
@@ -133,7 +121,6 @@ const isDeepEqual = (obj1, obj2, depth = Infinity) => {
   return true
 }
 
-// quick comparison of simple, JSON serializable objects
 const isJsonEqual = (obj1, obj2) =>
   obj1 == null || obj2 == null ? false : JSON.stringify(obj1) === JSON.stringify(obj2)
 
@@ -241,39 +228,16 @@ const prune = obj => {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-// Trim the ending cycle of an array.
-//   ['A','B','C','C'] -> ['A','B','C']
-//   ['A', 'B', 'C', 'A', 'B', 'A', 'B'] -> ['A', 'B', 'C', 'A', 'B']
-//   ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D'] -> ['A', 'B', 'C', 'D']
-const trimEndingCycle = array => {
-  const n = array.length
-  const maxLen = Math.floor(n / 2)
-
-  const isMatch = len => array.slice(n - 2 * len, n - len).every((v, i) => v === array[n - len + i])
-
-  const k = Array.from({ length: maxLen }, (_, i) => i + 1).reduce(
-    (acc, len) => (isMatch(len) ? len : acc),
-    0
-  )
-
-  return array.slice(0, n - k)
-}
-
-const writeCSVContent = async (writable, dataRows) => {
-  const csvRows = dataRows.map(row => row.map(csvEscape))
-  const csvContent = csvRows.map(row => row.join(',')).join('\n')
-  await writable.write(csvContent + '\n')
-}
-
 export {
   after,
   capitalize,
   checkImageUrlExists,
-  conceptNameInFilename,
-  csvHeaders,
+  conceptNameForFilename,
   deepDiff,
   diff,
-  drop, filterObject, hasTrue,
+  drop,
+  filterObject,
+  hasTrue,
   humanTimestamp,
   isDeepEqual,
   isElementInViewport,
@@ -286,6 +250,4 @@ export {
   prettyFormat,
   prune,
   sleep,
-  trimEndingCycle,
-  writeCSVContent,
 }

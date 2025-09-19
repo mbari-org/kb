@@ -9,7 +9,7 @@ import useReferencesExport from '@/components/kb/panels/references/table/header/
 
 import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
 
-import { REFERENCES as REFERENCES_TOOLTIPS } from '@/lib/tooltips'
+import { REFERENCES as REFERENCES_TOOLTIPS } from '@/lib/constants'
 
 const { EXPORT, SWITCH } = REFERENCES_TOOLTIPS
 

@@ -4,7 +4,8 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import useCsvComments from '@/hooks/useCsvComments'
 
-import { csvHeaders, humanTimestamp, writeCSVContent } from '@/lib/utils'
+import { csvHeaders, csvOut } from '@/lib/csv'
+import { humanTimestamp } from '@/lib/utils'
 
 const dataHeaders = [
   'Username',
@@ -50,7 +51,7 @@ const useUsersExport = () => {
       const writable = await handle.createWritable()
       await writable.write(csvComments())
       await writable.write(csvHeaders(dataHeaders))
-      await writeCSVContent(writable, userData(users))
+      await csvOut(writable, userData(users))
       await writable.close()
     } catch (error) {
       if (error.name !== 'AbortError') {

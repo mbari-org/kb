@@ -12,12 +12,8 @@ import { capitalize } from '@/lib/utils'
 
 import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
-import {
-  conceptNameInFilename,
-  csvHeaders,
-  humanTimestamp,
-  writeCSVContent,
-} from '@/lib/utils'
+import { csvHeaders, csvOut } from '@/lib/csv'
+import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 const { EXTENT, TYPE } = CONCEPT_HISTORY
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
@@ -78,7 +74,7 @@ const fileName = ({ conceptName, historyExtent, type }) => {
   if (type === TYPE.CONCEPT) {
     const extent =
       historyExtent === EXTENT.CONCEPT ? '' : `-and-${historyExtent}`
-    return `KB-History-${conceptNameInFilename(conceptName)}${extent}.csv`
+    return `KB-History-${conceptNameForFilename(conceptName)}${extent}.csv`
   }
   return `KB-History-${capitalize(type)}.csv`
 }
@@ -161,7 +157,7 @@ const useHistoryExport = () => {
           return sortOrder === 'asc' ? -comparison : comparison
         })
         const rows = sortedData.map(item => rowData(item, selectedType))
-        await writeCSVContent(writable, rows)
+        await csvOut(writable, rows)
       } else {
         let pageIndex = 0
         let hasMoreData = true
@@ -184,7 +180,7 @@ const useHistoryExport = () => {
           }
 
           const rows = historyItems.map(item => rowData(item, selectedType))
-          await writeCSVContent(writable, rows)
+          await csvOut(writable, rows)
           pageIndex++
         }
       }

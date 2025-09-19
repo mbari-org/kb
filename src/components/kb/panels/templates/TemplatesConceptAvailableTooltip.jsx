@@ -4,7 +4,7 @@ import { Stack, Typography } from '@mui/material'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { FONT } from '@/lib/tooltips'
+import { FONT } from '@/lib/constants'
 import { SELECTED } from '@/lib/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS

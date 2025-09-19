@@ -7,7 +7,7 @@ import { CiEdit } from 'react-icons/ci'
 import KBTooltip from '@/components/common/KBTooltip'
 
 import { USER_ROLES } from '@/lib/constants'
-import { USERS } from '@/lib/tooltips'
+import { USERS } from '@/lib/constants'
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const theme = useTheme()
