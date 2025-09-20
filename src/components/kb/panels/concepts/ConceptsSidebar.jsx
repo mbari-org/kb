@@ -1,10 +1,14 @@
 import { useRef, useState, use } from 'react'
 
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ConceptsTree from '@/components/kb/panels/concepts/tree/ConceptsTree'
+import KBTooltip from '@/components/common/KBTooltip'
+
+import useExportConceptModal from '@/components/kb/panels/concepts/concept/export/useExportConceptModal'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -16,21 +20,39 @@ const ConceptsSidebar = () => {
   const sidebarRef = useRef(null)
 
   const { concept } = use(ConceptContext)
+  const openExportModal = useExportConceptModal()
 
   const [autoExpand, setAutoExpand] = useState(null)
+
+  if (!concept) return null
 
   const doConceptSelected = selectedName => {
     setAutoExpand?.({ expand: true, name: selectedName })
     return true
   }
 
-  if (!concept) return null
+  const exportConcept = () => {
+    openExportModal()
+  }
+
+  const leftComponent = (
+    <KBTooltip title='Export concept data'>
+      <Button
+        onClick={exportConcept}
+        size='small'
+        sx={{ ml: 1, mt: 0.25, minWidth: 'auto', px: 1 }}
+      >
+        Export
+      </Button>
+    </KBTooltip>
+  )
 
   return (
     <Stack sx={{ height: '100%', ml: 2, mr: 1, mt: 1.75 }}>
       <ConceptSelect
         conceptName={concept.name}
         doConceptSelected={doConceptSelected}
+        leftComponent={leftComponent}
         rightComponent={NAV_HISTORY}
         width='auto'
       />
