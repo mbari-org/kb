@@ -8,7 +8,7 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ConceptsTree from '@/components/kb/panels/concepts/tree/ConceptsTree'
 import KBTooltip from '@/components/common/KBTooltip'
 
-import useExportConceptModal from '@/components/kb/panels/concepts/concept/export/useExportConceptModal'
+import useConceptExportModal from '@/components/kb/panels/concepts/concept/export/useConceptExportModal'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -20,7 +20,7 @@ const ConceptsSidebar = () => {
   const sidebarRef = useRef(null)
 
   const { concept } = use(ConceptContext)
-  const openExportModal = useExportConceptModal()
+  const openExportModal = useConceptExportModal()
 
   const [autoExpand, setAutoExpand] = useState(null)
 

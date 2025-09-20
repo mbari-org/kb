@@ -4,8 +4,8 @@ import Actions from '@/components/modal/actions/Actions'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-const ExportConceptActions = () => {
-  const { closeModal } = use(ConceptModalContext)
+const ConceptExportActions = () => {
+  const { closeModal, modalData } = use(ConceptModalContext)
 
   const handleAction = action => {
     switch (action) {
@@ -24,11 +24,11 @@ const ExportConceptActions = () => {
   return (
     <Actions
       colors={['cancel', 'main']}
-      disabled={[false, true]}
+      disabled={[false, !modalData.validInput]}
       labels={['Cancel', 'Export']}
       onAction={handleAction}
     />
   )
 }
 
-export default ExportConceptActions
+export default ConceptExportActions

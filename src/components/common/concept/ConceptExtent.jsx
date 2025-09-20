@@ -3,6 +3,7 @@ import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/materia
 import { useTheme } from '@mui/material/styles'
 
 import { CONCEPT_EXTENT } from '@/lib/constants'
+import KBTooltip from '@/components/common/KBTooltip'
 
 const { CHILDREN, CONCEPT, DESCENDANTS } = CONCEPT_EXTENT
 
@@ -24,7 +25,9 @@ const ConceptExtent = ({ initialValue = CONCEPT, onChange  }) => {
 
   return (
     <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
-      <Typography>Extent:</Typography>
+      <KBTooltip title='Extend Concept data to either Children or Descendants'>
+        <Typography>Extent:</Typography>
+      </KBTooltip>
       <ToggleButtonGroup
         value={conceptExtent}
         exclusive
