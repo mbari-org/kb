@@ -11,7 +11,6 @@ const PanelDataExport = ({
   switchLabel,
   switchToolTip = '',
   width,
-  disabled = false,
 }) => {
   return (
     <Box
@@ -27,14 +26,14 @@ const PanelDataExport = ({
           <Typography variant='body1'>Total: {count}</Typography>
         </Box>
         <KBTooltip title={exportToolTip}>
-          <Button onClick={exportFn}>Export</Button>
+          <Button disabled={count === 0} onClick={exportFn}>Export</Button>
         </KBTooltip>
       </Stack>
       <Box>
         <KBTooltip title={switchToolTip}>
           <FormControlLabel
             control={
-              <Switch size='small' checked={checked} onChange={switchFn} disabled={disabled} />
+              <Switch size='small' checked={checked} onChange={switchFn} />
             }
             label={switchLabel}
           />
