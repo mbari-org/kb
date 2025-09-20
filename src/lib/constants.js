@@ -65,6 +65,10 @@ export const CONCEPT_RANK = {
 
 export const CONCEPT_SELECT = {
   CONCEPT_LABEL: 'Concept',
+  LEFT_COMPONENT: {
+    INFO_ICON: 'info_icon',
+    NONE: 'none',
+  },
   RIGHT_COMPONENT: {
     NAV_HISTORY: 'nav',
     NONE: 'none',

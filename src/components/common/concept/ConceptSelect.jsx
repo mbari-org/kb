@@ -5,7 +5,6 @@ import { useTheme } from '@mui/material/styles'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
-import KBInfoIcon from '@/components/icon/KBInfoIcon'
 import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 
@@ -23,11 +22,11 @@ const ConceptSelect = ({
   doConceptSelected,
   keepFocus = false,
   label = CONCEPT_LABEL,
+  leftComponent = NONE,
   onInputChange,
   onSpecialChange,
   rightComponent = NONE,
   selectables,
-  tooltip,
   updateConceptSelected = true,
   width = WIDTH,
 }) => {
@@ -94,14 +93,10 @@ const ConceptSelect = ({
           >
             {label}
           </Typography>
-          {tooltip && (
-            <KBInfoIcon
-              tooltip={tooltip}
-              placement='top'
-              size={16}
-              disabled={disabled}
-              sx={{ mb: 1 }}
-            />
+          {leftComponent !== NONE && (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {leftComponent}
+            </Box>
           )}
         </Box>
         {rightComponent !== NONE && !disabled && (

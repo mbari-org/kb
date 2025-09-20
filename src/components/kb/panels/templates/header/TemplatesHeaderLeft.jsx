@@ -1,7 +1,7 @@
 import { use } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
-
+import KBInfoIcon from '@/components/icon/KBInfoIcon'
 import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -28,12 +28,21 @@ const TemplatesHeaderLeft = () => {
     }
   }
 
+  const infoIcon = (
+    <KBInfoIcon
+      tooltip={<TemplatesConceptAvailableTooltip />}
+      placement='top'
+      size={16}
+      sx={{ mb: 1 }}
+    />
+  )
+
   return (
     <ConceptSelect
       conceptName={filters[TEMPLATES.FILTERS.CONCEPT]}
       doConceptSelected={doConceptSelected}
+      leftComponent={infoIcon}
       selectables={selectables}
-      tooltip={<TemplatesConceptAvailableTooltip />}
       updateConceptSelected={true}
     />
   )
