@@ -6,9 +6,10 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { sleep } from '@/lib/utils'
 
-import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
+import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
-const { EXTENT, TYPE } = CONCEPT_HISTORY
+const { TYPE } = CONCEPT_HISTORY
+const { CHILDREN, DESCENDANTS } = CONCEPT_EXTENT
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
@@ -22,7 +23,7 @@ const useLoadData = ({
   const { getConcept, getDescendantNames } = use(TaxonomyContext)
 
   const conceptChildren = useMemo(() => {
-    if (!selectedConcept || conceptHistoryExtent !== EXTENT.CHILDREN) return []
+    if (!selectedConcept || conceptHistoryExtent !== CHILDREN) return []
     const concept = getConcept(selectedConcept)
     return concept?.children || []
   }, [conceptHistoryExtent, getConcept, selectedConcept])
@@ -122,11 +123,11 @@ const useLoadData = ({
       setTypeState({ limit: DEFAULT_LIMIT, offset: 0 })
 
       if (selectedType === TYPE.CONCEPT && selectedConcept) {
-        if (conceptHistoryExtent === EXTENT.CHILDREN) {
+        if (conceptHistoryExtent === CHILDREN) {
           return loadConceptChildrenData({ setCount, setConceptData, setTypeData })
         }
 
-        if (conceptHistoryExtent === EXTENT.DESCENDANTS) {
+        if (conceptHistoryExtent === DESCENDANTS) {
           return loadConceptDescendantsData({ setCount, setConceptData, setTypeData })
         }
         return loadConceptData({ setCount, setConceptData, setTypeData })

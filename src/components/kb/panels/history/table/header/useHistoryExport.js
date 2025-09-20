@@ -11,11 +11,11 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
-import { CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
+import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
-const { EXTENT, TYPE } = CONCEPT_HISTORY
+const { TYPE } = CONCEPT_HISTORY
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 
 const commentsContent = ({ concept, historyExtent, historyType }) => {
@@ -73,7 +73,7 @@ const fetchHistory = async (type, pageIndex, pageSize, apiFns) => {
 const fileName = ({ conceptName, historyExtent, type }) => {
   if (type === TYPE.CONCEPT) {
     const extent =
-      historyExtent === EXTENT.CONCEPT ? '' : `_and_${historyExtent}`
+      historyExtent === CONCEPT_EXTENT.CONCEPT ? '' : `_and_${historyExtent}`
     return `KB-History_${conceptNameForFilename(conceptName)}${extent}.csv`
   }
   return `KB-History-${capitalize(type)}.csv`

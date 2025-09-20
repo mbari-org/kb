@@ -11,12 +11,13 @@ import useLoadData from '@/contexts/panels/history/useLoadData'
 import usePageData from '@/contexts/panels/history/usePageData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
-import { CONCEPT_HISTORY } from '@/lib/constants'
+import { CONCEPT_EXTENT, CONCEPT_HISTORY } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const { EXTENT, TYPE } = CONCEPT_HISTORY
+const { CHILDREN, DESCENDANTS } = CONCEPT_EXTENT
+const { TYPE } = CONCEPT_HISTORY
 const { CONCEPT, PANEL, SETTINGS } = SELECTED
 const { HISTORY } = SETTINGS
 
@@ -33,7 +34,7 @@ const HistoryProvider = ({ children }) => {
 
   const [count, setCount] = useState(0)
   const [conceptData, setConceptData] = useState([])
-  const [conceptHistoryExtent, setConceptHistoryExtent] = useState(EXTENT.CONCEPT)
+  const [conceptHistoryExtent, setConceptHistoryExtent] = useState(CONCEPT_EXTENT.CONCEPT)
   const [typeData, setTypeData] = useState([])
   const [typeState, setTypeState] = useState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
   const [sortOrder, setSortOrder] = useState('desc')
@@ -41,7 +42,7 @@ const HistoryProvider = ({ children }) => {
   const isTypeChanging = useRef(false)
 
   useEffect(() => {
-    setConceptHistoryExtent(EXTENT.CONCEPT)
+    setConceptHistoryExtent(CONCEPT_EXTENT.CONCEPT)
   }, [selectedConcept])
 
   const loadData = useLoadData({
@@ -71,9 +72,9 @@ const HistoryProvider = ({ children }) => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
       const loadingMsg =
-        conceptHistoryExtent === EXTENT.CHILDREN
+        conceptHistoryExtent === CHILDREN
           ? 'Loading children history...'
-          : conceptHistoryExtent === EXTENT.DESCENDANTS
+          : conceptHistoryExtent === DESCENDANTS
             ? 'Loading descendants history...'
             : 'Loading data...'
 

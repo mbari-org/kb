@@ -13,6 +13,12 @@ export const CONCEPT_EXPAND = {
   TOGGLE: 'toggle',
 }
 
+export const CONCEPT_EXTENT = {
+  CHILDREN: 'children',
+  CONCEPT: 'concept',
+  DESCENDANTS: 'descendants',
+}
+
 export const CONCEPT_FIELD = {
   ALIASES: 'aliases',
   AUTHOR: 'author',
@@ -26,11 +32,6 @@ export const CONCEPT_FIELD = {
 }
 
 export const CONCEPT_HISTORY = {
-  EXTENT: {
-    CHILDREN: 'children',
-    CONCEPT: 'concept',
-    DESCENDANTS: 'descendants',
-  },
   TYPE: {
     APPROVED: 'approved',
     CONCEPT: 'concept',
