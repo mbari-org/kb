@@ -4,7 +4,6 @@ import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
 
 import ConceptTreeItem from '@/components/kb/panels/concepts/tree/ConceptTreeItem'
-import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
 
 import useArrowKeys from '@/components/kb/panels/concepts/tree/lib/useArrowKeys'
 import useConceptAutoExpand from '@/components/kb/panels/concepts/tree/lib/useConceptAutoExpand'
@@ -21,7 +20,7 @@ import { buildTree } from '@/lib/kb/model/taxonomy'
 import { SELECTED } from '@/lib/constants'
 
 const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
-  const { concept, onConceptTreeReady } = use(ConceptContext)
+  const { concept, conceptPath, onConceptTreeReady } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
 
@@ -97,16 +96,13 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const { needsToScroll, scrollToNode } = useConceptsTreeScroll(apiRef, concept, sidebarRef)
 
   useEffect(() => {
-    if (concept && taxonomy) {
-      const path = itemPath(taxonomy, concept)
-      if (path && path.length > 0) {
-        setExpandedItems(prev => [...new Set([...prev, ...path])])
-      }
-      setTimeout(() => {
-        needsToScroll() ? scrollToNode(() => onConceptTreeReady()) : onConceptTreeReady()
-      }, 100)
+    if (conceptPath && conceptPath.length > 0) {
+      setExpandedItems(prev => [...new Set([...prev, ...conceptPath])])
     }
-  }, [concept, taxonomy, needsToScroll, scrollToNode, onConceptTreeReady])
+    setTimeout(() => {
+      needsToScroll() ? scrollToNode(() => onConceptTreeReady()) : onConceptTreeReady()
+    }, 100)
+  }, [conceptPath, needsToScroll, scrollToNode, onConceptTreeReady])
 
   if (!concept || !getConcept(concept.name)) {
     return null

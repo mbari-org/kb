@@ -1,8 +1,7 @@
 import { use, useCallback } from 'react'
 
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
-import { itemPath } from './taxonomyItem'
 
 import { CONCEPT_EXPAND } from '@/lib/constants'
 
@@ -15,7 +14,8 @@ const allLeafs = (taxonomy, conceptName, leafs = []) => {
   return leafs
 }
 
-const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
+const useExpandConcept = (expandedItems, setExpandedItems) => {
+  const { conceptPath } = use(ConceptContext)
   const { loadConceptDescendants } = use(TaxonomyContext)
 
   const isExpanded = useCallback(
@@ -33,13 +33,12 @@ const useExpandConcept = (expandedItems, setExpandedItems, taxonomy) => {
   )
 
   const expand = useCallback(
-    concept => {
-      const path = itemPath(taxonomy, concept)
-      if (path) {
-        setExpandedItems(prevItems => [...new Set([...prevItems, ...path])])
+    () => {
+      if (conceptPath) {
+        setExpandedItems(prevItems => [...new Set([...prevItems, ...conceptPath])])
       }
     },
-    [setExpandedItems, taxonomy]
+    [setExpandedItems, conceptPath]
   )
 
   const descendants = useCallback(

@@ -3,7 +3,7 @@ import { use } from 'react'
 import { FormControl, TextField, Autocomplete } from '@mui/material'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import { getConceptTaxa } from '@/lib/api/concept'
+import { getConceptTaxa } from '@/lib/api/taxonomy'
 
 import { TO_CONCEPT_SPECIAL } from '@/lib/constants'
 

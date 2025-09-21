@@ -1,22 +1,23 @@
 import { use, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
-import { itemPath } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
-
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import useLoadConceptError from '@/hooks/useLoadConceptError'
 import useConceptLoader from './useConceptLoader'
 import useConceptPending from './pending/useConceptPending'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
-import AppModalContext from '@/contexts/app/AppModalContext'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
+
+import { getConceptPath } from '@/lib/api/taxonomy'
 
 import { initialConceptState, isStateModified } from '@/lib/kb/state'
 
@@ -25,21 +26,21 @@ import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
-  const { setModalData } = use(ConceptModalContext)
-  const { refreshData: refreshPanelData } = use(PanelDataContext)
   const { setProcessing: setAppProcessing, setModalData: setAppModalData } = use(AppModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { apiFns } = use(ConfigContext)
+  const { refreshData: refreshPanelData } = use(PanelDataContext)
   const { getSelected, panels  } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction  } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
+  const [conceptPath, setConceptPath] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
   const [editing, setEditing] = useState(false)
 
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
-
-  const conceptPath = useMemo(() => itemPath(taxonomy, concept), [concept, taxonomy])
 
   const onConceptTreeReady = useCallback(() => {
     setAppProcessing(false)
@@ -187,6 +188,25 @@ const ConceptProvider = ({ children }) => {
       stagedState,
     ]
   )
+
+  useEffect(() => {
+    if (!concept || !apiFns) {
+      return
+    }
+
+    const fetchConceptPath = async () => {
+      const payload = await apiFns.apiPayload(getConceptPath, concept.name)
+
+      const parseNode = (node, path = []) => {
+        if (!node.children) return [...path, node.name]
+        return parseNode(node.children[0], [...path, node.name])
+      }
+
+      setConceptPath(parseNode(payload))
+    }
+
+    fetchConceptPath()
+  }, [apiFns, concept])
 
   return <ConceptContext value={value}>{children}</ConceptContext>
 }
