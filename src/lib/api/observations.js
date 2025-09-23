@@ -1,6 +1,11 @@
-import { annosaurusPut } from '@/lib/services/annosaurus/methods'
+import { annosaurusGet, annosaurusPut } from '@/lib/services/annosaurus/methods'
 
-const renameToConceptObservations = async (config, payload) =>
+const getConceptObservationsCount = async (config, conceptName) =>  {
+  const { error, payload } =  await annosaurusGet(config, ['observations', 'concept', 'count', conceptName])
+  return { error, result: payload?.count }
+}
+
+const renameConceptObservations = async (config, payload) =>
   annosaurusPut(config, ['observations', 'concept', 'rename'], payload)
 
-export { renameToConceptObservations }
+export { getConceptObservationsCount, renameConceptObservations }

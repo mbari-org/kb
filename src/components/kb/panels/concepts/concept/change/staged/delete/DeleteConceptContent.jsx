@@ -9,7 +9,10 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { getConceptAnnotationCount } from '@/lib/api/annotations'
+import { getConceptAnnotationsCount } from '@/lib/api/annotations'
+import { getToConceptAssociationsCount } from '@/lib/api/associations'
+import { getConceptObservationsCount } from '@/lib/api/observations'
+import { getConceptTemplateCount, getToConceptTemplateCount } from '@/lib/api/linkTemplates'
 
 const DeleteConceptContent = () => {
   const { apiFns } = use(ConfigContext)
@@ -17,7 +20,13 @@ const DeleteConceptContent = () => {
   const { setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 
-  const [annotationCount, setAnnotationCount] = useState(0)
+  const [assignedCounts, setAssignedCounts] = useState({
+    conceptAnnotations: 0,
+    toConceptAssociations: 0,
+    conceptObservations: 0,
+    conceptTemplates: 0,
+    toConceptTemplates: 0,
+  })
   const [isValid, setIsValid] = useState(true)
   const [reassignTo, setReassignTo] = useState(concept.parent)
 
@@ -45,30 +54,35 @@ const DeleteConceptContent = () => {
   }
 
   useEffect(() => {
-    const getCount = async () => {
-      const payload = await apiFns.apiPayload(getConceptAnnotationCount, concept.name)
-      const { count } = payload.content
-      setAnnotationCount(count)
+    const getAssignedCounts = async () => {
+      const counts = await Promise.all([
+        apiFns.apiResult(getConceptAnnotationsCount, concept.name),
+        apiFns.apiResult(getToConceptAssociationsCount, concept.name),
+        apiFns.apiResult(getConceptObservationsCount, concept.name),
+        apiFns.apiResult(getConceptTemplateCount, concept.name),
+        apiFns.apiResult(getToConceptTemplateCount, concept.name),
+      ])
+      setAssignedCounts(counts)
     }
-    getCount()
+    getAssignedCounts()
   }, [apiFns, concept.name])
 
-  const annotationsMessage =
-    annotationCount === 0
-      ? 'This concept has no annotations.'
-      : `This concept has ${annotationCount} annotation${
-        annotationCount !== 1 ? 's' : ''
-      } which must be reassigned.`
+  const hasAssignedData = Object.values(assignedCounts).some(count => count > 0)
+
+  const assignmentMessage =
+    hasAssignedData
+      ? 'This concept does not have data that needs to be reassigned.'
+      : 'This concept has data that needs to be reassigned.'
 
   return (
     <Box>
       <Typography align='center' color='cancel' variant='h6'>
         DELETE
       </Typography>
-      <Typography align='center'>{annotationsMessage}</Typography>
+      <Typography align='center'>{assignmentMessage}</Typography>
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>
-          {annotationCount > 0 && (
+          {hasAssignedData && (
             <Box sx={{ width: '80%', mx: 'auto', mt: 2 }}>
               <ToConceptChoice
                 error={!isValid}

@@ -3,15 +3,14 @@ import { annosaurusGet, annosaurusPost, annosaurusPut } from '@/lib/services/ann
 const getConceptAnnotations = async (config, conceptName) =>
   annosaurusGet(config, ['fast', 'concept', conceptName])
 
-const getConceptAnnotationCount = async (config, conceptName) =>
-  annosaurusPost(config, ['fast', 'count'], {
+const getConceptAnnotationsCount = async (config, conceptName) => {
+  const { error, payload } = await annosaurusPost(config, ['fast', 'count'], {
     concepts: [conceptName],
   })
+  return { error, result: payload?.content?.count }
+}
 
 const putConceptAnnotation = async (config, payload) =>
   annosaurusPut(config, ['annotations', payload.observation_uuid], payload)
 
-const renameToConceptAnnotations = async (config, payload) =>
-  annosaurusPut(config, ['associations', 'toconcept', 'rename'], payload)
-
-export { getConceptAnnotationCount, getConceptAnnotations, putConceptAnnotation, renameToConceptAnnotations }
+export { getConceptAnnotations, getConceptAnnotationsCount, putConceptAnnotation }

@@ -5,21 +5,30 @@ const createConceptTemplate = async (config, payload) => oniPost(config, ['linkt
 const deleteConceptTemplate = async (config, templateId) =>
   oniDelete(config, ['linktemplates', templateId])
 
+const getTemplates = async (config, params) => oniGet(config, ['linktemplates'], params)
+
 const getTemplatesCount = async config => {
+  const wtf = await oniGet(config, ['linktemplates', 'count'])
+  console.log('wtf', wtf)
   const { error, payload } = await oniGet(config, ['linktemplates', 'count'])
   return { error, result: payload?.count }
 }
 
-const getTemplates = async (config, params) => oniGet(config, ['linktemplates'], params)
-
 const getAvailableTemplates = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'query', 'for', conceptName])
+
+const getConceptTemplateCount = async (config, conceptName) => {
+  const { error, payload } = await oniGet(config, ['linktemplates', 'concept', 'count', conceptName])
+  return { error, result: payload }
+}
 
 const getExplicitTemplates = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'concept', conceptName])
 
-const getToConceptTemplateCount = async (config, conceptName) =>
-  oniGet(config, ['linktemplates', 'toconcept', 'count', conceptName])
+const getToConceptTemplateCount = async (config, conceptName) => {
+  const { error, payload } = await oniGet(config, ['linktemplates', 'toconcept', 'count', conceptName])
+  return { error, result: payload }
+}
 
 const getToConceptTemplates = async (config, conceptName) =>
   oniGet(config, ['linktemplates', 'toconcept', conceptName])
@@ -34,6 +43,7 @@ export {
   createConceptTemplate,
   deleteConceptTemplate,
   getAvailableTemplates,
+  getConceptTemplateCount,
   getExplicitTemplates,
   getTemplates,
   getTemplatesCount,

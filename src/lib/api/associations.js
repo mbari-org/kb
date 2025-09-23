@@ -1,10 +1,11 @@
-import { renameToConceptAnnotations } from '@/lib/api/annotations'
-import { renameToConceptObservations } from '@/lib/api/observations'
+import { annosaurusGet, annosaurusPut } from '@/lib/services/annosaurus/methods'
 
-const renameConceptAssociations = async (config, payload) =>
-  Promise.all([
-    renameToConceptAnnotations(config, payload),
-    renameToConceptObservations(config, payload),
-  ])
+const getToConceptAssociationsCount = async (config, conceptName) => {
+  const { error, payload } = await annosaurusGet(config, ['associations', 'toconcept', 'count', conceptName])
+  return { error, result: payload?.count }
+}
 
-export { renameConceptAssociations }
+const renameToConceptAssociations = async (config, payload) =>
+  annosaurusPut(config, ['associations', 'toconcept', 'rename'], payload)
+
+export { getToConceptAssociationsCount, renameToConceptAssociations }
