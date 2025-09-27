@@ -14,7 +14,29 @@ const Whoops = ({ children }) => {
     clearStores()
 
     // Use window.location.href to bypass the React error boundary
-    window.location.href = '/kbeditor/login'
+    window.location.href = '/kbeditor/'
+  }
+
+  const handleReset = () => {
+    window.location.href = '/kbeditor/'
+  }
+
+  const handleCopyInfo = async error => {
+    const stack = error.original?.stack || error.stack
+    const responseMessage = error.whoops
+      ? `${error.whoops?.title}: ${error.whoops?.message}\n${error.whoops?.method}\n${error.whoops?.url}`
+      : 'An unexpected error occurred'
+
+    const infoToCopy = `Error: ${responseMessage}\n\nStack Trace:\n${
+      stack || 'No stack trace available'
+    }`
+
+    try {
+      await navigator.clipboard.writeText(infoToCopy)
+      // Could add a toast notification here if desired
+    } catch (err) {
+      console.error('Failed to copy error info:', err)
+    }
   }
 
   const renderWhoops = ({ error }) => {
@@ -161,28 +183,6 @@ const Whoops = ({ children }) => {
         </Stack>
       </Box>
     )
-  }
-
-  const handleReset = () => {
-    window.location.reload()
-  }
-
-  const handleCopyInfo = async error => {
-    const stack = error.original?.stack || error.stack
-    const responseMessage = error.whoops
-      ? `${error.whoops?.title}: ${error.whoops?.message}\n${error.whoops?.method}\n${error.whoops?.url}`
-      : 'An unexpected error occurred'
-
-    const infoToCopy = `Error: ${responseMessage}\n\nStack Trace:\n${
-      stack || 'No stack trace available'
-    }`
-
-    try {
-      await navigator.clipboard.writeText(infoToCopy)
-      // Could add a toast notification here if desired
-    } catch (err) {
-      console.error('Failed to copy error info:', err)
-    }
   }
 
   return (
