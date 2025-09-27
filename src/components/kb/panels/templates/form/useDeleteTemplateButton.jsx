@@ -1,4 +1,5 @@
 import { use, useCallback } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
@@ -14,6 +15,7 @@ import {
 const { DELETING } = PROCESSING
 
 const useDeleteTemplateButton = () => {
+  const { showBoundary } = useErrorBoundary()
   const { deleteTemplate } = use(TemplatesContext)
 
   const { closeModal, createModal, setProcessing } = useTemplatesModalOperationsContext()
@@ -30,7 +32,7 @@ const useDeleteTemplateButton = () => {
         closeModal()
       } catch (error) {
         setProcessing(false)
-        console.error('Error deleting template:', error)
+        showBoundary(error)
       }
     },
     [deleteTemplate, closeModal, setProcessing]

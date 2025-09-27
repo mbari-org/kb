@@ -1,5 +1,6 @@
 import { useState, use } from 'react'
 import { useTheme } from '@mui/material/styles'
+import { useErrorBoundary } from 'react-error-boundary'
 import { MdRefresh } from 'react-icons/md'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 
@@ -18,6 +19,7 @@ import {
 } from '@/version'
 
 const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'caption' }) => {
+  const { showBoundary } = useErrorBoundary()
   const theme = useTheme()
   const { isDev } = use(ConfigContext)
 
@@ -42,13 +44,11 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
       })
       const result = await response.json()
 
-      if (result.success) {
-        console.log('🔄 Version refreshed:', result.version)
-      } else {
-        console.error('❌ Failed to refresh version:', result.error)
+      if (!result.success) {
+        throw new Error(`Failed to refresh version: ${result.error}`)
       }
     } catch (error) {
-      console.error('❌ Error refreshing version:', error)
+      showBoundary(error)
     } finally {
       setIsRefreshing(false)
     }

@@ -1,4 +1,5 @@
 import { use, useCallback, useEffect, useState } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -12,6 +13,7 @@ import { getUsers, createUser, updateUser } from '@/lib/api/users'
 import { drop } from '@/lib/utils'
 
 const UsersProvider = ({ children }) => {
+  const { showBoundary } = useErrorBoundary()
   const { user } = use(UserContext)
   const { apiFns } = use(ConfigContext)
 
@@ -47,7 +49,7 @@ const UsersProvider = ({ children }) => {
         prevUsers.map(user => (user.username === username ? { ...user, locked: lock } : user))
       )
     } catch (error) {
-      console.error('Error locking user:', error)
+      showBoundary(error)
     }
   }, [])
 

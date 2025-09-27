@@ -1,4 +1,5 @@
 import { use, useCallback } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import { useUsersModalOperationsContext, useUsersModalDataContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -13,6 +14,7 @@ import {
 } from '@/components/kb/panels/users/form/userModalUtils'
 
 const useLockUserButton = () => {
+  const { showBoundary } = useErrorBoundary()
   const { createModal, closeModal } = useUsersModalOperationsContext()
   const { lockUser, users } = use(UsersContext)
 
@@ -26,7 +28,7 @@ const useLockUserButton = () => {
         await lockUser(user.username, !user.locked)
         closeModal()
       } catch (error) {
-        console.error('Error locking/unlocking user:', error)
+        showBoundary(error)
       }
     },
     [lockUser, closeModal]

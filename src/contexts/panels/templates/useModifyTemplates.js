@@ -15,24 +15,36 @@ const useModifyTemplates = () => {
 
   const deleteTemplate = useCallback(
     async template => {
-      await apiFns.apiPayload(deleteConceptTemplate, template.id)
-      await refreshData()
+      try {
+        await apiFns.apiPayload(deleteConceptTemplate, template.id)
+        await refreshData()
+      } catch (error) {
+        throw new Error(`Failed to delete template: ${error.message}`)
+      }
     },
     [apiFns, refreshData]
   )
 
   const editTemplate = useCallback(
     async (oldTemplate, newTemplate) => {
-      await apiFns.apiPayload(updateTemplate, [oldTemplate.id, newTemplate])
-      await refreshData()
+      try {
+        await apiFns.apiPayload(updateTemplate, [oldTemplate.id, newTemplate])
+        await refreshData()
+      } catch (error) {
+        throw new Error(`Failed to update template: ${error.message}`)
+      }
     },
     [apiFns, refreshData]
   )
 
   const addTemplate = useCallback(
     async template => {
-      await apiFns.apiPayload(createConceptTemplate, template)
-      await refreshData()
+      try {
+        await apiFns.apiPayload(createConceptTemplate, template)
+        await refreshData()
+      } catch (error) {
+        throw new Error(`Failed to create template: ${error.message}`)
+      }
     },
     [apiFns, refreshData]
   )
