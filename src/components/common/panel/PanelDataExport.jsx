@@ -26,7 +26,9 @@ const PanelDataExport = ({
           <Typography variant='body1'>Total: {count}</Typography>
         </Box>
         <KBTooltip title={exportToolTip}>
-          <Button disabled={count === 0} onClick={exportFn}>Export</Button>
+          <Box component='span'>
+            <Button disabled={count === 0} onClick={exportFn}>Export</Button>
+          </Box>
         </KBTooltip>
       </Stack>
       <Box>

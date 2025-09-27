@@ -8,8 +8,6 @@ const deleteConceptTemplate = async (config, templateId) =>
 const getTemplates = async (config, params) => oniGet(config, ['linktemplates'], params)
 
 const getTemplatesCount = async config => {
-  const wtf = await oniGet(config, ['linktemplates', 'count'])
-  console.log('wtf', wtf)
   const { error, payload } = await oniGet(config, ['linktemplates', 'count'])
   return { error, result: payload?.count }
 }

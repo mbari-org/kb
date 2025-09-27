@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { BsInfoCircle } from 'react-icons/bs'
 
@@ -9,7 +9,8 @@ const KBInfoIcon = ({ tooltip, placement = 'top', size = 18, disabled = false, s
 
   return (
     <KBTooltip title={tooltip} placement={placement}>
-      <IconButton
+      <Box component='span'>
+        <IconButton
         disabled={disabled}
         sx={{
           backgroundColor: disabled ? 'action.disabledBackground' : theme.palette.primary.main,
@@ -29,6 +30,7 @@ const KBInfoIcon = ({ tooltip, placement = 'top', size = 18, disabled = false, s
       >
         <BsInfoCircle size={size} />
       </IconButton>
+      </Box>
     </KBTooltip>
   )
 }

@@ -10,16 +10,14 @@ import whoopsImage from '@/assets/whoops.jpg'
 const Whoops = ({ children }) => {
   const theme = useTheme()
 
+  // Using window.location.href bypasses the React error boundary
   const handleForcedLogout = () => {
     clearStores()
-
-    // Use window.location.href to bypass the React error boundary
     window.location.href = '/kbeditor/'
   }
 
-  const handleReset = () => {
+  const handleReset = () =>
     window.location.href = '/kbeditor/'
-  }
 
   const handleCopyInfo = async error => {
     const stack = error.original?.stack || error.stack
@@ -31,17 +29,11 @@ const Whoops = ({ children }) => {
       stack || 'No stack trace available'
     }`
 
-    try {
-      await navigator.clipboard.writeText(infoToCopy)
-      // Could add a toast notification here if desired
-    } catch (err) {
-      console.error('Failed to copy error info:', err)
-    }
+    await navigator.clipboard.writeText(infoToCopy)
+    alert('Error information copied to clipboard! Please include when reporting this issue.')
   }
 
   const renderWhoops = ({ error }) => {
-    console.log('error', error)
-
     const responseMessage = error.whoops
       ? `
       ${error.whoops?.title}: ${error.whoops?.message}

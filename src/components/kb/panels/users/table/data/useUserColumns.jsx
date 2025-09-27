@@ -45,7 +45,8 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
           </KBTooltip>
 
           <KBTooltip title={USERS.EDIT}>
-            <IconButton
+            <Box component='span'>
+              <IconButton
               size='small'
               onClick={() => editUserModal(params.row)}
               disabled={params.row.locked}
@@ -58,6 +59,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
             >
               <CiEdit size={24} />
             </IconButton>
+            </Box>
           </KBTooltip>
         </Box>
       ),
