@@ -56,8 +56,13 @@ const useLoadData = ({
 
       const CONCURRENCY = 8
       const RETRIES = 2
-      const isNetworkError = err =>
-        err?.original?.name === 'TypeError' || err?.whoops?.message === 'Failed to fetch'
+      const isNetworkError = err => {
+        if (!err) return false
+        if (err.title === 'Network Error') return true
+        if (err.message === 'Failed to fetch') return true
+        if (err.original && err.original.name === 'TypeError') return true
+        return false
+      }
 
       const results = []
       for (let i = 0; i < names.length; i += CONCURRENCY) {
@@ -79,7 +84,6 @@ const useLoadData = ({
                 continue
               }
 
-              // final escalation after retries
               await apiFns.apiPayload(getConceptHistory, name)
               throw error?.original || new Error('History request failed after retries')
             }

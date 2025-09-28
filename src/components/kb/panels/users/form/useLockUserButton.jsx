@@ -5,6 +5,7 @@ import { useUsersModalOperationsContext, useUsersModalDataContext } from '@/cont
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
+import { createError } from '@/lib/errors'
 
 import { USER_ROLES } from '@/lib/constants'
 import {
@@ -28,10 +29,16 @@ const useLockUserButton = () => {
         await lockUser(user.username, !user.locked)
         closeModal()
       } catch (error) {
-        showBoundary(error)
+        const userError = createError(
+          'User Lock Error',
+          `Failed to ${user.locked ? 'unlock' : 'lock'} user ${user.username}`,
+          { username: user.username, action: user.locked ? 'unlock' : 'lock' },
+          error
+        )
+        showBoundary(userError)
       }
     },
-    [lockUser, closeModal]
+    [closeModal, lockUser, showBoundary]
   )
 
   return useCallback(

@@ -79,7 +79,6 @@ const humanTimestamp = timestamp => {
 
   const date = new Date(timestamp)
   if (isNaN(date.getTime())) {
-    console.error('Invalid timestamp:', timestamp)
     return `Invalid timestamp: ${timestamp}`
   }
 

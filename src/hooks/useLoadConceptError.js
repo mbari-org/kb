@@ -1,35 +1,38 @@
 import { use, useCallback } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
+import { createConceptError } from '@/lib/errors'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const useLoadConceptError = () => {
   const { showBoundary } = useErrorBoundary()
-
   const { concepts } = use(SelectedContext)
 
   return useCallback(
     error => {
-      // CxNote error.conceptName failed to load, so we remove it from the concepts store; however,
-      // the removal may result in sequential duplicates, which we remove as well.
-
       const conceptName = error.conceptName
       const currentConcepts = concepts.getState()
 
+      // Remove failed concept and dedup
       const newState = currentConcepts.reduce((acc, concept) => {
-        // skip conceptName entries
-        if (concept === conceptName) return acc
-        // skip sequential duplicate entry
-        if (acc.length > 0 && acc[acc.length - 1] === concept) return acc
+        if (concept === conceptName ||
+            (acc.length > 0 && acc[acc.length - 1] === concept)) {
+          return acc
+        }
         return [...acc, concept]
       }, [])
 
       concepts.clear()
       newState.forEach(concept => concepts.push(concept))
 
-      const info = `Concept ${conceptName} failed to load and will be removed from the current Concepts stack`
+      const message = error.message || 'Failed to load concept'
+      const conceptError = createConceptError(
+        conceptName,
+        message,
+        error.original
+      )
 
-      showBoundary({ ...error, info })
+      showBoundary(conceptError)
     },
     [concepts, showBoundary]
   )

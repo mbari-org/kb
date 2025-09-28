@@ -5,6 +5,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
 import { diff, drop, pick } from '@/lib/utils'
+import { createError } from '@/lib/errors'
 const submitRealizations = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
@@ -15,11 +16,42 @@ const submitRealizations = ([submit, { concept, updatesInfo }]) => {
   const initialRealizations = initialValue('realizations')
 
   const submitRealization = (apiFn, trackerInfo) =>
-    submit(apiFn, trackerInfo.params).then(response => ({
-      field: 'realizations',
-      response,
-      ...trackerInfo,
-    }))
+    submit(apiFn, trackerInfo.params)
+      .then(response => ({
+        field: 'realizations',
+        response,
+        ...trackerInfo,
+      }))
+      .catch(error => ({
+        field: 'realizations',
+        error: createError(
+          'Realization Operation Failed',
+          `Failed to ${getRealizationActionMessage(trackerInfo.action)} realization for concept ${concept.name}`,
+          {
+            conceptName: concept.name,
+            realizationId: trackerInfo.update.id,
+            linkName: trackerInfo.update.linkName,
+            toConcept: trackerInfo.update.toConcept,
+            action: trackerInfo.action,
+            index: trackerInfo.index,
+          },
+          error
+        ),
+        ...trackerInfo,
+      }))
+
+  const getRealizationActionMessage = action => {
+    switch (action) {
+      case REALIZATION.ADD:
+        return 'add'
+      case REALIZATION.EDIT:
+        return 'update'
+      case REALIZATION.DELETE:
+        return 'delete'
+      default:
+        return 'process'
+    }
+  }
 
   const realizationAdd = update => {
     const realization = pick(update, ['linkName', 'toConcept', 'linkValue'])

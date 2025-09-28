@@ -1,5 +1,6 @@
 import { csvHeaders, csvOut } from '@/lib/csv'
 import { humanTimestamp } from '@/lib/utils'
+import { createError } from '@/lib/errors'
 
 const csvExport = ({
   comments = [],
@@ -42,7 +43,12 @@ const csvExport = ({
       })
     } catch (error) {
       if (error.name !== 'AbortError') {
-        throw new Error(`Error opening file picker: ${error.message}`)
+        throw createError(
+          'CSV Export Error',
+          `Failed to open file picker: ${error.message}`,
+          { error: error.message },
+          error
+        )
       }
       if (onProgress) {
         onProgress(false)
@@ -82,7 +88,12 @@ const csvExport = ({
 
       await writable.close()
     } catch (error) {
-      throw new Error(`Error writing file: ${error.message}`)
+      throw createError(
+        'CSV Export Error',
+        `Failed to write CSV file: ${error.message}`,
+        { error: error.message },
+        error
+      )
     } finally {
       if (onProgress) {
         onProgress(false)

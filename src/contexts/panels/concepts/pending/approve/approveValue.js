@@ -1,4 +1,5 @@
 import { HISTORY_FIELD } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 const approveValue = (concept, item) => {
   switch (item.field) {
@@ -13,7 +14,11 @@ const approveValue = (concept, item) => {
     }
 
     default:
-      throw new Error(`Invalid approval pending value field: ${item.field}`)
+      throw createError(
+        'Invalid Pending Field',
+        `Cannot approve change with invalid field: ${item.field}`,
+        { item }
+      )
   }
 }
 

@@ -6,6 +6,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { getConcept } from '@/lib/api/concept'
 
 import { HISTORY_FIELD } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 import rejectAlias from '@/contexts/panels/concepts/pending/reject/rejectAlias'
 import rejectChild from '@/contexts/panels/concepts/pending/reject/rejectChild'
@@ -66,7 +67,11 @@ const useRejectPending = () => {
             break
 
           default:
-            throw new Error(`Invalid reject pending field: ${pendingItem.field}`)
+            throw createError(
+              'Invalid Pending Field',
+              `Cannot reject pending change with invalid field: ${pendingItem.field}`,
+              { pendingItem }
+            )
         }
 
         rejectFn(freshConcept, pendingItem, rejectingItems)

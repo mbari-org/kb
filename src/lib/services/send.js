@@ -1,3 +1,5 @@
+import { createApiError, getHttpErrorTitle } from '@/lib/errors'
+
 const apiSend = async (url, params) => {
   try {
     const response = await fetch(url, params)
@@ -5,16 +7,6 @@ const apiSend = async (url, params) => {
     if (response.status === 200) {
       const payload = await response.json()
       return { payload }
-    }
-
-    if (response.status === 401) {
-      return errorResponse(
-        null,
-        errorTitle(response.status),
-        'Unauthorized: Invalid token',
-        url,
-        params
-      )
     }
 
     let errorMessage = `HTTP ${response.status}`
@@ -25,45 +17,20 @@ const apiSend = async (url, params) => {
       errorMessage = response.statusText || errorMessage
     }
 
-    return errorResponse(null, errorTitle(response.status), errorMessage, url, params)
+    const title = getHttpErrorTitle(response.status)
+    const apiError = createApiError(title, errorMessage, url, params)
+    return { error: apiError }
+
   } catch (error) {
-    return errorResponse(error, 'Error', error.message, url, params)
+    const apiError = createApiError(
+      'Network Error',
+      error.message || 'Failed to complete request',
+      url,
+      params,
+      error
+    )
+    return { error: apiError }
   }
-}
-
-const errorTitle = status => {
-  switch (status) {
-    case 400:
-      return 'Bad Request'
-    case 401:
-      return 'Unauthorized'
-    case 403:
-      return 'Forbidden'
-    case 404:
-      return 'Not Found'
-    case 500:
-      return 'Internal Server Error'
-    default:
-      return 'Unknown Error'
-  }
-}
-
-const errorResponse = (error, title, message, url, params) => {
-  const whoops = {
-    message,
-    method: params.method,
-    title,
-    url,
-  }
-  console.error(whoops)
-  console.error('Authorization', params?.headers?.Authorization)
-
-  const wrappedError = {
-    original: error,
-    whoops,
-  }
-
-  return { error: wrappedError }
 }
 
 export default apiSend

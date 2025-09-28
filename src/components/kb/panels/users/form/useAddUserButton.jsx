@@ -4,6 +4,7 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
+import { createError, createValidationError } from '@/lib/errors'
 
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -35,7 +36,7 @@ const useAddUserButton = () => {
       try {
         const validateUser = createUserValidator(false)
         if (!validateUser(user)) {
-          return
+          throw createValidationError('Invalid user data', { user })
         }
 
         setProcessing(SAVING)
@@ -45,7 +46,15 @@ const useAddUserButton = () => {
         closeModal()
       } catch (error) {
         setProcessing(false)
-        throw error
+        if (error.title === 'Validation Error') {
+          throw error
+        }
+        throw createError(
+          'User Creation Error',
+          'Failed to create new user',
+          { userData: processAddUserData(user) },
+          error
+        )
       }
     },
     [addUser, closeModal, setProcessing]

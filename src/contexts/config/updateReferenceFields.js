@@ -1,10 +1,15 @@
 import { updateReference } from '@/lib/api/references'
 
 import { isEmpty } from '@/lib/utils'
+import { createError } from '@/lib/errors'
 
 const updateReferenceFields = async (oldReference, newReference, apiFns) => {
   if (newReference.id !== oldReference.id) {
-    throw new Error('Attempting edit reference with different IDs')
+    throw createError(
+      'Reference Edit Error',
+      'Cannot edit reference with mismatched IDs',
+      { oldId: oldReference.id, newId: newReference.id }
+    )
   }
   const referenceId = oldReference.id
 

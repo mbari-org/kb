@@ -1,4 +1,5 @@
 import { ACTION } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 const approveMedia = (concept, item) => {
   switch (item.action) {
@@ -24,7 +25,11 @@ const approveMedia = (concept, item) => {
     }
 
     default:
-      throw new Error(`Invalid approval pending media action: ${item.action}`)
+      throw createError(
+        'Invalid Pending Action',
+        `Cannot approve media with invalid action: ${item.action}`,
+        { item }
+      )
   }
 }
 

@@ -3,6 +3,7 @@ import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/api/med
 import { CONCEPT_STATE } from '@/lib/constants'
 
 import { pick } from '@/lib/utils'
+import { createError } from '@/lib/errors'
 
 const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo
@@ -12,11 +13,41 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   }
 
   const submitMediaItem = (apiFn, trackerInfo) =>
-    submit(apiFn, trackerInfo.params).then(response => ({
-      field: 'media',
-      response,
-      ...trackerInfo,
-    }))
+    submit(apiFn, trackerInfo.params)
+      .then(response => ({
+        field: 'media',
+        response,
+        ...trackerInfo,
+      }))
+      .catch(error => ({
+        field: 'media',
+        error: createError(
+          'Media Operation Failed',
+          `Failed to ${getMediaActionMessage(trackerInfo.action)} media item for concept ${concept.name}`,
+          {
+            conceptName: concept.name,
+            mediaId: trackerInfo.update.id,
+            mediaType: trackerInfo.update.mediaType,
+            action: trackerInfo.action,
+            index: trackerInfo.index,
+          },
+          error
+        ),
+        ...trackerInfo,
+      }))
+
+  const getMediaActionMessage = action => {
+    switch (action) {
+      case CONCEPT_STATE.MEDIA_ITEM.ADD:
+        return 'add'
+      case CONCEPT_STATE.MEDIA_ITEM.EDIT:
+        return 'update'
+      case CONCEPT_STATE.MEDIA_ITEM.DELETE:
+        return 'delete'
+      default:
+        return 'process'
+    }
+  }
 
   const mediaAdd = (update, index) => {
     const mediaItem = pick(update, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])

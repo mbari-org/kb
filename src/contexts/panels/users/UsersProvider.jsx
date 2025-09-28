@@ -51,7 +51,7 @@ const UsersProvider = ({ children }) => {
     } catch (error) {
       showBoundary(error)
     }
-  }, [])
+  }, [showBoundary])
 
   useEffect(() => {
     if (!user) return

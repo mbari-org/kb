@@ -11,6 +11,7 @@ import {
 
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 
+import { createError } from '@/lib/errors'
 import { orderedAliases } from '@/lib/kb/model/aliases'
 import { filterRanks } from '@/lib/kb/model/rank'
 import { sortRealizations } from '@/lib/kb/model/realization'
@@ -48,7 +49,11 @@ const closestConcept = (taxonomy, concept) => {
 
 const deleteConcept = async (taxonomy, concept, reassignTo, apiFns) => {
   if (0 < concept.children.length) {
-    throw new Error(`Concept "${concept.name}" has children.`)
+    throw createError(
+      'Delete Validation Error',
+      `Cannot delete concept "${concept.name}" because it has children.`,
+      { childCount: concept.children.length, conceptName: concept.name }
+    )
   }
 
   const conceptAnnotations = await apiFns.apiPayload(apiConceptAnnotations, concept.name)
@@ -59,9 +64,15 @@ const deleteConcept = async (taxonomy, concept, reassignTo, apiFns) => {
     )
   )
 
-  // CxTBD Should we attempt to revert any successful updates here?
-  const error = annotationUpdateResults.find(result => result.error)
-  if (error) throw error.error.original || new Error('Failed to update annotations')
+  const errorResult = annotationUpdateResults.find(result => result.error)
+  if (errorResult) {
+    throw createError(
+      'Annotation Update Error',
+      'Failed to update concept annotations during delete',
+      { failedAnnotation: errorResult.error?.details, conceptName: concept.name, reassignTo },
+      errorResult.error?.original
+    )
+  }
 
   await apiFns.apiPayload(apiDelete, concept.name)
 
@@ -331,7 +342,11 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
     const descendant = getConcept(updatedTaxonomy, descendantName)
 
     if (!descendant) {
-      throw new Error(`Concept not found in taxonomy: ${descendantName}`)
+      throw createError(
+        'Missing Concept',
+        `Concept not found in taxonomy: ${descendantName}`,
+        { conceptName: descendantName }
+      )
     }
 
     if (descendant && !descendant.children) {
@@ -450,7 +465,11 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
 
 const removeTaxonomyConcept = (taxonomy, concept) => {
   if (concept.children.length > 0) {
-    throw new Error(`Concept "${concept.name}" has children.`)
+    throw createError(
+      'Delete Validation Error',
+      `Cannot delete concept "${concept.name}" because it has children`,
+      { conceptName: concept.name, childCount: concept.children.length }
+    )
   }
 
   const conceptMap = { ...taxonomy.conceptMap }

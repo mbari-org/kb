@@ -1,4 +1,5 @@
 import { ACTION } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 const approveChild = (concept, item) => {
   switch (item.action) {
@@ -14,7 +15,11 @@ const approveChild = (concept, item) => {
     }
 
     default:
-      throw new Error(`Invalid approval pending child action: ${item.action}`)
+      throw createError(
+        'Invalid Pending Action',
+        `Cannot approve child with invalid action: ${item.action}`,
+        { item }
+      )
   }
 }
 

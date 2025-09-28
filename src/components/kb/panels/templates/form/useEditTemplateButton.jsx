@@ -5,6 +5,7 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptTitle from '@/components/common/ConceptTitle'
 import Actions from '@/components/common/factory/Actions'
+import { createError, createValidationError } from '@/lib/errors'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -42,8 +43,11 @@ const useEditTemplateButton = () => {
 
         // Duplicate check (exclude the original template by id)
         if (isDuplicateTemplate(allTemplates, template, original.id)) {
-          updateModalData({ alert: duplicateTemplateAlert() })
-          return
+          throw createValidationError('Template already exists', {
+            templateId: template?.id,
+            duplicateToConcept: template?.toConcept,
+            duplicateLinkName: template?.linkName,
+          })
         }
 
         setProcessing(UPDATING)
@@ -51,7 +55,18 @@ const useEditTemplateButton = () => {
         closeModal()
       } catch (error) {
         setProcessing(false)
-        throw error
+        if (error.title === 'Validation Error') {
+          if (error.message === 'Template already exists') {
+            updateModalData({ alert: duplicateTemplateAlert() })
+          }
+          throw error
+        }
+        throw createError(
+          'Template Update Error',
+          'Failed to update template',
+          { templateId: template?.id },
+          error
+        )
       }
     },
     [allTemplates, editTemplate, closeModal, setProcessing, updateModalData]

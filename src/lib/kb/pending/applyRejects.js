@@ -1,4 +1,5 @@
 import { HISTORY_FIELD } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 import rejectAlias from '@/contexts/panels/concepts/pending/reject/rejectAlias'
 import rejectChild from '@/contexts/panels/concepts/pending/reject/rejectChild'
@@ -31,7 +32,11 @@ const applyReject = (concept, pendingItem, allItems) => {
       return rejectRealization(concept, pendingItem, allItems)
 
     default:
-      throw new Error(`Invalid reject pending field: ${pendingItem.field}`)
+      throw createError(
+        'Invalid Pending Field',
+        `Cannot reject pending change with invalid field: ${pendingItem.field}`,
+        { pendingItem }
+      )
   }
 }
 

@@ -15,6 +15,7 @@ import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
 import UserContext from '@/contexts/user/UserContext'
 
 import { HISTORY_FIELD } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 const PendingItemDetail = props => {
   const { modalData } = usePanelModalDataContext()
@@ -49,7 +50,11 @@ const PendingItemDetail = props => {
       return <PendingAliasItem item={item} />
 
     default:
-      throw new Error(`Unknown pending item field type: ${item.field}`)
+      throw createError(
+        'Invalid Field Type',
+        `Cannot display pending item with unknown field type: ${item.field}`,
+        { item }
+      )
   }
 }
 

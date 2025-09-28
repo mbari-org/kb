@@ -10,6 +10,7 @@ import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'
 
 import { LABELS, PENDING } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useUpdatePending'
 
 const { APPROVE, CONFIRM, DEFER, REJECT } = LABELS.BUTTON
@@ -81,7 +82,11 @@ const HistoryPendingActions = props => {
       }
 
       default:
-        throw new Error(`Invalid pending item action: ${label}`)
+        throw createError(
+          'Invalid Action',
+          `Cannot handle unknown pending item action: ${label}`,
+          { label, pendingConfirm }
+        )
     }
   }
 

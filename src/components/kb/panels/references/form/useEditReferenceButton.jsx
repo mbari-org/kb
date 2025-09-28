@@ -5,6 +5,7 @@ import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
+import { createError } from '@/lib/errors'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -24,7 +25,7 @@ const useEditReferenceButton = () => {
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, true, isDoiUnique),
-    [updateModalData, closeModal, isDoiUnique]
+    [closeModal, isDoiUnique, updateModalData]
   )
 
   const handleCommit = useCallback(
@@ -42,7 +43,15 @@ const useEditReferenceButton = () => {
         closeModal()
       } catch (error) {
         setProcessing(false)
-        throw error
+        if (error.title === 'Validation Error') {
+          throw error
+        }
+        throw createError(
+          'Reference Update Error',
+          'Failed to update reference',
+          { referenceId: reference?.id },
+          error
+        )
       }
     },
     [editReference, closeModal, setProcessing]

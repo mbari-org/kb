@@ -1,4 +1,5 @@
 import { HISTORY_FIELD } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 import approveAlias from '@/contexts/panels/concepts/pending/approve/approveAlias'
 import approveChild from '@/contexts/panels/concepts/pending/approve/approveChild'
@@ -31,7 +32,11 @@ const applyApproval = (concept, pendingItem, allItems) => {
       return approveRealization(concept, pendingItem, allItems)
 
     default:
-      throw new Error(`Invalid approval pending field: ${pendingItem.field}`)
+      throw createError(
+        'Invalid Pending Field',
+        `Cannot approve pending change with invalid field: ${pendingItem.field}`,
+        { pendingItem }
+      )
   }
 }
 

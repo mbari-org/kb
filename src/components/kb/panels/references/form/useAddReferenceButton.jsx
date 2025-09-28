@@ -1,6 +1,7 @@
 import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
+import { createError, createValidationError } from '@/lib/errors'
 
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
@@ -36,7 +37,11 @@ const useAddReferenceButton = () => {
       try {
         const validateReference = createReferenceValidator(false, isDoiUnique)
         if (!validateReference(reference)) {
-          return
+          throw createValidationError('Invalid reference data', {
+            doi: reference.doi,
+            citation: reference.citation,
+            concepts: reference.concepts,
+          })
         }
 
         setProcessing(SAVING)
@@ -46,7 +51,15 @@ const useAddReferenceButton = () => {
         closeModal()
       } catch (error) {
         setProcessing(false)
-        throw error
+        if (error.title === 'Validation Error') {
+          throw error
+        }
+        throw createError(
+          'Reference Creation Error',
+          'Failed to create new reference',
+          { referenceData: reference },
+          error
+        )
       }
     },
     [addReference, closeModal, setProcessing, isDoiUnique]

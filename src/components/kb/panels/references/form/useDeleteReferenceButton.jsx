@@ -1,9 +1,11 @@
 import { use, useCallback } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
+import { createError } from '@/lib/errors'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -22,13 +24,26 @@ const useDeleteReferenceButton = () => {
     closeModal()
   }, [closeModal])
 
+  const { showBoundary } = useErrorBoundary()
+
   const handleDeleteConfirm = useCallback(
     async reference => {
-      setProcessing(DELETING)
-      await deleteReference(reference)
-      closeModal()
+      try {
+        setProcessing(DELETING)
+        await deleteReference(reference)
+        closeModal()
+      } catch (error) {
+        setProcessing(false)
+        const deleteError = createError(
+          'Reference Delete Error',
+          'Failed to delete reference',
+          { referenceId: reference?.id },
+          error
+        )
+        showBoundary(deleteError)
+      }
     },
-    [deleteReference, closeModal, setProcessing]
+    [deleteReference, closeModal, setProcessing, showBoundary]
   )
 
   return useCallback(

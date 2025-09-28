@@ -31,12 +31,19 @@ const useSaveStaged = () => {
   return useCallback(async () => {
     setProcessing('Saving concept...')
 
-    const updatesInfo = await submitStaged(
-      apiFns.apiPayload,
-      staleConcept,
-      initialState,
-      stagedState
-    )
+    let updatesInfo
+    try {
+      updatesInfo = await submitStaged(
+        apiFns.apiPayload,
+        staleConcept,
+        initialState,
+        stagedState
+      )
+    } catch (error) {
+      setProcessing(false)
+      throw error
+    }
+
     const { hasUpdated, results } = updatesInfo
 
     const conceptName = hasUpdated('name')

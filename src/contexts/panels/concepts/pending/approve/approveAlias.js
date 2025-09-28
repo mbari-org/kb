@@ -1,4 +1,5 @@
 import { ACTION } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 const approveAlias = (concept, item) => {
   switch (item.action) {
@@ -21,7 +22,11 @@ const approveAlias = (concept, item) => {
     }
 
     default:
-      throw new Error(`Invalid approval pending alias action: ${item.action}`)
+      throw createError(
+        'Invalid Pending Action',
+        `Cannot approve alias with invalid action: ${item.action}`,
+        { item }
+      )
   }
   concept.alternateNames = (concept.aliases || []).map(a => a.name).sort()
 }

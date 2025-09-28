@@ -1,4 +1,5 @@
 import { genRefresh } from '@/lib/auth/refreshKey'
+import { createError } from '@/lib/errors'
 import authStore from '@/lib/store/authStore'
 
 import authUrl from './authUrl'
@@ -23,7 +24,7 @@ const loginReadOnly = async () => {
 const loginUser = async (config, username, password) => {
   const { error, url: loginUrl } = authUrl(config, 'login')
   if (error) {
-    return { error }
+    return { error: createError('Auth URL Error', error.message || 'Failed to get auth URL', { config }) }
   }
 
   try {
@@ -31,7 +32,13 @@ const loginUser = async (config, username, password) => {
     const loginResponse = await fetch(loginUrl, loginParams)
 
     if (loginResponse.status !== 200) {
-      return errorMessage(loginResponse.statusText)
+      return {
+        error: createError(
+          'Login Failed',
+          loginResponse.status === 401 ? 'Invalid username or password' : `Login failed: ${loginResponse.statusText}`,
+          { status: loginResponse.status, username }
+        ),
+      }
     }
 
     const { access_token: token } = await loginResponse.json()
@@ -45,10 +52,14 @@ const loginUser = async (config, username, password) => {
 
     return { auth }
   } catch (error) {
-    if (error.message === 'Failed to fetch') {
-      return { error: 'Invalid Username/Password' }
+    return {
+      error: createError(
+        'Login Error',
+        error.message === 'Failed to fetch' ? 'Failed to connect to authentication service' : error.message,
+        { username },
+        error
+      ),
     }
-    return { error: error.message }
   }
 }
 
@@ -83,20 +94,5 @@ const headers = auth => ({
   Accept: 'application/json',
   Authorization: `${auth}`,
 })
-
-const errorMessage = statusText => {
-  var message
-  switch (statusText.toLowerCase()) {
-    case 'unauthorized':
-      message = 'Invalid Username/Password'
-      break
-    case 'invalid':
-      message = 'Invalid Username/Password'
-      break
-    default:
-      message = `An unknown error occurred: ${statusText}\nPlease contact support.`
-  }
-  return { error: message }
-}
 
 export { loginReadOnly, loginUser }

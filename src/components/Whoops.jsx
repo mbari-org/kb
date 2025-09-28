@@ -21,8 +21,8 @@ const Whoops = ({ children }) => {
 
   const handleCopyInfo = async error => {
     const stack = error.original?.stack || error.stack
-    const responseMessage = error.whoops
-      ? `${error.whoops?.title}: ${error.whoops?.message}\n${error.whoops?.method}\n${error.whoops?.url}`
+    const responseMessage = error.title
+      ? `${error.title}: ${error.message}\n${error.details ? JSON.stringify(error.details, null, 2) : ''}`
       : 'An unexpected error occurred'
 
     const infoToCopy = `Error: ${responseMessage}\n\nStack Trace:\n${
@@ -34,11 +34,10 @@ const Whoops = ({ children }) => {
   }
 
   const renderWhoops = ({ error }) => {
-    const responseMessage = error.whoops
+    const responseMessage = error.title
       ? `
-      ${error.whoops?.title}: ${error.whoops?.message}
-      ${error.whoops?.method}
-      ${error.whoops?.url}
+      ${error.title}: ${error.message}
+      ${error.details ? `\nDetails: ${JSON.stringify(error.details, null, 2)}` : ''}
       `
       : 'An unexpected error occurred'
 

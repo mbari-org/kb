@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import PanelModal from '@/components/modal/PanelModal'
+import { createError } from '@/lib/errors'
 
 const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
   return useMemo(() => {
@@ -7,7 +8,11 @@ const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
 
     const ResolvedPanelModal = () => {
       if (!modalConfig.contentComponent) {
-        throw new Error('modalConfig.contentComponent is required')
+        throw createError(
+          'Invalid Modal Config',
+          'Modal configuration must include a content component',
+          { hasActionsComponent: !!modalConfig.actionsComponent }
+        )
       }
 
       return (

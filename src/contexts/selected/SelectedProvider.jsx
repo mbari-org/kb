@@ -8,6 +8,7 @@ import usePanelSelect from '@/contexts/selected/usePanelSelect'
 import useConceptSelect from '@/contexts/selected/useConceptSelect'
 
 import { SELECTED, UNSAFE_ACTION } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 
 const { CONCEPT, PANEL } = SELECTED
 const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
@@ -27,7 +28,11 @@ const SelectedProvider = ({ children }) => {
         case PANEL:
           return panelSelect.current()
         default:
-          throw new Error(`select unknown key: ${key}`)
+          throw createError(
+            'Invalid Selection Key',
+            `Cannot get selection for unknown key: ${key}`,
+            { key }
+          )
       }
     },
     [conceptSelect, panelSelect]

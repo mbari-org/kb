@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { createError } from '@/lib/errors'
 
 const useTaxonomyIntegrity = () => {
   const checkIntegrity = useCallback(taxonomy => {
@@ -10,10 +11,10 @@ const useTaxonomyIntegrity = () => {
     const { conceptMap, aliasMap, rootName } = taxonomy
 
     if (!conceptMap || typeof conceptMap !== 'object') {
-      throw new Error('taxonomy.conceptMap is missing or invalid')
+      throw createError('Taxonomy Integrity Error', 'taxonomy.conceptMap is missing or invalid')
     }
     if (!aliasMap || typeof aliasMap !== 'object') {
-      throw new Error('taxonomy.aliasMap is missing or invalid')
+      throw createError('Taxonomy Integrity Error', 'taxonomy.aliasMap is missing or invalid')
     }
     if (!rootName || !conceptMap[rootName]) {
       addError(`Root concept "${rootName}" is missing from conceptMap`)
@@ -211,7 +212,7 @@ const useTaxonomyIntegrity = () => {
       const message = `Taxonomy integrity check failed (found ${errors.length} issue${
         errors.length === 1 ? '' : 's'
       }):\n- ${errors.join('\n- ')}`
-      throw new Error(message)
+      throw createError('Taxonomy Integrity Error', message, { errors })
     }
   }, [])
 

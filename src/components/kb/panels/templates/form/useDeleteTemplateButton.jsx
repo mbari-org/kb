@@ -5,6 +5,7 @@ import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import ConceptTitle from '@/components/common/ConceptTitle'
 import Actions from '@/components/common/factory/Actions'
+import { createError } from '@/lib/errors'
 
 import { PROCESSING } from '@/lib/constants'
 import {
@@ -32,10 +33,16 @@ const useDeleteTemplateButton = () => {
         closeModal()
       } catch (error) {
         setProcessing(false)
-        showBoundary(error)
+        const deleteError = createError(
+          'Template Delete Error',
+          'Failed to delete template',
+          { templateId: template?.id },
+          error
+        )
+        showBoundary(deleteError)
       }
     },
-    [deleteTemplate, closeModal, setProcessing]
+    [closeModal, deleteTemplate, setProcessing, showBoundary]
   )
 
   return useCallback(

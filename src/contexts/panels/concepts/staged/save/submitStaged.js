@@ -7,6 +7,7 @@ import submitParent from '@/contexts/panels/concepts/staged/save/submitter/submi
 import submitRank from '@/contexts/panels/concepts/staged/save/submitter/submitRank'
 import submitRealizations from '@/contexts/panels/concepts/staged/save/submitter/submitRealizations'
 
+import { createError } from '@/lib/errors'
 import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
 const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
@@ -26,8 +27,33 @@ const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
 
   updatesInfo.results = await Promise.all(submitters)
 
-  if (updatesInfo.results.some(result => result.error)) {
-    throw new Error('Failed to save concept changes')
+  const failedResults = updatesInfo.results.filter(result => result.error)
+  if (failedResults.length > 0) {
+    const failedOperations = failedResults.map(result => ({
+      field: result.field,
+      action: result.action,
+      details: result.error.details,
+      message: result.error.message,
+    }))
+
+    // Group failures by field for better error reporting
+    const failuresByField = failedOperations.reduce((acc, op) => {
+      acc[op.field] = acc[op.field] || []
+      acc[op.field].push(op)
+      return acc
+    }, {})
+
+    const fieldsWithErrors = Object.keys(failuresByField).join(', ')
+    throw createError(
+      'Concept Save Error',
+      `Failed to save changes to concept ${concept.name} in fields: ${fieldsWithErrors}`,
+      {
+        conceptName: concept.name,
+        failedOperations,
+        failuresByField,
+      },
+      failedResults[0].error
+    )
   }
 
   return updatesInfo

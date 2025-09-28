@@ -1,4 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 const RESET = CONCEPT_STATE.RESET
 
 const stringValues = o => {
@@ -113,7 +114,11 @@ const resetConceptState = (action, dispatch, initialState) => {
       break
 
     default:
-      throw new Error(`Unknown reset action: ${action.type}`)
+      throw createError(
+        'Invalid Reset Action',
+        `Cannot reset concept state with unknown action: ${action.type}`,
+        { action }
+      )
   }
 }
 
