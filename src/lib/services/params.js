@@ -15,14 +15,10 @@ const apiParams = (method, data) => {
   }
 
   if (data) {
-    if (method === 'GET') {
-      params.qs = new URLSearchParams(data).toString()
-    } else {
-      params.body = JSON.stringify(data)
-    }
+    params.body = JSON.stringify(data)
   }
 
   return params
 }
 
-export default apiParams
+export { apiParams }

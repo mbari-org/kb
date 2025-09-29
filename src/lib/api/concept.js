@@ -1,34 +1,34 @@
 import { annosaurusGet } from '@/lib/services/annosaurus/methods'
 import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 
-const createConcept = async (config, updates) => oniPost(config, ['concept'], updates)
+const createConcept = async (config, updates) => oniPost({ config, path: ['concept'], data: updates })
 
-const deleteConcept = async (config, conceptName) => oniDelete(config, ['concept', conceptName])
+const deleteConcept = async (config, conceptName) => oniDelete({ config, path: ['concept', conceptName] })
 
-const getConcept = async (config, conceptName) => oniGet(config, ['concept', conceptName])
+const getConcept = async (config, conceptName) => oniGet({ config, path: ['concept', conceptName] })
 
 const getConceptAnnotations = async (config, conceptName) =>
-  annosaurusGet(config, ['fast', 'concept', conceptName])
+  annosaurusGet({ config, path: ['fast', 'concept', conceptName] })
 
 const getConceptChildren = async (config, conceptName) =>
-  oniGet(config, ['concept', 'children', conceptName])
+  oniGet({ config, path: ['concept', 'children', conceptName] })
 
 const getConceptParent = async (config, conceptName) =>
-  oniGet(config, ['concept', 'parent', conceptName])
+  oniGet({ config, path: ['concept', 'parent', conceptName] })
 
-const getConceptNames = async (config, conceptName) => oniGet(config, ['raw', 'names', conceptName])
+const getConceptNames = async (config, conceptName) => oniGet({ config, path: ['raw', 'names', conceptName] })
 
 const updateConceptAuthor = async (config, [conceptName, updates]) =>
-  oniPut(config, ['names', conceptName], updates)
+  oniPut({ config, path: ['names', conceptName], data: updates })
 
 const updateConceptName = async (config, [conceptName, updates]) =>
-  oniPut(config, ['names', conceptName], { newName: updates.name })
+  oniPut({ config, path: ['names', conceptName], data: { newName: updates.name } })
 
 const updateConceptParent = async (config, [conceptName, updates]) =>
-  oniPut(config, ['concept', conceptName], updates)
+  oniPut({ config, path: ['concept', conceptName], data: updates })
 
 const updateConceptRank = async (config, [conceptName, updates]) =>
-  oniPut(config, ['concept', conceptName], updates)
+  oniPut({ config, path: ['concept', conceptName], data: updates })
 
 export {
   createConcept,
