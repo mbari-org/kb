@@ -1,11 +1,12 @@
 import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
+import { paramsQs } from '@/lib/services/params'
 
 const createConceptTemplate = async (config, payload) => oniPost({ config, path: ['linktemplates'], data: payload })
 
 const deleteConceptTemplate = async (config, templateId) =>
   oniDelete({ config, path: ['linktemplates', templateId] })
 
-const getTemplates = async (config, params) => oniGet({ config, path: ['linktemplates'], qs: params ? new URLSearchParams(params).toString() : undefined })
+const getTemplates = async (config, params) => oniGet({ config, path: ['linktemplates'], qs: paramsQs(params) })
 
 const getTemplatesCount = async config => {
   const { error, payload } = await oniGet({ config, path: ['linktemplates', 'count'] })

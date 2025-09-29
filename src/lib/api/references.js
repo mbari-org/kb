@@ -1,4 +1,5 @@
 import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
+import { paramsQs } from '@/lib/services/params'
 
 const addConcept = async (config, [referenceId, conceptName]) =>
   oniPut({ config, path: ['references', 'add', referenceId, 'to', conceptName] })
@@ -10,7 +11,7 @@ const deleteReference = async (config, referenceId) =>
 
 const getReference = async (config, referenceId) => oniGet({ config, path: ['references', referenceId] })
 
-const getReferences = async (config, params) => oniGet({ config, path: ['references'], qs: params ? new URLSearchParams(params).toString() : undefined })
+const getReferences = async (config, params) => oniGet({ config, path: ['references'], qs: paramsQs(params) })
 
 const removeConcept = async (config, [referenceId, conceptName]) =>
   oniPut({ config, path: ['references', 'remove', referenceId, 'from', conceptName] })

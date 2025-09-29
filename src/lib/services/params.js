@@ -21,4 +21,7 @@ const apiParams = (method, data) => {
   return params
 }
 
-export { apiParams }
+const paramsQs = params => {
+  params ? new URLSearchParams(params).toString() : undefined }
+
+export { apiParams, paramsQs }
