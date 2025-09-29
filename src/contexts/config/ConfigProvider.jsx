@@ -6,6 +6,7 @@ import ConfigContext from './ConfigContext'
 
 import createServiceLookup from '@/lib/services/config/createServiceLookup'
 import getEndpoints from '@/lib/services/config/getEndpoints'
+import useApiFns from '@/contexts/config/useApiFns'
 
 import configUrlStore from '@/lib/store/configUrl'
 
@@ -86,56 +87,14 @@ const ConfigProvider = ({ children }) => {
     } else {
       navigate('/login')
     }
-    // navigate and loadConfig are stable, no need to include in dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const createApiFns = useCallback((config, showBoundary) => {
-    const apiPayload = async (payloadRequest, params) => {
-      const { error, payload } = await payloadRequest(config, params)
-      if (error) {
-        showBoundary(error)
-      }
-      return payload
-    }
-
-    const apiPaginated = async (paginationRequest, params) => {
-      // Even though the API returns limit and offset values, they simply echo the values sent by
-      // the client. The values for limit and offset are maintained internally by the client itself.
-      // So we can just return the payload content.
-      const { error, payload } = await paginationRequest(config, params)
-      if (error) {
-        showBoundary(error)
-      }
-      return payload.content
-    }
-
-    const apiRaw = async (apiRequest, params) => apiRequest(config, params)
-
-    const apiResult = async (apiRequest, params) => {
-      const { error, result } = await apiRequest(config, params)
-      if (error) {
-        showBoundary(error)
-      }
-      return result
-    }
-
-    return {
-      apiPayload,
-      apiRaw,
-      apiResult,
-      apiPaginated,
-    }
-  }, [])
+  const apiFnsFromHook = useApiFns(config?.valid ? config : null, showBoundary)
 
   useEffect(() => {
-    if (!config?.valid) {
-      setApiFns(null)
-      return
-    }
-
-    setApiFns(createApiFns(config, showBoundary))
-  }, [config, showBoundary, createApiFns])
+    setApiFns(apiFnsFromHook)
+  }, [apiFnsFromHook])
 
   useEffect(() => {
     return () => {
