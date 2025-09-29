@@ -1,5 +1,3 @@
-import localStore from './localStore'
-
 // Trim the ending cycle of an array.
 //   ['A','B','C','C'] -> ['A','B','C']
 //   ['A', 'B', 'C', 'A', 'B', 'A', 'B'] -> ['A', 'B', 'C', 'A', 'B']
@@ -18,78 +16,75 @@ const trimEndingCycle = array => {
   return array.slice(0, n - k)
 }
 
-const historyStore = (store, maxSize, defaultEntry) => {
-  const initStore = () => {
-    store.set({ state: [defaultEntry], position: 0 })
-  }
-
-  if (!store.get()) {
-    initStore()
-  }
+const createHistoryState = (maxSize, defaultEntry, initData) => {
+  let data = initData || { state: [defaultEntry], position: 0 }
 
   return {
     back: () => {
-      const { position, state } = store.get()
+      const { position, state } = data
       const newPosition = position > 0 ? position - 1 : 0
-      store.set({ state, position: newPosition })
+      data = { state, position: newPosition }
       return state[newPosition]
     },
 
     backItems: () => {
-      const { position, state } = store.get()
+      const { position, state } = data
       return state.slice(0, position).reverse()
     },
 
-    canGoBack: () => store.get().position > 0,
+    canGoBack: () => data.position > 0,
 
     canGoForward: () => {
-      const { state, position } = store.get()
+      const { state, position } = data
       return position < state.length - 1
     },
 
-    clear: () => store.set({ state: [], position: -1 }),
-
-    init: () => initStore(),
+    clear: () => {
+      data = { state: [], position: -1 }
+    },
 
     current: () => {
-      const { state, position } = store.get()
+      const { state, position } = data
       return state[position]
     },
 
     forward: () => {
-      const { position, state } = store.get()
+      const { position, state } = data
       const newPosition = position < state.length - 1 ? position + 1 : position
-      store.set({ state, position: newPosition })
+      data = { state, position: newPosition }
       return state[newPosition]
     },
 
     forwardItems: () => {
-      const { position, state } = store.get()
+      const { position, state } = data
       return state.slice(position + 1)
     },
 
-    getPosition: () => store.get().position,
+    getPosition: () => data.position,
 
-    getState: () => store.get().state,
+    getState: () => data.state,
 
     goBack: delta => {
-      const { position, state } = store.get()
+      const { position, state } = data
       const newPosition = Math.max(0, position - delta)
-      store.set({ state, position: newPosition })
+      data = { state, position: newPosition }
       return state[newPosition]
     },
 
     goForward: delta => {
-      const { position, state } = store.get()
+      const { position, state } = data
       const newPosition = Math.min(state.length - 1, position + delta)
-      store.set({ state, position: newPosition })
+      data = { state, position: newPosition }
       return state[newPosition]
     },
 
-    push: entry => {
-      const { state, position } = store.get()
+    init: initData => {
+      data = initData
+    },
 
-      // Remove forward history, add new entry, trim length
+    push: entry => {
+      const { state, position } = data
+
       const pushState = state.slice(0, position + 1)
       pushState.push(entry)
       if (pushState.length > maxSize) {
@@ -98,18 +93,13 @@ const historyStore = (store, maxSize, defaultEntry) => {
 
       const trimState = trimEndingCycle(pushState)
 
-      store.set({ state: trimState, position: trimState.length - 1 })
+      data = { state: trimState, position: trimState.length - 1 }
     },
 
-    remove: () => store.remove(),
+    remove: () => {
+      data = { state: [defaultEntry], position: 0 }
+    },
   }
 }
 
-const createHistoryStore = (name, maxSize, defaultEntry) => {
-  const store = localStore(name)
-  return historyStore(store, maxSize, defaultEntry)
-}
-
-const getHistoryStore = name => localStore(name)
-
-export { createHistoryStore, getHistoryStore }
+export default createHistoryState

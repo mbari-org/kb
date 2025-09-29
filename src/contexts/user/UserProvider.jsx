@@ -8,6 +8,7 @@ import useRefreshUser from '@/contexts/user/lib/useRefreshUser'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
+import useUserPreferences from '@/contexts/user/useUserPreferences'
 
 const UserProvider = ({ children }) => {
   const navigate = useNavigate()
@@ -23,6 +24,9 @@ const UserProvider = ({ children }) => {
   const refreshingRef = useRef(false)
 
   const logout = useLogout(setUser)
+
+  const { getPreferences, createPreferences, updatePreferences } = useUserPreferences({ config, user })
+
   const processAuth = useProcessAuth(setUser)
   const refreshUser = useRefreshUser({ setUser, user })
 
@@ -30,7 +34,7 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (!config || !user) return
-    if (refreshingRef.current) return // Prevent concurrent refresh attempts
+    if (refreshingRef.current) return
 
     refreshingRef.current = true
 
@@ -58,6 +62,9 @@ const UserProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      config,
+      createPreferences,
+      getPreferences,
       hasUnsavedChanges,
       logout,
       processAuth,
@@ -65,11 +72,23 @@ const UserProvider = ({ children }) => {
       setHasUnsavedChanges,
       setUnsafeAction,
       unsafeAction,
+      updatePreferences,
       user,
     }),
-    [logout, processAuth, refreshUser, user, hasUnsavedChanges, unsafeAction]
+    [
+      config,
+      createPreferences,
+      getPreferences,
+      hasUnsavedChanges,
+      logout,
+      processAuth,
+      refreshUser,
+      setUnsafeAction,
+      unsafeAction,
+      updatePreferences,
+      user,
+    ]
   )
-
   return <UserContext value={value}>{children}</UserContext>
 }
 

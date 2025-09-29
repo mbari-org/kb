@@ -1,122 +1,55 @@
-import { use, useCallback, useEffect, useMemo, useState } from 'react'
+import { use, useMemo } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import settingsStore from '@/lib/store/settingsStore'
-import usePanelSelect from '@/contexts/selected/usePanelSelect'
-import useConceptSelect from '@/contexts/selected/useConceptSelect'
-
-import { SELECTED, UNSAFE_ACTION } from '@/lib/constants'
-import { createError } from '@/lib/errors'
-
-const { CONCEPT, PANEL } = SELECTED
-const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
+import usePreferences from '@/contexts/selected/usePreferences'
+import useSelected from '@/contexts/selected/useSelected'
+import useSettings from '@/contexts/selected/useSettings'
 
 const SelectedProvider = ({ children }) => {
-  const [settings, setSettings] = useState(null)
-  const { hasUnsavedChanges, setUnsafeAction } = use(UserContext)
+  const { createPreferences, getPreferences, updatePreferences, user } = use(UserContext)
+  use(TaxonomyContext)
 
-  const conceptSelect = useConceptSelect()
-  const panelSelect = usePanelSelect()
+  const {
+    currentConcept,
+    currentPanel,
+    conceptSelect,
+    panelSelect,
+    getSelected,
+    updateSelected,
+  } = useSelected()
 
-  const getSelected = useCallback(
-    key => {
-      switch (key) {
-        case CONCEPT:
-          return conceptSelect.current()
-        case PANEL:
-          return panelSelect.current()
-        default:
-          throw createError(
-            'Invalid Selection Key',
-            `Cannot get selection for unknown key: ${key}`,
-            { key }
-          )
-      }
-    },
-    [conceptSelect, panelSelect]
-  )
+  const { settings, setSettings, getSettings, updateSettings } = useSettings()
 
-  const getSettings = useCallback(
-    (key, field) => {
-      if (!settings) return undefined
-      const keySettings = settings[key]
-      return field ? keySettings[field] : keySettings
-    },
-    [settings]
-  )
-
-  const updateSelected = useCallback(
-    ({ concept: conceptName, panel: panelName, force = false }) => {
-      if (conceptName && conceptName !== conceptSelect.current()) {
-        if (!force && hasUnsavedChanges && panelSelect.current() === SELECTED.PANELS.CONCEPTS) {
-          setUnsafeAction({ type: UNSAFE_ACTION.CONCEPT, payload: { concept: conceptName } })
-          return
-        }
-        conceptSelect.push(conceptName)
-      }
-
-      if (panelName && panelName !== panelSelect.current()) {
-        panelSelect.push(panelName)
-      }
-    },
-    [conceptSelect, panelSelect, hasUnsavedChanges, setUnsafeAction]
-  )
-
-  const updateSettings = useCallback(({ history, references, templates }) => {
-    setSettings(prevSettings => {
-      if (!prevSettings) return prevSettings
-
-      const updatedSettings = {
-        ...prevSettings,
-        ...(history && { [HISTORY.KEY]: { ...prevSettings[HISTORY.KEY], ...history } }),
-        ...(references && { [REFERENCES.KEY]: { ...prevSettings[REFERENCES.KEY], ...references } }),
-        ...(templates && { [TEMPLATES.KEY]: { ...prevSettings[TEMPLATES.KEY], ...templates } }),
-      }
-
-      settingsStore.set(updatedSettings)
-      return updatedSettings
-    })
-  }, [])
-
-  useEffect(() => {
-    const storedSelected = settingsStore.get()
-
-    const history = storedSelected?.[HISTORY.KEY] || { [HISTORY.TYPE]: HISTORY.TYPES.PENDING }
-    const references = storedSelected?.[REFERENCES.KEY] || { [REFERENCES.BY_CONCEPT]: false }
-    const templates = storedSelected?.[TEMPLATES.KEY] || {
-      [TEMPLATES.AVAILABLE]: false,
-      [TEMPLATES.FILTERS.KEY]: {},
-    }
-
-    const initialSettings = {
-      history,
-      references,
-      templates,
-    }
-
-    settingsStore.set(initialSettings)
-    setSettings(initialSettings)
-  }, [])
+  const { isLoading } = usePreferences({
+    conceptSelect,
+    createPreferences,
+    currentConcept,
+    currentPanel,
+    getPreferences,
+    panelSelect,
+    setSettings,
+    settings,
+    updatePreferences,
+    user,
+  })
 
   const value = useMemo(
     () => ({
       concepts: conceptSelect,
       getSelected,
       getSettings,
+      isLoading,
       panels: panelSelect,
       updateSelected,
       updateSettings,
     }),
-    [conceptSelect, getSelected, getSettings, panelSelect, updateSelected, updateSettings]
+    [conceptSelect, getSelected, getSettings, isLoading, panelSelect, updateSelected, updateSettings]
   )
 
-  if (!settings) {
-    return null
-  }
-
-  return <SelectedContext value={value}>{children}</SelectedContext>
+  return <SelectedContext.Provider value={value}>{children}</SelectedContext.Provider>
 }
 
 export default SelectedProvider

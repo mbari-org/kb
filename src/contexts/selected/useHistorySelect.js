@@ -1,52 +1,66 @@
-import { useMemo, useState } from 'react'
+import createHistoryState from '@/lib/state/historyState'
+import { useCallback, useMemo, useState } from 'react'
 
-/**
- * A generic hook for managing history-based selection state
- * @param {Function} createStore - Function to create the store instance
- * @param {any} initialValue - Initial value for the store
- * @returns {Object} History selection interface
- */
-const useHistorySelect = (createStore, initialValue) => {
-  const store = useMemo(() => createStore(initialValue), [createStore, initialValue])
-  const [current, setCurrent] = useState(store.current())
-
-  return useMemo(
-    () => ({
-      ...store,
-
-      back: () => {
-        const result = store.back()
-        setCurrent(store.current())
-        return result
-      },
-
-      current: () => current,
-
-      forward: () => {
-        const result = store.forward()
-        setCurrent(store.current())
-        return result
-      },
-
-      goBack: delta => {
-        const result = store.goBack(delta)
-        setCurrent(store.current())
-        return result
-      },
-
-      goForward: delta => {
-        const result = store.goForward(delta)
-        setCurrent(store.current())
-        return result
-      },
-
-      push: value => {
-        store.push(value)
-        setCurrent(value)
-      },
-    }),
-    [store, current]
+const useHistorySelect = (maxSize, defaultValue, onCurrentChange) => {
+  const store = useMemo(() =>
+    createHistoryState(maxSize, defaultValue),
+  [maxSize, defaultValue]
   )
+
+  const [current, setCurrent] = useState(() => store.current())
+
+  const updateCurrent = useCallback(value => {
+    setCurrent(value)
+    if (onCurrentChange) onCurrentChange(value)
+  }, [onCurrentChange])
+
+  return useMemo(() => ({
+    ...store,
+
+    current: () => current,
+
+    push: value => {
+      store.push(value)
+      updateCurrent(value)
+    },
+
+    back: () => {
+      const result = store.back()
+      updateCurrent(result)
+      return result
+    },
+
+    forward: () => {
+      const result = store.forward()
+      updateCurrent(result)
+      return result
+    },
+
+    goBack: delta => {
+      const result = store.goBack(delta)
+      updateCurrent(result)
+      return result
+    },
+
+    goForward: delta => {
+      const result = store.goForward(delta)
+      updateCurrent(result)
+      return result
+    },
+
+    clear: () => {
+      store.clear()
+      updateCurrent(null)
+    },
+
+    init: initData => {
+      store.init(initData)
+      updateCurrent(store.current())
+    },
+
+    getState: () => store.getState(),
+    getPosition: () => store.getPosition(),
+  }), [current, store, updateCurrent])
 }
 
 export default useHistorySelect

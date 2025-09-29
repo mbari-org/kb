@@ -1,10 +1,16 @@
 import panelMods from '@/components/kb/panels/modules'
 import useHistorySelect from '@/contexts/selected/useHistorySelect'
-import { createPanelStore } from '@/lib/store/panelStore'
+import { STORE } from '@/lib/constants'
+import { useMemo } from 'react'
 
-const usePanelSelect = () => {
-  const defaultPanel = panelMods[0].name
-  return useHistorySelect(createPanelStore, defaultPanel)
+const usePanelSelect = onCurrentChange => {
+  const defaultPanel = useMemo(() => panelMods[0].name, [])
+
+  return useHistorySelect(
+    STORE.PANEL.MAX_SIZE,
+    defaultPanel,
+    onCurrentChange
+  )
 }
 
 export default usePanelSelect

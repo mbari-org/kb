@@ -1,24 +1,29 @@
 import useHistorySelect from '@/contexts/selected/useHistorySelect'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import { createConceptStore } from '@/lib/store/conceptStore'
-import { use } from 'react'
+import { STORE } from '@/lib/constants'
+import { use, useMemo } from 'react'
 
-const useConceptSelected = () => {
+const useConceptSelect = onCurrentChange => {
   const { getRootName } = use(TaxonomyContext)
 
-  const conceptSelect = useHistorySelect(createConceptStore, getRootName)
+  const historySelect = useHistorySelect(
+    STORE.CONCEPT.MAX_SIZE,
+    getRootName,
+    onCurrentChange
+  )
 
-  conceptSelect.removeName = name => {
-    const newState = conceptSelect
-      .getState()
-      .filter(item => item !== name)
-      .filter((item, index, arr) => index === 0 || item !== arr[index - 1])
+  return useMemo(() => ({
+    ...historySelect,
 
-    conceptSelect.clear()
-    newState.forEach(name => conceptSelect.push(name))
-  }
+    removeName: name => {
+      const newState = historySelect.getState()
+        .filter(item => item !== name)
+        .filter((item, index, arr) => index === 0 || item !== arr[index - 1])
 
-  return conceptSelect
+      historySelect.clear()
+      newState.forEach(n => historySelect.push(n))
+    },
+  }), [historySelect])
 }
 
-export default useConceptSelected
+export default useConceptSelect
