@@ -1,17 +1,33 @@
+import { PREF_TYPES, createPreferencesPayload, parsePreferences } from '@/lib/kb/model/preferences'
 import { oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 import { paramsQs } from '@/lib/services/params'
 
-const PREFS_NAME = 'kb-ui'
+const PREFS_PREFIX = 'kb-ui/'
+const prefsName = username => PREFS_PREFIX + username
 
-const prefsQs = username => paramsQs({ name: PREFS_NAME, key: username })
+const PREFS_KEYS = {
+  CONCEPTS: 'concepts',
+  PANELS: 'panels',
+  SETTINGS: 'settings',
+}
 
-const getPreferences = async (config, username) =>
-  oniGet({ config, path: ['prefs'], qs: prefsQs(username) })
+const prefsQs = (username, key) => paramsQs({ name: prefsName(username), key })
 
-const createPreferences = async (config, username, value) =>
-  oniPost({ config, path: ['prefs'], data: { name: PREFS_NAME, key: username, value } })
+const getPreferences = async (config, username, key) => {
+  const response = key
+    ? await oniGet({ config, path: ['prefs'], qs: prefsQs(username, key) })
+    : await oniGet({ config, path: ['prefs', 'startswith'], qs: paramsQs({ prefix: prefsName(username) }) })
+  return parsePreferences(response.payload)
+}
 
-const updatePreferences = async (config, username, value) =>
-  oniPut({ config, path: ['prefs'], qs: prefsQs(username), data: { value } })
+const createPreferences = async (config, username, type, value) => {
+  const payload = createPreferencesPayload(type, value)
+  await oniPost({ config, path: ['prefs'], data: { name: prefsName(username), key: payload.type, value: payload.value } })
+}
 
-export { createPreferences, getPreferences, updatePreferences }
+const updatePreferences = async (config, username, type, value) => {
+  const payload = createPreferencesPayload(type, value)
+  await oniPut({ config, path: ['prefs'], qs: prefsQs(username, payload.type), data: { value: payload.value } })
+}
+
+export { PREFS_KEYS, createPreferences, getPreferences, updatePreferences }

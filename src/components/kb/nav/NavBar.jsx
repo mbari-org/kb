@@ -15,7 +15,7 @@ import { isAdmin } from '@/lib/auth/role'
 
 const NavBar = ({ selectPanel }) => {
   const { user } = use(UserContext)
-  const { panels } = use(SelectedContext)
+  const { panels, isLoading } = use(SelectedContext)
 
   const activePanel = panels.current()
 
@@ -33,7 +33,7 @@ const NavBar = ({ selectPanel }) => {
     >
       <Toolbar>
         <Box sx={{ mb: 1.5 }}>
-          <NavHistoryLinks history={panels} />
+          {!isLoading && <NavHistoryLinks history={panels} />}
         </Box>
         {panelNames.map(name => (
           <PanelLink

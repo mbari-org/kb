@@ -11,46 +11,28 @@ import { createError } from '@/lib/errors'
 const useUserPreferences = ({ config, user }) => {
 
   const getPreferences = useCallback(
-    async username => {
-      const { error, payload } = await apiGetPreferences(config, username)
-      if (error) {
-        throw createError('Preferences Loading Error', 'Failed to load user preferences', { username }, error)
-      }
-
-      if (!payload) return null
-
+    async key => {
       try {
-        const raw = typeof payload?.value === 'string' ? payload.value : payload
-        const prefs = typeof raw === 'string' ? JSON.parse(raw) : raw
-        
-        if (Array.isArray(prefs) && prefs.length === 0) {
-          return null
-        }
-        
-        return prefs
-      } catch (e) {
-        throw createError('Preferences Parse Error', 'Invalid preferences JSON from server', { username, payload }, e)
+        return await apiGetPreferences(config, user.name, key)
+      } catch (error) {
+        throw createError('Preferences Loading Error', 'Failed to load user preferences', { username: user.name }, error)
       }
     },
-    [config]
+    [config, user]
   )
 
   const createPreferences = useCallback(
-    async prefs => {
+    async (key, prefs) => {
       if (!user) return
-      const value = JSON.stringify(prefs)
-      const { error } = await apiCreatePreferences(config, user.name, value)
-      if (error) throw error
+      await apiCreatePreferences(config, user.name, key, prefs)
     },
     [config, user]
   )
 
   const updatePreferences = useCallback(
-    async prefs => {
+    async (key, prefs) => {
       if (!user) return
-      const value = JSON.stringify(prefs)
-      const { error } = await apiUpdatePreferences(config, user.name, value)
-      if (error) throw error
+      await apiUpdatePreferences(config, user.name, key, prefs)
     },
     [config, user]
   )

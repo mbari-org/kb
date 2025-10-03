@@ -4,6 +4,7 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 import NavHistoryButton from './NavHistoryButton'
 
 const NavHistoryLinks = ({ history }) => {
+  if (!history) return null;
   const historyGoBack = delta => history.goBack(delta + 1)
   const historyGoForward = delta => history.goForward(delta + 1)
 
