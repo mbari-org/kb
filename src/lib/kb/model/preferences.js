@@ -1,5 +1,7 @@
 import LZString from 'lz-string'
 
+const MAX_PREFERENCE_LENGTH = 255
+
 export const PREF_TYPES = {
   CONCEPTS: 'concepts',
   PANELS: 'panels',
@@ -61,13 +63,41 @@ const fromArray = (type, arr) => {
   }
 }
 
+const trimHistoryPreference = (type, value) => {
+  if (type !== PREF_TYPES.CONCEPTS && type !== PREF_TYPES.PANELS) {
+    return value
+  }
+
+  let trimmedValue = { ...value, state: [...value.state] }
+  let serialized = serializeWithoutTrim(type, trimmedValue)
+
+  while (serialized.length > MAX_PREFERENCE_LENGTH && trimmedValue.state.length > 1) {
+    trimmedValue.state.shift()
+    if (trimmedValue.position > 0) {
+      trimmedValue.position--
+    }
+    serialized = serializeWithoutTrim(type, trimmedValue)
+  }
+
+  if (serialized.length > MAX_PREFERENCE_LENGTH) {
+    throw new Error(`Preference value exceeds ${MAX_PREFERENCE_LENGTH} characters even after trimming`)
+  }
+
+  return trimmedValue
+}
+
+const serializeWithoutTrim = (type, value) => {
+  const arr = toArray(type, value)
+  const json = JSON.stringify(arr)
+  return LZString.compressToBase64(json)
+}
+
 export const serializePreferences = (type, value) => {
   if (value === undefined || value === null) {
     throw new Error('Cannot serialize undefined or null preferences value')
   }
-  const arr = toArray(type, value)
-  const json = JSON.stringify(arr)
-  return LZString.compressToBase64(json)
+  const trimmedValue = trimHistoryPreference(type, value)
+  return serializeWithoutTrim(type, trimmedValue)
 }
 
 export const deserializePreferences = (type, value) => {
