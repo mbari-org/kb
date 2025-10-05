@@ -1,27 +1,24 @@
 import { use, useCallback, useMemo } from 'react'
 
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
-import { createError } from '@/lib/errors'
+import useConfirmReferenceChangesModal from './useConfirmReferenceChangesModal'
 
-import { PROCESSING } from '@/lib/constants'
 import {
   createModalActions,
   processEditReferenceData,
   createHandlers,
   createModalContent,
+  createChangeDetector,
 } from '@/components/kb/panels/references/form/referenceModalUtils'
 
-const { UPDATING } = PROCESSING
-
 const useEditReferenceButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } =
+  const { closeModal, createModal, updateModalData } =
     useReferencesModalOperationsContext()
-  const { editReference } = use(ReferencesContext)
   const { isDoiUnique } = use(PanelDataContext)
+  const openConfirmModal = useConfirmReferenceChangesModal()
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, true, isDoiUnique),
@@ -29,44 +26,41 @@ const useEditReferenceButton = () => {
   )
 
   const handleCommit = useCallback(
-    async (reference, original) => {
-      try {
-        const updatedData = processEditReferenceData(reference, original)
+    (reference, original, reopenEditModal) => {
+      const updatedData = processEditReferenceData(reference, original)
 
-        if (!updatedData) {
-          closeModal()
-          return
-        }
-
-        setProcessing(UPDATING)
-        await editReference(original, reference)
+      if (!updatedData) {
         closeModal()
-      } catch (error) {
-        setProcessing(false)
-        if (error.title === 'Validation Error') {
-          throw error
-        }
-        throw createError(
-          'Reference Update Error',
-          'Failed to update reference',
-          { referenceId: reference?.id },
-          error
-        )
+        return
       }
+
+      closeModal()
+      openConfirmModal(reference, original, reopenEditModal)
     },
-    [editReference, closeModal, setProcessing]
+    [closeModal, openConfirmModal]
   )
 
   const editReferenceModal = useCallback(
-    referenceToEdit => {
+    (referenceToEdit, databaseOriginal = null) => {
       const modalReference = {
         ...referenceToEdit,
         concepts: referenceToEdit.concepts || [],
       }
+      
+      const actualOriginal = databaseOriginal || referenceToEdit
+      
+      const calculateChanges = createChangeDetector(true)
+      const initialHasChanges = calculateChanges(modalReference, actualOriginal)
+
+      const reopenThisModal = updatedRef => {
+        const refToUse = updatedRef || referenceToEdit
+        editReferenceModal(refToUse, actualOriginal)
+      }
 
       const ActionView = () => {
         const { modalData } = useReferencesModalDataContext()
-        const actions = createModalActions(handleCancel, handleCommit)(modalData)
+        const handleCommitWithReopen = (ref, orig) => handleCommit(ref, orig, reopenThisModal)
+        const actions = createModalActions(handleCancel, handleCommitWithReopen)(modalData)
         if (!Array.isArray(actions)) return null
 
         const colors = actions.map(a => a.color || 'main')
@@ -95,9 +89,9 @@ const useEditReferenceButton = () => {
         titleComponent: TitleView,
         data: {
           reference: modalReference,
-          original: referenceToEdit,
+          original: actualOriginal,
           isValid: true,
-          hasChanges: false,
+          hasChanges: initialHasChanges,
         },
       })
     },
