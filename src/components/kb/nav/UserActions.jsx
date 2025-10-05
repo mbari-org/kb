@@ -32,14 +32,14 @@ const UserActions = () => {
 
   const { refresh } = use(RefreshContext)
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
     if (hasModifications) {
       setUnsafeAction({ type: UNSAFE_ACTION.REFRESH, payload: {} })
     } else {
-      refresh()
+      await refresh()
     }
   }
 

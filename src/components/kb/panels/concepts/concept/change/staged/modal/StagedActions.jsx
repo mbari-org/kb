@@ -48,7 +48,7 @@ const StagedActions = ({ intent }) => {
           break
 
         case UNSAFE_ACTION.REFRESH:
-          closeModal(true, () => refresh())
+          closeModal(true, async () => await refresh())
           break
       }
       setUnsafeAction(null)

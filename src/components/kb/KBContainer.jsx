@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { use, useMemo, useState } from 'react'
 import Box from '@mui/material/Box'
 import { puid } from 'puid-js'
 
@@ -14,8 +14,11 @@ import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 import UsersProvider from '@/contexts/panels/users/UsersProvider'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
+import UserContext from '@/contexts/user/UserContext'
 
 const KBContainer = () => {
+  const { savePreferencesRef } = use(UserContext)
+
   const id24 = useMemo(() => {
     const { generator, error } = puid({ bits: 24 })
     if (error) throw error
@@ -23,7 +26,18 @@ const KBContainer = () => {
   }, [])
 
   const [refreshKey, setRefreshKey] = useState(() => id24())
-  const refreshValue = useMemo(() => ({ refresh: () => setRefreshKey(id24()) }), [id24])
+  const refreshValue = useMemo(() => ({
+    refresh: async () => {
+      try {
+        if (savePreferencesRef.current) {
+          await savePreferencesRef.current()
+        }
+      } catch (error) {
+        console.error('Failed to save preferences on refresh:', error)
+      }
+      setRefreshKey(id24())
+    }
+  }), [id24, savePreferencesRef])
 
   return (
     <Box sx={{ height: '100vh' }}>
