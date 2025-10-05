@@ -120,9 +120,6 @@ const isDeepEqual = (obj1, obj2, depth = Infinity) => {
   return true
 }
 
-const isJsonEqual = (obj1, obj2) =>
-  obj1 == null || obj2 == null ? false : JSON.stringify(obj1) === JSON.stringify(obj2)
-
 const isElementInViewport = element => {
   const rect = element.getBoundingClientRect()
   return (
@@ -162,6 +159,9 @@ const isEqual = (obj1, obj2) => {
 
   return true
 }
+
+const isJsonEqual = (obj1, obj2) =>
+  obj1 == null || obj2 == null ? false : JSON.stringify(obj1) === JSON.stringify(obj2)
 
 const isRefEqual = (obj1, obj2, depth = Infinity) => {
   if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {

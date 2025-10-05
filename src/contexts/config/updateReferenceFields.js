@@ -1,7 +1,6 @@
 import { updateReference } from '@/lib/api/references'
-
-import { isEmpty } from '@/lib/utils'
 import { createError } from '@/lib/errors'
+import { isEmpty, isJsonEqual } from '@/lib/utils'
 
 const updateReferenceFields = async (oldReference, newReference, apiFns) => {
   if (newReference.id !== oldReference.id) {
@@ -20,6 +19,10 @@ const updateReferenceFields = async (oldReference, newReference, apiFns) => {
 
   if (newReference.doi !== oldReference.doi) {
     updatedData.doi = newReference.doi
+  }
+
+  if (!isJsonEqual(newReference.concepts, oldReference.concepts)) {
+    updatedData.concepts = newReference.concepts
   }
 
   return !isEmpty(updatedData)

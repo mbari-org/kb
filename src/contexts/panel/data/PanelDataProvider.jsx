@@ -124,6 +124,7 @@ export const PanelDataProvider = ({ children }) => {
       references,
       refreshData,
       setExporting,
+      setReferences,
       templates,
     }),
     [
