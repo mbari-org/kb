@@ -57,8 +57,21 @@ export function versionPlugin() {
 
   function writeVersionFile(versionInfo) {
     const versionFilePath = path.resolve('src/version.js')
+
+    // Format the object with proper ESLint rules:
+    // - Unquoted property names
+    // - Single quotes for strings
+    // - Trailing comma on last property
+    const formattedInfo = Object.entries(versionInfo)
+      .map(([key, value]) => {
+        const formattedValue = typeof value === 'string' ? `'${value}'` : value
+        return `  ${key}: ${formattedValue},`
+      })
+      .join('\n')
     const versionFileContent = `// This file is auto-generated during build. Do not edit manually.
-export const VERSION_INFO = ${JSON.stringify(versionInfo, null, 2)}
+export const VERSION_INFO = {
+${formattedInfo}
+}
 
 export const getVersion = () => VERSION_INFO.version
 export const getBuildDate = () => VERSION_INFO.buildDate

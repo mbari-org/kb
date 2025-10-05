@@ -25,8 +25,8 @@ const UserActions = () => {
         settings: {
           history: getSettings('history'),
           references: getSettings('references'),
-          templates: getSettings('templates')
-        }
+          templates: getSettings('templates'),
+        },
       }
       await updatePreferences(prefs)
     } catch (error) {

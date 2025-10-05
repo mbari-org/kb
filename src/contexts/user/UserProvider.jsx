@@ -22,8 +22,9 @@ const UserProvider = ({ children }) => {
 
   const mountedRef = useRef(true)
   const refreshingRef = useRef(false)
+  const savePreferencesRef = useRef(null)
 
-  const logout = useLogout(setUser)
+  const logout = useLogout(setUser, () => savePreferencesRef.current?.())
 
   const { getPreferences, createPreferences, updatePreferences } = useUserPreferences({ config, user })
 
@@ -69,6 +70,7 @@ const UserProvider = ({ children }) => {
       logout,
       processAuth,
       refreshUser,
+      savePreferencesRef,
       setHasUnsavedChanges,
       setUnsafeAction,
       unsafeAction,

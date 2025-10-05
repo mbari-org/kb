@@ -1,40 +1,51 @@
-import { use, useMemo } from 'react'
+import { use, useCallback, useMemo } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import UserContext from '@/contexts/user/UserContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 
-import usePreferences from '@/contexts/selected/usePreferences'
-import useSelected from '@/contexts/selected/useSelected'
-import useSettings from '@/contexts/selected/useSettings'
+import { createError } from '@/lib/errors'
+import { SELECTED } from '@/lib/constants'
+
+const { CONCEPT, PANEL } = SELECTED
 
 const SelectedProvider = ({ children }) => {
-  const { createPreferences, getPreferences, updatePreferences, user } = use(UserContext)
-  use(TaxonomyContext)
-
   const {
-    currentConcept,
-    currentPanel,
     conceptSelect,
+    getSettings,
+    isLoading,
     panelSelect,
-    getSelected,
-    updateSelected,
-  } = useSelected()
+    updateSettings,
+  } = use(PreferencesContext)
 
-  const { settings, setSettings, getSettings, updateSettings } = useSettings()
+  const getSelected = useCallback(
+    key => {
+      if (key === CONCEPT) {
+        return conceptSelect.current()
+      } else if (key === PANEL) {
+        return panelSelect.current()
+      } else {
+        throw createError(
+          'Invalid Selection Key',
+          `Cannot get selection for unknown key: ${key}`,
+          { key }
+        )
+      }
+    },
+    [conceptSelect, panelSelect]
+  )
 
-  const { isLoading } = usePreferences({
-    conceptSelect,
-    createPreferences,
-    currentConcept,
-    currentPanel,
-    getPreferences,
-    panelSelect,
-    setSettings,
-    settings,
-    updatePreferences,
-    user,
-  })
+  const updateSelected = useCallback(
+    ({ concept: conceptName, panel: panelName }) => {
+      if (conceptName && conceptName !== conceptSelect.current()) {
+        conceptSelect.push(conceptName)
+      }
+
+      if (panelName && panelName !== panelSelect.current()) {
+        panelSelect.push(panelName)
+      }
+    },
+    [conceptSelect, panelSelect]
+  )
 
   const value = useMemo(
     () => ({

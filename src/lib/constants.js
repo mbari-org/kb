@@ -228,6 +228,8 @@ export const PENDING = {
   },
 }
 
+export const PREFS_AUTOSAVE_MILLIS = 15_000
+
 export const PROCESSING = {
   DELETING: 'Deleting...',
   LOADING: 'Loading...',

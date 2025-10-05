@@ -1,4 +1,4 @@
-import { PREF_TYPES, createPreferencesPayload, parsePreferences } from '@/lib/kb/model/preferences'
+import { createPreferencesPayload, parsePreferences } from '@/lib/kb/model/preferences'
 import { oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 import { paramsQs } from '@/lib/services/params'
 
@@ -30,4 +30,4 @@ const updatePreferences = async (config, username, type, value) => {
   await oniPut({ config, path: ['prefs'], qs: prefsQs(username, payload.type), data: { value: payload.value } })
 }
 
-export { PREFS_KEYS, createPreferences, getPreferences, updatePreferences }
+export { createPreferences, getPreferences, PREFS_KEYS, updatePreferences }

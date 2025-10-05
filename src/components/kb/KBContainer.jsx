@@ -9,6 +9,7 @@ import AppModalProvider from '@/contexts/app/AppModalProvider'
 import ConceptModalProvider from '@/contexts/panels/concepts/modal/ConceptModalProvider'
 import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
 import PanelDataProvider from '@/contexts/panel/data/PanelDataProvider'
+import PreferencesProvider from '@/contexts/preferences/PreferencesProvider'
 import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 import UsersProvider from '@/contexts/panels/users/UsersProvider'
@@ -29,17 +30,19 @@ const KBContainer = () => {
       <AppModalProvider>
         <RefreshContext value={refreshValue}>
           <TaxonomyProvider key={refreshKey}>
-            <SelectedProvider>
-              <UsersProvider>
-                <PanelDataProvider>
-                  <ConceptModalProvider>
-                    <ConceptProvider>
-                      <KnowledgeBase />
-                    </ConceptProvider>
-                  </ConceptModalProvider>
-                </PanelDataProvider>
-              </UsersProvider>
-            </SelectedProvider>
+            <PreferencesProvider>
+              <SelectedProvider>
+                <UsersProvider>
+                  <PanelDataProvider>
+                    <ConceptModalProvider>
+                      <ConceptProvider>
+                        <KnowledgeBase />
+                      </ConceptProvider>
+                    </ConceptModalProvider>
+                  </PanelDataProvider>
+                </UsersProvider>
+              </SelectedProvider>
+            </PreferencesProvider>
           </TaxonomyProvider>
         </RefreshContext>
         <AppModal />

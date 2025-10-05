@@ -1,29 +1,34 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
+import PreferencesContext from '@/contexts/preferences/PreferencesContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import UserContext from '@/contexts/user/UserContext'
+
+import useConceptSelect from '@/contexts/selected/useConceptSelect'
+import usePanelSelect from '@/contexts/selected/usePanelSelect'
+import useSettings from '@/contexts/selected/useSettings'
 
 import { PREFS_KEYS } from '@/lib/api/preferences'
-
+import { PREFS_AUTOSAVE_MILLIS } from '@/lib/constants'
 import { isEmpty } from '@/lib/utils'
 
-const AUTOSAVE_MILLIS = 5_000
-
-const ALL_CLEAN = {
+const CLEAN_PREFS = {
   [PREFS_KEYS.CONCEPTS]: false,
   [PREFS_KEYS.PANELS]: false,
   [PREFS_KEYS.SETTINGS]: false,
 }
 
-const usePreferences = ({
-  conceptSelect,
-  createPreferences,
-  currentConcept,
-  currentPanel,
-  getPreferences,
-  panelSelect,
-  setSettings,
-  settings,
-  updatePreferences,
-  user,
-}) => {
+const PreferencesProvider = ({ children }) => {
+  const { createPreferences, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)
+  use(TaxonomyContext)
+
+  const [currentConcept, setCurrentConcept] = useState(null)
+  const [currentPanel, setCurrentPanel] = useState(null)
+
+  const conceptSelect = useConceptSelect(setCurrentConcept)
+  const panelSelect = usePanelSelect(setCurrentPanel)
+  const { settings, setSettings, getSettings, updateSettings } = useSettings()
+
   const [isDirty, setIsDirty] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [preferencesInitialized, setPreferencesInitialized] = useState(false)
@@ -72,7 +77,7 @@ const usePreferences = ({
       }
 
       setPreferencesInitialized(true)
-      setIsDirty(ALL_CLEAN)
+      setIsDirty(CLEAN_PREFS)
       setIsLoading(false)
     }
 
@@ -112,14 +117,6 @@ const usePreferences = ({
     }))
   }, [settings, preferencesInitialized])
 
-  const markDirty = useCallback(key => {
-    if (!preferencesInitialized) return
-    setIsDirty(prev => ({
-      ...prev,
-      [key]: true,
-    }))
-  }, [preferencesInitialized])
-
   useEffect(() => {
     if (!preferencesInitialized) return
 
@@ -135,8 +132,7 @@ const usePreferences = ({
       isSaving.current = true
 
       const savePreferences = async () => {
-
-        const prefUpdates = PREFS_KEYS.reduce((acc, key) => {
+        const prefUpdates = Object.values(PREFS_KEYS).reduce((acc, key) => {
           if (isDirty[key]) {
             acc.push({ key, value: prefsValue(key) })
           }
@@ -147,7 +143,7 @@ const usePreferences = ({
           await Promise.all(prefUpdates.map(update => {
             return updatePreferences(update.key, update.value)
           }))
-          setIsDirty(ALL_CLEAN)
+          setIsDirty(CLEAN_PREFS)
         } catch (error) {
           console.error('Failed to autosave preferences:', error)
         } finally {
@@ -156,7 +152,7 @@ const usePreferences = ({
       }
 
       savePreferences()
-    }, AUTOSAVE_MILLIS)
+    }, PREFS_AUTOSAVE_MILLIS)
 
     return () => {
       if (autosaveInterval.current) {
@@ -165,10 +161,50 @@ const usePreferences = ({
     }
   }, [isDirty, preferencesInitialized, prefsValue, serverPreferencesExist, updatePreferences])
 
-  return {
-    isLoading,
-    markDirty,
-  }
+  const savePreferences = useCallback(async () => {
+    if (!preferencesInitialized || !serverPreferencesExist) return
+    if (isSaving.current) return
+
+    isSaving.current = true
+
+    try {
+      const prefUpdates = Object.values(PREFS_KEYS).reduce((acc, key) => {
+        if (isDirty[key]) {
+          acc.push({ key, value: prefsValue(key) })
+        }
+        return acc
+      }, [])
+
+      await Promise.all(prefUpdates.map(update => {
+        return updatePreferences(update.key, update.value)
+      }))
+      setIsDirty(CLEAN_PREFS)
+    } catch (error) {
+      console.error('Failed to save preferences:', error)
+    } finally {
+      isSaving.current = false
+    }
+  }, [isDirty, preferencesInitialized, serverPreferencesExist, prefsValue, updatePreferences])
+
+  useEffect(() => {
+    savePreferencesRef.current = savePreferences
+  }, [savePreferences, savePreferencesRef])
+
+  const value = useMemo(
+    () => ({
+      conceptSelect,
+      currentConcept,
+      currentPanel,
+      getSettings,
+      isLoading,
+      panelSelect,
+      savePreferences,
+      updateSettings,
+    }),
+    [conceptSelect, currentConcept, currentPanel, getSettings, isLoading, panelSelect, savePreferences, updateSettings]
+  )
+
+  return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>
 }
 
-export default usePreferences
+export default PreferencesProvider
