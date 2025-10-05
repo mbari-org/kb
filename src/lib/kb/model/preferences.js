@@ -1,11 +1,29 @@
+// This code employs a custom serialization strategy to reduce the size of user preferences. All
+// serialization processing is done on the client side, and the in-memory representations are
+// deserialized for debugging purposes. It also trims the preferences values to ensure they are
+// within the maximum length of a string in the database.
+
 import LZString from 'lz-string'
 
 const MAX_PREFERENCE_LENGTH = 255
 
-export const PREF_TYPES = {
+const PREF_TYPES = {
   CONCEPTS: 'concepts',
   PANELS: 'panels',
   SETTINGS: 'settings',
+}
+
+const HISTORY_TYPE_CODING = {
+  approved: 'a',
+  concept: 'c',
+  pending: 'p',
+}
+
+// Helper functions to get code from type or type from code
+const getHistoryTypeCode = type => HISTORY_TYPE_CODING[type] || 'p'
+const getHistoryTypeFromCode = code => {
+  const entry = Object.entries(HISTORY_TYPE_CODING).find(([, value]) => value === code)
+  return entry ? entry[0] : 'pending'
 }
 
 const isValidPreferenceType = type => Object.values(PREF_TYPES).includes(type)
@@ -19,18 +37,26 @@ const toArray = (type, value) => {
       // position: current index in the state array
       return [value.state, value.position]
 
-    case PREF_TYPES.SETTINGS:
-      // Array format: [historyType, referencesByConcept, templatesAvailable, templatesFilters]
-      // historyType: string ('approved' | 'concept' | 'pending')
-      // referencesByConcept: boolean
-      // templatesAvailable: boolean
-      // templatesFilters: object with optional keys (concept, toConcept, linkName, linkValue)
-      return [
-        value.history?.type || 'pending',
-        value.references?.byConcept || false,
-        value.templates?.available || false,
-        value.templates?.filters || {},
+    case PREF_TYPES.SETTINGS: {
+      // Array format: [historyTypeCode, referencesByConcept, templatesAvailable, templatesFilters]
+      // historyTypeCode: single char ('a'=approved | 'c'=concept | 'p'=pending)
+      // referencesByConcept: 0 or 1 (false or true)
+      // templatesAvailable: 0 or 1 (false or true)
+      // templatesFilters: array [concept, toConcept, linkName, linkValue] (empty string "" for null values)
+      const filters = value.templates?.filters || {}
+      const filtersArray = [
+        filters.concept || '',
+        filters.toConcept || '',
+        filters.linkName || '',
+        filters.linkValue || '',
       ]
+      return [
+        getHistoryTypeCode(value.history?.type),
+        value.references?.byConcept ? 1 : 0,
+        value.templates?.available ? 1 : 0,
+        filtersArray,
+      ]
+    }
 
     default:
       throw new Error(`Unknown preference type: ${type}`)
@@ -47,16 +73,23 @@ const fromArray = (type, arr) => {
         position: arr[1],
       }
 
-    case PREF_TYPES.SETTINGS:
-      // Array format: [historyType, referencesByConcept, templatesAvailable, templatesFilters]
+    case PREF_TYPES.SETTINGS: {
+      // Array format: [historyTypeCode, referencesByConcept, templatesAvailable, templatesFilters]
+      const filtersArray = arr[3] || []
+      const filters = {}
+      if (filtersArray[0]) filters.concept = filtersArray[0]
+      if (filtersArray[1]) filters.toConcept = filtersArray[1]
+      if (filtersArray[2]) filters.linkName = filtersArray[2]
+      if (filtersArray[3]) filters.linkValue = filtersArray[3]
       return {
-        history: { type: arr[0] },
-        references: { byConcept: arr[1] },
+        history: { type: getHistoryTypeFromCode(arr[0]) },
+        references: { byConcept: arr[1] === 1 },
         templates: {
-          available: arr[2],
-          filters: arr[3],
+          available: arr[2] === 1,
+          filters,
         },
       }
+    }
 
     default:
       throw new Error(`Unknown preference type: ${type}`)
@@ -92,7 +125,7 @@ const serializeWithoutTrim = (type, value) => {
   return LZString.compressToBase64(json)
 }
 
-export const serializePreferences = (type, value) => {
+const serializePreferences = (type, value) => {
   if (value === undefined || value === null) {
     throw new Error('Cannot serialize undefined or null preferences value')
   }
@@ -100,7 +133,7 @@ export const serializePreferences = (type, value) => {
   return serializeWithoutTrim(type, trimmedValue)
 }
 
-export const deserializePreferences = (type, value) => {
+const deserializePreferences = (type, value) => {
   try {
     const json = LZString.decompressFromBase64(value)
     if (!json) {
@@ -113,7 +146,7 @@ export const deserializePreferences = (type, value) => {
   }
 }
 
-export const createPreferencesPayload = (type, value) => {
+const createPreferencesPayload = (type, value) => {
   if (!isValidPreferenceType(type)) {
     throw new Error(`Invalid preferences type: ${type}`)
   }
@@ -123,7 +156,7 @@ export const createPreferencesPayload = (type, value) => {
   }
 }
 
-export const parsePreferences = preferences => {
+const parsePreferences = preferences => {
   const prefs = preferences.reduce((acc, preference) => {
     if (!preference || !preference.value || !preference.key) {
       throw new Error('Invalid preference response format')
@@ -134,4 +167,12 @@ export const parsePreferences = preferences => {
   }, {})
 
   return prefs
+}
+
+export {
+  createPreferencesPayload,
+  deserializePreferences,
+  parsePreferences,
+  PREF_TYPES,
+  serializePreferences,
 }
