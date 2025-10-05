@@ -1,4 +1,5 @@
-// Constants representing the types of preferences supported by the KB UI
+import LZString from 'lz-string'
+
 export const PREF_TYPES = {
   CONCEPTS: 'concepts',
   PANELS: 'panels',
@@ -65,12 +66,17 @@ export const serializePreferences = (type, value) => {
     throw new Error('Cannot serialize undefined or null preferences value')
   }
   const arr = toArray(type, value)
-  return JSON.stringify(arr)
+  const json = JSON.stringify(arr)
+  return LZString.compressToBase64(json)
 }
 
 export const deserializePreferences = (type, value) => {
   try {
-    const arr = JSON.parse(value)
+    const json = LZString.decompressFromBase64(value)
+    if (!json) {
+      throw new Error('Failed to decompress value')
+    }
+    const arr = JSON.parse(json)
     return fromArray(type, arr)
   } catch (error) {
     throw new Error(`Failed to deserialize preferences value: ${error.message}`)

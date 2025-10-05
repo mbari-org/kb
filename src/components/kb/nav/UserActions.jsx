@@ -14,26 +14,8 @@ import RefreshContext from '@/contexts/refresh/RefreshContext'
 const ICON_SIZE = 22
 
 const UserActions = () => {
-  const { logout, user, hasUnsavedChanges, setUnsafeAction, updatePreferences } = use(UserContext)
-  const { panels, concepts, getSettings } = use(SelectedContext)
-
-  const savePrefsThen = async next => {
-    try {
-      const prefs = {
-        concepts: { state: concepts.getState(), position: concepts.getPosition() },
-        panels: { state: panels.getState(), position: panels.getPosition() },
-        settings: {
-          history: getSettings('history'),
-          references: getSettings('references'),
-          templates: getSettings('templates'),
-        },
-      }
-      await updatePreferences(prefs)
-    } catch (error) {
-      console.error('Failed to save preferences on logout:', error)
-    }
-    next()
-  }
+  const { logout, user, hasUnsavedChanges, setUnsafeAction } = use(UserContext)
+  const { panels } = use(SelectedContext)
 
   const handleLogout = () => {
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
@@ -42,7 +24,7 @@ const UserActions = () => {
     if (hasModifications) {
       setUnsafeAction({ type: UNSAFE_ACTION.LOGOUT, payload: {} })
     } else {
-      savePrefsThen(logout)
+      logout()
     }
   }
 
@@ -57,7 +39,7 @@ const UserActions = () => {
     if (hasModifications) {
       setUnsafeAction({ type: UNSAFE_ACTION.REFRESH, payload: {} })
     } else {
-      savePrefsThen(refresh)
+      refresh()
     }
   }
 
