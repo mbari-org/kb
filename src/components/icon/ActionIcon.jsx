@@ -1,6 +1,9 @@
+import { use } from 'react'
 import { Box, IconButton, useTheme } from '@mui/material'
 
 import KBTooltip from '@/components/common/KBTooltip'
+import UserContext from '@/contexts/user/UserContext'
+import { isReadOnly } from '@/lib/auth/role'
 
 const SIZE = 16
 const BUTTON_SIZE = 'small'
@@ -10,6 +13,7 @@ const ActionIcon = ({
   color,
   Icon,
   onClick,
+  restrictReadOnly = false,
   size = SIZE,
   sx = {},
   tooltip,
@@ -17,6 +21,9 @@ const ActionIcon = ({
   ...props
 }) => {
   const theme = useTheme()
+  const { user } = use(UserContext)
+
+  const isDisabled = restrictReadOnly && isReadOnly(user)
 
   const hoverColor = color
     ? theme.palette[color]?.main || theme.palette.primary.main
@@ -27,17 +34,18 @@ const ActionIcon = ({
   if (asDiv) {
     const divElement = (
       <Box
-        onClick={onClick}
+        onClick={isDisabled ? undefined : onClick}
         sx={{
           alignItems: 'center',
           borderRadius: '50%',
-          cursor: 'pointer',
+          cursor: isDisabled ? 'not-allowed' : 'pointer',
           display: 'flex',
           justifyContent: 'center',
+          opacity: isDisabled ? 0.5 : 1,
           padding: '4px',
           '&:hover': {
-            ...theme.kb?.icon?.hover,
-            ...(color && { color: hoverColor }),
+            ...(isDisabled ? {} : theme.kb?.icon?.hover),
+            ...(color && !isDisabled && { color: hoverColor }),
           },
           ...sx,
         }}
@@ -61,11 +69,12 @@ const ActionIcon = ({
   const button = (
     <IconButton
       size={BUTTON_SIZE}
+      disabled={isDisabled}
       onClick={onClick}
       sx={{
         '&:hover': {
-          ...theme.kb?.icon?.hover,
-          ...(color && { color: hoverColor }),
+          ...(isDisabled ? {} : theme.kb?.icon?.hover),
+          ...(color && !isDisabled && { color: hoverColor }),
         },
         ...sx,
       }}

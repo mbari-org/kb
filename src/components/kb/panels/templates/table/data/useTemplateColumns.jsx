@@ -1,9 +1,9 @@
 import { use } from 'react'
-import { useTheme } from '@mui/material/styles'
-import { Box, IconButton } from '@mui/material'
+import { Box } from '@mui/material'
 import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 
+import ActionIcon from '@/components/icon/ActionIcon'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import TemplateCell from './TemplateCell'
 
@@ -13,7 +13,6 @@ import { SELECTED } from '@/lib/constants'
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
-  const theme = useTheme()
   const { updateFilters } = use(TemplatesContext)
 
   const columns = [
@@ -25,31 +24,21 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       headerClassName: 'bold-header',
       renderCell: params => (
         <Box>
-          <IconButton
-            size='small'
+          <ActionIcon
+            color='cancel'
+            Icon={MdOutlineDeleteForever}
             onClick={() => deleteTemplateModal(params.row)}
-            sx={{
-              mr: 1,
-              '&:hover': {
-                color: 'error.main',
-                ...theme.kb.icon.hover,
-              },
-            }}
-          >
-            <MdOutlineDeleteForever size={24} />
-          </IconButton>
-          <IconButton
-            size='small'
+            restrictReadOnly
+            size={24}
+            sx={{ mr: 1 }}
+          />
+          <ActionIcon
+            color='edit'
+            Icon={CiEdit}
             onClick={() => editTemplateModal(params.row)}
-            sx={{
-              '&:hover': {
-                color: 'edit.main',
-                ...theme.kb.icon.hover,
-              },
-            }}
-          >
-            <CiEdit size={24} />
-          </IconButton>
+            restrictReadOnly
+            size={24}
+          />
         </Box>
       ),
     },

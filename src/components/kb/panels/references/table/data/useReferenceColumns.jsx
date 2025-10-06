@@ -1,54 +1,42 @@
-import { Box, IconButton } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
+import { Box } from '@mui/material'
 
 import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 
+import ActionIcon from '@/components/icon/ActionIcon'
+
 const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
-  const theme = useTheme()
 
   const columns = [
     {
       field: 'actions',
+      width: 100,      headerClassName: 'bold-header',
       headerName: '',
-      width: 100,
-      sortable: false,
-      headerClassName: 'bold-header',
       renderCell: params => (
         <Box>
-          <IconButton
-            size='small'
+          <ActionIcon
+            color='cancel'
+            Icon={MdOutlineDeleteForever}
             onClick={() => deleteReferenceModal(params.row)}
-            sx={{
-              mr: 1,
-              '&:hover': {
-                color: 'error.main',
-                ...theme.kb.icon.hover,
-              },
-            }}
-          >
-            <MdOutlineDeleteForever size={24} />
-          </IconButton>
-          <IconButton
-            size='small'
+            restrictReadOnly
+            size={24}
+            sx={{ mr: 1 }}
+          />
+          <ActionIcon
+            color='edit'
+            Icon={CiEdit}
             onClick={() => editReferenceModal(params.row)}
-            sx={{
-              '&:hover': {
-                color: 'edit.main',
-                ...theme.kb.icon.hover,
-              },
-            }}
-          >
-            <CiEdit size={24} />
-          </IconButton>
+            restrictReadOnly
+            size={24}
+          />
         </Box>
       ),
+      sortable: false,
     },
     {
       field: 'doi',
-      headerName: 'DOI',
-      width: 200,
       headerClassName: 'bold-header',
+      headerName: 'DOI',
       renderCell: params => (
         <Box
           sx={{
@@ -58,12 +46,13 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
           {params.value}
         </Box>
       ),
+      width: 200,
     },
     {
       field: 'citation',
-      headerName: 'Citation',
       flex: 0.4,
       headerClassName: 'bold-header',
+      headerName: 'Citation',
       renderCell: params => (
         <Box
           sx={{
@@ -78,10 +67,9 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
     },
     {
       field: 'concepts',
-      headerName: 'Concepts',
       flex: 0.4,
+      headerName: 'Concepts',
       headerClassName: 'bold-header',
-      valueGetter: params => params.join(', ') || '',
       renderCell: params => (
         <Box
           sx={{
@@ -93,6 +81,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
           {params.value}
         </Box>
       ),
+      valueGetter: params => params.join(', ') || '',
     },
   ]
 
