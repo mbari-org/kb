@@ -6,13 +6,13 @@ import { LABELS } from '@/lib/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, SAVE, DELETE } = LABELS.BUTTON
+const { CANCEL, CONFIRM_DISCARD, DELETE, SAVE } = LABELS.BUTTON
 
 export const REFERENCE_FIELDS = {
-  EDITABLE: ['citation', 'doi', 'concepts'],
-  REQUIRED_BASE: ['citation', 'doi'],
-  REQUIRED_ADD: ['citation', 'doi'],
   ADD_SUBMIT: ['citation', 'doi', 'concepts'],
+  EDITABLE: ['citation', 'doi', 'concepts'],
+  REQUIRED_ADD: ['citation', 'doi'],
+  REQUIRED_BASE: ['citation', 'doi'],
 }
 
 export const createReferenceValidator =
@@ -45,7 +45,6 @@ export const createChangeDetector =
         )
       }
 
-      // For edit mode, compare with original
       if (!original) {
       // If no original reference, consider any data as changes
         return true
@@ -81,9 +80,9 @@ export const createFormChangeHandler = (
     const hasChanges = calculateHasChanges(reference, original)
 
     updateModalData({
-      reference,
-      isValid,
       hasChanges,
+      isValid,
+      reference,
     })
   }
 }
@@ -95,7 +94,7 @@ export const createModalActions =
         {
           color: 'cancel',
           disabled: false,
-          label: CANCEL,
+          label: currentModalData.isValid && currentModalData.hasChanges ? CONFIRM_DISCARD : CANCEL,
           onClick: handleCancel,
         },
         {
@@ -113,10 +112,10 @@ export const createModalContent = (handleFormChange, isEdit) => {
     return (
       <ReferenceForm
         key={formKey}
-        reference={modalData.reference}
-        original={modalData.original}
-        onChange={handleFormChange}
         isEdit={isEdit}
+        onChange={handleFormChange}
+        original={modalData.original}
+        reference={modalData.reference}
       />
     )
   }

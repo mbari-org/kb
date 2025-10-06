@@ -1,13 +1,15 @@
 import { use, useCallback } from 'react'
 
-import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import ConfirmReferencesContent from './ConfirmReferenceContent'
+
 import { createError } from '@/lib/errors'
 
-import { PROCESSING } from '@/lib/constants'
+import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
+import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+
+import { PROCESSING, LABELS } from '@/lib/constants'
 
 const { UPDATING } = PROCESSING
 
@@ -42,33 +44,19 @@ const useConfirmReferenceModal = () => {
       const ActionView = () => {
         const { modalData } = useReferencesModalDataContext()
 
-        const actions = [
-          {
-            color: 'cancel',
-            disabled: false,
-            label: 'Continue',
-            onClick: () => {
-              closeModal()
-              if (reopenEditModal) {
-                reopenEditModal(modalData.reference)
-              }
-            },
-          },
-          {
-            color: 'primary',
-            disabled: false,
-            label: 'Confirm',
-            onClick: () => handleConfirm(modalData.reference, modalData.original),
-          },
-        ]
-
-        const colors = actions.map(a => a.color || 'main')
-        const disabled = actions.map(a => a.disabled || false)
-        const labels = actions.map(a => a.label)
+        const colors = ['cancel', 'main']
+        const disabled = [false, false]
+        const labels = [LABELS.BUTTON.CONTINUE, LABELS.BUTTON.CONFIRM]
 
         const onAction = label => {
-          const a = actions.find(x => x.label === label)
-          if (a && a.onClick) a.onClick()
+          if (label === LABELS.BUTTON.CONTINUE) {
+            closeModal()
+            if (reopenEditModal) {
+              reopenEditModal(modalData.reference)
+            }
+          } else if (label === LABELS.BUTTON.CONFIRM) {
+            handleConfirm(modalData.reference, modalData.original)
+          }
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
