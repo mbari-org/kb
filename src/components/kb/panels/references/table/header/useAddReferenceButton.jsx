@@ -17,7 +17,7 @@ import {
   processAddReferenceData,
   createHandlers,
   createModalContent,
-} from '@/components/kb/panels/references/form/referenceModalUtils'
+} from '@/components/kb/panels/references/modal/referenceModalUtils'
 
 const { SAVING } = PROCESSING
 

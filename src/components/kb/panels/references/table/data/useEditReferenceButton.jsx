@@ -4,7 +4,7 @@ import { useReferencesModalOperationsContext, useReferencesModalDataContext } fr
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
-import useConfirmReferenceChangesModal from './useConfirmReferenceChangesModal'
+import useConfirmReferenceModal from '../../modal/useConfirmReferenceModal'
 
 import {
   createModalActions,
@@ -12,13 +12,13 @@ import {
   createHandlers,
   createModalContent,
   createChangeDetector,
-} from '@/components/kb/panels/references/form/referenceModalUtils'
+} from '@/components/kb/panels/references/modal/referenceModalUtils'
 
 const useEditReferenceButton = () => {
   const { closeModal, createModal, updateModalData } =
     useReferencesModalOperationsContext()
   const { isDoiUnique } = use(PanelDataContext)
-  const openConfirmModal = useConfirmReferenceChangesModal()
+  const openConfirmModal = useConfirmReferenceModal()
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, true, isDoiUnique),
@@ -46,9 +46,9 @@ const useEditReferenceButton = () => {
         ...referenceToEdit,
         concepts: referenceToEdit.concepts || [],
       }
-      
+
       const actualOriginal = databaseOriginal || referenceToEdit
-      
+
       const calculateChanges = createChangeDetector(true)
       const initialHasChanges = calculateChanges(modalReference, actualOriginal)
 

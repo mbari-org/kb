@@ -1,4 +1,4 @@
-import useAddReferenceButton from '@/components/kb/panels/references/form/useAddReferenceButton'
+import useAddReferenceButton from '@/components/kb/panels/references/table/header/useAddReferenceButton'
 
 const ReferencesTableHeaderRight = () => {
   const AddReferenceButton = useAddReferenceButton()

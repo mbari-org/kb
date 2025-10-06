@@ -12,7 +12,7 @@ import {
   createDeleteReferenceActions,
   createDeleteReferenceContent,
   createDeleteReferenceTitle,
-} from '@/components/kb/panels/references/form/referenceModalUtils'
+} from '@/components/kb/panels/references/modal/referenceModalUtils'
 
 const { DELETING } = PROCESSING
 

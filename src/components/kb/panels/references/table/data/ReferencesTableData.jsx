@@ -3,8 +3,8 @@ import { use, useState } from 'react'
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import ReferencesPagination from './ReferencesPagination'
 
-import useEditReferenceButton from '@/components/kb/panels/references/form/useEditReferenceButton'
-import useDeleteReferenceButton from '@/components/kb/panels/references/form/useDeleteReferenceButton'
+import useEditReferenceButton from '@/components/kb/panels/references/table/data/useEditReferenceButton'
+import useDeleteReferenceButton from '@/components/kb/panels/references/table/data/useDeleteReferenceButton'
 import useReferenceColumns from '@/components/kb/panels/references/table/data/useReferenceColumns'
 
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'

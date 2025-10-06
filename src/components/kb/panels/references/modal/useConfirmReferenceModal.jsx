@@ -4,14 +4,14 @@ import { useReferencesModalOperationsContext, useReferencesModalDataContext } fr
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
-import ReferencesChangesContent from './ReferencesChangesContent'
+import ConfirmReferencesContent from './ConfirmReferenceContent'
 import { createError } from '@/lib/errors'
 
 import { PROCESSING } from '@/lib/constants'
 
 const { UPDATING } = PROCESSING
 
-const useConfirmReferenceChangesModal = () => {
+const useConfirmReferenceModal = () => {
   const { closeModal, createModal, setProcessing } = useReferencesModalOperationsContext()
   const { editReference } = use(ReferencesContext)
 
@@ -37,7 +37,7 @@ const useConfirmReferenceChangesModal = () => {
     [editReference, closeModal, setProcessing]
   )
 
-  const openConfirmModal = useCallback(
+  const editReferenceModal = useCallback(
     (reference, original, reopenEditModal) => {
       const ActionView = () => {
         const { modalData } = useReferencesModalDataContext()
@@ -78,7 +78,7 @@ const useConfirmReferenceChangesModal = () => {
         const { modalData } = useReferencesModalDataContext()
         const { reference: updated, original: orig } = modalData
 
-        return <ReferencesChangesContent reference={updated} original={orig} />
+        return <ConfirmReferencesContent reference={updated} original={orig} />
       }
 
       const TitleView = () => <Title title='Confirm Reference Changes' />
@@ -96,7 +96,7 @@ const useConfirmReferenceChangesModal = () => {
     [createModal, closeModal, handleConfirm]
   )
 
-  return openConfirmModal
+  return editReferenceModal
 }
 
-export default useConfirmReferenceChangesModal
+export default useConfirmReferenceModal

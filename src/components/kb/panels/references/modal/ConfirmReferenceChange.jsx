@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material'
 
-const ReferenceChanges = ({ label, oldValue, newValue, isArray = false }) => {
+const ConfirmReferenceChange = ({ label, oldValue, newValue, isArray = false }) => {
   const hasChanged = isArray
     ? JSON.stringify(oldValue?.sort()) !== JSON.stringify(newValue?.sort())
     : oldValue !== newValue
@@ -33,7 +33,7 @@ const ReferenceChanges = ({ label, oldValue, newValue, isArray = false }) => {
       {!isArray ? (
         <Stack spacing={1}>
           <Box sx={{ pl: 2 }}>
-            <Typography variant='body2' color='error.main' sx={{ textDecoration: 'line-through' }}>
+            <Typography variant='body2' color='error.main' >
               {formatValue(oldValue)}
             </Typography>
           </Box>
@@ -50,7 +50,7 @@ const ReferenceChanges = ({ label, oldValue, newValue, isArray = false }) => {
               <Typography variant='caption' color='text.secondary'>
                 Removed:
               </Typography>
-              <Typography variant='body2' color='error.main' sx={{ textDecoration: 'line-through' }}>
+              <Typography variant='body2' color='cancel' >
                 {diff.removed.join(', ')}
               </Typography>
             </Box>
@@ -71,33 +71,4 @@ const ReferenceChanges = ({ label, oldValue, newValue, isArray = false }) => {
   )
 }
 
-const ReferencesChangesContent = ({ reference, original }) => {
-  return (
-    <Stack spacing={3} sx={{ minWidth: 500 }}>
-      <Stack spacing={2} sx={{ p: 2, bgcolor: 'background.default', borderRadius: 1 }}>
-        <ReferenceChanges
-          label='Citation'
-          oldValue={original.citation}
-          newValue={reference.citation}
-        />
-        <ReferenceChanges
-          label='DOI'
-          oldValue={original.doi}
-          newValue={reference.doi}
-        />
-        <ReferenceChanges
-          label='Concepts'
-          oldValue={original.concepts}
-          newValue={reference.concepts}
-          isArray={true}
-        />
-      </Stack>
-
-      <Typography variant='body2' color='text.secondary' sx={{ textAlign: 'center', fontStyle: 'italic' }}>
-        Click Confirm to save these changes, or Cancel to return to editing.
-      </Typography>
-    </Stack>
-  )
-}
-
-export default ReferencesChangesContent
+export default ConfirmReferenceChange
