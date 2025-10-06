@@ -1,8 +1,10 @@
 import { memo, useCallback, useState, useEffect } from 'react'
-import { Box, TextField, MenuItem } from '@mui/material'
+import { Box, Stack, TextField, MenuItem } from '@mui/material'
 
 import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
 import useDebounce from '@/hooks/useDebounce'
+import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
+import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
 
 const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
   const [showConfirm, setShowConfirm] = useState(false)
@@ -74,8 +76,11 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
 
   const showConfirmPassword = !isEdit || showConfirm
 
+  const { modalData } = useUsersModalDataContext()
+  const isDiscard = !!modalData?.confirmDiscard
+
   return (
-    <Box sx={{ p: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
+    <Stack spacing={2} sx={{ p: 1, width: 500 }}>
       <TextField
         label='Username'
         value={localUser.username || ''}
@@ -168,7 +173,10 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         error={showError('email')}
         helperText={getHelperText('email')}
       />
-    </Box>
+      <Box sx={{ alignItems: 'center', display: 'flex', height: 60, justifyContent: 'center', pt: isDiscard ? 0.5 : 0 }}>
+        {isDiscard ? <DiscardingAlert /> : null}
+      </Box>
+    </Stack>
   )
 })
 

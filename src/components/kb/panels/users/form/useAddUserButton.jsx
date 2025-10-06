@@ -9,7 +9,7 @@ import { createError, createValidationError } from '@/lib/errors'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
-import { PROCESSING } from '@/lib/constants'
+import { LABELS, PROCESSING } from '@/lib/constants'
 import {
   createModalActions,
   createUserValidator,
@@ -20,6 +20,7 @@ import {
 } from '@/components/kb/panels/users/form/userModalUtils'
 
 const { SAVING } = PROCESSING
+const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
 
 const useAddUserButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =
@@ -68,14 +69,42 @@ const useAddUserButton = () => {
   const addUserModal = useCallback(() => {
     const ActionView = () => {
       const { modalData } = useUsersModalDataContext()
+
+      const confirmDiscard = !!modalData?.confirmDiscard
+
+      if (confirmDiscard) {
+        const colors = ['cancel', 'main']
+        const disabled = [false, false]
+        const labels = [DISCARD, 'Continue']
+
+        const onAction = label => {
+          if (label === DISCARD) {
+            closeModal()
+          } else {
+            updateModalData({ confirmDiscard: false })
+          }
+        }
+
+        return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+      }
+
       const actions = createModalActions(handleCancel, handleCommit)(modalData)
       if (!Array.isArray(actions)) return null
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map(a => a.label)
+      const labels = actions.map((a, i) => {
+        if (i === 0 && modalData?.hasChanges) {
+          return DISCARD
+        }
+        return a.label
+      })
 
       const onAction = label => {
+        if (label === DISCARD || label === CONFIRM_DISCARD) {
+          updateModalData({ confirmDiscard: true })
+          return
+        }
         const a = actions.find(x => x.label === label)
         if (a && a.onClick) a.onClick()
       }
@@ -99,6 +128,14 @@ const useAddUserButton = () => {
         user: createInitialUser(),
         isValid: false,
         hasChanges: false,
+      },
+      onClose: currentData => {
+        const { confirmDiscard, hasChanges } = currentData || {}
+        if (!confirmDiscard && hasChanges) {
+          updateModalData({ confirmDiscard: true })
+          return false
+        }
+        return true
       },
     })
   }, [createModal, handleFormChange, users, handleCancel, handleCommit])
