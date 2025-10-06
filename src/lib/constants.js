@@ -294,18 +294,10 @@ export const SELECTED = {
   },
 }
 
-export const STORE = {
+export const LOCAL_STORE = {
   AUTH: {
     KEY: 'kb:auth',
   },
-  // Concept and Panel stores are now in-memory only (no localStorage)
-  CONCEPT: {
-    MAX_SIZE: 50,
-  },
-  PANEL: {
-    MAX_SIZE: 50,
-  },
-  // Settings are now stored in React context and synced with server
 }
 
 export const TO_CONCEPT_SPECIAL = ['self', 'nil']

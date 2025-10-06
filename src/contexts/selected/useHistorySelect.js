@@ -1,11 +1,8 @@
 import createHistoryState from '@/lib/state/historyState'
 import { useCallback, useMemo, useState } from 'react'
 
-const useHistorySelect = (maxSize, defaultValue, onCurrentChange) => {
-  const store = useMemo(() =>
-    createHistoryState(maxSize, defaultValue),
-  [maxSize, defaultValue]
-  )
+const useHistorySelect = (defaultValue, onCurrentChange) => {
+  const store = useMemo(() => createHistoryState(defaultValue), [defaultValue])
 
   const [current, setCurrent] = useState(() => store.current())
 

@@ -16,7 +16,7 @@ const trimEndingCycle = array => {
   return array.slice(0, n - k)
 }
 
-const createHistoryState = (maxSize, defaultEntry, initData) => {
+const createHistoryState = (defaultEntry, initData) => {
   let data = initData || { state: [defaultEntry], position: 0 }
 
   return {
@@ -87,9 +87,6 @@ const createHistoryState = (maxSize, defaultEntry, initData) => {
 
       const pushState = state.slice(0, position + 1)
       pushState.push(entry)
-      if (pushState.length > maxSize) {
-        pushState.shift()
-      }
 
       const trimState = trimEndingCycle(pushState)
 
