@@ -6,6 +6,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import useConfirmReferenceModal from '../../modal/useConfirmReferenceModal'
 
+import { LABELS } from '@/lib/constants'
 import {
   createModalActions,
   processEditReferenceData,
@@ -13,6 +14,8 @@ import {
   createModalContent,
   createChangeDetector,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
+
+const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
 
 const useEditReferenceButton = () => {
   const { closeModal, createModal, updateModalData } =
@@ -60,6 +63,25 @@ const useEditReferenceButton = () => {
       const ActionView = () => {
         const { modalData } = useReferencesModalDataContext()
         const handleCommitWithReopen = (ref, orig) => handleCommit(ref, orig, reopenThisModal)
+
+        const confirmDiscard = !!modalData?.confirmDiscard
+
+        if (confirmDiscard) {
+          const colors = ['cancel', 'main']
+          const disabled = [false, false]
+          const labels = [DISCARD, 'Continue']
+
+          const onAction = label => {
+            if (label === DISCARD) {
+              closeModal()
+            } else {
+              updateModalData({ confirmDiscard: false })
+            }
+          }
+
+          return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+        }
+
         const actions = createModalActions(handleCancel, handleCommitWithReopen)(modalData)
         if (!Array.isArray(actions)) return null
 
@@ -68,6 +90,10 @@ const useEditReferenceButton = () => {
         const labels = actions.map(a => a.label)
 
         const onAction = label => {
+          if (label === CONFIRM_DISCARD) {
+            updateModalData({ confirmDiscard: true })
+            return
+          }
           const a = actions.find(x => x.label === label)
           if (a && a.onClick) a.onClick()
         }
@@ -93,9 +119,17 @@ const useEditReferenceButton = () => {
           isValid: true,
           hasChanges: initialHasChanges,
         },
+        onClose: currentData => {
+          const { confirmDiscard, isValid, hasChanges } = currentData || {}
+          if (!confirmDiscard && isValid && hasChanges) {
+            updateModalData({ confirmDiscard: true })
+            return false
+          }
+          return true
+        },
       })
     },
-    [createModal, handleFormChange, handleCancel, handleCommit]
+    [createModal, handleFormChange, handleCancel, handleCommit, closeModal, updateModalData]
   )
 
   return editReferenceModal

@@ -8,8 +8,8 @@ const ReferenceConceptsInput = ({
   handleConceptAdd,
   handleConceptDelete,
   handleSearchInput,
-  selectedConcept,
   reference,
+  selectedConcept,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -54,6 +54,7 @@ const ReferenceConceptsInput = ({
         keepFocus={true}
         onInputChange={handleSearchInput}
         updateConceptSelected={false}
+        width='100%'
       />
     </Stack>
   )

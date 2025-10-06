@@ -4,8 +4,8 @@ const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick
   return (
     <Menu
       anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
       onClose={onClose}
+      open={Boolean(anchorEl)}
       slotProps={{
         paper: {
           style: {
@@ -17,12 +17,12 @@ const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick
     >
       <ListSubheader
         sx={{
-          py: 1,
-          px: 2,
-          color: 'text.secondary',
-          fontWeight: 'bold',
           borderBottom: '1px solid',
           borderColor: 'divider',
+          color: 'text.secondary',
+          fontWeight: 'bold',
+          px: 2,
+          py: 1,
         }}
       >
         Select to Remove Concept

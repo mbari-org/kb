@@ -6,7 +6,7 @@ import { LABELS } from '@/lib/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, CONFIRM_DISCARD, DELETE, SAVE } = LABELS.BUTTON
+const { CANCEL, CONFIRM_DISCARD, DELETE, DISCARD_ALL, SAVE } = LABELS.BUTTON
 
 export const REFERENCE_FIELDS = {
   ADD_SUBMIT: ['citation', 'doi', 'concepts'],
@@ -89,21 +89,41 @@ export const createFormChangeHandler = (
 
 export const createModalActions =
   (handleCancel, handleCommit, saveLabel = SAVE) =>
-    currentModalData =>
-      [
+    currentModalData => {
+      const { isValid, hasChanges, confirmDiscard } = currentModalData
+
+      if (confirmDiscard) {
+        return [
+          {
+            color: 'cancel',
+            disabled: false,
+            label: DISCARD_ALL,
+            onClick: handleCancel,
+          },
+          {
+            color: 'main',
+            disabled: false,
+            label: 'Continue',
+            onClick: handleCancel,
+          },
+        ]
+      }
+
+      return [
         {
           color: 'cancel',
           disabled: false,
-          label: currentModalData.isValid && currentModalData.hasChanges ? CONFIRM_DISCARD : CANCEL,
+          label: isValid && hasChanges ? CONFIRM_DISCARD : CANCEL,
           onClick: handleCancel,
         },
         {
           color: 'primary',
-          disabled: !currentModalData.isValid || !currentModalData.hasChanges,
+          disabled: !isValid || !hasChanges,
           label: saveLabel,
           onClick: () => handleCommit(currentModalData.reference, currentModalData.original),
         },
       ]
+    }
 
 export const createModalContent = (handleFormChange, isEdit) => {
   const formKey = isEdit ? 'edit-reference-form' : 'add-reference-form'
@@ -141,10 +161,9 @@ export const processEditReferenceData = (reference, original) => {
   })
 
   if (!hasFieldChanges) {
-    return null // No changes
+    return null
   }
 
-  // Get updates
   return filterObject(
     diff(pick(reference, REFERENCE_FIELDS.EDITABLE), original),
     (_key, value) => value !== undefined && value !== null
@@ -154,20 +173,19 @@ export const processEditReferenceData = (reference, original) => {
 export const processAddReferenceData = reference => {
   const data = pick(reference, REFERENCE_FIELDS.ADD_SUBMIT)
 
-  // Always include concepts array (even if empty) as required by API
+  // API requires concepts array (even if empty)
   return {
     ...filterObject(data, (key, value) => {
       if (key === 'concepts') {
-        return true // Always include concepts
+        return true
       }
       return value && value.trim() !== ''
     }),
-    concepts: data.concepts || [], // Ensure concepts is always an array
+    concepts: data.concepts || [],
   }
 }
 
 export const createHandlers = (updateModalData, closeModal, isEdit, isDoiUnique = () => true) => {
-  // Create the form change handler once, not on every form change
   const formChangeHandler = createFormChangeHandler(updateModalData, isEdit, isDoiUnique)
 
   const handleFormChange = (updatedReference, original) => {
