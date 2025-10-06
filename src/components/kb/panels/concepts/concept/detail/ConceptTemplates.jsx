@@ -49,12 +49,12 @@ const ConceptTemplates = () => {
 
   return (
     <ConceptPropertyPages
+      iconComponent={() => <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />}
       isLoading={isLoading}
       items={filteredTemplates}
       loadingText='Loading templates...'
       renderItem={renderItem}
       title='Templates'
-      iconComponent={() => <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />}
     >
       <ConceptTemplatesAvailableToggle />
     </ConceptPropertyPages>
