@@ -1,10 +1,11 @@
 import { memo, useCallback, useState, useEffect } from 'react'
 import { Box, Stack, TextField, MenuItem } from '@mui/material'
 
+import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
+
 import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
 import useDebounce from '@/hooks/useDebounce'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
-import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
 
 const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
   const [showConfirm, setShowConfirm] = useState(false)

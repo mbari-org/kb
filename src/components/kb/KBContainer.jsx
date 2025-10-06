@@ -36,7 +36,7 @@ const KBContainer = () => {
         console.error('Failed to save preferences on refresh:', error)
       }
       setRefreshKey(id24())
-    }
+    },
   }), [id24, savePreferencesRef])
 
   return (

@@ -1,8 +1,9 @@
-import { Stack } from '@mui/material'
-import { Box, TextField } from '@mui/material'
+import { Box, Stack, TextField } from '@mui/material'
 import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 import ModalActionText from '@/components/common/ModalActionText'
-import ActionsAlert from '@/components/modal/actions/ActionsAlert'
+import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
+
+// import ActionsAlert from '@/components/modal/actions/ActionsAlert'
 
 import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateForm'
 
@@ -21,8 +22,7 @@ const TemplateForm = ({ alert = null, isEdit = false, onChange, original, templa
   return (
     <Stack spacing={2}>
       <ModalActionText text={`${isEdit ? 'Edit' : 'Add'} Template`} />
-      <Box>
-        <TextField
+      <TextField
           fullWidth
           label='Link Name'
           onChange={handleChange('linkName')}
@@ -30,15 +30,13 @@ const TemplateForm = ({ alert = null, isEdit = false, onChange, original, templa
           size='small'
           value={template.linkName}
         />
-      </Box>
       <ToConceptSelect
         conceptName={template.toConcept}
         doConceptSelected={handleToConceptSelect}
         onSpecialChange={handleToConceptSpecial}
         width='100%'
       />
-      <Box>
-        <TextField
+      <TextField
           fullWidth
           label='Link Value'
           onChange={handleChange('linkValue')}
@@ -46,15 +44,9 @@ const TemplateForm = ({ alert = null, isEdit = false, onChange, original, templa
           size='small'
           value={template.linkValue}
         />
+      <Box sx={{ alignItems: 'center', display: 'flex', height: 60, justifyContent: 'center', pt: alert ? 0.5 : 0 }}>
+        {alert ? <DiscardingAlert /> : null}
       </Box>
-      <Stack
-        spacing={0}
-        sx={{ alignItems: 'center', mt: 1, minHeight: 68, justifyContent: 'center' }}
-      >
-        {alert && (
-          <ActionsAlert line1={alert.line1} line2={alert.line2} severity={alert.severity} />
-        )}
-      </Stack>
     </Stack>
   )
 }

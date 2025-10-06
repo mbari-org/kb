@@ -2,7 +2,7 @@ import { Box, Stack } from '@mui/material'
 
 import ReferenceTextInputs from './ReferenceTextInputs'
 import ReferenceConceptsInput from './ReferenceConceptsInput'
-import ReferenceDiscardAlert from '@/components/modal/actions/ReferenceDiscardAlert'
+import DiscardAlert from '@/components/modal/actions/DiscardingAlert'
 
 import { useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import useReferenceForm from '@/components/kb/panels/references/form/useReferenceForm'
@@ -30,7 +30,7 @@ const ReferenceForm = ({ isEdit = false, onChange, reference, original }) => {
         reference={reference}
       />
       <Box sx={{ alignItems: 'center', display: 'flex', height: 60, justifyContent: 'center', pt: isDiscard ? 0.5 : 0 }}>
-        {isDiscard ? <ReferenceDiscardAlert /> : null}
+        {isDiscard ? <DiscardAlert /> : null}
       </Box>
     </Stack>
   )

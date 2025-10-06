@@ -123,7 +123,7 @@ const useEditUserButton = () => {
         },
       })
     },
-    [createModal, handleFormChange, users, handleCancel, handleCommit]
+    [closeModal, createModal, handleCancel, handleCommit, handleFormChange, updateModalData, users]
   )
 
   return editUserModal

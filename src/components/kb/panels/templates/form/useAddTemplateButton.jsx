@@ -21,6 +21,7 @@ import {
   createTemplateOnClose,
   duplicateTemplateAlert,
   isDuplicateTemplate,
+  discardEditsAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 const { SAVING } = PROCESSING
@@ -68,14 +69,34 @@ const useAddTemplateButton = () => {
 
     const ActionView = () => {
       const { modalData } = useTemplatesModalDataContext()
+
+      // In confirm-discard, render explicit Discard/Continue that close or continue
+      if (modalData?.confirmDiscard) {
+        const colors = ['cancel', 'main']
+        const disabled = [false, false]
+        const labels = ['Discard', 'Continue']
+        const onAction = label => {
+          if (label === 'Discard') {
+            closeModal()
+          } else {
+            updateModalData({ confirmDiscard: false, alert: null })
+          }
+        }
+        return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+      }
+
       const actions = createModalActions(handleCancel, handleCommit, updateModalData)(modalData)
       if (!Array.isArray(actions)) return null
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map(a => a.label)
+      const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? 'Discard' : a.label))
 
       const onAction = label => {
+        if (label === 'Discard') {
+          updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
+          return
+        }
         const a = actions.find(x => x.label === label)
         if (a && a.onClick) a.onClick()
       }

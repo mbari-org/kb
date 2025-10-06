@@ -18,7 +18,6 @@ const TemplatesTableData = () => {
 
   const [displayTemplates, setDisplayTemplates] = useState([])
 
-  // Local pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
 
@@ -27,7 +26,6 @@ const TemplatesTableData = () => {
 
   const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
 
-  // Paginate the filtered templates
   useEffect(() => {
     if (!filteredTemplates || filteredTemplates.length === 0) {
       setDisplayTemplates([])
@@ -46,31 +44,31 @@ const TemplatesTableData = () => {
 
   const handlePageSizeChange = newPageSize => {
     setPageSize(newPageSize)
-    setCurrentPage(1) // Reset to first page when page size changes
+    setCurrentPage(1)
   }
 
   const paginationComponent = (
     <TemplatesPagination
-      displayTemplates={filteredTemplates}
-      pageSize={pageSize}
       currentPage={currentPage}
+      displayTemplates={filteredTemplates}
       onPageChange={handlePageChange}
       onPageSizeChange={handlePageSizeChange}
+      pageSize={pageSize}
     />
   )
 
   return (
     <PanelDataGrid
       columns={columns}
-      rows={displayTemplates}
-      rowCount={filteredTemplates.length}
-      paginationModel={{
-        pageSize: pageSize,
-        page: currentPage - 1, // MUI DataGrid uses 0-based indexing
-      }}
       pageSizeOptions={PAGE_SIZE_OPTIONS}
-      paginationMode='client'
       paginationComponent={paginationComponent}
+      paginationMode='client'
+      paginationModel={{
+        page: currentPage - 1, // MUI DataGrid uses 0-based indexing
+        pageSize: pageSize,
+      }}
+      rowCount={filteredTemplates.length}
+      rows={displayTemplates}
     />
   )
 }

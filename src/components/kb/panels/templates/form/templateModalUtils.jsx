@@ -61,13 +61,13 @@ export const createModalActions =
           {
             color: 'cancel',
             disabled: false,
-            label: CONFIRM_DISCARD,
+            label: DISCARD,
             onClick: handleCancel,
           },
           {
             color: 'main',
             disabled: false,
-            label: REJECT_DISCARD,
+            label: 'Continue',
             onClick: () => updateModalData({ confirmDiscard: false, alert: null }),
           },
         ]
@@ -77,7 +77,7 @@ export const createModalActions =
         {
           color: 'cancel',
           disabled: false,
-          label: DISCARD,
+          label: CANCEL,
           onClick: () =>
             hasChanges
               ? updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })

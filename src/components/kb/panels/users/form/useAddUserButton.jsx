@@ -138,7 +138,7 @@ const useAddUserButton = () => {
         return true
       },
     })
-  }, [createModal, handleFormChange, users, handleCancel, handleCommit])
+  }, [closeModal, createModal, handleCancel, handleCommit, handleFormChange, updateModalData, users])
 
   const AddUserButton = useCallback(() => <PanelAddButton onClick={addUserModal} />, [addUserModal])
 
