@@ -1,8 +1,6 @@
-
-import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
-
 import TemplatesHeaderLeft from '@/components/kb/panels/templates/header/TemplatesHeaderLeft'
 import TemplatesHeaderRight from '@/components/kb/panels/templates/header/TemplatesHeaderRight'
+import TemplatesHeaderTitle from '@/components/kb/panels/templates/header/TemplatesHeaderTitle'
 import TemplatesTableData from '@/components/kb/panels/templates/table/data/TemplatesTableData'
 import TemplatesTableHeaderLeft from '@/components/kb/panels/templates/table/header/TemplatesTableHeaderLeft'
 import TemplatesTableHeaderMiddle from '@/components/kb/panels/templates/table/header/TemplatesTableHeaderMiddle'
@@ -29,7 +27,7 @@ const TemplatesContent = () => {
   return createTablePanel({
     header: {
       headerLeft: <TemplatesHeaderLeft />,
-      headerTitle: <PanelHeaderTitle title='Templates' />,
+      headerTitle: <TemplatesHeaderTitle />,
       headerRight: <TemplatesHeaderRight />,
     },
     tableHeader: {

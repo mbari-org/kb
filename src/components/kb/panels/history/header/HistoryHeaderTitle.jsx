@@ -8,8 +8,9 @@ import { capitalize } from '@/lib/utils'
 
 const HistoryHeaderTitle = () => {
   const { selectedType } = use(HistoryContext)
+  const title = `${capitalize(selectedType)} History`
 
-  return <PanelHeaderTitle title={capitalize(selectedType)} />
+  return <PanelHeaderTitle title={title} />
 }
 
 export default HistoryHeaderTitle

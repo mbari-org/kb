@@ -1,6 +1,5 @@
-import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
-
 import ReferencesHeaderLeft from '@/components/kb/panels/references/header/ReferencesHeaderLeft'
+import ReferencesHeaderTitle from '@/components/kb/panels/references/header/ReferencesHeaderTitle'
 import ReferencesTableHeaderLeft from '@/components/kb/panels/references/table/header/ReferencesTableHeaderLeft'
 import ReferencesTableHeaderRight from '@/components/kb/panels/references/table/header/ReferencesTableHeaderRight'
 import ReferencesTableData from '@/components/kb/panels/references/table/data/ReferencesTableData'
@@ -25,7 +24,7 @@ const ReferencesContent = () => {
   return createTablePanel({
     header: {
       headerLeft: <ReferencesHeaderLeft />,
-      headerTitle: <PanelHeaderTitle title='References' />,
+      headerTitle: <ReferencesHeaderTitle />,
     },
     tableHeader: {
       headerLeft: <ReferencesTableHeaderLeft />,
