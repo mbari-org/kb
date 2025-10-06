@@ -125,7 +125,7 @@ const useAddTemplateButton = () => {
       },
       onClose,
     })
-  }, [createModal, filters, handleFormChange, handleCancel, handleCommit, updateModalData])
+  }, [closeModal, createModal, filters, handleCancel, handleCommit, handleFormChange, updateModalData])
 
   const AddTemplateButton = useCallback(() => {
     const { TEMPLATES } = SELECTED.SETTINGS

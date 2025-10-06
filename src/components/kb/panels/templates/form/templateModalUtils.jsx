@@ -7,7 +7,7 @@ import { LABELS } from '@/lib/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, CONFIRM_DISCARD, DELETE, DISCARD, REJECT_DISCARD, SAVE } = LABELS.BUTTON
+const { CANCEL, DELETE, DISCARD, SAVE } = LABELS.BUTTON
 
 const TEMPLATE_FIELDS = ['concept', 'linkName', 'toConcept', 'linkValue']
 

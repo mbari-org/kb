@@ -133,7 +133,7 @@ const useEditTemplateButton = () => {
         onClose,
       })
     },
-    [createModal, handleFormChange, handleCancel, handleCommit, updateModalData]
+    [closeModal, createModal, handleCancel, handleCommit, handleFormChange, updateModalData]
   )
 
   return editTemplateModal
