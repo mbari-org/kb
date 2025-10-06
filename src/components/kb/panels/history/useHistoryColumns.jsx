@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { Box } from '@mui/material'
 
-import InspectIcon from '@/components/icon/InspectIcon'
+import FilterIcon from '@/components/icon/FilterIcon'
 import StampIcon from '@/components/icon/StampIcon'
 
 import usePendingItemModal from '@/components/kb/panels/history/pending/usePendingItemModal'
@@ -17,21 +17,24 @@ import { humanTimestamp } from '@/lib/utils'
 import { CONCEPT_HISTORY, SELECTED } from '@/lib/constants'
 
 const { TYPE } = CONCEPT_HISTORY
+const { HISTORY } = SELECTED.SETTINGS
 
 const useHistoryColumns = ({ type }) => {
   const openPendingItem = usePendingItemModal()
-  const { updateSelected } = use(SelectedContext)
+  const { updateSelected, updateSettings } = use(SelectedContext)
   const { user } = use(UserContext)
 
   const isAdminUser = isAdmin(user)
 
-  const handleConceptInspect = row => {
-    updateSelected({ [SELECTED.CONCEPT]: row.concept, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
-  }
   const handleConceptApproval = row => {
     if (row?.id) {
       openPendingItem({ conceptName: row.concept, item: row })
     }
+  }
+
+  const handleConceptFilter = row => {
+    updateSelected({ [SELECTED.CONCEPT]: row.concept })
+    updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: TYPE.CONCEPT } })
   }
 
   const isSortable = type === TYPE.CONCEPT
@@ -59,17 +62,16 @@ const useHistoryColumns = ({ type }) => {
   const inspectColumn = () => {
     return {
       field: 'inspect',
-      onClick: handleConceptInspect,
+      headerName: '',
+      onClick: handleConceptFilter,
       renderCell: params => (
         <Box>
-          <InspectIcon
-            onClick={() => handleConceptInspect(params.row)}
-            tooltip='View this Concept'
+          <FilterIcon
+            onClick={() => handleConceptFilter(params.row)}
+            tooltip='Filter History to this Concept'
           />
         </Box>
       ),
-      tooltip: 'View this Concept',
-      headerName: '',
       sortable: false,
       width: 50,
     }

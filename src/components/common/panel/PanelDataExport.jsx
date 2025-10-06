@@ -31,16 +31,18 @@ const PanelDataExport = ({
           </Box>
         </KBTooltip>
       </Stack>
-      <Box>
-        <KBTooltip title={switchToolTip}>
-          <FormControlLabel
-            control={
-              <Switch size='small' checked={checked} onChange={switchFn} />
-            }
-            label={switchLabel}
-          />
-        </KBTooltip>
-      </Box>
+      {switchFn && (
+        <Box>
+          <KBTooltip title={switchToolTip}>
+            <FormControlLabel
+              control={
+                <Switch size='small' checked={checked} onChange={switchFn} />
+              }
+              label={switchLabel}
+            />
+          </KBTooltip>
+        </Box>
+      )}
     </Box>
   )
 }
