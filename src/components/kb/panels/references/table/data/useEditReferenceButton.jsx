@@ -87,10 +87,15 @@ const useEditReferenceButton = () => {
 
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)
-        const labels = actions.map(a => a.label)
+        const labels = actions.map((a, i) => {
+          if (i === 0 && modalData?.hasChanges) {
+            return DISCARD
+          }
+          return a.label
+        })
 
         const onAction = label => {
-          if (label === CONFIRM_DISCARD) {
+          if (label === DISCARD || label === CONFIRM_DISCARD) {
             updateModalData({ confirmDiscard: true })
             return
           }
@@ -120,11 +125,13 @@ const useEditReferenceButton = () => {
           hasChanges: initialHasChanges,
         },
         onClose: currentData => {
-          const { confirmDiscard, isValid, hasChanges } = currentData || {}
-          if (!confirmDiscard && isValid && hasChanges) {
+          const { confirmDiscard, hasChanges } = currentData || {}
+          if (!confirmDiscard && hasChanges) {
+            // Enter confirm-discard mode instead of closing
             updateModalData({ confirmDiscard: true })
             return false
           }
+          // Otherwise allow closing
           return true
         },
       })

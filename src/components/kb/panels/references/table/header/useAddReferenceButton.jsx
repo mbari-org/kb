@@ -9,7 +9,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 
-import { PROCESSING } from '@/lib/constants'
+import { LABELS, PROCESSING } from '@/lib/constants'
 import {
   createModalActions,
   createReferenceValidator,
@@ -20,6 +20,7 @@ import {
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
 const { SAVING } = PROCESSING
+const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
 
 const useAddReferenceButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =
@@ -68,14 +69,42 @@ const useAddReferenceButton = () => {
   const addReferenceModal = useCallback(() => {
     const ActionView = () => {
       const { modalData } = useReferencesModalDataContext()
+
+      const confirmDiscard = !!modalData?.confirmDiscard
+
+      if (confirmDiscard) {
+        const colors = ['cancel', 'main']
+        const disabled = [false, false]
+        const labels = [DISCARD, 'Continue']
+
+        const onAction = label => {
+          if (label === DISCARD) {
+            closeModal()
+          } else {
+            updateModalData({ confirmDiscard: false })
+          }
+        }
+
+        return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+      }
+
       const actions = createModalActions(handleCancel, handleCommit)(modalData)
       if (!Array.isArray(actions)) return null
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map(a => a.label)
+      const labels = actions.map((a, i) => {
+        if (i === 0 && modalData?.hasChanges) {
+          return DISCARD
+        }
+        return a.label
+      })
 
       const onAction = label => {
+        if (label === DISCARD || label === CONFIRM_DISCARD) {
+          updateModalData({ confirmDiscard: true })
+          return
+        }
         const a = actions.find(x => x.label === label)
         if (a && a.onClick) a.onClick()
       }
@@ -100,8 +129,16 @@ const useAddReferenceButton = () => {
         isValid: false,
         hasChanges: false,
       },
+      onClose: currentData => {
+        const { confirmDiscard, hasChanges } = currentData || {}
+        if (!confirmDiscard && hasChanges) {
+          updateModalData({ confirmDiscard: true })
+          return false
+        }
+        return true
+      },
     })
-  }, [createModal, handleFormChange, handleCancel, handleCommit])
+  }, [createModal, handleFormChange, handleCancel, handleCommit, closeModal, updateModalData])
 
   const AddReferenceButton = useCallback(
     () => <PanelAddButton onClick={addReferenceModal} />,
