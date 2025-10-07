@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 
@@ -68,15 +68,6 @@ const fetchHistory = async (type, pageIndex, pageSize, apiFns) => {
     { limit: EXPORT_PAGE_SIZE, offset },
   ])
   return response
-}
-
-const fileName = ({ conceptName, historyExtent, type }) => {
-  if (type === TYPE.CONCEPT) {
-    const extent =
-      historyExtent === CONCEPT_EXTENT.CONCEPT ? '' : `_and_${historyExtent}`
-    return `KB-History_${conceptNameForFilename(conceptName)}${extent}.csv`
-  }
-  return `KB-History-${capitalize(type)}.csv`
 }
 
 const rowData = (item, type) => {
@@ -155,11 +146,14 @@ const useHistoryExport = () => {
   const isConceptExport = selectedType === TYPE.CONCEPT && selectedConcept && conceptData
   const [estimatedPages, setEstimatedPages] = useState(null)
 
-  const suggestName = () => fileName({
-    type: selectedType,
-    conceptName: selectedConcept,
-    historyExtent: conceptHistoryExtent,
-  })
+  const suggestName = useCallback(() => {
+    if (selectedType === TYPE.CONCEPT) {
+      const extent =
+        conceptHistoryExtent === CONCEPT_EXTENT.CONCEPT ? '' : `_and_${conceptHistoryExtent}`
+      return `KB-History_${conceptNameForFilename(selectedConcept)}${extent}.csv`
+    }
+    return `KB-History-${capitalize(selectedType)}.csv`
+  }, [selectedType, selectedConcept, conceptHistoryExtent])
 
   useEffect(() => {
     if (!isConceptExport) {

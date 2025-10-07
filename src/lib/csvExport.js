@@ -1,6 +1,6 @@
 import { csvHeaders, csvOut } from '@/lib/csv'
-import { humanTimestamp } from '@/lib/utils'
 import { createError } from '@/lib/errors'
+import { humanTimestamp } from '@/lib/utils'
 
 const csvExport = ({
   comments = [],
@@ -14,13 +14,15 @@ const csvExport = ({
   title,
   user,
 }) => {
-  const csvComments = () => {
+  const csvComments = count => {
     let commentText = `# ${title}\n`
     if (comments) {
       commentText += comments.map(line => `#   ${line}`).join('\n')
       commentText += '\n'
     }
-    commentText += `#   Total: ${count}\n`
+    if (count) {
+      commentText += `#   Total: ${count}\n`
+    }
     commentText += `#   Exported By: ${user.name}\n`
     commentText += `#   Date: ${humanTimestamp(new Date())}\n`
     commentText += '#\n'
@@ -58,10 +60,10 @@ const csvExport = ({
 
     try {
       writable = await handle.createWritable()
-      await writable.write(csvComments())
-      await writable.write(csvHeaders(headers))
-
       if (paginated) {
+        await writable.write(csvComments(count))
+        await writable.write(csvHeaders(headers))
+
         let pageIndex = 0
         let hasMoreData = true
 
@@ -81,7 +83,11 @@ const csvExport = ({
         }
       } else {
         const data = await getData()
-        if (data && data.length > 0) {
+        const count = data?.length
+        await writable.write(csvComments(count))
+        await writable.write(csvHeaders(headers))
+
+        if (data && count > 0) {
           await csvOut(writable, data)
         }
       }

@@ -22,31 +22,32 @@ const getChildrenInfo = async (apiFns, conceptName) => {
 const getConcept = async (apiFns, conceptName) =>
   apiFns.apiPayload(apiConcept, conceptName)
 
-const getDescendantsInfo = async (apiFns, conceptName, conceptId, acc = []) => {
+const getDescendantsInfo = async (apiFns, conceptName, conceptId, descendantsInfo = []) => {
   const children = await getChildrenInfo(apiFns, conceptName)
 
   for (const child of children) {
-    acc.push({ ...child, parentId: conceptId })
-    await getDescendantsInfo(apiFns, child.name, child.id, acc)
+    descendantsInfo.push({ ...child, parentId: conceptId })
+    await getDescendantsInfo(apiFns, child.name, child.id, descendantsInfo)
   }
 
-  return acc
+  return descendantsInfo
 }
 
 const getDescendantNames = async (apiFns, conceptName) => {
   const phylogeny = await apiFns.apiPayload(getConceptDescendants, conceptName)
 
-  const flattenNames = node => {
-    const names = [node.name]
+  const names = []
+  const collectNames = node => {
+    names.push(node.name)
     if (node.children) {
       for (const child of node.children) {
-        names.push(...flattenNames(child))
+        collectNames(child)
       }
     }
-    return names
   }
 
-  return flattenNames(phylogeny)
+  collectNames(phylogeny)
+  return names
 }
 
 const getNextSibling = (concept, getConcept) => {

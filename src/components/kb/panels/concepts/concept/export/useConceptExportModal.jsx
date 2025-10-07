@@ -11,7 +11,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { CONCEPT_EXTENT, EXPORT_TYPE } from '@/lib/constants'
 
 const initialModalData = {
-  conceptExtent: CONCEPT_EXTENT.CONCEPT,
+  conceptExtent: CONCEPT_EXTENT.DESCENDANTS,
   exportType: EXPORT_TYPE.CSV,
   validInput: true,
 }

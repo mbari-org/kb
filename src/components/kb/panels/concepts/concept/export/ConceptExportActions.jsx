@@ -2,10 +2,18 @@ import { use } from 'react'
 
 import Actions from '@/components/modal/actions/Actions'
 
+import useConceptExportCsv from '@/components/kb/panels/concepts/concept/export/useConceptExportCsv'
+
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 const ConceptExportActions = () => {
   const { closeModal, modalData } = use(ConceptModalContext)
+
+  const conceptExportCsv = useConceptExportCsv(modalData.conceptExtent)
+
+  const exportCsv = () => {
+    conceptExportCsv()
+  }
 
   const handleAction = action => {
     switch (action) {
@@ -14,7 +22,7 @@ const ConceptExportActions = () => {
         break
       }
       case 'Export': {
-        // TODO: Implement export logic
+        exportCsv()
         closeModal()
         break
       }
