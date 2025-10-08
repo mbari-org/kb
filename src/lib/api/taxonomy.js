@@ -1,11 +1,5 @@
 import { oniGet } from '@/lib/services/oni/methods'
 
-const getConceptPath = async (config, conceptName) =>
-  oniGet({ config, path: ['phylogeny', 'up', conceptName] })
-
-const getConceptTaxa = async (config, conceptName) =>
-  oniGet({ config, path: ['phylogeny', 'taxa', conceptName] })
-
 const getNames = async config => {
   const { error, payload } = await oniGet({ config, path: ['names'] })
   return { error, payload: payload?.content }
@@ -24,4 +18,4 @@ const getRanks = async config => {
 
 const getRoot = async config => oniGet({ config, path: ['concept', 'query', 'root'] })
 
-export { getConceptPath, getConceptTaxa, getNames, getRanks, getRoot }
+export { getNames, getRanks, getRoot }

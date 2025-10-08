@@ -1,3 +1,4 @@
+import { use } from 'react'
 import { Box, IconButton, Modal, Stack } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
 
@@ -10,18 +11,29 @@ import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/chang
 
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
+
 const ChangeStructureChoices = ({ closeChoices }) => {
   const { disableDelete, disableChangeName, disableChangeParent } = useStructureChoices()
+  const { setProcessing } = use(AppModalContext)
 
   const addChild = useAddChildModal()
   const changeName = useChangeNameModal()
   const changeParent = useChangeParentModal()
   const deleteConcept = useDeleteConceptModal()
 
-  const handleClick = onClick => event => {
+  const handleClick = (structureFn, loadingMessage = null) => async event => {
     event.preventDefault()
     closeChoices()
-    onClick()
+
+    if (loadingMessage) {
+      setProcessing(loadingMessage)
+      await structureFn()
+      setProcessing(false)
+      return
+    }
+
+    structureFn()
   }
 
   return (
@@ -63,7 +75,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
             />
             <StructureChoiceButton
               disabled={disableChangeParent}
-              onClick={handleClick(changeParent)}
+              onClick={handleClick(changeParent, 'Loading concept descendants...')}
               text='Change Parent'
             />
             <StructureChoiceButton
@@ -75,7 +87,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
           <StructureChoiceButton
             color='cancel'
             disabled={disableDelete}
-            onClick={handleClick(deleteConcept)}
+            onClick={handleClick(deleteConcept, 'Checking concept dependencies...')}
             text='Delete Concept'
           />
         </Stack>

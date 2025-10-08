@@ -6,14 +6,14 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { PROCESSING } from '@/lib/constants'
+import { getDescendantNames  } from '@/lib/kb/model/concept'
+
 import { CONCEPT_STATE } from '@/lib/constants'
 
-const { LOADING } = PROCESSING
 const { RESET } = CONCEPT_STATE
 
 const initialModalData = {
@@ -47,20 +47,19 @@ const changeParentOnClose = modifyConcept => {
 }
 
 const useChangeParentModal = () => {
+  const { apiFns } = use(ConfigContext)
   const { concept, modifyConcept } = use(ConceptContext)
-  const { setModal, setModalData, setProcessing } = use(ConceptModalContext)
-  const { getDescendantNames } = use(TaxonomyContext)
+  const { setModal, setModalData } = use(ConceptModalContext)
 
-  const alreadyLoadingDescendants = useRef(false)
+  const alreadyGettingDescendants = useRef(false)
 
   return useCallback(async () => {
-    if (!concept || alreadyLoadingDescendants.current) return
+    if (!concept || alreadyGettingDescendants.current) return
 
     try {
-      alreadyLoadingDescendants.current = true
-      setProcessing(LOADING)
+      alreadyGettingDescendants.current = true
 
-      const descendantNames = await getDescendantNames(concept.name)
+      const descendantNames = await getDescendantNames(apiFns, concept.name)
       const omitChoices = [concept.name, concept.parent, ...descendantNames]
 
       const modal = changeParentModal(omitChoices)
@@ -71,10 +70,9 @@ const useChangeParentModal = () => {
     } catch (error) {
       throw new Error(`Failed to load descendants: ${error}`)
     } finally {
-      alreadyLoadingDescendants.current = false
-      setProcessing(false)
+      alreadyGettingDescendants.current = false
     }
-  }, [concept, getDescendantNames, modifyConcept, setModal, setModalData, setProcessing])
+  }, [apiFns, concept, modifyConcept, setModal, setModalData])
 }
 
 export default useChangeParentModal

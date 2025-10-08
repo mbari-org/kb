@@ -13,10 +13,19 @@ const getConceptAnnotations = async (config, conceptName) =>
 const getConceptChildren = async (config, conceptName) =>
   oniGet({ config, path: ['concept', 'children', conceptName] })
 
+const getConceptDescendants = async (config, conceptName) =>
+  oniGet({ config, path: ['phylogeny', 'down', conceptName] })
+
 const getConceptParent = async (config, conceptName) =>
   oniGet({ config, path: ['concept', 'parent', conceptName] })
 
+const getConceptPath = async (config, conceptName) =>
+  oniGet({ config, path: ['phylogeny', 'up', conceptName] })
+
 const getConceptNames = async (config, conceptName) => oniGet({ config, path: ['raw', 'names', conceptName] })
+
+const getConceptTaxa = async (config, conceptName) =>
+  oniGet({ config, path: ['phylogeny', 'taxa', conceptName] })
 
 const updateConceptAuthor = async (config, [conceptName, updates]) =>
   oniPut({ config, path: ['names', conceptName], data: updates })
@@ -36,8 +45,11 @@ export {
   getConcept,
   getConceptAnnotations,
   getConceptChildren,
+  getConceptDescendants,
   getConceptNames,
   getConceptParent,
+  getConceptPath,
+  getConceptTaxa,
   updateConceptAuthor,
   updateConceptName,
   updateConceptParent,

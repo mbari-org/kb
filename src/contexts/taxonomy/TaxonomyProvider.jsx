@@ -6,7 +6,7 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { getConcept as apiConcept } from '@/lib/api/concept'
+import { getConcept as apiConcept } from '@/lib/kb/model/concept'
 
 import {
   closestConcept as closestTaxonomyConcept,
@@ -115,19 +115,6 @@ const TaxonomyProvider = ({ children }) => {
       return getTaxonomyAncestorNames(taxonomy, conceptName)
     },
     [taxonomy]
-  )
-
-  const getDescendantNames = useCallback(
-    async conceptName => {
-      if (!taxonomy) return []
-
-      const concept = getTaxonomyConcept(taxonomy, conceptName)
-      if (!concept) return []
-
-      const { descendantNames } = await loadTaxonomyConceptDescendants(taxonomy, concept, apiFns)
-      return descendantNames
-    },
-    [apiFns, taxonomy]
   )
 
   const getNames = useCallback(() => {
@@ -250,7 +237,7 @@ const TaxonomyProvider = ({ children }) => {
           addedChildren
             .filter(childName => childName !== staleConcept.name)
             .map(async childName => {
-              const child = await apiFns.apiPayload(apiConcept, childName)
+              const child = await apiConcept(apiFns, childName)
               child.parent = freshConcept.name
               insertConcept(child, conceptMap, aliasMap)
             })
@@ -343,7 +330,6 @@ const TaxonomyProvider = ({ children }) => {
       getConcept,
       getConceptPrimaryName,
       getAncestorNames,
-      getDescendantNames,
       getNames,
       getRootName,
       isConceptLoaded,
@@ -360,7 +346,6 @@ const TaxonomyProvider = ({ children }) => {
       deleteConcept,
       filterRanks,
       getAncestorNames,
-      getDescendantNames,
       getConcept,
       getConceptPrimaryName,
       getNames,

@@ -1,14 +1,52 @@
+import { getConcept as apiConcept, getConceptChildren, getConceptDescendants } from '@/lib/api/concept'
+import { pick } from '@/lib/utils'
+
 const addedConcepts = (parent, updatesInfo) => {
   const { updatedValue } = updatesInfo
   return updatedValue('children').map(child => ({
     ...child,
     aliases: [],
     alternateNames: [],
-    realizations: [],
     media: [],
     parent,
+    realizations: [],
     references: [],
   }))
+}
+
+const getChildrenInfo = async (apiFns, conceptName) => {
+  const children = await apiFns.apiPayload(getConceptChildren, conceptName)
+  return children.map(child => pick(child, ['id', 'name', 'alternateNames']))
+}
+
+const getConcept = async (apiFns, conceptName) =>
+  apiFns.apiPayload(apiConcept, conceptName)
+
+const getDescendantsInfo = async (apiFns, conceptName, conceptId, acc = []) => {
+  const children = await getChildrenInfo(apiFns, conceptName)
+
+  for (const child of children) {
+    acc.push({ ...child, parentId: conceptId })
+    await getDescendantsInfo(apiFns, child.name, child.id, acc)
+  }
+
+  return acc
+}
+
+const getDescendantNames = async (apiFns, conceptName) => {
+  const phylogeny = await apiFns.apiPayload(getConceptDescendants, conceptName)
+
+  const flattenNames = node => {
+    const names = [node.name]
+    if (node.children) {
+      for (const child of node.children) {
+        names.push(...flattenNames(child))
+      }
+    }
+    return names
+  }
+
+  return flattenNames(phylogeny)
 }
 
 const getNextSibling = (concept, getConcept) => {
@@ -38,4 +76,12 @@ const getPrevSibling = (concept, getConcept) => {
   return null
 }
 
-export { addedConcepts, getNextSibling, getPrevSibling }
+export {
+  addedConcepts,
+  getChildrenInfo,
+  getConcept,
+  getDescendantNames,
+  getDescendantsInfo,
+  getNextSibling,
+  getPrevSibling,
+}
