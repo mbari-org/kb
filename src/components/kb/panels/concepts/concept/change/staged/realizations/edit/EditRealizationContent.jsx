@@ -38,11 +38,13 @@ const EditRealizationContent = () => {
   const isEdit = modalData?.action === CONCEPT_STATE.REALIZATION.EDIT
   const actionText = actionVerb(modalData.action)
 
-  // populated form when editing
   useEffect(() => {
     if (isEdit) {
       const editRealization = stagedState?.realizations?.[realizationIndex]
-      setRealizationItem(editRealization || modalRealizationItem)
+      const timeoutId = setTimeout(() => {
+        setRealizationItem(editRealization || modalRealizationItem)
+      }, 0)
+      return () => clearTimeout(timeoutId)
     }
   }, [isEdit, modalRealizationItem, realizationIndex, stagedState?.realizations])
 
@@ -53,16 +55,21 @@ const EditRealizationContent = () => {
   }, [getAvailableLinkTemplates, filterLinkName])
 
   useEffect(() => {
-    setCycleIndex(0)
-    setCurrentPage(0)
+    const timeoutId = setTimeout(() => {
+      setCycleIndex(0)
+      setCurrentPage(0)
+    }, 0)
+    return () => clearTimeout(timeoutId)
   }, [filterLinkName])
 
-  // Auto-page to show the currently cycled template (only when cycling, not when manually paging)
   useEffect(() => {
     if (filteredTemplates.length > 0 && cycleIndex > 0) {
       const pageForCurrentTemplate = Math.floor(cycleIndex / ITEMS_PER_PAGE)
       if (pageForCurrentTemplate !== currentPage) {
-        setCurrentPage(pageForCurrentTemplate)
+        const timeoutId = setTimeout(() => {
+          setCurrentPage(pageForCurrentTemplate)
+        }, 0)
+        return () => clearTimeout(timeoutId)
       }
     }
   }, [cycleIndex, currentPage, filteredTemplates.length])

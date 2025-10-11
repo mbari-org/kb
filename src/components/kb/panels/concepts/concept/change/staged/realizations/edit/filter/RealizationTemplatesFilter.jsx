@@ -13,7 +13,6 @@ const RealizationTemplatesFilter = ({
 }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
-  // Use controlled pagination if provided, otherwise use internal state
   const [internalPage, setInternalPage] = useState(0)
   const isControlled = currentPage !== undefined && onPageChange !== undefined
   const activePage = isControlled ? currentPage : internalPage
@@ -22,12 +21,12 @@ const RealizationTemplatesFilter = ({
     return getAvailableLinkTemplates(linkName)
   }, [getAvailableLinkTemplates, linkName])
 
-  // Reset internal page when templates change and not controlled
   useEffect(() => {
     if (!isControlled) {
-      setInternalPage(0)
+      const timeoutId = setTimeout(() => setInternalPage(0), 0)
+      return () => clearTimeout(timeoutId)
     }
-  }, [linkName, isControlled]) // Only reset when linkName changes, not when templates array reference changes
+  }, [linkName, isControlled])
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,

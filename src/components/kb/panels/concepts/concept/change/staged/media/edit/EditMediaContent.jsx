@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useMemo, useState } from 'react'
 import {
   Box,
   Checkbox,
@@ -45,7 +45,6 @@ const EditMediaContent = () => {
     url: false,
   })
   const [previewOn, setPreviewOn] = useState(false)
-  const [showPrimaryCheckbox, setShowPrimaryCheckbox] = useState(false)
 
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true, isDuplicate: false })
 
@@ -115,9 +114,10 @@ const EditMediaContent = () => {
     }
   }
 
-  useEffect(() => {
-    setShowPrimaryCheckbox(!hasPrimary(stagedState.media) || isPrimary(mediaItem))
-  }, [stagedState.media, mediaIndex, mediaItem])
+  const showPrimaryCheckbox = useMemo(
+    () => !hasPrimary(stagedState.media) || isPrimary(mediaItem),
+    [stagedState.media, mediaItem]
+  )
 
   if (!mediaItem) {
     return null

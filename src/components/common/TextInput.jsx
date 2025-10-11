@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { Box, TextField, IconButton } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
@@ -16,14 +16,12 @@ const TextInput = ({
 }) => {
   const [inputValue, setInputValue] = useState(value || '')
 
-  // Use debounced onChange if debounceMs is provided
   const debouncedOnChange = useDebounce(onChange, debounceMs)
   const handleChange = debounceMs > 0 ? debouncedOnChange : onChange
 
-  // Sync local state with prop value
-  useEffect(() => {
-    setInputValue(value || '')
-  }, [value])
+  if (value !== undefined && inputValue !== value) {
+    setInputValue(value)
+  }
 
   const handleInputChange = useCallback(
     event => {

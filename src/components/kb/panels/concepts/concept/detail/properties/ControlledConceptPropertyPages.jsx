@@ -30,26 +30,21 @@ const ControlledConceptPropertyPages = ({
   const hasItems = items?.length > 0
   const showEmptyIcon = !hasItems && !isLoading
 
-  // Track previous items state to detect transitions
   const [prevHasItems, setPrevHasItems] = useState(hasItems)
 
-  // collapsed when no items (unless fixedHeight is set)
   useEffect(() => {
-    if (showEmptyIcon && fixedHeight === undefined) {
-      setExpanded(false)
-    }
-  }, [showEmptyIcon, fixedHeight])
-
-  // Auto-expand when items go from empty to non-empty
-  useEffect(() => {
-    if (!prevHasItems && hasItems && fixedHeight === undefined) {
-      setExpanded(true)
-    }
-    setPrevHasItems(hasItems)
-  }, [hasItems, prevHasItems, fixedHeight])
+    const timeoutId = setTimeout(() => {
+      if (showEmptyIcon && fixedHeight === undefined) {
+        setExpanded(false)
+      } else if (!prevHasItems && hasItems && fixedHeight === undefined) {
+        setExpanded(true)
+      }
+      setPrevHasItems(hasItems)
+    }, 0)
+    return () => clearTimeout(timeoutId)
+  }, [showEmptyIcon, fixedHeight, hasItems, prevHasItems])
 
   const handleToggle = () => {
-    // Only allow toggle if there are items and fixedHeight is not set
     if (hasItems && fixedHeight === undefined) {
       setExpanded(!expanded)
     }
@@ -59,7 +54,6 @@ const ControlledConceptPropertyPages = ({
     if (direction) {
       setAnimationDirection(direction)
     } else {
-      // Fallback to calculating direction if not provided
       const calculatedDirection = newPage > currentPage ? 'down' : 'up'
       setAnimationDirection(calculatedDirection)
     }
@@ -68,7 +62,6 @@ const ControlledConceptPropertyPages = ({
       onPageChange(newPage, direction)
     }
 
-    // Ensure accordion is expanded when pagination buttons are clicked (unless fixedHeight is set)
     if (!expanded && fixedHeight === undefined) {
       setExpanded(true)
     }
@@ -77,7 +70,7 @@ const ControlledConceptPropertyPages = ({
   return (
     <Accordion
       expanded={fixedHeight !== undefined || expanded}
-      onChange={() => {}} // Disable default accordion behavior
+      onChange={() => {}}
       sx={{
         boxShadow: 'none',
         '&:before': {
@@ -87,7 +80,6 @@ const ControlledConceptPropertyPages = ({
     >
       <AccordionSummary
         onClick={e => {
-          // Only handle accordion toggle if click is not on interactive elements
           if (!e.target.closest('.clickable-element')) {
             e.stopPropagation()
           }

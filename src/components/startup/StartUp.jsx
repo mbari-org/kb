@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState, useTransition } from 'react'
+import { use, useCallback, useState, useTransition } from 'react'
 
 import { Box } from '@mui/material'
 
@@ -9,22 +9,20 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 const StartUp = () => {
   const { config } = use(ConfigContext)
 
-  const [configIsDirty, setConfigIsDirty] = useState(true)
+  // null means use default (!config?.valid), otherwise use override
+  const [configIsDirtyOverride, setConfigIsDirtyOverride] = useState(null)
+  const configIsDirty = configIsDirtyOverride !== null ? configIsDirtyOverride : !config?.valid
 
   const [_isPending, startTransition] = useTransition()
 
   const handleConfigChange = useCallback(
     newConfigIsDirty => {
       startTransition(() => {
-        setConfigIsDirty(newConfigIsDirty)
+        setConfigIsDirtyOverride(newConfigIsDirty)
       })
     },
     [startTransition]
   )
-
-  useEffect(() => {
-    setConfigIsDirty(!config?.valid)
-  }, [config])
 
   return (
     <Box

@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useMemo } from 'react'
 
 import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
 import ConceptTemplatesAvailableToggle from '@/components/kb/panels/concepts/concept/detail/templates/ConceptTemplatesAvailableToggle'
@@ -19,8 +19,6 @@ const ConceptTemplates = () => {
   const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
   const { getAncestorNames } = use(TaxonomyContext)
 
-  const [filteredTemplates, setFilteredTemplates] = useState([])
-
   const selectedConcept = getSelected(SELECTED.CONCEPT)
   const available = getSettings(TEMPLATES.KEY, TEMPLATES.AVAILABLE)
 
@@ -38,11 +36,10 @@ const ConceptTemplates = () => {
     })
   }
 
-  useEffect(() => {
+  const filteredTemplates = useMemo(() => {
     const ancestorNames = available ? getAncestorNames(selectedConcept) : []
     const concepts = selectedConcept ? [selectedConcept, ...ancestorNames] : null
-
-    setFilteredTemplates(filterTemplates(templates, { concepts }))
+    return filterTemplates(templates, { concepts })
   }, [available, getAncestorNames, selectedConcept, templates])
 
   const tooltip = `Go to ${available ? 'Available' : 'Explicit'} Templates for this Concept`

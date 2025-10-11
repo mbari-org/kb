@@ -36,11 +36,14 @@ const useConceptPending = concept => {
   useEffect(() => {
     if (concept) {
       const newConceptData = conceptPendingHistory(concept.name, pendingHistory)
-      setPendingData({
-        [CONCEPT]: newConceptData,
-        [CONFIRM]: null,
-        [PARENT]: parentPendingHistory(concept.parent, pendingHistory),
-      })
+      const timeoutId = setTimeout(() => {
+        setPendingData({
+          [CONCEPT]: newConceptData,
+          [CONFIRM]: null,
+          [PARENT]: parentPendingHistory(concept.parent, pendingHistory),
+        })
+      }, 0)
+      return () => clearTimeout(timeoutId)
     }
   }, [concept, pendingHistory])
 

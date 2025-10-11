@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import TemplatesContext from './TemplatesContext'
 import { TemplatesModalProvider } from './modal'
@@ -29,8 +29,6 @@ const TemplatesProvider = ({ children }) => {
 
   const handleLoadConceptError = useLoadConceptError()
 
-  const [filteredTemplates, setFilteredTemplates] = useState([])
-
   const templatesSettings = getSettings(TEMPLATES.KEY)
   const { available, filters = {} } = templatesSettings
 
@@ -56,53 +54,39 @@ const TemplatesProvider = ({ children }) => {
     }
   }, [filters, getSelected, updateFilters])
 
+  const filteredTemplates = useMemo(() => {
+    if (!templates || templates.length === 0) return []
+
+    const linkName = filters[FILTERS.LINK_NAME]
+    const toConcept = filters[FILTERS.TO_CONCEPT]
+    const linkValue = filters[FILTERS.LINK_VALUE]
+    const concept = filters[FILTERS.CONCEPT]
+
+    if (!concept) {
+      return filterTemplates(templates, { linkName, toConcept, linkValue })
+    }
+
+    const concepts = isConceptLoaded(concept)
+      ? [concept, ...(available ? getAncestorNames(concept) : [])]
+      : null
+
+    return filterTemplates(templates, { concepts, linkName, toConcept, linkValue })
+  }, [available, filters, getAncestorNames, isConceptLoaded, templates])
+
   useEffect(() => {
-    if (!filters[FILTERS.CONCEPT]) {
-      const filtered = filterTemplates(templates, {
-        linkName: filters[FILTERS.LINK_NAME],
-        toConcept: filters[FILTERS.TO_CONCEPT],
-        linkValue: filters[FILTERS.LINK_VALUE],
-      })
-      setFilteredTemplates(filtered)
-      return
-    }
+    const concept = filters[FILTERS.CONCEPT]
+    if (!concept) return
+    if (isConceptLoaded(concept) || isLoadingConcept.current) return
 
-    const updateFilteredTemplates = () => {
-      const ancestorNames = available ? getAncestorNames(filters[FILTERS.CONCEPT]) : []
-      const allConcepts = filters[FILTERS.CONCEPT]
-        ? [filters[TEMPLATES.FILTERS.CONCEPT], ...ancestorNames]
-        : null
-      const filtered = filterTemplates(templates, {
-        concepts: allConcepts,
-        linkName: filters[FILTERS.LINK_NAME],
-        toConcept: filters[FILTERS.TO_CONCEPT],
-        linkValue: filters[FILTERS.LINK_VALUE],
+    isLoadingConcept.current = true
+    loadConcept(concept)
+      .catch(error => {
+        handleLoadConceptError({ ...error, conceptName: concept })
       })
-      setFilteredTemplates(filtered)
-    }
-
-    if (isConceptLoaded(filters[FILTERS.CONCEPT])) {
-      updateFilteredTemplates()
-    } else if (!isLoadingConcept.current) {
-      isLoadingConcept.current = true
-      loadConcept(filters[FILTERS.CONCEPT])
-        .then(updateFilteredTemplates)
-        .catch(error => {
-          handleLoadConceptError({ ...error, conceptName: filters[FILTERS.CONCEPT] })
-        })
-        .finally(() => {
-          isLoadingConcept.current = false
-        })
-    }
-  }, [
-    available,
-    filters,
-    getAncestorNames,
-    handleLoadConceptError,
-    isConceptLoaded,
-    loadConcept,
-    templates,
-  ])
+      .finally(() => {
+        isLoadingConcept.current = false
+      })
+  }, [filters, handleLoadConceptError, isConceptLoaded, loadConcept])
 
   const value = useMemo(
     () => ({

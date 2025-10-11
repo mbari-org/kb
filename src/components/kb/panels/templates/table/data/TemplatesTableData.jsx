@@ -27,15 +27,18 @@ const TemplatesTableData = () => {
   const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
 
   useEffect(() => {
-    if (!filteredTemplates || filteredTemplates.length === 0) {
-      setDisplayTemplates([])
-      return
-    }
+    const timeoutId = setTimeout(() => {
+      if (!filteredTemplates || filteredTemplates.length === 0) {
+        setDisplayTemplates([])
+        return
+      }
 
-    const startIndex = (currentPage - 1) * pageSize
-    const endIndex = startIndex + pageSize
-    const paginated = filteredTemplates.slice(startIndex, endIndex)
-    setDisplayTemplates(paginated)
+      const startIndex = (currentPage - 1) * pageSize
+      const endIndex = startIndex + pageSize
+      const paginated = filteredTemplates.slice(startIndex, endIndex)
+      setDisplayTemplates(paginated)
+    }, 0)
+    return () => clearTimeout(timeoutId)
   }, [filteredTemplates, currentPage, pageSize])
 
   const handlePageChange = newPage => {

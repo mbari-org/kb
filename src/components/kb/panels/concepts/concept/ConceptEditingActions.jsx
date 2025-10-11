@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useMemo, useState } from 'react'
+import { use, useCallback, useMemo } from 'react'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -19,8 +19,6 @@ const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 
 const ConceptEditingActions = () => {
-  const [isModified, setIsModified] = useState(false)
-
   const { concept, editing, initialState, modifyConcept, pending, setEditing, stagedState } =
     use(ConceptContext)
 
@@ -30,9 +28,10 @@ const ConceptEditingActions = () => {
   const displayPending = useDisplayPending()
   const displayStaged = useDisplayStaged()
 
-  useEffect(() => {
-    setIsModified(isStateModified({ initialState, stagedState }))
-  }, [initialState, stagedState])
+  const isModified = useMemo(
+    () => isStateModified({ initialState, stagedState }),
+    [initialState, stagedState]
+  )
 
   const editCancelDiscardButtonText = useMemo(() => {
     if (!editing) return EDIT

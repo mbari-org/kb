@@ -29,46 +29,39 @@ const ConceptPropertyPages = ({
   const hasItems = items?.length > 0
   const showEmptyIcon = !hasItems && !isLoading
 
-  // Track previous items state to detect transitions
   const [prevHasItems, setPrevHasItems] = useState(hasItems)
 
-  // collapsed when no items (unless fixedHeight is set)
   useEffect(() => {
-    if (showEmptyIcon && fixedHeight === undefined) {
-      setExpanded(false)
-    }
-  }, [showEmptyIcon, fixedHeight])
-
-  // Auto-expand when items go from empty to non-empty
-  useEffect(() => {
-    if (!prevHasItems && hasItems && fixedHeight === undefined) {
-      setExpanded(true)
-    }
-    setPrevHasItems(hasItems)
-  }, [hasItems, prevHasItems, fixedHeight])
+    const timeoutId = setTimeout(() => {
+      if (showEmptyIcon && fixedHeight === undefined) {
+        setExpanded(false)
+      } else if (!prevHasItems && hasItems && fixedHeight === undefined) {
+        setExpanded(true)
+      }
+      setPrevHasItems(hasItems)
+    }, 0)
+    return () => clearTimeout(timeoutId)
+  }, [showEmptyIcon, fixedHeight, hasItems, prevHasItems])
 
   const handleToggle = () => {
-    // Only allow toggle if there are items and fixedHeight is not set
     if (hasItems && fixedHeight === undefined) {
       setExpanded(!expanded)
     }
   }
 
-  // Reset page when items change
   useEffect(() => {
-    setPage(0)
+    const timeoutId = setTimeout(() => setPage(0), 0)
+    return () => clearTimeout(timeoutId)
   }, [items])
 
   const handleChangePage = (newPage, direction) => {
     if (direction) {
       setAnimationDirection(direction)
     } else {
-      // Fallback to calculating direction if not provided
       const calculatedDirection = newPage > page ? 'down' : 'up'
       setAnimationDirection(calculatedDirection)
     }
     setPage(newPage)
-    // Ensure accordion is expanded when pagination buttons are clicked (unless fixedHeight is set)
     if (!expanded && fixedHeight === undefined) {
       setExpanded(true)
     }

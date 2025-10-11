@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback } from 'react'
 import { Box, FormControl } from '@mui/material'
 
 import TextInput from '@/components/common/TextInput'
@@ -14,8 +14,6 @@ import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants'
 const ConceptAuthor = () => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
 
-  const [author, setAuthor] = useState(stagedState.author?.value)
-
   const border = stagedBorder(initialState.author, stagedState.author)
 
   const infoStyle = useConceptDetailStyle('Author')
@@ -23,7 +21,6 @@ const ConceptAuthor = () => {
   const handleChange = useCallback(
     event => {
       const value = event.target.value
-      setAuthor(value)
       modifyConcept({
         type: CONCEPT_STATE.AUTHOR,
         update: { field: CONCEPT_FIELD.AUTHOR, value },
@@ -31,10 +28,6 @@ const ConceptAuthor = () => {
     },
     [modifyConcept]
   )
-
-  useEffect(() => {
-    setAuthor(stagedState.author?.value || '')
-  }, [stagedState.author])
 
   return (
     <FormControl>
@@ -44,7 +37,7 @@ const ConceptAuthor = () => {
           debounceMs={333}
           label='Author'
           onChange={handleChange}
-          value={author || ''}
+          value={stagedState.author?.value || ''}
         />
       </Box>
     </FormControl>

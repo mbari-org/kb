@@ -97,12 +97,19 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
 
   useEffect(() => {
     if (conceptPath && conceptPath.length > 0) {
-      setExpandedItems(prev => [...new Set([...prev, ...conceptPath])])
+      const timeoutId = setTimeout(() => {
+        setExpandedItems(prev => [...new Set([...prev, ...conceptPath])])
+      }, 0)
+      return () => clearTimeout(timeoutId)
     }
-    setTimeout(() => {
+  }, [conceptPath])
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
       needsToScroll() ? scrollToNode(() => onConceptTreeReady()) : onConceptTreeReady()
     }, 100)
-  }, [conceptPath, needsToScroll, scrollToNode, onConceptTreeReady])
+    return () => clearTimeout(timeoutId)
+  }, [needsToScroll, scrollToNode, onConceptTreeReady])
 
   if (!concept || !getConcept(concept.name)) {
     return null

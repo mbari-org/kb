@@ -9,7 +9,13 @@ const NavHistoryButton = ({ dropItems, icon: Icon, label, onClick, onItemSelect,
   const pressTimer = useRef(null)
   const wasLongPress = useRef(false)
 
-  // Add document-level mouse event listeners
+  const handleClose = () => {
+    setAnchorEl(null)
+    setHoveredIndex(-1)
+    setIsDragging(false)
+    wasLongPress.current = false
+  }
+
   useEffect(() => {
     const handleDocumentMouseUp = () => {
       if (isDragging) {
@@ -60,13 +66,6 @@ const NavHistoryButton = ({ dropItems, icon: Icon, label, onClick, onItemSelect,
       return
     }
     onClick?.(event)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-    setHoveredIndex(-1)
-    setIsDragging(false)
-    wasLongPress.current = false
   }
 
   const handleItemMouseEnter = index => {

@@ -1,4 +1,4 @@
-import { use, useActionState, useEffect, useState } from 'react'
+import { use, useActionState, useState } from 'react'
 
 import { Box, Card, CardActions, CardContent, TextField } from '@mui/material'
 
@@ -10,7 +10,8 @@ import SubmitError from '@/components/common/SubmitError'
 const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const { config, updateConfig } = use(ConfigContext)
 
-  const [configUrl, setConfigUrl] = useState(null)
+  const [localConfigUrl, setLocalConfigUrl] = useState(null)
+  const configUrl = localConfigUrl !== null ? localConfigUrl : (config?.url || '')
 
   const submitConfigUrl = async (_prevState, formData) => {
     const formConfigUrl = formData.get('configUrl')
@@ -21,13 +22,9 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
 
   const handleConfigChange = event => {
     const url = event.target.value
-    setConfigUrl(url)
+    setLocalConfigUrl(url)
     setConfigIsDirty(url && url !== config?.url)
   }
-
-  useEffect(() => {
-    setConfigUrl(config?.url || '')
-  }, [config])
 
   return (
     <Box component='form' action={configAction}>
@@ -41,7 +38,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
             onChange={handleConfigChange}
             required
             sx={{ mt: 1 }}
-            value={configUrl || ''}
+            value={configUrl}
           />
           <SubmitError errorText={config?.error || configState?.error || ''} />
         </CardContent>

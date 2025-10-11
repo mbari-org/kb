@@ -83,7 +83,8 @@ const ConceptProvider = ({ children }) => {
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
     if (!isConceptPanelActive && editing) {
-      setEditing(false)
+      const timeoutId = setTimeout(() => setEditing(false), 0)
+      return () => clearTimeout(timeoutId)
     }
   }, [panels, editing])
 
@@ -138,7 +139,8 @@ const ConceptProvider = ({ children }) => {
     const taxonomyConcept = getConcept(selectedConcept)
     if (!taxonomyConcept) return
 
-    handleSetConcept(taxonomyConcept)
+    const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
+    return () => clearTimeout(timeoutId)
   }, [concept, getConcept, getSelected, handleSetConcept, isConceptLoaded, taxonomy])
 
   useEffect(() => {

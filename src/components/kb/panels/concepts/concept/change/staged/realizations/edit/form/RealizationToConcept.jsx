@@ -26,13 +26,11 @@ const RealizationToConcept = ({
     return toConcept === 'self' || toConcept === 'nil'
   }, [toConcept])
 
-  // Check if current toConcept is descendant of the current concept
   const isValidToConcept = useMemo(
     () => !toConcept || isSpecial || taxaNames.length === 0 || taxaNames.includes(toConcept),
     [toConcept, taxaNames, isSpecial]
   )
 
-  // Notify parent of validation status
   useEffect(() => {
     if (onValidationChange) {
       onValidationChange(isValidToConcept)
@@ -53,11 +51,11 @@ const RealizationToConcept = ({
     [realizationItem, onRealizationChange, isSpecial]
   )
 
-  // Reset taxa fetch flag when template changes (indicated by templateId change)
   const templateId = realizationItem.templateId
   useEffect(() => {
     hasFetchedTaxaRef.current = false
-    setTaxaNames([])
+    const timeoutId = setTimeout(() => setTaxaNames([]), 0)
+    return () => clearTimeout(timeoutId)
   }, [templateId])
 
   useEffect(() => {
@@ -68,12 +66,11 @@ const RealizationToConcept = ({
       return acc
     }, {})
     if (specialMap[toConcept]) {
-      setTaxaNames(specialMap[toConcept])
+      const timeoutId = setTimeout(() => setTaxaNames(specialMap[toConcept]), 0)
       hasFetchedTaxaRef.current = true
-      return
+      return () => clearTimeout(timeoutId)
     }
 
-    // Only fetch taxa once when form is initially populated
     if (!hasFetchedTaxaRef.current) {
       const fetchTaxa = async () => {
         const taxa = await apiFns.apiPayload(getConceptTaxa, toConcept)
