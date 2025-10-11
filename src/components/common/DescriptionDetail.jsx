@@ -1,34 +1,27 @@
 import { Box } from '@mui/material'
 
-import { createDetail, createText } from '@/components/common/factory/createComponent'
+import Detail from '@/components/common/factory/Detail'
+import Text from '@/components/common/factory/Text'
 
 const DescriptionDetail = props => {
   const { description, detail } = props
 
-  const Description = createText({
-    id: 'modal-content-description',
-    text: description,
-    sx: {
-      mb: 1,
-      variant: 'h6',
-      component: 'h4',
-    },
-  })
-
-  const Detail = createDetail({
-    id: 'modal-content-detail',
-    detail,
-    sx: { mb: 1, ml: 2 },
-  })
-
   return (
     <Box>
-      <Description
+      <Text
         id='modal-content-description'
         text={description}
-        sx={{ mb: 1, variant: 'h6', component: 'h4' }}
+        sx={{
+          mb: 1,
+          variant: 'h6',
+          component: 'h4',
+        }}
       />
-      <Detail id='modal-content-detail' detail={detail} sx={{ mb: 1, ml: 2 }} />
+      <Detail
+        id='modal-content-detail'
+        detail={detail}
+        sx={{ mb: 1, ml: 2 }}
+      />
     </Box>
   )
 }

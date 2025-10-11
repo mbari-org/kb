@@ -19,9 +19,8 @@ const UsersModalRenderer = () => {
 }
 
 const UsersContent = () => {
-  const { createTablePanel } = usePanelFactory()
-
   const AddUserButton = useAddUserButton()
+  const { createTablePanel } = usePanelFactory()
 
   return createTablePanel({
     header: {
@@ -29,7 +28,7 @@ const UsersContent = () => {
     },
     tableHeader: {
       headerLeft: <UsersTableHeaderLeft />,
-      headerRight: <AddUserButton />,
+      headerRight: AddUserButton(),
     },
     tableData: {
       content: <UsersTableData />,

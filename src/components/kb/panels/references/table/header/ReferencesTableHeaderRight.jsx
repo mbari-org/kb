@@ -8,13 +8,13 @@ import UserContext from '@/contexts/user/UserContext'
 
 const ReferencesTableHeaderRight = () => {
   const { user } = use(UserContext)
-  const AddReferenceButton = useAddReferenceButton()
+  const addReferenceButton = useAddReferenceButton()
 
   if (isReadOnly(user)) {
     return null
   }
 
-  return <AddReferenceButton />
+  return addReferenceButton()
 }
 
 export default ReferencesTableHeaderRight

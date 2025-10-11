@@ -3,7 +3,6 @@ import { Box } from '@mui/material'
 
 import Detail from '@/components/common/factory/Detail'
 import ModalActionText from '@/components/common/ModalActionText'
-import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -23,15 +22,11 @@ const DeleteMediaContent = () => {
 
   const detail = drop(mediaItem, ['action', 'conceptName', 'id', 'mimeType'])
 
-  const Details = createComponent(Detail, {
-    detail,
-  })
-
   return (
     <Box>
       <ModalActionText text={actionText + ' Media'} />
       <Box sx={{ ml: 2, mt: 1 }}>
-        <Details id='delete-media-content-detail' />
+        <Detail id='delete-media-content-detail' detail={detail} />
       </Box>
     </Box>
   )

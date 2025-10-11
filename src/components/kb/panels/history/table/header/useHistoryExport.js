@@ -135,13 +135,13 @@ const useHistoryExport = () => {
     return historyItems.map(item => rowData(item, selectedType))
   }
 
-  const getEstimatedPages = async () => {
+  const getEstimatedPages = useCallback(async () => {
     if (selectedType === TYPE.CONCEPT && selectedConcept && conceptData) {
       return null
     }
     const totalCount = await apiFns.apiResult(getHistoryCount, selectedType)
     return totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : '?'
-  }
+  }, [apiFns, conceptData, selectedConcept, selectedType])
 
   const isConceptExport = selectedType === TYPE.CONCEPT && selectedConcept && conceptData
   const [estimatedPages, setEstimatedPages] = useState(null)
@@ -159,7 +159,7 @@ const useHistoryExport = () => {
     if (!isConceptExport) {
       getEstimatedPages().then(setEstimatedPages)
     }
-  }, [selectedType, isConceptExport])
+  }, [getEstimatedPages, isConceptExport, selectedType])
 
   return csvExport({
     comments: content,

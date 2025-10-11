@@ -8,13 +8,13 @@ import UserContext from '@/contexts/user/UserContext'
 
 const TemplatesTableHeaderRight = () => {
   const { user } = use(UserContext)
-  const AddTemplateButton = useAddTemplateButton()
+  const addTemplateButton = useAddTemplateButton()
 
   if (isReadOnly(user)) {
     return null
   }
 
-  return <AddTemplateButton />
+  return addTemplateButton()
 }
 
 export default TemplatesTableHeaderRight

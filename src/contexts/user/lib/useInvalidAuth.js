@@ -9,7 +9,7 @@ const useInvalidAuth = setUser => {
     authStore.remove()
     setUser(null)
     navigate('/login')
-  }, [setUser])
+  }, [navigate, setUser])
 }
 
 export default useInvalidAuth

@@ -3,7 +3,6 @@ import { Box } from '@mui/material'
 
 import Detail from '@/components/common/factory/Detail'
 import ModalActionText from '@/components/common/ModalActionText'
-import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -16,15 +15,14 @@ const DeleteAliasContent = () => {
 
   const actionText = actionVerb(modalData.action)
 
-  const Details = createComponent(Detail, {
-    detail: drop(aliasItem, 'id'),
-  })
-
   return (
     <Box>
       <ModalActionText text={actionText + ' Alias'} />
       <Box sx={{ ml: 2, mt: 1 }}>
-        <Details id='delete-alias-content-detail' />
+        <Detail
+          id='delete-alias-content-detail'
+          detail={drop(aliasItem, 'id')}
+        />
       </Box>
     </Box>
   )

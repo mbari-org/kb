@@ -17,7 +17,7 @@ const useLogout = (setUser, savePreferences) => {
     clearStores()
     setUser(null)
     navigate('/login')
-  }, [setUser, savePreferences])
+  }, [navigate, savePreferences, setUser])
 }
 
 export default useLogout

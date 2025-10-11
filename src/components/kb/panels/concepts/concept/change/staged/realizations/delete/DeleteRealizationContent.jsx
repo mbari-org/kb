@@ -3,7 +3,6 @@ import { Box } from '@mui/material'
 
 import Detail from '@/components/common/factory/Detail'
 import ModalActionText from '@/components/common/ModalActionText'
-import { createComponent } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -16,16 +15,16 @@ const DeleteRealizationContent = () => {
   const actionText = actionVerb(modalData.action)
 
   const keys = ['linkName', 'toConcept', 'linkValue']
-  const Details = createComponent(Detail, {
-    detail: realizationItem,
-    keys,
-  })
 
   return (
     <Box>
       <ModalActionText text={actionText + ' Realization'} />
       <Box sx={{ ml: 2, mt: 1 }}>
-        <Details id='delete-realization-content-detail' />
+        <Detail
+          id='delete-realization-content-detail'
+          detail={realizationItem}
+          keys={keys}
+        />
       </Box>
     </Box>
   )

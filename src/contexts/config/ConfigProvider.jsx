@@ -86,7 +86,7 @@ const ConfigProvider = ({ children }) => {
     } else {
       navigate('/login')
     }
-  }, [])
+  }, [loadConfig, navigate])
 
   const apiFnsFromHook = useApiFns(config?.valid ? config : null, showBoundary)
 
