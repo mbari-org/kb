@@ -77,7 +77,6 @@ const ConfigProvider = ({ children }) => {
     const storedConfigUrl = configUrlStore.get()
     if (storedConfigUrl) {
       loadConfig(storedConfigUrl, () => {
-        // On error, clear config and navigate to login
         if (mountedRef.current) {
           setConfig(null)
           configUrlStore.clear()
@@ -87,7 +86,6 @@ const ConfigProvider = ({ children }) => {
     } else {
       navigate('/login')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const apiFnsFromHook = useApiFns(config?.valid ? config : null, showBoundary)

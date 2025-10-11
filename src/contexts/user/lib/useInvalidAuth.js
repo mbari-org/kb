@@ -9,8 +9,6 @@ const useInvalidAuth = setUser => {
     authStore.remove()
     setUser(null)
     navigate('/login')
-    // navigate does not change, so no need to include it in the dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setUser])
 }
 

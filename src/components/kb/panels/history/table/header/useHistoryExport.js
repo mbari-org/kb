@@ -159,7 +159,6 @@ const useHistoryExport = () => {
     if (!isConceptExport) {
       getEstimatedPages().then(setEstimatedPages)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType, isConceptExport])
 
   return csvExport({
