@@ -33,7 +33,7 @@ export default [
       'react-hooks/static-components': 'error',
       'react-hooks/immutability': 'error',
       'react-hooks/set-state-in-effect': 'error',
-      'react-hooks/refs': 'off',
+      'react-hooks/refs': 'error',
       'react-hooks/preserve-manual-memoization': 'off',
       '@stylistic/array-bracket-spacing': ['error', 'never'],
       '@stylistic/arrow-parens': ['error', 'as-needed'],

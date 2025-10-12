@@ -1,6 +1,6 @@
-import { use, useCallback, useEffect, useRef } from 'react'
+import { use, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { createActions } from '@/components/modal/conceptModalFactory'
+import Actions from '@/components/modal/actions/Actions'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -14,10 +14,17 @@ import { CONCEPT_STATE, LABELS, RESETTING, UNSAFE_ACTION } from '@/lib/constants
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
+const COLORS = ['cancel', 'main']
 const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
 const { SAVE } = LABELS.CONCEPT.ACTION
 const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
+
+const getLabels = (confirmReset, intent) => {
+  const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
+  const confirmLabels = [CONFIRM_DISCARD, REJECT_DISCARD]
+  return confirmReset ? confirmLabels : actionLabels
+}
 
 const StagedActions = ({ intent }) => {
   const { confirmReset, initialState, modifyConcept, setEditing, stagedState } =
@@ -80,13 +87,7 @@ const StagedActions = ({ intent }) => {
     }
   }, [closeModal, handleSpecialAction, initialState, setEditing, stagedState])
 
-  const colors = ['cancel', 'main']
-  const actionLabels = [DISCARD_ALL, intent === SAVE ? SAVE : BACK_TO_EDIT]
-  const confirmLabels = [CONFIRM_DISCARD, REJECT_DISCARD]
-
-  const labels = confirmReset ? confirmLabels : actionLabels
-
-  const onAction = label => {
+  const onAction = useCallback(label => {
     switch (label) {
       case BACK_TO_EDIT:
         setUnsafeAction(null)
@@ -116,9 +117,11 @@ const StagedActions = ({ intent }) => {
         closeModal()
         break
     }
-  }
+  }, [closeModal, handleSpecialAction, modifyConcept, saveStaged, setUnsafeAction])
 
-  return createActions({ colors, labels, onAction }, 'StagedStateActions')
+  const labels = useMemo(() => getLabels(confirmReset, intent), [confirmReset, intent])
+
+  return <Actions colors={COLORS} labels={labels} onAction={onAction} />
 }
 
 export default StagedActions

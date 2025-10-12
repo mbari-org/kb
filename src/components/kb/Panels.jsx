@@ -1,4 +1,4 @@
-import { use, useRef } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 
 import panelMods from '@/components/kb/panels/modules'
@@ -17,10 +17,17 @@ const Panels = () => {
   const { panels } = use(SelectedContext)
   const activePanel = panels.current()
 
-  // Track which panels have been mounted using a ref
-  const mountedPanelsRef = useRef(new Set([activePanel]))
-  mountedPanelsRef.current.add(activePanel)
-  const mountedPanels = mountedPanelsRef.current
+  const [mountedPanels, setMountedPanels] = useState(() => new Set([activePanel]))
+
+  const hasPanel = mountedPanels.has(activePanel)
+  useEffect(() => {
+    if (!hasPanel) {
+      const timeoutId = setTimeout(() => {
+        setMountedPanels(prev => new Set([...prev, activePanel]))
+      }, 0)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [activePanel, hasPanel])
 
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>

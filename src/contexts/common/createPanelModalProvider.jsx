@@ -1,4 +1,4 @@
-import { createContext, useCallback, useMemo, useState, useRef, useContext } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState, useRef, useContext } from 'react'
 
 const createPanelModalProvider = (panelName, useModalHook) => {
   const DataContext = createContext()
@@ -41,7 +41,9 @@ const createPanelModalProvider = (panelName, useModalHook) => {
       [onClose, processing]
     )
 
-    closeModalRef.current = closeModal
+    useEffect(() => {
+      closeModalRef.current = closeModal
+    }, [closeModal])
 
     const createModal = useCallback(
       ({ actionsComponent, contentComponent, titleComponent, data = {}, minWidth = 500, onClose = null }) => {
@@ -61,14 +63,12 @@ const createPanelModalProvider = (panelName, useModalHook) => {
     )
 
     const updateModalData = useCallback(data => {
-      setModalData(prev => {
-        const newData = { ...prev, ...data }
-        modalDataRef.current = newData // Keep ref in sync
-        return newData
-      })
+      setModalData(prev => ({ ...prev, ...data }))
     }, [])
 
-    modalDataRef.current = modalData
+    useEffect(() => {
+      modalDataRef.current = modalData
+    }, [modalData])
 
     const modal = useModalHook(modalConfig, modalDataRef, closeModalRef)
 
