@@ -27,10 +27,11 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   const [expandedItems, setExpandedItems] = useState([])
 
   const apiRef = useTreeViewApiRef()
+  const conceptName = concept?.name
 
   const selectedItems = useMemo(() => {
-    return concept?.name ? [concept.name] : []
-  }, [concept?.name])
+    return conceptName ? [conceptName] : []
+  }, [conceptName])
 
   const treeItems = useMemo(() => {
     const root = buildTree(taxonomy)

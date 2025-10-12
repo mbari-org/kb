@@ -34,7 +34,7 @@ export default [
       'react-hooks/immutability': 'error',
       'react-hooks/set-state-in-effect': 'error',
       'react-hooks/refs': 'error',
-      'react-hooks/preserve-manual-memoization': 'off',
+      'react-hooks/preserve-manual-memoization': 'error',
       '@stylistic/array-bracket-spacing': ['error', 'never'],
       '@stylistic/arrow-parens': ['error', 'as-needed'],
       '@stylistic/comma-dangle': ['error', {
