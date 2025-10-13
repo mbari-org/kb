@@ -3,8 +3,8 @@ export const filterTemplates = (templates, filters = {}) => {
 
   const { concepts, toConcept, linkName, linkValue } = filters
 
-  const trimmedLinkName = linkName?.trim()
-  const trimmedLinkValue = linkValue?.trim()
+  const trimmedLinkName = linkName?.trim().toLowerCase()
+  const trimmedLinkValue = linkValue?.trim().toLowerCase()
 
   if (!concepts && !toConcept && !trimmedLinkName && !trimmedLinkValue) {
     return templates
@@ -25,14 +25,14 @@ export const filterTemplates = (templates, filters = {}) => {
   // Filter by linkName
   if (trimmedLinkName) {
     filteredTemplates = filteredTemplates.filter(template =>
-      template.linkName?.toLowerCase().includes(trimmedLinkName.toLowerCase())
+      template.linkName?.toLowerCase().includes(trimmedLinkName)
     )
   }
 
   // Filter by linkValue
   if (trimmedLinkValue) {
     filteredTemplates = filteredTemplates.filter(template =>
-      template.linkValue?.toLowerCase().includes(trimmedLinkValue.toLowerCase())
+      template.linkValue?.toLowerCase().includes(trimmedLinkValue)
     )
   }
 

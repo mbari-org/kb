@@ -1,18 +1,20 @@
-import { useCallback } from 'react'
-
+import { useEffect } from 'react'
 import TextInput from '@/components/common/TextInput'
-import useDebounce from '@/hooks/useDebounce'
+import useDebouncedField from '@/hooks/useDebouncedField'
 
-const TableHeaderLinkFilter = ({ name, value, onChange }) => {
-  const debouncedOnChange = useDebounce(onChange, 300)
+const TableHeaderLinkFilter = ({ name, value: initialValue, onChange }) => {
+  const handleFieldChange = fieldName => value => onChange(fieldName, value)
 
-  const handleChange = useCallback(
-    event => {
-      const newValue = event.target.value
-      debouncedOnChange(name, newValue)
-    },
-    [debouncedOnChange, name]
+  const [value, handleChange, setValue] = useDebouncedField(
+    initialValue,
+    name,
+    handleFieldChange,
+    300
   )
+
+  useEffect(() => {
+    setValue(initialValue || '')
+  }, [initialValue, setValue])
 
   return (
     <TextInput
