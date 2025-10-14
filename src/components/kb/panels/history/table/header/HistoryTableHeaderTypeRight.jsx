@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 const HistoryTableHeaderTypeRight = () => {
-  const { handleSortChange, sortOrder } = use(HistoryContext)
+  const { handleSortChange, pageState } = use(HistoryContext)
   const theme = useTheme()
 
   const toggleButtonSx = {
@@ -19,7 +19,7 @@ const HistoryTableHeaderTypeRight = () => {
     <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
       <Typography>Created Order:</Typography>
       <ToggleButtonGroup
-        value={sortOrder || 'desc'}
+        value={pageState.sortOrder || 'desc'}
         exclusive
         onChange={(e, newValue) => {
           if (newValue !== null) {

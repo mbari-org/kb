@@ -1,21 +1,23 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
-import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
+import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 const { TYPE } = CONCEPT_HISTORY
+const { CONCEPT } = SELECTED
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 
 const commentsContent = ({ concept, historyExtent, historyType }) => {
@@ -102,20 +104,24 @@ const rowData = (item, type) => {
 
 const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { conceptData, conceptHistoryExtent, selectedType, selectedConcept, sortOrder } = use(HistoryContext)
+  const { conceptState, selectedType, pageState } = use(HistoryContext)
+  const { getSelected } = use(SelectedContext)
   const { setExporting } = use(PanelDataContext)
   const { user } = use(UserContext)
 
+  const selectedConcept = useMemo(() => getSelected(CONCEPT), [getSelected])
+  const { data: conceptData, extent: conceptExtent } = conceptState
+
   const content = commentsContent({
     concept: selectedConcept,
-    historyExtent: conceptHistoryExtent,
+    historyExtent: conceptExtent,
     historyType: selectedType,
   })
 
   const getConceptData = async () => {
     const sortedData = [...conceptData].sort((a, b) => {
       const comparison = new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
-      return sortOrder === 'asc' ? -comparison : comparison
+      return pageState.sortOrder === 'asc' ? -comparison : comparison
     })
     return sortedData.map(item => rowData(item, selectedType))
   }
@@ -149,11 +155,11 @@ const useHistoryExport = () => {
   const suggestName = useCallback(() => {
     if (selectedType === TYPE.CONCEPT) {
       const extent =
-        conceptHistoryExtent === CONCEPT_EXTENT.CONCEPT ? '' : `_and_${conceptHistoryExtent}`
+        conceptExtent === CONCEPT_EXTENT.CONCEPT ? '' : `_and_${conceptExtent}`
       return `KB-History_${conceptNameForFilename(selectedConcept)}${extent}.csv`
     }
     return `KB-History-${capitalize(selectedType)}.csv`
-  }, [selectedType, selectedConcept, conceptHistoryExtent])
+  }, [selectedType, selectedConcept, conceptExtent])
 
   useEffect(() => {
     if (!isConceptExport) {

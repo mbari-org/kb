@@ -5,31 +5,31 @@ import { PAGINATION } from '@/lib/constants'
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const usePageHistory = ({ count, setTypeState }) => {
+const usePageHistory = ({ count, updatePageState }) => {
   const nextPage = useCallback(() => {
-    setTypeState(prev => ({
+    updatePageState(prev => ({
       ...prev,
       offset: Math.min(prev.offset + prev.limit, Math.max(0, count - prev.limit)),
     }))
-  }, [count, setTypeState])
+  }, [count, updatePageState])
 
   const prevPage = useCallback(() => {
-    setTypeState(prev => ({
+    updatePageState(prev => ({
       ...prev,
       offset: Math.max(0, prev.offset - prev.limit),
     }))
-  }, [setTypeState])
+  }, [updatePageState])
 
   const setPageSize = useCallback(
     newLimit => {
-      setTypeState({ limit: newLimit, offset: 0 })
+      updatePageState({ limit: newLimit, offset: 0 })
     },
-    [setTypeState]
+    [updatePageState]
   )
 
   const resetPagination = useCallback(() => {
-    setTypeState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
-  }, [setTypeState])
+    updatePageState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
+  }, [updatePageState])
 
   return { nextPage, prevPage, setPageSize, resetPagination }
 }

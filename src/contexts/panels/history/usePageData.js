@@ -8,44 +8,45 @@ const usePageData = ({
   count,
   selectedConcept,
   selectedType,
-  sortOrder,
-  typeState,
+  pageState,
 }) => {
+  const { limit, offset, sortOrder } = pageState
+
   const pageData = useCallback(
-    async ({ setTypeData }) => {
+    async ({ updatePageState }) => {
       if (!apiFns) return
 
       if (selectedType === 'concept' && selectedConcept) {
-        const start = typeState.offset
-        const end = start + typeState.limit
-        setTypeData(conceptData.slice(start, end))
+        const start = offset
+        const end = start + limit
+        updatePageState({ data: conceptData.slice(start, end) })
         return
       }
 
       if (selectedType === 'pending') {
-        const start = typeState.offset
-        const end = start + typeState.limit
-        setTypeData(conceptData.slice(start, end))
+        const start = offset
+        const end = start + limit
+        updatePageState({ data: conceptData.slice(start, end) })
         return
       }
 
-      let actualOffset = typeState.offset
+      let actualOffset = offset
       if (sortOrder === 'desc') {
-        const page = Math.floor(typeState.offset / typeState.limit)
-        const totalPages = Math.ceil(count / typeState.limit)
+        const page = Math.floor(offset / limit)
+        const totalPages = Math.ceil(count / limit)
         const reversePage = totalPages - 1 - page
-        actualOffset = reversePage * typeState.limit
+        actualOffset = reversePage * limit
       }
 
       const data = await apiFns.apiPaginated(getHistory, [
         selectedType,
-        { ...typeState, offset: actualOffset },
+        { limit, offset: actualOffset },
       ])
 
       const sortedData = sortOrder === 'desc' ? [...data].reverse() : data
-      setTypeData(sortedData)
+      updatePageState({ data: sortedData })
     },
-    [apiFns, conceptData, count, selectedConcept, selectedType, sortOrder, typeState]
+    [apiFns, conceptData, count, selectedConcept, selectedType, sortOrder, limit, offset]
   )
 
   return pageData

@@ -11,10 +11,10 @@ import { PAGINATION } from '@/lib/constants'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableConceptData = ({ hideFooter = false }) => {
-  const { conceptData, count, nextPage, prevPage, selectedType, setPageSize, typeState } =
+  const { conceptState, count, nextPage, prevPage, selectedType, setPageSize, pageState } =
     use(HistoryContext)
 
-  const { limit, offset } = typeState
+  const { limit, offset } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
   const paginationComponent = (
@@ -40,7 +40,7 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
         pageSize: limit,
         page: Math.floor(offset / limit),
       }}
-      rows={conceptData}
+      rows={conceptState.data}
     />
   )
 }

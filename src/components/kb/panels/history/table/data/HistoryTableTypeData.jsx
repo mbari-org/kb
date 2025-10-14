@@ -11,10 +11,10 @@ import { PAGINATION } from '@/lib/constants'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableTypeData = ({ hideFooter = false }) => {
-  const { count, nextPage, prevPage, selectedType, setPageSize, typeData, typeState } =
+  const { count, nextPage, prevPage, selectedType, setPageSize, pageState } =
     use(HistoryContext)
 
-  const { limit, offset } = typeState
+  const { limit, offset } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
   // Ensure rowCount is at least 1 to prevent MUI X error
@@ -44,7 +44,7 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
         page: Math.floor(offset / limit),
       }}
       rowCount={rowCount}
-      rows={typeData}
+      rows={pageState.data}
     />
   )
 }

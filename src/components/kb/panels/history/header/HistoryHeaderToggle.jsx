@@ -21,8 +21,8 @@ const HistoryHeaderToggle = ({ onChange }) => {
       size='small'
       sx={{ mr: 1 }}
     >
-      <HistoryToggleButton value={PENDING} />
       <HistoryToggleButton value={APPROVED} />
+      <HistoryToggleButton value={PENDING} />
       <HistoryToggleButton value={CONCEPT} />
     </ToggleButtonGroup>
   )

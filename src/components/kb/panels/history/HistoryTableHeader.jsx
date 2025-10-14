@@ -5,7 +5,6 @@ import HistoryTableHeaderTypeRight from './table/header/HistoryTableHeaderTypeRi
 const HistoryTableHeader = ({
   count,
   handleSortChange,
-  sortOrder = 'desc',
   title,
   titleTopMargin = 0,
 }) => {
@@ -24,7 +23,7 @@ const HistoryTableHeader = ({
         }}
       >
         <Typography sx={{ ml: 2 }}>Total: {count}</Typography>
-        <HistoryTableHeaderTypeRight handleSortChange={handleSortChange} sortOrder={sortOrder} />
+        <HistoryTableHeaderTypeRight handleSortChange={handleSortChange} />
       </Box>
     </Box>
   )

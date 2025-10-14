@@ -22,49 +22,62 @@ const { CONCEPT, PANEL, SETTINGS } = SELECTED
 const { HISTORY } = SETTINGS
 
 const HistoryProvider = ({ children }) => {
+  const { setModalData, setProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
   const { pendingHistory } = use(PanelDataContext)
-  const { setProcessing, setModalData } = use(AppModalContext)
   const { getSelected, getSettings } = use(SelectedContext)
 
+  const activePanel = getSelected(PANEL)
   const selectedConcept = getSelected(CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
-  const activePanel = getSelected(PANEL)
+
   const isActive = activePanel === 'History'
 
-  const [count, setCount] = useState(0)
-  const [conceptData, setConceptData] = useState([])
-  const [conceptHistoryExtent, setConceptHistoryExtent] = useState(CONCEPT_EXTENT.CONCEPT)
-  const [typeData, setTypeData] = useState([])
-  const [typeState, setTypeState] = useState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
-  const [sortOrder, setSortOrder] = useState('desc')
+  const [conceptState, setConceptState] = useState({
+    count: 0,
+    data: [],
+    extent: CONCEPT_EXTENT.CONCEPT,
+  })
+
+  const [pageState, setPageState] = useState({
+    data: [],
+    limit: DEFAULT_LIMIT,
+    offset: DEFAULT_OFFSET,
+    sortOrder: 'desc',
+  })
+
+  const updateConceptState = useCallback(updates => {
+    setConceptState(prev => ({ ...prev, ...updates }))
+  }, [])
+
+  const updatePageState = useCallback(updates => {
+    setPageState(prev => ({ ...prev, ...updates }))
+  }, [])
 
   const isTypeChanging = useRef(false)
 
   useEffect(() => {
-    setConceptHistoryExtent(CONCEPT_EXTENT.CONCEPT)
-  }, [selectedConcept])
+    updateConceptState({ extent: CONCEPT_EXTENT.CONCEPT })
+  }, [selectedConcept, updateConceptState])
 
   const loadData = useLoadData({
     apiFns,
-    conceptData,
-    conceptHistoryExtent,
-    count,
+    conceptData: conceptState.data,
+    conceptHistoryExtent: conceptState.extent,
+    count: conceptState.count,
     pendingHistory,
     selectedConcept,
     selectedType,
-    sortOrder,
-    typeState,
+    sortOrder: pageState.sortOrder,
   })
 
   const pageData = usePageData({
     apiFns,
-    conceptData,
-    count,
+    conceptData: conceptState.data,
+    count: conceptState.count,
     selectedConcept,
     selectedType,
-    sortOrder,
-    typeState,
+    pageState,
   })
 
   useEffect(() => {
@@ -72,9 +85,9 @@ const HistoryProvider = ({ children }) => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
       const loadingMsg =
-        conceptHistoryExtent === CHILDREN
+        conceptState.extent === CHILDREN
           ? 'Loading children history...'
-          : conceptHistoryExtent === DESCENDANTS
+          : conceptState.extent === DESCENDANTS
             ? 'Loading descendants history...'
             : 'Loading data...'
 
@@ -84,7 +97,7 @@ const HistoryProvider = ({ children }) => {
       }, PROCESSING.LOADING_DELAY)
 
       try {
-        await loadData({ setCount, setConceptData, setTypeData, setTypeState })
+        await loadData({ updateConceptState, updatePageState })
       } finally {
         clearTimeout(timer)
         setProcessing(false)
@@ -94,7 +107,7 @@ const HistoryProvider = ({ children }) => {
     run()
   }, [
     apiFns,
-    conceptHistoryExtent,
+    conceptState.extent,
     isActive,
     loadData,
     pendingHistory,
@@ -102,58 +115,55 @@ const HistoryProvider = ({ children }) => {
     selectedType,
     setModalData,
     setProcessing,
+    updatePageState,
+    updateConceptState,
   ])
 
   useEffect(() => {
     const run = async () => {
       if (!apiFns || !isActive || isTypeChanging.current) return
-      await pageData({ setTypeData })
+      await pageData({ updatePageState })
     }
     run()
   }, [
     apiFns,
-    conceptData,
-    count,
+    conceptState.data,
+    conceptState.count,
     isActive,
     pageData,
     pendingHistory,
     selectedConcept,
     selectedType,
-    sortOrder,
-    typeState,
+    updatePageState,
+    pageState.sortOrder,
   ])
 
   const { nextPage, prevPage, setPageSize, resetPagination } = usePageHistory({
-    count,
-    setTypeState,
+    count: conceptState.count,
+    updatePageState,
   })
 
   const handleSortChange = useCallback(
     newSortOrder => {
       if (selectedType !== TYPE.CONCEPT) {
-        setSortOrder(newSortOrder)
-        setTypeState(prev => ({ ...prev, offset: 0 }))
+        updatePageState({ sortOrder: newSortOrder, offset: 0 })
       }
     },
-    [selectedType]
+    [selectedType, updatePageState]
   )
 
   const value = {
-    conceptData,
-    conceptHistoryExtent,
-    count,
-    data: typeData,
-    typeData,
-    typeState,
+    conceptState,
+    count: conceptState.count,
+    pageState,
     handleSortChange,
     nextPage,
     prevPage,
     resetPagination,
-    selectedConcept,
     selectedType,
-    setConceptHistoryExtent,
     setPageSize,
-    sortOrder,
+    updatePageState,
+    updateConceptState,
   }
 
   return <HistoryContext value={value}>{children}</HistoryContext>

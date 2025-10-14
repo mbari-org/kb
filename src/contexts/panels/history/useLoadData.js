@@ -29,29 +29,27 @@ const useLoadData = ({
   }, [conceptHistoryExtent, getConcept, selectedConcept])
 
   const loadConceptData = useCallback(
-    async ({ setCount, setConceptData, setTypeData }) => {
+    async ({ updateConceptState, updatePageState }) => {
       const data = await apiFns.apiPayload(getConceptHistory, selectedConcept)
-      setCount(data.length)
-      setConceptData(data)
-      setTypeData(data.slice(0, DEFAULT_LIMIT))
+      updateConceptState({ data, count: data.length })
+      updatePageState({ data: data.slice(0, DEFAULT_LIMIT) })
     },
     [apiFns, selectedConcept]
   )
 
   const loadConceptChildrenData = useCallback(
-    async ({ setCount, setConceptData, setTypeData }) => {
+    async ({ updateConceptState, updatePageState }) => {
       const names = [selectedConcept, ...conceptChildren]
       const lists = await Promise.all(names.map(name => apiFns.apiPayload(getConceptHistory, name)))
       const merged = lists.flat()
-      setCount(merged.length)
-      setConceptData(merged)
-      setTypeData(merged.slice(0, DEFAULT_LIMIT))
+      updateConceptState({ data: merged, count: merged.length })
+      updatePageState({ data: merged.slice(0, DEFAULT_LIMIT) })
     },
     [apiFns, conceptChildren, selectedConcept]
   )
 
   const loadConceptDescendantsData = useCallback(
-    async ({ setCount, setConceptData, setTypeData }) => {
+    async ({ updateConceptState, updatePageState }) => {
       const names = [selectedConcept, ...(await getDescendantNames(selectedConcept))]
 
       const CONCURRENCY = 8
@@ -93,55 +91,51 @@ const useLoadData = ({
       }
 
       const merged = results.flat()
-      setCount(merged.length)
-      setConceptData(merged)
-      setTypeData(merged.slice(0, DEFAULT_LIMIT))
+      updateConceptState({ data: merged, count: merged.length })
+      updatePageState({ data: merged.slice(0, DEFAULT_LIMIT) })
     },
     [apiFns, getDescendantNames, selectedConcept]
   )
 
   const loadPendingData = useCallback(
-    async ({ setCount, setConceptData, setTypeData }) => {
-      // Use pendingHistory for both count and data so pagination works
-      setCount(pendingHistory.length)
-      setConceptData(pendingHistory)
-      setTypeData(pendingHistory.slice(0, DEFAULT_LIMIT))
+    async ({ updateConceptState, updatePageState }) => {
+      updateConceptState({ data: pendingHistory, count: pendingHistory.length })
+      updatePageState({ data: pendingHistory.slice(0, DEFAULT_LIMIT) })
     },
     [pendingHistory]
   )
 
   const loadApprovedData = useCallback(
-    async ({ setCount, setConceptData, setTypeData }) => {
+    async ({ updateConceptState, updatePageState }) => {
       const result = await apiFns.apiResult(getHistoryCount, selectedType)
-      setCount(result)
-      setConceptData([])
-      setTypeData([])
+      updateConceptState({ data: [], count: result })
+      updatePageState({ data: [] })
     },
     [apiFns, selectedType]
   )
 
   const loadData = useCallback(
-    async ({ setCount, setConceptData, setTypeData, setTypeState }) => {
+    async ({ updateConceptState, updatePageState }) => {
       if (!apiFns) return
 
-      setTypeState({ limit: DEFAULT_LIMIT, offset: 0 })
+      updatePageState({ limit: DEFAULT_LIMIT, offset: 0 })
 
       if (selectedType === TYPE.CONCEPT && selectedConcept) {
         if (conceptHistoryExtent === CHILDREN) {
-          return loadConceptChildrenData({ setCount, setConceptData, setTypeData })
+          return loadConceptChildrenData({ updateConceptState, updatePageState })
         }
 
         if (conceptHistoryExtent === DESCENDANTS) {
-          return loadConceptDescendantsData({ setCount, setConceptData, setTypeData })
+          return loadConceptDescendantsData({ updateConceptState, updatePageState })
         }
-        return loadConceptData({ setCount, setConceptData, setTypeData })
+        return loadConceptData({ updateConceptState, updatePageState })
       }
 
       if (selectedType === TYPE.PENDING) {
-        return loadPendingData({ setCount, setConceptData, setTypeData })
+        return loadPendingData({ updateConceptState, updatePageState })
       }
 
-      return loadApprovedData({ setCount, setConceptData, setTypeData })
+      return loadApprovedData({ updateConceptState, updatePageState })
     },
     [
       apiFns,
