@@ -23,6 +23,7 @@ const ConceptSelect = ({
   keepFocus = false,
   label = CONCEPT_LABEL,
   leftComponent = NONE,
+  onClear,
   onInputChange,
   onSpecialChange,
   rightComponent = NONE,
@@ -61,7 +62,7 @@ const ConceptSelect = ({
         }
       }
     } else {
-      doConceptSelected?.(null)
+      onClear ? onClear() : doConceptSelected?.(null)
     }
   }
 

@@ -11,8 +11,8 @@ const { HISTORY } = SELECTED.SETTINGS
 const HistoryHeaderRight = () => {
   const { updateSettings } = use(SelectedContext)
 
-  const handleHistorySelection = (_, newSelection) =>
-    !!newSelection && updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: newSelection } })
+  const handleHistorySelection = (_, historyType) =>
+    !!historyType && updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: historyType } })
 
   return <HistoryHeaderToggle onChange={handleHistorySelection} />
 }

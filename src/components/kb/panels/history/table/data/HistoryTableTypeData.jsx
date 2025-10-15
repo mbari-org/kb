@@ -21,10 +21,8 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   } =
     use(HistoryContext)
 
-  const { limit, offset, sortOrder } = pageState
+  const { limit, offset } = pageState
   const columns = useHistoryColumns({ type: selectedType })
-
-  console.log('sortOrder', sortOrder)
 
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)

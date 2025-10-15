@@ -7,18 +7,22 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
 
-const { CONCEPT } = SELECTED.SETTINGS.HISTORY.TYPES
+const { HISTORY } = SELECTED.SETTINGS
 const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
 
 const HistoryHeaderLeft = () => {
-  const { selectedType } = use(HistoryContext)
-  const { getSelected } = use(SelectedContext)
+  const { pageState, selectedType } = use(HistoryContext)
+  const { getSelected, updateSettings } = use(SelectedContext)
+
+  const handleClear = () => {
+    updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: pageState.lastHistoryType } })
+  }
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
 
-  if (selectedType !== CONCEPT) return null
+  if (selectedType !== HISTORY.TYPES.CONCEPT) return null
 
-  return <ConceptSelect conceptName={selectedConcept} rightComponent={NAV_HISTORY} />
+  return <ConceptSelect conceptName={selectedConcept} onClear={handleClear} rightComponent={NAV_HISTORY} />
 }
 
 export default HistoryHeaderLeft

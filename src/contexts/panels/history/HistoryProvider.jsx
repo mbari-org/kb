@@ -41,6 +41,7 @@ const HistoryProvider = ({ children }) => {
 
   const [pageState, setPageState] = useState({
     data: [],
+    lastHistoryType: selectedType !== TYPE.CONCEPT ? selectedType : TYPE.PENDING,
     limit: DEFAULT_LIMIT,
     offset: DEFAULT_OFFSET,
     sortOrder: 'desc',
@@ -76,6 +77,10 @@ const HistoryProvider = ({ children }) => {
     const run = async () => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
+
+      if (selectedType !== TYPE.CONCEPT) {
+        updatePageState({ lastHistoryType: selectedType })
+      }
 
       const loadingMsg =
         conceptState.extent === CHILDREN
