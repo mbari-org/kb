@@ -9,13 +9,13 @@ import { PAGINATION } from '@/lib/constants'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryPagination = ({
-  limit,
-  offset,
   count,
+  hideFooter = false,
+  limit,
   nextPage,
+  offset,
   prevPage,
   setPageSize,
-  hideFooter = false,
 }) => {
   const currentPage = Math.floor(offset / limit) + 1 // Convert to 1-based index
   const totalPages = Math.ceil(count / limit)

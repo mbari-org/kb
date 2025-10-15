@@ -62,21 +62,13 @@ const HistoryProvider = ({ children }) => {
 
   const loadData = useLoadData({
     apiFns,
-    conceptData: conceptState.data,
     conceptHistoryExtent: conceptState.extent,
-    count: conceptState.count,
     pendingHistory,
-    selectedConcept,
-    selectedType,
-    sortOrder: pageState.sortOrder,
   })
 
   const pageData = usePageData({
     apiFns,
-    conceptData: conceptState.data,
-    count: conceptState.count,
-    selectedConcept,
-    selectedType,
+    conceptState,
     pageState,
   })
 
@@ -84,6 +76,7 @@ const HistoryProvider = ({ children }) => {
     const run = async () => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
+
       const loadingMsg =
         conceptState.extent === CHILDREN
           ? 'Loading children history...'
@@ -144,9 +137,9 @@ const HistoryProvider = ({ children }) => {
   })
 
   const handleSortChange = useCallback(
-    newSortOrder => {
+    sortOrder => {
       if (selectedType !== TYPE.CONCEPT) {
-        updatePageState({ sortOrder: newSortOrder, offset: 0 })
+        updatePageState({ sortOrder, offset: 0 })
       }
     },
     [selectedType, updatePageState]
@@ -154,7 +147,6 @@ const HistoryProvider = ({ children }) => {
 
   const value = {
     conceptState,
-    count: conceptState.count,
     pageState,
     handleSortChange,
     nextPage,

@@ -21,15 +21,11 @@ const HistoryContent = () => {
   const { createTablePanel } = usePanelFactory()
   const { selectedType } = use(HistoryContext)
 
-  const dataContent =
-    selectedType === TYPE.CONCEPT ? <HistoryTableConceptData /> : <HistoryTableTypeData />
+  const HistoryTableData =
+    selectedType === TYPE.CONCEPT ? HistoryTableConceptData : HistoryTableTypeData
 
-  const headerRight =
-    selectedType === TYPE.CONCEPT ? (
-      <HistoryTableHeaderConceptRight />
-    ) : (
-      <HistoryTableHeaderTypeRight />
-    )
+  const HistoryTableHeaderRight =
+    selectedType === TYPE.CONCEPT ? HistoryTableHeaderConceptRight : HistoryTableHeaderTypeRight
 
   return createTablePanel({
     header: {
@@ -39,10 +35,10 @@ const HistoryContent = () => {
     },
     tableHeader: {
       headerLeft: <HistoryTableHeaderLeft />,
-      headerRight: headerRight,
+      headerRight: <HistoryTableHeaderRight />,
     },
     tableData: {
-      content: dataContent,
+      content: <HistoryTableData />,
     },
   })
 }

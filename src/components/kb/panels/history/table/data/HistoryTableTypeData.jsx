@@ -11,18 +11,29 @@ import { PAGINATION } from '@/lib/constants'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableTypeData = ({ hideFooter = false }) => {
-  const { count, nextPage, prevPage, selectedType, setPageSize, pageState } =
+  const {
+    conceptState,
+    nextPage,
+    pageState,
+    prevPage,
+    selectedType,
+    setPageSize,
+  } =
     use(HistoryContext)
 
-  const { limit, offset } = pageState
+  const { limit, offset, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
+  console.log('sortOrder', sortOrder)
+
   // Ensure rowCount is at least 1 to prevent MUI X error
-  const rowCount = Math.max(1, count)
+  const rowCount = Math.max(1, conceptState.count)
+
+  const rows = pageState.sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data
 
   const paginationComponent = (
     <HistoryPagination
-      count={count}
+      count={conceptState.count}
       hideFooter={hideFooter}
       limit={limit}
       nextPage={nextPage}
@@ -40,11 +51,11 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
       paginationComponent={paginationComponent}
       paginationMode='server'
       paginationModel={{
-        pageSize: limit,
         page: Math.floor(offset / limit),
+        pageSize: limit,
       }}
       rowCount={rowCount}
-      rows={pageState.data}
+      rows={rows}
     />
   )
 }

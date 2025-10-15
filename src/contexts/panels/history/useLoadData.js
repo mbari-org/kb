@@ -2,14 +2,16 @@ import { use, useCallback, useMemo } from 'react'
 
 import { getConceptHistory, getHistoryCount } from '@/lib/api/history'
 
+import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { sleep } from '@/lib/utils'
 
-import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION } from '@/lib/constants'
+import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants'
 
 const { TYPE } = CONCEPT_HISTORY
 const { CHILDREN, DESCENDANTS } = CONCEPT_EXTENT
+const { CONCEPT, SETTINGS } = SELECTED
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
@@ -17,13 +19,15 @@ const useLoadData = ({
   apiFns,
   conceptHistoryExtent,
   pendingHistory,
-  selectedConcept,
-  selectedType,
 }) => {
+  const { getSelected, getSettings } = use(SelectedContext)
   const { getConcept, getDescendantNames } = use(TaxonomyContext)
 
+  const selectedConcept = getSelected(CONCEPT)
+  const selectedType = getSettings(SETTINGS.HISTORY.KEY, SETTINGS.HISTORY.TYPE)
+
   const conceptChildren = useMemo(() => {
-    if (!selectedConcept || conceptHistoryExtent !== CHILDREN) return []
+    if (conceptHistoryExtent !== CHILDREN) return []
     const concept = getConcept(selectedConcept)
     return concept?.children || []
   }, [conceptHistoryExtent, getConcept, selectedConcept])
@@ -120,7 +124,7 @@ const useLoadData = ({
 
       updatePageState({ limit: DEFAULT_LIMIT, offset: 0 })
 
-      if (selectedType === TYPE.CONCEPT && selectedConcept) {
+      if (selectedType === TYPE.CONCEPT) {
         if (conceptHistoryExtent === CHILDREN) {
           return loadConceptChildrenData({ updateConceptState, updatePageState })
         }
@@ -145,7 +149,6 @@ const useLoadData = ({
       loadConceptData,
       loadConceptDescendantsData,
       loadPendingData,
-      selectedConcept,
       selectedType,
     ]
   )

@@ -14,12 +14,12 @@ const HistoryHeaderToggle = ({ onChange }) => {
 
   return (
     <ToggleButtonGroup
-      value={selectedType}
+      aria-label='history type'
       exclusive
       onChange={onChange}
-      aria-label='history type'
       size='small'
       sx={{ mr: 1 }}
+      value={selectedType}
     >
       <HistoryToggleButton value={APPROVED} />
       <HistoryToggleButton value={PENDING} />
