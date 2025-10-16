@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import KBInfoIcon from '@/components/icon/KBInfoIcon'
@@ -32,7 +32,7 @@ const MediaPreview = ({ setPreviewOn }) => {
   })
 
   return (
-    <Box>
+    <Stack>
       <Box
         sx={{
           border,
@@ -63,30 +63,37 @@ const MediaPreview = ({ setPreviewOn }) => {
       </Box>
       <Box
         sx={{
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center',
           marginTop: 1,
           minHeight: '24px',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        {mediaItem?.credit && (
-          <Box sx={{ marginRight: 1 }}>
-            <KBInfoIcon tooltip={mediaItem?.credit} placement='top' size={18} />
-          </Box>
-        )}
         <Typography
           align='center'
           sx={{
-            flexGrow: 1,
             textAlign: 'center',
           }}
           variant='caption'
         >
           {mediaItem?.caption}
         </Typography>
+        {mediaItem?.credit && (
+          <Box
+            sx={{
+              position: 'absolute',
+              left: 0,
+              top: '50%',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <KBInfoIcon tooltip={mediaItem?.credit} placement='top' size={18} />
+          </Box>
+        )}
       </Box>
-    </Box>
+    </Stack>
   )
 }
 

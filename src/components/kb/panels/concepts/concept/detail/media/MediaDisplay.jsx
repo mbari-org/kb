@@ -14,7 +14,6 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   } = use(ConceptContext)
   const mediaItem = media[mediaIndex]
 
-  // Use provided URL if available, otherwise use mediaItem URL
   const imageUrl = url || mediaItem?.url
 
   return (
@@ -44,7 +43,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
           width: '100%',
         }}
       >
-        {url ? (
+        {url && (
           <img
             alt='Concept Media Display'
             onClick={() => setPreviewOn(false)}
@@ -55,7 +54,8 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
               width: '100%',
             }}
           />
-        ) : (
+        )}
+        {!url && (
           <Box
             sx={{
               height: '100%',
