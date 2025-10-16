@@ -27,8 +27,8 @@ const { CONTINUE } = LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
   const { setProcessing: setAppProcessing, setModalData: setAppModalData } = use(AppModalContext)
-  const { setModalData } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
+  const { setModalData } = use(ConceptModalContext)
   const { refreshData: refreshPanelData } = use(PanelDataContext)
   const { getSelected, panels  } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
