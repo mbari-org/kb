@@ -17,7 +17,6 @@ import { filterTemplates } from '@/components/kb/panels/templates/utils'
 import { SELECTED } from '@/lib/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS
-
 const FILTERS = TEMPLATES.FILTERS
 
 const TemplatesProvider = ({ children }) => {

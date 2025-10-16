@@ -2,50 +2,43 @@ import { SELECTED } from '@/lib/constants'
 import { useCallback } from 'react'
 
 const { TEMPLATES } = SELECTED.SETTINGS
-const FILTERS = TEMPLATES.FILTERS
+const { CONCEPT, TO_CONCEPT, LINK_NAME, LINK_VALUE } = TEMPLATES.FILTERS
 
-export default function useUpdateFilters(filters, updateSettings) {
+const FILTERS = [CONCEPT, TO_CONCEPT, LINK_NAME, LINK_VALUE]
+
+const EMPTY_FILTERS = FILTERS.reduce((acc, key) => {
+  acc[key] = ''
+  return acc
+}, {})
+
+const useUpdateFilters = (filters, updateSettings) => {
+  const updateSetting = useCallback(
+    updatedFilters => {
+      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.FILTERS.KEY]: updatedFilters } })
+    },
+    [updateSettings]
+  )
+
   const updateFilters = useCallback(
     updates => {
-      const newFilters = { ...filters }
-
-      if (updates[FILTERS.CONCEPT] !== undefined) {
-        const next = updates[FILTERS.CONCEPT]
-        if (next && next.trim()) {
-          newFilters[FILTERS.CONCEPT] = next
-        } else {
-          newFilters[FILTERS.CONCEPT] = ''
-        }
+      if (updates === null) {
+        updateSetting(EMPTY_FILTERS)
+        return
       }
 
-      if (updates[FILTERS.TO_CONCEPT] !== undefined) {
-        if (updates[FILTERS.TO_CONCEPT] && updates[FILTERS.TO_CONCEPT].trim()) {
-          newFilters[FILTERS.TO_CONCEPT] = updates[FILTERS.TO_CONCEPT]
-        } else {
-          delete newFilters[FILTERS.TO_CONCEPT]
+      const updatedFilters = { ...filters }
+      FILTERS.forEach(key => {
+        if (updates[key] !== undefined) {
+          const value = updates[key]
+          updatedFilters[key] = value && value.trim() ? value : ''
         }
-      }
-
-      if (updates[FILTERS.LINK_NAME] !== undefined) {
-        if (updates[FILTERS.LINK_NAME] && updates[FILTERS.LINK_NAME].trim()) {
-          newFilters[FILTERS.LINK_NAME] = updates[FILTERS.LINK_NAME]
-        } else {
-          delete newFilters[FILTERS.LINK_NAME]
-        }
-      }
-
-      if (updates[FILTERS.LINK_VALUE] !== undefined) {
-        if (updates[FILTERS.LINK_VALUE] && updates[FILTERS.LINK_VALUE].trim()) {
-          newFilters[FILTERS.LINK_VALUE] = updates[FILTERS.LINK_VALUE]
-        } else {
-          delete newFilters[FILTERS.LINK_VALUE]
-        }
-      }
-
-      updateSettings({ [TEMPLATES.KEY]: { [FILTERS.KEY]: newFilters } })
+      })
+      updateSetting(updatedFilters)
     },
-    [filters, updateSettings]
+    [filters, updateSetting]
   )
 
   return { updateFilters }
 }
+
+export default useUpdateFilters
