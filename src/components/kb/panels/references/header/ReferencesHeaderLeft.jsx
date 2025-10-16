@@ -8,11 +8,11 @@ import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
 
 const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
 
-const { CONCEPT } = SELECTED
-const { REFERENCES } = SELECTED.SETTINGS
+const { CONCEPT, SETTINGS } = SELECTED
+const { REFERENCES } = SETTINGS
 
 const ReferencesHeaderLeft = () => {
-  const { getSelected, getSettings, updateSelected } = use(SelectedContext)
+  const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(CONCEPT)
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
@@ -23,11 +23,16 @@ const ReferencesHeaderLeft = () => {
     }
   }
 
+  const handleClear = () => {
+    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false } })
+  }
+
   return (
     <ConceptSelect
       conceptName={selectedConcept}
       disabled={!byConcept}
       doConceptSelected={handleConceptSelect}
+      onClear={handleClear}
       rightComponent={NAV_HISTORY}
     />
   )
