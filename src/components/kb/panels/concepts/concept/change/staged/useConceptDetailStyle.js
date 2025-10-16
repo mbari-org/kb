@@ -27,7 +27,7 @@ const standardStyle = {
 const useConceptDetailStyle = field => {
   const theme = useTheme()
 
-  const { editing, pending } = use(ConceptContext)
+  const { isEditing, pending } = use(ConceptContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
@@ -54,7 +54,7 @@ const useConceptDetailStyle = field => {
     [fontWeight, theme, textColor]
   )
 
-  if (!editing || fieldHasPending) {
+  if (!isEditing || fieldHasPending) {
     return {
       ...standardStyle,
       sx: sx,

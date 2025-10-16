@@ -37,7 +37,7 @@ const ConceptProvider = ({ children }) => {
   const [concept, setConcept] = useState(null)
   const [conceptPath, setConceptPath] = useState(null)
   const [confirmReset, setConfirmReset] = useState(null)
-  const [editing, setEditing] = useState(false)
+  const [isEditing, setEditing] = useState(false)
 
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
@@ -82,11 +82,11 @@ const ConceptProvider = ({ children }) => {
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
-    if (!isConceptPanelActive && editing) {
+    if (!isConceptPanelActive && isEditing) {
       const timeoutId = setTimeout(() => setEditing(false), 0)
       return () => clearTimeout(timeoutId)
     }
-  }, [panels, editing])
+  }, [panels, isEditing])
 
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
@@ -165,7 +165,7 @@ const ConceptProvider = ({ children }) => {
       concept,
       conceptPath,
       confirmReset,
-      editing,
+      isEditing,
       initialState,
       modifyConcept,
       onConceptTreeReady,
@@ -179,7 +179,7 @@ const ConceptProvider = ({ children }) => {
       concept,
       conceptPath,
       confirmReset,
-      editing,
+      isEditing,
       handleSetConcept,
       initialState,
       modifyConcept,

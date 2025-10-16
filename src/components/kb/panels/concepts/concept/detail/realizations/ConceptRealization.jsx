@@ -15,7 +15,7 @@ import { stagedBorder } from '@/lib/kb/state/staged'
 const ConceptRealization = ({ realization }) => {
   const theme = useTheme()
 
-  const { editing } = use(ConceptContext)
+  const { isEditing } = use(ConceptContext)
 
   const detailStyle = useConceptDetailStyle('realizations')
 
@@ -37,9 +37,9 @@ const ConceptRealization = ({ realization }) => {
   })
 
   const showEdit =
-    editing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.DELETE
+    isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.DELETE
   const showDelete =
-    editing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
+    isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
 
   const realizationIcon = action => {
     return <RealizationActionIcon action={action} realizationIndex={realization.index} size={20} />

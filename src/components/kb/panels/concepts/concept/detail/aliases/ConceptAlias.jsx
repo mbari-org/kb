@@ -17,7 +17,7 @@ const ALIAS = CONCEPT_STATE.ALIAS
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
 
-  const { editing } = use(ConceptContext)
+  const { isEditing } = use(ConceptContext)
 
   const detailStyle = useConceptDetailStyle('aliases')
 
@@ -38,8 +38,8 @@ const ConceptAlias = ({ alias }) => {
     width: '2px',
   })
 
-  const showEdit = editing && !alias.historyId && alias.action !== ALIAS.DELETE
-  const showDelete = editing && !alias.historyId && alias.action !== ALIAS.ADD
+  const showEdit = isEditing && !alias.historyId && alias.action !== ALIAS.DELETE
+  const showDelete = isEditing && !alias.historyId && alias.action !== ALIAS.ADD
 
   const aliasIcon = action => {
     return <AliasActionIcon action={action} aliasIndex={alias.index} size={20} />

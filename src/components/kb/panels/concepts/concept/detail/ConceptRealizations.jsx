@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const ConceptRealizations = () => {
-  const { editing, stagedState } = use(ConceptContext)
+  const { isEditing, stagedState } = use(ConceptContext)
 
   const realizations = stagedState?.realizations || []
 
@@ -23,7 +23,7 @@ const ConceptRealizations = () => {
 
   return (
     <ConceptPropertyList
-      iconComponent={editing ? IconComponent : null}
+      iconComponent={isEditing ? IconComponent : null}
       renderComponent={RealizationComponent}
       items={realizations}
       title='Realizations'

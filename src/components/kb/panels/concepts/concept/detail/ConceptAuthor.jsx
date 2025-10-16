@@ -12,7 +12,7 @@ import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/
 import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants'
 
 const ConceptAuthor = () => {
-  const { editing, initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)
 
   const border = stagedBorder(initialState.author, stagedState.author)
 
@@ -37,7 +37,7 @@ const ConceptAuthor = () => {
           debounceMs={333}
           label='Author'
           onChange={handleChange}
-          showClearButton={editing}
+          showClearButton={isEditing}
           value={stagedState.author?.value || ''}
         />
       </Box>

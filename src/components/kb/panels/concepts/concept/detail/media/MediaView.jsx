@@ -14,13 +14,13 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 const MediaView = () => {
   const mediaViewRef = useRef(null)
 
-  const { editing, stagedState } = use(ConceptContext)
+  const { isEditing, stagedState } = use(ConceptContext)
   const { media, mediaIndex } = stagedState
 
   const [previewOn, setPreviewOn] = useState(false)
 
-  // const showEditMedia = editing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA_ITEM.DELETE
-  const showEditMedia = editing && !media[mediaIndex]?.historyId
+  // const showEditMedia = isEditing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA_ITEM.DELETE
+  const showEditMedia = isEditing && !media[mediaIndex]?.historyId
 
   return (
     <Box>
@@ -30,7 +30,7 @@ const MediaView = () => {
         {showEditMedia && (
           <Box>
             <MediaDelete />
-            {editing && (
+            {isEditing && (
               <MediaAdd
                 sx={{
                   left: '50%',

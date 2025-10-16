@@ -11,7 +11,7 @@ import { CONCEPT_STATE } from '@/lib/constants'
 const ALIAS = CONCEPT_STATE.ALIAS
 
 const ConceptAliases = () => {
-  const { editing, stagedState } = use(ConceptContext)
+  const { isEditing, stagedState } = use(ConceptContext)
 
   const aliases = stagedState?.aliases || []
 
@@ -20,7 +20,7 @@ const ConceptAliases = () => {
 
   return (
     <ConceptPropertyList
-      iconComponent={editing ? IconComponent : null}
+      iconComponent={isEditing ? IconComponent : null}
       items={aliases}
       renderComponent={AliasComponent}
       title='Alternate Names'

@@ -6,7 +6,7 @@ import MediaAdd from '../../change/staged/media/edit/MediaAdd'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const NoMedia = () => {
-  const { editing } = use(ConceptContext)
+  const { isEditing } = use(ConceptContext)
 
   return (
     <Box
@@ -39,7 +39,7 @@ const NoMedia = () => {
       >
         No Media
       </Typography>
-      {editing && (
+      {isEditing && (
         <Box
           sx={{
             position: 'absolute',

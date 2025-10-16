@@ -11,7 +11,7 @@ import ConceptViewToggleButton from './ConceptViewToggleButton'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const ConceptViewToggle = ({ sx }) => {
-  const { editing } = use(ConceptContext)
+  const { isEditing } = use(ConceptContext)
 
   const [conceptView, setConceptView] = useState('standard')
 
@@ -23,7 +23,7 @@ const ConceptViewToggle = ({ sx }) => {
     <Box sx={sx}>
       <ToggleButtonGroup
         aria-label='text alignment'
-        disabled={editing}
+        disabled={isEditing}
         exclusive
         onChange={handleViewSelection}
         value={conceptView}

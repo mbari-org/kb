@@ -19,7 +19,7 @@ const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 
 const ConceptEditingActions = () => {
-  const { concept, editing, initialState, modifyConcept, pending, setEditing, stagedState } =
+  const { concept, isEditing, initialState, modifyConcept, pending, setEditing, stagedState } =
     use(ConceptContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
@@ -34,13 +34,13 @@ const ConceptEditingActions = () => {
   )
 
   const editCancelDiscardButtonText = useMemo(() => {
-    if (!editing) return EDIT
+    if (!isEditing) return EDIT
     if (isModified) return DISCARD_ALL
     return CANCEL
-  }, [editing, isModified])
+  }, [isEditing, isModified])
 
   const handleCancelDiscard = useCallback(() => {
-    if (!editing) {
+    if (!isEditing) {
       setEditing(true)
     } else if (!isModified) {
       setEditing(false)
@@ -48,7 +48,7 @@ const ConceptEditingActions = () => {
       modifyConcept({ type: TO_INITIAL })
       displayStaged(DISCARD)
     }
-  }, [editing, isModified, modifyConcept, setEditing, displayStaged])
+  }, [isEditing, isModified, modifyConcept, setEditing, displayStaged])
 
   const handlePending = useCallback(() => {
     displayPending(PENDING_ACTION)
@@ -66,8 +66,8 @@ const ConceptEditingActions = () => {
 
   const showPendingButton = useMemo(() => {
     const hasPending = pendingConcept?.length > 0 || pendingChild(pendingParent, concept.name)
-    return !editing && hasPending
-  }, [pendingConcept, pendingParent, concept.name, editing])
+    return !isEditing && hasPending
+  }, [pendingConcept, pendingParent, concept.name, isEditing])
 
   return (
     <Box
@@ -81,10 +81,10 @@ const ConceptEditingActions = () => {
         right: 15,
       }}
     >
-      <Button color={editing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
+      <Button color={isEditing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
         {editCancelDiscardButtonText}
       </Button>
-      {editing && isModified && (
+      {isEditing && isModified && (
         <Button onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
           {STAGED}
         </Button>
@@ -94,7 +94,7 @@ const ConceptEditingActions = () => {
           {PENDING_ACTION}
         </Button>
       )}
-      <Button disabled={!editing || !isModified} onClick={handleSave} variant='contained'>
+      <Button disabled={!isEditing || !isModified} onClick={handleSave} variant='contained'>
         {SAVE}
       </Button>
     </Box>
