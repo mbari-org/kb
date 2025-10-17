@@ -8,20 +8,20 @@ import useConfirmReferenceModal from '../../modal/useConfirmReferenceModal'
 
 import { LABELS } from '@/lib/constants'
 import {
-  createModalActions,
-  processEditReferenceData,
-  createHandlers,
-  createModalContent,
   createChangeDetector,
+  createHandlers,
+  createModalActions,
+  createModalContent,
+  processEditReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
 const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
 
 const useEditReferenceButton = () => {
+  const openConfirmModal = useConfirmReferenceModal()
   const { closeModal, createModal, updateModalData } =
     useReferencesModalOperationsContext()
   const { isDoiUnique } = use(PanelDataContext)
-  const openConfirmModal = useConfirmReferenceModal()
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, true, isDoiUnique),

@@ -144,10 +144,10 @@ export const createModalContent = (handleFormChange, isEdit) => {
   return ReferenceModalContent
 }
 
-export const createInitialReference = () => ({
+export const createInitialReference = initialConcept => ({
   citation: '',
   doi: '',
-  concepts: [],
+  concepts: initialConcept ? [initialConcept] : [],
 })
 
 export const processEditReferenceData = (reference, original) => {

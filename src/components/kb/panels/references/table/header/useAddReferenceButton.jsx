@@ -1,32 +1,41 @@
 import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
+import Actions from '@/components/common/factory/Actions'
+import Title from '@/components/common/factory/Title'
 import { createError, createValidationError } from '@/lib/errors'
 
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
-import Title from '@/components/common/factory/Title'
-import Actions from '@/components/common/factory/Actions'
+import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { LABELS, PROCESSING } from '@/lib/constants'
+import { LABELS, PROCESSING, SELECTED } from '@/lib/constants'
 import {
-  createModalActions,
-  createReferenceValidator,
-  createInitialReference,
-  processAddReferenceData,
   createHandlers,
+  createInitialReference,
+  createModalActions,
   createModalContent,
+  createReferenceValidator,
+  processAddReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-const { SAVING } = PROCESSING
 const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
+const { REFERENCES } = SELECTED.SETTINGS
+const { SAVING } = PROCESSING
 
 const useAddReferenceButton = () => {
+  const { isDoiUnique } = use(PanelDataContext)
+  const { addReference } = use(ReferencesContext)
   const { closeModal, createModal, updateModalData, setProcessing } =
     useReferencesModalOperationsContext()
-  const { addReference } = use(ReferencesContext)
-  const { isDoiUnique } = use(PanelDataContext)
+  const { getSelected, getSettings } = use(SelectedContext)
+
+  const conceptName = getSelected(SELECTED.CONCEPT)
+  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
+
+  const initialReferenceData = useMemo(() =>
+    createInitialReference(byConcept ? conceptName : null), [byConcept, conceptName])
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, false, isDoiUnique),
@@ -77,13 +86,8 @@ const useAddReferenceButton = () => {
         const disabled = [false, false]
         const labels = [DISCARD, 'Continue']
 
-        const onAction = label => {
-          if (label === DISCARD) {
-            closeModal()
-          } else {
-            updateModalData({ confirmDiscard: false })
-          }
-        }
+        const onAction = label =>
+          label === DISCARD ? closeModal() : updateModalData({ confirmDiscard: false })
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
       }
@@ -93,20 +97,17 @@ const useAddReferenceButton = () => {
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map((a, i) => {
-        if (i === 0 && modalData?.hasChanges) {
-          return DISCARD
-        }
-        return a.label
-      })
+      const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges) ? DISCARD : a.label)
 
       const onAction = label => {
         if (label === DISCARD || label === CONFIRM_DISCARD) {
           updateModalData({ confirmDiscard: true })
           return
         }
-        const a = actions.find(x => x.label === label)
-        if (a && a.onClick) a.onClick()
+        const action = actions.find(x => x.label === label)
+        if (action && action.onClick) {
+          action.onClick()
+        }
       }
 
       return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
@@ -125,7 +126,7 @@ const useAddReferenceButton = () => {
       contentComponent: ContentView,
       titleComponent: TitleView,
       data: {
-        reference: createInitialReference(),
+        reference: initialReferenceData,
         isValid: false,
         hasChanges: false,
       },
@@ -138,7 +139,7 @@ const useAddReferenceButton = () => {
         return true
       },
     })
-  }, [createModal, handleFormChange, handleCancel, handleCommit, closeModal, updateModalData])
+  }, [createModal, initialReferenceData, handleCancel, handleCommit, closeModal, updateModalData, handleFormChange])
 
   const AddReferenceButton = useCallback(
     () => <PanelAddButton onClick={addReferenceModal} />,
