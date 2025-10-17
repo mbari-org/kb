@@ -19,7 +19,7 @@ const TemplatesHeaderLeft = () => {
 
   const selectables = available ? getNames() : explicitConcepts
 
-  const doConceptSelected = conceptName => {
+  const handleConceptSelected = conceptName => {
     if (conceptName) {
       updateSelected({ [SELECTED.CONCEPT]: conceptName })
       updateFilters({ [TEMPLATES.FILTERS.CONCEPT]: conceptName })
@@ -40,7 +40,7 @@ const TemplatesHeaderLeft = () => {
   return (
     <ConceptSelect
       conceptName={filters[TEMPLATES.FILTERS.CONCEPT]}
-      doConceptSelected={doConceptSelected}
+      doConceptSelected={handleConceptSelected}
       leftComponent={infoIcon}
       selectables={selectables}
       updateConceptSelected={true}

@@ -50,7 +50,6 @@ const ConceptSelect = ({
 
   const handleConceptSelect = selectedName => {
     if (selectedName) {
-      // Check if the selected name is valid (either in options or a special value)
       const isValidSelection =
         options.includes(selectedName) ||
         (rightComponent === SPECIAL && TO_CONCEPT_SPECIAL.includes(selectedName))

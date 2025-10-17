@@ -14,12 +14,15 @@ const { REFERENCES } = SETTINGS
 const ReferencesHeaderLeft = () => {
   const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
 
-  const selectedConcept = getSelected(CONCEPT)
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
+  const selectedConcept = byConcept ? getSelected(CONCEPT) : ''
 
-  const handleConceptSelect = selectedName => {
+  const handleConceptSelected = selectedName => {
     if (selectedName) {
       updateSelected({ [CONCEPT]: selectedName })
+      updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
+    } else {
+      updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false } })
     }
   }
 
@@ -30,8 +33,7 @@ const ReferencesHeaderLeft = () => {
   return (
     <ConceptSelect
       conceptName={selectedConcept}
-      disabled={!byConcept}
-      doConceptSelected={handleConceptSelect}
+      doConceptSelected={handleConceptSelected}
       onClear={handleClear}
       rightComponent={NAV_HISTORY}
     />
