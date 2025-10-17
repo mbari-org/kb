@@ -13,16 +13,14 @@ const ConceptTemplatesAvailableToggle = () => {
   const { getSelected, getSettings, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const available = getSettings(TEMPLATES.KEY, TEMPLATES.AVAILABLE)
+  const byAvailable = getSettings(TEMPLATES.KEY, TEMPLATES.BY_AVAILABLE)
 
   const handleAvailableChange = event => {
-    const newValue = event.target.checked
-    // When in concept detail context, we need to ensure the concept filter is set
-    // to prevent the TemplatesProvider from resetting the available flag
+    const value = event.target.checked
     const currentFilters = getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY) || {}
     updateSettings({
       [TEMPLATES.KEY]: {
-        [TEMPLATES.AVAILABLE]: newValue,
+        [TEMPLATES.BY_AVAILABLE]: value,
         [TEMPLATES.FILTERS.KEY]: {
           ...currentFilters,
           [TEMPLATES.FILTERS.CONCEPT]: selectedConcept,
@@ -34,7 +32,7 @@ const ConceptTemplatesAvailableToggle = () => {
   return (
     <ConceptTemplatesAvailableTooltip>
       <FormControlLabel
-        control={<Switch checked={available} onChange={handleAvailableChange} size='small' />}
+        control={<Switch checked={byAvailable} onChange={handleAvailableChange} size='small' />}
         label='Available'
       />
     </ConceptTemplatesAvailableTooltip>

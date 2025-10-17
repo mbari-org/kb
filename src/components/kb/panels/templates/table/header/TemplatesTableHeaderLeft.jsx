@@ -14,11 +14,11 @@ const { EXPORT } = TEMPLATES_TOOLTIPS
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const TemplatesTableHeaderLeft = () => {
-  const { available, filteredTemplates, setAvailable, filters } = use(TemplatesContext)
+  const { byAvailable, filteredTemplates, setByAvailable, filters } = use(TemplatesContext)
 
   const templatesExport = useTemplatesExport()
 
-  const switchFn = event => setAvailable(event.target.checked)
+  const switchFn = event => setByAvailable(event.target.checked)
 
   let exportToolTip
   if (filters[TEMPLATES.FILTERS.CONCEPT] && filters[TEMPLATES.FILTERS.TO_CONCEPT]) {
@@ -33,7 +33,7 @@ const TemplatesTableHeaderLeft = () => {
 
   return (
     <PanelDataExport
-      checked={available}
+      checked={byAvailable}
       count={filteredTemplates.length}
       exportFn={templatesExport}
       exportToolTip={exportToolTip}

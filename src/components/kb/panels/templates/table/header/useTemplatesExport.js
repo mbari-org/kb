@@ -21,9 +21,9 @@ import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
 const buildComments = data => {
-  const { available, filterConcept, filterToConcept, linkName, linkValue } = data
+  const { byAvailable, filterConcept, filterToConcept, linkName, linkValue } = data
 
-  const comments = [`Type: ${available ? 'Available' : 'Explicit'}`]
+  const comments = [`Type: ${byAvailable ? 'Available' : 'Explicit'}`]
 
   if (!filterConcept && !filterToConcept && !linkName && !linkValue) {
     return comments
@@ -68,7 +68,7 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 
   if (hasConceptFilter && hasToConceptFilter) {
     const conceptTemplates = await apiFns.apiPayload(
-      data.available ? getAvailableTemplates : getExplicitTemplates,
+      data.byAvailable ? getAvailableTemplates : getExplicitTemplates,
       data.filterConcept
     )
     return conceptTemplates.filter(template => template.toConcept === data.filterToConcept)
@@ -76,7 +76,7 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 
   if (hasConceptFilter) {
     return apiFns.apiPayload(
-      data.available ? getAvailableTemplates : getExplicitTemplates,
+      data.byAvailable ? getAvailableTemplates : getExplicitTemplates,
       data.filterConcept
     )
   }
@@ -92,7 +92,7 @@ const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
   const { setExporting } = use(PanelDataContext)
   const {
-    available,
+    byAvailable,
     concept,
     toConcept,
     linkName,
@@ -102,7 +102,7 @@ const useTemplatesExport = () => {
   const { user } = use(UserContext)
 
   const normalizedFilters = {
-    available,
+    byAvailable,
     filterConcept: concept,
     filterToConcept: toConcept,
     linkName,
@@ -129,7 +129,7 @@ const useTemplatesExport = () => {
     return `${conceptName}_${linkNameValue}_${toConceptName}_${linkValueValue}`
   })()
 
-  const availableTag = normalizedFilters.available ? 'Available' : 'Explicit'
+  const availableTag = normalizedFilters.byAvailable ? 'Available' : 'Explicit'
   const suggestName = () => {
     const baseName = `KB-Templates-${availableTag}`
     if (!filterName) {

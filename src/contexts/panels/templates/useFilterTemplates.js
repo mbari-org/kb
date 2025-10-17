@@ -13,7 +13,7 @@ import { SELECTED } from '@/lib/constants'
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const useFilterTemplates = ({
-  available,
+  byAvailable,
   filterConcept,
   filterToConcept,
   limit,
@@ -57,7 +57,7 @@ const useFilterTemplates = ({
             await filterAndPaginateTemplates(filteredTemplates, pageParams)
           } else {
             const conceptTemplates = await apiFns.apiPayload(
-              available ? getAvailableTemplates : getExplicitTemplates,
+              byAvailable ? getAvailableTemplates : getExplicitTemplates,
               concept
             )
             setConceptTemplatesCache(conceptTemplates)
@@ -75,7 +75,7 @@ const useFilterTemplates = ({
             await filterAndPaginateTemplates(conceptTemplatesCache, pageParams)
           } else {
             const conceptTemplates = await apiFns.apiPayload(
-              available ? getAvailableTemplates : getExplicitTemplates,
+              byAvailable ? getAvailableTemplates : getExplicitTemplates,
               concept
             )
             setConceptTemplatesCache(conceptTemplates)
@@ -107,7 +107,7 @@ const useFilterTemplates = ({
     },
     [
       apiFns,
-      available,
+      byAvailable,
       filterAndPaginateTemplates,
       setCount,
       setDisplayTemplates,

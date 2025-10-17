@@ -19,14 +19,12 @@ const useAvailableLinkTemplates = () => {
     linkName => {
       if (!templates || !conceptNames.length) return []
 
-      // If no linkName is provided, return all available templates
       if (!linkName) {
         return filterTemplates(templates, {
           concepts: conceptNames,
         })
       }
 
-      // If linkName is provided, filter by both concepts and linkName
       return filterTemplates(templates, {
         concepts: conceptNames,
         linkName: linkName,

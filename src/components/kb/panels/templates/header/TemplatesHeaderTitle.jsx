@@ -4,10 +4,13 @@ import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 const TemplatesHeaderTitle = () => {
-  const { available, filters } = use(TemplatesContext)
-  const isFiltered = Object.values(filters).some(value => value)
+  const { byAvailable, filters } = use(TemplatesContext)
 
-  const title = `${isFiltered ? 'Filtered ' : ''} ${available ? 'Available ' : ''} Templates`
+  const available = byAvailable ? 'Available ' : ''
+  const filtered = Object.values(filters).some(value => value) ? 'Filtered ' : ''
+  const all = (available === '' && filtered === '') ? 'All ' : ''
+
+  const title = `${all}${filtered}${available}Templates`
 
   return <PanelHeaderTitle title={title} />
 }

@@ -67,7 +67,6 @@ const useRealizationFormHandlers = ({
       if (event.key === 'Enter') {
         const currentInput = realizationItem.linkName || ''
 
-        // Check if current input exactly matches an available template linkName
         const exactMatch = allAvailableTemplates.find(
           template => template.linkName === currentInput
         )
@@ -78,7 +77,6 @@ const useRealizationFormHandlers = ({
           event.preventDefault()
           const selectedOption = exactMatch ? currentInput : singleFilteredOption
           handleLinkNameSelect(event, selectedOption)
-          // Blur current input first, then focus linkValue
           event.target.blur()
           setTimeout(() => {
             focusLinkValue?.()

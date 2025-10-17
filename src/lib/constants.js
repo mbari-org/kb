@@ -282,7 +282,7 @@ export const SELECTED = {
     },
     TEMPLATES: {
       KEY: 'templates',
-      AVAILABLE: 'available',
+      BY_AVAILABLE: 'byAvailable',
       FILTERS: {
         KEY: 'filters',
         CONCEPT: 'concept',

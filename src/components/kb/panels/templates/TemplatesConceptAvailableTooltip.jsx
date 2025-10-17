@@ -23,16 +23,16 @@ const TEMPLATES_ALL = 'All Templates'
 const TEMPLATES_AVAILABLE = 'Available Concept Templates'
 const TEMPLATES_EXPLICIT = 'Explicit Concept Templates'
 
-const selectedAvailableMessaging = (available, concept) => {
-  if (!concept && !available) {
+const selectedAvailableMessaging = (byAvailable, concept) => {
+  if (!concept && !byAvailable) {
     return [TEMPLATES_ALL, SELECT_RESTRICTED, SELECTED_NONE]
   }
 
-  if (!concept && available) {
+  if (!concept && byAvailable) {
     return [TEMPLATES_ALL, SELECT_ANY, SELECTED_NONE]
   }
 
-  if (concept && !available) {
+  if (concept && !byAvailable) {
     return [TEMPLATES_EXPLICIT, SELECT_RESTRICTED, SELECTED_EXPLICIT]
   }
 
@@ -40,7 +40,7 @@ const selectedAvailableMessaging = (available, concept) => {
 }
 
 const TemplatesConceptAvailableTooltip = () => {
-  const { available, filters } = use(TemplatesContext)
+  const { byAvailable, filters } = use(TemplatesContext)
 
   const descriptionProps = {
     ml: '0.75em !important',
@@ -58,7 +58,7 @@ const TemplatesConceptAvailableTooltip = () => {
   }
 
   const [title, selectionDescription, displayDescription] = selectedAvailableMessaging(
-    available,
+    byAvailable,
     filters[FILTERS.CONCEPT]
   )
 

@@ -17,7 +17,7 @@ const offText = 'Off: Show templates explicitly defined for this concept'
 const ConceptTemplatesAvailableTooltip = ({ children }) => {
   const { getSettings } = use(SelectedContext)
 
-  const available = getSettings(TEMPLATES.KEY, TEMPLATES.AVAILABLE)
+  const byAvailable = getSettings(TEMPLATES.KEY, TEMPLATES.BY_AVAILABLE)
 
   const fontProps = {
     fontSize: FONT.SIZE,
@@ -30,8 +30,8 @@ const ConceptTemplatesAvailableTooltip = ({ children }) => {
     textAlign: 'center',
   }
 
-  const onColor = available ? 'inherit' : 'grey.500'
-  const offColor = available ? 'grey.500' : 'inherit'
+  const onColor = byAvailable ? 'inherit' : 'grey.500'
+  const offColor = byAvailable ? 'grey.500' : 'inherit'
 
   return (
     <KBTooltip

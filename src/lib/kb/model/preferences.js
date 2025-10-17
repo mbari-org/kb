@@ -38,10 +38,10 @@ const toArray = (type, value) => {
       return [value.state, value.position]
 
     case PREF_TYPES.SETTINGS: {
-      // Array format: [historyTypeCode, referencesByConcept, templatesAvailable, templatesFilters]
+      // Array format: [historyTypeCode, referencesByConcept, templatesByAvailable, templatesFilters]
       // historyTypeCode: single char ('a'=approved | 'c'=concept | 'p'=pending)
       // referencesByConcept: 0 or 1 (false or true)
-      // templatesAvailable: 0 or 1 (false or true)
+      // templatesByAvailable: 0 or 1 (false or true)
       // templatesFilters: array [concept, toConcept, linkName, linkValue] (empty string "" for null values)
       const filters = value.templates?.filters || {}
       const filtersArray = [
@@ -53,7 +53,7 @@ const toArray = (type, value) => {
       return [
         getHistoryTypeCode(value.history?.type),
         value.references?.byConcept ? 1 : 0,
-        value.templates?.available ? 1 : 0,
+        value.templates?.byAvailable ? 1 : 0,
         filtersArray,
       ]
     }
@@ -74,7 +74,7 @@ const fromArray = (type, arr) => {
       }
 
     case PREF_TYPES.SETTINGS: {
-      // Array format: [historyTypeCode, referencesByConcept, templatesAvailable, templatesFilters]
+      // Array format: [historyTypeCode, referencesByConcept, templatesByAvailable, templatesFilters]
       const filtersArray = arr[3] || []
       const filters = {}
       if (filtersArray[0]) filters.concept = filtersArray[0]
@@ -85,7 +85,7 @@ const fromArray = (type, arr) => {
         history: { type: getHistoryTypeFromCode(arr[0]) },
         references: { byConcept: arr[1] === 1 },
         templates: {
-          available: arr[2] === 1,
+          byAvailable: arr[2] === 1,
           filters,
         },
       }
@@ -170,9 +170,7 @@ const parsePreferences = preferences => {
 }
 
 export {
-  createPreferencesPayload,
+  PREF_TYPES, createPreferencesPayload,
   deserializePreferences,
-  parsePreferences,
-  PREF_TYPES,
-  serializePreferences,
+  parsePreferences, serializePreferences,
 }

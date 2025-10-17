@@ -15,9 +15,9 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const TemplatesHeaderLeft = () => {
   const { updateSelected } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
-  const { available, explicitConcepts, filters, updateFilters } = use(TemplatesContext)
+  const { byAvailable, explicitConcepts, filters, updateFilters } = use(TemplatesContext)
 
-  const selectables = available ? getNames() : explicitConcepts
+  const selectables = byAvailable ? getNames() : explicitConcepts
 
   const handleConceptSelected = conceptName => {
     if (conceptName) {

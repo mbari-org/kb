@@ -9,7 +9,7 @@ const useSettings = () => {
     [HISTORY.KEY]: { [HISTORY.TYPE]: HISTORY.TYPES.PENDING },
     [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false },
     [TEMPLATES.KEY]: {
-      [TEMPLATES.AVAILABLE]: false,
+      [TEMPLATES.BY_AVAILABLE]: false,
       [TEMPLATES.FILTERS.KEY]: {},
     },
   })

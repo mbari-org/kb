@@ -20,7 +20,7 @@ const ConceptTemplates = () => {
   const { getAncestorNames } = use(TaxonomyContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const available = getSettings(TEMPLATES.KEY, TEMPLATES.AVAILABLE)
+  const byAvailable = getSettings(TEMPLATES.KEY, TEMPLATES.BY_AVAILABLE)
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,
@@ -37,12 +37,12 @@ const ConceptTemplates = () => {
   }
 
   const filteredTemplates = useMemo(() => {
-    const ancestorNames = available ? getAncestorNames(selectedConcept) : []
+    const ancestorNames = byAvailable ? getAncestorNames(selectedConcept) : []
     const concepts = selectedConcept ? [selectedConcept, ...ancestorNames] : null
     return filterTemplates(templates, { concepts })
-  }, [available, getAncestorNames, selectedConcept, templates])
+  }, [byAvailable, getAncestorNames, selectedConcept, templates])
 
-  const tooltip = `Go to ${available ? 'Available' : 'Explicit'} Templates for this Concept`
+  const tooltip = `Go to ${byAvailable ? 'Available' : 'Explicit'} Templates for this Concept`
 
   return (
     <ConceptPropertyPages

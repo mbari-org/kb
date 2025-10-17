@@ -29,10 +29,10 @@ const TemplatesProvider = ({ children }) => {
   const handleLoadConceptError = useLoadConceptError()
 
   const templatesSettings = getSettings(TEMPLATES.KEY)
-  const { available, filters = {} } = templatesSettings
+  const { byAvailable, filters = {} } = templatesSettings
 
-  const setAvailable = useCallback(
-    bool => updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.AVAILABLE]: bool } }),
+  const setByAvailable = useCallback(
+    bool => updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: bool } }),
     [updateSettings]
   )
 
@@ -66,11 +66,11 @@ const TemplatesProvider = ({ children }) => {
     }
 
     const concepts = isConceptLoaded(concept)
-      ? [concept, ...(available ? getAncestorNames(concept) : [])]
+      ? [concept, ...(byAvailable ? getAncestorNames(concept) : [])]
       : null
 
     return filterTemplates(templates, { concepts, linkName, toConcept, linkValue })
-  }, [available, filters, getAncestorNames, isConceptLoaded, templates])
+  }, [byAvailable, filters, getAncestorNames, isConceptLoaded, templates])
 
   useEffect(() => {
     const concept = filters[FILTERS.CONCEPT]
@@ -90,7 +90,7 @@ const TemplatesProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       addTemplate,
-      available,
+      byAvailable,
       concept: filters[FILTERS.CONCEPT],
       deleteTemplate,
       editTemplate,
@@ -99,19 +99,19 @@ const TemplatesProvider = ({ children }) => {
       filters,
       linkName: filters[FILTERS.LINK_NAME],
       linkValue: filters[FILTERS.LINK_VALUE],
-      setAvailable,
+      setByAvailable,
       toConcept: filters[FILTERS.TO_CONCEPT],
       updateFilters,
     }),
     [
       addTemplate,
-      available,
+      byAvailable,
       deleteTemplate,
       editTemplate,
       explicitConcepts,
       filteredTemplates,
       filters,
-      setAvailable,
+      setByAvailable,
       updateFilters,
     ]
   )
