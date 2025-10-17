@@ -11,9 +11,10 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import { SELECTED } from '@/lib/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS
+const { FILTERS } = TEMPLATES
 
 const TemplatesHeaderLeft = () => {
-  const { updateSelected } = use(SelectedContext)
+  const { updateSelected, updateSettings } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
   const { byAvailable, explicitConcepts, filters, updateFilters } = use(TemplatesContext)
 
@@ -22,9 +23,10 @@ const TemplatesHeaderLeft = () => {
   const handleConceptSelected = conceptName => {
     if (conceptName) {
       updateSelected({ [SELECTED.CONCEPT]: conceptName })
-      updateFilters({ [TEMPLATES.FILTERS.CONCEPT]: conceptName })
+      updateFilters({ [FILTERS.CONCEPT]: conceptName })
     } else {
-      updateFilters({ [TEMPLATES.FILTERS.CONCEPT]: '' })
+      updateFilters({ [FILTERS.CONCEPT]: '' })
+      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: false } })
     }
   }
 
@@ -39,7 +41,7 @@ const TemplatesHeaderLeft = () => {
 
   return (
     <ConceptSelect
-      conceptName={filters[TEMPLATES.FILTERS.CONCEPT]}
+      conceptName={filters[FILTERS.CONCEPT]}
       doConceptSelected={handleConceptSelected}
       leftComponent={infoIcon}
       selectables={selectables}

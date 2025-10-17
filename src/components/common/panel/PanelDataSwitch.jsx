@@ -4,6 +4,7 @@ import KBTooltip from '@/components/common/KBTooltip'
 
 const PanelDataSwitch = ({
   checked,
+  disabled = false,
   switchFn,
   switchLabel,
   switchToolTip = '',
@@ -13,7 +14,7 @@ const PanelDataSwitch = ({
       <KBTooltip title={switchToolTip}>
         <FormControlLabel
           control={
-            <Switch size='small' checked={checked} onChange={switchFn} />
+            <Switch size='small' checked={checked} disabled={disabled} onChange={switchFn} />
           }
           label={switchLabel}
         />

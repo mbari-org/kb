@@ -14,6 +14,7 @@ import { TEMPLATES as TEMPLATES_TOOLTIPS } from '@/lib/constants'
 
 const { EXPORT } = TEMPLATES_TOOLTIPS
 const { TEMPLATES } = SELECTED.SETTINGS
+const { FILTERS } = TEMPLATES
 
 const TemplatesTableHeaderLeft = () => {
   const { byAvailable, filteredTemplates, setByAvailable, filters } = use(TemplatesContext)
@@ -22,12 +23,14 @@ const TemplatesTableHeaderLeft = () => {
 
   const switchFn = event => setByAvailable(event.target.checked)
 
+  const switchDisabled = filters[FILTERS.CONCEPT] === ''
+
   let exportToolTip
-  if (filters[TEMPLATES.FILTERS.CONCEPT] && filters[TEMPLATES.FILTERS.TO_CONCEPT]) {
+  if (filters[FILTERS.CONCEPT] && filters[FILTERS.TO_CONCEPT]) {
     exportToolTip = EXPORT.CONCEPT_TO_CONCEPT
-  } else if (filters[TEMPLATES.FILTERS.CONCEPT]) {
+  } else if (filters[FILTERS.CONCEPT]) {
     exportToolTip = EXPORT.CONCEPT
-  } else if (filters[TEMPLATES.FILTERS.TO_CONCEPT]) {
+  } else if (filters[FILTERS.TO_CONCEPT]) {
     exportToolTip = EXPORT.TO_CONCEPT
   } else {
     exportToolTip = EXPORT.ALL
@@ -50,6 +53,7 @@ const TemplatesTableHeaderLeft = () => {
       />
       <PanelDataSwitch
         checked={byAvailable}
+        disabled={switchDisabled}
         switchFn={switchFn}
         switchLabel='Available'
         switchToolTip={<TemplatesConceptAvailableTooltip />}
