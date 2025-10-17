@@ -1,6 +1,8 @@
 import { use } from 'react'
+import { Box } from '@mui/material'
 
 import PanelDataExport from '@/components/common/panel/PanelDataExport'
+import PanelDataSwitch from '@/components/common/panel/PanelDataSwitch'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
@@ -32,16 +34,27 @@ const TemplatesTableHeaderLeft = () => {
   }
 
   return (
-    <PanelDataExport
-      checked={byAvailable}
-      count={filteredTemplates.length}
-      exportFn={templatesExport}
-      exportToolTip={exportToolTip}
-      switchFn={switchFn}
-      switchLabel='Available'
-      switchToolTip={<TemplatesConceptAvailableTooltip />}
-      width={CONCEPT_SELECT.WIDTH}
-    />
+    <Box
+      sx={{
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: CONCEPT_SELECT.WIDTH,
+      }}
+    >
+      <PanelDataExport
+        count={filteredTemplates.length}
+        exportFn={templatesExport}
+        exportToolTip={exportToolTip}
+        width='auto'
+      />
+      <PanelDataSwitch
+        checked={byAvailable}
+        switchFn={switchFn}
+        switchLabel='Available'
+        switchToolTip={<TemplatesConceptAvailableTooltip />}
+      />
+    </Box>
   )
 }
 

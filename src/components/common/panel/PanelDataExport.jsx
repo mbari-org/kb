@@ -1,15 +1,11 @@
-import { Box, Button, FormControlLabel, Stack, Switch, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 
 import KBTooltip from '@/components/common/KBTooltip'
 
 const PanelDataExport = ({
-  checked,
   count,
   exportFn,
   exportToolTip = 'Export',
-  switchFn,
-  switchLabel,
-  switchToolTip = '',
   width,
 }) => {
   return (
@@ -31,18 +27,6 @@ const PanelDataExport = ({
           </Box>
         </KBTooltip>
       </Stack>
-      {switchFn && (
-        <Box>
-          <KBTooltip title={switchToolTip}>
-            <FormControlLabel
-              control={
-                <Switch size='small' checked={checked} onChange={switchFn} />
-              }
-              label={switchLabel}
-            />
-          </KBTooltip>
-        </Box>
-      )}
     </Box>
   )
 }
