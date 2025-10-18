@@ -5,7 +5,7 @@ import PropertyActionIcon from './PropertyActionIcon'
 const PropertyDeleteIcon = ({ onClick, size, tooltip }) => {
   return (
     <PropertyActionIcon
-      color='remove.main'
+      color='remove'
       Icon={MdOutlineDeleteForever}
       onClick={onClick}
       size={size}

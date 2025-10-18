@@ -5,7 +5,7 @@ import PropertyActionIcon from './PropertyActionIcon'
 const PropertyEditIcon = ({ onClick, size, tooltip }) => {
   return (
     <PropertyActionIcon
-      color='edit.main'
+      color='edit'
       Icon={CiEdit}
       onClick={onClick}
       size={size}
