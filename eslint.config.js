@@ -102,6 +102,7 @@ export default [
       // Existing rules
       'no-irregular-whitespace': 'error',
       'unicode-bom': ['error', 'never'],
+      'no-multi-spaces': 'error',
       'no-unused-vars': [
         'warn',
         {
