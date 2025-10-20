@@ -31,8 +31,10 @@ const ChangeNameContent = () => {
     setModifiedFields
   )
 
+  const isValidChange = name.value !== concept.name && !nameError
+
   const toColor = () => {
-    return name.value !== concept.name && !nameError
+    return isValidChange
       ? theme.concept.color.add
       : theme.palette.grey[700]
   }
@@ -75,9 +77,9 @@ const ChangeNameContent = () => {
         />
       </Stack>
 
-      <Box sx={{ ml: 6.75, mt: 2 }}>
+      <Box sx={{ ml: 6.75 }}>
         {isAdminUser && (
-          <NameChangeExtent nameChangeType={name.extent} onChange={handleNameExtentChange} />
+          <NameChangeExtent disabled={!isValidChange} nameChangeType={name.extent} onChange={handleNameExtentChange} />
         )}
       </Box>
 

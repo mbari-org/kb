@@ -7,7 +7,7 @@ const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
 const useSettings = () => {
   const [settings, setSettings] = useState({
     [HISTORY.KEY]: { [HISTORY.TYPE]: HISTORY.TYPES.PENDING },
-    [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false },
+    [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true },
     [TEMPLATES.KEY]: {
       [TEMPLATES.BY_AVAILABLE]: false,
       [TEMPLATES.FILTERS.KEY]: {},

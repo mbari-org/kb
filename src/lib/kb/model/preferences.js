@@ -33,16 +33,16 @@ const toArray = (type, value) => {
     case PREF_TYPES.CONCEPTS:
     case PREF_TYPES.PANELS:
       // Array format: [state, position]
-      // state: array of concept/panel names
-      // position: current index in the state array
+      //   state: array of concept/panel names
+      //   position: current index in the state array
       return [value.state, value.position]
 
     case PREF_TYPES.SETTINGS: {
       // Array format: [historyTypeCode, referencesByConcept, templatesByAvailable, templatesFilters]
-      // historyTypeCode: single char ('a'=approved | 'c'=concept | 'p'=pending)
-      // referencesByConcept: 0 or 1 (false or true)
-      // templatesByAvailable: 0 or 1 (false or true)
-      // templatesFilters: array [concept, toConcept, linkName, linkValue] (empty string "" for null values)
+      //   historyTypeCode: single char ('a'=approved | 'c'=concept | 'p'=pending)
+      //   referencesByConcept: 0 or 1 (false or true)
+      //   templatesByAvailable: 0 or 1 (false or true)
+      //   templatesFilters: array [concept, toConcept, linkName, linkValue] (empty string "" for null values)
       const filters = value.templates?.filters || {}
       const filtersArray = [
         filters.concept || '',
@@ -170,7 +170,7 @@ const parsePreferences = preferences => {
 }
 
 export {
-  PREF_TYPES, createPreferencesPayload,
+  createPreferencesPayload,
   deserializePreferences,
-  parsePreferences, serializePreferences,
+  parsePreferences, PREF_TYPES, serializePreferences,
 }
