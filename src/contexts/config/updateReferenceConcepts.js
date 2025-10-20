@@ -1,4 +1,4 @@
-import { addConcept, removeConcept } from '@/lib/api/references'
+import { addConcept, removeConcept } from '@/lib/kb/api/references'
 import { createReference } from '@/lib/kb/model/reference'
 import { isEmpty } from '@/lib/utils'
 

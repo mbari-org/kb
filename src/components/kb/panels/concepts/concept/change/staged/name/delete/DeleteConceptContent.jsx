@@ -73,7 +73,7 @@ const DeleteConceptContent = () => {
 
         {!isValid && (
           <Typography color='cancel' variant='caption'>
-            Please select a valid concept to reassign annotations
+            Please select a valid concept to reassign associated data
           </Typography>
         )}
       </Stack>

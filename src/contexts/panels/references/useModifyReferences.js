@@ -6,7 +6,7 @@ import {
   createReference as createReferenceApi,
   getReferences as getReferencesApi,
   deleteReference as removeReference,
-} from '@/lib/api/references'
+} from '@/lib/kb/api/references'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 

@@ -1,4 +1,4 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 
 import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
 import InspectIcon from '@/components/icon/InspectIcon'
@@ -11,14 +11,11 @@ import { SELECTED } from '@/lib/constants'
 const { REFERENCES } = SELECTED.SETTINGS
 
 const ConceptReferences = () => {
-  const { references } = use(PanelDataContext)
+  const { getReferences } = use(PanelDataContext)
   const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-
-  const conceptReferences = useMemo(() => {
-    return references.filter(reference => reference.concepts.includes(selectedConcept))
-  }, [references, selectedConcept])
+  const conceptReferences = getReferences(selectedConcept)
 
   const renderItem = {
     key: (reference, index) => reference.doi || index,

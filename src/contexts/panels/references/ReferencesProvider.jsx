@@ -7,7 +7,7 @@ import { ReferencesModalProvider } from './modal'
 import useModifyReferences from './useModifyReferences'
 
 export const ReferencesProvider = ({ children }) => {
-  const { references, setReferences } = use(PanelDataContext)
+  const { setReferences } = use(PanelDataContext)
 
   const { addReference, editReference, deleteReference } = useModifyReferences({
     setReferences,
@@ -17,7 +17,6 @@ export const ReferencesProvider = ({ children }) => {
     addReference,
     deleteReference,
     editReference,
-    references,
   }
 
   return (

@@ -1,6 +1,6 @@
-import { createConcept } from '@/lib/api/concept'
 import { CONCEPT_STATE } from '@/lib/constants'
 import { createError } from '@/lib/errors'
+import { createConcept } from '@/lib/kb/api/concept'
 
 const { CHILD } = CONCEPT_STATE
 

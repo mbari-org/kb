@@ -8,7 +8,7 @@ import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/sta
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { isStateModified } from '@/lib/kb/state'
+import { isStateModified } from '@/lib/kb/state/state'
 import { pendingChild } from '@/lib/kb/model/history'
 
 import { CONCEPT_STATE, LABELS, PENDING, RESETTING } from '@/lib/constants'

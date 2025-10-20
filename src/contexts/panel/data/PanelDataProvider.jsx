@@ -43,6 +43,12 @@ export const PanelDataProvider = ({ children }) => {
     [references]
   )
 
+  const getReferences = useCallback(conceptName => {
+    return conceptName
+      ? references.filter(reference => reference.concepts.includes(conceptName))
+      : references
+  }, [references])
+
   const refreshData = useCallback(
     async (type = 'all') => {
       if (!apiFns) return
@@ -100,14 +106,12 @@ export const PanelDataProvider = ({ children }) => {
     [apiFns, calcExplicitConcepts, loadReferences, loadTemplates, loadPendingHistory]
   )
 
-  // Initial load
   useEffect(() => {
     if (apiFns) {
       refreshData()
     }
   }, [apiFns, refreshData])
 
-  // Export processing function that wraps AppModalContext setProcessing
   const setExporting = useCallback(
     state => {
       setProcessing(state)
@@ -118,10 +122,10 @@ export const PanelDataProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       explicitConcepts,
-      pendingHistory,
+      getReferences,
       isDoiUnique,
       isLoading,
-      references,
+      pendingHistory,
       refreshData,
       setExporting,
       setReferences,
@@ -129,22 +133,21 @@ export const PanelDataProvider = ({ children }) => {
     }),
     [
       explicitConcepts,
-      pendingHistory,
+      getReferences,
       isDoiUnique,
       isLoading,
-      references,
+      pendingHistory,
       refreshData,
       setExporting,
+      setReferences,
       templates,
     ]
   )
 
-  // Don't render children until initial data is loaded to prevent race conditions
   if (isInitialLoad) {
     return <PanelDataContext value={value}>{null}</PanelDataContext>
   }
 
-  // After initial load, always render children (refreshes won't cause unmounting)
   return <PanelDataContext value={value}>{children}</PanelDataContext>
 }
 

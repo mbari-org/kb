@@ -5,7 +5,7 @@ import {
   getExplicitTemplates,
   getTemplates,
   getToConceptTemplates,
-} from '@/lib/api/linkTemplates'
+} from '@/lib/kb/api/linkTemplates'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'

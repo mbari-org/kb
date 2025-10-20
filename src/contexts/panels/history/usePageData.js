@@ -1,6 +1,6 @@
 import { use, useCallback } from 'react'
 
-import { getHistory } from '@/lib/api/history'
+import { getHistory } from '@/lib/kb/api/history'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 

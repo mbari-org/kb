@@ -1,6 +1,6 @@
 import { use, useCallback, useMemo } from 'react'
 
-import { getConceptHistory, getHistoryCount } from '@/lib/api/history'
+import { getConceptHistory, getHistoryCount } from '@/lib/kb/api/history'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'

@@ -302,13 +302,6 @@ export const LOCAL_STORE = {
 
 export const TO_CONCEPT_SPECIAL = ['self', 'nil']
 
-export const UNSAFE_ACTION = {
-  CONCEPT: 'concept',
-  PANEL: 'panel',
-  LOGOUT: 'logout',
-  REFRESH: 'refresh',
-}
-
 export const TOOLTIPS = {
   DELAY: {
     onEnter: 500,
@@ -354,6 +347,13 @@ export const TOOLTIPS = {
 }
 
 export const { DELAY, FONT, HISTORY, TEMPLATES, REFERENCES, USERS } = TOOLTIPS
+
+export const UNSAFE_ACTION = {
+  CONCEPT: 'concept',
+  PANEL: 'panel',
+  LOGOUT: 'logout',
+  REFRESH: 'refresh',
+}
 
 export const USER_ROLES = {
   ADMIN: 'Admin',

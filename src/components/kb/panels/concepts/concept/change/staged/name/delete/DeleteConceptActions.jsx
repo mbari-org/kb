@@ -8,7 +8,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { REASSIGNMENTS } from './useDeleteConceptModal'
+import { ASSOCIATED_COUNTS } from '../associatedData'
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
@@ -49,7 +49,7 @@ const DeleteConceptActions = () => {
         old: concept.name,
         new: reassignTo,
       }
-      const apiPromises = REASSIGNMENTS.reduce((acc, reassignment) => {
+      const apiPromises = ASSOCIATED_COUNTS.reduce((acc, reassignment) => {
         if (reassignment.renameFn && reassignmentCounts[reassignment.title] > 0) {
           acc.push(apiFns.apiPayload(reassignment.renameFn, renamePayload))
         }

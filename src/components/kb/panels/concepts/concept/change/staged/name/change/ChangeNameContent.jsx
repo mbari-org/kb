@@ -4,7 +4,6 @@ import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import _TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 import ModalActionText from '@/components/common/ModalActionText'
 import UserContext from '@/contexts/user/UserContext'
@@ -41,6 +40,7 @@ const ChangeNameContent = () => {
 
   const isAdminUser = isAdmin(user)
   const realizationCount = stagedState?.realizations.length
+  // const referencesCount =
 
   return (
     <Box>
@@ -68,8 +68,8 @@ const ChangeNameContent = () => {
           sx={{
             '& .MuiFormHelperText-root': {
               color: nameError ? theme.palette.cancel.main : 'transparent',
-              margin: '15px 0 0 10px',
               lineHeight: '0',
+              margin: '15px 0 0 10px',
             },
           }}
           value={name.value}

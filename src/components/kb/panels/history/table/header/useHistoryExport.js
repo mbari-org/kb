@@ -1,6 +1,6 @@
 import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { getHistory, getHistoryCount } from '@/lib/api/history'
+import { getHistory, getHistoryCount } from '@/lib/kb/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'

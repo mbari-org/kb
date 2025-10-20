@@ -4,7 +4,7 @@ import {
   createPreferences as apiCreatePreferences,
   getPreferences as apiGetPreferences,
   updatePreferences as apiUpdatePreferences,
-} from '@/lib/api/preferences'
+} from '@/lib/kb/api/preferences'
 
 import { createError } from '@/lib/errors'
 

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { getHistory, getHistoryCount } from '@/lib/api/history'
+import { getHistory, getHistoryCount } from '@/lib/kb/api/history'
 
 import { PAGINATION } from '@/lib/constants'
 

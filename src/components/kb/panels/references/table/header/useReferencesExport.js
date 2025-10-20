@@ -1,7 +1,6 @@
 import { use } from 'react'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -26,28 +25,24 @@ const buildComments = byConceptName => {
 }
 
 const useReferencesExport = () => {
-  const { references } = use(ReferencesContext)
+  const { getReferences, setExporting } = use(PanelDataContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const { user } = use(UserContext)
-  const { setExporting } = use(PanelDataContext)
 
-  const selectedConcept = getSelected(SELECTED.CONCEPT)
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
-  const byConceptName = byConcept ? selectedConcept : null
+  const selectedConcept = byConcept ? getSelected(SELECTED.CONCEPT) : null
+
+  const references = getReferences(selectedConcept)
 
   const suggestName = () => {
-    const conceptName = byConceptName ? `_${conceptNameForFilename(byConceptName)}` : ''
+    const conceptName = selectedConcept ? `_${conceptNameForFilename(selectedConcept)}` : ''
     return `KB-References${conceptName}.csv`
   }
 
-  const filteredReferences = byConcept
-    ? references.filter(reference => reference.concepts.includes(selectedConcept))
-    : references
-
   return csvExport({
-    comments: buildComments(byConceptName),
-    count: filteredReferences.length,
-    getData: () => dataRows(filteredReferences),
+    comments: buildComments(selectedConcept),
+    count: references.length,
+    getData: () => dataRows(references),
     headers: dataHeaders,
     onProgress: setExporting,
     paginated: false,

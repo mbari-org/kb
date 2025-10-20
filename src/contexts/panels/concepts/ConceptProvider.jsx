@@ -17,9 +17,9 @@ import UserContext from '@/contexts/user/UserContext'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 
-import { getConceptPath } from '@/lib/api/concept'
+import { getConceptPath } from '@/lib/kb/api/concept'
 
-import { initialConceptState, isStateModified } from '@/lib/kb/state'
+import { initialConceptState, isStateModified } from '@/lib/kb/state/state'
 
 import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
 

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { getTemplates, getTemplatesCount } from '@/lib/api/linkTemplates'
+import { getTemplates, getTemplatesCount } from '@/lib/kb/api/linkTemplates'
 
 import { PAGINATION } from '@/lib/constants'
 

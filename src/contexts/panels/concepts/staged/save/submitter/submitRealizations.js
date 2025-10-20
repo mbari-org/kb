@@ -1,11 +1,11 @@
-import { createRealization, deleteRealization, updateRealization } from '@/lib/api/linkRealizations'
+import { createRealization, deleteRealization, updateRealization } from '@/lib/kb/api/linkRealizations'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
-import { diff, drop, pick } from '@/lib/utils'
 import { createError } from '@/lib/errors'
+import { diff, drop, pick } from '@/lib/utils'
 const submitRealizations = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
 

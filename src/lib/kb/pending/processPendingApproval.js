@@ -1,5 +1,5 @@
-import { updatePendingItem } from '@/lib/api/history'
 import { PENDING } from '@/lib/constants'
+import { updatePendingItem } from '@/lib/kb/api/history'
 
 import { applyApprovals } from '@/lib/kb/pending/applyApproves'
 import { applyRejects } from '@/lib/kb/pending/applyRejects'

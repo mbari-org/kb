@@ -1,4 +1,4 @@
-import { putConceptAnnotation as apiPutConceptAnnotation } from '@/lib/api/annotations'
+import { putConceptAnnotation as apiPutConceptAnnotation } from '@/lib/kb/api/annotations'
 
 import {
   getConceptChildren as apiChildren,
@@ -7,9 +7,9 @@ import {
   getConceptNames as apiConceptNames,
   deleteConcept as apiDelete,
   getConceptParent as apiParent,
-} from '@/lib/api/concept'
+} from '@/lib/kb/api/concept'
 
-import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
+import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/kb/api/taxonomy'
 
 import { createError } from '@/lib/errors'
 import { orderedAliases } from '@/lib/kb/model/aliases'

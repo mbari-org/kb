@@ -1,4 +1,4 @@
-import { createAlias, deleteAlias, updateAlias } from '@/lib/api/aliases'
+import { createAlias, deleteAlias, updateAlias } from '@/lib/kb/api/aliases'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

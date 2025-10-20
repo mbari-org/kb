@@ -1,5 +1,5 @@
-import { updateConceptAuthor } from '@/lib/api/concept'
 import { CONCEPT_STATE } from '@/lib/constants'
+import { updateConceptAuthor } from '@/lib/kb/api/concept'
 
 const submitAuthor = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo

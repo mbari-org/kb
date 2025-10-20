@@ -1,4 +1,4 @@
-import { getConcept as apiConcept, getConceptChildren, getConceptDescendants } from '@/lib/api/concept'
+import { getConcept as apiConcept, getConceptChildren, getConceptDescendants } from '@/lib/kb/api/concept'
 import { pick } from '@/lib/utils'
 
 const addedConcepts = (parent, updatesInfo) => {

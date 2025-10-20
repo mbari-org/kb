@@ -3,7 +3,7 @@ import { use, useCallback } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { getConcept } from '@/lib/api/concept'
+import { getConcept } from '@/lib/kb/api/concept'
 
 import { HISTORY_FIELD } from '@/lib/constants'
 import { createError } from '@/lib/errors'

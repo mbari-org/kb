@@ -8,7 +8,7 @@ import { UsersModalProvider } from './modal'
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { getUsers, createUser, updateUser } from '@/lib/api/users'
+import { getUsers, createUser, updateUser } from '@/lib/kb/api/users'
 
 import { drop } from '@/lib/utils'
 

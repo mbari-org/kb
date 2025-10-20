@@ -8,7 +8,7 @@ import useConceptSelect from '@/contexts/selected/useConceptSelect'
 import usePanelSelect from '@/contexts/selected/usePanelSelect'
 import useSettings from '@/contexts/selected/useSettings'
 
-import { PREFS_KEYS } from '@/lib/api/preferences'
+import { PREFS_KEYS } from '@/lib/kb/api/preferences'
 import { PREFS_AUTOSAVE_MILLIS } from '@/lib/constants'
 import { isEmpty } from '@/lib/utils'
 

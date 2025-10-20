@@ -7,7 +7,7 @@ import useEditReferenceButton from '@/components/kb/panels/references/table/data
 import useDeleteReferenceButton from '@/components/kb/panels/references/table/data/useDeleteReferenceButton'
 import useReferenceColumns from '@/components/kb/panels/references/table/data/useReferenceColumns'
 
-import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { PAGINATION, SELECTED } from '@/lib/constants'
@@ -19,15 +19,13 @@ const { CONCEPT } = SELECTED
 const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesTableData = () => {
-  const { references } = use(ReferencesContext)
+  const { getReferences } = use(PanelDataContext)
   const { getSelected, getSettings } = use(SelectedContext)
 
-  const selectedConcept = getSelected(CONCEPT)
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
+  const selectedConcept = byConcept ? getSelected(CONCEPT) : null
 
-  const selectedReferences = byConcept
-    ? references.filter(reference => reference.concepts.includes(selectedConcept))
-    : references
+  const selectedReferences = getReferences(selectedConcept)
 
   const editReferenceModal = useEditReferenceButton()
   const deleteReferenceModal = useDeleteReferenceButton()

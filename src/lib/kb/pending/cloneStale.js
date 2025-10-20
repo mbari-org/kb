@@ -1,4 +1,4 @@
-import { getConcept } from '@/lib/api/concept'
+import { getConcept } from '@/lib/kb/api/concept'
 
 export const cloneStale = async (apiFns, staleConcept, useServerBase = true) => {
   let base = {}

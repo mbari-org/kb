@@ -8,7 +8,7 @@ import RefreshContext from '@/contexts/refresh/RefreshContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { isStateModified } from '@/lib/kb/state'
+import { isStateModified } from '@/lib/kb/state/state'
 
 import { CONCEPT_STATE, LABELS, RESETTING, UNSAFE_ACTION } from '@/lib/constants'
 

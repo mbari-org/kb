@@ -5,9 +5,9 @@ import { IoCloseSharp } from 'react-icons/io5'
 import StructureChoiceButton from './StructureChoiceButton'
 
 import useAddChildModal from '@/components/kb/panels/concepts/concept/change/staged/children/useAddChildModal'
-import useChangeNameModal from '@/components/kb/panels/concepts/concept/change/staged/name/useChangeNameModal'
+import useChangeNameModal from '@/components/kb/panels/concepts/concept/change/staged/name/change/useChangeNameModal'
 import useChangeParentModal from '@/components/kb/panels/concepts/concept/change/staged/parent/useChangeParentModal'
-import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/change/staged/delete/useDeleteConceptModal'
+import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/change/staged/name/delete/useDeleteConceptModal'
 
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
 

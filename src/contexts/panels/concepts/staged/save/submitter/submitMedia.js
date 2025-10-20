@@ -1,9 +1,9 @@
-import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/api/media'
+import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/kb/api/media'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 
-import { pick } from '@/lib/utils'
 import { createError } from '@/lib/errors'
+import { pick } from '@/lib/utils'
 
 const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo

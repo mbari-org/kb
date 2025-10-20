@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { getReferences as getReferencesApi } from '@/lib/api/references'
+import { getReferences as getReferencesApi } from '@/lib/kb/api/references'
 
 import { PAGINATION } from '@/lib/constants'
 import { createReference } from '@/lib/kb/model/reference'

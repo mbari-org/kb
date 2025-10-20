@@ -17,8 +17,8 @@ import applyParent from '@/contexts/panels/concepts/staged/save/applier/applyPar
 import applyRank from '@/contexts/panels/concepts/staged/save/applier/applyRank'
 import applyRealizations from '@/contexts/panels/concepts/staged/save/applier/applyRealizations'
 
-import { getConcept } from '@/lib/api/concept'
 import { isAdmin } from '@/lib/auth/role'
+import { getConcept } from '@/lib/kb/api/concept'
 
 const useSaveStaged = () => {
   const { apiFns } = use(ConfigContext)
