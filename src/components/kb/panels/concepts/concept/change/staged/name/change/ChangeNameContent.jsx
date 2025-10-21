@@ -3,9 +3,11 @@ import { use, useState } from 'react'
 import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
 import ModalActionText from '@/components/common/ModalActionText'
+
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
@@ -17,6 +19,7 @@ const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept, stagedState } = use(ConceptContext)
+  const { getReferences } = use(PanelDataContext)
   const { user } = use(UserContext)
 
   const [name, setName] = useState({ value: concept.name, extent: '' })
@@ -40,7 +43,9 @@ const ChangeNameContent = () => {
 
   const isAdminUser = isAdmin(user)
   const realizationCount = stagedState?.realizations.length
-  // const referencesCount =
+  const referencesCount = getReferences(concept.name).length
+
+  const hasAssociatedData = realizationCount > 0 || referencesCount > 0
 
   return (
     <Box>
@@ -83,21 +88,18 @@ const ChangeNameContent = () => {
         )}
       </Box>
 
-      {realizationCount > 0 && (
+      {hasAssociatedData && (
         <Box sx={{ borderTop: '1px solid #000000', mt: 2, textAlign: 'center' }}>
-          <Typography variant='body1' color='text.secondary' sx={{ mt: 2 }}>
-            {`Updating the name of concept will affect ${realizationCount} link realizations.`}
+          <Typography variant='body1' sx={{ mt: 2 }}>
+            {`Associated Data: ${realizationCount} link realizations and ${referencesCount} references.`}
           </Typography>
           {!isAdminUser && (
             <Box sx={{ mt: 2 }}>
               <Typography variant='body1' color='text.secondary'>
-                {'Please communicate with an admin regarding this change since'}
+                {'Please communicate with an admin regarding this change.'}
               </Typography>
               <Typography variant='body1' color='text.secondary'>
-                {'when approving, an admin must specify whether to modify the'}
-              </Typography>
-              <Typography variant='body1' color='text.secondary'>
-                {'associated link realizations.'}
+                {'When approving, an admin must specify whether to modify data associated with the concept.'}
               </Typography>
             </Box>
           )}

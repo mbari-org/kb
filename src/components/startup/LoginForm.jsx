@@ -1,4 +1,4 @@
-import { use, useActionState, useEffect, useRef } from 'react'
+import { use, useActionState, useEffect, useRef, useCallback } from 'react'
 
 import { Box, Card, CardActions, CardContent } from '@mui/material'
 
@@ -12,17 +12,18 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { loginUser } from '@/lib/services/auth/login'
 
 const LoginForm = ({ isVisible = true }) => {
-  const { processAuth } = use(UserContext)
-  const { config } = use(ConfigContext)
-
   const usernameRef = useRef(null)
 
-  const submitLogin = async (_prevState, formData) => {
+  const { config } = use(ConfigContext)
+  const { processAuth } = use(UserContext)
+
+  const submitLogin = useCallback(async (_prevState, formData) => {
     const username = formData.get('username')
     const password = formData.get('password')
 
     return loginUser(config, username, password)
-  }
+  }, [config])
+
   const [loginState, loginAction] = useActionState(submitLogin, null)
 
   useEffect(() => {
@@ -34,6 +35,10 @@ const LoginForm = ({ isVisible = true }) => {
       usernameRef.current.focus()
     }
   }, [isVisible])
+
+  if (!isVisible) {
+    return null
+  }
 
   return (
     <Box component='form' action={loginAction}>
