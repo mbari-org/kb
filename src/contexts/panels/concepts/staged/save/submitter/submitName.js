@@ -10,11 +10,11 @@ const submitName = ([submit, { concept, updatesInfo }]) => {
     const params = [concept.name, { name: name.value }]
     submitters.push(
       submit(updateConceptName, params).then(response => ({
-        field: 'name',
         action: CONCEPT_STATE.NAME,
+        field: 'name',
         params,
-        update: name,
         response,
+        update: name,
       }))
     )
   }

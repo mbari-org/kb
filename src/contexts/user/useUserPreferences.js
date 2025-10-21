@@ -13,7 +13,8 @@ const useUserPreferences = ({ config, user }) => {
   const getPreferences = useCallback(
     async key => {
       try {
-        return await apiGetPreferences(config, user.name, key)
+        const prefs = await apiGetPreferences(config, user.name, key)
+        return key ? prefs[key] : prefs
       } catch (error) {
         throw createError('Preferences Loading Error', 'Failed to load user preferences', { username: user.name }, error)
       }

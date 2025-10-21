@@ -1,32 +1,22 @@
 import { use, useCallback } from 'react'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import UserContext from '@/contexts/user/UserContext'
 
+import applyResults from '@/contexts/panels/concepts/staged/save/applyResults'
+import applySideEffects from '@/contexts/panels/concepts/staged/save/applySideEffects'
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
-
-import applyAliases from '@/contexts/panels/concepts/staged/save/applier/applyAliases'
-import applyAuthor from '@/contexts/panels/concepts/staged/save/applier/applyAuthor'
-import applyChildren from '@/contexts/panels/concepts/staged/save/applier/applyChildren'
-import applyMedia from '@/contexts/panels/concepts/staged/save/applier/applyMedia'
-import applyParent from '@/contexts/panels/concepts/staged/save/applier/applyParent'
-import applyRank from '@/contexts/panels/concepts/staged/save/applier/applyRank'
-import applyRealizations from '@/contexts/panels/concepts/staged/save/applier/applyRealizations'
-
-import { isAdmin } from '@/lib/auth/role'
-import { getConcept } from '@/lib/kb/api/concept'
+import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
 
 const useSaveStaged = () => {
-  const { apiFns } = use(ConfigContext)
   const { closeModal, setProcessing } = use(ConceptModalContext)
-  const { concept: staleConcept, initialState, setConcept, stagedState } = use(ConceptContext)
+  const { initialState, setConcept, stagedState } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { refreshConcept } = use(TaxonomyContext)
-  const { user } = use(UserContext)
+
+  const updatesContext = useUpdatesContext()
 
   return useCallback(async () => {
     setProcessing('Saving concept...')
@@ -34,8 +24,8 @@ const useSaveStaged = () => {
     let updatesInfo
     try {
       updatesInfo = await submitStaged(
-        apiFns.apiPayload,
-        staleConcept,
+        updatesContext.apiFns.apiPayload,
+        updatesContext.staleConcept,
         initialState,
         stagedState
       )
@@ -44,38 +34,11 @@ const useSaveStaged = () => {
       throw error
     }
 
-    const { hasUpdated, results } = updatesInfo
+    const freshConcept = await applyResults(updatesContext, updatesInfo)
 
-    const conceptName = hasUpdated('name')
-      ? updatesInfo.updatedValue('name').value
-      : staleConcept.name
+    await applySideEffects(updatesContext, updatesInfo)
 
-    const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
-
-    freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
-    freshConcept.alternateNames = [...staleConcept.alternateNames]
-    freshConcept.children = [...staleConcept.children]
-    freshConcept.parent = staleConcept.parent
-
-    const appliers = {
-      aliases: (concept, tracker) => applyAliases(concept, tracker),
-      author: (concept, tracker) => applyAuthor(concept, tracker),
-      children: (concept, tracker) => applyChildren(concept, tracker),
-      media: (concept, tracker) => applyMedia(concept, tracker),
-      parent: (concept, tracker) => applyParent(concept, tracker),
-      rank: (concept, tracker) => applyRank(concept, tracker),
-      realizations: (concept, tracker) => applyRealizations(concept, tracker),
-    }
-
-    results.forEach(tracker => {
-      const apply = appliers[tracker.field]
-      if (apply) {
-        const trackerWithRole = { ...tracker, isAdmin: isAdmin(user) }
-        apply(freshConcept, trackerWithRole)
-      }
-    })
-
-    const { concept: updatedConcept } = await refreshConcept(freshConcept, staleConcept)
+    const { concept: updatedConcept } = await refreshConcept(freshConcept, updatesContext.staleConcept)
 
     await setConcept(updatedConcept)
 
@@ -85,16 +48,14 @@ const useSaveStaged = () => {
 
     setProcessing(false)
   }, [
-    apiFns,
     closeModal,
     initialState,
+    updatesContext,
     refreshConcept,
     setConcept,
     setProcessing,
     stagedState,
-    staleConcept,
     updateSelected,
-    user,
   ])
 }
 

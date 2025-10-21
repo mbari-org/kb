@@ -4,10 +4,10 @@ import { Box, Typography } from '@mui/material'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-
 import { formatDelta } from '@/components/common/format'
 import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
+
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { RESETTING } from '@/lib/constants'
 
@@ -22,7 +22,7 @@ const StagedObject = ({ group, stagedEdit }) => {
 
   const GroupHeader = () => {
     return (
-      <Typography sx={{ fontSize: '1.25rem', opacity: disabled ? 0.5 : 1 }}>{group}</Typography>
+      <Typography sx={{ fontSize: '1.4rem', opacity: disabled ? 0.5 : 1 }}>{group}</Typography>
     )
   }
 
@@ -32,11 +32,11 @@ const StagedObject = ({ group, stagedEdit }) => {
         {Object.keys(initial)
           .filter(field => field !== 'action')
           .map(field => {
-            const hasChanged = initial[field] !== staged[field]
-            if (!hasChanged) return null
-
-            const deltaValue = formatDelta(initial[field], staged[field])
-            return <FieldValueDisplay key={field} field={field} value={deltaValue} />
+            if (initial[field] !== staged[field]) {
+              const deltaValue = formatDelta(initial[field], staged[field])
+              return <FieldValueDisplay key={field} field={field} value={deltaValue} />
+            }
+            return null
           })}
       </Box>
     )

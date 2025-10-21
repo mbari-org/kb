@@ -7,7 +7,7 @@ import KBTooltip from '@/components/common/KBTooltip'
 
 const { CHILDREN, CONCEPT, DESCENDANTS } = CONCEPT_EXTENT
 
-const ConceptExtent = ({ initialValue = CONCEPT, onChange  }) => {
+const ConceptExtent = ({ initialValue = CONCEPT, onChange }) => {
   const [conceptExtent, setConceptExtent] = useState(initialValue)
   const theme = useTheme()
 
@@ -29,10 +29,10 @@ const ConceptExtent = ({ initialValue = CONCEPT, onChange  }) => {
         <Typography>Extent:</Typography>
       </KBTooltip>
       <ToggleButtonGroup
-        value={conceptExtent}
         exclusive
         onChange={handleChange}
         size='small'
+        value={conceptExtent}
       >
         <ToggleButton value={CHILDREN} sx={toggleButtonSx}>
           children

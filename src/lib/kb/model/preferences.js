@@ -171,6 +171,5 @@ const parsePreferences = preferences => {
 
 export {
   createPreferencesPayload,
-  deserializePreferences,
-  parsePreferences, PREF_TYPES, serializePreferences,
+  parsePreferences,
 }

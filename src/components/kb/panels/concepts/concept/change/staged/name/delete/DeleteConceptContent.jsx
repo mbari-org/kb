@@ -48,7 +48,7 @@ const DeleteConceptContent = () => {
       </Typography>
       {modalData.isLoading && <ProcessingMessage message='Loading related data...' />}
       {!modalData.isLoading && (
-        modalData.reassignmentMessages.map((message, index) => (
+        modalData.associatedMessages.map((message, index) => (
           <Typography key={index} align='center'>
             {message}
           </Typography>
