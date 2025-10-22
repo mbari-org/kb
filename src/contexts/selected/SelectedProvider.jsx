@@ -9,26 +9,30 @@ import { SELECTED } from '@/lib/constants'
 const { CONCEPT, PANEL } = SELECTED
 
 const SelectedProvider = ({ children }) => {
+  const { selectedValues } = use(PreferencesContext)
   const {
     conceptSelect,
     getSettings,
     isLoading,
     panelSelect,
     updateSettings,
-  } = use(PreferencesContext)
+  } = selectedValues
 
   const getSelected = useCallback(
     key => {
-      if (key === CONCEPT) {
-        return conceptSelect.current()
-      } else if (key === PANEL) {
-        return panelSelect.current()
-      } else {
-        throw createError(
-          'Invalid Selection Key',
-          `Cannot get selection for unknown key: ${key}`,
-          { key }
-        )
+      switch (key) {
+        case CONCEPT:
+          return conceptSelect.current()
+
+        case PANEL:
+          return panelSelect.current()
+
+        default:
+          throw createError(
+            'Invalid Selection Key',
+            `Cannot get selection for unknown key: ${key}`,
+            { key }
+          )
       }
     },
     [conceptSelect, panelSelect]
@@ -46,6 +50,10 @@ const SelectedProvider = ({ children }) => {
     },
     [conceptSelect, panelSelect]
   )
+
+  // CxNote conceptSelect, getSettings, isLoading, panelSelect, updateSettings are pass through from PreferencesProvider
+  //  as selectedValues and exported here since they are "selected" values, but due to component hierarchy, they are
+  //  required to be maintained at the PreferencesProvider level.
 
   const value = useMemo(
     () => ({

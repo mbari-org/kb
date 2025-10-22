@@ -190,18 +190,25 @@ const PreferencesProvider = ({ children }) => {
     savePreferencesRef.current = savePreferences
   }, [savePreferences, savePreferencesRef])
 
-  const value = useMemo(
+  const selectedValues = useMemo(
     () => ({
       conceptSelect,
-      currentConcept,
-      currentPanel,
       getSettings,
       isLoading,
       panelSelect,
-      savePreferences,
       updateSettings,
     }),
-    [conceptSelect, currentConcept, currentPanel, getSettings, isLoading, panelSelect, savePreferences, updateSettings]
+    [conceptSelect, getSettings, isLoading, panelSelect, updateSettings]
+  )
+
+  const value = useMemo(
+    () => ({
+      currentConcept,
+      currentPanel,
+      savePreferences,
+      selectedValues,
+    }),
+    [currentConcept, currentPanel, savePreferences, selectedValues]
   )
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>
