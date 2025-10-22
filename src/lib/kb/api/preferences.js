@@ -1,15 +1,9 @@
+import { PREFS } from '@/lib/constants'
 import { createPreferencesPayload, parsePreferences } from '@/lib/kb/model/preferences'
 import { oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 import { paramsQs } from '@/lib/services/params'
 
-const PREFS_PREFIX = 'kb-ui/'
-const prefsName = username => PREFS_PREFIX + username
-
-const PREFS_KEYS = {
-  CONCEPTS: 'concepts',
-  PANELS: 'panels',
-  SETTINGS: 'settings',
-}
+const prefsName = username => PREFS.PREFIX + username
 
 const prefsQs = (username, key) => paramsQs({ name: prefsName(username), key })
 
@@ -30,4 +24,4 @@ const updatePreferences = async (config, username, type, value) => {
   await oniPut({ config, path: ['prefs'], qs: prefsQs(username, payload.type), data: { value: payload.value } })
 }
 
-export { createPreferences, getPreferences, PREFS_KEYS, updatePreferences }
+export { createPreferences, getPreferences, updatePreferences }

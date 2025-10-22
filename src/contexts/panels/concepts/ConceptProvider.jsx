@@ -30,9 +30,9 @@ const ConceptProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
   const { refreshData: refreshPanelData } = use(PanelDataContext)
-  const { getSelected, panels  } = use(SelectedContext)
+  const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction  } = use(UserContext)
+  const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [conceptPath, setConceptPath] = useState(null)

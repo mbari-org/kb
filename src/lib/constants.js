@@ -228,7 +228,16 @@ export const PENDING = {
   },
 }
 
-export const PREFS_AUTOSAVE_MILLIS = 15_000
+export const PREFS = {
+  AUTOSAVE_MILLIS: 15_000,
+  KEYS: {
+    CONCEPTS: 'concepts',
+    PANELS: 'panels',
+    SETTINGS: 'settings',
+  },
+  MAX_LENGTH: 255,
+  PREFIX: 'kb-ui/',
+}
 
 export const PROCESSING = {
   DELETING: 'Deleting...',

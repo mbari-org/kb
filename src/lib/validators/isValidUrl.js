@@ -1,4 +1,4 @@
-const isValidUrl = (string) => {
+const isValidUrl = string => {
   try {
     new URL(string)
     return true

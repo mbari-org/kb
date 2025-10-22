@@ -10,7 +10,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { getDescendantNames  } from '@/lib/kb/model/concept'
+import { getDescendantNames } from '@/lib/kb/model/concept'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

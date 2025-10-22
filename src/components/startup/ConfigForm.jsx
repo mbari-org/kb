@@ -19,7 +19,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
 
   const [configState, configAction] = useActionState(submitConfigUrl, '')
 
-  const handleConfigChange = (event) => {
+  const handleConfigChange = event => {
     const newValue = event.target.value
     setConfigUrl(newValue)
     setConfigIsDirty(newValue && newValue !== config?.url)

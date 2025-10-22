@@ -1,22 +1,22 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useCallback, useEffect, useMemo } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 
+import useSettings from '@/contexts/selected/useSettings'
 import { createError } from '@/lib/errors'
 import { SELECTED } from '@/lib/constants'
 
 const { CONCEPT, PANEL } = SELECTED
 
 const SelectedProvider = ({ children }) => {
-  const { selectedValues } = use(PreferencesContext)
-  const {
-    conceptSelect,
-    getSettings,
-    isLoading,
-    panelSelect,
-    updateSettings,
-  } = selectedValues
+  const { conceptSelect, isLoading, getSettingsRef, onSettingsChangeRef, onSettingsInitRef, panelSelect } = use(PreferencesContext)
+  const { settings, setSettings, getSettings, updateSettings: originalUpdateSettings } = useSettings()
+
+  useEffect(() => {
+    onSettingsInitRef.current = setSettings
+    getSettingsRef.current = () => settings
+  }, [setSettings, settings, onSettingsInitRef, getSettingsRef])
 
   const getSelected = useCallback(
     key => {
@@ -51,9 +51,12 @@ const SelectedProvider = ({ children }) => {
     [conceptSelect, panelSelect]
   )
 
-  // CxNote conceptSelect, getSettings, isLoading, panelSelect, updateSettings are pass through from PreferencesProvider
-  //  as selectedValues and exported here since they are "selected" values, but due to component hierarchy, they are
-  //  required to be maintained at the PreferencesProvider level.
+  const updateSettings = useCallback(arg => {
+    originalUpdateSettings(arg)
+    if (onSettingsChangeRef.current) {
+      onSettingsChangeRef.current(arg)
+    }
+  }, [originalUpdateSettings, onSettingsChangeRef])
 
   const value = useMemo(
     () => ({
@@ -62,10 +65,22 @@ const SelectedProvider = ({ children }) => {
       getSettings,
       isLoading,
       panels: panelSelect,
+      settings,
+      setSettings,
       updateSelected,
       updateSettings,
     }),
-    [conceptSelect, getSelected, getSettings, isLoading, panelSelect, updateSelected, updateSettings]
+    [
+      conceptSelect,
+      getSelected,
+      getSettings,
+      isLoading,
+      panelSelect,
+      settings,
+      setSettings,
+      updateSelected,
+      updateSettings,
+    ]
   )
 
   return <SelectedContext.Provider value={value}>{children}</SelectedContext.Provider>

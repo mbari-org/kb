@@ -10,7 +10,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
   const columns = [
     {
       field: 'actions',
-      width: 100,      headerClassName: 'bold-header',
+      width: 100, headerClassName: 'bold-header',
       headerName: '',
       renderCell: params => (
         <Box>
