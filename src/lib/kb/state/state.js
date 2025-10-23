@@ -8,6 +8,8 @@ import { rankState } from '@/lib/kb/state/rank'
 import { realizationsState } from '@/lib/kb/state/realizations'
 import { valueState } from '@/lib/kb/state/value'
 
+import { CONCEPT_FIELD } from '@/lib/constants'
+
 import { drop, isJsonEqual } from '@/lib/utils'
 
 const indexState = {
@@ -33,7 +35,7 @@ const initialConceptState = (concept, pendingConcept) => {
     ...parentState(concept, pendingConcept),
     ...rankState(concept, pendingConcept),
     ...realizationsState(concept, pendingConcept),
-    ...valueState(concept, 'delete', false),
+    ...valueState(concept, CONCEPT_FIELD.DELETE, false),
   }
 }
 

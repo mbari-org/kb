@@ -23,7 +23,7 @@ export const CONCEPT_FIELD = {
   ALIASES: 'aliases',
   AUTHOR: 'author',
   CHILDREN: 'children',
-  DELETE: 'delete',
+  DELETE: 'deleteConcept',
   MEDIA: 'media',
   NAME: 'name',
   PARENT: 'parent',
