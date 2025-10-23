@@ -1,8 +1,19 @@
 import { changeConcept } from '@/lib/kb/api/references'
 
 import { CONCEPT_FIELD, CONCEPT_NAME_EXTENT, PREFS } from '@/lib/constants'
+import { REASSIGNMENT_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/associatedData'
 
 const { ASSOCIATED_DATA } = CONCEPT_NAME_EXTENT
+
+const performReassignments = async (apiFns, conceptName, reassignTo, associatedCounts) => {
+  const reassignmentPromises = REASSIGNMENT_COUNTS.reduce((acc, reassignment) => {
+    if (reassignment.renamedFn && associatedCounts[reassignment.title] > 0) {
+      acc.push(apiFns.apiPayload(reassignment.renamedFn, { old: conceptName, new: reassignTo }))
+    }
+    return acc
+  }, [])
+  return Promise.all(reassignmentPromises)
+}
 
 const removeConceptPrefsName = async (updatesContext, deletedConceptName) => {
   const { getPreferences, savePreferences } = updatesContext
@@ -53,7 +64,17 @@ const applySideEffects = async (updatesContext, updatesInfo) => {
   if (updatesInfo?.hasUpdated(CONCEPT_FIELD.DELETE)) {
     const { initial: wasDeleted, staged: isDeleted } = updatesInfo.updatedValue(CONCEPT_FIELD.DELETE) || {}
     if (!wasDeleted && isDeleted) {
-      await removeConceptPrefsName(updatesContext, updatesContext.staleConcept.name)
+      const deletedConceptName = updatesContext.staleConcept.name
+      await removeConceptPrefsName(updatesContext, deletedConceptName)
+      const { reassignmentData } = updatesContext
+      if (reassignmentData?.associatedCounts && reassignmentData?.reassignTo) {
+        await performReassignments(
+          updatesContext.apiFns,
+          deletedConceptName,
+          reassignmentData.reassignTo,
+          reassignmentData.associatedCounts
+        )
+      }
     }
   }
 }

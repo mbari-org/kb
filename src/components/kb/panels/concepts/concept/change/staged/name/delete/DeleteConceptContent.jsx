@@ -44,7 +44,7 @@ const DeleteConceptContent = () => {
   return (
     <Box>
       <Typography align='center' color='cancel' variant='h6'>
-        DELETE
+        DELETE CONCEPT
       </Typography>
       {modalData.isLoading && <ProcessingMessage message='Loading related data...' />}
       {!modalData.isLoading && (
@@ -56,13 +56,13 @@ const DeleteConceptContent = () => {
       )}
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>
-          {modalData.hasReassignmentData && (
+          {modalData.hasAssociatedData && (
             <Box sx={{ width: '80%', mx: 'auto', mt: 2 }}>
               <ToConceptChoice
                 error={!isValid}
                 handleChange={handleChange}
                 handleKeyUp={handleKeyUp}
-                label='Assign To'
+                label='Reassign To'
                 omitChoices={[concept.name]}
                 required
                 value={reassignTo}

@@ -7,56 +7,62 @@ import {
 } from '@/lib/kb/api/linkTemplates'
 import { getConceptObservationsCount, renameConceptObservations } from '@/lib/kb/api/observations'
 
-export const ASSOCIATED_COUNTS = [
+export const REASSIGNMENT_COUNTS = [
   {
-    title: 'Concept Annotations',
-    countFn: getConceptAnnotationsCount,
-    renameFn: null,
+    title: 'Concept Annotation',
+    countsFn: getConceptAnnotationsCount,
+    renamedFn: null,
   },
   {
-    title: 'ToConcept Associations',
-    countFn: getToConceptAssociationsCount,
-    renameFn: renameToConceptAssociations,
+    title: 'ToConcept Association',
+    countsFn: getToConceptAssociationsCount,
+    renamedFn: renameToConceptAssociations,
   },
   {
-    title: 'Concept Observations',
-    countFn: getConceptObservationsCount,
-    renameFn: renameConceptObservations,
+    title: 'Concept Observation',
+    countsFn: getConceptObservationsCount,
+    renamedFn: renameConceptObservations,
   },
   {
-    title: 'Concept Templates',
-    countFn: getConceptTemplateCount,
-    renameFn: null,
+    title: 'Concept Template',
+    countsFn: getConceptTemplateCount,
+    renamedFn: null,
   },
   {
-    title: 'ToConcept Templates',
-    countFn: getToConceptTemplateCount,
-    renameFn: renameToConceptTemplates,
+    title: 'ToConcept Template',
+    countsFn: getToConceptTemplateCount,
+    renamedFn: renameToConceptTemplates,
   },
 ]
 
-export const associatedMessage = (key, count) => {
-  return `There ${count > 1 ? 'are' : 'is'} ${count} ${key} that need to be reassigned.`
+export const reassignmentMessage = (key, count) => {
+  return `${count} ${key}${count > 1 ? 's' : ''} will be reassigned.`
 }
 
-export const associatedInfo = async (apiFns, conceptName) => {
-  const counts = await Promise.all(ASSOCIATED_COUNTS.map(({ countFn }) => apiFns.apiResult(countFn, conceptName)))
+export const associatedInfo = async (apiFns, conceptName, getReferences) => {
+  const counts = await Promise.all(REASSIGNMENT_COUNTS.map(({ countsFn }) => apiFns.apiResult(countsFn, conceptName)))
 
-  const countsByTitle = ASSOCIATED_COUNTS.reduce((acc, { title }, index) => {
+  const associatedCounts = REASSIGNMENT_COUNTS.reduce((acc, { title }, index) => {
     acc[title] = counts[index]
     return acc
   }, {})
 
-  const hasAssociatedData = counts.some(count => count > 0)
+  const referencesCount = getReferences ? getReferences(conceptName).length : 0
+
+  const hasAssociatedData = counts.some(count => count > 0) || referencesCount > 0
 
   const associatedMessages = hasAssociatedData
-    ? ASSOCIATED_COUNTS.reduce((messages, { title }, index) => {
+    ? REASSIGNMENT_COUNTS.reduce((messages, { title }, index) => {
         if (counts[index] > 0) {
-          messages.push(associatedMessage(title, counts[index]))
+          messages.push(reassignmentMessage(title, counts[index]))
         }
         return messages
       }, [])
     : ['There is no data that needs to be reassigned.']
 
-  return { associatedMessages, countsByTitle, hasAssociatedData }
+  if (referencesCount > 0) {
+    associatedMessages.push(`${referencesCount} Concept Reference${referencesCount > 1 ? 's' : ''} will be removed.`)
+  }
+
+  return { associatedMessages, associatedCounts, hasAssociatedData }
 }

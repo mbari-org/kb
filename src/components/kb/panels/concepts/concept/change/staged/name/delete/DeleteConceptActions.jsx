@@ -8,11 +8,9 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { ASSOCIATED_COUNTS } from '../associatedData'
-
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept } = use(ConceptContext)
+  const { concept, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData, setModalData, setProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { deleteConcept, loadConcept } = use(TaxonomyContext)
@@ -44,20 +42,13 @@ const DeleteConceptActions = () => {
     }
     if (label === 'Confirm') {
       setProcessing('Deleting concept...')
-      const { reassignTo, reassignmentCounts } = modalData
-      const renamePayload = {
-        old: concept.name,
-        new: reassignTo,
-      }
-      const apiPromises = ASSOCIATED_COUNTS.reduce((acc, reassignment) => {
-        if (reassignment.renameFn && reassignmentCounts[reassignment.title] > 0) {
-          acc.push(apiFns.apiPayload(reassignment.renameFn, renamePayload))
-        }
-        return acc
-      }, [deleteConcept(concept, reassignTo)])
-
-      Promise.all(apiPromises).then(results => {
-        const closestConceptName = results[0].closestConcept.name
+      const { associatedCounts, reassignTo } = modalData
+      modifyConcept({
+        field: 'reassignmentData',
+        value: { associatedCounts, reassignTo },
+      })
+      deleteConcept(concept, reassignTo).then(result => {
+        const closestConceptName = result.closestConcept.name
         closeModal(true, () => {
           loadConcept(closestConceptName, true)
           updateSelected({ concept: closestConceptName })

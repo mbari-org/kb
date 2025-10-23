@@ -8,7 +8,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 const useUpdatesContext = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept: staleConcept } = use(ConceptContext)
+  const { concept: staleConcept, stagedState } = use(ConceptContext)
   const { getReferences, refreshData: refreshPanelData } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { getPreferences, user } = use(UserContext)
@@ -17,6 +17,7 @@ const useUpdatesContext = () => {
     apiFns,
     getPreferences,
     getReferences,
+    reassignmentData: stagedState?.reassignmentData,
     refreshPanelData,
     savePreferences,
     staleConcept,
