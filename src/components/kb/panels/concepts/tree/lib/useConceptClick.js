@@ -10,7 +10,7 @@ const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand) =
         expandConcept(concept, CONCEPT_EXPAND.TOGGLE)
       } else {
         selectConcept(conceptName)
-        setAutoExpand({ expand: true, name: conceptName })
+        setAutoExpand({ expand: false, name: null })
       }
     },
     [concept, expandConcept, selectConcept, setAutoExpand]
