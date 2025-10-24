@@ -16,13 +16,13 @@ import {
   getConcept as getTaxonomyConcept,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
+  insertConcept,
   isConceptLoaded as isTaxonomyConceptLoaded,
   isDescendant as isDescendantConcept,
   isRoot as isTaxonomyRoot,
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
-  insertConcept,
   removeTaxonomyConcept,
 } from '@/lib/kb/model/taxonomy'
 
@@ -75,8 +75,8 @@ const TaxonomyProvider = ({ children }) => {
   const deleteConcept = useCallback(
     async (concept, reassignTo) => {
       const result = await deleteTaxonomyConcept(taxonomy, concept, reassignTo, apiFns)
-      updateTaxonomy(result.updatedTaxonomy)
-      return result
+      updateTaxonomy(result.taxonomy)
+      return result.closestConcept
     },
     [apiFns, taxonomy, updateTaxonomy]
   )

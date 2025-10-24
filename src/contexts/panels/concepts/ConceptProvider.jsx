@@ -141,7 +141,7 @@ const ConceptProvider = ({ children }) => {
 
     const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
     return () => clearTimeout(timeoutId)
-  }, [concept, getConcept, getSelected, handleSetConcept, isConceptLoaded, taxonomy])
+  }, [getConcept, getSelected, handleSetConcept, isConceptLoaded, taxonomy])
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS

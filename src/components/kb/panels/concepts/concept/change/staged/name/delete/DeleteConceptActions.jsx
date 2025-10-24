@@ -5,15 +5,23 @@ import { createActions } from '@/components/modal/conceptModalFactory'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import UserContext from '@/contexts/user/UserContext'
+
+import applySideEffects from './applySideEffects'
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept, modifyConcept } = use(ConceptContext)
-  const { closeModal, modalData, setModalData, setProcessing } = use(ConceptModalContext)
+  const { concept } = use(ConceptContext)
+  const { closeModal, modalData, setModalData } = use(ConceptModalContext)
+  const { getReferences, refreshData: refreshPanelData } = use(PanelDataContext)
+  const { savePreferences } = use(PreferencesContext)
   const { updateSelected } = use(SelectedContext)
   const { deleteConcept, loadConcept } = use(TaxonomyContext)
+  const { getPreferences } = use(UserContext)
 
   const isConfirm = modalData?.alertType === 'delete'
 
@@ -40,23 +48,23 @@ const DeleteConceptActions = () => {
       closeModal()
       return
     }
+
     if (label === 'Confirm') {
-      setProcessing('Deleting concept...')
-      const { associatedCounts, reassignTo } = modalData
-      modifyConcept({
-        field: 'reassignmentData',
-        value: { associatedCounts, reassignTo },
-      })
-      deleteConcept(concept, reassignTo).then(result => {
-        const closestConceptName = result.closestConcept.name
+      const { reassignTo } = modalData
+      deleteConcept(concept, reassignTo).then(async closestConcept => {
+        const updatesContext = {
+          apiFns,
+          getPreferences,
+          getReferences,
+          refreshPanelData,
+          savePreferences,
+        }
+        await applySideEffects(updatesContext, concept.name, modalData.reassignmentData)
+        updateSelected({ concept: closestConcept.name })
         closeModal(true, () => {
-          loadConcept(closestConceptName, true)
-          updateSelected({ concept: closestConceptName })
+          loadConcept(closestConcept.name)
         })
       })
-        .finally(() => {
-          setProcessing(null)
-        })
     }
   }
   return createActions({ colors, labels, onAction }, 'DeleteConceptActions:Confirm')

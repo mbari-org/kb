@@ -1,9 +1,5 @@
-import { changeConcept } from '@/lib/kb/api/references'
-
-import { CONCEPT_FIELD, CONCEPT_NAME_EXTENT, PREFS } from '@/lib/constants'
 import { REASSIGNMENT_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/associatedData'
-
-const { ASSOCIATED_DATA } = CONCEPT_NAME_EXTENT
+import { CONCEPT_FIELD, PREFS } from '@/lib/constants'
 
 const performReassignments = async (apiFns, conceptName, reassignTo, associatedCounts) => {
   const reassignmentPromises = REASSIGNMENT_COUNTS.reduce((acc, reassignment) => {
@@ -13,18 +9,6 @@ const performReassignments = async (apiFns, conceptName, reassignTo, associatedC
     return acc
   }, [])
   return Promise.all(reassignmentPromises)
-}
-
-const removeConceptPrefsName = async (updatesContext, deletedConceptName) => {
-  const { getPreferences, savePreferences } = updatesContext
-  const conceptPrefs = await getPreferences(PREFS.KEYS.CONCEPTS)
-  const removalsBeforePosition = conceptPrefs.state
-    .slice(0, conceptPrefs.position)
-    .filter(name => name === deletedConceptName).length
-  const updatedPrefsState = conceptPrefs.state.filter(name => name !== deletedConceptName)
-  const updatedPosition = conceptPrefs.position - removalsBeforePosition
-  const updatedConceptPrefs = { state: updatedPrefsState, position: updatedPosition }
-  await savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs)
 }
 
 const updateConceptPrefsName = async (updatesContext, updatesInfo) => {
@@ -39,43 +23,18 @@ const updateConceptPrefsName = async (updatesContext, updatesInfo) => {
 }
 
 const updatedNameInfo = updatesInfo => {
-  const updated = updatesInfo?.updatedValue('name')
+  const updated = updatesInfo?.updatedValue(CONCEPT_FIELD.NAME)
   return { value: updated?.value, extent: updated?.extent }
 }
 
-const updateReferences = async (updatesContext, updatesInfo) => {
-  const { value: updatedName, extent: updatedNameExtent } = updatedNameInfo(updatesInfo)
-  if (updatedNameExtent === ASSOCIATED_DATA) {
-    const { apiFns, getReferences, refreshPanelData, staleConcept } = updatesContext
-    const staleName = staleConcept.name
-    const references = getReferences(staleName)
-    await Promise.all(
-      references.map(reference => apiFns.apiPayload(changeConcept, [reference.id, staleName, updatedName]))
-    )
-    await refreshPanelData('references')
-  }
-}
+export { performReassignments }
 
 const applySideEffects = async (updatesContext, updatesInfo) => {
-  if (updatesInfo?.hasUpdated('name')) {
+  if (updatesInfo?.hasUpdated(CONCEPT_FIELD.NAME)) {
+    const { refreshPanelData } = updatesContext
+
     await updateConceptPrefsName(updatesContext, updatesInfo)
-    await updateReferences(updatesContext, updatesInfo)
-  }
-  if (updatesInfo?.hasUpdated(CONCEPT_FIELD.DELETE)) {
-    const { initial: wasDeleted, staged: isDeleted } = updatesInfo.updatedValue(CONCEPT_FIELD.DELETE) || {}
-    if (!wasDeleted && isDeleted) {
-      const deletedConceptName = updatesContext.staleConcept.name
-      await removeConceptPrefsName(updatesContext, deletedConceptName)
-      const { reassignmentData } = updatesContext
-      if (reassignmentData?.associatedCounts && reassignmentData?.reassignTo) {
-        await performReassignments(
-          updatesContext.apiFns,
-          deletedConceptName,
-          reassignmentData.reassignTo,
-          reassignmentData.associatedCounts
-        )
-      }
-    }
+    await refreshPanelData('references')
   }
 }
 
