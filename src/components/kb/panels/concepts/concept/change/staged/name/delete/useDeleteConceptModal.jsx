@@ -25,21 +25,23 @@ const useDeleteConceptModal = () => {
       alert: null,
       associatedCounts: [],
       associatedMessages: [],
-      hasAssociatedData: false,
+      hasReassignmentData: false,
+      hasReferencesData: false,
       isLoading: true,
       isValid: true,
       modified: true,
       reassignTo: concept.parent,
     }))
 
-    const { associatedCounts, hasAssociatedData, associatedMessages } =
+    const { associatedCounts, hasReassignmentData, hasReferencesData, associatedMessages } =
       await associatedInfo(apiFns, concept.name, getReferences)
 
     setModalData(prev => ({
       ...prev,
       associatedCounts,
       associatedMessages,
-      hasAssociatedData,
+      hasReassignmentData,
+      hasReferencesData,
       isLoading: false,
     }))
 

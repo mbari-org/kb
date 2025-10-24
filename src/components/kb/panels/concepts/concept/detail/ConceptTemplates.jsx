@@ -42,7 +42,7 @@ const ConceptTemplates = () => {
     return filterTemplates(templates, { concepts })
   }, [byAvailable, getAncestorNames, selectedConcept, templates])
 
-  const tooltip = `Go to ${byAvailable ? 'Available' : 'Explicit'} Templates for this Concept`
+  const tooltip = `View ${byAvailable ? 'Available' : 'Explicit'} Templates for this Concept`
 
   return (
     <ConceptPropertyPages

@@ -27,7 +27,7 @@ const ConceptReferences = () => {
     updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
   }
 
-  const tooltip = 'Go to References for this Concept'
+  const tooltip = 'View References for this Concept'
 
   return (
     <ConceptPropertyPages

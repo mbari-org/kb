@@ -49,9 +49,11 @@ export const associatedInfo = async (apiFns, conceptName, getReferences) => {
 
   const referencesCount = getReferences ? getReferences(conceptName).length : 0
 
-  const hasAssociatedData = counts.some(count => count > 0) || referencesCount > 0
+  const hasReassignmentData = counts.some(count => count > 0)
+  const hasReferencesData = referencesCount > 0
+  const hasAssociatedData = hasReassignmentData || hasReferencesData
 
-  const associatedMessages = hasAssociatedData
+  const associatedMessages = hasReassignmentData
     ? REASSIGNMENT_COUNTS.reduce((messages, { title }, index) => {
         if (counts[index] > 0) {
           messages.push(reassignmentMessage(title, counts[index]))
@@ -60,9 +62,9 @@ export const associatedInfo = async (apiFns, conceptName, getReferences) => {
       }, [])
     : ['There is no data that needs to be reassigned.']
 
-  if (referencesCount > 0) {
+  if (hasReferencesData) {
     associatedMessages.push(`${referencesCount} Concept Reference${referencesCount > 1 ? 's' : ''} will be removed.`)
   }
 
-  return { associatedMessages, associatedCounts, hasAssociatedData }
+  return { associatedMessages, associatedCounts, hasReassignmentData, hasReferencesData }
 }

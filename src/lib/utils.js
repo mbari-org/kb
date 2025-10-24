@@ -209,6 +209,10 @@ const pick = (object, fields) => {
   }, {})
 }
 
+const pluralCount = (count, word) => {
+  return `${count} ${word}${count > 1 ? 's' : ''}`
+}
+
 const prettyFormat = object => {
   return Object.entries(object)
     .map(([key, value]) => `${key}: ${value}`)
@@ -246,6 +250,7 @@ export {
   isRefEqual,
   isUrlValid,
   pick,
+  pluralCount,
   prettyFormat,
   prune,
   sleep,

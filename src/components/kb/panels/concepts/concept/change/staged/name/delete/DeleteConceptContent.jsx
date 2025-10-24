@@ -56,7 +56,7 @@ const DeleteConceptContent = () => {
       )}
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>
-          {modalData.hasAssociatedData && (
+          {modalData.hasReassignmentData && (
             <Box sx={{ width: '80%', mx: 'auto', mt: 2 }}>
               <ToConceptChoice
                 error={!isValid}

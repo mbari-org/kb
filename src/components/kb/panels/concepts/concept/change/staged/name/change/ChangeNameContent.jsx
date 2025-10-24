@@ -14,6 +14,7 @@ import useChangeNameHandlers from './useChangeNameHandlers'
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { isAdmin } from '@/lib/auth/role'
+import { pluralCount } from '@/lib/utils'
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -46,6 +47,9 @@ const ChangeNameContent = () => {
   const referencesCount = getReferences(concept.name).length
 
   const hasAssociatedData = realizationCount > 0 || referencesCount > 0
+
+  const realizationMessage = pluralCount(realizationCount, 'link realization')
+  const referencesMessage = pluralCount(referencesCount, 'reference')
 
   return (
     <Box>
@@ -91,7 +95,7 @@ const ChangeNameContent = () => {
       {hasAssociatedData && (
         <Box sx={{ borderTop: '1px solid #000000', mt: 2, textAlign: 'center' }}>
           <Typography variant='body1' sx={{ mt: 2 }}>
-            {`Associated Data: ${realizationCount} link realizations and ${referencesCount} references.`}
+            {`Associated Data: ${realizationMessage} and ${referencesMessage}.`}
           </Typography>
           {!isAdminUser && (
             <Box sx={{ mt: 2 }}>
