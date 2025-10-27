@@ -91,16 +91,12 @@ const TemplatesProvider = ({ children }) => {
     () => ({
       addTemplate,
       byAvailable,
-      concept: filters[FILTERS.CONCEPT],
       deleteTemplate,
       editTemplate,
       explicitConcepts,
       filteredTemplates,
       filters,
-      linkName: filters[FILTERS.LINK_NAME],
-      linkValue: filters[FILTERS.LINK_VALUE],
       setByAvailable,
-      toConcept: filters[FILTERS.TO_CONCEPT],
       updateFilters,
     }),
     [

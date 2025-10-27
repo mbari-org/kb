@@ -14,9 +14,12 @@ import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
-import { PAGINATION } from '@/lib/constants'
+import { PAGINATION, SELECTED } from '@/lib/constants'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
+
+const { TEMPLATES } = SELECTED.SETTINGS
+const { FILTERS } = TEMPLATES
 
 const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 
@@ -93,20 +96,17 @@ const useTemplatesExport = () => {
   const { setExporting } = use(PanelDataContext)
   const {
     byAvailable,
-    concept,
-    toConcept,
-    linkName,
-    linkValue,
+    filters,
     filteredTemplates,
   } = use(TemplatesContext)
   const { user } = use(UserContext)
 
   const normalizedFilters = {
     byAvailable,
-    filterConcept: concept,
-    filterToConcept: toConcept,
-    linkName,
-    linkValue,
+    filterConcept: filters[FILTERS.CONCEPT],
+    filterToConcept: filters[FILTERS.TO_CONCEPT],
+    linkName: filters[FILTERS.LINK_NAME],
+    linkValue: filters[FILTERS.LINK_VALUE],
     displayTemplates: filteredTemplates,
   }
 
