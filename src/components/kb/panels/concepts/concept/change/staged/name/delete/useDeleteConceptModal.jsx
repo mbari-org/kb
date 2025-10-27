@@ -11,7 +11,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { associatedInfo } from '../associatedData'
+import { associatedInfo } from '../associatedCountsData'
 
 const useDeleteConceptModal = () => {
   const { apiFns } = use(ConfigContext)

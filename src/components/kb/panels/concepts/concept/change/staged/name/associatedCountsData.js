@@ -1,48 +1,42 @@
 import { getConceptAnnotationsCount } from '@/lib/kb/api/annotations'
-import { getToConceptAssociationsCount, renameToConceptAssociations } from '@/lib/kb/api/associations'
+import { getToConceptAssociationsCount } from '@/lib/kb/api/associations'
 import {
   getConceptTemplateCount,
   getToConceptTemplateCount,
-  renameToConceptTemplates,
 } from '@/lib/kb/api/linkTemplates'
-import { getConceptObservationsCount, renameConceptObservations } from '@/lib/kb/api/observations'
+import { getConceptObservationsCount } from '@/lib/kb/api/observations'
 
-export const REASSIGNMENT_COUNTS = [
+export const ASSOCIATION_INFO = [
   {
     title: 'Concept Annotation',
     countsFn: getConceptAnnotationsCount,
-    renamedFn: null,
   },
   {
     title: 'ToConcept Association',
     countsFn: getToConceptAssociationsCount,
-    renamedFn: renameToConceptAssociations,
   },
   {
     title: 'Concept Observation',
     countsFn: getConceptObservationsCount,
-    renamedFn: renameConceptObservations,
   },
   {
     title: 'Concept Template',
     countsFn: getConceptTemplateCount,
-    renamedFn: null,
   },
   {
     title: 'ToConcept Template',
     countsFn: getToConceptTemplateCount,
-    renamedFn: renameToConceptTemplates,
   },
 ]
 
-export const reassignmentMessage = (key, count) => {
+export const renamedMessage = (key, count) => {
   return `${count} ${key}${count > 1 ? 's' : ''} will be reassigned.`
 }
 
 export const associatedInfo = async (apiFns, conceptName, getReferences) => {
-  const counts = await Promise.all(REASSIGNMENT_COUNTS.map(({ countsFn }) => apiFns.apiResult(countsFn, conceptName)))
+  const counts = await Promise.all(ASSOCIATION_INFO.map(({ countsFn }) => apiFns.apiResult(countsFn, conceptName)))
 
-  const associatedCounts = REASSIGNMENT_COUNTS.reduce((acc, { title }, index) => {
+  const associatedCounts = ASSOCIATION_INFO.reduce((acc, { title }, index) => {
     acc[title] = counts[index]
     return acc
   }, {})
@@ -51,12 +45,11 @@ export const associatedInfo = async (apiFns, conceptName, getReferences) => {
 
   const hasReassignmentData = counts.some(count => count > 0)
   const hasReferencesData = referencesCount > 0
-  const hasAssociatedData = hasReassignmentData || hasReferencesData
 
   const associatedMessages = hasReassignmentData
-    ? REASSIGNMENT_COUNTS.reduce((messages, { title }, index) => {
+    ? ASSOCIATION_INFO.reduce((messages, { title }, index) => {
         if (counts[index] > 0) {
-          messages.push(reassignmentMessage(title, counts[index]))
+          messages.push(renamedMessage(title, counts[index]))
         }
         return messages
       }, [])

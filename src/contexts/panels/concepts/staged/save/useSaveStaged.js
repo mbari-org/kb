@@ -5,8 +5,8 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import applyRenameSideEffects from '@/contexts/panels/concepts/staged/save/applyRenameSideEffects'
 import applyResults from '@/contexts/panels/concepts/staged/save/applyResults'
-import applySideEffects from '@/contexts/panels/concepts/staged/save/applySideEffects'
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
 
@@ -36,7 +36,7 @@ const useSaveStaged = () => {
 
     const freshConcept = await applyResults(updatesContext, updatesInfo)
 
-    await applySideEffects(updatesContext, updatesInfo)
+    await applyRenameSideEffects(updatesContext, updatesInfo)
 
     const { concept: updatedConcept } = await refreshConcept(freshConcept, updatesContext.staleConcept)
 

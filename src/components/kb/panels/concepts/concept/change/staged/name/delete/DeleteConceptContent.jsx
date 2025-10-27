@@ -1,4 +1,4 @@
-import { use, useState, useMemo } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 
@@ -10,7 +10,10 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import useAssociatedCounts, { associatedMessages, ASSOCIATED_ACTIONS } from '../useAssociatedCounts'
+
 const DeleteConceptContent = () => {
+
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
@@ -18,13 +21,21 @@ const DeleteConceptContent = () => {
   const [isValid, setIsValid] = useState(true)
   const [reassignTo, setReassignTo] = useState(concept.parent)
 
-  const allowedChoices = useMemo(() => {
-    return getNames().filter(name => name !== concept.name)
-  }, [getNames, concept.name])
+  const associatedCounts = useAssociatedCounts()
+  useEffect(() => {
+    if (associatedCounts !== null) {
+      setModalData(prev => ({
+        ...prev,
+        associatedCounts,
+        associatedMessages: associatedMessages(ASSOCIATED_ACTIONS.DELETE, associatedCounts) }))
+    }
+  }, [associatedCounts, setModalData])
 
-  const validateChoice = choice => {
-    return choice && allowedChoices.includes(choice)
-  }
+  const validateChoice = useCallback(choice =>
+    getNames()
+      .filter(name => name !== concept.name)
+      .includes(choice),
+  [getNames, concept.name])
 
   const handleChange = (_event, selectedName) => {
     setReassignTo(selectedName)
@@ -41,23 +52,47 @@ const DeleteConceptContent = () => {
     setModalData(prev => ({ ...prev, reassignTo: reassignTo, modified: valid, isValid: valid }))
   }
 
+  const { removalMessages, reassignmentMessages } = modalData.associatedMessages
+
+  const hasRemovals = removalMessages?.length > 0
+  const hasReassignments = reassignmentMessages?.length > 0
+  const hasAssociatedActions = hasRemovals || hasReassignments
+
   return (
     <Box>
       <Typography align='center' color='cancel' variant='h6'>
         DELETE CONCEPT
       </Typography>
       {modalData.isLoading && <ProcessingMessage message='Loading related data...' />}
-      {!modalData.isLoading && (
-        modalData.associatedMessages.map((message, index) => (
-          <Typography key={index} align='center'>
-            {message}
+      {!modalData.isLoading && hasAssociatedActions && (
+        <Box>
+          <Typography variant='body1' sx={{ ml: 1, mt: 2 }}>
+            {'Associated Actions:'}
           </Typography>
-        ))
+          {hasRemovals && (
+              <Box sx={{ mb: 2 }}>
+                {removalMessages.map((message, index) => (
+                  <Typography key={`removal-${index}`} variant='body1' sx={{ ml: 6 }}>
+                    {message}
+                  </Typography>
+                ))}
+              </Box>
+          )}
+          {hasReassignments && (
+            <Box sx={{ mb: 2 }}>
+              {reassignmentMessages.map((message, index) => (
+                <Typography key={`reassignment-${index}`} variant='body1' sx={{ ml: 6 }}>
+                  {message}
+                </Typography>
+              ))}
+            </Box>
+          )}
+        </Box>
       )}
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>
-          {modalData.hasReassignmentData && (
-            <Box sx={{ width: '80%', mx: 'auto', mt: 2 }}>
+          {hasReassignments && (
+            <Box sx={{ ml: 1 }}>
               <ToConceptChoice
                 error={!isValid}
                 handleChange={handleChange}

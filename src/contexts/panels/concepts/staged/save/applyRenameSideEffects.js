@@ -1,10 +1,10 @@
-import { REASSIGNMENT_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/associatedData'
+import { ASSOCIATION_INFO } from '@/components/kb/panels/concepts/concept/change/staged/name/associatedCountsData'
 import { CONCEPT_FIELD, PREFS } from '@/lib/constants'
 
 const performReassignments = async (apiFns, conceptName, reassignTo, associatedCounts) => {
-  const reassignmentPromises = REASSIGNMENT_COUNTS.reduce((acc, reassignment) => {
-    if (reassignment.renamedFn && associatedCounts[reassignment.title] > 0) {
-      acc.push(apiFns.apiPayload(reassignment.renamedFn, { old: conceptName, new: reassignTo }))
+  const reassignmentPromises = ASSOCIATION_INFO.reduce((acc, association) => {
+    if (association.renamedFn && associatedCounts[association.title] > 0) {
+      acc.push(apiFns.apiPayload(association.renamedFn, { old: conceptName, new: reassignTo }))
     }
     return acc
   }, [])
@@ -29,13 +29,18 @@ const updatedNameInfo = updatesInfo => {
 
 export { performReassignments }
 
-const applySideEffects = async (updatesContext, updatesInfo) => {
+const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   if (updatesInfo?.hasUpdated(CONCEPT_FIELD.NAME)) {
-    const { refreshPanelData } = updatesContext
+    // await performReassignments(
+    //   updatesContext.apiFns,
+    //   updatesContext.staleConcept.name,
+    //   updatesInfo.reassignTo,
+    //   updatesInfo.associatedCounts)
 
+    const { refreshPanelData } = updatesContext
     await updateConceptPrefsName(updatesContext, updatesInfo)
     await refreshPanelData('references')
   }
 }
 
-export default applySideEffects
+export default applyRenameSideEffects

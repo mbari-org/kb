@@ -11,7 +11,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import applySideEffects from './applySideEffects'
+import applyDeleteSideEffects from './applyDeleteSideEffects'
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
@@ -52,14 +52,18 @@ const DeleteConceptActions = () => {
     if (label === 'Confirm') {
       const { reassignTo } = modalData
       deleteConcept(concept, reassignTo).then(async closestConcept => {
-        const updatesContext = {
+        const deleteConceptContext = {
           apiFns,
+          associatedCounts: modalData.associatedCounts,
+          associatedMessages: modalData.associatedMessages,
+          concept,
           getPreferences,
           getReferences,
+          reassignTo,
           refreshPanelData,
           savePreferences,
         }
-        await applySideEffects(updatesContext, concept.name, modalData.reassignmentData)
+        await applyDeleteSideEffects(deleteConceptContext)
         updateSelected({ concept: closestConcept.name })
         closeModal(true, () => {
           loadConcept(closestConcept.name)

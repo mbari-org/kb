@@ -36,7 +36,7 @@ const ConceptTemplates = () => {
     })
   }
 
-  const filteredTemplates = useMemo(() => {
+  const conceptTemplates = useMemo(() => {
     const ancestorNames = byAvailable ? getAncestorNames(selectedConcept) : []
     const concepts = selectedConcept ? [selectedConcept, ...ancestorNames] : null
     return filterTemplates(templates, { concepts })
@@ -48,7 +48,7 @@ const ConceptTemplates = () => {
     <ConceptPropertyPages
       iconComponent={() => <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />}
       isLoading={isLoading}
-      items={filteredTemplates}
+      items={conceptTemplates}
       loadingText='Loading templates...'
       renderItem={renderItem}
       title='Templates'

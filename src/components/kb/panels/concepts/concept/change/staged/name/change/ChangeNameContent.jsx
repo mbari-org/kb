@@ -13,6 +13,8 @@ import UserContext from '@/contexts/user/UserContext'
 import useChangeNameHandlers from './useChangeNameHandlers'
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
+import { filterTemplates } from '@/components/kb/panels/templates/utils'
+
 import { isAdmin } from '@/lib/auth/role'
 import { pluralCount } from '@/lib/utils'
 
@@ -20,7 +22,7 @@ const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept, stagedState } = use(ConceptContext)
-  const { getReferences } = use(PanelDataContext)
+  const { getReferences, templates } = use(PanelDataContext)
   const { user } = use(UserContext)
 
   const [name, setName] = useState({ value: concept.name, extent: '' })
@@ -45,11 +47,17 @@ const ChangeNameContent = () => {
   const isAdminUser = isAdmin(user)
   const realizationCount = stagedState?.realizations.length
   const referencesCount = getReferences(concept.name).length
+  const templateCount = filterTemplates(templates, { concepts: [concept.name] }).length
 
-  const hasAssociatedData = realizationCount > 0 || referencesCount > 0
+  const messages = [[realizationCount, 'Link Realization'], [referencesCount, 'Reference'], [templateCount, 'Concept Template']]
+    .reduce((acc, [count, name]) => {
+      if (count > 0) {
+        acc.push(pluralCount(count, name))
+      }
+      return acc
+    }, [])
 
-  const realizationMessage = pluralCount(realizationCount, 'link realization')
-  const referencesMessage = pluralCount(referencesCount, 'reference')
+  const hasAssociatedData = messages.length > 0
 
   return (
     <Box>
@@ -93,10 +101,16 @@ const ChangeNameContent = () => {
       </Box>
 
       {hasAssociatedData && (
-        <Box sx={{ borderTop: '1px solid #000000', mt: 2, textAlign: 'center' }}>
-          <Typography variant='body1' sx={{ mt: 2 }}>
-            {`Associated Data: ${realizationMessage} and ${referencesMessage}.`}
+        <Box sx={{ borderTop: '1px solid #000000', mt: 2 }}>
+          <Typography variant='body1' sx={{ mt: 2, ml: 3 }}>
+            {'Associated Data:'}
           </Typography>
+          {messages.map((message, index) => { return (
+            <Typography key={index} variant='body1' sx={{ ml: 6 }}>
+                {message}
+              </Typography>
+          )
+          })}
           {!isAdminUser && (
             <Box sx={{ mt: 2 }}>
               <Typography variant='body1' color='text.secondary'>
