@@ -1,4 +1,4 @@
-import { CONCEPT_FIELD, PREFS } from '@/lib/constants'
+import { CONCEPT_FIELD, PANEL_DATA, PREFS } from '@/lib/constants'
 
 const getNameUpdate = updatesInfo => {
   const updated = updatesInfo?.updatedValue(CONCEPT_FIELD.NAME)
@@ -39,7 +39,7 @@ const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
 
     const { refreshPanelData } = updatesContext
     await updateConceptPrefsName(updatesContext, updatesInfo)
-    await refreshPanelData('references')
+    await refreshPanelData(PANEL_DATA.KEYS.REFERENCES)
   }
 }
 

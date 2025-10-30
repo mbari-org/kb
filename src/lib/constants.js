@@ -205,6 +205,13 @@ export const PAGINATION = {
   },
 }
 
+export const PANEL_DATA = {
+  KEYS: {
+    REFERENCES: 'references',
+    TEMPLATES: 'templates',
+    PENDING_HISTORY: 'pendingHistory',
+  },
+}
 export const PENDING = {
   APPROVAL: {
     ACCEPT: 'approve',

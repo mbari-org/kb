@@ -8,6 +8,8 @@ import useLoadReferences from '@/contexts/panel/data/useLoadReferences'
 import useLoadTemplates from '@/contexts/panel/data/useLoadTemplates'
 import useLoadPendingHistory from '@/contexts/panel/data/useLoadPendingHistory'
 
+import { PANEL_DATA } from '@/lib/constants'
+
 export const PanelDataProvider = ({ children }) => {
   const { setProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
@@ -19,6 +21,7 @@ export const PanelDataProvider = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [clearTemplateFilters, setClearTemplateFilters] = useState(false)
 
   const loadReferences = useLoadReferences(apiFns)
   const loadTemplates = useLoadTemplates(apiFns)
@@ -78,13 +81,13 @@ export const PanelDataProvider = ({ children }) => {
             }
           }
 
-          case 'references': {
+          case PANEL_DATA.KEYS.REFERENCES: {
             const referencesData = await loadReferences()
             setReferences(referencesData)
             return { references: referencesData }
           }
 
-          case 'templates': {
+          case PANEL_DATA.KEYS.TEMPLATES: {
             const templatesData = await loadTemplates()
             const explicitConceptsData = calcExplicitConcepts(templatesData)
             setTemplates(templatesData)
@@ -92,7 +95,7 @@ export const PanelDataProvider = ({ children }) => {
             return { templates: templatesData, explicitConcepts: explicitConceptsData }
           }
 
-          case 'pendingHistory': {
+          case PANEL_DATA.KEYS.PENDING_HISTORY: {
             const pendingHistoryData = await loadPendingHistory()
             setPendingHistory(pendingHistoryData)
             return { pendingHistory: pendingHistoryData }
@@ -121,17 +124,20 @@ export const PanelDataProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      clearTemplateFilters,
       explicitConcepts,
       getReferences,
       isDoiUnique,
       isLoading,
       pendingHistory,
       refreshData,
+      setClearTemplateFilters,
       setExporting,
       setReferences,
       templates,
     }),
     [
+      clearTemplateFilters,
       explicitConcepts,
       getReferences,
       isDoiUnique,

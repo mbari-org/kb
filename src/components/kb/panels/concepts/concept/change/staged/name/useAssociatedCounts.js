@@ -54,22 +54,37 @@ const useAssociatedCounts = () => {
   )
 
   useEffect(() => {
-    const fetchCounts = async () => {
-      const counts = []
-      for (const { title, fn, ON_DELETE, ON_RENAME, renameFn } of API_COUNTS) {
-        const value = await fn()
-        counts.push({
-          message: pluralCount(value, title),
-          value,
-          ON_DELETE,
-          ON_RENAME,
-          renameFn,
-        })
-      }
+    let isMounted = true
 
-      setAssociatedCounts(counts)
+    const fetchCounts = async () => {
+      try {
+        const counts = []
+        for (const { title, fn, ON_DELETE, ON_RENAME, renameFn } of API_COUNTS) {
+          if (!isMounted) return
+          const value = await fn()
+          counts.push({
+            message: pluralCount(value, title),
+            value,
+            ON_DELETE,
+            ON_RENAME,
+            renameFn,
+          })
+        }
+
+        if (isMounted) {
+          setAssociatedCounts(counts)
+        }
+      } catch (error) {
+        if (isMounted) {
+          throw error
+        }
+      }
     }
     fetchCounts()
+
+    return () => {
+      isMounted = false
+    }
   }, [API_COUNTS])
 
   return associatedCounts

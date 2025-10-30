@@ -21,7 +21,7 @@ import { getConceptPath } from '@/lib/kb/api/concept'
 
 import { initialConceptState, isStateModified } from '@/lib/kb/state/state'
 
-import { CONCEPT_STATE, LABELS, SELECTED } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS, PANEL_DATA, SELECTED } from '@/lib/constants'
 
 const { CONTINUE } = LABELS.BUTTON
 
@@ -56,7 +56,7 @@ const ConceptProvider = ({ children }) => {
     async updatedConcept => {
       setEditing(false)
 
-      const { pendingHistory } = await refreshPanelData('pendingHistory')
+      const { pendingHistory } = await refreshPanelData(PANEL_DATA.KEYS.PENDING_HISTORY)
       const pendingConcept = pendingHistory.filter(
         history => history.concept === updatedConcept.name
       )

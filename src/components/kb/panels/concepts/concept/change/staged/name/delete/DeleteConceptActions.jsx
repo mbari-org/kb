@@ -17,9 +17,9 @@ const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
   const { closeModal, modalData, setModalData } = use(ConceptModalContext)
-  const { getReferences, refreshData: refreshPanelData } = use(PanelDataContext)
+  const { getReferences, refreshData: refreshPanelData, setClearTemplateFilters } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
-  const { updateSelected } = use(SelectedContext)
+  const { getSettings, updateSelected } = use(SelectedContext)
   const { deleteConcept, loadConcept } = use(TaxonomyContext)
   const { getPreferences } = use(UserContext)
 
@@ -59,9 +59,11 @@ const DeleteConceptActions = () => {
           concept,
           getPreferences,
           getReferences,
+          getSettings,
           reassignTo,
           refreshPanelData,
           savePreferences,
+          setClearTemplateFilters,
         }
         await applyDeleteSideEffects(deleteConceptContext)
         updateSelected({ concept: closestConcept.name })

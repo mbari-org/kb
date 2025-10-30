@@ -1,19 +1,7 @@
+import { PANEL_DATA, PREFS } from '@/lib/constants'
 
-import { PREFS } from '@/lib/constants'
-
-// const performReassignments = async deleteConceptContext => {
-//   const { apiFns, concept, associatedCounts, reassignTo } = deleteConceptContext
-//   const reassignmentPromises = ASSOCIATION_INFO.reduce((acc, association) => {
-//     if (association.renamedFn && associatedCounts[association.title] > 0) {
-//       acc.push(apiFns.apiPayload(association.renamedFn, { old: concept.name, new: reassignTo }))
-//     }
-//     return acc
-//   }, [])
-//   return Promise.all(reassignmentPromises)
-// }
-
-const removeConceptPrefsName = async deleteConceptContext => {
-  const { getPreferences, savePreferences, concept } = deleteConceptContext
+const conceptPrefsUpdate = async deleteConceptContext => {
+  const { getPreferences, concept } = deleteConceptContext
   const conceptPrefs = await getPreferences(PREFS.KEYS.CONCEPTS)
   const removalsBeforePosition = conceptPrefs.state
     .slice(0, conceptPrefs.position)
@@ -21,13 +9,34 @@ const removeConceptPrefsName = async deleteConceptContext => {
   const updatedPrefsState = conceptPrefs.state.filter(name => name !== concept.name)
   const updatedPosition = conceptPrefs.position - removalsBeforePosition
   const updatedConceptPrefs = { state: updatedPrefsState, position: updatedPosition }
-  await savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs)
+  return updatedConceptPrefs
+}
+
+const settingsUpdate = deleteConceptContext => {
+  deleteConceptContext.setClearTemplateFilters(true)
+
+  const { getSettings } = deleteConceptContext
+  const currentSettings = getSettings(PREFS.KEYS.SETTINGS) || {}
+  const updatedSettings = {
+    ...currentSettings,
+    templates: {
+      ...currentSettings.templates,
+      filters: {},
+    },
+  }
+  return updatedSettings
 }
 
 const applyDeleteSideEffects = async deleteConceptContext => {
-  // await performReassignments(deleteConceptContext)
-  await removeConceptPrefsName(deleteConceptContext)
-  await deleteConceptContext.refreshPanelData('references')
+  const { savePreferences, refreshPanelData } = deleteConceptContext
+
+  const updatedConceptPrefs = await conceptPrefsUpdate(deleteConceptContext)
+  const updatedSettings = settingsUpdate(deleteConceptContext)
+
+  await savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs)
+  await savePreferences(PREFS.KEYS.SETTINGS, updatedSettings)
+
+  await refreshPanelData(PANEL_DATA.KEYS.REFERENCES)
 }
 
 export default applyDeleteSideEffects

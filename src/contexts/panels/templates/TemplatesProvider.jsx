@@ -22,7 +22,7 @@ const FILTERS = TEMPLATES.FILTERS
 const TemplatesProvider = ({ children }) => {
   const isLoadingConcept = useRef(false)
 
-  const { explicitConcepts, templates } = use(PanelDataContext)
+  const { clearTemplateFilters, explicitConcepts, setClearTemplateFilters, templates } = use(PanelDataContext)
   const { getSelected, getSettings, updateSettings } = use(SelectedContext)
   const { getAncestorNames, isConceptLoaded, loadConcept } = use(TaxonomyContext)
 
@@ -86,6 +86,13 @@ const TemplatesProvider = ({ children }) => {
         isLoadingConcept.current = false
       })
   }, [filters, handleLoadConceptError, isConceptLoaded, loadConcept])
+
+  useEffect(() => {
+    if (clearTemplateFilters) {
+      updateFilters(null)
+      setClearTemplateFilters(false)
+    }
+  }, [clearTemplateFilters, setClearTemplateFilters, updateFilters])
 
   const value = useMemo(
     () => ({
