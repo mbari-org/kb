@@ -14,7 +14,7 @@ const ChangeNameActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  const { isValid, name } = modalData
+  const { isValid, name, associatedCounts, associatedMessages } = modalData
 
   const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
     closeModal,
@@ -28,6 +28,8 @@ const ChangeNameActions = () => {
       update: {
         ...name,
         action: CONCEPT_STATE.NAME,
+        associatedCounts,
+        associatedMessages,
       },
     })
 

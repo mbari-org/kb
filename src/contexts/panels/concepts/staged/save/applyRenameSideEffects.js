@@ -1,19 +1,18 @@
-import { ASSOCIATION_INFO } from '@/components/kb/panels/concepts/concept/change/staged/name/associatedCountsData'
 import { CONCEPT_FIELD, PREFS } from '@/lib/constants'
 
-const performReassignments = async (apiFns, conceptName, reassignTo, associatedCounts) => {
-  const reassignmentPromises = ASSOCIATION_INFO.reduce((acc, association) => {
-    if (association.renamedFn && associatedCounts[association.title] > 0) {
-      acc.push(apiFns.apiPayload(association.renamedFn, { old: conceptName, new: reassignTo }))
-    }
-    return acc
-  }, [])
-  return Promise.all(reassignmentPromises)
+const getNameUpdate = updatesInfo => {
+  const updated = updatesInfo?.updatedValue(CONCEPT_FIELD.NAME)
+  return {
+    value: updated?.value,
+    extent: updated?.extent,
+    associatedCounts: updated?.associatedCounts,
+    reassignTo: updated?.reassignTo,
+  }
 }
 
 const updateConceptPrefsName = async (updatesContext, updatesInfo) => {
   const { getPreferences, savePreferences, staleConcept } = updatesContext
-  const { value: updatedName } = updatedNameInfo(updatesInfo)
+  const { value: updatedName } = getNameUpdate(updatesInfo)
   const staleName = staleConcept.name
 
   const conceptPrefs = await getPreferences(PREFS.KEYS.CONCEPTS)
@@ -22,20 +21,21 @@ const updateConceptPrefsName = async (updatesContext, updatesInfo) => {
   await savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs)
 }
 
-const updatedNameInfo = updatesInfo => {
-  const updated = updatesInfo?.updatedValue(CONCEPT_FIELD.NAME)
-  return { value: updated?.value, extent: updated?.extent }
-}
+const performReassignments = async (conceptName, reassignTo, associatedCounts) => {
+  const reassignmentPromises = associatedCounts
+    .filter(count => count.value > 0 && count.renameFn)
+    .map(count => count.renameFn({ old: conceptName, new: reassignTo }))
 
-export { performReassignments }
+  return Promise.all(reassignmentPromises)
+}
 
 const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   if (updatesInfo?.hasUpdated(CONCEPT_FIELD.NAME)) {
-    // await performReassignments(
-    //   updatesContext.apiFns,
-    //   updatesContext.staleConcept.name,
-    //   updatesInfo.reassignTo,
-    //   updatesInfo.associatedCounts)
+    const { reassignTo, associatedCounts } = getNameUpdate(updatesInfo)
+    await performReassignments(
+      updatesContext.staleConcept.name,
+      reassignTo,
+      associatedCounts)
 
     const { refreshPanelData } = updatesContext
     await updateConceptPrefsName(updatesContext, updatesInfo)

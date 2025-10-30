@@ -1,36 +1,24 @@
 import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { getConceptAnnotationsCount } from '@/lib/kb/api/annotations'
-import { getToConceptAssociationsCount } from '@/lib/kb/api/associations'
-import {
-  getConceptTemplateCount,
-  getToConceptTemplateCount,
-} from '@/lib/kb/api/linkTemplates'
-import { getConceptObservationsCount } from '@/lib/kb/api/observations'
-
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { pluralCount } from '@/lib/utils'
+import { ASSOCIATION_CONFIG, ON_ACTION } from './associationConfig'
 
 export const ASSOCIATED_ACTIONS = {
   DELETE: 'onDelete',
   RENAME: 'onRename',
 }
 
-const ON_ACTION = {
-  REASSIGN: 'Reassign',
-  REMOVE: 'Remove',
-}
-
 export const associatedMessages = (action, counts) => {
   const removalMessages = []
   const reassignmentMessages = []
 
-  counts.forEach(({ message, value, onDelete, onRename }) => {
+  counts.forEach(({ message, value, ON_DELETE, ON_RENAME }) => {
     if (value > 0) {
-      const actionValue = action === ASSOCIATED_ACTIONS.DELETE ? onDelete : onRename
+      const actionValue = action === ASSOCIATED_ACTIONS.DELETE ? ON_DELETE : ON_RENAME
       if (actionValue === ON_ACTION.REMOVE) {
         removalMessages.push(`${actionValue}: ${message}`)
       }
@@ -54,54 +42,33 @@ const useAssociatedCounts = () => {
     fn => apiFns.apiResult(fn, concept.name),
     [apiFns, concept.name])
 
+  const apiPayload = useCallback(
+    fn => apiFns.apiPayload(fn),
+    [apiFns])
+
   const API_COUNTS = useMemo(
-    () => [
-      {
-        title: 'Concept Annotation',
-        fn: () => apiFn(getConceptAnnotationsCount),
-        onDelete: ON_ACTION.REMOVE,
-        onRename: ON_ACTION.REASSIGN,
-      },
-      {
-        title: 'ToConcept Association',
-        fn: () => apiFn(getToConceptAssociationsCount),
-        onDelete: ON_ACTION.REMOVE,
-        onRename: ON_ACTION.REASSIGN,
-      },
-      {
-        title: 'Concept Observation',
-        fn: () => apiFn(getConceptObservationsCount),
-        onDelete: ON_ACTION.REMOVE,
-        onRename: ON_ACTION.REASSIGN,
-      },
-      {
-        title: 'Concept Template',
-        fn: () => apiFn(getConceptTemplateCount),
-        onDelete: ON_ACTION.REMOVE,
-        onRename: ON_ACTION.REASSIGN,
-      },
-      {
-        title: 'ToConcept Template',
-        fn: () => apiFn(getToConceptTemplateCount),
-        onDelete: ON_ACTION.REASSIGN,
-        onRename: ON_ACTION.REASSIGN,
-      },
-      {
-        title: 'Concept Reference',
-        fn: () => getReferences(concept.name).length,
-        onDelete: ON_ACTION.REMOVE,
-        onRename: ON_ACTION.REMOVE,
-      },
-    ],
-    [apiFn, getReferences, concept.name]
+    () => ASSOCIATION_CONFIG.map(({ title, countFn, renameFn, onDelete, onRename }) => {
+      const fn = title === 'Concept Reference'
+        ? () => getReferences(concept.name).length
+        : () => apiFn(countFn)
+      const apiRenameFn = renameFn ? payload => apiPayload(renameFn)(payload) : null
+      return { title, fn, onDelete, onRename, apiRenameFn }
+    }),
+    [apiFn, apiPayload, getReferences, concept.name]
   )
 
   useEffect(() => {
     const fetchCounts = async () => {
       const counts = []
-      for (const { title, fn, onDelete, onRename } of API_COUNTS) {
+      for (const { title, fn, onDelete, onRename, apiRenameFn } of API_COUNTS) {
         const value = await fn()
-        counts.push({ message: pluralCount(value, title), value, onDelete, onRename })
+        counts.push({
+          message: pluralCount(value, title),
+          value,
+          ON_DELETE: onDelete,
+          ON_RENAME: onRename,
+          renameFn: apiRenameFn,
+        })
       }
 
       setAssociatedCounts(counts)
