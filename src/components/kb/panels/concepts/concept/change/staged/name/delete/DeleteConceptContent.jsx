@@ -3,6 +3,7 @@ import { use, useCallback, useEffect, useState } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 
 import ProcessingMessage from '@/components/common/ProcessingMessage'
+import AssociatedActions from '@/components/common/concept/AssociatedActions'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
@@ -27,7 +28,8 @@ const DeleteConceptContent = () => {
       setModalData(prev => ({
         ...prev,
         associatedCounts,
-        associatedMessages: associatedMessages(ASSOCIATED_ACTIONS.DELETE, associatedCounts) }))
+        associatedMessages: associatedMessages(ASSOCIATED_ACTIONS.DELETE, associatedCounts),
+        isLoading: false }))
     }
   }, [associatedCounts, setModalData])
 
@@ -52,7 +54,7 @@ const DeleteConceptContent = () => {
     setModalData(prev => ({ ...prev, reassignTo: reassignTo, modified: valid, isValid: valid }))
   }
 
-  const { removalMessages, reassignmentMessages } = modalData.associatedMessages
+  const { removalMessages, reassignmentMessages } = modalData.associatedMessages || {}
 
   const hasRemovals = removalMessages?.length > 0
   const hasReassignments = reassignmentMessages?.length > 0
@@ -65,29 +67,10 @@ const DeleteConceptContent = () => {
       </Typography>
       {modalData.isLoading && <ProcessingMessage message='Loading related data...' />}
       {!modalData.isLoading && hasAssociatedActions && (
-        <Box>
-          <Typography variant='body1' sx={{ ml: 1, mt: 2 }}>
-            {'Associated Actions:'}
-          </Typography>
-          {hasRemovals && (
-              <Box sx={{ mb: 2 }}>
-                {removalMessages.map((message, index) => (
-                  <Typography key={`removal-${index}`} variant='body1' sx={{ ml: 6 }}>
-                    {message}
-                  </Typography>
-                ))}
-              </Box>
-          )}
-          {hasReassignments && (
-            <Box sx={{ mb: 2 }}>
-              {reassignmentMessages.map((message, index) => (
-                <Typography key={`reassignment-${index}`} variant='body1' sx={{ ml: 6 }}>
-                  {message}
-                </Typography>
-              ))}
-            </Box>
-          )}
-        </Box>
+        <AssociatedActions
+          removalMessages={removalMessages}
+          reassignmentMessages={reassignmentMessages}
+        />
       )}
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>

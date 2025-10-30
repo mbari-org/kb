@@ -19,6 +19,7 @@ import useAssociatedCounts, { associatedMessages, ASSOCIATED_ACTIONS } from '../
 
 import { isAdmin } from '@/lib/auth/role'
 import ProcessingMessage from '@/components/common/ProcessingMessage'
+import AssociatedActions from '@/components/common/concept/AssociatedActions'
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -57,7 +58,8 @@ const ChangeNameContent = () => {
       setModalData(prev => ({
         ...prev,
         associatedCounts,
-        associatedMessages: associatedMessages(ASSOCIATED_ACTIONS.RENAME, associatedCounts) }))
+        associatedMessages: associatedMessages(ASSOCIATED_ACTIONS.RENAME, associatedCounts),
+        isLoading: false }))
     }
   }, [associatedCounts, setModalData])
 
@@ -132,39 +134,12 @@ const ChangeNameContent = () => {
       </Box>
 
       {hasAssociatedData && (
-        <Box>
-          <Typography variant='body1' sx={{ ml: 1, mt: 2 }}>
-            {'Associated Actions:'}
-          </Typography>
-          {hasRemovals && (
-            <Box sx={{ mb: 2 }}>
-              {removalMessages.map((message, index) => (
-                <Typography key={`removal-${index}`} variant='body1' sx={{ ml: 6 }}>
-                  {message}
-                </Typography>
-              ))}
-            </Box>
-          )}
-          {hasReassignments && (
-            <Box sx={{ mb: 2 }}>
-              {reassignmentMessages.map((message, index) => (
-                <Typography key={`reassignment-${index}`} variant='body1' sx={{ ml: 6 }}>
-                  {message}
-                </Typography>
-              ))}
-            </Box>
-          )}
-          {!isAdminUser && (
-            <Box sx={{ mt: 2 }}>
-              <Typography variant='body1' color='text.secondary'>
-                {'Please communicate with an admin regarding this change.'}
-              </Typography>
-              <Typography variant='body1' color='text.secondary'>
-                {'When approving, an admin must specify whether to modify data associated with the concept.'}
-              </Typography>
-            </Box>
-          )}
-        </Box>
+        <AssociatedActions
+          removalMessages={removalMessages}
+          reassignmentMessages={reassignmentMessages}
+          isAdminUser={isAdminUser}
+          showNonAdminGuidance
+        />
       )}
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>

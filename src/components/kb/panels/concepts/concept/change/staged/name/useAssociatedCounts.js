@@ -42,32 +42,28 @@ const useAssociatedCounts = () => {
     fn => apiFns.apiResult(fn, concept.name),
     [apiFns, concept.name])
 
-  const apiPayload = useCallback(
-    fn => apiFns.apiPayload(fn),
-    [apiFns])
-
   const API_COUNTS = useMemo(
     () => ASSOCIATION_CONFIG.map(({ title, countFn, renameFn, onDelete, onRename }) => {
       const fn = title === 'Concept Reference'
         ? () => getReferences(concept.name).length
         : () => apiFn(countFn)
-      const apiRenameFn = renameFn ? payload => apiPayload(renameFn)(payload) : null
-      return { title, fn, onDelete, onRename, apiRenameFn }
+      const boundRenameFn = renameFn ? payload => apiFns.apiPayload(renameFn, payload) : null
+      return { title, fn, ON_DELETE: onDelete, ON_RENAME: onRename, renameFn: boundRenameFn }
     }),
-    [apiFn, apiPayload, getReferences, concept.name]
+    [apiFn, apiFns, getReferences, concept.name]
   )
 
   useEffect(() => {
     const fetchCounts = async () => {
       const counts = []
-      for (const { title, fn, onDelete, onRename, apiRenameFn } of API_COUNTS) {
+      for (const { title, fn, ON_DELETE, ON_RENAME, renameFn } of API_COUNTS) {
         const value = await fn()
         counts.push({
           message: pluralCount(value, title),
           value,
-          ON_DELETE: onDelete,
-          ON_RENAME: onRename,
-          renameFn: apiRenameFn,
+          ON_DELETE,
+          ON_RENAME,
+          renameFn,
         })
       }
 
