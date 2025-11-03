@@ -16,7 +16,7 @@ const useSaveStaged = () => {
   const { closeModal, setProcessing } = use(ConceptModalContext)
   const { initialState, setConcept, stagedState } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
-  const { refreshConcept } = use(TaxonomyContext)
+  const { conceptEditsRefresh } = use(TaxonomyContext)
 
   const updatesContext = useUpdatesContext()
 
@@ -42,7 +42,7 @@ const useSaveStaged = () => {
       await applyRenameSideEffects(updatesContext, updatesInfo)
     }
 
-    const { concept: updatedConcept } = await refreshConcept(freshConcept, updatesContext.staleConcept)
+    const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, updatesContext.staleConcept)
 
     await setConcept(updatedConcept)
 
@@ -52,10 +52,10 @@ const useSaveStaged = () => {
 
     setProcessing(false)
   }, [
+    conceptEditsRefresh,
     closeModal,
     initialState,
     updatesContext,
-    refreshConcept,
     setConcept,
     setProcessing,
     stagedState,

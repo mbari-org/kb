@@ -16,7 +16,7 @@ const useUpdatedPending = () => {
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
   const { updateSelected } = use(SelectedContext)
-  const { getConcept, refreshConcept } = use(TaxonomyContext)
+  const { conceptEditsRefresh, getConcept } = use(TaxonomyContext)
 
   return useCallback(
     async pendingConfirm => {
@@ -36,8 +36,8 @@ const useUpdatedPending = () => {
         approval,
         deps: {
           apiFns,
+          conceptEditsRefresh,
           getConcept,
-          refreshConcept,
           refreshHistory: null,
           updateSelected,
         },
@@ -45,7 +45,7 @@ const useUpdatedPending = () => {
       })
 
       if (updated.includes(staleConcept.name)) {
-        const { concept: updatedConcept } = await refreshConcept(
+        const { concept: updatedConcept } = await conceptEditsRefresh(
           getConcept(staleConcept.name),
           staleConcept
         )
@@ -58,9 +58,9 @@ const useUpdatedPending = () => {
     },
     [
       apiFns,
+      conceptEditsRefresh,
       getConcept,
       pending,
-      refreshConcept,
       setConcept,
       setProcessing,
       staleConcept,

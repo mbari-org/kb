@@ -1,3 +1,7 @@
+import { pick } from '@/lib/utils'
+
+const REFERENCE_FIELDS = ['citation', 'doi', 'concepts']
+
 const sortConcepts = concepts => [...(concepts || [])].sort((a, b) => a.localeCompare(b))
 
 const createReference = (data = {}) => ({
@@ -7,6 +11,8 @@ const createReference = (data = {}) => ({
   concepts: sortConcepts(data.concepts),
 })
 
+const pickReference = object => pick(object, REFERENCE_FIELDS)
+
 const updateReference = (reference, updates) =>
   createReference({
     ...reference,
@@ -14,4 +20,4 @@ const updateReference = (reference, updates) =>
     concepts: sortConcepts(updates.concepts || reference.concepts),
   })
 
-export { createReference, updateReference }
+export { createReference, pickReference, updateReference }

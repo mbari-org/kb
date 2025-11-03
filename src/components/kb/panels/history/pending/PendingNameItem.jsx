@@ -12,10 +12,10 @@ import { pendingInfo } from '@/lib/kb/model/history'
 import { isPendingName } from '@/lib/kb/state/name'
 import { isAdmin } from '@/lib/auth/role'
 
-import { HISTORY_FIELD, PENDING, CONCEPT_NAME_EXTENT } from '@/lib/constants'
+import { HISTORY_FIELD, LABELS, PENDING } from '@/lib/constants'
 
 const { APPROVAL } = PENDING
-const { NAME_ONLY } = CONCEPT_NAME_EXTENT
+const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const PendingNameItem = ({ item, user }) => {
   const [nameChangeType, setNameChangeType] = useState(NAME_ONLY)

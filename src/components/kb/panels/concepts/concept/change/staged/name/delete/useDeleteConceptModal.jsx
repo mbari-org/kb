@@ -5,24 +5,40 @@ import DeleteConceptContent from './DeleteConceptContent'
 import DeleteConceptActions from './DeleteConceptActions'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
+import { relatedDataCounts } from './relatedDataCounts'
 
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 const useDeleteConceptModal = () => {
+  const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
+  const { getReferences } = use(PanelDataContext)
 
-  const deleteConceptModal = useCallback(() => {
+  const deleteConceptModal = useCallback(async () => {
     setModalData(prev => ({
       ...prev,
       alert: null,
-      associatedCounts: null,
-      associatedMessages: {},
+      relatedDataCounts: null,
       isLoading: true,
       isValid: true,
       modified: true,
-      reassignTo: concept.parent,
+      reassign: concept.parent,
+    }))
+
+    const counts = await relatedDataCounts({
+      apiFns,
+      concept,
+      getReferences,
+    })
+
+    setModalData(prev => ({
+      ...prev,
+      relatedDataCounts: counts,
+      isLoading: false,
     }))
 
     const modal = createModal({
@@ -33,7 +49,7 @@ const useDeleteConceptModal = () => {
     })
 
     setModal(modal)
-  }, [concept.parent, setModal, setModalData])
+  }, [apiFns, concept, getReferences, setModal, setModalData])
 
   return deleteConceptModal
 }

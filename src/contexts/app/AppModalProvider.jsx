@@ -8,6 +8,7 @@ const AppModalProvider = ({ children }) => {
   const [onClose, setOnClose] = useState(null)
   const [processing, setProcessing] = useState(false)
   const [processingMessage, setProcessingMessage] = useState('Processing...')
+  const [suppressDisplay, setSuppressDisplay] = useState(false)
 
   const closeModal = useCallback(
     confirmed => {
@@ -63,8 +64,10 @@ const AppModalProvider = ({ children }) => {
       setModalData,
       setModal: handleSetModal,
       setProcessing: handleSetProcessing,
+      suppressDisplay,
+      setSuppressDisplay,
     }),
-    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing]
+    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing, suppressDisplay]
   )
 
   return <AppModalContext value={value}>{children}</AppModalContext>

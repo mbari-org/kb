@@ -43,11 +43,6 @@ export const CONCEPT_NAME = {
   EXTENT: 'nameExtent',
 }
 
-export const CONCEPT_NAME_EXTENT = {
-  ASSOCIATED_DATA: 'Associated Data',
-  NAME_ONLY: 'Name Only',
-}
-
 export const CONCEPT_NAME_TYPES = {
   COMMON: 'Common',
   FORMER: 'Former',
@@ -176,7 +171,7 @@ export const LABELS = {
       STAGED: 'Staged',
     },
     CHANGE_NAME: {
-      ASSOCIATED_DATA: 'Associated Data',
+      REASSIGN_DATA: 'Reassign Data',
       NAME_ONLY: 'Name Only',
     },
   },

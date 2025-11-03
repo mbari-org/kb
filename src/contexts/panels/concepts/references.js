@@ -1,4 +1,4 @@
-import { changeConcept, removeConcept } from '@/lib/kb/api/references'
+import { addConcept, removeConcept } from '@/lib/kb/api/references'
 
 import { PANEL_DATA } from '@/lib/constants'
 
@@ -9,7 +9,7 @@ const updateReferences = async (updatesContext, { conceptName, updatedName }) =>
   if (references.length > 0) {
     const updatePromises = references.map(reference => {
       if (updatedName) {
-        return apiFns.apiPayload(changeConcept, [reference.id, conceptName, updatedName])
+        return apiFns.apiPayload(addConcept, [reference.id, conceptName, updatedName])
       }
       return apiFns.apiPayload(removeConcept, [reference.id, conceptName])
     })

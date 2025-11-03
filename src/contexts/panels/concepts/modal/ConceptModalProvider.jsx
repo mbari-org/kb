@@ -1,13 +1,19 @@
-import { useCallback, useState, useMemo } from 'react'
+import { use, useCallback, useState, useMemo, useEffect } from 'react'
 import { flushSync } from 'react-dom'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalContext from './ConceptModalContext'
 
 const ConceptModalProvider = ({ children }) => {
+  const { setSuppressDisplay } = use(AppModalContext)
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
   const [processing, setProcessing] = useState(false)
+
+  useEffect(() => {
+    setSuppressDisplay(Boolean(processing))
+  }, [processing, setSuppressDisplay])
 
   const closeModal = useCallback(
     (confirmed, onComplete) => {

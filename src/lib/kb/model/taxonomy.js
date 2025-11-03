@@ -1,9 +1,7 @@
-import { putConceptAnnotation as apiPutConceptAnnotation } from '@/lib/kb/api/annotations'
 
 import {
   getConceptChildren as apiChildren,
   getConcept as apiConcept,
-  getConceptAnnotations as apiConceptAnnotations,
   getConceptNames as apiConceptNames,
   deleteConcept as apiDelete,
   getConceptParent as apiParent,
@@ -47,30 +45,12 @@ const closestConcept = (taxonomy, concept) => {
   return getConcept(taxonomy, parent.children[childIndex - 1])
 }
 
-const deleteConcept = async (taxonomy, concept, reassignTo, apiFns) => {
+const deleteConcept = async (taxonomy, concept, reassign, apiFns) => {
   if (0 < concept.children.length) {
     throw createError(
       'Delete Validation Error',
-      `Cannot delete concept "${concept.name}" because it has children.`,
+      `Cannot delete concept "${concept.name}" with children.`,
       { childCount: concept.children.length, conceptName: concept.name }
-    )
-  }
-
-  const conceptAnnotations = await apiFns.apiPayload(apiConceptAnnotations, concept.name)
-
-  const annotationUpdateResults = await Promise.all(
-    conceptAnnotations.map(annotation =>
-      apiFns.apiRaw(apiPutConceptAnnotation, { ...annotation, concept: reassignTo })
-    )
-  )
-
-  const errorResult = annotationUpdateResults.find(result => result.error)
-  if (errorResult) {
-    throw createError(
-      'Annotation Update Error',
-      'Failed to update concept annotations during delete',
-      { failedAnnotation: errorResult.error?.details, conceptName: concept.name, reassignTo },
-      errorResult.error?.original
     )
   }
 

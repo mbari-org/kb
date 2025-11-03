@@ -1,8 +1,8 @@
 import { FormControlLabel, Radio, Stack } from '@mui/material'
 
-import { CONCEPT_NAME_EXTENT } from '@/lib/constants'
+import { LABELS } from '@/lib/constants'
 
-const { NAME_ONLY, ASSOCIATED_DATA } = CONCEPT_NAME_EXTENT
+const { NAME_ONLY, REASSIGN_DATA } = LABELS.CONCEPT.CHANGE_NAME
 
 const textSx = {
   '& .MuiFormControlLabel-label': {
@@ -30,15 +30,15 @@ const NameChangeExtent = ({ disabled, nameChangeType, onChange }) => {
       <FormControlLabel
         control={
           <Radio
-            checked={nameChangeType === ASSOCIATED_DATA}
+            checked={nameChangeType === REASSIGN_DATA}
             disabled={disabled}
             name='nameChangeType'
             onChange={onChange}
             size='small'
-            value={ASSOCIATED_DATA}
+            value={REASSIGN_DATA}
           />
         }
-        label={ASSOCIATED_DATA}
+        label={REASSIGN_DATA}
         sx={textSx}
       />
     </Stack>

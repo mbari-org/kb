@@ -10,7 +10,8 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { hasDuplicate, EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { hasDuplicate } from '@/lib/kb/model/realization'
+import { EMPTY_TEMPLATE } from '@/lib/kb/model/templates'
 
 import useStageRealization from './useStageRealization'
 import useRealizationContentHandlers from './useRealizationContentHandlers'
@@ -33,7 +34,7 @@ const EditRealizationContent = () => {
   const [cycleIndex, setCycleIndex] = useState(0)
   const [filterLinkName, setFilterLinkName] = useState('')
   const [isValidToConcept, setIsValidToConcept] = useState(true)
-  const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_REALIZATION)
+  const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
 
   const isEdit = modalData?.action === CONCEPT_STATE.REALIZATION.EDIT
   const actionText = actionVerb(modalData.action)
@@ -140,7 +141,7 @@ const EditRealizationContent = () => {
             onChange={event => {
               const newValue = event.target.value
               setFilterLinkName(newValue)
-              handleRealizationChange(EMPTY_REALIZATION)
+            handleRealizationChange(EMPTY_TEMPLATE)
             }}
             onKeyDown={handleFilterKeyDown}
             size='small'

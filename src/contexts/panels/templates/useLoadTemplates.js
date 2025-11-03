@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { getTemplates, getTemplatesCount } from '@/lib/kb/api/linkTemplates'
+import { getTemplates, getTemplatesCount } from '@/lib/kb/api/templates'
 
 import { PAGINATION } from '@/lib/constants'
 

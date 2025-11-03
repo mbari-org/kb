@@ -5,14 +5,14 @@ const getNameUpdate = updatesInfo => {
   return {
     value: updated.value,
     extent: updated.extent,
-    associatedCounts: updated.associatedCounts,
+    relatedDataCounts: updated.relatedDataCounts,
   }
 }
 
-const performReassignments = async (conceptName, newConceptName, associatedCounts) => {
-  const reassignmentPromises = associatedCounts
-    .filter(count => count.value > 0 && count.renameFn)
-    .map(count => count.renameFn({ old: conceptName, new: newConceptName }))
+const performReassignments = async (conceptName, newConceptName, relatedDataCounts) => {
+  const reassignmentPromises = relatedDataCounts
+    .filter(count => count.value > 0 && count.reassignFn)
+    .map(count => count.reassignFn({ old: conceptName, new: newConceptName }))
 
   return Promise.all(reassignmentPromises)
 }
@@ -51,14 +51,14 @@ const settingsUpdate = (updatesContext, staleName, newConceptName) => {
 }
 
 const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
-  const { value: newConceptName, associatedCounts } = getNameUpdate(updatesInfo)
+  const { value: newConceptName, relatedDataCounts } = getNameUpdate(updatesInfo)
   const staleConcept = updatesContext.staleConcept
   const { savePreferences, refreshPanelData } = updatesContext
 
   await performReassignments(
     staleConcept.name,
     newConceptName,
-    associatedCounts)
+    relatedDataCounts)
 
   const updatedConceptPrefs = await conceptPrefsUpdate(updatesContext, newConceptName)
   const updatedSettings = settingsUpdate(updatesContext, staleConcept.name, newConceptName)

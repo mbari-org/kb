@@ -1,5 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/constants'
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
+import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
 import useDebounce from '@/hooks/useDebounce'
 
@@ -27,7 +27,7 @@ const useRealizationContentHandlers = ({
 
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION.ADD
-        ? updatedRealizationItem[field] !== EMPTY_TEMPLATE[field]
+        ? updatedRealizationItem[field] !== EMPTY_REALIZATION[field]
         : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
 
     debouncedInput(updatedRealizationItem, fieldIsModified, field)

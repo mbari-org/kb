@@ -1,12 +1,13 @@
 import { use } from 'react'
-import { Box, CircularProgress, Fade, Modal, Typography } from '@mui/material'
+import { Box, Fade, Modal } from '@mui/material'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
+import ProcessingMessage from '@/components/common/ProcessingMessage'
 
 const KbLoading = () => {
-  const { processing, processingMessage } = use(AppModalContext)
+  const { processing, processingMessage, suppressDisplay } = use(AppModalContext)
 
-  if (!processing) return null
+  if (!processing || suppressDisplay) return null
 
   const message = processingMessage
 
@@ -22,21 +23,7 @@ const KbLoading = () => {
             outline: 'none',
           }}
         >
-          <Box
-            sx={{
-              alignItems: 'center',
-              bgcolor: 'background.paper',
-              borderRadius: 1,
-              boxShadow: 6,
-              display: 'flex',
-              gap: 2,
-              px: 3,
-              py: 2,
-            }}
-          >
-            <CircularProgress size={24} />
-            <Typography variant='subtitle1'>{message}</Typography>
-          </Box>
+          <ProcessingMessage message={message} />
         </Box>
       </Fade>
     </Modal>

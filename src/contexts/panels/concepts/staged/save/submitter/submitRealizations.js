@@ -1,4 +1,4 @@
-import { createRealization, deleteRealization, updateRealization } from '@/lib/kb/api/linkRealizations'
+import { createRealization, deleteRealization, updateRealization } from '@/lib/kb/api/realizations'
 
 import { CONCEPT_STATE } from '@/lib/constants'
 

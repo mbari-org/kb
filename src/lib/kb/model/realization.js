@@ -2,17 +2,9 @@ import { pick } from '@/lib/utils'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
-export const EMPTY_TEMPLATE = {
-  concept: '',
-  linkName: '',
-  toConcept: '',
-  linkValue: '',
-}
+export const REALIZATION_FIELDS = ['concept', ...REALIZATION_DISPLAY_FIELDS]
 
-const EMPTY_REALIZATION = {
-  ...EMPTY_TEMPLATE,
-  templateId: null,
-}
+export const EMPTY_REALIZATION = Object.fromEntries(REALIZATION_FIELDS.map(field => [field, '']))
 
 const hasDuplicate = (realizations, realization, excludeIndex = null) => {
   if (!realization.linkName || !realization.toConcept || !realization.linkValue) {
@@ -28,17 +20,17 @@ const hasDuplicate = (realizations, realization, excludeIndex = null) => {
 const isSame = (a, b) =>
   a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
 
-const realizationFields = realization => pick(realization, REALIZATION_DISPLAY_FIELDS)
+const matchingRealizationString = (realization, realizationStr) => {
+  const parsedRealization = parseRealization(realizationStr)
+  return isSame(realization, parsedRealization)
+}
 
 const parseRealization = realization => {
   const [linkName, toConcept, linkValue] = realization.split(' | ')
   return { linkName, toConcept, linkValue }
 }
 
-const matchingRealizationString = (realization, realizationStr) => {
-  const parsedRealization = parseRealization(realizationStr)
-  return isSame(realization, parsedRealization)
-}
+const pickRealization = object => pick(object, REALIZATION_FIELDS)
 
 const sortRealizations = realizations =>
   realizations.sort(
@@ -49,12 +41,11 @@ const sortRealizations = realizations =>
   )
 
 export {
-  EMPTY_REALIZATION,
   hasDuplicate,
   isSame,
   matchingRealizationString,
   parseRealization,
+  pickRealization,
   REALIZATION_DISPLAY_FIELDS,
-  realizationFields,
   sortRealizations,
 }

@@ -8,7 +8,7 @@ import {
   getAvailableTemplates,
   getExplicitTemplates,
   getToConceptTemplates,
-} from '@/lib/kb/api/linkTemplates'
+} from '@/lib/kb/api/templates'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

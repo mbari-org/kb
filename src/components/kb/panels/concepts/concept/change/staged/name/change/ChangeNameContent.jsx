@@ -3,8 +3,12 @@ import { use, useCallback, useEffect, useState } from 'react'
 import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import NameChangeExtent from '@/components/common/NameChangeExtent'
 import ModalActionText from '@/components/common/ModalActionText'
+import NameChangeExtent from '@/components/common/NameChangeExtent'
+import ProcessingMessage from '@/components/common/ProcessingMessage'
+import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
+
+import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
@@ -14,12 +18,9 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
-import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
-import useAssociatedCounts, { associatedMessages, ASSOCIATED_ACTIONS } from '../useAssociatedCounts'
+import useRelatedDataCounts from '../useRelatedDataCounts'
 
 import { isAdmin } from '@/lib/auth/role'
-import ProcessingMessage from '@/components/common/ProcessingMessage'
-import AssociatedActions from '@/components/common/concept/AssociatedActions'
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -32,7 +33,7 @@ const ChangeNameContent = () => {
   const [name, setName] = useState({ value: concept.name, extent: '' })
   const [modifiedFields, setModifiedFields] = useState({ name: false })
   const [isValid, setIsValid] = useState(true)
-  const [reassignTo, setReassignTo] = useState(concept.parent)
+  const [reassign, setReassignTo] = useState(concept.parent)
 
   const { nameError, nameHelperText } = useConceptNameValidate(name, modifiedFields)
   const { handleNameChange, handleNameExtentChange } = useChangeNameHandlers(
@@ -52,21 +53,17 @@ const ChangeNameContent = () => {
 
   const isAdminUser = isAdmin(user)
 
-  const associatedCounts = useAssociatedCounts()
+  const relatedDataCounts = useRelatedDataCounts()
   useEffect(() => {
-    if (associatedCounts !== null) {
+    if (relatedDataCounts !== null) {
       setModalData(prev => ({
         ...prev,
-        associatedCounts,
-        associatedMessages: associatedMessages(ASSOCIATED_ACTIONS.RENAME, associatedCounts),
+        relatedDataCounts,
         isLoading: false }))
     }
-  }, [associatedCounts, setModalData])
+  }, [relatedDataCounts, setModalData])
 
-  const { removalMessages, reassignmentMessages } = modalData.associatedMessages || {}
-  const hasRemovals = removalMessages?.length > 0
-  const hasReassignments = reassignmentMessages?.length > 0
-  const hasAssociatedData = hasRemovals || hasReassignments
+  const hasRelatedData = relatedDataCounts.some(count => count.value > 0)
 
   const validateChoice = useCallback(choice =>
     getNames()
@@ -82,11 +79,11 @@ const ChangeNameContent = () => {
   }
 
   const handleReassignKeyUp = event => {
-    const reassignTo = event.target.value.trim()
-    setReassignTo(reassignTo)
-    const valid = validateChoice(reassignTo)
+    const reassign = event.target.value.trim()
+    setReassignTo(reassign)
+    const valid = validateChoice(reassign)
     setIsValid(valid)
-    setModalData(prev => ({ ...prev, reassignTo: reassignTo, modified: valid, isValid: valid }))
+    setModalData(prev => ({ ...prev, reassign: reassign, modified: valid, isValid: valid }))
   }
 
   return (
@@ -133,17 +130,13 @@ const ChangeNameContent = () => {
         )}
       </Box>
 
-      {hasAssociatedData && (
-        <AssociatedActions
-          removalMessages={removalMessages}
-          reassignmentMessages={reassignmentMessages}
-          isAdminUser={isAdminUser}
-          showNonAdminGuidance
-        />
-      )}
+      <RelatedDataCounts
+        relatedDataCounts={relatedDataCounts}
+      />
+
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>
-          {hasReassignments && (
+          {hasRelatedData && (
             <Box sx={{ ml: 1 }}>
               <ToConceptChoice
                 error={!isValid}
@@ -152,7 +145,7 @@ const ChangeNameContent = () => {
                 label='Reassign To'
                 omitChoices={[concept.name]}
                 required
-                value={reassignTo}
+                value={reassign}
               />
             </Box>
           )}
@@ -160,7 +153,7 @@ const ChangeNameContent = () => {
 
         {!isValid && (
           <Typography color='cancel' variant='caption'>
-            Please select a valid concept to reassign associated data
+            Please select a valid concept to reassign Concept related data
           </Typography>
         )}
       </Stack>

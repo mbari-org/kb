@@ -8,7 +8,7 @@ import cloneStale from '@/lib/kb/pending/cloneStale'
 export const processPendingApproval = async ({
   approval,
   items,
-  deps: { apiFns, getConcept, refreshConcept, updateSelected, refreshHistory },
+  deps: { apiFns, getConcept, conceptEditsRefresh, updateSelected, refreshHistory },
   strategy = { accept: 'apply', reject: 'apply' },
 }) => {
   if (!items || items.length === 0) return { updated: [] }
@@ -43,7 +43,7 @@ export const processPendingApproval = async ({
       applyApprovals(freshConcept, conceptItems)
     }
 
-    const { concept: updatedConcept } = await refreshConcept(freshConcept, staleConcept)
+    const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, staleConcept)
 
     if (updatedConcept && updatedConcept.name && updatedConcept.name !== staleConcept.name) {
       if (typeof updateSelected === 'function') {

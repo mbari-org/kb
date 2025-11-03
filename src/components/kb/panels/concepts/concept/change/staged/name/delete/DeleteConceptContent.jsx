@@ -1,9 +1,9 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 
 import ProcessingMessage from '@/components/common/ProcessingMessage'
-import AssociatedActions from '@/components/common/concept/AssociatedActions'
+import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
@@ -11,27 +11,15 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useAssociatedCounts, { associatedMessages, ASSOCIATED_ACTIONS } from '../useAssociatedCounts'
-
 const DeleteConceptContent = () => {
-
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 
   const [isValid, setIsValid] = useState(true)
-  const [reassignTo, setReassignTo] = useState(concept.parent)
+  const [reassign, setReassignTo] = useState(concept.parent)
 
-  const associatedCounts = useAssociatedCounts()
-  useEffect(() => {
-    if (associatedCounts !== null) {
-      setModalData(prev => ({
-        ...prev,
-        associatedCounts,
-        associatedMessages: associatedMessages(ASSOCIATED_ACTIONS.DELETE, associatedCounts),
-        isLoading: false }))
-    }
-  }, [associatedCounts, setModalData])
+  const { relatedDataCounts, isLoading } = modalData
 
   const validateChoice = useCallback(choice =>
     getNames()
@@ -47,34 +35,29 @@ const DeleteConceptContent = () => {
   }
 
   const handleKeyUp = event => {
-    const reassignTo = event.target.value.trim()
-    setReassignTo(reassignTo)
-    const valid = validateChoice(reassignTo)
+    const reassign = event.target.value.trim()
+    setReassignTo(reassign)
+    const valid = validateChoice(reassign)
     setIsValid(valid)
-    setModalData(prev => ({ ...prev, reassignTo: reassignTo, modified: valid, isValid: valid }))
+    setModalData(prev => ({ ...prev, reassign: reassign, modified: valid, isValid: valid }))
   }
 
-  const { removalMessages, reassignmentMessages } = modalData.associatedMessages || {}
-
-  const hasRemovals = removalMessages?.length > 0
-  const hasReassignments = reassignmentMessages?.length > 0
-  const hasAssociatedActions = hasRemovals || hasReassignments
+  const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
   return (
     <Box>
       <Typography align='center' color='cancel' variant='h6'>
         DELETE CONCEPT
       </Typography>
-      {modalData.isLoading && <ProcessingMessage message='Loading related data...' />}
-      {!modalData.isLoading && hasAssociatedActions && (
-        <AssociatedActions
-          removalMessages={removalMessages}
-          reassignmentMessages={reassignmentMessages}
+      {isLoading && <ProcessingMessage message='Loading related data...' />}
+      {!modalData.isLoading && hasRelatedData && (
+        <RelatedDataCounts
+          relatedDataCounts={relatedDataCounts}
         />
       )}
       <Stack direction='column' spacing={1} alignItems='center'>
         <Box>
-          {hasReassignments && (
+          {hasRelatedData && (
             <Box sx={{ ml: 1 }}>
               <ToConceptChoice
                 error={!isValid}
@@ -83,7 +66,7 @@ const DeleteConceptContent = () => {
                 label='Reassign To'
                 omitChoices={[concept.name]}
                 required
-                value={reassignTo}
+                value={reassign}
               />
             </Box>
           )}
@@ -91,7 +74,7 @@ const DeleteConceptContent = () => {
 
         {!isValid && (
           <Typography color='cancel' variant='caption'>
-            Please select a valid concept to reassign associated data
+            Please select a valid concept to reassign Concept related data
           </Typography>
         )}
       </Stack>

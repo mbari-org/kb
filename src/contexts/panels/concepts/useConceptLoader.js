@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef } from 'react'
 
 // Custom hook to handle async concept loading with race condition protection
 const useConceptLoader = ({
-  isConceptLoaded,
   getConcept,
-  loadConcept,
-  handleSetConcept,
-  handleLoadConceptError,
   getSelected,
+  handleLoadConceptError,
+  handleSetConcept,
+  isConceptLoaded,
+  loadConcept,
   setEditing,
 }) => {
   const isLoadingConcept = useRef(false)
@@ -56,12 +56,12 @@ const useConceptLoader = ({
       }
     },
     [
-      isConceptLoaded,
       getConcept,
-      loadConcept,
-      handleSetConcept,
-      handleLoadConceptError,
       getSelected,
+      handleLoadConceptError,
+      handleSetConcept,
+      isConceptLoaded,
+      loadConcept,
       setEditing,
     ]
   )

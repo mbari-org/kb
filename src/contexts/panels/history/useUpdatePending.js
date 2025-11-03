@@ -10,7 +10,7 @@ import processPendingApproval from '@/lib/kb/pending/processPendingApproval'
 const useHistoryUpdatePending = () => {
   const { apiFns } = use(ConfigContext)
   const { refreshData } = use(PanelDataContext)
-  const { getConcept, refreshConcept } = use(TaxonomyContext)
+  const { conceptEditsRefresh, getConcept } = use(TaxonomyContext)
   const { updateSelected } = use(SelectedContext)
 
   return useCallback(
@@ -19,8 +19,8 @@ const useHistoryUpdatePending = () => {
         approval,
         deps: {
           apiFns,
+          conceptEditsRefresh,
           getConcept,
-          refreshConcept,
           updateSelected,
           refreshHistory: () => refreshData('pendingHistory'),
         },
@@ -29,7 +29,7 @@ const useHistoryUpdatePending = () => {
 
       return true
     },
-    [apiFns, getConcept, refreshConcept, refreshData, updateSelected]
+    [apiFns, conceptEditsRefresh, getConcept, refreshData, updateSelected]
   )
 }
 

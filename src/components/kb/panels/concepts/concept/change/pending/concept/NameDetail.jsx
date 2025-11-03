@@ -19,10 +19,10 @@ import { isAdmin } from '@/lib/auth/role'
 import { isPendingName } from '@/lib/kb/state/name'
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { CONCEPT_NAME_EXTENT, PENDING } from '@/lib/constants'
+import { LABELS, PENDING } from '@/lib/constants'
 
 const { APPROVAL, GROUP } = PENDING
-const { NAME_ONLY } = CONCEPT_NAME_EXTENT
+const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingConcept }) => {
   const { modalData, setModalData } = use(ConceptModalContext)

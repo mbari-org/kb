@@ -11,16 +11,16 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import applyDeleteSideEffects from './applyDeleteSideEffects'
+import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
-  const { closeModal, modalData, setModalData } = use(ConceptModalContext)
-  const { getReferences, refreshData: refreshPanelData, setClearTemplateFilters } = use(PanelDataContext)
+  const { closeModal, modalData, setModalData, setProcessing } = use(ConceptModalContext)
+  const { getReferences, refreshData: refreshPanelData, setClearTemplateFilters, templates } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { getSettings, updateSelected } = use(SelectedContext)
-  const { deleteConcept, loadConcept } = use(TaxonomyContext)
+  const { deleteConcept, getConcept, refreshConcept } = use(TaxonomyContext)
   const { getPreferences } = use(UserContext)
 
   const isConfirm = modalData?.alertType === 'delete'
@@ -43,33 +43,43 @@ const DeleteConceptActions = () => {
 
   const colors = ['main', 'cancel']
   const labels = ['Cancel', 'Confirm']
-  const onAction = label => {
+  const onAction = async label => {
     if (label === 'Cancel') {
       closeModal()
       return
     }
 
     if (label === 'Confirm') {
-      const { reassignTo } = modalData
-      deleteConcept(concept, reassignTo).then(async closestConcept => {
-        const deleteConceptContext = {
-          apiFns,
-          associatedCounts: modalData.associatedCounts,
-          associatedMessages: modalData.associatedMessages,
-          concept,
-          getPreferences,
-          getReferences,
-          getSettings,
-          reassignTo,
-          refreshPanelData,
-          savePreferences,
-          setClearTemplateFilters,
-        }
-        await applyDeleteSideEffects(deleteConceptContext)
+      setProcessing('Deleting Concept....')
+      const { reassign } = modalData
+      const deleteConceptContext = {
+        apiFns,
+        relatedDataCounts: modalData.relatedDataCounts,
+        concept,
+        getPreferences,
+        getReferences,
+        getSettings,
+        reassign,
+        refreshPanelData,
+        savePreferences,
+        setClearTemplateFilters,
+        templates,
+      }
+
+      const preDeleteResults = await preSideEffects(deleteConceptContext)
+      const { closestConcept } = await deleteConcept(concept, reassign)
+      const postDeleteResults = await postSideEffects(deleteConceptContext)
+
+      const results = { ...preDeleteResults, ...postDeleteResults }
+
+      const reassignedConcept = { ...getConcept(reassign) }
+      await applyResults(reassignedConcept, refreshPanelData, results)
+
+      refreshConcept(reassignedConcept)
+
+      closeModal(true, () => {
         updateSelected({ concept: closestConcept.name })
-        closeModal(true, () => {
-          loadConcept(closestConcept.name)
-        })
+        setClearTemplateFilters(true)
       })
     }
   }

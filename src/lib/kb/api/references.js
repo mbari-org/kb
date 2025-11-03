@@ -4,12 +4,6 @@ import { paramsQs } from '@/lib/services/params'
 const addConcept = async (config, [referenceId, conceptName]) =>
   oniPut({ config, path: ['references', 'add', referenceId, 'to', conceptName] })
 
-const changeConcept = async (config, [referenceId, fromName, toName]) =>
-  Promise.all([
-    removeConcept(config, [referenceId, fromName]),
-    addConcept(config, [referenceId, toName]),
-  ])
-
 const createReference = async (config, payload) => oniPost({ config, path: ['references'], data: payload })
 
 const deleteReference = async (config, referenceId) =>
@@ -27,7 +21,6 @@ const updateReference = async (config, [referenceId, payload]) =>
 
 export {
   addConcept,
-  changeConcept,
   createReference,
   deleteReference,
   getReference,

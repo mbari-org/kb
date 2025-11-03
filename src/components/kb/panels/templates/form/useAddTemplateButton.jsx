@@ -8,7 +8,7 @@ import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/realization'
+import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
 import { PROCESSING, SELECTED } from '@/lib/constants'
 
@@ -119,7 +119,7 @@ const useAddTemplateButton = () => {
         hasChanges: false,
         isValid: false,
         template: {
-          ...EMPTY_TEMPLATE,
+          ...EMPTY_REALIZATION,
           concept: filters[SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT],
         },
       },
