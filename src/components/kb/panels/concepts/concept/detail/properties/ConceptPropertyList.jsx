@@ -11,7 +11,7 @@ import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 import { ACTION } from '@/lib/constants'
 
 const ConceptPropertyList = ({
-  iconComponent,
+  actionComponent,
   items = [],
   maxHeight = '300px',
   renderComponent,
@@ -34,7 +34,7 @@ const ConceptPropertyList = ({
   return (
     <Box>
       <Box sx={{ minHeight: '42px', height: '42px' }}>
-        <ConceptSectionTitle color={titleColor} title={title} iconComponent={iconComponent}>
+        <ConceptSectionTitle color={titleColor} title={title} actionComponent={actionComponent}>
           <Box sx={{ ml: 2, flex: 1 }} />
           {hasItems && (
             <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>

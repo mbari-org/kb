@@ -20,7 +20,7 @@ const ConceptAliases = () => {
 
   return (
     <ConceptPropertyList
-      iconComponent={isEditing ? IconComponent : null}
+      actionComponent={isEditing ? IconComponent : null}
       items={aliases}
       renderComponent={AliasComponent}
       title='Alternate Names'

@@ -14,7 +14,7 @@ const BaseConceptPropertyPages = ({
   defaultExpanded = true,
   disablePagination = false,
   fixedHeight,
-  iconComponent,
+  actionComponent,
   isLoading = false,
   items = [],
   loadingText = 'Loading...',
@@ -108,7 +108,7 @@ const BaseConceptPropertyPages = ({
           fixedHeight={fixedHeight}
           handleToggle={handleToggle}
           hasItems={hasItems}
-          iconComponent={iconComponent}
+          actionComponent={actionComponent}
           itemsPerPage={rowsPerPage}
           onPageChange={handlePageChange}
           onPageTextClick={() => {

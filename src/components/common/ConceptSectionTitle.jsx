@@ -1,12 +1,12 @@
 import { Box, Typography } from '@mui/material'
 
-const ConceptSectionTitle = ({ children, color, iconComponent, sx = {}, title }) => {
+const ConceptSectionTitle = ({ children, color, actionComponent, sx = {}, title }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, ...sx }}>
       <Typography variant='h6' sx={{ color, fontWeight: 'bold' }}>
         {title}
       </Typography>
-      {iconComponent && (
+      {actionComponent && (
         <Box
           className='clickable-element'
           sx={{
@@ -22,7 +22,7 @@ const ConceptSectionTitle = ({ children, color, iconComponent, sx = {}, title })
             },
           }}
         >
-          {iconComponent()}
+          {actionComponent()}
         </Box>
       )}
       {children}

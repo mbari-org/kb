@@ -5,7 +5,7 @@ const ConceptPropertyPages = ({
   defaultExpanded = true,
   disablePagination = false,
   fixedHeight,
-  iconComponent,
+  actionComponent,
   isLoading = false,
   items = [],
   loadingText = 'Loading...',
@@ -26,7 +26,7 @@ const ConceptPropertyPages = ({
       defaultExpanded={defaultExpanded}
       disablePagination={disablePagination}
       fixedHeight={fixedHeight}
-      iconComponent={iconComponent}
+      actionComponent={actionComponent}
       isLoading={isLoading}
       items={items}
       loadingText={loadingText}
