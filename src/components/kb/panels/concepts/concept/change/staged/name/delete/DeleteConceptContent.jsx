@@ -20,6 +20,7 @@ const DeleteConceptContent = () => {
   const [reassign, setReassignTo] = useState(concept.parent)
 
   const { relatedDataCounts, isLoading } = modalData
+  const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
   const validateChoice = useCallback(choice =>
     getNames()
@@ -41,8 +42,6 @@ const DeleteConceptContent = () => {
     setIsValid(valid)
     setModalData(prev => ({ ...prev, reassign: reassign, modified: valid, isValid: valid }))
   }
-
-  const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
   return (
     <Box>

@@ -1,5 +1,7 @@
 import { use, useCallback, useEffect, useState } from 'react'
 
+import useDebounce from '@/hooks/useDebounce'
+
 import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
@@ -18,7 +20,6 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
-import useRelatedDataCounts from '../useRelatedDataCounts'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -43,27 +44,31 @@ const ChangeNameContent = () => {
     setModifiedFields
   )
 
-  const isValidChange = name.value !== concept.name && !nameError
+  const isValidName = name.value !== concept.name && !nameError
+
+  const handleUpdateModalData = useCallback(
+    (nameValue, isValidValue) => {
+      setModalData(prev => ({ ...prev, name: nameValue, isValid: isValidValue }))
+    },
+    [setModalData]
+  )
+
+  const debouncedUpdateModalData = useDebounce(handleUpdateModalData)
+
+  useEffect(() => {
+    debouncedUpdateModalData(name, isValidName)
+  }, [name, isValidName, debouncedUpdateModalData])
 
   const toColor = () => {
-    return isValidChange
+    return isValidName
       ? theme.concept.color.add
       : theme.palette.grey[700]
   }
 
   const isAdminUser = isAdmin(user)
 
-  const relatedDataCounts = useRelatedDataCounts()
-  useEffect(() => {
-    if (relatedDataCounts !== null) {
-      setModalData(prev => ({
-        ...prev,
-        relatedDataCounts,
-        isLoading: false }))
-    }
-  }, [relatedDataCounts, setModalData])
-
-  const hasRelatedData = relatedDataCounts.some(count => count.value > 0)
+  const { relatedDataCounts } = modalData
+  const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
   const validateChoice = useCallback(choice =>
     getNames()
@@ -91,73 +96,76 @@ const ChangeNameContent = () => {
       <ModalActionText text='Change Name' />
       {modalData?.isLoading && <ProcessingMessage message='Loading related data...' />}
       {!modalData?.isLoading && (
-      <>
-      <Stack direction='row' spacing={2} alignItems='center' sx={{ mt: 1, ml: 3 }}>
-        <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>To:</Typography>
-        <TextField
-          error={nameError}
-          fullWidth
-          helperText={nameError ? nameHelperText : ' '}
-          onChange={handleNameChange}
-          onKeyUp={handleNameChange}
-          slotProps={{
-            input: {
-              sx: {
-                color: toColor(),
-                cursor: 'text',
-                fontFamily: theme.concept.fontFamily,
-                fontSize: theme.concept.updateFontSize,
-                fontWeight: theme.concept.fontWeight,
-                height: 'auto',
+      <Box>
+        <Stack direction='row' spacing={2} alignItems='center' sx={{ mt: 1, ml: 3 }}>
+          <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>To:</Typography>
+          <TextField
+            error={nameError}
+            fullWidth
+            helperText={nameError ? nameHelperText : ' '}
+            onChange={handleNameChange}
+            onKeyUp={handleNameChange}
+            slotProps={{
+              input: {
+                sx: {
+                  color: toColor(),
+                  cursor: 'text',
+                  fontFamily: theme.concept.fontFamily,
+                  fontSize: theme.concept.updateFontSize,
+                  fontWeight: theme.concept.fontWeight,
+                  height: 'auto',
+                },
               },
-            },
-          }}
-          sx={{
-            '& .MuiFormHelperText-root': {
-              color: nameError ? theme.palette.cancel.main : 'transparent',
-              lineHeight: '0',
-              margin: '15px 0 0 10px',
-            },
-          }}
-          value={name.value}
-          variant='standard'
-        />
-      </Stack>
-
-      <Box sx={{ ml: 6.75 }}>
-        {isAdminUser && (
-          <NameChangeExtent disabled={!isValidChange} nameChangeType={name.extent} onChange={handleNameExtentChange} />
-        )}
-      </Box>
-
-      <RelatedDataCounts
-        relatedDataCounts={relatedDataCounts}
-      />
-
-      <Stack direction='column' spacing={1} alignItems='center'>
-        <Box>
-          {hasRelatedData && (
-            <Box sx={{ ml: 1 }}>
-              <ToConceptChoice
-                error={!isValid}
-                handleChange={handleReassignChange}
-                handleKeyUp={handleReassignKeyUp}
-                label='Reassign To'
-                omitChoices={[concept.name]}
-                required
-                value={reassign}
-              />
-            </Box>
+            }}
+            sx={{
+              '& .MuiFormHelperText-root': {
+                color: nameError ? theme.palette.cancel.main : 'transparent',
+                lineHeight: '0',
+                margin: '15px 0 0 10px',
+              },
+            }}
+            value={name.value}
+            variant='standard'
+          />
+        </Stack>
+        <Box sx={{ ml: 6.75 }}>
+          {isAdminUser && (
+            <NameChangeExtent
+              disabled={!isValidName}
+              nameChangeType={name.extent}
+              onChange={handleNameExtentChange}
+              value={name.extent}
+            />
           )}
         </Box>
-
-        {!isValid && (
-          <Typography color='cancel' variant='caption'>
-            Please select a valid concept to reassign Concept related data
-          </Typography>
+        {!modalData.isLoading && hasRelatedData && (
+          <RelatedDataCounts
+            relatedDataCounts={relatedDataCounts}
+          />
         )}
-      </Stack>
-      </>
+        <Stack direction='column' spacing={1} alignItems='center'>
+          <Box>
+            {hasRelatedData && (
+              <Box sx={{ ml: 1 }}>
+                <ToConceptChoice
+                  error={!isValid}
+                  handleChange={handleReassignChange}
+                  handleKeyUp={handleReassignKeyUp}
+                  label='Reassign To'
+                  omitChoices={[concept.name]}
+                  required
+                  value={reassign}
+                />
+              </Box>
+            )}
+          </Box>
+          {!isValid && (
+            <Typography color='cancel' variant='caption'>
+              Please select a valid concept to reassign Concept related data
+            </Typography>
+          )}
+        </Stack>
+      </Box>
       )}
     </Box>
   )

@@ -2,7 +2,7 @@ import { FormControlLabel, Radio, Stack } from '@mui/material'
 
 import { LABELS } from '@/lib/constants'
 
-const { NAME_ONLY, REASSIGN_DATA } = LABELS.CONCEPT.CHANGE_NAME
+const { NAME_ONLY, REASSIGN } = LABELS.CONCEPT.CHANGE_NAME
 
 const textSx = {
   '& .MuiFormControlLabel-label': {
@@ -12,7 +12,21 @@ const textSx = {
 
 const NameChangeExtent = ({ disabled, nameChangeType, onChange }) => {
   return (
-    <Stack direction='row' spacing={1}>
+    <Stack direction='row' spacing={3}>
+      <FormControlLabel
+        control={
+          <Radio
+            checked={nameChangeType === REASSIGN}
+            disabled={disabled}
+            name='nameChangeType'
+            onChange={onChange}
+            size='small'
+            value={REASSIGN}
+          />
+        }
+        label={REASSIGN}
+        sx={textSx}
+      />
       <FormControlLabel
         control={
           <Radio
@@ -25,20 +39,6 @@ const NameChangeExtent = ({ disabled, nameChangeType, onChange }) => {
           />
         }
         label={NAME_ONLY}
-        sx={textSx}
-      />
-      <FormControlLabel
-        control={
-          <Radio
-            checked={nameChangeType === REASSIGN_DATA}
-            disabled={disabled}
-            name='nameChangeType'
-            onChange={onChange}
-            size='small'
-            value={REASSIGN_DATA}
-          />
-        }
-        label={REASSIGN_DATA}
         sx={textSx}
       />
     </Stack>

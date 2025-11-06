@@ -10,7 +10,6 @@ import { getConcept as apiConcept } from '@/lib/kb/model/concept'
 
 import {
   closestConcept as closestTaxonomyConcept,
-  deleteConcept as deleteTaxonomyConcept,
   filterTaxonomyRanks,
   getAncestorNames as getTaxonomyAncestorNames,
   getConcept as getTaxonomyConcept,

@@ -4,7 +4,7 @@ import { createRealization } from '@/lib/kb/api/realizations'
 import { addConcept } from '@/lib/kb/api/references'
 import { createConceptTemplate, renameToConceptTemplates } from '@/lib/kb/api/templates'
 
-import { RELATED_DATA_COUNTS } from './relatedDataCounts'
+import { RELATED_DATA_COUNTS } from '../relatedDataCounts'
 
 import { pickRealization } from '@/lib/kb/model/realization'
 import { pickReference } from '@/lib/kb/model/reference'

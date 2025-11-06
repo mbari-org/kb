@@ -13,8 +13,8 @@ import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdates
 import { CONCEPT_FIELD } from '@/lib/constants'
 
 const useSaveStaged = () => {
-  const { closeModal, setProcessing } = use(ConceptModalContext)
   const { initialState, setConcept, stagedState } = use(ConceptContext)
+  const { closeModal, setProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh } = use(TaxonomyContext)
 
@@ -52,14 +52,14 @@ const useSaveStaged = () => {
 
     setProcessing(false)
   }, [
-    conceptEditsRefresh,
     closeModal,
+    conceptEditsRefresh,
     initialState,
-    updatesContext,
     setConcept,
     setProcessing,
     stagedState,
     updateSelected,
+    updatesContext,
   ])
 }
 

@@ -11,16 +11,27 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { CONCEPT_STATE } from '@/lib/constants'
 
 const ChangeNameActions = () => {
-  const { concept, confirmReset, modifyConcept } = use(ConceptContext)
+  const { concept, confirmReset, initialState, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
   const { isValid, name, relatedDataCounts } = modalData
 
-  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
+  const { handleConfirm, handleContinue } = createConfirmationHandlers({
     closeModal,
     concept,
     modifyConcept,
   })
+
+  const handleDiscard = () => {
+    if (name.value !== concept.name) {
+      modifyConcept({
+        type: CONCEPT_STATE.RESET.NAME,
+        update: { name: initialState.name },
+      })
+    } else {
+      closeModal()
+    }
+  }
 
   const handleStage = () => {
     modifyConcept({
@@ -35,6 +46,8 @@ const ChangeNameActions = () => {
     closeModal(true)
   }
 
+  const stageDisabled = !isValid || (!confirmReset && name.extent === '')
+
   return createStagedActions({
     confirmReset,
     name: 'ChangeNameActions',
@@ -42,7 +55,7 @@ const ChangeNameActions = () => {
     onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,
-    stageDisabled: !isValid,
+    stageDisabled,
   })
 }
 

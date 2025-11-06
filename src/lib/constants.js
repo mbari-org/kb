@@ -171,7 +171,7 @@ export const LABELS = {
       STAGED: 'Staged',
     },
     CHANGE_NAME: {
-      REASSIGN_DATA: 'Reassign Data',
+      REASSIGN: 'Reassign Related Data',
       NAME_ONLY: 'Name Only',
     },
   },
