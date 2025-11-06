@@ -14,8 +14,11 @@ import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
 
 import UserContext from '@/contexts/user/UserContext'
 
-import { HISTORY_FIELD } from '@/lib/constants'
 import { createError } from '@/lib/errors'
+
+import { HISTORY_FIELD } from '@/lib/constants'
+
+const { ALIAS, CHILD, MEDIA, NAME, PARENT, RANK, REALIZATION, TEMPLATE } = HISTORY_FIELD
 
 const PendingItemDetail = props => {
   const { modalData } = usePanelModalDataContext()
@@ -25,29 +28,32 @@ const PendingItemDetail = props => {
   if (!item?.field) return null
 
   switch (item.field) {
-    case HISTORY_FIELD.RANK:
-      return <PendingRankItem item={item} />
+    case ALIAS:
+      return <PendingAliasItem item={item} />
 
-    case HISTORY_FIELD.NAME:
+    case CHILD:
+      return <PendingChildItem item={item} />
+
+    case MEDIA:
+      return <PendingMediaItem item={item} />
+
+    case NAME:
       if (isPendingName(item)) {
         return <PendingNameItem item={item} user={user} />
       }
       return <PendingAliasItem item={item} />
 
-    case HISTORY_FIELD.PARENT:
+    case PARENT:
       return <PendingParentItem item={item} />
 
-    case HISTORY_FIELD.CHILD:
-      return <PendingChildItem item={item} />
+    case RANK:
+      return <PendingRankItem item={item} />
 
-    case HISTORY_FIELD.REALIZATION:
+    case REALIZATION:
       return <PendingRealizationItem item={item} />
 
-    case HISTORY_FIELD.MEDIA:
-      return <PendingMediaItem item={item} />
-
-    case HISTORY_FIELD.ALIAS:
-      return <PendingAliasItem item={item} />
+    case TEMPLATE:
+      return <PendingRealizationItem item={item} />
 
     default:
       throw createError(

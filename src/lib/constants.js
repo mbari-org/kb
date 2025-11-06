@@ -133,6 +133,7 @@ export const HISTORY_FIELD = {
   PARENT: 'Concept.parent',
   RANK: 'Rank',
   REALIZATION: 'LinkRealization',
+  TEMPLATE: 'LinkTemplate',
 }
 
 export const LABELS = {
