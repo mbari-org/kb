@@ -12,11 +12,8 @@ import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
 
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
-import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
-
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
@@ -28,13 +25,10 @@ const ChangeNameContent = () => {
 
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
-  const { getNames } = use(TaxonomyContext)
   const { user } = use(UserContext)
 
   const [name, setName] = useState({ value: concept.name, extent: '' })
   const [modifiedFields, setModifiedFields] = useState({ name: false })
-  const [isValid, setIsValid] = useState(true)
-  const [reassign, setReassignTo] = useState(concept.parent)
 
   const { nameError, nameHelperText } = useConceptNameValidate(name, modifiedFields)
   const { handleNameChange, handleNameExtentChange } = useChangeNameHandlers(
@@ -70,26 +64,6 @@ const ChangeNameContent = () => {
   const { relatedDataCounts } = modalData
   const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
-  const validateChoice = useCallback(choice =>
-    getNames()
-      .filter(name => name !== concept.name)
-      .includes(choice),
-  [getNames, concept.name])
-
-  const handleReassignChange = (_event, selectedName) => {
-    setReassignTo(selectedName)
-    const valid = validateChoice(selectedName)
-    setIsValid(valid)
-    setModalData(prev => ({ ...prev, toConcept: selectedName, modified: valid, isValid: valid }))
-  }
-
-  const handleReassignKeyUp = event => {
-    const reassign = event.target.value.trim()
-    setReassignTo(reassign)
-    const valid = validateChoice(reassign)
-    setIsValid(valid)
-    setModalData(prev => ({ ...prev, reassign: reassign, modified: valid, isValid: valid }))
-  }
 
   return (
     <Box>
@@ -143,28 +117,6 @@ const ChangeNameContent = () => {
             relatedDataCounts={relatedDataCounts}
           />
         )}
-        <Stack direction='column' spacing={1} alignItems='center'>
-          <Box>
-            {hasRelatedData && (
-              <Box sx={{ ml: 1 }}>
-                <ToConceptChoice
-                  error={!isValid}
-                  handleChange={handleReassignChange}
-                  handleKeyUp={handleReassignKeyUp}
-                  label='Reassign To'
-                  omitChoices={[concept.name]}
-                  required
-                  value={reassign}
-                />
-              </Box>
-            )}
-          </Box>
-          {!isValid && (
-            <Typography color='cancel' variant='caption'>
-              Please select a valid concept to reassign Concept related data
-            </Typography>
-          )}
-        </Stack>
       </Box>
       )}
     </Box>
