@@ -64,7 +64,6 @@ const ChangeNameContent = () => {
   const { relatedDataCounts } = modalData
   const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
-
   return (
     <Box>
       <ModalActionText text='Change Name' />

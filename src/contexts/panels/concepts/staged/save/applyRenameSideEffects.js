@@ -63,10 +63,12 @@ const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   const updatedConceptPrefs = await conceptPrefsUpdate(updatesContext, newConceptName)
   const updatedSettings = settingsUpdate(updatesContext, staleConcept.name, newConceptName)
 
-  await savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs)
-  await savePreferences(PREFS.KEYS.SETTINGS, updatedSettings)
-
-  await refreshPanelData(PANEL_DATA.KEYS.REFERENCES)
+  await Promise.all([
+    savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs),
+    savePreferences(PREFS.KEYS.SETTINGS, updatedSettings),
+    refreshPanelData(PANEL_DATA.KEYS.TEMPLATES),
+    refreshPanelData(PANEL_DATA.KEYS.REFERENCES),
+  ])
 }
 
 export default applyRenameSideEffects
