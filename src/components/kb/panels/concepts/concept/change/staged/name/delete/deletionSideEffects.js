@@ -145,7 +145,7 @@ const applyResults = async (reassignedConcept, refreshPanelDataFn, results) => {
     Object.entries(results).map(async ([key, value]) => {
       switch (key) {
         case ASSOCIATIONS:
-          // CxInc
+          // CxTBD
           break
 
         case ANNOTATIONS:

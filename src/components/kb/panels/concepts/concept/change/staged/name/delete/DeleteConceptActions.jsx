@@ -13,6 +13,8 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
+import { deleteConcept as deleteTaxonomyConcept, getConcept as getTaxonomyConcept, insertConcept } from '@/lib/kb/model/taxonomy'
+
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
@@ -20,7 +22,7 @@ const DeleteConceptActions = () => {
   const { getReferences, refreshData: refreshPanelData, setClearTemplateFilters, templates } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { getSettings, updateSelected } = use(SelectedContext)
-  const { deleteConcept, getConcept, refreshConcept } = use(TaxonomyContext)
+  const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
   const { getPreferences } = use(UserContext)
 
   const isConfirm = modalData?.alertType === 'delete'
@@ -66,16 +68,20 @@ const DeleteConceptActions = () => {
         templates,
       }
 
+      // CxNote due to closures the taxonomy must be directly manipulated
+
       const preDeleteResults = await preSideEffects(deleteConceptContext)
-      const { closestConcept } = await deleteConcept(concept, reassign)
+      const { closestConcept, taxonomy: updatedTaxonomy } =
+        await deleteTaxonomyConcept(taxonomy, concept, apiFns)
       const postDeleteResults = await postSideEffects(deleteConceptContext)
 
       const results = { ...preDeleteResults, ...postDeleteResults }
 
-      const reassignedConcept = { ...getConcept(reassign) }
+      const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
       await applyResults(reassignedConcept, refreshPanelData, results)
 
-      refreshConcept(reassignedConcept)
+      insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+      updateTaxonomy(updatedTaxonomy)
 
       closeModal(true, () => {
         updateSelected({ concept: closestConcept.name })

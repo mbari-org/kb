@@ -52,29 +52,16 @@ const TaxonomyProvider = ({ children }) => {
   const checkIntegrity = useTaxonomyIntegrity()
 
   const updateTaxonomy = useCallback(
-    taxonomy => {
+    updatedTaxonomy => {
       try {
-        checkIntegrity(taxonomy)
+        checkIntegrity(updatedTaxonomy)
       } catch (error) {
         showBoundary(error)
         return
       }
-      setTaxonomy(taxonomy)
+      setTaxonomy(updatedTaxonomy)
     },
     [checkIntegrity, showBoundary]
-  )
-
-  const refreshConcept = useCallback(
-    concept => {
-      const conceptMap = { ...taxonomy.conceptMap }
-      const aliasMap = { ...taxonomy.aliasMap }
-
-      insertConcept(concept, conceptMap, aliasMap)
-
-      const updatedTaxonomy = { ...taxonomy, aliasMap, conceptMap }
-      updateTaxonomy(updatedTaxonomy)
-    },
-    [taxonomy, updateTaxonomy]
   )
 
   const conceptEditsRefresh = useCallback(
@@ -175,15 +162,6 @@ const TaxonomyProvider = ({ children }) => {
       return closestTaxonomyConcept(taxonomy, concept)
     },
     [taxonomy]
-  )
-
-  const deleteConcept = useCallback(
-    async (concept, reassign) => {
-      const result = await deleteTaxonomyConcept(taxonomy, concept, reassign, apiFns)
-      updateTaxonomy(result.taxonomy)
-      return { closestConcept: result.closestConcept, taxonomy: result.taxonomy }
-    },
-    [apiFns, taxonomy, updateTaxonomy]
   )
 
   const filterRanks = useCallback(
@@ -338,7 +316,6 @@ const TaxonomyProvider = ({ children }) => {
     () => ({
       conceptEditsRefresh,
       closestConcept,
-      deleteConcept,
       filterRanks,
       getConcept,
       getConceptPrimaryName,
@@ -350,14 +327,13 @@ const TaxonomyProvider = ({ children }) => {
       isRoot,
       loadConcept,
       loadConceptDescendants,
-      refreshConcept,
       removeConcept,
       taxonomy,
+      updateTaxonomy,
     }),
     [
       conceptEditsRefresh,
       closestConcept,
-      deleteConcept,
       filterRanks,
       getAncestorNames,
       getConcept,
@@ -369,9 +345,9 @@ const TaxonomyProvider = ({ children }) => {
       isRoot,
       loadConcept,
       loadConceptDescendants,
-      refreshConcept,
       removeConcept,
       taxonomy,
+      updateTaxonomy,
     ]
   )
 

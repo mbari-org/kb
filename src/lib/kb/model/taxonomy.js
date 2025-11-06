@@ -45,7 +45,7 @@ const closestConcept = (taxonomy, concept) => {
   return getConcept(taxonomy, parent.children[childIndex - 1])
 }
 
-const deleteConcept = async (taxonomy, concept, reassign, apiFns) => {
+const deleteConcept = async (taxonomy, concept, apiFns) => {
   if (0 < concept.children.length) {
     throw createError(
       'Delete Validation Error',
