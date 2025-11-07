@@ -1,12 +1,13 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 
 import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyList'
+import ConceptReference from '@/components/kb/panels/concepts/concept/detail/references/ConceptReference'
 import InspectIcon from '@/components/icon/InspectIcon'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/constants'
+import { CONCEPT_STATE, SELECTED } from '@/lib/constants'
 
 const { REFERENCES } = SELECTED.SETTINGS
 
@@ -15,9 +16,18 @@ const ConceptReferences = () => {
   const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const conceptReferences = getReferences(selectedConcept)
+  const references = getReferences(selectedConcept)
 
-  const ReferenceComponent = ({ item }) => item.doi
+  const conceptReferences = useMemo(
+    () =>
+      references.map(ref => ({
+        ...ref,
+        action: CONCEPT_STATE.NO_ACTION,
+      })),
+    [references]
+  )
+
+  const ReferenceComponent = ({ item }) => <ConceptReference reference={item} />
 
   const linkToReferences = () => {
     updateSelected({ [SELECTED.PANEL]: SELECTED.PANELS.REFERENCES })
