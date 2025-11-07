@@ -2,9 +2,6 @@ import { CONCEPT_STATE } from '@/lib/constants'
 import { sortRealizations } from '@/lib/kb/model/realization'
 
 const applyRealizations = (concept, tracker) => {
-  const addRealization = realization => {
-    concept.realizations = sortRealizations([...concept.realizations, realization])
-  }
 
   const deleteRealization = id => {
     const updated = concept.realizations.filter(realization => realization.id !== id)
@@ -21,11 +18,9 @@ const applyRealizations = (concept, tracker) => {
   }
 
   switch (tracker.action) {
-    case CONCEPT_STATE.REALIZATION.ADD: {
-      const payload = tracker.response?.payload
-      payload?.id ? addRealization(payload) : addRealization({ ...tracker.params })
+    case CONCEPT_STATE.REALIZATION.ADD:
+      // no-op Server response already includes the realization
       break
-    }
 
     case CONCEPT_STATE.REALIZATION.DELETE: {
       if (tracker.isAdmin) {

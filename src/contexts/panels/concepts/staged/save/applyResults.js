@@ -19,6 +19,10 @@ const applyResults = async (updatesContext, updatesInfo) => {
   freshConcept.alternateNames = [...staleConcept.alternateNames]
   freshConcept.children = [...staleConcept.children]
   freshConcept.parent = staleConcept.parent
+  if (freshConcept.linkRealizations) {
+    freshConcept.realizations = freshConcept.linkRealizations
+    delete freshConcept.linkRealizations
+  }
 
   const appliers = {
     aliases: (concept, tracker) => applyAliases(concept, tracker),
