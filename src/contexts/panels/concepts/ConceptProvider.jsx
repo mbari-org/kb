@@ -29,7 +29,7 @@ const ConceptProvider = ({ children }) => {
   const { setProcessing: setAppProcessing, setModalData: setAppModalData } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
-  const { refreshData: refreshPanelData } = use(PanelDataContext)
+  const { getConceptTemplates, refreshData: refreshPanelData } = use(PanelDataContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction } = use(UserContext)
@@ -61,13 +61,18 @@ const ConceptProvider = ({ children }) => {
         history => history.concept === updatedConcept.name
       )
 
-      const conceptState = initialConceptState(updatedConcept, pendingConcept)
+      const conceptWithTemplates = {
+        ...updatedConcept,
+        templates: getConceptTemplates(updatedConcept.name),
+      }
+
+      const conceptState = initialConceptState(conceptWithTemplates, pendingConcept)
       setInitialState(conceptState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
 
-      setConcept(updatedConcept)
+      setConcept(conceptWithTemplates)
     },
-    [refreshPanelData]
+    [getConceptTemplates, refreshPanelData]
   )
 
   const conceptLoader = useConceptLoader({

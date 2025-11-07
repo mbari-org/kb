@@ -46,6 +46,12 @@ export const PanelDataProvider = ({ children }) => {
     [references]
   )
 
+  const getConceptTemplates = useCallback(conceptName => {
+    return conceptName
+      ? templates.filter(template => template.concept === conceptName)
+      : templates
+  }, [templates])
+
   const getReferences = useCallback(conceptName => {
     return conceptName
       ? references.filter(reference => reference.concepts.includes(conceptName))
@@ -126,6 +132,7 @@ export const PanelDataProvider = ({ children }) => {
     () => ({
       clearTemplateFilters,
       explicitConcepts,
+      getConceptTemplates,
       getReferences,
       isDoiUnique,
       isLoading,
@@ -139,6 +146,7 @@ export const PanelDataProvider = ({ children }) => {
     [
       clearTemplateFilters,
       explicitConcepts,
+      getConceptTemplates,
       getReferences,
       isDoiUnique,
       isLoading,

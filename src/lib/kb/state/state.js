@@ -6,6 +6,7 @@ import { nameState } from '@/lib/kb/state/name'
 import { parentState } from '@/lib/kb/state/parent'
 import { rankState } from '@/lib/kb/state/rank'
 import { realizationsState } from '@/lib/kb/state/realizations'
+import { templatesState } from '@/lib/kb/state/templates'
 import { valueState } from '@/lib/kb/state/value'
 
 import { CONCEPT_FIELD } from '@/lib/constants'
@@ -35,6 +36,7 @@ const initialConceptState = (concept, pendingConcept) => {
     ...parentState(concept, pendingConcept),
     ...rankState(concept, pendingConcept),
     ...realizationsState(concept, pendingConcept),
+    ...templatesState(concept, pendingConcept),
     ...valueState(concept, CONCEPT_FIELD.DELETE, false),
   }
 }
