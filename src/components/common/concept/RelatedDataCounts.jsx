@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material'
 import UserContext from '@/contexts/user/UserContext'
 
 import { isAdmin } from '@/lib/auth/role'
+import { RELATED_DATA_TYPE } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 const RelatedDataCounts = ({ relatedDataCounts }) => {
   const { user } = use(UserContext)
@@ -15,18 +16,25 @@ const RelatedDataCounts = ({ relatedDataCounts }) => {
 
   if (!hasRelatedData) return null
 
-  return (
-    <Box>
+  const groupedByType = relatedDataCounts.reduce((acc, count) => {
+    const type = count.type || 'Other'
+    if (!acc[type]) acc[type] = []
+    acc[type].push(count)
+    return acc
+  }, {})
+
+  const renderSection = (type, counts) => (
+    <Box key={type} >
       <Typography sx={{
         fontSize: theme => theme.typography.fontSize * 1.2,
-        fontWeight: 'bold', ml: 1, mt: 2 }}>
-        {'Related Data:'}
+        fontWeight: 'bold', ml: 1 }}>
+        {`${type} Data:`}
       </Typography>
-      <Box sx={{ ml: 6 }}>
-        <Box sx={{ mb: 2 }}>
-          {relatedDataCounts.map((count, index) => (
+      <Box sx={{ ml: 4 }}>
+        <Box sx={{ mb: 1 }}>
+          {counts.map((count, index) => (
             <Typography
-              key={`related-data-${index}`}
+              key={`${type}-${index}`}
               sx={count.value > 0 ? { fontStyle: 'italic', fontWeight: 'bold' } : {}}
             >
               {`${count.title}: ${count.value} `}
@@ -34,6 +42,12 @@ const RelatedDataCounts = ({ relatedDataCounts }) => {
           ))}
         </Box>
       </Box>
+    </Box>
+  )
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      {Object.entries(groupedByType).map(([type, counts]) => renderSection(type, counts))}
       {!isAdminUser && (
         <Box sx={{ alignItems: 'center', mt: 2 }}>
           <Typography color='text.secondary'>

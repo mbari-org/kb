@@ -1,12 +1,11 @@
 import { getConceptAnnotationsCount } from '@/lib/kb/api/annotations'
-import { getToConceptAssociationsCount } from '@/lib/kb/api/associations'
+import { getToConceptAssociationsCount, renameToConceptAssociations } from '@/lib/kb/api/associations'
+import { renameConceptObservations } from '@/lib/kb/api/observations'
 import {
   getConceptTemplateCount,
   getToConceptTemplateCount,
   renameToConceptTemplates,
 } from '@/lib/kb/api/templates'
-import { renameConceptObservations } from '@/lib/kb/api/observations'
-import { renameToConceptAssociations } from '@/lib/kb/api/associations'
 
 export const RELATED_DATA_COUNTS = {
   ANNOTATIONS: 'Concept Annotations / Observations',
@@ -17,6 +16,11 @@ export const RELATED_DATA_COUNTS = {
   REFERENCES: 'References To Concept',
 }
 
+export const RELATED_DATA_TYPE = {
+  ANNOTATIONS: 'Annotations',
+  KNOWLEDGE_BASE: 'Knowledge Base',
+}
+
 export const relatedDataCounts = async ({
   apiFns,
   concept,
@@ -25,41 +29,47 @@ export const relatedDataCounts = async ({
   const config = [
     {
       title: RELATED_DATA_COUNTS.ANNOTATIONS,
+      type: RELATED_DATA_TYPE.ANNOTATIONS,
       apiCountFn: getConceptAnnotationsCount,
       reassignFn: payload => apiFns.apiPayload(renameConceptObservations, payload),
     },
     {
       title: RELATED_DATA_COUNTS.ASSOCIATIONS,
+      type: RELATED_DATA_TYPE.ANNOTATIONS,
       apiCountFn: getToConceptAssociationsCount,
       reassignFn: payload => apiFns.apiPayload(renameToConceptAssociations, [payload.old, payload.new]),
     },
     {
       title: RELATED_DATA_COUNTS.REALIZATIONS,
+      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       localCountFn: () => concept.realizations.length,
     },
     {
       title: RELATED_DATA_COUNTS.TEMPLATES_DEFINED,
+      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       apiCountFn: getConceptTemplateCount,
     },
     {
       title: RELATED_DATA_COUNTS.TEMPLATES_TO,
+      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       apiCountFn: getToConceptTemplateCount,
       reassignFn: payload => apiFns.apiPayload(renameToConceptTemplates, payload),
     },
     {
       title: RELATED_DATA_COUNTS.REFERENCES,
+      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       localCountFn: conceptName => getReferences(conceptName).length,
     },
   ]
 
   const counts = []
-  for (const { title, apiCountFn, localCountFn } of config) {
+  for (const { title, type, apiCountFn, localCountFn } of config) {
     const countFn = apiCountFn
       ? () => apiFns?.apiResult(apiCountFn, concept.name)
       : () => localCountFn(concept.name)
 
     const value = await countFn()
-    counts.push({ title, value, reassignFn: config.find(c => c.title === title).reassignFn })
+    counts.push({ title, type, value, reassignFn: config.find(c => c.title === title).reassignFn })
   }
 
   return counts

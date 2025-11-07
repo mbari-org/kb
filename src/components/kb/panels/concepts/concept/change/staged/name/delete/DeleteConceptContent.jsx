@@ -45,9 +45,20 @@ const DeleteConceptContent = () => {
 
   return (
     <Box>
-      <Typography align='center' color='cancel' variant='h6'>
+      <Typography align='center' color='cancel' sx={{ fontSize: theme => theme.typography.fontSize * 1.5, fontWeight: 'bold' }}>
         DELETE CONCEPT
       </Typography>
+      {!modalData.isLoading && !hasRelatedData && (
+        <Typography align='center'>
+          This Concept has no related Annotations or Knowledge Base data.
+        </Typography>
+      )}
+      {!modalData.isLoading && hasRelatedData && (
+        <Typography align='center'>
+          Related data must be reassigned to another concept.
+        </Typography>
+      )}
+
       {isLoading && <ProcessingMessage message='Loading related data...' />}
       {!modalData.isLoading && hasRelatedData && (
         <RelatedDataCounts
