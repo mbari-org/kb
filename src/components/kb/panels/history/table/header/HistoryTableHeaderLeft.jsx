@@ -15,7 +15,7 @@ const HistoryTableHeaderLeft = () => {
 
   const toolTip = HISTORY.EXPORT[selectedType.toUpperCase()]
 
-  return <PanelDataExport count={count} exportFn={historyExport} exportToolTip={toolTip} width='auto' />
+  return <PanelDataExport count={count} exportFn={historyExport} exportTooltip={toolTip} width='auto' />
 }
 
 export default HistoryTableHeaderLeft

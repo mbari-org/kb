@@ -7,11 +7,11 @@ const PanelDataSwitch = ({
   disabled = false,
   switchFn,
   switchLabel,
-  switchToolTip = '',
+  switchTooltip = '',
 }) => {
   return (
     <Box>
-      <KBTooltip title={switchToolTip}>
+      <KBTooltip title={switchTooltip}>
         <FormControlLabel
           control={
             <Switch size='small' checked={checked} disabled={disabled} onChange={switchFn} />

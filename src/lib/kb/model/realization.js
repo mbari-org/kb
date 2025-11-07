@@ -6,6 +6,11 @@ export const REALIZATION_FIELDS = ['concept', ...REALIZATION_DISPLAY_FIELDS]
 
 export const EMPTY_REALIZATION = Object.fromEntries(REALIZATION_FIELDS.map(field => [field, '']))
 
+const asText = realization => `${realization.linkName} | ${realization.toConcept} | ${realization.linkValue}`
+
+const isSame = (a, b) =>
+  a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
+
 const hasDuplicate = (realizations, realization, excludeIndex = null) => {
   if (!realization.linkName || !realization.toConcept || !realization.linkValue) {
     return false
@@ -16,9 +21,6 @@ const hasDuplicate = (realizations, realization, excludeIndex = null) => {
 
   return realizationsToCheck.some(existing => isSame(realization, existing))
 }
-
-const isSame = (a, b) =>
-  a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
 
 const matchingRealizationString = (realization, realizationStr) => {
   const parsedRealization = parseRealization(realizationStr)
@@ -41,6 +43,7 @@ const sortRealizations = realizations =>
   )
 
 export {
+  asText,
   hasDuplicate,
   isSame,
   matchingRealizationString,

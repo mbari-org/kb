@@ -5,7 +5,7 @@ import KBTooltip from '@/components/common/KBTooltip'
 const PanelDataExport = ({
   count,
   exportFn,
-  exportToolTip = 'Export',
+  exportTooltip = 'Export',
   width,
 }) => {
   return (
@@ -21,7 +21,7 @@ const PanelDataExport = ({
         <Box sx={{ minWidth: '100px' }}>
           <Typography variant='body1'>Total: {count}</Typography>
         </Box>
-        <KBTooltip title={exportToolTip}>
+        <KBTooltip title={exportTooltip}>
           <Box component='span'>
             <Button disabled={count === 0} onClick={exportFn}>Export</Button>
           </Box>

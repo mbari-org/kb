@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import ConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyPages'
+import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyList'
 import InspectIcon from '@/components/icon/InspectIcon'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -17,10 +17,7 @@ const ConceptReferences = () => {
   const selectedConcept = getSelected(SELECTED.CONCEPT)
   const conceptReferences = getReferences(selectedConcept)
 
-  const renderItem = {
-    key: (reference, index) => reference.doi || index,
-    content: reference => reference.doi,
-  }
+  const ReferenceComponent = ({ item }) => item.doi
 
   const linkToReferences = () => {
     updateSelected({ [SELECTED.PANEL]: SELECTED.PANELS.REFERENCES })
@@ -30,9 +27,9 @@ const ConceptReferences = () => {
   const tooltip = 'View References for this Concept'
 
   return (
-    <ConceptPropertyPages
+    <ConceptPropertyList
       items={conceptReferences}
-      renderItem={renderItem}
+      renderComponent={ReferenceComponent}
       title='References DOI'
       actionComponent={() => (
         <InspectIcon onClick={linkToReferences} tooltip={tooltip} asDiv={true} />

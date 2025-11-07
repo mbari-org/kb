@@ -25,15 +25,15 @@ const TemplatesTableHeaderLeft = () => {
 
   const switchDisabled = filters[FILTERS.CONCEPT] === ''
 
-  let exportToolTip
+  let exportTooltip
   if (filters[FILTERS.CONCEPT] && filters[FILTERS.TO_CONCEPT]) {
-    exportToolTip = EXPORT.CONCEPT_TO_CONCEPT
+    exportTooltip = EXPORT.CONCEPT_TO_CONCEPT
   } else if (filters[FILTERS.CONCEPT]) {
-    exportToolTip = EXPORT.CONCEPT
+    exportTooltip = EXPORT.CONCEPT
   } else if (filters[FILTERS.TO_CONCEPT]) {
-    exportToolTip = EXPORT.TO_CONCEPT
+    exportTooltip = EXPORT.TO_CONCEPT
   } else {
-    exportToolTip = EXPORT.ALL
+    exportTooltip = EXPORT.ALL
   }
 
   return (
@@ -48,7 +48,7 @@ const TemplatesTableHeaderLeft = () => {
       <PanelDataExport
         count={filteredTemplates.length}
         exportFn={templatesExport}
-        exportToolTip={exportToolTip}
+        exportTooltip={exportTooltip}
         width='auto'
       />
       <PanelDataSwitch
@@ -56,7 +56,7 @@ const TemplatesTableHeaderLeft = () => {
         disabled={switchDisabled}
         switchFn={switchFn}
         switchLabel='Available'
-        switchToolTip={<TemplatesConceptAvailableTooltip />}
+        switchTooltip={<TemplatesConceptAvailableTooltip />}
       />
     </Box>
   )

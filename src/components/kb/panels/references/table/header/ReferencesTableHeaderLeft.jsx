@@ -22,13 +22,13 @@ const ReferencesTableHeaderLeft = () => {
   const selectedConcept = byConcept ? getSelected(SELECTED.CONCEPT) : null
   const references = getReferences(selectedConcept)
 
-  const exportToolTip = byConcept ? EXPORT.BY_CONCEPT : EXPORT.ALL
+  const exportTooltip = byConcept ? EXPORT.BY_CONCEPT : EXPORT.ALL
 
   return (
     <PanelDataExport
       count={references.length}
       exportFn={referencesExport}
-      exportToolTip={exportToolTip}
+      exportTooltip={exportTooltip}
       width={CONCEPT_SELECT.WIDTH}
     />
   )

@@ -9,7 +9,7 @@ import { USER_ROLES } from '@/lib/constants'
 import { USERS } from '@/lib/constants'
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
-  const lockToolTip = locked => locked ? USERS.UNLOCK : USERS.LOCK
+  const lockTooltip = locked => locked ? USERS.UNLOCK : USERS.LOCK
 
   const columns = [
     {
@@ -23,7 +23,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
           <ActionIcon
             Icon={params.row.locked ? AiOutlineLock : AiOutlineUnlock}
             onClick={() => lockUserModal(params.row)}
-            tooltip={lockToolTip(params.row.locked)}
+            tooltip={lockTooltip(params.row.locked)}
             color={params.row.locked ? 'add' : 'cancel'}
             size={22}
             sx={{ mr: 1 }}
