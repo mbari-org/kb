@@ -11,6 +11,7 @@ import NameDetail from '@/components/kb/panels/concepts/concept/change/pending/c
 import ParentDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ParentDetail'
 import RankDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RankDetail'
 import RealizationsDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationsDetail'
+import TemplatesDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/TemplatesDetail'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -49,6 +50,7 @@ const PendingContent = () => {
       <ParentDetail pendingConcept={pendingConcept} />
       <RankDetail pendingConcept={pendingConcept} />
       <RealizationsDetail pendingConcept={pendingConcept} />
+      <TemplatesDetail pendingConcept={pendingConcept} />
     </Stack>
   )
 }

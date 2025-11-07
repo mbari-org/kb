@@ -228,6 +228,7 @@ export const PENDING = {
     PARENT: 'Parent',
     RANK: 'Rank',
     REALIZATIONS: 'Realizations',
+    TEMPLATES: 'Templates',
   },
 }
 
