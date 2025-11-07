@@ -146,7 +146,7 @@ export const LABELS = {
     CONFIRM: 'Confirm',
     CONFIRM_DISCARD: 'Discard',
     CONTINUE: 'Continue',
-    DEFER: 'Defer',
+    DEFER: 'Close',
     DELETE: 'Delete',
     DISCARD: 'Discard',
     DISCARD_ALL: 'Discard All',
