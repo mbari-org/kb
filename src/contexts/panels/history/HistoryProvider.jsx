@@ -6,19 +6,21 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
-import { PAGINATION, PROCESSING, SELECTED } from '@/lib/constants/constants'
+import { PROCESSING } from '@/lib/constants.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 import useLoadData from '@/contexts/panels/history/useLoadData'
 import usePageData from '@/contexts/panels/history/usePageData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
-import { CONCEPT_EXTENT, CONCEPT_HISTORY } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
-const { CHILDREN, DESCENDANTS } = CONCEPT_EXTENT
-const { TYPE } = CONCEPT_HISTORY
-const { CONCEPT, PANEL, SETTINGS } = SELECTED
+const { CHILDREN, DESCENDANTS, SOLO } = CONCEPT.EXTENT
+const { TYPE } = CONCEPT.HISTORY
+const { CONCEPT: SELECTED_CONCEPT, PANEL, SETTINGS } = SELECTED
 const { HISTORY } = SETTINGS
 
 const HistoryProvider = ({ children }) => {
@@ -28,7 +30,7 @@ const HistoryProvider = ({ children }) => {
   const { getSelected, getSettings } = use(SelectedContext)
 
   const activePanel = getSelected(PANEL)
-  const selectedConcept = getSelected(CONCEPT)
+  const selectedConcept = getSelected(SELECTED_CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
 
   const isActive = activePanel === 'History'
@@ -36,7 +38,7 @@ const HistoryProvider = ({ children }) => {
   const [conceptState, setConceptState] = useState({
     count: 0,
     data: [],
-    extent: CONCEPT_EXTENT.CONCEPT,
+    extent: SOLO,
   })
 
   const [pageState, setPageState] = useState({
@@ -58,7 +60,7 @@ const HistoryProvider = ({ children }) => {
   const isTypeChanging = useRef(false)
 
   useEffect(() => {
-    updateConceptState({ extent: CONCEPT_EXTENT.CONCEPT })
+    updateConceptState({ extent: SOLO })
   }, [selectedConcept, updateConceptState])
 
   const loadData = useLoadData({

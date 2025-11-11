@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingRealization } from '@/lib/kb/state/realizations'
 
-import { PENDING } from '@/lib/constants/constants'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { REALIZATIONS } = PENDING.GROUP
 

@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { CONCEPT_EXTENT } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 import KBTooltip from '@/components/common/KBTooltip'
 
-const { CHILDREN, CONCEPT, DESCENDANTS } = CONCEPT_EXTENT
+const { CHILDREN, SOLO: CONCEPT_VALUE, DESCENDANTS } = CONCEPT.EXTENT
 
-const ConceptExtent = ({ initialValue = CONCEPT, onChange }) => {
+const ConceptExtent = ({ initialValue = CONCEPT_VALUE, onChange }) => {
   const [conceptExtent, setConceptExtent] = useState(initialValue)
   const theme = useTheme()
 
@@ -18,7 +18,7 @@ const ConceptExtent = ({ initialValue = CONCEPT, onChange }) => {
   }
 
   const handleChange = (_event, newValue) => {
-    const value = newValue || CONCEPT
+    const value = newValue || CONCEPT_VALUE
     setConceptExtent(value)
     onChange?.(value)
   }

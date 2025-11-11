@@ -5,7 +5,7 @@ import { FormControl, TextField, Autocomplete } from '@mui/material'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConceptTaxa } from '@/lib/kb/api/concept'
 
-import { TO_CONCEPT_SPECIAL } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const RealizationToConcept = ({
   realizationItem,
@@ -61,7 +61,7 @@ const RealizationToConcept = ({
   useEffect(() => {
     if (!apiFns || !toConcept) return
 
-    const specialMap = TO_CONCEPT_SPECIAL.reduce((acc, val) => {
+    const specialMap = CONCEPT.TO_SPECIAL.reduce((acc, val) => {
       acc[val] = [val]
       return acc
     }, {})

@@ -9,7 +9,7 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-import { CONCEPT_RANK } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 import { rankField } from '@/lib/kb/state/rank'
 import { capitalize } from '@/lib/utils'
@@ -24,7 +24,7 @@ const RankFieldInput = ({ field, initialRank, rank, onChange }) => {
 
   const fieldValue = rankValue(field)
   const otherValue =
-    field === CONCEPT_RANK.NAME ? rankValue(CONCEPT_RANK.LEVEL) : rankValue(CONCEPT_RANK.NAME)
+    field === CONCEPT.RANK.NAME ? rankValue(CONCEPT.RANK.LEVEL) : rankValue(CONCEPT.RANK.NAME)
 
   const rankOptions = filterRanks(rankField(field), otherValue)
 

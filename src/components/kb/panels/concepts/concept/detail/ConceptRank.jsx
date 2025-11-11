@@ -7,7 +7,9 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { pendingChange } from '@/lib/kb/state/rank'
 
-import { CONCEPT_RANK, CONCEPT_STATE, PENDING } from '@/lib/constants/constants'
+import { PENDING } from '@/lib/constants/pending.js'
+import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ConceptRank = () => {
   const { initialState, modifyConcept, pending, stagedState } = use(ConceptContext)
@@ -59,16 +61,16 @@ const ConceptRank = () => {
   return (
     <Stack direction='row' spacing={1.5}>
       <RankFieldInput
-        field={CONCEPT_RANK.NAME}
+        field={CONCEPT.RANK.NAME}
         initialRank={initialRank}
-        rank={stagedField(CONCEPT_RANK.NAME)}
-        onChange={onChange(CONCEPT_RANK.NAME)}
+        rank={stagedField(CONCEPT.RANK.NAME)}
+        onChange={onChange(CONCEPT.RANK.NAME)}
       />
       <RankFieldInput
-        field={CONCEPT_RANK.LEVEL}
+        field={CONCEPT.RANK.LEVEL}
         initialRank={initialRank}
-        rank={stagedField(CONCEPT_RANK.LEVEL)}
-        onChange={onChange(CONCEPT_RANK.LEVEL)}
+        rank={stagedField(CONCEPT.RANK.LEVEL)}
+        onChange={onChange(CONCEPT.RANK.LEVEL)}
       />
     </Stack>
   )

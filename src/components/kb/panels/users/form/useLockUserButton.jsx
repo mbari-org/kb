@@ -7,7 +7,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
-import { USER_ROLES } from '@/lib/constants/constants'
+import { ROLES } from '@/lib/constants/roles.js'
 import {
   createLockUserActions,
   createLockUserContent,
@@ -44,7 +44,7 @@ const useLockUserButton = () => {
   return useCallback(
     user => {
       // Check if this is the last unlocked admin
-      const unlockedAdmins = users.filter(user => user.role === USER_ROLES.ADMIN && !user.locked)
+      const unlockedAdmins = users.filter(user => user.role === ROLES.ADMIN && !user.locked)
       const isLastAdmin =
         unlockedAdmins.length === 1 && unlockedAdmins[0].username === user.username
 

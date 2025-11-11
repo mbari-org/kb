@@ -9,7 +9,9 @@ import usePrefsTimer from '@/contexts/preferences/usePrefsTimer'
 import useSavePrefs from '@/contexts/preferences/useSavePrefs'
 import useInitPrefs from '@/contexts/preferences/useInitPrefs'
 
-import { PREFS } from '@/lib/constants/constants'
+import { PREFS } from '@/lib/constants/prefs.js'
+
+const { KEY } = PREFS.API
 
 const PreferencesProvider = ({ children }) => {
   const { createPreferences, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)
@@ -28,20 +30,20 @@ const PreferencesProvider = ({ children }) => {
   const onConceptChange = useCallback(concept => {
     setCurrentConcept(concept)
     if (preferencesInitialized) {
-      setDirtyFlags(prev => ({ ...prev, [PREFS.KEYS.CONCEPTS]: true }))
+      setDirtyFlags(prev => ({ ...prev, [KEY.CONCEPTS]: true }))
     }
   }, [preferencesInitialized])
 
   const onPanelChange = useCallback(panel => {
     setCurrentPanel(panel)
     if (preferencesInitialized) {
-      setDirtyFlags(prev => ({ ...prev, [PREFS.KEYS.PANELS]: true }))
+      setDirtyFlags(prev => ({ ...prev, [KEY.PANELS]: true }))
     }
   }, [preferencesInitialized])
 
   const onSettingsChange = useCallback(() => {
     if (preferencesInitialized) {
-      setDirtyFlags(prev => ({ ...prev, [PREFS.KEYS.SETTINGS]: true }))
+      setDirtyFlags(prev => ({ ...prev, [KEY.SETTINGS]: true }))
     }
   }, [preferencesInitialized])
 

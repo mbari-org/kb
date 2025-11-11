@@ -7,7 +7,7 @@ import { formatDelta } from '@/components/common/format'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { RESETTING } from '@/lib/constants/constants'
+import { RESETTING } from '@/lib/constants.js'
 
 import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 

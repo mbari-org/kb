@@ -7,7 +7,7 @@ import PendingValues from '@/components/kb/panels/concepts/concept/change/pendin
 import { formatDelta, formatField } from '@/components/common/format'
 import { pendingActionText, pendingInfo } from '@/lib/kb/model/history'
 
-import { HISTORY_FIELD } from '@/lib/constants/constants'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const PendingRankItem = ({ item }) => {
   if (!item || item.field !== HISTORY_FIELD.RANK) return null

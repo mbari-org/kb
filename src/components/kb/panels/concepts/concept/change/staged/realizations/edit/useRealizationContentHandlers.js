@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/constants/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
 import useDebounce from '@/hooks/useDebounce'

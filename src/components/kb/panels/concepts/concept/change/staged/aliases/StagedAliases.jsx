@@ -3,12 +3,12 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedAliasesEdits } from '@/lib/kb/state/aliases'
 
-import { RESETTING } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const StagedAliases = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={RESETTING.ALIASES}
+      group={UI_TEXT.RESETTING.ALIASES}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedAlias}
       stagedItems={stagedAliasesEdits(stagedEdit)}

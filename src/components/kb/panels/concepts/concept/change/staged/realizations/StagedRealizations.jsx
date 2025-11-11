@@ -3,12 +3,12 @@ import StagedRealization from '@/components/kb/panels/concepts/concept/change/st
 
 import { stagedRealizationEdits } from '@/lib/kb/state/realizations'
 
-import { RESETTING } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const StagedRealizations = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={RESETTING.REALIZATIONS}
+      group={UI_TEXT.RESETTING.REALIZATIONS}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedRealization}
       stagedItems={stagedRealizationEdits(stagedEdit)}

@@ -6,7 +6,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import useConfirmReferenceModal from '../../modal/useConfirmReferenceModal'
 
-import { LABELS } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createChangeDetector,
   createHandlers,
@@ -15,7 +15,7 @@ import {
   processEditReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
+const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 
 const useEditReferenceButton = () => {
   const openConfirmModal = useConfirmReferenceModal()

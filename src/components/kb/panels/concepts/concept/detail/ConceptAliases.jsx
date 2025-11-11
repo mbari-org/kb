@@ -6,7 +6,7 @@ import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ALIAS = CONCEPT_STATE.ALIAS
 

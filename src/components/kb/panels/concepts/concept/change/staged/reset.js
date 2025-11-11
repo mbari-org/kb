@@ -1,4 +1,5 @@
-import { CONCEPT_STATE, RESETTING } from '@/lib/constants/constants'
+import { RESETTING } from '@/lib/constants.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { RESET } = CONCEPT_STATE
 

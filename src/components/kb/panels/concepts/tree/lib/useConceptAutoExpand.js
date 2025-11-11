@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { CONCEPT_EXPAND } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const useConceptAutoExpand = ({
   autoExpand,
@@ -22,7 +22,7 @@ const useConceptAutoExpand = ({
 
     const target = getConceptPrimaryName(autoExpand.name) || autoExpand.name
     if (target === concept.name) {
-      expandConcept(concept, CONCEPT_EXPAND.ON)
+      expandConcept(concept, CONCEPT.EXPAND.ON)
       setAutoExpand({ expand: false, name: null })
     }
   }, [autoExpand, concept, expandConcept, getConceptPrimaryName, setAutoExpand])

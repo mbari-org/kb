@@ -10,7 +10,8 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { LABELS, PROCESSING, SELECTED } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 import {
   createHandlers,
   createInitialReference,
@@ -20,9 +21,9 @@ import {
   processAddReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
+const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 const { REFERENCES } = SELECTED.SETTINGS
-const { SAVING } = PROCESSING
+const { SAVING } = UI_TEXT.PROCESSING
 
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)

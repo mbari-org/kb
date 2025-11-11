@@ -2,7 +2,7 @@ import { CiEdit } from 'react-icons/ci'
 
 import MediaAction from '../MediaAction'
 
-import { CONCEPT_STATE } from '@/lib/constants/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const MEDIA_EDIT = 'Edit Media'
 

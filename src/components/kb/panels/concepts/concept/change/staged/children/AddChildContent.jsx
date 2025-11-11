@@ -14,7 +14,8 @@ import useConceptNameValidate from '@/components/kb/panels/concepts/concept/chan
 
 import { rankField } from '@/lib/kb/state/rank'
 
-import { CONCEPT_RANK, CONCEPT_STATE } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 
@@ -93,16 +94,16 @@ const AddChildContent = () => {
       </FormControl>
       <Stack direction='row' spacing={1.5} sx={{ mt: 4 }}>
         <RankFieldInput
-          field={CONCEPT_RANK.NAME}
+          field={CONCEPT.RANK.NAME}
           initialRank={initialRank}
           rank={formRank}
-          onChange={handleChange(rankField(CONCEPT_RANK.NAME))}
+          onChange={handleChange(rankField(CONCEPT.RANK.NAME))}
         />
         <RankFieldInput
-          field={CONCEPT_RANK.LEVEL}
+          field={CONCEPT.RANK.LEVEL}
           initialRank={initialRank}
           rank={formRank}
-          onChange={handleChange(rankField(CONCEPT_RANK.LEVEL))}
+          onChange={handleChange(rankField(CONCEPT.RANK.LEVEL))}
         />
       </Stack>
     </Box>

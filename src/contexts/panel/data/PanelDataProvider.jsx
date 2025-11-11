@@ -8,7 +8,7 @@ import useLoadReferences from '@/contexts/panel/data/useLoadReferences'
 import useLoadTemplates from '@/contexts/panel/data/useLoadTemplates'
 import useLoadPendingHistory from '@/contexts/panel/data/useLoadPendingHistory'
 
-import { PANEL_DATA } from '@/lib/constants/constants'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 export const PanelDataProvider = ({ children }) => {
   const { setProcessing } = use(AppModalContext)
@@ -87,13 +87,13 @@ export const PanelDataProvider = ({ children }) => {
             }
           }
 
-          case PANEL_DATA.KEYS.REFERENCES: {
+          case PANEL_DATA.REFERENCES: {
             const referencesData = await loadReferences()
             setReferences(referencesData)
             return { references: referencesData }
           }
 
-          case PANEL_DATA.KEYS.TEMPLATES: {
+          case PANEL_DATA.TEMPLATES: {
             const templatesData = await loadTemplates()
             const explicitConceptsData = calcExplicitConcepts(templatesData)
             setTemplates(templatesData)
@@ -101,7 +101,7 @@ export const PanelDataProvider = ({ children }) => {
             return { templates: templatesData, explicitConcepts: explicitConceptsData }
           }
 
-          case PANEL_DATA.KEYS.PENDING_HISTORY: {
+          case PANEL_DATA.PENDING_HISTORY: {
             const pendingHistoryData = await loadPendingHistory()
             setPendingHistory(pendingHistoryData)
             return { pendingHistory: pendingHistoryData }

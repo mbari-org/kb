@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { PAGINATION } from '@/lib/constants/constants'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0

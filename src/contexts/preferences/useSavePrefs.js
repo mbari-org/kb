@@ -1,15 +1,17 @@
 import { useCallback } from 'react'
 
-import { PREFS } from '@/lib/constants/constants'
+import { PREFS } from '@/lib/constants/prefs.js'
+
+const { KEY } = PREFS.API
 
 const syncInMemoryStore = (key, value, conceptSelectRef, panelSelectRef, onSettingsInitRef) => {
-  if (key === PREFS.KEYS.CONCEPTS && conceptSelectRef?.current) {
+  if (key === KEY.CONCEPTS && conceptSelectRef?.current) {
     conceptSelectRef.current.clear()
     value.state.forEach(name => conceptSelectRef.current.push(name))
-  } else if (key === PREFS.KEYS.PANELS && panelSelectRef?.current) {
+  } else if (key === KEY.PANELS && panelSelectRef?.current) {
     panelSelectRef.current.clear()
     value.state.forEach(name => panelSelectRef.current.push(name))
-  } else if (key === PREFS.KEYS.SETTINGS && onSettingsInitRef?.current) {
+  } else if (key === KEY.SETTINGS && onSettingsInitRef?.current) {
     onSettingsInitRef.current(value)
   }
 }
@@ -39,7 +41,7 @@ const useSavePrefs = ({
       if (key && value) {
         prefUpdates = [{ key, value }]
       } else {
-        prefUpdates = Object.values(PREFS.KEYS).reduce((acc, k) => {
+        prefUpdates = Object.values(PREFS.API.KEY).reduce((acc, k) => {
           if (dirtyFlags[k]) {
             acc.push({ key: k, value: prefsValue(k) })
           }

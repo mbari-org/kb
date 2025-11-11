@@ -9,7 +9,8 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/stagedBorder'
 
-import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ConceptAuthor = () => {
   const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)
@@ -23,7 +24,7 @@ const ConceptAuthor = () => {
       const value = event.target.value
       modifyConcept({
         type: CONCEPT_STATE.AUTHOR,
-        update: { field: CONCEPT_FIELD.AUTHOR, value },
+        update: { field: CONCEPT.FIELD.AUTHOR, value },
       })
     },
     [modifyConcept]

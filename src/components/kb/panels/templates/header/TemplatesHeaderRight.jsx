@@ -4,7 +4,7 @@ import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { SELECTED } from '@/lib/constants/constants'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

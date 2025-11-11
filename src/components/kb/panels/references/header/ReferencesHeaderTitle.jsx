@@ -4,7 +4,7 @@ import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/constants/constants'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
 

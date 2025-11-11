@@ -7,10 +7,11 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useReferencesExport from '@/components/kb/panels/references/table/header/useReferencesExport'
 
-import { CONCEPT_SELECT, SELECTED, TOOLTIPS } from '@/lib/constants/constants'
+import { CONCEPT, SELECTED } from '@/lib/constants.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
-const { EXPORT } = TOOLTIPS.REFERENCES
+const { EXPORT } = UI_TEXT.TOOLTIP.REFERENCES
 
 const ReferencesTableHeaderLeft = () => {
   const { getReferences } = use(PanelDataContext)
@@ -29,7 +30,7 @@ const ReferencesTableHeaderLeft = () => {
       count={references.length}
       exportFn={referencesExport}
       exportTooltip={exportTooltip}
-      width={CONCEPT_SELECT.WIDTH}
+      width={CONCEPT.SELECT.WIDTH}
     />
   )
 }

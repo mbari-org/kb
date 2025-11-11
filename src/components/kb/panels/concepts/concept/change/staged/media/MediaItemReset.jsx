@@ -2,7 +2,7 @@ import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { resettingMedia } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import { CONCEPT_STATE } from '@/lib/constants/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { RESET } = CONCEPT_STATE
 

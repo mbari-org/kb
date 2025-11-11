@@ -3,7 +3,8 @@ import { Box, Stack, TextField, MenuItem } from '@mui/material'
 
 import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
 
-import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants/constants'
+import { EMAIL_REGEX } from '@/lib/constants'
+import { ROLES } from '@/lib/constants/roles.js'
 import useDebounce from '@/hooks/useDebounce'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
 
@@ -127,7 +128,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         error={showError('role')}
         helperText={getHelperText('role')}
       >
-        {Object.values(USER_ROLES).map(role => (
+        {Object.values(ROLES).map(role => (
           <MenuItem key={role} value={role}>
             {role}
           </MenuItem>

@@ -7,14 +7,14 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
-import { PROCESSING } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createDeleteReferenceActions,
   createDeleteReferenceContent,
   createDeleteReferenceTitle,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-const { DELETING } = PROCESSING
+const { DELETING } = UI_TEXT.PROCESSING
 
 const useDeleteReferenceButton = () => {
   const { createModal, closeModal, setProcessing } = useReferencesModalOperationsContext()

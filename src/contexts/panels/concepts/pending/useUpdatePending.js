@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { capitalize } from '@/lib/utils'
 
-import { PENDING } from '@/lib/constants/constants'
+import { PENDING } from '@/lib/constants/pending.js'
 import processPendingApproval from '@/lib/kb/pending/processPendingApproval'
 
 const useUpdatedPending = () => {

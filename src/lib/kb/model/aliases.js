@@ -1,14 +1,14 @@
 import { capitalize, isJsonEqual, pick } from '@/lib/utils'
 
-import { CONCEPT_NAME_TYPES } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 
 // Prescribed order of types
 const ALIAS_TYPES = [
-  CONCEPT_NAME_TYPES.COMMON,
-  CONCEPT_NAME_TYPES.SYNONYM,
-  CONCEPT_NAME_TYPES.FORMER,
+  CONCEPT.NAME_TYPES.COMMON,
+  CONCEPT.NAME_TYPES.SYNONYM,
+  CONCEPT.NAME_TYPES.FORMER,
 ]
 
 const EMPTY_ALIAS = {

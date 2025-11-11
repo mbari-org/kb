@@ -5,7 +5,7 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 
-import { LABELS, PROCESSING } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createModalActions,
   processEditUserData,
@@ -13,8 +13,8 @@ import {
   createModalContent,
 } from '@/components/kb/panels/users/form/userModalUtils'
 
-const { UPDATING } = PROCESSING
-const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
+const { UPDATING } = UI_TEXT.PROCESSING
+const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 
 const useEditUserButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =

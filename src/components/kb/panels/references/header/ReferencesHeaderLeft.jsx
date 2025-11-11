@@ -4,9 +4,10 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { CONCEPT_SELECT, SELECTED } from '@/lib/constants/constants'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT as CONCEPT_CONSTANTS } from '@/lib/constants.js'
 
-const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
+const { NAV_HISTORY } = CONCEPT_CONSTANTS.SELECT.RIGHT_COMPONENT
 
 const { CONCEPT, SETTINGS } = SELECTED
 const { REFERENCES } = SETTINGS

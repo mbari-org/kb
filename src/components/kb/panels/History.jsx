@@ -14,8 +14,8 @@ import usePanelFactory from '@/components/common/panel/usePanelFactory'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryProvider from '@/contexts/panels/history/HistoryProvider'
 
-import { CONCEPT_HISTORY } from '@/lib/constants/constants'
-const { TYPE } = CONCEPT_HISTORY
+import { CONCEPT } from '@/lib/constants.js'
+const { TYPE } = CONCEPT.HISTORY
 
 const HistoryContent = () => {
   const { createTablePanel } = usePanelFactory()

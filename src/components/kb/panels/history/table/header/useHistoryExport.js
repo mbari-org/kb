@@ -12,12 +12,15 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
-import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
-const { TYPE } = CONCEPT_HISTORY
-const { CONCEPT } = SELECTED
+const { TYPE } = CONCEPT.HISTORY
+const { CONCEPT: SELECTED_CONCEPT } = SELECTED
+const { SOLO } = CONCEPT.EXTENT
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 
 const commentsContent = ({ concept, historyExtent, historyType }) => {
@@ -109,7 +112,7 @@ const useHistoryExport = () => {
   const { setExporting } = use(PanelDataContext)
   const { user } = use(UserContext)
 
-  const selectedConcept = useMemo(() => getSelected(CONCEPT), [getSelected])
+  const selectedConcept = useMemo(() => getSelected(SELECTED_CONCEPT), [getSelected])
   const { data: conceptData, extent: conceptExtent } = conceptState
 
   const content = commentsContent({
@@ -155,7 +158,7 @@ const useHistoryExport = () => {
   const suggestName = useCallback(() => {
     if (selectedType === TYPE.CONCEPT) {
       const extent =
-        conceptExtent === CONCEPT_EXTENT.CONCEPT ? '' : `_and_${conceptExtent}`
+        conceptExtent === SOLO ? '' : `_and_${conceptExtent}`
       return `KB-History_${conceptNameForFilename(selectedConcept)}${extent}.csv`
     }
     return `KB-History-${capitalize(selectedType)}.csv`

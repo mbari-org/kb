@@ -10,7 +10,7 @@ import applyResults from '@/contexts/panels/concepts/staged/save/applyResults'
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
 
-import { CONCEPT_FIELD } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const useSaveStaged = () => {
   const { initialState, setConcept, stagedState } = use(ConceptContext)
@@ -38,7 +38,7 @@ const useSaveStaged = () => {
 
     const freshConcept = await applyResults(updatesContext, updatesInfo)
 
-    if (updatesInfo.hasUpdated(CONCEPT_FIELD.NAME)) {
+    if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
       await applyRenameSideEffects(updatesContext, updatesInfo)
     }
 

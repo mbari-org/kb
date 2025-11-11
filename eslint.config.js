@@ -84,7 +84,7 @@ export default [
       '@stylistic/key-spacing': ['error', { beforeColon: false, afterColon: true }],
       '@stylistic/keyword-spacing': ['error', { before: true, after: true }],
       '@stylistic/max-len': ['error', { code: 120, ignoreUrls: true, ignoreStrings: true, ignoreTemplateLiterals: true }],
-      '@stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1 }],
       '@stylistic/no-trailing-spaces': 'error',
       '@stylistic/object-curly-spacing': ['error', 'always'],
       '@stylistic/quote-props': ['error', 'as-needed'],

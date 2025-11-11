@@ -1,13 +1,16 @@
 import { useCallback, useEffect } from 'react'
 
-import { PREFS } from '@/lib/constants/constants'
 import { createError } from '@/lib/errors'
 import { isEmpty } from '@/lib/utils'
 
+import { PREFS } from '@/lib/constants/prefs.js'
+
+const { KEY } = PREFS.API
+
 const CLEAN_FLAGS = {
-  [PREFS.KEYS.CONCEPTS]: false,
-  [PREFS.KEYS.PANELS]: false,
-  [PREFS.KEYS.SETTINGS]: false,
+  [KEY.CONCEPTS]: false,
+  [KEY.PANELS]: false,
+  [KEY.SETTINGS]: false,
 }
 
 const useInitPrefs = ({
@@ -27,19 +30,19 @@ const useInitPrefs = ({
 }) => {
   const prefsValue = useCallback(key => {
     switch (key) {
-      case PREFS.KEYS.CONCEPTS:
+      case KEY.CONCEPTS:
         return {
           state: conceptSelect.getState(),
           position: conceptSelect.getPosition(),
         }
 
-      case PREFS.KEYS.PANELS:
+      case KEY.PANELS:
         return {
           state: panelSelect.getState(),
           position: panelSelect.getPosition(),
         }
 
-      case PREFS.KEYS.SETTINGS:
+      case KEY.SETTINGS:
         return getSettings()
 
       default:
@@ -56,7 +59,7 @@ const useInitPrefs = ({
       const allPrefs = await getPreferences()
 
       if (isEmpty(allPrefs)) {
-        await Promise.all(Object.values(PREFS.KEYS).map(key => {
+        await Promise.all(Object.values(KEY).map(key => {
           return createPreferences(key, prefsValue(key))
         }))
         setServerPreferencesExist(true)

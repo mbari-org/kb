@@ -5,10 +5,11 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { CONCEPT_SELECT, SELECTED } from '@/lib/constants/constants'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT } from '@/lib/constants.js'
 
 const { HISTORY } = SELECTED.SETTINGS
-const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
+const { NAV_HISTORY } = CONCEPT.SELECT.RIGHT_COMPONENT
 
 const HistoryHeaderLeft = () => {
   const { pageState, selectedType } = use(HistoryContext)

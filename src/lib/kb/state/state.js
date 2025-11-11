@@ -9,7 +9,7 @@ import { realizationsState } from '@/lib/kb/state/realizations'
 import { templatesState } from '@/lib/kb/state/templates'
 import { valueState } from '@/lib/kb/state/value'
 
-import { CONCEPT_FIELD } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 import { drop, isJsonEqual } from '@/lib/utils'
 
@@ -37,7 +37,7 @@ const initialConceptState = (concept, pendingConcept) => {
     ...rankState(concept, pendingConcept),
     ...realizationsState(concept, pendingConcept),
     ...templatesState(concept, pendingConcept),
-    ...valueState(concept, CONCEPT_FIELD.DELETE, false),
+    ...valueState(concept, CONCEPT.FIELD.DELETE, false),
   }
 }
 

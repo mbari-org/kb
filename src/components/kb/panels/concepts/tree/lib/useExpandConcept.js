@@ -3,7 +3,7 @@ import { use, useCallback } from 'react'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_EXPAND } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const allLeafs = (taxonomy, conceptName, leafs = []) => {
   const concept = taxonomy.conceptMap[conceptName]
@@ -61,19 +61,19 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
   return useCallback(
     (concept, expanded) => {
       switch (expanded) {
-        case CONCEPT_EXPAND.DESCENDANTS:
+        case CONCEPT.EXPAND.DESCENDANTS:
           descendants(concept)
           break
 
-        case CONCEPT_EXPAND.OFF:
+        case CONCEPT.EXPAND.OFF:
           collapse(concept)
           break
 
-        case CONCEPT_EXPAND.ON:
+        case CONCEPT.EXPAND.ON:
           expand(concept)
           break
 
-        case CONCEPT_EXPAND.TOGGLE:
+        case CONCEPT.EXPAND.TOGGLE:
           toggle(concept)
           break
       }

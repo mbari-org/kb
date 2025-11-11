@@ -8,7 +8,8 @@ import ConceptExportJson from '@/components/kb/panels/concepts/concept/export/Co
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { CONCEPT_EXTENT, EXPORT_TYPE } from '@/lib/constants/constants'
+import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
+import { CONCEPT } from '@/lib/constants.js'
 
 const ConceptExportContent = () => {
   const { modalData, setModalData } = use(ConceptModalContext)
@@ -25,7 +26,7 @@ const ConceptExportContent = () => {
 
   const exportMessage = useMemo(() => {
     let message = `Export ${exportType} data for the concept`
-    if (conceptExtent !== CONCEPT_EXTENT.CONCEPT) {
+    if (conceptExtent !== CONCEPT.EXTENT.SOLO) {
       message += ` and its ${conceptExtent}`
     }
     message += ':'

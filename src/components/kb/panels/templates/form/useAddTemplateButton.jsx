@@ -10,7 +10,8 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
-import { PROCESSING, SELECTED } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 import {
   createModalActions,
@@ -24,7 +25,7 @@ import {
   discardEditsAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-const { SAVING } = PROCESSING
+const { SAVING } = UI_TEXT.PROCESSING
 
 const useAddTemplateButton = () => {
   const { addTemplate, filters } = use(TemplatesContext)

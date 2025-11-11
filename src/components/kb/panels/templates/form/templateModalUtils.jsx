@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import TemplateForm from '@/components/kb/panels/templates/form/TemplateForm'
 import ModalActionText from '@/components/common/ModalActionText'
 
-import { LABELS } from '@/lib/constants/constants'
+import { LABELS } from '@/lib/constants.js'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 

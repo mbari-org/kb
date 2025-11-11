@@ -9,11 +9,12 @@ import {
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'
 
-import { LABELS, PENDING } from '@/lib/constants/constants'
+import { PENDING } from '@/lib/constants/pending.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useUpdatePending'
 
-const { APPROVE, CONFIRM, DEFER, REJECT } = LABELS.BUTTON
+const { APPROVE, CONFIRM, DEFER, REJECT } = UI_TEXT.LABELS.BUTTON
 
 const HistoryPendingActions = props => {
   const { modalData } = usePanelModalDataContext()

@@ -21,9 +21,12 @@ import { getConceptPath } from '@/lib/kb/api/concept'
 
 import { initialConceptState, isStateModified } from '@/lib/kb/state/state'
 
-import { CONCEPT_STATE, LABELS, PANEL_DATA, SELECTED } from '@/lib/constants/constants'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const { CONTINUE } = LABELS.BUTTON
+const { CONTINUE } = UI_TEXT.LABELS.BUTTON
 
 const ConceptProvider = ({ children }) => {
   const { setProcessing: setAppProcessing, setModalData: setAppModalData } = use(AppModalContext)
@@ -56,7 +59,7 @@ const ConceptProvider = ({ children }) => {
     async updatedConcept => {
       setEditing(false)
 
-      const { pendingHistory } = await refreshPanelData(PANEL_DATA.KEYS.PENDING_HISTORY)
+      const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
       const pendingConcept = pendingHistory.filter(
         history => history.concept === updatedConcept.name
       )

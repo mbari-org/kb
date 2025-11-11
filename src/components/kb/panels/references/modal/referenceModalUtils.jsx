@@ -2,11 +2,11 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import { LABELS } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, CONFIRM_DISCARD, DELETE, DISCARD_ALL, SAVE } = LABELS.BUTTON
+const { CANCEL, CONFIRM_DISCARD, DELETE, DISCARD_ALL, SAVE } = UI_TEXT.LABELS.BUTTON
 
 export const REFERENCE_FIELDS = {
   ADD_SUBMIT: ['citation', 'doi', 'concepts'],

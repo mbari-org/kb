@@ -8,7 +8,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { isPendingMedia } from '@/lib/kb/state/media'
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-import { PENDING } from '@/lib/constants/constants'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()

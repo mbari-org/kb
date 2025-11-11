@@ -7,7 +7,8 @@ import InspectIcon from '@/components/icon/InspectIcon'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { CONCEPT_STATE, SELECTED } from '@/lib/constants/constants'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
 

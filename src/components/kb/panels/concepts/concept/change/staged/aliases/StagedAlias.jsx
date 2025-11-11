@@ -4,7 +4,7 @@ import StagedItem from '@/components/kb/panels/concepts/concept/change/staged/St
 import StagedAliasDetail from './StagedAliasDetail'
 import StagedAliasHeader from './StagedAliasHeader'
 
-import { RESETTING } from '@/lib/constants/constants'
+import { RESETTING } from '@/lib/constants.js'
 
 const StagedAlias = ({ initialItem, resetting, stagedItem }) => {
   const group = RESETTING.ALIASES

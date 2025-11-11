@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { DELAY, FONT } from '@/lib/constants/constants'
+import { TOOLTIP } from '@/lib/constants.js'
 
 /**
  * KBTooltip component - a wrapper around MUI Tooltip with consistent styling and behavior
@@ -22,14 +22,14 @@ const KBTooltip = ({ children, title, tooltipSx, ...props }) => {
           sx: {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.grey[200],
-            fontSize: FONT.SIZE,
-            fontFamily: FONT.FAMILY,
+            fontSize: TOOLTIP.FONT.SIZE,
+            fontFamily: TOOLTIP.FONT.FAMILY,
             ...tooltipSx, // Allow custom styles to override defaults
           },
         },
       }}
-      enterDelay={DELAY.onEnter}
-      leaveDelay={DELAY.onLeave}
+      enterDelay={TOOLTIP.DELAY.onEnter}
+      leaveDelay={TOOLTIP.DELAY.onLeave}
       disableInteractive={true}
       title={title}
       {...props}

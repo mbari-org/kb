@@ -1,13 +1,13 @@
 import { Stack, Typography } from '@mui/material'
 
-import { FONT } from '@/lib/constants/constants'
+import { TOOLTIP } from '@/lib/constants.js'
 
 const onText = 'On: Show available templates that can be used with this concept'
 const offText = 'Off: Show templates explicitly defined for this concept'
 
 const ConceptTemplatesAvailableTooltip = ({ byAvailable }) => {
   return (
-    <Stack direction='column' spacing={0} sx={{ fontSize: FONT.SIZE, fontFamily: FONT.FAMILY }}>
+    <Stack direction='column' spacing={0} sx={{ fontSize: TOOLTIP.FONT.SIZE, fontFamily: TOOLTIP.FONT.FAMILY }}>
       <Typography sx={{ mb: '0.5em !important', mt: '0.25em !important', textAlign: 'center' }}>
         Available
       </Typography>

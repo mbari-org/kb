@@ -12,7 +12,7 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize, conceptNameForFilename } from '@/lib/utils'
 
-import { CONCEPT_EXTENT } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const dataHeaders = [
   'id',
@@ -36,7 +36,7 @@ const commentsContent = ({ concept, conceptExtent }) => {
 }
 
 const suggestName = ({ concept, conceptExtent }) => {
-  const extent = conceptExtent !== CONCEPT_EXTENT.CONCEPT ? `_and_${conceptExtent}` : ''
+  const extent = conceptExtent !== CONCEPT.EXTENT.SOLO ? `_and_${conceptExtent}` : ''
   return `KB-Concepts_${conceptNameForFilename(concept.name)}${extent}.csv`
 }
 
@@ -51,11 +51,11 @@ const useConceptExportCsv = conceptExtent => {
     const parent = getConcept(concept.parent)
 
     switch (conceptExtent) {
-      case CONCEPT_EXTENT.CONCEPT: {
+      case CONCEPT.EXTENT.SOLO: {
         return [dataRow(concept, parent.id)]
       }
 
-      case CONCEPT_EXTENT.CHILDREN: {
+      case CONCEPT.EXTENT.CHILDREN: {
         return concept.children.reduce((acc, child) => {
           const childConcept = getConcept(child)
           acc.push(dataRow(childConcept, concept.id))
@@ -63,7 +63,7 @@ const useConceptExportCsv = conceptExtent => {
         }, [dataRow(concept, parent.id)])
       }
 
-      case CONCEPT_EXTENT.DESCENDANTS: {
+      case CONCEPT.EXTENT.DESCENDANTS: {
         const descendantsInfo = await getDescendantsInfo(apiFns, concept.name, concept.id)
         return descendantsInfo.reduce((acc, descendant) => {
           acc.push([descendant.id, descendant.parentId, conceptNames(descendant.name, descendant.alternateNames)])

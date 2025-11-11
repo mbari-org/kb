@@ -1,7 +1,11 @@
-import { CONCEPT_FIELD, PANEL_DATA, PREFS } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { PREFS } from '@/lib/constants/prefs.js'
+
+const { KEY } = PREFS.API
 
 const getNameUpdate = updatesInfo => {
-  const updated = updatesInfo.updatedValue(CONCEPT_FIELD.NAME)
+  const updated = updatesInfo.updatedValue(CONCEPT.FIELD.NAME)
   return {
     value: updated.value,
     extent: updated.extent,
@@ -21,14 +25,14 @@ const conceptPrefsUpdate = async (updatesContext, newConceptName) => {
   const { getPreferences, staleConcept } = updatesContext
   const staleName = staleConcept.name
 
-  const conceptPrefs = await getPreferences(PREFS.KEYS.CONCEPTS)
+  const conceptPrefs = await getPreferences(KEY.CONCEPTS)
   const updatedPrefsState = conceptPrefs.state.map(name => name === staleName ? newConceptName : name)
   return { state: updatedPrefsState, position: conceptPrefs.position }
 }
 
 const settingsUpdate = (updatesContext, staleName, newConceptName) => {
   const { getSettings } = updatesContext
-  const currentSettings = getSettings(PREFS.KEYS.SETTINGS) || {}
+  const currentSettings = getSettings(KEY.SETTINGS) || {}
 
   const updatedSettings = {
     ...currentSettings,
@@ -64,10 +68,10 @@ const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   const updatedSettings = settingsUpdate(updatesContext, staleConcept.name, newConceptName)
 
   await Promise.all([
-    savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs),
-    savePreferences(PREFS.KEYS.SETTINGS, updatedSettings),
-    refreshPanelData(PANEL_DATA.KEYS.TEMPLATES),
-    refreshPanelData(PANEL_DATA.KEYS.REFERENCES),
+    savePreferences(KEY.CONCEPTS, updatedConceptPrefs),
+    savePreferences(KEY.SETTINGS, updatedSettings),
+    refreshPanelData(PANEL_DATA.TEMPLATES),
+    refreshPanelData(PANEL_DATA.REFERENCES),
   ])
 }
 

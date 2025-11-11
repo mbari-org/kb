@@ -1,4 +1,4 @@
-import { ACTION } from '@/lib/constants/constants'
+import { ACTION } from '@/lib/constants'
 
 const rejectChild = (concept, pendingItem) => {
   switch (pendingItem.action) {

@@ -14,9 +14,10 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { humanTimestamp } from '@/lib/utils'
 
-import { CONCEPT_HISTORY, SELECTED } from '@/lib/constants/constants'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT } from '@/lib/constants.js'
 
-const { TYPE } = CONCEPT_HISTORY
+const { TYPE } = CONCEPT.HISTORY
 const { HISTORY } = SELECTED.SETTINGS
 
 const useHistoryColumns = ({ type }) => {

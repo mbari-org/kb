@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { getNextSibling, getPrevSibling } from '@/lib/kb/model/concept'
 
-import { CONCEPT_EXPAND } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
 
 const useArrowNavigation = (
   concept,
@@ -61,7 +61,7 @@ const useArrowNavigation = (
 
         case 'ArrowLeft': {
           isExpanded(concept)
-            ? expandConcept(concept, CONCEPT_EXPAND.OFF)
+            ? expandConcept(concept, CONCEPT.EXPAND.OFF)
             : (navToConceptName = concept.parent)
           break
         }
@@ -69,7 +69,7 @@ const useArrowNavigation = (
         case 'ArrowRight':
           expandConcept(
             concept,
-            event.altKey && event.ctrlKey ? CONCEPT_EXPAND.DESCENDANTS : CONCEPT_EXPAND.ON
+            event.altKey && event.ctrlKey ? CONCEPT.EXPAND.DESCENDANTS : CONCEPT.EXPAND.ON
           )
           break
         default:

@@ -4,8 +4,7 @@ import { Stack, Typography } from '@mui/material'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { FONT } from '@/lib/constants/constants'
-import { SELECTED } from '@/lib/constants/constants'
+import { SELECTED, TOOLTIP } from '@/lib/constants.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
@@ -47,8 +46,8 @@ const TemplatesConceptAvailableTooltip = () => {
   }
 
   const fontProps = {
-    fontSize: FONT.SIZE,
-    fontFamily: FONT.FAMILY,
+    fontSize: TOOLTIP.FONT.SIZE,
+    fontFamily: TOOLTIP.FONT.FAMILY,
   }
 
   const titleProps = {

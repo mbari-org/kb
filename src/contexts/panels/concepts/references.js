@@ -1,6 +1,6 @@
 import { addConcept, removeConcept } from '@/lib/kb/api/references'
 
-import { PANEL_DATA } from '@/lib/constants/constants'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 const updateReferences = async (updatesContext, { conceptName, updatedName }) => {
   const { apiFns, getReferences, refreshPanelData } = updatesContext
@@ -14,7 +14,7 @@ const updateReferences = async (updatesContext, { conceptName, updatedName }) =>
       return apiFns.apiPayload(removeConcept, [reference.id, conceptName])
     })
     await Promise.all(updatePromises)
-    await refreshPanelData(PANEL_DATA.KEYS.REFERENCES)
+    await refreshPanelData(PANEL_DATA.REFERENCES)
   }
 }
 

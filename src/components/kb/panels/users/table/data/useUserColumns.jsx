@@ -5,11 +5,10 @@ import { CiEdit } from 'react-icons/ci'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 
-import { USER_ROLES } from '@/lib/constants/constants'
-import { USERS } from '@/lib/constants/constants'
+import { ROLES, TOOLTIP } from '@/lib/constants.js'
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
-  const lockTooltip = locked => locked ? USERS.UNLOCK : USERS.LOCK
+  const lockTooltip = locked => locked ? TOOLTIP.USERS.UNLOCK : TOOLTIP.USERS.LOCK
 
   const columns = [
     {
@@ -32,7 +31,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
           <ActionIcon
             Icon={CiEdit}
             onClick={() => editUserModal(params.row)}
-            tooltip={USERS.EDIT}
+            tooltip={TOOLTIP.USERS.EDIT}
             color='edit'
             size={24}
             disabled={params.row.locked}
@@ -52,7 +51,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
       headerName: 'Role',
       width: 130,
       type: 'singleSelect',
-      valueOptions: Object.values(USER_ROLES),
+      valueOptions: Object.values(ROLES),
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },

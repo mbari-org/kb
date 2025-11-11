@@ -9,10 +9,10 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
 import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
-import { CONCEPT_SELECT, SELECTED } from '@/lib/constants/constants'
-import { TEMPLATES as TEMPLATES_TOOLTIPS } from '@/lib/constants/constants'
+import { CONCEPT, SELECTED } from '@/lib/constants.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
-const { EXPORT } = TEMPLATES_TOOLTIPS
+const { EXPORT } = UI_TEXT.TOOLTIP.TEMPLATES
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
 
@@ -42,7 +42,7 @@ const TemplatesTableHeaderLeft = () => {
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'space-between',
-        width: CONCEPT_SELECT.WIDTH,
+        width: CONCEPT.SELECT.WIDTH,
       }}
     >
       <PanelDataExport

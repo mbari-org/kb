@@ -16,7 +16,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { createError } from '@/lib/errors'
 
-import { HISTORY_FIELD } from '@/lib/constants/constants'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const { ALIAS, CHILD, MEDIA, NAME, PARENT, RANK, REALIZATION, TEMPLATE } = HISTORY_FIELD
 

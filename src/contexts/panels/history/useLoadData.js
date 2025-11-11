@@ -7,11 +7,14 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { sleep } from '@/lib/utils'
 
-import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
-const { TYPE } = CONCEPT_HISTORY
-const { CHILDREN, DESCENDANTS } = CONCEPT_EXTENT
-const { CONCEPT, SETTINGS } = SELECTED
+const { CHILDREN, DESCENDANTS } = CONCEPT.EXTENT
+const { TYPE } = CONCEPT.HISTORY
+const { CONCEPT: SELECTED_CONCEPT, SETTINGS } = SELECTED
+const { HISTORY } = SETTINGS
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
@@ -23,8 +26,8 @@ const useLoadData = ({
   const { getSelected, getSettings } = use(SelectedContext)
   const { getConcept, getDescendantNames } = use(TaxonomyContext)
 
-  const selectedConcept = getSelected(CONCEPT)
-  const selectedType = getSettings(SETTINGS.HISTORY.KEY, SETTINGS.HISTORY.TYPE)
+  const selectedConcept = getSelected(SELECTED_CONCEPT)
+  const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
 
   const conceptChildren = useMemo(() => {
     if (conceptHistoryExtent !== CHILDREN) return []

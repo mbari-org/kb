@@ -9,7 +9,7 @@ import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/s
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { RESETTING } from '@/lib/constants/constants'
+import { RESETTING } from '@/lib/constants.js'
 
 const StagedObject = ({ group, stagedEdit }) => {
   const { confirmReset } = use(ConceptContext)

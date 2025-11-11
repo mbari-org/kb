@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/constants/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { createError } from '@/lib/errors'
 import { createConcept } from '@/lib/kb/api/concept'
 

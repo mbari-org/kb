@@ -7,7 +7,7 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError, createValidationError } from '@/lib/errors'
 
-import { PROCESSING } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createHandlers,
   createModalActions,
@@ -19,7 +19,7 @@ import {
   discardEditsAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-const { UPDATING } = PROCESSING
+const { UPDATING } = UI_TEXT.PROCESSING
 
 const useEditTemplateButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =

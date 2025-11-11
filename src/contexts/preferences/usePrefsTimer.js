@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-import { PREFS } from '@/lib/constants/constants'
+import { PREFS } from '@/lib/constants/prefs.js'
 
 const usePrefsTimer = ({
   CLEAN_FLAGS,
@@ -29,7 +29,7 @@ const usePrefsTimer = ({
       isSaving.current = true
 
       const savePreferences = async () => {
-        const prefUpdates = Object.values(PREFS.KEYS).reduce((acc, key) => {
+        const prefUpdates = Object.values(PREFS.API.KEY).reduce((acc, key) => {
           if (dirtyFlags[key]) {
             acc.push({ key, value: prefsValue(key) })
           }
@@ -49,7 +49,7 @@ const usePrefsTimer = ({
       }
 
       savePreferences()
-    }, PREFS.AUTOSAVE_MILLIS)
+    }, PREFS.API.AUTOSAVE_MILLIS)
   }, [
     CLEAN_FLAGS,
     dirtyFlags,

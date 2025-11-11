@@ -1,6 +1,7 @@
 import { pendingItems } from '@/lib/kb/model/history'
 
-import { HISTORY_FIELD, PENDING } from '@/lib/constants/constants'
+import { PENDING } from '@/lib/constants/pending.js'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const { GROUP } = PENDING
 

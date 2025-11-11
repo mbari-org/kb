@@ -8,7 +8,7 @@ import ConceptSectionTitle from '@/components/common/ConceptSectionTitle'
 import ConceptPropertiesEmpty from './ConceptPropertiesEmpty'
 import ConceptPropertiesDisclosure from './ConceptPropertiesDisclosure'
 
-import { ACTION } from '@/lib/constants/constants'
+import { ACTION } from '@/lib/constants'
 
 const ConceptPropertyList = ({
   actionComponent,

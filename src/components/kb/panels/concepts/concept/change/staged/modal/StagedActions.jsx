@@ -10,13 +10,16 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { isStateModified } from '@/lib/kb/state/state'
 
-import { CONCEPT_STATE, LABELS, RESETTING, UNSAFE_ACTION } from '@/lib/constants/constants'
+import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
+import { RESETTING } from '@/lib/constants.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
 const COLORS = ['cancel', 'main']
-const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = LABELS.BUTTON
-const { SAVE } = LABELS.CONCEPT.ACTION
+const { BACK_TO_EDIT, CONFIRM_DISCARD, DISCARD_ALL, REJECT_DISCARD } = UI_TEXT.LABELS.BUTTON
+const { SAVE } = UI_TEXT.LABELS.CONCEPT.ACTION
 const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 

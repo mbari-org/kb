@@ -11,25 +11,27 @@ import { pickReference } from '@/lib/kb/model/reference'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { PANEL_DATA, PREFS } from '@/lib/constants/constants'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { PREFS } from '@/lib/constants/prefs.js'
 
+const { KEY } = PREFS.API
 const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
   const { concept, getPreferences } = deleteConceptContext
-  const conceptPrefs = await getPreferences(PREFS.KEYS.CONCEPTS)
+  const conceptPrefs = await getPreferences(KEY.CONCEPTS)
   const removalsBeforePosition = conceptPrefs.state
     .slice(0, conceptPrefs.position)
     .filter(name => name === concept.name).length
   const updatedPrefsState = conceptPrefs.state.filter(name => name !== concept.name)
   const updatedPosition = conceptPrefs.position - removalsBeforePosition
   const updatedConceptPrefs = { state: updatedPrefsState, position: updatedPosition }
-  return deleteConceptContext.savePreferences(PREFS.KEYS.CONCEPTS, updatedConceptPrefs)
+  return deleteConceptContext.savePreferences(KEY.CONCEPTS, updatedConceptPrefs)
 }
 
 const performSettingsUpdate = deleteConceptContext => {
   const { getSettings } = deleteConceptContext
-  const currentSettings = getSettings(PREFS.KEYS.SETTINGS) || {}
+  const currentSettings = getSettings(KEY.SETTINGS) || {}
   const updatedSettings = {
     ...currentSettings,
     templates: {
@@ -37,7 +39,7 @@ const performSettingsUpdate = deleteConceptContext => {
       filters: {},
     },
   }
-  return deleteConceptContext.savePreferences(PREFS.KEYS.SETTINGS, updatedSettings)
+  return deleteConceptContext.savePreferences(KEY.SETTINGS, updatedSettings)
 }
 
 const preSideEffects = async deleteConceptContext => {
@@ -129,7 +131,7 @@ const postSideEffects = async deleteConceptContext => {
     ),
   }
 
-  await refreshPanelDataFn(PANEL_DATA.KEYS.REFERENCES)
+  await refreshPanelDataFn(PANEL_DATA.REFERENCES)
 
   const results = await Promise.all(
     Object.entries(promises).map(([key, promise]) =>
@@ -161,7 +163,7 @@ const applyResults = async (reassignedConcept, refreshPanelDataFn, results) => {
             })
             reassignedConcept.realizations = realizations
 
-            await refreshPanelDataFn(PANEL_DATA.KEYS.REALIZATIONS)
+            await refreshPanelDataFn(PANEL_DATA.REALIZATIONS)
           }
           break
         }
@@ -175,7 +177,7 @@ const applyResults = async (reassignedConcept, refreshPanelDataFn, results) => {
             })
             reassignedConcept.references = references
 
-            await refreshPanelDataFn(PANEL_DATA.KEYS.REFERENCES)
+            await refreshPanelDataFn(PANEL_DATA.REFERENCES)
           }
           break
         }
@@ -183,7 +185,7 @@ const applyResults = async (reassignedConcept, refreshPanelDataFn, results) => {
         case TEMPLATES_DEFINED:
         case TEMPLATES_TO:
           if (value.length > 0) {
-            await refreshPanelDataFn(PANEL_DATA.KEYS.TEMPLATES)
+            await refreshPanelDataFn(PANEL_DATA.TEMPLATES)
           }
           break
       }

@@ -1,4 +1,4 @@
-import { ACTION } from '@/lib/constants/constants'
+import { ACTION } from '@/lib/constants'
 import { createError } from '@/lib/errors'
 
 const approveAlias = (concept, item) => {

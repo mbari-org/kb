@@ -9,7 +9,7 @@ import { createError, createValidationError } from '@/lib/errors'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
-import { LABELS, PROCESSING } from '@/lib/constants/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createModalActions,
   createUserValidator,
@@ -19,8 +19,8 @@ import {
   createModalContent,
 } from '@/components/kb/panels/users/form/userModalUtils'
 
-const { SAVING } = PROCESSING
-const { CONFIRM_DISCARD, DISCARD } = LABELS.BUTTON
+const { SAVING } = UI_TEXT.PROCESSING
+const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 
 const useAddUserButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =

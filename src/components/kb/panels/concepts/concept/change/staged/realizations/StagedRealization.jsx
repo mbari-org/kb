@@ -4,7 +4,7 @@ import StagedItemReset from '@/components/kb/panels/concepts/concept/change/stag
 import StagedRealizationDetail from './StagedRealizationDetail'
 import StagedRealizationHeader from './StagedRealizationHeader'
 
-import { RESETTING } from '@/lib/constants/constants'
+import { RESETTING } from '@/lib/constants.js'
 
 const StagedRealization = ({ initialItem, resetting, stagedItem }) => {
   const group = RESETTING.REALIZATIONS

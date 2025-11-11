@@ -1,0 +1,45 @@
+import { UI_CONCEPT } from './ui/concept.js'
+import { UI_LABELS } from './ui/labels.js'
+import { UI_PROCESSING } from './ui/processing.js'
+import { UI_RESETTING } from './ui/resetting.js'
+import { ROLES } from './roles.js'
+import { UI_TOOLTIP } from './ui/tooltip.js'
+
+export const UI_TEXT = {
+  LABELS: UI_LABELS,
+  PROCESSING: {
+    DELETING: UI_PROCESSING.DELETING,
+    LOADING: UI_PROCESSING.LOADING,
+    SAVING: UI_PROCESSING.SAVING,
+    UPDATING: UI_PROCESSING.UPDATING,
+  },
+  TOOLTIP: {
+    HISTORY: UI_TOOLTIP.HISTORY,
+    REFERENCES: UI_TOOLTIP.REFERENCES,
+    TEMPLATES: UI_TOOLTIP.TEMPLATES,
+    USERS: UI_TOOLTIP.USERS,
+  },
+  CONCEPT: {
+    SELECT: {
+      CONCEPT_LABEL: UI_CONCEPT.SELECT.CONCEPT_LABEL,
+      TO_CONCEPT_LABEL: UI_CONCEPT.SELECT.TO_CONCEPT_LABEL,
+    },
+    // Appears as button text in ToConceptSpecial
+    TO_SPECIAL: UI_CONCEPT.TO_SPECIAL,
+    // Used for alias type dropdown items
+    NAME_TYPES: UI_CONCEPT.NAME_TYPES,
+  },
+  RESETTING: {
+    // These values are shown as staged group headers
+    ALIASES: UI_RESETTING.ALIASES,
+    AUTHOR: UI_RESETTING.AUTHOR,
+    CHILDREN: UI_RESETTING.CHILDREN,
+    MEDIA: UI_RESETTING.MEDIA,
+    NAME: UI_RESETTING.NAME,
+    PARENT: UI_RESETTING.PARENT,
+    RANK: UI_RESETTING.RANK,
+    REALIZATIONS: UI_RESETTING.REALIZATIONS,
+    TEMPLATES: UI_RESETTING.TEMPLATES,
+  },
+  ROLES,
+}

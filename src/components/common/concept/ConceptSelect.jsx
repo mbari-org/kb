@@ -11,9 +11,10 @@ import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_SELECT, TO_CONCEPT_SPECIAL } from '@/lib/constants/constants'
+import { CONCEPT } from '@/lib/constants.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
-const { CONCEPT_LABEL, RIGHT_COMPONENT, WIDTH } = CONCEPT_SELECT
+const { RIGHT_COMPONENT, WIDTH } = CONCEPT.SELECT
 const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
 
 const ConceptSelect = ({
@@ -21,7 +22,7 @@ const ConceptSelect = ({
   disabled = false,
   doConceptSelected,
   keepFocus = false,
-  label = CONCEPT_LABEL,
+  label = UI_TEXT.CONCEPT.SELECT.CONCEPT_LABEL,
   leftComponent = NONE,
   onClear,
   onInputChange,
@@ -42,7 +43,7 @@ const ConceptSelect = ({
 
     // If this is a special component (ToConcept), include special values in options
     if (rightComponent === SPECIAL) {
-      return [...baseOptions, ...TO_CONCEPT_SPECIAL]
+      return [...baseOptions, ...CONCEPT.TO_SPECIAL]
     }
 
     return baseOptions
@@ -52,7 +53,7 @@ const ConceptSelect = ({
     if (selectedName) {
       const isValidSelection =
         options.includes(selectedName) ||
-        (rightComponent === SPECIAL && TO_CONCEPT_SPECIAL.includes(selectedName))
+        (rightComponent === SPECIAL && CONCEPT.TO_SPECIAL.includes(selectedName))
 
       if (isValidSelection) {
         const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true

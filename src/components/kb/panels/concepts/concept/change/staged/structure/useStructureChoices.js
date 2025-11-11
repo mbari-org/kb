@@ -7,7 +7,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { hasPendingStructure } from '@/lib/kb/model/history'
 
-import { ACTION } from '@/lib/constants/constants'
+import { ACTION } from '@/lib/constants'
 
 const hasStagedStructure = (concept, stagedState) => {
   const hasStagedChildren = stagedState.children.some(child => child.action !== ACTION.NONE)

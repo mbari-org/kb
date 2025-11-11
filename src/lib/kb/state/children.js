@@ -1,7 +1,9 @@
 import { CHILD_FIELDS } from '@/lib/kb/model/children'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
-import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants/constants'
+import { ACTION } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const addChild = (state, update) => {
   const childIndex = state.children.length

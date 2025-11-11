@@ -8,7 +8,7 @@ import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { PENDING } from '@/lib/constants/constants'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { APPROVAL } = PENDING
 
