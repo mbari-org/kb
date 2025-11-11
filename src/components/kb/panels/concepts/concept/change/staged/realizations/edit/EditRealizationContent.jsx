@@ -141,7 +141,7 @@ const EditRealizationContent = () => {
             onChange={event => {
               const newValue = event.target.value
               setFilterLinkName(newValue)
-            handleRealizationChange(EMPTY_TEMPLATE)
+              handleRealizationChange(EMPTY_TEMPLATE)
             }}
             onKeyDown={handleFilterKeyDown}
             size='small'

@@ -12,6 +12,8 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const { config, updateConfig } = use(ConfigContext)
   const [configUrl, setConfigUrl] = useState(config?.url || '')
 
+  const inputUrl = config?.valid ? config.url : configUrl
+
   const submitConfigUrl = async (_prevState, formData) => {
     const formConfigUrl = formData.get('configUrl')
     return updateConfig(formConfigUrl)
@@ -31,9 +33,8 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   useEffect(() => {
     if (config?.valid) {
       setConfigIsDirty(false)
-      setConfigUrl(config.url)
     }
-  }, [config?.valid, config?.url, setConfigIsDirty])
+  }, [config?.valid, setConfigIsDirty])
 
   return (
     <Box component='form' action={configAction}>
@@ -47,7 +48,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
             onChange={handleConfigChange}
             required
             sx={{ mt: 1 }}
-            value={configUrl}
+            value={inputUrl}
           />
           <SubmitError errorText={config?.error || configState?.error || ''} />
         </CardContent>

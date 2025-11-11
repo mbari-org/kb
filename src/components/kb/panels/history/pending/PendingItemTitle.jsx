@@ -1,5 +1,3 @@
-import { use } from 'react'
-
 import Title from '@/components/common/factory/Title'
 
 import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'

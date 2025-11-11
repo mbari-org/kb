@@ -4,7 +4,6 @@ import { Box, Typography } from '@mui/material'
 import UserContext from '@/contexts/user/UserContext'
 
 import { isAdmin } from '@/lib/auth/role'
-import { RELATED_DATA_TYPE } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 const RelatedDataCounts = ({ relatedDataCounts }) => {
   const { user } = use(UserContext)

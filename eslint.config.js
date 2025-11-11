@@ -111,6 +111,7 @@ export default [
           caughtErrors: 'all',
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
           reportUsedIgnorePattern: true,
         },
       ],

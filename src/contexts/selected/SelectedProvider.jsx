@@ -10,7 +10,14 @@ import { SELECTED } from '@/lib/constants'
 const { CONCEPT, PANEL } = SELECTED
 
 const SelectedProvider = ({ children }) => {
-  const { conceptSelect, isLoading, getSettingsRef, onSettingsChangeRef, onSettingsInitRef, panelSelect } = use(PreferencesContext)
+  const {
+    conceptSelect,
+    getSettingsRef,
+    isLoading,
+    onSettingsChangeRef,
+    onSettingsInitRef,
+    panelSelect,
+  } = use(PreferencesContext)
   const { settings, setSettings, getSettings, updateSettings: originalUpdateSettings } = useSettings()
 
   useEffect(() => {
