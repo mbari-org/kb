@@ -2,7 +2,7 @@ import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { resettingRealization } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const { RESET } = CONCEPT_STATE
 

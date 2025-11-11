@@ -12,7 +12,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { resettingMedia } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { mediaItemEdits } from '@/lib/kb/model/media'
-import { RESETTING } from '@/lib/constants'
+import { RESETTING } from '@/lib/constants/constants'
 
 const MediaDetail = ({ edit }) => {
   const [_, media] = edit

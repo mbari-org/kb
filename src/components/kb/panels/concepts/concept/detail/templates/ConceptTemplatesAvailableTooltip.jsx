@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 
-import { FONT } from '@/lib/constants'
+import { FONT } from '@/lib/constants/constants'
 
 const onText = 'On: Show available templates that can be used with this concept'
 const offText = 'Off: Show templates explicitly defined for this concept'

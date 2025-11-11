@@ -6,7 +6,7 @@ import { grey } from '@mui/material/colors'
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED, UNSAFE_ACTION } from '@/lib/constants'
+import { SELECTED, UNSAFE_ACTION } from '@/lib/constants/constants'
 import LogoutIcon from '@/components/icon/LogoutIcon'
 import RefreshAppIcon from '@/components/icon/RefreshAppIcon'
 import RefreshContext from '@/contexts/refresh/RefreshContext'

@@ -12,7 +12,7 @@ import { formatDelta, otherApprovalSx } from '@/components/common/format'
 
 import { isPendingParent } from '@/lib/kb/state/parent'
 
-import { PENDING } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/constants'
 
 const { APPROVAL, GROUP } = PENDING
 

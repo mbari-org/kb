@@ -1,6 +1,6 @@
 import PendingItem from '@/components/kb/panels/concepts/concept/change/pending/PendingItem'
 
-import { PENDING } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/constants'
 
 const { GROUP } = PENDING
 

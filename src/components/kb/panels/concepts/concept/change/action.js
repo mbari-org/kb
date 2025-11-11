@@ -1,7 +1,7 @@
 import { formatDelta } from '@/components/common/format'
 import theme from '@/lib/theme'
 
-import { ACTION } from '@/lib/constants'
+import { ACTION } from '@/lib/constants/constants'
 
 const actionVerb = action => action.split(' ').shift()
 

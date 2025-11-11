@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS } from '@/lib/constants/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 

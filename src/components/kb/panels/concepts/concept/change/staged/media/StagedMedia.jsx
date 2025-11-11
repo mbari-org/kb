@@ -3,7 +3,7 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedMediaEdits } from '@/lib/kb/state/media'
 
-import { RESETTING } from '@/lib/constants'
+import { RESETTING } from '@/lib/constants/constants'
 
 const StagedMedia = ({ stagedEdit }) => {
   return (

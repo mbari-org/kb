@@ -2,7 +2,7 @@ import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 
 import MediaAction from '@/components/kb/panels/concepts/concept/change/staged/media/MediaAction'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const MEDIA_ADD = 'Add Media'
 

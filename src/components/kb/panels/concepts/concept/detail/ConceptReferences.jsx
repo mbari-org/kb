@@ -7,7 +7,7 @@ import InspectIcon from '@/components/icon/InspectIcon'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { CONCEPT_STATE, SELECTED } from '@/lib/constants'
+import { CONCEPT_STATE, SELECTED } from '@/lib/constants/constants'
 
 const { REFERENCES } = SELECTED.SETTINGS
 

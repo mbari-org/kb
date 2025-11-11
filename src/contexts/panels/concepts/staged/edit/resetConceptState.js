@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 import { createError } from '@/lib/errors'
 const RESET = CONCEPT_STATE.RESET
 

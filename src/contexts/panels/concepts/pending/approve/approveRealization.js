@@ -1,4 +1,4 @@
-import { ACTION, HISTORY_FIELD } from '@/lib/constants'
+import { ACTION, HISTORY_FIELD } from '@/lib/constants/constants'
 import { matchingRealizationString, parseRealization } from '@/lib/kb/model/realization'
 
 const approveRealization = (concept, item) => {

@@ -8,7 +8,7 @@ import useLoadReferences from '@/contexts/panel/data/useLoadReferences'
 import useLoadTemplates from '@/contexts/panel/data/useLoadTemplates'
 import useLoadPendingHistory from '@/contexts/panel/data/useLoadPendingHistory'
 
-import { PANEL_DATA } from '@/lib/constants'
+import { PANEL_DATA } from '@/lib/constants/constants'
 
 export const PanelDataProvider = ({ children }) => {
   const { setProcessing } = use(AppModalContext)

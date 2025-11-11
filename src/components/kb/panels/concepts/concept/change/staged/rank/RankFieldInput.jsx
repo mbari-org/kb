@@ -9,7 +9,7 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-import { CONCEPT_RANK } from '@/lib/constants'
+import { CONCEPT_RANK } from '@/lib/constants/constants'
 
 import { rankField } from '@/lib/kb/state/rank'
 import { capitalize } from '@/lib/utils'

@@ -13,7 +13,7 @@ import { isSame } from '@/lib/kb/model/realization'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { CONCEPT_STATE, SELECTED } from '@/lib/constants'
+import { CONCEPT_STATE, SELECTED } from '@/lib/constants/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

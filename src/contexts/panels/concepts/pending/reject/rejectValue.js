@@ -1,4 +1,4 @@
-import { CONCEPT_FIELD, HISTORY_FIELD } from '@/lib/constants'
+import { CONCEPT_FIELD, HISTORY_FIELD } from '@/lib/constants/constants'
 
 const rejectValue = (concept, pendingItem) => {
   let field

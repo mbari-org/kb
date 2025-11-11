@@ -10,7 +10,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { LABELS, PROCESSING, SELECTED } from '@/lib/constants'
+import { LABELS, PROCESSING, SELECTED } from '@/lib/constants/constants'
 import {
   createHandlers,
   createInitialReference,

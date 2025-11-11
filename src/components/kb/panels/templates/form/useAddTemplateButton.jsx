@@ -10,7 +10,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
-import { PROCESSING, SELECTED } from '@/lib/constants'
+import { PROCESSING, SELECTED } from '@/lib/constants/constants'
 
 import {
   createModalActions,

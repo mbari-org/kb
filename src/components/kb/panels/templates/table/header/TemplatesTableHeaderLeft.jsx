@@ -9,8 +9,8 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import useTemplatesExport from '@/components/kb/panels/templates/table/header/useTemplatesExport'
 import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
-import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
-import { TEMPLATES as TEMPLATES_TOOLTIPS } from '@/lib/constants'
+import { CONCEPT_SELECT, SELECTED } from '@/lib/constants/constants'
+import { TEMPLATES as TEMPLATES_TOOLTIPS } from '@/lib/constants/constants'
 
 const { EXPORT } = TEMPLATES_TOOLTIPS
 const { TEMPLATES } = SELECTED.SETTINGS

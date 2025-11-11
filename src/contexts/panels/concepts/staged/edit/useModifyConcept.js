@@ -5,7 +5,7 @@ import {
   resetConceptState,
 } from '@/contexts/panels/concepts/staged/edit/resetConceptState'
 
-import { RESETTING } from '@/lib/constants'
+import { RESETTING } from '@/lib/constants/constants'
 
 const { CONFIRMED } = RESETTING
 

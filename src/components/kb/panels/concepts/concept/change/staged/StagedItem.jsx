@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 
-import { RESETTING } from '@/lib/constants'
+import { RESETTING } from '@/lib/constants/constants'
 
 const StagedItem = ({ ItemDetail, ItemHeader, ItemReset, resetting }) => {
   const disabled = resetting === RESETTING.EXTENT.OTHER

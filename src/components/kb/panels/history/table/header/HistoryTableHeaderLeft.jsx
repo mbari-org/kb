@@ -6,7 +6,7 @@ import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import useHistoryExport from '@/components/kb/panels/history/table/header/useHistoryExport'
 
-import { HISTORY } from '@/lib/constants'
+import { HISTORY } from '@/lib/constants/constants'
 
 const HistoryTableHeaderLeft = () => {
   const { count, selectedType } = use(HistoryContext)

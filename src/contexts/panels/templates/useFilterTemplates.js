@@ -3,7 +3,7 @@ import { use, useCallback, useState } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { SELECTED } from '@/lib/constants'
+import { SELECTED } from '@/lib/constants/constants'
 import {
   getAvailableTemplates,
   getExplicitTemplates,

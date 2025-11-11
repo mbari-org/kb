@@ -1,4 +1,4 @@
-import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants/constants'
 import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { orderedAliases } from '@/lib/kb/model/aliases'

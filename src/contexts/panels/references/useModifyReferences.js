@@ -12,7 +12,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { createReference } from '@/lib/kb/model/reference'
 
-import { PAGINATION } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants/constants'
 
 const { EXPORT_PAGE_SIZE } = PAGINATION.REFERENCES
 

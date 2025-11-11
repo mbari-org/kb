@@ -14,7 +14,7 @@ import usePanelFactory from '@/components/common/panel/usePanelFactory'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryProvider from '@/contexts/panels/history/HistoryProvider'
 
-import { CONCEPT_HISTORY } from '@/lib/constants'
+import { CONCEPT_HISTORY } from '@/lib/constants/constants'
 const { TYPE } = CONCEPT_HISTORY
 
 const HistoryContent = () => {

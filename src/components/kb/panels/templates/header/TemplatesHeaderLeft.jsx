@@ -8,7 +8,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { SELECTED } from '@/lib/constants'
+import { SELECTED } from '@/lib/constants/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES

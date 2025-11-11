@@ -1,4 +1,4 @@
-import { CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
+import { CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants/constants'
 
 const isPendingAuthor = pendingItem =>
   pendingItem.field === HISTORY_FIELD.NAME && pendingItem.action === CONCEPT_STATE.AUTHOR

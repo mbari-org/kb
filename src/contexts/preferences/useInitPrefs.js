@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { PREFS } from '@/lib/constants'
+import { PREFS } from '@/lib/constants/constants'
 import { createError } from '@/lib/errors'
 import { isEmpty } from '@/lib/utils'
 

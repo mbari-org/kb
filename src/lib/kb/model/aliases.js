@@ -1,6 +1,6 @@
 import { capitalize, isJsonEqual, pick } from '@/lib/utils'
 
-import { CONCEPT_NAME_TYPES } from '@/lib/constants'
+import { CONCEPT_NAME_TYPES } from '@/lib/constants/constants'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 

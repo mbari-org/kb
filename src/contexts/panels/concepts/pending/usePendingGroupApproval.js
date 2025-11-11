@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { PENDING } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/constants'
 
 const { OTHER } = PENDING.APPROVAL
 

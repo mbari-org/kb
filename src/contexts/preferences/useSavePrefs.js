@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { PREFS } from '@/lib/constants'
+import { PREFS } from '@/lib/constants/constants'
 
 const syncInMemoryStore = (key, value, conceptSelectRef, panelSelectRef, onSettingsInitRef) => {
   if (key === PREFS.KEYS.CONCEPTS && conceptSelectRef?.current) {

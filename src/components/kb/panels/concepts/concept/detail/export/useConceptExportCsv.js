@@ -12,7 +12,7 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize, conceptNameForFilename } from '@/lib/utils'
 
-import { CONCEPT_EXTENT } from '@/lib/constants'
+import { CONCEPT_EXTENT } from '@/lib/constants/constants'
 
 const dataHeaders = [
   'id',

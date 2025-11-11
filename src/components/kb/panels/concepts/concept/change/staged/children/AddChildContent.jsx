@@ -14,7 +14,7 @@ import useConceptNameValidate from '@/components/kb/panels/concepts/concept/chan
 
 import { rankField } from '@/lib/kb/state/rank'
 
-import { CONCEPT_RANK, CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_RANK, CONCEPT_STATE } from '@/lib/constants/constants'
 
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 

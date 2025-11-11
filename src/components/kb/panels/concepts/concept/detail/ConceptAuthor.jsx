@@ -9,7 +9,7 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/stagedBorder'
 
-import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_FIELD, CONCEPT_STATE } from '@/lib/constants/constants'
 
 const ConceptAuthor = () => {
   const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)

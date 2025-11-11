@@ -3,7 +3,7 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedAliasesEdits } from '@/lib/kb/state/aliases'
 
-import { RESETTING } from '@/lib/constants'
+import { RESETTING } from '@/lib/constants/constants'
 
 const StagedAliases = ({ stagedEdit }) => {
   return (

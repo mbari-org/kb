@@ -14,7 +14,7 @@ import useUpdateFilters from './useUpdateFilters'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { SELECTED } from '@/lib/constants'
+import { SELECTED } from '@/lib/constants/constants'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const FILTERS = TEMPLATES.FILTERS

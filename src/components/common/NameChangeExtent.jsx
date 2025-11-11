@@ -1,6 +1,6 @@
 import { FormControlLabel, Radio, Stack } from '@mui/material'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS } from '@/lib/constants/constants'
 
 const { NAME_ONLY, REASSIGN } = LABELS.CONCEPT.CHANGE_NAME
 

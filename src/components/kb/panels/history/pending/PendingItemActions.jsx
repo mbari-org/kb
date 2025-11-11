@@ -9,7 +9,7 @@ import {
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'
 
-import { LABELS, PENDING } from '@/lib/constants'
+import { LABELS, PENDING } from '@/lib/constants/constants'
 import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useUpdatePending'
 

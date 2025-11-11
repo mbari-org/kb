@@ -12,7 +12,7 @@ import { pendingInfo } from '@/lib/kb/model/history'
 import { isPendingName } from '@/lib/kb/state/name'
 import { isAdmin } from '@/lib/auth/role'
 
-import { HISTORY_FIELD, LABELS, PENDING } from '@/lib/constants'
+import { HISTORY_FIELD, LABELS, PENDING } from '@/lib/constants/constants'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME

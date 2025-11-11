@@ -17,7 +17,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
-import { CONCEPT_FIELD, RESETTING } from '@/lib/constants'
+import { CONCEPT_FIELD, RESETTING } from '@/lib/constants/constants'
 
 const StagedContent = () => {
   const { initialState, stagedState } = use(ConceptContext)

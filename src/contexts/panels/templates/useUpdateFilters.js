@@ -1,4 +1,4 @@
-import { SELECTED } from '@/lib/constants'
+import { SELECTED } from '@/lib/constants/constants'
 import { useCallback } from 'react'
 
 const { TEMPLATES } = SELECTED.SETTINGS

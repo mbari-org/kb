@@ -21,7 +21,7 @@ import { getConceptPath } from '@/lib/kb/api/concept'
 
 import { initialConceptState, isStateModified } from '@/lib/kb/state/state'
 
-import { CONCEPT_STATE, LABELS, PANEL_DATA, SELECTED } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS, PANEL_DATA, SELECTED } from '@/lib/constants/constants'
 
 const { CONTINUE } = LABELS.BUTTON
 

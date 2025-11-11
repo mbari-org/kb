@@ -4,7 +4,7 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { CONCEPT_SELECT, SELECTED } from '@/lib/constants'
+import { CONCEPT_SELECT, SELECTED } from '@/lib/constants/constants'
 
 const { NAV_HISTORY } = CONCEPT_SELECT.RIGHT_COMPONENT
 

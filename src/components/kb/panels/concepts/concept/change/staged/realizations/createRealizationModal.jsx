@@ -7,7 +7,7 @@ import EditRealizationContent from '@/components/kb/panels/concepts/concept/chan
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const createRealizationModal = action => {
   const createComponents = () => {

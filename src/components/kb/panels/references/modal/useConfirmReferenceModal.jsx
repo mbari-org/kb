@@ -9,7 +9,7 @@ import { createError } from '@/lib/errors'
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
-import { PROCESSING, LABELS } from '@/lib/constants'
+import { PROCESSING, LABELS } from '@/lib/constants/constants'
 
 const { UPDATING } = PROCESSING
 

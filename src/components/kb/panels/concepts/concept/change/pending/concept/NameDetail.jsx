@@ -19,7 +19,7 @@ import { isAdmin } from '@/lib/auth/role'
 import { isPendingName } from '@/lib/kb/state/name'
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { LABELS, PENDING } from '@/lib/constants'
+import { LABELS, PENDING } from '@/lib/constants/constants'
 
 const { APPROVAL, GROUP } = PENDING
 const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME

@@ -1,4 +1,4 @@
-import { USER_ROLES } from '@/lib/constants'
+import { USER_ROLES } from '@/lib/constants/constants'
 
 const isAdmin = user => user.role === USER_ROLES.ADMIN
 const isMaint = user => user.role === USER_ROLES.MAINT

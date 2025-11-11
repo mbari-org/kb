@@ -15,7 +15,7 @@ import { getPendingIds } from '@/components/kb/panels/concepts/concept/change/pe
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { PENDING } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/constants'
 
 const { ACCEPT, OTHER, REJECT } = PENDING.APPROVAL
 

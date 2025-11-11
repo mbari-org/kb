@@ -1,6 +1,6 @@
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
-import { CONCEPT_SELECT } from '@/lib/constants'
+import { CONCEPT_SELECT } from '@/lib/constants/constants'
 
 const { TO_CONCEPT_LABEL, RIGHT_COMPONENT } = CONCEPT_SELECT
 const { SPECIAL } = RIGHT_COMPONENT

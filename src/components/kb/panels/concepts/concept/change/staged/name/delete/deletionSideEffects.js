@@ -11,7 +11,7 @@ import { pickReference } from '@/lib/kb/model/reference'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { PANEL_DATA, PREFS } from '@/lib/constants'
+import { PANEL_DATA, PREFS } from '@/lib/constants/constants'
 
 const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
 

@@ -1,4 +1,4 @@
-import { CONCEPT_FIELD, PANEL_DATA, PREFS } from '@/lib/constants'
+import { CONCEPT_FIELD, PANEL_DATA, PREFS } from '@/lib/constants/constants'
 
 const getNameUpdate = updatesInfo => {
   const updated = updatesInfo.updatedValue(CONCEPT_FIELD.NAME)

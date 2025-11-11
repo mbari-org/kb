@@ -2,7 +2,7 @@ import { getPrimary, isPrimary } from '@/lib/kb/model/media'
 
 import { stagedEdits } from '@/lib/kb/state/staged'
 
-import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants/constants'
 
 const addMedia = (state, update) => {
   const isPrimaryMedia = isPrimary(update.mediaItem)

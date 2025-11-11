@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useState } from 'react'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
+import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants/constants'
 
 const { CONCEPT, CONFIRM, PARENT } = PENDING.DATA
 

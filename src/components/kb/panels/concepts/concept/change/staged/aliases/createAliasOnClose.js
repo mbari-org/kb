@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 import { hasTrue } from '@/lib/utils'
 
 const createAliasOnClose = ({ initialState, modifyConcept }) => {

@@ -8,7 +8,7 @@ import EditMediaContent from '@/components/kb/panels/concepts/concept/change/sta
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const createEditMediaModal = action => {
   const createComponents = () => {

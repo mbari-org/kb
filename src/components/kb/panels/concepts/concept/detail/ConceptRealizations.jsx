@@ -6,7 +6,7 @@ import RealizationActionIcon from '@/components/kb/panels/concepts/concept/chang
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const ConceptRealizations = () => {
   const { isEditing, stagedState } = use(ConceptContext)

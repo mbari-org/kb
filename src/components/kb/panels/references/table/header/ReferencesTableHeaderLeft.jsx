@@ -7,7 +7,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useReferencesExport from '@/components/kb/panels/references/table/header/useReferencesExport'
 
-import { CONCEPT_SELECT, SELECTED, TOOLTIPS } from '@/lib/constants'
+import { CONCEPT_SELECT, SELECTED, TOOLTIPS } from '@/lib/constants/constants'
 
 const { REFERENCES } = SELECTED.SETTINGS
 const { EXPORT } = TOOLTIPS.REFERENCES

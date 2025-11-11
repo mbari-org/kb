@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { CONCEPT_EXPAND } from '@/lib/constants'
+import { CONCEPT_EXPAND } from '@/lib/constants/constants'
 
 const useConceptAutoExpand = ({
   autoExpand,

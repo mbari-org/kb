@@ -14,7 +14,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
-import { PAGINATION, SELECTED } from '@/lib/constants'
+import { PAGINATION, SELECTED } from '@/lib/constants/constants'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 

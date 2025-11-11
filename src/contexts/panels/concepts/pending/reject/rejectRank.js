@@ -1,4 +1,4 @@
-import { HISTORY_FIELD } from '@/lib/constants'
+import { HISTORY_FIELD } from '@/lib/constants/constants'
 import { pendingChange as rankPendingChange } from '@/lib/kb/state/rank'
 
 const rejectRank = (concept, pendingItem, rejecting) => {

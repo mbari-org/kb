@@ -12,7 +12,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { EMPTY_CHILD } from '@/lib/kb/model/children'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 import { hasTrue } from '@/lib/utils'
 

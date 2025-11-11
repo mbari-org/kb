@@ -1,4 +1,4 @@
-import { ACTION } from '@/lib/constants'
+import { ACTION } from '@/lib/constants/constants'
 
 const rejectMedia = (concept, pendingItem) => {
   switch (pendingItem.action) {

@@ -6,7 +6,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import useConfirmReferenceModal from '../../modal/useConfirmReferenceModal'
 
-import { LABELS } from '@/lib/constants'
+import { LABELS } from '@/lib/constants/constants'
 import {
   createChangeDetector,
   createHandlers,

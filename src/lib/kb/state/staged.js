@@ -3,7 +3,7 @@ import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/s
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const deleteItem = edit => {
   return { ...edit, updates: {} }

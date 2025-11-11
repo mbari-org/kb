@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingTemplate } from '@/lib/kb/state/templates'
 
-import { PENDING } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/constants'
 
 const { TEMPLATES } = PENDING.GROUP
 

@@ -7,7 +7,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { pendingChange } from '@/lib/kb/state/rank'
 
-import { CONCEPT_RANK, CONCEPT_STATE, PENDING } from '@/lib/constants'
+import { CONCEPT_RANK, CONCEPT_STATE, PENDING } from '@/lib/constants/constants'
 
 const ConceptRank = () => {
   const { initialState, modifyConcept, pending, stagedState } = use(ConceptContext)

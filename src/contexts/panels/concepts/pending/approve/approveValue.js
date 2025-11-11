@@ -1,4 +1,4 @@
-import { HISTORY_FIELD } from '@/lib/constants'
+import { HISTORY_FIELD } from '@/lib/constants/constants'
 import { createError } from '@/lib/errors'
 
 const approveValue = (concept, item) => {

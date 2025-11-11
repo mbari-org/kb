@@ -1,6 +1,6 @@
 import { displayItem, stagedEdits } from '@/lib/kb/state/staged'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const MEDIA_DISPLAY_FIELDS = ['url', 'credit', 'caption', 'isPrimary']
 

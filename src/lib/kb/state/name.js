@@ -1,4 +1,4 @@
-import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants/constants'
 
 const nameState = (concept, pendingConcept) => {
   const { name } = concept

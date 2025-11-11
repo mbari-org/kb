@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import UserForm from '@/components/kb/panels/users/form/UserForm'
 
-import { EMAIL_REGEX, LABELS } from '@/lib/constants'
+import { EMAIL_REGEX, LABELS } from '@/lib/constants/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 

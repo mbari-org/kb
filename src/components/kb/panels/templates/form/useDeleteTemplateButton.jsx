@@ -7,7 +7,7 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
-import { PROCESSING } from '@/lib/constants'
+import { PROCESSING } from '@/lib/constants/constants'
 import {
   createDeleteTemplateActions,
   createDeleteTemplateContent,

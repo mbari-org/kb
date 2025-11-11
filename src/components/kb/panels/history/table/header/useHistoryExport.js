@@ -12,7 +12,7 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
-import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants'
+import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants/constants'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 

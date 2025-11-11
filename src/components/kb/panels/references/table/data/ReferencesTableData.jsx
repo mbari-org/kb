@@ -10,7 +10,7 @@ import useReferenceColumns from '@/components/kb/panels/references/table/data/us
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { PAGINATION, SELECTED } from '@/lib/constants'
+import { PAGINATION, SELECTED } from '@/lib/constants/constants'
 
 const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0

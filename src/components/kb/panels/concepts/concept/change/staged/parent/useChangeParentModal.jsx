@@ -12,7 +12,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { getDescendantNames } from '@/lib/kb/model/concept'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const { RESET } = CONCEPT_STATE
 

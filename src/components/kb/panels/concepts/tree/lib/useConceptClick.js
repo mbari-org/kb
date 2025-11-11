@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { CONCEPT_EXPAND } from '@/lib/constants'
+import { CONCEPT_EXPAND } from '@/lib/constants/constants'
 
 const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand) => {
   return useCallback(

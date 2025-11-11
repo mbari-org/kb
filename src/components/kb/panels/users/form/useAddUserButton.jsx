@@ -9,7 +9,7 @@ import { createError, createValidationError } from '@/lib/errors'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
-import { LABELS, PROCESSING } from '@/lib/constants'
+import { LABELS, PROCESSING } from '@/lib/constants/constants'
 import {
   createModalActions,
   createUserValidator,

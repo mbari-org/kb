@@ -12,7 +12,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { aliasFields, EMPTY_ALIAS } from '@/lib/kb/model/aliases'
 
-import { CONCEPT_STATE } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/constants'
 
 const ADD = CONCEPT_STATE.ALIAS.ADD
 const DELETE = CONCEPT_STATE.ALIAS.DELETE

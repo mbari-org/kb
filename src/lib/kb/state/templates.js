@@ -1,4 +1,4 @@
-import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants/constants'
 
 const isMatching = (template, pendingTemplate) => {
   const templateString =
@@ -34,4 +34,4 @@ const templatesState = (concept, pendingConcept) => {
   return { templates: stagedTemplates }
 }
 
-export { isPendingTemplate, templateState, templatesState }
+export { isPendingTemplate, templatesState, templateState }

@@ -19,7 +19,7 @@ import useFilterLinkName from './useFilterLinkName'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 
-import { CONCEPT_STATE, CONCEPT_PROPERTY_LIST } from '@/lib/constants'
+import { CONCEPT_STATE, CONCEPT_PROPERTY_LIST } from '@/lib/constants/constants'
 
 const { ITEMS_PER_PAGE } = CONCEPT_PROPERTY_LIST
 

@@ -1,4 +1,4 @@
-import { ACTION } from '@/lib/constants'
+import { ACTION } from '@/lib/constants/constants'
 import { matchingRealizationString, parseRealization } from '@/lib/kb/model/realization'
 
 const rejectRealization = (concept, pendingItem) => {

@@ -7,7 +7,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
-import { PROCESSING } from '@/lib/constants'
+import { PROCESSING } from '@/lib/constants/constants'
 import {
   createDeleteReferenceActions,
   createDeleteReferenceContent,

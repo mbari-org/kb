@@ -9,7 +9,7 @@ import usePrefsTimer from '@/contexts/preferences/usePrefsTimer'
 import useSavePrefs from '@/contexts/preferences/useSavePrefs'
 import useInitPrefs from '@/contexts/preferences/useInitPrefs'
 
-import { PREFS } from '@/lib/constants'
+import { PREFS } from '@/lib/constants/constants'
 
 const PreferencesProvider = ({ children }) => {
   const { createPreferences, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)

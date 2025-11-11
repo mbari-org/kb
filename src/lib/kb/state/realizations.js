@@ -2,7 +2,7 @@ import { stagedEdits } from '@/lib/kb/state/staged'
 
 import { matchingRealizationString, sortRealizations } from '@/lib/kb/model/realization'
 
-import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants'
+import { ACTION, CONCEPT_STATE, HISTORY_FIELD } from '@/lib/constants/constants'
 
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 

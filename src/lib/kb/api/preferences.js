@@ -1,4 +1,4 @@
-import { PREFS } from '@/lib/constants'
+import { PREFS } from '@/lib/constants/constants'
 import { createPreferencesPayload, parsePreferences } from '@/lib/kb/model/preferences'
 import { oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 import { paramsQs } from '@/lib/services/params'

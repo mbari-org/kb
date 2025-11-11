@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { getReferences as getReferencesApi } from '@/lib/kb/api/references'
 
-import { PAGINATION } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants/constants'
 import { createReference } from '@/lib/kb/model/reference'
 
 const { REFERENCES } = PAGINATION

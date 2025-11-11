@@ -7,7 +7,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { sleep } from '@/lib/utils'
 
-import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants'
+import { CONCEPT_EXTENT, CONCEPT_HISTORY, PAGINATION, SELECTED } from '@/lib/constants/constants'
 
 const { TYPE } = CONCEPT_HISTORY
 const { CHILDREN, DESCENDANTS } = CONCEPT_EXTENT

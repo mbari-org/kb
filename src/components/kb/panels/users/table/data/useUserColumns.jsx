@@ -5,8 +5,8 @@ import { CiEdit } from 'react-icons/ci'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 
-import { USER_ROLES } from '@/lib/constants'
-import { USERS } from '@/lib/constants'
+import { USER_ROLES } from '@/lib/constants/constants'
+import { USERS } from '@/lib/constants/constants'
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const lockTooltip = locked => locked ? USERS.UNLOCK : USERS.LOCK

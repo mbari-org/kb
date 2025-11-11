@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { PAGINATION } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants/constants'
 
 const DEFAULT_LIMIT = PAGINATION.TEMPLATES.DEFAULT_LIMIT
 

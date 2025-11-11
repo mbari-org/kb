@@ -11,7 +11,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { isStateModified } from '@/lib/kb/state/state'
 import { pendingChild } from '@/lib/kb/model/history'
 
-import { CONCEPT_STATE, LABELS, PENDING, RESETTING } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS, PENDING, RESETTING } from '@/lib/constants/constants'
 
 const { DISCARD, DISCARD_ALL } = LABELS.BUTTON
 const { CANCEL, EDIT, PENDING: PENDING_ACTION, SAVE, STAGED } = LABELS.CONCEPT.ACTION

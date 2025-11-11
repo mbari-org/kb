@@ -10,7 +10,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { isStateModified } from '@/lib/kb/state/state'
 
-import { CONCEPT_STATE, LABELS, RESETTING, UNSAFE_ACTION } from '@/lib/constants'
+import { CONCEPT_STATE, LABELS, RESETTING, UNSAFE_ACTION } from '@/lib/constants/constants'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 

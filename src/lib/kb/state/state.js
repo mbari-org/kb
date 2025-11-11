@@ -9,7 +9,7 @@ import { realizationsState } from '@/lib/kb/state/realizations'
 import { templatesState } from '@/lib/kb/state/templates'
 import { valueState } from '@/lib/kb/state/value'
 
-import { CONCEPT_FIELD } from '@/lib/constants'
+import { CONCEPT_FIELD } from '@/lib/constants/constants'
 
 import { drop, isJsonEqual } from '@/lib/utils'
 

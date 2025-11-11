@@ -5,7 +5,7 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 
-import { LABELS, PROCESSING } from '@/lib/constants'
+import { LABELS, PROCESSING } from '@/lib/constants/constants'
 import {
   createModalActions,
   processEditUserData,

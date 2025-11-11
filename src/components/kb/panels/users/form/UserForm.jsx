@@ -3,7 +3,7 @@ import { Box, Stack, TextField, MenuItem } from '@mui/material'
 
 import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
 
-import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants'
+import { EMAIL_REGEX, USER_ROLES } from '@/lib/constants/constants'
 import useDebounce from '@/hooks/useDebounce'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
 
