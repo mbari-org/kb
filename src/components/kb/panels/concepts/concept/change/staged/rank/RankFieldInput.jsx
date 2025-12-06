@@ -14,7 +14,7 @@ import { CONCEPT } from '@/lib/constants.js'
 import { rankField } from '@/lib/kb/state/rank'
 import { capitalize } from '@/lib/utils'
 
-const RankFieldInput = ({ field, initialRank, rank, onChange }) => {
+const RankFieldInput = ({ field, initialRank, label, rank, onChange }) => {
   const theme = useTheme()
 
   const inputStyle = useConceptDetailStyle(field)
@@ -39,7 +39,7 @@ const RankFieldInput = ({ field, initialRank, rank, onChange }) => {
     <FormControl {...inputStyle}>
       <Box alignItems='center' display='flex' flexDirection='row' width='100%'>
         <Box display='flex' flexDirection='column' flexGrow={1} sx={{ border }}>
-          <InputLabel id={`${field}-label`}>{capitalize(field)}</InputLabel>
+          <InputLabel id={`${field}-label`}>{label}</InputLabel>
           <Select
             displayEmpty
             labelId={`${field}-label`}

@@ -6,7 +6,7 @@ import RankFieldInput from '@/components/kb/panels/concepts/concept/change/stage
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { pendingChange } from '@/lib/kb/state/rank'
-
+import { UI_TEXT } from '@/lib/config/ui-text/index.js'
 import { PENDING } from '@/lib/constants/pending.js'
 import { CONCEPT } from '@/lib/constants.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -63,12 +63,14 @@ const ConceptRank = () => {
       <RankFieldInput
         field={CONCEPT.RANK.NAME}
         initialRank={initialRank}
+        label={UI_TEXT.PANELS.CONCEPTS.RANK.NAME}
         rank={stagedField(CONCEPT.RANK.NAME)}
         onChange={onChange(CONCEPT.RANK.NAME)}
       />
       <RankFieldInput
         field={CONCEPT.RANK.LEVEL}
         initialRank={initialRank}
+        label={UI_TEXT.PANELS.CONCEPTS.RANK.LEVEL}
         rank={stagedField(CONCEPT.RANK.LEVEL)}
         onChange={onChange(CONCEPT.RANK.LEVEL)}
       />

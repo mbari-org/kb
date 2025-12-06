@@ -1,0 +1,16 @@
+{
+  "SWITCH": {
+    "LABEL": "Available",
+    "TOOLTIP": {
+      "AVAILABLE": "Show available templates that can be used with this concept",
+      "EXPLICIT": "Show templates explicitly defined for this concept"
+    }
+  },
+  "LABEL": "Templates",
+  "VIEW": {
+    "TOOLTIP": {
+      "AVAILABLE": "View available templates for this concept",
+      "EXPLICIT": "View explicit templates for this concept"
+    }
+  }
+}

@@ -11,13 +11,14 @@ import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/
 
 import { CONCEPT } from '@/lib/constants.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { UI_TEXT } from '@/lib/config/ui-text/index.js'
 
 const ConceptAuthor = () => {
   const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)
 
   const border = stagedBorder(initialState.author, stagedState.author)
 
-  const infoStyle = useConceptDetailStyle('Author')
+  const infoStyle = useConceptDetailStyle(CONCEPT.FIELD.AUTHOR)
 
   const handleChange = useCallback(
     event => {
@@ -36,7 +37,7 @@ const ConceptAuthor = () => {
         <TextInput
           {...infoStyle}
           debounceMs={333}
-          label='Author'
+          label={UI_TEXT.PANELS.CONCEPTS.AUTHOR.LABEL}
           onChange={handleChange}
           showClearButton={isEditing}
           value={stagedState.author?.value || ''}

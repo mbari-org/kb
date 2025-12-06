@@ -9,6 +9,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { UI_TEXT } from '@/lib/config/ui-text/index.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
 
@@ -35,15 +36,17 @@ const ConceptReferences = () => {
     updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
   }
 
-  const tooltip = 'View References for this Concept'
-
   return (
     <ConceptPropertyList
       items={conceptReferences}
       renderComponent={ReferenceComponent}
-      title='References DOI'
+      title={UI_TEXT.PANELS.CONCEPTS.REFERENCES.LABEL}
       actionComponent={() => (
-        <InspectIcon onClick={linkToReferences} tooltip={tooltip} asDiv={true} />
+        <InspectIcon
+          asDiv={true}
+          onClick={linkToReferences}
+          tooltip={UI_TEXT.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP}
+        />
       )}
     />
   )

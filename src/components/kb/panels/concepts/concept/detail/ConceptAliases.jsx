@@ -7,15 +7,14 @@ import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-
-const ALIAS = CONCEPT_STATE.ALIAS
+import { UI_TEXT } from '@/lib/config/ui-text/index.js'
 
 const ConceptAliases = () => {
   const { isEditing, stagedState } = use(ConceptContext)
 
   const aliases = stagedState?.aliases || []
 
-  const IconComponent = () => <AliasActionIcon action={ALIAS.ADD} aliasIndex={aliases.length} />
+  const IconComponent = () => <AliasActionIcon action={CONCEPT_STATE.ALIAS.ADD} aliasIndex={aliases.length} />
   const AliasComponent = ({ item }) => <ConceptAlias alias={item} />
 
   return (
@@ -23,7 +22,7 @@ const ConceptAliases = () => {
       actionComponent={isEditing ? IconComponent : null}
       items={aliases}
       renderComponent={AliasComponent}
-      title='Alternate Names'
+      title={UI_TEXT.PANELS.CONCEPTS.ALIASES.LABEL}
     />
   )
 }

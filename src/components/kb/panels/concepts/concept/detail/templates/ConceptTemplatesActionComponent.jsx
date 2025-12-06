@@ -1,7 +1,7 @@
 import { use, useCallback } from 'react'
 import { Box, Stack } from '@mui/material'
 
-import ConceptTemplatesAvailableTooltip from '@/components/kb/panels/concepts/concept/detail/templates/ConceptTemplatesAvailableTooltip'
+import ConceptTemplatesSwitchTooltip from '@/components/kb/panels/concepts/concept/detail/templates/ConceptTemplatesSwitchTooltip'
 import InspectIcon from '@/components/icon/InspectIcon'
 import PanelDataSwitch from '@/components/common/panel/PanelDataSwitch'
 
@@ -9,6 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
+import { UI_TEXT } from '@/lib/config/ui-text/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
@@ -19,7 +20,9 @@ const ConceptTemplatesActionComponent = () => {
   const byAvailable = getSettings(TEMPLATES.KEY, TEMPLATES.BY_AVAILABLE)
   const filters = getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY)
 
-  const tooltip = `View ${byAvailable ? 'Available' : 'Explicit'} Templates for this Concept`
+  const tooltip = byAvailable
+    ? UI_TEXT.PANELS.CONCEPTS.TEMPLATES.VIEW.TOOLTIP.AVAILABLE
+    : UI_TEXT.PANELS.CONCEPTS.TEMPLATES.VIEW.TOOLTIP.EXPLICIT
 
   const linkToTemplates = useCallback(() => {
     updateSelected({ [SELECTED.PANEL]: SELECTED.PANELS.TEMPLATES })
@@ -50,8 +53,8 @@ const ConceptTemplatesActionComponent = () => {
         <PanelDataSwitch
           checked={byAvailable}
           switchFn={switchFn}
-          switchLabel='Available'
-          switchTooltip={<ConceptTemplatesAvailableTooltip />}
+          switchLabel={UI_TEXT.PANELS.CONCEPTS.TEMPLATES.SWITCH.LABEL}
+          switchTooltip={<ConceptTemplatesSwitchTooltip byAvailable={byAvailable} />}
         />
       </Box>
     </Stack>

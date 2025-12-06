@@ -12,7 +12,9 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-const ALIAS = CONCEPT_STATE.ALIAS
+import { UI_TEXT } from '@/lib/config/ui-text/index.js'
+
+const ALIASES = UI_TEXT.PANELS.CONCEPTS.ALIASES
 
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
@@ -38,8 +40,8 @@ const ConceptAlias = ({ alias }) => {
     width: '2px',
   })
 
-  const showEdit = isEditing && !alias.historyId && alias.action !== ALIAS.DELETE
-  const showDelete = isEditing && !alias.historyId && alias.action !== ALIAS.ADD
+  const showEdit = isEditing && !alias.historyId && alias.action !== CONCEPT_STATE.ALIAS.DELETE
+  const showDelete = isEditing && !alias.historyId && alias.action !== CONCEPT_STATE.ALIAS.ADD
 
   const aliasIcon = action => {
     return <AliasActionIcon action={action} aliasIndex={alias.index} size={20} />
@@ -48,18 +50,18 @@ const ConceptAlias = ({ alias }) => {
   return (
     <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
-        {showEdit && aliasIcon(ALIAS.EDIT)}
-        {showDelete && aliasIcon(ALIAS.DELETE)}
+        {showEdit && aliasIcon(CONCEPT_STATE.ALIAS.EDIT)}
+        {showDelete && aliasIcon(CONCEPT_STATE.ALIAS.DELETE)}
       </Stack>
       <Stack direction='row' spacing={1} width='100%'>
         <Box sx={{ flex: 1.5, pl: 0 }}>
-          <TextField {...infoStyle} label='Name' value={alias.name || ''} />
+          <TextField {...infoStyle} label={ALIASES.NAME} value={alias.name || ''} />
         </Box>
         <Box sx={{ flex: 1 }}>
-          <TextField {...infoStyle} label='Author' value={alias.author || ''} />
+          <TextField {...infoStyle} label={ALIASES.AUTHOR} value={alias.author || ''} />
         </Box>
         <Box sx={{ width: 90, flexShrink: 0 }}>
-          <TextField {...infoStyle} label='Type' value={alias.nameType || ''} />
+          <TextField {...infoStyle} label={ALIASES.TYPE} value={alias.nameType || ''} />
         </Box>
       </Stack>
     </Stack>
