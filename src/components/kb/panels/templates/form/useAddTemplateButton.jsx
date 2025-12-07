@@ -10,8 +10,9 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
-import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { UI_TEXT } from '@/config/text/index.js'
 import { SELECTED } from '@/lib/kb/constants/selected.js'
+import { UI_PROCESSING } from '@/lib/kb/constants/ui/processing.js'
 
 import {
   createModalActions,
@@ -25,7 +26,7 @@ import {
   discardEditsAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-const { SAVING } = UI_TEXT.PROCESSING
+const { SAVING } = UI_PROCESSING
 
 const useAddTemplateButton = () => {
   const { addTemplate, filters } = use(TemplatesContext)
@@ -132,8 +133,8 @@ const useAddTemplateButton = () => {
     const { TEMPLATES } = SELECTED.SETTINGS
     const conceptSelected = Boolean(filters?.[TEMPLATES.FILTERS.CONCEPT])
     const tooltip = conceptSelected
-      ? 'Add Template to Selected Concept'
-      : 'Select Concept to Add Template'
+      ? UI_TEXT.PANELS.TEMPLATES.TOOLTIP.ADD.CONCEPT_SELECTED
+      : UI_TEXT.PANELS.TEMPLATES.TOOLTIP.ADD.CONCEPT_NOT_SELECTED
 
     return (
       <PanelAddButton disabled={!conceptSelected} onClick={addTemplateModal} tooltip={tooltip} />

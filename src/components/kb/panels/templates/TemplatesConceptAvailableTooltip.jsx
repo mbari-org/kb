@@ -5,37 +5,36 @@ import { Stack, Typography } from '@mui/material'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED, TOOLTIP } from '@/lib/constants.js'
+import { UI_TEXT } from '@/config/text/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
+const { SWITCH } = UI_TEXT.PANELS.TEMPLATES.TOOLTIP
 
 const SELECTED_NONE = 'With no Concept selected, all Templates are displayed.'
-const SELECT_ANY = 'For Available Templates, any Concept can be selected.'
-const SELECT_RESTRICTED =
-  'With Available off, only Concept with explicit Templates can be selected.'
-const SELECTED_AVAILABLE =
-  'All Templates available for use with the selected Concept are displayed.'
-const SELECTED_EXPLICIT =
-  'Only Templates explicitly defined for the selected Concept are displayed.'
-
-const TEMPLATES_ALL = 'All Templates'
-const TEMPLATES_AVAILABLE = 'Available Concept Templates'
-const TEMPLATES_EXPLICIT = 'Explicit Concept Templates'
 
 const selectedAvailableMessaging = (byAvailable, concept) => {
   if (!concept && !byAvailable) {
-    return [TEMPLATES_ALL, SELECT_RESTRICTED, SELECTED_NONE]
+    return ['All Templates', SWITCH.EXPLICIT.CONCEPT, SELECTED_NONE]
   }
 
   if (!concept && byAvailable) {
-    return [TEMPLATES_ALL, SELECT_ANY, SELECTED_NONE]
+    return ['All Templates', SWITCH.AVAILABLE.CONCEPT, SELECTED_NONE]
   }
 
   if (concept && !byAvailable) {
-    return [TEMPLATES_EXPLICIT, SELECT_RESTRICTED, SELECTED_EXPLICIT]
+    return [
+      SWITCH.EXPLICIT.TITLE,
+      SWITCH.EXPLICIT.CONCEPT,
+      SWITCH.EXPLICIT.TEMPLATES,
+    ]
   }
 
-  return [TEMPLATES_AVAILABLE, SELECT_ANY, SELECTED_AVAILABLE]
+  return [
+    SWITCH.AVAILABLE.TITLE,
+    SWITCH.AVAILABLE.CONCEPT,
+    SWITCH.AVAILABLE.TEMPLATES,
+  ]
 }
 
 const TemplatesConceptAvailableTooltip = () => {
@@ -66,11 +65,11 @@ const TemplatesConceptAvailableTooltip = () => {
       <Typography sx={titleProps}>{title}</Typography>
       <Stack direction='column' spacing={1}>
         <Stack direction='column' spacing={0.25}>
-          <Typography>Concept Selection</Typography>
+          <Typography>{SWITCH.CONCEPT}</Typography>
           <Typography sx={descriptionProps}>{selectionDescription}</Typography>
         </Stack>
         <Stack direction='column' spacing={0.25}>
-          <Typography>Templates Display</Typography>
+          <Typography>{SWITCH.TEMPLATES}</Typography>
           <Typography sx={descriptionProps}>{displayDescription}</Typography>
         </Stack>
       </Stack>

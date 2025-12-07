@@ -10,9 +10,9 @@ import useTemplatesExport from '@/components/kb/panels/templates/table/header/us
 import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
 import { CONCEPT, SELECTED } from '@/lib/constants.js'
-import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { UI_TEXT } from '@/config/text/index.js'
 
-const { EXPORT } = UI_TEXT.TOOLTIP.TEMPLATES
+const { EXPORT } = UI_TEXT.PANELS.TEMPLATES.TOOLTIP
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
 

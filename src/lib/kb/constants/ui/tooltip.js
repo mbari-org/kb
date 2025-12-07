@@ -24,14 +24,6 @@ export const UI_TOOLTIP = {
       ALL: 'All References',
     },
   },
-  TEMPLATES: {
-    EXPORT: {
-      ALL: 'Export All Templates',
-      CONCEPT: 'Export Templates for selected Concept',
-      CONCEPT_TO_CONCEPT: 'Export Templates for selected Concept to selected To Concept',
-      TO_CONCEPT: 'Export Templates for selected To Concept',
-    },
-  },
   USERS: {
     EDIT: 'Edit User details',
     EXPORT: {

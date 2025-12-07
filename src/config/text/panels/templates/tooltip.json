@@ -1,0 +1,28 @@
+{
+  "TOOLTIP": {
+    "ADD": {
+      "CONCEPT_SELECTED": "Add template to selected concept",
+      "CONCEPT_NOT_SELECTED": "Select concept to add template"
+    },
+    "EXPORT": {
+      "ALL": "Export all templates",
+      "CONCEPT": "Export templates for selected concept",
+      "CONCEPT_TO_CONCEPT": "Export templates for selected concept to selected to concept",
+      "TO_CONCEPT": "Export templates for selected to concept"
+    },
+    "SWITCH": {
+      "AVAILABLE": {
+        "TITLE": "Available concept templates",
+        "CONCEPT": "For available concept templates, any concept can be selected.",
+        "TEMPLATES": "With available concept templates on, all templates available for use with the selected concept are displayed."
+      },
+      "CONCEPT": "Concept templates",
+      "EXPLICIT": {
+        "TITLE": "Explicit concept templates",
+        "CONCEPT": "With available concept templates off, only concept with explicit templates can be selected.",
+        "TEMPLATES": "With available concept templates off, only templates explicitly defined for the selected concept are displayed."
+      },
+      "TEMPLATES": "Templates displayed"
+    }
+  }
+}
