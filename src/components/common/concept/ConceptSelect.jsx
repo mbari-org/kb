@@ -22,7 +22,7 @@ const ConceptSelect = ({
   disabled = false,
   doConceptSelected,
   keepFocus = false,
-  label = UI_TEXT.CONCEPT.SELECT.CONCEPT_LABEL,
+  label = UI_TEXT.CONCEPT.SELECT.CONCEPT,
   leftComponent = NONE,
   onClear,
   onInputChange,
