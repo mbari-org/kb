@@ -1,0 +1,15 @@
+{
+  "ALIAS": {
+    "TYPES": {
+      "COMMON": "Common?",
+      "FORMER": "Former",
+      "PRIMARY": "Primary",
+      "SYNONYM": "Synonym"
+    }
+  },
+  "SELECT": {
+    "CONCEPT": "Concept",
+    "SPECIAL": ["self", "nil"],
+    "TO_CONCEPT": "To concept"
+  }
+}

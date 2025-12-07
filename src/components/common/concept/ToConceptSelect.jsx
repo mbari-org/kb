@@ -1,7 +1,7 @@
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
 import { CONCEPT } from '@/lib/constants.js'
-import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { UI_TEXT } from '@/lib/config/ui-text/index.js'
 
 const { RIGHT_COMPONENT } = CONCEPT.SELECT
 const { SPECIAL } = RIGHT_COMPONENT

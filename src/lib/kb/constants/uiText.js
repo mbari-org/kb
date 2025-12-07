@@ -1,8 +1,7 @@
-import { UI_CONCEPT } from './ui/concept.js'
+import { ROLES } from './roles.js'
 import { UI_LABELS } from './ui/labels.js'
 import { UI_PROCESSING } from './ui/processing.js'
 import { UI_RESETTING } from './ui/resetting.js'
-import { ROLES } from './roles.js'
 import { UI_TOOLTIP } from './ui/tooltip.js'
 
 export const UI_TEXT = {
@@ -18,16 +17,6 @@ export const UI_TEXT = {
     REFERENCES: UI_TOOLTIP.REFERENCES,
     TEMPLATES: UI_TOOLTIP.TEMPLATES,
     USERS: UI_TOOLTIP.USERS,
-  },
-  CONCEPT: {
-    SELECT: {
-      CONCEPT_LABEL: UI_CONCEPT.SELECT.CONCEPT_LABEL,
-      TO_CONCEPT_LABEL: UI_CONCEPT.SELECT.TO_CONCEPT_LABEL,
-    },
-    // Appears as button text in ToConceptSpecial
-    TO_SPECIAL: UI_CONCEPT.TO_SPECIAL,
-    // Used for alias type dropdown items
-    NAME_TYPES: UI_CONCEPT.NAME_TYPES,
   },
   RESETTING: {
     // These values are shown as staged group headers
