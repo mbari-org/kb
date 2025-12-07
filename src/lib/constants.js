@@ -13,5 +13,5 @@ export { ROLES } from './kb/constants/roles.js'
 export { SELECTED } from './kb/constants/selected.js'
 export { UNSAFE_ACTION } from './kb/constants/unsafeAction.js'
 
-export { LABELS, PROCESSING, RESETTING, TOOLTIP, UI_CONCEPT, UI_LABELS, UI_PROCESSING, UI_RESETTING, UI_TOOLTIP } from './kb/constants/ui/index.js'
+export { LABELS, PROCESSING, RESETTING, TOOLTIP, UI_LABELS, UI_PROCESSING, UI_RESETTING, UI_TOOLTIP } from './kb/constants/ui/index.js'
 

@@ -1,5 +1,5 @@
-export { UI_CONCEPT } from './concept.js'
-export { UI_LABELS, UI_LABELS as LABELS } from './labels.js'
-export { UI_PROCESSING, UI_PROCESSING as PROCESSING } from './processing.js'
-export { UI_RESETTING, UI_RESETTING as RESETTING } from './resetting.js'
-export { UI_TOOLTIP, UI_TOOLTIP as TOOLTIP } from './tooltip.js'
+export { UI_LABELS as LABELS, UI_LABELS } from './labels.js'
+export { UI_PROCESSING as PROCESSING, UI_PROCESSING } from './processing.js'
+export { UI_RESETTING as RESETTING, UI_RESETTING } from './resetting.js'
+export { UI_TOOLTIP as TOOLTIP, UI_TOOLTIP } from './tooltip.js'
+

@@ -19,7 +19,6 @@ export const UI_TEXT = {
     USERS: UI_TOOLTIP.USERS,
   },
   RESETTING: {
-    // These values are shown as staged group headers
     ALIASES: UI_RESETTING.ALIASES,
     AUTHOR: UI_RESETTING.AUTHOR,
     CHILDREN: UI_RESETTING.CHILDREN,

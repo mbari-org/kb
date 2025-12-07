@@ -7,6 +7,4 @@ export const CONCEPT = {
   },
   // Appears as button text in ToConceptSpecial
   TO_SPECIAL: concept.SELECT.SPECIAL,
-  // Used for alias type dropdown items
-  NAME_TYPES: concept.ALIAS.TYPES,
 }
