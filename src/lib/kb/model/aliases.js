@@ -1,13 +1,15 @@
 import { capitalize, isJsonEqual, pick } from '@/lib/utils'
 
-import { ALIAS_TYPES } from '@/config/text/alias.js'
+import alias from '@/config/text/alias.json'
+
+const ALIAS = alias.ALIAS
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 
 const EMPTY_ALIAS = {
   author: '',
   name: '',
-  nameType: ALIAS_TYPES[0],
+  nameType: ALIAS.TYPE[0],
 }
 
 const aliasesEqual = (a, b) => isJsonEqual(aliasFields(a), aliasFields(b))
@@ -16,7 +18,7 @@ const aliasFields = alias => pick(alias, ALIAS_FIELDS)
 
 const orderedAliases = aliases => {
   const nameTypes = aliases.map(alias => ({ ...alias, nameType: capitalize(alias.nameType) }))
-  return ALIAS_TYPES.flatMap(type => sortedType(nameTypes, type))
+  return ALIAS.TYPE.flatMap(type => sortedType(nameTypes, type))
 }
 
 const sortedType = (aliases, type) =>

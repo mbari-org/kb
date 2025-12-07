@@ -12,7 +12,9 @@ import useEditAliasHandlers from './useEditAliasHandlers'
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
-import { ALIAS_TYPES } from '@/config/text/alias.js'
+import alias from '@/config/text/alias.json'
+
+const ALIAS = alias.ALIAS
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 
@@ -99,7 +101,7 @@ const EditAliasContent = () => {
             sx={{ height: 43.2812 }}
             value={formAlias.nameType}
           >
-            {ALIAS_TYPES.map(value => (
+            {ALIAS.TYPE.map(value => (
               <MenuItem key={value} value={value}>
                 {value}
               </MenuItem>

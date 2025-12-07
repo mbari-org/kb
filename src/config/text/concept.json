@@ -1,7 +1,9 @@
 {
-  "SELECT": {
-    "CONCEPT": "Concept",
-    "SPECIAL": ["self", "nil"],
-    "TO_CONCEPT": "To concept"
+  "CONCEPT": {
+    "SELECT": {
+      "CONCEPT": "Concept",
+      "SPECIAL": ["self", "nil"],
+      "TO_CONCEPT": "To concept"
+    }
   }
 }

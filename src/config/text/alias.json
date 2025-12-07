@@ -1,8 +1,5 @@
 {
-  "TYPES": {
-    "COMMON": "Common",
-    "FORMER": "Former",
-    "PRIMARY": "Primary",
-    "SYNONYM": "Synonym"
+  "ALIAS": {
+    "TYPE": ["Common", "Synonym", "Former"]
   }
 }
