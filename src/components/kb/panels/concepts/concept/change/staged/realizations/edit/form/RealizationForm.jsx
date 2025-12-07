@@ -2,7 +2,7 @@ import { useMemo, useCallback, useState } from 'react'
 import { FormControl, Stack } from '@mui/material'
 
 import TextInput from '@/components/common/TextInput'
-import useAvailableLinkTemplates from '../useAvailableLinkTemplates'
+import useAvailableLinkTemplates from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/useAvailableLinkTemplates'
 import RealizationToConcept from './RealizationToConcept'
 
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'

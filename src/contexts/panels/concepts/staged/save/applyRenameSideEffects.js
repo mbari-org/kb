@@ -1,6 +1,6 @@
 import { CONCEPT } from '@/lib/constants.js'
-import { PANEL_DATA } from '@/lib/constants/panelData.js'
-import { PREFS } from '@/lib/constants/prefs.js'
+import { PANEL_DATA } from '@/lib/kb/constants/panelData.js'
+import { PREFS } from '@/lib/kb/constants/prefs.js'
 
 const { KEY } = PREFS.API
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-import { PREFS } from '@/lib/constants/prefs.js'
+import { PREFS } from '@/lib/kb/constants/prefs.js'
 
 const usePrefsTimer = ({
   CLEAN_FLAGS,

@@ -1,4 +1,4 @@
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
 import { CONCEPT } from '@/lib/constants.js'
 
 const rejectValue = (concept, pendingItem) => {

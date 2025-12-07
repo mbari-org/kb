@@ -1,6 +1,6 @@
 import { ACTION } from '@/lib/constants'
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
 
 const isMatching = (template, pendingTemplate) => {
   const templateString =

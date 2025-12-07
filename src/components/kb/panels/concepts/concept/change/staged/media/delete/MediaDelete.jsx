@@ -1,8 +1,8 @@
 import { MdOutlineDeleteForever } from 'react-icons/md'
 
-import MediaAction from '../MediaAction'
+import MediaAction from '@/components/kb/panels/concepts/concept/change/staged/media/MediaAction'
 
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 const MEDIA_DELETE = 'Delete Media'
 

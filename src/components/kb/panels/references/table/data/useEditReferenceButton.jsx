@@ -4,9 +4,9 @@ import { useReferencesModalOperationsContext, useReferencesModalDataContext } fr
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
-import useConfirmReferenceModal from '../../modal/useConfirmReferenceModal'
+import useConfirmReferenceModal from '@/components/kb/panels/references/modal/useConfirmReferenceModal'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
 import {
   createChangeDetector,
   createHandlers,

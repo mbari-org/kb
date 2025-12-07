@@ -4,15 +4,15 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 import ChangeNameActions from './ChangeNameActions'
 import ChangeNameContent from './ChangeNameContent'
 
+import { relatedDataCounts } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 import { createModal } from '@/components/modal/conceptModalFactory'
-import { relatedDataCounts } from '../relatedDataCounts'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 const { NAME } = CONCEPT_STATE
 

@@ -8,7 +8,7 @@ import PanelDataSwitch from '@/components/common/panel/PanelDataSwitch'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 import { UI_TEXT } from '@/lib/config/ui-text/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS

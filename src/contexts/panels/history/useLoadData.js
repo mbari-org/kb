@@ -8,8 +8,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { sleep } from '@/lib/utils'
 
 import { CONCEPT } from '@/lib/constants.js'
-import { PAGINATION } from '@/lib/constants/pagination.js'
-import { SELECTED } from '@/lib/constants/selected.js'
+import { PAGINATION } from '@/lib/kb/constants/pagination.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 const { CHILDREN, DESCENDANTS } = CONCEPT.EXTENT
 const { TYPE } = CONCEPT.HISTORY

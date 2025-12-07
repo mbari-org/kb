@@ -2,7 +2,7 @@ import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/materia
 import { useTheme } from '@mui/material/styles'
 
 import KBTooltip from '@/components/common/KBTooltip'
-import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
+import { EXPORT_TYPE } from '@/lib/kb/constants/exportType.js'
 
 const ConceptExportType = ({ value = EXPORT_TYPE.CSV, onChange }) => {
   const theme = useTheme()

@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box } from '@mui/material'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
-import FieldReset from '../kb/panels/concepts/concept/change/staged/field/FieldReset'
+import FieldReset from '@/components/kb/panels/concepts/concept/change/staged/field/FieldReset'
 
 import { RESETTING } from '@/lib/constants.js'
 

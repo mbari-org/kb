@@ -21,10 +21,10 @@ import { getConceptPath } from '@/lib/kb/api/concept'
 
 import { initialConceptState, isStateModified } from '@/lib/kb/state/state'
 
-import { PANEL_DATA } from '@/lib/constants/panelData.js'
-import { SELECTED } from '@/lib/constants/selected.js'
-import { UI_TEXT } from '@/lib/constants/uiText.js'
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { PANEL_DATA } from '@/lib/kb/constants/panelData.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 const { CONTINUE } = UI_TEXT.LABELS.BUTTON
 

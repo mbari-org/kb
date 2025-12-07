@@ -1,6 +1,6 @@
 import { createRealization, deleteRealization, updateRealization } from '@/lib/kb/api/realizations'
 
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
 

@@ -4,7 +4,7 @@ import { getHistory } from '@/lib/kb/api/history'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 import { CONCEPT } from '@/lib/constants.js'
 
 const { TYPE } = CONCEPT.HISTORY

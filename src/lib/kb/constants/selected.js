@@ -1,4 +1,4 @@
-import { CONCEPT } from '../constants.js'
+import { CONCEPT } from '@/lib/constants.js'
 
 export const SELECTED = {
   CONCEPT: 'concept',

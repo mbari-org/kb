@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingChild } from '@/lib/kb/state/children'
 
-import { PENDING } from '@/lib/constants/pending.js'
+import { PENDING } from '@/lib/kb/constants/pending.js'
 
 const { CHILDREN } = PENDING.GROUP
 

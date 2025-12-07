@@ -9,7 +9,7 @@ import { createError, createValidationError } from '@/lib/errors'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
 import {
   createModalActions,
   createUserValidator,

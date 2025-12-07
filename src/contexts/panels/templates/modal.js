@@ -1,4 +1,4 @@
-import createPanelModalProvider from '../../common/createPanelModalProvider'
+import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
 import useTemplatesModal from './useTemplatesModal'
 
 const {
@@ -16,3 +16,4 @@ export {
   useTemplatesModalDataContext,
   useTemplatesModalOperationsContext,
 }
+

@@ -5,7 +5,7 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
 import {
   createModalActions,
   processEditUserData,

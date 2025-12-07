@@ -1,4 +1,4 @@
-import createPanelModalProvider from '../../common/createPanelModalProvider'
+import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
 import useUsersModal from './useUsersModal'
 
 // Create the complete modal provider setup for users
@@ -17,3 +17,4 @@ export {
   useUsersModalDataContext,
   useUsersModalOperationsContext,
 }
+

@@ -8,7 +8,7 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import TemplateCell from './TemplateCell'
 
 import { humanTimestamp } from '@/lib/utils'
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

@@ -10,7 +10,7 @@ import { pendingInfo } from '@/lib/kb/model/history'
 
 import { formatDelta, formatField } from '@/components/common/format'
 
-import { PENDING } from '@/lib/constants/pending.js'
+import { PENDING } from '@/lib/kb/constants/pending.js'
 
 const { OTHER } = PENDING.APPROVAL
 

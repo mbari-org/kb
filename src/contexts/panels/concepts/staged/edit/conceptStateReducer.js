@@ -13,7 +13,7 @@ import {
 } from '@/lib/kb/state/realizations'
 import { editValue } from '@/lib/kb/state/value'
 
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } =
   CONCEPT_STATE

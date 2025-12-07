@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
 

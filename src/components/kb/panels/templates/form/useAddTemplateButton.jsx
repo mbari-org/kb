@@ -10,8 +10,8 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
-import { SELECTED } from '@/lib/constants/selected.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 import {
   createModalActions,

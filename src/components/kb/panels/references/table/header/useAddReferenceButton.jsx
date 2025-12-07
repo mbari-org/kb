@@ -10,8 +10,8 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
-import { SELECTED } from '@/lib/constants/selected.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 import {
   createHandlers,
   createInitialReference,

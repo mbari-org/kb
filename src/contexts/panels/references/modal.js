@@ -1,4 +1,4 @@
-import createPanelModalProvider from '../../common/createPanelModalProvider'
+import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
 import useReferencesModal from './useReferencesModal'
 
 // Create the complete modal provider setup for references
@@ -17,3 +17,4 @@ export {
   useReferencesModalDataContext,
   useReferencesModalOperationsContext,
 }
+

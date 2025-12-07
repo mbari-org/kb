@@ -5,7 +5,7 @@ import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 
 import useSettings from '@/contexts/selected/useSettings'
 import { createError } from '@/lib/errors'
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 const { CONCEPT, PANEL } = SELECTED
 

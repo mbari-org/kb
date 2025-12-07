@@ -24,7 +24,7 @@ import { actionVerb } from '@/components/kb/panels/concepts/concept/change/actio
 import { hasPrimary, isPrimary } from '@/lib/kb/model/media'
 import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'

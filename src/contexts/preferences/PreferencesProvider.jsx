@@ -9,7 +9,7 @@ import usePrefsTimer from '@/contexts/preferences/usePrefsTimer'
 import useSavePrefs from '@/contexts/preferences/useSavePrefs'
 import useInitPrefs from '@/contexts/preferences/useInitPrefs'
 
-import { PREFS } from '@/lib/constants/prefs.js'
+import { PREFS } from '@/lib/kb/constants/prefs.js'
 
 const { KEY } = PREFS.API
 

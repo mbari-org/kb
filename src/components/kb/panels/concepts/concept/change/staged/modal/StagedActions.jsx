@@ -10,10 +10,10 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { isStateModified } from '@/lib/kb/state/state'
 
-import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
+import { UNSAFE_ACTION } from '@/lib/kb/constants/unsafeAction.js'
 import { RESETTING } from '@/lib/constants.js'
-import { UI_TEXT } from '@/lib/constants/uiText.js'
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 

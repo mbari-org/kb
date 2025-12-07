@@ -5,7 +5,7 @@ import usePanelSelect from '@/contexts/selected/usePanelSelect'
 
 import { createError } from '@/lib/errors'
 
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 const { CONCEPT, PANEL } = SELECTED
 

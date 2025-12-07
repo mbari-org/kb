@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from 'react'
 
 import ControlledConceptPropertyPages from '@/components/kb/panels/concepts/concept/detail/properties/ControlledConceptPropertyPages'
 import RealizationTemplate from './RealizationTemplate'
-import useAvailableLinkTemplates from '../useAvailableLinkTemplates'
+import useAvailableLinkTemplates from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/useAvailableLinkTemplates'
 
 const RealizationTemplatesFilter = ({
   currentPage,

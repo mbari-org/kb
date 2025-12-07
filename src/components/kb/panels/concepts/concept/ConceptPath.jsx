@@ -5,7 +5,7 @@ import { MdNavigateNext } from 'react-icons/md'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 const ConceptPath = () => {
   const { conceptPath } = use(ConceptContext)

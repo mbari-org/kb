@@ -4,15 +4,15 @@ import { createRealization } from '@/lib/kb/api/realizations'
 import { addConcept } from '@/lib/kb/api/references'
 import { createConceptTemplate, renameToConceptTemplates } from '@/lib/kb/api/templates'
 
-import { RELATED_DATA_COUNTS } from '../relatedDataCounts'
+import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 import { pickRealization } from '@/lib/kb/model/realization'
 import { pickReference } from '@/lib/kb/model/reference'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { PANEL_DATA } from '@/lib/constants/panelData.js'
-import { PREFS } from '@/lib/constants/prefs.js'
+import { PANEL_DATA } from '@/lib/kb/constants/panelData.js'
+import { PREFS } from '@/lib/kb/constants/prefs.js'
 
 const { KEY } = PREFS.API
 const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS

@@ -12,9 +12,9 @@ import { isStateModified } from '@/lib/kb/state/state'
 import { pendingChild } from '@/lib/kb/model/history'
 
 import { RESETTING } from '@/lib/constants.js'
-import { PENDING } from '@/lib/constants/pending.js'
-import { UI_TEXT } from '@/lib/constants/uiText.js'
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { PENDING } from '@/lib/kb/constants/pending.js'
+import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 const { DISCARD, DISCARD_ALL } = UI_TEXT.LABELS.BUTTON
 const { CANCEL, EDIT, PENDING: PENDING_ACTION, SAVE, STAGED } = UI_TEXT.LABELS.CONCEPT.ACTION

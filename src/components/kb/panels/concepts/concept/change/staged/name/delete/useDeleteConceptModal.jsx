@@ -5,7 +5,7 @@ import DeleteConceptContent from './DeleteConceptContent'
 import DeleteConceptActions from './DeleteConceptActions'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
-import { relatedDataCounts } from '../relatedDataCounts'
+import { relatedDataCounts } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'

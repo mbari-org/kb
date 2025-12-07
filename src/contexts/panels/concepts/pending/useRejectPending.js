@@ -5,7 +5,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { getConcept } from '@/lib/kb/api/concept'
 
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
 import { createError } from '@/lib/errors'
 
 import rejectAlias from '@/contexts/panels/concepts/pending/reject/rejectAlias'

@@ -6,7 +6,7 @@ import TableHeaderLinkFilter from '@/components/kb/panels/templates/table/header
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { SELECTED } from '@/lib/constants/selected.js'
+import { SELECTED } from '@/lib/kb/constants/selected.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

@@ -1,7 +1,7 @@
 import { capitalize } from '@/lib/utils'
 
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
-import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
+import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
 
 const rankState = (concept, pendingConcept) => {
   const { rankLevel, rankName } = concept

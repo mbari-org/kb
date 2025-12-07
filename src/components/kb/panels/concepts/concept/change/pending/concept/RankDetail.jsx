@@ -12,7 +12,7 @@ import { pendingChange, pendingRank } from '@/lib/kb/state/rank'
 
 import { formatDelta, formatField, otherApprovalSx } from '@/components/common/format'
 
-import { PENDING } from '@/lib/constants/pending.js'
+import { PENDING } from '@/lib/kb/constants/pending.js'
 
 const { APPROVAL, GROUP } = PENDING
 
