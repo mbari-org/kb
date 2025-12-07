@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
-import { UI_TEXT } from '@/config/ui-text/index.js'
+import { UI_TEXT } from '@/config/text/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

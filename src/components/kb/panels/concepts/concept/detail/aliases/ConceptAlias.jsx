@@ -12,7 +12,7 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-import { UI_TEXT } from '@/config/ui-text/index.js'
+import { UI_TEXT } from '@/config/text/index.js'
 
 const ALIASES = UI_TEXT.PANELS.CONCEPTS.ALIASES
 

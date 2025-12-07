@@ -1,7 +1,7 @@
 import { Button, Stack } from '@mui/material'
 import theme from '@/lib/theme'
 
-import { UI_TEXT } from '@/config/ui-text/index.js'
+import { UI_TEXT } from '@/config/text/index.js'
 
 const ToConceptSpecial = ({ onChange }) => {
   const buttonStyle = {

@@ -1,6 +1,6 @@
 import { capitalize, isJsonEqual, pick } from '@/lib/utils'
 
-import { ALIAS_TYPES } from '@/config/ui-text/alias.js'
+import { ALIAS_TYPES } from '@/config/text/alias.js'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 
