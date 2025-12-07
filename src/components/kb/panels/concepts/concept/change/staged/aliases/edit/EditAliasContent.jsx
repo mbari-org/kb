@@ -12,9 +12,7 @@ import useEditAliasHandlers from './useEditAliasHandlers'
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
-import alias from '@/config/text/alias.json'
-
-const ALIAS = alias.ALIAS
+import { ALIAS } from '@/lib/kb/constants/alias.js'
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 

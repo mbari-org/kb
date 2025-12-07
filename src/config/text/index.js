@@ -1,8 +1,6 @@
-import alias from './alias.json'
+import { ALIAS } from '@/lib/kb/constants/alias.js'
 import concept from './concept.json'
 import { PANELS } from './panels/index.js'
-
-const ALIAS = alias.ALIAS
 
 const CONCEPT = {
   SELECT: concept.CONCEPT.SELECT,

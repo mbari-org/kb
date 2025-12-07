@@ -1,4 +1,3 @@
-import { ROLES } from './roles.js'
 import { UI_LABELS } from './ui/labels.js'
 import { UI_PROCESSING } from './ui/processing.js'
 import { UI_RESETTING } from './ui/resetting.js'
@@ -29,5 +28,4 @@ export const UI_TEXT = {
     REALIZATIONS: UI_RESETTING.REALIZATIONS,
     TEMPLATES: UI_RESETTING.TEMPLATES,
   },
-  ROLES,
 }

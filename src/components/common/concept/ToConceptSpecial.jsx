@@ -18,7 +18,7 @@ const ToConceptSpecial = ({ onChange }) => {
 
   return (
     <Stack direction='row' spacing={1} sx={{ mt: 0.5 }}>
-      {UI_TEXT.CONCEPT.SPECIAL.map(value => (
+      {UI_TEXT.CONCEPT.SELECT.SPECIAL.map(value => (
         <Button
           key={value}
           onClick={() => onChange(value)}
