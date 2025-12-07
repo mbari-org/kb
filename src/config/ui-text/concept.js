@@ -1,4 +1,4 @@
-import concept from '../concept.json'
+import concept from './concept.json'
 
 export const CONCEPT = {
   SELECT: {

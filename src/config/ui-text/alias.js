@@ -1,4 +1,4 @@
-import alias from '../alias.json'
+import alias from './alias.json'
 
 export const ALIAS = alias
 

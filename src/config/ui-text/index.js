@@ -1,5 +1,5 @@
-import { ALIAS } from './alias/index.js'
-import { CONCEPT } from './concept/index.js'
+import { ALIAS } from './alias.js'
+import { CONCEPT } from './concept.js'
 import { PANELS } from './panels/index.js'
 
 export const UI_TEXT = {
