@@ -1,6 +1,6 @@
 import { FormControlLabel, Radio, Stack } from '@mui/material'
 
-import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { UI_TEXT } from '@/constants/uiText.js'
 
 const { NAME_ONLY, REASSIGN } = UI_TEXT.LABELS.CONCEPT.CHANGE_NAME
 

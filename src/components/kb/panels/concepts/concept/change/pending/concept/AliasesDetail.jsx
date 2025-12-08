@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingAlias } from '@/lib/kb/state/aliases'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 
 const { ALIASES } = PENDING.GROUP
 

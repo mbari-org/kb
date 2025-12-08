@@ -5,7 +5,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { hasPending, pendingChild } from '@/lib/kb/model/history'
 import { isPendingName } from '@/lib/kb/state/name'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 
 const useHasPendingStructure = () => {
   const { concept, pending } = use(ConceptContext)

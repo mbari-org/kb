@@ -9,7 +9,7 @@ import useEditTemplateButton from '@/components/kb/panels/templates/form/useEdit
 import useDeleteTemplateButton from '@/components/kb/panels/templates/form/useDeleteTemplateButton'
 import useTemplateColumns from './useTemplateColumns'
 
-import { PAGINATION } from '@/lib/kb/constants/pagination.js'
+import { PAGINATION } from '@/constants/pagination.js'
 
 const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.TEMPLATES
 

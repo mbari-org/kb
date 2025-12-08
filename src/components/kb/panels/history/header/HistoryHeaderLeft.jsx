@@ -5,7 +5,7 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/kb/constants/selected.js'
+import { SELECTED } from '@/constants/selected.js'
 import { CONCEPT } from '@/lib/constants.js'
 
 const { HISTORY } = SELECTED.SETTINGS

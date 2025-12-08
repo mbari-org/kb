@@ -5,7 +5,7 @@ import HistoryToggleButton from './HistoryToggleButton'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
-import { SELECTED } from '@/lib/kb/constants/selected.js'
+import { SELECTED } from '@/constants/selected.js'
 
 const { PENDING, APPROVED, CONCEPT } = SELECTED.SETTINGS.HISTORY.TYPES
 

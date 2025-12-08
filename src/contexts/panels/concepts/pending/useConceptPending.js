@@ -3,8 +3,8 @@ import { use, useCallback, useEffect, useState } from 'react'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { ACTION } from '@/lib/constants'
-import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { HISTORY_FIELD } from '@/constants/historyField.js'
+import { PENDING } from '@/constants/pending.js'
 
 const { CONCEPT, CONFIRM, PARENT } = PENDING.DATA
 

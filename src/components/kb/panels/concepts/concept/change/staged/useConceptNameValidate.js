@@ -4,7 +4,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 
 const useConceptNameValidate = (formData, modifiedFields) => {
   const { stagedState } = use(ConceptContext)

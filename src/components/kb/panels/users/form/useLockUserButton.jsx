@@ -7,7 +7,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
-import { ROLES } from '@/lib/kb/constants/roles.js'
+import { ROLES } from '@/constants/roles.js'
 import {
   createLockUserActions,
   createLockUserContent,

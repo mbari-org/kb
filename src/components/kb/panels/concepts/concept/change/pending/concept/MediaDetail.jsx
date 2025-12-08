@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingMedia } from '@/lib/kb/state/media'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 
 const { MEDIA } = PENDING.GROUP
 

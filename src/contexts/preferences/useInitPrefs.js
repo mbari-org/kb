@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react'
 import { createError } from '@/lib/errors'
 import { isEmpty } from '@/lib/utils'
 
-import { PREFS } from '@/lib/kb/constants/prefs.js'
+import { PREFS } from '@/constants/prefs.js'
 
 const { KEY } = PREFS.API
 

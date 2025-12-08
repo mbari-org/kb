@@ -1,7 +1,7 @@
-import { PANELS } from '@/config/js/panels.js'
-import concept from '@/config/text/concept.json'
+import { CONCEPT } from './concept.js'
+import { PANELS } from './panels.js'
 
 export const CONFIG = {
-  CONCEPT: concept.CONCEPT,
+  CONCEPT,
   PANELS,
 }

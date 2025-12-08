@@ -5,7 +5,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { formatDelta } from '@/components/common/format'
 
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 
 const { MEDIA_ITEM: MEDIA_ITEM } = CONCEPT_STATE
 

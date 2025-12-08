@@ -8,7 +8,7 @@ import {
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 
 const ChangeNameActions = () => {
   const { concept, confirmReset, initialState, modifyConcept } = use(ConceptContext)

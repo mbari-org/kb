@@ -8,8 +8,8 @@ import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
-import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
+import { PENDING } from '@/constants/pending.js'
+import { HISTORY_FIELD } from '@/constants/historyField.js'
 
 const PendingAliasItem = ({ item }) => {
   if (!item || item.field !== HISTORY_FIELD.ALIAS) return null

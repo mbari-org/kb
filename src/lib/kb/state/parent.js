@@ -1,5 +1,5 @@
-import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { HISTORY_FIELD } from '@/constants/historyField.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 
 const editParent = (state, update) => {
   // update: { field: 'parent', value: newParentName }

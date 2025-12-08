@@ -19,7 +19,7 @@ import { isAdmin } from '@/lib/auth/role'
 import { isPendingName } from '@/lib/kb/state/name'
 import { pendingInfo } from '@/lib/kb/model/history'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 import { LABELS } from '@/lib/constants.js'
 
 const { APPROVAL, GROUP } = PENDING

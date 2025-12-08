@@ -4,7 +4,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import PageControl from '@/components/common/PageControl'
 import usePageCommit from '@/hooks/usePageCommit'
 
-import { PAGINATION } from '@/lib/kb/constants/pagination.js'
+import { PAGINATION } from '@/constants/pagination.js'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.TEMPLATES.PAGE_SIZE_OPTIONS
 

@@ -4,7 +4,7 @@ import HistoryHeaderToggle from './HistoryHeaderToggle'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/lib/kb/constants/selected.js'
+import { SELECTED } from '@/constants/selected.js'
 
 const { HISTORY } = SELECTED.SETTINGS
 

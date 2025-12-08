@@ -12,9 +12,9 @@ import { pendingInfo } from '@/lib/kb/model/history'
 import { isPendingName } from '@/lib/kb/state/name'
 import { isAdmin } from '@/lib/auth/role'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
-import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
-import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
+import { PENDING } from '@/constants/pending.js'
+import { HISTORY_FIELD } from '@/constants/historyField.js'
+import { UI_TEXT } from '@/constants/uiText.js'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = UI_TEXT.LABELS.CONCEPT.CHANGE_NAME

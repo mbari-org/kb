@@ -1,4 +1,4 @@
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 
 const applyChildren = (concept, tracker) => {
   if (tracker.action === CONCEPT_STATE.CHILD.ADD) {

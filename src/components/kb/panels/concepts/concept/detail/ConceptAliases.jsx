@@ -6,7 +6,7 @@ import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 import { CONFIG } from '@/config/js/index.js'
 
 const ConceptAliases = () => {

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { getHistory, getHistoryCount } from '@/lib/kb/api/history'
 
-import { PAGINATION } from '@/lib/kb/constants/pagination.js'
+import { PAGINATION } from '@/constants/pagination.js'
 
 import { pendingActionText } from '@/lib/kb/model/history'
 

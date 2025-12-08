@@ -11,8 +11,8 @@ import { pickReference } from '@/lib/kb/model/reference'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { PANEL_DATA } from '@/lib/kb/constants/panelData.js'
-import { PREFS } from '@/lib/kb/constants/prefs.js'
+import { PANEL_DATA } from '@/constants/panelData.js'
+import { PREFS } from '@/constants/prefs.js'
 
 const { KEY } = PREFS.API
 const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS

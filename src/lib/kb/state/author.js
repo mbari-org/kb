@@ -1,5 +1,5 @@
-import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { HISTORY_FIELD } from '@/constants/historyField.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 
 const isPendingAuthor = pendingItem =>
   pendingItem.field === HISTORY_FIELD.NAME && pendingItem.action === CONCEPT_STATE.AUTHOR

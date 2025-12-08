@@ -9,7 +9,7 @@ import useEditUserButton from '@/components/kb/panels/users/form/useEditUserButt
 import useLockUserButton from '@/components/kb/panels/users/form/useLockUserButton'
 import useUserColumns from '@/components/kb/panels/users/table/data/useUserColumns'
 
-import { PAGINATION } from '@/lib/kb/constants/pagination.js'
+import { PAGINATION } from '@/constants/pagination.js'
 
 const DEFAULT_LIMIT = PAGINATION.USERS.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0

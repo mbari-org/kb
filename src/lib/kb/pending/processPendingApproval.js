@@ -1,4 +1,4 @@
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 import { updatePendingItem } from '@/lib/kb/api/history'
 
 import { applyApprovals } from '@/lib/kb/pending/applyApproves'

@@ -5,7 +5,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { hasPending } from '@/lib/kb/model/history'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 
 const baseStyle = {
   fullWidth: true,

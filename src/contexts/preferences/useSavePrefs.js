@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { PREFS } from '@/lib/kb/constants/prefs.js'
+import { PREFS } from '@/constants/prefs.js'
 
 const { KEY } = PREFS.API
 

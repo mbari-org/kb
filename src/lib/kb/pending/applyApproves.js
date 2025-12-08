@@ -1,4 +1,4 @@
-import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
+import { HISTORY_FIELD } from '@/constants/historyField.js'
 import { createError } from '@/lib/errors'
 
 import approveAlias from '@/contexts/panels/concepts/pending/approve/approveAlias'

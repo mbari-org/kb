@@ -1,6 +1,6 @@
 import { capitalize, isJsonEqual, pick } from '@/lib/utils'
 
-import { ALIAS } from '@/lib/kb/constants/alias.js'
+import { ALIAS } from '@/constants/alias.js'
 
 const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
 

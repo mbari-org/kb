@@ -14,8 +14,8 @@ import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
-import { SELECTED } from '@/lib/kb/constants/selected.js'
-import { PAGINATION } from '@/lib/kb/constants/pagination.js'
+import { SELECTED } from '@/constants/selected.js'
+import { PAGINATION } from '@/constants/pagination.js'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 

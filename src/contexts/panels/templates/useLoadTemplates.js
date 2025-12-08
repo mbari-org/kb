@@ -4,7 +4,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { getTemplates, getTemplatesCount } from '@/lib/kb/api/templates'
 
-import { PAGINATION } from '@/lib/kb/constants/pagination.js'
+import { PAGINATION } from '@/constants/pagination.js'
 
 const DEFAULT_LIMIT = PAGINATION.TEMPLATES.DEFAULT_LIMIT
 

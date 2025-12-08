@@ -12,8 +12,8 @@ import { isStateModified } from '@/lib/kb/state/state'
 import { pendingChild } from '@/lib/kb/model/history'
 
 import { RESETTING } from '@/lib/constants.js'
-import { PENDING } from '@/lib/kb/constants/pending.js'
-import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { PENDING } from '@/constants/pending.js'
+import { CONCEPT_STATE } from '@/constants/conceptState.js'
 import { CONFIG } from '@/config/js/index.js'
 
 const { BUTTON } = CONFIG.PANELS.CONCEPTS

@@ -2,8 +2,8 @@ import { isPendingChild } from '@/lib/kb/state/children'
 import { isPendingName } from '@/lib/kb/state/name'
 
 import { ACTION } from '@/lib/constants'
-import { HISTORY_FIELD } from '@/lib/kb/constants/historyField.js'
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { HISTORY_FIELD } from '@/constants/historyField.js'
+import { PENDING } from '@/constants/pending.js'
 
 import { capitalize, humanTimestamp, isEmpty, pick } from '@/lib/utils'
 

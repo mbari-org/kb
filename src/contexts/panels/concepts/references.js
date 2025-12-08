@@ -1,6 +1,6 @@
 import { addConcept, removeConcept } from '@/lib/kb/api/references'
 
-import { PANEL_DATA } from '@/lib/kb/constants/panelData.js'
+import { PANEL_DATA } from '@/constants/panelData.js'
 
 const updateReferences = async (updatesContext, { conceptName, updatedName }) => {
   const { apiFns, getReferences, refreshPanelData } = updatesContext

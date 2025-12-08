@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { isPendingMedia } from '@/lib/kb/state/media'
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()

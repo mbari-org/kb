@@ -13,7 +13,7 @@ import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendin
 import { pendingInfo } from '@/lib/kb/model/history'
 
 import { ACTION } from '@/lib/constants'
-import { PENDING } from '@/lib/kb/constants/pending.js'
+import { PENDING } from '@/constants/pending.js'
 
 const { APPROVAL, GROUP } = PENDING
 
