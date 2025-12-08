@@ -3,12 +3,12 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedMediaEdits } from '@/lib/concept/state/media'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const StagedMedia = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={UI_TEXT.RESETTING.MEDIA}
+      group={CONFIG.PANELS.CONCEPTS.MODALS.STAGED.CONCEPT.MEDIA}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedMediaItem}
       stagedItems={stagedMediaEdits(stagedEdit)}

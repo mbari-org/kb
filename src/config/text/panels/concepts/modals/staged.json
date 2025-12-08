@@ -1,0 +1,24 @@
+{
+  "BUTTON": {
+    "CONFIRM_DISCARD": "Discard",
+    "CONTINUE": "Back to Editing",
+    "DISCARD_ALL": "Discard All",
+    "DECLINE_DISCARD": "Keep"
+  },
+  "CONCEPT": {
+    "ALIASES": "Aliases",
+    "AUTHOR": "Author",
+    "CHILDREN": "Children",
+    "MEDIA": "Media",
+    "NAME": "Name",
+    "PARENT": "Parent",
+    "RANK": "Rank",
+    "REALIZATIONS": "Realizations",
+    "TEMPLATES": "Templates"
+  },
+  "DESCRIPTION": "Staged edits",
+  "WARNING": {
+    "LINE_1": "Discarding edits is final.",
+    "LINE_2": "Please confirm you want to discard the indicated edits."
+  }
+}

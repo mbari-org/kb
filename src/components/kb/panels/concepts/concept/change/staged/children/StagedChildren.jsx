@@ -3,12 +3,12 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedChildren } from '@/lib/concept/state/children'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const StagedChildren = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={UI_TEXT.RESETTING.CHILDREN}
+      group={CONFIG.PANELS.CONCEPTS.MODALS.STAGED.CONCEPT.CHILDREN}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedChild}
       stagedItems={stagedChildren(stagedEdit)}

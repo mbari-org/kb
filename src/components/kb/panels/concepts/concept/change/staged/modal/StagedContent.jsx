@@ -17,8 +17,10 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONFIG } from '@/config/js/index.js'
 import { CONCEPT } from '@/lib/constants'
+
+const { STAGED } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const StagedContent = () => {
   const { initialState, stagedState } = use(ConceptContext)
@@ -39,7 +41,7 @@ const StagedContent = () => {
         return <StagedAliases key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.AUTHOR:
-        return <StagedValue key={field} group={UI_TEXT.RESETTING.AUTHOR} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} group={STAGED.CONCEPT.AUTHOR} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.CHILDREN:
         return <StagedChildren key={field} stagedEdit={stagedEdit} />
@@ -48,13 +50,13 @@ const StagedContent = () => {
         return <StagedMedia key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.NAME:
-        return <StagedObject key={field} group={UI_TEXT.RESETTING.NAME} stagedEdit={stagedEdit} />
+        return <StagedObject key={field} group={STAGED.CONCEPT.NAME} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.PARENT:
-        return <StagedValue key={field} group={UI_TEXT.RESETTING.PARENT} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} group={STAGED.CONCEPT.PARENT} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.RANK:
-        return <StagedObject key={field} group={UI_TEXT.RESETTING.RANK} stagedEdit={stagedEdit} />
+        return <StagedObject key={field} group={STAGED.CONCEPT.RANK} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.REALIZATIONS:
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />
@@ -72,7 +74,7 @@ const StagedContent = () => {
 
   return (
     <Stack direction='column' spacing={1}>
-      <ModalActionText text='Staged Edits' />
+      <ModalActionText text={STAGED.DESCRIPTION} />
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         {stagedEdits.map(stagedComponent)}
       </Box>

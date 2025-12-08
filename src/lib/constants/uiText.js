@@ -1,6 +1,5 @@
 import { UI_LABELS } from './ui/labels.js'
 import { UI_PROCESSING } from './ui/processing.js'
-import { UI_RESETTING } from './ui/resetting.js'
 import { UI_TOOLTIP } from './ui/tooltip.js'
 
 export const UI_TEXT = {
@@ -15,16 +14,5 @@ export const UI_TEXT = {
     HISTORY: UI_TOOLTIP.HISTORY,
     REFERENCES: UI_TOOLTIP.REFERENCES,
     USERS: UI_TOOLTIP.USERS,
-  },
-  RESETTING: {
-    ALIASES: UI_RESETTING.ALIASES,
-    AUTHOR: UI_RESETTING.AUTHOR,
-    CHILDREN: UI_RESETTING.CHILDREN,
-    MEDIA: UI_RESETTING.MEDIA,
-    NAME: UI_RESETTING.NAME,
-    PARENT: UI_RESETTING.PARENT,
-    RANK: UI_RESETTING.RANK,
-    REALIZATIONS: UI_RESETTING.REALIZATIONS,
-    TEMPLATES: UI_RESETTING.TEMPLATES,
   },
 }

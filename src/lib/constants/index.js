@@ -13,4 +13,6 @@ export { ROLES } from './roles.js'
 export { SELECTED } from './selected.js'
 export { UNSAFE_ACTION } from './unsafeAction.js'
 
-export { LABELS, PROCESSING, RESETTING, TOOLTIP, UI_LABELS, UI_PROCESSING, UI_RESETTING, UI_TOOLTIP } from './ui/index.js'
+export { UI_RESETTING as RESETTING, UI_RESETTING } from './resetting.js'
+export { LABELS, PROCESSING, TOOLTIP, UI_LABELS, UI_PROCESSING, UI_TOOLTIP } from './ui/index.js'
+
