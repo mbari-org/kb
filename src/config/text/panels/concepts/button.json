@@ -1,0 +1,11 @@
+{
+  "BUTTON": {
+    "CANCEL": "Cancel",
+    "DISCARD": "Discard",
+    "DISCARD_ALL": "Discard All",
+    "EDIT": "Edit",
+    "PENDING": "Pending",
+    "SAVE": "Save",
+    "STAGED": "Staged"
+  }
+}

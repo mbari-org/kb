@@ -13,11 +13,11 @@ import { pendingChild } from '@/lib/kb/model/history'
 
 import { RESETTING } from '@/lib/constants.js'
 import { PENDING } from '@/lib/kb/constants/pending.js'
-import { UI_TEXT } from '@/lib/kb/constants/uiText.js'
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
+import { UI_TEXT } from '@/config/text/index.js'
 
-const { DISCARD, DISCARD_ALL } = UI_TEXT.LABELS.BUTTON
-const { CANCEL, EDIT, PENDING: PENDING_ACTION, SAVE, STAGED } = UI_TEXT.LABELS.CONCEPT.ACTION
+const { BUTTON } = UI_TEXT.PANELS.CONCEPTS
+const { DISCARD, DISCARD_ALL, CANCEL, EDIT, PENDING: PENDING_ACTION, SAVE, STAGED } = BUTTON.BUTTON
 const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 
