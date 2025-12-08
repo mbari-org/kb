@@ -94,6 +94,17 @@ const TemplatesProvider = ({ children }) => {
     }
   }, [clearTemplateFilters, setClearTemplateFilters, updateFilters])
 
+  const filterString = useCallback(template => {
+    if (!template) return '* | * | * | *'
+
+    const concept = template.concept || '*'
+    const linkName = template.linkName || '*'
+    const toConcept = template.toConcept || '*'
+    const linkValue = template.linkValue || '*'
+
+    return `${concept} | ${linkName} | ${toConcept} | ${linkValue}`
+  }, [])
+
   const value = useMemo(
     () => ({
       addTemplate,
@@ -103,6 +114,7 @@ const TemplatesProvider = ({ children }) => {
       explicitConcepts,
       filteredTemplates,
       filters,
+      filterString,
       setByAvailable,
       updateFilters,
     }),
@@ -114,6 +126,7 @@ const TemplatesProvider = ({ children }) => {
       explicitConcepts,
       filteredTemplates,
       filters,
+      filterString,
       setByAvailable,
       updateFilters,
     ]

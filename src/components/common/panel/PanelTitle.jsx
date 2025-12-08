@@ -31,7 +31,7 @@ const PanelTitle = ({ subtitle, title }) => {
           component='div'
           align='center'
           sx={{
-            fontSize: '0.75rem',
+            fontSize: '1rem',
             mt: 0.5,
             width: '100%',
           }}

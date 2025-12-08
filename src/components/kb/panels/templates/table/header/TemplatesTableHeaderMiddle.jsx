@@ -40,7 +40,6 @@ const TemplatesTableHeaderMiddle = () => {
           onClick={handleClearAll}
           sx={{
             fontSize: '0.8rem',
-            transform: 'translateY(0.75rem)',
           }}
         >
           {BUTTON.CLEAR_FILTERS}

@@ -22,16 +22,16 @@ import templatesPanel from '@/config/text/panels/templates/panel.json'
 import usersPanel from '@/config/text/panels/users/panel.json'
 
 const modules = [
-  { module: Concepts, name: conceptsPanel.name },
-  { module: Templates, name: templatesPanel.name },
-  { module: References, name: referencesPanel.name },
-  { module: Embargoes, name: embargoesPanel.name },
-  { module: History, name: historyPanel.name },
-  { module: Notes, name: notesPanel.name },
-  { module: Import, name: importPanel.name },
-  { module: Export, name: exportPanel.name },
-  { module: Users, name: usersPanel.name },
-  { module: AboutHelp, name: aboutHelpPanel.name },
+  { module: Concepts, name: conceptsPanel.NAME },
+  { module: Templates, name: templatesPanel.NAME },
+  { module: References, name: referencesPanel.NAME },
+  { module: Embargoes, name: embargoesPanel.NAME },
+  { module: History, name: historyPanel.NAME },
+  { module: Notes, name: notesPanel.NAME },
+  { module: Import, name: importPanel.NAME },
+  { module: Export, name: exportPanel.NAME },
+  { module: Users, name: usersPanel.NAME },
+  { module: AboutHelp, name: aboutHelpPanel.NAME },
 ]
 
 export default modules

@@ -3,16 +3,28 @@ import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
+import { CONFIG } from '@/config/js/index.js'
+
+import { SELECTED } from '@/lib/constants'
+
+const { TEMPLATES } = SELECTED.SETTINGS
+const { FILTERS } = TEMPLATES
+
 const TemplatesHeaderTitle = () => {
-  const { byAvailable, filters } = use(TemplatesContext)
+  const { filterString, filters } = use(TemplatesContext)
 
-  const available = byAvailable ? 'Available ' : ''
-  const filtered = Object.values(filters).some(value => value) ? 'Filtered ' : ''
-  const all = (available === '' && filtered === '') ? 'All ' : ''
+  const title = CONFIG.PANELS.TEMPLATES.PANEL.NAME
 
-  const title = `${all}${filtered}${available}Templates`
+  const filterTemplate = {
+    concept: filters[FILTERS.CONCEPT],
+    linkName: filters[FILTERS.LINK_NAME],
+    toConcept: filters[FILTERS.TO_CONCEPT],
+    linkValue: filters[FILTERS.LINK_VALUE],
+  }
 
-  return <PanelHeaderTitle title={title} />
+  const subtitle = filterString(filterTemplate)
+
+  return <PanelHeaderTitle subtitle={subtitle} title={title} />
 }
 
 export default TemplatesHeaderTitle
