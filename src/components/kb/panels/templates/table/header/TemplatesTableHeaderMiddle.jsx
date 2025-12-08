@@ -8,7 +8,7 @@ import KBTooltip from '@/components/common/KBTooltip'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
-import { UI_TEXT } from '@/config/js/text.js'
+import { UI_TEXT } from '@/config/js/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { BUTTON, TOOLTIP } = UI_TEXT.PANELS.TEMPLATES

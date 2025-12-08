@@ -9,7 +9,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
-import { UI_TEXT } from '@/config/js/text.js'
+import { UI_TEXT } from '@/config/js/index.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
 

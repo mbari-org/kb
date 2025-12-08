@@ -6,7 +6,7 @@ import RankFieldInput from '@/components/kb/panels/concepts/concept/change/stage
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { pendingChange } from '@/lib/kb/state/rank'
-import { UI_TEXT } from '@/config/js/text.js'
+import { UI_TEXT } from '@/config/js/index.js'
 import { PENDING } from '@/lib/kb/constants/pending.js'
 import { CONCEPT } from '@/lib/constants.js'
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'

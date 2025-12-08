@@ -2,7 +2,7 @@ import { Box, useTheme } from '@mui/material'
 
 import EmptyPanel from '@/components/common/panel/EmptyPanel'
 import VersionDisplay from '@/components/common/VersionDisplay'
-import { UI_TEXT } from '@/config/js/text.js'
+import { UI_TEXT } from '@/config/js/index.js'
 
 const TITLE = UI_TEXT.PANELS.ABOUT_HELP.TITLE
 
