@@ -1,6 +1,3 @@
-export const UI_PROCESSING = {
-  DELETING: 'Deleting...',
-  LOADING: 'Loading...',
-  SAVING: 'Saving...',
-  UPDATING: 'Updating...',
-}
+import { PROCESSING } from '@/config/js/processing.js'
+
+export const UI_PROCESSING = PROCESSING

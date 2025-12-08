@@ -1,15 +1,8 @@
 import { UI_LABELS } from './ui/labels.js'
-import { UI_PROCESSING } from './ui/processing.js'
 import { UI_TOOLTIP } from './ui/tooltip.js'
 
 export const UI_TEXT = {
   LABELS: UI_LABELS,
-  PROCESSING: {
-    DELETING: UI_PROCESSING.DELETING,
-    LOADING: UI_PROCESSING.LOADING,
-    SAVING: UI_PROCESSING.SAVING,
-    UPDATING: UI_PROCESSING.UPDATING,
-  },
   TOOLTIP: {
     HISTORY: UI_TOOLTIP.HISTORY,
     REFERENCES: UI_TOOLTIP.REFERENCES,
