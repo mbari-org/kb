@@ -8,9 +8,9 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { otherApprovalSx } from '@/components/common/format'
 
-import { isPendingChild } from '@/lib/kb/state/children'
+import { isPendingChild } from '@/lib/concept/state/children'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { CHILDREN } = PENDING.GROUP
 

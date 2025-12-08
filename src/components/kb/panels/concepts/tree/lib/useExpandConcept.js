@@ -3,7 +3,7 @@ import { use, useCallback } from 'react'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const allLeafs = (taxonomy, conceptName, leafs = []) => {
   const concept = taxonomy.conceptMap[conceptName]

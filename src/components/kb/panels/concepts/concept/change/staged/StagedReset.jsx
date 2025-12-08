@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import { RESETTING } from '@/lib/constants.js'
+import { RESETTING } from '@/lib/constants'
 
 const StagedReset = ({
   child,

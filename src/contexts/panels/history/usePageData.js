@@ -1,11 +1,11 @@
 import { use, useCallback } from 'react'
 
-import { getHistory } from '@/lib/kb/api/history'
+import { getHistory } from '@/lib/api/history'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/constants/selected.js'
-import { CONCEPT } from '@/lib/constants.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT } from '@/lib/constants'
 
 const { TYPE } = CONCEPT.HISTORY
 const { HISTORY } = SELECTED.SETTINGS

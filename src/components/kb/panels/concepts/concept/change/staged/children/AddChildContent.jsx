@@ -12,10 +12,10 @@ import useInputStyle from './useInputStyle'
 import useAddChildHandlers from './useAddChildHandlers'
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
-import { rankField } from '@/lib/kb/state/rank'
+import { rankField } from '@/lib/concept/state/rank'
 
-import { CONCEPT } from '@/lib/constants.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 

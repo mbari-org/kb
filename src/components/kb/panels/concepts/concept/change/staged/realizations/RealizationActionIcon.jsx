@@ -10,9 +10,9 @@ import createRealizationOnClose from '@/components/kb/panels/concepts/concept/ch
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ADD = CONCEPT_STATE.REALIZATION.ADD
 const DELETE = CONCEPT_STATE.REALIZATION.DELETE

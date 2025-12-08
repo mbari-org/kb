@@ -1,9 +1,9 @@
 import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/StagedItems'
 import StagedRealization from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealization'
 
-import { stagedRealizationEdits } from '@/lib/kb/state/realizations'
+import { stagedRealizationEdits } from '@/lib/concept/state/realizations'
 
-import { UI_TEXT } from '@/constants/uiText.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const StagedRealizations = ({ stagedEdit }) => {
   return (

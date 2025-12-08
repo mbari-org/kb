@@ -6,10 +6,10 @@ import PendingValues from '@/components/kb/panels/concepts/concept/change/pendin
 
 import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
-import { pendingInfo } from '@/lib/kb/model/history'
+import { pendingInfo } from '@/lib/model/history'
 
-import { PENDING } from '@/constants/pending.js'
-import { HISTORY_FIELD } from '@/constants/historyField.js'
+import { PENDING } from '@/lib/constants/pending.js'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const PendingAliasItem = ({ item }) => {
   if (!item || item.field !== HISTORY_FIELD.ALIAS) return null

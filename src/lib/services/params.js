@@ -1,4 +1,4 @@
-import authStore from '@/lib/store/authStore'
+import authStore from '@/lib/local/store/authStore'
 
 const apiParams = (method, data) => {
   const { token } = authStore.get()

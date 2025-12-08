@@ -9,8 +9,8 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/stagedBorder'
 
-import { CONCEPT } from '@/lib/constants.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { CONFIG } from '@/config/js/index.js'
 
 const ConceptAuthor = () => {

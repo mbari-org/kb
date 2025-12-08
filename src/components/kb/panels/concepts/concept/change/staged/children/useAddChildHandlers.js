@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import useDebounce from '@/hooks/useDebounce'
+import useDebounce from '@/lib/hooks/useDebounce'
 
 import { hasTrue } from '@/lib/utils'
 

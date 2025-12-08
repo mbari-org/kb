@@ -10,9 +10,9 @@ import createAliasOnClose from '@/components/kb/panels/concepts/concept/change/s
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { aliasFields, EMPTY_ALIAS } from '@/lib/kb/model/aliases'
+import { aliasFields, EMPTY_ALIAS } from '@/lib/model/aliases'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ADD = CONCEPT_STATE.ALIAS.ADD
 const DELETE = CONCEPT_STATE.ALIAS.DELETE

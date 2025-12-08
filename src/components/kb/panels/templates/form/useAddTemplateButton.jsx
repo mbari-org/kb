@@ -8,11 +8,11 @@ import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
 import { CONFIG } from '@/config/js/index.js'
-import { SELECTED } from '@/constants/selected.js'
-import { UI_PROCESSING } from '@/constants/ui/processing.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { UI_PROCESSING } from '@/lib/constants/ui/processing.js'
 
 import {
   createModalActions,

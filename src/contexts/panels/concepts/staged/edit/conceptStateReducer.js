@@ -1,19 +1,19 @@
-import { addAlias, deleteAlias, editAlias, resetAliases } from '@/lib/kb/state/aliases'
-import { editAuthor, resetAuthor } from '@/lib/kb/state/author'
-import { addChild, resetChild, resetChildren } from '@/lib/kb/state/children'
-import { addMedia, deleteMedia, editMedia, resetMedia } from '@/lib/kb/state/media'
-import { editName, resetName } from '@/lib/kb/state/name'
-import { editParent, resetParent } from '@/lib/kb/state/parent'
-import { editRank, resetRank } from '@/lib/kb/state/rank'
+import { addAlias, deleteAlias, editAlias, resetAliases } from '@/lib/concept/state/aliases'
+import { editAuthor, resetAuthor } from '@/lib/concept/state/author'
+import { addChild, resetChild, resetChildren } from '@/lib/concept/state/children'
+import { addMedia, deleteMedia, editMedia, resetMedia } from '@/lib/concept/state/media'
+import { editName, resetName } from '@/lib/concept/state/name'
+import { editParent, resetParent } from '@/lib/concept/state/parent'
+import { editRank, resetRank } from '@/lib/concept/state/rank'
 import {
   addRealization,
   deleteRealization,
   editRealization,
   resetRealizations,
-} from '@/lib/kb/state/realizations'
-import { editValue } from '@/lib/kb/state/value'
+} from '@/lib/concept/state/realizations'
+import { editValue } from '@/lib/concept/state/value'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } =
   CONCEPT_STATE

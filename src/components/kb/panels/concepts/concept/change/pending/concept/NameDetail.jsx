@@ -16,11 +16,11 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { formatDelta } from '@/components/common/format'
 import { isAdmin } from '@/lib/auth/role'
-import { isPendingName } from '@/lib/kb/state/name'
-import { pendingInfo } from '@/lib/kb/model/history'
+import { isPendingName } from '@/lib/concept/state/name'
+import { pendingInfo } from '@/lib/model/history'
 
-import { PENDING } from '@/constants/pending.js'
-import { LABELS } from '@/lib/constants.js'
+import { PENDING } from '@/lib/constants/pending.js'
+import { LABELS } from '@/lib/constants'
 
 const { APPROVAL, GROUP } = PENDING
 const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME

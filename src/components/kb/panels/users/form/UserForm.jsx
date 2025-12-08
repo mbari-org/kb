@@ -4,8 +4,8 @@ import { Box, Stack, TextField, MenuItem } from '@mui/material'
 import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
 
 import { EMAIL_REGEX } from '@/lib/constants'
-import { ROLES } from '@/constants/roles.js'
-import useDebounce from '@/hooks/useDebounce'
+import { ROLES } from '@/lib/constants/roles.js'
+import useDebounce from '@/lib/hooks/useDebounce'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
 
 const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {

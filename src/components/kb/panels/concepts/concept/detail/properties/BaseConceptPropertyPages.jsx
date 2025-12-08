@@ -4,7 +4,7 @@ import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ConceptPropertiesDetails from './ConceptPropertiesDetails'
 import ConceptPropertiesSummary from './ConceptPropertiesSummary'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const { ITEMS_PER_PAGE } = CONCEPT.PROPERTY_LIST
 

@@ -1,6 +1,6 @@
 import { use, useCallback, useEffect, useState } from 'react'
 
-import useDebounce from '@/hooks/useDebounce'
+import useDebounce from '@/lib/hooks/useDebounce'
 
 import { Box, Stack, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'

@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useMemo, useReducer, useState } from 'reac
 
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
-import useLoadConceptError from '@/hooks/useLoadConceptError'
+import useLoadConceptError from '@/lib/hooks/useLoadConceptError'
 import useConceptLoader from './useConceptLoader'
 import useConceptPending from './pending/useConceptPending'
 
@@ -17,14 +17,14 @@ import UserContext from '@/contexts/user/UserContext'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 
-import { getConceptPath } from '@/lib/kb/api/concept'
+import { getConceptPath } from '@/lib/api/concept'
 
-import { initialConceptState, isStateModified } from '@/lib/kb/state/state'
+import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
 
-import { PANEL_DATA } from '@/constants/panelData.js'
-import { SELECTED } from '@/constants/selected.js'
-import { UI_TEXT } from '@/constants/uiText.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { CONTINUE } = UI_TEXT.LABELS.BUTTON
 

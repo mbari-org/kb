@@ -14,8 +14,8 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { humanTimestamp } from '@/lib/utils'
 
-import { SELECTED } from '@/constants/selected.js'
-import { CONCEPT } from '@/lib/constants.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT } from '@/lib/constants'
 
 const { TYPE } = CONCEPT.HISTORY
 const { HISTORY } = SELECTED.SETTINGS

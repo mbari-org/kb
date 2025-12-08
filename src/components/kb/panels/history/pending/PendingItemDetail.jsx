@@ -8,7 +8,7 @@ import PendingParentItem from '@/components/kb/panels/history/pending/PendingPar
 import PendingRankItem from '@/components/kb/panels/history/pending/PendingRankItem'
 import PendingRealizationItem from '@/components/kb/panels/history/pending/PendingRealizationItem'
 
-import { isPendingName } from '@/lib/kb/state/name'
+import { isPendingName } from '@/lib/concept/state/name'
 
 import { usePanelModalDataContext } from '@/contexts/panel/modal/Context'
 
@@ -16,7 +16,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { createError } from '@/lib/errors'
 
-import { HISTORY_FIELD } from '@/constants/historyField.js'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const { ALIAS, CHILD, MEDIA, NAME, PARENT, RANK, REALIZATION, TEMPLATE } = HISTORY_FIELD
 

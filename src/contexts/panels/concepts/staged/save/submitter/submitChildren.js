@@ -1,6 +1,6 @@
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { createError } from '@/lib/errors'
-import { createConcept } from '@/lib/kb/api/concept'
+import { createConcept } from '@/lib/api/concept'
 
 const { CHILD } = CONCEPT_STATE
 

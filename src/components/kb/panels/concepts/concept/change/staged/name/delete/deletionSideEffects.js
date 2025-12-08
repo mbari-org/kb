@@ -1,18 +1,18 @@
-import { renameToConceptAssociations } from '@/lib/kb/api/associations'
-import { renameConceptObservations } from '@/lib/kb/api/observations'
-import { createRealization } from '@/lib/kb/api/realizations'
-import { addConcept } from '@/lib/kb/api/references'
-import { createConceptTemplate, renameToConceptTemplates } from '@/lib/kb/api/templates'
+import { renameToConceptAssociations } from '@/lib/api/associations'
+import { renameConceptObservations } from '@/lib/api/observations'
+import { createRealization } from '@/lib/api/realizations'
+import { addConcept } from '@/lib/api/references'
+import { createConceptTemplate, renameToConceptTemplates } from '@/lib/api/templates'
 
 import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
-import { pickRealization } from '@/lib/kb/model/realization'
-import { pickReference } from '@/lib/kb/model/reference'
+import { pickRealization } from '@/lib/model/realization'
+import { pickReference } from '@/lib/model/reference'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { PANEL_DATA } from '@/constants/panelData.js'
-import { PREFS } from '@/constants/prefs.js'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { PREFS } from '@/lib/constants/prefs.js'
 
 const { KEY } = PREFS.API
 const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS

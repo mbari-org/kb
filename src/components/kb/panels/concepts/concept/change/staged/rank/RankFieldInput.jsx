@@ -7,11 +7,11 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 
-import { stagedBorder } from '@/lib/kb/state/staged'
+import { stagedBorder } from '@/lib/concept/state/staged'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
-import { rankField } from '@/lib/kb/state/rank'
+import { rankField } from '@/lib/concept/state/rank'
 import { capitalize } from '@/lib/utils'
 
 const RankFieldInput = ({ field, initialRank, label, rank, onChange }) => {

@@ -1,5 +1,5 @@
 import { createError } from '@/lib/errors'
-import { updateReference } from '@/lib/kb/api/references'
+import { updateReference } from '@/lib/api/references'
 import { isEmpty, isJsonEqual } from '@/lib/utils'
 
 const updateReferenceFields = async (oldReference, newReference, apiFns) => {

@@ -5,8 +5,8 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/constants/selected.js'
-import { CONCEPT } from '@/lib/constants.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT } from '@/lib/constants'
 
 const { HISTORY } = SELECTED.SETTINGS
 const { NAV_HISTORY } = CONCEPT.SELECT.RIGHT_COMPONENT

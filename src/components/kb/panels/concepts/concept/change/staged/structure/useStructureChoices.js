@@ -5,7 +5,7 @@ import { hasStateChange } from '@/contexts/panels/concepts/staged/edit/stateUpda
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { hasPendingStructure } from '@/lib/kb/model/history'
+import { hasPendingStructure } from '@/lib/model/history'
 
 import { ACTION } from '@/lib/constants'
 

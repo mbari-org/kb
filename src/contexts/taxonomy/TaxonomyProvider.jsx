@@ -6,7 +6,7 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { getConcept as apiConcept } from '@/lib/kb/model/concept'
+import { getConcept as apiConcept } from '@/lib/model/concept'
 
 import {
   closestConcept as closestTaxonomyConcept,
@@ -23,9 +23,9 @@ import {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   removeTaxonomyConcept,
-} from '@/lib/kb/model/taxonomy'
+} from '@/lib/model/taxonomy'
 
-import useTaxonomyIntegrity from '@/hooks/useTaxonomyIntegrity'
+import useTaxonomyIntegrity from '@/lib/hooks/useTaxonomyIntegrity'
 
 import { isAdmin } from '@/lib/auth/role'
 

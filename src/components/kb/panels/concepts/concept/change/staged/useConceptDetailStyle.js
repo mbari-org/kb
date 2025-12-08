@@ -3,9 +3,9 @@ import { use, useMemo } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { hasPending } from '@/lib/kb/model/history'
+import { hasPending } from '@/lib/model/history'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const baseStyle = {
   fullWidth: true,

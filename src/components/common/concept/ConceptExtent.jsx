@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 import KBTooltip from '@/components/common/KBTooltip'
 
 const { CHILDREN, SOLO: CONCEPT_VALUE, DESCENDANTS } = CONCEPT.EXTENT

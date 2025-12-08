@@ -6,13 +6,13 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { getDescendantsInfo } from '@/lib/kb/model/concept'
+import { getDescendantsInfo } from '@/lib/model/concept'
 
 import csvExport from '@/lib/csvExport'
 
 import { capitalize, conceptNameForFilename } from '@/lib/utils'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const dataHeaders = [
   'id',

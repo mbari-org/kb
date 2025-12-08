@@ -14,7 +14,7 @@ import './swiper/mediaSwiper.css'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { MEDIA_ITEM } = CONCEPT_STATE
 

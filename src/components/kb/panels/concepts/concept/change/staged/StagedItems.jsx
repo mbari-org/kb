@@ -5,7 +5,7 @@ import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { RESETTING } from '@/lib/constants.js'
+import { RESETTING } from '@/lib/constants'
 
 import {
   resettingGroup,

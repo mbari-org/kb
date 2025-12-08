@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 
-import { TOOLTIP } from '@/lib/constants.js'
+import { TOOLTIP } from '@/lib/constants'
 import { CONFIG } from '@/config/js/index.js'
 
 const SWITCH = CONFIG.PANELS.CONCEPTS.TEMPLATES.SWITCH

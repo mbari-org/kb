@@ -1,6 +1,6 @@
 import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { getHistory, getHistoryCount } from '@/lib/kb/api/history'
+import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -12,9 +12,9 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
-import { CONCEPT } from '@/lib/constants.js'
-import { PAGINATION } from '@/constants/pagination.js'
-import { SELECTED } from '@/constants/selected.js'
+import { CONCEPT } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants/pagination.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 

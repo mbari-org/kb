@@ -8,7 +8,7 @@ import createServiceLookup from '@/lib/services/config/createServiceLookup'
 import getEndpoints from '@/lib/services/config/getEndpoints'
 import useApiFns from '@/contexts/config/useApiFns'
 
-import configUrlStore from '@/lib/store/configUrl'
+import configUrlStore from '@/lib/local/store/configUrl'
 
 // const isDev = import.meta.env.DEV
 const isDev = true

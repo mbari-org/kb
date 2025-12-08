@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { clearStores } from '@/lib/store/clearStores'
+import { clearStores } from '@/lib/local/store/clearStores'
 
 const useLogout = (setUser, savePreferences) => {
   const navigate = useNavigate()

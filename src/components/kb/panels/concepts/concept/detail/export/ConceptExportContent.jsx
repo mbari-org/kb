@@ -8,8 +8,8 @@ import ConceptExportJson from '@/components/kb/panels/concepts/concept/export/Co
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EXPORT_TYPE } from '@/constants/exportType.js'
-import { CONCEPT } from '@/lib/constants.js'
+import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
+import { CONCEPT } from '@/lib/constants'
 
 const ConceptExportContent = () => {
   const { modalData, setModalData } = use(ConceptModalContext)

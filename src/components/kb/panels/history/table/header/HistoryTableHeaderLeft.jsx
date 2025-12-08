@@ -6,7 +6,7 @@ import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import useHistoryExport from '@/components/kb/panels/history/table/header/useHistoryExport'
 
-import { UI_TEXT } from '@/constants/uiText.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const HistoryTableHeaderLeft = () => {
   const { count, selectedType } = use(HistoryContext)

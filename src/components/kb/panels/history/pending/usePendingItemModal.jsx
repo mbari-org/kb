@@ -4,7 +4,7 @@ import PendingItemTitle from '@/components/kb/panels/history/pending/PendingItem
 import PendingItemActions from '@/components/kb/panels/history/pending/PendingItemActions'
 import PendingItemDetail from '@/components/kb/panels/history/pending/PendingItemDetail'
 
-import { pendingActionText } from '@/lib/kb/model/history'
+import { pendingActionText } from '@/lib/model/history'
 
 const usePendingItemModal = () => {
   const { createModal } = usePanelModalOperationsContext()

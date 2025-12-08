@@ -3,9 +3,9 @@ import { use } from 'react'
 import { FormControl, TextField, Autocomplete } from '@mui/material'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
-import { getConceptTaxa } from '@/lib/kb/api/concept'
+import { getConceptTaxa } from '@/lib/api/concept'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const RealizationToConcept = ({
   realizationItem,

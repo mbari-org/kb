@@ -3,7 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { clearStores } from '@/lib/store/clearStores'
+import { clearStores } from '@/lib/local/store/clearStores'
 
 import whoopsImage from '@/assets/whoops.jpg'
 

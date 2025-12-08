@@ -6,7 +6,7 @@ import HistoryPagination from './HistoryPagination'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
-import { PAGINATION } from '@/constants/pagination.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 

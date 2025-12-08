@@ -3,12 +3,12 @@ import { use, useCallback, useState } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { SELECTED } from '@/constants/selected.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 import {
   getAvailableTemplates,
   getExplicitTemplates,
   getToConceptTemplates,
-} from '@/lib/kb/api/templates'
+} from '@/lib/api/templates'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

@@ -2,10 +2,10 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { hasPending, pendingChild } from '@/lib/kb/model/history'
-import { isPendingName } from '@/lib/kb/state/name'
+import { hasPending, pendingChild } from '@/lib/model/history'
+import { isPendingName } from '@/lib/concept/state/name'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const useHasPendingStructure = () => {
   const { concept, pending } = use(ConceptContext)

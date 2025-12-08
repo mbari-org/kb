@@ -13,7 +13,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { isReadOnly } from '@/lib/auth/role'
 
-import { hasPendingStructure } from '@/lib/kb/model/history'
+import { hasPendingStructure } from '@/lib/model/history'
 
 const ConceptName = () => {
   const theme = useTheme()

@@ -12,7 +12,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { SELECTED } from '@/constants/selected.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const KnowledgeBase = () => {
   const { processing: appProcessing } = use(AppModalContext)

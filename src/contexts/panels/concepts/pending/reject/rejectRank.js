@@ -1,5 +1,5 @@
-import { HISTORY_FIELD } from '@/constants/historyField.js'
-import { pendingChange as rankPendingChange } from '@/lib/kb/state/rank'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { pendingChange as rankPendingChange } from '@/lib/concept/state/rank'
 
 const rejectRank = (concept, pendingItem, rejecting) => {
   const change = rankPendingChange([{ field: HISTORY_FIELD.RANK, ...pendingItem }, ...rejecting])

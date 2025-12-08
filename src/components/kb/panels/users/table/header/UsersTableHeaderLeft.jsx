@@ -6,7 +6,7 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import useUsersExport from '@/components/kb/panels/users/table/header/useUsersExport'
 
-import { UI_TEXT } from '@/constants/uiText.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const { EXPORT } = UI_TEXT.TOOLTIP.USERS
 

@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode'
 
-import authStore from '@/lib/store/authStore'
+import authStore from '@/lib/local/store/authStore'
 
 const decodeToken = () => {
   const { token } = authStore.get()

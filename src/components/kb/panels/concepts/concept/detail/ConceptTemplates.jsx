@@ -9,12 +9,12 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { isSame } from '@/lib/kb/model/realization'
+import { isSame } from '@/lib/model/realization'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { SELECTED } from '@/constants/selected.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { CONFIG } from '@/config/js/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS

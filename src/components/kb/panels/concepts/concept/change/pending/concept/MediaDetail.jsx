@@ -8,9 +8,9 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { otherApprovalSx } from '@/components/common/format'
 
-import { isPendingMedia } from '@/lib/kb/state/media'
+import { isPendingMedia } from '@/lib/concept/state/media'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { MEDIA } = PENDING.GROUP
 

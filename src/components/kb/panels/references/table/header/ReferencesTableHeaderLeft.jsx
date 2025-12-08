@@ -7,8 +7,8 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useReferencesExport from '@/components/kb/panels/references/table/header/useReferencesExport'
 
-import { CONCEPT, SELECTED } from '@/lib/constants.js'
-import { UI_TEXT } from '@/constants/uiText.js'
+import { CONCEPT, SELECTED } from '@/lib/constants'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
 const { EXPORT } = UI_TEXT.TOOLTIP.REFERENCES

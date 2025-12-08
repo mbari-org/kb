@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
-import { getNextSibling, getPrevSibling } from '@/lib/kb/model/concept'
+import { getNextSibling, getPrevSibling } from '@/lib/model/concept'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const useArrowNavigation = (
   concept,

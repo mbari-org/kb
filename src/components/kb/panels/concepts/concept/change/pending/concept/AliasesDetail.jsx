@@ -8,9 +8,9 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { otherApprovalSx } from '@/components/common/format'
 
-import { isPendingAlias } from '@/lib/kb/state/aliases'
+import { isPendingAlias } from '@/lib/concept/state/aliases'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { ALIASES } = PENDING.GROUP
 

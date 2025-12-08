@@ -13,14 +13,20 @@ import TablePanel from './TablePanel'
  */
 const usePanelFactory = () => {
   return useMemo(() => {
-    const createPanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} } = {}) => (
-      <PanelHeader
-        headerLeft={headerLeft}
-        headerTitle={<PanelTitle title={headerTitle} />}
-        headerRight={headerRight}
-        sx={sx}
-      />
-    )
+    const createPanelHeader = ({ headerLeft, title, headerTitle, headerRight, subtitle, sx = {} } = {}) => {
+      // If headerTitle is provided (React component), use it directly
+      // Otherwise, wrap title string in PanelTitle
+      const headerTitleContent = headerTitle || (title ? <PanelTitle title={title} subtitle={subtitle} /> : null)
+
+      return (
+        <PanelHeader
+          headerLeft={headerLeft}
+          headerTitle={headerTitleContent}
+          headerRight={headerRight}
+          sx={sx}
+        />
+      )
+    }
 
     const createTableHeader = ({ headerLeft, headerMiddle, headerRight, sx = {} } = {}) => (
       <PanelTableHeader

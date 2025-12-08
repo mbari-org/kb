@@ -8,13 +8,13 @@ import NameChangeExtent from '@/components/common/NameChangeExtent'
 
 import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
-import { pendingInfo } from '@/lib/kb/model/history'
-import { isPendingName } from '@/lib/kb/state/name'
+import { pendingInfo } from '@/lib/model/history'
+import { isPendingName } from '@/lib/concept/state/name'
 import { isAdmin } from '@/lib/auth/role'
 
-import { PENDING } from '@/constants/pending.js'
-import { HISTORY_FIELD } from '@/constants/historyField.js'
-import { UI_TEXT } from '@/constants/uiText.js'
+import { PENDING } from '@/lib/constants/pending.js'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = UI_TEXT.LABELS.CONCEPT.CHANGE_NAME

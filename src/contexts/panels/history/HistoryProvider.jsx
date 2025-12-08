@@ -6,14 +6,14 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
-import { PROCESSING } from '@/lib/constants.js'
-import { SELECTED } from '@/constants/selected.js'
-import { PAGINATION } from '@/constants/pagination.js'
+import { PROCESSING } from '@/lib/constants'
+import { SELECTED } from '@/lib/constants/selected.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 import useLoadData from '@/contexts/panels/history/useLoadData'
 import usePageData from '@/contexts/panels/history/usePageData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0

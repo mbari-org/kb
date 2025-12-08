@@ -10,7 +10,7 @@ import applyResults from '@/contexts/panels/concepts/staged/save/applyResults'
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const useSaveStaged = () => {
   const { initialState, setConcept, stagedState } = use(ConceptContext)

@@ -10,8 +10,8 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { hasDuplicate } from '@/lib/kb/model/realization'
-import { EMPTY_TEMPLATE } from '@/lib/kb/model/templates'
+import { hasDuplicate } from '@/lib/model/realization'
+import { EMPTY_TEMPLATE } from '@/lib/model/templates'
 
 import useStageRealization from './useStageRealization'
 import useRealizationContentHandlers from './useRealizationContentHandlers'
@@ -19,8 +19,8 @@ import useFilterLinkName from './useFilterLinkName'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 
-import { CONCEPT } from '@/lib/constants.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { ITEMS_PER_PAGE } = CONCEPT.PROPERTY_LIST
 

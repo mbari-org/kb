@@ -11,7 +11,7 @@ import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 import { CONFIG } from '@/config/js/index.js'
 
 const { RIGHT_COMPONENT, WIDTH } = CONCEPT.SELECT

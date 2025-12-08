@@ -5,11 +5,11 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 
 import { formatDelta } from '@/components/common/format'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
-import { REALIZATION_DISPLAY_FIELDS } from '@/lib/kb/model/realization'
+import { REALIZATION_DISPLAY_FIELDS } from '@/lib/model/realization'
 import { drop } from '@/lib/utils'
 
 const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {

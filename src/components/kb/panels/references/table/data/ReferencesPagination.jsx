@@ -2,7 +2,7 @@ import { Typography, Box, IconButton, Select, MenuItem } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
 import PageControl from '@/components/common/PageControl'
-import usePageCommit from '@/hooks/usePageCommit'
+import usePageCommit from '@/lib/hooks/usePageCommit'
 
 const PAGE_SIZE_OPTIONS = [5, 10, 25, 50]
 

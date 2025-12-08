@@ -7,14 +7,14 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useLoadConceptError from '@/hooks/useLoadConceptError'
+import useLoadConceptError from '@/lib/hooks/useLoadConceptError'
 
 import useModifyTemplates from './useModifyTemplates'
 import useUpdateFilters from './useUpdateFilters'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-import { SELECTED } from '@/constants/selected.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const FILTERS = TEMPLATES.FILTERS

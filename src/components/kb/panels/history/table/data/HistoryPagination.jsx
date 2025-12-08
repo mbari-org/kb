@@ -2,9 +2,9 @@ import { Typography, Box, IconButton, Select, MenuItem } from '@mui/material'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
 import PageControl from '@/components/common/PageControl'
-import usePageCommit from '@/hooks/usePageCommit'
+import usePageCommit from '@/lib/hooks/usePageCommit'
 
-import { PAGINATION } from '@/constants/pagination.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 

@@ -1,4 +1,4 @@
-import authStore from '@/lib/store/authStore'
+import authStore from '@/lib/local/store/authStore'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 

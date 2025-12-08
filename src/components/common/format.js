@@ -1,4 +1,4 @@
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const fieldColorSx = predicate => {
   if (predicate) {

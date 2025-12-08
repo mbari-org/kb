@@ -3,7 +3,7 @@ import { use, useCallback } from 'react'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { pendingChild } from '@/lib/kb/model/history'
+import { pendingChild } from '@/lib/model/history'
 
 /**
  * Hook for creating concept items for tree display

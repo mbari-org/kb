@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
 const useRealizationFormHandlers = ({
   realizationItem,

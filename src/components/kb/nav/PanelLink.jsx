@@ -6,8 +6,8 @@ import { Button } from '@mui/material'
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { UNSAFE_ACTION } from '@/constants/unsafeAction.js'
-import { SELECTED } from '@/constants/selected.js'
+import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
   const { panels } = use(SelectedContext)

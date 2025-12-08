@@ -13,7 +13,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
-import { deleteConcept as deleteTaxonomyConcept, getConcept as getTaxonomyConcept, insertConcept } from '@/lib/kb/model/taxonomy'
+import { deleteConcept as deleteTaxonomyConcept, getConcept as getTaxonomyConcept, insertConcept } from '@/lib/model/taxonomy'
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)

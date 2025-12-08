@@ -8,12 +8,12 @@ import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/sta
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { isStateModified } from '@/lib/kb/state/state'
-import { pendingChild } from '@/lib/kb/model/history'
+import { isStateModified } from '@/lib/concept/state/state'
+import { pendingChild } from '@/lib/model/history'
 
-import { RESETTING } from '@/lib/constants.js'
-import { PENDING } from '@/constants/pending.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { RESETTING } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/pending.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { CONFIG } from '@/config/js/index.js'
 
 const { BUTTON } = CONFIG.PANELS.CONCEPTS

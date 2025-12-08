@@ -8,7 +8,7 @@ import EditAliasContent from '@/components/kb/panels/concepts/concept/change/sta
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const createAliasModal = action => {
   const createComponents = () => {

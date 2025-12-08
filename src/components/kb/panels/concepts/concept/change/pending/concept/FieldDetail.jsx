@@ -6,11 +6,11 @@ import PendingValues from '@/components/kb/panels/concepts/concept/change/pendin
 
 import { useFieldPendingApproval } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
 
-import { pendingInfo } from '@/lib/kb/model/history'
+import { pendingInfo } from '@/lib/model/history'
 
 import { formatDelta, formatField } from '@/components/common/format'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { OTHER } = PENDING.APPROVAL
 

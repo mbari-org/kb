@@ -1,5 +1,5 @@
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
-import { sortRealizations } from '@/lib/kb/model/realization'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { sortRealizations } from '@/lib/model/realization'
 
 const applyRealizations = (concept, tracker) => {
 

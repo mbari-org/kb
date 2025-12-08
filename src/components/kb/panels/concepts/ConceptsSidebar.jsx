@@ -12,7 +12,7 @@ import useConceptExportModal from '@/components/kb/panels/concepts/concept/expor
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 
 const NAV_HISTORY = CONCEPT.SELECT.RIGHT_COMPONENT.NAV_HISTORY
 

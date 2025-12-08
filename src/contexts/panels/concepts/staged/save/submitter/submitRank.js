@@ -1,5 +1,5 @@
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
-import { updateConceptRank } from '@/lib/kb/api/concept'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { updateConceptRank } from '@/lib/api/concept'
 
 const submitRank = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo

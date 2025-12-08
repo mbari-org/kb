@@ -8,8 +8,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { capitalize } from '@/lib/utils'
 
-import { PENDING } from '@/constants/pending.js'
-import processPendingApproval from '@/lib/kb/pending/processPendingApproval'
+import { PENDING } from '@/lib/constants/pending.js'
+import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 
 const useUpdatedPending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)

@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
 
-import '@/hooks/paginationTransition.css'
+import '@/lib/hooks/paginationTransition.css'
 
 const ConceptPropertiesDetails = ({
   fixedHeight,

@@ -1,6 +1,6 @@
 import { ACTION } from '@/lib/constants'
-import { HISTORY_FIELD } from '@/constants/historyField.js'
-import { matchingRealizationString, parseRealization } from '@/lib/kb/model/realization'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { matchingRealizationString, parseRealization } from '@/lib/model/realization'
 
 const approveRealization = (concept, item) => {
   switch (item.action) {

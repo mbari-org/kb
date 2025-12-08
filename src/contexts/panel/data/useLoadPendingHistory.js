@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 
-import { getHistory, getHistoryCount } from '@/lib/kb/api/history'
+import { getHistory, getHistoryCount } from '@/lib/api/history'
 
-import { PAGINATION } from '@/constants/pagination.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 
-import { pendingActionText } from '@/lib/kb/model/history'
+import { pendingActionText } from '@/lib/model/history'
 
 const { HISTORY } = PAGINATION
 

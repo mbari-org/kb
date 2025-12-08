@@ -6,13 +6,13 @@ import {
   createReference as createReferenceApi,
   getReferences as getReferencesApi,
   deleteReference as removeReference,
-} from '@/lib/kb/api/references'
+} from '@/lib/api/references'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { createReference } from '@/lib/kb/model/reference'
+import { createReference } from '@/lib/model/reference'
 
-import { PAGINATION } from '@/constants/pagination.js'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 
 const { EXPORT_PAGE_SIZE } = PAGINATION.REFERENCES
 

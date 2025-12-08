@@ -10,9 +10,9 @@ import { createModal } from '@/components/modal/conceptModalFactory'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EMPTY_CHILD } from '@/lib/kb/model/children'
+import { EMPTY_CHILD } from '@/lib/model/children'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import { hasTrue } from '@/lib/utils'
 

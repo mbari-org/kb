@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
-import { usePaginationTransition } from '@/hooks/usePaginationTransition'
-import '@/hooks/paginationTransition.css'
+import { usePaginationTransition } from '@/lib/hooks/usePaginationTransition'
+import '@/lib/hooks/paginationTransition.css'
 
 /**
  * A reusable container component that handles pagination transitions and gradient overlays

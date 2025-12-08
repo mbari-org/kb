@@ -16,9 +16,9 @@ import TemplatesDetail from '@/components/kb/panels/concepts/concept/change/pend
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { pendingChild as getPendingChild } from '@/lib/kb/model/history'
+import { pendingChild as getPendingChild } from '@/lib/model/history'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 import { isEmpty } from '@/lib/utils'
 

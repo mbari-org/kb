@@ -7,7 +7,7 @@ import KBTooltip from '@/components/common/KBTooltip'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { SELECTED } from '@/constants/selected.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 import { CONFIG } from '@/config/js/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS

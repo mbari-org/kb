@@ -5,11 +5,11 @@ import RankFieldInput from '@/components/kb/panels/concepts/concept/change/stage
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { pendingChange } from '@/lib/kb/state/rank'
+import { pendingChange } from '@/lib/concept/state/rank'
 import { CONFIG } from '@/config/js/index.js'
-import { PENDING } from '@/constants/pending.js'
-import { CONCEPT } from '@/lib/constants.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { PENDING } from '@/lib/constants/pending.js'
+import { CONCEPT } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ConceptRank = () => {
   const { initialState, modifyConcept, pending, stagedState } = use(ConceptContext)

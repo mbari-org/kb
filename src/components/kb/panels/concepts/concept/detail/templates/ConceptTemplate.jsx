@@ -1,9 +1,9 @@
 import { useTheme } from '@mui/material/styles'
 import { Box } from '@mui/material'
 
-import { stagedBorder } from '@/lib/kb/state/staged'
+import { stagedBorder } from '@/lib/concept/state/staged'
 
-import { asText } from '@/lib/kb/model/realization'
+import { asText } from '@/lib/model/realization'
 
 const ConceptTemplate = ({ template }) => {
   const theme = useTheme()

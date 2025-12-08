@@ -1,5 +1,5 @@
 import { ACTION } from '@/lib/constants'
-import { matchingRealizationString, parseRealization } from '@/lib/kb/model/realization'
+import { matchingRealizationString, parseRealization } from '@/lib/model/realization'
 
 const rejectRealization = (concept, pendingItem) => {
   switch (pendingItem.action) {

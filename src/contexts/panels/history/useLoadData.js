@@ -1,15 +1,15 @@
 import { use, useCallback, useMemo } from 'react'
 
-import { getConceptHistory, getHistoryCount } from '@/lib/kb/api/history'
+import { getConceptHistory, getHistoryCount } from '@/lib/api/history'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { sleep } from '@/lib/utils'
 
-import { CONCEPT } from '@/lib/constants.js'
-import { PAGINATION } from '@/constants/pagination.js'
-import { SELECTED } from '@/constants/selected.js'
+import { CONCEPT } from '@/lib/constants'
+import { PAGINATION } from '@/lib/constants/pagination.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const { CHILDREN, DESCENDANTS } = CONCEPT.EXTENT
 const { TYPE } = CONCEPT.HISTORY

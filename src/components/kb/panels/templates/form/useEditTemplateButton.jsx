@@ -7,7 +7,7 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError, createValidationError } from '@/lib/errors'
 
-import { UI_TEXT } from '@/constants/uiText.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createHandlers,
   createModalActions,

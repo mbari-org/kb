@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import FieldReset from '@/components/kb/panels/concepts/concept/change/staged/field/FieldReset'
 
-import { RESETTING } from '@/lib/constants.js'
+import { RESETTING } from '@/lib/constants'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 

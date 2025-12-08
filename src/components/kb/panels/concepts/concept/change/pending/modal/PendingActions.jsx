@@ -10,8 +10,8 @@ import useUpdatedPending from '@/contexts/panels/concepts/pending/useUpdatePendi
 
 import { isAdmin } from '@/lib/auth/role'
 
-import { PENDING } from '@/constants/pending.js'
-import { LABELS } from '@/lib/constants.js'
+import { PENDING } from '@/lib/constants/pending.js'
+import { LABELS } from '@/lib/constants'
 
 const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = LABELS.BUTTON
 const { APPROVAL, GROUP } = PENDING

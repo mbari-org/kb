@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { TOOLTIP } from '@/lib/constants.js'
+import { TOOLTIP } from '@/lib/constants'
 
 /**
  * KBTooltip component - a wrapper around MUI Tooltip with consistent styling and behavior

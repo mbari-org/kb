@@ -8,9 +8,9 @@ import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendi
 
 import { otherApprovalSx } from '@/components/common/format'
 
-import { isPendingTemplate } from '@/lib/kb/state/templates'
+import { isPendingTemplate } from '@/lib/concept/state/templates'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { TEMPLATES } = PENDING.GROUP
 

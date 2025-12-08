@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import TextInput from '@/components/common/TextInput'
-import useDebouncedField from '@/hooks/useDebouncedField'
+import useDebouncedField from '@/lib/hooks/useDebouncedField'
 
 const TableHeaderLinkFilter = ({ name, value: initialValue, onChange }) => {
   const handleFieldChange = fieldName => value => onChange(fieldName, value)

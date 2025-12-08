@@ -10,9 +10,9 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { getDescendantNames } from '@/lib/kb/model/concept'
+import { getDescendantNames } from '@/lib/model/concept'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { RESET } = CONCEPT_STATE
 

@@ -7,7 +7,7 @@ import UserContext from '@/contexts/user/UserContext'
 import csvExport from '@/lib/csvExport'
 import { conceptNameForFilename } from '@/lib/utils'
 
-import { SELECTED } from '@/constants/selected.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
 

@@ -1,5 +1,5 @@
 import { isAdmin } from '@/lib/auth/role'
-import { getConcept } from '@/lib/kb/api/concept'
+import { getConcept } from '@/lib/api/concept'
 
 import applyAliases from '@/contexts/panels/concepts/staged/save/applier/applyAliases'
 import applyAuthor from '@/contexts/panels/concepts/staged/save/applier/applyAuthor'

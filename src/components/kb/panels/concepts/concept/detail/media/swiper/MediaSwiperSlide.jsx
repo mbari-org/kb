@@ -5,10 +5,10 @@ import { useTheme } from '@mui/material/styles'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { isPendingMedia } from '@/lib/kb/state/media'
-import { stagedBorder } from '@/lib/kb/state/staged'
+import { isPendingMedia } from '@/lib/concept/state/media'
+import { stagedBorder } from '@/lib/concept/state/staged'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()

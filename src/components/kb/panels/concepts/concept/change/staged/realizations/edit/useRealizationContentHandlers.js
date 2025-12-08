@@ -1,7 +1,7 @@
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
-import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
-import useDebounce from '@/hooks/useDebounce'
+import useDebounce from '@/lib/hooks/useDebounce'
 
 const useRealizationContentHandlers = ({
   action,

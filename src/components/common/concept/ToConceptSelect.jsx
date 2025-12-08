@@ -1,6 +1,6 @@
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
-import { CONCEPT } from '@/lib/constants.js'
+import { CONCEPT } from '@/lib/constants'
 import { CONFIG } from '@/config/js/index.js'
 
 const { RIGHT_COMPONENT } = CONCEPT.SELECT

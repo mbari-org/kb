@@ -1,6 +1,6 @@
 import { genRefresh } from '@/lib/auth/refreshKey'
 import { createError } from '@/lib/errors'
-import authStore from '@/lib/store/authStore'
+import authStore from '@/lib/local/store/authStore'
 
 import authUrl from './authUrl'
 

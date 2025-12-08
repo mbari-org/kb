@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 
 import ActionsAlert from './ActionsAlert'
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { ACCEPT, REJECT } = PENDING.APPROVAL
 

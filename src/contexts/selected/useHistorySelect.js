@@ -1,4 +1,4 @@
-import createHistoryState from '@/lib/state/historyState'
+import createHistoryState from '@/lib/local/state/historyState'
 import { useCallback, useMemo, useState } from 'react'
 
 const useHistorySelect = (defaultValue, onCurrentChange) => {

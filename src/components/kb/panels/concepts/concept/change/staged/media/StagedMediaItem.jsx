@@ -4,7 +4,7 @@ import StagedItem from '@/components/kb/panels/concepts/concept/change/staged/St
 import StagedMediaItemDetail from './StagedMediaItemDetail'
 import StagedMediaItemHeader from './StagedMediaItemHeader'
 
-import { RESETTING } from '@/lib/constants.js'
+import { RESETTING } from '@/lib/constants'
 
 const StagedMediaItem = ({ initialItem, resetting, stagedItem }) => {
   const group = RESETTING.MEDIA

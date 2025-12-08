@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import { UI_TEXT } from '@/constants/uiText.js'
+import { UI_TEXT } from '@/lib/constants/uiText.js'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 

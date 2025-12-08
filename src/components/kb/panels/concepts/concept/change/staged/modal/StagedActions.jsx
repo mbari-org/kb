@@ -8,13 +8,13 @@ import RefreshContext from '@/contexts/refresh/RefreshContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { isStateModified } from '@/lib/kb/state/state'
+import { isStateModified } from '@/lib/concept/state/state'
 
-import { UNSAFE_ACTION } from '@/constants/unsafeAction.js'
-import { RESETTING } from '@/lib/constants.js'
+import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
+import { RESETTING } from '@/lib/constants'
 import { CONFIG } from '@/config/js/index.js'
-import { UI_TEXT as UI_TEXT_OLD } from '@/constants/uiText.js'
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { UI_TEXT as UI_TEXT_OLD } from '@/lib/constants/uiText.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 

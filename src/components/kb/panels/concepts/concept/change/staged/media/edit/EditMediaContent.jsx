@@ -18,13 +18,13 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useStageMedia from './useStageMedia'
-import useDebounce from '@/hooks/useDebounce'
+import useDebounce from '@/lib/hooks/useDebounce'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
-import { hasPrimary, isPrimary } from '@/lib/kb/model/media'
+import { hasPrimary, isPrimary } from '@/lib/model/media'
 import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 
-import { CONCEPT_STATE } from '@/constants/conceptState.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'

@@ -1,11 +1,11 @@
-import { getConceptAnnotationsCount } from '@/lib/kb/api/annotations'
-import { getToConceptAssociationsCount, renameToConceptAssociations } from '@/lib/kb/api/associations'
-import { renameConceptObservations } from '@/lib/kb/api/observations'
+import { getConceptAnnotationsCount } from '@/lib/api/annotations'
+import { getToConceptAssociationsCount, renameToConceptAssociations } from '@/lib/api/associations'
+import { renameConceptObservations } from '@/lib/api/observations'
 import {
   getConceptTemplateCount,
   getToConceptTemplateCount,
   renameToConceptTemplates,
-} from '@/lib/kb/api/templates'
+} from '@/lib/api/templates'
 
 export const RELATED_DATA_COUNTS = {
   ANNOTATIONS: 'Concept Annotations / Observations',

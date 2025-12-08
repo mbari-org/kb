@@ -6,13 +6,13 @@ import PendingValues from '@/components/kb/panels/concepts/concept/change/pendin
 
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
-import { pendingInfo } from '@/lib/kb/model/history'
+import { pendingInfo } from '@/lib/model/history'
 
 import { formatDelta, otherApprovalSx } from '@/components/common/format'
 
-import { isPendingParent } from '@/lib/kb/state/parent'
+import { isPendingParent } from '@/lib/concept/state/parent'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { APPROVAL, GROUP } = PENDING
 

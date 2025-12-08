@@ -7,12 +7,12 @@ import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending
 
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
-import { pendingInfo } from '@/lib/kb/model/history'
-import { pendingChange, pendingRank } from '@/lib/kb/state/rank'
+import { pendingInfo } from '@/lib/model/history'
+import { pendingChange, pendingRank } from '@/lib/concept/state/rank'
 
 import { formatDelta, formatField, otherApprovalSx } from '@/components/common/format'
 
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { APPROVAL, GROUP } = PENDING
 

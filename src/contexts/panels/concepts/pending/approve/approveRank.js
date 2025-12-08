@@ -1,4 +1,4 @@
-import { rankValues } from '@/lib/kb/model/rank'
+import { rankValues } from '@/lib/model/rank'
 
 const approveRank = (concept, item) => {
   const { level, name } = rankValues(item.newValue)

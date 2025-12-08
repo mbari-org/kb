@@ -10,10 +10,10 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
-import { pendingInfo } from '@/lib/kb/model/history'
+import { pendingInfo } from '@/lib/model/history'
 
 import { ACTION } from '@/lib/constants'
-import { PENDING } from '@/constants/pending.js'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const { APPROVAL, GROUP } = PENDING
 

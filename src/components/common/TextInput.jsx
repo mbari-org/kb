@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { Box, TextField, IconButton } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
-import useDebounce from '@/hooks/useDebounce'
+import useDebounce from '@/lib/hooks/useDebounce'
 
 const TextInput = ({
   value,

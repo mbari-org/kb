@@ -8,8 +8,8 @@ import { createModal } from '@/components/modal/conceptModalFactory'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { EXPORT_TYPE } from '@/constants/exportType.js'
-import { CONCEPT } from '@/lib/constants.js'
+import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
+import { CONCEPT } from '@/lib/constants'
 
 const initialModalData = {
   conceptExtent: CONCEPT.EXTENT.DESCENDANTS,
