@@ -35,7 +35,7 @@ const TemplatesTableHeaderMiddle = () => {
         value={filters[TEMPLATES.FILTERS.LINK_NAME] || ''}
         onChange={handleFilterChange}
       />
-      <KBTooltip title={TOOLTIP.CLEAR_ALL}>
+      <KBTooltip title={TOOLTIP.CLEAR_FILTERS}>
         <Button
           onClick={handleClearAll}
           sx={{

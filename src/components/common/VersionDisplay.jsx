@@ -8,15 +8,9 @@ import { Typography, Box, IconButton } from '@mui/material'
 
 import KBTooltip from '@/components/common/KBTooltip'
 import ConfigContext from '@/contexts/config/ConfigContext'
+import useVersionTooltip from '@/lib/hooks/useVersionTooltip'
 
-import {
-  getBranchName,
-  getBuildDate,
-  getCommitDate,
-  getCommitMessage,
-  getVersion,
-  isDirty,
-} from '@/version'
+import { getVersion, isDirty } from '@/version'
 
 const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'caption' }) => {
   const { showBoundary } = useErrorBoundary()
@@ -27,12 +21,8 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
 
   const dirty = isDirty()
   const dirtyColor = dirty ? theme.palette.primary.edit : color
-
   const version = getVersion()
-  const buildDate = getBuildDate()
-  const branchName = getBranchName()
-  const commitDate = getCommitDate()
-  const commitMessage = getCommitMessage()
+  const devTooltip = useVersionTooltip()
 
   const handleRefreshVersion = async () => {
     if (!isDev || isRefreshing) return
@@ -53,68 +43,6 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
       setIsRefreshing(false)
     }
   }
-
-  const formatDate = dateString => {
-    try {
-      return new Date(dateString).toLocaleString()
-    } catch {
-      return dateString
-    }
-  }
-
-  const devTooltip = (
-    <Box
-      sx={{
-        minWidth: 300,
-        p: 1.5,
-        borderRadius: 1,
-        overflow: 'hidden',
-      }}
-    >
-      <Box sx={{ display: 'flex', mb: 1 }}>
-        <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-          <strong>Version:</strong>
-        </Typography>
-        <Typography variant='body2'>{version}</Typography>
-      </Box>
-      <Box sx={{ display: 'flex', mb: 1 }}>
-        <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-          <strong>Commit:</strong>
-        </Typography>
-        <Typography variant='body2'>{formatDate(commitDate)}</Typography>
-      </Box>
-      <Box sx={{ display: 'flex', mb: 1 }}>
-        <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-          <strong>Message:</strong>
-        </Typography>
-        <Typography variant='body2' sx={{ wordBreak: 'break-word' }}>
-          {commitMessage}
-        </Typography>
-      </Box>
-      <Box sx={{ display: 'flex', mb: 1 }}>
-        <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-          <strong>Build:</strong>
-        </Typography>
-        <Typography variant='body2'>{formatDate(buildDate)}</Typography>
-      </Box>
-      <Box sx={{ display: 'flex', mb: 1 }}>
-        <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-          <strong>Branch:</strong>
-        </Typography>
-        <Typography variant='body2'>{branchName}</Typography>
-      </Box>
-      {dirty && (
-        <Box sx={{ display: 'flex', mb: 1 }}>
-          <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Status:</strong>
-          </Typography>
-          <Typography variant='body2' sx={{ color: theme.palette.primary.edit }}>
-            Working directory has uncommitted changes
-          </Typography>
-        </Box>
-      )}
-    </Box>
-  )
 
   const renderContent = () => {
     if (display === 'icon') {
