@@ -32,26 +32,14 @@ const PanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} }) => {
           alignItems: 'center',
           display: 'flex',
           justifyContent: 'center',
-          left: 0,
+          left: '50%',
           position: 'absolute',
-          right: 0,
           top: '50%',
-          transform: 'translateY(-50%)',
+          transform: 'translate(-50%, -50%)',
+          width: '60%',
         }}
       >
-        <Typography
-          component='div'
-          sx={{
-            mt: -2,
-            overflow: 'hidden',
-            textAlign: 'center',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            width: '60%',
-          }}
-        >
-          {headerTitle}
-        </Typography>
+        {headerTitle}
       </Box>
 
       <Box

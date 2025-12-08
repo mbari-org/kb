@@ -10,7 +10,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/kb/model/realization'
 
-import { UI_TEXT } from '@/config/text/index.js'
+import { UI_TEXT } from '@/config/js/text.js'
 import { SELECTED } from '@/lib/kb/constants/selected.js'
 import { UI_PROCESSING } from '@/lib/kb/constants/ui/processing.js'
 

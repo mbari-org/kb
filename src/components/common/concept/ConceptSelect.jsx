@@ -12,7 +12,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT } from '@/lib/constants.js'
-import { UI_TEXT } from '@/config/text/index.js'
+import { UI_TEXT } from '@/config/js/text.js'
 
 const { RIGHT_COMPONENT, WIDTH } = CONCEPT.SELECT
 const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT

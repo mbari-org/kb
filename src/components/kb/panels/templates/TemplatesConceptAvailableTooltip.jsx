@@ -5,7 +5,7 @@ import { Stack, Typography } from '@mui/material'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED, TOOLTIP } from '@/lib/constants.js'
-import { UI_TEXT } from '@/config/text/index.js'
+import { UI_TEXT } from '@/config/js/text.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES

@@ -14,7 +14,7 @@ import { pendingChild } from '@/lib/kb/model/history'
 import { RESETTING } from '@/lib/constants.js'
 import { PENDING } from '@/lib/kb/constants/pending.js'
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
-import { UI_TEXT } from '@/config/text/index.js'
+import { UI_TEXT } from '@/config/js/text.js'
 
 const { BUTTON } = UI_TEXT.PANELS.CONCEPTS
 const { DISCARD, DISCARD_ALL, CANCEL, EDIT, PENDING: PENDING_ACTION, SAVE, STAGED } = BUTTON.BUTTON
