@@ -1,11 +1,9 @@
 import PendingItem from '@/components/kb/panels/concepts/concept/change/pending/PendingItem'
 
-import { PENDING } from '@/lib/constants/pending.js'
-
-const { GROUP } = PENDING
+import group from '@/config/text/panels/concepts/modals/group.json'
 
 const AliasDetail = ({ pendingAlias }) => {
-  return <PendingItem group={GROUP.ALIASES} item={pendingAlias} />
+  return <PendingItem group={group.ALIASES} item={pendingAlias} />
 }
 
 export default AliasDetail

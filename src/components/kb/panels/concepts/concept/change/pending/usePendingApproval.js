@@ -1,31 +1,29 @@
 import { pendingItems } from '@/lib/model/history'
 
-import { PENDING } from '@/lib/constants/pending.js'
+import group from '@/config/text/panels/concepts/modals/group.json'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
-const { GROUP } = PENDING
-
-const historyFieldForGroup = group => {
-  switch (group) {
-    case GROUP.ALIASES:
+const historyFieldForGroup = groupValue => {
+  switch (groupValue) {
+    case group.ALIASES:
       return HISTORY_FIELD.ALIAS
 
-    case GROUP.CHILDREN:
+    case group.CHILDREN:
       return HISTORY_FIELD.CHILD
 
-    case GROUP.MEDIA:
+    case group.MEDIA:
       return HISTORY_FIELD.MEDIA
 
-    case GROUP.NAME:
+    case group.NAME:
       return HISTORY_FIELD.NAME
 
-    case GROUP.PARENT:
+    case group.PARENT:
       return HISTORY_FIELD.PARENT
 
-    case GROUP.RANK:
+    case group.RANK:
       return HISTORY_FIELD.RANK
 
-    case GROUP.REALIZATIONS:
+    case group.REALIZATIONS:
       return HISTORY_FIELD.REALIZATION
 
     default:
@@ -36,7 +34,7 @@ const historyFieldForGroup = group => {
 export const getPendingIds = (pendingConcept, targetGroup) => {
   const fieldName = historyFieldForGroup(targetGroup)
 
-  if (targetGroup === GROUP.ALL) {
+  if (targetGroup === group.ALL) {
     return pendingConcept.map(history => history.id)
   }
 

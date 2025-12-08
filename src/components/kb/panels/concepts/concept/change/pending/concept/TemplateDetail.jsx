@@ -1,11 +1,9 @@
 import PendingItem from '@/components/kb/panels/concepts/concept/change/pending/PendingItem'
 
-import { PENDING } from '@/lib/constants/pending.js'
-
-const { GROUP } = PENDING
+import group from '@/config/text/panels/concepts/modals/group.json'
 
 const TemplateDetail = ({ pendingTemplate }) => {
-  return <PendingItem group={GROUP.TEMPLATES} item={pendingTemplate} />
+  return <PendingItem group={group.TEMPLATES} item={pendingTemplate} />
 }
 
 export default TemplateDetail

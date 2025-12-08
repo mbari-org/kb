@@ -2,9 +2,10 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
+import group from '@/config/text/panels/concepts/modals/group.json'
 import { PENDING } from '@/lib/constants/pending.js'
 
-const { APPROVAL, GROUP } = PENDING
+const { APPROVAL } = PENDING
 
 const usePendingItemApproval = item => {
   const { pending } = use(ConceptContext)
@@ -14,7 +15,7 @@ const usePendingItemApproval = item => {
     return null
   }
 
-  if (pendingConfirm.group === GROUP.ALL) {
+  if (pendingConfirm.group === group.ALL) {
     return pendingConfirm.approval
   }
 

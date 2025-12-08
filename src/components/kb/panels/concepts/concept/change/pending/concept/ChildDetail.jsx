@@ -14,8 +14,9 @@ import { pendingInfo } from '@/lib/model/history'
 
 import { ACTION } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
+import group from '@/config/text/panels/concepts/modals/group.json'
 
-const { APPROVAL, GROUP } = PENDING
+const { APPROVAL } = PENDING
 
 const ChildDetail = ({ pendingChild }) => {
   const approval = usePendingItemApproval(pendingChild)
@@ -44,7 +45,7 @@ const ChildDetail = ({ pendingChild }) => {
 
   const pendingDetailTitle = (
     <>
-      <PendingButtons approval={approval} group={GROUP.CHILDREN} item={pendingChild} />
+      <PendingButtons approval={approval} group={group.CHILDREN} item={pendingChild} />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography sx={aliasSx}>{pendingChild.action}</Typography>
         {childName !== pendingChild.concept && (

@@ -1,13 +1,4 @@
 {
-  "BUTTON": {
-    "APPROVE": "Approve",
-    "APPROVE_ALL": "Approve All",
-    "CLOSE": "Close",
-    "CONFIRM": "Confirm",
-    "DEFER": "Defer",
-    "REJECT": "Reject",
-    "REJECT_ALL": "Reject All"
-  },
   "DESCRIPTION": "Pending history",
   "INFO": {
     "LINE_1": "Pending edit approval is final.",

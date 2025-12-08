@@ -1,0 +1,15 @@
+{
+  "APPROVE": "Approve",
+  "APPROVE_ALL": "Approve All",
+  "CONFIRM": "Confirm",
+  "CONFIRM_DISCARD": "Discard",
+  "CONTINUE": "Back to Editing",
+  "CLOSE": "Close",
+  "DISCARD_ALL": "Discard All",
+  "DECLINE_DISCARD": "Keep",
+  "DEFER": "Defer",
+  "REJECT": "Reject",
+  "REJECT_ALL": "Reject All",
+  "SAVE": "Save",
+  "STAGE": "Stage"
+}

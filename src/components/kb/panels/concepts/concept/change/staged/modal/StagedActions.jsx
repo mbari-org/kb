@@ -20,7 +20,7 @@ import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
 const COLORS = ['cancel', 'main']
 const { BUTTON } = CONFIG.PANELS.CONCEPTS
-const { DISCARD_ALL, SAVE } = BUTTON.BUTTON
+const { DISCARD_ALL, SAVE } = BUTTON
 const { BACK_TO_EDIT, CONFIRM_DISCARD, REJECT_DISCARD } = UI_TEXT_OLD.LABELS.BUTTON
 const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING

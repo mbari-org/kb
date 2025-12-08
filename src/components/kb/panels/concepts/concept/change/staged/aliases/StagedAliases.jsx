@@ -3,12 +3,12 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedAliasesEdits } from '@/lib/concept/state/aliases'
 
-import { CONFIG } from '@/config/js/index.js'
+import { MODALS } from '@/config/js/panels/concepts/modals.js'
 
 const StagedAliases = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={CONFIG.PANELS.CONCEPTS.MODALS.STAGED.CONCEPT.ALIASES}
+      group={MODALS.STAGED.CONCEPT.ALIASES}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedAlias}
       stagedItems={stagedAliasesEdits(stagedEdit)}

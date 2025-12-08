@@ -1,11 +1,9 @@
 import PendingItem from '@/components/kb/panels/concepts/concept/change/pending/PendingItem'
 
-import { PENDING } from '@/lib/constants/pending.js'
-
-const { GROUP } = PENDING
+import group from '@/config/text/panels/concepts/modals/group.json'
 
 const MediaItemDetail = ({ pendingMediaItem }) => {
-  return <PendingItem group={GROUP.MEDIA} item={pendingMediaItem} />
+  return <PendingItem group={group.MEDIA} item={pendingMediaItem} />
 }
 
 export default MediaItemDetail

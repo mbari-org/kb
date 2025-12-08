@@ -19,8 +19,11 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { pendingChild as getPendingChild } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
+import { CONFIG } from '@/config/js/index.js'
 
 import { isEmpty } from '@/lib/utils'
+
+const { MODALS } = CONFIG.PANELS.CONCEPTS
 
 const PendingContent = () => {
   const { concept, pending } = use(ConceptContext)
@@ -41,7 +44,7 @@ const PendingContent = () => {
 
   return (
     <Stack direction='column' spacing={1}>
-      <ModalActionText text='Pending History' />
+      <ModalActionText text={MODALS.PENDING.DESCRIPTION} />
       {pendingChild && <ChildDetail pendingChild={pendingChild} />}
       <AliasesDetail pendingConcept={pendingConcept} />
       {!pendingChild && <ChildrenDetail pendingConcept={pendingConcept} />}

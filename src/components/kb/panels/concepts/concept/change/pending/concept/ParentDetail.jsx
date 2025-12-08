@@ -13,11 +13,12 @@ import { formatDelta, otherApprovalSx } from '@/components/common/format'
 import { isPendingParent } from '@/lib/concept/state/parent'
 
 import { PENDING } from '@/lib/constants/pending.js'
+import group from '@/config/text/panels/concepts/modals/group.json'
 
-const { APPROVAL, GROUP } = PENDING
+const { APPROVAL } = PENDING
 
 const ParentDetail = ({ pendingConcept }) => {
-  const approval = usePendingGroupApproval(GROUP.PARENT)
+  const approval = usePendingGroupApproval(group.PARENT)
 
   const pendingParent = pendingConcept.find(isPendingParent)
   if (!pendingParent) {

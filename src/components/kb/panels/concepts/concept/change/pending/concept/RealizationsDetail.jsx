@@ -10,9 +10,9 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingRealization } from '@/lib/concept/state/realizations'
 
-import { PENDING } from '@/lib/constants/pending.js'
+import group from '@/config/text/panels/concepts/modals/group.json'
 
-const { REALIZATIONS } = PENDING.GROUP
+const { REALIZATIONS } = group
 
 const RealizationsDetail = ({ pendingConcept }) => {
   const pendingRealizations = pendingConcept.filter(isPendingRealization)

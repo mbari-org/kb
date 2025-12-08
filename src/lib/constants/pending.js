@@ -9,16 +9,5 @@ export const PENDING = {
     CONFIRM: 'confirm',
     PARENT: 'parent',
   },
-  GROUP: {
-    ALIASES: 'Aliases',
-    ALL: 'All',
-    CHILDREN: 'Children',
-    MEDIA: 'Media',
-    NAME: 'Name',
-    PARENT: 'Parent',
-    RANK: 'Rank',
-    REALIZATIONS: 'Realizations',
-    TEMPLATES: 'Templates',
-  },
 }
 

@@ -1,7 +1,7 @@
 import ActionsAlert from './ActionsAlert'
-import { CONFIG } from '@/config/js/index.js'
+import { MODALS } from '@/config/js/panels/concepts/modals.js'
 
-const STAGED = CONFIG.PANELS.CONCEPTS.MODALS.STAGED
+const STAGED = MODALS.STAGED
 
 const DiscardingAlert = () => (
   <ActionsAlert
