@@ -1,9 +1,9 @@
 import { Stack, Typography } from '@mui/material'
 
 import { TOOLTIP } from '@/lib/constants.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
-const SWITCH = UI_TEXT.PANELS.CONCEPTS.TEMPLATES.SWITCH
+const SWITCH = CONFIG.PANELS.CONCEPTS.TEMPLATES.SWITCH
 
 const ConceptTemplatesSwitchTooltip = ({ byAvailable }) => {
   return (

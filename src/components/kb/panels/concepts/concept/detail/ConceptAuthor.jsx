@@ -11,7 +11,7 @@ import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/
 
 import { CONCEPT } from '@/lib/constants.js'
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const ConceptAuthor = () => {
   const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)
@@ -37,7 +37,7 @@ const ConceptAuthor = () => {
         <TextInput
           {...infoStyle}
           debounceMs={333}
-          label={UI_TEXT.PANELS.CONCEPTS.AUTHOR.LABEL}
+          label={CONFIG.PANELS.CONCEPTS.AUTHOR.LABEL}
           onChange={handleChange}
           showClearButton={isEditing}
           value={stagedState.author?.value || ''}

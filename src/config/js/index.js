@@ -1,7 +1,7 @@
-import concept from '../text/concept.json'
-import { PANELS } from './panels.js'
+import { PANELS } from '@/config/js/panels.js'
+import concept from '@/config/text/concept.json'
 
-export const UI_TEXT = {
+export const CONFIG = {
   CONCEPT: concept.CONCEPT,
   PANELS,
 }

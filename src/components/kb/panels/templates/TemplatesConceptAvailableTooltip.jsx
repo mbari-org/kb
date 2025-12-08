@@ -5,11 +5,11 @@ import { Stack, Typography } from '@mui/material'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED, TOOLTIP } from '@/lib/constants.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
-const { SWITCH } = UI_TEXT.PANELS.TEMPLATES.TOOLTIP
+const { SWITCH } = CONFIG.PANELS.TEMPLATES.TOOLTIP
 
 const selectedAvailableMessaging = (byAvailable, concept) => {
   if (!concept && !byAvailable) {

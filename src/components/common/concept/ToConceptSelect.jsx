@@ -1,7 +1,7 @@
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
 import { CONCEPT } from '@/lib/constants.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const { RIGHT_COMPONENT } = CONCEPT.SELECT
 const { SPECIAL } = RIGHT_COMPONENT
@@ -20,7 +20,7 @@ const ToConceptSelect = ({
       disabled={disabled}
       doConceptSelected={doConceptSelected}
       onSpecialChange={onSpecialChange}
-      label={UI_TEXT.CONCEPT.SELECT.TO_CONCEPT}
+      label={CONFIG.CONCEPT.SELECT.TO_CONCEPT}
       rightComponent={SPECIAL}
       required={required}
       updateConceptSelected={false}

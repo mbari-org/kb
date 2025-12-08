@@ -12,7 +12,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT } from '@/lib/constants.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const { RIGHT_COMPONENT, WIDTH } = CONCEPT.SELECT
 const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
@@ -22,7 +22,7 @@ const ConceptSelect = ({
   disabled = false,
   doConceptSelected,
   keepFocus = false,
-  label = UI_TEXT.CONCEPT.SELECT.CONCEPT,
+  label = CONFIG.CONCEPT.SELECT.CONCEPT,
   leftComponent = NONE,
   onClear,
   onInputChange,

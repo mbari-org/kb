@@ -9,7 +9,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const { REFERENCES } = SELECTED.SETTINGS
 
@@ -40,12 +40,12 @@ const ConceptReferences = () => {
     <ConceptPropertyList
       items={conceptReferences}
       renderComponent={ReferenceComponent}
-      title={UI_TEXT.PANELS.CONCEPTS.REFERENCES.LABEL}
+      title={CONFIG.PANELS.CONCEPTS.REFERENCES.LABEL}
       actionComponent={() => (
         <InspectIcon
           asDiv={true}
           onClick={linkToReferences}
-          tooltip={UI_TEXT.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP}
+          tooltip={CONFIG.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP}
         />
       )}
     />

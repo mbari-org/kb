@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
@@ -21,8 +21,8 @@ const ConceptTemplatesActionComponent = () => {
   const filters = getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY)
 
   const tooltip = byAvailable
-    ? UI_TEXT.PANELS.CONCEPTS.TEMPLATES.VIEW.TOOLTIP.AVAILABLE
-    : UI_TEXT.PANELS.CONCEPTS.TEMPLATES.VIEW.TOOLTIP.EXPLICIT
+    ? CONFIG.PANELS.CONCEPTS.TEMPLATES.VIEW.TOOLTIP.AVAILABLE
+    : CONFIG.PANELS.CONCEPTS.TEMPLATES.VIEW.TOOLTIP.EXPLICIT
 
   const linkToTemplates = useCallback(() => {
     updateSelected({ [SELECTED.PANEL]: SELECTED.PANELS.TEMPLATES })
@@ -53,7 +53,7 @@ const ConceptTemplatesActionComponent = () => {
         <PanelDataSwitch
           checked={byAvailable}
           switchFn={switchFn}
-          switchLabel={UI_TEXT.PANELS.CONCEPTS.TEMPLATES.SWITCH.LABEL}
+          switchLabel={CONFIG.PANELS.CONCEPTS.TEMPLATES.SWITCH.LABEL}
           switchTooltip={<ConceptTemplatesSwitchTooltip byAvailable={byAvailable} />}
         />
       </Box>

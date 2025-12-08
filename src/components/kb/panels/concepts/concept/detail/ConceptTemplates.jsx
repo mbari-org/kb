@@ -15,7 +15,7 @@ import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
@@ -46,7 +46,7 @@ const ConceptTemplates = () => {
       actionComponent={ConceptTemplatesActionComponent}
       items={templateItems}
       renderComponent={TemplateComponent}
-      title={UI_TEXT.PANELS.CONCEPTS.TEMPLATES.LABEL}
+      title={CONFIG.PANELS.CONCEPTS.TEMPLATES.LABEL}
     />
   )
 }

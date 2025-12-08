@@ -7,7 +7,7 @@ import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/kb/constants/conceptState.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const ConceptAliases = () => {
   const { isEditing, stagedState } = use(ConceptContext)
@@ -22,7 +22,7 @@ const ConceptAliases = () => {
       actionComponent={isEditing ? IconComponent : null}
       items={aliases}
       renderComponent={AliasComponent}
-      title={UI_TEXT.PANELS.CONCEPTS.ALIASES.LABEL}
+      title={CONFIG.PANELS.CONCEPTS.ALIASES.LABEL}
     />
   )
 }

@@ -8,10 +8,10 @@ import KBTooltip from '@/components/common/KBTooltip'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
-const { BUTTON, TOOLTIP } = UI_TEXT.PANELS.TEMPLATES
+const { BUTTON, TOOLTIP } = CONFIG.PANELS.TEMPLATES
 
 const TemplatesTableHeaderMiddle = () => {
   const { filters, updateFilters } = use(TemplatesContext)

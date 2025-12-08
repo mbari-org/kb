@@ -12,9 +12,9 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/kb/state/staged'
 
-import { UI_TEXT } from '@/config/js/index.js'
+import { CONFIG } from '@/config/js/index.js'
 
-const ALIASES = UI_TEXT.PANELS.CONCEPTS.ALIASES
+const ALIASES = CONFIG.PANELS.CONCEPTS.ALIASES
 
 const ConceptAlias = ({ alias }) => {
   const theme = useTheme()
