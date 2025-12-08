@@ -1,5 +1,7 @@
+import button from './button.json'
 import tooltip from './tooltip.json'
 
 export const TEMPLATES = {
-  TOOLTIP: tooltip.TOOLTIP,
+  BUTTON: button,
+  TOOLTIP: tooltip,
 }

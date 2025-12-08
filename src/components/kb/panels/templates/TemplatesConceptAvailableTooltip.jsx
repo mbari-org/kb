@@ -11,15 +11,13 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
 const { SWITCH } = UI_TEXT.PANELS.TEMPLATES.TOOLTIP
 
-const SELECTED_NONE = 'With no Concept selected, all Templates are displayed.'
-
 const selectedAvailableMessaging = (byAvailable, concept) => {
   if (!concept && !byAvailable) {
-    return ['All Templates', SWITCH.EXPLICIT.CONCEPT, SELECTED_NONE]
+    return [SWITCH.NO_CONCEPT.TITLE, SWITCH.EXPLICIT.CONCEPT, SWITCH.NO_CONCEPT.TEMPLATES]
   }
 
   if (!concept && byAvailable) {
-    return ['All Templates', SWITCH.AVAILABLE.CONCEPT, SELECTED_NONE]
+    return [SWITCH.NO_CONCEPT.TITLE, SWITCH.AVAILABLE.CONCEPT, SWITCH.NO_CONCEPT.TEMPLATES]
   }
 
   if (concept && !byAvailable) {

@@ -3,12 +3,15 @@ import { use } from 'react'
 import { Stack, Button } from '@mui/material'
 
 import TableHeaderLinkFilter from '@/components/kb/panels/templates/table/header/middle/TableHeaderLinkFilter'
+import KBTooltip from '@/components/common/KBTooltip'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED } from '@/lib/kb/constants/selected.js'
+import { UI_TEXT } from '@/config/text/index.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
+const { BUTTON, TOOLTIP } = UI_TEXT.PANELS.TEMPLATES
 
 const TemplatesTableHeaderMiddle = () => {
   const { filters, updateFilters } = use(TemplatesContext)
@@ -32,15 +35,17 @@ const TemplatesTableHeaderMiddle = () => {
         value={filters[TEMPLATES.FILTERS.LINK_NAME] || ''}
         onChange={handleFilterChange}
       />
-      <Button
-        onClick={handleClearAll}
-        sx={{
-          fontSize: '0.8rem',
-          transform: 'translateY(0.75rem)',
-        }}
-      >
-        Clear All
-      </Button>
+      <KBTooltip title={TOOLTIP.CLEAR_ALL}>
+        <Button
+          onClick={handleClearAll}
+          sx={{
+            fontSize: '0.8rem',
+            transform: 'translateY(0.75rem)',
+          }}
+        >
+          {BUTTON.CLEAR_FILTERS}
+        </Button>
+      </KBTooltip>
       <TableHeaderLinkFilter
         name={TEMPLATES.FILTERS.LINK_VALUE}
         value={filters[TEMPLATES.FILTERS.LINK_VALUE] || ''}
