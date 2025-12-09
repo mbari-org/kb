@@ -2,8 +2,8 @@ import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
@@ -16,7 +16,10 @@ import { CONCEPT } from '@/lib/constants'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
+import { CONFIG } from '@/config/js'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
+
+const { PROCESSING } = CONFIG
 
 const { TYPE } = CONCEPT.HISTORY
 const { CONCEPT: SELECTED_CONCEPT } = SELECTED
@@ -109,8 +112,8 @@ const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
   const { conceptState, selectedType, pageState } = use(HistoryContext)
   const { getSelected } = use(SelectedContext)
-  const { setExporting } = use(PanelDataContext)
   const { user } = use(UserContext)
+  const { setProcessing } = use(AppModalContext)
 
   const selectedConcept = useMemo(() => getSelected(SELECTED_CONCEPT), [getSelected])
   const { data: conceptData, extent: conceptExtent } = conceptState
@@ -170,13 +173,24 @@ const useHistoryExport = () => {
     }
   }, [getEstimatedPages, isConceptExport, selectedType])
 
+  const onProgress = useCallback(
+    value => {
+      if (value === false) {
+        setProcessing(PROCESSING.OFF)
+      } else if (typeof value === 'string') {
+        setProcessing(PROCESSING.LOAD, value)
+      }
+    },
+    [setProcessing]
+  )
+
   return csvExport({
     comments: content,
     count: conceptData?.length || 0,
     estimatedTotalPages: estimatedPages,
     getData: isConceptExport ? getConceptData : getPaginatedData,
     headers: dataHeaders(selectedType),
-    onProgress: setExporting,
+    onProgress,
     paginated: !isConceptExport,
     suggestName,
     title: 'Knowledge Base History',

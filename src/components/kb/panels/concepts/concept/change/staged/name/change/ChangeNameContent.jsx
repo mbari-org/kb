@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles'
 
 import ModalActionText from '@/components/common/ModalActionText'
 import NameChangeExtent from '@/components/common/NameChangeExtent'
-import ProcessingMessage from '@/components/common/ProcessingMessage'
+import ProcessingMsg from '@/components/common/ProcessingMessage'
 import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
 
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
@@ -67,7 +67,7 @@ const ChangeNameContent = () => {
   return (
     <Box>
       <ModalActionText text='Change Name' />
-      {modalData?.isLoading && <ProcessingMessage message='Loading related data...' />}
+      {modalData?.isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData?.isLoading && (
       <Box>
         <Stack direction='row' spacing={2} alignItems='center' sx={{ mt: 1, ml: 3 }}>

@@ -14,6 +14,9 @@ import { UI_TEXT } from '@/lib/constants/uiText.js'
 import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useUpdatePending'
 
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 const { APPROVE, CONFIRM, DEFER, REJECT } = UI_TEXT.LABELS.BUTTON
 
 const HistoryPendingActions = props => {
@@ -59,10 +62,10 @@ const HistoryPendingActions = props => {
 
       case CONFIRM: {
         try {
-          setProcessing('Updating pending...')
+          setProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
           await updatePending({ approval: pendingConfirm, item })
         } finally {
-          setProcessing(false)
+          setProcessing(PROCESSING.OFF)
           closeModal(true)
         }
         return

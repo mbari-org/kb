@@ -10,8 +10,9 @@ import { useReferencesModalOperationsContext, useReferencesModalDataContext } fr
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
 import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONFIG } from '@/config/js'
 
-const { UPDATING } = UI_TEXT.PROCESSING
+const { PROCESSING } = CONFIG
 
 const useConfirmReferenceModal = () => {
   const { closeModal, createModal, setProcessing } = useReferencesModalOperationsContext()
@@ -20,11 +21,11 @@ const useConfirmReferenceModal = () => {
   const handleConfirm = useCallback(
     async (reference, original) => {
       try {
-        setProcessing(UPDATING)
+        setProcessing(PROCESSING.UPDATE)
         await editReference(original, reference)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           throw error
         }
@@ -49,12 +50,12 @@ const useConfirmReferenceModal = () => {
         const labels = [UI_TEXT.LABELS.BUTTON.CONTINUE, UI_TEXT.LABELS.BUTTON.CONFIRM]
 
         const onAction = label => {
-          if (label === LABELS.BUTTON.CONTINUE) {
+          if (label === UI_TEXT.LABELS.BUTTON.CONTINUE) {
             closeModal()
             if (reopenEditModal) {
               reopenEditModal(modalData.reference)
             }
-          } else if (label === LABELS.BUTTON.CONFIRM) {
+          } else if (label === UI_TEXT.LABELS.BUTTON.CONFIRM) {
             handleConfirm(modalData.reference, modalData.original)
           }
         }

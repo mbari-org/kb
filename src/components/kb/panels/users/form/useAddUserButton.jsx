@@ -19,7 +19,9 @@ import {
   createModalContent,
 } from '@/components/kb/panels/users/form/userModalUtils'
 
-const { SAVING } = UI_TEXT.PROCESSING
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 
 const useAddUserButton = () => {
@@ -40,13 +42,13 @@ const useAddUserButton = () => {
           throw createValidationError('Invalid user data', { user })
         }
 
-        setProcessing(SAVING)
+        setProcessing(PROCESSING.SAVE)
 
         const userData = processAddUserData(user)
         await addUser(userData)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           throw error
         }

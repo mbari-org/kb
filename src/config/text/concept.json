@@ -3,6 +3,12 @@
     "SELECT": {
       "CONCEPT": "Concept",
       "TO_CONCEPT": "To concept"
+    },
+    "STRUCTURE": {
+      "CHANGE_NAME": "Change name",
+      "CHANGE_PARENT": "Change parent",
+      "ADD_CHILD": "Add child",
+      "DELETE_CONCEPT": "Delete concept"
     }
   }
 }

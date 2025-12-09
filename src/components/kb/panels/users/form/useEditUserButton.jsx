@@ -13,7 +13,9 @@ import {
   createModalContent,
 } from '@/components/kb/panels/users/form/userModalUtils'
 
-const { UPDATING } = UI_TEXT.PROCESSING
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 
 const useEditUserButton = () => {
@@ -36,11 +38,11 @@ const useEditUserButton = () => {
           return
         }
 
-        setProcessing(UPDATING)
+        setProcessing(PROCESSING.UPDATE)
         await editUser(user.username, updatedData)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         throw error
       }
     },

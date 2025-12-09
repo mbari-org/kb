@@ -25,11 +25,14 @@ import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { UI_TEXT } from '@/lib/constants/uiText.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
 
 const { CONTINUE } = UI_TEXT.LABELS.BUTTON
+const { PROCESSING } = CONFIG
 
 const ConceptProvider = ({ children }) => {
-  const { setProcessing: setAppProcessing, setModalData: setAppModalData } = use(AppModalContext)
+  const { setProcessing } = use(AppModalContext)
+
   const { apiFns } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
   const { getConceptTemplates, refreshData: refreshPanelData } = use(PanelDataContext)
@@ -46,8 +49,8 @@ const ConceptProvider = ({ children }) => {
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
   const onConceptTreeReady = useCallback(() => {
-    setAppProcessing(false)
-  }, [setAppProcessing])
+    setProcessing(PROCESSING.OFF)
+  }, [setProcessing])
 
   const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
@@ -115,8 +118,7 @@ const ConceptProvider = ({ children }) => {
       } else {
         setHasUnsavedChanges(false)
 
-        setAppModalData({ processingMessage: 'Loading concept...' })
-        setAppProcessing(true)
+        setProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
 
         conceptLoader(selectedConcept)
       }
@@ -131,8 +133,7 @@ const ConceptProvider = ({ children }) => {
     isConceptLoaded,
     loadConcept,
     panels,
-    setAppModalData,
-    setAppProcessing,
+    setProcessing,
     setConcept,
     setHasUnsavedChanges,
     setModalData,

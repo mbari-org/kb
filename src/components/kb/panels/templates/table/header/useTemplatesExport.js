@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useCallback } from 'react'
 
 import {
   getAvailableTemplates,
@@ -7,17 +7,20 @@ import {
   getToConceptTemplates,
 } from '@/lib/api/templates'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
-import { SELECTED } from '@/lib/constants/selected.js'
 import { PAGINATION } from '@/lib/constants/pagination.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
+import { CONFIG } from '@/config/js'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
+
+const { PROCESSING } = CONFIG
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
@@ -94,13 +97,13 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 
 const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { setExporting } = use(PanelDataContext)
   const {
     byAvailable,
     filters,
     filteredTemplates,
   } = use(TemplatesContext)
   const { user } = use(UserContext)
+  const { setProcessing } = use(AppModalContext)
 
   const normalizedFilters = {
     byAvailable,
@@ -163,13 +166,24 @@ const useTemplatesExport = () => {
     return pagedTemplates?.length > 0 ? dataRows(pagedTemplates) : null
   }
 
+  const onProgress = useCallback(
+    value => {
+      if (value === false) {
+        setProcessing(PROCESSING.OFF)
+      } else if (typeof value === 'string') {
+        setProcessing(PROCESSING.LOAD, value)
+      }
+    },
+    [setProcessing]
+  )
+
   return csvExport({
     comments: buildComments(normalizedFilters),
     count,
     estimatedTotalPages,
     getData,
     headers: dataHeaders,
-    onProgress: setExporting,
+    onProgress,
     paginated,
     suggestName,
     title: 'Knowledge Base Templates Export',

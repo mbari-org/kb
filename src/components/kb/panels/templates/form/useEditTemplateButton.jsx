@@ -7,7 +7,6 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError, createValidationError } from '@/lib/errors'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createHandlers,
   createModalActions,
@@ -19,7 +18,9 @@ import {
   discardEditsAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-const { UPDATING } = UI_TEXT.PROCESSING
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 
 const useEditTemplateButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =
@@ -51,11 +52,11 @@ const useEditTemplateButton = () => {
           })
         }
 
-        setProcessing(UPDATING)
+        setProcessing(PROCESSING.UPDATE)
         await editTemplate(original, template)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           if (error.message === 'Template already exists') {
             updateModalData({ alert: duplicateTemplateAlert() })

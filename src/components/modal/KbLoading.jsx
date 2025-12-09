@@ -2,14 +2,12 @@ import { use } from 'react'
 import { Box, Fade, Modal } from '@mui/material'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
-import ProcessingMessage from '@/components/common/ProcessingMessage'
+import ProcessingMsg from '@/components/common/ProcessingMessage'
 
 const KbLoading = () => {
   const { processing, processingMessage, suppressDisplay } = use(AppModalContext)
 
   if (!processing || suppressDisplay) return null
-
-  const message = processingMessage
 
   return (
     <Modal open aria-labelledby='kb-processing-overlay' closeAfterTransition>
@@ -23,7 +21,7 @@ const KbLoading = () => {
             outline: 'none',
           }}
         >
-          <ProcessingMessage message={message} />
+          <ProcessingMsg message={processingMessage} />
         </Box>
       </Fade>
     </Modal>

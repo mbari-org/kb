@@ -13,10 +13,10 @@ import {
 } from '@mui/material'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import ProcessingMessage from '@/components/common/ProcessingMessage'
+import ProcessingMsg from '@/components/common/ProcessingMessage'
 
 const ConceptModal = () => {
-  const { modal, closeModal, processing } = use(ConceptModalContext)
+  const { modal, closeModal, processing, processingMessage } = use(ConceptModalContext)
 
   if (!modal) {
     return null
@@ -25,7 +25,6 @@ const ConceptModal = () => {
   const { actions, content, title, minWidth = 500 } = modal
 
   const isProcessing = Boolean(processing)
-  const processingMessage = typeof processing === 'string' ? processing : 'Processing...'
 
   return (
     <Modal
@@ -57,7 +56,7 @@ const ConceptModal = () => {
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
               {actions}
             </CardActions>
-            {isProcessing && <ProcessingMessage message={processingMessage} />}
+            {isProcessing && <ProcessingMsg message={processingMessage} />}
           </Card>
         </Box>
       </Fade>

@@ -1,5 +1,10 @@
 import { createContext, useCallback, useEffect, useMemo, useState, useRef, useContext } from 'react'
 
+import useSetProcessing from '@/lib/hooks/useSetProcessing'
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
+
 const createPanelModalProvider = (panelName, useModalHook) => {
   const DataContext = createContext()
   const OperationsContext = createContext()
@@ -34,7 +39,7 @@ const createPanelModalProvider = (panelName, useModalHook) => {
         setOnClose(null)
         setModalData({})
         setModalConfig(null)
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
 
         return true
       },
@@ -57,7 +62,7 @@ const createPanelModalProvider = (panelName, useModalHook) => {
         setModalConfig(modalConfig)
         setModalData(data)
         setOnClose(() => onClose)
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
       },
       []
     )
@@ -65,6 +70,8 @@ const createPanelModalProvider = (panelName, useModalHook) => {
     const updateModalData = useCallback(data => {
       setModalData(prev => ({ ...prev, ...data }))
     }, [])
+
+    const handleSetProcessing = useSetProcessing(setProcessing)
 
     useEffect(() => {
       modalDataRef.current = modalData
@@ -79,10 +86,10 @@ const createPanelModalProvider = (panelName, useModalHook) => {
         createModal,
         modal,
         processing,
-        setProcessing,
+        setProcessing: handleSetProcessing,
         updateModalData,
       }),
-      [closeModal, createModal, modal, processing, setProcessing, updateModalData]
+      [closeModal, createModal, modal, processing, handleSetProcessing, updateModalData]
     )
 
     // Data context - only includes modalData for modal content components

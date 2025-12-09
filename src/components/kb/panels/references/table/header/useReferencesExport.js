@@ -1,5 +1,6 @@
-import { use } from 'react'
+import { use, useCallback } from 'react'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
@@ -7,7 +8,10 @@ import UserContext from '@/contexts/user/UserContext'
 import csvExport from '@/lib/csvExport'
 import { conceptNameForFilename } from '@/lib/utils'
 
+import { CONFIG } from '@/config/js'
 import { SELECTED } from '@/lib/constants/selected.js'
+
+const { PROCESSING } = CONFIG
 
 const { REFERENCES } = SELECTED.SETTINGS
 
@@ -25,9 +29,10 @@ const buildComments = byConceptName => {
 }
 
 const useReferencesExport = () => {
-  const { getReferences, setExporting } = use(PanelDataContext)
+  const { getReferences } = use(PanelDataContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const { user } = use(UserContext)
+  const { setProcessing } = use(AppModalContext)
 
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
   const selectedConcept = byConcept ? getSelected(SELECTED.CONCEPT) : null
@@ -39,12 +44,23 @@ const useReferencesExport = () => {
     return `KB-References${conceptName}.csv`
   }
 
+  const onProgress = useCallback(
+    value => {
+      if (value === false) {
+        setProcessing(PROCESSING.OFF)
+      } else if (typeof value === 'string') {
+        setProcessing(PROCESSING.LOAD, value)
+      }
+    },
+    [setProcessing]
+  )
+
   return csvExport({
     comments: buildComments(selectedConcept),
     count: references.length,
     getData: () => dataRows(references),
     headers: dataHeaders,
-    onProgress: setExporting,
+    onProgress,
     paginated: false,
     suggestName,
     title: 'Knowledge Base References',

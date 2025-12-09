@@ -3,6 +3,10 @@ import { flushSync } from 'react-dom'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalContext from './ConceptModalContext'
+import useSetProcessing from '@/lib/hooks/useSetProcessing'
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 
 const ConceptModalProvider = ({ children }) => {
   const { setSuppressDisplay } = use(AppModalContext)
@@ -10,6 +14,9 @@ const ConceptModalProvider = ({ children }) => {
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
   const [processing, setProcessing] = useState(false)
+  const [processingMessage, setProcessingMessage] = useState(PROCESSING.OFF)
+
+  const handleSetProcessing = useSetProcessing(setProcessing, setProcessingMessage)
 
   useEffect(() => {
     setSuppressDisplay(Boolean(processing))
@@ -34,7 +41,7 @@ const ConceptModalProvider = ({ children }) => {
         setOnClose(null)
         setModalData({})
         setModal(null)
-        setProcessing(false)
+        handleSetProcessing(PROCESSING.OFF)
       })
 
       // Execute completion callback after React has completed all updates
@@ -45,7 +52,7 @@ const ConceptModalProvider = ({ children }) => {
 
       return true
     },
-    [onClose, modalData, processing]
+    [onClose, modalData, processing, handleSetProcessing]
   )
 
   const handleSetModal = useCallback((modal, onCloseCallback) => {
@@ -57,13 +64,14 @@ const ConceptModalProvider = ({ children }) => {
     () => ({
       closeModal,
       processing,
+      processingMessage,
       modal,
       modalData,
       setModalData,
       setModal: handleSetModal,
-      setProcessing,
+      setProcessing: handleSetProcessing,
     }),
-    [closeModal, processing, modal, modalData, handleSetModal]
+    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing]
   )
 
   return <ConceptModalContext value={value}>{children}</ConceptModalContext>

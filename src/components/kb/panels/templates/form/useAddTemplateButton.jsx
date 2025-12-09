@@ -12,7 +12,6 @@ import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
 import { CONFIG } from '@/config/js/index.js'
 import { SELECTED } from '@/lib/constants/selected.js'
-import { UI_PROCESSING } from '@/lib/constants/ui/processing.js'
 
 import {
   createModalActions,
@@ -26,7 +25,7 @@ import {
   discardEditsAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-const { SAVING } = UI_PROCESSING
+const { PROCESSING } = CONFIG
 
 const useAddTemplateButton = () => {
   const { addTemplate, filters } = use(TemplatesContext)
@@ -53,13 +52,13 @@ const useAddTemplateButton = () => {
           return
         }
 
-        setProcessing(SAVING)
+        setProcessing(PROCESSING.SAVE)
 
         const templateData = processAddTemplateData(template)
         await addTemplate(templateData)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         throw error
       }
     },

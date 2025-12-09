@@ -2,7 +2,7 @@ import { use, useCallback, useState } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 
-import ProcessingMessage from '@/components/common/ProcessingMessage'
+import ProcessingMsg from '@/components/common/ProcessingMessage'
 import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
@@ -59,7 +59,7 @@ const DeleteConceptContent = () => {
         </Typography>
       )}
 
-      {isLoading && <ProcessingMessage message='Loading related data...' />}
+      {isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData.isLoading && hasRelatedData && (
         <RelatedDataCounts
           relatedDataCounts={relatedDataCounts}

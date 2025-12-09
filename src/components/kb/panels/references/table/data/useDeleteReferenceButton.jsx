@@ -7,14 +7,15 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createDeleteReferenceActions,
   createDeleteReferenceContent,
   createDeleteReferenceTitle,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-const { DELETING } = UI_TEXT.PROCESSING
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 
 const useDeleteReferenceButton = () => {
   const { createModal, closeModal, setProcessing } = useReferencesModalOperationsContext()
@@ -29,11 +30,11 @@ const useDeleteReferenceButton = () => {
   const handleDeleteConfirm = useCallback(
     async reference => {
       try {
-        setProcessing(DELETING)
+        setProcessing(PROCESSING.DELETE)
         await deleteReference(reference)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         const deleteError = createError(
           'Reference Delete Error',
           'Failed to delete reference',

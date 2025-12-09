@@ -1,6 +1,5 @@
 import { use, useEffect, useState, useCallback, useMemo } from 'react'
 
-import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
@@ -11,7 +10,6 @@ import useLoadPendingHistory from '@/contexts/panel/data/useLoadPendingHistory'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 export const PanelDataProvider = ({ children }) => {
-  const { setProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
 
   const [explicitConcepts, setExplicitConcepts] = useState([])
@@ -121,13 +119,6 @@ export const PanelDataProvider = ({ children }) => {
     }
   }, [apiFns, refreshData])
 
-  const setExporting = useCallback(
-    state => {
-      setProcessing(state)
-    },
-    [setProcessing]
-  )
-
   const value = useMemo(
     () => ({
       clearTemplateFilters,
@@ -139,7 +130,6 @@ export const PanelDataProvider = ({ children }) => {
       pendingHistory,
       refreshData,
       setClearTemplateFilters,
-      setExporting,
       setReferences,
       templates,
     }),
@@ -152,7 +142,6 @@ export const PanelDataProvider = ({ children }) => {
       isLoading,
       pendingHistory,
       refreshData,
-      setExporting,
       setReferences,
       templates,
     ]

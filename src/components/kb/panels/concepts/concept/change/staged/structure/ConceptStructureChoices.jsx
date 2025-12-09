@@ -12,6 +12,9 @@ import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/chang
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
+import { CONFIG } from '@/config/js'
+
+const { CONCEPT, PROCESSING } = CONFIG
 
 const ChangeStructureChoices = ({ closeChoices }) => {
   const { disableDelete, disableChangeName, disableChangeParent } = useStructureChoices()
@@ -22,14 +25,14 @@ const ChangeStructureChoices = ({ closeChoices }) => {
   const changeParent = useChangeParentModal()
   const deleteConcept = useDeleteConceptModal()
 
-  const handleClick = (structureFn, loadingMessage = null) => async event => {
+  const handleClick = (structureFn, processingArg = null) => async event => {
     event.preventDefault()
     closeChoices()
 
-    if (loadingMessage) {
-      setProcessing(loadingMessage)
+    if (processingArg) {
+      setProcessing(PROCESSING.LOAD, processingArg)
       await structureFn()
-      setProcessing(false)
+      setProcessing(PROCESSING.OFF)
       return
     }
 
@@ -71,24 +74,24 @@ const ChangeStructureChoices = ({ closeChoices }) => {
             <StructureChoiceButton
               disabled={disableChangeName}
               onClick={handleClick(changeName)}
-              text='Change Name'
+              text={CONCEPT.STRUCTURE.CHANGE_NAME}
             />
             <StructureChoiceButton
               disabled={disableChangeParent}
-              onClick={handleClick(changeParent, 'Loading concept descendants...')}
-              text='Change Parent'
+              onClick={handleClick(changeParent, PROCESSING.ARG.CONCEPT_DESCENDANTS)}
+              text={CONCEPT.STRUCTURE.CHANGE_PARENT}
             />
             <StructureChoiceButton
               disabled={false}
               onClick={handleClick(addChild)}
-              text='Add Child'
+              text={CONCEPT.STRUCTURE.ADD_CHILD}
             />
           </Stack>
           <StructureChoiceButton
             color='cancel'
             disabled={disableDelete}
-            onClick={handleClick(deleteConcept, 'Checking concept dependencies...')}
-            text='Delete Concept'
+            onClick={handleClick(deleteConcept, PROCESSING.ARG.CONCEPT_DEPENDENCIES)}
+            text={CONCEPT.STRUCTURE.DELETE_CONCEPT}
           />
         </Stack>
       </Box>

@@ -1,13 +1,17 @@
 import { useCallback, useState, useMemo } from 'react'
 
 import AppModalContext from './AppModalContext'
+import useSetProcessing from '@/lib/hooks/useSetProcessing'
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 
 const AppModalProvider = ({ children }) => {
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
   const [processing, setProcessing] = useState(false)
-  const [processingMessage, setProcessingMessage] = useState('Processing...')
+  const [processingMessage, setProcessingMessage] = useState(PROCESSING.OFF)
   const [suppressDisplay, setSuppressDisplay] = useState(false)
 
   const closeModal = useCallback(
@@ -29,8 +33,7 @@ const AppModalProvider = ({ children }) => {
       setOnClose(null)
       setModalData({})
       setModal(null)
-      setProcessing(false)
-      setProcessingMessage('Processing...')
+      setProcessing(PROCESSING.OFF)
 
       return true
     },
@@ -42,17 +45,7 @@ const AppModalProvider = ({ children }) => {
     setOnClose(typeof onCloseCallback === 'function' ? onCloseCallback : null)
   }, [])
 
-  const handleSetProcessing = useCallback(state => {
-    if (typeof state === 'string') {
-      setProcessing(true)
-      setProcessingMessage(state)
-    } else {
-      setProcessing(state)
-      if (!state) {
-        setProcessingMessage('Processing...')
-      }
-    }
-  }, [])
+  const handleSetProcessing = useSetProcessing(setProcessing, setProcessingMessage)
 
   const value = useMemo(
     () => ({
@@ -64,10 +57,11 @@ const AppModalProvider = ({ children }) => {
       setModalData,
       setModal: handleSetModal,
       setProcessing: handleSetProcessing,
+      setProcessingMessage,
       suppressDisplay,
       setSuppressDisplay,
     }),
-    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing, suppressDisplay]
+    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing, setProcessingMessage, suppressDisplay]
   )
 
   return <AppModalContext value={value}>{children}</AppModalContext>

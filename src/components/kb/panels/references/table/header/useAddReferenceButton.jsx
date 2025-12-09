@@ -21,9 +21,11 @@ import {
   processAddReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
+import { CONFIG } from '@/config/js'
+const { PROCESSING } = CONFIG
+
 const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 const { REFERENCES } = SELECTED.SETTINGS
-const { SAVING } = UI_TEXT.PROCESSING
 
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)
@@ -55,13 +57,13 @@ const useAddReferenceButton = () => {
           })
         }
 
-        setProcessing(SAVING)
+        setProcessing(PROCESSING.SAVE)
 
         const referenceData = processAddReferenceData(reference)
         await addReference(referenceData)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           throw error
         }

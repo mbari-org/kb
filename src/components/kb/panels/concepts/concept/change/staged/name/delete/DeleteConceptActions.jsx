@@ -15,6 +15,10 @@ import { applyResults, preSideEffects, postSideEffects } from './deletionSideEff
 
 import { deleteConcept as deleteTaxonomyConcept, getConcept as getTaxonomyConcept, insertConcept } from '@/lib/model/taxonomy'
 
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
+
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
@@ -52,7 +56,7 @@ const DeleteConceptActions = () => {
     }
 
     if (label === 'Confirm') {
-      setProcessing('Deleting Concept....')
+      setProcessing(PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
       const { reassign } = modalData
       const deleteConceptContext = {
         apiFns,

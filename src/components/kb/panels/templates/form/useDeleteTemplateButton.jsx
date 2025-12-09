@@ -7,13 +7,14 @@ import ConceptTitle from '@/components/common/ConceptTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createDeleteTemplateActions,
   createDeleteTemplateContent,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-const { DELETING } = UI_TEXT.PROCESSING
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 
 const useDeleteTemplateButton = () => {
   const { showBoundary } = useErrorBoundary()
@@ -28,11 +29,11 @@ const useDeleteTemplateButton = () => {
   const handleDeleteConfirm = useCallback(
     async template => {
       try {
-        setProcessing(DELETING)
+        setProcessing(PROCESSING.DELETE)
         await deleteTemplate(template)
         closeModal()
       } catch (error) {
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         const deleteError = createError(
           'Template Delete Error',
           'Failed to delete template',

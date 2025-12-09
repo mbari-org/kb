@@ -1,7 +1,7 @@
 import { use, useCallback } from 'react'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
@@ -12,7 +12,10 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize, conceptNameForFilename } from '@/lib/utils'
 
+import { CONFIG } from '@/config/js'
 import { CONCEPT } from '@/lib/constants'
+
+const { PROCESSING } = CONFIG
 
 const dataHeaders = [
   'id',
@@ -43,9 +46,20 @@ const suggestName = ({ concept, conceptExtent }) => {
 const useConceptExportCsv = conceptExtent => {
   const { concept } = use(ConceptContext)
   const { apiFns } = use(ConfigContext)
-  const { setExporting } = use(PanelDataContext)
+  const { setProcessing } = use(AppModalContext)
   const { getConcept } = use(TaxonomyContext)
   const { user } = use(UserContext)
+
+  const onProgress = useCallback(
+    value => {
+      if (value === false) {
+        setProcessing(PROCESSING.OFF)
+      } else if (typeof value === 'string') {
+        setProcessing(PROCESSING.LOAD, value)
+      }
+    },
+    [setProcessing]
+  )
 
   const getData = useCallback(async () => {
     const parent = getConcept(concept.parent)
@@ -78,7 +92,7 @@ const useConceptExportCsv = conceptExtent => {
     count: 0,
     getData,
     headers: dataHeaders,
-    onProgress: setExporting,
+    onProgress,
     paginated: false,
     suggestName: () => suggestName({ concept, conceptExtent }),
     title: `Knowledge Base Concept: ${concept.name}`,

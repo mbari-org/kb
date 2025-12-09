@@ -1,12 +1,15 @@
-import { use } from 'react'
+import { use, useCallback } from 'react'
 
-import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import AppModalContext from '@/contexts/app/AppModalContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
+import { CONFIG } from '@/config/js'
 import { humanTimestamp } from '@/lib/utils'
+
+const { PROCESSING } = CONFIG
 
 const dataHeaders = [
   'Username',
@@ -38,14 +41,25 @@ const suggestName = () => 'KB-Users.csv'
 const useUsersExport = () => {
   const { users } = use(UsersContext)
   const { user } = use(UserContext)
-  const { setExporting } = use(PanelDataContext)
+  const { setProcessing } = use(AppModalContext)
+
+  const onProgress = useCallback(
+    value => {
+      if (value === false) {
+        setProcessing(PROCESSING.OFF)
+      } else if (typeof value === 'string') {
+        setProcessing(PROCESSING.LOAD, value)
+      }
+    },
+    [setProcessing]
+  )
 
   return csvExport({
     comments: buildComments(),
     count: users.length,
     getData: async () => dataRows(users),
     headers: dataHeaders,
-    onProgress: setExporting,
+    onProgress,
     paginated: false,
     suggestName,
     title: 'Knowledge Base Users',

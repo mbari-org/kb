@@ -6,10 +6,12 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { capitalize } from '@/lib/utils'
-
-import { PENDING } from '@/lib/constants/pending.js'
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
+import { PENDING } from '@/lib/constants/pending.js'
+
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
 
 const useUpdatedPending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
@@ -30,7 +32,7 @@ const useUpdatedPending = () => {
           : propIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
       ).filter(Boolean)
 
-      setProcessing(`${capitalize(approval)} pending changes...`)
+      setProcessing(PROCESSING.UPDATE, `{PROCESSING.ARG.PENDING} ${approval}`)
 
       const { updated } = await processPendingApproval({
         approval,
@@ -52,7 +54,7 @@ const useUpdatedPending = () => {
         await setConcept(updatedConcept)
       }
 
-      setProcessing(false)
+      setProcessing(PROCESSING.OFF)
 
       return pendingConcept.length !== items.length
     },

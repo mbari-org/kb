@@ -1,6 +1,18 @@
 {
-  "DELETING": "Deleting...",
-  "LOADING": "Loading...",
-  "SAVING": "Saving...",
-  "UPDATING": "Updating..."
+  "ARG": {
+    "CONCEPT": "concept",
+    "CONCEPT_DESCENDANTS": "concept descendants",
+    "CONCEPT_DEPENDENCIES": "concept dependencies",
+    "HISTORY": {
+      "CHILDREN": "children history",
+      "DATA": "data",
+      "DESCENDANTS": "descendants history"
+    },
+    "PENDING": "pending"
+  },
+  "DELETE": "Delete",
+  "LOAD": "Load",
+  "OFF": "",
+  "SAVE": "Save",
+  "UPDATE": "Update"
 }

@@ -12,6 +12,10 @@ import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdates
 
 import { CONCEPT } from '@/lib/constants'
 
+import { CONFIG } from '@/config/js'
+
+const { PROCESSING } = CONFIG
+
 const useSaveStaged = () => {
   const { initialState, setConcept, stagedState } = use(ConceptContext)
   const { closeModal, setProcessing } = use(ConceptModalContext)
@@ -21,7 +25,7 @@ const useSaveStaged = () => {
   const updatesContext = useUpdatesContext()
 
   return useCallback(async () => {
-    setProcessing('Saving concept...')
+    setProcessing(PROCESSING.SAVE, PROCESSING.ARG.CONCEPT)
 
     let updatesInfo
     try {
@@ -32,7 +36,7 @@ const useSaveStaged = () => {
         stagedState
       )
     } catch (error) {
-      setProcessing(false)
+      setProcessing(PROCESSING.OFF)
       throw error
     }
 
@@ -50,7 +54,7 @@ const useSaveStaged = () => {
 
     closeModal()
 
-    setProcessing(false)
+    setProcessing(PROCESSING.OFF)
   }, [
     closeModal,
     conceptEditsRefresh,

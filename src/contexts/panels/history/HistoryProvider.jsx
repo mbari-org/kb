@@ -84,23 +84,23 @@ const HistoryProvider = ({ children }) => {
         updatePageState({ lastHistoryType: selectedType })
       }
 
-      const loadingMsg =
+      const processingArg =
         conceptState.extent === CHILDREN
-          ? 'Loading children history...'
+          ? PROCESSING.ARG.HISTORY.CHILDREN
           : conceptState.extent === DESCENDANTS
-            ? 'Loading descendants history...'
-            : 'Loading data...'
+            ? PROCESSING.ARG.HISTORY.DESCENDANTS
+            : PROCESSING.ARG.HISTORY.DATA
 
       // Delay showing the overlay to avoid UI flash on fast operations
       const timer = setTimeout(() => {
-        setProcessing(loadingMsg)
+        setProcessing(PROCESSING.LOAD, processingArg)
       }, PROCESSING.LOADING_DELAY)
 
       try {
         await loadData({ updateConceptState, updatePageState })
       } finally {
         clearTimeout(timer)
-        setProcessing(false)
+        setProcessing(PROCESSING.OFF)
         isTypeChanging.current = false
       }
     }
