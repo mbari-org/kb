@@ -3,11 +3,11 @@ import { Box, Stack, Typography } from '@mui/material'
 import TemplateForm from '@/components/kb/panels/templates/form/TemplateForm'
 import ModalActionText from '@/components/common/ModalActionText'
 
-import { LABELS } from '@/lib/constants'
-
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, DELETE, DISCARD, SAVE } = LABELS.BUTTON
+import { CONFIG } from '@/config/js/index.js'
+
+const { CANCEL, DELETE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
 
 const TEMPLATE_FIELDS = ['concept', 'linkName', 'toConcept', 'linkValue']
 
@@ -67,7 +67,7 @@ export const createModalActions =
           {
             color: 'main',
             disabled: false,
-            label: 'Continue',
+            label: CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CONTINUE,
             onClick: () => updateModalData({ confirmDiscard: false, alert: null }),
           },
         ]
@@ -156,16 +156,17 @@ export const createDeleteTemplateActions =
 export const createDeleteTemplateContent = () => {
   const DeleteTemplateContent = currentModalData => {
     const { template } = currentModalData
+    const { CONTENT, FIELDS } = CONFIG.PANELS.TEMPLATES.MODALS.DELETE
 
     const fields = [
-      { label: 'Link Name', value: template.linkName },
-      { label: 'To Concept', value: template.toConcept },
-      { label: 'Link Value', value: template.linkValue },
+      { label: FIELDS.LINK_NAME, value: template.linkName },
+      { label: FIELDS.TO_CONCEPT, value: template.toConcept },
+      { label: FIELDS.LINK_VALUE, value: template.linkValue },
     ]
 
     return (
       <Stack spacing={1}>
-        <ModalActionText text='Delete Template' />
+        <ModalActionText text={CONTENT.HEADER} />
         <Stack spacing={2} sx={{ p: 2 }}>
           {fields.map(({ label, value }) => (
             <Box key={label}>
@@ -178,10 +179,10 @@ export const createDeleteTemplateContent = () => {
         </Stack>
         <Stack sx={{ textAlign: 'center' }}>
           <Typography variant='body1' color='cancel'>
-            This template will be permanently deleted.
+            {CONTENT.WARNING.LINE_1}
           </Typography>
           <Typography variant='body1' color='cancel'>
-            This action cannot be undone.
+            {CONTENT.WARNING.LINE_2}
           </Typography>
         </Stack>
       </Stack>

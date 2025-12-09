@@ -3,9 +3,10 @@ import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 import ModalActionText from '@/components/common/ModalActionText'
 import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
 
-// import ActionsAlert from '@/components/modal/actions/ActionsAlert'
-
+import { CONFIG } from '@/config/js/index.js'
 import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateForm'
+
+const { ADD, EDIT } = CONFIG.PANELS.TEMPLATES.MODALS
 
 const TemplateForm = ({ alert = null, isEdit = false, onChange, original, template }) => {
   const { handleChange } = useTemplateForm({ isEdit, onChange, template, original })
@@ -21,7 +22,7 @@ const TemplateForm = ({ alert = null, isEdit = false, onChange, original, templa
 
   return (
     <Stack spacing={2}>
-      <ModalActionText text={`${isEdit ? 'Edit' : 'Add'} Template`} />
+      <ModalActionText text={isEdit ? EDIT.CONTENT.HEADER : ADD.CONTENT.HEADER} />
       <TextField
           fullWidth
           label='Link Name'

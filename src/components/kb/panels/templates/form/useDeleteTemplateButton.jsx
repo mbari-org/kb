@@ -3,7 +3,7 @@ import { useErrorBoundary } from 'react-error-boundary'
 
 import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
-import ConceptTitle from '@/components/common/ConceptTitle'
+import TemplateTitle from '@/components/kb/panels/templates/form/TemplateTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError } from '@/lib/errors'
 
@@ -77,7 +77,7 @@ const useDeleteTemplateButton = () => {
         data: {
           template,
         },
-        titleComponent: ConceptTitle,
+        titleComponent: TemplateTitle,
       })
     },
     [createModal, handleCancel, handleDeleteConfirm]

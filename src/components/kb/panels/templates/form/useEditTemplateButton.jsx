@@ -3,7 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
-import ConceptTitle from '@/components/common/ConceptTitle'
+import TemplateTitle from '@/components/kb/panels/templates/form/TemplateTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError, createValidationError } from '@/lib/errors'
 
@@ -84,9 +84,9 @@ const useEditTemplateButton = () => {
         if (modalData?.confirmDiscard) {
           const colors = ['cancel', 'main']
           const disabled = [false, false]
-          const labels = ['Discard', 'Continue']
+          const labels = [CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD, CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CONTINUE]
           const onAction = label => {
-            if (label === 'Discard') {
+            if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD) {
               closeModal()
             } else {
               updateModalData({ confirmDiscard: false, alert: null })
@@ -100,10 +100,10 @@ const useEditTemplateButton = () => {
 
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)
-        const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? 'Discard' : a.label))
+        const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD : a.label))
 
         const onAction = label => {
-          if (label === 'Discard') {
+          if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD) {
             updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
             return
           }
@@ -123,7 +123,7 @@ const useEditTemplateButton = () => {
       createModal({
         actionsComponent: ActionView,
         contentComponent: ContentView,
-        titleComponent: ConceptTitle,
+        titleComponent: TemplateTitle,
         data: {
           confirmDiscard: false,
           hasChanges: false,

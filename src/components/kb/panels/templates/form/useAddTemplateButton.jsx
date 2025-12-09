@@ -1,7 +1,7 @@
 import { use, useCallback, useMemo } from 'react'
 
 import PanelAddButton from '@/components/common/panel/PanelAddButton'
-import ConceptTitle from '@/components/common/ConceptTitle'
+import TemplateTitle from '@/components/kb/panels/templates/form/TemplateTitle'
 import Actions from '@/components/common/factory/Actions'
 
 import { useTemplatesModalOperationsContext, useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
@@ -75,9 +75,9 @@ const useAddTemplateButton = () => {
       if (modalData?.confirmDiscard) {
         const colors = ['cancel', 'main']
         const disabled = [false, false]
-        const labels = ['Discard', 'Continue']
+        const labels = [CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD, CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CONTINUE]
         const onAction = label => {
-          if (label === 'Discard') {
+          if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD) {
             closeModal()
           } else {
             updateModalData({ confirmDiscard: false, alert: null })
@@ -91,7 +91,7 @@ const useAddTemplateButton = () => {
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? 'Discard' : a.label))
+      const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD : a.label))
 
       const onAction = label => {
         if (label === 'Discard') {
@@ -114,7 +114,7 @@ const useAddTemplateButton = () => {
     createModal({
       actionsComponent: ActionView,
       contentComponent: ContentView,
-      titleComponent: ConceptTitle,
+      titleComponent: TemplateTitle,
       data: {
         confirmDiscard: false,
         hasChanges: false,

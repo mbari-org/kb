@@ -1,0 +1,14 @@
+{
+  "CONTENT": {
+    "HEADER": "Delete template",
+    "WARNING": {
+      "LINE_1": "This template will be permanently deleted.",
+      "LINE_2": "This action cannot be undone."
+    }
+  },
+  "FIELDS": {
+    "LINK_NAME": "Link name",
+    "TO_CONCEPT": "To concept",
+    "LINK_VALUE": "Link value"
+  }
+}
