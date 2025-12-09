@@ -32,12 +32,6 @@ export const CONCEPT = {
     VALUE: 'name',
     EXTENT: 'nameExtent',
   },
-  NAME_TYPES: {
-    COMMON: 'Common',
-    FORMER: 'Former',
-    PRIMARY: 'Primary',
-    SYNONYM: 'Synonym',
-  },
   PROPERTY_LIST: {
     ITEMS_PER_PAGE: 5,
   },
@@ -46,7 +40,6 @@ export const CONCEPT = {
     NAME: 'name',
   },
   SELECT: {
-    CONCEPT_LABEL: 'Concept',
     LEFT_COMPONENT: {
       INFO_ICON: 'info_icon',
       NONE: 'none',
@@ -56,8 +49,6 @@ export const CONCEPT = {
       NONE: 'none',
       SPECIAL: 'special',
     },
-    TO_CONCEPT_LABEL: 'To Concept',
     WIDTH: 350,
   },
-  TO_SPECIAL: ['self', 'nil'],
 }

@@ -1,8 +1,15 @@
 {
   "CONCEPT": {
+    "NO_ITEMS": "None",
+    "NO_MEDIA": "No media",
     "SELECT": {
       "CONCEPT": "Concept",
       "TO_CONCEPT": "To concept"
+    },
+    "TO_SPECIAL": ["self", "nil"],
+    "EXTENT": {
+      "CHILDREN": "children",
+      "DESCENDANTS": "descendants"
     },
     "STRUCTURE": {
       "CHANGE_NAME": "Change name",

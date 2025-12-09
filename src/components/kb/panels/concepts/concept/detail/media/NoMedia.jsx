@@ -4,6 +4,9 @@ import { Box, Typography } from '@mui/material'
 import MediaAdd from '@/components/kb/panels/concepts/concept/change/staged/media/edit/MediaAdd'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import { CONFIG } from '@/config/js'
+
+const { CONCEPT } = CONFIG
 
 const NoMedia = () => {
   const { isEditing } = use(ConceptContext)
@@ -37,7 +40,7 @@ const NoMedia = () => {
           zIndex: 1,
         }}
       >
-        No Media
+        {CONCEPT.NO_MEDIA}
       </Typography>
       {isEditing && (
         <Box

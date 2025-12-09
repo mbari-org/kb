@@ -3,10 +3,11 @@ import { Box, Stack, Typography } from '@mui/material'
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
 import { UI_TEXT } from '@/lib/constants/uiText.js'
-
+import { CONFIG } from '@/config/js'
 import { diff, filterObject, pick } from '@/lib/utils'
 
 const { CANCEL, CONFIRM_DISCARD, DELETE, DISCARD_ALL, SAVE } = UI_TEXT.LABELS.BUTTON
+const { CONCEPT } = CONFIG
 
 export const REFERENCE_FIELDS = {
   ADD_SUBMIT: ['citation', 'doi', 'concepts'],
@@ -226,7 +227,7 @@ export const createDeleteReferenceContent = () => {
     const fields = [
       { label: 'Citation', value: reference.citation },
       { label: 'DOI', value: reference.doi },
-      { label: 'Concepts', value: reference.concepts ? reference.concepts.join(', ') : 'None' },
+      { label: 'Concepts', value: reference.concepts ? reference.concepts.join(', ') : CONCEPT.NO_ITEMS },
     ]
 
     return (

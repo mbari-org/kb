@@ -3,9 +3,11 @@ import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/materia
 import { useTheme } from '@mui/material/styles'
 
 import { CONCEPT } from '@/lib/constants'
+import { CONFIG } from '@/config/js/index.js'
 import KBTooltip from '@/components/common/KBTooltip'
 
 const { CHILDREN, SOLO: CONCEPT_VALUE, DESCENDANTS } = CONCEPT.EXTENT
+const { CHILDREN: CHILDREN_TEXT, DESCENDANTS: DESCENDANTS_TEXT } = CONFIG.CONCEPT.EXTENT
 
 const ConceptExtent = ({ initialValue = CONCEPT_VALUE, onChange }) => {
   const [conceptExtent, setConceptExtent] = useState(initialValue)
@@ -35,10 +37,10 @@ const ConceptExtent = ({ initialValue = CONCEPT_VALUE, onChange }) => {
         value={conceptExtent}
       >
         <ToggleButton value={CHILDREN} sx={toggleButtonSx}>
-          children
+          {CHILDREN_TEXT}
         </ToggleButton>
         <ToggleButton value={DESCENDANTS} sx={toggleButtonSx}>
-          descendants
+          {DESCENDANTS_TEXT}
         </ToggleButton>
       </ToggleButtonGroup>
     </Stack>

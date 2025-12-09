@@ -5,7 +5,7 @@ import { FormControl, TextField, Autocomplete } from '@mui/material'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConceptTaxa } from '@/lib/api/concept'
 
-import { CONCEPT } from '@/lib/constants'
+import { CONFIG } from '@/config/js/index.js'
 
 const RealizationToConcept = ({
   realizationItem,
@@ -23,7 +23,7 @@ const RealizationToConcept = ({
   const toConcept = realizationItem.toConcept
 
   const isSpecial = useMemo(() => {
-    return toConcept === 'self' || toConcept === 'nil'
+    return CONFIG.CONCEPT.TO_SPECIAL.includes(toConcept)
   }, [toConcept])
 
   const isValidToConcept = useMemo(
@@ -61,7 +61,7 @@ const RealizationToConcept = ({
   useEffect(() => {
     if (!apiFns || !toConcept) return
 
-    const specialMap = CONCEPT.TO_SPECIAL.reduce((acc, val) => {
+    const specialMap = CONFIG.CONCEPT.TO_SPECIAL.reduce((acc, val) => {
       acc[val] = [val]
       return acc
     }, {})

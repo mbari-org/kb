@@ -43,7 +43,7 @@ const ConceptSelect = ({
 
     // If this is a special component (ToConcept), include special values in options
     if (rightComponent === SPECIAL) {
-      return [...baseOptions, ...CONCEPT.TO_SPECIAL]
+      return [...baseOptions, ...CONFIG.CONCEPT.TO_SPECIAL]
     }
 
     return baseOptions
@@ -53,7 +53,7 @@ const ConceptSelect = ({
     if (selectedName) {
       const isValidSelection =
         options.includes(selectedName) ||
-        (rightComponent === SPECIAL && CONCEPT.TO_SPECIAL.includes(selectedName))
+        (rightComponent === SPECIAL && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName))
 
       if (isValidSelection) {
         const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true
