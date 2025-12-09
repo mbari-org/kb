@@ -1,0 +1,18 @@
+{
+  "TITLE": {
+    "LOCK": "Lock user",
+    "UNLOCK": "Unlock user",
+    "LOCK_LAST_ADMIN": "Can't lock last admin"
+  },
+  "MESSAGE": {
+    "LOCK_LAST_ADMIN": {
+      "LINE_1": "You cannot lock the last unlocked admin.",
+      "LINE_2": "Please unlock another admin first."
+    },
+    "LOCK": {
+      "LINE_1": "A locked user will not be able to log in to the Knowledge Base.",
+      "LINE_2": "No other changes are made."
+    },
+    "UNLOCK": "An unlocked user will be able to log in to the Knowledge Base."
+  }
+}

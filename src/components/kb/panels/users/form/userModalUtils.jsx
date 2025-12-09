@@ -3,11 +3,12 @@ import { Box, Stack, Typography } from '@mui/material'
 import UserForm from '@/components/kb/panels/users/form/UserForm'
 
 import { EMAIL_REGEX } from '@/lib/constants'
-import { LABELS } from '@/lib/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, SAVE } = LABELS.BUTTON
+import { CONFIG } from '@/config/js/index.js'
+
+const { CANCEL, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
 const EDITABLE = ['affiliation', 'email', 'firstName', 'lastName', 'role']
 const EDITABLE_ADD = [...EDITABLE, 'username']
@@ -170,7 +171,7 @@ export const createHandlers = (updateModalData, closeModal, isEdit) => {
 // Lock user specific utilities
 export const createLockUserActions = (handleCancel, handleLockToggle) => currentModalData => {
   const { user, isLastAdmin } = currentModalData
-  const { CANCEL, LOCK, UNLOCK, CLOSE } = LABELS.BUTTON
+  const { CANCEL, LOCK, UNLOCK, CLOSE } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
   if (isLastAdmin) {
     return [
@@ -201,26 +202,28 @@ export const createLockUserActions = (handleCancel, handleLockToggle) => current
 
 export const createLockUserTitle = currentModalData => {
   const { user, isLastAdmin } = currentModalData
+  const { TITLE } = CONFIG.PANELS.USERS.MODALS.LOCK
 
   if (isLastAdmin) {
-    return 'Can\'t Lock Last Admin'
+    return TITLE.LOCK_LAST_ADMIN
   }
 
-  return user?.locked ? 'Unlock User' : 'Lock User'
+  return user?.locked ? TITLE.UNLOCK : TITLE.LOCK
 }
 
 export const createLockUserContent = () => {
   const LockUserContent = currentModalData => {
     const { user, isLastAdmin } = currentModalData
+    const { MESSAGE } = CONFIG.PANELS.USERS.MODALS.LOCK
 
     if (isLastAdmin) {
       return (
         <Stack spacing={0} sx={{ textAlign: 'center' }}>
           <Typography variant='body1' color='text.secondary'>
-            You cannot lock the last unlocked admin.
+            {MESSAGE.LOCK_LAST_ADMIN.LINE_1}
           </Typography>
           <Typography variant='body1' color='text.secondary'>
-            Please unlock another admin first.
+            {MESSAGE.LOCK_LAST_ADMIN.LINE_2}
           </Typography>
         </Stack>
       )
@@ -235,9 +238,9 @@ export const createLockUserContent = () => {
       { label: 'Email', value: user.email },
     ]
 
-    const lockedText = `A ${user.locked ? 'unlocked' : 'locked'} user will ${
-      user.locked ? '' : 'not'
-    } be able to log in to the Knowledge Base.`
+    // If user is locked, we're unlocking them - show unlocked message
+    // If user is unlocked, we're locking them - show locked message (with 2 lines)
+    const isUnlocking = user.locked
 
     return (
       <Stack spacing={3}>
@@ -252,12 +255,20 @@ export const createLockUserContent = () => {
           ))}
         </Stack>
         <Stack spacing={0} sx={{ textAlign: 'center' }}>
-          <Typography variant='body1' color='text.secondary'>
-            {lockedText}
-          </Typography>
-          <Typography variant='body1' color='text.secondary'>
-            No other changes are made.
-          </Typography>
+          {isUnlocking ? (
+            <Typography variant='body1' color='text.secondary'>
+              {MESSAGE.UNLOCK}
+            </Typography>
+          ) : (
+            <>
+              <Typography variant='body1' color='text.secondary'>
+                {MESSAGE.LOCK.LINE_1}
+              </Typography>
+              <Typography variant='body1' color='text.secondary'>
+                {MESSAGE.LOCK.LINE_2}
+              </Typography>
+            </>
+          )}
         </Stack>
       </Stack>
     )

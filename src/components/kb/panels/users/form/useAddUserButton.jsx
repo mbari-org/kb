@@ -77,7 +77,7 @@ const useAddUserButton = () => {
       if (confirmDiscard) {
         const colors = ['cancel', 'main']
         const disabled = [false, false]
-        const labels = [DISCARD, 'Continue']
+        const labels = [DISCARD, CONFIG.PANELS.USERS.MODALS.BUTTON.CONTINUE]
 
         const onAction = label => {
           if (label === DISCARD) {
@@ -120,7 +120,7 @@ const useAddUserButton = () => {
       return UserModalContent(modalData)
     }
 
-    const TitleView = () => <Title title='Add User' />
+    const TitleView = () => <Title title={CONFIG.PANELS.USERS.MODALS.ADD.TITLE} />
 
     createModal({
       actionsComponent: ActionView,
@@ -142,7 +142,16 @@ const useAddUserButton = () => {
     })
   }, [closeModal, createModal, handleCancel, handleCommit, handleFormChange, updateModalData, users])
 
-  const AddUserButton = useCallback(() => <PanelAddButton onClick={addUserModal} />, [addUserModal])
+  const AddUserButton = useCallback(
+    () => (
+      <PanelAddButton
+        onClick={addUserModal}
+        label={CONFIG.PANELS.USERS.BUTTON.ADD}
+        tooltip={CONFIG.PANELS.USERS.TOOLTIP.ADD}
+      />
+    ),
+    [addUserModal]
+  )
 
   return AddUserButton
 }

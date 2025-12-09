@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
+    "resolveJsonModule": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   }
 }

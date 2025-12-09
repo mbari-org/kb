@@ -14,12 +14,4 @@ export const UI_TOOLTIP = {
       PENDING: 'Export Pending History',
     },
   },
-  USERS: {
-    EDIT: 'Edit User details',
-    EXPORT: {
-      ALL: 'Export All Users',
-    },
-    LOCK: 'Lock User to prevent login',
-    UNLOCK: 'Unlock User to allow login',
-  },
 }

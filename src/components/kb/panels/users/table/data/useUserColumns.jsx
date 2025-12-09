@@ -5,10 +5,12 @@ import { CiEdit } from 'react-icons/ci'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 
-import { ROLES, TOOLTIP } from '@/lib/constants'
+import { ROLES } from '@/lib/constants'
+import { CONFIG } from '@/config/js/index.js'
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
-  const lockTooltip = locked => locked ? TOOLTIP.USERS.UNLOCK : TOOLTIP.USERS.LOCK
+  const lockTooltip = locked =>
+    locked ? CONFIG.PANELS.USERS.TOOLTIP.UNLOCK : CONFIG.PANELS.USERS.TOOLTIP.LOCK
 
   const columns = [
     {
@@ -31,7 +33,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
           <ActionIcon
             Icon={CiEdit}
             onClick={() => editUserModal(params.row)}
-            tooltip={TOOLTIP.USERS.EDIT}
+            tooltip={CONFIG.PANELS.USERS.TOOLTIP.EDIT}
             color='edit'
             size={24}
             disabled={params.row.locked}

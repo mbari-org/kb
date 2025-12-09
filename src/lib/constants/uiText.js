@@ -5,6 +5,5 @@ export const UI_TEXT = {
   LABELS: UI_LABELS,
   TOOLTIP: {
     HISTORY: UI_TOOLTIP.HISTORY,
-    USERS: UI_TOOLTIP.USERS,
   },
 }

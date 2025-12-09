@@ -65,7 +65,7 @@ const useEditUserButton = () => {
         if (confirmDiscard) {
           const colors = ['cancel', 'main']
           const disabled = [false, false]
-          const labels = [DISCARD, 'Continue']
+          const labels = [DISCARD, CONFIG.PANELS.USERS.MODALS.BUTTON.CONTINUE]
 
           const onAction = label => {
             if (label === DISCARD) {
@@ -103,7 +103,7 @@ const useEditUserButton = () => {
         return UserModalContent(modalData)
       }
 
-      const TitleView = () => <Title title='Edit User' />
+      const TitleView = () => <Title title={CONFIG.PANELS.USERS.MODALS.EDIT.TITLE} />
 
       createModal({
         actionsComponent: ActionView,

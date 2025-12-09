@@ -6,15 +6,13 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import useUsersExport from '@/components/kb/panels/users/table/header/useUsersExport'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
-
-const { EXPORT } = UI_TEXT.TOOLTIP.USERS
+import { CONFIG } from '@/config/js/index.js'
 
 const UsersTableHeaderLeft = () => {
   const { users } = use(UsersContext)
   const usersExport = useUsersExport()
 
-  const toolTip = EXPORT.ALL
+  const toolTip = CONFIG.PANELS.USERS.TOOLTIP.EXPORT.ALL
 
   return <PanelDataExport count={users?.length || 0} exportFn={usersExport} exportTooltip={toolTip} width='auto' />
 }
