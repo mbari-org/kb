@@ -10,7 +10,6 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import {
   createHandlers,
@@ -24,8 +23,8 @@ import {
 import { CONFIG } from '@/config/js'
 const { PROCESSING } = CONFIG
 
-const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
 const { REFERENCES } = SELECTED.SETTINGS
+const { DISCARD } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)
@@ -87,7 +86,7 @@ const useAddReferenceButton = () => {
       if (confirmDiscard) {
         const colors = ['cancel', 'main']
         const disabled = [false, false]
-        const labels = [DISCARD, 'Continue']
+        const labels = [DISCARD, CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE]
 
         const onAction = label =>
           label === DISCARD ? closeModal() : updateModalData({ confirmDiscard: false })
@@ -103,7 +102,7 @@ const useAddReferenceButton = () => {
       const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges) ? DISCARD : a.label)
 
       const onAction = label => {
-        if (label === DISCARD || label === CONFIRM_DISCARD) {
+        if (label === DISCARD || label === CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD) {
           updateModalData({ confirmDiscard: true })
           return
         }
@@ -122,7 +121,7 @@ const useAddReferenceButton = () => {
       return ReferenceModalContent(modalData)
     }
 
-    const TitleView = () => <Title title='Add Reference' />
+    const TitleView = () => <Title title={CONFIG.PANELS.REFERENCES.MODALS.ADD.TITLE} />
 
     createModal({
       actionsComponent: ActionView,

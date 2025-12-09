@@ -26,6 +26,7 @@ const ReferenceForm = ({ isEdit = false, onChange, reference, original }) => {
         handleConceptAdd={handleConceptAdd}
         handleConceptDelete={handleConceptDelete}
         handleSearchInput={handleConceptSearchInput}
+        isEdit={isEdit}
         selectedConcept={selectedConcept}
         reference={reference}
       />

@@ -2,11 +2,10 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
 import { CONFIG } from '@/config/js'
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, CONFIRM_DISCARD, DELETE, DISCARD_ALL, SAVE } = UI_TEXT.LABELS.BUTTON
+const { CANCEL, DELETE, DISCARD_ALL, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 const { CONCEPT } = CONFIG
 
 export const REFERENCE_FIELDS = {
@@ -104,7 +103,7 @@ export const createModalActions =
           {
             color: 'main',
             disabled: false,
-            label: 'Continue',
+            label: CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE,
             onClick: handleCancel,
           },
         ]
@@ -114,7 +113,7 @@ export const createModalActions =
         {
           color: 'cancel',
           disabled: false,
-          label: isValid && hasChanges ? CONFIRM_DISCARD : CANCEL,
+          label: isValid && hasChanges ? CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD : CANCEL,
           onClick: handleCancel,
         },
         {
@@ -218,16 +217,15 @@ export const createDeleteReferenceActions =
     ]
   }
 
-export const createDeleteReferenceTitle = () => 'Delete Reference'
-
 export const createDeleteReferenceContent = () => {
   const DeleteReferenceContent = currentModalData => {
     const { reference } = currentModalData
+    const { CONTENT, FIELDS } = CONFIG.PANELS.REFERENCES.MODALS.DELETE
 
     const fields = [
-      { label: 'Citation', value: reference.citation },
-      { label: 'DOI', value: reference.doi },
-      { label: 'Concepts', value: reference.concepts ? reference.concepts.join(', ') : CONCEPT.NO_ITEMS },
+      { label: FIELDS.CITATION, value: reference.citation },
+      { label: FIELDS.DOI, value: reference.doi },
+      { label: FIELDS.CONCEPTS, value: reference.concepts ? reference.concepts.join(', ') : CONCEPT.NO_ITEMS },
     ]
 
     return (
@@ -244,10 +242,10 @@ export const createDeleteReferenceContent = () => {
         </Stack>
         <Stack spacing={0} sx={{ textAlign: 'center' }}>
           <Typography variant='body1' color='text.secondary'>
-            This reference will be permanently deleted.
+            {CONTENT.WARNING.LINE_1}
           </Typography>
           <Typography variant='body1' color='text.secondary'>
-            This action cannot be undone.
+            {CONTENT.WARNING.LINE_2}
           </Typography>
         </Stack>
       </Stack>

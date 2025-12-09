@@ -10,7 +10,6 @@ import { createError } from '@/lib/errors'
 import {
   createDeleteReferenceActions,
   createDeleteReferenceContent,
-  createDeleteReferenceTitle,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
 import { CONFIG } from '@/config/js'
@@ -72,10 +71,7 @@ const useDeleteReferenceButton = () => {
         return DeleteReferenceContent(modalData)
       }
 
-      const TitleView = () => {
-        const { modalData } = useReferencesModalDataContext()
-        return <Title title={createDeleteReferenceTitle(modalData)} />
-      }
+      const TitleView = () => <Title title={CONFIG.PANELS.REFERENCES.MODALS.DELETE.TITLE} />
 
       createModal({
         actionsComponent: ActionView,

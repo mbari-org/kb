@@ -6,7 +6,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import useConfirmReferenceModal from '@/components/kb/panels/references/modal/useConfirmReferenceModal'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import { CONFIG } from '@/config/js'
 import {
   createChangeDetector,
   createHandlers,
@@ -15,7 +15,7 @@ import {
   processEditReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
+const { DISCARD } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 
 const useEditReferenceButton = () => {
   const openConfirmModal = useConfirmReferenceModal()
@@ -69,7 +69,7 @@ const useEditReferenceButton = () => {
         if (confirmDiscard) {
           const colors = ['cancel', 'main']
           const disabled = [false, false]
-          const labels = [DISCARD, 'Continue']
+          const labels = [DISCARD, CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE]
 
           const onAction = label => {
             if (label === DISCARD) {
@@ -95,7 +95,7 @@ const useEditReferenceButton = () => {
         })
 
         const onAction = label => {
-          if (label === DISCARD || label === CONFIRM_DISCARD) {
+          if (label === DISCARD || label === CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD) {
             updateModalData({ confirmDiscard: true })
             return
           }
@@ -112,7 +112,7 @@ const useEditReferenceButton = () => {
         return ReferenceModalContent(modalData)
       }
 
-      const TitleView = () => <Title title='Edit Reference' />
+      const TitleView = () => <Title title={CONFIG.PANELS.REFERENCES.MODALS.EDIT.TITLE} />
 
       createModal({
         actionsComponent: ActionView,

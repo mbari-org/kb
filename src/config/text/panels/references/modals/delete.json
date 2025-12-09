@@ -1,0 +1,14 @@
+{
+  "TITLE": "Delete reference",
+  "CONTENT": {
+    "WARNING": {
+      "LINE_1": "This reference will be permanently deleted.",
+      "LINE_2": "This action cannot be undone."
+    }
+  },
+  "FIELDS": {
+    "CITATION": "Citation",
+    "DOI": "DOI",
+    "CONCEPTS": "Concepts"
+  }
+}

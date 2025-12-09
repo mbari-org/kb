@@ -1,5 +1,7 @@
 import { Menu, MenuItem, ListSubheader } from '@mui/material'
 
+import { CONFIG } from '@/config/js'
+
 const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick }) => {
   return (
     <Menu
@@ -25,7 +27,7 @@ const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick
           py: 1,
         }}
       >
-        Select to Remove Concept
+        {CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.SELECT_REMOVE}
       </ListSubheader>
       {concepts?.map(concept => (
         <MenuItem key={concept} onClick={() => onConceptClick(concept)}>
