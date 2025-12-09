@@ -1,3 +1,6 @@
 {
-  "NAME": "References"
+  "NAME": "References",
+  "SUBTITLE": {
+    "ALL_CONCEPTS": "All concepts"
+  }
 }

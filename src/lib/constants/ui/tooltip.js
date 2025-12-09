@@ -14,16 +14,6 @@ export const UI_TOOLTIP = {
       PENDING: 'Export Pending History',
     },
   },
-  REFERENCES: {
-    EXPORT: {
-      BY_CONCEPT: 'Export References associated with selected Concept',
-      ALL: 'Export All References',
-    },
-    SWITCH: {
-      BY_CONCEPT: 'References associated with selected Concept',
-      ALL: 'All References',
-    },
-  },
   USERS: {
     EDIT: 'Edit User details',
     EXPORT: {

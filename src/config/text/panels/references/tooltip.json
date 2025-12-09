@@ -1,0 +1,7 @@
+{
+  "ADD": "Add reference",
+  "EXPORT": {
+    "ALL": "Export all references",
+    "CONCEPT": "Export references for selected concept"
+  }
+}

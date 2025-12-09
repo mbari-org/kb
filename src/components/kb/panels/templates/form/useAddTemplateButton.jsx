@@ -136,7 +136,12 @@ const useAddTemplateButton = () => {
       : CONFIG.PANELS.TEMPLATES.TOOLTIP.ADD.CONCEPT_NOT_SELECTED
 
     return (
-      <PanelAddButton disabled={!conceptSelected} onClick={addTemplateModal} tooltip={tooltip} />
+      <PanelAddButton
+        disabled={!conceptSelected}
+        onClick={addTemplateModal}
+        tooltip={tooltip}
+        label={CONFIG.PANELS.TEMPLATES.BUTTON.ADD}
+      />
     )
   }, [addTemplateModal, filters])
 

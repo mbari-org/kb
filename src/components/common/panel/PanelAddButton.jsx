@@ -1,10 +1,10 @@
 import { Box, Button } from '@mui/material'
 import KBTooltip from '@/components/common/KBTooltip'
 
-const PanelAddButton = ({ onClick, disabled = false, tooltip }) => {
+const PanelAddButton = ({ onClick, disabled = false, tooltip, label = 'Add' }) => {
   const button = (
     <Button color='primary' disabled={disabled} onClick={onClick} variant='contained'>
-      Add
+      {label}
     </Button>
   )
 

@@ -145,7 +145,13 @@ const useAddReferenceButton = () => {
   }, [createModal, initialReferenceData, handleCancel, handleCommit, closeModal, updateModalData, handleFormChange])
 
   const AddReferenceButton = useCallback(
-    () => <PanelAddButton onClick={addReferenceModal} />,
+    () => (
+      <PanelAddButton
+        onClick={addReferenceModal}
+        label={CONFIG.PANELS.REFERENCES.BUTTON.ADD}
+        tooltip={CONFIG.PANELS.REFERENCES.TOOLTIP.ADD}
+      />
+    ),
     [addReferenceModal]
   )
 
