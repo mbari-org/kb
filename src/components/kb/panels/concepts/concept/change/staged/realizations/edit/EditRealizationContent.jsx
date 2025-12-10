@@ -17,12 +17,12 @@ import useStageRealization from './useStageRealization'
 import useRealizationContentHandlers from './useRealizationContentHandlers'
 import useFilterLinkName from './useFilterLinkName'
 
-import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
-
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
 
 const { ITEMS_PER_PAGE } = CONCEPT.PROPERTY_LIST
+const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const EditRealizationContent = () => {
   const { stagedState } = use(ConceptContext)
@@ -38,7 +38,7 @@ const EditRealizationContent = () => {
   const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
 
   const isEdit = modalData?.action === CONCEPT_STATE.REALIZATION.EDIT
-  const actionText = actionVerb(modalData.action)
+  const modalLabel = action === CONCEPT_STATE.REALIZATION.ADD ? REALIZATION.ADD.LABEL : REALIZATION.EDIT.LABEL
 
   useEffect(() => {
     if (isEdit) {
@@ -152,7 +152,7 @@ const EditRealizationContent = () => {
           <Divider sx={{ my: 1 }} />
         </Box>
       )}
-      <ModalActionText text={`${actionText} Realization`} />
+      <ModalActionText text={modalLabel} />
       <RealizationForm
         isDuplicate={isDuplicate}
         isEdit={isEdit}

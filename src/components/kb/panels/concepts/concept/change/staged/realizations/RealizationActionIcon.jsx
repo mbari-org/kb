@@ -13,6 +13,9 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
+
+const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const ADD = CONCEPT_STATE.REALIZATION.ADD
 const DELETE = CONCEPT_STATE.REALIZATION.DELETE
@@ -23,10 +26,10 @@ const RealizationActionIcon = ({ action, realizationIndex, size }) => {
 
   const tooltip =
     action === ADD
-      ? 'Add Realization'
+      ? REALIZATION.ADD.TOOLTIP
       : action === DELETE
-        ? 'Delete Realization'
-        : 'Edit Realization'
+        ? REALIZATION.DELETE.TOOLTIP
+        : REALIZATION.EDIT.TOOLTIP
 
   const onClick = useCallback(() => {
     const realizationItem =
