@@ -5,9 +5,10 @@
 
 import { createActions } from '@/components/modal/conceptModalFactory'
 import { RESETTING } from '@/lib/constants'
-import { LABELS } from '@/lib/constants'
 
-const { CONFIRM, CONTINUE, DISCARD, STAGE } = LABELS.BUTTON
+import { CONFIG } from '@/config/js'
+
+const { CONFIRM, CONTINUE, DISCARD, STAGE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { CONFIRMED } = RESETTING
 
 /**

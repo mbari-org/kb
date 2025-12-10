@@ -3,8 +3,9 @@ import { MdOutlineDeleteForever } from 'react-icons/md'
 import MediaAction from '@/components/kb/panels/concepts/concept/change/staged/media/MediaAction'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
 
-const MEDIA_DELETE = 'Delete Media'
+const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const MediaDelete = () => {
   return (
@@ -13,7 +14,7 @@ const MediaDelete = () => {
       color='cancel'
       Icon={MdOutlineDeleteForever}
       position='left'
-      tooltip={MEDIA_DELETE}
+      tooltip={MEDIA.DELETE.TOOLTIP}
       sx={{ mb: 1.25 }}
     />
   )

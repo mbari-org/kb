@@ -3,8 +3,9 @@ import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import MediaAction from '@/components/kb/panels/concepts/concept/change/staged/media/MediaAction'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
 
-const MEDIA_ADD = 'Add Media'
+const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const MediaAdd = ({ position, size, sx }) => {
   return (
@@ -18,7 +19,7 @@ const MediaAdd = ({ position, size, sx }) => {
         ...sx,
         backgroundColor: 'transparent',
       }}
-      tooltip={MEDIA_ADD}
+      tooltip={MEDIA.ADD.TOOLTIP}
     />
   )
 }

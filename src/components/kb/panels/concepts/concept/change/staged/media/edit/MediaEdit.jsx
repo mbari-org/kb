@@ -3,8 +3,9 @@ import { CiEdit } from 'react-icons/ci'
 import MediaAction from '@/components/kb/panels/concepts/concept/change/staged/media/MediaAction'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
 
-const MEDIA_EDIT = 'Edit Media'
+const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const MediaEdit = () => {
   return (
@@ -13,7 +14,7 @@ const MediaEdit = () => {
       color='edit'
       Icon={CiEdit}
       position='right'
-      tooltip={MEDIA_EDIT}
+      tooltip={MEDIA.EDIT.TOOLTIP}
       sx={{ mb: 1.25 }}
     />
   )

@@ -26,6 +26,11 @@ import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
+import { CONFIG } from '@/config/js'
+
+import { ACTION } from '@/lib/constants'
+
+const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
@@ -160,12 +165,14 @@ const EditMediaContent = () => {
     },
   }
 
+  const modalActionText = actionText === ACTION.EDIT ? MEDIA.EDIT.LABEL : MEDIA.ADD.LABEL
+
   const creditError = modifiedFields.credit && formMediaItem.credit.trim() === ''
   const creditHelperText = formMediaItem.credit.trim() === '' ? 'Credit cannot be empty' : ''
 
   return (
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
-      <ModalActionText text={actionText + ' Media'} />
+      <ModalActionText text={modalActionText} />
       <FormControl fullWidth margin='normal'>
         <TextField
           error={urlError}
@@ -207,7 +214,7 @@ const EditMediaContent = () => {
                 onChange={handleChange}
               />
             }
-            label='Is Primary'
+            label={MEDIA.EDIT.PRIMARY}
           />
         </Box>
       )}

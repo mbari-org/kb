@@ -6,10 +6,13 @@ import realizations from '@/config/text/panels/concepts/realizations.json'
 import references from '@/config/text/panels/concepts/references.json'
 import templates from '@/config/text/panels/concepts/templates.json'
 
+import { MODALS } from './concepts/modals.js'
+
 export const CONCEPTS = {
   ALIASES: aliases,
   AUTHOR: author,
   BUTTON: button,
+  MODALS,
   RANK: rank,
   REALIZATIONS: realizations,
   REFERENCES: references,

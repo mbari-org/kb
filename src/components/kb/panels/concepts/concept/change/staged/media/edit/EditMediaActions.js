@@ -16,7 +16,6 @@ const EditMediaActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  // Handle case where modalData might be empty or undefined
   const { mediaItem = { url: '', credit: '' }, modified = false } = modalData || {}
 
   const validMediaItem = useMemo(
@@ -25,9 +24,9 @@ const EditMediaActions = () => {
   )
 
   const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
-    modifyConcept,
     closeModal,
     concept,
+    modifyConcept,
   })
 
   const handleStage = () => {
@@ -38,13 +37,13 @@ const EditMediaActions = () => {
   const stageDisabled = !modified && validMediaItem
 
   return createStagedActions({
+    confirmReset,
+    name: 'EditMediaActions',
+    onConfirm: handleConfirm,
+    onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
-    confirmReset,
-    onConfirm: handleConfirm,
-    onContinue: handleContinue,
-    name: 'EditMediaActions',
   })
 }
 
