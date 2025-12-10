@@ -11,8 +11,11 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import useEditAliasHandlers from './useEditAliasHandlers'
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
-import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 import { ALIAS } from '@/lib/constants/alias.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
+
+const { ALIAS: ALIAS_MODAL } = CONFIG.PANELS.CONCEPTS.MODALS
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 
@@ -24,7 +27,7 @@ const EditAliasContent = () => {
 
   const [formAlias, setFormAlias] = useState(modalData.aliasItem)
 
-  const actionText = actionVerb(modalData.action)
+  const modalLabel = modalData.action === CONCEPT_STATE.ALIAS.ADD ? ALIAS_MODAL.ADD.LABEL : ALIAS_MODAL.EDIT.LABEL
 
   const stagedAlias = useMemo(
     () => ({ ...stagedState.aliases[modalData.aliasIndex] }),
@@ -54,7 +57,7 @@ const EditAliasContent = () => {
 
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>
-      <ModalActionText text={`${actionText} Alias`} />
+      <ModalActionText text={modalLabel} />
       <FormControl {...inputStyle}>
         <TextInput
           error={nameError}

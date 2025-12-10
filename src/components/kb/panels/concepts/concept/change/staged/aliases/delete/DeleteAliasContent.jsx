@@ -6,18 +6,18 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 import { drop } from '@/lib/utils'
+import { CONFIG } from '@/config/js'
+
+const { ALIAS } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const DeleteAliasContent = () => {
   const { modalData } = use(ConceptModalContext)
   const { aliasItem } = modalData
 
-  const actionText = actionVerb(modalData.action)
-
   return (
     <Box>
-      <ModalActionText text={actionText + ' Alias'} />
+      <ModalActionText text={ALIAS.DELETE.LABEL} />
       <Box sx={{ ml: 2, mt: 1 }}>
         <Detail
           id='delete-alias-content-detail'

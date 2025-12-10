@@ -13,6 +13,9 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { aliasFields, EMPTY_ALIAS } from '@/lib/model/aliases'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { CONFIG } from '@/config/js'
+
+const { ALIAS } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const ADD = CONCEPT_STATE.ALIAS.ADD
 const DELETE = CONCEPT_STATE.ALIAS.DELETE
@@ -21,7 +24,7 @@ const AliasActionIcon = ({ action, aliasIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
-  const tooltip = action === ADD ? 'Add Alias' : action === DELETE ? 'Delete Alias' : 'Edit Alias'
+  const tooltip = action === ADD ? ALIAS.ADD.TOOLTIP : action === DELETE ? ALIAS.DELETE.TOOLTIP : ALIAS.EDIT.TOOLTIP
 
   const onClick = useCallback(() => {
     const aliasItem = action === ADD ? EMPTY_ALIAS : aliasFields(stagedState.aliases[aliasIndex])
