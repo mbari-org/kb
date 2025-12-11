@@ -1,3 +1,4 @@
+import { use } from 'react'
 import { Stack, Box } from '@mui/material'
 
 import ConceptMedia from '@/components/kb/panels/concepts/concept/detail/ConceptMedia'
@@ -6,7 +7,11 @@ import ConceptAuthor from '@/components/kb/panels/concepts/concept/detail/Concep
 import ConceptRank from '@/components/kb/panels/concepts/concept/detail/ConceptRank'
 import ConceptProperties from '@/components/kb/panels/concepts/concept/detail/properties/ConceptProperties'
 
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+
 const ConceptView = () => {
+  const { isMarineOrganism } = use(ConceptContext)
+
   return (
     <Stack direction='row' spacing={1.5} sx={{ height: '100%' }}>
       <ConceptMedia />
@@ -14,7 +19,7 @@ const ConceptView = () => {
         <Stack direction='column' spacing={2}>
           <ConceptName />
           <ConceptAuthor />
-          <ConceptRank />
+          {isMarineOrganism && <ConceptRank />}
         </Stack>
         <Box sx={{ mt: 4 }}>
           <ConceptProperties />

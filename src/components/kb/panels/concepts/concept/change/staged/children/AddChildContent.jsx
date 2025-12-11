@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'
 import ModalActionText from '@/components/common/ModalActionText'
 
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useInputStyle from './useInputStyle'
@@ -27,6 +28,7 @@ const AddChildContent = () => {
   const theme = useTheme()
   const inputStyle = useInputStyle()
 
+  const { isMarineOrganism } = use(ConceptContext)
   const { modalData } = use(ConceptModalContext)
 
   const { child } = modalData
@@ -96,22 +98,24 @@ const AddChildContent = () => {
           value={formChild.author}
         />
       </FormControl>
-      <Stack direction='row' spacing={1.5} sx={{ mt: 4 }}>
-        <RankFieldInput
-          field={CONCEPT.RANK.NAME}
-          initialRank={initialRank}
-          label={MODALS.STRUCTURE.ADD_CHILD.RANK.NAME}
-          rank={formRank}
-          onChange={handleChange(rankField(CONCEPT.RANK.NAME))}
-        />
-        <RankFieldInput
-          field={CONCEPT.RANK.LEVEL}
-          initialRank={initialRank}
-          label={MODALS.STRUCTURE.ADD_CHILD.RANK.LEVEL}
-          rank={formRank}
-          onChange={handleChange(rankField(CONCEPT.RANK.LEVEL))}
-        />
-      </Stack>
+      {isMarineOrganism && (
+        <Stack direction='row' spacing={1.5} sx={{ mt: 4 }}>
+          <RankFieldInput
+            field={CONCEPT.RANK.NAME}
+            initialRank={initialRank}
+            label={MODALS.STRUCTURE.ADD_CHILD.RANK.NAME}
+            rank={formRank}
+            onChange={handleChange(rankField(CONCEPT.RANK.NAME))}
+          />
+          <RankFieldInput
+            field={CONCEPT.RANK.LEVEL}
+            initialRank={initialRank}
+            label={MODALS.STRUCTURE.ADD_CHILD.RANK.LEVEL}
+            rank={formRank}
+            onChange={handleChange(rankField(CONCEPT.RANK.LEVEL))}
+          />
+        </Stack>
+      )}
     </Box>
   )
 }
