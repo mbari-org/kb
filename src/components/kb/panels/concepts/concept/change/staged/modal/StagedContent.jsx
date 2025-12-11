@@ -41,7 +41,7 @@ const StagedContent = () => {
         return <StagedAliases key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.AUTHOR:
-        return <StagedValue key={field} group={STAGED.CONCEPT.AUTHOR} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} group={CONCEPT_MODALS.AUTHOR} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.CHILDREN:
         return <StagedChildren key={field} stagedEdit={stagedEdit} />
@@ -50,13 +50,13 @@ const StagedContent = () => {
         return <StagedMedia key={field} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.NAME:
-        return <StagedObject key={field} group={STAGED.CONCEPT.NAME} stagedEdit={stagedEdit} />
+        return <StagedObject key={field} group={CONCEPT_MODALS.NAME} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.PARENT:
-        return <StagedValue key={field} group={STAGED.CONCEPT.PARENT} stagedEdit={stagedEdit} />
+        return <StagedValue key={field} group={CONCEPT_MODALS.PARENT} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.RANK:
-        return <StagedObject key={field} group={STAGED.CONCEPT.RANK} stagedEdit={stagedEdit} />
+        return <StagedObject key={field} group={CONCEPT_MODALS.RANK} stagedEdit={stagedEdit} />
 
       case CONCEPT.FIELD.REALIZATIONS:
         return <StagedRealizations key={field} stagedEdit={stagedEdit} />

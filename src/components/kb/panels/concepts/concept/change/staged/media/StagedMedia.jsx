@@ -8,7 +8,7 @@ import { MODALS } from '@/config/js/panels/concepts/modals.js'
 const StagedMedia = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={MODALS.STAGED.CONCEPT.MEDIA}
+      group={MODALS.CONCEPT.MEDIA}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedMediaItem}
       stagedItems={stagedMediaEdits(stagedEdit)}

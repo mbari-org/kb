@@ -8,7 +8,7 @@ import { MODALS } from '@/config/js/panels/concepts/modals.js'
 const StagedRealizations = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={MODALS.STAGED.CONCEPT.REALIZATIONS}
+      group={MODALS.CONCEPT.REALIZATIONS}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedRealization}
       stagedItems={stagedRealizationEdits(stagedEdit)}
