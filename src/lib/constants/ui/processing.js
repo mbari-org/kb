@@ -1,3 +1,3 @@
-import { PROCESSING } from '@/config/js/processing.js'
+import CONFIG from '@/config'
 
-export const UI_PROCESSING = PROCESSING
+export const UI_PROCESSING = CONFIG.PROCESSING

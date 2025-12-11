@@ -1,9 +1,9 @@
 import { pendingItems } from '@/lib/model/history'
 
-import { PANELS } from '@/config/js/panels.js'
+import CONFIG from '@/config'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
-const { CONCEPT: group } = PANELS.CONCEPTS.MODALS
+const { CONCEPT: group } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const historyFieldForGroup = groupValue => {
   switch (groupValue) {

@@ -13,7 +13,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { aliasFields, EMPTY_ALIAS } from '@/lib/model/aliases'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { ALIAS } = CONFIG.PANELS.CONCEPTS.MODALS
 

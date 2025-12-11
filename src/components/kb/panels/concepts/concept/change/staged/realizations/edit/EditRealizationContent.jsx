@@ -19,7 +19,7 @@ import useFilterLinkName from './useFilterLinkName'
 
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { ITEMS_PER_PAGE } = CONCEPT.PROPERTY_LIST
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS

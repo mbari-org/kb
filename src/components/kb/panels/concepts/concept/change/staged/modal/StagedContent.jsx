@@ -17,10 +17,10 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
-import { MODALS } from '@/config/js/panels/concepts/modals.js'
+import CONFIG from '@/config'
 import { CONCEPT } from '@/lib/constants'
 
-const { STAGED } = MODALS
+const { STAGED, CONCEPT: CONCEPT_MODALS } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const StagedContent = () => {
   const { initialState, stagedState } = use(ConceptContext)

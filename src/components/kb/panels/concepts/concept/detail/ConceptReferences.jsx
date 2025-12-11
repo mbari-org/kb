@@ -9,7 +9,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const { REFERENCES } = SELECTED.SETTINGS
 

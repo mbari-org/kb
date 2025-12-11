@@ -1,7 +1,7 @@
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
 import { CONCEPT } from '@/lib/constants'
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const { RIGHT_COMPONENT } = CONCEPT.SELECT
 const { SPECIAL } = RIGHT_COMPONENT

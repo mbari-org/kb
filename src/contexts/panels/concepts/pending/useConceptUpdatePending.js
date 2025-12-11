@@ -10,7 +10,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 import { PENDING } from '@/lib/constants/pending.js'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 

@@ -11,7 +11,7 @@ import stagedBorder from '@/components/kb/panels/concepts/concept/change/staged/
 
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const ConceptAuthor = () => {
   const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)

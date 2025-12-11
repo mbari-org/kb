@@ -13,12 +13,12 @@ import { pendingChange, pendingRank } from '@/lib/concept/state/rank'
 import { formatDelta, formatField, otherApprovalSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import group from '@/config/text/panels/concepts/modals/group.json'
+import CONFIG from '@/config'
 
 const { APPROVAL } = PENDING
 
 const RankDetail = ({ pendingConcept }) => {
-  const approval = usePendingGroupApproval(group.RANK)
+  const approval = usePendingGroupApproval(CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.RANK)
 
   const rank = pendingRank(pendingConcept)
   if (!rank) return null
@@ -52,7 +52,7 @@ const RankDetail = ({ pendingConcept }) => {
 
   const pendingGroupTitle = (
     <>
-      <PendingButtons approval={approval} group={group.RANK} />
+      <PendingButtons approval={approval} group={CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.RANK} />
       <Typography sx={rankSx}>Rank</Typography>
     </>
   )

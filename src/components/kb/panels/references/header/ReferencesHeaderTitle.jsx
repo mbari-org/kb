@@ -3,7 +3,7 @@ import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 

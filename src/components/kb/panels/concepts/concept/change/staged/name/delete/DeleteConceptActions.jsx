@@ -15,7 +15,7 @@ import { applyResults, preSideEffects, postSideEffects } from './deletionSideEff
 
 import { deleteConcept as deleteTaxonomyConcept, getConcept as getTaxonomyConcept, insertConcept } from '@/lib/model/taxonomy'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 

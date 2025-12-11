@@ -10,9 +10,9 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingAlias } from '@/lib/concept/state/aliases'
 
-import group from '@/config/text/panels/concepts/modals/group.json'
+import CONFIG from '@/config'
 
-const { ALIASES } = group
+const { ALIASES } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
 const AliasesDetail = ({ pendingConcept }) => {
   const pendingAliases = pendingConcept.filter(isPendingAlias)

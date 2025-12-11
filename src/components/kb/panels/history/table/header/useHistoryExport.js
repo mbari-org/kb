@@ -16,7 +16,7 @@ import { CONCEPT } from '@/lib/constants'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 const { PROCESSING } = CONFIG

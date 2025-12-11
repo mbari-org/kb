@@ -6,7 +6,7 @@
 import { createActions } from '@/components/modal/conceptModalFactory'
 import { RESETTING } from '@/lib/constants'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { CONFIRM, CONTINUE, DISCARD, STAGE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { CONFIRMED } = RESETTING

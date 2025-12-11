@@ -12,7 +12,7 @@ import { isStateModified } from '@/lib/concept/state/state'
 
 import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
 import { RESETTING } from '@/lib/constants'
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 import { UI_TEXT as UI_TEXT_OLD } from '@/lib/constants/uiText.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 

@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import MediaAdd from '@/components/kb/panels/concepts/concept/change/staged/media/edit/MediaAdd'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { CONCEPT } = CONFIG
 

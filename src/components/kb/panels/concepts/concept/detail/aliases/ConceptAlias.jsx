@@ -12,7 +12,7 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/concept/state/staged'
 
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const ALIASES = CONFIG.PANELS.CONCEPTS.ALIASES
 

@@ -6,7 +6,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 

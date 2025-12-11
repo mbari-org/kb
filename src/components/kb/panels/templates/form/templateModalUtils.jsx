@@ -5,7 +5,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const { CANCEL, DELETE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
 

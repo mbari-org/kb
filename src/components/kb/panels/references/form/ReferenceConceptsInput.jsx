@@ -5,7 +5,7 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ReferenceConceptsDropDown from './ReferenceConceptsDropDown'
 import KBTooltip from '@/components/common/KBTooltip'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const ReferenceConceptsInput = ({
   handleConceptAdd,

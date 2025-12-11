@@ -2,7 +2,7 @@ import { useCallback, useState, useMemo } from 'react'
 
 import AppModalContext from './AppModalContext'
 import useSetProcessing from '@/lib/hooks/useSetProcessing'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 

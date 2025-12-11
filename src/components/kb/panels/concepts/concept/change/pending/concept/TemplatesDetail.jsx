@@ -10,9 +10,9 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingTemplate } from '@/lib/concept/state/templates'
 
-import group from '@/config/text/panels/concepts/modals/group.json'
+import CONFIG from '@/config'
 
-const { TEMPLATES } = group
+const { TEMPLATES } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
 const TemplatesDetail = ({ pendingConcept }) => {
   const pendingTemplates = pendingConcept.filter(isPendingTemplate)

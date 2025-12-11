@@ -3,7 +3,7 @@ import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import MediaAction from '@/components/kb/panels/concepts/concept/change/staged/media/MediaAction'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 

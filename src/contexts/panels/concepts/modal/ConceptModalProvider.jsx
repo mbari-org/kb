@@ -4,7 +4,7 @@ import { flushSync } from 'react-dom'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalContext from './ConceptModalContext'
 import useSetProcessing from '@/lib/hooks/useSetProcessing'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 

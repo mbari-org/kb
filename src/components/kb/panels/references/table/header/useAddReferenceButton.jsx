@@ -20,7 +20,7 @@ import {
   processAddReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 const { PROCESSING } = CONFIG
 
 const { REFERENCES } = SELECTED.SETTINGS

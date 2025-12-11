@@ -3,12 +3,12 @@ import StagedRealization from '@/components/kb/panels/concepts/concept/change/st
 
 import { stagedRealizationEdits } from '@/lib/concept/state/realizations'
 
-import { MODALS } from '@/config/js/panels/concepts/modals.js'
+import CONFIG from '@/config'
 
 const StagedRealizations = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={MODALS.CONCEPT.REALIZATIONS}
+      group={CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.REALIZATIONS}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedRealization}
       stagedItems={stagedRealizationEdits(stagedEdit)}

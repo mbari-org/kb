@@ -11,11 +11,11 @@ import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConc
 import { isAdmin } from '@/lib/auth/role'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import { MODALS } from '@/config/js/panels/concepts/modals.js'
-import group from '@/config/text/panels/concepts/modals/group.json'
+import CONFIG from '@/config'
 
-const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = MODALS.BUTTON
+const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { APPROVAL } = PENDING
+const GROUP = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
 const PendingActions = () => {
   const { pending, setPendingConfirm } = use(ConceptContext)
@@ -53,14 +53,14 @@ const PendingActions = () => {
       ]
     }
 
-    if (pendingConfirm.approval === APPROVAL.ACCEPT && pendingConfirm.group === group.ALL) {
+    if (pendingConfirm.approval === APPROVAL.ACCEPT && pendingConfirm.group === GROUP.ALL) {
       return [
         [false, false, true],
         [CONFIRM, DEFER, REJECT_ALL],
       ]
     }
 
-    if (pendingConfirm.approval === APPROVAL.REJECT && pendingConfirm.group === group.ALL) {
+    if (pendingConfirm.approval === APPROVAL.REJECT && pendingConfirm.group === GROUP.ALL) {
       return [
         [true, false, false],
         [APPROVE_ALL, DEFER, CONFIRM],
@@ -88,7 +88,7 @@ const PendingActions = () => {
     label => {
       switch (label) {
         case APPROVE_ALL: {
-          setPendingConfirm({ approval: APPROVAL.ACCEPT, group: group.ALL, pendingItems })
+          setPendingConfirm({ approval: APPROVAL.ACCEPT, group: GROUP.ALL, pendingItems })
           break
         }
 
@@ -110,7 +110,7 @@ const PendingActions = () => {
           break
 
         case REJECT_ALL: {
-          setPendingConfirm({ approval: APPROVAL.REJECT, group: group.ALL, pendingItems })
+          setPendingConfirm({ approval: APPROVAL.REJECT, group: GROUP.ALL, pendingItems })
           break
         }
 

@@ -13,7 +13,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 

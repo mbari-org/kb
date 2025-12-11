@@ -10,7 +10,7 @@ import useTemplatesExport from '@/components/kb/panels/templates/table/header/us
 import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
 import { CONCEPT, SELECTED } from '@/lib/constants'
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const { EXPORT } = CONFIG.PANELS.TEMPLATES.TOOLTIP
 const { TEMPLATES } = SELECTED.SETTINGS

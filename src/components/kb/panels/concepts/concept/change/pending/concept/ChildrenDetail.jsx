@@ -10,9 +10,9 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingChild } from '@/lib/concept/state/children'
 
-import group from '@/config/text/panels/concepts/modals/group.json'
+import CONFIG from '@/config'
 
-const { CHILDREN } = group
+const { CHILDREN } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
 const sortChildren = (a, b) => {
   const aValue = a.newValue ?? a.oldValue

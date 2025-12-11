@@ -6,7 +6,7 @@ import { EMAIL_REGEX } from '@/lib/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const { CANCEL, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
 

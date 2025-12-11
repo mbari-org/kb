@@ -3,12 +3,12 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedMediaEdits } from '@/lib/concept/state/media'
 
-import { MODALS } from '@/config/js/panels/concepts/modals.js'
+import CONFIG from '@/config'
 
 const StagedMedia = ({ stagedEdit }) => {
   return (
     <StagedItems
-      group={MODALS.CONCEPT.MEDIA}
+      group={CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.MEDIA}
       stagedEdit={stagedEdit}
       StagedGroupItem={StagedMediaItem}
       stagedItems={stagedMediaEdits(stagedEdit)}

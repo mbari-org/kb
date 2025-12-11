@@ -1,7 +1,7 @@
 import { createContext, useCallback, useEffect, useMemo, useState, useRef, useContext } from 'react'
 
 import useSetProcessing from '@/lib/hooks/useSetProcessing'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 

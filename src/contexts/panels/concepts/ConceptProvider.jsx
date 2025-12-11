@@ -25,7 +25,7 @@ import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { UI_TEXT } from '@/lib/constants/uiText.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { CONTINUE } = UI_TEXT.LABELS.BUTTON
 const { PROCESSING } = CONFIG

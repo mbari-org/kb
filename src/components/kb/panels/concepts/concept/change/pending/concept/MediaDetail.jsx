@@ -10,9 +10,9 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingMedia } from '@/lib/concept/state/media'
 
-import group from '@/config/text/panels/concepts/modals/group.json'
+import CONFIG from '@/config'
 
-const { MEDIA } = group
+const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
 const MediaDetail = ({ pendingConcept }) => {
   const pendingMedia = pendingConcept.filter(isPendingMedia)

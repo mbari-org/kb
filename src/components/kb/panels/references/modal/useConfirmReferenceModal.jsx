@@ -10,7 +10,7 @@ import { useReferencesModalOperationsContext, useReferencesModalDataContext } fr
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
 import { UI_TEXT } from '@/lib/constants/uiText.js'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 

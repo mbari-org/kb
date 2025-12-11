@@ -6,7 +6,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import useConfirmReferenceModal from '@/components/kb/panels/references/modal/useConfirmReferenceModal'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 import {
   createChangeDetector,
   createHandlers,

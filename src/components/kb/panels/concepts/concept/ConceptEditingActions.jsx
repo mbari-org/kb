@@ -14,7 +14,7 @@ import { pendingChild } from '@/lib/model/history'
 import { RESETTING } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const { BUTTON } = CONFIG.PANELS.CONCEPTS
 const { DISCARD, DISCARD_ALL, CANCEL, EDIT, PENDING: PENDING_ACTION, SAVE, STAGED } = BUTTON

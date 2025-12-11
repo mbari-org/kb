@@ -13,7 +13,7 @@ import useConceptNameValidate from '@/components/kb/panels/concepts/concept/chan
 
 import { ALIAS } from '@/lib/constants/alias.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { ALIAS: ALIAS_MODAL } = CONFIG.PANELS.CONCEPTS.MODALS
 

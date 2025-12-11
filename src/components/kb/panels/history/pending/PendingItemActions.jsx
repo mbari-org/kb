@@ -14,7 +14,7 @@ import { UI_TEXT } from '@/lib/constants/uiText.js'
 import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdatePending'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 const { APPROVE, CONFIRM, DEFER, REJECT } = UI_TEXT.LABELS.BUTTON

@@ -18,7 +18,7 @@ import {
   discardEditsAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
 

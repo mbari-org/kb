@@ -21,7 +21,7 @@ import { pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import { LABELS } from '@/lib/constants'
-import group from '@/config/text/panels/concepts/modals/group.json'
+import CONFIG from '@/config'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
@@ -30,7 +30,7 @@ const NameDetail = ({ pendingConcept }) => {
   const { modalData, setModalData } = use(ConceptModalContext)
   const { user } = use(UserContext)
 
-  const approval = usePendingGroupApproval(group.NAME)
+  const approval = usePendingGroupApproval(CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.NAME)
 
   useEffect(() => {
     setModalData(prevData => ({
@@ -62,7 +62,7 @@ const NameDetail = ({ pendingConcept }) => {
 
   const pendingGroupTitle = (
     <>
-      <PendingButtons approval={approval} group={group.NAME} />
+      <PendingButtons approval={approval} group={CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.NAME} />
       <Typography sx={nameSx}>Name: </Typography>
       <Typography sx={{ ...nameSx, fontWeight: 'bold' }}>{nameDelta}</Typography>
     </>

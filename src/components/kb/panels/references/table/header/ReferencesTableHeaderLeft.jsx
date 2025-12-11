@@ -8,7 +8,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import useReferencesExport from '@/components/kb/panels/references/table/header/useReferencesExport'
 
 import { CONCEPT, SELECTED } from '@/lib/constants'
-import { CONFIG } from '@/config/js/index.js'
+import CONFIG from '@/config'
 
 const { REFERENCES } = SELECTED.SETTINGS
 

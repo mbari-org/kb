@@ -6,7 +6,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { CONFIG } from '@/config/js'
+import CONFIG from '@/config'
 import { drop } from '@/lib/utils'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
