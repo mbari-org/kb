@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import useUpdatedPending from '@/contexts/panels/concepts/pending/useUpdatePending'
+import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConceptUpdatePending'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -26,7 +26,7 @@ const PendingActions = () => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingConfirm = pending(PENDING.DATA.CONFIRM)
 
-  const updatePending = useUpdatedPending()
+  const updatePending = useConceptUpdatedPending()
 
   const pendingItems = useMemo(() => {
     const ids = pendingConfirm?.pendingIds

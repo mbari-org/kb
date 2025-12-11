@@ -1,6 +1,7 @@
 import { use, useCallback } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -13,10 +14,11 @@ import { CONFIG } from '@/config/js'
 
 const { PROCESSING } = CONFIG
 
-const useUpdatedPending = () => {
+const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
   const { setProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
+  const { refreshData } = use(PanelDataContext)
   const { updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh, getConcept } = use(TaxonomyContext)
 
@@ -32,7 +34,7 @@ const useUpdatedPending = () => {
           : propIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
       ).filter(Boolean)
 
-      setProcessing(PROCESSING.UPDATE, `{PROCESSING.ARG.PENDING} ${approval}`)
+      setProcessing(PROCESSING.UPDATE, `${PROCESSING.ARG.PENDING}: ${approval}`)
 
       const { updated } = await processPendingApproval({
         approval,
@@ -40,7 +42,7 @@ const useUpdatedPending = () => {
           apiFns,
           conceptEditsRefresh,
           getConcept,
-          refreshHistory: null,
+          refreshData,
           updateSelected,
         },
         items,
@@ -63,6 +65,7 @@ const useUpdatedPending = () => {
       conceptEditsRefresh,
       getConcept,
       pending,
+      refreshData,
       setConcept,
       setProcessing,
       staleConcept,
@@ -71,4 +74,4 @@ const useUpdatedPending = () => {
   )
 }
 
-export default useUpdatedPending
+export default useConceptUpdatePending

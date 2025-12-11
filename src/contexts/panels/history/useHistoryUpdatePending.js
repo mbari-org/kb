@@ -21,8 +21,8 @@ const useHistoryUpdatePending = () => {
           apiFns,
           conceptEditsRefresh,
           getConcept,
+          refreshData,
           updateSelected,
-          refreshHistory: () => refreshData('pendingHistory'),
         },
         items: [item],
       })
