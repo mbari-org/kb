@@ -8,6 +8,10 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
+import CONFIG from '@/text'
+
+const { MODALS } = CONFIG.PANELS.CONCEPTS
+
 const ChangeParentContent = ({ omitChoices }) => {
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ConceptModalContext)
@@ -35,7 +39,7 @@ const ChangeParentContent = ({ omitChoices }) => {
   return (
     <Box>
       <Stack alignItems='center' direction='row' spacing={1}>
-        <ModalActionText text='Change Parent:' />
+        <ModalActionText text={MODALS.STRUCTURE.CHANGE_PARENT.LABEL} />
         <Typography sx={{ fontWeight: 'bold' }} variant='h6'>
           {concept.parent}
         </Typography>
@@ -45,7 +49,7 @@ const ChangeParentContent = ({ omitChoices }) => {
           handleChange={handleChange}
           handleKeyUp={handleKeyUp}
           initialValue={null}
-          label='To'
+          label={MODALS.STRUCTURE.CHANGE_PARENT.TO}
           omitChoices={omitChoices}
           value={toConcept}
         />

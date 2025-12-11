@@ -11,6 +11,10 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import CONFIG from '@/text'
+
+const { MODALS } = CONFIG.PANELS.CONCEPTS
+
 const DeleteConceptContent = () => {
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
@@ -46,16 +50,16 @@ const DeleteConceptContent = () => {
   return (
     <Box>
       <Typography align='center' color='cancel' sx={{ fontSize: theme => theme.typography.fontSize * 1.5, fontWeight: 'bold' }}>
-        DELETE CONCEPT
+        {MODALS.STRUCTURE.DELETE_CONCEPT.LABEL}
       </Typography>
       {!modalData.isLoading && !hasRelatedData && (
         <Typography align='center'>
-          This Concept has no related Annotations or Knowledge Base data.
+          {MODALS.STRUCTURE.DELETE_CONCEPT.NO_RELATED_DATA}
         </Typography>
       )}
       {!modalData.isLoading && hasRelatedData && (
         <Typography align='center'>
-          Related data must be reassigned to another concept.
+          {MODALS.STRUCTURE.DELETE_CONCEPT.MUST_REASSIGN}
         </Typography>
       )}
 
@@ -73,7 +77,7 @@ const DeleteConceptContent = () => {
                 error={!isValid}
                 handleChange={handleChange}
                 handleKeyUp={handleKeyUp}
-                label='Reassign To'
+                label={MODALS.STRUCTURE.DELETE_CONCEPT.REASSIGN_TO}
                 omitChoices={[concept.name]}
                 required
                 value={reassign}
@@ -84,7 +88,7 @@ const DeleteConceptContent = () => {
 
         {!isValid && (
           <Typography color='cancel' variant='caption'>
-            Please select a valid concept to reassign Concept related data
+            {MODALS.STRUCTURE.DELETE_CONCEPT.ERROR_MESSAGE}
           </Typography>
         )}
       </Stack>

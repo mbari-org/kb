@@ -1,0 +1,7 @@
+{
+  "LABEL": "DELETE CONCEPT",
+  "NO_RELATED_DATA": "This Concept has no related Annotations or Knowledge Base data.",
+  "MUST_REASSIGN": "Related data must be reassigned to another concept.",
+  "REASSIGN_TO": "Reassign To",
+  "ERROR_MESSAGE": "Please select a valid concept to reassign Concept related data"
+}

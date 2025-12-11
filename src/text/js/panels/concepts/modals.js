@@ -11,6 +11,10 @@ import realizationAdd from '@/text/config/panels/concepts/modals/realization/add
 import realizationDelete from '@/text/config/panels/concepts/modals/realization/delete.json'
 import realizationEdit from '@/text/config/panels/concepts/modals/realization/edit.json'
 import staged from '@/text/config/panels/concepts/modals/staged.json'
+import addChild from '@/text/config/panels/concepts/modals/structure/addChild.json'
+import changeName from '@/text/config/panels/concepts/modals/structure/changeName.json'
+import changeParent from '@/text/config/panels/concepts/modals/structure/changeParent.json'
+import deleteConcept from '@/text/config/panels/concepts/modals/structure/deleteConcept.json'
 
 export const MODALS = {
   ALIAS: {
@@ -32,4 +36,10 @@ export const MODALS = {
     EDIT: realizationEdit,
   },
   STAGED: staged,
+  STRUCTURE: {
+    ADD_CHILD: addChild,
+    CHANGE_NAME: changeName,
+    CHANGE_PARENT: changeParent,
+    DELETE_CONCEPT: deleteConcept,
+  },
 }

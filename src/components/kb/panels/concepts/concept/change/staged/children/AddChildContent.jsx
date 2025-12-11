@@ -17,6 +17,10 @@ import { rankField } from '@/lib/concept/state/rank'
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
+import CONFIG from '@/text'
+
+const { MODALS } = CONFIG.PANELS.CONCEPTS
+
 export const ADD_CHILD_FORM_ID = 'add-child-concept-form'
 
 const AddChildContent = () => {
@@ -65,12 +69,12 @@ const AddChildContent = () => {
 
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>
-      <ModalActionText text='Add Child' />
+      <ModalActionText text={MODALS.STRUCTURE.ADD_CHILD.LABEL} />
       <FormControl {...inputStyle}>
         <TextField
           error={false}
           helperText={nameError ? nameHelperText : ' '}
-          label='Name'
+          label={MODALS.STRUCTURE.ADD_CHILD.NAME}
           name='name'
           onChange={handleChange('name')}
           required
@@ -86,7 +90,7 @@ const AddChildContent = () => {
       </FormControl>
       <FormControl {...inputStyle}>
         <TextField
-          label='Author'
+          label={MODALS.STRUCTURE.ADD_CHILD.AUTHOR}
           name='author'
           onChange={handleChange('author')}
           value={formChild.author}
@@ -96,12 +100,14 @@ const AddChildContent = () => {
         <RankFieldInput
           field={CONCEPT.RANK.NAME}
           initialRank={initialRank}
+          label={MODALS.STRUCTURE.ADD_CHILD.RANK.NAME}
           rank={formRank}
           onChange={handleChange(rankField(CONCEPT.RANK.NAME))}
         />
         <RankFieldInput
           field={CONCEPT.RANK.LEVEL}
           initialRank={initialRank}
+          label={MODALS.STRUCTURE.ADD_CHILD.RANK.LEVEL}
           rank={formRank}
           onChange={handleChange(rankField(CONCEPT.RANK.LEVEL))}
         />

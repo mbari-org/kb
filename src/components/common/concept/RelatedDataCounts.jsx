@@ -3,6 +3,10 @@ import { Box, Typography } from '@mui/material'
 
 import UserContext from '@/contexts/user/UserContext'
 
+import CONFIG from '@/text'
+
+const { NON_ADMIN_MESSAGE } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
+
 import { isAdmin } from '@/lib/auth/role'
 
 const RelatedDataCounts = ({ relatedDataCounts }) => {
@@ -16,18 +20,18 @@ const RelatedDataCounts = ({ relatedDataCounts }) => {
   if (!hasRelatedData) return null
 
   const groupedByType = relatedDataCounts.reduce((acc, count) => {
-    const type = count.type || 'Other'
-    if (!acc[type]) acc[type] = []
-    acc[type].push(count)
+    if (!acc[count.type]) acc[count.type] = []
+    acc[count.type].push(count)
     return acc
   }, {})
 
-  const renderSection = (type, counts) => (
+  const renderSection = (type, counts) => {
+    return (
     <Box key={type} >
       <Typography sx={{
         fontSize: theme => theme.typography.fontSize * 1.2,
         fontWeight: 'bold', ml: 1 }}>
-        {`${type} Data:`}
+        {`${type}:`}
       </Typography>
       <Box sx={{ ml: 4 }}>
         <Box sx={{ mb: 1 }}>
@@ -42,18 +46,18 @@ const RelatedDataCounts = ({ relatedDataCounts }) => {
         </Box>
       </Box>
     </Box>
-  )
+    )}
 
   return (
     <Box sx={{ mt: 1 }}>
       {Object.entries(groupedByType).map(([type, counts]) => renderSection(type, counts))}
       {!isAdminUser && (
         <Box sx={{ alignItems: 'center', mt: 2 }}>
-          <Typography color='text.secondary'>
-            {'Please communicate with an admin regarding this change.'}
+          <Typography color='text.secondary' sx={{ textAlign: 'center' }}>
+            {NON_ADMIN_MESSAGE.COMMUNICATE}
           </Typography>
-          <Typography color='text.secondary'>
-            {'When approving, an admin must specify whether to reassign Concept related data.'}
+          <Typography color='text.secondary' sx={{ textAlign: 'center' }}>
+            {NON_ADMIN_MESSAGE.APPROVAL}
           </Typography>
         </Box>
       )}

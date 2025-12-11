@@ -20,6 +20,10 @@ import useChangeNameHandlers from './useChangeNameHandlers'
 
 import { isAdmin } from '@/lib/auth/role'
 
+import CONFIG from '@/text'
+
+const { MODALS } = CONFIG.PANELS.CONCEPTS
+
 const ChangeNameContent = () => {
   const theme = useTheme()
 
@@ -66,7 +70,7 @@ const ChangeNameContent = () => {
 
   return (
     <Box>
-      <ModalActionText text='Change Name' />
+      <ModalActionText text={MODALS.STRUCTURE.CHANGE_NAME.LABEL} />
       {modalData?.isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData?.isLoading && (
       <Box>

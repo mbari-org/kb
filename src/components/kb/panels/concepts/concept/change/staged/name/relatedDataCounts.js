@@ -7,19 +7,11 @@ import {
   renameToConceptTemplates,
 } from '@/lib/api/templates'
 
-export const RELATED_DATA_COUNTS = {
-  ANNOTATIONS: 'Concept Annotations / Observations',
-  ASSOCIATIONS: 'Associations To Concept',
-  REALIZATIONS: 'Concept Link Realizations',
-  TEMPLATES_DEFINED: 'Templates defined for Concept',
-  TEMPLATES_TO: 'Templates To Concept',
-  REFERENCES: 'References To Concept',
-}
+import CONFIG from '@/text'
 
-export const RELATED_DATA_TYPE = {
-  ANNOTATIONS: 'Annotations',
-  KNOWLEDGE_BASE: 'Knowledge Base',
-}
+const { RELATED_DATA_COUNTS, RELATED_DATA_TYPE } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
+
+export { RELATED_DATA_COUNTS, RELATED_DATA_TYPE }
 
 export const relatedDataCounts = async ({
   apiFns,

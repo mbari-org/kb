@@ -1,0 +1,9 @@
+{
+  "LABEL": "Add child",
+  "NAME": "Name",
+  "AUTHOR": "Author",
+  "RANK": {
+    "NAME": "Rank Name",
+    "LEVEL": "Rank Level"
+  }
+}

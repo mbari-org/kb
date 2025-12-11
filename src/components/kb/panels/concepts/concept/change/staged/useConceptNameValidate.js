@@ -6,6 +6,10 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
+import CONFIG from '@/text'
+
+const CHANGE_NAME = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
+
 const useConceptNameValidate = (formData, modifiedFields) => {
   const { stagedState } = use(ConceptContext)
   const { modalData } = use(ConceptModalContext)
@@ -46,9 +50,9 @@ const useConceptNameValidate = (formData, modifiedFields) => {
   const nameHelperText = !modifiedFields.name
     ? ''
     : (formData.name || formData.value || '').trim() === ''
-        ? 'Name cannot be empty'
+        ? CHANGE_NAME.NAME_HELPER_TEXT
         : !isValidName
-            ? 'Concept name already exists'
+            ? CHANGE_NAME.NAME_ERROR
             : ''
 
   return {
