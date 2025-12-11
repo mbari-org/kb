@@ -46,11 +46,11 @@ const StagedActions = ({ intent }) => {
 
     if (unsafeAction) {
       switch (unsafeAction.type) {
-        case UNSAFE_ACTION.CONCEPT:
+        case UNSAFE_ACTION.CHANGE_CONCEPT:
           updateSelected({ concept: unsafeAction.payload.concept, force: true })
           break
 
-        case UNSAFE_ACTION.PANEL:
+        case UNSAFE_ACTION.CHANGE_PANEL:
           updateSelected({ panel: unsafeAction.payload.panel })
           break
 

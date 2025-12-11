@@ -41,7 +41,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
     if (hasModifications) {
-      setUnsafeAction({ type: UNSAFE_ACTION.PANEL, payload: { panel: name } })
+      setUnsafeAction({ type: UNSAFE_ACTION.CHANGE_PANEL, payload: { panel: name } })
     } else {
       selectPanel(name)
     }
