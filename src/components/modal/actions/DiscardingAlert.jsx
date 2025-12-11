@@ -1,5 +1,5 @@
 import ActionsAlert from './ActionsAlert'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const STAGED = CONFIG.PANELS.CONCEPTS.MODALS.STAGED
 

@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingChild } from '@/lib/concept/state/children'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { CHILDREN } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 

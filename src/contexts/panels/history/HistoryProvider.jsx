@@ -6,7 +6,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 import useLoadData from '@/contexts/panels/history/useLoadData'

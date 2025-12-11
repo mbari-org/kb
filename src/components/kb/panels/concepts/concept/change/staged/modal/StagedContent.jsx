@@ -17,7 +17,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { CONCEPT } from '@/lib/constants'
 
 const { STAGED, CONCEPT: CONCEPT_MODALS } = CONFIG.PANELS.CONCEPTS.MODALS

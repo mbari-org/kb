@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

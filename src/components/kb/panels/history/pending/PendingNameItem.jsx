@@ -14,7 +14,7 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME

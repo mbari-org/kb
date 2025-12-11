@@ -5,7 +5,7 @@ import { FormControl, TextField, Autocomplete } from '@mui/material'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConceptTaxa } from '@/lib/api/concept'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const RealizationToConcept = ({
   realizationItem,

@@ -3,7 +3,7 @@ import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 import ModalActionText from '@/components/common/ModalActionText'
 import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateForm'
 
 const { ADD, EDIT } = CONFIG.PANELS.TEMPLATES.MODALS

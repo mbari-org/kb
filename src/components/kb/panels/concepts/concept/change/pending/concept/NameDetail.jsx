@@ -20,7 +20,7 @@ import { isPendingName } from '@/lib/concept/state/name'
 import { pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME

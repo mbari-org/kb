@@ -12,7 +12,7 @@ import {
   createDeleteTemplateContent,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 

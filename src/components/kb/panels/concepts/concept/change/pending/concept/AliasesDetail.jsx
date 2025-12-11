@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingAlias } from '@/lib/concept/state/aliases'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { ALIASES } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 

@@ -12,7 +12,7 @@ import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdates
 
 import { CONCEPT } from '@/lib/constants'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 

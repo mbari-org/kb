@@ -5,7 +5,7 @@ import { Stack, Typography } from '@mui/material'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED } from '@/lib/constants'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const TOOLTIP_FONT = {
   SIZE: '1em',

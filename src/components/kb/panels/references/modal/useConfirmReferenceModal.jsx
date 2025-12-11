@@ -9,7 +9,7 @@ import { createError } from '@/lib/errors'
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 const { CONTINUE, CONFIRM } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON

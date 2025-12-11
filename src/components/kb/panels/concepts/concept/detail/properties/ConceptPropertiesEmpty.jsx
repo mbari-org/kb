@@ -1,5 +1,5 @@
 import Text from '@/components/common/factory/Text'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { CONCEPT } = CONFIG
 

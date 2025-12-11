@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingRealization } from '@/lib/concept/state/realizations'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { REALIZATIONS } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 

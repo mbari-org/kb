@@ -11,7 +11,7 @@ import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConc
 import { isAdmin } from '@/lib/auth/role'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { APPROVAL } = PENDING

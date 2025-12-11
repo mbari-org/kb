@@ -13,7 +13,7 @@ import { PENDING } from '@/lib/constants/pending.js'
 import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdatePending'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 const { APPROVE, CONFIRM, DEFER, REJECT } = CONFIG.PANELS.HISTORY.MODALS.BUTTON

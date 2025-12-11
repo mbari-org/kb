@@ -1,5 +1,5 @@
 import EmptyPanel from '@/components/common/panel/EmptyPanel'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import useVersionTooltip from '@/lib/hooks/useVersionTooltip'
 import { getVersion } from '@/version'
 

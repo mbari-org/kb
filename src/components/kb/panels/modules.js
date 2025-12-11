@@ -1,4 +1,4 @@
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 // Direct imports - all panels loaded upfront but hidden when not active
 import AboutHelp from '@/components/kb/panels/AboutHelp'

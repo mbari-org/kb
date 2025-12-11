@@ -14,7 +14,7 @@ import { pendingInfo } from '@/lib/model/history'
 
 import { ACTION } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { APPROVAL } = PENDING
 

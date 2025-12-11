@@ -12,7 +12,7 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize, conceptNameForFilename } from '@/lib/utils'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { CONCEPT } from '@/lib/constants'
 
 const { PROCESSING } = CONFIG

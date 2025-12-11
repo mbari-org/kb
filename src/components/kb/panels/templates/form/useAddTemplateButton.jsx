@@ -10,7 +10,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 import {

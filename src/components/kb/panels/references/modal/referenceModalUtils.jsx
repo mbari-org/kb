@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { diff, filterObject, pick } from '@/lib/utils'
 
 const { CANCEL, DELETE, DISCARD_ALL, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON

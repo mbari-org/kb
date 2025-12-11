@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingTemplate } from '@/lib/concept/state/templates'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { TEMPLATES } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 

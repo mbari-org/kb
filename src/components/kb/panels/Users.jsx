@@ -8,7 +8,7 @@ import useAddUserButton from '@/components/kb/panels/users/form/useAddUserButton
 import UsersProvider from '@/contexts/panels/users/UsersProvider'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const UsersModalRenderer = () => {
   const { modal: usersModal, processing: usersProcessing } = useUsersModalOperationsContext()

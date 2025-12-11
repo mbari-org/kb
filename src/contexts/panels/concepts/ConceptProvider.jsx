@@ -24,7 +24,7 @@ import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { CONTINUE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { PROCESSING } = CONFIG

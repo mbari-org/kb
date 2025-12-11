@@ -1,6 +1,6 @@
 import { FormControlLabel, Radio, Stack } from '@mui/material'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { NAME_ONLY, REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 

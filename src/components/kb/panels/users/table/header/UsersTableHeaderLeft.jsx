@@ -6,7 +6,7 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 
 import useUsersExport from '@/components/kb/panels/users/table/header/useUsersExport'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const UsersTableHeaderLeft = () => {
   const { users } = use(UsersContext)

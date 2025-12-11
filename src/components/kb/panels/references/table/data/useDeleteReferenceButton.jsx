@@ -12,7 +12,7 @@ import {
   createDeleteReferenceContent,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 

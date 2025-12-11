@@ -15,7 +15,7 @@ import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

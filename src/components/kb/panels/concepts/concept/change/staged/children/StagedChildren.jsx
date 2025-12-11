@@ -3,7 +3,7 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedChildren } from '@/lib/concept/state/children'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const StagedChildren = ({ stagedEdit }) => {
   return (

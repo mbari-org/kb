@@ -13,7 +13,7 @@ import { pendingChange, pendingRank } from '@/lib/concept/state/rank'
 import { formatDelta, formatField, otherApprovalSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { APPROVAL } = PENDING
 

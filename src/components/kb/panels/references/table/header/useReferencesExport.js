@@ -8,7 +8,7 @@ import UserContext from '@/contexts/user/UserContext'
 import csvExport from '@/lib/csvExport'
 import { conceptNameForFilename } from '@/lib/utils'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const { PROCESSING } = CONFIG

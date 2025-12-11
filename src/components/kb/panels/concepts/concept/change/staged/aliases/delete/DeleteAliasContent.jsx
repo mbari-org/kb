@@ -7,7 +7,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { drop } from '@/lib/utils'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { ALIAS } = CONFIG.PANELS.CONCEPTS.MODALS
 

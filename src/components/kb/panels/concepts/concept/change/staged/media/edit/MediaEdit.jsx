@@ -3,7 +3,7 @@ import { CiEdit } from 'react-icons/ci'
 import MediaAction from '@/components/kb/panels/concepts/concept/change/staged/media/MediaAction'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 

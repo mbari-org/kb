@@ -1,6 +1,6 @@
 import { pendingItems } from '@/lib/model/history'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const { CONCEPT: group } = CONFIG.PANELS.CONCEPTS.MODALS

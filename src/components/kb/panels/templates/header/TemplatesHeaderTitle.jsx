@@ -3,7 +3,7 @@ import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 import { SELECTED } from '@/lib/constants'
 import useFilterStringTooltip from '@/lib/hooks/useFilterStringTooltip'

@@ -26,7 +26,7 @@ import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 import { ACTION } from '@/lib/constants'
 

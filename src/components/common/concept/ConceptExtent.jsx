@@ -3,7 +3,7 @@ import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/materia
 import { useTheme } from '@mui/material/styles'
 
 import { CONCEPT } from '@/lib/constants'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import KBTooltip from '@/components/common/KBTooltip'
 
 const { CHILDREN, SOLO: CONCEPT_VALUE, DESCENDANTS } = CONCEPT.EXTENT

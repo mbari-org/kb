@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 

@@ -7,7 +7,7 @@ import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const ConceptAliases = () => {
   const { isEditing, stagedState } = use(ConceptContext)

@@ -1,6 +1,6 @@
 import { Menu, MenuItem, ListSubheader } from '@mui/material'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick }) => {
   return (

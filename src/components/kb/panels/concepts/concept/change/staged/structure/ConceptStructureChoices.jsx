@@ -12,7 +12,7 @@ import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/chang
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { CONCEPT, PROCESSING } = CONFIG
 

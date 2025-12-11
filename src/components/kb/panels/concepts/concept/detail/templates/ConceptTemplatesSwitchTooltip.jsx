@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const TOOLTIP_FONT = {
   SIZE: '1em',

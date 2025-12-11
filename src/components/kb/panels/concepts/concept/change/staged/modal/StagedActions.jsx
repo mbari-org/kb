@@ -12,7 +12,7 @@ import { isStateModified } from '@/lib/concept/state/state'
 
 import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
 import { RESETTING } from '@/lib/constants'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'

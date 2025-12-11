@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingMedia } from '@/lib/concept/state/media'
 
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 

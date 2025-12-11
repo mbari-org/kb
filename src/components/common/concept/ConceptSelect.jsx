@@ -12,7 +12,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT } from '@/lib/constants'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { RIGHT_COMPONENT, WIDTH } = CONCEPT.SELECT
 const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT

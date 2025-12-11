@@ -13,7 +13,7 @@ import { formatDelta, otherApprovalSx } from '@/components/common/format'
 import { isPendingParent } from '@/lib/concept/state/parent'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/config'
+import CONFIG from '@/text'
 
 const { APPROVAL } = PENDING
 
