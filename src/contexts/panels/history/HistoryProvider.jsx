@@ -6,7 +6,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
-import { PROCESSING } from '@/lib/constants'
+import CONFIG from '@/config'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 import useLoadData from '@/contexts/panels/history/useLoadData'
@@ -26,6 +26,7 @@ const { HISTORY } = SETTINGS
 const HistoryProvider = ({ children }) => {
   const { setModalData, setProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
+  const { PROCESSING } = CONFIG
   const { pendingHistory } = use(PanelDataContext)
   const { getSelected, getSettings } = use(SelectedContext)
 

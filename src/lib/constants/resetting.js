@@ -1,4 +1,4 @@
-export const UI_RESETTING = {
+export const RESETTING = {
   CONFIRMED: {
     NO: 'Discard Reset',
     YES: 'Perform Reset',

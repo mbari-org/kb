@@ -14,10 +14,10 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import CONFIG from '@/config'
 
 const { APPROVAL } = PENDING
-const { NAME_ONLY } = UI_TEXT.LABELS.CONCEPT.CHANGE_NAME
+const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
 
 const PendingNameItem = ({ item, user }) => {
   const [nameChangeType, setNameChangeType] = useState(NAME_ONLY)

@@ -1,6 +1,7 @@
 {
   "CANCEL": "Cancel",
   "CLOSE": "Close",
+  "CONFIRM_DISCARD": "Discard",
   "CONTINUE": "Continue",
   "DISCARD": "Discard",
   "SAVE": "Save",

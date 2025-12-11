@@ -9,7 +9,6 @@ import { createError, createValidationError } from '@/lib/errors'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
 import {
   createModalActions,
   createUserValidator,
@@ -22,7 +21,7 @@ import {
 import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
-const { CONFIRM_DISCARD, DISCARD } = UI_TEXT.LABELS.BUTTON
+const { CONFIRM_DISCARD, DISCARD } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
 const useAddUserButton = () => {
   const { closeModal, createModal, updateModalData, setProcessing } =

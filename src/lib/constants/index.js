@@ -9,10 +9,8 @@ export { PAGINATION } from './pagination.js'
 export { PANEL_DATA } from './panelData.js'
 export { PENDING } from './pending.js'
 export { PREFS } from './prefs.js'
+export { RESETTING } from './resetting.js'
 export { ROLES } from './roles.js'
 export { SELECTED } from './selected.js'
 export { UNSAFE_ACTION } from './unsafeAction.js'
-
-export { UI_RESETTING as RESETTING, UI_RESETTING } from './resetting.js'
-export { LABELS, PROCESSING, TOOLTIP, UI_LABELS, UI_PROCESSING, UI_TOOLTIP } from './ui/index.js'
 

@@ -1,21 +1,23 @@
 {
-  "CONCEPT": {
-    "NO_ITEMS": "None",
-    "NO_MEDIA": "No media",
-    "SELECT": {
-      "CONCEPT": "Concept",
-      "TO_CONCEPT": "To concept"
-    },
-    "TO_SPECIAL": ["self", "nil"],
-    "EXTENT": {
-      "CHILDREN": "children",
-      "DESCENDANTS": "descendants"
-    },
-    "STRUCTURE": {
-      "CHANGE_NAME": "Change name",
-      "CHANGE_PARENT": "Change parent",
-      "ADD_CHILD": "Add child",
-      "DELETE_CONCEPT": "Delete concept"
-    }
-  }
+  "CHANGE_NAME": {
+    "REASSIGN": "Reassign Related Data",
+    "NAME_ONLY": "Name Only"
+  },
+  "EXTENT": {
+    "CHILDREN": "children",
+    "DESCENDANTS": "descendants"
+  },
+  "NO_ITEMS": "None",
+  "NO_MEDIA": "No media",
+  "SELECT": {
+    "CONCEPT": "Concept",
+    "TO_CONCEPT": "To concept"
+  },
+  "STRUCTURE": {
+    "CHANGE_NAME": "Change name",
+    "CHANGE_PARENT": "Change parent",
+    "ADD_CHILD": "Add child",
+    "DELETE_CONCEPT": "Delete concept"
+  },
+  "TO_SPECIAL": ["self", "nil"]
 }

@@ -6,14 +6,14 @@ import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import useHistoryExport from '@/components/kb/panels/history/table/header/useHistoryExport'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
+import CONFIG from '@/config'
 
 const HistoryTableHeaderLeft = () => {
   const { count, selectedType } = use(HistoryContext)
 
   const historyExport = useHistoryExport()
 
-  const toolTip = UI_TEXT.TOOLTIP.HISTORY.EXPORT[selectedType.toUpperCase()]
+  const toolTip = CONFIG.PANELS.HISTORY.TOOLTIP.EXPORT[selectedType.toUpperCase()]
 
   return <PanelDataExport count={count} exportFn={historyExport} exportTooltip={toolTip} width='auto' />
 }

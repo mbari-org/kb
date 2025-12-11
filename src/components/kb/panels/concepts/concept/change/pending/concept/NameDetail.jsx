@@ -20,11 +20,10 @@ import { isPendingName } from '@/lib/concept/state/name'
 import { pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import { LABELS } from '@/lib/constants'
 import CONFIG from '@/config'
 
 const { APPROVAL } = PENDING
-const { NAME_ONLY } = LABELS.CONCEPT.CHANGE_NAME
+const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingConcept }) => {
   const { modalData, setModalData } = use(ConceptModalContext)

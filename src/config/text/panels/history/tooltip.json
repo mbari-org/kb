@@ -1,0 +1,7 @@
+{
+  "EXPORT": {
+    "APPROVED": "Export Approved History",
+    "CONCEPT": "Export History for selected Concept",
+    "PENDING": "Export Pending History"
+  }
+}

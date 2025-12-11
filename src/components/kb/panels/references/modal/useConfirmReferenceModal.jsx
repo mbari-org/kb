@@ -9,10 +9,10 @@ import { createError } from '@/lib/errors'
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
-import { UI_TEXT } from '@/lib/constants/uiText.js'
 import CONFIG from '@/config'
 
 const { PROCESSING } = CONFIG
+const { CONTINUE, CONFIRM } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 
 const useConfirmReferenceModal = () => {
   const { closeModal, createModal, setProcessing } = useReferencesModalOperationsContext()
@@ -47,15 +47,15 @@ const useConfirmReferenceModal = () => {
 
         const colors = ['cancel', 'main']
         const disabled = [false, false]
-        const labels = [UI_TEXT.LABELS.BUTTON.CONTINUE, UI_TEXT.LABELS.BUTTON.CONFIRM]
+        const labels = [CONTINUE, CONFIRM]
 
         const onAction = label => {
-          if (label === UI_TEXT.LABELS.BUTTON.CONTINUE) {
+          if (label === CONTINUE) {
             closeModal()
             if (reopenEditModal) {
               reopenEditModal(modalData.reference)
             }
-          } else if (label === UI_TEXT.LABELS.BUTTON.CONFIRM) {
+          } else if (label === CONFIRM) {
             handleConfirm(modalData.reference, modalData.original)
           }
         }

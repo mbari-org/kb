@@ -13,7 +13,6 @@ import { isStateModified } from '@/lib/concept/state/state'
 import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
 import { RESETTING } from '@/lib/constants'
 import CONFIG from '@/config'
-import { UI_TEXT as UI_TEXT_OLD } from '@/lib/constants/uiText.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
@@ -21,7 +20,7 @@ import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 const COLORS = ['cancel', 'main']
 const { BUTTON } = CONFIG.PANELS.CONCEPTS
 const { DISCARD_ALL, SAVE } = BUTTON
-const { BACK_TO_EDIT, CONFIRM_DISCARD, REJECT_DISCARD } = UI_TEXT_OLD.LABELS.BUTTON
+const { CONTINUE: BACK_TO_EDIT, CONFIRM_DISCARD, DECLINE_DISCARD: REJECT_DISCARD } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 

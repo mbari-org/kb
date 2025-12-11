@@ -1,7 +1,16 @@
 import { Tooltip } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { TOOLTIP } from '@/lib/constants'
+const TOOLTIP = {
+  DELAY: {
+    onEnter: 500,
+    onLeave: 0,
+  },
+  FONT: {
+    SIZE: '1em',
+    FAMILY: 'Arial, sans-serif',
+  },
+}
 
 /**
  * KBTooltip component - a wrapper around MUI Tooltip with consistent styling and behavior

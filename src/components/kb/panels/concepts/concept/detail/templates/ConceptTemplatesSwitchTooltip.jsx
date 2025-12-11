@@ -1,13 +1,17 @@
 import { Stack, Typography } from '@mui/material'
 
-import { TOOLTIP } from '@/lib/constants'
 import CONFIG from '@/config'
+
+const TOOLTIP_FONT = {
+  SIZE: '1em',
+  FAMILY: 'Arial, sans-serif',
+}
 
 const SWITCH = CONFIG.PANELS.CONCEPTS.TEMPLATES.SWITCH
 
 const ConceptTemplatesSwitchTooltip = ({ byAvailable }) => {
   return (
-    <Stack direction='column' spacing={0} sx={{ fontSize: TOOLTIP.FONT.SIZE, fontFamily: TOOLTIP.FONT.FAMILY }}>
+    <Stack direction='column' spacing={0} sx={{ fontSize: TOOLTIP_FONT.SIZE, fontFamily: TOOLTIP_FONT.FAMILY }}>
       <Typography sx={{ mb: '0.5em !important', mt: '0.25em !important', textAlign: 'center' }}>
         {SWITCH.LABEL}
       </Typography>
