@@ -28,11 +28,11 @@ const useConceptUpdatePending = () => {
 
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
-      const items = (
-        propItems
-          ? propItems
-          : propIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
-      ).filter(Boolean)
+      // Standardize on pendingIds - convert to items for processing
+      // Backward compatibility: support pendingItems if provided, but prefer pendingIds
+      const items = propItems
+        ? propItems
+        : (propIds || []).map(pendingId => pendingConcept.find(item => item.id === pendingId)).filter(Boolean)
 
       setProcessing(PROCESSING.UPDATE, `${PROCESSING.ARG.PENDING}: ${approval}`)
 

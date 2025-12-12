@@ -11,7 +11,7 @@ import HandIcon from '@/components/icon/HandIcon'
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { getPendingIds } from '@/components/kb/panels/concepts/concept/change/pending/usePendingApproval'
+import { pendingIds } from '@/lib/model/history'
 
 import { isAdmin } from '@/lib/auth/role'
 
@@ -43,8 +43,11 @@ const PendingButtons = ({ approval, group, item }) => {
   const handleClick = useCallback(
     clicked => {
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
-      const pendingIds = item ? [item.id] : getPendingIds(pendingConcept, group, concept.name)
-      setPendingConfirm({ approval: clicked, group, pendingIds })
+      setPendingConfirm({
+        approval: clicked,
+        group,
+        pendingIds: item ? [item.id] : pendingIds(pendingConcept, group, concept.name),
+      })
     },
     [concept.name, group, pending, item, setPendingConfirm]
   )

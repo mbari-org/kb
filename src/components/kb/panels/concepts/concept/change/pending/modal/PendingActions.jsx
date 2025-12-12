@@ -28,14 +28,11 @@ const PendingActions = () => {
 
   const updatePending = useConceptUpdatedPending()
 
-  const pendingItems = useMemo(() => {
-    const ids = pendingConfirm?.pendingIds
-    if (Array.isArray(ids) && ids.length > 0) {
-      return ids
-        .map(id => pendingConcept.find(item => item.id === id))
-        .filter(Boolean)
+  const pendingIds = useMemo(() => {
+    if (pendingConfirm?.pendingIds?.length > 0) {
+      return pendingConfirm.pendingIds
     }
-    return pendingConcept
+    return pendingConcept.map(({ id }) => id)
   }, [pendingConcept, pendingConfirm])
 
   const [disabled, labels] = useMemo(() => {
@@ -88,7 +85,7 @@ const PendingActions = () => {
     label => {
       switch (label) {
         case APPROVE_ALL: {
-          setPendingConfirm({ approval: APPROVAL.ACCEPT, group: GROUP.ALL, pendingItems })
+          setPendingConfirm({ approval: APPROVAL.ACCEPT, group: GROUP.ALL, pendingIds })
           break
         }
 
@@ -110,7 +107,7 @@ const PendingActions = () => {
           break
 
         case REJECT_ALL: {
-          setPendingConfirm({ approval: APPROVAL.REJECT, group: GROUP.ALL, pendingItems })
+          setPendingConfirm({ approval: APPROVAL.REJECT, group: GROUP.ALL, pendingIds })
           break
         }
 
@@ -120,7 +117,7 @@ const PendingActions = () => {
           break
       }
     },
-    [closeModal, pendingConfirm, pendingItems, setPendingConfirm, updatePending]
+    [closeModal, pendingConfirm, pendingIds, setPendingConfirm, updatePending]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')

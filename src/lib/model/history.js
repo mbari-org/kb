@@ -5,7 +5,11 @@ import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
+import CONFIG from '@/text'
+
 import { capitalize, humanTimestamp, isEmpty, pick } from '@/lib/utils'
+
+const { CONCEPT: group } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const hasPending = (pending, field) =>
   field ? !isEmpty(pendingItems(pending, field)) : !isEmpty(pending)
@@ -69,11 +73,54 @@ const pendingValues = pendingItem =>
     ['creationTimestamp', 'created'],
   ])
 
+const historyFieldForGroup = groupValue => {
+  switch (groupValue) {
+    case group.ALIASES:
+      return HISTORY_FIELD.ALIAS
+
+    case group.CHILDREN:
+      return HISTORY_FIELD.CHILD
+
+    case group.MEDIA:
+      return HISTORY_FIELD.MEDIA
+
+    case group.NAME:
+      return HISTORY_FIELD.NAME
+
+    case group.PARENT:
+      return HISTORY_FIELD.PARENT
+
+    case group.RANK:
+      return HISTORY_FIELD.RANK
+
+    case group.REALIZATIONS:
+      return HISTORY_FIELD.REALIZATION
+
+    default:
+      return null
+  }
+}
+
+const pendingIds = (pendingConcept, targetGroup) => {
+  const fieldName = historyFieldForGroup(targetGroup)
+
+  if (targetGroup === group.ALL) {
+    return pendingConcept.map(history => history.id)
+  }
+
+  if (fieldName) {
+    return pendingItems(pendingConcept, fieldName).map(history => history.id)
+  }
+
+  return [targetGroup]
+}
+
 export {
   hasPending,
   hasPendingStructure,
   pendingActionText,
   pendingChild,
+  pendingIds,
   pendingInfo,
   pendingItems,
   pendingValues,
