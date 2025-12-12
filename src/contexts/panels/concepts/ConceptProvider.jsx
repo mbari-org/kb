@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
@@ -31,6 +31,7 @@ const { PROCESSING } = CONFIG
 
 const ConceptProvider = ({ children }) => {
   const { setProcessing } = use(AppModalContext)
+  const isSettingConceptRef = useRef(false)
 
   const { apiFns } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
@@ -59,6 +60,9 @@ const ConceptProvider = ({ children }) => {
 
   const handleSetConcept = useCallback(
     async updatedConcept => {
+      if (isSettingConceptRef.current) return
+      isSettingConceptRef.current = true
+
       setEditing(false)
 
       const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
@@ -76,8 +80,16 @@ const ConceptProvider = ({ children }) => {
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
 
       setConcept(conceptWithTemplates)
+
+      // Only turn off processing if we were the one who started it
+      setProcessing(PROCESSING.OFF)
+
+      // Reset the ref on the next tick
+      setTimeout(() => {
+        isSettingConceptRef.current = false
+      }, 0)
     },
-    [getConceptTemplates, refreshPanelData]
+    [getConceptTemplates, refreshPanelData, setProcessing]
   )
 
   const conceptLoader = useConceptLoader({
@@ -143,6 +155,7 @@ const ConceptProvider = ({ children }) => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
     if (!selectedConcept) return
     if (!isConceptLoaded(selectedConcept)) return
+    if (isSettingConceptRef.current) return
 
     const taxonomyConcept = getConcept(selectedConcept)
     if (!taxonomyConcept) return
