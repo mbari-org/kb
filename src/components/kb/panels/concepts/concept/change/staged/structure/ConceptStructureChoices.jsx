@@ -25,18 +25,18 @@ const ChangeStructureChoices = ({ closeChoices }) => {
   const changeParent = useChangeParentModal()
   const deleteConcept = useDeleteConceptModal()
 
-  const handleClick = (structureFn, processingArg = null) => async event => {
+  const handleClick = (structureFn, processingValue = null) => async event => {
     event.preventDefault()
     closeChoices()
 
-    if (processingArg) {
-      setProcessing(PROCESSING.LOAD, processingArg)
+    if (processingValue) {
+      setProcessing(PROCESSING.LOAD, processingValue)
       await structureFn()
       setProcessing(PROCESSING.OFF)
       return
     }
 
-    structureFn()
+    await structureFn()
   }
 
   return (

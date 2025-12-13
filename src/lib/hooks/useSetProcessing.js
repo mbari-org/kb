@@ -6,21 +6,21 @@ const { PROCESSING } = CONFIG
 
 const useSetProcessing = (setProcessingState, setProcessingMessage) => {
   return useCallback(
-    (processingValue, arg) => {
+    (processingKey, processingValue) => {
       const keyName = Object.keys(PROCESSING).find(
-        key => PROCESSING[key] === processingValue
+        key => PROCESSING[key] === processingKey
       )
 
       if (!keyName) {
-        const validValues = Object.values(PROCESSING)
-          .filter(v => v !== PROCESSING.OFF)
+        const validKeys = Object.keys(PROCESSING)
+          .filter(key => key !== PROCESSING.OFF)
           .join(', ')
         throw new Error(
-          `Invalid PROCESSING value: ${processingValue}. Valid values are: ${validValues}`
+          `Invalid PROCESSING key: ${processingKey}. Valid keys are: ${validKeys}`
         )
       }
 
-      if (processingValue === PROCESSING.OFF) {
+      if (processingKey === PROCESSING.OFF) {
         setProcessingState(false)
         if (setProcessingMessage) {
           setProcessingMessage(PROCESSING.OFF)
@@ -28,7 +28,7 @@ const useSetProcessing = (setProcessingState, setProcessingMessage) => {
         return
       }
 
-      const message = `${processingValue} ${arg ? `${arg}` : ''} ...`
+      const message = `${processingKey} ${processingValue ? `${processingValue}` : ''} ...`
 
       setProcessingState(true)
       if (setProcessingMessage) {
