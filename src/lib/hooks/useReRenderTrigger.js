@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { isRefEqual } from '@/lib/utils'
 
-const useUpdateTrigger = (name, props, depth = 2) => {
+const useReRenderTrigger = (name, props, depth = 2) => {
   const prevProps = useRef()
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const useUpdateTrigger = (name, props, depth = 2) => {
       })
 
       if (Object.keys(changes).length) {
-        console.log('[update-trigger]', name, changes)
+        console.log('[re-render-trigger]', name, changes)
       }
     }
 
@@ -30,4 +30,4 @@ const useUpdateTrigger = (name, props, depth = 2) => {
   }, [name, props, depth])
 }
 
-export default useUpdateTrigger
+export default useReRenderTrigger
