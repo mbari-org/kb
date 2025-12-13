@@ -16,15 +16,12 @@ const AppModalProvider = ({ children }) => {
 
   const closeModal = useCallback(
     confirmed => {
-      // if processing, don't close unless forced
       if (processing && !confirmed) {
         return false
       }
 
-      // If we have an onClose callback, call it and check if it prevents closing
       if (onClose && !confirmed) {
         const shouldClose = onClose(modalData)
-        // If callback explicitly returns false, prevent closing
         if (shouldClose === false) {
           return false
         }
@@ -33,7 +30,7 @@ const AppModalProvider = ({ children }) => {
       setOnClose(null)
       setModalData({})
       setModal(null)
-      setProcessing(PROCESSING.OFF)
+      setProcessing(false)
 
       return true
     },
@@ -46,6 +43,11 @@ const AppModalProvider = ({ children }) => {
   }, [])
 
   const handleSetProcessing = useSetProcessing(setProcessing, setProcessingMessage)
+
+  const resetProcessing = useCallback(() => {
+    setProcessing(false)
+    setProcessingMessage(PROCESSING.OFF)
+  }, [])
 
   const value = useMemo(
     () => ({
@@ -60,8 +62,9 @@ const AppModalProvider = ({ children }) => {
       setProcessingMessage,
       suppressDisplay,
       setSuppressDisplay,
+      resetProcessing,
     }),
-    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing, setProcessingMessage, suppressDisplay]
+    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing, setProcessingMessage, suppressDisplay, resetProcessing]
   )
 
   return <AppModalContext value={value}>{children}</AppModalContext>

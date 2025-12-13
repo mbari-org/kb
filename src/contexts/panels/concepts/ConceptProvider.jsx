@@ -30,7 +30,7 @@ const { CONTINUE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { PROCESSING } = CONFIG
 
 const ConceptProvider = ({ children }) => {
-  const { setProcessing } = use(AppModalContext)
+  const { setProcessing, setSuppressDisplay } = use(AppModalContext)
   const isSettingConceptRef = useRef(false)
 
   const { apiFns } = use(ConfigContext)
@@ -49,8 +49,10 @@ const ConceptProvider = ({ children }) => {
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
   const onConceptTreeReady = useCallback(() => {
+    // Don't suppress, let path fetch complete
+    setSuppressDisplay(false)
     setProcessing(PROCESSING.OFF)
-  }, [setProcessing])
+  }, [setProcessing, setSuppressDisplay])
 
   const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
@@ -80,9 +82,6 @@ const ConceptProvider = ({ children }) => {
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
 
       setConcept(conceptWithTemplates)
-
-      // Only turn off processing if we were the one who started it
-      setProcessing(PROCESSING.OFF)
 
       // Reset the ref on the next tick
       setTimeout(() => {
@@ -129,6 +128,7 @@ const ConceptProvider = ({ children }) => {
       } else {
         setHasUnsavedChanges(false)
 
+        setSuppressDisplay(true)
         setProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
 
         conceptLoader(selectedConcept)
@@ -145,6 +145,7 @@ const ConceptProvider = ({ children }) => {
     loadConcept,
     panels,
     setProcessing,
+    setSuppressDisplay,
     setConcept,
     setHasUnsavedChanges,
     setModalData,
