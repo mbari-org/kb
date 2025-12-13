@@ -5,6 +5,9 @@ import { useTheme } from '@mui/material/styles'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
+import CONFIG from '@/text'
+import KBTooltip from '@/components/common/KBTooltip'
+
 const HistoryTableHeaderTypeRight = () => {
   const { handleSortChange, pageState } = use(HistoryContext)
   const theme = useTheme()
@@ -15,9 +18,25 @@ const HistoryTableHeaderTypeRight = () => {
     padding: '4px 8px',
   }
 
+  const labelElement = <Typography>{CONFIG.PANELS.HISTORY.ORDER.LABEL}:</Typography>
+
+  const newestButton = (
+    <ToggleButton value='desc' sx={toggleButtonSx}>
+      {CONFIG.PANELS.HISTORY.ORDER.BUTTON.NEWEST}
+    </ToggleButton>
+  )
+
+  const oldestButton = (
+    <ToggleButton value='asc' sx={toggleButtonSx}>
+      {CONFIG.PANELS.HISTORY.ORDER.BUTTON.OLDEST}
+    </ToggleButton>
+  )
+
   return (
     <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
-      <Typography>Created Order:</Typography>
+      <KBTooltip title={CONFIG.PANELS.HISTORY.TOOLTIP.ORDER.LABEL}>
+        {labelElement}
+      </KBTooltip>
       <ToggleButtonGroup
         value={pageState.sortOrder || 'desc'}
         exclusive
@@ -28,12 +47,12 @@ const HistoryTableHeaderTypeRight = () => {
         }}
         size='small'
       >
-        <ToggleButton value='desc' sx={toggleButtonSx}>
-          Newest
-        </ToggleButton>
-        <ToggleButton value='asc' sx={toggleButtonSx}>
-          Oldest
-        </ToggleButton>
+        <KBTooltip title={CONFIG.PANELS.HISTORY.TOOLTIP.ORDER.NEWEST}>
+          {newestButton}
+        </KBTooltip>
+        <KBTooltip title={CONFIG.PANELS.HISTORY.TOOLTIP.ORDER.OLDEST}>
+          {oldestButton}
+        </KBTooltip>
       </ToggleButtonGroup>
     </Stack>
   )

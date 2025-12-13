@@ -9,7 +9,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 
 const { PENDING, APPROVED, CONCEPT } = SELECTED.SETTINGS.HISTORY.TYPES
 
-const HistoryHeaderToggle = ({ onChange }) => {
+const HistoryHeaderToggle = ({ onChange, tooltips }) => {
   const { selectedType } = use(HistoryContext)
 
   return (
@@ -21,9 +21,9 @@ const HistoryHeaderToggle = ({ onChange }) => {
       sx={{ mr: 1 }}
       value={selectedType}
     >
-      <HistoryToggleButton value={APPROVED} />
-      <HistoryToggleButton value={PENDING} />
-      <HistoryToggleButton value={CONCEPT} />
+      <HistoryToggleButton value={APPROVED} tooltip={tooltips?.APPROVED} />
+      <HistoryToggleButton value={PENDING} tooltip={tooltips?.PENDING} />
+      <HistoryToggleButton value={CONCEPT} tooltip={tooltips?.CONCEPT} />
     </ToggleButtonGroup>
   )
 }

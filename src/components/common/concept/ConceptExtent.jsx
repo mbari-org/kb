@@ -9,7 +9,14 @@ import KBTooltip from '@/components/common/KBTooltip'
 const { CHILDREN, SOLO: CONCEPT_VALUE, DESCENDANTS } = CONCEPT.EXTENT
 const { CHILDREN: CHILDREN_TEXT, DESCENDANTS: DESCENDANTS_TEXT } = CONFIG.CONCEPT.EXTENT
 
-const ConceptExtent = ({ initialValue = CONCEPT_VALUE, onChange }) => {
+const ConceptExtent = ({
+  initialValue = CONCEPT_VALUE,
+  label = 'Extent:',
+  labelTooltip,
+  childrenTooltip,
+  descendantsTooltip,
+  onChange,
+}) => {
   const [conceptExtent, setConceptExtent] = useState(initialValue)
   const theme = useTheme()
 
@@ -25,23 +32,45 @@ const ConceptExtent = ({ initialValue = CONCEPT_VALUE, onChange }) => {
     onChange?.(value)
   }
 
+  const childrenButton = (
+    <ToggleButton value={CHILDREN} sx={toggleButtonSx}>
+      {CHILDREN_TEXT}
+    </ToggleButton>
+  )
+
+  const descendantsButton = (
+    <ToggleButton value={DESCENDANTS} sx={toggleButtonSx}>
+      {DESCENDANTS_TEXT}
+    </ToggleButton>
+  )
+
+  const labelElement = <Typography>{label}</Typography>
+
   return (
     <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
-      <KBTooltip title='Extend Concept data to either Children or Descendants'>
-        <Typography>Extent:</Typography>
-      </KBTooltip>
+      {labelTooltip ? (
+        <KBTooltip title={labelTooltip}>{labelElement}</KBTooltip>
+      ) : (
+        <KBTooltip title='Extend Concept data to either Children or Descendants'>
+          {labelElement}
+        </KBTooltip>
+      )}
       <ToggleButtonGroup
         exclusive
         onChange={handleChange}
         size='small'
         value={conceptExtent}
       >
-        <ToggleButton value={CHILDREN} sx={toggleButtonSx}>
-          {CHILDREN_TEXT}
-        </ToggleButton>
-        <ToggleButton value={DESCENDANTS} sx={toggleButtonSx}>
-          {DESCENDANTS_TEXT}
-        </ToggleButton>
+        {childrenTooltip ? (
+          <KBTooltip title={childrenTooltip}>{childrenButton}</KBTooltip>
+        ) : (
+          childrenButton
+        )}
+        {descendantsTooltip ? (
+          <KBTooltip title={descendantsTooltip}>{descendantsButton}</KBTooltip>
+        ) : (
+          descendantsButton
+        )}
       </ToggleButtonGroup>
     </Stack>
   )
