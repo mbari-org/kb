@@ -22,11 +22,11 @@ const { CHILDREN, DESCENDANTS, SOLO } = CONCEPT.EXTENT
 const { TYPE } = CONCEPT.HISTORY
 const { CONCEPT: SELECTED_CONCEPT, PANEL, SETTINGS } = SELECTED
 const { HISTORY } = SETTINGS
+const { PROCESSING } = CONFIG
 
 const HistoryProvider = ({ children }) => {
   const { setModalData, setProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
-  const { PROCESSING } = CONFIG
   const { pendingHistory } = use(PanelDataContext)
   const { getSelected, getSettings } = use(SelectedContext)
 
