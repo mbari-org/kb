@@ -12,7 +12,7 @@ import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/T
 import { CONCEPT, SELECTED } from '@/lib/constants'
 import CONFIG from '@/text'
 
-const { EXPORT } = CONFIG.PANELS.TEMPLATES.TOOLTIP
+const { EXPORT } = CONFIG.PANELS.TEMPLATES.EXPORT.TOOLTIP
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
 
@@ -36,6 +36,9 @@ const TemplatesTableHeaderLeft = () => {
     exportTooltip = EXPORT.ALL
   }
 
+  const countLabel = CONFIG.PANELS.TEMPLATES.EXPORT.TOTAL
+  const exportButtonLabel = CONFIG.PANELS.TEMPLATES.EXPORT.BUTTON.EXPORT
+
   return (
     <Box
       sx={{
@@ -47,6 +50,8 @@ const TemplatesTableHeaderLeft = () => {
     >
       <PanelDataExport
         count={filteredTemplates.length}
+        countLabel={countLabel}
+        exportButtonLabel={exportButtonLabel}
         exportFn={templatesExport}
         exportTooltip={exportTooltip}
         width='auto'

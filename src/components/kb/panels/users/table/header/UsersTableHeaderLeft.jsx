@@ -12,9 +12,20 @@ const UsersTableHeaderLeft = () => {
   const { users } = use(UsersContext)
   const usersExport = useUsersExport()
 
-  const toolTip = CONFIG.PANELS.USERS.TOOLTIP.EXPORT.ALL
+  const toolTip = CONFIG.PANELS.USERS.EXPORT.TOOLTIP.EXPORT.ALL
+  const countLabel = CONFIG.PANELS.USERS.EXPORT.TOTAL
+  const exportButtonLabel = CONFIG.PANELS.USERS.EXPORT.BUTTON.EXPORT
 
-  return <PanelDataExport count={users?.length || 0} exportFn={usersExport} exportTooltip={toolTip} width='auto' />
+  return (
+    <PanelDataExport
+      count={users?.length || 0}
+      countLabel={countLabel}
+      exportButtonLabel={exportButtonLabel}
+      exportFn={usersExport}
+      exportTooltip={toolTip}
+      width='auto'
+    />
+  )
 }
 
 export default UsersTableHeaderLeft
