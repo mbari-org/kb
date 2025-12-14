@@ -8,7 +8,7 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ConceptsTree from '@/components/kb/panels/concepts/tree/ConceptsTree'
 import KBTooltip from '@/components/common/KBTooltip'
 
-import useConceptExportModal from '@/components/kb/panels/concepts/concept/export/useConceptExportModal'
+import useConceptExportModal from '@/components/kb/panels/concepts/concept/detail/export/useConceptExportModal'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 

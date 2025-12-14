@@ -2,9 +2,9 @@ import { use, useMemo } from 'react'
 import { Stack, Typography } from '@mui/material'
 
 import ConceptExtent from '@/components/common/concept/ConceptExtent'
-import ConceptExportType from '@/components/kb/panels/concepts/concept/export/ConceptExportType'
-import ConceptExportCsv from '@/components/kb/panels/concepts/concept/export/ConceptExportCsv'
-import ConceptExportJson from '@/components/kb/panels/concepts/concept/export/ConceptExportJson'
+import ConceptExportType from './ConceptExportType'
+import ConceptExportCsv from './ConceptExportCsv'
+import ConceptExportJson from './ConceptExportJson'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 

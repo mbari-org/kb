@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import Actions from '@/components/modal/actions/Actions'
 
-import useConceptExportCsv from '@/components/kb/panels/concepts/concept/export/useConceptExportCsv'
+import useConceptExportCsv from './useConceptExportCsv'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 

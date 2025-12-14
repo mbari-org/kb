@@ -9,13 +9,13 @@ import useHistoryExport from '@/components/kb/panels/history/table/header/useHis
 import CONFIG from '@/text'
 
 const HistoryTableHeaderLeft = () => {
-  const { count, selectedType } = use(HistoryContext)
+  const { conceptState, selectedType } = use(HistoryContext)
 
   const historyExport = useHistoryExport()
 
   const toolTip = CONFIG.PANELS.HISTORY.TOOLTIP.EXPORT[selectedType.toUpperCase()]
 
-  return <PanelDataExport count={count} exportFn={historyExport} exportTooltip={toolTip} width='auto' />
+  return <PanelDataExport count={conceptState.count} exportFn={historyExport} exportTooltip={toolTip} width='auto' />
 }
 
 export default HistoryTableHeaderLeft
