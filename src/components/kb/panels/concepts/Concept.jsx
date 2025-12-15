@@ -6,13 +6,9 @@ import ConceptEditingActions from '@/components/kb/panels/concepts/concept/Conce
 import ConceptView from '@/components/kb/panels/concepts/concept/ConceptView'
 import ConceptPath from '@/components/kb/panels/concepts/concept/ConceptPath'
 
-import { isReadOnly } from '@/lib/auth/role'
-
-import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const Concept = () => {
-  const { user } = use(UserContext)
   const { stagedState } = use(ConceptContext)
 
   if (stagedState && Object.keys(stagedState).length === 0) {
@@ -34,7 +30,7 @@ const Concept = () => {
         <ConceptPath />
       </Stack>
       <ConceptView />
-      {!isReadOnly(user) && <ConceptEditingActions />}
+      <ConceptEditingActions />
     </Stack>
   )
 }
