@@ -12,8 +12,6 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const { config, updateConfig } = use(ConfigContext)
   const [configUrl, setConfigUrl] = useState(config?.url || '')
 
-  const inputUrl = config?.valid ? config.url : configUrl
-
   const submitConfigUrl = async (_prevState, formData) => {
     const formConfigUrl = formData.get('configUrl')
     return updateConfig(formConfigUrl)
@@ -29,6 +27,13 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
 
   const isUrlValid = isValidUrl(configUrl)
   const isButtonEnabled = configIsDirty && isUrlValid
+
+  // Sync configUrl state when config.url changes (but only if not dirty)
+  useEffect(() => {
+    if (config?.url && !configIsDirty) {
+      setConfigUrl(config.url)
+    }
+  }, [config?.url, configIsDirty])
 
   useEffect(() => {
     if (config?.valid) {
@@ -48,7 +53,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
             onChange={handleConfigChange}
             required
             sx={{ mt: 1 }}
-            value={inputUrl}
+            value={configUrl}
           />
           <SubmitError errorText={config?.error || configState?.error || ''} />
         </CardContent>
