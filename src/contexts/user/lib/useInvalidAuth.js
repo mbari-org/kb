@@ -8,7 +8,7 @@ const useInvalidAuth = setUser => {
   return useCallback(() => {
     authStore.remove()
     setUser(null)
-    navigate('/login')
+    navigate('/kb')
   }, [navigate, setUser])
 }
 

@@ -80,11 +80,11 @@ const ConfigProvider = ({ children }) => {
         if (mountedRef.current) {
           setConfig(null)
           configUrlStore.clear()
-          navigate('/login', { replace: true })
+          navigate('/kb', { replace: true })
         }
       })
     } else {
-      navigate('/login', { replace: true })
+      navigate('/kb', { replace: true })
     }
   }, [loadConfig, navigate])
 
