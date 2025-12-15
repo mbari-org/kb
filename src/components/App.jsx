@@ -26,11 +26,10 @@ const App = () => {
             <ConfigProvider>
               <UserProvider>
                 <Routes>
-                  <Route path='/login' element={<StartUp />} />
                   <Route element={<AuthRoute />}>
                     <Route path='/kb' element={<KbContainer />}></Route>
                   </Route>
-                  <Route path='*' element={<Navigate to='/login' replace />} />
+                  <Route path='*' element={<Navigate to='/kb' replace />} />
                 </Routes>
               </UserProvider>
             </ConfigProvider>

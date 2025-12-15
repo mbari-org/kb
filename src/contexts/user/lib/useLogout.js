@@ -1,11 +1,8 @@
 import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import { clearStores } from '@/lib/local/store/clearStores'
 
 const useLogout = (setUser, savePreferences) => {
-  const navigate = useNavigate()
-
   return useCallback(async () => {
     try {
       if (savePreferences) {
@@ -16,8 +13,7 @@ const useLogout = (setUser, savePreferences) => {
     }
     clearStores()
     setUser(null)
-    navigate('/login')
-  }, [navigate, savePreferences, setUser])
+  }, [savePreferences, setUser])
 }
 
 export default useLogout

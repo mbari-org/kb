@@ -42,7 +42,7 @@ const UserProvider = ({ children }) => {
     refreshUser()
       .then(() => {
         if (mountedRef.current && location.pathname !== '/kb') {
-          navigate('/kb')
+          navigate('/kb', { replace: true })
         }
       })
       .catch(error => {
