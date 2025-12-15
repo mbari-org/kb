@@ -1,10 +1,10 @@
 import { use } from 'react'
 
-import { Stack } from '@mui/material'
+import { Box } from '@mui/material'
 
-import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
 import ConceptView from '@/components/kb/panels/concepts/concept/ConceptView'
 import ConceptPath from '@/components/kb/panels/concepts/concept/ConceptPath'
+import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
@@ -16,22 +16,21 @@ const Concept = () => {
   }
 
   return (
-    <Stack
-      direction='column'
-      spacing={1.5}
+    <Box
       sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1.5,
         m: 2,
         mt: 1,
-        minHeight: '100vh',
+        height: '100vh',
         position: 'relative',
       }}
     >
-      <Stack direction='row' alignItems='center' justifyContent='space-between'>
-        <ConceptPath />
-      </Stack>
+      <ConceptPath />
       <ConceptView />
       <ConceptEditingActions />
-    </Stack>
+    </Box>
   )
 }
 

@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { Breadcrumbs, Button } from '@mui/material'
+import { Box, Breadcrumbs, Button } from '@mui/material'
 import { MdNavigateNext } from 'react-icons/md'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -16,33 +16,35 @@ const ConceptPath = () => {
   }
 
   return (
-    <Breadcrumbs
-      maxItems={Infinity}
-      separator={<MdNavigateNext fontSize='large' />}
-      sx={{
-        '& .MuiBreadcrumbs-separator': { mx: 0 },
-        '& .MuiButton-root': {
-          padding: '0px',
-          minWidth: 'auto',
-          textTransform: 'none',
-        },
-        height: theme => `${theme.typography.fontSize * 3}px`,
-        display: 'flex',
-      }}
-    >
-      {conceptPath?.map((path, index) => (
-        <Button
-          key={index}
-          color={index === conceptPath.length - 1 ? 'primary' : 'inherit'}
-          onClick={() => {
-            if (index === conceptPath.length - 1) return
-            handlePathClick(path)
-          }}
-        >
-          {path}
-        </Button>
-      ))}
-    </Breadcrumbs>
+    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Breadcrumbs
+        maxItems={Infinity}
+        separator={<MdNavigateNext fontSize='large' />}
+        sx={{
+          '& .MuiBreadcrumbs-separator': { mx: 0 },
+          '& .MuiButton-root': {
+            padding: '0px',
+            minWidth: 'auto',
+            textTransform: 'none',
+          },
+          height: theme => `${theme.typography.fontSize * 3}px`,
+          display: 'flex',
+        }}
+      >
+        {conceptPath?.map((path, index) => (
+          <Button
+            key={index}
+            color={index === conceptPath.length - 1 ? 'primary' : 'inherit'}
+            onClick={() => {
+              if (index === conceptPath.length - 1) return
+              handlePathClick(path)
+            }}
+          >
+            {path}
+          </Button>
+        ))}
+      </Breadcrumbs>
+    </Box>
   )
 }
 
