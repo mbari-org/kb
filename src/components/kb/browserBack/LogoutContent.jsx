@@ -1,23 +1,26 @@
-import { Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
+
+import logoutModal from '@/text/config/logoutModal.json'
 
 const LogoutContent = () => (
-  <Stack spacing={0} sx={{ textAlign: 'center' }}>
-    <Typography variant='body1' color='text.secondary'>
-      The browser back button closes the Knowledge Base app and logs you out.
+  <Stack spacing={0} sx={{ textAlign: 'left' }}>
+    <Typography variant='body1' sx={{ textAlign: 'center' }}>
+      {logoutModal.MESSAGE.DESCRIPTION}
     </Typography>
-    <Typography variant='body1' color='text.secondary' sx={{ mt: 2 }}>
-      You can use the &lt; and &gt; navigation buttons to return to a previous Concept or Panel.
+    <Box sx={{ mt: 2 }}>
+      <Typography variant='body1' >
+        <span dangerouslySetInnerHTML={{ __html: logoutModal.MESSAGE.NAV_BUTTONS.DESCRIPTION }} />
+      </Typography>
+      <Box component='ul' sx={{ mt: 0, mb: 0, pl: 5 }}>
+        <li>{logoutModal.MESSAGE.NAV_BUTTONS.CONCEPTS}</li>
+        <li>{logoutModal.MESSAGE.NAV_BUTTONS.PANELS}</li>
+      </Box>
+    </Box>
+    <Typography variant='body1' >
+      {logoutModal.MESSAGE.NAV_BUTTONS.LONG_PRESS}
     </Typography>
-    <Typography variant='body1' color='text.secondary'>
-      Concept buttons are on the Concept selection control and Panel buttons are in the top
-      navigation bar.
-    </Typography>
-    <Typography variant='body1' color='text.secondary' sx={{ mt: 2 }}>
-      Each of these buttons provides a long press option to jump to a specific point in the history
-      as well.
-    </Typography>
-    <Typography variant='body1' color='text.secondary' sx={{ mt: 5 }}>
-      Are you sure you want to logout?
+    <Typography variant='body1' sx={{ mt: 5, textAlign: 'center' }}>
+      {logoutModal.MESSAGE.CONFIRM}
     </Typography>
   </Stack>
 )

@@ -1,0 +1,18 @@
+{
+  "BUTTON": {
+    "NO": "Continue",
+    "LOGOUT": "Logout"
+  },
+  "MESSAGE": {
+    "DESCRIPTION": "Are you trying to navigate within the app?",
+    "NAV_BUTTONS": {
+      "DESCRIPTION": "You can use the &lt; and &gt; navigation buttons to return to a previous Concept or Panel.",
+      "CONCEPTS": "Concept buttons are on the far right of the Concept selection control.",
+      "PANELS": "Panel buttons are on the far left of the top navigation bar.",
+      "LONG_PRESS": "You can long press the nav buttons to jump to a specific point in their history as well."
+    },
+    "BROWSER_BACK": "The browser back button closes the Knowledge Base app and logs you out.",
+    "CONFIRM": "Are you sure you want to logout?"
+  },
+  "TITLE": "Logout"
+}
