@@ -1,0 +1,18 @@
+{
+  "ALERT": "Error information copied to clipboard! Please include when reporting this issue.",
+  "BUTTON": {
+    "COPY": "Copy Info",
+    "LOGOUT": "Logout",
+    "RESET": "Reset"
+  },
+  "MESSAGE": {
+    "COPY": "(to send to app developers)",
+    "ERROR": "An unexpected error occurred. 😣 To minimize the risk of corrupting data, we won't proceed.",
+    "IMAGE_SUBTITLE": "しまった!",
+    "LOGOUT": "Remove user settings and return to the login screen",
+    "NO_STACK": "No stack trace available",
+    "RESET": "Keep user settings and attempt to reload the app",
+    "UNEXPECTED": "An unexpected error occurred",
+    "UNSAVED": "Any unsaved changes are lost. 🫣"
+  }
+}

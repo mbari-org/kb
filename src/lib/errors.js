@@ -5,12 +5,15 @@ export const createError = (title, message, details = {}, original = null) => ({
   original,
 })
 
-export const createApiError = (title, message, url, params, original = null) =>
-  createError(title, message, {
-    url,
+export const createApiError = (title, message, url, params, original = null) => {
+  const details = {
+    body: params?.body ? JSON.parse(params.body) : undefined,
     method: params?.method,
-    ...params?.details,
-  }, original)
+    url,
+  }
+
+  return createError(title, message, details, original)
+}
 
 export const createConceptError = (conceptName, message, original = null) =>
   createError(

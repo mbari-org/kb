@@ -5,7 +5,11 @@ import { useTheme } from '@mui/material/styles'
 
 import { clearStores } from '@/lib/local/store/clearStores'
 
+import CONFIG from '@/text'
+
 import whoopsImage from '@/assets/whoops.jpg'
+
+const BAIL_TO_LOCATION = '/kbeditor/'
 
 const Whoops = ({ children }) => {
   const theme = useTheme()
@@ -13,33 +17,33 @@ const Whoops = ({ children }) => {
   // Using window.location.href bypasses the React error boundary
   const handleForcedLogout = () => {
     clearStores()
-    window.location.href = '/kbeditor/'
+    window.location.href = BAIL_TO_LOCATION
   }
 
   const handleReset = () =>
-    window.location.href = '/kbeditor/'
+    window.location.href = BAIL_TO_LOCATION
 
   const handleCopyInfo = async error => {
     const stack = error.original?.stack || error.stack
     const responseMessage = error.title
       ? `${error.title}: ${error.message}\n${error.details ? JSON.stringify(error.details, null, 2) : ''}`
-      : 'An unexpected error occurred'
+      : CONFIG.WHOOPS.MESSAGE.UNEXPECTED
 
-    const infoToCopy = `Error: ${responseMessage}\n\nStack Trace:\n${
-      stack || 'No stack trace available'
+    const infoToCopy = `${responseMessage}\n\nStack Trace:\n${
+      stack || CONFIG.WHOOPS.MESSAGE.NO_STACK
     }`
 
     await navigator.clipboard.writeText(infoToCopy)
-    alert('Error information copied to clipboard! Please include when reporting this issue.')
+    alert(CONFIG.WHOOPS.ALERT)
   }
 
   const renderWhoops = ({ error }) => {
     const responseMessage = error.title
       ? `
       ${error.title}: ${error.message}
-      ${error.details ? `\nDetails: ${JSON.stringify(error.details, null, 2)}` : ''}
+      ${error.details ? `\n${JSON.stringify(error.details, null, 2)}` : ''}
       `
-      : 'An unexpected error occurred'
+      : CONFIG.WHOOPS.MESSAGE.UNEXPECTED
 
     const stack = error.original?.stack || error.stack
     return (
@@ -85,14 +89,13 @@ const Whoops = ({ children }) => {
         {stack && (
           <Stack sx={{ width: '80%' }}>
             <Typography variant='body1' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              しまった!
+              {CONFIG.WHOOPS.MESSAGE.IMAGE_SUBTITLE}
             </Typography>
             <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 'bold', mt: 2 }}>
               💥 {responseMessage} 💥
             </Typography>
             <Typography variant='body2' sx={{ textAlign: 'center', mt: 1, mb: 1 }}>
-              We encountered a processing error. 😣 To minimize the risk of corrupting data, we
-              won&apos;t proceed.
+              {CONFIG.WHOOPS.MESSAGE.ERROR}
             </Typography>
 
             <Box
@@ -114,10 +117,10 @@ const Whoops = ({ children }) => {
                 }}
                 variant='text'
               >
-                Copy Info
+                {CONFIG.WHOOPS.BUTTON.COPY}
               </Button>
               <Typography variant='body2' sx={{ textAlign: 'center' }}>
-                (to send to app developers)
+                {CONFIG.WHOOPS.MESSAGE.COPY}
               </Typography>
             </Box>
             <Typography
@@ -143,33 +146,33 @@ const Whoops = ({ children }) => {
           <Box sx={{ textAlign: 'left' }}>
             <Stack direction='row' spacing={1}>
               <Typography sx={{ fontWeight: 'bold' }} variant='body2'>
-                Logout:
+                {CONFIG.WHOOPS.BUTTON.LOGOUT}:
               </Typography>
               <Typography variant='body2'>
-                Remove user settings and return to the login screen
+                {CONFIG.WHOOPS.MESSAGE.LOGOUT}
               </Typography>
             </Stack>
 
             <Stack direction='row' spacing={1}>
               <Typography sx={{ fontWeight: 'bold' }} variant='body2'>
-                Reset:
+                {CONFIG.WHOOPS.BUTTON.RESET}:
               </Typography>
               <Typography variant='body2'>
-                Keep user settings and attempt to reload the app
+                {CONFIG.WHOOPS.MESSAGE.RESET}
               </Typography>
             </Stack>
           </Box>
         </Box>
         <Box sx={{ mt: 2 }} />
         <Typography variant='body2' sx={{ textAlign: 'center' }}>
-          Either way, any unsaved changes are lost. 🫣
+          {CONFIG.WHOOPS.MESSAGE.UNSAVED}
         </Typography>
         <Stack direction='row' spacing={15} sx={{ mt: 2 }}>
           <Button onClick={handleForcedLogout} sx={{ fontSize: '24px' }}>
-            Logout
+            {CONFIG.WHOOPS.BUTTON.LOGOUT}
           </Button>
           <Button onClick={handleReset} sx={{ fontSize: '24px' }}>
-            Reset
+            {CONFIG.WHOOPS.BUTTON.RESET}
           </Button>
         </Stack>
       </Box>
