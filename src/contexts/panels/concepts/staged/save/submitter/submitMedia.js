@@ -6,7 +6,7 @@ import { createError } from '@/lib/errors'
 import { pick } from '@/lib/utils'
 
 const submitMedia = ([submit, { concept, updatesInfo }]) => {
-  const { hasUpdated, updatedValue } = updatesInfo
+  const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
   if (!hasUpdated('media')) {
     return []
@@ -49,6 +49,8 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     }
   }
 
+  const getMediaId = (update, index) => update.id || initialValue('media')?.[index]?.id
+
   const mediaAdd = (update, index) => {
     const mediaItem = pick(update, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
     const params = {
@@ -66,7 +68,9 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
 
   const mediaEdit = (update, index) => {
     const mediaItem = pick(update, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
-    const params = [update.id, mediaItem]
+    const mediaId = getMediaId(update, index)
+
+    const params = [mediaId, mediaItem]
     const trackerInfo = {
       action: CONCEPT_STATE.MEDIA_ITEM.EDIT,
       index,
@@ -77,7 +81,8 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   }
 
   const mediaDelete = (update, index) => {
-    const params = update.id
+    const params = getMediaId(update, index)
+
     const trackerInfo = {
       action: CONCEPT_STATE.MEDIA_ITEM.DELETE,
       index,
