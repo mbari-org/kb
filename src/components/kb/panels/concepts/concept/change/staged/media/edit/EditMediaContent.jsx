@@ -119,10 +119,18 @@ const EditMediaContent = () => {
     }
   }
 
-  const showPrimaryCheckbox = useMemo(
-    () => !hasPrimary(stagedState.media) || isPrimary(mediaItem),
-    [stagedState.media, mediaItem]
-  )
+  const showPrimaryCheckbox = useMemo(() => {
+    if (action === CONCEPT_STATE.MEDIA_ITEM.ADD) {
+      return !hasPrimary(stagedState.media)
+    }
+
+    const otherMedia = stagedState.media.filter((_, index) => index !== mediaIndex)
+    const hasOtherPrimary = hasPrimary(otherMedia)
+
+    const wasOriginallyPrimary = isPrimary(stagedState.media[mediaIndex])
+
+    return !hasOtherPrimary || wasOriginallyPrimary
+  }, [stagedState.media, action, mediaIndex])
 
   if (!mediaItem) {
     return null
