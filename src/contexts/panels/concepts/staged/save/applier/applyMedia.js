@@ -16,10 +16,20 @@ const applyMedia = (concept, tracker) => {
       concept.media = concept.media.toSpliced(index, 1, next)
     }
   }
+
   switch (tracker.action) {
     case CONCEPT_STATE.MEDIA_ITEM.ADD: {
       const payload = tracker.response?.payload
-      payload?.id ? addMedia(payload) : addMedia({ ...tracker.params })
+      // Use payload if available (has id), otherwise use tracker.update (submitted data)
+      const mediaToAdd = payload?.id ? payload : tracker.update
+
+      const alreadyUpdated = mediaToAdd.id
+        ? concept.media.some(m => m.id === mediaToAdd.id)
+        : concept.media.some(m => m.url === mediaToAdd.url && m.mediaType === mediaToAdd.mediaType)
+
+      if (!alreadyUpdated) {
+        addMedia(mediaToAdd)
+      }
       break
     }
 
