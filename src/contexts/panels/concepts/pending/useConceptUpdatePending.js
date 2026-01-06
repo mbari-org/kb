@@ -16,7 +16,7 @@ const { PROCESSING } = CONFIG
 
 const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
-  const { setProcessing } = use(ConceptModalContext)
+  const { withProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
   const { refreshData } = use(PanelDataContext)
   const { updateSelected } = use(SelectedContext)
@@ -34,31 +34,33 @@ const useConceptUpdatePending = () => {
         ? propItems
         : (propIds || []).map(pendingId => pendingConcept.find(item => item.id === pendingId)).filter(Boolean)
 
-      setProcessing(PROCESSING.UPDATE, `${PROCESSING.ARG.PENDING}: ${approval}`)
+      return withProcessing(
+        async () => {
+          const { updated } = await processPendingApproval({
+            approval,
+            deps: {
+              apiFns,
+              conceptEditsRefresh,
+              getConcept,
+              refreshData,
+              updateSelected,
+            },
+            items,
+          })
 
-      const { updated } = await processPendingApproval({
-        approval,
-        deps: {
-          apiFns,
-          conceptEditsRefresh,
-          getConcept,
-          refreshData,
-          updateSelected,
+          if (updated.includes(staleConcept.name)) {
+            const { concept: updatedConcept } = await conceptEditsRefresh(
+              getConcept(staleConcept.name),
+              staleConcept
+            )
+            await setConcept(updatedConcept)
+          }
+
+          return pendingConcept.length !== items.length
         },
-        items,
-      })
-
-      if (updated.includes(staleConcept.name)) {
-        const { concept: updatedConcept } = await conceptEditsRefresh(
-          getConcept(staleConcept.name),
-          staleConcept
-        )
-        await setConcept(updatedConcept)
-      }
-
-      setProcessing(PROCESSING.OFF)
-
-      return pendingConcept.length !== items.length
+        PROCESSING.UPDATE,
+        `${PROCESSING.ARG.PENDING}: ${approval}`
+      )
     },
     [
       apiFns,
@@ -67,9 +69,9 @@ const useConceptUpdatePending = () => {
       pending,
       refreshData,
       setConcept,
-      setProcessing,
       staleConcept,
       updateSelected,
+      withProcessing,
     ]
   )
 }

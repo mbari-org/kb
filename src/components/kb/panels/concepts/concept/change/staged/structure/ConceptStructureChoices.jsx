@@ -18,7 +18,7 @@ const { CONCEPT, PROCESSING } = CONFIG
 
 const ChangeStructureChoices = ({ closeChoices }) => {
   const { disableDelete, disableChangeName, disableChangeParent } = useStructureChoices()
-  const { setProcessing } = use(AppModalContext)
+  const { beginProcessing } = use(AppModalContext)
 
   const addChild = useAddChildModal()
   const changeName = useChangeNameModal()
@@ -30,9 +30,12 @@ const ChangeStructureChoices = ({ closeChoices }) => {
     closeChoices()
 
     if (processingValue) {
-      setProcessing(PROCESSING.LOAD, processingValue)
-      await structureFn()
-      setProcessing(PROCESSING.OFF)
+      const stop = beginProcessing(PROCESSING.LOAD, processingValue)
+      try {
+        await structureFn()
+      } finally {
+        stop()
+      }
       return
     }
 

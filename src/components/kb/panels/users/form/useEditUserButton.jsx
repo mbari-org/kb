@@ -18,7 +18,7 @@ const { PROCESSING } = CONFIG
 const { CONFIRM_DISCARD, DISCARD } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
 const useEditUserButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } =
+  const { closeModal, createModal, updateModalData, withProcessing } =
     useUsersModalOperationsContext()
   const { editUser, users } = use(UsersContext)
 
@@ -29,23 +29,19 @@ const useEditUserButton = () => {
 
   const handleCommit = useCallback(
     async (user, original) => {
-      try {
-        const updatedData = processEditUserData(user, original)
+      const updatedData = processEditUserData(user, original)
 
-        if (!updatedData) {
-          closeModal()
-          return
-        }
+      if (!updatedData) {
+        closeModal()
+        return
+      }
 
-        setProcessing(PROCESSING.UPDATE)
+      await withProcessing(async () => {
         await editUser(user.username, updatedData)
         closeModal()
-      } catch (error) {
-        setProcessing(PROCESSING.OFF)
-        throw error
-      }
+      }, PROCESSING.UPDATE)
     },
-    [editUser, closeModal, setProcessing]
+    [editUser, closeModal, withProcessing]
   )
 
   const editUserModal = useCallback(

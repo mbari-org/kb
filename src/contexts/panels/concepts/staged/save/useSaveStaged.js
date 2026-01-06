@@ -18,52 +18,51 @@ const { PROCESSING } = CONFIG
 
 const useSaveStaged = () => {
   const { initialState, setConcept, stagedState } = use(ConceptContext)
-  const { closeModal, setProcessing } = use(ConceptModalContext)
+  const { closeModal, withProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh } = use(TaxonomyContext)
 
   const updatesContext = useUpdatesContext()
 
-  return useCallback(async () => {
-    setProcessing(PROCESSING.SAVE, PROCESSING.ARG.CONCEPT)
+  return useCallback(() => {
+    return withProcessing(
+      async () => {
+        const updatesInfo = await submitStaged(
+          updatesContext.apiFns.apiPayload,
+          updatesContext.staleConcept,
+          initialState,
+          stagedState
+        )
 
-    let updatesInfo
-    try {
-      updatesInfo = await submitStaged(
-        updatesContext.apiFns.apiPayload,
-        updatesContext.staleConcept,
-        initialState,
-        stagedState
-      )
-    } catch (error) {
-      setProcessing(PROCESSING.OFF)
-      throw error
-    }
+        const freshConcept = await applyResults(updatesContext, updatesInfo)
 
-    const freshConcept = await applyResults(updatesContext, updatesInfo)
+        if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
+          await applyRenameSideEffects(updatesContext, updatesInfo)
+        }
 
-    if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
-      await applyRenameSideEffects(updatesContext, updatesInfo)
-    }
+        const { concept: updatedConcept } = await conceptEditsRefresh(
+          freshConcept,
+          updatesContext.staleConcept
+        )
 
-    const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, updatesContext.staleConcept)
+        await setConcept(updatedConcept)
 
-    await setConcept(updatedConcept)
+        updateSelected({ concept: updatedConcept.name })
 
-    updateSelected({ concept: updatedConcept.name })
-
-    closeModal()
-
-    setProcessing(PROCESSING.OFF)
+        closeModal()
+      },
+      PROCESSING.SAVE,
+      PROCESSING.ARG.CONCEPT
+    )
   }, [
     closeModal,
     conceptEditsRefresh,
     initialState,
     setConcept,
-    setProcessing,
     stagedState,
     updateSelected,
     updatesContext,
+    withProcessing,
   ])
 }
 

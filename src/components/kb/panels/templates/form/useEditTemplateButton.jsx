@@ -23,7 +23,7 @@ import CONFIG from '@/text'
 const { PROCESSING } = CONFIG
 
 const useEditTemplateButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } =
+  const { closeModal, createModal, updateModalData, withProcessing } =
     useTemplatesModalOperationsContext()
   const { editTemplate } = use(TemplatesContext)
   const { templates: allTemplates } = use(PanelDataContext)
@@ -52,11 +52,11 @@ const useEditTemplateButton = () => {
           })
         }
 
-        setProcessing(PROCESSING.UPDATE)
-        await editTemplate(original, template)
-        closeModal()
+        await withProcessing(async () => {
+          await editTemplate(original, template)
+          closeModal()
+        }, PROCESSING.UPDATE)
       } catch (error) {
-        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           if (error.message === 'Template already exists') {
             updateModalData({ alert: duplicateTemplateAlert() })
@@ -71,7 +71,7 @@ const useEditTemplateButton = () => {
         )
       }
     },
-    [allTemplates, editTemplate, closeModal, setProcessing, updateModalData]
+    [allTemplates, editTemplate, closeModal, updateModalData, withProcessing]
   )
 
   const editTemplateModal = useCallback(

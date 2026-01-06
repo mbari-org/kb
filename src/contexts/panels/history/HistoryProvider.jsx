@@ -24,8 +24,10 @@ const { CONCEPT: SELECTED_CONCEPT, PANEL, SETTINGS } = SELECTED
 const { HISTORY } = SETTINGS
 const { PROCESSING } = CONFIG
 
+const LOADING_DELAY_MS = 200
+
 const HistoryProvider = ({ children }) => {
-  const { setModalData, setProcessing } = use(AppModalContext)
+  const { beginProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
   const { pendingHistory } = use(PanelDataContext)
   const { getSelected, getSettings } = use(SelectedContext)
@@ -92,16 +94,14 @@ const HistoryProvider = ({ children }) => {
             ? PROCESSING.ARG.HISTORY.DESCENDANTS
             : PROCESSING.ARG.HISTORY.DATA
 
-      // Delay showing the overlay to avoid UI flash on fast operations
-      const timer = setTimeout(() => {
-        setProcessing(PROCESSING.LOAD, processingArg)
-      }, PROCESSING.LOADING_DELAY)
+      const stopProcessing = beginProcessing(PROCESSING.LOAD, processingArg, {
+        delayMs: LOADING_DELAY_MS,
+      })
 
       try {
         await loadData({ updateConceptState, updatePageState })
       } finally {
-        clearTimeout(timer)
-        setProcessing(PROCESSING.OFF)
+        stopProcessing()
         isTypeChanging.current = false
       }
     }
@@ -114,8 +114,7 @@ const HistoryProvider = ({ children }) => {
     pendingHistory,
     selectedConcept,
     selectedType,
-    setModalData,
-    setProcessing,
+    beginProcessing,
     updatePageState,
     updateConceptState,
   ])

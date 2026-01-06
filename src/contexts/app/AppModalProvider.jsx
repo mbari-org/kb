@@ -1,18 +1,21 @@
 import { useCallback, useState, useMemo } from 'react'
 
 import AppModalContext from './AppModalContext'
-import useSetProcessing from '@/lib/hooks/useSetProcessing'
-import CONFIG from '@/text'
-
-const { PROCESSING } = CONFIG
+import useProcessingManager from '@/lib/hooks/useProcessingManager'
 
 const AppModalProvider = ({ children }) => {
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
-  const [processing, setProcessing] = useState(false)
-  const [processingMessage, setProcessingMessage] = useState(PROCESSING.OFF)
   const [suppressDisplay, setSuppressDisplay] = useState(false)
+
+  const {
+    beginProcessing,
+    processing,
+    processingMessage,
+    resetProcessing,
+    withProcessing,
+  } = useProcessingManager()
 
   const closeModal = useCallback(
     confirmed => {
@@ -30,11 +33,11 @@ const AppModalProvider = ({ children }) => {
       setOnClose(null)
       setModalData({})
       setModal(null)
-      setProcessing(false)
+      resetProcessing()
 
       return true
     },
-    [onClose, modalData, processing]
+    [onClose, modalData, processing, resetProcessing]
   )
 
   const handleSetModal = useCallback((modal, onCloseCallback) => {
@@ -42,29 +45,34 @@ const AppModalProvider = ({ children }) => {
     setOnClose(typeof onCloseCallback === 'function' ? onCloseCallback : null)
   }, [])
 
-  const handleSetProcessing = useSetProcessing(setProcessing, setProcessingMessage)
-
-  const resetProcessing = useCallback(() => {
-    setProcessing(false)
-    setProcessingMessage(PROCESSING.OFF)
-  }, [])
 
   const value = useMemo(
     () => ({
       closeModal,
+      beginProcessing,
       processing,
       processingMessage,
       modal,
       modalData,
       setModalData,
       setModal: handleSetModal,
-      setProcessing: handleSetProcessing,
-      setProcessingMessage,
       suppressDisplay,
       setSuppressDisplay,
       resetProcessing,
+      withProcessing,
     }),
-    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing, setProcessingMessage, suppressDisplay, resetProcessing]
+    [
+      closeModal,
+      processing,
+      processingMessage,
+      modal,
+      modalData,
+      handleSetModal,
+      suppressDisplay,
+      resetProcessing,
+      beginProcessing,
+      withProcessing,
+    ]
   )
 
   return <AppModalContext value={value}>{children}</AppModalContext>

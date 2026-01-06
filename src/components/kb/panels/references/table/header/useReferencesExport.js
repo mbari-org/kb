@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useRef } from 'react'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -32,7 +32,8 @@ const useReferencesExport = () => {
   const { getReferences } = use(PanelDataContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const { user } = use(UserContext)
-  const { setProcessing } = use(AppModalContext)
+  const { beginProcessing } = use(AppModalContext)
+  const processingRef = useRef(null)
 
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
   const selectedConcept = byConcept ? getSelected(SELECTED.CONCEPT) : null
@@ -47,12 +48,19 @@ const useReferencesExport = () => {
   const onProgress = useCallback(
     value => {
       if (value === false) {
-        setProcessing(PROCESSING.OFF)
+        if (processingRef.current) {
+          processingRef.current()
+          processingRef.current = null
+        }
       } else if (typeof value === 'string') {
-        setProcessing(PROCESSING.LOAD, value)
+        if (!processingRef.current) {
+          processingRef.current = beginProcessing(PROCESSING.LOAD, value)
+        } else if (processingRef.current.updateMessage) {
+          processingRef.current.updateMessage(value)
+        }
       }
     },
-    [setProcessing]
+    [beginProcessing]
   )
 
   return csvExport({

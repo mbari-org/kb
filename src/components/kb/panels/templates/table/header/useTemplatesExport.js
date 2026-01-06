@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useRef } from 'react'
 
 import {
   getAvailableTemplates,
@@ -103,7 +103,8 @@ const useTemplatesExport = () => {
     filteredTemplates,
   } = use(TemplatesContext)
   const { user } = use(UserContext)
-  const { setProcessing } = use(AppModalContext)
+  const { beginProcessing } = use(AppModalContext)
+  const processingRef = useRef(null)
 
   const normalizedFilters = {
     byAvailable,
@@ -169,12 +170,19 @@ const useTemplatesExport = () => {
   const onProgress = useCallback(
     value => {
       if (value === false) {
-        setProcessing(PROCESSING.OFF)
+        if (processingRef.current) {
+          processingRef.current()
+          processingRef.current = null
+        }
       } else if (typeof value === 'string') {
-        setProcessing(PROCESSING.LOAD, value)
+        if (!processingRef.current) {
+          processingRef.current = beginProcessing(PROCESSING.LOAD, value)
+        } else if (processingRef.current.updateMessage) {
+          processingRef.current.updateMessage(value)
+        }
       }
     },
-    [setProcessing]
+    [beginProcessing]
   )
 
   return csvExport({

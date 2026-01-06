@@ -17,7 +17,7 @@ import CONFIG from '@/text'
 const { PROCESSING } = CONFIG
 
 const useDeleteReferenceButton = () => {
-  const { createModal, closeModal, setProcessing } = useReferencesModalOperationsContext()
+  const { createModal, closeModal, withProcessing } = useReferencesModalOperationsContext()
   const { deleteReference } = use(ReferencesContext)
 
   const handleCancel = useCallback(() => {
@@ -29,11 +29,11 @@ const useDeleteReferenceButton = () => {
   const handleDeleteConfirm = useCallback(
     async reference => {
       try {
-        setProcessing(PROCESSING.DELETE)
-        await deleteReference(reference)
-        closeModal()
+        await withProcessing(async () => {
+          await deleteReference(reference)
+          closeModal()
+        }, PROCESSING.DELETE)
       } catch (error) {
-        setProcessing(PROCESSING.OFF)
         const deleteError = createError(
           'Reference Delete Error',
           'Failed to delete reference',
@@ -43,7 +43,7 @@ const useDeleteReferenceButton = () => {
         showBoundary(deleteError)
       }
     },
-    [deleteReference, closeModal, setProcessing, showBoundary]
+    [deleteReference, closeModal, showBoundary, withProcessing]
   )
 
   return useCallback(

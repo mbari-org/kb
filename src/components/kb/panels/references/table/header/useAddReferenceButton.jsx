@@ -29,7 +29,7 @@ const { DISCARD } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)
   const { addReference } = use(ReferencesContext)
-  const { closeModal, createModal, updateModalData, setProcessing } =
+  const { closeModal, createModal, updateModalData, withProcessing } =
     useReferencesModalOperationsContext()
   const { getSelected, getSettings } = use(SelectedContext)
 
@@ -56,13 +56,12 @@ const useAddReferenceButton = () => {
           })
         }
 
-        setProcessing(PROCESSING.SAVE)
-
         const referenceData = processAddReferenceData(reference)
-        await addReference(referenceData)
-        closeModal()
+        await withProcessing(async () => {
+          await addReference(referenceData)
+          closeModal()
+        }, PROCESSING.SAVE)
       } catch (error) {
-        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           throw error
         }
@@ -74,7 +73,7 @@ const useAddReferenceButton = () => {
         )
       }
     },
-    [addReference, closeModal, setProcessing, isDoiUnique]
+    [addReference, closeModal, isDoiUnique, withProcessing]
   )
 
   const addReferenceModal = useCallback(() => {

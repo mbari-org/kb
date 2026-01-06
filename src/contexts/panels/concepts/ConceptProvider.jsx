@@ -30,7 +30,7 @@ const { CONTINUE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { PROCESSING } = CONFIG
 
 const ConceptProvider = ({ children }) => {
-  const { setProcessing, setSuppressDisplay } = use(AppModalContext)
+  const { beginProcessing, resetProcessing, setSuppressDisplay } = use(AppModalContext)
   const isSettingConceptRef = useRef(false)
 
   const { apiFns } = use(ConfigContext)
@@ -51,8 +51,8 @@ const ConceptProvider = ({ children }) => {
   const onConceptTreeReady = useCallback(() => {
     // Don't suppress, let path fetch complete
     setSuppressDisplay(false)
-    setProcessing(PROCESSING.OFF)
-  }, [setProcessing, setSuppressDisplay])
+    resetProcessing()
+  }, [resetProcessing, setSuppressDisplay])
 
   const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
@@ -88,7 +88,7 @@ const ConceptProvider = ({ children }) => {
         isSettingConceptRef.current = false
       }, 0)
     },
-    [getConceptTemplates, refreshPanelData, setProcessing]
+    [getConceptTemplates, refreshPanelData]
   )
 
   const conceptLoader = useConceptLoader({
@@ -129,9 +129,8 @@ const ConceptProvider = ({ children }) => {
         setHasUnsavedChanges(false)
 
         setSuppressDisplay(true)
-        setProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
-
-        conceptLoader(selectedConcept)
+        const stop = beginProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
+        Promise.resolve(conceptLoader(selectedConcept)).finally(stop)
       }
     }
   }, [
@@ -144,7 +143,7 @@ const ConceptProvider = ({ children }) => {
     isConceptLoaded,
     loadConcept,
     panels,
-    setProcessing,
+    beginProcessing,
     setSuppressDisplay,
     setConcept,
     setHasUnsavedChanges,

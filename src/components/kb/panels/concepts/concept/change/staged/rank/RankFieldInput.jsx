@@ -12,7 +12,6 @@ import { stagedBorder } from '@/lib/concept/state/staged'
 import { CONCEPT } from '@/lib/constants'
 
 import { rankField } from '@/lib/concept/state/rank'
-import { capitalize } from '@/lib/utils'
 
 const RankFieldInput = ({ field, initialRank, label, rank, onChange }) => {
   const theme = useTheme()

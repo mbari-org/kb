@@ -20,7 +20,7 @@ const useDeleteTemplateButton = () => {
   const { showBoundary } = useErrorBoundary()
   const { deleteTemplate } = use(TemplatesContext)
 
-  const { closeModal, createModal, setProcessing } = useTemplatesModalOperationsContext()
+  const { closeModal, createModal, withProcessing } = useTemplatesModalOperationsContext()
 
   const handleCancel = useCallback(() => {
     closeModal()
@@ -29,11 +29,11 @@ const useDeleteTemplateButton = () => {
   const handleDeleteConfirm = useCallback(
     async template => {
       try {
-        setProcessing(PROCESSING.DELETE)
-        await deleteTemplate(template)
-        closeModal()
+        await withProcessing(async () => {
+          await deleteTemplate(template)
+          closeModal()
+        }, PROCESSING.DELETE)
       } catch (error) {
-        setProcessing(PROCESSING.OFF)
         const deleteError = createError(
           'Template Delete Error',
           'Failed to delete template',
@@ -43,7 +43,7 @@ const useDeleteTemplateButton = () => {
         showBoundary(deleteError)
       }
     },
-    [closeModal, deleteTemplate, setProcessing, showBoundary]
+    [closeModal, deleteTemplate, showBoundary, withProcessing]
   )
 
   return useCallback(

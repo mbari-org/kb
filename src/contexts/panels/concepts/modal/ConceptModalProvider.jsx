@@ -3,20 +3,20 @@ import { flushSync } from 'react-dom'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalContext from './ConceptModalContext'
-import useSetProcessing from '@/lib/hooks/useSetProcessing'
-import CONFIG from '@/text'
-
-const { PROCESSING } = CONFIG
+import useProcessingManager from '@/lib/hooks/useProcessingManager'
 
 const ConceptModalProvider = ({ children }) => {
   const { setSuppressDisplay } = use(AppModalContext)
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
   const [onClose, setOnClose] = useState(null)
-  const [processing, setProcessing] = useState(false)
-  const [processingMessage, setProcessingMessage] = useState(PROCESSING.OFF)
-
-  const handleSetProcessing = useSetProcessing(setProcessing, setProcessingMessage)
+  const {
+    beginProcessing,
+    processing,
+    processingMessage,
+    resetProcessing,
+    withProcessing,
+  } = useProcessingManager()
 
   useEffect(() => {
     setSuppressDisplay(Boolean(processing))
@@ -41,7 +41,7 @@ const ConceptModalProvider = ({ children }) => {
         setOnClose(null)
         setModalData({})
         setModal(null)
-        handleSetProcessing(PROCESSING.OFF)
+        resetProcessing()
       })
 
       // Execute completion callback after React has completed all updates
@@ -52,7 +52,7 @@ const ConceptModalProvider = ({ children }) => {
 
       return true
     },
-    [onClose, modalData, processing, handleSetProcessing]
+    [onClose, modalData, processing, resetProcessing]
   )
 
   const handleSetModal = useCallback((modal, onCloseCallback) => {
@@ -69,9 +69,19 @@ const ConceptModalProvider = ({ children }) => {
       modalData,
       setModalData,
       setModal: handleSetModal,
-      setProcessing: handleSetProcessing,
+      beginProcessing,
+      withProcessing,
     }),
-    [closeModal, processing, processingMessage, modal, modalData, handleSetModal, handleSetProcessing]
+    [
+      closeModal,
+      processing,
+      processingMessage,
+      modal,
+      modalData,
+      handleSetModal,
+      beginProcessing,
+      withProcessing,
+    ]
   )
 
   return <ConceptModalContext value={value}>{children}</ConceptModalContext>

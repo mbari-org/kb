@@ -22,7 +22,7 @@ const { PROCESSING } = CONFIG
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
-  const { closeModal, modalData, setModalData, setProcessing } = use(ConceptModalContext)
+  const { closeModal, modalData, setModalData, withProcessing } = use(ConceptModalContext)
   const { getReferences, refreshData: refreshPanelData, setClearTemplateFilters, templates } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { getSettings, updateSelected } = use(SelectedContext)
@@ -56,7 +56,6 @@ const DeleteConceptActions = () => {
     }
 
     if (label === 'Confirm') {
-      setProcessing(PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
       const { reassign } = modalData
       const deleteConceptContext = {
         apiFns,
@@ -74,23 +73,25 @@ const DeleteConceptActions = () => {
 
       // CxNote due to closures the taxonomy must be directly manipulated
 
-      const preDeleteResults = await preSideEffects(deleteConceptContext)
-      const { closestConcept, taxonomy: updatedTaxonomy } =
-        await deleteTaxonomyConcept(taxonomy, concept, apiFns)
-      const postDeleteResults = await postSideEffects(deleteConceptContext)
+      await withProcessing(async () => {
+        const preDeleteResults = await preSideEffects(deleteConceptContext)
+        const { closestConcept, taxonomy: updatedTaxonomy } =
+          await deleteTaxonomyConcept(taxonomy, concept, apiFns)
+        const postDeleteResults = await postSideEffects(deleteConceptContext)
 
-      const results = { ...preDeleteResults, ...postDeleteResults }
+        const results = { ...preDeleteResults, ...postDeleteResults }
 
-      const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
-      await applyResults(reassignedConcept, refreshPanelData, results)
+        const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
+        await applyResults(reassignedConcept, refreshPanelData, results)
 
-      insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
-      updateTaxonomy(updatedTaxonomy)
+        insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+        updateTaxonomy(updatedTaxonomy)
 
-      closeModal(true, () => {
-        updateSelected({ concept: closestConcept.name })
-        setClearTemplateFilters(true)
-      })
+        closeModal(true, () => {
+          updateSelected({ concept: closestConcept.name })
+          setClearTemplateFilters(true)
+        })
+      }, PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
     }
   }
   return createActions({ colors, labels, onAction }, 'DeleteConceptActions:Confirm')

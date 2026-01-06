@@ -20,7 +20,7 @@ const { APPROVE, CONFIRM, DEFER, REJECT } = CONFIG.PANELS.HISTORY.MODALS.BUTTON
 
 const HistoryPendingActions = props => {
   const { modalData } = usePanelModalDataContext()
-  const { closeModal, setProcessing } = usePanelModalOperationsContext()
+  const { beginProcessing, closeModal } = usePanelModalOperationsContext()
 
   const updatePending = useHistoryUpdatePending()
 
@@ -61,10 +61,9 @@ const HistoryPendingActions = props => {
 
       case CONFIRM: {
         try {
-          setProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
-          await updatePending({ approval: pendingConfirm, item })
+          const stop = beginProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
+          await updatePending({ approval: pendingConfirm, item }).finally(stop)
         } finally {
-          setProcessing(PROCESSING.OFF)
           closeModal(true)
         }
         return

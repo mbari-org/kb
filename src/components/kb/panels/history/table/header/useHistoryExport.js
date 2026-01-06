@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useMemo, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 
@@ -113,7 +113,8 @@ const useHistoryExport = () => {
   const { conceptState, selectedType, pageState } = use(HistoryContext)
   const { getSelected } = use(SelectedContext)
   const { user } = use(UserContext)
-  const { setProcessing } = use(AppModalContext)
+  const { beginProcessing } = use(AppModalContext)
+  const processingRef = useRef(null)
 
   const selectedConcept = useMemo(() => getSelected(SELECTED_CONCEPT), [getSelected])
   const { data: conceptData, extent: conceptExtent } = conceptState
@@ -176,12 +177,19 @@ const useHistoryExport = () => {
   const onProgress = useCallback(
     value => {
       if (value === false) {
-        setProcessing(PROCESSING.OFF)
+        if (processingRef.current) {
+          processingRef.current()
+          processingRef.current = null
+        }
       } else if (typeof value === 'string') {
-        setProcessing(PROCESSING.LOAD, value)
+        if (!processingRef.current) {
+          processingRef.current = beginProcessing(PROCESSING.LOAD, value)
+        } else if (processingRef.current.updateMessage) {
+          processingRef.current.updateMessage(value)
+        }
       }
     },
-    [setProcessing]
+    [beginProcessing]
   )
 
   return csvExport({

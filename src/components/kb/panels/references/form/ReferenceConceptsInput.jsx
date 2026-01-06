@@ -11,7 +11,6 @@ const ReferenceConceptsInput = ({
   handleConceptAdd,
   handleConceptDelete,
   handleSearchInput,
-  isEdit = false,
   reference,
   selectedConcept,
 }) => {

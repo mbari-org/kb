@@ -24,7 +24,7 @@ const { PROCESSING } = CONFIG
 const { CONFIRM_DISCARD, DISCARD } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
 const useAddUserButton = () => {
-  const { closeModal, createModal, updateModalData, setProcessing } =
+  const { closeModal, createModal, updateModalData, withProcessing } =
     useUsersModalOperationsContext()
   const { addUser, users } = use(UsersContext)
 
@@ -41,13 +41,12 @@ const useAddUserButton = () => {
           throw createValidationError('Invalid user data', { user })
         }
 
-        setProcessing(PROCESSING.SAVE)
-
         const userData = processAddUserData(user)
-        await addUser(userData)
-        closeModal()
+        await withProcessing(async () => {
+          await addUser(userData)
+          closeModal()
+        }, PROCESSING.SAVE)
       } catch (error) {
-        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           throw error
         }
@@ -59,7 +58,7 @@ const useAddUserButton = () => {
         )
       }
     },
-    [addUser, closeModal, setProcessing]
+    [addUser, closeModal, withProcessing]
   )
 
   // const content = useCallback(

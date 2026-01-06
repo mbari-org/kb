@@ -31,7 +31,7 @@ const useAddTemplateButton = () => {
   const { addTemplate, filters } = use(TemplatesContext)
   const { templates: allTemplates } = use(PanelDataContext)
 
-  const { closeModal, createModal, updateModalData, setProcessing } =
+  const { closeModal, createModal, updateModalData, withProcessing } =
     useTemplatesModalOperationsContext()
 
   const { handleCancel, handleFormChange } = useMemo(
@@ -41,28 +41,23 @@ const useAddTemplateButton = () => {
 
   const handleCommit = useCallback(
     async template => {
-      try {
-        const validateTemplate = createTemplateValidator(false)
-        if (!validateTemplate(template)) {
-          return
-        }
+      const validateTemplate = createTemplateValidator(false)
+      if (!validateTemplate(template)) {
+        return
+      }
 
-        if (isDuplicateTemplate(allTemplates, template)) {
-          updateModalData({ alert: duplicateTemplateAlert() })
-          return
-        }
+      if (isDuplicateTemplate(allTemplates, template)) {
+        updateModalData({ alert: duplicateTemplateAlert() })
+        return
+      }
 
-        setProcessing(PROCESSING.SAVE)
-
+      await withProcessing(async () => {
         const templateData = processAddTemplateData(template)
         await addTemplate(templateData)
         closeModal()
-      } catch (error) {
-        setProcessing(PROCESSING.OFF)
-        throw error
-      }
+      }, PROCESSING.SAVE)
     },
-    [addTemplate, allTemplates, closeModal, setProcessing, updateModalData]
+    [addTemplate, allTemplates, closeModal, updateModalData, withProcessing]
   )
 
   const addTemplateModal = useCallback(() => {

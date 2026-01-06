@@ -15,17 +15,17 @@ const { PROCESSING } = CONFIG
 const { CONTINUE, CONFIRM } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 
 const useConfirmReferenceModal = () => {
-  const { closeModal, createModal, setProcessing } = useReferencesModalOperationsContext()
+  const { closeModal, createModal, withProcessing } = useReferencesModalOperationsContext()
   const { editReference } = use(ReferencesContext)
 
   const handleConfirm = useCallback(
     async (reference, original) => {
       try {
-        setProcessing(PROCESSING.UPDATE)
-        await editReference(original, reference)
-        closeModal()
+        await withProcessing(async () => {
+          await editReference(original, reference)
+          closeModal()
+        }, PROCESSING.UPDATE)
       } catch (error) {
-        setProcessing(PROCESSING.OFF)
         if (error.title === 'Validation Error') {
           throw error
         }
@@ -37,7 +37,7 @@ const useConfirmReferenceModal = () => {
         )
       }
     },
-    [editReference, closeModal, setProcessing]
+    [editReference, closeModal, withProcessing]
   )
 
   const editReferenceModal = useCallback(

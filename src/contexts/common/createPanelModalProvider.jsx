@@ -1,9 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState, useRef, useContext } from 'react'
 
-import useSetProcessing from '@/lib/hooks/useSetProcessing'
-import CONFIG from '@/text'
-
-const { PROCESSING } = CONFIG
+import useProcessingManager from '@/lib/hooks/useProcessingManager'
 
 const createPanelModalProvider = (panelName, useModalHook) => {
   const DataContext = createContext()
@@ -16,7 +13,7 @@ const createPanelModalProvider = (panelName, useModalHook) => {
     const [modalConfig, setModalConfig] = useState(null)
     const [modalData, setModalData] = useState({})
     const [onClose, setOnClose] = useState(null)
-    const [processing, setProcessing] = useState(false)
+    const { beginProcessing, processing, resetProcessing, withProcessing } = useProcessingManager()
 
     const closeModalRef = useRef()
     const modalDataRef = useRef(modalData)
@@ -39,11 +36,11 @@ const createPanelModalProvider = (panelName, useModalHook) => {
         setOnClose(null)
         setModalData({})
         setModalConfig(null)
-        setProcessing(PROCESSING.OFF)
+        resetProcessing()
 
         return true
       },
-      [onClose, processing]
+      [onClose, processing, resetProcessing]
     )
 
     useEffect(() => {
@@ -62,16 +59,15 @@ const createPanelModalProvider = (panelName, useModalHook) => {
         setModalConfig(modalConfig)
         setModalData(data)
         setOnClose(() => onClose)
-        setProcessing(PROCESSING.OFF)
+        resetProcessing()
       },
-      []
+      [resetProcessing]
     )
 
     const updateModalData = useCallback(data => {
       setModalData(prev => ({ ...prev, ...data }))
     }, [])
 
-    const handleSetProcessing = useSetProcessing(setProcessing)
 
     useEffect(() => {
       modalDataRef.current = modalData
@@ -86,10 +82,12 @@ const createPanelModalProvider = (panelName, useModalHook) => {
         createModal,
         modal,
         processing,
-        setProcessing: handleSetProcessing,
+        beginProcessing,
+        resetProcessing,
+        withProcessing,
         updateModalData,
       }),
-      [closeModal, createModal, modal, processing, handleSetProcessing, updateModalData]
+      [closeModal, createModal, modal, processing, beginProcessing, resetProcessing, withProcessing, updateModalData]
     )
 
     // Data context - only includes modalData for modal content components

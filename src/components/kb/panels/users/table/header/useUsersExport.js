@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useRef } from 'react'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -41,17 +41,25 @@ const suggestName = () => 'KB-Users.csv'
 const useUsersExport = () => {
   const { users } = use(UsersContext)
   const { user } = use(UserContext)
-  const { setProcessing } = use(AppModalContext)
+  const { beginProcessing } = use(AppModalContext)
+  const processingRef = useRef(null)
 
   const onProgress = useCallback(
     value => {
       if (value === false) {
-        setProcessing(PROCESSING.OFF)
+        if (processingRef.current) {
+          processingRef.current()
+          processingRef.current = null
+        }
       } else if (typeof value === 'string') {
-        setProcessing(PROCESSING.LOAD, value)
+        if (!processingRef.current) {
+          processingRef.current = beginProcessing(PROCESSING.LOAD, value)
+        } else if (processingRef.current.updateMessage) {
+          processingRef.current.updateMessage(value)
+        }
       }
     },
-    [setProcessing]
+    [beginProcessing]
   )
 
   return csvExport({
