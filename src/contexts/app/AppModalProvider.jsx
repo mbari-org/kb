@@ -44,8 +44,6 @@ const AppModalProvider = ({ children }) => {
     setModal(modal)
     setOnClose(typeof onCloseCallback === 'function' ? onCloseCallback : null)
   }, [])
-
-
   const value = useMemo(
     () => ({
       closeModal,

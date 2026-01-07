@@ -67,8 +67,6 @@ const createPanelModalProvider = (panelName, useModalHook) => {
     const updateModalData = useCallback(data => {
       setModalData(prev => ({ ...prev, ...data }))
     }, [])
-
-
     useEffect(() => {
       modalDataRef.current = modalData
     }, [modalData])

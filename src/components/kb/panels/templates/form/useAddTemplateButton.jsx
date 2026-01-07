@@ -86,7 +86,9 @@ const useAddTemplateButton = () => {
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD : a.label))
+      const labels = actions.map((a, i) =>
+        i === 0 && modalData?.hasChanges ? CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD : a.label
+      )
 
       const onAction = label => {
         if (label === 'Discard') {

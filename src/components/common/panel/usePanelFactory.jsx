@@ -4,7 +4,6 @@ import { Box } from '@mui/material'
 import PanelHeader from './PanelHeader'
 import PanelTable from './PanelTable'
 import PanelTableHeader from './PanelTableHeader'
-import PanelTitle from './PanelTitle'
 import TablePanel from './TablePanel'
 
 /**
@@ -13,15 +12,11 @@ import TablePanel from './TablePanel'
  */
 const usePanelFactory = () => {
   return useMemo(() => {
-    const createPanelHeader = ({ headerLeft, title, headerTitle, headerRight, subtitle, subtitleTooltip, sx = {} } = {}) => {
-      // If headerTitle is provided (React component), use it directly
-      // Otherwise, wrap title string in PanelTitle
-      const headerTitleContent = headerTitle || (title ? <PanelTitle title={title} subtitle={subtitle} subtitleTooltip={subtitleTooltip} /> : null)
-
+    const createPanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} } = {}) => {
       return (
         <PanelHeader
           headerLeft={headerLeft}
-          headerTitle={headerTitleContent}
+          headerTitle={headerTitle}
           headerRight={headerRight}
           sx={sx}
         />
