@@ -30,8 +30,13 @@ const { CONTINUE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { PROCESSING } = CONFIG
 
 const ConceptProvider = ({ children }) => {
-  const { beginProcessing, resetProcessing, setSuppressDisplay } = use(AppModalContext)
+  const { beginProcessing } = use(AppModalContext)
   const isSettingConceptRef = useRef(false)
+  const processingStopRef = useRef(null)
+  const processingCountRef = useRef(0)
+  const pendingTreeStopRef = useRef(null)
+  const pendingTreeTimeoutRef = useRef(null)
+  const previousConceptNameRef = useRef(null)
 
   const { apiFns } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
@@ -48,11 +53,22 @@ const ConceptProvider = ({ children }) => {
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
-  const onConceptTreeReady = useCallback(() => {
-    // Don't suppress, let path fetch complete
-    setSuppressDisplay(false)
-    resetProcessing()
-  }, [resetProcessing, setSuppressDisplay])
+  const startProcessing = useCallback(
+    (key, value) => {
+      if (!processingStopRef.current) {
+        processingStopRef.current = beginProcessing(key, value)
+      }
+      processingCountRef.current += 1
+      return () => {
+        processingCountRef.current = Math.max(0, processingCountRef.current - 1)
+        if (processingCountRef.current === 0 && processingStopRef.current) {
+          processingStopRef.current()
+          processingStopRef.current = null
+        }
+      }
+    },
+    [beginProcessing]
+  )
 
   const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
@@ -128,8 +144,7 @@ const ConceptProvider = ({ children }) => {
       } else {
         setHasUnsavedChanges(false)
 
-        setSuppressDisplay(true)
-        const stop = beginProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
+        const stop = startProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
         Promise.resolve(conceptLoader(selectedConcept)).finally(stop)
       }
     }
@@ -143,8 +158,7 @@ const ConceptProvider = ({ children }) => {
     isConceptLoaded,
     loadConcept,
     panels,
-    beginProcessing,
-    setSuppressDisplay,
+    startProcessing,
     setConcept,
     setHasUnsavedChanges,
     setModalData,
@@ -187,6 +201,17 @@ const ConceptProvider = ({ children }) => {
     [conceptPath]
   )
 
+  const onConceptTreeReady = useCallback(() => {
+    if (pendingTreeStopRef.current) {
+      pendingTreeStopRef.current()
+      pendingTreeStopRef.current = null
+    }
+    if (pendingTreeTimeoutRef.current) {
+      clearTimeout(pendingTreeTimeoutRef.current)
+      pendingTreeTimeoutRef.current = null
+    }
+  }, [])
+
   const value = useMemo(
     () => ({
       concept,
@@ -222,22 +247,74 @@ const ConceptProvider = ({ children }) => {
 
   useEffect(() => {
     if (!concept || !apiFns) {
+      // Reset ref when concept is cleared
+      if (!concept) {
+        previousConceptNameRef.current = null
+      }
       return
     }
 
+    // Only fetch concept path if the concept name has actually changed
+    const currentConceptName = concept.name
+    if (previousConceptNameRef.current === currentConceptName) {
+      return
+    }
+    previousConceptNameRef.current = currentConceptName
+
+    // Clear any prior pending tree stop/timeout
+    if (pendingTreeStopRef.current) {
+      pendingTreeStopRef.current()
+      pendingTreeStopRef.current = null
+    }
+    if (pendingTreeTimeoutRef.current) {
+      clearTimeout(pendingTreeTimeoutRef.current)
+      pendingTreeTimeoutRef.current = null
+    }
+
+    const stop = conceptPath ? () => {} : startProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT_PATH || 'concept path')
+
     const fetchConceptPath = async () => {
-      const payload = await apiFns.apiPayload(getConceptPath, concept.name)
+      try {
+        const payload = await apiFns.apiPayload(getConceptPath, concept.name)
 
-      const parseNode = (node, path = []) => {
-        if (!node.children) return [...path, node.name]
-        return parseNode(node.children[0], [...path, node.name])
+        const parseNode = (node, path = []) => {
+          if (!node.children) return [...path, node.name]
+          return parseNode(node.children[0], [...path, node.name])
+        }
+
+        setConceptPath(parseNode(payload))
+        // Defer stopping until ConceptsTree signals ready (expansion/scroll done)
+        pendingTreeStopRef.current = stop
+        // Fallback timeout to avoid stuck overlay
+        pendingTreeTimeoutRef.current = setTimeout(() => {
+          if (pendingTreeStopRef.current === stop) {
+            pendingTreeStopRef.current()
+            pendingTreeStopRef.current = null
+          }
+          if (pendingTreeTimeoutRef.current) {
+            clearTimeout(pendingTreeTimeoutRef.current)
+            pendingTreeTimeoutRef.current = null
+          }
+        }, 1000)
+      } catch (error) {
+        stop()
+        throw error
       }
-
-      setConceptPath(parseNode(payload))
     }
 
     fetchConceptPath()
-  }, [apiFns, concept])
+
+    return () => {
+      if (pendingTreeStopRef.current) {
+        pendingTreeStopRef.current()
+        pendingTreeStopRef.current = null
+      }
+      if (pendingTreeTimeoutRef.current) {
+        clearTimeout(pendingTreeTimeoutRef.current)
+        pendingTreeTimeoutRef.current = null
+      }
+    }
+  }, [apiFns, concept, startProcessing])
 
   return <ConceptContext value={value}>{children}</ConceptContext>
 }
