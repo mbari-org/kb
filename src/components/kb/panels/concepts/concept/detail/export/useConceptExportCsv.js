@@ -1,4 +1,4 @@
-import { use, useCallback, useRef } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -47,26 +47,26 @@ const useConceptExportCsv = conceptExtent => {
   const { concept } = use(ConceptContext)
   const { apiFns } = use(ConfigContext)
   const { beginProcessing } = use(AppModalContext)
-  const processingRef = useRef(null)
+  const [processingStop, setProcessingStop] = useState(null)
   const { getConcept } = use(TaxonomyContext)
   const { user } = use(UserContext)
 
   const onProgress = useCallback(
     value => {
       if (value === false) {
-        if (processingRef.current) {
-          processingRef.current()
-          processingRef.current = null
+        if (processingStop) {
+          processingStop()
+          setProcessingStop(null)
         }
       } else if (typeof value === 'string') {
-        if (!processingRef.current) {
-          processingRef.current = beginProcessing(PROCESSING.LOAD, value)
-        } else if (processingRef.current.updateMessage) {
-          processingRef.current.updateMessage(value)
+        if (!processingStop) {
+          setProcessingStop(() => beginProcessing(PROCESSING.LOAD, value))
+        } else if (processingStop.updateMessage) {
+          processingStop.updateMessage(value)
         }
       }
     },
-    [beginProcessing]
+    [processingStop, beginProcessing]
   )
 
   const getData = useCallback(async () => {

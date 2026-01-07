@@ -10,7 +10,7 @@ import SubmitError from '@/components/common/SubmitError'
 
 const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const { config, updateConfig } = use(ConfigContext)
-  const [configUrl, setConfigUrl] = useState(config?.url || '')
+  const [configUrl, setConfigUrl] = useState(() => config?.url || '')
 
   const submitConfigUrl = async (_prevState, formData) => {
     const formConfigUrl = formData.get('configUrl')
@@ -28,7 +28,6 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const isUrlValid = isValidUrl(configUrl)
   const isButtonEnabled = configIsDirty && isUrlValid
 
-  // Sync configUrl state when config.url changes (but only if not dirty)
   useEffect(() => {
     if (config?.url && !configIsDirty) {
       setConfigUrl(config.url)
