@@ -1,5 +1,5 @@
 import { use, useCallback } from 'react'
-import { Box, FormControl } from '@mui/material'
+import { Box } from '@mui/material'
 
 import TextInput from '@/components/common/TextInput'
 
@@ -16,7 +16,7 @@ import CONFIG from '@/text'
 const ConceptAuthor = () => {
   const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)
 
-  const border = stagedBorder(initialState.author, stagedState.author)
+  const border = stagedBorder(initialState.author?.value, stagedState.author?.value)
 
   const infoStyle = useConceptDetailStyle(CONCEPT.FIELD.AUTHOR)
 
@@ -25,25 +25,26 @@ const ConceptAuthor = () => {
       const value = event.target.value
       modifyConcept({
         type: CONCEPT_STATE.AUTHOR,
-        update: { field: CONCEPT.FIELD.AUTHOR, value },
+        update: {
+          field: CONCEPT.FIELD.AUTHOR,
+          value,
+          initialAuthor: initialState.author,
+        },
       })
     },
-    [modifyConcept]
+    [modifyConcept, initialState]
   )
 
   return (
-    <FormControl>
-      <Box sx={{ ...border }}>
-        <TextInput
-          {...infoStyle}
-          debounceMs={333}
-          label={CONFIG.PANELS.CONCEPTS.AUTHOR.LABEL}
-          onChange={handleChange}
-          showClearButton={isEditing}
-          value={stagedState.author?.value || ''}
-        />
-      </Box>
-    </FormControl>
+    <Box sx={{ ...border }}>
+      <TextInput
+        {...infoStyle}
+        label={CONFIG.PANELS.CONCEPTS.AUTHOR.LABEL}
+        onChange={handleChange}
+        showClearButton={isEditing}
+        value={stagedState.author?.value || ''}
+      />
+    </Box>
   )
 }
 

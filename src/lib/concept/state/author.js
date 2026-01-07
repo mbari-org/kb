@@ -1,5 +1,5 @@
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const isPendingAuthor = pendingItem =>
   pendingItem.field === HISTORY_FIELD.NAME && pendingItem.action === CONCEPT_STATE.AUTHOR
@@ -30,7 +30,15 @@ const authorState = (concept, pendingConcept) => {
 }
 
 const editAuthor = (state, update) => {
-  const { value } = update
+  const { value, initialAuthor } = update
+
+  if (initialAuthor && value === initialAuthor.value) {
+    return {
+      ...state,
+      author: initialAuthor,
+    }
+  }
+
   return {
     ...state,
     author: {

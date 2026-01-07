@@ -2,22 +2,16 @@ import { useCallback, useState } from 'react'
 import { Box, TextField, IconButton } from '@mui/material'
 import { IoClose } from 'react-icons/io5'
 
-import useDebounce from '@/lib/hooks/useDebounce'
-
 const TextInput = ({
   value,
   onChange,
   placeholder,
   size = 'small',
   sx = {},
-  debounceMs = 0,
   showClearButton = true,
   ...textFieldProps
 }) => {
   const [inputValue, setInputValue] = useState(value || '')
-
-  const debouncedOnChange = useDebounce(onChange, debounceMs)
-  const handleChange = debounceMs > 0 ? debouncedOnChange : onChange
 
   if (value !== undefined && inputValue !== value) {
     setInputValue(value)
@@ -27,9 +21,9 @@ const TextInput = ({
     event => {
       const newValue = event.target.value
       setInputValue(newValue)
-      handleChange?.(event)
+      onChange?.(event)
     },
-    [handleChange]
+    [onChange]
   )
 
   const handleClear = useCallback(() => {
@@ -41,8 +35,8 @@ const TextInput = ({
         value: '',
       },
     }
-    handleChange?.(syntheticEvent)
-  }, [handleChange, textFieldProps.name])
+    onChange?.(syntheticEvent)
+  }, [onChange, textFieldProps.name])
 
   return (
     <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
