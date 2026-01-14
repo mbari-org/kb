@@ -9,6 +9,8 @@ const PanelTitle = ({ subtitle, subtitleTooltip, title }) => {
       align='center'
       sx={{
         fontSize: '1rem',
+        lineHeight: 1,
+        mt: -0.55,
         width: '100%',
       }}
     >
@@ -19,10 +21,9 @@ const PanelTitle = ({ subtitle, subtitleTooltip, title }) => {
   return (
     <Box
       sx={{
+        alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        mt: -2,
         overflow: 'hidden',
         textAlign: 'center',
         width: '100%',
@@ -41,12 +42,20 @@ const PanelTitle = ({ subtitle, subtitleTooltip, title }) => {
       >
         {title}
       </Typography>
-      {subtitle && subtitleTooltip && (
-        <KBTooltip title={subtitleTooltip}>
-          {subtitleContent}
-        </KBTooltip>
-      )}
-      {subtitle && !subtitleTooltip && subtitleContent}
+      <Box
+        sx={{
+          fontSize: '1rem',
+          height: '1rem',
+          width: '100%',
+        }}
+      >
+        {subtitle && subtitleTooltip && (
+          <KBTooltip title={subtitleTooltip}>
+            {subtitleContent}
+          </KBTooltip>
+        )}
+        {subtitle && !subtitleTooltip && subtitleContent}
+      </Box>
     </Box>
   )
 }

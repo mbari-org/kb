@@ -14,7 +14,6 @@ const TablePanel = ({ header, panelTable, sx = {} }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        mt: 2,
         width: '100%',
         ...sx,
       }}

@@ -20,7 +20,7 @@ const AboutHelp = () => {
     ),
   })
 
-  return <Box sx={{ mt: 1 }}>{header}</Box>
+  return <Box>{header}</Box>
 }
 
 export default AboutHelp
