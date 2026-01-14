@@ -16,7 +16,7 @@ const AboutHelp = () => {
 
   const header = createPanelHeader({
     headerTitle: (
-      <PanelHeaderTitle subtitle={`v${version}`} subtitleTooltip={versionTooltip} title={TITLE} />
+      <PanelHeaderTitle subtitle={`Version: ${version}`} subtitleTooltip={versionTooltip} title={TITLE} />
     ),
   })
 
