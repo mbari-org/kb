@@ -1,18 +1,17 @@
 import { useTheme } from '@mui/material/styles'
+
 import ActionIcon from '@/components/icon/ActionIcon'
-import refreshIcon from '@/assets/refresh-48.png'
+import infoIcon from '@/assets/info-48.png'
 
-const RefreshImg = ({ size }) => (
-  <img src={refreshIcon} alt='Refresh App' width={size} height={size} />
-)
+const InfoImg = ({ size }) => <img src={infoIcon} alt='Info' width={size} height={size} />
 
-const RefreshAppIcon = ({
-  asDiv = true,
-  hoverBackground = 'transparent', // 'transparent' or 'primary.main'
+const InfoIcon = ({
   onClick,
-  size,
+  tooltip = 'Info',
   sx = {},
-  tooltip = 'Refresh App',
+  asDiv = true,
+  hoverBackground = 'transparent',
+  size,
   ...props
 }) => {
   const theme = useTheme()
@@ -27,15 +26,15 @@ const RefreshAppIcon = ({
   return (
     <ActionIcon
       asDiv={asDiv}
-      Icon={RefreshImg}
+      Icon={InfoImg}
       onClick={onClick}
-      size={size}
       sx={{ ...hoverSx, ...sx }}
       tooltip={tooltip}
       tooltipPlacement='top'
+      size={size}
       {...props}
     />
   )
 }
 
-export default RefreshAppIcon
+export default InfoIcon
