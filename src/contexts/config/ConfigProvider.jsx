@@ -63,7 +63,7 @@ const ConfigProvider = ({ children }) => {
     async url => {
       if (url === null) {
         setConfig(null)
-        configUrlStore.clear()
+        configUrlStore.remove()
         return
       }
 
@@ -79,7 +79,7 @@ const ConfigProvider = ({ children }) => {
       loadConfig(storedConfigUrl, () => {
         if (mountedRef.current) {
           setConfig(null)
-          configUrlStore.clear()
+          configUrlStore.remove()
           navigate('/kb', { replace: true })
         }
       })
