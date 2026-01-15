@@ -1,7 +1,7 @@
 {
   "name": "kb",
   "private": true,
-  "version": "0.0.0",
+  "version": "2026.01.15",
   "type": "module",
   "homepage": "/kbeditor",
   "dependencies": {
@@ -43,6 +43,8 @@
     "build": "vite build",
     "kb": "yarn build && yarn preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "version:generate": "node scripts/generate-version.js",
+    "release:version": "node scripts/release-version.js"
   }
 }

@@ -6,6 +6,7 @@ import {
   getBranchName,
   getBuildDate,
   getCommitDate,
+  getCommitHash,
   getCommitMessage,
   getVersion,
   isDirty,
@@ -19,12 +20,13 @@ const useVersionTooltip = () => {
   const theme = useTheme()
 
   return useMemo(() => {
-    const version = getVersion()
-    const buildDate = getBuildDate()
     const branchName = getBranchName()
+    const buildDate = getBuildDate()
     const commitDate = getCommitDate()
+    const commitHash = getCommitHash()
     const commitMessage = getCommitMessage()
     const dirty = isDirty()
+    const version = getVersion()
 
     const formatDate = dateString => {
       try {
@@ -52,6 +54,12 @@ const useVersionTooltip = () => {
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
             <strong>Commit:</strong>
+          </Typography>
+          <Typography variant='body2'>{commitHash}</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', mb: 1 }}>
+          <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
+            <strong>Date:</strong>
           </Typography>
           <Typography variant='body2'>{formatDate(commitDate)}</Typography>
         </Box>

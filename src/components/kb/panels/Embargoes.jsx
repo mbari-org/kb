@@ -1,4 +1,4 @@
-import EmptyPanel from '@/components/common/panel/EmptyPanel'
+import EmptyPanel from '@/components/panel/EmptyPanel'
 
 const Embargoes = () => {
   return <EmptyPanel title='Embargoes' />

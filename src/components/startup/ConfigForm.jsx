@@ -38,7 +38,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
     if (config?.valid) {
       setConfigIsDirty(false)
     }
-  }, [config?.valid, setConfigIsDirty])
+  }, [config?.valid, config?.url, setConfigIsDirty])
 
   return (
     <Box component='form' action={configAction}>

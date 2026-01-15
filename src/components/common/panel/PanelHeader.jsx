@@ -11,6 +11,7 @@ const PanelHeader = ({ headerLeft, headerTitle, headerRight, sx = {} }) => {
         height: HEADER_HEIGHT,
         ml: 2,
         mr: 2,
+        mt: 2,
         position: 'relative',
         ...sx,
       }}
