@@ -1,11 +1,13 @@
 # Application Versioning
 
-This React application uses an automated versioning system that generates version strings in the format `YYYY.MM.DD-commitHash`.
+This React application uses an automated versioning system that generates date-based version strings in the format `YYYY.MM.DD`.
 
 ## Overview
 
 The versioning system automatically:
-- Generates version strings based on the current date and git commit hash
+
+- Generates version strings based on the current date
+- Captures git metadata (hash, branch, commit date/message)
 - Creates a version file that can be imported by React components
 - Integrates with the build process
 - Provides detailed build and commit information
@@ -13,21 +15,22 @@ The versioning system automatically:
 ## Version Format
 
 ```
-YYYY.MM.DD-commitHash
+YYYY.MM.DD
 ```
 
-**Example:** `2025.06.15-af28b01`
+**Example:** `2025.06.15`
 
-- `YYYY.MM.DD`: Build date in ISO format
-- `commitHash`: Short git commit hash (7 characters)
+- `YYYY.MM.DD`: Build date in calendar format
 
 ## Files
 
 ### Core Files
-- `scripts/generate-version.js` - Version generation script
-- `src/lib/version.js` - Auto-generated version file (gitignored)
-- `src/components/common/VersionDisplay.jsx` - React component for displaying version
 
+- `vite-plugins/version-plugin.js` - Version generation plugin
+- `src/version.js` - Auto-generated version file
+- `src/components/common/VersionDisplay.jsx` - React component for displaying version
+- `scripts/generate-version.js` - Manual generator for `src/version.js`
+- `scripts/release-version.js` - Release script that bumps `package.json` and tags
 
 ## Setup
 
@@ -36,8 +39,9 @@ Version generation is automatically integrated into Vite via a custom plugin. No
 ### How It Works
 
 - **Development**: Version is generated when Vite starts and can be refreshed via HMR
-- **Production**: Version is generated during build process
+- **Production**: Version is generated during the build process
 - **HMR Integration**: Changes are reflected without server restart
+- **Package.json update**: `package.json` is updated only during the release script
 
 ## Usage
 
@@ -53,27 +57,30 @@ yarn dev
 yarn build
 ```
 
-### Manual Version Generation
+### Release Workflow (Script)
 
-```bash
-# Generate version file manually
-yarn version:generate
-```
+1. Commit changes normally during development.
+2. Regenerate `src/version.js` as needed (optional): `yarn version:generate`.
+3. On `main` with a clean working tree, run `yarn release:version`.
+4. The release script updates `package.json`, commits with `v<version>`, and tags `main` with `<version>`.
 
 ### Hot Module Replacement (HMR) Support
 
 In development mode, you can refresh the version without restarting the server:
 
 **Method 1: Using the UI**
+
 - Hover over the version display in the navigation
 - Click the small refresh icon that appears
 
 **Method 2: Using Browser Console**
+
 ```javascript
 fetch('/api/regenerate-version', { method: 'POST' })
 ```
 
 **Method 3: Using curl**
+
 ```bash
 curl -X POST http://localhost:5173/api/regenerate-version
 ```
@@ -85,15 +92,15 @@ The version will update immediately in the UI via HMR, reflecting your latest co
 #### Import Version Functions
 
 ```javascript
-import { getVersion, getBuildDate, getCommitHash, getBranchName } from '@/lib/version';
+import { getVersion, getBuildDate, getCommitHash, getBranchName } from '@/version'
 
 function MyComponent() {
-  const version = getVersion(); // "2025.06.15-af28b01"
-  const buildDate = getBuildDate(); // "2025-06-15T11:02:01.803Z"
-  const commitHash = getCommitHash(); // "af28b01"
-  const branchName = getBranchName(); // "main"
-  
-  return <div>Version: {version}</div>;
+  const version = getVersion() // "2025.06.15"
+  const buildDate = getBuildDate() // "2025-06-15T11:02:01.803Z"
+  const commitHash = getCommitHash() // "af28b01"
+  const branchName = getBranchName() // "main"
+
+  return <div>Version: {version}</div>
 }
 ```
 
@@ -109,8 +116,8 @@ import VersionDisplay from '@/components/common/VersionDisplay';
 <VersionDisplay display="icon" />
 
 // Custom styling
-<VersionDisplay 
-  variant="h6" 
+<VersionDisplay
+  variant="h6"
   color="primary.main"
 />
 ```
@@ -123,10 +130,12 @@ import VersionDisplay from '@/components/common/VersionDisplay';
 #### Automatic Tooltip Behavior
 
 The `VersionDisplay` component automatically shows a detailed tooltip when:
+
 - Running in **development mode** (for any display mode)
 - Display mode is **icon** (always shows tooltip in production too)
 
 The tooltip contains:
+
 - Version string
 - Commit date and hash
 - Build date
@@ -141,11 +150,12 @@ The generated version file contains:
 
 ```javascript
 {
-  version: "2025.06.15-af28b01",      // Main version string
+  version: "2025.06.15",                // Main version string
   buildDate: "2025-06-15T11:02:01.803Z", // ISO timestamp of build
   commitHash: "af28b01",                // Short git commit hash
   branchName: "main",                   // Git branch name
   commitDate: "2025-06-13 14:47:45 +0200", // Git commit timestamp
+  commitMessage: "Fix login form",      // First line of commit message
   isDirty: false                        // Whether working directory had uncommitted changes
 }
 ```
@@ -153,6 +163,7 @@ The generated version file contains:
 ## Working Directory Status
 
 The system detects if the working directory has uncommitted changes:
+
 - `isDirty: true` - Working directory has uncommitted changes
 - `isDirty: false` - Working directory is clean
 
@@ -162,32 +173,33 @@ This information is displayed in the UI with a warning indicator when changes ar
 
 ### Modifying Version Format
 
-Edit `scripts/generate-version.js` and modify the `dateString` and version construction:
+Edit `vite-plugins/version-plugin.js` and modify `dateString` and how `versionInfo.version` is set:
 
 ```javascript
-// Current format: YYYY.MM.DD-commitHash
-const version = `${dateString}-${commitHash}`;
+// Current format: YYYY.MM.DD
+const version = `${dateString}`
 
 // Example alternative: v1.0.0-YYYYMMDD-commitHash
-const version = `v1.0.0-${year}${month}${day}-${commitHash}`;
+const version = `v1.0.0-${year}${month}${day}-${commitHash}`
 ```
 
 ### Adding New Version Information
 
-Extend the `versionInfo` object in the generation script:
+Extend the `versionInfo` object in the plugin:
 
 ```javascript
 const versionInfo = {
-  version: `${dateString}-${commitHash}`,
+  version: `${dateString}`,
   buildDate: now.toISOString(),
   commitHash: commitHash,
   branchName: branchName,
   commitDate: commitDate,
+  commitMessage: commitMessage,
   isDirty: !isWorkingDirClean,
   // Add custom fields
   buildNumber: process.env.BUILD_NUMBER || 'local',
-  environment: process.env.NODE_ENV || 'development'
-};
+  environment: process.env.NODE_ENV || 'development',
+}
 ```
 
 ### Styling the VersionDisplay Component
@@ -195,11 +207,7 @@ const versionInfo = {
 The component accepts all Material-UI Typography props and additional styling:
 
 ```javascript
-<VersionDisplay 
-  variant="body2"
-  color="text.primary"
-  sx={{ fontWeight: 'bold' }}
-/>
+<VersionDisplay variant='body2' color='text.primary' sx={{ fontWeight: 'bold' }} />
 ```
 
 ## Troubleshooting
@@ -207,21 +215,16 @@ The component accepts all Material-UI Typography props and additional styling:
 ### Version Shows "unknown"
 
 This occurs when:
+
 - Git is not available
 - The directory is not a git repository
 - Git commands fail
 
 The system will gracefully fall back to "unknown" values.
 
-
 ### Build Fails During Version Generation
 
-Check that Node.js can execute the script:
-```bash
-node scripts/generate-version.js
-```
-
-Ensure the `scripts` directory and files have proper permissions.
+Make sure `git` is available in the build environment and that the repo has history. The plugin calls git to resolve commit metadata.
 
 ## Integration Examples
 
@@ -230,10 +233,10 @@ Ensure the `scripts` directory and files have proper permissions.
 ```javascript
 function AppFooter() {
   return (
-    <Box component="footer" sx={{ p: 2, textAlign: 'center' }}>
+    <Box component='footer' sx={{ p: 2, textAlign: 'center' }}>
       <VersionDisplay />
     </Box>
-  );
+  )
 }
 ```
 
@@ -244,12 +247,12 @@ function AboutDialog() {
   return (
     <Dialog open={open}>
       <DialogContent>
-        <Typography variant="h6">MBARI VARS KnowledgeBase</Typography>
-        <VersionDisplay display="icon" variant="body2" />
-        <Typography variant="caption">Click the icon for version details</Typography>
+        <Typography variant='h6'>MBARI VARS KnowledgeBase</Typography>
+        <VersionDisplay display='icon' variant='body2' />
+        <Typography variant='caption'>Click the icon for version details</Typography>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 ```
 
@@ -265,7 +268,6 @@ function NavBar() {
         <VersionDisplay />
       </Toolbar>
     </AppBar>
-  );
+  )
 }
 ```
-

@@ -5,10 +5,11 @@ import path from 'path'
 /**
  * Vite plugin for automatic version generation with HMR support
  */
-export function versionPlugin() {
+export const versionPlugin = () => {
   let server
+  let pendingWatchFile
 
-  function generateVersionInfo() {
+  const generateVersionInfo = () => {
     try {
       const now = new Date()
       const year = now.getFullYear()
@@ -36,7 +37,7 @@ export function versionPlugin() {
         commitHash: commitHash,
         commitMessage: commitMessage,
         isDirty: !isWorkingDirClean,
-        version: `${year}-${month}-${day}`,
+        version: dateString,
       }
 
       return versionInfo
@@ -55,7 +56,7 @@ export function versionPlugin() {
     }
   }
 
-  function writeVersionFile(versionInfo) {
+  const writeVersionFile = versionInfo => {
     const versionFilePath = path.resolve('src/version.js')
 
     const formattedInfo = Object.entries(versionInfo)
@@ -82,12 +83,34 @@ export const isDirty = () => VERSION_INFO.isDirty
     return versionFilePath
   }
 
+  const writePackageJsonVersion = version => {
+    const packageJsonPath = path.resolve('package.json')
+    const rawPackageJson = fs.readFileSync(packageJsonPath, 'utf8')
+    const packageJson = JSON.parse(rawPackageJson)
+
+    packageJson.version = version
+    fs.writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`)
+    return packageJsonPath
+  }
+
+  const getExactGitTag = () => {
+    try {
+      return execSync('git describe --tags --exact-match', { encoding: 'utf8' }).trim()
+    } catch {
+      return null
+    }
+  }
+
   return {
     name: 'version-plugin',
 
-    buildStart() {
+    buildStart: () => {
       const versionInfo = generateVersionInfo()
       const filePath = writeVersionFile(versionInfo)
+      const gitTag = getExactGitTag()
+      if (gitTag) {
+        writePackageJsonVersion(versionInfo.version)
+      }
 
       console.log(`✅ Version generated: ${versionInfo.version}`)
       console.log(`   Commit: ${versionInfo.commitHash}`)
@@ -95,22 +118,33 @@ export const isDirty = () => VERSION_INFO.isDirty
       console.log(`   Message: ${versionInfo.commitMessage}`)
       console.log(`   Build: ${versionInfo.buildDate}`)
       console.log(`   Branch: ${versionInfo.branchName}`)
+      console.log(`   Tag: ${gitTag || 'none'}`)
       console.log(`   Working dir clean: ${!versionInfo.isDirty}`)
 
       // Add the version file to Vite's watch list in dev mode
-      if (server) {
-        this.addWatchFile(filePath)
+      if (server?.watcher) {
+        server.watcher.add(filePath)
+      } else {
+        pendingWatchFile = filePath
       }
     },
 
-    configureServer(viteServer) {
+    configureServer: viteServer => {
       server = viteServer
+      if (pendingWatchFile) {
+        server.watcher.add(pendingWatchFile)
+        pendingWatchFile = undefined
+      }
 
       server.middlewares.use('/api/regenerate-version', (req, res) => {
         if (req.method === 'POST') {
           try {
             const versionInfo = generateVersionInfo()
             const filePath = writeVersionFile(versionInfo)
+            const gitTag = getExactGitTag()
+            if (gitTag) {
+              writePackageJsonVersion(versionInfo.version)
+            }
 
             // Trigger HMR for the version file
             const module = server.moduleGraph.getModuleById(filePath)
@@ -123,6 +157,7 @@ export const isDirty = () => VERSION_INFO.isDirty
               JSON.stringify({
                 success: true,
                 version: `${versionInfo.version}`,
+                tag: gitTag,
                 message: 'Version regenerated successfully',
               })
             )
