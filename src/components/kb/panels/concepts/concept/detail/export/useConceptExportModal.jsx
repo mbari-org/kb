@@ -12,8 +12,8 @@ import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
 import { CONCEPT } from '@/lib/constants'
 
 const initialModalData = {
-  conceptExtent: CONCEPT.EXTENT.DESCENDANTS,
-  exportType: EXPORT_TYPE.CSV,
+  conceptExtent: CONCEPT.EXTENT.SOLO,
+  exportType: EXPORT_TYPE.JSON,
   validInput: true,
 }
 

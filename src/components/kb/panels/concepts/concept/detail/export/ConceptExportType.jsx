@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles'
 import KBTooltip from '@/components/common/KBTooltip'
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
 
-const ConceptExportType = ({ value = EXPORT_TYPE.CSV, onChange }) => {
+const ConceptExportType = ({ value = EXPORT_TYPE.JSON, onChange }) => {
   const theme = useTheme()
 
   const toggleButtonSx = {
@@ -29,11 +29,11 @@ const ConceptExportType = ({ value = EXPORT_TYPE.CSV, onChange }) => {
         onChange={handleChange}
         size='small'
       >
-        <ToggleButton value={EXPORT_TYPE.CSV} sx={toggleButtonSx}>
-          CSV
-        </ToggleButton>
         <ToggleButton value={EXPORT_TYPE.JSON} sx={toggleButtonSx}>
           JSON
+        </ToggleButton>
+        <ToggleButton value={EXPORT_TYPE.CSV} sx={toggleButtonSx}>
+          CSV
         </ToggleButton>
       </ToggleButtonGroup>
     </Stack>

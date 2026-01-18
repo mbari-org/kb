@@ -4,7 +4,6 @@ import { Stack, Typography } from '@mui/material'
 import ConceptExtent from '@/components/common/concept/ConceptExtent'
 import ConceptExportType from './ConceptExportType'
 import ConceptExportCsv from './ConceptExportCsv'
-import ConceptExportJson from './ConceptExportJson'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -29,11 +28,9 @@ const ConceptExportContent = () => {
     if (conceptExtent !== CONCEPT.EXTENT.SOLO) {
       message += ` and its ${conceptExtent}`
     }
-    message += ':'
+    message += '.'
     return message
   }, [conceptExtent, exportType])
-
-  const ExportComponent = exportType === EXPORT_TYPE.CSV ? ConceptExportCsv : ConceptExportJson
 
   return (
     <Stack spacing={2}>
@@ -51,7 +48,7 @@ const ConceptExportContent = () => {
       <Typography variant='body2' color='text.secondary'>
           {exportMessage}
       </Typography>
-      <ExportComponent />
+      { exportType === EXPORT_TYPE.CSV && <ConceptExportCsv /> }
     </Stack>
   )
 }
