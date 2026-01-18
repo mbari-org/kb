@@ -10,7 +10,9 @@ const generateVersionInfo = () => {
     const year = now.getFullYear()
     const month = String(now.getMonth() + 1).padStart(2, '0')
     const day = String(now.getDate()).padStart(2, '0')
-    const dateString = `${year}.${month}.${day}`
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    const dateString = `${year}.${month}.${day}-${hours}${minutes}`
 
     const commitHash = run('git rev-parse --short HEAD')
     const branchName = run('git rev-parse --abbrev-ref HEAD')

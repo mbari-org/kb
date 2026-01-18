@@ -1,6 +1,6 @@
 # Application Versioning
 
-This React application uses an automated versioning system that generates date-based version strings in the format `YYYY.MM.DD`.
+This React application uses an automated versioning system that generates date-based version strings in the format `YYYY.MM.DD-HHMM`.
 
 ## Overview
 
@@ -15,12 +15,13 @@ The versioning system automatically:
 ## Version Format
 
 ```
-YYYY.MM.DD
+YYYY.MM.DD-HHMM
 ```
 
-**Example:** `2025.06.15`
+**Example:** `2025.06.15-1430`
 
 - `YYYY.MM.DD`: Build date in calendar format
+- `HHMM`: Build time in 24-hour local time
 
 ## Files
 
@@ -95,7 +96,7 @@ The version will update immediately in the UI via HMR, reflecting your latest co
 import { getVersion, getBuildDate, getCommitHash, getBranchName } from '@/version'
 
 function MyComponent() {
-  const version = getVersion() // "2025.06.15"
+  const version = getVersion() // "2025.06.15-1430"
   const buildDate = getBuildDate() // "2025-06-15T11:02:01.803Z"
   const commitHash = getCommitHash() // "af28b01"
   const branchName = getBranchName() // "main"
@@ -150,7 +151,7 @@ The generated version file contains:
 
 ```javascript
 {
-  version: "2025.06.15",                // Main version string
+  version: "2025.06.15-1430",             // Main version string
   buildDate: "2025-06-15T11:02:01.803Z", // ISO timestamp of build
   commitHash: "af28b01",                // Short git commit hash
   branchName: "main",                   // Git branch name
@@ -176,7 +177,7 @@ This information is displayed in the UI with a warning indicator when changes ar
 Edit `vite-plugins/version-plugin.js` and modify `dateString` and how `versionInfo.version` is set:
 
 ```javascript
-// Current format: YYYY.MM.DD
+// Current format: YYYY.MM.DD-HHMM
 const version = `${dateString}`
 
 // Example alternative: v1.0.0-YYYYMMDD-commitHash

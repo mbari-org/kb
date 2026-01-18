@@ -15,7 +15,9 @@ export const versionPlugin = () => {
       const year = now.getFullYear()
       const month = String(now.getMonth() + 1).padStart(2, '0')
       const day = String(now.getDate()).padStart(2, '0')
-      const dateString = `${year}.${month}.${day}`
+      const hours = String(now.getHours()).padStart(2, '0')
+      const minutes = String(now.getMinutes()).padStart(2, '0')
+      const dateString = `${year}.${month}.${day}-${hours}${minutes}`
 
       const commitHash = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim()
       const branchName = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim()
