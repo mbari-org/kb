@@ -59,9 +59,11 @@ export const versionPlugin = () => {
   const writeVersionFile = versionInfo => {
     const versionFilePath = path.resolve('src/version.js')
 
+    const escapeForSingleQuote = value => String(value).replaceAll('\'', '\\\'')
     const formattedInfo = Object.entries(versionInfo)
       .map(([key, value]) => {
-        const formattedValue = typeof value === 'string' ? `'${value}'` : value
+        const formattedValue =
+          typeof value === 'string' ? `'${escapeForSingleQuote(value)}'` : value
         return `  ${key}: ${formattedValue},`
       })
       .join('\n')
