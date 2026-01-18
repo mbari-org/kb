@@ -22,17 +22,12 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const handleConfigChange = event => {
     const newValue = event.target.value
     setConfigUrl(newValue)
-    setConfigIsDirty(newValue && newValue !== config?.url)
+    setConfigIsDirty(newValue !== config?.url)
   }
 
-  const isUrlValid = isValidUrl(configUrl)
+  const displayConfigUrl = configIsDirty ? configUrl : config?.url || configUrl || ''
+  const isUrlValid = isValidUrl(displayConfigUrl)
   const isButtonEnabled = configIsDirty && isUrlValid
-
-  useEffect(() => {
-    if (config?.url && !configIsDirty) {
-      setConfigUrl(config.url)
-    }
-  }, [config?.url, configIsDirty])
 
   useEffect(() => {
     if (config?.valid) {
@@ -52,7 +47,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
             onChange={handleConfigChange}
             required
             sx={{ mt: 1 }}
-            value={configUrl}
+            value={displayConfigUrl}
           />
           <SubmitError errorText={config?.error || configState?.error || ''} />
         </CardContent>
