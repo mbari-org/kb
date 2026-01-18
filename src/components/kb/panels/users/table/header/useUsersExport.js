@@ -1,5 +1,9 @@
 import { use, useCallback, useState } from 'react'
 
+import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
+import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
+
 import AppModalContext from '@/contexts/app/AppModalContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import UserContext from '@/contexts/user/UserContext'
@@ -41,7 +45,7 @@ const suggestName = () => 'KB-Users.csv'
 const useUsersExport = () => {
   const { users } = use(UsersContext)
   const { user } = use(UserContext)
-  const { beginProcessing } = use(AppModalContext)
+  const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
 
   const onProgress = useCallback(
@@ -51,6 +55,19 @@ const useUsersExport = () => {
           processingStop()
           setProcessingStop(null)
         }
+      } else if (value?.status === 'done' && value.fileName) {
+        if (processingStop) {
+          processingStop()
+          setProcessingStop(null)
+        }
+        const modal = createAppModal({
+          Content: ExportCompleteContent,
+          Title: ExportCompleteTitle,
+          minWidth: 420,
+          focusClose: true,
+        })
+        setModalData({ fileName: value.fileName })
+        setModal(modal)
       } else if (typeof value === 'string') {
         if (!processingStop) {
           setProcessingStop(() => beginProcessing(PROCESSING.LOAD, value))
@@ -59,7 +76,7 @@ const useUsersExport = () => {
         }
       }
     },
-    [processingStop, beginProcessing]
+    [processingStop, beginProcessing, setModal, setModalData]
   )
 
   return csvExport({

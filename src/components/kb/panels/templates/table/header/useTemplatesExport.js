@@ -7,6 +7,10 @@ import {
   getToConceptTemplates,
 } from '@/lib/api/templates'
 
+import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
+import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
+
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
@@ -103,7 +107,7 @@ const useTemplatesExport = () => {
     filteredTemplates,
   } = use(TemplatesContext)
   const { user } = use(UserContext)
-  const { beginProcessing } = use(AppModalContext)
+  const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
 
   const normalizedFilters = {
@@ -174,6 +178,19 @@ const useTemplatesExport = () => {
           processingStop()
           setProcessingStop(null)
         }
+      } else if (value?.status === 'done' && value.fileName) {
+        if (processingStop) {
+          processingStop()
+          setProcessingStop(null)
+        }
+        const modal = createAppModal({
+          Content: ExportCompleteContent,
+          Title: ExportCompleteTitle,
+          minWidth: 420,
+          focusClose: true,
+        })
+        setModalData({ fileName: value.fileName })
+        setModal(modal)
       } else if (typeof value === 'string') {
         if (!processingStop) {
           setProcessingStop(() => beginProcessing(PROCESSING.LOAD, value))
@@ -182,7 +199,7 @@ const useTemplatesExport = () => {
         }
       }
     },
-    [processingStop, beginProcessing]
+    [processingStop, beginProcessing, setModal, setModalData]
   )
 
   return csvExport({

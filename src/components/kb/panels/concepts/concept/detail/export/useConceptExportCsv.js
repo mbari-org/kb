@@ -1,5 +1,9 @@
 import { use, useCallback, useState } from 'react'
 
+import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
+import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
+
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -46,7 +50,7 @@ const suggestName = ({ concept, conceptExtent }) => {
 const useConceptExportCsv = conceptExtent => {
   const { concept } = use(ConceptContext)
   const { apiFns } = use(ConfigContext)
-  const { beginProcessing } = use(AppModalContext)
+  const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
   const { getConcept } = use(TaxonomyContext)
   const { user } = use(UserContext)
@@ -58,6 +62,19 @@ const useConceptExportCsv = conceptExtent => {
           processingStop()
           setProcessingStop(null)
         }
+      } else if (value?.status === 'done' && value.fileName) {
+        if (processingStop) {
+          processingStop()
+          setProcessingStop(null)
+        }
+        const modal = createAppModal({
+          Content: ExportCompleteContent,
+          Title: ExportCompleteTitle,
+          minWidth: 420,
+          focusClose: true,
+        })
+        setModalData({ fileName: value.fileName })
+        setModal(modal)
       } else if (typeof value === 'string') {
         if (!processingStop) {
           setProcessingStop(() => beginProcessing(PROCESSING.LOAD, value))
@@ -66,7 +83,7 @@ const useConceptExportCsv = conceptExtent => {
         }
       }
     },
-    [processingStop, beginProcessing]
+    [processingStop, beginProcessing, setModal, setModalData]
   )
 
   const getData = useCallback(async () => {

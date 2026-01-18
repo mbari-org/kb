@@ -2,6 +2,10 @@ import { use, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 
+import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
+import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
+
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
@@ -113,7 +117,7 @@ const useHistoryExport = () => {
   const { conceptState, selectedType, pageState } = use(HistoryContext)
   const { getSelected } = use(SelectedContext)
   const { user } = use(UserContext)
-  const { beginProcessing } = use(AppModalContext)
+  const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
 
   const selectedConcept = useMemo(() => getSelected(SELECTED_CONCEPT), [getSelected])
@@ -181,6 +185,19 @@ const useHistoryExport = () => {
           processingStop()
           setProcessingStop(null)
         }
+      } else if (value?.status === 'done' && value.fileName) {
+        if (processingStop) {
+          processingStop()
+          setProcessingStop(null)
+        }
+        const modal = createAppModal({
+          Content: ExportCompleteContent,
+          Title: ExportCompleteTitle,
+          minWidth: 420,
+          focusClose: true,
+        })
+        setModalData({ fileName: value.fileName })
+        setModal(modal)
       } else if (typeof value === 'string') {
         if (!processingStop) {
           setProcessingStop(() => beginProcessing(PROCESSING.LOAD, value))
@@ -189,7 +206,7 @@ const useHistoryExport = () => {
         }
       }
     },
-    [processingStop, beginProcessing]
+    [processingStop, beginProcessing, setModal, setModalData]
   )
 
   return csvExport({
