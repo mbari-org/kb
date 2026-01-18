@@ -314,7 +314,7 @@ const ConceptProvider = ({ children }) => {
         pendingTreeTimeoutRef.current = null
       }
     }
-  }, [apiFns, concept, startProcessing])
+  }, [apiFns, concept, conceptPath, startProcessing])
 
   return <ConceptContext value={value}>{children}</ConceptContext>
 }

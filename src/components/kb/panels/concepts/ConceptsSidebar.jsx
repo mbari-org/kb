@@ -13,8 +13,11 @@ import useConceptExportModal from '@/components/kb/panels/concepts/concept/detai
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { CONCEPT } from '@/lib/constants'
+import CONFIG from '@/text'
 
 const NAV_HISTORY = CONCEPT.SELECT.RIGHT_COMPONENT.NAV_HISTORY
+const exportTooltip = CONFIG.PANELS.CONCEPTS.EXPORT.TOOLTIP.EXPORT
+const exportButtonLabel = CONFIG.PANELS.CONCEPTS.EXPORT.BUTTON.EXPORT
 
 const ConceptsSidebar = () => {
   const sidebarRef = useRef(null)
@@ -36,13 +39,13 @@ const ConceptsSidebar = () => {
   }
 
   const leftComponent = (
-    <KBTooltip title='Export concept data'>
+    <KBTooltip title={exportTooltip}>
       <Button
         onClick={exportConcept}
         size='small'
         sx={{ ml: 1, mt: 0.25, minWidth: 'auto', px: 1 }}
       >
-        Export
+        {exportButtonLabel}
       </Button>
     </KBTooltip>
   )

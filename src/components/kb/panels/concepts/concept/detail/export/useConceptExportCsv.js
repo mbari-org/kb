@@ -1,25 +1,17 @@
-import { use, useCallback, useState } from 'react'
+import { use, useCallback } from 'react'
 
-import createAppModal from '@/components/modal/app/createAppModal'
-import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
-import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
-
-import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { getDescendantsInfo } from '@/lib/model/concept'
+import { getSuggestedFileName } from './conceptExport'
+import useConceptExportProgress from './useConceptExportProgress'
 
-import csvExport from '@/lib/csvExport'
-
-import { capitalize, conceptNameForFilename } from '@/lib/utils'
-
-import CONFIG from '@/text'
 import { CONCEPT } from '@/lib/constants'
-
-const { PROCESSING } = CONFIG
+import csvExport from '@/lib/csvExport'
+import { capitalize } from '@/lib/utils'
 
 const dataHeaders = [
   'id',
@@ -42,49 +34,13 @@ const commentsContent = ({ concept, conceptExtent }) => {
   return [`Concept: ${concept.name}`, `Extent: ${capitalize(conceptExtent)}`]
 }
 
-const suggestName = ({ concept, conceptExtent }) => {
-  const extent = conceptExtent !== CONCEPT.EXTENT.SOLO ? `_and_${conceptExtent}` : ''
-  return `KB-Concepts_${conceptNameForFilename(concept.name)}${extent}.csv`
-}
-
 const useConceptExportCsv = conceptExtent => {
   const { concept } = use(ConceptContext)
   const { apiFns } = use(ConfigContext)
-  const { beginProcessing, setModal, setModalData } = use(AppModalContext)
-  const [processingStop, setProcessingStop] = useState(null)
   const { getConcept } = use(TaxonomyContext)
   const { user } = use(UserContext)
 
-  const onProgress = useCallback(
-    value => {
-      if (value === false) {
-        if (processingStop) {
-          processingStop()
-          setProcessingStop(null)
-        }
-      } else if (value?.status === 'done' && value.fileName) {
-        if (processingStop) {
-          processingStop()
-          setProcessingStop(null)
-        }
-        const modal = createAppModal({
-          Content: ExportCompleteContent,
-          Title: ExportCompleteTitle,
-          minWidth: 420,
-          focusClose: true,
-        })
-        setModalData({ fileName: value.fileName })
-        setModal(modal)
-      } else if (typeof value === 'string') {
-        if (!processingStop) {
-          setProcessingStop(() => beginProcessing(PROCESSING.LOAD, value))
-        } else if (processingStop.updateMessage) {
-          processingStop.updateMessage(value)
-        }
-      }
-    },
-    [processingStop, beginProcessing, setModal, setModalData]
-  )
+  const onProgress = useConceptExportProgress()
 
   const getData = useCallback(async () => {
     const parent = getConcept(concept.parent)
@@ -119,7 +75,7 @@ const useConceptExportCsv = conceptExtent => {
     headers: dataHeaders,
     onProgress,
     paginated: false,
-    suggestName: () => suggestName({ concept, conceptExtent }),
+    suggestName: () => getSuggestedFileName({ concept, conceptExtent, extension: 'csv' }),
     title: `Knowledge Base Concept: ${concept.name}`,
     user,
   })
