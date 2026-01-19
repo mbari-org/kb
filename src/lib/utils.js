@@ -1,3 +1,5 @@
+import { COMMON } from '@/text'
+
 const after = (ms, fn) => new Promise(resolve => setTimeout(resolve, ms)).then(fn)
 
 const capitalize = string => {
@@ -66,7 +68,7 @@ const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
 
-const conceptNameForFilename = str => (str || 'all').replace(/\s+/g, '-')
+const conceptNameForFilename = str => (str || COMMON.UTILS.FILENAME.DEFAULT).replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
 
 const hasTrue = arg => {
   if (typeof arg === 'boolean') return arg
@@ -79,7 +81,7 @@ const humanTimestamp = timestamp => {
 
   const date = new Date(timestamp)
   if (isNaN(date.getTime())) {
-    return `Invalid timestamp: ${timestamp}`
+    return COMMON.UTILS.TIMESTAMP.INVALID_MESSAGE.replace('{value}', timestamp)
   }
 
   const month = date.toLocaleString('default', { month: 'short' })

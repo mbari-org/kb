@@ -1,0 +1,14 @@
+{
+  "CSV": {
+    "FILE_TYPE": "CSV Files",
+    "FILE_EXTENSION": ".csv",
+    "MIME_TYPE": "text/csv",
+    "ERROR": {
+      "TITLE": "CSV Export Error",
+      "GENERATE_FAILED": "Failed to generate CSV file",
+      "FILE_PICKER_FAILED": "Failed to open file picker",
+      "WRITE_FAILED": "Failed to write CSV file"
+    },
+    "PROGRESS": "Exporting page {page} of {total} to CSV file..."
+  }
+}

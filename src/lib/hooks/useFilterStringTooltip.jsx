@@ -10,10 +10,10 @@ import CONFIG from '@/text'
  */
 const useFilterStringTooltip = filterTemplate => {
   return useMemo(() => {
-    const concept = filterTemplate?.concept || '*'
-    const linkName = filterTemplate?.linkName || '*'
-    const toConcept = filterTemplate?.toConcept || '*'
-    const linkValue = filterTemplate?.linkValue || '*'
+    const concept = filterTemplate?.concept || CONFIG.COMMON.FILTER.DEFAULTS.CONCEPT
+    const linkName = filterTemplate?.linkName || CONFIG.COMMON.FILTER.DEFAULTS.LINK_NAME
+    const toConcept = filterTemplate?.toConcept || CONFIG.COMMON.FILTER.DEFAULTS.TO_CONCEPT
+    const linkValue = filterTemplate?.linkValue || CONFIG.COMMON.FILTER.DEFAULTS.LINK_VALUE
 
     return (
       <Box
@@ -31,25 +31,25 @@ const useFilterStringTooltip = filterTemplate => {
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Concept:</strong>
+            <strong>{CONFIG.COMMON.FILTER.LABELS.CONCEPT}:</strong>
           </Typography>
           <Typography variant='body2'>{concept}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Link name:</strong>
+            <strong>{CONFIG.COMMON.FILTER.LABELS.LINK_NAME}:</strong>
           </Typography>
           <Typography variant='body2'>{linkName}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>To concept:</strong>
+            <strong>{CONFIG.COMMON.FILTER.LABELS.TO_CONCEPT}:</strong>
           </Typography>
           <Typography variant='body2'>{toConcept}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Link value:</strong>
+            <strong>{CONFIG.COMMON.FILTER.LABELS.LINK_VALUE}:</strong>
           </Typography>
           <Typography variant='body2'>{linkValue}</Typography>
         </Box>

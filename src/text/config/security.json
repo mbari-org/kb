@@ -1,0 +1,12 @@
+{
+  "ENCRYPTION": {
+    "IV_LENGTH": 12,
+    "ALGORITHM": "AES-GCM",
+    "HASH_ALGORITHM": "SHA-256",
+    "ENCRYPTABLE_ACTIONS": ["encrypt", "decrypt"],
+    "PASSWORD": "password"
+  },
+  "ERROR": {
+    "EXTRACT_FAILED": "Extract failed"
+  }
+}

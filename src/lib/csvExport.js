@@ -1,3 +1,5 @@
+import { COMMON } from '@/text'
+
 import { csvEscape, csvHeaders, csvOut } from '@/lib/csv'
 import { createError } from '@/lib/errors'
 import { humanTimestamp } from '@/lib/utils'
@@ -43,7 +45,7 @@ const csvExport = ({
 
           while (hasMoreData) {
             if (onProgress && estimatedTotalPages) {
-              onProgress(`Exporting page ${pageIndex + 1} of ${estimatedTotalPages} to CSV file...`)
+              onProgress(COMMON.EXPORT.CSV.PROGRESS.replace('{page}', pageIndex + 1).replace('{total}', estimatedTotalPages))
             }
 
             const data = await getData(pageIndex)
@@ -75,8 +77,8 @@ const csvExport = ({
         }
       } catch (error) {
         throw createError(
-          'CSV Export Error',
-          `Failed to generate CSV file: ${error.message}`,
+          COMMON.EXPORT.CSV.ERROR.TITLE,
+          `${COMMON.EXPORT.CSV.ERROR.GENERATE_FAILED}: ${error.message}`,
           { error: error.message },
           error
         )
@@ -96,16 +98,16 @@ const csvExport = ({
         suggestedName: suggestName(),
         types: [
           {
-            description: 'CSV Files',
-            accept: { 'text/csv': ['.csv'] },
+            description: COMMON.EXPORT.CSV.FILE_TYPE,
+            accept: { [COMMON.EXPORT.CSV.MIME_TYPE]: [COMMON.EXPORT.CSV.FILE_EXTENSION] },
           },
         ],
       })
     } catch (error) {
       if (error.name !== 'AbortError') {
         throw createError(
-          'CSV Export Error',
-          `Failed to open file picker: ${error.message}`,
+          COMMON.EXPORT.CSV.ERROR.TITLE,
+          `${COMMON.EXPORT.CSV.ERROR.FILE_PICKER_FAILED}: ${error.message}`,
           { error: error.message },
           error
         )
@@ -127,7 +129,7 @@ const csvExport = ({
 
         while (hasMoreData) {
           if (onProgress && estimatedTotalPages) {
-            onProgress(`Exporting page ${pageIndex + 1} of ${estimatedTotalPages} to CSV file...`)
+            onProgress(COMMON.EXPORT.CSV.PROGRESS.replace('{page}', pageIndex + 1).replace('{total}', estimatedTotalPages))
           }
 
           const data = await getData(pageIndex)
@@ -156,8 +158,8 @@ const csvExport = ({
       }
     } catch (error) {
       throw createError(
-        'CSV Export Error',
-        `Failed to write CSV file: ${error.message}`,
+        COMMON.EXPORT.CSV.ERROR.TITLE,
+        `${COMMON.EXPORT.CSV.ERROR.WRITE_FAILED}: ${error.message}`,
         { error: error.message },
         error
       )

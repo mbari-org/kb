@@ -1,0 +1,17 @@
+{
+  "WILDCARD": "*",
+  "FILTER": {
+    "LABELS": {
+      "CONCEPT": "Concept",
+      "LINK_NAME": "Link name",
+      "TO_CONCEPT": "To concept",
+      "LINK_VALUE": "Link value"
+    },
+    "DEFAULTS": {
+      "CONCEPT": "*",
+      "LINK_NAME": "*",
+      "TO_CONCEPT": "*",
+      "LINK_VALUE": "*"
+    }
+  }
+}

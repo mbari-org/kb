@@ -1,0 +1,9 @@
+{
+  "TIMESTAMP": {
+    "INVALID_MESSAGE": "Invalid timestamp: {value}"
+  },
+  "FILENAME": {
+    "DEFAULT": "all",
+    "SEPARATOR": "-"
+  }
+}
