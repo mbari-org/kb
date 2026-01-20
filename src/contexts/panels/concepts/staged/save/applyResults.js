@@ -1,5 +1,6 @@
-import { isAdmin } from '@/lib/auth/role'
 import { getConcept } from '@/lib/api/concept'
+import { isAdmin } from '@/lib/auth/role'
+import { isJsonEqual, pick } from '@/lib/utils'
 
 import applyAliases from '@/contexts/panels/concepts/staged/save/applier/applyAliases'
 import applyAuthor from '@/contexts/panels/concepts/staged/save/applier/applyAuthor'
@@ -14,6 +15,19 @@ const applyResults = async (updatesContext, updatesInfo) => {
   const conceptName = updatesInfo?.updatedValue('name')?.value || staleConcept.name
 
   const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
+
+  if (updatesInfo?.hasUpdated('media')) {
+    const normalizeMedia = media =>
+      (media || []).map(item =>
+        pick(item, ['id', 'url', 'mediaType', 'caption', 'credit', 'isPrimary'])
+      )
+    const stagedMedia = normalizeMedia(updatesInfo.updatedValue('media'))
+    const freshMedia = normalizeMedia(freshConcept.media)
+
+    if (!isJsonEqual(stagedMedia, freshMedia)) {
+      freshConcept.media = staleConcept.media.map(mediaItem => ({ ...mediaItem }))
+    }
+  }
 
   freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
   freshConcept.alternateNames = [...staleConcept.alternateNames]
