@@ -6,13 +6,16 @@ import { applyApprovals } from '@/lib/concept/pending/applyApproves'
 import { applyRejects } from '@/lib/concept/pending/applyRejects'
 import cloneStale from '@/lib/concept/pending/cloneStale'
 
+// processPendingApproval handles both pending approve and reject. The nomenclature is approval reject or approval
+// approve.
+
 export const processPendingApproval = async ({
   approval,
   items,
   deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, updateSelected },
   strategy = { accept: 'apply', reject: 'apply' },
 }) => {
-  if (!items || items.length === 0) return { updated: [] }
+  if (!items || items.length === 0) return { updated: [], concepts: {} }
 
   await Promise.all(items.map(item => apiFns.apiPayload(updatePendingItem, [approval, item.id])))
 
@@ -26,6 +29,7 @@ export const processPendingApproval = async ({
   }, {})
 
   const updated = []
+  const concepts = {}
 
   for (const conceptName of Object.keys(groups)) {
     const conceptItems = groups[conceptName]
@@ -34,8 +38,9 @@ export const processPendingApproval = async ({
 
     let freshConcept = staleConcept
 
+    // Use the local stale concept as the base for optimistic updates
     if (approval === PENDING.APPROVAL.REJECT && strategy.reject === 'apply') {
-      freshConcept = await cloneStale(apiFns, staleConcept, true)
+      freshConcept = await cloneStale(apiFns, staleConcept, false)
       applyRejects(freshConcept, conceptItems)
     } else if (approval === PENDING.APPROVAL.ACCEPT && strategy.accept === 'apply') {
       freshConcept = await cloneStale(apiFns, staleConcept, false)
@@ -44,16 +49,20 @@ export const processPendingApproval = async ({
 
     const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, staleConcept)
 
+    const updatedName = updatedConcept?.name || conceptName
+
     if (updatedConcept && updatedConcept.name && updatedConcept.name !== staleConcept.name) {
-      if (typeof updateSelected === 'function') {
-        updateSelected({ concept: updatedConcept.name })
-      }
+      updateSelected({ concept: updatedConcept.name })
     }
 
-    updated.push(updatedConcept?.name || conceptName)
+    updated.push(updatedName)
+
+    if (updatedConcept) {
+      concepts[updatedName] = updatedConcept
+    }
   }
 
-  return { updated }
+  return { concepts, updated }
 }
 
 export default processPendingApproval

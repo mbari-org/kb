@@ -24,19 +24,15 @@ const useConceptUpdatePending = () => {
 
   return useCallback(
     async pendingConfirm => {
-      const { approval, pendingIds: propIds, pendingItems: propItems } = pendingConfirm
+      const { approval, pendingIds } = pendingConfirm
 
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
-      // Standardize on pendingIds - convert to items for processing
-      // Backward compatibility: support pendingItems if provided, but prefer pendingIds
-      const items = propItems
-        ? propItems
-        : (propIds || []).map(pendingId => pendingConcept.find(item => item.id === pendingId)).filter(Boolean)
+      const pendingItems = pendingIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
 
       return withProcessing(
         async () => {
-          const { updated } = await processPendingApproval({
+          const { concepts, updated } = await processPendingApproval({
             approval,
             deps: {
               apiFns,
@@ -45,18 +41,22 @@ const useConceptUpdatePending = () => {
               refreshData,
               updateSelected,
             },
-            items,
+            items: pendingItems,
           })
 
-          if (updated.includes(staleConcept.name)) {
-            const { concept: updatedConcept } = await conceptEditsRefresh(
-              getConcept(staleConcept.name),
-              staleConcept
-            )
-            await setConcept(updatedConcept)
+          const conceptName = staleConcept.name
+          const optimisticConcept = concepts?.[conceptName]
+
+          if (optimisticConcept) {
+            await setConcept(optimisticConcept)
+          } else if (updated.includes(conceptName)) {
+            const refreshedConcept = getConcept(conceptName)
+            if (refreshedConcept) {
+              await setConcept(refreshedConcept)
+            }
           }
 
-          return pendingConcept.length !== items.length
+          return pendingConcept.length !== pendingItems.length
         },
         PROCESSING.UPDATE,
         `${PROCESSING.ARG.PENDING}: ${approval}`
