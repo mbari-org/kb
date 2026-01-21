@@ -52,7 +52,7 @@ const LoginForm = ({ isVisible = true }) => {
             type='password'
             sx={{ mt: 2 }}
           />
-          <SubmitError errorText={loginState?.error} />
+          <SubmitError errorText={loginState?.error?.message} />
         </CardContent>
         <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
           <SubmitButton buttonText='Login' pendingText='Logging In...' />
