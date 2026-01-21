@@ -39,8 +39,8 @@
   },
   "packageManager": "yarn@4.5.1",
   "scripts": {
-    "dev": "yarn version:generate && vite",
-    "build": "yarn version:generate && vite build",
+    "dev": "vite",
+    "build": "vite build",
     "kb": "yarn build && yarn preview",
     "lint": "eslint .",
     "preview": "vite preview",

@@ -16,18 +16,40 @@ const generateVersionInfo = () => {
 
     const commitHash = run('git rev-parse --short HEAD')
     const branchName = run('git rev-parse --abbrev-ref HEAD')
-    const commitDate = run('git show -s --format=%ci HEAD')
+    const commitDate = run('git show -s --format=%cI HEAD')
     const commitMessage = run('git log -1 --pretty=%B').split('\n').pop()
     const isWorkingDirClean = run('git status --porcelain') === ''
 
+    let tag = null
+    try {
+      tag = run('git describe --tags --exact-match')
+    } catch {
+      tag = null
+    }
+
+    const hasTag = Boolean(tag)
+    const finalVersion = hasTag ? tag : dateString
+
+    // Default semantics: build date is now, dirty flag reflects working tree at generation
+    let finalBuildDate = now.toISOString()
+    let finalIsDirty = !isWorkingDirClean
+
+    // For tagged builds (release artifacts), treat build metadata as that of the tag
+    if (hasTag) {
+      // Use the commit date as the build/tag date and report status as clean
+      finalBuildDate = commitDate
+      finalIsDirty = false
+    }
+
     return {
       branchName: branchName,
-      buildDate: now.toISOString(),
+      buildDate: finalBuildDate,
       commitDate: commitDate,
       commitHash: commitHash,
       commitMessage: commitMessage,
-      isDirty: !isWorkingDirClean,
-      version: dateString,
+      isDirty: finalIsDirty,
+      version: finalVersion,
+      tag: tag,
     }
   } catch (error) {
     console.error('❌ Error generating version:', error.message)
