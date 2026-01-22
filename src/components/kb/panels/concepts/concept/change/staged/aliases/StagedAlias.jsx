@@ -4,10 +4,10 @@ import StagedItem from '@/components/kb/panels/concepts/concept/change/staged/St
 import StagedAliasDetail from './StagedAliasDetail'
 import StagedAliasHeader from './StagedAliasHeader'
 
-import { RESETTING } from '@/lib/constants'
+import { CONCEPT } from '@/lib/constants'
 
 const StagedAlias = ({ initialItem, resetting, stagedItem }) => {
-  const group = RESETTING.ALIASES
+  const group = CONCEPT.FIELD.ALIASES
 
   const itemDetail = () => <StagedAliasDetail initialAlias={initialItem} stagedAlias={stagedItem} />
   const itemHeader = () => <StagedAliasHeader initialAlias={initialItem} stagedAlias={stagedItem} />
