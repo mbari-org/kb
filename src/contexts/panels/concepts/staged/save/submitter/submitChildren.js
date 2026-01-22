@@ -1,3 +1,4 @@
+import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { createError } from '@/lib/errors'
 import { createConcept } from '@/lib/api/concept'
@@ -7,19 +8,19 @@ const { CHILD } = CONCEPT_STATE
 const submitChildren = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo
 
-  if (!hasUpdated('children')) {
+  if (!hasUpdated(CONCEPT.FIELD.CHILDREN)) {
     return []
   }
 
   const submitChild = (apiFn, trackerInfo) =>
     submit(apiFn, trackerInfo.params)
       .then(response => ({
-        field: 'children',
+        field: CONCEPT.FIELD.CHILDREN,
         response,
         ...trackerInfo,
       }))
       .catch(error => ({
-        field: 'children',
+        field: CONCEPT.FIELD.CHILDREN,
         error: createError(
           'Child Creation Failed',
           `Failed to add child concept ${trackerInfo.params.name} to ${concept.name}`,
@@ -34,7 +35,7 @@ const submitChildren = ([submit, { concept, updatesInfo }]) => {
         ...trackerInfo,
       }))
 
-  const submitters = updatedValue('children').reduce((acc, update, index) => {
+  const submitters = updatedValue(CONCEPT.FIELD.CHILDREN).reduce((acc, update, index) => {
     if (update.action === CHILD.ADD) {
       const params = { ...update, parentName: concept.name }
       const trackerInfo = { action: CHILD.ADD, index, params, update }

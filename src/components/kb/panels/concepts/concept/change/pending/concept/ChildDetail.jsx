@@ -12,7 +12,7 @@ import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendin
 
 import { pendingInfo } from '@/lib/model/history'
 
-import { ACTION } from '@/lib/constants'
+import { ACTION, CONCEPT } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/text'
 
@@ -37,7 +37,7 @@ const ChildDetail = ({ pendingChild }) => {
   const childInfo = useMemo(() => {
     const info = []
     if (pendingChild.parent) {
-      info.push(['parent', pendingChild.parent])
+      info.push([CONCEPT.FIELD.PARENT, pendingChild.parent])
     }
     info.push(...pendingInfo(pendingChild))
     return info

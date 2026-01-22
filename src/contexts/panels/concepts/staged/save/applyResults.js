@@ -1,5 +1,6 @@
 import { getConcept } from '@/lib/api/concept'
 import { isAdmin } from '@/lib/auth/role'
+import { CONCEPT } from '@/lib/constants'
 import { isJsonEqual, pick } from '@/lib/utils'
 
 import applyAliases from '@/contexts/panels/concepts/staged/save/applier/applyAliases'
@@ -12,16 +13,17 @@ import applyRealizations from '@/contexts/panels/concepts/staged/save/applier/ap
 
 const applyResults = async (updatesContext, updatesInfo) => {
   const { apiFns, staleConcept, user } = updatesContext
-  const conceptName = updatesInfo?.updatedValue('name')?.value || staleConcept.name
+  const conceptName =
+    updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
   const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
 
-  if (updatesInfo?.hasUpdated('media')) {
+  if (updatesInfo?.hasUpdated(CONCEPT.FIELD.MEDIA)) {
     const normalizeMedia = media =>
       (media || []).map(item =>
         pick(item, ['id', 'url', 'mediaType', 'caption', 'credit', 'isPrimary'])
       )
-    const stagedMedia = normalizeMedia(updatesInfo.updatedValue('media'))
+    const stagedMedia = normalizeMedia(updatesInfo.updatedValue(CONCEPT.FIELD.MEDIA))
     const freshMedia = normalizeMedia(freshConcept.media)
 
     if (!isJsonEqual(stagedMedia, freshMedia)) {
@@ -39,13 +41,13 @@ const applyResults = async (updatesContext, updatesInfo) => {
   }
 
   const appliers = {
-    aliases: (concept, tracker) => applyAliases(concept, tracker),
-    author: (concept, tracker) => applyAuthor(concept, tracker),
-    children: (concept, tracker) => applyChildren(concept, tracker),
-    media: (concept, tracker) => applyMedia(concept, tracker),
-    parent: (concept, tracker) => applyParent(concept, tracker),
-    rank: (concept, tracker) => applyRank(concept, tracker),
-    realizations: (concept, tracker) => applyRealizations(concept, tracker),
+    [CONCEPT.FIELD.ALIASES]: (concept, tracker) => applyAliases(concept, tracker),
+    [CONCEPT.FIELD.AUTHOR]: (concept, tracker) => applyAuthor(concept, tracker),
+    [CONCEPT.FIELD.CHILDREN]: (concept, tracker) => applyChildren(concept, tracker),
+    [CONCEPT.FIELD.MEDIA]: (concept, tracker) => applyMedia(concept, tracker),
+    [CONCEPT.FIELD.PARENT]: (concept, tracker) => applyParent(concept, tracker),
+    [CONCEPT.FIELD.RANK]: (concept, tracker) => applyRank(concept, tracker),
+    [CONCEPT.FIELD.REALIZATIONS]: (concept, tracker) => applyRealizations(concept, tracker),
   }
 
   updatesInfo.results.forEach(tracker => {

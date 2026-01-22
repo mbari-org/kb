@@ -13,6 +13,7 @@ import { createError } from '@/lib/errors'
 import { orderedAliases } from '@/lib/model/aliases'
 import { filterRanks } from '@/lib/model/rank'
 import { sortRealizations } from '@/lib/model/realization'
+import { CONCEPT } from '@/lib/constants'
 
 import { addedConcepts } from './concept'
 
@@ -375,9 +376,12 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
 
   insertConcept(updatedConcept, conceptMap, aliasMap)
 
-  const structureChanged = ['aliases', 'children', 'name', 'parent'].some(field =>
-    hasUpdated(field)
-  )
+  const structureChanged = [
+    CONCEPT.FIELD.ALIASES,
+    CONCEPT.FIELD.CHILDREN,
+    CONCEPT.FIELD.NAME,
+    CONCEPT.FIELD.PARENT,
+  ].some(field => hasUpdated(field))
 
   if (!structureChanged) {
     const updatedTaxonomy = {
@@ -387,7 +391,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
     return { concept: updatedConcept, taxonomy: updatedTaxonomy }
   }
 
-  if (hasUpdated('aliases')) {
+  if (hasUpdated(CONCEPT.FIELD.ALIASES)) {
     concept.aliases
       .filter(alias => !updatedConcept.aliases.includes(alias))
       .forEach(alias => delete aliasMap[alias.name])
@@ -397,7 +401,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
     })
   }
 
-  if (hasUpdated('children')) {
+  if (hasUpdated(CONCEPT.FIELD.CHILDREN)) {
     addedConcepts(updatedConcept.name, updatesInfo).forEach(child => {
       insertConcept(child, conceptMap, aliasMap)
     })
@@ -419,7 +423,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
     })
   }
 
-  if (hasUpdated('parent')) {
+  if (hasUpdated(CONCEPT.FIELD.PARENT)) {
     const priorParentConcept = { ...taxonomy.conceptMap[concept.parent] }
     priorParentConcept.children = priorParentConcept.children.filter(
       child => child !== updatedConcept.name

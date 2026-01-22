@@ -13,7 +13,6 @@ export const processPendingApproval = async ({
   approval,
   items,
   deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, updateSelected },
-  strategy = { accept: 'apply', reject: 'apply' },
 }) => {
   if (!items || items.length === 0) return { updated: [], concepts: {} }
 
@@ -39,10 +38,10 @@ export const processPendingApproval = async ({
     let freshConcept = staleConcept
 
     // Use the local stale concept as the base for optimistic updates
-    if (approval === PENDING.APPROVAL.REJECT && strategy.reject === 'apply') {
+    if (approval === PENDING.APPROVAL.REJECT) {
       freshConcept = await cloneStale(apiFns, staleConcept, false)
       applyRejects(freshConcept, conceptItems)
-    } else if (approval === PENDING.APPROVAL.ACCEPT && strategy.accept === 'apply') {
+    } else if (approval === PENDING.APPROVAL.ACCEPT) {
       freshConcept = await cloneStale(apiFns, staleConcept, false)
       applyApprovals(freshConcept, conceptItems)
     }

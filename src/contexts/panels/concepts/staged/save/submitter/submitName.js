@@ -1,3 +1,4 @@
+import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { updateConceptName } from '@/lib/api/concept'
 
@@ -5,13 +6,13 @@ const submitName = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, updatedValue } = updatesInfo
 
   const submitters = []
-  if (hasUpdated('name')) {
-    const name = updatedValue('name')
+  if (hasUpdated(CONCEPT.FIELD.NAME)) {
+    const name = updatedValue(CONCEPT.FIELD.NAME)
     const params = [concept.name, { name: name.value }]
     submitters.push(
       submit(updateConceptName, params).then(response => ({
         action: CONCEPT_STATE.NAME,
-        field: 'name',
+        field: CONCEPT.FIELD.NAME,
         params,
         response,
         update: name,
