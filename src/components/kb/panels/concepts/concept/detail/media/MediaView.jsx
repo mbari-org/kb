@@ -19,26 +19,26 @@ const MediaView = () => {
 
   const [previewOn, setPreviewOn] = useState(false)
 
-  // const showEditMedia = isEditing && media[mediaIndex]?.action !== CONCEPT_STATE.MEDIA_ITEM.DELETE
-  const showEditMedia = isEditing && !media[mediaIndex]?.historyId
+  const showAddMedia = isEditing
+  const showEditDeleteMedia = isEditing && !media[mediaIndex]?.historyId
 
   return (
     <Box>
       <Box ref={mediaViewRef} sx={{ position: 'relative' }}>
         <MediaPreview setPreviewOn={setPreviewOn} />
         <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} />
-        {showEditMedia && (
+        {showAddMedia && (
           <Box>
-            <MediaDelete />
-            {isEditing && (
-              <MediaAdd
-                sx={{
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                }}
-              />
-            )}
-            <MediaEdit />
+            {showEditDeleteMedia && <MediaDelete />}
+            <MediaAdd
+              sx={{
+                bottom: 20,
+                left: '50%',
+                position: 'absolute',
+                transform: 'translateX(-50%)',
+              }}
+            />
+            {showEditDeleteMedia && <MediaEdit />}
           </Box>
         )}
       </Box>
