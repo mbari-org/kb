@@ -1,5 +1,6 @@
 import { createRealization, deleteRealization, updateRealization } from '@/lib/api/realizations'
 
+import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
@@ -9,21 +10,21 @@ import { diff, drop, pick } from '@/lib/utils'
 const submitRealizations = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
-  if (!hasUpdated('realizations')) {
+  if (!hasUpdated(CONCEPT.FIELD.REALIZATIONS)) {
     return []
   }
 
-  const initialRealizations = initialValue('realizations')
+  const initialRealizations = initialValue(CONCEPT.FIELD.REALIZATIONS)
 
   const submitRealization = (apiFn, trackerInfo) =>
     submit(apiFn, trackerInfo.params)
       .then(response => ({
-        field: 'realizations',
+        field: CONCEPT.FIELD.REALIZATIONS,
         response,
         ...trackerInfo,
       }))
       .catch(error => ({
-        field: 'realizations',
+        field: CONCEPT.FIELD.REALIZATIONS,
         error: createError(
           'Realization Operation Failed',
           `Failed to ${getRealizationActionMessage(trackerInfo.action)} realization for concept ${concept.name}`,
@@ -81,7 +82,7 @@ const submitRealizations = ([submit, { concept, updatesInfo }]) => {
     [REALIZATION.DELETE]: realizationDelete,
   }
 
-  const submitters = updatedValue('realizations').reduce((acc, update, index) => {
+  const submitters = updatedValue(CONCEPT.FIELD.REALIZATIONS).reduce((acc, update, index) => {
     const submitter = actionSubmitter[update.action]
     if (!submitter) return acc
     const { apiFn, params, action } = submitter(update, index)

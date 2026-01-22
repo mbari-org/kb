@@ -1,5 +1,6 @@
 import { createMediaItem, deleteMediaItem, updateMediaItem } from '@/lib/api/media'
 
+import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import { createError } from '@/lib/errors'
@@ -8,19 +9,19 @@ import { pick } from '@/lib/utils'
 const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
-  if (!hasUpdated('media')) {
+  if (!hasUpdated(CONCEPT.FIELD.MEDIA)) {
     return []
   }
 
   const submitMediaItem = (apiFn, trackerInfo) =>
     submit(apiFn, trackerInfo.params)
       .then(response => ({
-        field: 'media',
+        field: CONCEPT.FIELD.MEDIA,
         response,
         ...trackerInfo,
       }))
       .catch(error => ({
-        field: 'media',
+        field: CONCEPT.FIELD.MEDIA,
         error: createError(
           'Media Operation Failed',
           `Failed to ${getMediaActionMessage(trackerInfo.action)} media item for concept ${concept.name}`,
@@ -49,7 +50,8 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     }
   }
 
-  const getMediaId = (update, index) => update.id || initialValue('media')?.[index]?.id
+  const getMediaId = (update, index) =>
+    update.id || initialValue(CONCEPT.FIELD.MEDIA)?.[index]?.id
 
   const mediaAdd = (update, index) => {
     const mediaItem = pick(update, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
@@ -98,7 +100,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     [CONCEPT_STATE.MEDIA_ITEM.DELETE]: mediaDelete,
   }
 
-  const submitters = updatedValue('media').reduce((acc, update, index) => {
+  const submitters = updatedValue(CONCEPT.FIELD.MEDIA).reduce((acc, update, index) => {
     const submitter = actionSubmitter[update.action]
     if (!submitter) return acc
     acc.push(submitter(update, index))

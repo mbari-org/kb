@@ -77,8 +77,8 @@ const AddChildContent = () => {
           error={false}
           helperText={nameError ? nameHelperText : ' '}
           label={MODALS.STRUCTURE.ADD_CHILD.NAME}
-          name='name'
-          onChange={handleChange('name')}
+          name={CONCEPT.FIELD.NAME}
+          onChange={handleChange(CONCEPT.FIELD.NAME)}
           required
           sx={{
             '& .MuiFormHelperText-root': {
@@ -93,8 +93,8 @@ const AddChildContent = () => {
       <FormControl {...inputStyle}>
         <TextField
           label={MODALS.STRUCTURE.ADD_CHILD.AUTHOR}
-          name='author'
-          onChange={handleChange('author')}
+          name={CONCEPT.FIELD.AUTHOR}
+          onChange={handleChange(CONCEPT.FIELD.AUTHOR)}
           value={formChild.author}
         />
       </FormControl>

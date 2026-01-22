@@ -19,6 +19,8 @@ export const CONCEPT = {
     NAME: 'name',
     PARENT: 'parent',
     RANK: 'rank',
+    RANK_LEVEL: 'rankLevel',
+    RANK_NAME: 'rankName',
     REALIZATIONS: 'realizations',
   },
   HISTORY: {

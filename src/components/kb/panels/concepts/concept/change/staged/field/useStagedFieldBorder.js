@@ -2,18 +2,20 @@ import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
+import { CONCEPT } from '@/lib/constants'
+
 const useStagedFieldBorder = field => {
   const { initialState, stagedState } = use(ConceptContext)
 
   const isStaged = field => {
     switch (field) {
-      case 'author':
+      case CONCEPT.FIELD.AUTHOR:
         return initialState.author !== stagedState.author
 
-      case 'rankName':
+      case CONCEPT.FIELD.RANK_NAME:
         return initialState.rank.name !== stagedState.rank.name
 
-      case 'rankLevel':
+      case CONCEPT.FIELD.RANK_LEVEL:
         return initialState.rank.level !== stagedState.rank.level
 
       default:

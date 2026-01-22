@@ -1,6 +1,8 @@
+import { CONCEPT } from '@/lib/constants'
+
 const RANK = {
-  LEVEL: 'rankLevel',
-  NAME: 'rankName',
+  LEVEL: CONCEPT.FIELD.RANK_LEVEL,
+  NAME: CONCEPT.FIELD.RANK_NAME,
 }
 
 const filterRanks = (ranks, field, otherValue) => {

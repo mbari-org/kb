@@ -1,4 +1,4 @@
-import { RESETTING } from '@/lib/constants'
+import { CONCEPT, RESETTING } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { RESET } = CONCEPT_STATE
@@ -47,8 +47,18 @@ const resettingField = (confirmReset, field) => {
 
   // nameChange legacy handled removed
 
-  if (field === 'rankLevel' && confirmReset.update?.field === 'rankName') return RESETTING.EXTENT.ME
-  if (field === 'rankName' && confirmReset.update?.field === 'rankLevel') return RESETTING.EXTENT.ME
+  if (
+    field === CONCEPT.FIELD.RANK_LEVEL &&
+    confirmReset.update?.field === CONCEPT.FIELD.RANK_NAME
+  ) {
+    return RESETTING.EXTENT.ME
+  }
+  if (
+    field === CONCEPT.FIELD.RANK_NAME &&
+    confirmReset.update?.field === CONCEPT.FIELD.RANK_LEVEL
+  ) {
+    return RESETTING.EXTENT.ME
+  }
 
   return RESETTING.EXTENT.OTHER
 }

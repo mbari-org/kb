@@ -2,6 +2,7 @@ import StagedReset from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { resettingRealization } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
+import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { RESET } = CONCEPT_STATE
@@ -9,7 +10,7 @@ const { RESET } = CONCEPT_STATE
 const RealizationReset = ({ index }) => {
   return (
     <StagedReset
-      group='realizations'
+      group={CONCEPT.FIELD.REALIZATIONS}
       index={index}
       resetGroupType={RESET.REALIZATIONS}
       resetItemType={RESET.REALIZATION}

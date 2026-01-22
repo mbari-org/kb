@@ -1,9 +1,10 @@
 import { getConcept as apiConcept, getConceptChildren, getConceptDescendants } from '@/lib/api/concept'
+import { CONCEPT } from '@/lib/constants'
 import { pick } from '@/lib/utils'
 
 const addedConcepts = (parent, updatesInfo) => {
   const { updatedValue } = updatesInfo
-  return updatedValue('children').map(child => ({
+  return updatedValue(CONCEPT.FIELD.CHILDREN).map(child => ({
     ...child,
     aliases: [],
     alternateNames: [],

@@ -1,5 +1,6 @@
 import { createAlias, deleteAlias, updateAlias } from '@/lib/api/aliases'
 
+import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { ALIAS: ALIAS } = CONCEPT_STATE
@@ -9,15 +10,15 @@ import { diff, drop, pick } from '@/lib/utils'
 const submitAliases = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
-  if (!hasUpdated('aliases')) {
+  if (!hasUpdated(CONCEPT.FIELD.ALIASES)) {
     return []
   }
 
-  const initialAliases = initialValue('aliases')
+  const initialAliases = initialValue(CONCEPT.FIELD.ALIASES)
 
   const submitAlias = (apiFn, trackerInfo) =>
     submit(apiFn, trackerInfo.params).then(response => ({
-      field: 'aliases',
+      field: CONCEPT.FIELD.ALIASES,
       response,
       ...trackerInfo,
     }))
@@ -55,7 +56,7 @@ const submitAliases = ([submit, { concept, updatesInfo }]) => {
     [ALIAS.DELETE]: aliasDelete,
   }
 
-  const submitters = updatedValue('aliases').reduce((acc, update, index) => {
+  const submitters = updatedValue(CONCEPT.FIELD.ALIASES).reduce((acc, update, index) => {
     const submitter = actionSubmitter[update.action]
     if (!submitter) return acc
     const { apiFn, params, action } = submitter(update, index)
