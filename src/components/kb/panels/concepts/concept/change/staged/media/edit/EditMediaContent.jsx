@@ -1,13 +1,12 @@
-import { use, useEffect, useMemo, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import {
   Box,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   TextField,
 } from '@mui/material'
 
 import EditMediaUrl from './EditMediaUrl'
+import EditMediaPrimary from './EditMediaPrimary'
 import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/MediaDisplay'
 import ModalActionText from '@/components/common/ModalActionText'
 
@@ -18,7 +17,6 @@ import useStageMedia from './useStageMedia'
 import useDebounce from '@/lib/hooks/useDebounce'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
-import { hasPrimary, isPrimary } from '@/lib/model/media'
 import { isUrlValid } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -113,19 +111,6 @@ const EditMediaContent = () => {
     }
   }
 
-  const showPrimaryCheckbox = useMemo(() => {
-    if (action === CONCEPT_STATE.MEDIA_ITEM.ADD) {
-      return !hasPrimary(stagedState.media)
-    }
-
-    const otherMedia = stagedState.media.filter((_, index) => index !== mediaIndex)
-    const hasOtherPrimary = hasPrimary(otherMedia)
-
-    const wasOriginallyPrimary = isPrimary(stagedState.media[mediaIndex])
-
-    return !hasOtherPrimary || wasOriginallyPrimary
-  }, [stagedState.media, action, mediaIndex])
-
   if (!mediaItem) {
     return null
   }
@@ -164,20 +149,13 @@ const EditMediaContent = () => {
           value={formMediaItem.caption}
         />
       </FormControl>
-      {showPrimaryCheckbox && (
-        <Box display='flex' justifyContent='flex-end'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={formMediaItem.isPrimary}
-                name='isPrimary'
-                onChange={handleChange}
-              />
-            }
-            label={MEDIA.EDIT.PRIMARY}
-          />
-        </Box>
-      )}
+      <EditMediaPrimary
+        action={action}
+        formMediaItem={formMediaItem}
+        mediaIndex={mediaIndex}
+        onChange={handleChange}
+        stagedMedia={stagedState.media}
+      />
       <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} url={formMediaItem.url} />
     </Box>
   )
