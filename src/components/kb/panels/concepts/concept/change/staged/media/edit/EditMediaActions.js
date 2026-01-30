@@ -9,16 +9,15 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
-
 import { isUrlValid } from '@/lib/utils'
 
 const EditMediaActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  const { mediaItem = { url: '', credit: '' }, modified = false } = modalData || {}
+  const { mediaItem = { url: '', credit: '' }, modified = false, formValid } = modalData || {}
 
-  const validMediaItem = useMemo(
+  const initialFormValid = useMemo(
     () => isUrlValid(mediaItem?.url || '') && (mediaItem?.credit || '').trim() !== '',
     [mediaItem]
   )
@@ -34,7 +33,7 @@ const EditMediaActions = () => {
     document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !modified && validMediaItem
+  const stageDisabled = formValid === undefined ? !initialFormValid : !formValid
 
   return createStagedActions({
     confirmReset,

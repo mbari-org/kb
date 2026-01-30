@@ -68,7 +68,9 @@ const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
 
-const conceptNameForFilename = str => (str || COMMON.UTILS.FILENAME.DEFAULT).replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
+const conceptNameForFilename = str =>
+  (str || COMMON.UTILS.FILENAME.DEFAULT)
+    .replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
 
 const hasTrue = arg => {
   if (typeof arg === 'boolean') return arg
@@ -257,3 +259,4 @@ export {
   prune,
   sleep,
 }
+

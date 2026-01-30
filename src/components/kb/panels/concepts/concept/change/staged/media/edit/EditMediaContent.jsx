@@ -68,22 +68,34 @@ const EditMediaContent = () => {
     [concept.media, stagedState.media, action, mediaIndex]
   )
 
-  const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field) => {
+  const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field, updatedUrlStatus) => {
     const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
     setModifiedFields(updatedModifiedFields)
 
     const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
 
-    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified }))
+    const hasUrlError = updatedMediaItem.url.trim() === '' ||
+      !isUrlValid(updatedMediaItem.url) ||
+      (!updatedUrlStatus.loading && !updatedUrlStatus.valid) ||
+      updatedUrlStatus.isDuplicate
+
+    const hasCreditError = updatedMediaItem.credit.trim() === ''
+
+    const formValid = !hasUrlError && !hasCreditError && !updatedUrlStatus.loading
+
+    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified, formValid }))
   }, 300)
 
-  const debouncedUrlCheck = useDebounce(value => {
+  const debouncedUrlCheck = useDebounce((value, updatedMediaItem) => {
     if (isUrlValid(value)) {
       setUrlStatus({ loading: true, valid: true, isDuplicate: false })
 
       checkImageUrlExists(value).then(exists => {
-        const isDuplicate = value !== mediaItem.url && isDuplicateURL(value)
-        setUrlStatus({ loading: false, valid: exists, isDuplicate })
+        const newUrlStatus = { loading: false, valid: exists, isDuplicate: false }
+        setUrlStatus(newUrlStatus)
+        const hasCreditError = updatedMediaItem.credit.trim() === ''
+        const formValid = !(!exists || hasCreditError)
+        setModalData(prev => ({ ...prev, formValid }))
       })
     } else {
       setUrlStatus({ loading: false, valid: false, isDuplicate: false })
@@ -105,10 +117,24 @@ const EditMediaContent = () => {
         ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
         : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
 
-    debouncedUpdateForm(updatedMediaItem, fieldIsModified, field)
-
     if (field === 'url') {
-      debouncedUrlCheck(value)
+      const isDuplicate = value !== mediaItem.url && isDuplicateURL(value)
+      if (isDuplicate) {
+        const newUrlStatus = { isDuplicate: true, loading: false, valid: true }
+        setUrlStatus(newUrlStatus)
+        debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, newUrlStatus)
+      } else if (isUrlValid(value)) {
+        const newUrlStatus = { isDuplicate: false, loading: true, valid: true }
+        setUrlStatus(newUrlStatus)
+        debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, newUrlStatus)
+        debouncedUrlCheck(value, updatedMediaItem)
+      } else {
+        const newUrlStatus = { isDuplicate: false, loading: false, valid: false }
+        setUrlStatus(newUrlStatus)
+        debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, newUrlStatus)
+      }
+    } else {
+      debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, urlStatus)
     }
   }
 
@@ -146,14 +172,14 @@ const EditMediaContent = () => {
   const urlHelperText =
     formMediaItem.url.trim() === ''
       ? 'URL cannot be empty'
-      : !isUrlValid(formMediaItem.url)
-          ? 'Please enter a valid URL'
-          : urlStatus.loading
-            ? 'Checking URL...'
-            : !urlStatus.valid
-                ? 'URL is not accessible'
-                : urlStatus.isDuplicate
-                  ? 'This media is already being used'
+      : urlStatus.isDuplicate
+        ? 'This media is already being used'
+        : !isUrlValid(formMediaItem.url)
+            ? 'Please enter a valid URL'
+            : urlStatus.loading
+              ? 'Checking URL...'
+              : !urlStatus.valid
+                  ? 'URL is not accessible'
                   : ''
 
   const urlSlotProps = {
