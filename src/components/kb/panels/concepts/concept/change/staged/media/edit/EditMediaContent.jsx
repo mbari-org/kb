@@ -128,6 +128,7 @@ const EditMediaContent = () => {
         modifiedUrl={modifiedFields.url}
         onUrlChange={handleUrlChange}
         onUrlStatusChange={handleUrlStatusChange}
+        setPreviewOn={setPreviewOn}
         value={formMediaItem.url}
       />
       <FormControl fullWidth margin='normal'>

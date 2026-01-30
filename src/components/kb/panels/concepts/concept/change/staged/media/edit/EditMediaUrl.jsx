@@ -16,10 +16,11 @@ import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const EditMediaUrl = ({
-  value,
+  modifiedUrl,
   onUrlChange,
   onUrlStatusChange,
-  modifiedUrl,
+  setPreviewOn,
+  value,
 }) => {
   const { concept, stagedState } = use(ConceptContext)
   const { modalData } = use(ConceptModalContext)
@@ -109,7 +110,7 @@ const EditMediaUrl = ({
             urlStatus.valid &&
             isUrlValid(value) &&
             value.trim() !== '' && (
-              <IconButton edge='end'>
+              <IconButton edge='end' onClick={() => setPreviewOn(true)}>
                 <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
               </IconButton>
           )}
