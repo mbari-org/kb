@@ -33,7 +33,8 @@ const EditMediaActions = () => {
     document.querySelector(`#${EDIT_MEDIA_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = formValid === undefined ? !initialFormValid : !formValid
+  const isFormValid = formValid === undefined ? initialFormValid : formValid
+  const stageDisabled = !modified || !isFormValid
 
   return createStagedActions({
     confirmReset,

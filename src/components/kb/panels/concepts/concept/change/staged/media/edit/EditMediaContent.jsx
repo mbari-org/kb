@@ -1,16 +1,13 @@
-import { use, useCallback, useMemo, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 import {
   Box,
   Checkbox,
   FormControl,
   FormControlLabel,
-  Icon,
-  IconButton,
-  InputAdornment,
   TextField,
 } from '@mui/material'
-import { MdOutlinePhoto } from 'react-icons/md'
 
+import EditMediaUrl from './EditMediaUrl'
 import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/MediaDisplay'
 import ModalActionText from '@/components/common/ModalActionText'
 
@@ -22,7 +19,7 @@ import useDebounce from '@/lib/hooks/useDebounce'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 import { hasPrimary, isPrimary } from '@/lib/model/media'
-import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
+import { isUrlValid } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
@@ -35,7 +32,7 @@ const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
 const EditMediaContent = () => {
-  const { concept, stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
 
   const { action, mediaIndex, mediaItem } = modalData
@@ -50,57 +47,46 @@ const EditMediaContent = () => {
     url: false,
   })
   const [previewOn, setPreviewOn] = useState(false)
-
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true, isDuplicate: false })
 
-  const isDuplicateURL = useCallback(
-    url => {
-      const inInitialMedia = concept.media.some(item => item.url === url)
-      const inStagedMedia = stagedState.media.some((item, index) => {
-        if (action === CONCEPT_STATE.MEDIA_ITEM.EDIT && index === mediaIndex) {
-          return false
-        }
-        return item.url === url
-      })
+  useEffect(() => {
+    const hasCreditError = formMediaItem.credit.trim() === ''
+    const hasUrlError = formMediaItem.url.trim() === '' ||
+      !isUrlValid(formMediaItem.url) ||
+      (!urlStatus.loading && !urlStatus.valid) ||
+      urlStatus.isDuplicate
+    const formValid = !hasUrlError && !hasCreditError && !urlStatus.loading
+    setModalData(prev => ({ ...prev, formValid }))
+  }, [formMediaItem, setModalData, urlStatus])
 
-      return inInitialMedia || inStagedMedia
-    },
-    [concept.media, stagedState.media, action, mediaIndex]
-  )
-
-  const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field, updatedUrlStatus) => {
+  const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field) => {
     const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
     setModifiedFields(updatedModifiedFields)
 
     const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
 
-    const hasUrlError = updatedMediaItem.url.trim() === '' ||
-      !isUrlValid(updatedMediaItem.url) ||
-      (!updatedUrlStatus.loading && !updatedUrlStatus.valid) ||
-      updatedUrlStatus.isDuplicate
-
-    const hasCreditError = updatedMediaItem.credit.trim() === ''
-
-    const formValid = !hasUrlError && !hasCreditError && !updatedUrlStatus.loading
-
-    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified, formValid }))
+    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified }))
   }, 300)
 
-  const debouncedUrlCheck = useDebounce((value, updatedMediaItem) => {
-    if (isUrlValid(value)) {
-      setUrlStatus({ loading: true, valid: true, isDuplicate: false })
-
-      checkImageUrlExists(value).then(exists => {
-        const newUrlStatus = { loading: false, valid: exists, isDuplicate: false }
-        setUrlStatus(newUrlStatus)
-        const hasCreditError = updatedMediaItem.credit.trim() === ''
-        const formValid = !(!exists || hasCreditError)
-        setModalData(prev => ({ ...prev, formValid }))
-      })
-    } else {
-      setUrlStatus({ loading: false, valid: false, isDuplicate: false })
+  const handleUrlChange = newUrl => {
+    const updatedMediaItem = {
+      ...formMediaItem,
+      url: newUrl,
     }
-  }, 500)
+
+    setFormMediaItem(updatedMediaItem)
+
+    const fieldIsModified =
+      action === CONCEPT_STATE.MEDIA_ITEM.ADD
+        ? updatedMediaItem.url !== EMPTY_MEDIA_ITEM.url
+        : stagedState.media[mediaIndex].url !== updatedMediaItem.url
+
+    setModifiedFields(prev => ({ ...prev, url: fieldIsModified }))
+  }
+
+  const handleUrlStatusChange = newUrlStatus => {
+    setUrlStatus(newUrlStatus)
+  }
 
   const handleChange = event => {
     const { name: field, value, type, checked } = event.target
@@ -117,25 +103,7 @@ const EditMediaContent = () => {
         ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
         : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
 
-    if (field === 'url') {
-      const isDuplicate = value !== mediaItem.url && isDuplicateURL(value)
-      if (isDuplicate) {
-        const newUrlStatus = { isDuplicate: true, loading: false, valid: true }
-        setUrlStatus(newUrlStatus)
-        debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, newUrlStatus)
-      } else if (isUrlValid(value)) {
-        const newUrlStatus = { isDuplicate: false, loading: true, valid: true }
-        setUrlStatus(newUrlStatus)
-        debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, newUrlStatus)
-        debouncedUrlCheck(value, updatedMediaItem)
-      } else {
-        const newUrlStatus = { isDuplicate: false, loading: false, valid: false }
-        setUrlStatus(newUrlStatus)
-        debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, newUrlStatus)
-      }
-    } else {
-      debouncedUpdateForm(updatedMediaItem, fieldIsModified, field, urlStatus)
-    }
+    debouncedUpdateForm(updatedMediaItem, fieldIsModified, field)
   }
 
   const stageMedia = useStageMedia()
@@ -162,43 +130,6 @@ const EditMediaContent = () => {
     return null
   }
 
-  const urlError =
-    modifiedFields.url &&
-    (formMediaItem.url.trim() === '' ||
-      !isUrlValid(formMediaItem.url) ||
-      (!urlStatus.loading && !urlStatus.valid) ||
-      urlStatus.isDuplicate)
-
-  const urlHelperText =
-    formMediaItem.url.trim() === ''
-      ? 'URL cannot be empty'
-      : urlStatus.isDuplicate
-        ? 'This media is already being used'
-        : !isUrlValid(formMediaItem.url)
-            ? 'Please enter a valid URL'
-            : urlStatus.loading
-              ? 'Checking URL...'
-              : !urlStatus.valid
-                  ? 'URL is not accessible'
-                  : ''
-
-  const urlSlotProps = {
-    input: {
-      endAdornment: (
-        <InputAdornment position='end'>
-          {!urlStatus.loading &&
-            urlStatus.valid &&
-            isUrlValid(formMediaItem.url) &&
-            formMediaItem.url.trim() !== '' &&
-            (<IconButton onClick={() => setPreviewOn(true)} edge='end'>
-              <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
-            </IconButton>
-            )}
-        </InputAdornment>
-      ),
-    },
-  }
-
   const modalActionText = actionText === ACTION.EDIT ? MEDIA.EDIT.LABEL : MEDIA.ADD.LABEL
 
   const creditError = modifiedFields.credit && formMediaItem.credit.trim() === ''
@@ -207,18 +138,13 @@ const EditMediaContent = () => {
   return (
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
       <ModalActionText text={modalActionText} />
-      <FormControl fullWidth margin='normal'>
-        <TextField
-          error={urlError}
-          helperText={modifiedFields.url ? urlHelperText : ''}
-          label='URL'
-          name='url'
-          onChange={handleChange}
-          required
-          slotProps={urlSlotProps}
-          value={formMediaItem.url}
-        />
-      </FormControl>
+      <EditMediaUrl
+        formMediaItem={formMediaItem}
+        modifiedUrl={modifiedFields.url}
+        onUrlChange={handleUrlChange}
+        onUrlStatusChange={handleUrlStatusChange}
+        value={formMediaItem.url}
+      />
       <FormControl fullWidth margin='normal'>
         <TextField
           error={creditError}
