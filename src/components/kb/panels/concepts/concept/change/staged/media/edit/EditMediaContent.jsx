@@ -82,10 +82,6 @@ const EditMediaContent = () => {
     setModifiedFields(prev => ({ ...prev, url: fieldIsModified }))
   }
 
-  const handleUrlStatusChange = newUrlStatus => {
-    setUrlStatus(newUrlStatus)
-  }
-
   const handleChange = event => {
     const { name: field, value, type, checked } = event.target
 
@@ -124,12 +120,12 @@ const EditMediaContent = () => {
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
       <ModalActionText text={modalActionText} />
       <EditMediaUrl
-        formMediaItem={formMediaItem}
         modifiedUrl={modifiedFields.url}
         onUrlChange={handleUrlChange}
-        onUrlStatusChange={handleUrlStatusChange}
         setPreviewOn={setPreviewOn}
-        value={formMediaItem.url}
+        onUrlStatusChange={setUrlStatus}
+        urlStatus={urlStatus}
+        urlValue={formMediaItem.url}
       />
       <FormControl fullWidth margin='normal'>
         <TextField
@@ -153,8 +149,7 @@ const EditMediaContent = () => {
       <EditMediaPrimary
         action={action}
         formMediaItem={formMediaItem}
-        mediaIndex={mediaIndex}
-        onChange={handleChange}
+        onPrimaryChange={handleChange}
         stagedMedia={stagedState.media}
       />
       <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} url={formMediaItem.url} />

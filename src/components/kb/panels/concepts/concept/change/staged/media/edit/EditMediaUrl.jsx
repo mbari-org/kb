@@ -1,4 +1,4 @@
-import { use, useCallback, useState } from 'react'
+import { use, useCallback } from 'react'
 import {
   FormControl,
   Icon,
@@ -15,21 +15,22 @@ import useDebounce from '@/lib/hooks/useDebounce'
 import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
+const URL_CHECK_DEBOUNCE_TIME = 500
+
 const EditMediaUrl = ({
   modifiedUrl,
   onUrlChange,
   onUrlStatusChange,
   setPreviewOn,
-  value,
+  urlStatus,
+  urlValue,
 }) => {
   const { concept, stagedState } = use(ConceptContext)
   const { modalData } = use(ConceptModalContext)
 
   const { action, mediaIndex, mediaItem } = modalData
 
-  const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true, isDuplicate: false })
-
-  const isDuplicateURL = useCallback(
+  const isDuplicateUrl = useCallback(
     url => {
       const inInitialMedia = concept.media.some(item => item.url === url)
       const inStagedMedia = stagedState.media.some((item, index) => {
@@ -47,54 +48,43 @@ const EditMediaUrl = ({
   const debouncedUrlCheck = useDebounce(urlValue => {
     if (isUrlValid(urlValue)) {
       const loadingStatus = { loading: true, valid: true, isDuplicate: false }
-      setUrlStatus(loadingStatus)
       onUrlStatusChange(loadingStatus)
 
       checkImageUrlExists(urlValue).then(exists => {
         const finalStatus = { loading: false, valid: exists, isDuplicate: false }
-        setUrlStatus(finalStatus)
         onUrlStatusChange(finalStatus)
       })
     } else {
-      setUrlStatus({ loading: false, valid: false, isDuplicate: false })
+      onUrlStatusChange({ loading: false, valid: false, isDuplicate: false })
     }
-  }, 500)
+  }, URL_CHECK_DEBOUNCE_TIME)
 
-  const handleUrlChange = newValue => {
-    const isDuplicate = newValue !== mediaItem.url && isDuplicateURL(newValue)
-    let newUrlStatus
-
+  const handleUrlInput = urlValue => {
+    const isDuplicate = urlValue !== mediaItem.url && isDuplicateUrl(urlValue)
     if (isDuplicate) {
-      newUrlStatus = { isDuplicate: true, loading: false, valid: true }
-      setUrlStatus(newUrlStatus)
-      onUrlStatusChange(newUrlStatus)
-    } else if (isUrlValid(newValue)) {
-      newUrlStatus = { isDuplicate: false, loading: true, valid: true }
-      setUrlStatus(newUrlStatus)
-      onUrlStatusChange(newUrlStatus)
-      debouncedUrlCheck(newValue)
+      onUrlStatusChange({ isDuplicate: true, loading: false, valid: true })
+    } else if (isUrlValid(urlValue)) {
+      onUrlStatusChange({ isDuplicate: false, loading: true, valid: true })
+      debouncedUrlCheck(urlValue)
     } else {
-      newUrlStatus = { isDuplicate: false, loading: false, valid: false }
-      setUrlStatus(newUrlStatus)
-      onUrlStatusChange(newUrlStatus)
+      onUrlStatusChange({ isDuplicate: false, loading: false, valid: false })
     }
-
-    onUrlChange(newValue)
+    onUrlChange(urlValue)
   }
 
   const urlError =
     modifiedUrl &&
-    (value.trim() === '' ||
-      !isUrlValid(value) ||
+    (urlValue.trim() === '' ||
+      !isUrlValid(urlValue) ||
       (!urlStatus.loading && !urlStatus.valid) ||
       urlStatus.isDuplicate)
 
   const urlHelperText =
-    value.trim() === ''
+    urlValue.trim() === ''
       ? 'URL cannot be empty'
       : urlStatus.isDuplicate
         ? 'This media is already being used'
-        : !isUrlValid(value)
+        : !isUrlValid(urlValue)
             ? 'Please enter a valid URL'
             : urlStatus.loading
               ? 'Checking URL...'
@@ -108,8 +98,8 @@ const EditMediaUrl = ({
         <InputAdornment position='end'>
           {!urlStatus.loading &&
             urlStatus.valid &&
-            isUrlValid(value) &&
-            value.trim() !== '' && (
+            isUrlValid(urlValue) &&
+            urlValue.trim() !== '' && (
               <IconButton edge='end' onClick={() => setPreviewOn(true)}>
                 <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
               </IconButton>
@@ -126,10 +116,10 @@ const EditMediaUrl = ({
         helperText={modifiedUrl ? urlHelperText : ''}
         label='URL'
         name='url'
-        onChange={e => handleUrlChange(e.target.value)}
+        onChange={event => handleUrlInput(event.target.value)}
         required
         slotProps={urlSlotProps}
-        value={value}
+        value={urlValue}
       />
     </FormControl>
   )

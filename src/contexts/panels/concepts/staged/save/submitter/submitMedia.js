@@ -24,7 +24,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
         field: CONCEPT.FIELD.MEDIA,
         error: createError(
           'Media Operation Failed',
-          `Failed to ${getMediaActionMessage(trackerInfo.action)} media item for concept ${concept.name}`,
+          `Failed to ${trackerInfo.action} item for concept ${concept.name}`,
           {
             conceptName: concept.name,
             mediaId: trackerInfo.update.id,
@@ -36,19 +36,6 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
         ),
         ...trackerInfo,
       }))
-
-  const getMediaActionMessage = action => {
-    switch (action) {
-      case CONCEPT_STATE.MEDIA_ITEM.ADD:
-        return 'add'
-      case CONCEPT_STATE.MEDIA_ITEM.EDIT:
-        return 'update'
-      case CONCEPT_STATE.MEDIA_ITEM.DELETE:
-        return 'delete'
-      default:
-        return 'process'
-    }
-  }
 
   const getMediaId = (update, index) =>
     update.id || initialValue(CONCEPT.FIELD.MEDIA)?.[index]?.id
@@ -100,7 +87,26 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     [CONCEPT_STATE.MEDIA_ITEM.DELETE]: mediaDelete,
   }
 
-  const submitters = updatedValue(CONCEPT.FIELD.MEDIA).reduce((acc, update, index) => {
+  const stagedMedia = updatedValue(CONCEPT.FIELD.MEDIA)
+
+  // Is some staged edit assuming primary media status?
+  const stagedNewPrimaryMedia = stagedMedia.find(
+    item =>
+      (item.action === CONCEPT_STATE.MEDIA_ITEM.ADD ||
+        item.action === CONCEPT_STATE.MEDIA_ITEM.EDIT) &&
+      item.isPrimary
+  )
+
+  // If so, force the current staged primary media to be an EDIT (which it may already be) and set isPrimary false
+  if (stagedNewPrimaryMedia) {
+    const currentStagedPrimaryMedia = stagedMedia.find(
+      item => item.isPrimary && item !== stagedNewPrimaryMedia
+    )
+    currentStagedPrimaryMedia.action = CONCEPT_STATE.MEDIA_ITEM.EDIT
+    currentStagedPrimaryMedia.isPrimary = false
+  }
+
+  const submitters = stagedMedia.reduce((acc, update, index) => {
     const submitter = actionSubmitter[update.action]
     if (!submitter) return acc
     acc.push(submitter(update, index))

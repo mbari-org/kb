@@ -6,23 +6,23 @@ import {
   Typography,
 } from '@mui/material'
 
-import { hasPrimary, isPrimary } from '@/lib/model/media'
+import { hasPrimary } from '@/lib/model/media'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/text'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 
-const EditMediaPrimary = ({ action, mediaIndex, formMediaItem, stagedMedia, onChange }) => {
+const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia }) => {
   const { isDisabled, shouldBeChecked } = useMemo(() => {
     const isAddingInitialMedia = action === CONCEPT_STATE.MEDIA_ITEM.ADD && !hasPrimary(stagedMedia)
-    const isEditingOnlyMedia = action === CONCEPT_STATE.MEDIA_ITEM.EDIT && stagedMedia.length === 1
+    const isEditingSoloMedia = action === CONCEPT_STATE.MEDIA_ITEM.EDIT && stagedMedia.length === 1
 
-    if (isAddingInitialMedia || isEditingOnlyMedia) {
+    if (isAddingInitialMedia || isEditingSoloMedia) {
       return { isDisabled: true, shouldBeChecked: true }
     }
 
     return { isDisabled: false, shouldBeChecked: formMediaItem.isPrimary }
-  }, [action, stagedMedia, formMediaItem.isPrimary, mediaIndex])
+  }, [action, formMediaItem.isPrimary, stagedMedia])
 
   return (
     <Box display='flex' justifyContent='flex-end'>
@@ -32,7 +32,7 @@ const EditMediaPrimary = ({ action, mediaIndex, formMediaItem, stagedMedia, onCh
             checked={shouldBeChecked}
             disabled={isDisabled}
             name='isPrimary'
-            onChange={onChange}
+            onChange={onPrimaryChange}
           />
         }
         label={

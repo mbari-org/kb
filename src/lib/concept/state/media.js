@@ -7,7 +7,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const addMedia = (state, update) => {
-  const isPrimaryMedia = isPrimary(update.mediaItem)
+  const isPrimaryMedia = state.media.length === 0 || isPrimary(update.mediaItem)
   const mediaIndex = state.media.length
   const mediaItem = {
     ...update.mediaItem,
