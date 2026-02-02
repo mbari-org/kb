@@ -12,7 +12,8 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useDebounce from '@/lib/hooks/useDebounce'
-import { checkImageUrlExists, isUrlValid } from '@/lib/utils'
+import { checkMediaUrlExists } from '@/lib/model/media'
+import { isUrlValid } from '@/lib/utils'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const URL_CHECK_DEBOUNCE_TIME = 500
@@ -50,7 +51,7 @@ const EditMediaUrl = ({
       const loadingStatus = { loading: true, valid: true, isDuplicate: false }
       onUrlStatusChange(loadingStatus)
 
-      checkImageUrlExists(urlValue).then(exists => {
+      checkMediaUrlExists(urlValue).then(exists => {
         const finalStatus = { loading: false, valid: exists, isDuplicate: false }
         onUrlStatusChange(finalStatus)
       })

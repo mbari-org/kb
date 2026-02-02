@@ -7,15 +7,6 @@ const capitalize = string => {
   return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
-const checkImageUrlExists = url => {
-  return new Promise(resolve => {
-    const img = new Image()
-    img.onload = () => resolve(true)
-    img.onerror = () => resolve(false)
-    img.src = url
-  })
-}
-
 const drop = (object, fields) => {
   if (Array.isArray(object)) return dropElements(object, fields)
   if (typeof object === 'object') return dropFields(object, fields)
@@ -238,7 +229,6 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 export {
   after,
   capitalize,
-  checkImageUrlExists,
   conceptNameForFilename,
   deepDiff,
   diff,
