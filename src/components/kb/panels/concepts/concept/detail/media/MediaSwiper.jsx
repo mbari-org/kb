@@ -18,7 +18,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { MEDIA_ITEM } = CONCEPT_STATE
 
-const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
+const MediaSwiper = ({ height, showControls = false, showNavigation = false, slidesPerView = 3 }) => {
   const { stagedState, modifyConcept } = use(ConceptContext)
   const swiperRef = useRef(null)
   const isProgrammaticChange = useRef(false)
@@ -72,10 +72,14 @@ const MediaSwiper = ({ height, slidesPerView = 3, showNavigation = false }) => {
         height,
         overflow: 'hidden',
       }}
-    >
+      >
       {editingMedia.map((mediaItem, mediaIndex) => (
         <SwiperSlide key={`concept-media-slide-${mediaIndex}`}>
-          <MediaSwiperSlide mediaIndex={mediaIndex} mediaItem={mediaItem} />
+          <MediaSwiperSlide
+            mediaIndex={mediaIndex}
+            mediaItem={mediaItem}
+            showControls={showControls}
+          />
         </SwiperSlide>
       ))}
     </Swiper>

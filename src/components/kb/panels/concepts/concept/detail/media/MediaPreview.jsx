@@ -58,6 +58,7 @@ const MediaPreview = ({ setPreviewOn }) => {
             }}
           />
         )
+
       case ICON:
         return (
           <img
@@ -78,6 +79,7 @@ const MediaPreview = ({ setPreviewOn }) => {
             }}
           />
         )
+
       case IMAGE:
       default:
         return (

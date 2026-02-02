@@ -11,7 +11,7 @@ import { stagedBorder } from '@/lib/concept/state/staged'
 import { PENDING } from '@/lib/constants/pending.js'
 import { getMediaType, IMAGE, ICON, VIDEO } from '@/lib/model/media'
 
-const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
+const MediaSwiperSlide = ({ mediaIndex, mediaItem, showControls = false }) => {
   const theme = useTheme()
 
   const { pending } = use(ConceptContext)
@@ -41,6 +41,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
       case VIDEO:
         return (
           <video
+            controls={showControls}
             onClick={() => slideClick(mediaIndex)}
             src={mediaUrl}
             style={{ border, height: 'auto', width: '100%' }}

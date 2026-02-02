@@ -22,6 +22,19 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
     if (!mediaUrl) return null
 
     switch (mediaType) {
+      case VIDEO:
+        return (
+          <video
+            controls
+            src={mediaUrl}
+            style={{
+              height: '100%',
+              objectFit: 'contain',
+              width: '100%',
+            }}
+          />
+        )
+
       case ICON:
         return (
           <img
@@ -46,19 +59,6 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
             style={{
               height: '100%',
               objectFit: 'cover',
-              width: '100%',
-            }}
-          />
-        )
-
-      case VIDEO:
-        return (
-          <video
-            controls
-            src={mediaUrl}
-            style={{
-              height: '100%',
-              objectFit: 'contain',
               width: '100%',
             }}
           />
@@ -106,7 +106,12 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
               margin: 0,
             }}
           >
-            <MediaSwiper height='100%' showNavigation={true} slidesPerView={1} />
+            <MediaSwiper
+              height='100%'
+              showNavigation={true}
+              slidesPerView={1}
+              showControls={true}
+            />
           </Box>
         )}
       </Box>
