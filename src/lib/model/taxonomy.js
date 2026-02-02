@@ -9,16 +9,16 @@ import {
 
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 
+import { CONCEPT } from '@/lib/constants'
 import { createError } from '@/lib/errors'
 import { orderedAliases } from '@/lib/model/aliases'
 import { filterRanks } from '@/lib/model/rank'
 import { sortRealizations } from '@/lib/model/realization'
-import { CONCEPT } from '@/lib/constants'
 
 import { addedConcepts } from './concept'
 
 import { treeItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
-import { normalizeMediaItem } from '@/lib/model/media'
+import { typeMediaItem } from '@/lib/model/media'
 
 const buildTree = taxonomy => {
   const treeItems = concept => {
@@ -359,7 +359,7 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
 const insertConcept = (concept, conceptMap, aliasMap) => {
   // Normalize media items to ensure canonical mediaType on read
   if (Array.isArray(concept.media)) {
-    concept.media = concept.media.map(normalizeMediaItem)
+    concept.media = concept.media.map(typeMediaItem)
   }
 
   conceptMap[concept.name] = concept
@@ -503,3 +503,4 @@ export {
   refreshTaxonomyConcept,
   removeTaxonomyConcept,
 }
+

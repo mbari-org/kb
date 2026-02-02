@@ -45,12 +45,14 @@ const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
   const GroupBody = () => {
     return (
       <Box>
-        {stagedItems.map((stagedItem, index) => {
+        {stagedItems.map((stagedItem, i) => {
+          const itemIndex =
+            typeof stagedItem.index === 'number' ? stagedItem.index : i
           return (
             <StagedGroupItem
-              key={`${group}-item-${index}`}
-              initialItem={items.initial?.[index]}
-              resetting={itemsResetting[index]}
+              key={`${group}-item-${itemIndex}`}
+              initialItem={items.initial?.[itemIndex]}
+              resetting={itemsResetting[itemIndex]}
               stagedItem={stagedItem}
             />
           )

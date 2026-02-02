@@ -1,43 +1,56 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { MEDIA_TYPES, getItemMediaType, isPrimary, normalizeMediaItem } from '@/lib/model/media'
+import { MEDIA_TYPES, getItemMediaType, isPrimary, typeMediaItem } from '@/lib/model/media'
+
+const ensurePrimaryInvariant = (media, mediaItem) => {
+  if (!mediaItem.isPrimary) return null
+
+  const mediaType = getItemMediaType(mediaItem)
+  if (!mediaType) return null
+
+  const otherPrimary = media.find(
+    item =>
+      getItemMediaType(item) === mediaType &&
+      item !== mediaItem
+  ) || null
+
+  if (!otherPrimary) return null
+
+  return media.map(item =>
+    item === otherPrimary ? { ...item, isPrimary: false } : item
+  )
+}
 
 const applyMedia = (concept, tracker) => {
-  const addMedia = media => {
-    const next = normalizeMediaItem(media)
+  const addMedia = mediaItem => {
+    const addedMediaItem = typeMediaItem(mediaItem)
 
     // If the new media is primary, clear primary on other items of the same type
     let baseMedia = concept.media
-    if (next.isPrimary) {
-      const type = getItemMediaType(next)
-      if (type) {
-        baseMedia = baseMedia.map(m =>
-          getItemMediaType(m) === type ? { ...m, isPrimary: false } : m
-        )
-      }
+    const updatedMedia = ensurePrimaryInvariant(baseMedia, addedMediaItem)
+    if (updatedMedia) {
+      baseMedia = updatedMedia
     }
-
-    concept.media = [...baseMedia, next]
+    concept.media = [...baseMedia, addedMediaItem]
   }
 
   const deleteMedia = id => {
     concept.media = concept.media.filter(m => m.id !== id)
   }
 
-  const editMedia = (id, updates) => {
+  const editMedia = (id, itemUpdates) => {
     const index = concept.media.findIndex(m => m.id === id)
     if (index >= 0) {
       const current = concept.media[index]
-      const next = normalizeMediaItem({ ...current, ...updates })
+      const updatedItem = typeMediaItem({ ...current, ...itemUpdates })
 
-      let updatedMedia = [...concept.media]
-      updatedMedia.splice(index, 1, next)
+      let updatedMedia = concept.media.toSpliced(index, 1, updatedItem)
 
       // If this edit makes an item primary, clear primary on other items of the same type
-      if (updates && updates.isPrimary) {
-        const type = getItemMediaType(next)
+      if (itemUpdates?.isPrimary) {
+        const type = getItemMediaType(updatedItem)
         if (type) {
-          updatedMedia = updatedMedia.map(m =>
-            m.id !== id && getItemMediaType(m) === type ? { ...m, isPrimary: false } : m
+          updatedMedia = updatedMedia.map(mediaItem =>
+            mediaItem.id !== id && getItemMediaType(mediaItem) === type ? { ...mediaItem, isPrimary: false } : mediaItem
           )
         }
       }
@@ -72,15 +85,15 @@ const applyMedia = (concept, tracker) => {
     }
 
     case CONCEPT_STATE.MEDIA_ITEM.EDIT: {
-      const [id, updates] = tracker.params
-      editMedia(id, updates)
+      const [id, itemUpdates] = tracker.params
+      editMedia(id, itemUpdates)
       break
     }
     default:
       break
   }
 
-  // After applying this tracker, ensure media are ordered so primaries come first
+  // After applying this tracker, ensure media are ordered so primary of each type comes first
   if (concept.media.length > 0) {
     const media = concept.media
     const mediaKey = item => item.id ?? `${item.url}|${getItemMediaType(item) ?? 'UNKNOWN'}`

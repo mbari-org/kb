@@ -103,14 +103,7 @@ const getPrimaryOfType = (media, type) => mediaOfType(media, type).find(isPrimar
 
 const hasPrimaryOfType = (media, type) => !!getPrimaryOfType(media, type)
 
-// A media item is primary only if its explicit isPrimary flag is true.
 const isPrimary = mediaItem => !!mediaItem.isPrimary
-
-// Normalize a raw media item by attaching a canonical mediaType.
-const normalizeMediaItem = item => ({
-  ...item,
-  mediaType: getItemMediaType(item),
-})
 
 const mediaItemEdits = ({ initial, staged }) =>
   stagedEdits({
@@ -122,23 +115,28 @@ const mediaItemEdits = ({ initial, staged }) =>
 
 const mediaItemFields = mediaItem => displayItem(mediaItem, MEDIA_DISPLAY_FIELDS)
 
+const typeMediaItem = mediaItem => ({
+  ...mediaItem,
+  mediaType: getItemMediaType(mediaItem),
+})
+
 export {
   checkMediaUrlExists,
   deriveMediaType,
-  getMediaType,
   getItemMediaType,
-  normalizeMediaItem,
+  getMediaType,
   getPrimary,
-  hasPrimary,
-  isPrimary,
-  mediaOfType,
   getPrimaryOfType,
+  hasPrimary,
   hasPrimaryOfType,
-  MEDIA_TYPES,
-  IMAGE,
   ICON,
-  VIDEO,
+  IMAGE,
+  isPrimary,
+  MEDIA_TYPES,
   mediaItemEdits,
   mediaItemFields,
+  mediaOfType,
+  typeMediaItem,
+  VIDEO,
 }
 

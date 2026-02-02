@@ -9,7 +9,9 @@ import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 const addMedia = (state, update) => {
   const mediaType = getMediaType(update.mediaItem.url)
   const sameTypeMedia = mediaOfType(state.media, mediaType)
-  const isPrimaryMedia = sameTypeMedia.length === 0 || isPrimary(update.mediaItem)
+  const isPrimaryMedia = mediaType
+    ? sameTypeMedia.length === 0 || isPrimary(update.mediaItem)
+    : isPrimary(update.mediaItem)
   const mediaIndex = state.media.length
   const mediaItem = {
     ...update.mediaItem,

@@ -15,7 +15,7 @@ import { getVersion, isDirty } from '@/version'
 const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'caption' }) => {
   const { showBoundary } = useErrorBoundary()
   const theme = useTheme()
-  const { isDev } = use(ConfigContext)
+  const { IS_DEV } = use(ConfigContext)
 
   const [isRefreshing, setIsRefreshing] = useState(false)
 
@@ -25,7 +25,7 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
   const devTooltip = useVersionTooltip()
 
   const handleRefreshVersion = async () => {
-    if (!isDev || isRefreshing) return
+    if (!IS_DEV || isRefreshing) return
 
     setIsRefreshing(true)
     try {
@@ -73,12 +73,12 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
         sx={{
           color: dirtyColor,
           '&:hover .refresh-button': {
-            opacity: isDev ? 1 : 0,
+            opacity: IS_DEV ? 1 : 0,
           },
         }}
       >
         <Typography variant={variant}>v{version}</Typography>
-        {isDev && (
+        {IS_DEV && (
           <IconButton
             className='refresh-button'
             size='small'
@@ -103,7 +103,7 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
 
   const content = renderContent()
 
-  if (isDev || display === 'icon') {
+  if (IS_DEV || display === 'icon') {
     return (
       <KBTooltip title={devTooltip} arrow placement='top'>
         <Box component='span'>{content}</Box>
