@@ -29,7 +29,17 @@ const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia 
     const isEditingSoloMediaOfType =
       action === CONCEPT_STATE.MEDIA_ITEM.EDIT && sameTypeMedia.length === 1
 
-    if (isAddingInitialMediaOfType || isEditingSoloMediaOfType) {
+    // For EDITs, determine if this media item was primary before any edits in the form.
+    const originalItem =
+      action === CONCEPT_STATE.MEDIA_ITEM.EDIT
+        ? stagedMedia.find(item => item.id && item.id === formMediaItem.id)
+        : null
+    const wasInitiallyPrimary = !!originalItem?.isPrimary
+
+    const isEditingInitiallyPrimaryOfType =
+      action === CONCEPT_STATE.MEDIA_ITEM.EDIT && wasInitiallyPrimary
+
+    if (isAddingInitialMediaOfType || isEditingSoloMediaOfType || isEditingInitiallyPrimaryOfType) {
       return { isDisabled: true, shouldBeChecked: true }
     }
 

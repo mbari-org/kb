@@ -1,7 +1,7 @@
 import { isJsonEqual, pick } from '@/lib/utils'
 
 const mediaItemFields = mediaItem =>
-  pick(mediaItem, ['id', 'caption', 'credit', 'isPrimary', 'url'])
+  pick(mediaItem, ['id', 'caption', 'credit', 'isPrimary', 'mediaType', 'url'])
 const mediaItemsEqual = (a, b) => isJsonEqual(mediaItemFields(a), mediaItemFields(b))
 
 const EMPTY_MEDIA_ITEM = {

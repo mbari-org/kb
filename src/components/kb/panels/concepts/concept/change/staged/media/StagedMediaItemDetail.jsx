@@ -27,11 +27,15 @@ const StagedMediaItemDetail = ({ initialMediaItem, stagedMediaItem }) => {
         break
 
       case MEDIA_ITEM.EDIT:
-        fieldValues = Object.entries(updates).map(([field, value]) => {
-          if (initialMediaItem[field] !== value) {
-            return [field, formatDelta(initialMediaItem[field], value)]
-          }
-        })
+        fieldValues = Object.entries(updates)
+          .map(([field, value]) => {
+            if (!initialMediaItem) return [field, formatDelta(undefined, value)]
+            if (initialMediaItem[field] !== value) {
+              return [field, formatDelta(initialMediaItem[field], value)]
+            }
+            return null
+          })
+          .filter(Boolean)
         break
     }
     return fieldValues
