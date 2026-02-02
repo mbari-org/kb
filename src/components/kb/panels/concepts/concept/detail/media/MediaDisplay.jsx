@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import MediaSwiper from './MediaSwiper'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import { getMediaType, MEDIA_TYPES } from '@/lib/model/media'
+import { getMediaType, ICON, IMAGE, VIDEO } from '@/lib/model/media'
 
 const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()
@@ -22,7 +22,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
     if (!mediaUrl) return null
 
     switch (mediaType) {
-      case MEDIA_TYPES.ICON:
+      case ICON:
         return (
           <img
             alt='Concept Media Icon Display'
@@ -36,7 +36,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
           />
         )
 
-      case MEDIA_TYPES.IMAGE:
+      case IMAGE:
       default:
         return (
           <img
@@ -51,7 +51,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
           />
         )
 
-      case MEDIA_TYPES.VIDEO:
+      case VIDEO:
         return (
           <video
             controls

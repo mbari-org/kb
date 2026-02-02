@@ -1,4 +1,4 @@
-import { getPrimary, isPrimary } from '@/lib/model/media'
+import { getMediaType, getPrimaryOfType, isPrimary, mediaOfType, MEDIA_TYPES } from '@/lib/model/media'
 
 import { stagedEdits } from '@/lib/concept/state/staged'
 
@@ -7,7 +7,9 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const addMedia = (state, update) => {
-  const isPrimaryMedia = state.media.length === 0 || isPrimary(update.mediaItem)
+  const mediaType = getMediaType(update.mediaItem.url)
+  const sameTypeMedia = mediaOfType(state.media, mediaType)
+  const isPrimaryMedia = sameTypeMedia.length === 0 || isPrimary(update.mediaItem)
   const mediaIndex = state.media.length
   const mediaItem = {
     ...update.mediaItem,
@@ -77,9 +79,21 @@ const mediaItemState = (mediaItem, pendingMedia) => {
 
 const mediaState = (concept, pendingConcept) => {
   const { media } = concept
-  const primaryMedia = getPrimary(media)
-  const otherMedia = media.filter(mediaItem => mediaItem.url !== primaryMedia?.url)
-  const orderedMedia = primaryMedia ? [primaryMedia, ...otherMedia] : otherMedia
+
+  // Order media by type and primary status based on MEDIA_TYPES ordering.
+  // For each type in MEDIA_TYPES: primary of that type first (if any), then others of that type.
+  const orderedByType = MEDIA_TYPES.reduce((acc, type) => {
+    const ofType = mediaOfType(media, type)
+    if (ofType.length === 0) return acc
+
+    const primaryOfType = getPrimaryOfType(ofType, type)
+    const othersOfType = ofType.filter(item => item.url !== primaryOfType?.url)
+
+    if (primaryOfType) acc.push(primaryOfType)
+    return acc.concat(othersOfType)
+  }, [])
+
+  const orderedMedia = orderedByType
 
   const pendingMedia = pendingConcept.filter(isPendingMedia)
 

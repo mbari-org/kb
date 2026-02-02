@@ -9,7 +9,7 @@ import { isPendingMedia } from '@/lib/concept/state/media'
 import { stagedBorder } from '@/lib/concept/state/staged'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import { getMediaType, MEDIA_TYPES } from '@/lib/model/media'
+import { getMediaType, IMAGE, ICON, VIDEO } from '@/lib/model/media'
 
 const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
   const theme = useTheme()
@@ -38,7 +38,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
     if (!mediaUrl) return null
 
     switch (mediaType) {
-      case MEDIA_TYPES.VIDEO:
+      case VIDEO:
         return (
           <video
             onClick={() => slideClick(mediaIndex)}
@@ -46,7 +46,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
             style={{ border, height: 'auto', width: '100%' }}
           />
         )
-      case MEDIA_TYPES.ICON:
+      case ICON:
         return (
           <img
             onClick={() => slideClick(mediaIndex)}
@@ -54,7 +54,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem }) => {
             style={{ border, height: 'auto', width: '50%' }}
           />
         )
-      case MEDIA_TYPES.IMAGE:
+      case IMAGE:
       default:
         return (
           <img

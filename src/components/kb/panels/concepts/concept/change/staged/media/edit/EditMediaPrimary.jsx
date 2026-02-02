@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@mui/material'
 
-import { hasPrimary } from '@/lib/model/media'
+import { getMediaType, hasPrimaryOfType, mediaOfType } from '@/lib/model/media'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/text'
 
@@ -14,15 +14,21 @@ const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia }) => {
   const { isDisabled, shouldBeChecked } = useMemo(() => {
-    const isAddingInitialMedia = action === CONCEPT_STATE.MEDIA_ITEM.ADD && !hasPrimary(stagedMedia)
-    const isEditingSoloMedia = action === CONCEPT_STATE.MEDIA_ITEM.EDIT && stagedMedia.length === 1
+    const mediaType = getMediaType(formMediaItem.url)
+    const sameTypeMedia = mediaOfType(stagedMedia, mediaType)
+    const hasPrimaryForType = hasPrimaryOfType(sameTypeMedia, mediaType)
 
-    if (isAddingInitialMedia || isEditingSoloMedia) {
+    const isAddingInitialMediaOfType =
+      action === CONCEPT_STATE.MEDIA_ITEM.ADD && !hasPrimaryForType
+    const isEditingSoloMediaOfType =
+      action === CONCEPT_STATE.MEDIA_ITEM.EDIT && sameTypeMedia.length === 1
+
+    if (isAddingInitialMediaOfType || isEditingSoloMediaOfType) {
       return { isDisabled: true, shouldBeChecked: true }
     }
 
     return { isDisabled: false, shouldBeChecked: formMediaItem.isPrimary }
-  }, [action, formMediaItem.isPrimary, stagedMedia])
+  }, [action, formMediaItem.isPrimary, formMediaItem.url, stagedMedia])
 
   return (
     <Box display='flex' justifyContent='flex-end'>
