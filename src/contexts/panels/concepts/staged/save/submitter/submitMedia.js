@@ -89,23 +89,6 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
 
   const stagedMedia = updatedValue(CONCEPT.FIELD.MEDIA)
 
-  // Is some staged edit assuming primary media status?
-  const stagedNewPrimaryMedia = stagedMedia.find(
-    item =>
-      (item.action === CONCEPT_STATE.MEDIA_ITEM.ADD ||
-        item.action === CONCEPT_STATE.MEDIA_ITEM.EDIT) &&
-      item.isPrimary
-  )
-
-  // If so, force the current staged primary media to be an EDIT (which it may already be) and set isPrimary false
-  if (stagedNewPrimaryMedia) {
-    const currentStagedPrimaryMedia = stagedMedia.find(
-      item => item.isPrimary && item !== stagedNewPrimaryMedia
-    )
-    currentStagedPrimaryMedia.action = CONCEPT_STATE.MEDIA_ITEM.EDIT
-    currentStagedPrimaryMedia.isPrimary = false
-  }
-
   const submitters = stagedMedia.reduce((acc, update, index) => {
     const submitter = actionSubmitter[update.action]
     if (!submitter) return acc
