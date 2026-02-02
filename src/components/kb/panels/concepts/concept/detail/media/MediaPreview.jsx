@@ -10,6 +10,7 @@ import { isPendingMedia } from '@/lib/concept/state/media'
 import { stagedBorder } from '@/lib/concept/state/staged'
 
 import { PENDING } from '@/lib/constants/pending.js'
+import { getMediaType, MEDIA_TYPES } from '@/lib/model/media'
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
@@ -22,6 +23,9 @@ const MediaPreview = ({ setPreviewOn }) => {
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
+  const mediaUrl = mediaItem?.url
+  const mediaType = mediaUrl ? getMediaType(mediaUrl) : null
+
   const pendingMedia = pendingConcept.filter(isPendingMedia)
   const border = stagedBorder({
     itemPending: pendingMedia,
@@ -30,6 +34,73 @@ const MediaPreview = ({ setPreviewOn }) => {
     theme,
     width: '3px',
   })
+
+  const renderMedia = () => {
+    if (!mediaUrl) return null
+
+    switch (mediaType) {
+      case MEDIA_TYPES.VIDEO:
+        return (
+          <video
+            onClick={() => setPreviewOn(true)}
+            src={mediaUrl}
+            style={{
+              height: '100%',
+              left: '50%',
+              maxHeight: '100%',
+              maxWidth: '100%',
+              objectFit: 'contain',
+              objectPosition: 'center',
+              position: 'absolute',
+              top: '50%',
+              width: '100%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        )
+      case MEDIA_TYPES.ICON:
+        return (
+          <img
+            alt={'Unable to display Media Icon! Check console for URL.'}
+            onClick={() => setPreviewOn(true)}
+            src={mediaUrl}
+            style={{
+              height: '50%',
+              left: '50%',
+              maxHeight: '100%',
+              maxWidth: '100%',
+              objectFit: 'contain',
+              objectPosition: 'center',
+              position: 'absolute',
+              top: '50%',
+              width: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        )
+      case MEDIA_TYPES.IMAGE:
+      default:
+        return (
+          <img
+            alt={'Unable to display Media! Check console for URL.'}
+            onClick={() => setPreviewOn(true)}
+            src={mediaUrl}
+            style={{
+              height: '100%',
+              left: '50%',
+              maxHeight: '100%',
+              maxWidth: '100%',
+              objectFit: 'contain',
+              objectPosition: 'center',
+              position: 'absolute',
+              top: '50%',
+              width: '100%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        )
+    }
+  }
 
   return (
     <Stack>
@@ -43,23 +114,7 @@ const MediaPreview = ({ setPreviewOn }) => {
           width: '100%',
         }}
       >
-        <img
-          alt={'Unable to display Media! Check console for URL.'}
-          onClick={() => setPreviewOn(true)}
-          src={mediaItem?.url}
-          style={{
-            height: '100%',
-            left: '50%',
-            maxHeight: '100%',
-            maxWidth: '100%',
-            objectFit: 'contain',
-            objectPosition: 'center',
-            position: 'absolute',
-            top: '50%',
-            width: '100%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
+        {renderMedia()}
       </Box>
       <Box
         sx={{

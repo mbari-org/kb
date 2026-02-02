@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import MediaSwiper from './MediaSwiper'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import { getMediaType, MEDIA_TYPES } from '@/lib/model/media'
 
 const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()
@@ -14,7 +15,56 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   } = use(ConceptContext)
   const mediaItem = media[mediaIndex]
 
-  const imageUrl = url || mediaItem?.url
+  const mediaUrl = url || mediaItem?.url
+  const mediaType = mediaUrl ? getMediaType(mediaUrl) : null
+
+  const renderMedia = () => {
+    if (!mediaUrl) return null
+
+    switch (mediaType) {
+      case MEDIA_TYPES.ICON:
+        return (
+          <img
+            alt='Concept Media Icon Display'
+            onClick={() => setPreviewOn(false)}
+            src={mediaUrl}
+            style={{
+              height: '50%',
+              objectFit: 'contain',
+              width: '50%',
+            }}
+          />
+        )
+
+      case MEDIA_TYPES.IMAGE:
+      default:
+        return (
+          <img
+            alt='Concept Media Display'
+            onClick={() => setPreviewOn(false)}
+            src={mediaUrl}
+            style={{
+              height: '100%',
+              objectFit: 'cover',
+              width: '100%',
+            }}
+          />
+        )
+
+      case MEDIA_TYPES.VIDEO:
+        return (
+          <video
+            controls
+            src={mediaUrl}
+            style={{
+              height: '100%',
+              objectFit: 'contain',
+              width: '100%',
+            }}
+          />
+        )
+    }
+  }
 
   return (
     <Dialog fullScreen open={previewOn} slotProps={{ backdrop: { TransitionComponent: Zoom } }}>
@@ -43,18 +93,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
           width: '100%',
         }}
       >
-        {url && (
-          <img
-            alt='Concept Media Display'
-            onClick={() => setPreviewOn(false)}
-            src={imageUrl}
-            style={{
-              height: '100%',
-              objectFit: 'cover',
-              width: '100%',
-            }}
-          />
-        )}
+        {url && renderMedia()}
         {!url && (
           <Box
             sx={{
