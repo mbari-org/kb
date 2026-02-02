@@ -4,7 +4,8 @@ import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import { createError } from '@/lib/errors'
-import { pick } from '@/lib/utils'
+import { drop, pick } from '@/lib/utils'
+import { getMediaType } from '@/lib/model/media'
 
 const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
@@ -41,7 +42,15 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     update.id || initialValue(CONCEPT.FIELD.MEDIA)?.[index]?.id
 
   const mediaAdd = (update, index) => {
-    const mediaItem = pick(update, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
+    const mediaType = update.mediaType || getMediaType(update.url)
+    const updateWithType = { ...update, mediaType }
+
+    // Build media item payload, omitting mediaType entirely if it is null/undefined
+    let mediaItem = pick(updateWithType, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
+    if (mediaItem.mediaType == null) {
+      mediaItem = drop(mediaItem, 'mediaType')
+    }
+
     const params = {
       conceptName: concept.name,
       ...mediaItem,
@@ -50,14 +59,22 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
       action: CONCEPT_STATE.MEDIA_ITEM.ADD,
       index,
       params,
-      update,
+      update: updateWithType,
     }
     return submitMediaItem(createMediaItem, trackerInfo)
   }
 
   const mediaEdit = (update, index) => {
-    const mediaItem = pick(update, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
-    const mediaId = getMediaId(update, index)
+    const mediaType = update.mediaType || getMediaType(update.url)
+    const updateWithType = { ...update, mediaType }
+
+    // Build media item payload, omitting mediaType entirely if it is null/undefined
+    let mediaItem = pick(updateWithType, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
+    if (mediaItem.mediaType == null) {
+      mediaItem = drop(mediaItem, 'mediaType')
+    }
+
+    const mediaId = getMediaId(updateWithType, index)
 
     const params = [mediaId, mediaItem]
     const trackerInfo = {

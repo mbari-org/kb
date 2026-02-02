@@ -18,6 +18,7 @@ import { CONCEPT } from '@/lib/constants'
 import { addedConcepts } from './concept'
 
 import { treeItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
+import { normalizeMediaItem } from '@/lib/model/media'
 
 const buildTree = taxonomy => {
   const treeItems = concept => {
@@ -356,6 +357,11 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
 }
 
 const insertConcept = (concept, conceptMap, aliasMap) => {
+  // Normalize media items to ensure canonical mediaType on read
+  if (Array.isArray(concept.media)) {
+    concept.media = concept.media.map(normalizeMediaItem)
+  }
+
   conceptMap[concept.name] = concept
   concept.alternateNames.forEach(alternateName => {
     aliasMap[alternateName] = concept

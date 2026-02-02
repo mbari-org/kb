@@ -1,4 +1,4 @@
-import { getMediaType, getPrimaryOfType, isPrimary, mediaOfType, MEDIA_TYPES } from '@/lib/model/media'
+import { getItemMediaType, getMediaType, isPrimary, MEDIA_TYPES, mediaOfType } from '@/lib/model/media'
 
 import { stagedEdits } from '@/lib/concept/state/staged'
 
@@ -80,20 +80,30 @@ const mediaItemState = (mediaItem, pendingMedia) => {
 const mediaState = (concept, pendingConcept) => {
   const { media } = concept
 
-  // Order media by type and primary status based on MEDIA_TYPES ordering.
-  // For each type in MEDIA_TYPES: primary of that type first (if any), then others of that type.
-  const orderedByType = MEDIA_TYPES.reduce((acc, type) => {
-    const ofType = mediaOfType(media, type)
-    if (ofType.length === 0) return acc
+  // Order media so that primaries come first
+  const mediaKey = item => item.id ?? `${item.url}|${getItemMediaType(item) ?? 'UNKNOWN'}`
 
-    const primaryOfType = getPrimaryOfType(ofType, type)
-    const othersOfType = ofType.filter(item => item.url !== primaryOfType?.url)
+  // Collect primary of each known type, in MEDIA_TYPES order
+  const primariesByType = MEDIA_TYPES.map(type =>
+    media.find(item => getItemMediaType(item) === type && isPrimary(item)) || null
+  )
 
-    if (primaryOfType) acc.push(primaryOfType)
-    return acc.concat(othersOfType)
-  }, [])
+  const primaries = []
+  const primaryKeys = new Set()
 
-  const orderedMedia = orderedByType
+  primariesByType.forEach(item => {
+    if (!item) return
+    const key = mediaKey(item)
+    if (!primaryKeys.has(key)) {
+      primaryKeys.add(key)
+      primaries.push(item)
+    }
+  })
+
+  // All other media (including unknown types) follow in the order received.
+  const nonPrimaries = media.filter(item => !primaryKeys.has(mediaKey(item)))
+
+  const orderedMedia = [...primaries, ...nonPrimaries]
 
   const pendingMedia = pendingConcept.filter(isPendingMedia)
 

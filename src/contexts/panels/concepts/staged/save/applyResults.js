@@ -18,18 +18,9 @@ const applyResults = async (updatesContext, updatesInfo) => {
 
   const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
 
-  if (updatesInfo?.hasUpdated(CONCEPT.FIELD.MEDIA)) {
-    const normalizeMedia = media =>
-      (media || []).map(item =>
-        pick(item, ['id', 'url', 'mediaType', 'caption', 'credit', 'isPrimary'])
-      )
-    const stagedMedia = normalizeMedia(updatesInfo.updatedValue(CONCEPT.FIELD.MEDIA))
-    const freshMedia = normalizeMedia(freshConcept.media)
-
-    if (!isJsonEqual(stagedMedia, freshMedia)) {
-      freshConcept.media = staleConcept.media.map(mediaItem => ({ ...mediaItem }))
-    }
-  }
+  // For media, trust the freshly loaded concept from the server.
+  // We no longer override freshConcept.media with staleConcept.media here;
+  // any optimistic adjustments are applied below via applyMedia using tracker results.
 
   freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
   freshConcept.alternateNames = [...staleConcept.alternateNames]

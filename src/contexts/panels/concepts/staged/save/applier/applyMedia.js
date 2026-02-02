@@ -1,8 +1,22 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { MEDIA_TYPES, getItemMediaType, isPrimary, normalizeMediaItem } from '@/lib/model/media'
 
 const applyMedia = (concept, tracker) => {
   const addMedia = media => {
-    concept.media = [...concept.media, media]
+    const next = normalizeMediaItem(media)
+
+    // If the new media is primary, clear primary on other items of the same type
+    let baseMedia = concept.media
+    if (next.isPrimary) {
+      const type = getItemMediaType(next)
+      if (type) {
+        baseMedia = baseMedia.map(m =>
+          getItemMediaType(m) === type ? { ...m, isPrimary: false } : m
+        )
+      }
+    }
+
+    concept.media = [...baseMedia, next]
   }
 
   const deleteMedia = id => {
@@ -12,16 +26,33 @@ const applyMedia = (concept, tracker) => {
   const editMedia = (id, updates) => {
     const index = concept.media.findIndex(m => m.id === id)
     if (index >= 0) {
-      const next = { ...concept.media[index], ...updates }
-      concept.media = concept.media.toSpliced(index, 1, next)
+      const current = concept.media[index]
+      const next = normalizeMediaItem({ ...current, ...updates })
+
+      let updatedMedia = [...concept.media]
+      updatedMedia.splice(index, 1, next)
+
+      // If this edit makes an item primary, clear primary on other items of the same type
+      if (updates && updates.isPrimary) {
+        const type = getItemMediaType(next)
+        if (type) {
+          updatedMedia = updatedMedia.map(m =>
+            m.id !== id && getItemMediaType(m) === type ? { ...m, isPrimary: false } : m
+          )
+        }
+      }
+
+      concept.media = updatedMedia
     }
   }
 
   switch (tracker.action) {
     case CONCEPT_STATE.MEDIA_ITEM.ADD: {
-      const payload = tracker.response?.payload
-      // Use payload if available (has id), otherwise use tracker.update (submitted data)
-      const mediaToAdd = payload?.id ? payload : tracker.update
+      const mediaToAdd = tracker.response
+
+      if (!mediaToAdd) {
+        throw new Error('applyMedia: MEDIA_ITEM.ADD tracker missing API response')
+      }
 
       const alreadyUpdated = mediaToAdd.id
         ? concept.media.some(m => m.id === mediaToAdd.id)
@@ -47,6 +78,32 @@ const applyMedia = (concept, tracker) => {
     }
     default:
       break
+  }
+
+  // After applying this tracker, ensure media are ordered so primaries come first
+  if (concept.media.length > 0) {
+    const media = concept.media
+    const mediaKey = item => item.id ?? `${item.url}|${getItemMediaType(item) ?? 'UNKNOWN'}`
+
+    const primariesByType = MEDIA_TYPES.map(type =>
+      media.find(item => getItemMediaType(item) === type && isPrimary(item)) || null
+    )
+
+    const primaries = []
+    const primaryKeys = new Set()
+
+    primariesByType.forEach(item => {
+      if (!item) return
+      const key = mediaKey(item)
+      if (!primaryKeys.has(key)) {
+        primaryKeys.add(key)
+        primaries.push(item)
+      }
+    })
+
+    const nonPrimaries = media.filter(item => !primaryKeys.has(mediaKey(item)))
+
+    concept.media = [...primaries, ...nonPrimaries]
   }
 }
 
