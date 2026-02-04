@@ -1,7 +1,7 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { MEDIA_TYPES, getItemMediaType, isPrimary, typeMediaItem } from '@/lib/model/media'
+import { getItemMediaType, typeMediaItem } from '@/lib/model/media'
 
-// Ensure the per-type invariant of one and only one item of each type is primary.
+// Ensure per-type invariant that updatedItem is the one and only one primary item of its type
 const ensurePrimaryInvariant = (media, updatedItem) => {
   if (!updatedItem?.isPrimary) return
 

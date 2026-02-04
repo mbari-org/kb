@@ -41,13 +41,13 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const getMediaId = (update, index) =>
     update.id || initialValue(CONCEPT.FIELD.MEDIA)?.[index]?.id
 
-  const buildMediaItemPayload = update => {
-    const mediaType = update.mediaType || getMediaType(update.url)
-    const updateWithType = { ...update, mediaType }
+  const buildMediaItemPayload = (update, { includeMediaType }) => {
+    const mediaType = includeMediaType ? (update.mediaType || getMediaType(update.url)) : undefined
+    const updateWithType = includeMediaType ? { ...update, mediaType } : update
 
-    // Build media item payload, omitting mediaType entirely if it is null/undefined
+    // Build media item payload, omitting mediaType entirely if not requested or null.
     let mediaItem = pick(updateWithType, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
-    if (mediaItem.mediaType == null) {
+    if (!includeMediaType || mediaItem.mediaType == null) {
       mediaItem = drop(mediaItem, 'mediaType')
     }
 
@@ -55,7 +55,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   }
 
   const mediaAdd = (update, index) => {
-    const { mediaItem, updateWithType } = buildMediaItemPayload(update)
+    const { mediaItem, updateWithType } = buildMediaItemPayload(update, { includeMediaType: true })
 
     const params = {
       conceptName: concept.name,
@@ -71,7 +71,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   }
 
   const mediaEdit = (update, index) => {
-    const { mediaItem, updateWithType } = buildMediaItemPayload(update)
+    const { mediaItem, updateWithType } = buildMediaItemPayload(update, { includeMediaType: false })
     const mediaId = getMediaId(updateWithType, index)
 
     const params = [mediaId, mediaItem]

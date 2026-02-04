@@ -41,7 +41,7 @@
   "packageManager": "yarn@4.5.1",
   "scripts": {
     "dev": "vite",
-    "m3:local": "cross-env VITE_M3_LOCAL=true vite",
+    "dev:local": "cross-env VITE_M3_LOCAL=true vite",
     "build": "vite build",
     "kb": "yarn build && yarn preview",
     "lint": "eslint .",
