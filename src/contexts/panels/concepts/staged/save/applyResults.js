@@ -1,7 +1,6 @@
 import { getConcept } from '@/lib/api/concept'
 import { isAdmin } from '@/lib/auth/role'
 import { CONCEPT } from '@/lib/constants'
-import { isJsonEqual, pick } from '@/lib/utils'
 
 import applyAliases from '@/contexts/panels/concepts/staged/save/applier/applyAliases'
 import applyAuthor from '@/contexts/panels/concepts/staged/save/applier/applyAuthor'
@@ -17,10 +16,6 @@ const applyResults = async (updatesContext, updatesInfo) => {
     updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
   const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
-
-  // For media, trust the freshly loaded concept from the server.
-  // We no longer override freshConcept.media with staleConcept.media here;
-  // any optimistic adjustments are applied below via applyMedia using tracker results.
 
   freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
   freshConcept.alternateNames = [...staleConcept.alternateNames]

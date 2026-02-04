@@ -4,8 +4,8 @@ import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import { createError } from '@/lib/errors'
-import { drop, pick } from '@/lib/utils'
 import { getMediaType } from '@/lib/model/media'
+import { drop, pick } from '@/lib/utils'
 
 const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const { hasUpdated, initialValue, updatedValue } = updatesInfo
@@ -27,11 +27,11 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
           'Media Operation Failed',
           `Failed to ${trackerInfo.action} item for concept ${concept.name}`,
           {
+            action: trackerInfo.action,
             conceptName: concept.name,
+            index: trackerInfo.index,
             mediaId: trackerInfo.update.id,
             mediaType: trackerInfo.update.mediaType,
-            action: trackerInfo.action,
-            index: trackerInfo.index,
           },
           error
         ),
@@ -41,7 +41,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   const getMediaId = (update, index) =>
     update.id || initialValue(CONCEPT.FIELD.MEDIA)?.[index]?.id
 
-  const mediaAdd = (update, index) => {
+  const buildMediaItemPayload = update => {
     const mediaType = update.mediaType || getMediaType(update.url)
     const updateWithType = { ...update, mediaType }
 
@@ -50,6 +50,12 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     if (mediaItem.mediaType == null) {
       mediaItem = drop(mediaItem, 'mediaType')
     }
+
+    return { mediaItem, updateWithType }
+  }
+
+  const mediaAdd = (update, index) => {
+    const { mediaItem, updateWithType } = buildMediaItemPayload(update)
 
     const params = {
       conceptName: concept.name,
@@ -65,15 +71,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   }
 
   const mediaEdit = (update, index) => {
-    const mediaType = update.mediaType || getMediaType(update.url)
-    const updateWithType = { ...update, mediaType }
-
-    // Build media item payload, omitting mediaType entirely if it is null/undefined
-    let mediaItem = pick(updateWithType, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
-    if (mediaItem.mediaType == null) {
-      mediaItem = drop(mediaItem, 'mediaType')
-    }
-
+    const { mediaItem, updateWithType } = buildMediaItemPayload(update)
     const mediaId = getMediaId(updateWithType, index)
 
     const params = [mediaId, mediaItem]

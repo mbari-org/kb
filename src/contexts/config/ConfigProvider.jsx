@@ -11,6 +11,7 @@ import useApiFns from '@/contexts/config/useApiFns'
 import configUrlStore from '@/lib/local/store/configUrl'
 
 const IS_DEV = import.meta.env.DEV
+const USE_M3_LOCAL = import.meta.env.VITE_M3_LOCAL ?? false
 
 const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
@@ -100,7 +101,7 @@ const ConfigProvider = ({ children }) => {
   }, [])
 
   const value = useMemo(
-    () => ({ apiFns, config, IS_DEV, updateConfig }),
+    () => ({ apiFns, config, IS_DEV, USE_M3_LOCAL, updateConfig }),
     [apiFns, config, updateConfig]
   )
 

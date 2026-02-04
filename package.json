@@ -29,6 +29,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
     "@vitejs/plugin-react": "^5.0.4",
+    "cross-env": "^10.1.0",
     "eslint": "^9.37.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.0",
@@ -40,6 +41,7 @@
   "packageManager": "yarn@4.5.1",
   "scripts": {
     "dev": "vite",
+    "m3:local": "cross-env VITE_M3_LOCAL=true vite",
     "build": "vite build",
     "kb": "yarn build && yarn preview",
     "lint": "eslint .",
