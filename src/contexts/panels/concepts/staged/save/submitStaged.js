@@ -25,7 +25,8 @@ const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
   submitters.push(...submitRank(submitterInfo))
   submitters.push(...submitRealizations(submitterInfo))
 
-  updatesInfo.results = await Promise.all(submitters)
+  const resultGroups = await Promise.all(submitters)
+  updatesInfo.results = resultGroups.flat()
 
   const failedResults = updatesInfo.results.filter(result => result.error)
   if (failedResults.length > 0) {

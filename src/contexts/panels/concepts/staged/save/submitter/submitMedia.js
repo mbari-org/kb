@@ -45,7 +45,6 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     const mediaType = includeMediaType ? (update.mediaType || getMediaType(update.url)) : undefined
     const updateWithType = includeMediaType ? { ...update, mediaType } : update
 
-    // Build media item payload, omitting mediaType entirely if not requested or null.
     let mediaItem = pick(updateWithType, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
     if (!includeMediaType || mediaItem.mediaType == null) {
       mediaItem = drop(mediaItem, ['mediaType'])
@@ -102,16 +101,24 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     [CONCEPT_STATE.MEDIA_ITEM.DELETE]: mediaDelete,
   }
 
-  const stagedMedia = updatedValue(CONCEPT.FIELD.MEDIA)
+  const stagedMedia = updatedValue(CONCEPT.FIELD.MEDIA) || []
 
-  const submitters = stagedMedia.reduce((acc, update, index) => {
-    const submitter = actionSubmitter[update.action]
-    if (!submitter) return acc
-    acc.push(submitter(update, index))
-    return acc
-  }, [])
+  const runSequentially = (async () => {
+    const trackers = []
 
-  return submitters
+    for (let index = 0; index < stagedMedia.length; index += 1) {
+      const update = stagedMedia[index]
+      const submitter = actionSubmitter[update.action]
+      if (!submitter) continue
+
+      const tracker = await submitter(update, index)
+      trackers.push(tracker)
+    }
+
+    return trackers
+  })()
+
+  return [runSequentially]
 }
 
 export default submitMedia
