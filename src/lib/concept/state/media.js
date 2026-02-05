@@ -6,6 +6,32 @@ import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
+const mediaItemKey = item => item.id ?? `${item.url}|${getItemMediaType(item) ?? 'UNKNOWN'}`
+
+const orderMediaByPrimary = media => {
+  // Order media so that primaries of each type come first
+  const primariesByType = MEDIA_TYPES.map(type =>
+    media.find(item => getItemMediaType(item) === type && isPrimary(item)) || null
+  )
+
+  const primaries = []
+  const primaryKeys = new Set()
+
+  primariesByType.forEach(item => {
+    if (!item) return
+    const key = mediaItemKey(item)
+    if (!primaryKeys.has(key)) {
+      primaryKeys.add(key)
+      primaries.push(item)
+    }
+  })
+
+  // All other media (including unknown types) follow in server/staged order.
+  const nonPrimaries = media.filter(item => !primaryKeys.has(mediaItemKey(item)))
+
+  return [...primaries, ...nonPrimaries]
+}
+
 const addMedia = (state, update) => {
   const mediaType = getMediaType(update.mediaItem.url)
   const sameTypeMedia = mediaOfType(state.media, mediaType)
@@ -31,10 +57,14 @@ const addMedia = (state, update) => {
     index: mediaIndex,
   }
 
+  const nextMedia = [...updatedMedia, mediaItem]
+  const orderedMedia = isPrimaryMedia && mediaType ? orderMediaByPrimary(nextMedia) : nextMedia
+  const orderedIndex = orderedMedia.findIndex(item => mediaItemKey(item) === mediaItemKey(mediaItem))
+
   return {
     ...state,
-    media: [...updatedMedia, mediaItem],
-    mediaIndex,
+    media: orderedMedia,
+    mediaIndex: orderedIndex === -1 ? mediaIndex : orderedIndex,
   }
 }
 
@@ -62,7 +92,7 @@ const deleteMedia = (state, update) => {
   )
 
   if (!wasPrimary || !mediaType) {
-    return { ...state, media }
+    return { ...state, media: orderMediaByPrimary(media) }
   }
 
   // Promote first remaining ADD/EDIT media of this type (but not DELETE)
@@ -83,7 +113,7 @@ const deleteMedia = (state, update) => {
     })
   }
 
-  return { ...state, media }
+  return { ...state, media: orderMediaByPrimary(media) }
 }
 
 const editMedia = (state, update) => {
@@ -103,7 +133,7 @@ const editMedia = (state, update) => {
   let media = state.media.map((item, index) => (index === mediaIndex ? updatedItem : item))
 
   if (!mediaType) {
-    return { ...state, media }
+    return { ...state, media: orderMediaByPrimary(media) }
   }
 
   // Case 1: selecting primary true -> demote all other staged items of same type
@@ -119,7 +149,7 @@ const editMedia = (state, update) => {
       return { ...item, isPrimary: false }
     })
 
-    return { ...state, media }
+    return { ...state, media: orderMediaByPrimary(media) }
   }
 
   // Case 2: deselecting primary on an ADD/EDIT that WAS primary
@@ -189,30 +219,7 @@ const mediaItemState = (mediaItem, pendingMedia) => {
 const mediaState = (concept, pendingConcept) => {
   const { media } = concept
 
-  // Order media so that primaries of each type come first
-  const mediaKey = item => item.id ?? `${item.url}|${getItemMediaType(item) ?? 'UNKNOWN'}`
-
-  // Collect primary of each known type, in MEDIA_TYPES order
-  const primariesByType = MEDIA_TYPES.map(type =>
-    media.find(item => getItemMediaType(item) === type && isPrimary(item)) || null
-  )
-
-  const primaries = []
-  const primaryKeys = new Set()
-
-  primariesByType.forEach(item => {
-    if (!item) return
-    const key = mediaKey(item)
-    if (!primaryKeys.has(key)) {
-      primaryKeys.add(key)
-      primaries.push(item)
-    }
-  })
-
-  // All other media (including unknown types) follow in server order.
-  const nonPrimaries = media.filter(item => !primaryKeys.has(mediaKey(item)))
-
-  const orderedMedia = [...primaries, ...nonPrimaries]
+  const orderedMedia = orderMediaByPrimary(media)
 
   const pendingMedia = pendingConcept.filter(isPendingMedia)
 
