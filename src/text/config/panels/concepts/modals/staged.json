@@ -1,7 +1,7 @@
 {
   "DESCRIPTION": "Staged edits",
-  "WARNING": {
-    "LINE_1": "Discarding edits is final.",
-    "LINE_2": "Please confirm you want to discard the indicated edits."
-  }
+  "WARNING": [
+    "Discarding edits is final.",
+    "Please confirm you want to discard the indicated edits."
+  ]
 }

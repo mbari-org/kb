@@ -215,16 +215,17 @@ export const createLockUserContent = () => {
   const LockUserContent = currentModalData => {
     const { user, isLastAdmin } = currentModalData
     const { MESSAGE } = CONFIG.PANELS.USERS.MODALS.LOCK
+    const lastAdminLines = MESSAGE.LOCK_LAST_ADMIN ?? []
+    const lockLines = MESSAGE.LOCK ?? []
 
     if (isLastAdmin) {
       return (
         <Stack spacing={0} sx={{ textAlign: 'center' }}>
-          <Typography variant='body1' color='text.secondary'>
-            {MESSAGE.LOCK_LAST_ADMIN.LINE_1}
-          </Typography>
-          <Typography variant='body1' color='text.secondary'>
-            {MESSAGE.LOCK_LAST_ADMIN.LINE_2}
-          </Typography>
+          {lastAdminLines.map((line, index) => (
+            <Typography key={`${line}-${index}`} variant='body1' color='text.secondary'>
+              {line}
+            </Typography>
+          ))}
         </Stack>
       )
     }
@@ -260,14 +261,11 @@ export const createLockUserContent = () => {
               {MESSAGE.UNLOCK}
             </Typography>
           ) : (
-            <>
-              <Typography variant='body1' color='text.secondary'>
-                {MESSAGE.LOCK.LINE_1}
+            lockLines.map((line, index) => (
+              <Typography key={`${line}-${index}`} variant='body1' color='text.secondary'>
+                {line}
               </Typography>
-              <Typography variant='body1' color='text.secondary'>
-                {MESSAGE.LOCK.LINE_2}
-              </Typography>
-            </>
+            ))
           )}
         </Stack>
       </Stack>

@@ -4,11 +4,7 @@ import CONFIG from '@/text'
 const STAGED = CONFIG.PANELS.CONCEPTS.MODALS.STAGED
 
 const DiscardingAlert = () => (
-  <ActionsAlert
-    line1={STAGED.WARNING.LINE_1}
-    line2={STAGED.WARNING.LINE_2}
-    severity='warning'
-  />
+  <ActionsAlert lines={STAGED.WARNING} severity='warning' />
 )
 
 export default DiscardingAlert

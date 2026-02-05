@@ -221,6 +221,7 @@ export const createDeleteReferenceContent = () => {
   const DeleteReferenceContent = currentModalData => {
     const { reference } = currentModalData
     const { CONTENT, FIELDS } = CONFIG.PANELS.REFERENCES.MODALS.DELETE
+    const warningLines = CONTENT.WARNING ?? []
 
     const fields = [
       { label: FIELDS.CITATION, value: reference.citation },
@@ -241,12 +242,11 @@ export const createDeleteReferenceContent = () => {
           ))}
         </Stack>
         <Stack spacing={0} sx={{ textAlign: 'center' }}>
-          <Typography variant='body1' color='text.secondary'>
-            {CONTENT.WARNING.LINE_1}
-          </Typography>
-          <Typography variant='body1' color='text.secondary'>
-            {CONTENT.WARNING.LINE_2}
-          </Typography>
+          {warningLines.map((line, index) => (
+            <Typography key={`${line}-${index}`} variant='body1' color='text.secondary'>
+              {line}
+            </Typography>
+          ))}
         </Stack>
       </Stack>
     )

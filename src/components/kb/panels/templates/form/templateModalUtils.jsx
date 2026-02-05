@@ -157,6 +157,7 @@ export const createDeleteTemplateContent = () => {
   const DeleteTemplateContent = currentModalData => {
     const { template } = currentModalData
     const { CONTENT, FIELDS } = CONFIG.PANELS.TEMPLATES.MODALS.DELETE
+    const warningLines = CONTENT.WARNING ?? []
 
     const fields = [
       { label: FIELDS.LINK_NAME, value: template.linkName },
@@ -178,12 +179,11 @@ export const createDeleteTemplateContent = () => {
           ))}
         </Stack>
         <Stack sx={{ textAlign: 'center' }}>
-          <Typography variant='body1' color='cancel'>
-            {CONTENT.WARNING.LINE_1}
-          </Typography>
-          <Typography variant='body1' color='cancel'>
-            {CONTENT.WARNING.LINE_2}
-          </Typography>
+          {warningLines.map((line, index) => (
+            <Typography key={`${line}-${index}`} variant='body1' color='cancel'>
+              {line}
+            </Typography>
+          ))}
         </Stack>
       </Stack>
     )

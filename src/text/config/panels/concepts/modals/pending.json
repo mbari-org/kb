@@ -1,7 +1,7 @@
 {
   "DESCRIPTION": "Pending history",
-  "INFO": {
-    "LINE_1": "Pending edit approval is final.",
-    "LINE_2": "Please confirm you want to approve the indicated pending edits."
-  }
+  "INFO": [
+    "Pending edit approval is final.",
+    "Please confirm you want to approve the indicated pending edits."
+  ]
 }
