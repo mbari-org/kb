@@ -48,7 +48,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     // Build media item payload, omitting mediaType entirely if not requested or null.
     let mediaItem = pick(updateWithType, ['caption', 'credit', 'isPrimary', 'mediaType', 'url'])
     if (!includeMediaType || mediaItem.mediaType == null) {
-      mediaItem = drop(mediaItem, 'mediaType')
+      mediaItem = drop(mediaItem, ['mediaType'])
     }
 
     return { mediaItem, updateWithType }

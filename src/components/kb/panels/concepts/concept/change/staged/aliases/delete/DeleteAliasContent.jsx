@@ -21,7 +21,7 @@ const DeleteAliasContent = () => {
       <Box sx={{ ml: 2, mt: 1 }}>
         <Detail
           id='delete-alias-content-detail'
-          detail={drop(aliasItem, 'id')}
+          detail={drop(aliasItem, ['id'])}
         />
       </Box>
     </Box>

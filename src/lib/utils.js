@@ -7,23 +7,19 @@ const capitalize = string => {
   return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
-const drop = (object, fields) => {
-  if (Array.isArray(object)) return dropElements(object, fields)
-  if (typeof object === 'object') return dropFields(object, fields)
-  return object
+const drop = (from, excludeFields) => {
+  if (Array.isArray(from)) return dropElements(from, excludeFields)
+  if (typeof from === 'object') return dropFields(from, excludeFields)
+  throw new Error(`drop expects either an array or object, but got: ${from}`)
 }
 
-const dropElements = (array, elements) => {
-  return array.filter(element => !elements.includes(element))
+const dropElements = (array, excludeElements) => {
+  return array.filter(element => !excludeElements.includes(element))
 }
 
-const dropFields = (object, fields) => {
-  if (object == null) return null
-
-  const fieldsArray = typeof fields === 'string' ? [fields] : fields
-
+const dropFields = (object, excludeFields) => {
   return Object.keys(object).reduce((result, key) => {
-    if (!fieldsArray.includes(key)) {
+    if (!excludeFields.includes(key)) {
       result[key] = object[key]
     }
     return result

@@ -1,4 +1,8 @@
 {
+  "PRIMARY_REASSIGN_MESSAGE": [
+    "Since this the current primary media of this type,",
+    "the server will reassign primary to another media of this same type."
+  ],
   "LABEL": "Delete media",
   "TOOLTIP": "Delete media"
 }
