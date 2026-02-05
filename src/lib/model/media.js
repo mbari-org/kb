@@ -10,9 +10,7 @@ const deriveMediaType = ({ mimeType, url } = {}) => {
 
   if (mime) {
     if (mime.startsWith('image/')) {
-      // Treat icon-like mime types as ICON
       if (mime.includes('icon')) return ICON
-      // Default image mime types to IMAGE
       return IMAGE
     }
     if (mime.startsWith('video/')) {
@@ -20,7 +18,6 @@ const deriveMediaType = ({ mimeType, url } = {}) => {
     }
   }
 
-  // Fallback to URL-based detection
   return getMediaType(url)
 }
 
