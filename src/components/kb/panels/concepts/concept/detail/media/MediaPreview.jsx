@@ -146,7 +146,7 @@ const MediaPreview = ({ setPreviewOn }) => {
               transform: 'translateY(-50%)',
             }}
           >
-            <KBInfoIcon tooltip={mediaItem?.credit} placement='top' size={18} />
+            <KBInfoIcon tooltip={`Credit: ${mediaItem?.credit}`} placement='top' size={18} />
           </Box>
         )}
       </Box>
