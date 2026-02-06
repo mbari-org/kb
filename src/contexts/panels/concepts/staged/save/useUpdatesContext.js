@@ -4,16 +4,16 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
-import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import UserContext from '@/contexts/user/UserContext'
 
 const useUpdatesContext = () => {
-  const { apiFns } = use(ConfigContext)
   const { concept: staleConcept, stagedState } = use(ConceptContext)
+  const { apiFns } = use(ConfigContext)
   const { getReferences, refreshData: refreshPanelData } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
-  const { getPreferences, user } = use(UserContext)
   const { getSettings } = use(SelectedContext)
+  const { getPreferences, user } = use(UserContext)
 
   return {
     apiFns,

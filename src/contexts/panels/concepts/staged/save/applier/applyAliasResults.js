@@ -1,6 +1,6 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const applyAliases = (concept, tracker) => {
+const applyAliasResults = ({ concept, isAdmin, result }) => {
   const addAlias = alias => {
     concept.aliases = [...concept.aliases, alias]
     concept.alternateNames = [...concept.alternateNames, alias.name]
@@ -27,9 +27,9 @@ const applyAliases = (concept, tracker) => {
     }
   }
 
-  switch (tracker.action) {
+  switch (result.action) {
     case CONCEPT_STATE.ALIAS.ADD: {
-      const payload = tracker.response?.payload
+      const payload = result.response?.payload
       payload?.name
         ? addAlias({
             id: payload.id,
@@ -38,22 +38,22 @@ const applyAliases = (concept, tracker) => {
             nameType: payload.nameType,
           })
         : addAlias({
-            author: tracker.update.author,
-            name: tracker.update.name,
-            nameType: tracker.update.nameType,
+            author: result.update.author,
+            name: result.update.name,
+            nameType: result.update.nameType,
           })
       break
     }
 
     case CONCEPT_STATE.ALIAS.DELETE: {
-      if (tracker.isAdmin) {
-        deleteAlias(tracker.params)
+      if (isAdmin) {
+        deleteAlias(result.params)
       }
       break
     }
 
     case CONCEPT_STATE.ALIAS.EDIT: {
-      const [priorName, updates] = tracker.params
+      const [priorName, updates] = result.params
       editAlias(priorName, updates)
       break
     }
@@ -63,4 +63,4 @@ const applyAliases = (concept, tracker) => {
   }
 }
 
-export default applyAliases
+export default applyAliasResults

@@ -1,3 +1,5 @@
+import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+
 import submitAliases from '@/contexts/panels/concepts/staged/save/submitter/submitAliases'
 import submitAuthor from '@/contexts/panels/concepts/staged/save/submitter/submitAuthor'
 import submitChildren from '@/contexts/panels/concepts/staged/save/submitter/submitChildren'
@@ -7,13 +9,14 @@ import submitParent from '@/contexts/panels/concepts/staged/save/submitter/submi
 import submitRank from '@/contexts/panels/concepts/staged/save/submitter/submitRank'
 import submitRealizations from '@/contexts/panels/concepts/staged/save/submitter/submitRealizations'
 
-import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { createError } from '@/lib/errors'
 
-const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
+const submitStaged = async (initialState, stagedState, updatesContext) => {
+  const { apiFns, staleConcept } = updatesContext
+
   const updatesInfo = createUpdatesInfo(initialState, stagedState)
 
-  const submitterInfo = [apiPayload, { concept, updatesInfo }]
+  const submitterInfo = [apiFns.apiPayload, { concept: staleConcept, updatesInfo }]
 
   const submitters = []
   submitters.push(...submitAliases(submitterInfo))
@@ -47,9 +50,9 @@ const submitStaged = async (apiPayload, concept, initialState, stagedState) => {
     const fieldsWithErrors = Object.keys(failuresByField).join(', ')
     throw createError(
       'Concept Save Error',
-      `Failed to save changes to concept ${concept.name} in fields: ${fieldsWithErrors}`,
+      `Failed to save changes to concept ${staleConcept.name} in fields: ${fieldsWithErrors}`,
       {
-        conceptName: concept.name,
+        conceptName: staleConcept.name,
         failedOperations,
         failuresByField,
       },

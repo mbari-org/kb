@@ -4,7 +4,7 @@ const createMediaItem = async (config, mediaItem) => oniPost({ config, path: ['m
 
 const deleteMediaItem = async (config, mediaItemId) => oniDelete({ config, path: ['media', mediaItemId] })
 
-const getMedia = async (config, conceptName) => oniGet({ config, path: ['media', conceptName] })
+const getMedia = async (config, conceptName) => oniGet({ config, path: ['media', 'search', 'concept', conceptName] })
 
 const updateMediaItem = async (config, [mediaItemId, mediaItem]) =>
   oniPut({ config, path: ['media', mediaItemId], data: mediaItem })

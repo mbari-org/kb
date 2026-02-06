@@ -1,14 +1,19 @@
 import { use, useCallback } from 'react'
 
+import { getConcept } from '@/lib/api/concept'
+import { getMedia } from '@/lib/api/media'
+
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import applyRenameSideEffects from '@/contexts/panels/concepts/staged/save/applyRenameSideEffects'
-import applyResults from '@/contexts/panels/concepts/staged/save/applyResults'
+import applyUpdateResults from '@/contexts/panels/concepts/staged/save/applyUpdateResults'
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
+
+import { isAdmin } from '@/lib/auth/role'
 
 import { CONCEPT } from '@/lib/constants'
 
@@ -27,17 +32,31 @@ const useSaveStaged = () => {
   return useCallback(() => {
     return withProcessing(
       async () => {
+        const { apiFns, staleConcept, user } = updatesContext
+
         const updatesInfo = await submitStaged(
-          updatesContext.apiFns.apiPayload,
-          updatesContext.staleConcept,
           initialState,
-          stagedState
+          stagedState,
+          updatesContext
         )
 
-        const freshConcept = await applyResults(updatesContext, updatesInfo)
+        const conceptName =
+          updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
+
+        const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
+
+        await applyUpdateResults({
+          freshConcept,
+          isAdmin: isAdmin(user),
+          staleConcept,
+          updatesInfo })
 
         if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
           await applyRenameSideEffects(updatesContext, updatesInfo)
+        }
+
+        if (updatesInfo.hasUpdated(CONCEPT.FIELD.MEDIA)) {
+          freshConcept.media = await apiFns.apiPayload(getMedia, conceptName)
         }
 
         const { concept: updatedConcept } = await conceptEditsRefresh(

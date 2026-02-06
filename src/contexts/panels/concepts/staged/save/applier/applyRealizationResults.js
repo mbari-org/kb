@@ -1,7 +1,7 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { sortRealizations } from '@/lib/model/realization'
 
-const applyRealizations = (concept, tracker) => {
+const applyRealizationResults = ({ concept, isAdmin, result }) => {
 
   const deleteRealization = id => {
     const updated = concept.realizations.filter(realization => realization.id !== id)
@@ -17,20 +17,20 @@ const applyRealizations = (concept, tracker) => {
     }
   }
 
-  switch (tracker.action) {
+  switch (result.action) {
     case CONCEPT_STATE.REALIZATION.ADD:
       // no-op Server response already includes the realization
       break
 
     case CONCEPT_STATE.REALIZATION.DELETE: {
-      if (tracker.isAdmin) {
-        deleteRealization(tracker.params)
+      if (isAdmin) {
+        deleteRealization(result.params)
       }
       break
     }
 
     case CONCEPT_STATE.REALIZATION.EDIT: {
-      const [id, updates] = tracker.params
+      const [id, updates] = result.params
       editRealization(id, updates)
       break
     }
@@ -39,4 +39,4 @@ const applyRealizations = (concept, tracker) => {
   }
 }
 
-export default applyRealizations
+export default applyRealizationResults
