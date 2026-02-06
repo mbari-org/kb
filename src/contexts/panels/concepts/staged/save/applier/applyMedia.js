@@ -19,59 +19,73 @@ const ensurePrimaryInvariant = (media, updatedItem) => {
   })
 }
 
+const mediaIndex = (concept, id) => concept.media.findIndex(m => m.id === id)
+
+const addMedia = (concept, tracker) => {
+  const mediaItem = tracker.response
+
+  if (!mediaItem) {
+    throw new Error('applyMedia: MEDIA_ITEM.ADD tracker missing API response')
+  }
+
+  const existingIndex = mediaItem.id
+    ? concept.media.findIndex(m => m.id === mediaItem.id)
+    : concept.media.findIndex(m => m.url === mediaItem.url)
+
+  const addedMediaItem = typeMediaItem(mediaItem)
+
+  if (existingIndex !== -1) {
+    const current = concept.media[existingIndex]
+    const updatedItem = typeMediaItem({ ...current, ...mediaItem })
+    concept.media[existingIndex] = updatedItem
+    ensurePrimaryInvariant(concept.media, updatedItem)
+    console.log('addMedia', concept.media)
+    return
+  }
+
+  ensurePrimaryInvariant(concept.media, addedMediaItem)
+  concept.media.push(addedMediaItem)
+  console.log('addMedia', concept.media)
+
+}
+
+const deleteMedia = (concept, tracker) => {
+  if (!tracker.isAdmin) return
+
+  const index = mediaIndex(concept, tracker.params)
+  if (index !== -1) {
+    concept.media.splice(index, 1)
+  }
+  console.log('deleteMedia', concept.media)
+}
+
+const editMedia = (concept, tracker) => {
+  const [id, itemUpdates] = tracker.params
+  const index = mediaIndex(concept, id)
+  if (index !== -1) {
+    const current = concept.media[index]
+    const updatedItem = typeMediaItem({ ...current, ...itemUpdates })
+
+    concept.media[index] = updatedItem
+    ensurePrimaryInvariant(concept.media, updatedItem)
+  }
+  console.log('editMedia', concept.media)
+}
+
 const applyMedia = (concept, tracker) => {
-  const addMedia = mediaItem => {
-    const addedMediaItem = typeMediaItem(mediaItem)
-    ensurePrimaryInvariant(concept.media, addedMediaItem)
-    concept.media.push(addedMediaItem)
-  }
-
-  const deleteMedia = id => {
-    const index = concept.media.findIndex(m => m.id === id)
-    if (index >= 0) {
-      concept.media.splice(index, 1)
-    }
-  }
-
-  const editMedia = (id, itemUpdates) => {
-    const index = concept.media.findIndex(m => m.id === id)
-    if (index >= 0) {
-      const current = concept.media[index]
-      const updatedItem = typeMediaItem({ ...current, ...itemUpdates })
-
-      concept.media[index] = updatedItem
-      ensurePrimaryInvariant(concept.media, updatedItem)
-    }
-  }
-
   switch (tracker.action) {
     case CONCEPT_STATE.MEDIA_ITEM.ADD: {
-      const mediaToAdd = tracker.response
-
-      if (!mediaToAdd) {
-        throw new Error('applyMedia: MEDIA_ITEM.ADD tracker missing API response')
-      }
-
-      const alreadyUpdated = mediaToAdd.id
-        ? concept.media.some(m => m.id === mediaToAdd.id)
-        : concept.media.some(m => m.url === mediaToAdd.url)
-
-      if (!alreadyUpdated) {
-        addMedia(mediaToAdd)
-      }
+      addMedia(concept, tracker)
       break
     }
 
     case CONCEPT_STATE.MEDIA_ITEM.DELETE: {
-      if (tracker.isAdmin) {
-        deleteMedia(tracker.params)
-      }
+      deleteMedia(concept, tracker)
       break
     }
 
     case CONCEPT_STATE.MEDIA_ITEM.EDIT: {
-      const [id, itemUpdates] = tracker.params
-      editMedia(id, itemUpdates)
+      editMedia(concept, tracker)
       break
     }
 

@@ -79,12 +79,11 @@ const EditMediaContent = () => {
         ? updatedMediaItem.url !== EMPTY_MEDIA_ITEM.url
         : stagedState.media[mediaIndex].url !== updatedMediaItem.url
 
-    setModifiedFields(prev => {
-      const updatedModifiedFields = { ...prev, url: fieldIsModified }
-      const modified = Object.values(updatedModifiedFields).some(isModified => isModified)
-      setModalData(prevModal => ({ ...prevModal, mediaItem: updatedMediaItem, modified }))
-      return updatedModifiedFields
-    })
+    const updatedModifiedFields = { ...modifiedFields, url: fieldIsModified }
+    setModifiedFields(updatedModifiedFields)
+
+    const modified = Object.values(updatedModifiedFields).some(isModified => isModified)
+    setModalData(prevModal => ({ ...prevModal, mediaItem: updatedMediaItem, modified }))
   }
 
   const handleChange = event => {

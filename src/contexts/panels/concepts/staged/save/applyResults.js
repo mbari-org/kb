@@ -27,22 +27,18 @@ const applyResults = async (updatesContext, updatesInfo) => {
   }
 
   const appliers = {
-    [CONCEPT.FIELD.ALIASES]: (concept, tracker) => applyAliases(concept, tracker),
-    [CONCEPT.FIELD.AUTHOR]: (concept, tracker) => applyAuthor(concept, tracker),
-    [CONCEPT.FIELD.CHILDREN]: (concept, tracker) => applyChildren(concept, tracker),
-    [CONCEPT.FIELD.MEDIA]: (concept, tracker) => applyMedia(concept, tracker),
-    [CONCEPT.FIELD.PARENT]: (concept, tracker) => applyParent(concept, tracker),
-    [CONCEPT.FIELD.RANK]: (concept, tracker) => applyRank(concept, tracker),
-    [CONCEPT.FIELD.REALIZATIONS]: (concept, tracker) => applyRealizations(concept, tracker),
+    [CONCEPT.FIELD.ALIASES]: applyAliases,
+    [CONCEPT.FIELD.AUTHOR]: applyAuthor,
+    [CONCEPT.FIELD.CHILDREN]: applyChildren,
+    [CONCEPT.FIELD.MEDIA]: applyMedia,
+    [CONCEPT.FIELD.PARENT]: applyParent,
+    [CONCEPT.FIELD.RANK]: applyRank,
+    [CONCEPT.FIELD.REALIZATIONS]: applyRealizations,
   }
 
-  updatesInfo.results.forEach(tracker => {
-    const apply = appliers[tracker.field]
-    if (apply) {
-      const trackerWithRole = { ...tracker, isAdmin: isAdmin(user) }
-      apply(freshConcept, trackerWithRole)
-    }
-  })
+  updatesInfo.results.forEach(tracker =>
+    appliers[tracker.field]?.(freshConcept, { ...tracker, isAdmin: isAdmin(user) })
+  )
 
   return freshConcept
 }
