@@ -1,5 +1,25 @@
+import { getMedia } from '@/lib/api/media'
+import { getConceptLinkRealizations } from '@/lib/api/realizations'
 import { annosaurusGet } from '@/lib/services/annosaurus/methods'
 import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
+
+// The server caches concepts, so we don't "trust" the media and realizations arrays in the fetched concept object,
+// instead we explicitly fetch media and realizations.
+const normalizeConcept = async (apiFns, concept) => {
+  const [freshMedia, freshRealizations] = await Promise.all([
+    apiFns.apiPayload(getMedia, concept.name),
+    apiFns.apiPayload(getConceptLinkRealizations, concept.name),
+  ])
+
+  concept.media = freshMedia
+  concept.realizations = freshRealizations
+
+  if (concept.linkRealizations) {
+    delete concept.linkRealizations
+  }
+
+  return concept
+}
 
 const createConcept = async (config, updates) => oniPost({ config, path: ['concept'], data: updates })
 
@@ -54,6 +74,7 @@ export {
   getConceptParent,
   getConceptPath,
   getConceptTaxa,
+  normalizeConcept,
   updateConceptAuthor,
   updateConceptName,
   updateConceptParent,

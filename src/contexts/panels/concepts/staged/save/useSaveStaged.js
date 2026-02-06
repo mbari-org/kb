@@ -1,7 +1,6 @@
 import { use, useCallback } from 'react'
 
-import { getConcept } from '@/lib/api/concept'
-import { getMedia } from '@/lib/api/media'
+import { getConcept, normalizeConcept } from '@/lib/api/concept'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -44,6 +43,7 @@ const useSaveStaged = () => {
           updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
         const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
+        await normalizeConcept(apiFns, freshConcept)
 
         await applyUpdateResults({
           freshConcept,
@@ -53,10 +53,6 @@ const useSaveStaged = () => {
 
         if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
           await applyRenameSideEffects(updatesContext, updatesInfo)
-        }
-
-        if (updatesInfo.hasUpdated(CONCEPT.FIELD.MEDIA)) {
-          freshConcept.media = await apiFns.apiPayload(getMedia, conceptName)
         }
 
         const { concept: updatedConcept } = await conceptEditsRefresh(

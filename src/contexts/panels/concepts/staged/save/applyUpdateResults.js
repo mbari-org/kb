@@ -5,7 +5,6 @@ import applyAuthorResults from '@/contexts/panels/concepts/staged/save/applier/a
 import applyChildrenResults from '@/contexts/panels/concepts/staged/save/applier/applyChildrenResults'
 import applyParentResults from '@/contexts/panels/concepts/staged/save/applier/applyParentResults'
 import applyRankResults from '@/contexts/panels/concepts/staged/save/applier/applyRankResults'
-import applyRealizationResults from '@/contexts/panels/concepts/staged/save/applier/applyRealizationResults'
 
 const applyUpdateResults = async ({ freshConcept, isAdmin, staleConcept, updatesInfo }) => {
 
@@ -13,10 +12,6 @@ const applyUpdateResults = async ({ freshConcept, isAdmin, staleConcept, updates
   freshConcept.alternateNames = [...staleConcept.alternateNames]
   freshConcept.children = [...staleConcept.children]
   freshConcept.parent = staleConcept.parent
-  if (freshConcept.linkRealizations) {
-    freshConcept.realizations = freshConcept.linkRealizations
-    delete freshConcept.linkRealizations
-  }
 
   const appliers = {
     [CONCEPT.FIELD.ALIASES]: applyAliasResults,
@@ -24,7 +19,6 @@ const applyUpdateResults = async ({ freshConcept, isAdmin, staleConcept, updates
     [CONCEPT.FIELD.CHILDREN]: applyChildrenResults,
     [CONCEPT.FIELD.PARENT]: applyParentResults,
     [CONCEPT.FIELD.RANK]: applyRankResults,
-    [CONCEPT.FIELD.REALIZATIONS]: applyRealizationResults,
   }
 
   updatesInfo.results.forEach(result =>

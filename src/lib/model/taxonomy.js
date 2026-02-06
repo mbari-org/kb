@@ -5,6 +5,7 @@ import {
   getConceptNames as apiConceptNames,
   deleteConcept as apiDelete,
   getConceptParent as apiParent,
+  normalizeConcept,
 } from '@/lib/api/concept'
 
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
@@ -173,6 +174,8 @@ const loadTaxonomy = async apiFns => {
   ])
 
   const rootConcept = await apiFns.apiPayload(apiConcept, root.name)
+  await normalizeConcept(apiFns, rootConcept)
+
   const rootConceptNames = await apiFns.apiPayload(apiConceptNames, rootConcept.name)
   rootConcept.aliases = orderedAliases(rootConceptNames)
 
@@ -208,6 +211,10 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   const concept = taxonomyConcept
     ? { ...taxonomyConcept }
     : await apiFns.apiPayload(apiConcept, conceptName)
+
+  if (!taxonomyConcept) {
+    await normalizeConcept(apiFns, concept)
+  }
 
   if (concept.name !== taxonomy.rootName && !concept.parent) {
     const parent = await apiFns.apiPayload(apiParent, concept.name)
