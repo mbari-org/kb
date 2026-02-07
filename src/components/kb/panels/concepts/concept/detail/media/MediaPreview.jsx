@@ -10,7 +10,10 @@ import { isPendingMedia } from '@/lib/concept/state/media'
 import { stagedBorder } from '@/lib/concept/state/staged'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import { getMediaType, IMAGE, ICON, VIDEO } from '@/lib/model/media'
+import { getMediaType } from '@/lib/model/media'
+import { MEDIA } from '@/lib/constants'
+
+const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()

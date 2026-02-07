@@ -6,7 +6,10 @@ import { useTheme } from '@mui/material/styles'
 import MediaSwiper from './MediaSwiper'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import { getMediaType, ICON, IMAGE, VIDEO } from '@/lib/model/media'
+import { getMediaType } from '@/lib/model/media'
+import { MEDIA } from '@/lib/constants'
+
+const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
 
 const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()

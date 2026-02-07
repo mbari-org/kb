@@ -1,10 +1,10 @@
 import { displayItem, stagedEdits } from '@/lib/concept/state/staged'
-import { MEDIA_DISPLAY_FIELDS, MEDIA_EXTENSIONS, MEDIA_TYPES } from '@/lib/constants'
+import { MEDIA } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const [IMAGE, ICON, VIDEO] = MEDIA_TYPES
+const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
 
-// Derive a canonical media type ('IMAGE', 'ICON', 'VIDEO') from mimeType and/or URL.
+// Derive a canonical media type from mimeType and/or URL.
 const deriveMediaType = ({ mimeType, url } = {}) => {
   const mime = mimeType?.toLowerCase()
 
@@ -28,9 +28,9 @@ const getMediaType = url => {
     if (!match) return null
 
     const extension = match[1]
-    if (MEDIA_EXTENSIONS.ICON.has(extension)) return ICON
-    if (MEDIA_EXTENSIONS.IMAGE.has(extension)) return IMAGE
-    if (MEDIA_EXTENSIONS.VIDEO.has(extension)) return VIDEO
+    if (MEDIA.EXTENSIONS.ICON.has(extension)) return ICON
+    if (MEDIA.EXTENSIONS.IMAGE.has(extension)) return IMAGE
+    if (MEDIA.EXTENSIONS.VIDEO.has(extension)) return VIDEO
 
     return null
   } catch {
@@ -82,12 +82,12 @@ const getPrimary = media => media.find(mediaItem => isPrimary(mediaItem))
 const hasPrimary = media => !!getPrimary(media)
 
 // Prefer explicit mediaType on the item; fall back to derived type from mimeType/URL.
-// Normalize explicit mediaType to match the canonical values in MEDIA_TYPES.
+// Normalize explicit mediaType to match the canonical values in MEDIA_TYPE.
 const getItemMediaType = item => {
   const raw = item?.mediaType
   if (typeof raw === 'string') {
     const upper = raw.toUpperCase()
-    if (MEDIA_TYPES.includes(upper)) {
+    if (MEDIA.ORDER.includes(upper)) {
       return upper
     }
   }
@@ -105,12 +105,12 @@ const isPrimary = mediaItem => !!mediaItem.isPrimary
 const mediaItemEdits = ({ initial, staged }) =>
   stagedEdits({
     stateTypes: CONCEPT_STATE.MEDIA_ITEM,
-    displayFields: MEDIA_DISPLAY_FIELDS,
+    displayFields: MEDIA.DISPLAY,
     initial,
     staged,
   })
 
-const mediaItemFields = mediaItem => displayItem(mediaItem, MEDIA_DISPLAY_FIELDS)
+const mediaItemFields = mediaItem => displayItem(mediaItem, MEDIA.DISPLAY)
 
 const typeMediaItem = mediaItem => ({
   ...mediaItem,
@@ -126,14 +126,10 @@ export {
   getPrimaryOfType,
   hasPrimary,
   hasPrimaryOfType,
-  ICON,
-  IMAGE,
   isPrimary,
-  MEDIA_TYPES,
   mediaItemEdits,
   mediaItemFields,
   mediaOfType,
   typeMediaItem,
-  VIDEO,
 }
 
