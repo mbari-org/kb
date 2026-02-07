@@ -151,6 +151,9 @@ const isEqual = (obj1, obj2) => {
   return true
 }
 
+const isEqualWithout = (arg1, arg2, dropList) =>
+  isJsonEqual(drop(arg1, dropList), drop(arg2, dropList))
+
 const isJsonEqual = (obj1, obj2) =>
   obj1 == null || obj2 == null ? false : JSON.stringify(obj1) === JSON.stringify(obj2)
 
@@ -236,6 +239,7 @@ export {
   isElementInViewport,
   isEmpty,
   isEqual,
+  isEqualWithout,
   isJsonEqual,
   isRefEqual,
   isUrlValid,
