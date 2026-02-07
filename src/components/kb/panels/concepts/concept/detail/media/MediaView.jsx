@@ -11,16 +11,21 @@ import MediaEdit from '@/components/kb/panels/concepts/concept/change/staged/med
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+
+const { MEDIA_ITEM } = CONCEPT_STATE
+
 const MediaView = () => {
   const mediaViewRef = useRef(null)
 
   const { isEditing, stagedState } = use(ConceptContext)
   const { media, mediaIndex } = stagedState
+  const mediaItem = media[mediaIndex]
 
   const [previewOn, setPreviewOn] = useState(false)
 
   const showAddMedia = isEditing
-  const showEditDeleteMedia = isEditing && !media[mediaIndex]?.historyId
+  const showDeleteEditMedia = isEditing && mediaItem?.action !== MEDIA_ITEM.DELETE && !mediaItem?.historyId
 
   return (
     <Box>
@@ -29,7 +34,7 @@ const MediaView = () => {
         <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} />
         {showAddMedia && (
           <Box>
-            {showEditDeleteMedia && <MediaDelete />}
+            {showDeleteEditMedia && <MediaDelete />}
             <MediaAdd
               sx={{
                 bottom: 20,
@@ -38,7 +43,7 @@ const MediaView = () => {
                 transform: 'translateX(-50%)',
               }}
             />
-            {showEditDeleteMedia && <MediaEdit />}
+            {showDeleteEditMedia && <MediaEdit />}
           </Box>
         )}
       </Box>

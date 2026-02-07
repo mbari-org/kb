@@ -19,34 +19,71 @@ const orderMediaByPrimary = media => {
   return [...primaries, ...itemsWithAction.filter(item => !isPrimary(item))]
 }
 
+const indexAndType = ({ editingItem, media, updatedItem }) => {
+  const editingItemType = getMediaType(editingItem.url)
+  const updatedIndex = media.findIndex(item => item === updatedItem)
+  return { editingItemType, updatedIndex }
+}
+
+const promotePrimary = ({ editingItem, media, updatedItem }) => {
+  const { editingItemType, updatedIndex } = indexAndType({ editingItem, media, updatedItem })
+  const candidateIndex = media.findIndex((item, index) => {
+    if (index === updatedIndex) return false
+    const itemType = getMediaType(item.url)
+    if (itemType !== editingItemType) return false
+    if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) return false
+    if (item.action === CONCEPT_STATE.NO_ACTION) return false
+    return true
+  })
+
+  if (candidateIndex === -1) return media
+
+  return media.map((item, index) => {
+    const itemType = getMediaType(item.url)
+    if (itemType !== editingItemType) return item
+    if (index === candidateIndex) return { ...item, isPrimary: true }
+    return { ...item, isPrimary: false }
+  })
+}
+
+const demotePrimary = ({ editingItem, media, updatedItem }) => {
+  const { editingItemType, updatedIndex } = indexAndType({ editingItem, media, updatedItem })
+  return media.map((item, index) => {
+    if (index === updatedIndex) return item
+    const itemType = getMediaType(item.url)
+    if (itemType !== editingItemType) return item
+    return { ...item, isPrimary: false }
+  })
+}
+
 const addMedia = (state, update) => {
   const addingItem = {
     ...update.mediaItem,
     action: CONCEPT_STATE.MEDIA_ITEM.ADD,
   }
 
-  const newStateMedia = [...state.media, addingItem]
-
-  let orderedMedia = newStateMedia
   if (addingItem.isPrimary) {
-    newStateMedia.forEach(item => {
-      if (item !== addingItem && getMediaType(item.url) === getMediaType(addingItem.url)) {
-        if (item.isPrimary) {
-          item.isPrimary = false
-          item.wasPrimary = true
-        }
+    const updatedMedia = orderMediaByPrimary([...state.media, addingItem])
+    updatedMedia.forEach(item => {
+      if (item !== addingItem && item.isPrimary && getMediaType(item.url) === getMediaType(addingItem.url)) {
+        item.isPrimary = false
+        item.wasPrimary = true
       }
     })
-    orderedMedia = orderMediaByPrimary(newStateMedia)
+    return {
+      ...state,
+      media: updatedMedia,
+      mediaIndex: updatedMedia.findIndex(item => item === addingItem),
+    }
   }
 
-  const orderedIndex = orderedMedia.findIndex(item => mediaItemKey(item) === mediaItemKey(addingItem))
-
+  const updatedMedia = [...state.media, addingItem]
   return {
     ...state,
-    media: orderedMedia,
-    mediaIndex: orderedIndex === -1 ? orderedMedia.length : orderedIndex,
+    media: updatedMedia,
+    mediaIndex: updatedMedia.length - 1,
   }
+
 }
 
 const deleteMedia = (state, update) => {
@@ -71,8 +108,7 @@ const deleteMedia = (state, update) => {
     }
   }
 
-  // mark as deleted and clear primary flag
-  let updatedMedia = state.media.map((item, index) =>
+  const updatedMedia = state.media.map((item, index) =>
     index === deletingIndex
       ? { ...item, action: CONCEPT_STATE.MEDIA_ITEM.DELETE, isPrimary: false }
       : item
@@ -82,52 +118,64 @@ const deleteMedia = (state, update) => {
     return { ...state, media: updatedMedia, mediaIndex: deletingIndex }
   }
 
-  // Promote first remaining ADD/EDIT media of this type (but not DELETE)
-  const candidateIndex = updatedMedia.findIndex((item, index) => {
-    if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) return false
-    if (getMediaType(item.url) !== deletingItemType) return false
-    return true
-  })
-
-  if (candidateIndex !== -1) {
-    updatedMedia = updatedMedia.map((item, index) => {
-      const itemType = getMediaType(item.url)
-      if (itemType !== deletingItemType) return item
-      if (index === candidateIndex) return { ...item, isPrimary: true }
-      return { ...item, isPrimary: false }
-    })
+  // Promote first remaining ADD/EDIT media of this type
+  for (const item of updatedMedia) {
+    if (item === deletingItem) continue
+    if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) continue
+    if (getMediaType(item.url) === deletingItemType) {
+      item.isPrimary = true
+      break
+    }
   }
-
-  return { ...state, media: orderMediaByPrimary(updatedMedia) }
+  return { ...state, media: updatedMedia, mediaIndex: deletingIndex }
 }
 
 const editMedia = (state, update) => {
-  const mediaIndex = update.mediaIndex
-  const editingItem = state.media[mediaIndex]
+  const editingIndex = update.mediaIndex
+  const editingItem = state.media[editingIndex]
+  const itemUpdates = update.mediaItem
 
-  const isAdd = editingItem.action === CONCEPT_STATE.MEDIA_ITEM.ADD
-  const updatedItem = {
-    ...update.mediaItem,
-    action: isAdd ? CONCEPT_STATE.MEDIA_ITEM.ADD : CONCEPT_STATE.MEDIA_ITEM.EDIT,
+  const updatedItem = { ...editingItem, ...itemUpdates }
+  if (updatedItem.action === CONCEPT_STATE.NO_ACTION) updatedItem.action = CONCEPT_STATE.MEDIA_ITEM.EDIT
+
+  // Not changing primary so just update the item
+  if (itemUpdates.isPrimary === editingItem.isPrimary) {
+    return { ...state, media: state.media.map(item => item === editingItem ? updatedItem : item) }
   }
 
-  const mediaType = getMediaType(updatedItem.url)
-  const wasPrimary = !!editingItem.isPrimary
-  const isPrimaryNow = !!updatedItem.isPrimary
+  const editingItemType = getMediaType(editingItem.url)
+  const updatedItemType = getMediaType(updatedItem.url)
 
-  let updatedMedia = state.media.map((item, index) => (index === mediaIndex ? updatedItem : item))
+  // Not changing type (but changing primary)
+  if (editingItemType === updatedItemType) {
+    const fnArgs = {
+      editingItem,
+      media: state.media.map((item, index) => (index === editingIndex ? updatedItem : item)),
+      updatedItem,
+    }
 
-  if (!mediaType) {
+    const updatedMedia = editingItem.isPrimary ? promotePrimary(fnArgs) : demotePrimary(fnArgs)
+
+    return { ...state, media: orderMediaByPrimary(updatedMedia) }
+  }
+
+  // DO NOT PROCEED BELOW HERE
+
+  const wasPrimary = editingItem.isPrimary
+
+  let updatedMedia = state.media.map((item, index) => (index === editingIndex ? itemUpdates : item))
+
+  if (!editingItemType) {
     return { ...state, media: orderMediaByPrimary(updatedMedia) }
   }
 
   // Case 1: selecting primary true -> demote all other staged items of same type
-  if (isPrimaryNow) {
+  if (!wasPrimary) {
     updatedMedia = updatedMedia.map((item, index) => {
-      if (index === mediaIndex) return item
+      if (index === editingIndex) return item
 
       const itemType = getMediaType(item.url)
-      const isSameType = itemType === mediaType
+      const isSameType = itemType === editingItemType
       if (!isSameType) return item
 
       // Demote any other staged media of this type (ADD or EDIT), regardless of prior state
@@ -142,11 +190,11 @@ const editMedia = (state, update) => {
   // - If there is an untouched concept.media primary of this type (NO_ACTION, isPrimary true),
   //   leave it alone and do NOT implicitly override it.
   // - Otherwise, promote the first staged media (ADD/EDIT, not DELETE) of this type.
-  if (wasPrimary && !isPrimaryNow) {
+  if (wasPrimary) {
     const hasUntouchedConceptPrimary = updatedMedia.some((item, index) => {
-      if (index === mediaIndex) return false
+      if (index === editingIndex) return false
       const itemType = getMediaType(item.url)
-      if (itemType !== mediaType) return false
+      if (itemType !== editingItemType) return false
       return item.action === CONCEPT_STATE.NO_ACTION && item.isPrimary
     })
 
@@ -155,9 +203,9 @@ const editMedia = (state, update) => {
     }
 
     const candidateIndex = updatedMedia.findIndex((item, index) => {
-      if (index === mediaIndex) return false
+      if (index === editingIndex) return false
       const itemType = getMediaType(item.url)
-      if (itemType !== mediaType) return false
+      if (itemType !== editingItemType) return false
       if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) return false
       // Only consider staged ADD/EDIT, not NO_ACTION
       if (item.action === CONCEPT_STATE.NO_ACTION) return false
@@ -167,7 +215,7 @@ const editMedia = (state, update) => {
     if (candidateIndex !== -1) {
       updatedMedia = updatedMedia.map((item, index) => {
         const itemType = getMediaType(item.url)
-        if (itemType !== mediaType) return item
+        if (itemType !== editingItemType) return item
         if (index === candidateIndex) return { ...item, isPrimary: true }
         return { ...item, isPrimary: false }
       })
