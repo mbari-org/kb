@@ -6,7 +6,7 @@ import { ACTION, MEDIA } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
-const mediaItemKey = item => item.id ?? `${item.url}|${getItemMediaType(item) ?? 'UNKNOWN'}`
+import { isEqualWithout } from '@/lib/utils'
 
 const ensureAction = item => (item.action ? item : { ...item, action: CONCEPT_STATE.NO_ACTION })
 
@@ -48,12 +48,33 @@ const promotePrimary = ({ editingItem, media, updatedItem }) => {
 
 const demotePrimary = ({ editingItem, media, updatedItem }) => {
   const { editingItemType, updatedIndex } = indexAndType({ editingItem, media, updatedItem })
-  return media.map((item, index) => {
-    if (index === updatedIndex) return item
+
+  // Find if an item needs to be demoted (at most one per type of editingItemType)
+  const demotedIndex = media.findIndex((item, index) => {
+    if (index === updatedIndex) return false
     const itemType = getMediaType(item.url)
-    if (itemType !== editingItemType) return item
-    return { ...item, isPrimary: false }
+    if (itemType !== editingItemType) return false
+    return item.isPrimary
   })
+
+  // If no item to demote, just return media unchanged
+  if (demotedIndex === -1) return media
+
+  // Demote the found item
+  const result = media.map((item, index) => {
+    if (index === demotedIndex) return { ...item, isPrimary: false }
+    return item
+  })
+
+  // Handle edge case: if demoted item doesn't have any changes, restore action to NO_ACTION
+  const demotedItem = result[demotedIndex]
+  if (demotedItem.action === CONCEPT_STATE.MEDIA_ITEM.EDIT) {
+    if (isEqualWithout(demotedItem, editingItem, ['action'])) {
+      demotedItem.action = CONCEPT_STATE.NO_ACTION
+    }
+  }
+
+  return result
 }
 
 const addMedia = (state, update) => {
