@@ -34,7 +34,7 @@ const useModifyConcept = (dispatch, initialState, setConfirmReset) => {
         return
       }
 
-      dispatch(action)
+      dispatch({ ...action, initialState })
     },
     [confirmingDiscard, dispatch, initialState, setConfirmReset]
   )

@@ -5,20 +5,20 @@ import { stagedEdits } from '@/lib/concept/state/staged'
 
 import { orderedAliases } from '@/lib/model/aliases'
 
-import { drop } from '@/lib/utils'
+import { drop, isJsonEqual } from '@/lib/utils'
 
 const ALIAS_FIELDS = ['id', 'name', 'nameType', 'author']
 
-const addAlias = (state, update) => {
-  const aliasIndex = state.aliases.length
+const addAlias = ({ stagedState, update }) => {
+  const aliasIndex = stagedState.aliases.length
   const aliasItem = {
     ...update.aliasItem,
     action: CONCEPT_STATE.ALIAS.ADD,
     index: aliasIndex,
   }
   return {
-    ...state,
-    aliases: [...state.aliases, aliasItem],
+    ...stagedState,
+    aliases: [...stagedState.aliases, aliasItem],
     aliasIndex,
   }
 }
@@ -43,21 +43,23 @@ const aliasesState = (concept, pendingConcept) => {
   return { aliases: orderedAliases(stagedAliases) }
 }
 
-const deleteAlias = (state, update) => {
-  const aliasItem = state.aliases[update.aliasIndex]
+const isModified = (initial, staged) => !isJsonEqual(initial?.aliases, staged?.aliases)
+
+const deleteAlias = ({ stagedState, update }) => {
+  const aliasItem = stagedState.aliases[update.aliasIndex]
   // If alias is an add, just remove it from state
   if (aliasItem?.action === CONCEPT_STATE.ALIAS.ADD) {
-    const updatedAliases = state.aliases.filter((_item, index) => index !== update.aliasIndex)
+    const updatedAliases = stagedState.aliases.filter((_item, index) => index !== update.aliasIndex)
     return {
-      ...state,
+      ...stagedState,
       aliases: updatedAliases,
     }
   }
-  return updateAlias(state, { type: CONCEPT_STATE.ALIAS.DELETE, update })
+  return updateAlias({ stagedState, update, type: CONCEPT_STATE.ALIAS.DELETE })
 }
 
-const editAlias = (state, update) => {
-  const aliasItem = state.aliases[update.aliasIndex]
+const editAlias = ({ stagedState, update }) => {
+  const aliasItem = stagedState.aliases[update.aliasIndex]
   // If editing an added alias, don't change the action
   if (aliasItem.action === CONCEPT_STATE.ALIAS.ADD) {
     const updatedItem = {
@@ -65,13 +67,13 @@ const editAlias = (state, update) => {
       action: CONCEPT_STATE.ALIAS.ADD,
     }
     return {
-      ...state,
-      aliases: state.aliases.map((item, index) =>
+      ...stagedState,
+      aliases: stagedState.aliases.map((item, index) =>
         index === update.aliasIndex ? updatedItem : item
       ),
     }
   }
-  return updateAlias(state, { type: CONCEPT_STATE.ALIAS.EDIT, update })
+  return updateAlias({ stagedState, update, type: CONCEPT_STATE.ALIAS.EDIT })
 }
 
 const isMatching = (alias, pendingAlias) => {
@@ -84,21 +86,21 @@ const isPendingAlias = pendingItem =>
   pendingItem.field === HISTORY_FIELD.ALIAS &&
   !(pendingItem.action === ACTION.EDIT && pendingItem.concept === pendingItem.newValue)
 
-const resetAliases = (state, update) => {
+const resetAliases = ({ stagedState, update }) => {
   const { index: resetIndex } = update
 
-  if (1 < state.aliases.length && resetIndex !== undefined) {
+  if (1 < stagedState.aliases.length && resetIndex !== undefined) {
     const alias = update.aliases[resetIndex]
     return {
-      ...state,
-      aliases: state.aliases.reduce((acc, item, index) => {
+      ...stagedState,
+      aliases: stagedState.aliases.reduce((acc, item, index) => {
         index === resetIndex ? alias != null && acc.push(alias) : acc.push(item)
         return acc
       }, []),
     }
   }
   return {
-    ...state,
+    ...stagedState,
     aliases: update.aliases,
   }
 }
@@ -114,11 +116,11 @@ const stagedAliasesEdits = stagedEdit => {
   })
 }
 
-const updateAlias = (state, { type, update }) => {
+const updateAlias = ({ stagedState, update, type }) => {
   const { aliasIndex, aliasItem } = update
-  const updatedItem = { ...state.aliases[aliasIndex], ...aliasItem, action: type }
-  const aliases = state.aliases.map((item, index) => (index === aliasIndex ? updatedItem : item))
-  return { ...state, aliases }
+  const updatedItem = { ...stagedState.aliases[aliasIndex], ...aliasItem, action: type }
+  const aliases = stagedState.aliases.map((item, index) => (index === aliasIndex ? updatedItem : item))
+  return { ...stagedState, aliases }
 }
 
 export {
@@ -126,6 +128,7 @@ export {
   aliasesState,
   deleteAlias,
   editAlias,
+  isModified,
   isPendingAlias,
   resetAliases,
   stagedAliasesEdits,

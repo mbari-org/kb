@@ -29,31 +29,33 @@ const authorState = (concept, pendingConcept) => {
   return { author: stateAuthor }
 }
 
-const editAuthor = (state, update) => {
+const editAuthor = ({ stagedState, update }) => {
   const { value, initialAuthor } = update
 
   if (initialAuthor && value === initialAuthor.value) {
     return {
-      ...state,
+      ...stagedState,
       author: initialAuthor,
     }
   }
 
   return {
-    ...state,
+    ...stagedState,
     author: {
-      ...state.author,
+      ...stagedState.author,
       action: CONCEPT_STATE.AUTHOR,
       value,
     },
   }
 }
 
-const resetAuthor = (state, update) => {
+const resetAuthor = ({ stagedState, update }) => {
   return {
-    ...state,
+    ...stagedState,
     author: update.author,
   }
 }
 
-export { authorState, editAuthor, resetAuthor }
+const isModified = (initial, staged) => initial?.author?.value !== staged?.author?.value
+
+export { authorState, editAuthor, isModified, resetAuthor }

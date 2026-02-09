@@ -1,4 +1,4 @@
-import { capitalize } from '@/lib/utils'
+import { capitalize, isJsonEqual } from '@/lib/utils'
 
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -15,11 +15,11 @@ const rankState = (concept, pendingConcept) => {
   return stagedRank(stateRank, pendingConcept)
 }
 
-const editRank = (state, update) => {
+const editRank = ({ stagedState, update }) => {
   return {
-    ...state,
+    ...stagedState,
     rank: {
-      ...state.rank,
+      ...stagedState.rank,
       ...update,
     },
   }
@@ -68,9 +68,9 @@ const pendingRank = pendingConcept => {
 
 const rankField = field => `rank${capitalize(field)}`
 
-const resetRank = (state, update) => {
+const resetRank = ({ stagedState, update }) => {
   return {
-    ...state,
+    ...stagedState,
     rank: update.rank,
   }
 }
@@ -94,4 +94,6 @@ const stagedRank = (stateRank, pendingConcept) => {
   }
 }
 
-export { editRank, pendingChange, pendingRank, rankField, rankState, resetRank }
+const isModified = (initial, staged) => !isJsonEqual(initial?.rank, staged?.rank)
+
+export { editRank, isModified, pendingChange, pendingRank, rankField, rankState, resetRank }

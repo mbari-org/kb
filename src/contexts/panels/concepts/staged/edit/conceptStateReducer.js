@@ -15,88 +15,88 @@ import { editValue } from '@/lib/concept/state/value'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } =
-  CONCEPT_STATE
+const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } = CONCEPT_STATE
 
-const conceptStateReducer = (state, { type, update }) => {
+const conceptStateReducer = (stagedState, { type, update, initialState }) => {
+  const params = { initialState, stagedState, update }
   switch (type) {
     case CONCEPT_STATE.INITIAL:
       return update
 
     case ALIAS.ADD:
-      return addAlias(state, update)
+      return addAlias(params)
 
     case ALIAS.DELETE:
-      return deleteAlias(state, update)
+      return deleteAlias(params)
 
     case ALIAS.EDIT:
-      return editAlias(state, update)
+      return editAlias(params)
 
     case AUTHOR:
-      return editAuthor(state, update)
+      return editAuthor(params)
 
     case CHILD.ADD:
-      return addChild(state, update)
+      return addChild(params)
 
     case MEDIA_ITEM.ADD:
-      return addMedia(state, update)
+      return addMedia(params)
 
     case MEDIA_ITEM.DELETE:
-      return deleteMedia(state, update)
+      return deleteMedia(params)
 
     case MEDIA_ITEM.EDIT:
-      return editMedia(state, update)
+      return editMedia(params)
 
     case MEDIA_ITEM.INDEX:
-      return editValue(state, update)
+      return editValue(params)
 
     case NAME:
-      return editName(state, update)
+      return editName(params)
 
     case PARENT:
-      return editParent(state, update)
+      return editParent(params)
 
     case RANK:
-      return editRank(state, update)
+      return editRank(params)
 
     case REALIZATION.ADD:
-      return addRealization(state, update)
+      return addRealization(params)
 
     case REALIZATION.DELETE:
-      return deleteRealization(state, update)
+      return deleteRealization(params)
 
     case REALIZATION.EDIT:
-      return editRealization(state, update)
+      return editRealization(params)
 
     case RESET.ALIASES:
-      return resetAliases(state, update)
+      return resetAliases(params)
 
     case RESET.AUTHOR:
-      return resetAuthor(state, update)
+      return resetAuthor(params)
 
     case RESET.CHILD:
-      return resetChild(state, update)
+      return resetChild(params)
 
     case RESET.CHILDREN:
-      return resetChildren(state, update)
+      return resetChildren(params)
 
     case RESET.MEDIA:
-      return resetMedia(state, update)
+      return resetMedia(params)
 
     case RESET.NAME:
-      return resetName(state, update)
+      return resetName(params)
 
     case RESET.PARENT:
-      return resetParent(state, update)
+      return resetParent(params)
 
     case RESET.RANK:
-      return resetRank(state, update)
+      return resetRank(params)
 
     case RESET.REALIZATIONS:
-      return resetRealizations(state, update)
+      return resetRealizations(params)
 
     default:
-      return state
+      return stagedState
   }
 }
 

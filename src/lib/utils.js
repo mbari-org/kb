@@ -154,8 +154,14 @@ const isEqual = (obj1, obj2) => {
 const isEqualWithout = (arg1, arg2, dropList) =>
   isJsonEqual(drop(arg1, dropList), drop(arg2, dropList))
 
-const isJsonEqual = (obj1, obj2) =>
-  obj1 == null || obj2 == null ? false : JSON.stringify(obj1) === JSON.stringify(obj2)
+const isJsonEqual = (obj1, obj2) => {
+  if (obj1 == null || obj2 == null) throw new Error('isJsonEqual called with null or undefined')
+  if (typeof obj1 !== typeof obj2) throw new Error(`isJsonEqual type mismatch: ${typeof obj1} vs ${typeof obj2}`)
+
+  if (Array.isArray(obj1) && obj1.length !== obj2.length) return false
+
+  return JSON.stringify(obj1) === JSON.stringify(obj2)
+}
 
 const isRefEqual = (obj1, obj2, depth = Infinity) => {
   if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
