@@ -80,7 +80,7 @@ const resetConceptState = (action, dispatch, initialState) => {
     case RESET.MEDIA:
       dispatch({
         type: RESET.MEDIA,
-        update: { media: initialState.media, index: action.update.index },
+        update: { media: initialState.media, stateId: action.update.stateId },
       })
       break
 

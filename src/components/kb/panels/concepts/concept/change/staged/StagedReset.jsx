@@ -51,7 +51,7 @@ const StagedReset = ({
         ? modifyConcept({ type: resetGroupType })
         : modifyConcept({
             type: resetItemType,
-            update: { groupIndex: index },
+            update: { stateId: index },
           })
       return
     }
