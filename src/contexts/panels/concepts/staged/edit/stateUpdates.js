@@ -8,10 +8,12 @@ const alignMediaByStateId = (initial, staged) => {
     acc[item.stateId] = item
     return acc
   }, {})
-  return staged.map(stagedItem => {
-    const initialItem = initialByStateId[stagedItem.stateId]
-    return initialItem || stagedItem
-  })
+  return staged
+    .map(stagedItem => {
+      const initialItem = initialByStateId[stagedItem.stateId]
+      return initialItem || stagedItem
+    })
+    .filter(item => initialByStateId[item.stateId])
 }
 
 const hasStateChange = (allInitialState, allStagedState) => {

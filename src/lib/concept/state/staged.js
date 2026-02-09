@@ -46,17 +46,29 @@ const stagedBorder = ({ noActionBorderColor, stagedItem, theme, width }) => {
   return `${borderWidth} ${borderStyle} ${borderColor}`
 }
 
-const stagedEdits = ({ displayFields, initial, staged, stateTypes }) =>
-  staged
+const stagedEdits = ({ displayFields, initial, staged, stateTypes }) => {
+  const initialByStateId = initial
+    ? Object.fromEntries(initial.map((item, i) => [item.stateId, { item, index: i }]))
+    : {}
+
+  return staged
     .reduce((acc, item, index) => {
-      const edit = itemEdit(stateTypes, index, initial[index], item, displayFields)
+      const initialItem = initialByStateId[item.stateId]?.item
+      const edit = itemEdit({
+        displayFields,
+        index,
+        initialItem,
+        stagedItem: item,
+        stateTypes,
+      })
       if (edit === null) return acc
       acc.push(edit)
       return acc
     }, [])
     .map(edit => (edit.action === stateTypes.DELETE ? deleteItem(edit) : editItem(edit)))
+}
 
-const itemEdit = (stateTypes, index, initialItem, stagedItem, displayFields) => {
+const itemEdit = ({ displayFields, index, initialItem, stagedItem, stateTypes }) => {
   const { action } = stagedItem
   if (!isStagedAction(action)) return null
 
@@ -66,4 +78,4 @@ const itemEdit = (stateTypes, index, initialItem, stagedItem, displayFields) => 
   return { action, index, initial, staged }
 }
 
-export { deleteItem, displayItem, editItem, itemEdit, stagedBorder, stagedEdits }
+export { deleteItem, displayItem, editItem, stagedBorder, stagedEdits }

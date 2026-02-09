@@ -1,5 +1,4 @@
 import { use, useCallback, useState, useMemo, useEffect } from 'react'
-import { flushSync } from 'react-dom'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalContext from './ConceptModalContext'
@@ -36,13 +35,11 @@ const ConceptModalProvider = ({ children }) => {
         }
       }
 
-      // Use flushSync to ensure all state updates are committed synchronously
-      flushSync(() => {
-        setOnClose(null)
-        setModalData({})
-        setModal(null)
-        resetProcessing()
-      })
+      // Reset state
+      setOnClose(null)
+      setModalData({})
+      setModal(null)
+      resetProcessing()
 
       // Execute completion callback after React has completed all updates
       if (onComplete) {
