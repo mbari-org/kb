@@ -2,6 +2,8 @@ import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
+import { isJsonEqual } from '@/lib/utils'
+
 const isMatching = (template, pendingTemplate) => {
   const templateString =
     pendingTemplate.action !== ACTION.DELETE
@@ -36,4 +38,6 @@ const templatesState = (concept, pendingConcept) => {
   return { templates: stagedTemplates }
 }
 
-export { isPendingTemplate, templatesState, templateState }
+const isModified = (initial, staged) => !isJsonEqual(initial?.templates, staged?.templates)
+
+export { isModified, isPendingTemplate, templatesState, templateState }

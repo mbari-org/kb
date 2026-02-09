@@ -5,16 +5,18 @@ import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
-const addChild = (state, update) => {
-  const childIndex = state.children.length
+import { isJsonEqual } from '@/lib/utils'
+
+const addChild = ({ stagedState, update }) => {
+  const childIndex = stagedState.children.length
   const childItem = {
     ...update.child,
     action: CONCEPT_STATE.CHILD.ADD,
     index: childIndex,
   }
   return {
-    ...state,
-    children: [...state.children, childItem],
+    ...stagedState,
+    children: [...stagedState.children, childItem],
   }
 }
 
@@ -28,33 +30,33 @@ const childrenState = (concept, pending) => {
 
 const isPendingChild = pendingItem => pendingItem.field === HISTORY_FIELD.CHILD
 
-const resetChildren = (state, update) => {
+const resetChildren = ({ stagedState, update }) => {
   const { index: resetIndex } = update
 
-  if (1 < state.children.length && resetIndex !== undefined) {
+  if (1 < stagedState.children.length && resetIndex !== undefined) {
     const child = update.children[resetIndex]
     return {
-      ...state,
-      children: state.children.reduce((acc, item, index) => {
+      ...stagedState,
+      children: stagedState.children.reduce((acc, item, index) => {
         index === resetIndex ? child != null && acc.push(child) : acc.push(item)
         return acc
       }, []),
     }
   }
   return {
-    ...state,
+    ...stagedState,
     children: update.children,
   }
 }
 
 // Reset a single child at its index, using the provided child object
-const resetChild = (state, update) => {
+const resetChild = ({ stagedState, update }) => {
   const { child } = update
   const resetIndex = child?.index
-  if (resetIndex === undefined) return state
+  if (resetIndex === undefined) return stagedState
   return {
-    ...state,
-    children: state.children.map((item, index) => (index === resetIndex ? child : item)),
+    ...stagedState,
+    children: stagedState.children.map((item, index) => (index === resetIndex ? child : item)),
   }
 }
 
@@ -86,4 +88,14 @@ const stagedChildren = stagedEdit => {
   })
 }
 
-export { addChild, childrenState, isPendingChild, resetChild, resetChildren, stagedChildren }
+const isModified = (initial, staged) => !isJsonEqual(initial?.children, staged?.children)
+
+export {
+  addChild,
+  childrenState,
+  isModified,
+  isPendingChild,
+  resetChild,
+  resetChildren,
+  stagedChildren,
+}

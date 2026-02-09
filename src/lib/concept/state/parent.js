@@ -1,13 +1,13 @@
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const editParent = (state, update) => {
+const editParent = ({ stagedState, update }) => {
   // update: { field: 'parent', value: newParentName }
   const { value } = update
   return {
-    ...state,
+    ...stagedState,
     parent: {
-      ...state.parent,
+      ...stagedState.parent,
       action: CONCEPT_STATE.PARENT,
       value,
     },
@@ -27,10 +27,10 @@ const parentState = (concept, pendingConcept) => {
   return stagedParent(stateParent, pendingConcept)
 }
 
-const resetParent = (state, update) => {
+const resetParent = ({ stagedState, update }) => {
   // update: { parent: { action, value, historyId? } }
   return {
-    ...state,
+    ...stagedState,
     parent: update.parent,
   }
 }
@@ -50,4 +50,6 @@ const stagedParent = (stateParent, pendingConcept) => {
   return { parent: stateParent }
 }
 
-export { editParent, isPendingParent, parentState, resetParent, stagedParent }
+const isModified = (initial, staged) => initial?.parent?.value !== staged?.parent?.value
+
+export { editParent, isModified, isPendingParent, parentState, resetParent, stagedParent }

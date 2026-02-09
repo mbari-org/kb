@@ -6,41 +6,43 @@ import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
+import { isJsonEqual } from '@/lib/utils'
+
 const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
 
-const addRealization = (state, update) => {
-  const realizationIndex = state.realizations.length
+const addRealization = ({ stagedState, update }) => {
+  const realizationIndex = stagedState.realizations.length
   const realizationItem = {
     ...update.realizationItem,
     action: CONCEPT_STATE.REALIZATION.ADD,
     index: realizationIndex,
   }
 
-  const updatedRealizations = [...state.realizations, realizationItem]
+  const updatedRealizations = [...stagedState.realizations, realizationItem]
   return {
-    ...state,
+    ...stagedState,
     realizations: sortRealizations(updatedRealizations),
     realizationIndex,
   }
 }
 
-const deleteRealization = (state, update) => {
-  const realizationItem = state.realizations[update.realizationIndex]
+const deleteRealization = ({ stagedState, update }) => {
+  const realizationItem = stagedState.realizations[update.realizationIndex]
   // If realization is an add, just remove it from state
   if (realizationItem?.action === CONCEPT_STATE.REALIZATION.ADD) {
-    const updatedRealizations = state.realizations.filter(
+    const updatedRealizations = stagedState.realizations.filter(
       (_item, index) => index !== update.realizationIndex
     )
     return {
-      ...state,
+      ...stagedState,
       realizations: updatedRealizations,
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.REALIZATION.DELETE, update })
+  return updateState({ stagedState, update, type: CONCEPT_STATE.REALIZATION.DELETE })
 }
 
-const editRealization = (state, update) => {
-  const realizationItem = state.realizations[update.realizationIndex]
+const editRealization = ({ stagedState, update }) => {
+  const realizationItem = stagedState.realizations[update.realizationIndex]
   // If editing an added realization, don't change the action
   if (realizationItem.action === CONCEPT_STATE.REALIZATION.ADD) {
     const updatedItem = {
@@ -48,13 +50,13 @@ const editRealization = (state, update) => {
       action: CONCEPT_STATE.REALIZATION.ADD,
     }
     return {
-      ...state,
-      realizations: state.realizations.map((item, index) =>
+      ...stagedState,
+      realizations: stagedState.realizations.map((item, index) =>
         index === update.realizationIndex ? updatedItem : item
       ),
     }
   }
-  return updateState(state, { type: CONCEPT_STATE.REALIZATION.EDIT, update })
+  return updateState({ stagedState, update, type: CONCEPT_STATE.REALIZATION.EDIT })
 }
 
 const isMatching = (realization, pendingRealization) => {
@@ -99,21 +101,21 @@ const realizationsState = (concept, pendingConcept) => {
   return { realizations: sortRealizations(stagedRealizations) }
 }
 
-const resetRealizations = (state, update) => {
+const resetRealizations = ({ stagedState, update }) => {
   const { index: resetIndex } = update
 
-  if (1 < state.realizations.length && resetIndex !== undefined) {
+  if (1 < stagedState.realizations.length && resetIndex !== undefined) {
     const realization = update.realizations[resetIndex]
     return {
-      ...state,
-      realizations: state.realizations.reduce((acc, item, index) => {
+      ...stagedState,
+      realizations: stagedState.realizations.reduce((acc, item, index) => {
         index === resetIndex ? realization != null && acc.push(realization) : acc.push(item)
         return acc
       }, []),
     }
   }
   return {
-    ...state,
+    ...stagedState,
     realizations: update.realizations,
   }
 }
@@ -129,21 +131,24 @@ const stagedRealizationEdits = stagedEdit => {
   })
 }
 
-const updateState = (state, { type, update }) => {
+const updateState = ({ stagedState, update, type }) => {
   const { realizationIndex, realizationItem } = update
-  const updatedItem = { ...state.realizations[realizationIndex], ...realizationItem, action: type }
+  const updatedItem = { ...stagedState.realizations[realizationIndex], ...realizationItem, action: type }
   return {
-    ...state,
-    realizations: state.realizations.map((item, index) =>
+    ...stagedState,
+    realizations: stagedState.realizations.map((item, index) =>
       index === realizationIndex ? updatedItem : item
     ),
   }
 }
 
+const isModified = (initial, staged) => !isJsonEqual(initial?.realizations, staged?.realizations)
+
 export {
   addRealization,
   deleteRealization,
   editRealization,
+  isModified,
   isPendingRealization,
   realizationEdits,
   realizationsState,

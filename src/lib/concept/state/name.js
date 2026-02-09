@@ -2,6 +2,8 @@ import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
+import { isJsonEqual } from '@/lib/utils'
+
 const nameState = (concept, pendingConcept) => {
   const { name } = concept
 
@@ -14,11 +16,11 @@ const nameState = (concept, pendingConcept) => {
   return stagedName(stateName, pendingConcept)
 }
 
-const editName = (state, update) => {
+const editName = ({ stagedState, update }) => {
   return {
-    ...state,
+    ...stagedState,
     name: {
-      ...state.name,
+      ...stagedState.name,
       ...update,
     },
   }
@@ -29,9 +31,9 @@ const isPendingName = pendingItem =>
   pendingItem.action === ACTION.EDIT &&
   pendingItem.concept === pendingItem.newValue
 
-const resetName = (state, update) => {
+const resetName = ({ stagedState, update }) => {
   return {
-    ...state,
+    ...stagedState,
     name: update.name,
   }
 }
@@ -51,4 +53,6 @@ const stagedName = (name, pendingConcept) => {
   return { name }
 }
 
-export { editName, isPendingName, nameState, resetName }
+const isModified = (initial, staged) => !isJsonEqual(initial?.name, staged?.name)
+
+export { editName, isModified, isPendingName, nameState, resetName }

@@ -1,17 +1,18 @@
-import { aliasesState } from '@/lib/concept/state/aliases'
-import { authorState } from '@/lib/concept/state/author'
-import { childrenState } from '@/lib/concept/state/children'
-import { mediaState } from '@/lib/concept/state/media'
-import { nameState } from '@/lib/concept/state/name'
-import { parentState } from '@/lib/concept/state/parent'
-import { rankState } from '@/lib/concept/state/rank'
-import { realizationsState } from '@/lib/concept/state/realizations'
-import { templatesState } from '@/lib/concept/state/templates'
-import { valueState } from '@/lib/concept/state/value'
+import { aliasesState, isModified as isAliasesModified } from '@/lib/concept/state/aliases'
+import { authorState, isModified as isAuthorModified } from '@/lib/concept/state/author'
+import { childrenState, isModified as isChildrenModified } from '@/lib/concept/state/children'
+import { isModified as isMediaModified, mediaState } from '@/lib/concept/state/media'
+import { isModified as isNameModified, nameState } from '@/lib/concept/state/name'
+import { isModified as isParentModified, parentState } from '@/lib/concept/state/parent'
+import { isModified as isRankModified, rankState } from '@/lib/concept/state/rank'
+import {
+  isModified as isRealizationsModified,
+  realizationsState,
+} from '@/lib/concept/state/realizations'
+import { isModified as isTemplatesModified, templatesState } from '@/lib/concept/state/templates'
+import { anyValueModified, valueState } from '@/lib/concept/state/value'
 
 import { CONCEPT } from '@/lib/constants'
-
-import { drop, isJsonEqual } from '@/lib/utils'
 
 const indexState = {
   aliasIndex: 0,
@@ -19,10 +20,26 @@ const indexState = {
   realizationIndex: 0,
 }
 
-const indexStateKeys = Object.keys(indexState)
+const MOD_CHECK_ORDER = [
+  anyValueModified,
+  isAuthorModified,
+  isNameModified,
+  isParentModified,
+  isAliasesModified,
+  isChildrenModified,
+  isRankModified,
+  isRealizationsModified,
+  isTemplatesModified,
+  isMediaModified,
+]
 
 const isStateModified = ({ initialState, stagedState }) => {
-  return !isJsonEqual(drop(initialState, indexStateKeys), drop(stagedState, indexStateKeys))
+  for (const isModified of MOD_CHECK_ORDER) {
+    if (isModified(initialState, stagedState)) {
+      return true
+    }
+  }
+  return false
 }
 
 const initialConceptState = (concept, pendingConcept) => {
