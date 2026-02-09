@@ -20,7 +20,6 @@ import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptS
 import { getConceptPath } from '@/lib/api/concept'
 
 import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
-
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'

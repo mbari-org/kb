@@ -1,3 +1,5 @@
+import { puid } from 'puid-js'
+
 import { getItemMediaType, getMediaType, isPrimary } from '@/lib/model/media'
 
 import { stagedEdits } from '@/lib/concept/state/staged'
@@ -7,6 +9,11 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 import { isEqualWithout } from '@/lib/utils'
+
+const { generator, error: generatorError } = puid({ total: 10, risk: 1e15 })
+if (generatorError) throw generatorError
+
+const genStateId = () => generator()
 
 const ensureAction = item => (item.action ? item : { ...item, action: CONCEPT_STATE.NO_ACTION })
 
@@ -277,24 +284,23 @@ const mediaState = (concept, pendingConcept) => {
 
   const pendingMedia = pendingConcept.filter(isPendingMedia)
 
-  const stagedMedia = orderedMedia.map((mediaItem, index) =>
-    mediaItemState({ ...mediaItem, index }, pendingMedia)
+  const stagedMedia = orderedMedia.map(mediaItem =>
+    mediaItemState({ ...mediaItem, stateId: genStateId() }, pendingMedia)
   )
 
   return { media: stagedMedia }
 }
 
 const resetMedia = (state, update) => {
-  const { index: resetIndex } = update
+  const { stateId: resetStateId, media: resetMediaArray } = update
 
-  if (1 < state.media.length && resetIndex !== undefined) {
-    const mediaItem = update.media[resetIndex]
-    return {
-      ...state,
-      media: state.media.reduce((acc, item, index) => {
-        index === resetIndex ? mediaItem != null && acc.push(mediaItem) : acc.push(item)
-        return acc
-      }, []),
+  if (1 < state.media.length && resetStateId !== undefined) {
+    const resetItem = resetMediaArray.find(item => item.stateId === resetStateId)
+    if (resetItem) {
+      return {
+        ...state,
+        media: state.media.map(item => (item.stateId === resetStateId ? resetItem : item)),
+      }
     }
   }
   return {
@@ -303,29 +309,12 @@ const resetMedia = (state, update) => {
   }
 }
 
-// The staged concept.media array will change order when the primary media is changed, so align initial media array
-// to the staged array so indexes remain consistent for comparison.
-const alignInitialMediaToStaged = (initial, staged) => {
-  const initialByKey = initial.reduce((acc, item) => {
-    const key = mediaItemKey(item)
-    acc[key] = acc[key] ? [...acc[key], item] : [item]
-    return acc
-  }, {})
-
-  return staged.map(item => {
-    const key = mediaItemKey(item)
-    const matches = initialByKey[key]
-    return matches && matches.length ? matches.shift() : undefined
-  })
-}
-
 const stagedMediaEdits = stagedEdit => {
   const [_field, media] = stagedEdit
-  const alignedInitial = alignInitialMediaToStaged(media.initial, media.staged)
 
   return stagedEdits({
     displayFields: MEDIA.DISPLAY,
-    initial: alignedInitial,
+    initial: media.initial,
     staged: media.staged,
     stateTypes: CONCEPT_STATE.MEDIA_ITEM,
   })
