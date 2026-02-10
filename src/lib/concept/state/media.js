@@ -168,6 +168,14 @@ const editMedia = ({ initialState, stagedState, update }) => {
 
   const updatedItem = { ...editingItem, ...itemUpdates }
 
+  // If URL changed, update mediaType to match the new URL
+  if (itemUpdates.url && itemUpdates.url !== editingItem.url) {
+    const newMediaType = getMediaType(itemUpdates.url)
+    if (newMediaType) {
+      updatedItem.mediaType = newMediaType
+    }
+  }
+
   // Check if we're restoring to initial state before setting action
   const initialItem = initialState?.media?.find(item => item.stateId === updatedItem.stateId)
   const isRestoringToInitial = initialItem && isEqualWithout(updatedItem, initialItem, ['action'])
@@ -178,7 +186,8 @@ const editMedia = ({ initialState, stagedState, update }) => {
 
   // Not changing primary so just update the item
   if (itemUpdates.isPrimary === editingItem.isPrimary) {
-    return { ...stagedState, media: stagedState.media.map(item => item === editingItem ? updatedItem : item) }
+    const updatedMedia = stagedState.media.map(item => item === editingItem ? updatedItem : item)
+    return { ...stagedState, media: updatedMedia, mediaIndex: editingIndex }
   }
 
   const editingItemType = getMediaType(editingItem.url)
@@ -193,9 +202,11 @@ const editMedia = ({ initialState, stagedState, update }) => {
       initialMedia: initialState?.media,
     }
 
-    const updatedMedia = editingItem.isPrimary ? promotePrimary(fnArgs) : demotePrimary(fnArgs)
+    const primaryAdjustedMedia = editingItem.isPrimary ? promotePrimary(fnArgs) : demotePrimary(fnArgs)
+    const updatedMedia = orderByPrimary(primaryAdjustedMedia)
+    const editedMediaIndex = updatedMedia.findIndex(item => item.stateId === updatedItem.stateId)
 
-    return { ...stagedState, media: orderByPrimary(updatedMedia) }
+    return { ...stagedState, media: updatedMedia, mediaIndex: editedMediaIndex }
   }
 
   // Changing type: handle old type primary demotion and new type primary handling
@@ -223,7 +234,10 @@ const editMedia = ({ initialState, stagedState, update }) => {
     })
   }
 
-  return { ...stagedState, media: orderByPrimary(finalMedia) }
+  const updatedMedia = orderByPrimary(finalMedia)
+  const editedMediaIndex = updatedMedia.findIndex(item => item.stateId === updatedItem.stateId)
+
+  return { ...stagedState, media: updatedMedia, mediaIndex: editedMediaIndex }
 }
 
 const isMatching = (mediaItem, pendingMediaItem) => {

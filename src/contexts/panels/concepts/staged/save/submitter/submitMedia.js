@@ -70,15 +70,19 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
   }
 
   const mediaEdit = (update, index) => {
-    const { mediaItem, updateWithType } = buildMediaItemPayload(update, { includeMediaType: false })
-    const mediaId = getMediaId(updateWithType, index)
+    const currentMediaType = getMediaType(update.url)
+    const mediaItem = pick(update, ['caption', 'credit', 'isPrimary', 'url'])
+    if (currentMediaType) {
+      mediaItem.mediaType = currentMediaType
+    }
+    const mediaId = getMediaId(update, index)
 
     const params = [mediaId, mediaItem]
     const trackerInfo = {
       action: CONCEPT_STATE.MEDIA_ITEM.EDIT,
       index,
       params,
-      update,
+      update: { ...update, mediaType: currentMediaType },
     }
     return submitMediaItem(updateMediaItem, trackerInfo)
   }
