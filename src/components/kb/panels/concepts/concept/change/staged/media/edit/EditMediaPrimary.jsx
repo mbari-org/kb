@@ -36,10 +36,9 @@ const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia 
         : null
     const wasInitiallyPrimary = !!originalItem?.isPrimary
 
-    const isEditingInitiallyPrimaryOfType =
-      action === CONCEPT_STATE.MEDIA_ITEM.EDIT && wasInitiallyPrimary
+    const isOnlyPrimaryOfType = action === CONCEPT_STATE.MEDIA_ITEM.EDIT && wasInitiallyPrimary && !hasPrimaryForType
 
-    if (isAddingInitialMediaOfType || isEditingSoloMediaOfType || isEditingInitiallyPrimaryOfType) {
+    if (isAddingInitialMediaOfType || isEditingSoloMediaOfType || isOnlyPrimaryOfType) {
       return { isDisabled: true, shouldBeChecked: true }
     }
 

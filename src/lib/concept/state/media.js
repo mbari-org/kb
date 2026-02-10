@@ -212,7 +212,7 @@ const editMedia = ({ initialState, stagedState, update }) => {
   // Changing type: handle old type primary demotion and new type primary handling
   const oldTypeMedia = stagedState.media.map((item, index) => (index === editingIndex ? updatedItem : item))
 
-  // If changing away from primary, need to demote old type's primary if one exists
+  // If changing away from primary, need to demote old type's primary and promote another of old type if exists
   let finalMedia = oldTypeMedia
   if (editingItem.isPrimary) {
     const demoteArgs = {
@@ -222,6 +222,16 @@ const editMedia = ({ initialState, stagedState, update }) => {
       initialMedia: initialState?.media,
     }
     finalMedia = demotePrimary(demoteArgs)
+
+    // Promote first remaining non-deleted item of old type to primary
+    for (const item of finalMedia) {
+      if (item === updatedItem) continue
+      if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) continue
+      if (getMediaType(item.url) === editingItemType) {
+        item.isPrimary = true
+        break
+      }
+    }
   }
 
   // If setting new type as primary, need to demote other items of new type
