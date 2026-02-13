@@ -135,11 +135,14 @@ const HistoryProvider = ({ children }) => {
     selectedConcept,
     selectedType,
     updatePageState,
+    pageState.offset,
     pageState.sortOrder,
   ])
 
   const { nextPage, prevPage, setPageSize, resetPagination } = usePageHistory({
     count: conceptState.count,
+    limit: pageState.limit,
+    offset: pageState.offset,
     updatePageState,
   })
 

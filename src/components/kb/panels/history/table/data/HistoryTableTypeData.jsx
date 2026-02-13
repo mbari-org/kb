@@ -13,6 +13,7 @@ const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 const HistoryTableTypeData = ({ hideFooter = false }) => {
   const {
     conceptState,
+    handleSortChange,
     nextPage,
     pageState,
     prevPage,
@@ -21,13 +22,22 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   } =
     use(HistoryContext)
 
-  const { limit, offset } = pageState
+  const { limit, offset, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
-  const rows = pageState.sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data
+  const rows = sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data
+
+  const sortModel = [{ field: 'creationTimestamp', sort: sortOrder || 'desc' }]
+
+  const onSortModelChange = model => {
+    const item = model[0]
+    if (item?.field === 'creationTimestamp' && item?.sort) {
+      handleSortChange(item.sort)
+    }
+  }
 
   const paginationComponent = (
     <HistoryPagination
@@ -44,6 +54,11 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   return (
     <PanelDataGrid
       columns={columns}
+      dataGridProps={{
+        onSortModelChange,
+        sortModel,
+        sortingMode: 'server',
+      }}
       hideFooter={hideFooter}
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}

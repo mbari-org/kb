@@ -8,6 +8,7 @@ const PageControl = ({ currentPage, totalPages, handlePageCommit }) => {
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1 }}>
       <Typography variant='body2'>Page</Typography>
       <TextField
+        key={currentPage}
         defaultValue={defaultValue}
         onBlur={handlePageCommit}
         onKeyDown={e => {

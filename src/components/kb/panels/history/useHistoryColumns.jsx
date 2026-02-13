@@ -39,6 +39,7 @@ const useHistoryColumns = ({ type }) => {
   }
 
   const isSortable = type === TYPE.CONCEPT
+  const isCreatedSortable = type === TYPE.APPROVED || type === TYPE.PENDING
 
   const approvedCell = params => {
     const isPending = !params.row.processedTimestamp
@@ -119,7 +120,8 @@ const useHistoryColumns = ({ type }) => {
       field: 'creationTimestamp',
       headerClassName: 'bold-header',
       headerName: 'Created',
-      sortable: isSortable,
+      sortable: isSortable || isCreatedSortable,
+      sortingOrder: isCreatedSortable ? ['desc', 'asc'] : undefined,
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },

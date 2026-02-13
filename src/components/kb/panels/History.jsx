@@ -6,7 +6,6 @@ import HistoryHeaderTitle from '@/components/kb/panels/history/header/HistoryHea
 import HistoryTableConceptData from '@/components/kb/panels/history/table/data/HistoryTableConceptData'
 import HistoryTableHeaderLeft from '@/components/kb/panels/history/table/header/HistoryTableHeaderLeft'
 import HistoryTableHeaderConceptRight from '@/components/kb/panels/history/table/header/HistoryTableHeaderConceptRight'
-import HistoryTableHeaderTypeRight from '@/components/kb/panels/history/table/header/HistoryTableHeaderTypeRight'
 import HistoryTableTypeData from '@/components/kb/panels/history/table/data/HistoryTableTypeData'
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
@@ -24,9 +23,6 @@ const HistoryContent = () => {
   const HistoryTableData =
     selectedType === TYPE.CONCEPT ? HistoryTableConceptData : HistoryTableTypeData
 
-  const HistoryTableHeaderRight =
-    selectedType === TYPE.CONCEPT ? HistoryTableHeaderConceptRight : HistoryTableHeaderTypeRight
-
   return createTablePanel({
     header: {
       headerLeft: <HistoryHeaderLeft />,
@@ -35,7 +31,8 @@ const HistoryContent = () => {
     },
     tableHeader: {
       headerLeft: <HistoryTableHeaderLeft />,
-      headerRight: <HistoryTableHeaderRight />,
+      headerRight:
+        selectedType === TYPE.CONCEPT ? <HistoryTableHeaderConceptRight /> : null,
     },
     tableData: {
       content: <HistoryTableData />,
