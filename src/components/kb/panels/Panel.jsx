@@ -12,7 +12,7 @@ const Panel = memo(({ panelComponent, name, isActive, hasBeenMounted }) => {
     <Box
       id={`kb-panel-${name}`}
       sx={{
-        display: 'flex',
+        display: isActive ? 'flex' : 'none',
         flexDirection: 'column',
         height: '100%',
         left: 0,

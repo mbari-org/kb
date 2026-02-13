@@ -39,7 +39,8 @@ const useHistoryColumns = ({ type }) => {
   }
 
   const isSortable = type === TYPE.CONCEPT
-  const isCreatedSortable = type === TYPE.APPROVED || type === TYPE.PENDING
+  const isCreatedSortable =
+    type === TYPE.APPROVED || type === TYPE.PENDING || type === TYPE.CONCEPT
 
   const approvedCell = params => {
     const isPending = !params.row.processedTimestamp

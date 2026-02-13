@@ -18,13 +18,23 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
     prevPage,
     selectedType,
     setPageSize,
+    updatePageState,
     pageState,
   } = use(HistoryContext)
 
-  const { limit, offset } = pageState
+  const { limit, offset, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
-  const data = pageState.sortOrder === 'desc' ? [...conceptState.data].reverse() : conceptState.data
+  const data = sortOrder === 'desc' ? [...conceptState.data].reverse() : conceptState.data
+
+  const sortModel = [{ field: 'creationTimestamp', sort: sortOrder || 'desc' }]
+
+  const onSortModelChange = model => {
+    const item = model[0]
+    if (item?.field === 'creationTimestamp' && item?.sort) {
+      updatePageState({ sortOrder: item.sort, offset: 0 })
+    }
+  }
 
   const paginationComponent = (
     <HistoryPagination
@@ -42,6 +52,11 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
   return (
     <PanelDataGrid
       columns={columns}
+      dataGridProps={{
+        onSortModelChange,
+        sortModel,
+        sortingMode: 'client',
+      }}
       hideFooter={hideFooter}
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}
