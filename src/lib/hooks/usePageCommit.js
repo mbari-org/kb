@@ -6,7 +6,8 @@ import { useCallback } from 'react'
  * @param {number} totalPages - Total number of pages
  * @param {function} nextPage - Move to next page
  * @param {function} prevPage - Move to previous page
- * @param {function} [goToPage] - Optional: jump directly to page (1-based). When provided, used instead of nextPage/prevPage loop.
+ * @param {function} [goToPage] - Optional: jump directly to page (1-based).
+ *   When provided, used instead of nextPage/prevPage loop.
  * @returns {function} handlePageCommit - Page commit handler
  */
 const usePageCommit = (currentPage, totalPages, nextPage, prevPage, goToPage) => {

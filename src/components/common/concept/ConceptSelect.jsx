@@ -26,11 +26,14 @@ const ConceptSelect = ({
   leftComponent = NONE,
   onClear,
   onInputChange,
+  onInputBlur,
   onSpecialChange,
   rightComponent = NONE,
   selectables,
   updateConceptSelected = true,
   width = WIDTH,
+  inputValue,
+  ignoreClearSelection = false,
 }) => {
   const theme = useTheme()
   const inputRef = useRef(null)
@@ -111,7 +114,12 @@ const ConceptSelect = ({
       </Stack>
       <Autocomplete
         disabled={disabled}
-        onChange={(_event, selectedName) => handleConceptSelect(selectedName)}
+        onChange={(_event, selectedName, reason) => {
+          if (ignoreClearSelection && reason === 'clear') {
+            return
+          }
+          handleConceptSelect(selectedName)
+        }}
         onInputChange={onInputChange}
         options={options}
         ref={inputRef}
@@ -125,6 +133,7 @@ const ConceptSelect = ({
                 WebkitTextFillColor: theme.palette.text.disabled,
               },
             }}
+            onBlur={onInputBlur}
             onKeyUp={handleKeyUp}
           />
         )}
@@ -140,6 +149,7 @@ const ConceptSelect = ({
             },
           },
         }}
+        inputValue={inputValue}
         value={conceptName || ''}
       />
       <hr />

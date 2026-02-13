@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useState } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
@@ -12,18 +12,48 @@ const { HISTORY } = SELECTED.SETTINGS
 const { NAV_HISTORY } = CONCEPT.SELECT.RIGHT_COMPONENT
 
 const HistoryHeaderLeft = () => {
-  const { pageState, selectedType } = use(HistoryContext)
-  const { getSelected, updateSettings } = use(SelectedContext)
-
-  const handleClear = () => {
-    updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: pageState.lastHistoryType } })
-  }
+  const { selectedType } = use(HistoryContext)
+  const { getSelected, updateSelected } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
 
+  const [draft, setDraft] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
+
+  const inputValue = isEditing ? draft : selectedConcept || ''
+
   if (selectedType !== HISTORY.TYPES.CONCEPT) return null
 
-  return <ConceptSelect conceptName={selectedConcept} onClear={handleClear} rightComponent={NAV_HISTORY} />
+  const handleInputBlur = () => {
+    setIsEditing(false)
+    setDraft('')
+  }
+
+  const handleInputChange = (_event, value) => {
+    setIsEditing(true)
+    setDraft(value)
+  }
+
+  const handleConceptSelected = conceptName => {
+    if (!conceptName) return true
+    setIsEditing(false)
+    setDraft('')
+    updateSelected({ [SELECTED.CONCEPT]: conceptName })
+    return true
+  }
+
+  return (
+    <ConceptSelect
+      conceptName={selectedConcept}
+      doConceptSelected={handleConceptSelected}
+      ignoreClearSelection={true}
+      inputValue={inputValue}
+      onInputBlur={handleInputBlur}
+      onInputChange={handleInputChange}
+      rightComponent={NAV_HISTORY}
+      updateConceptSelected={false}
+    />
+  )
 }
 
 export default HistoryHeaderLeft
