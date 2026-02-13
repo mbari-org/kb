@@ -61,20 +61,28 @@ const useHistoryColumns = ({ type }) => {
   }
 
   const inspectColumn = () => {
+    const showPendingApproval = type === TYPE.PENDING && isAdminUser
+
     return {
       field: 'inspect',
       headerName: '',
       onClick: handleConceptFilter,
       renderCell: params => (
-        <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <FilterIcon
             onClick={() => handleConceptFilter(params.row)}
             tooltip='Filter History to this Concept'
           />
+          {showPendingApproval && (
+            <StampIcon
+              onClick={() => handleConceptApproval(params.row)}
+              tooltip='Approve/Reject'
+            />
+          )}
         </Box>
       ),
       sortable: false,
-      width: 50,
+      width: showPendingApproval ? 90 : 50,
     }
   }
 
