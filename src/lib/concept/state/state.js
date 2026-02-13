@@ -34,6 +34,8 @@ const MOD_CHECK_ORDER = [
 ]
 
 const isStateModified = ({ initialState, stagedState }) => {
+  if (!initialState || !stagedState) return false
+
   for (const isModified of MOD_CHECK_ORDER) {
     if (isModified(initialState, stagedState)) {
       return true

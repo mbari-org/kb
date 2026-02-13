@@ -42,7 +42,7 @@ const ConceptProvider = ({ children }) => {
   const { getConceptTemplates, refreshData: refreshPanelData } = use(PanelDataContext)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { hasUnsavedChanges, setHasUnsavedChanges, unsafeAction } = use(UserContext)
+  const { setHasUnsavedChanges, unsafeAction } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [conceptPath, setConceptPath] = useState(null)
@@ -51,6 +51,11 @@ const ConceptProvider = ({ children }) => {
 
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
+
+  const isConceptModified = useMemo(
+    () => isStateModified({ initialState, stagedState }),
+    [initialState, stagedState]
+  )
 
   const startProcessing = useCallback(
     (key, value) => {
@@ -131,18 +136,12 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
-    const isNewConceptSelected = selectedConcept !== concept?.name
-    const shouldUpdateConcept = isNewConceptSelected && isConceptPanelActive
-
-    // Otherwise follow selection-change path
-    if (shouldUpdateConcept) {
-      if (hasUnsavedChanges) {
+    if (selectedConcept !== concept?.name && panels.current() === SELECTED.PANELS.CONCEPTS) {
+      if (isStateModified({ initialState, stagedState })) {
         displayStaged(CONTINUE)
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
       } else {
         setHasUnsavedChanges(false)
-
         const stop = startProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
         Promise.resolve(conceptLoader(selectedConcept)).finally(stop)
       }
@@ -153,10 +152,11 @@ const ConceptProvider = ({ children }) => {
     displayStaged,
     getConcept,
     getSelected,
-    hasUnsavedChanges,
+    initialState,
     isConceptLoaded,
     loadConcept,
     panels,
+    stagedState,
     startProcessing,
     setConcept,
     setHasUnsavedChanges,
@@ -169,13 +169,14 @@ const ConceptProvider = ({ children }) => {
     if (!selectedConcept) return
     if (!isConceptLoaded(selectedConcept)) return
     if (isSettingConceptRef.current) return
+    if (isConceptModified) return
 
     const taxonomyConcept = getConcept(selectedConcept)
     if (!taxonomyConcept) return
 
     const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
     return () => clearTimeout(timeoutId)
-  }, [getConcept, getSelected, handleSetConcept, isConceptLoaded, taxonomy])
+  }, [getConcept, getSelected, handleSetConcept, initialState, isConceptLoaded, isConceptModified, taxonomy])
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
@@ -254,11 +255,10 @@ const ConceptProvider = ({ children }) => {
     }
 
     // Only fetch concept path if the concept name has actually changed
-    const currentConceptName = concept.name
-    if (previousConceptNameRef.current === currentConceptName) {
+    if (previousConceptNameRef.current === concept.name) {
       return
     }
-    previousConceptNameRef.current = currentConceptName
+    previousConceptNameRef.current = concept.name
 
     // Clear any prior pending tree stop/timeout
     if (pendingTreeStopRef.current) {
@@ -284,6 +284,7 @@ const ConceptProvider = ({ children }) => {
         setConceptPath(parseNode(payload))
         // Defer stopping until ConceptsTree signals ready (expansion/scroll done)
         pendingTreeStopRef.current = stop
+
         // Fallback timeout to avoid stuck overlay
         pendingTreeTimeoutRef.current = setTimeout(() => {
           if (pendingTreeStopRef.current === stop) {

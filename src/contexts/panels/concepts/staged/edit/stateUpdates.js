@@ -1,6 +1,6 @@
 import { drop, isJsonEqual } from '@/lib/utils'
 
-// const STATE_INDEXES = ['aliasIndex', 'mediaIndex', 'realizationIndex']
+const STATE_INDEXES = ['aliasIndex', 'mediaIndex', 'realizationIndex']
 
 const alignMediaByStateId = (initial, staged) => {
   if (!staged || !initial) return staged
@@ -18,8 +18,8 @@ const alignMediaByStateId = (initial, staged) => {
 
 const hasStateChange = (allInitialState, allStagedState) => {
   // Drop fields that are not relevant to state change comparison
-  const initialState = drop(allInitialState, ['aliasIndex', 'mediaIndex', 'realizationIndex'])
-  const stagedState = drop(allStagedState, ['aliasIndex', 'mediaIndex', 'realizationIndex'])
+  const initialState = drop(allInitialState, STATE_INDEXES)
+  const stagedState = drop(allStagedState, STATE_INDEXES)
   // Align media arrays by stateId before comparison so reordering doesn't matter
   const alignedInitial = { ...initialState, media: alignMediaByStateId(initialState.media, stagedState.media) }
   return !isJsonEqual(stagedState, alignedInitial)
