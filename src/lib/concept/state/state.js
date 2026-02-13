@@ -17,50 +17,42 @@ const indexState = {
   realizationIndex: 0,
 }
 
-let modCheckOrder
-const getModCheckOrder = () => {
-  if (!modCheckOrder) {
-    modCheckOrder = [
-      value.anyValueModified,
-      author.isModified,
-      name.isModified,
-      parent.isModified,
-      aliases.isModified,
-      children.isModified,
-      rank.isModified,
-      realizations.isModified,
-      templates.isModified,
-      media.isModified,
-    ]
-  }
-  return modCheckOrder
-}
+const stateField = module => ({
+  initialState: (concept, pendingConcept) =>
+    module.initialState(concept, pendingConcept),
+  isModified: (initialState, stagedState) =>
+    module.isModified(initialState, stagedState),
+})
+
+const STATE_FIELDS = [
+  {
+    initialState: (concept, _pendingConcept) =>
+      value.initialState(concept, CONCEPT.FIELD.DELETE, false),
+    isModified: (initialState, stagedState) =>
+      value.isModified(initialState, stagedState),
+  },
+  stateField(author),
+  stateField(name),
+  stateField(parent),
+  stateField(aliases),
+  stateField(children),
+  stateField(rank),
+  stateField(realizations),
+  stateField(templates),
+  stateField(media),
+]
 
 const isStateModified = ({ initialState, stagedState }) => {
   if (!initialState || !stagedState) return false
-
-  for (const isModified of getModCheckOrder()) {
-    if (isModified(initialState, stagedState)) {
-      return true
-    }
-  }
-  return false
+  return STATE_FIELDS.some(({ isModified }) => isModified(initialState, stagedState))
 }
 
 const initialConceptState = (concept, pendingConcept) => {
-  return {
-    ...aliases.initialState(concept, pendingConcept),
-    ...author.initialState(concept, pendingConcept),
-    ...children.initialState(concept, pendingConcept),
-    ...indexState,
-    ...media.initialState(concept, pendingConcept),
-    ...name.initialState(concept, pendingConcept),
-    ...parent.initialState(concept, pendingConcept),
-    ...rank.initialState(concept, pendingConcept),
-    ...realizations.initialState(concept, pendingConcept),
-    ...templates.initialState(concept, pendingConcept),
-    ...value.initialState(concept, CONCEPT.FIELD.DELETE, false),
+  const state = { ...indexState }
+  for (const { initialState } of STATE_FIELDS) {
+    Object.assign(state, initialState(concept, pendingConcept))
   }
+  return state
 }
 
 export { initialConceptState, isStateModified }

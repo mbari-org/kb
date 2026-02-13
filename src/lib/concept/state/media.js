@@ -65,7 +65,6 @@ const promotePrimary = ({ editingItem, media, updatedItem }) => {
     const itemType = getMediaType(item.url)
     if (itemType !== editingItemType) return false
     if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) return false
-    if (item.action === CONCEPT_STATE.NO_ACTION) return false
     return true
   })
 
@@ -74,8 +73,16 @@ const promotePrimary = ({ editingItem, media, updatedItem }) => {
   return media.map((item, index) => {
     const itemType = getMediaType(item.url)
     if (itemType !== editingItemType) return item
-    if (index === candidateIndex) return { ...item, isPrimary: true }
-    return { ...item, isPrimary: false }
+
+    if (index === candidateIndex) {
+      const nextAction =
+        item.action === CONCEPT_STATE.NO_ACTION
+          ? CONCEPT_STATE.MEDIA_ITEM.EDIT
+          : item.action
+      return { ...item, action: nextAction, isPrimary: true }
+    }
+
+    return item.isPrimary ? { ...item, isPrimary: false } : item
   })
 }
 
@@ -173,16 +180,34 @@ const deleteMedia = ({ stagedState, update }) => {
     return { ...stagedState, media: updatedMedia, mediaIndex: deletingIndex }
   }
 
-  // Promote first remaining ADD/EDIT media of this type
-  for (const item of updatedMedia) {
-    if (item === deletingItem) continue
-    if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) continue
-    if (getMediaType(item.url) === deletingItemType) {
-      item.isPrimary = true
-      break
-    }
+  const promoteIndex = updatedMedia.findIndex((item, index) => {
+    if (index === deletingIndex) return false
+    if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) return false
+    return getMediaType(item.url) === deletingItemType
+  })
+
+  if (promoteIndex === -1) {
+    return { ...stagedState, media: updatedMedia, mediaIndex: deletingIndex }
   }
-  return { ...stagedState, media: updatedMedia, mediaIndex: deletingIndex }
+
+  const promotedMedia = updatedMedia.map((item, index) => {
+    if (item.action === CONCEPT_STATE.MEDIA_ITEM.DELETE) return item
+
+    const itemType = getMediaType(item.url)
+    if (itemType !== deletingItemType) return item
+
+    if (index === promoteIndex) {
+      const nextAction =
+        item.action === CONCEPT_STATE.NO_ACTION
+          ? CONCEPT_STATE.MEDIA_ITEM.EDIT
+          : item.action
+      return { ...item, action: nextAction, isPrimary: true }
+    }
+
+    return item.isPrimary ? { ...item, isPrimary: false } : item
+  })
+
+  return { ...stagedState, media: promotedMedia, mediaIndex: deletingIndex }
 }
 
 const editMedia = ({ initialState, stagedState, update }) => {
@@ -204,7 +229,11 @@ const editMedia = ({ initialState, stagedState, update }) => {
   const initialItem = initialState?.media?.find(item => item.stateId === updatedItem.stateId)
   const isRestoringToInitial = initialItem && isEqualWithout(updatedItem, initialItem, ['action'])
 
-  if (updatedItem.action === CONCEPT_STATE.NO_ACTION && !isRestoringToInitial) {
+  if (isRestoringToInitial) {
+    if (updatedItem.action === CONCEPT_STATE.MEDIA_ITEM.EDIT) {
+      updatedItem.action = CONCEPT_STATE.NO_ACTION
+    }
+  } else if (updatedItem.action === CONCEPT_STATE.NO_ACTION) {
     updatedItem.action = CONCEPT_STATE.MEDIA_ITEM.EDIT
   }
 
