@@ -27,7 +27,18 @@ const usePageHistory = ({ count, limit, offset, updatePageState }) => {
     updatePageState({ limit: DEFAULT_LIMIT, offset: DEFAULT_OFFSET })
   }, [updatePageState])
 
-  return { nextPage, prevPage, setPageSize, resetPagination }
+  const goToPage = useCallback(
+    pageNumber => {
+      const newOffset = Math.max(
+        0,
+        Math.min((pageNumber - 1) * limit, Math.max(0, count - limit))
+      )
+      updatePageState({ offset: newOffset })
+    },
+    [count, limit, updatePageState]
+  )
+
+  return { nextPage, prevPage, setPageSize, resetPagination, goToPage }
 }
 
 export default usePageHistory

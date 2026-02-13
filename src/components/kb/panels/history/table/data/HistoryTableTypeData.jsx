@@ -13,6 +13,7 @@ const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 const HistoryTableTypeData = ({ hideFooter = false }) => {
   const {
     conceptState,
+    goToPage,
     handleSortChange,
     nextPage,
     pageState,
@@ -42,6 +43,7 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   const paginationComponent = (
     <HistoryPagination
       count={conceptState.count}
+      goToPage={goToPage}
       hideFooter={hideFooter}
       limit={limit}
       nextPage={nextPage}

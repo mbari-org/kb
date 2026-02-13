@@ -11,8 +11,15 @@ import { PAGINATION } from '@/lib/constants/pagination.js'
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableConceptData = ({ hideFooter = false }) => {
-  const { conceptState, nextPage, prevPage, selectedType, setPageSize, pageState } =
-    use(HistoryContext)
+  const {
+    conceptState,
+    goToPage,
+    nextPage,
+    prevPage,
+    selectedType,
+    setPageSize,
+    pageState,
+  } = use(HistoryContext)
 
   const { limit, offset } = pageState
   const columns = useHistoryColumns({ type: selectedType })
@@ -22,6 +29,7 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
   const paginationComponent = (
     <HistoryPagination
       count={conceptState.count}
+      goToPage={goToPage}
       hideFooter={hideFooter}
       limit={limit}
       nextPage={nextPage}

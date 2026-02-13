@@ -10,6 +10,7 @@ const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryPagination = ({
   count,
+  goToPage,
   hideFooter = false,
   limit,
   nextPage,
@@ -20,7 +21,13 @@ const HistoryPagination = ({
   const currentPage = Math.floor(offset / limit) + 1 // Convert to 1-based index
   const totalPages = Math.ceil(count / limit)
 
-  const handlePageCommit = usePageCommit(currentPage, totalPages, nextPage, prevPage)
+  const handlePageCommit = usePageCommit(
+    currentPage,
+    totalPages,
+    nextPage,
+    prevPage,
+    goToPage
+  )
 
   if (hideFooter) return null
 
