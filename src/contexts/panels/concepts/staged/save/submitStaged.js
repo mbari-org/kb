@@ -1,4 +1,4 @@
-import { createUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { stateUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 
 import submitAliases from '@/contexts/panels/concepts/staged/save/submitter/submitAliases'
 import submitAuthor from '@/contexts/panels/concepts/staged/save/submitter/submitAuthor'
@@ -14,9 +14,9 @@ import { createError } from '@/lib/errors'
 const submitStaged = async (initialState, stagedState, updatesContext) => {
   const { apiFns, staleConcept } = updatesContext
 
-  const updatesInfo = createUpdatesInfo(initialState, stagedState)
+  const info = stateUpdatesInfo(initialState, stagedState)
 
-  const submitterInfo = [apiFns.apiPayload, { concept: staleConcept, updatesInfo }]
+  const submitterInfo = [apiFns.apiPayload, { concept: staleConcept, updatesInfo: info }]
 
   const submitters = []
   submitters.push(...submitAliases(submitterInfo))
@@ -29,9 +29,9 @@ const submitStaged = async (initialState, stagedState, updatesContext) => {
   submitters.push(...submitRealizations(submitterInfo))
 
   const resultGroups = await Promise.all(submitters)
-  updatesInfo.results = resultGroups.flat()
+  info.results = resultGroups.flat()
 
-  const failedResults = updatesInfo.results.filter(result => result.error)
+  const failedResults = info.results.filter(result => result.error)
   if (failedResults.length > 0) {
     const failedOperations = failedResults.map(result => ({
       field: result.field,
@@ -60,7 +60,7 @@ const submitStaged = async (initialState, stagedState, updatesContext) => {
     )
   }
 
-  return updatesInfo
+  return info
 }
 
 export default submitStaged

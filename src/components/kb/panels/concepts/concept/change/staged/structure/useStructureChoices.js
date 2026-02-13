@@ -1,6 +1,6 @@
 import { use, useMemo } from 'react'
 
-import { hasStateChange } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { isStateModified } from '@/lib/concept/state/state'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -44,7 +44,7 @@ const useStructureChoices = () => {
       hasChildren ||
       hasStagedChildren ||
       hasStagedDelete ||
-      hasStateChange(initialState, stagedState) ||
+      isStateModified({ initialState, stagedState }) ||
       pendingStructure.any,
     [hasChildren, hasStagedChildren, hasStagedDelete, initialState, isRoot, pendingStructure.any, stagedState]
   )

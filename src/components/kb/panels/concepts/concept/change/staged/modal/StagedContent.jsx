@@ -15,7 +15,8 @@ import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/S
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { hasStateChange, stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { isStateModified } from '@/lib/concept/state/state'
 
 import CONFIG from '@/text'
 import { CONCEPT } from '@/lib/constants'
@@ -67,7 +68,7 @@ const StagedContent = () => {
   }
 
   useEffect(() => {
-    if (!hasStateChange(initialState, stagedState)) {
+    if (!isStateModified({ initialState, stagedState })) {
       closeModal(true)
     }
   }, [closeModal, initialState, stagedState])

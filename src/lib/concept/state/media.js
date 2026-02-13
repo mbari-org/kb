@@ -15,7 +15,31 @@ if (generatorError) throw generatorError
 
 const genStateId = () => generator()
 
-const isModified = (initial, staged) => !isJsonEqual(initial?.media, staged?.media)
+const alignMediaByStateId = (initial, staged) => {
+  if (!staged || !initial) return staged
+  const initialByStateId = initial.reduce((acc, item) => {
+    acc[item.stateId] = item
+    return acc
+  }, {})
+  return staged
+    .map(stagedItem => {
+      const initialItem = initialByStateId[stagedItem.stateId]
+      return initialItem || stagedItem
+    })
+    .filter(item => initialByStateId[item.stateId])
+}
+
+const isModified = (initial, staged) => {
+  const alignedInitial = alignMediaByStateId(initial?.media, staged?.media)
+  return !isJsonEqual(staged?.media, alignedInitial)
+}
+
+const stateUpdates = (initial, staged) => {
+  const aligned = alignMediaByStateId(initial?.media, staged?.media)
+  return !isJsonEqual(aligned, staged?.media)
+    ? { media: { initial: aligned, staged: staged?.media } }
+    : {}
+}
 
 const ensureAction = item => (item.action ? item : { ...item, action: CONCEPT_STATE.NO_ACTION })
 
@@ -250,6 +274,20 @@ const editMedia = ({ initialState, stagedState, update }) => {
   return { ...stagedState, media: updatedMedia, mediaIndex: editedMediaIndex }
 }
 
+const initialState = (concept, pendingConcept) => {
+  const { media } = concept
+
+  const orderedMedia = orderByPrimary(media)
+
+  const pendingMedia = pendingConcept.filter(isPendingMedia)
+
+  const stagedMedia = orderedMedia.map(mediaItem =>
+    mediaItemState({ ...mediaItem, stateId: genStateId() }, pendingMedia)
+  )
+
+  return { media: stagedMedia }
+}
+
 const isMatching = (mediaItem, pendingMediaItem) => {
   const pendingMediaValue =
     pendingMediaItem.action === ACTION.DELETE
@@ -272,20 +310,6 @@ const mediaItemState = (mediaItem, pendingMedia) => {
     }
   }
   return { ...mediaItem, action: CONCEPT_STATE.NO_ACTION }
-}
-
-const mediaState = (concept, pendingConcept) => {
-  const { media } = concept
-
-  const orderedMedia = orderByPrimary(media)
-
-  const pendingMedia = pendingConcept.filter(isPendingMedia)
-
-  const stagedMedia = orderedMedia.map(mediaItem =>
-    mediaItemState({ ...mediaItem, stateId: genStateId() }, pendingMedia)
-  )
-
-  return { media: stagedMedia }
 }
 
 const resetMedia = ({ stagedState, update }) => {
@@ -319,12 +343,14 @@ const stagedMediaEdits = stagedEdit => {
 
 export {
   addMedia,
+  alignMediaByStateId,
   deleteMedia,
   editMedia,
+  initialState,
   isModified,
   isPendingMedia,
-  mediaState,
   resetMedia,
   stagedMediaEdits,
+  stateUpdates,
 }
 

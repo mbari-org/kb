@@ -1,3 +1,4 @@
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { CONCEPT } from '@/lib/constants'
 
 import { isJsonEqual } from '@/lib/utils'
@@ -10,7 +11,7 @@ const VALUE_MODIFICATION_CHECKS = [
 const anyValueModified = (initial, staged) =>
   VALUE_MODIFICATION_CHECKS.some(check => check(initial, staged))
 
-const valueState = (concept, field, fieldValue) => {
+const initialState = (concept, field, fieldValue) => {
   const { [field]: conceptValue } = concept
   const value = fieldValue ?? conceptValue
   return {
@@ -25,4 +26,7 @@ const editValue = ({ stagedState, update }) => {
 
 const isModified = (initial, staged) => anyValueModified(initial, staged)
 
-export { anyValueModified, editValue, isModified, valueState }
+const stateUpdates = (initial, staged) =>
+  generalStateUpdates(CONCEPT.FIELD.DELETE, initial, staged)
+
+export { anyValueModified, editValue, initialState, isModified, stateUpdates }

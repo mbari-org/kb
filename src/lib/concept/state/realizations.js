@@ -1,3 +1,4 @@
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { stagedEdits } from '@/lib/concept/state/staged'
 
 import { matchingRealizationString, sortRealizations } from '@/lib/model/realization'
@@ -93,7 +94,7 @@ const realizationState = (realization, pendingRealizations) => {
   return { ...realization, action: CONCEPT_STATE.NO_ACTION }
 }
 
-const realizationsState = (concept, pendingConcept) => {
+const initialState = (concept, pendingConcept) => {
   const pendingRealizations = pendingConcept.filter(isPendingRealization)
   const stagedRealizations = concept.realizations.map((realization, index) =>
     realizationState({ ...realization, index }, pendingRealizations)
@@ -144,16 +145,19 @@ const updateState = ({ stagedState, update, type }) => {
 
 const isModified = (initial, staged) => !isJsonEqual(initial?.realizations, staged?.realizations)
 
+const stateUpdates = (initial, staged) => generalStateUpdates('realizations', initial, staged)
+
 export {
   addRealization,
   deleteRealization,
   editRealization,
+  initialState,
   isModified,
   isPendingRealization,
   realizationEdits,
-  realizationsState,
   realizationState,
   resetRealizations,
   stagedRealizationEdits,
+  stateUpdates,
 }
 

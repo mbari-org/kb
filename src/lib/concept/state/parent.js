@@ -1,5 +1,6 @@
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 const editParent = ({ stagedState, update }) => {
   // update: { field: 'parent', value: newParentName }
@@ -16,7 +17,7 @@ const editParent = ({ stagedState, update }) => {
 
 const isPendingParent = pendingItem => pendingItem.field === HISTORY_FIELD.PARENT
 
-const parentState = (concept, pendingConcept) => {
+const initialState = (concept, pendingConcept) => {
   const { parent } = concept
 
   const stateParent = {
@@ -52,4 +53,6 @@ const stagedParent = (stateParent, pendingConcept) => {
 
 const isModified = (initial, staged) => initial?.parent?.value !== staged?.parent?.value
 
-export { editParent, isModified, isPendingParent, parentState, resetParent, stagedParent }
+const stateUpdates = (initial, staged) => generalStateUpdates('parent', initial, staged)
+
+export { editParent, initialState, isModified, isPendingParent, resetParent, stagedParent, stateUpdates }

@@ -1,52 +1,49 @@
-import { drop, isJsonEqual } from '@/lib/utils'
+import { isJsonEqual } from '@/lib/utils'
 
-const STATE_INDEXES = ['aliasIndex', 'mediaIndex', 'realizationIndex']
+const generalStateUpdates = (field, initial, staged) =>
+  !isJsonEqual(initial?.[field], staged?.[field])
+    ? { [field]: { initial: initial[field], staged: staged[field] } }
+    : {}
 
-const alignMediaByStateId = (initial, staged) => {
-  if (!staged || !initial) return staged
-  const initialByStateId = initial.reduce((acc, item) => {
-    acc[item.stateId] = item
-    return acc
-  }, {})
-  return staged
-    .map(stagedItem => {
-      const initialItem = initialByStateId[stagedItem.stateId]
-      return initialItem || stagedItem
-    })
-    .filter(item => initialByStateId[item.stateId])
-}
+import { isStateModified } from '@/lib/concept/state/state'
+import * as aliases from '@/lib/concept/state/aliases'
+import * as author from '@/lib/concept/state/author'
+import * as children from '@/lib/concept/state/children'
+import * as media from '@/lib/concept/state/media'
+import * as name from '@/lib/concept/state/name'
+import * as parent from '@/lib/concept/state/parent'
+import * as rank from '@/lib/concept/state/rank'
+import * as realizations from '@/lib/concept/state/realizations'
+import * as templates from '@/lib/concept/state/templates'
+import * as value from '@/lib/concept/state/value'
 
-const hasStateChange = (allInitialState, allStagedState) => {
-  // Drop fields that are not relevant to state change comparison
-  const initialState = drop(allInitialState, STATE_INDEXES)
-  const stagedState = drop(allStagedState, STATE_INDEXES)
-  // Align media arrays by stateId before comparison so reordering doesn't matter
-  const alignedInitial = { ...initialState, media: alignMediaByStateId(initialState.media, stagedState.media) }
-  return !isJsonEqual(stagedState, alignedInitial)
-}
+const INDEX_FIELDS = ['aliasIndex', 'mediaIndex', 'realizationIndex']
 
 const stateUpdates = (initialState, stagedState) => {
-  if (!hasStateChange(initialState, stagedState)) {
-    return {}
+  if (!isStateModified({ initialState, stagedState })) return {}
+
+  const moduleUpdates = {
+    ...aliases.stateUpdates(initialState, stagedState),
+    ...author.stateUpdates(initialState, stagedState),
+    ...children.stateUpdates(initialState, stagedState),
+    ...media.stateUpdates(initialState, stagedState),
+    ...name.stateUpdates(initialState, stagedState),
+    ...parent.stateUpdates(initialState, stagedState),
+    ...rank.stateUpdates(initialState, stagedState),
+    ...realizations.stateUpdates(initialState, stagedState),
+    ...templates.stateUpdates(initialState, stagedState),
+    ...value.stateUpdates(initialState, stagedState),
   }
 
-  return stateChanges(initialState, stagedState).reduce((edits, [field, initial, staged]) => {
-    edits[field] = { initial, staged }
-    return edits
-  }, {})
+  const indexUpdates = INDEX_FIELDS.reduce(
+    (acc, field) => ({ ...acc, ...generalStateUpdates(field, initialState, stagedState) }),
+    {}
+  )
+
+  return { ...moduleUpdates, ...indexUpdates }
 }
 
-const stateChanges = (initialState, stagedState) => {
-  const alignedInitial = { ...initialState, media: alignMediaByStateId(initialState.media, stagedState.media) }
-  return Object.keys(stagedState).reduce((changes, field) => {
-    if (!isJsonEqual(stagedState[field], alignedInitial[field])) {
-      changes.push([field, alignedInitial[field], stagedState[field]])
-    }
-    return changes
-  }, [])
-}
-
-const createUpdatesInfo = (initialState, stagedState) => {
+const stateUpdatesInfo = (initialState, stagedState) => {
   const forceLoad = false
   const updates = stateUpdates(initialState, stagedState)
   const hasUpdated = field => updates[field] !== undefined
@@ -55,4 +52,4 @@ const createUpdatesInfo = (initialState, stagedState) => {
   return { forceLoad, hasUpdated, initialValue, updatedValue }
 }
 
-export { createUpdatesInfo, hasStateChange, stateUpdates }
+export { generalStateUpdates, stateUpdates, stateUpdatesInfo }

@@ -1,7 +1,8 @@
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { stagedEdits } from '@/lib/concept/state/staged'
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
-import { stagedEdits } from '@/lib/concept/state/staged'
 
 import { orderedAliases } from '@/lib/model/aliases'
 
@@ -35,7 +36,7 @@ const aliasState = (alias, pendingAliases) => {
   return { ...alias, action: CONCEPT_STATE.NO_ACTION }
 }
 
-const aliasesState = (concept, pendingConcept) => {
+const initialState = (concept, pendingConcept) => {
   const pendingAliases = pendingConcept.filter(isPendingAlias)
   const stagedAliases = concept.aliases.map((alias, index) =>
     aliasState({ ...alias, index }, pendingAliases)
@@ -44,6 +45,8 @@ const aliasesState = (concept, pendingConcept) => {
 }
 
 const isModified = (initial, staged) => !isJsonEqual(initial?.aliases, staged?.aliases)
+
+const stateUpdates = (initial, staged) => generalStateUpdates('aliases', initial, staged)
 
 const deleteAlias = ({ stagedState, update }) => {
   const aliasItem = stagedState.aliases[update.aliasIndex]
@@ -125,12 +128,13 @@ const updateAlias = ({ stagedState, update, type }) => {
 
 export {
   addAlias,
-  aliasesState,
   deleteAlias,
   editAlias,
+  initialState,
   isModified,
   isPendingAlias,
   resetAliases,
   stagedAliasesEdits,
+  stateUpdates,
 }
 

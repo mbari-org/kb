@@ -1,3 +1,4 @@
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
@@ -30,7 +31,7 @@ const templateState = (template, pendingTemplates) => {
   return { ...template, action: CONCEPT_STATE.NO_ACTION }
 }
 
-const templatesState = (concept, pendingConcept) => {
+const initialState = (concept, pendingConcept) => {
   const pendingTemplates = pendingConcept.filter(isPendingTemplate)
   const stagedTemplates = (concept.templates || []).map((template, index) =>
     templateState({ ...template, index }, pendingTemplates)
@@ -40,4 +41,6 @@ const templatesState = (concept, pendingConcept) => {
 
 const isModified = (initial, staged) => !isJsonEqual(initial?.templates, staged?.templates)
 
-export { isModified, isPendingTemplate, templatesState, templateState }
+const stateUpdates = (initial, staged) => generalStateUpdates('templates', initial, staged)
+
+export { initialState, isModified, isPendingTemplate, stateUpdates, templateState }

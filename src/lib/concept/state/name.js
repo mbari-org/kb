@@ -1,10 +1,11 @@
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 import { isJsonEqual } from '@/lib/utils'
 
-const nameState = (concept, pendingConcept) => {
+const initialState = (concept, pendingConcept) => {
   const { name } = concept
 
   const stateName = {
@@ -55,4 +56,6 @@ const stagedName = (name, pendingConcept) => {
 
 const isModified = (initial, staged) => !isJsonEqual(initial?.name, staged?.name)
 
-export { editName, isModified, isPendingName, nameState, resetName }
+const stateUpdates = (initial, staged) => generalStateUpdates('name', initial, staged)
+
+export { editName, initialState, isModified, isPendingName, resetName, stateUpdates }

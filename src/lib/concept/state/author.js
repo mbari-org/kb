@@ -1,3 +1,4 @@
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
@@ -7,7 +8,7 @@ const isPendingAuthor = pendingItem =>
 // CxNote the server does not support a pending author field. This implementation is to normalize
 // the field to that of the other staged state fields.
 
-const authorState = (concept, pendingConcept) => {
+const initialState = (concept, pendingConcept) => {
   const { author } = concept
 
   const stateAuthor = {
@@ -58,4 +59,6 @@ const resetAuthor = ({ stagedState, update }) => {
 
 const isModified = (initial, staged) => initial?.author?.value !== staged?.author?.value
 
-export { authorState, editAuthor, isModified, resetAuthor }
+const stateUpdates = (initial, staged) => generalStateUpdates('author', initial, staged)
+
+export { editAuthor, initialState, isModified, resetAuthor, stateUpdates }
