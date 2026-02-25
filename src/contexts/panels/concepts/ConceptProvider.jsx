@@ -20,7 +20,6 @@ import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptS
 import { getConceptPath } from '@/lib/api/concept'
 
 import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
-import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/text'
@@ -39,7 +38,8 @@ const ConceptProvider = ({ children }) => {
 
   const { apiFns } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
-  const { getConceptTemplates, refreshData: refreshPanelData } = use(PanelDataContext)
+  const { getConceptTemplates, pendingHistory } = use(PanelDataContext)
+  const pendingHistoryRef = useRef(pendingHistory)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { setHasUnsavedChanges, unsafeAction } = use(UserContext)
@@ -80,15 +80,18 @@ const ConceptProvider = ({ children }) => {
 
   const { pending, setPendingConfirm } = useConceptPending(concept)
 
+  useEffect(() => {
+    pendingHistoryRef.current = pendingHistory
+  }, [pendingHistory])
+
   const handleSetConcept = useCallback(
-    async updatedConcept => {
+    updatedConcept => {
       if (isSettingConceptRef.current) return
       isSettingConceptRef.current = true
 
       setEditing(false)
 
-      const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
-      const pendingConcept = pendingHistory.filter(
+      const pendingConcept = pendingHistoryRef.current.filter(
         history => history.concept === updatedConcept.name
       )
 
@@ -108,7 +111,7 @@ const ConceptProvider = ({ children }) => {
         isSettingConceptRef.current = false
       }, 0)
     },
-    [getConceptTemplates, refreshPanelData]
+    [getConceptTemplates]
   )
 
   const conceptLoader = useConceptLoader({
