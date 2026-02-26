@@ -42,6 +42,7 @@ const useHistoryColumns = ({ type }) => {
 
   const sortableFields = [
     'action',
+    ...(type === TYPE.PENDING ? ['concept'] : []),
     'creationTimestamp',
     'creatorName',
     'field',

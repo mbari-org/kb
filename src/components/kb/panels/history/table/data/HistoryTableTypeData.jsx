@@ -29,14 +29,17 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   const { limit, offset, sortField, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
+  const effectiveSortField =
+    sortField === 'concept' && selectedType !== TYPE.PENDING ? 'creationTimestamp' : sortField
+
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
   const rows = pageState.data
 
   const sortModel = useMemo(
-    () => [{ field: sortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
-    [sortField, sortOrder]
+    () => [{ field: effectiveSortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
+    [effectiveSortField, sortOrder]
   )
 
   const onSortModelChange = useCallback(
@@ -54,6 +57,8 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
         item.field === 'oldValue' ||
         item.field === 'newValue'
       ) {
+        isAllowed = true
+      } else if (selectedType === TYPE.PENDING && item.field === 'concept') {
         isAllowed = true
       } else if (
         selectedType === TYPE.APPROVED &&

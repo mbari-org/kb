@@ -25,11 +25,13 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
   const { limit, offset, sortField, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
+  const effectiveSortField = sortField === 'concept' ? 'creationTimestamp' : sortField
+
   const rows = conceptState.data
 
   const sortModel = useMemo(
-    () => [{ field: sortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
-    [sortField, sortOrder]
+    () => [{ field: effectiveSortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
+    [effectiveSortField, sortOrder]
   )
 
   const onSortModelChange = useCallback(

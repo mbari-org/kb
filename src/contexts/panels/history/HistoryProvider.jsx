@@ -84,6 +84,13 @@ const HistoryProvider = ({ children }) => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
 
+      if (selectedType === TYPE.APPROVED) {
+        setPageState(prev => {
+          if (prev.sortField !== 'concept') return prev
+          return { ...prev, offset: 0, sortField: 'creationTimestamp' }
+        })
+      }
+
       if (selectedType !== TYPE.CONCEPT) {
         updatePageState({ lastHistoryType: selectedType })
       }
