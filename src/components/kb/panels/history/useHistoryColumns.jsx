@@ -46,19 +46,33 @@ const useHistoryColumns = ({ type }) => {
           all: true,
           fields: {},
         }
-      : type === TYPE.APPROVED || type === TYPE.PENDING
+      : type === TYPE.APPROVED
         ? {
             all: false,
             fields: {
-              creationTimestamp: true,
-              field: true,
               action: true,
+              creationTimestamp: true,
               creatorName: true,
-              oldValue: true,
+              field: true,
               newValue: true,
+              oldValue: true,
+              processedTimestamp: true,
+              processorName: true,
             },
           }
-        : { all: false, fields: {} }
+        : type === TYPE.PENDING
+          ? {
+              all: false,
+              fields: {
+                action: true,
+                creationTimestamp: true,
+                creatorName: true,
+                field: true,
+                newValue: true,
+                oldValue: true,
+              },
+            }
+          : { all: false, fields: {} }
 
   const isColumnSortable = field => sortSpec.all || !!sortSpec.fields[field]
   const sortableProps = field =>

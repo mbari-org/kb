@@ -43,7 +43,9 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
         item.field !== 'action' &&
         item.field !== 'creatorName' &&
         item.field !== 'oldValue' &&
-        item.field !== 'newValue'
+        item.field !== 'newValue' &&
+        item.field !== 'processorName' &&
+        item.field !== 'processedTimestamp'
       ) {
         return
       }

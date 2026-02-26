@@ -6,7 +6,10 @@ import HistoryPagination from './HistoryPagination'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
+import { CONCEPT } from '@/lib/constants'
 import { PAGINATION } from '@/lib/constants/pagination.js'
+
+const { TYPE } = CONCEPT.HISTORY
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
@@ -41,20 +44,29 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
       const item = model[0]
       if (!item?.field || !item?.sort) return
 
+      let isAllowed = false
+
       if (
-        item.field !== 'creationTimestamp' &&
-        item.field !== 'field' &&
-        item.field !== 'action' &&
-        item.field !== 'creatorName' &&
-        item.field !== 'oldValue' &&
-        item.field !== 'newValue'
+        item.field === 'creationTimestamp' ||
+        item.field === 'field' ||
+        item.field === 'action' ||
+        item.field === 'creatorName' ||
+        item.field === 'oldValue' ||
+        item.field === 'newValue'
       ) {
-        return
+        isAllowed = true
+      } else if (
+        selectedType === TYPE.APPROVED &&
+        (item.field === 'processorName' || item.field === 'processedTimestamp')
+      ) {
+        isAllowed = true
       }
+
+      if (!isAllowed) return
 
       handleSortChange(item.field, item.sort)
     },
-    [handleSortChange]
+    [handleSortChange, selectedType]
   )
 
   const paginationComponent = (
