@@ -27,6 +27,7 @@ export const useLoadPendingHistory = apiFns => {
         {
           limit: historyPerPage,
           offset: pageIndex * historyPerPage,
+          sort: 'creationTimestamp,asc',
         },
       ])
       acc.push(...pagePendingHistory)

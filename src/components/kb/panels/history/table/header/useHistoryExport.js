@@ -77,7 +77,7 @@ const fetchHistory = async (type, pageIndex, pageSize, apiFns) => {
   const offset = pageIndex * pageSize
   const response = await apiFns.apiPaginated(getHistory, [
     type,
-    { limit: EXPORT_PAGE_SIZE, offset },
+    { limit: EXPORT_PAGE_SIZE, offset, sort: 'creationTimestamp,asc' },
   ])
   return response
 }

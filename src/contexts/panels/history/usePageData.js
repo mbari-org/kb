@@ -27,16 +27,13 @@ const usePageData = ({
 
       let data = []
       if (selectedType === TYPE.APPROVED) {
-        let actualOffset = offset
-        if (sortOrder === 'desc') {
-          const page = Math.floor(offset / limit)
-          const totalPages = Math.ceil(conceptState.count / limit)
-          const reversePage = totalPages - 1 - page
-          actualOffset = reversePage * limit
-        }
         data = await apiFns.apiPaginated(getHistory, [
           selectedType,
-          { limit, offset: actualOffset },
+          {
+            limit,
+            offset,
+            sort: `creationTimestamp,${sortOrder}`,
+          },
         ])
       } else {
         const start = offset
@@ -45,7 +42,7 @@ const usePageData = ({
       }
       updatePageState({ data })
     },
-    [apiFns, conceptState.data, conceptState.count, selectedType, sortOrder, limit, offset]
+    [apiFns, conceptState.data, selectedType, sortOrder, limit, offset]
   )
 
   return pageData

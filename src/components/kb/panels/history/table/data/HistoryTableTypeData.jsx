@@ -6,7 +6,10 @@ import HistoryPagination from './HistoryPagination'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
+import { CONCEPT } from '@/lib/constants'
 import { PAGINATION } from '@/lib/constants/pagination.js'
+
+const { TYPE } = CONCEPT.HISTORY
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
@@ -29,7 +32,12 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
-  const rows = sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data
+  const rows =
+    selectedType === TYPE.APPROVED
+      ? pageState.data
+      : sortOrder === 'desc'
+        ? [...pageState.data].reverse()
+        : pageState.data
 
   const sortModel = [{ field: 'creationTimestamp', sort: sortOrder || 'desc' }]
 
