@@ -37,7 +37,9 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
       const item = model[0]
       if (!item?.field || !item?.sort) return
 
-      if (item.field !== 'creationTimestamp' && item.field !== 'field') return
+      if (item.field !== 'creationTimestamp' && item.field !== 'field' && item.field !== 'action') {
+        return
+      }
 
       if (sortField === item.field && sortOrder === item.sort) return
 

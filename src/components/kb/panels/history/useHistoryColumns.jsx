@@ -38,26 +38,30 @@ const useHistoryColumns = ({ type }) => {
     updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: TYPE.CONCEPT } })
   }
 
+  const SORTING_ORDER = ['asc', 'desc']
+
   const sortSpec =
     type === TYPE.CONCEPT
       ? {
           all: true,
-          fields: {
-            creationTimestamp: { sortingOrder: ['desc', 'asc'] },
-          },
+          fields: {},
         }
       : type === TYPE.APPROVED || type === TYPE.PENDING
         ? {
             all: false,
             fields: {
-              creationTimestamp: { sortingOrder: ['desc', 'asc'] },
-              field: { sortingOrder: ['asc', 'desc'] },
+              creationTimestamp: true,
+              field: true,
+              action: true,
             },
           }
         : { all: false, fields: {} }
 
   const isColumnSortable = field => sortSpec.all || !!sortSpec.fields[field]
-  const sortingOrderFor = field => sortSpec.fields[field]?.sortingOrder
+  const sortableProps = field =>
+    isColumnSortable(field)
+      ? { sortable: true, sortingOrder: SORTING_ORDER }
+      : { sortable: false }
 
   const approvedCell = params => {
     const isPending = !params.row.processedTimestamp
@@ -110,37 +114,35 @@ const useHistoryColumns = ({ type }) => {
       field: 'concept',
       headerClassName: 'bold-header',
       headerName: 'Concept',
-      sortable: isColumnSortable('concept'),
+      ...sortableProps('concept'),
       width: 200,
     },
     {
       field: 'field',
       headerClassName: 'bold-header',
       headerName: 'Field',
-      sortable: isColumnSortable('field'),
-      sortingOrder: sortingOrderFor('field'),
+      ...sortableProps('field'),
       width: 130,
     },
     {
       field: 'action',
       headerClassName: 'bold-header',
       headerName: 'Action',
-      sortable: isColumnSortable('action'),
+      ...sortableProps('action'),
       width: 100,
     },
     {
       field: 'creatorName',
       headerClassName: 'bold-header',
       headerName: 'Creator',
-      sortable: isColumnSortable('creatorName'),
+      ...sortableProps('creatorName'),
       width: 130,
     },
     {
       field: 'creationTimestamp',
       headerClassName: 'bold-header',
       headerName: 'Created',
-      sortable: isColumnSortable('creationTimestamp'),
-      sortingOrder: sortingOrderFor('creationTimestamp'),
+      ...sortableProps('creationTimestamp'),
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },
@@ -148,14 +150,14 @@ const useHistoryColumns = ({ type }) => {
       field: 'oldValue',
       headerClassName: 'bold-header',
       headerName: 'Old Value',
-      sortable: isColumnSortable('oldValue'),
+      ...sortableProps('oldValue'),
       width: 200,
     },
     {
       field: 'newValue',
       headerClassName: 'bold-header',
       headerName: 'New Value',
-      sortable: isColumnSortable('newValue'),
+      ...sortableProps('newValue'),
       width: 200,
     },
   ]
@@ -164,7 +166,7 @@ const useHistoryColumns = ({ type }) => {
     field: 'approved',
     headerClassName: 'bold-header',
     headerName: 'Approved',
-    sortable: isColumnSortable('approved'),
+    ...sortableProps('approved'),
     renderCell: approvedCell,
     width: 100,
   }
@@ -174,14 +176,14 @@ const useHistoryColumns = ({ type }) => {
       field: 'processorName',
       headerClassName: 'bold-header',
       headerName: 'Processor',
-      sortable: isColumnSortable('processorName'),
+      ...sortableProps('processorName'),
       width: 100,
     },
     {
       field: 'processedTimestamp',
       headerClassName: 'bold-header',
       headerName: 'Processed',
-      sortable: isColumnSortable('processedTimestamp'),
+      ...sortableProps('processedTimestamp'),
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },

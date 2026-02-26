@@ -47,6 +47,10 @@ const usePageData = ({
             sorted = [...conceptState.data].sort((a, b) => {
               return (a.field || '').localeCompare(b.field || '', undefined, { sensitivity: 'base' })
             })
+          } else if (sortField === 'action') {
+            sorted = [...conceptState.data].sort((a, b) => {
+              return (a.action || '').localeCompare(b.action || '', undefined, { sensitivity: 'base' })
+            })
           }
 
           if (sortOrder === 'desc') {
