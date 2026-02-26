@@ -20,6 +20,8 @@ import { CONCEPT } from '@/lib/constants'
 const { TYPE } = CONCEPT.HISTORY
 const { HISTORY } = SELECTED.SETTINGS
 
+const SORTING_ORDER = ['asc', 'desc']
+
 const useHistoryColumns = ({ type }) => {
   const openPendingItem = usePendingItemModal()
   const { updateSelected, updateSettings } = use(SelectedContext)
@@ -38,45 +40,18 @@ const useHistoryColumns = ({ type }) => {
     updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: TYPE.CONCEPT } })
   }
 
-  const SORTING_ORDER = ['asc', 'desc']
+  const sortableFields = [
+    'action',
+    'creationTimestamp',
+    'creatorName',
+    'field',
+    'newValue',
+    'oldValue',
+    ...(type !== TYPE.PENDING ? ['processedTimestamp', 'processorName'] : []),
+  ]
 
-  const sortSpec =
-    type === TYPE.CONCEPT
-      ? {
-          all: true,
-          fields: {},
-        }
-      : type === TYPE.APPROVED
-        ? {
-            all: false,
-            fields: {
-              action: true,
-              creationTimestamp: true,
-              creatorName: true,
-              field: true,
-              newValue: true,
-              oldValue: true,
-              processedTimestamp: true,
-              processorName: true,
-            },
-          }
-        : type === TYPE.PENDING
-          ? {
-              all: false,
-              fields: {
-                action: true,
-                creationTimestamp: true,
-                creatorName: true,
-                field: true,
-                newValue: true,
-                oldValue: true,
-              },
-            }
-          : { all: false, fields: {} }
-
-  const isColumnSortable = field => sortSpec.all || !!sortSpec.fields[field]
   const sortableProps = field =>
-    isColumnSortable(field)
+    sortableFields.includes(field)
       ? { sortable: true, sortingOrder: SORTING_ORDER }
       : { sortable: false }
 
