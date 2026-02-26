@@ -58,6 +58,12 @@ const usePageData = ({
             sorted = textSort(sortData, 'field')
           } else if (sortField === 'action') {
             sorted = textSort(sortData, 'action')
+          } else if (sortField === 'creatorName') {
+            sorted = textSort(sortData, 'creatorName')
+          } else if (sortField === 'oldValue') {
+            sorted = textSort(sortData, 'oldValue')
+          } else if (sortField === 'newValue') {
+            sorted = textSort(sortData, 'newValue')
           }
 
           if (sortOrder === 'desc') {

@@ -53,6 +53,9 @@ const useHistoryColumns = ({ type }) => {
               creationTimestamp: true,
               field: true,
               action: true,
+              creatorName: true,
+              oldValue: true,
+              newValue: true,
             },
           }
         : { all: false, fields: {} }

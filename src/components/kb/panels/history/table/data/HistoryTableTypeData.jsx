@@ -41,7 +41,14 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
       const item = model[0]
       if (!item?.field || !item?.sort) return
 
-      if (item.field !== 'creationTimestamp' && item.field !== 'field' && item.field !== 'action') {
+      if (
+        item.field !== 'creationTimestamp' &&
+        item.field !== 'field' &&
+        item.field !== 'action' &&
+        item.field !== 'creatorName' &&
+        item.field !== 'oldValue' &&
+        item.field !== 'newValue'
+      ) {
         return
       }
 
