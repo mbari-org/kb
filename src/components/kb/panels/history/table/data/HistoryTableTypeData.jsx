@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useCallback, useMemo } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
@@ -6,10 +6,7 @@ import HistoryPagination from './HistoryPagination'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
-import { CONCEPT } from '@/lib/constants'
 import { PAGINATION } from '@/lib/constants/pagination.js'
-
-const { TYPE } = CONCEPT.HISTORY
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
@@ -26,27 +23,30 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   } =
     use(HistoryContext)
 
-  const { limit, offset, sortOrder } = pageState
+  const { limit, offset, sortField, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
-  const rows =
-    selectedType === TYPE.APPROVED
-      ? pageState.data
-      : sortOrder === 'desc'
-        ? [...pageState.data].reverse()
-        : pageState.data
+  const rows = pageState.data
 
-  const sortModel = [{ field: 'creationTimestamp', sort: sortOrder || 'desc' }]
+  const sortModel = useMemo(
+    () => [{ field: sortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
+    [sortField, sortOrder]
+  )
 
-  const onSortModelChange = model => {
-    const item = model[0]
-    if (item?.field === 'creationTimestamp' && item?.sort) {
-      handleSortChange(item.sort)
-    }
-  }
+  const onSortModelChange = useCallback(
+    model => {
+      const item = model[0]
+      if (!item?.field || !item?.sort) return
+
+      if (item.field !== 'creationTimestamp' && item.field !== 'field') return
+
+      handleSortChange(item.field, item.sort)
+    },
+    [handleSortChange]
+  )
 
   const paginationComponent = (
     <HistoryPagination

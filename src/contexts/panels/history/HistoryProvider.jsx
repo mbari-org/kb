@@ -49,6 +49,7 @@ const HistoryProvider = ({ children }) => {
     lastHistoryType: selectedType !== TYPE.CONCEPT ? selectedType : TYPE.PENDING,
     limit: DEFAULT_LIMIT,
     offset: DEFAULT_OFFSET,
+    sortField: 'creationTimestamp',
     sortOrder: 'desc',
   })
 
@@ -136,6 +137,7 @@ const HistoryProvider = ({ children }) => {
     selectedType,
     updatePageState,
     pageState.offset,
+    pageState.sortField,
     pageState.sortOrder,
   ])
 
@@ -147,12 +149,17 @@ const HistoryProvider = ({ children }) => {
   })
 
   const handleSortChange = useCallback(
-    sortOrder => {
-      if (selectedType !== TYPE.CONCEPT) {
-        updatePageState({ sortOrder, offset: 0 })
-      }
+    (sortField, sortOrder) => {
+      if (selectedType === TYPE.CONCEPT) return
+
+      setPageState(prev => {
+        if (prev.sortField === sortField && prev.sortOrder === sortOrder) {
+          return prev
+        }
+        return { ...prev, sortField, sortOrder, offset: 0 }
+      })
     },
-    [selectedType, updatePageState]
+    [selectedType]
   )
 
   const value = {

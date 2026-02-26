@@ -19,7 +19,7 @@ const usePageData = ({
 
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
 
-  const { limit, offset, sortOrder } = pageState
+  const { limit, offset, sortField, sortOrder } = pageState
 
   const pageData = useCallback(
     async ({ updatePageState }) => {
@@ -32,17 +32,35 @@ const usePageData = ({
           {
             limit,
             offset,
-            sort: `creationTimestamp,${sortOrder}`,
+            sort: `${sortField},${sortOrder}`,
           },
         ])
       } else {
+        let sorted = conceptState.data
+
+        if (selectedType === TYPE.PENDING) {
+          if (sortField === 'creationTimestamp') {
+            sorted = [...conceptState.data].sort((a, b) => {
+              return new Date(a.creationTimestamp) - new Date(b.creationTimestamp)
+            })
+          } else if (sortField === 'field') {
+            sorted = [...conceptState.data].sort((a, b) => {
+              return (a.field || '').localeCompare(b.field || '', undefined, { sensitivity: 'base' })
+            })
+          }
+
+          if (sortOrder === 'desc') {
+            sorted.reverse()
+          }
+        }
+
         const start = offset
         const end = start + limit
-        data = conceptState.data.slice(start, end)
+        data = sorted.slice(start, end)
       }
       updatePageState({ data })
     },
-    [apiFns, conceptState.data, selectedType, sortOrder, limit, offset]
+    [apiFns, conceptState.data, selectedType, sortField, sortOrder, limit, offset]
   )
 
   return pageData
