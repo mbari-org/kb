@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useCallback, useMemo } from 'react'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryPagination from './HistoryPagination'
@@ -22,19 +22,29 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
     pageState,
   } = use(HistoryContext)
 
-  const { limit, offset, sortOrder } = pageState
+  const { limit, offset, sortField, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
-  const data = sortOrder === 'desc' ? [...conceptState.data].reverse() : conceptState.data
+  const rows = conceptState.data
 
-  const sortModel = [{ field: 'creationTimestamp', sort: sortOrder || 'desc' }]
+  const sortModel = useMemo(
+    () => [{ field: sortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
+    [sortField, sortOrder]
+  )
 
-  const onSortModelChange = model => {
-    const item = model[0]
-    if (item?.field === 'creationTimestamp' && item?.sort) {
-      updatePageState({ sortOrder: item.sort, offset: 0 })
-    }
-  }
+  const onSortModelChange = useCallback(
+    model => {
+      const item = model[0]
+      if (!item?.field || !item?.sort) return
+
+      if (item.field !== 'creationTimestamp' && item.field !== 'field') return
+
+      if (sortField === item.field && sortOrder === item.sort) return
+
+      updatePageState({ sortField: item.field, sortOrder: item.sort, offset: 0 })
+    },
+    [sortField, sortOrder, updatePageState]
+  )
 
   const paginationComponent = (
     <HistoryPagination
@@ -66,7 +76,7 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
         pageSize: limit,
         page: Math.floor(offset / limit),
       }}
-      rows={data}
+      rows={rows}
     />
   )
 }
