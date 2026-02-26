@@ -65,6 +65,7 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
     <PanelDataGrid
       columns={columns}
       dataGridProps={{
+        disableColumnFilter: true,
         onSortModelChange,
         sortModel,
         sortingMode: 'server',

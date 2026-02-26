@@ -53,6 +53,7 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
     <PanelDataGrid
       columns={columns}
       dataGridProps={{
+        disableColumnFilter: true,
         onSortModelChange,
         sortModel,
         sortingMode: 'client',
