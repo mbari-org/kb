@@ -63,6 +63,14 @@ const useHistoryColumns = ({ type }) => {
       ? { sortable: true, sortingOrder: SORTING_ORDER }
       : { sortable: false }
 
+  const columnProps = (field, headerName, width) => ({
+    field,
+    headerClassName: 'bold-header',
+    headerName,
+    width,
+    ...sortableProps(field),
+  })
+
   const approvedCell = params => {
     const isPending = !params.row.processedTimestamp
     const isApproved = !!params.row.approved
@@ -110,82 +118,28 @@ const useHistoryColumns = ({ type }) => {
   }
 
   const baseColumns = [
+    columnProps('concept', 'Concept', 200),
+    columnProps('field', 'Field', 130),
+    columnProps('action', 'Action', 100),
+    columnProps('creatorName', 'Creator', 130),
     {
-      field: 'concept',
-      headerClassName: 'bold-header',
-      headerName: 'Concept',
-      ...sortableProps('concept'),
-      width: 200,
-    },
-    {
-      field: 'field',
-      headerClassName: 'bold-header',
-      headerName: 'Field',
-      ...sortableProps('field'),
-      width: 130,
-    },
-    {
-      field: 'action',
-      headerClassName: 'bold-header',
-      headerName: 'Action',
-      ...sortableProps('action'),
-      width: 100,
-    },
-    {
-      field: 'creatorName',
-      headerClassName: 'bold-header',
-      headerName: 'Creator',
-      ...sortableProps('creatorName'),
-      width: 130,
-    },
-    {
-      field: 'creationTimestamp',
-      headerClassName: 'bold-header',
-      headerName: 'Created',
-      ...sortableProps('creationTimestamp'),
+      ...columnProps('creationTimestamp', 'Created', 165),
       valueFormatter: value => humanTimestamp(value),
-      width: 165,
     },
-    {
-      field: 'oldValue',
-      headerClassName: 'bold-header',
-      headerName: 'Old Value',
-      ...sortableProps('oldValue'),
-      width: 200,
-    },
-    {
-      field: 'newValue',
-      headerClassName: 'bold-header',
-      headerName: 'New Value',
-      ...sortableProps('newValue'),
-      width: 200,
-    },
+    columnProps('oldValue', 'Old Value', 200),
+    columnProps('newValue', 'New Value', 200),
   ]
 
   const approvedColumn = {
-    field: 'approved',
-    headerClassName: 'bold-header',
-    headerName: 'Approved',
-    ...sortableProps('approved'),
+    ...columnProps('approved', 'Approved', 100),
     renderCell: approvedCell,
-    width: 100,
   }
 
   const processorColumns = [
+    columnProps('processorName', 'Processor', 100),
     {
-      field: 'processorName',
-      headerClassName: 'bold-header',
-      headerName: 'Processor',
-      ...sortableProps('processorName'),
-      width: 100,
-    },
-    {
-      field: 'processedTimestamp',
-      headerClassName: 'bold-header',
-      headerName: 'Processed',
-      ...sortableProps('processedTimestamp'),
+      ...columnProps('processedTimestamp', 'Processed', 165),
       valueFormatter: value => humanTimestamp(value),
-      width: 165,
     },
   ]
 
