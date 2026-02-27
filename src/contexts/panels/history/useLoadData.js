@@ -4,6 +4,7 @@ import { getConceptHistory, getHistoryCount } from '@/lib/api/history'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import { getDescendantNames } from '@/lib/model/concept'
 
 import { sleep } from '@/lib/utils'
 
@@ -24,7 +25,7 @@ const useLoadData = ({
   pendingHistory,
 }) => {
   const { getSelected, getSettings } = use(SelectedContext)
-  const { getConcept, getDescendantNames } = use(TaxonomyContext)
+  const { getConcept } = use(TaxonomyContext)
 
   const selectedConcept = getSelected(SELECTED_CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
@@ -57,7 +58,8 @@ const useLoadData = ({
 
   const loadConceptDescendantsData = useCallback(
     async ({ updateConceptState, updatePageState }) => {
-      const names = [selectedConcept, ...(await getDescendantNames(selectedConcept))]
+      const descendantNames = await getDescendantNames(apiFns, selectedConcept)
+      const names = [selectedConcept, ...descendantNames]
 
       const CONCURRENCY = 8
       const RETRIES = 2
@@ -101,7 +103,7 @@ const useLoadData = ({
       updateConceptState({ data: merged, count: merged.length })
       updatePageState({ data: merged.slice(0, DEFAULT_LIMIT) })
     },
-    [apiFns, getDescendantNames, selectedConcept]
+    [apiFns, selectedConcept]
   )
 
   const loadPendingData = useCallback(

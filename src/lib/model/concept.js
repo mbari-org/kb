@@ -37,18 +37,10 @@ const getDescendantsInfo = async (apiFns, conceptName, conceptId, descendantsInf
 const getDescendantNames = async (apiFns, conceptName) => {
   const phylogeny = await apiFns.apiPayload(getConceptDescendants, conceptName)
 
-  const names = []
-  const collectNames = node => {
-    names.push(node.name)
-    if (node.children) {
-      for (const child of node.children) {
-        collectNames(child)
-      }
-    }
-  }
+  const descendantNames = node =>
+    (node.children || []).flatMap(child => [child.name, ...descendantNames(child)])
 
-  collectNames(phylogeny)
-  return names
+  return descendantNames(phylogeny)
 }
 
 const getNextSibling = (concept, getConcept) => {
@@ -87,3 +79,4 @@ export {
   getNextSibling,
   getPrevSibling,
 }
+
