@@ -49,6 +49,12 @@ const ConceptProvider = ({ children }) => {
   const [confirmReset, setConfirmReset] = useState(null)
   const [isEditing, setEditing] = useState(false)
 
+  const indexRef = useRef({
+    aliasIndex: 0,
+    mediaIndex: 0,
+    realizationIndex: 0,
+  })
+
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
@@ -84,12 +90,23 @@ const ConceptProvider = ({ children }) => {
     pendingHistoryRef.current = pendingHistory
   }, [pendingHistory])
 
+  useEffect(() => {
+    indexRef.current = {
+      aliasIndex: stagedState?.aliasIndex ?? 0,
+      mediaIndex: stagedState?.mediaIndex ?? 0,
+      realizationIndex: stagedState?.realizationIndex ?? 0,
+    }
+  }, [stagedState?.aliasIndex, stagedState?.mediaIndex, stagedState?.realizationIndex])
+
   const handleSetConcept = useCallback(
     updatedConcept => {
       if (isSettingConceptRef.current) return
       isSettingConceptRef.current = true
 
-      setEditing(false)
+      const isSameConcept = concept?.name && concept?.name === updatedConcept.name
+      if (!isSameConcept) {
+        setEditing(false)
+      }
 
       const pendingConcept = pendingHistoryRef.current.filter(
         history => history.concept === updatedConcept.name
@@ -101,6 +118,22 @@ const ConceptProvider = ({ children }) => {
       }
 
       const conceptState = initialConceptState(conceptWithTemplates, pendingConcept)
+
+      if (isSameConcept) {
+        const clampIndex = (index, length) => {
+          if (!Number.isFinite(index)) return 0
+          if (!Number.isFinite(length) || length <= 0) return 0
+          return Math.max(0, Math.min(index, length - 1))
+        }
+
+        conceptState.aliasIndex = clampIndex(indexRef.current.aliasIndex, conceptState.aliases?.length)
+        conceptState.mediaIndex = clampIndex(indexRef.current.mediaIndex, conceptState.media?.length)
+        conceptState.realizationIndex = clampIndex(
+          indexRef.current.realizationIndex,
+          conceptState.realizations?.length
+        )
+      }
+
       setInitialState(conceptState)
       dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
 
@@ -111,7 +144,7 @@ const ConceptProvider = ({ children }) => {
         isSettingConceptRef.current = false
       }, 0)
     },
-    [getConceptTemplates]
+    [concept?.name, getConceptTemplates]
   )
 
   const conceptLoader = useConceptLoader({
@@ -172,6 +205,7 @@ const ConceptProvider = ({ children }) => {
     if (!selectedConcept) return
     if (!isConceptLoaded(selectedConcept)) return
     if (isSettingConceptRef.current) return
+    if (isEditing) return
     if (isConceptModified) return
 
     const taxonomyConcept = getConcept(selectedConcept)
@@ -179,7 +213,16 @@ const ConceptProvider = ({ children }) => {
 
     const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
     return () => clearTimeout(timeoutId)
-  }, [getConcept, getSelected, handleSetConcept, initialState, isConceptLoaded, isConceptModified, taxonomy])
+  }, [
+    getConcept,
+    getSelected,
+    handleSetConcept,
+    initialState,
+    isConceptLoaded,
+    isConceptModified,
+    isEditing,
+    taxonomy,
+  ])
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
