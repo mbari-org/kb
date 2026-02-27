@@ -114,11 +114,11 @@ const useLoadData = ({
 
   const loadApprovedData = useCallback(
     async ({ updateConceptState, updatePageState }) => {
-      const result = await apiFns.apiResult(getHistoryCount, selectedType)
+      const result = await apiFns.apiResult(getHistoryCount, 'approved')
       updateConceptState({ data: [], count: result })
       updatePageState({ data: [] })
     },
-    [apiFns, selectedType]
+    [apiFns]
   )
 
   const loadData = useCallback(
