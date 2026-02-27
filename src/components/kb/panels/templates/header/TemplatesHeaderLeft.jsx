@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useEffect } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import KBInfoIcon from '@/components/icon/KBInfoIcon'
@@ -10,15 +10,25 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 
-const { TEMPLATES } = SELECTED.SETTINGS
+const { SETTINGS } = SELECTED
+const { TEMPLATES } = SETTINGS
 const { FILTERS } = TEMPLATES
 
 const TemplatesHeaderLeft = () => {
-  const { updateSelected, updateSettings } = use(SelectedContext)
+  const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
   const { byAvailable, explicitConcepts, filters, updateFilters } = use(TemplatesContext)
 
   const selectables = byAvailable ? getNames() : explicitConcepts
+
+  const selectedConcept = getSelected(SELECTED.CONCEPT)
+  const filtersConcept = filters[FILTERS.CONCEPT]
+
+  useEffect(() => {
+    if (selectedConcept && selectedConcept !== filtersConcept) {
+      updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
+    }
+  }, [filtersConcept, selectedConcept, updateFilters])
 
   const handleConceptSelected = conceptName => {
     if (conceptName) {
