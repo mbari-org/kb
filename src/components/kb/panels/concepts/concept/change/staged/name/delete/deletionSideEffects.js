@@ -13,9 +13,16 @@ import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PREFS } from '@/lib/constants/prefs.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+
+import { drop, emptyValues } from '@/lib/utils.js'
 
 const { KEY } = PREFS.API
 const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
+const { TEMPLATES } = SELECTED.SETTINGS
+
+const FILTERS = drop(SELECTED.SETTINGS.TEMPLATES.FILTERS, [TEMPLATES.FILTERS.KEY])
+const EMPTY_FILTERS = emptyValues(FILTERS)
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
   const { concept, getPreferences } = deleteConceptContext
@@ -30,15 +37,23 @@ const performConceptPrefsUpdate = async deleteConceptContext => {
 }
 
 const performSettingsUpdate = deleteConceptContext => {
-  const { getSettings } = deleteConceptContext
-  const currentSettings = getSettings(KEY.SETTINGS) || {}
+  const { settings } = deleteConceptContext
+
+  const currentSettings = settings
+  const templatesSettings = currentSettings.templates || {}
+
   const updatedSettings = {
     ...currentSettings,
     templates: {
-      ...currentSettings.templates,
-      filters: {},
+      ...templatesSettings,
+      byAvailable: false,
+      filters: {
+        ...templatesSettings.filters,
+        ...EMPTY_FILTERS,
+      },
     },
   }
+
   return deleteConceptContext.savePreferences(KEY.SETTINGS, updatedSettings)
 }
 

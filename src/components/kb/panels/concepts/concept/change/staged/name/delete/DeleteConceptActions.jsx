@@ -25,7 +25,7 @@ const DeleteConceptActions = () => {
   const { closeModal, modalData, setModalData, withProcessing } = use(ConceptModalContext)
   const { getReferences, refreshData: refreshPanelData, setClearTemplateFilters, templates } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
-  const { getSettings, updateSelected } = use(SelectedContext)
+  const { settings, updateSelected } = use(SelectedContext)
   const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
   const { getPreferences } = use(UserContext)
 
@@ -63,11 +63,11 @@ const DeleteConceptActions = () => {
         concept,
         getPreferences,
         getReferences,
-        getSettings,
         reassign,
         refreshPanelData,
         savePreferences,
         setClearTemplateFilters,
+        settings,
         templates,
       }
 

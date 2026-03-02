@@ -7,6 +7,10 @@ const capitalize = string => {
   return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
+const conceptNameForFilename = str =>
+  (str || COMMON.UTILS.FILENAME.DEFAULT)
+    .replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
+
 const drop = (from, excludeFields) => {
   if (Array.isArray(from)) return dropElements(from, excludeFields)
   if (typeof from === 'object') return dropFields(from, excludeFields)
@@ -51,13 +55,12 @@ const diff = (o1, o2) =>
     return result
   }, {})
 
+const emptyValues = obj =>
+  Object.fromEntries(Object.keys(obj).map(key => [key, '']))
+
 const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
-
-const conceptNameForFilename = str =>
-  (str || COMMON.UTILS.FILENAME.DEFAULT)
-    .replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
 
 const hasTrue = arg => {
   if (typeof arg === 'boolean') return arg
@@ -238,6 +241,7 @@ export {
   deepDiff,
   diff,
   drop,
+  emptyValues,
   filterObject,
   hasTrue,
   humanTimestamp,

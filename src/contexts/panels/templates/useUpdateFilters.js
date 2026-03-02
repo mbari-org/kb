@@ -1,15 +1,12 @@
-import { SELECTED } from '@/lib/constants/selected.js'
 import { useCallback } from 'react'
 
+import { SELECTED } from '@/lib/constants/selected.js'
+import { drop, emptyValues } from '@/lib/utils'
+
 const { TEMPLATES } = SELECTED.SETTINGS
-const { CONCEPT, TO_CONCEPT, LINK_NAME, LINK_VALUE } = TEMPLATES.FILTERS
 
-const FILTERS = [CONCEPT, TO_CONCEPT, LINK_NAME, LINK_VALUE]
-
-const EMPTY_FILTERS = FILTERS.reduce((acc, key) => {
-  acc[key] = ''
-  return acc
-}, {})
+const FILTERS = drop(SELECTED.SETTINGS.TEMPLATES.FILTERS, [TEMPLATES.FILTERS.KEY])
+const EMPTY_FILTERS = emptyValues(FILTERS)
 
 const useUpdateFilters = (filters, updateSettings) => {
   const updateSetting = useCallback(
@@ -27,7 +24,7 @@ const useUpdateFilters = (filters, updateSettings) => {
       }
 
       const updatedFilters = { ...filters }
-      FILTERS.forEach(key => {
+      EMPTY_FILTERS.forEach(key => {
         if (updates[key] !== undefined) {
           const value = updates[key]
           updatedFilters[key] = value && value.trim() ? value : ''
