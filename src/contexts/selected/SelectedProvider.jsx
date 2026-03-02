@@ -14,16 +14,16 @@ const SelectedProvider = ({ children }) => {
     conceptSelect,
     getSettingsRef,
     isLoading,
-    onSettingsChangeRef,
-    onSettingsInitRef,
+    markSettingsDirtyRef,
+    onInitSettingsRef,
     panelSelect,
   } = use(PreferencesContext)
-  const { settings, setSettings, getSettings, updateSettings: originalUpdateSettings } = useSettings()
+  const { settings, setSettings, getSettings, updateSettings: stateUpdateSettings } = useSettings()
 
   useEffect(() => {
-    onSettingsInitRef.current = setSettings
+    onInitSettingsRef.current = setSettings
     getSettingsRef.current = () => settings
-  }, [setSettings, settings, onSettingsInitRef, getSettingsRef])
+  }, [setSettings, settings, onInitSettingsRef, getSettingsRef])
 
   const getSelected = useCallback(
     key => {
@@ -58,12 +58,12 @@ const SelectedProvider = ({ children }) => {
     [conceptSelect, panelSelect]
   )
 
-  const updateSettings = useCallback(arg => {
-    originalUpdateSettings(arg)
-    if (onSettingsChangeRef.current) {
-      onSettingsChangeRef.current(arg)
+  const persistUpdateSettings = useCallback(arg => {
+    stateUpdateSettings(arg)
+    if (markSettingsDirtyRef.current) {
+      markSettingsDirtyRef.current(arg)
     }
-  }, [originalUpdateSettings, onSettingsChangeRef])
+  }, [stateUpdateSettings, markSettingsDirtyRef])
 
   const value = useMemo(
     () => ({
@@ -75,7 +75,7 @@ const SelectedProvider = ({ children }) => {
       settings,
       setSettings,
       updateSelected,
-      updateSettings,
+      updateSettings: persistUpdateSettings,
     }),
     [
       conceptSelect,
@@ -86,7 +86,7 @@ const SelectedProvider = ({ children }) => {
       settings,
       setSettings,
       updateSelected,
-      updateSettings,
+      persistUpdateSettings,
     ]
   )
 

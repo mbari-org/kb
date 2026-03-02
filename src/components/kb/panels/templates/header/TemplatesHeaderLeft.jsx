@@ -22,13 +22,18 @@ const TemplatesHeaderLeft = () => {
   const selectables = byAvailable ? getNames() : explicitConcepts
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
+  const selectedPanel = getSelected(SELECTED.PANEL)
+
   const filtersConcept = filters[FILTERS.CONCEPT]
 
   useEffect(() => {
+    const isTemplatesPanel = selectedPanel === SELECTED.PANELS.TEMPLATES
+    if (filtersConcept === '' && isTemplatesPanel) return
+
     if (selectedConcept && selectedConcept !== filtersConcept) {
       updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
     }
-  }, [filtersConcept, selectedConcept, updateFilters])
+  }, [filtersConcept, selectedConcept, selectedPanel, updateFilters])
 
   const handleConceptSelected = conceptName => {
     if (conceptName) {

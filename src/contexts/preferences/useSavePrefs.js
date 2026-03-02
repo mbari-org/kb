@@ -4,15 +4,15 @@ import { PREFS } from '@/lib/constants/prefs.js'
 
 const { KEY } = PREFS.API
 
-const syncInMemoryStore = (key, value, conceptSelectRef, panelSelectRef, onSettingsInitRef) => {
+const syncInMemoryStore = (key, value, conceptSelectRef, panelSelectRef, onInitSettingsRef) => {
   if (key === KEY.CONCEPTS && conceptSelectRef?.current) {
     conceptSelectRef.current.clear()
     value.state.forEach(name => conceptSelectRef.current.push(name))
   } else if (key === KEY.PANELS && panelSelectRef?.current) {
     panelSelectRef.current.clear()
     value.state.forEach(name => panelSelectRef.current.push(name))
-  } else if (key === KEY.SETTINGS && onSettingsInitRef?.current) {
-    onSettingsInitRef.current(value)
+  } else if (key === KEY.SETTINGS && onInitSettingsRef?.current) {
+    onInitSettingsRef.current(value)
   }
 }
 
@@ -21,7 +21,7 @@ const useSavePrefs = ({
   conceptSelectRef,
   dirtyFlags,
   isSaving,
-  onSettingsInitRef,
+  onInitSettingsRef,
   panelSelectRef,
   prefsValue,
   preferencesInitialized,
@@ -54,7 +54,7 @@ const useSavePrefs = ({
       }))
 
       if (key && value) {
-        syncInMemoryStore(key, value, conceptSelectRef, panelSelectRef, onSettingsInitRef)
+        syncInMemoryStore(key, value, conceptSelectRef, panelSelectRef, onInitSettingsRef)
         setDirtyFlags(prev => ({ ...prev, [key]: false }))
       } else {
         setDirtyFlags(CLEAN_FLAGS)
@@ -71,7 +71,7 @@ const useSavePrefs = ({
     conceptSelectRef,
     dirtyFlags,
     isSaving,
-    onSettingsInitRef,
+    onInitSettingsRef,
     panelSelectRef,
     prefsValue,
     preferencesInitialized,

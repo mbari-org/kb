@@ -23,8 +23,8 @@ const PreferencesProvider = ({ children }) => {
   const [preferencesInitialized, setPreferencesInitialized] = useState(false)
   const [serverPreferencesExist, setServerPreferencesExist] = useState(false)
 
-  const onSettingsInitRef = useRef(null)
-  const onSettingsChangeRef = useRef(null)
+  const onInitSettingsRef = useRef(null)
+  const markSettingsDirtyRef = useRef(null)
   const getSettingsRef = useRef(null)
 
   const onConceptChange = useCallback(concept => {
@@ -51,8 +51,8 @@ const PreferencesProvider = ({ children }) => {
   const panelSelect = usePanelSelect(onPanelChange)
 
   useEffect(() => {
-    onSettingsChangeRef.current = onSettingsChange
-  }, [onSettingsChange, onSettingsChangeRef])
+    markSettingsDirtyRef.current = onSettingsChange
+  }, [onSettingsChange, markSettingsDirtyRef])
 
   const getSettingsForPrefs = useCallback(() => {
     return getSettingsRef.current?.()
@@ -66,7 +66,7 @@ const PreferencesProvider = ({ children }) => {
     preferencesInitialized,
     getSettings: getSettingsForPrefs,
     getSettingsRef,
-    onSettingsInitRef,
+    onInitSettingsRef,
     setDirtyFlags,
     setIsLoading,
     setPreferencesInitialized,
@@ -100,7 +100,7 @@ const PreferencesProvider = ({ children }) => {
     conceptSelectRef,
     dirtyFlags,
     isSaving,
-    onSettingsInitRef,
+    onInitSettingsRef,
     panelSelectRef,
     prefsValue,
     preferencesInitialized,
@@ -121,8 +121,8 @@ const PreferencesProvider = ({ children }) => {
       currentPanel,
       isLoading,
       getSettingsRef,
-      onSettingsChangeRef,
-      onSettingsInitRef,
+      markSettingsDirtyRef,
+      onInitSettingsRef,
       panelSelect,
       savePreferences,
     }),

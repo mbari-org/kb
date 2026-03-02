@@ -21,7 +21,7 @@ const useInitPrefs = ({
   preferencesInitialized,
   getSettings,
   getSettingsRef,
-  onSettingsInitRef,
+  onInitSettingsRef,
   setDirtyFlags,
   setIsLoading,
   setPreferencesInitialized,
@@ -66,8 +66,8 @@ const useInitPrefs = ({
       } else {
         conceptSelect.init(allPrefs.concepts)
         panelSelect.init(allPrefs.panels)
-        if (onSettingsInitRef?.current) {
-          onSettingsInitRef.current(allPrefs.settings)
+        if (onInitSettingsRef?.current) {
+          onInitSettingsRef.current(allPrefs.settings)
         }
         setServerPreferencesExist(true)
       }
@@ -83,7 +83,7 @@ const useInitPrefs = ({
     createPreferences,
     getPreferences,
     getSettingsRef,
-    onSettingsInitRef,
+    onInitSettingsRef,
     panelSelect,
     preferencesInitialized,
     prefsValue,
