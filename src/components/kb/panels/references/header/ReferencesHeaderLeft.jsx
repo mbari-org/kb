@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useEffect, useRef } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 
@@ -9,14 +9,29 @@ import { CONCEPT as CONCEPT_CONSTANTS } from '@/lib/constants'
 
 const { NAV_HISTORY } = CONCEPT_CONSTANTS.SELECT.RIGHT_COMPONENT
 
-const { CONCEPT, SETTINGS } = SELECTED
+const { CONCEPT, PANEL, PANELS, SETTINGS } = SELECTED
 const { REFERENCES } = SETTINGS
 
 const ReferencesHeaderLeft = () => {
   const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
 
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
-  const selectedConcept = byConcept ? getSelected(CONCEPT) : ''
+
+  const selectedConcept = getSelected(CONCEPT)
+  const selectedPanel = getSelected(PANEL)
+
+  const prevSelectedPanelRef = useRef(selectedPanel)
+
+  useEffect(() => {
+    const wasReferencesPanel = prevSelectedPanelRef.current === PANELS.REFERENCES
+    const isReferencesPanel = selectedPanel === PANELS.REFERENCES
+
+    if (!wasReferencesPanel && isReferencesPanel && selectedConcept && !byConcept) {
+      updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
+    }
+
+    prevSelectedPanelRef.current = selectedPanel
+  }, [byConcept, selectedConcept, selectedPanel, updateSettings])
 
   const handleConceptSelected = selectedName => {
     if (selectedName) {
@@ -33,7 +48,7 @@ const ReferencesHeaderLeft = () => {
 
   return (
     <ConceptSelect
-      conceptName={selectedConcept}
+      conceptName={byConcept ? selectedConcept : ''}
       doConceptSelected={handleConceptSelected}
       onClear={handleClear}
       rightComponent={NAV_HISTORY}
