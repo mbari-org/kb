@@ -4,12 +4,18 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
-import { drop, emptyFields, isJsonEqual } from '@/lib/utils'
+import { isJsonEqual } from '@/lib/utils'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
-const FILTERS = drop(SELECTED.SETTINGS.TEMPLATES.FILTERS, [TEMPLATES.FILTERS.KEY])
-const EMPTY_FILTERS = emptyFields(FILTERS)
+const { CONCEPT, TO_CONCEPT, LINK_NAME, LINK_VALUE } = TEMPLATES.FILTERS
+
+const EMPTY_FILTERS = {
+  [CONCEPT]: '',
+  [TO_CONCEPT]: '',
+  [LINK_NAME]: '',
+  [LINK_VALUE]: '',
+}
 
 const isMatching = (template, pendingTemplate) => {
   const templateString =
