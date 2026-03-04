@@ -19,7 +19,7 @@ import useConceptItem from '@/components/kb/panels/concepts/tree/lib/useConceptI
 import { buildTree } from '@/lib/model/taxonomy'
 import { SELECTED } from '@/lib/constants/selected.js'
 
-const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
+const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef, onRegisterScrollToNode }) => {
   const { concept, conceptPath, onConceptTreeReady } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
@@ -95,6 +95,10 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   )
 
   const { scrollToNode } = useConceptsTreeScroll(apiRef, concept, sidebarRef)
+
+  useEffect(() => {
+    onRegisterScrollToNode?.(() => scrollToNode())
+  }, [onRegisterScrollToNode, scrollToNode])
 
   useEffect(() => {
     if (conceptPath && conceptPath.length > 0) {

@@ -1,4 +1,4 @@
-import { useRef, useState, use } from 'react'
+import { useCallback, useRef, useState, use } from 'react'
 
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -21,6 +21,16 @@ const ConceptsSidebar = () => {
 
   const [autoExpand, setAutoExpand] = useState(null)
 
+  const scrollToConceptRef = useRef(() => { })
+
+  const registerScrollFn = useCallback(scrollHandler => {
+    scrollToConceptRef.current = scrollHandler || (() => {})
+  }, [])
+
+  const handleScroll = useCallback(() => {
+    scrollToConceptRef.current?.()
+  }, [])
+
   if (!concept) return null
 
   const doConceptSelected = selectedName => {
@@ -31,9 +41,15 @@ const ConceptsSidebar = () => {
   return (
     <Stack sx={{ height: '100%', ml: 2, mr: 1, mt: 1.75 }}>
       <ConceptSelect
+        auxiliaryComponent={
+          <ConceptsSidebarAuxiliary
+            concepts={concepts}
+            onExport={openExportModal}
+            onScrollToConcept={handleScroll}
+          />
+        }
         conceptName={concept.name}
         doConceptSelected={doConceptSelected}
-        auxiliaryComponent={<ConceptsSidebarAuxiliary concepts={concepts} onExport={openExportModal} />}
         width='auto'
       />
       <Box
@@ -49,6 +65,7 @@ const ConceptsSidebar = () => {
       >
         <ConceptsTree
           autoExpand={autoExpand}
+          registerScrollFn={registerScrollFn}
           setAutoExpand={setAutoExpand}
           sidebarRef={sidebarRef}
           style={{ flexGrow: 1, height: '100%' }}
