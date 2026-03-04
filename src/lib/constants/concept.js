@@ -42,15 +42,6 @@ export const CONCEPT = {
     NAME: 'name',
   },
   SELECT: {
-    LEFT_COMPONENT: {
-      INFO_ICON: 'info_icon',
-      NONE: 'none',
-    },
-    RIGHT_COMPONENT: {
-      NAV_HISTORY: 'nav',
-      NONE: 'none',
-      SPECIAL: 'special',
-    },
     WIDTH: 350,
   },
 }

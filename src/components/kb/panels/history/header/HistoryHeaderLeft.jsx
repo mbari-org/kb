@@ -1,19 +1,18 @@
 import { use, useState } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
+import ConceptSelectNavHistoryAuxiliary from '@/components/common/concept/ConceptSelectNavHistoryAuxiliary'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
-import { CONCEPT } from '@/lib/constants'
 
 const { HISTORY } = SELECTED.SETTINGS
-const { NAV_HISTORY } = CONCEPT.SELECT.RIGHT_COMPONENT
 
 const HistoryHeaderLeft = () => {
   const { selectedType } = use(HistoryContext)
-  const { getSelected, updateSelected } = use(SelectedContext)
+  const { concepts, getSelected, updateSelected } = use(SelectedContext)
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
 
@@ -46,11 +45,11 @@ const HistoryHeaderLeft = () => {
     <ConceptSelect
       conceptName={selectedConcept}
       doConceptSelected={handleConceptSelected}
+      auxiliaryComponent={<ConceptSelectNavHistoryAuxiliary concepts={concepts} />}
       ignoreClearSelection={true}
       inputValue={inputValue}
       onInputBlur={handleInputBlur}
       onInputChange={handleInputChange}
-      rightComponent={NAV_HISTORY}
       updateConceptSelected={false}
     />
   )

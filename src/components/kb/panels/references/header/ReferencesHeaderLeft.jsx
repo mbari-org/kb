@@ -1,19 +1,17 @@
 import { use, useEffect, useRef } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
+import ConceptSelectNavHistoryAuxiliary from '@/components/common/concept/ConceptSelectNavHistoryAuxiliary'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
-import { CONCEPT as CONCEPT_CONSTANTS } from '@/lib/constants'
-
-const { NAV_HISTORY } = CONCEPT_CONSTANTS.SELECT.RIGHT_COMPONENT
 
 const { CONCEPT, PANEL, PANELS, SETTINGS } = SELECTED
 const { REFERENCES } = SETTINGS
 
 const ReferencesHeaderLeft = () => {
-  const { getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
+  const { concepts, getSelected, getSettings, updateSelected, updateSettings } = use(SelectedContext)
 
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
 
@@ -50,8 +48,8 @@ const ReferencesHeaderLeft = () => {
     <ConceptSelect
       conceptName={byConcept ? selectedConcept : ''}
       doConceptSelected={handleConceptSelected}
+      auxiliaryComponent={<ConceptSelectNavHistoryAuxiliary concepts={concepts} />}
       onClear={handleClear}
-      rightComponent={NAV_HISTORY}
     />
   )
 }

@@ -1,12 +1,11 @@
 import { use, useMemo, useRef } from 'react'
-import { Stack, Typography, Box } from '@mui/material'
+import { Stack } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
-import NavHistoryLinks from '@/components/common/NavHistoryLinks'
-import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
+import ConceptSelectAuxiliary from '@/components/common/concept/ConceptSelectAuxiliary'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -14,49 +13,48 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { CONCEPT } from '@/lib/constants'
 import CONFIG from '@/text'
 
-const { RIGHT_COMPONENT, WIDTH } = CONCEPT.SELECT
-const { NAV_HISTORY, NONE, SPECIAL } = RIGHT_COMPONENT
+const { WIDTH } = CONCEPT.SELECT
 
 const ConceptSelect = ({
+  auxiliaryComponent,
   conceptName,
   disabled = false,
   doConceptSelected,
+  ignoreClearSelection = false,
+  includeSpecialOptions = false,
+  inputValue,
   keepFocus = false,
   label = CONFIG.CONCEPT.SELECT.CONCEPT,
-  leftComponent = NONE,
   onClear,
-  onInputChange,
   onInputBlur,
-  onSpecialChange,
-  rightComponent = NONE,
+  onInputChange,
   selectables,
   updateConceptSelected = true,
   width = WIDTH,
-  inputValue,
-  ignoreClearSelection = false,
 }) => {
   const theme = useTheme()
   const inputRef = useRef(null)
 
-  const { concepts, updateSelected } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
   const { getNames } = use(TaxonomyContext)
+  const hasSpecialOptions = includeSpecialOptions
 
   const options = useMemo(() => {
     const baseOptions = selectables ? selectables : getNames()
 
     // If this is a special component (ToConcept), include special values in options
-    if (rightComponent === SPECIAL) {
+    if (hasSpecialOptions) {
       return [...baseOptions, ...CONFIG.CONCEPT.TO_SPECIAL]
     }
 
     return baseOptions
-  }, [getNames, selectables, rightComponent])
+  }, [getNames, hasSpecialOptions, selectables])
 
   const handleConceptSelect = selectedName => {
     if (selectedName) {
       const isValidSelection =
         options.includes(selectedName) ||
-        (rightComponent === SPECIAL && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName))
+        (hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName))
 
       if (isValidSelection) {
         const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true
@@ -80,38 +78,7 @@ const ConceptSelect = ({
 
   return (
     <Stack spacing={0} sx={{ width }}>
-      <Stack
-        direction='row'
-        justifyContent='space-between'
-        alignItems='center'
-        sx={{ minHeight: '40px' }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <Typography
-            sx={{
-              color: disabled ? 'text.disabled' : 'text.primary',
-              fontSize: theme => theme.typography.fontSize * 1.2,
-              fontWeight: 'bold',
-              ml: 1.5,
-            }}
-          >
-            {label}
-          </Typography>
-          {leftComponent !== NONE && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {leftComponent}
-            </Box>
-          )}
-        </Box>
-        {rightComponent !== NONE && !disabled && (
-          <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>
-            {rightComponent === NAV_HISTORY && <NavHistoryLinks history={concepts} />}
-            {rightComponent === SPECIAL && (
-              <ToConceptSpecial onChange={onSpecialChange || doConceptSelected} />
-            )}
-          </Box>
-        )}
-      </Stack>
+      {auxiliaryComponent || <ConceptSelectAuxiliary disabled={disabled} label={label} />}
       <Autocomplete
         disabled={disabled}
         onChange={(_event, selectedName, reason) => {

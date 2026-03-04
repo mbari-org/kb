@@ -1,10 +1,5 @@
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
-
-import { CONCEPT } from '@/lib/constants'
-import CONFIG from '@/text'
-
-const { RIGHT_COMPONENT } = CONCEPT.SELECT
-const { SPECIAL } = RIGHT_COMPONENT
+import ToConceptSelectAuxiliary from '@/components/common/concept/ToConceptSelectAuxiliary'
 
 const ToConceptSelect = ({
   conceptName,
@@ -19,9 +14,8 @@ const ToConceptSelect = ({
       conceptName={conceptName}
       disabled={disabled}
       doConceptSelected={doConceptSelected}
-      onSpecialChange={onSpecialChange}
-      label={CONFIG.CONCEPT.SELECT.TO_CONCEPT}
-      rightComponent={SPECIAL}
+      auxiliaryComponent={<ToConceptSelectAuxiliary disabled={disabled} onChange={onSpecialChange || doConceptSelected} />}
+      includeSpecialOptions={true}
       required={required}
       updateConceptSelected={false}
       width={width}
