@@ -1,12 +1,9 @@
 import { useCallback } from 'react'
 
+import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
 import { SELECTED } from '@/lib/constants/selected.js'
-import { drop, emptyValues } from '@/lib/utils'
 
 const { TEMPLATES } = SELECTED.SETTINGS
-
-const FILTERS = drop(SELECTED.SETTINGS.TEMPLATES.FILTERS, [TEMPLATES.FILTERS.KEY])
-const EMPTY_FILTERS = emptyValues(FILTERS)
 
 const useUpdateFilters = (filters, updateSettings) => {
   const updateSetting = useCallback(
@@ -24,7 +21,7 @@ const useUpdateFilters = (filters, updateSettings) => {
       }
 
       const updatedFilters = { ...filters }
-      EMPTY_FILTERS.forEach(key => {
+      Object.keys(EMPTY_FILTERS).forEach(key => {
         if (updates[key] !== undefined) {
           const value = updates[key]
           updatedFilters[key] = value && value.trim() ? value : ''

@@ -55,7 +55,7 @@ const diff = (o1, o2) =>
     return result
   }, {})
 
-const emptyValues = obj =>
+const emptyFields = obj =>
   Object.fromEntries(Object.keys(obj).map(key => [key, '']))
 
 const filterObject = (obj, predicate) => {
@@ -241,7 +241,7 @@ export {
   deepDiff,
   diff,
   drop,
-  emptyValues,
+  emptyFields,
   filterObject,
   hasTrue,
   humanTimestamp,

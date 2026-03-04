@@ -2,8 +2,14 @@ import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stat
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { SELECTED } from '@/lib/constants/selected.js'
 
-import { isJsonEqual } from '@/lib/utils'
+import { drop, emptyFields, isJsonEqual } from '@/lib/utils'
+
+const { TEMPLATES } = SELECTED.SETTINGS
+
+const FILTERS = drop(SELECTED.SETTINGS.TEMPLATES.FILTERS, [TEMPLATES.FILTERS.KEY])
+const EMPTY_FILTERS = emptyFields(FILTERS)
 
 const isMatching = (template, pendingTemplate) => {
   const templateString =
@@ -43,4 +49,4 @@ const isModified = (initial, staged) => !isJsonEqual(initial?.templates, staged?
 
 const stateUpdates = (initial, staged) => generalStateUpdates('templates', initial, staged)
 
-export { initialState, isModified, isPendingTemplate, stateUpdates, templateState }
+export { EMPTY_FILTERS, initialState, isModified, isPendingTemplate, stateUpdates, templateState }
