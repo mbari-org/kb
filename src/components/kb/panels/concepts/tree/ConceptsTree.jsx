@@ -94,7 +94,7 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
     sidebarRef
   )
 
-  const { needsToScroll, scrollToNode } = useConceptsTreeScroll(apiRef, concept, sidebarRef)
+  const { scrollToNode } = useConceptsTreeScroll(apiRef, concept, sidebarRef)
 
   useEffect(() => {
     if (conceptPath && conceptPath.length > 0) {
@@ -106,11 +106,8 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef }) => {
   }, [conceptPath])
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      needsToScroll() ? scrollToNode(() => onConceptTreeReady()) : onConceptTreeReady()
-    }, 100)
-    return () => clearTimeout(timeoutId)
-  }, [needsToScroll, scrollToNode, onConceptTreeReady])
+    return scrollToNode(onConceptTreeReady, 100)
+  }, [scrollToNode, onConceptTreeReady])
 
   if (!concept || !getConcept(concept.name)) {
     return null
