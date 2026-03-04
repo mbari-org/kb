@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 
 import Concept from '@/components/kb/panels/concepts/Concept'
 import ConceptsPanelDivider from '@/components/kb/panels/concepts/ConceptsPanelDivider'
-import ConceptsSidebar from '@/components/kb/panels/concepts/ConceptsSidebar'
+import ConceptsSidebar from '@/components/kb/panels/concepts/sidebar/ConceptsSidebar'
 
 const Concepts = () => {
   const [sidebarWidth, setSidebarWidth] = useState(0)

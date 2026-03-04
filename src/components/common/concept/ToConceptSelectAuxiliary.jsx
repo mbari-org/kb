@@ -8,7 +8,7 @@ const ToConceptSelectAuxiliary = ({ disabled = false, onChange }) => {
     <ConceptSelectAuxiliary
       disabled={disabled}
       label={CONFIG.CONCEPT.SELECT.TO_CONCEPT}
-      right={<ToConceptSpecial onChange={onChange} />}
+      components={[null, <ToConceptSpecial onChange={onChange} />]}
     />
   )
 }

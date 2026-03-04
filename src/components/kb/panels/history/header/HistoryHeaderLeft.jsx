@@ -1,7 +1,7 @@
 import { use, useState } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
-import ConceptSelectNavHistoryAuxiliary from '@/components/common/concept/ConceptSelectNavHistoryAuxiliary'
+import ConceptNavAuxiliary from '@/components/common/concept/ConceptNavAuxiliary'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -45,7 +45,7 @@ const HistoryHeaderLeft = () => {
     <ConceptSelect
       conceptName={selectedConcept}
       doConceptSelected={handleConceptSelected}
-      auxiliaryComponent={<ConceptSelectNavHistoryAuxiliary concepts={concepts} />}
+      auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
       ignoreClearSelection={true}
       inputValue={inputValue}
       onInputBlur={handleInputBlur}

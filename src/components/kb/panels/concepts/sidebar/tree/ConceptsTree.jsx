@@ -1,28 +1,31 @@
-import { use, useCallback, useEffect, useMemo, useState, memo } from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState, memo } from 'react'
+
+import Box from '@mui/material/Box'
 
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
 
-import ConceptTreeItem from '@/components/kb/panels/concepts/tree/ConceptTreeItem'
+import ConceptTreeItem from '@/components/kb/panels/concepts/sidebar/tree/ConceptTreeItem'
 
-import useArrowKeys from '@/components/kb/panels/concepts/tree/lib/useArrowKeys'
-import useConceptAutoExpand from '@/components/kb/panels/concepts/tree/lib/useConceptAutoExpand'
-import useConceptClick from '@/components/kb/panels/concepts/tree/lib/useConceptClick'
-import useExpandConcept from '@/components/kb/panels/concepts/tree/lib/useExpandConcept'
-import useConceptsTreeScroll from '@/components/kb/panels/concepts/tree/lib/useConceptsTreeScroll'
+import useArrowKeys from '@/components/kb/panels/concepts/sidebar/tree/lib/useArrowKeys'
+import useConceptAutoExpand from '@/components/kb/panels/concepts/sidebar/tree/lib/useConceptAutoExpand'
+import useConceptClick from '@/components/kb/panels/concepts/sidebar/tree/lib/useConceptClick'
+import useExpandConcept from '@/components/kb/panels/concepts/sidebar/tree/lib/useExpandConcept'
+import useConceptsTreeScroll from '@/components/kb/panels/concepts/sidebar/tree/lib/useConceptsTreeScroll'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useConceptItem from '@/components/kb/panels/concepts/tree/lib/useConceptItem'
+import useConceptItem from '@/components/kb/panels/concepts/sidebar/tree/lib/useConceptItem'
 import { buildTree } from '@/lib/model/taxonomy'
 import { SELECTED } from '@/lib/constants/selected.js'
 
-const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef, onRegisterScrollToNode }) => {
+const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
   const { concept, conceptPath, onConceptTreeReady } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
+  const sidebarRef = useRef(null)
 
   const [expandedItems, setExpandedItems] = useState([])
 
@@ -97,8 +100,8 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef, onRegisterScrollT
   const { scrollToNode } = useConceptsTreeScroll(apiRef, concept, sidebarRef)
 
   useEffect(() => {
-    onRegisterScrollToNode?.(() => scrollToNode())
-  }, [onRegisterScrollToNode, scrollToNode])
+    registerScrollFn?.(() => scrollToNode())
+  }, [registerScrollFn, scrollToNode])
 
   useEffect(() => {
     if (conceptPath && conceptPath.length > 0) {
@@ -118,20 +121,32 @@ const ConceptsTree = ({ autoExpand, setAutoExpand, sidebarRef, onRegisterScrollT
   }
 
   return (
-    <aside className='taxonomy-tree' style={{ flexGrow: 1, height: '100%' }}>
-      <RichTreeView
-        apiRef={apiRef}
-        expandedItems={expandedItems}
-        getItemId={getItemId}
-        itemChildrenIndentation={8}
-        items={treeItems}
-        onItemClick={handleItemClick}
-        selectedItems={selectedItems}
-        slotProps={slotProps}
-        slots={slots}
-        style={{ flexGrow: 1, height: '100%' }}
-      />
-    </aside>
+    <Box
+      ref={sidebarRef}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        outline: 'none',
+        overflowY: 'auto',
+      }}
+      tabIndex={0}
+    >
+      <aside className='taxonomy-tree' style={{ flexGrow: 1, height: '100%' }}>
+        <RichTreeView
+          apiRef={apiRef}
+          expandedItems={expandedItems}
+          getItemId={getItemId}
+          itemChildrenIndentation={8}
+          items={treeItems}
+          onItemClick={handleItemClick}
+          selectedItems={selectedItems}
+          slotProps={slotProps}
+          slots={slots}
+          style={{ flexGrow: 1, height: '100%' }}
+        />
+      </aside>
+    </Box>
   )
 }
 

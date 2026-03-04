@@ -17,7 +17,7 @@ const TemplatesConceptSelectAuxiliary = () => {
   return (
     <ConceptSelectAuxiliary
       label={CONFIG.CONCEPT.SELECT.CONCEPT}
-      left={infoIcon}
+      components={[infoIcon, null]}
     />
   )
 }

@@ -1,7 +1,7 @@
 import { use, useEffect, useRef } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
-import ConceptSelectNavHistoryAuxiliary from '@/components/common/concept/ConceptSelectNavHistoryAuxiliary'
+import ConceptNavAuxiliary from '@/components/common/concept/ConceptNavAuxiliary'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -48,7 +48,7 @@ const ReferencesHeaderLeft = () => {
     <ConceptSelect
       conceptName={byConcept ? selectedConcept : ''}
       doConceptSelected={handleConceptSelected}
-      auxiliaryComponent={<ConceptSelectNavHistoryAuxiliary concepts={concepts} />}
+      auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
       onClear={handleClear}
     />
   )

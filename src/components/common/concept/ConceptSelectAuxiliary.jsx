@@ -2,15 +2,16 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-const ConceptSelectAuxiliary = ({ disabled = false, label, left, right }) => {
+const ConceptSelectAuxiliary = ({ disabled = false, label, components = [] }) => {
+  const activeComponents = disabled ? [] : components
+
   return (
     <Stack
       direction='row'
-      justifyContent='space-between'
       alignItems='center'
       sx={{ minHeight: '40px' }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography
           sx={{
             color: disabled ? 'text.disabled' : 'text.primary',
@@ -21,9 +22,24 @@ const ConceptSelectAuxiliary = ({ disabled = false, label, left, right }) => {
         >
           {label}
         </Typography>
-        {left && <Box sx={{ display: 'flex', alignItems: 'center' }}>{left}</Box>}
       </Box>
-      {right && !disabled && <Box sx={{ ml: -2, display: 'flex', alignItems: 'center' }}>{right}</Box>}
+      {activeComponents.length > 0 && (
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          {activeComponents.map((component, index) => (
+            <Box
+              key={index}
+              sx={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {component}
+            </Box>
+          ))}
+        </Box>
+      )}
     </Stack>
   )
 }

@@ -18,7 +18,7 @@ import { sortRealizations } from '@/lib/model/realization'
 
 import { addedConcepts } from './concept'
 
-import { treeItem } from '@/components/kb/panels/concepts/tree/lib/taxonomyItem'
+import { treeItem } from '@/components/kb/panels/concepts/sidebar/tree/lib/taxonomyItem'
 import { typeMediaItem } from '@/lib/model/media'
 
 const buildTree = taxonomy => {
