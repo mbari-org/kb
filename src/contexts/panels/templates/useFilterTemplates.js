@@ -119,94 +119,96 @@ const useFilterTemplates = ({
     ]
   )
 
-  const handleConceptFilter = useCallback(
-    conceptName => {
-      setConceptTemplates([])
-
+  const updateTemplateFilterSetting = useCallback(
+    (filterKey, filterValue) => {
       const newFilters = { ...getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY) }
-      if (conceptName) {
-        newFilters[TEMPLATES.FILTERS.CONCEPT] = conceptName
+      if (filterValue) {
+        newFilters[filterKey] = filterValue
       } else {
-        delete newFilters[TEMPLATES.FILTERS.CONCEPT]
+        delete newFilters[filterKey]
       }
       updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.FILTERS.KEY]: newFilters } })
+    },
+    [getSettings, updateSettings]
+  )
 
-      if (conceptName) {
+  const showAllTemplatesFirstPage = useCallback(() => {
+    if (allTemplates) {
+      setCount(allTemplates.length)
+      const start = 0
+      const end = start + limit
+      const paginatedTemplates = allTemplates.slice(start, end)
+      setDisplayTemplates(paginatedTemplates)
+    }
+  }, [allTemplates, limit, setCount, setDisplayTemplates])
+
+  const applyTemplateFilters = useCallback(
+    (concept, toConcept) => {
+      if (concept || toConcept) {
+        filterTemplates(concept, toConcept, { limit, offset: 0 })
+      } else {
+        showAllTemplatesFirstPage()
+      }
+    },
+    [filterTemplates, limit, showAllTemplatesFirstPage]
+  )
+
+  const initializeTemplateFilterUpdate = useCallback(
+    (filterKey, filterValue, concept, toConcept) => {
+      setConceptTemplates([])
+      updateTemplateFilterSetting(filterKey, filterValue)
+      const nextConcept = concept || null
+      const nextToConcept = toConcept || null
+      return { nextConcept, nextToConcept }
+    },
+    [setConceptTemplates, updateTemplateFilterSetting]
+  )
+
+  const handleConceptFilter = useCallback(
+    conceptName => {
+      const hasConcept = Boolean(conceptName)
+      const changedConcept = conceptName !== filterConcept
+      const { nextConcept, nextToConcept } = initializeTemplateFilterUpdate(
+        TEMPLATES.FILTERS.CONCEPT,
+        conceptName,
+        conceptName,
+        filterToConcept
+      )
+
+      if (hasConcept) {
         updateSelected({ [SELECTED.CONCEPT]: conceptName })
       }
 
-      if (conceptName !== filterConcept) {
+      if (changedConcept) {
         setConceptTemplatesCache([])
       }
-      if (conceptName) {
-        filterTemplates(conceptName, filterToConcept, { limit, offset: 0 })
-      } else {
-        if (filterToConcept) {
-          filterTemplates(null, filterToConcept, { limit, offset: 0 })
-        } else {
-          if (allTemplates) {
-            setCount(allTemplates.length)
-            const start = 0
-            const end = start + limit
-            const paginatedTemplates = allTemplates.slice(start, end)
-            setDisplayTemplates(paginatedTemplates)
-          }
-        }
-      }
+      applyTemplateFilters(nextConcept, nextToConcept)
     },
     [
-      allTemplates,
+      applyTemplateFilters,
       filterConcept,
       filterToConcept,
-      filterTemplates,
-      getSettings,
-      limit,
-      setConceptTemplates,
+      initializeTemplateFilterUpdate,
       setConceptTemplatesCache,
-      setCount,
-      setDisplayTemplates,
       updateSelected,
-      updateSettings,
     ]
   )
 
   const handleToConceptFilter = useCallback(
     toConceptName => {
-      setConceptTemplates([])
+      const { nextConcept, nextToConcept } = initializeTemplateFilterUpdate(
+        TEMPLATES.FILTERS.TO_CONCEPT,
+        toConceptName,
+        filterConcept,
+        toConceptName
+      )
 
-      const newFilters = { ...getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY) }
-      if (toConceptName) {
-        newFilters[TEMPLATES.FILTERS.TO_CONCEPT] = toConceptName
-      } else {
-        delete newFilters[TEMPLATES.FILTERS.TO_CONCEPT]
-      }
-      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.FILTERS.KEY]: newFilters } })
-      if (toConceptName) {
-        filterTemplates(filterConcept, toConceptName, { limit, offset: 0 })
-      } else {
-        if (filterConcept) {
-          filterTemplates(filterConcept, null, { limit, offset: 0 })
-        } else {
-          if (allTemplates) {
-            setCount(allTemplates.length)
-            const start = 0
-            const end = start + limit
-            const paginatedTemplates = allTemplates.slice(start, end)
-            setDisplayTemplates(paginatedTemplates)
-          }
-        }
-      }
+      applyTemplateFilters(nextConcept, nextToConcept)
     },
     [
-      allTemplates,
+      applyTemplateFilters,
       filterConcept,
-      filterTemplates,
-      getSettings,
-      limit,
-      setConceptTemplates,
-      setCount,
-      setDisplayTemplates,
-      updateSettings,
+      initializeTemplateFilterUpdate,
     ]
   )
 
