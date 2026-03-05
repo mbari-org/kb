@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import { PREFS } from '@/lib/constants/prefs.js'
+import { createError } from '@/lib/errors'
 
 const usePrefsTimer = ({
   CLEAN_FLAGS,
@@ -43,7 +44,14 @@ const usePrefsTimer = ({
           }))
           setDirtyFlags(CLEAN_FLAGS)
         } catch (error) {
-          showBoundary(new Error('Failed to autosave user preferences', { cause: error }))
+          showBoundary(
+            createError(
+              'Preferences Autosave Error',
+              'Failed to autosave user preferences',
+              {},
+              error
+            )
+          )
         } finally {
           isSaving.current = false
         }

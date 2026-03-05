@@ -99,7 +99,7 @@ const PreferencesProvider = ({ children }) => {
     panelSelectRef.current = panelSelect
   }, [panelSelect])
 
-  const { savePreferences } = useSavePrefs({
+  const { flushPreferences, savePreferences } = useSavePrefs({
     CLEAN_FLAGS,
     conceptSelectRef,
     dirtyFlags,
@@ -115,8 +115,8 @@ const PreferencesProvider = ({ children }) => {
   })
 
   useEffect(() => {
-    savePreferencesRef.current = savePreferences
-  }, [savePreferences, savePreferencesRef])
+    savePreferencesRef.current = flushPreferences
+  }, [flushPreferences, savePreferencesRef])
 
   const value = useMemo(
     () => ({

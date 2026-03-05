@@ -1,6 +1,7 @@
 import { use, useMemo, useState } from 'react'
 import Box from '@mui/material/Box'
 import { puid } from 'puid-js'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import AppModal from '@/components/modal/AppModal'
 import KnowledgeBase from '@/components/kb/KnowledgeBase'
@@ -15,8 +16,10 @@ import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 import UsersProvider from '@/contexts/panels/users/UsersProvider'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 import UserContext from '@/contexts/user/UserContext'
+import { createError } from '@/lib/errors'
 
 const KBContainer = () => {
+  const { showBoundary } = useErrorBoundary()
   const { savePreferencesRef } = use(UserContext)
 
   const id24 = useMemo(() => {
@@ -28,16 +31,24 @@ const KBContainer = () => {
   const [refreshKey, setRefreshKey] = useState(() => id24())
   const refreshValue = useMemo(() => ({
     refresh: async () => {
-      try {
-        if (savePreferencesRef.current) {
+      if (savePreferencesRef.current) {
+        try {
           await savePreferencesRef.current()
+        } catch (error) {
+          showBoundary(
+            createError(
+              'Preferences Save Error',
+              'Failed to save preferences on refresh',
+              { action: 'refresh' },
+              error
+            )
+          )
+          return
         }
-      } catch (error) {
-        console.error('Failed to save preferences on refresh:', error)
       }
       setRefreshKey(id24())
     },
-  }), [id24, savePreferencesRef])
+  }), [id24, savePreferencesRef, showBoundary])
 
   return (
     <Box sx={{ height: '100vh' }}>

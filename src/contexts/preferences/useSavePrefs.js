@@ -4,6 +4,19 @@ import { PREFS } from '@/lib/constants/prefs.js'
 
 const { KEY } = PREFS.API
 
+const getAllPreferenceUpdates = prefsValue => {
+  return Object.values(PREFS.API.KEY).map(key => ({ key, value: prefsValue(key) }))
+}
+
+const getDirtyPreferenceUpdates = (dirtyFlags, prefsValue) => {
+  return Object.values(PREFS.API.KEY).reduce((acc, key) => {
+    if (dirtyFlags[key]) {
+      acc.push({ key, value: prefsValue(key) })
+    }
+    return acc
+  }, [])
+}
+
 const syncInMemoryStore = (key, value, conceptSelectRef, panelSelectRef, onInitSettingsRef) => {
   if (key === KEY.CONCEPTS && conceptSelectRef?.current) {
     conceptSelectRef.current.clear()
@@ -30,6 +43,11 @@ const useSavePrefs = ({
   setDirtyFlags,
   updatePreferences,
 }) => {
+  const updatePreferenceValues = useCallback(async prefUpdates => {
+    await Promise.all(prefUpdates.map(update => {
+      return updatePreferences(update.key, update.value)
+    }))
+  }, [updatePreferences])
   const savePreferences = useCallback(async (key, value) => {
     if (!preferencesInitialized || !serverPreferencesExist) return
     if (isSaving.current) return
@@ -41,17 +59,10 @@ const useSavePrefs = ({
       if (key && value) {
         prefUpdates = [{ key, value }]
       } else {
-        prefUpdates = Object.values(PREFS.API.KEY).reduce((acc, k) => {
-          if (dirtyFlags[k]) {
-            acc.push({ key: k, value: prefsValue(k) })
-          }
-          return acc
-        }, [])
+        prefUpdates = getDirtyPreferenceUpdates(dirtyFlags, prefsValue)
       }
 
-      await Promise.all(prefUpdates.map(update => {
-        return updatePreferences(update.key, update.value)
-      }))
+      await updatePreferenceValues(prefUpdates)
 
       if (key && value) {
         syncInMemoryStore(key, value, conceptSelectRef, panelSelectRef, onInitSettingsRef)
@@ -78,10 +89,41 @@ const useSavePrefs = ({
     resetAutosaveTimer,
     serverPreferencesExist,
     setDirtyFlags,
-    updatePreferences,
+    updatePreferenceValues,
   ])
 
-  return { savePreferences }
+  const flushPreferences = useCallback(async () => {
+    if (!preferencesInitialized || !serverPreferencesExist) return
+
+    while (isSaving.current) {
+      await new Promise(resolve => setTimeout(resolve, 5))
+    }
+
+    isSaving.current = true
+
+    try {
+      const prefUpdates = getAllPreferenceUpdates(prefsValue)
+      await updatePreferenceValues(prefUpdates)
+      setDirtyFlags(CLEAN_FLAGS)
+      resetAutosaveTimer()
+    } catch (error) {
+      console.error('Failed to flush preferences:', error)
+      throw error
+    } finally {
+      isSaving.current = false
+    }
+  }, [
+    CLEAN_FLAGS,
+    isSaving,
+    preferencesInitialized,
+    prefsValue,
+    resetAutosaveTimer,
+    serverPreferencesExist,
+    setDirtyFlags,
+    updatePreferenceValues,
+  ])
+
+  return { flushPreferences, savePreferences }
 }
 
 export default useSavePrefs
