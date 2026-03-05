@@ -32,12 +32,8 @@ const ReferencesHeaderLeft = () => {
   }, [byConcept, selectedConcept, selectedPanel, updateSettings])
 
   const handleConceptSelected = selectedName => {
-    if (selectedName) {
-      updateSelected({ [CONCEPT]: selectedName })
-      updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
-    } else {
-      updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false } })
-    }
+    !!selectedName && updateSelected({ [CONCEPT]: selectedName })
+    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: !!selectedName } })
   }
 
   const handleClear = () => {

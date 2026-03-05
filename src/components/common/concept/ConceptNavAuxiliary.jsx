@@ -8,7 +8,7 @@ const ConceptNavAuxiliary = ({ concepts, disabled = false }) => {
     <ConceptSelectAuxiliary
       disabled={disabled}
       label={CONFIG.CONCEPT.SELECT.CONCEPT}
-      components={[null, <NavHistoryLinks history={concepts} />]}
+      components={[null, <NavHistoryLinks key='nav-history-links' history={concepts} />]}
     />
   )
 }

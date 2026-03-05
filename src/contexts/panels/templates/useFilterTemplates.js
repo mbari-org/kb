@@ -3,12 +3,12 @@ import { use, useCallback, useState } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { SELECTED } from '@/lib/constants/selected.js'
 import {
   getAvailableTemplates,
   getExplicitTemplates,
   getToConceptTemplates,
 } from '@/lib/api/templates'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
@@ -122,7 +122,7 @@ const useFilterTemplates = ({
   const handleConceptFilter = useCallback(
     conceptName => {
       setConceptTemplates([])
-      // Store the filter concept in settings
+
       const newFilters = { ...getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY) }
       if (conceptName) {
         newFilters[TEMPLATES.FILTERS.CONCEPT] = conceptName
@@ -130,22 +130,20 @@ const useFilterTemplates = ({
         delete newFilters[TEMPLATES.FILTERS.CONCEPT]
       }
       updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.FILTERS.KEY]: newFilters } })
-      // Also update the global concept selection
+
       if (conceptName) {
         updateSelected({ [SELECTED.CONCEPT]: conceptName })
       }
-      // Clear cache when concept changes
+
       if (conceptName !== filterConcept) {
         setConceptTemplatesCache([])
       }
       if (conceptName) {
         filterTemplates(conceptName, filterToConcept, { limit, offset: 0 })
       } else {
-        // If concept is deselected, check if toConcept is still active
         if (filterToConcept) {
           filterTemplates(null, filterToConcept, { limit, offset: 0 })
         } else {
-          // No filters active - use data from KBDataProvider
           if (allTemplates) {
             setCount(allTemplates.length)
             const start = 0
@@ -157,25 +155,25 @@ const useFilterTemplates = ({
       }
     },
     [
+      allTemplates,
       filterConcept,
       filterToConcept,
       filterTemplates,
-      limit,
-      updateSelected,
-      updateSettings,
       getSettings,
+      limit,
       setConceptTemplates,
       setConceptTemplatesCache,
       setCount,
       setDisplayTemplates,
-      allTemplates,
+      updateSelected,
+      updateSettings,
     ]
   )
 
   const handleToConceptFilter = useCallback(
     toConceptName => {
       setConceptTemplates([])
-      // Store the filter toConcept in settings
+
       const newFilters = { ...getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY) }
       if (toConceptName) {
         newFilters[TEMPLATES.FILTERS.TO_CONCEPT] = toConceptName
@@ -184,14 +182,11 @@ const useFilterTemplates = ({
       }
       updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.FILTERS.KEY]: newFilters } })
       if (toConceptName) {
-        // Pass current concept filter to avoid unnecessary fetching
         filterTemplates(filterConcept, toConceptName, { limit, offset: 0 })
       } else {
-        // If clearing toConcept filter, show all templates for current concept
         if (filterConcept) {
           filterTemplates(filterConcept, null, { limit, offset: 0 })
         } else {
-          // No filters active - use data from KBDataProvider
           if (allTemplates) {
             setCount(allTemplates.length)
             const start = 0
@@ -203,15 +198,15 @@ const useFilterTemplates = ({
       }
     },
     [
+      allTemplates,
       filterConcept,
       filterTemplates,
+      getSettings,
       limit,
       setConceptTemplates,
       setCount,
       setDisplayTemplates,
-      allTemplates,
       updateSettings,
-      getSettings,
     ]
   )
 

@@ -1,5 +1,7 @@
 import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import { useErrorBoundary } from 'react-error-boundary'
+
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -74,6 +76,7 @@ const PreferencesProvider = ({ children }) => {
     user,
   })
 
+  const { showBoundary } = useErrorBoundary()
   const { resetAutosaveTimer, isSaving } = usePrefsTimer({
     CLEAN_FLAGS,
     dirtyFlags,
@@ -81,6 +84,7 @@ const PreferencesProvider = ({ children }) => {
     preferencesInitialized,
     serverPreferencesExist,
     setDirtyFlags,
+    showBoundary,
     updatePreferences,
   })
 

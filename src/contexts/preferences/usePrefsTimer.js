@@ -6,10 +6,11 @@ const usePrefsTimer = ({
   CLEAN_FLAGS,
   dirtyFlags,
   preferencesInitialized,
-  serverPreferencesExist,
   prefsValue,
-  updatePreferences,
+  serverPreferencesExist,
   setDirtyFlags,
+  showBoundary,
+  updatePreferences,
 }) => {
   const autosaveInterval = useRef(null)
   const isSaving = useRef(false)
@@ -42,7 +43,7 @@ const usePrefsTimer = ({
           }))
           setDirtyFlags(CLEAN_FLAGS)
         } catch (error) {
-          console.error('Failed to autosave preferences:', error)
+          showBoundary(new Error('Failed to autosave user preferences', { cause: error }))
         } finally {
           isSaving.current = false
         }
@@ -56,8 +57,9 @@ const usePrefsTimer = ({
     preferencesInitialized,
     prefsValue,
     serverPreferencesExist,
-    updatePreferences,
     setDirtyFlags,
+    showBoundary,
+    updatePreferences,
   ])
 
   useEffect(() => {

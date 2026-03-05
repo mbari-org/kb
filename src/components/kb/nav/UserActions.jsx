@@ -24,6 +24,16 @@ const UserActions = () => {
   const { panels } = use(SelectedContext)
   const { setModal } = use(AppModalContext)
 
+  const handleAppInfo = () => {
+    const modal = createAppModal({
+      Content: AppInfoContent,
+      Title: AppInfoTitle,
+      minWidth: 520,
+      focusClose: true,
+    })
+    setModal(modal)
+  }
+
   const handleLogout = () => {
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
@@ -41,21 +51,7 @@ const UserActions = () => {
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
     const hasModifications = isOnConceptsPanel && hasUnsavedChanges
 
-    if (hasModifications) {
-      setUnsafeAction({ type: UNSAFE_ACTION.REFRESH, payload: {} })
-    } else {
-      await refresh()
-    }
-  }
-
-  const handleAppInfo = () => {
-    const modal = createAppModal({
-      Content: AppInfoContent,
-      Title: AppInfoTitle,
-      minWidth: 520,
-      focusClose: true,
-    })
-    setModal(modal)
+    hasModifications ? setUnsafeAction({ type: UNSAFE_ACTION.REFRESH, payload: {} }) : await refresh()
   }
 
   return (
