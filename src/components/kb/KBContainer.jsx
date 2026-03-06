@@ -1,4 +1,4 @@
-import { use, useMemo, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 import Box from '@mui/material/Box'
 import { puid } from 'puid-js'
 import { useErrorBoundary } from 'react-error-boundary'
@@ -15,12 +15,27 @@ import SelectedProvider from '@/contexts/selected/SelectedProvider'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 import UsersProvider from '@/contexts/panels/users/UsersProvider'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 import UserContext from '@/contexts/user/UserContext'
 import { createError } from '@/lib/errors'
 
 const KBContainer = () => {
   const { showBoundary } = useErrorBoundary()
+  const { initializeAppPreferences } = use(ConfigContext)
   const { savePreferencesRef } = use(UserContext)
+
+  useEffect(() => {
+    initializeAppPreferences().catch(error => {
+      showBoundary(
+        createError(
+          'Preferences Loading Error',
+          'Failed to initialize app preferences',
+          { scope: 'app' },
+          error
+        )
+      )
+    })
+  }, [initializeAppPreferences, showBoundary])
 
   const id24 = useMemo(() => {
     const { generator, error } = puid({ bits: 24 })

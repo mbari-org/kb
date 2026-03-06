@@ -7,18 +7,25 @@ import ConfigContext from './ConfigContext'
 import createServiceLookup from '@/lib/services/config/createServiceLookup'
 import getEndpoints from '@/lib/services/config/getEndpoints'
 import useApiFns from '@/contexts/config/useApiFns'
+import useAppPreferences from '@/contexts/config/useAppPreferences'
 
 import configUrlStore from '@/lib/local/store/configUrl'
+import { PREFS } from '@/lib/constants/prefs.js'
 
 const IS_DEV = import.meta.env.DEV
 const USE_M3_LOCAL = import.meta.env.VITE_M3_LOCAL ?? false
+const appPhylogenyRootKey = PREFS.APP.PHYLOGENY.KEY
+const defaultPhylogenyRoot = PREFS.APP.PHYLOGENY.ROOT
 
 const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
   const { showBoundary } = useErrorBoundary()
   const [config, setConfig] = useState(null)
   const [apiFns, setApiFns] = useState(null)
+  const [appPreferences, setAppPreferences] = useState({})
+  const [appPreferencesInitialized, setAppPreferencesInitialized] = useState(false)
   const mountedRef = useRef(true)
+  const appPreferencesInitializingRef = useRef(false)
 
   const loadConfig = useCallback(async (url, onError) => {
     try {
@@ -89,10 +96,54 @@ const ConfigProvider = ({ children }) => {
   }, [loadConfig, navigate])
 
   const apiFnsFromHook = useApiFns(config?.valid ? config : null, showBoundary)
+  const { getAppPreference: loadAppPreference, saveAppPreference: persistAppPreference } = useAppPreferences({ config })
 
   useEffect(() => {
     setApiFns(apiFnsFromHook)
   }, [apiFnsFromHook])
+
+  useEffect(() => {
+    appPreferencesInitializingRef.current = false
+    setAppPreferences({})
+    setAppPreferencesInitialized(false)
+  }, [config?.url])
+
+  const getAppPreference = useCallback(
+    async key => {
+      const value = await loadAppPreference(key)
+      setAppPreferences(prev => ({ ...prev, [key]: value }))
+      return value
+    },
+    [loadAppPreference]
+  )
+
+  const saveAppPreference = useCallback(
+    async (key, value) => {
+      await persistAppPreference(key, value)
+      setAppPreferences(prev => ({ ...prev, [key]: value }))
+    },
+    [persistAppPreference]
+  )
+
+  const initializeAppPreferences = useCallback(async () => {
+    if (!config) return
+    if (appPreferencesInitialized) return
+    if (appPreferencesInitializingRef.current) return
+
+    appPreferencesInitializingRef.current = true
+
+    try {
+      const appPhylogenyRoot = await getAppPreference(appPhylogenyRootKey)
+      if (appPhylogenyRoot === null || appPhylogenyRoot === undefined) {
+        await saveAppPreference(appPhylogenyRootKey, defaultPhylogenyRoot)
+      }
+      setAppPreferencesInitialized(true)
+    } finally {
+      appPreferencesInitializingRef.current = false
+    }
+  }, [appPreferencesInitialized, config, getAppPreference, saveAppPreference])
+
+  const phylogenyRoot = appPreferences[appPhylogenyRootKey] ?? defaultPhylogenyRoot
 
   useEffect(() => {
     return () => {
@@ -101,8 +152,28 @@ const ConfigProvider = ({ children }) => {
   }, [])
 
   const value = useMemo(
-    () => ({ apiFns, config, IS_DEV, USE_M3_LOCAL, updateConfig }),
-    [apiFns, config, updateConfig]
+    () => ({
+      apiFns,
+      appPreferencesInitialized,
+      config,
+      getAppPreference,
+      initializeAppPreferences,
+      IS_DEV,
+      phylogenyRoot,
+      saveAppPreference,
+      updateConfig,
+      USE_M3_LOCAL,
+    }),
+    [
+      apiFns,
+      appPreferencesInitialized,
+      config,
+      getAppPreference,
+      initializeAppPreferences,
+      phylogenyRoot,
+      saveAppPreference,
+      updateConfig,
+    ]
   )
 
   return <ConfigContext value={value}>{children}</ConfigContext>

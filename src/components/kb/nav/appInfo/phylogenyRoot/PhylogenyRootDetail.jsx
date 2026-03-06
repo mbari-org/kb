@@ -2,6 +2,7 @@ import { use } from 'react'
 
 import AppInfoDetail from '@/components/kb/nav/appInfo/AppInfoDetail'
 import AppModalContext from '@/contexts/app/AppModalContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 import UserContext from '@/contexts/user/UserContext'
 import Title from '@/components/common/factory/Title'
 
@@ -12,7 +13,8 @@ import createAppModal from '@/components/modal/app/createAppModal'
 import { isAdmin } from '@/lib/auth/role'
 
 const PhylogenyRootDetail = ({ conceptNames = [] }) => {
-  const { phylogenyRoot, user } = use(UserContext)
+  const { phylogenyRoot } = use(ConfigContext)
+  const { user } = use(UserContext)
   const { closeModal, setModal, setModalData } = use(AppModalContext)
 
   const isAdminUser = isAdmin(user)

@@ -36,13 +36,13 @@ const ConceptProvider = ({ children }) => {
   const pendingTreeTimeoutRef = useRef(null)
   const previousConceptNameRef = useRef(null)
 
-  const { apiFns } = use(ConfigContext)
+  const { apiFns, phylogenyRoot } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
   const { getConceptTemplates, pendingHistory } = use(PanelDataContext)
   const pendingHistoryRef = useRef(pendingHistory)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { phylogenyRoot, setHasUnsavedChanges, unsafeAction } = use(UserContext)
+  const { setHasUnsavedChanges, unsafeAction } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [conceptPath, setConceptPath] = useState(null)

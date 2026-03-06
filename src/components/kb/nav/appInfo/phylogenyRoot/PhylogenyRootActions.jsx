@@ -3,7 +3,7 @@ import { use } from 'react'
 import { createActions } from '@/components/common/factory/createComponent'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
-import UserContext from '@/contexts/user/UserContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { PREFS } from '@/lib/constants/prefs.js'
 import CONFIG from '@/text'
@@ -13,7 +13,7 @@ const { CANCEL, SAVE } = CONFIG.PANELS.CONCEPTS.BUTTON
 
 const PhylogenyRootActions = () => {
   const { closeModal, modalData } = use(AppModalContext)
-  const { saveAppPreference } = use(UserContext)
+  const { saveAppPreference } = use(ConfigContext)
   const selectedPhylogenyRoot = modalData.selectedPhylogenyRoot || ''
 
   const colors = ['cancel', 'main']
