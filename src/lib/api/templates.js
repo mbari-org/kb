@@ -33,7 +33,7 @@ const getToConceptTemplates = async (config, conceptName) =>
   oniGet({ config, path: ['linktemplates', 'toconcept', conceptName] })
 
 const renameToConceptTemplates = async (config, payload) =>
-  oniPost({ config, path: ['linktemplates', 'toconcept', 'rename'], data: payload })
+  oniPut({ config, path: ['linktemplates', 'toconcept', 'rename'], data: payload })
 
 const updateTemplate = async (config, [templateId, payload]) =>
   oniPut({ config, path: ['linktemplates', templateId], data: payload })
@@ -51,3 +51,4 @@ export {
   renameToConceptTemplates,
   updateTemplate,
 }
+

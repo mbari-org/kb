@@ -33,12 +33,10 @@ const performConceptPrefsUpdate = async deleteConceptContext => {
 
 const performSettingsUpdate = deleteConceptContext => {
   const { settings } = deleteConceptContext
-
-  const currentSettings = settings
-  const templatesSettings = currentSettings.templates || {}
+  const templatesSettings = settings.templates || {}
 
   const updatedSettings = {
-    ...currentSettings,
+    ...settings,
     templates: {
       ...templatesSettings,
       byAvailable: false,
@@ -78,6 +76,9 @@ const preSideEffects = async deleteConceptContext => {
         case REALIZATIONS:
           break
 
+        case REFERENCES:
+          break
+
         case TEMPLATES_DEFINED: {
           const definedTemplates = filterTemplates(templates, { concepts: [concept.name] })
           const templatePromises = definedTemplates.map(template => {
@@ -101,8 +102,6 @@ const preSideEffects = async deleteConceptContext => {
           )
           break
 
-        case REFERENCES:
-          break
       }
     }
   })
