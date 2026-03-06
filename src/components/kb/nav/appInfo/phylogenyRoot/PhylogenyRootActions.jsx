@@ -15,6 +15,7 @@ const PhylogenyRootActions = () => {
   const { closeModal, modalData } = use(AppModalContext)
   const { saveAppPreference } = use(ConfigContext)
   const selectedPhylogenyRoot = modalData.selectedPhylogenyRoot || ''
+  const resolveConceptPrimaryName = modalData.getConceptPrimaryName
 
   const colors = ['cancel', 'main']
   const disabled = [false, !selectedPhylogenyRoot]
@@ -26,9 +27,13 @@ const PhylogenyRootActions = () => {
         closeModal(false)
         return
 
-      case SAVE:
-        saveAppPreference(phylogenyRootKey, selectedPhylogenyRoot).then(() => closeModal(true))
+      case SAVE: {
+        const conceptName = resolveConceptPrimaryName
+          ? resolveConceptPrimaryName(selectedPhylogenyRoot)
+          : selectedPhylogenyRoot
+        saveAppPreference(phylogenyRootKey, conceptName).then(() => closeModal(true))
         return
+      }
     }
   }
 

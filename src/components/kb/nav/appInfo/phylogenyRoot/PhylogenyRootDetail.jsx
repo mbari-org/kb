@@ -12,7 +12,7 @@ import PhylogenyRootContent from './PhylogenyRootContent'
 import createAppModal from '@/components/modal/app/createAppModal'
 import { isAdmin } from '@/lib/auth/role'
 
-const PhylogenyRootDetail = ({ conceptNames = [] }) => {
+const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName }) => {
   const { phylogenyRoot } = use(ConfigContext)
   const { user } = use(UserContext)
   const { closeModal, setModal, setModalData } = use(AppModalContext)
@@ -24,7 +24,10 @@ const PhylogenyRootDetail = ({ conceptNames = [] }) => {
     if (!didClose) {
       return
     }
-    setModalData({ selectedPhylogenyRoot: phylogenyRoot })
+    setModalData({
+      selectedPhylogenyRoot: phylogenyRoot,
+      getConceptPrimaryName,
+    })
 
     const modal = createAppModal({
       Actions: PhylogenyRootActions,

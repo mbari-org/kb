@@ -24,12 +24,12 @@ const UserActions = () => {
   const { logout, hasUnsavedChanges, setUnsafeAction } = use(UserContext)
   const { panels } = use(SelectedContext)
   const { setModal } = use(AppModalContext)
-  const { getNames } = use(TaxonomyContext)
+  const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
 
   const handleAppInfo = () => {
     const conceptNames = getNames() || []
     const modal = createAppModal({
-      Content: () => <AppInfoContent conceptNames={conceptNames} />,
+      Content: () => <AppInfoContent conceptNames={conceptNames} getConceptPrimaryName={getConceptPrimaryName} />,
       Title: AppInfoTitle,
       minWidth: 520,
       focusClose: true,
