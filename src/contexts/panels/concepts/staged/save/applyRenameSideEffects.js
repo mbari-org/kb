@@ -2,7 +2,7 @@ import { CONCEPT } from '@/lib/constants'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PREFS } from '@/lib/constants/prefs.js'
 
-const { KEY } = PREFS.API
+const { KEY } = PREFS.USER
 
 const getNameUpdate = updatesInfo => {
   const updated = updatesInfo.updatedValue(CONCEPT.FIELD.NAME)

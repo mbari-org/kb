@@ -42,7 +42,7 @@ const ConceptProvider = ({ children }) => {
   const pendingHistoryRef = useRef(pendingHistory)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { setHasUnsavedChanges, unsafeAction } = use(UserContext)
+  const { phylogenyRoot, setHasUnsavedChanges, unsafeAction } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [conceptPath, setConceptPath] = useState(null)
@@ -243,8 +243,8 @@ const ConceptProvider = ({ children }) => {
 
   // Since conceptPath is already created we can use it to determine if the concept is a phylogeny root
   const isPhylogenyRoot = useMemo(
-    () => conceptPath?.includes('marine organism') ?? false,
-    [conceptPath]
+    () => conceptPath?.includes(phylogenyRoot) ?? false,
+    [conceptPath, phylogenyRoot]
   )
 
   const onConceptTreeReady = useCallback(() => {

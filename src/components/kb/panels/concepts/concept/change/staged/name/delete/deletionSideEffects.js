@@ -16,7 +16,7 @@ import { PREFS } from '@/lib/constants/prefs.js'
 
 import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
 
-const { KEY } = PREFS.API
+const { KEY } = PREFS.USER
 const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
 
 const performConceptPrefsUpdate = async deleteConceptContext => {

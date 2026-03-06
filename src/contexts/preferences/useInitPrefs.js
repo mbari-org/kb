@@ -5,7 +5,7 @@ import { isEmpty } from '@/lib/utils'
 
 import { PREFS } from '@/lib/constants/prefs.js'
 
-const { KEY } = PREFS.API
+const { KEY } = PREFS.USER
 
 const CLEAN_FLAGS = {
   [KEY.CONCEPTS]: false,

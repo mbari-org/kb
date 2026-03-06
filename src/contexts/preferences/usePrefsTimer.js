@@ -31,7 +31,7 @@ const usePrefsTimer = ({
       isSaving.current = true
 
       const savePreferences = async () => {
-        const prefUpdates = Object.values(PREFS.API.KEY).reduce((acc, key) => {
+        const prefUpdates = Object.values(PREFS.USER.KEY).reduce((acc, key) => {
           if (dirtyFlags[key]) {
             acc.push({ key, value: prefsValue(key) })
           }
@@ -58,7 +58,7 @@ const usePrefsTimer = ({
       }
 
       savePreferences()
-    }, PREFS.API.AUTOSAVE_MILLIS)
+    }, PREFS.USER.AUTOSAVE_MILLIS)
   }, [
     CLEAN_FLAGS,
     dirtyFlags,

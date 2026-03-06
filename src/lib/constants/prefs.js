@@ -1,5 +1,5 @@
 export const PREFS = {
-  API: {
+  USER: {
     AUTOSAVE_MILLIS: 15_000,
     KEY: {
       CONCEPTS: 'concepts',
@@ -8,6 +8,13 @@ export const PREFS = {
     },
     MAX_LENGTH: 255,
     PREFIX: 'kb-ui/',
+  },
+  APP: {
+    PREFIX: 'kb-app',
+    PHYLOGENY: {
+      KEY: 'phylogeny-root',
+      ROOT: 'marine organism',
+    },
   },
   AUTH: {
     LOCAL_STORE: 'kb:auth',

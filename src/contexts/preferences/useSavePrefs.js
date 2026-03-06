@@ -2,14 +2,14 @@ import { useCallback } from 'react'
 
 import { PREFS } from '@/lib/constants/prefs.js'
 
-const { KEY } = PREFS.API
+const { KEY } = PREFS.USER
 
 const getAllPreferenceUpdates = prefsValue => {
-  return Object.values(PREFS.API.KEY).map(key => ({ key, value: prefsValue(key) }))
+  return Object.values(PREFS.USER.KEY).map(key => ({ key, value: prefsValue(key) }))
 }
 
 const getDirtyPreferenceUpdates = (dirtyFlags, prefsValue) => {
-  return Object.values(PREFS.API.KEY).reduce((acc, key) => {
+  return Object.values(PREFS.USER.KEY).reduce((acc, key) => {
     if (dirtyFlags[key]) {
       acc.push({ key, value: prefsValue(key) })
     }

@@ -13,7 +13,7 @@ import useInitPrefs from '@/contexts/preferences/useInitPrefs'
 
 import { PREFS } from '@/lib/constants/prefs.js'
 
-const { KEY } = PREFS.API
+const { KEY } = PREFS.USER
 
 const PreferencesProvider = ({ children }) => {
   const { createPreferences, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)
