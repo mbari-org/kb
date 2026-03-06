@@ -7,6 +7,7 @@ import createAppModal from '@/components/modal/app/createAppModal'
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -23,10 +24,12 @@ const UserActions = () => {
   const { logout, hasUnsavedChanges, setUnsafeAction } = use(UserContext)
   const { panels } = use(SelectedContext)
   const { setModal } = use(AppModalContext)
+  const { getNames } = use(TaxonomyContext)
 
   const handleAppInfo = () => {
+    const conceptNames = getNames() || []
     const modal = createAppModal({
-      Content: AppInfoContent,
+      Content: () => <AppInfoContent conceptNames={conceptNames} />,
       Title: AppInfoTitle,
       minWidth: 520,
       focusClose: true,
