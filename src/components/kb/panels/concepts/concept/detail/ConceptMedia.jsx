@@ -15,8 +15,9 @@ const ConceptMedia = () => {
       sx={{
         flexBasis: '25%',
         flexShrink: 0,
-        maxHeight: '50%',
-        overflow: 'hidden',
+        minHeight: 0,
+        overflowY: 'auto',
+        overflowX: 'hidden',
         position: 'relative',
       }}
     >

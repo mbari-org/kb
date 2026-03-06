@@ -1,5 +1,5 @@
 import { use, useRef, useState } from 'react'
-import { Box } from '@mui/material'
+import { Box, Divider } from '@mui/material'
 
 import MediaDisplay from '@/components/kb/panels/concepts/concept/detail/media/MediaDisplay'
 import MediaPreview from '@/components/kb/panels/concepts/concept/detail/media/MediaPreview'
@@ -28,7 +28,7 @@ const MediaView = () => {
   const showDeleteEditMedia = isEditing && mediaItem?.action !== MEDIA_ITEM.DELETE && !mediaItem?.historyId
 
   return (
-    <Box>
+    <>
       <Box ref={mediaViewRef} sx={{ position: 'relative' }}>
         <MediaPreview setPreviewOn={setPreviewOn} />
         <MediaDisplay previewOn={previewOn} setPreviewOn={setPreviewOn} />
@@ -50,7 +50,8 @@ const MediaView = () => {
       <Box sx={{ mt: 0.5, position: 'relative', overflow: 'visible' }}>
         <MediaSwiper height='auto' />
       </Box>
-    </Box>
+      <Divider sx={{ borderWidth: 2, mt: 1 }} />
+    </>
   )
 }
 
