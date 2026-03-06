@@ -53,8 +53,7 @@ const ConceptSelect = ({
   const handleConceptSelect = selectedName => {
     if (selectedName) {
       const isValidSelection =
-        options.includes(selectedName) ||
-        (hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName))
+        options.includes(selectedName) || (hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName))
 
       if (isValidSelection) {
         const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true
@@ -119,7 +118,6 @@ const ConceptSelect = ({
         inputValue={inputValue}
         value={conceptName || ''}
       />
-      <hr />
     </Stack>
   )
 }

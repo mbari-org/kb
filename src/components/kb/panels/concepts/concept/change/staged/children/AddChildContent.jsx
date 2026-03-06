@@ -28,7 +28,7 @@ const AddChildContent = () => {
   const theme = useTheme()
   const inputStyle = useInputStyle()
 
-  const { isMarineOrganism } = use(ConceptContext)
+  const { isPhylogenyRoot } = use(ConceptContext)
   const { modalData } = use(ConceptModalContext)
 
   const { child } = modalData
@@ -98,7 +98,7 @@ const AddChildContent = () => {
           value={formChild.author}
         />
       </FormControl>
-      {isMarineOrganism && (
+      {isPhylogenyRoot && (
         <Stack direction='row' spacing={1.5} sx={{ mt: 4 }}>
           <RankFieldInput
             field={CONCEPT.RANK.NAME}

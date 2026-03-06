@@ -49,17 +49,20 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
   const slots = useMemo(() => ({ item: ConceptTreeItem }), [])
 
   const selectedConceptName = concept?.name
-  const slotProps = useMemo(() => ({
-    item: ({ itemId }) => {
-      const item = createConceptItem(taxonomy, itemId)
-      return {
-        item: {
-          ...item,
-          isSelected: itemId === selectedConceptName,
-        },
-      }
-    },
-  }), [taxonomy, selectedConceptName, createConceptItem])
+  const slotProps = useMemo(
+    () => ({
+      item: ({ itemId }) => {
+        const item = createConceptItem(taxonomy, itemId)
+        return {
+          item: {
+            ...item,
+            isSelected: itemId === selectedConceptName,
+          },
+        }
+      },
+    }),
+    [taxonomy, selectedConceptName, createConceptItem]
+  )
 
   const handleConceptSelect = useCallback(
     conceptName => {
@@ -72,12 +75,7 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
 
   const getItemId = useCallback(item => item.id, [])
 
-  const handleItemClick = useConceptClick(
-    concept,
-    expandConcept,
-    handleConceptSelect,
-    setAutoExpand
-  )
+  const handleItemClick = useConceptClick(concept, expandConcept, handleConceptSelect, setAutoExpand)
 
   useConceptAutoExpand({
     autoExpand,
@@ -87,15 +85,7 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
     setAutoExpand,
   })
 
-  useArrowKeys(
-    concept,
-    expandConcept,
-    expandedItems,
-    getConcept,
-    handleConceptSelect,
-    setAutoExpand,
-    sidebarRef
-  )
+  useArrowKeys(concept, expandConcept, expandedItems, getConcept, handleConceptSelect, setAutoExpand, sidebarRef)
 
   const { scrollToNode } = useConceptsTreeScroll(apiRef, concept, sidebarRef)
 
@@ -127,6 +117,7 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,
+        ml: -0.5,
         outline: 'none',
         overflowY: 'auto',
       }}

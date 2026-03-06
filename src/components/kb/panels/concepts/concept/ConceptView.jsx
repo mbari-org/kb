@@ -13,7 +13,7 @@ import ConceptTemplates from '@/components/kb/panels/concepts/concept/detail/Con
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const ConceptView = () => {
-  const { isMarineOrganism } = use(ConceptContext)
+  const { isPhylogenyRoot } = use(ConceptContext)
 
   return (
     <Box
@@ -43,7 +43,7 @@ const ConceptView = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <ConceptName />
           <ConceptAuthor />
-          {isMarineOrganism && <ConceptRank />}
+          {isPhylogenyRoot && <ConceptRank />}
         </Box>
         <Box
           sx={{

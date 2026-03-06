@@ -9,16 +9,16 @@ import { drop } from '@/lib/utils'
 import { CONCEPT } from '@/lib/constants'
 
 const StagedChildDetail = ({ stagedChild }) => {
-  const { isMarineOrganism } = use(ConceptContext)
+  const { isPhylogenyRoot } = use(ConceptContext)
   const { updates } = stagedChild
 
   const fieldValues = useMemo(() => {
     const hiddenFields = ['name']
-    if (!isMarineOrganism) {
+    if (!isPhylogenyRoot) {
       hiddenFields.push(CONCEPT.FIELD.RANK_NAME, CONCEPT.FIELD.RANK_LEVEL)
     }
     return Object.entries(drop(updates, hiddenFields))
-  }, [isMarineOrganism, updates])
+  }, [isPhylogenyRoot, updates])
 
   return (
     <Box>

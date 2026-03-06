@@ -21,7 +21,7 @@ const AppModal = () => {
     return null
   }
 
-  const { actions, content, title, minWidth = 500, focusClose = false } = modal
+  const { actions, content, title, minWidth = 500, focusClose = false, contentSx } = modal
 
   return (
     <Modal
@@ -50,7 +50,7 @@ const AppModal = () => {
               <IoCloseSharp />
             </IconButton>
             <CardHeader title={title()} />
-            <CardContent sx={{ pb: 0, pt: 0 }}>{content()}</CardContent>
+            <CardContent sx={[{ pb: 0, pt: 0 }, contentSx]}>{content()}</CardContent>
             {actions && (
               <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
                 {actions()}

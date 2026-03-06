@@ -241,8 +241,8 @@ const ConceptProvider = ({ children }) => {
     setModalData(prev => ({ ...prev, unsafeAction }))
   }, [unsafeAction, displayStaged, setModalData])
 
-  // Since conceptPath is already created we can use it to determine if the concept is a marine organism
-  const isMarineOrganism = useMemo(
+  // Since conceptPath is already created we can use it to determine if the concept is a phylogeny root
+  const isPhylogenyRoot = useMemo(
     () => conceptPath?.includes('marine organism') ?? false,
     [conceptPath]
   )
@@ -265,7 +265,7 @@ const ConceptProvider = ({ children }) => {
       confirmReset,
       isEditing,
       initialState,
-      isMarineOrganism,
+      isPhylogenyRoot,
       modifyConcept,
       onConceptTreeReady,
       pending,
@@ -281,7 +281,7 @@ const ConceptProvider = ({ children }) => {
       isEditing,
       handleSetConcept,
       initialState,
-      isMarineOrganism,
+      isPhylogenyRoot,
       modifyConcept,
       onConceptTreeReady,
       pending,

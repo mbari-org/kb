@@ -1,4 +1,4 @@
-import { use, useCallback, useMemo } from 'react'
+import { use } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
@@ -6,18 +6,13 @@ import HistoryPagination from './HistoryPagination'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
-import { CONCEPT } from '@/lib/constants'
 import { PAGINATION } from '@/lib/constants/pagination.js'
-
-const { TYPE } = CONCEPT.HISTORY
 
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS
 
 const HistoryTableTypeData = ({ hideFooter = false }) => {
   const {
     conceptState,
-    goToPage,
-    handleSortChange,
     nextPage,
     pageState,
     prevPage,
@@ -26,58 +21,17 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   } =
     use(HistoryContext)
 
-  const { limit, offset, sortField, sortOrder } = pageState
+  const { limit, offset } = pageState
   const columns = useHistoryColumns({ type: selectedType })
-
-  const effectiveSortField =
-    sortField === 'concept' && selectedType !== TYPE.PENDING ? 'creationTimestamp' : sortField
 
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
-  const rows = pageState.data
-
-  const sortModel = useMemo(
-    () => [{ field: effectiveSortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
-    [effectiveSortField, sortOrder]
-  )
-
-  const onSortModelChange = useCallback(
-    model => {
-      const item = model[0]
-      if (!item?.field || !item?.sort) return
-
-      let isAllowed = false
-
-      if (
-        item.field === 'creationTimestamp' ||
-        item.field === 'field' ||
-        item.field === 'action' ||
-        item.field === 'creatorName' ||
-        item.field === 'oldValue' ||
-        item.field === 'newValue'
-      ) {
-        isAllowed = true
-      } else if (selectedType === TYPE.PENDING && item.field === 'concept') {
-        isAllowed = true
-      } else if (
-        selectedType === TYPE.APPROVED &&
-        (item.field === 'processorName' || item.field === 'processedTimestamp')
-      ) {
-        isAllowed = true
-      }
-
-      if (!isAllowed) return
-
-      handleSortChange(item.field, item.sort)
-    },
-    [handleSortChange, selectedType]
-  )
+  const rows = pageState.sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data
 
   const paginationComponent = (
     <HistoryPagination
       count={conceptState.count}
-      goToPage={goToPage}
       hideFooter={hideFooter}
       limit={limit}
       nextPage={nextPage}
@@ -90,12 +44,6 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   return (
     <PanelDataGrid
       columns={columns}
-      dataGridProps={{
-        disableColumnFilter: true,
-        onSortModelChange,
-        sortModel,
-        sortingMode: 'server',
-      }}
       hideFooter={hideFooter}
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}

@@ -15,7 +15,7 @@ const ConceptsSidebar = () => {
 
   const [autoExpand, setAutoExpand] = useState(null)
 
-  const scrollToConceptRef = useRef(() => { })
+  const scrollToConceptRef = useRef(() => {})
 
   const registerScrollFn = useCallback(scrollHandler => {
     scrollToConceptRef.current = scrollHandler || (() => {})
@@ -33,23 +33,14 @@ const ConceptsSidebar = () => {
   }
 
   return (
-    <Stack sx={{ height: '100%', ml: 2, mr: 1, mt: 1.75 }}>
+    <Stack sx={{ gap: 1, height: '100%', ml: 1, mr: 1, mt: 1.75 }}>
       <ConceptSelect
-        auxiliaryComponent={
-          <SidebarSelectAuxiliary
-            concepts={concepts}
-            onScrollToConcept={handleScroll}
-          />
-        }
+        auxiliaryComponent={<SidebarSelectAuxiliary concepts={concepts} onScrollToConcept={handleScroll} />}
         conceptName={concept.name}
         doConceptSelected={doConceptSelected}
         width='auto'
       />
-      <ConceptsTree
-        autoExpand={autoExpand}
-        registerScrollFn={registerScrollFn}
-        setAutoExpand={setAutoExpand}
-      />
+      <ConceptsTree autoExpand={autoExpand} registerScrollFn={registerScrollFn} setAutoExpand={setAutoExpand} />
     </Stack>
   )
 }
