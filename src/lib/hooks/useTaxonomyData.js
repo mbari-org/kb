@@ -42,6 +42,9 @@ const descendantData = async (concept, getConcept, apiFns) => {
   while (queue.length > 0) {
     const { name, parentChildren } = queue.shift()
     const nextConcept = getConcept(name)
+    if (!nextConcept) {
+      throw new Error(`Failed to load concept data for descendant: ${name}`)
+    }
     const nextData = await conceptData(nextConcept, apiFns)
     nextData.children = []
     parentChildren.push(nextData)
@@ -59,43 +62,52 @@ const useTaxonomyData = () => {
   const { beginProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
-  const { getConcept, loadConceptDescendants } = use(TaxonomyContext)
+  const { getConcept, getConceptFromTaxonomy, loadConceptDescendants } = use(TaxonomyContext)
 
   return useCallback(
     async conceptExtent => {
+      let getTaxonomyConcept = getConcept
       if (conceptExtent === CONCEPT.EXTENT.DESCENDANTS) {
         const processing = beginProcessing(PROCESSING.LOAD, null, { delayMs: 0 })
         if (processing.updateMessage) {
           processing.updateMessage('Loading concept descendants ...')
         }
         try {
-          await loadConceptDescendants(concept)
+          const updatedTaxonomy = await loadConceptDescendants(concept)
+          // Create a new getTaxonomyConcept function that references the updated taxonomy with descendants since the
+          // getConcept from TaxonomyContext will be stale here, and due to React rendering behavior, won't have the
+          // updated taxonomy until this function completes and components re-render.
+          if (updatedTaxonomy) {
+            getTaxonomyConcept = conceptName =>
+              getConceptFromTaxonomy(updatedTaxonomy, conceptName)
+          }
         } finally {
           processing()
         }
       }
 
       const exportData = await conceptData(concept, apiFns)
-
       switch (conceptExtent) {
         case CONCEPT.EXTENT.SOLO:
           exportData.children = concept.children
           break
+
         case CONCEPT.EXTENT.CHILDREN: {
-          const childConcepts = concept.children.map(child => getConcept(child))
+          const childConcepts = concept.children.map(child => getTaxonomyConcept(child))
           exportData.children = await Promise.all(
             childConcepts.map(child => conceptData(child, apiFns))
           )
           break
         }
+
         case CONCEPT.EXTENT.DESCENDANTS:
-          exportData.children = await descendantData(concept, getConcept, apiFns)
+          exportData.children = await descendantData(concept, getTaxonomyConcept, apiFns)
           break
       }
       return exportData
 
     },
-    [apiFns, beginProcessing, concept, getConcept, loadConceptDescendants]
+    [apiFns, beginProcessing, concept, getConcept, getConceptFromTaxonomy, loadConceptDescendants]
   )
 }
 

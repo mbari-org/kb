@@ -14,9 +14,10 @@ const getContent = async ({
   onProgress,
   fileName,
 }) => {
+  onProgress?.(`Loading ${concept.name} (${conceptExtent}) ...`)
   const taxonomyData = await getTaxonomyData(conceptExtent)
+  onProgress?.(`Generating JSON for ${fileName} ...`)
   const content = JSON.stringify(taxonomyData, null, 2) + '\n'
-  onProgress?.(`Export ${concept.name} to ${fileName} ...`)
   return content
 }
 
@@ -33,6 +34,7 @@ const viaFilePicker = async ({ contentParams, fileName, getContent, onProgress }
     ],
   })
   const content = await getContent(contentParams)
+  onProgress?.(`Writing to ${handle?.name || fileName} ...`)
   const writable = await handle.createWritable()
   await writable.write(content)
   await writable.close()
@@ -42,6 +44,7 @@ const viaFilePicker = async ({ contentParams, fileName, getContent, onProgress }
 
 const viaLinkDownload = async ({ contentParams, fileName, getContent, onProgress }) => {
   const content = await getContent(contentParams)
+  onProgress?.(`Downloading ${fileName} ...`)
   const blob = new Blob([content], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')

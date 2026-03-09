@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 
 const ProcessingMsg = ({ message }) => {
   return (
@@ -22,7 +22,7 @@ const ProcessingMsg = ({ message }) => {
       }}
     >
       <Box sx={{ alignItems: 'center', display: 'flex', gap: 1 }}>
-        <span className='h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent' />
+        <CircularProgress size={32} sx={{ color: 'white' }} />
         <span>{message}</span>
       </Box>
     </Box>

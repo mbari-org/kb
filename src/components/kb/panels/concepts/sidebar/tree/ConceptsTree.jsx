@@ -103,7 +103,7 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
   }, [conceptPath])
 
   useEffect(() => {
-    return scrollToNode(onConceptTreeReady, 100)
+    return scrollToNode(onConceptTreeReady, 250)
   }, [scrollToNode, onConceptTreeReady])
 
   if (!concept || !getConcept(concept.name)) {

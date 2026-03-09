@@ -86,12 +86,8 @@ const TaxonomyProvider = ({ children }) => {
       }
 
       if (!isEqual(freshConcept.children, staleConcept.children)) {
-        const addedChildren = freshConcept.children.filter(
-          name => !staleConcept.children.includes(name)
-        )
-        const removedChildren = staleConcept.children.filter(
-          name => !freshConcept.children.includes(name)
-        )
+        const addedChildren = freshConcept.children.filter(name => !staleConcept.children.includes(name))
+        const removedChildren = staleConcept.children.filter(name => !freshConcept.children.includes(name))
 
         await Promise.all(
           addedChildren
@@ -183,6 +179,11 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
+  const getConceptFromTaxonomy = useCallback((conceptTaxonomy, conceptName) => {
+    if (!conceptTaxonomy) return null
+    return getTaxonomyConcept(conceptTaxonomy, conceptName)
+  }, [])
+
   const getConceptPrimaryName = useCallback(
     conceptName => {
       if (!taxonomy) return null
@@ -237,7 +238,11 @@ const TaxonomyProvider = ({ children }) => {
       if (!taxonomy || !apiFns) return null
 
       if (!force && isConceptLoaded(conceptName)) {
-        return getConcept(conceptName)
+        const loadedConcept = getTaxonomyConcept(taxonomy, conceptName)
+        if (!loadedConcept) {
+          throw new Error(`Taxonomy reported concept as loaded but lookup failed: ${conceptName}`)
+        }
+        return loadedConcept
       }
 
       if (alreadyLoadingConcept.current) {
@@ -247,11 +252,7 @@ const TaxonomyProvider = ({ children }) => {
       try {
         alreadyLoadingConcept.current = true
 
-        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(
-          taxonomy,
-          conceptName,
-          apiFns
-        )
+        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(taxonomy, conceptName, apiFns)
 
         updateTaxonomy(updatedTaxonomy)
 
@@ -262,18 +263,14 @@ const TaxonomyProvider = ({ children }) => {
         alreadyLoadingConcept.current = false
       }
     },
-    [apiFns, getConcept, isConceptLoaded, showBoundary, taxonomy, updateTaxonomy]
+    [apiFns, isConceptLoaded, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const loadConceptDescendants = useCallback(
     async concept => {
       if (!apiFns || !taxonomy) return null
       try {
-        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(
-          taxonomy,
-          concept,
-          apiFns
-        )
+        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(taxonomy, concept, apiFns)
         updateTaxonomy(updatedTaxonomy)
 
         return updatedTaxonomy
@@ -286,12 +283,15 @@ const TaxonomyProvider = ({ children }) => {
 
   const removeConcept = useCallback(
     conceptName => {
-      const concept = getConcept(conceptName)
+      const concept = getTaxonomyConcept(taxonomy, conceptName)
+      if (!concept) {
+        throw new Error(`Cannot remove missing concept from taxonomy: ${conceptName}`)
+      }
       const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(taxonomy, concept)
       updateTaxonomy(updatedTaxonomy)
       return updatedTaxonomy
     },
-    [getConcept, taxonomy, updateTaxonomy]
+    [taxonomy, updateTaxonomy]
   )
 
   useEffect(() => {
@@ -317,6 +317,7 @@ const TaxonomyProvider = ({ children }) => {
       closestConcept,
       filterRanks,
       getConcept,
+      getConceptFromTaxonomy,
       getConceptPrimaryName,
       getAncestorNames,
       getNames,
@@ -336,6 +337,7 @@ const TaxonomyProvider = ({ children }) => {
       filterRanks,
       getAncestorNames,
       getConcept,
+      getConceptFromTaxonomy,
       getConceptPrimaryName,
       getNames,
       getRootName,
