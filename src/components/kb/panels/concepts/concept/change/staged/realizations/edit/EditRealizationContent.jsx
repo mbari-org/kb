@@ -2,7 +2,7 @@ import { use, useState, useMemo, useEffect, useCallback } from 'react'
 import { Box, TextField, Divider } from '@mui/material'
 
 import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/form/RealizationForm'
-import RealizationTemplatesFilter from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesFilter'
+import RealizationTemplatesList from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesList'
 import ModalActionText from '@/components/common/ModalActionText'
 import useAvailableLinkTemplates from './useAvailableLinkTemplates'
 
@@ -17,11 +17,8 @@ import useStageRealization from './useStageRealization'
 import useRealizationContentHandlers from './useRealizationContentHandlers'
 import useFilterLinkName from './useFilterLinkName'
 
-import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/text'
-
-const { ITEMS_PER_PAGE } = CONCEPT.PROPERTY_LIST
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const EditRealizationContent = () => {
@@ -31,7 +28,6 @@ const EditRealizationContent = () => {
 
   const { action, realizationIndex, modalRealizationItem } = modalData
 
-  const [currentPage, setCurrentPage] = useState(0)
   const [cycleIndex, setCycleIndex] = useState(0)
   const [filterLinkName, setFilterLinkName] = useState('')
   const [isValidToConcept, setIsValidToConcept] = useState(true)
@@ -59,22 +55,9 @@ const EditRealizationContent = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setCycleIndex(0)
-      setCurrentPage(0)
     }, 0)
     return () => clearTimeout(timeoutId)
   }, [filterLinkName])
-
-  useEffect(() => {
-    if (filteredTemplates.length > 0 && cycleIndex > 0) {
-      const pageForCurrentTemplate = Math.floor(cycleIndex / ITEMS_PER_PAGE)
-      if (pageForCurrentTemplate !== currentPage) {
-        const timeoutId = setTimeout(() => {
-          setCurrentPage(pageForCurrentTemplate)
-        }, 0)
-        return () => clearTimeout(timeoutId)
-      }
-    }
-  }, [cycleIndex, currentPage, filteredTemplates.length])
 
   const isDuplicate = useMemo(() => {
     const excludeIndex = action === CONCEPT_STATE.REALIZATION.ADD ? null : realizationIndex
@@ -111,10 +94,6 @@ const EditRealizationContent = () => {
     setCycleIndex,
   })
 
-  const handlePageChange = useCallback(newPage => {
-    setCurrentPage(newPage)
-  }, [])
-
   const handleValidationChange = useCallback(validationData => {
     if (validationData.isValidToConcept !== undefined) {
       setIsValidToConcept(validationData.isValidToConcept)
@@ -129,16 +108,14 @@ const EditRealizationContent = () => {
     <Box>
       {!isEdit && (
         <Box>
-          <RealizationTemplatesFilter
-            currentPage={currentPage}
+          <RealizationTemplatesList
             isLoading={isLoading}
-            linkName={filterLinkName}
-            onPageChange={handlePageChange}
             onTemplateSelect={handleTemplateSelect}
+            templates={filteredTemplates}
           />
           <TextField
             fullWidth
-            label='Filter Link Name'
+            label='Filter by Link Name'
             onChange={event => {
               const newValue = event.target.value
               setFilterLinkName(newValue)
@@ -146,7 +123,7 @@ const EditRealizationContent = () => {
             }}
             onKeyDown={handleFilterKeyDown}
             size='small'
-            sx={{ mb: 2 }}
+            sx={{ mb: 2, mt: 2 }}
             value={filterLinkName}
           />
           <Divider sx={{ my: 1 }} />

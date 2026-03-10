@@ -4,13 +4,7 @@ import ControlledConceptPropertyPages from '@/components/kb/panels/concepts/conc
 import RealizationTemplate from './RealizationTemplate'
 import useAvailableLinkTemplates from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/useAvailableLinkTemplates'
 
-const RealizationTemplatesFilter = ({
-  currentPage,
-  isLoading,
-  linkName,
-  onPageChange,
-  onTemplateSelect,
-}) => {
+const RealizationTemplatesPaged = ({ currentPage, isLoading, linkName, onPageChange, onTemplateSelect }) => {
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
   const [internalPage, setInternalPage] = useState(0)
@@ -30,9 +24,7 @@ const RealizationTemplatesFilter = ({
 
   const renderItem = {
     key: (template, index) => `${template.concept}-${template.linkName}-${index}`,
-    content: template => (
-      <RealizationTemplate template={template} onTemplateSelect={onTemplateSelect} />
-    ),
+    content: template => <RealizationTemplate template={template} onTemplateSelect={onTemplateSelect} />,
   }
 
   return (
@@ -49,4 +41,4 @@ const RealizationTemplatesFilter = ({
   )
 }
 
-export default RealizationTemplatesFilter
+export default RealizationTemplatesPaged
