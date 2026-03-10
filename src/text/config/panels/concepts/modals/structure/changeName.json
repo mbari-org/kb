@@ -17,6 +17,6 @@
   },
   "NON_ADMIN_MESSAGE": {
     "COMMUNICATE": "Please communicate with an admin regarding this change.",
-    "APPROVAL": "When approving, an admin must specify whether to reassign Concept related data."
+    "APPROVAL": "When approving, an admin must specify how to reassign Concept related data."
   }
 }

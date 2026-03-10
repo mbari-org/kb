@@ -10,6 +10,9 @@ import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/stag
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import UserContext from '@/contexts/user/UserContext'
+
+import { isAdmin } from '@/lib/auth/role'
 
 import CONFIG from '@/text'
 
@@ -19,6 +22,7 @@ const DeleteConceptContent = () => {
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
+  const { user } = use(UserContext)
 
   const [isValid, setIsValid] = useState(true)
   const [reassign, setReassignTo] = useState(concept.parent)
@@ -26,11 +30,13 @@ const DeleteConceptContent = () => {
   const { relatedDataCounts, isLoading } = modalData
   const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
-  const validateChoice = useCallback(choice =>
-    getNames()
-      .filter(name => name !== concept.name)
-      .includes(choice),
-  [getNames, concept.name])
+  const validateChoice = useCallback(
+    choice =>
+      getNames()
+        .filter(name => name !== concept.name)
+        .includes(choice),
+    [getNames, concept.name]
+  )
 
   const handleChange = (_event, selectedName) => {
     setReassignTo(selectedName)
@@ -49,49 +55,47 @@ const DeleteConceptContent = () => {
 
   return (
     <Box>
-      <Typography align='center' color='cancel' sx={{ fontSize: theme => theme.typography.fontSize * 1.5, fontWeight: 'bold' }}>
+      <Typography
+        align='center'
+        color='cancel'
+        sx={{ fontSize: theme => theme.typography.fontSize * 1.5, fontWeight: 'bold' }}
+      >
         {MODALS.STRUCTURE.DELETE_CONCEPT.LABEL}
       </Typography>
       {!modalData.isLoading && !hasRelatedData && (
-        <Typography align='center'>
-          {MODALS.STRUCTURE.DELETE_CONCEPT.NO_RELATED_DATA}
-        </Typography>
+        <Typography align='center'>{MODALS.STRUCTURE.DELETE_CONCEPT.NO_RELATED_DATA}</Typography>
       )}
       {!modalData.isLoading && hasRelatedData && (
-        <Typography align='center'>
-          {MODALS.STRUCTURE.DELETE_CONCEPT.MUST_REASSIGN}
-        </Typography>
+        <Typography align='center'>{MODALS.STRUCTURE.DELETE_CONCEPT.MUST_REASSIGN}</Typography>
       )}
 
       {isLoading && <ProcessingMsg message='Loading related data...' />}
-      {!modalData.isLoading && hasRelatedData && (
-        <RelatedDataCounts
-          relatedDataCounts={relatedDataCounts}
-        />
-      )}
-      <Stack direction='column' spacing={1} alignItems='center'>
-        <Box>
-          {hasRelatedData && (
-            <Box sx={{ ml: 1 }}>
-              <ToConceptChoice
-                error={!isValid}
-                handleChange={handleChange}
-                handleKeyUp={handleKeyUp}
-                label={MODALS.STRUCTURE.DELETE_CONCEPT.REASSIGN_TO}
-                omitChoices={[concept.name]}
-                required
-                value={reassign}
-              />
-            </Box>
-          )}
-        </Box>
+      {!modalData.isLoading && hasRelatedData && <RelatedDataCounts relatedDataCounts={relatedDataCounts} />}
+      {isAdmin(user) && (
+        <Stack direction='column' spacing={1} alignItems='center'>
+          <Box>
+            {hasRelatedData && (
+              <Box sx={{ ml: 1 }}>
+                <ToConceptChoice
+                  error={!isValid}
+                  handleChange={handleChange}
+                  handleKeyUp={handleKeyUp}
+                  label={MODALS.STRUCTURE.DELETE_CONCEPT.REASSIGN_TO}
+                  omitChoices={[concept.name]}
+                  required
+                  value={reassign}
+                />
+              </Box>
+            )}
+          </Box>
 
-        {!isValid && (
-          <Typography color='cancel' variant='caption'>
-            {MODALS.STRUCTURE.DELETE_CONCEPT.ERROR_MESSAGE}
-          </Typography>
-        )}
-      </Stack>
+          {!isValid && (
+            <Typography color='cancel' variant='caption'>
+              {MODALS.STRUCTURE.DELETE_CONCEPT.ERROR_MESSAGE}
+            </Typography>
+          )}
+        </Stack>
+      )}
     </Box>
   )
 }
