@@ -9,15 +9,12 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 const getJsonData = async ({
   conceptExtent,
-  fileName,
   getTaxonomyData,
   onProgress,
 
 }) => {
   onProgress?.('Formatting concept data ...')
   const taxonomyData = await getTaxonomyData(conceptExtent)
-
-  onProgress?.(`Generating JSON for ${fileName} ...`)
   return JSON.stringify(taxonomyData, null, 2) + '\n'
 }
 
