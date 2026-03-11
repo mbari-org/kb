@@ -18,19 +18,18 @@ const ConceptExportActions = () => {
   const exportCsv = useConceptExportCsv(modalData.conceptExtent)
   const exportJson = useConceptExportJson(modalData.conceptExtent)
 
-  const handleAction = action => {
+  const handleAction = async action => {
     switch (action) {
       case CANCEL: {
         closeModal()
         break
       }
       case EXPORT: {
-        if (modalData.exportType === EXPORT_TYPE.JSON) {
-          exportJson()
-        } else {
-          exportCsv()
+        try {
+          await (modalData.exportType === EXPORT_TYPE.JSON ? exportJson() : exportCsv())
+        } finally {
+          closeModal()
         }
-        closeModal()
         break
       }
     }

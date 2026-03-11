@@ -73,9 +73,11 @@ const useProcessingManager = () => {
         updateState()
       }
 
-      timeoutId = setTimeout(() => {
-        cleanup()
-      }, timeoutMs)
+      if (typeof timeoutMs === 'number' && timeoutMs > 0) {
+        timeoutId = setTimeout(() => {
+          cleanup()
+        }, timeoutMs)
+      }
 
       const stop = () => cleanup()
       stop.updateMessage = newMessage => {

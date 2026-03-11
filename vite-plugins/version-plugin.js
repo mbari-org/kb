@@ -29,7 +29,7 @@ export const versionPlugin = () => {
 
   const getExactGitTag = () => {
     try {
-      return execSync('git describe --tags --exact-match', { encoding: 'utf8' }).trim()
+      return execSync('git describe --tags --exact-match 2>/dev/null', { encoding: 'utf8' }).trim()
     } catch {
       return null
     }

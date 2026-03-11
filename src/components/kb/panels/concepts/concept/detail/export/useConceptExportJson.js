@@ -7,52 +7,54 @@ import useConceptExportProgress from './useConceptExportProgress'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-const getContent = async ({
-  concept,
+const getJsonData = async ({
   conceptExtent,
+  fileName,
   getTaxonomyData,
   onProgress,
-  fileName,
+
 }) => {
-  onProgress?.(`Loading ${concept.name} (${conceptExtent}) ...`)
+  onProgress?.('Formatting concept data ...')
   const taxonomyData = await getTaxonomyData(conceptExtent)
+
   onProgress?.(`Generating JSON for ${fileName} ...`)
-  const content = JSON.stringify(taxonomyData, null, 2) + '\n'
-  return content
+  return JSON.stringify(taxonomyData, null, 2) + '\n'
 }
 
-const viaFilePicker = async ({ contentParams, fileName, getContent, onProgress }) => {
-  if (!window?.showSaveFilePicker) return false
+const dataOutput = async fileName => {
+  if (window.showSaveFilePicker) {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: fileName,
+      types: [
+        {
+          description: 'JSON Files',
+          accept: { 'application/json': ['.json'] },
+        },
+      ],
+    })
+    return { outputFn: viaFilePicker, handle }
+  }
 
-  const handle = await window.showSaveFilePicker({
-    suggestedName: fileName,
-    types: [
-      {
-        description: 'JSON Files',
-        accept: { 'application/json': ['.json'] },
-      },
-    ],
-  })
-  const content = await getContent(contentParams)
-  onProgress?.(`Writing to ${handle?.name || fileName} ...`)
+  return { outputFn: viaLinkDownload }
+}
+
+// File picker gives more user control, but is not supported in all browsers
+// showSaveFilePicker MUST be called before any await, or Chrome blocks it (transient activation)
+const viaFilePicker = async ({ handle, jsonData }) => {
   const writable = await handle.createWritable()
-  await writable.write(content)
+  await writable.write(jsonData)
   await writable.close()
-  onProgress?.({ status: 'done', fileName: handle?.name || fileName })
-  return true
 }
 
-const viaLinkDownload = async ({ contentParams, fileName, getContent, onProgress }) => {
-  const content = await getContent(contentParams)
-  onProgress?.(`Downloading ${fileName} ...`)
-  const blob = new Blob([content], { type: 'application/json' })
+// Only if file picker is not supported
+const viaLinkDownload = async ({ fileName, jsonData }) => {
+  const blob = new Blob([jsonData], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
   link.download = fileName
   link.click()
   URL.revokeObjectURL(url)
-  onProgress?.({ status: 'done', fileName })
 }
 
 const useConceptExportJson = conceptExtent => {
@@ -63,22 +65,30 @@ const useConceptExportJson = conceptExtent => {
 
   return useCallback(async () => {
     const fileName = getSuggestedFileName({ concept, conceptExtent, extension: 'json' })
-    try {
-      const contentParams = {
-        concept,
-        conceptExtent,
-        getTaxonomyData,
-        onProgress,
-        fileName,
-      }
+    const contentParams = {
+      concept,
+      conceptExtent,
+      fileName,
+      getTaxonomyData,
+      onProgress,
+    }
 
-      if (await viaFilePicker({ contentParams, fileName, getContent, onProgress })) {
+    try {
+      const { handle, outputFn } = await dataOutput(fileName)
+      const outputFile = handle?.name || fileName
+
+      onProgress?.('Get Concept data ...')
+      const jsonData = await getJsonData(contentParams)
+
+      onProgress?.(`Output Concept data to ${outputFile} ...`)
+      handle ? await outputFn({ handle, jsonData }) : await outputFn({ fileName: outputFile, jsonData })
+      onProgress?.({ status: 'done', fileName: outputFile })
+    } catch (error) {
+      // User cancel
+      if (error?.name === 'AbortError') {
         return
       }
 
-      await viaLinkDownload({ contentParams, fileName, getContent, onProgress })
-
-    } catch (error) {
       const errorMessage = error?.message || `${error}`
       throw createError(
         'JSON Export Error',

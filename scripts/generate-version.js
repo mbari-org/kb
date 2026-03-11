@@ -22,7 +22,7 @@ const generateVersionInfo = () => {
 
     let tag = null
     try {
-      tag = run('git describe --tags --exact-match')
+      tag = run('git describe --tags --exact-match 2>/dev/null')
     } catch {
       tag = null
     }

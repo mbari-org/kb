@@ -36,7 +36,7 @@ const useConceptExportProgress = () => {
         setModal(modal)
       } else if (typeof value === 'string') {
         if (!processingStopRef.current) {
-          const stop = beginProcessing(PROCESSING.LOAD, null, { delayMs: 0 })
+          const stop = beginProcessing(PROCESSING.LOAD, null, { delayMs: 0, timeoutMs: 0 })
           if (stop.updateMessage) {
             stop.updateMessage(value)
           }
