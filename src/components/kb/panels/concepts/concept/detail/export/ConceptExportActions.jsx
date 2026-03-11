@@ -12,6 +12,7 @@ import CONFIG from '@/text'
 
 const { CANCEL } = CONFIG.PANELS.CONCEPTS.BUTTON
 const { EXPORT } = CONFIG.PANELS.CONCEPTS.EXPORT.BUTTON
+
 const ConceptExportActions = () => {
   const { closeModal, modalData } = use(ConceptModalContext)
 

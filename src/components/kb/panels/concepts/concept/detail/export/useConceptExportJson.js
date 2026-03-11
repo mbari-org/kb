@@ -1,20 +1,22 @@
 import { use, useCallback } from 'react'
 
 import { createError } from '@/lib/errors'
-import useTaxonomyData from '@/lib/hooks/useTaxonomyData'
 import { getSuggestedFileName } from './conceptExport'
+import useConceptData from './useConceptData'
 import useConceptExportProgress from './useConceptExportProgress'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 const getJsonData = async ({
   conceptExtent,
+  includeData,
   getTaxonomyData,
   onProgress,
 
 }) => {
   onProgress?.('Formatting concept data ...')
-  const taxonomyData = await getTaxonomyData(conceptExtent)
+  const taxonomyData = await getTaxonomyData(conceptExtent, includeData)
   return JSON.stringify(taxonomyData, null, 2) + '\n'
 }
 
@@ -56,15 +58,17 @@ const viaLinkDownload = async ({ fileName, jsonData }) => {
 
 const useConceptExportJson = conceptExtent => {
   const { concept } = use(ConceptContext)
+  const { modalData } = use(ConceptModalContext)
 
   const onProgress = useConceptExportProgress()
-  const getTaxonomyData = useTaxonomyData()
+  const getTaxonomyData = useConceptData()
 
   return useCallback(async () => {
     const fileName = getSuggestedFileName({ concept, conceptExtent, extension: 'json' })
     const contentParams = {
       concept,
       conceptExtent,
+      includeData: modalData.includeData,
       fileName,
       getTaxonomyData,
       onProgress,
@@ -96,7 +100,7 @@ const useConceptExportJson = conceptExtent => {
     } finally {
       onProgress?.(false)
     }
-  }, [concept, conceptExtent, getTaxonomyData, onProgress])
+  }, [concept, conceptExtent, getTaxonomyData, modalData.includeData, onProgress])
 }
 
 export default useConceptExportJson

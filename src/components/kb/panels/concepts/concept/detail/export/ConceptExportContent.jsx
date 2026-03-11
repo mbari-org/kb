@@ -3,7 +3,8 @@ import { Stack, Typography } from '@mui/material'
 
 import ConceptExtent from '@/components/common/concept/ConceptExtent'
 import ConceptExportType from './ConceptExportType'
-import ConceptExportCsv from './ConceptExportCsv'
+import ConceptExportCsvFields from './ConceptExportCsvFields'
+import ConceptExportJsonFields from './ConceptExportJsonFields'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -48,7 +49,8 @@ const ConceptExportContent = () => {
       <Typography variant='body2' color='text.secondary'>
           {exportMessage}
       </Typography>
-      { exportType === EXPORT_TYPE.CSV && <ConceptExportCsv /> }
+      {exportType === EXPORT_TYPE.CSV && <ConceptExportCsvFields />}
+      {exportType === EXPORT_TYPE.JSON && <ConceptExportJsonFields />}
     </Stack>
   )
 }

@@ -12,27 +12,49 @@ import { drop } from '@/lib/utils'
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
+export const ALWAYS_INCLUDED_FIELDS = ['name', 'children']
+export const OPTIONAL_FIELDS = ['aliases', 'author', 'media', 'parent', 'rank', 'realizations']
 
-const conceptData = concept => {
-  return {
-    name: concept.name,
-    aliases: concept.aliases.map(alias => drop(alias, ['id'])),
-    author: concept.author,
-    children: concept.children,
-    media: concept.media
-      ? concept.media.map(item => drop(item, ['conceptName', 'id', 'lastUpdated']))
-      : [],
-    parent: concept.parent,
-    rankLevel: concept.rankLevel || '',
-    rankName: concept.rankName || '',
-    realizations: concept.realizations
-      ? concept.realizations.map(realization => drop(realization, ['id']))
-      : [],
+const conceptDataFn = apiFns => {
+  return async (concept, includeFields) => {
+    const exportData = {
+      name: concept.name,
+      children: concept.children,
+    }
+
+    if (includeFields.aliases) {
+      const aliases = concept.aliases
+        ? concept.aliases
+        : orderedAliases(await apiFns.apiPayload(getConceptNames, concept.name))
+      exportData.aliases = aliases.map(alias => drop(alias, ['id']))
+    }
+    if (includeFields.author) {
+      exportData.author = concept.author
+    }
+    if (includeFields.media) {
+      exportData.media = concept.media
+        ? concept.media.map(item => drop(item, ['conceptName', 'id', 'lastUpdated']))
+        : []
+    }
+    if (includeFields.parent) {
+      exportData.parent = concept.parent
+    }
+    if (includeFields.rank) {
+      exportData.rankLevel = concept.rankLevel || ''
+      exportData.rankName = concept.rankName || ''
+    }
+    if (includeFields.realizations) {
+      exportData.realizations = concept.realizations
+        ? concept.realizations.map(realization => drop(realization, ['id']))
+        : []
+    }
+
+    return exportData
   }
 }
 
-const descendantDataFn = (ensureConceptAliases, getConceptData) => {
-  return async (concept, getConcept) => {
+const descendantDataFn = getConceptData => {
+  return async (concept, getConcept, includeFields) => {
     const nestedDescendants = []
     const queue = concept.children.map(name => ({ name, parentChildren: nestedDescendants }))
 
@@ -42,7 +64,7 @@ const descendantDataFn = (ensureConceptAliases, getConceptData) => {
       if (!nextConcept) {
         throw new Error(`Failed to load concept data for descendant: ${name}`)
       }
-      const nextData = getConceptData(await ensureConceptAliases(nextConcept))
+      const nextData = await getConceptData(nextConcept, includeFields)
       nextData.children = []
       parentChildren.push(nextData)
       if (nextConcept.children?.length) {
@@ -56,32 +78,17 @@ const descendantDataFn = (ensureConceptAliases, getConceptData) => {
   }
 }
 
-const ensureConceptAliasesFn = apiFns => {
-  return async concept => {
-    if (concept.aliases) {
-      return concept
-    }
-    return {
-      ...concept,
-      aliases: orderedAliases(await apiFns.apiPayload(getConceptNames, concept.name)),
-    }
-  }
-}
-
-const useTaxonomyData = () => {
+const useConceptData = () => {
   const { beginProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
   const { concept: exportedConcept } = use(ConceptContext)
   const { getConcept, getConceptFromTaxonomy, loadConceptDescendants } = use(TaxonomyContext)
-
-  const ensureConceptAliases = useMemo(() => ensureConceptAliasesFn(apiFns), [apiFns])
-  const descendantData = useMemo(
-    () => descendantDataFn(ensureConceptAliases, conceptData),
-    [ensureConceptAliases]
-  )
+  const conceptData = useMemo(() => conceptDataFn(apiFns), [apiFns])
+  const descendantData = useMemo(() => descendantDataFn(conceptData), [conceptData])
 
   return useCallback(
-    async conceptExtent => {
+    async (conceptExtent, includeFieldsInput) => {
+      const includeFields = includeFieldsInput
       let getTaxonomyConcept = getConcept
 
       if (conceptExtent === CONCEPT.EXTENT.DESCENDANTS) {
@@ -103,33 +110,22 @@ const useTaxonomyData = () => {
         }
       }
 
-      const concept = await ensureConceptAliases(exportedConcept)
-      const exportData = conceptData(concept)
+      const exportData = await conceptData(exportedConcept, includeFields)
 
-      switch (conceptExtent) {
-        case CONCEPT.EXTENT.SOLO: {
-          exportData.children = exportedConcept.children
-          break
-        }
-
-        case CONCEPT.EXTENT.CHILDREN: {
-          const childConcepts = await Promise.all(
-            exportedConcept.children.map(async childName => {
-              const childConcept = getTaxonomyConcept(childName)
-              if (!childConcept) {
-                throw new Error(`Failed to load concept data for child: ${childName}`)
-              }
-              return ensureConceptAliases(childConcept)
-            })
-          )
-          exportData.children = childConcepts.map(child => conceptData(child))
-          break
-        }
-
-        case CONCEPT.EXTENT.DESCENDANTS: {
-          exportData.children = await descendantData(concept, getTaxonomyConcept)
-          break
-        }
+      if (conceptExtent === CONCEPT.EXTENT.SOLO) {
+        exportData.children = exportedConcept.children
+      } else if (conceptExtent === CONCEPT.EXTENT.CHILDREN) {
+        exportData.children = await Promise.all(
+          exportedConcept.children.map(async childName => {
+            const childConcept = getTaxonomyConcept(childName)
+            if (!childConcept) {
+              throw new Error(`Failed to load concept data for child: ${childName}`)
+            }
+            return conceptData(childConcept, includeFields)
+          })
+        )
+      } else if (conceptExtent === CONCEPT.EXTENT.DESCENDANTS) {
+        exportData.children = await descendantData(exportedConcept, getTaxonomyConcept, includeFields)
       }
 
       return exportData
@@ -137,7 +133,7 @@ const useTaxonomyData = () => {
     [
       beginProcessing,
       exportedConcept,
-      ensureConceptAliases,
+      conceptData,
       descendantData,
       getConcept,
       getConceptFromTaxonomy,
@@ -146,4 +142,4 @@ const useTaxonomyData = () => {
   )
 }
 
-export default useTaxonomyData
+export default useConceptData

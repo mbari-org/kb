@@ -10,10 +10,15 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
 import { CONCEPT } from '@/lib/constants'
+import { ALWAYS_INCLUDED_FIELDS, OPTIONAL_FIELDS } from './useConceptData'
 
 const initialModalData = {
   conceptExtent: CONCEPT.EXTENT.SOLO,
   exportType: EXPORT_TYPE.JSON,
+  includeData: {
+    ...Object.fromEntries(ALWAYS_INCLUDED_FIELDS.map(field => [field, true])),
+    ...Object.fromEntries(OPTIONAL_FIELDS.map(field => [field, false])),
+  },
   validInput: true,
 }
 
