@@ -2,8 +2,11 @@ import { use } from 'react'
 import { Box } from '@mui/material'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import CONFIG from '@/text'
 import { OPTIONAL_FIELDS } from './useConceptData'
 import ConceptExportJsonField from './ConceptExportJsonField'
+
+const { ALL } = CONFIG.COMMON.EXPORT.JSON
 
 const ConceptExportJsonFields = () => {
   const { modalData, setModalData } = use(ConceptModalContext)
@@ -44,7 +47,7 @@ const ConceptExportJsonFields = () => {
       <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', mt: 3 }}>
         <ConceptExportJsonField
           checked={OPTIONAL_FIELDS.every(field => includeData[field])}
-          field='All data'
+          field={ALL}
           onChange={handleAllDataChange}
         />
       </Box>

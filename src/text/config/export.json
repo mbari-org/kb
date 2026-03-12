@@ -10,5 +10,10 @@
       "WRITE_FAILED": "Failed to write CSV file"
     },
     "PROGRESS": "Exporting page {page} of {total} to CSV file..."
+  },
+  "DISMISS": "OK",
+  "DONE": "File export complete",
+  "JSON": {
+    "ALL": "All data"
   }
 }

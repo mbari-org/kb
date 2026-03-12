@@ -1,13 +1,9 @@
 import { use, useCallback, useState } from 'react'
 
-import {
-  getAvailableTemplates,
-  getExplicitTemplates,
-  getTemplates,
-  getToConceptTemplates,
-} from '@/lib/api/templates'
+import { getAvailableTemplates, getExplicitTemplates, getTemplates, getToConceptTemplates } from '@/lib/api/templates'
 
 import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteActions from '@/components/kb/export/ExportCompleteActions'
 import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
 import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
 
@@ -86,10 +82,7 @@ const fetchFilteredTemplates = async (data, apiFns) => {
   }
 
   if (hasConceptFilter) {
-    return apiFns.apiPayload(
-      data.byAvailable ? getAvailableTemplates : getExplicitTemplates,
-      data.filterConcept
-    )
+    return apiFns.apiPayload(data.byAvailable ? getAvailableTemplates : getExplicitTemplates, data.filterConcept)
   }
 
   if (hasToConceptFilter) {
@@ -101,11 +94,7 @@ const fetchFilteredTemplates = async (data, apiFns) => {
 
 const useTemplatesExport = () => {
   const { apiFns } = use(ConfigContext)
-  const {
-    byAvailable,
-    filters,
-    filteredTemplates,
-  } = use(TemplatesContext)
+  const { byAvailable, filters, filteredTemplates } = use(TemplatesContext)
   const { user } = use(UserContext)
   const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
@@ -145,14 +134,11 @@ const useTemplatesExport = () => {
       return `${baseName}.csv`
     }
     // If filterName starts with underscore, don't add extra underscore
-    return filterName.startsWith('_')
-      ? `${baseName}${filterName}.csv`
-      : `${baseName}_${filterName}.csv`
+    return filterName.startsWith('_') ? `${baseName}${filterName}.csv` : `${baseName}_${filterName}.csv`
   }
 
-  const paginated = !normalizedFilters.displayTemplates &&
-    !normalizedFilters.filterConcept &&
-    !normalizedFilters.filterToConcept
+  const paginated =
+    !normalizedFilters.displayTemplates && !normalizedFilters.filterConcept && !normalizedFilters.filterToConcept
 
   const count = normalizedFilters.displayTemplates?.length ?? '?'
   const estimatedTotalPages = null
@@ -184,6 +170,7 @@ const useTemplatesExport = () => {
           setProcessingStop(null)
         }
         const modal = createAppModal({
+          Actions: ExportCompleteActions,
           Content: ExportCompleteContent,
           Title: ExportCompleteTitle,
           minWidth: 420,

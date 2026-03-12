@@ -1,6 +1,7 @@
 import { use, useCallback, useRef } from 'react'
 
 import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteActions from '@/components/kb/export/ExportCompleteActions'
 import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
 import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
 
@@ -27,6 +28,7 @@ const useConceptExportProgress = () => {
           processingStopRef.current = null
         }
         const modal = createAppModal({
+          Actions: ExportCompleteActions,
           Content: ExportCompleteContent,
           Title: ExportCompleteTitle,
           minWidth: 420,

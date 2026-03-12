@@ -3,6 +3,7 @@ import { use, useCallback, useEffect, useMemo, useState } from 'react'
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteActions from '@/components/kb/export/ExportCompleteActions'
 import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
 import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
 
@@ -138,12 +139,7 @@ const useHistoryExport = () => {
   }
 
   const getPaginatedData = async pageIndex => {
-    const historyItems = await fetchHistory(
-      selectedType,
-      pageIndex,
-      EXPORT_PAGE_SIZE,
-      apiFns
-    )
+    const historyItems = await fetchHistory(selectedType, pageIndex, EXPORT_PAGE_SIZE, apiFns)
 
     if (!historyItems || historyItems.length === 0) {
       return null
@@ -165,8 +161,7 @@ const useHistoryExport = () => {
 
   const suggestName = useCallback(() => {
     if (selectedType === TYPE.CONCEPT) {
-      const extent =
-        conceptExtent === SOLO ? '' : `_and_${conceptExtent}`
+      const extent = conceptExtent === SOLO ? '' : `_and_${conceptExtent}`
       return `KB-History_${conceptNameForFilename(selectedConcept)}${extent}.csv`
     }
     return `KB-History-${capitalize(selectedType)}.csv`
@@ -191,6 +186,7 @@ const useHistoryExport = () => {
           setProcessingStop(null)
         }
         const modal = createAppModal({
+          Actions: ExportCompleteActions,
           Content: ExportCompleteContent,
           Title: ExportCompleteTitle,
           minWidth: 420,

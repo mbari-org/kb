@@ -1,6 +1,7 @@
 import { use, useCallback, useState } from 'react'
 
 import createAppModal from '@/components/modal/app/createAppModal'
+import ExportCompleteActions from '@/components/kb/export/ExportCompleteActions'
 import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
 import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
 
@@ -21,8 +22,7 @@ const { REFERENCES } = SELECTED.SETTINGS
 
 const dataHeaders = ['DOI', 'Citation', 'Concepts']
 
-const dataRows = references =>
-  references.map(reference => [reference.doi, reference.citation, reference.concepts])
+const dataRows = references => references.map(reference => [reference.doi, reference.citation, reference.concepts])
 
 const buildComments = byConceptName => {
   const comments = []
@@ -62,6 +62,7 @@ const useReferencesExport = () => {
           setProcessingStop(null)
         }
         const modal = createAppModal({
+          Actions: ExportCompleteActions,
           Content: ExportCompleteContent,
           Title: ExportCompleteTitle,
           minWidth: 420,

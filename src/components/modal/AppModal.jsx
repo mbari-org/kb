@@ -1,16 +1,7 @@
 import { use } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Fade,
-  IconButton,
-  Modal,
-} from '@mui/material'
+import { Box, Card, CardActions, CardContent, CardHeader, Fade, IconButton, Modal } from '@mui/material'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 
@@ -22,7 +13,6 @@ const AppModal = () => {
   }
 
   const { actions, content, title, minWidth = 500, focusClose = false, contentSx } = modal
-
   return (
     <Modal
       aria-labelledby='system-modal-alert'
@@ -51,11 +41,7 @@ const AppModal = () => {
             </IconButton>
             <CardHeader title={title()} />
             <CardContent sx={[{ pb: 0, pt: 0 }, contentSx]}>{content()}</CardContent>
-            {actions && (
-              <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-                {actions()}
-              </CardActions>
-            )}
+            {actions && <CardActions style={{ display: 'flex', justifyContent: 'center' }}>{actions()}</CardActions>}
           </Card>
         </Box>
       </Fade>

@@ -1,6 +1,6 @@
 {
-  "WILDCARD": "*",
-  "FILTER": {
+  "TEMPLATE_FILTERS": {
+    "WILDCARD": "*",
     "LABELS": {
       "CONCEPT": "Concept",
       "LINK_NAME": "Link name",
