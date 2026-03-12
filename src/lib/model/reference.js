@@ -1,3 +1,4 @@
+import { getConcept as getConceptApi } from '@/lib/api/concept'
 import { pick } from '@/lib/utils'
 
 const REFERENCE_FIELDS = ['citation', 'doi', 'concepts']
@@ -11,6 +12,14 @@ const createReference = (data = {}) => ({
   concepts: sortConcepts(data.concepts),
 })
 
+const loadReferences = async (apiFns, concept) => {
+  if (concept.references) {
+    return concept.references
+  }
+  const refreshedConcept = await apiFns.apiPayload(getConceptApi, concept.name)
+  return refreshedConcept.references || []
+}
+
 const pickReference = object => pick(object, REFERENCE_FIELDS)
 
 const updateReference = (reference, updates) =>
@@ -20,4 +29,4 @@ const updateReference = (reference, updates) =>
     concepts: sortConcepts(updates.concepts || reference.concepts),
   })
 
-export { createReference, pickReference, updateReference }
+export { createReference, loadReferences, pickReference, updateReference }

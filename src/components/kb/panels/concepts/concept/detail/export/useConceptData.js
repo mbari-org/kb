@@ -5,15 +5,25 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { getConceptNames } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants/concept'
-import { orderedAliases } from '@/lib/model/aliases'
+import { loadAliases } from '@/lib/model/aliases'
+import { loadReferences } from '@/lib/model/reference'
+import { loadTemplates } from '@/lib/model/templates'
 import { drop } from '@/lib/utils'
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 export const ALWAYS_INCLUDED_FIELDS = ['name', 'children']
-export const OPTIONAL_FIELDS = ['aliases', 'author', 'media', 'parent', 'rank', 'realizations']
+export const OPTIONAL_FIELDS = [
+  'aliases',
+  'author',
+  'media',
+  'parent',
+  'rank',
+  'realizations',
+  'references',
+  'templates',
+]
 
 const conceptDataFn = apiFns => {
   return async (concept, includeFields) => {
@@ -23,9 +33,7 @@ const conceptDataFn = apiFns => {
     }
 
     if (includeFields.aliases) {
-      const aliases = concept.aliases
-        ? concept.aliases
-        : orderedAliases(await apiFns.apiPayload(getConceptNames, concept.name))
+      const aliases = await loadAliases(apiFns, concept)
       exportData.aliases = aliases.map(alias => drop(alias, ['id']))
     }
     if (includeFields.author) {
@@ -48,7 +56,14 @@ const conceptDataFn = apiFns => {
         ? concept.realizations.map(realization => drop(realization, ['id']))
         : []
     }
-
+    if (includeFields.references) {
+      const references = await loadReferences(apiFns, concept)
+      exportData.references = references.map(reference => drop(reference, ['id', 'lastUpdated']))
+    }
+    if (includeFields.templates) {
+      const templates = await loadTemplates(apiFns, concept)
+      exportData.templates = templates.map(template => drop(template, ['id', 'lastUpdated']))
+    }
     return exportData
   }
 }
@@ -68,9 +83,7 @@ const descendantDataFn = getConceptData => {
       nextData.children = []
       parentChildren.push(nextData)
       if (nextConcept.children?.length) {
-        nextConcept.children.forEach(childName =>
-          queue.push({ name: childName, parentChildren: nextData.children })
-        )
+        nextConcept.children.forEach(childName => queue.push({ name: childName, parentChildren: nextData.children }))
       }
     }
 
@@ -102,8 +115,7 @@ const useConceptData = () => {
           // getConcept from TaxonomyContext will be stale here, and due to React rendering behavior, won't have the
           // updated taxonomy until this function completes and components re-render.
           if (updatedTaxonomy) {
-            getTaxonomyConcept = conceptName =>
-              getConceptFromTaxonomy(updatedTaxonomy, conceptName)
+            getTaxonomyConcept = conceptName => getConceptFromTaxonomy(updatedTaxonomy, conceptName)
           }
         } finally {
           processing()
