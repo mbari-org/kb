@@ -22,9 +22,10 @@ const ConceptModal = () => {
     return null
   }
 
-  const { actions, content, title, minWidth = 500 } = modal
+  const { actions, content, title, minWidth = 500, maxWidth, focusClose = false, contentSx } = modal
 
   const isProcessing = Boolean(processing)
+  const renderModalSlot = slot => (typeof slot === 'function' ? slot() : slot)
 
   return (
     <Modal
@@ -42,8 +43,9 @@ const ConceptModal = () => {
             mt: 10,
           }}
         >
-          <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth }}>
+          <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth, maxWidth }}>
             <IconButton
+              autoFocus={focusClose}
               aria-label='close'
               onClick={() => closeModal(false)}
               sx={{ position: 'absolute', right: 8, top: 8 }}
@@ -51,11 +53,15 @@ const ConceptModal = () => {
             >
               <IoCloseSharp />
             </IconButton>
-            <CardHeader title={title} />
-            <CardContent sx={{ pb: 0, pt: 0, position: 'relative' }}>{content}</CardContent>
-            <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-              {actions}
-            </CardActions>
+            <CardHeader title={renderModalSlot(title)} />
+            <CardContent sx={[{ pb: 0, pt: 0, position: 'relative' }, contentSx]}>
+              {renderModalSlot(content)}
+            </CardContent>
+            {actions && (
+              <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
+                {renderModalSlot(actions)}
+              </CardActions>
+            )}
             {isProcessing && <ProcessingMsg message={processingMessage} />}
           </Card>
         </Box>
