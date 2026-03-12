@@ -70,7 +70,7 @@ const MediaSwiper = ({ height, showControls = false, showNavigation = false, sli
       slidesPerView={slidesPerView}
       style={{
         height,
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
       >
       {editingMedia.map((mediaItem, mediaIndex) => (

@@ -53,5 +53,5 @@
 }
 
 .swiper-pagination {
-  bottom: clamp(0px, 0.4vmin, 4px) !important;
+  bottom: -24px !important;
 }

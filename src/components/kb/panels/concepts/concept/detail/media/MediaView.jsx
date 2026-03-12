@@ -50,7 +50,7 @@ const MediaView = () => {
       <Box sx={{ mt: 0.5, position: 'relative', overflow: 'visible' }}>
         <MediaSwiper height='auto' />
       </Box>
-      <Divider sx={{ borderWidth: 2, mt: 1 }} />
+      <Divider sx={{ borderWidth: 2, mt: 1.5 }} />
     </>
   )
 }
