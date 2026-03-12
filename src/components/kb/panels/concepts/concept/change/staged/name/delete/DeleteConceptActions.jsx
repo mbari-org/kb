@@ -82,7 +82,7 @@ const DeleteConceptActions = () => {
         const results = { ...preDeleteResults, ...postDeleteResults }
 
         const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
-        await applyResults(reassignedConcept, refreshPanelData, results)
+        await applyResults(refreshPanelData, results)
 
         insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
         updateTaxonomy(updatedTaxonomy)

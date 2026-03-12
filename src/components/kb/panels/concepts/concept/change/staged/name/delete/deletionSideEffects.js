@@ -1,13 +1,9 @@
 import { renameToConceptAssociations } from '@/lib/api/associations'
 import { renameConceptObservations } from '@/lib/api/observations'
-import { createRealization } from '@/lib/api/realizations'
-import { addConcept, removeConcept } from '@/lib/api/references'
+import { removeConcept } from '@/lib/api/references'
 import { createConceptTemplate, renameToConceptTemplates } from '@/lib/api/templates'
 
 import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
-
-import { pickRealization } from '@/lib/model/realization'
-import { pickReference } from '@/lib/model/reference'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
@@ -113,77 +109,33 @@ const preSideEffects = async deleteConceptContext => {
 }
 
 const postSideEffects = async deleteConceptContext => {
-  const { apiFns, concept, reassign, refreshPanelData: refreshPanelDataFn } = deleteConceptContext
+  const { refreshPanelData: refreshPanelDataFn } = deleteConceptContext
 
   await performConceptPrefsUpdate(deleteConceptContext)
   await performSettingsUpdate(deleteConceptContext)
-
-  const promises = {
-    [REALIZATIONS]: Promise.all(
-      concept.realizations.map(realization => {
-        const { linkName, linkValue, toConcept } = realization
-        const reassignedRealization = {
-          concept: reassign,
-          linkName,
-          toConcept,
-          linkValue,
-        }
-        return apiFns.apiPayload(createRealization, reassignedRealization)
-      })
-    ),
-    [REFERENCES]: Promise.all(
-      concept.references.map(reference => apiFns.apiPayload(addConcept, [reference.id, reassign]))
-    ),
-  }
-
   await refreshPanelDataFn(PANEL_DATA.REFERENCES)
-
-  const results = await Promise.all(
-    Object.entries(promises).map(([key, promise]) => promise.then(value => [key, value]))
-  )
-
-  return Object.fromEntries(results)
+  return {}
 }
 
-const applyResults = async (reassignedConcept, refreshPanelDataFn, results) => {
+const applyResults = async (refreshPanelDataFn, results) => {
   await Promise.all(
     Object.entries(results).map(async ([key, value]) => {
       switch (key) {
         case ASSOCIATIONS:
-          // CxTBD
+          // no-op
           break
 
         case ANNOTATIONS:
           // no-op
           break
 
-        case REALIZATIONS: {
-          if (value.length > 0) {
-            const realizations = [...reassignedConcept.realizations]
-            value.forEach(result => {
-              const realization = pickRealization(result)
-              realizations.push(realization)
-            })
-            reassignedConcept.realizations = realizations
-
-            await refreshPanelDataFn(PANEL_DATA.REALIZATIONS)
-          }
+        case REALIZATIONS:
+          // no-op
           break
-        }
 
-        case REFERENCES: {
-          if (value.length > 0) {
-            const references = [...reassignedConcept.references]
-            value.forEach(result => {
-              const reference = pickReference(result)
-              references.push(reference)
-            })
-            reassignedConcept.references = references
-
-            await refreshPanelDataFn(PANEL_DATA.REFERENCES)
-          }
+        case REFERENCES:
+          // no-op
           break
-        }
 
         case TEMPLATES_DEFINED:
         case TEMPLATES_TO:
