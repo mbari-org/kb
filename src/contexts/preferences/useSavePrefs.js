@@ -17,13 +17,13 @@ const getDirtyPreferenceUpdates = (dirtyFlags, prefsValue) => {
   }, [])
 }
 
-const syncInMemoryStore = (key, value, conceptSelectRef, panelSelectRef, onInitSettingsRef) => {
-  if (key === KEY.CONCEPTS && conceptSelectRef?.current) {
-    conceptSelectRef.current.clear()
-    value.state.forEach(name => conceptSelectRef.current.push(name))
-  } else if (key === KEY.PANELS && panelSelectRef?.current) {
-    panelSelectRef.current.clear()
-    value.state.forEach(name => panelSelectRef.current.push(name))
+const syncInMemoryStore = (key, value, conceptSelectionRef, panelSelectionRef, onInitSettingsRef) => {
+  if (key === KEY.CONCEPTS && conceptSelectionRef?.current) {
+    conceptSelectionRef.current.clear()
+    value.state.forEach(name => conceptSelectionRef.current.push(name))
+  } else if (key === KEY.PANELS && panelSelectionRef?.current) {
+    panelSelectionRef.current.clear()
+    value.state.forEach(name => panelSelectionRef.current.push(name))
   } else if (key === KEY.SETTINGS && onInitSettingsRef?.current) {
     onInitSettingsRef.current(value)
   }
@@ -31,11 +31,11 @@ const syncInMemoryStore = (key, value, conceptSelectRef, panelSelectRef, onInitS
 
 const useSavePrefs = ({
   CLEAN_FLAGS,
-  conceptSelectRef,
+  conceptSelectionRef,
   dirtyFlags,
   isSaving,
   onInitSettingsRef,
-  panelSelectRef,
+  panelSelectionRef,
   prefsValue,
   preferencesInitialized,
   resetAutosaveTimer,
@@ -43,54 +43,62 @@ const useSavePrefs = ({
   setDirtyFlags,
   updatePreferences,
 }) => {
-  const updatePreferenceValues = useCallback(async prefUpdates => {
-    await Promise.all(prefUpdates.map(update => {
-      return updatePreferences(update.key, update.value)
-    }))
-  }, [updatePreferences])
-  const savePreferences = useCallback(async (key, value) => {
-    if (!preferencesInitialized || !serverPreferencesExist) return
-    if (isSaving.current) return
+  const updatePreferenceValues = useCallback(
+    async prefUpdates => {
+      await Promise.all(
+        prefUpdates.map(update => {
+          return updatePreferences(update.key, update.value)
+        })
+      )
+    },
+    [updatePreferences]
+  )
+  const savePreferences = useCallback(
+    async (key, value) => {
+      if (!preferencesInitialized || !serverPreferencesExist) return
+      if (isSaving.current) return
 
-    isSaving.current = true
+      isSaving.current = true
 
-    try {
-      let prefUpdates
-      if (key && value) {
-        prefUpdates = [{ key, value }]
-      } else {
-        prefUpdates = getDirtyPreferenceUpdates(dirtyFlags, prefsValue)
+      try {
+        let prefUpdates
+        if (key && value) {
+          prefUpdates = [{ key, value }]
+        } else {
+          prefUpdates = getDirtyPreferenceUpdates(dirtyFlags, prefsValue)
+        }
+
+        await updatePreferenceValues(prefUpdates)
+
+        if (key && value) {
+          syncInMemoryStore(key, value, conceptSelectionRef, panelSelectionRef, onInitSettingsRef)
+          setDirtyFlags(prev => ({ ...prev, [key]: false }))
+        } else {
+          setDirtyFlags(CLEAN_FLAGS)
+        }
+
+        resetAutosaveTimer()
+      } catch (error) {
+        console.error('Failed to save preferences:', error)
+      } finally {
+        isSaving.current = false
       }
-
-      await updatePreferenceValues(prefUpdates)
-
-      if (key && value) {
-        syncInMemoryStore(key, value, conceptSelectRef, panelSelectRef, onInitSettingsRef)
-        setDirtyFlags(prev => ({ ...prev, [key]: false }))
-      } else {
-        setDirtyFlags(CLEAN_FLAGS)
-      }
-
-      resetAutosaveTimer()
-    } catch (error) {
-      console.error('Failed to save preferences:', error)
-    } finally {
-      isSaving.current = false
-    }
-  }, [
-    CLEAN_FLAGS,
-    conceptSelectRef,
-    dirtyFlags,
-    isSaving,
-    onInitSettingsRef,
-    panelSelectRef,
-    prefsValue,
-    preferencesInitialized,
-    resetAutosaveTimer,
-    serverPreferencesExist,
-    setDirtyFlags,
-    updatePreferenceValues,
-  ])
+    },
+    [
+      CLEAN_FLAGS,
+      conceptSelectionRef,
+      dirtyFlags,
+      isSaving,
+      onInitSettingsRef,
+      panelSelectionRef,
+      prefsValue,
+      preferencesInitialized,
+      resetAutosaveTimer,
+      serverPreferencesExist,
+      setDirtyFlags,
+      updatePreferenceValues,
+    ]
+  )
 
   const flushPreferences = useCallback(async () => {
     if (!preferencesInitialized || !serverPreferencesExist) return

@@ -5,8 +5,8 @@ import { useErrorBoundary } from 'react-error-boundary'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import useConceptSelect from '@/contexts/selected/useConceptSelect'
-import usePanelSelect from '@/contexts/selected/usePanelSelect'
+import useConceptSelection from '@/contexts/selected/useConceptSelection'
+import usePanelSelection from '@/contexts/selected/usePanelSelection'
 import usePrefsTimer from '@/contexts/preferences/usePrefsTimer'
 import useSavePrefs from '@/contexts/preferences/useSavePrefs'
 import useInitPrefs from '@/contexts/preferences/useInitPrefs'
@@ -29,19 +29,25 @@ const PreferencesProvider = ({ children }) => {
   const markSettingsDirtyRef = useRef(null)
   const getSettingsRef = useRef(null)
 
-  const onConceptChange = useCallback(concept => {
-    setCurrentConcept(concept)
-    if (preferencesInitialized) {
-      setDirtyFlags(prev => ({ ...prev, [KEY.CONCEPTS]: true }))
-    }
-  }, [preferencesInitialized])
+  const onConceptChange = useCallback(
+    concept => {
+      setCurrentConcept(concept)
+      if (preferencesInitialized) {
+        setDirtyFlags(prev => ({ ...prev, [KEY.CONCEPTS]: true }))
+      }
+    },
+    [preferencesInitialized]
+  )
 
-  const onPanelChange = useCallback(panel => {
-    setCurrentPanel(panel)
-    if (preferencesInitialized) {
-      setDirtyFlags(prev => ({ ...prev, [KEY.PANELS]: true }))
-    }
-  }, [preferencesInitialized])
+  const onPanelChange = useCallback(
+    panel => {
+      setCurrentPanel(panel)
+      if (preferencesInitialized) {
+        setDirtyFlags(prev => ({ ...prev, [KEY.PANELS]: true }))
+      }
+    },
+    [preferencesInitialized]
+  )
 
   const onSettingsChange = useCallback(() => {
     if (preferencesInitialized) {
@@ -49,8 +55,8 @@ const PreferencesProvider = ({ children }) => {
     }
   }, [preferencesInitialized])
 
-  const conceptSelect = useConceptSelect(onConceptChange)
-  const panelSelect = usePanelSelect(onPanelChange)
+  const conceptSelection = useConceptSelection(onConceptChange)
+  const panelSelection = usePanelSelection(onPanelChange)
 
   useEffect(() => {
     markSettingsDirtyRef.current = onSettingsChange
@@ -61,10 +67,10 @@ const PreferencesProvider = ({ children }) => {
   }, [getSettingsRef])
 
   const { CLEAN_FLAGS, prefsValue } = useInitPrefs({
-    conceptSelect,
+    conceptSelection,
     createPreferences,
     getPreferences,
-    panelSelect,
+    panelSelection,
     preferencesInitialized,
     getSettings: getSettingsForPrefs,
     getSettingsRef,
@@ -73,6 +79,7 @@ const PreferencesProvider = ({ children }) => {
     setIsLoading,
     setPreferencesInitialized,
     setServerPreferencesExist,
+    updatePreferences,
     user,
   })
 
@@ -88,24 +95,24 @@ const PreferencesProvider = ({ children }) => {
     updatePreferences,
   })
 
-  const conceptSelectRef = useRef(conceptSelect)
-  const panelSelectRef = useRef(panelSelect)
+  const conceptSelectionRef = useRef(conceptSelection)
+  const panelSelectionRef = useRef(panelSelection)
 
   useEffect(() => {
-    conceptSelectRef.current = conceptSelect
-  }, [conceptSelect])
+    conceptSelectionRef.current = conceptSelection
+  }, [conceptSelection])
 
   useEffect(() => {
-    panelSelectRef.current = panelSelect
-  }, [panelSelect])
+    panelSelectionRef.current = panelSelection
+  }, [panelSelection])
 
   const { flushPreferences, savePreferences } = useSavePrefs({
     CLEAN_FLAGS,
-    conceptSelectRef,
+    conceptSelectionRef,
     dirtyFlags,
     isSaving,
     onInitSettingsRef,
-    panelSelectRef,
+    panelSelectionRef,
     prefsValue,
     preferencesInitialized,
     resetAutosaveTimer,
@@ -120,17 +127,17 @@ const PreferencesProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      conceptSelect,
+      conceptSelection,
       currentConcept,
       currentPanel,
       isLoading,
       getSettingsRef,
       markSettingsDirtyRef,
       onInitSettingsRef,
-      panelSelect,
+      panelSelection,
       savePreferences,
     }),
-    [conceptSelect, currentConcept, currentPanel, isLoading, panelSelect, savePreferences]
+    [conceptSelection, currentConcept, currentPanel, isLoading, panelSelection, savePreferences]
   )
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>

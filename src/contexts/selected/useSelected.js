@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
-import useConceptSelect from '@/contexts/selected/useConceptSelect'
-import usePanelSelect from '@/contexts/selected/usePanelSelect'
+import useConceptSelection from '@/contexts/selected/useConceptSelection'
+import usePanelSelection from '@/contexts/selected/usePanelSelection'
 
 import { createError } from '@/lib/errors'
 
@@ -13,45 +13,41 @@ const useSelected = () => {
   const [currentConcept, setCurrentConcept] = useState(null)
   const [currentPanel, setCurrentPanel] = useState(null)
 
-  const conceptSelect = useConceptSelect(setCurrentConcept)
-  const panelSelect = usePanelSelect(setCurrentPanel)
+  const conceptSelection = useConceptSelection(setCurrentConcept)
+  const panelSelection = usePanelSelection(setCurrentPanel)
 
   const getSelected = useCallback(
     key => {
       if (key === CONCEPT) {
-        return conceptSelect.current()
+        return conceptSelection.current()
       } else if (key === PANEL) {
-        return panelSelect.current()
+        return panelSelection.current()
       } else {
-        throw createError(
-          'Invalid Selection Key',
-          `Cannot get selection for unknown key: ${key}`,
-          { key }
-        )
+        throw createError('Invalid Selection Key', `Cannot get selection for unknown key: ${key}`, { key })
       }
     },
-    [conceptSelect, panelSelect]
+    [conceptSelection, panelSelection]
   )
 
   const updateSelected = useCallback(
     ({ concept: conceptName, panel: panelName }) => {
-      if (conceptName && conceptName !== conceptSelect.current()) {
-        conceptSelect.push(conceptName)
+      if (conceptName && conceptName !== conceptSelection.current()) {
+        conceptSelection.push(conceptName)
       }
 
-      if (panelName && panelName !== panelSelect.current()) {
-        panelSelect.push(panelName)
+      if (panelName && panelName !== panelSelection.current()) {
+        panelSelection.push(panelName)
       }
     },
-    [conceptSelect, panelSelect]
+    [conceptSelection, panelSelection]
   )
 
   return {
-    conceptSelect,
+    conceptSelection,
     currentConcept,
     currentPanel,
     getSelected,
-    panelSelect,
+    panelSelection,
     updateSelected,
   }
 }

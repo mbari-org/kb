@@ -22,11 +22,18 @@ const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, 
 const performConceptPrefsUpdate = async deleteConceptContext => {
   const { concept, getPreferences } = deleteConceptContext
   const conceptPrefs = await getPreferences(KEY.CONCEPTS)
-  const removalsBeforePosition = conceptPrefs.state
-    .slice(0, conceptPrefs.position)
+  const removalsAtOrBeforePosition = conceptPrefs.state
+    .slice(0, conceptPrefs.position + 1)
     .filter(name => name === concept.name).length
   const updatedPrefsState = conceptPrefs.state.filter(name => name !== concept.name)
-  const updatedPosition = conceptPrefs.position - removalsBeforePosition
+  let updatedPosition = conceptPrefs.position - removalsAtOrBeforePosition
+  if (updatedPrefsState.length === 0) {
+    updatedPosition = -1
+  } else if (updatedPosition < 0) {
+    updatedPosition = 0
+  } else if (updatedPosition >= updatedPrefsState.length) {
+    updatedPosition = updatedPrefsState.length - 1
+  }
   const updatedConceptPrefs = { state: updatedPrefsState, position: updatedPosition }
   return deleteConceptContext.savePreferences(KEY.CONCEPTS, updatedConceptPrefs)
 }

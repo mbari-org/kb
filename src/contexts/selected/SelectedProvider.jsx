@@ -10,14 +10,8 @@ import { SELECTED } from '@/lib/constants/selected.js'
 const { CONCEPT, PANEL } = SELECTED
 
 const SelectedProvider = ({ children }) => {
-  const {
-    conceptSelect,
-    getSettingsRef,
-    isLoading,
-    markSettingsDirtyRef,
-    onInitSettingsRef,
-    panelSelect,
-  } = use(PreferencesContext)
+  const { conceptSelection, getSettingsRef, isLoading, markSettingsDirtyRef, onInitSettingsRef, panelSelection } =
+    use(PreferencesContext)
   const { settings, setSettings, getSettings, updateSettings: stateUpdateSettings } = useSettings()
 
   useEffect(() => {
@@ -29,60 +23,59 @@ const SelectedProvider = ({ children }) => {
     key => {
       switch (key) {
         case CONCEPT:
-          return conceptSelect.current()
+          return conceptSelection.current()
 
         case PANEL:
-          return panelSelect.current()
+          return panelSelection.current()
 
         default:
-          throw createError(
-            'Invalid Selection Key',
-            `Cannot get selection for unknown key: ${key}`,
-            { key }
-          )
+          throw createError('Invalid Selection Key', `Cannot get selection for unknown key: ${key}`, { key })
       }
     },
-    [conceptSelect, panelSelect]
+    [conceptSelection, panelSelection]
   )
 
   const updateSelected = useCallback(
     ({ concept: conceptName, panel: panelName }) => {
-      if (conceptName && conceptName !== conceptSelect.current()) {
-        conceptSelect.push(conceptName)
+      if (conceptName && conceptName !== conceptSelection.current()) {
+        conceptSelection.push(conceptName)
       }
 
-      if (panelName && panelName !== panelSelect.current()) {
-        panelSelect.push(panelName)
+      if (panelName && panelName !== panelSelection.current()) {
+        panelSelection.push(panelName)
       }
     },
-    [conceptSelect, panelSelect]
+    [conceptSelection, panelSelection]
   )
 
-  const persistUpdateSettings = useCallback(arg => {
-    stateUpdateSettings(arg)
-    if (markSettingsDirtyRef.current) {
-      markSettingsDirtyRef.current(arg)
-    }
-  }, [stateUpdateSettings, markSettingsDirtyRef])
+  const persistUpdateSettings = useCallback(
+    arg => {
+      stateUpdateSettings(arg)
+      if (markSettingsDirtyRef.current) {
+        markSettingsDirtyRef.current(arg)
+      }
+    },
+    [stateUpdateSettings, markSettingsDirtyRef]
+  )
 
   const value = useMemo(
     () => ({
-      concepts: conceptSelect,
+      concepts: conceptSelection,
       getSelected,
       getSettings,
       isLoading,
-      panels: panelSelect,
+      panels: panelSelection,
       settings,
       setSettings,
       updateSelected,
       updateSettings: persistUpdateSettings,
     }),
     [
-      conceptSelect,
+      conceptSelection,
       getSelected,
       getSettings,
       isLoading,
-      panelSelect,
+      panelSelection,
       settings,
       setSettings,
       updateSelected,
