@@ -39,7 +39,7 @@ const StagedActions = ({ intent }) => {
     use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { refresh } = use(RefreshContext)
-  const { updateSelected } = use(SelectedContext)
+  const { updateSelected, updateSettings } = use(SelectedContext)
   const { logout, setUnsafeAction } = use(UserContext)
 
   const saveStaged = useSaveStaged()
@@ -56,6 +56,9 @@ const StagedActions = ({ intent }) => {
 
         case UNSAFE_ACTION.CHANGE_PANEL:
           updateSelected({ panel: unsafeAction.payload.panel })
+          if (unsafeAction.payload.settings) {
+            updateSettings(unsafeAction.payload.settings)
+          }
           break
 
         case UNSAFE_ACTION.LOGOUT:
@@ -84,7 +87,7 @@ const StagedActions = ({ intent }) => {
     if (isLogout) {
       closeModal(true, () => logout())
     }
-  }, [closeModal, logout, modalData, refresh, setUnsafeAction, updateSelected])
+  }, [closeModal, logout, modalData, refresh, setUnsafeAction, updateSelected, updateSettings])
 
   useEffect(() => {
     if (resetConfirmedRef.current && !isStateModified({ initialState, stagedState })) {
