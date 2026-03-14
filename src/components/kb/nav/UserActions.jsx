@@ -5,11 +5,10 @@ import { Stack } from '@mui/material'
 import createAppModal from '@/components/modal/app/createAppModal'
 
 import UserContext from '@/contexts/user/UserContext'
-import useUnsafeAction from '@/contexts/user/useUnsafeAction'
+import useGuardedAction from '@/contexts/user/useGuardedAction'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-
-import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
+import { GUARDED_ACTION } from '@/lib/constants/guardedAction.js'
 import LogoutIcon from '@/components/icon/LogoutIcon'
 import RefreshAppIcon from '@/components/icon/RefreshAppIcon'
 import InfoIcon from '@/components/icon/InfoIcon'
@@ -21,7 +20,7 @@ const ICON_SIZE = 22
 
 const UserActions = () => {
   const { logout } = use(UserContext)
-  const { guardUnsafeAction } = useUnsafeAction()
+  const { runGuardedAction } = useGuardedAction()
   const { setModal } = use(AppModalContext)
   const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
 
@@ -38,13 +37,13 @@ const UserActions = () => {
   }
 
   const handleLogout = () => {
-    guardUnsafeAction({ onSafe: logout, type: UNSAFE_ACTION.LOGOUT })
+    runGuardedAction({ onSafe: logout, type: GUARDED_ACTION.LOGOUT })
   }
 
   const { refresh } = use(RefreshContext)
 
   const handleRefresh = async () => {
-    await guardUnsafeAction({ onSafe: refresh, type: UNSAFE_ACTION.REFRESH })
+    await runGuardedAction({ onSafe: refresh, type: GUARDED_ACTION.REFRESH })
   }
 
   return (

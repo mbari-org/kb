@@ -7,7 +7,7 @@ import PanelDataSwitch from '@/components/common/panel/PanelDataSwitch'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import useUnsafeAction from '@/contexts/user/useUnsafeAction'
+import useGuardedAction from '@/contexts/user/useGuardedAction'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/text'
@@ -17,7 +17,7 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const ConceptTemplatesActionComponent = () => {
   const { concept } = use(ConceptContext)
   const { getSettings, updateSelected, updateSettings } = use(SelectedContext)
-  const { guardPanelChange } = useUnsafeAction()
+  const { guardPanelChange } = useGuardedAction()
 
   const byAvailable = getSettings(TEMPLATES.KEY, TEMPLATES.BY_AVAILABLE)
   const filters = getSettings(TEMPLATES.KEY, TEMPLATES.FILTERS.KEY)

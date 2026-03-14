@@ -6,7 +6,7 @@ import InspectIcon from '@/components/icon/InspectIcon'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import useUnsafeAction from '@/contexts/user/useUnsafeAction'
+import useGuardedAction from '@/contexts/user/useGuardedAction'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -17,7 +17,7 @@ const { REFERENCES } = SELECTED.SETTINGS
 const ConceptReferences = () => {
   const { getReferences } = use(PanelDataContext)
   const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
-  const { guardPanelChange } = useUnsafeAction()
+  const { guardPanelChange } = useGuardedAction()
 
   const selectedConcept = getSelected(SELECTED.CONCEPT)
   const references = getReferences(selectedConcept)

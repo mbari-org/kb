@@ -17,7 +17,7 @@ const UserProvider = ({ children }) => {
   const { config } = use(ConfigContext)
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
-  const [unsafeAction, setUnsafeAction] = useState(null)
+  const [guardedAction, setGuardedAction] = useState(null)
   const [user, setUser] = useState(null)
 
   const mountedRef = useRef(true)
@@ -72,8 +72,8 @@ const UserProvider = ({ children }) => {
       refreshUser,
       savePreferencesRef,
       setHasUnsavedChanges,
-      setUnsafeAction,
-      unsafeAction,
+      setGuardedAction,
+      guardedAction,
       updatePreferences,
       user,
     }),
@@ -85,8 +85,8 @@ const UserProvider = ({ children }) => {
       logout,
       processAuth,
       refreshUser,
-      setUnsafeAction,
-      unsafeAction,
+      setGuardedAction,
+      guardedAction,
       updatePreferences,
       user,
     ]

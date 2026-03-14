@@ -4,11 +4,11 @@ import { useTheme } from '@emotion/react'
 import { Button } from '@mui/material'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import useUnsafeAction from '@/contexts/user/useUnsafeAction'
+import useGuardedAction from '@/contexts/user/useGuardedAction'
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
   const { panels } = use(SelectedContext)
-  const { guardPanelChange } = useUnsafeAction()
+  const { guardPanelChange } = useGuardedAction()
 
   const currentPanel = panels.current()
 

@@ -4,38 +4,38 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
-import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
+import { GUARDED_ACTION } from '@/lib/constants/guardedAction.js'
 
-const useUnsafeAction = () => {
+const useGuardedAction = () => {
   const { panels } = use(SelectedContext)
-  const { hasUnsavedChanges, setUnsafeAction } = use(UserContext)
+  const { hasUnsavedChanges, setGuardedAction } = use(UserContext)
 
-  const isUnsafeContext = useCallback(() => {
+  const isGuardedContext = useCallback(() => {
     const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
     return isOnConceptsPanel && hasUnsavedChanges
   }, [hasUnsavedChanges, panels])
 
-  const guardUnsafeAction = useCallback(
+  const runGuardedAction = useCallback(
     ({ onSafe, payload = {}, type }) => {
-      if (isUnsafeContext()) {
-        setUnsafeAction({ type, payload })
+      if (isGuardedContext()) {
+        setGuardedAction({ type, payload })
         return false
       }
 
       return onSafe()
     },
-    [isUnsafeContext, setUnsafeAction]
+    [isGuardedContext, setGuardedAction]
   )
 
   const guardPanelChange = useCallback(
     ({ onSafe, panel, settings }) => {
       const payload = settings ? { panel, settings } : { panel }
-      return guardUnsafeAction({ onSafe, payload, type: UNSAFE_ACTION.CHANGE_PANEL })
+      return runGuardedAction({ onSafe, payload, type: GUARDED_ACTION.CHANGE_PANEL })
     },
-    [guardUnsafeAction]
+    [runGuardedAction]
   )
 
-  return { guardPanelChange, guardUnsafeAction }
+  return { guardPanelChange, runGuardedAction }
 }
 
-export default useUnsafeAction
+export default useGuardedAction

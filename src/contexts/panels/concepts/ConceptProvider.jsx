@@ -42,7 +42,7 @@ const ConceptProvider = ({ children }) => {
   const pendingHistoryRef = useRef(pendingHistory)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
-  const { setHasUnsavedChanges, unsafeAction } = use(UserContext)
+  const { guardedAction, setHasUnsavedChanges } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
   const [conceptPath, setConceptPath] = useState(null)
@@ -235,11 +235,11 @@ const ConceptProvider = ({ children }) => {
   }, [initialState, stagedState, panels, setHasUnsavedChanges])
 
   useEffect(() => {
-    if (!unsafeAction) return
+    if (!guardedAction) return
 
     displayStaged(CONTINUE)
-    setModalData(prev => ({ ...prev, unsafeAction }))
-  }, [unsafeAction, displayStaged, setModalData])
+    setModalData(prev => ({ ...prev, guardedAction }))
+  }, [guardedAction, displayStaged, setModalData])
 
   // Since conceptPath is already created we can use it to determine if the concept is a phylogeny root
   const isPhylogenyRoot = useMemo(

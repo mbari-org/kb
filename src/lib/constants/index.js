@@ -13,5 +13,5 @@ export { PREFS } from './prefs.js'
 export { RESETTING } from './resetting.js'
 export { ROLES } from './roles.js'
 export { SELECTED } from './selected.js'
-export { UNSAFE_ACTION } from './unsafeAction.js'
+export { GUARDED_ACTION } from './guardedAction.js'
 

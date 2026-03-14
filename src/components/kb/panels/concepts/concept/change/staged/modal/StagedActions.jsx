@@ -10,7 +10,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { isStateModified } from '@/lib/concept/state/state'
 
-import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
+import { GUARDED_ACTION } from '@/lib/constants/guardedAction.js'
 import { RESETTING } from '@/lib/constants'
 import CONFIG from '@/text'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -40,36 +40,36 @@ const StagedActions = ({ intent }) => {
   const { closeModal, modalData } = use(ConceptModalContext)
   const { refresh } = use(RefreshContext)
   const { updateSelected, updateSettings } = use(SelectedContext)
-  const { logout, setUnsafeAction } = use(UserContext)
+  const { logout, setGuardedAction } = use(UserContext)
 
   const saveStaged = useSaveStaged()
   const resetConfirmedRef = useRef(false)
 
   const handleSpecialAction = useCallback(() => {
-    const { panel: selectPanel, concept: selectConcept, logout: isLogout, unsafeAction } = modalData || {}
+    const { panel: selectPanel, concept: selectConcept, guardedAction, logout: isLogout } = modalData || {}
 
-    if (unsafeAction) {
-      switch (unsafeAction.type) {
-        case UNSAFE_ACTION.CHANGE_CONCEPT:
-          updateSelected({ concept: unsafeAction.payload.concept, force: true })
+    if (guardedAction) {
+      switch (guardedAction.type) {
+        case GUARDED_ACTION.CHANGE_CONCEPT:
+          updateSelected({ concept: guardedAction.payload.concept, force: true })
           break
 
-        case UNSAFE_ACTION.CHANGE_PANEL:
-          updateSelected({ panel: unsafeAction.payload.panel })
-          if (unsafeAction.payload.settings) {
-            updateSettings(unsafeAction.payload.settings)
+        case GUARDED_ACTION.CHANGE_PANEL:
+          updateSelected({ panel: guardedAction.payload.panel })
+          if (guardedAction.payload.settings) {
+            updateSettings(guardedAction.payload.settings)
           }
           break
 
-        case UNSAFE_ACTION.LOGOUT:
+        case GUARDED_ACTION.LOGOUT:
           closeModal(true, () => logout())
           break
 
-        case UNSAFE_ACTION.REFRESH:
+        case GUARDED_ACTION.REFRESH:
           closeModal(true, async () => await refresh())
           break
       }
-      setUnsafeAction(null)
+      setGuardedAction(null)
       return
     }
 
@@ -87,7 +87,7 @@ const StagedActions = ({ intent }) => {
     if (isLogout) {
       closeModal(true, () => logout())
     }
-  }, [closeModal, logout, modalData, refresh, setUnsafeAction, updateSelected, updateSettings])
+  }, [closeModal, logout, modalData, refresh, setGuardedAction, updateSelected, updateSettings])
 
   useEffect(() => {
     if (resetConfirmedRef.current && !isStateModified({ initialState, stagedState })) {
@@ -101,7 +101,7 @@ const StagedActions = ({ intent }) => {
   const onAction = useCallback(label => {
     switch (label) {
       case BACK_TO_EDIT:
-        setUnsafeAction(null)
+        setGuardedAction(null)
         modifyConcept({ type: CONFIRMED.NO })
         closeModal()
         break
@@ -128,7 +128,7 @@ const StagedActions = ({ intent }) => {
         closeModal()
         break
     }
-  }, [closeModal, handleSpecialAction, modifyConcept, saveStaged, setUnsafeAction])
+  }, [closeModal, handleSpecialAction, modifyConcept, saveStaged, setGuardedAction])
 
   const labels = useMemo(() => getLabels(confirmReset, intent), [confirmReset, intent])
 
