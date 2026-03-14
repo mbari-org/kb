@@ -53,23 +53,18 @@ const TaxonomyProvider = ({ children }) => {
   const checkIntegrity = useTaxonomyIntegrity()
 
   const updateTaxonomy = useCallback(
-    nextTaxonomyOrUpdater => {
-      const currentTaxonomy = taxonomyRef.current
-      const updatedTaxonomy =
-        typeof nextTaxonomyOrUpdater === 'function'
-          ? nextTaxonomyOrUpdater(currentTaxonomy)
-          : nextTaxonomyOrUpdater
+    updatedTaxonomy => {
 
       if (updatedTaxonomy === undefined) {
-        showBoundary(new Error('Taxonomy update failed: updater returned undefined taxonomy'))
-        return currentTaxonomy
+        showBoundary(new Error('Taxonomy update failed: updated taxonomy is undefined'))
+        return taxonomyRef.current
       }
 
       try {
         checkIntegrity(updatedTaxonomy)
       } catch (error) {
         showBoundary(error)
-        return currentTaxonomy
+        return taxonomyRef.current
       }
 
       taxonomyRef.current = updatedTaxonomy
@@ -368,26 +363,23 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const removeConcept = useCallback(
-    conceptName => {
-      const currentTaxonomy = taxonomyRef.current
-      if (!currentTaxonomy) {
-        throw new Error(`Cannot remove concept "${conceptName}" before taxonomy is loaded`)
-      }
+    async conceptName => {
+      return runTaxonomyTransaction(async currentTaxonomy => {
+        if (!currentTaxonomy) {
+          throw new Error(`Cannot remove concept "${conceptName}" before taxonomy is loaded`)
+        }
 
-      const concept = getTaxonomyConcept(currentTaxonomy, conceptName)
-      if (!concept) {
-        throw new Error(`Cannot remove missing concept from taxonomy: ${conceptName}`)
-      }
-      const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(currentTaxonomy, concept)
-      updateTaxonomy(updatedTaxonomy)
-      return updatedTaxonomy
+        const concept = getTaxonomyConcept(currentTaxonomy, conceptName)
+        if (!concept) {
+          throw new Error(`Cannot remove missing concept from taxonomy: ${conceptName}`)
+        }
+
+        const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(currentTaxonomy, concept)
+        return updatedTaxonomy
+      })
     },
-    [updateTaxonomy]
+    [runTaxonomyTransaction]
   )
-
-  useEffect(() => {
-    taxonomyRef.current = taxonomy
-  }, [taxonomy])
 
   useEffect(() => {
     if (!apiFns || taxonomy) return
