@@ -3,15 +3,12 @@ import { useTheme } from '@emotion/react'
 
 import { Button } from '@mui/material'
 
-import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
-
-import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
-import { SELECTED } from '@/lib/constants/selected.js'
+import useUnsafeAction from '@/contexts/user/useUnsafeAction'
 
 const PanelLink = ({ isActive, name, selectPanel }) => {
   const { panels } = use(SelectedContext)
-  const { hasUnsavedChanges, setUnsafeAction } = use(UserContext)
+  const { guardPanelChange } = useUnsafeAction()
 
   const currentPanel = panels.current()
 
@@ -36,15 +33,7 @@ const PanelLink = ({ isActive, name, selectPanel }) => {
 
   const handleClick = () => {
     if (name === currentPanel) return
-
-    const isOnConceptsPanel = currentPanel === SELECTED.PANELS.CONCEPTS
-    const hasModifications = isOnConceptsPanel && hasUnsavedChanges
-
-    if (hasModifications) {
-      setUnsafeAction({ type: UNSAFE_ACTION.CHANGE_PANEL, payload: { panel: name } })
-    } else {
-      selectPanel(name)
-    }
+    guardPanelChange({ onSafe: () => selectPanel(name), panel: name })
   }
 
   return (

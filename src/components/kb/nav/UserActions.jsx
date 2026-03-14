@@ -5,12 +5,11 @@ import { Stack } from '@mui/material'
 import createAppModal from '@/components/modal/app/createAppModal'
 
 import UserContext from '@/contexts/user/UserContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import useUnsafeAction from '@/contexts/user/useUnsafeAction'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { UNSAFE_ACTION } from '@/lib/constants/unsafeAction.js'
-import { SELECTED } from '@/lib/constants/selected.js'
 import LogoutIcon from '@/components/icon/LogoutIcon'
 import RefreshAppIcon from '@/components/icon/RefreshAppIcon'
 import InfoIcon from '@/components/icon/InfoIcon'
@@ -21,8 +20,8 @@ import RefreshContext from '@/contexts/refresh/RefreshContext'
 const ICON_SIZE = 22
 
 const UserActions = () => {
-  const { logout, hasUnsavedChanges, setUnsafeAction } = use(UserContext)
-  const { panels } = use(SelectedContext)
+  const { logout } = use(UserContext)
+  const { guardUnsafeAction } = useUnsafeAction()
   const { setModal } = use(AppModalContext)
   const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
 
@@ -39,23 +38,13 @@ const UserActions = () => {
   }
 
   const handleLogout = () => {
-    const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
-    const hasModifications = isOnConceptsPanel && hasUnsavedChanges
-
-    if (hasModifications) {
-      setUnsafeAction({ type: UNSAFE_ACTION.LOGOUT, payload: {} })
-    } else {
-      logout()
-    }
+    guardUnsafeAction({ onSafe: logout, type: UNSAFE_ACTION.LOGOUT })
   }
 
   const { refresh } = use(RefreshContext)
 
   const handleRefresh = async () => {
-    const isOnConceptsPanel = panels.current() === SELECTED.PANELS.CONCEPTS
-    const hasModifications = isOnConceptsPanel && hasUnsavedChanges
-
-    hasModifications ? setUnsafeAction({ type: UNSAFE_ACTION.REFRESH, payload: {} }) : await refresh()
+    await guardUnsafeAction({ onSafe: refresh, type: UNSAFE_ACTION.REFRESH })
   }
 
   return (
