@@ -164,27 +164,54 @@ const TaxonomyProvider = ({ children }) => {
           }
         }
 
-        if (freshConcept.name !== staleConcept.name) {
-          const freshParent = { ...conceptMap[freshConcept.parent] }
-          freshParent.children = freshParent.children.filter(child => child !== staleConcept.name)
-          freshParent.children.push(freshConcept.name)
-          freshParent.children.sort()
-          insertConcept(freshParent, conceptMap, aliasMap)
+        const hasRenamed = freshConcept.name !== staleConcept.name
+        const hasReparented = freshConcept.parent !== staleConcept.parent
 
+        if (hasRenamed) {
           names = names.filter(name => name !== staleConcept.name)
           names.push(freshConcept.name)
           names.sort()
         }
 
-        if (freshConcept.parent !== staleConcept.parent) {
-          const freshParent = { ...conceptMap[freshConcept.parent] }
-          freshParent.children.push(freshConcept.name)
-          freshParent.children.sort()
-          insertConcept(freshParent, conceptMap, aliasMap)
+        if (hasRenamed || hasReparented) {
+          const nextParentName = freshConcept.parent
+          const priorParentName = staleConcept.parent
+          const nextParent = conceptMap[nextParentName]
+          const priorParent = conceptMap[priorParentName]
 
-          const staleParent = { ...conceptMap[staleConcept.parent] }
-          staleParent.children = staleParent.children.filter(child => child !== staleConcept.name)
-          insertConcept(staleParent, conceptMap, aliasMap)
+          if (!nextParent) {
+            throw new Error(
+              `Cannot refresh taxonomy edits for "${freshConcept.name}": new parent "${nextParentName}" is missing`
+            )
+          }
+          if (!priorParent) {
+            throw new Error(
+              `Cannot refresh taxonomy edits for "${freshConcept.name}": prior parent "${priorParentName}" is missing`
+            )
+          }
+
+          if (nextParentName === priorParentName) {
+            const updatedParent = { ...nextParent }
+            const replacedChildren = (updatedParent.children || []).map(child =>
+              child === staleConcept.name ? freshConcept.name : child
+            )
+            updatedParent.children = Array.from(new Set(replacedChildren)).sort()
+            insertConcept(updatedParent, conceptMap, aliasMap)
+          } else {
+            const updatedNextParent = { ...nextParent }
+            const nextChildren = (updatedNextParent.children || []).filter(
+              child => child !== staleConcept.name
+            )
+            nextChildren.push(freshConcept.name)
+            updatedNextParent.children = Array.from(new Set(nextChildren)).sort()
+            insertConcept(updatedNextParent, conceptMap, aliasMap)
+
+            const updatedPriorParent = { ...priorParent }
+            updatedPriorParent.children = (updatedPriorParent.children || []).filter(
+              child => child !== staleConcept.name && child !== freshConcept.name
+            )
+            insertConcept(updatedPriorParent, conceptMap, aliasMap)
+          }
         }
 
         return { ...currentTaxonomy, aliasMap, conceptMap, names }
