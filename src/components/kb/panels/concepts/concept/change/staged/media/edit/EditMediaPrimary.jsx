@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   Box,
   Checkbox,
@@ -44,6 +44,18 @@ const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia 
 
     return { isDisabled: false, shouldBeChecked: formMediaItem.isPrimary }
   }, [action, formMediaItem, stagedMedia])
+
+  useEffect(() => {
+    if (shouldBeChecked && !formMediaItem.isPrimary) {
+      onPrimaryChange({
+        target: {
+          checked: true,
+          name: 'isPrimary',
+          type: 'checkbox',
+        },
+      })
+    }
+  }, [formMediaItem.isPrimary, onPrimaryChange, shouldBeChecked])
 
   return (
     <Box display='flex' justifyContent='flex-end'>

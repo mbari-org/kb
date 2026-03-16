@@ -124,12 +124,12 @@ const getNames = taxonomy => taxonomy?.names
 
 const isConceptLoaded = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
-  return (
+  return Boolean(
     concept &&
-    concept.aliases &&
-    concept.children &&
-    concept.children.every(child => taxonomy.conceptMap[child]?.children) &&
-    (concept.name === taxonomy.rootName || concept.parent)
+      concept.aliases &&
+      concept.children &&
+      concept.children.every(child => taxonomy.conceptMap[child]?.children) &&
+      (concept.name === taxonomy.rootName || concept.parent)
   )
 }
 

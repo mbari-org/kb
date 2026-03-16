@@ -47,174 +47,124 @@ const TaxonomyProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
-  const taxonomyRef = useRef(null)
-  const taxonomyTransactionRef = useRef(Promise.resolve())
 
   const checkIntegrity = useTaxonomyIntegrity()
 
   const updateTaxonomy = useCallback(
     updatedTaxonomy => {
-
-      if (updatedTaxonomy === undefined) {
-        showBoundary(new Error('Taxonomy update failed: updated taxonomy is undefined'))
-        return taxonomyRef.current
-      }
-
       try {
         checkIntegrity(updatedTaxonomy)
       } catch (error) {
         showBoundary(error)
-        return taxonomyRef.current
+        return taxonomy
       }
-
-      taxonomyRef.current = updatedTaxonomy
       setTaxonomy(updatedTaxonomy)
       return updatedTaxonomy
     },
-    [checkIntegrity, showBoundary]
-  )
-
-  const runTaxonomyTransaction = useCallback(
-    async transactionFn => {
-      const run = async () => {
-        const currentTaxonomy = taxonomyRef.current
-        const updatedTaxonomy = await transactionFn(currentTaxonomy)
-        if (updatedTaxonomy === undefined) {
-          throw new Error('Taxonomy transaction failed: transaction returned undefined taxonomy')
-        }
-        return updateTaxonomy(updatedTaxonomy)
-      }
-
-      const pendingTransaction = taxonomyTransactionRef.current.then(run, run)
-      taxonomyTransactionRef.current = pendingTransaction.then(() => null, () => null)
-      return pendingTransaction
-    },
-    [updateTaxonomy]
+    [checkIntegrity, showBoundary, taxonomy]
   )
 
   const conceptEditsRefresh = useCallback(
     async (freshConcept, staleConcept) => {
       if (freshConcept === staleConcept) {
-        return { concept: freshConcept, taxonomy: taxonomyRef.current }
+        return { concept: freshConcept, taxonomy }
       }
 
-      const updatedTaxonomy = await runTaxonomyTransaction(async currentTaxonomy => {
-        if (!currentTaxonomy) {
-          throw new Error(
-            `Cannot refresh taxonomy edits for concept "${freshConcept?.name || staleConcept?.name}": taxonomy is not loaded`
-          )
-        }
+      const aliasMap = { ...taxonomy.aliasMap }
+      const conceptMap = { ...taxonomy.conceptMap }
+      let names = taxonomy.names
 
-        const aliasMap = { ...currentTaxonomy.aliasMap }
-        const conceptMap = { ...currentTaxonomy.conceptMap }
-        let names = currentTaxonomy.names
+      const aliasesChanged = !isEqual(freshConcept.alternateNames, staleConcept.alternateNames)
+      const childrenChanged = !isEqual(freshConcept.children, staleConcept.children)
+      const nameChanged = freshConcept.name !== staleConcept.name
+      const parentChanged = freshConcept.parent !== staleConcept.parent
 
-        delete conceptMap[staleConcept.name]
-        staleConcept.alternateNames.forEach(alternateName => {
-          delete aliasMap[alternateName]
-        })
-        insertConcept(freshConcept, conceptMap, aliasMap)
-
-        if (!isEqual(freshConcept.alternateNames, staleConcept.alternateNames)) {
-          names = names.filter(name => !staleConcept.alternateNames.includes(name))
-          names.push(...freshConcept.alternateNames)
-          names.sort()
-        }
-
-        if (!isEqual(freshConcept.children, staleConcept.children)) {
-          const addedChildren = freshConcept.children.filter(
-            name => !staleConcept.children.includes(name)
-          )
-          const removedChildren = staleConcept.children.filter(
-            name => !freshConcept.children.includes(name)
-          )
-
-          await Promise.all(
-            addedChildren
-              .filter(childName => childName !== staleConcept.name)
-              .map(async childName => {
-                const child = await apiConcept(apiFns, childName)
-                child.parent = freshConcept.name
-                insertConcept(child, conceptMap, aliasMap)
-              })
-          )
-
-          removedChildren.forEach(childName => {
-            const removed = conceptMap[childName]
-            if (removed) {
-              if (Array.isArray(removed.alternateNames)) {
-                removed.alternateNames.forEach(aliasName => {
-                  delete aliasMap[aliasName]
-                })
-              }
-              delete conceptMap[childName]
-            }
-          })
-
-          if (addedChildren.length > 0 || removedChildren.length > 0) {
-            names = names
-              .filter(name => !removedChildren.includes(name))
-              .concat(addedChildren)
-              .sort()
-          }
-        }
-
-        const hasRenamed = freshConcept.name !== staleConcept.name
-        const hasReparented = freshConcept.parent !== staleConcept.parent
-
-        if (hasRenamed) {
-          names = names.filter(name => name !== staleConcept.name)
-          names.push(freshConcept.name)
-          names.sort()
-        }
-
-        if (hasRenamed || hasReparented) {
-          const nextParentName = freshConcept.parent
-          const priorParentName = staleConcept.parent
-          const nextParent = conceptMap[nextParentName]
-          const priorParent = conceptMap[priorParentName]
-
-          if (!nextParent) {
-            throw new Error(
-              `Cannot refresh taxonomy edits for "${freshConcept.name}": new parent "${nextParentName}" is missing`
-            )
-          }
-          if (!priorParent) {
-            throw new Error(
-              `Cannot refresh taxonomy edits for "${freshConcept.name}": prior parent "${priorParentName}" is missing`
-            )
-          }
-
-          if (nextParentName === priorParentName) {
-            const updatedParent = { ...nextParent }
-            const replacedChildren = (updatedParent.children || []).map(child =>
-              child === staleConcept.name ? freshConcept.name : child
-            )
-            updatedParent.children = Array.from(new Set(replacedChildren)).sort()
-            insertConcept(updatedParent, conceptMap, aliasMap)
-          } else {
-            const updatedNextParent = { ...nextParent }
-            const nextChildren = (updatedNextParent.children || []).filter(
-              child => child !== staleConcept.name
-            )
-            nextChildren.push(freshConcept.name)
-            updatedNextParent.children = Array.from(new Set(nextChildren)).sort()
-            insertConcept(updatedNextParent, conceptMap, aliasMap)
-
-            const updatedPriorParent = { ...priorParent }
-            updatedPriorParent.children = (updatedPriorParent.children || []).filter(
-              child => child !== staleConcept.name && child !== freshConcept.name
-            )
-            insertConcept(updatedPriorParent, conceptMap, aliasMap)
-          }
-        }
-
-        return { ...currentTaxonomy, aliasMap, conceptMap, names }
+      delete conceptMap[staleConcept.name]
+      staleConcept.alternateNames.forEach(alternateName => {
+        delete aliasMap[alternateName]
       })
+      insertConcept(freshConcept, conceptMap, aliasMap)
+
+      if (childrenChanged) {
+        const addedChildren = freshConcept.children.filter(name => !staleConcept.children.includes(name))
+        const removedChildren = staleConcept.children.filter(name => !freshConcept.children.includes(name))
+
+        await Promise.all(
+          addedChildren
+            .filter(childName => childName !== staleConcept.name)
+            .map(async childName => {
+              const existingChild = conceptMap[childName]
+              if (existingChild && existingChild.parent === freshConcept.name) {
+                return
+              }
+
+              const child = await apiConcept(apiFns, childName)
+              child.parent = freshConcept.name
+              insertConcept(child, conceptMap, aliasMap)
+            })
+        )
+
+        removedChildren.forEach(childName => {
+          const removed = conceptMap[childName]
+          if (removed) {
+            if (Array.isArray(removed.alternateNames)) {
+              removed.alternateNames.forEach(aliasName => {
+                delete aliasMap[aliasName]
+              })
+            }
+            delete conceptMap[childName]
+          }
+        })
+      }
+
+      const copyParent = parentName => {
+        const parentConcept = conceptMap[parentName]
+        if (!parentConcept) {
+          throw new Error(`Cannot refresh concept with missing parent in taxonomy: ${parentName}`)
+        }
+
+        return {
+          ...parentConcept,
+          children: [...(parentConcept.children ?? [])],
+        }
+      }
+
+      if (parentChanged) {
+        const freshParent = copyParent(freshConcept.parent)
+        if (!freshParent.children.includes(freshConcept.name)) {
+          freshParent.children.push(freshConcept.name)
+          freshParent.children.sort()
+        }
+        insertConcept(freshParent, conceptMap, aliasMap)
+        const staleParent = copyParent(staleConcept.parent)
+        staleParent.children = staleParent.children.filter(
+          child => child !== staleConcept.name && child !== freshConcept.name
+        )
+        insertConcept(staleParent, conceptMap, aliasMap)
+      } else if (nameChanged) {
+        const parent = copyParent(freshConcept.parent)
+        parent.children = parent.children.filter(child => child !== staleConcept.name)
+        if (!parent.children.includes(freshConcept.name)) {
+          parent.children.push(freshConcept.name)
+          parent.children.sort()
+        }
+        insertConcept(parent, conceptMap, aliasMap)
+      }
+
+      if (aliasesChanged || childrenChanged || nameChanged) {
+        names = [...Object.keys(conceptMap), ...Object.keys(aliasMap)].sort()
+      }
+
+      const updatedTaxonomy = { ...taxonomy, aliasMap, conceptMap, names }
+
+      const committedTaxonomy = updateTaxonomy(updatedTaxonomy)
+      if (committedTaxonomy !== updatedTaxonomy) {
+        return { concept: staleConcept, taxonomy: committedTaxonomy || taxonomy }
+      }
 
       return { concept: freshConcept, taxonomy: updatedTaxonomy }
     },
-    [apiFns, runTaxonomyTransaction]
+    [apiFns, taxonomy, updateTaxonomy]
   )
 
   const closestConcept = useCallback(
@@ -301,7 +251,15 @@ const TaxonomyProvider = ({ children }) => {
 
   const loadConcept = useCallback(
     async (conceptName, force = false) => {
-      if (!apiFns || !taxonomyRef.current) return null
+      if (!taxonomy || !apiFns) return null
+
+      if (!force && isConceptLoaded(conceptName)) {
+        const loadedConcept = getTaxonomyConcept(taxonomy, conceptName)
+        if (!loadedConcept) {
+          throw new Error(`Taxonomy reported concept as loaded but lookup failed: ${conceptName}`)
+        }
+        return loadedConcept
+      }
 
       if (alreadyLoadingConcept.current) {
         return null
@@ -310,75 +268,46 @@ const TaxonomyProvider = ({ children }) => {
       try {
         alreadyLoadingConcept.current = true
 
-        const updatedTaxonomy = await runTaxonomyTransaction(async currentTaxonomy => {
-          if (!currentTaxonomy) {
-            throw new Error(`Cannot load concept "${conceptName}" because taxonomy is not loaded`)
-          }
-          if (!force && isTaxonomyConceptLoaded(currentTaxonomy, conceptName)) {
-            return currentTaxonomy
-          }
+        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(taxonomy, conceptName, apiFns)
+        const committedTaxonomy = updateTaxonomy(updatedTaxonomy)
+        const effectiveTaxonomy = committedTaxonomy || taxonomy
 
-          const { taxonomy: loadedTaxonomy } = await loadTaxonomyConcept(
-            currentTaxonomy,
-            conceptName,
-            apiFns
-          )
-          return loadedTaxonomy
-        })
-
-        return getTaxonomyConcept(updatedTaxonomy, conceptName)
+        return getTaxonomyConcept(effectiveTaxonomy, conceptName)
       } catch (error) {
         showBoundary(error)
       } finally {
         alreadyLoadingConcept.current = false
       }
     },
-    [apiFns, runTaxonomyTransaction, showBoundary]
+    [apiFns, isConceptLoaded, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const loadConceptDescendants = useCallback(
     async concept => {
-      if (!apiFns || !taxonomyRef.current) return null
+      if (!apiFns || !taxonomy) return null
       try {
-        const updatedTaxonomy = await runTaxonomyTransaction(async currentTaxonomy => {
-          if (!currentTaxonomy) {
-            throw new Error(
-              `Cannot load concept descendants for "${concept?.name}": taxonomy is not loaded`
-            )
-          }
-          const { taxonomy: loadedTaxonomy } = await loadTaxonomyConceptDescendants(
-            currentTaxonomy,
-            concept,
-            apiFns
-          )
-          return loadedTaxonomy
-        })
+        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(taxonomy, concept, apiFns)
+        const committedTaxonomy = updateTaxonomy(updatedTaxonomy)
 
-        return updatedTaxonomy
+        return committedTaxonomy || taxonomy
       } catch (error) {
         showBoundary(error)
       }
     },
-    [apiFns, runTaxonomyTransaction, showBoundary]
+    [apiFns, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const removeConcept = useCallback(
-    async conceptName => {
-      return runTaxonomyTransaction(async currentTaxonomy => {
-        if (!currentTaxonomy) {
-          throw new Error(`Cannot remove concept "${conceptName}" before taxonomy is loaded`)
-        }
-
-        const concept = getTaxonomyConcept(currentTaxonomy, conceptName)
-        if (!concept) {
-          throw new Error(`Cannot remove missing concept from taxonomy: ${conceptName}`)
-        }
-
-        const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(currentTaxonomy, concept)
-        return updatedTaxonomy
-      })
+    conceptName => {
+      const concept = getTaxonomyConcept(taxonomy, conceptName)
+      if (!concept) {
+        throw new Error(`Cannot remove missing concept from taxonomy: ${conceptName}`)
+      }
+      const { taxonomy: updatedTaxonomy } = removeTaxonomyConcept(taxonomy, concept)
+      const committedTaxonomy = updateTaxonomy(updatedTaxonomy)
+      return committedTaxonomy || taxonomy
     },
-    [runTaxonomyTransaction]
+    [taxonomy, updateTaxonomy]
   )
 
   useEffect(() => {
