@@ -10,6 +10,11 @@ const dirname = path.dirname(filename)
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), versionPlugin()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './test/setup.js',
+  },
   build: {
     sourcemap: true,
   },
