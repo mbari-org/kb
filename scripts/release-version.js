@@ -24,6 +24,14 @@ const ensureMainBranch = () => {
   }
 }
 
+const ensureLintPasses = () => {
+  run('yarn lint')
+}
+
+const ensureTestsPass = () => {
+  run('yarn vitest run')
+}
+
 const getVersionInfo = async () => {
   const versionPath = path.resolve('src/version.js')
   const versionUrl = pathToFileURL(versionPath).href
@@ -63,6 +71,8 @@ const commitAndTag = version => {
 const main = async () => {
   ensureMainBranch()
   ensureCleanWorkingTree()
+  ensureLintPasses()
+  ensureTestsPass()
 
   run('node scripts/generate-version.js')
 

@@ -63,7 +63,8 @@ yarn build
 1. Commit changes normally during development.
 2. Regenerate `src/version.js` as needed (optional): `yarn version:generate`.
 3. On `main` with a clean working tree, run `yarn release:version`.
-4. The release script updates `package.json`, commits with `v<version>`, and tags `main` with `<version>`.
+4. The release script runs `yarn lint` and the full test suite as required pre-release gates.
+5. If both pass, the release script updates `package.json`, commits with `v<version>`, and tags `main` with `<version>`.
 
 ### Hot Module Replacement (HMR) Support
 
