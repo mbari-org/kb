@@ -21,7 +21,7 @@ import CONFIG from '@/text'
 const { PROCESSING } = CONFIG
 
 const useSaveStaged = () => {
-  const { initialState, setConcept, stagedState } = use(ConceptContext)
+  const { initialState, setConcept, setEditing, stagedState } = use(ConceptContext)
   const { closeModal, withProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh } = use(TaxonomyContext)
@@ -33,14 +33,9 @@ const useSaveStaged = () => {
       async () => {
         const { apiFns, staleConcept, user } = updatesContext
 
-        const updatesInfo = await submitStaged(
-          initialState,
-          stagedState,
-          updatesContext
-        )
+        const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
 
-        const conceptName =
-          updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
+        const conceptName = updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
         const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
         await normalizeConcept(apiFns, freshConcept)
@@ -49,18 +44,17 @@ const useSaveStaged = () => {
           freshConcept,
           isAdmin: isAdmin(user),
           staleConcept,
-          updatesInfo })
+          updatesInfo,
+        })
 
         if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
           await applyRenameSideEffects(updatesContext, updatesInfo)
         }
 
-        const { concept: updatedConcept } = await conceptEditsRefresh(
-          freshConcept,
-          updatesContext.staleConcept
-        )
+        const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, updatesContext.staleConcept)
 
         await setConcept(updatedConcept)
+        setEditing(false)
 
         updateSelected({ concept: updatedConcept.name })
 
@@ -74,6 +68,7 @@ const useSaveStaged = () => {
     conceptEditsRefresh,
     initialState,
     setConcept,
+    setEditing,
     stagedState,
     updateSelected,
     updatesContext,

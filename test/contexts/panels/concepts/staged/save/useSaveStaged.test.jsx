@@ -66,6 +66,7 @@ describe('useSaveStaged', () => {
     const closeModal = vi.fn()
     const conceptEditsRefresh = vi.fn(async () => ({ concept: updatedConcept }))
     const setConcept = vi.fn(async () => {})
+    const setEditing = vi.fn()
     const updateSelected = vi.fn()
     const withProcessing = vi.fn(async work => work())
 
@@ -79,13 +80,11 @@ describe('useSaveStaged', () => {
         <ConfigContext.Provider value={{ apiFns }}>
           <PanelDataContext.Provider value={{ getReferences: vi.fn(), refreshData: vi.fn() }}>
             <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
-              <SelectedContext.Provider
-                value={{ getSettings: vi.fn(() => ({})), updateSelected }}
-              >
+              <SelectedContext.Provider value={{ getSettings: vi.fn(() => ({})), updateSelected }}>
                 <TaxonomyContext.Provider value={{ conceptEditsRefresh }}>
                   <ConceptModalContext.Provider value={{ closeModal, withProcessing }}>
                     <ConceptContext.Provider
-                      value={{ concept: staleConcept, initialState: {}, setConcept, stagedState: {} }}
+                      value={{ concept: staleConcept, initialState: {}, setConcept, setEditing, stagedState: {} }}
                     >
                       {children}
                     </ConceptContext.Provider>
@@ -119,6 +118,7 @@ describe('useSaveStaged', () => {
     )
     expect(conceptEditsRefresh).toHaveBeenCalledWith(freshConcept, staleConcept)
     expect(setConcept).toHaveBeenCalledWith(updatedConcept)
+    expect(setEditing).toHaveBeenCalledWith(false)
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'renamed-concept' })
     expect(closeModal).toHaveBeenCalled()
     expect(withProcessing).toHaveBeenCalledTimes(1)
