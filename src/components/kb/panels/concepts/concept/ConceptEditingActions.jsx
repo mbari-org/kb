@@ -25,8 +25,7 @@ const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 
 const ConceptEditingActions = () => {
-  const { concept, isEditing, initialState, modifyConcept, pending, setEditing, stagedState } =
-    use(ConceptContext)
+  const { concept, isEditing, initialState, modifyConcept, pending, setEditing, stagedState } = use(ConceptContext)
   const { user } = use(UserContext)
   const readonly = isReadOnly(user)
 
@@ -36,10 +35,7 @@ const ConceptEditingActions = () => {
   const displayPending = useDisplayPending()
   const displayStaged = useDisplayStaged()
 
-  const isModified = useMemo(
-    () => isStateModified({ initialState, stagedState }),
-    [initialState, stagedState]
-  )
+  const isModified = useMemo(() => isStateModified({ initialState, stagedState }), [initialState, stagedState])
 
   const editCancelDiscardButtonText = useMemo(() => {
     if (!isEditing) return EDIT
@@ -89,14 +85,16 @@ const ConceptEditingActions = () => {
         right: 15,
       }}
     >
-      <Button
-        color={isEditing ? 'cancel' : 'main'}
-        disabled={readonly}
-        onClick={handleCancelDiscard}
-        variant='contained'
-      >
-        {editCancelDiscardButtonText}
-      </Button>
+      {!readonly && (
+        <Button
+          color={isEditing ? 'cancel' : 'main'}
+          disabled={readonly}
+          onClick={handleCancelDiscard}
+          variant='contained'
+        >
+          {editCancelDiscardButtonText}
+        </Button>
+      )}
       {isEditing && isModified && (
         <Button disabled={readonly} onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
           {STAGED}
@@ -107,9 +105,11 @@ const ConceptEditingActions = () => {
           {PENDING_ACTION}
         </Button>
       )}
-      <Button disabled={readonly || !isEditing || !isModified} onClick={handleSave} variant='contained'>
-        {SAVE}
-      </Button>
+      {!readonly && (
+        <Button disabled={readonly || !isEditing || !isModified} onClick={handleSave} variant='contained'>
+          {SAVE}
+        </Button>
+      )}
     </Box>
   )
 }
