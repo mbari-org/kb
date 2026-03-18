@@ -1,17 +1,20 @@
 #!/usr/bin/env node
 
-import { execSync, spawn } from 'child_process'
+import { execFileSync, spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import process from 'process'
 import { pathToFileURL } from 'url'
 
-const run = command => execSync(command, { encoding: 'utf8' }).trim()
+const run = (command, args = []) =>
+  execFileSync(command, args, {
+    encoding: 'utf8',
+  }).trim()
 
-const consoleMonitor = (command, { label, intervalMs = 15000 }) =>
+const consoleMonitor = (command, args = [], { label, intervalMs = 15000 }) =>
   new Promise((resolve, reject) => {
     const start = Date.now()
-    const child = spawn(command, { shell: true, stdio: 'inherit' })
+    const child = spawn(command, args, { stdio: 'inherit' })
     const timer = setInterval(() => {
       const elapsedSeconds = Math.floor((Date.now() - start) / 1000)
       console.log(`⏳ ${label} still running (${elapsedSeconds}s elapsed)...`)
@@ -37,10 +40,10 @@ const consoleMonitor = (command, { label, intervalMs = 15000 }) =>
     })
   })
 
-const getCurrentBranch = () => run('git rev-parse --abbrev-ref HEAD')
+const getCurrentBranch = () => run('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
 
 const ensureCleanWorkingTree = () => {
-  const status = run('git status --porcelain')
+  const status = run('git', ['status', '--porcelain'])
   if (status) {
     throw new Error('Working tree is dirty. Commit or stash changes first.')
   }
@@ -54,17 +57,17 @@ const ensureMainBranch = () => {
 }
 
 const ensureLintPasses = () => {
-  run('yarn lint')
+  run('yarn', ['lint'])
 }
 
 const ensureTestsPass = async () => {
-  console.log('🧪 Running test validation: yarn vitest run')
+  const testCommand = 'yarn'
+  const testArgs = ['vitest', 'run', '--pool=threads', '--maxWorkers=80%', '--reporter=dot']
+  console.log(`🧪 Running test validation: ${testCommand} ${testArgs.join(' ')}`)
   try {
-    await consoleMonitor('yarn vitest run', { label: 'Test validation' })
+    await consoleMonitor(testCommand, testArgs, { label: 'Test validation' })
   } catch {
-    throw new Error(
-      'Test validation failed. Review failing test output above, fix the failures, and rerun release processing.'
-    )
+    throw new Error('Tests failed.')
   }
 }
 
@@ -92,16 +95,16 @@ const updatePackageJsonVersion = version => {
 }
 
 const ensureTagDoesNotExist = version => {
-  const existing = run(`git tag --list ${version}`)
+  const existing = run('git', ['tag', '--list', version])
   if (existing) {
     throw new Error(`Tag "${version}" already exists.`)
   }
 }
 
 const commitAndTag = version => {
-  run('git add package.json')
-  run(`git commit -m "v${version}"`)
-  run(`git tag ${version}`)
+  run('git', ['add', 'package.json'])
+  run('git', ['commit', '-m', `v${version}`])
+  run('git', ['tag', version])
 }
 
 const main = async () => {
@@ -110,7 +113,7 @@ const main = async () => {
   ensureLintPasses()
   await ensureTestsPass()
 
-  run('node scripts/generate-version.js')
+  run('node', ['scripts/generate-version.js'])
 
   const { version } = await getVersionInfo()
   ensureTagDoesNotExist(version)
