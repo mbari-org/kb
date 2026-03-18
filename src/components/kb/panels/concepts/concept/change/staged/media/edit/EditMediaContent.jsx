@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 import {
   Box,
   FormControl,
@@ -44,26 +44,40 @@ const EditMediaContent = () => {
     isPrimary: false,
     url: false,
   })
+  const modifiedFieldsRef = useRef(modifiedFields)
   const [previewOn, setPreviewOn] = useState(false)
   const [urlStatus, setUrlStatus] = useState({ loading: false, valid: true, isDuplicate: false })
 
   useEffect(() => {
     const hasCreditError = formMediaItem.credit.trim() === ''
-    const hasUrlError = formMediaItem.url.trim() === '' ||
+    const hasUrlError =
+      formMediaItem.url.trim() === '' ||
       !isUrlValid(formMediaItem.url) ||
       (!urlStatus.loading && !urlStatus.valid) ||
       urlStatus.isDuplicate
+
     const formValid = !hasUrlError && !hasCreditError && !urlStatus.loading
     setModalData(prev => ({ ...prev, formValid }))
   }, [formMediaItem, setModalData, urlStatus])
 
-  const debouncedUpdateForm = useDebounce((updatedMediaItem, fieldIsModified, field) => {
-    const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
+  const applyFieldUpdate = (field, fieldValue, fieldIsModified) => {
+    const updatedModifiedFields = { ...modifiedFieldsRef.current, [field]: fieldIsModified }
+    modifiedFieldsRef.current = updatedModifiedFields
     setModifiedFields(updatedModifiedFields)
 
-    const modified = Object.values(updatedModifiedFields).some(fieldIsModified => fieldIsModified)
+    const modified = Object.values(updatedModifiedFields).some(isModified => isModified)
+    setModalData(prevModal => ({
+      ...prevModal,
+      mediaItem: {
+        ...prevModal.mediaItem,
+        [field]: fieldValue,
+      },
+      modified,
+    }))
+  }
 
-    setModalData(prev => ({ ...prev, mediaItem: updatedMediaItem, modified }))
+  const debouncedApplyFieldUpdate = useDebounce((field, fieldValue, fieldIsModified) => {
+    applyFieldUpdate(field, fieldValue, fieldIsModified)
   }, 300)
 
   const handleUrlChange = newUrl => {
@@ -79,11 +93,7 @@ const EditMediaContent = () => {
         ? updatedMediaItem.url !== EMPTY_MEDIA_ITEM.url
         : stagedState.media[mediaIndex].url !== updatedMediaItem.url
 
-    const updatedModifiedFields = { ...modifiedFields, url: fieldIsModified }
-    setModifiedFields(updatedModifiedFields)
-
-    const modified = Object.values(updatedModifiedFields).some(isModified => isModified)
-    setModalData(prevModal => ({ ...prevModal, mediaItem: updatedMediaItem, modified }))
+    applyFieldUpdate('url', updatedMediaItem.url, fieldIsModified)
   }
 
   const handleChange = event => {
@@ -101,7 +111,12 @@ const EditMediaContent = () => {
         ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
         : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
 
-    debouncedUpdateForm(updatedMediaItem, fieldIsModified, field)
+    if (type === 'checkbox') {
+      applyFieldUpdate(field, updatedMediaItem[field], fieldIsModified)
+      return
+    }
+
+    debouncedApplyFieldUpdate(field, updatedMediaItem[field], fieldIsModified)
   }
 
   const stageMedia = useStageMedia()
