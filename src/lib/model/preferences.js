@@ -142,7 +142,7 @@ const deserializePreferences = (type, value) => {
     const arr = JSON.parse(json)
     return fromArray(type, arr)
   } catch (error) {
-    throw new Error(`Failed to deserialize preferences value: ${error.message}`)
+    throw new Error(`Failed to deserialize preferences value: ${error.message}`, { cause: error })
   }
 }
 

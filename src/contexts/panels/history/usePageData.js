@@ -37,7 +37,7 @@ const usePageData = ({
     async ({ updatePageState }) => {
       if (!apiFns) return
 
-      let data = []
+      let data
       if (selectedType === TYPE.APPROVED) {
         data = await apiFns.apiPaginated(getHistory, [
           selectedType,

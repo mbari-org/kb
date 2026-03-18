@@ -90,8 +90,8 @@ const csvExport = ({
       return
     }
 
-    let writable = null
-    let handle = null
+    let writable
+    let handle
 
     try {
       handle = await window.showSaveFilePicker({

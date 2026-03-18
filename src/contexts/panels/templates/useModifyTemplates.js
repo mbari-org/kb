@@ -19,7 +19,7 @@ const useModifyTemplates = () => {
         await apiFns.apiPayload(deleteConceptTemplate, template.id)
         await refreshData()
       } catch (error) {
-        throw new Error(`Failed to delete template: ${error.message}`)
+        throw new Error(`Failed to delete template: ${error.message}`, { cause: error })
       }
     },
     [apiFns, refreshData]
@@ -31,7 +31,7 @@ const useModifyTemplates = () => {
         await apiFns.apiPayload(updateTemplate, [oldTemplate.id, newTemplate])
         await refreshData()
       } catch (error) {
-        throw new Error(`Failed to update template: ${error.message}`)
+        throw new Error(`Failed to update template: ${error.message}`, { cause: error })
       }
     },
     [apiFns, refreshData]
@@ -43,7 +43,7 @@ const useModifyTemplates = () => {
         await apiFns.apiPayload(createConceptTemplate, template)
         await refreshData()
       } catch (error) {
-        throw new Error(`Failed to create template: ${error.message}`)
+        throw new Error(`Failed to create template: ${error.message}`, { cause: error })
       }
     },
     [apiFns, refreshData]

@@ -68,7 +68,7 @@ const useChangeParentModal = () => {
       setModal(modal, onClose)
       setModalData(initialModalData)
     } catch (error) {
-      throw new Error(`Failed to load descendants: ${error}`)
+      throw new Error(`Failed to load descendants: ${error.message}`, { cause: error })
     } finally {
       alreadyGettingDescendants.current = false
     }
