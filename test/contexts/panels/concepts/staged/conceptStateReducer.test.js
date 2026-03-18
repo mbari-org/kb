@@ -99,7 +99,7 @@ describe('conceptStateReducer', () => {
   describe('MEDIA_ITEM', () => {
     it('ADD: appends media item', () => {
       const update = {
-        mediaItem: { url: 'https://example.com/image.jpg', mediaType: 'Image', isPrimary: false },
+        mediaItem: { url: 'https://aqui.nada/image.jpg', mediaType: 'Image', isPrimary: false },
       }
       const result = conceptStateReducer(baseStagedState, {
         type: MEDIA_ITEM.ADD,
@@ -107,13 +107,13 @@ describe('conceptStateReducer', () => {
         initialState: baseStagedState,
       })
       expect(result.media).toHaveLength(1)
-      expect(result.media[0].url).toBe('https://example.com/image.jpg')
+      expect(result.media[0].url).toBe('https://aqui.nada/image.jpg')
       expect(result.media[0].action).toBe(MEDIA_ITEM.ADD)
     })
 
     it('DELETE: removes added media from state', () => {
       const addedMedia = {
-        url: 'https://example.com/img.jpg',
+        url: 'https://aqui.nada/img.jpg',
         mediaType: 'Image',
         action: MEDIA_ITEM.ADD,
       }
@@ -132,9 +132,7 @@ describe('conceptStateReducer', () => {
     it('EDIT: updates media item at index', () => {
       const stagedState = {
         ...baseStagedState,
-        media: [
-          { stateId: 's1', url: 'https://old.com/img.jpg', mediaType: 'Image', action: 'None' },
-        ],
+        media: [{ stateId: 's1', url: 'https://old.com/img.jpg', mediaType: 'Image', action: 'None' }],
       }
       const initialState = {
         media: [{ stateId: 's1', url: 'https://old.com/img.jpg', mediaType: 'Image' }],
@@ -224,9 +222,7 @@ describe('conceptStateReducer', () => {
     it('EDIT: updates realization at index', () => {
       const stagedState = {
         ...baseStagedState,
-        realizations: [
-          { linkName: 'sameAs', toConcept: 'Old', linkValue: 'v', action: 'None', index: 0 },
-        ],
+        realizations: [{ linkName: 'sameAs', toConcept: 'Old', linkValue: 'v', action: 'None', index: 0 }],
       }
       const result = conceptStateReducer(stagedState, {
         type: REALIZATION.EDIT,

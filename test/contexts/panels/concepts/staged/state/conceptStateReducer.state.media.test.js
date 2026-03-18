@@ -1,7 +1,7 @@
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 import { stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
-import { isStateModified } from '@/lib/concept/state/state'
 import * as media from '@/lib/concept/state/media'
+import { isStateModified } from '@/lib/concept/state/state'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState'
 import { describe, expect, it } from 'vitest'
 
@@ -36,7 +36,7 @@ const countPrimaryByType = mediaItems =>
 describe('conceptStateReducer media', () => {
   it('adds a media item and verifies isModified', () => {
     const mediaItem = {
-      url: 'https://example.com/image.jpg',
+      url: 'https://aqui.nada/image.jpg',
       mediaType: 'Image',
       isPrimary: false,
     }
@@ -49,7 +49,7 @@ describe('conceptStateReducer media', () => {
 
     expect(stagedState.media).toHaveLength(1)
     expect(stagedState.media[0]).toMatchObject({
-      url: 'https://example.com/image.jpg',
+      url: 'https://aqui.nada/image.jpg',
       mediaType: 'Image',
       isPrimary: false,
       action: MEDIA_ITEM.ADD,
@@ -61,7 +61,7 @@ describe('conceptStateReducer media', () => {
 
   it('verifies stateUpdates from media matches reducer output', () => {
     const mediaItem = {
-      url: 'https://example.com/staged.jpg',
+      url: 'https://aqui.nada/staged.jpg',
       mediaType: 'Image',
       isPrimary: false,
     }
@@ -77,7 +77,7 @@ describe('conceptStateReducer media', () => {
     expect(mediaStateUpdates.media.initial).toEqual([])
     expect(mediaStateUpdates.media.staged).toHaveLength(1)
     expect(mediaStateUpdates.media.staged[0]).toMatchObject({
-      url: 'https://example.com/staged.jpg',
+      url: 'https://aqui.nada/staged.jpg',
       mediaType: 'Image',
       isPrimary: false,
       action: MEDIA_ITEM.ADD,
@@ -91,7 +91,7 @@ describe('conceptStateReducer media', () => {
 
   it('edits the added media item and verifies new staged values', () => {
     const mediaItem = {
-      url: 'https://example.com/original.jpg',
+      url: 'https://aqui.nada/original.jpg',
       mediaType: 'Image',
       isPrimary: false,
     }
@@ -106,21 +106,21 @@ describe('conceptStateReducer media', () => {
       type: MEDIA_ITEM.EDIT,
       update: {
         mediaIndex: 0,
-        mediaItem: { url: 'https://example.com/edited.jpg' },
+        mediaItem: { url: 'https://aqui.nada/edited.jpg' },
       },
       initialState,
     })
 
     expect(stagedState.media).toHaveLength(1)
-    expect(stagedState.media[0].url).toBe('https://example.com/edited.jpg')
+    expect(stagedState.media[0].url).toBe('https://aqui.nada/edited.jpg')
 
     const mediaStateUpdates = media.stateUpdates(initialState, stagedState)
-    expect(mediaStateUpdates.media.staged[0].url).toBe('https://example.com/edited.jpg')
+    expect(mediaStateUpdates.media.staged[0].url).toBe('https://aqui.nada/edited.jpg')
   })
 
   it('deletes the added media item and verifies isModified is false', () => {
     const mediaItem = {
-      url: 'https://example.com/to-delete.jpg',
+      url: 'https://aqui.nada/to-delete.jpg',
       mediaType: 'Image',
       isPrimary: false,
     }
@@ -150,7 +150,7 @@ describe('conceptStateReducer media', () => {
 
   it('full flow: add, verify stateUpdates, edit, verify, delete, verify isModified false', () => {
     const mediaItem = {
-      url: 'https://example.com/dingo.jpg',
+      url: 'https://aqui.nada/dingo.jpg',
       mediaType: 'Image',
       isPrimary: false,
     }
@@ -162,13 +162,13 @@ describe('conceptStateReducer media', () => {
     })
 
     expect(stagedState.media).toHaveLength(1)
-    expect(stagedState.media[0].url).toBe('https://example.com/dingo.jpg')
+    expect(stagedState.media[0].url).toBe('https://aqui.nada/dingo.jpg')
     expect(isStateModified({ initialState, stagedState })).toBe(true)
 
     let updates = media.stateUpdates(initialState, stagedState)
     expect(updates.media.initial).toEqual([])
     expect(updates.media.staged[0]).toMatchObject({
-      url: 'https://example.com/dingo.jpg',
+      url: 'https://aqui.nada/dingo.jpg',
       mediaType: 'Image',
       action: MEDIA_ITEM.ADD,
     })
@@ -177,15 +177,15 @@ describe('conceptStateReducer media', () => {
       type: MEDIA_ITEM.EDIT,
       update: {
         mediaIndex: 0,
-        mediaItem: { url: 'https://example.com/dingo-updated.jpg' },
+        mediaItem: { url: 'https://aqui.nada/dingo-updated.jpg' },
       },
       initialState,
     })
 
-    expect(stagedState.media[0].url).toBe('https://example.com/dingo-updated.jpg')
+    expect(stagedState.media[0].url).toBe('https://aqui.nada/dingo-updated.jpg')
 
     updates = media.stateUpdates(initialState, stagedState)
-    expect(updates.media.staged[0].url).toBe('https://example.com/dingo-updated.jpg')
+    expect(updates.media.staged[0].url).toBe('https://aqui.nada/dingo-updated.jpg')
 
     stagedState = conceptStateReducer(stagedState, {
       type: MEDIA_ITEM.DELETE,
@@ -201,14 +201,14 @@ describe('conceptStateReducer media', () => {
   it('adding a primary media item demotes existing primary of same type without mutating input state', () => {
     const existingImagePrimary = {
       stateId: 'img-1',
-      url: 'https://example.com/image-1.jpg',
+      url: 'https://aqui.nada/image-1.jpg',
       mediaType: 'Image',
       isPrimary: true,
       action: CONCEPT_STATE.NO_ACTION,
     }
     const existingVideoPrimary = {
       stateId: 'vid-1',
-      url: 'https://example.com/video-1.mp4',
+      url: 'https://aqui.nada/video-1.mp4',
       mediaType: 'Video',
       isPrimary: true,
       action: CONCEPT_STATE.NO_ACTION,
@@ -224,7 +224,7 @@ describe('conceptStateReducer media', () => {
       type: MEDIA_ITEM.ADD,
       update: {
         mediaItem: {
-          url: 'https://example.com/image-2.jpg',
+          url: 'https://aqui.nada/image-2.jpg',
           mediaType: 'Image',
           isPrimary: true,
         },
@@ -236,7 +236,7 @@ describe('conceptStateReducer media', () => {
       item => (item.mediaType || '').toUpperCase() === 'IMAGE' && item.isPrimary
     )
     expect(imagePrimaries).toHaveLength(1)
-    expect(imagePrimaries[0].url).toBe('https://example.com/image-2.jpg')
+    expect(imagePrimaries[0].url).toBe('https://aqui.nada/image-2.jpg')
 
     const priorImage = result.media.find(item => item.stateId === 'img-1')
     expect(priorImage.isPrimary).toBe(false)
@@ -251,7 +251,7 @@ describe('conceptStateReducer media', () => {
   it('deleting a newly added primary restores prior same-type primary without mutating input state', () => {
     const restoredCandidate = {
       stateId: 'img-1',
-      url: 'https://example.com/image-1.jpg',
+      url: 'https://aqui.nada/image-1.jpg',
       mediaType: 'Image',
       isPrimary: false,
       wasPrimary: true,
@@ -259,7 +259,7 @@ describe('conceptStateReducer media', () => {
     }
     const addedPrimary = {
       stateId: 'img-2',
-      url: 'https://example.com/image-2.jpg',
+      url: 'https://aqui.nada/image-2.jpg',
       mediaType: 'Image',
       isPrimary: true,
       action: MEDIA_ITEM.ADD,
@@ -287,21 +287,21 @@ describe('conceptStateReducer media', () => {
   it('editing a primary image into video promotes remaining image primary and demotes other video primary', () => {
     const imagePrimary = {
       stateId: 'img-1',
-      url: 'https://example.com/image-1.jpg',
+      url: 'https://aqui.nada/image-1.jpg',
       mediaType: 'Image',
       isPrimary: true,
       action: CONCEPT_STATE.NO_ACTION,
     }
     const imageSecondary = {
       stateId: 'img-2',
-      url: 'https://example.com/image-2.jpg',
+      url: 'https://aqui.nada/image-2.jpg',
       mediaType: 'Image',
       isPrimary: false,
       action: CONCEPT_STATE.NO_ACTION,
     }
     const videoPrimary = {
       stateId: 'vid-1',
-      url: 'https://example.com/video-1.mp4',
+      url: 'https://aqui.nada/video-1.mp4',
       mediaType: 'Video',
       isPrimary: true,
       action: CONCEPT_STATE.NO_ACTION,
@@ -318,7 +318,7 @@ describe('conceptStateReducer media', () => {
       type: MEDIA_ITEM.EDIT,
       update: {
         mediaIndex: 0,
-        mediaItem: { url: 'https://example.com/video-2.mp4' },
+        mediaItem: { url: 'https://aqui.nada/video-2.mp4' },
       },
       initialState: initialStateWithMedia,
     })
@@ -339,14 +339,14 @@ describe('conceptStateReducer media', () => {
   it('deleting an existing primary promotes another same-type item and marks promotion as edit', () => {
     const imagePrimary = {
       stateId: 'img-1',
-      url: 'https://example.com/image-1.jpg',
+      url: 'https://aqui.nada/image-1.jpg',
       mediaType: 'Image',
       isPrimary: true,
       action: CONCEPT_STATE.NO_ACTION,
     }
     const imageSecondary = {
       stateId: 'img-2',
-      url: 'https://example.com/image-2.jpg',
+      url: 'https://aqui.nada/image-2.jpg',
       mediaType: 'Image',
       isPrimary: false,
       action: CONCEPT_STATE.NO_ACTION,
