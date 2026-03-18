@@ -1,12 +1,41 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process'
+import { execSync, spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import process from 'process'
 import { pathToFileURL } from 'url'
 
 const run = command => execSync(command, { encoding: 'utf8' }).trim()
+
+const consoleMonitor = (command, { label, intervalMs = 15000 }) =>
+  new Promise((resolve, reject) => {
+    const start = Date.now()
+    const child = spawn(command, { shell: true, stdio: 'inherit' })
+    const timer = setInterval(() => {
+      const elapsedSeconds = Math.floor((Date.now() - start) / 1000)
+      console.log(`⏳ ${label} still running (${elapsedSeconds}s elapsed)...`)
+    }, intervalMs)
+
+    const cleanup = () => clearInterval(timer)
+
+    child.on('error', error => {
+      cleanup()
+      reject(error)
+    })
+
+    child.on('close', code => {
+      cleanup()
+      if (code === 0) {
+        const elapsedSeconds = Math.floor((Date.now() - start) / 1000)
+        console.log(`✅ ${label} completed in ${elapsedSeconds}s.`)
+        resolve()
+        return
+      }
+
+      reject(new Error(`${label} failed with exit code ${code}`))
+    })
+  })
 
 const getCurrentBranch = () => run('git rev-parse --abbrev-ref HEAD')
 
@@ -28,8 +57,15 @@ const ensureLintPasses = () => {
   run('yarn lint')
 }
 
-const ensureTestsPass = () => {
-  run('yarn vitest run')
+const ensureTestsPass = async () => {
+  console.log('🧪 Running test validation: yarn vitest run')
+  try {
+    await consoleMonitor('yarn vitest run', { label: 'Test validation' })
+  } catch {
+    throw new Error(
+      'Test validation failed. Review failing test output above, fix the failures, and rerun release processing.'
+    )
+  }
 }
 
 const getVersionInfo = async () => {
@@ -72,7 +108,7 @@ const main = async () => {
   ensureMainBranch()
   ensureCleanWorkingTree()
   ensureLintPasses()
-  ensureTestsPass()
+  await ensureTestsPass()
 
   run('node scripts/generate-version.js')
 
