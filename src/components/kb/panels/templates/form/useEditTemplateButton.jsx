@@ -16,6 +16,7 @@ import {
   duplicateTemplateAlert,
   isDuplicateTemplate,
   discardEditsAlert,
+  confirmTemplateSaveAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 import CONFIG from '@/text'
@@ -39,12 +40,14 @@ const useEditTemplateButton = () => {
         const updatedData = processEditTemplateData(template, original)
 
         if (!updatedData) {
+          updateModalData({ confirmCommit: false })
           closeModal()
           return
         }
 
         // Duplicate check (exclude the original template by id)
         if (isDuplicateTemplate(allTemplates, template, original.id)) {
+          updateModalData({ confirmCommit: false })
           throw createValidationError('Template already exists', {
             templateId: template?.id,
             duplicateToConcept: template?.toConcept,
@@ -81,7 +84,7 @@ const useEditTemplateButton = () => {
       const ActionView = () => {
         const { modalData } = useTemplatesModalDataContext()
 
-        if (modalData?.confirmDiscard) {
+        if (modalData.confirmDiscard) {
           const colors = ['cancel', 'main']
           const disabled = [false, false]
           const labels = [CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD, CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CONTINUE]
@@ -95,18 +98,37 @@ const useEditTemplateButton = () => {
           return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
         }
 
+        if (modalData.confirmCommit) {
+          const colors = ['cancel', 'primary']
+          const disabled = [false, false]
+          const labels = [CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CANCEL, CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.SAVE]
+          const onAction = label => {
+            if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CANCEL) {
+              updateModalData({ confirmCommit: false, alert: null, confirmDiscard: false })
+              closeModal(false)
+            } else {
+              handleCommit(modalData.template, modalData.original)
+            }
+          }
+          return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+        }
+
         const actions = createModalActions(handleCancel, handleCommit, updateModalData)(modalData)
         if (!Array.isArray(actions)) return null
 
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)
         const labels = actions.map((a, i) =>
-          i === 0 && modalData?.hasChanges ? CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD : a.label
+          i === 0 && modalData.hasChanges ? CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD : a.label
         )
 
         const onAction = label => {
           if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD) {
             updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
+            return
+          }
+          if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.SAVE) {
+            updateModalData({ confirmCommit: true, alert: confirmTemplateSaveAlert() })
             return
           }
           const a = actions.find(x => x.label === label)
@@ -128,6 +150,7 @@ const useEditTemplateButton = () => {
         titleComponent: TemplateTitle,
         data: {
           confirmDiscard: false,
+          confirmCommit: false,
           hasChanges: false,
           isValid: true,
           original: templateToEdit,

@@ -1,7 +1,7 @@
 import { Box, Stack, TextField } from '@mui/material'
 import ToConceptSelect from '@/components/common/concept/ToConceptSelect'
 import ModalActionText from '@/components/common/ModalActionText'
-import DiscardingAlert from '@/components/modal/actions/DiscardingAlert'
+import ActionsAlert from '@/components/modal/actions/ActionsAlert'
 
 import CONFIG from '@/text'
 import useTemplateForm from '@/components/kb/panels/templates/form/useTemplateForm'
@@ -46,7 +46,7 @@ const TemplateForm = ({ alert = null, isEdit = false, onChange, original, templa
           value={template.linkValue}
         />
       <Box sx={{ alignItems: 'center', display: 'flex', height: 60, justifyContent: 'center', pt: alert ? 0.5 : 0 }}>
-        {alert ? <DiscardingAlert /> : null}
+        {alert ? <ActionsAlert lines={alert.lines} severity={alert.severity || 'info'} /> : null}
       </Box>
     </Stack>
   )

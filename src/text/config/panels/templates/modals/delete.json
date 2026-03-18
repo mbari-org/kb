@@ -4,7 +4,27 @@
     "WARNING": [
       "This template will be permanently deleted.",
       "This action cannot be undone."
+    ],
+    "CONFIRM_WARNING": [
+      "Deleting this template is final.",
+      "Please confirm you want to permanently delete it."
     ]
+  },
+  "ALERT": {
+    "WARNING": {
+      "LINES": [
+        "This template will be permanently deleted.",
+        "This action cannot be undone."
+      ],
+      "SEVERITY": "warning"
+    },
+    "CONFIRM_WARNING": {
+      "LINES": [
+        "Deleting this template is final.",
+        "Please confirm you want to permanently delete it."
+      ],
+      "SEVERITY": "error"
+    }
   },
   "FIELDS": {
     "LINK_NAME": "Link name",

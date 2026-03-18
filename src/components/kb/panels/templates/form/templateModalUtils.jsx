@@ -7,7 +7,8 @@ import { diff, filterObject, pick } from '@/lib/utils'
 
 import CONFIG from '@/text'
 
-const { CANCEL, DELETE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
+const { BUTTON } = CONFIG.PANELS.TEMPLATES.MODALS
+const { ADD, EDIT, DELETE: DELETE_MODAL } = CONFIG.PANELS.TEMPLATES.MODALS
 
 const TEMPLATE_FIELDS = ['concept', 'linkName', 'toConcept', 'linkValue']
 
@@ -18,17 +19,17 @@ export const createTemplateValidator = () => templateData =>
 
 const createChangeDetector =
   (isEdit = false) =>
-    (templateData, original = null) => {
-      if (!isEdit) {
-        return TEMPLATE_FIELDS.some(field => hasInput(templateData, field))
-      }
-
-      if (!original) {
-        return true
-      }
-
-      return TEMPLATE_FIELDS.some(field => templateData[field] !== original[field])
+  (templateData, original = null) => {
+    if (!isEdit) {
+      return TEMPLATE_FIELDS.some(field => hasInput(templateData, field))
     }
+
+    if (!original) {
+      return true
+    }
+
+    return TEMPLATE_FIELDS.some(field => templateData[field] !== original[field])
+  }
 
 const createFormChangeHandler = (updateModalData, isEdit = false) => {
   const validateTemplate = createTemplateValidator(isEdit)
@@ -46,51 +47,50 @@ const createFormChangeHandler = (updateModalData, isEdit = false) => {
       template,
       isValid,
       hasChanges,
+      confirmCommit: false,
       alert: null,
     })
   }
 }
 
 export const createModalActions =
-  (handleCancel, handleCommit, updateModalData, saveLabel = SAVE) =>
-    currentModalData => {
-      const { confirmDiscard = false, hasChanges = false } = currentModalData || {}
+  (handleCancel, handleCommit, updateModalData, saveLabel = BUTTON.SAVE) =>
+  currentModalData => {
+    const { confirmDiscard = false, hasChanges = false } = currentModalData || {}
 
-      if (confirmDiscard) {
-        return [
-          {
-            color: 'cancel',
-            disabled: false,
-            label: DISCARD,
-            onClick: handleCancel,
-          },
-          {
-            color: 'main',
-            disabled: false,
-            label: CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CONTINUE,
-            onClick: () => updateModalData({ confirmDiscard: false, alert: null }),
-          },
-        ]
-      }
-
+    if (confirmDiscard) {
       return [
         {
           color: 'cancel',
           disabled: false,
-          label: CANCEL,
-          onClick: () =>
-            hasChanges
-              ? updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
-              : handleCancel(),
+          label: BUTTON.DISCARD,
+          onClick: handleCancel,
         },
         {
-          color: 'primary',
-          disabled: !currentModalData.isValid || !currentModalData.hasChanges,
-          label: saveLabel,
-          onClick: () => handleCommit(currentModalData.template, currentModalData.original),
+          color: 'main',
+          disabled: false,
+          label: BUTTON.CONTINUE,
+          onClick: () => updateModalData({ confirmDiscard: false, alert: null }),
         },
       ]
     }
+
+    return [
+      {
+        color: 'cancel',
+        disabled: false,
+        label: BUTTON.CANCEL,
+        onClick: () =>
+          hasChanges ? updateModalData({ confirmDiscard: true, alert: discardEditsAlert() }) : handleCancel(),
+      },
+      {
+        color: 'primary',
+        disabled: !currentModalData.isValid || !currentModalData.hasChanges,
+        label: saveLabel,
+        onClick: () => handleCommit(currentModalData.template, currentModalData.original),
+      },
+    ]
+  }
 
 export const createModalContent = (handleFormChange, isEdit) => {
   const formKey = isEdit ? 'edit-template-form' : 'add-template-form'
@@ -135,29 +135,55 @@ export const createHandlers = (updateModalData, closeModal, isEdit) => {
   return { handleCancel, handleFormChange }
 }
 
-export const createDeleteTemplateActions =
-  (handleCancel, handleDeleteConfirm) => currentModalData => {
+export const createDeleteTemplateActions = (handleCancel, handleDeleteConfirm) => currentModalData => {
+  if (currentModalData.confirmDelete) {
     return [
       {
         color: 'main',
         disabled: false,
-        label: CANCEL,
+        label: BUTTON.CANCEL,
         onClick: handleCancel,
       },
       {
         color: 'cancel',
         disabled: false,
-        label: DELETE,
+        label: BUTTON.DELETE,
         onClick: () => handleDeleteConfirm(currentModalData.template),
       },
     ]
   }
+  return [
+    {
+      color: 'main',
+      disabled: false,
+      label: BUTTON.CANCEL,
+      onClick: handleCancel,
+    },
+    {
+      color: 'cancel',
+      disabled: false,
+      label: BUTTON.DELETE,
+      onClick: () => handleDeleteConfirm(currentModalData.template),
+    },
+  ]
+}
 
 export const createDeleteTemplateContent = () => {
+  const getSeverityColor = severity => {
+    if (severity === 'error') return 'error.main'
+    else if (severity === 'success') return 'success.main'
+    else if (severity === 'info') return 'info.main'
+    return 'warning.main'
+  }
   const DeleteTemplateContent = currentModalData => {
     const { template } = currentModalData
-    const { CONTENT, FIELDS } = CONFIG.PANELS.TEMPLATES.MODALS.DELETE
-    const warningLines = CONTENT.WARNING ?? []
+    const { ALERT, CONTENT, FIELDS } = DELETE_MODAL
+    const warningLines = ALERT.WARNING.LINES
+    const confirmLines = ALERT.CONFIRM_WARNING.LINES
+    const showConfirmWarning = Boolean(currentModalData.confirmDelete)
+    const linesToShow = showConfirmWarning ? confirmLines : warningLines
+    const warningSeverity = showConfirmWarning ? ALERT.CONFIRM_WARNING.SEVERITY : ALERT.WARNING.SEVERITY
+    const warningColor = getSeverityColor(warningSeverity)
 
     const fields = [
       { label: FIELDS.LINK_NAME, value: template.linkName },
@@ -179,8 +205,8 @@ export const createDeleteTemplateContent = () => {
           ))}
         </Stack>
         <Stack sx={{ textAlign: 'center' }}>
-          {warningLines.map((line, index) => (
-            <Typography key={`${line}-${index}`} variant='body1' color='cancel'>
+          {linesToShow.map((line, index) => (
+            <Typography key={`${line}-${index}`} variant='body1' color={warningColor}>
               {line}
             </Typography>
           ))}
@@ -202,9 +228,18 @@ export const createTemplateOnClose = updateModalData => data => {
 }
 
 export const discardEditsAlert = () => ({
-  line1: 'Discarding edits is final.',
-  line2: 'Please confirm you want to discard the indicated edits.',
-  severity: 'warning',
+  lines: ADD.ALERT.DISCARD.LINES,
+  severity: ADD.ALERT.DISCARD.SEVERITY,
+})
+
+export const confirmTemplateSaveAlert = () => ({
+  lines: ADD.ALERT.SAVE_CONFIRM.LINES,
+  severity: ADD.ALERT.SAVE_CONFIRM.SEVERITY,
+})
+
+export const confirmTemplateDeleteAlert = () => ({
+  lines: DELETE_MODAL.CONTENT.CONFIRM_WARNING,
+  severity: DELETE_MODAL.ALERT.CONFIRM_WARNING.SEVERITY,
 })
 
 export const isDuplicateTemplate = (templates, template, excludeId = null) => {
@@ -220,7 +255,6 @@ export const isDuplicateTemplate = (templates, template, excludeId = null) => {
 }
 
 export const duplicateTemplateAlert = () => ({
-  line1: 'A template with these values already exists for this concept.',
-  line2: 'Please modify the values to create a unique template.',
-  severity: 'error',
+  lines: EDIT.ALERT.DUPLICATE.LINES,
+  severity: EDIT.ALERT.DUPLICATE.SEVERITY,
 })

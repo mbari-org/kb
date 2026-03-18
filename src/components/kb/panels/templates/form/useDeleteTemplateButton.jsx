@@ -10,6 +10,7 @@ import { createError } from '@/lib/errors'
 import {
   createDeleteTemplateActions,
   createDeleteTemplateContent,
+  confirmTemplateDeleteAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 import CONFIG from '@/text'
@@ -19,12 +20,12 @@ const { PROCESSING } = CONFIG
 const useDeleteTemplateButton = () => {
   const { showBoundary } = useErrorBoundary()
   const { deleteTemplate } = use(TemplatesContext)
-
-  const { closeModal, createModal, withProcessing } = useTemplatesModalOperationsContext()
+  const { closeModal, createModal, updateModalData, withProcessing } = useTemplatesModalOperationsContext()
 
   const handleCancel = useCallback(() => {
+    updateModalData({ confirmDelete: false, alert: null })
     closeModal()
-  }, [closeModal])
+  }, [closeModal, updateModalData])
 
   const handleDeleteConfirm = useCallback(
     async template => {
@@ -46,6 +47,7 @@ const useDeleteTemplateButton = () => {
     [closeModal, deleteTemplate, showBoundary, withProcessing]
   )
 
+
   return useCallback(
     template => {
       const ActionView = () => {
@@ -58,6 +60,10 @@ const useDeleteTemplateButton = () => {
         const labels = actions.map(a => a.label)
 
         const onAction = label => {
+          if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DELETE && !modalData.confirmDelete) {
+            updateModalData({ confirmDelete: true, alert: confirmTemplateDeleteAlert() })
+            return
+          }
           const a = actions.find(x => x.label === label)
           if (a && a.onClick) a.onClick()
         }
@@ -75,12 +81,14 @@ const useDeleteTemplateButton = () => {
         actionsComponent: ActionView,
         contentComponent: ContentView,
         data: {
+          alert: null,
+          confirmDelete: false,
           template,
         },
         titleComponent: TemplateTitle,
       })
     },
-    [createModal, handleCancel, handleDeleteConfirm]
+    [createModal, handleCancel, handleDeleteConfirm, updateModalData]
   )
 }
 

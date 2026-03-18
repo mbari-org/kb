@@ -1,5 +1,28 @@
 {
   "CONTENT": {
     "HEADER": "Add template"
+  },
+  "ALERT": {
+    "DISCARD": {
+      "LINES": [
+        "Discarding edits is final.",
+        "Please confirm you want to discard the indicated edits."
+      ],
+      "SEVERITY": "warning"
+    },
+    "DUPLICATE": {
+      "LINES": [
+        "A template with these values already exists for this concept.",
+        "Please modify the values to create a unique template."
+      ],
+      "SEVERITY": "error"
+    },
+    "SAVE_CONFIRM": {
+      "LINES": [
+        "You are about to save template changes.",
+        "Please confirm you want to continue."
+      ],
+      "SEVERITY": "success"
+    }
   }
 }
