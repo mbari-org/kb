@@ -24,7 +24,9 @@ import UserContext from '@/contexts/user/UserContext'
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import { initialConceptState } from '@/lib/concept/state/state'
+import { filterRanks as filterTaxonomyRanks } from '@/lib/model/rank'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { ROLES } from '@/lib/constants/roles.js'
 
 const BASE_URL = 'http://localhost:8123'
 
@@ -50,7 +52,10 @@ const ConceptModalRenderer = () => {
   return modal ? <ConceptModal /> : null
 }
 
-const createConceptWithState = (name, { aliases = [], media = [], realizations = [], references = [] } = {}) => ({
+const createConceptWithState = (
+  name,
+  { aliases = [], media = [], realizations = [], references = [], rankLevel = '', rankName = '' } = {}
+) => ({
   name,
   parent: 'root',
   children: [],
@@ -60,6 +65,8 @@ const createConceptWithState = (name, { aliases = [], media = [], realizations =
   realizations,
   references,
   templates: [],
+  rankLevel,
+  rankName,
 })
 
 export const createMediaItem = ({ url, credit = 'Test Credit', caption = '', isPrimary = false, id = null }) => ({
@@ -84,16 +91,24 @@ const rootConcept = {
 
 const objectConcept = createConceptWithState('object')
 
-const createDingoConcept = ({ aliases = [], media = [], realizations = [], references = [] } = {}) =>
-  createConceptWithState('dingo', { aliases, media, realizations, references })
+const createDingoConcept = ({
+  aliases = [],
+  media = [],
+  realizations = [],
+  references = [],
+  rankLevel = '',
+  rankName = '',
+} = {}) =>
+  createConceptWithState('dingo', { aliases, media, realizations, references, rankLevel, rankName })
 
-export const createMockTaxonomy = conceptMap => {
+export const createMockTaxonomy = (conceptMap, ranks = []) => {
   const names = Object.keys(conceptMap)
   return {
     rootName: 'root',
     names,
     conceptMap,
     aliasMap: {},
+    ranks,
   }
 }
 
@@ -106,7 +121,7 @@ export const createMockTaxonomyValue = (taxonomy, getConcept) => ({
   loadConcept: vi.fn(name => Promise.resolve(getConcept(name))),
   getRootName: vi.fn(() => 'root'),
   isRoot: (tax, concept) => concept?.name === tax?.rootName,
-  filterRanks: () => [],
+  filterRanks: (field, otherValue) => filterTaxonomyRanks(taxonomy.ranks || [], field, otherValue),
   taxonomy,
 })
 
@@ -124,21 +139,28 @@ const mergeSettings = (current, update) => {
     return current
   }
 
-  return Object.keys(update).reduce((acc, key) => {
-    const currentValue = acc[key]
-    const updateValue = update[key]
+  return Object.keys(update).reduce(
+    (acc, key) => {
+      const currentValue = acc[key]
+      const updateValue = update[key]
 
-    const canMerge =
-      currentValue && typeof currentValue === 'object' && !Array.isArray(currentValue) &&
-      updateValue && typeof updateValue === 'object' && !Array.isArray(updateValue)
+      const canMerge =
+        currentValue &&
+        typeof currentValue === 'object' &&
+        !Array.isArray(currentValue) &&
+        updateValue &&
+        typeof updateValue === 'object' &&
+        !Array.isArray(updateValue)
 
-    if (canMerge) {
-      acc[key] = mergeSettings(currentValue, updateValue)
-    } else {
-      acc[key] = updateValue
-    }
-    return acc
-  }, { ...current })
+      if (canMerge) {
+        acc[key] = mergeSettings(currentValue, updateValue)
+      } else {
+        acc[key] = updateValue
+      }
+      return acc
+    },
+    { ...current }
+  )
 }
 
 export const ConceptPanelTestWrapper = ({
@@ -148,7 +170,11 @@ export const ConceptPanelTestWrapper = ({
   initialRealizations = [],
   initialReferences = [],
   initialTemplates = [],
+  initialRank = { level: '', name: '' },
+  taxonomyRanks = [],
+  isPhylogenyRoot = false,
   initialSelectedSettings = {},
+  userRole = ROLES.ADMIN,
   hasUnsavedChanges = false,
   onSetGuardedAction,
   onUpdateSelected,
@@ -159,6 +185,8 @@ export const ConceptPanelTestWrapper = ({
     media: initialMedia,
     realizations: initialRealizations,
     references: initialReferences,
+    rankLevel: initialRank.level || '',
+    rankName: initialRank.name || '',
   })
 
   const conceptMap = {
@@ -168,7 +196,7 @@ export const ConceptPanelTestWrapper = ({
   }
 
   const mockGetConcept = vi.fn(name => conceptMap[name] || null)
-  const mockTaxonomy = createMockTaxonomy(conceptMap)
+  const mockTaxonomy = createMockTaxonomy(conceptMap, taxonomyRanks)
   const mockTaxonomyValue = createMockTaxonomyValue(mockTaxonomy, mockGetConcept)
 
   const [concept, setConcept] = useState(dingoConcept)
@@ -234,7 +262,6 @@ export const ConceptPanelTestWrapper = ({
     },
     [mockGetConcept, onUpdateSelected]
   )
-
 
   const mockGetSettings = useCallback(
     (key, subKey) => {
@@ -302,7 +329,7 @@ export const ConceptPanelTestWrapper = ({
   }
 
   const mockUserValue = {
-    user: { role: 'Admin' },
+    user: { role: userRole },
     hasUnsavedChanges,
     setGuardedAction: onSetGuardedAction || vi.fn(),
     getPreferences: vi.fn(() => Promise.resolve({})),
@@ -331,6 +358,7 @@ export const ConceptPanelTestWrapper = ({
                               stagedState,
                               initialState,
                               isMarineOrganism: false,
+                              isPhylogenyRoot,
                               isEditing,
                               setEditing,
                               modifyConcept,
