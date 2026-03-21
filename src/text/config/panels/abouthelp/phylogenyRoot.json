@@ -1,0 +1,11 @@
+{
+  "ALERT": {
+    "SAVE_CONFIRM": {
+      "LINES": [
+        "You are about to change the phylogeny root.",
+        "Please confirm you want to continue."
+      ],
+      "SEVERITY": "success"
+    }
+  }
+}
