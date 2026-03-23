@@ -23,8 +23,8 @@ const apiSend = async (url, params) => {
     return { error: apiError }
   } catch (error) {
     const apiError = createApiError(
-      ERROR_TEXT.TITLES.NETWORK,
-      error.message || ERROR_TEXT.MESSAGES.REQUEST_FAILED,
+      ERROR_TEXT.API.NETWORK,
+      error.message || ERROR_TEXT.API.REQUEST_FAILED,
       url,
       params,
       error

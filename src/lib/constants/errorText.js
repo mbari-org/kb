@@ -1,4 +1,10 @@
 export const ERROR_TEXT = {
+  API: {
+    FAILED_FETCH: 'Failed to fetch',
+    NETWORK: 'Network Error',
+    REQUEST_FAILED: 'API request failed',
+    TITLE: 'API Error',
+  },
   HTTP: {
     400: 'Bad Request',
     401: 'Unauthorized',
@@ -9,14 +15,6 @@ export const ERROR_TEXT = {
   },
   TITLES: {
     CONCEPT_LOADING: 'Concept Loading Error',
-    NETWORK: 'Network Error',
     VALIDATION: 'Validation Error',
-    API: {
-      TITLE: 'API Error',
-      REQUEST_FAILED: 'API request failed',
-    },
-  },
-  MESSAGES: {
-    REQUEST_FAILED: 'Failed to complete request',
   },
 }

@@ -62,7 +62,7 @@ const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
       const RETRIES = 2
       const isNetworkError = err => {
         if (!err) return false
-        if (err.title === ERROR_TEXT.TITLES.NETWORK) return true
+        if (err.title === ERROR_TEXT.API.NETWORK) return true
         if (err.message === 'Failed to fetch') return true
         if (err.original && err.original.name === 'TypeError') return true
         return false

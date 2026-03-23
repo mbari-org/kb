@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
+import { checkConcept } from '@/lib/api/concept'
 import { createError } from '@/lib/errors'
 import { isEmpty } from '@/lib/utils'
 
@@ -13,32 +14,74 @@ const CLEAN_FLAGS = {
   [KEY.SETTINGS]: false,
 }
 
+const normalizeConceptPreferences = async (value, config) => {
+  const normalized = normalizeHistoryPreferences(value)
+  if (normalized.state.length === 0) {
+    return normalized
+  }
+
+  const checks = await Promise.all(
+    [...new Set(normalized.state)].map(async conceptName => ({
+      conceptName,
+      exists: await checkConcept(config, conceptName),
+    }))
+  )
+
+  const conceptExists = checks.reduce((acc, result) => {
+    acc[result.conceptName] = result.exists
+    return acc
+  }, {})
+
+  const validState = []
+  let removedBeforeOrAtPosition = 0
+  normalized.state.forEach((conceptName, index) => {
+    if (conceptExists[conceptName]) {
+      validState.push(conceptName)
+    } else if (index <= normalized.position) {
+      removedBeforeOrAtPosition += 1
+    }
+  })
+
+  return normalizeHistoryPreferences({
+    ...normalized,
+    state: validState,
+    position: normalized.position - removedBeforeOrAtPosition,
+  })
+}
+
 const normalizeHistoryPreferences = value => {
-  const state = Array.isArray(value?.state) ? value.state : []
-  const rawPosition = Number.isInteger(value?.position) ? value.position : -1
+  const state = value?.state || []
+  const rawPosition = value?.position ?? -1
 
   if (state.length === 0) {
     return { state, position: -1 }
-  } else if (rawPosition < 0) {
-    return { state, position: 0 }
-  } else if (rawPosition >= state.length) {
-    return { state, position: state.length - 1 }
-  } else {
-    return { state, position: rawPosition }
   }
+
+  if (rawPosition < 0) {
+    return { state, position: 0 }
+  }
+
+  if (rawPosition >= state.length) {
+    return { state, position: state.length - 1 }
+  }
+
+  return { state, position: rawPosition }
 }
 
 const isSameHistoryPreferences = (left, right) => {
   if (left.position !== right.position) {
     return false
-  } else if (left.state.length !== right.state.length) {
-    return false
-  } else {
-    return left.state.every((name, index) => name === right.state[index])
   }
+
+  if (left.state.length !== right.state.length) {
+    return false
+  }
+
+  return left.state.every((name, index) => name === right.state[index])
 }
 
 const useInitPrefs = ({
+  config,
   conceptSelection,
   createPreferences,
   getPreferences,
@@ -95,7 +138,7 @@ const useInitPrefs = ({
         )
         setServerPreferencesExist(true)
       } else {
-        const normalizedConcepts = normalizeHistoryPreferences(allPrefs.concepts)
+        const normalizedConcepts = await normalizeConceptPreferences(allPrefs.concepts, config)
         const normalizedPanels = normalizeHistoryPreferences(allPrefs.panels)
 
         conceptSelection.init(normalizedConcepts)
@@ -121,6 +164,7 @@ const useInitPrefs = ({
 
     initializePreferences()
   }, [
+    config,
     conceptSelection,
     createPreferences,
     getPreferences,

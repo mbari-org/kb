@@ -16,7 +16,7 @@ import { PREFS } from '@/lib/constants/prefs.js'
 const { KEY } = PREFS.USER
 
 const PreferencesProvider = ({ children }) => {
-  const { createPreferences, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)
+  const { createPreferences, config, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)
 
   const [currentConcept, setCurrentConcept] = useState(null)
   const [currentPanel, setCurrentPanel] = useState(null)
@@ -67,6 +67,7 @@ const PreferencesProvider = ({ children }) => {
   }, [getSettingsRef])
 
   const { CLEAN_FLAGS, prefsValue } = useInitPrefs({
+    config,
     conceptSelection,
     createPreferences,
     getPreferences,
