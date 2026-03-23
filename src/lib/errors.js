@@ -1,4 +1,4 @@
-import { COMMON } from '@/text'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 
 export const createError = (title, message, details = {}, original = null) => ({
   title,
@@ -18,27 +18,22 @@ export const createApiError = (title, message, url, params, original = null) => 
 }
 
 const HTTP_STATUS_TITLES = {
-  400: COMMON.ERRORS.HTTP['400'],
-  401: COMMON.ERRORS.HTTP['401'],
-  403: COMMON.ERRORS.HTTP['403'],
-  404: COMMON.ERRORS.HTTP['404'],
-  500: COMMON.ERRORS.HTTP['500'],
+  400: ERROR_TEXT.HTTP['400'],
+  401: ERROR_TEXT.HTTP['401'],
+  403: ERROR_TEXT.HTTP['403'],
+  404: ERROR_TEXT.HTTP['404'],
+  500: ERROR_TEXT.HTTP['500'],
 }
 
 export const createConceptError = (conceptName, message, original = null) =>
-  createError(
-    COMMON.ERRORS.TITLES.CONCEPT_LOADING,
-    message,
-    { conceptName },
-    original
-  )
+  createError(ERROR_TEXT.TITLES.CONCEPT_LOADING, message, { conceptName }, original)
 
 export const createValidationError = (message, details = {}) =>
-  createError(COMMON.ERRORS.TITLES.VALIDATION, message, details)
+  createError(ERROR_TEXT.TITLES.VALIDATION, message, details)
 
 export const getHttpErrorTitle = status => {
   if (HTTP_STATUS_TITLES[status]) {
     return HTTP_STATUS_TITLES[status]
   }
-  return COMMON.ERRORS.HTTP.UNKNOWN
+  return ERROR_TEXT.HTTP.UNKNOWN
 }

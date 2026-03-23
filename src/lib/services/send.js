@@ -1,3 +1,4 @@
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 import { createApiError, getHttpErrorTitle } from '@/lib/errors'
 
 const apiSend = async (url, params) => {
@@ -20,11 +21,10 @@ const apiSend = async (url, params) => {
     const title = getHttpErrorTitle(response.status)
     const apiError = createApiError(title, errorMessage, url, params)
     return { error: apiError }
-
   } catch (error) {
     const apiError = createApiError(
-      'Network Error',
-      error.message || 'Failed to complete request',
+      ERROR_TEXT.TITLES.NETWORK,
+      error.message || ERROR_TEXT.MESSAGES.REQUEST_FAILED,
       url,
       params,
       error

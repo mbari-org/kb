@@ -9,6 +9,7 @@ import { getDescendantNames } from '@/lib/model/concept'
 import { sleep } from '@/lib/utils'
 
 import { CONCEPT } from '@/lib/constants'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
@@ -19,11 +20,7 @@ const { HISTORY } = SETTINGS
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
-const useLoadData = ({
-  apiFns,
-  conceptHistoryExtent,
-  pendingHistory,
-}) => {
+const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
   const { getSelected, getSettings } = use(SelectedContext)
   const { getConcept } = use(TaxonomyContext)
 
@@ -65,7 +62,7 @@ const useLoadData = ({
       const RETRIES = 2
       const isNetworkError = err => {
         if (!err) return false
-        if (err.title === 'Network Error') return true
+        if (err.title === ERROR_TEXT.TITLES.NETWORK) return true
         if (err.message === 'Failed to fetch') return true
         if (err.original && err.original.name === 'TypeError') return true
         return false
