@@ -55,6 +55,7 @@
     "guard:test-drift": "bash scripts/check-test-drift.sh",
     "preview": "vite preview",
     "version:generate": "node scripts/generate-version.js",
-    "release:version": "node scripts/release-version.js"
+    "release:version": "node scripts/release-version.js",
+    "release:check": "node scripts/release-version.js --check"
   }
 }

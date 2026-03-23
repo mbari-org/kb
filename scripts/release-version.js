@@ -56,8 +56,15 @@ const ensureMainBranch = () => {
   }
 }
 
-const ensureLintPasses = () => {
-  run('yarn', ['lint'])
+const ensureLintPasses = async () => {
+  const lintCommand = 'yarn'
+  const lintArgs = ['lint']
+  console.log(`🧹 Running lint validation: ${lintCommand} ${lintArgs.join(' ')}`)
+  try {
+    await consoleMonitor(lintCommand, lintArgs, { label: 'Lint validation', intervalMs: 10000 })
+  } catch {
+    throw new Error('Lint failed.')
+  }
 }
 
 const ensureTestsPass = async () => {
@@ -108,10 +115,16 @@ const commitAndTag = version => {
 }
 
 const main = async () => {
+  const isCheckOnly = process.argv.includes('--check')
   ensureMainBranch()
   ensureCleanWorkingTree()
-  ensureLintPasses()
+  await ensureLintPasses()
   await ensureTestsPass()
+
+  if (isCheckOnly) {
+    console.log('✅ Release pre-checks passed.')
+    return
+  }
 
   run('node', ['scripts/generate-version.js'])
 

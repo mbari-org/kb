@@ -43,7 +43,7 @@ vi.mock('react-error-boundary', () => ({
 
 const AddButtonHarness = () => {
   const AddTemplateButton = useAddTemplateButton()
-  return <AddTemplateButton />
+  return AddTemplateButton()
 }
 
 const DeleteButtonHarness = ({ template }) => {

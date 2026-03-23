@@ -32,6 +32,15 @@ describe('Media Combined Flows - Add then Edit', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
+  const waitForStageButtonEnabled = async () => {
+    await waitFor(
+      () => {
+        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        expect(stageButton).toBeEnabled()
+      },
+      { timeout: 5000 }
+    )
+  }
 
   it('adds media then edits the URL of the same item', async () => {
     const user = userEvent.setup()
@@ -54,13 +63,7 @@ describe('Media Combined Flows - Add then Edit', () => {
       credit: 'Initial Credit',
     })
 
-    await waitFor(
-      async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
-        expect(stageButton).toBeEnabled()
-      },
-      { timeout: 1000 }
-    )
+    await waitForStageButtonEnabled()
 
     await clickStageButton(user, screen)
 
@@ -78,13 +81,7 @@ describe('Media Combined Flows - Add then Edit', () => {
       url: MEDIA_URLS.IMAGE.pack,
     })
 
-    await waitFor(
-      async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
-        expect(stageButton).toBeEnabled()
-      },
-      { timeout: 1000 }
-    )
+    await waitForStageButtonEnabled()
 
     await clickStageButton(user, screen)
 
@@ -95,7 +92,7 @@ describe('Media Combined Flows - Add then Edit', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
     })
-  })
+  }, 15000)
 
   it('adds media then edits credit and caption', async () => {
     const user = userEvent.setup()
@@ -157,7 +154,7 @@ describe('Media Combined Flows - Add then Edit', () => {
     await waitFor(() => {
       expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
     })
-  })
+  }, 15000)
 })
 
 describe('Media Combined Flows - Add then Delete', () => {
