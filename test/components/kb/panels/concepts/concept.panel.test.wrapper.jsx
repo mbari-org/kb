@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { vi } from 'vitest'
 import { use, useState, useCallback, useReducer, useEffect, useMemo } from 'react'
 

@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import Concepts from '@/components/kb/panels/Concepts'
 import { GUARDED_ACTION } from '@/lib/constants/guardedAction'
 
-import { ConceptPanelTestWrapper } from '../ConceptPanelTestWrapper'
+import { ConceptPanelTestWrapper } from '../concept.panel.test.wrapper'
 
 const clickReferencesInspect = async user => {
   await waitFor(() => {

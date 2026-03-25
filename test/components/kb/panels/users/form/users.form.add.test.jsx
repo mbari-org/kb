@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 
 import { ROLES } from '@/lib/constants/roles.js'
 import UsersContext from '@/contexts/panels/users/UsersContext'
-import { UsersPanelTestWrapper } from '../UsersPanelTestWrapper'
+import { UsersPanelTestWrapper } from '../users.panel.test.wrapper'
 
 // Mock the form modal
 vi.mock('@/components/kb/panels/users/form/UserForm', () => ({

@@ -12,7 +12,7 @@ import {
   clickStageButton,
   clickDiscardAllButton,
   confirmDiscard,
-} from '../ConceptPanelTestWrapper'
+} from '../concept.panel.test.wrapper'
 
 const cloneAliases = aliases => aliases.map(item => ({ ...item }))
 

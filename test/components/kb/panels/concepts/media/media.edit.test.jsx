@@ -14,7 +14,7 @@ import {
   togglePrimaryCheckbox,
   clickStageButton,
   clickDiscardButton,
-} from '../ConceptPanelTestWrapper'
+} from '../concept.panel.test.wrapper'
 
 vi.mock('@/lib/model/media', async importOriginal => {
   const original = await importOriginal()

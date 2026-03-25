@@ -5,7 +5,7 @@ import { useState } from 'react'
 import UsersTableData from '@/components/kb/panels/users/table/data/UsersTableData'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
-import { UsersPanelTestWrapper, mockUsers } from '../UsersPanelTestWrapper'
+import { UsersPanelTestWrapper, mockUsers } from '../users.panel.test.wrapper'
 
 // Mock pagination component
 vi.mock('@/components/kb/panels/users/table/data/UsersPagination', () => ({

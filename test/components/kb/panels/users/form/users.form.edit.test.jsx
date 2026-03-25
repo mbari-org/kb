@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 import { ROLES } from '@/lib/constants/roles.js'
 import UsersContext from '@/contexts/panels/users/UsersContext'
-import { UsersPanelTestWrapper, mockUsers } from '../UsersPanelTestWrapper'
+import { UsersPanelTestWrapper, mockUsers } from '../users.panel.test.wrapper'
 
 // Mock the edit form modal
 vi.mock('@/contexts/panels/users/modal', () => ({
