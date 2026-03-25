@@ -5,7 +5,7 @@ import Users from '@/components/kb/panels/Users'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import { UsersModalProvider } from '@/contexts/panels/users/modal'
 
-import { UsersPanelTestWrapper, mockUsers } from './UsersPanelTestWrapper'
+import { UsersPanelTestWrapper, mockUsers } from './users.panel.test.wrapper'
 
 // Mock the modal context
 vi.mock('@/contexts/panels/users/modal', () => ({

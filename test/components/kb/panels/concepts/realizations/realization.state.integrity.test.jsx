@@ -12,7 +12,7 @@ import {
   clickStageButton,
   clickDiscardAllButton,
   confirmDiscard,
-} from '../ConceptPanelTestWrapper'
+} from '../concept.panel.test.wrapper'
 
 const cloneRealizations = realizations => realizations.map(item => ({ ...item }))
 

@@ -9,7 +9,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 
-import { ConceptPanelTestWrapper } from './ConceptPanelTestWrapper'
+import { ConceptPanelTestWrapper } from './concept.panel.test.wrapper'
 
 describe('Concept path behavior', () => {
   it('updates the path when a concept is selected from ConceptSelect', async () => {

@@ -11,7 +11,7 @@ import {
   enterEditMode,
   clickDiscardAllButton,
   confirmDiscard,
-} from '../ConceptPanelTestWrapper'
+} from '../concept.panel.test.wrapper'
 
 const selectRankOption = async (user, label, option) => {
   const select = screen.getByRole('combobox', { name: label })

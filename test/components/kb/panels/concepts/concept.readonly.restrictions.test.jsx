@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react'
 import Concepts from '@/components/kb/panels/Concepts'
 import { ROLES } from '@/lib/constants/roles.js'
 
-import { ConceptPanelTestWrapper } from './ConceptPanelTestWrapper'
+import { ConceptPanelTestWrapper } from './concept.panel.test.wrapper'
 
 describe('Concepts panel READ_ONLY restrictions', () => {
   it('does not show the Edit button for READ_ONLY users', () => {
