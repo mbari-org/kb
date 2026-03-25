@@ -36,6 +36,16 @@ describe('HistoryHeaderRight', () => {
     expect(screen.getByRole('button', { name: SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT })).toBeInTheDocument()
   })
 
+  it('marks approved toggle as selected when approved is the current history type', () => {
+    renderHeaderRight({
+      selectedType: SELECTED.SETTINGS.HISTORY.TYPES.APPROVED,
+    })
+
+    expect(
+      screen.getByRole('button', { name: SELECTED.SETTINGS.HISTORY.TYPES.APPROVED })
+    ).toHaveAttribute('aria-pressed', 'true')
+  })
+
   it('updates selected history type when a different toggle button is chosen', async () => {
     const user = userEvent.setup()
     const { updateSettings } = renderHeaderRight({
