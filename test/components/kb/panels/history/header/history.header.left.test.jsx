@@ -56,6 +56,12 @@ describe('HistoryHeaderLeft', () => {
     expect(capturedConceptSelectProps).toBeNull()
   })
 
+  it('does not render ConceptSelect when selected history type is approved', () => {
+    renderHeader({ selectedType: SELECTED.SETTINGS.HISTORY.TYPES.APPROVED })
+
+    expect(capturedConceptSelectProps).toBeNull()
+  })
+
   it('configures ConceptSelect to keep clear disabled and skip automatic context updates', () => {
     renderHeader({ selectedType: SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT })
 
