@@ -46,6 +46,16 @@ describe('HistoryHeaderRight', () => {
     ).toHaveAttribute('aria-pressed', 'true')
   })
 
+  it('marks pending toggle as selected when pending is the current history type', () => {
+    renderHeaderRight({
+      selectedType: SELECTED.SETTINGS.HISTORY.TYPES.PENDING,
+    })
+
+    expect(
+      screen.getByRole('button', { name: SELECTED.SETTINGS.HISTORY.TYPES.PENDING })
+    ).toHaveAttribute('aria-pressed', 'true')
+  })
+
   it('updates selected history type when a different toggle button is chosen', async () => {
     const user = userEvent.setup()
     const { updateSettings } = renderHeaderRight({
@@ -57,6 +67,21 @@ describe('HistoryHeaderRight', () => {
     expect(updateSettings).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.HISTORY.KEY]: {
         [SELECTED.SETTINGS.HISTORY.TYPE]: SELECTED.SETTINGS.HISTORY.TYPES.APPROVED,
+      },
+    })
+  })
+
+  it('updates selected history type to pending when pending toggle is chosen', async () => {
+    const user = userEvent.setup()
+    const { updateSettings } = renderHeaderRight({
+      selectedType: SELECTED.SETTINGS.HISTORY.TYPES.APPROVED,
+    })
+
+    await user.click(screen.getByRole('button', { name: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }))
+
+    expect(updateSettings).toHaveBeenCalledWith({
+      [SELECTED.SETTINGS.HISTORY.KEY]: {
+        [SELECTED.SETTINGS.HISTORY.TYPE]: SELECTED.SETTINGS.HISTORY.TYPES.PENDING,
       },
     })
   })
