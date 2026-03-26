@@ -49,4 +49,38 @@ describe('HistoryHeaderTitle', () => {
       screen.getByText(CONFIG.PANELS.HISTORY.TYPE[SELECTED.SETTINGS.HISTORY.TYPES.PENDING.toUpperCase()])
     ).toBeInTheDocument()
   })
+
+  it('shows selected concept name as subtitle for concept solo extent', () => {
+    renderTitle({
+      selectedType: SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT,
+      selectedConcept: 'dingo',
+      extent: CONCEPT.EXTENT.SOLO,
+    })
+
+    expect(screen.getByText('dingo')).toBeInTheDocument()
+  })
+
+  it('shows concept plus children extent subtitle for concept history', () => {
+    renderTitle({
+      selectedType: SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT,
+      selectedConcept: 'dingo',
+      extent: CONCEPT.EXTENT.CHILDREN,
+    })
+
+    expect(
+      screen.getByText(`dingo and ${CONFIG.PANELS.HISTORY.EXTENT[CONCEPT.EXTENT.CHILDREN.toUpperCase()]}`)
+    ).toBeInTheDocument()
+  })
+
+  it('shows concept plus descendants extent subtitle for concept history', () => {
+    renderTitle({
+      selectedType: SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT,
+      selectedConcept: 'dingo',
+      extent: CONCEPT.EXTENT.DESCENDANTS,
+    })
+
+    expect(
+      screen.getByText(`dingo and ${CONFIG.PANELS.HISTORY.EXTENT[CONCEPT.EXTENT.DESCENDANTS.toUpperCase()]}`)
+    ).toBeInTheDocument()
+  })
 })
