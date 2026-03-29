@@ -4,6 +4,7 @@ import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 
 import ActionIcon from '@/components/icon/ActionIcon'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import TemplateCell from './TemplateCell'
 
@@ -14,6 +15,7 @@ const { TEMPLATES } = SELECTED.SETTINGS
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
   const { updateFilters } = use(TemplatesContext)
+  const { updateSelected } = use(SelectedContext)
 
   const columns = [
     {
@@ -46,7 +48,11 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       field: 'concept',
       headerClassName: 'bold-header',
       headerName: 'Concept',
-      renderCell: TemplateCell({ filterKey: TEMPLATES.FILTERS.CONCEPT, updateFilters }),
+      renderCell: TemplateCell({
+        filterKey: TEMPLATES.FILTERS.CONCEPT,
+        updateFilters,
+        onConceptClick: conceptName => updateSelected({ [SELECTED.CONCEPT]: conceptName }),
+      }),
       width: 175,
     },
     {
