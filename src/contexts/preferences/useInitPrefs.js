@@ -149,8 +149,16 @@ const useInitPrefs = ({
                 })
               : normalizedConcepts
           const normalizedPanels = normalizeHistoryPreferences(allPrefs.panels)
+          const defaultPanelName = panelSelection.getState()[0] || 'Concepts'
+          const panelsForInit =
+            normalizedPanels.state.length === 0
+              ? normalizeHistoryPreferences({
+                  state: [defaultPanelName],
+                  position: 0,
+                })
+              : normalizedPanels
           conceptSelection.init(conceptsForInit)
-          panelSelection.init(normalizedPanels)
+          panelSelection.init(panelsForInit)
           if (onInitSettingsRef?.current) {
             onInitSettingsRef.current(allPrefs.settings)
           }
@@ -158,9 +166,9 @@ const useInitPrefs = ({
             isSameHistoryPreferences(allPrefs.concepts, conceptsForInit)
               ? Promise.resolve()
               : updatePreferences(KEY.CONCEPTS, conceptsForInit),
-            isSameHistoryPreferences(allPrefs.panels, normalizedPanels)
+            isSameHistoryPreferences(allPrefs.panels, panelsForInit)
               ? Promise.resolve()
-              : updatePreferences(KEY.PANELS, normalizedPanels),
+              : updatePreferences(KEY.PANELS, panelsForInit),
           ])
           setServerPreferencesExist(true)
         }
