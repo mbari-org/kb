@@ -1,0 +1,6 @@
+export const LOADING = {
+  STARTUP: {
+    PANEL_DATA_TIMEOUT: 20_000,
+    TAXONOMY_TIMEOUT: 20_000,
+  },
+}
