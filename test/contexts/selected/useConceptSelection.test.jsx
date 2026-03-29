@@ -9,7 +9,7 @@ describe('useConceptSelection', () => {
     const onCurrentChange = vi.fn()
 
     const wrapper = ({ children }) => (
-      <TaxonomyContext.Provider value={{ getRootName: 'root' }}>{children}</TaxonomyContext.Provider>
+      <TaxonomyContext.Provider value={{ rootName: 'root' }}>{children}</TaxonomyContext.Provider>
     )
 
     const { result } = renderHook(() => useConceptSelection(onCurrentChange), { wrapper })

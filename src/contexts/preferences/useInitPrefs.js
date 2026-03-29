@@ -95,6 +95,7 @@ const useInitPrefs = ({
   setPreferencesInitialized,
   setServerPreferencesExist,
   showBoundary,
+  rootName,
   updatePreferences,
   user,
 }) => {
@@ -140,17 +141,23 @@ const useInitPrefs = ({
           setServerPreferencesExist(true)
         } else {
           const normalizedConcepts = await normalizeConceptPreferences(allPrefs.concepts, config)
+          const conceptsForInit =
+            normalizedConcepts.state.length === 0
+              ? normalizeHistoryPreferences({
+                  state: [rootName],
+                  position: 0,
+                })
+              : normalizedConcepts
           const normalizedPanels = normalizeHistoryPreferences(allPrefs.panels)
-
-          conceptSelection.init(normalizedConcepts)
+          conceptSelection.init(conceptsForInit)
           panelSelection.init(normalizedPanels)
           if (onInitSettingsRef?.current) {
             onInitSettingsRef.current(allPrefs.settings)
           }
           await Promise.all([
-            isSameHistoryPreferences(allPrefs.concepts, normalizedConcepts)
+            isSameHistoryPreferences(allPrefs.concepts, conceptsForInit)
               ? Promise.resolve()
-              : updatePreferences(KEY.CONCEPTS, normalizedConcepts),
+              : updatePreferences(KEY.CONCEPTS, conceptsForInit),
             isSameHistoryPreferences(allPrefs.panels, normalizedPanels)
               ? Promise.resolve()
               : updatePreferences(KEY.PANELS, normalizedPanels),
@@ -183,6 +190,7 @@ const useInitPrefs = ({
     setPreferencesInitialized,
     setServerPreferencesExist,
     showBoundary,
+    rootName,
     updatePreferences,
     user,
   ])

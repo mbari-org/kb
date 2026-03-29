@@ -33,6 +33,7 @@ const createArgs = overrides => ({
   setPreferencesInitialized: vi.fn(),
   setServerPreferencesExist: vi.fn(),
   showBoundary: vi.fn(),
+  rootName: 'root',
   updatePreferences: vi.fn(),
   user: { name: 'tester' },
   ...overrides,
@@ -127,6 +128,34 @@ describe('useInitPrefs', () => {
     expect(args.updatePreferences).toHaveBeenCalledWith('concepts', {
       state: ['root', 'dingo', 'object'],
       position: 1,
+    })
+  })
+
+  it('falls back to taxonomy root when normalization removes all concepts', async () => {
+    checkConcept.mockResolvedValue(false)
+    const args = createArgs({
+      getPreferences: vi.fn(async () => ({
+        concepts: {
+          state: ['deleted-a', 'deleted-b'],
+          position: 1,
+        },
+        panels: { state: ['Concepts'], position: 0 },
+        settings: {},
+      })),
+    })
+
+    renderHook(() => useInitPrefs(args))
+
+    await waitFor(() => {
+      expect(args.conceptSelection.init).toHaveBeenCalledWith({
+        state: ['root'],
+        position: 0,
+      })
+    })
+
+    expect(args.updatePreferences).toHaveBeenCalledWith('concepts', {
+      state: ['root'],
+      position: 0,
     })
   })
 
