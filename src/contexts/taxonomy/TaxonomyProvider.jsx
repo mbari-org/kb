@@ -28,8 +28,20 @@ import {
 import useTaxonomyIntegrity from '@/lib/hooks/useTaxonomyIntegrity'
 
 import { isAdmin } from '@/lib/auth/role'
+import { LOADING } from '@/lib/constants/loading.js'
+import { createError } from '@/lib/errors'
 
 import { isEqual } from '@/lib/utils'
+
+const withTimeout = (promise, timeoutMs, timeoutError) => {
+  return new Promise((resolve, reject) => {
+    const timeoutId = globalThis.setTimeout(() => reject(timeoutError), timeoutMs)
+    promise
+      .then(resolve)
+      .catch(reject)
+      .finally(() => globalThis.clearTimeout(timeoutId))
+  })
+}
 
 const loadInitialTaxonomy = async apiFns => {
   try {
@@ -317,9 +329,19 @@ const TaxonomyProvider = ({ children }) => {
 
   useEffect(() => {
     if (!apiFns || taxonomy) return
+    let cancelled = false
 
-    loadInitialTaxonomy(apiFns).then(
+    withTimeout(
+      loadInitialTaxonomy(apiFns),
+      LOADING.STARTUP.TAXONOMY_TIMEOUT,
+      createError(
+        'Taxonomy Load Timeout',
+        `Taxonomy did not finish loading within ${LOADING.STARTUP.TAXONOMY_TIMEOUT}ms`,
+        { timeoutMs: LOADING.STARTUP.TAXONOMY_TIMEOUT }
+      )
+    ).then(
       ({ error: taxonomyError, taxonomy: initialTaxonomy }) => {
+        if (cancelled) return
         if (taxonomyError) {
           showBoundary(taxonomyError)
         } else {
@@ -327,9 +349,14 @@ const TaxonomyProvider = ({ children }) => {
         }
       },
       error => {
+        if (cancelled) return
         showBoundary(error)
       }
     )
+
+    return () => {
+      cancelled = true
+    }
   }, [apiFns, taxonomy, showBoundary, updateTaxonomy])
 
   const value = useMemo(

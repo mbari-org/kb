@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { act, render, waitFor } from '@testing-library/react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
@@ -16,6 +16,7 @@ import {
 import { getMedia } from '@/lib/api/media'
 import { getConceptLinkRealizations } from '@/lib/api/realizations'
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
+import { LOADING } from '@/lib/constants/loading.js'
 
 const cloneItems = items => items.map(item => ({ ...item }))
 
@@ -179,6 +180,49 @@ const renderTaxonomy = async () => {
 }
 
 const apiCallsFor = (apiPayload, fn) => apiPayload.mock.calls.filter(([calledFn]) => calledFn === fn)
+
+describe('TaxonomyProvider startup loading', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks()
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('sends timeout errors to the boundary when initial taxonomy loading hangs', async () => {
+    const errors = []
+    const apiFns = {
+      apiPayload: vi.fn(() => new Promise(() => {})),
+    }
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    try {
+      render(
+        <ErrorBoundary fallbackRender={() => null} onError={error => errors.push(error)}>
+          <UserContext.Provider value={{ user: { role: 'Admin' } }}>
+            <ConfigContext.Provider value={{ apiFns }}>
+              <TaxonomyProvider>
+                <div data-testid='taxonomy-ready'>ready</div>
+              </TaxonomyProvider>
+            </ConfigContext.Provider>
+          </UserContext.Provider>
+        </ErrorBoundary>
+      )
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(LOADING.STARTUP.TAXONOMY_TIMEOUT_MS + 1)
+        await vi.runAllTimersAsync()
+        await Promise.resolve()
+      })
+      expect(errors).toHaveLength(1)
+      expect(errors[0]).toMatchObject({ title: 'Taxonomy Load Timeout' })
+    } finally {
+      consoleErrorSpy.mockRestore()
+    }
+  })
+})
 
 describe('TaxonomyProvider conceptEditsRefresh', () => {
   beforeEach(() => {

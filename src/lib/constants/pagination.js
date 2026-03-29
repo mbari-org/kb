@@ -7,6 +7,7 @@ export const PAGINATION = {
   REFERENCES: {
     DEFAULT_LIMIT: 50,
     EXPORT_PAGE_SIZE: 100,
+    MAX_PAGES: 1000,
     PAGE_SIZE_OPTIONS: [10, 25, 50, 100],
   },
   TEMPLATES: {

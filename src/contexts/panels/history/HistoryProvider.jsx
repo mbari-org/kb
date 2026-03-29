@@ -24,7 +24,7 @@ const { CONCEPT: SELECTED_CONCEPT, PANEL, SETTINGS } = SELECTED
 const { HISTORY } = SETTINGS
 const { PROCESSING } = CONFIG
 
-const LOADING_DELAY_MS = 200
+const LOADING_DELAY = 200
 
 const HistoryProvider = ({ children }) => {
   const { beginProcessing } = use(AppModalContext)
@@ -103,7 +103,7 @@ const HistoryProvider = ({ children }) => {
             : PROCESSING.ARG.HISTORY.DATA
 
       const stopProcessing = beginProcessing(PROCESSING.LOAD, processingArg, {
-        delayMs: LOADING_DELAY_MS,
+        delayMs: LOADING_DELAY,
       })
 
       try {

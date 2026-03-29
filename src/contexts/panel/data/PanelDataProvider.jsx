@@ -1,4 +1,5 @@
 import { use, useEffect, useState, useCallback, useMemo } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -6,10 +7,23 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import useLoadReferences from '@/contexts/panel/data/useLoadReferences'
 import useLoadTemplates from '@/contexts/panel/data/useLoadTemplates'
 import useLoadPendingHistory from '@/contexts/panel/data/useLoadPendingHistory'
+import { LOADING } from '@/lib/constants/loading.js'
 
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { createError } from '@/lib/errors'
+
+const withTimeout = (promise, timeoutMs, timeoutError) => {
+  return new Promise((resolve, reject) => {
+    const timeoutId = globalThis.setTimeout(() => reject(timeoutError), timeoutMs)
+    promise
+      .then(resolve)
+      .catch(reject)
+      .finally(() => globalThis.clearTimeout(timeoutId))
+  })
+}
 
 export const PanelDataProvider = ({ children }) => {
+  const { showBoundary } = useErrorBoundary()
   const { apiFns } = use(ConfigContext)
 
   const [explicitConcepts, setExplicitConcepts] = useState([])
@@ -25,6 +39,18 @@ export const PanelDataProvider = ({ children }) => {
   const loadTemplates = useLoadTemplates(apiFns)
   const loadPendingHistory = useLoadPendingHistory(apiFns)
 
+  const withLoadTimeout = useCallback(promise => {
+    return withTimeout(
+      promise,
+      LOADING.STARTUP.PANEL_DATA_TIMEOUT,
+      createError(
+        'Panel Data Load Timeout',
+        `Panel data did not finish loading within ${LOADING.STARTUP.PANEL_DATA_TIMEOUT}ms`,
+        { timeoutMs: LOADING.STARTUP.PANEL_DATA_TIMEOUT }
+      )
+    )
+  }, [])
+
   const calcExplicitConcepts = useCallback(templatesData => {
     if (!templatesData || templatesData.length === 0) return []
 
@@ -37,24 +63,25 @@ export const PanelDataProvider = ({ children }) => {
     (doi, currentId) => {
       if (!doi) return true
       return !references.some(
-        reference =>
-          reference.id !== currentId && reference.doi?.toLowerCase() === doi.toLowerCase()
+        reference => reference.id !== currentId && reference.doi?.toLowerCase() === doi.toLowerCase()
       )
     },
     [references]
   )
 
-  const getConceptTemplates = useCallback(conceptName => {
-    return conceptName
-      ? templates.filter(template => template.concept === conceptName)
-      : templates
-  }, [templates])
+  const getConceptTemplates = useCallback(
+    conceptName => {
+      return conceptName ? templates.filter(template => template.concept === conceptName) : templates
+    },
+    [templates]
+  )
 
-  const getReferences = useCallback(conceptName => {
-    return conceptName
-      ? references.filter(reference => reference.concepts.includes(conceptName))
-      : references
-  }, [references])
+  const getReferences = useCallback(
+    conceptName => {
+      return conceptName ? references.filter(reference => reference.concepts.includes(conceptName)) : references
+    },
+    [references]
+  )
 
   const refreshData = useCallback(
     async (type = 'all') => {
@@ -65,11 +92,9 @@ export const PanelDataProvider = ({ children }) => {
       try {
         switch (type) {
           case 'all': {
-            const [referencesData, templatesData, pendingHistoryData] = await Promise.all([
-              loadReferences(),
-              loadTemplates(),
-              loadPendingHistory(),
-            ])
+            const [referencesData, templatesData, pendingHistoryData] = await withLoadTimeout(
+              Promise.all([loadReferences(), loadTemplates(), loadPendingHistory()])
+            )
             const explicitConceptsData = calcExplicitConcepts(templatesData)
 
             setReferences(referencesData)
@@ -86,13 +111,13 @@ export const PanelDataProvider = ({ children }) => {
           }
 
           case PANEL_DATA.REFERENCES: {
-            const referencesData = await loadReferences()
+            const referencesData = await withLoadTimeout(loadReferences())
             setReferences(referencesData)
             return { references: referencesData }
           }
 
           case PANEL_DATA.TEMPLATES: {
-            const templatesData = await loadTemplates()
+            const templatesData = await withLoadTimeout(loadTemplates())
             const explicitConceptsData = calcExplicitConcepts(templatesData)
             setTemplates(templatesData)
             setExplicitConcepts(explicitConceptsData)
@@ -100,7 +125,7 @@ export const PanelDataProvider = ({ children }) => {
           }
 
           case PANEL_DATA.PENDING_HISTORY: {
-            const pendingHistoryData = await loadPendingHistory()
+            const pendingHistoryData = await withLoadTimeout(loadPendingHistory())
             setPendingHistory(pendingHistoryData)
             return { pendingHistory: pendingHistoryData }
           }
@@ -110,14 +135,14 @@ export const PanelDataProvider = ({ children }) => {
         setIsInitialLoad(false)
       }
     },
-    [apiFns, calcExplicitConcepts, loadReferences, loadTemplates, loadPendingHistory]
+    [apiFns, calcExplicitConcepts, loadPendingHistory, loadReferences, loadTemplates, withLoadTimeout]
   )
 
   useEffect(() => {
     if (apiFns) {
-      refreshData()
+      refreshData().catch(showBoundary)
     }
-  }, [apiFns, refreshData])
+  }, [apiFns, refreshData, showBoundary])
 
   const value = useMemo(
     () => ({

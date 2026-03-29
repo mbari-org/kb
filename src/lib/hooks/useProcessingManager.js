@@ -3,10 +3,9 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
-const DEFAULT_DELAY_MS = 200
+const DEFAULT_DELAY = 200
 
-const createId = () =>
-  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+const createId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 
 const buildMessage = (processingKey, processingValue) => {
   if (processingKey === PROCESSING.OFF) return PROCESSING.OFF
@@ -18,30 +17,23 @@ const useProcessingManager = () => {
   const [processingCount, setProcessingCount] = useState(0)
   const [processingMessage, setProcessingMessage] = useState(PROCESSING.OFF)
 
-  const updateState = useCallback(
-    messageOverride => {
-      const size = operationsRef.current.size
-      setProcessingCount(size)
-      if (messageOverride) {
-        setProcessingMessage(messageOverride)
-        return
-      }
-      if (size === 0) {
-        setProcessingMessage(PROCESSING.OFF)
-        return
-      }
-      const last = Array.from(operationsRef.current.values()).at(-1)
-      setProcessingMessage(last.message)
-    },
-    []
-  )
+  const updateState = useCallback(messageOverride => {
+    const size = operationsRef.current.size
+    setProcessingCount(size)
+    if (messageOverride) {
+      setProcessingMessage(messageOverride)
+      return
+    }
+    if (size === 0) {
+      setProcessingMessage(PROCESSING.OFF)
+      return
+    }
+    const last = Array.from(operationsRef.current.values()).at(-1)
+    setProcessingMessage(last.message)
+  }, [])
 
   const beginProcessing = useCallback(
-    (
-      processingKey,
-      processingValue,
-      { delayMs = DEFAULT_DELAY_MS, timeoutMs = 30000 } = {}
-    ) => {
+    (processingKey, processingValue, { delayMs = DEFAULT_DELAY, timeoutMs = 30000 } = {}) => {
       const id = createId()
       const message = buildMessage(processingKey, processingValue)
       let registered = false
