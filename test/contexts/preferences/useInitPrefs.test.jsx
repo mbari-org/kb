@@ -8,9 +8,9 @@ vi.mock('@/lib/api/concept', () => ({
   checkConcept: vi.fn(),
 }))
 
-const createSelection = () => ({
-  getPosition: vi.fn(() => 0),
-  getState: vi.fn(() => []),
+const createSelection = ({ position = 0, state = [] } = {}) => ({
+  getPosition: vi.fn(() => position),
+  getState: vi.fn(() => state),
   init: vi.fn(),
 })
 
@@ -23,7 +23,7 @@ const createArgs = overrides => ({
     panels: { state: ['Concepts'], position: 0 },
     settings: {},
   })),
-  panelSelection: createSelection(),
+  panelSelection: createSelection({ state: ['Concepts'] }),
   preferencesInitialized: false,
   getSettings: vi.fn(() => ({})),
   getSettingsRef: { current: null },
@@ -155,6 +155,70 @@ describe('useInitPrefs', () => {
 
     expect(args.updatePreferences).toHaveBeenCalledWith('concepts', {
       state: ['root'],
+      position: 0,
+    })
+  })
+
+  it('falls back to default panel when panel history is empty', async () => {
+    checkConcept.mockResolvedValue(true)
+    const args = createArgs({
+      getPreferences: vi.fn(async () => ({
+        concepts: {
+          state: ['root'],
+          position: 0,
+        },
+        panels: {
+          state: [],
+          position: -1,
+        },
+        settings: {},
+      })),
+    })
+
+    renderHook(() => useInitPrefs(args))
+
+    await waitFor(() => {
+      expect(args.panelSelection.init).toHaveBeenCalledWith({
+        state: ['Concepts'],
+        position: 0,
+      })
+    })
+
+    expect(args.updatePreferences).toHaveBeenCalledWith('panels', {
+      state: ['Concepts'],
+      position: 0,
+    })
+  })
+
+  it('falls back to Concepts when panel selection has no default panel', async () => {
+    checkConcept.mockResolvedValue(true)
+    const args = createArgs({
+      panelSelection: createSelection({ state: [] }),
+      getPreferences: vi.fn(async () => ({
+        concepts: {
+          state: ['root'],
+          position: 0,
+        },
+        panels: {
+          state: [],
+          position: -1,
+        },
+        settings: {},
+      })),
+    })
+
+    renderHook(() => useInitPrefs(args))
+
+    await waitFor(() => {
+      expect(args.panelSelection.init).toHaveBeenCalledWith({
+        state: ['Concepts'],
+        position: 0,
+      })
+    })
+
+    expect(args.showBoundary).not.toHaveBeenCalled()
+    expect(args.updatePreferences).toHaveBeenCalledWith('panels', {
+      state: ['Concepts'],
       position: 0,
     })
   })
