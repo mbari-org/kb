@@ -271,10 +271,15 @@ const TaxonomyProvider = ({ children }) => {
         const { taxonomy: updatedTaxonomy } = await loadTaxonomyConcept(taxonomy, conceptName, apiFns)
         const committedTaxonomy = updateTaxonomy(updatedTaxonomy)
         const effectiveTaxonomy = committedTaxonomy || taxonomy
+        const loadedConcept = getTaxonomyConcept(effectiveTaxonomy, conceptName)
+        if (!loadedConcept) {
+          throw new Error(`Taxonomy load completed but concept lookup failed: ${conceptName}`)
+        }
 
-        return getTaxonomyConcept(effectiveTaxonomy, conceptName)
+        return loadedConcept
       } catch (error) {
         showBoundary(error)
+        throw error
       } finally {
         alreadyLoadingConcept.current = false
       }

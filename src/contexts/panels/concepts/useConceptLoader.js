@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react'
 
+const toLoadConceptError = (error, conceptName) => ({
+  conceptName,
+  message: error?.message || 'Failed to load concept',
+  original: error?.original || error,
+})
+
 // Custom hook to handle async concept loading with race condition protection
 const useConceptLoader = ({
   getConcept,
@@ -22,7 +28,18 @@ const useConceptLoader = ({
   const conceptLoader = useCallback(
     async selectedConcept => {
       if (isConceptLoaded(selectedConcept)) {
-        handleSetConcept(getConcept(selectedConcept))
+        const loadedConcept = getConcept(selectedConcept)
+        if (!loadedConcept) {
+          handleLoadConceptError(
+            toLoadConceptError(
+              new Error(`Concept marked loaded but lookup failed: ${selectedConcept}`),
+              selectedConcept
+            )
+          )
+          return
+        }
+
+        handleSetConcept(loadedConcept)
         return
       }
 
@@ -37,6 +54,9 @@ const useConceptLoader = ({
         const conceptToLoad = selectedConcept
 
         const loadedConcept = await loadConcept(conceptToLoad)
+        if (!loadedConcept) {
+          throw new Error(`Failed to load concept: ${conceptToLoad}`)
+        }
 
         if (isMountedRef.current) {
           const currentSelected = getSelected('concept')
@@ -47,8 +67,8 @@ const useConceptLoader = ({
       } catch (error) {
         if (isMountedRef.current) {
           const currentSelected = getSelected('concept')
-          if (error.conceptName === currentSelected) {
-            handleLoadConceptError({ ...error, conceptName: selectedConcept })
+          if (currentSelected === selectedConcept) {
+            handleLoadConceptError(toLoadConceptError(error, selectedConcept))
           }
         }
       } finally {
