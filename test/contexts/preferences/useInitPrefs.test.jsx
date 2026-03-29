@@ -32,6 +32,7 @@ const createArgs = overrides => ({
   setIsLoading: vi.fn(),
   setPreferencesInitialized: vi.fn(),
   setServerPreferencesExist: vi.fn(),
+  showBoundary: vi.fn(),
   updatePreferences: vi.fn(),
   user: { name: 'tester' },
   ...overrides,
@@ -127,5 +128,24 @@ describe('useInitPrefs', () => {
       state: ['root', 'dingo', 'object'],
       position: 1,
     })
+  })
+
+  it('sends initialization failures to the error boundary and clears loading state', async () => {
+    const initError = new Error('boom')
+    const args = createArgs({
+      getPreferences: vi.fn(async () => {
+        throw initError
+      }),
+    })
+
+    renderHook(() => useInitPrefs(args))
+
+    await waitFor(() => {
+      expect(args.showBoundary).toHaveBeenCalledWith(initError)
+      expect(args.setIsLoading).toHaveBeenCalledWith(false)
+    })
+
+    expect(args.setIsLoading).toHaveBeenCalledWith(true)
+    expect(args.setPreferencesInitialized).not.toHaveBeenCalled()
   })
 })

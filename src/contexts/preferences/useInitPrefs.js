@@ -94,6 +94,7 @@ const useInitPrefs = ({
   setIsLoading,
   setPreferencesInitialized,
   setServerPreferencesExist,
+  showBoundary,
   updatePreferences,
   user,
 }) => {
@@ -127,39 +128,43 @@ const useInitPrefs = ({
 
     const initializePreferences = async () => {
       setIsLoading(true)
+      try {
+        const allPrefs = await getPreferences()
 
-      const allPrefs = await getPreferences()
+        if (isEmpty(allPrefs)) {
+          await Promise.all(
+            Object.values(KEY).map(key => {
+              return createPreferences(key, prefsValue(key))
+            })
+          )
+          setServerPreferencesExist(true)
+        } else {
+          const normalizedConcepts = await normalizeConceptPreferences(allPrefs.concepts, config)
+          const normalizedPanels = normalizeHistoryPreferences(allPrefs.panels)
 
-      if (isEmpty(allPrefs)) {
-        await Promise.all(
-          Object.values(KEY).map(key => {
-            return createPreferences(key, prefsValue(key))
-          })
-        )
-        setServerPreferencesExist(true)
-      } else {
-        const normalizedConcepts = await normalizeConceptPreferences(allPrefs.concepts, config)
-        const normalizedPanels = normalizeHistoryPreferences(allPrefs.panels)
-
-        conceptSelection.init(normalizedConcepts)
-        panelSelection.init(normalizedPanels)
-        if (onInitSettingsRef?.current) {
-          onInitSettingsRef.current(allPrefs.settings)
+          conceptSelection.init(normalizedConcepts)
+          panelSelection.init(normalizedPanels)
+          if (onInitSettingsRef?.current) {
+            onInitSettingsRef.current(allPrefs.settings)
+          }
+          await Promise.all([
+            isSameHistoryPreferences(allPrefs.concepts, normalizedConcepts)
+              ? Promise.resolve()
+              : updatePreferences(KEY.CONCEPTS, normalizedConcepts),
+            isSameHistoryPreferences(allPrefs.panels, normalizedPanels)
+              ? Promise.resolve()
+              : updatePreferences(KEY.PANELS, normalizedPanels),
+          ])
+          setServerPreferencesExist(true)
         }
-        await Promise.all([
-          isSameHistoryPreferences(allPrefs.concepts, normalizedConcepts)
-            ? Promise.resolve()
-            : updatePreferences(KEY.CONCEPTS, normalizedConcepts),
-          isSameHistoryPreferences(allPrefs.panels, normalizedPanels)
-            ? Promise.resolve()
-            : updatePreferences(KEY.PANELS, normalizedPanels),
-        ])
-        setServerPreferencesExist(true)
-      }
 
-      setPreferencesInitialized(true)
-      setDirtyFlags(CLEAN_FLAGS)
-      setIsLoading(false)
+        setPreferencesInitialized(true)
+        setDirtyFlags(CLEAN_FLAGS)
+      } catch (error) {
+        showBoundary(error)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     initializePreferences()
@@ -177,6 +182,7 @@ const useInitPrefs = ({
     setIsLoading,
     setPreferencesInitialized,
     setServerPreferencesExist,
+    showBoundary,
     updatePreferences,
     user,
   ])
