@@ -221,8 +221,6 @@ const TaxonomyProvider = ({ children }) => {
     return getTaxonomyNames(taxonomy)
   }, [taxonomy])
 
-  const getRootName = useMemo(() => taxonomy?.rootName, [taxonomy?.rootName])
-
   const isConceptLoaded = useCallback(
     conceptName => {
       if (!taxonomy) return false
@@ -246,6 +244,8 @@ const TaxonomyProvider = ({ children }) => {
     },
     [taxonomy]
   )
+
+  const rootName = useMemo(() => taxonomy?.rootName, [taxonomy?.rootName])
 
   const alreadyLoadingConcept = useRef(false)
 
@@ -337,13 +337,13 @@ const TaxonomyProvider = ({ children }) => {
       getConceptPrimaryName,
       getAncestorNames,
       getNames,
-      getRootName,
       isConceptLoaded,
       isDescendant,
       isRoot,
       loadConcept,
       loadConceptDescendants,
       removeConcept,
+      rootName,
       taxonomy,
       updateTaxonomy,
     }),
@@ -356,7 +356,7 @@ const TaxonomyProvider = ({ children }) => {
       getConceptFromTaxonomy,
       getConceptPrimaryName,
       getNames,
-      getRootName,
+      rootName,
       isConceptLoaded,
       isDescendant,
       isRoot,

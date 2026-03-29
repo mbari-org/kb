@@ -3,9 +3,9 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { use, useMemo } from 'react'
 
 const useConceptSelection = onCurrentChange => {
-  const { getRootName } = use(TaxonomyContext)
+  const { rootName } = use(TaxonomyContext)
 
-  const historySelection = useHistorySelection(getRootName, onCurrentChange)
+  const historySelection = useHistorySelection(rootName, onCurrentChange)
 
   return useMemo(
     () => ({
