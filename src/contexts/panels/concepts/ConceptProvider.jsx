@@ -1,4 +1,5 @@
 import { use, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
@@ -28,6 +29,7 @@ const { CONTINUE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { PROCESSING } = CONFIG
 
 const ConceptProvider = ({ children }) => {
+  const { showBoundary } = useErrorBoundary()
   const { beginProcessing } = use(AppModalContext)
   const isSettingConceptRef = useRef(false)
   const processingStopRef = useRef(null)
@@ -348,7 +350,7 @@ const ConceptProvider = ({ children }) => {
       }
     }
 
-    fetchConceptPath()
+    fetchConceptPath().catch(showBoundary)
 
     return () => {
       if (pendingTreeStopRef.current) {
@@ -360,7 +362,7 @@ const ConceptProvider = ({ children }) => {
         pendingTreeTimeoutRef.current = null
       }
     }
-  }, [apiFns, concept, conceptPath, startProcessing])
+  }, [apiFns, concept, conceptPath, showBoundary, startProcessing])
 
   return <ConceptContext value={value}>{children}</ConceptContext>
 }
