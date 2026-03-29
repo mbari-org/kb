@@ -489,6 +489,33 @@ describe('TaxonomyProvider loadConcept', () => {
     expect(apiFns.apiPayload).not.toHaveBeenCalled()
     expect(errors).toEqual([])
   })
+
+  it('rethrows generic load failures instead of swallowing them', async () => {
+    const { apiFns, errors, getContext } = await renderTaxonomy()
+    const loadError = new Error('failed to load old-parent')
+
+    const apiPayloadImpl = apiFns.apiPayload.getMockImplementation()
+    apiFns.apiPayload.mockImplementation(async (fn, value) => {
+      if (fn === apiConceptNames && value === 'old-parent') {
+        throw loadError
+      }
+
+      return apiPayloadImpl(fn, value)
+    })
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      await act(async () => {
+        await expect(getContext().loadConcept('old-parent')).rejects.toBe(loadError)
+      })
+
+      await waitFor(() => {
+        expect(errors).toContain(loadError)
+      })
+    } finally {
+      consoleErrorSpy.mockRestore()
+    }
+  })
 })
 
 describe('TaxonomyProvider loadConceptDescendants', () => {
