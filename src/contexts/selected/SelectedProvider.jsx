@@ -2,6 +2,7 @@ import { use, useCallback, useEffect, useMemo } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useSettings from '@/contexts/selected/useSettings'
 import { createError } from '@/lib/errors'
@@ -12,6 +13,7 @@ const { CONCEPT, PANEL } = SELECTED
 const SelectedProvider = ({ children }) => {
   const { conceptSelection, getSettingsRef, isLoading, markSettingsDirtyRef, onInitSettingsRef, panelSelection } =
     use(PreferencesContext)
+  const { getConceptPrimaryName } = use(TaxonomyContext)
   const { settings, setSettings, getSettings, updateSettings: stateUpdateSettings } = useSettings()
 
   useEffect(() => {
@@ -37,15 +39,18 @@ const SelectedProvider = ({ children }) => {
 
   const updateSelected = useCallback(
     ({ concept: conceptName, panel: panelName }) => {
-      if (conceptName && conceptName !== conceptSelection.current()) {
-        conceptSelection.push(conceptName)
+      if (conceptName) {
+        const selectedConceptName = getConceptPrimaryName(conceptName) || conceptName
+        if (selectedConceptName !== conceptSelection.current()) {
+          conceptSelection.push(selectedConceptName)
+        }
       }
 
       if (panelName && panelName !== panelSelection.current()) {
         panelSelection.push(panelName)
       }
     },
-    [conceptSelection, panelSelection]
+    [conceptSelection, getConceptPrimaryName, panelSelection]
   )
 
   const persistUpdateSettings = useCallback(
