@@ -39,6 +39,7 @@ const TemplatesHeaderLeft = () => {
       updateSelected({ [SELECTED.CONCEPT]: conceptName })
       updateFilters({ [FILTERS.CONCEPT]: conceptName })
     } else {
+      updateSelected({ [SELECTED.CONCEPT]: null })
       updateFilters({ [FILTERS.CONCEPT]: '' })
       updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: false } })
     }
@@ -46,9 +47,9 @@ const TemplatesHeaderLeft = () => {
 
   return (
     <ConceptSelect
+      auxiliaryComponent={<TemplatesConceptSelectAuxiliary />}
       conceptName={filters[FILTERS.CONCEPT]}
       doConceptSelected={handleConceptSelected}
-      auxiliaryComponent={<TemplatesConceptSelectAuxiliary />}
       selectables={selectables}
       updateConceptSelected={true}
     />

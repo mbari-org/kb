@@ -97,18 +97,28 @@ describe('TemplatesHeaderLeft', () => {
     })
   })
 
-  it('clears template concept filter and turns off by-available mode on clear selection', () => {
-    const { updateFilters, updateSettings } = renderHeader()
+  it('clears template concept filter, selected concept, and turns off by-available mode on clear selection', () => {
+    const { updateFilters, updateSelected, updateSettings } = renderHeader()
 
     act(() => {
       capturedConceptSelectProps.doConceptSelected(null)
     })
 
+    expect(updateSelected).toHaveBeenCalledWith({ [SELECTED.CONCEPT]: null })
     expect(updateFilters).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT]: '',
     })
     expect(updateSettings).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.TEMPLATES.KEY]: { [SELECTED.SETTINGS.TEMPLATES.BY_AVAILABLE]: false },
     })
+  })
+
+  it('displays the template filter concept value, not the selected concept, in ConceptSelect', () => {
+    renderHeader({
+      selectedConcept: 'dingo',
+      filters: { [SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT]: 'object' },
+    })
+
+    expect(capturedConceptSelectProps.conceptName).toBe('object')
   })
 })
