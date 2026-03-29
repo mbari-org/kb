@@ -65,6 +65,7 @@ const PreferencesProvider = ({ children }) => {
   const getSettingsForPrefs = useCallback(() => {
     return getSettingsRef.current?.()
   }, [getSettingsRef])
+  const { showBoundary } = useErrorBoundary()
 
   const { CLEAN_FLAGS, prefsValue } = useInitPrefs({
     config,
@@ -80,11 +81,11 @@ const PreferencesProvider = ({ children }) => {
     setIsLoading,
     setPreferencesInitialized,
     setServerPreferencesExist,
+    showBoundary,
     updatePreferences,
     user,
   })
 
-  const { showBoundary } = useErrorBoundary()
   const { resetAutosaveTimer, isSaving } = usePrefsTimer({
     CLEAN_FLAGS,
     dirtyFlags,
