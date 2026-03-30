@@ -44,7 +44,7 @@ const createRealizationModal = action => {
       }
 
       default: {
-        return null
+        throw new Error(`Invalid realization modal action: ${action}`)
       }
     }
   }

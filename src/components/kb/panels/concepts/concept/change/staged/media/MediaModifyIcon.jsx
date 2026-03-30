@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import PropertyAddIcon from '@/components/icon/property/PropertyAddIcon'
 import PropertyDeleteIcon from '@/components/icon/property/PropertyDeleteIcon'
@@ -23,23 +23,32 @@ const DELETE = CONCEPT_STATE.MEDIA_ITEM.DELETE
 const MediaModifyIcon = ({ action, mediaIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
+  const [asyncError, setAsyncError] = useState(null)
+
+  if (asyncError) {
+    throw asyncError
+  }
 
   const onClick = useCallback(() => {
-    const mediaItem =
-      action === ADD ? EMPTY_MEDIA_ITEM : mediaItemFields(stagedState.media[mediaIndex])
+    try {
+      const mediaItem =
+        action === ADD ? EMPTY_MEDIA_ITEM : mediaItemFields(stagedState.media[mediaIndex])
 
-    const actionModalData = {
-      action,
-      mediaItem,
-      mediaIndex,
-      modified: false,
+      const actionModalData = {
+        action,
+        mediaItem,
+        mediaIndex,
+        modified: false,
+      }
+      setModalData(actionModalData)
+
+      const modal = createEditMediaModal(action)
+      const onClose = createEditMediaOnClose({ initialState, modifyConcept })
+
+      setModal(modal, onClose)
+    } catch (error) {
+      setAsyncError(error)
     }
-    setModalData(actionModalData)
-
-    const modal = createEditMediaModal(action)
-    const onClose = createEditMediaOnClose({ initialState, modifyConcept })
-
-    setModal(modal, onClose)
   }, [action, mediaIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
   const IconComponent =

@@ -37,7 +37,7 @@ const createEditMediaModal = action => {
         }
       }
       default: {
-        return null
+        throw new Error(`Invalid media modal action: ${action}`)
       }
     }
   }

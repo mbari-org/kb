@@ -37,7 +37,7 @@ const createAliasModal = action => {
         }
       }
       default: {
-        return null
+        throw new Error(`Invalid alias modal action: ${action}`)
       }
     }
   }

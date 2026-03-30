@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import PropertyAddIcon from '@/components/icon/property/PropertyAddIcon'
 import PropertyDeleteIcon from '@/components/icon/property/PropertyDeleteIcon'
@@ -23,6 +23,11 @@ const DELETE = CONCEPT_STATE.REALIZATION.DELETE
 const RealizationActionIcon = ({ action, realizationIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
+  const [asyncError, setAsyncError] = useState(null)
+
+  if (asyncError) {
+    throw asyncError
+  }
 
   const tooltip =
     action === ADD
@@ -32,21 +37,25 @@ const RealizationActionIcon = ({ action, realizationIndex, size }) => {
         : REALIZATION.EDIT.TOOLTIP
 
   const onClick = useCallback(() => {
-    const realizationItem =
-      action === ADD ? EMPTY_REALIZATION : stagedState.realizations[realizationIndex]
+    try {
+      const realizationItem =
+        action === ADD ? EMPTY_REALIZATION : stagedState.realizations[realizationIndex]
 
-    const modalData = {
-      action,
-      modified: { linkName: false, toConcept: false, linkValue: false },
-      realizationIndex,
-      realizationItem,
+      const modalData = {
+        action,
+        modified: { linkName: false, toConcept: false, linkValue: false },
+        realizationIndex,
+        realizationItem,
+      }
+      setModalData(modalData)
+
+      const modal = createRealizationModal(action)
+      const onClose = createRealizationOnClose({ initialState, modifyConcept })
+
+      setModal(modal, onClose)
+    } catch (error) {
+      setAsyncError(error)
     }
-    setModalData(modalData)
-
-    const modal = createRealizationModal(action)
-    const onClose = createRealizationOnClose({ initialState, modifyConcept })
-
-    setModal(modal, onClose)
   }, [action, realizationIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
   const IconComponent =
