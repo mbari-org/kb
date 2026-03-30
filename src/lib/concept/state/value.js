@@ -1,4 +1,4 @@
-import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
 import { CONCEPT } from '@/lib/constants'
 
 import { isJsonEqual } from '@/lib/utils'

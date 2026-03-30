@@ -1,9 +1,4 @@
-import { isJsonEqual } from '@/lib/utils'
-
-const generalStateUpdates = (field, initial, staged) =>
-  !isJsonEqual(initial?.[field], staged?.[field])
-    ? { [field]: { initial: initial[field], staged: staged[field] } }
-    : {}
+import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
 
 import { isStateModified } from '@/lib/concept/state/state'
 import * as aliases from '@/lib/concept/state/aliases'
