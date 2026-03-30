@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useState } from 'react'
 
 import PropertyAddIcon from '@/components/icon/property/PropertyAddIcon'
 import PropertyDeleteIcon from '@/components/icon/property/PropertyDeleteIcon'
@@ -23,24 +23,33 @@ const DELETE = CONCEPT_STATE.ALIAS.DELETE
 const AliasActionIcon = ({ action, aliasIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
   const { setModal, setModalData } = use(ConceptModalContext)
+  const [asyncError, setAsyncError] = useState(null)
+
+  if (asyncError) {
+    throw asyncError
+  }
 
   const tooltip = action === ADD ? ALIAS.ADD.TOOLTIP : action === DELETE ? ALIAS.DELETE.TOOLTIP : ALIAS.EDIT.TOOLTIP
 
   const onClick = useCallback(() => {
-    const aliasItem = action === ADD ? EMPTY_ALIAS : aliasFields(stagedState.aliases[aliasIndex])
+    try {
+      const aliasItem = action === ADD ? EMPTY_ALIAS : aliasFields(stagedState.aliases[aliasIndex])
 
-    const actionModalData = {
-      action,
-      aliasItem,
-      aliasIndex,
-      modified: { author: false, name: false, nameType: false },
+      const actionModalData = {
+        action,
+        aliasItem,
+        aliasIndex,
+        modified: { author: false, name: false, nameType: false },
+      }
+      setModalData(actionModalData)
+
+      const modal = createAliasModal(action)
+      const onClose = createAliasOnClose({ initialState, modifyConcept })
+
+      setModal(modal, onClose)
+    } catch (error) {
+      setAsyncError(error)
     }
-    setModalData(actionModalData)
-
-    const modal = createAliasModal(action)
-    const onClose = createAliasOnClose({ initialState, modifyConcept })
-
-    setModal(modal, onClose)
   }, [action, aliasIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
   const IconComponent =
