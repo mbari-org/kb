@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useState } from 'react'
 import { Box, IconButton, Modal, Stack } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
 
@@ -17,6 +17,7 @@ import CONFIG from '@/text'
 const { CONCEPT, PROCESSING } = CONFIG
 
 const ChangeStructureChoices = ({ closeChoices }) => {
+  const [asyncError, setAsyncError] = useState(null)
   const { disableDelete, disableChangeName, disableChangeParent } = useStructureChoices()
   const { beginProcessing } = use(AppModalContext)
 
@@ -24,22 +25,27 @@ const ChangeStructureChoices = ({ closeChoices }) => {
   const changeName = useChangeNameModal()
   const changeParent = useChangeParentModal()
   const deleteConcept = useDeleteConceptModal()
+  if (asyncError) {
+    throw asyncError
+  }
 
   const handleClick = (structureFn, processingValue = null) => async event => {
     event.preventDefault()
     closeChoices()
-
-    if (processingValue) {
-      const stop = beginProcessing(PROCESSING.LOAD, processingValue)
-      try {
-        await structureFn()
-      } finally {
-        stop()
+    try {
+      if (processingValue) {
+        const stop = beginProcessing(PROCESSING.LOAD, processingValue)
+        try {
+          await structureFn()
+        } finally {
+          stop()
+        }
+        return
       }
-      return
+      await structureFn()
+    } catch (error) {
+      setAsyncError(error)
     }
-
-    await structureFn()
   }
 
   return (

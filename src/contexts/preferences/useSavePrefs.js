@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 
 import { PREFS } from '@/lib/constants/prefs.js'
+import { createError } from '@/lib/errors'
 
 const { KEY } = PREFS.USER
 
@@ -41,6 +42,7 @@ const useSavePrefs = ({
   resetAutosaveTimer,
   serverPreferencesExist,
   setDirtyFlags,
+  showBoundary,
   updatePreferences,
 }) => {
   const updatePreferenceValues = useCallback(
@@ -79,7 +81,14 @@ const useSavePrefs = ({
 
         resetAutosaveTimer()
       } catch (error) {
-        console.error('Failed to save preferences:', error)
+        const saveError = createError(
+          'Preferences Save Error',
+          'Failed to save preferences',
+          { key: key || null },
+          error
+        )
+        showBoundary(saveError)
+        throw saveError
       } finally {
         isSaving.current = false
       }
@@ -96,6 +105,7 @@ const useSavePrefs = ({
       resetAutosaveTimer,
       serverPreferencesExist,
       setDirtyFlags,
+      showBoundary,
       updatePreferenceValues,
     ]
   )
@@ -115,8 +125,14 @@ const useSavePrefs = ({
       setDirtyFlags(CLEAN_FLAGS)
       resetAutosaveTimer()
     } catch (error) {
-      console.error('Failed to flush preferences:', error)
-      throw error
+      const flushError = createError(
+        'Preferences Flush Error',
+        'Failed to flush preferences',
+        {},
+        error
+      )
+      showBoundary(flushError)
+      throw flushError
     } finally {
       isSaving.current = false
     }
@@ -128,6 +144,7 @@ const useSavePrefs = ({
     resetAutosaveTimer,
     serverPreferencesExist,
     setDirtyFlags,
+    showBoundary,
     updatePreferenceValues,
   ])
 

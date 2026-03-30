@@ -107,7 +107,7 @@ const useEditTemplateButton = () => {
               updateModalData({ confirmCommit: false, alert: null, confirmDiscard: false })
               closeModal(false)
             } else {
-              handleCommit(modalData.template, modalData.original)
+              return handleCommit(modalData.template, modalData.original)
             }
           }
           return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
@@ -132,7 +132,7 @@ const useEditTemplateButton = () => {
             return
           }
           const a = actions.find(x => x.label === label)
-          if (a && a.onClick) a.onClick()
+          if (a && a.onClick) return a.onClick()
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

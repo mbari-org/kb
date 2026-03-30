@@ -1,16 +1,32 @@
+import { useCallback, useState } from 'react'
+
 import { Button } from '@mui/material'
 
 const Action = ({ color, disabled, index, label, onAction, totalActions }) => {
+  const [asyncError, setAsyncError] = useState(null)
   const isMiddleButton = totalActions === 3 && index === 1
   const isLastButton = totalActions === 3 && index === 2
   const isSecondButton = totalActions === 2 && index === 1
+  if (asyncError) {
+    throw asyncError
+  }
+  const handleClick = useCallback(() => {
+    try {
+      const actionResult = onAction(label)
+      if (actionResult && typeof actionResult.then === 'function') {
+        actionResult.catch(setAsyncError)
+      }
+    } catch (error) {
+      setAsyncError(error)
+    }
+  }, [label, onAction])
 
   return (
     <Button
       key={index}
       color={color || 'main'}
       disabled={disabled}
-      onClick={() => onAction(label)}
+      onClick={handleClick}
       sx={{
         justifySelf: isMiddleButton ? 'center' : isLastButton || isSecondButton ? 'end' : 'start',
         marginLeft: totalActions === 1 ? 'auto' : 'inherit',

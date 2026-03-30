@@ -107,7 +107,7 @@ const useAddReferenceButton = () => {
         }
         const action = actions.find(x => x.label === label)
         if (action && action.onClick) {
-          action.onClick()
+          return action.onClick()
         }
       }
 
