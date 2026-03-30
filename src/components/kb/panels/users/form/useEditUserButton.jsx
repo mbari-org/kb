@@ -15,11 +15,10 @@ import {
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
-const { CONFIRM_DISCARD, DISCARD } = CONFIG.PANELS.USERS.MODALS.BUTTON
+const { CANCEL, CONFIRM_DISCARD, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
 const useEditUserButton = () => {
-  const { closeModal, createModal, updateModalData, withProcessing } =
-    useUsersModalOperationsContext()
+  const { closeModal, createModal, updateModalData, withProcessing } = useUsersModalOperationsContext()
   const { editUser, users } = use(UsersContext)
 
   const { handleCancel, handleFormChange } = useMemo(
@@ -60,13 +59,20 @@ const useEditUserButton = () => {
         if (confirmDiscard) {
           const colors = ['cancel', 'main']
           const disabled = [false, false]
-          const labels = [DISCARD, CONFIG.PANELS.USERS.MODALS.BUTTON.CONTINUE]
+          const labels = [DISCARD, CONTINUE]
 
-          const onAction = label => {
-            if (label === DISCARD) {
-              closeModal()
-            } else {
-              updateModalData({ confirmDiscard: false })
+          const onAction = async label => {
+            switch (label) {
+              case DISCARD:
+                closeModal()
+                break
+
+              case CONTINUE:
+                updateModalData({ confirmDiscard: false })
+                break
+
+              default:
+                throw new Error(`Invalid edit user discard action: ${label}`)
             }
           }
 
@@ -80,13 +86,24 @@ const useEditUserButton = () => {
         const disabled = actions.map(a => a.disabled || false)
         const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? DISCARD : a.label))
 
-        const onAction = label => {
-          if (label === DISCARD || label === CONFIRM_DISCARD) {
-            updateModalData({ confirmDiscard: true })
-            return
+        const onAction = async label => {
+          switch (label) {
+            case DISCARD:
+            case CONFIRM_DISCARD:
+              updateModalData({ confirmDiscard: true })
+              break
+
+            case CANCEL:
+              closeModal()
+              break
+
+            case SAVE:
+              await handleCommit(modalData.user, modalData.original)
+              break
+
+            default:
+              throw new Error(`Invalid edit user action: ${label}`)
           }
-          const a = actions.find(x => x.label === label)
-          if (a && a.onClick) return a.onClick()
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

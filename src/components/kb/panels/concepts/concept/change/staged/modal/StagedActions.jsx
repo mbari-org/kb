@@ -98,7 +98,7 @@ const StagedActions = ({ intent }) => {
     }
   }, [closeModal, handleSpecialAction, initialState, setEditing, stagedState])
 
-  const onAction = useCallback(label => {
+  const onAction = useCallback(async label => {
     switch (label) {
       case BACK_TO_EDIT:
         setGuardedAction(null)
@@ -120,9 +120,9 @@ const StagedActions = ({ intent }) => {
         break
 
       case SAVE:
-        return saveStaged().then(() => {
-          handleSpecialAction()
-        })
+        await saveStaged()
+        handleSpecialAction()
+        break
 
       default:
         closeModal()

@@ -27,11 +27,11 @@ const PhylogenyRootActions = () => {
   const disabled = [false, !selectedPhylogenyRoot || isCurrentPhylogenyRoot]
   const labels = [CANCEL, SAVE]
 
-  const onAction = label => {
+  const onAction = async label => {
     switch (label) {
       case CANCEL:
         closeModal(false)
-        return
+        break
 
       case SAVE:
         if (!confirmCommit) {
@@ -43,9 +43,15 @@ const PhylogenyRootActions = () => {
               severity: SAVE_CONFIRM.SEVERITY,
             },
           }))
-          return
+          break
         }
-        return saveAppPreference(phylogenyRootKey, selectedConceptName).then(() => closeModal(true))
+
+        await saveAppPreference(phylogenyRootKey, selectedConceptName)
+        closeModal(true)
+        break
+
+      default:
+        throw new Error(`Invalid phylogeny root action: ${label}`)
     }
   }
 

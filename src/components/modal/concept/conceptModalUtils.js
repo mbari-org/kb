@@ -36,20 +36,26 @@ export const createStagedActions = ({
   const disabled = [false, stageDisabled]
   const labels = confirmReset ? [CONFIRM, CONTINUE] : [DISCARD, STAGE]
 
-  const onAction = label => {
+  const onAction = async label => {
     switch (label) {
       case CONFIRM:
-        onConfirm()
+        await onConfirm()
         break
+
       case CONTINUE:
-        onContinue()
+        await onContinue()
         break
+
       case DISCARD:
-        onDiscard()
+        await onDiscard()
         break
+
       case STAGE:
-        onStage()
+        await onStage()
         break
+
+      default:
+        throw new Error(`Invalid staged action label: ${label}`)
     }
   }
 
@@ -124,10 +130,7 @@ export const validateChildName = (childName, existingNames, stagedChildren) => {
     return false
   }
 
-  return (
-    !existingNames.includes(childName) &&
-    !stagedChildren.some(stagedChild => stagedChild.name === childName)
-  )
+  return !existingNames.includes(childName) && !stagedChildren.some(stagedChild => stagedChild.name === childName)
 }
 
 /**

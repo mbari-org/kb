@@ -82,7 +82,7 @@ const PendingActions = () => {
   const colors = ['clean', 'main', 'cancel']
 
   const onAction = useCallback(
-    label => {
+    async label => {
       switch (label) {
         case APPROVE_ALL: {
           setPendingConfirm({ approval: APPROVAL.ACCEPT, group: GROUP.ALL, pendingIds })
@@ -90,12 +90,12 @@ const PendingActions = () => {
         }
 
         case CONFIRM: {
-          return updatePending(pendingConfirm).then(isMorePending => {
-            if (!isMorePending) {
-              closeModal()
-            }
-            setPendingConfirm(null)
-          })
+          const isMorePending = await updatePending(pendingConfirm)
+          if (!isMorePending) {
+            closeModal()
+          }
+          setPendingConfirm(null)
+          break
         }
 
         case DEFER:

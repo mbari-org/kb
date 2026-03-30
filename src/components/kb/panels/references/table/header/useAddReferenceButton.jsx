@@ -24,7 +24,7 @@ import CONFIG from '@/text'
 const { PROCESSING } = CONFIG
 
 const { REFERENCES } = SELECTED.SETTINGS
-const { DISCARD } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)
@@ -85,10 +85,22 @@ const useAddReferenceButton = () => {
       if (confirmDiscard) {
         const colors = ['cancel', 'main']
         const disabled = [false, false]
-        const labels = [DISCARD, CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE]
+        const labels = [DISCARD, CONTINUE]
 
-        const onAction = label =>
-          label === DISCARD ? closeModal() : updateModalData({ confirmDiscard: false })
+        const onAction = async label => {
+          switch (label) {
+            case DISCARD:
+              closeModal()
+              break
+
+            case CONTINUE:
+              updateModalData({ confirmDiscard: false })
+              break
+
+            default:
+              throw new Error(`Invalid add reference discard action: ${label}`)
+          }
+        }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
       }
@@ -99,15 +111,22 @@ const useAddReferenceButton = () => {
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
       const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges) ? DISCARD : a.label)
+      const onAction = async label => {
+        switch (label) {
+          case DISCARD:
+            updateModalData({ confirmDiscard: true })
+            break
 
-      const onAction = label => {
-        if (label === DISCARD || label === CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD) {
-          updateModalData({ confirmDiscard: true })
-          return
-        }
-        const action = actions.find(x => x.label === label)
-        if (action && action.onClick) {
-          return action.onClick()
+          case CANCEL:
+            closeModal()
+            break
+
+          case SAVE:
+            await handleCommit(modalData.reference)
+            break
+
+          default:
+            throw new Error(`Invalid add reference action: ${label}`)
         }
       }
 

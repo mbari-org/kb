@@ -15,6 +15,7 @@ import {
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
+const { CANCEL, DELETE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 
 const useDeleteReferenceButton = () => {
   const { createModal, closeModal, withProcessing } = useReferencesModalOperationsContext()
@@ -57,9 +58,19 @@ const useDeleteReferenceButton = () => {
         const disabled = actions.map(a => a.disabled || false)
         const labels = actions.map(a => a.label)
 
-        const onAction = label => {
-          const a = actions.find(x => x.label === label)
-          if (a && a.onClick) return a.onClick()
+        const onAction = async label => {
+          switch (label) {
+            case CANCEL:
+              handleCancel()
+              break
+
+            case DELETE:
+              await handleDeleteConfirm(modalData.reference)
+              break
+
+            default:
+              throw new Error(`Invalid delete reference action: ${label}`)
+          }
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

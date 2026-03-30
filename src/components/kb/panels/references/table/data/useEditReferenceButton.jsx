@@ -14,8 +14,7 @@ import {
   createModalContent,
   processEditReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
-
-const { DISCARD } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
 
 const useEditReferenceButton = () => {
   const openConfirmModal = useConfirmReferenceModal()
@@ -69,13 +68,20 @@ const useEditReferenceButton = () => {
         if (confirmDiscard) {
           const colors = ['cancel', 'main']
           const disabled = [false, false]
-          const labels = [DISCARD, CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE]
+          const labels = [DISCARD, CONTINUE]
 
-          const onAction = label => {
-            if (label === DISCARD) {
-              closeModal()
-            } else {
-              updateModalData({ confirmDiscard: false })
+          const onAction = async label => {
+            switch (label) {
+              case DISCARD:
+                closeModal()
+                break
+
+              case CONTINUE:
+                updateModalData({ confirmDiscard: false })
+                break
+
+              default:
+                throw new Error(`Invalid edit reference discard action: ${label}`)
             }
           }
 
@@ -94,13 +100,23 @@ const useEditReferenceButton = () => {
           return a.label
         })
 
-        const onAction = label => {
-          if (label === DISCARD || label === CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD) {
-            updateModalData({ confirmDiscard: true })
-            return
+        const onAction = async label => {
+          switch (label) {
+            case DISCARD:
+              updateModalData({ confirmDiscard: true })
+              break
+
+            case CANCEL:
+              closeModal()
+              break
+
+            case SAVE:
+              await handleCommitWithReopen(modalData.reference, modalData.original)
+              break
+
+            default:
+              throw new Error(`Invalid edit reference action: ${label}`)
           }
-          const a = actions.find(x => x.label === label)
-          if (a && a.onClick) return a.onClick()
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

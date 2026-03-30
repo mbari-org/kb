@@ -49,14 +49,16 @@ const useConfirmReferenceModal = () => {
         const disabled = [false, false]
         const labels = [CONTINUE, CONFIRM]
 
-        const onAction = label => {
+        const onAction = async label => {
           if (label === CONTINUE) {
             closeModal()
             if (reopenEditModal) {
               reopenEditModal(modalData.reference)
             }
           } else if (label === CONFIRM) {
-            return handleConfirm(modalData.reference, modalData.original)
+            await handleConfirm(modalData.reference, modalData.original)
+          } else {
+            throw new Error(`Invalid confirm reference action: ${label}`)
           }
         }
 

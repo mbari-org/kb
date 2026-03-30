@@ -56,7 +56,7 @@ const HistoryPendingActions = props => {
     switch (label) {
       case APPROVE: {
         setPendingConfirm(PENDING.APPROVAL.ACCEPT)
-        return
+        break
       }
 
       case CONFIRM: {
@@ -66,7 +66,7 @@ const HistoryPendingActions = props => {
         } finally {
           closeModal(true)
         }
-        return
+        break
       }
 
       case DEFER: {
@@ -75,12 +75,12 @@ const HistoryPendingActions = props => {
         } else {
           closeModal()
         }
-        return
+        break
       }
 
       case REJECT: {
         setPendingConfirm(PENDING.APPROVAL.REJECT)
-        return
+        break
       }
 
       default:

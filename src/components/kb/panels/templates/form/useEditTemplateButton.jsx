@@ -22,6 +22,7 @@ import {
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
 
 const useEditTemplateButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } =
@@ -87,12 +88,19 @@ const useEditTemplateButton = () => {
         if (modalData.confirmDiscard) {
           const colors = ['cancel', 'main']
           const disabled = [false, false]
-          const labels = [CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD, CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CONTINUE]
-          const onAction = label => {
-            if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD) {
-              closeModal()
-            } else {
-              updateModalData({ confirmDiscard: false, alert: null })
+          const labels = [DISCARD, CONTINUE]
+          const onAction = async label => {
+            switch (label) {
+              case DISCARD:
+                closeModal()
+                break
+
+              case CONTINUE:
+                updateModalData({ confirmDiscard: false, alert: null })
+                break
+
+              default:
+                throw new Error(`Invalid edit template discard action: ${label}`)
             }
           }
           return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
@@ -101,13 +109,20 @@ const useEditTemplateButton = () => {
         if (modalData.confirmCommit) {
           const colors = ['cancel', 'primary']
           const disabled = [false, false]
-          const labels = [CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CANCEL, CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.SAVE]
-          const onAction = label => {
-            if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CANCEL) {
-              updateModalData({ confirmCommit: false, alert: null, confirmDiscard: false })
-              closeModal(false)
-            } else {
-              return handleCommit(modalData.template, modalData.original)
+          const labels = [CANCEL, SAVE]
+          const onAction = async label => {
+            switch (label) {
+              case CANCEL:
+                updateModalData({ confirmCommit: false, alert: null, confirmDiscard: false })
+                closeModal(false)
+                break
+
+              case SAVE:
+                await handleCommit(modalData.template, modalData.original)
+                break
+
+              default:
+                throw new Error(`Invalid edit template commit action: ${label}`)
             }
           }
           return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
@@ -119,20 +134,26 @@ const useEditTemplateButton = () => {
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)
         const labels = actions.map((a, i) =>
-          i === 0 && modalData.hasChanges ? CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD : a.label
+          i === 0 && modalData.hasChanges ? DISCARD : a.label
         )
 
-        const onAction = label => {
-          if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DISCARD) {
-            updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
-            return
+        const onAction = async label => {
+          switch (label) {
+            case DISCARD:
+              updateModalData({ confirmDiscard: true, alert: discardEditsAlert() })
+              break
+
+            case CANCEL:
+              closeModal(false)
+              break
+
+            case SAVE:
+              updateModalData({ confirmCommit: true, alert: confirmTemplateSaveAlert() })
+              break
+
+            default:
+              throw new Error(`Invalid edit template action: ${label}`)
           }
-          if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.SAVE) {
-            updateModalData({ confirmCommit: true, alert: confirmTemplateSaveAlert() })
-            return
-          }
-          const a = actions.find(x => x.label === label)
-          if (a && a.onClick) return a.onClick()
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
