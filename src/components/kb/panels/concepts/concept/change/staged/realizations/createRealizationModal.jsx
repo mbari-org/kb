@@ -9,6 +9,8 @@ import { createModal } from '@/components/modal/conceptModalFactory'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
+const MIN_WIDTH = 750
+
 const createRealizationModal = action => {
   const createComponents = () => {
     const Title = () => <ConceptTitle />
@@ -19,22 +21,28 @@ const createRealizationModal = action => {
           Actions: EditRealizationActions,
           Content: EditRealizationContent,
           Title,
+          minWidth: MIN_WIDTH,
         }
       }
+
       case CONCEPT_STATE.REALIZATION.DELETE: {
         return {
           Actions: DeleteRealizationActions,
           Content: DeleteRealizationContent,
           Title,
+          minWidth: MIN_WIDTH,
         }
       }
+
       case CONCEPT_STATE.REALIZATION.EDIT: {
         return {
           Actions: EditRealizationActions,
           Content: EditRealizationContent,
           Title,
+          minWidth: MIN_WIDTH,
         }
       }
+
       default: {
         return null
       }

@@ -54,6 +54,13 @@ const RealizationForm = ({
     [realizationItem, onRealizationChange]
   )
 
+  const wrappedFieldSx = {
+    '& .MuiInputBase-inputMultiline': {
+      overflowWrap: 'anywhere',
+      whiteSpace: 'pre-wrap',
+    },
+  }
+
   return (
     <Stack
       component='form'
@@ -97,10 +104,13 @@ const RealizationForm = ({
         <TextInput
           disabled={!isValidLinkName}
           label='Link Value'
+          minRows={isEdit ? 1 : undefined}
+          multiline={isEdit}
           name='linkValue'
           onChange={handleLinkValueChange}
           required
           size='small'
+          sx={isEdit ? wrappedFieldSx : undefined}
           value={realizationItem.linkValue}
         />
       </FormControl>
