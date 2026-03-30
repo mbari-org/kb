@@ -45,8 +45,7 @@ const PhylogenyRootActions = () => {
           }))
           return
         }
-        saveAppPreference(phylogenyRootKey, selectedConceptName).then(() => closeModal(true))
-        return
+        return saveAppPreference(phylogenyRootKey, selectedConceptName).then(() => closeModal(true))
     }
   }
 

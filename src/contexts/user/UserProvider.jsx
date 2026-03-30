@@ -18,13 +18,14 @@ const UserProvider = ({ children }) => {
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [guardedAction, setGuardedAction] = useState(null)
+  const [logoutError, setLogoutError] = useState(null)
   const [user, setUser] = useState(null)
 
   const mountedRef = useRef(true)
   const refreshingRef = useRef(false)
   const savePreferencesRef = useRef(null)
 
-  const logout = useLogout(setUser, () => savePreferencesRef.current?.())
+  const logout = useLogout(setUser, () => savePreferencesRef.current?.(), setLogoutError)
 
   const { getPreferences, createPreferences, updatePreferences } = useUserPreferences({ config, user })
 
@@ -32,6 +33,10 @@ const UserProvider = ({ children }) => {
   const refreshUser = useRefreshUser({ setUser, user })
 
   useAuthUser({ logout, setUser, user })
+
+  if (logoutError) {
+    throw logoutError
+  }
 
   useEffect(() => {
     if (!config || !user) return

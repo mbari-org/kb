@@ -123,6 +123,7 @@ const PreferencesProvider = ({ children }) => {
     resetAutosaveTimer,
     serverPreferencesExist,
     setDirtyFlags,
+    showBoundary,
     updatePreferences,
   })
 

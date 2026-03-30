@@ -120,9 +120,9 @@ const StagedActions = ({ intent }) => {
         break
 
       case SAVE:
-        saveStaged()
-        handleSpecialAction()
-        break
+        return saveStaged().then(() => {
+          handleSpecialAction()
+        })
 
       default:
         closeModal()

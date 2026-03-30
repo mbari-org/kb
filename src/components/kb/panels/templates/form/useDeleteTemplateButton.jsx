@@ -65,7 +65,7 @@ const useDeleteTemplateButton = () => {
             return
           }
           const a = actions.find(x => x.label === label)
-          if (a && a.onClick) a.onClick()
+          if (a && a.onClick) return a.onClick()
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

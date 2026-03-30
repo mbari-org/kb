@@ -92,7 +92,7 @@ const useAddTemplateButton = () => {
             updateModalData({ confirmCommit: false, alert: null, confirmDiscard: false })
             closeModal(false)
           } else {
-            handleCommit(modalData.template)
+            return handleCommit(modalData.template)
           }
         }
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
@@ -117,7 +117,7 @@ const useAddTemplateButton = () => {
           return
         }
         const a = actions.find(x => x.label === label)
-        if (a && a.onClick) a.onClick()
+        if (a && a.onClick) return a.onClick()
       }
 
       return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

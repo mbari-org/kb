@@ -90,13 +90,12 @@ const PendingActions = () => {
         }
 
         case CONFIRM: {
-          updatePending(pendingConfirm).then(isMorePending => {
+          return updatePending(pendingConfirm).then(isMorePending => {
             if (!isMorePending) {
               closeModal()
             }
             setPendingConfirm(null)
           })
-          break
         }
 
         case DEFER:

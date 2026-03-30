@@ -56,7 +56,7 @@ const useConfirmReferenceModal = () => {
               reopenEditModal(modalData.reference)
             }
           } else if (label === CONFIRM) {
-            handleConfirm(modalData.reference, modalData.original)
+            return handleConfirm(modalData.reference, modalData.original)
           }
         }
 
