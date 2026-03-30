@@ -13,6 +13,9 @@ import {
   createLockUserContent,
   createLockUserTitle,
 } from '@/components/kb/panels/users/form/userModalUtils'
+import CONFIG from '@/text'
+
+const { CANCEL, CLOSE, LOCK, UNLOCK } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
 const useLockUserButton = () => {
   const { showBoundary } = useErrorBoundary()
@@ -57,9 +60,21 @@ const useLockUserButton = () => {
         const disabled = actions.map(a => a.disabled || false)
         const labels = actions.map(a => a.label)
 
-        const onAction = label => {
-          const a = actions.find(x => x.label === label)
-          if (a && a.onClick) return a.onClick()
+        const onAction = async label => {
+          switch (label) {
+            case CLOSE:
+            case CANCEL:
+              handleCancel()
+              break
+
+            case LOCK:
+            case UNLOCK:
+              await handleLockToggle(modalData.user)
+              break
+
+            default:
+              throw new Error(`Invalid lock user action: ${label}`)
+          }
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

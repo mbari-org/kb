@@ -11,14 +11,9 @@ const Action = ({ color, disabled, index, label, onAction, totalActions }) => {
     throw asyncError
   }
   const handleClick = useCallback(() => {
-    try {
-      const actionResult = onAction(label)
-      if (actionResult && typeof actionResult.then === 'function') {
-        actionResult.catch(setAsyncError)
-      }
-    } catch (error) {
-      setAsyncError(error)
-    }
+    Promise.resolve()
+      .then(() => onAction(label))
+      .catch(setAsyncError)
   }, [label, onAction])
 
   return (

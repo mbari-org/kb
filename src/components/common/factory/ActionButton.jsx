@@ -12,14 +12,9 @@ const ActionButton = ({ color, disabled, index, label, onAction, totalActions })
   }
 
   const handleClick = useCallback(() => {
-    try {
-      const actionResult = onAction(label)
-      if (actionResult && typeof actionResult.then === 'function') {
-        actionResult.catch(setAsyncError)
-      }
-    } catch (error) {
-      setAsyncError(error)
-    }
+    Promise.resolve()
+      .then(() => onAction(label))
+      .catch(setAsyncError)
   }, [label, onAction])
   return (
     <Button

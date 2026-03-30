@@ -16,6 +16,7 @@ import {
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
+const { CANCEL, DELETE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
 
 const useDeleteTemplateButton = () => {
   const { showBoundary } = useErrorBoundary()
@@ -59,13 +60,23 @@ const useDeleteTemplateButton = () => {
         const disabled = actions.map(a => a.disabled || false)
         const labels = actions.map(a => a.label)
 
-        const onAction = label => {
-          if (label === CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.DELETE && !modalData.confirmDelete) {
-            updateModalData({ confirmDelete: true, alert: confirmTemplateDeleteAlert() })
-            return
+        const onAction = async label => {
+          switch (label) {
+            case CANCEL:
+              handleCancel()
+              break
+
+            case DELETE:
+              if (!modalData.confirmDelete) {
+                updateModalData({ confirmDelete: true, alert: confirmTemplateDeleteAlert() })
+                break
+              }
+              await handleDeleteConfirm(modalData.template)
+              break
+
+            default:
+              throw new Error(`Invalid delete template action: ${label}`)
           }
-          const a = actions.find(x => x.label === label)
-          if (a && a.onClick) return a.onClick()
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />

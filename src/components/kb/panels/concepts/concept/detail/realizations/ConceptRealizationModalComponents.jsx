@@ -61,7 +61,9 @@ const ConceptRealizationModalContent = () => {
 const ConceptRealizationModalActions = () => {
   const { closeModal } = use(ConceptModalContext)
 
-  const handleAction = () => closeModal(true)
+  const handleAction = async () => {
+    closeModal(true)
+  }
 
   return createActions(
     {

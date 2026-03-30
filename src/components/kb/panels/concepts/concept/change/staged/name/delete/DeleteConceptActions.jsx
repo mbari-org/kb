@@ -18,6 +18,12 @@ import { deleteConcept as deleteTaxonomyConcept, getConcept as getTaxonomyConcep
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
+const ACTION_LABEL = Object.freeze({
+  CANCEL: 'Cancel',
+  CONFIRM: 'Confirm',
+  DELETE: 'Delete',
+  DISCARD: 'Discard',
+})
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
@@ -33,14 +39,19 @@ const DeleteConceptActions = () => {
 
   if (!isConfirm) {
     const colors = ['main', 'cancel']
-    const labels = ['Discard', 'Delete']
-    const onAction = label => {
-      if (label === 'Discard') {
-        closeModal()
-        return
-      }
-      if (label === 'Delete') {
-        setModalData(prev => ({ ...prev, alertType: 'delete' }))
+    const labels = [ACTION_LABEL.DISCARD, ACTION_LABEL.DELETE]
+    const onAction = async label => {
+      switch (label) {
+        case ACTION_LABEL.DISCARD:
+          closeModal()
+          break
+
+        case ACTION_LABEL.DELETE:
+          setModalData(prev => ({ ...prev, alertType: 'delete' }))
+          break
+
+        default:
+          throw new Error(`Invalid delete concept primary action: ${label}`)
       }
     }
     const disabled = [false, !modalData.isValid]
@@ -48,50 +59,54 @@ const DeleteConceptActions = () => {
   }
 
   const colors = ['main', 'cancel']
-  const labels = ['Cancel', 'Confirm']
+  const labels = [ACTION_LABEL.CANCEL, ACTION_LABEL.CONFIRM]
   const onAction = async label => {
-    if (label === 'Cancel') {
-      closeModal()
-      return
-    }
+    switch (label) {
+      case ACTION_LABEL.CANCEL:
+        closeModal()
+        break
 
-    if (label === 'Confirm') {
-      const { reassign } = modalData
-      const deleteConceptContext = {
-        apiFns,
-        relatedDataCounts: modalData.relatedDataCounts,
-        concept,
-        getPreferences,
-        getReferences,
-        reassign,
-        refreshPanelData,
-        savePreferences,
-        setClearTemplateFilters,
-        settings,
-        templates,
+      case ACTION_LABEL.CONFIRM: {
+        const { reassign } = modalData
+        const deleteConceptContext = {
+          apiFns,
+          relatedDataCounts: modalData.relatedDataCounts,
+          concept,
+          getPreferences,
+          getReferences,
+          reassign,
+          refreshPanelData,
+          savePreferences,
+          setClearTemplateFilters,
+          settings,
+          templates,
+        }
+
+        // CxNote due to closures the taxonomy must be directly manipulated
+
+        await withProcessing(async () => {
+          const preDeleteResults = await preSideEffects(deleteConceptContext)
+          const { closestConcept, taxonomy: updatedTaxonomy } =
+            await deleteTaxonomyConcept(taxonomy, concept, apiFns)
+          const postDeleteResults = await postSideEffects(deleteConceptContext)
+
+          const results = { ...preDeleteResults, ...postDeleteResults }
+
+          const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
+          await applyResults(refreshPanelData, results)
+
+          insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+          updateTaxonomy(updatedTaxonomy)
+
+          closeModal(true, () => {
+            updateSelected({ concept: closestConcept.name })
+            setClearTemplateFilters(true)
+          })
+        }, PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
+        break
       }
-
-      // CxNote due to closures the taxonomy must be directly manipulated
-
-      await withProcessing(async () => {
-        const preDeleteResults = await preSideEffects(deleteConceptContext)
-        const { closestConcept, taxonomy: updatedTaxonomy } =
-          await deleteTaxonomyConcept(taxonomy, concept, apiFns)
-        const postDeleteResults = await postSideEffects(deleteConceptContext)
-
-        const results = { ...preDeleteResults, ...postDeleteResults }
-
-        const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
-        await applyResults(refreshPanelData, results)
-
-        insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
-        updateTaxonomy(updatedTaxonomy)
-
-        closeModal(true, () => {
-          updateSelected({ concept: closestConcept.name })
-          setClearTemplateFilters(true)
-        })
-      }, PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
+      default:
+        throw new Error(`Invalid delete concept confirm action: ${label}`)
     }
   }
   return createActions({ colors, labels, onAction }, 'DeleteConceptActions:Confirm')

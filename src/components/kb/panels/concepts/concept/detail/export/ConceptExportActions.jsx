@@ -33,6 +33,8 @@ const ConceptExportActions = () => {
         }
         break
       }
+      default:
+        throw new Error(`Invalid concept export action: ${action}`)
     }
   }
 
