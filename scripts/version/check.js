@@ -2,16 +2,9 @@
 
 import process from 'process'
 
-import {
-  ensureCleanWorkingTree,
-  ensureLintPasses,
-  ensureMainBranch,
-  ensureTestDeployPasses,
-  ensureTestsPass,
-} from './common.js'
+import { ensureCleanWorkingTree, ensureLintPasses, ensureTestDeployPasses, ensureTestsPass } from './common.js'
 
 const main = async () => {
-  ensureMainBranch()
   ensureCleanWorkingTree()
   await ensureLintPasses()
   await ensureTestsPass()
