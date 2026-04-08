@@ -1,8 +1,7 @@
-import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-const run = command => execSync(command, { encoding: 'utf8' }).trim()
+import { run } from './common.js'
 
 const generateVersionInfo = () => {
   try {
@@ -14,15 +13,15 @@ const generateVersionInfo = () => {
     const minutes = String(now.getUTCMinutes()).padStart(2, '0')
     const dateString = `${year}.${month}.${day}-${hours}${minutes}`
 
-    const commitHash = run('git rev-parse --short HEAD')
-    const branchName = run('git rev-parse --abbrev-ref HEAD')
-    const commitDate = run('git show -s --format=%cI HEAD')
-    const commitMessage = run('git log -1 --pretty=%B').split('\n').pop()
-    const isWorkingDirClean = run('git status --porcelain') === ''
+    const commitHash = run('git', ['rev-parse', '--short', 'HEAD'])
+    const branchName = run('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
+    const commitDate = run('git', ['show', '-s', '--format=%cI', 'HEAD'])
+    const commitMessage = run('git', ['log', '-1', '--pretty=%B']).trim().split('\n')[0]
+    const isWorkingDirClean = run('git', ['status', '--porcelain']) === ''
 
     let tag = null
     try {
-      tag = run('git describe --tags --exact-match 2>/dev/null')
+      tag = run('git', ['describe', '--tags', '--exact-match'], { stdio: ['pipe', 'pipe', 'ignore'] })
     } catch {
       tag = null
     }
@@ -68,11 +67,10 @@ const generateVersionInfo = () => {
 
 const writeVersionFile = versionInfo => {
   const versionFilePath = path.resolve('src/version.js')
-  const escapeForSingleQuote = value => String(value).replaceAll('\'', '\\\'')
+  const escapeForSingleQuote = value => String(value).replaceAll("'", "\\'")
   const formattedInfo = Object.entries(versionInfo)
     .map(([key, value]) => {
-      const formattedValue =
-        typeof value === 'string' ? `'${escapeForSingleQuote(value)}'` : value
+      const formattedValue = typeof value === 'string' ? `'${escapeForSingleQuote(value)}'` : value
       return `  ${key}: ${formattedValue},`
     })
     .join('\n')

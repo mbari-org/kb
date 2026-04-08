@@ -1,17 +1,11 @@
-#!/usr/bin/env node
-
 import { execFileSync, spawn } from 'child_process'
-import fs from 'fs'
 import path from 'path'
-import process from 'process'
 import { pathToFileURL } from 'url'
 
-const run = (command, args = []) =>
-  execFileSync(command, args, {
-    encoding: 'utf8',
-  }).trim()
+export const run = (command, args = [], options = {}) =>
+  execFileSync(command, args, { encoding: 'utf8', ...options }).trim()
 
-const consoleMonitor = (command, args = [], { label, intervalMs = 15000 }) =>
+export const consoleMonitor = (command, args = [], { label, intervalMs = 15000 }) =>
   new Promise((resolve, reject) => {
     const start = Date.now()
     const child = spawn(command, args, { stdio: 'inherit' })
@@ -40,23 +34,21 @@ const consoleMonitor = (command, args = [], { label, intervalMs = 15000 }) =>
     })
   })
 
-const getCurrentBranch = () => run('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
-
-const ensureCleanWorkingTree = () => {
+export const ensureCleanWorkingTree = () => {
   const status = run('git', ['status', '--porcelain'])
   if (status) {
     throw new Error('Working tree is dirty. Commit or stash changes first.')
   }
 }
 
-const ensureMainBranch = () => {
-  const branch = getCurrentBranch()
+export const ensureMainBranch = () => {
+  const branch = run('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
   if (branch !== 'main') {
     throw new Error(`Expected branch "main", but on "${branch}".`)
   }
 }
 
-const ensureLintPasses = async () => {
+export const ensureLintPasses = async () => {
   const lintCommand = 'yarn'
   const lintArgs = ['lint']
   console.log(`🧹 Running lint validation: ${lintCommand} ${lintArgs.join(' ')}`)
@@ -67,7 +59,7 @@ const ensureLintPasses = async () => {
   }
 }
 
-const ensureTestsPass = async () => {
+export const ensureTestsPass = async () => {
   const testCommand = 'yarn'
   const testArgs = ['vitest', 'run', '--pool=threads', '--maxWorkers=80%', '--reporter=dot']
   console.log(`🧪 Running test validation: ${testCommand} ${testArgs.join(' ')}`)
@@ -78,7 +70,23 @@ const ensureTestsPass = async () => {
   }
 }
 
-const getVersionInfo = async () => {
+export const ensureTestDeployPasses = async () => {
+  const testDeployCommand = 'node'
+  const testDeployArgs = ['scripts/version/test-deploy.js']
+  console.log(
+    `🚢 Running test deploy validation: ${testDeployCommand} ${testDeployArgs.join(' ')}`
+  )
+  try {
+    await consoleMonitor(testDeployCommand, testDeployArgs, {
+      label: 'Test deploy validation',
+      intervalMs: 10000,
+    })
+  } catch {
+    throw new Error('Test deploy failed.')
+  }
+}
+
+export const getVersionInfo = async () => {
   const versionPath = path.resolve('src/version.js')
   const versionUrl = pathToFileURL(versionPath).href
   const { VERSION_INFO } = await import(versionUrl)
@@ -87,56 +95,3 @@ const getVersionInfo = async () => {
   }
   return VERSION_INFO
 }
-
-const updatePackageJsonVersion = version => {
-  const packageJsonPath = path.resolve('package.json')
-  const rawPackageJson = fs.readFileSync(packageJsonPath, 'utf8')
-  const packageJson = JSON.parse(rawPackageJson)
-
-  if (packageJson.version === version) {
-    throw new Error(`package.json already at version ${version}.`)
-  }
-
-  packageJson.version = version
-  fs.writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`)
-}
-
-const ensureTagDoesNotExist = version => {
-  const existing = run('git', ['tag', '--list', version])
-  if (existing) {
-    throw new Error(`Tag "${version}" already exists.`)
-  }
-}
-
-const commitAndTag = version => {
-  run('git', ['add', 'package.json'])
-  run('git', ['commit', '-m', `v${version}`])
-  run('git', ['tag', version])
-}
-
-const main = async () => {
-  const isCheckOnly = process.argv.includes('--check')
-  ensureMainBranch()
-  ensureCleanWorkingTree()
-  await ensureLintPasses()
-  await ensureTestsPass()
-
-  if (isCheckOnly) {
-    console.log('✅ Release pre-checks passed.')
-    return
-  }
-
-  run('node', ['scripts/generate-version.js'])
-
-  const { version } = await getVersionInfo()
-  ensureTagDoesNotExist(version)
-  updatePackageJsonVersion(version)
-  commitAndTag(version)
-
-  console.log(`✅ Created release commit and tag for ${version}`)
-}
-
-main().catch(error => {
-  console.error(`❌ Release failed: ${error.message}`)
-  process.exit(1)
-})

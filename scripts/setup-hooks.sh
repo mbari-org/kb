@@ -9,5 +9,5 @@ git config core.hooksPath .githooks
 echo "✅ Git hooks configured successfully!"
 echo "The pre-commit hook will now automatically generate version info before each commit."
 echo ""
-echo "To manually generate version info, run: yarn version:generate"
+echo "To manually generate version info, run: yarn version:tag"
 

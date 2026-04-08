@@ -1,21 +1,15 @@
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import path from 'path'
 import { pathToFileURL } from 'url'
-
-/**
- * Vite plugin for automatic version generation with HMR support
- *
- * Single source of truth: scripts/generate-version.js
- */
 export const versionPlugin = () => {
   let server
   let pendingWatchFile
 
   const versionFilePath = path.resolve('src/version.js')
+  const generateScriptPath = path.resolve('scripts/version/tag.js')
 
   const runGenerateScript = () => {
-    // Delegate version generation to the shared script
-    execSync('node scripts/generate-version.js', {
+    execFileSync('node', [generateScriptPath], {
       stdio: 'inherit',
       encoding: 'utf8',
     })
@@ -29,7 +23,10 @@ export const versionPlugin = () => {
 
   const getExactGitTag = () => {
     try {
-      return execSync('git describe --tags --exact-match 2>/dev/null', { encoding: 'utf8' }).trim()
+      return execFileSync('git', ['describe', '--tags', '--exact-match'], {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'ignore'],
+      }).trim()
     } catch {
       return null
     }

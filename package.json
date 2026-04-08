@@ -46,16 +46,16 @@
   },
   "packageManager": "yarn@4.5.1",
   "scripts": {
+    "build": "vite build",
     "dev": "vite",
     "dev:local": "cross-env VITE_M3_LOCAL=true vite",
-    "build": "vite build",
     "kb": "yarn build && yarn preview",
     "lint": "eslint .",
-    "test": "vitest",
-    "guard:test-drift": "bash scripts/check-test-drift.sh",
     "preview": "vite preview",
-    "version:generate": "node scripts/generate-version.js",
-    "release:version": "node scripts/release-version.js",
-    "release:check": "node scripts/release-version.js --check"
+    "test": "vitest",
+    "version:check": "node scripts/version/check.js",
+    "version:release": "node scripts/version/release.js",
+    "version:tag": "node scripts/version/tag.js",
+    "version:test-deploy": "node scripts/version/test-deploy.js"
   }
 }

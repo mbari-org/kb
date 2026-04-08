@@ -98,7 +98,7 @@ src/
 | `yarn preview` | Preview production build locally |
 | `yarn kb` | Build and preview (combined command) |
 | `yarn lint` | Run ESLint code analysis |
-| `yarn version:generate` | Generate version information |
+| `yarn version:tag` | Generate version information |
 
 ## 🏗️ Development
 
