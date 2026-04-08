@@ -70,11 +70,11 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
       default:
         return (
           <Box
-            display='flex'
-            alignItems='center'
-            gap={0.5}
             sx={{
+              alignItems: 'center',
               color: dirtyColor,
+              display: 'flex',
+              gap: 0.5,
               '&:hover .refresh-button': {
                 opacity: IS_DEV ? 1 : 0,
               },

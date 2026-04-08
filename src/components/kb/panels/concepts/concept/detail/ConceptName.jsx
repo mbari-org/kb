@@ -37,7 +37,7 @@ const ConceptName = () => {
     hasStagedStructure || hasPending.any ? theme.concept.color.edit : theme.palette.primary.main
 
   return (
-    <Stack direction='row' alignItems='center' sx={{ position: 'relative' }}>
+    <Stack direction='row' sx={{ alignItems: 'center', position: 'relative' }}>
       <Typography
         component='div'
         sx={{

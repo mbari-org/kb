@@ -20,8 +20,8 @@ vi.mock('@mui/x-tree-view/RichTreeView', () => ({
   },
 }))
 
-vi.mock('@mui/x-tree-view/hooks', () => ({
-  useTreeViewApiRef: () => ({ current: { getItemDOMElement: mockGetItemDOMElement } }),
+vi.mock('@mui/x-tree-view', () => ({
+  useRichTreeViewApiRef: () => ({ current: { getItemDOMElement: mockGetItemDOMElement } }),
 }))
 
 vi.mock('@/components/kb/panels/concepts/sidebar/tree/lib/useArrowKeys', () => ({

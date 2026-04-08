@@ -58,7 +58,7 @@ const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia 
   }, [formMediaItem.isPrimary, onPrimaryChange, shouldBeChecked])
 
   return (
-    <Box display='flex' justifyContent='flex-end'>
+    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
       <FormControlLabel
         control={
           <Checkbox

@@ -3,7 +3,7 @@ import { use, useCallback, useEffect, useMemo, useRef, useState, memo } from 're
 import Box from '@mui/material/Box'
 
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
-import { useTreeViewApiRef } from '@mui/x-tree-view/hooks'
+import { useRichTreeViewApiRef } from '@mui/x-tree-view'
 
 import ConceptTreeItem from '@/components/kb/panels/concepts/sidebar/tree/ConceptTreeItem'
 
@@ -29,7 +29,7 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
 
   const [expandedItems, setExpandedItems] = useState([])
 
-  const apiRef = useTreeViewApiRef()
+  const apiRef = useRichTreeViewApiRef()
   const conceptName = concept?.name
 
   const selectedItems = useMemo(() => {

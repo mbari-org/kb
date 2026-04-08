@@ -58,7 +58,7 @@ const ConceptRealization = ({ realization }) => {
   const linkNameLabel = realization.linkName?.trim() || 'View Realization'
 
   return (
-    <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
+    <Stack direction='row' spacing={1} width='100%' sx={{ alignItems: 'center', border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
         {showEdit && realizationIcon(CONCEPT_STATE.REALIZATION.EDIT)}
         {showDelete && realizationIcon(CONCEPT_STATE.REALIZATION.DELETE)}

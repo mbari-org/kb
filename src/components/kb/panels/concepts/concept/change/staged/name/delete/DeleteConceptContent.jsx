@@ -72,7 +72,7 @@ const DeleteConceptContent = () => {
       {isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData.isLoading && hasRelatedData && <RelatedDataCounts relatedDataCounts={relatedDataCounts} />}
       {isAdmin(user) && (
-        <Stack direction='column' spacing={1} alignItems='center'>
+        <Stack direction='column' spacing={1} sx={{ alignItems: 'center' }}>
           <Box>
             {hasRelatedData && (
               <Box sx={{ ml: 1 }}>

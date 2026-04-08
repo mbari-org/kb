@@ -19,7 +19,7 @@ const ConceptExportType = ({ value = EXPORT_TYPE.JSON, onChange }) => {
   }
 
   return (
-    <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
+    <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mr: 0.5 }}>
       <KBTooltip title='Export format'>
         <Typography>Type:</Typography>
       </KBTooltip>

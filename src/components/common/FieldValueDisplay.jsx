@@ -9,11 +9,12 @@ import {
 const FieldValueDisplay = ({ disabled, field, sx, value }) => {
   const fieldSx = disabled ? { ...baseFieldSx, color: 'text.disabled' } : baseFieldSx
   const valueSx = disabled ? { ...baseValueSx, color: 'text.disabled' } : baseValueSx
+  const containerSx = { display: 'flex', flexDirection: 'row', ...sx }
 
   return (
-    <Box key={field} display='flex' flexDirection='row' sx={sx}>
+    <Box key={field} sx={containerSx}>
       <Typography sx={fieldSx}>{formatField(field)}:</Typography>
-      <Typography sx={valueSx} ml={1}>
+      <Typography sx={{ ...valueSx, ml: 1 }}>
         {typeof value === 'boolean' ? String(value) : value}
       </Typography>
     </Box>

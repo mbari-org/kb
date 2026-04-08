@@ -47,7 +47,7 @@ const ConceptExtent = ({
   const labelElement = <Typography>{label}</Typography>
 
   return (
-    <Stack direction='row' spacing={1} alignItems='center' sx={{ mr: 0.5 }}>
+    <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mr: 0.5 }}>
       {labelTooltip ? (
         <KBTooltip title={labelTooltip}>{labelElement}</KBTooltip>
       ) : (

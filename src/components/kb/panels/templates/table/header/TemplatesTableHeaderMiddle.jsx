@@ -27,7 +27,7 @@ const TemplatesTableHeaderMiddle = () => {
   }
 
   return (
-    <Stack direction='row' alignItems='center' spacing={5}>
+    <Stack direction='row' spacing={5} sx={{ alignItems: 'center' }}>
       <TableHeaderLinkFilter
         name={TEMPLATES.FILTERS.LINK_NAME}
         value={filters[TEMPLATES.FILTERS.LINK_NAME] || ''}

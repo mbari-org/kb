@@ -47,7 +47,7 @@ const UserActions = () => {
   }
 
   return (
-    <Stack alignItems='center' direction='row' spacing={1} sx={{ mt: -1.5 }}>
+    <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mt: -1.5 }}>
       <InfoIcon onClick={handleAppInfo} size={ICON_SIZE} tooltip='App Info' />
       <RefreshAppIcon onClick={handleRefresh} size={ICON_SIZE} tooltip='Refresh Data' />
       <LogoutIcon onClick={handleLogout} size={ICON_SIZE} tooltip='Logout' />

@@ -49,7 +49,7 @@ const ConceptAlias = ({ alias }) => {
   }
 
   return (
-    <Stack alignItems='center' direction='row' spacing={1} width='100%' sx={{ border, ml: -1 }}>
+    <Stack direction='row' spacing={1} width='100%' sx={{ alignItems: 'center', border, ml: -1 }}>
       <Stack direction='column' spacing={-0.5}>
         {showEdit && aliasIcon(CONCEPT_STATE.ALIAS.EDIT)}
         {showDelete && aliasIcon(CONCEPT_STATE.ALIAS.DELETE)}

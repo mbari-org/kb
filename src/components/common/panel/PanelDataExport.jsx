@@ -19,7 +19,7 @@ const PanelDataExport = ({
         width: width,
       }}
     >
-      <Stack direction='row' spacing={1} alignItems='center'>
+      <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
         <Box sx={{ minWidth: '100px' }}>
           <Typography variant='body1'>{countLabel}: {count}</Typography>
         </Box>

@@ -74,7 +74,7 @@ const ChangeNameContent = () => {
       {modalData?.isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData?.isLoading && (
       <Box>
-        <Stack direction='row' spacing={2} alignItems='center' sx={{ mt: 1, ml: 3 }}>
+        <Stack direction='row' spacing={2} sx={{ alignItems: 'center', mt: 1, ml: 3 }}>
           <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>To:</Typography>
           <TextField
             error={nameError}

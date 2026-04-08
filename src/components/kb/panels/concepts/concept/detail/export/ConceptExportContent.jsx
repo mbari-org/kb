@@ -35,19 +35,12 @@ const ConceptExportContent = () => {
 
   return (
     <Stack spacing={2}>
-      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-        <ConceptExportType
-          value={exportType}
-          onChange={handleExportTypeChange}
-        />
-        <ConceptExtent
-          initialValue={conceptExtent}
-          onChange={handleConceptExtentChange}
-          exportType={exportType}
-        />
+      <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <ConceptExportType value={exportType} onChange={handleExportTypeChange} />
+        <ConceptExtent initialValue={conceptExtent} onChange={handleConceptExtentChange} exportType={exportType} />
       </Stack>
       <Typography variant='body2' color='text.secondary'>
-          {exportMessage}
+        {exportMessage}
       </Typography>
       {exportType === EXPORT_TYPE.CSV && <ConceptExportCsvFields />}
       {exportType === EXPORT_TYPE.JSON && <ConceptExportJsonFields />}

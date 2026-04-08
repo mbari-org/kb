@@ -38,7 +38,7 @@ const ChangeParentContent = ({ omitChoices }) => {
 
   return (
     <Box>
-      <Stack alignItems='center' direction='row' spacing={1}>
+      <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
         <ModalActionText text={MODALS.STRUCTURE.CHANGE_PARENT.LABEL} />
         <Typography sx={{ fontWeight: 'bold' }} variant='h6'>
           {concept.parent}

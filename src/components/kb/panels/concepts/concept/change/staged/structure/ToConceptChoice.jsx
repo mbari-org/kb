@@ -27,7 +27,7 @@ const ToConceptChoice = ({
   }, [optionNames, value])
 
   return (
-    <Stack direction='row' spacing={3} alignItems='center'>
+    <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
       <Typography align='center'>{label}:</Typography>
       <Autocomplete
         onChange={handleChange}

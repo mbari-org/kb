@@ -36,8 +36,8 @@ const RankFieldInput = ({ field, initialRank, label, rank, onChange }) => {
 
   return (
     <FormControl {...inputStyle}>
-      <Box alignItems='center' display='flex' flexDirection='row' width='100%'>
-        <Box display='flex' flexDirection='column' flexGrow={1} sx={{ border }}>
+      <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'row', width: '100%' }}>
+        <Box sx={{ border, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <InputLabel id={`${field}-label`}>{label}</InputLabel>
           <Select
             displayEmpty

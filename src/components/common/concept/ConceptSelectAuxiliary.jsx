@@ -8,8 +8,7 @@ const ConceptSelectAuxiliary = ({ disabled = false, label, components = [] }) =>
   return (
     <Stack
       direction='row'
-      alignItems='center'
-      sx={{ minHeight: '40px' }}
+      sx={{ alignItems: 'center', minHeight: '40px' }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography
