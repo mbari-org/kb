@@ -1,4 +1,4 @@
-import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
+import generalStateUpdates from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
 import { capitalize, isJsonEqual } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'

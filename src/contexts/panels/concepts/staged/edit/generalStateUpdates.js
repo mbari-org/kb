@@ -16,4 +16,4 @@ const generalStateUpdates = (field, initial, staged) => {
   }
 }
 
-export { generalStateUpdates }
+export default generalStateUpdates

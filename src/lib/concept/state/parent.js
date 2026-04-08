@@ -1,4 +1,4 @@
-import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
+import generalStateUpdates from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 

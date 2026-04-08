@@ -1,4 +1,4 @@
-import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
+import generalStateUpdates from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
 
 import { isStateModified } from '@/lib/concept/state/state'
 import * as aliases from '@/lib/concept/state/aliases'

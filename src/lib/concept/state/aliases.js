@@ -1,4 +1,4 @@
-import { generalStateUpdates } from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
+import generalStateUpdates from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
 import { stagedEdits } from '@/lib/concept/state/staged'
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
