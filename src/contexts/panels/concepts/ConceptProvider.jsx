@@ -119,7 +119,7 @@ const ConceptProvider = ({ children }) => {
         templates: getConceptTemplates(updatedConcept.name),
       }
 
-      const conceptState = initialConceptState(conceptWithTemplates, pendingConcept)
+      const initialState = initialConceptState(conceptWithTemplates, pendingConcept)
 
       if (isSameConcept) {
         const clampIndex = (index, length) => {
@@ -128,16 +128,18 @@ const ConceptProvider = ({ children }) => {
           return Math.max(0, Math.min(index, length - 1))
         }
 
-        conceptState.aliasIndex = clampIndex(indexRef.current.aliasIndex, conceptState.aliases?.length)
-        conceptState.mediaIndex = clampIndex(indexRef.current.mediaIndex, conceptState.media?.length)
-        conceptState.realizationIndex = clampIndex(
+        initialState.aliasIndex = clampIndex(indexRef.current.aliasIndex, initialState.aliases?.length)
+        initialState.mediaIndex = clampIndex(indexRef.current.mediaIndex, initialState.media?.length)
+        initialState.realizationIndex = clampIndex(
           indexRef.current.realizationIndex,
-          conceptState.realizations?.length
+          initialState.realizations?.length
         )
       }
 
-      setInitialState(conceptState)
-      dispatch({ type: CONCEPT_STATE.INITIAL, update: conceptState })
+      const stagedState = structuredClone(initialState)
+
+      setInitialState(initialState)
+      dispatch({ type: CONCEPT_STATE.INITIAL, update: stagedState })
 
       setConcept(conceptWithTemplates)
 
