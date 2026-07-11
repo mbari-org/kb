@@ -6,6 +6,7 @@ import concept from '@/text/config/panels/concepts/modals/group.json'
 import mediaAdd from '@/text/config/panels/concepts/modals/media/add.json'
 import mediaDelete from '@/text/config/panels/concepts/modals/media/delete.json'
 import mediaEdit from '@/text/config/panels/concepts/modals/media/edit.json'
+import mediaPrimary from '@/text/config/panels/concepts/modals/media/primary.json'
 import pending from '@/text/config/panels/concepts/modals/pending.json'
 import realizationAdd from '@/text/config/panels/concepts/modals/realization/add.json'
 import realizationDelete from '@/text/config/panels/concepts/modals/realization/delete.json'
@@ -28,6 +29,7 @@ export const MODALS = {
     ADD: mediaAdd,
     DELETE: mediaDelete,
     EDIT: mediaEdit,
+    PRIMARY: mediaPrimary,
   },
   PENDING: pending,
   REALIZATION: {

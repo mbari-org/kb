@@ -5,6 +5,7 @@ import {
   FormControlLabel,
   Typography,
 } from '@mui/material'
+import KBTooltip from '@/components/common/KBTooltip'
 
 import { getItemMediaType, hasPrimaryOfType, mediaOfType } from '@/lib/model/media'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -59,21 +60,23 @@ const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia 
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={shouldBeChecked}
-            disabled={isDisabled}
-            name='isPrimary'
-            onChange={onPrimaryChange}
-          />
-        }
-        label={
-          <Typography sx={{ color: 'text.primary' }}>
-            {MEDIA.EDIT.PRIMARY}
-          </Typography>
-        }
-      />
+      <KBTooltip title={MEDIA.PRIMARY.TOOLTIP}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={shouldBeChecked}
+              disabled={isDisabled}
+              name='isPrimary'
+              onChange={onPrimaryChange}
+            />
+          }
+          label={
+            <Typography sx={{ color: 'text.primary' }}>
+              {MEDIA.PRIMARY.LABEL}
+            </Typography>
+          }
+        />
+      </KBTooltip>
     </Box>
   )
 }
