@@ -14,7 +14,7 @@ const ChangeNameActions = () => {
   const { concept, confirmReset, initialState, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
-  const { isValid, name, relatedDataCounts } = modalData
+  const { hasRelatedData, isValid, name, relatedDataCounts } = modalData
 
   const { handleConfirm, handleContinue } = createConfirmationHandlers({
     closeModal,
@@ -46,7 +46,7 @@ const ChangeNameActions = () => {
     closeModal(true)
   }
 
-  const stageDisabled = !isValid || (!confirmReset && name.extent === '')
+  const stageDisabled = !isValid || (!confirmReset && hasRelatedData && name.extent === '')
 
   return createStagedActions({
     confirmReset,

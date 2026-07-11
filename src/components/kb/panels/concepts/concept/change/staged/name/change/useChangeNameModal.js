@@ -13,8 +13,10 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import CONFIG from '@/text'
 
 const { NAME } = CONCEPT_STATE
+const { TEMPLATES_DEFINED } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
 
 const useChangeNameModal = () => {
   const { apiFns } = use(ConfigContext)
@@ -51,11 +53,15 @@ const useChangeNameModal = () => {
       concept,
       getReferences,
     })
+    const hasRelatedData = counts
+      .filter(count => count.title !== TEMPLATES_DEFINED)
+      .some(count => count.value > 0)
 
     setModalData(prev => ({
       ...prev,
       action: NAME,
       alert: null,
+      hasRelatedData,
       isLoading: false,
       isValid: true,
       modified: false,

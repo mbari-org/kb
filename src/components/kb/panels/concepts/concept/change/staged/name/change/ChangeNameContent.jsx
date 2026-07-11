@@ -59,70 +59,65 @@ const ChangeNameContent = () => {
   }, [name, isValidName, debouncedUpdateModalData])
 
   const toColor = () => {
-    return isValidName
-      ? theme.concept.color.add
-      : theme.palette.grey[700]
+    return isValidName ? theme.concept.color.add : theme.palette.grey[700]
   }
 
   const isAdminUser = isAdmin(user)
 
-  const { relatedDataCounts } = modalData
+  const { hasRelatedData, relatedDataCounts } = modalData
   const filteredRelatedDataCounts = relatedDataCounts?.filter(count => count.title !== TEMPLATES_DEFINED)
-  const hasRelatedData = filteredRelatedDataCounts?.some(count => count.value > 0)
 
   return (
     <Box>
       <ModalActionText text={MODALS.STRUCTURE.CHANGE_NAME.LABEL} />
       {modalData?.isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData?.isLoading && (
-      <Box>
-        <Stack direction='row' spacing={2} sx={{ alignItems: 'center', mt: 1, ml: 3 }}>
-          <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>To:</Typography>
-          <TextField
-            error={nameError}
-            fullWidth
-            helperText={nameError ? nameHelperText : ' '}
-            onChange={handleNameChange}
-            onKeyUp={handleNameChange}
-            slotProps={{
-              input: {
-                sx: {
-                  color: toColor(),
-                  cursor: 'text',
-                  fontFamily: theme.concept.fontFamily,
-                  fontSize: theme.concept.updateFontSize,
-                  fontWeight: theme.concept.fontWeight,
-                  height: 'auto',
+        <Box>
+          <Stack direction='row' spacing={2} sx={{ alignItems: 'center', mt: 1, ml: 3 }}>
+            <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>To:</Typography>
+            <TextField
+              error={nameError}
+              fullWidth
+              helperText={nameError ? nameHelperText : ' '}
+              onChange={handleNameChange}
+              onKeyUp={handleNameChange}
+              slotProps={{
+                input: {
+                  sx: {
+                    color: toColor(),
+                    cursor: 'text',
+                    fontFamily: theme.concept.fontFamily,
+                    fontSize: theme.concept.updateFontSize,
+                    fontWeight: theme.concept.fontWeight,
+                    height: 'auto',
+                  },
                 },
-              },
-            }}
-            sx={{
-              '& .MuiFormHelperText-root': {
-                color: nameError ? theme.palette.cancel.main : 'transparent',
-                lineHeight: '0',
-                margin: '15px 0 0 10px',
-              },
-            }}
-            value={name.value}
-            variant='standard'
-          />
-        </Stack>
-        <Box sx={{ ml: 6.75 }}>
-          {isAdminUser && (
-            <NameChangeExtent
-              disabled={!isValidName}
-              nameChangeType={name.extent}
-              onChange={handleNameExtentChange}
-              value={name.extent}
+              }}
+              sx={{
+                '& .MuiFormHelperText-root': {
+                  color: nameError ? theme.palette.cancel.main : 'transparent',
+                  lineHeight: '0',
+                  margin: '15px 0 0 10px',
+                },
+              }}
+              value={name.value}
+              variant='standard'
             />
+          </Stack>
+          <Box sx={{ ml: 6.75 }}>
+            {isAdminUser && !!hasRelatedData && (
+              <NameChangeExtent
+                disabled={!isValidName}
+                nameChangeType={name.extent}
+                onChange={handleNameExtentChange}
+                value={name.extent}
+              />
+            )}
+          </Box>
+          {!modalData.isLoading && !!hasRelatedData && (
+            <RelatedDataCounts relatedDataCounts={filteredRelatedDataCounts} />
           )}
         </Box>
-        {!modalData.isLoading && hasRelatedData && (
-          <RelatedDataCounts
-            relatedDataCounts={filteredRelatedDataCounts}
-          />
-        )}
-      </Box>
       )}
     </Box>
   )
