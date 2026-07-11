@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Link } from '@mui/material'
 
 import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
@@ -43,7 +43,9 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
             py: 1,
           }}
         >
-          {params.value}
+          <Link href={params.value} rel='noopener noreferrer' target='_blank'>
+            {params.value}
+          </Link>
         </Box>
       ),
       width: 200,
