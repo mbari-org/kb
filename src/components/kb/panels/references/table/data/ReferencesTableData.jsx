@@ -8,6 +8,7 @@ import useDeleteReferenceButton from '@/components/kb/panels/references/table/da
 import useReferenceColumns from '@/components/kb/panels/references/table/data/useReferenceColumns'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -21,19 +22,23 @@ const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesTableData = () => {
   const { getReferences } = use(PanelDataContext)
+  const { citationGlob } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
 
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
   const selectedConcept = byConcept ? getSelected(CONCEPT) : null
 
-  const selectedReferences = getReferences(selectedConcept)
+  const selectedConceptReferences = getReferences(selectedConcept)
+  const filteredReferences = selectedConceptReferences
+    .filter(reference => reference.citation.toLowerCase().includes(citationGlob.toLowerCase()))
 
   const editReferenceModal = useEditReferenceButton()
   const deleteReferenceModal = useDeleteReferenceButton()
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)
-  const displayedReferences = selectedReferences.slice(offset, offset + limit)
+
+  const displayedReferences = filteredReferences.slice(offset, offset + limit)
 
   const columns = useReferenceColumns({ editReferenceModal, deleteReferenceModal })
 
@@ -46,7 +51,7 @@ const ReferencesTableData = () => {
 
   const paginationComponent = (
     <ReferencesPagination
-      count={selectedReferences.length}
+      count={filteredReferences.length}
       limit={limit}
       nextPage={nextPage}
       offset={offset}
@@ -59,7 +64,7 @@ const ReferencesTableData = () => {
     <PanelDataGrid
       columns={columns}
       rows={displayedReferences}
-      rowCount={selectedReferences.length}
+      rowCount={filteredReferences.length}
       paginationModel={{
         page: Math.floor(offset / limit),
         pageSize: limit,
