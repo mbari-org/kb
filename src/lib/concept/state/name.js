@@ -5,6 +5,9 @@ import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
 import { isJsonEqual } from '@/lib/utils'
 
+// Protect structure of DB concept name: trim ends and replace any multiple spaces.
+const normalizeConceptName = value => value.trim().replace(/\s+/g, ' ')
+
 const initialState = (concept, pendingConcept) => {
   const { name } = concept
 
@@ -18,11 +21,12 @@ const initialState = (concept, pendingConcept) => {
 }
 
 const editName = ({ stagedState, update }) => {
+  const nameUpdate = { ...update, value: normalizeConceptName(update.value) }
   return {
     ...stagedState,
     name: {
       ...stagedState.name,
-      ...update,
+      ...nameUpdate,
     },
   }
 }
@@ -58,4 +62,4 @@ const isModified = (initial, staged) => !isJsonEqual(initial?.name, staged?.name
 
 const stateUpdates = (initial, staged) => generalStateUpdates('name', initial, staged)
 
-export { editName, initialState, isModified, isPendingName, resetName, stateUpdates }
+export { editName, initialState, isModified, isPendingName, normalizeConceptName, resetName, stateUpdates }

@@ -3,6 +3,7 @@ import { use, useCallback } from 'react'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import useDebounce from '@/lib/hooks/useDebounce'
+import { normalizeConceptName } from '@/lib/concept/state/name'
 
 import { hasTrue } from '@/lib/utils'
 
@@ -31,10 +32,14 @@ const useAddChildHandlers = (
       event.preventDefault()
 
       const { action, child, index } = modalData
+      const normalizedChild = {
+        ...child,
+        name: normalizeConceptName(child.name),
+      }
 
       modifyConcept({
         type: action,
-        update: { child, index },
+        update: { child: normalizedChild, index },
       })
 
       closeModal(true)

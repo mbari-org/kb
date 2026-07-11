@@ -26,6 +26,18 @@ const baseStagedState = {
 const initialState = { ...baseStagedState }
 
 describe('conceptStateReducer name', () => {
+  it('normalizes name value by trimming and collapsing internal whitespace', () => {
+    const stagedState = conceptStateReducer(baseStagedState, {
+      type: NAME,
+      update: { value: '   Deep    Sea    Coral   ', extent: 'Full extent' },
+      initialState,
+    })
+
+    expect(stagedState.name).toMatchObject({
+      value: 'Deep Sea Coral',
+      extent: 'Full extent',
+    })
+  })
   it('edits name and verifies isModified', () => {
     const stagedState = conceptStateReducer(baseStagedState, {
       type: NAME,

@@ -265,6 +265,68 @@ describe('concept object add child discard', () => {
     vi.clearAllMocks()
   })
 
+  it('normalizes newly staged child concept name whitespace', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <TestWrapper>
+        <Concepts />
+      </TestWrapper>
+    )
+
+    const conceptInput = screen.getByRole('combobox')
+    await user.click(conceptInput)
+    await user.clear(conceptInput)
+    await user.type(conceptInput, 'object')
+
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'object' })).toBeInTheDocument()
+    })
+    await user.click(screen.getByRole('option', { name: 'object' }))
+
+    await waitFor(() => {
+      expect(screen.getAllByText('object').length).toBeGreaterThan(0)
+    })
+
+    const editButton = screen.getByRole('button', { name: 'Edit' })
+    await user.click(editButton)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /edit concept structure/i })).toBeInTheDocument()
+    })
+    await user.click(screen.getByRole('button', { name: /edit concept structure/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(ADD_CHILD)).toBeInTheDocument()
+    })
+    await user.click(screen.getByRole('button', { name: ADD_CHILD }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Add child')).toBeInTheDocument()
+    })
+    const nameInput = screen.getByRole('textbox', { name: /name/i })
+    await user.clear(nameInput)
+    await user.type(nameInput, '   Deep    Sea    Coral   ')
+
+    await waitFor(
+      () => {
+        expect(screen.getByRole('button', { name: 'Stage' })).toBeEnabled()
+      },
+      { timeout: 500 }
+    )
+    await user.click(screen.getByRole('button', { name: 'Stage' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Staged' })).toBeInTheDocument()
+    })
+    await user.click(screen.getByRole('button', { name: 'Staged' }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Add Child:')).toBeInTheDocument()
+      expect(screen.getByText('Deep Sea Coral')).toBeInTheDocument()
+    })
+  })
+
   it('adds child dingo, stages, discards all, verifies ConceptStructureIcon is hidden', async () => {
     const user = userEvent.setup()
 
