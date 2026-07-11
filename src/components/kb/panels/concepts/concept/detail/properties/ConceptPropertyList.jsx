@@ -78,7 +78,11 @@ const ConceptPropertyList = ({
             <Stack direction='column' spacing={1}>
               {items.map((item, index) => {
                 const Component = renderComponent
-                return <Component key={index} item={item} />
+                return (
+                  <Box key={index} sx={{ minWidth: 0, width: '100%' }}>
+                    <Component item={item} />
+                  </Box>
+                )
               })}
             </Stack>
           </Box>

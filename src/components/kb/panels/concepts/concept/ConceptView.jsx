@@ -31,13 +31,14 @@ const ConceptView = () => {
       <Box
         sx={{
           display: 'flex',
+          flex: '1',
           flexDirection: 'column',
           gap: 2,
-          flex: '1',
+          minHeight: 0,
+          minWidth: 0,
           ml: 1,
           mr: 1,
           textAlign: 'left',
-          minHeight: 0,
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -48,13 +49,14 @@ const ConceptView = () => {
         <Box
           sx={{
             display: 'flex',
+            flex: 1,
             flexDirection: 'column',
             gap: 2,
-            overflowY: 'auto',
-            flex: 1,
             minHeight: 0,
-            pr: 1,
+            minWidth: 0,
             mt: 4,
+            overflowY: 'auto',
+            pr: 1,
           }}
         >
           <ConceptAliases />
