@@ -32,11 +32,6 @@ export const relatedDataCounts = async ({
       reassignFn: payload => apiFns.apiPayload(renameToConceptAssociations, [payload.old, payload.new]),
     },
     {
-      title: RELATED_DATA_COUNTS.REALIZATIONS,
-      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
-      localCountFn: () => concept.realizations.length,
-    },
-    {
       title: RELATED_DATA_COUNTS.TEMPLATES_DEFINED,
       type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       apiCountFn: getConceptTemplateCount,

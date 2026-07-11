@@ -13,7 +13,7 @@ import { PREFS } from '@/lib/constants/prefs.js'
 import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
 
 const { KEY } = PREFS.USER
-const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
+const { ANNOTATIONS, ASSOCIATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
   const { concept, getPreferences } = deleteConceptContext
@@ -70,8 +70,6 @@ const preSideEffects = async deleteConceptContext => {
           promises[ANNOTATIONS] = apiFns.apiPayload(renameConceptObservations, oldNewPayload)
           break
 
-        case REALIZATIONS:
-          break
 
         case REFERENCES:
           promises[REFERENCES] = Promise.all(
@@ -129,9 +127,6 @@ const applyResults = async (refreshPanelDataFn, results) => {
           // no-op
           break
 
-        case REALIZATIONS:
-          // no-op
-          break
 
         case REFERENCES:
           // no-op
