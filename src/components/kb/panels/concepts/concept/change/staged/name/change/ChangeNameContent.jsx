@@ -23,6 +23,7 @@ import { isAdmin } from '@/lib/auth/role'
 import CONFIG from '@/text'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
+const { TEMPLATES_DEFINED } = MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -66,7 +67,8 @@ const ChangeNameContent = () => {
   const isAdminUser = isAdmin(user)
 
   const { relatedDataCounts } = modalData
-  const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
+  const filteredRelatedDataCounts = relatedDataCounts?.filter(count => count.title !== TEMPLATES_DEFINED)
+  const hasRelatedData = filteredRelatedDataCounts?.some(count => count.value > 0)
 
   return (
     <Box>
@@ -117,7 +119,7 @@ const ChangeNameContent = () => {
         </Box>
         {!modalData.isLoading && hasRelatedData && (
           <RelatedDataCounts
-            relatedDataCounts={relatedDataCounts}
+            relatedDataCounts={filteredRelatedDataCounts}
           />
         )}
       </Box>

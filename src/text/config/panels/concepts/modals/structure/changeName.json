@@ -6,9 +6,9 @@
   "RELATED_DATA_COUNTS": {
     "ANNOTATIONS": "Concept Annotations / Observations",
     "ASSOCIATIONS": "Associations To Concept",
-    "TEMPLATES_DEFINED": "Templates defined for Concept",
-    "TEMPLATES_TO": "Templates To Concept",
-    "REFERENCES": "References To Concept"
+    "TEMPLATES_DEFINED": "Templates explicitly defined for Concept",
+    "TEMPLATES_TO": "Link Templates To Concept",
+    "REFERENCES": "Link Realizations To Concept"
   },
   "RELATED_DATA_TYPE": {
     "ANNOTATIONS": "Annotations Data",
