@@ -1,20 +1,20 @@
 import { useState } from 'react'
 import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 import { CONCEPT } from '@/lib/constants'
 import CONFIG from '@/text'
-import KBTooltip from '@/components/common/KBTooltip'
 
 const { CHILDREN, SOLO: CONCEPT_VALUE, DESCENDANTS } = CONCEPT.EXTENT
-const { CHILDREN: CHILDREN_TEXT, DESCENDANTS: DESCENDANTS_TEXT } = CONFIG.CONCEPT.EXTENT
+const {
+  BUTTON: { CHILDREN: CHILDREN_TEXT, DESCENDANTS: DESCENDANTS_TEXT },
+  TOOLTIP: { EXTENT: EXTENT_TOOLTIP, CHILDREN: CHILDREN_TOOLTIP, DESCENDANTS: DESCENDANTS_TOOLTIP },
+} = CONFIG.CONCEPT.EXTENT
 
 const ConceptExtent = ({
   initialValue = CONCEPT_VALUE,
   label = 'Extent:',
-  labelTooltip,
-  childrenTooltip,
-  descendantsTooltip,
   onChange,
 }) => {
   const [conceptExtent, setConceptExtent] = useState(initialValue)
@@ -34,13 +34,17 @@ const ConceptExtent = ({
 
   const childrenButton = (
     <ToggleButton value={CHILDREN} sx={toggleButtonSx}>
-      {CHILDREN_TEXT}
+      <KBTooltipTarget title={CHILDREN_TOOLTIP} wrapper='span' wrapperSx={{ display: 'inline-flex' }}>
+        {CHILDREN_TEXT}
+      </KBTooltipTarget>
     </ToggleButton>
   )
 
   const descendantsButton = (
     <ToggleButton value={DESCENDANTS} sx={toggleButtonSx}>
-      {DESCENDANTS_TEXT}
+      <KBTooltipTarget title={DESCENDANTS_TOOLTIP} wrapper='span' wrapperSx={{ display: 'inline-flex' }}>
+        {DESCENDANTS_TEXT}
+      </KBTooltipTarget>
     </ToggleButton>
   )
 
@@ -48,29 +52,10 @@ const ConceptExtent = ({
 
   return (
     <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mr: 0.5 }}>
-      {labelTooltip ? (
-        <KBTooltip title={labelTooltip}>{labelElement}</KBTooltip>
-      ) : (
-        <KBTooltip title='Extend Concept data to either Children or Descendants'>
-          {labelElement}
-        </KBTooltip>
-      )}
-      <ToggleButtonGroup
-        exclusive
-        onChange={handleChange}
-        size='small'
-        value={conceptExtent}
-      >
-        {childrenTooltip ? (
-          <KBTooltip title={childrenTooltip}>{childrenButton}</KBTooltip>
-        ) : (
-          childrenButton
-        )}
-        {descendantsTooltip ? (
-          <KBTooltip title={descendantsTooltip}>{descendantsButton}</KBTooltip>
-        ) : (
-          descendantsButton
-        )}
+      <KBTooltipTarget title={EXTENT_TOOLTIP}>{labelElement}</KBTooltipTarget>
+      <ToggleButtonGroup exclusive onChange={handleChange} size='small' value={conceptExtent}>
+        {childrenButton}
+        {descendantsButton}
       </ToggleButtonGroup>
     </Stack>
   )

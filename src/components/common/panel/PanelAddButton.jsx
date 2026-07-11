@@ -1,5 +1,5 @@
-import { Box, Button } from '@mui/material'
-import KBTooltip from '@/components/common/KBTooltip'
+import { Button } from '@mui/material'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 const PanelAddButton = ({ onClick, disabled = false, tooltip, label = 'Add' }) => {
   const button = (
@@ -9,11 +9,10 @@ const PanelAddButton = ({ onClick, disabled = false, tooltip, label = 'Add' }) =
   )
 
   if (tooltip) {
-    // Wrap disabled button in a span for tooltip to work on disabled buttons
     return (
-      <KBTooltip title={tooltip} placement='top'>
-        <Box component='span'>{button}</Box>
-      </KBTooltip>
+      <KBTooltipTarget title={tooltip} placement='top' wrapper='span' wrapperSx={{ display: 'inline-flex' }}>
+        {button}
+      </KBTooltipTarget>
     )
   }
 

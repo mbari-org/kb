@@ -1,11 +1,10 @@
 import IconButton from '@mui/material/IconButton'
 import { LuScrollText } from 'react-icons/lu'
-
-import KBTooltip from '@/components/common/KBTooltip'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 const ConceptScroll = ({ onScrollToConcept }) => {
   return (
-    <KBTooltip title='Sroll to Concept'>
+    <KBTooltipTarget title='Sroll to Concept'>
       <IconButton
         aria-label='scroll to concept'
         color='inherit'
@@ -15,7 +14,7 @@ const ConceptScroll = ({ onScrollToConcept }) => {
       >
         <LuScrollText />
       </IconButton>
-    </KBTooltip>
+    </KBTooltipTarget>
   )
 }
 

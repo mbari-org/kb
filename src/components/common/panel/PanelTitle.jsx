@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material'
-
-import KBTooltip from '@/components/common/KBTooltip'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 const PanelTitle = ({ subtitle, subtitleTooltip, title }) => {
   const subtitleContent = subtitle && (
@@ -49,11 +48,7 @@ const PanelTitle = ({ subtitle, subtitleTooltip, title }) => {
           width: '100%',
         }}
       >
-        {subtitle && subtitleTooltip && (
-          <KBTooltip title={subtitleTooltip}>
-            {subtitleContent}
-          </KBTooltip>
-        )}
+        {subtitle && subtitleTooltip && <KBTooltipTarget title={subtitleTooltip}>{subtitleContent}</KBTooltipTarget>}
         {subtitle && !subtitleTooltip && subtitleContent}
       </Box>
     </Box>

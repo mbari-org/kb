@@ -1,7 +1,6 @@
 import { use } from 'react'
 import { Box, IconButton, useTheme } from '@mui/material'
-
-import KBTooltip from '@/components/common/KBTooltip'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import UserContext from '@/contexts/user/UserContext'
 import { isReadOnly } from '@/lib/auth/role'
 
@@ -25,9 +24,7 @@ const ActionIcon = ({
 
   const isDisabled = restrictReadOnly && isReadOnly(user)
 
-  const hoverColor = color
-    ? theme.palette[color]?.main || theme.palette.primary.main
-    : theme.palette.primary.main
+  const hoverColor = color ? theme.palette[color]?.main || theme.palette.primary.main : theme.palette.primary.main
 
   const sizedIcon = <Icon size={size} />
 
@@ -57,9 +54,9 @@ const ActionIcon = ({
 
     if (tooltip) {
       return (
-        <KBTooltip title={tooltip} placement={tooltipPlacement}>
+        <KBTooltipTarget title={tooltip} placement={tooltipPlacement}>
           {divElement}
-        </KBTooltip>
+        </KBTooltipTarget>
       )
     }
 
@@ -86,9 +83,9 @@ const ActionIcon = ({
 
   if (tooltip) {
     return (
-      <KBTooltip title={tooltip} placement={tooltipPlacement}>
+      <KBTooltipTarget title={tooltip} placement={tooltipPlacement}>
         {button}
-      </KBTooltip>
+      </KBTooltipTarget>
     )
   }
 

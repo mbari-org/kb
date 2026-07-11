@@ -2,8 +2,8 @@ import { TextField, Stack } from '@mui/material'
 import { useState } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import ReferenceConceptsDropDown from './ReferenceConceptsDropDown'
-import KBTooltip from '@/components/common/KBTooltip'
 
 import CONFIG from '@/text'
 
@@ -49,9 +49,14 @@ const ReferenceConceptsInput = ({
   return (
     <Stack spacing={0.5}>
       {hasConcepts ? (
-        <KBTooltip placement='top' title={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.TOOLTIP.REMOVE}>
+        <KBTooltipTarget
+          placement='top'
+          title={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.TOOLTIP.REMOVE}
+          wrapper='div'
+          wrapperSx={{ display: 'block', width: '100%' }}
+        >
           {conceptsTextField}
-        </KBTooltip>
+        </KBTooltipTarget>
       ) : (
         conceptsTextField
       )}
@@ -61,19 +66,22 @@ const ReferenceConceptsInput = ({
         onClose={handleMenuClose}
         onConceptClick={handleClickedConcept}
       />
-      <KBTooltip placement='top' title={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.TOOLTIP.ADD}>
-        <div>
-          <ConceptSelect
-            conceptName={selectedConcept}
-            doConceptSelected={handleConceptAdd}
-            label={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.LABEL}
-            keepFocus={true}
-            onInputChange={handleSearchInput}
-            updateConceptSelected={false}
-            width='100%'
-          />
-        </div>
-      </KBTooltip>
+      <KBTooltipTarget
+        placement='top'
+        title={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.TOOLTIP.ADD}
+        wrapper='div'
+        wrapperSx={{ display: 'block', width: '100%' }}
+      >
+        <ConceptSelect
+          conceptName={selectedConcept}
+          doConceptSelected={handleConceptAdd}
+          label={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.LABEL}
+          keepFocus={true}
+          onInputChange={handleSearchInput}
+          updateConceptSelected={false}
+          width='100%'
+        />
+      </KBTooltipTarget>
     </Stack>
   )
 }

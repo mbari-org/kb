@@ -1,11 +1,6 @@
 import { useEffect, useMemo } from 'react'
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  Typography,
-} from '@mui/material'
-import KBTooltip from '@/components/common/KBTooltip'
+import { Box, Checkbox, Typography } from '@mui/material'
+import KBTooltipFormControlLabel from '@/components/common/tooltip/KBTooltipFormControlLabel'
 
 import { getItemMediaType, hasPrimaryOfType, mediaOfType } from '@/lib/model/media'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -27,8 +22,7 @@ const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia 
     const isAddingInitialMediaOfType =
       action === CONCEPT_STATE.MEDIA_ITEM.ADD && sameTypeMedia.length === 0 && !hasPrimaryForType
 
-    const isEditingSoloMediaOfType =
-      action === CONCEPT_STATE.MEDIA_ITEM.EDIT && sameTypeMedia.length === 1
+    const isEditingSoloMediaOfType = action === CONCEPT_STATE.MEDIA_ITEM.EDIT && sameTypeMedia.length === 1
 
     // For EDITs, determine if this media item was primary before any edits in the form.
     const originalItem =
@@ -60,23 +54,13 @@ const EditMediaPrimary = ({ action, formMediaItem, onPrimaryChange, stagedMedia 
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <KBTooltip title={MEDIA.PRIMARY.TOOLTIP}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={shouldBeChecked}
-              disabled={isDisabled}
-              name='isPrimary'
-              onChange={onPrimaryChange}
-            />
-          }
-          label={
-            <Typography sx={{ color: 'text.primary' }}>
-              {MEDIA.PRIMARY.LABEL}
-            </Typography>
-          }
-        />
-      </KBTooltip>
+      <KBTooltipFormControlLabel
+        tooltip={MEDIA.PRIMARY.TOOLTIP}
+        control={
+          <Checkbox checked={shouldBeChecked} disabled={isDisabled} name='isPrimary' onChange={onPrimaryChange} />
+        }
+        label={<Typography sx={{ color: 'text.primary' }}>{MEDIA.PRIMARY.LABEL}</Typography>}
+      />
     </Box>
   )
 }

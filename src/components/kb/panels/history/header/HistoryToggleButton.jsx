@@ -1,7 +1,6 @@
 import ToggleButton from '@mui/material/ToggleButton'
 import { useTheme } from '@mui/material/styles'
-
-import KBTooltip from '@/components/common/KBTooltip'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 const HistoryToggleButton = ({ value, tooltip, sx }) => {
   const theme = useTheme()
@@ -12,7 +11,7 @@ const HistoryToggleButton = ({ value, tooltip, sx }) => {
     </ToggleButton>
   )
 
-  return tooltip ? <KBTooltip title={tooltip}>{button}</KBTooltip> : button
+  return tooltip ? <KBTooltipTarget title={tooltip}>{button}</KBTooltipTarget> : button
 }
 
 export default HistoryToggleButton

@@ -1,7 +1,6 @@
 import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-
-import KBTooltip from '@/components/common/KBTooltip'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
 
 const ConceptExportType = ({ value = EXPORT_TYPE.JSON, onChange }) => {
@@ -20,15 +19,10 @@ const ConceptExportType = ({ value = EXPORT_TYPE.JSON, onChange }) => {
 
   return (
     <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mr: 0.5 }}>
-      <KBTooltip title='Export format'>
+      <KBTooltipTarget title='Export format'>
         <Typography>Type:</Typography>
-      </KBTooltip>
-      <ToggleButtonGroup
-        value={value}
-        exclusive
-        onChange={handleChange}
-        size='small'
-      >
+      </KBTooltipTarget>
+      <ToggleButtonGroup value={value} exclusive onChange={handleChange} size='small'>
         <ToggleButton value={EXPORT_TYPE.JSON} sx={toggleButtonSx}>
           JSON
         </ToggleButton>

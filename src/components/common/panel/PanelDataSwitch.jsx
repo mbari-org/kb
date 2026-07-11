@@ -1,24 +1,14 @@
-import { Box, FormControlLabel, Switch } from '@mui/material'
+import { Box, Switch } from '@mui/material'
+import KBTooltipFormControlLabel from '@/components/common/tooltip/KBTooltipFormControlLabel'
 
-import KBTooltip from '@/components/common/KBTooltip'
-
-const PanelDataSwitch = ({
-  checked,
-  disabled = false,
-  switchFn,
-  switchLabel,
-  switchTooltip = '',
-}) => {
+const PanelDataSwitch = ({ checked, disabled = false, switchFn, switchLabel, switchTooltip = '' }) => {
   return (
     <Box>
-      <KBTooltip title={switchTooltip}>
-        <FormControlLabel
-          control={
-            <Switch size='small' checked={checked} disabled={disabled} onChange={switchFn} />
-          }
-          label={switchLabel}
-        />
-      </KBTooltip>
+      <KBTooltipFormControlLabel
+        tooltip={switchTooltip}
+        control={<Switch size='small' checked={checked} disabled={disabled} onChange={switchFn} />}
+        label={switchLabel}
+      />
     </Box>
   )
 }

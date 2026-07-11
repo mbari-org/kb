@@ -4,8 +4,15 @@
     "NAME_ONLY": "Name Only"
   },
   "EXTENT": {
-    "CHILDREN": "children",
-    "DESCENDANTS": "descendants"
+    "BUTTON": {
+      "CHILDREN": "Children",
+      "DESCENDANTS": "Descendants"
+    },
+    "TOOLTIP": {
+      "EXTENT": "Extend Concept Data",
+      "CHILDREN": "Include Concept children",
+      "DESCENDANTS": "Include Concept descentants"
+    }
   },
   "NO_ITEMS": "None",
   "NO_MEDIA": "No media",

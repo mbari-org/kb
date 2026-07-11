@@ -37,7 +37,7 @@ const ConceptExportContent = () => {
     <Stack spacing={2}>
       <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
         <ConceptExportType value={exportType} onChange={handleExportTypeChange} />
-        <ConceptExtent initialValue={conceptExtent} onChange={handleConceptExtentChange} exportType={exportType} />
+        <ConceptExtent initialValue={conceptExtent} onChange={handleConceptExtentChange} />
       </Stack>
       <Typography variant='body2' color='text.secondary'>
         {exportMessage}

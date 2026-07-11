@@ -5,8 +5,7 @@ import { MdRefresh } from 'react-icons/md'
 
 import { Box, IconButton, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-
-import KBTooltip from '@/components/common/KBTooltip'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import useVersionTooltip from '@/lib/hooks/useVersionTooltip'
 
@@ -109,9 +108,9 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
 
   if (IS_DEV || display === 'icon') {
     return (
-      <KBTooltip title={devTooltip} arrow placement='top'>
-        <Box component='span'>{content}</Box>
-      </KBTooltip>
+      <KBTooltipTarget title={devTooltip} arrow placement='top'>
+        {content}
+      </KBTooltipTarget>
     )
   }
 

@@ -1,15 +1,7 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
-import KBTooltip from '@/components/common/KBTooltip'
-
-const PanelDataExport = ({
-  count,
-  countLabel,
-  exportButtonLabel,
-  exportFn,
-  exportTooltip,
-  width,
-}) => {
+const PanelDataExport = ({ count, countLabel, exportButtonLabel, exportFn, exportTooltip, width }) => {
   return (
     <Box
       sx={{
@@ -21,13 +13,15 @@ const PanelDataExport = ({
     >
       <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
         <Box sx={{ minWidth: '100px' }}>
-          <Typography variant='body1'>{countLabel}: {count}</Typography>
+          <Typography variant='body1'>
+            {countLabel}: {count}
+          </Typography>
         </Box>
-        <KBTooltip title={exportTooltip}>
-          <Box component='span'>
-            <Button disabled={count === 0} onClick={exportFn}>{exportButtonLabel}</Button>
-          </Box>
-        </KBTooltip>
+        <KBTooltipTarget title={exportTooltip} wrapper='span' wrapperSx={{ display: 'inline-flex' }}>
+          <Button disabled={count === 0} onClick={exportFn}>
+            {exportButtonLabel}
+          </Button>
+        </KBTooltipTarget>
       </Stack>
     </Box>
   )
