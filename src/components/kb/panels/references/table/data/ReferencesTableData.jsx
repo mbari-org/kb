@@ -75,6 +75,7 @@ const ReferencesTableData = () => {
       dataGridProps={{
         disableColumnFilter: true,
         disableColumnMenu: true,
+        disableColumnSorting: true,
         getRowId: reference => reference.id,
       }}
     />
