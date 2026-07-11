@@ -33,6 +33,7 @@ const ReferencesTableData = () => {
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)
+  const displayedReferences = selectedReferences.slice(offset, offset + limit)
 
   const columns = useReferenceColumns({ editReferenceModal, deleteReferenceModal })
 
@@ -57,7 +58,7 @@ const ReferencesTableData = () => {
   return (
     <PanelDataGrid
       columns={columns}
-      rows={selectedReferences}
+      rows={displayedReferences}
       rowCount={selectedReferences.length}
       paginationModel={{
         page: Math.floor(offset / limit),
