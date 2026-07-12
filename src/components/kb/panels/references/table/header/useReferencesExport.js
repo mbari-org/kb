@@ -4,21 +4,17 @@ import createAppModal from '@/components/modal/app/createAppModal'
 import ExportCompleteActions from '@/components/kb/export/ExportCompleteActions'
 import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
 import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
+import useFilteredReferences from '@/components/kb/panels/references/useFilteredReferences'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
-import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 import { conceptNameForFilename } from '@/lib/utils'
 
 import CONFIG from '@/text'
-import { SELECTED } from '@/lib/constants/selected.js'
 
 const { PROCESSING } = CONFIG
-
-const { REFERENCES } = SELECTED.SETTINGS
 
 const dataHeaders = ['DOI', 'Citation', 'Concepts']
 
@@ -33,16 +29,10 @@ const buildComments = byConceptName => {
 }
 
 const useReferencesExport = () => {
-  const { getReferences } = use(PanelDataContext)
-  const { getSelected, getSettings } = use(SelectedContext)
+  const { filteredReferences, selectedConcept } = useFilteredReferences()
   const { user } = use(UserContext)
   const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
-
-  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
-  const selectedConcept = byConcept ? getSelected(SELECTED.CONCEPT) : null
-
-  const references = getReferences(selectedConcept)
 
   const suggestName = () => {
     const conceptName = selectedConcept ? `_${conceptNameForFilename(selectedConcept)}` : ''
@@ -83,8 +73,8 @@ const useReferencesExport = () => {
 
   return csvExport({
     comments: buildComments(selectedConcept),
-    count: references.length,
-    getData: () => dataRows(references),
+    count: filteredReferences.length,
+    getData: () => dataRows(filteredReferences),
     headers: dataHeaders,
     onProgress,
     paginated: false,
