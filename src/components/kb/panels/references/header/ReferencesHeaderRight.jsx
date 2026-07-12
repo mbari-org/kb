@@ -1,57 +1,23 @@
-import { use, useEffect, useState } from 'react'
-import { Autocomplete, Stack, TextField, Typography } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
-
-import { CONCEPT } from '@/lib/constants'
-import useDebounce from '@/lib/hooks/useDebounce'
+import { use } from 'react'
+import ConceptExtent from '@/components/common/concept/ConceptExtent'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import SelectedContext from '@/contexts/selected/SelectedContext'
 
-const { WIDTH } = CONCEPT.SELECT
+import { SELECTED } from '@/lib/constants/selected.js'
+
+const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesHeaderRight = () => {
-  const theme = useTheme()
-  const { citationGlob, setCitationGlob } = use(ReferencesContext)
-  const [citationInput, setCitationInput] = useState(citationGlob)
-  const debouncedSetCitationGlob = useDebounce(setCitationGlob)
+  const { conceptExtent, setConceptExtent } = use(ReferencesContext)
+  const { getSelected, getSettings } = use(SelectedContext)
+  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
+  const conceptName = byConcept ? getSelected(SELECTED.CONCEPT) : null
 
-  useEffect(() => {
-    setCitationInput(citationGlob)
-  }, [citationGlob])
+  if (!conceptName) {
+    return null
+  }
 
-  useEffect(() => {
-    debouncedSetCitationGlob(citationInput)
-  }, [citationInput, debouncedSetCitationGlob])
-
-  return (
-    <Stack spacing={0} sx={{ width: WIDTH }}>
-      <Stack direction='row' sx={{ alignItems: 'center', minHeight: '40px' }}>
-        <Typography
-          sx={{
-            fontSize: theme => theme.typography.fontSize * 1.2,
-            fontWeight: 'bold',
-            ml: 1.5,
-          }}
-        >
-          Citation Filter
-        </Typography>
-      </Stack>
-      <Autocomplete
-        freeSolo
-        inputValue={citationInput}
-        onInputChange={(_event, value) => setCitationInput(value)}
-        options={[]}
-        renderInput={params => (
-          <TextField
-            {...params}
-            sx={{
-              backgroundColor: theme.palette.primary.pale,
-            }}
-          />
-        )}
-        size='small'
-      />
-    </Stack>
-  )
+  return <ConceptExtent initialValue={conceptExtent} onChange={setConceptExtent} />
 }
 
 export default ReferencesHeaderRight
