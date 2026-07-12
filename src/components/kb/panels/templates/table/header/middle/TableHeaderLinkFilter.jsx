@@ -5,12 +5,7 @@ import useDebouncedField from '@/lib/hooks/useDebouncedField'
 const TableHeaderLinkFilter = ({ name, value: initialValue, onChange }) => {
   const handleFieldChange = fieldName => value => onChange(fieldName, value)
 
-  const [value, handleChange, setValue] = useDebouncedField(
-    initialValue,
-    name,
-    handleFieldChange,
-    300
-  )
+  const [value, handleChange, setValue] = useDebouncedField(initialValue, name, handleFieldChange, 300)
 
   useEffect(() => {
     setValue(initialValue || '')
@@ -19,7 +14,7 @@ const TableHeaderLinkFilter = ({ name, value: initialValue, onChange }) => {
   return (
     <TextInput
       onChange={handleChange}
-      placeholder={`Filter link ${name.replace('link', '').toLowerCase()}`}
+      placeholder={`Filter Link ${name.replace('link', '')}`}
       size='small'
       sx={{ minWidth: 100 }}
       value={value}

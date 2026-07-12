@@ -3,9 +3,9 @@
     "WILDCARD": "*",
     "LABELS": {
       "CONCEPT": "Concept",
-      "LINK_NAME": "Link name",
-      "TO_CONCEPT": "To concept",
-      "LINK_VALUE": "Link value"
+      "LINK_NAME": "Link Name",
+      "TO_CONCEPT": "To Concept",
+      "LINK_VALUE": "Link Value"
     },
     "DEFAULTS": {
       "CONCEPT": "*",
