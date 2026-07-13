@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { Box, Link, Stack, TextField, Typography } from '@mui/material'
+import { Box, Stack, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import RealizationActionIcon from '@/components/kb/panels/concepts/concept/change/staged/realizations/RealizationActionIcon'
@@ -15,7 +15,7 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/concept/state/staged'
 
-const ConceptRealization = ({ realization }) => {
+const ConceptRealization = ({ realization, widths = [20, 30, 50], rowSx = {} }) => {
   const theme = useTheme()
 
   const { isEditing } = use(ConceptContext)
@@ -29,7 +29,7 @@ const ConceptRealization = ({ realization }) => {
 
   const infoStyle = {
     ...detailStyle,
-    disabled: true,
+    InputProps: { readOnly: true },
     variant: 'standard',
   }
 
@@ -40,10 +40,8 @@ const ConceptRealization = ({ realization }) => {
     width: '2px',
   })
 
-  const showEdit =
-    isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.DELETE
-  const showDelete =
-    isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
+  const showEdit = isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.DELETE
+  const showDelete = isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
 
   const realizationIcon = action => {
     return <RealizationActionIcon action={action} realizationIndex={realization.index} size={20} />
@@ -56,42 +54,97 @@ const ConceptRealization = ({ realization }) => {
   }
 
   const linkNameLabel = realization.linkName?.trim() || 'View Realization'
+  const toConceptLabel = realization.toConcept || ''
+  const linkValueLabel = realization.linkValue || ''
+  const [linkNameWidth = 20, toConceptWidth = 30, linkValueWidth = 50] = widths
 
   return (
-    <Stack direction='row' spacing={1} width='100%' sx={{ alignItems: 'center', border, ml: -1 }}>
+    <Stack direction='row' spacing={1} width='100%' sx={{ alignItems: 'center', border, ...rowSx }}>
       <Stack direction='column' spacing={-0.5}>
         {showEdit && realizationIcon(CONCEPT_STATE.REALIZATION.EDIT)}
         {showDelete && realizationIcon(CONCEPT_STATE.REALIZATION.DELETE)}
       </Stack>
-      <Stack direction='row' spacing={1} width='100%'>
-        <Box sx={{ pl: 0, width: 200, flexShrink: 0 }}>
-          <Stack spacing={0.25}>
-            <Typography sx={{ color: 'text.secondary', fontSize: '0.75rem', lineHeight: 1.66, pl: 1.75 }}>
-              Link Name
-            </Typography>
-            <Link
-              component='button'
-              onClick={handleViewRealization}
-              sx={{
-                alignSelf: 'flex-start',
-                fontSize: '0.95rem',
-                lineHeight: 1.6,
-                overflowWrap: 'anywhere',
-                pl: 1.75,
-                textAlign: 'left',
-                textTransform: 'none',
-              }}
-              underline='hover'
-            >
-              {linkNameLabel}
-            </Link>
-          </Stack>
+      <Stack direction='row' spacing={1} width='100%' sx={{ flex: 1, minWidth: 0 }}>
+        <Box
+          sx={{
+            flex: `0 0 ${linkNameWidth}%`,
+            maxWidth: `${linkNameWidth}%`,
+            minWidth: 0,
+            pl: 0,
+            position: 'relative',
+          }}
+        >
+          <Box
+            aria-label='View realization'
+            component='button'
+            onClick={handleViewRealization}
+            sx={{
+              background: 'transparent',
+              border: 0,
+              cursor: 'pointer',
+              inset: 0,
+              p: 0,
+              position: 'absolute',
+              zIndex: 1,
+            }}
+            type='button'
+          />
+          <TextField
+            {...infoStyle}
+            label='Link Name'
+            sx={{
+              ...infoStyle.sx,
+              '& .MuiInputBase-input': {
+                ...(infoStyle.sx?.['& .MuiInputBase-input'] || {}),
+                WebkitTextFillColor: theme.palette.primary.main,
+                color: theme.palette.primary.main,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              },
+              '& .MuiInputBase-input.Mui-disabled': {
+                ...(infoStyle.sx?.['& .MuiInputBase-input.Mui-disabled'] || {}),
+                WebkitTextFillColor: theme.palette.primary.main,
+                color: theme.palette.primary.main,
+              },
+            }}
+            title={linkNameLabel}
+            value={linkNameLabel}
+          />
         </Box>
-        <Box sx={{ flex: 1 }}>
-          <TextField {...infoStyle} label='To Concept' value={realization.toConcept || ''} />
+        <Box sx={{ flex: `0 0 ${toConceptWidth}%`, maxWidth: `${toConceptWidth}%`, minWidth: 0 }}>
+          <TextField
+            {...infoStyle}
+            label='To Concept'
+            sx={{
+              ...infoStyle.sx,
+              '& .MuiInputBase-input': {
+                ...(infoStyle.sx?.['& .MuiInputBase-input'] || {}),
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              },
+            }}
+            title={toConceptLabel}
+            value={toConceptLabel}
+          />
         </Box>
-        <Box sx={{ flex: 1.5 }}>
-          <TextField {...infoStyle} label='Link Value' value={realization.linkValue || ''} />
+        <Box sx={{ flex: `0 0 ${linkValueWidth}%`, maxWidth: `${linkValueWidth}%`, minWidth: 0 }}>
+          <TextField
+            {...infoStyle}
+            label='Link Value'
+            sx={{
+              ...infoStyle.sx,
+              '& .MuiInputBase-input': {
+                ...(infoStyle.sx?.['& .MuiInputBase-input'] || {}),
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              },
+            }}
+            title={linkValueLabel}
+            value={linkValueLabel}
+          />
         </Box>
       </Stack>
     </Stack>

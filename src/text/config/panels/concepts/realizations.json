@@ -1,3 +1,6 @@
 {
-  "LABEL": "Realizations"
+  "LABEL": "Realizations",
+  "VIEW": {
+    "TOOLTIP": "View realizations for this concept"
+  }
 }

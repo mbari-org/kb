@@ -3,6 +3,7 @@ import { CONCEPTS } from './panels/concepts.js'
 import { EMBARGOES } from './panels/embargoes.js'
 import { HISTORY } from './panels/history.js'
 import { NOTES } from './panels/notes.js'
+import { REALIZATIONS } from './panels/realizations.js'
 import { REFERENCES } from './panels/references.js'
 import { TEMPLATES } from './panels/templates.js'
 import { USERS } from './panels/users.js'
@@ -13,6 +14,7 @@ export const PANELS = {
   EMBARGOES,
   HISTORY,
   NOTES,
+  REALIZATIONS,
   REFERENCES,
   TEMPLATES,
   USERS,

@@ -48,7 +48,11 @@ const PanelTitle = ({ subtitle, subtitleTooltip, title }) => {
           width: '100%',
         }}
       >
-        {subtitle && subtitleTooltip && <KBTooltipTarget title={subtitleTooltip}>{subtitleContent}</KBTooltipTarget>}
+        {subtitle && subtitleTooltip && (
+          <KBTooltipTarget title={subtitleTooltip} wrapperSx={{ display: 'block', width: '100%' }}>
+            {subtitleContent}
+          </KBTooltipTarget>
+        )}
         {subtitle && !subtitleTooltip && subtitleContent}
       </Box>
     </Box>

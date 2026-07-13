@@ -9,33 +9,32 @@ import { CONCEPT } from '@/lib/constants'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 
-const { REFERENCES } = SELECTED.SETTINGS
+const { REFERENCES: SETTINGS } = SELECTED.SETTINGS
+const PANEL = CONFIG.PANELS.REFERENCES.PANEL
+const ALL_CONCEPTS = PANEL.SUBTITLE.ALL_CONCEPTS
 
 const ReferencesHeaderTitle = () => {
   const { conceptExtent } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
-  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
+  const byConcept = getSettings(SETTINGS.KEY, SETTINGS.BY_CONCEPT)
   const conceptName = byConcept ? getSelected(SELECTED.CONCEPT) : null
 
-  const title = CONFIG.PANELS.REFERENCES.PANEL.NAME
-  let subtitle
-  switch (conceptExtent) {
-    case CONCEPT.EXTENT.CHILDREN:
-      subtitle = conceptName ? `${conceptName} and children` : CONFIG.PANELS.REFERENCES.PANEL.SUBTITLE.ALL_CONCEPTS
-      break
-    case CONCEPT.EXTENT.DESCENDANTS:
-      subtitle = conceptName ? `${conceptName} and descendants` : CONFIG.PANELS.REFERENCES.PANEL.SUBTITLE.ALL_CONCEPTS
-      break
-    default:
-      subtitle = conceptName || CONFIG.PANELS.REFERENCES.PANEL.SUBTITLE.ALL_CONCEPTS
+  const title = PANEL.NAME
+  let subtitle = ALL_CONCEPTS
+  if (conceptName) {
+    switch (conceptExtent) {
+      case CONCEPT.EXTENT.CHILDREN:
+        subtitle = `${conceptName} and children`
+        break
+      case CONCEPT.EXTENT.DESCENDANTS:
+        subtitle = `${conceptName} and descendants`
+        break
+      default:
+        subtitle = conceptName
+    }
   }
 
-  return (
-    <PanelHeaderTitle
-      subtitle={subtitle}
-      title={title}
-    />
-  )
+  return <PanelHeaderTitle subtitle={subtitle} title={title} />
 }
 
 export default ReferencesHeaderTitle
