@@ -80,7 +80,7 @@ const useFilteredReferences = () => {
     reference.citation.toLowerCase().includes((citationGlob || '').toLowerCase())
   )
 
-  return { byConcept, filteredReferences, selectedConcept }
+  return { byConcept, conceptExtent, filteredReferences, selectedConcept }
 }
 
 export default useFilteredReferences

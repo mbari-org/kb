@@ -8,7 +8,7 @@
     "ASSOCIATIONS": "Associations To Concept",
     "TEMPLATES_DEFINED": "Templates explicitly defined for Concept",
     "TEMPLATES_TO": "Link Templates To Concept",
-    "REFERENCES": "Link Realizations To Concept"
+    "REFERENCES": "References To Concept"
   },
   "RELATED_DATA_TYPE": {
     "ANNOTATIONS": "Annotations Data",

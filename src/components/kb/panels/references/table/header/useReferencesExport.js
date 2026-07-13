@@ -10,7 +10,8 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
-import { conceptNameForFilename } from '@/lib/utils'
+import { capitalize, conceptNameForFilename } from '@/lib/utils'
+import { CONCEPT } from '@/lib/constants'
 
 import CONFIG from '@/text'
 
@@ -20,23 +21,25 @@ const dataHeaders = ['DOI', 'Citation', 'Concepts']
 
 const dataRows = references => references.map(reference => [reference.doi, reference.citation, reference.concepts])
 
-const buildComments = byConceptName => {
+const buildComments = ({ conceptExtent, byConceptName }) => {
   const comments = []
   if (byConceptName) {
     comments.push(`Concept: ${byConceptName}`)
+    comments.push(`Extent: ${capitalize(conceptExtent)}`)
   }
   return comments
 }
 
 const useReferencesExport = () => {
-  const { filteredReferences, selectedConcept } = useFilteredReferences()
+  const { conceptExtent, filteredReferences, selectedConcept } = useFilteredReferences()
   const { user } = use(UserContext)
   const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
 
   const suggestName = () => {
     const conceptName = selectedConcept ? `_${conceptNameForFilename(selectedConcept)}` : ''
-    return `KB-References${conceptName}.csv`
+    const extent = selectedConcept && conceptExtent !== CONCEPT.EXTENT.SOLO ? `_and_${conceptExtent}` : ''
+    return `KB-References${conceptName}${extent}.csv`
   }
 
   const onProgress = useCallback(
@@ -72,7 +75,7 @@ const useReferencesExport = () => {
   )
 
   return csvExport({
-    comments: buildComments(selectedConcept),
+    comments: buildComments({ byConceptName: selectedConcept, conceptExtent }),
     count: filteredReferences.length,
     getData: () => dataRows(filteredReferences),
     headers: dataHeaders,
