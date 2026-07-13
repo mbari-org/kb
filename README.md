@@ -98,7 +98,40 @@ src/
 | `yarn preview` | Preview production build locally |
 | `yarn kb` | Build and preview (combined command) |
 | `yarn lint` | Run ESLint code analysis |
-| `yarn version:tag` | Generate version information |
+| `yarn version:check` | Run release pre-checks (clean tree, lint, tests, test deploy) |
+| `yarn version:tag` | Regenerate `src/version.js` from git metadata |
+| `yarn version:test-deploy` | Build and smoke-test deploy via local `m3-quickstart` nginx |
+| `yarn version:release` | Run release flow: checks, version bump, commit, and git tag |
+
+### Versioning scripts
+
+The versioning scripts live in `scripts/version/` and are intended for release preparation and verification.
+
+- `yarn version:tag`
+  - Generates `src/version.js`.
+  - If `HEAD` has an exact git tag, that tag becomes `VERSION_INFO.version`.
+  - Otherwise version uses UTC timestamp format: `YYYY.MM.DD-HHMM`.
+- `yarn version:test-deploy`
+  - Builds `dist/`, syncs it into sibling repo `../m3-quickstart/docker/nginx/html/kbeditor/`, rebuilds/restarts nginx, then runs a smoke test against `http://localhost/kbeditor/`.
+  - Optional env overrides:
+    - `VERSION_CHECK_SMOKE_URL`
+    - `VERSION_CHECK_SMOKE_SNIPPET`
+    - `VERSION_CHECK_SMOKE_MAX_ATTEMPTS`
+    - `VERSION_CHECK_SMOKE_RETRY_DELAY_MS`
+- `yarn version:check`
+  - Fails fast unless working tree is clean.
+  - Runs, in order: `yarn lint`, `yarn vitest run --pool=threads --maxWorkers=80% --reporter=dot`, and `node scripts/version/test-deploy.js`.
+- `yarn version:release`
+  - Requires branch `main` and a clean working tree.
+  - Runs same validations as `version:check`.
+  - Runs `version:tag`, updates `package.json` `version`, creates a commit `v<version>`, and creates git tag `<version>`.
+  - Fails if tag already exists.
+
+Recommended release sequence:
+1. Switch to `main` and make sure your tree is clean.
+2. Run `yarn version:check` and fix any failures.
+3. Run `yarn version:release`.
+4. Push commit and tags (`git push && git push --tags`).
 
 ## 🏗️ Development
 
