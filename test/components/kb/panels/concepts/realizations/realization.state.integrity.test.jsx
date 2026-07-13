@@ -18,7 +18,7 @@ const cloneRealizations = realizations => realizations.map(item => ({ ...item })
 
 const waitForStageEnabled = async () => {
   await waitFor(() => {
-    expect(screen.getByRole('button', { name: 'Stage' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: /staged?/i })).toBeEnabled()
   })
 }
 
@@ -37,14 +37,24 @@ const getRealizationActionElements = label => {
 
   return []
 }
+const resolveActionTarget = element => {
+  if (!element) return null
+  if (element.tagName?.toLowerCase() === 'button') return element
+  return (
+    element.querySelector?.('button, [role="button"], div') ||
+    element.closest?.('button, [role="button"], div') ||
+    null
+  )
+}
 
 const clickRealizationAction = async (user, label, index = 0) => {
   await waitFor(() => {
     expect(getRealizationActionElements(label).length).toBeGreaterThan(index)
   })
-
   const actionElement = getRealizationActionElements(label)[index]
-  await user.click(actionElement)
+  const actionTarget = resolveActionTarget(actionElement)
+  expect(actionTarget).toBeInTheDocument()
+  await user.click(actionTarget)
 }
 
 const ConceptRealizationStateProbe = ({ onChange }) => {

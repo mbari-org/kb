@@ -22,7 +22,10 @@ describe('Concept panel references', () => {
   })
 
   it('renders references returned for the selected concept', () => {
-    const initialReferences = [{ doi: '10.1000/first' }, { doi: '10.1000/second' }]
+    const initialReferences = [
+      { doi: 'https://doi.org/10.1000/first', citation: 'First Reference Citation' },
+      { doi: 'https://doi.org/10.1000/second', citation: 'Second Reference Citation' },
+    ]
 
     render(
       <ConceptPanelTestWrapper initialReferences={initialReferences}>
@@ -30,8 +33,16 @@ describe('Concept panel references', () => {
       </ConceptPanelTestWrapper>
     )
 
-    expect(screen.getByText('10.1000/first')).toBeInTheDocument()
-    expect(screen.getByText('10.1000/second')).toBeInTheDocument()
+    expect(screen.getByText('First Reference Citation')).toBeInTheDocument()
+    expect(screen.getByText('Second Reference Citation')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'First Reference Citation' })).toHaveAttribute(
+      'href',
+      'https://doi.org/10.1000/first'
+    )
+    expect(screen.getByRole('link', { name: 'Second Reference Citation' })).toHaveAttribute(
+      'href',
+      'https://doi.org/10.1000/second'
+    )
   })
 
   it('inspect action routes to references panel and sets by-concept filter when safe', async () => {

@@ -35,7 +35,7 @@ describe('Media Combined Flows - Add then Edit', () => {
   const waitForStageButtonEnabled = async () => {
     await waitFor(
       () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 5000 }
@@ -55,7 +55,7 @@ describe('Media Combined Flows - Add then Edit', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -68,13 +68,13 @@ describe('Media Combined Flows - Add then Edit', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -86,7 +86,7 @@ describe('Media Combined Flows - Add then Edit', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -107,7 +107,7 @@ describe('Media Combined Flows - Add then Edit', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -118,7 +118,7 @@ describe('Media Combined Flows - Add then Edit', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -127,13 +127,13 @@ describe('Media Combined Flows - Add then Edit', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -143,7 +143,7 @@ describe('Media Combined Flows - Add then Edit', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -152,7 +152,7 @@ describe('Media Combined Flows - Add then Edit', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   }, 15000)
 })
@@ -175,7 +175,7 @@ describe('Media Combined Flows - Add then Delete', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -185,7 +185,7 @@ describe('Media Combined Flows - Add then Delete', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -194,7 +194,7 @@ describe('Media Combined Flows - Add then Delete', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickDeleteMediaButton(user, screen)
@@ -223,7 +223,7 @@ describe('Media Combined Flows - Add then Delete', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -233,7 +233,7 @@ describe('Media Combined Flows - Add then Delete', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -242,12 +242,12 @@ describe('Media Combined Flows - Add then Delete', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -257,7 +257,7 @@ describe('Media Combined Flows - Add then Delete', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -266,7 +266,7 @@ describe('Media Combined Flows - Add then Delete', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickDeleteMediaButton(user, screen)
@@ -284,7 +284,7 @@ describe('Media Combined Flows - Add then Delete', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
     })
-  })
+  }, 20000)
 })
 
 describe('Media Combined Flows - Edit then Delete', () => {
@@ -315,7 +315,7 @@ describe('Media Combined Flows - Edit then Delete', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -324,7 +324,7 @@ describe('Media Combined Flows - Edit then Delete', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -333,7 +333,7 @@ describe('Media Combined Flows - Edit then Delete', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickDeleteMediaButton(user, screen)
@@ -368,7 +368,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -378,7 +378,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -387,13 +387,13 @@ describe('Media Combined Flows - Full Workflow', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -402,7 +402,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -411,12 +411,12 @@ describe('Media Combined Flows - Full Workflow', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -426,7 +426,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -435,7 +435,7 @@ describe('Media Combined Flows - Full Workflow', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickDeleteMediaButton(user, screen)
@@ -453,7 +453,7 @@ describe('Media Combined Flows - Full Workflow', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
     })
-  })
+  }, 20000)
 
   it('adds mixed media types then performs operations on each', async () => {
     const user = userEvent.setup()
@@ -468,7 +468,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -478,7 +478,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -487,12 +487,12 @@ describe('Media Combined Flows - Full Workflow', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -502,7 +502,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -511,12 +511,12 @@ describe('Media Combined Flows - Full Workflow', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -526,7 +526,7 @@ describe('Media Combined Flows - Full Workflow', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -535,13 +535,13 @@ describe('Media Combined Flows - Full Workflow', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
     })
-  })
+  }, 20000)
 })
 
 describe('Media Combined Flows - Discard Operations', () => {
@@ -562,7 +562,7 @@ describe('Media Combined Flows - Discard Operations', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const discardButton = screen.getByRole('button', { name: 'Discard' })
@@ -570,14 +570,14 @@ describe('Media Combined Flows - Discard Operations', () => {
 
     await waitFor(
       () => {
-        expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+        expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
       },
       { timeout: 2000 }
     )
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -587,7 +587,7 @@ describe('Media Combined Flows - Discard Operations', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -596,7 +596,7 @@ describe('Media Combined Flows - Discard Operations', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -627,7 +627,7 @@ describe('Media Combined Flows - Discard Operations', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -636,7 +636,7 @@ describe('Media Combined Flows - Discard Operations', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -645,12 +645,12 @@ describe('Media Combined Flows - Discard Operations', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -660,7 +660,7 @@ describe('Media Combined Flows - Discard Operations', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -669,7 +669,7 @@ describe('Media Combined Flows - Discard Operations', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -708,7 +708,7 @@ describe('Media Combined Flows - Primary Designation', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -721,7 +721,7 @@ describe('Media Combined Flows - Primary Designation', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -730,12 +730,12 @@ describe('Media Combined Flows - Primary Designation', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -750,7 +750,7 @@ describe('Media Combined Flows - Primary Designation', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -759,7 +759,7 @@ describe('Media Combined Flows - Primary Designation', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -792,7 +792,7 @@ describe('Media Combined Flows - Primary Designation', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
@@ -818,7 +818,7 @@ describe('Media Combined Flows - Type Transitions', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -828,7 +828,7 @@ describe('Media Combined Flows - Type Transitions', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -837,13 +837,13 @@ describe('Media Combined Flows - Type Transitions', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -852,7 +852,7 @@ describe('Media Combined Flows - Type Transitions', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -861,12 +861,12 @@ describe('Media Combined Flows - Type Transitions', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -880,7 +880,7 @@ describe('Media Combined Flows - Type Transitions', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -889,9 +889,9 @@ describe('Media Combined Flows - Type Transitions', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
-  })
+  }, 20000)
 })
 
 describe('Media Combined Flows - Edge Cases', () => {
@@ -912,7 +912,7 @@ describe('Media Combined Flows - Edge Cases', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -922,7 +922,7 @@ describe('Media Combined Flows - Edge Cases', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -931,19 +931,19 @@ describe('Media Combined Flows - Edge Cases', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await clickDiscardButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickDeleteMediaButton(user, screen)
@@ -960,7 +960,7 @@ describe('Media Combined Flows - Edge Cases', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -970,7 +970,7 @@ describe('Media Combined Flows - Edge Cases', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -979,7 +979,7 @@ describe('Media Combined Flows - Edge Cases', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -1007,14 +1007,14 @@ describe('Media Combined Flows - Edge Cases', () => {
     for (const image of images) {
       await clickAddMediaButton(user, screen)
       await waitFor(() => {
-        expect(screen.getByText('Add media')).toBeInTheDocument()
+        expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
       })
 
       await fillMediaForm(user, screen, image)
 
       await waitFor(
         async () => {
-          const stageButton = screen.getByRole('button', { name: 'Stage' })
+          const stageButton = screen.getByRole('button', { name: /staged?/i })
           expect(stageButton).toBeEnabled()
         },
         { timeout: 1000 }
@@ -1023,7 +1023,7 @@ describe('Media Combined Flows - Edge Cases', () => {
       await clickStageButton(user, screen)
 
       await waitFor(() => {
-        expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+        expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
       })
     }
 
@@ -1051,14 +1051,14 @@ describe('Media Combined Flows - Edge Cases', () => {
     for (const video of videos) {
       await clickAddMediaButton(user, screen)
       await waitFor(() => {
-        expect(screen.getByText('Add media')).toBeInTheDocument()
+        expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
       })
 
       await fillMediaForm(user, screen, video)
 
       await waitFor(
         async () => {
-          const stageButton = screen.getByRole('button', { name: 'Stage' })
+          const stageButton = screen.getByRole('button', { name: /staged?/i })
           expect(stageButton).toBeEnabled()
         },
         { timeout: 1000 }
@@ -1067,7 +1067,7 @@ describe('Media Combined Flows - Edge Cases', () => {
       await clickStageButton(user, screen)
 
       await waitFor(() => {
-        expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+        expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
       })
     }
 

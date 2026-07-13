@@ -17,8 +17,8 @@ const ConceptRealizationModalContent = () => {
 
   const realization = modalData?.realization || {}
   const infoStyle = {
+    disabled: true,
     fullWidth: true,
-    InputProps: { readOnly: true },
     variant: 'outlined',
   }
   const wrappedFieldSx = {

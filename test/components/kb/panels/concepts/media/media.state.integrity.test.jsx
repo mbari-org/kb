@@ -36,7 +36,7 @@ const cloneMedia = media => media.map(item => ({ ...item }))
 const mediaType = item => ((item?.mediaType || getMediaType(item?.url) || '') + '').toUpperCase()
 const waitForStageEnabled = async () => {
   await waitFor(() => {
-    expect(screen.getByRole('button', { name: 'Stage' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: /staged?/i })).toBeEnabled()
   })
 }
 
@@ -77,7 +77,7 @@ describe('Media state integrity', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -89,7 +89,7 @@ describe('Media state integrity', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -194,7 +194,7 @@ describe('Media state integrity', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -206,7 +206,7 @@ describe('Media state integrity', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -255,7 +255,7 @@ describe('Media state integrity', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {

@@ -29,7 +29,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50], rowSx = {} }) 
 
   const infoStyle = {
     ...detailStyle,
-    InputProps: { readOnly: true },
+    disabled: true,
     variant: 'standard',
   }
 

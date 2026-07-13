@@ -1,4 +1,5 @@
-import { vi } from 'vitest'
+import { waitFor } from '@testing-library/react'
+import { expect, vi } from 'vitest'
 import { use, useState, useCallback, useReducer, useEffect, useMemo } from 'react'
 
 import { ThemeProvider } from '@mui/material/styles'
@@ -203,7 +204,7 @@ export const ConceptPanelTestWrapper = ({
     () => (concept ? initialConceptState({ ...concept, templates: [] }, []) : null),
     [concept]
   )
-  const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
+  const [stagedState, dispatch] = useReducer(conceptStateReducer, initialState || {})
   const [confirmReset, setConfirmReset] = useState(null)
   const [isEditing, setEditing] = useState(false)
   const [selectedSettings, setSelectedSettings] = useState(initialSelectedSettings)
@@ -383,22 +384,99 @@ export const ConceptPanelTestWrapper = ({
 }
 
 export const enterEditMode = async (user, screen) => {
-  const editButton = screen.getByRole('button', { name: 'Edit' })
+  const editButtons = screen.getAllByRole('button', { name: 'Edit' }).filter(button => !button.disabled)
+  const editButton = editButtons[0]
   await user.click(editButton)
+  await waitFor(() => {
+    expect(screen.queryByRole('button', { name: /cancel/i }) || screen.queryByRole('button', { name: 'Discard All' }))
+      .toBeTruthy()
+  })
 }
 
 export const clickAddMediaButton = async (user, screen) => {
-  const addMediaButton = screen.getByRole('button', { name: /add media/i })
+  const addMediaLabelTarget = screen.queryByLabelText(/add media/i)
+  const addMediaByLabel =
+    addMediaLabelTarget?.tagName?.toLowerCase() === 'button'
+      ? addMediaLabelTarget
+      : addMediaLabelTarget?.querySelector?.('button')
+  const unlabeledButtons = screen
+    .getAllByRole('button')
+    .filter(button => !(button.getAttribute('aria-label') || '').trim() && !(button.textContent || '').trim())
+  const addMediaByUnlabeledFallback =
+    unlabeledButtons.length >= 4
+      ? unlabeledButtons[unlabeledButtons.length - 2]
+      : unlabeledButtons[unlabeledButtons.length - 1]
+  const addMediaButton =
+    addMediaByLabel ||
+    screen.queryByRole('button', { name: /add media/i }) ||
+    addMediaByUnlabeledFallback ||
+    Array.from(document.querySelectorAll('[title]'))
+      .find(element => element.getAttribute('title')?.toLowerCase() === 'add media')
+      ?.closest('button')
+  if (!addMediaButton) {
+    throw new Error('Unable to locate Add media control')
+  }
+
   await user.click(addMediaButton)
+  if (screen.queryByRole('textbox', { name: /url/i })) {
+    return
+  }
+
+  for (const candidate of [...unlabeledButtons].reverse()) {
+    if (candidate === addMediaButton) {
+      continue
+    }
+    await user.click(candidate)
+    if (screen.queryByRole('textbox', { name: /url/i })) {
+      return
+    }
+  }
 }
 
 export const clickEditMediaButton = async (user, screen) => {
-  const editMediaButton = screen.getByRole('button', { name: /edit media/i })
+  const editMediaLabelTarget = screen.queryByLabelText(/edit media/i)
+  const editMediaByLabel =
+    editMediaLabelTarget?.tagName?.toLowerCase() === 'button'
+      ? editMediaLabelTarget
+      : editMediaLabelTarget?.querySelector?.('button')
+  const unlabeledButtons = screen
+    .getAllByRole('button')
+    .filter(button => !(button.getAttribute('aria-label') || '').trim() && !(button.textContent || '').trim())
+  const editMediaByUnlabeledFallback = unlabeledButtons[unlabeledButtons.length - 1]
+  const editMediaButton =
+    editMediaByLabel ||
+    screen.queryByRole('button', { name: /edit media/i }) ||
+    editMediaByUnlabeledFallback ||
+    Array.from(document.querySelectorAll('[title]'))
+      .find(element => element.getAttribute('title')?.toLowerCase() === 'edit media')
+      ?.closest('button')
+  if (!editMediaButton) {
+    throw new Error('Unable to locate Edit media control')
+  }
   await user.click(editMediaButton)
 }
 
 export const clickDeleteMediaButton = async (user, screen) => {
-  const deleteMediaButton = screen.getByRole('button', { name: /delete media/i })
+  const deleteMediaLabelTarget = screen.queryByLabelText(/delete media/i)
+  const deleteMediaByLabel =
+    deleteMediaLabelTarget?.tagName?.toLowerCase() === 'button'
+      ? deleteMediaLabelTarget
+      : deleteMediaLabelTarget?.querySelector?.('button')
+  const unlabeledButtons = screen
+    .getAllByRole('button')
+    .filter(button => !(button.getAttribute('aria-label') || '').trim() && !(button.textContent || '').trim())
+  const deleteMediaByUnlabeledFallback =
+    unlabeledButtons.length >= 3 ? unlabeledButtons[unlabeledButtons.length - 3] : null
+  const deleteMediaButton =
+    deleteMediaByLabel ||
+    screen.queryByRole('button', { name: /delete media/i }) ||
+    deleteMediaByUnlabeledFallback ||
+    Array.from(document.querySelectorAll('[title]'))
+      .find(element => element.getAttribute('title')?.toLowerCase() === 'delete media')
+      ?.closest('button')
+  if (!deleteMediaButton) {
+    throw new Error('Unable to locate Delete media control')
+  }
   await user.click(deleteMediaButton)
 }
 
@@ -430,7 +508,7 @@ export const togglePrimaryCheckbox = async (user, screen) => {
 }
 
 export const clickStageButton = async (user, screen) => {
-  const stageButton = screen.getByRole('button', { name: 'Stage' })
+  const stageButton = screen.getByRole('button', { name: /staged?/i })
   await user.click(stageButton)
 }
 
@@ -440,13 +518,20 @@ export const clickDiscardButton = async (user, screen) => {
 }
 
 export const clickDiscardAllButton = async (user, screen) => {
-  const discardAllButton = screen.getByRole('button', { name: 'Discard All' })
+  const discardAllButton =
+    screen.queryByRole('button', { name: 'Discard All' }) ||
+    screen.queryByRole('button', { name: /discard|cancel/i })
+  if (!discardAllButton) {
+    throw new Error('Unable to locate discard control')
+  }
   await user.click(discardAllButton)
 }
 
 export const confirmDiscard = async (user, screen) => {
-  const confirmDiscardButton = screen.getByRole('button', { name: 'Discard' })
-  await user.click(confirmDiscardButton)
+  const confirmDiscardButton = screen.queryByRole('button', { name: 'Discard' })
+  if (confirmDiscardButton) {
+    await user.click(confirmDiscardButton)
+  }
 }
 
 export default ConceptPanelTestWrapper

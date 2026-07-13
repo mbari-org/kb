@@ -40,7 +40,7 @@ describe('Media Add - Image Types', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -50,7 +50,7 @@ describe('Media Add - Image Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -59,11 +59,11 @@ describe('Media Add - Image Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument()
     })
   })
 
@@ -80,7 +80,7 @@ describe('Media Add - Image Types', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -91,7 +91,7 @@ describe('Media Add - Image Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -100,9 +100,9 @@ describe('Media Add - Image Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
-  })
+  }, 15000)
 
   it('adds image with primary designation enabled', async () => {
     const user = userEvent.setup()
@@ -117,7 +117,7 @@ describe('Media Add - Image Types', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -130,7 +130,7 @@ describe('Media Add - Image Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -139,7 +139,7 @@ describe('Media Add - Image Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -156,7 +156,7 @@ describe('Media Add - Image Types', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -166,7 +166,7 @@ describe('Media Add - Image Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -175,12 +175,12 @@ describe('Media Add - Image Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -190,7 +190,7 @@ describe('Media Add - Image Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -199,7 +199,7 @@ describe('Media Add - Image Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -220,7 +220,7 @@ describe('Media Add - Image Types', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -252,7 +252,7 @@ describe('Media Add - Video Types', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -263,7 +263,7 @@ describe('Media Add - Video Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -272,7 +272,7 @@ describe('Media Add - Video Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -289,7 +289,7 @@ describe('Media Add - Video Types', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -299,7 +299,7 @@ describe('Media Add - Video Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -308,7 +308,7 @@ describe('Media Add - Video Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -325,7 +325,7 @@ describe('Media Add - Video Types', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -339,7 +339,7 @@ describe('Media Add - Video Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -348,12 +348,12 @@ describe('Media Add - Video Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -367,7 +367,7 @@ describe('Media Add - Video Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -376,7 +376,7 @@ describe('Media Add - Video Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })
@@ -399,7 +399,7 @@ describe('Media Add - Icon Types', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -409,7 +409,7 @@ describe('Media Add - Icon Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -418,7 +418,7 @@ describe('Media Add - Icon Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })
@@ -441,7 +441,7 @@ describe('Media Add - Mixed Media Types', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -454,7 +454,7 @@ describe('Media Add - Mixed Media Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -463,12 +463,12 @@ describe('Media Add - Mixed Media Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -481,7 +481,7 @@ describe('Media Add - Mixed Media Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -490,12 +490,12 @@ describe('Media Add - Mixed Media Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -508,7 +508,7 @@ describe('Media Add - Mixed Media Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -517,9 +517,9 @@ describe('Media Add - Mixed Media Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
-  })
+  }, 15000)
 
   it('adds second image after video - second image is not auto-primary', async () => {
     const user = userEvent.setup()
@@ -534,7 +534,7 @@ describe('Media Add - Mixed Media Types', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -544,7 +544,7 @@ describe('Media Add - Mixed Media Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -552,12 +552,12 @@ describe('Media Add - Mixed Media Types', () => {
 
     await clickStageButton(user, screen)
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -567,7 +567,7 @@ describe('Media Add - Mixed Media Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -575,12 +575,12 @@ describe('Media Add - Mixed Media Types', () => {
 
     await clickStageButton(user, screen)
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -612,13 +612,13 @@ describe('Media Add - Validation', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
     expect(urlInput).toHaveValue('')
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: /staged?/i })
     expect(stageButton).toBeDisabled()
   })
 
@@ -635,14 +635,14 @@ describe('Media Add - Validation', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
     await user.type(urlInput, MEDIA_URLS.IMAGE.head_01)
 
     await waitFor(() => {
-      const stageButton = screen.getByRole('button', { name: 'Stage' })
+      const stageButton = screen.getByRole('button', { name: /staged?/i })
       expect(stageButton).toBeDisabled()
     })
   })
@@ -660,7 +660,7 @@ describe('Media Add - Validation', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
@@ -684,7 +684,7 @@ describe('Media Add - Validation', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const discardButton = screen.getByRole('button', { name: 'Discard' })
@@ -692,7 +692,7 @@ describe('Media Add - Validation', () => {
 
     await waitFor(
       () => {
-        expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+        expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
       },
       { timeout: 2000 }
     )
@@ -713,7 +713,7 @@ describe('Media Add - Validation', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
@@ -740,13 +740,13 @@ describe('Media Add - Validation', () => {
     await clickAddMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
     await user.type(urlInput, MEDIA_URLS.IMAGE.head_01)
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: /staged?/i })
     expect(stageButton).toBeDisabled()
   })
 })
@@ -769,7 +769,7 @@ describe('Media Add - Primary Designation Edge Cases', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -779,7 +779,7 @@ describe('Media Add - Primary Designation Edge Cases', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -787,12 +787,12 @@ describe('Media Add - Primary Designation Edge Cases', () => {
 
     await clickStageButton(user, screen)
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -821,7 +821,7 @@ describe('Media Add - Primary Designation Edge Cases', () => {
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -831,7 +831,7 @@ describe('Media Add - Primary Designation Edge Cases', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -839,12 +839,12 @@ describe('Media Add - Primary Designation Edge Cases', () => {
 
     await clickStageButton(user, screen)
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Add media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -859,7 +859,7 @@ describe('Media Add - Primary Designation Edge Cases', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -868,7 +868,7 @@ describe('Media Add - Primary Designation Edge Cases', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })

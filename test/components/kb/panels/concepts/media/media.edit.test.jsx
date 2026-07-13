@@ -51,7 +51,7 @@ describe('Media Edit - URL Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
@@ -62,7 +62,7 @@ describe('Media Edit - URL Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -71,7 +71,7 @@ describe('Media Edit - URL Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -101,7 +101,7 @@ describe('Media Edit - URL Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -110,7 +110,7 @@ describe('Media Edit - URL Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -119,7 +119,7 @@ describe('Media Edit - URL Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -145,7 +145,7 @@ describe('Media Edit - URL Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -154,7 +154,7 @@ describe('Media Edit - URL Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -163,7 +163,7 @@ describe('Media Edit - URL Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -189,7 +189,7 @@ describe('Media Edit - URL Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -198,7 +198,7 @@ describe('Media Edit - URL Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -207,7 +207,7 @@ describe('Media Edit - URL Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })
@@ -239,7 +239,7 @@ describe('Media Edit - Credit Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const creditInput = screen.getByRole('textbox', { name: /credit/i })
@@ -250,7 +250,7 @@ describe('Media Edit - Credit Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -259,7 +259,7 @@ describe('Media Edit - Credit Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -289,7 +289,7 @@ describe('Media Edit - Credit Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const creditInput = screen.getByRole('textbox', { name: /credit/i })
@@ -299,7 +299,7 @@ describe('Media Edit - Credit Changes', () => {
       expect(screen.getByText(/credit cannot be empty/i)).toBeInTheDocument()
     })
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: /staged?/i })
     expect(stageButton).toBeDisabled()
   })
 })
@@ -332,7 +332,7 @@ describe('Media Edit - Caption Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const captionInput = screen.getByRole('textbox', { name: /caption/i })
@@ -342,7 +342,7 @@ describe('Media Edit - Caption Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -351,7 +351,7 @@ describe('Media Edit - Caption Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -378,7 +378,7 @@ describe('Media Edit - Caption Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const captionInput = screen.getByRole('textbox', { name: /caption/i })
@@ -389,7 +389,7 @@ describe('Media Edit - Caption Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -398,7 +398,7 @@ describe('Media Edit - Caption Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -425,7 +425,7 @@ describe('Media Edit - Caption Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const captionInput = screen.getByRole('textbox', { name: /caption/i })
@@ -433,7 +433,7 @@ describe('Media Edit - Caption Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -442,7 +442,7 @@ describe('Media Edit - Caption Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })
@@ -474,7 +474,7 @@ describe('Media Edit - Primary Designation Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const primaryCheckbox = screen.getByRole('checkbox', { name: /primary/i })
@@ -510,7 +510,7 @@ describe('Media Edit - Primary Designation Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const primaryCheckbox = screen.getByRole('checkbox', { name: /primary/i })
@@ -522,7 +522,7 @@ describe('Media Edit - Primary Designation Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -531,7 +531,7 @@ describe('Media Edit - Primary Designation Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -563,7 +563,7 @@ describe('Media Edit - Primary Designation Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
@@ -598,7 +598,7 @@ describe('Media Edit - Combined Field Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -608,7 +608,7 @@ describe('Media Edit - Combined Field Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -617,7 +617,7 @@ describe('Media Edit - Combined Field Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -644,7 +644,7 @@ describe('Media Edit - Combined Field Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -655,7 +655,7 @@ describe('Media Edit - Combined Field Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -664,7 +664,7 @@ describe('Media Edit - Combined Field Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -698,7 +698,7 @@ describe('Media Edit - Combined Field Changes', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -711,7 +711,7 @@ describe('Media Edit - Combined Field Changes', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -720,7 +720,7 @@ describe('Media Edit - Combined Field Changes', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })
@@ -752,7 +752,7 @@ describe('Media Edit - Validation', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
@@ -762,7 +762,7 @@ describe('Media Edit - Validation', () => {
       expect(screen.getByText(/url cannot be empty/i)).toBeInTheDocument()
     })
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: /staged?/i })
     expect(stageButton).toBeDisabled()
   })
 
@@ -788,7 +788,7 @@ describe('Media Edit - Validation', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     const urlInput = screen.getByRole('textbox', { name: /url/i })
@@ -822,7 +822,7 @@ describe('Media Edit - Validation', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -832,7 +832,7 @@ describe('Media Edit - Validation', () => {
     await clickDiscardButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
@@ -860,10 +860,10 @@ describe('Media Edit - Validation', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: /staged?/i })
     expect(stageButton).toBeDisabled()
   })
 })
@@ -895,7 +895,7 @@ describe('Media Edit - Video Types', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -904,7 +904,7 @@ describe('Media Edit - Video Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -913,7 +913,7 @@ describe('Media Edit - Video Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -940,7 +940,7 @@ describe('Media Edit - Video Types', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -950,7 +950,7 @@ describe('Media Edit - Video Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -959,7 +959,7 @@ describe('Media Edit - Video Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })
@@ -991,7 +991,7 @@ describe('Media Edit - Icon Types', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -1000,7 +1000,7 @@ describe('Media Edit - Icon Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -1009,7 +1009,7 @@ describe('Media Edit - Icon Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 
@@ -1035,7 +1035,7 @@ describe('Media Edit - Icon Types', () => {
     await clickEditMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit media')).toBeInTheDocument()
+      expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
     await fillMediaForm(user, screen, {
@@ -1044,7 +1044,7 @@ describe('Media Edit - Icon Types', () => {
 
     await waitFor(
       async () => {
-        const stageButton = screen.getByRole('button', { name: 'Stage' })
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
         expect(stageButton).toBeEnabled()
       },
       { timeout: 1000 }
@@ -1053,7 +1053,7 @@ describe('Media Edit - Icon Types', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Edit media')).not.toBeInTheDocument()
+      expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
   })
 })

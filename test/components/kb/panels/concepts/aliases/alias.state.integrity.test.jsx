@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
@@ -18,7 +18,7 @@ const cloneAliases = aliases => aliases.map(item => ({ ...item }))
 
 const waitForStageEnabled = async () => {
   await waitFor(() => {
-    expect(screen.getByRole('button', { name: 'Stage' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: /staged?/i })).toBeEnabled()
   })
 }
 
@@ -37,6 +37,15 @@ const getAliasActionElements = label => {
 
   return []
 }
+const resolveActionTarget = element => {
+  if (!element) return null
+  if (element.tagName?.toLowerCase() === 'button') return element
+  return (
+    element.querySelector?.('button, [role="button"], div') ||
+    element.closest?.('button, [role="button"], div') ||
+    null
+  )
+}
 
 const clickAliasAction = async (user, label, index = 0) => {
   await waitFor(() => {
@@ -44,7 +53,9 @@ const clickAliasAction = async (user, label, index = 0) => {
   })
 
   const actionElement = getAliasActionElements(label)[index]
-  await user.click(actionElement)
+  const actionTarget = resolveActionTarget(actionElement)
+  expect(actionTarget).toBeInTheDocument()
+  await user.click(actionTarget)
 }
 
 const ConceptAliasStateProbe = ({ onChange }) => {
@@ -87,8 +98,11 @@ describe('Alias state integrity', () => {
       expect(screen.getByText('Add alias')).toBeInTheDocument()
     })
 
-    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'dingo-common')
-    await user.type(screen.getByRole('textbox', { name: 'Author' }), 'tester')
+    const aliasForm = document.getElementById('add-alias-form')
+    expect(aliasForm).toBeInTheDocument()
+
+    await user.type(within(aliasForm).getByRole('textbox', { name: /name/i }), 'dingo-common')
+    await user.type(within(aliasForm).getByRole('textbox', { name: /author/i }), 'tester')
 
     await waitForStageEnabled()
     await clickStageButton(user, screen)
@@ -128,10 +142,13 @@ describe('Alias state integrity', () => {
       expect(screen.getByText('Edit alias')).toBeInTheDocument()
     })
 
-    const nameInput = screen.getByRole('textbox', { name: 'Name' })
+    const aliasForm = document.getElementById('add-alias-form')
+    expect(aliasForm).toBeInTheDocument()
+
+    const nameInput = within(aliasForm).getByRole('textbox', { name: /name/i })
     await user.clear(nameInput)
     await user.type(nameInput, 'dingo-edited')
-    const authorInput = screen.getByRole('textbox', { name: 'Author' })
+    const authorInput = within(aliasForm).getByRole('textbox', { name: /author/i })
     await user.clear(authorInput)
     await user.type(authorInput, 'editor')
 
@@ -202,7 +219,10 @@ describe('Alias state integrity', () => {
       expect(screen.getByText('Edit alias')).toBeInTheDocument()
     })
 
-    const authorInput = screen.getByRole('textbox', { name: 'Author' })
+    const aliasForm = document.getElementById('add-alias-form')
+    expect(aliasForm).toBeInTheDocument()
+
+    const authorInput = within(aliasForm).getByRole('textbox', { name: /author/i })
     await user.clear(authorInput)
     await user.type(authorInput, 'changed')
 

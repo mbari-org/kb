@@ -23,6 +23,32 @@ import CONFIG from '@/text'
 
 const { CHANGE_NAME, CHANGE_PARENT, ADD_CHILD, DELETE_CONCEPT } = CONFIG.CONCEPT.STRUCTURE
 
+const resolveActionTarget = element => {
+  if (!element) return null
+  if (element.tagName?.toLowerCase() === 'button') return element
+  return (
+    element.querySelector?.('button, [role="button"], div') ||
+    element.closest?.('button, [role="button"], div') ||
+    null
+  )
+}
+
+const getStructureActionButton = () => {
+  const byLabel = screen.queryByLabelText(/edit concept structure/i)
+  if (byLabel) {
+    return resolveActionTarget(byLabel)
+  }
+
+  const byRole = screen.queryByRole('button', { name: /edit concept structure/i })
+  if (byRole) {
+    return byRole
+  }
+
+  const byTitle = Array.from(document.querySelectorAll('[title]'))
+    .find(element => element.getAttribute('title')?.toLowerCase() === 'edit concept structure')
+  return resolveActionTarget(byTitle)
+}
+
 // Mock concept data - buildTree expects conceptMap[child] for each child
 const rootConcept = {
   name: 'root',
@@ -319,12 +345,13 @@ describe('concept object structure choices', () => {
     // Verify ConceptProvider context has isEditing true - ConceptStructureIcon only shows when isEditing
     // ConceptStructureIcon is an IconButton with tooltip "Edit Concept Structure"
     await waitFor(() => {
-      const structureIcon = screen.getByRole('button', { name: /edit concept structure/i })
-      expect(structureIcon).toBeInTheDocument()
+      const structureActionButton = getStructureActionButton()
+      expect(structureActionButton).toBeInTheDocument()
     })
 
     // Verify ConceptView ConceptName has ConceptStructureIcon - click it
-    const structureIcon = screen.getByRole('button', { name: /edit concept structure/i })
+    const structureIcon = getStructureActionButton()
+    expect(structureIcon).toBeInTheDocument()
     await user.click(structureIcon)
 
     // Verify ChangeStructureChoices is displayed
