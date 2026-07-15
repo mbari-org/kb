@@ -11,6 +11,7 @@ import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PREFS } from '@/lib/constants/prefs.js'
 
 import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
+import { isIdentical } from '@/lib/model/templates'
 
 const { KEY } = PREFS.USER
 const { ANNOTATIONS, ASSOCIATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
@@ -70,7 +71,6 @@ const preSideEffects = async deleteConceptContext => {
           promises[ANNOTATIONS] = apiFns.apiPayload(renameConceptObservations, oldNewPayload)
           break
 
-
         case REFERENCES:
           promises[REFERENCES] = Promise.all(
             concept.references.map(reference => apiFns.apiPayload(removeConcept, [reference.id, concept.name]))
@@ -78,17 +78,28 @@ const preSideEffects = async deleteConceptContext => {
           break
 
         case TEMPLATES_DEFINED: {
-          const definedTemplates = filterTemplates(templates, { concepts: [concept.name] })
-          const templatePromises = definedTemplates.map(template => {
-            const { linkName, linkValue, toConcept } = template
-            const newTemplate = {
+          const templatesOnReassignedConcept = filterTemplates(templates, { concepts: [reassign] })
+          const templateToReassign = filterTemplates(templates, { concepts: [concept.name] }).filter(
+            template =>
+              !templatesOnReassignedConcept.some(existing =>
+                isIdentical(
+                  {
+                    ...template,
+                    toConcept: template.toConcept || reassign,
+                  },
+                  existing
+                )
+              )
+          )
+
+          const templatePromises = templateToReassign.map(({ linkName, linkValue, toConcept }) =>
+            apiFns.apiPayload(createConceptTemplate, {
               concept: reassign,
               linkName,
               linkValue,
               toConcept: toConcept || reassign,
-            }
-            return apiFns.apiPayload(createConceptTemplate, newTemplate)
-          })
+            })
+          )
           promises[TEMPLATES_DEFINED] = Promise.all(templatePromises)
           break
         }
@@ -126,7 +137,6 @@ const applyResults = async (refreshPanelDataFn, results) => {
         case ANNOTATIONS:
           // no-op
           break
-
 
         case REFERENCES:
           // no-op

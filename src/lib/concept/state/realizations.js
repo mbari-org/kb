@@ -7,9 +7,9 @@ import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
-import { isJsonEqual } from '@/lib/utils'
+import { REALIZATION_VALUE_FIELDS } from '@/lib/model/realization'
 
-const REALIZATION_DISPLAY_FIELDS = ['linkName', 'toConcept', 'linkValue']
+import { isJsonEqual } from '@/lib/utils'
 
 const addRealization = ({ stagedState, update }) => {
   const realizationIndex = stagedState.realizations.length
@@ -31,9 +31,7 @@ const deleteRealization = ({ stagedState, update }) => {
   const realizationItem = stagedState.realizations[update.realizationIndex]
   // If realization is an add, just remove it from state
   if (realizationItem?.action === CONCEPT_STATE.REALIZATION.ADD) {
-    const updatedRealizations = stagedState.realizations.filter(
-      (_item, index) => index !== update.realizationIndex
-    )
+    const updatedRealizations = stagedState.realizations.filter((_item, index) => index !== update.realizationIndex)
     return {
       ...stagedState,
       realizations: updatedRealizations,
@@ -62,9 +60,7 @@ const editRealization = ({ stagedState, update }) => {
 
 const isMatching = (realization, pendingRealization) => {
   const realizationString =
-    pendingRealization.action !== ACTION.DELETE
-      ? pendingRealization.newValue
-      : pendingRealization.oldValue
+    pendingRealization.action !== ACTION.DELETE ? pendingRealization.newValue : pendingRealization.oldValue
 
   return matchingRealizationString(realization, realizationString)
 }
@@ -73,7 +69,7 @@ const isPendingRealization = pendingItem => pendingItem.field === HISTORY_FIELD.
 
 const realizationEdits = realizations => {
   return stagedEdits({
-    displayFields: REALIZATION_DISPLAY_FIELDS,
+    displayFields: REALIZATION_VALUE_FIELDS,
     initial: realizations.initial,
     staged: realizations.staged,
     stateTypes: CONCEPT_STATE.REALIZATION,
@@ -81,9 +77,7 @@ const realizationEdits = realizations => {
 }
 
 const realizationState = (realization, pendingRealizations) => {
-  const pendingRealization = pendingRealizations.find(pendingItem =>
-    isMatching(realization, pendingItem)
-  )
+  const pendingRealization = pendingRealizations.find(pendingItem => isMatching(realization, pendingItem))
   if (pendingRealization) {
     return {
       ...realization,
@@ -125,7 +119,7 @@ const stagedRealizationEdits = stagedEdit => {
   const [_field, realizations] = stagedEdit
 
   return stagedEdits({
-    displayFields: REALIZATION_DISPLAY_FIELDS,
+    displayFields: REALIZATION_VALUE_FIELDS,
     initial: realizations.initial,
     staged: realizations.staged,
     stateTypes: CONCEPT_STATE.REALIZATION,
@@ -137,9 +131,7 @@ const updateState = ({ stagedState, update, type }) => {
   const updatedItem = { ...stagedState.realizations[realizationIndex], ...realizationItem, action: type }
   return {
     ...stagedState,
-    realizations: stagedState.realizations.map((item, index) =>
-      index === realizationIndex ? updatedItem : item
-    ),
+    realizations: stagedState.realizations.map((item, index) => (index === realizationIndex ? updatedItem : item)),
   }
 }
 
@@ -160,4 +152,3 @@ export {
   stagedRealizationEdits,
   stateUpdates,
 }
-

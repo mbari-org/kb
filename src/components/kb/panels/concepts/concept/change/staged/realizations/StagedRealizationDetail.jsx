@@ -9,7 +9,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { REALIZATION: REALIZATION } = CONCEPT_STATE
 
-import { REALIZATION_DISPLAY_FIELDS } from '@/lib/model/realization'
+import { REALIZATION_VALUE_FIELDS } from '@/lib/model/realization'
 import { drop } from '@/lib/utils'
 
 const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {
@@ -24,7 +24,7 @@ const StagedRealizationDetail = ({ initialRealization, stagedRealization }) => {
 
       case REALIZATION.DELETE:
         // Show the values of the realization being deleted
-        fieldValues = REALIZATION_DISPLAY_FIELDS.map(field => [field, initialRealization?.[field]])
+        fieldValues = REALIZATION_VALUE_FIELDS.map(field => [field, initialRealization?.[field]])
         break
 
       case REALIZATION.EDIT:
