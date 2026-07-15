@@ -42,7 +42,7 @@ const DeleteConceptContent = () => {
     setReassignTo(selectedName)
     const valid = validateChoice(selectedName)
     setIsValid(valid)
-    setModalData(prev => ({ ...prev, toConcept: selectedName, modified: valid, isValid: valid }))
+    setModalData(prev => ({ ...prev, reassign: selectedName, modified: valid, isValid: valid }))
   }
 
   const handleKeyUp = event => {
