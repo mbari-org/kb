@@ -31,6 +31,12 @@ const TemplatesProvider = ({ children }) => {
   const templatesSettings = getSettings(TEMPLATES.KEY)
   const { byAvailable, filters = {} } = templatesSettings
 
+  const selectedPanel = getSelected(SELECTED.PANEL)
+  const selectedConcept = getSelected(SELECTED.CONCEPT)
+  const isTemplatesPanelSelected = selectedPanel === SELECTED.PANELS.TEMPLATES
+  const isInitialConceptFilterPending =
+    isTemplatesPanelSelected && typeof filters[FILTERS.CONCEPT] === 'undefined' && Boolean(selectedConcept)
+
   const setByAvailable = useCallback(
     bool => updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: bool } }),
     [updateSettings]
@@ -41,20 +47,14 @@ const TemplatesProvider = ({ children }) => {
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates()
 
   useEffect(() => {
-    if (getSelected(SELECTED.PANEL) === SELECTED.PANELS.TEMPLATES) {
-      const selectedConcept = getSelected(SELECTED.CONCEPT)
-
-      if (
-        typeof filters[FILTERS.CONCEPT] === 'undefined' &&
-        selectedConcept
-      ) {
-        updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
-      }
+    if (isInitialConceptFilterPending) {
+      updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
     }
-  }, [filters, getSelected, updateFilters])
+  }, [isInitialConceptFilterPending, selectedConcept, updateFilters])
 
   const filteredTemplates = useMemo(() => {
     if (!templates || templates.length === 0) return []
+    if (isInitialConceptFilterPending) return []
 
     const linkName = filters[FILTERS.LINK_NAME]
     const toConcept = filters[FILTERS.TO_CONCEPT]
@@ -65,12 +65,14 @@ const TemplatesProvider = ({ children }) => {
       return filterTemplates(templates, { linkName, toConcept, linkValue })
     }
 
-    const concepts = isConceptLoaded(concept)
-      ? [concept, ...(byAvailable ? getAncestorNames(concept) : [])]
-      : null
+    if (!isConceptLoaded(concept)) {
+      return []
+    }
+
+    const concepts = [concept, ...(byAvailable ? getAncestorNames(concept) : [])]
 
     return filterTemplates(templates, { concepts, linkName, toConcept, linkValue })
-  }, [byAvailable, filters, getAncestorNames, isConceptLoaded, templates])
+  }, [byAvailable, filters, getAncestorNames, isConceptLoaded, isInitialConceptFilterPending, templates])
 
   useEffect(() => {
     const concept = filters[FILTERS.CONCEPT]
