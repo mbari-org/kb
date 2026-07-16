@@ -8,7 +8,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { PREFS } from '@/lib/constants/prefs.js'
 import CONFIG from '@/text'
 
-const phylogenyRootKey = PREFS.APP.PHYLOGENY.KEY
+const phylogenyRootKey = PREFS.APP.PHYLOGENY.ROOT.KEY
 const { CANCEL, SAVE } = CONFIG.PANELS.CONCEPTS.BUTTON
 const { SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.PHYLOGENY_ROOT.ALERT
 

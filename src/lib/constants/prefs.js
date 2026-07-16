@@ -11,9 +11,19 @@ export const PREFS = {
   },
   APP: {
     PREFIX: 'kb-app',
+    MEDIA: {
+      BASE_URL: {
+        ROOT: {
+          DEFAULT: '',
+          KEY: 'media-base-url',
+        },
+      },
+    },
     PHYLOGENY: {
-      KEY: 'phylogeny-root',
-      ROOT: 'marine organism',
+      ROOT: {
+        DEFAULT: 'marine organism',
+        KEY: 'phylogeny-root',
+      },
     },
   },
   AUTH: {

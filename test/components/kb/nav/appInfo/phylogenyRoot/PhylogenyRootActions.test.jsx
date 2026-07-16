@@ -78,7 +78,7 @@ describe('PhylogenyRootActions', () => {
 
     await user.click(screen.getByRole('button', { name: 'Save' }))
 
-    expect(saveAppPreference).toHaveBeenCalledWith(PREFS.APP.PHYLOGENY.KEY, 'phyla')
+    expect(saveAppPreference).toHaveBeenCalledWith(PREFS.APP.PHYLOGENY.ROOT.KEY, 'phyla')
     await waitFor(() => {
       expect(closeModal).toHaveBeenCalledWith(true)
     })
@@ -100,7 +100,7 @@ describe('PhylogenyRootActions', () => {
 
     await user.click(screen.getByRole('button', { name: 'Save' }))
 
-    expect(saveAppPreference).toHaveBeenCalledWith(PREFS.APP.PHYLOGENY.KEY, 'canis lupus')
+    expect(saveAppPreference).toHaveBeenCalledWith(PREFS.APP.PHYLOGENY.ROOT.KEY, 'canis lupus')
     await waitFor(() => {
       expect(closeModal).toHaveBeenCalledWith(true)
     })

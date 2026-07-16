@@ -13,6 +13,7 @@ import {
 } from '@/components/kb/panels/concepts/concept/change/staged/media/edit/mediaItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -22,6 +23,7 @@ const DELETE = CONCEPT_STATE.MEDIA_ITEM.DELETE
 
 const MediaModifyIcon = ({ action, mediaIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { mediaBaseUrl } = use(ConfigContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const [asyncError, setAsyncError] = useState(null)
 
@@ -32,7 +34,9 @@ const MediaModifyIcon = ({ action, mediaIndex, size }) => {
   const onClick = useCallback(() => {
     try {
       const mediaItem =
-        action === ADD ? EMPTY_MEDIA_ITEM : mediaItemFields(stagedState.media[mediaIndex])
+        action === ADD
+          ? { ...EMPTY_MEDIA_ITEM, url: mediaBaseUrl || '' }
+          : mediaItemFields(stagedState.media[mediaIndex])
 
       const actionModalData = {
         action,
@@ -49,7 +53,7 @@ const MediaModifyIcon = ({ action, mediaIndex, size }) => {
     } catch (error) {
       setAsyncError(error)
     }
-  }, [action, mediaIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
+  }, [action, mediaBaseUrl, mediaIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
   const IconComponent =
     action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon

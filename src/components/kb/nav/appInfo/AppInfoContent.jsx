@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { use } from 'react'
 
 import AppInfoDetail from '@/components/kb/nav/appInfo/AppInfoDetail'
+import MediaBaseURLDetail from '@/components/kb/nav/appInfo/mediaBaseUR/MediaBaseURLDetail'
 import PhylogenyRootDetail from '@/components/kb/nav/appInfo/phylogenyRoot/PhylogenyRootDetail'
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -19,6 +20,7 @@ const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName }) => {
         <AppInfoDetail label='User' value={user.name} />
         <AppInfoDetail label='Role' value={user.role} />
         <AppInfoDetail label='Config' value={config?.url || ''} />
+        <MediaBaseURLDetail />
         <PhylogenyRootDetail conceptNames={conceptNames} getConceptPrimaryName={getConceptPrimaryName} />
       </Box>
       <Box sx={{ alignSelf: 'flex-end', mt: 2, pb: 2, textAlign: 'right' }}>

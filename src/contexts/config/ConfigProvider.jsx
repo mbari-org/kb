@@ -14,8 +14,10 @@ import { PREFS } from '@/lib/constants/prefs.js'
 
 const IS_DEV = import.meta.env.DEV
 const USE_M3_LOCAL = import.meta.env.VITE_M3_LOCAL ?? false
-const appPhylogenyRootKey = PREFS.APP.PHYLOGENY.KEY
-const defaultPhylogenyRoot = PREFS.APP.PHYLOGENY.ROOT
+const appMediaBaseUrlKey = PREFS.APP.MEDIA.BASE_URL.ROOT.KEY
+const defaultMediaBaseUrl = PREFS.APP.MEDIA.BASE_URL.ROOT.DEFAULT
+const appPhylogenyRootKey = PREFS.APP.PHYLOGENY.ROOT.KEY
+const defaultPhylogenyRoot = PREFS.APP.PHYLOGENY.ROOT.DEFAULT
 
 const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
@@ -133,6 +135,10 @@ const ConfigProvider = ({ children }) => {
     appPreferencesInitializingRef.current = true
 
     try {
+      const appMediaBaseUrl = await getAppPreference(appMediaBaseUrlKey)
+      if (appMediaBaseUrl === null || appMediaBaseUrl === undefined) {
+        await saveAppPreference(appMediaBaseUrlKey, defaultMediaBaseUrl)
+      }
       const appPhylogenyRoot = await getAppPreference(appPhylogenyRootKey)
       if (appPhylogenyRoot === null || appPhylogenyRoot === undefined) {
         await saveAppPreference(appPhylogenyRootKey, defaultPhylogenyRoot)
@@ -143,6 +149,7 @@ const ConfigProvider = ({ children }) => {
     }
   }, [appPreferencesInitialized, config, getAppPreference, saveAppPreference])
 
+  const mediaBaseUrl = appPreferences[appMediaBaseUrlKey] ?? defaultMediaBaseUrl
   const phylogenyRoot = appPreferences[appPhylogenyRootKey] ?? defaultPhylogenyRoot
 
   useEffect(() => {
@@ -159,6 +166,7 @@ const ConfigProvider = ({ children }) => {
       getAppPreference,
       initializeAppPreferences,
       IS_DEV,
+      mediaBaseUrl,
       phylogenyRoot,
       saveAppPreference,
       updateConfig,
@@ -170,6 +178,7 @@ const ConfigProvider = ({ children }) => {
       config,
       getAppPreference,
       initializeAppPreferences,
+      mediaBaseUrl,
       phylogenyRoot,
       saveAppPreference,
       updateConfig,
