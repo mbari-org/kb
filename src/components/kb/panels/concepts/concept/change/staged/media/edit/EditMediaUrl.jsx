@@ -1,35 +1,29 @@
 import { use, useCallback } from 'react'
-import {
-  FormControl,
-  Icon,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from '@mui/material'
+import { FormControl, Icon, IconButton, InputAdornment, TextField } from '@mui/material'
 import { MdOutlinePhoto } from 'react-icons/md'
+import isValidUrl from '@/lib/validators/isValidUrl'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useDebounce from '@/lib/hooks/useDebounce'
-import { checkMediaUrlExists } from '@/lib/model/media'
-import { isUrlValid } from '@/lib/utils'
+import isValidMedia from '@/lib/validators/isValidMedia'
+
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const URL_CHECK_DEBOUNCE_TIME = 500
 
-const EditMediaUrl = ({
-  modifiedUrl,
-  onUrlChange,
-  onUrlStatusChange,
-  setPreviewOn,
-  urlStatus,
-  urlValue,
-}) => {
+const EditMediaUrl = ({ modifiedUrl, onUrlChange, onUrlStatusChange, setPreviewOn, urlStatus, urlValue }) => {
   const { concept, stagedState } = use(ConceptContext)
   const { modalData } = use(ConceptModalContext)
 
   const { action, mediaIndex, mediaItem } = modalData
+  const showPreviewButton =
+    !urlStatus.loading &&
+    urlStatus.valid &&
+    isValidUrl(urlValue) &&
+    urlValue.trim() !== '' &&
+    (action !== CONCEPT_STATE.MEDIA_ITEM.ADD || modifiedUrl)
 
   const isDuplicateUrl = useCallback(
     url => {
@@ -47,11 +41,11 @@ const EditMediaUrl = ({
   )
 
   const debouncedUrlCheck = useDebounce(urlValue => {
-    if (isUrlValid(urlValue)) {
+    if (isValidUrl(urlValue)) {
       const loadingStatus = { loading: true, valid: true, isDuplicate: false }
       onUrlStatusChange(loadingStatus)
 
-      checkMediaUrlExists(urlValue).then(exists => {
+      isValidMedia(urlValue).then(exists => {
         const finalStatus = { loading: false, valid: exists, isDuplicate: false }
         onUrlStatusChange(finalStatus)
       })
@@ -64,7 +58,7 @@ const EditMediaUrl = ({
     const isDuplicate = urlValue !== mediaItem.url && isDuplicateUrl(urlValue)
     if (isDuplicate) {
       onUrlStatusChange({ isDuplicate: true, loading: false, valid: true })
-    } else if (isUrlValid(urlValue)) {
+    } else if (isValidUrl(urlValue)) {
       onUrlStatusChange({ isDuplicate: false, loading: true, valid: true })
       debouncedUrlCheck(urlValue)
     } else {
@@ -76,7 +70,7 @@ const EditMediaUrl = ({
   const urlError =
     modifiedUrl &&
     (urlValue.trim() === '' ||
-      !isUrlValid(urlValue) ||
+      !isValidUrl(urlValue) ||
       (!urlStatus.loading && !urlStatus.valid) ||
       urlStatus.isDuplicate)
 
@@ -85,25 +79,22 @@ const EditMediaUrl = ({
       ? 'URL cannot be empty'
       : urlStatus.isDuplicate
         ? 'This media is already being used'
-        : !isUrlValid(urlValue)
-            ? 'Please enter a valid URL'
-            : urlStatus.loading
-              ? 'Checking URL...'
-              : !urlStatus.valid
-                  ? 'URL is not accessible'
-                  : ''
+        : !isValidUrl(urlValue)
+          ? 'Please enter a valid URL'
+          : urlStatus.loading
+            ? 'Checking URL...'
+            : !urlStatus.valid
+              ? 'URL is not a valid media file'
+              : ''
 
   const urlSlotProps = {
     input: {
       endAdornment: (
         <InputAdornment position='end'>
-          {!urlStatus.loading &&
-            urlStatus.valid &&
-            isUrlValid(urlValue) &&
-            urlValue.trim() !== '' && (
-              <IconButton edge='end' onClick={() => setPreviewOn(true)}>
-                <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
-              </IconButton>
+          {showPreviewButton && (
+            <IconButton edge='end' onClick={() => setPreviewOn(true)}>
+              <Icon color='main' component={MdOutlinePhoto} sx={{ mb: 2, fontSize: 20 }} />
+            </IconButton>
           )}
         </InputAdornment>
       ),

@@ -14,11 +14,9 @@ import {
   clickStageButton,
 } from '../concept.panel.test.wrapper'
 
-vi.mock('@/lib/model/media', async importOriginal => {
-  const original = await importOriginal()
+vi.mock('@/lib/validators/isValidMedia', () => {
   return {
-    ...original,
-    checkMediaUrlExists: vi.fn(() => Promise.resolve(true)),
+    default: vi.fn(() => Promise.resolve(true)),
   }
 })
 

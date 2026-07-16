@@ -38,44 +38,6 @@ const getMediaType = url => {
   }
 }
 
-const checkMediaUrlExists = url => {
-  const mediaType = getMediaType(url)
-
-  if (mediaType === IMAGE) {
-    return new Promise(resolve => {
-      const img = new Image()
-      img.onload = () => resolve(true)
-      img.onerror = () => resolve(false)
-      img.src = url
-    })
-  }
-
-  if (mediaType === VIDEO) {
-    return new Promise(resolve => {
-      const video = document.createElement('video')
-      video.preload = 'metadata'
-      video.onloadedmetadata = () => resolve(true)
-      video.onerror = () => resolve(false)
-      video.src = url
-    })
-  }
-
-  if (mediaType === ICON) {
-    return new Promise(resolve => {
-      const img = new Image()
-      img.onload = () => resolve(true)
-      img.onerror = () => resolve(false)
-      img.src = url
-    })
-  }
-
-  return new Promise(resolve => {
-    const img = new Image()
-    img.onload = () => resolve(true)
-    img.onerror = () => resolve(false)
-    img.src = url
-  })
-}
 
 const getPrimary = media => media.find(mediaItem => isPrimary(mediaItem))
 
@@ -118,7 +80,6 @@ const typeMediaItem = mediaItem => ({
 })
 
 export {
-  checkMediaUrlExists,
   deriveMediaType,
   getItemMediaType,
   getMediaType,

@@ -1,4 +1,5 @@
 import { use, useMemo } from 'react'
+import isValidUrl from '@/lib/validators/isValidUrl'
 
 import {
   createConfirmationHandlers,
@@ -9,7 +10,6 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
-import { isUrlValid } from '@/lib/utils'
 
 const EditMediaActions = () => {
   const { concept, confirmReset, modifyConcept } = use(ConceptContext)
@@ -18,7 +18,7 @@ const EditMediaActions = () => {
   const { mediaItem = { url: '', credit: '' }, modified = false, formValid } = modalData || {}
 
   const initialFormValid = useMemo(
-    () => isUrlValid(mediaItem?.url || '') && (mediaItem?.credit || '').trim() !== '',
+    () => isValidUrl(mediaItem?.url || '') && (mediaItem?.credit || '').trim() !== '',
     [mediaItem]
   )
 

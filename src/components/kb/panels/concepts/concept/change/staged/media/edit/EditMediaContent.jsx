@@ -1,9 +1,6 @@
 import { use, useEffect, useRef, useState } from 'react'
-import {
-  Box,
-  FormControl,
-  TextField,
-} from '@mui/material'
+import { Box, FormControl, TextField } from '@mui/material'
+import isValidUrl from '@/lib/validators/isValidUrl'
 
 import EditMediaUrl from './EditMediaUrl'
 import EditMediaPrimary from './EditMediaPrimary'
@@ -17,7 +14,6 @@ import useStageMedia from './useStageMedia'
 import useDebounce from '@/lib/hooks/useDebounce'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
-import { isUrlValid } from '@/lib/utils'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
@@ -52,7 +48,7 @@ const EditMediaContent = () => {
     const hasCreditError = formMediaItem.credit.trim() === ''
     const hasUrlError =
       formMediaItem.url.trim() === '' ||
-      !isUrlValid(formMediaItem.url) ||
+      !isValidUrl(formMediaItem.url) ||
       (!urlStatus.loading && !urlStatus.valid) ||
       urlStatus.isDuplicate
 

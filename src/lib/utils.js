@@ -186,14 +186,6 @@ const isRefEqual = (obj1, obj2, depth = Infinity) => {
   return true
 }
 
-const isUrlValid = url => {
-  try {
-    new URL(url)
-    return true
-  } catch {
-    return false
-  }
-}
 
 const pick = (object, fields) => {
   return fields.reduce((result, field) => {
@@ -247,7 +239,6 @@ export {
   isEqualWithout,
   isJsonEqual,
   isRefEqual,
-  isUrlValid,
   pick,
   pluralCount,
   prettyFormat,

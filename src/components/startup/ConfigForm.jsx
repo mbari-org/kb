@@ -26,8 +26,8 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   }
 
   const displayConfigUrl = configIsDirty ? configUrl : config?.url || configUrl || ''
-  const isUrlValid = isValidUrl(displayConfigUrl)
-  const isButtonEnabled = configIsDirty && isUrlValid
+  const isValidConfigUrl = isValidUrl(displayConfigUrl)
+  const isButtonEnabled = configIsDirty && isValidConfigUrl
 
   useEffect(() => {
     if (config?.valid) {
