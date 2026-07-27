@@ -40,6 +40,12 @@ const useAddTemplateButton = () => {
     () => createHandlers(updateModalData, closeModal, false),
     [updateModalData, closeModal]
   )
+  const handleDuplicateChange = useCallback(
+    isDuplicate => {
+      updateModalData({ isDuplicate })
+    },
+    [updateModalData]
+  )
 
   const handleCommit = useCallback(
     async template => {
@@ -93,7 +99,7 @@ const useAddTemplateButton = () => {
 
       if (modalData.confirmCommit) {
         const colors = ['cancel', 'primary']
-        const disabled = [false, false]
+        const disabled = [false, !!modalData.isDuplicate]
         const labels = [CANCEL, SAVE]
         const onAction = async label => {
           switch (label) {
@@ -146,7 +152,7 @@ const useAddTemplateButton = () => {
 
     const ContentView = () => {
       const { modalData } = useTemplatesModalDataContext()
-      const TemplateModalContent = createModalContent(handleFormChange, false)
+      const TemplateModalContent = createModalContent(handleFormChange, false, handleDuplicateChange)
       return TemplateModalContent(modalData)
     }
 
@@ -158,6 +164,7 @@ const useAddTemplateButton = () => {
         confirmDiscard: false,
         confirmCommit: false,
         hasChanges: false,
+        isDuplicate: false,
         isValid: false,
         template: {
           ...EMPTY_REALIZATION,
@@ -166,7 +173,7 @@ const useAddTemplateButton = () => {
       },
       onClose,
     })
-  }, [closeModal, createModal, filters, handleCancel, handleCommit, handleFormChange, updateModalData])
+  }, [closeModal, createModal, filters, handleCancel, handleCommit, handleDuplicateChange, handleFormChange, updateModalData])
 
   const AddTemplateButton = useCallback(() => {
     const { TEMPLATES } = SELECTED.SETTINGS

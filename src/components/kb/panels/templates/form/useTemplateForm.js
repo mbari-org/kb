@@ -2,15 +2,19 @@ import { useState } from 'react'
 
 const useTemplateForm = ({ onChange, template, original }) => {
   const [hasSearchInput, setHasSearchInput] = useState(false)
-
+  const updateTemplate = updater => {
+    const updatedTemplate = updater(template)
+    onChange(updatedTemplate, original)
+  }
   const handleChange = field => event => {
     const newValue = event.target.value
-    const updatedTemplate = {
-      ...template,
-      [field]: newValue,
+    if (typeof newValue !== 'string') {
+      throw new Error(`Template form field '${field}' must be a string`)
     }
-
-    onChange(updatedTemplate, original)
+    updateTemplate(currentTemplate => ({
+      ...currentTemplate,
+      [field]: newValue,
+    }))
   }
 
   const handleSearchInput = event => {
@@ -21,6 +25,7 @@ const useTemplateForm = ({ onChange, template, original }) => {
     handleChange,
     handleSearchInput,
     hasSearchInput,
+    updateTemplate,
   }
 }
 

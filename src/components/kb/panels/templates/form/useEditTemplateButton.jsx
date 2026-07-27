@@ -11,6 +11,7 @@ import {
   createHandlers,
   createModalActions,
   createModalContent,
+  processAddTemplateData,
   processEditTemplateData,
   createTemplateOnClose,
   duplicateTemplateAlert,
@@ -27,12 +28,18 @@ const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTO
 const useEditTemplateButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } =
     useTemplatesModalOperationsContext()
-  const { editTemplate } = use(TemplatesContext)
+  const { addTemplate, deleteTemplate, editTemplate } = use(TemplatesContext)
   const { templates: allTemplates } = use(PanelDataContext)
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, true),
     [updateModalData, closeModal]
+  )
+  const handleDuplicateChange = useCallback(
+    isDuplicate => {
+      updateModalData({ isDuplicate })
+    },
+    [updateModalData]
   )
 
   const handleCommit = useCallback(
@@ -45,6 +52,10 @@ const useEditTemplateButton = () => {
           closeModal()
           return
         }
+        const isIdentityChanged =
+          template.concept !== original.concept ||
+          template.linkName !== original.linkName ||
+          template.toConcept !== original.toConcept
 
         // Duplicate check (exclude the original template by id)
         if (isDuplicateTemplate(allTemplates, template, original.id)) {
@@ -57,7 +68,12 @@ const useEditTemplateButton = () => {
         }
 
         await withProcessing(async () => {
-          await editTemplate(original, template)
+          if (isIdentityChanged) {
+            await addTemplate(processAddTemplateData(template))
+            await deleteTemplate(original)
+          } else {
+            await editTemplate(original, updatedData)
+          }
           closeModal()
         }, PROCESSING.UPDATE)
       } catch (error) {
@@ -75,7 +91,7 @@ const useEditTemplateButton = () => {
         )
       }
     },
-    [allTemplates, editTemplate, closeModal, updateModalData, withProcessing]
+    [allTemplates, addTemplate, deleteTemplate, editTemplate, closeModal, updateModalData, withProcessing]
   )
 
   const editTemplateModal = useCallback(
@@ -108,7 +124,7 @@ const useEditTemplateButton = () => {
 
         if (modalData.confirmCommit) {
           const colors = ['cancel', 'primary']
-          const disabled = [false, false]
+          const disabled = [false, !!modalData.isDuplicate]
           const labels = [CANCEL, SAVE]
           const onAction = async label => {
             switch (label) {
@@ -161,7 +177,7 @@ const useEditTemplateButton = () => {
 
       const ContentView = () => {
         const { modalData } = useTemplatesModalDataContext()
-        const TemplateModalContent = createModalContent(handleFormChange, true)
+        const TemplateModalContent = createModalContent(handleFormChange, true, handleDuplicateChange)
         return TemplateModalContent(modalData)
       }
 
@@ -173,6 +189,7 @@ const useEditTemplateButton = () => {
           confirmDiscard: false,
           confirmCommit: false,
           hasChanges: false,
+          isDuplicate: false,
           isValid: true,
           original: templateToEdit,
           template: { ...templateToEdit },
@@ -180,7 +197,7 @@ const useEditTemplateButton = () => {
         onClose,
       })
     },
-    [closeModal, createModal, handleCancel, handleCommit, handleFormChange, updateModalData]
+    [closeModal, createModal, handleCancel, handleCommit, handleDuplicateChange, handleFormChange, updateModalData]
   )
 
   return editTemplateModal

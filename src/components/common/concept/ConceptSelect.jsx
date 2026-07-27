@@ -52,11 +52,14 @@ const ConceptSelect = ({
 
   const handleConceptSelect = selectedName => {
     if (selectedName) {
+      const isSpecialSelection = hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName)
       const isValidSelection =
-        options.includes(selectedName) || (hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName))
+        options.includes(selectedName) || isSpecialSelection
 
       if (isValidSelection) {
-        const conceptName = getConceptPrimaryName(selectedName)
+        const conceptName = isSpecialSelection
+          ? selectedName
+          : getConceptPrimaryName(selectedName) || selectedName
         const doSelection = doConceptSelected ? doConceptSelected(conceptName) : true
         if (doSelection && updateConceptSelected) {
           updateSelected({ concept: conceptName })
@@ -74,6 +77,13 @@ const ConceptSelect = ({
       const inputField = inputRef.current?.querySelector('input')
       keepFocus ? inputField?.focus() : inputField?.blur()
     }
+  }
+  const handleBlur = event => {
+    const selectedName = event.target.value.trim()
+    if (selectedName !== '') {
+      handleConceptSelect(selectedName)
+    }
+    onInputBlur?.(event)
   }
 
   return (
@@ -100,7 +110,7 @@ const ConceptSelect = ({
                 WebkitTextFillColor: theme.palette.text.disabled,
               },
             }}
-            onBlur={onInputBlur}
+            onBlur={handleBlur}
             onKeyUp={handleKeyUp}
           />
         )}

@@ -56,7 +56,7 @@ const createFormChangeHandler = (updateModalData, isEdit = false) => {
 export const createModalActions =
   (handleCancel, handleCommit, updateModalData, saveLabel = BUTTON.SAVE) =>
   currentModalData => {
-    const { confirmDiscard = false, hasChanges = false } = currentModalData || {}
+    const { confirmDiscard = false, hasChanges = false, isDuplicate = false } = currentModalData || {}
 
     if (confirmDiscard) {
       return [
@@ -85,14 +85,14 @@ export const createModalActions =
       },
       {
         color: 'primary',
-        disabled: !currentModalData.isValid || !currentModalData.hasChanges,
+        disabled: !currentModalData.isValid || !currentModalData.hasChanges || isDuplicate,
         label: saveLabel,
         onClick: () => handleCommit(currentModalData.template, currentModalData.original),
       },
     ]
   }
 
-export const createModalContent = (handleFormChange, isEdit) => {
+export const createModalContent = (handleFormChange, isEdit, handleDuplicateChange) => {
   const formKey = isEdit ? 'edit-template-form' : 'add-template-form'
 
   const TemplateModalContent = modalData => {
@@ -102,6 +102,7 @@ export const createModalContent = (handleFormChange, isEdit) => {
         template={modalData.template}
         original={modalData.original}
         onChange={handleFormChange}
+        onDuplicateChange={handleDuplicateChange}
         isEdit={isEdit}
         alert={modalData.alert}
       />
