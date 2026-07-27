@@ -36,7 +36,7 @@ const ConceptSelect = ({
   const inputRef = useRef(null)
 
   const { updateSelected } = use(SelectedContext)
-  const { getNames } = use(TaxonomyContext)
+  const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
   const hasSpecialOptions = includeSpecialOptions
 
   const options = useMemo(() => {
@@ -56,9 +56,10 @@ const ConceptSelect = ({
         options.includes(selectedName) || (hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName))
 
       if (isValidSelection) {
-        const doSelection = doConceptSelected ? doConceptSelected(selectedName) : true
+        const conceptName = getConceptPrimaryName(selectedName)
+        const doSelection = doConceptSelected ? doConceptSelected(conceptName) : true
         if (doSelection && updateConceptSelected) {
-          updateSelected({ concept: selectedName })
+          updateSelected({ concept: conceptName })
         }
       }
     } else {

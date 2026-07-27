@@ -6,7 +6,7 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-const taxonomyNames = ['root', 'dingo', 'object']
+const testTaxonomyNames = ['root', 'dingo', 'object']
 
 const renderConceptSelect = ({
   conceptName = '',
@@ -14,11 +14,13 @@ const renderConceptSelect = ({
   onClear = vi.fn(),
   ignoreClearSelection = false,
   updateConceptSelected = true,
+  taxonomyNames: names = testTaxonomyNames,
+  getConceptPrimaryName = name => name,
 } = {}) => {
   const updateSelected = vi.fn()
 
   render(
-    <TaxonomyContext.Provider value={{ getNames: () => taxonomyNames }}>
+    <TaxonomyContext.Provider value={{ getNames: () => names, getConceptPrimaryName }}>
       <SelectedContext.Provider value={{ updateSelected }}>
         <ConceptSelect
           conceptName={conceptName}
@@ -91,7 +93,7 @@ describe('ConceptSelect', () => {
 
     const secondOnClear = vi.fn()
     const { unmount } = render(
-      <TaxonomyContext.Provider value={{ getNames: () => taxonomyNames }}>
+      <TaxonomyContext.Provider value={{ getNames: () => testTaxonomyNames, getConceptPrimaryName: name => name }}>
         <SelectedContext.Provider value={{ updateSelected: vi.fn() }}>
           <ConceptSelect
             conceptName='dingo'
@@ -106,5 +108,27 @@ describe('ConceptSelect', () => {
     await user.click(screen.getAllByLabelText(/clear/i)[1])
     expect(secondOnClear).not.toHaveBeenCalled()
     unmount()
+  })
+
+  it('uses the concept primary name when an alias is selected', async () => {
+    const user = userEvent.setup()
+    const getConceptPrimaryName = vi.fn(name => (name === 'dingo-alias' ? 'dingo' : name))
+    const { doConceptSelected, updateSelected } = renderConceptSelect({
+      taxonomyNames: ['root', 'dingo', 'dingo-alias', 'object'],
+      getConceptPrimaryName,
+    })
+
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'dingo-alias' })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('option', { name: 'dingo-alias' }))
+
+    expect(getConceptPrimaryName).toHaveBeenCalledWith('dingo-alias')
+    expect(doConceptSelected).toHaveBeenCalledWith('dingo')
+    expect(updateSelected).toHaveBeenCalledWith({ concept: 'dingo' })
   })
 })
