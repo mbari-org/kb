@@ -1,20 +1,11 @@
-import { use } from 'react'
-
 import Title from '@/components/common/factory/Title'
 
-import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
-
-import { SELECTED } from '@/lib/constants/selected.js'
-
-const { TEMPLATES } = SELECTED.SETTINGS
-const { FILTERS } = TEMPLATES
+import { useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
 
 const TemplateTitle = () => {
-  const { filters } = use(TemplatesContext)
-  const conceptName = filters[FILTERS.CONCEPT]
+  const { modalData } = useTemplatesModalDataContext()
 
-  if (!conceptName) return <Title title='Concept: Loading...' />
-
+  const conceptName = modalData.template.concept
   return <Title title={`Concept: ${conceptName}`} />
 }
 

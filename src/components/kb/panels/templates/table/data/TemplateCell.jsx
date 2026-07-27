@@ -6,6 +6,7 @@ const TemplateCell = ({ filterKey, onConceptClick, updateFilters }) => {
   const Cell = params => {
     const value = params.value
     if (!value) return null
+
     return (
       <Tooltip title={`Set filter ${filterKey}`} placement='top' enterDelay={500}>
         <Box
@@ -27,6 +28,7 @@ const TemplateCell = ({ filterKey, onConceptClick, updateFilters }) => {
       </Tooltip>
     )
   }
+
   Cell.displayName = `${capitalize(filterKey)}TemplateCell`
   return Cell
 }
