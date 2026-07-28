@@ -11,6 +11,7 @@ import CONFIG from '@/text'
 const renderActions = ({
   confirmCommit = false,
   mediaBaseURL = 'https://example.org/media/',
+  onCancel,
   selectedMediaBaseURL = '',
   urlStatus,
 } = {}) => {
@@ -25,6 +26,7 @@ const renderActions = ({
           closeModal,
           modalData: {
             confirmCommit,
+            onCancel,
             selectedMediaBaseURL,
             urlStatus,
           },
@@ -72,8 +74,10 @@ describe('MediaBaseURLActions', () => {
 
   it('saves selected media base URL when save is confirmed', async () => {
     const user = userEvent.setup()
+    const onCancel = vi.fn()
     const { closeModal, saveAppPreference } = renderActions({
       confirmCommit: true,
+      onCancel,
       selectedMediaBaseURL: 'https://new.example.org/assets/',
     })
 
@@ -83,6 +87,7 @@ describe('MediaBaseURLActions', () => {
     await waitFor(() => {
       expect(closeModal).toHaveBeenCalledWith(true)
     })
+    expect(onCancel).toHaveBeenCalledTimes(1)
   })
 
   it('disables save for invalid URL input', () => {
@@ -119,5 +124,16 @@ describe('MediaBaseURLActions', () => {
     })
 
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+  })
+
+  it('reopens app info when cancel is clicked and a cancel callback exists', async () => {
+    const user = userEvent.setup()
+    const onCancel = vi.fn()
+    const { closeModal } = renderActions({ onCancel })
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+
+    expect(closeModal).toHaveBeenCalledWith(false)
+    expect(onCancel).toHaveBeenCalledTimes(1)
   })
 })

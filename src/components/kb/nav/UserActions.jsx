@@ -2,18 +2,13 @@ import { use } from 'react'
 
 import { Stack } from '@mui/material'
 
-import createAppModal from '@/components/modal/app/createAppModal'
-
 import UserContext from '@/contexts/user/UserContext'
 import useGuardedAction from '@/contexts/user/useGuardedAction'
-import AppModalContext from '@/contexts/app/AppModalContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { GUARDED_ACTION } from '@/lib/constants/guardedAction.js'
 import LogoutIcon from '@/components/icon/LogoutIcon'
 import RefreshAppIcon from '@/components/icon/RefreshAppIcon'
 import InfoIcon from '@/components/icon/InfoIcon'
-import AppInfoContent from '@/components/kb/nav/appInfo/AppInfoContent'
-import AppInfoTitle from '@/components/kb/nav/appInfo/AppInfoTitle'
+import useAppInfoModal from '@/components/kb/nav/appInfo/useAppInfoModal'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 
 import CONFIG from '@/text'
@@ -23,20 +18,7 @@ const ICON_SIZE = 22
 const UserActions = () => {
   const { logout } = use(UserContext)
   const { runGuardedAction } = useGuardedAction()
-  const { setModal } = use(AppModalContext)
-  const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
-
-  const handleAppInfo = () => {
-    const conceptNames = getNames() || []
-    const modal = createAppModal({
-      Content: () => <AppInfoContent conceptNames={conceptNames} getConceptPrimaryName={getConceptPrimaryName} />,
-      Title: AppInfoTitle,
-      width: '50%',
-      focusClose: true,
-      contentSx: { '&:last-child': { pb: 0 } },
-    })
-    setModal(modal)
-  }
+  const { openAppInfoModal } = useAppInfoModal()
 
   const handleLogout = () => {
     runGuardedAction({ onSafe: logout, type: GUARDED_ACTION.LOGOUT })
@@ -50,7 +32,7 @@ const UserActions = () => {
 
   return (
     <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mt: -1.5 }}>
-      <InfoIcon onClick={handleAppInfo} size={ICON_SIZE} tooltip={CONFIG.APP_INFO.TOOLTIP} />
+      <InfoIcon onClick={openAppInfoModal} size={ICON_SIZE} tooltip={CONFIG.APP_INFO.TOOLTIP} />
       <RefreshAppIcon onClick={handleRefresh} size={ICON_SIZE} tooltip='Refresh Data' />
       <LogoutIcon onClick={handleLogout} size={ICON_SIZE} tooltip='Logout' />
     </Stack>

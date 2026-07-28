@@ -9,7 +9,7 @@ import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getVersion } from '@/version'
 
-const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName }) => {
+const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName, onEditComplete }) => {
   const { user } = use(UserContext)
   const { config } = use(ConfigContext)
 
@@ -21,9 +21,13 @@ const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName }) => {
         <AppInfoDetail label='User' value={user.name} />
         <AppInfoDetail label='Role' value={user.role} />
         <AppInfoDetail label='Config' value={config?.url || ''} />
-        <PhylogenyRootDetail conceptNames={conceptNames} getConceptPrimaryName={getConceptPrimaryName} />
-        <MediaBaseURLDetail />
-        <DsgConceptURLDetail />
+        <PhylogenyRootDetail
+          conceptNames={conceptNames}
+          getConceptPrimaryName={getConceptPrimaryName}
+          onEditComplete={onEditComplete}
+        />
+        <MediaBaseURLDetail onEditComplete={onEditComplete} />
+        <DsgConceptURLDetail onEditComplete={onEditComplete} />
       </Box>
       <Box sx={{ alignSelf: 'flex-end', mt: 2, pb: 2, textAlign: 'right' }}>
         <Typography component='span'>Version: </Typography>

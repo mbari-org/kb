@@ -11,6 +11,7 @@ import CONFIG from '@/text'
 const renderActions = ({
   confirmCommit = false,
   getConceptPrimaryName,
+  onCancel,
   phylogenyRoot = 'root',
   selectedPhylogenyRoot = '',
 } = {}) => {
@@ -27,6 +28,7 @@ const renderActions = ({
             confirmCommit,
             selectedPhylogenyRoot,
             getConceptPrimaryName,
+            onCancel,
           },
           setModalData,
         }}
@@ -71,8 +73,10 @@ describe('PhylogenyRootActions', () => {
 
   it('saves selected root as-is when save is confirmed', async () => {
     const user = userEvent.setup()
+    const onCancel = vi.fn()
     const { closeModal, saveAppPreference } = renderActions({
       confirmCommit: true,
+      onCancel,
       selectedPhylogenyRoot: 'phyla',
     })
 
@@ -82,12 +86,15 @@ describe('PhylogenyRootActions', () => {
     await waitFor(() => {
       expect(closeModal).toHaveBeenCalledWith(true)
     })
+    expect(onCancel).toHaveBeenCalledTimes(1)
   })
 
   it('converts selected alias to concept primary name when save is confirmed', async () => {
     const user = userEvent.setup()
+    const onCancel = vi.fn()
     const { closeModal, saveAppPreference } = renderActions({
       confirmCommit: true,
+      onCancel,
       selectedPhylogenyRoot: 'wolf-alias',
       getConceptPrimaryName: vi.fn(name => {
         if (name === 'wolf-alias') {
@@ -104,6 +111,7 @@ describe('PhylogenyRootActions', () => {
     await waitFor(() => {
       expect(closeModal).toHaveBeenCalledWith(true)
     })
+    expect(onCancel).toHaveBeenCalledTimes(1)
   })
 
   it('disables save when selected root matches current phylogeny root', () => {
@@ -129,5 +137,16 @@ describe('PhylogenyRootActions', () => {
     })
 
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
+  })
+
+  it('reopens app info when cancel is clicked and a cancel callback exists', async () => {
+    const user = userEvent.setup()
+    const onCancel = vi.fn()
+    const { closeModal } = renderActions({ onCancel, selectedPhylogenyRoot: 'phyla' })
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+
+    expect(closeModal).toHaveBeenCalledWith(false)
+    expect(onCancel).toHaveBeenCalledTimes(1)
   })
 })

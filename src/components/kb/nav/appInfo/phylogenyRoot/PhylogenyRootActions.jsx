@@ -15,6 +15,7 @@ const { SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.PHYLOGENY_ROOT.ALERT
 const PhylogenyRootActions = () => {
   const { closeModal, modalData, setModalData } = use(AppModalContext)
   const { phylogenyRoot, saveAppPreference } = use(ConfigContext)
+  const onCancel = modalData.onCancel
   const confirmCommit = Boolean(modalData.confirmCommit)
   const selectedPhylogenyRoot = modalData.selectedPhylogenyRoot || ''
   const resolveConceptPrimaryName = modalData.getConceptPrimaryName
@@ -30,7 +31,12 @@ const PhylogenyRootActions = () => {
   const onAction = async label => {
     switch (label) {
       case CANCEL:
-        closeModal(false)
+        if (!closeModal(false)) {
+          break
+        }
+        if (typeof onCancel === 'function') {
+          onCancel()
+        }
         break
 
       case SAVE:
@@ -47,7 +53,12 @@ const PhylogenyRootActions = () => {
         }
 
         await saveAppPreference(phylogenyRootKey, selectedConceptName)
-        closeModal(true)
+        if (!closeModal(true)) {
+          break
+        }
+        if (typeof onCancel === 'function') {
+          onCancel()
+        }
         break
 
       default:

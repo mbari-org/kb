@@ -6,7 +6,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import DsgConceptURLActions from './DsgConceptURLActions'
 import DsgConceptURLContent from './DsgConceptURLContent'
 
-const DsgConceptURLDetail = () => {
+const DsgConceptURLDetail = ({ onEditComplete }) => {
   const { dsgConceptUrl } = use(ConfigContext)
 
   return (
@@ -17,6 +17,7 @@ const DsgConceptURLDetail = () => {
       editTooltip='Edit DSG Concept URL'
       label='DSG Concept URL'
       modalDataValueKey='selectedDsgConceptUrl'
+      onEditComplete={onEditComplete}
       title='Edit DSG Concept URL'
     />
   )

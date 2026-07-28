@@ -6,7 +6,7 @@ import MediaBaseURLContent from './MediaBaseURLContent'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-const MediaBaseURLDetail = () => {
+const MediaBaseURLDetail = ({ onEditComplete }) => {
   const { mediaBaseURL } = use(ConfigContext)
 
   return (
@@ -17,6 +17,7 @@ const MediaBaseURLDetail = () => {
       editTooltip='Edit Media Base URL'
       label='Media Base URL'
       modalDataValueKey='selectedMediaBaseURL'
+      onEditComplete={onEditComplete}
       title='Edit Media Base URL'
     />
   )

@@ -20,6 +20,7 @@ const BaseURLActions = ({
 }) => {
   const { closeModal, modalData, setModalData } = use(AppModalContext)
   const { saveAppPreference } = use(ConfigContext)
+  const onCancel = modalData.onCancel
   const confirmCommit = Boolean(modalData.confirmCommit)
   const selectedBaseUrl = modalData[modalDataValueKey] || ''
   const trimmedBaseUrl = selectedBaseUrl.trim()
@@ -35,7 +36,12 @@ const BaseURLActions = ({
   const onAction = async label => {
     switch (label) {
       case CANCEL:
-        closeModal(false)
+        if (!closeModal(false)) {
+          break
+        }
+        if (typeof onCancel === 'function') {
+          onCancel()
+        }
         break
 
       case SAVE:
@@ -64,7 +70,12 @@ const BaseURLActions = ({
         }
 
         await saveAppPreference(preferenceKey, trimmedBaseUrl)
-        closeModal(true)
+        if (!closeModal(true)) {
+          break
+        }
+        if (typeof onCancel === 'function') {
+          onCancel()
+        }
         break
 
       default:

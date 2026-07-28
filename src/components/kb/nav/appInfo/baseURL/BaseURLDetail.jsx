@@ -11,7 +11,16 @@ import { isAdmin } from '@/lib/auth/role'
 
 import CONFIG from '@/text'
 
-const BaseURLDetail = ({ Actions, Content, baseUrl, editTooltip, label, modalDataValueKey, title }) => {
+const BaseURLDetail = ({
+  Actions,
+  Content,
+  baseUrl,
+  editTooltip,
+  label,
+  modalDataValueKey,
+  onEditComplete,
+  title,
+}) => {
   const { user } = use(UserContext)
   const { closeModal, setModal, setModalData } = use(AppModalContext)
 
@@ -24,6 +33,7 @@ const BaseURLDetail = ({ Actions, Content, baseUrl, editTooltip, label, modalDat
     }
 
     setModalData({
+      onCancel: onEditComplete,
       [modalDataValueKey]: baseUrl || '',
     })
 
