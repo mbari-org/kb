@@ -6,40 +6,47 @@ import ExportCompleteContent from '@/components/kb/export/ExportCompleteContent'
 import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
-import { conceptNameForFilename } from '@/lib/utils'
+import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/text'
 
 const { PROCESSING } = CONFIG
 
-const dataHeaders = ['Link Name', 'To Concept', 'Link Value']
-const dataRows = realizations => realizations.map(realization => [realization.linkName, realization.toConcept, realization.linkValue])
+const { REALIZATIONS } = SELECTED.SETTINGS
 
-const buildComments = conceptName => {
+const dataHeaders = ['Concept', 'Link Name', 'To Concept', 'Link Value', 'Last Updated']
+const dataRows = realizations =>
+  realizations.map(realization => [
+    realization.concept,
+    realization.linkName,
+    realization.toConcept,
+    realization.linkValue,
+    humanTimestamp(realization.lastUpdated),
+  ])
+
+const buildComments = filters => {
   const comments = []
-  if (conceptName) {
-    comments.push(`Concept: ${conceptName}`)
-  }
+  filters[REALIZATIONS.FILTERS.CONCEPT] && comments.push(`Concept: ${filters[REALIZATIONS.FILTERS.CONCEPT]}`)
+  filters[REALIZATIONS.FILTERS.LINK_NAME] && comments.push(`Link Name: ${filters[REALIZATIONS.FILTERS.LINK_NAME]}`)
+  filters[REALIZATIONS.FILTERS.TO_CONCEPT] && comments.push(`To Concept: ${filters[REALIZATIONS.FILTERS.TO_CONCEPT]}`)
+  filters[REALIZATIONS.FILTERS.LINK_VALUE] && comments.push(`Link Value: ${filters[REALIZATIONS.FILTERS.LINK_VALUE]}`)
   return comments
 }
 
 const useRealizationsExport = () => {
-  const { stagedState } = use(ConceptContext)
-  const { getSelected } = use(SelectedContext)
+  const { filteredRealizations, filters } = use(RealizationsContext)
   const { user } = use(UserContext)
   const { beginProcessing, setModal, setModalData } = use(AppModalContext)
   const [processingStop, setProcessingStop] = useState(null)
-
-  const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const realizations = stagedState?.realizations || []
+  const realizations = filteredRealizations || []
 
   const suggestName = () => {
+    const selectedConcept = filters[REALIZATIONS.FILTERS.CONCEPT]
     const conceptName = selectedConcept ? `_${conceptNameForFilename(selectedConcept)}` : ''
     return `KB-Realizations${conceptName}.csv`
   }
@@ -77,7 +84,7 @@ const useRealizationsExport = () => {
   )
 
   return csvExport({
-    comments: buildComments(selectedConcept),
+    comments: buildComments(filters),
     count: realizations.length,
     getData: () => dataRows(realizations),
     headers: dataHeaders,

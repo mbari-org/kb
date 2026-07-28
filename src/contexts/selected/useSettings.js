@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 
-const { HISTORY, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
+const { HISTORY, REALIZATIONS, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
 
 const useSettings = () => {
   const [settings, setSettings] = useState({
@@ -11,6 +11,9 @@ const useSettings = () => {
     [TEMPLATES.KEY]: {
       [TEMPLATES.BY_AVAILABLE]: false,
       [TEMPLATES.FILTERS.KEY]: {},
+    },
+    [REALIZATIONS.KEY]: {
+      [REALIZATIONS.FILTERS.KEY]: {},
     },
   })
 
@@ -22,7 +25,7 @@ const useSettings = () => {
     [settings]
   )
 
-  const updateSettings = useCallback(({ history, references, templates }) => {
+  const updateSettings = useCallback(({ history, realizations, references, templates }) => {
     setSettings(prevSettings => {
       const updatedSettings = { ...prevSettings }
 
@@ -37,6 +40,12 @@ const useSettings = () => {
         updatedSettings[REFERENCES.KEY] = {
           ...prevSettings[REFERENCES.KEY],
           ...references,
+        }
+      }
+      if (realizations) {
+        updatedSettings[REALIZATIONS.KEY] = {
+          ...prevSettings[REALIZATIONS.KEY],
+          ...realizations,
         }
       }
 

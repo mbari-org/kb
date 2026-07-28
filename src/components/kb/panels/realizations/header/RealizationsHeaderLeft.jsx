@@ -1,48 +1,49 @@
-import { use, useEffect, useRef } from 'react'
+import { use, useEffect } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ConceptNavAuxiliary from '@/components/common/concept/ConceptNavAuxiliary'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
-import CONFIG from '@/text'
+import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
-const { CONCEPT, PANEL, SETTINGS } = SELECTED
-const { REFERENCES } = SETTINGS
-const REALIZATIONS_PANEL = CONFIG.PANELS.REALIZATIONS.PANEL.NAME
+const { CONCEPT, PANEL } = SELECTED
+const { REALIZATIONS } = SELECTED.SETTINGS
+const { FILTERS } = REALIZATIONS
 
 const RealizationsHeaderLeft = () => {
-  const { concepts, getSelected, updateSelected, updateSettings } = use(SelectedContext)
+  const { concepts, getSelected, updateSelected } = use(SelectedContext)
+  const { explicitConcepts, filters, updateFilters } = use(RealizationsContext)
   const selectedConcept = getSelected(CONCEPT)
   const selectedPanel = getSelected(PANEL)
-  const prevSelectedPanelRef = useRef(selectedPanel)
+  const filterConcept = filters[FILTERS.CONCEPT]
+  const selectables = explicitConcepts.length > 0 ? explicitConcepts : undefined
 
   useEffect(() => {
-    const wasRealizationsPanel = prevSelectedPanelRef.current === REALIZATIONS_PANEL
-    const isRealizationsPanel = selectedPanel === REALIZATIONS_PANEL
-
-    if (!wasRealizationsPanel && isRealizationsPanel) {
-      updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false } })
+    const isRealizationsPanel = selectedPanel === SELECTED.PANELS.REALIZATIONS
+    if (filterConcept === '' && isRealizationsPanel) return
+    if (selectedConcept && selectedConcept !== filterConcept) {
+      updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
     }
+  }, [filterConcept, selectedConcept, selectedPanel, updateFilters])
 
-    prevSelectedPanelRef.current = selectedPanel
-  }, [selectedPanel, updateSettings])
-
-  const handleConceptSelected = selectedName => {
-    !!selectedName && updateSelected({ [CONCEPT]: selectedName })
-    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: !!selectedName } })
-  }
-
-  const handleClear = () => {
-    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false } })
+  const handleConceptSelected = conceptName => {
+    if (conceptName) {
+      updateSelected({ [SELECTED.CONCEPT]: conceptName })
+      updateFilters({ [FILTERS.CONCEPT]: conceptName })
+      return
+    }
+    updateSelected({ [SELECTED.CONCEPT]: null })
+    updateFilters({ [FILTERS.CONCEPT]: '' })
   }
 
   return (
     <ConceptSelect
-      conceptName={selectedConcept}
-      doConceptSelected={handleConceptSelected}
       auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
-      onClear={handleClear}
+      conceptName={filterConcept}
+      doConceptSelected={handleConceptSelected}
+      selectables={selectables}
+      updateConceptSelected={true}
     />
   )
 }

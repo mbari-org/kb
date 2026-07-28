@@ -7,11 +7,13 @@ import { LOADING } from '@/lib/constants/loading.js'
 
 const {
   loadPendingHistoryMock,
+  loadRealizationsMock,
   loadReferencesMock,
   loadTemplatesMock,
   showBoundaryMock,
 } = vi.hoisted(() => ({
   loadPendingHistoryMock: vi.fn(),
+  loadRealizationsMock: vi.fn(),
   loadReferencesMock: vi.fn(),
   loadTemplatesMock: vi.fn(),
   showBoundaryMock: vi.fn(),
@@ -25,6 +27,9 @@ vi.mock('react-error-boundary', () => ({
 
 vi.mock('@/contexts/panel/data/useLoadReferences', () => ({
   default: () => loadReferencesMock,
+}))
+vi.mock('@/contexts/panel/data/useLoadRealizations', () => ({
+  default: () => loadRealizationsMock,
 }))
 
 vi.mock('@/contexts/panel/data/useLoadTemplates', () => ({
@@ -41,6 +46,7 @@ describe('PanelDataProvider', () => {
     vi.useFakeTimers()
 
     loadReferencesMock.mockImplementation(() => new Promise(() => {}))
+    loadRealizationsMock.mockImplementation(() => new Promise(() => {}))
     loadTemplatesMock.mockImplementation(() => new Promise(() => {}))
     loadPendingHistoryMock.mockImplementation(() => new Promise(() => {}))
   })

@@ -1,49 +1,57 @@
-import { Box, Link } from '@mui/material'
+import { use } from 'react'
 
-const useRealizationColumns = ({ onViewRealization }) => {
-  const baseCellSx = {
-    overflow: 'hidden',
-    py: 1,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: '100%',
-  }
+import SelectedContext from '@/contexts/selected/SelectedContext'
+import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
+import TemplateCell from '@/components/kb/panels/templates/table/data/TemplateCell'
+
+import { humanTimestamp } from '@/lib/utils'
+import { SELECTED } from '@/lib/constants/selected.js'
+
+const { REALIZATIONS } = SELECTED.SETTINGS
+
+const useRealizationColumns = () => {
+  const { updateFilters } = use(RealizationsContext)
+  const { updateSelected } = use(SelectedContext)
 
   return [
     {
+      field: 'concept',
+      headerClassName: 'bold-header',
+      headerName: 'Concept',
+      renderCell: TemplateCell({
+        filterKey: REALIZATIONS.FILTERS.CONCEPT,
+        updateFilters,
+        onConceptClick: conceptName => updateSelected({ [SELECTED.CONCEPT]: conceptName }),
+      }),
+      width: 175,
+    },
+    {
       field: 'linkName',
-      flex: 0.15,
       headerClassName: 'bold-header',
       headerName: 'Link Name',
-      renderCell: params => {
-        const linkNameLabel = params.value?.trim() || 'View Realization'
-        return (
-          <Box sx={baseCellSx} title={linkNameLabel}>
-            <Link
-              component='button'
-              onClick={() => onViewRealization(params.row)}
-              sx={{ overflow: 'hidden', textAlign: 'left', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-              underline='hover'
-            >
-              {linkNameLabel}
-            </Link>
-          </Box>
-        )
-      },
+      renderCell: TemplateCell({ filterKey: REALIZATIONS.FILTERS.LINK_NAME, updateFilters }),
+      width: 175,
     },
     {
       field: 'toConcept',
-      flex: 0.2,
       headerClassName: 'bold-header',
       headerName: 'To Concept',
-      renderCell: params => <Box sx={baseCellSx} title={params.value || ''}>{params.value || ''}</Box>,
+      renderCell: TemplateCell({ filterKey: REALIZATIONS.FILTERS.TO_CONCEPT, updateFilters }),
+      width: 175,
     },
     {
       field: 'linkValue',
-      flex: 0.65,
       headerClassName: 'bold-header',
       headerName: 'Link Value',
-      renderCell: params => <Box sx={baseCellSx} title={params.value || ''}>{params.value || ''}</Box>,
+      renderCell: TemplateCell({ filterKey: REALIZATIONS.FILTERS.LINK_VALUE, updateFilters }),
+      width: 250,
+    },
+    {
+      field: 'lastUpdated',
+      headerClassName: 'bold-header',
+      headerName: 'Last Updated',
+      valueFormatter: value => humanTimestamp(value),
+      width: 165,
     },
   ]
 }

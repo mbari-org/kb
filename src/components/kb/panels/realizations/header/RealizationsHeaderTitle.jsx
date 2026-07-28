@@ -1,19 +1,30 @@
 import { use } from 'react'
 import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 
 import CONFIG from '@/text'
 import { SELECTED } from '@/lib/constants/selected.js'
+import useFilterStringTooltip from '@/lib/hooks/useFilterStringTooltip'
 
 const PANEL = CONFIG.PANELS.REALIZATIONS.PANEL
 
 const RealizationsHeaderTitle = () => {
-  const { getSelected } = use(SelectedContext)
-  const conceptName = getSelected(SELECTED.CONCEPT)
+  const { filterString, filters } = use(RealizationsContext)
+  const { REALIZATIONS } = SELECTED.SETTINGS
 
   const title = PANEL.NAME
 
-  return <PanelHeaderTitle subtitle={conceptName} title={title} />
+  const filterRealization = {
+    concept: filters[REALIZATIONS.FILTERS.CONCEPT],
+    linkName: filters[REALIZATIONS.FILTERS.LINK_NAME],
+    toConcept: filters[REALIZATIONS.FILTERS.TO_CONCEPT],
+    linkValue: filters[REALIZATIONS.FILTERS.LINK_VALUE],
+  }
+
+  const subtitle = filterString(filterRealization)
+  const subtitleTooltip = useFilterStringTooltip(filterRealization)
+
+  return <PanelHeaderTitle subtitle={subtitle} subtitleTooltip={subtitleTooltip} title={title} />
 }
 
 export default RealizationsHeaderTitle

@@ -11,16 +11,22 @@ import References from '@/components/kb/panels/References'
 import Templates from '@/components/kb/panels/Templates'
 import Users from '@/components/kb/panels/Users'
 
+const {
+  PANELS: { CONCEPTS, TEMPLATES, REALIZATIONS, REFERENCES, EMBARGOES, HISTORY, NOTES, USERS, ABOUT_HELP },
+} = CONFIG
+
+const name = panel => panel.PANEL.NAME
+
 const modules = [
-  { module: Concepts, name: CONFIG.PANELS.CONCEPTS.PANEL.NAME },
-  { module: Templates, name: CONFIG.PANELS.TEMPLATES.PANEL.NAME },
-  { module: References, name: CONFIG.PANELS.REFERENCES.PANEL.NAME },
-  { module: Realizations, name: CONFIG.PANELS.REALIZATIONS.PANEL.NAME },
-  { module: Embargoes, name: CONFIG.PANELS.EMBARGOES.PANEL.NAME },
-  { module: History, name: CONFIG.PANELS.HISTORY.PANEL.NAME },
-  { module: Notes, name: CONFIG.PANELS.NOTES.PANEL.NAME },
-  { module: Users, name: CONFIG.PANELS.USERS.PANEL.NAME },
-  { module: AboutHelp, name: CONFIG.PANELS.ABOUT_HELP.PANEL.NAME },
+  { module: Concepts, name: name(CONCEPTS) },
+  { module: Templates, name: name(TEMPLATES) },
+  { module: Realizations, name: name(REALIZATIONS) },
+  { module: References, name: name(REFERENCES) },
+  { module: Embargoes, name: name(EMBARGOES) },
+  { module: History, name: name(HISTORY) },
+  { module: Notes, name: name(NOTES) },
+  { module: Users, name: name(USERS) },
+  { module: AboutHelp, name: name(ABOUT_HELP) },
 ]
 
 export default modules

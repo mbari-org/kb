@@ -2,14 +2,20 @@ import { use } from 'react'
 
 import PanelDataExport from '@/components/common/panel/PanelDataExport'
 import useRealizationsExport from '@/components/kb/panels/realizations/table/header/useRealizationsExport'
-
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
+import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/text'
 
 const RealizationsTableHeaderLeft = () => {
-  const { stagedState } = use(ConceptContext)
-  const count = stagedState?.realizations?.length || 0
+  const { filteredRealizations, filters } = use(RealizationsContext)
+  const { REALIZATIONS } = SELECTED.SETTINGS
+  const count = filteredRealizations.length
   const realizationsExport = useRealizationsExport()
+
+  const exportTooltip =
+    filters[REALIZATIONS.FILTERS.CONCEPT] || filters[REALIZATIONS.FILTERS.TO_CONCEPT]
+      ? CONFIG.PANELS.REALIZATIONS.EXPORT.TOOLTIP.EXPORT.CONCEPT
+      : CONFIG.PANELS.REALIZATIONS.EXPORT.TOOLTIP.EXPORT.ALL
 
   return (
     <PanelDataExport
@@ -17,7 +23,7 @@ const RealizationsTableHeaderLeft = () => {
       countLabel={CONFIG.PANELS.REALIZATIONS.EXPORT.TOTAL}
       exportButtonLabel={CONFIG.PANELS.REALIZATIONS.EXPORT.BUTTON.EXPORT}
       exportFn={realizationsExport}
-      exportTooltip={CONFIG.PANELS.REALIZATIONS.EXPORT.TOOLTIP.EXPORT.CONCEPT}
+      exportTooltip={exportTooltip}
       width='auto'
     />
   )

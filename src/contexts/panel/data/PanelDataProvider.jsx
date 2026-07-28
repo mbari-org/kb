@@ -5,6 +5,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import useLoadReferences from '@/contexts/panel/data/useLoadReferences'
+import useLoadRealizations from '@/contexts/panel/data/useLoadRealizations'
 import useLoadTemplates from '@/contexts/panel/data/useLoadTemplates'
 import useLoadPendingHistory from '@/contexts/panel/data/useLoadPendingHistory'
 import { LOADING } from '@/lib/constants/loading.js'
@@ -28,6 +29,7 @@ export const PanelDataProvider = ({ children }) => {
 
   const [explicitConcepts, setExplicitConcepts] = useState([])
   const [references, setReferences] = useState([])
+  const [realizations, setRealizations] = useState([])
   const [templates, setTemplates] = useState([])
   const [pendingHistory, setPendingHistory] = useState([])
 
@@ -36,6 +38,7 @@ export const PanelDataProvider = ({ children }) => {
   const [clearTemplateFilters, setClearTemplateFilters] = useState(false)
 
   const loadReferences = useLoadReferences(apiFns)
+  const loadRealizations = useLoadRealizations(apiFns)
   const loadTemplates = useLoadTemplates(apiFns)
   const loadPendingHistory = useLoadPendingHistory(apiFns)
 
@@ -92,22 +95,29 @@ export const PanelDataProvider = ({ children }) => {
       try {
         switch (type) {
           case 'all': {
-            const [referencesData, templatesData, pendingHistoryData] = await withLoadTimeout(
-              Promise.all([loadReferences(), loadTemplates(), loadPendingHistory()])
+            const [referencesData, realizationsData, templatesData, pendingHistoryData] = await withLoadTimeout(
+              Promise.all([loadReferences(), loadRealizations(), loadTemplates(), loadPendingHistory()])
             )
             const explicitConceptsData = calcExplicitConcepts(templatesData)
 
             setReferences(referencesData)
+            setRealizations(realizationsData)
             setTemplates(templatesData)
             setPendingHistory(pendingHistoryData)
             setExplicitConcepts(explicitConceptsData)
 
             return {
               references: referencesData,
+              realizations: realizationsData,
               templates: templatesData,
               pendingHistory: pendingHistoryData,
               explicitConcepts: explicitConceptsData,
             }
+          }
+          case PANEL_DATA.REALIZATIONS: {
+            const realizationsData = await withLoadTimeout(loadRealizations())
+            setRealizations(realizationsData)
+            return { realizations: realizationsData }
           }
 
           case PANEL_DATA.REFERENCES: {
@@ -135,7 +145,7 @@ export const PanelDataProvider = ({ children }) => {
         setIsInitialLoad(false)
       }
     },
-    [apiFns, calcExplicitConcepts, loadPendingHistory, loadReferences, loadTemplates, withLoadTimeout]
+    [apiFns, calcExplicitConcepts, loadPendingHistory, loadRealizations, loadReferences, loadTemplates, withLoadTimeout]
   )
 
   useEffect(() => {
@@ -153,6 +163,7 @@ export const PanelDataProvider = ({ children }) => {
       isDoiUnique,
       isLoading,
       pendingHistory,
+      realizations,
       refreshData,
       setClearTemplateFilters,
       setReferences,
@@ -166,6 +177,7 @@ export const PanelDataProvider = ({ children }) => {
       isDoiUnique,
       isLoading,
       pendingHistory,
+      realizations,
       refreshData,
       setReferences,
       templates,

@@ -4,6 +4,7 @@
   },
   "TOOLTIP": {
     "EXPORT": {
+      "ALL": "Export all realizations",
       "CONCEPT": "Export realizations for selected concept"
     }
   },

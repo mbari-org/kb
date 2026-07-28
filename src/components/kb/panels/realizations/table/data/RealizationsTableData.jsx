@@ -1,78 +1,78 @@
-import { use, useEffect, useMemo, useRef } from 'react'
+import { use, useEffect, useState } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
-
-import createConceptRealizationModal from '@/components/kb/panels/concepts/concept/detail/realizations/createConceptRealizationModal'
+import RealizationsPagination from '@/components/kb/panels/realizations/table/data/RealizationsPagination'
 import useRealizationColumns from '@/components/kb/panels/realizations/table/data/useRealizationColumns'
+import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import { PAGINATION } from '@/lib/constants/pagination.js'
 
-import { SELECTED } from '@/lib/constants/selected.js'
+const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.REALIZATIONS
 
 const RealizationsTableData = () => {
-  const { setConcept, stagedState } = use(ConceptContext)
-  const { setModal, setModalData } = use(ConceptModalContext)
-  const { getSelected } = use(SelectedContext)
-  const { isConceptLoaded, loadConcept } = use(TaxonomyContext)
-  const isLoadingRef = useRef(false)
+  const { filteredRealizations } = use(RealizationsContext)
+  const [displayRealizations, setDisplayRealizations] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
 
-  const selectedConcept = getSelected(SELECTED.CONCEPT)
+  const columns = useRealizationColumns()
 
   useEffect(() => {
-    if (!selectedConcept || isConceptLoaded(selectedConcept) || isLoadingRef.current) return
+    const timeoutId = setTimeout(() => {
+      if (!filteredRealizations || filteredRealizations.length === 0) {
+        setDisplayRealizations([])
+        return
+      }
 
-    let cancelled = false
-    isLoadingRef.current = true
+      const startIndex = (currentPage - 1) * pageSize
+      const endIndex = startIndex + pageSize
+      setDisplayRealizations(
+        filteredRealizations
+          .slice(startIndex, endIndex)
+          .map((realization, index) => ({ ...realization, __rowId: realization.id || `${startIndex + index}` }))
+      )
+    }, 0)
 
-    loadConcept(selectedConcept)
-      .then(loadedConcept => {
-        if (!cancelled && loadedConcept) {
-          setConcept(loadedConcept)
-        }
-      })
-      .finally(() => {
-        if (!cancelled) {
-          isLoadingRef.current = false
-        }
-      })
+    return () => clearTimeout(timeoutId)
+  }, [filteredRealizations, currentPage, pageSize])
 
-    return () => {
-      cancelled = true
-      isLoadingRef.current = false
-    }
-  }, [isConceptLoaded, loadConcept, selectedConcept, setConcept])
-
-  const onViewRealization = realization => {
-    const modal = createConceptRealizationModal(realization)
-    setModalData({ realization })
-    setModal(modal)
+  const handlePageChange = newPage => {
+    setCurrentPage(newPage)
   }
 
-  const columns = useRealizationColumns({ onViewRealization })
+  const handlePageSizeChange = newPageSize => {
+    setPageSize(newPageSize)
+    setCurrentPage(1)
+  }
 
-  const rowsWithId = useMemo(() => {
-    const rows = stagedState?.realizations || []
-    return rows.map((row, index) => ({ ...row, __rowId: `${row.linkName || 'realization'}-${index}` }))
-  }, [stagedState?.realizations])
+  const paginationComponent = (
+    <RealizationsPagination
+      currentPage={currentPage}
+      displayRealizations={filteredRealizations}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+      pageSize={pageSize}
+    />
+  )
 
   return (
     <PanelDataGrid
       columns={columns}
+      pageSizeOptions={PAGE_SIZE_OPTIONS}
+      paginationComponent={paginationComponent}
+      paginationMode='client'
+      paginationModel={{
+        page: currentPage - 1,
+        pageSize,
+      }}
       dataGridProps={{
         disableColumnFilter: true,
         disableColumnMenu: true,
         disableColumnSorting: true,
         getRowId: row => row.__rowId,
       }}
-      hideFooter={true}
-      paginationMode='client'
-      paginationModel={{ page: 0, pageSize: rowsWithId.length || 1 }}
-      rows={rowsWithId}
-      rowCount={rowsWithId.length}
-      sx={{ minHeight: 0 }}
+      rowCount={filteredRealizations.length}
+      rows={displayRealizations}
     />
   )
 }

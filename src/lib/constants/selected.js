@@ -5,6 +5,7 @@ export const SELECTED = {
   PANEL: 'panel',
   PANELS: {
     CONCEPTS: 'Concepts',
+    REALIZATIONS: 'Realizations',
     REFERENCES: 'References',
     TEMPLATES: 'Templates',
   },
@@ -25,6 +26,16 @@ export const SELECTED = {
     TEMPLATES: {
       KEY: 'templates',
       BY_AVAILABLE: 'byAvailable',
+      FILTERS: {
+        KEY: 'filters',
+        CONCEPT: 'concept',
+        TO_CONCEPT: 'toConcept',
+        LINK_NAME: 'linkName',
+        LINK_VALUE: 'linkValue',
+      },
+    },
+    REALIZATIONS: {
+      KEY: 'realizations',
       FILTERS: {
         KEY: 'filters',
         CONCEPT: 'concept',
