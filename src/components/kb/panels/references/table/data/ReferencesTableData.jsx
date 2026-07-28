@@ -29,6 +29,7 @@ const ReferencesTableData = () => {
 
   const nextPage = () => setOffset(prev => prev + limit)
   const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
+  const goToPage = page => setOffset((page - 1) * limit)
   const setPageSize = newLimit => {
     setLimit(newLimit)
     setOffset(0)
@@ -42,6 +43,7 @@ const ReferencesTableData = () => {
       offset={offset}
       prevPage={prevPage}
       setPageSize={setPageSize}
+      goToPage={goToPage}
     />
   )
 

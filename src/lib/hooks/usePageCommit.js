@@ -13,8 +13,9 @@ import { useCallback } from 'react'
 const usePageCommit = (currentPage, totalPages, nextPage, prevPage, goToPage) => {
   const handlePageCommit = useCallback(
     event => {
-      const newPage = parseInt(event.target.value)
-      if (!isNaN(newPage) && newPage >= 1 && newPage <= totalPages) {
+      const enteredPage = parseInt(event.target.value, 10)
+      if (!isNaN(enteredPage)) {
+        const newPage = Math.min(totalPages, Math.max(1, enteredPage))
         if (goToPage) {
           goToPage(newPage)
         } else {

@@ -27,6 +27,7 @@ const UsersTableData = () => {
 
   const nextPage = () => setOffset(prev => prev + limit)
   const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
+  const goToPage = page => setOffset((page - 1) * limit)
   const setPageSize = newLimit => {
     setLimit(newLimit)
     setOffset(0)
@@ -40,6 +41,7 @@ const UsersTableData = () => {
       offset={offset}
       prevPage={prevPage}
       setPageSize={setPageSize}
+      goToPage={goToPage}
     />
   )
 

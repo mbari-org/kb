@@ -6,11 +6,11 @@ import usePageCommit from '@/lib/hooks/usePageCommit'
 
 const PAGE_SIZE_OPTIONS = [5, 10, 25, 50]
 
-const ReferencesPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize }) => {
+const ReferencesPagination = ({ limit, offset, count, nextPage, prevPage, setPageSize, goToPage }) => {
   const currentPage = Math.floor(offset / limit) + 1 // Convert to 1-based index
   const totalPages = Math.ceil(count / limit)
 
-  const handlePageCommit = usePageCommit(currentPage, totalPages, nextPage, prevPage)
+  const handlePageCommit = usePageCommit(currentPage, totalPages, nextPage, prevPage, goToPage)
 
   return (
     <Box

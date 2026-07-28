@@ -26,7 +26,13 @@ const RealizationsPagination = ({ currentPage, displayRealizations, onPageChange
     }
   }
 
-  const handlePageCommit = usePageCommit(validCurrentPage, totalPages, handleNextPage, handlePrevPage)
+  const handlePageCommit = usePageCommit(
+    validCurrentPage,
+    totalPages,
+    handleNextPage,
+    handlePrevPage,
+    onPageChange
+  )
 
   const handlePageSizeChange = newPageSize => {
     onPageSizeChange(newPageSize)

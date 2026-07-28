@@ -42,7 +42,8 @@ const TemplatesPagination = ({
     validCurrentPage,
     totalPages,
     handleNextPage,
-    handlePrevPage
+    handlePrevPage,
+    onPageChange
   )
 
   const handlePageSizeChange = newPageSize => {
