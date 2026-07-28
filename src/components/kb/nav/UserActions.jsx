@@ -16,6 +16,8 @@ import AppInfoContent from '@/components/kb/nav/appInfo/AppInfoContent'
 import AppInfoTitle from '@/components/kb/nav/appInfo/AppInfoTitle'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 
+import CONFIG from '@/text'
+
 const ICON_SIZE = 22
 
 const UserActions = () => {
@@ -29,7 +31,7 @@ const UserActions = () => {
     const modal = createAppModal({
       Content: () => <AppInfoContent conceptNames={conceptNames} getConceptPrimaryName={getConceptPrimaryName} />,
       Title: AppInfoTitle,
-      minWidth: 520,
+      width: '50%',
       focusClose: true,
       contentSx: { '&:last-child': { pb: 0 } },
     })
@@ -48,7 +50,7 @@ const UserActions = () => {
 
   return (
     <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mt: -1.5 }}>
-      <InfoIcon onClick={handleAppInfo} size={ICON_SIZE} tooltip='App Info' />
+      <InfoIcon onClick={handleAppInfo} size={ICON_SIZE} tooltip={CONFIG.APP_INFO.TOOLTIP} />
       <RefreshAppIcon onClick={handleRefresh} size={ICON_SIZE} tooltip='Refresh Data' />
       <LogoutIcon onClick={handleLogout} size={ICON_SIZE} tooltip='Logout' />
     </Stack>

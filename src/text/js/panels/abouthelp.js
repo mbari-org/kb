@@ -1,9 +1,11 @@
 import panel from '@/text/config/panels/abouthelp/panel.json'
-import mediaBaseURL from '@/text/config/panels/abouthelp/mediaBaseURL.json'
+import dsgConceptURL from '@/text/config/panels/abouthelp/dsgConceptURL.json'
+import MediaBaseURL from '@/text/config/panels/abouthelp/MediaBaseURL.json'
 import phylogenyRoot from '@/text/config/panels/abouthelp/phylogenyRoot.json'
 
 export const ABOUT_HELP = {
-  MEDIA_BASE_URL: mediaBaseURL,
+  DSG_CONCEPT_URL: dsgConceptURL,
+  MEDIA_BASE_URL: MediaBaseURL,
   PHYLOGENY_ROOT: phylogenyRoot,
   PANEL: panel,
   TITLE: panel.title,

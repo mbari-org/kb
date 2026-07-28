@@ -10,13 +10,16 @@ export const PREFS = {
     PREFIX: 'kb-ui/',
   },
   APP: {
-    PREFIX: 'kb-app',
+    DSG: {
+      CONCEPT_URL: {
+        DEFAULT: '',
+        KEY: 'dsg-concept-url',
+      },
+    },
     MEDIA: {
       BASE_URL: {
-        ROOT: {
-          DEFAULT: '',
-          KEY: 'media-base-url',
-        },
+        DEFAULT: '',
+        KEY: 'media-base-url',
       },
     },
     PHYLOGENY: {
@@ -25,6 +28,7 @@ export const PREFS = {
         KEY: 'phylogeny-root',
       },
     },
+    PREFIX: 'kb-app',
   },
   AUTH: {
     LOCAL_STORE: 'kb:auth',

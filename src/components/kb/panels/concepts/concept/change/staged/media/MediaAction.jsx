@@ -17,7 +17,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const MediaAction = ({ Icon, action, color, position = 'right', size, tooltip, sx = {} }) => {
   const { stagedState, initialState, modifyConcept } = use(ConceptContext)
-  const { mediaBaseUrl } = use(ConfigContext)
+  const { mediaBaseURL } = use(ConfigContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const [asyncError, setAsyncError] = useState(null)
 
@@ -27,13 +27,12 @@ const MediaAction = ({ Icon, action, color, position = 'right', size, tooltip, s
 
   const handleClick = useCallback(() => {
     try {
-      const mediaIndex =
-        action === CONCEPT_STATE.MEDIA_ITEM.ADD ? stagedState.media.length : stagedState.mediaIndex
+      const mediaIndex = action === CONCEPT_STATE.MEDIA_ITEM.ADD ? stagedState.media.length : stagedState.mediaIndex
       const stagedMediaItem = stagedState.media[mediaIndex]
       const mediaItem = stagedMediaItem
         ? mediaItemFields(stagedMediaItem)
         : action === CONCEPT_STATE.MEDIA_ITEM.ADD
-          ? { ...EMPTY_MEDIA_ITEM, url: mediaBaseUrl || '' }
+          ? { ...EMPTY_MEDIA_ITEM, url: mediaBaseURL || '' }
           : EMPTY_MEDIA_ITEM
 
       const modalData = {
@@ -51,7 +50,7 @@ const MediaAction = ({ Icon, action, color, position = 'right', size, tooltip, s
     } catch (error) {
       setAsyncError(error)
     }
-  }, [action, mediaBaseUrl, stagedState, initialState, modifyConcept, setModal, setModalData])
+  }, [action, mediaBaseURL, stagedState, initialState, modifyConcept, setModal, setModalData])
 
   return (
     <MediaIcon

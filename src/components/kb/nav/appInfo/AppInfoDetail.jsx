@@ -3,11 +3,17 @@ import { CiEdit } from 'react-icons/ci'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 
-const AppInfoDetail = ({ label, value, onEdit, editTooltip }) => {
+import CONFIG from '@/text'
+
+const AppInfoDetail = ({ editTooltip, label, onEdit, value }) => {
   const hasEditAction = typeof onEdit === 'function'
+
+  const fontWeight = value !== CONFIG.APP_INFO.BASE_URL.NONE ? 'bold' : 'normal'
+  const fontStyle = value !== CONFIG.APP_INFO.BASE_URL.NONE ? 'normal' : 'italic'
+
   return (
     <Box sx={{ display: 'flex', mb: 1 }}>
-      <Box sx={{ alignItems: 'center', display: 'flex', width: 175, flexShrink: 0 }}>
+      <Box sx={{ alignItems: 'center', display: 'flex', width: 200, flexShrink: 0 }}>
         <Box sx={{ width: 20, mr: 1, lineHeight: 0 }}>
           {hasEditAction && (
             <ActionIcon
@@ -23,7 +29,7 @@ const AppInfoDetail = ({ label, value, onEdit, editTooltip }) => {
         </Box>
         <Typography>{label}:</Typography>
       </Box>
-      <Typography sx={{ fontWeight: 'bold' }}>{value}</Typography>
+      <Typography sx={{ fontStyle, fontWeight }}>{value}</Typography>
     </Box>
   )
 }

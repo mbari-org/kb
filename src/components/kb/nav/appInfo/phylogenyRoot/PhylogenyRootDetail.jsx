@@ -33,7 +33,6 @@ const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName }) => {
       Actions: PhylogenyRootActions,
       Content: () => <PhylogenyRootContent conceptNames={conceptNames} />,
       Title: () => <Title title='Edit Phylogeny Root' />,
-      minWidth: 520,
       focusClose: true,
     })
 

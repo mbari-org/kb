@@ -23,7 +23,7 @@ const DELETE = CONCEPT_STATE.MEDIA_ITEM.DELETE
 
 const MediaModifyIcon = ({ action, mediaIndex, size }) => {
   const { initialState, modifyConcept, stagedState } = use(ConceptContext)
-  const { mediaBaseUrl } = use(ConfigContext)
+  const { mediaBaseURL } = use(ConfigContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const [asyncError, setAsyncError] = useState(null)
 
@@ -35,7 +35,7 @@ const MediaModifyIcon = ({ action, mediaIndex, size }) => {
     try {
       const mediaItem =
         action === ADD
-          ? { ...EMPTY_MEDIA_ITEM, url: mediaBaseUrl || '' }
+          ? { ...EMPTY_MEDIA_ITEM, url: mediaBaseURL || '' }
           : mediaItemFields(stagedState.media[mediaIndex])
 
       const actionModalData = {
@@ -53,10 +53,9 @@ const MediaModifyIcon = ({ action, mediaIndex, size }) => {
     } catch (error) {
       setAsyncError(error)
     }
-  }, [action, mediaBaseUrl, mediaIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
+  }, [action, mediaBaseURL, mediaIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
-  const IconComponent =
-    action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
+  const IconComponent = action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
   return <IconComponent onClick={onClick} size={size} />
 }

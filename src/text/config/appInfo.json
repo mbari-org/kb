@@ -1,0 +1,11 @@
+{
+  "BASE_URL": {
+    "NONE": "not set"
+  },
+  "HELPER_TEXT": {
+    "DSG": "URL for DSG Concept Viewing",
+    "MEDIA": "Base URL for Media Assets"
+  },
+  "TITLE": "App Info",
+  "TOOLTIP": "App Info and Optional Settings"
+}

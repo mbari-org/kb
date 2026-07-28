@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import MediaBaseURLActions from '@/components/kb/nav/appInfo/mediaBaseUR/MediaBaseURLActions'
+import MediaBaseURLActions from '@/components/kb/nav/appInfo/mediaBaseURL/MediaBaseURLActions'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { PREFS } from '@/lib/constants/prefs'
@@ -10,8 +10,8 @@ import CONFIG from '@/text'
 
 const renderActions = ({
   confirmCommit = false,
-  mediaBaseUrl = 'https://example.org/media/',
-  selectedMediaBaseUrl = '',
+  mediaBaseURL = 'https://example.org/media/',
+  selectedMediaBaseURL = '',
   urlStatus,
 } = {}) => {
   const closeModal = vi.fn(() => true)
@@ -19,13 +19,13 @@ const renderActions = ({
   const setModalData = vi.fn()
 
   render(
-    <ConfigContext.Provider value={{ mediaBaseUrl, saveAppPreference }}>
+    <ConfigContext.Provider value={{ mediaBaseURL, saveAppPreference }}>
       <AppModalContext.Provider
         value={{
           closeModal,
           modalData: {
             confirmCommit,
-            selectedMediaBaseUrl,
+            selectedMediaBaseURL,
             urlStatus,
           },
           setModalData,
@@ -51,7 +51,7 @@ describe('MediaBaseURLActions', () => {
   it('enters verify state on first save click before persisting media base URL', async () => {
     const user = userEvent.setup()
     const { closeModal, saveAppPreference, setModalData } = renderActions({
-      selectedMediaBaseUrl: 'https://new.example.org/assets/',
+      selectedMediaBaseURL: 'https://new.example.org/assets/',
     })
 
     await user.click(screen.getByRole('button', { name: 'Save' }))
@@ -74,15 +74,12 @@ describe('MediaBaseURLActions', () => {
     const user = userEvent.setup()
     const { closeModal, saveAppPreference } = renderActions({
       confirmCommit: true,
-      selectedMediaBaseUrl: 'https://new.example.org/assets/',
+      selectedMediaBaseURL: 'https://new.example.org/assets/',
     })
 
     await user.click(screen.getByRole('button', { name: 'Save' }))
 
-    expect(saveAppPreference).toHaveBeenCalledWith(
-      PREFS.APP.MEDIA.BASE_URL.ROOT.KEY,
-      'https://new.example.org/assets/'
-    )
+    expect(saveAppPreference).toHaveBeenCalledWith(PREFS.APP.MEDIA.BASE_URL.KEY, 'https://new.example.org/assets/')
     await waitFor(() => {
       expect(closeModal).toHaveBeenCalledWith(true)
     })
@@ -90,7 +87,7 @@ describe('MediaBaseURLActions', () => {
 
   it('disables save for invalid URL input', () => {
     renderActions({
-      selectedMediaBaseUrl: 'not-a-url',
+      selectedMediaBaseURL: 'not-a-url',
     })
 
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -98,8 +95,8 @@ describe('MediaBaseURLActions', () => {
 
   it('disables save when selected value matches current media base URL', () => {
     renderActions({
-      mediaBaseUrl: 'https://example.org/media/',
-      selectedMediaBaseUrl: 'https://example.org/media/',
+      mediaBaseURL: 'https://example.org/media/',
+      selectedMediaBaseURL: 'https://example.org/media/',
     })
 
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
@@ -107,7 +104,7 @@ describe('MediaBaseURLActions', () => {
 
   it('disables save while live URL check is in progress', () => {
     renderActions({
-      selectedMediaBaseUrl: 'https://new.example.org/assets/',
+      selectedMediaBaseURL: 'https://new.example.org/assets/',
       urlStatus: { loading: true, valid: true },
     })
 
@@ -116,8 +113,8 @@ describe('MediaBaseURLActions', () => {
 
   it('allows save when media base URL is cleared from a non-empty current value', () => {
     renderActions({
-      mediaBaseUrl: 'https://example.org/media/',
-      selectedMediaBaseUrl: '',
+      mediaBaseURL: 'https://example.org/media/',
+      selectedMediaBaseURL: '',
       urlStatus: { loading: false, valid: true },
     })
 

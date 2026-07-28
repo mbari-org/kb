@@ -12,7 +12,7 @@ const AppModal = () => {
     return null
   }
 
-  const { actions, content, title, minWidth = 500, focusClose = false, contentSx } = modal
+  const { actions, content, title, minWidth = 500, maxWidth, width, focusClose = false, contentSx } = modal
   return (
     <Modal
       aria-labelledby='system-modal-alert'
@@ -30,7 +30,7 @@ const AppModal = () => {
             mt: 10,
           }}
         >
-          <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth }}>
+          <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth, maxWidth, width }}>
             <IconButton
               autoFocus={focusClose}
               aria-label='close'

@@ -2,17 +2,17 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import MediaBaseURLContent from '@/components/kb/nav/appInfo/mediaBaseUR/MediaBaseURLContent'
+import MediaBaseURLContent from '@/components/kb/nav/appInfo/mediaBaseURL/MediaBaseURLContent'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
-const renderContent = ({ alert = null, selectedMediaBaseUrl = '' } = {}) => {
+const renderContent = ({ alert = null, selectedMediaBaseURL = '' } = {}) => {
   const setModalData = vi.fn()
 
   const TestProvider = ({ children }) => {
     const [modalData, setModalDataState] = useState({
       alert,
       confirmCommit: Boolean(alert),
-      selectedMediaBaseUrl,
+      selectedMediaBaseURL,
     })
 
     const handleSetModalData = updater => {
@@ -52,7 +52,7 @@ describe('MediaBaseURLContent', () => {
         lines: ['You are about to change the media base URL.', 'Please confirm you want to continue.'],
         severity: 'success',
       },
-      selectedMediaBaseUrl: 'https://example.org/media/',
+      selectedMediaBaseURL: 'https://example.org/media/',
     })
 
     expect(screen.getByText('You are about to change the media base URL.')).toBeInTheDocument()
@@ -65,7 +65,7 @@ describe('MediaBaseURLContent', () => {
         lines: ['You are about to change the media base URL.', 'Please confirm you want to continue.'],
         severity: 'success',
       },
-      selectedMediaBaseUrl: 'https://example.org/media/',
+      selectedMediaBaseURL: 'https://example.org/media/',
     })
 
     const input = screen.getByRole('textbox', { name: 'Media Base URL' })
@@ -77,25 +77,25 @@ describe('MediaBaseURLContent', () => {
     expect(updater({})).toEqual({
       alert: null,
       confirmCommit: false,
-      selectedMediaBaseUrl: 'https://new.example.org/assets/',
+      selectedMediaBaseURL: 'https://new.example.org/assets/',
       urlStatus: { loading: true, valid: true },
     })
   })
 
   it('shows validation helper text for invalid URL values', () => {
     renderContent({
-      selectedMediaBaseUrl: 'not-a-url',
+      selectedMediaBaseURL: 'not-a-url',
     })
     expect(screen.getByText('Please enter a valid URL')).toBeInTheDocument()
   })
 
   it('shows "not set" placeholder and no error for empty value', () => {
     renderContent({
-      selectedMediaBaseUrl: '',
+      selectedMediaBaseURL: '',
     })
 
     const input = screen.getByRole('textbox', { name: 'Media Base URL' })
-    expect(input).toHaveAttribute('placeholder', 'not set')
+    expect(input).toHaveAttribute('placeholder', 'Base URL for Media Assets')
     expect(screen.queryByText('Please enter a valid URL')).not.toBeInTheDocument()
   })
 
@@ -104,7 +104,7 @@ describe('MediaBaseURLContent', () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network error')))
 
     renderContent({
-      selectedMediaBaseUrl: '',
+      selectedMediaBaseURL: '',
     })
 
     const input = screen.getByRole('textbox', { name: 'Media Base URL' })

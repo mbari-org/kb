@@ -1,16 +1,11 @@
 {
   "ALERT": {
     "INVALID_URL": {
-      "LINES": [
-        "Please enter a valid media base URL."
-      ],
+      "LINES": ["Please enter a valid base URL for media."],
       "SEVERITY": "error"
     },
     "SAVE_CONFIRM": {
-      "LINES": [
-        "You are about to change the media base URL.",
-        "Please confirm you want to continue."
-      ],
+      "LINES": ["You are about to change the base URL for media.", "Please confirm you want to continue."],
       "SEVERITY": "success"
     }
   }

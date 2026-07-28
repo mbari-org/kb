@@ -6,6 +6,7 @@ const createAppModal = ({
   Title,
   minWidth = 500,
   maxWidth,
+  width,
   focusClose = false,
   contentSx,
 }) => ({
@@ -15,6 +16,7 @@ const createAppModal = ({
   contentSx,
   minWidth,
   maxWidth,
+  width,
   focusClose,
 })
 

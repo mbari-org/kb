@@ -14,8 +14,10 @@ import { PREFS } from '@/lib/constants/prefs.js'
 
 const IS_DEV = import.meta.env.DEV
 const USE_M3_LOCAL = import.meta.env.VITE_M3_LOCAL ?? false
-const appMediaBaseUrlKey = PREFS.APP.MEDIA.BASE_URL.ROOT.KEY
-const defaultMediaBaseUrl = PREFS.APP.MEDIA.BASE_URL.ROOT.DEFAULT
+const appMediaBaseURLKey = PREFS.APP.MEDIA.BASE_URL.KEY
+const defaultMediaBaseURL = PREFS.APP.MEDIA.BASE_URL.DEFAULT
+const appDsgConceptUrlKey = PREFS.APP.DSG.CONCEPT_URL.KEY
+const defaultDsgConceptUrl = PREFS.APP.DSG.CONCEPT_URL.DEFAULT
 const appPhylogenyRootKey = PREFS.APP.PHYLOGENY.ROOT.KEY
 const defaultPhylogenyRoot = PREFS.APP.PHYLOGENY.ROOT.DEFAULT
 
@@ -135,9 +137,13 @@ const ConfigProvider = ({ children }) => {
     appPreferencesInitializingRef.current = true
 
     try {
-      const appMediaBaseUrl = await getAppPreference(appMediaBaseUrlKey)
-      if (appMediaBaseUrl === null || appMediaBaseUrl === undefined) {
-        await saveAppPreference(appMediaBaseUrlKey, defaultMediaBaseUrl)
+      const appMediaBaseURL = await getAppPreference(appMediaBaseURLKey)
+      if (appMediaBaseURL === null || appMediaBaseURL === undefined) {
+        await saveAppPreference(appMediaBaseURLKey, defaultMediaBaseURL)
+      }
+      const appDsgConceptUrl = await getAppPreference(appDsgConceptUrlKey)
+      if (appDsgConceptUrl === null || appDsgConceptUrl === undefined) {
+        await saveAppPreference(appDsgConceptUrlKey, defaultDsgConceptUrl)
       }
       const appPhylogenyRoot = await getAppPreference(appPhylogenyRootKey)
       if (appPhylogenyRoot === null || appPhylogenyRoot === undefined) {
@@ -149,7 +155,8 @@ const ConfigProvider = ({ children }) => {
     }
   }, [appPreferencesInitialized, config, getAppPreference, saveAppPreference])
 
-  const mediaBaseUrl = appPreferences[appMediaBaseUrlKey] ?? defaultMediaBaseUrl
+  const mediaBaseURL = appPreferences[appMediaBaseURLKey] ?? defaultMediaBaseURL
+  const dsgConceptUrl = appPreferences[appDsgConceptUrlKey] ?? defaultDsgConceptUrl
   const phylogenyRoot = appPreferences[appPhylogenyRootKey] ?? defaultPhylogenyRoot
 
   useEffect(() => {
@@ -163,10 +170,11 @@ const ConfigProvider = ({ children }) => {
       apiFns,
       appPreferencesInitialized,
       config,
+      dsgConceptUrl,
       getAppPreference,
       initializeAppPreferences,
       IS_DEV,
-      mediaBaseUrl,
+      mediaBaseURL,
       phylogenyRoot,
       saveAppPreference,
       updateConfig,
@@ -176,9 +184,10 @@ const ConfigProvider = ({ children }) => {
       apiFns,
       appPreferencesInitialized,
       config,
+      dsgConceptUrl,
       getAppPreference,
       initializeAppPreferences,
-      mediaBaseUrl,
+      mediaBaseURL,
       phylogenyRoot,
       saveAppPreference,
       updateConfig,
