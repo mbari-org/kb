@@ -6,6 +6,9 @@ import MediaBaseURLContent from '@/components/kb/nav/appInfo/mediaBaseURL/MediaB
 import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
+const { FIELD_LABEL, DESCRIPTION } = CONFIG.APP_INFO.MEDIA_URL
+const { SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.MEDIA_BASE_URL.ALERT
+
 const renderContent = ({ alert = null, selectedMediaBaseURL = '' } = {}) => {
   const setModalData = vi.fn()
 
@@ -47,29 +50,31 @@ describe('MediaBaseURLContent', () => {
     vi.useRealTimers()
     vi.unstubAllGlobals()
   })
+
   it('renders alert lines when an alert exists in modal data', () => {
     renderContent({
       alert: {
-        lines: ['You are about to change the media base URL.', 'Please confirm you want to continue.'],
-        severity: 'success',
+        lines: SAVE_CONFIRM.LINES,
+        severity: SAVE_CONFIRM.SEVERITY,
       },
       selectedMediaBaseURL: 'https://example.org/media/',
     })
 
-    expect(screen.getByText('You are about to change the media base URL.')).toBeInTheDocument()
-    expect(screen.getByText('Please confirm you want to continue.')).toBeInTheDocument()
+    SAVE_CONFIRM.LINES.forEach(line => {
+      expect(screen.getByText(line)).toBeInTheDocument()
+    })
   })
 
   it('clears verify state and alert when the media base URL changes', () => {
     const { setModalData } = renderContent({
       alert: {
-        lines: ['You are about to change the media base URL.', 'Please confirm you want to continue.'],
-        severity: 'success',
+        lines: SAVE_CONFIRM.LINES,
+        severity: SAVE_CONFIRM.SEVERITY,
       },
       selectedMediaBaseURL: 'https://example.org/media/',
     })
 
-    const input = screen.getByRole('textbox', { name: 'Media Base URL' })
+    const input = screen.getByRole('textbox', { name: FIELD_LABEL })
     fireEvent.change(input, { target: { value: 'https://new.example.org/assets/' } })
 
     expect(setModalData).toHaveBeenCalled()
@@ -95,14 +100,14 @@ describe('MediaBaseURLContent', () => {
       selectedMediaBaseURL: '',
     })
 
-    const input = screen.getByRole('textbox', { name: 'Media Base URL' })
+    const input = screen.getByRole('textbox', { name: FIELD_LABEL })
     expect(input).not.toHaveAttribute('placeholder')
     expect(screen.queryByText('Please enter a valid URL')).not.toBeInTheDocument()
   })
 
   it('renders media description text from app info config', () => {
     renderContent({ selectedMediaBaseURL: '' })
-    expect(screen.getByText(CONFIG.APP_INFO.DESCRIPTION.MEDIA)).toBeInTheDocument()
+    expect(screen.getByText(DESCRIPTION)).toBeInTheDocument()
   })
 
   it('performs debounced live URL check and shows inaccessible message on failure', async () => {
@@ -113,7 +118,7 @@ describe('MediaBaseURLContent', () => {
       selectedMediaBaseURL: '',
     })
 
-    const input = screen.getByRole('textbox', { name: 'Media Base URL' })
+    const input = screen.getByRole('textbox', { name: FIELD_LABEL })
     fireEvent.change(input, { target: { value: 'https://new.example.org/assets/' } })
 
     expect(screen.getByText('Checking URL...')).toBeInTheDocument()

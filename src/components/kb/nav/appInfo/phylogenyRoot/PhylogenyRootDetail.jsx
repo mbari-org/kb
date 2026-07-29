@@ -11,6 +11,10 @@ import PhylogenyRootContent from './PhylogenyRootContent'
 
 import createAppModal from '@/components/modal/app/createAppModal'
 import { isAdmin } from '@/lib/auth/role'
+import CONFIG from '@/lib/config'
+
+const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
+const { EDIT_TITLE, EDIT_TOOLTIP, FIELD_LABEL } = phylogenyConfig
 
 const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName, onEditComplete }) => {
   const { phylogenyRoot } = use(ConfigContext)
@@ -33,7 +37,7 @@ const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName, onEditC
     const modal = createAppModal({
       Actions: PhylogenyRootActions,
       Content: () => <PhylogenyRootContent conceptNames={conceptNames} />,
-      Title: () => <Title title='Edit Phylogeny Root' />,
+      Title: () => <Title title={EDIT_TITLE} />,
       focusClose: true,
       width: '50%',
     })
@@ -43,8 +47,8 @@ const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName, onEditC
 
   return (
     <AppInfoDetail
-      editTooltip='Edit Phylogeny Root'
-      label='Phylogeny Root'
+      editTooltip={EDIT_TOOLTIP}
+      label={FIELD_LABEL}
       onEdit={isAdminUser ? handleEditPhylogenyRoot : undefined}
       value={phylogenyRoot}
     />

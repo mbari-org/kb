@@ -5,8 +5,8 @@ import AppInfoEditLayout from '@/components/kb/nav/appInfo/AppInfoEditLayout'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
-const phylogenyDescription =
-  CONFIG.APP_INFO.DESCRIPTION['PHYLOGENY ROOT'] ?? CONFIG.APP_INFO.DESCRIPTION['PHLOGENY ROOT'] ?? ''
+const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
+const { DESCRIPTION, FIELD_LABEL } = phylogenyConfig
 
 const PhylogenyRootContent = ({ conceptNames = [] }) => {
   const { modalData, setModalData } = use(AppModalContext)
@@ -14,7 +14,7 @@ const PhylogenyRootContent = ({ conceptNames = [] }) => {
   const selectedPhylogenyRoot = modalData.selectedPhylogenyRoot || ''
 
   return (
-    <AppInfoEditLayout alert={alert} description={phylogenyDescription}>
+    <AppInfoEditLayout alert={alert} description={DESCRIPTION}>
       <Autocomplete
         onChange={(_event, selectedName) =>
           setModalData(prev => ({
@@ -25,7 +25,7 @@ const PhylogenyRootContent = ({ conceptNames = [] }) => {
           }))
         }
         options={conceptNames}
-        renderInput={params => <TextField {...params} helperText=' ' label='Phylogeny Root' size='small' />}
+        renderInput={params => <TextField {...params} helperText=' ' label={FIELD_LABEL} size='small' />}
         value={selectedPhylogenyRoot || null}
       />
     </AppInfoEditLayout>

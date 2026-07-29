@@ -6,6 +6,10 @@ import PhylogenyRootContent from '@/components/kb/nav/appInfo/phylogenyRoot/Phyl
 import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
+const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
+const { DESCRIPTION, FIELD_LABEL } = phylogenyConfig
+const { SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.PHYLOGENY_ROOT.ALERT
+
 const renderContent = ({ alert = null, selectedPhylogenyRoot = '' } = {}) => {
   const setModalData = vi.fn()
 
@@ -30,34 +34,34 @@ const renderContent = ({ alert = null, selectedPhylogenyRoot = '' } = {}) => {
 describe('PhylogenyRootContent', () => {
   it('renders phylogeny description text from app info config', () => {
     renderContent()
-    const phylogenyDescription =
-      CONFIG.APP_INFO.DESCRIPTION['PHYLOGENY ROOT'] ?? CONFIG.APP_INFO.DESCRIPTION['PHLOGENY ROOT']
-    expect(screen.getByText(phylogenyDescription)).toBeInTheDocument()
+    expect(screen.getByText(DESCRIPTION)).toBeInTheDocument()
   })
+
   it('renders verification alert lines when an alert exists in modal data', () => {
     renderContent({
       alert: {
-        lines: ['You are about to change the phylogeny root.', 'Please confirm you want to continue.'],
-        severity: 'success',
+        lines: SAVE_CONFIRM.LINES,
+        severity: SAVE_CONFIRM.SEVERITY,
       },
       selectedPhylogenyRoot: 'wolf-alias',
     })
 
-    expect(screen.getByText('You are about to change the phylogeny root.')).toBeInTheDocument()
-    expect(screen.getByText('Please confirm you want to continue.')).toBeInTheDocument()
+    SAVE_CONFIRM.LINES.forEach(line => {
+      expect(screen.getByText(line)).toBeInTheDocument()
+    })
   })
 
   it('clears verify state and alert when a new root is selected', async () => {
     const user = userEvent.setup()
     const { setModalData } = renderContent({
       alert: {
-        lines: ['You are about to change the phylogeny root.', 'Please confirm you want to continue.'],
-        severity: 'success',
+        lines: SAVE_CONFIRM.LINES,
+        severity: SAVE_CONFIRM.SEVERITY,
       },
       selectedPhylogenyRoot: 'wolf-alias',
     })
 
-    const input = screen.getByRole('combobox', { name: 'Phylogeny Root' })
+    const input = screen.getByRole('combobox', { name: FIELD_LABEL })
     await user.click(input)
     await user.clear(input)
     await user.type(input, 'canis lupus')

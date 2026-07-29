@@ -7,6 +7,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { PREFS } from '@/lib/constants/prefs'
 import CONFIG from '@/lib/config'
+const { CANCEL, SAVE } = CONFIG.PANELS.CONCEPTS.BUTTON
 
 const renderActions = ({
   confirmCommit = false,
@@ -56,7 +57,7 @@ describe('MediaBaseURLActions', () => {
       selectedMediaBaseURL: 'https://new.example.org/assets/',
     })
 
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(screen.getByRole('button', { name: SAVE }))
 
     expect(saveAppPreference).not.toHaveBeenCalled()
     expect(closeModal).not.toHaveBeenCalled()
@@ -95,7 +96,7 @@ describe('MediaBaseURLActions', () => {
       selectedMediaBaseURL: 'not-a-url',
     })
 
-    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: SAVE })).toBeDisabled()
   })
 
   it('disables save when selected value matches current media base URL', () => {
@@ -104,7 +105,7 @@ describe('MediaBaseURLActions', () => {
       selectedMediaBaseURL: 'https://example.org/media/',
     })
 
-    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: SAVE })).toBeDisabled()
   })
 
   it('disables save while live URL check is in progress', () => {
@@ -113,7 +114,7 @@ describe('MediaBaseURLActions', () => {
       urlStatus: { loading: true, valid: true },
     })
 
-    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: SAVE })).toBeDisabled()
   })
 
   it('allows save when media base URL is cleared from a non-empty current value', () => {
@@ -123,7 +124,7 @@ describe('MediaBaseURLActions', () => {
       urlStatus: { loading: false, valid: true },
     })
 
-    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: SAVE })).toBeEnabled()
   })
 
   it('reopens app info when cancel is clicked and a cancel callback exists', async () => {
@@ -131,7 +132,7 @@ describe('MediaBaseURLActions', () => {
     const onCancel = vi.fn()
     const { closeModal } = renderActions({ onCancel })
 
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    await user.click(screen.getByRole('button', { name: CANCEL }))
 
     expect(closeModal).toHaveBeenCalledWith(false)
     expect(onCancel).toHaveBeenCalledTimes(1)

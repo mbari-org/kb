@@ -2,9 +2,32 @@
   "BASE_URL": {
     "NONE": "not set"
   },
+  "DSG_CONCEPT": {
+    "DESCRIPTION": "The URL for DSG concept viewing. Concept names are appended to this URL to generate links to DSG concepts.",
+    "EDIT_TITLE": "Set DSG Concept URL",
+    "EDIT_TOOLTIP": "Set DSG Concept URL",
+    "FIELD_LABEL": "DSG Concept URL"
+  },
+  "MEDIA_URL": {
+    "DESCRIPTION": "A base URL for media assets. Users can then attach media file names to the URL.",
+    "EDIT_TITLE": "Set Media Base URL",
+    "EDIT_TOOLTIP": "Set Media Base URL",
+    "FIELD_LABEL": "Media Base URL"
+  },
+  "PHYLOGENY_ROOT": {
+    "DESCRIPTION": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level.",
+    "EDIT_TITLE": "Set Phylogeny Root",
+    "EDIT_TOOLTIP": "Set Phylogeny Root",
+    "FIELD_LABEL": "Phylogeny Root"
+  },
+  "PHLOGENY_ROOT": {
+    "DESCRIPTION": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level.",
+    "EDIT_TITLE": "Set Phylogeny Root",
+    "EDIT_TOOLTIP": "Set Phylogeny Root",
+    "FIELD_LABEL": "Phylogeny Root"
+  },
   "DESCRIPTION": {
     "DSG": "The URL for DSG concept viewing. Concept names are appended to this URL to generate links to DSG concepts.",
-    "MEDIA": "A base URL for media assets. Users can then attach media file names to the URL.",
     "PHLOGENY ROOT": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level."
   },
   "TITLE": "App Info",
