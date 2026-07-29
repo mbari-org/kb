@@ -4,6 +4,7 @@ import { Autocomplete, TextField } from '@mui/material'
 import { useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getDescendantNames } from '@/lib/model/concept'
+
 const TO_NIL = 'nil'
 const TO_SELF = 'self'
 
@@ -47,7 +48,6 @@ const LinkValueInput = ({ disabled = false, onChange, value }) => {
   }
 
   if (linkValueConcept) {
-
     return (
       <Autocomplete
         disabled={disabled}

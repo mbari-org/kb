@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 
 import TemplateTitle from '@/components/kb/panels/templates/form/TemplateTitle'
 import { useTemplatesModalDataContext } from '@/contexts/panels/templates/modal'

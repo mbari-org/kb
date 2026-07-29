@@ -15,7 +15,6 @@ const FILTERS = REALIZATIONS.FILTERS
 const RealizationsProvider = ({ children }) => {
   const { getSelected, getSettings, updateSettings } = use(SelectedContext)
   const { realizations, refreshData } = use(PanelDataContext)
-  const allRealizations = Array.isArray(realizations) ? realizations : []
 
   const realizationsSettings = getSettings(REALIZATIONS.KEY) || {}
   const filters = realizationsSettings[FILTERS.KEY] || EMPTY_FILTERS
@@ -36,25 +35,25 @@ const RealizationsProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isRealizationsPanelSelected) return
-    if (allRealizations.length > 0) return
+    if (realizations.length > 0) return
     refreshData(PANEL_DATA.REALIZATIONS)
-  }, [allRealizations.length, isRealizationsPanelSelected, refreshData])
+  }, [realizations.length, isRealizationsPanelSelected, refreshData])
 
   const explicitConcepts = useMemo(() => {
-    if (allRealizations.length === 0) {
+    if (realizations.length === 0) {
       return []
     }
     const uniqueConcepts = new Set()
-    allRealizations.forEach(realization => {
+    realizations.forEach(realization => {
       if (realization.concept) {
         uniqueConcepts.add(realization.concept)
       }
     })
     return Array.from(uniqueConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-  }, [allRealizations])
+  }, [realizations])
 
   const filteredRealizations = useMemo(() => {
-    if (allRealizations.length === 0) {
+    if (realizations.length === 0) {
       return []
     }
     if (isInitialConceptFilterPending) {
@@ -66,7 +65,7 @@ const RealizationsProvider = ({ children }) => {
     const trimmedLinkName = filters[FILTERS.LINK_NAME]?.trim().toLowerCase()
     const trimmedLinkValue = filters[FILTERS.LINK_VALUE]?.trim().toLowerCase()
 
-    return allRealizations.filter(realization => {
+    return realizations.filter(realization => {
       if (concept && realization.concept && realization.concept !== concept) {
         return false
       }
@@ -81,7 +80,7 @@ const RealizationsProvider = ({ children }) => {
       }
       return true
     })
-  }, [allRealizations, filters, isInitialConceptFilterPending])
+  }, [realizations, filters, isInitialConceptFilterPending])
 
   const filterString = useCallback(realization => {
     if (!realization) return '* | * | * | *'
@@ -100,10 +99,10 @@ const RealizationsProvider = ({ children }) => {
       filteredRealizations,
       filters,
       filterString,
-      realizations: allRealizations,
+      realizations: realizations,
       updateFilters,
     }),
-    [allRealizations, explicitConcepts, filteredRealizations, filters, filterString, updateFilters]
+    [realizations, explicitConcepts, filteredRealizations, filters, filterString, updateFilters]
   )
 
   return <RealizationsContext value={value}>{children}</RealizationsContext>

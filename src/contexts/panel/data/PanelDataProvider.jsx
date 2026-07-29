@@ -149,9 +149,11 @@ export const PanelDataProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (apiFns) {
+    if (!apiFns) return
+    const timeoutId = globalThis.setTimeout(() => {
       refreshData().catch(showBoundary)
-    }
+    }, 0)
+    return () => globalThis.clearTimeout(timeoutId)
   }, [apiFns, refreshData, showBoundary])
 
   const value = useMemo(

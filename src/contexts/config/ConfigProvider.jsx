@@ -25,7 +25,6 @@ const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
   const { showBoundary } = useErrorBoundary()
   const [config, setConfig] = useState(null)
-  const [apiFns, setApiFns] = useState(null)
   const [appPreferences, setAppPreferences] = useState({})
   const [appPreferencesInitialized, setAppPreferencesInitialized] = useState(false)
   const mountedRef = useRef(true)
@@ -72,6 +71,9 @@ const ConfigProvider = ({ children }) => {
 
   const updateConfig = useCallback(
     async url => {
+      appPreferencesInitializingRef.current = false
+      setAppPreferences({})
+      setAppPreferencesInitialized(false)
       if (url === null) {
         setConfig(null)
         configUrlStore.remove()
@@ -100,17 +102,8 @@ const ConfigProvider = ({ children }) => {
   }, [loadConfig, navigate])
 
   const apiFnsFromHook = useApiFns(config?.valid ? config : null, showBoundary)
+  const apiFns = apiFnsFromHook
   const { getAppPreference: loadAppPreference, saveAppPreference: persistAppPreference } = useAppPreferences({ config })
-
-  useEffect(() => {
-    setApiFns(apiFnsFromHook)
-  }, [apiFnsFromHook])
-
-  useEffect(() => {
-    appPreferencesInitializingRef.current = false
-    setAppPreferences({})
-    setAppPreferencesInitialized(false)
-  }, [config?.url])
 
   const getAppPreference = useCallback(
     async key => {

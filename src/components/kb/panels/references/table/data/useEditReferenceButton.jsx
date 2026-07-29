@@ -18,8 +18,7 @@ const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTT
 
 const useEditReferenceButton = () => {
   const openConfirmModal = useConfirmReferenceModal()
-  const { closeModal, createModal, updateModalData } =
-    useReferencesModalOperationsContext()
+  const { closeModal, createModal, updateModalData } = useReferencesModalOperationsContext()
   const { isDoiUnique } = use(PanelDataContext)
 
   const { handleCancel, handleFormChange } = useMemo(
@@ -42,118 +41,120 @@ const useEditReferenceButton = () => {
     [closeModal, openConfirmModal]
   )
 
-  const editReferenceModal = useCallback(
-    (referenceToEdit, databaseOriginal = null) => {
-      const modalReference = {
-        ...referenceToEdit,
-        concepts: referenceToEdit.concepts || [],
-      }
+  // Helper function (hoisted) so reopenThisModal can call it without TDZ issues
+  function openEditModalInner(referenceToEdit, databaseOriginal) {
+    const modalReference = {
+      ...referenceToEdit,
+      concepts: referenceToEdit.concepts || [],
+    }
 
-      const actualOriginal = databaseOriginal || referenceToEdit
+    const actualOriginal = databaseOriginal || referenceToEdit
 
-      const calculateChanges = createChangeDetector(true)
-      const initialHasChanges = calculateChanges(modalReference, actualOriginal)
+    const calculateChanges = createChangeDetector(true)
+    const initialHasChanges = calculateChanges(modalReference, actualOriginal)
 
-      const reopenThisModal = updatedRef => {
-        const refToUse = updatedRef || referenceToEdit
-        editReferenceModal(refToUse, actualOriginal)
-      }
+    const reopenThisModal = updatedRef => {
+      const refToUse = updatedRef || referenceToEdit
+      openEditModalInner(refToUse, actualOriginal)
+    }
 
-      const ActionView = () => {
-        const { modalData } = useReferencesModalDataContext()
-        const handleCommitWithReopen = (ref, orig) => handleCommit(ref, orig, reopenThisModal)
+    const ActionView = () => {
+      const { modalData } = useReferencesModalDataContext()
+      const handleCommitWithReopen = (ref, orig) => handleCommit(ref, orig, reopenThisModal)
 
-        const confirmDiscard = !!modalData?.confirmDiscard
+      const confirmDiscard = !!modalData?.confirmDiscard
 
-        if (confirmDiscard) {
-          const colors = ['cancel', 'main']
-          const disabled = [false, false]
-          const labels = [DISCARD, CONTINUE]
-
-          const onAction = async label => {
-            switch (label) {
-              case DISCARD:
-                closeModal()
-                break
-
-              case CONTINUE:
-                updateModalData({ confirmDiscard: false })
-                break
-
-              default:
-                throw new Error(`Invalid edit reference discard action: ${label}`)
-            }
-          }
-
-          return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
-        }
-
-        const actions = createModalActions(handleCancel, handleCommitWithReopen)(modalData)
-        if (!Array.isArray(actions)) return null
-
-        const colors = actions.map(a => a.color || 'main')
-        const disabled = actions.map(a => a.disabled || false)
-        const labels = actions.map((a, i) => {
-          if (i === 0 && modalData?.hasChanges) {
-            return DISCARD
-          }
-          return a.label
-        })
+      if (confirmDiscard) {
+        const colors = ['cancel', 'main']
+        const disabled = [false, false]
+        const labels = [DISCARD, CONTINUE]
 
         const onAction = async label => {
           switch (label) {
             case DISCARD:
-              updateModalData({ confirmDiscard: true })
-              break
-
-            case CANCEL:
               closeModal()
               break
 
-            case SAVE:
-              await handleCommitWithReopen(modalData.reference, modalData.original)
+            case CONTINUE:
+              updateModalData({ confirmDiscard: false })
               break
 
             default:
-              throw new Error(`Invalid edit reference action: ${label}`)
+              throw new Error(`Invalid edit reference discard action: ${label}`)
           }
         }
 
         return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
       }
 
-      const ContentView = () => {
-        const { modalData } = useReferencesModalDataContext()
-        const ReferenceModalContent = createModalContent(handleFormChange, true)
-        return ReferenceModalContent(modalData)
+      const actions = createModalActions(handleCancel, handleCommitWithReopen)(modalData)
+      if (!Array.isArray(actions)) return null
+
+      const colors = actions.map(a => a.color || 'main')
+      const disabled = actions.map(a => a.disabled || false)
+      const labels = actions.map((a, i) => {
+        if (i === 0 && modalData?.hasChanges) {
+          return DISCARD
+        }
+        return a.label
+      })
+
+      const onAction = async label => {
+        switch (label) {
+          case DISCARD:
+            updateModalData({ confirmDiscard: true })
+            break
+
+          case CANCEL:
+            closeModal()
+            break
+
+          case SAVE:
+            await handleCommitWithReopen(modalData.reference, modalData.original)
+            break
+
+          default:
+            throw new Error(`Invalid edit reference action: ${label}`)
+        }
       }
 
-      const TitleView = () => <Title title={CONFIG.PANELS.REFERENCES.MODALS.EDIT.TITLE} />
+      return <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+    }
 
-      createModal({
-        actionsComponent: ActionView,
-        contentComponent: ContentView,
-        titleComponent: TitleView,
-        data: {
-          reference: modalReference,
-          original: actualOriginal,
-          isValid: true,
-          hasChanges: initialHasChanges,
-        },
-        onClose: currentData => {
-          const { confirmDiscard, hasChanges } = currentData || {}
-          if (!confirmDiscard && hasChanges) {
-            // Enter confirm-discard mode instead of closing
-            updateModalData({ confirmDiscard: true })
-            return false
-          }
-          // Otherwise allow closing
-          return true
-        },
-      })
-    },
-    [createModal, handleFormChange, handleCancel, handleCommit, closeModal, updateModalData]
-  )
+    const ContentView = () => {
+      const { modalData } = useReferencesModalDataContext()
+      const ReferenceModalContent = createModalContent(handleFormChange, true)
+      return ReferenceModalContent(modalData)
+    }
+
+    const TitleView = () => <Title title={CONFIG.PANELS.REFERENCES.MODALS.EDIT.TITLE} />
+
+    createModal({
+      actionsComponent: ActionView,
+      contentComponent: ContentView,
+      titleComponent: TitleView,
+      data: {
+        reference: modalReference,
+        original: actualOriginal,
+        isValid: true,
+        hasChanges: initialHasChanges,
+      },
+      onClose: currentData => {
+        const { confirmDiscard, hasChanges } = currentData || {}
+        if (!confirmDiscard && hasChanges) {
+          // Enter confirm-discard mode instead of closing
+          updateModalData({ confirmDiscard: true })
+          return false
+        }
+        // Otherwise allow closing
+        return true
+      },
+    })
+  }
+
+  const editReferenceModal = (referenceToEdit, databaseOriginal = null) => {
+    openEditModalInner(referenceToEdit, databaseOriginal)
+  }
 
   return editReferenceModal
 }

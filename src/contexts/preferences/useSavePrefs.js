@@ -34,7 +34,7 @@ const useSavePrefs = ({
   CLEAN_FLAGS,
   conceptSelectionRef,
   dirtyFlags,
-  isSaving,
+  isSaving: isSavingRef,
   onInitSettingsRef,
   panelSelectionRef,
   prefsValue,
@@ -58,9 +58,9 @@ const useSavePrefs = ({
   const savePreferences = useCallback(
     async (key, value) => {
       if (!preferencesInitialized || !serverPreferencesExist) return
-      if (isSaving.current) return
+      if (isSavingRef.current) return
 
-      isSaving.current = true
+      isSavingRef.current = true
 
       try {
         let prefUpdates
@@ -90,14 +90,14 @@ const useSavePrefs = ({
         showBoundary(saveError)
         throw saveError
       } finally {
-        isSaving.current = false
+        isSavingRef.current = false
       }
     },
     [
       CLEAN_FLAGS,
       conceptSelectionRef,
       dirtyFlags,
-      isSaving,
+      isSavingRef,
       onInitSettingsRef,
       panelSelectionRef,
       prefsValue,
@@ -112,12 +112,10 @@ const useSavePrefs = ({
 
   const flushPreferences = useCallback(async () => {
     if (!preferencesInitialized || !serverPreferencesExist) return
-
-    while (isSaving.current) {
+    while (isSavingRef.current) {
       await new Promise(resolve => setTimeout(resolve, 5))
     }
-
-    isSaving.current = true
+    isSavingRef.current = true
 
     try {
       const prefUpdates = getAllPreferenceUpdates(prefsValue)
@@ -134,11 +132,11 @@ const useSavePrefs = ({
       showBoundary(flushError)
       throw flushError
     } finally {
-      isSaving.current = false
+      isSavingRef.current = false
     }
   }, [
     CLEAN_FLAGS,
-    isSaving,
+    isSavingRef,
     preferencesInitialized,
     prefsValue,
     resetAutosaveTimer,

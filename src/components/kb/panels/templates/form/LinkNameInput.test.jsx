@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 
 import LinkNameInput from '@/components/kb/panels/templates/form/LinkNameInput'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
@@ -38,11 +39,7 @@ describe('LinkNameInput', () => {
     renderWithTemplatesContext(
       {
         filters: { [FILTERS.CONCEPT]: 'marine organism' },
-        filteredTemplates: [
-          { linkName: 'curling' },
-          { linkName: 'curling' },
-          { linkName: 'grazing' },
-        ],
+        filteredTemplates: [{ linkName: 'curling' }, { linkName: 'curling' }, { linkName: 'grazing' }],
       },
       { onChange, value: '' }
     )

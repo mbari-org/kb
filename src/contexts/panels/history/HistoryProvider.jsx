@@ -64,7 +64,10 @@ const HistoryProvider = ({ children }) => {
   const isTypeChanging = useRef(false)
 
   useEffect(() => {
-    updateConceptState({ extent: SOLO })
+    const timeoutId = globalThis.setTimeout(() => {
+      updateConceptState({ extent: SOLO })
+    }, 0)
+    return () => globalThis.clearTimeout(timeoutId)
   }, [selectedConcept, updateConceptState])
 
   const loadData = useLoadData({
