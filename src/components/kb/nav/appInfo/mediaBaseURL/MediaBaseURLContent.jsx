@@ -5,8 +5,8 @@ import CONFIG from '@/lib/config'
 const MediaBaseURLContent = () => {
   return (
     <BaseURLContent
+      description={CONFIG.APP_INFO.DESCRIPTION.MEDIA}
       fieldLabel='Media Base URL'
-      helperText={CONFIG.APP_INFO.HELPER_TEXT.MEDIA}
       modalDataValueKey='selectedMediaBaseURL'
     />
   )

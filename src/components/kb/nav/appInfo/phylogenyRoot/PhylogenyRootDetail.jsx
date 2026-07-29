@@ -35,6 +35,7 @@ const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName, onEditC
       Content: () => <PhylogenyRootContent conceptNames={conceptNames} />,
       Title: () => <Title title='Edit Phylogeny Root' />,
       focusClose: true,
+      width: '50%',
     })
 
     setModal(modal)

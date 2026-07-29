@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import PhylogenyRootContent from '@/components/kb/nav/appInfo/phylogenyRoot/PhylogenyRootContent'
 import AppModalContext from '@/contexts/app/AppModalContext'
+import CONFIG from '@/lib/config'
 
 const renderContent = ({ alert = null, selectedPhylogenyRoot = '' } = {}) => {
   const setModalData = vi.fn()
@@ -27,6 +28,12 @@ const renderContent = ({ alert = null, selectedPhylogenyRoot = '' } = {}) => {
 }
 
 describe('PhylogenyRootContent', () => {
+  it('renders phylogeny description text from app info config', () => {
+    renderContent()
+    const phylogenyDescription =
+      CONFIG.APP_INFO.DESCRIPTION['PHYLOGENY ROOT'] ?? CONFIG.APP_INFO.DESCRIPTION['PHLOGENY ROOT']
+    expect(screen.getByText(phylogenyDescription)).toBeInTheDocument()
+  })
   it('renders verification alert lines when an alert exists in modal data', () => {
     renderContent({
       alert: {

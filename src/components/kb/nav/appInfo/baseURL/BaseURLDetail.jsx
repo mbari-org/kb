@@ -32,8 +32,8 @@ const BaseURLDetail = ({ Actions, Content, baseUrl, editTooltip, label, modalDat
       Actions,
       Content,
       Title: () => <Title title={title} />,
-      minWidth: 520,
       focusClose: true,
+      width: '50%',
     })
 
     setModal(modal)

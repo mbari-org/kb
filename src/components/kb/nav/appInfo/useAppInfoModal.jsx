@@ -1,10 +1,11 @@
 import { use, useCallback } from 'react'
 
-import createAppModal from '@/components/modal/app/createAppModal'
 import AppInfoContent from '@/components/kb/nav/appInfo/AppInfoContent'
 import AppInfoTitle from '@/components/kb/nav/appInfo/AppInfoTitle'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
+import createAppModal from '@/components/modal/app/createAppModal'
 
 const useAppInfoModal = () => {
   const { setModal } = use(AppModalContext)

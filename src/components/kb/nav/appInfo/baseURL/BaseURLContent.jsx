@@ -1,15 +1,14 @@
 import { use, useCallback } from 'react'
-import { Box, TextField } from '@mui/material'
-
-import ActionsAlert from '@/components/modal/actions/ActionsAlert'
+import { TextField } from '@mui/material'
+import AppInfoEditLayout from '@/components/kb/nav/appInfo/AppInfoEditLayout'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
+
 import isValidUrl from '@/lib/validators/isValidUrl'
 import useDebounce from '@/lib/hooks/useDebounce'
 
 const URL_CHECK_DEBOUNCE_TIME = 500
-
-const BaseURLContent = ({ fieldLabel, helperText, modalDataValueKey }) => {
+const BaseURLContent = ({ description, fieldLabel, modalDataValueKey }) => {
   const { modalData, setModalData } = use(AppModalContext)
   const alert = modalData.alert || null
   const selectedBaseUrl = modalData[modalDataValueKey] || ''
@@ -76,32 +75,26 @@ const BaseURLContent = ({ fieldLabel, helperText, modalDataValueKey }) => {
   const hasError = (trimmedBaseUrl !== '' && !isValidUrl(trimmedBaseUrl)) || (!urlStatus.loading && !urlStatus.valid)
 
   const fieldHelperText =
-    trimmedBaseUrl === ''
-      ? helperText || ' '
-      : !isValidUrl(trimmedBaseUrl)
-        ? 'Please enter a valid URL'
-        : urlStatus.loading
-          ? 'Checking URL...'
-          : !urlStatus.valid
-            ? 'URL is not accessible'
-            : helperText || ' '
+    trimmedBaseUrl !== '' && !isValidUrl(trimmedBaseUrl)
+      ? 'Please enter a valid URL'
+      : urlStatus.loading
+        ? 'Checking URL...'
+        : !urlStatus.valid
+          ? 'URL is not accessible'
+          : ' '
 
   return (
-    <Box sx={{ minWidth: 500, p: 1 }}>
+    <AppInfoEditLayout alert={alert} description={description}>
       <TextField
         error={hasError}
         fullWidth
         helperText={fieldHelperText}
         label={fieldLabel}
         onChange={e => handleUrlInput(e.target.value)}
-        placeholder={helperText || 'not set'}
         size='small'
         value={selectedBaseUrl}
       />
-      <Box sx={{ alignItems: 'center', display: 'flex', height: 60, justifyContent: 'center', mt: 1 }}>
-        {alert ? <ActionsAlert lines={alert.lines} severity={alert.severity || 'info'} /> : null}
-      </Box>
-    </Box>
+    </AppInfoEditLayout>
   )
 }
 

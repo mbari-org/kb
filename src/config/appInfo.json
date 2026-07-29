@@ -2,9 +2,10 @@
   "BASE_URL": {
     "NONE": "not set"
   },
-  "HELPER_TEXT": {
-    "DSG": "URL for DSG Concept Viewing",
-    "MEDIA": "Base URL for Media Assets"
+  "DESCRIPTION": {
+    "DSG": "The URL for DSG concept viewing. Concept names are appended to this URL to generate links to DSG concepts.",
+    "MEDIA": "A base URL for media assets. Users can then attach media file names to the URL.",
+    "PHLOGENY ROOT": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level."
   },
   "TITLE": "App Info",
   "TOOLTIP": "App Info and Optional Settings"

@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import MediaBaseURLContent from '@/components/kb/nav/appInfo/mediaBaseURL/MediaBaseURLContent'
 import AppModalContext from '@/contexts/app/AppModalContext'
+import CONFIG from '@/lib/config'
 
 const renderContent = ({ alert = null, selectedMediaBaseURL = '' } = {}) => {
   const setModalData = vi.fn()
@@ -89,14 +90,19 @@ describe('MediaBaseURLContent', () => {
     expect(screen.getByText('Please enter a valid URL')).toBeInTheDocument()
   })
 
-  it('shows "not set" placeholder and no error for empty value', () => {
+  it('shows no placeholder and no error for empty value', () => {
     renderContent({
       selectedMediaBaseURL: '',
     })
 
     const input = screen.getByRole('textbox', { name: 'Media Base URL' })
-    expect(input).toHaveAttribute('placeholder', 'Base URL for Media Assets')
+    expect(input).not.toHaveAttribute('placeholder')
     expect(screen.queryByText('Please enter a valid URL')).not.toBeInTheDocument()
+  })
+
+  it('renders media description text from app info config', () => {
+    renderContent({ selectedMediaBaseURL: '' })
+    expect(screen.getByText(CONFIG.APP_INFO.DESCRIPTION.MEDIA)).toBeInTheDocument()
   })
 
   it('performs debounced live URL check and shows inaccessible message on failure', async () => {

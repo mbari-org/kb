@@ -5,8 +5,8 @@ import CONFIG from '@/lib/config'
 const DsgConceptURLContent = () => {
   return (
     <BaseURLContent
+      description={CONFIG.APP_INFO.DESCRIPTION.DSG}
       fieldLabel='DSG Concept URL'
-      helperText={CONFIG.APP_INFO.HELPER_TEXT.DSG}
       modalDataValueKey='selectedDsgConceptUrl'
     />
   )
