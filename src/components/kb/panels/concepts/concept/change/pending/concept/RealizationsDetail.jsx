@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingRealization } from '@/lib/concept/state/realizations'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { REALIZATIONS } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
@@ -39,9 +39,7 @@ const RealizationsDetail = ({ pendingConcept }) => {
     </Stack>
   )
 
-  return (
-    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
-  )
+  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
 }
 
 export default RealizationsDetail

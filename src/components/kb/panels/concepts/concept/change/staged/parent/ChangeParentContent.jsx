@@ -8,7 +8,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
 

@@ -13,7 +13,7 @@ import { formatDelta, otherApprovalSx } from '@/components/common/format'
 import { isPendingParent } from '@/lib/concept/state/parent'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
 
@@ -40,16 +40,9 @@ const ParentDetail = ({ pendingConcept }) => {
     </>
   )
 
-  const pendingDetailValues = (
-    <PendingValues pendingValues={pendingInfo(pendingParent)} disabled={disabled} />
-  )
+  const pendingDetailValues = <PendingValues pendingValues={pendingInfo(pendingParent)} disabled={disabled} />
 
-  return (
-    <PendingDetail
-      pendingDetailTitle={pendingDetailTitle}
-      pendingDetailValues={pendingDetailValues}
-    />
-  )
+  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
 }
 
 export default ParentDetail

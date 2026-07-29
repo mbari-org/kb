@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 import { CONCEPT } from '@/lib/constants'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CHILDREN, SOLO: CONCEPT_VALUE, DESCENDANTS } = CONCEPT.EXTENT
 const {
@@ -12,11 +12,7 @@ const {
   TOOLTIP: { EXTENT: EXTENT_TOOLTIP, CHILDREN: CHILDREN_TOOLTIP, DESCENDANTS: DESCENDANTS_TOOLTIP },
 } = CONFIG.CONCEPT.EXTENT
 
-const ConceptExtent = ({
-  initialValue = CONCEPT_VALUE,
-  label = 'Extent:',
-  onChange,
-}) => {
+const ConceptExtent = ({ initialValue = CONCEPT_VALUE, label = 'Extent:', onChange }) => {
   const [conceptExtent, setConceptExtent] = useState(initialValue)
   const theme = useTheme()
 

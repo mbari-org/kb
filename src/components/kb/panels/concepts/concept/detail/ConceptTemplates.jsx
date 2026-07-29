@@ -15,7 +15,7 @@ import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
@@ -35,8 +35,10 @@ const ConceptTemplates = () => {
     const filteredTemplates = filterTemplates(templates, { concepts })
 
     const actionTemplate = template =>
-      stagedState?.templates?.find(stagedTemplate => isSame(template, stagedTemplate)) ||
-     { ...template, action: CONCEPT_STATE.NO_ACTION }
+      stagedState?.templates?.find(stagedTemplate => isSame(template, stagedTemplate)) || {
+        ...template,
+        action: CONCEPT_STATE.NO_ACTION,
+      }
 
     return filteredTemplates.map(template => actionTemplate(template))
   }, [byAvailable, concept.name, getAncestorNames, templates, stagedState?.templates])

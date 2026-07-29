@@ -18,7 +18,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
 import { isStateModified } from '@/lib/concept/state/state'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { CONCEPT } from '@/lib/constants'
 
 const { STAGED, CONCEPT: CONCEPT_MODALS } = CONFIG.PANELS.CONCEPTS.MODALS
@@ -28,10 +28,7 @@ const StagedContent = () => {
   const { closeModal } = use(ConceptModalContext)
 
   const stagedEdits = useMemo(
-    () =>
-      Object.entries(stateUpdates(initialState, stagedState)).sort(([keyA], [keyB]) =>
-        keyA.localeCompare(keyB)
-      ),
+    () => Object.entries(stateUpdates(initialState, stagedState)).sort(([keyA], [keyB]) => keyA.localeCompare(keyB)),
     [initialState, stagedState]
   )
 
@@ -76,9 +73,7 @@ const StagedContent = () => {
   return (
     <Stack direction='column' spacing={1}>
       <ModalActionText text={STAGED.DESCRIPTION} />
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        {stagedEdits.map(stagedComponent)}
-      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{stagedEdits.map(stagedComponent)}</Box>
     </Stack>
   )
 }

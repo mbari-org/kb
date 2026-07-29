@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const DEFAULT_DELAY = 200

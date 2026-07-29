@@ -1,4 +1,4 @@
-import { COMMON } from '@/text'
+import { COMMON } from '@/lib/config'
 
 const after = (ms, fn) => new Promise(resolve => setTimeout(resolve, ms)).then(fn)
 
@@ -8,8 +8,7 @@ const capitalize = string => {
 }
 
 const conceptNameForFilename = str =>
-  (str || COMMON.UTILS.FILENAME.DEFAULT)
-    .replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
+  (str || COMMON.UTILS.FILENAME.DEFAULT).replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
 
 const drop = (from, excludeFields) => {
   if (Array.isArray(from)) return dropElements(from, excludeFields)
@@ -83,13 +82,7 @@ const humanTimestamp = timestamp => {
 }
 
 const isDeepEqual = (obj1, obj2, depth = Infinity) => {
-  if (
-    depth === 0 ||
-    typeof obj1 !== 'object' ||
-    obj1 === null ||
-    typeof obj2 !== 'object' ||
-    obj2 === null
-  ) {
+  if (depth === 0 || typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
     return isEqual(obj1, obj2)
   }
 
@@ -151,8 +144,7 @@ const isEqual = (obj1, obj2) => {
   return true
 }
 
-const isEqualWithout = (arg1, arg2, dropList) =>
-  isJsonEqual(drop(arg1, dropList), drop(arg2, dropList))
+const isEqualWithout = (arg1, arg2, dropList) => isJsonEqual(drop(arg1, dropList), drop(arg2, dropList))
 
 const isJsonEqual = (obj1, obj2) => {
   if (obj1 == null || obj2 == null) throw new Error('isJsonEqual called with null or undefined')
@@ -185,7 +177,6 @@ const isRefEqual = (obj1, obj2, depth = Infinity) => {
 
   return true
 }
-
 
 const pick = (object, fields) => {
   return fields.reduce((result, field) => {
@@ -229,7 +220,8 @@ export {
   conceptNameForFilename,
   deepDiff,
   diff,
-  drop, filterObject,
+  drop,
+  filterObject,
   hasTrue,
   humanTimestamp,
   isDeepEqual,
@@ -245,4 +237,3 @@ export {
   prune,
   sleep,
 }
-

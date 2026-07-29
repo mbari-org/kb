@@ -11,7 +11,7 @@ import InfoIcon from '@/components/icon/InfoIcon'
 import useAppInfoModal from '@/components/kb/nav/appInfo/useAppInfoModal'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const ICON_SIZE = 22
 

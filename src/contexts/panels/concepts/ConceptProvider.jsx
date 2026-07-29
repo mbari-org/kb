@@ -23,7 +23,7 @@ import { getConceptPath } from '@/lib/api/concept'
 import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CONTINUE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 const { PROCESSING } = CONFIG
@@ -60,10 +60,7 @@ const ConceptProvider = ({ children }) => {
   const [initialState, setInitialState] = useState(null)
   const [stagedState, dispatch] = useReducer(conceptStateReducer, {})
 
-  const isConceptModified = useMemo(
-    () => isStateModified({ initialState, stagedState }),
-    [initialState, stagedState]
-  )
+  const isConceptModified = useMemo(() => isStateModified({ initialState, stagedState }), [initialState, stagedState])
 
   const startProcessing = useCallback(
     (key, value) => {
@@ -110,9 +107,7 @@ const ConceptProvider = ({ children }) => {
         setEditing(false)
       }
 
-      const pendingConcept = pendingHistoryRef.current.filter(
-        history => history.concept === updatedConcept.name
-      )
+      const pendingConcept = pendingHistoryRef.current.filter(history => history.concept === updatedConcept.name)
 
       const conceptWithTemplates = {
         ...updatedConcept,
@@ -130,10 +125,7 @@ const ConceptProvider = ({ children }) => {
 
         initialState.aliasIndex = clampIndex(indexRef.current.aliasIndex, initialState.aliases?.length)
         initialState.mediaIndex = clampIndex(indexRef.current.mediaIndex, initialState.media?.length)
-        initialState.realizationIndex = clampIndex(
-          indexRef.current.realizationIndex,
-          initialState.realizations?.length
-        )
+        initialState.realizationIndex = clampIndex(indexRef.current.realizationIndex, initialState.realizations?.length)
       }
 
       const stagedState = structuredClone(initialState)
@@ -217,16 +209,7 @@ const ConceptProvider = ({ children }) => {
 
     const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
     return () => clearTimeout(timeoutId)
-  }, [
-    getConcept,
-    getSelected,
-    handleSetConcept,
-    initialState,
-    isConceptLoaded,
-    isConceptModified,
-    isEditing,
-    taxonomy,
-  ])
+  }, [getConcept, getSelected, handleSetConcept, initialState, isConceptLoaded, isConceptModified, isEditing, taxonomy])
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
@@ -246,10 +229,7 @@ const ConceptProvider = ({ children }) => {
   }, [guardedAction, displayStaged, setModalData])
 
   // Since conceptPath is already created we can use it to determine if the concept is a phylogeny root
-  const isPhylogenyRoot = useMemo(
-    () => conceptPath?.includes(phylogenyRoot) ?? false,
-    [conceptPath, phylogenyRoot]
-  )
+  const isPhylogenyRoot = useMemo(() => conceptPath?.includes(phylogenyRoot) ?? false, [conceptPath, phylogenyRoot])
 
   const onConceptTreeReady = useCallback(() => {
     if (pendingTreeStopRef.current) {
@@ -320,7 +300,9 @@ const ConceptProvider = ({ children }) => {
       pendingTreeTimeoutRef.current = null
     }
 
-    const stop = conceptPath ? () => {} : startProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT_PATH || 'concept path')
+    const stop = conceptPath
+      ? () => {}
+      : startProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT_PATH || 'concept path')
 
     const fetchConceptPath = async () => {
       try {

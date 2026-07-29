@@ -3,7 +3,7 @@ import useFilteredReferences from '@/components/kb/panels/references/useFiltered
 import useReferencesExport from '@/components/kb/panels/references/table/header/useReferencesExport'
 
 import { CONCEPT } from '@/lib/constants'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const ReferencesTableHeaderLeft = () => {
   const { byConcept, filteredReferences } = useFilteredReferences()

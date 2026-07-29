@@ -13,9 +13,13 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
-import { deleteConcept as deleteTaxonomyConcept, getConcept as getTaxonomyConcept, insertConcept } from '@/lib/model/taxonomy'
+import {
+  deleteConcept as deleteTaxonomyConcept,
+  getConcept as getTaxonomyConcept,
+  insertConcept,
+} from '@/lib/model/taxonomy'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const ACTION_LABEL = Object.freeze({
@@ -84,25 +88,28 @@ const DeleteConceptActions = () => {
 
         // CxNote due to closures the taxonomy must be directly manipulated
 
-        await withProcessing(async () => {
-          const preDeleteResults = await preSideEffects(deleteConceptContext)
-          const { closestConcept, taxonomy: updatedTaxonomy } =
-            await deleteTaxonomyConcept(taxonomy, concept, apiFns)
-          const postDeleteResults = await postSideEffects(deleteConceptContext)
+        await withProcessing(
+          async () => {
+            const preDeleteResults = await preSideEffects(deleteConceptContext)
+            const { closestConcept, taxonomy: updatedTaxonomy } = await deleteTaxonomyConcept(taxonomy, concept, apiFns)
+            const postDeleteResults = await postSideEffects(deleteConceptContext)
 
-          const results = { ...preDeleteResults, ...postDeleteResults }
+            const results = { ...preDeleteResults, ...postDeleteResults }
 
-          const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
-          await applyResults(refreshPanelData, results)
+            const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
+            await applyResults(refreshPanelData, results)
 
-          insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
-          updateTaxonomy(updatedTaxonomy)
+            insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+            updateTaxonomy(updatedTaxonomy)
 
-          closeModal(true, () => {
-            updateSelected({ concept: closestConcept.name })
-            setClearTemplateFilters(true)
-          })
-        }, PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
+            closeModal(true, () => {
+              updateSelected({ concept: closestConcept.name })
+              setClearTemplateFilters(true)
+            })
+          },
+          PROCESSING.DELETE,
+          PROCESSING.ARG.CONCEPT
+        )
         break
       }
       default:

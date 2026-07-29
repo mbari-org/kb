@@ -5,7 +5,7 @@ import StagedItems from '@/components/kb/panels/concepts/concept/change/staged/S
 
 import { stagedMediaEdits } from '@/lib/concept/state/media'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const StagedMedia = ({ stagedEdit }) => {
   const stagedItems = useMemo(() => stagedMediaEdits(stagedEdit), [stagedEdit])

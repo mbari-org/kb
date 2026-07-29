@@ -13,7 +13,7 @@ import { pendingChange, pendingRank } from '@/lib/concept/state/rank'
 import { formatDelta, formatField, otherApprovalSx } from '@/components/common/format'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
 
@@ -75,20 +75,14 @@ const RankDetail = ({ pendingConcept }) => {
             }}
           >
             <FieldValueDisplay disabled={disabled} field={fieldName} value={fieldDelta} />
-            <PendingValues
-              leftMargin={2}
-              pendingValues={pendingInfo(pendingRank)}
-              disabled={disabled}
-            />
+            <PendingValues leftMargin={2} pendingValues={pendingInfo(pendingRank)} disabled={disabled} />
           </Box>
         )
       })}
     </Box>
   )
 
-  return (
-    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
-  )
+  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
 }
 
 export default RankDetail

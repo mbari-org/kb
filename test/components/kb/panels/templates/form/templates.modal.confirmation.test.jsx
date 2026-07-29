@@ -7,7 +7,7 @@ import useDeleteTemplateButton from '@/components/kb/panels/templates/form/useDe
 import { createDeleteTemplateContent } from '@/components/kb/panels/templates/form/templateModalUtils'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 let mockModalData = null
 let createModalMock

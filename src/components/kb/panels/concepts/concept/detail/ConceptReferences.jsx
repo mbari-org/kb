@@ -10,7 +10,7 @@ import useGuardedAction from '@/contexts/user/useGuardedAction'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { REFERENCES } = SELECTED.SETTINGS
 
@@ -52,11 +52,7 @@ const ConceptReferences = () => {
       renderComponent={ReferenceComponent}
       title={CONFIG.PANELS.CONCEPTS.REFERENCES.LABEL}
       actionComponent={() => (
-        <InspectIcon
-          asDiv={true}
-          onClick={linkToReferences}
-          tooltip={CONFIG.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP}
-        />
+        <InspectIcon asDiv={true} onClick={linkToReferences} tooltip={CONFIG.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP} />
       )}
     />
   )

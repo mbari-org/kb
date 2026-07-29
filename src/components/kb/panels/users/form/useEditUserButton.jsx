@@ -12,7 +12,7 @@ import {
   createModalContent,
 } from '@/components/kb/panels/users/form/userModalUtils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const { CANCEL, CONFIRM_DISCARD, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON

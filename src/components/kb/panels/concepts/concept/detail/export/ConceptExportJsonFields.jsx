@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box } from '@mui/material'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { OPTIONAL_FIELDS } from './useConceptData'
 import ConceptExportJsonField from './ConceptExportJsonField'
 

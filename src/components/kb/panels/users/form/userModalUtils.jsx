@@ -6,7 +6,7 @@ import { EMAIL_REGEX } from '@/lib/constants'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CANCEL, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
@@ -15,44 +15,44 @@ const EDITABLE_ADD = [...EDITABLE, 'username']
 
 export const createUserValidator =
   (isEdit = false) =>
-    userData => {
-      const requiredFields = isEdit ? EDITABLE_ADD : [...EDITABLE_ADD, 'password']
+  userData => {
+    const requiredFields = isEdit ? EDITABLE_ADD : [...EDITABLE_ADD, 'password']
 
-      const allFieldsFilled = requiredFields.every(field => {
-        const value = userData[field] || ''
-        return value.trim() !== ''
-      })
+    const allFieldsFilled = requiredFields.every(field => {
+      const value = userData[field] || ''
+      return value.trim() !== ''
+    })
 
-      const isEmailValid = EMAIL_REGEX.test(userData.email || '')
+    const isEmailValid = EMAIL_REGEX.test(userData.email || '')
 
-      const passwordsMatch = isEdit
-        ? userData.password
-          ? userData.password === userData.confirmPassword
-          : true
-        : userData.password === userData.confirmPassword
+    const passwordsMatch = isEdit
+      ? userData.password
+        ? userData.password === userData.confirmPassword
+        : true
+      : userData.password === userData.confirmPassword
 
-      return allFieldsFilled && isEmailValid && passwordsMatch
-    }
+    return allFieldsFilled && isEmailValid && passwordsMatch
+  }
 
 const createChangeDetector =
   (isEdit = false) =>
-    (userData, original = null) => {
-      if (!isEdit) {
+  (userData, original = null) => {
+    if (!isEdit) {
       // For add mode, any non-empty field means changes
-        const fieldsToCheck = [...EDITABLE_ADD, 'password']
-        return fieldsToCheck.some(field => {
-          const value = userData[field] || ''
-          return value.trim() !== ''
-        })
-      }
-
-      // For edit mode, compare with original
-      const fieldsToCompare = EDITABLE
-      return (
-        fieldsToCompare.some(field => userData[field] !== original[field]) ||
-      (userData.password && userData.password.trim() !== '')
-      )
+      const fieldsToCheck = [...EDITABLE_ADD, 'password']
+      return fieldsToCheck.some(field => {
+        const value = userData[field] || ''
+        return value.trim() !== ''
+      })
     }
+
+    // For edit mode, compare with original
+    const fieldsToCompare = EDITABLE
+    return (
+      fieldsToCompare.some(field => userData[field] !== original[field]) ||
+      (userData.password && userData.password.trim() !== '')
+    )
+  }
 
 const createFormChangeHandler = (updateModalData, isEdit = false) => {
   const validateUser = createUserValidator(isEdit)
@@ -78,21 +78,20 @@ const createFormChangeHandler = (updateModalData, isEdit = false) => {
 
 export const createModalActions =
   (handleCancel, handleCommit, saveLabel = SAVE) =>
-    currentModalData =>
-      [
-        {
-          color: 'cancel',
-          disabled: false,
-          label: CANCEL,
-          onClick: handleCancel,
-        },
-        {
-          color: 'primary',
-          disabled: !currentModalData.isValid || !currentModalData.hasChanges,
-          label: saveLabel,
-          onClick: () => handleCommit(currentModalData.user, currentModalData.original),
-        },
-      ]
+  currentModalData => [
+    {
+      color: 'cancel',
+      disabled: false,
+      label: CANCEL,
+      onClick: handleCancel,
+    },
+    {
+      color: 'primary',
+      disabled: !currentModalData.isValid || !currentModalData.hasChanges,
+      label: saveLabel,
+      onClick: () => handleCommit(currentModalData.user, currentModalData.original),
+    },
+  ]
 
 export const createModalContent = (handleFormChange, users, isEdit) => {
   const formKey = isEdit ? 'edit-user-form' : 'add-user-form'
@@ -147,10 +146,7 @@ export const processEditUserData = (user, original) => {
 }
 
 export const processAddUserData = user => {
-  return filterObject(
-    pick(user, [...EDITABLE_ADD, 'password']),
-    (key, value) => value && value.trim() !== ''
-  )
+  return filterObject(pick(user, [...EDITABLE_ADD, 'password']), (key, value) => value && value.trim() !== '')
 }
 
 export const createHandlers = (updateModalData, closeModal, isEdit) => {

@@ -17,7 +17,7 @@ import csvExport from '@/lib/csvExport'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 const { PROCESSING } = CONFIG

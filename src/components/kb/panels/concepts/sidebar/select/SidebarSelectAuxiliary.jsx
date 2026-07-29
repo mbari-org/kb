@@ -3,7 +3,7 @@ import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 import ConceptExport from '@/components/kb/panels/concepts/sidebar/select/ConceptExport'
 import ConceptScroll from '@/components/kb/panels/concepts/sidebar/select/ConceptScroll'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const SidebarSelectAuxiliary = ({ concepts, onScrollToConcept }) => {
   const conceptExport = <ConceptExport />

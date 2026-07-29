@@ -1,23 +1,19 @@
 import { useCallback } from 'react'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 
 const useSetProcessing = (setProcessingState, setProcessingMessage) => {
   return useCallback(
     (processingKey, processingValue) => {
-      const keyName = Object.keys(PROCESSING).find(
-        key => PROCESSING[key] === processingKey
-      )
+      const keyName = Object.keys(PROCESSING).find(key => PROCESSING[key] === processingKey)
 
       if (!keyName) {
         const validKeys = Object.keys(PROCESSING)
           .filter(key => key !== PROCESSING.OFF)
           .join(', ')
-        throw new Error(
-          `Invalid PROCESSING key: ${processingKey}. Valid keys are: ${validKeys}`
-        )
+        throw new Error(`Invalid PROCESSING key: ${processingKey}. Valid keys are: ${validKeys}`)
       }
 
       if (processingKey === PROCESSING.OFF) {

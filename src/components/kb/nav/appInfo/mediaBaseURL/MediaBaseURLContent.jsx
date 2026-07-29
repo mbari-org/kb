@@ -1,6 +1,6 @@
 import BaseURLContent from '@/components/kb/nav/appInfo/baseURL/BaseURLContent'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const MediaBaseURLContent = () => {
   return (

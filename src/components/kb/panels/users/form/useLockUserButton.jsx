@@ -13,7 +13,7 @@ import {
   createLockUserContent,
   createLockUserTitle,
 } from '@/components/kb/panels/users/form/userModalUtils'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CANCEL, CLOSE, LOCK, UNLOCK } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
@@ -48,8 +48,7 @@ const useLockUserButton = () => {
     user => {
       // Check if this is the last unlocked admin
       const unlockedAdmins = users.filter(user => user.role === ROLES.ADMIN && !user.locked)
-      const isLastAdmin =
-        unlockedAdmins.length === 1 && unlockedAdmins[0].username === user.username
+      const isLastAdmin = unlockedAdmins.length === 1 && unlockedAdmins[0].username === user.username
 
       const ActionView = () => {
         const { modalData } = useUsersModalDataContext()

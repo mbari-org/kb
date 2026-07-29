@@ -3,7 +3,7 @@ import { CiEdit } from 'react-icons/ci'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const AppInfoDetail = ({ editTooltip, label, onEdit, value }) => {
   const hasEditAction = typeof onEdit === 'function'

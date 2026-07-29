@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const TOOLTIP_FONT = {
   SIZE: '1em',
@@ -17,14 +17,10 @@ const ConceptTemplatesSwitchTooltip = ({ byAvailable }) => {
       </Typography>
       <Stack direction='column' spacing={1}>
         <Stack direction='column' spacing={0.25}>
-          <Typography color={byAvailable ? 'inherit' : 'grey.500'}>
-            {SWITCH.TOOLTIP.AVAILABLE}
-          </Typography>
+          <Typography color={byAvailable ? 'inherit' : 'grey.500'}>{SWITCH.TOOLTIP.AVAILABLE}</Typography>
         </Stack>
         <Stack direction='column' spacing={0.25}>
-          <Typography color={byAvailable ? 'grey.500' : 'inherit'}>
-            {SWITCH.TOOLTIP.EXPLICIT}
-          </Typography>
+          <Typography color={byAvailable ? 'grey.500' : 'inherit'}>{SWITCH.TOOLTIP.EXPLICIT}</Typography>
         </Stack>
       </Stack>
     </Stack>

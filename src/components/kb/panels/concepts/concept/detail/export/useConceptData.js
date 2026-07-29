@@ -10,7 +10,7 @@ import { loadAliases } from '@/lib/model/aliases'
 import { loadReferences } from '@/lib/model/reference'
 import { loadTemplates } from '@/lib/model/templates'
 import { drop } from '@/lib/utils'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 export const ALWAYS_INCLUDED_FIELDS = ['name', 'children']

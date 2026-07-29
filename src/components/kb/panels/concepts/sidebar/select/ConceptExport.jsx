@@ -2,7 +2,7 @@ import Button from '@mui/material/Button'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import useConceptExportModal from '@/components/kb/panels/concepts/concept/detail/export/useConceptExportModal'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const exportTooltip = CONFIG.PANELS.CONCEPTS.EXPORT.TOOLTIP.EXPORT
 const exportButtonLabel = CONFIG.PANELS.CONCEPTS.EXPORT.BUTTON.EXPORT

@@ -5,7 +5,7 @@ import { Stack, Typography } from '@mui/material'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { SELECTED } from '@/lib/constants'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const TOOLTIP_FONT = {
   SIZE: '1em',
@@ -26,18 +26,10 @@ const selectedAvailableMessaging = (byAvailable, concept) => {
   }
 
   if (concept && !byAvailable) {
-    return [
-      SWITCH.EXPLICIT.TITLE,
-      SWITCH.EXPLICIT.CONCEPT,
-      SWITCH.EXPLICIT.TEMPLATES,
-    ]
+    return [SWITCH.EXPLICIT.TITLE, SWITCH.EXPLICIT.CONCEPT, SWITCH.EXPLICIT.TEMPLATES]
   }
 
-  return [
-    SWITCH.AVAILABLE.TITLE,
-    SWITCH.AVAILABLE.CONCEPT,
-    SWITCH.AVAILABLE.TEMPLATES,
-  ]
+  return [SWITCH.AVAILABLE.TITLE, SWITCH.AVAILABLE.CONCEPT, SWITCH.AVAILABLE.TEMPLATES]
 }
 
 const TemplatesConceptAvailableTooltip = () => {

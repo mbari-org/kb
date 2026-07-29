@@ -2,7 +2,7 @@ import { use } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import BaseURLActions from '@/components/kb/nav/appInfo/baseURL/BaseURLActions'
 import { PREFS } from '@/lib/constants/prefs.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const MediaBaseUrlKey = PREFS.APP.MEDIA.BASE_URL.KEY
 const { INVALID_URL, SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.MEDIA_BASE_URL.ALERT

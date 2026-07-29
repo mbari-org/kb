@@ -4,7 +4,7 @@ import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { CONCEPT } from '@/lib/constants'
 
 import { SELECTED } from '@/lib/constants/selected.js'

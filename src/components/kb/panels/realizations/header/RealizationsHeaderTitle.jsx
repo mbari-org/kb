@@ -2,7 +2,7 @@ import { use } from 'react'
 import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
 import useFilterStringTooltip from '@/lib/hooks/useFilterStringTooltip'
 

@@ -14,7 +14,7 @@ import useDebounce from '@/lib/hooks/useDebounce'
 
 import { duplicateTemplateAlert, isDuplicateTemplate } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { ADD, EDIT } = CONFIG.PANELS.TEMPLATES.MODALS
 const TO_NIL = 'nil'

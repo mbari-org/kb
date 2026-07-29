@@ -13,7 +13,7 @@ import {
   confirmTemplateDeleteAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const { CANCEL, DELETE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
@@ -47,7 +47,6 @@ const useDeleteTemplateButton = () => {
     },
     [closeModal, deleteTemplate, showBoundary, withProcessing]
   )
-
 
   return useCallback(
     template => {

@@ -10,7 +10,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import useGuardedAction from '@/contexts/user/useGuardedAction'
 
 import { SELECTED } from '@/lib/constants/selected.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 

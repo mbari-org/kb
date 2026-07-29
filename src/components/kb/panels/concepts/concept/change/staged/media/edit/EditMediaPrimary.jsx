@@ -4,7 +4,7 @@ import KBTooltipFormControlLabel from '@/components/common/tooltip/KBTooltipForm
 
 import { getItemMediaType, hasPrimaryOfType, mediaOfType } from '@/lib/model/media'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 

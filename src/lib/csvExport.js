@@ -1,4 +1,4 @@
-import { COMMON } from '@/text'
+import { COMMON } from '@/lib/config'
 
 import { csvEscape, csvHeaders, csvOut } from '@/lib/csv'
 import { createError } from '@/lib/errors'
@@ -16,8 +16,7 @@ const csvExport = ({
   title,
   user,
 }) => {
-  const csvRowsToString = dataRows =>
-    dataRows.map(row => row.map(csvEscape).join(',')).join('\n') + '\n'
+  const csvRowsToString = dataRows => dataRows.map(row => row.map(csvEscape).join(',')).join('\n') + '\n'
 
   const csvComments = count => {
     let commentText = `# ${title}\n`
@@ -45,7 +44,9 @@ const csvExport = ({
 
           while (hasMoreData) {
             if (onProgress && estimatedTotalPages) {
-              onProgress(COMMON.EXPORT.CSV.PROGRESS.replace('{page}', pageIndex + 1).replace('{total}', estimatedTotalPages))
+              onProgress(
+                COMMON.EXPORT.CSV.PROGRESS.replace('{page}', pageIndex + 1).replace('{total}', estimatedTotalPages)
+              )
             }
 
             const data = await getData(pageIndex)
@@ -129,7 +130,9 @@ const csvExport = ({
 
         while (hasMoreData) {
           if (onProgress && estimatedTotalPages) {
-            onProgress(COMMON.EXPORT.CSV.PROGRESS.replace('{page}', pageIndex + 1).replace('{total}', estimatedTotalPages))
+            onProgress(
+              COMMON.EXPORT.CSV.PROGRESS.replace('{page}', pageIndex + 1).replace('{total}', estimatedTotalPages)
+            )
           }
 
           const data = await getData(pageIndex)

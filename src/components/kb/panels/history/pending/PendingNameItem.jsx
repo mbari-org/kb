@@ -14,7 +14,7 @@ import { isAdmin } from '@/lib/auth/role'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
@@ -44,22 +44,13 @@ const PendingNameItem = ({ item, user }) => {
       <PendingValues disabled={false} leftMargin={6} pendingValues={pendingInfo(item)} />
       {isAdminUser && (
         <Box sx={{ ml: 16 }}>
-          <NameChangeExtent
-            disabled={!enableExtent}
-            nameChangeType={nameChangeType}
-            onChange={handleNameChangeType}
-          />
+          <NameChangeExtent disabled={!enableExtent} nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         </Box>
       )}
     </>
   )
 
-  return (
-    <PendingDetail
-      pendingDetailTitle={pendingDetailTitle}
-      pendingDetailValues={pendingDetailValues}
-    />
-  )
+  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
 }
 
 export default PendingNameItem

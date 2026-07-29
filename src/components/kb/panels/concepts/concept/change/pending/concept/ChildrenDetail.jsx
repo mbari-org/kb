@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingChild } from '@/lib/concept/state/children'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CHILDREN } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
@@ -46,9 +46,7 @@ const ChildrenDetail = ({ pendingConcept }) => {
     </Stack>
   )
 
-  return (
-    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
-  )
+  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
 }
 
 export default ChildrenDetail

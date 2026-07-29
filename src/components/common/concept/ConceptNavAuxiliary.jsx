@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import ConceptSelectAuxiliary from '@/components/common/concept/ConceptSelectAuxiliary'
 import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const ConceptNavAuxiliary = ({ concepts, disabled = false }) => {
   return (

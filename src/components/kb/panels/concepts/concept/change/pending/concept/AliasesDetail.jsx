@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingAlias } from '@/lib/concept/state/aliases'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { ALIASES } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
@@ -39,9 +39,7 @@ const AliasesDetail = ({ pendingConcept }) => {
     </Stack>
   )
 
-  return (
-    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
-  )
+  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
 }
 
 export default AliasesDetail

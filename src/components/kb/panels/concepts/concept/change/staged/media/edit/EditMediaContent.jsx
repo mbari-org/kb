@@ -17,7 +17,7 @@ import { actionVerb } from '@/components/kb/panels/concepts/concept/change/actio
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { EMPTY_MEDIA_ITEM } from './mediaItem'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 import { ACTION } from '@/lib/constants'
 
@@ -154,12 +154,7 @@ const EditMediaContent = () => {
         />
       </FormControl>
       <FormControl fullWidth margin='normal'>
-        <TextField
-          label='Caption'
-          name='caption'
-          onChange={handleChange}
-          value={formMediaItem.caption}
-        />
+        <TextField label='Caption' name='caption' onChange={handleChange} value={formMediaItem.caption} />
       </FormControl>
       <EditMediaPrimary
         action={action}

@@ -13,7 +13,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
@@ -30,16 +30,11 @@ const RealizationActionIcon = ({ action, realizationIndex, size }) => {
   }
 
   const tooltip =
-    action === ADD
-      ? REALIZATION.ADD.TOOLTIP
-      : action === DELETE
-        ? REALIZATION.DELETE.TOOLTIP
-        : REALIZATION.EDIT.TOOLTIP
+    action === ADD ? REALIZATION.ADD.TOOLTIP : action === DELETE ? REALIZATION.DELETE.TOOLTIP : REALIZATION.EDIT.TOOLTIP
 
   const onClick = useCallback(() => {
     try {
-      const realizationItem =
-        action === ADD ? EMPTY_REALIZATION : stagedState.realizations[realizationIndex]
+      const realizationItem = action === ADD ? EMPTY_REALIZATION : stagedState.realizations[realizationIndex]
 
       const modalData = {
         action,
@@ -58,8 +53,7 @@ const RealizationActionIcon = ({ action, realizationIndex, size }) => {
     }
   }, [action, realizationIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
-  const IconComponent =
-    action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
+  const IconComponent = action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
   return <IconComponent onClick={onClick} size={size} tooltip={tooltip} />
 }

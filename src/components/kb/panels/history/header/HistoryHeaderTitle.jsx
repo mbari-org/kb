@@ -5,7 +5,7 @@ import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { CONCEPT, SELECTED } from '@/lib/constants'
 
 const { TYPE } = CONCEPT.HISTORY

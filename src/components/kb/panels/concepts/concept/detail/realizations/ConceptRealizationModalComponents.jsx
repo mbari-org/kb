@@ -6,7 +6,7 @@ import { createActions } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CLOSE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
 
@@ -76,8 +76,4 @@ const ConceptRealizationModalActions = () => {
   )
 }
 
-export {
-  ConceptRealizationModalActions,
-  ConceptRealizationModalContent,
-  ConceptRealizationModalTitle,
-}
+export { ConceptRealizationModalActions, ConceptRealizationModalContent, ConceptRealizationModalTitle }

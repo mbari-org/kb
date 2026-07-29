@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingTemplate } from '@/lib/concept/state/templates'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { TEMPLATES } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
@@ -39,9 +39,7 @@ const TemplatesDetail = ({ pendingConcept }) => {
     </Stack>
   )
 
-  return (
-    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
-  )
+  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
 }
 
 export default TemplatesDetail

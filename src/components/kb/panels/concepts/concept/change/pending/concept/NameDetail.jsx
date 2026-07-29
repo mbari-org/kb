@@ -20,7 +20,7 @@ import { isPendingName } from '@/lib/concept/state/name'
 import { pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
@@ -69,25 +69,16 @@ const NameDetail = ({ pendingConcept }) => {
 
   const pendingGroupDetail = (
     <>
-      <PendingValues
-        disabled={approval === APPROVAL.OTHER}
-        pendingValues={pendingInfo(pendingName)}
-      />
+      <PendingValues disabled={approval === APPROVAL.OTHER} pendingValues={pendingInfo(pendingName)} />
       {isAdminUser && (
         <Box sx={{ ml: 16 }}>
-          <NameChangeExtent
-            disabled={!enableExtent}
-            nameChangeType={nameChangeType}
-            onChange={handleNameChangeType}
-          />
+          <NameChangeExtent disabled={!enableExtent} nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         </Box>
       )}
     </>
   )
 
-  return (
-    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
-  )
+  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
 }
 
 export default NameDetail

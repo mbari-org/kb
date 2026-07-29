@@ -6,7 +6,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { PREFS } from '@/lib/constants/prefs.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const phylogenyRootKey = PREFS.APP.PHYLOGENY.ROOT.KEY
 const { CANCEL, SAVE } = CONFIG.PANELS.CONCEPTS.BUTTON

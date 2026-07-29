@@ -20,7 +20,7 @@ import useChangeNameHandlers from './useChangeNameHandlers'
 
 import { isAdmin } from '@/lib/auth/role'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
 const { TEMPLATES_DEFINED } = MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS

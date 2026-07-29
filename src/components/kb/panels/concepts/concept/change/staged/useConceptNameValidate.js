@@ -6,7 +6,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const CHANGE_NAME = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
 
@@ -35,25 +35,17 @@ const useConceptNameValidate = (formData, modifiedFields) => {
         .map(alias => alias.name),
     ]
     return !existingNames.includes(name)
-  }, [
-    formData.name,
-    formData.value,
-    getNames,
-    stagedState.name,
-    stagedState.children,
-    stagedState.aliases,
-    modalData,
-  ])
+  }, [formData.name, formData.value, getNames, stagedState.name, stagedState.children, stagedState.aliases, modalData])
 
   const nameError = modifiedFields.name && !isValidName
 
   const nameHelperText = !modifiedFields.name
     ? ''
     : (formData.name || formData.value || '').trim() === ''
-        ? CHANGE_NAME.NAME_HELPER_TEXT
-        : !isValidName
-            ? CHANGE_NAME.NAME_ERROR
-            : ''
+      ? CHANGE_NAME.NAME_HELPER_TEXT
+      : !isValidName
+        ? CHANGE_NAME.NAME_ERROR
+        : ''
 
   return {
     nameError,

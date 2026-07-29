@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 
 import { clearStores } from '@/lib/local/store/clearStores'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 import whoopsImage from '@/assets/whoops.jpg'
 
@@ -20,8 +20,7 @@ const Whoops = ({ children }) => {
     window.location.href = BAIL_TO_LOCATION
   }
 
-  const handleReset = () =>
-    window.location.href = BAIL_TO_LOCATION
+  const handleReset = () => (window.location.href = BAIL_TO_LOCATION)
 
   const handleCopyInfo = async error => {
     const stack = error.original?.stack || error.stack
@@ -29,9 +28,7 @@ const Whoops = ({ children }) => {
       ? `${error.title}: ${error.message}\n${error.details ? JSON.stringify(error.details, null, 2) : ''}`
       : CONFIG.WHOOPS.MESSAGE.UNEXPECTED
 
-    const infoToCopy = `${responseMessage}\n\nStack Trace:\n${
-      stack || CONFIG.WHOOPS.MESSAGE.NO_STACK
-    }`
+    const infoToCopy = `${responseMessage}\n\nStack Trace:\n${stack || CONFIG.WHOOPS.MESSAGE.NO_STACK}`
 
     await navigator.clipboard.writeText(infoToCopy)
     alert(CONFIG.WHOOPS.ALERT)
@@ -98,9 +95,7 @@ const Whoops = ({ children }) => {
               {CONFIG.WHOOPS.MESSAGE.ERROR}
             </Typography>
 
-            <Box
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', mt: 1 }}
-            >
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', mt: 1 }}>
               <Button
                 onClick={() => handleCopyInfo(error)}
                 sx={{
@@ -148,18 +143,14 @@ const Whoops = ({ children }) => {
               <Typography sx={{ fontWeight: 'bold' }} variant='body2'>
                 {CONFIG.WHOOPS.BUTTON.LOGOUT}:
               </Typography>
-              <Typography variant='body2'>
-                {CONFIG.WHOOPS.MESSAGE.LOGOUT}
-              </Typography>
+              <Typography variant='body2'>{CONFIG.WHOOPS.MESSAGE.LOGOUT}</Typography>
             </Stack>
 
             <Stack direction='row' spacing={1}>
               <Typography sx={{ fontWeight: 'bold' }} variant='body2'>
                 {CONFIG.WHOOPS.BUTTON.RESET}:
               </Typography>
-              <Typography variant='body2'>
-                {CONFIG.WHOOPS.MESSAGE.RESET}
-              </Typography>
+              <Typography variant='body2'>{CONFIG.WHOOPS.MESSAGE.RESET}</Typography>
             </Stack>
           </Box>
         </Box>

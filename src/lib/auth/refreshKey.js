@@ -1,4 +1,4 @@
-import { COMMON } from '@/text'
+import { COMMON } from '@/lib/config'
 
 const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle
 const IVL = COMMON.SECURITY.ENCRYPTION.IV_LENGTH

@@ -6,7 +6,7 @@ import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
 import useHistoryExport from '@/components/kb/panels/history/table/header/useHistoryExport'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const HistoryTableHeaderLeft = () => {
   const { conceptState } = use(HistoryContext)

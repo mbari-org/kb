@@ -5,14 +5,13 @@ import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 import { capitalize, humanTimestamp, isEmpty, pick } from '@/lib/utils'
 
 const { CONCEPT: group } = CONFIG.PANELS.CONCEPTS.MODALS
 
-const hasPending = (pending, field) =>
-  field ? !isEmpty(pendingItems(pending, field)) : !isEmpty(pending)
+const hasPending = (pending, field) => (field ? !isEmpty(pendingItems(pending, field)) : !isEmpty(pending))
 
 const pendingItems = (pendingConcept, field) => {
   if (!pendingConcept) return []
@@ -125,4 +124,3 @@ export {
   pendingItems,
   pendingValues,
 }
-

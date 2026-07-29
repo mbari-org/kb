@@ -13,7 +13,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { aliasFields, EMPTY_ALIAS } from '@/lib/model/aliases'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { ALIAS } = CONFIG.PANELS.CONCEPTS.MODALS
 
@@ -52,8 +52,7 @@ const AliasActionIcon = ({ action, aliasIndex, size }) => {
     }
   }, [action, aliasIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
 
-  const IconComponent =
-    action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
+  const IconComponent = action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
   return <IconComponent onClick={onClick} size={size} tooltip={tooltip} />
 }

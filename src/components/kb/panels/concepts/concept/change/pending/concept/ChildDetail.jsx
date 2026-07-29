@@ -14,7 +14,7 @@ import { pendingInfo } from '@/lib/model/history'
 
 import { ACTION, CONCEPT } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
 
@@ -57,12 +57,7 @@ const ChildDetail = ({ pendingChild }) => {
 
   const pendingDetailValues = <PendingValues pendingValues={childInfo} disabled={disabled} />
 
-  return (
-    <PendingDetail
-      pendingDetailTitle={pendingDetailTitle}
-      pendingDetailValues={pendingDetailValues}
-    />
-  )
+  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
 }
 
 export default ChildDetail

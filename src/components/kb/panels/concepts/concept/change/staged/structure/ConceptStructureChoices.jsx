@@ -12,7 +12,7 @@ import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/chang
 import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CONCEPT, PROCESSING } = CONFIG
 
@@ -29,24 +29,26 @@ const ChangeStructureChoices = ({ closeChoices }) => {
     throw asyncError
   }
 
-  const handleClick = (structureFn, processingValue = null) => async event => {
-    event.preventDefault()
-    closeChoices()
-    try {
-      if (processingValue) {
-        const stop = beginProcessing(PROCESSING.LOAD, processingValue)
-        try {
-          await structureFn()
-        } finally {
-          stop()
+  const handleClick =
+    (structureFn, processingValue = null) =>
+    async event => {
+      event.preventDefault()
+      closeChoices()
+      try {
+        if (processingValue) {
+          const stop = beginProcessing(PROCESSING.LOAD, processingValue)
+          try {
+            await structureFn()
+          } finally {
+            stop()
+          }
+          return
         }
-        return
+        await structureFn()
+      } catch (error) {
+        setAsyncError(error)
       }
-      await structureFn()
-    } catch (error) {
-      setAsyncError(error)
     }
-  }
 
   return (
     <Modal open={true} onClose={closeChoices}>

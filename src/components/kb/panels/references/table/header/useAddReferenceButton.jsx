@@ -20,7 +20,7 @@ import {
   processAddReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 const { PROCESSING } = CONFIG
 
 const { REFERENCES } = SELECTED.SETTINGS
@@ -29,15 +29,16 @@ const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTT
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)
   const { addReference } = use(ReferencesContext)
-  const { closeModal, createModal, updateModalData, withProcessing } =
-    useReferencesModalOperationsContext()
+  const { closeModal, createModal, updateModalData, withProcessing } = useReferencesModalOperationsContext()
   const { getSelected, getSettings } = use(SelectedContext)
 
   const conceptName = getSelected(SELECTED.CONCEPT)
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
 
-  const initialReferenceData = useMemo(() =>
-    createInitialReference(byConcept ? conceptName : null), [byConcept, conceptName])
+  const initialReferenceData = useMemo(
+    () => createInitialReference(byConcept ? conceptName : null),
+    [byConcept, conceptName]
+  )
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, false, isDoiUnique),
@@ -110,7 +111,7 @@ const useAddReferenceButton = () => {
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges) ? DISCARD : a.label)
+      const labels = actions.map((a, i) => (i === 0 && modalData?.hasChanges ? DISCARD : a.label))
       const onAction = async label => {
         switch (label) {
           case DISCARD:

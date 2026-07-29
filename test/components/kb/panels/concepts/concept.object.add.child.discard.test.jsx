@@ -23,7 +23,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import { initialConceptState } from '@/lib/concept/state/state'
@@ -36,9 +36,7 @@ const resolveActionTarget = element => {
   if (!element) return null
   if (element.tagName?.toLowerCase() === 'button') return element
   return (
-    element.querySelector?.('button, [role="button"], div') ||
-    element.closest?.('button, [role="button"], div') ||
-    null
+    element.querySelector?.('button, [role="button"], div') || element.closest?.('button, [role="button"], div') || null
   )
 }
 
@@ -172,10 +170,13 @@ const TestWrapper = ({ children }) => {
     goForward: () => concept?.name,
   }
 
-  const mockGetSelected = useCallback(key => {
-    if (key === 'concept') return concept?.name
-    return 'Concepts'
-  }, [concept])
+  const mockGetSelected = useCallback(
+    key => {
+      if (key === 'concept') return concept?.name
+      return 'Concepts'
+    },
+    [concept]
+  )
 
   const mockUpdateSelected = useCallback(({ concept: conceptName }) => {
     if (conceptName) {
@@ -271,14 +272,14 @@ const TestWrapper = ({ children }) => {
   )
 }
 
-
 const getStructureIconButton = () => {
   const byLabel = screen.queryByLabelText(/edit concept structure/i)
   if (byLabel) return resolveActionTarget(byLabel)
   const byRole = screen.queryByRole('button', { name: /edit concept structure/i })
   if (byRole) return byRole
-  const byTitle = Array.from(document.querySelectorAll('[title]'))
-    .find(element => element.getAttribute('title')?.toLowerCase() === 'edit concept structure')
+  const byTitle = Array.from(document.querySelectorAll('[title]')).find(
+    element => element.getAttribute('title')?.toLowerCase() === 'edit concept structure'
+  )
   return resolveActionTarget(byTitle)
 }
 
@@ -345,10 +346,13 @@ describe('concept object add child discard', () => {
     await user.type(authorInput, 'me')
 
     // Wait for debounced modalData update so Stage button becomes enabled
-    await waitFor(() => {
-      const stageButton = screen.getByRole('button', { name: /staged?/i })
-      expect(stageButton).toBeEnabled()
-    }, { timeout: 3000 })
+    await waitFor(
+      () => {
+        const stageButton = screen.getByRole('button', { name: /staged?/i })
+        expect(stageButton).toBeEnabled()
+      },
+      { timeout: 3000 }
+    )
 
     // Click Stage
     const stageButton = screen.getByRole('button', { name: /staged?/i })

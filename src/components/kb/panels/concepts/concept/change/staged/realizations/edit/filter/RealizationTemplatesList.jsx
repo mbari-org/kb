@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ConceptSectionTitle from '@/components/common/ConceptSectionTitle'
 import RealizationTemplate from './RealizationTemplate'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CONCEPT } = CONFIG
 const HEADER_HEIGHT = 42

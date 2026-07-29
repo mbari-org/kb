@@ -5,7 +5,7 @@ import HistoryHeaderTitle from '@/components/kb/panels/history/header/HistoryHea
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import { CONCEPT, SELECTED } from '@/lib/constants'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const renderTitle = ({
   selectedType = SELECTED.SETTINGS.HISTORY.TYPES.APPROVED,

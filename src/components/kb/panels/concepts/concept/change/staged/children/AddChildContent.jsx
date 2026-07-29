@@ -18,7 +18,7 @@ import { rankField } from '@/lib/concept/state/rank'
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
 

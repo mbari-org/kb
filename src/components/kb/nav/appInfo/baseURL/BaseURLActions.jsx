@@ -6,7 +6,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 
 import isValidUrl from '@/lib/validators/isValidUrl'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CANCEL, SAVE } = CONFIG.PANELS.CONCEPTS.BUTTON
 
@@ -30,7 +30,10 @@ const BaseURLActions = ({
   const isCurrentBaseUrl = trimmedBaseUrl === currentBaseUrl
 
   const colors = ['cancel', 'main']
-  const disabled = [false, !isValidBaseUrl || (!isEmptyBaseUrl && (urlStatus.loading || !urlStatus.valid)) || isCurrentBaseUrl]
+  const disabled = [
+    false,
+    !isValidBaseUrl || (!isEmptyBaseUrl && (urlStatus.loading || !urlStatus.valid)) || isCurrentBaseUrl,
+  ]
   const labels = [CANCEL, SAVE]
 
   const onAction = async label => {

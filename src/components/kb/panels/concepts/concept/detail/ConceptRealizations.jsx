@@ -12,7 +12,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import useGuardedAction from '@/contexts/user/useGuardedAction'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const ConceptRealizations = () => {
   const { isEditing, stagedState } = use(ConceptContext)

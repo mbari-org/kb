@@ -7,7 +7,7 @@ import ExportCompleteTitle from '@/components/kb/export/ExportCompleteTitle'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 

@@ -5,7 +5,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import { diff, filterObject, pick } from '@/lib/utils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG.PANELS.TEMPLATES.MODALS
 const { ADD, EDIT, DELETE: DELETE_MODAL } = CONFIG.PANELS.TEMPLATES.MODALS

@@ -4,7 +4,7 @@ import PanelDataExport from '@/components/common/panel/PanelDataExport'
 import useRealizationsExport from '@/components/kb/panels/realizations/table/header/useRealizationsExport'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import { SELECTED } from '@/lib/constants/selected.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const RealizationsTableHeaderLeft = () => {
   const { filteredRealizations, filters } = use(RealizationsContext)

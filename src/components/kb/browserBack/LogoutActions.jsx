@@ -5,7 +5,7 @@ import { Box, Button, Stack } from '@mui/material'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import logoutModal from '@/text/config/logoutModal.json'
+import logoutModal from '@/config/logoutModal.json'
 
 const LogoutActions = () => {
   const { closeModal } = use(AppModalContext)

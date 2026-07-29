@@ -8,7 +8,7 @@ import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import { EMPTY_FILTERS } from '@/contexts/panels/realizations/constants'
 import { SELECTED } from '@/lib/constants/selected.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
 const { BUTTON, TOOLTIP } = CONFIG.PANELS.REALIZATIONS

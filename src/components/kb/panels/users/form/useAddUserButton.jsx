@@ -18,14 +18,13 @@ import {
   createModalContent,
 } from '@/components/kb/panels/users/form/userModalUtils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const { CANCEL, CONFIRM_DISCARD, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
 const useAddUserButton = () => {
-  const { closeModal, createModal, updateModalData, withProcessing } =
-    useUsersModalOperationsContext()
+  const { closeModal, createModal, updateModalData, withProcessing } = useUsersModalOperationsContext()
   const { addUser, users } = use(UsersContext)
 
   const { handleCancel, handleFormChange } = useMemo(

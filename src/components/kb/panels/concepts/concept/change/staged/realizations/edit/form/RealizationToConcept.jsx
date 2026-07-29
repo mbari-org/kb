@@ -5,7 +5,7 @@ import { FormControl, TextField, Autocomplete } from '@mui/material'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConceptTaxa } from '@/lib/api/concept'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const RealizationToConcept = ({
   realizationItem,
@@ -76,9 +76,7 @@ const RealizationToConcept = ({
         const taxa = await apiFns.apiPayload(getConceptTaxa, toConcept)
 
         const names = taxa
-          .flatMap(item =>
-            item.alternativeNames ? [item.name].concat(item.alternativeNames) : [item.name]
-          )
+          .flatMap(item => (item.alternativeNames ? [item.name].concat(item.alternativeNames) : [item.name]))
           .sort()
 
         setTaxaNames(names)

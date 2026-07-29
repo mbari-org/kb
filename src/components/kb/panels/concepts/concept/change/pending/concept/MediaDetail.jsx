@@ -10,7 +10,7 @@ import { otherApprovalSx } from '@/components/common/format'
 
 import { isPendingMedia } from '@/lib/concept/state/media'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
@@ -39,9 +39,7 @@ const MediaDetail = ({ pendingConcept }) => {
     </Stack>
   )
 
-  return (
-    <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
-  )
+  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
 }
 
 export default MediaDetail

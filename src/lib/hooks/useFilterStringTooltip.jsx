@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { useMemo } from 'react'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 /**
  * Hook that returns a tooltip component with structured filter information

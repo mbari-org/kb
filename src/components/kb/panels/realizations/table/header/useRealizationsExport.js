@@ -13,7 +13,7 @@ import csvExport from '@/lib/csvExport'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
 import { SELECTED } from '@/lib/constants/selected.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 

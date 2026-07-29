@@ -1,23 +1,15 @@
 import { getConceptAnnotationsCount } from '@/lib/api/annotations'
 import { getToConceptAssociationsCount, renameToConceptAssociations } from '@/lib/api/associations'
 import { renameConceptObservations } from '@/lib/api/observations'
-import {
-  getConceptTemplateCount,
-  getToConceptTemplateCount,
-  renameToConceptTemplates,
-} from '@/lib/api/templates'
+import { getConceptTemplateCount, getToConceptTemplateCount, renameToConceptTemplates } from '@/lib/api/templates'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { RELATED_DATA_COUNTS, RELATED_DATA_TYPE } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
 
 export { RELATED_DATA_COUNTS, RELATED_DATA_TYPE }
 
-export const relatedDataCounts = async ({
-  apiFns,
-  concept,
-  getReferences,
-}) => {
+export const relatedDataCounts = async ({ apiFns, concept, getReferences }) => {
   const config = [
     {
       title: RELATED_DATA_COUNTS.ANNOTATIONS,
@@ -51,9 +43,7 @@ export const relatedDataCounts = async ({
 
   const counts = []
   for (const { title, type, apiCountFn, localCountFn } of config) {
-    const countFn = apiCountFn
-      ? () => apiFns?.apiResult(apiCountFn, concept.name)
-      : () => localCountFn(concept.name)
+    const countFn = apiCountFn ? () => apiFns?.apiResult(apiCountFn, concept.name) : () => localCountFn(concept.name)
 
     const value = await countFn()
     counts.push({ title, type, value, reassignFn: config.find(c => c.title === title).reassignFn })

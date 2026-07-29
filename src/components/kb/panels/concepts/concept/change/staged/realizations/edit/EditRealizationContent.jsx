@@ -18,7 +18,7 @@ import useRealizationContentHandlers from './useRealizationContentHandlers'
 import useFilterLinkName from './useFilterLinkName'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const EditRealizationContent = () => {

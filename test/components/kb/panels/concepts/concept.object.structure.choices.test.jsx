@@ -19,7 +19,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CHANGE_NAME, CHANGE_PARENT, ADD_CHILD, DELETE_CONCEPT } = CONFIG.CONCEPT.STRUCTURE
 
@@ -27,9 +27,7 @@ const resolveActionTarget = element => {
   if (!element) return null
   if (element.tagName?.toLowerCase() === 'button') return element
   return (
-    element.querySelector?.('button, [role="button"], div') ||
-    element.closest?.('button, [role="button"], div') ||
-    null
+    element.querySelector?.('button, [role="button"], div') || element.closest?.('button, [role="button"], div') || null
   )
 }
 
@@ -44,8 +42,9 @@ const getStructureActionButton = () => {
     return byRole
   }
 
-  const byTitle = Array.from(document.querySelectorAll('[title]'))
-    .find(element => element.getAttribute('title')?.toLowerCase() === 'edit concept structure')
+  const byTitle = Array.from(document.querySelectorAll('[title]')).find(
+    element => element.getAttribute('title')?.toLowerCase() === 'edit concept structure'
+  )
   return resolveActionTarget(byTitle)
 }
 
@@ -204,10 +203,13 @@ const TestWrapper = ({ children }) => {
     goForward: () => concept?.name,
   }
 
-  const mockGetSelected = useCallback(key => {
-    if (key === 'concept') return concept?.name
-    return 'Concepts'
-  }, [concept])
+  const mockGetSelected = useCallback(
+    key => {
+      if (key === 'concept') return concept?.name
+      return 'Concepts'
+    },
+    [concept]
+  )
 
   const mockUpdateSelected = useCallback(({ concept: conceptName }) => {
     if (conceptName) {
@@ -277,28 +279,28 @@ const TestWrapper = ({ children }) => {
           <ConfigContext.Provider value={mockConfigValue}>
             <AppModalContext.Provider value={mockAppModalValue}>
               <PanelDataContext.Provider value={mockPanelDataValue}>
-              <TaxonomyContext.Provider value={mockTaxonomyValue}>
-                <ConceptModalContext.Provider value={mockConceptModalValue}>
-                  <SelectedContext.Provider value={mockSelectedValue}>
-                    <ConceptContext.Provider
-                      value={{
-                        concept,
-                        conceptPath: concept ? [concept.name] : null,
-                        onConceptTreeReady: vi.fn(),
-                        stagedState: concept ? stagedState : null,
-                        initialState: concept ? initialState : null,
-                        isMarineOrganism: false,
-                        isEditing,
-                        setEditing,
-                        modifyConcept: vi.fn(),
-                        pending: () => [],
-                      }}
-                    >
-                      {children}
-                    </ConceptContext.Provider>
-                  </SelectedContext.Provider>
-                </ConceptModalContext.Provider>
-              </TaxonomyContext.Provider>
+                <TaxonomyContext.Provider value={mockTaxonomyValue}>
+                  <ConceptModalContext.Provider value={mockConceptModalValue}>
+                    <SelectedContext.Provider value={mockSelectedValue}>
+                      <ConceptContext.Provider
+                        value={{
+                          concept,
+                          conceptPath: concept ? [concept.name] : null,
+                          onConceptTreeReady: vi.fn(),
+                          stagedState: concept ? stagedState : null,
+                          initialState: concept ? initialState : null,
+                          isMarineOrganism: false,
+                          isEditing,
+                          setEditing,
+                          modifyConcept: vi.fn(),
+                          pending: () => [],
+                        }}
+                      >
+                        {children}
+                      </ConceptContext.Provider>
+                    </SelectedContext.Provider>
+                  </ConceptModalContext.Provider>
+                </TaxonomyContext.Provider>
               </PanelDataContext.Provider>
             </AppModalContext.Provider>
           </ConfigContext.Provider>

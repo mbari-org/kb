@@ -11,7 +11,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { humanTimestamp } from '@/lib/utils'
 
 const { PROCESSING } = CONFIG

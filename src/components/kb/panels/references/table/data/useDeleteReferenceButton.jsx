@@ -12,7 +12,7 @@ import {
   createDeleteReferenceContent,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const { CANCEL, DELETE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON

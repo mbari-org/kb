@@ -6,7 +6,7 @@ import MediaBaseURLActions from '@/components/kb/nav/appInfo/mediaBaseURL/MediaB
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { PREFS } from '@/lib/constants/prefs'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const renderActions = ({
   confirmCommit = false,

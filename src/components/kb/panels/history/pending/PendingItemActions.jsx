@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { Box, Stack } from '@mui/material'
 
-import {
-  usePanelModalDataContext,
-  usePanelModalOperationsContext,
-} from '@/contexts/panel/modal/Context'
+import { usePanelModalDataContext, usePanelModalOperationsContext } from '@/contexts/panel/modal/Context'
 
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'
@@ -13,7 +10,7 @@ import { PENDING } from '@/lib/constants/pending.js'
 import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdatePending'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const { APPROVE, CONFIRM, DEFER, REJECT } = CONFIG.PANELS.HISTORY.MODALS.BUTTON
@@ -84,11 +81,10 @@ const HistoryPendingActions = props => {
       }
 
       default:
-        throw createError(
-          'Invalid Action',
-          `Cannot handle unknown pending item action: ${label}`,
-          { label, pendingConfirm }
-        )
+        throw createError('Invalid Action', `Cannot handle unknown pending item action: ${label}`, {
+          label,
+          pendingConfirm,
+        })
     }
   }
 

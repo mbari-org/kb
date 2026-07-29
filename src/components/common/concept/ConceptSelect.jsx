@@ -11,7 +11,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT } from '@/lib/constants'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { WIDTH } = CONCEPT.SELECT
 
@@ -53,13 +53,10 @@ const ConceptSelect = ({
   const handleConceptSelect = selectedName => {
     if (selectedName) {
       const isSpecialSelection = hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName)
-      const isValidSelection =
-        options.includes(selectedName) || isSpecialSelection
+      const isValidSelection = options.includes(selectedName) || isSpecialSelection
 
       if (isValidSelection) {
-        const conceptName = isSpecialSelection
-          ? selectedName
-          : getConceptPrimaryName(selectedName) || selectedName
+        const conceptName = isSpecialSelection ? selectedName : getConceptPrimaryName(selectedName) || selectedName
         const doSelection = doConceptSelected ? doConceptSelected(conceptName) : true
         if (doSelection && updateConceptSelected) {
           updateSelected({ concept: conceptName })

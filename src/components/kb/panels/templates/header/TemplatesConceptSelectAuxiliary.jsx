@@ -2,24 +2,14 @@ import ConceptSelectAuxiliary from '@/components/common/concept/ConceptSelectAux
 import KBInfoIcon from '@/components/icon/KBInfoIcon'
 import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/TemplatesConceptAvailableTooltip'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const TemplatesConceptSelectAuxiliary = () => {
   const infoIcon = (
-    <KBInfoIcon
-      tooltip={<TemplatesConceptAvailableTooltip />}
-      placement='top'
-      size={16}
-      sx={{ mb: 1 }}
-    />
+    <KBInfoIcon tooltip={<TemplatesConceptAvailableTooltip />} placement='top' size={16} sx={{ mb: 1 }} />
   )
 
-  return (
-    <ConceptSelectAuxiliary
-      label={CONFIG.CONCEPT.SELECT.CONCEPT}
-      components={[infoIcon, null]}
-    />
-  )
+  return <ConceptSelectAuxiliary label={CONFIG.CONCEPT.SELECT.CONCEPT} components={[infoIcon, null]} />
 }
 
 export default TemplatesConceptSelectAuxiliary

@@ -9,7 +9,7 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
 import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
 import { SELECTED } from '@/lib/constants/selected.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { BUTTON, TOOLTIP } = CONFIG.PANELS.TEMPLATES

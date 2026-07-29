@@ -8,16 +8,11 @@ import useAddUserButton from '@/components/kb/panels/users/form/useAddUserButton
 import UsersProvider from '@/contexts/panels/users/UsersProvider'
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const UsersModalRenderer = () => {
   const { modal: usersModal, processing: usersProcessing } = useUsersModalOperationsContext()
-  return (
-    !usersProcessing &&
-    usersModal &&
-    typeof usersModal === 'function' &&
-    usersModal()
-  )
+  return !usersProcessing && usersModal && typeof usersModal === 'function' && usersModal()
 }
 
 const UsersContent = () => {

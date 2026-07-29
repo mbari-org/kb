@@ -10,7 +10,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 import {
@@ -33,8 +33,7 @@ const useAddTemplateButton = () => {
   const { addTemplate, filters } = use(TemplatesContext)
   const { templates: allTemplates } = use(PanelDataContext)
 
-  const { closeModal, createModal, updateModalData, withProcessing } =
-    useTemplatesModalOperationsContext()
+  const { closeModal, createModal, updateModalData, withProcessing } = useTemplatesModalOperationsContext()
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, false),
@@ -124,9 +123,7 @@ const useAddTemplateButton = () => {
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
-      const labels = actions.map((a, i) =>
-        i === 0 && modalData.hasChanges ? DISCARD : a.label
-      )
+      const labels = actions.map((a, i) => (i === 0 && modalData.hasChanges ? DISCARD : a.label))
 
       const onAction = async label => {
         switch (label) {
@@ -173,7 +170,16 @@ const useAddTemplateButton = () => {
       },
       onClose,
     })
-  }, [closeModal, createModal, filters, handleCancel, handleCommit, handleDuplicateChange, handleFormChange, updateModalData])
+  }, [
+    closeModal,
+    createModal,
+    filters,
+    handleCancel,
+    handleCommit,
+    handleDuplicateChange,
+    handleFormChange,
+    updateModalData,
+  ])
 
   const AddTemplateButton = useCallback(() => {
     const { TEMPLATES } = SELECTED.SETTINGS

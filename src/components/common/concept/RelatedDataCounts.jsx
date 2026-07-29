@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 
 import UserContext from '@/contexts/user/UserContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { NON_ADMIN_MESSAGE } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
 
@@ -27,26 +27,31 @@ const RelatedDataCounts = ({ relatedDataCounts }) => {
 
   const renderSection = (type, counts) => {
     return (
-    <Box key={type} >
-      <Typography sx={{
-        fontSize: theme => theme.typography.fontSize * 1.2,
-        fontWeight: 'bold', ml: 1 }}>
-        {`${type}:`}
-      </Typography>
-      <Box sx={{ ml: 4 }}>
-        <Box sx={{ mb: 1 }}>
-          {counts.map((count, index) => (
-            <Typography
-              key={`${type}-${index}`}
-              sx={count.value > 0 ? { fontStyle: 'italic', fontWeight: 'bold' } : {}}
-            >
-              {`${count.title}: ${count.value} `}
-            </Typography>
-          ))}
+      <Box key={type}>
+        <Typography
+          sx={{
+            fontSize: theme => theme.typography.fontSize * 1.2,
+            fontWeight: 'bold',
+            ml: 1,
+          }}
+        >
+          {`${type}:`}
+        </Typography>
+        <Box sx={{ ml: 4 }}>
+          <Box sx={{ mb: 1 }}>
+            {counts.map((count, index) => (
+              <Typography
+                key={`${type}-${index}`}
+                sx={count.value > 0 ? { fontStyle: 'italic', fontWeight: 'bold' } : {}}
+              >
+                {`${count.title}: ${count.value} `}
+              </Typography>
+            ))}
+          </Box>
         </Box>
       </Box>
-    </Box>
-    )}
+    )
+  }
 
   return (
     <Box sx={{ mt: 1 }}>

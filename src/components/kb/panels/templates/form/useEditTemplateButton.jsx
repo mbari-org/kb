@@ -20,14 +20,13 @@ import {
   confirmTemplateSaveAlert,
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
 
 const useEditTemplateButton = () => {
-  const { closeModal, createModal, updateModalData, withProcessing } =
-    useTemplatesModalOperationsContext()
+  const { closeModal, createModal, updateModalData, withProcessing } = useTemplatesModalOperationsContext()
   const { addTemplate, deleteTemplate, editTemplate } = use(TemplatesContext)
   const { templates: allTemplates } = use(PanelDataContext)
 
@@ -83,12 +82,7 @@ const useEditTemplateButton = () => {
           }
           throw error
         }
-        throw createError(
-          'Template Update Error',
-          'Failed to update template',
-          { templateId: template?.id },
-          error
-        )
+        throw createError('Template Update Error', 'Failed to update template', { templateId: template?.id }, error)
       }
     },
     [allTemplates, addTemplate, deleteTemplate, editTemplate, closeModal, updateModalData, withProcessing]
@@ -149,9 +143,7 @@ const useEditTemplateButton = () => {
 
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)
-        const labels = actions.map((a, i) =>
-          i === 0 && modalData.hasChanges ? DISCARD : a.label
-        )
+        const labels = actions.map((a, i) => (i === 0 && modalData.hasChanges ? DISCARD : a.label))
 
         const onAction = async label => {
           switch (label) {

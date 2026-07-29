@@ -7,7 +7,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { drop } from '@/lib/utils'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { ALIAS } = CONFIG.PANELS.CONCEPTS.MODALS
 
@@ -19,10 +19,7 @@ const DeleteAliasContent = () => {
     <Box>
       <ModalActionText text={ALIAS.DELETE.LABEL} />
       <Box sx={{ ml: 2, mt: 1 }}>
-        <Detail
-          id='delete-alias-content-detail'
-          detail={drop(aliasItem, ['id'])}
-        />
+        <Detail id='delete-alias-content-detail' detail={drop(aliasItem, ['id'])} />
       </Box>
     </Box>
   )

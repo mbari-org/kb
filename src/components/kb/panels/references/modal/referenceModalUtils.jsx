@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { diff, filterObject, pick } from '@/lib/utils'
 
 const { CANCEL, DELETE, DISCARD_ALL, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
@@ -17,56 +17,52 @@ export const REFERENCE_FIELDS = {
 
 export const createReferenceValidator =
   (isEdit = false, isDoiUnique = () => true) =>
-    referenceData => {
-      const requiredFields = isEdit ? REFERENCE_FIELDS.REQUIRED_BASE : REFERENCE_FIELDS.REQUIRED_ADD
+  referenceData => {
+    const requiredFields = isEdit ? REFERENCE_FIELDS.REQUIRED_BASE : REFERENCE_FIELDS.REQUIRED_ADD
 
-      const allFieldsFilled = requiredFields.every(field => {
-        const value = referenceData[field] || ''
-        return value.trim() !== ''
-      })
+    const allFieldsFilled = requiredFields.every(field => {
+      const value = referenceData[field] || ''
+      return value.trim() !== ''
+    })
 
-      const isDoiValid = isDoiUnique(referenceData.doi, referenceData.id)
+    const isDoiValid = isDoiUnique(referenceData.doi, referenceData.id)
 
-      return allFieldsFilled && isDoiValid
-    }
+    return allFieldsFilled && isDoiValid
+  }
 
 export const createChangeDetector =
   (isEdit = false) =>
-    (referenceData, original = null) => {
-      if (!isEdit) {
+  (referenceData, original = null) => {
+    if (!isEdit) {
       // For add mode, any non-empty field means changes
-        const fieldsToCheck = REFERENCE_FIELDS.REQUIRED_ADD
-        return (
-          fieldsToCheck.some(field => {
-            const value = referenceData[field] || ''
-            return value.trim() !== ''
-          }) ||
+      const fieldsToCheck = REFERENCE_FIELDS.REQUIRED_ADD
+      return (
+        fieldsToCheck.some(field => {
+          const value = referenceData[field] || ''
+          return value.trim() !== ''
+        }) ||
         (referenceData.concepts && referenceData.concepts.length > 0)
-        )
-      }
-
-      if (!original) {
-      // If no original reference, consider any data as changes
-        return true
-      }
-
-      const fieldsToCompare = REFERENCE_FIELDS.EDITABLE
-      return fieldsToCompare.some(field => {
-        if (field === 'concepts') {
-        // Compare arrays
-          const originalConcepts = original[field] || []
-          const currentConcepts = referenceData[field] || []
-          return JSON.stringify(originalConcepts.sort()) !== JSON.stringify(currentConcepts.sort())
-        }
-        return referenceData[field] !== original[field]
-      })
+      )
     }
 
-export const createFormChangeHandler = (
-  updateModalData,
-  isEdit = false,
-  isDoiUnique = () => true
-) => {
+    if (!original) {
+      // If no original reference, consider any data as changes
+      return true
+    }
+
+    const fieldsToCompare = REFERENCE_FIELDS.EDITABLE
+    return fieldsToCompare.some(field => {
+      if (field === 'concepts') {
+        // Compare arrays
+        const originalConcepts = original[field] || []
+        const currentConcepts = referenceData[field] || []
+        return JSON.stringify(originalConcepts.sort()) !== JSON.stringify(currentConcepts.sort())
+      }
+      return referenceData[field] !== original[field]
+    })
+  }
+
+export const createFormChangeHandler = (updateModalData, isEdit = false, isDoiUnique = () => true) => {
   const validateReference = createReferenceValidator(isEdit, isDoiUnique)
   const calculateHasChanges = createChangeDetector(isEdit)
 
@@ -89,41 +85,41 @@ export const createFormChangeHandler = (
 
 export const createModalActions =
   (handleCancel, handleCommit, saveLabel = SAVE) =>
-    currentModalData => {
-      const { isValid, hasChanges, confirmDiscard } = currentModalData
+  currentModalData => {
+    const { isValid, hasChanges, confirmDiscard } = currentModalData
 
-      if (confirmDiscard) {
-        return [
-          {
-            color: 'cancel',
-            disabled: false,
-            label: DISCARD_ALL,
-            onClick: handleCancel,
-          },
-          {
-            color: 'main',
-            disabled: false,
-            label: CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE,
-            onClick: handleCancel,
-          },
-        ]
-      }
-
+    if (confirmDiscard) {
       return [
         {
           color: 'cancel',
           disabled: false,
-          label: isValid && hasChanges ? CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD : CANCEL,
+          label: DISCARD_ALL,
           onClick: handleCancel,
         },
         {
-          color: 'primary',
-          disabled: !isValid || !hasChanges,
-          label: saveLabel,
-          onClick: () => handleCommit(currentModalData.reference, currentModalData.original),
+          color: 'main',
+          disabled: false,
+          label: CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE,
+          onClick: handleCancel,
         },
       ]
     }
+
+    return [
+      {
+        color: 'cancel',
+        disabled: false,
+        label: isValid && hasChanges ? CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD : CANCEL,
+        onClick: handleCancel,
+      },
+      {
+        color: 'primary',
+        disabled: !isValid || !hasChanges,
+        label: saveLabel,
+        onClick: () => handleCommit(currentModalData.reference, currentModalData.original),
+      },
+    ]
+  }
 
 export const createModalContent = (handleFormChange, isEdit) => {
   const formKey = isEdit ? 'edit-reference-form' : 'add-reference-form'
@@ -199,23 +195,22 @@ export const createHandlers = (updateModalData, closeModal, isEdit, isDoiUnique 
   return { handleCancel, handleFormChange }
 }
 
-export const createDeleteReferenceActions =
-  (handleCancel, handleDeleteConfirm) => currentModalData => {
-    return [
-      {
-        color: 'main',
-        disabled: false,
-        label: CANCEL,
-        onClick: handleCancel,
-      },
-      {
-        color: 'cancel',
-        disabled: false,
-        label: DELETE,
-        onClick: () => handleDeleteConfirm(currentModalData.reference),
-      },
-    ]
-  }
+export const createDeleteReferenceActions = (handleCancel, handleDeleteConfirm) => currentModalData => {
+  return [
+    {
+      color: 'main',
+      disabled: false,
+      label: CANCEL,
+      onClick: handleCancel,
+    },
+    {
+      color: 'cancel',
+      disabled: false,
+      label: DELETE,
+      onClick: () => handleDeleteConfirm(currentModalData.reference),
+    },
+  ]
+}
 
 export const createDeleteReferenceContent = () => {
   const DeleteReferenceContent = currentModalData => {

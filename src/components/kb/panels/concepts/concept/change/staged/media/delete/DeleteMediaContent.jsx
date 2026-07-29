@@ -6,7 +6,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { getItemMediaType } from '@/lib/model/media'
 import { pick } from '@/lib/utils'
 
@@ -33,15 +33,15 @@ const DeleteMediaContent = () => {
         <Detail id='delete-media-content-detail' detail={detail} />
       </Box>
       {showPrimaryReassignMessage && (
-          <Box sx={{ ml: 2, mt: 1 }}>
-            <Typography variant='body2' sx={{ color: 'text.secondary', textAlign: 'center' }}>
+        <Box sx={{ ml: 2, mt: 1 }}>
+          <Typography variant='body2' sx={{ color: 'text.secondary', textAlign: 'center' }}>
             {primaryReassignMessage.map((line, index) => (
               <span key={`${line}-${index}`}>
                 {line}
                 {index < primaryReassignMessage.length - 1 && <br />}
               </span>
             ))}
-            </Typography>
+          </Typography>
         </Box>
       )}
     </Box>

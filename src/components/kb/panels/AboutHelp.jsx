@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import useVersionTooltip from '@/lib/hooks/useVersionTooltip'
 import { getVersion } from '@/version'
 
@@ -15,9 +15,7 @@ const AboutHelp = () => {
   const { createPanelHeader } = usePanelFactory()
 
   const header = createPanelHeader({
-    headerTitle: (
-      <PanelHeaderTitle subtitle={`Version: ${version}`} subtitleTooltip={versionTooltip} title={TITLE} />
-    ),
+    headerTitle: <PanelHeaderTitle subtitle={`Version: ${version}`} subtitleTooltip={versionTooltip} title={TITLE} />,
   })
 
   return <Box>{header}</Box>

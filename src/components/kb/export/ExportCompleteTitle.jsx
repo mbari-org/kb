@@ -1,5 +1,5 @@
 import Title from '@/components/common/factory/Title'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { DONE } = CONFIG.COMMON.EXPORT
 

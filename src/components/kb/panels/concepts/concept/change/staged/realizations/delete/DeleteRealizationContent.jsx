@@ -6,7 +6,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
@@ -20,11 +20,7 @@ const DeleteRealizationContent = () => {
     <Box>
       <ModalActionText text={REALIZATION.DELETE.LABEL} />
       <Box sx={{ ml: 2, mt: 1 }}>
-        <Detail
-          id='delete-realization-content-detail'
-          detail={realizationItem}
-          keys={keys}
-        />
+        <Detail id='delete-realization-content-detail' detail={realizationItem} keys={keys} />
       </Box>
     </Box>
   )

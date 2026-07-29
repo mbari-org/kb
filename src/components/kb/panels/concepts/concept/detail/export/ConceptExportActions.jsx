@@ -8,7 +8,7 @@ import useConceptExportJson from './useConceptExportJson'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 const { CANCEL } = CONFIG.PANELS.CONCEPTS.BUTTON
 const { EXPORT } = CONFIG.PANELS.CONCEPTS.EXPORT.BUTTON
@@ -39,12 +39,7 @@ const ConceptExportActions = () => {
   }
 
   return (
-    <Actions
-      colors={['cancel', 'main']}
-      disabled={[false, false]}
-      labels={[CANCEL, EXPORT]}
-      onAction={handleAction}
-    />
+    <Actions colors={['cancel', 'main']} disabled={[false, false]} labels={[CANCEL, EXPORT]} onAction={handleAction} />
   )
 }
 

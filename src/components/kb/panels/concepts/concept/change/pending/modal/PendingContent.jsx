@@ -19,7 +19,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { pendingChild as getPendingChild } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 
 import { isEmpty } from '@/lib/utils'
 

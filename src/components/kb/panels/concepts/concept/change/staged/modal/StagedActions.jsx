@@ -12,7 +12,7 @@ import { isStateModified } from '@/lib/concept/state/state'
 
 import { GUARDED_ACTION } from '@/lib/constants/guardedAction.js'
 import { RESETTING } from '@/lib/constants'
-import CONFIG from '@/text'
+import CONFIG from '@/lib/config'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
@@ -35,8 +35,7 @@ const getLabels = (confirmReset, intent) => {
 }
 
 const StagedActions = ({ intent }) => {
-  const { confirmReset, initialState, modifyConcept, setEditing, stagedState } =
-    use(ConceptContext)
+  const { confirmReset, initialState, modifyConcept, setEditing, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { refresh } = use(RefreshContext)
   const { updateSelected, updateSettings } = use(SelectedContext)
@@ -98,37 +97,40 @@ const StagedActions = ({ intent }) => {
     }
   }, [closeModal, handleSpecialAction, initialState, setEditing, stagedState])
 
-  const onAction = useCallback(async label => {
-    switch (label) {
-      case BACK_TO_EDIT:
-        setGuardedAction(null)
-        modifyConcept({ type: CONFIRMED.NO })
-        closeModal()
-        break
+  const onAction = useCallback(
+    async label => {
+      switch (label) {
+        case BACK_TO_EDIT:
+          setGuardedAction(null)
+          modifyConcept({ type: CONFIRMED.NO })
+          closeModal()
+          break
 
-      case CONFIRM_DISCARD:
-        modifyConcept({ type: CONFIRMED.YES })
-        resetConfirmedRef.current = true
-        break
+        case CONFIRM_DISCARD:
+          modifyConcept({ type: CONFIRMED.YES })
+          resetConfirmedRef.current = true
+          break
 
-      case REJECT_DISCARD:
-        modifyConcept({ type: CONFIRMED.NO })
-        break
+        case REJECT_DISCARD:
+          modifyConcept({ type: CONFIRMED.NO })
+          break
 
-      case DISCARD_ALL:
-        modifyConcept({ type: TO_INITIAL })
-        break
+        case DISCARD_ALL:
+          modifyConcept({ type: TO_INITIAL })
+          break
 
-      case SAVE:
-        await saveStaged()
-        handleSpecialAction()
-        break
+        case SAVE:
+          await saveStaged()
+          handleSpecialAction()
+          break
 
-      default:
-        closeModal()
-        break
-    }
-  }, [closeModal, handleSpecialAction, modifyConcept, saveStaged, setGuardedAction])
+        default:
+          closeModal()
+          break
+      }
+    },
+    [closeModal, handleSpecialAction, modifyConcept, saveStaged, setGuardedAction]
+  )
 
   const labels = useMemo(() => getLabels(confirmReset, intent), [confirmReset, intent])
 
