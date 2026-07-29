@@ -12,6 +12,9 @@ import {
   clickDiscardAllButton,
   confirmDiscard,
 } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 const selectRankOption = async (user, label, option) => {
   const select = screen.getByRole('combobox', { name: label })
@@ -53,11 +56,7 @@ describe('Rank state integrity', () => {
     const user = userEvent.setup()
 
     render(
-      <ConceptPanelTestWrapper
-        initialRank={initialRank}
-        isPhylogenyRoot={false}
-        taxonomyRanks={taxonomyRanks}
-      >
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot={false} taxonomyRanks={taxonomyRanks}>
         <Concepts />
       </ConceptPanelTestWrapper>
     )
@@ -70,11 +69,7 @@ describe('Rank state integrity', () => {
 
   it('shows rank fields when concept is under phylogeny root setting', () => {
     render(
-      <ConceptPanelTestWrapper
-        initialRank={initialRank}
-        isPhylogenyRoot
-        taxonomyRanks={taxonomyRanks}
-      >
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
         <Concepts />
       </ConceptPanelTestWrapper>
     )
@@ -88,11 +83,7 @@ describe('Rank state integrity', () => {
     let latestState = { initialRank: {}, stagedRank: {} }
 
     render(
-      <ConceptPanelTestWrapper
-        initialRank={initialRank}
-        isPhylogenyRoot
-        taxonomyRanks={taxonomyRanks}
-      >
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
         <Concepts />
         <ConceptRankStateProbe
           onChange={state => {
@@ -108,7 +99,7 @@ describe('Rank state integrity', () => {
     await selectRankOption(user, 'Level', 'Subclass')
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: BUTTON.SAVE })).toBeEnabled()
       expect(latestState.stagedRank.name).toBe('Aves')
       expect(latestState.stagedRank.level).toBe('Subclass')
       expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)

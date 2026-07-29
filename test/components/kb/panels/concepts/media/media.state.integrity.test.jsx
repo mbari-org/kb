@@ -22,6 +22,9 @@ import {
   clickDiscardAllButton,
   confirmDiscard,
 } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -264,14 +267,14 @@ describe('Media state integrity', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
 
     await clickDiscardAllButton(user, screen)
     await confirmDiscard(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {

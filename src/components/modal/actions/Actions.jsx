@@ -67,15 +67,9 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
       <Stack spacing={0} sx={{ alignItems: 'center', mt: 1, height: 60, justifyContent: 'center' }}>
         {!!confirmReset && <DiscardingAlert />}
         {!!pendingConfirm && <PendingAlert approval={pendingConfirm.approval} />}
-        {!!modalData?.alertType && modalData.alertType === 'delete' && !confirmReset && (
-          <DeleteAlert />
-        )}
+        {!!modalData?.alertType && modalData.alertType === 'delete' && !confirmReset && <DeleteAlert />}
         {!!modalData?.alert && !confirmReset && !modalData?.alertType && (
-          <ActionsAlert
-            line1={modalData.alert.line1}
-            line2={modalData.alert.line2}
-            severity={modalData.alert.severity || 'info'}
-          />
+          <ActionsAlert lines={modalData.alert.lines} severity={modalData.alert.severity || 'info'} />
         )}
         {!!isDuplicate && !confirmReset && !modalData?.alert && !modalData?.alertType && <DuplicateAlert />}
       </Stack>

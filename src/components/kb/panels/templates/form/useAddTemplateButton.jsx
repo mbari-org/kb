@@ -27,7 +27,7 @@ import {
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 const { PROCESSING } = CONFIG
-const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 
 const useAddTemplateButton = () => {
   const { addTemplate, filters } = use(TemplatesContext)
@@ -193,7 +193,7 @@ const useAddTemplateButton = () => {
         disabled={!conceptSelected}
         onClick={addTemplateModal}
         tooltip={tooltip}
-        label={CONFIG.PANELS.TEMPLATES.BUTTON.ADD}
+        label={CONFIG.BUTTON.ADD}
       />
     )
   }, [addTemplateModal, filters])

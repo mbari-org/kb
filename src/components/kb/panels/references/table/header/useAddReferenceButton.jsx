@@ -24,7 +24,7 @@ import CONFIG from '@/lib/config'
 const { PROCESSING } = CONFIG
 
 const { REFERENCES } = SELECTED.SETTINGS
-const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)
@@ -166,7 +166,7 @@ const useAddReferenceButton = () => {
     () => (
       <PanelAddButton
         onClick={addReferenceModal}
-        label={CONFIG.PANELS.REFERENCES.BUTTON.ADD}
+        label={CONFIG.BUTTON.ADD}
         tooltip={CONFIG.PANELS.REFERENCES.TOOLTIP.ADD}
       />
     ),

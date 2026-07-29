@@ -13,7 +13,7 @@ import { isAdmin } from '@/lib/auth/role'
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
-const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
+const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = CONFIG.BUTTON
 const { APPROVAL } = PENDING
 const GROUP = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 

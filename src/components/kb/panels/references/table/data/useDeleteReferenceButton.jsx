@@ -15,7 +15,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const { CANCEL, DELETE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
+const { CANCEL, DELETE } = CONFIG.BUTTON
 
 const useDeleteReferenceButton = () => {
   const { createModal, closeModal, withProcessing } = useReferencesModalOperationsContext()

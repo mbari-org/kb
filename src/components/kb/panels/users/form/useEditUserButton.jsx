@@ -15,7 +15,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const { CANCEL, CONFIRM_DISCARD, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 
 const useEditUserButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } = useUsersModalOperationsContext()
@@ -89,7 +89,6 @@ const useEditUserButton = () => {
         const onAction = async label => {
           switch (label) {
             case DISCARD:
-            case CONFIRM_DISCARD:
               updateModalData({ confirmDiscard: true })
               break
 

@@ -5,7 +5,7 @@ import useConceptExportModal from '@/components/kb/panels/concepts/concept/detai
 import CONFIG from '@/lib/config'
 
 const exportTooltip = CONFIG.PANELS.CONCEPTS.EXPORT.TOOLTIP.EXPORT
-const exportButtonLabel = CONFIG.PANELS.CONCEPTS.EXPORT.BUTTON.EXPORT
+const exportButtonLabel = CONFIG.BUTTON.EXPORT
 
 const ConceptExport = () => {
   const openExportModal = useConceptExportModal()

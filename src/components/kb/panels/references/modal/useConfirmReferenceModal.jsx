@@ -12,7 +12,7 @@ import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const { CONTINUE, CONFIRM } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
+const { CONTINUE, CONFIRM } = CONFIG.BUTTON
 
 const useConfirmReferenceModal = () => {
   const { closeModal, createModal, withProcessing } = useReferencesModalOperationsContext()

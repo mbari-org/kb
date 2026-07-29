@@ -23,14 +23,16 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import CONFIG from '@/lib/config'
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyConcept'
 import { initialConceptState } from '@/lib/concept/state/state'
 import { normalizeConceptName } from '@/lib/concept/state/name'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
+import CONFIG from '@/lib/config'
+
 const { ADD_CHILD } = CONFIG.CONCEPT.STRUCTURE
+const BUTTON = CONFIG.BUTTON
 
 const resolveActionTarget = element => {
   if (!element) return null
@@ -317,7 +319,7 @@ describe('concept object add child discard', () => {
     })
 
     // Click Edit to enter editing mode
-    const editButton = screen.getByRole('button', { name: 'Edit' })
+    const editButton = screen.getByRole('button', { name: BUTTON.EDIT })
     await user.click(editButton)
 
     // Click structure choices icon
@@ -360,16 +362,16 @@ describe('concept object add child discard', () => {
 
     // Click Discard All in ConceptEditingActions
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
-    const discardAllButton = screen.getByRole('button', { name: 'Discard All' })
+    const discardAllButton = screen.getByRole('button', { name: BUTTON.DISCARD_ALL })
     await user.click(discardAllButton)
 
     // In the confirmation modal, click Discard to confirm
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD })).toBeInTheDocument()
     })
-    const confirmDiscardButton = screen.getByRole('button', { name: 'Discard' })
+    const confirmDiscardButton = screen.getByRole('button', { name: BUTTON.DISCARD })
     await user.click(confirmDiscardButton)
 
     // Verify ConceptStructureIcon is not displayed

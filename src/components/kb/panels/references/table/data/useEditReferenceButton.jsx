@@ -14,7 +14,7 @@ import {
   createModalContent,
   processEditReferenceData,
 } from '@/components/kb/panels/references/modal/referenceModalUtils'
-const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 
 const useEditReferenceButton = () => {
   const openConfirmModal = useConfirmReferenceModal()

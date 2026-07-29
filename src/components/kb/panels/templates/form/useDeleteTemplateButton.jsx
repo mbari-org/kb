@@ -16,7 +16,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const { CANCEL, DELETE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
+const { CANCEL, DELETE } = CONFIG.BUTTON
 
 const useDeleteTemplateButton = () => {
   const { showBoundary } = useErrorBoundary()

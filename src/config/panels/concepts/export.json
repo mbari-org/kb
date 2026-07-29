@@ -1,9 +1,5 @@
 {
-  "BUTTON": {
-    "EXPORT": "Export"
-  },
   "TOOLTIP": {
     "EXPORT": "Export concept data"
-  },
-  "TOTAL": "Total"
+  }
 }

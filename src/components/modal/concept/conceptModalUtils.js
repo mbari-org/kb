@@ -8,7 +8,7 @@ import { RESETTING } from '@/lib/constants'
 
 import CONFIG from '@/lib/config'
 
-const { CONFIRM, CONTINUE, DISCARD, STAGE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
+const { BACK_TO_EDITING, CONFIRM, DISCARD, STAGE } = CONFIG.BUTTON
 const { CONFIRMED } = RESETTING
 
 /**
@@ -34,7 +34,7 @@ export const createStagedActions = ({
 }) => {
   const colors = ['cancel', 'main']
   const disabled = [false, stageDisabled]
-  const labels = confirmReset ? [CONFIRM, CONTINUE] : [DISCARD, STAGE]
+  const labels = confirmReset ? [CONFIRM, BACK_TO_EDITING] : [DISCARD, STAGE]
 
   const onAction = async label => {
     switch (label) {
@@ -42,7 +42,7 @@ export const createStagedActions = ({
         await onConfirm()
         break
 
-      case CONTINUE:
+      case BACK_TO_EDITING:
         await onContinue()
         break
 

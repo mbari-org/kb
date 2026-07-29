@@ -6,6 +6,10 @@ import RealizationsContext from '@/contexts/panels/realizations/RealizationsCont
 import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
+const { BUTTON } = CONFIG
+const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.EXPORT
+const { TOTAL } = CONFIG.EXPORT
+
 const RealizationsTableHeaderLeft = () => {
   const { filteredRealizations, filters } = use(RealizationsContext)
   const { REALIZATIONS } = SELECTED.SETTINGS
@@ -14,14 +18,14 @@ const RealizationsTableHeaderLeft = () => {
 
   const exportTooltip =
     filters[REALIZATIONS.FILTERS.CONCEPT] || filters[REALIZATIONS.FILTERS.TO_CONCEPT]
-      ? CONFIG.PANELS.REALIZATIONS.EXPORT.TOOLTIP.EXPORT.CONCEPT
-      : CONFIG.PANELS.REALIZATIONS.EXPORT.TOOLTIP.EXPORT.ALL
+      ? TOOLTIP.EXPORT.CONCEPT
+      : TOOLTIP.EXPORT.ALL
 
   return (
     <PanelDataExport
       count={count}
-      countLabel={CONFIG.PANELS.REALIZATIONS.EXPORT.TOTAL}
-      exportButtonLabel={CONFIG.PANELS.REALIZATIONS.EXPORT.BUTTON.EXPORT}
+      countLabel={TOTAL}
+      exportButtonLabel={BUTTON.EXPORT}
       exportFn={realizationsExport}
       exportTooltip={exportTooltip}
       width='auto'

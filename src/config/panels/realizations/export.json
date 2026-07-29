@@ -1,12 +1,8 @@
 {
-  "BUTTON": {
-    "EXPORT": "Export"
-  },
   "TOOLTIP": {
     "EXPORT": {
       "ALL": "Export all realizations",
       "CONCEPT": "Export realizations for selected concept"
     }
-  },
-  "TOTAL": "Total"
+  }
 }

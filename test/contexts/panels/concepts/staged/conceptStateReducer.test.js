@@ -1,6 +1,9 @@
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState'
 import { describe, expect, it } from 'vitest'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } = CONCEPT_STATE
 
@@ -235,7 +238,7 @@ describe('conceptStateReducer', () => {
 
   describe('RESET', () => {
     it('ALIASES: resets aliases from update', () => {
-      const stagedState = { ...baseStagedState, aliases: [{ name: 'Staged' }] }
+      const stagedState = { ...baseStagedState, aliases: [{ name: BUTTON.STAGED }] }
       const update = { aliases: [{ name: 'Reset' }] }
       const result = conceptStateReducer(stagedState, {
         type: RESET.ALIASES,
@@ -261,7 +264,7 @@ describe('conceptStateReducer', () => {
       const stagedState = {
         ...baseStagedState,
         children: [
-          { name: 'Keep', action: 'None', index: 0 },
+          { name: BUTTON.KEEP, action: 'None', index: 0 },
           { name: 'Modified', action: 'Edit', index: 1 },
         ],
       }
@@ -275,7 +278,7 @@ describe('conceptStateReducer', () => {
     })
 
     it('CHILDREN: resets all children from update', () => {
-      const stagedState = { ...baseStagedState, children: [{ name: 'Staged' }] }
+      const stagedState = { ...baseStagedState, children: [{ name: BUTTON.STAGED }] }
       const update = { children: [{ name: 'Reset' }] }
       const result = conceptStateReducer(stagedState, {
         type: RESET.CHILDREN,
@@ -319,7 +322,7 @@ describe('conceptStateReducer', () => {
     })
 
     it('RANK: resets rank from update', () => {
-      const stagedState = { ...baseStagedState, rank: { level: 'Staged', name: 'Staged' } }
+      const stagedState = { ...baseStagedState, rank: { level: 'Staged', name: BUTTON.STAGED } }
       const update = { rank: { action: 'None', level: 'Species', name: 'Animalia' } }
       const result = conceptStateReducer(stagedState, {
         type: RESET.RANK,

@@ -1,7 +1,4 @@
 {
-  "BUTTON": {
-    "EXPORT": "Export"
-  },
   "TOOLTIP": {
     "EXPORT": {
       "ALL": "Export all templates",
@@ -9,6 +6,5 @@
       "CONCEPT_TO_CONCEPT": "Export templates for selected concept to selected to concept",
       "TO_CONCEPT": "Export templates for selected to concept"
     }
-  },
-  "TOTAL": "Total"
+  }
 }

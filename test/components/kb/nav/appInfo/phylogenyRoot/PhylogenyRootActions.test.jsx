@@ -7,7 +7,8 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import { PREFS } from '@/lib/constants/prefs'
 import CONFIG from '@/lib/config'
-const { CANCEL, SAVE } = CONFIG.PANELS.CONCEPTS.BUTTON
+
+const { CANCEL, SAVE } = CONFIG.BUTTON
 
 const renderActions = ({
   confirmCommit = false,
@@ -81,7 +82,7 @@ describe('PhylogenyRootActions', () => {
       selectedPhylogenyRoot: 'phyla',
     })
 
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(screen.getByRole('button', { name: SAVE }))
 
     expect(saveAppPreference).toHaveBeenCalledWith(PREFS.APP.PHYLOGENY.ROOT.KEY, 'phyla')
     await waitFor(() => {
@@ -106,7 +107,7 @@ describe('PhylogenyRootActions', () => {
       }),
     })
 
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(screen.getByRole('button', { name: SAVE }))
 
     expect(saveAppPreference).toHaveBeenCalledWith(PREFS.APP.PHYLOGENY.ROOT.KEY, 'canis lupus')
     await waitFor(() => {

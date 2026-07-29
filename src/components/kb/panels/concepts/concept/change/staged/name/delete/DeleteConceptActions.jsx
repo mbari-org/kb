@@ -22,12 +22,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const ACTION_LABEL = Object.freeze({
-  CANCEL: 'Cancel',
-  CONFIRM: 'Confirm',
-  DELETE: 'Delete',
-  DISCARD: 'Discard',
-})
+const { CANCEL, CONFIRM, DELETE, DISCARD } = CONFIG.BUTTON
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
@@ -43,14 +38,14 @@ const DeleteConceptActions = () => {
 
   if (!isConfirm) {
     const colors = ['main', 'cancel']
-    const labels = [ACTION_LABEL.DISCARD, ACTION_LABEL.DELETE]
+    const labels = [DISCARD, DELETE]
     const onAction = async label => {
       switch (label) {
-        case ACTION_LABEL.DISCARD:
+        case DISCARD:
           closeModal()
           break
 
-        case ACTION_LABEL.DELETE:
+        case DELETE:
           setModalData(prev => ({ ...prev, alertType: 'delete' }))
           break
 
@@ -63,14 +58,14 @@ const DeleteConceptActions = () => {
   }
 
   const colors = ['main', 'cancel']
-  const labels = [ACTION_LABEL.CANCEL, ACTION_LABEL.CONFIRM]
+  const labels = [CANCEL, CONFIRM]
   const onAction = async label => {
     switch (label) {
-      case ACTION_LABEL.CANCEL:
+      case CANCEL:
         closeModal()
         break
 
-      case ACTION_LABEL.CONFIRM: {
+      case CONFIRM: {
         const { reassign } = modalData
         const deleteConceptContext = {
           apiFns,

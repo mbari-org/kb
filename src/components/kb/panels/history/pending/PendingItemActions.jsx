@@ -13,7 +13,8 @@ import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdateP
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const { APPROVE, CONFIRM, DEFER, REJECT } = CONFIG.PANELS.HISTORY.MODALS.BUTTON
+const { APPROVE, CLOSE, CONFIRM, REJECT } = CONFIG.BUTTON
+const DEFER = CLOSE
 
 const HistoryPendingActions = props => {
   const { modalData } = usePanelModalDataContext()

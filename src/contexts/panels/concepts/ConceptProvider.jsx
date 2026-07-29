@@ -25,7 +25,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
 
-const { CONTINUE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
+const { BACK_TO_EDITING } = CONFIG.BUTTON
 const { PROCESSING } = CONFIG
 
 const ConceptProvider = ({ children }) => {
@@ -170,7 +170,7 @@ const ConceptProvider = ({ children }) => {
 
     if (selectedConcept !== concept?.name && panels.current() === SELECTED.PANELS.CONCEPTS) {
       if (isStateModified({ initialState, stagedState })) {
-        displayStaged(CONTINUE)
+        displayStaged(BACK_TO_EDITING)
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
       } else {
         setHasUnsavedChanges(false)
@@ -224,7 +224,7 @@ const ConceptProvider = ({ children }) => {
   useEffect(() => {
     if (!guardedAction) return
 
-    displayStaged(CONTINUE)
+    displayStaged(BACK_TO_EDITING)
     setModalData(prev => ({ ...prev, guardedAction }))
   }, [guardedAction, displayStaged, setModalData])
 

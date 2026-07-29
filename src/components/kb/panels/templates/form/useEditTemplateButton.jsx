@@ -23,7 +23,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.TEMPLATES.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 
 const useEditTemplateButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } = useTemplatesModalOperationsContext()

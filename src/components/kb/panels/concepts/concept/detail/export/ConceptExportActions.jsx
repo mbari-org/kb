@@ -10,8 +10,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
 import CONFIG from '@/lib/config'
 
-const { CANCEL } = CONFIG.PANELS.CONCEPTS.BUTTON
-const { EXPORT } = CONFIG.PANELS.CONCEPTS.EXPORT.BUTTON
+const { CANCEL, EXPORT } = CONFIG.BUTTON
 
 const ConceptExportActions = () => {
   const { closeModal, modalData } = use(ConceptModalContext)

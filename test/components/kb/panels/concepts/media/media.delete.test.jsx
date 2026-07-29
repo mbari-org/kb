@@ -15,6 +15,9 @@ import {
   clickDiscardAllButton,
   confirmDiscard,
 } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -61,7 +64,7 @@ describe('Media Delete - Single Media Item', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -376,7 +379,7 @@ describe('Media Delete - Discard Operations', () => {
       expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
     })
 
-    expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
   })
 
   it('discard all removes staged delete operation', async () => {
@@ -411,19 +414,19 @@ describe('Media Delete - Discard Operations', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
 
     await clickDiscardAllButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD })).toBeInTheDocument()
     })
 
     await confirmDiscard(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
     })
   })
 })
@@ -477,7 +480,7 @@ describe('Media Delete - Mixed Media Types', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -518,7 +521,7 @@ describe('Media Delete - Mixed Media Types', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 })

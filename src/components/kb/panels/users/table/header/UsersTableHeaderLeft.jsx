@@ -8,21 +8,21 @@ import useUsersExport from '@/components/kb/panels/users/table/header/useUsersEx
 
 import CONFIG from '@/lib/config'
 
+const { BUTTON } = CONFIG
+const { TOOLTIP } = CONFIG.PANELS.USERS.EXPORT
+const { TOTAL } = CONFIG.EXPORT
+
 const UsersTableHeaderLeft = () => {
   const { users } = use(UsersContext)
   const usersExport = useUsersExport()
 
-  const toolTip = CONFIG.PANELS.USERS.EXPORT.TOOLTIP.EXPORT.ALL
-  const countLabel = CONFIG.PANELS.USERS.EXPORT.TOTAL
-  const exportButtonLabel = CONFIG.PANELS.USERS.EXPORT.BUTTON.EXPORT
-
   return (
     <PanelDataExport
       count={users?.length || 0}
-      countLabel={countLabel}
-      exportButtonLabel={exportButtonLabel}
+      countLabel={TOTAL}
+      exportButtonLabel={BUTTON.EXPORT}
       exportFn={usersExport}
-      exportTooltip={toolTip}
+      exportTooltip={TOOLTIP.EXPORT.ALL}
       width='auto'
     />
   )

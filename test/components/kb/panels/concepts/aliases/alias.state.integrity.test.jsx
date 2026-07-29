@@ -13,6 +13,9 @@ import {
   clickDiscardAllButton,
   confirmDiscard,
 } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 const cloneAliases = aliases => aliases.map(item => ({ ...item }))
 
@@ -41,9 +44,7 @@ const resolveActionTarget = element => {
   if (!element) return null
   if (element.tagName?.toLowerCase() === 'button') return element
   return (
-    element.querySelector?.('button, [role="button"], div') ||
-    element.closest?.('button, [role="button"], div') ||
-    null
+    element.querySelector?.('button, [role="button"], div') || element.closest?.('button, [role="button"], div') || null
   )
 }
 
@@ -230,14 +231,14 @@ describe('Alias state integrity', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
 
     await clickDiscardAllButton(user, screen)
     await confirmDiscard(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
     })
 
     await waitFor(() => {

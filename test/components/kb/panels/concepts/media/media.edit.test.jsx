@@ -15,6 +15,9 @@ import {
   clickStageButton,
   clickDiscardButton,
 } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -73,7 +76,7 @@ describe('Media Edit - URL Changes', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -261,7 +264,7 @@ describe('Media Edit - Credit Changes', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -833,7 +836,7 @@ describe('Media Edit - Validation', () => {
       expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
-    expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
   })
 
   it('stage button disabled when no changes made', async () => {

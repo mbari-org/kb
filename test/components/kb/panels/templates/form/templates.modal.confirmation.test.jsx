@@ -107,7 +107,7 @@ describe('Templates modal confirmation flows', () => {
     const user = userEvent.setup()
     renderAddHarness()
 
-    await user.click(screen.getByRole('button', { name: CONFIG.PANELS.TEMPLATES.BUTTON.ADD }))
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.ADD }))
 
     expect(createModalMock).toHaveBeenCalledTimes(1)
     const modalConfig = createModalMock.mock.calls[0][0]
@@ -127,7 +127,7 @@ describe('Templates modal confirmation flows', () => {
 
     render(<modalConfig.actionsComponent />)
 
-    await user.click(screen.getByRole('button', { name: CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CANCEL }))
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CANCEL }))
 
     expect(updateModalDataMock).toHaveBeenCalledWith({
       confirmCommit: false,
@@ -141,7 +141,7 @@ describe('Templates modal confirmation flows', () => {
     const user = userEvent.setup()
     renderAddHarness()
 
-    await user.click(screen.getByRole('button', { name: CONFIG.PANELS.TEMPLATES.BUTTON.ADD }))
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.ADD }))
     expect(createModalMock).toHaveBeenCalledTimes(1)
     const modalConfig = createModalMock.mock.calls[0][0]
 
@@ -160,7 +160,7 @@ describe('Templates modal confirmation flows', () => {
 
     render(<modalConfig.actionsComponent />)
 
-    await user.click(screen.getByRole('button', { name: CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.SAVE }))
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.SAVE }))
 
     expect(updateModalDataMock).toHaveBeenCalledWith({
       confirmCommit: true,
@@ -192,7 +192,7 @@ describe('Templates modal confirmation flows', () => {
 
     render(<modalConfig.actionsComponent />)
 
-    await user.click(screen.getByRole('button', { name: CONFIG.PANELS.TEMPLATES.MODALS.BUTTON.CANCEL }))
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CANCEL }))
 
     expect(updateModalDataMock).toHaveBeenCalledWith({ confirmDelete: false, alert: null })
     expect(closeModalMock).toHaveBeenCalled()

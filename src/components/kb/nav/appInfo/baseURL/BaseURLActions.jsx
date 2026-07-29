@@ -8,7 +8,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import isValidUrl from '@/lib/validators/isValidUrl'
 import CONFIG from '@/lib/config'
 
-const { CANCEL, SAVE } = CONFIG.PANELS.CONCEPTS.BUTTON
+const { CANCEL, SAVE } = CONFIG.BUTTON
 
 const BaseURLActions = ({
   actionName,

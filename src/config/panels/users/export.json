@@ -1,11 +1,7 @@
 {
-  "BUTTON": {
-    "EXPORT": "Export"
-  },
   "TOOLTIP": {
     "EXPORT": {
       "ALL": "Export all users"
     }
-  },
-  "TOTAL": "Total"
+  }
 }

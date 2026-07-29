@@ -5,16 +5,17 @@ import useReferencesExport from '@/components/kb/panels/references/table/header/
 import { CONCEPT } from '@/lib/constants'
 import CONFIG from '@/lib/config'
 
+const { BUTTON } = CONFIG
+const { TOOLTIP, TOTAL } = CONFIG.PANELS.REFERENCES.EXPORT
+
 const ReferencesTableHeaderLeft = () => {
   const { byConcept, filteredReferences } = useFilteredReferences()
   const referencesExport = useReferencesExport()
 
-  const exportTooltip = byConcept
-    ? CONFIG.PANELS.REFERENCES.EXPORT.TOOLTIP.EXPORT.CONCEPT
-    : CONFIG.PANELS.REFERENCES.EXPORT.TOOLTIP.EXPORT.ALL
+  const exportTooltip = byConcept ? TOOLTIP.EXPORT.CONCEPT : TOOLTIP.EXPORT.ALL
 
-  const countLabel = CONFIG.PANELS.REFERENCES.EXPORT.TOTAL
-  const exportButtonLabel = CONFIG.PANELS.REFERENCES.EXPORT.BUTTON.EXPORT
+  const countLabel = TOTAL
+  const exportButtonLabel = BUTTON.EXPORT
 
   return (
     <PanelDataExport

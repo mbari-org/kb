@@ -5,7 +5,7 @@ import ReferenceForm from '@/components/kb/panels/references/form/ReferenceForm'
 import CONFIG from '@/lib/config'
 import { diff, filterObject, pick } from '@/lib/utils'
 
-const { CANCEL, DELETE, DISCARD_ALL, SAVE } = CONFIG.PANELS.REFERENCES.MODALS.BUTTON
+const { CANCEL, CONTINUE, DELETE, DISCARD, DISCARD_ALL, SAVE } = CONFIG.BUTTON
 const { CONCEPT } = CONFIG
 
 export const REFERENCE_FIELDS = {
@@ -99,7 +99,7 @@ export const createModalActions =
         {
           color: 'main',
           disabled: false,
-          label: CONFIG.PANELS.REFERENCES.MODALS.BUTTON.CONTINUE,
+          label: CONTINUE,
           onClick: handleCancel,
         },
       ]
@@ -109,7 +109,7 @@ export const createModalActions =
       {
         color: 'cancel',
         disabled: false,
-        label: isValid && hasChanges ? CONFIG.PANELS.REFERENCES.MODALS.BUTTON.DISCARD : CANCEL,
+        label: isValid && hasChanges ? DISCARD : CANCEL,
         onClick: handleCancel,
       },
       {

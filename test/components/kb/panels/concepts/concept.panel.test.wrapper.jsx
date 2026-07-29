@@ -27,6 +27,9 @@ import { initialConceptState } from '@/lib/concept/state/state'
 import { filterRanks as filterTaxonomyRanks } from '@/lib/model/rank'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { ROLES } from '@/lib/constants/roles.js'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 const BASE_URL = 'http://localhost:8123'
 
@@ -98,8 +101,7 @@ const createDingoConcept = ({
   references = [],
   rankLevel = '',
   rankName = '',
-} = {}) =>
-  createConceptWithState('dingo', { aliases, media, realizations, references, rankLevel, rankName })
+} = {}) => createConceptWithState('dingo', { aliases, media, realizations, references, rankLevel, rankName })
 
 export const createMockTaxonomy = (conceptMap, ranks = []) => {
   const names = Object.keys(conceptMap)
@@ -384,12 +386,13 @@ export const ConceptPanelTestWrapper = ({
 }
 
 export const enterEditMode = async (user, screen) => {
-  const editButtons = screen.getAllByRole('button', { name: 'Edit' }).filter(button => !button.disabled)
+  const editButtons = screen.getAllByRole('button', { name: BUTTON.EDIT }).filter(button => !button.disabled)
   const editButton = editButtons[0]
   await user.click(editButton)
   await waitFor(() => {
-    expect(screen.queryByRole('button', { name: /cancel/i }) || screen.queryByRole('button', { name: 'Discard All' }))
-      .toBeTruthy()
+    expect(
+      screen.queryByRole('button', { name: /cancel/i }) || screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })
+    ).toBeTruthy()
   })
 }
 
@@ -513,13 +516,13 @@ export const clickStageButton = async (user, screen) => {
 }
 
 export const clickDiscardButton = async (user, screen) => {
-  const discardButton = screen.getByRole('button', { name: 'Discard' })
+  const discardButton = screen.getByRole('button', { name: BUTTON.DISCARD })
   await user.click(discardButton)
 }
 
 export const clickDiscardAllButton = async (user, screen) => {
   const discardAllButton =
-    screen.queryByRole('button', { name: 'Discard All' }) ||
+    screen.queryByRole('button', { name: BUTTON.DISCARD_ALL }) ||
     screen.queryByRole('button', { name: /discard|cancel/i })
   if (!discardAllButton) {
     throw new Error('Unable to locate discard control')
@@ -528,7 +531,7 @@ export const clickDiscardAllButton = async (user, screen) => {
 }
 
 export const confirmDiscard = async (user, screen) => {
-  const confirmDiscardButton = screen.queryByRole('button', { name: 'Discard' })
+  const confirmDiscardButton = screen.queryByRole('button', { name: BUTTON.DISCARD })
   if (confirmDiscardButton) {
     await user.click(confirmDiscardButton)
   }

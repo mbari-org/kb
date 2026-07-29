@@ -15,7 +15,7 @@ import {
 } from '@/components/kb/panels/users/form/userModalUtils'
 import CONFIG from '@/lib/config'
 
-const { CANCEL, CLOSE, LOCK, UNLOCK } = CONFIG.PANELS.USERS.MODALS.BUTTON
+const { CANCEL, CLOSE, LOCK, UNLOCK } = CONFIG.BUTTON
 
 const useLockUserButton = () => {
   const { showBoundary } = useErrorBoundary()

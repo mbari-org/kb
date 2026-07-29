@@ -5,6 +5,9 @@ import Concepts from '@/components/kb/panels/Concepts'
 import { ROLES } from '@/lib/constants/roles.js'
 
 import { ConceptPanelTestWrapper } from './concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 describe('Concepts panel READ_ONLY restrictions', () => {
   it('does not show the Edit button for READ_ONLY users', () => {
@@ -14,7 +17,7 @@ describe('Concepts panel READ_ONLY restrictions', () => {
       </ConceptPanelTestWrapper>
     )
 
-    expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: BUTTON.EDIT })).not.toBeInTheDocument()
   })
 
   it('does not show the Save button for READ_ONLY users', () => {
@@ -24,6 +27,6 @@ describe('Concepts panel READ_ONLY restrictions', () => {
       </ConceptPanelTestWrapper>
     )
 
-    expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: BUTTON.SAVE })).not.toBeInTheDocument()
   })
 })

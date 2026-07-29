@@ -8,22 +8,21 @@ import useHistoryExport from '@/components/kb/panels/history/table/header/useHis
 
 import CONFIG from '@/lib/config'
 
+const { BUTTON } = CONFIG
+const { TOOLTIP, TOTAL } = CONFIG.PANELS.HISTORY.EXPORT
+
 const HistoryTableHeaderLeft = () => {
   const { conceptState } = use(HistoryContext)
 
   const historyExport = useHistoryExport()
 
-  const toolTip = CONFIG.PANELS.HISTORY.EXPORT.TOOLTIP.EXPORT
-  const countLabel = CONFIG.PANELS.HISTORY.EXPORT.TOTAL
-  const exportButtonLabel = CONFIG.PANELS.HISTORY.EXPORT.BUTTON.EXPORT
-
   return (
     <PanelDataExport
       count={conceptState.count}
-      countLabel={countLabel}
-      exportButtonLabel={exportButtonLabel}
+      countLabel={TOTAL}
+      exportButtonLabel={BUTTON.EXPORT}
       exportFn={historyExport}
-      exportTooltip={toolTip}
+      exportTooltip={TOOLTIP.EXPORT}
       width='auto'
     />
   )

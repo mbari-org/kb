@@ -21,6 +21,8 @@ import UserContext from '@/contexts/user/UserContext'
 
 import CONFIG from '@/lib/config'
 
+const BUTTON = CONFIG.BUTTON
+
 const { CHANGE_NAME, CHANGE_PARENT, ADD_CHILD, DELETE_CONCEPT } = CONFIG.CONCEPT.STRUCTURE
 
 const resolveActionTarget = element => {
@@ -340,7 +342,7 @@ describe('concept object structure choices', () => {
     })
 
     // Select the Edit button (ConceptEditingActions)
-    const editButton = screen.getByRole('button', { name: 'Edit' })
+    const editButton = screen.getByRole('button', { name: BUTTON.EDIT })
     expect(editButton).toBeInTheDocument()
     await user.click(editButton)
 

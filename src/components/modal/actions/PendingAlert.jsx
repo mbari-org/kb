@@ -13,15 +13,13 @@ const PendingAlert = ({ approval }) => {
     <Box>
       {!!isAccept && (
         <ActionsAlert
-          line1={'Pending edit approval is final.'}
-          line2={'Please confirm you want to approve the indicated pending edits.'}
+          lines={['Pending edit approval is final.', 'Please confirm you want to approve the indicated pending edits.']}
           severity={'info'}
         />
       )}
       {!!isReject && (
         <ActionsAlert
-          line1={'Pending edit rejection is final.'}
-          line2={'Please confirm you want to reject the indicated pending edits.'}
+          lines={['Pending edit rejection is final.', 'Please confirm you want to reject the indicated pending edits.']}
           severity={'error'}
         />
       )}

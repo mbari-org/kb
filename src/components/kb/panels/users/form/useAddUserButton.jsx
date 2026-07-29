@@ -21,7 +21,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
-const { CANCEL, CONFIRM_DISCARD, CONTINUE, DISCARD, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
+const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 
 const useAddUserButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } = useUsersModalOperationsContext()
@@ -109,7 +109,6 @@ const useAddUserButton = () => {
       const onAction = async label => {
         switch (label) {
           case DISCARD:
-          case CONFIRM_DISCARD:
             updateModalData({ confirmDiscard: true })
             break
 
@@ -158,13 +157,7 @@ const useAddUserButton = () => {
   }, [closeModal, createModal, handleCancel, handleCommit, handleFormChange, updateModalData, users])
 
   const AddUserButton = useCallback(
-    () => (
-      <PanelAddButton
-        onClick={addUserModal}
-        label={CONFIG.PANELS.USERS.BUTTON.ADD}
-        tooltip={CONFIG.PANELS.USERS.TOOLTIP.ADD}
-      />
-    ),
+    () => <PanelAddButton onClick={addUserModal} label={CONFIG.BUTTON.ADD} tooltip={CONFIG.PANELS.USERS.TOOLTIP.ADD} />,
     [addUserModal]
   )
 

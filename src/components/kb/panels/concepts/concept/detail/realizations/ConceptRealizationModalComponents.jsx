@@ -8,7 +8,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import CONFIG from '@/lib/config'
 
-const { CLOSE } = CONFIG.PANELS.CONCEPTS.MODALS.BUTTON
+const { CLOSE } = CONFIG.BUTTON
 
 const ConceptRealizationModalTitle = () => <Title title='Realization' />
 

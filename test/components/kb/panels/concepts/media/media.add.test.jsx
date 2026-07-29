@@ -13,6 +13,9 @@ import {
   togglePrimaryCheckbox,
   clickStageButton,
 } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -201,7 +204,7 @@ describe('Media Add - Image Types', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -685,7 +688,7 @@ describe('Media Add - Validation', () => {
       expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
-    const discardButton = screen.getByRole('button', { name: 'Discard' })
+    const discardButton = screen.getByRole('button', { name: BUTTON.DISCARD })
     await user.click(discardButton)
 
     await waitFor(
@@ -695,7 +698,7 @@ describe('Media Add - Validation', () => {
       { timeout: 2000 }
     )
 
-    expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
   })
 
   it('shows error for invalid URL format when typing', async () => {

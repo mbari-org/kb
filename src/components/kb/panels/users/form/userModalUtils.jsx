@@ -8,7 +8,7 @@ import { diff, filterObject, pick } from '@/lib/utils'
 
 import CONFIG from '@/lib/config'
 
-const { CANCEL, SAVE } = CONFIG.PANELS.USERS.MODALS.BUTTON
+const { CANCEL, CLOSE, LOCK, SAVE, UNLOCK } = CONFIG.BUTTON
 
 const EDITABLE = ['affiliation', 'email', 'firstName', 'lastName', 'role']
 const EDITABLE_ADD = [...EDITABLE, 'username']
@@ -167,7 +167,6 @@ export const createHandlers = (updateModalData, closeModal, isEdit) => {
 // Lock user specific utilities
 export const createLockUserActions = (handleCancel, handleLockToggle) => currentModalData => {
   const { user, isLastAdmin } = currentModalData
-  const { CANCEL, LOCK, UNLOCK, CLOSE } = CONFIG.PANELS.USERS.MODALS.BUTTON
 
   if (isLastAdmin) {
     return [

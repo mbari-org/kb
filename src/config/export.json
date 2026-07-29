@@ -15,5 +15,6 @@
   "DONE": "File export complete",
   "JSON": {
     "ALL": "All data"
-  }
+  },
+  "TOTAL": "Total"
 }

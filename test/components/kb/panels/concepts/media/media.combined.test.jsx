@@ -19,6 +19,9 @@ import {
   clickDiscardAllButton,
   confirmDiscard,
 } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
+
+const BUTTON = CONFIG.BUTTON
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -88,7 +91,7 @@ describe('Media Combined Flows - Add then Edit', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   }, 15000)
 
@@ -280,7 +283,7 @@ describe('Media Combined Flows - Add then Delete', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   }, 20000)
 })
@@ -449,7 +452,7 @@ describe('Media Combined Flows - Full Workflow', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   }, 20000)
 
@@ -537,7 +540,7 @@ describe('Media Combined Flows - Full Workflow', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   }, 20000)
 })
@@ -563,7 +566,7 @@ describe('Media Combined Flows - Discard Operations', () => {
       expect(screen.getByRole('textbox', { name: /url/i })).toBeInTheDocument()
     })
 
-    const discardButton = screen.getByRole('button', { name: 'Discard' })
+    const discardButton = screen.getByRole('button', { name: BUTTON.DISCARD })
     await user.click(discardButton)
 
     await waitFor(
@@ -598,7 +601,7 @@ describe('Media Combined Flows - Discard Operations', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -671,19 +674,19 @@ describe('Media Combined Flows - Discard Operations', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
 
     await clickDiscardAllButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD })).toBeInTheDocument()
     })
 
     await confirmDiscard(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Discard All' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
     })
   })
 })
@@ -981,7 +984,7 @@ describe('Media Combined Flows - Edge Cases', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -1026,7 +1029,7 @@ describe('Media Combined Flows - Edge Cases', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 
@@ -1070,7 +1073,7 @@ describe('Media Combined Flows - Edge Cases', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Discard All' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.DISCARD_ALL })).toBeInTheDocument()
     })
   })
 })
