@@ -14,7 +14,7 @@ const PANEL = CONFIG.PANELS.REFERENCES.PANEL
 const ALL_CONCEPTS = PANEL.SUBTITLE.ALL_CONCEPTS
 
 const ReferencesHeaderTitle = () => {
-  const { conceptExtent } = use(ReferencesContext)
+  const { citationGlob, conceptExtent, conceptGlob } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const byConcept = getSettings(SETTINGS.KEY, SETTINGS.BY_CONCEPT)
   const conceptName = byConcept ? getSelected(SELECTED.CONCEPT) : null
@@ -32,6 +32,10 @@ const ReferencesHeaderTitle = () => {
       default:
         subtitle = conceptName
     }
+  }
+  const hasTextFilter = Boolean(citationGlob?.trim() || conceptGlob?.trim())
+  if (hasTextFilter) {
+    subtitle = `${subtitle} (filtered)`
   }
 
   return <PanelHeaderTitle subtitle={subtitle} title={title} />

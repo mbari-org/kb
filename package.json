@@ -50,7 +50,7 @@
     "dev": "vite",
     "dev:local": "cross-env VITE_M3_LOCAL=true vite",
     "kb": "yarn build && yarn preview",
-    "lint": "eslint .",
+    "lint": "eslint . --no-fix",
     "preview": "vite preview",
     "test": "vitest",
     "version:check": "node scripts/version/check.js",

@@ -17,7 +17,7 @@ const { EXTENT } = CONCEPT
 const useFilteredReferences = () => {
   const { apiFns } = use(ConfigContext)
   const { getReferences } = use(PanelDataContext)
-  const { citationGlob, conceptExtent } = use(ReferencesContext)
+  const { citationGlob, conceptExtent, conceptGlob } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const { getConcept } = use(TaxonomyContext)
 
@@ -76,9 +76,19 @@ const useFilteredReferences = () => {
       selectedReferences = getReferences(selectedConcept)
   }
 
-  const filteredReferences = selectedReferences.filter(reference =>
-    reference.citation.toLowerCase().includes((citationGlob || '').toLowerCase())
-  )
+  const trimmedCitationGlob = (citationGlob || '').toLowerCase()
+  const trimmedConceptGlob = (conceptGlob || '').toLowerCase()
+
+  const filteredReferences = selectedReferences.filter(reference => {
+    const citationMatches = reference.citation.toLowerCase().includes(trimmedCitationGlob)
+    const conceptMatches =
+      !trimmedConceptGlob ||
+      reference.concepts?.some(referenceConcept =>
+        referenceConcept?.toLowerCase().includes(trimmedConceptGlob)
+      )
+
+    return citationMatches && conceptMatches
+  })
 
   return { byConcept, conceptExtent, filteredReferences, selectedConcept }
 }
