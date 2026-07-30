@@ -11,7 +11,8 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
-const { BUTTON, TOOLTIP } = CONFIG.PANELS.REALIZATIONS
+const { BUTTON } = CONFIG
+const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.PANEL
 
 const RealizationsTableHeaderMiddle = () => {
   const { filters, updateFilters } = use(RealizationsContext)
