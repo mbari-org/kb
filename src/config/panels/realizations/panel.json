@@ -2,5 +2,13 @@
   "NAME": "Realizations",
   "SUBTITLE": {
     "ALL_CONCEPTS": "All Concepts"
+  },
+  "TOOLTIP": {
+    "CLEAR_FILTERS": "Clear filters",
+    "FILTER": "Current filter",
+    "EXPORT": {
+      "ALL": "Export all realizations",
+      "CONCEPT": "Export realizations for selected concept"
+    }
   }
 }

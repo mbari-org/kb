@@ -10,8 +10,8 @@
     },
     "TOOLTIP": {
       "EXTENT": "Extend Concept Data",
-      "CHILDREN": "Include Concept Children",
-      "DESCENDANTS": "Include Concept Descentants"
+      "CHILDREN": "Extend Data to Concept Children",
+      "DESCENDANTS": "Extend Data to Concept Descendants"
     }
   },
   "NO_ITEMS": "None",

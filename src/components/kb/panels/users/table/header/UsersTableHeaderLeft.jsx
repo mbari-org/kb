@@ -9,7 +9,7 @@ import useUsersExport from '@/components/kb/panels/users/table/header/useUsersEx
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { TOOLTIP } = CONFIG.PANELS.USERS.EXPORT
+const { TOOLTIP } = CONFIG.PANELS.USERS.PANEL
 const { TOTAL } = CONFIG.EXPORT
 
 const UsersTableHeaderLeft = () => {

@@ -5,7 +5,7 @@ import useDebouncedField from '@/lib/hooks/useDebouncedField'
 const TableHeaderLinkFilter = ({ name, value: initialValue, onChange }) => {
   const handleFieldChange = fieldName => value => onChange(fieldName, value)
 
-  const [value, handleChange, setValue] = useDebouncedField(initialValue, name, handleFieldChange, 300)
+  const [value, handleChange, setValue] = useDebouncedField(initialValue, name, handleFieldChange)
 
   useEffect(() => {
     setValue(initialValue || '')

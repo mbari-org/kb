@@ -12,12 +12,14 @@ import { SELECTED } from '@/lib/constants/selected.js'
 const { REFERENCES: SETTINGS } = SELECTED.SETTINGS
 const PANEL = CONFIG.PANELS.REFERENCES.PANEL
 const ALL_CONCEPTS = PANEL.SUBTITLE.ALL_CONCEPTS
+const FILTERS = SETTINGS.FILTERS
 
 const ReferencesHeaderTitle = () => {
-  const { citationGlob, conceptExtent, conceptGlob } = use(ReferencesContext)
+  const { conceptExtent, filters } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const byConcept = getSettings(SETTINGS.KEY, SETTINGS.BY_CONCEPT)
-  const conceptName = byConcept ? getSelected(SELECTED.CONCEPT) : null
+  const selectedConcept = getSelected(SELECTED.CONCEPT)
+  const conceptName = byConcept ? filters[FILTERS.CONCEPT] || selectedConcept : null
 
   const title = PANEL.NAME
   let subtitle = ALL_CONCEPTS
@@ -33,7 +35,7 @@ const ReferencesHeaderTitle = () => {
         subtitle = conceptName
     }
   }
-  const hasTextFilter = Boolean(citationGlob?.trim() || conceptGlob?.trim())
+  const hasTextFilter = Boolean(filters[FILTERS.CITATION]?.trim() || filters[FILTERS.CONCEPTS]?.trim())
   if (hasTextFilter) {
     subtitle = `${subtitle} (filtered)`
   }

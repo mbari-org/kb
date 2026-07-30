@@ -13,7 +13,7 @@ import { CONCEPT, SELECTED } from '@/lib/constants'
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { EXPORT } = CONFIG.PANELS.TEMPLATES.EXPORT.TOOLTIP
+const { EXPORT } = CONFIG.PANELS.TEMPLATES.PANEL.TOOLTIP
 const { FILTERS } = SELECTED.SETTINGS.TEMPLATES
 const { TOTAL } = CONFIG.EXPORT
 

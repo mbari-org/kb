@@ -9,7 +9,8 @@ import { ROLES } from '@/lib/constants'
 import CONFIG from '@/lib/config'
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
-  const lockTooltip = locked => (locked ? CONFIG.PANELS.USERS.TOOLTIP.UNLOCK : CONFIG.PANELS.USERS.TOOLTIP.LOCK)
+  const lockTooltip = locked =>
+    locked ? CONFIG.PANELS.USERS.PANEL.TOOLTIP.UNLOCK : CONFIG.PANELS.USERS.PANEL.TOOLTIP.LOCK
 
   const columns = [
     {
@@ -32,7 +33,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
           <ActionIcon
             Icon={CiEdit}
             onClick={() => editUserModal(params.row)}
-            tooltip={CONFIG.PANELS.USERS.TOOLTIP.EDIT}
+            tooltip={CONFIG.PANELS.USERS.PANEL.TOOLTIP.EDIT}
             color='edit'
             size={24}
             disabled={params.row.locked}

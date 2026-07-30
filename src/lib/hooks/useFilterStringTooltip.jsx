@@ -26,7 +26,7 @@ const useFilterStringTooltip = filterTemplate => {
       >
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
           <Typography variant='body2'>
-            <strong>{CONFIG.PANELS.TEMPLATES.TOOLTIP.FILTER}</strong>
+            <strong>{CONFIG.PANELS.TEMPLATES.PANEL.TOOLTIP.FILTER}</strong>
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>

@@ -7,7 +7,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.EXPORT
+const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.PANEL
 const { TOTAL } = CONFIG.EXPORT
 
 const RealizationsTableHeaderLeft = () => {

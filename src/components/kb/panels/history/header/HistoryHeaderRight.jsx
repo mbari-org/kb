@@ -15,7 +15,7 @@ const HistoryHeaderRight = () => {
   const handleHistorySelection = (_, historyType) =>
     !!historyType && updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: historyType } })
 
-  const tooltips = CONFIG.PANELS.HISTORY.TOOLTIP.TYPE
+  const tooltips = CONFIG.PANELS.HISTORY.PANEL.TOOLTIP.TYPE
 
   return <HistoryHeaderToggle onChange={handleHistorySelection} tooltips={tooltips} />
 }

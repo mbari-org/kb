@@ -13,57 +13,63 @@ import { getDescendantNames } from '@/lib/model/concept'
 const { CONCEPT: SELECTED_CONCEPT } = SELECTED
 const { REFERENCES } = SELECTED.SETTINGS
 const { EXTENT } = CONCEPT
+const FILTERS = REFERENCES.FILTERS
 
 const useFilteredReferences = () => {
   const { apiFns } = use(ConfigContext)
   const { getReferences } = use(PanelDataContext)
-  const { citationGlob, conceptExtent, conceptGlob } = use(ReferencesContext)
+  const { conceptExtent, filters, citationGlob, conceptGlob } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const { getConcept } = use(TaxonomyContext)
 
   const [descendantExtent, setDescendantExtent] = useState({ conceptName: null, names: [] })
 
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
-  const selectedConcept = byConcept ? getSelected(SELECTED_CONCEPT) : null
+  const selectedConcept = getSelected(SELECTED_CONCEPT)
+  const resolvedFilters = filters || {
+    [FILTERS.CITATION]: citationGlob || '',
+    [FILTERS.CONCEPT]: '',
+    [FILTERS.CONCEPTS]: conceptGlob || '',
+  }
+  const conceptFilter = byConcept ? resolvedFilters[FILTERS.CONCEPT] || selectedConcept : null
 
   useEffect(() => {
-    if (!selectedConcept || conceptExtent !== EXTENT.DESCENDANTS) return
+    if (!conceptFilter || conceptExtent !== EXTENT.DESCENDANTS) return
 
     let cancelled = false
     const loadDescendants = async () => {
-      const descendantNames = await getDescendantNames(apiFns, selectedConcept)
+      const descendantNames = await getDescendantNames(apiFns, conceptFilter)
       if (!cancelled) {
-        setDescendantExtent({ conceptName: selectedConcept, names: descendantNames })
+        setDescendantExtent({ conceptName: conceptFilter, names: descendantNames })
       }
     }
 
     loadDescendants().catch(() => {
       if (!cancelled) {
-        setDescendantExtent({ conceptName: selectedConcept, names: [] })
+        setDescendantExtent({ conceptName: conceptFilter, names: [] })
       }
     })
 
     return () => {
       cancelled = true
     }
-  }, [apiFns, conceptExtent, selectedConcept])
+  }, [apiFns, conceptExtent, conceptFilter])
 
   const allReferences = getReferences(null)
   let selectedReferences
   switch (conceptExtent) {
     case EXTENT.CHILDREN:
     case EXTENT.DESCENDANTS: {
-      if (!selectedConcept) {
+      if (!conceptFilter) {
         selectedReferences = allReferences
         break
       }
-
-      let extentConceptNames = [selectedConcept]
+      let extentConceptNames = [conceptFilter]
       if (conceptExtent === EXTENT.CHILDREN) {
-        const selectedTaxonomyConcept = getConcept(selectedConcept)
-        extentConceptNames = [selectedConcept, ...(selectedTaxonomyConcept?.children || [])]
-      } else if (descendantExtent.conceptName === selectedConcept) {
-        extentConceptNames = [selectedConcept, ...descendantExtent.names]
+        const selectedTaxonomyConcept = getConcept(conceptFilter)
+        extentConceptNames = [conceptFilter, ...(selectedTaxonomyConcept?.children || [])]
+      } else if (descendantExtent.conceptName === conceptFilter) {
+        extentConceptNames = [conceptFilter, ...descendantExtent.names]
       }
 
       const conceptNameSet = new Set(extentConceptNames)
@@ -73,11 +79,11 @@ const useFilteredReferences = () => {
       break
     }
     default:
-      selectedReferences = getReferences(selectedConcept)
+      selectedReferences = getReferences(conceptFilter)
   }
 
-  const trimmedCitationGlob = (citationGlob || '').toLowerCase()
-  const trimmedConceptGlob = (conceptGlob || '').toLowerCase()
+  const trimmedCitationGlob = (resolvedFilters[FILTERS.CITATION] || '').toLowerCase()
+  const trimmedConceptGlob = (resolvedFilters[FILTERS.CONCEPTS] || '').toLowerCase()
 
   const filteredReferences = selectedReferences.filter(reference => {
     const citationMatches = reference.citation.toLowerCase().includes(trimmedCitationGlob)
@@ -90,7 +96,7 @@ const useFilteredReferences = () => {
     return citationMatches && conceptMatches
   })
 
-  return { byConcept, conceptExtent, filteredReferences, selectedConcept }
+  return { byConcept, conceptExtent, filteredReferences, selectedConcept: conceptFilter }
 }
 
 export default useFilteredReferences

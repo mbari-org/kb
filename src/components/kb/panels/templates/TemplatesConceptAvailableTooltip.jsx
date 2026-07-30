@@ -14,7 +14,7 @@ const TOOLTIP_FONT = {
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
-const { SWITCH } = CONFIG.PANELS.TEMPLATES.TOOLTIP
+const { SWITCH } = CONFIG.PANELS.TEMPLATES.PANEL.TOOLTIP
 
 const selectedAvailableMessaging = (byAvailable, concept) => {
   if (!concept && !byAvailable) {

@@ -1,3 +1,6 @@
 {
-  "NAME": "Concepts"
+  "NAME": "Concepts",
+  "TOOLTIP": {
+    "EXPORT": "Export concept data"
+  }
 }

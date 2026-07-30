@@ -167,7 +167,7 @@ const useAddReferenceButton = () => {
       <PanelAddButton
         onClick={addReferenceModal}
         label={CONFIG.BUTTON.ADD}
-        tooltip={CONFIG.PANELS.REFERENCES.TOOLTIP.ADD}
+        tooltip={CONFIG.PANELS.REFERENCES.PANEL.TOOLTIP.ADD}
       />
     ),
     [addReferenceModal]

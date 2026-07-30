@@ -157,7 +157,9 @@ const useAddUserButton = () => {
   }, [closeModal, createModal, handleCancel, handleCommit, handleFormChange, updateModalData, users])
 
   const AddUserButton = useCallback(
-    () => <PanelAddButton onClick={addUserModal} label={CONFIG.BUTTON.ADD} tooltip={CONFIG.PANELS.USERS.TOOLTIP.ADD} />,
+    () => (
+      <PanelAddButton onClick={addUserModal} label={CONFIG.BUTTON.ADD} tooltip={CONFIG.PANELS.USERS.PANEL.TOOLTIP.ADD} />
+    ),
     [addUserModal]
   )
 

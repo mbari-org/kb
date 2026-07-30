@@ -8,10 +8,11 @@ import { SELECTED } from '@/lib/constants/selected.js'
 const { REFERENCES } = SELECTED.SETTINGS
 
 const ReferencesHeaderRight = () => {
-  const { conceptExtent, setConceptExtent } = use(ReferencesContext)
+  const { conceptExtent, filters, setConceptExtent } = use(ReferencesContext)
   const { getSelected, getSettings } = use(SelectedContext)
   const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
-  const conceptName = byConcept ? getSelected(SELECTED.CONCEPT) : null
+  const selectedConcept = getSelected(SELECTED.CONCEPT)
+  const conceptName = byConcept ? filters[REFERENCES.FILTERS.CONCEPT] || selectedConcept : null
 
   if (!conceptName) {
     return null

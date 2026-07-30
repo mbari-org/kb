@@ -6,7 +6,7 @@ import { CONCEPT } from '@/lib/constants'
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { TOOLTIP } = CONFIG.PANELS.REFERENCES.EXPORT
+const { TOOLTIP } = CONFIG.PANELS.REFERENCES.PANEL
 const { TOTAL } = CONFIG.EXPORT
 
 const ReferencesTableHeaderLeft = () => {

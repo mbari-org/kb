@@ -9,7 +9,7 @@ import useHistoryExport from '@/components/kb/panels/history/table/header/useHis
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { TOOLTIP } = CONFIG.PANELS.HISTORY.EXPORT
+const { TOOLTIP } = CONFIG.PANELS.HISTORY.PANEL
 const { TOTAL } = CONFIG.EXPORT
 
 const HistoryTableHeaderLeft = () => {
@@ -23,7 +23,7 @@ const HistoryTableHeaderLeft = () => {
       countLabel={TOTAL}
       exportButtonLabel={BUTTON.EXPORT}
       exportFn={historyExport}
-      exportTooltip={TOOLTIP.EXPORT}
+      exportTooltip={TOOLTIP.EXPORT.BUTTON}
       width='auto'
     />
   )

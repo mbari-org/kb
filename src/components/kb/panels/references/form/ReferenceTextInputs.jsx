@@ -8,11 +8,7 @@ const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
   const { isDoiUnique } = use(PanelDataContext)
 
   const [doiValue, handleDoiChange] = useDebouncedField(reference.doi, 'doi', handleFieldChange)
-  const [citationValue, handleCitationChange] = useDebouncedField(
-    reference.citation,
-    'citation',
-    handleFieldChange
-  )
+  const [citationValue, handleCitationChange] = useDebouncedField(reference.citation, 'citation', handleFieldChange)
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -25,6 +21,7 @@ const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
         required
         value={doiValue}
       />
+
       <TextField
         fullWidth
         label='Citation'

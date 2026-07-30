@@ -8,8 +8,8 @@ import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
 import { SELECTED } from '@/lib/constants/selected'
 import CONFIG from '@/lib/config'
 
-const { TEMPLATES } = SELECTED.SETTINGS
-const { BUTTON } = CONFIG.PANELS.TEMPLATES
+const { BUTTON } = CONFIG
+const { TEMPLATES: TEMPLATE_SETTINGS } = SELECTED.SETTINGS
 
 const renderHeaderMiddle = filters => {
   const updateFilters = vi.fn()
@@ -34,7 +34,7 @@ describe('TemplatesTableHeaderMiddle', () => {
   it('enables clear filters when any filter has a value', () => {
     renderHeaderMiddle({
       ...EMPTY_FILTERS,
-      [TEMPLATES.FILTERS.LINK_NAME]: 'contains',
+      [TEMPLATE_SETTINGS.FILTERS.LINK_NAME]: 'contains',
     })
 
     const clearButton = screen.getByRole('button', { name: BUTTON.CLEAR_FILTERS })

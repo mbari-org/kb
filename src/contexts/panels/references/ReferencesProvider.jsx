@@ -1,10 +1,11 @@
-import { use, useCallback, useState } from 'react'
+import { use, useCallback, useEffect } from 'react'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { ReferencesModalProvider } from './modal'
+import useUpdateFilters, { EMPTY_FILTERS } from './useUpdateFilters'
 
 import useModifyReferences from './useModifyReferences'
 import { CONCEPT } from '@/lib/constants'
@@ -12,32 +13,28 @@ import { SELECTED } from '@/lib/constants/selected.js'
 
 export const ReferencesProvider = ({ children }) => {
   const { setReferences } = use(PanelDataContext)
-  const { getSelected } = use(SelectedContext)
-  const [citationFilter, setCitationFilter] = useState({ concept: null, value: '' })
-  const [conceptFilter, setConceptFilter] = useState({ concept: null, value: '' })
-  const [extentFilter, setExtentFilter] = useState({ concept: null, value: CONCEPT.EXTENT.SOLO })
+  const { getSelected, getSettings, updateSettings } = use(SelectedContext)
   const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const citationGlob = citationFilter.concept === selectedConcept ? citationFilter.value : ''
-  const conceptGlob = conceptFilter.concept === selectedConcept ? conceptFilter.value : ''
-  const conceptExtent = extentFilter.concept === selectedConcept ? extentFilter.value : CONCEPT.EXTENT.SOLO
+  const referencesSettings = getSettings(SELECTED.SETTINGS.REFERENCES.KEY) || {}
+  const byConcept = referencesSettings[SELECTED.SETTINGS.REFERENCES.BY_CONCEPT]
+  const filters = referencesSettings[SELECTED.SETTINGS.REFERENCES.FILTERS.KEY] || EMPTY_FILTERS
+  const filterConcept = filters[SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]
+  const conceptExtent = filters[SELECTED.SETTINGS.REFERENCES.FILTERS.EXTENT] || CONCEPT.EXTENT.SOLO
+  const { updateFilters } = useUpdateFilters(filters, updateSettings)
 
-  const setCitationGlob = useCallback(
-    value => {
-      setCitationFilter({ concept: selectedConcept, value })
-    },
-    [selectedConcept]
-  )
-  const setConceptGlob = useCallback(
-    value => {
-      setConceptFilter({ concept: selectedConcept, value })
-    },
-    [selectedConcept]
-  )
+  useEffect(() => {
+    if (!byConcept) return
+    if (!selectedConcept) return
+    if (filterConcept) return
+
+    updateFilters({ [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: selectedConcept })
+  }, [byConcept, filterConcept, selectedConcept, updateFilters])
+
   const setConceptExtent = useCallback(
     value => {
-      setExtentFilter({ concept: selectedConcept, value })
+      updateFilters({ [SELECTED.SETTINGS.REFERENCES.FILTERS.EXTENT]: value })
     },
-    [selectedConcept]
+    [updateFilters]
   )
 
   const { addReference, editReference, deleteReference } = useModifyReferences({
@@ -46,14 +43,12 @@ export const ReferencesProvider = ({ children }) => {
 
   const value = {
     addReference,
-    citationGlob,
-    conceptGlob,
     conceptExtent,
     deleteReference,
     editReference,
-    setConceptGlob,
+    filters,
     setConceptExtent,
-    setCitationGlob,
+    updateFilters,
   }
 
   return (
