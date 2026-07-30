@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useState } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import TemplatesPagination from './TemplatesPagination'
@@ -16,8 +16,6 @@ const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.TEMPLATES
 const TemplatesTableData = () => {
   const { filteredTemplates } = use(TemplatesContext)
 
-  const [displayTemplates, setDisplayTemplates] = useState([])
-
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
 
@@ -25,21 +23,8 @@ const TemplatesTableData = () => {
   const deleteTemplateModal = useDeleteTemplateButton()
 
   const columns = useTemplateColumns({ deleteTemplateModal, editTemplateModal })
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!filteredTemplates || filteredTemplates.length === 0) {
-        setDisplayTemplates([])
-        return
-      }
-
-      const startIndex = (currentPage - 1) * pageSize
-      const endIndex = startIndex + pageSize
-      const paginated = filteredTemplates.slice(startIndex, endIndex)
-      setDisplayTemplates(paginated)
-    }, 0)
-    return () => clearTimeout(timeoutId)
-  }, [filteredTemplates, currentPage, pageSize])
+  const totalPages = Math.max(1, Math.ceil(filteredTemplates.length / pageSize))
+  const currentPageClamped = Math.min(Math.max(1, currentPage), totalPages)
 
   const handlePageChange = newPage => {
     setCurrentPage(newPage)
@@ -52,8 +37,8 @@ const TemplatesTableData = () => {
 
   const paginationComponent = (
     <TemplatesPagination
-      currentPage={currentPage}
-      displayTemplates={filteredTemplates}
+      currentPage={currentPageClamped}
+      templates={filteredTemplates}
       onPageChange={handlePageChange}
       onPageSizeChange={handlePageSizeChange}
       pageSize={pageSize}
@@ -67,11 +52,11 @@ const TemplatesTableData = () => {
       paginationComponent={paginationComponent}
       paginationMode='client'
       paginationModel={{
-        page: currentPage - 1, // MUI DataGrid uses 0-based indexing
+        page: currentPageClamped - 1, // MUI DataGrid uses 0-based indexing
         pageSize: pageSize,
       }}
       rowCount={filteredTemplates.length}
-      rows={displayTemplates}
+      rows={filteredTemplates}
     />
   )
 }

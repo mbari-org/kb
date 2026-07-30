@@ -9,14 +9,14 @@ import { PAGINATION } from '@/lib/constants/pagination.js'
 const PAGE_SIZE_OPTIONS = PAGINATION.TEMPLATES.PAGE_SIZE_OPTIONS
 
 const TemplatesPagination = ({
-  displayTemplates,
+  templates,
   pageSize,
   currentPage,
   onPageChange,
   onPageSizeChange,
 }) => {
-  // Calculate pagination values based on displayTemplates
-  const totalCount = displayTemplates.length
+  // Calculate pagination values based on all filtered templates
+  const totalCount = templates.length
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
   // Ensure currentPage is within valid range
