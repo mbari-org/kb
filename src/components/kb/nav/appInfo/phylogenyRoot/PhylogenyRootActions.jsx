@@ -10,7 +10,8 @@ import CONFIG from '@/lib/config'
 
 const phylogenyRootKey = PREFS.APP.PHYLOGENY.ROOT.KEY
 const { CANCEL, SAVE } = CONFIG.BUTTON
-const { SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.PHYLOGENY_ROOT.ALERT
+const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
+const { SAVE_CONFIRM } = phylogenyConfig.EDIT
 
 const PhylogenyRootActions = () => {
   const { closeModal, modalData, setModalData } = use(AppModalContext)

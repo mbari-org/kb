@@ -5,7 +5,7 @@ import { PREFS } from '@/lib/constants/prefs.js'
 import CONFIG from '@/lib/config'
 
 const MediaBaseUrlKey = PREFS.APP.MEDIA.BASE_URL.KEY
-const { INVALID_URL, SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.MEDIA_BASE_URL.ALERT
+const { INVALID_URL, SAVE_CONFIRM } = CONFIG.APP_INFO.MEDIA_URL.EDIT
 
 const MediaBaseURLActions = () => {
   const { mediaBaseURL } = use(ConfigContext)

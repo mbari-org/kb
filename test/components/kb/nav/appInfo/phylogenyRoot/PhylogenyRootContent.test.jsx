@@ -8,7 +8,7 @@ import CONFIG from '@/lib/config'
 
 const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
 const { DESCRIPTION, FIELD_LABEL } = phylogenyConfig
-const { SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.PHYLOGENY_ROOT.ALERT
+const { SAVE_CONFIRM } = phylogenyConfig.EDIT
 
 const renderContent = ({ alert = null, selectedPhylogenyRoot = '' } = {}) => {
   const setModalData = vi.fn()

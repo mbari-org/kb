@@ -4,21 +4,60 @@
   },
   "DSG_CONCEPT": {
     "DESCRIPTION": "The URL for DSG concept viewing. Concept names are appended to this URL to generate links to DSG concepts.",
-    "EDIT_TITLE": "Set DSG Concept URL",
-    "EDIT_TOOLTIP": "Set DSG Concept URL",
-    "FIELD_LABEL": "DSG Concept URL"
+    "FIELD_LABEL": "DSG Concept URL",
+    "EDIT": {
+      "TITLE": "Set DSG Concept URL",
+      "TOOLTIP": "Set DSG Concept URL",
+      "INVALID_URL": {
+        "LINES": [
+          "Please enter a valid URL for DSG concept viewing."
+        ],
+        "SEVERITY": "error"
+      },
+      "SAVE_CONFIRM": {
+        "LINES": [
+          "You are about to change the URL for DSG concept viewing.",
+          "Please confirm you want to continue."
+        ],
+        "SEVERITY": "success"
+      }
+    }
   },
   "MEDIA_URL": {
     "DESCRIPTION": "A base URL for media assets. Users can then attach media file names to the URL.",
-    "EDIT_TITLE": "Set Media Base URL",
-    "EDIT_TOOLTIP": "Set Media Base URL",
-    "FIELD_LABEL": "Media Base URL"
+    "FIELD_LABEL": "Media Base URL",
+    "EDIT": {
+      "TITLE": "Set Media Base URL",
+      "TOOLTIP": "Set Media Base URL",
+      "INVALID_URL": {
+        "LINES": [
+          "Please enter a valid base URL for media."
+        ],
+        "SEVERITY": "error"
+      },
+      "SAVE_CONFIRM": {
+        "LINES": [
+          "You are about to change the base URL for media.",
+          "Please confirm you want to continue."
+        ],
+        "SEVERITY": "success"
+      }
+    }
   },
   "PHYLOGENY_ROOT": {
     "DESCRIPTION": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level.",
-    "EDIT_TITLE": "Set Phylogeny Root",
-    "EDIT_TOOLTIP": "Set Phylogeny Root",
-    "FIELD_LABEL": "Phylogeny Root"
+    "FIELD_LABEL": "Phylogeny Root",
+    "EDIT": {
+      "TITLE": "Set Phylogeny Root",
+      "TOOLTIP": "Set Phylogeny Root",
+      "SAVE_CONFIRM": {
+        "LINES": [
+          "You are about to change the phylogeny root.",
+          "Please confirm you want to continue."
+        ],
+        "SEVERITY": "success"
+      }
+    }
   },
   "PHLOGENY_ROOT": {
     "DESCRIPTION": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level.",

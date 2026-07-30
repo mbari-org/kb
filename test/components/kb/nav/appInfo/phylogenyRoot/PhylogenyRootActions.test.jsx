@@ -9,6 +9,8 @@ import { PREFS } from '@/lib/constants/prefs'
 import CONFIG from '@/lib/config'
 
 const { CANCEL, SAVE } = CONFIG.BUTTON
+const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
+const { SAVE_CONFIRM } = phylogenyConfig.EDIT
 
 const renderActions = ({
   confirmCommit = false,
@@ -68,8 +70,8 @@ describe('PhylogenyRootActions', () => {
     const updatedData = modalUpdater({})
     expect(updatedData.confirmCommit).toBe(true)
     expect(updatedData.alert).toEqual({
-      lines: CONFIG.PANELS.ABOUT_HELP.PHYLOGENY_ROOT.ALERT.SAVE_CONFIRM.LINES,
-      severity: CONFIG.PANELS.ABOUT_HELP.PHYLOGENY_ROOT.ALERT.SAVE_CONFIRM.SEVERITY,
+      lines: SAVE_CONFIRM.LINES,
+      severity: SAVE_CONFIRM.SEVERITY,
     })
   })
 

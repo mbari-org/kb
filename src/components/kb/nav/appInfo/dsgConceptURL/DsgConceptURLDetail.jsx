@@ -6,8 +6,8 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import DsgConceptURLActions from './DsgConceptURLActions'
 import DsgConceptURLContent from './DsgConceptURLContent'
 import CONFIG from '@/lib/config'
-
-const { EDIT_TITLE, EDIT_TOOLTIP, FIELD_LABEL } = CONFIG.APP_INFO.DSG_CONCEPT
+const { EDIT, FIELD_LABEL } = CONFIG.APP_INFO.DSG_CONCEPT
+const { TITLE, TOOLTIP } = EDIT
 
 const DsgConceptURLDetail = ({ onEditComplete }) => {
   const { dsgConceptUrl } = use(ConfigContext)
@@ -17,11 +17,11 @@ const DsgConceptURLDetail = ({ onEditComplete }) => {
       Actions={DsgConceptURLActions}
       Content={DsgConceptURLContent}
       baseUrl={dsgConceptUrl}
-      editTooltip={EDIT_TOOLTIP}
+      editTooltip={TOOLTIP}
       label={FIELD_LABEL}
       modalDataValueKey='selectedDsgConceptUrl'
       onEditComplete={onEditComplete}
-      title={EDIT_TITLE}
+      title={TITLE}
     />
   )
 }

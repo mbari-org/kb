@@ -7,7 +7,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
 const { FIELD_LABEL, DESCRIPTION } = CONFIG.APP_INFO.MEDIA_URL
-const { SAVE_CONFIRM } = CONFIG.PANELS.ABOUT_HELP.MEDIA_BASE_URL.ALERT
+const { SAVE_CONFIRM } = CONFIG.APP_INFO.MEDIA_URL.EDIT
 
 const renderContent = ({ alert = null, selectedMediaBaseURL = '' } = {}) => {
   const setModalData = vi.fn()

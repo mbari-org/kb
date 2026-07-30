@@ -9,6 +9,7 @@ import { PREFS } from '@/lib/constants/prefs'
 import CONFIG from '@/lib/config'
 
 const { CANCEL, SAVE } = CONFIG.BUTTON
+const { SAVE_CONFIRM } = CONFIG.APP_INFO.MEDIA_URL.EDIT
 
 const renderActions = ({
   confirmCommit = false,
@@ -69,8 +70,8 @@ describe('MediaBaseURLActions', () => {
     const updatedData = modalUpdater({})
     expect(updatedData.confirmCommit).toBe(true)
     expect(updatedData.alert).toEqual({
-      lines: CONFIG.PANELS.ABOUT_HELP.MEDIA_BASE_URL.ALERT.SAVE_CONFIRM.LINES,
-      severity: CONFIG.PANELS.ABOUT_HELP.MEDIA_BASE_URL.ALERT.SAVE_CONFIRM.SEVERITY,
+      lines: SAVE_CONFIRM.LINES,
+      severity: SAVE_CONFIRM.SEVERITY,
     })
   })
 
