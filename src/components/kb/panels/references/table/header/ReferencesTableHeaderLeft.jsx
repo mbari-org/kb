@@ -6,7 +6,8 @@ import { CONCEPT } from '@/lib/constants'
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { TOOLTIP, TOTAL } = CONFIG.PANELS.REFERENCES.EXPORT
+const { TOOLTIP } = CONFIG.PANELS.REFERENCES.EXPORT
+const { TOTAL } = CONFIG.EXPORT
 
 const ReferencesTableHeaderLeft = () => {
   const { byConcept, filteredReferences } = useFilteredReferences()

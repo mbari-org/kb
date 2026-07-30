@@ -9,7 +9,8 @@ import useHistoryExport from '@/components/kb/panels/history/table/header/useHis
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { TOOLTIP, TOTAL } = CONFIG.PANELS.HISTORY.EXPORT
+const { TOOLTIP } = CONFIG.PANELS.HISTORY.EXPORT
+const { TOTAL } = CONFIG.EXPORT
 
 const HistoryTableHeaderLeft = () => {
   const { conceptState } = use(HistoryContext)

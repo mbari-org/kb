@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useMemo, useState } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import RealizationsPagination from '@/components/kb/panels/realizations/table/data/RealizationsPagination'
@@ -11,30 +11,16 @@ const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.REALIZATIONS
 
 const RealizationsTableData = () => {
   const { filteredRealizations } = use(RealizationsContext)
-  const [displayRealizations, setDisplayRealizations] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
 
   const columns = useRealizationColumns()
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!filteredRealizations || filteredRealizations.length === 0) {
-        setDisplayRealizations([])
-        return
-      }
-
-      const startIndex = (currentPage - 1) * pageSize
-      const endIndex = startIndex + pageSize
-      setDisplayRealizations(
-        filteredRealizations
-          .slice(startIndex, endIndex)
-          .map((realization, index) => ({ ...realization, __rowId: realization.id || `${startIndex + index}` }))
-      )
-    }, 0)
-
-    return () => clearTimeout(timeoutId)
-  }, [filteredRealizations, currentPage, pageSize])
+  const realizationRows = useMemo(
+    () => filteredRealizations.map((realization, index) => ({ ...realization, __rowId: realization.id || `${index}` })),
+    [filteredRealizations]
+  )
+  const totalPages = Math.max(1, Math.ceil(realizationRows.length / pageSize))
+  const currentPageClamped = Math.min(Math.max(1, currentPage), totalPages)
 
   const handlePageChange = newPage => {
     setCurrentPage(newPage)
@@ -47,8 +33,8 @@ const RealizationsTableData = () => {
 
   const paginationComponent = (
     <RealizationsPagination
-      currentPage={currentPage}
-      displayRealizations={filteredRealizations}
+      currentPage={currentPageClamped}
+      realizations={realizationRows}
       onPageChange={handlePageChange}
       onPageSizeChange={handlePageSizeChange}
       pageSize={pageSize}
@@ -62,17 +48,16 @@ const RealizationsTableData = () => {
       paginationComponent={paginationComponent}
       paginationMode='client'
       paginationModel={{
-        page: currentPage - 1,
+        page: currentPageClamped - 1,
         pageSize,
       }}
       dataGridProps={{
         disableColumnFilter: true,
         disableColumnMenu: true,
-        disableColumnSorting: true,
         getRowId: row => row.__rowId,
       }}
-      rowCount={filteredRealizations.length}
-      rows={displayRealizations}
+      rowCount={realizationRows.length}
+      rows={realizationRows}
     />
   )
 }
