@@ -6,7 +6,7 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import CONFIG from '@/lib/config'
 
 import { SELECTED } from '@/lib/constants'
-import useFilterStringTooltip from '@/lib/hooks/useFilterStringTooltip'
+import useFilterDisplay from '@/lib/hooks/useFilterDisplay'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
@@ -24,7 +24,7 @@ const TemplatesHeaderTitle = () => {
   }
 
   const subtitle = filterString(filterTemplate)
-  const subtitleTooltip = useFilterStringTooltip(filterTemplate)
+  const subtitleTooltip = useFilterDisplay(filterTemplate)
 
   return <PanelHeaderTitle subtitle={subtitle} subtitleTooltip={subtitleTooltip} title={title} />
 }

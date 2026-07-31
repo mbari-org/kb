@@ -1,4 +1,18 @@
 {
+  "FILTER": {
+    "DEFAULT": {
+      "CONCEPT": "*",
+      "LINK_NAME": "*",
+      "TO_CONCEPT": "*",
+      "LINK_VALUE": "*"
+    },
+    "LABEL": {
+      "CONCEPT": "Concept",
+      "LINK_NAME": "Link Name",
+      "TO_CONCEPT": "To Concept",
+      "LINK_VALUE": "Link Value"
+    }
+  },
   "NAME": "Templates",
   "TOOLTIP": {
     "ADD": {

@@ -1,19 +1,16 @@
-import { Box, Typography } from '@mui/material'
 import { useMemo } from 'react'
+import { Box, Typography } from '@mui/material'
 
 import CONFIG from '@/lib/config'
 
-/**
- * Hook that returns a tooltip component with structured filter information
- * @param {Object} filterTemplate - The filter template object with concept, linkName, toConcept, linkValue
- * @returns {JSX.Element} A Box component containing filter details for use in tooltips
- */
-const useFilterStringTooltip = filterTemplate => {
+const { FILTER } = CONFIG.PANELS.TEMPLATES.PANEL
+
+const useFilterDisplay = filterTemplate => {
   return useMemo(() => {
-    const concept = filterTemplate?.concept || CONFIG.COMMON.TEMPLATE_FILTERS.DEFAULTS.CONCEPT
-    const linkName = filterTemplate?.linkName || CONFIG.COMMON.TEMPLATE_FILTERS.DEFAULTS.LINK_NAME
-    const toConcept = filterTemplate?.toConcept || CONFIG.COMMON.TEMPLATE_FILTERS.DEFAULTS.TO_CONCEPT
-    const linkValue = filterTemplate?.linkValue || CONFIG.COMMON.TEMPLATE_FILTERS.DEFAULTS.LINK_VALUE
+    const concept = filterTemplate?.concept || FILTER.DEFAULT.CONCEPT
+    const linkName = filterTemplate?.linkName || FILTER.DEFAULT.LINK_NAME
+    const toConcept = filterTemplate?.toConcept || FILTER.DEFAULT.TO_CONCEPT
+    const linkValue = filterTemplate?.linkValue || FILTER.DEFAULT.LINK_VALUE
 
     return (
       <Box
@@ -26,30 +23,30 @@ const useFilterStringTooltip = filterTemplate => {
       >
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
           <Typography variant='body2'>
-            <strong>{CONFIG.PANELS.TEMPLATES.PANEL.TOOLTIP.FILTER}</strong>
+            <strong>Current filter</strong>
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>{CONFIG.COMMON.TEMPLATE_FILTERS.LABELS.CONCEPT}:</strong>
+            <strong>{FILTER.LABEL.CONCEPT}:</strong>
           </Typography>
           <Typography variant='body2'>{concept}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>{CONFIG.COMMON.TEMPLATE_FILTERS.LABELS.LINK_NAME}:</strong>
+            <strong>{FILTER.LABEL.LINK_NAME}:</strong>
           </Typography>
           <Typography variant='body2'>{linkName}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>{CONFIG.COMMON.TEMPLATE_FILTERS.LABELS.TO_CONCEPT}:</strong>
+            <strong>{FILTER.LABEL.TO_CONCEPT}:</strong>
           </Typography>
           <Typography variant='body2'>{toConcept}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>{CONFIG.COMMON.TEMPLATE_FILTERS.LABELS.LINK_VALUE}:</strong>
+            <strong>{FILTER.LABEL.LINK_VALUE}:</strong>
           </Typography>
           <Typography variant='body2'>{linkValue}</Typography>
         </Box>
@@ -58,4 +55,4 @@ const useFilterStringTooltip = filterTemplate => {
   }, [filterTemplate])
 }
 
-export default useFilterStringTooltip
+export default useFilterDisplay

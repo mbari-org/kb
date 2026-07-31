@@ -4,7 +4,7 @@ import RealizationsContext from '@/contexts/panels/realizations/RealizationsCont
 
 import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
-import useFilterStringTooltip from '@/lib/hooks/useFilterStringTooltip'
+import useFilterDisplay from '@/lib/hooks/useFilterDisplay'
 
 const PANEL = CONFIG.PANELS.REALIZATIONS.PANEL
 
@@ -22,7 +22,7 @@ const RealizationsHeaderTitle = () => {
   }
 
   const subtitle = filterString(filterRealization)
-  const subtitleTooltip = useFilterStringTooltip(filterRealization)
+  const subtitleTooltip = useFilterDisplay(filterRealization)
 
   return <PanelHeaderTitle subtitle={subtitle} subtitleTooltip={subtitleTooltip} title={title} />
 }
