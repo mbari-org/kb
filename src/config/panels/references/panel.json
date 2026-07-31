@@ -10,11 +10,11 @@
     "ALL_CONCEPTS": "All Concepts"
   },
   "TOOLTIP": {
-    "ADD": "Add reference",
+    "ADD": "Add Reference",
     "FILTERS": {
-      "CONCEPT": "Match Concept name in Concepts",
-      "CITATION": "Match substring in Citations",
-      "CONCEPTS": "Match substring in Concepts"
+      "CONCEPT": "Filter by exact Concept name in Concepts list",
+      "CITATION": "Filter by substring in Citations",
+      "CONCEPTS": "Filter by substring in Concepts"
     },
     "EXPORT": {
       "ALL": "Export all references",

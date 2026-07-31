@@ -28,27 +28,29 @@ const RealizationsTableHeaderMiddle = () => {
 
   return (
     <Stack direction='row' spacing={5} sx={{ alignItems: 'center' }}>
-      <TableHeaderLinkFilter
-        name={REALIZATIONS.FILTERS.LINK_NAME}
-        value={filters[REALIZATIONS.FILTERS.LINK_NAME] || ''}
-        onChange={handleFilterChange}
-      />
-      <KBTooltipTarget title={TOOLTIP.CLEAR_FILTERS}>
-        <Button
-          disabled={isClearFiltersDisabled}
-          onClick={handleClearAll}
-          sx={{
-            fontSize: '0.8rem',
-          }}
-        >
-          {BUTTON.CLEAR_FILTERS}
-        </Button>
+      <KBTooltipTarget title={TOOLTIP.FILTER.LINK_NAME}>
+        <TableHeaderLinkFilter
+          name={REALIZATIONS.FILTERS.LINK_NAME}
+          value={filters[REALIZATIONS.FILTERS.LINK_NAME] || ''}
+          onChange={handleFilterChange}
+        />
       </KBTooltipTarget>
-      <TableHeaderLinkFilter
-        name={REALIZATIONS.FILTERS.LINK_VALUE}
-        value={filters[REALIZATIONS.FILTERS.LINK_VALUE] || ''}
-        onChange={handleFilterChange}
-      />
+      <Button
+        disabled={isClearFiltersDisabled}
+        onClick={handleClearAll}
+        sx={{
+          fontSize: '0.8rem',
+        }}
+      >
+        {BUTTON.CLEAR_FILTERS}
+      </Button>
+      <KBTooltipTarget title={TOOLTIP.FILTER.LINK_VALUE}>
+        <TableHeaderLinkFilter
+          name={REALIZATIONS.FILTERS.LINK_VALUE}
+          value={filters[REALIZATIONS.FILTERS.LINK_VALUE] || ''}
+          onChange={handleFilterChange}
+        />
+      </KBTooltipTarget>
     </Stack>
   )
 }

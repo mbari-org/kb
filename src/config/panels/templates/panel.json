@@ -1,17 +1,14 @@
 {
   "FILTER": {
-    "DEFAULT": {
-      "CONCEPT": "*",
-      "LINK_NAME": "*",
-      "TO_CONCEPT": "*",
-      "LINK_VALUE": "*"
-    },
+    "CURRENT": "Current Filters",
     "LABEL": {
       "CONCEPT": "Concept",
       "LINK_NAME": "Link Name",
       "TO_CONCEPT": "To Concept",
       "LINK_VALUE": "Link Value"
-    }
+    },
+    "NONE": "*",
+    "NO_SET": "not set"
   },
   "NAME": "Templates",
   "TOOLTIP": {
@@ -20,33 +17,34 @@
       "CONCEPT_NOT_SELECTED": "Select concept to add template"
     },
     "EXPORT": {
-      "ALL": "Export all templates",
-      "CONCEPT": "Export templates for selected concept",
-      "CONCEPT_TO_CONCEPT": "Export templates for selected concept to selected to concept",
-      "TO_CONCEPT": "Export templates for selected to concept"
+      "ALL": "Export All Templates",
+      "CONCEPT": "Export Templates for Selected Concept",
+      "CONCEPT_TO_CONCEPT": "Export Templates for Selected Concept to Selected To Concept",
+      "TO_CONCEPT": "Export Templates for Selected To Concept"
     },
     "FILTER": {
-      "CURRENT": "Current filter",
-      "LINK_NAME": "Match substring in Link Name",
-      "LINK_VALUE": "Match substring in Link Value"
+      "CONCEPT": "Filter by Concept",
+      "LINK_NAME": "Filter by substring in Link Name",
+      "LINK_VALUE": "Filter by substring in Link Value",
+      "TO_CONCEPT": "Filter by To Concept"
     },
     "SWITCH": {
       "AVAILABLE": {
-        "TITLE": "Available concept templates",
-        "CONCEPT": "For available concept templates, any concept can be selected.",
-        "TEMPLATES": "With available concept templates on, all templates available for use with the selected concept are displayed."
+        "TITLE": "Showing Available Concept Templates",
+        "CONCEPT": "Any concept can be selected.",
+        "TEMPLATES": "All available templates for use with the selected concept are displayed."
       },
-      "CONCEPT": "Concept templates",
+      "CONCEPT": "Concept Selection",
       "EXPLICIT": {
-        "TITLE": "Explicit concept templates",
-        "CONCEPT": "With available concept templates off, only concept with explicit templates can be selected.",
-        "TEMPLATES": "With available concept templates off, only templates explicitly defined for the selected concept are displayed."
+        "TITLE": "Showing Explicit Concept Templates",
+        "CONCEPT": "Only concept with explicit templates can be selected.",
+        "TEMPLATES": "Only templates explicitly defined for the selected concept are displayed."
       },
       "NO_CONCEPT": {
-        "TITLE": "All templates",
+        "TITLE": "All Templates",
         "TEMPLATES": "With no concept selected, all templates are displayed."
       },
-      "TEMPLATES": "Templates displayed"
+      "TEMPLATES": "Templates Displayed"
     }
   }
 }

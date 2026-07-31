@@ -1,8 +1,8 @@
 {
-  "LABEL": "Add concept",
-  "SELECT_REMOVE": "Select concept to remove",
+  "LABEL": "Add Concept",
+  "SELECT_REMOVE": "Select Concept to Remove",
   "TOOLTIP": {
-    "ADD": "Add a concept to the reference",
-    "REMOVE": "Click to remove a concept from the reference"
+    "ADD": "Add a Concept to the Concepts list",
+    "REMOVE": "Click to remove a Concept from the Concepts list"
   }
 }

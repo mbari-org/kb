@@ -2,14 +2,19 @@ import { use, useEffect } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ConceptNavAuxiliary from '@/components/common/concept/ConceptNavAuxiliary'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 
+import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
+
 const { CONCEPT, PANEL } = SELECTED
 const { REALIZATIONS } = SELECTED.SETTINGS
 const { FILTERS } = REALIZATIONS
+
+const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.PANEL
 
 const RealizationsHeaderLeft = () => {
   const { concepts, getSelected, updateSelected } = use(SelectedContext)
@@ -38,13 +43,15 @@ const RealizationsHeaderLeft = () => {
   }
 
   return (
-    <ConceptSelect
-      auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
-      conceptName={filterConcept}
-      doConceptSelected={handleConceptSelected}
-      selectables={selectables}
-      updateConceptSelected={true}
-    />
+    <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTER.CONCEPT}>
+      <ConceptSelect
+        auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
+        conceptName={filterConcept}
+        doConceptSelected={handleConceptSelected}
+        selectables={selectables}
+        updateConceptSelected={true}
+      />
+    </KBTooltipTarget>
   )
 }
 

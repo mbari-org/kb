@@ -1,13 +1,17 @@
 import { use, useEffect } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import TemplatesConceptSelectAuxiliary from '@/components/kb/panels/templates/header/TemplatesConceptSelectAuxiliary'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
+import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
+
+const { TOOLTIP } = CONFIG.PANELS.TEMPLATES.PANEL
 
 const { SETTINGS } = SELECTED
 const { TEMPLATES } = SETTINGS
@@ -46,13 +50,15 @@ const TemplatesHeaderLeft = () => {
   }
 
   return (
-    <ConceptSelect
-      auxiliaryComponent={<TemplatesConceptSelectAuxiliary />}
-      conceptName={filters[FILTERS.CONCEPT]}
-      doConceptSelected={handleConceptSelected}
-      selectables={selectables}
-      updateConceptSelected={true}
-    />
+    <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTER.CONCEPT}>
+      <ConceptSelect
+        auxiliaryComponent={<TemplatesConceptSelectAuxiliary />}
+        conceptName={filters[FILTERS.CONCEPT]}
+        doConceptSelected={handleConceptSelected}
+        selectables={selectables}
+        updateConceptSelected={true}
+      />
+    </KBTooltipTarget>
   )
 }
 

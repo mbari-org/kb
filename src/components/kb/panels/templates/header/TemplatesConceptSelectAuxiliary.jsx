@@ -5,11 +5,9 @@ import TemplatesConceptAvailableTooltip from '@/components/kb/panels/templates/T
 import CONFIG from '@/lib/config'
 
 const TemplatesConceptSelectAuxiliary = () => {
-  const infoIcon = (
-    <KBInfoIcon tooltip={<TemplatesConceptAvailableTooltip />} placement='top' size={16} sx={{ mb: 1 }} />
-  )
+  const infoIcon = <KBInfoIcon tooltip={<TemplatesConceptAvailableTooltip />} sx={{ mb: 1, ml: -7 }} />
 
-  return <ConceptSelectAuxiliary label={CONFIG.CONCEPT.SELECT.CONCEPT} components={[infoIcon, null]} />
+  return <ConceptSelectAuxiliary components={[infoIcon, null]} label={CONFIG.CONCEPT.SELECT.CONCEPT} />
 }
 
 export default TemplatesConceptSelectAuxiliary

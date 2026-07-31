@@ -4,11 +4,15 @@
     "ALL_CONCEPTS": "All Concepts"
   },
   "TOOLTIP": {
-    "CLEAR_FILTERS": "Clear filters",
-    "FILTER": "Current filter",
     "EXPORT": {
       "ALL": "Export all realizations",
       "CONCEPT": "Export realizations for selected concept"
+    },
+    "FILTER": {
+      "CONCEPT": "Filter by Concept",
+      "LINK_NAME": "Filter by substring in Link Name",
+      "LINK_VALUE": "Filter by substring in Link Value",
+      "TO_CONCEPT": "Filter by To Concept"
     }
   }
 }

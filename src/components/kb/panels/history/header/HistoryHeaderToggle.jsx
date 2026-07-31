@@ -5,11 +5,13 @@ import HistoryToggleButton from './HistoryToggleButton'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 
+import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
 
+const { TOGGLE: TOOGLE_TOOLTIP } = CONFIG.PANELS.HISTORY.PANEL.TOOLTIP
 const { PENDING, APPROVED, CONCEPT } = SELECTED.SETTINGS.HISTORY.TYPES
 
-const HistoryHeaderToggle = ({ onChange, tooltips }) => {
+const HistoryHeaderToggle = ({ onChange }) => {
   const { selectedType } = use(HistoryContext)
 
   return (
@@ -21,9 +23,9 @@ const HistoryHeaderToggle = ({ onChange, tooltips }) => {
       sx={{ mr: 1 }}
       value={selectedType}
     >
-      <HistoryToggleButton value={APPROVED} tooltip={tooltips?.APPROVED} />
-      <HistoryToggleButton value={PENDING} tooltip={tooltips?.PENDING} />
-      <HistoryToggleButton value={CONCEPT} tooltip={tooltips?.CONCEPT} />
+      <HistoryToggleButton tooltip={TOOGLE_TOOLTIP.APPROVED} value={APPROVED} />
+      <HistoryToggleButton tooltip={TOOGLE_TOOLTIP.PENDING} value={PENDING} />
+      <HistoryToggleButton tooltip={TOOGLE_TOOLTIP.CONCEPT} value={CONCEPT} />
     </ToggleButtonGroup>
   )
 }

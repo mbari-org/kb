@@ -2,14 +2,11 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-const ConceptSelectAuxiliary = ({ disabled = false, label, components = [] }) => {
+const ConceptSelectAuxiliary = ({ components = [], disabled = false, label }) => {
   const activeComponents = disabled ? [] : components
 
   return (
-    <Stack
-      direction='row'
-      sx={{ alignItems: 'center', minHeight: '40px' }}
-    >
+    <Stack direction='row' sx={{ alignItems: 'center', minHeight: '40px' }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography
           sx={{

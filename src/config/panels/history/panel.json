@@ -19,7 +19,7 @@
       "NEWEST": "Order by newest first",
       "OLDEST": "Order by oldest first"
     },
-    "TYPE": {
+    "TOGGLE": {
       "APPROVED": "Display all approved history",
       "CONCEPT": "Display all history for selected concept",
       "PENDING": "Display all pending history"
