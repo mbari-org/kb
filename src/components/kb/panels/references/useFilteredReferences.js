@@ -3,14 +3,12 @@ import { use, useEffect, useState } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT } from '@/lib/constants'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { getDescendantNames } from '@/lib/model/concept'
 
-const { CONCEPT: SELECTED_CONCEPT } = SELECTED
 const { REFERENCES } = SELECTED.SETTINGS
 const { EXTENT } = CONCEPT
 const FILTERS = REFERENCES.FILTERS
@@ -19,19 +17,16 @@ const useFilteredReferences = () => {
   const { apiFns } = use(ConfigContext)
   const { getReferences } = use(PanelDataContext)
   const { conceptExtent, filters, citationGlob, conceptGlob } = use(ReferencesContext)
-  const { getSelected, getSettings } = use(SelectedContext)
   const { getConcept } = use(TaxonomyContext)
 
   const [descendantExtent, setDescendantExtent] = useState({ conceptName: null, names: [] })
 
-  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
-  const selectedConcept = getSelected(SELECTED_CONCEPT)
   const resolvedFilters = filters || {
     [FILTERS.CITATION]: citationGlob || '',
     [FILTERS.CONCEPT]: '',
     [FILTERS.CONCEPTS]: conceptGlob || '',
   }
-  const conceptFilter = byConcept ? resolvedFilters[FILTERS.CONCEPT] || selectedConcept : null
+  const conceptFilter = resolvedFilters[FILTERS.CONCEPT] || null
 
   useEffect(() => {
     if (!conceptFilter || conceptExtent !== EXTENT.DESCENDANTS) return
@@ -96,7 +91,7 @@ const useFilteredReferences = () => {
     return citationMatches && conceptMatches
   })
 
-  return { byConcept, conceptExtent, filteredReferences, selectedConcept: conceptFilter }
+  return { conceptExtent, filteredReferences, selectedConcept: conceptFilter }
 }
 
 export default useFilteredReferences

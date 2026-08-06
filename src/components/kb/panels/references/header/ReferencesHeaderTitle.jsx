@@ -2,8 +2,6 @@ import { use } from 'react'
 import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
-import SelectedContext from '@/contexts/selected/SelectedContext'
-
 import CONFIG from '@/lib/config'
 import { CONCEPT } from '@/lib/constants'
 
@@ -16,10 +14,7 @@ const FILTERS = SETTINGS.FILTERS
 
 const ReferencesHeaderTitle = () => {
   const { conceptExtent, filters } = use(ReferencesContext)
-  const { getSelected, getSettings } = use(SelectedContext)
-  const byConcept = getSettings(SETTINGS.KEY, SETTINGS.BY_CONCEPT)
-  const selectedConcept = getSelected(SELECTED.CONCEPT)
-  const conceptName = byConcept ? filters[FILTERS.CONCEPT] || selectedConcept : null
+  const conceptName = filters[FILTERS.CONCEPT]
 
   const title = PANEL.NAME
   let subtitle = ALL_CONCEPTS

@@ -13,6 +13,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
 
 const { REFERENCES } = SELECTED.SETTINGS
+const { FILTERS } = REFERENCES
 
 const ConceptReferences = () => {
   const { getReferences } = use(PanelDataContext)
@@ -35,7 +36,11 @@ const ConceptReferences = () => {
 
   const linkToReferences = () => {
     const panel = SELECTED.PANELS.REFERENCES
-    const settings = { [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } }
+    const settings = {
+      [REFERENCES.KEY]: {
+        [REFERENCES.FILTERS.KEY]: { [FILTERS.CONCEPT]: selectedConcept },
+      },
+    }
     guardPanelChange({
       onSafe: () => {
         updateSelected({ [SELECTED.PANEL]: panel })

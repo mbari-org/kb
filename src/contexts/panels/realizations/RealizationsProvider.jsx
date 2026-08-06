@@ -4,7 +4,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { EMPTY_FILTERS } from '@/contexts/panels/realizations/constants'
+import { DEFAULT_FILTERS } from '@/contexts/panels/realizations/constants'
 import useUpdateFilters from '@/contexts/panels/realizations/useUpdateFilters'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
@@ -17,7 +17,7 @@ const RealizationsProvider = ({ children }) => {
   const { realizations, refreshData } = use(PanelDataContext)
 
   const realizationsSettings = getSettings(REALIZATIONS.KEY) || {}
-  const filters = realizationsSettings[FILTERS.KEY] || EMPTY_FILTERS
+  const filters = realizationsSettings[FILTERS.KEY] || DEFAULT_FILTERS
 
   const selectedPanel = getSelected(SELECTED.PANEL)
   const selectedConcept = getSelected(SELECTED.CONCEPT)

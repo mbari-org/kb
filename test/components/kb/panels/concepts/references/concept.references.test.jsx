@@ -67,7 +67,7 @@ describe('Concept panel references', () => {
       expect(onUpdateSelected).toHaveBeenCalledWith({ panel: 'References' })
     })
     expect(onUpdateSettings).toHaveBeenCalledWith({
-      references: { byConcept: true },
+      references: { filters: { concept: 'dingo' } },
     })
     expect(onSetGuardedAction).not.toHaveBeenCalled()
   })
@@ -97,7 +97,7 @@ describe('Concept panel references', () => {
         payload: {
           panel: 'References',
           settings: {
-            references: { byConcept: true },
+            references: { filters: { concept: 'dingo' } },
           },
         },
       })

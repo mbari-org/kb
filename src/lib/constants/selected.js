@@ -21,7 +21,6 @@ export const SELECTED = {
     },
     REFERENCES: {
       KEY: 'references',
-      BY_CONCEPT: 'byConcept',
       FILTERS: {
         KEY: 'filters',
         CITATION: 'citation',

@@ -28,10 +28,9 @@ const conceptHistory = {
 
 const renderHeader = ({
   selectedConcept = 'dingo',
-  byConcept = true,
   filters = { [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: 'dingo' },
 } = {}) => {
-  const updateSettings = vi.fn()
+  const updateSelected = vi.fn()
   const updateFilters = vi.fn()
 
   const getSelected = key => {
@@ -44,20 +43,12 @@ const renderHeader = ({
     }
   }
 
-  const getSettings = (key, subKey) => {
-    if (key === SELECTED.SETTINGS.REFERENCES.KEY && subKey === SELECTED.SETTINGS.REFERENCES.BY_CONCEPT) {
-      return byConcept
-    }
-    return undefined
-  }
-
   render(
     <SelectedContext.Provider
       value={{
         concepts: conceptHistory,
         getSelected,
-        getSettings,
-        updateSettings,
+        updateSelected,
       }}
     >
       <ReferencesContext.Provider value={{ filters, updateFilters }}>
@@ -66,7 +57,7 @@ const renderHeader = ({
     </SelectedContext.Provider>
   )
 
-  return { updateFilters, updateSettings }
+  return { updateFilters, updateSelected }
 }
 
 describe('ReferencesHeaderLeft', () => {
@@ -75,10 +66,9 @@ describe('ReferencesHeaderLeft', () => {
     vi.clearAllMocks()
   })
 
-  it('passes references concept filter value to ConceptSelect when by-concept mode is enabled', () => {
+  it('passes references concept filter value to ConceptSelect', () => {
     renderHeader({
       selectedConcept: 'dingo',
-      byConcept: true,
       filters: { [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: 'object' },
     })
 
@@ -86,39 +76,29 @@ describe('ReferencesHeaderLeft', () => {
     expect(capturedConceptSelectProps.conceptName).toBe('object')
   })
 
-  it('uses empty ConceptSelect value when by-concept mode is disabled', () => {
-    renderHeader({ selectedConcept: 'dingo', byConcept: false })
-
-    expect(capturedConceptSelectProps).toBeDefined()
-    expect(capturedConceptSelectProps.conceptName).toBe('')
-  })
-
-  it('updates references filters and references settings through ConceptSelect callbacks', () => {
-    const { updateFilters, updateSettings } = renderHeader({
-      selectedConcept: 'dingo',
-      byConcept: true,
-    })
+  it('updates global selected concept and references filter from ConceptSelect selection', () => {
+    const { updateFilters, updateSelected } = renderHeader()
 
     act(() => {
       capturedConceptSelectProps.doConceptSelected('object')
     })
 
+    expect(updateSelected).toHaveBeenCalledWith({ [SELECTED.CONCEPT]: 'object' })
     expect(updateFilters).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: 'object',
     })
-    expect(updateSettings).toHaveBeenCalledWith({
-      [SELECTED.SETTINGS.REFERENCES.KEY]: { [SELECTED.SETTINGS.REFERENCES.BY_CONCEPT]: true },
-    })
+  })
+
+  it('clears references filter without affecting selected concept', () => {
+    const { updateFilters, updateSelected } = renderHeader()
 
     act(() => {
       capturedConceptSelectProps.onClear()
     })
 
+    expect(updateSelected).not.toHaveBeenCalled()
     expect(updateFilters).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: '',
-    })
-    expect(updateSettings).toHaveBeenCalledWith({
-      [SELECTED.SETTINGS.REFERENCES.KEY]: { [SELECTED.SETTINGS.REFERENCES.BY_CONCEPT]: false },
     })
   })
 })

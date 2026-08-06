@@ -13,8 +13,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 
 const { TOOLTIP } = CONFIG.PANELS.TEMPLATES.PANEL
 
-const { SETTINGS } = SELECTED
-const { TEMPLATES } = SETTINGS
+const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
 
 const TemplatesHeaderLeft = () => {
@@ -39,14 +38,13 @@ const TemplatesHeaderLeft = () => {
   }, [filtersConcept, selectedConcept, selectedPanel, updateFilters])
 
   const handleConceptSelected = conceptName => {
-    if (conceptName) {
-      updateSelected({ [SELECTED.CONCEPT]: conceptName })
-      updateFilters({ [FILTERS.CONCEPT]: conceptName })
-    } else {
-      updateSelected({ [SELECTED.CONCEPT]: null })
-      updateFilters({ [FILTERS.CONCEPT]: '' })
-      updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: false } })
-    }
+    updateSelected({ [SELECTED.CONCEPT]: conceptName })
+    updateFilters({ [FILTERS.CONCEPT]: conceptName })
+  }
+
+  const handleClear = () => {
+    updateFilters({ [FILTERS.CONCEPT]: '' })
+    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: false } })
   }
 
   return (
@@ -55,6 +53,7 @@ const TemplatesHeaderLeft = () => {
         auxiliaryComponent={<TemplatesConceptSelectAuxiliary />}
         conceptName={filters[FILTERS.CONCEPT]}
         doConceptSelected={handleConceptSelected}
+        onClear={handleClear}
         selectables={selectables}
         updateConceptSelected={true}
       />

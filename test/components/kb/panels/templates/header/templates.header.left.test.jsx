@@ -97,14 +97,14 @@ describe('TemplatesHeaderLeft', () => {
     })
   })
 
-  it('clears template concept filter, selected concept, and turns off by-available mode on clear selection', () => {
+  it('clears template concept filter and turns off by-available mode without affecting selected concept', () => {
     const { updateFilters, updateSelected, updateSettings } = renderHeader()
 
     act(() => {
-      capturedConceptSelectProps.doConceptSelected(null)
+      capturedConceptSelectProps.onClear()
     })
 
-    expect(updateSelected).toHaveBeenCalledWith({ [SELECTED.CONCEPT]: null })
+    expect(updateSelected).not.toHaveBeenCalled()
     expect(updateFilters).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT]: '',
     })

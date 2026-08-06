@@ -27,18 +27,18 @@ const RealizationsHeaderLeft = () => {
   useEffect(() => {
     const isRealizationsPanel = selectedPanel === SELECTED.PANELS.REALIZATIONS
     if (filterConcept === '' && isRealizationsPanel) return
+
     if (selectedConcept && selectedConcept !== filterConcept) {
       updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
     }
   }, [filterConcept, selectedConcept, selectedPanel, updateFilters])
 
   const handleConceptSelected = conceptName => {
-    if (conceptName) {
-      updateSelected({ [SELECTED.CONCEPT]: conceptName })
-      updateFilters({ [FILTERS.CONCEPT]: conceptName })
-      return
-    }
-    updateSelected({ [SELECTED.CONCEPT]: null })
+    updateSelected({ [SELECTED.CONCEPT]: conceptName })
+    updateFilters({ [FILTERS.CONCEPT]: conceptName })
+  }
+
+  const handleClear = () => {
     updateFilters({ [FILTERS.CONCEPT]: '' })
   }
 
@@ -48,6 +48,7 @@ const RealizationsHeaderLeft = () => {
         auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
         conceptName={filterConcept}
         doConceptSelected={handleConceptSelected}
+        onClear={handleClear}
         selectables={selectables}
         updateConceptSelected={true}
       />

@@ -53,28 +53,24 @@ const references = [
   { id: 'r4', citation: 'alpha other', concepts: ['other'] },
 ]
 
-const renderTable = ({ byConcept, citationGlob, conceptExtent }) => {
+const renderTable = ({ conceptExtent, filters }) => {
   const getReferences = conceptName =>
     conceptName
       ? references.filter(reference => reference.concepts.includes(conceptName))
       : references
 
   const getSelected = key => (key === SELECTED.CONCEPT ? 'shark' : null)
-  const getSettings = (key, setting) =>
-    key === SELECTED.SETTINGS.REFERENCES.KEY && setting === SELECTED.SETTINGS.REFERENCES.BY_CONCEPT
-      ? byConcept
-      : null
 
   return render(
     <ConfigContext value={{ apiFns: { apiPayload: vi.fn() } }}>
       <PanelDataContext value={{ getReferences }}>
         <ReferencesContext
           value={{
-            citationGlob,
             conceptExtent,
+            filters,
           }}
         >
-          <SelectedContext value={{ getSelected, getSettings }}>
+          <SelectedContext value={{ getSelected }}>
             <TaxonomyContext value={{ getConcept: () => ({ children: ['shark-child'] }) }}>
               <ReferencesTableData />
             </TaxonomyContext>
@@ -88,9 +84,11 @@ const renderTable = ({ byConcept, citationGlob, conceptExtent }) => {
 describe('ReferencesTableData filtering', () => {
   it('filters by selected concept when extent is solo', () => {
     renderTable({
-      byConcept: true,
-      citationGlob: 'alpha',
       conceptExtent: CONCEPT.EXTENT.SOLO,
+      filters: {
+        [SELECTED.SETTINGS.REFERENCES.FILTERS.CITATION]: 'alpha',
+        [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: 'shark',
+      },
     })
 
     expect(screen.getByTestId('row-count')).toHaveTextContent('1')
@@ -99,9 +97,8 @@ describe('ReferencesTableData filtering', () => {
 
   it('includes selected concept and children when extent is children', () => {
     renderTable({
-      byConcept: true,
-      citationGlob: '',
       conceptExtent: CONCEPT.EXTENT.CHILDREN,
+      filters: { [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: 'shark' },
     })
 
     expect(screen.getByTestId('row-count')).toHaveTextContent('2')
@@ -112,9 +109,11 @@ describe('ReferencesTableData filtering', () => {
     getDescendantNamesMock.mockResolvedValueOnce(['shark-child', 'shark-grandchild'])
 
     renderTable({
-      byConcept: true,
-      citationGlob: 'alpha',
       conceptExtent: CONCEPT.EXTENT.DESCENDANTS,
+      filters: {
+        [SELECTED.SETTINGS.REFERENCES.FILTERS.CITATION]: 'alpha',
+        [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: 'shark',
+      },
     })
 
     await waitFor(() => {

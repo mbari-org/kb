@@ -5,7 +5,6 @@ import TextInput from '@/components/common/TextInput'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import useDebouncedField from '@/lib/hooks/useDebouncedField'
 
@@ -20,8 +19,6 @@ const TOOLTIP = CONFIG.PANELS.REFERENCES.PANEL.TOOLTIP
 
 const ReferencesTableHeaderMiddle = () => {
   const { filters, updateFilters } = use(ReferencesContext)
-  const { getSettings, updateSettings } = use(SelectedContext)
-  const byConcept = getSettings(SELECTED.SETTINGS.REFERENCES.KEY, SELECTED.SETTINGS.REFERENCES.BY_CONCEPT)
 
   const handleFieldChange = key => value => {
     switch (key) {
@@ -61,14 +58,9 @@ const ReferencesTableHeaderMiddle = () => {
   const hasConceptFilter = Boolean(filters[FILTER_SETTINGS.CONCEPT])
   const hasExtentFilter = (filters[FILTER_SETTINGS.EXTENT] || CONCEPT.EXTENT.SOLO) !== CONCEPT.EXTENT.SOLO
   const isClearFiltersDisabled =
-    !hasCitationFilter &&
-    !hasConceptsFilter &&
-    !hasConceptFilter &&
-    !hasExtentFilter &&
-    !byConcept
+    !hasCitationFilter && !hasConceptsFilter && !hasConceptFilter && !hasExtentFilter
   const handleClearFilters = () => {
     updateFilters(null)
-    updateSettings({ [SELECTED.SETTINGS.REFERENCES.KEY]: { [SELECTED.SETTINGS.REFERENCES.BY_CONCEPT]: false } })
   }
 
   return (

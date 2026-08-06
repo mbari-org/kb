@@ -10,10 +10,10 @@ const { TOOLTIP } = CONFIG.PANELS.REFERENCES.PANEL
 const { TOTAL } = CONFIG.EXPORT
 
 const ReferencesTableHeaderLeft = () => {
-  const { byConcept, filteredReferences } = useFilteredReferences()
+  const { filteredReferences, selectedConcept } = useFilteredReferences()
   const referencesExport = useReferencesExport()
 
-  const exportTooltip = byConcept ? TOOLTIP.EXPORT.CONCEPT : TOOLTIP.EXPORT.ALL
+  const exportTooltip = selectedConcept ? TOOLTIP.EXPORT.CONCEPT : TOOLTIP.EXPORT.ALL
 
   const countLabel = TOTAL
   const exportButtonLabel = BUTTON.EXPORT

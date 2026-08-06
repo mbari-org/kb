@@ -8,7 +8,6 @@ import { createError, createValidationError } from '@/lib/errors'
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import {
@@ -25,20 +24,16 @@ const { PROCESSING } = CONFIG
 
 const { REFERENCES } = SELECTED.SETTINGS
 const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
+const { FILTERS } = REFERENCES
 
 const useAddReferenceButton = () => {
   const { isDoiUnique } = use(PanelDataContext)
-  const { addReference } = use(ReferencesContext)
+  const { addReference, filters } = use(ReferencesContext)
   const { closeModal, createModal, updateModalData, withProcessing } = useReferencesModalOperationsContext()
-  const { getSelected, getSettings } = use(SelectedContext)
 
-  const conceptName = getSelected(SELECTED.CONCEPT)
-  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
+  const conceptName = filters[FILTERS.CONCEPT] || null
 
-  const initialReferenceData = useMemo(
-    () => createInitialReference(byConcept ? conceptName : null),
-    [byConcept, conceptName]
-  )
+  const initialReferenceData = useMemo(() => createInitialReference(conceptName), [conceptName])
 
   const { handleCancel, handleFormChange } = useMemo(
     () => createHandlers(updateModalData, closeModal, false, isDoiUnique),

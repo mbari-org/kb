@@ -1,4 +1,4 @@
-import { use, useEffect, useRef } from 'react'
+import { use, useEffect } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ConceptNavAuxiliary from '@/components/common/concept/ConceptNavAuxiliary'
@@ -15,47 +15,42 @@ const TOOLTIP = CONFIG.PANELS.REFERENCES.PANEL.TOOLTIP
 
 const { CONCEPT, PANEL, PANELS, SETTINGS } = SELECTED
 const { REFERENCES } = SETTINGS
+const { FILTERS } = REFERENCES
 
 const ReferencesHeaderLeft = () => {
-  const { concepts, getSelected, getSettings, updateSettings } = use(SelectedContext)
+  const { concepts, getSelected, updateSelected } = use(SelectedContext)
   const { filters, updateFilters } = use(ReferencesContext)
-
-  const byConcept = getSettings(REFERENCES.KEY, REFERENCES.BY_CONCEPT)
 
   const selectedConcept = getSelected(CONCEPT)
   const selectedPanel = getSelected(PANEL)
 
-  const prevSelectedPanelRef = useRef(selectedPanel)
+  const filtersConcept = filters[FILTERS.CONCEPT]
 
   useEffect(() => {
-    const wasReferencesPanel = prevSelectedPanelRef.current === PANELS.REFERENCES
     const isReferencesPanel = selectedPanel === PANELS.REFERENCES
+    if (filtersConcept === '' && isReferencesPanel) return
 
-    if (!wasReferencesPanel && isReferencesPanel && selectedConcept && !byConcept) {
-      updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: true } })
+    if (selectedConcept && selectedConcept !== filtersConcept) {
+      updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
     }
+  }, [filtersConcept, selectedConcept, selectedPanel, updateFilters])
 
-    prevSelectedPanelRef.current = selectedPanel
-  }, [byConcept, selectedConcept, selectedPanel, updateSettings])
-
-  const handleConceptSelected = selectedName => {
-    updateFilters({ [REFERENCES.FILTERS.CONCEPT]: selectedName || '' })
-    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: !!selectedName } })
+  const handleConceptSelected = conceptName => {
+    updateSelected({ [CONCEPT]: conceptName })
+    updateFilters({ [FILTERS.CONCEPT]: conceptName })
   }
 
   const handleClear = () => {
-    updateFilters({ [REFERENCES.FILTERS.CONCEPT]: '' })
-    updateSettings({ [REFERENCES.KEY]: { [REFERENCES.BY_CONCEPT]: false } })
+    updateFilters({ [FILTERS.CONCEPT]: '' })
   }
 
   return (
     <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTERS.CONCEPT}>
       <ConceptSelect
         auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
-        conceptName={byConcept ? filters[REFERENCES.FILTERS.CONCEPT] || '' : ''}
+        conceptName={filters[FILTERS.CONCEPT] || ''}
         doConceptSelected={handleConceptSelected}
         onClear={handleClear}
-        updateConceptSelected={false}
       />
     </KBTooltipTarget>
   )
