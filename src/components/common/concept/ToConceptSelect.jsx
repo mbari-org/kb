@@ -1,7 +1,15 @@
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ToConceptSelectAuxiliary from '@/components/common/concept/ToConceptSelectAuxiliary'
 
-const ToConceptSelect = ({ conceptName, disabled, doConceptSelected, onSpecialChange, required = true, width }) => {
+const ToConceptSelect = ({
+  conceptName,
+  disabled,
+  doConceptSelected,
+  onSpecialChange,
+  required = true,
+  selectables,
+  width,
+}) => {
   return (
     <ConceptSelect
       conceptName={conceptName}
@@ -16,6 +24,7 @@ const ToConceptSelect = ({ conceptName, disabled, doConceptSelected, onSpecialCh
       }
       includeSpecialOptions={true}
       required={required}
+      selectables={selectables}
       updateConceptSelected={false}
       width={width}
     />

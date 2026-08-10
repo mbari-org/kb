@@ -9,6 +9,8 @@ import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
+import CONFIG from '@/lib/config'
+
 const { REALIZATIONS } = SELECTED.SETTINGS
 const FILTERS = REALIZATIONS.FILTERS
 const { DEFAULT_FILTERS } = dataFilters(REALIZATIONS.KEY)
@@ -51,6 +53,20 @@ const RealizationsProvider = ({ children }) => {
       }
     })
     return Array.from(uniqueConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+  }, [realizations])
+
+  const explicitToConcepts = useMemo(() => {
+    if (realizations.length === 0) {
+      return []
+    }
+    const uniqueToConcepts = new Set()
+    realizations.forEach(realization => {
+      if (realization.toConcept) {
+        uniqueToConcepts.add(realization.toConcept)
+      }
+    })
+
+    return Array.from(uniqueToConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
   }, [realizations])
 
   const filteredRealizations = useMemo(() => {
@@ -97,13 +113,14 @@ const RealizationsProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       explicitConcepts,
+      explicitToConcepts,
       filteredRealizations,
       filters,
       filterString,
       realizations: realizations,
       updateFilters,
     }),
-    [explicitConcepts, filteredRealizations, filters, filterString, realizations, updateFilters]
+    [explicitConcepts, explicitToConcepts, filteredRealizations, filters, filterString, realizations, updateFilters]
   )
 
   return <RealizationsContext value={value}>{children}</RealizationsContext>

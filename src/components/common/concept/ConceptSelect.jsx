@@ -59,22 +59,22 @@ const ConceptSelect = ({
 
   const { updateSelected } = use(SelectedContext)
   const { getConceptPrimaryName, getNames } = use(TaxonomyContext)
-  const hasSpecialOptions = includeSpecialOptions
 
   const options = useMemo(() => {
     const baseOptions = selectables ? selectables : getNames()
 
     // If this is a special component (ToConcept), include special values in options
-    if (hasSpecialOptions) {
-      return [...baseOptions, ...CONFIG.CONCEPT.TO_SPECIAL]
+    if (includeSpecialOptions) {
+      const specialOptions = CONFIG.CONCEPT.TO_SPECIAL.filter(option => !baseOptions.includes(option))
+      return [...baseOptions, ...specialOptions]
     }
 
     return baseOptions
-  }, [getNames, hasSpecialOptions, selectables])
+  }, [getNames, includeSpecialOptions, selectables])
 
   const handleConceptSelect = selectedName => {
     if (selectedName) {
-      const isSpecialSelection = hasSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName)
+      const isSpecialSelection = includeSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName)
       const isValidSelection = options.includes(selectedName) || isSpecialSelection
 
       if (isValidSelection) {

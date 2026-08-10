@@ -11,13 +11,15 @@ const { REALIZATIONS } = SELECTED.SETTINGS
 const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.PANEL
 
 const RealizationsHeaderRight = () => {
-  const { filters, updateFilters } = use(RealizationsContext)
+  const { explicitToConcepts, filters, updateFilters } = use(RealizationsContext)
+  const selectables = explicitToConcepts.length > 0 ? explicitToConcepts : undefined
 
   return (
     <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTER.TO_CONCEPT}>
       <ToConceptSelect
         conceptName={filters[REALIZATIONS.FILTERS.TO_CONCEPT]}
         doConceptSelected={toConcept => updateFilters({ [REALIZATIONS.FILTERS.TO_CONCEPT]: toConcept })}
+        selectables={selectables}
       />
     </KBTooltipTarget>
   )

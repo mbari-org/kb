@@ -9,10 +9,10 @@
       "CONCEPT": "Export realizations for selected concept"
     },
     "FILTER": {
-      "CONCEPT": "Filter by Concept",
+      "CONCEPT": "Filter by Realization Concepts",
       "LINK_NAME": "Filter by substring in Link Name",
       "LINK_VALUE": "Filter by substring in Link Value",
-      "TO_CONCEPT": "Filter by To Concept"
+      "TO_CONCEPT": "Filter by Realization To Concepts"
     }
   }
 }
