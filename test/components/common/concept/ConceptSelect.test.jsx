@@ -110,6 +110,24 @@ describe('ConceptSelect', () => {
     unmount()
   })
 
+  it('ranks options as exact match, then prefix, then contains', async () => {
+    const user = userEvent.setup()
+    renderConceptSelect({
+      taxonomyNames: ['Amedusa', 'medu', 'Medusa', 'xmedu', 'object'],
+    })
+
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    await user.type(input, 'medu')
+
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'medu' })).toBeInTheDocument()
+    })
+
+    const optionNames = screen.getAllByRole('option').map(option => option.textContent)
+    expect(optionNames).toEqual(['medu', 'Medusa', 'Amedusa', 'xmedu'])
+  })
+
   it('uses the concept primary name when an alias is selected', async () => {
     const user = userEvent.setup()
     const getConceptPrimaryName = vi.fn(name => (name === 'dingo-alias' ? 'dingo' : name))
