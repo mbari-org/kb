@@ -15,7 +15,7 @@ const { TEMPLATES } = SELECTED.SETTINGS
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
   const { updateFilters } = use(TemplatesContext)
-  const { updateSelected } = use(SelectedContext)
+  const { updateSelected, updateSettings } = use(SelectedContext)
 
   const columns = [
     {
@@ -51,7 +51,10 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       renderCell: TemplateCell({
         filterKey: TEMPLATES.FILTERS.CONCEPT,
         updateFilters,
-        onConceptClick: conceptName => updateSelected({ [SELECTED.CONCEPT]: conceptName }),
+        onConceptClick: conceptName => {
+          updateSelected({ [SELECTED.CONCEPT]: conceptName })
+          updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: false } })
+        },
       }),
       width: 175,
     },

@@ -84,8 +84,8 @@ describe('TemplatesHeaderLeft', () => {
     expect(capturedConceptSelectProps.selectables).toEqual(['root', 'dingo', 'object'])
   })
 
-  it('updates selected concept and template filters from ConceptSelect callback', () => {
-    const { updateFilters, updateSelected } = renderHeader()
+  it('updates selected concept and template filters from ConceptSelect callback and turns off by-available', () => {
+    const { updateFilters, updateSelected, updateSettings } = renderHeader()
 
     act(() => {
       capturedConceptSelectProps.doConceptSelected('object')
@@ -95,9 +95,12 @@ describe('TemplatesHeaderLeft', () => {
     expect(updateFilters).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT]: 'object',
     })
+    expect(updateSettings).toHaveBeenCalledWith({
+      [SELECTED.SETTINGS.TEMPLATES.KEY]: { [SELECTED.SETTINGS.TEMPLATES.BY_AVAILABLE]: false },
+    })
   })
 
-  it('clears template concept filter and turns off by-available mode without affecting selected concept', () => {
+  it('clears template concept filter and turns on by-available mode without affecting selected concept', () => {
     const { updateFilters, updateSelected, updateSettings } = renderHeader()
 
     act(() => {
@@ -109,7 +112,7 @@ describe('TemplatesHeaderLeft', () => {
       [SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT]: '',
     })
     expect(updateSettings).toHaveBeenCalledWith({
-      [SELECTED.SETTINGS.TEMPLATES.KEY]: { [SELECTED.SETTINGS.TEMPLATES.BY_AVAILABLE]: false },
+      [SELECTED.SETTINGS.TEMPLATES.KEY]: { [SELECTED.SETTINGS.TEMPLATES.BY_AVAILABLE]: true },
     })
   })
 

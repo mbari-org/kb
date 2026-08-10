@@ -40,11 +40,12 @@ const TemplatesHeaderLeft = () => {
   const handleConceptSelected = conceptName => {
     updateSelected({ [SELECTED.CONCEPT]: conceptName })
     updateFilters({ [FILTERS.CONCEPT]: conceptName })
+    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: false } })
   }
 
   const handleClear = () => {
     updateFilters({ [FILTERS.CONCEPT]: '' })
-    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: false } })
+    updateSettings({ [TEMPLATES.KEY]: { [TEMPLATES.BY_AVAILABLE]: true } })
   }
 
   return (
