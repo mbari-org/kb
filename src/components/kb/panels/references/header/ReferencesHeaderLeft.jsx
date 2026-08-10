@@ -45,7 +45,7 @@ const ReferencesHeaderLeft = () => {
   }
 
   return (
-    <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTERS.CONCEPT}>
+    <KBTooltipTarget placement='right' title={TOOLTIP.FILTERS.CONCEPT}>
       <ConceptSelect
         auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
         conceptName={filters[FILTERS.CONCEPT] || ''}

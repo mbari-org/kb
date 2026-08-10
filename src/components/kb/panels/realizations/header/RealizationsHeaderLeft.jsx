@@ -43,7 +43,7 @@ const RealizationsHeaderLeft = () => {
   }
 
   return (
-    <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTER.CONCEPT}>
+    <KBTooltipTarget placement='right' title={TOOLTIP.FILTER.CONCEPT}>
       <ConceptSelect
         auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
         conceptName={filterConcept}

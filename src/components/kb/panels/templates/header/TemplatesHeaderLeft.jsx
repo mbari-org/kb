@@ -48,7 +48,7 @@ const TemplatesHeaderLeft = () => {
   }
 
   return (
-    <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTER.CONCEPT}>
+    <KBTooltipTarget placement='right' title={TOOLTIP.FILTER.CONCEPT}>
       <ConceptSelect
         auxiliaryComponent={<TemplatesConceptSelectAuxiliary />}
         conceptName={filters[FILTERS.CONCEPT]}
