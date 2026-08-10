@@ -7,12 +7,13 @@ import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
+import dataFilters from '@/contexts/panels/dataFilters'
 import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
 const { TEMPLATES: TEMPLATE_SETTINGS } = SELECTED.SETTINGS
+const { EMPTY_FILTERS } = dataFilters(TEMPLATE_SETTINGS.KEY)
 const { TOOLTIP } = CONFIG.PANELS.TEMPLATES.PANEL
 
 const TemplatesTableHeaderMiddle = () => {

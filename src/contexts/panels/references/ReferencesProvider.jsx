@@ -5,17 +5,15 @@ import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { ReferencesModalProvider } from './modal'
-import useUpdateFilters from './useUpdateFilters'
+import dataFilters from '@/contexts/panels/dataFilters'
+import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
 
 import useModifyReferences from './useModifyReferences'
 import { CONCEPT } from '@/lib/constants'
 import { SELECTED } from '@/lib/constants/selected.js'
 
-const DEFAULT_FILTERS = {
-  [SELECTED.SETTINGS.REFERENCES.FILTERS.CITATION]: '',
-  [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPTS]: '',
-  [SELECTED.SETTINGS.REFERENCES.FILTERS.EXTENT]: CONCEPT.EXTENT.SOLO,
-}
+const { REFERENCES } = SELECTED.SETTINGS
+const { DEFAULT_FILTERS } = dataFilters(REFERENCES.KEY)
 
 export const ReferencesProvider = ({ children }) => {
   const { setReferences } = use(PanelDataContext)
@@ -23,23 +21,23 @@ export const ReferencesProvider = ({ children }) => {
   const selectedPanel = getSelected(SELECTED.PANEL)
   const selectedConcept = getSelected(SELECTED.CONCEPT)
   const isReferencesPanelSelected = selectedPanel === SELECTED.PANELS.REFERENCES
-  const referencesSettings = getSettings(SELECTED.SETTINGS.REFERENCES.KEY) || {}
-  const filters = referencesSettings[SELECTED.SETTINGS.REFERENCES.FILTERS.KEY] || DEFAULT_FILTERS
-  const filterConcept = filters[SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]
-  const conceptExtent = filters[SELECTED.SETTINGS.REFERENCES.FILTERS.EXTENT] || CONCEPT.EXTENT.SOLO
+  const referencesSettings = getSettings(REFERENCES.KEY) || {}
+  const filters = referencesSettings[REFERENCES.FILTERS.KEY] || DEFAULT_FILTERS
+  const filterConcept = filters[REFERENCES.FILTERS.CONCEPT]
+  const conceptExtent = filters[REFERENCES.FILTERS.EXTENT] || CONCEPT.EXTENT.SOLO
   const isInitialConceptFilterPending =
     isReferencesPanelSelected && typeof filterConcept === 'undefined' && Boolean(selectedConcept)
-  const { updateFilters } = useUpdateFilters(filters, updateSettings)
+  const { updateFilters } = useUpdateFilters(REFERENCES.KEY, updateSettings)
 
   useEffect(() => {
     if (isInitialConceptFilterPending) {
-      updateFilters({ [SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT]: selectedConcept })
+      updateFilters({ [REFERENCES.FILTERS.CONCEPT]: selectedConcept })
     }
   }, [isInitialConceptFilterPending, selectedConcept, updateFilters])
 
   const setConceptExtent = useCallback(
     value => {
-      updateFilters({ [SELECTED.SETTINGS.REFERENCES.FILTERS.EXTENT]: value })
+      updateFilters({ [REFERENCES.FILTERS.EXTENT]: value })
     },
     [updateFilters]
   )

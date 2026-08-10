@@ -2,20 +2,7 @@ import generalStateUpdates from '@/contexts/panels/concepts/staged/edit/generalS
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
-import { SELECTED } from '@/lib/constants/selected.js'
-
 import { isJsonEqual } from '@/lib/utils'
-
-const { TEMPLATES } = SELECTED.SETTINGS
-
-const { CONCEPT, TO_CONCEPT, LINK_NAME, LINK_VALUE } = TEMPLATES.FILTERS
-
-const EMPTY_FILTERS = {
-  [CONCEPT]: '',
-  [TO_CONCEPT]: '',
-  [LINK_NAME]: '',
-  [LINK_VALUE]: '',
-}
 
 const isMatching = (template, pendingTemplate) => {
   const templateString =
@@ -55,4 +42,4 @@ const isModified = (initial, staged) => !isJsonEqual(initial?.templates, staged?
 
 const stateUpdates = (initial, staged) => generalStateUpdates('templates', initial, staged)
 
-export { EMPTY_FILTERS, initialState, isModified, isPendingTemplate, stateUpdates, templateState }
+export { initialState, isModified, isPendingTemplate, stateUpdates, templateState }

@@ -24,6 +24,7 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: ['kb.localtest.me', '.localtest.me'],
     host: true,
     strictPort: true,
     port: 5173,

@@ -4,6 +4,25 @@ import { SELECTED } from '@/lib/constants/selected.js'
 
 const { HISTORY, REALIZATIONS, REFERENCES, TEMPLATES } = SELECTED.SETTINGS
 
+const mergePanelSettings = (prevPanelSettings = {}, nextPanelSettings = {}, filtersKey) => {
+  const { replaceFilters = false, ...panelUpdates } = nextPanelSettings
+  const updatedPanelSettings = {
+    ...prevPanelSettings,
+    ...panelUpdates,
+  }
+
+  if (Object.hasOwn(panelUpdates, filtersKey)) {
+    updatedPanelSettings[filtersKey] = replaceFilters
+      ? panelUpdates[filtersKey]
+      : {
+          ...(prevPanelSettings[filtersKey] || {}),
+          ...panelUpdates[filtersKey],
+        }
+  }
+
+  return updatedPanelSettings
+}
+
 const useSettings = () => {
   const [settings, setSettings] = useState({
     [HISTORY.KEY]: { [HISTORY.TYPE]: HISTORY.TYPES.PENDING },
@@ -37,23 +56,26 @@ const useSettings = () => {
       }
 
       if (references) {
-        updatedSettings[REFERENCES.KEY] = {
-          ...prevSettings[REFERENCES.KEY],
-          ...references,
-        }
+        updatedSettings[REFERENCES.KEY] = mergePanelSettings(
+          prevSettings[REFERENCES.KEY],
+          references,
+          REFERENCES.FILTERS.KEY
+        )
       }
       if (realizations) {
-        updatedSettings[REALIZATIONS.KEY] = {
-          ...prevSettings[REALIZATIONS.KEY],
-          ...realizations,
-        }
+        updatedSettings[REALIZATIONS.KEY] = mergePanelSettings(
+          prevSettings[REALIZATIONS.KEY],
+          realizations,
+          REALIZATIONS.FILTERS.KEY
+        )
       }
 
       if (templates) {
-        updatedSettings[TEMPLATES.KEY] = {
-          ...prevSettings[TEMPLATES.KEY],
-          ...templates,
-        }
+        updatedSettings[TEMPLATES.KEY] = mergePanelSettings(
+          prevSettings[TEMPLATES.KEY],
+          templates,
+          TEMPLATES.FILTERS.KEY
+        )
       }
 
       return updatedSettings

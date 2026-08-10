@@ -4,13 +4,14 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { DEFAULT_FILTERS } from '@/contexts/panels/realizations/constants'
-import useUpdateFilters from '@/contexts/panels/realizations/useUpdateFilters'
+import dataFilters from '@/contexts/panels/dataFilters'
+import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
 const FILTERS = REALIZATIONS.FILTERS
+const { DEFAULT_FILTERS } = dataFilters(REALIZATIONS.KEY)
 
 const RealizationsProvider = ({ children }) => {
   const { getSelected, getSettings, updateSettings } = use(SelectedContext)
@@ -25,7 +26,7 @@ const RealizationsProvider = ({ children }) => {
   const isInitialConceptFilterPending =
     isRealizationsPanelSelected && typeof filters[FILTERS.CONCEPT] === 'undefined' && Boolean(selectedConcept)
 
-  const { updateFilters } = useUpdateFilters(filters, updateSettings)
+  const { updateFilters } = useUpdateFilters(REALIZATIONS.KEY, updateSettings)
 
   useEffect(() => {
     if (isInitialConceptFilterPending) {
@@ -102,7 +103,7 @@ const RealizationsProvider = ({ children }) => {
       realizations: realizations,
       updateFilters,
     }),
-    [realizations, explicitConcepts, filteredRealizations, filters, filterString, updateFilters]
+    [explicitConcepts, filteredRealizations, filters, filterString, realizations, updateFilters]
   )
 
   return <RealizationsContext value={value}>{children}</RealizationsContext>

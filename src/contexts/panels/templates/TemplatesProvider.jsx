@@ -10,7 +10,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import useLoadConceptError from '@/lib/hooks/useLoadConceptError'
 
 import useModifyTemplates from './useModifyTemplates'
-import useUpdateFilters from './useUpdateFilters'
+import dataFilters from '@/contexts/panels/dataFilters'
+import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
@@ -18,6 +19,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const FILTERS = TEMPLATES.FILTERS
+const { DEFAULT_FILTERS } = dataFilters(TEMPLATES.KEY)
 
 const TemplatesProvider = ({ children }) => {
   const isLoadingConcept = useRef(false)
@@ -28,8 +30,9 @@ const TemplatesProvider = ({ children }) => {
 
   const handleLoadConceptError = useLoadConceptError()
 
-  const templatesSettings = getSettings(TEMPLATES.KEY)
-  const { byAvailable, filters = {} } = templatesSettings
+  const templatesSettings = getSettings(TEMPLATES.KEY) || {}
+  const byAvailable = templatesSettings[TEMPLATES.BY_AVAILABLE]
+  const filters = templatesSettings[FILTERS.KEY] || DEFAULT_FILTERS
 
   const selectedPanel = getSelected(SELECTED.PANEL)
   const selectedConcept = getSelected(SELECTED.CONCEPT)
@@ -42,7 +45,7 @@ const TemplatesProvider = ({ children }) => {
     [updateSettings]
   )
 
-  const { updateFilters } = useUpdateFilters(filters, updateSettings)
+  const { updateFilters } = useUpdateFilters(TEMPLATES.KEY, updateSettings)
 
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates()
 

@@ -6,11 +6,12 @@ import TableHeaderLinkFilter from '@/components/kb/panels/templates/table/header
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
-import { EMPTY_FILTERS } from '@/contexts/panels/realizations/constants'
+import dataFilters from '@/contexts/panels/dataFilters'
 import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
+const { EMPTY_FILTERS } = dataFilters(REALIZATIONS.KEY)
 const { BUTTON } = CONFIG
 const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.PANEL
 

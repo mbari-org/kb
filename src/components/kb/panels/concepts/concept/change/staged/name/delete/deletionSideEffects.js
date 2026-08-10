@@ -10,11 +10,13 @@ import { filterTemplates } from '@/components/kb/panels/templates/utils'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PREFS } from '@/lib/constants/prefs.js'
 
-import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
+import dataFilters from '@/contexts/panels/dataFilters'
+import { SELECTED } from '@/lib/constants/selected.js'
 import { isIdentical } from '@/lib/model/templates'
 
 const { KEY } = PREFS.USER
 const { ANNOTATIONS, ASSOCIATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
+const { EMPTY_FILTERS } = dataFilters(SELECTED.SETTINGS.TEMPLATES.KEY)
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
   const { concept, getPreferences } = deleteConceptContext

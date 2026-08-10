@@ -4,12 +4,13 @@ import { render, screen } from '@testing-library/react'
 import TemplatesTableHeaderMiddle from '@/components/kb/panels/templates/table/header/TemplatesTableHeaderMiddle'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
-import { EMPTY_FILTERS } from '@/lib/concept/state/templates'
+import dataFilters from '@/contexts/panels/dataFilters'
 import { SELECTED } from '@/lib/constants/selected'
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
 const { TEMPLATES: TEMPLATE_SETTINGS } = SELECTED.SETTINGS
+const { EMPTY_FILTERS } = dataFilters(TEMPLATE_SETTINGS.KEY)
 
 const renderHeaderMiddle = filters => {
   const updateFilters = vi.fn()
