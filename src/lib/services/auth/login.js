@@ -63,20 +63,6 @@ const loginUser = async (config, username, password) => {
   }
 }
 
-// const processToken = async (password, token) => {
-//   const { role, name } = decodeJwt(token)
-//   const refresh = await obfuscate(password)
-// const auth = {
-//   token,
-//   refresh,
-//   role,
-//   username: name,
-// }
-// authStore.set(auth)
-
-//   return { auth }
-// }
-
 const params = (username, password) => {
   const auth = basicAuth(username, password)
   return {
