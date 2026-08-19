@@ -6,6 +6,7 @@ import rejectChild from '@/contexts/panels/concepts/pending/reject/rejectChild'
 import rejectMedia from '@/contexts/panels/concepts/pending/reject/rejectMedia'
 import rejectRank from '@/contexts/panels/concepts/pending/reject/rejectRank'
 import rejectRealization from '@/contexts/panels/concepts/pending/reject/rejectRealization'
+import rejectTemplate from '@/contexts/panels/concepts/pending/reject/rejectTemplate'
 import rejectValue from '@/contexts/panels/concepts/pending/reject/rejectValue'
 
 const applyReject = (concept, pendingItem, allItems) => {
@@ -30,6 +31,9 @@ const applyReject = (concept, pendingItem, allItems) => {
 
     case HISTORY_FIELD.REALIZATION:
       return rejectRealization(concept, pendingItem, allItems)
+
+    case HISTORY_FIELD.TEMPLATE:
+      return rejectTemplate(concept, pendingItem, allItems)
 
     default:
       throw createError(

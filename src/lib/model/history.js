@@ -95,6 +95,9 @@ const historyFieldForGroup = groupValue => {
     case group.REALIZATIONS:
       return HISTORY_FIELD.REALIZATION
 
+    case group.TEMPLATES:
+      return HISTORY_FIELD.TEMPLATE
+
     default:
       return null
   }

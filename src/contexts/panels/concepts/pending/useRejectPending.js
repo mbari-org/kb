@@ -13,6 +13,7 @@ import rejectChild from '@/contexts/panels/concepts/pending/reject/rejectChild'
 import rejectMedia from '@/contexts/panels/concepts/pending/reject/rejectMedia'
 import rejectRank from '@/contexts/panels/concepts/pending/reject/rejectRank'
 import rejectRealization from '@/contexts/panels/concepts/pending/reject/rejectRealization'
+import rejectTemplate from '@/contexts/panels/concepts/pending/reject/rejectTemplate'
 import rejectValue from '@/contexts/panels/concepts/pending/reject/rejectValue'
 
 const useRejectPending = () => {
@@ -33,6 +34,7 @@ const useRejectPending = () => {
       freshConcept.realizations = staleConcept.realizations.map(realization => ({
         ...realization,
       }))
+      freshConcept.templates = (staleConcept.templates || []).map(template => ({ ...template }))
 
       rejectingItems.forEach(pendingItem => {
         let rejectFn
@@ -64,6 +66,10 @@ const useRejectPending = () => {
 
           case HISTORY_FIELD.REALIZATION:
             rejectFn = rejectRealization
+            break
+
+          case HISTORY_FIELD.TEMPLATE:
+            rejectFn = rejectTemplate
             break
 
           default:

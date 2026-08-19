@@ -2,6 +2,7 @@ import generalStateUpdates from '@/contexts/panels/concepts/staged/edit/generalS
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { matchingTemplateString } from '@/lib/model/templates'
 import { isJsonEqual } from '@/lib/utils'
 
 const isMatching = (template, pendingTemplate) => {
@@ -10,8 +11,7 @@ const isMatching = (template, pendingTemplate) => {
       ? pendingTemplate.newValue
       : pendingTemplate.oldValue
 
-  const str = `${template.linkName}|${template.toConcept}|${template.linkValue}`.replace(/\s/g, '')
-  return str === templateString.replace(/\s/g, '')
+  return matchingTemplateString(template, templateString)
 }
 
 const isPendingTemplate = pendingItem => pendingItem.field === HISTORY_FIELD.TEMPLATE

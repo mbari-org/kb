@@ -1,5 +1,4 @@
 import { ACTION } from '@/lib/constants'
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { matchingRealizationString, parseRealization } from '@/lib/model/realization'
 
 const approveRealization = (concept, item) => {
@@ -26,7 +25,7 @@ const approveRealization = (concept, item) => {
       break
     }
 
-    case HISTORY_FIELD.REALIZATION: {
+    case ACTION.EDIT: {
       const oldParsed = parseRealization(item.oldValue)
       const newParsed = parseRealization(item.newValue)
       concept.realizations = (concept.realizations || []).map(realization => {

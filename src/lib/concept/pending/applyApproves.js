@@ -6,6 +6,7 @@ import approveChild from '@/contexts/panels/concepts/pending/approve/approveChil
 import approveMedia from '@/contexts/panels/concepts/pending/approve/approveMedia'
 import approveRank from '@/contexts/panels/concepts/pending/approve/approveRank'
 import approveRealization from '@/contexts/panels/concepts/pending/approve/approveRealization'
+import approveTemplate from '@/contexts/panels/concepts/pending/approve/approveTemplate'
 import approveValue from '@/contexts/panels/concepts/pending/approve/approveValue'
 
 const applyApproval = (concept, pendingItem, allItems) => {
@@ -30,6 +31,9 @@ const applyApproval = (concept, pendingItem, allItems) => {
 
     case HISTORY_FIELD.REALIZATION:
       return approveRealization(concept, pendingItem, allItems)
+
+    case HISTORY_FIELD.TEMPLATE:
+      return approveTemplate(concept, pendingItem, allItems)
 
     default:
       throw createError(
