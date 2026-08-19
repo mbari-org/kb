@@ -14,11 +14,11 @@ export const processPendingApproval = async ({
   items,
   deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, updateSelected },
 }) => {
-  if (!items || items.length === 0) return { updated: [], concepts: {} }
+  if (!items || items.length === 0) return { updated: [], concepts: {}, pendingHistory: [] }
 
   await Promise.all(items.map(item => apiFns.apiPayload(updatePendingItem, [approval, item.id])))
 
-  await refreshData(PANEL_DATA.ALL)
+  const { pendingHistory } = await refreshData(PANEL_DATA.ALL)
 
   const groups = items.reduce((acc, item) => {
     const key = item.concept
@@ -61,7 +61,7 @@ export const processPendingApproval = async ({
     }
   }
 
-  return { concepts, updated }
+  return { concepts, pendingHistory, updated }
 }
 
 export default processPendingApproval

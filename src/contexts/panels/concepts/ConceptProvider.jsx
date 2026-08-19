@@ -98,13 +98,17 @@ const ConceptProvider = ({ children }) => {
   }, [stagedState?.aliasIndex, stagedState?.mediaIndex, stagedState?.realizationIndex])
 
   const handleSetConcept = useCallback(
-    updatedConcept => {
+    (updatedConcept, pendingHistoryOverride) => {
       if (isSettingConceptRef.current) return
       isSettingConceptRef.current = true
 
       const isSameConcept = concept?.name && concept?.name === updatedConcept.name
       if (!isSameConcept) {
         setEditing(false)
+      }
+
+      if (pendingHistoryOverride) {
+        pendingHistoryRef.current = pendingHistoryOverride
       }
 
       const pendingConcept = pendingHistoryRef.current.filter(history => history.concept === updatedConcept.name)

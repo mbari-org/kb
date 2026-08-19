@@ -48,7 +48,7 @@ describe('processPendingApproval', () => {
       }
       return null
     })
-    const refreshData = vi.fn(async () => {})
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
     const updateSelected = vi.fn()
     const items = [
       { concept: 'old-concept', field: 'Name', id: 'pending-1' },
@@ -86,6 +86,7 @@ describe('processPendingApproval', () => {
       concepts: {
         'renamed-concept': updatedConcept,
       },
+      pendingHistory: [],
       updated: ['renamed-concept'],
     })
   })

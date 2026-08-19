@@ -15,6 +15,7 @@ import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdates
 import { isAdmin } from '@/lib/auth/role'
 
 import { CONCEPT } from '@/lib/constants'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 import CONFIG from '@/lib/config'
 
@@ -31,7 +32,7 @@ const useSaveStaged = () => {
   return useCallback(() => {
     return withProcessing(
       async () => {
-        const { apiFns, staleConcept, user } = updatesContext
+        const { apiFns, refreshPanelData, staleConcept, user } = updatesContext
 
         const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
 
@@ -51,9 +52,11 @@ const useSaveStaged = () => {
           await applyRenameSideEffects(updatesContext, updatesInfo)
         }
 
+        const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
+
         const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, updatesContext.staleConcept)
 
-        await setConcept(updatedConcept)
+        await setConcept(updatedConcept, pendingHistory)
         setEditing(false)
 
         updateSelected({ concept: updatedConcept.name })

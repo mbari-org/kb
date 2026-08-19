@@ -32,7 +32,7 @@ const useConceptUpdatePending = () => {
 
       return withProcessing(
         async () => {
-          const { concepts, updated } = await processPendingApproval({
+          const { concepts, pendingHistory, updated } = await processPendingApproval({
             approval,
             deps: {
               apiFns,
@@ -48,11 +48,11 @@ const useConceptUpdatePending = () => {
           const optimisticConcept = concepts?.[conceptName]
 
           if (optimisticConcept) {
-            await setConcept(optimisticConcept)
+            await setConcept(optimisticConcept, pendingHistory)
           } else if (updated.includes(conceptName)) {
             const refreshedConcept = getConcept(conceptName)
             if (refreshedConcept) {
-              await setConcept(refreshedConcept)
+              await setConcept(refreshedConcept, pendingHistory)
             }
           }
 
