@@ -1,6 +1,9 @@
 {
   "LABEL": "References",
+  "CITATION": {
+    "TOOLTIP": "View DOI for this Reference in a new tab"
+  },
   "VIEW": {
-    "TOOLTIP": "View references for this concept"
+    "TOOLTIP": "View References for this Concept"
   }
 }
