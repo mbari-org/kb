@@ -15,7 +15,7 @@ const RealizationsHeaderRight = () => {
   const selectables = explicitToConcepts.length > 0 ? explicitToConcepts : undefined
 
   return (
-    <KBTooltipTarget placement='bottom' title={TOOLTIP.FILTER.TO_CONCEPT}>
+    <KBTooltipTarget placement='left' title={TOOLTIP.FILTER.TO_CONCEPT}>
       <ToConceptSelect
         conceptName={filters[REALIZATIONS.FILTERS.TO_CONCEPT]}
         doConceptSelected={toConcept => updateFilters({ [REALIZATIONS.FILTERS.TO_CONCEPT]: toConcept })}

@@ -124,7 +124,10 @@ const postSideEffects = async deleteConceptContext => {
 
   await performConceptPrefsUpdate(deleteConceptContext)
   await performSettingsUpdate(deleteConceptContext)
-  await refreshPanelDataFn(PANEL_DATA.REFERENCES)
+  await Promise.all([
+    refreshPanelDataFn(PANEL_DATA.REFERENCES),
+    refreshPanelDataFn(PANEL_DATA.REALIZATIONS),
+  ])
   return {}
 }
 

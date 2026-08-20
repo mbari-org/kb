@@ -26,7 +26,7 @@ const conceptPrefsUpdate = async (updatesContext, newConceptName) => {
   const staleName = staleConcept.name
 
   const conceptPrefs = await getPreferences(KEY.CONCEPTS)
-  const updatedPrefsState = conceptPrefs.state.map(name => name === staleName ? newConceptName : name)
+  const updatedPrefsState = conceptPrefs.state.map(name => (name === staleName ? newConceptName : name))
   return { state: updatedPrefsState, position: conceptPrefs.position }
 }
 
@@ -59,10 +59,7 @@ const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   const staleConcept = updatesContext.staleConcept
   const { savePreferences, refreshPanelData } = updatesContext
 
-  await performReassignments(
-    staleConcept.name,
-    newConceptName,
-    relatedDataCounts)
+  await performReassignments(staleConcept.name, newConceptName, relatedDataCounts)
 
   const updatedConceptPrefs = await conceptPrefsUpdate(updatesContext, newConceptName)
   const updatedSettings = settingsUpdate(updatesContext, staleConcept.name, newConceptName)
@@ -70,8 +67,10 @@ const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   await Promise.all([
     savePreferences(KEY.CONCEPTS, updatedConceptPrefs),
     savePreferences(KEY.SETTINGS, updatedSettings),
-    refreshPanelData(PANEL_DATA.TEMPLATES),
+
+    refreshPanelData(PANEL_DATA.REALIZATIONS),
     refreshPanelData(PANEL_DATA.REFERENCES),
+    refreshPanelData(PANEL_DATA.TEMPLATES),
   ])
 }
 

@@ -21,7 +21,7 @@ export const relatedDataCounts = async ({ apiFns, concept, getReferences }) => {
       title: RELATED_DATA_COUNTS.ASSOCIATIONS,
       type: RELATED_DATA_TYPE.ANNOTATIONS,
       apiCountFn: getToConceptAssociationsCount,
-      reassignFn: payload => apiFns.apiPayload(renameToConceptAssociations, [payload.old, payload.new]),
+      reassignFn: payload => apiFns.apiPayload(renameToConceptAssociations, payload),
     },
     {
       title: RELATED_DATA_COUNTS.TEMPLATES_DEFINED,
