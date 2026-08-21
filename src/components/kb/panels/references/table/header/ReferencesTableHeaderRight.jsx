@@ -4,13 +4,11 @@ import useAddReferenceButton from '@/components/kb/panels/references/table/heade
 
 import UserContext from '@/contexts/user/UserContext'
 
-import { isReadOnly } from '@/lib/auth/role'
-
 const ReferencesTableHeaderRight = () => {
-  const { user } = use(UserContext)
+  const { isReadOnly } = use(UserContext)
   const addReferenceButton = useAddReferenceButton()
 
-  if (isReadOnly(user)) {
+  if (isReadOnly) {
     return null
   }
 

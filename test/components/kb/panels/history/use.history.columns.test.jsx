@@ -35,7 +35,7 @@ const createWrapper = ({ role = ROLES.ADMIN } = {}) => {
   const updateSettings = vi.fn()
 
   const Wrapper = ({ children }) => (
-    <UserContext.Provider value={{ user: { role } }}>
+    <UserContext.Provider value={{ isAdmin: role === ROLES.ADMIN, user: { role } }}>
       <SelectedContext.Provider value={{ updateSelected, updateSettings }}>
         {children}
       </SelectedContext.Provider>

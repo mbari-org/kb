@@ -6,15 +6,13 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import UsersContext from '@/contexts/panels/users/UsersContext'
 import { UsersModalProvider } from './modal'
 
-import { isAdmin } from '@/lib/auth/role'
-
 import { getUsers, createUser, updateUser } from '@/lib/api/users'
 
 import { drop } from '@/lib/utils'
 
 const UsersProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
-  const { user } = use(UserContext)
+  const { isAdmin, user } = use(UserContext)
   const { apiFns } = use(ConfigContext)
 
   const [users, setUsers] = useState([])
@@ -67,8 +65,8 @@ const UsersProvider = ({ children }) => {
           .sort((a, b) => a.username.localeCompare(b.username))
       )
     }
-    if (isAdmin(user)) loadUsers()
-  }, [apiFns, user])
+    if (isAdmin) loadUsers()
+  }, [apiFns, isAdmin, user])
 
   const value = {
     addUser,

@@ -18,8 +18,6 @@ import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
 
-import { isAdmin } from '@/lib/auth/role'
-
 import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
@@ -30,7 +28,7 @@ const ChangeNameContent = () => {
 
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
 
   const [name, setName] = useState({ value: concept.name, extent: '' })
   const [modifiedFields, setModifiedFields] = useState({ name: false })
@@ -61,8 +59,6 @@ const ChangeNameContent = () => {
   const toColor = () => {
     return isValidName ? theme.concept.color.add : theme.palette.grey[700]
   }
-
-  const isAdminUser = isAdmin(user)
 
   const { hasRelatedData, relatedDataCounts } = modalData
   const filteredRelatedDataCounts = relatedDataCounts?.filter(count => count.title !== TEMPLATES_DEFINED)
@@ -105,7 +101,7 @@ const ChangeNameContent = () => {
             />
           </Stack>
           <Box sx={{ ml: 6.75 }}>
-            {isAdminUser && !!hasRelatedData && (
+            {isAdmin && !!hasRelatedData && (
               <NameChangeExtent
                 disabled={!isValidName}
                 nameChangeType={name.extent}

@@ -7,11 +7,8 @@ import CONFIG from '@/lib/config'
 
 const { NON_ADMIN_MESSAGE } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
 
-import { isAdmin } from '@/lib/auth/role'
-
 const RelatedDataCounts = ({ relatedDataCounts }) => {
-  const { user } = use(UserContext)
-  const isAdminUser = isAdmin(user)
+  const { isAdmin } = use(UserContext)
 
   if (!relatedDataCounts) return null
 
@@ -56,7 +53,7 @@ const RelatedDataCounts = ({ relatedDataCounts }) => {
   return (
     <Box sx={{ mt: 1 }}>
       {Object.entries(groupedByType).map(([type, counts]) => renderSection(type, counts))}
-      {!isAdminUser && (
+      {!isAdmin && (
         <Box sx={{ alignItems: 'center', mt: 2 }}>
           <Typography color='text.secondary' sx={{ textAlign: 'center' }}>
             {NON_ADMIN_MESSAGE.COMMUNICATE}

@@ -27,7 +27,6 @@ import {
 
 import useTaxonomyIntegrity from '@/lib/hooks/useTaxonomyIntegrity'
 
-import { isAdmin } from '@/lib/auth/role'
 import { LOADING } from '@/lib/constants/loading.js'
 import { createError } from '@/lib/errors'
 
@@ -55,7 +54,7 @@ const loadInitialTaxonomy = async apiFns => {
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
   const { apiFns } = use(ConfigContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
@@ -191,12 +190,12 @@ const TaxonomyProvider = ({ children }) => {
     (field, otherValue) => {
       if (!taxonomy) return []
       const taxonomyRanks = filterTaxonomyRanks(taxonomy, field, otherValue)
-      if (isAdmin(user)) {
+      if (isAdmin) {
         return taxonomyRanks
       }
       return taxonomyRanks.filter(rank => rank !== '')
     },
-    [taxonomy, user]
+    [isAdmin, taxonomy]
   )
 
   const getConcept = useCallback(

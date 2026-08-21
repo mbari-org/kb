@@ -4,14 +4,10 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { isAdmin } from '@/lib/auth/role'
-
 const useChangeNameHandlers = (name, setName, nameError, setModifiedFields) => {
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ConceptModalContext)
-  const { user } = use(UserContext)
-
-  const isAdminUser = isAdmin(user)
+  const { isAdmin } = use(UserContext)
 
   const isValidModified = updatedName => {
     const { extent, value } = updatedName
@@ -19,7 +15,7 @@ const useChangeNameHandlers = (name, setName, nameError, setModifiedFields) => {
     const isNameModified = value !== concept.name
     // Use the validation hook result instead of custom logic
     const isNameValid = isNameModified && !nameError
-    if (isAdminUser) {
+    if (isAdmin) {
       return {
         isValid: isNameValid && extent !== '',
         modified: isNameValid || extent !== '',

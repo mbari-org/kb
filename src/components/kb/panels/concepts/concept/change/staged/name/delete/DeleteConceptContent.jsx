@@ -12,8 +12,6 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { isAdmin } from '@/lib/auth/role'
-
 import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
@@ -22,7 +20,7 @@ const DeleteConceptContent = () => {
   const { concept } = use(ConceptContext)
   const { modalData, setModalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
 
   const [isValid, setIsValid] = useState(true)
   const [reassign, setReassignTo] = useState(concept.parent)
@@ -71,7 +69,7 @@ const DeleteConceptContent = () => {
 
       {isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData.isLoading && hasRelatedData && <RelatedDataCounts relatedDataCounts={relatedDataCounts} />}
-      {isAdmin(user) && (
+      {isAdmin && (
         <Stack direction='column' spacing={1} sx={{ alignItems: 'center' }}>
           <Box>
             {hasRelatedData && (

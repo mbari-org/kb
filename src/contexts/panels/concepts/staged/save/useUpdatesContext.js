@@ -13,13 +13,14 @@ const useUpdatesContext = () => {
   const { getReferences, refreshData: refreshPanelData } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { getSettings } = use(SelectedContext)
-  const { getPreferences, user } = use(UserContext)
+  const { getPreferences, isAdmin, user } = use(UserContext)
 
   return {
     apiFns,
     getPreferences,
     getReferences,
     getSettings,
+    isAdmin,
     reassignmentData: stagedState?.reassignmentData,
     refreshPanelData,
     savePreferences,

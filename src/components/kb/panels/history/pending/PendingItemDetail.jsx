@@ -22,7 +22,7 @@ const { ALIAS, CHILD, MEDIA, NAME, PARENT, RANK, REALIZATION, TEMPLATE } = HISTO
 
 const PendingItemDetail = props => {
   const { modalData } = usePanelModalDataContext()
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
   const { item } = { ...modalData, ...props }
 
   if (!item?.field) return null
@@ -39,7 +39,7 @@ const PendingItemDetail = props => {
 
     case NAME:
       if (isPendingName(item)) {
-        return <PendingNameItem item={item} user={user} />
+        return <PendingNameItem item={item} isAdmin={isAdmin} />
       }
       return <PendingAliasItem item={item} />
 

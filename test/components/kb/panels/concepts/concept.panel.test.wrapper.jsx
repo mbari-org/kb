@@ -332,6 +332,8 @@ export const ConceptPanelTestWrapper = ({
 
   const mockUserValue = {
     user: { role: userRole },
+    isAdmin: userRole === ROLES.ADMIN,
+    isReadOnly: userRole !== ROLES.ADMIN && userRole !== ROLES.MAINT,
     hasUnsavedChanges,
     setGuardedAction: onSetGuardedAction || vi.fn(),
     getPreferences: vi.fn(() => Promise.resolve({})),

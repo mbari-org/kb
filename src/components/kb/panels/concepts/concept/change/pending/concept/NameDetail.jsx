@@ -15,7 +15,6 @@ import { otherApprovalSx } from '@/components/common/format'
 import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
 
 import { formatDelta } from '@/components/common/format'
-import { isAdmin } from '@/lib/auth/role'
 import { isPendingName } from '@/lib/concept/state/name'
 import { pendingInfo } from '@/lib/model/history'
 
@@ -27,7 +26,7 @@ const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingConcept }) => {
   const { modalData, setModalData } = use(ConceptModalContext)
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
 
   const approval = usePendingGroupApproval(CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.NAME)
 
@@ -53,7 +52,6 @@ const NameDetail = ({ pendingConcept }) => {
   }
 
   const enableExtent = approval === APPROVAL.ACCEPT
-  const isAdminUser = isAdmin(user)
 
   const nameSx = otherApprovalSx(approval)
 
@@ -70,7 +68,7 @@ const NameDetail = ({ pendingConcept }) => {
   const pendingGroupDetail = (
     <>
       <PendingValues disabled={approval === APPROVAL.OTHER} pendingValues={pendingInfo(pendingName)} />
-      {isAdminUser && (
+      {isAdmin && (
         <Box sx={{ ml: 16 }}>
           <NameChangeExtent disabled={!enableExtent} nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         </Box>

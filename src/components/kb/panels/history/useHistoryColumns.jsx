@@ -10,8 +10,6 @@ import usePendingItemModal from '@/components/kb/panels/history/pending/usePendi
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { isAdmin } from '@/lib/auth/role'
-
 import { humanTimestamp } from '@/lib/utils'
 
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -25,9 +23,7 @@ const SORTING_ORDER = ['asc', 'desc']
 const useHistoryColumns = ({ type }) => {
   const openPendingItem = usePendingItemModal()
   const { updateSelected, updateSettings } = use(SelectedContext)
-  const { user } = use(UserContext)
-
-  const isAdminUser = isAdmin(user)
+  const { isAdmin } = use(UserContext)
 
   const handleConceptApproval = row => {
     if (row?.id) {
@@ -75,7 +71,7 @@ const useHistoryColumns = ({ type }) => {
       ))
     !isPending && isApproved && (content = 'Yes')
     !isPending && !isApproved && (content = 'No')
-    isPending && !isAdminUser && (content = 'Pending')
+    isPending && !isAdmin && (content = 'Pending')
 
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
@@ -85,7 +81,7 @@ const useHistoryColumns = ({ type }) => {
   }
 
   const inspectColumn = () => {
-    const showPendingApproval = type === TYPE.PENDING && isAdminUser
+    const showPendingApproval = type === TYPE.PENDING && isAdmin
 
     return {
       field: 'inspect',

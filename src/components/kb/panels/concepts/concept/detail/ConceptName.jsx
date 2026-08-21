@@ -11,14 +11,12 @@ import useStructureChoices from '@/components/kb/panels/concepts/concept/change/
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { isReadOnly } from '@/lib/auth/role'
-
 import { hasPendingStructure } from '@/lib/model/history'
 
 const ConceptName = () => {
   const theme = useTheme()
 
-  const { user } = use(UserContext)
+  const { isReadOnly } = use(UserContext)
   const { concept, isEditing, pending } = use(ConceptContext)
 
   const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } =
@@ -29,7 +27,7 @@ const ConceptName = () => {
   const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
 
   const showStructureButton =
-    isEditing && !showStructureChoicesModal && !hasStagedDelete && !isReadOnly(user)
+    isEditing && !showStructureChoicesModal && !hasStagedDelete && !isReadOnly
 
   const hasPending = hasPendingStructure(pending, concept.name)
 

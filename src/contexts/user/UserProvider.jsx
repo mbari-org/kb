@@ -10,6 +10,8 @@ import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import useUserPreferences from '@/contexts/user/useUserPreferences'
 
+import { isAdmin as userIsAdmin, isReadOnly as userIsReadOnly } from '@/lib/auth/role'
+
 const UserProvider = ({ children }) => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -66,19 +68,24 @@ const UserProvider = ({ children }) => {
     }
   }, [])
 
+  const isAdmin = Boolean(user && userIsAdmin(user))
+  const isReadOnly = Boolean(user && userIsReadOnly(user))
+
   const value = useMemo(
     () => ({
       config,
       createPreferences,
       getPreferences,
+      guardedAction,
       hasUnsavedChanges,
+      isAdmin,
+      isReadOnly,
       logout,
       processAuth,
       refreshUser,
       savePreferencesRef,
-      setHasUnsavedChanges,
       setGuardedAction,
-      guardedAction,
+      setHasUnsavedChanges,
       updatePreferences,
       user,
     }),
@@ -86,12 +93,13 @@ const UserProvider = ({ children }) => {
       config,
       createPreferences,
       getPreferences,
+      guardedAction,
       hasUnsavedChanges,
+      isAdmin,
+      isReadOnly,
       logout,
       processAuth,
       refreshUser,
-      setGuardedAction,
-      guardedAction,
       updatePreferences,
       user,
     ]

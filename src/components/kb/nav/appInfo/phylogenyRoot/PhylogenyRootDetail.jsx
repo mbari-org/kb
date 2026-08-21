@@ -10,7 +10,6 @@ import PhylogenyRootActions from './PhylogenyRootActions'
 import PhylogenyRootContent from './PhylogenyRootContent'
 
 import createAppModal from '@/components/modal/app/createAppModal'
-import { isAdmin } from '@/lib/auth/role'
 import CONFIG from '@/lib/config'
 
 const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
@@ -19,10 +18,8 @@ const { TITLE, TOOLTIP } = EDIT
 
 const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName, onEditComplete }) => {
   const { phylogenyRoot } = use(ConfigContext)
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
   const { closeModal, setModal, setModalData } = use(AppModalContext)
-
-  const isAdminUser = isAdmin(user)
 
   const handleEditPhylogenyRoot = () => {
     const didClose = closeModal(true)
@@ -50,7 +47,7 @@ const PhylogenyRootDetail = ({ conceptNames = [], getConceptPrimaryName, onEditC
     <AppInfoDetail
       editTooltip={TOOLTIP}
       label={FIELD_LABEL}
-      onEdit={isAdminUser ? handleEditPhylogenyRoot : undefined}
+      onEdit={isAdmin ? handleEditPhylogenyRoot : undefined}
       value={phylogenyRoot}
     />
   )

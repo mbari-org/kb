@@ -7,15 +7,12 @@ import Title from '@/components/common/factory/Title'
 import createAppModal from '@/components/modal/app/createAppModal'
 
 import UserContext from '@/contexts/user/UserContext'
-import { isAdmin } from '@/lib/auth/role'
 
 import CONFIG from '@/lib/config'
 
 const BaseURLDetail = ({ Actions, Content, baseUrl, editTooltip, label, modalDataValueKey, onEditComplete, title }) => {
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
   const { closeModal, setModal, setModalData } = use(AppModalContext)
-
-  const isAdminUser = isAdmin(user)
 
   const handleEdit = () => {
     const didClose = closeModal(true)
@@ -43,7 +40,7 @@ const BaseURLDetail = ({ Actions, Content, baseUrl, editTooltip, label, modalDat
     <AppInfoDetail
       editTooltip={editTooltip}
       label={label}
-      onEdit={isAdminUser ? handleEdit : undefined}
+      onEdit={isAdmin ? handleEdit : undefined}
       value={baseUrl || CONFIG.APP_INFO.BASE_URL.NONE}
     />
   )

@@ -11,15 +11,13 @@ import panelMods from '@/components/kb/panels/modules'
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
-import { isAdmin } from '@/lib/auth/role'
-
 const NavBar = ({ selectPanel }) => {
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
   const { panels, isLoading } = use(SelectedContext)
 
   const activePanel = panels.current()
 
-  const panelNames = isAdmin(user)
+  const panelNames = isAdmin
     ? panelMods.map(({ name }) => name)
     : panelMods.map(({ name }) => name).filter(name => name !== 'Users')
 

@@ -10,7 +10,6 @@ import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
 import { pendingInfo } from '@/lib/model/history'
 import { isPendingName } from '@/lib/concept/state/name'
-import { isAdmin } from '@/lib/auth/role'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
@@ -19,14 +18,13 @@ import CONFIG from '@/lib/config'
 const { APPROVAL } = PENDING
 const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
 
-const PendingNameItem = ({ item, user }) => {
+const PendingNameItem = ({ item, isAdmin }) => {
   const [nameChangeType, setNameChangeType] = useState(NAME_ONLY)
 
   if (!item || item.field !== HISTORY_FIELD.NAME || !isPendingName(item)) return null
 
   const title = pendingActionValue(item)
   const nameSx = otherApprovalSx(APPROVAL.ACCEPT)
-  const isAdminUser = isAdmin(user)
   const enableExtent = true // For now, always enable in history panel context
 
   const handleNameChangeType = event => {
@@ -42,7 +40,7 @@ const PendingNameItem = ({ item, user }) => {
   const pendingDetailValues = (
     <>
       <PendingValues disabled={false} leftMargin={6} pendingValues={pendingInfo(item)} />
-      {isAdminUser && (
+      {isAdmin && (
         <Box sx={{ ml: 16 }}>
           <NameChangeExtent disabled={!enableExtent} nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         </Box>

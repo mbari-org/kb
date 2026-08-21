@@ -9,8 +9,6 @@ import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/sta
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { isReadOnly } from '@/lib/auth/role'
-
 import { isStateModified } from '@/lib/concept/state/state'
 import { pendingChild } from '@/lib/model/history'
 
@@ -26,8 +24,7 @@ const { CONFIRMED } = RESETTING
 
 const ConceptEditingActions = () => {
   const { concept, isEditing, initialState, modifyConcept, pending, setEditing, stagedState } = use(ConceptContext)
-  const { user } = use(UserContext)
-  const readonly = isReadOnly(user)
+  const { isReadOnly } = use(UserContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
@@ -85,10 +82,10 @@ const ConceptEditingActions = () => {
         right: 15,
       }}
     >
-      {!readonly && (
+      {!isReadOnly && (
         <Button
           color={isEditing ? 'cancel' : 'main'}
-          disabled={readonly}
+          disabled={isReadOnly}
           onClick={handleCancelDiscard}
           variant='contained'
         >
@@ -96,17 +93,17 @@ const ConceptEditingActions = () => {
         </Button>
       )}
       {isEditing && isModified && (
-        <Button disabled={readonly} onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
+        <Button disabled={isReadOnly} onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
           {STAGED}
         </Button>
       )}
       {showPendingButton && (
-        <Button color='main' disabled={readonly} onClick={handlePending} variant='contained'>
+        <Button color='main' disabled={isReadOnly} onClick={handlePending} variant='contained'>
           {PENDING_ACTION}
         </Button>
       )}
-      {!readonly && (
-        <Button disabled={readonly || !isEditing || !isModified} onClick={handleSave} variant='contained'>
+      {!isReadOnly && (
+        <Button disabled={isReadOnly || !isEditing || !isModified} onClick={handleSave} variant='contained'>
           {SAVE}
         </Button>
       )}

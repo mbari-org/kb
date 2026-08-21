@@ -13,18 +13,16 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
 import { pendingIds } from '@/lib/model/history'
 
-import { isAdmin } from '@/lib/auth/role'
-
 import { PENDING } from '@/lib/constants/pending.js'
 
 const { ACCEPT, OTHER, REJECT } = PENDING.APPROVAL
 
 const PendingButtons = ({ approval, group, item }) => {
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
   const { concept, pending, setPendingConfirm } = use(ConceptContext)
 
   const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
-    if (!isAdmin(user)) {
+    if (!isAdmin) {
       return [true, true, RejectIcon, AcceptIcon]
     }
 
@@ -38,7 +36,7 @@ const PendingButtons = ({ approval, group, item }) => {
       default:
         return [false, false, RejectIcon, AcceptIcon]
     }
-  }, [approval, user])
+  }, [approval, isAdmin])
 
   const handleClick = useCallback(
     clicked => {

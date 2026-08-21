@@ -78,7 +78,7 @@ describe('useSaveStaged', () => {
     applyRenameSideEffectsMock.mockResolvedValue(undefined)
 
     const wrapper = ({ children }) => (
-      <UserContext.Provider value={{ getPreferences: vi.fn(), user: { role: 'Admin' } }}>
+      <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true, user: { role: 'Admin' } }}>
         <ConfigContext.Provider value={{ apiFns }}>
           <PanelDataContext.Provider value={{ getReferences: vi.fn(), refreshData }}>
             <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>

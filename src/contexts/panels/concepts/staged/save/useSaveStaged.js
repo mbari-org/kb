@@ -12,8 +12,6 @@ import applyUpdateResults from '@/contexts/panels/concepts/staged/save/applyUpda
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
 
-import { isAdmin } from '@/lib/auth/role'
-
 import { CONCEPT } from '@/lib/constants'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
@@ -32,7 +30,7 @@ const useSaveStaged = () => {
   return useCallback(() => {
     return withProcessing(
       async () => {
-        const { apiFns, refreshPanelData, staleConcept, user } = updatesContext
+        const { apiFns, isAdmin, refreshPanelData, staleConcept } = updatesContext
 
         const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
 
@@ -43,7 +41,7 @@ const useSaveStaged = () => {
 
         await applyUpdateResults({
           freshConcept,
-          isAdmin: isAdmin(user),
+          isAdmin,
           staleConcept,
           updatesInfo,
         })

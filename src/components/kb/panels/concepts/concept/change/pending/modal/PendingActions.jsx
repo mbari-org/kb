@@ -8,8 +8,6 @@ import UserContext from '@/contexts/user/UserContext'
 
 import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConceptUpdatePending'
 
-import { isAdmin } from '@/lib/auth/role'
-
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
@@ -21,7 +19,7 @@ const PendingActions = () => {
   const { pending, setPendingConfirm } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
 
-  const { user } = use(UserContext)
+  const { isAdmin } = use(UserContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingConfirm = pending(PENDING.DATA.CONFIRM)
@@ -36,7 +34,7 @@ const PendingActions = () => {
   }, [pendingConcept, pendingConfirm])
 
   const [disabled, labels] = useMemo(() => {
-    if (!isAdmin(user)) {
+    if (!isAdmin) {
       return [
         [true, false, true],
         [APPROVE_ALL, CLOSE, REJECT_ALL],
@@ -77,7 +75,7 @@ const PendingActions = () => {
         [APPROVE, DEFER, CONFIRM],
       ]
     }
-  }, [pendingConfirm, user])
+  }, [isAdmin, pendingConfirm])
 
   const colors = ['clean', 'main', 'cancel']
 

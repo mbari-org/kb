@@ -2,7 +2,6 @@ import { use } from 'react'
 import { Box, IconButton, useTheme } from '@mui/material'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import UserContext from '@/contexts/user/UserContext'
-import { isReadOnly } from '@/lib/auth/role'
 
 const SIZE = 16
 const BUTTON_SIZE = 'small'
@@ -20,9 +19,9 @@ const ActionIcon = ({
   ...props
 }) => {
   const theme = useTheme()
-  const { user } = use(UserContext)
+  const { isReadOnly } = use(UserContext)
 
-  const isDisabled = restrictReadOnly && isReadOnly(user)
+  const isDisabled = restrictReadOnly && isReadOnly
 
   const hoverColor = color ? theme.palette[color]?.main || theme.palette.primary.main : theme.palette.primary.main
 
