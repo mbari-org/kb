@@ -3,6 +3,11 @@
   "NAME": "Name",
   "NAME_HELPER_TEXT": "Name cannot be empty",
   "NAME_ERROR": "Concept name already exists",
+  "NAME_ONLY_WARN": "The concept name will be changed, but all related data will remain assigned to the original name.",
+  "NON_ADMIN_MESSAGE": {
+    "COMMUNICATE": "Please communicate with an admin regarding this change.",
+    "APPROVAL": "When approving, an admin must specify how to reassign Concept related data."
+  },
   "RELATED_DATA_COUNTS": {
     "ANNOTATIONS": "Concept Annotations / Observations",
     "ASSOCIATIONS": "Associations To Concept",
@@ -13,9 +18,5 @@
   "RELATED_DATA_TYPE": {
     "ANNOTATIONS": "Annotations Data",
     "KNOWLEDGE_BASE": "Knowledge Base Data"
-  },
-  "NON_ADMIN_MESSAGE": {
-    "COMMUNICATE": "Please communicate with an admin regarding this change.",
-    "APPROVAL": "When approving, an admin must specify how to reassign Concept related data."
   }
 }

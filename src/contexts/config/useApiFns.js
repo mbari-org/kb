@@ -4,10 +4,12 @@ const useApiFns = (config, showBoundary) => {
   return useMemo(() => {
     if (!config) return null
 
-    const apiPayload = async (payloadRequest, params) => {
+    // Some actions on the server
+    const apiPayload = async (payloadRequest, params, ignoreErrorPayload) => {
       const { error, payload } = await payloadRequest(config, params)
+
       if (error) {
-        showBoundary(error)
+        ignoreErrorPayload ? ignoreErrorPayload : showBoundary(error)
       }
       return payload
     }
