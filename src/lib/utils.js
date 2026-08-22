@@ -214,6 +214,16 @@ const prune = obj => {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+const withTimeout = (promise, timeoutMs, timeoutError) => {
+  return new Promise((resolve, reject) => {
+    const timeoutId = globalThis.setTimeout(() => reject(timeoutError), timeoutMs)
+    promise
+      .then(resolve)
+      .catch(reject)
+      .finally(() => globalThis.clearTimeout(timeoutId))
+  })
+}
+
 export {
   after,
   capitalize,
@@ -236,4 +246,5 @@ export {
   prettyFormat,
   prune,
   sleep,
+  withTimeout,
 }

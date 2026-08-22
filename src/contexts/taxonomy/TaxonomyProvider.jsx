@@ -30,17 +30,7 @@ import useTaxonomyIntegrity from '@/lib/hooks/useTaxonomyIntegrity'
 import { LOADING } from '@/lib/constants/loading.js'
 import { createError } from '@/lib/errors'
 
-import { isEqual } from '@/lib/utils'
-
-const withTimeout = (promise, timeoutMs, timeoutError) => {
-  return new Promise((resolve, reject) => {
-    const timeoutId = globalThis.setTimeout(() => reject(timeoutError), timeoutMs)
-    promise
-      .then(resolve)
-      .catch(reject)
-      .finally(() => globalThis.clearTimeout(timeoutId))
-  })
-}
+import { isEqual, withTimeout } from '@/lib/utils'
 
 const loadInitialTaxonomy = async apiFns => {
   try {

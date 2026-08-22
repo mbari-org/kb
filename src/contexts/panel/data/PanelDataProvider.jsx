@@ -13,15 +13,7 @@ import { LOADING } from '@/lib/constants/loading.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { createError } from '@/lib/errors'
 
-const withTimeout = (promise, timeoutMs, timeoutError) => {
-  return new Promise((resolve, reject) => {
-    const timeoutId = globalThis.setTimeout(() => reject(timeoutError), timeoutMs)
-    promise
-      .then(resolve)
-      .catch(reject)
-      .finally(() => globalThis.clearTimeout(timeoutId))
-  })
-}
+import { withTimeout } from '@/lib/utils'
 
 export const PanelDataProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
