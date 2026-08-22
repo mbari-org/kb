@@ -100,7 +100,7 @@ src/
 | `yarn lint` | Run ESLint code analysis |
 | `yarn version:check` | Run release pre-checks (clean tree, lint, tests, test deploy) |
 | `yarn version:tag` | Regenerate `src/version.js` from git metadata |
-| `yarn version:test-deploy` | Build and smoke-test deploy via local `m3-quickstart` nginx |
+| `yarn version:test-deploy` | Build and smoke-test deploy via local `vars-quickstart-public` nginx |
 | `yarn version:release` | Run release flow: checks, version bump, commit, and git tag |
 
 ### Versioning scripts
@@ -112,7 +112,8 @@ The versioning scripts live in `scripts/version/` and are intended for release p
   - If `HEAD` has an exact git tag, that tag becomes `VERSION_INFO.version`.
   - Otherwise version uses UTC timestamp format: `YYYY.MM.DD-HHMM`.
 - `yarn version:test-deploy`
-  - Builds `dist/`, syncs it into sibling repo `../m3-quickstart/docker/nginx/html/kbeditor/`, rebuilds/restarts nginx, then runs a smoke test against `http://localhost/kbeditor/`.
+  - Builds `dist/`, syncs it into sibling repo `../vars-quickstart-public/temp/nginx/html/kbeditor/`, restarts nginx, then runs a smoke test against `https://localhost/kbeditor/`.
+  - Requires local `vars-quickstart-public` configured for HTTPS (for example `./varsq mkcert` and `./varsq configure localhost`).
   - Optional env overrides:
     - `VERSION_CHECK_SMOKE_URL`
     - `VERSION_CHECK_SMOKE_SNIPPET`

@@ -13,7 +13,6 @@ import configUrlStore from '@/lib/local/store/configUrl'
 import { PREFS } from '@/lib/constants/prefs.js'
 
 const IS_DEV = import.meta.env.DEV
-const USE_M3_LOCAL = import.meta.env.VITE_M3_LOCAL ?? false
 const appMediaBaseURLKey = PREFS.APP.MEDIA.BASE_URL.KEY
 const defaultMediaBaseURL = PREFS.APP.MEDIA.BASE_URL.DEFAULT
 const appDsgConceptUrlKey = PREFS.APP.DSG.CONCEPT_URL.KEY
@@ -171,7 +170,6 @@ const ConfigProvider = ({ children }) => {
       phylogenyRoot,
       saveAppPreference,
       updateConfig,
-      USE_M3_LOCAL,
     }),
     [
       apiFns,

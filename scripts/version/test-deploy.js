@@ -6,12 +6,12 @@ import process from 'process'
 
 import { consoleMonitor, run } from './common.js'
 
-const quickstartRoot = path.resolve('../m3-quickstart')
-const quickstartNginxHtmlDir = path.join(quickstartRoot, 'docker/nginx/html')
+const quickstartRoot = path.resolve('../vars-quickstart-public')
+const quickstartNginxHtmlDir = path.join(quickstartRoot, 'temp/nginx/html')
 const quickstartKbEditorDir = path.join(quickstartNginxHtmlDir, 'kbeditor')
-const quickstartDockerScript = path.join(quickstartRoot, 'bin/__docker.sh')
+const quickstartVarsqScript = path.join(quickstartRoot, 'varsq')
 const distDir = path.resolve('dist')
-const smokeUrl = process.env.VERSION_CHECK_SMOKE_URL || 'http://localhost/kbeditor/'
+const smokeUrl = process.env.VERSION_CHECK_SMOKE_URL || 'https://localhost/kbeditor/'
 const smokeExpectedSnippet = process.env.VERSION_CHECK_SMOKE_SNIPPET || '/kbeditor/assets/'
 const smokeMaxAttempts = Number.parseInt(process.env.VERSION_CHECK_SMOKE_MAX_ATTEMPTS || '12', 10)
 const smokeRetryDelayMs = Number.parseInt(process.env.VERSION_CHECK_SMOKE_RETRY_DELAY_MS || '5000', 10)
@@ -29,7 +29,17 @@ const ensureDirectoryExists = (directoryPath, label) => {
 }
 
 const runNginxSmokeTest = async () => {
-  const curlArgs = ['--fail', '--silent', '--show-error', '--location', '--max-time', '20', smokeUrl]
+  // vars-quickstart-public terminates TLS at nginx; local certs are typically self-signed.
+  const curlArgs = [
+    '--fail',
+    '--silent',
+    '--show-error',
+    '--location',
+    '--insecure',
+    '--max-time',
+    '20',
+    smokeUrl,
+  ]
 
   for (let attempt = 1; attempt <= smokeMaxAttempts; attempt += 1) {
     try {
@@ -69,10 +79,14 @@ const ensureFileExists = (filePath, label) => {
 }
 
 const verifyTestDeployPrerequisites = () => {
-  ensureDirectoryExists(quickstartRoot, 'm3-quickstart repository')
-  ensureDirectoryExists(quickstartNginxHtmlDir, 'm3-quickstart nginx html directory')
-  ensureDirectoryExists(quickstartKbEditorDir, 'm3-quickstart kbeditor directory')
-  ensureFileExists(quickstartDockerScript, 'm3-quickstart docker helper script')
+  ensureDirectoryExists(quickstartRoot, 'vars-quickstart-public repository')
+  ensureDirectoryExists(quickstartNginxHtmlDir, 'vars-quickstart-public nginx html directory')
+  ensureFileExists(quickstartVarsqScript, 'vars-quickstart-public varsq script')
+
+  if (!fs.existsSync(quickstartKbEditorDir)) {
+    fs.mkdirSync(quickstartKbEditorDir, { recursive: true })
+  }
+  ensureDirectoryExists(quickstartKbEditorDir, 'vars-quickstart-public kbeditor directory')
 }
 
 const main = async () => {
@@ -87,19 +101,13 @@ const main = async () => {
 
   const syncCommand = 'rsync'
   const syncArgs = ['-a', '--delete', `${distDir}/`, `${quickstartKbEditorDir}/`]
-  console.log(`📦 Syncing dist into m3-quickstart: ${syncCommand} ${syncArgs.join(' ')}`)
+  console.log(`📦 Syncing dist into vars-quickstart-public: ${syncCommand} ${syncArgs.join(' ')}`)
   await consoleMonitor(syncCommand, syncArgs, { label: 'Asset sync', intervalMs: 5000 })
 
-  const rebuildArgs = ['build', 'nginx']
-  console.log(`🐳 Rebuilding nginx image: ${quickstartDockerScript} ${rebuildArgs.join(' ')}`)
-  await consoleMonitor(quickstartDockerScript, rebuildArgs, {
-    label: 'Nginx image rebuild',
-    intervalMs: 10000,
-  })
-
-  const restartArgs = ['up', '-d', 'nginx']
-  console.log(`🚀 Restarting nginx service: ${quickstartDockerScript} ${restartArgs.join(' ')}`)
-  await consoleMonitor(quickstartDockerScript, restartArgs, {
+  // Static assets are volume-mounted from temp/nginx/html; restart is enough.
+  const restartArgs = ['docker', 'restart', 'nginx']
+  console.log(`🚀 Restarting nginx service: ${quickstartVarsqScript} ${restartArgs.join(' ')}`)
+  await consoleMonitor(quickstartVarsqScript, restartArgs, {
     label: 'Nginx service restart',
     intervalMs: 10000,
   })

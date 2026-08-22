@@ -48,7 +48,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "dev:local": "cross-env VITE_M3_LOCAL=true vite",
+    "dev:local": "cross-env VITE_LOCAL_BACKEND_URL=https://localhost vite",
     "kb": "yarn build && yarn preview",
     "lint": "eslint . --no-fix",
     "preview": "vite preview",
