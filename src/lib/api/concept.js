@@ -1,7 +1,5 @@
 import { getMedia } from '@/lib/api/media'
 import { getConceptLinkRealizations } from '@/lib/api/realizations'
-import { ERROR_TEXT } from '@/lib/constants/errorText.js'
-import { getHttpErrorTitle } from '@/lib/errors'
 import { annosaurusGet } from '@/lib/services/annosaurus/methods'
 import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
 
