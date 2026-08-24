@@ -23,15 +23,6 @@ const normalizeConcept = async (apiFns, concept) => {
   return concept
 }
 
-const checkConcept = async (config, conceptName) => {
-  const { error } = await getConcept(config, conceptName)
-
-  if (!error) return true
-  if (error.message === ERROR_TEXT.API.FAILED_FETCH) return false
-  if (error.title === getHttpErrorTitle(404)) return false
-  throw error
-}
-
 const createConcept = async (config, updates) => oniPost({ config, path: ['concept'], data: updates })
 
 const deleteConcept = async (config, conceptName) => oniDelete({ config, path: ['concept', conceptName] })
@@ -69,7 +60,6 @@ const updateConceptRank = async (config, [conceptName, updates]) =>
   oniPut({ config, path: ['concept', conceptName], data: updates })
 
 export {
-  checkConcept,
   createConcept,
   deleteConcept,
   getConcept,

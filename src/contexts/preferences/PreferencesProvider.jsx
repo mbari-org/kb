@@ -3,7 +3,6 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useConceptSelection from '@/contexts/selected/useConceptSelection'
@@ -17,8 +16,7 @@ import { PREFS } from '@/lib/constants/prefs.js'
 const { KEY } = PREFS.USER
 
 const PreferencesProvider = ({ children }) => {
-  const { createPreferences, config, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)
-  const { rootName } = use(TaxonomyContext)
+  const { createPreferences, getPreferences, savePreferencesRef, updatePreferences, user } = use(UserContext)
 
   const [currentConcept, setCurrentConcept] = useState(null)
   const [currentPanel, setCurrentPanel] = useState(null)
@@ -70,7 +68,6 @@ const PreferencesProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
   const { CLEAN_FLAGS, prefsValue } = useInitPrefs({
-    config,
     conceptSelection,
     createPreferences,
     getPreferences,
@@ -79,7 +76,6 @@ const PreferencesProvider = ({ children }) => {
     getSettings: getSettingsForPrefs,
     getSettingsRef,
     onInitSettingsRef,
-    rootName,
     setDirtyFlags,
     setIsLoading,
     setPreferencesInitialized,

@@ -2,11 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 
 import useInitPrefs from '@/contexts/preferences/useInitPrefs'
-import { checkConcept } from '@/lib/api/concept'
-
-vi.mock('@/lib/api/concept', () => ({
-  checkConcept: vi.fn(),
-}))
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const createSelection = ({ position = 0, state = [] } = {}) => ({
   getPosition: vi.fn(() => position),
@@ -14,8 +10,12 @@ const createSelection = ({ position = 0, state = [] } = {}) => ({
   init: vi.fn(),
 })
 
+const createCheckConceptName = (validNames = ['root', 'dingo', 'object']) => {
+  const valid = new Set(validNames)
+  return vi.fn(conceptName => valid.has(conceptName))
+}
+
 const createArgs = overrides => ({
-  config: { url: 'http://example.test' },
   conceptSelection: createSelection(),
   createPreferences: vi.fn(),
   getPreferences: vi.fn(async () => ({
@@ -33,19 +33,33 @@ const createArgs = overrides => ({
   setPreferencesInitialized: vi.fn(),
   setServerPreferencesExist: vi.fn(),
   showBoundary: vi.fn(),
-  rootName: 'root',
   updatePreferences: vi.fn(),
   user: { name: 'tester' },
   ...overrides,
 })
+
+const renderUseInitPrefs = (args, taxonomy = {}) => {
+  const taxonomyValue = {
+    checkConceptName: createCheckConceptName(),
+    rootName: 'root',
+    ...taxonomy,
+  }
+
+  return {
+    ...renderHook(() => useInitPrefs(args), {
+      wrapper: ({ children }) => <TaxonomyContext value={taxonomyValue}>{children}</TaxonomyContext>,
+    }),
+    taxonomyValue,
+  }
+}
 
 describe('useInitPrefs', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  it('deduplicates and filters concept history state by validating concepts from API', async () => {
-    checkConcept.mockImplementation(async (_config, conceptName) => conceptName !== 'deleted')
+  it('filters concept history state by taxonomy names', async () => {
+    const checkConceptName = createCheckConceptName(['root', 'dingo', 'object'])
 
     const args = createArgs({
       getPreferences: vi.fn(async () => ({
@@ -58,27 +72,59 @@ describe('useInitPrefs', () => {
       })),
     })
 
-    renderHook(() => useInitPrefs(args))
+    const { taxonomyValue } = renderUseInitPrefs(args, { checkConceptName })
 
     await waitFor(() => {
       expect(args.conceptSelection.init).toHaveBeenCalled()
       expect(args.setPreferencesInitialized).toHaveBeenCalledWith(true)
     })
 
-    expect(checkConcept).toHaveBeenCalledTimes(4)
+    expect(taxonomyValue.checkConceptName).toHaveBeenCalled()
     expect(args.conceptSelection.init).toHaveBeenCalledWith({
-      state: ['root', 'dingo', 'dingo', 'object', 'dingo'],
-      position: 4,
+      state: ['root', 'dingo', 'object', 'dingo'],
+      position: 3,
     })
     expect(args.updatePreferences).toHaveBeenCalledWith('concepts', {
-      state: ['root', 'dingo', 'dingo', 'object', 'dingo'],
-      position: 4,
+      state: ['root', 'dingo', 'object', 'dingo'],
+      position: 3,
+    })
+  })
+
+  it('collapses adjacent duplicates created by removing missing concepts', async () => {
+    const checkConceptName = createCheckConceptName([
+      'object',
+      'behavior',
+      'NetCDF',
+      'wood',
+    ])
+
+    const args = createArgs({
+      getPreferences: vi.fn(async () => ({
+        concepts: {
+          state: ['object', 'behavior', 'CDF', 'behavior', 'NetCDF', 'CDF', 'wood'],
+          position: 4,
+        },
+        panels: { state: ['Concepts'], position: 0 },
+        settings: {},
+      })),
+    })
+
+    renderUseInitPrefs(args, { checkConceptName, rootName: 'object' })
+
+    await waitFor(() => {
+      expect(args.conceptSelection.init).toHaveBeenCalledWith({
+        state: ['object', 'behavior', 'NetCDF', 'wood'],
+        position: 2,
+      })
+    })
+
+    expect(args.updatePreferences).toHaveBeenCalledWith('concepts', {
+      state: ['object', 'behavior', 'NetCDF', 'wood'],
+      position: 2,
     })
   })
 
   it('keeps normalized concepts unchanged when all are unique and valid', async () => {
-    checkConcept.mockResolvedValue(true)
-
     const args = createArgs({
       getPreferences: vi.fn(async () => ({
         concepts: {
@@ -90,7 +136,7 @@ describe('useInitPrefs', () => {
       })),
     })
 
-    renderHook(() => useInitPrefs(args))
+    renderUseInitPrefs(args)
 
     await waitFor(() => {
       expect(args.conceptSelection.init).toHaveBeenCalledWith({
@@ -103,8 +149,6 @@ describe('useInitPrefs', () => {
   })
 
   it('adjusts concept position when a deleted concept appears before the current position', async () => {
-    checkConcept.mockImplementation(async (_config, conceptName) => conceptName !== 'deleted')
-
     const args = createArgs({
       getPreferences: vi.fn(async () => ({
         concepts: {
@@ -116,7 +160,7 @@ describe('useInitPrefs', () => {
       })),
     })
 
-    renderHook(() => useInitPrefs(args))
+    renderUseInitPrefs(args)
 
     await waitFor(() => {
       expect(args.conceptSelection.init).toHaveBeenCalledWith({
@@ -132,7 +176,6 @@ describe('useInitPrefs', () => {
   })
 
   it('falls back to taxonomy root when normalization removes all concepts', async () => {
-    checkConcept.mockResolvedValue(false)
     const args = createArgs({
       getPreferences: vi.fn(async () => ({
         concepts: {
@@ -144,7 +187,7 @@ describe('useInitPrefs', () => {
       })),
     })
 
-    renderHook(() => useInitPrefs(args))
+    renderUseInitPrefs(args, { checkConceptName: createCheckConceptName([]) })
 
     await waitFor(() => {
       expect(args.conceptSelection.init).toHaveBeenCalledWith({
@@ -160,7 +203,6 @@ describe('useInitPrefs', () => {
   })
 
   it('falls back to default panel when panel history is empty', async () => {
-    checkConcept.mockResolvedValue(true)
     const args = createArgs({
       getPreferences: vi.fn(async () => ({
         concepts: {
@@ -175,7 +217,7 @@ describe('useInitPrefs', () => {
       })),
     })
 
-    renderHook(() => useInitPrefs(args))
+    renderUseInitPrefs(args)
 
     await waitFor(() => {
       expect(args.panelSelection.init).toHaveBeenCalledWith({
@@ -191,7 +233,6 @@ describe('useInitPrefs', () => {
   })
 
   it('falls back to Concepts when panel selection has no default panel', async () => {
-    checkConcept.mockResolvedValue(true)
     const args = createArgs({
       panelSelection: createSelection({ state: [] }),
       getPreferences: vi.fn(async () => ({
@@ -207,7 +248,7 @@ describe('useInitPrefs', () => {
       })),
     })
 
-    renderHook(() => useInitPrefs(args))
+    renderUseInitPrefs(args)
 
     await waitFor(() => {
       expect(args.panelSelection.init).toHaveBeenCalledWith({
@@ -231,7 +272,7 @@ describe('useInitPrefs', () => {
       }),
     })
 
-    renderHook(() => useInitPrefs(args))
+    renderUseInitPrefs(args)
 
     await waitFor(() => {
       expect(args.showBoundary).toHaveBeenCalledWith(initError)

@@ -32,15 +32,6 @@ import { createError } from '@/lib/errors'
 
 import { isEqual, withTimeout } from '@/lib/utils'
 
-const loadInitialTaxonomy = async apiFns => {
-  try {
-    const { taxonomy: rootTaxonomy } = await loadTaxonomy(apiFns)
-    return loadTaxonomyConcept(rootTaxonomy, rootTaxonomy.rootName, apiFns)
-  } catch (error) {
-    return { error }
-  }
-}
-
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
@@ -48,6 +39,15 @@ const TaxonomyProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
+
+  const loadInitialTaxonomy = async () => {
+    try {
+      const { taxonomy: rootTaxonomy } = await loadTaxonomy(apiFns)
+      return loadTaxonomyConcept(rootTaxonomy, rootTaxonomy.rootName, apiFns)
+    } catch (error) {
+      return { error }
+    }
+  }
 
   const checkIntegrity = useTaxonomyIntegrity()
 
@@ -222,6 +222,11 @@ const TaxonomyProvider = ({ children }) => {
     return getTaxonomyNames(taxonomy)
   }, [taxonomy])
 
+  const checkConceptName = useCallback(
+    conceptName => getTaxonomyNames(taxonomy).includes(conceptName),
+    [taxonomy]
+  )
+
   const isConceptLoaded = useCallback(
     conceptName => {
       if (!taxonomy) return false
@@ -321,7 +326,7 @@ const TaxonomyProvider = ({ children }) => {
     let cancelled = false
 
     withTimeout(
-      loadInitialTaxonomy(apiFns),
+      loadInitialTaxonomy(),
       LOADING.STARTUP.TAXONOMY_TIMEOUT,
       createError(
         'Taxonomy Load Timeout',
@@ -350,6 +355,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      checkConceptName,
       conceptEditsRefresh,
       closestConcept,
       filterRanks,
@@ -369,6 +375,7 @@ const TaxonomyProvider = ({ children }) => {
       updateTaxonomy,
     }),
     [
+      checkConceptName,
       conceptEditsRefresh,
       closestConcept,
       filterRanks,

@@ -1,6 +1,7 @@
-import { useCallback, useEffect } from 'react'
+import { use, useCallback, useEffect } from 'react'
 
-import { checkConcept } from '@/lib/api/concept'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
 import { createError } from '@/lib/errors'
 import { isEmpty } from '@/lib/utils'
 
@@ -14,30 +15,24 @@ const CLEAN_FLAGS = {
   [KEY.SETTINGS]: false,
 }
 
-const normalizeConceptPreferences = async (value, config) => {
+const normalizeConceptPreferences = (value, checkConceptName) => {
   const normalized = normalizeHistoryPreferences(value)
   if (normalized.state.length === 0) {
     return normalized
   }
 
-  const checks = await Promise.all(
-    [...new Set(normalized.state)].map(async conceptName => ({
-      conceptName,
-      exists: await checkConcept(config, conceptName),
-    }))
-  )
-
-  const conceptExists = checks.reduce((acc, result) => {
-    acc[result.conceptName] = result.exists
-    return acc
-  }, {})
-
   const validState = []
   let removedBeforeOrAtPosition = 0
   normalized.state.forEach((conceptName, index) => {
-    if (conceptExists[conceptName]) {
+    const exists = checkConceptName(conceptName)
+    const isAdjacentDuplicate = exists && validState[validState.length - 1] === conceptName
+
+    if (exists && !isAdjacentDuplicate) {
       validState.push(conceptName)
-    } else if (index <= normalized.position) {
+      return
+    }
+
+    if (index <= normalized.position) {
       removedBeforeOrAtPosition += 1
     }
   })
@@ -81,7 +76,6 @@ const isSameHistoryPreferences = (left, right) => {
 }
 
 const useInitPrefs = ({
-  config,
   conceptSelection,
   createPreferences,
   getPreferences,
@@ -95,10 +89,11 @@ const useInitPrefs = ({
   setPreferencesInitialized,
   setServerPreferencesExist,
   showBoundary,
-  rootName,
   updatePreferences,
   user,
 }) => {
+  const { checkConceptName, rootName } = use(TaxonomyContext)
+
   const prefsValue = useCallback(
     key => {
       switch (key) {
@@ -140,7 +135,7 @@ const useInitPrefs = ({
           )
           setServerPreferencesExist(true)
         } else {
-          const normalizedConcepts = await normalizeConceptPreferences(allPrefs.concepts, config)
+          const normalizedConcepts = normalizeConceptPreferences(allPrefs.concepts, checkConceptName)
           const conceptsForInit =
             normalizedConcepts.state.length === 0
               ? normalizeHistoryPreferences({
@@ -184,7 +179,7 @@ const useInitPrefs = ({
 
     initializePreferences()
   }, [
-    config,
+    checkConceptName,
     conceptSelection,
     createPreferences,
     getPreferences,
