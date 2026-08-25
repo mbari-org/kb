@@ -1,4 +1,4 @@
-import { oniGet, oniPut } from '@/lib/services/oni/methods'
+import { oniGet, oniUserPut } from '@/lib/services/oni/methods'
 import { paramsQs } from '@/lib/services/params'
 
 const getConceptHistory = async (config, conceptName) =>
@@ -12,6 +12,6 @@ const getHistoryCount = async (config, type) => {
 }
 
 const updatePendingItem = async (config, [approval, pendingId]) =>
-  oniPut({ config, path: ['history', approval, pendingId] })
+  oniUserPut({ config, path: ['history', approval, pendingId] })
 
 export { getConceptHistory, getHistory, getHistoryCount, updatePendingItem }

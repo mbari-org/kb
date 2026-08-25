@@ -1,10 +1,10 @@
-import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
+import { oniGet, oniUserDelete, oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
 import { paramsQs } from '@/lib/services/params'
 
-const createConceptTemplate = async (config, payload) => oniPost({ config, path: ['linktemplates'], data: payload })
+const createConceptTemplate = async (config, payload) => oniUserPost({ config, path: ['linktemplates'], data: payload })
 
 const deleteConceptTemplate = async (config, templateId) =>
-  oniDelete({ config, path: ['linktemplates', templateId] })
+  oniUserDelete({ config, path: ['linktemplates', templateId] })
 
 const getTemplates = async (config, params) => oniGet({ config, path: ['linktemplates'], qs: paramsQs(params) })
 
@@ -33,10 +33,10 @@ const getToConceptTemplates = async (config, conceptName) =>
   oniGet({ config, path: ['linktemplates', 'toconcept', conceptName] })
 
 const renameToConceptTemplates = async (config, payload) =>
-  oniPut({ config, path: ['linktemplates', 'toconcept', 'rename'], data: payload })
+  oniUserPut({ config, path: ['linktemplates', 'toconcept', 'rename'], data: payload })
 
 const updateTemplate = async (config, [templateId, payload]) =>
-  oniPut({ config, path: ['linktemplates', templateId], data: payload })
+  oniUserPut({ config, path: ['linktemplates', templateId], data: payload })
 
 export {
   createConceptTemplate,

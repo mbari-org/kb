@@ -34,7 +34,7 @@ const UserProvider = ({ children }) => {
   const processAuth = useProcessAuth(setUser)
   const refreshUser = useRefreshUser({ setUser, user })
 
-  useAuthUser({ logout, setUser, user })
+  useAuthUser({ processAuth, user })
 
   if (logoutError) {
     throw logoutError

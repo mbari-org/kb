@@ -9,9 +9,9 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 const StartUp = () => {
   const { config } = use(ConfigContext)
 
-  // null means use default (!config?.valid), otherwise use override
+  // null means use default (!config?.url), otherwise use override
   const [configIsDirtyOverride, setConfigIsDirtyOverride] = useState(null)
-  const configIsDirty = configIsDirtyOverride !== null ? configIsDirtyOverride : !config?.valid
+  const configIsDirty = configIsDirtyOverride !== null ? configIsDirtyOverride : !config?.url
 
   const [_isPending, startTransition] = useTransition()
 

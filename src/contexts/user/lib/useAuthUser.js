@@ -1,22 +1,16 @@
 import { useEffect } from 'react'
 
-import processToken from '@/lib/auth/processToken'
 import authStore from '@/lib/local/store/authStore'
 
-const useAuthUser = ({ logout, setUser, user }) => {
+const useAuthUser = ({ processAuth, user }) => {
   useEffect(() => {
     if (user) return
 
     const auth = authStore.get()
     if (!auth) return
 
-    const { error: authError, user: authUser } = processToken(auth.token)
-    if (authError) {
-      logout()
-      return
-    }
-    setUser(authUser)
-  }, [logout, setUser, user])
+    processAuth(auth)
+  }, [processAuth, user])
 }
 
 export default useAuthUser

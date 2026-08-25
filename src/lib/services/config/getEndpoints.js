@@ -1,24 +1,22 @@
-const IS_DEV = import.meta.env.DEV
+import { isLocalConfigUrl, isLocalDevUrl, toConfigServiceUrl, toLocalDevUrl } from './localDevUrl'
 
-const toLocalDevUrl = endpointUrl => {
-  const urlObj = new URL(endpointUrl)
-  // Route service calls through the Vite dev-server proxy so the browser never
-  // has to trust the local quickstart self-signed certificate.
-  return `${globalThis.location.origin}${urlObj.pathname}${urlObj.search}`
-}
-
-const getEndpoints = async url => {
+const getEndpoints = async (url, token) => {
   try {
     // This allows the user's input for config server URL to be slashed or slashless
-    const slashlessUrl = url.replace(/\/+$/, '')
+    const configUrl = isLocalConfigUrl(url) ? toConfigServiceUrl(url) : url.replace(/\/+$/, '')
 
-    // In Vite dev, always go through the same-origin proxy. Direct browser calls to
-    // https://localhost fail with net::ERR_CERT_AUTHORITY_INVALID on self-signed certs.
-    const configPath = IS_DEV
-      ? `${globalThis.location.origin}/config/endpoints`
-      : `${slashlessUrl}/endpoints`
+    const configPath = isLocalDevUrl(configUrl)
+      ? `${toLocalDevUrl(configUrl)}/endpoints`
+      : `${configUrl}/endpoints`
+
+    const headers = token
+      ? {
+          Authorization: `Bearer ${token}`,
+        }
+      : undefined
 
     const response = await fetch(configPath, {
+      headers,
       method: 'GET',
       mode: 'cors',
     })
@@ -28,11 +26,11 @@ const getEndpoints = async url => {
 
     const endpoints = await response.json()
 
-    if (IS_DEV) {
-      endpoints.forEach(endpoint => {
+    endpoints.forEach(endpoint => {
+      if (isLocalDevUrl(endpoint.url)) {
         endpoint.url = toLocalDevUrl(endpoint.url)
-      })
-    }
+      }
+    })
 
     return { endpoints }
   } catch (error) {

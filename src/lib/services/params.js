@@ -1,7 +1,4 @@
-import authStore from '@/lib/local/store/authStore'
-
-const apiParams = (method, data) => {
-  const { token } = authStore.get()
+const apiParams = (method, data, token) => {
 
   const headers = {
     Accept: 'application/json',

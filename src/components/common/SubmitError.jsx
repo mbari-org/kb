@@ -11,6 +11,8 @@ const SubmitError = ({ errorText }) => {
           color={theme.palette.error.main}
           fontSize={theme.typography.fontSize}
           fontWeight={theme.typography.fontWeightBold}
+          sx={{ color: theme.palette.error.main }}
+          style={{ color: theme.palette.error.main }}
         >
           {errorText}
         </Typography>

@@ -40,15 +40,6 @@ const TaxonomyProvider = ({ children }) => {
 
   const [taxonomy, setTaxonomy] = useState(null)
 
-  const loadInitialTaxonomy = async () => {
-    try {
-      const { taxonomy: rootTaxonomy } = await loadTaxonomy(apiFns)
-      return loadTaxonomyConcept(rootTaxonomy, rootTaxonomy.rootName, apiFns)
-    } catch (error) {
-      return { error }
-    }
-  }
-
   const checkIntegrity = useTaxonomyIntegrity()
 
   const updateTaxonomy = useCallback(
@@ -324,6 +315,14 @@ const TaxonomyProvider = ({ children }) => {
   useEffect(() => {
     if (!apiFns || taxonomy) return
     let cancelled = false
+    const loadInitialTaxonomy = async () => {
+      try {
+        const { taxonomy: rootTaxonomy } = await loadTaxonomy(apiFns)
+        return loadTaxonomyConcept(rootTaxonomy, rootTaxonomy.rootName, apiFns)
+      } catch (error) {
+        return { error }
+      }
+    }
 
     withTimeout(
       loadInitialTaxonomy(),

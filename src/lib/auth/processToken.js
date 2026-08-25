@@ -1,19 +1,26 @@
 import { jwtDecode } from 'jwt-decode'
 
 const processToken = token => {
-  const decodedToken = jwtDecode(token)
+  let decodedToken
+  try {
+    decodedToken = jwtDecode(token)
+  } catch {
+    return { error: 'Invalid Token' }
+  }
 
-  const { exp, role, name } = decodedToken
+  const { affiliation, email, exp, name, role, username } = decodedToken
 
   const currentTime = Date.now() / 1000
-  if (exp * 1000 < currentTime) {
+  if (!exp || exp < currentTime) {
     return { error: 'Expired Token' }
   }
 
   const user = {
+    affiliation,
+    email,
     expiry: exp,
     role,
-    name,
+    name: name || username,
   }
 
   return { user }

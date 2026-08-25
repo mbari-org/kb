@@ -2,8 +2,11 @@ import { useCallback } from 'react'
 
 import { clearStores } from '@/lib/local/store/clearStores'
 import { createError } from '@/lib/errors'
+import ConfigContext from '@/contexts/config/ConfigContext'
+import { use } from 'react'
 
 const useLogout = (setUser, savePreferences, onError) => {
+  const { clearAuthenticatedConfig } = use(ConfigContext)
   return useCallback(async () => {
     try {
       if (savePreferences) {
@@ -20,8 +23,9 @@ const useLogout = (setUser, savePreferences, onError) => {
       )
     }
     clearStores()
+    clearAuthenticatedConfig()
     setUser(null)
-  }, [onError, savePreferences, setUser])
+  }, [clearAuthenticatedConfig, onError, savePreferences, setUser])
 }
 
 export default useLogout

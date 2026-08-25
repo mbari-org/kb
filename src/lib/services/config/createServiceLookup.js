@@ -1,7 +1,7 @@
-const createServiceLookup = endpoints => {
-  const serviceNames = ['annosaurus', 'oni']
+const createServiceLookup = (endpoints, razielUrl) => {
+  const serviceNames = ['annosaurus', 'oni', 'raziel']
 
-  const serviceEndpoints = endpoints
+  const serviceEndpoints = [{ name: 'raziel', url: razielUrl }, ...endpoints]
     .filter(endpoint => serviceNames.includes(endpoint.name))
     .reduce((acc, obj) => {
       acc.set(obj.name, obj)
@@ -20,7 +20,10 @@ const createServiceLookup = endpoints => {
       }
     }
 
-    return { url: serviceEndpoint.url }
+    return {
+      secret: serviceEndpoint.secret,
+      url: serviceEndpoint.url,
+    }
   }
 }
 

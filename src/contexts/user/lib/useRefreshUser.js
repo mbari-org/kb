@@ -30,8 +30,8 @@ const useRefreshUser = ({ setUser, user }) => {
           const { name } = user
           const { auth, error } = await loginUser(config, name, userRefresh.password)
           if (error) throw error
-
-          processAuth(auth)
+          const processed = await processAuth(auth)
+          if (processed?.error) throw processed.error
           resolve()
         } catch (error) {
           handleInvalidAuth()

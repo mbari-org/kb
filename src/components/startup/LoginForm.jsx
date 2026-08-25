@@ -1,4 +1,4 @@
-import { use, useActionState, useEffect, useRef, useCallback } from 'react'
+import { use, useActionState, useRef, useCallback, useEffect } from 'react'
 
 import { Box, Card, CardActions, CardContent } from '@mui/material'
 
@@ -17,18 +17,18 @@ const LoginForm = ({ isVisible = true }) => {
   const { config } = use(ConfigContext)
   const { processAuth } = use(UserContext)
 
-  const submitLogin = useCallback(async (_prevState, formData) => {
-    const username = formData.get('username')
-    const password = formData.get('password')
-
-    return loginUser(config, username, password)
-  }, [config])
+  const submitLogin = useCallback(
+    async (_prevState, formData) => {
+      const username = formData.get('username')
+      const password = formData.get('password')
+      const result = await loginUser(config, username, password)
+      if (result.error) return result
+      return processAuth(result.auth, { password, username })
+    },
+    [config, processAuth]
+  )
 
   const [loginState, loginAction] = useActionState(submitLogin, null)
-
-  useEffect(() => {
-    !!loginState && processAuth(loginState?.auth)
-  }, [loginState, processAuth])
 
   useEffect(() => {
     if (isVisible && usernameRef.current) {

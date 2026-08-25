@@ -6,10 +6,13 @@ import ConfigContext from './ConfigContext'
 
 import createServiceLookup from '@/lib/services/config/createServiceLookup'
 import getEndpoints from '@/lib/services/config/getEndpoints'
+import validateConfigUrl from '@/lib/services/config/validateConfigUrl'
+import createServiceTokenManager from '@/lib/services/auth/serviceTokens'
 import useApiFns from '@/contexts/config/useApiFns'
 import useAppPreferences from '@/contexts/config/useAppPreferences'
 
 import configUrlStore from '@/lib/local/store/configUrl'
+import authStore from '@/lib/local/store/authStore'
 import { PREFS } from '@/lib/constants/prefs.js'
 
 const IS_DEV = import.meta.env.DEV
@@ -23,82 +26,86 @@ const defaultPhylogenyRoot = PREFS.APP.PHYLOGENY.ROOT.DEFAULT
 const ConfigProvider = ({ children }) => {
   const navigate = useNavigate()
   const { showBoundary } = useErrorBoundary()
-  const [config, setConfig] = useState(null)
+  const [config, setConfig] = useState(() => {
+    const storedConfigUrl = configUrlStore.get()
+    return storedConfigUrl ? { url: storedConfigUrl, valid: false } : null
+  })
   const [appPreferences, setAppPreferences] = useState({})
   const [appPreferencesInitialized, setAppPreferencesInitialized] = useState(false)
   const mountedRef = useRef(true)
   const appPreferencesInitializingRef = useRef(false)
 
-  const loadConfig = useCallback(async (url, onError) => {
-    try {
-      const { endpoints, error } = await getEndpoints(url)
-
-      if (!mountedRef.current) return
-
-      if (error) {
-        if (onError) {
-          onError(error)
-        } else {
-          setConfig({
-            error,
-            url,
-            valid: false,
-          })
-        }
-        return
-      }
-
-      const getServiceUrl = createServiceLookup(endpoints)
-      setConfig({
-        getServiceUrl,
-        url,
-        valid: true,
-      })
-    } catch (err) {
-      if (!mountedRef.current) return
-      if (onError) {
-        onError(err)
-      } else {
-        setConfig({
-          error: err,
-          url,
-          valid: false,
-        })
-      }
-    }
+  const clearAuthenticatedConfig = useCallback(() => {
+    setConfig(currentConfig => {
+      currentConfig?.clearServiceTokens?.()
+      return currentConfig ? { url: currentConfig.url, valid: false } : currentConfig
+    })
   }, [])
 
   const updateConfig = useCallback(
     async url => {
-      appPreferencesInitializingRef.current = false
-      setAppPreferences({})
-      setAppPreferencesInitialized(false)
       if (url === null) {
+        appPreferencesInitializingRef.current = false
+        setAppPreferences({})
+        setAppPreferencesInitialized(false)
+        clearAuthenticatedConfig()
+        authStore.remove()
         setConfig(null)
         configUrlStore.remove()
         return
       }
+      const { error } = await validateConfigUrl(url)
+      if (error) return { error }
+
+      appPreferencesInitializingRef.current = false
+      setAppPreferences({})
+      setAppPreferencesInitialized(false)
+      clearAuthenticatedConfig()
+      authStore.remove()
 
       configUrlStore.set(url)
-      await loadConfig(url)
+      setConfig({ url, valid: false })
     },
-    [loadConfig]
+    [clearAuthenticatedConfig]
   )
+  const authenticateConfig = useCallback(async (auth, oniUserCredentials, readOnly = false) => {
+    const url = configUrlStore.get()
+    if (!url) throw new Error('No config service URL configured')
+
+    const { endpoints, error } = await getEndpoints(url, auth.token)
+    if (error) {
+      const configError = new Error(error)
+      if (mountedRef.current) setConfig({ error, url, valid: false })
+      throw configError
+    }
+
+    const getServiceUrl = createServiceLookup(endpoints, url)
+    const tokenManager = createServiceTokenManager({
+      getServiceUrl,
+      oniUserCredentials,
+      razielToken: auth.token,
+      readOnlyToken: readOnly ? auth.token : undefined,
+    })
+    const authenticatedConfig = {
+      clearServiceTokens: tokenManager.clearServiceTokens,
+      getServiceToken: tokenManager.getServiceToken,
+      getServiceUrl,
+      getOniUserToken: tokenManager.getOniUserToken,
+      refreshOniUserToken: tokenManager.refreshOniUserToken,
+      refreshServiceToken: tokenManager.refreshServiceToken,
+      url,
+      valid: true,
+    }
+
+    if (mountedRef.current) setConfig(authenticatedConfig)
+    return { config: authenticatedConfig }
+  }, [])
 
   useEffect(() => {
-    const storedConfigUrl = configUrlStore.get()
-    if (storedConfigUrl) {
-      loadConfig(storedConfigUrl, () => {
-        if (mountedRef.current) {
-          setConfig(null)
-          configUrlStore.remove()
-          navigate('/kb', { replace: true })
-        }
-      })
-    } else {
+    if (!config) {
       navigate('/kb', { replace: true })
     }
-  }, [loadConfig, navigate])
+  }, [config, navigate])
 
   const apiFnsFromHook = useApiFns(config?.valid ? config : null, showBoundary)
   const apiFns = apiFnsFromHook
@@ -161,6 +168,8 @@ const ConfigProvider = ({ children }) => {
     () => ({
       apiFns,
       appPreferencesInitialized,
+      authenticateConfig,
+      clearAuthenticatedConfig,
       config,
       dsgConceptUrl,
       getAppPreference,
@@ -174,6 +183,8 @@ const ConfigProvider = ({ children }) => {
     [
       apiFns,
       appPreferencesInitialized,
+      authenticateConfig,
+      clearAuthenticatedConfig,
       config,
       dsgConceptUrl,
       getAppPreference,

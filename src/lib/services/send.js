@@ -7,7 +7,7 @@ const apiSend = async (url, params) => {
 
     if (response.status === 200) {
       const payload = await response.json()
-      return { payload }
+      return { payload, status: response.status }
     }
 
     let errorMessage = `HTTP ${response.status}`
@@ -20,7 +20,7 @@ const apiSend = async (url, params) => {
 
     const title = getHttpErrorTitle(response.status)
     const apiError = createApiError(title, errorMessage, url, params)
-    return { error: apiError }
+    return { error: apiError, status: response.status }
   } catch (error) {
     const apiError = createApiError(
       ERROR_TEXT.API.NETWORK,

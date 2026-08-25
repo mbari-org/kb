@@ -9,8 +9,6 @@ import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
-import CONFIG from '@/lib/config'
-
 const { REALIZATIONS } = SELECTED.SETTINGS
 const FILTERS = REALIZATIONS.FILTERS
 const { DEFAULT_FILTERS } = dataFilters(REALIZATIONS.KEY)

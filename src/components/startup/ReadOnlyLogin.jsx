@@ -9,6 +9,7 @@ import { loginReadOnly } from '@/lib/services/auth/login'
 const ReadOnlyLogin = () => {
   const [asyncError, setAsyncError] = useState(null)
   const { processAuth } = use(UserContext)
+
   if (asyncError) {
     throw asyncError
   }
@@ -16,7 +17,8 @@ const ReadOnlyLogin = () => {
   const handleReadOnlyLogin = useCallback(async () => {
     try {
       const { auth } = await loginReadOnly()
-      processAuth(auth)
+      const result = await processAuth(auth)
+      if (result?.error) throw result.error
     } catch (error) {
       setAsyncError(error)
     }

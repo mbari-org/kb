@@ -1,7 +1,7 @@
 import { getMedia } from '@/lib/api/media'
 import { getConceptLinkRealizations } from '@/lib/api/realizations'
 import { annosaurusGet } from '@/lib/services/annosaurus/methods'
-import { oniDelete, oniGet, oniPost, oniPut } from '@/lib/services/oni/methods'
+import { oniGet, oniUserDelete, oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
 
 // The server caches concepts, so we don't "trust" the media and realizations arrays in the fetched concept object,
 // instead we explicitly fetch media and realizations.
@@ -21,9 +21,9 @@ const normalizeConcept = async (apiFns, concept) => {
   return concept
 }
 
-const createConcept = async (config, updates) => oniPost({ config, path: ['concept'], data: updates })
+const createConcept = async (config, updates) => oniUserPost({ config, path: ['concept'], data: updates })
 
-const deleteConcept = async (config, conceptName) => oniDelete({ config, path: ['concept', conceptName] })
+const deleteConcept = async (config, conceptName) => oniUserDelete({ config, path: ['concept', conceptName] })
 
 const getConcept = async (config, conceptName) => oniGet({ config, path: ['concept', conceptName] })
 
@@ -46,16 +46,16 @@ const getConceptNames = async (config, conceptName) => oniGet({ config, path: ['
 const getConceptTaxa = async (config, conceptName) => oniGet({ config, path: ['phylogeny', 'taxa', conceptName] })
 
 const updateConceptAuthor = async (config, [conceptName, updates]) =>
-  oniPut({ config, path: ['names', conceptName], data: updates })
+  oniUserPut({ config, path: ['names', conceptName], data: updates })
 
 const updateConceptName = async (config, [conceptName, updates]) =>
-  oniPut({ config, path: ['names', conceptName], data: { newName: updates.name } })
+  oniUserPut({ config, path: ['names', conceptName], data: { newName: updates.name } })
 
 const updateConceptParent = async (config, [conceptName, updates]) =>
-  oniPut({ config, path: ['concept', conceptName], data: updates })
+  oniUserPut({ config, path: ['concept', conceptName], data: updates })
 
 const updateConceptRank = async (config, [conceptName, updates]) =>
-  oniPut({ config, path: ['concept', conceptName], data: updates })
+  oniUserPut({ config, path: ['concept', conceptName], data: updates })
 
 export {
   createConcept,

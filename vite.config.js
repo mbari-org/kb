@@ -11,7 +11,7 @@ const dirname = path.dirname(filename)
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, dirname, '')
   const localBackendTarget =
-    process.env.VITE_LOCAL_BACKEND_URL || env.VITE_LOCAL_BACKEND_URL || 'https://localhost'
+    globalThis.process?.env?.VITE_LOCAL_BACKEND_URL || env.VITE_LOCAL_BACKEND_URL || 'https://localhost'
 
   // Always proxy local quickstart HTTPS services in dev. secure:false skips the
   // self-signed cert that browsers reject when calling https://localhost directly.

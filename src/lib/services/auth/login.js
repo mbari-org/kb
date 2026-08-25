@@ -1,8 +1,8 @@
 import { genRefresh } from '@/lib/auth/refreshKey'
 import { createError } from '@/lib/errors'
-import authStore from '@/lib/local/store/authStore'
 
 import authUrl from './authUrl'
+
 
 const loginReadOnly = async () => {
   const refresh = await genRefresh('readonly')
@@ -12,17 +12,16 @@ const loginReadOnly = async () => {
   const token =
     'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8vd3d3Lm1iYXJpLm9yZyIsImlhdCI6MTU3Nzg3NDYzMywiZXhwIjo3OTUyMzgwMjE2LCJzdWIiOiIyMzgiLCJuYW1lIjoicmVhZG9ubHkiLCJyb2xlIjoiUmVhZE9ubHkifQ.8zHQftSuItJDnkpVcd6VJEI1t26z14h3tFexZaB1UR2ju0oLldkWoWpTmJE3PwGL6aPFHODChJpsFFzi-Qui5A'
 
-  const auth = {
-    refresh,
-    token,
+  return {
+    auth: {
+      refresh,
+      token,
+    },
   }
-  authStore.set(auth)
-
-  return { auth }
 }
 
 const loginUser = async (config, username, password) => {
-  const { error, url: loginUrl } = authUrl(config, 'login')
+  const { error, url: loginUrl } = authUrl(config)
   if (error) {
     return { error: createError('Auth URL Error', error.message || 'Failed to get auth URL', { config }) }
   }
@@ -41,14 +40,19 @@ const loginUser = async (config, username, password) => {
       }
     }
 
-    const { access_token: token } = await loginResponse.json()
+    const { access_token: token, accessToken } = await loginResponse.json()
+    const razielToken = token || accessToken
+    if (!razielToken) {
+      return {
+        error: createError('Login Failed', 'Authentication response missing token', { username }),
+      }
+    }
     const refresh = await genRefresh(password)
 
     const auth = {
       refresh,
-      token,
+      token: razielToken,
     }
-    authStore.set(auth)
 
     return { auth }
   } catch (error) {
