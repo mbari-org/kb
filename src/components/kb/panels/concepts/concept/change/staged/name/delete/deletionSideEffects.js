@@ -1,6 +1,7 @@
 import { renameToConceptAssociations } from '@/lib/api/associations'
 import { renameConceptObservations } from '@/lib/api/observations'
-import { removeConcept } from '@/lib/api/references'
+import { renameToConceptRealizations } from '@/lib/api/realizations'
+import { addConcept, removeConcept } from '@/lib/api/references'
 import { createConceptTemplate, renameToConceptTemplates } from '@/lib/api/templates'
 
 import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
@@ -15,7 +16,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import { isIdentical } from '@/lib/model/templates'
 
 const { KEY } = PREFS.USER
-const { ANNOTATIONS, ASSOCIATIONS, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
+const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS_TO, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
 const { EMPTY_FILTERS } = dataFilters(SELECTED.SETTINGS.TEMPLATES.KEY)
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
@@ -66,16 +67,23 @@ const preSideEffects = async deleteConceptContext => {
     if (count.value > 0) {
       switch (count.title) {
         case ASSOCIATIONS:
-          promises[ASSOCIATIONS] = apiFns.apiPayload(renameToConceptAssociations, [concept.name, reassign])
+          promises[ASSOCIATIONS] = apiFns.apiPayload(renameToConceptAssociations, oldNewPayload)
           break
 
         case ANNOTATIONS:
           promises[ANNOTATIONS] = apiFns.apiPayload(renameConceptObservations, oldNewPayload)
           break
 
+        case REALIZATIONS_TO:
+          promises[REALIZATIONS_TO] = apiFns.apiPayload(renameToConceptRealizations, oldNewPayload)
+          break
+
         case REFERENCES:
           promises[REFERENCES] = Promise.all(
             concept.references.map(reference => apiFns.apiPayload(removeConcept, [reference.id, concept.name]))
+          )
+          promises[REFERENCES] = Promise.all(
+            concept.references.map(reference => apiFns.apiPayload(addConcept, [reference.id, reassign]))
           )
           break
 
@@ -124,10 +132,7 @@ const postSideEffects = async deleteConceptContext => {
 
   await performConceptPrefsUpdate(deleteConceptContext)
   await performSettingsUpdate(deleteConceptContext)
-  await Promise.all([
-    refreshPanelDataFn(PANEL_DATA.REFERENCES),
-    refreshPanelDataFn(PANEL_DATA.REALIZATIONS),
-  ])
+  await Promise.all([refreshPanelDataFn(PANEL_DATA.REFERENCES), refreshPanelDataFn(PANEL_DATA.REALIZATIONS)])
   return {}
 }
 
@@ -141,6 +146,12 @@ const applyResults = async (refreshPanelDataFn, results) => {
 
         case ANNOTATIONS:
           // no-op
+          break
+
+        case REALIZATIONS_TO:
+          if (value.length > 0) {
+            await refreshPanelDataFn(PANEL_DATA.REALIZATIONS)
+          }
           break
 
         case REFERENCES:

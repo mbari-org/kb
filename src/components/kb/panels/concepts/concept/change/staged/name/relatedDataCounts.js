@@ -1,6 +1,7 @@
 import { getConceptAnnotationsCount } from '@/lib/api/annotations'
 import { getToConceptAssociationsCount, renameToConceptAssociations } from '@/lib/api/associations'
 import { renameConceptObservations } from '@/lib/api/observations'
+import { getToConceptRealizationsCount, renameToConceptRealizations } from '@/lib/api/realizations'
 import { getConceptTemplateCount, getToConceptTemplateCount, renameToConceptTemplates } from '@/lib/api/templates'
 
 import CONFIG from '@/lib/config'
@@ -24,6 +25,17 @@ export const relatedDataCounts = async ({ apiFns, concept, getReferences }) => {
       reassignFn: payload => apiFns.apiPayload(renameToConceptAssociations, payload),
     },
     {
+      title: RELATED_DATA_COUNTS.REALIZATIONS_TO,
+      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
+      apiCountFn: getToConceptRealizationsCount,
+      reassignFn: payload => apiFns.apiPayload(renameToConceptRealizations, payload),
+    },
+    {
+      title: RELATED_DATA_COUNTS.REFERENCES,
+      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
+      localCountFn: conceptName => getReferences(conceptName).length,
+    },
+    {
       title: RELATED_DATA_COUNTS.TEMPLATES_DEFINED,
       type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       apiCountFn: getConceptTemplateCount,
@@ -33,11 +45,6 @@ export const relatedDataCounts = async ({ apiFns, concept, getReferences }) => {
       type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       apiCountFn: getToConceptTemplateCount,
       reassignFn: payload => apiFns.apiPayload(renameToConceptTemplates, payload),
-    },
-    {
-      title: RELATED_DATA_COUNTS.REFERENCES,
-      type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
-      localCountFn: conceptName => getReferences(conceptName).length,
     },
   ]
 
