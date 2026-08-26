@@ -97,6 +97,14 @@ const ConfigProvider = ({ children }) => {
       valid: true,
     }
 
+    if (!readOnly && oniUserCredentials) {
+      await Promise.all([
+        tokenManager.getServiceToken('annosaurus'),
+        tokenManager.getServiceToken('oni'),
+        tokenManager.getOniUserToken(),
+      ])
+    }
+
     if (mountedRef.current) setConfig(authenticatedConfig)
     return { config: authenticatedConfig }
   }, [])
