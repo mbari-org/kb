@@ -13,6 +13,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
+import { normalizeConcept } from '@/lib/api/concept'
 import {
   deleteConcept as deleteTaxonomyConcept,
   getConcept as getTaxonomyConcept,
@@ -28,7 +29,8 @@ const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
   const { closeModal, modalData, setModalData, withProcessing } = use(ConceptModalContext)
-  const { getReferences, refreshData: refreshPanelData, setClearTemplateFilters, templates } = use(PanelDataContext)
+  const { getReferences, realizations, refreshData: refreshPanelData, setClearTemplateFilters, templates } =
+    use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { settings, updateSelected } = use(SelectedContext)
   const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
@@ -73,6 +75,7 @@ const DeleteConceptActions = () => {
           concept,
           getPreferences,
           getReferences,
+          realizations,
           reassign,
           refreshPanelData,
           savePreferences,
@@ -91,10 +94,23 @@ const DeleteConceptActions = () => {
 
             const results = { ...preDeleteResults, ...postDeleteResults }
 
-            const reassignedConcept = { ...getTaxonomyConcept(updatedTaxonomy, reassign) }
             await applyResults(refreshPanelData, results)
 
-            insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+            if (reassign) {
+              const reassignedConcept = getTaxonomyConcept(updatedTaxonomy, reassign)
+              if (reassignedConcept) {
+                await normalizeConcept(apiFns, reassignedConcept)
+                insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+              }
+            }
+            if (closestConcept && closestConcept.name !== reassign) {
+              const closestInTaxonomy = getTaxonomyConcept(updatedTaxonomy, closestConcept.name)
+              if (closestInTaxonomy) {
+                await normalizeConcept(apiFns, closestInTaxonomy)
+                insertConcept(closestInTaxonomy, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+              }
+            }
+
             updateTaxonomy(updatedTaxonomy)
 
             closeModal(true, () => {

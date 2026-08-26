@@ -1,6 +1,6 @@
 import { renameToConceptAssociations } from '@/lib/api/associations'
 import { renameConceptObservations } from '@/lib/api/observations'
-import { renameToConceptRealizations } from '@/lib/api/realizations'
+import { createRealization, renameToConceptRealizations } from '@/lib/api/realizations'
 import { renameReferenceConcept } from '@/lib/api/references'
 import { createConceptTemplate, renameToConceptTemplates } from '@/lib/api/templates'
 
@@ -13,10 +13,19 @@ import { PREFS } from '@/lib/constants/prefs.js'
 
 import dataFilters from '@/contexts/panels/dataFilters'
 import { SELECTED } from '@/lib/constants/selected.js'
+import { isSame } from '@/lib/model/realization'
 import { isIdentical } from '@/lib/model/templates'
 
 const { KEY } = PREFS.USER
-const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS_TO, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } = RELATED_DATA_COUNTS
+const {
+  ANNOTATIONS,
+  ASSOCIATIONS,
+  REALIZATIONS,
+  REALIZATIONS_TO,
+  REFERENCES,
+  TEMPLATES_DEFINED,
+  TEMPLATES_TO,
+} = RELATED_DATA_COUNTS
 const { EMPTY_FILTERS } = dataFilters(SELECTED.SETTINGS.TEMPLATES.KEY)
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
@@ -58,33 +67,71 @@ const performSettingsUpdate = deleteConceptContext => {
 }
 
 const preSideEffects = async deleteConceptContext => {
-  const { apiFns, concept, reassign, relatedDataCounts, templates } = deleteConceptContext
+  const { apiFns, concept, realizations, reassign, relatedDataCounts, templates } = deleteConceptContext
   const oldNewPayload = { old: concept.name, new: reassign }
 
-  const promises = {}
+  const results = {}
 
-  relatedDataCounts.forEach(count => {
+  for (const count of relatedDataCounts) {
     if (count.value > 0) {
       switch (count.title) {
         case ASSOCIATIONS:
-          promises[ASSOCIATIONS] = apiFns.apiPayload(renameToConceptAssociations, oldNewPayload)
+          results[ASSOCIATIONS] = await apiFns.apiPayload(renameToConceptAssociations, oldNewPayload)
           break
 
         case ANNOTATIONS:
-          promises[ANNOTATIONS] = apiFns.apiPayload(renameConceptObservations, oldNewPayload)
+          results[ANNOTATIONS] = await apiFns.apiPayload(renameConceptObservations, oldNewPayload)
           break
+
+        case REALIZATIONS: {
+          const realizationsOnReassignedConcept = (realizations || []).filter(r => r.concept === reassign)
+          const realizationsToReassign = (
+            concept.realizations?.length
+              ? concept.realizations
+              : (realizations || []).filter(r => r.concept === concept.name)
+          ).filter(
+            realization =>
+              !realizationsOnReassignedConcept.some(existing =>
+                isSame(
+                  {
+                    ...realization,
+                    toConcept:
+                      realization.toConcept === concept.name || !realization.toConcept
+                        ? reassign
+                        : realization.toConcept,
+                  },
+                  existing
+                )
+              )
+          )
+
+          const realizationResults = []
+          for (const { linkName, linkValue, toConcept } of realizationsToReassign) {
+            const res = await apiFns.apiPayload(createRealization, {
+              concept: reassign,
+              linkName,
+              linkValue,
+              toConcept: toConcept === concept.name || !toConcept ? reassign : toConcept,
+            })
+            realizationResults.push(res)
+          }
+          results[REALIZATIONS] = realizationResults
+          break
+        }
 
         case REALIZATIONS_TO:
-          promises[REALIZATIONS_TO] = apiFns.apiPayload(renameToConceptRealizations, oldNewPayload)
+          results[REALIZATIONS_TO] = await apiFns.apiPayload(renameToConceptRealizations, oldNewPayload)
           break
 
-        case REFERENCES:
-          promises[REFERENCES] = Promise.all(
-            concept.references.map(reference =>
-              apiFns.apiPayload(renameReferenceConcept, [reference.id, concept.name, reassign])
-            )
-          )
+        case REFERENCES: {
+          const referenceResults = []
+          for (const reference of concept.references || []) {
+            const res = await apiFns.apiPayload(renameReferenceConcept, [reference.id, concept.name, reassign])
+            referenceResults.push(res)
+          }
+          results[REFERENCES] = referenceResults
           break
+        }
 
         case TEMPLATES_DEFINED: {
           const templatesOnReassignedConcept = filterTemplates(templates, { concepts: [reassign] })
@@ -101,29 +148,28 @@ const preSideEffects = async deleteConceptContext => {
               )
           )
 
-          const templatePromises = templateToReassign.map(({ linkName, linkValue, toConcept }) =>
-            apiFns.apiPayload(createConceptTemplate, {
+          const templateResults = []
+          for (const { linkName, linkValue, toConcept } of templateToReassign) {
+            const res = await apiFns.apiPayload(createConceptTemplate, {
               concept: reassign,
               linkName,
               linkValue,
               toConcept: toConcept || reassign,
             })
-          )
-          promises[TEMPLATES_DEFINED] = Promise.all(templatePromises)
+            templateResults.push(res)
+          }
+          results[TEMPLATES_DEFINED] = templateResults
           break
         }
 
         case TEMPLATES_TO:
-          promises[TEMPLATES_TO] = apiFns.apiPayload(renameToConceptTemplates, oldNewPayload)
+          results[TEMPLATES_TO] = await apiFns.apiPayload(renameToConceptTemplates, oldNewPayload)
           break
       }
     }
-  })
+  }
 
-  const apiResults = await Promise.all(
-    Object.entries(promises).map(([key, promise]) => promise.then(value => [key, value]))
-  )
-  return Object.fromEntries(apiResults)
+  return results
 }
 
 const postSideEffects = async deleteConceptContext => {
@@ -147,6 +193,7 @@ const applyResults = async (refreshPanelDataFn, results) => {
           // no-op
           break
 
+        case REALIZATIONS:
         case REALIZATIONS_TO:
           if (value.length > 0) {
             await refreshPanelDataFn(PANEL_DATA.REALIZATIONS)

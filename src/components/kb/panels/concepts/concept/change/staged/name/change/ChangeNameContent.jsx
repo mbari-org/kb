@@ -21,7 +21,7 @@ import useChangeNameHandlers from './useChangeNameHandlers'
 import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
-const { TEMPLATES_DEFINED } = MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
+const { REALIZATIONS, TEMPLATES_DEFINED } = MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -61,7 +61,9 @@ const ChangeNameContent = () => {
   }
 
   const { hasRelatedData, relatedDataCounts } = modalData
-  const filteredRelatedDataCounts = relatedDataCounts?.filter(count => count.title !== TEMPLATES_DEFINED)
+  const filteredRelatedDataCounts = relatedDataCounts?.filter(
+    count => count.title !== TEMPLATES_DEFINED && count.title !== REALIZATIONS
+  )
 
   return (
     <Box>

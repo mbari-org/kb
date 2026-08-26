@@ -10,6 +10,11 @@ const deleteRealization = async (config, realizationId) =>
 const getConceptLinkRealizations = async (config, conceptName) =>
   oniGet({ config, path: ['linkrealizations', 'concept', conceptName] })
 
+const getConceptRealizationCount = async (config, conceptName) => {
+  const { error, payload } = await getConceptLinkRealizations(config, conceptName)
+  return { error, result: payload?.length ?? 0 }
+}
+
 const getRealizations = async (config, params) => oniGet({ config, path: ['linkrealizations'], qs: paramsQs(params) })
 
 const getToConceptRealizations = async (config, conceptName) =>
@@ -30,6 +35,7 @@ export {
   createRealization,
   deleteRealization,
   getConceptLinkRealizations,
+  getConceptRealizationCount,
   getRealizations,
   getToConceptRealizations,
   getToConceptRealizationsCount,
