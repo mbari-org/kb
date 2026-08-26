@@ -72,10 +72,23 @@ describe('useSaveStaged', () => {
     const updateSelected = vi.fn()
     const withProcessing = vi.fn(async work => work())
 
-    submitStagedMock.mockResolvedValue(updatesInfo)
-    normalizeConceptMock.mockResolvedValue(freshConcept)
-    applyUpdateResultsMock.mockResolvedValue(undefined)
-    applyRenameSideEffectsMock.mockResolvedValue(undefined)
+    const order = []
+    submitStagedMock.mockImplementation(async () => {
+      order.push('submitStaged')
+      return updatesInfo
+    })
+    applyRenameSideEffectsMock.mockImplementation(async () => {
+      order.push('applyRenameSideEffects')
+      return undefined
+    })
+    normalizeConceptMock.mockImplementation(async () => {
+      order.push('normalizeConcept')
+      return freshConcept
+    })
+    applyUpdateResultsMock.mockImplementation(async () => {
+      order.push('applyUpdateResults')
+      return undefined
+    })
 
     const wrapper = ({ children }) => (
       <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true, user: { role: 'Admin' } }}>
@@ -105,6 +118,7 @@ describe('useSaveStaged', () => {
       await result.current()
     })
 
+    expect(order).toEqual(['submitStaged', 'applyRenameSideEffects', 'normalizeConcept', 'applyUpdateResults'])
     expect(submitStagedMock).toHaveBeenCalledTimes(1)
     expect(apiFns.apiPayload).toHaveBeenCalledWith(apiGetConcept, 'renamed-concept')
     expect(normalizeConceptMock).toHaveBeenCalledWith(apiFns, freshConcept)

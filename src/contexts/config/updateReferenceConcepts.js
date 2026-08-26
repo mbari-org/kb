@@ -1,4 +1,4 @@
-import { addConcept, removeConcept } from '@/lib/api/references'
+import { addReferenceConcept, removeReferenceConcept } from '@/lib/api/references'
 import { createReference } from '@/lib/model/reference'
 import { isEmpty } from '@/lib/utils'
 
@@ -11,13 +11,13 @@ const updateReferenceConcepts = async (oldReference, newReference, apiFns) => {
 
   newConcepts.forEach(concept => {
     if (!oldConcepts.includes(concept)) {
-      promises.push(() => apiFns.apiPayload(addConcept, [referenceId, concept]))
+      promises.push(() => apiFns.apiPayload(addReferenceConcept, [referenceId, concept]))
     }
   })
 
   oldConcepts.forEach(concept => {
     if (!newConcepts.includes(concept)) {
-      promises.push(() => apiFns.apiPayload(removeConcept, [referenceId, concept]))
+      promises.push(() => apiFns.apiPayload(removeReferenceConcept, [referenceId, concept]))
     }
   })
 

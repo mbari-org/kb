@@ -34,6 +34,10 @@ const useSaveStaged = () => {
 
         const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
 
+        if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
+          await applyRenameSideEffects(updatesContext, updatesInfo)
+        }
+
         const conceptName = updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
         const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
@@ -45,10 +49,6 @@ const useSaveStaged = () => {
           staleConcept,
           updatesInfo,
         })
-
-        if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
-          await applyRenameSideEffects(updatesContext, updatesInfo)
-        }
 
         const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
 

@@ -1,7 +1,7 @@
 import { renameToConceptAssociations } from '@/lib/api/associations'
 import { renameConceptObservations } from '@/lib/api/observations'
 import { renameToConceptRealizations } from '@/lib/api/realizations'
-import { addConcept, removeConcept } from '@/lib/api/references'
+import { renameReferenceConcept } from '@/lib/api/references'
 import { createConceptTemplate, renameToConceptTemplates } from '@/lib/api/templates'
 
 import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
@@ -79,11 +79,16 @@ const preSideEffects = async deleteConceptContext => {
           break
 
         case REFERENCES:
+          // promises[REFERENCES] = Promise.all(
+          //   concept.references.map(reference => apiFns.apiPayload(removeReferenceConcept, [reference.id, concept.name]))
+          // )
+          // promises[REFERENCES] = Promise.all(
+          //   concept.references.map(reference => apiFns.apiPayload(addReferenceConcept, [reference.id, reassign]))
+          // )
           promises[REFERENCES] = Promise.all(
-            concept.references.map(reference => apiFns.apiPayload(removeConcept, [reference.id, concept.name]))
-          )
-          promises[REFERENCES] = Promise.all(
-            concept.references.map(reference => apiFns.apiPayload(addConcept, [reference.id, reassign]))
+            concept.references.map(reference =>
+              apiFns.apiPayload(renameReferenceConcept, [reference.id, concept.name, reassign])
+            )
           )
           break
 
