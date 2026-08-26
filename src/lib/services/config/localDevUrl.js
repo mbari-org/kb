@@ -1,19 +1,18 @@
-const IS_DEV = import.meta.env.DEV
 const LOCAL_HOSTNAMES = new Set(['127.0.0.1', '[::1]', 'localhost'])
 
 const isLocalDevUrl = endpointUrl => {
-  if (!IS_DEV) return false
-
   try {
-    const { hostname, port, protocol } = new URL(endpointUrl)
-    return LOCAL_HOSTNAMES.has(hostname) && (protocol === 'https:' || (protocol === 'http:' && !port))
+    const { hostname } = new URL(endpointUrl)
+    return LOCAL_HOSTNAMES.has(hostname) || hostname === globalThis.location?.hostname
   } catch {
     return false
   }
 }
+
 const isLocalConfigUrl = endpointUrl => {
   try {
-    return LOCAL_HOSTNAMES.has(new URL(endpointUrl).hostname)
+    const { hostname } = new URL(endpointUrl)
+    return LOCAL_HOSTNAMES.has(hostname) || hostname === globalThis.location?.hostname
   } catch {
     return false
   }

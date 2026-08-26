@@ -6,13 +6,9 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { loginReadOnly } from '@/lib/services/auth/login'
 
-const ReadOnlyLogin = () => {
+const ReadOnlyLogin = ({ isVisible = true }) => {
   const [asyncError, setAsyncError] = useState(null)
   const { processAuth } = use(UserContext)
-
-  if (asyncError) {
-    throw asyncError
-  }
 
   const handleReadOnlyLogin = useCallback(async () => {
     try {
@@ -23,6 +19,14 @@ const ReadOnlyLogin = () => {
       setAsyncError(error)
     }
   }, [processAuth])
+
+  if (!isVisible) {
+    return null
+  }
+
+  if (asyncError) {
+    throw asyncError
+  }
 
   return (
     <Box
