@@ -2,7 +2,7 @@ import { use, useMemo, useRef } from 'react'
 import { Stack } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
+import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
 import ConceptSelectAuxiliary from '@/components/common/concept/ConceptSelectAuxiliary'
@@ -10,32 +10,11 @@ import ConceptSelectAuxiliary from '@/components/common/concept/ConceptSelectAux
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import filterConceptOptions from '@/lib/concept/filterConceptOptions'
 import { CONCEPT } from '@/lib/constants'
 import CONFIG from '@/lib/config'
 
 const { WIDTH } = CONCEPT.SELECT
-const defaultFilterOptions = createFilterOptions()
-
-const matchPriority = (option, input) => {
-  if (option === input) return 0
-  if (option.startsWith(input)) return 1
-  return 2
-}
-
-const filterConceptOptions = (options, state) => {
-  const filtered = defaultFilterOptions(options, state)
-  const input = state.inputValue.trim().toLowerCase()
-  if (!input) return filtered
-
-  return filtered
-    .map(option => ({ option, lower: option.toLowerCase() }))
-    .sort((a, b) => {
-      const priorityDiff = matchPriority(a.lower, input) - matchPriority(b.lower, input)
-      if (priorityDiff !== 0) return priorityDiff
-      return a.option.localeCompare(b.option, undefined, { sensitivity: 'base' })
-    })
-    .map(({ option }) => option)
-}
 
 const ConceptSelect = ({
   auxiliaryComponent,

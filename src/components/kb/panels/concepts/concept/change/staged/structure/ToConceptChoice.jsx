@@ -2,6 +2,7 @@ import { use, useMemo } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Stack, Typography, Autocomplete, TextField, Divider } from '@mui/material'
 
+import filterConceptOptions from '@/lib/concept/filterConceptOptions'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const ToConceptChoice = ({
@@ -30,6 +31,7 @@ const ToConceptChoice = ({
     <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
       <Typography align='center'>{label}:</Typography>
       <Autocomplete
+        filterOptions={filterConceptOptions}
         onChange={handleChange}
         options={optionNames}
         renderInput={params => (

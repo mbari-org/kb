@@ -79,12 +79,6 @@ const preSideEffects = async deleteConceptContext => {
           break
 
         case REFERENCES:
-          // promises[REFERENCES] = Promise.all(
-          //   concept.references.map(reference => apiFns.apiPayload(removeReferenceConcept, [reference.id, concept.name]))
-          // )
-          // promises[REFERENCES] = Promise.all(
-          //   concept.references.map(reference => apiFns.apiPayload(addReferenceConcept, [reference.id, reassign]))
-          // )
           promises[REFERENCES] = Promise.all(
             concept.references.map(reference =>
               apiFns.apiPayload(renameReferenceConcept, [reference.id, concept.name, reassign])
