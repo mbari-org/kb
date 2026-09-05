@@ -6,6 +6,7 @@ import ProcessingMsg from '@/components/common/ProcessingMessage'
 import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
+import { validateConceptInput } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -28,17 +29,14 @@ const DeleteConceptContent = () => {
   const { relatedDataCounts, isLoading } = modalData
   const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
 
-  const validateChoice = useCallback(
-    choice =>
-      getNames()
-        .filter(name => name !== concept.name)
-        .includes(choice),
-    [getNames, concept.name]
+  const validateInput = useCallback(
+    input => validateConceptInput(input, getNames(), [concept.name]),
+    [concept.name, getNames]
   )
 
   const handleChange = (_event, selectedName) => {
     setReassignTo(selectedName)
-    const valid = validateChoice(selectedName)
+    const valid = validateInput(selectedName)
     setIsValid(valid)
     setModalData(prev => ({ ...prev, reassign: selectedName, modified: valid, isValid: valid }))
   }
@@ -46,7 +44,7 @@ const DeleteConceptContent = () => {
   const handleKeyUp = event => {
     const reassign = event.target.value.trim()
     setReassignTo(reassign)
-    const valid = validateChoice(reassign)
+    const valid = validateInput(reassign)
     setIsValid(valid)
     setModalData(prev => ({ ...prev, reassign: reassign, modified: valid, isValid: valid }))
   }

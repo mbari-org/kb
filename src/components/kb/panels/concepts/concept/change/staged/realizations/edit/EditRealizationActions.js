@@ -6,7 +6,7 @@ import { EDIT_REALIZATION_FORM_ID } from './form/RealizationForm'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
-import { hasTrue } from '@/lib/utils'
+import { hasTrueValue } from '@/lib/utils'
 
 const EditRealizationActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
@@ -23,7 +23,7 @@ const EditRealizationActions = () => {
   }
 
   const stageDisabled =
-    isDuplicate || !isValidToConcept || !hasTrue(modified) || !validRealization(realizationItem)
+    isDuplicate || !isValidToConcept || !hasTrueValue(modified) || !validRealization(realizationItem)
 
   return createStagedActions({
     closeModal,

@@ -18,6 +18,7 @@ const { RESET } = CONCEPT_STATE
 
 const initialModalData = {
   action: CONCEPT_STATE.PARENT,
+  isValid: false,
   modified: false,
   parent: '',
 }

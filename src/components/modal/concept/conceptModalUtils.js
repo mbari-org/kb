@@ -121,3 +121,12 @@ export const validateNameChange = (newName, currentName, existingNames) => {
 
   return !existingNames.includes(newName)
 }
+
+export const validateConceptInput = (input, existingNames = [], omitChoices = []) => {
+  const trimmed = (input || '').trim()
+  if (!trimmed) {
+    return false
+  }
+
+  return existingNames.filter(name => !omitChoices.includes(name)).includes(trimmed)
+}

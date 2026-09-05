@@ -7,7 +7,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { hasTrue } from '@/lib/utils'
+import { hasTrueValue } from '@/lib/utils'
 
 const { PARENT } = CONCEPT_STATE
 
@@ -16,9 +16,10 @@ const ChangeParentActions = () => {
   const { closeModal, modalData } = use(ConceptModalContext)
 
   // Handle case where modalData might be undefined
-  const { modified = false, parent = '' } = modalData || {}
+  const { isValid = false, modified = false, parent = '' } = modalData || {}
 
-  const isModified = hasTrue(modified)
+  const isModified = hasTrueValue(modified)
+  const stageDisabled = !confirmReset && (!isModified || !isValid)
 
   const handleStage = () => {
     modifyConcept({
@@ -34,7 +35,7 @@ const ChangeParentActions = () => {
     modifyConcept,
     name: 'ChangeParentActions',
     onStage: handleStage,
-    stageDisabled: !isModified,
+    stageDisabled,
   })
 }
 
