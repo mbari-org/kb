@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
-import { hasTrue } from '@/lib/utils'
+import { hasTrueValue } from '@/lib/utils'
 
 const EditAliasActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptContext)
@@ -17,15 +17,14 @@ const EditAliasActions = () => {
 
   const { aliasItem, modified } = modalData
 
-  const validName =
-    !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
+  const validName = !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
 
   const handleStage = () => {
     // go through the form to trigger required/validation checks
     document.querySelector(`#${ADD_ALIAS_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !validName || !hasTrue(modified)
+  const stageDisabled = !validName || !hasTrueValue(modified)
 
   return createStagedActions({
     closeModal,

@@ -4,36 +4,55 @@ import { Box, Stack, Typography } from '@mui/material'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import ModalActionText from '@/components/common/ModalActionText'
 
 import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
+import { validateConceptInput } from '@/components/modal/concept/conceptModalUtils'
 
 import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
 
-const ChangeParentContent = ({ omitChoices }) => {
+const ChangeParentContent = ({ omitChoices = [] }) => {
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ConceptModalContext)
+  const { getNames } = use(TaxonomyContext)
 
   const [toConcept, setToConcept] = useState(null)
 
+  const validateInput = useCallback(
+    input => validateConceptInput(input, getNames(), omitChoices),
+    [getNames, omitChoices]
+  )
+
   const handleChange = useCallback(
     (_event, selectedName) => {
+      const isValid = validateInput(selectedName)
       setToConcept(selectedName)
-      setModalData({ parent: selectedName, modified: true })
+      setModalData(prev => ({
+        ...prev,
+        isValid,
+        modified: isValid,
+        parent: selectedName,
+      }))
     },
-    [setModalData]
+    [setModalData, validateInput]
   )
 
   const handleKeyUp = useCallback(
     event => {
       const conceptName = event.target.value.trim()
-      const modified = conceptName !== concept.parent
+      const isValid = validateInput(conceptName)
       setToConcept(conceptName)
-      setModalData({ parent: conceptName, modified })
+      setModalData(prev => ({
+        ...prev,
+        isValid,
+        modified: isValid,
+        parent: conceptName,
+      }))
     },
-    [concept.parent, setModalData]
+    [setModalData, validateInput]
   )
 
   return (
@@ -46,9 +65,9 @@ const ChangeParentContent = ({ omitChoices }) => {
       </Stack>
       <Box sx={{ mt: 1, ml: 3 }}>
         <ToConceptChoice
+          error={toConcept !== null && toConcept !== '' && !validateInput(toConcept)}
           handleChange={handleChange}
           handleKeyUp={handleKeyUp}
-          initialValue={null}
           label={MODALS.STRUCTURE.CHANGE_PARENT.TO}
           omitChoices={omitChoices}
           value={toConcept}

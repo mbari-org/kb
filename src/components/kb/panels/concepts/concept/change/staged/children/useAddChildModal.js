@@ -14,7 +14,7 @@ import { EMPTY_CHILD } from '@/lib/model/children'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-import { hasTrue } from '@/lib/utils'
+import { hasTrueValue } from '@/lib/utils'
 
 const { CHILD, RESET } = CONCEPT_STATE
 
@@ -30,7 +30,7 @@ const addChildModal = () => {
 
 const addChildOnClose = (modifyConcept, stagedChildren) => {
   return modalData => {
-    if (hasTrue(modalData.modified)) {
+    if (hasTrueValue(modalData.modified)) {
       modifyConcept({
         type: RESET.CHILDREN,
         update: {

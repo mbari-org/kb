@@ -4,7 +4,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import useDebounce from '@/lib/hooks/useDebounce'
 
-import { hasTrue } from '@/lib/utils'
+import { hasTrueValue } from '@/lib/utils'
 
 const useEditAliasHandlers = (formAlias, setFormAlias, stagedAlias) => {
   const { modifyConcept } = use(ConceptContext)
@@ -20,21 +20,24 @@ const useEditAliasHandlers = (formAlias, setFormAlias, stagedAlias) => {
     )
   )
 
-  const handleStage = useCallback(event => {
-    event.preventDefault()
+  const handleStage = useCallback(
+    event => {
+      event.preventDefault()
 
-    const { action, aliasIndex, aliasItem } = modalData
+      const { action, aliasIndex, aliasItem } = modalData
 
-    modifyConcept({
-      type: action,
-      update: {
-        aliasIndex,
-        aliasItem,
-      },
-    })
+      modifyConcept({
+        type: action,
+        update: {
+          aliasIndex,
+          aliasItem,
+        },
+      })
 
-    closeModal(true)
-  }, [closeModal, modalData, modifyConcept])
+      closeModal(true)
+    },
+    [closeModal, modalData, modifyConcept]
+  )
 
   const handleChange = useCallback(
     field => event => {
@@ -52,7 +55,7 @@ const useEditAliasHandlers = (formAlias, setFormAlias, stagedAlias) => {
       const updatedModified = { ...modalData.modified, [field]: fieldIsModified }
 
       // Check if any field is modified
-      const _modified = hasTrue(updatedModified)
+      const _modified = hasTrueValue(updatedModified)
 
       // Debounced modalData update (for validation, Actions component, etc.)
       debouncedUpdateModalData(updatedAlias, updatedModified)

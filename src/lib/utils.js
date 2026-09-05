@@ -58,7 +58,7 @@ const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
 }
 
-const hasTrue = arg => {
+const hasTrueValue = arg => {
   if (typeof arg === 'boolean') return arg
   const values = Array.isArray(arg) ? arg : Object.values(arg)
   return values.some(value => value === true || value === 'true')
@@ -232,7 +232,7 @@ export {
   diff,
   drop,
   filterObject,
-  hasTrue,
+  hasTrueValue,
   humanTimestamp,
   isDeepEqual,
   isElementInViewport,

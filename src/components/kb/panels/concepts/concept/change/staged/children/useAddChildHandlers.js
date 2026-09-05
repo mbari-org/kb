@@ -5,15 +5,9 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import useDebounce from '@/lib/hooks/useDebounce'
 import { normalizeConceptName } from '@/lib/concept/state/name'
 
-import { hasTrue } from '@/lib/utils'
+import { hasTrueValue } from '@/lib/utils'
 
-const useAddChildHandlers = (
-  formChild,
-  setFormChild,
-  modifiedFields,
-  setModifiedFields,
-  originalChild
-) => {
+const useAddChildHandlers = (formChild, setFormChild, modifiedFields, setModifiedFields, originalChild) => {
   const { modifyConcept } = use(ConceptContext)
   const { closeModal, modalData, setModalData } = use(ConceptModalContext)
 
@@ -63,19 +57,12 @@ const useAddChildHandlers = (
       const updatedModifiedFields = { ...modifiedFields, [field]: fieldIsModified }
       setModifiedFields(updatedModifiedFields)
 
-      const modified = hasTrue(updatedModifiedFields)
+      const modified = hasTrueValue(updatedModifiedFields)
 
       // Debounced modalData update (for validation, Actions component, etc.)
       debouncedUpdateModalData(updatedChild, modified)
     },
-    [
-      originalChild,
-      formChild,
-      modifiedFields,
-      setFormChild,
-      setModifiedFields,
-      debouncedUpdateModalData,
-    ]
+    [originalChild, formChild, modifiedFields, setFormChild, setModifiedFields, debouncedUpdateModalData]
   )
 
   return {
