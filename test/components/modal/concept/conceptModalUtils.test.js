@@ -31,11 +31,15 @@ describe('conceptModalUtils validation helpers', () => {
   })
 
   describe('validateChildName', () => {
-    it('validates child name against existing and staged names', () => {
+    it('validates child name against existing and staged names (case-insensitive)', () => {
       expect(validateChildName('NewChild', ['root'], [])).toBe(true)
       expect(validateChildName('root', ['root'], [])).toBe(false)
-      expect(validateChildName('Staged', ['root'], [{ name: 'Staged' }])).toBe(false)
+      expect(validateChildName('ROOT', ['root'], [])).toBe(false)
+      expect(validateChildName('Root', ['root'], [])).toBe(false)
+      expect(validateChildName('Staged', ['root'], [{ name: 'staged' }])).toBe(false)
+      expect(validateChildName('STAGED', ['root'], [{ name: 'Staged' }])).toBe(false)
       expect(validateChildName('', ['root'], [])).toBe(false)
+      expect(validateChildName('   ', ['root'], [])).toBe(false)
     })
   })
 
