@@ -2,7 +2,6 @@ import { use, useMemo } from 'react'
 
 import {
   createStagedActions,
-  createConfirmationHandlers,
   validateChildName,
 } from '@/components/modal/concept/conceptModalUtils'
 
@@ -13,7 +12,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { ADD_CHILD_FORM_ID } from './AddChildContent'
 
 const AddChildActions = () => {
-  const { concept, confirmReset, modifyConcept, stagedState } = use(ConceptContext)
+  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 
@@ -23,12 +22,6 @@ const AddChildActions = () => {
     return validateChildName(child?.name, getNames(), stagedState.children)
   }, [child?.name, getNames, stagedState.children])
 
-  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
-    closeModal,
-    concept,
-    modifyConcept,
-  })
-
   const handleStage = () => {
     // Need to go through the form to trigger required and validation checks
     document.querySelector(`#${ADD_CHILD_FORM_ID}`)?.requestSubmit()
@@ -37,11 +30,10 @@ const AddChildActions = () => {
   const stageDisabled = !confirmReset && (!modified || !isValidChild)
 
   return createStagedActions({
+    closeModal,
     confirmReset,
+    modifyConcept,
     name: 'AddChildActions',
-    onConfirm: handleConfirm,
-    onContinue: handleContinue,
-    onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
   })

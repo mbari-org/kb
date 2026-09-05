@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import { createStagedActions, createConfirmationHandlers } from '@/components/modal/concept/conceptModalUtils'
+import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -14,12 +14,6 @@ const ChangeNameActions = () => {
   const { isAdmin } = use(UserContext)
 
   const { hasRelatedData, isValid, name, relatedDataCounts } = modalData
-
-  const { handleConfirm, handleContinue } = createConfirmationHandlers({
-    closeModal,
-    concept,
-    modifyConcept,
-  })
 
   const handleDiscard = () => {
     if (name.value !== concept.name) {
@@ -48,10 +42,10 @@ const ChangeNameActions = () => {
   const stageDisabled = !isValid || (isAdmin && !confirmReset && hasRelatedData && name.extent === '')
 
   return createStagedActions({
+    closeModal,
     confirmReset,
+    modifyConcept,
     name: 'ChangeNameActions',
-    onConfirm: handleConfirm,
-    onContinue: handleContinue,
     onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,

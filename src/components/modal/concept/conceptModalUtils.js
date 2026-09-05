@@ -11,20 +11,10 @@ import CONFIG from '@/lib/config'
 const { BACK_TO_EDITING, CONFIRM, DISCARD, STAGE } = CONFIG.BUTTON
 const { CONFIRMED } = RESETTING
 
-/**
- * Creates standard action configuration for concept modals
- * @param {Object} config - Action configuration
- * @param {Function} config.onDiscard - Called when discard is clicked
- * @param {Function} config.onStage - Called when stage is clicked
- * @param {boolean} config.stageDisabled - Whether stage button is disabled
- * @param {boolean} config.confirmReset - Whether in confirmation reset mode
- * @param {Function} config.onConfirm - Called when confirm discard is clicked
- * @param {Function} config.onContinue - Called when continue is clicked
- * @param {string} config.name - Component name for debugging
- * @returns {Component} Actions component
- */
 export const createStagedActions = ({
+  closeModal,
   confirmReset = false,
+  modifyConcept,
   name = 'StagedActions',
   onConfirm,
   onContinue,
@@ -36,18 +26,28 @@ export const createStagedActions = ({
   const disabled = [false, stageDisabled]
   const labels = confirmReset ? [CONFIRM, BACK_TO_EDITING] : [DISCARD, STAGE]
 
+  const handleConfirm =
+    onConfirm ||
+    (() => {
+      modifyConcept?.({ type: CONFIRMED.YES, update: {} })
+      closeModal?.(true)
+    })
+
+  const handleContinue = onContinue || (() => modifyConcept?.({ type: CONFIRMED.NO }))
+  const handleDiscard = onDiscard || (() => closeModal?.())
+
   const onAction = async label => {
     switch (label) {
       case CONFIRM:
-        await onConfirm()
+        await handleConfirm()
         break
 
       case BACK_TO_EDITING:
-        await onContinue()
+        await handleContinue()
         break
 
       case DISCARD:
-        await onDiscard()
+        await handleDiscard()
         break
 
       case STAGE:
@@ -62,15 +62,7 @@ export const createStagedActions = ({
   return createActions({ colors, disabled, labels, onAction }, name)
 }
 
-/**
- * Creates handlers for confirmation reset flow (when confirmReset is active)
- * @param {Object} config - Handler configuration
- * @param {Function} config.modifyConcept - Modify concept function
- * @param {Function} config.closeModal - Close modal function
- * @param {Object} config.concept - Current concept
- * @returns {Object} Confirmation handlers
- */
-export const createConfirmationHandlers = ({ closeModal, _concept, modifyConcept }) => {
+export const createConfirmationHandlers = ({ closeModal, modifyConcept }) => {
   const handleConfirm = (update = {}) => {
     modifyConcept({
       type: CONFIRMED.YES,
@@ -94,14 +86,6 @@ export const createConfirmationHandlers = ({ closeModal, _concept, modifyConcept
   }
 }
 
-/**
- * Creates handlers for basic stage/discard flow
- * @param {Object} config - Configuration
- * @param {Function} config.modifyConcept - Modify concept function
- * @param {Function} config.closeModal - Close modal function
- * @param {Object} config.stageAction - Action to dispatch when staging
- * @returns {Object} Basic action handlers
- */
 export const createStageDiscardHandlers = ({ closeModal, modifyConcept, stageAction }) => {
   const handleDiscard = () => closeModal()
 
@@ -118,13 +102,6 @@ export const createStageDiscardHandlers = ({ closeModal, modifyConcept, stageAct
   }
 }
 
-/**
- * Validates child concept name
- * @param {string} childName - Child name to validate
- * @param {Array<string>} existingNames - Existing concept names
- * @param {Array<Object>} stagedChildren - Currently staged children
- * @returns {boolean} Whether the child name is valid
- */
 export const validateChildName = (childName, existingNames, stagedChildren) => {
   if (!childName || childName.trim() === '') {
     return false
@@ -133,13 +110,6 @@ export const validateChildName = (childName, existingNames, stagedChildren) => {
   return !existingNames.includes(childName) && !stagedChildren.some(stagedChild => stagedChild.name === childName)
 }
 
-/**
- * Validates concept name change
- * @param {string} newName - New name to validate
- * @param {string} currentName - Current concept name
- * @param {Array<string>} existingNames - Existing concept names
- * @returns {boolean} Whether the name change is valid
- */
 export const validateNameChange = (newName, currentName, existingNames) => {
   if (!newName || newName.trim() === '') {
     return false

@@ -1,9 +1,6 @@
 import { use } from 'react'
 
-import {
-  createStagedActions,
-  createConfirmationHandlers,
-} from '@/components/modal/concept/conceptModalUtils'
+import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -14,7 +11,7 @@ import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 import { hasTrue } from '@/lib/utils'
 
 const EditAliasActions = () => {
-  const { concept, confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 
@@ -22,12 +19,6 @@ const EditAliasActions = () => {
 
   const validName =
     !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
-
-  const { handleConfirm, handleContinue, handleDiscard } = createConfirmationHandlers({
-    closeModal,
-    concept,
-    modifyConcept,
-  })
 
   const handleStage = () => {
     // go through the form to trigger required/validation checks
@@ -37,11 +28,10 @@ const EditAliasActions = () => {
   const stageDisabled = !validName || !hasTrue(modified)
 
   return createStagedActions({
+    closeModal,
     confirmReset,
+    modifyConcept,
     name: 'EditAliasActions',
-    onConfirm: handleConfirm,
-    onContinue: handleContinue,
-    onDiscard: handleDiscard,
     onStage: handleStage,
     stageDisabled,
   })
