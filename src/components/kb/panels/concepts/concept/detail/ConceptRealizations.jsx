@@ -14,6 +14,10 @@ import useGuardedAction from '@/contexts/user/useGuardedAction'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
 
+const RealizationComponent = ({ item }) => (
+  <ConceptRealization realization={item} rowSx={{ ml: -1, mr: '30px' }} widths={[20, 30, 50]} />
+)
+
 const ConceptRealizations = () => {
   const { isEditing, stagedState } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
@@ -43,9 +47,6 @@ const ConceptRealizations = () => {
       />
       {isEditing ? <IconComponent /> : null}
     </Stack>
-  )
-  const RealizationComponent = ({ item }) => (
-    <ConceptRealization realization={item} rowSx={{ ml: -1, mr: '30px' }} widths={[20, 30, 50]} />
   )
 
   return (

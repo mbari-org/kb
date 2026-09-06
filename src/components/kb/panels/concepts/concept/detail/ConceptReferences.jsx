@@ -15,6 +15,8 @@ import CONFIG from '@/lib/config'
 const { REFERENCES } = SELECTED.SETTINGS
 const { FILTERS } = REFERENCES
 
+const ReferenceComponent = ({ item }) => <ConceptReference reference={item} />
+
 const ConceptReferences = () => {
   const { getReferences } = use(PanelDataContext)
   const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
@@ -31,8 +33,6 @@ const ConceptReferences = () => {
       })),
     [references]
   )
-
-  const ReferenceComponent = ({ item }) => <ConceptReference reference={item} />
 
   const linkToReferences = () => {
     const panel = SELECTED.PANELS.REFERENCES

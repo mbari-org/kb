@@ -19,6 +19,8 @@ import CONFIG from '@/lib/config'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
+const TemplateComponent = ({ item }) => <ConceptTemplate template={item} />
+
 const ConceptTemplates = () => {
   const { concept, stagedState } = use(ConceptContext)
   const { templates } = use(PanelDataContext)
@@ -26,8 +28,6 @@ const ConceptTemplates = () => {
   const { getAncestorNames } = use(TaxonomyContext)
 
   const byAvailable = getSettings(TEMPLATES.KEY, TEMPLATES.BY_AVAILABLE)
-
-  const TemplateComponent = ({ item }) => <ConceptTemplate template={item} />
 
   const templateItems = useMemo(() => {
     const ancestorNames = byAvailable ? getAncestorNames(concept.name) : []
