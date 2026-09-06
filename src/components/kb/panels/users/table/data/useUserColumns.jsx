@@ -8,6 +8,8 @@ import ActionIcon from '@/components/icon/ActionIcon'
 import { ROLES } from '@/lib/constants'
 import CONFIG from '@/lib/config'
 
+import { humanTimestamp } from '@/lib/utils'
+
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const lockTooltip = locked =>
     locked ? CONFIG.PANELS.USERS.PANEL.TOOLTIP.UNLOCK : CONFIG.PANELS.USERS.PANEL.TOOLTIP.LOCK
@@ -91,6 +93,14 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
       width: 100,
       headerClassName: 'bold-header',
       valueGetter: params => (params ? 'Yes' : 'No'),
+    },
+    {
+      field: 'lastUpdated',
+      headerName: 'Last Update',
+      width: 250,
+      headerClassName: 'bold-header',
+      cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
+      valueGetter: value => humanTimestamp(value),
     },
   ]
 

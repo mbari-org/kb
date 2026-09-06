@@ -36,32 +36,32 @@ const UsersTableData = () => {
   const paginationComponent = (
     <UsersPagination
       count={users.length}
+      goToPage={goToPage}
       limit={limit}
       nextPage={nextPage}
       offset={offset}
       prevPage={prevPage}
       setPageSize={setPageSize}
-      goToPage={goToPage}
     />
   )
 
   return (
     <PanelDataGrid
       columns={columns}
-      rows={users}
-      rowCount={users.length}
-      paginationModel={{
-        pageSize: limit,
-        page: Math.floor(offset / limit),
-      }}
-      pageSizeOptions={PAGINATION.USERS.PAGE_SIZE_OPTIONS}
-      paginationMode='server'
-      paginationComponent={paginationComponent}
       dataGridProps={{
         disableColumnFilter: true,
         disableColumnMenu: true,
         getRowId: undefined, // Use default row ID
       }}
+      paginationModel={{
+        page: Math.floor(offset / limit),
+        pageSize: limit,
+      }}
+      pageSizeOptions={PAGINATION.USERS.PAGE_SIZE_OPTIONS}
+      paginationComponent={paginationComponent}
+      paginationMode='server'
+      rows={users}
+      rowCount={users.length}
       sx={{
         '& .disabled-cell': {
           color: 'text.disabled',
