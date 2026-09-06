@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 
 import MediaSwiper from './MediaSwiper'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import { getMediaType } from '@/lib/model/media'
 import { MEDIA } from '@/lib/constants'
 
@@ -15,7 +15,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()
   const {
     stagedState: { media, mediaIndex },
-  } = use(ConceptContext)
+  } = use(ConceptStagedContext)
   const mediaItem = media[mediaIndex]
 
   const mediaUrl = url || mediaItem?.url

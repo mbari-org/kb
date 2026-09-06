@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 import TextInput from '@/components/common/TextInput'
 import ModalActionText from '@/components/common/ModalActionText'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import useEditAliasHandlers from './useEditAliasHandlers'
@@ -22,7 +22,7 @@ export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 const EditAliasContent = () => {
   const theme = useTheme()
 
-  const { stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { modalData } = use(ConceptModalContext)
 
   const [formAlias, setFormAlias] = useState(modalData.aliasItem)

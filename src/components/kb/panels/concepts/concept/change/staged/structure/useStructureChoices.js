@@ -3,6 +3,7 @@ import { use, useMemo } from 'react'
 import { isStateModified } from '@/lib/concept/state/state'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { hasPendingStructure } from '@/lib/model/history'
@@ -24,7 +25,8 @@ const hasStagedStructure = (concept, stagedState) => {
 }
 
 const useStructureChoices = () => {
-  const { concept, initialState, pending, stagedState } = use(ConceptContext)
+  const { concept, initialState, pending } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
   const pendingStructure = hasPendingStructure(pending, concept?.name)

@@ -8,6 +8,7 @@ import kbTheme from '@/lib/theme'
 import ChangeParentContent from '@/components/kb/panels/concepts/concept/change/staged/parent/ChangeParentContent'
 import ChangeParentActions from '@/components/kb/panels/concepts/concept/change/staged/parent/ChangeParentActions'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -30,21 +31,26 @@ const TestChangeParent = ({
         <ConceptContext.Provider
           value={{
             concept,
-            confirmReset: false,
-            modifyConcept: onStage,
             pending: () => [],
           }}
         >
-          <ConceptModalContext.Provider
+          <ConceptStagedContext.Provider
             value={{
-              closeModal: vi.fn(),
-              modalData,
-              setModalData,
+              confirmReset: false,
+              modifyConcept: onStage,
             }}
           >
-            <ChangeParentContent omitChoices={omitChoices} />
-            <ChangeParentActions />
-          </ConceptModalContext.Provider>
+            <ConceptModalContext.Provider
+              value={{
+                closeModal: vi.fn(),
+                modalData,
+                setModalData,
+              }}
+            >
+              <ChangeParentContent omitChoices={omitChoices} />
+              <ChangeParentActions />
+            </ConceptModalContext.Provider>
+          </ConceptStagedContext.Provider>
         </ConceptContext.Provider>
       </TaxonomyContext.Provider>
     </ThemeProvider>

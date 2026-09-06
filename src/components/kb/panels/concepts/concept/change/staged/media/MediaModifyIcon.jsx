@@ -13,6 +13,7 @@ import {
 } from '@/components/kb/panels/concepts/concept/change/staged/media/edit/mediaItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
@@ -22,7 +23,8 @@ const ADD = CONCEPT_STATE.MEDIA_ITEM.ADD
 const DELETE = CONCEPT_STATE.MEDIA_ITEM.DELETE
 
 const MediaModifyIcon = ({ action, mediaIndex, size }) => {
-  const { initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { initialState } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { mediaBaseURL } = use(ConfigContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const [asyncError, setAsyncError] = useState(null)

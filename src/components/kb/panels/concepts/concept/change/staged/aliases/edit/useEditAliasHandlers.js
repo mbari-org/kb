@@ -1,13 +1,13 @@
 import { use, useCallback } from 'react'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import useDebounce from '@/lib/hooks/useDebounce'
 
 import { hasTrueValue } from '@/lib/utils'
 
 const useEditAliasHandlers = (formAlias, setFormAlias, stagedAlias) => {
-  const { modifyConcept } = use(ConceptContext)
+  const { modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData, setModalData } = use(ConceptModalContext)
 
   // Debounced function to update modalData (for validation and external components)

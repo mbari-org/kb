@@ -3,13 +3,13 @@ import isValidUrl from '@/lib/validators/isValidUrl'
 
 import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EDIT_MEDIA_FORM_ID } from './EditMediaContent'
 
 const EditMediaActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
   const { mediaItem = { url: '', credit: '' }, modified = false, formValid } = modalData || {}

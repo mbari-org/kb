@@ -7,7 +7,7 @@ import MediaReset from './MediaReset'
 
 import { fieldSx } from '@/components/common/format'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { resettingMedia } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
@@ -17,7 +17,7 @@ import { RESETTING } from '@/lib/constants'
 const MediaDetail = ({ edit }) => {
   const [_, media] = edit
 
-  const { confirmReset } = use(ConceptContext)
+  const { confirmReset } = use(ConceptStagedContext)
 
   const mediaSx =
     resettingMedia(confirmReset) === RESETTING.EXTENT.OTHER

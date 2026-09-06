@@ -13,6 +13,7 @@ import Concepts from '@/components/kb/panels/Concepts'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -289,16 +290,21 @@ const TestWrapper = ({ children }) => {
                           concept,
                           conceptPath: concept ? [concept.name] : null,
                           onConceptTreeReady: vi.fn(),
-                          stagedState: concept ? stagedState : null,
                           initialState: concept ? initialState : null,
                           isMarineOrganism: false,
                           isEditing,
                           setEditing,
-                          modifyConcept: vi.fn(),
                           pending: () => [],
                         }}
                       >
-                        {children}
+                        <ConceptStagedContext.Provider
+                          value={{
+                            stagedState: concept ? stagedState : null,
+                            modifyConcept: vi.fn(),
+                          }}
+                        >
+                          {children}
+                        </ConceptStagedContext.Provider>
                       </ConceptContext.Provider>
                     </SelectedContext.Provider>
                   </ConceptModalContext.Provider>

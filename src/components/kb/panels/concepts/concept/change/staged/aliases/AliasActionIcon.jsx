@@ -8,6 +8,7 @@ import createAliasModal from '@/components/kb/panels/concepts/concept/change/sta
 import createAliasOnClose from '@/components/kb/panels/concepts/concept/change/staged/aliases/createAliasOnClose'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { aliasFields, EMPTY_ALIAS } from '@/lib/model/aliases'
@@ -21,7 +22,8 @@ const ADD = CONCEPT_STATE.ALIAS.ADD
 const DELETE = CONCEPT_STATE.ALIAS.DELETE
 
 const AliasActionIcon = ({ action, aliasIndex, size }) => {
-  const { initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { initialState } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const [asyncError, setAsyncError] = useState(null)
 

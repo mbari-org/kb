@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState'
 import {
   ConceptPanelTestWrapper,
@@ -27,7 +28,8 @@ const selectRankOption = async (user, label, option) => {
 }
 
 const ConceptRankStateProbe = ({ onChange }) => {
-  const { initialState, stagedState } = useContext(ConceptContext)
+  const { initialState } = useContext(ConceptContext)
+  const { stagedState } = useContext(ConceptStagedContext)
 
   useEffect(() => {
     onChange({

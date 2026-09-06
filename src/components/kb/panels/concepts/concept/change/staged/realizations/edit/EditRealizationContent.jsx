@@ -6,7 +6,7 @@ import RealizationTemplatesList from '@/components/kb/panels/concepts/concept/ch
 import ModalActionText from '@/components/common/ModalActionText'
 import useAvailableLinkTemplates from './useAvailableLinkTemplates'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
@@ -22,7 +22,7 @@ import CONFIG from '@/lib/config'
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const EditRealizationContent = () => {
-  const { stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { modalData, setModalData } = use(ConceptModalContext)
   const { isLoading } = use(PanelDataContext)
 

@@ -3,13 +3,13 @@ import { use } from 'react'
 import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 import { EDIT_REALIZATION_FORM_ID } from './form/RealizationForm'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { hasTrueValue } from '@/lib/utils'
 
 const EditRealizationActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
   const { isDuplicate, modified, realizationItem, isValidToConcept = true } = modalData || {}

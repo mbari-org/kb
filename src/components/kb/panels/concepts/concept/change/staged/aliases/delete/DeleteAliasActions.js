@@ -5,13 +5,13 @@ import {
   createStageDiscardHandlers,
 } from '@/components/modal/concept/conceptModalUtils'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const DeleteAliasActions = () => {
-  const { modifyConcept } = use(ConceptContext)
+  const { modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { aliasItem, aliasIndex } = modalData
 

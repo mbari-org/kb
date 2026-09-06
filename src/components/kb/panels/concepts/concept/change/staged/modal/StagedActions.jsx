@@ -3,6 +3,7 @@ import { use, useCallback, useEffect, useMemo, useRef } from 'react'
 import Actions from '@/components/modal/actions/Actions'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -35,7 +36,8 @@ const getLabels = (confirmReset, intent) => {
 }
 
 const StagedActions = ({ intent }) => {
-  const { confirmReset, initialState, modifyConcept, setEditing, stagedState } = use(ConceptContext)
+  const { initialState, setEditing } = use(ConceptContext)
+  const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { refresh } = use(RefreshContext)
   const { updateSelected, updateSettings } = use(SelectedContext)

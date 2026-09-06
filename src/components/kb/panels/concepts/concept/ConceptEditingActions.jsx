@@ -7,6 +7,7 @@ import useDisplayPending from '@/components/kb/panels/concepts/concept/change/pe
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { isStateModified } from '@/lib/concept/state/state'
@@ -23,7 +24,8 @@ const { TO_INITIAL } = CONCEPT_STATE.RESET
 const { CONFIRMED } = RESETTING
 
 const ConceptEditingActions = () => {
-  const { concept, isEditing, initialState, modifyConcept, pending, setEditing, stagedState } = use(ConceptContext)
+  const { concept, isEditing, initialState, pending, setEditing } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { isReadOnly } = use(UserContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)

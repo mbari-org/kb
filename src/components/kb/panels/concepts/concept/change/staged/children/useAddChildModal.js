@@ -7,7 +7,7 @@ import AddChildContent from './AddChildContent'
 
 import { createModal } from '@/components/modal/conceptModalFactory'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EMPTY_CHILD } from '@/lib/model/children'
@@ -44,7 +44,7 @@ const addChildOnClose = (modifyConcept, stagedChildren) => {
 }
 
 const useAddChildModal = () => {
-  const { modifyConcept, stagedState } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
   return useCallback(() => {

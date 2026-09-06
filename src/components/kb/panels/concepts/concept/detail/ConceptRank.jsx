@@ -4,6 +4,7 @@ import { Stack } from '@mui/material'
 import RankFieldInput from '@/components/kb/panels/concepts/concept/change/staged/rank/RankFieldInput'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { pendingChange } from '@/lib/concept/state/rank'
 import CONFIG from '@/lib/config'
@@ -12,7 +13,8 @@ import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ConceptRank = () => {
-  const { initialState, modifyConcept, pending, stagedState } = use(ConceptContext)
+  const { initialState, pending } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
 
   const initialRank = initialState.rank
   const stagedRank = stagedState.rank

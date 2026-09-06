@@ -5,14 +5,14 @@ import {
   validateChildName,
 } from '@/components/modal/concept/conceptModalUtils'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { ADD_CHILD_FORM_ID } from './AddChildContent'
 
 const AddChildActions = () => {
-  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
+  const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 

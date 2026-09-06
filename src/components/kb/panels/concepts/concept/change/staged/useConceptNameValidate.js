@@ -1,6 +1,6 @@
 import { use, useMemo } from 'react'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -11,7 +11,7 @@ import CONFIG from '@/lib/config'
 const CHANGE_NAME = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
 
 const useConceptNameValidate = (formData, modifiedFields) => {
-  const { stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { modalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 

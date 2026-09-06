@@ -6,10 +6,10 @@ import ConceptView from '@/components/kb/panels/concepts/concept/ConceptView'
 import ConceptPath from '@/components/kb/panels/concepts/concept/ConceptPath'
 import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 const Concept = () => {
-  const { stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
 
   if (stagedState && Object.keys(stagedState).length === 0) {
     return null

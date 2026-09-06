@@ -8,6 +8,7 @@ import { createModal } from '@/components/modal/conceptModalFactory'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { getDescendantNames } from '@/lib/model/concept'
@@ -49,7 +50,8 @@ const changeParentOnClose = modifyConcept => {
 
 const useChangeParentModal = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept, modifyConcept } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
+  const { modifyConcept } = use(ConceptStagedContext)
   const { setModal, setModalData } = use(ConceptModalContext)
 
   const alreadyGettingDescendants = useRef(false)

@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -11,7 +11,7 @@ import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 import { hasTrueValue } from '@/lib/utils'
 
 const EditAliasActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { getNames } = use(TaxonomyContext)
 

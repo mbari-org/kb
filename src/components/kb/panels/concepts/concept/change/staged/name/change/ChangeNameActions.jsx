@@ -3,13 +3,15 @@ import { use } from 'react'
 import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ChangeNameActions = () => {
-  const { concept, confirmReset, initialState, modifyConcept } = use(ConceptContext)
+  const { concept, initialState } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { isAdmin } = use(UserContext)
 

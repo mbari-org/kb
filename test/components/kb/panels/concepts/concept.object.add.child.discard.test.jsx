@@ -14,6 +14,7 @@ import ConceptModal from '@/components/modal/ConceptModal'
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalProvider from '@/contexts/panels/concepts/modal/ConceptModalProvider'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -247,18 +248,23 @@ const TestWrapper = ({ children }) => {
                               concept,
                               conceptPath: concept ? [concept.name] : null,
                               onConceptTreeReady: vi.fn(),
-                              stagedState,
                               initialState,
                               isMarineOrganism: false,
                               isEditing,
                               setEditing,
-                              modifyConcept,
-                              confirmReset,
                               pending: () => [],
                             }}
                           >
-                            {children}
-                            <ConceptModalRenderer />
+                            <ConceptStagedContext.Provider
+                              value={{
+                                stagedState,
+                                modifyConcept,
+                                confirmReset,
+                              }}
+                            >
+                              {children}
+                              <ConceptModalRenderer />
+                            </ConceptStagedContext.Provider>
                           </ConceptContext.Provider>
                         </SelectedContext.Provider>
                       </ConceptModalProvider>

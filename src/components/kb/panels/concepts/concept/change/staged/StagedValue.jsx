@@ -5,14 +5,14 @@ import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/S
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import { formatDelta } from '@/components/common/format'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { RESETTING } from '@/lib/constants'
 
 import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 const StagedValue = ({ group, stagedEdit }) => {
-  const { confirmReset } = use(ConceptContext)
+  const { confirmReset } = use(ConceptStagedContext)
 
   const [field, item] = stagedEdit
 

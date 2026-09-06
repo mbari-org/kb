@@ -1,10 +1,10 @@
 import { use } from 'react'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 const useStageMedia = () => {
-  const { modifyConcept } = use(ConceptContext)
+  const { modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
   const stageMedia = async event => {

@@ -1,11 +1,13 @@
 import { use } from 'react'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { CONCEPT } from '@/lib/constants'
 
 const useStagedFieldBorder = field => {
-  const { initialState, stagedState } = use(ConceptContext)
+  const { initialState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
 
   const isStaged = field => {
     switch (field) {

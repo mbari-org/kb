@@ -1,11 +1,11 @@
 import { use, useCallback } from 'react'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const useOnReset = (group, index) => {
-  const { modifyConcept } = use(ConceptContext)
+  const { modifyConcept } = use(ConceptStagedContext)
 
   return useCallback(() => {
     modifyConcept({

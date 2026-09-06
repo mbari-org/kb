@@ -10,13 +10,15 @@ import {
 } from '@/components/kb/panels/concepts/concept/change/staged/media/edit/mediaItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const MediaAction = ({ Icon, action, color, position = 'right', size, tooltip, sx = {} }) => {
-  const { stagedState, initialState, modifyConcept } = use(ConceptContext)
+  const { initialState } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { mediaBaseURL } = use(ConfigContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const [asyncError, setAsyncError] = useState(null)

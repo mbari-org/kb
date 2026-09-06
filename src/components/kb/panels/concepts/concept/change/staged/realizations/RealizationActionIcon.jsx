@@ -8,6 +8,7 @@ import createRealizationModal from '@/components/kb/panels/concepts/concept/chan
 import createRealizationOnClose from '@/components/kb/panels/concepts/concept/change/staged/realizations/createRealizationOnClose'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
@@ -21,7 +22,8 @@ const ADD = CONCEPT_STATE.REALIZATION.ADD
 const DELETE = CONCEPT_STATE.REALIZATION.DELETE
 
 const RealizationActionIcon = ({ action, realizationIndex, size }) => {
-  const { initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { initialState } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const [asyncError, setAsyncError] = useState(null)
 

@@ -10,6 +10,7 @@ import { createModal } from '@/components/modal/conceptModalFactory'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -21,7 +22,8 @@ const { REALIZATIONS, TEMPLATES_DEFINED } =
 
 const useChangeNameModal = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept, modifyConcept, initialState } = use(ConceptContext)
+  const { concept, initialState } = use(ConceptContext)
+  const { modifyConcept } = use(ConceptStagedContext)
   const { setModal, setModalData } = use(ConceptModalContext)
   const { getReferences } = use(PanelDataContext)
 

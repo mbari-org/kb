@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { CONCEPT } from '@/lib/constants'
@@ -12,7 +12,7 @@ import { hasTrueValue } from '@/lib/utils'
 const { PARENT } = CONCEPT_STATE
 
 const ChangeParentActions = () => {
-  const { confirmReset, modifyConcept } = use(ConceptContext)
+  const { confirmReset, modifyConcept } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
 
   // Handle case where modalData might be undefined

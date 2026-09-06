@@ -3,6 +3,7 @@ import { use, useCallback } from 'react'
 import { getConcept, normalizeConcept } from '@/lib/api/concept'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -20,7 +21,8 @@ import CONFIG from '@/lib/config'
 const { PROCESSING } = CONFIG
 
 const useSaveStaged = () => {
-  const { initialState, setConcept, setEditing, stagedState } = use(ConceptContext)
+  const { initialState, setConcept, setEditing } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { closeModal, withProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh } = use(TaxonomyContext)

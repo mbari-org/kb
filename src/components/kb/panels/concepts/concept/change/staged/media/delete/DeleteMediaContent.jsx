@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import Detail from '@/components/common/factory/Detail'
 import ModalActionText from '@/components/common/ModalActionText'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import CONFIG from '@/lib/config'
 import { getItemMediaType } from '@/lib/model/media'
@@ -15,7 +15,7 @@ const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
 const DeleteMediaContent = () => {
   const {
     stagedState: { media, mediaIndex },
-  } = use(ConceptContext)
+  } = use(ConceptStagedContext)
 
   const mediaItem = media?.[mediaIndex]
   const detail = mediaItem ? pick(mediaItem, ['url', 'credit', 'caption', 'isPrimary']) : {}

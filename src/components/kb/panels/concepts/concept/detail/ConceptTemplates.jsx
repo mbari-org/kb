@@ -5,6 +5,7 @@ import ConceptTemplatesActionComponent from '@/components/kb/panels/concepts/con
 import ConceptTemplate from '@/components/kb/panels/concepts/concept/detail/templates/ConceptTemplate'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -22,7 +23,8 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const TemplateComponent = ({ item }) => <ConceptTemplate template={item} />
 
 const ConceptTemplates = () => {
-  const { concept, stagedState } = use(ConceptContext)
+  const { concept } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { templates } = use(PanelDataContext)
   const { getSettings } = use(SelectedContext)
   const { getAncestorNames } = use(TaxonomyContext)

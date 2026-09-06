@@ -6,12 +6,12 @@ import FieldReset from '@/components/kb/panels/concepts/concept/change/staged/fi
 
 import { RESETTING } from '@/lib/constants'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { resettingField } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 const FieldValueDetail = ({ field, value }) => {
-  const { confirmReset } = use(ConceptContext)
+  const { confirmReset } = use(ConceptStagedContext)
 
   const disabled = resettingField(confirmReset, field) === RESETTING.EXTENT.OTHER
 

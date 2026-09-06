@@ -8,6 +8,7 @@ import RealizationActionIcon from '@/components/kb/panels/concepts/concept/chang
 import InspectIcon from '@/components/icon/InspectIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import useGuardedAction from '@/contexts/user/useGuardedAction'
 
@@ -19,7 +20,8 @@ const RealizationComponent = ({ item }) => (
 )
 
 const ConceptRealizations = () => {
-  const { isEditing, stagedState } = use(ConceptContext)
+  const { isEditing } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { updateSelected } = use(SelectedContext)
   const { guardPanelChange } = useGuardedAction()
 

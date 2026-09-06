@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 
 import ConceptAuthor from '@/components/kb/panels/concepts/concept/detail/ConceptAuthor'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -23,16 +24,21 @@ describe('Concepts panel - ConceptAuthor', () => {
               value: initialAuthor,
             },
           },
-          stagedState: {
-            author: {
-              value: stagedAuthor,
-            },
-          },
           pending: () => [],
-          modifyConcept,
         }}
       >
-        <ConceptAuthor />
+        <ConceptStagedContext.Provider
+          value={{
+            stagedState: {
+              author: {
+                value: stagedAuthor,
+              },
+            },
+            modifyConcept,
+          }}
+        >
+          <ConceptAuthor />
+        </ConceptStagedContext.Provider>
       </ConceptContext.Provider>
     )
 

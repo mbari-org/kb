@@ -13,6 +13,7 @@ import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
@@ -24,7 +25,8 @@ import { CONCEPT } from '@/lib/constants'
 const { STAGED, CONCEPT: CONCEPT_MODALS } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const StagedContent = () => {
-  const { initialState, stagedState } = use(ConceptContext)
+  const { initialState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { closeModal } = use(ConceptModalContext)
 
   const stagedEdits = useMemo(

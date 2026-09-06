@@ -4,6 +4,7 @@ import { Box } from '@mui/material'
 import TextInput from '@/components/common/TextInput'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 
@@ -14,7 +15,8 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
 
 const ConceptAuthor = () => {
-  const { isEditing, initialState, modifyConcept, stagedState } = use(ConceptContext)
+  const { isEditing, initialState } = use(ConceptContext)
+  const { modifyConcept, stagedState } = use(ConceptStagedContext)
 
   const border = stagedBorder(initialState.author?.value, stagedState.author?.value)
 

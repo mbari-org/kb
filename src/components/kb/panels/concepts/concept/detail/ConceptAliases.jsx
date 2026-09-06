@@ -5,6 +5,7 @@ import ConceptAlias from '@/components/kb/panels/concepts/concept/detail/aliases
 import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyList'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
@@ -12,7 +13,8 @@ import CONFIG from '@/lib/config'
 const AliasComponent = ({ item }) => <ConceptAlias alias={item} />
 
 const ConceptAliases = () => {
-  const { isEditing, stagedState } = use(ConceptContext)
+  const { isEditing } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
 
   const aliases = stagedState?.aliases || []
 

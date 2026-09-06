@@ -7,12 +7,12 @@ import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/S
 import { formatDelta } from '@/components/common/format'
 import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { RESETTING } from '@/lib/constants'
 
 const StagedObject = ({ group, stagedEdit }) => {
-  const { confirmReset } = use(ConceptContext)
+  const { confirmReset } = use(ConceptStagedContext)
 
   const [field, { initial, staged }] = stagedEdit
 

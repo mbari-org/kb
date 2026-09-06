@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { defineConfig, loadEnv } from 'vite'
+import { defaultExclude } from 'vitest/config'
 import { versionPlugin } from './vite-plugins/version-plugin.js'
 
 const filename = fileURLToPath(import.meta.url)
@@ -31,6 +32,9 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: 'jsdom',
       setupFiles: './test/setup.js',
+      // .kilo holds Agent Manager worktrees: repo checkouts whose duplicate
+      //  test files must not be discovered by this project's test run.
+      exclude: [...defaultExclude, '.kilo/**'],
     },
     build: {
       sourcemap: true,

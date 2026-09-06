@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 
 import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { RESETTING } from '@/lib/constants'
 
@@ -28,7 +28,7 @@ const resetting = (confirmReset, group, items) => {
 }
 
 const StagedItems = ({ group, stagedEdit, StagedGroupItem, stagedItems }) => {
-  const { confirmReset } = use(ConceptContext)
+  const { confirmReset } = use(ConceptStagedContext)
 
   const [_field, items] = stagedEdit
 

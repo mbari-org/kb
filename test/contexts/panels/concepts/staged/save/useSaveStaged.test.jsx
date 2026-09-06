@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -97,13 +98,15 @@ describe('useSaveStaged', () => {
             <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
               <SelectedContext.Provider value={{ getSettings: vi.fn(() => ({})), updateSelected }}>
                 <TaxonomyContext.Provider value={{ conceptEditsRefresh }}>
-                  <ConceptModalContext.Provider value={{ closeModal, withProcessing }}>
-                    <ConceptContext.Provider
-                      value={{ concept: staleConcept, initialState: {}, setConcept, setEditing, stagedState: {} }}
-                    >
-                      {children}
-                    </ConceptContext.Provider>
-                  </ConceptModalContext.Provider>
+                    <ConceptModalContext.Provider value={{ closeModal, withProcessing }}>
+                      <ConceptContext.Provider
+                        value={{ concept: staleConcept, initialState: {}, setConcept, setEditing }}
+                      >
+                        <ConceptStagedContext.Provider value={{ stagedState: {} }}>
+                          {children}
+                        </ConceptStagedContext.Provider>
+                      </ConceptContext.Provider>
+                    </ConceptModalContext.Provider>
                 </TaxonomyContext.Provider>
               </SelectedContext.Provider>
             </PreferencesContext.Provider>

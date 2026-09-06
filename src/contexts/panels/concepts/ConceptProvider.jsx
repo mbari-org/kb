@@ -9,6 +9,7 @@ import useConceptPending from './pending/useConceptPending'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -250,33 +251,39 @@ const ConceptProvider = ({ children }) => {
     () => ({
       concept,
       conceptPath,
-      confirmReset,
       isEditing,
       initialState,
       isPhylogenyRoot,
-      modifyConcept,
       onConceptTreeReady,
       pending,
       setConcept: handleSetConcept,
       setEditing,
       setPendingConfirm,
-      stagedState,
     }),
     [
       concept,
       conceptPath,
-      confirmReset,
       isEditing,
       handleSetConcept,
       initialState,
       isPhylogenyRoot,
-      modifyConcept,
       onConceptTreeReady,
       pending,
       setEditing,
       setPendingConfirm,
-      stagedState,
     ]
+  )
+
+  // Staged editing state changes at keystroke frequency while editing. It is split into
+  //  its own context so per-keystroke dispatches re-render only staged-editing consumers
+  //  rather than every ConceptContext consumer.
+  const stagedValue = useMemo(
+    () => ({
+      confirmReset,
+      modifyConcept,
+      stagedState,
+    }),
+    [confirmReset, modifyConcept, stagedState]
   )
 
   useEffect(() => {
@@ -352,7 +359,11 @@ const ConceptProvider = ({ children }) => {
     }
   }, [apiFns, concept, conceptPath, showBoundary, startProcessing])
 
-  return <ConceptContext value={value}>{children}</ConceptContext>
+  return (
+    <ConceptContext value={value}>
+      <ConceptStagedContext value={stagedValue}>{children}</ConceptStagedContext>
+    </ConceptContext>
+  )
 }
 
 export default ConceptProvider

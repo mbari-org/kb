@@ -11,6 +11,7 @@ import kbTheme from '@/lib/theme'
 import Concepts from '@/components/kb/panels/Concepts'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -189,20 +190,6 @@ const TestWrapper = ({ children }) => {
                   concept,
                   conceptPath: concept ? [concept.name] : null,
                   onConceptTreeReady: vi.fn(),
-                  stagedState: concept
-                    ? {
-                        name: { value: concept.name, action: 'None' },
-                        parent: { action: 'None' },
-                        author: { value: '', action: 'None' },
-                        children: [],
-                        deleteConcept: false,
-                        aliases: [],
-                        templates: [],
-                        rank: { action: 'None', level: '', name: '' },
-                        realizations: [],
-                        media: [],
-                      }
-                    : null,
                   initialState: concept
                     ? {
                         author: { value: '', action: 'None' },
@@ -219,13 +206,32 @@ const TestWrapper = ({ children }) => {
                     : null,
                   isMarineOrganism: false,
                   isEditing: false,
-                  modifyConcept: vi.fn(),
                   pending: () => [],
                 }}
               >
-                {children}
+                <ConceptStagedContext.Provider
+                  value={{
+                    stagedState: concept
+                      ? {
+                          name: { value: concept.name, action: 'None' },
+                          parent: { action: 'None' },
+                          author: { value: '', action: 'None' },
+                          children: [],
+                          deleteConcept: false,
+                          aliases: [],
+                          templates: [],
+                          rank: { action: 'None', level: '', name: '' },
+                          realizations: [],
+                          media: [],
+                        }
+                      : null,
+                    modifyConcept: vi.fn(),
+                  }}
+                >
+                  {children}
+                </ConceptStagedContext.Provider>
               </ConceptContext.Provider>
-              </SelectedContext.Provider>
+            </SelectedContext.Provider>
             </ConceptModalContext.Provider>
           </TaxonomyContext.Provider>
         </PanelDataContext.Provider>

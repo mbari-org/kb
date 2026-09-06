@@ -2,7 +2,7 @@ import { use } from 'react'
 
 import ResettingButton from '@/components/kb/panels/concepts/concept/change/staged/reset/ResettingButton'
 
-import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
@@ -19,7 +19,7 @@ const StagedReset = ({
   resetItemType,
   resettingFunction,
 }) => {
-  const { confirmReset, modifyConcept, stagedState } = use(ConceptContext)
+  const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
 
   const arg = child ?? field ?? index
   const resetting = resettingFunction(confirmReset, arg) === RESETTING.EXTENT.ME

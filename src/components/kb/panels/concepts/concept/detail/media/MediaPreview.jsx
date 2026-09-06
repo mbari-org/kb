@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles'
 import KBInfoIcon from '@/components/icon/KBInfoIcon'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
 import { isPendingMedia } from '@/lib/concept/state/media'
 import { stagedBorder } from '@/lib/concept/state/staged'
@@ -22,7 +23,7 @@ const MediaPreview = ({ setPreviewOn }) => {
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
 
-  const { stagedState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { media, mediaIndex } = stagedState
   const mediaItem = media[mediaIndex]
 
