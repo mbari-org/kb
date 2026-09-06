@@ -5,12 +5,14 @@ import { EDIT_REALIZATION_FORM_ID } from './form/RealizationForm'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import { hasTrueValue } from '@/lib/utils'
 
 const EditRealizationActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptStagedContext)
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const { isDuplicate, modified, realizationItem, isValidToConcept = true } = modalData || {}
 

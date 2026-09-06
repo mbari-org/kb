@@ -5,6 +5,7 @@ import { createStagedActions } from '@/components/modal/concept/conceptModalUtil
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -12,7 +13,8 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 const ChangeNameActions = () => {
   const { concept, initialState } = use(ConceptContext)
   const { confirmReset, modifyConcept } = use(ConceptStagedContext)
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { isAdmin } = use(UserContext)
 
   const { hasRelatedData, isValid, name, relatedDataCounts } = modalData

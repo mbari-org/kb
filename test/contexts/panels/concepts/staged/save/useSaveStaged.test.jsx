@@ -6,6 +6,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
@@ -100,14 +101,16 @@ describe('useSaveStaged', () => {
               <SelectedContext.Provider value={{ updateSelected }}>
                 <SelectedSettingsContext.Provider value={{ getSettings: vi.fn(() => ({})) }}>
                   <TaxonomyContext.Provider value={{ conceptEditsRefresh }}>
-                      <ConceptModalContext.Provider value={{ closeModal, withProcessing }}>
-                        <ConceptContext.Provider
-                          value={{ concept: staleConcept, initialState: {}, setConcept, setEditing }}
-                        >
-                          <ConceptStagedContext.Provider value={{ stagedState: {} }}>
-                            {children}
-                          </ConceptStagedContext.Provider>
-                        </ConceptContext.Provider>
+                      <ConceptModalContext.Provider value={{ closeModal }}>
+                        <ConceptModalProcessingContext.Provider value={{ withProcessing }}>
+                          <ConceptContext.Provider
+                            value={{ concept: staleConcept, initialState: {}, setConcept, setEditing }}
+                          >
+                            <ConceptStagedContext.Provider value={{ stagedState: {} }}>
+                              {children}
+                            </ConceptStagedContext.Provider>
+                          </ConceptContext.Provider>
+                        </ConceptModalProcessingContext.Provider>
                       </ConceptModalContext.Provider>
                   </TaxonomyContext.Provider>
                 </SelectedSettingsContext.Provider>

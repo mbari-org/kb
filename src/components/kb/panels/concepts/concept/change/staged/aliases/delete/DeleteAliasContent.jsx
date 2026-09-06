@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import Detail from '@/components/common/factory/Detail'
 import ModalActionText from '@/components/common/ModalActionText'
 
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import { drop } from '@/lib/utils'
 import CONFIG from '@/lib/config'
@@ -12,7 +12,7 @@ import CONFIG from '@/lib/config'
 const { ALIAS } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const DeleteAliasContent = () => {
-  const { modalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { aliasItem } = modalData
 
   return (

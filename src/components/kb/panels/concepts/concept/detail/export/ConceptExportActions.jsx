@@ -6,6 +6,7 @@ import useConceptExportCsv from './useConceptExportCsv'
 import useConceptExportJson from './useConceptExportJson'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
 import CONFIG from '@/lib/config'
@@ -13,7 +14,8 @@ import CONFIG from '@/lib/config'
 const { CANCEL, EXPORT } = CONFIG.BUTTON
 
 const ConceptExportActions = () => {
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const exportCsv = useConceptExportCsv(modalData.conceptExtent)
   const exportJson = useConceptExportJson(modalData.conceptExtent)

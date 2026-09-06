@@ -7,6 +7,7 @@ import {
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
@@ -15,7 +16,8 @@ const DeleteRealizationActions = () => {
     stagedState: { realizations },
     modifyConcept,
   } = use(ConceptStagedContext)
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const realizationIndex = modalData?.realizationIndex ?? 0
   const realization = realizations?.[realizationIndex]

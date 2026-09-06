@@ -14,6 +14,7 @@ import useConceptNameValidate from '@/components/kb/panels/concepts/concept/chan
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useChangeNameHandlers from './useChangeNameHandlers'
@@ -27,7 +28,8 @@ const ChangeNameContent = () => {
   const theme = useTheme()
 
   const { concept } = use(ConceptContext)
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { isAdmin } = use(UserContext)
 
   const [name, setName] = useState({ value: concept.name, extent: '' })

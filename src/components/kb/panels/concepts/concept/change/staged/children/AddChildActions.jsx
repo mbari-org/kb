@@ -7,13 +7,15 @@ import {
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { ADD_CHILD_FORM_ID } from './AddChildContent'
 
 const AddChildActions = () => {
   const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { getNames } = use(TaxonomyContext)
 
   const { child, modified } = modalData

@@ -5,7 +5,7 @@ import isValidUrl from '@/lib/validators/isValidUrl'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import useDebounce from '@/lib/hooks/useDebounce'
 import isValidMedia from '@/lib/validators/isValidMedia'
@@ -17,7 +17,7 @@ const URL_CHECK_DEBOUNCE_TIME = 500
 const EditMediaUrl = ({ modifiedUrl, onUrlChange, onUrlStatusChange, setPreviewOn, urlStatus, urlValue }) => {
   const { concept } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
-  const { modalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const { action, mediaIndex, mediaItem } = modalData
   const showPreviewButton =

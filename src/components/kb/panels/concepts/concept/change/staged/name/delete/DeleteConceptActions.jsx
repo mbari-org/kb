@@ -5,6 +5,8 @@ import { createActions } from '@/components/modal/conceptModalFactory'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -29,7 +31,9 @@ const { CANCEL, CONFIRM, DELETE, DISCARD } = CONFIG.BUTTON
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
   const { concept } = use(ConceptContext)
-  const { closeModal, modalData, setModalData, withProcessing } = use(ConceptModalContext)
+  const { closeModal, setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
+  const { withProcessing } = use(ConceptModalProcessingContext)
   const { getReferences, realizations, refreshData: refreshPanelData, setClearTemplateFilters, templates } =
     use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)

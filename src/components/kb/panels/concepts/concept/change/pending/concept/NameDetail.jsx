@@ -8,6 +8,7 @@ import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending
 import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { otherApprovalSx } from '@/components/common/format'
@@ -25,7 +26,8 @@ const { APPROVAL } = PENDING
 const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingConcept }) => {
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { isAdmin } = use(UserContext)
 
   const approval = usePendingGroupApproval(CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.NAME)

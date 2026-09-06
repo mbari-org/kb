@@ -10,6 +10,7 @@ import ChangeParentActions from '@/components/kb/panels/concepts/concept/change/
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const TestChangeParent = ({
@@ -43,12 +44,13 @@ const TestChangeParent = ({
             <ConceptModalContext.Provider
               value={{
                 closeModal: vi.fn(),
-                modalData,
                 setModalData,
               }}
             >
-              <ChangeParentContent omitChoices={omitChoices} />
-              <ChangeParentActions />
+              <ConceptModalDataContext.Provider value={{ modalData }}>
+                <ChangeParentContent omitChoices={omitChoices} />
+                <ChangeParentActions />
+              </ConceptModalDataContext.Provider>
             </ConceptModalContext.Provider>
           </ConceptStagedContext.Provider>
         </ConceptContext.Provider>

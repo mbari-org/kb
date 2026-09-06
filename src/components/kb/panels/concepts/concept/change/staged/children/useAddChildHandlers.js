@@ -2,6 +2,7 @@ import { use, useCallback } from 'react'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import useDebounce from '@/lib/hooks/useDebounce'
 import { normalizeConceptName } from '@/lib/concept/state/name'
 
@@ -9,7 +10,8 @@ import { hasTrueValue } from '@/lib/utils'
 
 const useAddChildHandlers = (formChild, setFormChild, modifiedFields, setModifiedFields, originalChild) => {
   const { modifyConcept } = use(ConceptStagedContext)
-  const { closeModal, modalData, setModalData } = use(ConceptModalContext)
+  const { closeModal, setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   // Debounced function to update modalData (for validation and external components)
   const debouncedUpdateModalData = useDebounce(

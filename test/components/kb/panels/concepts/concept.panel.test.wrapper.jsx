@@ -13,7 +13,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import ConceptModalProvider from '@/contexts/panels/concepts/modal/ConceptModalProvider'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
@@ -53,7 +53,7 @@ export const MEDIA_URLS = {
 }
 
 const ConceptModalRenderer = () => {
-  const { modal } = use(ConceptModalContext)
+  const { modal } = use(ConceptModalDataContext)
   return modal ? <ConceptModal /> : null
 }
 

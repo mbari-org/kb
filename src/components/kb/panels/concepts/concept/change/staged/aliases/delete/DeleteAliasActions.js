@@ -7,12 +7,14 @@ import {
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const DeleteAliasActions = () => {
   const { modifyConcept } = use(ConceptStagedContext)
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { aliasItem, aliasIndex } = modalData
 
   const stageAction = {

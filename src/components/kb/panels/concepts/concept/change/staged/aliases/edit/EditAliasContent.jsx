@@ -6,7 +6,7 @@ import TextInput from '@/components/common/TextInput'
 import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import useEditAliasHandlers from './useEditAliasHandlers'
 import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
@@ -23,7 +23,7 @@ const EditAliasContent = () => {
   const theme = useTheme()
 
   const { stagedState } = use(ConceptStagedContext)
-  const { modalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const [formAlias, setFormAlias] = useState(modalData.aliasItem)
 

@@ -13,10 +13,14 @@ import {
 } from '@mui/material'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 import ProcessingMsg from '@/components/common/ProcessingMessage'
 
 const ConceptModal = () => {
-  const { modal, closeModal, processing, processingMessage } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modal } = use(ConceptModalDataContext)
+  const { processing, processingMessage } = use(ConceptModalProcessingContext)
 
   if (!modal) {
     return null

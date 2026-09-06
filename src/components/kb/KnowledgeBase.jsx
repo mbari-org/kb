@@ -9,14 +9,14 @@ import Panels from '@/components/kb/Panels'
 import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const KnowledgeBase = () => {
   const { processing: appProcessing } = use(AppModalContext)
-  const { modal: holdModal } = use(ConceptModalContext)
+  const { modal: holdModal } = use(ConceptModalDataContext)
   const { updateSelected } = use(SelectedContext)
 
   const [_isPending, startTransition] = useTransition()

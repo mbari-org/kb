@@ -3,7 +3,7 @@ import { use, useCallback } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -16,7 +16,7 @@ const { PROCESSING } = CONFIG
 
 const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
-  const { withProcessing } = use(ConceptModalContext)
+  const { withProcessing } = use(ConceptModalProcessingContext)
   const { apiFns } = use(ConfigContext)
   const { refreshData } = use(PanelDataContext)
   const { updateSelected } = use(SelectedContext)

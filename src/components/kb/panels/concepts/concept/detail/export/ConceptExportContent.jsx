@@ -7,12 +7,14 @@ import ConceptExportCsvFields from './ConceptExportCsvFields'
 import ConceptExportJsonFields from './ConceptExportJsonFields'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
 import { CONCEPT } from '@/lib/constants'
 
 const ConceptExportContent = () => {
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { conceptExtent, exportType } = modalData
 
   const handleConceptExtentChange = value => {

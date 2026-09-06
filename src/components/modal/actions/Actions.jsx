@@ -11,14 +11,14 @@ import DeleteAlert from './DeleteAlert'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import { PENDING } from '@/lib/constants/pending.js'
 
 const Actions = ({ colors, disabled, labels, onAction }) => {
   const { pending } = use(ConceptContext)
   const { confirmReset } = use(ConceptStagedContext)
-  const { modalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const pendingConfirm = pending(PENDING.DATA.CONFIRM)
 

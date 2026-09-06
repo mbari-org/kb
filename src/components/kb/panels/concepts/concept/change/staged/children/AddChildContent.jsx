@@ -7,7 +7,7 @@ import RankFieldInput from '@/components/kb/panels/concepts/concept/change/stage
 import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import useInputStyle from './useInputStyle'
 import useAddChildHandlers from './useAddChildHandlers'
@@ -29,7 +29,7 @@ const AddChildContent = () => {
   const inputStyle = useInputStyle()
 
   const { isPhylogenyRoot } = use(ConceptContext)
-  const { modalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const { child } = modalData
 

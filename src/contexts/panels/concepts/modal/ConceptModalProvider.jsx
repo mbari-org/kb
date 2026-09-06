@@ -1,14 +1,15 @@
-import { use, useCallback, useState, useMemo, useEffect } from 'react'
+import { use, useCallback, useState, useMemo, useEffect, useRef } from 'react'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalContext from './ConceptModalContext'
+import ConceptModalDataContext from './ConceptModalDataContext'
+import ConceptModalProcessingContext from './ConceptModalProcessingContext'
 import useProcessingManager from '@/lib/hooks/useProcessingManager'
 
 const ConceptModalProvider = ({ children }) => {
   const { setSuppressDisplay } = use(AppModalContext)
   const [modal, setModal] = useState(null)
   const [modalData, setModalData] = useState({})
-  const [onClose, setOnClose] = useState(null)
   const {
     beginProcessing,
     processing,
@@ -17,26 +18,38 @@ const ConceptModalProvider = ({ children }) => {
     withProcessing,
   } = useProcessingManager()
 
+  const modalDataRef = useRef(modalData)
+  const onCloseRef = useRef(null)
+  const processingRef = useRef(processing)
+
   useEffect(() => {
     setSuppressDisplay(Boolean(processing))
   }, [processing, setSuppressDisplay])
 
+  useEffect(() => {
+    modalDataRef.current = modalData
+  }, [modalData])
+
+  useEffect(() => {
+    processingRef.current = processing
+  }, [processing])
+
   const closeModal = useCallback(
     (confirmed, onComplete) => {
       // if processing, don't close unless forced
-      if (processing && !confirmed) {
+      if (processingRef.current && !confirmed) {
         return false
       }
 
-      if (onClose && !confirmed) {
-        const shouldClose = onClose(modalData)
+      if (onCloseRef.current && !confirmed) {
+        const shouldClose = onCloseRef.current(modalDataRef.current)
         if (shouldClose === false) {
           return false
         }
       }
 
       // Reset state
-      setOnClose(null)
+      onCloseRef.current = null
       setModalData({})
       setModal(null)
       resetProcessing()
@@ -49,39 +62,41 @@ const ConceptModalProvider = ({ children }) => {
 
       return true
     },
-    [onClose, modalData, processing, resetProcessing]
+    [resetProcessing]
   )
 
   const handleSetModal = useCallback((modal, onCloseCallback) => {
     setModal(modal)
-    setOnClose(() => onCloseCallback)
+    onCloseRef.current = onCloseCallback
   }, [])
 
   const value = useMemo(
     () => ({
       closeModal,
-      processing,
-      processingMessage,
-      modal,
-      modalData,
       setModalData,
       setModal: handleSetModal,
       beginProcessing,
       withProcessing,
     }),
-    [
-      closeModal,
-      processing,
-      processingMessage,
-      modal,
-      modalData,
-      handleSetModal,
-      beginProcessing,
-      withProcessing,
-    ]
+    [closeModal, handleSetModal, beginProcessing, withProcessing]
   )
 
-  return <ConceptModalContext value={value}>{children}</ConceptModalContext>
+  const dataValue = useMemo(() => ({ modal, modalData }), [modal, modalData])
+
+  const processingValue = useMemo(
+    () => ({ processing, processingMessage }),
+    [processing, processingMessage]
+  )
+
+  return (
+    <ConceptModalContext value={value}>
+      <ConceptModalDataContext value={dataValue}>
+        <ConceptModalProcessingContext value={processingValue}>
+          {children}
+        </ConceptModalProcessingContext>
+      </ConceptModalDataContext>
+    </ConceptModalContext>
+  )
 }
 
 export default ConceptModalProvider

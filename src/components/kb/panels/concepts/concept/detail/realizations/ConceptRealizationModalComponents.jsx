@@ -5,6 +5,7 @@ import Title from '@/components/common/factory/Title'
 import { createActions } from '@/components/common/factory/createComponent'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import CONFIG from '@/lib/config'
 
@@ -13,7 +14,7 @@ const { CLOSE } = CONFIG.BUTTON
 const ConceptRealizationModalTitle = () => <Title title='Realization' />
 
 const ConceptRealizationModalContent = () => {
-  const { modalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const realization = modalData?.realization || {}
   const infoStyle = {

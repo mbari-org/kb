@@ -2,6 +2,7 @@ import { use } from 'react'
 import { Box } from '@mui/material'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import CONFIG from '@/lib/config'
 import { OPTIONAL_FIELDS } from './useConceptData'
 import ConceptExportJsonField from './ConceptExportJsonField'
@@ -9,7 +10,8 @@ import ConceptExportJsonField from './ConceptExportJsonField'
 const { ALL } = CONFIG.COMMON.EXPORT.JSON
 
 const ConceptExportJsonFields = () => {
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const includeData = modalData.includeData
 
   const handleAllDataChange = event => {

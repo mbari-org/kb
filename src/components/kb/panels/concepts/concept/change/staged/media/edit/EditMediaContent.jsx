@@ -9,6 +9,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import useStageMedia from './useStageMedia'
 import useDebounce from '@/lib/hooks/useDebounce'
@@ -27,7 +28,8 @@ export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
 const EditMediaContent = () => {
   const { stagedState } = use(ConceptStagedContext)
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const { action, mediaIndex, mediaItem } = modalData
 

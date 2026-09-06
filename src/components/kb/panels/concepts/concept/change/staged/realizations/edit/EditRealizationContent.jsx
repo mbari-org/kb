@@ -8,6 +8,7 @@ import useAvailableLinkTemplates from './useAvailableLinkTemplates'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { hasDuplicate } from '@/lib/model/realization'
@@ -23,7 +24,8 @@ const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const EditRealizationContent = () => {
   const { stagedState } = use(ConceptStagedContext)
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { isLoading } = use(PanelDataContext)
 
   const { action, realizationIndex, modalRealizationItem } = modalData

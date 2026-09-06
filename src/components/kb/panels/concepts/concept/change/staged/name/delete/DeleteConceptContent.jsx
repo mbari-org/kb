@@ -10,6 +10,7 @@ import { validateConceptInput } from '@/components/modal/concept/conceptModalUti
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -19,7 +20,8 @@ const { MODALS } = CONFIG.PANELS.CONCEPTS
 
 const DeleteConceptContent = () => {
   const { concept } = use(ConceptContext)
-  const { modalData, setModalData } = use(ConceptModalContext)
+  const { setModalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { getNames } = use(TaxonomyContext)
   const { isAdmin } = use(UserContext)
 

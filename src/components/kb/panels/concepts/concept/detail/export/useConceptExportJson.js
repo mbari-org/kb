@@ -6,7 +6,7 @@ import useConceptData from './useConceptData'
 import useConceptExportProgress from './useConceptExportProgress'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
-import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 const getJsonData = async ({
   conceptExtent,
@@ -58,7 +58,7 @@ const viaLinkDownload = async ({ fileName, jsonData }) => {
 
 const useConceptExportJson = conceptExtent => {
   const { concept } = use(ConceptContext)
-  const { modalData } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const onProgress = useConceptExportProgress()
   const getTaxonomyData = useConceptData()

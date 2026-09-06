@@ -15,6 +15,8 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
@@ -241,12 +243,18 @@ const TestWrapper = ({ children }) => {
     setModal: vi.fn(),
     setModalData: vi.fn(),
     closeModal: vi.fn(),
-    modal: null,
-    modalData: {},
-    processing: false,
-    processingMessage: null,
     beginProcessing: vi.fn(),
     withProcessing: vi.fn(),
+  }
+
+  const mockConceptModalDataValue = {
+    modal: null,
+    modalData: {},
+  }
+
+  const mockConceptModalProcessingValue = {
+    processing: false,
+    processingMessage: null,
   }
 
   const mockAppModalValue = {
@@ -288,6 +296,8 @@ const TestWrapper = ({ children }) => {
               <PanelDataContext.Provider value={mockPanelDataValue}>
                 <TaxonomyContext.Provider value={mockTaxonomyValue}>
                   <ConceptModalContext.Provider value={mockConceptModalValue}>
+                    <ConceptModalDataContext.Provider value={mockConceptModalDataValue}>
+                      <ConceptModalProcessingContext.Provider value={mockConceptModalProcessingValue}>
                     <SelectedContext.Provider value={mockSelectedValue}>
                       <SelectedSettingsContext.Provider value={mockSelectedSettingsValue}>
                         <ConceptContext.Provider
@@ -313,6 +323,8 @@ const TestWrapper = ({ children }) => {
                         </ConceptContext.Provider>
                       </SelectedSettingsContext.Provider>
                     </SelectedContext.Provider>
+                      </ConceptModalProcessingContext.Provider>
+                    </ConceptModalDataContext.Provider>
                   </ConceptModalContext.Provider>
                 </TaxonomyContext.Provider>
               </PanelDataContext.Provider>

@@ -5,6 +5,7 @@ import Actions from '@/components/modal/actions/Actions'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
@@ -39,7 +40,8 @@ const getLabels = (confirmReset, intent) => {
 const StagedActions = ({ intent }) => {
   const { initialState, setEditing } = use(ConceptContext)
   const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
-  const { closeModal, modalData } = use(ConceptModalContext)
+  const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
   const { refresh } = use(RefreshContext)
   const { updateSelected } = use(SelectedContext)
   const { updateSettings } = use(SelectedSettingsContext)
