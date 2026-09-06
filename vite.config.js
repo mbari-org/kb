@@ -32,8 +32,6 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: 'jsdom',
       setupFiles: './test/setup.js',
-      // .kilo holds Agent Manager worktrees: repo checkouts whose duplicate
-      //  test files must not be discovered by this project's test run.
       exclude: [...defaultExclude, '.kilo/**'],
     },
     build: {

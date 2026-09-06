@@ -274,9 +274,6 @@ const ConceptProvider = ({ children }) => {
     ]
   )
 
-  // Staged editing state changes at keystroke frequency while editing. It is split into
-  //  its own context so per-keystroke dispatches re-render only staged-editing consumers
-  //  rather than every ConceptContext consumer.
   const stagedValue = useMemo(
     () => ({
       confirmReset,
