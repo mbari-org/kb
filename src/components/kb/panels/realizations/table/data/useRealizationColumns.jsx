@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
@@ -13,7 +13,7 @@ const useRealizationColumns = () => {
   const { updateFilters } = use(RealizationsContext)
   const { updateSelected } = use(SelectedContext)
 
-  return [
+  return useMemo(() => [
     {
       field: 'concept',
       headerClassName: 'bold-header',
@@ -53,7 +53,7 @@ const useRealizationColumns = () => {
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },
-  ]
+  ], [updateFilters, updateSelected])
 }
 
 export default useRealizationColumns

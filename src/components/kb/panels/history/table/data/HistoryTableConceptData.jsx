@@ -59,36 +59,49 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
     [sortField, sortOrder, updatePageState]
   )
 
-  const paginationComponent = (
-    <HistoryPagination
-      count={conceptState.count}
-      goToPage={goToPage}
-      hideFooter={hideFooter}
-      limit={limit}
-      nextPage={nextPage}
-      offset={offset}
-      prevPage={prevPage}
-      setPageSize={setPageSize}
-    />
+  const paginationComponent = useMemo(
+    () => (
+      <HistoryPagination
+        count={conceptState.count}
+        goToPage={goToPage}
+        hideFooter={hideFooter}
+        limit={limit}
+        nextPage={nextPage}
+        offset={offset}
+        prevPage={prevPage}
+        setPageSize={setPageSize}
+      />
+    ),
+    [conceptState.count, goToPage, hideFooter, limit, nextPage, offset, prevPage, setPageSize]
+  )
+
+  const dataGridProps = useMemo(
+    () => ({
+      disableColumnFilter: true,
+      onSortModelChange,
+      sortModel,
+      sortingMode: 'client',
+    }),
+    [onSortModelChange, sortModel]
+  )
+
+  const paginationModel = useMemo(
+    () => ({
+      pageSize: limit,
+      page: Math.floor(offset / limit),
+    }),
+    [limit, offset]
   )
 
   return (
     <PanelDataGrid
       columns={columns}
-      dataGridProps={{
-        disableColumnFilter: true,
-        onSortModelChange,
-        sortModel,
-        sortingMode: 'client',
-      }}
+      dataGridProps={dataGridProps}
       hideFooter={hideFooter}
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}
       paginationMode='client'
-      paginationModel={{
-        pageSize: limit,
-        page: Math.floor(offset / limit),
-      }}
+      paginationModel={paginationModel}
       rows={rows}
     />
   )

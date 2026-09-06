@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
@@ -28,19 +28,33 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
-  const rows = pageState.sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data
+  const rows = useMemo(
+    () => (pageState.sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data),
+    [pageState.data, pageState.sortOrder]
+  )
 
-  const paginationComponent = (
-    <HistoryPagination
-      count={conceptState.count}
-      goToPage={goToPage}
-      hideFooter={hideFooter}
-      limit={limit}
-      nextPage={nextPage}
-      offset={offset}
-      prevPage={prevPage}
-      setPageSize={setPageSize}
-    />
+  const paginationComponent = useMemo(
+    () => (
+      <HistoryPagination
+        count={conceptState.count}
+        goToPage={goToPage}
+        hideFooter={hideFooter}
+        limit={limit}
+        nextPage={nextPage}
+        offset={offset}
+        prevPage={prevPage}
+        setPageSize={setPageSize}
+      />
+    ),
+    [conceptState.count, goToPage, hideFooter, limit, nextPage, offset, prevPage, setPageSize]
+  )
+
+  const paginationModel = useMemo(
+    () => ({
+      page: Math.floor(offset / limit),
+      pageSize: limit,
+    }),
+    [limit, offset]
   )
 
   return (
@@ -50,10 +64,7 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}
       paginationMode='server'
-      paginationModel={{
-        page: Math.floor(offset / limit),
-        pageSize: limit,
-      }}
+      paginationModel={paginationModel}
       rowCount={rowCount}
       rows={rows}
     />

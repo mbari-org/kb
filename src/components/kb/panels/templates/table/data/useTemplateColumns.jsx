@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 import { Box } from '@mui/material'
 import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
@@ -17,7 +17,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
   const { updateFilters } = use(TemplatesContext)
   const { updateSelected, updateSettings } = use(SelectedContext)
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       field: 'actions',
       headerName: '',
@@ -87,7 +87,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },
-  ]
+  ], [deleteTemplateModal, editTemplateModal, updateFilters, updateSelected, updateSettings])
 
   return columns
 }

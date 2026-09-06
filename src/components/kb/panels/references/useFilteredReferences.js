@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -21,11 +21,15 @@ const useFilteredReferences = () => {
 
   const [descendantExtent, setDescendantExtent] = useState({ conceptName: null, names: [] })
 
-  const resolvedFilters = filters || {
-    [FILTERS.CITATION]: citationGlob || '',
-    [FILTERS.CONCEPT]: '',
-    [FILTERS.CONCEPTS]: conceptGlob || '',
-  }
+  const resolvedFilters = useMemo(
+    () =>
+      filters || {
+        [FILTERS.CITATION]: citationGlob || '',
+        [FILTERS.CONCEPT]: '',
+        [FILTERS.CONCEPTS]: conceptGlob || '',
+      },
+    [citationGlob, conceptGlob, filters]
+  )
   const conceptFilter = resolvedFilters[FILTERS.CONCEPT] || null
 
   useEffect(() => {
@@ -50,46 +54,48 @@ const useFilteredReferences = () => {
     }
   }, [apiFns, conceptExtent, conceptFilter])
 
-  const allReferences = getReferences(null)
-  let selectedReferences
-  switch (conceptExtent) {
-    case EXTENT.CHILDREN:
-    case EXTENT.DESCENDANTS: {
-      if (!conceptFilter) {
-        selectedReferences = allReferences
+  const filteredReferences = useMemo(() => {
+    const allReferences = getReferences(null)
+    let selectedReferences
+    switch (conceptExtent) {
+      case EXTENT.CHILDREN:
+      case EXTENT.DESCENDANTS: {
+        if (!conceptFilter) {
+          selectedReferences = allReferences
+          break
+        }
+        let extentConceptNames = [conceptFilter]
+        if (conceptExtent === EXTENT.CHILDREN) {
+          const selectedTaxonomyConcept = getConcept(conceptFilter)
+          extentConceptNames = [conceptFilter, ...(selectedTaxonomyConcept?.children || [])]
+        } else if (descendantExtent.conceptName === conceptFilter) {
+          extentConceptNames = [conceptFilter, ...descendantExtent.names]
+        }
+
+        const conceptNameSet = new Set(extentConceptNames)
+        selectedReferences = allReferences.filter(reference =>
+          reference.concepts?.some(referenceConcept => conceptNameSet.has(referenceConcept))
+        )
         break
       }
-      let extentConceptNames = [conceptFilter]
-      if (conceptExtent === EXTENT.CHILDREN) {
-        const selectedTaxonomyConcept = getConcept(conceptFilter)
-        extentConceptNames = [conceptFilter, ...(selectedTaxonomyConcept?.children || [])]
-      } else if (descendantExtent.conceptName === conceptFilter) {
-        extentConceptNames = [conceptFilter, ...descendantExtent.names]
-      }
-
-      const conceptNameSet = new Set(extentConceptNames)
-      selectedReferences = allReferences.filter(reference =>
-        reference.concepts?.some(referenceConcept => conceptNameSet.has(referenceConcept))
-      )
-      break
+      default:
+        selectedReferences = getReferences(conceptFilter)
     }
-    default:
-      selectedReferences = getReferences(conceptFilter)
-  }
 
-  const trimmedCitationGlob = (resolvedFilters[FILTERS.CITATION] || '').toLowerCase()
-  const trimmedConceptGlob = (resolvedFilters[FILTERS.CONCEPTS] || '').toLowerCase()
+    const trimmedCitationGlob = (resolvedFilters[FILTERS.CITATION] || '').toLowerCase()
+    const trimmedConceptGlob = (resolvedFilters[FILTERS.CONCEPTS] || '').toLowerCase()
 
-  const filteredReferences = selectedReferences.filter(reference => {
-    const citationMatches = reference.citation.toLowerCase().includes(trimmedCitationGlob)
-    const conceptMatches =
-      !trimmedConceptGlob ||
-      reference.concepts?.some(referenceConcept =>
-        referenceConcept?.toLowerCase().includes(trimmedConceptGlob)
-      )
+    return selectedReferences.filter(reference => {
+      const citationMatches = reference.citation.toLowerCase().includes(trimmedCitationGlob)
+      const conceptMatches =
+        !trimmedConceptGlob ||
+        reference.concepts?.some(referenceConcept =>
+          referenceConcept?.toLowerCase().includes(trimmedConceptGlob)
+        )
 
-    return citationMatches && conceptMatches
-  })
+      return citationMatches && conceptMatches
+    })
+  }, [conceptExtent, conceptFilter, descendantExtent, getConcept, getReferences, resolvedFilters])
 
   return { conceptExtent, filteredReferences, selectedConcept: conceptFilter }
 }

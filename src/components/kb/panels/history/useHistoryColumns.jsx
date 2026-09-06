@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useMemo } from 'react'
 
 import { Box } from '@mui/material'
 
@@ -25,121 +25,120 @@ const useHistoryColumns = ({ type }) => {
   const { updateSelected, updateSettings } = use(SelectedContext)
   const { isAdmin } = use(UserContext)
 
-  const handleConceptApproval = row => {
-    if (row?.id) {
-      openPendingItem({ conceptName: row.concept, item: row })
+  return useMemo(() => {
+    const handleConceptApproval = row => {
+      if (row?.id) {
+        openPendingItem({ conceptName: row.concept, item: row })
+      }
     }
-  }
 
-  const handleConceptFilter = row => {
-    updateSelected({ [SELECTED.CONCEPT]: row.concept })
-    updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: TYPE.CONCEPT } })
-  }
+    const handleConceptFilter = row => {
+      updateSelected({ [SELECTED.CONCEPT]: row.concept })
+      updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: TYPE.CONCEPT } })
+    }
 
-  const sortableFields = [
-    'action',
-    ...(type === TYPE.PENDING ? ['concept'] : []),
-    'creationTimestamp',
-    'creatorName',
-    'field',
-    'newValue',
-    'oldValue',
-    ...(type !== TYPE.PENDING ? ['processedTimestamp', 'processorName'] : []),
-  ]
+    const sortableFields = [
+      'action',
+      ...(type === TYPE.PENDING ? ['concept'] : []),
+      'creationTimestamp',
+      'creatorName',
+      'field',
+      'newValue',
+      'oldValue',
+      ...(type !== TYPE.PENDING ? ['processedTimestamp', 'processorName'] : []),
+    ]
 
-  const sortableProps = field =>
-    sortableFields.includes(field)
-      ? { sortable: true, sortingOrder: SORTING_ORDER }
-      : { sortable: false }
+    const sortableProps = field =>
+      sortableFields.includes(field)
+        ? { sortable: true, sortingOrder: SORTING_ORDER }
+        : { sortable: false }
 
-  const columnProps = (field, headerName, width) => ({
-    field,
-    headerClassName: 'bold-header',
-    headerName,
-    width,
-    ...sortableProps(field),
-  })
+    const columnProps = (field, headerName, width) => ({
+      field,
+      headerClassName: 'bold-header',
+      headerName,
+      width,
+      ...sortableProps(field),
+    })
 
-  const approvedCell = params => {
-    const isPending = !params.row.processedTimestamp
-    const isApproved = !!params.row.approved
+    const approvedCell = params => {
+      const isPending = !params.row.processedTimestamp
+      const isApproved = !!params.row.approved
 
-    let content
-    isPending &&
-      (content = (
-        <StampIcon onClick={() => handleConceptApproval(params.row)} tooltip='Approve/Reject' />
-      ))
-    !isPending && isApproved && (content = 'Yes')
-    !isPending && !isApproved && (content = 'No')
-    isPending && !isAdmin && (content = 'Pending')
+      let content
+      isPending &&
+        (content = (
+          <StampIcon onClick={() => handleConceptApproval(params.row)} tooltip='Approve/Reject' />
+        ))
+      !isPending && isApproved && (content = 'Yes')
+      !isPending && !isApproved && (content = 'No')
+      isPending && !isAdmin && (content = 'Pending')
 
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-        {content}
-      </Box>
-    )
-  }
-
-  const inspectColumn = () => {
-    const showPendingApproval = type === TYPE.PENDING && isAdmin
-
-    return {
-      field: 'inspect',
-      headerName: '',
-      onClick: handleConceptFilter,
-      renderCell: params => (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <FilterIcon
-            onClick={() => handleConceptFilter(params.row)}
-            tooltip='Filter History to this Concept'
-          />
-          {showPendingApproval && (
-            <StampIcon
-              onClick={() => handleConceptApproval(params.row)}
-              tooltip='Approve/Reject'
-            />
-          )}
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          {content}
         </Box>
-      ),
-      sortable: false,
-      width: showPendingApproval ? 90 : 50,
+      )
     }
-  }
 
-  const baseColumns = [
-    columnProps('concept', 'Concept', 200),
-    columnProps('field', 'Field', 130),
-    columnProps('action', 'Action', 100),
-    columnProps('creatorName', 'Creator', 130),
-    {
-      ...columnProps('creationTimestamp', 'Created', 165),
-      valueFormatter: value => humanTimestamp(value),
-    },
-    columnProps('oldValue', 'Old Value', 200),
-    columnProps('newValue', 'New Value', 200),
-  ]
+    const inspectColumn = () => {
+      const showPendingApproval = type === TYPE.PENDING && isAdmin
 
-  const approvedColumn = {
-    ...columnProps('approved', 'Approved', 100),
-    renderCell: approvedCell,
-  }
+      return {
+        field: 'inspect',
+        headerName: '',
+        onClick: handleConceptFilter,
+        renderCell: params => (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <FilterIcon
+              onClick={() => handleConceptFilter(params.row)}
+              tooltip='Filter History to this Concept'
+            />
+            {showPendingApproval && (
+              <StampIcon
+                onClick={() => handleConceptApproval(params.row)}
+                tooltip='Approve/Reject'
+              />
+            )}
+          </Box>
+        ),
+        sortable: false,
+        width: showPendingApproval ? 90 : 50,
+      }
+    }
 
-  const processorColumns = [
-    columnProps('processorName', 'Processor', 100),
-    {
-      ...columnProps('processedTimestamp', 'Processed', 165),
-      valueFormatter: value => humanTimestamp(value),
-    },
-  ]
+    const baseColumns = [
+      columnProps('concept', 'Concept', 200),
+      columnProps('field', 'Field', 130),
+      columnProps('action', 'Action', 100),
+      columnProps('creatorName', 'Creator', 130),
+      {
+        ...columnProps('creationTimestamp', 'Created', 165),
+        valueFormatter: value => humanTimestamp(value),
+      },
+      columnProps('oldValue', 'Old Value', 200),
+      columnProps('newValue', 'New Value', 200),
+    ]
 
-  const columns =
-    type === TYPE.PENDING
+    const approvedColumn = {
+      ...columnProps('approved', 'Approved', 100),
+      renderCell: approvedCell,
+    }
+
+    const processorColumns = [
+      columnProps('processorName', 'Processor', 100),
+      {
+        ...columnProps('processedTimestamp', 'Processed', 165),
+        valueFormatter: value => humanTimestamp(value),
+      },
+    ]
+
+    return type === TYPE.PENDING
       ? [inspectColumn(), ...baseColumns]
       : type === TYPE.APPROVED
         ? [inspectColumn(), ...baseColumns, ...processorColumns]
         : [approvedColumn, ...baseColumns, ...processorColumns]
-
-  return columns
+  }, [isAdmin, openPendingItem, type, updateSelected, updateSettings])
 }
 
 export default useHistoryColumns

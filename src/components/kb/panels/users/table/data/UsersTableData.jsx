@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { use, useCallback, useMemo, useState } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import UsersPagination from './UsersPagination'
@@ -14,6 +14,18 @@ import { PAGINATION } from '@/lib/constants/pagination.js'
 const DEFAULT_LIMIT = PAGINATION.USERS.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
+const DATA_GRID_PROPS = {
+  disableColumnFilter: true,
+  disableColumnMenu: true,
+}
+
+const USERS_SX = {
+  '& .disabled-cell': {
+    color: 'text.disabled',
+    opacity: 0.85,
+  },
+}
+
 const UsersTableData = () => {
   const { users } = use(UsersContext)
 
@@ -25,49 +37,48 @@ const UsersTableData = () => {
 
   const columns = useUserColumns({ editUserModal, lockUserModal })
 
-  const nextPage = () => setOffset(prev => prev + limit)
-  const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
-  const goToPage = page => setOffset((page - 1) * limit)
-  const setPageSize = newLimit => {
+  const nextPage = useCallback(() => setOffset(prev => prev + limit), [limit])
+  const prevPage = useCallback(() => setOffset(prev => Math.max(0, prev - limit)), [limit])
+  const goToPage = useCallback(page => setOffset((page - 1) * limit), [limit])
+  const setPageSize = useCallback(newLimit => {
     setLimit(newLimit)
     setOffset(0)
-  }
+  }, [])
 
-  const paginationComponent = (
-    <UsersPagination
-      count={users.length}
-      goToPage={goToPage}
-      limit={limit}
-      nextPage={nextPage}
-      offset={offset}
-      prevPage={prevPage}
-      setPageSize={setPageSize}
-    />
+  const paginationComponent = useMemo(
+    () => (
+      <UsersPagination
+        count={users.length}
+        goToPage={goToPage}
+        limit={limit}
+        nextPage={nextPage}
+        offset={offset}
+        prevPage={prevPage}
+        setPageSize={setPageSize}
+      />
+    ),
+    [goToPage, limit, nextPage, offset, prevPage, setPageSize, users.length]
+  )
+
+  const paginationModel = useMemo(
+    () => ({
+      page: Math.floor(offset / limit),
+      pageSize: limit,
+    }),
+    [limit, offset]
   )
 
   return (
     <PanelDataGrid
       columns={columns}
-      dataGridProps={{
-        disableColumnFilter: true,
-        disableColumnMenu: true,
-        getRowId: undefined, // Use default row ID
-      }}
-      paginationModel={{
-        page: Math.floor(offset / limit),
-        pageSize: limit,
-      }}
+      dataGridProps={DATA_GRID_PROPS}
+      paginationModel={paginationModel}
       pageSizeOptions={PAGINATION.USERS.PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}
       paginationMode='server'
       rows={users}
       rowCount={users.length}
-      sx={{
-        '& .disabled-cell': {
-          color: 'text.disabled',
-          opacity: 0.85,
-        },
-      }}
+      sx={USERS_SX}
     />
   )
 }

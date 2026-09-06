@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { use, useCallback, useMemo, useState } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import TemplatesPagination from './TemplatesPagination'
@@ -26,23 +26,34 @@ const TemplatesTableData = () => {
   const totalPages = Math.max(1, Math.ceil(filteredTemplates.length / pageSize))
   const currentPageClamped = Math.min(Math.max(1, currentPage), totalPages)
 
-  const handlePageChange = newPage => {
+  const handlePageChange = useCallback(newPage => {
     setCurrentPage(newPage)
-  }
+  }, [])
 
-  const handlePageSizeChange = newPageSize => {
+  const handlePageSizeChange = useCallback(newPageSize => {
     setPageSize(newPageSize)
     setCurrentPage(1)
-  }
+  }, [])
 
-  const paginationComponent = (
-    <TemplatesPagination
-      currentPage={currentPageClamped}
-      templates={filteredTemplates}
-      onPageChange={handlePageChange}
-      onPageSizeChange={handlePageSizeChange}
-      pageSize={pageSize}
-    />
+  const paginationComponent = useMemo(
+    () => (
+      <TemplatesPagination
+        currentPage={currentPageClamped}
+        templates={filteredTemplates}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+        pageSize={pageSize}
+      />
+    ),
+    [currentPageClamped, filteredTemplates, handlePageChange, handlePageSizeChange, pageSize]
+  )
+
+  const paginationModel = useMemo(
+    () => ({
+      page: currentPageClamped - 1,
+      pageSize,
+    }),
+    [currentPageClamped, pageSize]
   )
 
   return (
@@ -51,10 +62,7 @@ const TemplatesTableData = () => {
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}
       paginationMode='client'
-      paginationModel={{
-        page: currentPageClamped - 1, // MUI DataGrid uses 0-based indexing
-        pageSize: pageSize,
-      }}
+      paginationModel={paginationModel}
       rowCount={filteredTemplates.length}
       rows={filteredTemplates}
     />

@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import UserContext from '@/contexts/user/UserContext'
@@ -68,12 +68,15 @@ const UsersProvider = ({ children }) => {
     if (isAdmin) loadUsers()
   }, [apiFns, isAdmin, user])
 
-  const value = {
-    addUser,
-    editUser,
-    lockUser,
-    users,
-  }
+  const value = useMemo(
+    () => ({
+      addUser,
+      editUser,
+      lockUser,
+      users,
+    }),
+    [addUser, editUser, lockUser, users]
+  )
 
   return (
     <UsersContext value={value}>

@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { Box } from '@mui/material'
 
 import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
@@ -14,7 +16,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const lockTooltip = locked =>
     locked ? CONFIG.PANELS.USERS.PANEL.TOOLTIP.UNLOCK : CONFIG.PANELS.USERS.PANEL.TOOLTIP.LOCK
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       field: 'actions',
       headerName: '',
@@ -102,7 +104,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
       valueGetter: value => humanTimestamp(value),
     },
-  ]
+  ], [editUserModal, lockUserModal])
 
   return columns
 }

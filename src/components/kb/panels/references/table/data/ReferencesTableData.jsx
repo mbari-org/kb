@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import ReferencesPagination from './ReferencesPagination'
@@ -13,6 +13,12 @@ import { PAGINATION } from '@/lib/constants/pagination.js'
 const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
+const DATA_GRID_PROPS = {
+  disableColumnFilter: true,
+  disableColumnMenu: true,
+  disableColumnSorting: true,
+  getRowId: reference => reference.id,
+}
 
 const ReferencesTableData = () => {
   const { filteredReferences } = useFilteredReferences()
@@ -23,28 +29,42 @@ const ReferencesTableData = () => {
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
   const [offset, setOffset] = useState(DEFAULT_OFFSET)
 
-  const displayedReferences = filteredReferences.slice(offset, offset + limit)
+  const displayedReferences = useMemo(
+    () => filteredReferences.slice(offset, offset + limit),
+    [filteredReferences, limit, offset]
+  )
 
   const columns = useReferenceColumns({ editReferenceModal, deleteReferenceModal })
 
-  const nextPage = () => setOffset(prev => prev + limit)
-  const prevPage = () => setOffset(prev => Math.max(0, prev - limit))
-  const goToPage = page => setOffset((page - 1) * limit)
-  const setPageSize = newLimit => {
+  const nextPage = useCallback(() => setOffset(prev => prev + limit), [limit])
+  const prevPage = useCallback(() => setOffset(prev => Math.max(0, prev - limit)), [limit])
+  const goToPage = useCallback(page => setOffset((page - 1) * limit), [limit])
+  const setPageSize = useCallback(newLimit => {
     setLimit(newLimit)
     setOffset(0)
-  }
+  }, [])
 
-  const paginationComponent = (
-    <ReferencesPagination
-      count={filteredReferences.length}
-      limit={limit}
-      nextPage={nextPage}
-      offset={offset}
-      prevPage={prevPage}
-      setPageSize={setPageSize}
-      goToPage={goToPage}
-    />
+  const paginationComponent = useMemo(
+    () => (
+      <ReferencesPagination
+        count={filteredReferences.length}
+        limit={limit}
+        nextPage={nextPage}
+        offset={offset}
+        prevPage={prevPage}
+        setPageSize={setPageSize}
+        goToPage={goToPage}
+      />
+    ),
+    [filteredReferences.length, goToPage, limit, nextPage, offset, prevPage, setPageSize]
+  )
+
+  const paginationModel = useMemo(
+    () => ({
+      page: Math.floor(offset / limit),
+      pageSize: limit,
+    }),
+    [limit, offset]
   )
 
   return (
@@ -52,19 +72,11 @@ const ReferencesTableData = () => {
       columns={columns}
       rows={displayedReferences}
       rowCount={filteredReferences.length}
-      paginationModel={{
-        page: Math.floor(offset / limit),
-        pageSize: limit,
-      }}
+      paginationModel={paginationModel}
       pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
       paginationMode='server'
       paginationComponent={paginationComponent}
-      dataGridProps={{
-        disableColumnFilter: true,
-        disableColumnMenu: true,
-        disableColumnSorting: true,
-        getRowId: reference => reference.id,
-      }}
+      dataGridProps={DATA_GRID_PROPS}
     />
   )
 }

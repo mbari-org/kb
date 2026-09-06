@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { Box, Link } from '@mui/material'
 
 import { CiEdit } from 'react-icons/ci'
@@ -7,7 +9,7 @@ import ActionIcon from '@/components/icon/ActionIcon'
 
 const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       field: 'actions',
       width: 100, headerClassName: 'bold-header',
@@ -85,7 +87,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
       ),
       valueGetter: params => params.join(', ') || '',
     },
-  ]
+  ], [deleteReferenceModal, editReferenceModal])
 
   return columns
 }
