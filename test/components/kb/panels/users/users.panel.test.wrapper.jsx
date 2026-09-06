@@ -15,6 +15,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import UserContext from '@/contexts/user/UserContext'
 
 // Mock user data
@@ -66,6 +67,9 @@ export const UsersPanelTestWrapper = ({ children }) => {
     panels: mockPanelSelect,
     getSelected: useCallback(() => 'Users', []),
     updateSelected: useCallback(() => {}, []),
+  }
+
+  const mockSelectedSettingsValue = {
     settings: {},
     getSettings: () => ({}),
     setSettings: () => {},
@@ -105,11 +109,13 @@ export const UsersPanelTestWrapper = ({ children }) => {
             <ConfigContext.Provider value={mockConfigValue}>
               <UserContext.Provider value={mockUserValue}>
                 <SelectedContext.Provider value={mockSelectedValue}>
-                  <PreferencesContext.Provider value={mockPreferencesValue}>
-                    <RefreshContext.Provider value={mockRefreshValue}>
-                      <PanelDataContext.Provider value={mockPanelDataValue}>{children}</PanelDataContext.Provider>
-                    </RefreshContext.Provider>
-                  </PreferencesContext.Provider>
+                  <SelectedSettingsContext.Provider value={mockSelectedSettingsValue}>
+                    <PreferencesContext.Provider value={mockPreferencesValue}>
+                      <RefreshContext.Provider value={mockRefreshValue}>
+                        <PanelDataContext.Provider value={mockPanelDataValue}>{children}</PanelDataContext.Provider>
+                      </RefreshContext.Provider>
+                    </PreferencesContext.Provider>
+                  </SelectedSettingsContext.Provider>
                 </SelectedContext.Provider>
               </UserContext.Provider>
             </ConfigContext.Provider>

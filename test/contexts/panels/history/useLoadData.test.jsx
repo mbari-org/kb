@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import useLoadData from '@/contexts/panels/history/useLoadData'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { PAGINATION } from '@/lib/constants/pagination'
@@ -38,10 +39,12 @@ const createWrapper = ({
   }
 
   const Wrapper = ({ children }) => (
-    <SelectedContext.Provider value={{ getSelected, getSettings }}>
-      <TaxonomyContext.Provider value={{ getConcept }}>
-        {children}
-      </TaxonomyContext.Provider>
+    <SelectedContext.Provider value={{ getSelected }}>
+      <SelectedSettingsContext.Provider value={{ getSettings }}>
+        <TaxonomyContext.Provider value={{ getConcept }}>
+          {children}
+        </TaxonomyContext.Provider>
+      </SelectedSettingsContext.Provider>
     </SelectedContext.Provider>
   )
 

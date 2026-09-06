@@ -15,6 +15,7 @@ import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContex
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -146,11 +147,14 @@ const TestWrapper = ({ children }) => {
     panels: mockPanelSelect,
     getSelected: mockGetSelected,
     updateSelected: mockUpdateSelected,
+    isLoading: false,
+  }
+
+  const mockSelectedSettingsValue = {
     settings: {},
     getSettings: () => ({}),
     setSettings: () => {},
     updateSettings: () => {},
-    isLoading: false,
   }
 
   const mockConceptModalValue = {
@@ -185,52 +189,54 @@ const TestWrapper = ({ children }) => {
             <TaxonomyContext.Provider value={mockTaxonomyValue}>
               <ConceptModalContext.Provider value={mockConceptModalValue}>
             <SelectedContext.Provider value={mockSelectedValue}>
-              <ConceptContext.Provider
-                value={{
-                  concept,
-                  conceptPath: concept ? [concept.name] : null,
-                  onConceptTreeReady: vi.fn(),
-                  initialState: concept
-                    ? {
-                        author: { value: '', action: 'None' },
-                        deleteConcept: false,
-                        aliases: [],
-                        templates: [],
-                        children: [],
-                        name: { value: concept.name, action: 'None' },
-                        parent: { action: 'None' },
-                        rank: { action: 'None', level: '', name: '' },
-                        realizations: [],
-                        media: [],
-                      }
-                    : null,
-                  isMarineOrganism: false,
-                  isEditing: false,
-                  pending: () => [],
-                }}
-              >
-                <ConceptStagedContext.Provider
+              <SelectedSettingsContext.Provider value={mockSelectedSettingsValue}>
+                <ConceptContext.Provider
                   value={{
-                    stagedState: concept
+                    concept,
+                    conceptPath: concept ? [concept.name] : null,
+                    onConceptTreeReady: vi.fn(),
+                    initialState: concept
                       ? {
-                          name: { value: concept.name, action: 'None' },
-                          parent: { action: 'None' },
                           author: { value: '', action: 'None' },
-                          children: [],
                           deleteConcept: false,
                           aliases: [],
                           templates: [],
+                          children: [],
+                          name: { value: concept.name, action: 'None' },
+                          parent: { action: 'None' },
                           rank: { action: 'None', level: '', name: '' },
                           realizations: [],
                           media: [],
                         }
                       : null,
-                    modifyConcept: vi.fn(),
+                    isMarineOrganism: false,
+                    isEditing: false,
+                    pending: () => [],
                   }}
                 >
-                  {children}
-                </ConceptStagedContext.Provider>
-              </ConceptContext.Provider>
+                  <ConceptStagedContext.Provider
+                    value={{
+                      stagedState: concept
+                        ? {
+                            name: { value: concept.name, action: 'None' },
+                            parent: { action: 'None' },
+                            author: { value: '', action: 'None' },
+                            children: [],
+                            deleteConcept: false,
+                            aliases: [],
+                            templates: [],
+                            rank: { action: 'None', level: '', name: '' },
+                            realizations: [],
+                            media: [],
+                          }
+                        : null,
+                      modifyConcept: vi.fn(),
+                    }}
+                  >
+                    {children}
+                  </ConceptStagedContext.Provider>
+                </ConceptContext.Provider>
+              </SelectedSettingsContext.Provider>
             </SelectedContext.Provider>
             </ConceptModalContext.Provider>
           </TaxonomyContext.Provider>

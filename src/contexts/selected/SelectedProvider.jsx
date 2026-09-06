@@ -1,6 +1,7 @@
 import { use, useCallback, useEffect, useMemo } from 'react'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -67,28 +68,30 @@ const SelectedProvider = ({ children }) => {
     () => ({
       concepts: conceptSelection,
       getSelected,
-      getSettings,
       isLoading,
       panels: panelSelection,
-      settings,
-      setSettings,
       updateSelected,
-      updateSettings: persistUpdateSettings,
     }),
-    [
-      conceptSelection,
-      getSelected,
-      getSettings,
-      isLoading,
-      panelSelection,
-      settings,
-      setSettings,
-      updateSelected,
-      persistUpdateSettings,
-    ]
+    [conceptSelection, getSelected, isLoading, panelSelection, updateSelected]
   )
 
-  return <SelectedContext.Provider value={value}>{children}</SelectedContext.Provider>
+  const settingsValue = useMemo(
+    () => ({
+      getSettings,
+      settings,
+      setSettings,
+      updateSettings: persistUpdateSettings,
+    }),
+    [getSettings, settings, setSettings, persistUpdateSettings]
+  )
+
+  return (
+    <SelectedContext.Provider value={value}>
+      <SelectedSettingsContext.Provider value={settingsValue}>
+        {children}
+      </SelectedSettingsContext.Provider>
+    </SelectedContext.Provider>
+  )
 }
 
 export default SelectedProvider

@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import usePageData from '@/contexts/panels/history/usePageData'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import { getHistory } from '@/lib/api/history'
 import { SELECTED } from '@/lib/constants/selected'
 
@@ -15,9 +15,9 @@ const createWrapper = ({ selectedType }) => {
   }
 
   const Wrapper = ({ children }) => (
-    <SelectedContext.Provider value={{ getSettings }}>
+    <SelectedSettingsContext.Provider value={{ getSettings }}>
       {children}
-    </SelectedContext.Provider>
+    </SelectedSettingsContext.Provider>
   )
   Wrapper.displayName = 'UsePageDataTestWrapper'
   return Wrapper

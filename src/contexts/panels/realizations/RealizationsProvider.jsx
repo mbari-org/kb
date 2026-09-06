@@ -3,6 +3,7 @@ import { use, useEffect, useMemo, useCallback } from 'react'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 
 import dataFilters from '@/contexts/panels/dataFilters'
 import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
@@ -14,7 +15,8 @@ const FILTERS = REALIZATIONS.FILTERS
 const { DEFAULT_FILTERS } = dataFilters(REALIZATIONS.KEY)
 
 const RealizationsProvider = ({ children }) => {
-  const { getSelected, getSettings, updateSettings } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
+  const { getSettings, updateSettings } = use(SelectedSettingsContext)
   const { realizations, refreshData } = use(PanelDataContext)
 
   const realizationsSettings = getSettings(REALIZATIONS.KEY) || {}

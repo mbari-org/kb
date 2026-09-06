@@ -7,7 +7,7 @@ import ConceptTemplate from '@/components/kb/panels/concepts/concept/detail/temp
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { isSame } from '@/lib/model/realization'
@@ -26,7 +26,7 @@ const ConceptTemplates = () => {
   const { concept } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
   const { templates } = use(PanelDataContext)
-  const { getSettings } = use(SelectedContext)
+  const { getSettings } = use(SelectedSettingsContext)
   const { getAncestorNames } = use(TaxonomyContext)
 
   const byAvailable = getSettings(TEMPLATES.KEY, TEMPLATES.BY_AVAILABLE)

@@ -7,6 +7,7 @@ import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContex
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { isStateModified } from '@/lib/concept/state/state'
@@ -40,7 +41,8 @@ const StagedActions = ({ intent }) => {
   const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
   const { closeModal, modalData } = use(ConceptModalContext)
   const { refresh } = use(RefreshContext)
-  const { updateSelected, updateSettings } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
+  const { updateSettings } = use(SelectedSettingsContext)
   const { logout, setGuardedAction } = use(UserContext)
 
   const saveStaged = useSaveStaged()

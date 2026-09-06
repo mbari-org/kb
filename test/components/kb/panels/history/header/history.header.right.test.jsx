@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import HistoryHeaderRight from '@/components/kb/panels/history/header/HistoryHeaderRight'
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import { SELECTED } from '@/lib/constants/selected'
 
 const renderHeaderRight = ({
@@ -14,9 +14,9 @@ const renderHeaderRight = ({
 
   render(
     <HistoryContext.Provider value={{ selectedType }}>
-      <SelectedContext.Provider value={{ updateSettings }}>
+      <SelectedSettingsContext.Provider value={{ updateSettings }}>
         <HistoryHeaderRight />
-      </SelectedContext.Provider>
+      </SelectedSettingsContext.Provider>
     </HistoryContext.Provider>
   )
 

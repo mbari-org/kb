@@ -5,6 +5,7 @@ import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import TemplatesConceptSelectAuxiliary from '@/components/kb/panels/templates/header/TemplatesConceptSelectAuxiliary'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 
@@ -17,7 +18,8 @@ const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
 
 const TemplatesHeaderLeft = () => {
-  const { getSelected, updateSelected, updateSettings } = use(SelectedContext)
+  const { getSelected, updateSelected } = use(SelectedContext)
+  const { updateSettings } = use(SelectedSettingsContext)
   const { getNames } = use(TaxonomyContext)
   const { byAvailable, explicitConcepts, filters, updateFilters } = use(TemplatesContext)
 

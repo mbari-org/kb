@@ -8,6 +8,7 @@ import StampIcon from '@/components/icon/StampIcon'
 import usePendingItemModal from '@/components/kb/panels/history/pending/usePendingItemModal'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import { humanTimestamp } from '@/lib/utils'
@@ -22,7 +23,8 @@ const SORTING_ORDER = ['asc', 'desc']
 
 const useHistoryColumns = ({ type }) => {
   const openPendingItem = usePendingItemModal()
-  const { updateSelected, updateSettings } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
+  const { updateSettings } = use(SelectedSettingsContext)
   const { isAdmin } = use(UserContext)
 
   return useMemo(() => {

@@ -5,7 +5,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import UserContext from '@/contexts/user/UserContext'
 
 const useUpdatesContext = () => {
@@ -14,7 +14,7 @@ const useUpdatesContext = () => {
   const { apiFns } = use(ConfigContext)
   const { getReferences, refreshData: refreshPanelData } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
-  const { getSettings } = use(SelectedContext)
+  const { getSettings } = use(SelectedSettingsContext)
   const { getPreferences, isAdmin, user } = use(UserContext)
 
   return {

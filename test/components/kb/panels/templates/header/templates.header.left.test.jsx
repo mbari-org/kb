@@ -2,6 +2,7 @@ import { act, render } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import TemplatesHeaderLeft from '@/components/kb/panels/templates/header/TemplatesHeaderLeft'
@@ -40,17 +41,19 @@ const renderHeader = ({
 
   render(
     <TaxonomyContext.Provider value={{ getNames }}>
-      <SelectedContext.Provider value={{ getSelected, updateSelected, updateSettings }}>
-        <TemplatesContext.Provider
-          value={{
-            byAvailable,
-            explicitConcepts,
-            filters,
-            updateFilters,
-          }}
-        >
-          <TemplatesHeaderLeft />
-        </TemplatesContext.Provider>
+      <SelectedContext.Provider value={{ getSelected, updateSelected }}>
+        <SelectedSettingsContext.Provider value={{ updateSettings }}>
+          <TemplatesContext.Provider
+            value={{
+              byAvailable,
+              explicitConcepts,
+              filters,
+              updateFilters,
+            }}
+          >
+            <TemplatesHeaderLeft />
+          </TemplatesContext.Provider>
+        </SelectedSettingsContext.Provider>
       </SelectedContext.Provider>
     </TaxonomyContext.Provider>
   )

@@ -19,6 +19,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import RefreshContext from '@/contexts/refresh/RefreshContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -299,11 +300,14 @@ export const ConceptPanelTestWrapper = ({
     panels: mockPanelSelect,
     getSelected: mockGetSelected,
     updateSelected: mockUpdateSelected,
+    isLoading: false,
+  }
+
+  const mockSelectedSettingsValue = {
     settings: selectedSettings,
     getSettings: mockGetSettings,
     setSettings: mockSetSettings,
     updateSettings: mockUpdateSettings,
-    isLoading: false,
   }
 
   const mockAppModalValue = {
@@ -355,30 +359,32 @@ export const ConceptPanelTestWrapper = ({
                     <TaxonomyContext.Provider value={mockTaxonomyValue}>
                       <ConceptModalProvider>
                         <SelectedContext.Provider value={mockSelectedValue}>
-                          <ConceptContext.Provider
-                            value={{
-                              concept,
-                              conceptPath: concept ? [concept.name] : null,
-                              onConceptTreeReady: vi.fn(),
-                              initialState,
-                              isMarineOrganism: false,
-                              isPhylogenyRoot,
-                              isEditing,
-                              setEditing,
-                              pending: () => [],
-                            }}
-                          >
-                            <ConceptStagedContext.Provider
+                          <SelectedSettingsContext.Provider value={mockSelectedSettingsValue}>
+                            <ConceptContext.Provider
                               value={{
-                                stagedState,
-                                modifyConcept,
-                                confirmReset,
+                                concept,
+                                conceptPath: concept ? [concept.name] : null,
+                                onConceptTreeReady: vi.fn(),
+                                initialState,
+                                isMarineOrganism: false,
+                                isPhylogenyRoot,
+                                isEditing,
+                                setEditing,
+                                pending: () => [],
                               }}
                             >
-                              {children}
-                              <ConceptModalRenderer />
-                            </ConceptStagedContext.Provider>
-                          </ConceptContext.Provider>
+                              <ConceptStagedContext.Provider
+                                value={{
+                                  stagedState,
+                                  modifyConcept,
+                                  confirmReset,
+                                }}
+                              >
+                                {children}
+                                <ConceptModalRenderer />
+                              </ConceptStagedContext.Provider>
+                            </ConceptContext.Provider>
+                          </SelectedSettingsContext.Provider>
                         </SelectedContext.Provider>
                       </ConceptModalProvider>
                     </TaxonomyContext.Provider>

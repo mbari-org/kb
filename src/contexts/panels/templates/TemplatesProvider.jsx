@@ -5,6 +5,7 @@ import { TemplatesModalProvider } from './modal'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useLoadConceptError from '@/lib/hooks/useLoadConceptError'
@@ -25,7 +26,8 @@ const TemplatesProvider = ({ children }) => {
   const isLoadingConcept = useRef(false)
 
   const { clearTemplateFilters, explicitConcepts, setClearTemplateFilters, templates } = use(PanelDataContext)
-  const { getSelected, getSettings, updateSettings } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
+  const { getSettings, updateSettings } = use(SelectedSettingsContext)
   const { getAncestorNames, isConceptLoaded, loadConcept } = use(TaxonomyContext)
 
   const handleLoadConceptError = useLoadConceptError()

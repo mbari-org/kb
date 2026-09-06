@@ -5,6 +5,7 @@ import { MdOutlineDeleteForever } from 'react-icons/md'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import TemplateCell from './TemplateCell'
 
@@ -15,7 +16,8 @@ const { TEMPLATES } = SELECTED.SETTINGS
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
   const { updateFilters } = use(TemplatesContext)
-  const { updateSelected, updateSettings } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
+  const { updateSettings } = use(SelectedSettingsContext)
 
   const columns = useMemo(() => [
     {

@@ -8,6 +8,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -32,7 +33,8 @@ const DeleteConceptActions = () => {
   const { getReferences, realizations, refreshData: refreshPanelData, setClearTemplateFilters, templates } =
     use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
-  const { settings, updateSelected } = use(SelectedContext)
+  const { updateSelected } = use(SelectedContext)
+  const { settings } = use(SelectedSettingsContext)
   const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
   const { getPreferences } = use(UserContext)
 

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import UserContext from '@/contexts/user/UserContext'
 import { ROLES } from '@/lib/constants/roles'
 import { SELECTED } from '@/lib/constants/selected'
@@ -36,8 +37,10 @@ const createWrapper = ({ role = ROLES.ADMIN } = {}) => {
 
   const Wrapper = ({ children }) => (
     <UserContext.Provider value={{ isAdmin: role === ROLES.ADMIN, user: { role } }}>
-      <SelectedContext.Provider value={{ updateSelected, updateSettings }}>
-        {children}
+      <SelectedContext.Provider value={{ updateSelected }}>
+        <SelectedSettingsContext.Provider value={{ updateSettings }}>
+          {children}
+        </SelectedSettingsContext.Provider>
       </SelectedContext.Provider>
     </UserContext.Provider>
   )

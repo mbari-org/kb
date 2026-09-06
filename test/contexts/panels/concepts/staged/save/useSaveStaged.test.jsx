@@ -8,6 +8,7 @@ import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContex
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import PreferencesContext from '@/contexts/preferences/PreferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
@@ -96,18 +97,20 @@ describe('useSaveStaged', () => {
         <ConfigContext.Provider value={{ apiFns }}>
           <PanelDataContext.Provider value={{ getReferences: vi.fn(), refreshData }}>
             <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
-              <SelectedContext.Provider value={{ getSettings: vi.fn(() => ({})), updateSelected }}>
-                <TaxonomyContext.Provider value={{ conceptEditsRefresh }}>
-                    <ConceptModalContext.Provider value={{ closeModal, withProcessing }}>
-                      <ConceptContext.Provider
-                        value={{ concept: staleConcept, initialState: {}, setConcept, setEditing }}
-                      >
-                        <ConceptStagedContext.Provider value={{ stagedState: {} }}>
-                          {children}
-                        </ConceptStagedContext.Provider>
-                      </ConceptContext.Provider>
-                    </ConceptModalContext.Provider>
-                </TaxonomyContext.Provider>
+              <SelectedContext.Provider value={{ updateSelected }}>
+                <SelectedSettingsContext.Provider value={{ getSettings: vi.fn(() => ({})) }}>
+                  <TaxonomyContext.Provider value={{ conceptEditsRefresh }}>
+                      <ConceptModalContext.Provider value={{ closeModal, withProcessing }}>
+                        <ConceptContext.Provider
+                          value={{ concept: staleConcept, initialState: {}, setConcept, setEditing }}
+                        >
+                          <ConceptStagedContext.Provider value={{ stagedState: {} }}>
+                            {children}
+                          </ConceptStagedContext.Provider>
+                        </ConceptContext.Provider>
+                      </ConceptModalContext.Provider>
+                  </TaxonomyContext.Provider>
+                </SelectedSettingsContext.Provider>
               </SelectedContext.Provider>
             </PreferencesContext.Provider>
           </PanelDataContext.Provider>

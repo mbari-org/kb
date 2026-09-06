@@ -3,6 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { getConceptHistory, getHistoryCount } from '@/lib/api/history'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { getDescendantNames } from '@/lib/model/concept'
 
@@ -21,7 +22,8 @@ const { HISTORY } = SETTINGS
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
 const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
-  const { getSelected, getSettings } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
+  const { getSettings } = use(SelectedSettingsContext)
   const { getConcept } = use(TaxonomyContext)
 
   const selectedConcept = getSelected(SELECTED_CONCEPT)

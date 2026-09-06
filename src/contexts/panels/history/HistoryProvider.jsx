@@ -4,6 +4,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import HistoryContext from './HistoryContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
 import CONFIG from '@/lib/config'
@@ -30,7 +31,8 @@ const HistoryProvider = ({ children }) => {
   const { beginProcessing } = use(AppModalContext)
   const { apiFns } = use(ConfigContext)
   const { pendingHistory } = use(PanelDataContext)
-  const { getSelected, getSettings } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
+  const { getSettings } = use(SelectedSettingsContext)
 
   const activePanel = getSelected(PANEL)
   const selectedConcept = getSelected(SELECTED_CONCEPT)

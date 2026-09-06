@@ -2,7 +2,7 @@ import { use, useCallback } from 'react'
 
 import { getHistory } from '@/lib/api/history'
 
-import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 
 import { CONCEPT } from '@/lib/constants'
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -15,7 +15,7 @@ const usePageData = ({
   conceptState,
   pageState,
 }) => {
-  const { getSettings } = use(SelectedContext)
+  const { getSettings } = use(SelectedSettingsContext)
 
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
 

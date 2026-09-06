@@ -3,6 +3,7 @@ import { use, useCallback, useEffect } from 'react'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 
 import { ReferencesModalProvider } from './modal'
 import dataFilters from '@/contexts/panels/dataFilters'
@@ -17,7 +18,8 @@ const { DEFAULT_FILTERS } = dataFilters(REFERENCES.KEY)
 
 export const ReferencesProvider = ({ children }) => {
   const { setReferences } = use(PanelDataContext)
-  const { getSelected, getSettings, updateSettings } = use(SelectedContext)
+  const { getSelected } = use(SelectedContext)
+  const { getSettings, updateSettings } = use(SelectedSettingsContext)
   const selectedPanel = getSelected(SELECTED.PANEL)
   const selectedConcept = getSelected(SELECTED.CONCEPT)
   const isReferencesPanelSelected = selectedPanel === SELECTED.PANELS.REFERENCES
