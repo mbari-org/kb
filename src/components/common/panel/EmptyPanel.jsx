@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
-import PanelHeaderTitle from '@/components/common/panel/PanelHeaderTitle'
-import usePanelFactory from '@/components/common/panel/usePanelFactory'
+import PanelHeaderTitle from './PanelHeaderTitle'
+import usePanelFactory from './usePanelFactory'
 
 const EmptyPanel = ({ title }) => {
   const { createPanelHeader } = usePanelFactory()
