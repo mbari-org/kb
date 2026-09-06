@@ -1,4 +1,4 @@
-import { use, useMemo, useRef } from 'react'
+import { use, useCallback, useMemo, useRef } from 'react'
 import { Stack } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
@@ -51,38 +51,99 @@ const ConceptSelect = ({
     return baseOptions
   }, [getNames, includeSpecialOptions, selectables])
 
-  const handleConceptSelect = selectedName => {
-    if (selectedName) {
-      const isSpecialSelection = includeSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName)
-      const isValidSelection = options.includes(selectedName) || isSpecialSelection
+  const handleConceptSelect = useCallback(
+    selectedName => {
+      if (selectedName) {
+        const isSpecialSelection = includeSpecialOptions && CONFIG.CONCEPT.TO_SPECIAL.includes(selectedName)
+        const isValidSelection = options.includes(selectedName) || isSpecialSelection
 
-      if (isValidSelection) {
-        const conceptName = isSpecialSelection ? selectedName : getConceptPrimaryName(selectedName) || selectedName
-        const doSelection = doConceptSelected ? doConceptSelected(conceptName) : true
-        if (doSelection && updateConceptSelected) {
-          updateSelected({ concept: conceptName })
+        if (isValidSelection) {
+          const conceptName = isSpecialSelection ? selectedName : getConceptPrimaryName(selectedName) || selectedName
+          const doSelection = doConceptSelected ? doConceptSelected(conceptName) : true
+          if (doSelection && updateConceptSelected) {
+            updateSelected({ concept: conceptName })
+          }
         }
+      } else {
+        onClear ? onClear() : doConceptSelected?.(null)
       }
-    } else {
-      onClear ? onClear() : doConceptSelected?.(null)
-    }
-  }
+    },
+    [
+      doConceptSelected,
+      getConceptPrimaryName,
+      includeSpecialOptions,
+      onClear,
+      options,
+      updateConceptSelected,
+      updateSelected,
+    ]
+  )
 
-  const handleKeyUp = event => {
-    if (event.key === 'Enter') {
+  const handleKeyUp = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        const selectedName = event.target.value.trim()
+        handleConceptSelect(selectedName)
+        const inputField = inputRef.current?.querySelector('input')
+        keepFocus ? inputField?.focus() : inputField?.blur()
+      }
+    },
+    [handleConceptSelect, keepFocus]
+  )
+
+  const handleBlur = useCallback(
+    event => {
       const selectedName = event.target.value.trim()
+      if (selectedName !== '') {
+        handleConceptSelect(selectedName)
+      }
+      onInputBlur?.(event)
+    },
+    [handleConceptSelect, onInputBlur]
+  )
+
+  const handleChange = useCallback(
+    (_event, selectedName, reason) => {
+      if (ignoreClearSelection && reason === 'clear') {
+        return
+      }
       handleConceptSelect(selectedName)
-      const inputField = inputRef.current?.querySelector('input')
-      keepFocus ? inputField?.focus() : inputField?.blur()
-    }
-  }
-  const handleBlur = event => {
-    const selectedName = event.target.value.trim()
-    if (selectedName !== '') {
-      handleConceptSelect(selectedName)
-    }
-    onInputBlur?.(event)
-  }
+    },
+    [handleConceptSelect, ignoreClearSelection]
+  )
+
+  const renderInput = useCallback(
+    params => (
+      <TextField
+        {...params}
+        disabled={disabled}
+        sx={{
+          backgroundColor: disabled ? 'action.disabledBackground' : theme.palette.primary.pale,
+          '& .MuiInputBase-input.Mui-disabled': {
+            WebkitTextFillColor: theme.palette.text.disabled,
+          },
+        }}
+        onBlur={handleBlur}
+        onKeyUp={handleKeyUp}
+      />
+    ),
+    [disabled, handleBlur, handleKeyUp, theme]
+  )
+
+  const slotProps = useMemo(
+    () => ({
+      paper: {
+        sx: {
+          '& .MuiAutocomplete-listbox': {
+            '& .MuiAutocomplete-option': {
+              backgroundColor: theme.palette.primary.light,
+            },
+          },
+        },
+      },
+    }),
+    [theme]
+  )
 
   return (
     <Stack spacing={0} sx={{ width }}>
@@ -90,41 +151,13 @@ const ConceptSelect = ({
       <Autocomplete
         disabled={disabled}
         filterOptions={filterConceptOptions}
-        onChange={(_event, selectedName, reason) => {
-          if (ignoreClearSelection && reason === 'clear') {
-            return
-          }
-          handleConceptSelect(selectedName)
-        }}
+        onChange={handleChange}
         onInputChange={onInputChange}
         options={options}
         ref={inputRef}
-        renderInput={params => (
-          <TextField
-            {...params}
-            disabled={disabled}
-            sx={{
-              backgroundColor: disabled ? 'action.disabledBackground' : theme.palette.primary.pale,
-              '& .MuiInputBase-input.Mui-disabled': {
-                WebkitTextFillColor: theme.palette.text.disabled,
-              },
-            }}
-            onBlur={handleBlur}
-            onKeyUp={handleKeyUp}
-          />
-        )}
+        renderInput={renderInput}
         size='small'
-        slotProps={{
-          paper: {
-            sx: {
-              '& .MuiAutocomplete-listbox': {
-                '& .MuiAutocomplete-option': {
-                  backgroundColor: theme.palette.primary.light,
-                },
-              },
-            },
-          },
-        }}
+        slotProps={slotProps}
         inputValue={inputValue}
         value={conceptName || ''}
       />
