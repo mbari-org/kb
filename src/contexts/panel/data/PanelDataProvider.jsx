@@ -86,6 +86,24 @@ export const PanelDataProvider = ({ children }) => {
 
       try {
         switch (type) {
+          case 'startup': {
+            const [referencesData, templatesData, pendingHistoryData] = await withLoadTimeout(
+              Promise.all([loadReferences(), loadTemplates(), loadPendingHistory()])
+            )
+            const explicitConceptsData = calcExplicitConcepts(templatesData)
+
+            setReferences(referencesData)
+            setTemplates(templatesData)
+            setPendingHistory(pendingHistoryData)
+            setExplicitConcepts(explicitConceptsData)
+
+            return {
+              references: referencesData,
+              templates: templatesData,
+              pendingHistory: pendingHistoryData,
+              explicitConcepts: explicitConceptsData,
+            }
+          }
           case 'all': {
             const [referencesData, realizationsData, templatesData, pendingHistoryData] = await withLoadTimeout(
               Promise.all([loadReferences(), loadRealizations(), loadTemplates(), loadPendingHistory()])
@@ -143,7 +161,7 @@ export const PanelDataProvider = ({ children }) => {
   useEffect(() => {
     if (!apiFns) return
     const timeoutId = globalThis.setTimeout(() => {
-      refreshData().catch(showBoundary)
+      refreshData('startup').catch(showBoundary)
     }, 0)
     return () => globalThis.clearTimeout(timeoutId)
   }, [apiFns, refreshData, showBoundary])

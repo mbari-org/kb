@@ -5,6 +5,7 @@ import { PAGINATION } from '@/lib/constants/pagination.js'
 
 const { REALIZATIONS } = PAGINATION
 const LOAD_PAGE_SIZE = Math.max(...REALIZATIONS.PAGE_SIZE_OPTIONS)
+const LOAD_BATCH_SIZE = 5
 const asString = value => {
   if (typeof value === 'string') {
     return value
@@ -44,19 +45,31 @@ const useLoadRealizations = apiFns => {
     let offset = 0
 
     while (true) {
-      const pagePayload = await apiFns.apiPayload(getRealizations, {
-        limit: LOAD_PAGE_SIZE,
-        offset,
-      })
-      const page = normalizeRealizations(pagePayload)
-      if (page.length === 0) {
-        break
+      const batch = await Promise.all(
+        Array.from({ length: LOAD_BATCH_SIZE }, (_, i) =>
+          apiFns.apiPayload(getRealizations, {
+            limit: LOAD_PAGE_SIZE,
+            offset: offset + i * LOAD_PAGE_SIZE,
+          })
+        )
+      )
+
+      let exhausted = false
+      for (const pagePayload of batch) {
+        const page = normalizeRealizations(pagePayload)
+        if (page.length === 0) {
+          exhausted = true
+          break
+        }
+        allPages.push(...page)
+        if (page.length < LOAD_PAGE_SIZE) {
+          exhausted = true
+          break
+        }
       }
-      allPages.push(...page)
-      if (page.length < LOAD_PAGE_SIZE) {
-        break
-      }
-      offset += LOAD_PAGE_SIZE
+      if (exhausted) break
+
+      offset += LOAD_BATCH_SIZE * LOAD_PAGE_SIZE
     }
 
     const allRealizations = allPages
