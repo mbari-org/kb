@@ -37,7 +37,7 @@ const ConceptProvider = ({ children }) => {
   const processingCountRef = useRef(0)
   const pendingTreeStopRef = useRef(null)
   const pendingTreeTimeoutRef = useRef(null)
-  const previousConceptNameRef = useRef(null)
+  const previousConceptKeyRef = useRef(null)
 
   const { apiFns, phylogenyRoot } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
@@ -287,16 +287,17 @@ const ConceptProvider = ({ children }) => {
     if (!concept || !apiFns) {
       // Reset ref when concept is cleared
       if (!concept) {
-        previousConceptNameRef.current = null
+        previousConceptKeyRef.current = null
       }
       return
     }
 
-    // Only fetch concept path if the concept name has actually changed
-    if (previousConceptNameRef.current === concept.name) {
+    // Only fetch concept path when the concept's position in the tree changes
+    const conceptKey = `${concept.name}|${concept.parent}`
+    if (previousConceptKeyRef.current === conceptKey) {
       return
     }
-    previousConceptNameRef.current = concept.name
+    previousConceptKeyRef.current = conceptKey
 
     // Clear any prior pending tree stop/timeout
     if (pendingTreeStopRef.current) {

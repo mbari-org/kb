@@ -5,7 +5,6 @@ import { getConcept, normalizeConcept } from '@/lib/api/concept'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
-import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
@@ -24,8 +23,7 @@ const { PROCESSING } = CONFIG
 const useSaveStaged = () => {
   const { initialState, setConcept, setEditing } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
-  const { closeModal } = use(ConceptModalContext)
-  const { withProcessing } = use(ConceptModalProcessingContext)
+  const { closeModal, withProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh } = use(TaxonomyContext)
 
