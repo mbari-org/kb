@@ -36,10 +36,6 @@ const LoginForm = ({ isVisible = true }) => {
     }
   }, [isVisible])
 
-  if (!isVisible) {
-    return null
-  }
-
   return (
     <Box component='form' action={loginAction}>
       <Card sx={{ bgcolor: 'transparent' }}>

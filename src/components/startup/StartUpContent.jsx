@@ -23,12 +23,12 @@ const StartUpContent = ({ configIsDirty, handleConfigChange }) => {
       <ConfigForm configIsDirty={configIsDirty} setConfigIsDirty={handleConfigChange} />
       <Box
         sx={{
-          minHeight: '300px',
           opacity: configIsDirty ? 0 : 1,
           transition: 'opacity 300ms ease-out',
+          visibility: configIsDirty ? 'hidden' : 'visible',
         }}
       >
-        <ReadOnlyLogin isVisible={!configIsDirty} />
+        <ReadOnlyLogin />
         <LoginForm isVisible={!configIsDirty} />
       </Box>
       <StartUpVersion />
