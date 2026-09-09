@@ -1,9 +1,54 @@
-import { memo } from 'react'
-import { Box } from '@mui/material'
+import { memo, useEffect, useState } from 'react'
+import { Box, CircularProgress } from '@mui/material'
 
 const DATA_GRID_PANELS = ['References', 'History', 'Templates', 'Users']
 
-const Panel = memo(({ panelComponent, name, isActive, hasBeenMounted }) => {
+const FALLBACK_SX = {
+  alignItems: 'center',
+  display: 'flex',
+  height: '100%',
+  justifyContent: 'center',
+}
+
+const loadedPanels = new Map()
+
+const LazyPanel = ({ load }) => {
+  const [Component, setComponent] = useState(() => loadedPanels.get(load) ?? null)
+  const [loadError, setLoadError] = useState(null)
+
+  useEffect(() => {
+    if (Component) return
+
+    let cancelled = false
+    load()
+      .then(mod => {
+        loadedPanels.set(load, mod.default)
+        if (!cancelled) setComponent(() => mod.default)
+      })
+      .catch(error => {
+        if (!cancelled) setLoadError(error)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [Component, load])
+
+  if (loadError) {
+    throw loadError
+  }
+
+  if (!Component) {
+    return (
+      <Box sx={FALLBACK_SX}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  return <Component />
+}
+
+const Panel = memo(({ load, name, isActive, hasBeenMounted }) => {
   const isDataGridPanel = DATA_GRID_PANELS.includes(name)
 
   const shouldRender = isActive || hasBeenMounted
@@ -25,7 +70,7 @@ const Panel = memo(({ panelComponent, name, isActive, hasBeenMounted }) => {
         width: '100%',
       }}
     >
-      {shouldRender && panelComponent()}
+      {shouldRender && <LazyPanel load={load} />}
     </Box>
   )
 })

@@ -32,12 +32,12 @@ const Panels = () => {
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
       <PanelModalProvider>
-        {panelMods.map(({ module: PanelComponent, name }) => (
+        {panelMods.map(({ load, name }) => (
           <Panel
             key={name}
             hasBeenMounted={mountedPanels.has(name)}
             isActive={activePanel === name}
-            panelComponent={PanelComponent}
+            load={load}
             name={name}
           />
         ))}
