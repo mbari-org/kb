@@ -1,6 +1,6 @@
-import { use, useCallback, useEffect, useMemo, useState } from 'react'
+import { use, useCallback, useMemo, useState } from 'react'
 
-import { getHistory, getHistoryCount } from '@/lib/api/history'
+import { getHistory } from '@/lib/api/history'
 
 import createAppModal from '@/components/modal/app/createAppModal'
 import ExportCompleteActions from '@/components/kb/export/ExportCompleteActions'
@@ -148,16 +148,12 @@ const useHistoryExport = () => {
     return historyItems.map(item => rowData(item, selectedType))
   }
 
-  const getEstimatedPages = useCallback(async () => {
-    if (selectedType === TYPE.CONCEPT && selectedConcept && conceptData) {
-      return null
-    }
-    const totalCount = await apiFns.apiResult(getHistoryCount, selectedType)
-    return totalCount ? Math.ceil(totalCount / EXPORT_PAGE_SIZE) : '?'
-  }, [apiFns, conceptData, selectedConcept, selectedType])
-
   const isConceptExport = selectedType === TYPE.CONCEPT && selectedConcept && conceptData
-  const [estimatedPages, setEstimatedPages] = useState(null)
+  const estimatedPages = isConceptExport
+    ? null
+    : conceptState.count
+      ? Math.ceil(conceptState.count / EXPORT_PAGE_SIZE)
+      : '?'
 
   const suggestName = useCallback(() => {
     if (selectedType === TYPE.CONCEPT) {
@@ -166,12 +162,6 @@ const useHistoryExport = () => {
     }
     return `KB-History-${capitalize(selectedType)}.csv`
   }, [selectedType, selectedConcept, conceptExtent])
-
-  useEffect(() => {
-    if (!isConceptExport) {
-      getEstimatedPages().then(setEstimatedPages)
-    }
-  }, [getEstimatedPages, isConceptExport, selectedType])
 
   const onProgress = useCallback(
     value => {
