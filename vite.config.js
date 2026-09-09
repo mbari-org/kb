@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(dirname, './src'),
+        ...(mode === 'profiling' && { 'react-dom/client': 'react-dom/profiling' }),
       },
     },
     server: {
