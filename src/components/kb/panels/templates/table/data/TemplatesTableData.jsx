@@ -1,4 +1,5 @@
 import { use, useCallback, useMemo, useState } from 'react'
+import { useTheme } from '@mui/material/styles'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import TemplatesPagination from './TemplatesPagination'
@@ -14,7 +15,8 @@ import { PAGINATION } from '@/lib/constants/pagination.js'
 const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.TEMPLATES
 
 const TemplatesTableData = () => {
-  const { filteredTemplates } = use(TemplatesContext)
+  const theme = useTheme()
+  const { filteredTemplates, getPendingTemplateAction } = use(TemplatesContext)
 
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
@@ -56,15 +58,36 @@ const TemplatesTableData = () => {
     [currentPageClamped, pageSize]
   )
 
+  const dataGridProps = useMemo(
+    () => ({
+      getRowClassName: params => {
+        const action = getPendingTemplateAction(params.row)
+        return action ? `pending-template-${action.toLowerCase()}` : ''
+      },
+    }),
+    [getPendingTemplateAction]
+  )
+
+  const pendingRowSx = useMemo(
+    () => ({
+      '& .pending-template-add': { border: `2px solid ${theme.palette.primary.add}` },
+      '& .pending-template-delete': { border: `2px solid ${theme.palette.primary.remove}` },
+      '& .pending-template-edit': { border: `2px solid ${theme.palette.primary.edit}` },
+    }),
+    [theme]
+  )
+
   return (
     <PanelDataGrid
       columns={columns}
+      dataGridProps={dataGridProps}
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       paginationComponent={paginationComponent}
       paginationMode='client'
       paginationModel={paginationModel}
       rowCount={filteredTemplates.length}
       rows={filteredTemplates}
+      sx={pendingRowSx}
     />
   )
 }

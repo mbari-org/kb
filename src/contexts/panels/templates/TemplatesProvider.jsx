@@ -16,7 +16,10 @@ import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
+import { ACTION } from '@/lib/constants'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { SELECTED } from '@/lib/constants/selected.js'
+import { matchingTemplateString } from '@/lib/model/templates'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const FILTERS = TEMPLATES.FILTERS
@@ -25,7 +28,8 @@ const { DEFAULT_FILTERS } = dataFilters(TEMPLATES.KEY)
 const TemplatesProvider = ({ children }) => {
   const isLoadingConcept = useRef(false)
 
-  const { clearTemplateFilters, explicitConcepts, setClearTemplateFilters, templates } = use(PanelDataContext)
+  const { clearTemplateFilters, explicitConcepts, pendingHistory, setClearTemplateFilters, templates } =
+    use(PanelDataContext)
   const { getSelected } = use(SelectedContext)
   const { getSettings, updateSettings } = use(SelectedSettingsContext)
   const { getAncestorNames, isConceptLoaded, loadConcept } = use(TaxonomyContext)
@@ -51,6 +55,19 @@ const TemplatesProvider = ({ children }) => {
 
   const { addTemplate, editTemplate, deleteTemplate } = useModifyTemplates()
 
+  const getPendingTemplateAction = useCallback(
+    template => {
+      const pendingItem = pendingHistory.find(
+        item =>
+          item.field === HISTORY_FIELD.TEMPLATE &&
+          item.concept === template.concept &&
+          matchingTemplateString(template, item.action === ACTION.DELETE ? item.oldValue : item.newValue)
+      )
+      return pendingItem?.action ?? null
+    },
+    [pendingHistory]
+  )
+
   useEffect(() => {
     if (isInitialConceptFilterPending) {
       updateFilters({ [FILTERS.CONCEPT]: selectedConcept })
@@ -61,10 +78,10 @@ const TemplatesProvider = ({ children }) => {
     if (!templates || templates.length === 0) return []
     if (isInitialConceptFilterPending) return []
 
+    const concept = filters[FILTERS.CONCEPT]
     const linkName = filters[FILTERS.LINK_NAME]
     const toConcept = filters[FILTERS.TO_CONCEPT]
     const linkValue = filters[FILTERS.LINK_VALUE]
-    const concept = filters[FILTERS.CONCEPT]
 
     if (!concept) {
       return filterTemplates(templates, { linkName, toConcept, linkValue })
@@ -122,6 +139,7 @@ const TemplatesProvider = ({ children }) => {
       filteredTemplates,
       filters,
       filterString,
+      getPendingTemplateAction,
       setByAvailable,
       updateFilters,
     }),
@@ -134,6 +152,7 @@ const TemplatesProvider = ({ children }) => {
       filteredTemplates,
       filters,
       filterString,
+      getPendingTemplateAction,
       setByAvailable,
       updateFilters,
     ]

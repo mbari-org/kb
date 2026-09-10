@@ -15,7 +15,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
-  const { updateFilters } = use(TemplatesContext)
+  const { getPendingTemplateAction, updateFilters } = use(TemplatesContext)
   const { updateSelected } = use(SelectedContext)
   const { updateSettings } = use(SelectedSettingsContext)
 
@@ -26,25 +26,26 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       width: 100,
       sortable: false,
       headerClassName: 'bold-header',
-      renderCell: params => (
-        <Box>
-          <ActionIcon
-            color='cancel'
-            Icon={MdOutlineDeleteForever}
-            onClick={() => deleteTemplateModal(params.row)}
-            restrictReadOnly
-            size={24}
-            sx={{ mr: 1 }}
-          />
-          <ActionIcon
-            color='edit'
-            Icon={CiEdit}
-            onClick={() => editTemplateModal(params.row)}
-            restrictReadOnly
-            size={24}
-          />
-        </Box>
-      ),
+      renderCell: params =>
+        getPendingTemplateAction(params.row) ? null : (
+          <Box>
+            <ActionIcon
+              color='cancel'
+              Icon={MdOutlineDeleteForever}
+              onClick={() => deleteTemplateModal(params.row)}
+              restrictReadOnly
+              size={24}
+              sx={{ mr: 1 }}
+            />
+            <ActionIcon
+              color='edit'
+              Icon={CiEdit}
+              onClick={() => editTemplateModal(params.row)}
+              restrictReadOnly
+              size={24}
+            />
+          </Box>
+        ),
     },
     {
       field: 'concept',
@@ -89,7 +90,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },
-  ], [deleteTemplateModal, editTemplateModal, updateFilters, updateSelected, updateSettings])
+  ], [deleteTemplateModal, editTemplateModal, getPendingTemplateAction, updateFilters, updateSelected, updateSettings])
 
   return columns
 }
