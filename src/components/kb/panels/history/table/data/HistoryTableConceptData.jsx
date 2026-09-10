@@ -1,4 +1,4 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useMemo } from 'react'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
 import HistoryPagination from './HistoryPagination'
@@ -18,45 +18,17 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
     prevPage,
     selectedType,
     setPageSize,
-    updatePageState,
     pageState,
   } = use(HistoryContext)
 
   const { limit, offset, sortField, sortOrder } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
-  const effectiveSortField = sortField === 'concept' ? 'creationTimestamp' : sortField
-
   const rows = conceptState.data
 
   const sortModel = useMemo(
-    () => [{ field: effectiveSortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
-    [effectiveSortField, sortOrder]
-  )
-
-  const onSortModelChange = useCallback(
-    model => {
-      const item = model[0]
-      if (!item?.field || !item?.sort) return
-
-      if (
-        item.field !== 'creationTimestamp' &&
-        item.field !== 'field' &&
-        item.field !== 'action' &&
-        item.field !== 'creatorName' &&
-        item.field !== 'oldValue' &&
-        item.field !== 'newValue' &&
-        item.field !== 'processorName' &&
-        item.field !== 'processedTimestamp'
-      ) {
-        return
-      }
-
-      if (sortField === item.field && sortOrder === item.sort) return
-
-      updatePageState({ sortField: item.field, sortOrder: item.sort, offset: 0 })
-    },
-    [sortField, sortOrder, updatePageState]
+    () => [{ field: sortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
+    [sortField, sortOrder]
   )
 
   const paginationComponent = useMemo(
@@ -78,11 +50,11 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
   const dataGridProps = useMemo(
     () => ({
       disableColumnFilter: true,
-      onSortModelChange,
+      disableColumnSorting: true,
       sortModel,
       sortingMode: 'client',
     }),
-    [onSortModelChange, sortModel]
+    [sortModel]
   )
 
   const paginationModel = useMemo(

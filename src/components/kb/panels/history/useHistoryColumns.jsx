@@ -19,8 +19,6 @@ import { CONCEPT } from '@/lib/constants'
 const { TYPE } = CONCEPT.HISTORY
 const { HISTORY } = SELECTED.SETTINGS
 
-const SORTING_ORDER = ['asc', 'desc']
-
 const useHistoryColumns = ({ type }) => {
   const openPendingItem = usePendingItemModal()
   const { updateSelected } = use(SelectedContext)
@@ -39,28 +37,12 @@ const useHistoryColumns = ({ type }) => {
       updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: TYPE.CONCEPT } })
     }
 
-    const sortableFields = [
-      'action',
-      ...(type === TYPE.PENDING ? ['concept'] : []),
-      'creationTimestamp',
-      'creatorName',
-      'field',
-      'newValue',
-      'oldValue',
-      ...(type !== TYPE.PENDING ? ['processedTimestamp', 'processorName'] : []),
-    ]
-
-    const sortableProps = field =>
-      sortableFields.includes(field)
-        ? { sortable: true, sortingOrder: SORTING_ORDER }
-        : { sortable: false }
-
     const columnProps = (field, headerName, width) => ({
       field,
       headerClassName: 'bold-header',
       headerName,
+      sortable: false,
       width,
-      ...sortableProps(field),
     })
 
     const approvedCell = params => {

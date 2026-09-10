@@ -89,13 +89,6 @@ const HistoryProvider = ({ children }) => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
 
-      if (selectedType === TYPE.APPROVED) {
-        setPageState(prev => {
-          if (prev.sortField !== 'concept') return prev
-          return { ...prev, offset: 0, sortField: 'creationTimestamp' }
-        })
-      }
-
       if (selectedType !== TYPE.CONCEPT) {
         updatePageState({ lastHistoryType: selectedType })
       }
@@ -160,24 +153,9 @@ const HistoryProvider = ({ children }) => {
     updatePageState,
   })
 
-  const handleSortChange = useCallback(
-    (sortField, sortOrder) => {
-      if (selectedType === TYPE.CONCEPT) return
-
-      setPageState(prev => {
-        if (prev.sortField === sortField && prev.sortOrder === sortOrder) {
-          return prev
-        }
-        return { ...prev, sortField, sortOrder, offset: 0 }
-      })
-    },
-    [selectedType]
-  )
-
   const value = {
     conceptState,
     pageState,
-    handleSortChange,
     nextPage,
     prevPage,
     goToPage,
