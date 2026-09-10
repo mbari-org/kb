@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { getRealizations } from '@/lib/api/realizations'
+import { getConceptLinkRealizations, getRealizations } from '@/lib/api/realizations'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 
 const { REALIZATIONS } = PAGINATION
@@ -40,44 +40,51 @@ const normalizeRealizations = payload => {
 }
 
 const useLoadRealizations = apiFns => {
-  const loadRealizations = useCallback(async () => {
-    const allPages = []
-    let offset = 0
-
-    while (true) {
-      const batch = await Promise.all(
-        Array.from({ length: LOAD_BATCH_SIZE }, (_, i) =>
-          apiFns.apiPayload(getRealizations, {
-            limit: LOAD_PAGE_SIZE,
-            offset: offset + i * LOAD_PAGE_SIZE,
-          })
-        )
-      )
-
-      let exhausted = false
-      for (const pagePayload of batch) {
-        const page = normalizeRealizations(pagePayload)
-        if (page.length === 0) {
-          exhausted = true
-          break
-        }
-        allPages.push(...page)
-        if (page.length < LOAD_PAGE_SIZE) {
-          exhausted = true
-          break
-        }
+  const loadRealizations = useCallback(
+    async conceptName => {
+      if (conceptName) {
+        const payload = await apiFns.apiPayload(getConceptLinkRealizations, conceptName)
+        return normalizeRealizations(payload).map(realization => ({
+          ...realization,
+          concept: realization.concept || conceptName,
+        }))
       }
-      if (exhausted) break
 
-      offset += LOAD_BATCH_SIZE * LOAD_PAGE_SIZE
-    }
+      const allPages = []
+      let offset = 0
 
-    const allRealizations = allPages
-    if (allRealizations.length === 0) {
-      return []
-    }
-    return allRealizations
-  }, [apiFns])
+      while (true) {
+        const batch = await Promise.all(
+          Array.from({ length: LOAD_BATCH_SIZE }, (_, i) =>
+            apiFns.apiPayload(getRealizations, {
+              limit: LOAD_PAGE_SIZE,
+              offset: offset + i * LOAD_PAGE_SIZE,
+            })
+          )
+        )
+
+        let exhausted = false
+        for (const pagePayload of batch) {
+          const page = normalizeRealizations(pagePayload)
+          if (page.length === 0) {
+            exhausted = true
+            break
+          }
+          allPages.push(...page)
+          if (page.length < LOAD_PAGE_SIZE) {
+            exhausted = true
+            break
+          }
+        }
+        if (exhausted) break
+
+        offset += LOAD_BATCH_SIZE * LOAD_PAGE_SIZE
+      }
+
+      return allPages
+    },
+    [apiFns]
+  )
 
   return loadRealizations
 }

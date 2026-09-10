@@ -18,11 +18,10 @@ const { TOOLTIP } = CONFIG.PANELS.REALIZATIONS.PANEL
 
 const RealizationsHeaderLeft = () => {
   const { concepts, getSelected, updateSelected } = use(SelectedContext)
-  const { explicitConcepts, filters, updateFilters } = use(RealizationsContext)
+  const { filters, updateFilters } = use(RealizationsContext)
   const selectedConcept = getSelected(CONCEPT)
   const selectedPanel = getSelected(PANEL)
   const filterConcept = filters[FILTERS.CONCEPT]
-  const selectables = explicitConcepts.length > 0 ? explicitConcepts : undefined
 
   useEffect(() => {
     const isRealizationsPanel = selectedPanel === SELECTED.PANELS.REALIZATIONS
@@ -49,7 +48,6 @@ const RealizationsHeaderLeft = () => {
         conceptName={filterConcept}
         doConceptSelected={handleConceptSelected}
         onClear={handleClear}
-        selectables={selectables}
         updateConceptSelected={true}
       />
     </KBTooltipTarget>

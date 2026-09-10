@@ -1,5 +1,6 @@
-import { use, useEffect, useMemo, useCallback } from 'react'
+import { use, useEffect, useMemo, useCallback, useState } from 'react'
 
+import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -7,6 +8,7 @@ import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext
 
 import dataFilters from '@/contexts/panels/dataFilters'
 import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
+import useLoadRealizations from '@/contexts/panel/data/useLoadRealizations'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
@@ -15,18 +17,23 @@ const FILTERS = REALIZATIONS.FILTERS
 const { DEFAULT_FILTERS } = dataFilters(REALIZATIONS.KEY)
 
 const RealizationsProvider = ({ children }) => {
+  const { apiFns } = use(ConfigContext)
   const { getSelected } = use(SelectedContext)
   const { getSettings, updateSettings } = use(SelectedSettingsContext)
   const { realizations, refreshData } = use(PanelDataContext)
+  const loadRealizations = useLoadRealizations(apiFns)
 
   const realizationsSettings = getSettings(REALIZATIONS.KEY) || {}
   const filters = realizationsSettings[FILTERS.KEY] || DEFAULT_FILTERS
+  const conceptFilter = filters[FILTERS.CONCEPT]
+
+  const [conceptRealizations, setConceptRealizations] = useState(null)
 
   const selectedPanel = getSelected(SELECTED.PANEL)
   const selectedConcept = getSelected(SELECTED.CONCEPT)
   const isRealizationsPanelSelected = selectedPanel === SELECTED.PANELS.REALIZATIONS
   const isInitialConceptFilterPending =
-    isRealizationsPanelSelected && typeof filters[FILTERS.CONCEPT] === 'undefined' && Boolean(selectedConcept)
+    isRealizationsPanelSelected && typeof conceptFilter === 'undefined' && Boolean(selectedConcept)
 
   const { updateFilters } = useUpdateFilters(REALIZATIONS.KEY, updateSettings)
 
@@ -38,22 +45,22 @@ const RealizationsProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isRealizationsPanelSelected) return
-    if (realizations.length > 0) return
-    refreshData(PANEL_DATA.REALIZATIONS)
-  }, [realizations.length, isRealizationsPanelSelected, refreshData])
+    if (isInitialConceptFilterPending) return
 
-  const explicitConcepts = useMemo(() => {
-    if (realizations.length === 0) {
-      return []
-    }
-    const uniqueConcepts = new Set()
-    realizations.forEach(realization => {
-      if (realization.concept) {
-        uniqueConcepts.add(realization.concept)
+    if (conceptFilter) {
+      let stale = false
+      loadRealizations(conceptFilter).then(loaded => {
+        if (!stale) setConceptRealizations({ concept: conceptFilter, data: loaded })
+      })
+      return () => {
+        stale = true
       }
-    })
-    return Array.from(uniqueConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-  }, [realizations])
+    }
+
+    if (realizations.length === 0) {
+      refreshData(PANEL_DATA.REALIZATIONS)
+    }
+  }, [conceptFilter, isInitialConceptFilterPending, isRealizationsPanelSelected, loadRealizations, realizations, refreshData])
 
   const explicitToConcepts = useMemo(() => {
     if (realizations.length === 0) {
@@ -70,19 +77,19 @@ const RealizationsProvider = ({ children }) => {
   }, [realizations])
 
   const filteredRealizations = useMemo(() => {
-    if (realizations.length === 0) {
-      return []
-    }
     if (isInitialConceptFilterPending) {
       return []
     }
+
+    const sourceRealizations =
+      conceptFilter && conceptRealizations?.concept === conceptFilter ? conceptRealizations.data : realizations
 
     const concept = filters[FILTERS.CONCEPT]
     const toConcept = filters[FILTERS.TO_CONCEPT]
     const trimmedLinkName = filters[FILTERS.LINK_NAME]?.trim().toLowerCase()
     const trimmedLinkValue = filters[FILTERS.LINK_VALUE]?.trim().toLowerCase()
 
-    return realizations.filter(realization => {
+    return sourceRealizations.filter(realization => {
       if (concept && realization.concept && realization.concept !== concept) {
         return false
       }
@@ -97,7 +104,7 @@ const RealizationsProvider = ({ children }) => {
       }
       return true
     })
-  }, [realizations, filters, isInitialConceptFilterPending])
+  }, [conceptFilter, conceptRealizations, realizations, filters, isInitialConceptFilterPending])
 
   const filterString = useCallback(realization => {
     if (!realization) return '* | * | * | *'
@@ -112,7 +119,6 @@ const RealizationsProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      explicitConcepts,
       explicitToConcepts,
       filteredRealizations,
       filters,
@@ -120,7 +126,7 @@ const RealizationsProvider = ({ children }) => {
       realizations: realizations,
       updateFilters,
     }),
-    [explicitConcepts, explicitToConcepts, filteredRealizations, filters, filterString, realizations, updateFilters]
+    [explicitToConcepts, filteredRealizations, filters, filterString, realizations, updateFilters]
   )
 
   return <RealizationsContext value={value}>{children}</RealizationsContext>

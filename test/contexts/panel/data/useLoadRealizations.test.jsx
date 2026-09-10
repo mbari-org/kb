@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { getRealizations } from '@/lib/api/realizations'
+import { getConceptLinkRealizations, getRealizations } from '@/lib/api/realizations'
 import { PAGINATION } from '@/lib/constants/pagination.js'
 import useLoadRealizations from '@/contexts/panel/data/useLoadRealizations'
 
@@ -44,5 +44,23 @@ describe('useLoadRealizations', () => {
     })
 
     expect(realizations).toEqual([])
+  })
+
+  it('loads realizations for a single concept via the concept endpoint', async () => {
+    const apiFns = {
+      apiPayload: vi.fn(async () => [{ id: 'r-1', linkName: 'eats', toConcept: 'D', linkValue: 'daily' }]),
+    }
+
+    const { result } = renderHook(() => useLoadRealizations(apiFns))
+
+    let realizations
+    await act(async () => {
+      realizations = await result.current('C')
+    })
+
+    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptLinkRealizations, 'C')
+    expect(realizations).toEqual([
+      expect.objectContaining({ id: 'r-1', concept: 'C', linkName: 'eats', toConcept: 'D', linkValue: 'daily' }),
+    ])
   })
 })

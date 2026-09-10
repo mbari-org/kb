@@ -37,6 +37,15 @@ const RealizationsTableData = () => {
     setCurrentPage(1)
   }, [])
 
+  const handleSortModelChange = useCallback(() => {
+    setCurrentPage(1)
+  }, [])
+
+  const dataGridProps = useMemo(
+    () => ({ ...DATA_GRID_PROPS, onSortModelChange: handleSortModelChange }),
+    [handleSortModelChange]
+  )
+
   const paginationComponent = useMemo(
     () => (
       <RealizationsPagination
@@ -65,7 +74,7 @@ const RealizationsTableData = () => {
       paginationComponent={paginationComponent}
       paginationMode='client'
       paginationModel={paginationModel}
-      dataGridProps={DATA_GRID_PROPS}
+      dataGridProps={dataGridProps}
       rowCount={realizationRows.length}
       rows={realizationRows}
     />
