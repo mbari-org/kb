@@ -32,7 +32,7 @@ const TemplatesProvider = ({ children }) => {
     use(PanelDataContext)
   const { getSelected } = use(SelectedContext)
   const { getSettings, updateSettings } = use(SelectedSettingsContext)
-  const { getAncestorNames, isConceptLoaded, loadConcept } = use(TaxonomyContext)
+  const { getAncestorNames, getNames, isConceptLoaded, loadConcept } = use(TaxonomyContext)
 
   const handleLoadConceptError = useLoadConceptError()
 
@@ -97,8 +97,14 @@ const TemplatesProvider = ({ children }) => {
   }, [byAvailable, filters, getAncestorNames, isConceptLoaded, isInitialConceptFilterPending, templates])
 
   useEffect(() => {
-    const concept = filters[FILTERS.CONCEPT]
+    let concept = filters[FILTERS.CONCEPT]
     if (!concept) return
+
+    if (!getNames().includes(concept)) {
+      updateFilters({ [FILTERS.CONCEPT]: '' })
+      return
+    }
+
     if (isConceptLoaded(concept) || isLoadingConcept.current) return
 
     isLoadingConcept.current = true
@@ -109,7 +115,7 @@ const TemplatesProvider = ({ children }) => {
       .finally(() => {
         isLoadingConcept.current = false
       })
-  }, [filters, handleLoadConceptError, isConceptLoaded, loadConcept])
+  }, [filters, getNames, handleLoadConceptError, isConceptLoaded, loadConcept, updateFilters])
 
   useEffect(() => {
     if (clearTemplateFilters) {
