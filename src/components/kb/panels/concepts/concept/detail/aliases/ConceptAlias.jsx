@@ -54,11 +54,11 @@ const ConceptAlias = ({ alias }) => {
         {showEdit && aliasIcon(CONCEPT_STATE.ALIAS.EDIT)}
         {showDelete && aliasIcon(CONCEPT_STATE.ALIAS.DELETE)}
       </Stack>
-      <Stack direction='row' spacing={1} width='100%'>
-        <Box sx={{ flex: 1.5, pl: 0 }}>
+      <Stack direction='row' spacing={1} width='100%' sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ flex: 5, pl: 0 }}>
           <TextField {...infoStyle} label={ALIASES.NAME} value={alias.name || ''} />
         </Box>
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 3 }}>
           <TextField {...infoStyle} label={ALIASES.AUTHOR} value={alias.author || ''} />
         </Box>
         <Box sx={{ width: 90, flexShrink: 0 }}>

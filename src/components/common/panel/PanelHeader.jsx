@@ -7,8 +7,8 @@ const CONTAINER_SX = {
   alignItems: 'center',
   display: 'flex',
   height: HEADER_HEIGHT,
-  ml: 2,
-  mr: 2,
+  ml: 1,
+  mr: 1,
   mt: 2,
   position: 'relative',
 }
