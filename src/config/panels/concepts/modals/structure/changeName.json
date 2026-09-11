@@ -2,7 +2,7 @@
   "LABEL": "Change name",
   "NAME": "Name",
   "NAME_HELPER_TEXT": "Name cannot be empty",
-  "NAME_ERROR": "Concept name already exists",
+  "NAME_EXISTS": "Concept name already exists",
   "NAME_ONLY_WARN": "The concept name will be changed, but all related data will remain assigned to the original name.",
   "NON_ADMIN_MESSAGE": {
     "COMMUNICATE": "Please communicate with an admin regarding this change.",

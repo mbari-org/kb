@@ -53,7 +53,8 @@ const EditAliasContent = () => {
 
   const { handleStage, handleChange } = useEditAliasHandlers(formAlias, setFormAlias, stagedAlias)
 
-  const { nameError, nameHelperText } = useConceptNameValidate(formAlias, modalData.modified)
+  const { isValidName, nameHelperText } = useConceptNameValidate(formAlias, modalData.modified)
+  const nameError = modalData.modified.name && !isValidName
 
   return (
     <Box component='form' id={ADD_ALIAS_FORM_ID} onSubmit={handleStage}>

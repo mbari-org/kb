@@ -67,7 +67,8 @@ const AddChildContent = () => {
     child
   )
 
-  const { nameError, nameHelperText } = useConceptNameValidate(formChild, modifiedFields)
+  const { isValidName, nameHelperText } = useConceptNameValidate(formChild, modifiedFields)
+  const nameError = modifiedFields.name && !isValidName
 
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>

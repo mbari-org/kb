@@ -102,20 +102,6 @@ export const createStageDiscardHandlers = ({ closeModal, modifyConcept, stageAct
   }
 }
 
-export const validateChildName = (childName, existingNames = [], stagedChildren = []) => {
-  if (!childName || childName.trim() === '') {
-    return false
-  }
-
-  const nameLower = childName.trim().toLowerCase()
-  const existsInExisting = existingNames.some(name => (name || '').toLowerCase() === nameLower)
-  const existsInStaged = (stagedChildren || []).some(
-    stagedChild => (stagedChild?.name || '').toLowerCase() === nameLower
-  )
-
-  return !existsInExisting && !existsInStaged
-}
-
 export const validateNameChange = (newName, currentName, existingNames = []) => {
   if (!newName || newName.trim() === '') {
     return false

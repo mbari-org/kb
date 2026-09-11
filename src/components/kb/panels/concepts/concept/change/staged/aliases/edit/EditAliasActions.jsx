@@ -5,7 +5,8 @@ import { createStagedActions } from '@/components/modal/concept/conceptModalUtil
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
+import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { ADD_ALIAS_FORM_ID } from './EditAliasContent'
 
@@ -15,18 +16,18 @@ const EditAliasActions = () => {
   const { confirmReset, modifyConcept } = use(ConceptStagedContext)
   const { closeModal } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
-  const { getNames } = use(TaxonomyContext)
 
   const { aliasItem, modified } = modalData
 
-  const validName = !modified.name || (aliasItem.name !== '' && !getNames().includes(aliasItem.name))
+  const { isValidName } = useConceptNameValidate(aliasItem, modified)
+  const nameError = modified.name && !isValidName
 
   const handleStage = () => {
     // go through the form to trigger required/validation checks
     document.querySelector(`#${ADD_ALIAS_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !validName || !hasTrueValue(modified)
+  const stageDisabled = nameError || !hasTrueValue(modified)
 
   return createStagedActions({
     closeModal,

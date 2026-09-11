@@ -2,6 +2,22 @@ import { COMMON } from '@/lib/config'
 
 const after = (ms, fn) => new Promise(resolve => setTimeout(resolve, ms)).then(fn)
 
+const binSearch = (sortedValues, value, caseInsensitive = false) => {
+  const normalize = caseInsensitive ? string => string.toLowerCase() : any => any
+  const needle = normalize(value)
+
+  let low = 0
+  let high = sortedValues.length - 1
+  while (low <= high) {
+    const mid = (low + high) >>> 1
+    const midValue = normalize(sortedValues[mid])
+    if (midValue < needle) low = mid + 1
+    else if (midValue > needle) high = mid - 1
+    else return true
+  }
+  return false
+}
+
 const capitalize = string => {
   const lower = string.toLowerCase()
   return lower.charAt(0).toUpperCase() + lower.slice(1)
@@ -226,6 +242,7 @@ const withTimeout = (promise, timeoutMs, timeoutError) => {
 
 export {
   after,
+  binSearch,
   capitalize,
   conceptNameForFilename,
   deepDiff,

@@ -5,6 +5,7 @@ import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptMod
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { binSearch } from '@/lib/utils'
 
 import CONFIG from '@/lib/config'
 
@@ -15,40 +16,32 @@ const useConceptNameValidate = (formData, modifiedFields) => {
   const { modalData } = use(ConceptModalDataContext)
   const { getNames } = use(TaxonomyContext)
 
-  const isValidName = useMemo(() => {
-    // Handle both formData.name (for children/aliases) and formData.value (for concept name changes)
-    const name = (formData.name || formData.value || '').trim()
+  const editingAliasIndex = modalData?.action === CONCEPT_STATE.ALIAS.EDIT ? modalData.aliasIndex : null
 
-    if (name === '' || getNames().includes(name)) return false
+  const stagedNames = useMemo(
+    () =>
+      new Set([
+        ...(stagedState.name?.value ? [stagedState.name.value.toLowerCase()] : []),
+        ...stagedState.children.map(child => child.name.toLowerCase()),
+        ...stagedState.aliases.filter((_, index) => index !== editingAliasIndex).map(alias => alias.name.toLowerCase()),
+      ]),
+    [stagedState.name, stagedState.children, stagedState.aliases, editingAliasIndex]
+  )
 
-    const existingNames = [
-      ...(stagedState.name?.value ? [stagedState.name.value] : []),
-      ...stagedState.children.map(child => child.name),
-      ...stagedState.aliases
-        .filter((_, index) => {
-          // For alias edit, exclude the current item being edited
-          if (modalData?.action === CONCEPT_STATE.ALIAS.EDIT && index === modalData.aliasIndex) {
-            return false
-          }
-          return true
-        })
-        .map(alias => alias.name),
-    ]
-    return !existingNames.includes(name)
-  }, [formData.name, formData.value, getNames, stagedState.name, stagedState.children, stagedState.aliases, modalData])
+  const name = (formData.name || formData.value || '').trim().toLowerCase()
 
-  const nameError = modifiedFields.name && !isValidName
+  const isValidName = name !== '' && !binSearch(getNames(), name, true) && !stagedNames.has(name)
 
   const nameHelperText = !modifiedFields.name
     ? ''
-    : (formData.name || formData.value || '').trim() === ''
+    : name === ''
       ? CHANGE_NAME.NAME_HELPER_TEXT
       : !isValidName
-        ? CHANGE_NAME.NAME_ERROR
+        ? CHANGE_NAME.NAME_EXISTS
         : ''
 
   return {
-    nameError,
+    isValidName,
     nameHelperText,
   }
 }

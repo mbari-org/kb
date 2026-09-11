@@ -35,7 +35,8 @@ const ChangeNameContent = () => {
   const [name, setName] = useState({ value: concept.name, extent: '' })
   const [modifiedFields, setModifiedFields] = useState({ name: false })
 
-  const { nameError, nameHelperText } = useConceptNameValidate(name, modifiedFields)
+  const { isValidName, nameHelperText } = useConceptNameValidate(name, modifiedFields)
+  const nameError = modifiedFields.name && !isValidName
   const { handleNameChange, handleNameExtentChange } = useChangeNameHandlers(
     name,
     setName,
@@ -43,7 +44,7 @@ const ChangeNameContent = () => {
     setModifiedFields
   )
 
-  const isValidName = name.value !== concept.name && !nameError
+  const isValidNameChange = name.value !== concept.name && !nameError
 
   const handleUpdateModalData = useCallback(
     (nameValue, isValidValue) => {
@@ -55,11 +56,11 @@ const ChangeNameContent = () => {
   const debouncedUpdateModalData = useDebounce(handleUpdateModalData)
 
   useEffect(() => {
-    debouncedUpdateModalData(name, isValidName)
-  }, [name, isValidName, debouncedUpdateModalData])
+    debouncedUpdateModalData(name, isValidNameChange)
+  }, [name, isValidNameChange, debouncedUpdateModalData])
 
   const toColor = () => {
-    return isValidName ? theme.concept.color.add : theme.palette.grey[700]
+    return isValidNameChange ? theme.concept.color.add : theme.palette.grey[700]
   }
 
   const { hasRelatedData, relatedDataCounts } = modalData
@@ -107,7 +108,7 @@ const ChangeNameContent = () => {
           <Box sx={{ ml: 6.75 }}>
             {isAdmin && !!hasRelatedData && (
               <NameChangeExtent
-                disabled={!isValidName}
+                disabled={!isValidNameChange}
                 nameChangeType={name.extent}
                 onChange={handleNameExtentChange}
                 value={name.extent}

@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  validateChildName,
-  validateConceptInput,
-  validateNameChange,
-} from '@/components/modal/concept/conceptModalUtils'
+import { validateConceptInput, validateNameChange } from '@/components/modal/concept/conceptModalUtils'
 
 describe('conceptModalUtils validation helpers', () => {
   describe('validateConceptInput', () => {
@@ -27,19 +23,6 @@ describe('conceptModalUtils validation helpers', () => {
 
     it('returns false when input is in omitChoices', () => {
       expect(validateConceptInput('Child', existingNames, ['Child'])).toBe(false)
-    })
-  })
-
-  describe('validateChildName', () => {
-    it('validates child name against existing and staged names (case-insensitive)', () => {
-      expect(validateChildName('NewChild', ['root'], [])).toBe(true)
-      expect(validateChildName('root', ['root'], [])).toBe(false)
-      expect(validateChildName('ROOT', ['root'], [])).toBe(false)
-      expect(validateChildName('Root', ['root'], [])).toBe(false)
-      expect(validateChildName('Staged', ['root'], [{ name: 'staged' }])).toBe(false)
-      expect(validateChildName('STAGED', ['root'], [{ name: 'Staged' }])).toBe(false)
-      expect(validateChildName('', ['root'], [])).toBe(false)
-      expect(validateChildName('   ', ['root'], [])).toBe(false)
     })
   })
 

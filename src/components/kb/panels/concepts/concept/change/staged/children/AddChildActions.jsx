@@ -1,35 +1,30 @@
-import { use, useMemo } from 'react'
+import { use } from 'react'
 
-import {
-  createStagedActions,
-  validateChildName,
-} from '@/components/modal/concept/conceptModalUtils'
+import { createStagedActions } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
+import useConceptNameValidate from '@/components/kb/panels/concepts/concept/change/staged/useConceptNameValidate'
 
 import { ADD_CHILD_FORM_ID } from './AddChildContent'
 
 const AddChildActions = () => {
-  const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
+  const { confirmReset, modifyConcept } = use(ConceptStagedContext)
   const { closeModal } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
-  const { getNames } = use(TaxonomyContext)
 
   const { child, modified } = modalData
 
-  const isValidChild = useMemo(() => {
-    return validateChildName(child?.name, getNames(), stagedState.children)
-  }, [child?.name, getNames, stagedState.children])
+  const { isValidName } = useConceptNameValidate(child, {})
 
   const handleStage = () => {
     // Need to go through the form to trigger required and validation checks
     document.querySelector(`#${ADD_CHILD_FORM_ID}`)?.requestSubmit()
   }
 
-  const stageDisabled = !confirmReset && (!modified || !isValidChild)
+  const stageDisabled = !confirmReset && (!modified || !isValidName)
 
   return createStagedActions({
     closeModal,
