@@ -1,16 +1,15 @@
 import { Box, TextField, Typography } from '@mui/material'
 
-const PageControl = ({ currentPage, totalPages, handlePageCommit }) => {
-  // Ensure currentPage is a valid number and convert to string
+const PageGo = ({ currentPage, handlePageGo, totalPages }) => {
   const defaultValue = String(Math.max(1, currentPage || 1))
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 1 }}>
       <Typography variant='body2'>Page</Typography>
       <TextField
-        key={currentPage}
         defaultValue={defaultValue}
-        onBlur={handlePageCommit}
+        key={currentPage}
+        onBlur={handlePageGo}
         onKeyDown={e => {
           if (e.key === 'Enter') {
             e.target.blur()
@@ -33,4 +32,4 @@ const PageControl = ({ currentPage, totalPages, handlePageCommit }) => {
   )
 }
 
-export default PageControl
+export default PageGo

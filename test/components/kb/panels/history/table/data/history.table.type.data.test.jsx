@@ -28,7 +28,7 @@ vi.mock('@/components/kb/panels/history/useHistoryColumns', () => ({
   default: () => [{ field: 'creationTimestamp' }],
 }))
 
-vi.mock('@/components/kb/panels/history/table/data/HistoryPagination', () => ({
+vi.mock('@/components/common/Pagination', () => ({
   default: () => <div data-testid='pagination' />,
 }))
 

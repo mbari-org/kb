@@ -37,7 +37,7 @@ vi.mock('@/components/kb/panels/references/table/data/useDeleteReferenceButton',
   default: () => vi.fn(),
 }))
 
-vi.mock('@/components/kb/panels/references/table/data/ReferencesPagination', () => ({
+vi.mock('@/components/common/Pagination', () => ({
   default: () => <div data-testid='references-pagination' />,
 }))
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 
+import Pagination from '@/components/common/Pagination'
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
-import ReferencesPagination from './ReferencesPagination'
 
 import useEditReferenceButton from '@/components/kb/panels/references/table/data/useEditReferenceButton'
 import useDeleteReferenceButton from '@/components/kb/panels/references/table/data/useDeleteReferenceButton'
@@ -46,14 +46,15 @@ const ReferencesTableData = () => {
 
   const paginationComponent = useMemo(
     () => (
-      <ReferencesPagination
+      <Pagination
         count={filteredReferences.length}
         limit={limit}
-        nextPage={nextPage}
         offset={offset}
-        prevPage={prevPage}
-        setPageSize={setPageSize}
-        goToPage={goToPage}
+        onGoTo={goToPage}
+        onNext={nextPage}
+        onPageSizeChange={setPageSize}
+        onPrev={prevPage}
+        pageSizeOptions={PAGINATION.REFERENCES.PAGE_SIZE_OPTIONS}
       />
     ),
     [filteredReferences.length, goToPage, limit, nextPage, offset, prevPage, setPageSize]

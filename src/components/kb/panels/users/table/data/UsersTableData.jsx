@@ -1,7 +1,7 @@
 import { use, useCallback, useMemo, useState } from 'react'
 
+import Pagination from '@/components/common/Pagination'
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
-import UsersPagination from './UsersPagination'
 
 import UsersContext from '@/contexts/panels/users/UsersContext'
 
@@ -47,14 +47,15 @@ const UsersTableData = () => {
 
   const paginationComponent = useMemo(
     () => (
-      <UsersPagination
+      <Pagination
         count={users.length}
-        goToPage={goToPage}
         limit={limit}
-        nextPage={nextPage}
         offset={offset}
-        prevPage={prevPage}
-        setPageSize={setPageSize}
+        onGoTo={goToPage}
+        onNext={nextPage}
+        onPageSizeChange={setPageSize}
+        onPrev={prevPage}
+        pageSizeOptions={PAGINATION.USERS.PAGE_SIZE_OPTIONS}
       />
     ),
     [goToPage, limit, nextPage, offset, prevPage, setPageSize, users.length]

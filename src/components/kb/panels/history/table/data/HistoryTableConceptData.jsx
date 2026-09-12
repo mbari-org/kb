@@ -1,7 +1,7 @@
 import { use, useCallback, useMemo } from 'react'
 
 import HistoryContext from '@/contexts/panels/history/HistoryContext'
-import HistoryPagination from './HistoryPagination'
+import Pagination from '@/components/common/Pagination'
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
@@ -47,18 +47,18 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
 
   const paginationComponent = useMemo(
     () => (
-      <HistoryPagination
+      <Pagination
         count={conceptState.count}
-        goToPage={goToPage}
-        hideFooter={hideFooter}
         limit={limit}
-        nextPage={nextPage}
         offset={offset}
-        prevPage={prevPage}
-        setPageSize={setPageSize}
+        onGoTo={goToPage}
+        onNext={nextPage}
+        onPageSizeChange={setPageSize}
+        onPrev={prevPage}
+        pageSizeOptions={PAGE_SIZE_OPTIONS}
       />
     ),
-    [conceptState.count, goToPage, hideFooter, limit, nextPage, offset, prevPage, setPageSize]
+    [conceptState.count, goToPage, limit, nextPage, offset, prevPage, setPageSize]
   )
 
   const dataGridProps = useMemo(

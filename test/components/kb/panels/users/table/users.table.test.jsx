@@ -8,18 +8,18 @@ import UsersContext from '@/contexts/panels/users/UsersContext'
 import { UsersPanelTestWrapper, mockUsers } from '../users.panel.test.wrapper'
 
 // Mock pagination component
-vi.mock('@/components/kb/panels/users/table/data/UsersPagination', () => ({
-  default: ({ count, limit, offset, nextPage, prevPage, setPageSize }) => (
+vi.mock('@/components/common/Pagination', () => ({
+  default: ({ count, limit, offset, onNext, onPageSizeChange, onPrev }) => (
     <div data-testid='pagination'>
       <span data-testid='pagination-count'>{count} users</span>
       <span data-testid='pagination-offset'>{offset} offset</span>
-      <button data-testid='pagination-prev' onClick={prevPage} disabled={offset === 0}>
+      <button data-testid='pagination-prev' onClick={onPrev} disabled={offset === 0}>
         Previous
       </button>
-      <button data-testid='pagination-next' onClick={nextPage} disabled={offset + limit >= count}>
+      <button data-testid='pagination-next' onClick={onNext} disabled={offset + limit >= count}>
         Next
       </button>
-      <select data-testid='pagination-limit' value={limit} onChange={e => setPageSize(parseInt(e.target.value))}>
+      <select data-testid='pagination-limit' value={limit} onChange={e => onPageSizeChange(parseInt(e.target.value))}>
         <option value={10}>10</option>
         <option value={25}>25</option>
         <option value={50}>50</option>
