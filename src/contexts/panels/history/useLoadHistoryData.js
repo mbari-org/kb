@@ -21,7 +21,7 @@ const { HISTORY } = SETTINGS
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
 
-const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
+const useLoadHistoryData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
   const { getSelected } = use(SelectedContext)
   const { getSettings } = use(SelectedSettingsContext)
   const { getConcept } = use(TaxonomyContext)
@@ -105,7 +105,7 @@ const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
     [apiFns, selectedConcept]
   )
 
-  const loadPendingData = useCallback(
+  const loadPendingHistoryData = useCallback(
     async ({ updateConceptState, updatePageState }) => {
       updateConceptState({ data: pendingHistory, count: pendingHistory.length })
       updatePageState({ data: pendingHistory.slice(0, DEFAULT_LIMIT) })
@@ -113,7 +113,7 @@ const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
     [pendingHistory]
   )
 
-  const loadApprovedData = useCallback(
+  const loadApprovedHistoryData = useCallback(
     async ({ updateConceptState, updatePageState }) => {
       const result = await apiFns.apiResult(getHistoryCount, 'approved')
       updateConceptState({ data: [], count: result })
@@ -122,7 +122,7 @@ const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
     [apiFns]
   )
 
-  const loadData = useCallback(
+  const loadHistoryData = useCallback(
     async ({ updateConceptState, updatePageState }) => {
       if (!apiFns) return
 
@@ -140,24 +140,24 @@ const useLoadData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
       }
 
       if (selectedType === TYPE.PENDING) {
-        return loadPendingData({ updateConceptState, updatePageState })
+        return loadPendingHistoryData({ updateConceptState, updatePageState })
       }
 
-      return loadApprovedData({ updateConceptState, updatePageState })
+      return loadApprovedHistoryData({ updateConceptState, updatePageState })
     },
     [
       apiFns,
       conceptHistoryExtent,
-      loadApprovedData,
+      loadApprovedHistoryData,
       loadConceptChildrenData,
       loadConceptData,
       loadConceptDescendantsData,
-      loadPendingData,
+      loadPendingHistoryData,
       selectedType,
     ]
   )
 
-  return loadData
+  return loadHistoryData
 }
 
-export default useLoadData
+export default useLoadHistoryData

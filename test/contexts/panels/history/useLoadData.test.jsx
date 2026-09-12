@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import useLoadData from '@/contexts/panels/history/useLoadData'
+import useLoadHistoryData from '@/contexts/panels/history/useLoadHistoryData'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -41,9 +41,7 @@ const createWrapper = ({
   const Wrapper = ({ children }) => (
     <SelectedContext.Provider value={{ getSelected }}>
       <SelectedSettingsContext.Provider value={{ getSettings }}>
-        <TaxonomyContext.Provider value={{ getConcept }}>
-          {children}
-        </TaxonomyContext.Provider>
+        <TaxonomyContext.Provider value={{ getConcept }}>{children}</TaxonomyContext.Provider>
       </SelectedSettingsContext.Provider>
     </SelectedContext.Provider>
   )
@@ -70,7 +68,7 @@ describe('useLoadData pending history', () => {
 
     const { result } = renderHook(
       () =>
-        useLoadData({
+        useLoadHistoryData({
           apiFns,
           conceptHistoryExtent: CONCEPT.EXTENT.SOLO,
           pendingHistory,
@@ -109,7 +107,7 @@ describe('useLoadData pending history', () => {
 
     const { result } = renderHook(
       () =>
-        useLoadData({
+        useLoadHistoryData({
           apiFns,
           conceptHistoryExtent: CONCEPT.EXTENT.SOLO,
           pendingHistory,
@@ -150,7 +148,7 @@ describe('useLoadData concept history', () => {
 
     const { result } = renderHook(
       () =>
-        useLoadData({
+        useLoadHistoryData({
           apiFns,
           conceptHistoryExtent: CONCEPT.EXTENT.SOLO,
           pendingHistory: [],
@@ -205,7 +203,7 @@ describe('useLoadData concept history', () => {
 
     const { result } = renderHook(
       () =>
-        useLoadData({
+        useLoadHistoryData({
           apiFns,
           conceptHistoryExtent: CONCEPT.EXTENT.CHILDREN,
           pendingHistory: [],
@@ -257,7 +255,7 @@ describe('useLoadData concept history', () => {
 
     const { result } = renderHook(
       () =>
-        useLoadData({
+        useLoadHistoryData({
           apiFns,
           conceptHistoryExtent: CONCEPT.EXTENT.DESCENDANTS,
           pendingHistory: [],

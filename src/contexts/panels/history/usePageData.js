@@ -18,8 +18,10 @@ const usePageData = ({
   const { getSettings } = use(SelectedSettingsContext)
 
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
+  const historySort = getSettings(HISTORY.KEY, HISTORY.SORT.KEY)
+  const { field: sortField, order: sortOrder } = historySort?.[selectedType] || HISTORY.SORT.DEFAULT
 
-  const { limit, offset, sortField, sortOrder } = pageState
+  const { limit, offset } = pageState
 
   const textSort = (sortData, field) => {
     return sortData.sort((a, b) => {

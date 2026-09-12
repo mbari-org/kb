@@ -39,19 +39,16 @@ const useHistoryColumns = ({ type }) => {
       updateSettings({ [HISTORY.KEY]: { [HISTORY.TYPE]: TYPE.CONCEPT } })
     }
 
-    const sortableFields =
-      type === TYPE.APPROVED
-        ? []
-        : [
-            'action',
-            ...(type === TYPE.PENDING ? ['concept'] : []),
-            'creationTimestamp',
-            'creatorName',
-            'field',
-            'newValue',
-            'oldValue',
-            ...(type === TYPE.CONCEPT ? ['processedTimestamp', 'processorName'] : []),
-          ]
+    const sortableFields = [
+      'action',
+      ...(type === TYPE.PENDING ? ['concept'] : []),
+      'creationTimestamp',
+      'creatorName',
+      'field',
+      'newValue',
+      'oldValue',
+      ...(type !== TYPE.PENDING ? ['processedTimestamp', 'processorName'] : []),
+    ]
 
     const sortableProps = field =>
       sortableFields.includes(field)

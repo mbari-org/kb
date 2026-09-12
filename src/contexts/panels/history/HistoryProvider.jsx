@@ -10,7 +10,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PAGINATION } from '@/lib/constants/pagination.js'
-import useLoadData from '@/contexts/panels/history/useLoadData'
+import useLoadHistoryData from '@/contexts/panels/history/useLoadHistoryData'
 import usePageData from '@/contexts/panels/history/usePageData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
 
@@ -32,13 +32,16 @@ const HistoryProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
   const { pendingHistory } = use(PanelDataContext)
   const { getSelected } = use(SelectedContext)
-  const { getSettings } = use(SelectedSettingsContext)
+  const { getSettings, updateSettings } = use(SelectedSettingsContext)
 
   const activePanel = getSelected(PANEL)
   const selectedConcept = getSelected(SELECTED_CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
 
   const isActive = activePanel === 'History'
+
+  const historySort = getSettings(HISTORY.KEY, HISTORY.SORT.KEY)
+  const { field: sortField, order: sortOrder } = historySort?.[selectedType] || HISTORY.SORT.DEFAULT
 
   const [conceptState, setConceptState] = useState({
     count: 0,
@@ -51,8 +54,6 @@ const HistoryProvider = ({ children }) => {
     lastHistoryType: selectedType !== TYPE.CONCEPT ? selectedType : TYPE.PENDING,
     limit: DEFAULT_LIMIT,
     offset: DEFAULT_OFFSET,
-    sortField: 'creationTimestamp',
-    sortOrder: 'desc',
   })
 
   const updateConceptState = useCallback(updates => {
@@ -63,6 +64,24 @@ const HistoryProvider = ({ children }) => {
     setPageState(prev => ({ ...prev, ...updates }))
   }, [])
 
+  const updateSort = useCallback(
+    ({ field, order }) => {
+      updateSettings({
+        [HISTORY.KEY]: {
+          [HISTORY.SORT.KEY]: {
+            ...getSettings(HISTORY.KEY, HISTORY.SORT.KEY),
+            [selectedType]: {
+              [HISTORY.SORT.FIELD]: field,
+              [HISTORY.SORT.ORDER]: order,
+            },
+          },
+        },
+      })
+      updatePageState({ offset: 0 })
+    },
+    [getSettings, selectedType, updatePageState, updateSettings]
+  )
+
   const isTypeChanging = useRef(false)
 
   useEffect(() => {
@@ -72,7 +91,7 @@ const HistoryProvider = ({ children }) => {
     return () => globalThis.clearTimeout(timeoutId)
   }, [selectedConcept, updateConceptState])
 
-  const loadData = useLoadData({
+  const loadData = useLoadHistoryData({
     apiFns,
     conceptHistoryExtent: conceptState.extent,
     pendingHistory,
@@ -88,13 +107,6 @@ const HistoryProvider = ({ children }) => {
     const run = async () => {
       if (!apiFns || !isActive) return
       isTypeChanging.current = true
-
-      if (selectedType === TYPE.APPROVED) {
-        setPageState(prev => {
-          if (prev.sortField !== 'concept') return prev
-          return { ...prev, offset: 0, sortField: 'creationTimestamp' }
-        })
-      }
 
       if (selectedType !== TYPE.CONCEPT) {
         updatePageState({ lastHistoryType: selectedType })
@@ -147,10 +159,10 @@ const HistoryProvider = ({ children }) => {
     pendingHistory,
     selectedConcept,
     selectedType,
+    sortField,
+    sortOrder,
     updatePageState,
     pageState.offset,
-    pageState.sortField,
-    pageState.sortOrder,
   ])
 
   const { nextPage, prevPage, setPageSize, resetPagination, goToPage } = usePageHistory({
@@ -169,8 +181,11 @@ const HistoryProvider = ({ children }) => {
     resetPagination,
     selectedType,
     setPageSize,
-    updatePageState,
+    sortField,
+    sortOrder,
     updateConceptState,
+    updatePageState,
+    updateSort,
   }
 
   return <HistoryContext value={value}>{children}</HistoryContext>

@@ -18,6 +18,12 @@ export const SELECTED = {
         CONCEPT: CONCEPT.HISTORY.TYPE.CONCEPT,
         PENDING: CONCEPT.HISTORY.TYPE.PENDING,
       },
+      SORT: {
+        KEY: 'sort',
+        FIELD: 'field',
+        ORDER: 'order',
+        DEFAULT: { field: 'creationTimestamp', order: 'desc' },
+      },
     },
     REFERENCES: {
       KEY: 'references',

@@ -18,20 +18,20 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
     prevPage,
     selectedType,
     setPageSize,
-    updatePageState,
     pageState,
+    sortField,
+    sortOrder,
+    updateSort,
   } = use(HistoryContext)
 
-  const { limit, offset, sortField, sortOrder } = pageState
+  const { limit, offset } = pageState
   const columns = useHistoryColumns({ type: selectedType })
-
-  const effectiveSortField = sortField === 'concept' ? 'creationTimestamp' : sortField
 
   const rows = conceptState.data
 
   const sortModel = useMemo(
-    () => [{ field: effectiveSortField || 'creationTimestamp', sort: sortOrder || 'desc' }],
-    [effectiveSortField, sortOrder]
+    () => [{ field: sortField, sort: sortOrder }],
+    [sortField, sortOrder]
   )
 
   const onSortModelChange = useCallback(
@@ -40,9 +40,9 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
       if (!item?.field || !item?.sort) return
       if (sortField === item.field && sortOrder === item.sort) return
 
-      updatePageState({ sortField: item.field, sortOrder: item.sort, offset: 0 })
+      updateSort({ field: item.field, order: item.sort })
     },
-    [sortField, sortOrder, updatePageState]
+    [sortField, sortOrder, updateSort]
   )
 
   const paginationComponent = useMemo(

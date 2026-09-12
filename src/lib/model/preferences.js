@@ -19,11 +19,47 @@ const HISTORY_TYPE_CODING = {
   pending: 'p',
 }
 
+const HISTORY_SORT_FIELD_CODING = {
+  action: 'a',
+  concept: 'c',
+  creationTimestamp: 'ct',
+  creatorName: 'cr',
+  field: 'f',
+  newValue: 'n',
+  oldValue: 'o',
+  processedTimestamp: 'pt',
+  processorName: 'pr',
+}
+
+const HISTORY_SORT_ORDER_CODING = {
+  asc: 'a',
+  desc: 'd',
+}
+
+const DEFAULT_HISTORY_SORT = {
+  field: 'creationTimestamp',
+  order: 'desc',
+}
+
 // Helper functions to get code from type or type from code
 const getHistoryTypeCode = type => HISTORY_TYPE_CODING[type] || 'p'
 const getHistoryTypeFromCode = code => {
   const entry = Object.entries(HISTORY_TYPE_CODING).find(([, value]) => value === code)
   return entry ? entry[0] : 'pending'
+}
+
+const getHistorySortFieldCode = field =>
+  HISTORY_SORT_FIELD_CODING[field] || HISTORY_SORT_FIELD_CODING[DEFAULT_HISTORY_SORT.field]
+const getHistorySortFieldFromCode = code => {
+  const entry = Object.entries(HISTORY_SORT_FIELD_CODING).find(([, value]) => value === code)
+  return entry ? entry[0] : DEFAULT_HISTORY_SORT.field
+}
+
+const getHistorySortOrderCode = order =>
+  HISTORY_SORT_ORDER_CODING[order] || HISTORY_SORT_ORDER_CODING[DEFAULT_HISTORY_SORT.order]
+const getHistorySortOrderFromCode = code => {
+  const entry = Object.entries(HISTORY_SORT_ORDER_CODING).find(([, value]) => value === code)
+  return entry ? entry[0] : DEFAULT_HISTORY_SORT.order
 }
 
 const isValidPreferenceType = type => Object.values(PREF_TYPES).includes(type)
@@ -38,11 +74,12 @@ const toArray = (type, value) => {
       return [value.state, value.position]
 
     case PREF_TYPES.SETTINGS: {
-      // Array format: [historyTypeCode, referencesByConcept, templatesByAvailable, templatesFilters]
+      // Array format: [historyTypeCode, referencesByConcept, templatesByAvailable, templatesFilters, historySort]
       //   historyTypeCode: single char ('a'=approved | 'c'=concept | 'p'=pending)
       //   referencesByConcept: 0 or 1 (false or true)
       //   templatesByAvailable: 0 or 1 (false or true)
       //   templatesFilters: array [concept, toConcept, linkName, linkValue] (empty string "" for null values)
+      //   historySort: array of [fieldCode, orderCode] per history type, in HISTORY_TYPE_CODING key order
       const filters = value.templates?.filters || {}
       const filtersArray = [
         filters.concept || '',
@@ -50,11 +87,17 @@ const toArray = (type, value) => {
         filters.linkName || '',
         filters.linkValue || '',
       ]
+      const sort = value.history?.sort || {}
+      const sortArray = Object.keys(HISTORY_TYPE_CODING).map(type => {
+        const typeSort = sort[type] || {}
+        return [getHistorySortFieldCode(typeSort.field), getHistorySortOrderCode(typeSort.order)]
+      })
       return [
         getHistoryTypeCode(value.history?.type),
         value.references?.byConcept ? 1 : 0,
         value.templates?.byAvailable ? 1 : 0,
         filtersArray,
+        sortArray,
       ]
     }
 
@@ -74,15 +117,25 @@ const fromArray = (type, arr) => {
       }
 
     case PREF_TYPES.SETTINGS: {
-      // Array format: [historyTypeCode, referencesByConcept, templatesByAvailable, templatesFilters]
+      // Array format: [historyTypeCode, referencesByConcept, templatesByAvailable, templatesFilters, historySort]
+      //   historySort defaults per type when absent (preferences stored before the slot existed)
       const filtersArray = arr[3] || []
       const filters = {}
       if (filtersArray[0]) filters.concept = filtersArray[0]
       if (filtersArray[1]) filters.toConcept = filtersArray[1]
       if (filtersArray[2]) filters.linkName = filtersArray[2]
       if (filtersArray[3]) filters.linkValue = filtersArray[3]
+      const sortArray = arr[4] || []
+      const sort = {}
+      Object.keys(HISTORY_TYPE_CODING).forEach((type, index) => {
+        const [fieldCode, orderCode] = sortArray[index] || []
+        sort[type] = {
+          field: getHistorySortFieldFromCode(fieldCode),
+          order: getHistorySortOrderFromCode(orderCode),
+        }
+      })
       return {
-        history: { type: getHistoryTypeFromCode(arr[0]) },
+        history: { type: getHistoryTypeFromCode(arr[0]), sort },
         references: { byConcept: arr[1] === 1 },
         templates: {
           byAvailable: arr[2] === 1,

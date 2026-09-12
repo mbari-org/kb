@@ -74,11 +74,12 @@ const dataHeaders = type => {
   return headers
 }
 
-const fetchHistory = async (type, pageIndex, pageSize, apiFns) => {
+const fetchHistory = async (type, pageIndex, pageSize, apiFns, { sortField, sortOrder }) => {
   const offset = pageIndex * pageSize
+  const serverSortField = sortField === 'concept' ? 'creationTimestamp' : sortField
   const response = await apiFns.apiPaginated(getHistory, [
     type,
-    { limit: EXPORT_PAGE_SIZE, offset, sort: 'creationTimestamp,asc' },
+    { limit: EXPORT_PAGE_SIZE, offset, sort: `${serverSortField},${sortOrder}` },
   ])
   return response
 }
@@ -115,7 +116,7 @@ const rowData = (item, type) => {
 
 const useHistoryExport = () => {
   const { apiFns } = use(ConfigContext)
-  const { conceptState, selectedType, pageState } = use(HistoryContext)
+  const { conceptState, selectedType, sortField, sortOrder } = use(HistoryContext)
   const { getSelected } = use(SelectedContext)
   const { user } = use(UserContext)
   const { beginProcessing, setModal, setModalData } = use(AppModalContext)
@@ -133,13 +134,16 @@ const useHistoryExport = () => {
   const getConceptData = async () => {
     const sortedData = [...conceptData].sort((a, b) => {
       const comparison = new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
-      return pageState.sortOrder === 'asc' ? -comparison : comparison
+      return sortOrder === 'asc' ? -comparison : comparison
     })
     return sortedData.map(item => rowData(item, selectedType))
   }
 
   const getPaginatedData = async pageIndex => {
-    const historyItems = await fetchHistory(selectedType, pageIndex, EXPORT_PAGE_SIZE, apiFns)
+    const historyItems = await fetchHistory(selectedType, pageIndex, EXPORT_PAGE_SIZE, apiFns, {
+      sortField,
+      sortOrder,
+    })
 
     if (!historyItems || historyItems.length === 0) {
       return null

@@ -88,6 +88,42 @@ describe('useHistoryColumns', () => {
     expect(conceptFields).not.toContain('inspect')
   })
 
+  it('marks server-sortable columns for approved type, excluding concept', () => {
+    const { Wrapper } = createWrapper()
+
+    const { result: approvedResult } = renderHook(
+      () => useHistoryColumns({ type: SELECTED.SETTINGS.HISTORY.TYPES.APPROVED }),
+      { wrapper: Wrapper }
+    )
+    const approvedByField = Object.fromEntries(
+      approvedResult.current.map(column => [column.field, column])
+    )
+    const approvedSortable = [
+      'action',
+      'creationTimestamp',
+      'creatorName',
+      'field',
+      'newValue',
+      'oldValue',
+      'processedTimestamp',
+      'processorName',
+    ]
+    approvedSortable.forEach(field => {
+      expect(approvedByField[field].sortable, field).toBe(true)
+    })
+    expect(approvedByField.concept.sortable).toBe(false)
+
+    const { result: pendingResult } = renderHook(
+      () => useHistoryColumns({ type: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }),
+      { wrapper: Wrapper }
+    )
+    const pendingByField = Object.fromEntries(
+      pendingResult.current.map(column => [column.field, column])
+    )
+    expect(pendingByField.concept.sortable).toBe(true)
+    expect(pendingByField.creatorName.sortable).toBe(true)
+  })
+
   it('fires filter and approval actions from pending inspect column for admin user', async () => {
     const user = userEvent.setup()
     const { Wrapper, updateSelected, updateSettings } = createWrapper({ role: ROLES.ADMIN })

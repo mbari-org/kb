@@ -25,7 +25,14 @@ const mergePanelSettings = (prevPanelSettings = {}, nextPanelSettings = {}, filt
 
 const useSettings = () => {
   const [settings, setSettings] = useState({
-    [HISTORY.KEY]: { [HISTORY.TYPE]: HISTORY.TYPES.PENDING },
+    [HISTORY.KEY]: {
+      [HISTORY.TYPE]: HISTORY.TYPES.PENDING,
+      [HISTORY.SORT.KEY]: {
+        [HISTORY.TYPES.APPROVED]: { ...HISTORY.SORT.DEFAULT },
+        [HISTORY.TYPES.CONCEPT]: { ...HISTORY.SORT.DEFAULT },
+        [HISTORY.TYPES.PENDING]: { ...HISTORY.SORT.DEFAULT },
+      },
+    },
     [REFERENCES.KEY]: { [REFERENCES.FILTERS.KEY]: {} },
     [TEMPLATES.KEY]: {
       [TEMPLATES.BY_AVAILABLE]: false,

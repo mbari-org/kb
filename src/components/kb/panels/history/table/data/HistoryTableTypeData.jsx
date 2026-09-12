@@ -21,19 +21,24 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
     prevPage,
     selectedType,
     setPageSize,
-    updatePageState,
+    sortField,
+    sortOrder,
+    updateSort,
   } =
     use(HistoryContext)
 
-  const { limit, offset, sortField, sortOrder } = pageState
+  const { limit, offset } = pageState
   const columns = useHistoryColumns({ type: selectedType })
 
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
   const rows = useMemo(
-    () => (pageState.sortOrder === 'desc' ? [...pageState.data].reverse() : pageState.data),
-    [pageState.data, pageState.sortOrder]
+    () =>
+      selectedType === TYPE.APPROVED || sortOrder !== 'desc'
+        ? pageState.data
+        : [...pageState.data].reverse(),
+    [pageState.data, selectedType, sortOrder]
   )
 
   const onSortModelChange = useCallback(
@@ -42,15 +47,22 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
       if (!item?.field || !item?.sort) return
       if (sortField === item.field && sortOrder === item.sort) return
 
-      updatePageState({ sortField: item.field, sortOrder: item.sort, offset: 0 })
+      updateSort({ field: item.field, order: item.sort })
     },
-    [sortField, sortOrder, updatePageState]
+    [sortField, sortOrder, updateSort]
   )
 
-  const dataGridProps = useMemo(
-    () => (selectedType === TYPE.PENDING ? { onSortModelChange } : undefined),
-    [onSortModelChange, selectedType]
+  const sortModel = useMemo(
+    () => [{ field: sortField, sort: sortOrder }],
+    [sortField, sortOrder]
   )
+
+  const dataGridProps = useMemo(() => {
+    if (selectedType === TYPE.APPROVED) {
+      return { onSortModelChange, sortModel, sortingMode: 'server' }
+    }
+    return selectedType === TYPE.PENDING ? { onSortModelChange } : undefined
+  }, [onSortModelChange, selectedType, sortModel])
 
   const paginationComponent = useMemo(
     () => (
