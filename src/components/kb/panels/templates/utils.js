@@ -12,24 +12,18 @@ export const filterTemplates = (templates, filters = {}) => {
 
   let filteredTemplates = templates
 
-  // Filter by concepts
   if (concepts) {
     filteredTemplates = filteredTemplates.filter(template => concepts.includes(template.concept))
   }
 
-  // Filter by toConcept
   if (toConcept) {
     filteredTemplates = filteredTemplates.filter(template => template.toConcept === toConcept)
   }
 
-  // Filter by linkName
   if (trimmedLinkName) {
-    filteredTemplates = filteredTemplates.filter(template =>
-      template.linkName?.toLowerCase().includes(trimmedLinkName)
-    )
+    filteredTemplates = filteredTemplates.filter(template => template.linkName?.toLowerCase().includes(trimmedLinkName))
   }
 
-  // Filter by linkValue
   if (trimmedLinkValue) {
     filteredTemplates = filteredTemplates.filter(template =>
       template.linkValue?.toLowerCase().includes(trimmedLinkValue)
@@ -42,7 +36,7 @@ export const filterTemplates = (templates, filters = {}) => {
 export const isValidTemplate = template =>
   Boolean(
     template?.concept?.trim() &&
-      template?.linkName?.trim() &&
-      template?.linkValue?.trim() &&
-      template?.toConcept?.trim()
+    template?.linkName?.trim() &&
+    template?.linkValue?.trim() &&
+    template?.toConcept?.trim()
   )

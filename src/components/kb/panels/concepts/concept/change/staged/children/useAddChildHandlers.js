@@ -8,12 +8,11 @@ import { normalizeConceptName } from '@/lib/concept/state/name'
 
 import { hasTrueValue } from '@/lib/utils'
 
-const useAddChildHandlers = (formChild, setFormChild, modifiedFields, setModifiedFields, originalChild) => {
+const useAddChildHandlers = ({ formChild, modifiedFields, originalChild, setFormChild, setModifiedFields }) => {
   const { modifyConcept } = use(ConceptStagedContext)
   const { closeModal, setModalData } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
 
-  // Debounced function to update modalData (for validation and external components)
   const debouncedUpdateModalData = useDebounce(
     useCallback(
       (updatedChild, modified) => {

@@ -59,13 +59,13 @@ const AddChildContent = () => {
     [formChild]
   )
 
-  const { handleStage, handleChange } = useAddChildHandlers(
+  const { handleStage, handleChange } = useAddChildHandlers({
     formChild,
-    setFormChild,
     modifiedFields,
+    originalChild: child,
+    setFormChild,
     setModifiedFields,
-    child
-  )
+  })
 
   const { isValidName, nameHelperText } = useConceptNameValidate(formChild, modifiedFields)
   const nameError = modifiedFields.name && !isValidName

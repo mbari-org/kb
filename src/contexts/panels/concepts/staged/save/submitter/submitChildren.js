@@ -3,6 +3,8 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { createError } from '@/lib/errors'
 import { createConcept } from '@/lib/api/concept'
 
+import { drop } from '@/lib/utils'
+
 const { CHILD } = CONCEPT_STATE
 
 const submitChildren = ([submit, { concept, updatesInfo }]) => {
@@ -37,7 +39,7 @@ const submitChildren = ([submit, { concept, updatesInfo }]) => {
 
   const submitters = updatedValue(CONCEPT.FIELD.CHILDREN).reduce((acc, update, index) => {
     if (update.action === CHILD.ADD) {
-      const params = { ...update, parentName: concept.name }
+      const params = drop({ ...update, parentName: concept.name }, ['action', 'index'])
       const trackerInfo = { action: CHILD.ADD, index, params, update }
       acc.push(submitChild(createConcept, trackerInfo))
     }
