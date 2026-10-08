@@ -12,6 +12,7 @@ import Concepts from '@/components/kb/panels/Concepts'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
@@ -193,6 +194,7 @@ const TestWrapper = ({ children }) => {
       <CssBaseline />
       <BrowserRouter>
         <UserContext.Provider value={mockUserValue}>
+          <ConfigContext.Provider value={{ dsgConceptUrl: '' }}>
           <PanelDataContext.Provider value={mockPanelDataValue}>
             <TaxonomyContext.Provider value={mockTaxonomyValue}>
               <ConceptModalContext.Provider value={mockConceptModalValue}>
@@ -253,6 +255,7 @@ const TestWrapper = ({ children }) => {
             </ConceptModalContext.Provider>
           </TaxonomyContext.Provider>
         </PanelDataContext.Provider>
+          </ConfigContext.Provider>
         </UserContext.Provider>
       </BrowserRouter>
     </ThemeProvider>
