@@ -25,7 +25,7 @@ const Whoops = ({ children }) => {
   const handleCopyInfo = async error => {
     const stack = error.original?.stack || error.stack
     const responseMessage = error.title
-      ? `${error.title}: ${error.message}\n${error.details ? JSON.stringify(error.details, null, 2) : ''}`
+      ? `${error.title}: ${error.message}${error.details ? `\nReq: ${JSON.stringify(error.details)}` : ''}`
       : CONFIG.WHOOPS.MESSAGE.UNEXPECTED
 
     const infoToCopy = `${responseMessage}\n\nStack Trace:\n${stack || CONFIG.WHOOPS.MESSAGE.NO_STACK}`
@@ -36,10 +36,7 @@ const Whoops = ({ children }) => {
 
   const renderWhoops = ({ error }) => {
     const responseMessage = error.title
-      ? `
-      ${error.title}: ${error.message}
-      ${error.details ? `\n${JSON.stringify(error.details, null, 2)}` : ''}
-      `
+      ? `${error.title}: ${error.message}${error.details ? `\nReq: ${JSON.stringify(error.details)}` : ''}`
       : CONFIG.WHOOPS.MESSAGE.UNEXPECTED
 
     const stack = error.original?.stack || error.stack
@@ -78,6 +75,7 @@ const Whoops = ({ children }) => {
             sx={{
               fontSize: '18px',
               textAlign: 'center',
+              whiteSpace: 'pre-wrap',
             }}
           >
             {responseMessage}
@@ -88,7 +86,10 @@ const Whoops = ({ children }) => {
             <Typography variant='body1' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               {CONFIG.WHOOPS.MESSAGE.IMAGE_SUBTITLE}
             </Typography>
-            <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 'bold', mt: 2 }}>
+            <Typography
+              variant='body2'
+              sx={{ textAlign: 'center', fontWeight: 'bold', mt: 2, whiteSpace: 'pre-wrap' }}
+            >
               💥 {responseMessage} 💥
             </Typography>
             <Typography variant='body2' sx={{ textAlign: 'center', mt: 1, mb: 1 }}>
