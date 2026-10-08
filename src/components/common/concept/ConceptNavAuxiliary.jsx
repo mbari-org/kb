@@ -4,10 +4,9 @@ import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 
 import CONFIG from '@/lib/config'
 
-const ConceptNavAuxiliary = ({ concepts, disabled = false }) => {
+const ConceptNavAuxiliary = ({ concepts }) => {
   return (
     <ConceptSelectAuxiliary
-      disabled={disabled}
       label={CONFIG.CONCEPT.SELECT.CONCEPT}
       components={[
         null,

@@ -3,10 +3,9 @@ import ToConceptSpecial from '@/components/common/concept/ToConceptSpecial'
 
 import CONFIG from '@/lib/config'
 
-const ToConceptSelectAuxiliary = ({ disabled = false, onChange }) => {
+const ToConceptSelectAuxiliary = ({ onChange }) => {
   return (
     <ConceptSelectAuxiliary
-      disabled={disabled}
       label={CONFIG.CONCEPT.SELECT.TO_CONCEPT}
       components={[null, <ToConceptSpecial key='to-concept-special' onChange={onChange} />]}
     />

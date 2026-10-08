@@ -66,22 +66,16 @@ const ReferenceConceptsInput = ({
         onClose={handleMenuClose}
         onConceptClick={handleClickedConcept}
       />
-      <KBTooltipTarget
-        placement='top'
-        title={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.TOOLTIP.ADD}
-        wrapper='div'
-        wrapperSx={{ display: 'block', width: '100%' }}
-      >
-        <ConceptSelect
-          conceptName={selectedConcept}
-          doConceptSelected={handleConceptAdd}
-          label={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.LABEL}
-          keepFocus={true}
-          onInputChange={handleSearchInput}
-          updateConceptSelected={false}
-          width='100%'
-        />
-      </KBTooltipTarget>
+      <ConceptSelect
+        conceptName={selectedConcept}
+        doConceptSelected={handleConceptAdd}
+        label={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.LABEL}
+        keepFocus={true}
+        onInputChange={handleSearchInput}
+        selectorTooltip={{ placement: 'top', title: CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.TOOLTIP.ADD }}
+        updateConceptSelected={false}
+        width='100%'
+      />
     </Stack>
   )
 }

@@ -2,7 +2,6 @@ import { use, useEffect } from 'react'
 
 import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import ConceptNavAuxiliary from '@/components/common/concept/ConceptNavAuxiliary'
-import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
@@ -45,14 +44,13 @@ const ReferencesHeaderLeft = () => {
   }
 
   return (
-    <KBTooltipTarget placement='right' title={TOOLTIP.FILTERS.CONCEPT}>
-      <ConceptSelect
-        auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
-        conceptName={filters[FILTERS.CONCEPT] || ''}
-        doConceptSelected={handleConceptSelected}
-        onClear={handleClear}
-      />
-    </KBTooltipTarget>
+    <ConceptSelect
+      auxiliaryComponent={<ConceptNavAuxiliary concepts={concepts} />}
+      conceptName={filters[FILTERS.CONCEPT] || ''}
+      doConceptSelected={handleConceptSelected}
+      onClear={handleClear}
+      selectorTooltip={{ placement: 'right', title: TOOLTIP.FILTERS.CONCEPT }}
+    />
   )
 }
 

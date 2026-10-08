@@ -6,6 +6,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
 import ConceptSelectAuxiliary from '@/components/common/concept/ConceptSelectAuxiliary'
+import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -19,7 +20,6 @@ const { WIDTH } = CONCEPT.SELECT
 const ConceptSelect = ({
   auxiliaryComponent,
   conceptName,
-  disabled = false,
   doConceptSelected,
   ignoreClearSelection = false,
   includeSpecialOptions = false,
@@ -30,6 +30,7 @@ const ConceptSelect = ({
   onInputBlur,
   onInputChange,
   selectables,
+  selectorTooltip,
   updateConceptSelected = true,
   width = WIDTH,
 }) => {
@@ -113,21 +114,29 @@ const ConceptSelect = ({
   )
 
   const renderInput = useCallback(
-    params => (
-      <TextField
-        {...params}
-        disabled={disabled}
-        sx={{
-          backgroundColor: disabled ? 'action.disabledBackground' : theme.palette.primary.pale,
-          '& .MuiInputBase-input.Mui-disabled': {
-            WebkitTextFillColor: theme.palette.text.disabled,
-          },
-        }}
-        onBlur={handleBlur}
-        onKeyUp={handleKeyUp}
-      />
-    ),
-    [disabled, handleBlur, handleKeyUp, theme]
+    params => {
+      const textField = (
+        <TextField
+          {...params}
+          sx={{ backgroundColor: theme.palette.primary.pale }}
+          onBlur={handleBlur}
+          onKeyUp={handleKeyUp}
+        />
+      )
+
+      return selectorTooltip?.title ? (
+        <KBTooltipTarget
+          placement={selectorTooltip.placement}
+          title={selectorTooltip.title}
+          wrapperSx={{ display: 'block' }}
+        >
+          {textField}
+        </KBTooltipTarget>
+      ) : (
+        textField
+      )
+    },
+    [handleBlur, handleKeyUp, selectorTooltip, theme]
   )
 
   const slotProps = useMemo(
@@ -147,9 +156,8 @@ const ConceptSelect = ({
 
   return (
     <Stack spacing={0} sx={{ width }}>
-      {auxiliaryComponent || <ConceptSelectAuxiliary disabled={disabled} label={label} />}
+      {auxiliaryComponent || <ConceptSelectAuxiliary label={label} />}
       <Autocomplete
-        disabled={disabled}
         filterOptions={filterConceptOptions}
         onChange={handleChange}
         onInputChange={onInputChange}
