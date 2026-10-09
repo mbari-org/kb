@@ -21,8 +21,7 @@ const useModifyReferences = ({ setReferences }) => {
 
   const addReference = useCallback(
     async referenceData => {
-      const createdReference = await apiFns.apiPayload(createReferenceApi, referenceData)
-      const addedReference = await updateReferenceConcepts(createdReference, referenceData, apiFns)
+      const addedReference = await apiFns.apiPayload(createReferenceApi, referenceData)
       setReferences(prev => [...prev, createReference(addedReference)])
     },
     [apiFns, setReferences]
@@ -39,11 +38,7 @@ const useModifyReferences = ({ setReferences }) => {
   const editReference = useCallback(
     async (oldReference, newReference) => {
       const updatedFieldsReference = await updateReferenceFields(oldReference, newReference, apiFns)
-      const updatedReference = await updateReferenceConcepts(
-        updatedFieldsReference,
-        newReference,
-        apiFns
-      )
+      const updatedReference = await updateReferenceConcepts(updatedFieldsReference, newReference, apiFns)
       setReferences(prev =>
         prev.map(prevReference =>
           prevReference.id === oldReference.id ? createReference(updatedReference) : prevReference
