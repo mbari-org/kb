@@ -40,6 +40,33 @@ const Whoops = ({ children }) => {
       : CONFIG.WHOOPS.MESSAGE.UNEXPECTED
 
     const stack = error.original?.stack || error.stack
+
+    const copyDevInfo = (
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', mt: 1 }}>
+        <Button
+          onClick={() => handleCopyInfo(error)}
+          sx={{
+            '&:hover': {
+              backgroundColor: 'transparent',
+              textDecoration: 'none',
+            },
+            fontSize: '18px',
+            minWidth: 'auto',
+            ml: '-0.35em',
+            padding: '2px 6px',
+            textDecoration: 'none',
+            textTransform: 'none',
+          }}
+          variant='text'
+        >
+          {CONFIG.WHOOPS.BUTTON.COPY}
+        </Button>
+        <Typography variant='body2' sx={{ textAlign: 'center' }}>
+          {CONFIG.WHOOPS.MESSAGE.COPY}
+        </Typography>
+      </Box>
+    )
+
     return (
       <Box
         sx={{
@@ -71,54 +98,32 @@ const Whoops = ({ children }) => {
           </Typography>
         )}
         {!stack && (
-          <Typography
-            sx={{
-              fontSize: '18px',
-              textAlign: 'center',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            {responseMessage}
-          </Typography>
+          <>
+            <Typography
+              sx={{
+                fontSize: '18px',
+                textAlign: 'center',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {responseMessage}
+            </Typography>
+            {copyDevInfo}
+          </>
         )}
         {stack && (
           <Stack sx={{ width: '80%' }}>
             <Typography variant='body1' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               {CONFIG.WHOOPS.MESSAGE.IMAGE_SUBTITLE}
             </Typography>
-            <Typography
-              variant='body2'
-              sx={{ textAlign: 'center', fontWeight: 'bold', mt: 2, whiteSpace: 'pre-wrap' }}
-            >
+            <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 'bold', mt: 2, whiteSpace: 'pre-wrap' }}>
               💥 {responseMessage} 💥
             </Typography>
             <Typography variant='body2' sx={{ textAlign: 'center', mt: 1, mb: 1 }}>
               {CONFIG.WHOOPS.MESSAGE.ERROR}
             </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', mt: 1 }}>
-              <Button
-                onClick={() => handleCopyInfo(error)}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'transparent',
-                    textDecoration: 'none',
-                  },
-                  fontSize: '18px',
-                  minWidth: 'auto',
-                  ml: '-0.35em',
-                  padding: '2px 6px',
-                  textDecoration: 'none',
-                  textTransform: 'none',
-                }}
-                variant='text'
-              >
-                {CONFIG.WHOOPS.BUTTON.COPY}
-              </Button>
-              <Typography variant='body2' sx={{ textAlign: 'center' }}>
-                {CONFIG.WHOOPS.MESSAGE.COPY}
-              </Typography>
-            </Box>
+            {copyDevInfo}
             <Typography
               variant='body2'
               component='pre'
