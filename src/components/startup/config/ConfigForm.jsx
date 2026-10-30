@@ -4,7 +4,9 @@ import { Box, Card, CardActions, CardContent, TextField } from '@mui/material'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import isValidUrl from '@/lib/validators/isValidUrl'
+import CONFIG from '@/lib/config'
 
+import ServiceInfo from './ServiceInfo'
 import SubmitButton from '@/components/common/SubmitButton'
 import SubmitError from '@/components/common/SubmitError'
 
@@ -20,7 +22,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
     return result
   }
 
-  const [_configState, configAction] = useActionState(submitConfigUrl, '')
+  const [_configState, configAction, isPending] = useActionState(submitConfigUrl, '')
 
   const handleConfigChange = event => {
     const newValue = event.target.value
@@ -34,6 +36,13 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const isValidConfigUrl = isValidUrl(displayConfigUrl)
   const isButtonEnabled = isFormDirty && isValidConfigUrl
 
+  const applyDefaultConfigUrl = close => {
+    setConfigUrl(CONFIG.LOGIN.CONFIG_SERVICE.DEFAULT)
+    setSubmitError('')
+    setConfigIsDirty(CONFIG.LOGIN.CONFIG_SERVICE.DEFAULT !== config?.url)
+    close()
+  }
+
   useEffect(() => {
     if (config?.url) {
       setConfigIsDirty(false)
@@ -46,13 +55,19 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
         <CardContent>
           <TextField
             id='config-service-url'
+            disabled={isPending}
             fullWidth
-            label='Config Service URL'
+            label={CONFIG.LOGIN.CONFIG_SERVICE.LABEL}
             name='configUrl'
             onChange={handleConfigChange}
             required
             sx={{ mt: 1 }}
             value={displayConfigUrl}
+            slotProps={{
+              input: {
+                endAdornment: <ServiceInfo disabled={isPending} onApplyDefault={applyDefaultConfigUrl} />,
+              },
+            }}
           />
           <SubmitError errorText={submitError || (!isFormDirty ? config?.error : '') || ''} />
         </CardContent>

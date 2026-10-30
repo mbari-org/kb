@@ -4,6 +4,7 @@ import { Box, Button } from '@mui/material'
 
 import UserContext from '@/contexts/user/UserContext'
 
+import CONFIG from '@/lib/config'
 import { loginReadOnly } from '@/lib/services/auth/login'
 
 const ReadOnlyLogin = () => {
@@ -48,7 +49,7 @@ const ReadOnlyLogin = () => {
           textDecoration: 'none',
         }}
       >
-        Read Only Access
+        {CONFIG.LOGIN.READ_ONLY}
       </Button>
     </Box>
   )

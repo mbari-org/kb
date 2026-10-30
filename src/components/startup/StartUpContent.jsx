@@ -1,9 +1,9 @@
 import { Box, useTheme } from '@mui/material'
 
 import StartUpImage from '@/components/startup/StartUpImage'
-import ConfigForm from '@/components/startup/ConfigForm'
-import ReadOnlyLogin from '@/components/startup/ReadOnlyLogin'
-import LoginForm from '@/components/startup/LoginForm'
+import ConfigForm from '@/components/startup/config/ConfigForm'
+import ReadOnlyLogin from '@/components/startup/login/ReadOnlyLogin'
+import LoginForm from '@/components/startup/login/LoginForm'
 import StartUpVersion from '@/components/startup/StartUpVersion'
 
 const StartUpContent = ({ configIsDirty, handleConfigChange }) => {

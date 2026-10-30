@@ -10,6 +10,7 @@ const validateConfigUrl = async url => {
     const response = await fetch(healthUrl, {
       method: 'GET',
       mode: 'cors',
+      signal: AbortSignal.timeout(5000),
     })
     if (response.status !== 200) {
       return {
@@ -18,7 +19,7 @@ const validateConfigUrl = async url => {
     }
     return {}
   } catch (error) {
-    const detail = error?.message ? ` (${error.message})` : ''
+    const detail = error?.name === 'TimeoutError' ? ' (timed out)' : error?.message ? ` (${error.message})` : ''
     return { error: `Config service: Failed access${detail}`, url }
   }
 }

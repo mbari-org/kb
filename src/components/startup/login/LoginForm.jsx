@@ -4,7 +4,7 @@ import { Box, Card, CardActions, CardContent } from '@mui/material'
 
 import SubmitButton from '@/components/common/SubmitButton'
 import SubmitError from '@/components/common/SubmitError'
-import LoginInput from '@/components/startup/LoginInput'
+import LoginInput from '@/components/startup/login/LoginInput'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -41,13 +41,7 @@ const LoginForm = ({ isVisible = true }) => {
       <Card sx={{ bgcolor: 'transparent' }}>
         <CardContent>
           <LoginInput id='login-user' ref={usernameRef} label='Username' name='username' />
-          <LoginInput
-            id='login-password'
-            label='Password'
-            name='password'
-            type='password'
-            sx={{ mt: 2 }}
-          />
+          <LoginInput id='login-password' label='Password' name='password' type='password' sx={{ mt: 2 }} />
           <SubmitError errorText={loginState?.error?.message} />
         </CardContent>
         <CardActions style={{ display: 'flex', justifyContent: 'center' }}>

@@ -1,0 +1,9 @@
+{
+  "CONFIG_SERVICE": {
+    "DEFAULT": "https://m3.shore.mbari.org/config",
+    "DESCRIPTION": "Please enter the URL for your VARS configuration server.",
+    "DETAIL": "At MBARI, enter",
+    "LABEL": "Config Service URL"
+  },
+  "READ_ONLY": "Read Only Access"
+}

@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ThemeProvider } from '@mui/material/styles'
 
-import ConfigForm from '@/components/startup/ConfigForm'
+import ConfigForm from '@/components/startup/config/ConfigForm'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import kbTheme from '@/lib/theme'
 

@@ -17,6 +17,7 @@ describe('validateConfigUrl', () => {
     expect(fetch).toHaveBeenCalledWith('http://wtf.com/health', {
       method: 'GET',
       mode: 'cors',
+      signal: expect.any(AbortSignal),
     })
   })
 
@@ -28,6 +29,17 @@ describe('validateConfigUrl', () => {
     })
   })
 
+  it('reports a timeout when the Config Service does not respond', async () => {
+    const timeoutError = new Error('The operation timed out')
+    timeoutError.name = 'TimeoutError'
+    globalThis.fetch = vi.fn().mockRejectedValue(timeoutError)
+
+    await expect(validateConfigUrl('http://wtf.com')).resolves.toEqual({
+      error: 'Config service: Failed access (timed out)',
+      url: 'http://wtf.com',
+    })
+  })
+
   it('uses the local proxy for the HTTPS loopback Config Service', async () => {
     globalThis.fetch = vi.fn().mockResolvedValue(response(200))
 
@@ -36,6 +48,7 @@ describe('validateConfigUrl', () => {
     expect(fetch).toHaveBeenCalledWith(`${globalThis.location.origin}/config/health`, {
       method: 'GET',
       mode: 'cors',
+      signal: expect.any(AbortSignal),
     })
   })
 
@@ -47,6 +60,7 @@ describe('validateConfigUrl', () => {
     expect(fetch).toHaveBeenCalledWith(`${globalThis.location.origin}/config/health`, {
       method: 'GET',
       mode: 'cors',
+      signal: expect.any(AbortSignal),
     })
   })
 
@@ -57,6 +71,7 @@ describe('validateConfigUrl', () => {
     expect(fetch).toHaveBeenCalledWith(`${globalThis.location.origin}/config/health`, {
       method: 'GET',
       mode: 'cors',
+      signal: expect.any(AbortSignal),
     })
   })
 })

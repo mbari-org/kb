@@ -19,6 +19,7 @@ const getEndpoints = async (url, token) => {
       headers,
       method: 'GET',
       mode: 'cors',
+      signal: AbortSignal.timeout(5000),
     })
     if (response.status !== 200) {
       return { error: `Config service: ${response.status} ${response.statusText || 'Error'}` }
@@ -34,7 +35,7 @@ const getEndpoints = async (url, token) => {
 
     return { endpoints }
   } catch (error) {
-    const detail = error?.message ? ` (${error.message})` : ''
+    const detail = error?.name === 'TimeoutError' ? ' (timed out)' : error?.message ? ` (${error.message})` : ''
     return { error: `Config service: Failed access${detail}`, url }
   }
 }
