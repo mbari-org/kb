@@ -26,28 +26,29 @@ const ConceptName = () => {
   const { isReadOnly } = use(UserContext)
   const { concept, isEditing, pending } = use(ConceptContext)
 
-  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } =
-    useStructureChoices()
-  const hasStagedStructure =
-    hasStagedChildren || hasStagedDelete || hasStagedName || hasStagedParent
+  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = useStructureChoices()
+  const hasStagedStructure = hasStagedChildren || hasStagedDelete || hasStagedName || hasStagedParent
 
   const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
 
-  const showStructureButton =
-    isEditing && !showStructureChoicesModal && !hasStagedDelete && !isReadOnly
+  const showStructureButton = isEditing && !showStructureChoicesModal && !hasStagedDelete && !isReadOnly
 
   const hasPending = hasPendingStructure(pending, concept.name)
 
-  const conceptColor =
-    hasStagedStructure || hasPending.any ? theme.concept.color.edit : theme.palette.primary.main
+  const conceptColor = hasStagedStructure || hasPending.any ? theme.concept.color.edit : theme.palette.primary.main
 
   const dsgLink = dsgConceptUrl && concept?.name && (
     <KBTooltip title={TOOLTIP.DSG}>
       <Box
         component='a'
-        href={`${dsgConceptUrl}${encodeURIComponent(concept.name)}`}
+        href={`${dsgConceptUrl.replace(/\/*$/, '/')}/#/view/${encodeURIComponent(concept.name)}`}
         rel='noopener noreferrer'
-        sx={{ color: 'inherit', font: 'inherit', textDecoration: 'none' }}
+        sx={{
+          color: 'inherit',
+          font: 'inherit',
+          textDecoration: 'none',
+          '&:hover': { fontStyle: 'italic' },
+        }}
         target='_blank'
       >
         {concept.name}
@@ -70,12 +71,8 @@ const ConceptName = () => {
       >
         {dsgLink || concept?.name}
       </Typography>
-      {showStructureButton && (
-        <ConceptStructureIcon onClick={() => setShowStructureChoices(true)} />
-      )}
-      {showStructureChoicesModal && (
-        <ChangeStructureChoices closeChoices={() => setShowStructureChoices(false)} />
-      )}
+      {showStructureButton && <ConceptStructureIcon onClick={() => setShowStructureChoices(true)} />}
+      {showStructureChoicesModal && <ChangeStructureChoices closeChoices={() => setShowStructureChoices(false)} />}
     </Stack>
   )
 }
