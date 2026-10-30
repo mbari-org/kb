@@ -1,4 +1,5 @@
-import generalStateUpdates from '@/contexts/panels/concepts/staged/edit/generalStateUpdates'
+import { puid } from 'puid-js'
+
 import { stagedEdits } from '@/lib/concept/state/staged'
 
 import { matchingRealizationString, sortRealizations } from '@/lib/model/realization'
@@ -11,27 +12,47 @@ import { REALIZATION_VALUE_FIELDS } from '@/lib/model/realization'
 
 import { isJsonEqual } from '@/lib/utils'
 
+const { generator, error: generatorError } = puid({ total: 10, risk: 1e15 })
+if (generatorError) throw generatorError
+
+const genStateId = () => generator()
+
+const alignRealizationsByStateId = (initial, staged) => {
+  if (!staged || !initial) return staged
+  const initialByStateId = initial.reduce((acc, item) => {
+    acc[item.stateId] = item
+    return acc
+  }, {})
+  return staged
+    .map(stagedItem => {
+      const initialItem = initialByStateId[stagedItem.stateId]
+      return initialItem || stagedItem
+    })
+    .filter(item => initialByStateId[item.stateId])
+}
+
 const addRealization = ({ stagedState, update }) => {
-  const realizationIndex = stagedState.realizations.length
   const realizationItem = {
     ...update.realizationItem,
     action: CONCEPT_STATE.REALIZATION.ADD,
-    index: realizationIndex,
+    stateId: genStateId(),
   }
 
-  const updatedRealizations = [...stagedState.realizations, realizationItem]
+  const updatedRealizations = sortRealizations([...stagedState.realizations, realizationItem])
   return {
     ...stagedState,
-    realizations: sortRealizations(updatedRealizations),
-    realizationIndex,
+    realizations: updatedRealizations,
+    realizationIndex: updatedRealizations.findIndex(item => item.stateId === realizationItem.stateId),
   }
 }
 
 const deleteRealization = ({ stagedState, update }) => {
-  const realizationItem = stagedState.realizations[update.realizationIndex]
+  const realizationItem = stagedState.realizations.find(item => item.stateId === update.realizationStateId)
   // If realization is an add, just remove it from state
   if (realizationItem?.action === CONCEPT_STATE.REALIZATION.ADD) {
-    const updatedRealizations = stagedState.realizations.filter((_item, index) => index !== update.realizationIndex)
+    const updatedRealizations = stagedState.realizations.filter(
+      item => item.stateId !== update.realizationStateId
+    )
     return {
       ...stagedState,
       realizations: updatedRealizations,
@@ -41,7 +62,7 @@ const deleteRealization = ({ stagedState, update }) => {
 }
 
 const editRealization = ({ stagedState, update }) => {
-  const realizationItem = stagedState.realizations[update.realizationIndex]
+  const realizationItem = stagedState.realizations.find(item => item.stateId === update.realizationStateId)
   // If editing an added realization, don't change the action
   if (realizationItem.action === CONCEPT_STATE.REALIZATION.ADD) {
     const updatedItem = {
@@ -50,8 +71,8 @@ const editRealization = ({ stagedState, update }) => {
     }
     return {
       ...stagedState,
-      realizations: stagedState.realizations.map((item, index) =>
-        index === update.realizationIndex ? updatedItem : item
+      realizations: stagedState.realizations.map(item =>
+        item.stateId === update.realizationStateId ? updatedItem : item
       ),
     }
   }
@@ -90,23 +111,22 @@ const realizationState = (realization, pendingRealizations) => {
 
 const initialState = (concept, pendingConcept) => {
   const pendingRealizations = pendingConcept.filter(isPendingRealization)
-  const stagedRealizations = concept.realizations.map((realization, index) =>
-    realizationState({ ...realization, index }, pendingRealizations)
+  const stagedRealizations = concept.realizations.map(realization =>
+    realizationState({ ...realization, stateId: genStateId() }, pendingRealizations)
   )
   return { realizations: sortRealizations(stagedRealizations) }
 }
 
 const resetRealizations = ({ stagedState, update }) => {
-  const { index: resetIndex } = update
+  const { stateId: resetStateId, realizations: resetRealizationsArray } = update
 
-  if (1 < stagedState.realizations.length && resetIndex !== undefined) {
-    const realization = update.realizations[resetIndex]
-    return {
-      ...stagedState,
-      realizations: stagedState.realizations.reduce((acc, item, index) => {
-        index === resetIndex ? realization != null && acc.push(realization) : acc.push(item)
-        return acc
-      }, []),
+  if (1 < stagedState.realizations.length && resetStateId !== undefined) {
+    const resetItem = resetRealizationsArray.find(item => item.stateId === resetStateId)
+    if (resetItem) {
+      return {
+        ...stagedState,
+        realizations: stagedState.realizations.map(item => (item.stateId === resetStateId ? resetItem : item)),
+      }
     }
   }
   return {
@@ -127,20 +147,33 @@ const stagedRealizationEdits = stagedEdit => {
 }
 
 const updateState = ({ stagedState, update, type }) => {
-  const { realizationIndex, realizationItem } = update
-  const updatedItem = { ...stagedState.realizations[realizationIndex], ...realizationItem, action: type }
+  const { realizationStateId, realizationItem } = update
+  const updatedItem = {
+    ...stagedState.realizations.find(item => item.stateId === realizationStateId),
+    ...realizationItem,
+    action: type,
+  }
   return {
     ...stagedState,
-    realizations: stagedState.realizations.map((item, index) => (index === realizationIndex ? updatedItem : item)),
+    realizations: stagedState.realizations.map(item => (item.stateId === realizationStateId ? updatedItem : item)),
   }
 }
 
-const isModified = (initial, staged) => !isJsonEqual(initial?.realizations, staged?.realizations)
+const isModified = (initial, staged) => {
+  const alignedInitial = alignRealizationsByStateId(initial?.realizations, staged?.realizations)
+  return !isJsonEqual(staged?.realizations, alignedInitial)
+}
 
-const stateUpdates = (initial, staged) => generalStateUpdates('realizations', initial, staged)
+const stateUpdates = (initial, staged) => {
+  const aligned = alignRealizationsByStateId(initial?.realizations, staged?.realizations)
+  return !isJsonEqual(aligned, staged?.realizations)
+    ? { realizations: { initial: aligned, staged: staged?.realizations } }
+    : {}
+}
 
 export {
   addRealization,
+  alignRealizationsByStateId,
   deleteRealization,
   editRealization,
   initialState,

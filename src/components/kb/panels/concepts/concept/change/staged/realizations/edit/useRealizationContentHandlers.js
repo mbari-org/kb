@@ -6,7 +6,7 @@ import useDebounce from '@/lib/hooks/useDebounce'
 const useRealizationContentHandlers = ({
   action,
   modalData,
-  realizationIndex,
+  realizationStateId,
   realizationItem,
   setModalData,
   setRealizationItem,
@@ -28,7 +28,8 @@ const useRealizationContentHandlers = ({
     const fieldIsModified =
       action === CONCEPT_STATE.REALIZATION.ADD
         ? updatedRealizationItem[field] !== EMPTY_REALIZATION[field]
-        : stagedState.realizations[realizationIndex][field] !== updatedRealizationItem[field]
+        : stagedState.realizations.find(item => item.stateId === realizationStateId)[field] !==
+          updatedRealizationItem[field]
 
     debouncedInput(updatedRealizationItem, fieldIsModified, field)
   }

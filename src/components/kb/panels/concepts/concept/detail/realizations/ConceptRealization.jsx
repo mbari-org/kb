@@ -44,7 +44,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50], rowSx = {} }) 
   const showDelete = isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
 
   const realizationIcon = action => {
-    return <RealizationActionIcon action={action} realizationIndex={realization.index} size={20} />
+    return <RealizationActionIcon action={action} realizationStateId={realization.stateId} size={20} />
   }
 
   const handleViewRealization = () => {

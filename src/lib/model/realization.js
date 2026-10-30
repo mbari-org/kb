@@ -10,13 +10,13 @@ const asText = realization => `${realization.linkName} | ${realization.toConcept
 
 const isSame = (a, b) => a.linkName === b.linkName && a.toConcept === b.toConcept && a.linkValue === b.linkValue
 
-const hasDuplicate = (realizations, realization, excludeIndex = null) => {
+const hasDuplicate = (realizations, realization, excludeStateId = null) => {
   if (!realization.linkName || !realization.toConcept || !realization.linkValue) {
     return false
   }
 
   const realizationsToCheck =
-    excludeIndex !== null ? realizations.filter((_, index) => index !== excludeIndex) : realizations
+    excludeStateId !== null ? realizations.filter(item => item.stateId !== excludeStateId) : realizations
 
   return realizationsToCheck.some(existing => isSame(realization, existing))
 }

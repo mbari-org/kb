@@ -17,7 +17,7 @@ const displayItem = (item, fields) => {
 }
 
 const editItem = edit => {
-  const { action, index, initial, staged } = edit
+  const { action, index, initial, staged, stateId } = edit
   const updates = staged.reduce((acc, [field, value], index) => {
     const initialValue = initial ? initial[index][1] : null
     if (value !== initialValue) {
@@ -29,6 +29,7 @@ const editItem = edit => {
   return {
     action,
     index,
+    stateId,
     updates,
   }
 }
@@ -75,7 +76,7 @@ const itemEdit = ({ displayFields, index, initialItem, stagedItem, stateTypes })
   const initial = action === stateTypes.ADD ? null : displayItem(initialItem, displayFields)
   const staged = action === stateTypes.DELETE ? null : displayItem(stagedItem, displayFields)
 
-  return { action, index, initial, staged }
+  return { action, index, initial, staged, stateId: stagedItem.stateId }
 }
 
 export { deleteItem, displayItem, editItem, stagedBorder, stagedEdits }

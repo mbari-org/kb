@@ -3,7 +3,7 @@ import { hasTrueValue } from '@/lib/utils'
 
 const createRealizationOnClose = ({ initialState, modifyConcept }) => {
   return modalData => {
-    const { modified, realizationIndex } = modalData
+    const { modified, realizationStateId } = modalData
     const isModified = hasTrueValue(modified)
 
     if (!isModified) {
@@ -12,7 +12,7 @@ const createRealizationOnClose = ({ initialState, modifyConcept }) => {
 
     modifyConcept({
       type: CONCEPT_STATE.RESET.REALIZATIONS,
-      update: { realizations: initialState.realizations, index: realizationIndex },
+      update: { realizations: initialState.realizations, stateId: realizationStateId },
     })
     return false
   }

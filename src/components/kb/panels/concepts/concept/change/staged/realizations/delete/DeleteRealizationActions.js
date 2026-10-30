@@ -19,13 +19,13 @@ const DeleteRealizationActions = () => {
   const { closeModal } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
 
-  const realizationIndex = modalData?.realizationIndex ?? 0
-  const realization = realizations?.[realizationIndex]
+  const realizationStateId = modalData?.realizationStateId
+  const realization = realizations?.find(item => item.stateId === realizationStateId)
 
   const stageAction = {
     type: CONCEPT_STATE.REALIZATION.DELETE,
     update: {
-      realizationIndex,
+      realizationStateId,
       realizationItem: {
         ...realization,
         action: CONCEPT_STATE.REALIZATION.DELETE,

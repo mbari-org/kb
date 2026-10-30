@@ -21,7 +21,7 @@ const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
 const ADD = CONCEPT_STATE.REALIZATION.ADD
 const DELETE = CONCEPT_STATE.REALIZATION.DELETE
 
-const RealizationActionIcon = ({ action, realizationIndex, size }) => {
+const RealizationActionIcon = ({ action, realizationStateId, size }) => {
   const { initialState } = use(ConceptContext)
   const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { setModal, setModalData } = use(ConceptModalContext)
@@ -36,12 +36,15 @@ const RealizationActionIcon = ({ action, realizationIndex, size }) => {
 
   const onClick = useCallback(() => {
     try {
-      const realizationItem = action === ADD ? EMPTY_REALIZATION : stagedState.realizations[realizationIndex]
+      const realizationItem =
+        action === ADD
+          ? EMPTY_REALIZATION
+          : stagedState.realizations.find(item => item.stateId === realizationStateId)
 
       const modalData = {
         action,
         modified: { linkName: false, toConcept: false, linkValue: false },
-        realizationIndex,
+        realizationStateId,
         realizationItem,
       }
       setModalData(modalData)
@@ -53,7 +56,7 @@ const RealizationActionIcon = ({ action, realizationIndex, size }) => {
     } catch (error) {
       setAsyncError(error)
     }
-  }, [action, realizationIndex, initialState, modifyConcept, setModal, setModalData, stagedState])
+  }, [action, realizationStateId, initialState, modifyConcept, setModal, setModalData, stagedState])
 
   const IconComponent = action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 

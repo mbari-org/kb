@@ -1,7 +1,7 @@
 {
   "NAME": "Concepts",
   "TOOLTIP": {
-    "DSG": "Display in DSG",
+    "DSG": "View DSG entry in a new tab",
     "EXPORT": "Export concept data"
   }
 }

@@ -63,8 +63,8 @@ const submitRealizations = ([submit, { concept, updatesInfo }]) => {
     return { apiFn: createRealization, params, action: REALIZATION.ADD }
   }
 
-  const realizationEdit = (update, index) => {
-    const prior = initialRealizations[index]
+  const realizationEdit = update => {
+    const prior = initialRealizations.find(item => item.stateId === update.stateId)
     const updateDiff = diff(update, prior)
     const realization = drop(updateDiff, ['action'])
     const params = [prior.id, realization]
@@ -78,7 +78,7 @@ const submitRealizations = ([submit, { concept, updatesInfo }]) => {
 
   const actionSubmitter = {
     [REALIZATION.ADD]: realizationAdd,
-    [REALIZATION.EDIT]: (u, i) => realizationEdit(u, i),
+    [REALIZATION.EDIT]: realizationEdit,
     [REALIZATION.DELETE]: realizationDelete,
   }
 

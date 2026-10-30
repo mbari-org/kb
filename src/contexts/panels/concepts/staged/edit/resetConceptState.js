@@ -105,7 +105,7 @@ const resetConceptState = (action, dispatch, initialState) => {
     case RESET.REALIZATIONS:
       dispatch({
         type: RESET.REALIZATIONS,
-        update: { realizations: initialState.realizations, index: action.update.index },
+        update: { realizations: initialState.realizations, stateId: action.update?.stateId },
       })
       break
 

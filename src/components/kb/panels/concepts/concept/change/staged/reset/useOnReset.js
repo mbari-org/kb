@@ -4,15 +4,15 @@ import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContex
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const useOnReset = (group, index) => {
+const useOnReset = (group, index, stateId) => {
   const { modifyConcept } = use(ConceptStagedContext)
 
   return useCallback(() => {
     modifyConcept({
       type: CONCEPT_STATE.RESET[group.toUpperCase()],
-      update: { index },
+      update: { index, stateId },
     })
-  }, [group, index, modifyConcept])
+  }, [group, index, stateId, modifyConcept])
 }
 
 export default useOnReset

@@ -212,24 +212,24 @@ describe('conceptStateReducer', () => {
     it('DELETE: removes added realization', () => {
       const stagedState = {
         ...baseStagedState,
-        realizations: [{ linkName: 'sameAs', action: REALIZATION.ADD, index: 0 }],
+        realizations: [{ linkName: 'sameAs', action: REALIZATION.ADD, stateId: 'r1' }],
       }
       const result = conceptStateReducer(stagedState, {
         type: REALIZATION.DELETE,
-        update: { realizationIndex: 0 },
+        update: { realizationStateId: 'r1' },
         initialState: baseStagedState,
       })
       expect(result.realizations).toHaveLength(0)
     })
 
-    it('EDIT: updates realization at index', () => {
+    it('EDIT: updates realization by stateId', () => {
       const stagedState = {
         ...baseStagedState,
-        realizations: [{ linkName: 'sameAs', toConcept: 'Old', linkValue: 'v', action: 'None', index: 0 }],
+        realizations: [{ linkName: 'sameAs', toConcept: 'Old', linkValue: 'v', action: 'None', stateId: 'r1' }],
       }
       const result = conceptStateReducer(stagedState, {
         type: REALIZATION.EDIT,
-        update: { realizationIndex: 0, realizationItem: { toConcept: 'New' } },
+        update: { realizationStateId: 'r1', realizationItem: { toConcept: 'New' } },
         initialState: baseStagedState,
       })
       expect(result.realizations[0].toConcept).toBe('New')

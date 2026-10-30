@@ -28,7 +28,7 @@ const EditRealizationContent = () => {
   const { modalData } = use(ConceptModalDataContext)
   const { isLoading } = use(PanelDataContext)
 
-  const { action, realizationIndex, modalRealizationItem } = modalData
+  const { action, realizationStateId, realizationItem: modalRealizationItem } = modalData
 
   const [cycleIndex, setCycleIndex] = useState(0)
   const [filterLinkName, setFilterLinkName] = useState('')
@@ -40,13 +40,13 @@ const EditRealizationContent = () => {
 
   useEffect(() => {
     if (isEdit) {
-      const editRealization = stagedState?.realizations?.[realizationIndex]
+      const editRealization = stagedState?.realizations?.find(item => item.stateId === realizationStateId)
       const timeoutId = setTimeout(() => {
         setRealizationItem(editRealization || modalRealizationItem)
       }, 0)
       return () => clearTimeout(timeoutId)
     }
-  }, [isEdit, modalRealizationItem, realizationIndex, stagedState?.realizations])
+  }, [isEdit, modalRealizationItem, realizationStateId, stagedState?.realizations])
 
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 
@@ -62,9 +62,9 @@ const EditRealizationContent = () => {
   }, [filterLinkName])
 
   const isDuplicate = useMemo(() => {
-    const excludeIndex = action === CONCEPT_STATE.REALIZATION.ADD ? null : realizationIndex
-    return hasDuplicate(stagedState.realizations, realizationItem, excludeIndex)
-  }, [action, realizationIndex, realizationItem, stagedState.realizations])
+    const excludeStateId = action === CONCEPT_STATE.REALIZATION.ADD ? null : realizationStateId
+    return hasDuplicate(stagedState.realizations, realizationItem, excludeStateId)
+  }, [action, realizationStateId, realizationItem, stagedState.realizations])
 
   useEffect(() => {
     setModalData(prev => ({
@@ -79,7 +79,7 @@ const EditRealizationContent = () => {
   const { handleRealizationChange, handleTemplateSelect } = useRealizationContentHandlers({
     action,
     modalData,
-    realizationIndex,
+    realizationStateId,
     realizationItem,
     setModalData,
     setRealizationItem,

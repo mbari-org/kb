@@ -45,7 +45,7 @@ describe('conceptStateReducer realizations', () => {
       toConcept: 'Other',
       linkValue: 'x',
       action: REALIZATION.ADD,
-      index: 0,
+      stateId: expect.any(String),
     })
 
     expect(realizations.isModified(initialState, stagedState)).toBe(true)
@@ -80,7 +80,7 @@ describe('conceptStateReducer realizations', () => {
       toConcept: 'Staged Concept',
       linkValue: 'v1',
       action: REALIZATION.ADD,
-      index: 0,
+      stateId: expect.any(String),
     })
 
     const fullStateUpdates = stateUpdates(initialState, stagedState)
@@ -105,8 +105,8 @@ describe('conceptStateReducer realizations', () => {
     stagedState = conceptStateReducer(stagedState, {
       type: REALIZATION.EDIT,
       update: {
-        realizationIndex: 0,
-        realizationItem: { toConcept: 'Edited', linkValue: 'v2' },
+        realizationStateId: stagedState.realizations[0].stateId,
+        realizationItem: { ...stagedState.realizations[0], toConcept: 'Edited', linkValue: 'v2' },
       },
       initialState,
     })
@@ -141,7 +141,7 @@ describe('conceptStateReducer realizations', () => {
 
     stagedState = conceptStateReducer(stagedState, {
       type: REALIZATION.DELETE,
-      update: { realizationIndex: 0 },
+      update: { realizationStateId: stagedState.realizations[0].stateId },
       initialState,
     })
 
@@ -182,8 +182,8 @@ describe('conceptStateReducer realizations', () => {
     stagedState = conceptStateReducer(stagedState, {
       type: REALIZATION.EDIT,
       update: {
-        realizationIndex: 0,
-        realizationItem: { toConcept: 'Dingo Updated', linkValue: 'y' },
+        realizationStateId: stagedState.realizations[0].stateId,
+        realizationItem: { ...stagedState.realizations[0], toConcept: 'Dingo Updated', linkValue: 'y' },
       },
       initialState,
     })
@@ -197,12 +197,141 @@ describe('conceptStateReducer realizations', () => {
 
     stagedState = conceptStateReducer(stagedState, {
       type: REALIZATION.DELETE,
-      update: { realizationIndex: 0 },
+      update: { realizationStateId: stagedState.realizations[0].stateId },
       initialState,
     })
 
     expect(stagedState.realizations).toHaveLength(0)
     expect(isStateModified({ initialState, stagedState })).toBe(false)
     expect(realizations.stateUpdates(initialState, stagedState)).toEqual({})
+  })
+
+  describe('stable stateId identity when server order differs from sort order', () => {
+    // Server returns zebra before alpha, but sortRealizations displays alpha first
+    const concept = {
+      realizations: [
+        { id: 11, linkName: 'zebra', toConcept: 'Zed', linkValue: 'z' },
+        { id: 22, linkName: 'alpha', toConcept: 'Ay', linkValue: 'a' },
+      ],
+    }
+
+    const buildState = () => {
+      const built = { ...baseStagedState, ...realizations.initialState(concept, []) }
+      return { initial: built, staged: structuredClone(built) }
+    }
+
+    it('initialState stamps stateId and sorts by linkName', () => {
+      const { initial } = buildState()
+
+      expect(initial.realizations.map(item => item.linkName)).toEqual(['alpha', 'zebra'])
+      expect(initial.realizations.every(item => typeof item.stateId === 'string')).toBe(true)
+    })
+
+    it('editing a displayed row targets the realization with that row stateId', () => {
+      const { initial, staged } = buildState()
+      const displayedRow = staged.realizations[0]
+      expect(displayedRow.linkName).toBe('alpha')
+
+      const stagedState = conceptStateReducer(staged, {
+        type: REALIZATION.EDIT,
+        update: {
+          realizationStateId: displayedRow.stateId,
+          realizationItem: { ...displayedRow, linkValue: 'edited' },
+        },
+        initialState: initial,
+      })
+
+      const alpha = stagedState.realizations.find(item => item.linkName === 'alpha')
+      const zebra = stagedState.realizations.find(item => item.linkName === 'zebra')
+      expect(alpha.linkValue).toBe('edited')
+      expect(alpha.action).toBe(REALIZATION.EDIT)
+      expect(zebra.linkValue).toBe('z')
+      expect(zebra.action).toBe(CONCEPT_STATE.NO_ACTION)
+    })
+
+    it('deleting a displayed row marks the realization with that row stateId', () => {
+      const { initial, staged } = buildState()
+      const displayedRow = staged.realizations[0]
+      expect(displayedRow.linkName).toBe('alpha')
+
+      const stagedState = conceptStateReducer(staged, {
+        type: REALIZATION.DELETE,
+        update: { realizationStateId: displayedRow.stateId },
+        initialState: initial,
+      })
+
+      const alpha = stagedState.realizations.find(item => item.linkName === 'alpha')
+      const zebra = stagedState.realizations.find(item => item.linkName === 'zebra')
+      expect(alpha.action).toBe(REALIZATION.DELETE)
+      expect(zebra.action).toBe(CONCEPT_STATE.NO_ACTION)
+    })
+  })
+
+  describe('stable stateId identity after an add re-sorts the staged array', () => {
+    const concept = {
+      realizations: [
+        { id: 11, linkName: 'alpha', toConcept: 'Ay', linkValue: 'a' },
+        { id: 22, linkName: 'zebra', toConcept: 'Zed', linkValue: 'z' },
+      ],
+    }
+
+    it('editing an existing realization after a mid-array add targets the correct item', () => {
+      const initial = { ...baseStagedState, ...realizations.initialState(concept, []) }
+      let staged = structuredClone(initial)
+
+      staged = conceptStateReducer(staged, {
+        type: REALIZATION.ADD,
+        update: {
+          realizationItem: { linkName: 'middle', toConcept: 'Em', linkValue: 'm' },
+        },
+        initialState: initial,
+      })
+
+      expect(staged.realizations.map(item => item.linkName)).toEqual(['alpha', 'middle', 'zebra'])
+
+      const zebraRow = staged.realizations.find(item => item.linkName === 'zebra')
+      staged = conceptStateReducer(staged, {
+        type: REALIZATION.EDIT,
+        update: {
+          realizationStateId: zebraRow.stateId,
+          realizationItem: { ...zebraRow, linkValue: 'z-edited' },
+        },
+        initialState: initial,
+      })
+
+      const zebra = staged.realizations.find(item => item.linkName === 'zebra')
+      const middle = staged.realizations.find(item => item.linkName === 'middle')
+      const alpha = staged.realizations.find(item => item.linkName === 'alpha')
+      expect(zebra.linkValue).toBe('z-edited')
+      expect(zebra.action).toBe(REALIZATION.EDIT)
+      expect(middle.action).toBe(REALIZATION.ADD)
+      expect(middle.linkValue).toBe('m')
+      expect(alpha.action).toBe(CONCEPT_STATE.NO_ACTION)
+    })
+
+    it('deleting an existing realization after a mid-array add targets the correct item', () => {
+      const initial = { ...baseStagedState, ...realizations.initialState(concept, []) }
+      let staged = structuredClone(initial)
+
+      staged = conceptStateReducer(staged, {
+        type: REALIZATION.ADD,
+        update: {
+          realizationItem: { linkName: 'middle', toConcept: 'Em', linkValue: 'm' },
+        },
+        initialState: initial,
+      })
+
+      const zebraRow = staged.realizations.find(item => item.linkName === 'zebra')
+      staged = conceptStateReducer(staged, {
+        type: REALIZATION.DELETE,
+        update: { realizationStateId: zebraRow.stateId },
+        initialState: initial,
+      })
+
+      const zebra = staged.realizations.find(item => item.linkName === 'zebra')
+      const middle = staged.realizations.find(item => item.linkName === 'middle')
+      expect(zebra.action).toBe(REALIZATION.DELETE)
+      expect(middle.action).toBe(REALIZATION.ADD)
+    })
   })
 })

@@ -5,9 +5,9 @@ import ResettingButton from '@/components/kb/panels/concepts/concept/change/stag
 import useOnReset from './useOnReset'
 
 const StagedItemReset = ({ group, resetting, stagedItem }) => {
-  const { index } = stagedItem
+  const { index, stateId } = stagedItem
 
-  const onClick = useOnReset(group, index)
+  const onClick = useOnReset(group, index, stateId)
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>

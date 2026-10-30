@@ -12,12 +12,12 @@ const useStageRealization = () => {
   const stageRealization = async event => {
     event.preventDefault()
 
-    const { action, realizationIndex, realizationItem } = modalData
+    const { action, realizationStateId, realizationItem } = modalData
 
     modifyConcept({
       type: action,
       update: {
-        realizationIndex,
+        realizationStateId,
         realizationItem,
       },
     })

@@ -28,7 +28,7 @@ const ConceptRealizations = () => {
   const realizations = stagedState?.realizations || []
 
   const IconComponent = () => (
-    <RealizationActionIcon action={CONCEPT_STATE.REALIZATION.ADD} realizationIndex={realizations.length} />
+    <RealizationActionIcon action={CONCEPT_STATE.REALIZATION.ADD} />
   )
   const linkToRealizations = () => {
     const panel = CONFIG.PANELS.REALIZATIONS.PANEL.NAME
