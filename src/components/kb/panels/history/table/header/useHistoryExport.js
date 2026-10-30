@@ -17,8 +17,8 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import { CONCEPT } from '@/lib/constants'
-import { PAGINATION } from '@/lib/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 import CONFIG from '@/lib/config'

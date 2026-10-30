@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import { getConceptLinkRealizations, getRealizations } from '@/lib/api/realizations'
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
 const { REALIZATIONS } = PAGINATION
 const LOAD_PAGE_SIZE = Math.max(...REALIZATIONS.PAGE_SIZE_OPTIONS)

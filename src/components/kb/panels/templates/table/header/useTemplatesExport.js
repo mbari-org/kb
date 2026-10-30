@@ -14,7 +14,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import csvExport from '@/lib/csvExport'
 
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 import CONFIG from '@/lib/config'

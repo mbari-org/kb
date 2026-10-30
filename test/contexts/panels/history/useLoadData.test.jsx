@@ -6,7 +6,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { PAGINATION } from '@/lib/constants/pagination'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected'
 import { CONCEPT } from '@/lib/constants'
 import { getConceptHistory } from '@/lib/api/history'

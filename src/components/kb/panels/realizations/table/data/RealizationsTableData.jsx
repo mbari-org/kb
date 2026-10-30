@@ -5,7 +5,7 @@ import RealizationsPagination from '@/components/kb/panels/realizations/table/da
 import useRealizationColumns from '@/components/kb/panels/realizations/table/data/useRealizationColumns'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
 const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.REALIZATIONS
 

@@ -8,8 +8,8 @@ import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext
 import AppModalContext from '@/contexts/app/AppModalContext'
 
 import CONFIG from '@/lib/config'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
-import { PAGINATION } from '@/lib/constants/pagination.js'
 import useLoadHistoryData from '@/contexts/panels/history/useLoadHistoryData'
 import usePageData from '@/contexts/panels/history/usePageData'
 import usePageHistory from '@/contexts/panels/history/usePageHistory'

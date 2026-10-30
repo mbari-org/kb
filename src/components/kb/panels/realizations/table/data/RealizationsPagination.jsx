@@ -1,6 +1,6 @@
 import Pagination from '@/components/common/Pagination'
 
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
 const PAGE_SIZE_OPTIONS = PAGINATION.REALIZATIONS.PAGE_SIZE_OPTIONS
 

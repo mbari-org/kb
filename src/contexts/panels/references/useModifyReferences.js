@@ -10,9 +10,9 @@ import {
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { createReference } from '@/lib/model/reference'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { createReference } from '@/lib/model/reference'
 
 const { EXPORT_PAGE_SIZE } = PAGINATION.REFERENCES
 

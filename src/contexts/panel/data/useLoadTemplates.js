@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { getTemplates, getTemplatesCount } from '@/lib/api/templates'
 
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
 const { TEMPLATES } = PAGINATION
 

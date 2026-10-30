@@ -79,7 +79,7 @@ vi.mock('@/components/kb/panels/users/form/useLockUserButton', () => ({
 }))
 
 // Mock pagination constants
-vi.mock('@/lib/constants/pagination.js', () => ({
+vi.mock('@/lib/config/constants/pagination.js', () => ({
   PAGINATION: {
     USERS: {
       DEFAULT_LIMIT: 10,

@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { getReferences as getReferencesApi } from '@/lib/api/references'
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import useLoadReferences from '@/contexts/panel/data/useLoadReferences'
 
 const { createReferenceMock } = vi.hoisted(() => ({

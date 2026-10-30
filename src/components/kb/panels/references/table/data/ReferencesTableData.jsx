@@ -8,7 +8,7 @@ import useDeleteReferenceButton from '@/components/kb/panels/references/table/da
 import useReferenceColumns from '@/components/kb/panels/references/table/data/useReferenceColumns'
 import useFilteredReferences from '@/components/kb/panels/references/useFilteredReferences'
 
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
 const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0

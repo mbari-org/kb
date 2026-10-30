@@ -6,8 +6,8 @@ import Pagination from '@/components/common/Pagination'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import { CONCEPT } from '@/lib/constants'
-import { PAGINATION } from '@/lib/constants/pagination.js'
 
 const { TYPE } = CONCEPT.HISTORY
 const PAGE_SIZE_OPTIONS = PAGINATION.HISTORY.PAGE_SIZE_OPTIONS

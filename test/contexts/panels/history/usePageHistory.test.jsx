@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import usePageHistory from '@/contexts/panels/history/usePageHistory'
-import { PAGINATION } from '@/lib/constants/pagination'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
 describe('usePageHistory', () => {
   it('moves forward and backward through pages with clamped offsets', () => {

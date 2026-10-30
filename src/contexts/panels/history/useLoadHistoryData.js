@@ -9,9 +9,9 @@ import { getDescendantNames } from '@/lib/model/concept'
 
 import { sleep } from '@/lib/utils'
 
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import { CONCEPT } from '@/lib/constants'
 import { ERROR_TEXT } from '@/lib/constants/errorText.js'
-import { PAGINATION } from '@/lib/constants/pagination.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const { CHILDREN, DESCENDANTS } = CONCEPT.EXTENT

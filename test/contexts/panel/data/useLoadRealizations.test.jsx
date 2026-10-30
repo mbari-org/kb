@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { getConceptLinkRealizations, getRealizations } from '@/lib/api/realizations'
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import useLoadRealizations from '@/contexts/panel/data/useLoadRealizations'
 
 const PAGE_SIZE = Math.max(...PAGINATION.REALIZATIONS.PAGE_SIZE_OPTIONS)

@@ -2,18 +2,15 @@ import { useCallback } from 'react'
 
 import { getReferences as getReferencesApi } from '@/lib/api/references'
 
-import { PAGINATION } from '@/lib/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/constants/pagination.js'
 import { createError } from '@/lib/errors'
 import { createReference } from '@/lib/model/reference'
 
 const { REFERENCES } = PAGINATION
-const { EXPORT_PAGE_SIZE, MAX_PAGES } = REFERENCES
+const { EXPORT_PAGE_SIZE } = REFERENCES
 
-/**
- * Hook for loading references data
- * @param {Object} apiFns - API functions from ConfigContext
- * @returns {Function} loadReferences function
- */
+const MAX_PAGES = 1000
+
 const useLoadReferences = apiFns => {
   const loadReferences = useCallback(async () => {
     let allReferences = []
@@ -38,9 +35,7 @@ const useLoadReferences = apiFns => {
         hasMoreData = false
         continue
       }
-      const pageSignature = referenceData
-        .map(reference => reference.id ?? JSON.stringify(reference))
-        .join('|')
+      const pageSignature = referenceData.map(reference => reference.id ?? JSON.stringify(reference)).join('|')
       if (seenPageSignatures.has(pageSignature)) {
         throw createError(
           'Invalid References Pagination',
