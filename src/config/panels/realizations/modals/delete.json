@@ -1,0 +1,22 @@
+{
+  "CONTENT": {
+    "HEADER": "Delete realization",
+    "WARNING": ["This realization will be permanently deleted.", "This action cannot be undone."],
+    "CONFIRM_WARNING": ["Deleting this realization is final.", "Please confirm you want to permanently delete it."]
+  },
+  "ALERT": {
+    "WARNING": {
+      "LINES": ["This realization will be permanently deleted.", "This action cannot be undone."],
+      "SEVERITY": "warning"
+    },
+    "CONFIRM_WARNING": {
+      "LINES": ["Deleting this realization is final.", "Please confirm you want to permanently delete it."],
+      "SEVERITY": "error"
+    }
+  },
+  "FIELDS": {
+    "LINK_NAME": "Link Name",
+    "TO_CONCEPT": "To Concept",
+    "LINK_VALUE": "Link Value"
+  }
+}

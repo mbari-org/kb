@@ -1,5 +1,9 @@
 import { use, useMemo } from 'react'
+import { Box } from '@mui/material'
+import { CiEdit } from 'react-icons/ci'
+import { MdOutlineDeleteForever } from 'react-icons/md'
 
+import ActionIcon from '@/components/icon/ActionIcon'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import TemplateCell from '@/components/kb/panels/templates/table/data/TemplateCell'
@@ -9,11 +13,38 @@ import { SELECTED } from '@/lib/constants/selected.js'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
 
-const useRealizationColumns = () => {
-  const { updateFilters } = use(RealizationsContext)
+const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal }) => {
+  const { getPendingRealizationAction, updateFilters } = use(RealizationsContext)
   const { updateSelected } = use(SelectedContext)
 
   return useMemo(() => [
+    {
+      field: 'actions',
+      headerName: '',
+      width: 100,
+      sortable: false,
+      headerClassName: 'bold-header',
+      renderCell: params =>
+        getPendingRealizationAction(params.row) ? null : (
+          <Box>
+            <ActionIcon
+              color='cancel'
+              Icon={MdOutlineDeleteForever}
+              onClick={() => deleteRealizationModal(params.row)}
+              restrictReadOnly
+              size={24}
+              sx={{ mr: 1 }}
+            />
+            <ActionIcon
+              color='edit'
+              Icon={CiEdit}
+              onClick={() => editRealizationModal(params.row)}
+              restrictReadOnly
+              size={24}
+            />
+          </Box>
+        ),
+    },
     {
       field: 'concept',
       headerClassName: 'bold-header',
@@ -53,7 +84,7 @@ const useRealizationColumns = () => {
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },
-  ], [updateFilters, updateSelected])
+  ], [deleteRealizationModal, editRealizationModal, getPendingRealizationAction, updateFilters, updateSelected])
 }
 
 export default useRealizationColumns

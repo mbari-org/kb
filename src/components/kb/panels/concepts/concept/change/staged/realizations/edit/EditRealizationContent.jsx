@@ -33,20 +33,15 @@ const EditRealizationContent = () => {
   const [cycleIndex, setCycleIndex] = useState(0)
   const [filterLinkName, setFilterLinkName] = useState('')
   const [isValidToConcept, setIsValidToConcept] = useState(true)
-  const [realizationItem, setRealizationItem] = useState(modalRealizationItem || EMPTY_TEMPLATE)
 
-  const isEdit = modalData?.action === CONCEPT_STATE.REALIZATION.EDIT
+  const isEdit = action === CONCEPT_STATE.REALIZATION.EDIT
   const modalLabel = action === CONCEPT_STATE.REALIZATION.ADD ? REALIZATION.ADD.LABEL : REALIZATION.EDIT.LABEL
 
-  useEffect(() => {
-    if (isEdit) {
-      const editRealization = stagedState?.realizations?.find(item => item.stateId === realizationStateId)
-      const timeoutId = setTimeout(() => {
-        setRealizationItem(editRealization || modalRealizationItem)
-      }, 0)
-      return () => clearTimeout(timeoutId)
-    }
-  }, [isEdit, modalRealizationItem, realizationStateId, stagedState?.realizations])
+  const [realizationItem, setRealizationItem] = useState(() =>
+    isEdit
+      ? stagedState.realizations.find(item => item.stateId === realizationStateId)
+      : modalRealizationItem || EMPTY_TEMPLATE
+  )
 
   const getAvailableLinkTemplates = useAvailableLinkTemplates()
 

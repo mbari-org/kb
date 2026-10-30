@@ -3,14 +3,20 @@ import { use, useEffect, useMemo, useCallback, useState } from 'react'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
+import { RealizationsModalProvider } from '@/contexts/panels/realizations/modal'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 
 import dataFilters from '@/contexts/panels/dataFilters'
 import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
 import useLoadRealizations from '@/contexts/panel/data/useLoadRealizations'
+import useModifyRealizations from '@/contexts/panels/realizations/useModifyRealizations'
+
+import { ACTION } from '@/lib/constants'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { matchingRealizationString } from '@/lib/model/realization'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
 const FILTERS = REALIZATIONS.FILTERS
@@ -20,8 +26,10 @@ const RealizationsProvider = ({ children }) => {
   const { apiFns } = use(ConfigContext)
   const { getSelected } = use(SelectedContext)
   const { getSettings, updateSettings } = use(SelectedSettingsContext)
-  const { realizations, refreshData } = use(PanelDataContext)
+  const { pendingHistory, realizations, refreshData } = use(PanelDataContext)
   const loadRealizations = useLoadRealizations(apiFns)
+
+  const { editRealization, deleteRealization } = useModifyRealizations()
 
   const realizationsSettings = getSettings(REALIZATIONS.KEY) || {}
   const filters = realizationsSettings[FILTERS.KEY] || DEFAULT_FILTERS
@@ -36,6 +44,19 @@ const RealizationsProvider = ({ children }) => {
     isRealizationsPanelSelected && typeof conceptFilter === 'undefined' && Boolean(selectedConcept)
 
   const { updateFilters } = useUpdateFilters(REALIZATIONS.KEY, updateSettings)
+
+  const getPendingRealizationAction = useCallback(
+    realization => {
+      const pendingItem = pendingHistory.find(
+        item =>
+          item.field === HISTORY_FIELD.REALIZATION &&
+          item.concept === realization.concept &&
+          matchingRealizationString(realization, item.action === ACTION.DELETE ? item.oldValue : item.newValue)
+      )
+      return pendingItem?.action ?? null
+    },
+    [pendingHistory]
+  )
 
   useEffect(() => {
     if (isInitialConceptFilterPending) {
@@ -119,17 +140,34 @@ const RealizationsProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      deleteRealization,
+      editRealization,
       explicitToConcepts,
       filteredRealizations,
       filters,
       filterString,
+      getPendingRealizationAction,
       realizations: realizations,
       updateFilters,
     }),
-    [explicitToConcepts, filteredRealizations, filters, filterString, realizations, updateFilters]
+    [
+      deleteRealization,
+      editRealization,
+      explicitToConcepts,
+      filteredRealizations,
+      filters,
+      filterString,
+      getPendingRealizationAction,
+      realizations,
+      updateFilters,
+    ]
   )
 
-  return <RealizationsContext value={value}>{children}</RealizationsContext>
+  return (
+    <RealizationsContext value={value}>
+      <RealizationsModalProvider>{children}</RealizationsModalProvider>
+    </RealizationsContext>
+  )
 }
 
 export default RealizationsProvider

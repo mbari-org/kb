@@ -6,14 +6,15 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
-const useAvailableLinkTemplates = () => {
+const useAvailableLinkTemplates = conceptName => {
   const { concept } = use(ConceptContext)
   const { templates } = use(PanelDataContext)
   const { getAncestorNames } = use(TaxonomyContext)
 
   const conceptNames = useMemo(() => {
-    return concept ? [concept.name, ...getAncestorNames(concept.name)] : []
-  }, [concept, getAncestorNames])
+    const name = conceptName ?? concept?.name
+    return name ? [name, ...getAncestorNames(name)] : []
+  }, [conceptName, concept, getAncestorNames])
 
   const getAvailableLinkTemplates = useCallback(
     linkName => {

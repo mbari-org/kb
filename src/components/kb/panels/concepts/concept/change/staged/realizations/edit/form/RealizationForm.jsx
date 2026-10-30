@@ -8,13 +8,14 @@ import RealizationToConcept from './RealizationToConcept'
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
 
 const RealizationForm = ({
+  conceptName,
   isEdit = false,
   onRealizationChange,
   onValidationChange,
   realizationItem,
   stageChange,
 }) => {
-  const getAvailableLinkTemplates = useAvailableLinkTemplates()
+  const getAvailableLinkTemplates = useAvailableLinkTemplates(conceptName)
 
   const [_isValidToConcept, setIsValidToConcept] = useState(true)
 

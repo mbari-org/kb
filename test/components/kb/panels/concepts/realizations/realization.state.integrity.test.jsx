@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
@@ -158,6 +158,12 @@ describe('Realization state integrity', () => {
     await user.type(linkValueInput, 'squid')
 
     await waitForStageEnabled()
+
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 100))
+    })
+    expect(linkValueInput).toHaveValue('squid')
+
     await clickStageButton(user, screen)
 
     await waitFor(() => {

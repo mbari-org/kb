@@ -9,6 +9,17 @@ import RealizationsTableHeaderRight from '@/components/kb/panels/realizations/ta
 
 import usePanelFactory from '@/components/common/panel/usePanelFactory'
 import RealizationsProvider from '@/contexts/panels/realizations/RealizationsProvider'
+import { useRealizationsModalOperationsContext } from '@/contexts/panels/realizations/modal'
+
+const RealizationsModalRenderer = () => {
+  const { modal: realizationsModal, processing: realizationsProcessing } = useRealizationsModalOperationsContext()
+  return (
+    !realizationsProcessing &&
+    realizationsModal &&
+    typeof realizationsModal === 'function' &&
+    realizationsModal()
+  )
+}
 
 const RealizationsContent = () => {
   const { createTablePanel } = usePanelFactory()
@@ -34,6 +45,7 @@ const Realizations = () => {
   return (
     <RealizationsProvider>
       <RealizationsContent />
+      <RealizationsModalRenderer />
     </RealizationsProvider>
   )
 }

@@ -1,9 +1,13 @@
 import { use, useCallback, useMemo, useState } from 'react'
+import { useTheme } from '@mui/material/styles'
 
 import PanelDataGrid from '@/components/common/panel/PanelDataGrid'
 import RealizationsPagination from '@/components/kb/panels/realizations/table/data/RealizationsPagination'
 import useRealizationColumns from '@/components/kb/panels/realizations/table/data/useRealizationColumns'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
+
+import useEditRealizationButton from '@/components/kb/panels/realizations/form/useEditRealizationButton'
+import useDeleteRealizationButton from '@/components/kb/panels/realizations/form/useDeleteRealizationButton'
 
 import { PAGINATION } from '@/lib/config/constants/pagination.js'
 
@@ -16,11 +20,15 @@ const DATA_GRID_PROPS = {
 }
 
 const RealizationsTableData = () => {
-  const { filteredRealizations } = use(RealizationsContext)
+  const theme = useTheme()
+  const { filteredRealizations, getPendingRealizationAction } = use(RealizationsContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(DEFAULT_LIMIT)
 
-  const columns = useRealizationColumns()
+  const editRealizationModal = useEditRealizationButton()
+  const deleteRealizationModal = useDeleteRealizationButton()
+
+  const columns = useRealizationColumns({ deleteRealizationModal, editRealizationModal })
   const realizationRows = useMemo(
     () => filteredRealizations.map((realization, index) => ({ ...realization, __rowId: realization.id || `${index}` })),
     [filteredRealizations]
@@ -42,8 +50,24 @@ const RealizationsTableData = () => {
   }, [])
 
   const dataGridProps = useMemo(
-    () => ({ ...DATA_GRID_PROPS, onSortModelChange: handleSortModelChange }),
-    [handleSortModelChange]
+    () => ({
+      ...DATA_GRID_PROPS,
+      onSortModelChange: handleSortModelChange,
+      getRowClassName: params => {
+        const action = getPendingRealizationAction(params.row)
+        return action ? `pending-realization-${action.toLowerCase()}` : ''
+      },
+    }),
+    [getPendingRealizationAction, handleSortModelChange]
+  )
+
+  const pendingRowSx = useMemo(
+    () => ({
+      '& .pending-realization-add': { border: `2px solid ${theme.palette.primary.add}` },
+      '& .pending-realization-delete': { border: `2px solid ${theme.palette.primary.remove}` },
+      '& .pending-realization-edit': { border: `2px solid ${theme.palette.primary.edit}` },
+    }),
+    [theme]
   )
 
   const paginationComponent = useMemo(
@@ -77,6 +101,7 @@ const RealizationsTableData = () => {
       dataGridProps={dataGridProps}
       rowCount={realizationRows.length}
       rows={realizationRows}
+      sx={pendingRowSx}
     />
   )
 }
