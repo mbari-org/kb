@@ -2,11 +2,11 @@ import { Box, Typography } from '@mui/material'
 
 import ActionsAlert from '@/components/modal/actions/ActionsAlert'
 
-const AppInfoEditLayout = ({ alert, children, description = '' }) => {
+const AppInfoEditLayout = ({ alert, children, description = '', detail = '' }) => {
   return (
     <Box sx={{ minWidth: 500, p: 1 }}>
       {children}
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+      <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', mt: 1 }}>
         <Typography
           sx={{
             overflowWrap: 'anywhere',
@@ -15,6 +15,16 @@ const AppInfoEditLayout = ({ alert, children, description = '' }) => {
           }}
         >
           {description}
+        </Typography>
+        <Typography
+          sx={{
+            mt: 0.5,
+            overflowWrap: 'anywhere',
+            textAlign: 'center',
+            width: '60%',
+          }}
+        >
+          {detail}
         </Typography>
       </Box>
       <Box sx={{ alignItems: 'center', display: 'flex', height: 60, justifyContent: 'center', mt: 1 }}>

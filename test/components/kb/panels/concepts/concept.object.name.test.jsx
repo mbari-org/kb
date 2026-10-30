@@ -194,7 +194,7 @@ const TestWrapper = ({ children }) => {
       <CssBaseline />
       <BrowserRouter>
         <UserContext.Provider value={mockUserValue}>
-          <ConfigContext.Provider value={{ dsgConceptUrl: '' }}>
+          <ConfigContext.Provider value={{ dsgBaseUrl: '' }}>
           <PanelDataContext.Provider value={mockPanelDataValue}>
             <TaxonomyContext.Provider value={mockTaxonomyValue}>
               <ConceptModalContext.Provider value={mockConceptModalValue}>

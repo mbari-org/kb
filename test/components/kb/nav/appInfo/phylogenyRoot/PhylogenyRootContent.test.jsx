@@ -7,7 +7,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
 const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
-const { DESCRIPTION, FIELD_LABEL } = phylogenyConfig
+const { DESCRIPTION, DETAIL, FIELD_LABEL } = phylogenyConfig
 const { SAVE_CONFIRM } = phylogenyConfig.EDIT
 
 const renderContent = ({ alert = null, selectedPhylogenyRoot = '' } = {}) => {
@@ -32,9 +32,10 @@ const renderContent = ({ alert = null, selectedPhylogenyRoot = '' } = {}) => {
 }
 
 describe('PhylogenyRootContent', () => {
-  it('renders phylogeny description text from app info config', () => {
+  it('renders phylogeny description and detail text from app info config', () => {
     renderContent()
     expect(screen.getByText(DESCRIPTION)).toBeInTheDocument()
+    expect(screen.getByText(DETAIL)).toBeInTheDocument()
   })
 
   it('renders verification alert lines when an alert exists in modal data', () => {

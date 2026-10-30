@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { use } from 'react'
 
 import AppInfoDetail from '@/components/kb/nav/appInfo/AppInfoDetail'
-import DsgConceptURLDetail from '@/components/kb/nav/appInfo/dsgConceptURL/DsgConceptURLDetail'
+import DsgConceptURLDetail from '@/components/kb/nav/appInfo/dsgBaseURL/DsgBaseURLDetail'
 import MediaBaseURLDetail from '@/components/kb/nav/appInfo/mediaBaseURL/MediaBaseURLDetail'
 import PhylogenyRootDetail from '@/components/kb/nav/appInfo/phylogenyRoot/PhylogenyRootDetail'
 import UserContext from '@/contexts/user/UserContext'

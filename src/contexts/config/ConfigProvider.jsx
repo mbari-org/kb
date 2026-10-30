@@ -18,8 +18,8 @@ import { PREFS } from '@/lib/constants/prefs.js'
 const IS_DEV = import.meta.env.DEV
 const appMediaBaseURLKey = PREFS.APP.MEDIA.BASE_URL.KEY
 const defaultMediaBaseURL = PREFS.APP.MEDIA.BASE_URL.DEFAULT
-const appDsgConceptUrlKey = PREFS.APP.DSG.CONCEPT_URL.KEY
-const defaultDsgConceptUrl = PREFS.APP.DSG.CONCEPT_URL.DEFAULT
+const appDsgBaseUrlKey = PREFS.APP.DSG.BASE_URL.KEY
+const defaultDsgBaseUrl = PREFS.APP.DSG.BASE_URL.DEFAULT
 const appPhylogenyRootKey = PREFS.APP.PHYLOGENY.ROOT.KEY
 const defaultPhylogenyRoot = PREFS.APP.PHYLOGENY.ROOT.DEFAULT
 
@@ -148,9 +148,9 @@ const ConfigProvider = ({ children }) => {
       if (appMediaBaseURL === null || appMediaBaseURL === undefined) {
         await saveAppPreference(appMediaBaseURLKey, defaultMediaBaseURL)
       }
-      const appDsgConceptUrl = await getAppPreference(appDsgConceptUrlKey)
-      if (appDsgConceptUrl === null || appDsgConceptUrl === undefined) {
-        await saveAppPreference(appDsgConceptUrlKey, defaultDsgConceptUrl)
+      const appDsgBaseUrl = await getAppPreference(appDsgBaseUrlKey)
+      if (appDsgBaseUrl === null || appDsgBaseUrl === undefined) {
+        await saveAppPreference(appDsgBaseUrlKey, defaultDsgBaseUrl)
       }
       const appPhylogenyRoot = await getAppPreference(appPhylogenyRootKey)
       if (appPhylogenyRoot === null || appPhylogenyRoot === undefined) {
@@ -163,7 +163,7 @@ const ConfigProvider = ({ children }) => {
   }, [appPreferencesInitialized, config, getAppPreference, saveAppPreference])
 
   const mediaBaseURL = appPreferences[appMediaBaseURLKey] ?? defaultMediaBaseURL
-  const dsgConceptUrl = appPreferences[appDsgConceptUrlKey] ?? defaultDsgConceptUrl
+  const dsgBaseUrl = appPreferences[appDsgBaseUrlKey] ?? defaultDsgBaseUrl
   const phylogenyRoot = appPreferences[appPhylogenyRootKey] ?? defaultPhylogenyRoot
 
   useEffect(() => {
@@ -179,7 +179,7 @@ const ConfigProvider = ({ children }) => {
       authenticateConfig,
       clearAuthenticatedConfig,
       config,
-      dsgConceptUrl,
+      dsgBaseUrl,
       getAppPreference,
       initializeAppPreferences,
       IS_DEV,
@@ -194,7 +194,7 @@ const ConfigProvider = ({ children }) => {
       authenticateConfig,
       clearAuthenticatedConfig,
       config,
-      dsgConceptUrl,
+      dsgBaseUrl,
       getAppPreference,
       initializeAppPreferences,
       mediaBaseURL,

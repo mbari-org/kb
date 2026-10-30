@@ -6,7 +6,7 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
 const phylogenyConfig = CONFIG.APP_INFO.PHYLOGENY_ROOT ?? CONFIG.APP_INFO.PHLOGENY_ROOT
-const { DESCRIPTION, FIELD_LABEL } = phylogenyConfig
+const { DESCRIPTION, DETAIL, FIELD_LABEL } = phylogenyConfig
 
 const PhylogenyRootContent = ({ conceptNames = [] }) => {
   const { modalData, setModalData } = use(AppModalContext)
@@ -14,7 +14,7 @@ const PhylogenyRootContent = ({ conceptNames = [] }) => {
   const selectedPhylogenyRoot = modalData.selectedPhylogenyRoot || ''
 
   return (
-    <AppInfoEditLayout alert={alert} description={DESCRIPTION}>
+    <AppInfoEditLayout alert={alert} description={DESCRIPTION} detail={DETAIL}>
       <Autocomplete
         onChange={(_event, selectedName) =>
           setModalData(prev => ({

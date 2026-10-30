@@ -6,7 +6,7 @@ import MediaBaseURLContent from '@/components/kb/nav/appInfo/mediaBaseURL/MediaB
 import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
-const { FIELD_LABEL, DESCRIPTION } = CONFIG.APP_INFO.MEDIA_URL
+const { FIELD_LABEL, DESCRIPTION, DETAIL } = CONFIG.APP_INFO.MEDIA_URL
 const { SAVE_CONFIRM } = CONFIG.APP_INFO.MEDIA_URL.EDIT
 
 const renderContent = ({ alert = null, selectedMediaBaseURL = '' } = {}) => {
@@ -105,9 +105,10 @@ describe('MediaBaseURLContent', () => {
     expect(screen.queryByText('Please enter a valid URL')).not.toBeInTheDocument()
   })
 
-  it('renders media description text from app info config', () => {
+  it('renders media description and detail text from app info config', () => {
     renderContent({ selectedMediaBaseURL: '' })
     expect(screen.getByText(DESCRIPTION)).toBeInTheDocument()
+    expect(screen.getByText(DETAIL)).toBeInTheDocument()
   })
 
   it('performs debounced live URL check and shows inaccessible message on failure', async () => {

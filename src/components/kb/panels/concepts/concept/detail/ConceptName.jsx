@@ -13,6 +13,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
+import { DSG } from '@/lib/config/constants/dsg.js'
 import { hasPendingStructure } from '@/lib/model/history'
 
 import CONFIG from '@/lib/config'
@@ -22,7 +23,7 @@ const { TOOLTIP } = CONFIG.PANELS.CONCEPTS.PANEL
 const ConceptName = () => {
   const theme = useTheme()
 
-  const { dsgConceptUrl } = use(ConfigContext)
+  const { dsgBaseUrl } = use(ConfigContext)
   const { isReadOnly } = use(UserContext)
   const { concept, isEditing, pending } = use(ConceptContext)
 
@@ -37,11 +38,14 @@ const ConceptName = () => {
 
   const conceptColor = hasStagedStructure || hasPending.any ? theme.concept.color.edit : theme.palette.primary.main
 
-  const dsgLink = dsgConceptUrl && concept?.name && (
+  const createDsgLink = concept =>
+    `${dsgBaseUrl.replace(/\/*$/, '/')}${DSG.CONCEPT_VIEW_PATH}${encodeURIComponent(concept.name)}`
+
+  const dsgLink = dsgBaseUrl && concept?.name && (
     <KBTooltip title={TOOLTIP.DSG}>
       <Box
         component='a'
-        href={`${dsgConceptUrl.replace(/\/*$/, '/')}/#/view/${encodeURIComponent(concept.name)}`}
+        href={createDsgLink(concept)}
         rel='noopener noreferrer'
         sx={{
           color: 'inherit',

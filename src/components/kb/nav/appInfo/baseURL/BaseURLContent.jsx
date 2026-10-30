@@ -8,7 +8,7 @@ import isValidUrl from '@/lib/validators/isValidUrl'
 import useDebounce from '@/lib/hooks/useDebounce'
 
 const URL_CHECK_DEBOUNCE_TIME = 500
-const BaseURLContent = ({ description, fieldLabel, modalDataValueKey }) => {
+const BaseURLContent = ({ description, detail, fieldLabel, modalDataValueKey }) => {
   const { modalData, setModalData } = use(AppModalContext)
   const alert = modalData.alert || null
   const selectedBaseUrl = modalData[modalDataValueKey] || ''
@@ -84,7 +84,7 @@ const BaseURLContent = ({ description, fieldLabel, modalDataValueKey }) => {
           : ' '
 
   return (
-    <AppInfoEditLayout alert={alert} description={description}>
+    <AppInfoEditLayout alert={alert} description={description} detail={detail}>
       <TextField
         error={hasError}
         fullWidth

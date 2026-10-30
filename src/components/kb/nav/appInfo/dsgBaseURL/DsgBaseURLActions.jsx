@@ -5,21 +5,21 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { PREFS } from '@/lib/constants/prefs.js'
 import CONFIG from '@/lib/config'
 
-const dsgConceptUrlKey = PREFS.APP.DSG.CONCEPT_URL.KEY
+const dsgBaseUrlKey = PREFS.APP.DSG.BASE_URL.KEY
 const { INVALID_URL, SAVE_CONFIRM } = CONFIG.APP_INFO.DSG_CONCEPT.EDIT
 
-const DsgConceptURLActions = () => {
-  const { dsgConceptUrl } = use(ConfigContext)
+const DsgBaseURLActions = () => {
+  const { dsgBaseUrl } = use(ConfigContext)
   return (
     <BaseURLActions
       actionName='DSG concept URL'
-      currentBaseUrl={dsgConceptUrl}
+      currentBaseUrl={dsgBaseUrl}
       invalidUrlAlert={INVALID_URL}
-      modalDataValueKey='selectedDsgConceptUrl'
-      preferenceKey={dsgConceptUrlKey}
+      modalDataValueKey='selectedDsgBaseUrl'
+      preferenceKey={dsgBaseUrlKey}
       saveConfirmAlert={SAVE_CONFIRM}
     />
   )
 }
 
-export default DsgConceptURLActions
+export default DsgBaseURLActions

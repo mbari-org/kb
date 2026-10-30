@@ -3,64 +3,55 @@
     "NONE": "not set"
   },
   "DSG_CONCEPT": {
-    "DESCRIPTION": "The URL for DSG concept viewing. Concept names are appended to this URL to generate links to DSG concepts.",
-    "FIELD_LABEL": "DSG Concept URL",
+    "DESCRIPTION": "Base URL for DSG links.",
+    "DETAIL": "Only enter the base URL of the DSG. The path to Concept links will be generated automatically.",
+    "FIELD_LABEL": "DSG Base URL",
     "EDIT": {
-      "TITLE": "Set DSG Concept URL",
-      "TOOLTIP": "Set DSG Concept URL",
+      "TITLE": "Set DSG Base URL",
+      "TOOLTIP": "Set DSG Base URL",
       "INVALID_URL": {
-        "LINES": [
-          "Please enter a valid URL for DSG concept viewing."
-        ],
+        "LINES": ["Please enter a valid DSG Base URL."],
         "SEVERITY": "error"
       },
       "SAVE_CONFIRM": {
-        "LINES": [
-          "You are about to change the URL for DSG concept viewing.",
-          "Please confirm you want to continue."
-        ],
+        "LINES": ["You are about to change the DSG Base URL.", "Please confirm you want to continue."],
         "SEVERITY": "success"
       }
     }
   },
   "MEDIA_URL": {
-    "DESCRIPTION": "A base URL for media assets. Users can then attach media file names to the URL.",
+    "DESCRIPTION": "Base URL for media assets.",
+    "DETAIL": "This URL will pre-populate when adding media files to Concepts.",
     "FIELD_LABEL": "Media Base URL",
     "EDIT": {
       "TITLE": "Set Media Base URL",
       "TOOLTIP": "Set Media Base URL",
       "INVALID_URL": {
-        "LINES": [
-          "Please enter a valid base URL for media."
-        ],
+        "LINES": ["Please enter a valid base URL for media."],
         "SEVERITY": "error"
       },
       "SAVE_CONFIRM": {
-        "LINES": [
-          "You are about to change the base URL for media.",
-          "Please confirm you want to continue."
-        ],
+        "LINES": ["You are about to change the base URL for media.", "Please confirm you want to continue."],
         "SEVERITY": "success"
       }
     }
   },
   "PHYLOGENY_ROOT": {
-    "DESCRIPTION": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level.",
+    "DESCRIPTION": "Concept name for the taxonomy phylogeny root.",
+    "DETAIL": "Only Concepts under this root will have Taxonomy Rank Name and Level.",
     "FIELD_LABEL": "Phylogeny Root",
     "EDIT": {
       "TITLE": "Set Phylogeny Root",
       "TOOLTIP": "Set Phylogeny Root",
       "SAVE_CONFIRM": {
-        "LINES": [
-          "You are about to change the phylogeny root.",
-          "Please confirm you want to continue."
-        ],
+        "LINES": ["You are about to change the phylogeny root.", "Please confirm you want to continue."],
         "SEVERITY": "success"
       }
     }
   },
   "PHLOGENY_ROOT": {
-    "DESCRIPTION": "Concept name for the taxonomy phylogeny root. Only Concepts under this root will have Taxonomy Rank Name and Level.",
+    "DESCRIPTION": "Concept name for the taxonomy phylogeny root.",
+    "DETAIL": "Only Concepts under this root will have Taxonomy Rank Name and Level.",
     "EDIT_TITLE": "Set Phylogeny Root",
     "EDIT_TOOLTIP": "Set Phylogeny Root",
     "FIELD_LABEL": "Phylogeny Root"
