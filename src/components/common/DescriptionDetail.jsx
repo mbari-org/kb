@@ -17,11 +17,19 @@ const DescriptionDetail = props => {
           component: 'h4',
         }}
       />
-      <Detail
-        id='modal-content-detail'
-        detail={detail}
-        sx={{ mb: 1, ml: 2 }}
-      />
+      {typeof detail === 'string' ? (
+        <Text
+          id='modal-content-detail'
+          text={detail}
+          sx={{ mb: 1, ml: 2 }}
+        />
+      ) : (
+        <Detail
+          id='modal-content-detail'
+          detail={detail}
+          sx={{ mb: 1, ml: 2 }}
+        />
+      )}
     </Box>
   )
 }

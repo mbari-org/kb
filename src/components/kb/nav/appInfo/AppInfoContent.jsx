@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { use } from 'react'
 
 import AppInfoDetail from '@/components/kb/nav/appInfo/AppInfoDetail'
-import DsgConceptURLDetail from '@/components/kb/nav/appInfo/dsgBaseURL/DsgBaseURLDetail'
+import DsgBaseURLDetail from '@/components/kb/nav/appInfo/dsgBaseURL/DsgBaseURLDetail'
 import MediaBaseURLDetail from '@/components/kb/nav/appInfo/mediaBaseURL/MediaBaseURLDetail'
 import PhylogenyRootDetail from '@/components/kb/nav/appInfo/phylogenyRoot/PhylogenyRootDetail'
 import UserContext from '@/contexts/user/UserContext'
@@ -27,7 +27,7 @@ const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName, onEditComple
           onEditComplete={onEditComplete}
         />
         <MediaBaseURLDetail onEditComplete={onEditComplete} />
-        <DsgConceptURLDetail onEditComplete={onEditComplete} />
+        <DsgBaseURLDetail onEditComplete={onEditComplete} />
       </Box>
       <Box sx={{ alignSelf: 'flex-end', mt: 2, pb: 2, textAlign: 'right' }}>
         <Typography component='span'>Version: </Typography>

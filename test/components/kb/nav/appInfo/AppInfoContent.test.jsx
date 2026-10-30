@@ -17,8 +17,8 @@ vi.mock('@/components/kb/nav/appInfo/mediaBaseURL/MediaBaseURLDetail', () => ({
   default: () => <div>media-base-url-detail</div>,
 }))
 
-vi.mock('@/components/kb/nav/appInfo/dsgConceptURL/DsgConceptURLDetail', () => ({
-  default: () => <div>dsg-concept-url-detail</div>,
+vi.mock('@/components/kb/nav/appInfo/dsgBaseURL/DsgBaseURLDetail', () => ({
+  default: () => <div>dsg-base-url-detail</div>,
 }))
 
 const renderWithContexts = () =>
@@ -31,7 +31,7 @@ const renderWithContexts = () =>
   )
 
 describe('AppInfoContent', () => {
-  it('renders app info details including DSG concept URL detail', () => {
+  it('renders app info details including DSG base URL detail', () => {
     renderWithContexts()
 
     expect(screen.getByText('User:')).toBeInTheDocument()
@@ -42,7 +42,7 @@ describe('AppInfoContent', () => {
     expect(screen.getByText('https://example.test/config')).toBeInTheDocument()
     expect(screen.getByText('phylogeny-root-detail')).toBeInTheDocument()
     expect(screen.getByText('media-base-url-detail')).toBeInTheDocument()
-    expect(screen.getByText('dsg-concept-url-detail')).toBeInTheDocument()
+    expect(screen.getByText('dsg-base-url-detail')).toBeInTheDocument()
     expect(screen.getByText('Version:')).toBeInTheDocument()
     expect(screen.getByText('1.2.3-test')).toBeInTheDocument()
   })

@@ -9,6 +9,8 @@ import { BrowserRouter } from 'react-router-dom'
 
 import kbTheme from '@/lib/theme'
 import Concepts from '@/components/kb/panels/Concepts'
+import { DSG } from '@/lib/config/constants/dsg.js'
+import CONFIG from '@/lib/config'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
@@ -105,7 +107,7 @@ const mockPanelSelect = {
   clear: () => {},
 }
 
-const TestWrapper = ({ children }) => {
+const TestWrapper = ({ children, dsgBaseUrl = '' }) => {
   const [concept, setConcept] = useState(rootConcept)
 
   const mockConceptSelect = {
@@ -194,7 +196,7 @@ const TestWrapper = ({ children }) => {
       <CssBaseline />
       <BrowserRouter>
         <UserContext.Provider value={mockUserValue}>
-          <ConfigContext.Provider value={{ dsgBaseUrl: '' }}>
+          <ConfigContext.Provider value={{ dsgBaseUrl }}>
           <PanelDataContext.Provider value={mockPanelDataValue}>
             <TaxonomyContext.Provider value={mockTaxonomyValue}>
               <ConceptModalContext.Provider value={mockConceptModalValue}>
@@ -300,5 +302,30 @@ describe('panel integration', () => {
     await waitFor(() => {
       expect(screen.getAllByText('object').length).toBeGreaterThan(0)
     })
+  })
+})
+
+describe('DSG link', () => {
+  it('renders the concept name as a DSG link when dsgBaseUrl is set', () => {
+    render(
+      <TestWrapper dsgBaseUrl='https://dsg.example.com'>
+        <Concepts />
+      </TestWrapper>
+    )
+
+    const link = screen.getByRole('link', { name: CONFIG.PANELS.CONCEPTS.PANEL.TOOLTIP.DSG })
+    expect(link).toHaveAttribute('href', `https://dsg.example.com/${DSG.CONCEPT_VIEW_PATH}root`)
+    expect(link).toHaveAttribute('target', '_blank')
+  })
+
+  it('renders the concept name as plain text when dsgBaseUrl is not set', () => {
+    render(
+      <TestWrapper>
+        <Concepts />
+      </TestWrapper>
+    )
+
+    expect(screen.queryByRole('link', { name: CONFIG.PANELS.CONCEPTS.PANEL.TOOLTIP.DSG })).not.toBeInTheDocument()
+    expect(screen.getAllByText('root').length).toBeGreaterThan(0)
   })
 })
