@@ -4,10 +4,10 @@ import { CONCEPT } from '@/lib/constants'
 
 const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand) => {
   return useCallback(
-    (_event, conceptName) => {
+    (event, conceptName) => {
       if (conceptName === concept.name) {
         setAutoExpand({ expand: false, name: null })
-        expandConcept(concept, CONCEPT.EXPAND.TOGGLE)
+        expandConcept(concept, event.altKey ? CONCEPT.EXPAND.DESCENDANTS : CONCEPT.EXPAND.TOGGLE)
       } else {
         selectConcept(conceptName)
         setAutoExpand({ expand: false, name: null })
