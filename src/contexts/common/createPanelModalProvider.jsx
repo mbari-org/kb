@@ -3,8 +3,8 @@ import { createContext, useCallback, useEffect, useMemo, useState, useRef, useCo
 import useProcessingManager from '@/lib/hooks/useProcessingManager'
 
 const createPanelModalProvider = (panelName, useModalHook) => {
-  const DataContext = createContext()
-  const OperationsContext = createContext()
+  const DataContext = createContext(null)
+  const OperationsContext = createContext(null)
 
   DataContext.displayName = `${panelName}ModalDataContext`
   OperationsContext.displayName = `${panelName}ModalOperationsContext`
@@ -107,7 +107,7 @@ const createPanelModalProvider = (panelName, useModalHook) => {
 
   const useDataContext = () => {
     const context = useContext(DataContext)
-    if (context === undefined) {
+    if (context === null) {
       throw new Error(
         `use${panelName}ModalDataContext must be used within a ${panelName}ModalProvider`
       )
@@ -117,7 +117,7 @@ const createPanelModalProvider = (panelName, useModalHook) => {
 
   const useOperationsContext = () => {
     const context = useContext(OperationsContext)
-    if (context === undefined) {
+    if (context === null) {
       throw new Error(
         `use${panelName}ModalOperationsContext must be used within a ${panelName}ModalProvider`
       )

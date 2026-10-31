@@ -1,5 +1,5 @@
 import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
-import useRealizationsModal from './useRealizationsModal'
+import usePanelModal from '@/contexts/panel/modal/usePanelModal'
 
 const {
   DataContext: RealizationsModalDataContext,
@@ -7,7 +7,7 @@ const {
   Provider: RealizationsModalProvider,
   useDataContext: useRealizationsModalDataContext,
   useOperationsContext: useRealizationsModalOperationsContext,
-} = createPanelModalProvider('Realizations', useRealizationsModal)
+} = createPanelModalProvider('Realizations', usePanelModal)
 
 export {
   RealizationsModalDataContext,

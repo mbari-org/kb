@@ -1,14 +1,13 @@
 import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
-import useReferencesModal from './useReferencesModal'
+import usePanelModal from '@/contexts/panel/modal/usePanelModal'
 
-// Create the complete modal provider setup for references
 const {
   DataContext: ReferencesModalDataContext,
   OperationsContext: ReferencesModalOperationsContext,
   Provider: ReferencesModalProvider,
   useDataContext: useReferencesModalDataContext,
   useOperationsContext: useReferencesModalOperationsContext,
-} = createPanelModalProvider('References', useReferencesModal)
+} = createPanelModalProvider('References', usePanelModal)
 
 export {
   ReferencesModalDataContext,
@@ -17,4 +16,3 @@ export {
   useReferencesModalDataContext,
   useReferencesModalOperationsContext,
 }
-

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box, Stack } from '@mui/material'
 
-import { usePanelModalDataContext, usePanelModalOperationsContext } from '@/contexts/panel/modal/Context'
+import { usePanelModalDataContext, usePanelModalOperationsContext } from '@/contexts/panel/modal'
 
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'

@@ -10,9 +10,15 @@ import useBrowserBack from '@/components/kb/browserBack/useBrowserBack'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
+import { PanelModalProvider, usePanelModalOperationsContext } from '@/contexts/panel/modal'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 import { SELECTED } from '@/lib/constants/selected.js'
+
+const PanelsModalMount = () => {
+  const { modal, processing } = usePanelModalOperationsContext()
+  return !processing && modal && typeof modal === 'function' ? modal() : null
+}
 
 const KnowledgeBase = () => {
   const { processing: appProcessing } = use(AppModalContext)
@@ -27,10 +33,13 @@ const KnowledgeBase = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <NavBar selectPanel={selectPanel} />
-      <Panels />
-      {holdModal && <ConceptModal />}
-      {appProcessing && <KbLoading />}
+      <PanelModalProvider>
+        <NavBar selectPanel={selectPanel} />
+        <Panels />
+        <PanelsModalMount />
+        {holdModal && <ConceptModal />}
+        {appProcessing && <KbLoading />}
+      </PanelModalProvider>
     </Box>
   )
 }

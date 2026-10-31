@@ -17,7 +17,7 @@ const usePanelModal = (modalConfig, modalDataRef, closeModalRef) => {
 
       return (
         <PanelModal
-          actions={<modalConfig.actionsComponent />}
+          actions={modalConfig.actionsComponent ? <modalConfig.actionsComponent /> : null}
           content={<modalConfig.contentComponent />}
           titleComponent={modalConfig.titleComponent ? <modalConfig.titleComponent /> : undefined}
           closeModal={closeModalRef.current}

@@ -1,5 +1,5 @@
 import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
-import useTemplatesModal from './useTemplatesModal'
+import usePanelModal from '@/contexts/panel/modal/usePanelModal'
 
 const {
   DataContext: TemplatesModalDataContext,
@@ -7,7 +7,7 @@ const {
   Provider: TemplatesModalProvider,
   useDataContext: useTemplatesModalDataContext,
   useOperationsContext: useTemplatesModalOperationsContext,
-} = createPanelModalProvider('Templates', useTemplatesModal)
+} = createPanelModalProvider('Templates', usePanelModal)
 
 export {
   TemplatesModalDataContext,
@@ -16,4 +16,3 @@ export {
   useTemplatesModalDataContext,
   useTemplatesModalOperationsContext,
 }
-

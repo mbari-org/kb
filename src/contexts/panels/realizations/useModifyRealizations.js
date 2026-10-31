@@ -22,8 +22,10 @@ const useModifyRealizations = () => {
       const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
       await normalizeConcept(apiFns, freshConcept)
 
-      freshConcept.children = freshConcept.children ?? staleConcept.children
-      freshConcept.parent = freshConcept.parent ?? staleConcept.parent
+      freshConcept.aliases = (staleConcept.aliases || []).map(alias => ({ ...alias }))
+      freshConcept.alternateNames = [...(staleConcept.alternateNames || [])]
+      freshConcept.children = [...(staleConcept.children || [])]
+      freshConcept.parent = staleConcept.parent
 
       await conceptEditsRefresh(freshConcept, staleConcept)
     },

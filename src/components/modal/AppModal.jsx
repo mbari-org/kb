@@ -1,8 +1,6 @@
 import { use } from 'react'
-import { IoCloseSharp } from 'react-icons/io5'
 
-import { Box, Card, CardActions, CardContent, CardHeader, Fade, IconButton, Modal } from '@mui/material'
-
+import ModalShell from '@/components/modal/ModalShell'
 import AppModalContext from '@/contexts/app/AppModalContext'
 
 const AppModal = () => {
@@ -12,40 +10,13 @@ const AppModal = () => {
     return null
   }
 
-  const { actions, content, title, minWidth = 500, maxWidth, width, focusClose = false, contentSx } = modal
   return (
-    <Modal
-      aria-labelledby='system-modal-alert'
-      aria-describedby='system-modal-alert-description'
-      open
-      onClose={() => closeModal(false)}
-      closeAfterTransition
-    >
-      <Fade in={true} timeout={500}>
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            mt: 10,
-          }}
-        >
-          <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth, maxWidth, width }}>
-            <IconButton
-              autoFocus={focusClose}
-              aria-label='close'
-              onClick={() => closeModal(false)}
-              sx={{ position: 'absolute', right: 8, top: 8 }}
-            >
-              <IoCloseSharp />
-            </IconButton>
-            <CardHeader title={title()} />
-            <CardContent sx={[{ pb: 0, pt: 0 }, contentSx]}>{content()}</CardContent>
-            {actions && <CardActions style={{ display: 'flex', justifyContent: 'center' }}>{actions()}</CardActions>}
-          </Card>
-        </Box>
-      </Fade>
-    </Modal>
+    <ModalShell
+      {...modal}
+      closeModal={closeModal}
+      backdropClose
+      ariaLabelledBy='system-modal-alert'
+    />
   )
 }
 

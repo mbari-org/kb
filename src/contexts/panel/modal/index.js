@@ -1,1 +1,8 @@
-export { PanelModalProvider } from './Provider'
+export {
+  PanelModalDataContext,
+  PanelModalOperationsContext,
+  PanelModalProvider,
+  usePanelModal,
+  usePanelModalDataContext,
+  usePanelModalOperationsContext,
+} from './factory'

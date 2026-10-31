@@ -7,7 +7,7 @@ const {
   Provider: PanelModalProvider,
   useDataContext: usePanelModalDataContext,
   useOperationsContext: usePanelModalOperationsContext,
-} = createPanelModalProvider('Panel', usePanelModal)
+} = createPanelModalProvider('Panel', (...args) => usePanelModal(...args))
 
 export {
   PanelModalDataContext,
@@ -16,3 +16,5 @@ export {
   usePanelModalDataContext,
   usePanelModalOperationsContext,
 }
+
+export { default as usePanelModal } from './usePanelModal'

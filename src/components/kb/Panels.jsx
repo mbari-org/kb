@@ -3,15 +3,8 @@ import { Box } from '@mui/material'
 
 import panelMods from '@/components/kb/panels/modules'
 import Panel from '@/components/kb/panels/Panel'
-import { PanelModalProvider } from '@/contexts/panel/modal'
-import { usePanelModalOperationsContext } from '@/contexts/panel/modal/Context'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
-
-const PanelsModalMount = () => {
-  const { modal, processing } = usePanelModalOperationsContext()
-  return !processing && modal && typeof modal === 'function' ? modal() : null
-}
 
 const Panels = () => {
   const { panels } = use(SelectedContext)
@@ -31,18 +24,15 @@ const Panels = () => {
 
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
-      <PanelModalProvider>
-        {panelMods.map(({ load, name }) => (
-          <Panel
-            key={name}
-            hasBeenMounted={mountedPanels.has(name)}
-            isActive={activePanel === name}
-            load={load}
-            name={name}
-          />
-        ))}
-        <PanelsModalMount />
-      </PanelModalProvider>
+      {panelMods.map(({ load, name }) => (
+        <Panel
+          key={name}
+          hasBeenMounted={mountedPanels.has(name)}
+          isActive={activePanel === name}
+          load={load}
+          name={name}
+        />
+      ))}
     </Box>
   )
 }

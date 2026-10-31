@@ -1,14 +1,13 @@
 import createPanelModalProvider from '@/contexts/common/createPanelModalProvider'
-import useUsersModal from './useUsersModal'
+import usePanelModal from '@/contexts/panel/modal/usePanelModal'
 
-// Create the complete modal provider setup for users
 const {
   DataContext: UsersModalDataContext,
   OperationsContext: UsersModalOperationsContext,
   Provider: UsersModalProvider,
   useDataContext: useUsersModalDataContext,
   useOperationsContext: useUsersModalOperationsContext,
-} = createPanelModalProvider('Users', useUsersModal)
+} = createPanelModalProvider('Users', usePanelModal)
 
 export {
   UsersModalDataContext,
@@ -17,4 +16,3 @@ export {
   useUsersModalDataContext,
   useUsersModalOperationsContext,
 }
-

@@ -56,7 +56,13 @@ describe('useModifyRealizations', () => {
   })
 
   it('editRealization updates the server, reloads the panel cache, and refreshes the taxonomy concept', async () => {
-    const staleConcept = { name: 'dingo' }
+    const staleConcept = {
+      name: 'dingo',
+      aliases: [{ name: 'wild-dog', nameType: 'Common' }],
+      alternateNames: ['wild-dog'],
+      children: ['pup'],
+      parent: 'canid',
+    }
     const { apiFns, conceptEditsRefresh, freshConcept, refreshData, wrapper } = buildHarness({
       taxonomyConcept: staleConcept,
     })
@@ -71,6 +77,10 @@ describe('useModifyRealizations', () => {
     expect(refreshData).toHaveBeenCalledWith('realizations')
     expect(apiFns.apiPayload).toHaveBeenCalledWith(apiGetConcept, 'dingo')
     expect(normalizeConceptMock).toHaveBeenCalledWith(apiFns, freshConcept)
+    expect(freshConcept.aliases).toEqual([{ name: 'wild-dog', nameType: 'Common' }])
+    expect(freshConcept.alternateNames).toEqual(['wild-dog'])
+    expect(freshConcept.children).toEqual(['pup'])
+    expect(freshConcept.parent).toBe('canid')
     expect(conceptEditsRefresh).toHaveBeenCalledWith(freshConcept, staleConcept)
   })
 
@@ -88,7 +98,13 @@ describe('useModifyRealizations', () => {
   })
 
   it('deleteRealization removes the server realization, reloads the panel cache, and refreshes the taxonomy concept', async () => {
-    const staleConcept = { name: 'dingo' }
+    const staleConcept = {
+      name: 'dingo',
+      aliases: [],
+      alternateNames: [],
+      children: [],
+      parent: 'canid',
+    }
     const { apiFns, conceptEditsRefresh, freshConcept, refreshData, wrapper } = buildHarness({
       taxonomyConcept: staleConcept,
     })
@@ -101,6 +117,9 @@ describe('useModifyRealizations', () => {
     expect(apiFns.apiPayload).toHaveBeenCalledWith(apiDeleteRealization, ORIGINAL.id)
     expect(refreshData).toHaveBeenCalledWith('realizations')
     expect(apiFns.apiPayload).toHaveBeenCalledWith(apiGetConcept, 'dingo')
+    expect(freshConcept.aliases).toEqual([])
+    expect(freshConcept.children).toEqual([])
+    expect(freshConcept.parent).toBe('canid')
     expect(conceptEditsRefresh).toHaveBeenCalledWith(freshConcept, staleConcept)
   })
 })
