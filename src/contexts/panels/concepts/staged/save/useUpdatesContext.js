@@ -12,7 +12,7 @@ const useUpdatesContext = () => {
   const { concept: staleConcept } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
   const { apiFns } = use(ConfigContext)
-  const { getReferences, refreshData: refreshPanelData } = use(PanelDataContext)
+  const { getReferences, realizations, refreshData: refreshPanelData } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { getSettings } = use(SelectedSettingsContext)
   const { getPreferences, isAdmin, user } = use(UserContext)
@@ -23,6 +23,7 @@ const useUpdatesContext = () => {
     getReferences,
     getSettings,
     isAdmin,
+    realizations,
     reassignmentData: stagedState?.reassignmentData,
     refreshPanelData,
     savePreferences,

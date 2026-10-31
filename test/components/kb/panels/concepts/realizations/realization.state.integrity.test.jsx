@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
@@ -17,6 +17,10 @@ import {
 import CONFIG from '@/lib/config'
 
 const BUTTON = CONFIG.BUTTON
+const REALIZATION_MODAL = CONFIG.PANELS.CONCEPTS.MODALS.REALIZATION
+
+const modalRoot = () => document.querySelector('.MuiModal-root')
+const getModalText = label => within(modalRoot()).getByText(label)
 
 const cloneRealizations = realizations => realizations.map(item => ({ ...item }))
 
@@ -103,10 +107,10 @@ describe('Realization state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickRealizationAction(user, 'Add realization')
+    await clickRealizationAction(user, REALIZATION_MODAL.ADD.TOOLTIP)
 
     await waitFor(() => {
-      expect(screen.getByText('Add realization')).toBeInTheDocument()
+      expect(getModalText(REALIZATION_MODAL.ADD.LABEL)).toBeInTheDocument()
     })
 
     await user.click(screen.getByRole('button', { name: 'predatorOf' }))
@@ -115,7 +119,7 @@ describe('Realization state integrity', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add realization')).not.toBeInTheDocument()
+      expect(modalRoot()).toBeNull()
     })
 
     await waitFor(() => {
@@ -147,10 +151,10 @@ describe('Realization state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickRealizationAction(user, 'Edit realization')
+    await clickRealizationAction(user, REALIZATION_MODAL.EDIT.TOOLTIP)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit realization')).toBeInTheDocument()
+      expect(getModalText(REALIZATION_MODAL.EDIT.LABEL)).toBeInTheDocument()
     })
 
     const linkValueInput = screen.getByRole('textbox', { name: 'Link Value' })
@@ -191,10 +195,10 @@ describe('Realization state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickRealizationAction(user, 'Delete realization')
+    await clickRealizationAction(user, REALIZATION_MODAL.DELETE.TOOLTIP)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete realization')).toBeInTheDocument()
+      expect(getModalText(REALIZATION_MODAL.DELETE.LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
@@ -226,10 +230,10 @@ describe('Realization state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickRealizationAction(user, 'Edit realization')
+    await clickRealizationAction(user, REALIZATION_MODAL.EDIT.TOOLTIP)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit realization')).toBeInTheDocument()
+      expect(getModalText(REALIZATION_MODAL.EDIT.LABEL)).toBeInTheDocument()
     })
 
     const linkValueInput = screen.getByRole('textbox', { name: 'Link Value' })

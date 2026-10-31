@@ -8,6 +8,7 @@ import RealizationsContext from '@/contexts/panels/realizations/RealizationsCont
 import RealizationsProvider from '@/contexts/panels/realizations/RealizationsProvider'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -63,9 +64,11 @@ const setup = ({ selectedConcept = 'C' } = {}) => {
       >
         <SelectedSettingsContext value={{ getSettings: () => settings, updateSettings }}>
           <PanelDataContext value={{ realizations: store, refreshData }}>
-            <RealizationsProvider>
-              <FilteredIds />
-            </RealizationsProvider>
+            <TaxonomyContext value={{ conceptEditsRefresh: vi.fn(), getConcept: () => null }}>
+              <RealizationsProvider>
+                <FilteredIds />
+              </RealizationsProvider>
+            </TaxonomyContext>
           </PanelDataContext>
         </SelectedSettingsContext>
       </SelectedContext>

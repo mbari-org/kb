@@ -3,6 +3,7 @@ import { use, useCallback, useMemo } from 'react'
 import { useRealizationsModalOperationsContext, useRealizationsModalDataContext } from '@/contexts/panels/realizations/modal'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import RealizationTitle from '@/components/kb/panels/realizations/form/RealizationTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError, createValidationError } from '@/lib/errors'
@@ -28,6 +29,7 @@ const useEditRealizationButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } = useRealizationsModalOperationsContext()
   const { editRealization } = use(RealizationsContext)
   const { realizations: allRealizations } = use(PanelDataContext)
+  const { loadConcept } = use(TaxonomyContext)
 
   const isDuplicateCheck = useCallback(
     (realization, original) => isDuplicateRealization(allRealizations, realization, original.id),
@@ -66,7 +68,7 @@ const useEditRealizationButton = () => {
 
         await withProcessing(async () => {
           await editRealization(original, updatedData)
-          closeModal()
+          closeModal(true)
         }, PROCESSING.UPDATE)
       } catch (error) {
         if (error.title === 'Validation Error') {
@@ -88,6 +90,8 @@ const useEditRealizationButton = () => {
 
   const editRealizationModal = useCallback(
     realizationToEdit => {
+      loadConcept(realizationToEdit.concept)
+
       const onClose = createRealizationOnClose(updateModalData)
 
       const ActionView = () => {
@@ -188,7 +192,7 @@ const useEditRealizationButton = () => {
         onClose,
       })
     },
-    [closeModal, createModal, handleCancel, handleCommit, handleFormChange, handleValidationChange, updateModalData]
+    [closeModal, createModal, handleCancel, handleCommit, handleFormChange, handleValidationChange, loadConcept, updateModalData]
   )
 
   return editRealizationModal

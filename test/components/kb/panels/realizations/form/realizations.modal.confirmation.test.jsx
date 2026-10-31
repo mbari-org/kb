@@ -7,6 +7,7 @@ import useDeleteRealizationButton from '@/components/kb/panels/realizations/form
 import { createDeleteRealizationContent } from '@/components/kb/panels/realizations/form/realizationModalUtils'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import CONFIG from '@/lib/config'
 
 let mockModalData = null
@@ -68,11 +69,13 @@ const renderEditHarness = () => {
   const panelDataValue = { realizations: [] }
 
   return render(
-    <PanelDataContext.Provider value={panelDataValue}>
-      <RealizationsContext.Provider value={realizationsValue}>
-        <EditButtonHarness realization={REALIZATION} />
-      </RealizationsContext.Provider>
-    </PanelDataContext.Provider>
+    <TaxonomyContext.Provider value={{ loadConcept: vi.fn() }}>
+      <PanelDataContext.Provider value={panelDataValue}>
+        <RealizationsContext.Provider value={realizationsValue}>
+          <EditButtonHarness realization={REALIZATION} />
+        </RealizationsContext.Provider>
+      </PanelDataContext.Provider>
+    </TaxonomyContext.Provider>
   )
 }
 
@@ -184,7 +187,7 @@ describe('Realizations modal confirmation flows', () => {
     await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.SAVE }))
 
     expect(editRealizationMock).toHaveBeenCalledWith(REALIZATION, { linkValue: 'squid' })
-    expect(closeModalMock).toHaveBeenCalled()
+    expect(closeModalMock).toHaveBeenCalledWith(true)
   })
 
   it('closes edit modal without saving when cancel is clicked in save confirmation step', async () => {

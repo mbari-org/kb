@@ -1,16 +1,7 @@
 import { use } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Fade,
-  IconButton,
-  Modal,
-} from '@mui/material'
+import { Box, Card, CardActions, CardContent, CardHeader, Fade, IconButton, Modal } from '@mui/material'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
@@ -32,12 +23,7 @@ const ConceptModal = () => {
   const renderModalSlot = slot => (typeof slot === 'function' ? slot() : slot)
 
   return (
-    <Modal
-      aria-labelledby='modal-alert'
-      aria-describedby='modal-alert-description'
-      open
-      closeAfterTransition
-    >
+    <Modal aria-labelledby='modal-alert' aria-describedby='modal-alert-description' open closeAfterTransition>
       <Fade in={true} timeout={500}>
         <Box
           sx={{

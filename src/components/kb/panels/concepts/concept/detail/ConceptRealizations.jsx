@@ -15,9 +15,7 @@ import useGuardedAction from '@/contexts/user/useGuardedAction'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
 
-const RealizationComponent = ({ item }) => (
-  <ConceptRealization realization={item} rowSx={{ ml: -1, mr: '30px' }} widths={[20, 30, 50]} />
-)
+const RealizationComponent = ({ item }) => <ConceptRealization realization={item} widths={[20, 30, 50]} />
 
 const ConceptRealizations = () => {
   const { isEditing } = use(ConceptContext)

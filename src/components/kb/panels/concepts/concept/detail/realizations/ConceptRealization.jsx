@@ -15,7 +15,7 @@ import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/chang
 
 import { stagedBorder } from '@/lib/concept/state/staged'
 
-const ConceptRealization = ({ realization, widths = [20, 30, 50], rowSx = {} }) => {
+const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
   const theme = useTheme()
 
   const { isEditing } = use(ConceptContext)
@@ -39,6 +39,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50], rowSx = {} }) 
     theme,
     width: '2px',
   })
+  const hasAction = realization.action && realization.action !== CONCEPT_STATE.NO_ACTION
 
   const showEdit = isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.DELETE
   const showDelete = isEditing && !realization.historyId && realization.action !== CONCEPT_STATE.REALIZATION.ADD
@@ -59,7 +60,12 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50], rowSx = {} }) 
   const [linkNameWidth = 20, toConceptWidth = 30, linkValueWidth = 50] = widths
 
   return (
-    <Stack direction='row' spacing={1} width='100%' sx={{ alignItems: 'center', border, ...rowSx }}>
+    <Stack
+      direction='row'
+      spacing={1}
+      width='100%'
+      sx={{ alignItems: 'center', border, ...(hasAction && { py: '2px' }) }}
+    >
       <Stack direction='column' spacing={-0.5}>
         {showEdit && realizationIcon(CONCEPT_STATE.REALIZATION.EDIT)}
         {showDelete && realizationIcon(CONCEPT_STATE.REALIZATION.DELETE)}

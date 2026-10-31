@@ -95,7 +95,7 @@ describe('useSaveStaged', () => {
     const wrapper = ({ children }) => (
       <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true, user: { role: 'Admin' } }}>
         <ConfigContext.Provider value={{ apiFns }}>
-          <PanelDataContext.Provider value={{ getReferences: vi.fn(), refreshData }}>
+          <PanelDataContext.Provider value={{ getReferences: vi.fn(), realizations: [], refreshData }}>
             <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
               <SelectedContext.Provider value={{ updateSelected }}>
                 <SelectedSettingsContext.Provider value={{ getSettings: vi.fn(() => ({})) }}>
@@ -145,5 +145,85 @@ describe('useSaveStaged', () => {
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'renamed-concept' })
     expect(closeModal).toHaveBeenCalled()
     expect(withProcessing).toHaveBeenCalledTimes(1)
+  })
+
+  const buildRealizationSaveHarness = ({ cachedRealizations }) => {
+    const staleConcept = { name: 'some-concept' }
+    const freshConcept = { name: 'some-concept', media: [], realizations: [] }
+    const updatedConcept = { name: 'some-concept', parent: 'root' }
+    const updatesInfo = {
+      hasUpdated: field => field === CONCEPT.FIELD.REALIZATIONS,
+      updatedValue: () => undefined,
+    }
+
+    const apiFns = {
+      apiPayload: vi.fn(async fn => {
+        if (fn === apiGetConcept) {
+          return freshConcept
+        }
+        throw new Error(`Unexpected api function: ${fn?.name || 'unknown'}`)
+      }),
+    }
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+
+    submitStagedMock.mockImplementation(async () => updatesInfo)
+    applyUpdateResultsMock.mockImplementation(async () => undefined)
+    normalizeConceptMock.mockImplementation(async () => freshConcept)
+
+    const wrapper = ({ children }) => (
+      <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true, user: { role: 'Admin' } }}>
+        <ConfigContext.Provider value={{ apiFns }}>
+          <PanelDataContext.Provider
+            value={{ getReferences: vi.fn(), realizations: cachedRealizations, refreshData }}
+          >
+            <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
+              <SelectedContext.Provider value={{ updateSelected: vi.fn() }}>
+                <SelectedSettingsContext.Provider value={{ getSettings: vi.fn(() => ({})) }}>
+                  <TaxonomyContext.Provider
+                    value={{ conceptEditsRefresh: vi.fn(async () => ({ concept: updatedConcept })) }}
+                  >
+                    <ConceptModalContext.Provider value={{ closeModal: vi.fn(), withProcessing: vi.fn(async work => work()) }}>
+                      <ConceptContext.Provider
+                        value={{ concept: staleConcept, initialState: {}, setConcept: vi.fn(async () => {}), setEditing: vi.fn() }}
+                      >
+                        <ConceptStagedContext.Provider value={{ stagedState: {} }}>
+                          {children}
+                        </ConceptStagedContext.Provider>
+                      </ConceptContext.Provider>
+                    </ConceptModalContext.Provider>
+                  </TaxonomyContext.Provider>
+                </SelectedSettingsContext.Provider>
+              </SelectedContext.Provider>
+            </PreferencesContext.Provider>
+          </PanelDataContext.Provider>
+        </ConfigContext.Provider>
+      </UserContext.Provider>
+    )
+
+    return { refreshData, wrapper }
+  }
+
+  it('refreshes the realizations panel cache when staged realizations are saved and the cache is loaded', async () => {
+    const { refreshData, wrapper } = buildRealizationSaveHarness({ cachedRealizations: [{ id: 1 }] })
+
+    const { result } = renderHook(() => useSaveStaged(), { wrapper })
+    await act(async () => {
+      await result.current()
+    })
+
+    expect(refreshData).toHaveBeenCalledWith('realizations')
+    expect(refreshData).toHaveBeenCalledWith('pendingHistory')
+  })
+
+  it('does not load the realizations panel cache on a realization save when the cache is not loaded', async () => {
+    const { refreshData, wrapper } = buildRealizationSaveHarness({ cachedRealizations: [] })
+
+    const { result } = renderHook(() => useSaveStaged(), { wrapper })
+    await act(async () => {
+      await result.current()
+    })
+
+    expect(refreshData).not.toHaveBeenCalledWith('realizations')
+    expect(refreshData).toHaveBeenCalledWith('pendingHistory')
   })
 })
