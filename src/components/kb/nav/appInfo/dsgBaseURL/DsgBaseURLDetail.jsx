@@ -6,7 +6,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import DsgBaseURLActions from './DsgBaseURLActions'
 import DsgBaseURLContent from './DsgBaseURLContent'
 import CONFIG from '@/lib/config'
-const { EDIT, FIELD_LABEL } = CONFIG.APP_INFO.DSG_CONCEPT
+const { EDIT, FIELD_LABEL } = CONFIG.APP_INFO.DSG_CONCEPT_URL
 const { TITLE, TOOLTIP } = EDIT
 
 const DsgBaseURLDetail = ({ onEditComplete }) => {

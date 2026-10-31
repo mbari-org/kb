@@ -9,7 +9,6 @@ import { BrowserRouter } from 'react-router-dom'
 
 import kbTheme from '@/lib/theme'
 import Concepts from '@/components/kb/panels/Concepts'
-import { DSG } from '@/lib/config/constants/dsg.js'
 import CONFIG from '@/lib/config'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -314,7 +313,7 @@ describe('DSG link', () => {
     )
 
     const link = screen.getByRole('link', { name: CONFIG.PANELS.CONCEPTS.PANEL.TOOLTIP.DSG })
-    expect(link).toHaveAttribute('href', `https://dsg.example.com/${DSG.CONCEPT_VIEW_PATH}root`)
+    expect(link).toHaveAttribute('href', 'https://dsg.example.com/root')
     expect(link).toHaveAttribute('target', '_blank')
   })
 

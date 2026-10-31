@@ -6,7 +6,7 @@ import { PREFS } from '@/lib/constants/prefs.js'
 import CONFIG from '@/lib/config'
 
 const dsgBaseUrlKey = PREFS.APP.DSG.BASE_URL.KEY
-const { INVALID_URL, SAVE_CONFIRM } = CONFIG.APP_INFO.DSG_CONCEPT.EDIT
+const { INVALID_URL, SAVE_CONFIRM } = CONFIG.APP_INFO.DSG_CONCEPT_URL.EDIT
 
 const DsgBaseURLActions = () => {
   const { dsgBaseUrl } = use(ConfigContext)

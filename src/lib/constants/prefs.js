@@ -12,7 +12,6 @@ export const PREFS = {
   APP: {
     DSG: {
       BASE_URL: {
-        DEFAULT: '',
         KEY: 'dsg-concept-url',
       },
     },

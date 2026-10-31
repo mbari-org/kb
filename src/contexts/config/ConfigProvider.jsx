@@ -14,12 +14,13 @@ import useAppPreferences from '@/contexts/config/useAppPreferences'
 import configUrlStore from '@/lib/local/store/configUrl'
 import authStore from '@/lib/local/store/authStore'
 import { PREFS } from '@/lib/constants/prefs.js'
+import CONFIG from '@/lib/config'
 
 const IS_DEV = import.meta.env.DEV
 const appMediaBaseURLKey = PREFS.APP.MEDIA.BASE_URL.KEY
 const defaultMediaBaseURL = PREFS.APP.MEDIA.BASE_URL.DEFAULT
 const appDsgBaseUrlKey = PREFS.APP.DSG.BASE_URL.KEY
-const defaultDsgBaseUrl = PREFS.APP.DSG.BASE_URL.DEFAULT
+const defaultDsgBaseUrl = CONFIG.APP_INFO.DSG_CONCEPT_URL.HINT.VALUE
 const appPhylogenyRootKey = PREFS.APP.PHYLOGENY.ROOT.KEY
 const defaultPhylogenyRoot = PREFS.APP.PHYLOGENY.ROOT.DEFAULT
 

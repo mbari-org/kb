@@ -2,9 +2,13 @@
   "BASE_URL": {
     "NONE": "not set"
   },
-  "DSG_CONCEPT": {
-    "DESCRIPTION": "Base URL for DSG links.",
-    "DETAIL": "Only enter the base URL of the DSG. The path to Concept links will be generated automatically.",
+  "DSG_CONCEPT_URL": {
+    "DESCRIPTION": "DSG URL for Concept links.",
+    "DETAIL": "Concept names are appended to this URL to generate links.",
+    "HINT": {
+      "TEXT": "At MBARI use",
+      "VALUE": "https://dsg.mbari.org/dsg/#/view/"
+    },
     "FIELD_LABEL": "DSG Base URL",
     "EDIT": {
       "TITLE": "Set DSG Base URL",
@@ -22,6 +26,10 @@
   "MEDIA_URL": {
     "DESCRIPTION": "Base URL for media assets.",
     "DETAIL": "This URL will pre-populate when adding media files to Concepts.",
+    "HINT": {
+      "TEXT": "At MBARI use",
+      "VALUE": "http://dsg.mbari.org/images/dsg/external/"
+    },
     "FIELD_LABEL": "Media Base URL",
     "EDIT": {
       "TITLE": "Set Media Base URL",
@@ -37,8 +45,13 @@
     }
   },
   "PHYLOGENY_ROOT": {
-    "DESCRIPTION": "Concept name for the taxonomy phylogeny root.",
+    "DESCRIPTION": "Concept for the taxonomy phylogeny root.",
     "DETAIL": "Only Concepts under this root will have Taxonomy Rank Name and Level.",
+    "HINT": {
+      "TEXT": "At MBARI use",
+      "VALUE": "marine organism"
+    },
+    "DEFAULT": "marine organism",
     "FIELD_LABEL": "Phylogeny Root",
     "EDIT": {
       "TITLE": "Set Phylogeny Root",
@@ -48,13 +61,6 @@
         "SEVERITY": "success"
       }
     }
-  },
-  "PHLOGENY_ROOT": {
-    "DESCRIPTION": "Concept name for the taxonomy phylogeny root.",
-    "DETAIL": "Only Concepts under this root will have Taxonomy Rank Name and Level.",
-    "EDIT_TITLE": "Set Phylogeny Root",
-    "EDIT_TOOLTIP": "Set Phylogeny Root",
-    "FIELD_LABEL": "Phylogeny Root"
   },
   "DESCRIPTION": {
     "DSG": "The URL for DSG concept viewing. Concept names are appended to this URL to generate links to DSG concepts.",

@@ -49,7 +49,7 @@ const ReadOnlyLogin = () => {
           textDecoration: 'none',
         }}
       >
-        {CONFIG.LOGIN.READ_ONLY}
+        {CONFIG.STARTUP.READ_ONLY}
       </Button>
     </Box>
   )

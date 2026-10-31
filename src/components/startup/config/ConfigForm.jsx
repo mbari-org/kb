@@ -10,6 +10,8 @@ import ServiceInfo from './ServiceInfo'
 import SubmitButton from '@/components/common/SubmitButton'
 import SubmitError from '@/components/common/SubmitError'
 
+const { CONFIG_SERVICE } = CONFIG.STARTUP
+
 const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const { config, updateConfig } = use(ConfigContext)
   const [configUrl, setConfigUrl] = useState(() => config?.url || '')
@@ -37,9 +39,9 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
   const isButtonEnabled = isFormDirty && isValidConfigUrl
 
   const applyDefaultConfigUrl = close => {
-    setConfigUrl(CONFIG.LOGIN.CONFIG_SERVICE.DEFAULT)
+    setConfigUrl(CONFIG_SERVICE.HINT.VALUE)
     setSubmitError('')
-    setConfigIsDirty(CONFIG.LOGIN.CONFIG_SERVICE.DEFAULT !== config?.url)
+    setConfigIsDirty(CONFIG_SERVICE.HINT.VALUE !== config?.url)
     close()
   }
 
@@ -57,7 +59,7 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
             id='config-service-url'
             disabled={isPending}
             fullWidth
-            label={CONFIG.LOGIN.CONFIG_SERVICE.LABEL}
+            label={CONFIG_SERVICE.LABEL}
             name='configUrl'
             onChange={handleConfigChange}
             required
