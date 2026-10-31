@@ -25,6 +25,7 @@ import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
+import debugSync from '@/debugSync'
 
 const { BACK_TO_EDITING } = CONFIG.BUTTON
 const { PROCESSING } = CONFIG
@@ -100,6 +101,8 @@ const ConceptProvider = ({ children }) => {
 
   const handleSetConcept = useCallback(
     (updatedConcept, pendingHistoryOverride) => {
+      console.debug('[KBSYNC] handleSetConcept', updatedConcept.name, 'realizations:', JSON.stringify(updatedConcept.realizations), 'refBusy:', isSettingConceptRef.current)
+      debugSync('[KBSYNC] handleSetConcept', updatedConcept.name, 'realizations:', JSON.stringify(updatedConcept.realizations), 'refBusy:', isSettingConceptRef.current)
       if (isSettingConceptRef.current) return
       isSettingConceptRef.current = true
 
@@ -212,6 +215,8 @@ const ConceptProvider = ({ children }) => {
     const taxonomyConcept = getConcept(selectedConcept)
     if (!taxonomyConcept) return
 
+    console.debug('[KBSYNC] sync effect re-baking', selectedConcept, 'realizations:', JSON.stringify(taxonomyConcept.realizations))
+    debugSync('[KBSYNC] sync effect re-baking', selectedConcept, 'realizations:', JSON.stringify(taxonomyConcept.realizations))
     const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
     return () => clearTimeout(timeoutId)
   }, [getConcept, getSelected, handleSetConcept, initialState, isConceptLoaded, isConceptModified, isEditing, taxonomy])

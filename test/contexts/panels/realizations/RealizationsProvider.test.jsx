@@ -9,6 +9,7 @@ import RealizationsProvider from '@/contexts/panels/realizations/RealizationsPro
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -65,9 +66,11 @@ const setup = ({ selectedConcept = 'C' } = {}) => {
         <SelectedSettingsContext value={{ getSettings: () => settings, updateSettings }}>
           <PanelDataContext value={{ realizations: store, refreshData }}>
             <TaxonomyContext value={{ conceptEditsRefresh: vi.fn(), getConcept: () => null }}>
-              <RealizationsProvider>
-                <FilteredIds />
-              </RealizationsProvider>
+              <UserContext value={{ isAdmin: true }}>
+                <RealizationsProvider>
+                  <FilteredIds />
+                </RealizationsProvider>
+              </UserContext>
             </TaxonomyContext>
           </PanelDataContext>
         </SelectedSettingsContext>
