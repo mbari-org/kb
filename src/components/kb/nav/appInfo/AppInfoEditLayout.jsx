@@ -1,8 +1,16 @@
 import { Box, Link, Typography } from '@mui/material'
+import { Fragment } from 'react'
 
 import ActionsAlert from '@/components/modal/actions/ActionsAlert'
 
+const hintValues = hint => {
+  if (hint.VALUE) return [hint.VALUE]
+  return hint.VALUES || []
+}
+
 const AppInfoEditLayout = ({ alert, children, description = '', detail = '', hint = {}, onApplyHint }) => {
+  const values = hintValues(hint)
+
   return (
     <Box sx={{ minWidth: 500, p: 1 }}>
       {children}
@@ -26,7 +34,7 @@ const AppInfoEditLayout = ({ alert, children, description = '', detail = '', hin
         >
           {detail}
         </Typography>
-        {hint.TEXT && hint.VALUE && (
+        {hint.TEXT && values.length > 0 && (
           <Typography
             sx={{
               mt: 1,
@@ -35,7 +43,15 @@ const AppInfoEditLayout = ({ alert, children, description = '', detail = '', hin
               width: '60%',
             }}
           >
-            {hint.TEXT}: <Link component='button' onClick={() => onApplyHint(hint.VALUE)}>{hint.VALUE}</Link>
+            {hint.TEXT}:{' '}
+            {values.map((value, index) => (
+              <Fragment key={value}>
+                {index > 0 && ', '}
+                <Link component='button' onClick={() => onApplyHint(value)}>
+                  {value}
+                </Link>
+              </Fragment>
+            ))}
           </Typography>
         )}
       </Box>

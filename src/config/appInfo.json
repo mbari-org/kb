@@ -28,7 +28,7 @@
     "DETAIL": "This URL will pre-populate when adding media files to Concepts.",
     "HINT": {
       "TEXT": "At MBARI use",
-      "VALUE": "http://dsg.mbari.org/images/dsg/external/"
+      "VALUES": ["http://dsg.mbari.org/images/dsg/external/", "http://dsg.mbari.org/images/dsg"]
     },
     "FIELD_LABEL": "Media Base URL",
     "EDIT": {
