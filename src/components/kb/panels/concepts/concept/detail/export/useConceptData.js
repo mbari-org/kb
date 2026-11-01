@@ -5,9 +5,11 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import { getConcept as apiConcept, normalizeConcept } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants/concept'
 import { loadAliases } from '@/lib/model/aliases'
 import { loadReferences } from '@/lib/model/reference'
+import { isStructureOnly } from '@/lib/model/taxonomy'
 import { loadTemplates } from '@/lib/model/templates'
 import { drop } from '@/lib/utils'
 import CONFIG from '@/lib/config'
@@ -27,33 +29,45 @@ export const OPTIONAL_FIELDS = [
 
 const conceptDataFn = apiFns => {
   return async (concept, includeFields) => {
+    let source = concept
+    const needsPayload =
+      includeFields.author || includeFields.media || includeFields.rank || includeFields.realizations
+    if (needsPayload && isStructureOnly(concept)) {
+      source = await apiFns.apiPayload(apiConcept, concept.name)
+      await normalizeConcept(apiFns, source)
+      source.children = concept.children
+      if (concept.parent !== undefined) {
+        source.parent = concept.parent
+      }
+    }
+
     const exportData = {
-      name: concept.name,
+      name: source.name,
       children: concept.children,
     }
 
     if (includeFields.aliases) {
-      const aliases = await loadAliases(apiFns, concept)
+      const aliases = await loadAliases(apiFns, source)
       exportData.aliases = aliases.map(alias => drop(alias, ['id']))
     }
     if (includeFields.author) {
-      exportData.author = concept.author
+      exportData.author = source.author
     }
     if (includeFields.media) {
-      exportData.media = concept.media
-        ? concept.media.map(item => drop(item, ['conceptName', 'id', 'lastUpdated']))
+      exportData.media = source.media
+        ? source.media.map(item => drop(item, ['conceptName', 'id', 'lastUpdated']))
         : []
     }
     if (includeFields.parent) {
-      exportData.parent = concept.parent
+      exportData.parent = source.parent
     }
     if (includeFields.rank) {
-      exportData.rankLevel = concept.rankLevel || ''
-      exportData.rankName = concept.rankName || ''
+      exportData.rankLevel = source.rankLevel || ''
+      exportData.rankName = source.rankName || ''
     }
     if (includeFields.realizations) {
-      exportData.realizations = concept.realizations
-        ? concept.realizations.map(realization => drop(realization, ['id']))
+      exportData.realizations = source.realizations
+        ? source.realizations.map(realization => drop(realization, ['id']))
         : []
     }
     if (includeFields.references) {

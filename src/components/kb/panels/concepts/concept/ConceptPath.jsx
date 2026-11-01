@@ -8,11 +8,16 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const ConceptPath = () => {
-  const { conceptPath } = use(ConceptContext)
+  const { conceptPath, prepareConceptSwitch } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
 
   const handlePathClick = path => {
-    updateSelected({ [SELECTED.CONCEPT]: path, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
+    prepareConceptSwitch()
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        updateSelected({ [SELECTED.CONCEPT]: path, [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS })
+      })
+    })
   }
 
   return (

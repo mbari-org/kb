@@ -22,7 +22,7 @@ import { buildTree } from '@/lib/model/taxonomy'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
-  const { concept, conceptPath, onConceptTreeReady } = use(ConceptContext)
+  const { concept, conceptPath, prepareConceptSwitch } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { getConcept, getConceptPrimaryName, taxonomy } = use(TaxonomyContext)
   const sidebarRef = useRef(null)
@@ -66,9 +66,18 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
 
   const handleConceptSelect = useCallback(
     conceptName => {
+      if (conceptName && conceptName !== concept?.name) {
+        prepareConceptSwitch()
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            updateSelected({ [SELECTED.CONCEPT]: conceptName })
+          })
+        })
+        return
+      }
       updateSelected({ [SELECTED.CONCEPT]: conceptName })
     },
-    [updateSelected]
+    [concept?.name, prepareConceptSwitch, updateSelected]
   )
 
   const expandConcept = useExpandConcept(expandedItems, setExpandedItems, taxonomy)
@@ -102,9 +111,10 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
     }
   }, [conceptPath])
 
+  // Scroll is best-effort background work; overlay is dismissed when concept path resolves.
   useEffect(() => {
-    return scrollToNode(onConceptTreeReady, 250)
-  }, [scrollToNode, onConceptTreeReady])
+    return scrollToNode(undefined, 0)
+  }, [scrollToNode])
 
   if (!concept || !getConcept(concept.name)) {
     return null

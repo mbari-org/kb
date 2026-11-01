@@ -1,20 +1,24 @@
 import { use, useCallback } from 'react'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import CONFIG from '@/lib/config'
 import { CONCEPT } from '@/lib/constants'
 
-const allLeafs = (taxonomy, conceptName, leafs = []) => {
+const { PROCESSING } = CONFIG
+
+const allExpandable = (taxonomy, conceptName, names = []) => {
   const concept = taxonomy.conceptMap[conceptName]
-  if (0 < concept.children.length) {
-    leafs.push(concept.name)
-    concept.children.forEach(child => allLeafs(taxonomy, child, leafs))
-  }
-  return leafs
+  if (!concept?.children?.length) return names
+  names.push(concept.name)
+  concept.children.forEach(child => allExpandable(taxonomy, child, names))
+  return names
 }
 
 const useExpandConcept = (expandedItems, setExpandedItems) => {
+  const { beginProcessing } = use(AppModalContext)
   const { conceptPath } = use(ConceptContext)
   const { loadConceptDescendants } = use(TaxonomyContext)
 
@@ -43,12 +47,19 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
 
   const descendants = useCallback(
     concept => {
-      loadConceptDescendants(concept).then(updatedTaxonomy => {
-        const leafs = allLeafs(updatedTaxonomy, concept.name)
-        setExpandedItems(prevItems => [...new Set([...prevItems, ...leafs])])
+      const stop = beginProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT_DESCENDANTS, {
+        delayMs: 0,
+        timeoutMs: 120000,
       })
+      loadConceptDescendants(concept)
+        .then(updatedTaxonomy => {
+          if (!updatedTaxonomy) return
+          const expandable = allExpandable(updatedTaxonomy, concept.name)
+          setExpandedItems(prevItems => [...new Set([...prevItems, ...expandable])])
+        })
+        .finally(stop)
     },
-    [loadConceptDescendants, setExpandedItems]
+    [beginProcessing, loadConceptDescendants, setExpandedItems]
   )
 
   const toggle = useCallback(
