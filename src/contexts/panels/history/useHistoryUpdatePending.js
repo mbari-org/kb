@@ -9,7 +9,7 @@ import processPendingApproval from '@/lib/concept/pending/processPendingApproval
 
 const useHistoryUpdatePending = () => {
   const { apiFns } = use(ConfigContext)
-  const { refreshData } = use(PanelDataContext)
+  const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
   const { conceptEditsRefresh, getConcept } = use(TaxonomyContext)
   const { updateSelected } = use(SelectedContext)
 
@@ -22,6 +22,7 @@ const useHistoryUpdatePending = () => {
           conceptEditsRefresh,
           getConcept,
           refreshData,
+          reloadConceptRealizations,
           updateSelected,
         },
         items: [item],
@@ -29,7 +30,7 @@ const useHistoryUpdatePending = () => {
 
       return true
     },
-    [apiFns, conceptEditsRefresh, getConcept, refreshData, updateSelected]
+    [apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, updateSelected]
   )
 }
 

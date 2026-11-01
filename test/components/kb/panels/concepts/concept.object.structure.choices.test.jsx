@@ -305,6 +305,7 @@ const TestWrapper = ({ children }) => {
                             concept,
                             conceptPath: concept ? [concept.name] : null,
                             onConceptTreeReady: vi.fn(),
+                            prepareConceptSwitch: vi.fn(),
                             initialState: concept ? initialState : null,
                             isMarineOrganism: false,
                             isEditing,

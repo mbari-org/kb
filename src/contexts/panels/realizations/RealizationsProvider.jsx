@@ -1,6 +1,5 @@
-import { use, useEffect, useMemo, useCallback, useState } from 'react'
+import { use, useEffect, useMemo, useCallback } from 'react'
 
-import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import { RealizationsModalProvider } from '@/contexts/panels/realizations/modal'
@@ -9,13 +8,11 @@ import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext
 
 import dataFilters from '@/contexts/panels/dataFilters'
 import useUpdateFilters from '@/contexts/panels/useUpdateFilters'
-import useLoadRealizations from '@/contexts/panel/data/useLoadRealizations'
 import useModifyRealizations from '@/contexts/panels/realizations/useModifyRealizations'
 
 import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { SELECTED } from '@/lib/constants/selected.js'
-import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { matchingRealizationString } from '@/lib/model/realization'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
@@ -23,19 +20,21 @@ const FILTERS = REALIZATIONS.FILTERS
 const { DEFAULT_FILTERS } = dataFilters(REALIZATIONS.KEY)
 
 const RealizationsProvider = ({ children }) => {
-  const { apiFns } = use(ConfigContext)
   const { getSelected } = use(SelectedContext)
   const { getSettings, updateSettings } = use(SelectedSettingsContext)
-  const { pendingHistory, realizations, refreshData } = use(PanelDataContext)
-  const loadRealizations = useLoadRealizations(apiFns)
+  const {
+    ensureAllRealizations,
+    ensureConceptRealizations,
+    getAllRealizations,
+    getConceptRealizations,
+    pendingHistory,
+  } = use(PanelDataContext)
 
   const { editRealization, deleteRealization } = useModifyRealizations()
 
   const realizationsSettings = getSettings(REALIZATIONS.KEY) || {}
   const filters = realizationsSettings[FILTERS.KEY] || DEFAULT_FILTERS
   const conceptFilter = filters[FILTERS.CONCEPT]
-
-  const [conceptRealizations, setConceptRealizations] = useState(null)
 
   const selectedPanel = getSelected(SELECTED.PANEL)
   const selectedConcept = getSelected(SELECTED.CONCEPT)
@@ -69,41 +68,32 @@ const RealizationsProvider = ({ children }) => {
     if (isInitialConceptFilterPending) return
 
     if (conceptFilter) {
-      let stale = false
-      loadRealizations(conceptFilter).then(loaded => {
-        if (!stale) setConceptRealizations({ concept: conceptFilter, data: loaded })
-      })
-      return () => {
-        stale = true
-      }
+      ensureConceptRealizations(conceptFilter)
+      return
     }
+    ensureAllRealizations()
+  }, [conceptFilter, ensureAllRealizations, ensureConceptRealizations, isInitialConceptFilterPending, isRealizationsPanelSelected])
 
-    if (realizations.length === 0) {
-      refreshData(PANEL_DATA.REALIZATIONS)
-    }
-  }, [conceptFilter, isInitialConceptFilterPending, isRealizationsPanelSelected, loadRealizations, realizations, refreshData])
+  const sourceRealizations = useMemo(
+    () => (conceptFilter ? (getConceptRealizations(conceptFilter) ?? []) : getAllRealizations()),
+    [conceptFilter, getAllRealizations, getConceptRealizations]
+  )
 
   const explicitToConcepts = useMemo(() => {
-    if (realizations.length === 0) {
-      return []
-    }
     const uniqueToConcepts = new Set()
-    realizations.forEach(realization => {
+    getAllRealizations().forEach(realization => {
       if (realization.toConcept) {
         uniqueToConcepts.add(realization.toConcept)
       }
     })
 
     return Array.from(uniqueToConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-  }, [realizations])
+  }, [getAllRealizations])
 
   const filteredRealizations = useMemo(() => {
     if (isInitialConceptFilterPending) {
       return []
     }
-
-    const sourceRealizations =
-      conceptFilter && conceptRealizations?.concept === conceptFilter ? conceptRealizations.data : realizations
 
     const concept = filters[FILTERS.CONCEPT]
     const toConcept = filters[FILTERS.TO_CONCEPT]
@@ -125,7 +115,7 @@ const RealizationsProvider = ({ children }) => {
       }
       return true
     })
-  }, [conceptFilter, conceptRealizations, realizations, filters, isInitialConceptFilterPending])
+  }, [filters, isInitialConceptFilterPending, sourceRealizations])
 
   const filterString = useCallback(realization => {
     if (!realization) return '* | * | * | *'
@@ -147,7 +137,6 @@ const RealizationsProvider = ({ children }) => {
       filters,
       filterString,
       getPendingRealizationAction,
-      realizations: realizations,
       updateFilters,
     }),
     [
@@ -158,7 +147,6 @@ const RealizationsProvider = ({ children }) => {
       filters,
       filterString,
       getPendingRealizationAction,
-      realizations,
       updateFilters,
     ]
   )

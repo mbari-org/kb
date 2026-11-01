@@ -38,7 +38,7 @@ describe('Concept path behavior', () => {
 
     render(
       <SelectedContext.Provider value={{ updateSelected }}>
-        <ConceptContext.Provider value={{ conceptPath: ['root', 'object', 'dingo'] }}>
+        <ConceptContext.Provider value={{ conceptPath: ['root', 'object', 'dingo'], prepareConceptSwitch: vi.fn() }}>
           <ConceptPath />
         </ConceptContext.Provider>
       </SelectedContext.Provider>
@@ -46,9 +46,11 @@ describe('Concept path behavior', () => {
 
     await user.click(screen.getByRole('button', { name: 'object' }))
 
-    expect(updateSelected).toHaveBeenCalledWith({
-      [SELECTED.CONCEPT]: 'object',
-      [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS,
+    await waitFor(() => {
+      expect(updateSelected).toHaveBeenCalledWith({
+        [SELECTED.CONCEPT]: 'object',
+        [SELECTED.PANEL]: SELECTED.PANELS.CONCEPTS,
+      })
     })
   })
 })

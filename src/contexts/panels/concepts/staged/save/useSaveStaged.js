@@ -32,19 +32,19 @@ const useSaveStaged = () => {
   return useCallback(() => {
     return withProcessing(
       async () => {
-        const { apiFns, isAdmin, realizations, refreshPanelData, staleConcept } = updatesContext
+        const { apiFns, isAdmin, refreshPanelData, reloadConceptRealizations, staleConcept } = updatesContext
 
         const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
+
+        const conceptName = updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
         if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
           await applyRenameSideEffects(updatesContext, updatesInfo)
         }
 
-        if (updatesInfo.hasUpdated(CONCEPT.FIELD.REALIZATIONS) && realizations.length > 0) {
-          await refreshPanelData(PANEL_DATA.REALIZATIONS)
+        if (updatesInfo.hasUpdated(CONCEPT.FIELD.REALIZATIONS)) {
+          await reloadConceptRealizations(conceptName)
         }
-
-        const conceptName = updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
         const freshConcept = await apiFns.apiPayload(getConcept, conceptName)
         await normalizeConcept(apiFns, freshConcept)

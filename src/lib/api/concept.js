@@ -1,18 +1,12 @@
 import { getMedia } from '@/lib/api/media'
-import { getConceptLinkRealizations } from '@/lib/api/realizations'
 import { annosaurusGet } from '@/lib/services/annosaurus/methods'
 import { oniGet, oniUserDelete, oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
 
-// The server caches concepts, so we don't "trust" the media and realizations arrays in the fetched concept object,
-// instead we explicitly fetch media and realizations.
+// The server caches concepts, so we don't "trust" the media array in the fetched concept object,
+// instead we explicitly fetch media. Realizations are owned by PanelData and are never read
+// from concept payloads.
 const normalizeConcept = async (apiFns, concept) => {
-  const [freshMedia, freshRealizations] = await Promise.all([
-    apiFns.apiPayload(getMedia, concept.name),
-    apiFns.apiPayload(getConceptLinkRealizations, concept.name),
-  ])
-
-  concept.media = freshMedia
-  concept.realizations = freshRealizations
+  concept.media = await apiFns.apiPayload(getMedia, concept.name)
 
   if (concept.linkRealizations) {
     delete concept.linkRealizations

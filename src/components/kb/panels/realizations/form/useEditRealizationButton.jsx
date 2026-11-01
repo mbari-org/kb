@@ -28,12 +28,13 @@ const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 const useEditRealizationButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } = useRealizationsModalOperationsContext()
   const { editRealization } = use(RealizationsContext)
-  const { realizations: allRealizations } = use(PanelDataContext)
+  const { getConceptRealizations } = use(PanelDataContext)
   const { loadConcept } = use(TaxonomyContext)
 
   const isDuplicateCheck = useCallback(
-    (realization, original) => isDuplicateRealization(allRealizations, realization, original.id),
-    [allRealizations]
+    (realization, original) =>
+      isDuplicateRealization(getConceptRealizations(original.concept) ?? [], realization, original.id),
+    [getConceptRealizations]
   )
 
   const { handleCancel, handleFormChange } = useMemo(
@@ -57,7 +58,7 @@ const useEditRealizationButton = () => {
           closeModal()
           return
         }
-        if (isDuplicateRealization(allRealizations, realization, original.id)) {
+        if (isDuplicateRealization(getConceptRealizations(original.concept) ?? [], realization, original.id)) {
           updateModalData({ confirmCommit: false })
           throw createValidationError('Realization already exists', {
             realizationId: realization?.id,
@@ -85,7 +86,7 @@ const useEditRealizationButton = () => {
         )
       }
     },
-    [allRealizations, editRealization, closeModal, updateModalData, withProcessing]
+    [editRealization, getConceptRealizations, closeModal, updateModalData, withProcessing]
   )
 
   const editRealizationModal = useCallback(

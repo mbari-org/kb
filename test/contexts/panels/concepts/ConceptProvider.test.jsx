@@ -52,7 +52,14 @@ const renderProvider = ({ apiPayload }) => {
     <AppModalContext.Provider value={{ beginProcessing }}>
       <ConfigContext.Provider value={{ apiFns: { apiPayload }, phylogenyRoot: 'root' }}>
         <ConceptModalContext.Provider value={{ setModal: vi.fn(), setModalData: vi.fn() }}>
-          <PanelDataContext.Provider value={{ getConceptTemplates, pendingHistory: [] }}>
+          <PanelDataContext.Provider
+            value={{
+              ensureConceptRealizations: vi.fn(async () => []),
+              getConceptTemplates,
+              pendingHistory: [],
+              realizationsByConcept: {},
+            }}
+          >
             <SelectedContext.Provider
               value={{
                 concepts: { clear: vi.fn(), getState: vi.fn(() => ['dingo']), push: vi.fn() },

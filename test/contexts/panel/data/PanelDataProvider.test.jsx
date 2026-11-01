@@ -1,79 +1,207 @@
-import { act, render, screen } from '@testing-library/react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { use } from 'react'
+import { act, render, screen, waitFor } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import PanelDataProvider from '@/contexts/panel/data/PanelDataProvider'
-import { LOADING } from '@/lib/constants/loading.js'
 
-const {
-  loadPendingHistoryMock,
-  loadRealizationsMock,
-  loadReferencesMock,
-  loadTemplatesMock,
-  showBoundaryMock,
-} = vi.hoisted(() => ({
-  loadPendingHistoryMock: vi.fn(),
-  loadRealizationsMock: vi.fn(),
-  loadReferencesMock: vi.fn(),
-  loadTemplatesMock: vi.fn(),
-  showBoundaryMock: vi.fn(),
-}))
+import { getConceptLinkRealizations, getRealizations } from '@/lib/api/realizations'
 
-vi.mock('react-error-boundary', () => ({
-  useErrorBoundary: () => ({
-    showBoundary: showBoundaryMock,
-  }),
-}))
+const DINGO_REALIZATIONS = [
+  { id: 1, concept: 'dingo', linkName: 'eats', toConcept: 'fish', linkValue: 'daily', lastUpdated: null },
+]
+const WOLF_REALIZATIONS = [
+  { id: 2, concept: 'wolf', linkName: 'eats', toConcept: 'fox', linkValue: 'often', lastUpdated: null },
+]
 
-vi.mock('@/contexts/panel/data/useLoadReferences', () => ({
-  default: () => loadReferencesMock,
-}))
-vi.mock('@/contexts/panel/data/useLoadRealizations', () => ({
-  default: () => loadRealizationsMock,
-}))
+const Probe = () => {
+  const { getAllRealizations, getConceptRealizations, realizationsAllLoaded } = use(PanelDataContext)
+  return (
+    <>
+      <div data-testid='all-loaded'>{String(realizationsAllLoaded)}</div>
+      <div data-testid='dingo'>{JSON.stringify(getConceptRealizations('dingo'))}</div>
+      <div data-testid='all'>{JSON.stringify(getAllRealizations().map(r => r.id))}</div>
+    </>
+  )
+}
 
-vi.mock('@/contexts/panel/data/useLoadTemplates', () => ({
-  default: () => loadTemplatesMock,
-}))
+const Actions = () => {
+  const {
+    ensureAllRealizations,
+    ensureConceptRealizations,
+    invalidateConceptRealizations,
+    reloadConceptRealizations,
+    setConceptRealizations,
+  } = use(PanelDataContext)
+  return (
+    <>
+      <button onClick={() => ensureConceptRealizations('dingo')} type='button'>
+        ensure-dingo
+      </button>
+      <button onClick={() => ensureConceptRealizations('wolf')} type='button'>
+        ensure-wolf
+      </button>
+      <button onClick={() => ensureAllRealizations()} type='button'>
+        ensure-all
+      </button>
+      <button onClick={() => ensureAllRealizations({ force: true })} type='button'>
+        force-all
+      </button>
+      <button onClick={() => setConceptRealizations('dingo', [{ ...DINGO_REALIZATIONS[0], linkValue: 'weekly' }])} type='button'>
+        set-dingo
+      </button>
+      <button onClick={() => reloadConceptRealizations('dingo')} type='button'>
+        reload-dingo
+      </button>
+      <button onClick={() => invalidateConceptRealizations('all')} type='button'>
+        invalidate-all
+      </button>
+    </>
+  )
+}
 
-vi.mock('@/contexts/panel/data/useLoadPendingHistory', () => ({
-  default: () => loadPendingHistoryMock,
-}))
-
-describe('PanelDataProvider', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-    vi.useFakeTimers()
-
-    loadReferencesMock.mockImplementation(() => new Promise(() => {}))
-    loadRealizationsMock.mockImplementation(() => new Promise(() => {}))
-    loadTemplatesMock.mockImplementation(() => new Promise(() => {}))
-    loadPendingHistoryMock.mockImplementation(() => new Promise(() => {}))
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('sends initial-load hangs to the error boundary instead of gating forever', async () => {
-    render(
-      <ConfigContext.Provider value={{ apiFns: {} }}>
+const renderProvider = apiFns =>
+  render(
+    <ErrorBoundary fallbackRender={() => null}>
+      <ConfigContext.Provider value={{ apiFns }}>
         <PanelDataProvider>
-          <div data-testid='panel-data-ready'>ready</div>
+          <Probe />
+          <Actions />
         </PanelDataProvider>
       </ConfigContext.Provider>
-    )
+    </ErrorBoundary>
+  )
 
-    expect(screen.queryByTestId('panel-data-ready')).toBeNull()
+describe('PanelDataProvider realizations store', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  const buildApiFns = () => ({
+    apiPaginated: vi.fn(async () => []),
+    apiPayload: vi.fn(async (fn, value) => {
+      if (fn === getConceptLinkRealizations && value === 'dingo') return DINGO_REALIZATIONS.map(r => ({ ...r }))
+      if (fn === getConceptLinkRealizations && value === 'wolf') return WOLF_REALIZATIONS.map(r => ({ ...r }))
+      if (fn === getConceptLinkRealizations) return []
+      if (fn === getRealizations) return { content: [...DINGO_REALIZATIONS, ...WOLF_REALIZATIONS].map(r => ({ ...r })) }
+      return []
+    }),
+    apiResult: vi.fn(async () => 0),
+  })
+
+  it('treats a missing key as not loaded and an empty list as loaded', async () => {
+    const apiFns = buildApiFns()
+    renderProvider(apiFns)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'ensure-dingo' })).toBeInTheDocument()
+    })
+    expect(screen.getByTestId('dingo').textContent).toBe('')
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(LOADING.STARTUP.PANEL_DATA_TIMEOUT_MS + 1)
-      await vi.runAllTimersAsync()
-      await Promise.resolve()
+      screen.getByRole('button', { name: 'ensure-dingo' }).click()
     })
-    expect(showBoundaryMock).toHaveBeenCalledWith(
-      expect.objectContaining({ title: 'Panel Data Load Timeout' })
-    )
-    expect(screen.getByTestId('panel-data-ready')).toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dingo').textContent).toBe(JSON.stringify(DINGO_REALIZATIONS))
+    })
+    expect(screen.getByTestId('all-loaded').textContent).toBe('false')
+  })
+
+  it('ensureAll fills multiple concept keys and flattens for the all view', async () => {
+    const apiFns = buildApiFns()
+    renderProvider(apiFns)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'ensure-all' })).toBeInTheDocument()
+    })
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'ensure-all' }).click()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('all-loaded').textContent).toBe('true')
+    })
+    expect(screen.getByTestId('dingo').textContent).toBe(JSON.stringify(DINGO_REALIZATIONS))
+    expect(screen.getByTestId('all').textContent).toBe(JSON.stringify([1, 2]))
+  })
+
+  it('setConceptRealizations updates a single key and keeps the all view consistent', async () => {
+    const apiFns = buildApiFns()
+    renderProvider(apiFns)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'ensure-all' })).toBeInTheDocument()
+    })
+    await act(async () => {
+      screen.getByRole('button', { name: 'ensure-all' }).click()
+    })
+    await waitFor(() => {
+      expect(screen.getByTestId('all-loaded').textContent).toBe('true')
+    })
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'set-dingo' }).click()
+    })
+
+    await waitFor(() => {
+      const dingo = JSON.parse(screen.getByTestId('dingo').textContent)
+      expect(dingo[0].linkValue).toBe('weekly')
+    })
+    expect(JSON.parse(screen.getByTestId('all').textContent)).toEqual([1, 2])
+  })
+
+  it('shares one in-flight ensure for concurrent concept requests', async () => {
+    const apiFns = buildApiFns()
+    renderProvider(apiFns)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'ensure-dingo' })).toBeInTheDocument()
+    })
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'ensure-dingo' }).click()
+      screen.getByRole('button', { name: 'ensure-dingo' }).click()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dingo').textContent).toBe(JSON.stringify(DINGO_REALIZATIONS))
+    })
+
+    const linkRealizationCalls = apiFns.apiPayload.mock.calls.filter(([fn]) => fn === getConceptLinkRealizations)
+    expect(linkRealizationCalls).toHaveLength(1)
+  })
+
+  it('reload bypasses the cache and invalidate-all resets the store', async () => {
+    const apiFns = buildApiFns()
+    renderProvider(apiFns)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'ensure-all' })).toBeInTheDocument()
+    })
+    await act(async () => {
+      screen.getByRole('button', { name: 'ensure-all' }).click()
+    })
+    await waitFor(() => {
+      expect(screen.getByTestId('all-loaded').textContent).toBe('true')
+    })
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'invalidate-all' }).click()
+    })
+
+    expect(screen.getByTestId('all-loaded').textContent).toBe('false')
+    expect(screen.getByTestId('dingo').textContent).toBe('')
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'reload-dingo' }).click()
+    })
+    await waitFor(() => {
+      expect(screen.getByTestId('dingo').textContent).toBe(JSON.stringify(DINGO_REALIZATIONS))
+    })
+    expect(screen.getByTestId('all-loaded').textContent).toBe('false')
   })
 })

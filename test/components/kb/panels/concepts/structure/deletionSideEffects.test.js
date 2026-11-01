@@ -26,10 +26,13 @@ describe('deletionSideEffects preSideEffects', () => {
       ],
     }
 
-    const realizations = [
-      ...concept.realizations,
-      { id: 4, concept: 'ReassignedConcept', linkName: 'existing-link', linkValue: 'val', toConcept: 'ReassignedConcept' },
-    ]
+    const realizationsByConcept = {
+      OldConcept: concept.realizations,
+      ReassignedConcept: [
+        { id: 4, concept: 'ReassignedConcept', linkName: 'existing-link', linkValue: 'val', toConcept: 'ReassignedConcept' },
+      ],
+    }
+    const ensureConceptRealizations = vi.fn(async conceptName => realizationsByConcept[conceptName] ?? [])
 
     const relatedDataCounts = [
       { title: RELATED_DATA_COUNTS.REALIZATIONS, value: 3 },
@@ -38,7 +41,7 @@ describe('deletionSideEffects preSideEffects', () => {
     const deleteConceptContext = {
       apiFns,
       concept,
-      realizations,
+      ensureConceptRealizations,
       reassign: 'ReassignedConcept',
       relatedDataCounts,
       templates: [],
@@ -46,6 +49,8 @@ describe('deletionSideEffects preSideEffects', () => {
 
     const results = await preSideEffects(deleteConceptContext)
 
+    expect(ensureConceptRealizations).toHaveBeenCalledWith('ReassignedConcept')
+    expect(ensureConceptRealizations).toHaveBeenCalledWith('OldConcept')
     expect(createdPayloads).toEqual([
       { concept: 'ReassignedConcept', linkName: 'sample-link', linkValue: 'nil', toConcept: 'TargetConcept' },
       { concept: 'ReassignedConcept', linkName: 'self-link', linkValue: 'nil', toConcept: 'ReassignedConcept' },

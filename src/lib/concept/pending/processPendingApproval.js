@@ -1,4 +1,5 @@
 import { updatePendingItem } from '@/lib/api/history'
+import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
@@ -12,13 +13,20 @@ import cloneStale from '@/lib/concept/pending/cloneStale'
 export const processPendingApproval = async ({
   approval,
   items,
-  deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, updateSelected },
+  deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, updateSelected },
 }) => {
   if (!items || items.length === 0) return { updated: [], concepts: {}, pendingHistory: [] }
 
   await Promise.all(items.map(item => apiFns.apiPayload(updatePendingItem, [approval, item.id])))
 
-  const { pendingHistory } = await refreshData(PANEL_DATA.ALL)
+  const realizationConcepts = [
+    ...new Set(items.filter(item => item.field === HISTORY_FIELD.REALIZATION).map(item => item.concept)),
+  ]
+
+  const [{ pendingHistory }] = await Promise.all([
+    refreshData(PANEL_DATA.PENDING_HISTORY),
+    ...realizationConcepts.map(conceptName => reloadConceptRealizations(conceptName)),
+  ])
 
   const groups = items.reduce((acc, item) => {
     const key = item.concept

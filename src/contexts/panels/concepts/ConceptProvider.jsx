@@ -1,4 +1,5 @@
-import { use, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import useDisplayStaged from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplayStaged'
@@ -25,7 +26,6 @@ import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
-import debugSync from '@/debugSync'
 
 const { BACK_TO_EDITING } = CONFIG.BUTTON
 const { PROCESSING } = CONFIG
@@ -34,15 +34,13 @@ const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
   const { beginProcessing } = use(AppModalContext)
   const isSettingConceptRef = useRef(false)
-  const processingStopRef = useRef(null)
-  const processingCountRef = useRef(0)
-  const pendingTreeStopRef = useRef(null)
-  const pendingTreeTimeoutRef = useRef(null)
+  const conceptSwitchStopRef = useRef(null)
   const previousConceptKeyRef = useRef(null)
 
   const { apiFns, phylogenyRoot } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
-  const { getConceptTemplates, pendingHistory } = use(PanelDataContext)
+  const { ensureConceptRealizations, getConceptTemplates, pendingHistory, realizationsByConcept } =
+    use(PanelDataContext)
   const pendingHistoryRef = useRef(pendingHistory)
   const { getSelected, panels } = use(SelectedContext)
   const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
@@ -64,22 +62,30 @@ const ConceptProvider = ({ children }) => {
 
   const isConceptModified = useMemo(() => isStateModified({ initialState, stagedState }), [initialState, stagedState])
 
-  const startProcessing = useCallback(
-    (key, value) => {
-      if (!processingStopRef.current) {
-        processingStopRef.current = beginProcessing(key, value)
-      }
-      processingCountRef.current += 1
-      return () => {
-        processingCountRef.current = Math.max(0, processingCountRef.current - 1)
-        if (processingCountRef.current === 0 && processingStopRef.current) {
-          processingStopRef.current()
-          processingStopRef.current = null
-        }
-      }
-    },
-    [beginProcessing]
-  )
+  const conceptPathsRef = useRef(new Map())
+
+  const stopConceptSwitchProcessing = useCallback(() => {
+    if (!conceptSwitchStopRef.current) return
+    conceptSwitchStopRef.current()
+    conceptSwitchStopRef.current = null
+  }, [])
+
+  // Idempotent: do not stop/restart if already showing — that flashes the overlay off.
+  const startConceptSwitchProcessing = useCallback(() => {
+    if (conceptSwitchStopRef.current) return
+    conceptSwitchStopRef.current = beginProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT, {
+      delayMs: 0,
+      timeoutMs: 60000,
+    })
+  }, [beginProcessing])
+
+  // Click handlers: commit overlay NOW so the browser can paint before heavy tree work.
+  const prepareConceptSwitch = useCallback(() => {
+    if (conceptSwitchStopRef.current) return
+    flushSync(() => {
+      startConceptSwitchProcessing()
+    })
+  }, [startConceptSwitchProcessing])
 
   const displayStaged = useDisplayStaged()
   const handleLoadConceptError = useLoadConceptError()
@@ -100,9 +106,7 @@ const ConceptProvider = ({ children }) => {
   }, [stagedState?.aliasIndex, stagedState?.mediaIndex, stagedState?.realizationIndex])
 
   const handleSetConcept = useCallback(
-    (updatedConcept, pendingHistoryOverride) => {
-      console.debug('[KBSYNC] handleSetConcept', updatedConcept.name, 'realizations:', JSON.stringify(updatedConcept.realizations), 'refBusy:', isSettingConceptRef.current)
-      debugSync('[KBSYNC] handleSetConcept', updatedConcept.name, 'realizations:', JSON.stringify(updatedConcept.realizations), 'refBusy:', isSettingConceptRef.current)
+    async (updatedConcept, pendingHistoryOverride) => {
       if (isSettingConceptRef.current) return
       isSettingConceptRef.current = true
 
@@ -117,8 +121,11 @@ const ConceptProvider = ({ children }) => {
 
       const pendingConcept = pendingHistoryRef.current.filter(history => history.concept === updatedConcept.name)
 
+      const realizations = await ensureConceptRealizations(updatedConcept.name)
+
       const conceptWithTemplates = {
         ...updatedConcept,
+        realizations,
         templates: getConceptTemplates(updatedConcept.name),
       }
 
@@ -148,7 +155,7 @@ const ConceptProvider = ({ children }) => {
         isSettingConceptRef.current = false
       }, 0)
     },
-    [concept?.name, getConceptTemplates]
+    [concept?.name, ensureConceptRealizations, getConceptTemplates]
   )
 
   const conceptLoader = useConceptLoader({
@@ -169,7 +176,7 @@ const ConceptProvider = ({ children }) => {
     }
   }, [panels, isEditing])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
     if (!selectedConcept) {
       setHasUnsavedChanges(false)
@@ -182,8 +189,12 @@ const ConceptProvider = ({ children }) => {
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
       } else {
         setHasUnsavedChanges(false)
-        const stop = startProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
-        Promise.resolve(conceptLoader(selectedConcept)).finally(stop)
+        // Overlay may already be up from prepareConceptSwitch; keep it during load/path.
+        startConceptSwitchProcessing()
+        Promise.resolve(conceptLoader(selectedConcept)).then(
+          () => {},
+          () => stopConceptSwitchProcessing()
+        )
       }
     }
   }, [
@@ -197,7 +208,8 @@ const ConceptProvider = ({ children }) => {
     loadConcept,
     panels,
     stagedState,
-    startProcessing,
+    startConceptSwitchProcessing,
+    stopConceptSwitchProcessing,
     setConcept,
     setHasUnsavedChanges,
     setModalData,
@@ -215,11 +227,19 @@ const ConceptProvider = ({ children }) => {
     const taxonomyConcept = getConcept(selectedConcept)
     if (!taxonomyConcept) return
 
-    console.debug('[KBSYNC] sync effect re-baking', selectedConcept, 'realizations:', JSON.stringify(taxonomyConcept.realizations))
-    debugSync('[KBSYNC] sync effect re-baking', selectedConcept, 'realizations:', JSON.stringify(taxonomyConcept.realizations))
     const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
     return () => clearTimeout(timeoutId)
-  }, [getConcept, getSelected, handleSetConcept, initialState, isConceptLoaded, isConceptModified, isEditing, taxonomy])
+  }, [
+    getConcept,
+    getSelected,
+    handleSetConcept,
+    initialState,
+    isConceptLoaded,
+    isConceptModified,
+    isEditing,
+    realizationsByConcept,
+    taxonomy,
+  ])
 
   useEffect(() => {
     const isConceptPanelActive = panels.current() === SELECTED.PANELS.CONCEPTS
@@ -242,15 +262,8 @@ const ConceptProvider = ({ children }) => {
   const isPhylogenyRoot = useMemo(() => conceptPath?.includes(phylogenyRoot) ?? false, [conceptPath, phylogenyRoot])
 
   const onConceptTreeReady = useCallback(() => {
-    if (pendingTreeStopRef.current) {
-      pendingTreeStopRef.current()
-      pendingTreeStopRef.current = null
-    }
-    if (pendingTreeTimeoutRef.current) {
-      clearTimeout(pendingTreeTimeoutRef.current)
-      pendingTreeTimeoutRef.current = null
-    }
-  }, [])
+    stopConceptSwitchProcessing()
+  }, [stopConceptSwitchProcessing])
 
   const value = useMemo(
     () => ({
@@ -261,6 +274,7 @@ const ConceptProvider = ({ children }) => {
       isPhylogenyRoot,
       onConceptTreeReady,
       pending,
+      prepareConceptSwitch,
       setConcept: handleSetConcept,
       setEditing,
       setPendingConfirm,
@@ -274,6 +288,7 @@ const ConceptProvider = ({ children }) => {
       isPhylogenyRoot,
       onConceptTreeReady,
       pending,
+      prepareConceptSwitch,
       setEditing,
       setPendingConfirm,
     ]
@@ -288,79 +303,60 @@ const ConceptProvider = ({ children }) => {
     [confirmReset, modifyConcept, stagedState]
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!concept || !apiFns) {
-      // Reset ref when concept is cleared
       if (!concept) {
         previousConceptKeyRef.current = null
+        stopConceptSwitchProcessing()
       }
       return
     }
 
-    // Only fetch concept path when the concept's position in the tree changes
     const conceptKey = `${concept.name}|${concept.parent}`
     if (previousConceptKeyRef.current === conceptKey) {
       return
     }
     previousConceptKeyRef.current = conceptKey
 
-    // Clear any prior pending tree stop/timeout
-    if (pendingTreeStopRef.current) {
-      pendingTreeStopRef.current()
-      pendingTreeStopRef.current = null
-    }
-    if (pendingTreeTimeoutRef.current) {
-      clearTimeout(pendingTreeTimeoutRef.current)
-      pendingTreeTimeoutRef.current = null
+    const applyPath = path => {
+      conceptPathsRef.current.set(concept.name, path)
+      setConceptPath(path)
+      stopConceptSwitchProcessing()
     }
 
-    const stop = conceptPath
-      ? () => {}
-      : startProcessing(PROCESSING.LOAD, PROCESSING.ARG.CONCEPT_PATH || 'concept path')
+    const cachedPath = conceptPathsRef.current.get(concept.name)
+    if (cachedPath) {
+      applyPath(cachedPath)
+      return
+    }
 
-    const fetchConceptPath = async () => {
+    // Path unknown — keep/show overlay until phylogeny/up returns.
+    startConceptSwitchProcessing()
+    let cancelled = false
+
+    const resolveConceptPath = async () => {
       try {
         const payload = await apiFns.apiPayload(getConceptPath, concept.name)
+        if (cancelled) return
 
         const parseNode = (node, path = []) => {
           if (!node.children) return [...path, node.name]
           return parseNode(node.children[0], [...path, node.name])
         }
 
-        setConceptPath(parseNode(payload))
-        // Defer stopping until ConceptsTree signals ready (expansion/scroll done)
-        pendingTreeStopRef.current = stop
-
-        // Fallback timeout to avoid stuck overlay
-        pendingTreeTimeoutRef.current = setTimeout(() => {
-          if (pendingTreeStopRef.current === stop) {
-            pendingTreeStopRef.current()
-            pendingTreeStopRef.current = null
-          }
-          if (pendingTreeTimeoutRef.current) {
-            clearTimeout(pendingTreeTimeoutRef.current)
-            pendingTreeTimeoutRef.current = null
-          }
-        }, 1000)
+        applyPath(parseNode(payload))
       } catch (error) {
-        stop()
+        if (!cancelled) stopConceptSwitchProcessing()
         throw error
       }
     }
 
-    fetchConceptPath().catch(showBoundary)
+    resolveConceptPath().catch(showBoundary)
 
     return () => {
-      if (pendingTreeStopRef.current) {
-        pendingTreeStopRef.current()
-        pendingTreeStopRef.current = null
-      }
-      if (pendingTreeTimeoutRef.current) {
-        clearTimeout(pendingTreeTimeoutRef.current)
-        pendingTreeTimeoutRef.current = null
-      }
+      cancelled = true
     }
-  }, [apiFns, concept, conceptPath, showBoundary, startProcessing])
+  }, [apiFns, concept, showBoundary, startConceptSwitchProcessing, stopConceptSwitchProcessing])
 
   return (
     <ConceptContext value={value}>

@@ -100,12 +100,14 @@ describe('Realizations panel edit save', () => {
   let apiFns
   let errors
   let refreshData
+  let reloadConceptRealizations
 
   beforeEach(() => {
     vi.clearAllMocks()
     errors = []
     apiFns = createApiFns(createStore())
     refreshData = vi.fn(async () => ({ realizations: [ROW] }))
+    reloadConceptRealizations = vi.fn(async () => [ROW])
   })
 
   const renderPanel = () =>
@@ -116,7 +118,14 @@ describe('Realizations panel edit save', () => {
             <TaxonomyProvider>
               <PanelModalProvider>
                 <PanelDataContext.Provider
-                  value={{ isLoading: false, pendingHistory: [], realizations: [ROW], refreshData, templates: [TEMPLATE] }}
+                  value={{
+                    getConceptRealizations: vi.fn(() => [ROW]),
+                    isLoading: false,
+                    pendingHistory: [],
+                    refreshData,
+                    reloadConceptRealizations,
+                    templates: [TEMPLATE],
+                  }}
                 >
                   <ConceptContext.Provider value={{ concept: null }}>
                     <ModifyBridge>

@@ -95,7 +95,9 @@ describe('useSaveStaged', () => {
     const wrapper = ({ children }) => (
       <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true, user: { role: 'Admin' } }}>
         <ConfigContext.Provider value={{ apiFns }}>
-          <PanelDataContext.Provider value={{ getReferences: vi.fn(), realizations: [], refreshData }}>
+          <PanelDataContext.Provider
+            value={{ getReferences: vi.fn(), refreshData, reloadConceptRealizations: vi.fn(async () => []) }}
+          >
             <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
               <SelectedContext.Provider value={{ updateSelected }}>
                 <SelectedSettingsContext.Provider value={{ getSettings: vi.fn(() => ({})) }}>
@@ -147,12 +149,12 @@ describe('useSaveStaged', () => {
     expect(withProcessing).toHaveBeenCalledTimes(1)
   })
 
-  const buildRealizationSaveHarness = ({ cachedRealizations }) => {
+  const buildRealizationSaveHarness = ({ realizationsUpdated = true } = {}) => {
     const staleConcept = { name: 'some-concept' }
     const freshConcept = { name: 'some-concept', media: [], realizations: [] }
     const updatedConcept = { name: 'some-concept', parent: 'root' }
     const updatesInfo = {
-      hasUpdated: field => field === CONCEPT.FIELD.REALIZATIONS,
+      hasUpdated: field => realizationsUpdated && field === CONCEPT.FIELD.REALIZATIONS,
       updatedValue: () => undefined,
     }
 
@@ -165,6 +167,7 @@ describe('useSaveStaged', () => {
       }),
     }
     const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
 
     submitStagedMock.mockImplementation(async () => updatesInfo)
     applyUpdateResultsMock.mockImplementation(async () => undefined)
@@ -174,7 +177,7 @@ describe('useSaveStaged', () => {
       <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true, user: { role: 'Admin' } }}>
         <ConfigContext.Provider value={{ apiFns }}>
           <PanelDataContext.Provider
-            value={{ getReferences: vi.fn(), realizations: cachedRealizations, refreshData }}
+            value={{ getReferences: vi.fn(), refreshData, reloadConceptRealizations }}
           >
             <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
               <SelectedContext.Provider value={{ updateSelected: vi.fn() }}>
@@ -200,30 +203,32 @@ describe('useSaveStaged', () => {
       </UserContext.Provider>
     )
 
-    return { refreshData, wrapper }
+    return { refreshData, reloadConceptRealizations, wrapper }
   }
 
-  it('refreshes the realizations panel cache when staged realizations are saved and the cache is loaded', async () => {
-    const { refreshData, wrapper } = buildRealizationSaveHarness({ cachedRealizations: [{ id: 1 }] })
+  it('reloads the saved concept realizations after staged realizations are saved', async () => {
+    const { refreshData, reloadConceptRealizations, wrapper } = buildRealizationSaveHarness()
 
     const { result } = renderHook(() => useSaveStaged(), { wrapper })
     await act(async () => {
       await result.current()
     })
 
-    expect(refreshData).toHaveBeenCalledWith('realizations')
+    expect(reloadConceptRealizations).toHaveBeenCalledWith('some-concept')
     expect(refreshData).toHaveBeenCalledWith('pendingHistory')
   })
 
-  it('does not load the realizations panel cache on a realization save when the cache is not loaded', async () => {
-    const { refreshData, wrapper } = buildRealizationSaveHarness({ cachedRealizations: [] })
+  it('does not reload realizations when no realization update was staged', async () => {
+    const { refreshData, reloadConceptRealizations, wrapper } = buildRealizationSaveHarness({
+      realizationsUpdated: false,
+    })
 
     const { result } = renderHook(() => useSaveStaged(), { wrapper })
     await act(async () => {
       await result.current()
     })
 
-    expect(refreshData).not.toHaveBeenCalledWith('realizations')
+    expect(reloadConceptRealizations).not.toHaveBeenCalled()
     expect(refreshData).toHaveBeenCalledWith('pendingHistory')
   })
 })

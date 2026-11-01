@@ -49,6 +49,7 @@ describe('processPendingApproval', () => {
       return null
     })
     const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
     const updateSelected = vi.fn()
     const items = [
       { concept: 'old-concept', field: 'Name', id: 'pending-1' },
@@ -63,7 +64,7 @@ describe('processPendingApproval', () => {
 
     const result = await processPendingApproval({
       approval: PENDING.APPROVAL.ACCEPT,
-      deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, updateSelected },
+      deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, updateSelected },
       items,
     })
 
@@ -75,7 +76,8 @@ describe('processPendingApproval', () => {
       PENDING.APPROVAL.ACCEPT,
       'pending-2',
     ])
-    expect(refreshData).toHaveBeenCalledWith(PANEL_DATA.ALL)
+    expect(refreshData).toHaveBeenCalledWith(PANEL_DATA.PENDING_HISTORY)
+    expect(reloadConceptRealizations).not.toHaveBeenCalled()
     expect(cloneStaleMock).toHaveBeenCalledWith(apiFns, staleConcept, false)
     expect(applyApprovalsMock).toHaveBeenCalledWith(optimisticConcept, items)
     expect(applyRejectsMock).not.toHaveBeenCalled()
@@ -89,5 +91,44 @@ describe('processPendingApproval', () => {
       pendingHistory: [],
       updated: ['renamed-concept'],
     })
+  })
+
+  it('reloads realizations only for concepts with realization items', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: [],
+      media: [],
+      name: 'dingo',
+      parent: 'root',
+      rankLevel: '',
+      rankName: '',
+    }
+
+    const apiFns = { apiPayload: vi.fn(async () => ({})) }
+    const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
+    const getConcept = vi.fn(() => staleConcept)
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
+    const updateSelected = vi.fn()
+    const items = [
+      { concept: 'dingo', field: 'LinkRealization', id: 'pending-1' },
+      { concept: 'wolf', field: 'LinkRealization', id: 'pending-2' },
+      { concept: 'wolf', field: 'LinkRealization', id: 'pending-3' },
+      { concept: 'dingo', field: 'Name', id: 'pending-4' },
+    ]
+
+    cloneStaleMock.mockResolvedValue({ ...staleConcept })
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.ACCEPT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, updateSelected },
+      items,
+    })
+
+    expect(refreshData).toHaveBeenCalledWith(PANEL_DATA.PENDING_HISTORY)
+    expect(reloadConceptRealizations).toHaveBeenCalledTimes(2)
+    expect(reloadConceptRealizations).toHaveBeenCalledWith('dingo')
+    expect(reloadConceptRealizations).toHaveBeenCalledWith('wolf')
   })
 })

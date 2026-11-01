@@ -20,33 +20,46 @@ const useConceptsTreeScroll = (apiRef, concept, containerRef) => {
 
   const scrollToNode = useCallback(
     (onComplete, delayMs = 0) => {
+      let cancelled = false
+
+      const complete = () => {
+        if (cancelled) return
+        onComplete?.()
+      }
+
       const run = () => {
+        if (cancelled) return
+
         if (!needsToScroll()) {
-          if (onComplete) onComplete()
+          complete()
           return
         }
 
         setTimeout(() => {
-          if (!conceptName || !apiRef?.current) return
+          if (cancelled) return
+
+          if (!conceptName || !apiRef?.current) {
+            complete()
+            return
+          }
 
           const el = apiRef.current.getItemDOMElement(conceptName)
           const container = containerRef?.current
-          if (!el || !container) return
+          if (!el || !container) {
+            complete()
+            return
+          }
 
           let done = false
           const finish = () => {
-            if (done) return
+            if (done || cancelled) return
             done = true
             container.removeEventListener?.('scrollend', finish)
-            setTimeout(() => {
-              if (onComplete) onComplete()
-            }, 500)
+            setTimeout(complete, 100)
           }
 
           container.addEventListener?.('scrollend', finish, { once: true })
-
           const fallback = setTimeout(finish, 700)
-          container.addEventListener?.('scrollend', () => clearTimeout(fallback), { once: true })
 
           const cRect = container.getBoundingClientRect()
           const eRect = el.getBoundingClientRect()
@@ -61,16 +74,28 @@ const useConceptsTreeScroll = (apiRef, concept, containerRef) => {
           )
 
           container.scrollTo({ top: targetScrollTop, behavior: 'smooth' })
-        }, 500)
+
+          // Keep fallback if scrollend never fires
+          container.addEventListener?.(
+            'scrollend',
+            () => clearTimeout(fallback),
+            { once: true }
+          )
+        }, 100)
       }
 
       if (delayMs && delayMs > 0) {
         const timeoutId = setTimeout(run, delayMs)
-        return () => clearTimeout(timeoutId)
+        return () => {
+          cancelled = true
+          clearTimeout(timeoutId)
+        }
       }
 
       run()
-      return () => {}
+      return () => {
+        cancelled = true
+      }
     },
     [apiRef, conceptName, containerRef, needsToScroll]
   )

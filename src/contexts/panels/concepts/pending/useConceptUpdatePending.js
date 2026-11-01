@@ -18,7 +18,7 @@ const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
   const { withProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
-  const { refreshData } = use(PanelDataContext)
+  const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
   const { updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh, getConcept } = use(TaxonomyContext)
 
@@ -39,6 +39,7 @@ const useConceptUpdatePending = () => {
               conceptEditsRefresh,
               getConcept,
               refreshData,
+              reloadConceptRealizations,
               updateSelected,
             },
             items: pendingItems,
@@ -68,6 +69,7 @@ const useConceptUpdatePending = () => {
       getConcept,
       pending,
       refreshData,
+      reloadConceptRealizations,
       setConcept,
       staleConcept,
       updateSelected,

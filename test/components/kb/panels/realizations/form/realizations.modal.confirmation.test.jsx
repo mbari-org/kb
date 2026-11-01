@@ -66,7 +66,7 @@ const renderEditHarness = () => {
   const realizationsValue = {
     editRealization: editRealizationMock,
   }
-  const panelDataValue = { realizations: [] }
+  const panelDataValue = { getConceptRealizations: vi.fn(() => []) }
 
   return render(
     <TaxonomyContext.Provider value={{ loadConcept: vi.fn() }}>
@@ -83,7 +83,7 @@ const renderDeleteHarness = () => {
   const realizationsValue = {
     deleteRealization: deleteRealizationMock,
   }
-  const panelDataValue = { realizations: [] }
+  const panelDataValue = { getConceptRealizations: vi.fn(() => []) }
 
   return render(
     <PanelDataContext.Provider value={panelDataValue}>

@@ -67,7 +67,7 @@ const performSettingsUpdate = deleteConceptContext => {
 }
 
 const preSideEffects = async deleteConceptContext => {
-  const { apiFns, concept, realizations, reassign, relatedDataCounts, templates } = deleteConceptContext
+  const { apiFns, concept, ensureConceptRealizations, reassign, relatedDataCounts, templates } = deleteConceptContext
   const oldNewPayload = { old: concept.name, new: reassign }
 
   const results = {}
@@ -84,12 +84,11 @@ const preSideEffects = async deleteConceptContext => {
           break
 
         case REALIZATIONS: {
-          const realizationsOnReassignedConcept = (realizations || []).filter(r => r.concept === reassign)
-          const realizationsToReassign = (
-            concept.realizations?.length
-              ? concept.realizations
-              : (realizations || []).filter(r => r.concept === concept.name)
-          ).filter(
+          const [realizationsOnReassignedConcept, conceptRealizations] = await Promise.all([
+            ensureConceptRealizations(reassign),
+            ensureConceptRealizations(concept.name),
+          ])
+          const realizationsToReassign = conceptRealizations.filter(
             realization =>
               !realizationsOnReassignedConcept.some(existing =>
                 isSame(

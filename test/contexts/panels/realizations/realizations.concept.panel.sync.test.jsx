@@ -1,4 +1,4 @@
-import { use, useState } from 'react'
+import { use } from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -8,7 +8,7 @@ import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
-import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+import PanelDataProvider from '@/contexts/panel/data/PanelDataProvider'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyProvider from '@/contexts/taxonomy/TaxonomyProvider'
 import UserContext from '@/contexts/user/UserContext'
@@ -22,8 +22,10 @@ import {
   getConceptParent as apiParent,
   getConceptPath,
 } from '@/lib/api/concept'
+import { getHistory, getHistoryCount } from '@/lib/api/history'
 import { getMedia } from '@/lib/api/media'
 import { deleteRealization as apiDeleteRealization, getConceptLinkRealizations, updateRealization } from '@/lib/api/realizations'
+import { getTemplatesCount } from '@/lib/api/templates'
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 
 import { ACTION } from '@/lib/constants'
@@ -32,17 +34,8 @@ import { SELECTED } from '@/lib/constants/selected.js'
 
 const ORIGINAL = { id: 7, concept: 'dingo', linkName: 'eats', toConcept: 'fish', linkValue: 'daily' }
 
-const createConceptRecord = ({ alternateNames = [], children, linkRealizations = [], name, parent }) => {
-  const concept = {
-    alternateNames,
-    linkRealizations: linkRealizations.map(r => ({ ...r })),
-    media: [],
-    name,
-    parent,
-    realizations: [],
-    references: [],
-    templates: [],
-  }
+const createConceptRecord = ({ alternateNames = [], children, name, parent }) => {
+  const concept = { alternateNames, media: [], name, parent, references: [], templates: [] }
   if (children !== undefined) {
     concept.children = children
   }
@@ -53,11 +46,7 @@ const createStore = () => ({
   children: { root: ['dingo'], dingo: [] },
   concepts: {
     root: createConceptRecord({ name: 'root', parent: undefined }),
-    dingo: createConceptRecord({
-      linkRealizations: [{ id: 7, linkName: 'eats', toConcept: 'fish', linkValue: 'daily' }],
-      name: 'dingo',
-      parent: 'root',
-    }),
+    dingo: createConceptRecord({ name: 'dingo', parent: 'root' }),
   },
   ranks: [],
   realizations: [{ ...ORIGINAL }],
@@ -68,10 +57,16 @@ const cloneConcept = concept => ({
   ...concept,
   alternateNames: [...(concept.alternateNames || [])],
   children: concept.children ? [...concept.children] : concept.children,
-  linkRealizations: (concept.linkRealizations || []).map(r => ({ ...r })),
 })
 
+const asRealizationString = realization =>
+  `${realization.linkName} | ${realization.toConcept} | ${realization.linkValue}`
+
 const createApiFns = (store, { isAdmin }) => ({
+  apiPaginated: vi.fn(async fn => {
+    if (fn === getHistory) return store.pendingHistory.map(item => ({ ...item }))
+    return []
+  }),
   apiPayload: vi.fn(async (fn, value) => {
     if (fn === apiRoot) return { name: 'root' }
     if (fn === apiNames) return Object.keys(store.concepts).sort()
@@ -86,10 +81,9 @@ const createApiFns = (store, { isAdmin }) => ({
       return store.realizations.filter(r => r.concept === value).map(r => ({ ...r }))
     if (fn === updateRealization) {
       const [id, updates] = value
-      if (isAdmin) {
-        store.realizations = store.realizations.map(r => (r.id === id ? { ...r, ...updates } : r))
-      } else {
-        const prior = store.realizations.find(r => r.id === id)
+      const prior = store.realizations.find(r => r.id === id)
+      store.realizations = store.realizations.map(r => (r.id === id ? { ...r, ...updates } : r))
+      if (!isAdmin) {
         store.pendingHistory = [
           ...store.pendingHistory,
           {
@@ -97,10 +91,8 @@ const createApiFns = (store, { isAdmin }) => ({
             action: ACTION.EDIT,
             concept: prior.concept,
             field: HISTORY_FIELD.REALIZATION,
-            oldValue: `${prior.linkName} | ${prior.toConcept} | ${prior.linkValue}`,
-            newValue: `${updates.linkName ?? prior.linkName} | ${updates.toConcept ?? prior.toConcept} | ${
-              updates.linkValue ?? prior.linkValue
-            }`,
+            oldValue: asRealizationString(prior),
+            newValue: asRealizationString({ ...prior, ...updates }),
           },
         ]
       }
@@ -108,10 +100,10 @@ const createApiFns = (store, { isAdmin }) => ({
     }
     if (fn === apiDeleteRealization) {
       const id = value
+      const prior = store.realizations.find(r => r.id === id)
       if (isAdmin) {
         store.realizations = store.realizations.filter(r => r.id !== id)
       } else {
-        const prior = store.realizations.find(r => r.id === id)
         store.pendingHistory = [
           ...store.pendingHistory,
           {
@@ -120,13 +112,18 @@ const createApiFns = (store, { isAdmin }) => ({
             concept: prior.concept,
             field: HISTORY_FIELD.REALIZATION,
             newValue: null,
-            oldValue: `${prior.linkName} | ${prior.toConcept} | ${prior.linkValue}`,
+            oldValue: asRealizationString(prior),
           },
         ]
       }
       return {}
     }
     throw new Error(`Unexpected api payload function: ${fn?.name || 'unknown'}`)
+  }),
+  apiResult: vi.fn(async fn => {
+    if (fn === getHistoryCount) return store.pendingHistory.length
+    if (fn === getTemplatesCount) return 0
+    return 0
   }),
 })
 
@@ -149,25 +146,6 @@ const ModifyBridge = ({ children }) => {
   return children(modify)
 }
 
-const PanelDataHarness = ({ store, children }) => {
-  const [pendingHistory, setPendingHistory] = useState(() => [...store.pendingHistory])
-  const [realizations, setRealizations] = useState(() => [...store.realizations])
-
-  const refreshData = vi.fn(async key => {
-    if (key === 'pendingHistory') setPendingHistory([...store.pendingHistory])
-    if (key === 'realizations') setRealizations([...store.realizations])
-    return { pendingHistory: store.pendingHistory, realizations: store.realizations }
-  })
-
-  return (
-    <PanelDataContext.Provider
-      value={{ getConceptTemplates: vi.fn(() => []), isLoading: false, pendingHistory, realizations, refreshData, templates: [] }}
-    >
-      {children}
-    </PanelDataContext.Provider>
-  )
-}
-
 const renderApp = ({ isAdmin }) => {
   const store = createStore()
   const apiFns = createApiFns(store, { isAdmin })
@@ -178,16 +156,16 @@ const renderApp = ({ isAdmin }) => {
       <UserContext.Provider value={{ guardedAction: null, isAdmin, setHasUnsavedChanges: vi.fn(), user: {} }}>
         <ConfigContext.Provider value={{ apiFns, phylogenyRoot: 'root' }}>
           <TaxonomyProvider>
-            <AppModalContext.Provider value={{ beginProcessing: vi.fn(() => vi.fn()) }}>
-              <ConceptModalContext.Provider value={{ setModal: vi.fn(), setModalData: vi.fn() }}>
-                <SelectedContext.Provider
-                  value={{
-                    concepts: { clear: vi.fn(), getState: vi.fn(() => ['dingo']), push: vi.fn() },
-                    getSelected: key => (key === SELECTED.CONCEPT ? 'dingo' : null),
-                    panels: { current: () => SELECTED.PANELS.CONCEPTS },
-                  }}
-                >
-                  <PanelDataHarness store={store}>
+            <PanelDataProvider>
+              <AppModalContext.Provider value={{ beginProcessing: vi.fn(() => vi.fn()) }}>
+                <ConceptModalContext.Provider value={{ setModal: vi.fn(), setModalData: vi.fn() }}>
+                  <SelectedContext.Provider
+                    value={{
+                      concepts: { clear: vi.fn(), getState: vi.fn(() => ['dingo']), push: vi.fn() },
+                      getSelected: key => (key === SELECTED.CONCEPT ? 'dingo' : null),
+                      panels: { current: () => SELECTED.PANELS.CONCEPTS },
+                    }}
+                  >
                     <ConceptProvider>
                       <ModifyBridge>
                         {({ deleteRealization, editRealization }) => (
@@ -203,10 +181,10 @@ const renderApp = ({ isAdmin }) => {
                         )}
                       </ModifyBridge>
                     </ConceptProvider>
-                  </PanelDataHarness>
-                </SelectedContext.Provider>
-              </ConceptModalContext.Provider>
-            </AppModalContext.Provider>
+                  </SelectedContext.Provider>
+                </ConceptModalContext.Provider>
+              </AppModalContext.Provider>
+            </PanelDataProvider>
           </TaxonomyProvider>
         </ConfigContext.Provider>
       </UserContext.Provider>
@@ -216,7 +194,7 @@ const renderApp = ({ isAdmin }) => {
   return { errors, store }
 }
 
-describe('Realizations panel edit reflected on Concept panel', () => {
+describe('Realizations panel writes reflected on Concept panel', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })

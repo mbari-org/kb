@@ -3,45 +3,27 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
-import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
-import UserContext from '@/contexts/user/UserContext'
 
 import useModifyRealizations from '@/contexts/panels/realizations/useModifyRealizations'
 
 import { deleteRealization as apiDeleteRealization, updateRealization } from '@/lib/api/realizations'
 
 const ORIGINAL = { id: 7, concept: 'dingo', linkName: 'eats', toConcept: 'fish', linkValue: 'daily' }
-const OTHER = { id: 9, concept: 'dingo', linkName: 'lives-near', toConcept: 'reef', linkValue: 'often' }
 
-const buildStaleConcept = () => ({
-  name: 'dingo',
-  aliases: [{ name: 'wild-dog', nameType: 'Common' }],
-  alternateNames: ['wild-dog'],
-  children: ['pup'],
-  parent: 'canid',
-  media: [],
-  realizations: [{ ...ORIGINAL }, { ...OTHER }],
-})
-
-const buildHarness = ({ isAdmin = true, taxonomyConcept }) => {
+const buildHarness = () => {
   const apiFns = { apiPayload: vi.fn(async () => ({})) }
   const refreshData = vi.fn(async () => ({}))
-  const conceptEditsRefresh = vi.fn(async freshConcept => ({ concept: freshConcept }))
-  const getConcept = vi.fn(() => taxonomyConcept)
+  const reloadConceptRealizations = vi.fn(async conceptName => [{ ...ORIGINAL, concept: conceptName }])
 
   const wrapper = ({ children }) => (
-    <UserContext.Provider value={{ isAdmin }}>
-      <ConfigContext.Provider value={{ apiFns }}>
-        <PanelDataContext.Provider value={{ refreshData }}>
-          <TaxonomyContext.Provider value={{ conceptEditsRefresh, getConcept }}>
-            {children}
-          </TaxonomyContext.Provider>
-        </PanelDataContext.Provider>
-      </ConfigContext.Provider>
-    </UserContext.Provider>
+    <ConfigContext.Provider value={{ apiFns }}>
+      <PanelDataContext.Provider value={{ refreshData, reloadConceptRealizations }}>
+        {children}
+      </PanelDataContext.Provider>
+    </ConfigContext.Provider>
   )
 
-  return { apiFns, conceptEditsRefresh, refreshData, wrapper }
+  return { apiFns, refreshData, reloadConceptRealizations, wrapper }
 }
 
 describe('useModifyRealizations', () => {
@@ -49,11 +31,8 @@ describe('useModifyRealizations', () => {
     vi.clearAllMocks()
   })
 
-  it('editRealization updates the server, reloads panel data, and applies the update to the taxonomy concept in-situ', async () => {
-    const staleConcept = buildStaleConcept()
-    const { apiFns, conceptEditsRefresh, refreshData, wrapper } = buildHarness({
-      taxonomyConcept: staleConcept,
-    })
+  it('editRealization updates the server then reloads the concept realizations and pending history', async () => {
+    const { apiFns, refreshData, reloadConceptRealizations, wrapper } = buildHarness()
     const updated = { linkValue: 'weekly' }
 
     const { result } = renderHook(() => useModifyRealizations(), { wrapper })
@@ -62,50 +41,27 @@ describe('useModifyRealizations', () => {
     })
 
     expect(apiFns.apiPayload).toHaveBeenCalledWith(updateRealization, [ORIGINAL.id, updated])
-    expect(refreshData).toHaveBeenCalledWith('realizations')
+    expect(reloadConceptRealizations).toHaveBeenCalledWith(ORIGINAL.concept)
     expect(refreshData).toHaveBeenCalledWith('pendingHistory')
-
-    expect(conceptEditsRefresh).toHaveBeenCalledTimes(1)
-    const [freshConcept, passedStale] = conceptEditsRefresh.mock.calls[0]
-    expect(passedStale).toBe(staleConcept)
-    expect(freshConcept.realizations).toEqual([{ ...ORIGINAL, linkValue: 'weekly' }, OTHER])
-    expect(freshConcept.aliases).toBe(staleConcept.aliases)
-    expect(freshConcept.children).toBe(staleConcept.children)
-    expect(freshConcept.parent).toBe('canid')
   })
 
-  it('editRealization keeps taxonomy realizations sorted after the update is applied', async () => {
-    const staleConcept = buildStaleConcept()
-    const { conceptEditsRefresh, wrapper } = buildHarness({ taxonomyConcept: staleConcept })
-    const updated = { linkName: 'zebra' }
+  it('editRealization does not touch the cache when the server update fails', async () => {
+    const { apiFns, refreshData, reloadConceptRealizations, wrapper } = buildHarness()
+    apiFns.apiPayload.mockRejectedValue(new Error('server down'))
 
     const { result } = renderHook(() => useModifyRealizations(), { wrapper })
-    await act(async () => {
-      await result.current.editRealization(ORIGINAL, updated)
-    })
+    await expect(
+      act(async () => {
+        await result.current.editRealization(ORIGINAL, { linkValue: 'weekly' })
+      })
+    ).rejects.toThrow('Failed to update realization')
 
-    const [freshConcept] = conceptEditsRefresh.mock.calls[0]
-    expect(freshConcept.realizations).toEqual([OTHER, { ...ORIGINAL, linkName: 'zebra' }])
+    expect(reloadConceptRealizations).not.toHaveBeenCalled()
+    expect(refreshData).not.toHaveBeenCalled()
   })
 
-  it('editRealization skips the taxonomy update when the concept is not loaded in the taxonomy', async () => {
-    const { apiFns, conceptEditsRefresh, refreshData, wrapper } = buildHarness({ taxonomyConcept: null })
-
-    const { result } = renderHook(() => useModifyRealizations(), { wrapper })
-    await act(async () => {
-      await result.current.editRealization(ORIGINAL, { linkValue: 'weekly' })
-    })
-
-    expect(apiFns.apiPayload).toHaveBeenCalledWith(updateRealization, [ORIGINAL.id, { linkValue: 'weekly' }])
-    expect(refreshData).toHaveBeenCalledWith('realizations')
-    expect(conceptEditsRefresh).not.toHaveBeenCalled()
-  })
-
-  it('deleteRealization removes the server realization, reloads panel data, and applies the update to the taxonomy concept in-situ', async () => {
-    const staleConcept = buildStaleConcept()
-    const { apiFns, conceptEditsRefresh, refreshData, wrapper } = buildHarness({
-      taxonomyConcept: staleConcept,
-    })
+  it('deleteRealization deletes on the server then reloads the concept realizations and pending history', async () => {
+    const { apiFns, refreshData, reloadConceptRealizations, wrapper } = buildHarness()
 
     const { result } = renderHook(() => useModifyRealizations(), { wrapper })
     await act(async () => {
@@ -113,32 +69,22 @@ describe('useModifyRealizations', () => {
     })
 
     expect(apiFns.apiPayload).toHaveBeenCalledWith(apiDeleteRealization, ORIGINAL.id)
-    expect(refreshData).toHaveBeenCalledWith('realizations')
+    expect(reloadConceptRealizations).toHaveBeenCalledWith(ORIGINAL.concept)
     expect(refreshData).toHaveBeenCalledWith('pendingHistory')
-
-    expect(conceptEditsRefresh).toHaveBeenCalledTimes(1)
-    const [freshConcept, passedStale] = conceptEditsRefresh.mock.calls[0]
-    expect(passedStale).toBe(staleConcept)
-    expect(freshConcept.realizations).toEqual([OTHER])
-    expect(freshConcept.parent).toBe('canid')
   })
 
-  it('deleteRealization keeps the taxonomy realization for a non-admin so it can be marked pending', async () => {
-    const staleConcept = buildStaleConcept()
-    const { apiFns, conceptEditsRefresh, wrapper } = buildHarness({
-      isAdmin: false,
-      taxonomyConcept: staleConcept,
-    })
+  it('deleteRealization does not touch the cache when the server delete fails', async () => {
+    const { apiFns, refreshData, reloadConceptRealizations, wrapper } = buildHarness()
+    apiFns.apiPayload.mockRejectedValue(new Error('server down'))
 
     const { result } = renderHook(() => useModifyRealizations(), { wrapper })
-    await act(async () => {
-      await result.current.deleteRealization(ORIGINAL)
-    })
+    await expect(
+      act(async () => {
+        await result.current.deleteRealization(ORIGINAL)
+      })
+    ).rejects.toThrow('Failed to delete realization')
 
-    expect(apiFns.apiPayload).toHaveBeenCalledWith(apiDeleteRealization, ORIGINAL.id)
-
-    expect(conceptEditsRefresh).toHaveBeenCalledTimes(1)
-    const [freshConcept] = conceptEditsRefresh.mock.calls[0]
-    expect(freshConcept.realizations).toEqual([ORIGINAL, OTHER])
+    expect(reloadConceptRealizations).not.toHaveBeenCalled()
+    expect(refreshData).not.toHaveBeenCalled()
   })
 })

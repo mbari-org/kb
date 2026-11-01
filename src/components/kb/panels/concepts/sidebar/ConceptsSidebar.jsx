@@ -10,8 +10,8 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
 const ConceptsSidebar = () => {
-  const { concept } = use(ConceptContext)
-  const { concepts } = use(SelectedContext)
+  const { concept, prepareConceptSwitch } = use(ConceptContext)
+  const { concepts, updateSelected } = use(SelectedContext)
 
   const [autoExpand, setAutoExpand] = useState(null)
 
@@ -28,6 +28,16 @@ const ConceptsSidebar = () => {
   if (!concept) return null
 
   const doConceptSelected = selectedName => {
+    if (selectedName && selectedName !== concept.name) {
+      prepareConceptSwitch()
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          updateSelected({ concept: selectedName })
+          setAutoExpand?.({ expand: true, name: selectedName })
+        })
+      })
+      return false
+    }
     setAutoExpand?.({ expand: true, name: selectedName })
     return true
   }

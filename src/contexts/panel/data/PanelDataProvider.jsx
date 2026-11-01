@@ -1,4 +1,4 @@
-import { use, useEffect, useState, useCallback, useMemo } from 'react'
+import { use, useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -13,7 +13,10 @@ import { LOADING } from '@/lib/constants/loading.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { createError } from '@/lib/errors'
 
+import { sortRealizations } from '@/lib/model/realization'
 import { withTimeout } from '@/lib/utils'
+
+const ALL_REALIZATIONS_KEY = '__all__'
 
 export const PanelDataProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
@@ -21,9 +24,15 @@ export const PanelDataProvider = ({ children }) => {
 
   const [explicitConcepts, setExplicitConcepts] = useState([])
   const [references, setReferences] = useState([])
-  const [realizations, setRealizations] = useState([])
   const [templates, setTemplates] = useState([])
   const [pendingHistory, setPendingHistory] = useState([])
+
+  // Sole realizations cache: map keyed by concept name. Missing key = not loaded;
+  // [] = loaded and empty. realizationsAllLoaded means the bulk catalog was merged
+  // into the map, so flattening the map yields the full catalog.
+  const [realizationsByConcept, setRealizationsByConcept] = useState({})
+  const [realizationsAllLoaded, setRealizationsAllLoaded] = useState(false)
+  const realizationLoadsRef = useRef(new Map())
 
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
@@ -48,7 +57,6 @@ export const PanelDataProvider = ({ children }) => {
 
   const calcExplicitConcepts = useCallback(templatesData => {
     if (!templatesData || templatesData.length === 0) return []
-
     const uniqueConcepts = new Set()
     templatesData.forEach(template => uniqueConcepts.add(template.concept))
     return Array.from(uniqueConcepts).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
@@ -76,6 +84,93 @@ export const PanelDataProvider = ({ children }) => {
       return conceptName ? references.filter(reference => reference.concepts.includes(conceptName)) : references
     },
     [references]
+  )
+
+  const getConceptRealizations = useCallback(
+    conceptName => realizationsByConcept[conceptName],
+    [realizationsByConcept]
+  )
+
+  const getAllRealizations = useCallback(
+    () => Object.values(realizationsByConcept).flat(),
+    [realizationsByConcept]
+  )
+
+  const setConceptRealizations = useCallback((conceptName, realizations) => {
+    const sorted = sortRealizations([...realizations])
+    setRealizationsByConcept(current => ({ ...current, [conceptName]: sorted }))
+    return sorted
+  }, [])
+
+  const invalidateConceptRealizations = useCallback(conceptName => {
+    if (conceptName === 'all') {
+      realizationLoadsRef.current.clear()
+      setRealizationsByConcept({})
+      setRealizationsAllLoaded(false)
+      return
+    }
+    setRealizationsByConcept(current => {
+      const next = { ...current }
+      delete next[conceptName]
+      return next
+    })
+  }, [])
+
+  const reloadConceptRealizations = useCallback(
+    async conceptName => {
+      const realizations = await loadRealizations(conceptName)
+      return setConceptRealizations(conceptName, realizations)
+    },
+    [loadRealizations, setConceptRealizations]
+  )
+
+  const ensureConceptRealizations = useCallback(
+    conceptName => {
+      const loaded = realizationsByConcept[conceptName]
+      if (loaded !== undefined) return Promise.resolve(loaded)
+      if (realizationsAllLoaded) return Promise.resolve([])
+
+      const pending = realizationLoadsRef.current.get(conceptName)
+      if (pending) return pending
+
+      const load = reloadConceptRealizations(conceptName).finally(() =>
+        realizationLoadsRef.current.delete(conceptName)
+      )
+      realizationLoadsRef.current.set(conceptName, load)
+      return load
+    },
+    [realizationsAllLoaded, realizationsByConcept, reloadConceptRealizations]
+  )
+
+  const ensureAllRealizations = useCallback(
+    ({ force = false } = {}) => {
+      if (realizationsAllLoaded && !force) {
+        return Promise.resolve(getAllRealizations())
+      }
+
+      const pending = realizationLoadsRef.current.get(ALL_REALIZATIONS_KEY)
+      if (pending && !force) return pending
+
+      const load = (async () => {
+        try {
+          const allRealizations = await loadRealizations()
+          const grouped = {}
+          allRealizations.forEach(realization => {
+            if (!realization.concept) return
+            ;(grouped[realization.concept] ||= []).push(realization)
+          })
+          Object.values(grouped).forEach(sortRealizations)
+          setRealizationsByConcept(grouped)
+          setRealizationsAllLoaded(true)
+          return Object.values(grouped).flat()
+        } finally {
+          realizationLoadsRef.current.delete(ALL_REALIZATIONS_KEY)
+        }
+      })()
+      realizationLoadsRef.current.set(ALL_REALIZATIONS_KEY, load)
+      return load
+    },
+    [getAllRealizations, loadRealizations, realizationsAllLoaded]
   )
 
   const refreshData = useCallback(
@@ -106,12 +201,11 @@ export const PanelDataProvider = ({ children }) => {
           }
           case 'all': {
             const [referencesData, realizationsData, templatesData, pendingHistoryData] = await withLoadTimeout(
-              Promise.all([loadReferences(), loadRealizations(), loadTemplates(), loadPendingHistory()])
+              Promise.all([loadReferences(), ensureAllRealizations({ force: true }), loadTemplates(), loadPendingHistory()])
             )
             const explicitConceptsData = calcExplicitConcepts(templatesData)
 
             setReferences(referencesData)
-            setRealizations(realizationsData)
             setTemplates(templatesData)
             setPendingHistory(pendingHistoryData)
             setExplicitConcepts(explicitConceptsData)
@@ -125,8 +219,7 @@ export const PanelDataProvider = ({ children }) => {
             }
           }
           case PANEL_DATA.REALIZATIONS: {
-            const realizationsData = await withLoadTimeout(loadRealizations())
-            setRealizations(realizationsData)
+            const realizationsData = await withLoadTimeout(ensureAllRealizations({ force: true }))
             return { realizations: realizationsData }
           }
 
@@ -155,7 +248,7 @@ export const PanelDataProvider = ({ children }) => {
         setIsInitialLoad(false)
       }
     },
-    [apiFns, calcExplicitConcepts, loadPendingHistory, loadRealizations, loadReferences, loadTemplates, withLoadTimeout]
+    [apiFns, calcExplicitConcepts, ensureAllRealizations, loadPendingHistory, loadReferences, loadTemplates, withLoadTimeout]
   )
 
   useEffect(() => {
@@ -169,28 +262,45 @@ export const PanelDataProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       clearTemplateFilters,
+      ensureAllRealizations,
+      ensureConceptRealizations,
       explicitConcepts,
+      getAllRealizations,
+      getConceptRealizations,
       getConceptTemplates,
       getReferences,
+      invalidateConceptRealizations,
       isDoiUnique,
       isLoading,
       pendingHistory,
-      realizations,
+      realizationsAllLoaded,
+      realizationsByConcept,
       refreshData,
+      reloadConceptRealizations,
       setClearTemplateFilters,
+      setConceptRealizations,
       setReferences,
       templates,
     }),
     [
       clearTemplateFilters,
+      ensureAllRealizations,
+      ensureConceptRealizations,
       explicitConcepts,
+      getAllRealizations,
+      getConceptRealizations,
       getConceptTemplates,
       getReferences,
+      invalidateConceptRealizations,
       isDoiUnique,
       isLoading,
       pendingHistory,
-      realizations,
+      realizationsAllLoaded,
+      realizationsByConcept,
       refreshData,
+      reloadConceptRealizations,
+      setClearTemplateFilters,
+      setConceptRealizations,
       setReferences,
       templates,
     ]

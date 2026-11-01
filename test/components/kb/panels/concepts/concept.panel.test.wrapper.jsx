@@ -333,6 +333,21 @@ export const ConceptPanelTestWrapper = ({
     getReferences: vi.fn(conceptName => (conceptName === concept?.name ? initialReferences : [])),
     refreshData: vi.fn(),
     isLoading: false,
+    ensureAllRealizations: vi.fn(() => Promise.resolve(initialRealizations)),
+    ensureConceptRealizations: vi.fn(conceptName =>
+      Promise.resolve(initialRealizations.filter(realization => realization.concept === conceptName))
+    ),
+    getAllRealizations: vi.fn(() => initialRealizations),
+    getConceptRealizations: vi.fn(conceptName =>
+      initialRealizations.filter(realization => realization.concept === conceptName)
+    ),
+    invalidateConceptRealizations: vi.fn(),
+    realizationsAllLoaded: false,
+    realizationsByConcept: {},
+    reloadConceptRealizations: vi.fn(conceptName =>
+      Promise.resolve(initialRealizations.filter(realization => realization.concept === conceptName))
+    ),
+    setConceptRealizations: vi.fn(),
   }
 
   const mockUserValue = {
@@ -365,6 +380,7 @@ export const ConceptPanelTestWrapper = ({
                                 concept,
                                 conceptPath: concept ? [concept.name] : null,
                                 onConceptTreeReady: vi.fn(),
+                                prepareConceptSwitch: vi.fn(),
                                 initialState,
                                 isMarineOrganism: false,
                                 isPhylogenyRoot,

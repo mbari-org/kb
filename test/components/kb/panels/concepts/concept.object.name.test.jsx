@@ -11,6 +11,7 @@ import kbTheme from '@/lib/theme'
 import Concepts from '@/components/kb/panels/Concepts'
 import CONFIG from '@/lib/config'
 
+import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -89,6 +90,7 @@ const mockTaxonomyValue = {
   getAncestorNames: () => [],
   isConceptLoaded: mockIsConceptLoaded,
   loadConcept: mockLoadConcept,
+  loadConceptDescendants: vi.fn(() => Promise.resolve(mockTaxonomy)),
   getRootName: mockGetRootName,
   isRoot: (taxonomy, concept) => concept?.name === taxonomy?.rootName,
   filterRanks: () => [],
@@ -190,12 +192,18 @@ const TestWrapper = ({ children, dsgBaseUrl = '' }) => {
 
   const mockUserValue = { user: { role: 'user' } }
 
+  const mockAppModalValue = {
+    beginProcessing: vi.fn(() => () => {}),
+    setSuppressDisplay: vi.fn(),
+  }
+
   return (
     <ThemeProvider theme={kbTheme}>
       <CssBaseline />
       <BrowserRouter>
         <UserContext.Provider value={mockUserValue}>
           <ConfigContext.Provider value={{ dsgBaseUrl }}>
+          <AppModalContext.Provider value={mockAppModalValue}>
           <PanelDataContext.Provider value={mockPanelDataValue}>
             <TaxonomyContext.Provider value={mockTaxonomyValue}>
               <ConceptModalContext.Provider value={mockConceptModalValue}>
@@ -208,6 +216,7 @@ const TestWrapper = ({ children, dsgBaseUrl = '' }) => {
                     concept,
                     conceptPath: concept ? [concept.name] : null,
                     onConceptTreeReady: vi.fn(),
+                    prepareConceptSwitch: vi.fn(),
                     initialState: concept
                       ? {
                           author: { value: '', action: 'None' },
@@ -256,6 +265,7 @@ const TestWrapper = ({ children, dsgBaseUrl = '' }) => {
             </ConceptModalContext.Provider>
           </TaxonomyContext.Provider>
         </PanelDataContext.Provider>
+          </AppModalContext.Provider>
           </ConfigContext.Provider>
         </UserContext.Provider>
       </BrowserRouter>

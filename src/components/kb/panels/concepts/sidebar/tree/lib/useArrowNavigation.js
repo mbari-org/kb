@@ -67,7 +67,7 @@ const useArrowNavigation = (
         }
 
         case 'ArrowRight':
-          expandConcept(concept, CONCEPT.EXPAND.ON)
+          expandConcept(concept, event.altKey ? CONCEPT.EXPAND.DESCENDANTS : CONCEPT.EXPAND.ON)
           break
         default:
           break

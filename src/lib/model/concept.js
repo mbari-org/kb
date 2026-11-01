@@ -10,7 +10,6 @@ const addedConcepts = (parent, updatesInfo) => {
     alternateNames: [],
     media: [],
     parent,
-    realizations: [],
     references: [],
   }))
 }

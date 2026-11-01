@@ -2,11 +2,13 @@
 import {
   getConceptChildren as apiChildren,
   getConcept as apiConcept,
+  getConceptDescendants as apiDescendants,
   getConceptNames as apiConceptNames,
   deleteConcept as apiDelete,
   getConceptParent as apiParent,
   normalizeConcept,
 } from '@/lib/api/concept'
+import { getMedia } from '@/lib/api/media'
 
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 
@@ -14,7 +16,6 @@ import { CONCEPT } from '@/lib/constants'
 import { createError } from '@/lib/errors'
 import { orderedAliases } from '@/lib/model/aliases'
 import { filterRanks } from '@/lib/model/rank'
-import { sortRealizations } from '@/lib/model/realization'
 
 import { addedConcepts } from './concept'
 
@@ -122,11 +123,13 @@ const getConceptPrimaryName = (taxonomy, conceptName) => {
 
 const getNames = taxonomy => taxonomy?.names
 
+const isStructureOnly = concept => Boolean(concept && !concept.aliases)
+
 const isConceptLoaded = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return Boolean(
     concept &&
-      concept.aliases &&
+      !isStructureOnly(concept) &&
       concept.children &&
       concept.children.every(child => taxonomy.conceptMap[child]?.children) &&
       (concept.name === taxonomy.rootName || concept.parent)
@@ -208,12 +211,21 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   const aliasMap = updatedTaxonomy.aliasMap
 
   const taxonomyConcept = getConcept(taxonomy, conceptName)
-  const concept = taxonomyConcept
-    ? { ...taxonomyConcept }
-    : await apiFns.apiPayload(apiConcept, conceptName)
+  const structureChildren = taxonomyConcept?.children
+  const structureParent = taxonomyConcept?.parent
 
-  if (!taxonomyConcept) {
+  let concept
+  if (!taxonomyConcept || isStructureOnly(taxonomyConcept)) {
+    concept = await apiFns.apiPayload(apiConcept, conceptName)
     await normalizeConcept(apiFns, concept)
+    if (structureChildren) {
+      concept.children = structureChildren
+    }
+    if (structureParent !== undefined) {
+      concept.parent = structureParent
+    }
+  } else {
+    concept = { ...taxonomyConcept }
   }
 
   if (concept.name !== taxonomy.rootName && !concept.parent) {
@@ -227,7 +239,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   }
 
   // If the concept already has children, we only need to load the concept's grand children. This
-  //  typically happens when a child concept is selected.
+  //  typically happens when a child concept is selected, or after phylogeny structure expand.
   if (concept?.children) {
     await Promise.all(
       concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
@@ -313,52 +325,135 @@ const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiFn
   return concept.children
 }
 
+const rebindAliases = (concept, aliasMap) => {
+  if (!Array.isArray(concept.alternateNames)) return
+  concept.alternateNames.forEach(alternateName => {
+    aliasMap[alternateName] = concept
+  })
+}
+
+const MEDIA_FETCH_BATCH_SIZE = 6
+const MEDIA_FETCH_ATTEMPTS = 2
+
+const chunkNames = (names, size) => {
+  const batches = []
+  for (let index = 0; index < names.length; index += size) {
+    batches.push(names.slice(index, index + size))
+  }
+  return batches
+}
+
+const applyConceptMedia = (conceptMap, aliasMap, name, media) => {
+  const mapped = conceptMap[name]
+  if (!mapped) return
+
+  const updated = {
+    ...mapped,
+    media: media.map(typeMediaItem),
+  }
+  conceptMap[name] = updated
+  rebindAliases(updated, aliasMap)
+}
+
+const fetchMediaBatch = async (names, apiFns) => {
+  const succeeded = []
+  const failed = []
+
+  await Promise.all(
+    names.map(async name => {
+      const media = await apiFns.apiPayload(getMedia, name, true)
+      if (Array.isArray(media)) {
+        succeeded.push([name, media])
+        return
+      }
+      failed.push(name)
+    })
+  )
+
+  return { failed, succeeded }
+}
+
+// Paced batches keep the API/browser from collapsing; never write media:[] on failure.
+const injectConceptMedia = async (conceptMap, aliasMap, conceptNames, apiFns) => {
+  let pending = conceptNames.filter(name => {
+    const mapped = conceptMap[name]
+    return mapped && mapped.media === undefined
+  })
+
+  for (let attempt = 1; attempt <= MEDIA_FETCH_ATTEMPTS && pending.length > 0; attempt += 1) {
+    const stillFailed = []
+
+    for (const batch of chunkNames(pending, MEDIA_FETCH_BATCH_SIZE)) {
+      const { failed, succeeded } = await fetchMediaBatch(batch, apiFns)
+      succeeded.forEach(([name, media]) => applyConceptMedia(conceptMap, aliasMap, name, media))
+      stillFailed.push(...failed)
+    }
+
+    pending = stillFailed
+  }
+
+  if (pending.length > 0) {
+    throw createError(
+      'Media Load Error',
+      `Failed to load media for ${pending.length} concept${pending.length === 1 ? '' : 's'} during tree expand`,
+      { conceptNames: pending }
+    )
+  }
+}
+
+// Expand-all / export: one phylogeny/down call, structure-only stubs for unloaded nodes.
+// Media is fetched cheaply for tree icons; full concept payloads load on select.
 const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
+  const phylogeny = await apiFns.apiPayload(apiDescendants, concept.name)
+
   const updatedTaxonomy = {
     ...taxonomy,
     conceptMap: { ...taxonomy.conceptMap },
     aliasMap: { ...taxonomy.aliasMap },
   }
-  const toVisit = [...concept.children]
-  const descendantNames = []
-
   const conceptMap = updatedTaxonomy.conceptMap
   const aliasMap = updatedTaxonomy.aliasMap
+  const descendantNames = []
+  const structureNames = []
 
-  while (0 < toVisit.length) {
-    const descendantName = toVisit.shift()
-    descendantNames.push(descendantName)
-    const descendant = getConcept(updatedTaxonomy, descendantName)
+  const mergeNode = (node, parentName) => {
+    const childNames = (node.children || []).map(child => child.name)
+    const existing = conceptMap[node.name]
 
-    if (!descendant) {
-      throw createError(
-        'Missing Concept',
-        `Concept not found in taxonomy: ${descendantName}`,
-        { conceptName: descendantName }
+    structureNames.push(node.name)
+
+    if (existing) {
+      const updated = {
+        ...existing,
+        children: childNames,
+      }
+      if (parentName !== undefined && updated.name !== taxonomy.rootName) {
+        updated.parent = parentName
+      }
+      conceptMap[node.name] = updated
+      rebindAliases(updated, aliasMap)
+    } else {
+      insertConcept(
+        {
+          alternateNames: [],
+          children: childNames,
+          name: node.name,
+          parent: parentName,
+        },
+        conceptMap,
+        aliasMap
       )
     }
 
-    if (descendant && !descendant.children) {
-      const children = await apiFns.apiPayload(apiChildren, descendant.name)
-      const updatedDescendant = {
-        ...descendant,
-        children: children.map(child => child.name),
-      }
-
-      insertConcept(updatedDescendant, conceptMap, aliasMap)
-
-      children.forEach(child => {
-        toVisit.push(child.name)
-        const updatedChild = {
-          ...child,
-          parent: descendantName,
-        }
-        insertConcept(updatedChild, conceptMap, aliasMap)
-      })
-    } else if (descendant?.children) {
-      toVisit.push(...descendant.children)
+    if (0 < childNames.length) {
+      descendantNames.push(node.name)
     }
+
+    ;(node.children || []).forEach(child => mergeNode(child, node.name))
   }
+
+  mergeNode(phylogeny, concept.parent)
+  await injectConceptMedia(conceptMap, aliasMap, structureNames, apiFns)
 
   return { descendantNames, taxonomy: updatedTaxonomy }
 }
@@ -369,14 +464,13 @@ const insertConcept = (concept, conceptMap, aliasMap) => {
     concept.media = concept.media.map(typeMediaItem)
   }
 
+  // Realizations are owned by PanelData; never promote the payload field onto taxonomy state
+  delete concept.linkRealizations
+
   conceptMap[concept.name] = concept
   concept.alternateNames.forEach(alternateName => {
     aliasMap[alternateName] = concept
   })
-  if (concept.linkRealizations) {
-    concept.realizations = sortRealizations(concept.linkRealizations)
-    delete concept.linkRealizations
-  }
 }
 
 const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) => {
@@ -504,6 +598,7 @@ export {
   isConceptLoaded,
   isDescendant,
   isRoot,
+  isStructureOnly,
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,

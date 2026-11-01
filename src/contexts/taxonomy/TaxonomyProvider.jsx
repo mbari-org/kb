@@ -29,7 +29,6 @@ import useTaxonomyIntegrity from '@/lib/hooks/useTaxonomyIntegrity'
 
 import { LOADING } from '@/lib/constants/loading.js'
 import { createError } from '@/lib/errors'
-import debugSync from '@/debugSync'
 
 import { isEqual, withTimeout } from '@/lib/utils'
 
@@ -45,7 +44,6 @@ const TaxonomyProvider = ({ children }) => {
 
   const updateTaxonomy = useCallback(
     updatedTaxonomy => {
-      debugSync('[KBSYNC] updateTaxonomy mapSize:', Object.keys(updatedTaxonomy?.conceptMap || {}).length, 'hasAbysso:', Boolean(updatedTaxonomy?.conceptMap?.['Abyssocucumis abyssorum']))
       try {
         checkIntegrity(updatedTaxonomy)
       } catch (error) {
