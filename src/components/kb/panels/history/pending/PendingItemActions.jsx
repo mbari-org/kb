@@ -14,7 +14,6 @@ import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
 const { APPROVE, CLOSE, CONFIRM, REJECT } = CONFIG.BUTTON
-const DEFER = CLOSE
 
 const HistoryPendingActions = props => {
   const { modalData } = usePanelModalDataContext()
@@ -33,19 +32,19 @@ const HistoryPendingActions = props => {
       case PENDING.APPROVAL.ACCEPT:
         return [
           [false, false, true],
-          [CONFIRM, DEFER, REJECT],
+          [CONFIRM, CLOSE, REJECT],
         ]
 
       case PENDING.APPROVAL.REJECT:
         return [
           [true, false, false],
-          [APPROVE, DEFER, CONFIRM],
+          [APPROVE, CLOSE, CONFIRM],
         ]
 
       default:
         return [
           [false, false, false],
-          [APPROVE, DEFER, REJECT],
+          [APPROVE, CLOSE, REJECT],
         ]
     }
   })()
@@ -57,21 +56,21 @@ const HistoryPendingActions = props => {
         break
       }
 
+      case CLOSE: {
+        if (pendingConfirm) {
+          setPendingConfirm(null)
+        } else {
+          closeModal()
+        }
+        break
+      }
+
       case CONFIRM: {
         try {
           const stop = beginProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
           await updatePending({ approval: pendingConfirm, item }).finally(stop)
         } finally {
           closeModal(true)
-        }
-        break
-      }
-
-      case DEFER: {
-        if (pendingConfirm) {
-          setPendingConfirm(null)
-        } else {
-          closeModal()
         }
         break
       }

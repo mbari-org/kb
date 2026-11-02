@@ -7,12 +7,22 @@ import RealizationsContext from '@/contexts/panels/realizations/RealizationsCont
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
 
+const openPendingItem = vi.fn()
+
 vi.mock('react-icons/md', () => ({
   MdOutlineDeleteForever: () => <span>delete-icon</span>,
 }))
 
 vi.mock('react-icons/ci', () => ({
   CiEdit: () => <span>edit-icon</span>,
+}))
+
+vi.mock('react-icons/pi', () => ({
+  PiStamp: () => <span>stamp-icon</span>,
+}))
+
+vi.mock('@/components/kb/panels/history/pending/usePendingItemModal', () => ({
+  default: () => openPendingItem,
 }))
 
 const REALIZATION = {
@@ -23,14 +33,23 @@ const REALIZATION = {
   linkValue: 'fish',
 }
 
-const createWrapper = ({ isReadOnly = false, pendingAction = null } = {}) => {
-  const getPendingRealizationAction = vi.fn(() => pendingAction)
+const PENDING_ITEM = {
+  id: 'pending-1',
+  action: 'Edit',
+  concept: 'dingo',
+  field: 'Realization',
+  oldValue: 'eats | nil | fish',
+  newValue: 'eats | nil | weekly',
+}
+
+const createWrapper = ({ isAdmin = false, isReadOnly = false, pendingItem = null } = {}) => {
+  const getPendingRealizationItem = vi.fn(() => pendingItem)
   const updateFilters = vi.fn()
   const updateSelected = vi.fn()
 
   const Wrapper = ({ children }) => (
-    <UserContext.Provider value={{ isReadOnly }}>
-      <RealizationsContext.Provider value={{ getPendingRealizationAction, updateFilters }}>
+    <UserContext.Provider value={{ isAdmin, isReadOnly }}>
+      <RealizationsContext.Provider value={{ getPendingRealizationItem, updateFilters }}>
         <SelectedContext.Provider value={{ updateSelected }}>{children}</SelectedContext.Provider>
       </RealizationsContext.Provider>
     </UserContext.Provider>
@@ -40,10 +59,10 @@ const createWrapper = ({ isReadOnly = false, pendingAction = null } = {}) => {
   return { Wrapper }
 }
 
-const renderActionsCell = ({ isReadOnly, pendingAction } = {}) => {
+const renderActionsCell = ({ isAdmin, isReadOnly, pendingItem } = {}) => {
   const deleteRealizationModal = vi.fn()
   const editRealizationModal = vi.fn()
-  const { Wrapper } = createWrapper({ isReadOnly, pendingAction })
+  const { Wrapper } = createWrapper({ isAdmin, isReadOnly, pendingItem })
 
   const { result } = renderHook(() => useRealizationColumns({ deleteRealizationModal, editRealizationModal }), {
     wrapper: Wrapper,
@@ -88,10 +107,26 @@ describe('useRealizationColumns actions column', () => {
     expect(editRealizationModal).toHaveBeenCalledWith(REALIZATION)
   })
 
-  it('renders no action buttons for a row with a pending action', () => {
-    const { container } = renderActionsCell({ pendingAction: 'Edit' })
+  it('renders no action buttons for a non-admin row with pending history', () => {
+    const { container } = renderActionsCell({ pendingItem: PENDING_ITEM })
 
     expect(container).toBeEmptyDOMElement()
+  })
+
+  it('renders approve/reject stamp for an admin on a pending row', async () => {
+    const user = userEvent.setup()
+    renderActionsCell({ isAdmin: true, pendingItem: PENDING_ITEM })
+
+    expect(screen.queryByText('delete-icon')).not.toBeInTheDocument()
+    expect(screen.queryByText('edit-icon')).not.toBeInTheDocument()
+
+    const stampButton = screen.getByText('stamp-icon').closest('button')
+    await user.click(stampButton)
+
+    expect(openPendingItem).toHaveBeenCalledWith({
+      conceptName: PENDING_ITEM.concept,
+      item: PENDING_ITEM,
+    })
   })
 
   it('disables action buttons for a read-only user', () => {

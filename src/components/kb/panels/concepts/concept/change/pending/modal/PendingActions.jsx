@@ -11,7 +11,7 @@ import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConc
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
-const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, DEFER, REJECT, REJECT_ALL } = CONFIG.BUTTON
+const { APPROVE, APPROVE_ALL, CLOSE, CONFIRM, REJECT, REJECT_ALL } = CONFIG.BUTTON
 const { APPROVAL } = PENDING
 const GROUP = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
@@ -44,35 +44,35 @@ const PendingActions = () => {
     if (!pendingConfirm) {
       return [
         [false, false, false],
-        [APPROVE_ALL, DEFER, REJECT_ALL],
+        [APPROVE_ALL, CLOSE, REJECT_ALL],
       ]
     }
 
     if (pendingConfirm.approval === APPROVAL.ACCEPT && pendingConfirm.group === GROUP.ALL) {
       return [
         [false, false, true],
-        [CONFIRM, DEFER, REJECT_ALL],
+        [CONFIRM, CLOSE, REJECT_ALL],
       ]
     }
 
     if (pendingConfirm.approval === APPROVAL.REJECT && pendingConfirm.group === GROUP.ALL) {
       return [
         [true, false, false],
-        [APPROVE_ALL, DEFER, CONFIRM],
+        [APPROVE_ALL, CLOSE, CONFIRM],
       ]
     }
 
     if (pendingConfirm.approval === APPROVAL.ACCEPT) {
       return [
         [false, false, true],
-        [CONFIRM, DEFER, REJECT],
+        [CONFIRM, CLOSE, REJECT],
       ]
     }
 
     if (pendingConfirm.approval === APPROVAL.REJECT) {
       return [
         [true, false, false],
-        [APPROVE, DEFER, CONFIRM],
+        [APPROVE, CLOSE, CONFIRM],
       ]
     }
   }, [isAdmin, pendingConfirm])
@@ -87,6 +87,13 @@ const PendingActions = () => {
           break
         }
 
+        case CLOSE:
+          if (!pendingConfirm) {
+            closeModal()
+          }
+          setPendingConfirm(null)
+          break
+
         case CONFIRM: {
           const isMorePending = await updatePending(pendingConfirm)
           if (!isMorePending) {
@@ -95,13 +102,6 @@ const PendingActions = () => {
           setPendingConfirm(null)
           break
         }
-
-        case DEFER:
-          if (!pendingConfirm) {
-            closeModal()
-          }
-          setPendingConfirm(null)
-          break
 
         case REJECT_ALL: {
           setPendingConfirm({ approval: APPROVAL.REJECT, group: GROUP.ALL, pendingIds })

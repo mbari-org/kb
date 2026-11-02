@@ -44,17 +44,20 @@ const RealizationsProvider = ({ children }) => {
 
   const { updateFilters } = useUpdateFilters(REALIZATIONS.KEY, updateSettings)
 
-  const getPendingRealizationAction = useCallback(
-    realization => {
-      const pendingItem = pendingHistory.find(
+  const getPendingRealizationItem = useCallback(
+    realization =>
+      pendingHistory.find(
         item =>
           item.field === HISTORY_FIELD.REALIZATION &&
           item.concept === realization.concept &&
           matchingRealizationString(realization, item.action === ACTION.DELETE ? item.oldValue : item.newValue)
-      )
-      return pendingItem?.action ?? null
-    },
+      ) ?? null,
     [pendingHistory]
+  )
+
+  const getPendingRealizationAction = useCallback(
+    realization => getPendingRealizationItem(realization)?.action ?? null,
+    [getPendingRealizationItem]
   )
 
   useEffect(() => {
@@ -137,6 +140,7 @@ const RealizationsProvider = ({ children }) => {
       filters,
       filterString,
       getPendingRealizationAction,
+      getPendingRealizationItem,
       updateFilters,
     }),
     [
@@ -147,6 +151,7 @@ const RealizationsProvider = ({ children }) => {
       filters,
       filterString,
       getPendingRealizationAction,
+      getPendingRealizationItem,
       updateFilters,
     ]
   )
