@@ -5,6 +5,8 @@ import ConceptSelect from '@/components/common/concept/ConceptSelect'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import ReferenceConceptsDropDown from './ReferenceConceptsDropDown'
 
+import { compareIgnoreCase } from './useReferenceForm'
+
 import CONFIG from '@/lib/config'
 
 const ReferenceConceptsInput = ({
@@ -40,11 +42,13 @@ const ReferenceConceptsInput = ({
     handleMenuClose()
   }
 
+  const sortedConcepts = [...(reference.concepts || [])].sort(compareIgnoreCase)
   const hasConcepts = reference.concepts?.length > 0
   const conceptsTextField = (
     <TextField
       fullWidth
       label='Concepts'
+      multiline
       onChange={handleConceptDelete}
       onClick={handleTextFieldClick}
       placeholder='Add concepts using the search box below'
@@ -53,7 +57,7 @@ const ReferenceConceptsInput = ({
           readOnly: true,
         },
       }}
-      value={reference.concepts?.join(', ') || ''}
+      value={sortedConcepts.join(', ')}
     />
   )
 
@@ -73,7 +77,7 @@ const ReferenceConceptsInput = ({
       )}
       <ReferenceConceptsDropDown
         anchorEl={anchorEl}
-        concepts={reference.concepts}
+        concepts={sortedConcepts}
         onClose={handleMenuClose}
         onConceptClick={handleClickedConcept}
       />

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+export const compareIgnoreCase = (a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })
+
 const useReferenceForm = ({ onChange, reference, original }) => {
   const [selectedConcept, setSelectedConcept] = useState(null)
   const [hasSearchInput, setHasSearchInput] = useState(false)
@@ -49,10 +51,12 @@ const useReferenceForm = ({ onChange, reference, original }) => {
   }
 
   const handleConceptAdd = conceptToAdd => {
+    if (!conceptToAdd) return
+
     const currentConcepts = reference.concepts || []
 
     if (!currentConcepts.includes(conceptToAdd)) {
-      const updatedConcepts = [...currentConcepts, conceptToAdd]
+      const updatedConcepts = [...currentConcepts, conceptToAdd].sort(compareIgnoreCase)
       const updatedReference = {
         ...reference,
         concepts: updatedConcepts,
