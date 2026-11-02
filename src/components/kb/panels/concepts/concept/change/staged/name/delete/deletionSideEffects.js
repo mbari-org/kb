@@ -17,15 +17,8 @@ import { isSame } from '@/lib/model/realization'
 import { isIdentical } from '@/lib/model/templates'
 
 const { KEY } = PREFS.USER
-const {
-  ANNOTATIONS,
-  ASSOCIATIONS,
-  REALIZATIONS,
-  REALIZATIONS_TO,
-  REFERENCES,
-  TEMPLATES_DEFINED,
-  TEMPLATES_TO,
-} = RELATED_DATA_COUNTS
+const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REALIZATIONS_TO, REFERENCES, TEMPLATES_DEFINED, TEMPLATES_TO } =
+  RELATED_DATA_COUNTS
 const { EMPTY_FILTERS } = dataFilters(SELECTED.SETTINGS.TEMPLATES.KEY)
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
@@ -172,11 +165,24 @@ const preSideEffects = async deleteConceptContext => {
 }
 
 const postSideEffects = async deleteConceptContext => {
-  const { refreshPanelData: refreshPanelDataFn } = deleteConceptContext
+  const {
+    concept,
+    invalidateConceptRealizations,
+    reassign,
+    refreshPanelData: refreshPanelDataFn,
+    renameRealizationToConceptNames,
+  } = deleteConceptContext
 
   await performConceptPrefsUpdate(deleteConceptContext)
   await performSettingsUpdate(deleteConceptContext)
-  await Promise.all([refreshPanelDataFn(PANEL_DATA.REFERENCES), refreshPanelDataFn(PANEL_DATA.REALIZATIONS)])
+
+  invalidateConceptRealizations(concept.name)
+  if (reassign) {
+    invalidateConceptRealizations(reassign)
+    renameRealizationToConceptNames(concept.name, reassign)
+  }
+
+  await refreshPanelDataFn(PANEL_DATA.REFERENCES)
   return {}
 }
 
@@ -194,9 +200,6 @@ const applyResults = async (refreshPanelDataFn, results) => {
 
         case REALIZATIONS:
         case REALIZATIONS_TO:
-          if (value.length > 0) {
-            await refreshPanelDataFn(PANEL_DATA.REALIZATIONS)
-          }
           break
 
         case REFERENCES:

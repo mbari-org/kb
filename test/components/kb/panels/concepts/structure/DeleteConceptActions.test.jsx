@@ -87,17 +87,17 @@ describe('DeleteConceptActions', () => {
         <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
           <ConceptContext.Provider value={{ concept, pending: () => [] }}>
             <ConceptStagedContext.Provider value={{ confirmReset: null }}>
-              <ConceptModalContext.Provider
-                value={{ closeModal, setModalData: vi.fn(), withProcessing }}
-              >
+              <ConceptModalContext.Provider value={{ closeModal, setModalData: vi.fn(), withProcessing }}>
                 <ConceptModalDataContext.Provider
                   value={{ modalData: { alertType: 'delete', isValid: true, reassign: null, relatedDataCounts: [] } }}
                 >
                   <PanelDataContext.Provider
                     value={{
+                      ensureConceptRealizations: vi.fn(async () => []),
                       getReferences: vi.fn(),
-                      realizations: [],
+                      invalidateConceptRealizations: vi.fn(),
                       refreshData,
+                      renameRealizationToConceptNames: vi.fn(),
                       setClearTemplateFilters,
                       templates: [],
                     }}
@@ -129,11 +129,7 @@ describe('DeleteConceptActions', () => {
       expect(updateTaxonomy).toHaveBeenCalledWith(updatedTaxonomy)
     })
 
-    expect(withProcessing).toHaveBeenCalledWith(
-      expect.any(Function),
-      PROCESSING.DELETE,
-      PROCESSING.ARG.CONCEPT
-    )
+    expect(withProcessing).toHaveBeenCalledWith(expect.any(Function), PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
     expect(deleteTaxonomyConceptMock).toHaveBeenCalled()
     expect(closeModal).toHaveBeenCalledWith(true, expect.any(Function))
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'sibling' })

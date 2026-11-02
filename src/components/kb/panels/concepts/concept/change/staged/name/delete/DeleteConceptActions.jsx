@@ -32,8 +32,15 @@ const DeleteConceptActions = () => {
   const { concept } = use(ConceptContext)
   const { closeModal, setModalData, withProcessing } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
-  const { ensureConceptRealizations, getReferences, refreshData: refreshPanelData, setClearTemplateFilters, templates } =
-    use(PanelDataContext)
+  const {
+    ensureConceptRealizations,
+    getReferences,
+    invalidateConceptRealizations,
+    refreshData: refreshPanelData,
+    renameRealizationToConceptNames,
+    setClearTemplateFilters,
+    templates,
+  } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
   const { updateSelected } = use(SelectedContext)
   const { settings } = use(SelectedSettingsContext)
@@ -80,8 +87,10 @@ const DeleteConceptActions = () => {
           ensureConceptRealizations,
           getPreferences,
           getReferences,
+          invalidateConceptRealizations,
           reassign,
           refreshPanelData,
+          renameRealizationToConceptNames,
           savePreferences,
           setClearTemplateFilters,
           settings,

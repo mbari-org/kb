@@ -33,6 +33,7 @@ const Actions = () => {
     ensureConceptRealizations,
     invalidateConceptRealizations,
     reloadConceptRealizations,
+    renameRealizationToConceptNames,
     setConceptRealizations,
   } = use(PanelDataContext)
   return (
@@ -49,7 +50,10 @@ const Actions = () => {
       <button onClick={() => ensureAllRealizations({ force: true })} type='button'>
         force-all
       </button>
-      <button onClick={() => setConceptRealizations('dingo', [{ ...DINGO_REALIZATIONS[0], linkValue: 'weekly' }])} type='button'>
+      <button
+        onClick={() => setConceptRealizations('dingo', [{ ...DINGO_REALIZATIONS[0], linkValue: 'weekly' }])}
+        type='button'
+      >
         set-dingo
       </button>
       <button onClick={() => reloadConceptRealizations('dingo')} type='button'>
@@ -57,6 +61,9 @@ const Actions = () => {
       </button>
       <button onClick={() => invalidateConceptRealizations('all')} type='button'>
         invalidate-all
+      </button>
+      <button onClick={() => renameRealizationToConceptNames('fish', 'shark')} type='button'>
+        rename-refs
       </button>
     </>
   )
@@ -203,5 +210,29 @@ describe('PanelDataProvider realizations store', () => {
       expect(screen.getByTestId('dingo').textContent).toBe(JSON.stringify(DINGO_REALIZATIONS))
     })
     expect(screen.getByTestId('all-loaded').textContent).toBe('false')
+  })
+
+  it('renameRealizationToConceptNames rewrites toConcept across loaded keys without a fetch', async () => {
+    const apiFns = buildApiFns()
+    renderProvider(apiFns)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'ensure-all' })).toBeInTheDocument()
+    })
+    await act(async () => {
+      screen.getByRole('button', { name: 'ensure-all' }).click()
+    })
+    await waitFor(() => {
+      expect(screen.getByTestId('all-loaded').textContent).toBe('true')
+    })
+
+    const callsBefore = apiFns.apiPayload.mock.calls.length
+    await act(async () => {
+      screen.getByRole('button', { name: 'rename-refs' }).click()
+    })
+
+    const dingo = JSON.parse(screen.getByTestId('dingo').textContent)
+    expect(dingo[0].toConcept).toBe('shark')
+    expect(apiFns.apiPayload.mock.calls.length).toBe(callsBefore)
   })
 })

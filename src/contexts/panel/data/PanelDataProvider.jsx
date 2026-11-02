@@ -27,9 +27,6 @@ export const PanelDataProvider = ({ children }) => {
   const [templates, setTemplates] = useState([])
   const [pendingHistory, setPendingHistory] = useState([])
 
-  // Sole realizations cache: map keyed by concept name. Missing key = not loaded;
-  // [] = loaded and empty. realizationsAllLoaded means the bulk catalog was merged
-  // into the map, so flattening the map yields the full catalog.
   const [realizationsByConcept, setRealizationsByConcept] = useState({})
   const [realizationsAllLoaded, setRealizationsAllLoaded] = useState(false)
   const realizationLoadsRef = useRef(new Map())
@@ -86,15 +83,9 @@ export const PanelDataProvider = ({ children }) => {
     [references]
   )
 
-  const getConceptRealizations = useCallback(
-    conceptName => realizationsByConcept[conceptName],
-    [realizationsByConcept]
-  )
+  const getConceptRealizations = useCallback(conceptName => realizationsByConcept[conceptName], [realizationsByConcept])
 
-  const getAllRealizations = useCallback(
-    () => Object.values(realizationsByConcept).flat(),
-    [realizationsByConcept]
-  )
+  const getAllRealizations = useCallback(() => Object.values(realizationsByConcept).flat(), [realizationsByConcept])
 
   const setConceptRealizations = useCallback((conceptName, realizations) => {
     const sorted = sortRealizations([...realizations])
@@ -124,6 +115,19 @@ export const PanelDataProvider = ({ children }) => {
     [loadRealizations, setConceptRealizations]
   )
 
+  const renameRealizationToConceptNames = useCallback((oldName, newName) => {
+    setRealizationsByConcept(current =>
+      Object.fromEntries(
+        Object.entries(current).map(([conceptName, realizations]) => [
+          conceptName,
+          realizations.map(realization =>
+            realization.toConcept === oldName ? { ...realization, toConcept: newName } : realization
+          ),
+        ])
+      )
+    )
+  }, [])
+
   const ensureConceptRealizations = useCallback(
     conceptName => {
       const loaded = realizationsByConcept[conceptName]
@@ -133,9 +137,7 @@ export const PanelDataProvider = ({ children }) => {
       const pending = realizationLoadsRef.current.get(conceptName)
       if (pending) return pending
 
-      const load = reloadConceptRealizations(conceptName).finally(() =>
-        realizationLoadsRef.current.delete(conceptName)
-      )
+      const load = reloadConceptRealizations(conceptName).finally(() => realizationLoadsRef.current.delete(conceptName))
       realizationLoadsRef.current.set(conceptName, load)
       return load
     },
@@ -201,7 +203,12 @@ export const PanelDataProvider = ({ children }) => {
           }
           case 'all': {
             const [referencesData, realizationsData, templatesData, pendingHistoryData] = await withLoadTimeout(
-              Promise.all([loadReferences(), ensureAllRealizations({ force: true }), loadTemplates(), loadPendingHistory()])
+              Promise.all([
+                loadReferences(),
+                ensureAllRealizations({ force: true }),
+                loadTemplates(),
+                loadPendingHistory(),
+              ])
             )
             const explicitConceptsData = calcExplicitConcepts(templatesData)
 
@@ -248,7 +255,15 @@ export const PanelDataProvider = ({ children }) => {
         setIsInitialLoad(false)
       }
     },
-    [apiFns, calcExplicitConcepts, ensureAllRealizations, loadPendingHistory, loadReferences, loadTemplates, withLoadTimeout]
+    [
+      apiFns,
+      calcExplicitConcepts,
+      ensureAllRealizations,
+      loadPendingHistory,
+      loadReferences,
+      loadTemplates,
+      withLoadTimeout,
+    ]
   )
 
   useEffect(() => {
@@ -277,6 +292,7 @@ export const PanelDataProvider = ({ children }) => {
       realizationsByConcept,
       refreshData,
       reloadConceptRealizations,
+      renameRealizationToConceptNames,
       setClearTemplateFilters,
       setConceptRealizations,
       setReferences,
@@ -299,6 +315,7 @@ export const PanelDataProvider = ({ children }) => {
       realizationsByConcept,
       refreshData,
       reloadConceptRealizations,
+      renameRealizationToConceptNames,
       setClearTemplateFilters,
       setConceptRealizations,
       setReferences,

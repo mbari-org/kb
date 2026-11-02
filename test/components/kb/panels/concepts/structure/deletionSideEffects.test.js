@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { preSideEffects } from '@/components/kb/panels/concepts/concept/change/staged/name/delete/deletionSideEffects'
+import {
+  postSideEffects,
+  preSideEffects,
+} from '@/components/kb/panels/concepts/concept/change/staged/name/delete/deletionSideEffects'
 import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 import { createRealization } from '@/lib/api/realizations'
 
@@ -29,14 +32,18 @@ describe('deletionSideEffects preSideEffects', () => {
     const realizationsByConcept = {
       OldConcept: concept.realizations,
       ReassignedConcept: [
-        { id: 4, concept: 'ReassignedConcept', linkName: 'existing-link', linkValue: 'val', toConcept: 'ReassignedConcept' },
+        {
+          id: 4,
+          concept: 'ReassignedConcept',
+          linkName: 'existing-link',
+          linkValue: 'val',
+          toConcept: 'ReassignedConcept',
+        },
       ],
     }
     const ensureConceptRealizations = vi.fn(async conceptName => realizationsByConcept[conceptName] ?? [])
 
-    const relatedDataCounts = [
-      { title: RELATED_DATA_COUNTS.REALIZATIONS, value: 3 },
-    ]
+    const relatedDataCounts = [{ title: RELATED_DATA_COUNTS.REALIZATIONS, value: 3 }]
 
     const deleteConceptContext = {
       apiFns,
@@ -56,5 +63,42 @@ describe('deletionSideEffects preSideEffects', () => {
       { concept: 'ReassignedConcept', linkName: 'self-link', linkValue: 'nil', toConcept: 'ReassignedConcept' },
     ])
     expect(results[RELATED_DATA_COUNTS.REALIZATIONS]).toHaveLength(2)
+  })
+})
+
+describe('deletionSideEffects postSideEffects', () => {
+  const buildContext = ({ reassign = null } = {}) => ({
+    concept: { name: 'OldConcept' },
+    getPreferences: vi.fn(async () => ({ state: ['OldConcept'], position: 0 })),
+    invalidateConceptRealizations: vi.fn(),
+    reassign,
+    refreshPanelData: vi.fn(async () => ({})),
+    renameRealizationToConceptNames: vi.fn(),
+    savePreferences: vi.fn(async () => ({})),
+    settings: {},
+  })
+
+  it('removes the deleted concept key and leaves other keys alone when there is no reassign', async () => {
+    const deleteConceptContext = buildContext()
+
+    await postSideEffects(deleteConceptContext)
+
+    expect(deleteConceptContext.invalidateConceptRealizations).toHaveBeenCalledWith('OldConcept')
+    expect(deleteConceptContext.invalidateConceptRealizations).toHaveBeenCalledTimes(1)
+    expect(deleteConceptContext.renameRealizationToConceptNames).not.toHaveBeenCalled()
+    expect(deleteConceptContext.refreshPanelData).toHaveBeenCalledWith('references')
+    expect(deleteConceptContext.refreshPanelData).not.toHaveBeenCalledWith('realizations')
+  })
+
+  it('invalidates the reassign target and rewrites toConcept references when reassigning', async () => {
+    const deleteConceptContext = buildContext({ reassign: 'ReassignedConcept' })
+
+    await postSideEffects(deleteConceptContext)
+
+    expect(deleteConceptContext.invalidateConceptRealizations).toHaveBeenCalledWith('OldConcept')
+    expect(deleteConceptContext.invalidateConceptRealizations).toHaveBeenCalledWith('ReassignedConcept')
+    expect(deleteConceptContext.renameRealizationToConceptNames).toHaveBeenCalledWith('OldConcept', 'ReassignedConcept')
+    expect(deleteConceptContext.refreshPanelData).toHaveBeenCalledWith('references')
+    expect(deleteConceptContext.refreshPanelData).not.toHaveBeenCalledWith('realizations')
   })
 })
