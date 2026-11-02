@@ -59,19 +59,23 @@ const PanelDataGrid = ({
   sx = EMPTY_PROPS,
 }) => {
   const dataGridPropsWithRowCount = useMemo(
-    () =>
-      paginationMode === 'server' && rowCount !== undefined
-        ? { ...dataGridProps, rowCount }
-        : dataGridProps,
+    () => (paginationMode === 'server' && rowCount !== undefined ? { ...dataGridProps, rowCount } : dataGridProps),
     [dataGridProps, paginationMode, rowCount]
   )
 
   const containerSx = useMemo(() => ({ ...CONTAINER_SX, ...sx }), [sx])
 
+  // Force a remount when the dataset identity changes. The virtual scroller can otherwise
+  // keep stale row DOM after rows are emptied or swapped while the grid is unmeasurable
+  // (e.g. inside a display:none keep-alive panel).
+  const rowKey = row => row?.id ?? row?.__rowId ?? ''
+  const rowsKey = `${rows.length}:${rowKey(rows[0])}:${rowKey(rows[rows.length - 1])}`
+
   return (
     <Box sx={containerSx}>
       <Box sx={GRID_WRAPPER_SX}>
         <DataGrid
+          key={rowsKey}
           columns={columns}
           disableRowSelectionOnClick
           disableSelectionOnClick

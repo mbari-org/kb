@@ -110,50 +110,52 @@ const ConceptProvider = ({ children }) => {
       if (isSettingConceptRef.current) return
       isSettingConceptRef.current = true
 
-      const isSameConcept = concept?.name && concept?.name === updatedConcept.name
-      if (!isSameConcept) {
-        setEditing(false)
-      }
-
-      if (pendingHistoryOverride) {
-        pendingHistoryRef.current = pendingHistoryOverride
-      }
-
-      const pendingConcept = pendingHistoryRef.current.filter(history => history.concept === updatedConcept.name)
-
-      const realizations = await ensureConceptRealizations(updatedConcept.name)
-
-      const conceptWithTemplates = {
-        ...updatedConcept,
-        realizations,
-        templates: getConceptTemplates(updatedConcept.name),
-      }
-
-      const initialState = initialConceptState(conceptWithTemplates, pendingConcept)
-
-      if (isSameConcept) {
-        const clampIndex = (index, length) => {
-          if (!Number.isFinite(index)) return 0
-          if (!Number.isFinite(length) || length <= 0) return 0
-          return Math.max(0, Math.min(index, length - 1))
+      try {
+        const isSameConcept = concept?.name && concept?.name === updatedConcept.name
+        if (!isSameConcept) {
+          setEditing(false)
         }
 
-        initialState.aliasIndex = clampIndex(indexRef.current.aliasIndex, initialState.aliases?.length)
-        initialState.mediaIndex = clampIndex(indexRef.current.mediaIndex, initialState.media?.length)
-        initialState.realizationIndex = clampIndex(indexRef.current.realizationIndex, initialState.realizations?.length)
+        if (pendingHistoryOverride) {
+          pendingHistoryRef.current = pendingHistoryOverride
+        }
+
+        const pendingConcept = pendingHistoryRef.current.filter(history => history.concept === updatedConcept.name)
+
+        const realizations = await ensureConceptRealizations(updatedConcept.name)
+
+        const conceptWithTemplates = {
+          ...updatedConcept,
+          realizations,
+          templates: getConceptTemplates(updatedConcept.name),
+        }
+
+        const initialState = initialConceptState(conceptWithTemplates, pendingConcept)
+
+        if (isSameConcept) {
+          const clampIndex = (index, length) => {
+            if (!Number.isFinite(index)) return 0
+            if (!Number.isFinite(length) || length <= 0) return 0
+            return Math.max(0, Math.min(index, length - 1))
+          }
+
+          initialState.aliasIndex = clampIndex(indexRef.current.aliasIndex, initialState.aliases?.length)
+          initialState.mediaIndex = clampIndex(indexRef.current.mediaIndex, initialState.media?.length)
+          initialState.realizationIndex = clampIndex(indexRef.current.realizationIndex, initialState.realizations?.length)
+        }
+
+        const stagedState = structuredClone(initialState)
+
+        setInitialState(initialState)
+        dispatch({ type: CONCEPT_STATE.INITIAL, update: stagedState })
+
+        setConcept(conceptWithTemplates)
+      } finally {
+        // Reset the ref on the next tick
+        setTimeout(() => {
+          isSettingConceptRef.current = false
+        }, 0)
       }
-
-      const stagedState = structuredClone(initialState)
-
-      setInitialState(initialState)
-      dispatch({ type: CONCEPT_STATE.INITIAL, update: stagedState })
-
-      setConcept(conceptWithTemplates)
-
-      // Reset the ref on the next tick
-      setTimeout(() => {
-        isSettingConceptRef.current = false
-      }, 0)
     },
     [concept?.name, ensureConceptRealizations, getConceptTemplates]
   )
@@ -219,6 +221,7 @@ const ConceptProvider = ({ children }) => {
   useEffect(() => {
     const selectedConcept = getSelected(SELECTED.CONCEPT)
     if (!selectedConcept) return
+    if (selectedConcept !== concept?.name) return
     if (!isConceptLoaded(selectedConcept)) return
     if (isSettingConceptRef.current) return
     if (isEditing) return
@@ -230,6 +233,7 @@ const ConceptProvider = ({ children }) => {
     const timeoutId = setTimeout(() => handleSetConcept(taxonomyConcept), 0)
     return () => clearTimeout(timeoutId)
   }, [
+    concept?.name,
     getConcept,
     getSelected,
     handleSetConcept,
@@ -316,9 +320,11 @@ const ConceptProvider = ({ children }) => {
     if (previousConceptKeyRef.current === conceptKey) {
       return
     }
-    previousConceptKeyRef.current = conceptKey
 
+    // Record the key only once the path is applied: a re-render can cancel an in-flight fetch,
+    // and the re-run must be free to start another one.
     const applyPath = path => {
+      previousConceptKeyRef.current = conceptKey
       conceptPathsRef.current.set(concept.name, path)
       setConceptPath(path)
       stopConceptSwitchProcessing()

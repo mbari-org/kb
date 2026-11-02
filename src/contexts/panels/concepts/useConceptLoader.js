@@ -39,7 +39,7 @@ const useConceptLoader = ({
           return
         }
 
-        handleSetConcept(loadedConcept)
+        await handleSetConcept(loadedConcept)
         return
       }
 
@@ -61,7 +61,7 @@ const useConceptLoader = ({
         if (isMountedRef.current) {
           const currentSelected = getSelected('concept')
           if (currentSelected === conceptToLoad) {
-            handleSetConcept(loadedConcept)
+            await handleSetConcept(loadedConcept)
           }
         }
       } catch (error) {
