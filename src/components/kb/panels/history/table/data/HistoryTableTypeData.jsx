@@ -33,13 +33,7 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
   // Ensure rowCount is at least 1 to prevent MUI X error
   const rowCount = Math.max(1, conceptState.count)
 
-  const rows = useMemo(
-    () =>
-      selectedType === TYPE.APPROVED || sortOrder !== 'desc'
-        ? pageState.data
-        : [...pageState.data].reverse(),
-    [pageState.data, selectedType, sortOrder]
-  )
+  const rows = pageState.data
 
   const onSortModelChange = useCallback(
     model => {
@@ -59,9 +53,11 @@ const HistoryTableTypeData = ({ hideFooter = false }) => {
 
   const dataGridProps = useMemo(() => {
     if (selectedType === TYPE.APPROVED) {
-      return { onSortModelChange, sortModel, sortingMode: 'server' }
+      return { disableColumnMenu: true, onSortModelChange, sortModel, sortingMode: 'server' }
     }
-    return selectedType === TYPE.PENDING ? { onSortModelChange } : undefined
+    return selectedType === TYPE.PENDING
+      ? { disableColumnMenu: true, onSortModelChange, sortModel }
+      : { disableColumnMenu: true }
   }, [onSortModelChange, selectedType, sortModel])
 
   const paginationComponent = useMemo(

@@ -64,6 +64,7 @@ const HistoryTableConceptData = ({ hideFooter = false }) => {
   const dataGridProps = useMemo(
     () => ({
       disableColumnFilter: true,
+      disableColumnMenu: true,
       onSortModelChange,
       sortModel,
       sortingMode: 'client',

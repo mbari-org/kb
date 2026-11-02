@@ -99,12 +99,14 @@ describe('HistoryTableTypeData approved sorting', () => {
 })
 
 describe('HistoryTableTypeData pending sorting', () => {
-  it('keeps client-side desc reversal and uncontrolled grid sorting', () => {
+  it('passes pre-sorted rows through unreversed and controls the grid sort model', () => {
     renderTable({ selectedType: TYPE.PENDING, sortOrder: 'desc' })
 
-    expect(rowOrder()).toEqual(['h3', 'h2', 'h1'])
+    expect(rowOrder()).toEqual(['h1', 'h2', 'h3'])
     expect(gridProps.current.dataGridProps.sortingMode).toBeUndefined()
-    expect(gridProps.current.dataGridProps.sortModel).toBeUndefined()
+    expect(gridProps.current.dataGridProps.sortModel).toEqual([
+      { field: 'creationTimestamp', sort: 'desc' },
+    ])
     expect(gridProps.current.dataGridProps.onSortModelChange).toBeDefined()
   })
 })

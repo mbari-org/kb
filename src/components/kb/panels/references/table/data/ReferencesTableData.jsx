@@ -14,7 +14,6 @@ const DEFAULT_LIMIT = PAGINATION.REFERENCES.DEFAULT_LIMIT
 const DEFAULT_OFFSET = 0
 
 const DATA_GRID_PROPS = {
-  disableColumnFilter: true,
   disableColumnMenu: true,
   disableColumnSorting: true,
   getRowId: reference => reference.id,

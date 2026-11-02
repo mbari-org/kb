@@ -60,6 +60,7 @@ const TemplatesTableData = () => {
 
   const dataGridProps = useMemo(
     () => ({
+      disableColumnMenu: true,
       getRowClassName: params => {
         const action = getPendingTemplateAction(params.row)
         return action ? `pending-template-${action.toLowerCase()}` : ''

@@ -15,14 +15,6 @@ vi.mock('@/components/kb/panels/history/pending/usePendingItemModal', () => ({
   default: () => openPendingItem,
 }))
 
-vi.mock('@/components/icon/FilterIcon', () => ({
-  default: ({ onClick }) => (
-    <button onClick={onClick} type='button'>
-      filter
-    </button>
-  ),
-}))
-
 vi.mock('@/components/icon/StampIcon', () => ({
   default: ({ onClick }) => (
     <button onClick={onClick} type='button'>
@@ -73,7 +65,8 @@ describe('useHistoryColumns', () => {
       { wrapper: adminWrapper.Wrapper }
     )
     const approvedFields = getFields(approvedResult.current)
-    expect(approvedFields[0]).toBe('inspect')
+    expect(approvedFields[0]).toBe('concept')
+    expect(approvedFields).not.toContain('inspect')
     expect(approvedFields).toContain('processorName')
     expect(approvedFields).toContain('processedTimestamp')
 
@@ -88,7 +81,7 @@ describe('useHistoryColumns', () => {
     expect(conceptFields).not.toContain('inspect')
   })
 
-  it('marks server-sortable columns for approved type, excluding concept', () => {
+  it('marks server-sortable columns for approved type', () => {
     const { Wrapper } = createWrapper()
 
     const { result: approvedResult } = renderHook(
@@ -100,6 +93,7 @@ describe('useHistoryColumns', () => {
     )
     const approvedSortable = [
       'action',
+      'concept',
       'creationTimestamp',
       'creatorName',
       'field',
@@ -111,7 +105,6 @@ describe('useHistoryColumns', () => {
     approvedSortable.forEach(field => {
       expect(approvedByField[field].sortable, field).toBe(true)
     })
-    expect(approvedByField.concept.sortable).toBe(false)
 
     const { result: pendingResult } = renderHook(
       () => useHistoryColumns({ type: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }),
@@ -122,9 +115,19 @@ describe('useHistoryColumns', () => {
     )
     expect(pendingByField.concept.sortable).toBe(true)
     expect(pendingByField.creatorName.sortable).toBe(true)
+
+    const { result: conceptResult } = renderHook(
+      () => useHistoryColumns({ type: SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT }),
+      { wrapper: Wrapper }
+    )
+    const conceptByField = Object.fromEntries(
+      conceptResult.current.map(column => [column.field, column])
+    )
+    expect(conceptByField.concept.sortable).toBe(false)
+    expect(conceptByField.approved.sortable).toBe(true)
   })
 
-  it('fires filter and approval actions from pending inspect column for admin user', async () => {
+  it('fires approval action from pending inspect column and filter action from concept cell for admin user', async () => {
     const user = userEvent.setup()
     const { Wrapper, updateSelected, updateSettings } = createWrapper({ role: ROLES.ADMIN })
     const row = { id: 'pending-1', concept: 'dingo', field: 'name' }
@@ -135,34 +138,32 @@ describe('useHistoryColumns', () => {
     )
 
     const inspectColumn = result.current.find(column => column.field === 'inspect')
-    render(inspectColumn.renderCell({ row }))
+    const { unmount } = render(inspectColumn.renderCell({ row }))
+    expect(screen.queryByRole('button', { name: 'filter' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'stamp' }))
+    expect(openPendingItem).toHaveBeenCalledWith({ conceptName: 'dingo', item: row })
+    unmount()
 
-    await user.click(screen.getByRole('button', { name: 'filter' }))
+    const conceptColumn = result.current.find(column => column.field === 'concept')
+    render(conceptColumn.renderCell({ row, value: row.concept }))
+    await user.click(screen.getByText('dingo'))
     expect(updateSelected).toHaveBeenCalledWith({ [SELECTED.CONCEPT]: 'dingo' })
     expect(updateSettings).toHaveBeenCalledWith({
       [SELECTED.SETTINGS.HISTORY.KEY]: {
         [SELECTED.SETTINGS.HISTORY.TYPE]: SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT,
       },
     })
-
-    await user.click(screen.getByRole('button', { name: 'stamp' }))
-    expect(openPendingItem).toHaveBeenCalledWith({ conceptName: 'dingo', item: row })
   })
 
-  it('hides pending approval icon in inspect column for non-admin user', () => {
+  it('omits pending inspect column for non-admin user', () => {
     const { Wrapper } = createWrapper({ role: ROLES.USER })
-    const row = { id: 'pending-1', concept: 'dingo', field: 'name' }
 
     const { result } = renderHook(
       () => useHistoryColumns({ type: SELECTED.SETTINGS.HISTORY.TYPES.PENDING }),
       { wrapper: Wrapper }
     )
 
-    const inspectColumn = result.current.find(column => column.field === 'inspect')
-    render(inspectColumn.renderCell({ row }))
-
-    expect(screen.getByRole('button', { name: 'filter' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'stamp' })).not.toBeInTheDocument()
+    expect(result.current.map(column => column.field)).not.toContain('inspect')
   })
 
   it('renders approved column values for concept history based on item state', async () => {

@@ -2,8 +2,8 @@ import { use, useMemo } from 'react'
 
 import { Box } from '@mui/material'
 
-import FilterIcon from '@/components/icon/FilterIcon'
 import StampIcon from '@/components/icon/StampIcon'
+import KBTooltip from '@/components/common/tooltip/KBTooltip'
 
 import usePendingItemModal from '@/components/kb/panels/history/pending/usePendingItemModal'
 
@@ -41,7 +41,7 @@ const useHistoryColumns = ({ type }) => {
 
     const sortableFields = [
       'action',
-      ...(type === TYPE.PENDING ? ['concept'] : []),
+      ...(type === TYPE.CONCEPT ? ['approved'] : ['concept']),
       'creationTimestamp',
       'creatorName',
       'field',
@@ -51,9 +51,7 @@ const useHistoryColumns = ({ type }) => {
     ]
 
     const sortableProps = field =>
-      sortableFields.includes(field)
-        ? { sortable: true, sortingOrder: SORTING_ORDER }
-        : { sortable: false }
+      sortableFields.includes(field) ? { sortable: true, sortingOrder: SORTING_ORDER } : { sortable: false }
 
     const columnProps = (field, headerName, width) => ({
       field,
@@ -68,58 +66,56 @@ const useHistoryColumns = ({ type }) => {
       const isApproved = !!params.row.approved
 
       let content
-      isPending &&
-        (content = (
-          <StampIcon onClick={() => handleConceptApproval(params.row)} tooltip='Approve/Reject' />
-        ))
+      isPending && (content = <StampIcon onClick={() => handleConceptApproval(params.row)} tooltip='Approve/Reject' />)
       !isPending && isApproved && (content = 'Yes')
       !isPending && !isApproved && (content = 'No')
       isPending && !isAdmin && (content = 'Pending')
 
       return (
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-          {content}
-        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>{content}</Box>
       )
     }
 
-    const inspectColumn = () => {
-      const showPendingApproval = type === TYPE.PENDING && isAdmin
-
-      return {
-        field: 'inspect',
-        headerName: '',
-        onClick: handleConceptFilter,
-        renderCell: params => (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <FilterIcon
-              onClick={() => handleConceptFilter(params.row)}
-              tooltip='Filter History to this Concept'
-            />
-            {showPendingApproval && (
-              <StampIcon
-                onClick={() => handleConceptApproval(params.row)}
-                tooltip='Approve/Reject'
-              />
-            )}
-          </Box>
-        ),
-        sortable: false,
-        width: showPendingApproval ? 90 : 50,
-      }
+    const approvalColumn = {
+      field: 'inspect',
+      headerName: '',
+      renderCell: params => (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <StampIcon onClick={() => handleConceptApproval(params.row)} tooltip='Approve/Reject' />
+        </Box>
+      ),
+      sortable: false,
+      width: 50,
     }
 
+    const conceptLinkCell = params => (
+      <KBTooltip title='Filter History to this Concept' placement='top'>
+        <Box
+          component='span'
+          onClick={() => handleConceptFilter(params.row)}
+          sx={{ color: 'primary.main', cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+        >
+          {params.value}
+        </Box>
+      </KBTooltip>
+    )
+
+    const conceptColumn =
+      type !== TYPE.CONCEPT
+        ? { ...columnProps('concept', 'Concept', 200), renderCell: conceptLinkCell }
+        : columnProps('concept', 'Concept', 200)
+
     const baseColumns = [
-      columnProps('concept', 'Concept', 200),
+      conceptColumn,
       columnProps('field', 'Field', 130),
       columnProps('action', 'Action', 100),
       columnProps('creatorName', 'Creator', 130),
+      columnProps('oldValue', 'Old Value', 200),
+      columnProps('newValue', 'New Value', 200),
       {
         ...columnProps('creationTimestamp', 'Created', 165),
         valueFormatter: value => humanTimestamp(value),
       },
-      columnProps('oldValue', 'Old Value', 200),
-      columnProps('newValue', 'New Value', 200),
     ]
 
     const approvedColumn = {
@@ -136,9 +132,9 @@ const useHistoryColumns = ({ type }) => {
     ]
 
     return type === TYPE.PENDING
-      ? [inspectColumn(), ...baseColumns]
+      ? [...(isAdmin ? [approvalColumn] : []), ...baseColumns]
       : type === TYPE.APPROVED
-        ? [inspectColumn(), ...baseColumns, ...processorColumns]
+        ? [...baseColumns, ...processorColumns]
         : [approvedColumn, ...baseColumns, ...processorColumns]
   }, [isAdmin, openPendingItem, type, updateSelected, updateSettings])
 }
