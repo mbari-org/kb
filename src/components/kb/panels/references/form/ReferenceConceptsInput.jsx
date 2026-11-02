@@ -15,6 +15,17 @@ const ReferenceConceptsInput = ({
   selectedConcept,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null)
+  const [inputValue, setInputValue] = useState('')
+
+  const onInputChange = (event, value) => {
+    setInputValue(value)
+    handleSearchInput(event, value)
+  }
+
+  const onConceptAdd = concept => {
+    handleConceptAdd(concept)
+    setInputValue('')
+  }
 
   const handleTextFieldClick = event => {
     if (reference.concepts?.length > 0) {
@@ -68,10 +79,11 @@ const ReferenceConceptsInput = ({
       />
       <ConceptSelect
         conceptName={selectedConcept}
-        doConceptSelected={handleConceptAdd}
+        doConceptSelected={onConceptAdd}
         label={CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.LABEL}
+        inputValue={inputValue}
         keepFocus={true}
-        onInputChange={handleSearchInput}
+        onInputChange={onInputChange}
         selectorTooltip={{ placement: 'top', title: CONFIG.PANELS.REFERENCES.MODALS.ADD_CONCEPT.TOOLTIP.ADD }}
         updateConceptSelected={false}
         width='100%'

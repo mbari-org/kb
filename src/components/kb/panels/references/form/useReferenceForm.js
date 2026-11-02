@@ -61,6 +61,7 @@ const useReferenceForm = ({ onChange, reference, original }) => {
       setSelectedConcept(null)
       onChange(updatedReference, original)
     }
+    setHasSearchInput(false)
   }
 
   return {
