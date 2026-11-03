@@ -1,106 +1,108 @@
 import { useCallback } from 'react'
 
+// The concept's node mounts only after its ancestry path expands, and expand/collapse
+//  transitions keep shifting layout for a few hundred ms; poll (bounded) until the
+//  element exists and its position has settled before measuring for the scroll.
+const POLL_INTERVAL_MS = 100
+const MAX_POLLS = 80
+
 const useConceptsTreeScroll = (apiRef, concept, containerRef) => {
   const conceptName = concept?.name
-
-  const needsToScroll = useCallback(() => {
-    if (!conceptName || !apiRef?.current) return false
-
-    const node = apiRef.current.getItemDOMElement(conceptName)
-    if (!node) return false
-
-    const container = containerRef?.current
-    if (!container) return false
-
-    const cRect = container.getBoundingClientRect()
-    const nodeRect = node.getBoundingClientRect()
-
-    return nodeRect.top < cRect.top || nodeRect.bottom > cRect.bottom
-  }, [conceptName, apiRef, containerRef])
 
   const scrollToNode = useCallback(
     (onComplete, delayMs = 0) => {
       let cancelled = false
+      let timeoutId
+      let lastTop = null
 
       const complete = () => {
         if (cancelled) return
         onComplete?.()
       }
 
-      const run = () => {
-        if (cancelled) return
+      const schedule = (fn, interval = POLL_INTERVAL_MS) => {
+        timeoutId = setTimeout(() => {
+          if (!cancelled) fn()
+        }, interval)
+      }
 
-        if (!needsToScroll()) {
+      const poll = pollsLeft => {
+        if (cancelled) return
+        if (pollsLeft <= 0) {
           complete()
           return
         }
 
-        setTimeout(() => {
-          if (cancelled) return
+        const container = containerRef?.current
+        const element = conceptName && apiRef?.current ? apiRef.current.getItemDOMElement(conceptName) : null
+        if (!element || !container) {
+          lastTop = null
+          schedule(() => poll(pollsLeft - 1))
+          return
+        }
 
-          if (!conceptName || !apiRef?.current) {
-            complete()
-            return
-          }
+        const eRect = element.getBoundingClientRect()
+        if (lastTop === null || lastTop !== eRect.top) {
+          lastTop = eRect.top
+          schedule(() => poll(pollsLeft - 1))
+          return
+        }
 
-          const el = apiRef.current.getItemDOMElement(conceptName)
-          const container = containerRef?.current
-          if (!el || !container) {
-            complete()
-            return
-          }
+        const cRect = container.getBoundingClientRect()
+        if (eRect.top >= cRect.top && eRect.bottom <= cRect.bottom) {
+          complete()
+          return
+        }
 
-          let done = false
-          const finish = () => {
-            if (done || cancelled) return
-            done = true
-            container.removeEventListener?.('scrollend', finish)
-            setTimeout(complete, 100)
-          }
-
-          container.addEventListener?.('scrollend', finish, { once: true })
-          const fallback = setTimeout(finish, 700)
-
-          const cRect = container.getBoundingClientRect()
-          const eRect = el.getBoundingClientRect()
-          const padding = 8
-          const delta = eRect.top - cRect.top
-          const targetScrollTop = Math.max(
-            0,
-            Math.min(
-              container.scrollHeight - container.clientHeight,
-              container.scrollTop + delta - padding
-            )
+        const padding = 8
+        const targetScrollTop = Math.max(
+          0,
+          Math.min(
+            container.scrollHeight - container.clientHeight,
+            container.scrollTop + (eRect.top - cRect.top) - padding
           )
+        )
 
-          container.scrollTo({ top: targetScrollTop, behavior: 'smooth' })
+        let done = false
+        const finish = () => {
+          if (done || cancelled) return
+          done = true
+          container.removeEventListener?.('scrollend', finish)
+          // Re-verify after the smooth scroll; layout may have kept moving.
+          lastTop = null
+          schedule(() => poll(pollsLeft - 1))
+        }
 
-          // Keep fallback if scrollend never fires
-          container.addEventListener?.(
-            'scrollend',
-            () => clearTimeout(fallback),
-            { once: true }
-          )
-        }, 100)
+        container.addEventListener?.('scrollend', finish, { once: true })
+        const fallback = setTimeout(finish, 700)
+
+        container.scrollTo({ top: targetScrollTop, behavior: 'smooth' })
+
+        // Keep fallback if scrollend never fires
+        container.addEventListener?.(
+          'scrollend',
+          () => clearTimeout(fallback),
+          { once: true }
+        )
       }
+
+      const run = () => poll(MAX_POLLS)
 
       if (delayMs && delayMs > 0) {
-        const timeoutId = setTimeout(run, delayMs)
-        return () => {
-          cancelled = true
-          clearTimeout(timeoutId)
-        }
+        schedule(run, delayMs)
+      } else {
+        run()
       }
 
-      run()
       return () => {
         cancelled = true
+        clearTimeout(timeoutId)
       }
     },
-    [apiRef, conceptName, containerRef, needsToScroll]
+    [apiRef, conceptName, containerRef]
   )
 
-  return { needsToScroll, scrollToNode }
+  return { scrollToNode }
 }
 
 export default useConceptsTreeScroll
