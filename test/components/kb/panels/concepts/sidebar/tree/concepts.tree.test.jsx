@@ -42,19 +42,8 @@ vi.mock('@/components/kb/panels/concepts/sidebar/tree/lib/useExpandConcept', () 
 
 vi.mock('@/components/kb/panels/concepts/sidebar/tree/lib/useConceptsTreeScroll', () => ({
   default: () => ({ scrollToNode: mockScrollToNode }),
-}))
+}))// Stable across renders, matching the real hook's useCallback identity
 
-// Stable across renders, matching the real hook's useCallback identity
-const mockCreateConceptItem = (_taxonomy, itemId) => ({
-  id: itemId,
-  hasPending: false,
-  mediaCount: 0,
-  name: itemId,
-})
-
-vi.mock('@/components/kb/panels/concepts/sidebar/tree/lib/useConceptItem', () => ({
-  default: () => mockCreateConceptItem,
-}))
 
 vi.mock('@/lib/model/taxonomy', () => ({
   buildTree: taxonomy => mockBuildTree(taxonomy),
@@ -104,31 +93,6 @@ describe('ConceptsTree', () => {
     expect(lastTreeViewProps.selectedItems).toEqual(['dingo'])
     expect(lastTreeViewProps.items).toEqual([{ id: 'root', children: [] }])
     expect(mockBuildTree).toHaveBeenCalledTimes(1)
-  })
-
-  it('keeps slot props referentially stable when only the selected concept changes', () => {
-    const taxonomy = { rootName: 'root' }
-    const renderWithConcept = concept => (
-      <ConceptContext.Provider value={{ concept, conceptPath: ['root', concept.name], onConceptTreeReady: vi.fn() }}>
-        <SelectedContext.Provider value={{ updateSelected: vi.fn() }}>
-          <TaxonomyContext.Provider
-            value={{ getConcept: () => concept, getConceptPrimaryName: name => name, taxonomy }}
-          >
-            <ConceptsTree autoExpand={null} registerScrollFn={vi.fn()} setAutoExpand={vi.fn()} />
-          </TaxonomyContext.Provider>
-        </SelectedContext.Provider>
-      </ConceptContext.Provider>
-    )
-
-    const { rerender } = render(renderWithConcept({ name: 'dingo' }))
-    const firstSlotProps = lastTreeViewProps.slotProps
-    const firstDingoItemProps = firstSlotProps.item({ itemId: 'dingo' })
-
-    rerender(renderWithConcept({ name: 'object' }))
-
-    expect(lastTreeViewProps.selectedItems).toEqual(['object'])
-    expect(lastTreeViewProps.slotProps).toBe(firstSlotProps)
-    expect(lastTreeViewProps.slotProps.item({ itemId: 'dingo' })).toBe(firstDingoItemProps)
   })
 
   it('registers an external scroll handler that calls scrollToNode', () => {

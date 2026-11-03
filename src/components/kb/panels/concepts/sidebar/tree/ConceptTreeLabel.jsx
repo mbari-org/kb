@@ -6,6 +6,7 @@ import { useTreeItemUtils } from '@mui/x-tree-view/hooks'
 
 import ConceptMediaIcon from './ConceptMediaIcon'
 import ConceptPendingHistoryIcon from './ConceptPendingHistoryIcon'
+import useConceptItem from './lib/useConceptItem'
 
 const StyledLabel = styled('div')(({ theme, hasPending, isSelected }) => {
   const baseStyle = {
@@ -36,14 +37,15 @@ const StyledLabel = styled('div')(({ theme, hasPending, isSelected }) => {
   return baseStyle
 })
 
-const ConceptTreeLabel = ({ children, hasPending, itemId, mediaCount }) => {
+const ConceptTreeLabel = ({ itemId }) => {
   const { status } = useTreeItemUtils({ itemId })
   const isSelected = status.selected
+  const { label, hasPending, mediaCount } = useConceptItem(itemId)
 
   return (
     <StyledLabel hasPending={hasPending} isSelected={isSelected}>
       <Box sx={{ display: 'flex', alignItems: 'top', flexGrow: 1, mr: 0.5 }}>
-        <span>{children}</span>
+        <span>{label}</span>
         <ConceptMediaIcon mediaCount={mediaCount} isSelected={isSelected} />
         {isSelected && hasPending && <ConceptPendingHistoryIcon hasPending={hasPending} />}
       </Box>

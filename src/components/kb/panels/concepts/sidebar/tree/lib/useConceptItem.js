@@ -1,4 +1,4 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useMemo } from 'react'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -9,7 +9,10 @@ import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 const KEY_SEPARATOR = String.fromCharCode(0)
 const childKey = (parentName, childName) => [parentName, childName].join(KEY_SEPARATOR)
 
-const useConceptItem = () => {
+const itemLabel = concept =>
+  concept.alternateNames.length === 0 ? concept.name : `${concept.name} (${concept.alternateNames.join(', ')})`
+
+const useConceptItem = itemId => {
   const { pendingHistory } = use(PanelDataContext)
   const { getConcept } = use(TaxonomyContext)
 
@@ -31,27 +34,17 @@ const useConceptItem = () => {
     [pendingHistory]
   )
 
-  const createConceptItem = useCallback(
-    (taxonomy, itemId) => {
-      const concept = getConcept(itemId)
-      if (!concept) return null
+  const concept = getConcept(itemId)
 
-      const hasPending =
-        pendingConceptNames.has(concept.name) || pendingChildKeys.has(childKey(concept.parent, concept.name))
-
-      return {
-        id: concept.name,
-        label:
-          concept.alternateNames.length === 0 ? concept.name : `${concept.name} (${concept.alternateNames.join(', ')})`,
-        hasPending,
-        mediaCount: concept.media?.length || 0,
-        parent: concept.parent,
-      }
-    },
-    [getConcept, pendingConceptNames, pendingChildKeys]
+  return useMemo(
+    () => ({
+      hasPending:
+        pendingConceptNames.has(concept.name) || pendingChildKeys.has(childKey(concept.parent, concept.name)),
+      label: itemLabel(concept),
+      mediaCount: concept.media?.length || 0,
+    }),
+    [concept, pendingConceptNames, pendingChildKeys]
   )
-
-  return createConceptItem
 }
 
 export default useConceptItem

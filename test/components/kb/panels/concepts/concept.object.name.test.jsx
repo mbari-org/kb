@@ -61,11 +61,7 @@ const entityConcept = {
   templates: [],
 }
 
-const mockGetConcept = vi.fn(name => {
-  if (name === 'object') return objectConcept
-  if (name === 'root') return rootConcept
-  return null
-})
+const mockGetConcept = vi.fn(name => mockTaxonomy.conceptMap[name] ?? null)
 
 const mockGetNames = vi.fn(() => ['object', 'entity', 'root'])
 const mockIsConceptLoaded = vi.fn(() => true)

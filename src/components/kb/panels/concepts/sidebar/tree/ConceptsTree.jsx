@@ -17,7 +17,6 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import useConceptItem from '@/components/kb/panels/concepts/sidebar/tree/lib/useConceptItem'
 import { buildTree } from '@/lib/model/taxonomy'
 import { SELECTED } from '@/lib/constants/selected.js'
 
@@ -41,26 +40,9 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
     return [root]
   }, [taxonomy])
 
-  const createConceptItem = useConceptItem()
-
-  // The slots 'item' field designates the rendering component, but only the itemId is provided,
-  //  not the item itself. The slotsProps 'item' field, passed to ConceptTreeItem in props,
-  //  provides display data.
+  // The slots 'item' field designates the rendering component. Display data is not
+  //  provided here; ConceptTreeLabel subscribes to it per item.
   const slots = useMemo(() => ({ item: ConceptTreeItem }), [])
-
-  // Per-item props are cached so references stay stable across selection changes;
-  //  a new taxonomy/pending state resets the cache via the memo deps.
-  const slotProps = useMemo(() => {
-    const itemPropsCache = new Map()
-    return {
-      item: ({ itemId }) => {
-        if (!itemPropsCache.has(itemId)) {
-          itemPropsCache.set(itemId, { item: createConceptItem(taxonomy, itemId) })
-        }
-        return itemPropsCache.get(itemId)
-      },
-    }
-  }, [taxonomy, createConceptItem])
 
   const handleConceptSelect = useCallback(
     conceptName => {
@@ -140,7 +122,6 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
           items={treeItems}
           onItemClick={handleItemClick}
           selectedItems={selectedItems}
-          slotProps={slotProps}
           slots={slots}
           style={{ flexGrow: 1, height: '100%' }}
         />
