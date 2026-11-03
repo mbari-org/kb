@@ -1,10 +1,19 @@
 import { useCallback } from 'react'
 
+import { treeItemClasses } from '@mui/x-tree-view'
+
 import { CONCEPT } from '@/lib/constants'
 
-const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand) => {
+const DISCLOSURE_SELECTOR = `.${treeItemClasses.iconContainer}`
+
+const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand, expandedItems) => {
   return useCallback(
     (event, conceptName) => {
+      if (event.target.closest(DISCLOSURE_SELECTOR) && expandedItems.includes(conceptName)) {
+        expandConcept({ name: conceptName }, CONCEPT.EXPAND.OFF)
+        return
+      }
+
       if (conceptName === concept.name) {
         setAutoExpand({ expand: false, name: null })
         expandConcept(concept, event.altKey ? CONCEPT.EXPAND.DESCENDANTS : CONCEPT.EXPAND.TOGGLE)
@@ -13,7 +22,7 @@ const useConceptClick = (concept, expandConcept, selectConcept, setAutoExpand) =
         setAutoExpand({ expand: false, name: null })
       }
     },
-    [concept, expandConcept, selectConcept, setAutoExpand]
+    [concept, expandConcept, expandedItems, selectConcept, setAutoExpand]
   )
 }
 
