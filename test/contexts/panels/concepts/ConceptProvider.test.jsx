@@ -43,10 +43,20 @@ const ConceptProbe = () => {
   return <div data-testid='concept-name'>{value.concept?.name || ''}</div>
 }
 
-const renderProvider = ({ apiPayload }) => {
+const renderProvider = ({ apiPayload, selectedName = 'dingo', taxonomyValue }) => {
   const beginProcessing = vi.fn(() => vi.fn())
+  const ensureConceptRealizations = vi.fn(async () => [])
   const getConceptTemplates = vi.fn(() => [])
   const setHasUnsavedChanges = vi.fn()
+  const updateSelected = vi.fn()
+
+  const defaultTaxonomyValue = {
+    getConcept: name => (name === 'dingo' ? concept : null),
+    getConceptPrimaryName: name => (name === 'dingo' ? 'dingo' : undefined),
+    isConceptLoaded: name => name === 'dingo',
+    loadConcept: vi.fn(async () => concept),
+    taxonomy: { rootName: 'root' },
+  }
 
   render(
     <AppModalContext.Provider value={{ beginProcessing }}>
@@ -54,7 +64,7 @@ const renderProvider = ({ apiPayload }) => {
         <ConceptModalContext.Provider value={{ setModal: vi.fn(), setModalData: vi.fn() }}>
           <PanelDataContext.Provider
             value={{
-              ensureConceptRealizations: vi.fn(async () => []),
+              ensureConceptRealizations,
               getConceptTemplates,
               pendingHistory: [],
               realizationsByConcept: {},
@@ -62,19 +72,13 @@ const renderProvider = ({ apiPayload }) => {
           >
             <SelectedContext.Provider
               value={{
-                concepts: { clear: vi.fn(), getState: vi.fn(() => ['dingo']), push: vi.fn() },
-                getSelected: key => (key === SELECTED.CONCEPT ? 'dingo' : null),
+                concepts: { clear: vi.fn(), getState: vi.fn(() => [selectedName]), push: vi.fn() },
+                getSelected: key => (key === SELECTED.CONCEPT ? selectedName : null),
                 panels: { current: () => SELECTED.PANELS.CONCEPTS },
+                updateSelected,
               }}
             >
-              <TaxonomyContext.Provider
-                value={{
-                  getConcept: name => (name === 'dingo' ? concept : null),
-                  isConceptLoaded: name => name === 'dingo',
-                  loadConcept: vi.fn(async () => concept),
-                  taxonomy: { rootName: 'root' },
-                }}
-              >
+              <TaxonomyContext.Provider value={taxonomyValue || defaultTaxonomyValue}>
                 <UserContext.Provider value={{ guardedAction: null, setHasUnsavedChanges }}>
                   <ConceptProvider>
                     <ConceptProbe />
@@ -87,7 +91,11 @@ const renderProvider = ({ apiPayload }) => {
       </ConfigContext.Provider>
     </AppModalContext.Provider>
   )
+
+  return { beginProcessing, ensureConceptRealizations, updateSelected }
 }
+
+const phylogenyUpPayload = { name: 'root', children: [{ name: 'dingo' }] }
 
 describe('ConceptProvider', () => {
   beforeEach(() => {
@@ -108,5 +116,42 @@ describe('ConceptProvider', () => {
     await waitFor(() => {
       expect(showBoundaryMock).toHaveBeenCalledWith(pathError)
     })
+  })
+
+  it('converges an alias selection to the primary name after the concept loads', async () => {
+    const aliasedConcept = { ...concept, alternateNames: ['doggo'] }
+    let aliasRegistered = false
+
+    const getConcept = name => {
+      if (name === 'dingo') return aliasedConcept
+      if (name === 'doggo' && aliasRegistered) return aliasedConcept
+      return null
+    }
+
+    const taxonomyValue = {
+      getConcept,
+      getConceptPrimaryName: name => getConcept(name)?.name,
+      isConceptLoaded: name => aliasRegistered && Boolean(getConcept(name)),
+      loadConcept: vi.fn(async () => {
+        aliasRegistered = true
+        return aliasedConcept
+      }),
+      taxonomy: { rootName: 'root' },
+    }
+
+    const apiPayload = vi.fn(async () => phylogenyUpPayload)
+
+    const { ensureConceptRealizations, updateSelected } = renderProvider({
+      apiPayload,
+      selectedName: 'doggo',
+      taxonomyValue,
+    })
+
+    await waitFor(() => {
+      expect(updateSelected).toHaveBeenCalledWith({ concept: 'dingo' })
+    })
+
+    expect(updateSelected).not.toHaveBeenCalledWith({ concept: 'doggo' })
+    expect(ensureConceptRealizations).toHaveBeenCalledTimes(1)
   })
 })

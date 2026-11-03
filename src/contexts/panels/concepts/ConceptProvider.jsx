@@ -42,8 +42,8 @@ const ConceptProvider = ({ children }) => {
   const { ensureConceptRealizations, getConceptTemplates, pendingHistory, realizationsByConcept } =
     use(PanelDataContext)
   const pendingHistoryRef = useRef(pendingHistory)
-  const { getSelected, panels } = use(SelectedContext)
-  const { getConcept, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
+  const { getSelected, panels, updateSelected } = use(SelectedContext)
+  const { getConcept, getConceptPrimaryName, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
   const { guardedAction, setHasUnsavedChanges } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
@@ -192,13 +192,18 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
+    const selectedPrimaryName = getConceptPrimaryName(selectedConcept)
+    if (selectedPrimaryName && selectedPrimaryName !== selectedConcept) {
+      updateSelected({ concept: selectedPrimaryName })
+      return
+    }
+
     if (selectedConcept !== concept?.name && panels.current() === SELECTED.PANELS.CONCEPTS) {
       if (isStateModified({ initialState, stagedState })) {
         displayStaged(BACK_TO_EDITING)
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
       } else {
         setHasUnsavedChanges(false)
-        // Overlay may already be up from prepareConceptSwitch; keep it during load/path.
         startConceptSwitchProcessing()
         Promise.resolve(conceptLoader(selectedConcept)).then(
           () => {},
@@ -211,6 +216,7 @@ const ConceptProvider = ({ children }) => {
     conceptLoader,
     displayStaged,
     getConcept,
+    getConceptPrimaryName,
     getSelected,
     initialState,
     isConceptLoaded,
@@ -223,6 +229,7 @@ const ConceptProvider = ({ children }) => {
     setHasUnsavedChanges,
     setModalData,
     taxonomy,
+    updateSelected,
   ])
 
   useEffect(() => {
@@ -269,7 +276,6 @@ const ConceptProvider = ({ children }) => {
     setModalData(prev => ({ ...prev, guardedAction }))
   }, [guardedAction, displayStaged, setModalData])
 
-  // Since conceptPath is already created we can use it to determine if the concept is a phylogeny root
   const isPhylogenyRoot = useMemo(() => conceptPath?.includes(phylogenyRoot) ?? false, [conceptPath, phylogenyRoot])
 
   const onConceptTreeReady = useCallback(() => {
