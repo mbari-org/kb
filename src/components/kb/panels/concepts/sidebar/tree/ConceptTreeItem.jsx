@@ -1,9 +1,9 @@
 import { forwardRef, memo } from 'react'
 
+import Collapse from '@mui/material/Collapse'
 import { TreeItemProvider, TreeItem } from '@mui/x-tree-view'
 
 import ConceptTreeLabel from './ConceptTreeLabel'
-import ConceptsExpand from './ConceptsExpand'
 
 const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
   const { itemId } = props
@@ -17,7 +17,7 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
           label: { itemId },
         }}
         slots={{
-          groupTransition: ConceptsExpand,
+          groupTransition: Collapse,
           label: ConceptTreeLabel,
         }}
       />

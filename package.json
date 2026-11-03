@@ -10,7 +10,6 @@
     "@mui/material": "^9.2.0",
     "@mui/x-data-grid": "^9.10.1",
     "@mui/x-tree-view": "^9.10.1",
-    "@react-spring/web": "^10.1.2",
     "classnames": "^2.5.1",
     "framer-motion": "^12.42.2",
     "jwt-decode": "^4.0.0",
