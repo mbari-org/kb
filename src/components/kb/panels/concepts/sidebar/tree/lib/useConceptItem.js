@@ -36,15 +36,16 @@ const useConceptItem = itemId => {
 
   const concept = getConcept(itemId)
 
-  return useMemo(
-    () => ({
+  return useMemo(() => {
+    if (!concept) return null
+
+    return {
       hasPending:
         pendingConceptNames.has(concept.name) || pendingChildKeys.has(childKey(concept.parent, concept.name)),
       label: itemLabel(concept),
       mediaCount: concept.media?.length || 0,
-    }),
-    [concept, pendingConceptNames, pendingChildKeys]
-  )
+    }
+  }, [concept, pendingConceptNames, pendingChildKeys])
 }
 
 export default useConceptItem

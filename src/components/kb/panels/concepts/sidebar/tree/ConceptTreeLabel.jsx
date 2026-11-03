@@ -40,7 +40,11 @@ const StyledLabel = styled('div')(({ theme, hasPending, isSelected }) => {
 const ConceptTreeLabel = ({ itemId }) => {
   const { status } = useTreeItemUtils({ itemId })
   const isSelected = status.selected
-  const { label, hasPending, mediaCount } = useConceptItem(itemId)
+  const item = useConceptItem(itemId)
+
+  if (!item) return null
+
+  const { label, hasPending, mediaCount } = item
 
   return (
     <StyledLabel hasPending={hasPending} isSelected={isSelected}>
