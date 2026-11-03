@@ -28,7 +28,7 @@ const RealizationsTableHeaderMiddle = () => {
   }
 
   return (
-    <Stack direction='row' spacing={5} sx={{ alignItems: 'center' }}>
+    <Stack direction='row' spacing={2} sx={{ alignItems: 'center' }}>
       <KBTooltipTarget title={TOOLTIP.FILTER.LINK_NAME}>
         <TableHeaderLinkFilter
           name={REALIZATIONS.FILTERS.LINK_NAME}

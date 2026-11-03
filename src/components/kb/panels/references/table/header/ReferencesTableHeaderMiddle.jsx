@@ -64,7 +64,7 @@ const ReferencesTableHeaderMiddle = () => {
   }
 
   return (
-    <Stack direction='row' spacing={5} sx={{ alignItems: 'center', justifyContent: 'center' }}>
+    <Stack direction='row' spacing={2} sx={{ alignItems: 'center', justifyContent: 'center' }}>
       <KBTooltipTarget title={TOOLTIP.FILTERS.CITATION}>
         <TextInput
           onChange={handleCitationChange}
