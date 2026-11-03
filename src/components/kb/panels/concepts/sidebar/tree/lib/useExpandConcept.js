@@ -17,10 +17,18 @@ const allExpandable = (taxonomy, conceptName, names = []) => {
   return names
 }
 
+const allDescendants = (taxonomy, conceptName, names = [conceptName]) => {
+  taxonomy.conceptMap[conceptName]?.children?.forEach(child => {
+    names.push(child)
+    allDescendants(taxonomy, child, names)
+  })
+  return names
+}
+
 const useExpandConcept = (expandedItems, setExpandedItems) => {
   const { beginProcessing } = use(AppModalContext)
   const { conceptPath } = use(ConceptContext)
-  const { loadConceptDescendants } = use(TaxonomyContext)
+  const { loadConceptDescendants, taxonomy } = use(TaxonomyContext)
 
   const isExpanded = useCallback(
     concept => {
@@ -29,11 +37,14 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
     [expandedItems]
   )
 
+  // Collapse also drops every descendant id, so re-expanding shows the subtree
+  //  progressively (children collapsed) instead of remounting everything at once.
   const collapse = useCallback(
     concept => {
-      setExpandedItems(prevItems => prevItems.filter(id => id !== concept.name))
+      const pruning = new Set(allDescendants(taxonomy, concept.name))
+      setExpandedItems(prevItems => prevItems.filter(id => !pruning.has(id)))
     },
-    [setExpandedItems]
+    [setExpandedItems, taxonomy]
   )
 
   const expand = useCallback(
