@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { alpha } from '@mui/material/styles'
+import { useTreeItemUtils } from '@mui/x-tree-view/hooks'
 
 import ConceptMediaIcon from './ConceptMediaIcon'
 import ConceptPendingHistoryIcon from './ConceptPendingHistoryIcon'
@@ -35,7 +36,10 @@ const StyledLabel = styled('div')(({ theme, hasPending, isSelected }) => {
   return baseStyle
 })
 
-const ConceptTreeLabel = ({ children, hasPending, isSelected, mediaCount }) => {
+const ConceptTreeLabel = ({ children, hasPending, itemId, mediaCount }) => {
+  const { status } = useTreeItemUtils({ itemId })
+  const isSelected = status.selected
+
   return (
     <StyledLabel hasPending={hasPending} isSelected={isSelected}>
       <Box sx={{ display: 'flex', alignItems: 'top', flexGrow: 1, mr: 0.5 }}>

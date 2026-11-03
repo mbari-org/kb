@@ -124,10 +124,14 @@ const createApiFns = store => ({
     } else if (fn === apiChildren) {
       return (store.children[value] || []).map(childName => cloneConcept(store.concepts[childName]))
     } else if (fn === apiDescendants) {
-      const buildPhylogeny = name => ({
-        name,
-        children: (store.children[name] || []).map(buildPhylogeny),
-      })
+      const buildPhylogeny = name => {
+        const alternativeNames = store.concepts[name]?.alternateNames || []
+        return {
+          name,
+          ...(alternativeNames.length > 0 && { alternativeNames }),
+          children: (store.children[name] || []).map(buildPhylogeny),
+        }
+      }
       return buildPhylogeny(value)
     } else if (fn === apiConceptNames) {
       return createAliases(store, value)
@@ -151,7 +155,7 @@ const TaxonomyProbe = ({ onChange }) => {
   return null
 }
 
-const renderTaxonomy = async () => {
+const renderTaxonomy = async ({ isKbDebug = false } = {}) => {
   const store = createStore()
   const apiFns = createApiFns(store)
   const errors = []
@@ -160,7 +164,7 @@ const renderTaxonomy = async () => {
   render(
     <ErrorBoundary fallbackRender={() => null} onError={error => errors.push(error)}>
       <UserContext.Provider value={{ user: { role: 'Admin' } }}>
-        <ConfigContext.Provider value={{ apiFns }}>
+        <ConfigContext.Provider value={{ apiFns, IS_KB_DEBUG: isKbDebug }}>
           <TaxonomyProvider>
             <TaxonomyProbe
               onChange={value => {
@@ -478,7 +482,7 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
   })
 
   it('returns the committed concept and taxonomy when integrity rejects a speculative refresh', async () => {
-    const { errors, getContext } = await renderTaxonomy()
+    const { errors, getContext } = await renderTaxonomy({ isKbDebug: true })
     const priorTaxonomy = getContext().taxonomy
     const staleConcept = getContext().getConcept('old-parent')
     const invalidFreshConcept = {
@@ -602,13 +606,17 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     expect(getContext().getConcept('moving-child').children).toEqual(['grandchild'])
     expect(getContext().getConcept('grandchild').parent).toBe('moving-child')
     expect(getContext().getConcept('grandchild').children).toEqual([])
+    expect(getContext().getConcept('grandchild').alternateNames).toEqual(['grandchild-alias'])
+    expect(getContext().taxonomy.aliasMap['grandchild-alias']).toBe(getContext().getConcept('grandchild'))
     expect(getContext().isConceptLoaded('grandchild')).toBe(false)
     expect(getContext().getConcept('grandchild').aliases).toBeUndefined()
     expect(getContext().getConcept('grandchild').media).toHaveLength(1)
     expect(getContext().getConcept('old-parent').media).toHaveLength(2)
-    expect(apiCallsFor(apiFns.apiPayload, getMedia).map(([, name]) => name).sort()).toEqual(
-      ['grandchild', 'old-parent'].sort()
-    )
+    expect(
+      apiCallsFor(apiFns.apiPayload, getMedia)
+        .map(([, name]) => name)
+        .sort()
+    ).toEqual(['grandchild', 'old-parent'].sort())
 
     apiFns.apiPayload.mockClear()
     await act(async () => {
@@ -689,9 +697,11 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     expect(loaded).toBe(getContext().getConcept('moving-child'))
     expect(getContext().isConceptLoaded('moving-child')).toBe(true)
     expect(getContext().getConcept('moving-child').children).toEqual(['grandchild'])
-    expect(getContext().getConcept('moving-child').aliases.map(alias => alias.name)).toEqual([
-      'moving-child-alias',
-    ])
+    expect(
+      getContext()
+        .getConcept('moving-child')
+        .aliases.map(alias => alias.name)
+    ).toEqual(['moving-child-alias'])
     expect(getContext().getConcept('grandchild').children).toEqual([])
     expect(errors).toEqual([])
   })

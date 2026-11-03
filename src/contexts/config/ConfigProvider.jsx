@@ -16,7 +16,8 @@ import authStore from '@/lib/local/store/authStore'
 import { PREFS } from '@/lib/constants/prefs.js'
 import CONFIG from '@/lib/config'
 
-const IS_DEV = import.meta.env.DEV
+const IS_KB_DEBUG = import.meta.env.KB_DEBUG
+const IS_KB_DEV = import.meta.env.KB_DEV
 const appMediaBaseURLKey = PREFS.APP.MEDIA.BASE_URL.KEY
 const defaultMediaBaseURL = PREFS.APP.MEDIA.BASE_URL.DEFAULT
 const appDsgBaseUrlKey = PREFS.APP.DSG.BASE_URL.KEY
@@ -183,7 +184,8 @@ const ConfigProvider = ({ children }) => {
       dsgBaseUrl,
       getAppPreference,
       initializeAppPreferences,
-      IS_DEV,
+      IS_KB_DEBUG,
+      IS_KB_DEV,
       mediaBaseURL,
       phylogenyRoot,
       saveAppPreference,

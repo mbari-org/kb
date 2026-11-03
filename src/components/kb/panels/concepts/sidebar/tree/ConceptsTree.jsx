@@ -48,21 +48,19 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
   //  provides display data.
   const slots = useMemo(() => ({ item: ConceptTreeItem }), [])
 
-  const selectedConceptName = concept?.name
-  const slotProps = useMemo(
-    () => ({
+  // Per-item props are cached so references stay stable across selection changes;
+  //  a new taxonomy/pending state resets the cache via the memo deps.
+  const slotProps = useMemo(() => {
+    const itemPropsCache = new Map()
+    return {
       item: ({ itemId }) => {
-        const item = createConceptItem(taxonomy, itemId)
-        return {
-          item: {
-            ...item,
-            isSelected: itemId === selectedConceptName,
-          },
+        if (!itemPropsCache.has(itemId)) {
+          itemPropsCache.set(itemId, { item: createConceptItem(taxonomy, itemId) })
         }
+        return itemPropsCache.get(itemId)
       },
-    }),
-    [taxonomy, selectedConceptName, createConceptItem]
-  )
+    }
+  }, [taxonomy, createConceptItem])
 
   const handleConceptSelect = useCallback(
     conceptName => {

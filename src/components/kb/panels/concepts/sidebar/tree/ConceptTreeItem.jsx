@@ -24,7 +24,7 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
           label: {
             hasMedia,
             hasPending: item.hasPending,
-            isSelected: item.isSelected,
+            itemId,
             mediaCount,
           },
         }}

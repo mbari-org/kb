@@ -25,6 +25,7 @@ import {
   removeTaxonomyConcept,
 } from '@/lib/model/taxonomy'
 
+import { useContext } from 'react'
 import useTaxonomyIntegrity from '@/lib/hooks/useTaxonomyIntegrity'
 
 import { LOADING } from '@/lib/constants/loading.js'
@@ -40,20 +41,24 @@ const TaxonomyProvider = ({ children }) => {
 
   const [taxonomy, setTaxonomy] = useState(null)
 
+  const { IS_KB_DEBUG } = useContext(ConfigContext)
+
   const checkIntegrity = useTaxonomyIntegrity()
 
   const updateTaxonomy = useCallback(
     updatedTaxonomy => {
-      try {
-        checkIntegrity(updatedTaxonomy)
-      } catch (error) {
-        showBoundary(error)
-        return taxonomy
+      if (IS_KB_DEBUG) {
+        try {
+          checkIntegrity(updatedTaxonomy)
+        } catch (error) {
+          showBoundary(error)
+          return taxonomy
+        }
       }
       setTaxonomy(updatedTaxonomy)
       return updatedTaxonomy
     },
-    [checkIntegrity, showBoundary, taxonomy]
+    [IS_KB_DEBUG, checkIntegrity, showBoundary, taxonomy]
   )
 
   const conceptEditsRefresh = useCallback(
@@ -213,10 +218,7 @@ const TaxonomyProvider = ({ children }) => {
     return getTaxonomyNames(taxonomy)
   }, [taxonomy])
 
-  const checkConceptName = useCallback(
-    conceptName => getTaxonomyNames(taxonomy).includes(conceptName),
-    [taxonomy]
-  )
+  const checkConceptName = useCallback(conceptName => getTaxonomyNames(taxonomy).includes(conceptName), [taxonomy])
 
   const isConceptLoaded = useCallback(
     conceptName => {

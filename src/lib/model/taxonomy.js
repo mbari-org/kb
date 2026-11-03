@@ -435,7 +435,7 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
     } else {
       insertConcept(
         {
-          alternateNames: [],
+          alternateNames: node.alternativeNames || [],
           children: childNames,
           name: node.name,
           parent: parentName,
