@@ -22,16 +22,43 @@ import { addedConcepts } from './concept'
 import { treeItem } from '@/components/kb/panels/concepts/sidebar/tree/lib/taxonomyItem'
 import { typeMediaItem } from '@/lib/model/media'
 
+// Node cache for structural sharing: a rebuilt node is reused when its children are
+//  referentially identical, so non-structural taxonomy updates (e.g. concept hydration)
+//  return the same root object and consumers can skip downstream rebuilds.
+const treeNodeCache = new Map()
+
 const buildTree = taxonomy => {
-  const treeItems = concept => {
+  const buildNode = concept => {
+    const children = concept.children?.map(child => buildNode(taxonomy.conceptMap[child])) || []
+
+    const cached = treeNodeCache.get(concept.name)
+    if (
+      cached &&
+      cached.children.length === children.length &&
+      cached.children.every((child, index) => child === children[index])
+    ) {
+      return cached
+    }
+
     const item = treeItem(concept)
-    item.children = concept.children?.map(child => treeItems(taxonomy.conceptMap[child])) || []
+    item.children = children
+    treeNodeCache.set(concept.name, item)
     return item
   }
 
-  const taxonomyTree = treeItems(taxonomy.conceptMap[taxonomy.rootName])
+  return buildNode(taxonomy.conceptMap[taxonomy.rootName])
+}
 
-  return taxonomyTree
+// Items-array companion to buildTree: because buildTree shares unchanged nodes, the
+//  array only needs replacing when the root node identity changes.
+let treeItemsCache = { items: null, root: null }
+
+const buildTreeItems = taxonomy => {
+  const root = buildTree(taxonomy)
+  if (treeItemsCache.root !== root) {
+    treeItemsCache = { items: [root], root }
+  }
+  return treeItemsCache.items
 }
 
 const closestConcept = (taxonomy, concept) => {
@@ -170,6 +197,8 @@ const getAncestorNames = (taxonomy, conceptName) => {
 }
 
 const loadTaxonomy = async apiFns => {
+  treeNodeCache.clear()
+
   const [root, names, ranks] = await Promise.all([
     apiFns.apiPayload(apiRoot),
     apiFns.apiPayload(apiNames),
@@ -586,6 +615,7 @@ const removeTaxonomyConcept = (taxonomy, concept) => {
 
 export {
   buildTree,
+  buildTreeItems,
   closestConcept,
   deleteConcept,
   descendants,

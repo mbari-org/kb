@@ -17,7 +17,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { buildTree } from '@/lib/model/taxonomy'
+import { buildTreeItems } from '@/lib/model/taxonomy'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
@@ -35,10 +35,9 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
     return conceptName ? [conceptName] : []
   }, [conceptName])
 
-  const treeItems = useMemo(() => {
-    const root = buildTree(taxonomy)
-    return [root]
-  }, [taxonomy])
+  // buildTreeItems shares unchanged nodes, so the items array keeps its identity across
+  //  non-structural taxonomy updates and RichTreeView skips its items-state rebuild.
+  const treeItems = useMemo(() => buildTreeItems(taxonomy), [taxonomy])
 
   // The slots 'item' field designates the rendering component. Display data is not
   //  provided here; ConceptTreeLabel subscribes to it per item.

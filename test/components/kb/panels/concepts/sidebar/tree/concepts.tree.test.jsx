@@ -8,7 +8,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 let lastTreeViewProps = null
 const mockScrollToNode = vi.fn(() => () => {})
-const mockBuildTree = vi.fn(() => ({ id: 'root', children: [] }))
+const mockTreeItems = [{ id: 'root', children: [] }]
+const mockBuildTree = vi.fn(() => mockTreeItems)
 const mockGetItemDOMElement = vi.fn(() => null)
 const mockItemClick = vi.fn()
 const mockExpandConcept = vi.fn()
@@ -42,11 +43,10 @@ vi.mock('@/components/kb/panels/concepts/sidebar/tree/lib/useExpandConcept', () 
 
 vi.mock('@/components/kb/panels/concepts/sidebar/tree/lib/useConceptsTreeScroll', () => ({
   default: () => ({ scrollToNode: mockScrollToNode }),
-}))// Stable across renders, matching the real hook's useCallback identity
-
+}))
 
 vi.mock('@/lib/model/taxonomy', () => ({
-  buildTree: taxonomy => mockBuildTree(taxonomy),
+  buildTreeItems: taxonomy => mockBuildTree(taxonomy),
 }))
 
 const renderTree = ({
@@ -93,6 +93,29 @@ describe('ConceptsTree', () => {
     expect(lastTreeViewProps.selectedItems).toEqual(['dingo'])
     expect(lastTreeViewProps.items).toEqual([{ id: 'root', children: [] }])
     expect(mockBuildTree).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the items array referentially stable when the root node is unchanged', () => {
+    const taxonomy = { rootName: 'root' }
+    const renderWithConcept = concept => (
+      <ConceptContext.Provider value={{ concept, conceptPath: ['root', concept.name], onConceptTreeReady: vi.fn() }}>
+        <SelectedContext.Provider value={{ updateSelected: vi.fn() }}>
+          <TaxonomyContext.Provider
+            value={{ getConcept: () => concept, getConceptPrimaryName: name => name, taxonomy }}
+          >
+            <ConceptsTree autoExpand={null} registerScrollFn={vi.fn()} setAutoExpand={vi.fn()} />
+          </TaxonomyContext.Provider>
+        </SelectedContext.Provider>
+      </ConceptContext.Provider>
+    )
+
+    const { rerender } = render(renderWithConcept({ name: 'dingo' }))
+    const firstItems = lastTreeViewProps.items
+
+    rerender(renderWithConcept({ name: 'object' }))
+
+    expect(lastTreeViewProps.selectedItems).toEqual(['object'])
+    expect(lastTreeViewProps.items).toBe(firstItems)
   })
 
   it('registers an external scroll handler that calls scrollToNode', () => {
