@@ -20,7 +20,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
 
-import { getConceptPath } from '@/lib/api/concept'
+import { getConceptPhylogenyUp } from '@/lib/api/concept'
 
 import { initialConceptState, isStateModified } from '@/lib/concept/state/state'
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -68,6 +68,10 @@ const ConceptProvider = ({ children }) => {
     if (!conceptSwitchStopRef.current) return
     conceptSwitchStopRef.current()
     conceptSwitchStopRef.current = null
+  }, [])
+
+  const resetConceptPaths = useCallback(() => {
+    conceptPathsRef.current.clear()
   }, [])
 
   // Idempotent: do not stop/restart if already showing — that flashes the overlay off.
@@ -141,7 +145,10 @@ const ConceptProvider = ({ children }) => {
 
           initialState.aliasIndex = clampIndex(indexRef.current.aliasIndex, initialState.aliases?.length)
           initialState.mediaIndex = clampIndex(indexRef.current.mediaIndex, initialState.media?.length)
-          initialState.realizationIndex = clampIndex(indexRef.current.realizationIndex, initialState.realizations?.length)
+          initialState.realizationIndex = clampIndex(
+            indexRef.current.realizationIndex,
+            initialState.realizations?.length
+          )
         }
 
         const stagedState = structuredClone(initialState)
@@ -279,6 +286,7 @@ const ConceptProvider = ({ children }) => {
       onConceptTreeReady,
       pending,
       prepareConceptSwitch,
+      resetConceptPaths,
       setConcept: handleSetConcept,
       setEditing,
       setPendingConfirm,
@@ -293,6 +301,7 @@ const ConceptProvider = ({ children }) => {
       onConceptTreeReady,
       pending,
       prepareConceptSwitch,
+      resetConceptPaths,
       setEditing,
       setPendingConfirm,
     ]
@@ -342,7 +351,7 @@ const ConceptProvider = ({ children }) => {
 
     const resolveConceptPath = async () => {
       try {
-        const payload = await apiFns.apiPayload(getConceptPath, concept.name)
+        const payload = await apiFns.apiPayload(getConceptPhylogenyUp, concept.name)
         if (cancelled) return
 
         const parseNode = (node, path = []) => {

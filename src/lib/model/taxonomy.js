@@ -2,7 +2,7 @@
 import {
   getConceptChildren as apiChildren,
   getConcept as apiConcept,
-  getConceptDescendants as apiDescendants,
+  getConceptPhylogenyDown as apiDescendants,
   getConceptNames as apiConceptNames,
   deleteConcept as apiDelete,
   getConceptParent as apiParent,

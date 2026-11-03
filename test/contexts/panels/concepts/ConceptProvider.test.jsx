@@ -12,7 +12,7 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 import { SELECTED } from '@/lib/constants/selected.js'
-import { getConceptPath } from '@/lib/api/concept'
+import { getConceptPhylogenyUp } from '@/lib/api/concept'
 
 const { showBoundaryMock } = vi.hoisted(() => ({
   showBoundaryMock: vi.fn(),
@@ -97,7 +97,7 @@ describe('ConceptProvider', () => {
   it('routes concept-path fetch failures to the error boundary', async () => {
     const pathError = new Error('concept path failed')
     const apiPayload = vi.fn(async (fn, conceptName) => {
-      if (fn === getConceptPath && conceptName === 'dingo') {
+      if (fn === getConceptPhylogenyUp && conceptName === 'dingo') {
         throw pathError
       }
       return {}

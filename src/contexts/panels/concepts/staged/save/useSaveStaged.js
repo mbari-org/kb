@@ -21,7 +21,7 @@ import CONFIG from '@/lib/config'
 const { PROCESSING } = CONFIG
 
 const useSaveStaged = () => {
-  const { initialState, setConcept, setEditing } = use(ConceptContext)
+  const { initialState, resetConceptPaths, setConcept, setEditing } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
   const { closeModal, withProcessing } = use(ConceptModalContext)
   const { updateSelected } = use(SelectedContext)
@@ -40,6 +40,10 @@ const useSaveStaged = () => {
 
         if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)) {
           await applyRenameSideEffects(updatesContext, updatesInfo)
+        }
+
+        if (updatesInfo.hasUpdated(CONCEPT.FIELD.NAME) || updatesInfo.hasUpdated(CONCEPT.FIELD.PARENT)) {
+          resetConceptPaths()
         }
 
         if (updatesInfo.hasUpdated(CONCEPT.FIELD.REALIZATIONS)) {
@@ -74,6 +78,7 @@ const useSaveStaged = () => {
     closeModal,
     conceptEditsRefresh,
     initialState,
+    resetConceptPaths,
     setConcept,
     setEditing,
     stagedState,

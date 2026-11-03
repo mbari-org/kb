@@ -11,7 +11,7 @@ import UserContext from '@/contexts/user/UserContext'
 import {
   getConcept as apiConcept,
   getConceptChildren as apiChildren,
-  getConceptDescendants as apiDescendants,
+  getConceptPhylogenyDown as apiDescendants,
   getConceptNames as apiConceptNames,
 } from '@/lib/api/concept'
 import { getMedia } from '@/lib/api/media'

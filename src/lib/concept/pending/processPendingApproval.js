@@ -13,11 +13,16 @@ import cloneStale from '@/lib/concept/pending/cloneStale'
 export const processPendingApproval = async ({
   approval,
   items,
-  deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, updateSelected },
+  deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected },
 }) => {
   if (!items || items.length === 0) return { updated: [], concepts: {}, pendingHistory: [] }
 
   await Promise.all(items.map(item => apiFns.apiPayload(updatePendingItem, [approval, item.id])))
+
+  const structuralFields = [HISTORY_FIELD.NAME, HISTORY_FIELD.PARENT]
+  if (approval === PENDING.APPROVAL.ACCEPT && items.some(item => structuralFields.includes(item.field))) {
+    resetConceptPaths()
+  }
 
   const realizationConcepts = [
     ...new Set(items.filter(item => item.field === HISTORY_FIELD.REALIZATION).map(item => item.concept)),

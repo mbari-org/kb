@@ -58,6 +58,6 @@
     "version:check": "node scripts/version/check.js",
     "version:release": "node scripts/version/release.js",
     "version:tag": "node scripts/version/tag.js",
-    "version:test-deploy": "node scripts/version/test-deploy.js"
+    "version:test-deploy": "node scripts/version/check.js && node scripts/version/test-deploy.js"
   }
 }

@@ -1,4 +1,4 @@
-import { getConcept as apiConcept, getConceptChildren, getConceptDescendants } from '@/lib/api/concept'
+import { getConcept as apiConcept, getConceptChildren, getConceptPhylogenyDown } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants'
 import { pick } from '@/lib/utils'
 
@@ -34,7 +34,7 @@ const getDescendantsInfo = async (apiFns, conceptName, conceptId, descendantsInf
 }
 
 const getDescendantNames = async (apiFns, conceptName) => {
-  const phylogeny = await apiFns.apiPayload(getConceptDescendants, conceptName)
+  const phylogeny = await apiFns.apiPayload(getConceptPhylogenyDown, conceptName)
 
   const descendantNames = node =>
     (node.children || []).flatMap(child => [child.name, ...descendantNames(child)])

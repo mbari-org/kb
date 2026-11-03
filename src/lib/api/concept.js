@@ -24,18 +24,18 @@ const getConcept = async (config, conceptName) => oniGet({ config, path: ['conce
 const getConceptAnnotations = async (config, conceptName) =>
   annosaurusGet({ config, path: ['fast', 'concept', conceptName] })
 
-const getConceptChildren = async (config, conceptName) => oniGet({ config, path: ['concept', 'children', conceptName] })
-
 const getConceptBasic = async (config, conceptName) => oniGet({ config, path: ['phylogeny', 'basic', conceptName] })
 
-const getConceptDescendants = async (config, conceptName) =>
-  oniGet({ config, path: ['phylogeny', 'down', conceptName] })
+const getConceptChildren = async (config, conceptName) => oniGet({ config, path: ['concept', 'children', conceptName] })
+
+const getConceptNames = async (config, conceptName) => oniGet({ config, path: ['raw', 'names', conceptName] })
 
 const getConceptParent = async (config, conceptName) => oniGet({ config, path: ['concept', 'parent', conceptName] })
 
-const getConceptPath = async (config, conceptName) => oniGet({ config, path: ['phylogeny', 'up', conceptName] })
+const getConceptPhylogenyDown = async (config, conceptName) =>
+  oniGet({ config, path: ['phylogeny', 'down', conceptName] })
 
-const getConceptNames = async (config, conceptName) => oniGet({ config, path: ['raw', 'names', conceptName] })
+const getConceptPhylogenyUp = async (config, conceptName) => oniGet({ config, path: ['phylogeny', 'up', conceptName] })
 
 const getConceptTaxa = async (config, conceptName) => oniGet({ config, path: ['phylogeny', 'taxa', conceptName] })
 
@@ -58,10 +58,10 @@ export {
   getConceptAnnotations,
   getConceptBasic,
   getConceptChildren,
-  getConceptDescendants,
+  getConceptPhylogenyDown,
   getConceptNames,
   getConceptParent,
-  getConceptPath,
+  getConceptPhylogenyUp,
   getConceptTaxa,
   normalizeConcept,
   updateConceptAuthor,

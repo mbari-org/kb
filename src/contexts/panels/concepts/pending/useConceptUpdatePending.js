@@ -15,7 +15,7 @@ import CONFIG from '@/lib/config'
 const { PROCESSING } = CONFIG
 
 const useConceptUpdatePending = () => {
-  const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
+  const { concept: staleConcept, pending, resetConceptPaths, setConcept } = use(ConceptContext)
   const { withProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
   const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
@@ -40,6 +40,7 @@ const useConceptUpdatePending = () => {
               getConcept,
               refreshData,
               reloadConceptRealizations,
+              resetConceptPaths,
               updateSelected,
             },
             items: pendingItems,
@@ -70,6 +71,7 @@ const useConceptUpdatePending = () => {
       pending,
       refreshData,
       reloadConceptRealizations,
+      resetConceptPaths,
       setConcept,
       staleConcept,
       updateSelected,

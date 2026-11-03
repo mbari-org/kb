@@ -20,7 +20,7 @@ import {
   getConceptChildren as apiChildren,
   getConceptNames as apiConceptNames,
   getConceptParent as apiParent,
-  getConceptPath,
+  getConceptPhylogenyUp,
 } from '@/lib/api/concept'
 import { getHistory, getHistoryCount } from '@/lib/api/history'
 import { getMedia } from '@/lib/api/media'
@@ -75,7 +75,7 @@ const createApiFns = (store, { isAdmin }) => ({
     if (fn === apiChildren) return (store.children[value] || []).map(childName => cloneConcept(store.concepts[childName]))
     if (fn === apiConceptNames) return []
     if (fn === apiParent) return { name: store.concepts[value]?.parent }
-    if (fn === getConceptPath) return { name: 'root', children: [{ name: 'dingo' }] }
+    if (fn === getConceptPhylogenyUp) return { name: 'root', children: [{ name: 'dingo' }] }
     if (fn === getMedia) return []
     if (fn === getConceptLinkRealizations)
       return store.realizations.filter(r => r.concept === value).map(r => ({ ...r }))

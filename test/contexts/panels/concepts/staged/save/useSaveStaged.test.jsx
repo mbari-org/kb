@@ -69,6 +69,7 @@ describe('useSaveStaged', () => {
     const conceptEditsRefresh = vi.fn(async () => ({ concept: updatedConcept }))
     const pendingHistory = [{ concept: 'renamed-concept', field: 'ConceptName', id: 'pending-1' }]
     const refreshData = vi.fn(async () => ({ pendingHistory }))
+    const resetConceptPaths = vi.fn()
     const setConcept = vi.fn(async () => {})
     const setEditing = vi.fn()
     const updateSelected = vi.fn()
@@ -104,7 +105,7 @@ describe('useSaveStaged', () => {
                   <TaxonomyContext.Provider value={{ conceptEditsRefresh }}>
                     <ConceptModalContext.Provider value={{ closeModal, withProcessing }}>
                       <ConceptContext.Provider
-                        value={{ concept: staleConcept, initialState: {}, setConcept, setEditing }}
+                        value={{ concept: staleConcept, initialState: {}, resetConceptPaths, setConcept, setEditing }}
                       >
                         <ConceptStagedContext.Provider value={{ stagedState: {} }}>
                           {children}
@@ -141,6 +142,7 @@ describe('useSaveStaged', () => {
       updatesInfo
     )
     expect(refreshData).toHaveBeenCalledWith('pendingHistory')
+    expect(resetConceptPaths).toHaveBeenCalledTimes(1)
     expect(conceptEditsRefresh).toHaveBeenCalledWith(freshConcept, staleConcept)
     expect(setConcept).toHaveBeenCalledWith(updatedConcept, pendingHistory)
     expect(setEditing).toHaveBeenCalledWith(false)
