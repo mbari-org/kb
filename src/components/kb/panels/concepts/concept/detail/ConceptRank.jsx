@@ -21,9 +21,13 @@ const ConceptRank = () => {
 
   const onChange = field => event => {
     const value = event.target.value
-    const action = value === initialState.rank[field] ? CONCEPT_STATE.NO_ACTION : CONCEPT_STATE.RANK
+    const updatedRank = { ...stagedRank, [field]: value }
+    const action =
+      updatedRank.name === initialRank.name && updatedRank.level === initialRank.level
+        ? CONCEPT_STATE.NO_ACTION
+        : CONCEPT_STATE.RANK
     modifyConcept({
-      type: action,
+      type: CONCEPT_STATE.RANK,
       update: {
         action,
         [field]: value,

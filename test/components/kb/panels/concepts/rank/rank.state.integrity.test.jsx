@@ -80,6 +80,69 @@ describe('Rank state integrity', () => {
     expect(screen.getByRole('combobox', { name: 'Level' })).toBeInTheDocument()
   })
 
+  it('allows reverting rank name back to the initial value', async () => {
+    const user = userEvent.setup()
+    let latestState = { initialRank: {}, stagedRank: {} }
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+        <ConceptRankStateProbe
+          onChange={state => {
+            latestState = state
+          }}
+        />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    await selectRankOption(user, 'Name', 'Aves')
+    await waitFor(() => {
+      expect(latestState.stagedRank.name).toBe('Aves')
+      expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
+    })
+
+    await selectRankOption(user, 'Name', 'Mammalia')
+    await waitFor(() => {
+      expect(latestState.stagedRank.name).toBe('Mammalia')
+      expect(latestState.stagedRank.level).toBe('Class')
+      expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.NO_ACTION)
+    })
+  })
+
+  it('allows reverting one rank field while the other stays modified', async () => {
+    const user = userEvent.setup()
+    let latestState = { initialRank: {}, stagedRank: {} }
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+        <ConceptRankStateProbe
+          onChange={state => {
+            latestState = state
+          }}
+        />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    await selectRankOption(user, 'Name', 'Aves')
+    await selectRankOption(user, 'Level', 'Subclass')
+    await waitFor(() => {
+      expect(latestState.stagedRank.name).toBe('Aves')
+      expect(latestState.stagedRank.level).toBe('Subclass')
+    })
+
+    await selectRankOption(user, 'Level', 'Class')
+    await waitFor(() => {
+      expect(latestState.stagedRank.level).toBe('Class')
+      expect(latestState.stagedRank.name).toBe('Aves')
+      expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
+    })
+  })
+
   it('updates rank name/level and discard all restores initial rank state', async () => {
     const user = userEvent.setup()
     let latestState = { initialRank: {}, stagedRank: {} }
