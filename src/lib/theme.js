@@ -17,8 +17,6 @@ const cancel = '#af0000'
 const clean = '#008800'
 const conceptDetail = '#008800'
 const paper = '#f0f0f0'
-const pendingIconClean = '#00dd00'
-const pendingIconDirty = '#dd0000'
 const reject = cancel
 const remove = cancel
 const selectorActive = grey[100]
@@ -32,10 +30,6 @@ const theme = createTheme({
       detail: conceptDetail,
       edit,
       pending: edit,
-      pendingIcon: {
-        clean: pendingIconClean,
-        dirty: pendingIconDirty,
-      },
       remove,
     },
     fontFamily: 'Roboto, sans-serif',

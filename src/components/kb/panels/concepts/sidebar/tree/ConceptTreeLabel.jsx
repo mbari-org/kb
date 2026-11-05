@@ -8,7 +8,9 @@ import ConceptMediaIcon from './ConceptMediaIcon'
 import ConceptPendingHistoryIcon from './ConceptPendingHistoryIcon'
 import useConceptItem from './lib/useConceptItem'
 
-const StyledLabel = styled('div')(({ theme, hasPending, isSelected }) => {
+import { actionColor } from '@/components/kb/panels/concepts/concept/change/action'
+
+const StyledLabel = styled('div')(({ theme, pendingAction, isSelected }) => {
   const baseStyle = {
     borderRadius: theme.spacing(0.8),
     display: 'flex',
@@ -30,8 +32,8 @@ const StyledLabel = styled('div')(({ theme, hasPending, isSelected }) => {
     baseStyle.backgroundColor = theme.palette.primary.main
   }
 
-  if (hasPending) {
-    baseStyle.color = isSelected ? theme.palette.common.white : theme.palette.error.main
+  if (pendingAction) {
+    baseStyle.color = isSelected ? theme.palette.common.white : actionColor(pendingAction)
   }
 
   return baseStyle
@@ -44,14 +46,14 @@ const ConceptTreeLabel = ({ itemId }) => {
 
   if (!item) return null
 
-  const { label, hasPending, mediaCount } = item
+  const { label, mediaCount, pendingAction } = item
 
   return (
-    <StyledLabel hasPending={hasPending} isSelected={isSelected}>
+    <StyledLabel pendingAction={pendingAction} isSelected={isSelected}>
       <Box sx={{ display: 'flex', alignItems: 'top', flexGrow: 1, mr: 0.5 }}>
         <span>{label}</span>
         <ConceptMediaIcon mediaCount={mediaCount} isSelected={isSelected} />
-        {isSelected && hasPending && <ConceptPendingHistoryIcon hasPending={hasPending} />}
+        {isSelected && pendingAction && <ConceptPendingHistoryIcon pendingAction={pendingAction} />}
       </Box>
     </StyledLabel>
   )

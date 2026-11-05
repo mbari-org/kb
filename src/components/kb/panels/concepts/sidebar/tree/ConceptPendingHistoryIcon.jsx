@@ -1,17 +1,12 @@
 import { Box } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
 
-const ConceptPendingHistoryIcon = ({ hasPending }) => {
-  const { concept: conceptTheme } = useTheme()
+import { actionColor } from '@/components/kb/panels/concepts/concept/change/action'
 
-  const dotColor = hasPending
-    ? conceptTheme.color.pendingIcon.dirty
-    : conceptTheme.color.pendingIcon.clean
-
+const ConceptPendingHistoryIcon = ({ pendingAction }) => {
   return (
     <Box
       sx={{
-        bgcolor: dotColor,
+        bgcolor: actionColor(pendingAction),
         borderRadius: '70%',
         display: 'inline-block',
         height: 6,

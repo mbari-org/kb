@@ -18,18 +18,19 @@ const useConceptItem = itemId => {
 
   const pendingConceptNames = useMemo(() => new Set(pendingHistory.map(history => history.concept)), [pendingHistory])
 
-  const pendingChildKeys = useMemo(
+  const pendingChildActions = useMemo(
     () =>
-      new Set(
+      new Map(
         pendingHistory
           .filter(
             history =>
               history.field === HISTORY_FIELD.CHILD &&
               (history.action === ACTION.ADD || history.action === ACTION.DELETE)
           )
-          .map(history =>
-            childKey(history.concept, history.action === ACTION.ADD ? history.newValue : history.oldValue)
-          )
+          .map(history => [
+            childKey(history.concept, history.action === ACTION.ADD ? history.newValue : history.oldValue),
+            history.action,
+          ])
       ),
     [pendingHistory]
   )
@@ -39,13 +40,15 @@ const useConceptItem = itemId => {
   return useMemo(() => {
     if (!concept) return null
 
+    const childAction = pendingChildActions.get(childKey(concept.parent, concept.name))
+    const pendingAction = childAction ?? (pendingConceptNames.has(concept.name) ? ACTION.EDIT : null)
+
     return {
-      hasPending:
-        pendingConceptNames.has(concept.name) || pendingChildKeys.has(childKey(concept.parent, concept.name)),
       label: itemLabel(concept),
       mediaCount: concept.media?.length || 0,
+      pendingAction,
     }
-  }, [concept, pendingConceptNames, pendingChildKeys])
+  }, [concept, pendingConceptNames, pendingChildActions])
 }
 
 export default useConceptItem
