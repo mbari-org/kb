@@ -158,7 +158,6 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    // Reptilia only pairs with level Order; the Name dropdown must still offer it
     await user.click(screen.getByRole('combobox', { name: 'Name' }))
     await waitFor(() => {
       expect(screen.getByRole('option', { name: 'Reptilia' })).toBeInTheDocument()

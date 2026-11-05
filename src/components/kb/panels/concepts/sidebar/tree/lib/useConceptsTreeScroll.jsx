@@ -6,6 +6,8 @@ import { useCallback } from 'react'
 const POLL_INTERVAL_MS = 100
 const MAX_POLLS = 80
 
+const USER_SCROLL_EVENTS = ['wheel', 'touchstart', 'pointerdown', 'keydown']
+
 const useConceptsTreeScroll = (apiRef, concept, containerRef) => {
   const conceptName = concept?.name
 
@@ -14,9 +16,28 @@ const useConceptsTreeScroll = (apiRef, concept, containerRef) => {
       let cancelled = false
       let timeoutId
       let lastTop = null
+      let watchedContainer = null
+
+      const cancel = () => {
+        cancelled = true
+        clearTimeout(timeoutId)
+        if (watchedContainer) {
+          USER_SCROLL_EVENTS.forEach(type => watchedContainer.removeEventListener(type, cancelOnUserScroll))
+          watchedContainer = null
+        }
+      }
+
+      const cancelOnUserScroll = () => cancel()
+
+      const watchUserScroll = container => {
+        if (watchedContainer || !container) return
+        watchedContainer = container
+        USER_SCROLL_EVENTS.forEach(type => container.addEventListener(type, cancelOnUserScroll, { passive: true }))
+      }
 
       const complete = () => {
         if (cancelled) return
+        cancel()
         onComplete?.()
       }
 
@@ -40,6 +61,8 @@ const useConceptsTreeScroll = (apiRef, concept, containerRef) => {
           schedule(() => poll(pollsLeft - 1))
           return
         }
+
+        watchUserScroll(container)
 
         const eRect = element.getBoundingClientRect()
         if (lastTop === null || lastTop !== eRect.top) {
@@ -94,10 +117,7 @@ const useConceptsTreeScroll = (apiRef, concept, containerRef) => {
         run()
       }
 
-      return () => {
-        cancelled = true
-        clearTimeout(timeoutId)
-      }
+      return cancel
     },
     [apiRef, conceptName, containerRef]
   )

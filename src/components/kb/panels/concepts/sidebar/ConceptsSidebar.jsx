@@ -43,7 +43,7 @@ const ConceptsSidebar = () => {
   }
 
   return (
-    <Stack sx={{ gap: 1, height: '100%', ml: 1, mr: 1, mt: 3.05 }}>
+    <Stack sx={{ gap: 1, height: '100%', ml: 1, mr: 1, pt: 3.05 }}>
       <ConceptSelect
         auxiliaryComponent={<SidebarSelectAuxiliary concepts={concepts} onScrollToConcept={handleScroll} />}
         conceptName={concept.name}

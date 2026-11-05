@@ -23,7 +23,7 @@ const Panels = () => {
   }, [activePanel, hasPanel])
 
   return (
-    <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
+    <Box sx={{ flexGrow: 1, minHeight: 0, overflow: 'clip' }}>
       {panelMods.map(({ load, name }) => (
         <Panel
           key={name}

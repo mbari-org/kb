@@ -62,7 +62,7 @@ const Panel = memo(({ load, name, isActive, hasBeenMounted }) => {
         height: '100%',
         left: 0,
         minHeight: isDataGridPanel ? '400px' : 'auto',
-        overflow: 'hidden',
+        overflow: 'clip',
         pointerEvents: isActive ? 'auto' : 'none',
         position: isActive ? 'relative' : 'absolute',
         top: 0,
