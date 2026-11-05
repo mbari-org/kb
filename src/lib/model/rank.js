@@ -13,13 +13,8 @@ const filterRanks = (ranks, field, otherValue) => {
 
   const fieldValues = ranks.filter(rank => rank[otherField] === otherValue).map(rank => rank[field])
 
-  const uniqueFieldValues = [...new Set(fieldValues)]
-  if (uniqueFieldValues.includes('')) {
-    uniqueFieldValues.splice(uniqueFieldValues.indexOf(''), 1)
-    uniqueFieldValues.unshift('')
-  }
-
-  return uniqueFieldValues
+  // '' is a valid pair value but not a selectable option; clearing is done via the clear button
+  return [...new Set(fieldValues)].filter(value => value !== '')
 }
 
 const rankValues = value => {

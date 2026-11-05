@@ -1,23 +1,26 @@
 import { use } from 'react'
 
-import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material'
+import { Autocomplete, Box, FormControl, TextField } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import UserContext from '@/contexts/user/UserContext'
 
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 
 import { stagedBorder } from '@/lib/concept/state/staged'
 
 import { CONCEPT } from '@/lib/constants'
+import CONFIG from '@/lib/config'
 
 import { rankField } from '@/lib/concept/state/rank'
 
-const RankFieldInput = ({ field, initialRank, label, rank, onChange }) => {
+const RankFieldInput = ({ field, initialRank, label, rank, onChange, onClear }) => {
   const theme = useTheme()
 
   const inputStyle = useConceptDetailStyle(field)
   const { filterRanks } = use(TaxonomyContext)
+  const { isAdmin } = use(UserContext)
 
   const rankValue = field => (rank[field] !== undefined ? rank[field] : initialRank[field])
 
@@ -34,31 +37,32 @@ const RankFieldInput = ({ field, initialRank, label, rank, onChange }) => {
     width: '2px',
   })
 
+  const clearLabel =
+    field === CONCEPT.RANK.NAME ? CONFIG.PANELS.CONCEPTS.RANK.CLEAR.NAME : CONFIG.PANELS.CONCEPTS.RANK.CLEAR.LEVEL
+
+  const handleChange = (_event, value) => {
+    if (value === null) {
+      onClear?.()
+      return
+    }
+    onChange({ target: { value } })
+  }
+
+  const { disabled, variant } = inputStyle
+
   return (
     <FormControl {...inputStyle}>
-      <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'row', width: '100%' }}>
-        <Box sx={{ border, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <InputLabel id={`${field}-label`}>{label}</InputLabel>
-          <Select
-            displayEmpty
-            labelId={`${field}-label`}
-            onChange={onChange}
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderTop: 'none',
-                borderLeft: 'none',
-                borderRight: 'none',
-              },
-            }}
-            value={fieldValue || ''}
-          >
-            {rankOptions.map(option => (
-              <MenuItem key={option} sx={{ height: '1.75em' }} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </Box>
+      <Box sx={{ border, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Autocomplete
+          clearText={clearLabel}
+          disableClearable={!isAdmin || !onClear}
+          disabled={disabled}
+          onChange={handleChange}
+          options={rankOptions}
+          renderInput={params => <TextField {...params} label={label} variant={variant} />}
+          size='small'
+          value={fieldValue || null}
+        />
       </Box>
     </FormControl>
   )

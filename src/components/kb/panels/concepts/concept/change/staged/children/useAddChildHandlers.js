@@ -66,8 +66,25 @@ const useAddChildHandlers = ({ formChild, modifiedFields, originalChild, setForm
     [originalChild, formChild, modifiedFields, setFormChild, setModifiedFields, debouncedUpdateModalData]
   )
 
+  const handleClear = useCallback(
+    fields => {
+      const updatedChild = { ...formChild, ...fields }
+      setFormChild(updatedChild)
+
+      const updatedModifiedFields = { ...modifiedFields }
+      Object.keys(fields).forEach(field => {
+        updatedModifiedFields[field] = updatedChild[field] !== originalChild[field]
+      })
+      setModifiedFields(updatedModifiedFields)
+
+      debouncedUpdateModalData(updatedChild, hasTrueValue(updatedModifiedFields))
+    },
+    [originalChild, formChild, modifiedFields, setFormChild, setModifiedFields, debouncedUpdateModalData]
+  )
+
   return {
     handleChange,
+    handleClear,
     handleStage,
   }
 }

@@ -40,18 +40,16 @@ const useConceptDetailStyle = field => {
   const sx = useMemo(
     () => ({
       '& .MuiInputBase-input': {
-        backgroundColor: theme.palette.primary.light,
         color: textColor,
         fontWeight: fontWeight,
         WebkitTextFillColor: textColor,
       },
       '& .MuiInputBase-input.Mui-disabled': {
-        backgroundColor: 'transparent',
         color: textColor,
         WebkitTextFillColor: textColor,
       },
     }),
-    [fontWeight, theme, textColor]
+    [fontWeight, textColor]
   )
 
   if (!isEditing || fieldHasPending) {

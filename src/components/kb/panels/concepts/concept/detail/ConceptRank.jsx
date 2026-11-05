@@ -13,15 +13,14 @@ import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const ConceptRank = () => {
-  const { initialState, pending } = use(ConceptContext)
+  const { initialState, isEditing, pending } = use(ConceptContext)
   const { modifyConcept, stagedState } = use(ConceptStagedContext)
 
   const initialRank = initialState.rank
   const stagedRank = stagedState.rank
 
-  const onChange = field => event => {
-    const value = event.target.value
-    const updatedRank = { ...stagedRank, [field]: value }
+  const applyRankUpdate = update => {
+    const updatedRank = { ...stagedRank, ...update }
     const action =
       updatedRank.name === initialRank.name && updatedRank.level === initialRank.level
         ? CONCEPT_STATE.NO_ACTION
@@ -30,9 +29,18 @@ const ConceptRank = () => {
       type: CONCEPT_STATE.RANK,
       update: {
         action,
-        [field]: value,
+        ...update,
       },
     })
+  }
+
+  const onChange = field => event => {
+    applyRankUpdate({ [field]: event.target.value })
+  }
+
+  // Clearing Name clears the pair; clearing Level clears only Level
+  const onClear = field => () => {
+    applyRankUpdate(field === CONCEPT.RANK.NAME ? { level: '', name: '' } : { level: '' })
   }
 
   // Since rank is a composite field of concept state, mimic individual pending rank changes
@@ -72,6 +80,7 @@ const ConceptRank = () => {
         label={CONFIG.PANELS.CONCEPTS.RANK.NAME}
         rank={stagedField(CONCEPT.RANK.NAME)}
         onChange={onChange(CONCEPT.RANK.NAME)}
+        onClear={isEditing ? onClear(CONCEPT.RANK.NAME) : undefined}
       />
       <RankFieldInput
         field={CONCEPT.RANK.LEVEL}
@@ -79,6 +88,7 @@ const ConceptRank = () => {
         label={CONFIG.PANELS.CONCEPTS.RANK.LEVEL}
         rank={stagedField(CONCEPT.RANK.LEVEL)}
         onChange={onChange(CONCEPT.RANK.LEVEL)}
+        onClear={isEditing ? onClear(CONCEPT.RANK.LEVEL) : undefined}
       />
     </Stack>
   )

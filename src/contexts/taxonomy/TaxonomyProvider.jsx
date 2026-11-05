@@ -1,7 +1,6 @@
 import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
-import UserContext from '@/contexts/user/UserContext'
 import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -36,7 +35,6 @@ import { isEqual, withTimeout } from '@/lib/utils'
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
 
-  const { isAdmin } = use(UserContext)
   const { apiFns } = use(ConfigContext)
 
   const [taxonomy, setTaxonomy] = useState(null)
@@ -175,13 +173,9 @@ const TaxonomyProvider = ({ children }) => {
   const filterRanks = useCallback(
     (field, otherValue) => {
       if (!taxonomy) return []
-      const taxonomyRanks = filterTaxonomyRanks(taxonomy, field, otherValue)
-      if (isAdmin) {
-        return taxonomyRanks
-      }
-      return taxonomyRanks.filter(rank => rank !== '')
+      return filterTaxonomyRanks(taxonomy, field, otherValue)
     },
-    [isAdmin, taxonomy]
+    [taxonomy]
   )
 
   const getConcept = useCallback(

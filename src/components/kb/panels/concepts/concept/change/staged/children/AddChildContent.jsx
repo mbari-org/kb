@@ -59,7 +59,7 @@ const AddChildContent = () => {
     [formChild]
   )
 
-  const { handleStage, handleChange } = useAddChildHandlers({
+  const { handleStage, handleChange, handleClear } = useAddChildHandlers({
     formChild,
     modifiedFields,
     originalChild: child,
@@ -107,6 +107,7 @@ const AddChildContent = () => {
             label={MODALS.STRUCTURE.ADD_CHILD.RANK.NAME}
             rank={formRank}
             onChange={handleChange(rankField(CONCEPT.RANK.NAME))}
+            onClear={() => handleClear({ rankLevel: '', rankName: '' })}
           />
           <RankFieldInput
             field={CONCEPT.RANK.LEVEL}
@@ -114,6 +115,7 @@ const AddChildContent = () => {
             label={MODALS.STRUCTURE.ADD_CHILD.RANK.LEVEL}
             rank={formRank}
             onChange={handleChange(rankField(CONCEPT.RANK.LEVEL))}
+            onClear={() => handleClear({ rankLevel: '' })}
           />
         </Stack>
       )}

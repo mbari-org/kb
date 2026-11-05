@@ -351,7 +351,7 @@ describe('concept object add child discard', () => {
 
     // In the add child modal: enter name 'dingo' and author 'me'
     await waitFor(() => {
-      expect(screen.getByText('Add child')).toBeInTheDocument()
+      expect(screen.getByText('Add Child')).toBeInTheDocument()
     })
     const nameInput = screen.getByRole('textbox', { name: /name/i })
     const authorInput = screen.getByRole('textbox', { name: /author/i })

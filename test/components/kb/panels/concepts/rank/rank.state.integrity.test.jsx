@@ -7,6 +7,7 @@ import Concepts from '@/components/kb/panels/Concepts'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState'
+import { ROLES } from '@/lib/constants/roles'
 import {
   ConceptPanelTestWrapper,
   enterEditMode,
@@ -43,6 +44,8 @@ const ConceptRankStateProbe = ({ onChange }) => {
 
 describe('Rank state integrity', () => {
   const taxonomyRanks = [
+    { rankLevel: '', rankName: 'Mammalia' },
+    { rankLevel: '', rankName: 'Aves' },
     { rankLevel: 'Class', rankName: 'Mammalia' },
     { rankLevel: 'Class', rankName: 'Aves' },
     { rankLevel: 'Subclass', rankName: 'Aves' },
@@ -141,6 +144,131 @@ describe('Rank state integrity', () => {
       expect(latestState.stagedRank.name).toBe('Aves')
       expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
     })
+  })
+
+  it('omits the blank option from rank dropdowns', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    await user.click(screen.getByRole('combobox', { name: 'Level' }))
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'Class' })).toBeInTheDocument()
+    })
+    expect(screen.getAllByRole('option')).toHaveLength(1)
+  })
+
+  it('clears only Rank Level with its clear button', async () => {
+    const user = userEvent.setup()
+    let latestState = { initialRank: {}, stagedRank: {} }
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+        <ConceptRankStateProbe
+          onChange={state => {
+            latestState = state
+          }}
+        />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    await selectRankOption(user, 'Name', 'Aves')
+    await selectRankOption(user, 'Level', 'Subclass')
+    await waitFor(() => {
+      expect(latestState.stagedRank.level).toBe('Subclass')
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Clear Rank Level' }))
+    await waitFor(() => {
+      expect(latestState.stagedRank.level).toBe('')
+      expect(latestState.stagedRank.name).toBe('Aves')
+      expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
+    })
+  })
+
+  it('clears both rank fields with the Rank Name clear button', async () => {
+    const user = userEvent.setup()
+    let latestState = { initialRank: {}, stagedRank: {} }
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+        <ConceptRankStateProbe
+          onChange={state => {
+            latestState = state
+          }}
+        />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    // The Autocomplete clear indicator is visibility-hidden until the field has focus
+    await user.click(screen.getByRole('combobox', { name: 'Name' }))
+    await user.click(screen.getByRole('button', { name: 'Clear Rank Name' }))
+    await waitFor(() => {
+      expect(latestState.stagedRank.name).toBe('')
+      expect(latestState.stagedRank.level).toBe('')
+      expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
+    })
+  })
+
+  it('gates rank fields by editing state', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    expect(screen.getByRole('combobox', { name: 'Name' })).toBeDisabled()
+    expect(screen.getByRole('combobox', { name: 'Level' })).toBeDisabled()
+
+    await enterEditMode(user, screen)
+
+    expect(screen.getByRole('combobox', { name: 'Name' })).toBeEnabled()
+    expect(screen.getByRole('combobox', { name: 'Level' })).toBeEnabled()
+  })
+
+  it('hides rank clear buttons when not editing', () => {
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    expect(screen.queryByRole('button', { name: 'Clear Rank Name' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Clear Rank Level' })).not.toBeInTheDocument()
+  })
+
+  it('hides rank clear buttons for non-admin users', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <ConceptPanelTestWrapper
+        initialRank={initialRank}
+        isPhylogenyRoot
+        taxonomyRanks={taxonomyRanks}
+        userRole={ROLES.MAINT}
+      >
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    expect(screen.queryByRole('button', { name: 'Clear Rank Name' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Clear Rank Level' })).not.toBeInTheDocument()
   })
 
   it('updates rank name/level and discard all restores initial rank state', async () => {

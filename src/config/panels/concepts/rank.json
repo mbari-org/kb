@@ -1,4 +1,8 @@
 {
   "LEVEL": "Level",
-  "NAME": "Name"
+  "NAME": "Name",
+  "CLEAR": {
+    "LEVEL": "Clear Rank Level",
+    "NAME": "Clear Rank Name"
+  }
 }
