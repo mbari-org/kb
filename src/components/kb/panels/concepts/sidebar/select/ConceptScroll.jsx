@@ -4,10 +4,10 @@ import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 const ConceptScroll = ({ onScrollToConcept }) => {
   return (
-    <KBTooltipTarget title='Sroll to Concept'>
+    <KBTooltipTarget title='Scroll to Concept'>
       <IconButton
         aria-label='scroll to concept'
-        color='inherit'
+        color='primary'
         onClick={onScrollToConcept}
         size='small'
         sx={{ mr: 0.25 }}

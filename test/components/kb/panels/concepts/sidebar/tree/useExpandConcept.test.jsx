@@ -20,19 +20,23 @@ const taxonomy = {
   },
 }
 
-const wrapper = ({ children }) => (
-  <AppModalContext.Provider value={{ beginProcessing: vi.fn() }}>
-    <ConceptContext.Provider value={{ conceptPath: null }}>
-      <TaxonomyContext.Provider value={{ loadConceptDescendants: vi.fn(), taxonomy }}>
-        {children}
-      </TaxonomyContext.Provider>
-    </ConceptContext.Provider>
-  </AppModalContext.Provider>
-)
+const makeWrapper = conceptPath => {
+  const Wrapper = ({ children }) => (
+    <AppModalContext.Provider value={{ beginProcessing: vi.fn() }}>
+      <ConceptContext.Provider value={{ conceptPath }}>
+        <TaxonomyContext.Provider value={{ loadConceptDescendants: vi.fn(), taxonomy }}>
+          {children}
+        </TaxonomyContext.Provider>
+      </ConceptContext.Provider>
+    </AppModalContext.Provider>
+  )
+  Wrapper.displayName = 'UseExpandConceptTestWrapper'
+  return Wrapper
+}
 
-const setup = () => {
+const setup = (conceptPath = null) => {
   const setExpandedItems = vi.fn()
-  const { result } = renderHook(() => useExpandConcept([], setExpandedItems), { wrapper })
+  const { result } = renderHook(() => useExpandConcept([], setExpandedItems), { wrapper: makeWrapper(conceptPath) })
   return { expandConcept: result.current, setExpandedItems }
 }
 
@@ -59,5 +63,27 @@ describe('useExpandConcept collapse', () => {
 
     const expanded = ['root', 'object', 'physical object', 'entity', 'data file']
     expect(applyUpdate(setExpandedItems, expanded)).toEqual(['root', 'object', 'entity'])
+  })
+})
+
+describe('useExpandConcept toParent', () => {
+  it('expands the concept path without the concept itself', () => {
+    const { expandConcept, setExpandedItems } = setup(['root', 'object', 'physical object'])
+
+    act(() => {
+      expandConcept({ name: 'physical object' }, CONCEPT.EXPAND.TO_PARENT)
+    })
+
+    expect(applyUpdate(setExpandedItems, ['entity'])).toEqual(['entity', 'root', 'object'])
+  })
+
+  it('does nothing when there is no concept path', () => {
+    const { expandConcept, setExpandedItems } = setup()
+
+    act(() => {
+      expandConcept({ name: 'physical object' }, CONCEPT.EXPAND.TO_PARENT)
+    })
+
+    expect(setExpandedItems).not.toHaveBeenCalled()
   })
 })

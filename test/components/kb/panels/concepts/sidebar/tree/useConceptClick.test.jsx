@@ -15,13 +15,15 @@ const disclosureEvent = () => {
   return { altKey: false, target: icon }
 }
 
-const setup = ({ conceptName = 'dingo', expandedItems = [] } = {}) => {
+const setup = ({ conceptName = 'dingo', conceptPath = null, expandedItems = [] } = {}) => {
   const concept = { name: 'dingo' }
   const expandConcept = vi.fn()
   const selectConcept = vi.fn()
   const setAutoExpand = vi.fn()
 
-  const { result } = renderHook(() => useConceptClick(concept, expandConcept, selectConcept, setAutoExpand, expandedItems))
+  const { result } = renderHook(() =>
+    useConceptClick(concept, conceptPath, expandConcept, selectConcept, setAutoExpand, expandedItems)
+  )
 
   return { concept, expandConcept, selectConcept, setAutoExpand, handleClick: result.current, conceptName }
 }
@@ -68,5 +70,41 @@ describe('useConceptClick', () => {
 
     expect(selectConcept).toHaveBeenCalledWith('object')
     expect(expandConcept).not.toHaveBeenCalled()
+  })
+
+  it('re-expands the selected concept path when collapsing its ancestor', () => {
+    const { concept, expandConcept, handleClick } = setup({
+      conceptPath: ['object', 'mammal', 'dingo'],
+      expandedItems: ['object', 'mammal'],
+    })
+
+    handleClick(disclosureEvent(), 'object')
+
+    expect(expandConcept).toHaveBeenCalledWith({ name: 'object' }, CONCEPT.EXPAND.OFF)
+    expect(expandConcept).toHaveBeenCalledWith(concept, CONCEPT.EXPAND.TO_PARENT)
+  })
+
+  it('does not re-expand when collapsing a node that does not contain the selected concept', () => {
+    const { expandConcept, handleClick } = setup({
+      conceptPath: ['object', 'mammal', 'dingo'],
+      expandedItems: ['object', 'mammal', 'plant'],
+    })
+
+    handleClick(disclosureEvent(), 'plant')
+
+    expect(expandConcept).toHaveBeenCalledWith({ name: 'plant' }, CONCEPT.EXPAND.OFF)
+    expect(expandConcept).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not re-expand when collapsing the selected concept itself', () => {
+    const { expandConcept, handleClick } = setup({
+      conceptPath: ['object', 'mammal', 'dingo'],
+      expandedItems: ['object', 'mammal', 'dingo'],
+    })
+
+    handleClick(disclosureEvent(), 'dingo')
+
+    expect(expandConcept).toHaveBeenCalledWith({ name: 'dingo' }, CONCEPT.EXPAND.OFF)
+    expect(expandConcept).toHaveBeenCalledTimes(1)
   })
 })

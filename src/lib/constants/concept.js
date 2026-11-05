@@ -4,6 +4,7 @@ export const CONCEPT = {
     OFF: 'off',
     ON: 'on',
     TOGGLE: 'toggle',
+    TO_PARENT: 'toParent',
   },
   EXTENT: {
     CHILDREN: 'children',

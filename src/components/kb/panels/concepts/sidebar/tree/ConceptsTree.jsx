@@ -63,7 +63,7 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
 
   const getItemId = useCallback(item => item.id, [])
 
-  const handleItemClick = useConceptClick(concept, expandConcept, handleConceptSelect, setAutoExpand, expandedItems)
+  const handleItemClick = useConceptClick(concept, conceptPath, expandConcept, handleConceptSelect, setAutoExpand, expandedItems)
 
   useConceptAutoExpand({
     autoExpand,

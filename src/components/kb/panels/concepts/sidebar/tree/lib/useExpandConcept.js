@@ -37,8 +37,6 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
     [expandedItems]
   )
 
-  // Collapse also drops every descendant id, so re-expanding shows the subtree
-  //  progressively (children collapsed) instead of remounting everything at once.
   const collapse = useCallback(
     concept => {
       const pruning = new Set(allDescendants(taxonomy, concept.name))
@@ -47,14 +45,17 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
     [setExpandedItems, taxonomy]
   )
 
-  const expand = useCallback(
-    () => {
-      if (conceptPath) {
-        setExpandedItems(prevItems => [...new Set([...prevItems, ...conceptPath])])
-      }
-    },
-    [setExpandedItems, conceptPath]
-  )
+  const expand = useCallback(() => {
+    if (conceptPath) {
+      setExpandedItems(prevItems => [...new Set([...prevItems, ...conceptPath])])
+    }
+  }, [setExpandedItems, conceptPath])
+
+  const expandToParent = useCallback(() => {
+    if (conceptPath) {
+      setExpandedItems(prevItems => [...new Set([...prevItems, ...conceptPath.slice(0, -1)])])
+    }
+  }, [setExpandedItems, conceptPath])
 
   const descendants = useCallback(
     concept => {
@@ -95,12 +96,16 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
           expand(concept)
           break
 
+        case CONCEPT.EXPAND.TO_PARENT:
+          expandToParent()
+          break
+
         case CONCEPT.EXPAND.TOGGLE:
           toggle(concept)
           break
       }
     },
-    [collapse, descendants, expand, toggle]
+    [collapse, descendants, expand, expandToParent, toggle]
   )
 }
 
