@@ -10,7 +10,7 @@ const ConceptScroll = ({ onScrollToConcept }) => {
         color='primary'
         onClick={onScrollToConcept}
         size='small'
-        sx={{ mr: 0.25 }}
+        sx={{ display: 'none', mr: 0.25 }}
       >
         <LuScrollText />
       </IconButton>
