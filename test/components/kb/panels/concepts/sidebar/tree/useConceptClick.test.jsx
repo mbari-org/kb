@@ -48,10 +48,19 @@ describe('useConceptClick', () => {
   it('selects without expanding when clicking a different concept', () => {
     const { expandConcept, selectConcept, handleClick } = setup()
 
-    handleClick(labelEvent({ altKey: true }), 'object')
+    handleClick(labelEvent(), 'object')
 
     expect(selectConcept).toHaveBeenCalledWith('object')
     expect(expandConcept).not.toHaveBeenCalled()
+  })
+
+  it('selects and expands all descendants when alt-clicking a different concept', () => {
+    const { expandConcept, selectConcept, handleClick } = setup()
+
+    handleClick(labelEvent({ altKey: true }), 'object')
+
+    expect(selectConcept).toHaveBeenCalledWith('object')
+    expect(expandConcept).toHaveBeenCalledWith({ name: 'object' }, CONCEPT.EXPAND.DESCENDANTS)
   })
 
   it('collapses an expanded concept without selecting when clicking its disclosure icon', () => {

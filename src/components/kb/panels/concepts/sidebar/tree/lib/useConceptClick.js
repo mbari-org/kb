@@ -23,6 +23,9 @@ const useConceptClick = (concept, conceptPath, expandConcept, selectConcept, set
       } else {
         selectConcept(conceptName)
         setAutoExpand({ expand: false, name: null })
+        if (event.altKey) {
+          expandConcept({ name: conceptName }, CONCEPT.EXPAND.DESCENDANTS)
+        }
       }
     },
     [concept, conceptPath, expandConcept, expandedItems, selectConcept, setAutoExpand]
