@@ -3,6 +3,7 @@ export const CONCEPT = {
     DESCENDANTS: 'descendants',
     OFF: 'off',
     ON: 'on',
+    SELF: 'self',
     TOGGLE: 'toggle',
     TO_PARENT: 'toParent',
   },

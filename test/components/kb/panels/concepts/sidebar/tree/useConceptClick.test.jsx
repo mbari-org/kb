@@ -72,13 +72,13 @@ describe('useConceptClick', () => {
     expect(selectConcept).not.toHaveBeenCalled()
   })
 
-  it('treats a disclosure icon click on a collapsed concept like a label click', () => {
+  it('expands a collapsed concept without selecting when clicking its disclosure icon', () => {
     const { expandConcept, selectConcept, handleClick } = setup({ expandedItems: [] })
 
     handleClick(disclosureEvent(), 'object')
 
-    expect(selectConcept).toHaveBeenCalledWith('object')
-    expect(expandConcept).not.toHaveBeenCalled()
+    expect(expandConcept).toHaveBeenCalledWith({ name: 'object' }, CONCEPT.EXPAND.SELF)
+    expect(selectConcept).not.toHaveBeenCalled()
   })
 
   it('re-expands the selected concept path when collapsing its ancestor', () => {

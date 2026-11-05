@@ -28,7 +28,7 @@ const allDescendants = (taxonomy, conceptName, names = [conceptName]) => {
 const useExpandConcept = (expandedItems, setExpandedItems) => {
   const { beginProcessing } = use(AppModalContext)
   const { conceptPath } = use(ConceptContext)
-  const { loadConceptDescendants, taxonomy } = use(TaxonomyContext)
+  const { loadConceptChildren, loadConceptDescendants, taxonomy } = use(TaxonomyContext)
 
   const isExpanded = useCallback(
     concept => {
@@ -56,6 +56,14 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
       setExpandedItems(prevItems => [...new Set([...prevItems, ...conceptPath.slice(0, -1)])])
     }
   }, [setExpandedItems, conceptPath])
+
+  const expandSelf = useCallback(
+    concept => {
+      setExpandedItems(prevItems => [...new Set([...prevItems, concept.name])])
+      loadConceptChildren(concept.name)
+    },
+    [loadConceptChildren, setExpandedItems]
+  )
 
   const descendants = useCallback(
     concept => {
@@ -96,6 +104,10 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
           expand(concept)
           break
 
+        case CONCEPT.EXPAND.SELF:
+          expandSelf(concept)
+          break
+
         case CONCEPT.EXPAND.TO_PARENT:
           expandToParent()
           break
@@ -105,7 +117,7 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
           break
       }
     },
-    [collapse, descendants, expand, expandToParent, toggle]
+    [collapse, descendants, expand, expandSelf, expandToParent, toggle]
   )
 }
 

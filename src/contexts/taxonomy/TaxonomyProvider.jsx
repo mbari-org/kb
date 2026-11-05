@@ -8,6 +8,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConcept as apiConcept } from '@/lib/model/concept'
 
 import {
+  areConceptChildrenLoaded as areTaxonomyConceptChildrenLoaded,
   closestConcept as closestTaxonomyConcept,
   filterTaxonomyRanks,
   getAncestorNames as getTaxonomyAncestorNames,
@@ -21,6 +22,7 @@ import {
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
+  loadTaxonomyConceptGrandchildren,
   removeTaxonomyConcept,
 } from '@/lib/model/taxonomy'
 
@@ -295,6 +297,22 @@ const TaxonomyProvider = ({ children }) => {
     [apiFns, showBoundary, taxonomy, updateTaxonomy]
   )
 
+  const loadConceptChildren = useCallback(
+    async conceptName => {
+      if (!apiFns || !taxonomy) return null
+      if (areTaxonomyConceptChildrenLoaded(taxonomy, conceptName)) return taxonomy
+      try {
+        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptGrandchildren(taxonomy, conceptName, apiFns)
+        const committedTaxonomy = updateTaxonomy(updatedTaxonomy)
+
+        return committedTaxonomy || taxonomy
+      } catch (error) {
+        showBoundary(error)
+      }
+    },
+    [apiFns, showBoundary, taxonomy, updateTaxonomy]
+  )
+
   const removeConcept = useCallback(
     conceptName => {
       const concept = getTaxonomyConcept(taxonomy, conceptName)
@@ -363,6 +381,7 @@ const TaxonomyProvider = ({ children }) => {
       isDescendant,
       isRoot,
       loadConcept,
+      loadConceptChildren,
       loadConceptDescendants,
       removeConcept,
       rootName,
@@ -384,6 +403,7 @@ const TaxonomyProvider = ({ children }) => {
       isDescendant,
       isRoot,
       loadConcept,
+      loadConceptChildren,
       loadConceptDescendants,
       removeConcept,
       taxonomy,

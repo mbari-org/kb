@@ -163,6 +163,11 @@ const isConceptLoaded = (taxonomy, conceptName) => {
   )
 }
 
+const areConceptChildrenLoaded = (taxonomy, conceptName) => {
+  const concept = getConcept(taxonomy, conceptName)
+  return Boolean(concept?.children?.every(child => taxonomy.conceptMap[child]?.children))
+}
+
 const isDescendant = (taxonomy, conceptName, descendantName) => {
   const concept = getConcept(taxonomy, conceptName)
   if (!concept) {
@@ -352,6 +357,19 @@ const loadTaxonomyConceptChildren = async (updatableTaxonomy, conceptName, apiFn
   }
 
   return concept.children
+}
+
+const loadTaxonomyConceptGrandchildren = async (taxonomy, conceptName, apiFns) => {
+  const updatedTaxonomy = {
+    ...taxonomy,
+    conceptMap: { ...taxonomy.conceptMap },
+    aliasMap: { ...taxonomy.aliasMap },
+  }
+
+  const concept = getConcept(taxonomy, conceptName)
+  await Promise.all(concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns)))
+
+  return { taxonomy: updatedTaxonomy }
 }
 
 const rebindAliases = (concept, aliasMap) => {
@@ -614,6 +632,7 @@ const removeTaxonomyConcept = (taxonomy, concept) => {
 }
 
 export {
+  areConceptChildrenLoaded,
   buildTree,
   buildTreeItems,
   closestConcept,
@@ -632,6 +651,7 @@ export {
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
+  loadTaxonomyConceptGrandchildren,
   refreshTaxonomyConcept,
   removeTaxonomyConcept,
 }

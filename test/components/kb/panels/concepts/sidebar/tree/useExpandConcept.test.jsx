@@ -20,13 +20,11 @@ const taxonomy = {
   },
 }
 
-const makeWrapper = conceptPath => {
+const makeWrapper = (conceptPath, taxonomyFns) => {
   const Wrapper = ({ children }) => (
     <AppModalContext.Provider value={{ beginProcessing: vi.fn() }}>
       <ConceptContext.Provider value={{ conceptPath }}>
-        <TaxonomyContext.Provider value={{ loadConceptDescendants: vi.fn(), taxonomy }}>
-          {children}
-        </TaxonomyContext.Provider>
+        <TaxonomyContext.Provider value={{ ...taxonomyFns, taxonomy }}>{children}</TaxonomyContext.Provider>
       </ConceptContext.Provider>
     </AppModalContext.Provider>
   )
@@ -35,9 +33,13 @@ const makeWrapper = conceptPath => {
 }
 
 const setup = (conceptPath = null) => {
+  const loadConceptChildren = vi.fn()
+  const loadConceptDescendants = vi.fn()
   const setExpandedItems = vi.fn()
-  const { result } = renderHook(() => useExpandConcept([], setExpandedItems), { wrapper: makeWrapper(conceptPath) })
-  return { expandConcept: result.current, setExpandedItems }
+  const { result } = renderHook(() => useExpandConcept([], setExpandedItems), {
+    wrapper: makeWrapper(conceptPath, { loadConceptChildren, loadConceptDescendants }),
+  })
+  return { expandConcept: result.current, loadConceptChildren, setExpandedItems }
 }
 
 const applyUpdate = (setExpandedItems, items) => setExpandedItems.mock.calls[0][0](items)
@@ -63,6 +65,28 @@ describe('useExpandConcept collapse', () => {
 
     const expanded = ['root', 'object', 'physical object', 'entity', 'data file']
     expect(applyUpdate(setExpandedItems, expanded)).toEqual(['root', 'object', 'entity'])
+  })
+})
+
+describe('useExpandConcept self', () => {
+  it('adds only the concept itself to expandedItems', () => {
+    const { expandConcept, setExpandedItems } = setup()
+
+    act(() => {
+      expandConcept({ name: 'object' }, CONCEPT.EXPAND.SELF)
+    })
+
+    expect(applyUpdate(setExpandedItems, ['entity'])).toEqual(['entity', 'object'])
+  })
+
+  it('loads the concept children so child disclosure state is known', () => {
+    const { expandConcept, loadConceptChildren } = setup()
+
+    act(() => {
+      expandConcept({ name: 'object' }, CONCEPT.EXPAND.SELF)
+    })
+
+    expect(loadConceptChildren).toHaveBeenCalledWith('object')
   })
 })
 

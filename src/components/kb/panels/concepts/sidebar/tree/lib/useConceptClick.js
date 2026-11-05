@@ -9,10 +9,14 @@ const DISCLOSURE_SELECTOR = `.${treeItemClasses.iconContainer}`
 const useConceptClick = (concept, conceptPath, expandConcept, selectConcept, setAutoExpand, expandedItems) => {
   return useCallback(
     (event, conceptName) => {
-      if (event.target.closest(DISCLOSURE_SELECTOR) && expandedItems.includes(conceptName)) {
-        expandConcept({ name: conceptName }, CONCEPT.EXPAND.OFF)
-        if (conceptName !== concept.name && conceptPath?.includes(conceptName)) {
-          expandConcept(concept, CONCEPT.EXPAND.TO_PARENT)
+      if (event.target.closest(DISCLOSURE_SELECTOR)) {
+        if (expandedItems.includes(conceptName)) {
+          expandConcept({ name: conceptName }, CONCEPT.EXPAND.OFF)
+          if (conceptName !== concept.name && conceptPath?.includes(conceptName)) {
+            expandConcept(concept, CONCEPT.EXPAND.TO_PARENT)
+          }
+        } else {
+          expandConcept({ name: conceptName }, CONCEPT.EXPAND.SELF)
         }
         return
       }
