@@ -333,7 +333,7 @@ export const ConceptPanelTestWrapper = ({
     getReferences: vi.fn(conceptName => (conceptName === concept?.name ? initialReferences : [])),
     refreshData: vi.fn(),
     isLoading: false,
-    ensureAllRealizations: vi.fn(() => Promise.resolve(initialRealizations)),
+    loadAllRealizations: vi.fn(() => Promise.resolve(initialRealizations)),
     ensureConceptRealizations: vi.fn(conceptName =>
       Promise.resolve(initialRealizations.filter(realization => realization.concept === conceptName))
     ),

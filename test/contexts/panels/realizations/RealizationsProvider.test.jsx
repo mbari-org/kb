@@ -17,7 +17,9 @@ const conceptCRealizations = [
 const conceptDRealizations = [
   { id: 'r-d', concept: 'D', linkName: 'lives-in', toConcept: 'E', linkValue: 'deep', lastUpdated: null },
 ]
-const allRealizations = [{ id: 'r-all', concept: 'A', linkName: 'sees', toConcept: 'B', linkValue: 'always', lastUpdated: null }]
+const allRealizations = [
+  { id: 'r-all', concept: 'A', linkName: 'sees', toConcept: 'B', linkValue: 'always', lastUpdated: null },
+]
 
 const buildSettings = conceptFilter => ({
   filters: {
@@ -35,7 +37,7 @@ const FilteredIds = () => {
 
 const setup = ({ selectedConcept = 'C' } = {}) => {
   const updateSettings = vi.fn()
-  const ensureAllRealizations = vi.fn()
+  const loadAllRealizations = vi.fn()
   const ensureConceptRealizations = vi.fn()
   let settings = buildSettings(undefined)
   let realizationsByConcept = {}
@@ -55,7 +57,7 @@ const setup = ({ selectedConcept = 'C' } = {}) => {
         <SelectedSettingsContext value={{ getSettings: () => settings, updateSettings }}>
           <PanelDataContext
             value={{
-              ensureAllRealizations: ensureAllRealizations.mockImplementation(async () =>
+              loadAllRealizations: loadAllRealizations.mockImplementation(async () =>
                 Object.values(realizationsByConcept).flat()
               ),
               ensureConceptRealizations: ensureConceptRealizations.mockImplementation(
@@ -80,7 +82,7 @@ const setup = ({ selectedConcept = 'C' } = {}) => {
   const view = render(tree())
 
   return {
-    ensureAllRealizations,
+    loadAllRealizations,
     ensureConceptRealizations,
     updateSettings,
     setFilter: async conceptFilter => {
@@ -105,7 +107,7 @@ describe('RealizationsProvider', () => {
   })
 
   it('ensures only the filtered concept realizations when the panel is displayed', async () => {
-    const { ensureAllRealizations, ensureConceptRealizations, updateSettings, setFilter, setMap } = setup()
+    const { loadAllRealizations, ensureConceptRealizations, updateSettings, setFilter, setMap } = setup()
 
     expect(updateSettings).toHaveBeenCalledWith({ realizations: { filters: { concept: 'C' } } })
 
@@ -113,7 +115,7 @@ describe('RealizationsProvider', () => {
     await setMap({ C: conceptCRealizations })
 
     expect(ensureConceptRealizations).toHaveBeenCalledWith('C')
-    expect(ensureAllRealizations).not.toHaveBeenCalled()
+    expect(loadAllRealizations).not.toHaveBeenCalled()
     expect(screen.getByTestId('filtered').textContent).toBe('r-c')
   })
 
@@ -131,14 +133,14 @@ describe('RealizationsProvider', () => {
   })
 
   it('ensures all realizations when the concept filter is cleared', async () => {
-    const { ensureAllRealizations, setFilter, setMap } = setup()
+    const { loadAllRealizations, setFilter, setMap } = setup()
 
     await setFilter('C')
     await setMap({ C: conceptCRealizations })
     await setFilter('')
     await setMap({ A: allRealizations, C: conceptCRealizations }, { allLoaded: true })
 
-    expect(ensureAllRealizations).toHaveBeenCalled()
+    expect(loadAllRealizations).toHaveBeenCalled()
     expect(screen.getByTestId('filtered').textContent).toBe('r-all,r-c')
   })
 

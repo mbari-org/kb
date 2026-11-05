@@ -29,7 +29,7 @@ const Probe = () => {
 
 const Actions = () => {
   const {
-    ensureAllRealizations,
+    loadAllRealizations,
     ensureConceptRealizations,
     invalidateConceptRealizations,
     reloadConceptRealizations,
@@ -44,10 +44,10 @@ const Actions = () => {
       <button onClick={() => ensureConceptRealizations('wolf')} type='button'>
         ensure-wolf
       </button>
-      <button onClick={() => ensureAllRealizations()} type='button'>
+      <button onClick={() => loadAllRealizations()} type='button'>
         ensure-all
       </button>
-      <button onClick={() => ensureAllRealizations({ force: true })} type='button'>
+      <button onClick={() => loadAllRealizations({ force: true })} type='button'>
         force-all
       </button>
       <button

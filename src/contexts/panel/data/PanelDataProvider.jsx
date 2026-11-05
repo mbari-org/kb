@@ -144,7 +144,7 @@ export const PanelDataProvider = ({ children }) => {
     [realizationsAllLoaded, realizationsByConcept, reloadConceptRealizations]
   )
 
-  const ensureAllRealizations = useCallback(
+  const loadAllRealizations = useCallback(
     ({ force = false } = {}) => {
       if (realizationsAllLoaded && !force) {
         return Promise.resolve(getAllRealizations())
@@ -159,7 +159,10 @@ export const PanelDataProvider = ({ children }) => {
           const grouped = {}
           allRealizations.forEach(realization => {
             if (!realization.concept) return
-            ;(grouped[realization.concept] ||= []).push(realization)
+            grouped[realization.concept] ||= []
+            if (!grouped[realization.concept].some(({ id }) => id === realization.id)) {
+              grouped[realization.concept].push(realization)
+            }
           })
           Object.values(grouped).forEach(sortRealizations)
           setRealizationsByConcept(grouped)
@@ -205,7 +208,7 @@ export const PanelDataProvider = ({ children }) => {
             const [referencesData, realizationsData, templatesData, pendingHistoryData] = await withLoadTimeout(
               Promise.all([
                 loadReferences(),
-                ensureAllRealizations({ force: true }),
+                loadAllRealizations({ force: true }),
                 loadTemplates(),
                 loadPendingHistory(),
               ])
@@ -226,7 +229,7 @@ export const PanelDataProvider = ({ children }) => {
             }
           }
           case PANEL_DATA.REALIZATIONS: {
-            const realizationsData = await withLoadTimeout(ensureAllRealizations({ force: true }))
+            const realizationsData = await withLoadTimeout(loadAllRealizations({ force: true }))
             return { realizations: realizationsData }
           }
 
@@ -258,7 +261,7 @@ export const PanelDataProvider = ({ children }) => {
     [
       apiFns,
       calcExplicitConcepts,
-      ensureAllRealizations,
+      loadAllRealizations,
       loadPendingHistory,
       loadReferences,
       loadTemplates,
@@ -277,7 +280,7 @@ export const PanelDataProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       clearTemplateFilters,
-      ensureAllRealizations,
+      loadAllRealizations,
       ensureConceptRealizations,
       explicitConcepts,
       getAllRealizations,
@@ -300,7 +303,7 @@ export const PanelDataProvider = ({ children }) => {
     }),
     [
       clearTemplateFilters,
-      ensureAllRealizations,
+      loadAllRealizations,
       ensureConceptRealizations,
       explicitConcepts,
       getAllRealizations,

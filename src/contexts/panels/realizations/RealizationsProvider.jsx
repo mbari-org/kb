@@ -22,13 +22,8 @@ const { DEFAULT_FILTERS } = dataFilters(REALIZATIONS.KEY)
 const RealizationsProvider = ({ children }) => {
   const { getSelected } = use(SelectedContext)
   const { getSettings, updateSettings } = use(SelectedSettingsContext)
-  const {
-    ensureAllRealizations,
-    ensureConceptRealizations,
-    getAllRealizations,
-    getConceptRealizations,
-    pendingHistory,
-  } = use(PanelDataContext)
+  const { loadAllRealizations, ensureConceptRealizations, getAllRealizations, getConceptRealizations, pendingHistory } =
+    use(PanelDataContext)
 
   const { editRealization, deleteRealization } = useModifyRealizations()
 
@@ -74,8 +69,14 @@ const RealizationsProvider = ({ children }) => {
       ensureConceptRealizations(conceptFilter)
       return
     }
-    ensureAllRealizations()
-  }, [conceptFilter, ensureAllRealizations, ensureConceptRealizations, isInitialConceptFilterPending, isRealizationsPanelSelected])
+    loadAllRealizations()
+  }, [
+    conceptFilter,
+    loadAllRealizations,
+    ensureConceptRealizations,
+    isInitialConceptFilterPending,
+    isRealizationsPanelSelected,
+  ])
 
   const sourceRealizations = useMemo(
     () => (conceptFilter ? (getConceptRealizations(conceptFilter) ?? []) : getAllRealizations()),
