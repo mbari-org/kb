@@ -11,9 +11,11 @@ const filterRanks = (ranks, field, otherValue) => {
   }
   const otherField = field === RANK.LEVEL ? RANK.NAME : RANK.LEVEL
 
-  const fieldValues = ranks.filter(rank => rank[otherField] === otherValue).map(rank => rank[field])
+  const fieldValues =
+    otherValue === undefined
+      ? ranks.map(rank => rank[field])
+      : ranks.filter(rank => rank[otherField] === otherValue).map(rank => rank[field])
 
-  // '' is a valid pair value but not a selectable option; clearing is done via the clear button
   return [...new Set(fieldValues)].filter(value => value !== '')
 }
 

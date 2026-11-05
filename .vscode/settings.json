@@ -9,6 +9,7 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "prettier.requireConfig": true,
   "workbench.tree.indent": 8,
+  "vscode-edge-devtools.defaultUrl": "http://localhost:5173/kbeditor/",
   "cSpell.words": [
     "abouthelp",
     "annosaurus",

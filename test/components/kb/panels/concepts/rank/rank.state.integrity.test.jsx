@@ -49,6 +49,7 @@ describe('Rank state integrity', () => {
     { rankLevel: 'Class', rankName: 'Mammalia' },
     { rankLevel: 'Class', rankName: 'Aves' },
     { rankLevel: 'Subclass', rankName: 'Aves' },
+    { rankLevel: 'Order', rankName: 'Reptilia' },
   ]
 
   const initialRank = { level: 'Class', name: 'Mammalia' }
@@ -142,6 +143,74 @@ describe('Rank state integrity', () => {
     await waitFor(() => {
       expect(latestState.stagedRank.level).toBe('Class')
       expect(latestState.stagedRank.name).toBe('Aves')
+      expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
+    })
+  })
+
+  it('lists all rank names regardless of the current level', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    // Reptilia only pairs with level Order; the Name dropdown must still offer it
+    await user.click(screen.getByRole('combobox', { name: 'Name' }))
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'Reptilia' })).toBeInTheDocument()
+    })
+    expect(screen.getAllByRole('option')).toHaveLength(3)
+  })
+
+  it('keeps Rank Level when the selected name supports it', async () => {
+    const user = userEvent.setup()
+    let latestState = { initialRank: {}, stagedRank: {} }
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+        <ConceptRankStateProbe
+          onChange={state => {
+            latestState = state
+          }}
+        />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    await selectRankOption(user, 'Name', 'Aves')
+    await waitFor(() => {
+      expect(latestState.stagedRank.name).toBe('Aves')
+      expect(latestState.stagedRank.level).toBe('Class')
+    })
+  })
+
+  it('clears Rank Level when the selected name does not support it', async () => {
+    const user = userEvent.setup()
+    let latestState = { initialRank: {}, stagedRank: {} }
+
+    render(
+      <ConceptPanelTestWrapper initialRank={initialRank} isPhylogenyRoot taxonomyRanks={taxonomyRanks}>
+        <Concepts />
+        <ConceptRankStateProbe
+          onChange={state => {
+            latestState = state
+          }}
+        />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+
+    await selectRankOption(user, 'Name', 'Reptilia')
+    await waitFor(() => {
+      expect(latestState.stagedRank.name).toBe('Reptilia')
+      expect(latestState.stagedRank.level).toBe('')
       expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
     })
   })

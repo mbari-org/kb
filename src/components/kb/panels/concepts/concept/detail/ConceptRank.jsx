@@ -5,8 +5,9 @@ import RankFieldInput from '@/components/kb/panels/concepts/concept/change/stage
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { pendingChange } from '@/lib/concept/state/rank'
+import { pendingChange, rankField } from '@/lib/concept/state/rank'
 import CONFIG from '@/lib/config'
 import { PENDING } from '@/lib/constants/pending.js'
 import { CONCEPT } from '@/lib/constants'
@@ -15,6 +16,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 const ConceptRank = () => {
   const { initialState, isEditing, pending } = use(ConceptContext)
   const { modifyConcept, stagedState } = use(ConceptStagedContext)
+  const { filterRanks } = use(TaxonomyContext)
 
   const initialRank = initialState.rank
   const stagedRank = stagedState.rank
@@ -35,15 +37,21 @@ const ConceptRank = () => {
   }
 
   const onChange = field => event => {
-    applyRankUpdate({ [field]: event.target.value })
+    const value = event.target.value
+    if (field === CONCEPT.RANK.NAME) {
+      const level = stagedRank.level
+      if (level && !filterRanks(rankField(CONCEPT.RANK.LEVEL), value).includes(level)) {
+        applyRankUpdate({ level: '', name: value })
+        return
+      }
+    }
+    applyRankUpdate({ [field]: value })
   }
 
-  // Clearing Name clears the pair; clearing Level clears only Level
   const onClear = field => () => {
     applyRankUpdate(field === CONCEPT.RANK.NAME ? { level: '', name: '' } : { level: '' })
   }
 
-  // Since rank is a composite field of concept state, mimic individual pending rank changes
   const stagedField = useCallback(
     field => {
       const pendingConcept = pending(PENDING.DATA.CONCEPT)

@@ -25,8 +25,7 @@ const RankFieldInput = ({ field, initialRank, label, rank, onChange, onClear }) 
   const rankValue = field => (rank[field] !== undefined ? rank[field] : initialRank[field])
 
   const fieldValue = rankValue(field)
-  const otherValue =
-    field === CONCEPT.RANK.NAME ? rankValue(CONCEPT.RANK.LEVEL) : rankValue(CONCEPT.RANK.NAME)
+  const otherValue = field === CONCEPT.RANK.NAME ? undefined : rankValue(CONCEPT.RANK.NAME)
 
   const rankOptions = filterRanks(rankField(field), otherValue)
 

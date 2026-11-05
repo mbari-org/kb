@@ -8,6 +8,7 @@ import ModalActionText from '@/components/common/ModalActionText'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useInputStyle from './useInputStyle'
 import useAddChildHandlers from './useAddChildHandlers'
@@ -30,6 +31,7 @@ const AddChildContent = () => {
 
   const { isPhylogenyRoot } = use(ConceptContext)
   const { modalData } = use(ConceptModalDataContext)
+  const { filterRanks } = use(TaxonomyContext)
 
   const { child } = modalData
 
@@ -70,6 +72,15 @@ const AddChildContent = () => {
   const { isValidName, nameHelperText } = useConceptNameValidate(formChild, modifiedFields)
   const nameError = modifiedFields.name && !isValidName
 
+  const handleRankNameChange = event => {
+    const value = event.target.value
+    if (formChild.rankLevel && !filterRanks(rankField(CONCEPT.RANK.LEVEL), value).includes(formChild.rankLevel)) {
+      handleClear({ rankLevel: '', rankName: value })
+      return
+    }
+    handleChange(rankField(CONCEPT.RANK.NAME))(event)
+  }
+
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>
       <ModalActionText text={MODALS.STRUCTURE.ADD_CHILD.LABEL} />
@@ -106,7 +117,7 @@ const AddChildContent = () => {
             initialRank={initialRank}
             label={MODALS.STRUCTURE.ADD_CHILD.RANK.NAME}
             rank={formRank}
-            onChange={handleChange(rankField(CONCEPT.RANK.NAME))}
+            onChange={handleRankNameChange}
             onClear={() => handleClear({ rankLevel: '', rankName: '' })}
           />
           <RankFieldInput
