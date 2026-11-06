@@ -1,0 +1,28 @@
+{
+  "CONTENT": {
+    "HEADER": "Add realization"
+  },
+  "ALERT": {
+    "DISCARD": {
+      "LINES": [
+        "Discarding edits is final.",
+        "Please confirm you want to discard the indicated edits."
+      ],
+      "SEVERITY": "warning"
+    },
+    "DUPLICATE": {
+      "LINES": [
+        "A realization with these values already exists for this concept.",
+        "Please modify the values to create a unique realization."
+      ],
+      "SEVERITY": "error"
+    },
+    "SAVE_CONFIRM": {
+      "LINES": [
+        "You are about to save realization changes.",
+        "Please confirm you want to continue."
+      ],
+      "SEVERITY": "success"
+    }
+  }
+}

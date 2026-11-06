@@ -1,16 +1,22 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { use, useCallback, useEffect, useMemo, useState } from 'react'
+import { Box, Divider, Stack, TextField, Typography } from '@mui/material'
 
 import RealizationForm from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/form/RealizationForm'
+import RealizationTemplatesList from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/filter/RealizationTemplatesList'
+import useAvailableLinkTemplates from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/useAvailableLinkTemplates'
+import useFilterLinkName from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/useFilterLinkName'
 import ActionsAlert from '@/components/modal/actions/ActionsAlert'
 import ModalActionText from '@/components/common/ModalActionText'
 
-import { hasDuplicate, REALIZATION_VALUE_FIELDS } from '@/lib/model/realization'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
+
+import { EMPTY_REALIZATION, hasDuplicate, REALIZATION_FIELDS, REALIZATION_VALUE_FIELDS } from '@/lib/model/realization'
 import { diff, filterObject, pick } from '@/lib/utils'
 
 import CONFIG from '@/lib/config'
 
 const { BUTTON } = CONFIG
-const { EDIT, DELETE: DELETE_MODAL } = CONFIG.PANELS.REALIZATIONS.MODALS
+const { ADD, EDIT, DELETE: DELETE_MODAL } = CONFIG.PANELS.REALIZATIONS.MODALS
 
 const hasInput = (realizationData, field) => realizationData[field]?.trim() !== ''
 
@@ -121,6 +127,114 @@ export const createEditContent = (handleFormChange, handleValidationChange, upda
   return EditRealizationContent
 }
 
+export const createAddContent = (handleFormChange, handleValidationChange, updateModalData) => {
+  const AddRealizationContent = modalData => {
+    const { isLoading } = use(PanelDataContext)
+
+    const concept = modalData.realization.concept
+    const getAvailableLinkTemplates = useAvailableLinkTemplates(concept)
+
+    const [cycleIndex, setCycleIndex] = useState(0)
+    const [filterLinkName, setFilterLinkName] = useState('')
+
+    const filteredTemplates = useMemo(() => {
+      return getAvailableLinkTemplates(filterLinkName)
+    }, [getAvailableLinkTemplates, filterLinkName])
+
+    useEffect(() => {
+      const timeoutId = setTimeout(() => {
+        setCycleIndex(0)
+      }, 0)
+      return () => clearTimeout(timeoutId)
+    }, [filterLinkName])
+
+    const handleRealizationChange = useCallback(
+      updatedRealizationItem => handleFormChange(updatedRealizationItem, modalData.original),
+      [modalData.original]
+    )
+
+    const handleTemplateSelect = useCallback(
+      template =>
+        handleFormChange(
+          {
+            ...modalData.realization,
+            linkName: template.linkName,
+            toConcept: template.toConcept,
+            linkValue: template.linkValue,
+            templateId: template.id,
+          },
+          modalData.original
+        ),
+      [modalData]
+    )
+
+    const { handleFilterKeyDown } = useFilterLinkName({
+      cycleIndex,
+      filterLinkName,
+      filteredTemplates,
+      onRealizationChange: handleRealizationChange,
+      realizationItem: modalData.realization,
+      setCycleIndex,
+    })
+
+    const handleSubmit = event => {
+      event.preventDefault()
+      if (modalData.isValid && modalData.isValidToConcept && modalData.hasChanges && !modalData.isDuplicate) {
+        updateModalData({ confirmCommit: true, alert: confirmAddRealizationSaveAlert() })
+      }
+    }
+
+    return (
+      <Stack spacing={2}>
+        <Box>
+          <RealizationTemplatesList
+            isLoading={isLoading}
+            onTemplateSelect={handleTemplateSelect}
+            templates={filteredTemplates}
+          />
+          <TextField
+            fullWidth
+            label='Filter by Link Name'
+            onChange={event => {
+              setFilterLinkName(event.target.value)
+              handleRealizationChange({ ...EMPTY_REALIZATION, concept })
+            }}
+            onKeyDown={handleFilterKeyDown}
+            size='small'
+            sx={{ mb: 2, mt: 2 }}
+            value={filterLinkName}
+          />
+          <Divider sx={{ my: 1 }} />
+        </Box>
+        <ModalActionText text={ADD.CONTENT.HEADER} />
+        <RealizationForm
+          conceptName={concept}
+          onRealizationChange={handleRealizationChange}
+          onValidationChange={handleValidationChange}
+          realizationItem={modalData.realization}
+          stageChange={handleSubmit}
+        />
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            height: 60,
+            justifyContent: 'center',
+            pt: modalData.alert ? 0.5 : 0,
+          }}
+        >
+          {modalData.alert ? (
+            <ActionsAlert lines={modalData.alert.lines} severity={modalData.alert.severity || 'info'} />
+          ) : null}
+        </Box>
+      </Stack>
+    )
+  }
+
+  AddRealizationContent.displayName = 'AddRealizationContent'
+  return AddRealizationContent
+}
+
 export const processEditRealizationData = (realization, original) => {
   const hasFieldChanges = REALIZATION_VALUE_FIELDS.some(field => realization[field] !== original[field])
 
@@ -133,6 +247,9 @@ export const processEditRealizationData = (realization, original) => {
     (_key, value) => value !== undefined && value !== null
   )
 }
+
+export const processAddRealizationData = realization =>
+  filterObject(pick(realization, REALIZATION_FIELDS), (_key, value) => value && value.trim() !== '')
 
 export const createHandlers = (updateModalData, closeModal, isDuplicateCheck) => {
   const handleCancel = () => closeModal(false)
@@ -257,4 +374,27 @@ export const isDuplicateRealization = (realizations, realization, excludeId) =>
 export const duplicateRealizationAlert = () => ({
   lines: EDIT.ALERT.DUPLICATE.LINES,
   severity: EDIT.ALERT.DUPLICATE.SEVERITY,
+})
+
+export const createAddRealizationOnClose = updateModalData => data => {
+  if (data?.hasChanges && !data?.confirmDiscard) {
+    updateModalData({ confirmDiscard: true, alert: discardAddRealizationAlert() })
+    return false
+  }
+  return true
+}
+
+export const discardAddRealizationAlert = () => ({
+  lines: ADD.ALERT.DISCARD.LINES,
+  severity: ADD.ALERT.DISCARD.SEVERITY,
+})
+
+export const confirmAddRealizationSaveAlert = () => ({
+  lines: ADD.ALERT.SAVE_CONFIRM.LINES,
+  severity: ADD.ALERT.SAVE_CONFIRM.SEVERITY,
+})
+
+export const duplicateAddRealizationAlert = () => ({
+  lines: ADD.ALERT.DUPLICATE.LINES,
+  severity: ADD.ALERT.DUPLICATE.SEVERITY,
 })

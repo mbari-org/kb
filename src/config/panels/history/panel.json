@@ -2,10 +2,10 @@
   "NAME": "History",
   "TOOLTIP": {
     "EXPORT": {
-      "BUTTON": "Export history",
-      "APPROVED": "Export approved history",
-      "CONCEPT": "Export history for selected concept",
-      "PENDING": "Export pending history"
+      "BUTTON": "Export History",
+      "APPROVED": "Export Approved History",
+      "CONCEPT": "Export History for selected Concept",
+      "PENDING": "Export Pending History"
     },
     "EXTENT": {
       "BUTTON": {
@@ -20,9 +20,9 @@
       "OLDEST": "Order by oldest first"
     },
     "TOGGLE": {
-      "APPROVED": "Display all approved history",
-      "CONCEPT": "Display all history for selected concept",
-      "PENDING": "Display all pending history"
+      "APPROVED": "Display all Approved History",
+      "CONCEPT": "Display all History for selected Concept",
+      "PENDING": "Display all Pending History"
     }
   }
 }

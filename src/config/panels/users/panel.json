@@ -1,12 +1,12 @@
 {
   "NAME": "Users",
   "TOOLTIP": {
-    "ADD": "Add user",
-    "EDIT": "Edit user details",
+    "ADD": "Add User",
+    "EDIT": "Edit User details",
     "EXPORT": {
-      "ALL": "Export all users"
+      "ALL": "Export all Users"
     },
-    "LOCK": "Lock user to prevent login",
-    "UNLOCK": "Unlock user to allow login"
+    "LOCK": "Lock User to prevent login",
+    "UNLOCK": "Unlock User to allow login"
   }
 }

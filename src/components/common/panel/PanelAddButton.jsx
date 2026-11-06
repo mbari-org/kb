@@ -10,7 +10,7 @@ const PanelAddButton = ({ onClick, disabled = false, tooltip, label = 'Add' }) =
 
   if (tooltip) {
     return (
-      <KBTooltipTarget title={tooltip} placement='top' wrapper='span' wrapperSx={{ display: 'inline-flex' }}>
+      <KBTooltipTarget title={tooltip} placement='bottom' wrapper='span' wrapperSx={{ display: 'inline-flex' }}>
         {button}
       </KBTooltipTarget>
     )

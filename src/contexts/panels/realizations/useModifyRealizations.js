@@ -1,6 +1,6 @@
 import { use, useCallback } from 'react'
 
-import { deleteRealization as apiDeleteRealization, updateRealization } from '@/lib/api/realizations'
+import { createRealization, deleteRealization as apiDeleteRealization, updateRealization } from '@/lib/api/realizations'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -10,6 +10,18 @@ import { PANEL_DATA } from '@/lib/constants/panelData.js'
 const useModifyRealizations = () => {
   const { apiFns } = use(ConfigContext)
   const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
+
+  const addRealization = useCallback(
+    async realization => {
+      try {
+        await apiFns.apiPayload(createRealization, realization)
+        await Promise.all([reloadConceptRealizations(realization.concept), refreshData(PANEL_DATA.PENDING_HISTORY)])
+      } catch (error) {
+        throw new Error(`Failed to add realization: ${error.message}`, { cause: error })
+      }
+    },
+    [apiFns, refreshData, reloadConceptRealizations]
+  )
 
   const editRealization = useCallback(
     async (original, updated) => {
@@ -35,7 +47,7 @@ const useModifyRealizations = () => {
     [apiFns, refreshData, reloadConceptRealizations]
   )
 
-  return { editRealization, deleteRealization }
+  return { addRealization, editRealization, deleteRealization }
 }
 
 export default useModifyRealizations

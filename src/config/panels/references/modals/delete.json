@@ -1,10 +1,7 @@
 {
-  "TITLE": "Delete reference",
+  "TITLE": "Delete Reference",
   "CONTENT": {
-    "WARNING": [
-      "This reference will be permanently deleted.",
-      "This action cannot be undone."
-    ]
+    "WARNING": ["This Reference will be permanently deleted.", "This action cannot be undone."]
   },
   "FIELDS": {
     "CITATION": "Citation",

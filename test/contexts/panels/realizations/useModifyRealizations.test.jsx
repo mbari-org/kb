@@ -6,7 +6,11 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import useModifyRealizations from '@/contexts/panels/realizations/useModifyRealizations'
 
-import { deleteRealization as apiDeleteRealization, updateRealization } from '@/lib/api/realizations'
+import {
+  createRealization as apiCreateRealization,
+  deleteRealization as apiDeleteRealization,
+  updateRealization,
+} from '@/lib/api/realizations'
 
 const ORIGINAL = { id: 7, concept: 'dingo', linkName: 'eats', toConcept: 'fish', linkValue: 'daily' }
 
@@ -83,6 +87,36 @@ describe('useModifyRealizations', () => {
         await result.current.deleteRealization(ORIGINAL)
       })
     ).rejects.toThrow('Failed to delete realization')
+
+    expect(reloadConceptRealizations).not.toHaveBeenCalled()
+    expect(refreshData).not.toHaveBeenCalled()
+  })
+
+  it('addRealization creates on the server then reloads the concept realizations and pending history', async () => {
+    const { apiFns, refreshData, reloadConceptRealizations, wrapper } = buildHarness()
+    const realization = { concept: 'dingo', linkName: 'eats', toConcept: 'fish', linkValue: 'daily' }
+
+    const { result } = renderHook(() => useModifyRealizations(), { wrapper })
+    await act(async () => {
+      await result.current.addRealization(realization)
+    })
+
+    expect(apiFns.apiPayload).toHaveBeenCalledWith(apiCreateRealization, realization)
+    expect(reloadConceptRealizations).toHaveBeenCalledWith(realization.concept)
+    expect(refreshData).toHaveBeenCalledWith('pendingHistory')
+  })
+
+  it('addRealization does not touch the cache when the server create fails', async () => {
+    const { apiFns, refreshData, reloadConceptRealizations, wrapper } = buildHarness()
+    apiFns.apiPayload.mockRejectedValue(new Error('server down'))
+    const realization = { concept: 'dingo', linkName: 'eats', toConcept: 'fish', linkValue: 'daily' }
+
+    const { result } = renderHook(() => useModifyRealizations(), { wrapper })
+    await expect(
+      act(async () => {
+        await result.current.addRealization(realization)
+      })
+    ).rejects.toThrow('Failed to add realization')
 
     expect(reloadConceptRealizations).not.toHaveBeenCalled()
     expect(refreshData).not.toHaveBeenCalled()

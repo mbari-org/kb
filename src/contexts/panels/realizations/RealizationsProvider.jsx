@@ -25,7 +25,7 @@ const RealizationsProvider = ({ children }) => {
   const { loadAllRealizations, ensureConceptRealizations, getAllRealizations, getConceptRealizations, pendingHistory } =
     use(PanelDataContext)
 
-  const { editRealization, deleteRealization } = useModifyRealizations()
+  const { addRealization, editRealization, deleteRealization } = useModifyRealizations()
 
   const realizationsSettings = getSettings(REALIZATIONS.KEY) || {}
   const filters = realizationsSettings[FILTERS.KEY] || DEFAULT_FILTERS
@@ -134,6 +134,7 @@ const RealizationsProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      addRealization,
       deleteRealization,
       editRealization,
       explicitToConcepts,
@@ -145,6 +146,7 @@ const RealizationsProvider = ({ children }) => {
       updateFilters,
     }),
     [
+      addRealization,
       deleteRealization,
       editRealization,
       explicitToConcepts,

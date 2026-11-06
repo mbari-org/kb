@@ -4,9 +4,13 @@
     "ALL_CONCEPTS": "All Concepts"
   },
   "TOOLTIP": {
+    "ADD": {
+      "CONCEPT_SELECTED": "Add Realization to selected Concept",
+      "CONCEPT_NOT_SELECTED": "Select Concept to add Realization"
+    },
     "EXPORT": {
-      "ALL": "Export all realizations",
-      "CONCEPT": "Export realizations for selected concept"
+      "ALL": "Export all Realizations",
+      "CONCEPT": "Export Realizations for selected Concept"
     },
     "FILTER": {
       "CONCEPT": "Filter by Realization Concepts",

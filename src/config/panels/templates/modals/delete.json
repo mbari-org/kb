@@ -1,16 +1,16 @@
 {
   "CONTENT": {
-    "HEADER": "Delete template",
-    "WARNING": ["This template will be permanently deleted.", "This action cannot be undone."],
-    "CONFIRM_WARNING": ["Deleting this template is final.", "Please confirm you want to permanently delete it."]
+    "HEADER": "Delete Template",
+    "WARNING": ["This Template will be permanently deleted.", "This action cannot be undone."],
+    "CONFIRM_WARNING": ["Deleting this Template is final.", "Please confirm you want to permanently delete it."]
   },
   "ALERT": {
     "WARNING": {
-      "LINES": ["This template will be permanently deleted.", "This action cannot be undone."],
+      "LINES": ["This Template will be permanently deleted.", "This action cannot be undone."],
       "SEVERITY": "warning"
     },
     "CONFIRM_WARNING": {
-      "LINES": ["Deleting this template is final.", "Please confirm you want to permanently delete it."],
+      "LINES": ["Deleting this Template is final.", "Please confirm you want to permanently delete it."],
       "SEVERITY": "error"
     }
   },

@@ -17,8 +17,8 @@
       "CONCEPTS": "Filter by substring in Concepts"
     },
     "EXPORT": {
-      "ALL": "Export all references",
-      "CONCEPT": "Export references for selected concept"
+      "ALL": "Export all References",
+      "CONCEPT": "Export References for selected Concept"
     }
   }
 }
