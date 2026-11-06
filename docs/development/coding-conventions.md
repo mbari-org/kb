@@ -5,10 +5,14 @@ Conventions observed in the source (sampled across `src/components`, `src/contex
 
 ## Project policies (from `AGENTS.md`, confirmed in code)
 
-- **No defensive programming.** No guards, fallbacks, or null-checks for conditions that
-  should not occur; let errors surface at their source. Only handle an error where there
-  is a real "what should happen next" answer. Errors route to the `Whoops` boundary or
-  AppModal rather than being swallowed.
+- **No defensive programming — hard rule.** No guards, fallbacks, type-checks, or
+  null-checks for conditions that should not occur; let errors surface at their source.
+  Only handle an error where there is a real "what should happen next" answer. Errors
+  route to the `Whoops` boundary or AppModal rather than being swallowed. A guard for an
+  impossible state costs a future maintainer a wasted thought cycle ("when is this not
+  an Array? what should happen then?"). When a value has exactly two real states (e.g.
+  absent vs. Array), use the precise construct (`?.`) rather than a type check
+  (`Array.isArray`) that implies states which cannot occur.
 - **Minimal comments.** Verified: ~0.35 comment lines per source file. Comments appear
   only where behavior is non-obvious (e.g. the structural-sharing cache note in
   `src/lib/model/taxonomy.js:25-27`, the proxy warning in `vite.config.js:17-21`).

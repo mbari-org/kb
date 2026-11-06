@@ -1,4 +1,3 @@
-
 import {
   getConceptChildren as apiChildren,
   getConcept as apiConcept,
@@ -78,11 +77,10 @@ const closestConcept = (taxonomy, concept) => {
 
 const deleteConcept = async (taxonomy, concept, apiFns) => {
   if (0 < concept.children.length) {
-    throw createError(
-      'Delete Validation Error',
-      `Cannot delete concept "${concept.name}" with children.`,
-      { childCount: concept.children.length, conceptName: concept.name }
-    )
+    throw createError('Delete Validation Error', `Cannot delete Concept "${concept.name}" with children.`, {
+      childCount: concept.children.length,
+      conceptName: concept.name,
+    })
   }
 
   await apiFns.apiPayload(apiDelete, concept.name)
@@ -136,8 +134,7 @@ const descendants = (taxonomy, conceptName) => {
   return allDescendants
 }
 
-const filterTaxonomyRanks = (taxonomy, field, otherValue) =>
-  filterRanks(taxonomy.ranks, field, otherValue)
+const filterTaxonomyRanks = (taxonomy, field, otherValue) => filterRanks(taxonomy.ranks, field, otherValue)
 
 const getConcept = (taxonomy, conceptName) => {
   return taxonomy?.conceptMap[conceptName] || taxonomy?.aliasMap[conceptName] || null
@@ -156,10 +153,10 @@ const isConceptLoaded = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   return Boolean(
     concept &&
-      !isStructureOnly(concept) &&
-      concept.children &&
-      concept.children.every(child => taxonomy.conceptMap[child]?.children) &&
-      (concept.name === taxonomy.rootName || concept.parent)
+    !isStructureOnly(concept) &&
+    concept.children &&
+    concept.children.every(child => taxonomy.conceptMap[child]?.children) &&
+    (concept.name === taxonomy.rootName || concept.parent)
   )
 }
 
@@ -275,9 +272,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   // If the concept already has children, we only need to load the concept's grand children. This
   //  typically happens when a child concept is selected, or after phylogeny structure expand.
   if (concept?.children) {
-    await Promise.all(
-      concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
-    )
+    await Promise.all(concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns)))
     insertConcept(concept, conceptMap, aliasMap)
     return { concept: concept, taxonomy: updatedTaxonomy }
   }
@@ -289,9 +284,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
     insertConcept(child, conceptMap, aliasMap)
   })
 
-  await Promise.all(
-    concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
-  )
+  await Promise.all(concept.children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns)))
 
   if (isRoot(taxonomy, concept)) {
     insertConcept(concept, conceptMap, aliasMap)
@@ -323,9 +316,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
 
   for (const name of conceptAncestry) {
     const children = await loadTaxonomyConceptChildren(updatedTaxonomy, name, apiFns)
-    await Promise.all(
-      children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns))
-    )
+    await Promise.all(children.map(child => loadTaxonomyConceptChildren(updatedTaxonomy, child, apiFns)))
   }
 
   // Wait until here to map the primary loaded concept (by conceptName) since the above processing
@@ -455,13 +446,10 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
   const conceptMap = updatedTaxonomy.conceptMap
   const aliasMap = updatedTaxonomy.aliasMap
   const descendantNames = []
-  const structureNames = []
 
   const mergeNode = (node, parentName) => {
     const childNames = (node.children || []).map(child => child.name)
     const existing = conceptMap[node.name]
-
-    structureNames.push(node.name)
 
     if (existing) {
       const updated = {
@@ -495,18 +483,23 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
 
   mergeNode(phylogeny, concept.parent)
 
-  const mediaNames = structureNames.filter(name => conceptMap[name]?.media === undefined)
+  const mediaNames = []
+  const queue = [phylogeny]
+  while (queue.length > 0) {
+    const node = queue.shift()
+    if (conceptMap[node.name]?.media === undefined) {
+      mediaNames.push(node.name)
+    }
+    queue.push(...(node.children || []))
+  }
 
   return { descendantNames, mediaNames, taxonomy: updatedTaxonomy }
 }
 
 const insertConcept = (concept, conceptMap, aliasMap) => {
-  // Normalize media items to ensure canonical mediaType on read
-  if (Array.isArray(concept.media)) {
-    concept.media = concept.media.map(typeMediaItem)
-  }
+  // Absent media means "not fetched yet"; an array gets canonical mediaType items.
+  concept.media = concept.media?.map(typeMediaItem)
 
-  // Realizations are owned by PanelData; never promote the payload field onto taxonomy state
   delete concept.linkRealizations
 
   conceptMap[concept.name] = concept
@@ -574,9 +567,7 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
 
   if (hasUpdated(CONCEPT.FIELD.PARENT)) {
     const priorParentConcept = { ...taxonomy.conceptMap[concept.parent] }
-    priorParentConcept.children = priorParentConcept.children.filter(
-      child => child !== updatedConcept.name
-    )
+    priorParentConcept.children = priorParentConcept.children.filter(child => child !== updatedConcept.name)
     insertConcept(priorParentConcept, conceptMap, aliasMap)
 
     const parentConcept = { ...conceptMap[updatedConcept.parent] }
@@ -598,11 +589,10 @@ const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) =>
 
 const removeTaxonomyConcept = (taxonomy, concept) => {
   if (concept.children.length > 0) {
-    throw createError(
-      'Delete Validation Error',
-      `Cannot delete concept "${concept.name}" because it has children`,
-      { conceptName: concept.name, childCount: concept.children.length }
-    )
+    throw createError('Delete Validation Error', `Cannot delete concept "${concept.name}" because it has children`, {
+      conceptName: concept.name,
+      childCount: concept.children.length,
+    })
   }
 
   const conceptMap = { ...taxonomy.conceptMap }
@@ -652,4 +642,3 @@ export {
   refreshTaxonomyConcept,
   removeTaxonomyConcept,
 }
-

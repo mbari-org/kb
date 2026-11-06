@@ -631,6 +631,27 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     expect(errors).toEqual([])
   })
 
+  it('fetches media breadth-first: children before grandchildren', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+
+    addStoreConcept(store, { name: 'sibling', children: [], parent: 'old-parent' })
+    store.children['old-parent'] = ['moving-child', 'sibling']
+
+    apiFns.apiPayload.mockClear()
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+
+    await waitFor(() => {
+      expect(getContext().getConcept('grandchild').media).toBeDefined()
+      expect(getContext().getConcept('sibling').media).toBeDefined()
+    })
+
+    const fetchedNames = apiCallsFor(apiFns.apiPayload, getMedia).map(([, name]) => name)
+    expect(fetchedNames.indexOf('sibling')).toBeLessThan(fetchedNames.indexOf('grandchild'))
+    expect(errors).toEqual([])
+  })
+
   it('retries a failed media fetch and then fills media', async () => {
     const { apiFns, errors, getContext, store } = await renderTaxonomy()
 
@@ -720,6 +741,24 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     })
 
     expect(getContext().getConcept('new-parent')).toBeNull()
+    expect(errors).toEqual([])
+  })
+
+  it('keeps phylogeny structure when a concept load races the descendants commit', async () => {
+    const { errors, getContext } = await renderTaxonomy()
+
+    // old-parent is structure-only after startup look-ahead, so the selection-triggered
+    //  loadConcept does real work and used to clobber the descendants merge on commit.
+    await act(async () => {
+      await Promise.all([
+        getContext().loadConceptDescendants(getContext().getConcept('old-parent')),
+        getContext().loadConcept('old-parent'),
+      ])
+    })
+
+    expect(getContext().getConcept('grandchild').children).toEqual([])
+    expect(getContext().getConcept('moving-child').children).toEqual(['grandchild'])
+    expect(getContext().getConcept('old-parent').aliases).toBeDefined()
     expect(errors).toEqual([])
   })
 
