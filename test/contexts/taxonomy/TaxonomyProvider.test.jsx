@@ -578,7 +578,7 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     vi.restoreAllMocks()
   })
 
-  it('merges phylogeny structure stubs and injects media for tree icons', async () => {
+  it('merges phylogeny structure stubs and fills media asynchronously for tree icons', async () => {
     const { apiFns, errors, getContext, store } = await renderTaxonomy()
 
     store.concepts.grandchild.media = [{ url: 'https://example.test/g.jpg', mimeType: 'image/jpeg' }]
@@ -589,7 +589,7 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
 
     expect(getContext().getConcept('grandchild')).toBeNull()
 
-    // Drop media from already look-ahead-loaded nodes so inject treats them as unset.
+    // Drop media from already look-ahead-loaded nodes so the fill treats them as unset.
     const priorOldParent = getContext().getConcept('old-parent')
     if (priorOldParent) {
       delete priorOldParent.media
@@ -602,7 +602,7 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
       returnedTaxonomy = await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
     })
 
-    expect(returnedTaxonomy).toBe(getContext().taxonomy)
+    expect(returnedTaxonomy.conceptMap['moving-child'].children).toEqual(['grandchild'])
     expect(getContext().getConcept('moving-child').children).toEqual(['grandchild'])
     expect(getContext().getConcept('grandchild').parent).toBe('moving-child')
     expect(getContext().getConcept('grandchild').children).toEqual([])
@@ -610,8 +610,11 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     expect(getContext().taxonomy.aliasMap['grandchild-alias']).toBe(getContext().getConcept('grandchild'))
     expect(getContext().isConceptLoaded('grandchild')).toBe(false)
     expect(getContext().getConcept('grandchild').aliases).toBeUndefined()
-    expect(getContext().getConcept('grandchild').media).toHaveLength(1)
-    expect(getContext().getConcept('old-parent').media).toHaveLength(2)
+
+    await waitFor(() => {
+      expect(getContext().getConcept('grandchild').media).toHaveLength(1)
+      expect(getContext().getConcept('old-parent').media).toHaveLength(2)
+    })
     expect(
       apiCallsFor(apiFns.apiPayload, getMedia)
         .map(([, name]) => name)
@@ -628,7 +631,7 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     expect(errors).toEqual([])
   })
 
-  it('retries a failed media fetch and then injects media', async () => {
+  it('retries a failed media fetch and then fills media', async () => {
     const { apiFns, errors, getContext, store } = await renderTaxonomy()
 
     store.concepts.grandchild.media = [{ url: 'https://example.test/g.jpg', mimeType: 'image/jpeg' }]
@@ -650,13 +653,15 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
       returnedTaxonomy = await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
     })
 
-    expect(returnedTaxonomy).toBe(getContext().taxonomy)
+    expect(returnedTaxonomy.conceptMap.grandchild).toBeDefined()
+    await waitFor(() => {
+      expect(getContext().getConcept('grandchild').media).toHaveLength(1)
+    })
     expect(grandchildMediaAttempts).toBe(2)
-    expect(getContext().getConcept('grandchild').media).toHaveLength(1)
     expect(errors).toEqual([])
   })
 
-  it('surfaces an error when media fetches keep failing', async () => {
+  it('leaves media unset without surfacing an error when media fetches keep failing', async () => {
     const { apiFns, errors, getContext } = await renderTaxonomy()
 
     const apiPayloadImpl = apiFns.apiPayload.getMockImplementation()
@@ -667,17 +672,55 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
       return apiPayloadImpl(fn, value, ignoreError)
     })
 
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    try {
-      await act(async () => {
-        await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
-      })
-    } finally {
-      consoleErrorSpy.mockRestore()
-    }
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
 
-    expect(errors.length).toBeGreaterThan(0)
-    expect(errors[0].message).toMatch(/Failed to load media/)
+    await waitFor(() => {
+      const grandchildCalls = apiCallsFor(apiFns.apiPayload, getMedia).filter(([, name]) => name === 'grandchild')
+      expect(grandchildCalls).toHaveLength(2)
+    })
+    expect(getContext().getConcept('grandchild').media).toBeUndefined()
+    expect(errors).toEqual([])
+  })
+
+  it('merges background media onto taxonomy committed by an interim update', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+
+    store.concepts.grandchild.media = [{ url: 'https://example.test/g.jpg', mimeType: 'image/jpeg' }]
+
+    let releaseMedia
+    const mediaGate = new Promise(resolve => {
+      releaseMedia = resolve
+    })
+    const apiPayloadImpl = apiFns.apiPayload.getMockImplementation()
+    apiFns.apiPayload.mockImplementation(async (fn, value, ignoreError) => {
+      if (fn === getMedia) {
+        await mediaGate
+      }
+      return apiPayloadImpl(fn, value, ignoreError)
+    })
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+    expect(getContext().getConcept('grandchild').media).toBeUndefined()
+
+    // Interim commit while the media fill is gated, e.g. from a concept switch.
+    act(() => {
+      getContext().removeConcept('new-parent')
+    })
+    expect(getContext().getConcept('new-parent')).toBeNull()
+
+    await act(async () => {
+      releaseMedia()
+    })
+    await waitFor(() => {
+      expect(getContext().getConcept('grandchild').media).toHaveLength(1)
+    })
+
+    expect(getContext().getConcept('new-parent')).toBeNull()
+    expect(errors).toEqual([])
   })
 
   it('hydrates a structure stub on loadConcept without losing phylogeny children', async () => {

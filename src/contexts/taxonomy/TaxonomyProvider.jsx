@@ -8,6 +8,7 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 import { getConcept as apiConcept } from '@/lib/model/concept'
 
 import {
+  applyConceptMedia,
   areConceptChildrenLoaded as areTaxonomyConceptChildrenLoaded,
   closestConcept as closestTaxonomyConcept,
   filterTaxonomyRanks,
@@ -19,6 +20,7 @@ import {
   isConceptLoaded as isTaxonomyConceptLoaded,
   isDescendant as isDescendantConcept,
   isRoot as isTaxonomyRoot,
+  loadConceptMediaIncremental,
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
@@ -33,6 +35,8 @@ import { LOADING } from '@/lib/constants/loading.js'
 import { createError } from '@/lib/errors'
 
 import { isEqual, withTimeout } from '@/lib/utils'
+
+const MEDIA_FLUSH_COUNT = 60
 
 const TaxonomyProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
@@ -282,19 +286,57 @@ const TaxonomyProvider = ({ children }) => {
     [apiFns, isConceptLoaded, showBoundary, taxonomy, updateTaxonomy]
   )
 
+  const mediaInFlightRef = useRef(new Set())
+
+  // Background fill of tree-icon media after a descendants load. Commits accumulate and
+  //  flush in chunks via functional updates, so media merges onto whatever taxonomy is
+  //  current (concept switches / edits mid-fill are not clobbered) and the tree re-renders
+  //  a few times per fill instead of once per batch. Never reaches the error boundary.
+  const fillConceptMedia = useCallback(
+    mediaNames => {
+      const pending = mediaNames.filter(name => !mediaInFlightRef.current.has(name))
+      if (pending.length === 0) return
+      pending.forEach(name => mediaInFlightRef.current.add(name))
+
+      let accumulated = []
+      const flush = () => {
+        if (accumulated.length === 0) return
+        const entries = accumulated
+        accumulated = []
+        setTaxonomy(current => {
+          if (!current) return current
+          const conceptMap = { ...current.conceptMap }
+          const aliasMap = { ...current.aliasMap }
+          entries.forEach(([name, media]) => applyConceptMedia(conceptMap, aliasMap, name, media))
+          return { ...current, conceptMap, aliasMap }
+        })
+      }
+
+      loadConceptMediaIncremental(pending, apiFns, succeeded => {
+        accumulated.push(...succeeded)
+        if (accumulated.length >= MEDIA_FLUSH_COUNT) flush()
+      }).finally(() => {
+        pending.forEach(name => mediaInFlightRef.current.delete(name))
+        flush()
+      })
+    },
+    [apiFns]
+  )
+
   const loadConceptDescendants = useCallback(
     async concept => {
       if (!apiFns || !taxonomy) return null
       try {
-        const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(taxonomy, concept, apiFns)
+        const { mediaNames, taxonomy: updatedTaxonomy } = await loadTaxonomyConceptDescendants(taxonomy, concept, apiFns)
         const committedTaxonomy = updateTaxonomy(updatedTaxonomy)
+        fillConceptMedia(mediaNames)
 
         return committedTaxonomy || taxonomy
       } catch (error) {
         showBoundary(error)
       }
     },
-    [apiFns, showBoundary, taxonomy, updateTaxonomy]
+    [apiFns, fillConceptMedia, showBoundary, taxonomy, updateTaxonomy]
   )
 
   const loadConceptChildren = useCallback(

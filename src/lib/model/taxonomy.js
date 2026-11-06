@@ -421,35 +421,29 @@ const fetchMediaBatch = async (names, apiFns) => {
 }
 
 // Paced batches keep the API/browser from collapsing; never write media:[] on failure.
-const injectConceptMedia = async (conceptMap, aliasMap, conceptNames, apiFns) => {
-  let pending = conceptNames.filter(name => {
-    const mapped = conceptMap[name]
-    return mapped && mapped.media === undefined
-  })
+// Results stream out via onBatch so callers commit incrementally; unresolved names are
+//  left with media undefined (icon absent) and refetched on a later expand.
+const loadConceptMediaIncremental = async (conceptNames, apiFns, onBatch) => {
+  let pending = [...conceptNames]
 
   for (let attempt = 1; attempt <= MEDIA_FETCH_ATTEMPTS && pending.length > 0; attempt += 1) {
     const stillFailed = []
 
     for (const batch of chunkNames(pending, MEDIA_FETCH_BATCH_SIZE)) {
       const { failed, succeeded } = await fetchMediaBatch(batch, apiFns)
-      succeeded.forEach(([name, media]) => applyConceptMedia(conceptMap, aliasMap, name, media))
+      if (succeeded.length > 0) {
+        onBatch(succeeded)
+      }
       stillFailed.push(...failed)
     }
 
     pending = stillFailed
   }
-
-  if (pending.length > 0) {
-    throw createError(
-      'Media Load Error',
-      `Failed to load media for ${pending.length} concept${pending.length === 1 ? '' : 's'} during tree expand`,
-      { conceptNames: pending }
-    )
-  }
 }
 
 // Expand-all / export: one phylogeny/down call, structure-only stubs for unloaded nodes.
-// Media is fetched cheaply for tree icons; full concept payloads load on select.
+// Returns mediaNames for the caller to fill asynchronously (tree icons); full concept
+//  payloads load on select.
 const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
   const phylogeny = await apiFns.apiPayload(apiDescendants, concept.name)
 
@@ -500,9 +494,10 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
   }
 
   mergeNode(phylogeny, concept.parent)
-  await injectConceptMedia(conceptMap, aliasMap, structureNames, apiFns)
 
-  return { descendantNames, taxonomy: updatedTaxonomy }
+  const mediaNames = structureNames.filter(name => conceptMap[name]?.media === undefined)
+
+  return { descendantNames, mediaNames, taxonomy: updatedTaxonomy }
 }
 
 const insertConcept = (concept, conceptMap, aliasMap) => {
@@ -632,6 +627,7 @@ const removeTaxonomyConcept = (taxonomy, concept) => {
 }
 
 export {
+  applyConceptMedia,
   areConceptChildrenLoaded,
   buildTree,
   buildTreeItems,
@@ -648,6 +644,7 @@ export {
   isDescendant,
   isRoot,
   isStructureOnly,
+  loadConceptMediaIncremental,
   loadTaxonomy,
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
