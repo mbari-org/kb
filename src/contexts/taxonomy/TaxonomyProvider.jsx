@@ -129,11 +129,9 @@ const TaxonomyProvider = ({ children }) => {
           removedChildren.forEach(childName => {
             const removed = conceptMap[childName]
             if (removed) {
-              if (Array.isArray(removed.alternateNames)) {
-                removed.alternateNames.forEach(aliasName => {
-                  delete aliasMap[aliasName]
-                })
-              }
+              removed.alternateNames.forEach(aliasName => {
+                delete aliasMap[aliasName]
+              })
               delete conceptMap[childName]
             }
           })

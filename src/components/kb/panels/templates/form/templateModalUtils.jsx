@@ -244,8 +244,7 @@ export const confirmTemplateDeleteAlert = () => ({
 })
 
 export const isDuplicateTemplate = (templates, template, excludeId = null) => {
-  const list = Array.isArray(templates) ? templates : []
-  return list.some(
+  return templates.some(
     existing =>
       (excludeId ? existing.id !== excludeId : true) &&
       template.concept === existing.concept &&

@@ -53,7 +53,7 @@ const useLockUserButton = () => {
       const ActionView = () => {
         const { modalData } = useUsersModalDataContext()
         const actions = createLockUserActions(handleCancel, handleLockToggle)(modalData)
-        if (!Array.isArray(actions)) return null
+        if (!actions) return null
 
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)

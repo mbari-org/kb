@@ -53,7 +53,7 @@ const useDeleteRealizationButton = () => {
       const ActionView = () => {
         const { modalData } = useRealizationsModalDataContext()
         const actions = createDeleteRealizationActions(handleCancel, handleDeleteConfirm)(modalData)
-        if (!Array.isArray(actions)) return null
+        if (!actions) return null
 
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)

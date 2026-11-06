@@ -31,13 +31,7 @@ const normalizeRealization = realization => ({
   toConcept: asString(realization?.toConcept ?? realization?.targetConcept ?? realization?.to),
   lastUpdated: realization?.lastUpdated ?? realization?.updatedTimestamp ?? realization?.updatedAt ?? null,
 })
-const normalizeRealizations = payload => {
-  if (Array.isArray(payload)) return payload.map(normalizeRealization)
-  if (Array.isArray(payload?.content)) return payload.content.map(normalizeRealization)
-  if (Array.isArray(payload?.linkrealizations)) return payload.linkrealizations.map(normalizeRealization)
-  if (Array.isArray(payload?.realizations)) return payload.realizations.map(normalizeRealization)
-  return []
-}
+const normalizeRealizations = realizations => realizations.map(normalizeRealization)
 
 const useLoadRealizations = apiFns => {
   const loadRealizations = useCallback(
@@ -65,7 +59,7 @@ const useLoadRealizations = apiFns => {
 
         let exhausted = false
         for (const pagePayload of batch) {
-          const page = normalizeRealizations(pagePayload)
+          const page = normalizeRealizations(pagePayload.content)
           if (page.length === 0) {
             exhausted = true
             break

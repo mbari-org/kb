@@ -76,8 +76,7 @@ const filterObject = (obj, predicate) => {
 
 const hasTrueValue = arg => {
   if (typeof arg === 'boolean') return arg
-  const values = Array.isArray(arg) ? arg : Object.values(arg)
-  return values.some(value => value === true || value === 'true')
+  return Object.values(arg).some(value => value === true || value === 'true')
 }
 
 const humanTimestamp = timestamp => {

@@ -364,7 +364,6 @@ const loadTaxonomyConceptGrandchildren = async (taxonomy, conceptName, apiFns) =
 }
 
 const rebindAliases = (concept, aliasMap) => {
-  if (!Array.isArray(concept.alternateNames)) return
   concept.alternateNames.forEach(alternateName => {
     aliasMap[alternateName] = concept
   })
@@ -400,7 +399,7 @@ const fetchMediaBatch = async (names, apiFns) => {
   await Promise.all(
     names.map(async name => {
       const media = await apiFns.apiPayload(getMedia, name, true)
-      if (Array.isArray(media)) {
+      if (media) {
         succeeded.push([name, media])
         return
       }

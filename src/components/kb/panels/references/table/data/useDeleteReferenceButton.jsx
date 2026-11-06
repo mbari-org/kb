@@ -52,7 +52,7 @@ const useDeleteReferenceButton = () => {
       const ActionView = () => {
         const { modalData } = useReferencesModalDataContext()
         const actions = createDeleteReferenceActions(handleCancel, handleDeleteConfirm)(modalData)
-        if (!Array.isArray(actions)) return null
+        if (!actions) return null
 
         const colors = actions.map(a => a.color || 'main')
         const disabled = actions.map(a => a.disabled || false)

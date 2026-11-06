@@ -15,8 +15,8 @@ describe('useLoadRealizations', () => {
     const apiFns = {
       apiPayload: vi.fn(async (fn, { offset }) => {
         calls.push(offset)
-        if (offset === 500) return [{ id: 'r-500' }]
-        return fullPage(offset)
+        if (offset === 500) return { content: [{ id: 'r-500' }] }
+        return { content: fullPage(offset) }
       }),
     }
 
@@ -34,7 +34,7 @@ describe('useLoadRealizations', () => {
   })
 
   it('returns an empty array when the first page is empty', async () => {
-    const apiFns = { apiPayload: vi.fn(async () => []) }
+    const apiFns = { apiPayload: vi.fn(async () => ({ content: [] })) }
 
     const { result } = renderHook(() => useLoadRealizations(apiFns))
 
@@ -44,6 +44,18 @@ describe('useLoadRealizations', () => {
     })
 
     expect(realizations).toEqual([])
+  })
+
+  it('throws when a page has an unexpected payload structure', async () => {
+    const apiFns = { apiPayload: vi.fn(async () => ({ unexpected: true })) }
+
+    const { result } = renderHook(() => useLoadRealizations(apiFns))
+
+    await expect(
+      act(async () => {
+        await result.current()
+      })
+    ).rejects.toThrow(TypeError)
   })
 
   it('loads realizations for a single concept via the concept endpoint', async () => {

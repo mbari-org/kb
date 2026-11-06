@@ -95,7 +95,7 @@ const useAddUserButton = () => {
       }
 
       const actions = createModalActions(handleCancel, handleCommit)(modalData)
-      if (!Array.isArray(actions)) return null
+      if (!actions) return null
 
       const colors = actions.map(a => a.color || 'main')
       const disabled = actions.map(a => a.disabled || false)
