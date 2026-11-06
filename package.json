@@ -1,7 +1,7 @@
 {
   "name": "kb",
   "private": true,
-  "version": "2026.11.03-1812",
+  "version": "2026.11.06-1720",
   "type": "module",
   "homepage": "/kbeditor",
   "dependencies": {
