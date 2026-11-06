@@ -46,6 +46,7 @@ const MediaPreview = ({ setPreviewOn }) => {
       case VIDEO:
         return (
           <video
+            key={mediaUrl}
             onClick={() => setPreviewOn(true)}
             src={mediaUrl}
             style={{
@@ -66,6 +67,7 @@ const MediaPreview = ({ setPreviewOn }) => {
       case ICON:
         return (
           <img
+            key={mediaUrl}
             alt={'Unable to display Media Icon! Check console for URL.'}
             onClick={() => setPreviewOn(true)}
             src={mediaUrl}
@@ -88,6 +90,7 @@ const MediaPreview = ({ setPreviewOn }) => {
       default:
         return (
           <img
+            key={mediaUrl}
             alt={'Unable to display Media! Check console for URL.'}
             onClick={() => setPreviewOn(true)}
             src={mediaUrl}

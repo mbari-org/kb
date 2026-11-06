@@ -28,6 +28,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
       case VIDEO:
         return (
           <video
+            key={mediaUrl}
             controls
             src={mediaUrl}
             style={{
@@ -41,6 +42,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
       case ICON:
         return (
           <img
+            key={mediaUrl}
             alt='Concept Media Icon Display'
             onClick={() => setPreviewOn(false)}
             src={mediaUrl}
@@ -56,6 +58,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
       default:
         return (
           <img
+            key={mediaUrl}
             alt='Concept Media Display'
             onClick={() => setPreviewOn(false)}
             src={mediaUrl}

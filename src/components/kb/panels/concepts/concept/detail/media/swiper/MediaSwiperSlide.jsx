@@ -44,6 +44,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem, showControls = false }) => {
       case VIDEO:
         return (
           <video
+            key={mediaUrl}
             controls={showControls}
             onClick={() => slideClick(mediaIndex)}
             src={mediaUrl}
@@ -53,6 +54,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem, showControls = false }) => {
       case ICON:
         return (
           <img
+            key={mediaUrl}
             onClick={() => slideClick(mediaIndex)}
             src={mediaUrl}
             style={{ border, height: 'auto', width: '50%' }}
@@ -62,6 +64,7 @@ const MediaSwiperSlide = ({ mediaIndex, mediaItem, showControls = false }) => {
       default:
         return (
           <img
+            key={mediaUrl}
             onClick={() => slideClick(mediaIndex)}
             src={mediaUrl}
             style={{ border, height: 'auto', width: '100%' }}
