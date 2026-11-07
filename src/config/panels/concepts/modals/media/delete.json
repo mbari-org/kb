@@ -1,9 +1,9 @@
 {
   "PRIMARY_REASSIGN_MESSAGE": [
-    "Since you are deleting the current primary media of this type,",
-    "the primary is being randomly reassigned to another media item.",
-    "You can edit the other media to explicitly set which item is primary."
+    "Since you are deleting the current primary Media of this type,",
+    "the primary is being randomly reassigned to another Media item.",
+    "You can edit the other Media to explicitly set which item is primary."
   ],
-  "LABEL": "Delete media",
-  "TOOLTIP": "Delete media"
+  "LABEL": "Delete Media",
+  "TOOLTIP": "Delete Media"
 }

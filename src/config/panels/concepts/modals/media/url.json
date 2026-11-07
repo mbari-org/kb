@@ -1,0 +1,8 @@
+{
+  "LABEL": "URL",
+  "EMPTY_ERROR": "URL cannot be empty",
+  "DUPLICATE_ERROR": "A Media with that URL is already in use for this Concept",
+  "INVALID_URL_ERROR": "Please enter a valid URL",
+  "CHECKING": "Checking URL...",
+  "INVALID_MEDIA_ERROR": "URL is not a valid Media"
+}

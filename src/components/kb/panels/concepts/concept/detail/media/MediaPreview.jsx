@@ -2,7 +2,7 @@ import { use } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import KBInfoIcon from '@/components/icon/KBInfoIcon'
+import KBTooltip from '@/components/common/tooltip/KBTooltip'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
@@ -15,6 +15,8 @@ import { getMediaType } from '@/lib/model/media'
 import { MEDIA } from '@/lib/constants'
 
 const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
+
+const CREDIT_TOOLTIP_MAX_LENGTH = 80
 
 const MediaPreview = ({ setPreviewOn }) => {
   const theme = useTheme()
@@ -113,18 +115,39 @@ const MediaPreview = ({ setPreviewOn }) => {
 
   return (
     <Stack>
-      <Box
-        sx={{
-          border,
-          height: '0',
-          paddingBottom: '100%',
-          position: 'relative',
-          overflow: 'hidden',
-          width: '100%',
-        }}
+      <KBTooltip
+        placement='bottom'
+        tooltipSx={{ maxWidth: '90vw' }}
+        title={
+          mediaUrl && (
+            <Box>
+              <Box>URL: {mediaUrl}</Box>
+              {mediaItem?.credit && (
+                <Box>
+                  Credit:{' '}
+                  {mediaItem.credit.length > CREDIT_TOOLTIP_MAX_LENGTH
+                    ? `${mediaItem.credit.slice(0, CREDIT_TOOLTIP_MAX_LENGTH)}…`
+                    : mediaItem.credit}
+                </Box>
+              )}
+              <Box>Primary: {mediaItem?.isPrimary ? 'true' : 'false'}</Box>
+            </Box>
+          )
+        }
       >
-        {renderMedia()}
-      </Box>
+        <Box
+          sx={{
+            border,
+            height: '0',
+            paddingBottom: '100%',
+            position: 'relative',
+            overflow: 'hidden',
+            width: '100%',
+          }}
+        >
+          {renderMedia()}
+        </Box>
+      </KBTooltip>
       <Box
         sx={{
           marginTop: 1,
@@ -144,18 +167,6 @@ const MediaPreview = ({ setPreviewOn }) => {
         >
           {mediaItem?.caption}
         </Typography>
-        {mediaItem?.credit && (
-          <Box
-            sx={{
-              position: 'absolute',
-              left: 0,
-              top: '50%',
-              transform: 'translateY(-50%)',
-            }}
-          >
-            <KBInfoIcon tooltip={`Credit: ${mediaItem?.credit}`} placement='top' size={18} />
-          </Box>
-        )}
       </Box>
     </Stack>
   )

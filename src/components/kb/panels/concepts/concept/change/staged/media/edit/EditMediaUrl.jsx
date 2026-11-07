@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useRef } from 'react'
 import { FormControl, Icon, IconButton, InputAdornment, TextField } from '@mui/material'
 import { MdOutlinePhoto } from 'react-icons/md'
 import isValidUrl from '@/lib/validators/isValidUrl'
@@ -11,8 +11,10 @@ import useDebounce from '@/lib/hooks/useDebounce'
 import isValidMedia from '@/lib/validators/isValidMedia'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import CONFIG from '@/lib/config'
 
 const URL_CHECK_DEBOUNCE_TIME = 500
+const { URL } = CONFIG.PANELS.CONCEPTS.MODALS.MEDIA
 
 const EditMediaUrl = ({ modifiedUrl, onUrlChange, onUrlStatusChange, setPreviewOn, urlStatus, urlValue }) => {
   const { concept } = use(ConceptContext)
@@ -42,14 +44,17 @@ const EditMediaUrl = ({ modifiedUrl, onUrlChange, onUrlStatusChange, setPreviewO
     [concept.media, stagedState.media, action, mediaIndex]
   )
 
+  const lastInputRef = useRef('')
+
   const debouncedUrlCheck = useDebounce(urlValue => {
+    if (urlValue !== lastInputRef.current) return
+
     if (isValidUrl(urlValue)) {
-      const loadingStatus = { loading: true, valid: true, isDuplicate: false }
-      onUrlStatusChange(loadingStatus)
+      onUrlStatusChange({ loading: true, valid: true, isDuplicate: false })
 
       isValidMedia(urlValue).then(exists => {
-        const finalStatus = { loading: false, valid: exists, isDuplicate: false }
-        onUrlStatusChange(finalStatus)
+        if (urlValue !== lastInputRef.current) return
+        onUrlStatusChange({ loading: false, valid: exists, isDuplicate: false })
       })
     } else {
       onUrlStatusChange({ loading: false, valid: false, isDuplicate: false })
@@ -57,6 +62,7 @@ const EditMediaUrl = ({ modifiedUrl, onUrlChange, onUrlStatusChange, setPreviewO
   }, URL_CHECK_DEBOUNCE_TIME)
 
   const handleUrlInput = urlValue => {
+    lastInputRef.current = urlValue
     const isDuplicate = urlValue !== mediaItem.url && isDuplicateUrl(urlValue)
     if (isDuplicate) {
       onUrlStatusChange({ isDuplicate: true, loading: false, valid: true })
@@ -78,15 +84,15 @@ const EditMediaUrl = ({ modifiedUrl, onUrlChange, onUrlStatusChange, setPreviewO
 
   const urlHelperText =
     urlValue.trim() === ''
-      ? 'URL cannot be empty'
+      ? URL.EMPTY_ERROR
       : urlStatus.isDuplicate
-        ? 'This media is already being used'
+        ? URL.DUPLICATE_ERROR
         : !isValidUrl(urlValue)
-          ? 'Please enter a valid URL'
+          ? URL.INVALID_URL_ERROR
           : urlStatus.loading
-            ? 'Checking URL...'
+            ? URL.CHECKING
             : !urlStatus.valid
-              ? 'URL is not a valid media file'
+              ? URL.INVALID_MEDIA_ERROR
               : ''
 
   const urlSlotProps = {
@@ -108,7 +114,7 @@ const EditMediaUrl = ({ modifiedUrl, onUrlChange, onUrlStatusChange, setPreviewO
       <TextField
         error={urlError}
         helperText={modifiedUrl ? urlHelperText : ''}
-        label='URL'
+        label={URL.LABEL}
         name='url'
         onChange={event => handleUrlInput(event.target.value)}
         required
