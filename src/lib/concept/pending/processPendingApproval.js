@@ -17,7 +17,9 @@ export const processPendingApproval = async ({
 }) => {
   if (!items || items.length === 0) return { updated: [], concepts: {}, pendingHistory: [] }
 
-  await Promise.all(items.map(item => apiFns.apiPayload(updatePendingItem, [approval, item.id])))
+  for (const item of items) {
+    await apiFns.apiPayload(updatePendingItem, [approval, item.id])
+  }
 
   const structuralFields = [HISTORY_FIELD.NAME, HISTORY_FIELD.PARENT]
   if (approval === PENDING.APPROVAL.ACCEPT && items.some(item => structuralFields.includes(item.field))) {

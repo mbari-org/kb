@@ -22,6 +22,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const BUTTON = CONFIG.BUTTON
+const DELETE_MEDIA_LABEL = CONFIG.PANELS.CONCEPTS.MODALS.MEDIA.DELETE.LABEL
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -201,13 +202,13 @@ describe('Media Combined Flows - Add then Delete', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 
@@ -273,13 +274,13 @@ describe('Media Combined Flows - Add then Delete', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -340,13 +341,13 @@ describe('Media Combined Flows - Edit then Delete', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 })
@@ -442,13 +443,13 @@ describe('Media Combined Flows - Full Workflow', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -950,13 +951,13 @@ describe('Media Combined Flows - Edge Cases', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickDiscardButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await clickAddMediaButton(user, screen)

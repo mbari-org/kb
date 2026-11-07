@@ -26,6 +26,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const BUTTON = CONFIG.BUTTON
+const DELETE_MEDIA_LABEL = CONFIG.PANELS.CONCEPTS.MODALS.MEDIA.DELETE.LABEL
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -142,13 +143,13 @@ describe('Media state integrity', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {

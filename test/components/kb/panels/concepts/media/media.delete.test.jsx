@@ -18,6 +18,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const BUTTON = CONFIG.BUTTON
+const DELETE_MEDIA_LABEL = CONFIG.PANELS.CONCEPTS.MODALS.MEDIA.DELETE.LABEL
 
 vi.mock('@/lib/validators/isValidMedia', () => {
   return {
@@ -52,7 +53,7 @@ describe('Media Delete - Single Media Item', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     expect(screen.getByText(/Solo Image Credit/)).toBeInTheDocument()
@@ -60,7 +61,7 @@ describe('Media Delete - Single Media Item', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -90,13 +91,13 @@ describe('Media Delete - Single Media Item', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 
@@ -122,13 +123,13 @@ describe('Media Delete - Single Media Item', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 })
@@ -167,7 +168,7 @@ describe('Media Delete - Non-Primary Media', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -177,7 +178,7 @@ describe('Media Delete - Non-Primary Media', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 
@@ -210,7 +211,7 @@ describe('Media Delete - Non-Primary Media', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -220,7 +221,7 @@ describe('Media Delete - Non-Primary Media', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 })
@@ -258,7 +259,7 @@ describe('Media Delete - Primary Media with Reassignment', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -268,7 +269,7 @@ describe('Media Delete - Primary Media with Reassignment', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 
@@ -300,7 +301,7 @@ describe('Media Delete - Primary Media with Reassignment', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -336,7 +337,7 @@ describe('Media Delete - Primary Media with Reassignment', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     expect(screen.queryByText(/primary is being randomly reassigned/i)).not.toBeInTheDocument()
@@ -370,13 +371,13 @@ describe('Media Delete - Discard Operations', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickDiscardButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
@@ -404,13 +405,13 @@ describe('Media Delete - Discard Operations', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -470,13 +471,13 @@ describe('Media Delete - Mixed Media Types', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -512,12 +513,12 @@ describe('Media Delete - Mixed Media Types', () => {
 
     await clickDeleteMediaButton(user, screen)
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -554,7 +555,7 @@ describe('Media Delete - Delete Modal Content', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     expect(screen.getByText(/Test Credit for Display/)).toBeInTheDocument()
@@ -582,7 +583,7 @@ describe('Media Delete - Delete Modal Content', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     expect(screen.getByText(/head_01\.jpg/)).toBeInTheDocument()
@@ -610,7 +611,7 @@ describe('Media Delete - Delete Modal Content', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     expect(screen.getByText(/true/i)).toBeInTheDocument()
@@ -645,13 +646,13 @@ describe('Media Delete - Edge Cases', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 
@@ -681,13 +682,13 @@ describe('Media Delete - Edge Cases', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 
@@ -713,25 +714,25 @@ describe('Media Delete - Edge Cases', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickDiscardButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
 
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 })
@@ -775,7 +776,7 @@ describe('Media Delete - Three or More Media Items', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -785,7 +786,7 @@ describe('Media Delete - Three or More Media Items', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 
@@ -835,13 +836,13 @@ describe('Media Delete - Three or More Media Items', () => {
     await clickDeleteMediaButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete media')).toBeInTheDocument()
+      expect(screen.getByText(DELETE_MEDIA_LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Delete media')).not.toBeInTheDocument()
+      expect(screen.queryByText(DELETE_MEDIA_LABEL)).not.toBeInTheDocument()
     })
   })
 })
