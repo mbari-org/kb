@@ -1,6 +1,6 @@
 import { use } from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptProvider from '@/contexts/panels/concepts/ConceptProvider'
@@ -43,7 +43,28 @@ const ConceptProbe = () => {
   return <div data-testid='concept-name'>{value.concept?.name || ''}</div>
 }
 
-const renderProvider = ({ apiPayload, selectedName = 'dingo', taxonomyValue }) => {
+const RenameProbe = ({ selectedRef }) => {
+  const { concept, conceptPath, relabelConceptPaths, setConcept } = use(ConceptContext)
+  return (
+    <>
+      <div data-testid='concept-name'>{concept?.name || ''}</div>
+      <div data-testid='concept-path'>{JSON.stringify(conceptPath)}</div>
+      <button
+        onClick={async () => {
+          relabelConceptPaths('dingo', 'coyote')
+          selectedRef.current = 'coyote'
+          await setConcept({ ...concept, name: 'coyote' })
+        }}
+        type='button'
+      >
+        rename
+      </button>
+    </>
+  )
+}
+
+const renderProvider = ({ apiPayload, probe, selectedName = 'dingo', selectedRef, taxonomyValue }) => {
+  const selectionRef = selectedRef || { current: selectedName }
   const beginProcessing = vi.fn(() => vi.fn())
   const ensureConceptRealizations = vi.fn(async () => [])
   const getConceptTemplates = vi.fn(() => [])
@@ -72,17 +93,15 @@ const renderProvider = ({ apiPayload, selectedName = 'dingo', taxonomyValue }) =
           >
             <SelectedContext.Provider
               value={{
-                concepts: { clear: vi.fn(), getState: vi.fn(() => [selectedName]), push: vi.fn() },
-                getSelected: key => (key === SELECTED.CONCEPT ? selectedName : null),
+                concepts: { clear: vi.fn(), getState: vi.fn(() => [selectionRef.current]), push: vi.fn() },
+                getSelected: key => (key === SELECTED.CONCEPT ? selectionRef.current : null),
                 panels: { current: () => SELECTED.PANELS.CONCEPTS },
                 updateSelected,
               }}
             >
               <TaxonomyContext.Provider value={taxonomyValue || defaultTaxonomyValue}>
                 <UserContext.Provider value={{ guardedAction: null, setHasUnsavedChanges }}>
-                  <ConceptProvider>
-                    <ConceptProbe />
-                  </ConceptProvider>
+                  <ConceptProvider>{probe || <ConceptProbe />}</ConceptProvider>
                 </UserContext.Provider>
               </TaxonomyContext.Provider>
             </SelectedContext.Provider>
@@ -92,7 +111,7 @@ const renderProvider = ({ apiPayload, selectedName = 'dingo', taxonomyValue }) =
     </AppModalContext.Provider>
   )
 
-  return { beginProcessing, ensureConceptRealizations, updateSelected }
+  return { beginProcessing, ensureConceptRealizations, selectedRef: selectionRef, updateSelected }
 }
 
 const phylogenyUpPayload = { name: 'root', children: [{ name: 'dingo' }] }
@@ -116,6 +135,38 @@ describe('ConceptProvider', () => {
     await waitFor(() => {
       expect(showBoundaryMock).toHaveBeenCalledWith(pathError)
     })
+  })
+
+  it('applies the relabeled path after a rename without refetching phylogeny', async () => {
+    const apiPayload = vi.fn(async (fn, conceptName) => {
+      if (fn === getConceptPhylogenyUp) return phylogenyUpPayload
+      throw new Error(`Unexpected api call: ${fn?.name || 'unknown'} ${conceptName || ''}`)
+    })
+    const selectedRef = { current: 'dingo' }
+
+    renderProvider({ apiPayload, probe: <RenameProbe selectedRef={selectedRef} />, selectedRef })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('concept-path').textContent).toBe(JSON.stringify(['root', 'dingo']))
+    })
+    const pathCallsBefore = apiPayload.mock.calls.filter(([fn]) => fn === getConceptPhylogenyUp)
+    expect(pathCallsBefore).toHaveLength(1)
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'rename' }).click()
+      await new Promise(resolve => setTimeout(resolve, 0))
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('concept-name').textContent).toBe('coyote')
+    })
+    await waitFor(() => {
+      expect(screen.getByTestId('concept-path').textContent).toBe(JSON.stringify(['root', 'coyote']))
+    })
+
+    const pathCalls = apiPayload.mock.calls.filter(([fn]) => fn === getConceptPhylogenyUp)
+    expect(pathCalls).toHaveLength(1)
+    expect(pathCalls[0][1]).toBe('dingo')
   })
 
   it('converges an alias selection to the primary name after the concept loads', async () => {

@@ -28,8 +28,15 @@ export const PanelDataProvider = ({ children }) => {
   const [pendingHistory, setPendingHistory] = useState([])
 
   const [realizationsByConcept, setRealizationsByConcept] = useState({})
+  const realizationsByConceptRef = useRef({})
   const [realizationsAllLoaded, setRealizationsAllLoaded] = useState(false)
+  const realizationsAllLoadedRef = useRef(false)
   const realizationLoadsRef = useRef(new Map())
+
+  const commitRealizationsByConcept = useCallback(next => {
+    realizationsByConceptRef.current = next
+    setRealizationsByConcept(next)
+  }, [])
 
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
@@ -87,25 +94,30 @@ export const PanelDataProvider = ({ children }) => {
 
   const getAllRealizations = useCallback(() => Object.values(realizationsByConcept).flat(), [realizationsByConcept])
 
-  const setConceptRealizations = useCallback((conceptName, realizations) => {
-    const sorted = sortRealizations([...realizations])
-    setRealizationsByConcept(current => ({ ...current, [conceptName]: sorted }))
-    return sorted
-  }, [])
+  const setConceptRealizations = useCallback(
+    (conceptName, realizations) => {
+      const sorted = sortRealizations([...realizations])
+      commitRealizationsByConcept({ ...realizationsByConceptRef.current, [conceptName]: sorted })
+      return sorted
+    },
+    [commitRealizationsByConcept]
+  )
 
-  const invalidateConceptRealizations = useCallback(conceptName => {
-    if (conceptName === 'all') {
-      realizationLoadsRef.current.clear()
-      setRealizationsByConcept({})
-      setRealizationsAllLoaded(false)
-      return
-    }
-    setRealizationsByConcept(current => {
-      const next = { ...current }
+  const invalidateConceptRealizations = useCallback(
+    conceptName => {
+      if (conceptName === 'all') {
+        realizationLoadsRef.current.clear()
+        realizationsAllLoadedRef.current = false
+        setRealizationsAllLoaded(false)
+        commitRealizationsByConcept({})
+        return
+      }
+      const next = { ...realizationsByConceptRef.current }
       delete next[conceptName]
-      return next
-    })
-  }, [])
+      commitRealizationsByConcept(next)
+    },
+    [commitRealizationsByConcept]
+  )
 
   const reloadConceptRealizations = useCallback(
     async conceptName => {
@@ -115,24 +127,40 @@ export const PanelDataProvider = ({ children }) => {
     [loadRealizations, setConceptRealizations]
   )
 
-  const renameRealizationToConceptNames = useCallback((oldName, newName) => {
-    setRealizationsByConcept(current =>
-      Object.fromEntries(
-        Object.entries(current).map(([conceptName, realizations]) => [
-          conceptName,
-          realizations.map(realization =>
-            realization.toConcept === oldName ? { ...realization, toConcept: newName } : realization
-          ),
-        ])
+  const renameRealizationToConceptNames = useCallback(
+    (oldName, newName) => {
+      commitRealizationsByConcept(
+        Object.fromEntries(
+          Object.entries(realizationsByConceptRef.current).map(([conceptName, realizations]) => [
+            conceptName,
+            realizations.map(realization =>
+              realization.toConcept === oldName ? { ...realization, toConcept: newName } : realization
+            ),
+          ])
+        )
       )
-    )
-  }, [])
+    },
+    [commitRealizationsByConcept]
+  )
+
+  const renameConceptRealizations = useCallback(
+    (oldName, newName) => {
+      const realizations = realizationsByConceptRef.current[oldName]
+      if (realizations === undefined) return
+
+      const next = { ...realizationsByConceptRef.current }
+      delete next[oldName]
+      next[newName] = realizations.map(realization => ({ ...realization, concept: newName }))
+      commitRealizationsByConcept(next)
+    },
+    [commitRealizationsByConcept]
+  )
 
   const ensureConceptRealizations = useCallback(
     conceptName => {
-      const loaded = realizationsByConcept[conceptName]
+      const loaded = realizationsByConceptRef.current[conceptName]
       if (loaded !== undefined) return Promise.resolve(loaded)
-      if (realizationsAllLoaded) return Promise.resolve([])
+      if (realizationsAllLoadedRef.current) return Promise.resolve([])
 
       const pending = realizationLoadsRef.current.get(conceptName)
       if (pending) return pending
@@ -141,13 +169,13 @@ export const PanelDataProvider = ({ children }) => {
       realizationLoadsRef.current.set(conceptName, load)
       return load
     },
-    [realizationsAllLoaded, realizationsByConcept, reloadConceptRealizations]
+    [reloadConceptRealizations]
   )
 
   const loadAllRealizations = useCallback(
     ({ force = false } = {}) => {
-      if (realizationsAllLoaded && !force) {
-        return Promise.resolve(getAllRealizations())
+      if (realizationsAllLoadedRef.current && !force) {
+        return Promise.resolve(Object.values(realizationsByConceptRef.current).flat())
       }
 
       const pending = realizationLoadsRef.current.get(ALL_REALIZATIONS_KEY)
@@ -165,8 +193,9 @@ export const PanelDataProvider = ({ children }) => {
             }
           })
           Object.values(grouped).forEach(sortRealizations)
-          setRealizationsByConcept(grouped)
+          realizationsAllLoadedRef.current = true
           setRealizationsAllLoaded(true)
+          commitRealizationsByConcept(grouped)
           return Object.values(grouped).flat()
         } finally {
           realizationLoadsRef.current.delete(ALL_REALIZATIONS_KEY)
@@ -175,7 +204,7 @@ export const PanelDataProvider = ({ children }) => {
       realizationLoadsRef.current.set(ALL_REALIZATIONS_KEY, load)
       return load
     },
-    [getAllRealizations, loadRealizations, realizationsAllLoaded]
+    [commitRealizationsByConcept, loadRealizations]
   )
 
   const refreshData = useCallback(
@@ -295,6 +324,7 @@ export const PanelDataProvider = ({ children }) => {
       realizationsByConcept,
       refreshData,
       reloadConceptRealizations,
+      renameConceptRealizations,
       renameRealizationToConceptNames,
       setClearTemplateFilters,
       setConceptRealizations,
@@ -318,6 +348,7 @@ export const PanelDataProvider = ({ children }) => {
       realizationsByConcept,
       refreshData,
       reloadConceptRealizations,
+      renameConceptRealizations,
       renameRealizationToConceptNames,
       setClearTemplateFilters,
       setConceptRealizations,

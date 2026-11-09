@@ -74,6 +74,17 @@ const ConceptProvider = ({ children }) => {
     conceptPathsRef.current.clear()
   }, [])
 
+  const relabelConceptPaths = useCallback((oldName, newName) => {
+    const relabeled = new Map()
+    conceptPathsRef.current.forEach((path, key) => {
+      relabeled.set(
+        key === oldName ? newName : key,
+        path.map(name => (name === oldName ? newName : name))
+      )
+    })
+    conceptPathsRef.current = relabeled
+  }, [])
+
   // Idempotent: do not stop/restart if already showing — that flashes the overlay off.
   const startConceptSwitchProcessing = useCallback(() => {
     if (conceptSwitchStopRef.current) return
@@ -292,6 +303,7 @@ const ConceptProvider = ({ children }) => {
       onConceptTreeReady,
       pending,
       prepareConceptSwitch,
+      relabelConceptPaths,
       resetConceptPaths,
       setConcept: handleSetConcept,
       setEditing,
@@ -307,6 +319,7 @@ const ConceptProvider = ({ children }) => {
       onConceptTreeReady,
       pending,
       prepareConceptSwitch,
+      relabelConceptPaths,
       resetConceptPaths,
       setEditing,
       setPendingConfirm,

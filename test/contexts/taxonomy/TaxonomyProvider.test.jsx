@@ -410,6 +410,23 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(errors).toEqual([])
   })
 
+  it('repoints loaded children to the new name on rename-only edits', async () => {
+    const { errors, getContext } = await renderTaxonomy({ isKbDebug: true })
+    const staleConcept = getContext().getConcept('old-parent')
+    const freshConcept = {
+      ...cloneConcept(staleConcept),
+      name: 'renamed-parent',
+    }
+
+    await act(async () => {
+      await getContext().conceptEditsRefresh(freshConcept, staleConcept)
+    })
+
+    expect(getContext().getConcept('moving-child').parent).toBe('renamed-parent')
+    expect(getContext().taxonomy.conceptMap['old-parent']).toBeUndefined()
+    expect(errors).toEqual([])
+  })
+
   it('moves concepts between parents for reparent-only edits', async () => {
     const { errors, getContext } = await renderTaxonomy()
     const priorNames = getContext().taxonomy.names

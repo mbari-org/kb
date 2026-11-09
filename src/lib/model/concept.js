@@ -1,18 +1,5 @@
 import { getConcept as apiConcept, getConceptChildren, getConceptPhylogenyDown } from '@/lib/api/concept'
-import { CONCEPT } from '@/lib/constants'
 import { pick } from '@/lib/utils'
-
-const addedConcepts = (parent, updatesInfo) => {
-  const { updatedValue } = updatesInfo
-  return updatedValue(CONCEPT.FIELD.CHILDREN).map(child => ({
-    ...child,
-    aliases: [],
-    alternateNames: [],
-    media: [],
-    parent,
-    references: [],
-  }))
-}
 
 const getChildrenInfo = async (apiFns, conceptName) => {
   const children = await apiFns.apiPayload(getConceptChildren, conceptName)
@@ -70,7 +57,6 @@ const getPrevSibling = (concept, getConcept) => {
 }
 
 export {
-  addedConcepts,
   getChildrenInfo,
   getConcept,
   getDescendantNames,

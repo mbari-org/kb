@@ -171,6 +171,15 @@ const TaxonomyProvider = ({ children }) => {
           insertConcept(parent, conceptMap, aliasMap)
         }
 
+        if (nameChanged) {
+          freshConcept.children?.forEach(childName => {
+            const child = conceptMap[childName]
+            if (child && child.parent !== freshConcept.name) {
+              insertConcept({ ...child, parent: freshConcept.name }, conceptMap, aliasMap)
+            }
+          })
+        }
+
         if (aliasesChanged || childrenChanged || nameChanged) {
           names = [...Object.keys(conceptMap), ...Object.keys(aliasMap)].sort()
         }

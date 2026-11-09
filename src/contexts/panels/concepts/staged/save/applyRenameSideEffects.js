@@ -57,9 +57,13 @@ const settingsUpdate = (updatesContext, staleName, newConceptName) => {
 const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   const { value: newConceptName, relatedDataCounts } = getNameUpdate(updatesInfo)
   const staleConcept = updatesContext.staleConcept
-  const { savePreferences, refreshPanelData } = updatesContext
+  const { renameConceptRealizations, renameRealizationToConceptNames, savePreferences, refreshPanelData } =
+    updatesContext
 
   await performReassignments(staleConcept.name, newConceptName, relatedDataCounts)
+
+  renameConceptRealizations(staleConcept.name, newConceptName)
+  renameRealizationToConceptNames(staleConcept.name, newConceptName)
 
   const updatedConceptPrefs = await conceptPrefsUpdate(updatesContext, newConceptName)
   const updatedSettings = settingsUpdate(updatesContext, staleConcept.name, newConceptName)
@@ -68,7 +72,6 @@ const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
     savePreferences(KEY.CONCEPTS, updatedConceptPrefs),
     savePreferences(KEY.SETTINGS, updatedSettings),
 
-    refreshPanelData(PANEL_DATA.REALIZATIONS),
     refreshPanelData(PANEL_DATA.REFERENCES),
     refreshPanelData(PANEL_DATA.TEMPLATES),
   ])

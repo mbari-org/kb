@@ -11,12 +11,9 @@ import { getMedia } from '@/lib/api/media'
 
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 
-import { CONCEPT } from '@/lib/constants'
 import { createError } from '@/lib/errors'
 import { orderedAliases } from '@/lib/model/aliases'
 import { filterRanks } from '@/lib/model/rank'
-
-import { addedConcepts } from './concept'
 
 import { treeItem } from '@/components/kb/panels/concepts/sidebar/tree/lib/taxonomyItem'
 import { typeMediaItem } from '@/lib/model/media'
@@ -507,85 +504,6 @@ const insertConcept = (concept, conceptMap, aliasMap) => {
   })
 }
 
-const refreshTaxonomyConcept = async (taxonomy, concept, updatesInfo, apiFns) => {
-  const { hasUpdated } = updatesInfo
-
-  const conceptMap = { ...taxonomy.conceptMap }
-  const aliasMap = { ...taxonomy.aliasMap }
-
-  const updatedConcept = await apiFns.apiPayload(apiConcept, concept.name)
-
-  insertConcept(updatedConcept, conceptMap, aliasMap)
-
-  const structureChanged = [
-    CONCEPT.FIELD.ALIASES,
-    CONCEPT.FIELD.CHILDREN,
-    CONCEPT.FIELD.NAME,
-    CONCEPT.FIELD.PARENT,
-  ].some(field => hasUpdated(field))
-
-  if (!structureChanged) {
-    const updatedTaxonomy = {
-      ...taxonomy,
-      conceptMap,
-    }
-    return { concept: updatedConcept, taxonomy: updatedTaxonomy }
-  }
-
-  if (hasUpdated(CONCEPT.FIELD.ALIASES)) {
-    concept.aliases
-      .filter(alias => !updatedConcept.aliases.includes(alias))
-      .forEach(alias => delete aliasMap[alias.name])
-
-    updatedConcept.aliases.forEach(alias => {
-      aliasMap[alias.name] = updatedConcept
-    })
-  }
-
-  if (hasUpdated(CONCEPT.FIELD.CHILDREN)) {
-    addedConcepts(updatedConcept.name, updatesInfo).forEach(child => {
-      insertConcept(child, conceptMap, aliasMap)
-    })
-
-    const priorChildren = concept.children
-    const currentChildren = updatedConcept.children
-    const removedChildren = priorChildren.filter(name => !currentChildren.includes(name))
-
-    removedChildren.forEach(childName => {
-      const childConcept = taxonomy.conceptMap[childName] || conceptMap[childName]
-      if (childConcept) {
-        // Drop the child concept from conceptMap
-        delete conceptMap[childName]
-        // Drop all alias names that pointed to that child
-        childConcept.alternateNames.forEach(alternateName => {
-          if (aliasMap[alternateName]) delete aliasMap[alternateName]
-        })
-      }
-    })
-  }
-
-  if (hasUpdated(CONCEPT.FIELD.PARENT)) {
-    const priorParentConcept = { ...taxonomy.conceptMap[concept.parent] }
-    priorParentConcept.children = priorParentConcept.children.filter(child => child !== updatedConcept.name)
-    insertConcept(priorParentConcept, conceptMap, aliasMap)
-
-    const parentConcept = { ...conceptMap[updatedConcept.parent] }
-    parentConcept.children = [...parentConcept.children, updatedConcept.name].sort()
-    insertConcept(parentConcept, conceptMap, aliasMap)
-  }
-
-  const updatedNames = await apiFns.apiPayload(apiNames)
-
-  const updatedTaxonomy = {
-    ...taxonomy,
-    aliasMap,
-    conceptMap,
-    names: updatedNames,
-  }
-
-  return { concept: updatedConcept, taxonomy: updatedTaxonomy }
-}
-
 const removeTaxonomyConcept = (taxonomy, concept) => {
   if (concept.children.length > 0) {
     throw createError('Delete Validation Error', `Cannot delete concept "${concept.name}" because it has children`, {
@@ -638,6 +556,5 @@ export {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   loadTaxonomyConceptGrandchildren,
-  refreshTaxonomyConcept,
   removeTaxonomyConcept,
 }

@@ -81,7 +81,8 @@ file and function that implements it.
    it, `setConceptPath(path)`. `ConceptsTree.jsx:84-91` merges `conceptPath` into
    `expandedItems`; `useConceptAutoExpand` handles first-load expansion;
    `useConceptsTreeScroll.jsx` smooth-scrolls to the node (bounded 100ms × 80 poll,
-   cancels on user scroll). `resetConceptPaths` clears the cache on rename/re-parent.
+   cancels on user scroll). `relabelConceptPaths` rewrites the cache on rename;
+   `resetConceptPaths` clears it on re-parent.
 
 ## 4. Concept editing state machine
 
@@ -121,13 +122,21 @@ file and function that implements it.
    the pending workflow instead.
 4. If the concept was renamed: `applyRenameSideEffects.js` — (a) `performReassignments`
    over `relatedDataCounts` entries with `value > 0` (each entry's `reassignFn({old,
-   new})`); (b) prefs history rewrite (`conceptPrefsUpdate` maps old→new in
-   `KEY.CONCEPTS`); (c) template filter rewrite (`settingsUpdate` rewrites
-   `templates.filters.concept`/`toConcept`); (d) `savePreferences` ×2 plus
-   `refreshPanelData` for REALIZATIONS, REFERENCES, TEMPLATES.
-5. `resetConceptPaths()` when NAME **or PARENT** changed; `reloadConceptRealizations` when
-   REALIZATIONS changed.
-6. Refetch: `apiPayload(getConcept, conceptName)` → `normalizeConcept`.
+   new})`); (b) local realization-cache relabels (`renameConceptRealizations` re-keys
+   the concept's own items and rewrites their `concept` field;
+   `renameRealizationToConceptNames` rewrites cached `toConcept` values — the server
+   cascades both sides of a rename, so no realization refetch is needed); (c) prefs
+   history rewrite (`conceptPrefsUpdate` maps old→new in `KEY.CONCEPTS`); (d) template
+   filter rewrite (`settingsUpdate` rewrites `templates.filters.concept`/`toConcept`);
+   (e) `savePreferences` ×2 plus `refreshPanelData` for REFERENCES, TEMPLATES.
+5. `relabelConceptPaths(old, new)` when NAME changed without PARENT (paths are
+   unchanged except for the renamed element); `resetConceptPaths()` when PARENT
+   changed; `reloadConceptRealizations` when REALIZATIONS changed.
+6. Refetch: `apiPayload(getConcept, conceptName)` → `normalizeConcept` — skipped for a
+   **pure rename** (only NAME staged): the fresh concept is built locally as
+   `{ ...staleConcept, name }` (minus UI-attached `realizations`/`templates`; media is
+   reused, or fetched alone if not yet loaded), since a rename changes nothing else
+   on the server.
 7. `applyUpdateResults` (`applyUpdateResults.js:9`) — seeds fresh aliases/alternateNames/
    children/parent from stale, then dispatches results through the **5 appliers**
    (`applyAliasResults`, `applyAuthorResults`, `applyChildrenResults`,

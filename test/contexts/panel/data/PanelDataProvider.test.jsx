@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useState } from 'react'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -22,6 +22,7 @@ const Probe = () => {
     <>
       <div data-testid='all-loaded'>{String(realizationsAllLoaded)}</div>
       <div data-testid='dingo'>{JSON.stringify(getConceptRealizations('dingo'))}</div>
+      <div data-testid='coyote'>{JSON.stringify(getConceptRealizations('coyote'))}</div>
       <div data-testid='all'>{JSON.stringify(getAllRealizations().map(r => r.id))}</div>
     </>
   )
@@ -33,16 +34,22 @@ const Actions = () => {
     ensureConceptRealizations,
     invalidateConceptRealizations,
     reloadConceptRealizations,
+    renameConceptRealizations,
     renameRealizationToConceptNames,
     setConceptRealizations,
   } = use(PanelDataContext)
+  const [ensureResult, setEnsureResult] = useState(null)
   return (
     <>
+      <div data-testid='ensure-result'>{JSON.stringify(ensureResult)}</div>
       <button onClick={() => ensureConceptRealizations('dingo')} type='button'>
         ensure-dingo
       </button>
       <button onClick={() => ensureConceptRealizations('wolf')} type='button'>
         ensure-wolf
+      </button>
+      <button onClick={async () => setEnsureResult(await ensureConceptRealizations('coyote'))} type='button'>
+        ensure-coyote
       </button>
       <button onClick={() => loadAllRealizations()} type='button'>
         ensure-all
@@ -61,6 +68,9 @@ const Actions = () => {
       </button>
       <button onClick={() => invalidateConceptRealizations('all')} type='button'>
         invalidate-all
+      </button>
+      <button onClick={() => renameConceptRealizations('dingo', 'coyote')} type='button'>
+        rename-concept
       </button>
       <button onClick={() => renameRealizationToConceptNames('fish', 'shark')} type='button'>
         rename-refs
@@ -210,6 +220,42 @@ describe('PanelDataProvider realizations store', () => {
       expect(screen.getByTestId('dingo').textContent).toBe(JSON.stringify(DINGO_REALIZATIONS))
     })
     expect(screen.getByTestId('all-loaded').textContent).toBe('false')
+  })
+
+  it('renameConceptRealizations re-keys and relabels items, and ensure resolves from the relabeled cache without a fetch', async () => {
+    const apiFns = buildApiFns()
+    renderProvider(apiFns)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'ensure-all' })).toBeInTheDocument()
+    })
+    await act(async () => {
+      screen.getByRole('button', { name: 'ensure-all' }).click()
+    })
+    await waitFor(() => {
+      expect(screen.getByTestId('all-loaded').textContent).toBe('true')
+    })
+
+    const callsBefore = apiFns.apiPayload.mock.calls.length
+    await act(async () => {
+      screen.getByRole('button', { name: 'rename-concept' }).click()
+    })
+
+    expect(screen.getByTestId('dingo').textContent).toBe('')
+    const coyote = JSON.parse(screen.getByTestId('coyote').textContent)
+    expect(coyote).toHaveLength(1)
+    expect(coyote[0].concept).toBe('coyote')
+    expect(coyote[0].toConcept).toBe('fish')
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'ensure-coyote' }).click()
+    })
+    await waitFor(() => {
+      const ensured = JSON.parse(screen.getByTestId('ensure-result').textContent)
+      expect(ensured).toHaveLength(1)
+      expect(ensured[0].concept).toBe('coyote')
+    })
+    expect(apiFns.apiPayload.mock.calls.length).toBe(callsBefore)
   })
 
   it('renameRealizationToConceptNames rewrites toConcept across loaded keys without a fetch', async () => {

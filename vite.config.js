@@ -27,6 +27,10 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    define: {
+      'import.meta.env.KB_DEBUG': JSON.stringify(env.KB_DEBUG === 'true'),
+      'import.meta.env.KB_DEV': JSON.stringify(env.KB_DEV === 'true'),
+    },
     plugins: [react(), versionPlugin()],
     test: {
       globals: true,

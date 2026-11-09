@@ -7,6 +7,8 @@ import { clearStores } from '@/lib/local/store/clearStores'
 
 import CONFIG from '@/lib/config'
 
+import { getVersion } from '@/version'
+
 import whoopsImage from '@/assets/whoops.jpg'
 
 const BAIL_TO_LOCATION = '/kbeditor/'
@@ -82,11 +84,13 @@ const Whoops = ({ children }) => {
           src={whoopsImage}
           alt='Whoops!'
           sx={{
-            marginBottom: '20px',
             maxWidth: '350px',
             width: '50%',
           }}
         />
+        <Typography variant='caption' sx={{ mb: 2.5, mt: 0.5, textAlign: 'center' }}>
+          Version: v{getVersion()}
+        </Typography>
         {error.info && (
           <Typography
             sx={{
