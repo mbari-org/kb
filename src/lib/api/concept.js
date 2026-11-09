@@ -1,4 +1,4 @@
-import { getMedia } from '@/lib/api/media'
+import { getMedia, patchPrimaryImageFlag } from '@/lib/api/media'
 import { annosaurusGet } from '@/lib/services/annosaurus/methods'
 import { oniGet, oniUserDelete, oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
 
@@ -7,6 +7,7 @@ import { oniGet, oniUserDelete, oniUserPost, oniUserPut } from '@/lib/services/o
 // from concept payloads.
 const normalizeConcept = async (apiFns, concept) => {
   concept.media = await apiFns.apiPayload(getMedia, concept.name)
+  await patchPrimaryImageFlag(apiFns, concept)
 
   if (concept.linkRealizations) {
     delete concept.linkRealizations

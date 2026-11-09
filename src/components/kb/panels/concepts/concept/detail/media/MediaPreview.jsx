@@ -116,7 +116,7 @@ const MediaPreview = ({ setPreviewOn }) => {
   return (
     <Stack>
       <KBTooltip
-        placement='bottom'
+        placement='bottom-start'
         tooltipSx={{ maxWidth: '90vw' }}
         title={
           mediaUrl && (
