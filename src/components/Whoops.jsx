@@ -7,7 +7,7 @@ import { clearStores } from '@/lib/local/store/clearStores'
 
 import CONFIG from '@/lib/config'
 
-import { getVersion } from '@/version'
+import { getCommitHash, getVersion } from '@/version'
 
 import whoopsImage from '@/assets/whoops.jpg'
 
@@ -89,7 +89,7 @@ const Whoops = ({ children }) => {
           }}
         />
         <Typography variant='caption' sx={{ mb: 2.5, mt: 0.5, textAlign: 'center' }}>
-          Version: v{getVersion()}
+          Version: v{getVersion()} ({getCommitHash()})
         </Typography>
         {error.info && (
           <Typography

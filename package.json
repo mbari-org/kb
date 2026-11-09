@@ -51,6 +51,7 @@
     "dev:local": "cross-env VITE_LOCAL_BACKEND_URL=https://localhost vite",
     "kb": "yarn build && yarn preview",
     "lint": "eslint . --no-fix",
+    "map-trace": "node scripts/map-trace.mjs",
     "preview": "vite preview",
     "profile": "yarn build:profile && yarn preview",
     "test": "vitest",
