@@ -130,7 +130,7 @@ const MediaPreview = ({ setPreviewOn }) => {
                     : mediaItem.credit}
                 </Box>
               )}
-              <Box>Primary: {mediaItem?.isPrimary ? 'true' : 'false'}</Box>
+              <Box>Primary: {mediaItem?.isPrimary ? 'Yes' : 'No'}</Box>
             </Box>
           )
         }

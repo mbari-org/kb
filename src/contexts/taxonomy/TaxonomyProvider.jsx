@@ -92,14 +92,20 @@ const TaxonomyProvider = ({ children }) => {
 
       let producedTaxonomy = null
       const committedTaxonomy = await enqueueTaxonomyMutation(async current => {
-        const aliasMap = { ...current.aliasMap }
-        const conceptMap = { ...current.conceptMap }
-        let names = current.names
-
         const aliasesChanged = !isEqual(freshConcept.alternateNames, staleConcept.alternateNames)
         const childrenChanged = !isEqual(freshConcept.children, staleConcept.children)
         const nameChanged = freshConcept.name !== staleConcept.name
         const parentChanged = freshConcept.parent !== staleConcept.parent
+
+        let base = current
+        if (parentChanged && !getTaxonomyConcept(current, freshConcept.parent)?.children) {
+          const { taxonomy: withParent } = await loadTaxonomyConcept(current, freshConcept.parent, apiFns)
+          base = withParent
+        }
+
+        const aliasMap = { ...base.aliasMap }
+        const conceptMap = { ...base.conceptMap }
+        let names = base.names
 
         delete conceptMap[staleConcept.name]
         staleConcept.alternateNames.forEach(alternateName => {
@@ -184,7 +190,7 @@ const TaxonomyProvider = ({ children }) => {
           names = [...Object.keys(conceptMap), ...Object.keys(aliasMap)].sort()
         }
 
-        producedTaxonomy = { ...current, aliasMap, conceptMap, names }
+        producedTaxonomy = { ...base, aliasMap, conceptMap, names }
         return producedTaxonomy
       })
 

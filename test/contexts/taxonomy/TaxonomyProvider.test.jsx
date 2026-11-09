@@ -11,6 +11,7 @@ import UserContext from '@/contexts/user/UserContext'
 import {
   getConcept as apiConcept,
   getConceptChildren as apiChildren,
+  getConceptParent as apiParent,
   getConceptPhylogenyDown as apiDescendants,
   getConceptNames as apiConceptNames,
 } from '@/lib/api/concept'
@@ -123,6 +124,8 @@ const createApiFns = store => ({
       return cloneConcept(store.concepts[value])
     } else if (fn === apiChildren) {
       return (store.children[value] || []).map(childName => cloneConcept(store.concepts[childName]))
+    } else if (fn === apiParent) {
+      return { name: store.concepts[value].parent }
     } else if (fn === apiDescendants) {
       const buildPhylogeny = name => {
         const alternativeNames = store.concepts[name]?.alternateNames || []
@@ -461,7 +464,31 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
 
     expect(getContext().getConcept('new-parent')).toBe(freshConcept)
     expect(getContext().getConcept('root').children).toEqual(['old-parent'])
-    expect(getContext().getConcept('moving-child').children).toEqual(['new-parent'])
+    expect(getContext().getConcept('moving-child').children).toEqual(['grandchild', 'new-parent'])
+    expect(errors).toEqual([])
+  })
+
+  it('moves a concept to a parent not present in the taxonomy', async () => {
+    const { errors, getContext, store } = await renderTaxonomy({ isKbDebug: true })
+
+    addStoreConcept(store, { name: 'unloaded-parent', parent: 'moving-child' })
+    store.children['moving-child'] = ['grandchild', 'unloaded-parent']
+
+    const staleConcept = getContext().getConcept('new-parent')
+    const freshConcept = {
+      ...cloneConcept(staleConcept),
+      parent: 'unloaded-parent',
+    }
+
+    await act(async () => {
+      await getContext().conceptEditsRefresh(freshConcept, staleConcept)
+    })
+
+    expect(getContext().getConcept('new-parent')).toBe(freshConcept)
+    expect(getContext().getConcept('unloaded-parent').children).toEqual(['new-parent'])
+    expect(getContext().getConcept('unloaded-parent').parent).toBe('moving-child')
+    expect(getContext().getConcept('moving-child').children).toEqual(['grandchild', 'unloaded-parent'])
+    expect(getContext().getConcept('root').children).toEqual(['old-parent'])
     expect(errors).toEqual([])
   })
 
