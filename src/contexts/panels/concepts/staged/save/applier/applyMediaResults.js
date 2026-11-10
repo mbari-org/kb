@@ -1,19 +1,31 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { getItemMediaType } from '@/lib/model/media'
 
 const { ADD, DELETE, EDIT } = CONCEPT_STATE.MEDIA_ITEM
 
 const byUrl = (a, b) => a.url.localeCompare(b.url)
 
-// Mirrors ONI media semantics: adds and edits apply immediately for any user with write
-//  access (a maintainer's add exists as a row pending approval), deletes apply only for admins.
+const clearSameTypePrimaries = (media, primaryItem) => {
+  if (!primaryItem.isPrimary) return media
+  const primaryType = getItemMediaType(primaryItem)
+  return media.map(item =>
+    item.id !== primaryItem.id && getItemMediaType(item) === primaryType ? { ...item, isPrimary: false } : item
+  )
+}
+
 const applyMediaResults = ({ concept, isAdmin, result }) => {
   switch (result.action) {
-    case ADD:
-      concept.media = [...concept.media, result.response].sort(byUrl)
+    case ADD: {
+      const added = result.response
+      concept.media = [...clearSameTypePrimaries(concept.media, added), added].sort(byUrl)
       break
+    }
     case EDIT: {
       const [mediaId] = result.params
-      concept.media = concept.media.map(item => (item.id === mediaId ? result.response : item)).sort(byUrl)
+      const updated = result.response
+      concept.media = clearSameTypePrimaries(concept.media, updated)
+        .map(item => (item.id === mediaId ? updated : item))
+        .sort(byUrl)
       break
     }
     case DELETE:
