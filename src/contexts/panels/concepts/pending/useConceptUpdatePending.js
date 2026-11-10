@@ -27,8 +27,11 @@ const useConceptUpdatePending = () => {
       const { approval, pendingIds } = pendingConfirm
 
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
+      const pendingParent = pending(PENDING.DATA.PARENT)
 
-      const pendingItems = pendingIds.map(pendingId => pendingConcept.find(item => item.id === pendingId))
+      const pendingItems = pendingIds.map(pendingId =>
+        [...pendingConcept, ...pendingParent].find(item => item.id === pendingId)
+      )
 
       return withProcessing(
         async () => {
@@ -56,6 +59,8 @@ const useConceptUpdatePending = () => {
             if (refreshedConcept) {
               await setConcept(refreshedConcept, pendingHistory)
             }
+          } else if (!getConcept(conceptName)) {
+            updateSelected({ concept: staleConcept.parent })
           }
 
           return pendingConcept.length !== pendingItems.length

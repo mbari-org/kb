@@ -26,9 +26,13 @@ describe('useConceptUpdatePending', () => {
     vi.clearAllMocks()
   })
 
-  const buildWrapper = ({ conceptEditsRefresh, getConcept, pendingItems, refreshData, setConcept, updateSelected, withProcessing }) => {
-    const staleConcept = { name: 'pending-concept' }
-    const pending = vi.fn(key => (key === PENDING.DATA.CONCEPT ? pendingItems : []))
+  const buildWrapper = ({ conceptEditsRefresh, getConcept, pendingItems, parentPendingItems = [], refreshData, setConcept, updateSelected, withProcessing }) => {
+    const staleConcept = { name: 'pending-concept', parent: 'root' }
+    const pending = vi.fn(key => {
+      if (key === PENDING.DATA.CONCEPT) return pendingItems
+      if (key === PENDING.DATA.PARENT) return parentPendingItems
+      return []
+    })
 
     const wrapper = ({ children }) => (
       <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
@@ -131,5 +135,55 @@ describe('useConceptUpdatePending', () => {
     expect(getConcept).toHaveBeenCalledWith('pending-concept')
     expect(setConcept).toHaveBeenCalledWith(refreshedConcept, pendingHistory)
     expect(remaining).toBe(false)
+  })
+
+  it('resolves parent-owned child records and selects the parent when the concept was deleted', async () => {
+    const childDeleteItem = {
+      id: 'p9',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Delete',
+      oldValue: 'pending-concept',
+    }
+    const pendingHistory = []
+
+    const getConcept = vi.fn(() => null)
+    const setConcept = vi.fn(async () => {})
+    const updateSelected = vi.fn()
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory,
+      updated: ['root'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept,
+      pendingItems: [],
+      parentPendingItems: [childDeleteItem],
+      refreshData: vi.fn(),
+      setConcept,
+      updateSelected,
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    let remaining
+    await act(async () => {
+      remaining = await result.current({ approval: 'accept', pendingIds: ['p9'] })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'accept',
+        items: [childDeleteItem],
+      })
+    )
+    expect(setConcept).not.toHaveBeenCalled()
+    expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
+    expect(remaining).toBe(true)
   })
 })

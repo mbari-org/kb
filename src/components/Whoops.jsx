@@ -30,7 +30,8 @@ const Whoops = ({ children }) => {
       ? `${error.title}: ${error.message}${error.details ? `\nReq: ${JSON.stringify(error.details)}` : ''}`
       : CONFIG.WHOOPS.MESSAGE.UNEXPECTED
 
-    const infoToCopy = `${responseMessage}\n\nStack Trace:\n${stack || CONFIG.WHOOPS.MESSAGE.NO_STACK}`
+    const versionStamp = `Version: v${getVersion()} (${getCommitHash()})`
+    const infoToCopy = `${versionStamp}\n\n${responseMessage}\n\nStack Trace:\n${stack || CONFIG.WHOOPS.MESSAGE.NO_STACK}`
 
     await navigator.clipboard.writeText(infoToCopy)
     alert(CONFIG.WHOOPS.ALERT)

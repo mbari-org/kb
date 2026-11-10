@@ -19,7 +19,7 @@ const { ACCEPT, OTHER, REJECT } = PENDING.APPROVAL
 
 const PendingButtons = ({ approval, group, item }) => {
   const { isAdmin } = use(UserContext)
-  const { concept, pending, setPendingConfirm } = use(ConceptContext)
+  const { pending, setPendingConfirm } = use(ConceptContext)
 
   const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
     if (!isAdmin) {
@@ -44,10 +44,10 @@ const PendingButtons = ({ approval, group, item }) => {
       setPendingConfirm({
         approval: clicked,
         group,
-        pendingIds: item ? [item.id] : pendingIds(pendingConcept, group, concept.name),
+        pendingIds: item ? [item.id] : pendingIds(pendingConcept, group),
       })
     },
-    [concept.name, group, pending, item, setPendingConfirm]
+    [group, pending, item, setPendingConfirm]
   )
 
   const [acceptApproved, rejectApproved] = !approval

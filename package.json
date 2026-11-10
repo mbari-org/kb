@@ -54,7 +54,7 @@
     "map-trace": "node scripts/map-trace.mjs",
     "preview": "vite preview",
     "profile": "yarn build:profile && yarn preview",
-    "test": "vitest",
+    "test": "vitest --reporter=dot",
     "version:check": "node scripts/version/check.js",
     "version:release": "node scripts/version/release.js",
     "version:tag": "node scripts/version/tag.js",

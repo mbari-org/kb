@@ -8,6 +8,8 @@ import UserContext from '@/contexts/user/UserContext'
 
 import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConceptUpdatePending'
 
+import { pendingChild as getPendingChild } from '@/lib/model/history'
+
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
@@ -16,12 +18,13 @@ const { APPROVAL } = PENDING
 const GROUP = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
 const PendingActions = () => {
-  const { pending, setPendingConfirm } = use(ConceptContext)
+  const { concept, pending, setPendingConfirm } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
 
   const { isAdmin } = use(UserContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
+  const pendingParent = pending(PENDING.DATA.PARENT)
   const pendingConfirm = pending(PENDING.DATA.CONFIRM)
 
   const updatePending = useConceptUpdatedPending()
@@ -30,8 +33,10 @@ const PendingActions = () => {
     if (pendingConfirm?.pendingIds?.length > 0) {
       return pendingConfirm.pendingIds
     }
-    return pendingConcept.map(({ id }) => id)
-  }, [pendingConcept, pendingConfirm])
+    const ids = pendingConcept.map(({ id }) => id)
+    const pendingChild = getPendingChild(pendingParent, concept.name)
+    return pendingChild && !ids.includes(pendingChild.id) ? [...ids, pendingChild.id] : ids
+  }, [concept.name, pendingConcept, pendingConfirm, pendingParent])
 
   const [disabled, labels] = useMemo(() => {
     if (!isAdmin) {
