@@ -23,12 +23,15 @@ const submitStaged = async (initialState, stagedState, updatesContext) => {
   submitters.push(...submitAuthor(submitterInfo))
   submitters.push(...submitChildren(submitterInfo))
   submitters.push(...submitMedia(submitterInfo))
-  submitters.push(...submitName(submitterInfo))
   submitters.push(...submitParent(submitterInfo))
   submitters.push(...submitRank(submitterInfo))
   submitters.push(...submitRealizations(submitterInfo))
+  submitters.push(...submitName(submitterInfo))
 
-  const resultGroups = await Promise.all(submitters)
+  const resultGroups = []
+  for (const submitter of submitters) {
+    resultGroups.push(await submitter())
+  }
   info.results = resultGroups.flat()
 
   const failedResults = info.results.filter(result => result.error)

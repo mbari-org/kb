@@ -107,7 +107,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
 
   const stagedMedia = updatedValue(CONCEPT.FIELD.MEDIA) || []
 
-  const runSequentially = (async () => {
+  const runSequentially = async () => {
     const trackers = []
 
     for (let index = 0; index < stagedMedia.length; index += 1) {
@@ -120,7 +120,7 @@ const submitMedia = ([submit, { concept, updatesInfo }]) => {
     }
 
     return trackers
-  })()
+  }
 
   return [runSequentially]
 }

@@ -41,7 +41,7 @@ const submitChildren = ([submit, { concept, updatesInfo }]) => {
     if (update.action === CHILD.ADD) {
       const params = drop({ ...update, parentName: concept.name }, ['action', 'index'])
       const trackerInfo = { action: CHILD.ADD, index, params, update }
-      acc.push(submitChild(createConcept, trackerInfo))
+      acc.push(() => submitChild(createConcept, trackerInfo))
     }
     return acc
   }, [])

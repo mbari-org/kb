@@ -61,7 +61,7 @@ const submitAliases = ([submit, { concept, updatesInfo }]) => {
     if (!submitter) return acc
     const { apiFn, params, action } = submitter(update, index)
     const trackerInfo = { action, index, params, update }
-    acc.push(submitAlias(apiFn, trackerInfo))
+    acc.push(() => submitAlias(apiFn, trackerInfo))
     return acc
   }, [])
 

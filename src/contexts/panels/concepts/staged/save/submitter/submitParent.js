@@ -10,7 +10,7 @@ const submitParent = ([submit, { concept, updatesInfo }]) => {
     const parent =
       updatedValue(CONCEPT.FIELD.PARENT)?.value ?? updatedValue(CONCEPT.FIELD.PARENT)
     const params = [concept.name, { parentName: parent }]
-    submitters.push(
+    submitters.push(() =>
       submit(updateConceptParent, params).then(response => ({
         field: CONCEPT.FIELD.PARENT,
         action: CONCEPT_STATE.PARENT,

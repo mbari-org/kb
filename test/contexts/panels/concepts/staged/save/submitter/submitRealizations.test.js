@@ -62,7 +62,7 @@ describe('submitRealizations', () => {
     const updatesInfo = stateUpdatesInfo(initial, staged)
     const submit = vi.fn(() => Promise.resolve({ ok: true }))
 
-    const results = await Promise.all(submitRealizations([submit, { concept, updatesInfo }]))
+    const results = await Promise.all(submitRealizations([submit, { concept, updatesInfo }]).map(submitOne => submitOne()))
 
     const addResult = results.find(result => result.action === REALIZATION.ADD)
     expect(addResult.error).toBeUndefined()
@@ -101,7 +101,7 @@ describe('submitRealizations', () => {
     const updatesInfo = stateUpdatesInfo(initial, staged)
     const submit = vi.fn(() => Promise.resolve({ ok: true }))
 
-    const results = await Promise.all(submitRealizations([submit, { concept, updatesInfo }]))
+    const results = await Promise.all(submitRealizations([submit, { concept, updatesInfo }]).map(submitOne => submitOne()))
 
     expect(results).toHaveLength(1)
     expect(results[0].action).toBe(REALIZATION.DELETE)

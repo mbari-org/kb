@@ -9,7 +9,7 @@ const submitName = ([submit, { concept, updatesInfo }]) => {
   if (hasUpdated(CONCEPT.FIELD.NAME)) {
     const name = updatedValue(CONCEPT.FIELD.NAME)
     const params = [concept.name, { name: name.value }]
-    submitters.push(
+    submitters.push(() =>
       submit(updateConceptName, params).then(response => ({
         action: CONCEPT_STATE.NAME,
         field: CONCEPT.FIELD.NAME,

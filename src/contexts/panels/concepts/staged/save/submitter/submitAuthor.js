@@ -10,7 +10,7 @@ const submitAuthor = ([submit, { concept, updatesInfo }]) => {
     const author =
       updatedValue(CONCEPT.FIELD.AUTHOR)?.value ?? updatedValue(CONCEPT.FIELD.AUTHOR)
     const params = [concept.name, { author }]
-    submitters.push(
+    submitters.push(() =>
       submit(updateConceptAuthor, params).then(response => ({
         field: CONCEPT.FIELD.AUTHOR,
         action: CONCEPT_STATE.AUTHOR,

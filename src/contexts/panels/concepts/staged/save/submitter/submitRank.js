@@ -13,7 +13,7 @@ const submitRank = ([submit, { concept, updatesInfo }]) => {
       rankName: rankUpdateValue.name,
     }
     const params = [concept.name, rankUpdate]
-    submitters.push(
+    submitters.push(() =>
       submit(updateConceptRank, params).then(response => ({
         field: CONCEPT.FIELD.RANK,
         action: CONCEPT_STATE.RANK,
