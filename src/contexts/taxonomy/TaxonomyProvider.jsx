@@ -14,6 +14,7 @@ import {
   filterTaxonomyRanks,
   getAncestorNames as getTaxonomyAncestorNames,
   getConcept as getTaxonomyConcept,
+  getConceptPath as getTaxonomyConceptPath,
   getConceptPrimaryName as getTaxonomyConceptPrimaryName,
   getNames as getTaxonomyNames,
   insertConcept,
@@ -249,6 +250,14 @@ const TaxonomyProvider = ({ children }) => {
     [taxonomy]
   )
 
+  const getConceptPath = useCallback(
+    conceptName => {
+      if (!taxonomy) return null
+      return getTaxonomyConceptPath(taxonomy, conceptName)
+    },
+    [taxonomy]
+  )
+
   const getNames = useCallback(() => {
     if (!taxonomy) return []
     return getTaxonomyNames(taxonomy)
@@ -437,6 +446,7 @@ const TaxonomyProvider = ({ children }) => {
       filterRanks,
       getConcept,
       getConceptFromTaxonomy,
+      getConceptPath,
       getConceptPrimaryName,
       getAncestorNames,
       getNames,
@@ -459,6 +469,7 @@ const TaxonomyProvider = ({ children }) => {
       getAncestorNames,
       getConcept,
       getConceptFromTaxonomy,
+      getConceptPath,
       getConceptPrimaryName,
       getNames,
       rootName,

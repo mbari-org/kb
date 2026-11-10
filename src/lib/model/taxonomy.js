@@ -175,6 +175,17 @@ const isDescendant = (taxonomy, conceptName, descendantName) => {
 
 const isRoot = (taxonomy, concept) => concept.name === taxonomy.rootName
 
+const getConceptPath = (taxonomy, conceptName) => {
+  const concept = getConcept(taxonomy, conceptName)
+  if (!concept) return null
+  if (isRoot(taxonomy, concept)) return [concept.name]
+
+  const ancestors = getAncestorNames(taxonomy, conceptName)
+  if (ancestors.at(-1) !== taxonomy.rootName) return null
+
+  return [...ancestors.reverse(), concept.name]
+}
+
 const getAncestorNames = (taxonomy, conceptName) => {
   const concept = getConcept(taxonomy, conceptName)
   if (!concept) return []
@@ -544,6 +555,7 @@ export {
   filterTaxonomyRanks,
   getAncestorNames,
   getConcept,
+  getConceptPath,
   getConceptPrimaryName,
   getNames,
   insertConcept,

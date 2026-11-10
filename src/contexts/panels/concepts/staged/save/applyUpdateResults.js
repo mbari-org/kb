@@ -3,6 +3,7 @@ import { CONCEPT } from '@/lib/constants'
 import applyAliasResults from '@/contexts/panels/concepts/staged/save/applier/applyAliasResults'
 import applyAuthorResults from '@/contexts/panels/concepts/staged/save/applier/applyAuthorResults'
 import applyChildrenResults from '@/contexts/panels/concepts/staged/save/applier/applyChildrenResults'
+import applyMediaResults from '@/contexts/panels/concepts/staged/save/applier/applyMediaResults'
 import applyParentResults from '@/contexts/panels/concepts/staged/save/applier/applyParentResults'
 import applyRankResults from '@/contexts/panels/concepts/staged/save/applier/applyRankResults'
 
@@ -17,6 +18,7 @@ const applyUpdateResults = async ({ freshConcept, isAdmin, staleConcept, updates
     [CONCEPT.FIELD.ALIASES]: applyAliasResults,
     [CONCEPT.FIELD.AUTHOR]: applyAuthorResults,
     [CONCEPT.FIELD.CHILDREN]: applyChildrenResults,
+    [CONCEPT.FIELD.MEDIA]: applyMediaResults,
     [CONCEPT.FIELD.PARENT]: applyParentResults,
     [CONCEPT.FIELD.RANK]: applyRankResults,
   }

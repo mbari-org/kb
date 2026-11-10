@@ -1,6 +1,6 @@
 import { use, useCallback } from 'react'
 
-import { getConcept, normalizeConcept } from '@/lib/api/concept'
+import { normalizeConcept } from '@/lib/api/concept'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
@@ -40,17 +40,6 @@ const useSaveStaged = () => {
         const conceptName = updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
         const nameUpdated = updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)
-        const isPureRename =
-          nameUpdated &&
-          ![
-            CONCEPT.FIELD.ALIASES,
-            CONCEPT.FIELD.AUTHOR,
-            CONCEPT.FIELD.CHILDREN,
-            CONCEPT.FIELD.MEDIA,
-            CONCEPT.FIELD.PARENT,
-            CONCEPT.FIELD.RANK,
-            CONCEPT.FIELD.REALIZATIONS,
-          ].some(field => updatesInfo.hasUpdated(field))
 
         if (nameUpdated) {
           await applyRenameSideEffects(updatesContext, updatesInfo)
@@ -66,17 +55,11 @@ const useSaveStaged = () => {
           await reloadConceptRealizations(conceptName)
         }
 
-        let freshConcept
-        if (isPureRename) {
-          // Strip UI-attached fields (added by ConceptProvider.handleSetConcept); they are not taxonomy state.
-          freshConcept = { ...staleConcept, name: conceptName }
-          delete freshConcept.realizations
-          delete freshConcept.templates
-          if (freshConcept.media === undefined) {
-            await normalizeConcept(apiFns, freshConcept)
-          }
-        } else {
-          freshConcept = await apiFns.apiPayload(getConcept, conceptName)
+        // Strip UI-attached fields (added by ConceptProvider.handleSetConcept); they are not taxonomy state.
+        const freshConcept = { ...staleConcept, name: conceptName }
+        delete freshConcept.realizations
+        delete freshConcept.templates
+        if (freshConcept.media === undefined) {
           await normalizeConcept(apiFns, freshConcept)
         }
 

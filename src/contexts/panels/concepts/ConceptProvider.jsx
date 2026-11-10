@@ -43,7 +43,8 @@ const ConceptProvider = ({ children }) => {
     use(PanelDataContext)
   const pendingHistoryRef = useRef(pendingHistory)
   const { getSelected, panels, updateSelected } = use(SelectedContext)
-  const { getConcept, getConceptPrimaryName, isConceptLoaded, loadConcept, taxonomy } = use(TaxonomyContext)
+  const { getConcept, getConceptPath, getConceptPrimaryName, isConceptLoaded, loadConcept, taxonomy } =
+    use(TaxonomyContext)
   const { guardedAction, setHasUnsavedChanges } = use(UserContext)
 
   const [concept, setConcept] = useState(null)
@@ -364,7 +365,12 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    // Path unknown — keep/show overlay until phylogeny/up returns.
+    const taxonomyPath = getConceptPath(concept.name)
+    if (taxonomyPath) {
+      applyPath(taxonomyPath)
+      return
+    }
+
     startConceptSwitchProcessing()
     let cancelled = false
 
@@ -390,7 +396,7 @@ const ConceptProvider = ({ children }) => {
     return () => {
       cancelled = true
     }
-  }, [apiFns, concept, showBoundary, startConceptSwitchProcessing, stopConceptSwitchProcessing])
+  }, [apiFns, concept, getConceptPath, showBoundary, startConceptSwitchProcessing, stopConceptSwitchProcessing])
 
   return (
     <ConceptContext value={value}>

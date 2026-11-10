@@ -73,6 +73,7 @@ const renderProvider = ({ apiPayload, probe, selectedName = 'dingo', selectedRef
 
   const defaultTaxonomyValue = {
     getConcept: name => (name === 'dingo' ? concept : null),
+    getConceptPath: () => null,
     getConceptPrimaryName: name => (name === 'dingo' ? 'dingo' : undefined),
     isConceptLoaded: name => name === 'dingo',
     loadConcept: vi.fn(async () => concept),
@@ -169,6 +170,27 @@ describe('ConceptProvider', () => {
     expect(pathCalls[0][1]).toBe('dingo')
   })
 
+  it('uses the taxonomy-derived concept path without fetching phylogeny', async () => {
+    const apiPayload = vi.fn(async fn => {
+      throw new Error(`Unexpected api call: ${fn?.name || 'unknown'}`)
+    })
+    const taxonomyValue = {
+      getConcept: name => (name === 'dingo' ? concept : null),
+      getConceptPath: name => (name === 'dingo' ? ['root', 'dingo'] : null),
+      getConceptPrimaryName: name => (name === 'dingo' ? 'dingo' : undefined),
+      isConceptLoaded: name => name === 'dingo',
+      loadConcept: vi.fn(async () => concept),
+      taxonomy: { rootName: 'root' },
+    }
+
+    renderProvider({ apiPayload, probe: <RenameProbe selectedRef={{ current: 'dingo' }} />, taxonomyValue })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('concept-path').textContent).toBe(JSON.stringify(['root', 'dingo']))
+    })
+    expect(apiPayload).not.toHaveBeenCalled()
+  })
+
   it('converges an alias selection to the primary name after the concept loads', async () => {
     const aliasedConcept = { ...concept, alternateNames: ['doggo'] }
     let aliasRegistered = false
@@ -181,6 +203,7 @@ describe('ConceptProvider', () => {
 
     const taxonomyValue = {
       getConcept,
+      getConceptPath: () => null,
       getConceptPrimaryName: name => getConcept(name)?.name,
       isConceptLoaded: name => aliasRegistered && Boolean(getConcept(name)),
       loadConcept: vi.fn(async () => {
