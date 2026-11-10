@@ -13,7 +13,7 @@ import cloneStale from '@/lib/concept/pending/cloneStale'
 export const processPendingApproval = async ({
   approval,
   items,
-  deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected },
+  deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected },
 }) => {
   if (!items || items.length === 0) return { updated: [], concepts: {}, pendingHistory: [] }
 
@@ -47,8 +47,8 @@ export const processPendingApproval = async ({
 
   for (const conceptName of Object.keys(groups)) {
     const conceptItems = groups[conceptName]
-    const staleConcept = getConcept(conceptName)
-    if (!staleConcept) continue
+    if (!getConcept(conceptName)) continue
+    const staleConcept = await loadConcept(conceptName)
 
     let freshConcept = staleConcept
 

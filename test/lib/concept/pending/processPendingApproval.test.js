@@ -48,6 +48,7 @@ describe('processPendingApproval', () => {
       }
       return null
     })
+    const loadConcept = vi.fn(async conceptName => getConcept(conceptName))
     const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
     const reloadConceptRealizations = vi.fn(async () => [])
     const updateSelected = vi.fn()
@@ -64,7 +65,7 @@ describe('processPendingApproval', () => {
 
     const result = await processPendingApproval({
       approval: PENDING.APPROVAL.ACCEPT,
-      deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, updateSelected },
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, updateSelected },
       items,
     })
 
@@ -108,6 +109,7 @@ describe('processPendingApproval', () => {
     const apiFns = { apiPayload: vi.fn(async () => ({})) }
     const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
     const getConcept = vi.fn(() => staleConcept)
+    const loadConcept = vi.fn(async () => staleConcept)
     const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
     const reloadConceptRealizations = vi.fn(async () => [])
     const updateSelected = vi.fn()
@@ -122,7 +124,7 @@ describe('processPendingApproval', () => {
 
     await processPendingApproval({
       approval: PENDING.APPROVAL.ACCEPT,
-      deps: { apiFns, conceptEditsRefresh, getConcept, refreshData, reloadConceptRealizations, updateSelected },
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, updateSelected },
       items,
     })
 
@@ -130,5 +132,43 @@ describe('processPendingApproval', () => {
     expect(reloadConceptRealizations).toHaveBeenCalledTimes(2)
     expect(reloadConceptRealizations).toHaveBeenCalledWith('dingo')
     expect(reloadConceptRealizations).toHaveBeenCalledWith('wolf')
+  })
+
+  it('fully loads a partially loaded group concept before cloning', async () => {
+    const partialConcept = { name: 'miscellany', parent: 'object', children: ['try'] }
+    const loadedConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: ['try'],
+      media: [],
+      name: 'miscellany',
+      parent: 'object',
+      rankLevel: '',
+      rankName: '',
+    }
+    const optimisticConcept = { ...loadedConcept, children: [] }
+
+    const apiFns = { apiPayload: vi.fn(async () => ({})) }
+    const conceptEditsRefresh = vi.fn(async () => ({ concept: optimisticConcept }))
+    const getConcept = vi.fn(() => partialConcept)
+    const loadConcept = vi.fn(async () => loadedConcept)
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
+    const updateSelected = vi.fn()
+    const items = [{ concept: 'miscellany', field: 'Concept.child', action: 'Delete', oldValue: 'try', id: 'pending-1' }]
+
+    cloneStaleMock.mockResolvedValue(optimisticConcept)
+    applyApprovalsMock.mockImplementation(() => {})
+
+    const result = await processPendingApproval({
+      approval: PENDING.APPROVAL.ACCEPT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, updateSelected },
+      items,
+    })
+
+    expect(loadConcept).toHaveBeenCalledWith('miscellany')
+    expect(cloneStaleMock).toHaveBeenCalledWith(apiFns, loadedConcept, false)
+    expect(conceptEditsRefresh).toHaveBeenCalledWith(optimisticConcept, loadedConcept)
+    expect(result.updated).toEqual(['miscellany'])
   })
 })

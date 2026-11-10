@@ -20,7 +20,7 @@ const useConceptUpdatePending = () => {
   const { apiFns } = use(ConfigContext)
   const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
   const { updateSelected } = use(SelectedContext)
-  const { conceptEditsRefresh, getConcept } = use(TaxonomyContext)
+  const { conceptEditsRefresh, getConcept, loadConcept } = use(TaxonomyContext)
 
   return useCallback(
     async pendingConfirm => {
@@ -41,6 +41,7 @@ const useConceptUpdatePending = () => {
               apiFns,
               conceptEditsRefresh,
               getConcept,
+              loadConcept,
               refreshData,
               reloadConceptRealizations,
               resetConceptPaths,
@@ -73,6 +74,7 @@ const useConceptUpdatePending = () => {
       apiFns,
       conceptEditsRefresh,
       getConcept,
+      loadConcept,
       pending,
       refreshData,
       reloadConceptRealizations,

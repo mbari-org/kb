@@ -28,6 +28,7 @@ import useModifyConcept from '@/contexts/panels/concepts/staged/edit/useModifyCo
 import { initialConceptState } from '@/lib/concept/state/state'
 import { filterRanks as filterTaxonomyRanks } from '@/lib/model/rank'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { PENDING } from '@/lib/constants/pending.js'
 import { ROLES } from '@/lib/constants/roles.js'
 import CONFIG from '@/lib/config'
 
@@ -171,6 +172,7 @@ export const ConceptPanelTestWrapper = ({
   children,
   initialAliases = [],
   initialMedia = [],
+  initialPendingConcept = [],
   initialRealizations = [],
   initialReferences = [],
   initialTemplates = [],
@@ -386,7 +388,7 @@ export const ConceptPanelTestWrapper = ({
                                 isPhylogenyRoot,
                                 isEditing,
                                 setEditing,
-                                pending: () => [],
+                                pending: key => (key === PENDING.DATA.CONCEPT ? initialPendingConcept : []),
                               }}
                             >
                               <ConceptStagedContext.Provider

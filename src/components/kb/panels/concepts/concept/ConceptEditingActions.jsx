@@ -84,24 +84,19 @@ const ConceptEditingActions = () => {
         right: 15,
       }}
     >
-      {!isReadOnly && (
-        <Button
-          color={isEditing ? 'cancel' : 'main'}
-          disabled={isReadOnly}
-          onClick={handleCancelDiscard}
-          variant='contained'
-        >
+      {showPendingButton && (
+        <Button color='main' onClick={handlePending} variant='contained'>
+          {PENDING_ACTION}
+        </Button>
+      )}
+      {!showPendingButton && !isReadOnly && (
+        <Button color={isEditing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
           {editCancelDiscardButtonText}
         </Button>
       )}
       {isEditing && isModified && (
         <Button disabled={isReadOnly} onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
           {STAGED}
-        </Button>
-      )}
-      {showPendingButton && (
-        <Button color='main' disabled={isReadOnly} onClick={handlePending} variant='contained'>
-          {PENDING_ACTION}
         </Button>
       )}
       {!isReadOnly && (
