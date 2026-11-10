@@ -11,7 +11,7 @@ const textSx = {
   },
 }
 
-const NameChangeExtent = ({ disabled, nameChangeType, onChange }) => {
+const NameChangeExtent = ({ nameChangeType, onChange }) => {
   return (
     <Stack direction='column' spacing={1} sx={{ mb: 2 }}>
       <Stack direction='row' spacing={3}>
@@ -19,7 +19,6 @@ const NameChangeExtent = ({ disabled, nameChangeType, onChange }) => {
           control={
             <Radio
               checked={nameChangeType === REASSIGN}
-              disabled={disabled}
               name='nameChangeType'
               onChange={onChange}
               size='small'
@@ -33,7 +32,6 @@ const NameChangeExtent = ({ disabled, nameChangeType, onChange }) => {
           control={
             <Radio
               checked={nameChangeType === NAME_ONLY}
-              disabled={disabled}
               name='nameChangeType'
               onChange={onChange}
               size='small'

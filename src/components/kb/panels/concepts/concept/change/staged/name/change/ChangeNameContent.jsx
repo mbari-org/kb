@@ -22,6 +22,7 @@ import useChangeNameHandlers from './useChangeNameHandlers'
 import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 const { REALIZATIONS, TEMPLATES_DEFINED } = MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
 
 const ChangeNameContent = () => {
@@ -32,7 +33,7 @@ const ChangeNameContent = () => {
   const { modalData } = use(ConceptModalDataContext)
   const { isAdmin } = use(UserContext)
 
-  const [name, setName] = useState({ value: concept.name, extent: '' })
+  const [name, setName] = useState({ value: concept.name, extent: isAdmin ? REASSIGN : '' })
   const [modifiedFields, setModifiedFields] = useState({ name: false })
 
   const { isValidName, nameHelperText } = useConceptNameValidate(name, modifiedFields)
@@ -107,12 +108,7 @@ const ChangeNameContent = () => {
           </Stack>
           <Box sx={{ ml: 6.75 }}>
             {isAdmin && !!hasRelatedData && (
-              <NameChangeExtent
-                disabled={!isValidNameChange}
-                nameChangeType={name.extent}
-                onChange={handleNameExtentChange}
-                value={name.extent}
-              />
+              <NameChangeExtent nameChangeType={name.extent} onChange={handleNameExtentChange} />
             )}
           </Box>
           {!modalData.isLoading && !!hasRelatedData && (

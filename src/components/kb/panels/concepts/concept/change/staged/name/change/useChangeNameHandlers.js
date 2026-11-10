@@ -4,6 +4,10 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import UserContext from '@/contexts/user/UserContext'
 
+import CONFIG from '@/lib/config'
+
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
+
 const useChangeNameHandlers = (name, setName, nameError, setModifiedFields) => {
   const { concept } = use(ConceptContext)
   const { setModalData } = use(ConceptModalContext)
@@ -30,10 +34,10 @@ const useChangeNameHandlers = (name, setName, nameError, setModifiedFields) => {
 
   const handleNameChange = event => {
     const updatedName = {
-      extent: '',
+      ...name,
       value: event.target.value,
     }
-    setName(prevName => ({ ...prevName, ...updatedName }))
+    setName(prevName => ({ ...prevName, value: event.target.value }))
 
     // Only mark as modified if the value is actually different from the original
     const isActuallyModified = updatedName.value !== concept.name
@@ -65,9 +69,9 @@ const useChangeNameHandlers = (name, setName, nameError, setModifiedFields) => {
     setModalData({
       isValid: false,
       modified: false,
-      name: { value: concept.name, extent: '' },
+      name: { value: concept.name, extent: isAdmin ? REASSIGN : '' },
     })
-  }, [concept, setModalData])
+  }, [concept, isAdmin, setModalData])
 
   return {
     handleNameChange,

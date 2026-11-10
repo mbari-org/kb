@@ -23,7 +23,7 @@ import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
-const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 
 const NameDetail = ({ pendingConcept }) => {
   const { setModalData } = use(ConceptModalContext)
@@ -35,7 +35,7 @@ const NameDetail = ({ pendingConcept }) => {
   useEffect(() => {
     setModalData(prevData => ({
       ...prevData,
-      nameChangeType: NAME_ONLY,
+      nameChangeType: REASSIGN,
     }))
   }, [setModalData])
 
@@ -52,8 +52,6 @@ const NameDetail = ({ pendingConcept }) => {
       nameChangeType: event.target.value,
     }))
   }
-
-  const enableExtent = approval === APPROVAL.ACCEPT
 
   const nameSx = otherApprovalSx(approval)
 
@@ -72,7 +70,7 @@ const NameDetail = ({ pendingConcept }) => {
       <PendingValues disabled={approval === APPROVAL.OTHER} pendingValues={pendingInfo(pendingName)} />
       {isAdmin && (
         <Box sx={{ ml: 16 }}>
-          <NameChangeExtent disabled={!enableExtent} nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+          <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         </Box>
       )}
     </>

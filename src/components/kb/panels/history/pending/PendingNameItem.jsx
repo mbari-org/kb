@@ -16,16 +16,15 @@ import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
-const { NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 
 const PendingNameItem = ({ item, isAdmin }) => {
-  const [nameChangeType, setNameChangeType] = useState(NAME_ONLY)
+  const [nameChangeType, setNameChangeType] = useState(REASSIGN)
 
   if (!item || item.field !== HISTORY_FIELD.NAME || !isPendingName(item)) return null
 
   const title = pendingActionValue(item)
   const nameSx = otherApprovalSx(APPROVAL.ACCEPT)
-  const enableExtent = true // For now, always enable in history panel context
 
   const handleNameChangeType = event => {
     setNameChangeType(event.target.value)
@@ -42,7 +41,7 @@ const PendingNameItem = ({ item, isAdmin }) => {
       <PendingValues disabled={false} leftMargin={6} pendingValues={pendingInfo(item)} />
       {isAdmin && (
         <Box sx={{ ml: 16 }}>
-          <NameChangeExtent disabled={!enableExtent} nameChangeType={nameChangeType} onChange={handleNameChangeType} />
+          <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         </Box>
       )}
     </>
