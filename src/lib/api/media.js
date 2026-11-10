@@ -13,8 +13,6 @@ const updateMediaItem = async (config, [mediaItemId, mediaItem]) =>
 
 const PRIMARY_PATCH_PATTERN = /_01\.[a-z0-9]+$/i
 
-// Legacy data can leave a concept's media with no primary flagged. Patch by promoting the
-//  "_01" image (or any image when there is no "_01"), both locally and on the server.
 const patchPrimaryImageFlag = async (apiFns, concept) => {
   const media = concept.media
   if (media.length === 0 || media.some(isPrimary)) return

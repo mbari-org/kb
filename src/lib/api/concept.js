@@ -2,9 +2,6 @@ import { getMedia, patchPrimaryImageFlag } from '@/lib/api/media'
 import { annosaurusGet } from '@/lib/services/annosaurus/methods'
 import { oniGet, oniUserDelete, oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
 
-// The server caches concepts, so we don't "trust" the media array in the fetched concept object,
-// instead we explicitly fetch media. Realizations are owned by PanelData and are never read
-// from concept payloads.
 const normalizeConcept = async (apiFns, concept) => {
   concept.media = await apiFns.apiPayload(getMedia, concept.name)
   await patchPrimaryImageFlag(apiFns, concept)

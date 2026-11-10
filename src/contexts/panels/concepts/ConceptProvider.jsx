@@ -350,8 +350,6 @@ const ConceptProvider = ({ children }) => {
       return
     }
 
-    // Record the key only once the path is applied: a re-render can cancel an in-flight fetch,
-    // and the re-run must be free to start another one.
     const applyPath = path => {
       previousConceptKeyRef.current = conceptKey
       conceptPathsRef.current.set(concept.name, path)

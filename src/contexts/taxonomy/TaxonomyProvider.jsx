@@ -485,7 +485,6 @@ const TaxonomyProvider = ({ children }) => {
     ]
   )
 
-  // Don't render children until taxonomy is loaded
   if (!taxonomy) {
     return <TaxonomyContext value={value}>{null}</TaxonomyContext>
   }

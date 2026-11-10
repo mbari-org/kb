@@ -1,11 +1,4 @@
 #!/usr/bin/env node
-// Map minified stack frames from a production build back to original source
-// using the sourcemaps in dist/assets.
-//
-// Usage:
-//   yarn map-trace <bundle-file> <line> <col>
-//   yarn map-trace '<pasted stack trace>'
-//   pbpaste | yarn map-trace
 import { readFileSync } from 'fs'
 import { existsSync } from 'fs'
 import path from 'path'

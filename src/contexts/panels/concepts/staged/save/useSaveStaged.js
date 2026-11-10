@@ -55,7 +55,6 @@ const useSaveStaged = () => {
           await reloadConceptRealizations(conceptName)
         }
 
-        // Strip UI-attached fields (added by ConceptProvider.handleSetConcept); they are not taxonomy state.
         const freshConcept = { ...staleConcept, name: conceptName }
         delete freshConcept.realizations
         delete freshConcept.templates

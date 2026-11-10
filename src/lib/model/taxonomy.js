@@ -18,9 +18,6 @@ import { filterRanks } from '@/lib/model/rank'
 import { treeItem } from '@/components/kb/panels/concepts/sidebar/tree/lib/taxonomyItem'
 import { typeMediaItem } from '@/lib/model/media'
 
-// Node cache for structural sharing: a rebuilt node is reused when its children are
-//  referentially identical, so non-structural taxonomy updates (e.g. concept hydration)
-//  return the same root object and consumers can skip downstream rebuilds.
 const treeNodeCache = new Map()
 
 const buildTree = taxonomy => {
