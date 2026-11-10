@@ -334,6 +334,42 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(errors).toEqual([])
   })
 
+  it('inserts a created child from its create payload without fetching', async () => {
+    const { apiFns, errors, getContext } = await renderTaxonomy()
+    const staleConcept = getContext().getConcept('old-parent')
+    const freshConcept = {
+      ...cloneConcept(staleConcept),
+      children: ['created-child', 'moving-child'],
+    }
+    const createdChildPayloads = {
+      'created-child': {
+        alternateNames: [],
+        aphiaId: null,
+        author: 'me',
+        id: 42,
+        media: [],
+        name: 'created-child',
+        rank: null,
+        references: [],
+      },
+    }
+
+    await act(async () => {
+      await getContext().conceptEditsRefresh(freshConcept, staleConcept, createdChildPayloads)
+    })
+
+    const createdChild = getContext().getConcept('created-child')
+    expect(createdChild.id).toBe(42)
+    expect(createdChild.parent).toBe('old-parent')
+    expect(createdChild.children).toEqual([])
+    expect(createdChild.aliases).toEqual([])
+    expect(getContext().isConceptLoaded('created-child')).toBe(true)
+    expect(
+      apiCallsFor(apiFns.apiPayload, apiConcept).filter(([, conceptName]) => conceptName === 'created-child')
+    ).toHaveLength(0)
+    expect(errors).toEqual([])
+  })
+
   it('removes child concepts and their aliases from taxonomy names and maps', async () => {
     const { errors, getContext } = await renderTaxonomy()
     const staleConcept = getContext().getConcept('old-parent')

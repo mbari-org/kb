@@ -16,6 +16,7 @@ import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
 import { getConcept as apiGetConcept } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const applyRenameSideEffectsMock = vi.fn()
 const applyUpdateResultsMock = vi.fn()
@@ -61,6 +62,7 @@ describe('useSaveStaged', () => {
     const updatedConcept = { name: 'renamed-concept', parent: 'root' }
     const updatesInfo = {
       hasUpdated: isUpdatedField,
+      results: [],
       updatedValue: field => {
         if (field === CONCEPT.FIELD.NAME) {
           return { value: 'renamed-concept' }
@@ -183,7 +185,7 @@ describe('useSaveStaged', () => {
       staleConcept: harness.staleConcept,
       updatesInfo: harness.updatesInfo,
     })
-    expect(harness.conceptEditsRefresh).toHaveBeenCalledWith(expectedFreshConcept, harness.staleConcept)
+    expect(harness.conceptEditsRefresh).toHaveBeenCalledWith(expectedFreshConcept, harness.staleConcept, {})
     expect(harness.refreshData).toHaveBeenCalledWith('pendingHistory')
     expect(harness.setConcept).toHaveBeenCalledWith(harness.updatedConcept, harness.pendingHistory)
     expect(harness.setEditing).toHaveBeenCalledWith(false)
@@ -224,7 +226,7 @@ describe('useSaveStaged', () => {
     expect(normalizeConceptMock).toHaveBeenCalledWith(harness.apiFns, harness.fetchedConcept)
     expect(harness.relabelConceptPaths).toHaveBeenCalledWith('old-concept', 'renamed-concept')
     expect(harness.resetConceptPaths).not.toHaveBeenCalled()
-    expect(harness.conceptEditsRefresh).toHaveBeenCalledWith(harness.fetchedConcept, harness.staleConcept)
+    expect(harness.conceptEditsRefresh).toHaveBeenCalledWith(harness.fetchedConcept, harness.staleConcept, {})
   })
 
   it('resets concept paths instead of relabeling when the parent changes alongside the name', async () => {
@@ -242,12 +244,31 @@ describe('useSaveStaged', () => {
     expect(harness.apiFns.apiPayload).toHaveBeenCalledWith(apiGetConcept, 'renamed-concept')
   })
 
+  it('passes created child payloads from submit results to conceptEditsRefresh', async () => {
+    const harness = buildRenameHarness({ isUpdatedField: () => false })
+    const childPayload = { alternateNames: [], id: 42, media: [], name: 'created-child' }
+    harness.updatesInfo.results = [
+      { action: CONCEPT_STATE.CHILD.ADD, field: CONCEPT.FIELD.CHILDREN, response: childPayload },
+      { action: CONCEPT_STATE.MEDIA_ITEM.ADD, field: CONCEPT.FIELD.MEDIA, response: { id: 7 } },
+    ]
+
+    const { result } = renderHook(() => useSaveStaged(), { wrapper: harness.wrapper })
+    await act(async () => {
+      await result.current()
+    })
+
+    expect(harness.conceptEditsRefresh).toHaveBeenCalledWith(harness.fetchedConcept, harness.staleConcept, {
+      'created-child': childPayload,
+    })
+  })
+
   const buildRealizationSaveHarness = ({ realizationsUpdated = true } = {}) => {
     const staleConcept = { name: 'some-concept' }
     const freshConcept = { name: 'some-concept', media: [], realizations: [] }
     const updatedConcept = { name: 'some-concept', parent: 'root' }
     const updatesInfo = {
       hasUpdated: field => realizationsUpdated && field === CONCEPT.FIELD.REALIZATIONS,
+      results: [],
       updatedValue: () => undefined,
     }
 

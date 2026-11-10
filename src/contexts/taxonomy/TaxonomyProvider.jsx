@@ -85,7 +85,7 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const conceptEditsRefresh = useCallback(
-    async (freshConcept, staleConcept) => {
+    async (freshConcept, staleConcept, createdChildPayloads = {}) => {
       if (freshConcept === staleConcept) {
         return { concept: freshConcept, taxonomy: taxonomyRef.current }
       }
@@ -126,7 +126,8 @@ const TaxonomyProvider = ({ children }) => {
                   return
                 }
 
-                const child = await apiConcept(apiFns, childName)
+                const payload = createdChildPayloads[childName]
+                const child = payload ? { ...payload, aliases: [], children: [] } : await apiConcept(apiFns, childName)
                 child.parent = freshConcept.name
                 insertConcept(child, conceptMap, aliasMap)
               })

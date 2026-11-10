@@ -14,6 +14,7 @@ import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
 
 import { CONCEPT } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 import CONFIG from '@/lib/config'
@@ -88,7 +89,15 @@ const useSaveStaged = () => {
 
         const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
 
-        const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, updatesContext.staleConcept)
+        const createdChildPayloads = updatesInfo.results
+          .filter(result => result.field === CONCEPT.FIELD.CHILDREN && result.action === CONCEPT_STATE.CHILD.ADD)
+          .reduce((acc, result) => ({ ...acc, [result.response.name]: result.response }), {})
+
+        const { concept: updatedConcept } = await conceptEditsRefresh(
+          freshConcept,
+          updatesContext.staleConcept,
+          createdChildPayloads
+        )
 
         await setConcept(updatedConcept, pendingHistory)
         setEditing(false)
