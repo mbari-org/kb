@@ -56,17 +56,18 @@ const buildTreeItems = taxonomy => {
 
 const closestConcept = (taxonomy, concept) => {
   const parent = getConcept(taxonomy, concept.parent)
+  const siblings = parent?.children
 
-  if (parent.children.length === 1) {
+  if (!siblings || siblings.length <= 1) {
     return parent
   }
 
-  const childIndex = parent.children.indexOf(concept.name)
+  const childIndex = siblings.indexOf(concept.name)
   if (childIndex === 0) {
-    return getConcept(taxonomy, parent.children[1])
+    return getConcept(taxonomy, siblings[1])
   }
 
-  return getConcept(taxonomy, parent.children[childIndex - 1])
+  return getConcept(taxonomy, siblings[childIndex - 1])
 }
 
 const deleteConcept = async (taxonomy, concept, apiFns) => {

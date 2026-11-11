@@ -10,6 +10,8 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 import { PENDING } from '@/lib/constants/pending.js'
 
+import { moveDeleteToLast, isPendingDelete } from '@/lib/model/history'
+
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
@@ -18,9 +20,9 @@ const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, resetConceptPaths, setConcept } = use(ConceptContext)
   const { withProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
-  const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
+  const { pendingHistory, refreshData, reloadConceptRealizations } = use(PanelDataContext)
   const { concepts: conceptSelection, updateSelected } = use(SelectedContext)
-  const { conceptEditsRefresh, getConcept, loadConcept } = use(TaxonomyContext)
+  const { closestConcept, conceptEditsRefresh, getConcept, loadConcept } = use(TaxonomyContext)
 
   return useCallback(
     async pendingConfirm => {
@@ -35,37 +37,60 @@ const useConceptUpdatePending = () => {
 
       return withProcessing(
         async () => {
-          const { concepts, pendingHistory, updated } = await processPendingApproval({
-            approval,
-            deps: {
-              apiFns,
-              conceptEditsRefresh,
-              getConcept,
-              loadConcept,
-              refreshData,
-              reloadConceptRealizations,
-              removeSelectedConceptName: conceptSelection.removeName,
-              resetConceptPaths,
-              updateSelected,
-            },
-            items: pendingItems,
-          })
+          const deps = {
+            apiFns,
+            conceptEditsRefresh,
+            getConcept,
+            loadConcept,
+            refreshData,
+            reloadConceptRealizations,
+            removeSelectedConceptName: conceptSelection.removeName,
+            resetConceptPaths,
+            updateSelected,
+          }
+
+          const deleteItem = pendingItems.find(isPendingDelete)
+          const approveDeleteAlone = approval === PENDING.APPROVAL.ACCEPT && deleteItem && pendingItems.length === 1
+          const deletedClosestName =
+            deleteItem?.oldValue === staleConcept.name
+              ? (closestConcept(staleConcept.name)?.name ?? staleConcept.parent)
+              : null
+
+          let result
+          let isMorePending
+
+          if (approveDeleteAlone) {
+            const otherPending = pendingHistory.filter(item => item.concept === deleteItem.oldValue)
+            if (otherPending.length > 0) {
+              await processPendingApproval({ approval: PENDING.APPROVAL.REJECT, deps, items: otherPending })
+            }
+            result = await processPendingApproval({ approval, deps, items: pendingItems })
+            isMorePending = false
+          } else {
+            const orderedItems = deleteItem ? moveDeleteToLast(pendingItems) : pendingItems
+            result = await processPendingApproval({ approval, deps, items: orderedItems })
+            isMorePending = pendingConcept.length !== pendingItems.length
+          }
+
+          const { concepts, deleted, pendingHistory: updatedPendingHistory, updated } = result
 
           const conceptName = staleConcept.name
           const optimisticConcept = concepts?.[conceptName]
 
-          if (optimisticConcept) {
-            await setConcept(optimisticConcept, pendingHistory)
+          if (deleted.includes(conceptName)) {
+            updateSelected({ concept: deletedClosestName })
+          } else if (optimisticConcept) {
+            await setConcept(optimisticConcept, updatedPendingHistory)
           } else if (updated.includes(conceptName)) {
             const refreshedConcept = getConcept(conceptName)
             if (refreshedConcept) {
-              await setConcept(refreshedConcept, pendingHistory)
+              await setConcept(refreshedConcept, updatedPendingHistory)
             }
           } else if (!getConcept(conceptName)) {
             updateSelected({ concept: staleConcept.parent })
           }
 
-          return pendingConcept.length !== pendingItems.length
+          return isMorePending
         },
         PROCESSING.UPDATE,
         `${PROCESSING.ARG.PENDING}: ${approval}`
@@ -73,11 +98,13 @@ const useConceptUpdatePending = () => {
     },
     [
       apiFns,
+      closestConcept,
       conceptEditsRefresh,
       conceptSelection,
       getConcept,
       loadConcept,
       pending,
+      pendingHistory,
       refreshData,
       reloadConceptRealizations,
       resetConceptPaths,

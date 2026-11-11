@@ -89,6 +89,7 @@ describe('processPendingApproval', () => {
       concepts: {
         'renamed-concept': updatedConcept,
       },
+      deleted: [],
       pendingHistory: [],
       updated: ['renamed-concept'],
     })
@@ -171,6 +172,7 @@ describe('processPendingApproval', () => {
     expect(cloneStaleMock).toHaveBeenCalledWith(apiFns, loadedConcept, false)
     expect(conceptEditsRefresh).toHaveBeenCalledWith(optimisticConcept, loadedConcept)
     expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
+    expect(result.deleted).toEqual(['try'])
     expect(result.updated).toEqual(['miscellany'])
   })
 

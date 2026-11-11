@@ -52,6 +52,16 @@ const hasPendingStructure = (pending, conceptName) => {
   }
 }
 
+const isPendingDelete = item => item.field === HISTORY_FIELD.CHILD && item.action === ACTION.DELETE
+
+const moveDeleteToLast = items => {
+  const [deletes, others] = items.reduce(
+    ([del, rest], item) => (isPendingDelete(item) ? [[...del, item], rest] : [del, [...rest, item]]),
+    [[], []]
+  )
+  return [...others, ...deletes]
+}
+
 const pendingActionText = action => {
   const actionText = action !== 'REPLACE' ? action : 'Edit'
   return capitalize(actionText)
@@ -120,6 +130,8 @@ const pendingIds = (pendingConcept, targetGroup) => {
 export {
   hasPending,
   hasPendingStructure,
+  isPendingDelete,
+  moveDeleteToLast,
   pendingActionText,
   pendingChild,
   pendingIds,

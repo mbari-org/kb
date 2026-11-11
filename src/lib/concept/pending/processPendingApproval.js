@@ -16,7 +16,7 @@ export const processPendingApproval = async ({
   items,
   deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, resetConceptPaths, updateSelected },
 }) => {
-  if (!items || items.length === 0) return { updated: [], concepts: {}, pendingHistory: [] }
+  if (!items || items.length === 0) return { concepts: {}, deleted: [], pendingHistory: [], updated: [] }
 
   for (const item of items) {
     await apiFns.apiPayload(updatePendingItem, [approval, item.id])
@@ -77,18 +77,20 @@ export const processPendingApproval = async ({
     }
   }
 
+  const deleted = []
   items
     .filter(item => item.field === HISTORY_FIELD.CHILD)
     .forEach(item => {
       if (approval === PENDING.APPROVAL.ACCEPT && item.action === ACTION.DELETE) {
         removeSelectedConceptName(item.oldValue)
+        deleted.push(item.oldValue)
       }
       if (approval === PENDING.APPROVAL.REJECT && item.action === ACTION.ADD) {
         removeSelectedConceptName(item.newValue)
       }
     })
 
-  return { concepts, pendingHistory, updated }
+  return { concepts, deleted, pendingHistory, updated }
 }
 
 export default processPendingApproval
