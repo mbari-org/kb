@@ -40,8 +40,15 @@ const LoginForm = ({ isVisible = true }) => {
     <Box component='form' action={loginAction}>
       <Card sx={{ bgcolor: 'transparent' }}>
         <CardContent>
-          <LoginInput id='login-user' ref={usernameRef} label='Username' name='username' />
-          <LoginInput id='login-password' label='Password' name='password' type='password' sx={{ mt: 2 }} />
+          <LoginInput id='login-user' autoComplete='username' ref={usernameRef} label='Username' name='username' />
+          <LoginInput
+            id='login-password'
+            autoComplete='current-password'
+            label='Password'
+            name='password'
+            type='password'
+            sx={{ mt: 2 }}
+          />
           <SubmitError errorText={loginState?.error?.message} />
         </CardContent>
         <CardActions style={{ display: 'flex', justifyContent: 'center' }}>

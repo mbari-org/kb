@@ -15,6 +15,9 @@ import AppModalContext from '@/contexts/app/AppModalContext'
  *   1. The actual page entry
  *   2. A dummy entry (marked with isDummyEntry flag) that enables popstate to fire
  *
+ * The dummy entry is pushed on the first user interaction (pointerdown/keydown); browsers skip history entries
+ * added without a user gesture, so pushing on mount would defeat the interception.
+ *
  * When the user clicks back, popstate fires, we intercept it, show the logout modal, and push a new dummy entry to
  * keep the handler active.
  */
@@ -35,16 +38,24 @@ const useBrowserBack = () => {
       setModal(modal)
     }
 
-    const currentState = window.history.state
-    const isAlreadyDummy = currentState?.isDummyEntry
-
-    if (!isAlreadyDummy) {
-      window.history.pushState({ isDummyEntry: true }, '', window.location.href)
+    const pushDummyEntry = () => {
+      removeInteractionListeners()
+      if (!window.history.state?.isDummyEntry) {
+        window.history.pushState({ isDummyEntry: true }, '', window.location.href)
+      }
     }
 
+    const removeInteractionListeners = () => {
+      window.removeEventListener('pointerdown', pushDummyEntry)
+      window.removeEventListener('keydown', pushDummyEntry)
+    }
+
+    window.addEventListener('pointerdown', pushDummyEntry)
+    window.addEventListener('keydown', pushDummyEntry)
     window.addEventListener('popstate', handlePopState)
 
     return () => {
+      removeInteractionListeners()
       window.removeEventListener('popstate', handlePopState)
     }
   }, [setModal])
