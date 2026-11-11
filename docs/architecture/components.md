@@ -58,7 +58,6 @@ Notes and Embargoes render `EmptyPanel` placeholders only.
 - `tooltip/`: `KBTooltip`, `KBTooltipTarget`, `KBTooltipFormControlLabel` (see
   `docs/development/coding-conventions.md` for usage rules)
 - `factory/` modal primitives
-- `CxTBD.jsx` — placeholder component, **currently has zero consumers** (dead code)
 - `VersionDisplay.jsx` — version string + tooltip (dev-mode HMR refresh)
 
 ## Modal framework (`src/components/modal/`)

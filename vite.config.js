@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: 'jsdom',
       setupFiles: './test/setup.js',
-      exclude: [...defaultExclude, '.kilo/**'],
+      exclude: defaultExclude,
     },
     build: {
       sourcemap: true,

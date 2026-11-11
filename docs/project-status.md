@@ -49,11 +49,9 @@ against the working tree; items marked *(draft notes)* come from `tmp/release.tx
    out under `// CxTmp until locked is implemented in the backend`; lines 60-61 also fake
    `locked: false` on every user load (`cxTmpUsers`).
 
-## Placeholders and dead code
+## Placeholders
 
 - **Notes and Embargoes panels** are `EmptyPanel` placeholders (no functionality).
-- `src/components/common/CxTBD.jsx` — placeholder component with **zero consumers**;
-  dead code, candidate for deletion.
 - No TODO/FIXME/HACK comments anywhere in `src/` or `test/` (the `Cx`-prefix convention
   is used instead; only the two `CxTmp` sites in `UsersProvider.jsx` remain).
 - The dead-code list in older docs is partly stale: `src/contexts/selected/useSelected.js`
