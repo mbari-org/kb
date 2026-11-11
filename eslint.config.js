@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 
 export default [
-  { ignores: ['dist', 'chrome/**/*', '.vscode/**'] },
+  { ignores: ['dist', 'chrome/**/*', '.vscode/**', '.yarn/**'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
