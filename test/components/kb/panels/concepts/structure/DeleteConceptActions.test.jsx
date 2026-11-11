@@ -1,11 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { useState } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
 
 import kbTheme from '@/lib/theme'
 
 import DeleteConceptActions from '@/components/kb/panels/concepts/concept/change/staged/name/delete/DeleteConceptActions'
+import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
+import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
+
+import { deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
+import { ACTION, HISTORY_FIELD } from '@/lib/constants'
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -67,6 +74,7 @@ describe('DeleteConceptActions', () => {
 
     const closeModal = vi.fn((confirmed, onComplete) => onComplete?.())
     const refreshData = vi.fn(async () => ({}))
+    const removeName = vi.fn()
     const setClearTemplateFilters = vi.fn()
     const updateSelected = vi.fn()
     const updateTaxonomy = vi.fn()
@@ -103,10 +111,10 @@ describe('DeleteConceptActions', () => {
                     }}
                   >
                     <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
-                      <SelectedContext.Provider value={{ updateSelected }}>
+                      <SelectedContext.Provider value={{ concepts: { removeName }, updateSelected }}>
                         <SelectedSettingsContext.Provider value={{ settings: {} }}>
                           <TaxonomyContext.Provider value={{ taxonomy: {}, updateTaxonomy }}>
-                            <UserContext.Provider value={{ getPreferences: vi.fn() }}>
+                            <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true }}>
                               <DeleteConceptActions />
                             </UserContext.Provider>
                           </TaxonomyContext.Provider>
@@ -132,7 +140,111 @@ describe('DeleteConceptActions', () => {
     expect(withProcessing).toHaveBeenCalledWith(expect.any(Function), PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
     expect(deleteTaxonomyConceptMock).toHaveBeenCalled()
     expect(closeModal).toHaveBeenCalledWith(true, expect.any(Function))
+    expect(removeName).toHaveBeenCalledWith('doomed')
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'sibling' })
     expect(setClearTemplateFilters).toHaveBeenCalledWith(true)
+  })
+
+  it('leaves the concept in the taxonomy and refreshes pending history for a non-admin delete', async () => {
+    const concept = { name: 'doomed', parent: 'root' }
+    const pendingDeletion = {
+      concept: 'root',
+      field: HISTORY_FIELD.CHILD,
+      action: ACTION.DELETE,
+      oldValue: concept.name,
+    }
+
+    const apiPayload = vi.fn(async () => ({}))
+    const closeModal = vi.fn()
+    const refreshData = vi.fn(async () => ({}))
+    const setModal = vi.fn()
+    const updateSelected = vi.fn()
+    const updateTaxonomy = vi.fn()
+    const withProcessing = vi.fn(async work => work())
+
+    const EditingState = () => {
+      const [isEditing, setEditing] = useState(true)
+      const { pending, setPendingConfirm } = useConceptPending(concept)
+
+      return (
+        <ConceptContext.Provider value={{ concept, initialState: null, isEditing, pending, setEditing, setPendingConfirm }}>
+          <ConceptStagedContext.Provider value={{ confirmReset: null }}>
+            <div data-testid='editing-actions'>
+              <ConceptEditingActions />
+            </div>
+            <DeleteConceptActions />
+          </ConceptStagedContext.Provider>
+        </ConceptContext.Provider>
+      )
+    }
+
+    const PanelState = () => {
+      const [pendingHistory, setPendingHistory] = useState([])
+      const refreshPanelData = async key => {
+        await refreshData(key)
+        setPendingHistory([pendingDeletion])
+      }
+
+      return (
+        <PanelDataContext.Provider
+          value={{
+            ensureConceptRealizations: vi.fn(async () => []),
+            getReferences: vi.fn(),
+            invalidateConceptRealizations: vi.fn(),
+            pendingHistory,
+            refreshData: refreshPanelData,
+            renameRealizationToConceptNames: vi.fn(),
+            setClearTemplateFilters: vi.fn(),
+            templates: [],
+          }}
+        >
+          <EditingState />
+        </PanelDataContext.Provider>
+      )
+    }
+
+    render(
+      <ThemeProvider theme={kbTheme}>
+        <ConfigContext.Provider value={{ apiFns: { apiPayload } }}>
+          <ConceptModalContext.Provider value={{ closeModal, setModal, setModalData: vi.fn(), withProcessing }}>
+            <ConceptModalDataContext.Provider
+              value={{ modalData: { alertType: 'delete', isValid: true, reassign: null, relatedDataCounts: [] } }}
+            >
+              <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
+                <SelectedContext.Provider value={{ concepts: { removeName: vi.fn() }, updateSelected }}>
+                  <SelectedSettingsContext.Provider value={{ settings: {} }}>
+                    <TaxonomyContext.Provider value={{ taxonomy: {}, updateTaxonomy }}>
+                      <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: false, isReadOnly: false }}>
+                        <PanelState />
+                      </UserContext.Provider>
+                    </TaxonomyContext.Provider>
+                  </SelectedSettingsContext.Provider>
+                </SelectedContext.Provider>
+              </PreferencesContext.Provider>
+            </ConceptModalDataContext.Provider>
+          </ConceptModalContext.Provider>
+        </ConfigContext.Provider>
+      </ThemeProvider>
+    )
+
+    const user = userEvent.setup()
+    const editingActions = within(screen.getByTestId('editing-actions'))
+    expect(editingActions.getByRole('button', { name: CONFIG.BUTTON.CANCEL })).toBeEnabled()
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
+
+    await waitFor(() => {
+      expect(closeModal).toHaveBeenCalledWith(true)
+    })
+    const pendingButton = await editingActions.findByRole('button', { name: CONFIG.BUTTON.PENDING })
+    expect(pendingButton).toBeEnabled()
+    expect(editingActions.queryByRole('button', { name: CONFIG.BUTTON.CANCEL })).not.toBeInTheDocument()
+    await user.click(pendingButton)
+    expect(setModal).toHaveBeenCalled()
+
+    expect(apiPayload).toHaveBeenCalledWith(apiDeleteConcept, 'doomed')
+    expect(refreshData).toHaveBeenCalledWith(PANEL_DATA.PENDING_HISTORY)
+    expect(deleteTaxonomyConceptMock).not.toHaveBeenCalled()
+    expect(updateTaxonomy).not.toHaveBeenCalled()
+    expect(updateSelected).not.toHaveBeenCalled()
   })
 })

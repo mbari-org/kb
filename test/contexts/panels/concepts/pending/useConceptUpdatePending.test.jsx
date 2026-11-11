@@ -37,7 +37,7 @@ describe('useConceptUpdatePending', () => {
     const wrapper = ({ children }) => (
       <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
         <PanelDataContext.Provider value={{ refreshData }}>
-          <SelectedContext.Provider value={{ updateSelected }}>
+          <SelectedContext.Provider value={{ concepts: { removeName: vi.fn() }, updateSelected }}>
             <TaxonomyContext.Provider value={{ conceptEditsRefresh, getConcept, loadConcept: vi.fn() }}>
               <ConceptModalContext.Provider value={{ withProcessing }}>
                 <ConceptContext.Provider value={{ concept: staleConcept, pending, setConcept }}>

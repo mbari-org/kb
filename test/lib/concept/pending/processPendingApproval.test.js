@@ -154,6 +154,7 @@ describe('processPendingApproval', () => {
     const loadConcept = vi.fn(async () => loadedConcept)
     const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
     const reloadConceptRealizations = vi.fn(async () => [])
+    const removeSelectedConceptName = vi.fn()
     const updateSelected = vi.fn()
     const items = [{ concept: 'miscellany', field: 'Concept.child', action: 'Delete', oldValue: 'try', id: 'pending-1' }]
 
@@ -162,13 +163,67 @@ describe('processPendingApproval', () => {
 
     const result = await processPendingApproval({
       approval: PENDING.APPROVAL.ACCEPT,
-      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, updateSelected },
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, updateSelected },
       items,
     })
 
     expect(loadConcept).toHaveBeenCalledWith('miscellany')
     expect(cloneStaleMock).toHaveBeenCalledWith(apiFns, loadedConcept, false)
     expect(conceptEditsRefresh).toHaveBeenCalledWith(optimisticConcept, loadedConcept)
+    expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
     expect(result.updated).toEqual(['miscellany'])
+  })
+
+  it('removes approved child deletes from concept selection history, but not rejected ones', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: ['try'],
+      media: [],
+      name: 'miscellany',
+      parent: 'object',
+      rankLevel: '',
+      rankName: '',
+    }
+
+    const apiFns = { apiPayload: vi.fn(async () => ({})) }
+    const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
+    const getConcept = vi.fn(() => staleConcept)
+    const loadConcept = vi.fn(async () => staleConcept)
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
+    const removeSelectedConceptName = vi.fn()
+    const updateSelected = vi.fn()
+    const items = [{ concept: 'miscellany', field: 'Concept.child', action: 'Delete', oldValue: 'try', id: 'pending-1' }]
+
+    cloneStaleMock.mockResolvedValue({ ...staleConcept })
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.ACCEPT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, updateSelected },
+      items,
+    })
+
+    expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
+
+    removeSelectedConceptName.mockClear()
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.REJECT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, updateSelected },
+      items,
+    })
+
+    expect(removeSelectedConceptName).not.toHaveBeenCalled()
+
+    const childAddItem = { concept: 'miscellany', field: 'Concept.child', action: 'Add', newValue: 'try', id: 'pending-2' }
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.REJECT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, updateSelected },
+      items: [childAddItem],
+    })
+
+    expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
   })
 })

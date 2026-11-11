@@ -1,4 +1,5 @@
 import { updatePendingItem } from '@/lib/api/history'
+import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PENDING } from '@/lib/constants/pending.js'
@@ -13,7 +14,7 @@ import cloneStale from '@/lib/concept/pending/cloneStale'
 export const processPendingApproval = async ({
   approval,
   items,
-  deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected },
+  deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, resetConceptPaths, updateSelected },
 }) => {
   if (!items || items.length === 0) return { updated: [], concepts: {}, pendingHistory: [] }
 
@@ -75,6 +76,17 @@ export const processPendingApproval = async ({
       concepts[updatedName] = updatedConcept
     }
   }
+
+  items
+    .filter(item => item.field === HISTORY_FIELD.CHILD)
+    .forEach(item => {
+      if (approval === PENDING.APPROVAL.ACCEPT && item.action === ACTION.DELETE) {
+        removeSelectedConceptName(item.oldValue)
+      }
+      if (approval === PENDING.APPROVAL.REJECT && item.action === ACTION.ADD) {
+        removeSelectedConceptName(item.newValue)
+      }
+    })
 
   return { concepts, pendingHistory, updated }
 }

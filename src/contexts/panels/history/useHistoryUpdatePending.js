@@ -13,7 +13,7 @@ const useHistoryUpdatePending = () => {
   const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
   const { resetConceptPaths } = use(ConceptContext)
   const { conceptEditsRefresh, getConcept, loadConcept } = use(TaxonomyContext)
-  const { updateSelected } = use(SelectedContext)
+  const { concepts: conceptSelection, updateSelected } = use(SelectedContext)
 
   return useCallback(
     async ({ approval, item }) => {
@@ -26,6 +26,7 @@ const useHistoryUpdatePending = () => {
           loadConcept,
           refreshData,
           reloadConceptRealizations,
+          removeSelectedConceptName: conceptSelection.removeName,
           resetConceptPaths,
           updateSelected,
         },
@@ -34,7 +35,7 @@ const useHistoryUpdatePending = () => {
 
       return true
     },
-    [apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected]
+    [apiFns, conceptEditsRefresh, conceptSelection, getConcept, loadConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected]
   )
 }
 

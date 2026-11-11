@@ -19,7 +19,7 @@ const useConceptUpdatePending = () => {
   const { withProcessing } = use(ConceptModalContext)
   const { apiFns } = use(ConfigContext)
   const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
-  const { updateSelected } = use(SelectedContext)
+  const { concepts: conceptSelection, updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh, getConcept, loadConcept } = use(TaxonomyContext)
 
   return useCallback(
@@ -44,6 +44,7 @@ const useConceptUpdatePending = () => {
               loadConcept,
               refreshData,
               reloadConceptRealizations,
+              removeSelectedConceptName: conceptSelection.removeName,
               resetConceptPaths,
               updateSelected,
             },
@@ -73,6 +74,7 @@ const useConceptUpdatePending = () => {
     [
       apiFns,
       conceptEditsRefresh,
+      conceptSelection,
       getConcept,
       loadConcept,
       pending,

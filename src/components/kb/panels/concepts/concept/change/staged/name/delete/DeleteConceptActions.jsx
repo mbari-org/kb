@@ -15,12 +15,14 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
-import { normalizeConcept } from '@/lib/api/concept'
+import { normalizeConcept, deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
 import {
   deleteConcept as deleteTaxonomyConcept,
   getConcept as getTaxonomyConcept,
   insertConcept,
 } from '@/lib/model/taxonomy'
+
+import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 import CONFIG from '@/lib/config'
 
@@ -29,7 +31,7 @@ const { CANCEL, CONFIRM, DELETE, DISCARD } = CONFIG.BUTTON
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept } = use(ConceptContext)
+  const { concept, setEditing } = use(ConceptContext)
   const { closeModal, setModalData, withProcessing } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
   const {
@@ -42,10 +44,10 @@ const DeleteConceptActions = () => {
     templates,
   } = use(PanelDataContext)
   const { savePreferences } = use(PreferencesContext)
-  const { updateSelected } = use(SelectedContext)
+  const { concepts: conceptSelection, updateSelected } = use(SelectedContext)
   const { settings } = use(SelectedSettingsContext)
   const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
-  const { getPreferences } = use(UserContext)
+  const { getPreferences, isAdmin } = use(UserContext)
 
   const isConfirm = modalData?.alertType === 'delete'
 
@@ -79,6 +81,20 @@ const DeleteConceptActions = () => {
         break
 
       case CONFIRM: {
+        if (!isAdmin) {
+          await withProcessing(
+            async () => {
+              await apiFns.apiPayload(apiDeleteConcept, concept.name)
+              await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
+              setEditing(false)
+              closeModal(true)
+            },
+            PROCESSING.DELETE,
+            PROCESSING.ARG.CONCEPT
+          )
+          break
+        }
+
         const { reassign } = modalData
         const deleteConceptContext = {
           apiFns,
@@ -127,6 +143,7 @@ const DeleteConceptActions = () => {
             updateTaxonomy(updatedTaxonomy)
 
             closeModal(true, () => {
+              conceptSelection.removeName(concept.name)
               updateSelected({ concept: closestConcept.name })
               setClearTemplateFilters(true)
             })

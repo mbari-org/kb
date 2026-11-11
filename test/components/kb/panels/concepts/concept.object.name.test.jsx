@@ -9,7 +9,9 @@ import { BrowserRouter } from 'react-router-dom'
 
 import kbTheme from '@/lib/theme'
 import Concepts from '@/components/kb/panels/Concepts'
+import ConceptName from '@/components/kb/panels/concepts/concept/detail/ConceptName'
 import CONFIG from '@/lib/config'
+import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -104,8 +106,15 @@ const mockPanelSelect = {
   clear: () => {},
 }
 
-const TestWrapper = ({ children, dsgBaseUrl = '' }) => {
-  const [concept, setConcept] = useState(rootConcept)
+const TestWrapper = ({
+  children,
+  dsgBaseUrl = '',
+  initialConcept = rootConcept,
+  pendingConcept = [],
+  pendingHistory = [],
+  pendingParent = [],
+}) => {
+  const [concept, setConcept] = useState(initialConcept)
 
   const mockConceptSelect = {
     current: () => concept?.name,
@@ -178,7 +187,7 @@ const TestWrapper = ({ children, dsgBaseUrl = '' }) => {
   }
 
   const mockPanelDataValue = {
-    pendingHistory: [],
+    pendingHistory,
     templates: [],
     getConceptTemplates: vi.fn(() => []),
     getReferences: vi.fn(() => []),
@@ -229,7 +238,7 @@ const TestWrapper = ({ children, dsgBaseUrl = '' }) => {
                       : null,
                     isMarineOrganism: false,
                     isEditing: false,
-                    pending: () => [],
+                    pending: key => (key === PENDING.DATA.CONCEPT ? pendingConcept : pendingParent),
                   }}
                 >
                   <ConceptStagedContext.Provider
@@ -332,5 +341,44 @@ describe('DSG link', () => {
 
     expect(screen.queryByRole('link', { name: CONFIG.PANELS.CONCEPTS.PANEL.TOOLTIP.DSG })).not.toBeInTheDocument()
     expect(screen.getAllByText('root').length).toBeGreaterThan(0)
+  })
+})
+
+describe('concept name pending deletion', () => {
+  it('colors the name red for its pending deletion and restores its color when resolved', () => {
+    const deletion = { concept: 'root', field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'object' }
+    const renderName = pendingHistory => (
+      <TestWrapper
+        initialConcept={{ ...objectConcept, parent: 'stale parent' }}
+        pendingHistory={pendingHistory}
+        dsgBaseUrl='https://dsg.example.com'
+      >
+        <ConceptName />
+      </TestWrapper>
+    )
+    const { rerender } = render(renderName([deletion]))
+    const name = screen.getByRole('link', { name: CONFIG.PANELS.CONCEPTS.PANEL.TOOLTIP.DSG }).parentElement
+
+    expect(name).toHaveStyle({ color: kbTheme.concept.color.remove })
+    rerender(renderName([]))
+    expect(name).toHaveStyle({ color: kbTheme.palette.primary.main })
+  })
+
+  it('does not color the name red for a different child or a pending change to its own children', () => {
+    const otherDeletion = { concept: 'root', field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'entity' }
+    const childDeletion = { field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'child' }
+    const { rerender } = render(
+      <TestWrapper initialConcept={objectConcept} pendingHistory={[otherDeletion]} pendingParent={[otherDeletion]}>
+        <ConceptName />
+      </TestWrapper>
+    )
+
+    expect(screen.getByText('object')).toHaveStyle({ color: kbTheme.palette.primary.main })
+    rerender(
+      <TestWrapper initialConcept={objectConcept} pendingConcept={[childDeletion]}>
+        <ConceptName />
+      </TestWrapper>
+    )
+    expect(screen.getByText('object')).toHaveStyle({ color: kbTheme.concept.color.edit })
   })
 })
