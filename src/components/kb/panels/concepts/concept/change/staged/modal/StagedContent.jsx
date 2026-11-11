@@ -75,7 +75,7 @@ const StagedContent = () => {
   return (
     <Stack direction='column' spacing={1}>
       <ModalActionText text={STAGED.DESCRIPTION} />
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{stagedEdits.map(stagedComponent)}</Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '60vh', overflowY: 'auto', pr: 1 }}>{stagedEdits.map(stagedComponent)}</Box>
     </Stack>
   )
 }

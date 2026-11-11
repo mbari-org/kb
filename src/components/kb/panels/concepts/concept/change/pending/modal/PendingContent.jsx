@@ -1,5 +1,5 @@
 import { use } from 'react'
-import { Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 
 import ModalActionText from '@/components/common/ModalActionText'
 
@@ -45,15 +45,17 @@ const PendingContent = () => {
   return (
     <Stack direction='column' spacing={1}>
       <ModalActionText text={MODALS.PENDING.DESCRIPTION} />
-      {pendingChild && <ChildDetail pendingChild={pendingChild} />}
-      <AliasesDetail pendingConcept={pendingConcept} />
-      {!pendingChild && <ChildrenDetail pendingConcept={pendingConcept} />}
-      <MediaDetail pendingConcept={pendingConcept} />
-      <NameDetail pendingConcept={pendingConcept} />
-      <ParentDetail pendingConcept={pendingConcept} />
-      <RankDetail pendingConcept={pendingConcept} />
-      <RealizationsDetail pendingConcept={pendingConcept} />
-      <TemplatesDetail pendingConcept={pendingConcept} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '60vh', overflowY: 'auto', pr: 1 }}>
+        {pendingChild && <ChildDetail pendingChild={pendingChild} />}
+        <AliasesDetail pendingConcept={pendingConcept} />
+        {!pendingChild && <ChildrenDetail pendingConcept={pendingConcept} />}
+        <MediaDetail pendingConcept={pendingConcept} />
+        <NameDetail pendingConcept={pendingConcept} />
+        <ParentDetail pendingConcept={pendingConcept} />
+        <RankDetail pendingConcept={pendingConcept} />
+        <RealizationsDetail pendingConcept={pendingConcept} />
+        <TemplatesDetail pendingConcept={pendingConcept} />
+      </Box>
     </Stack>
   )
 }
