@@ -26,6 +26,14 @@ const capitalize = string => {
 const conceptNameForFilename = str =>
   (str || COMMON.UTILS.FILENAME.DEFAULT).replace(/\s+/g, COMMON.UTILS.FILENAME.SEPARATOR)
 
+const diff = (o1, o2) =>
+  Object.keys(o1).reduce((result, key) => {
+    if (!isEqual(o1[key], o2[key])) {
+      result[key] = o1[key]
+    }
+    return result
+  }, {})
+
 const drop = (from, excludeFields) => {
   if (Array.isArray(from)) return dropElements(from, excludeFields)
   if (typeof from === 'object') return dropFields(from, excludeFields)
@@ -44,31 +52,6 @@ const dropFields = (object, excludeFields) => {
     return result
   }, {})
 }
-
-const deepDiff = (o1, o2) => {
-  const diff = {}
-
-  Object.keys(o1).forEach(key => {
-    if (typeof o1[key] === 'object' && o1[key] !== null && !Array.isArray(o1[key])) {
-      const nestedDiff = deepDiff(o1[key], o2[key])
-      if (Object.keys(nestedDiff).length > 0) {
-        diff[key] = nestedDiff
-      }
-    } else if (!isEqual(o1[key], o2[key])) {
-      diff[key] = o1[key]
-    }
-  })
-
-  return diff
-}
-
-const diff = (o1, o2) =>
-  Object.keys(o1).reduce((result, key) => {
-    if (!isEqual(o1[key], o2[key])) {
-      result[key] = o1[key]
-    }
-    return result
-  }, {})
 
 const filterObject = (obj, predicate) => {
   return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key, value)))
@@ -244,7 +227,6 @@ export {
   binSearch,
   capitalize,
   conceptNameForFilename,
-  deepDiff,
   diff,
   drop,
   filterObject,

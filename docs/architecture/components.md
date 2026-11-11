@@ -142,7 +142,7 @@ Provider responsibilities:
 | `hooks/` | `useDebounce`, `useDebouncedField`, `useProcessError`, `useLoadConceptError`, `useTaxonomyIntegrity`, `useProcessingManager`, `useSetProcessing`, `usePageGo`, `useFilterTooltip`, `useVersionTooltip`, `useKBData`, `useReRenderTrigger` |
 | `validators/` | `isValidUrl`, `isValidMedia` (async load-probe) |
 | `config/` | `CONFIG` registry over `src/config/**.json` |
-| top-level | `csv.js`/`csvExport.js` (File System Access API), `errors.js` (structured error factories), `theme.js` (MBARI palette, MUI overrides), `utils.js` (`pick`, `drop`, `isDeepEqual`, `deepDiff`, `sleep`, `withTimeout`, `binSearch`, …) |
+| top-level | `csv.js`/`csvExport.js` (File System Access API), `errors.js` (structured error factories), `theme.js` (MBARI palette, MUI overrides), `utils.js` (`pick`, `drop`, `isDeepEqual`, `sleep`, `withTimeout`, `binSearch`, …) |
 
 ## Config (`src/config/`)
 

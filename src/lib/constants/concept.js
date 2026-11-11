@@ -36,9 +36,6 @@ export const CONCEPT = {
     VALUE: 'name',
     EXTENT: 'nameExtent',
   },
-  PROPERTY_LIST: {
-    ITEMS_PER_PAGE: 5,
-  },
   RANK: {
     LEVEL: 'level',
     NAME: 'name',
