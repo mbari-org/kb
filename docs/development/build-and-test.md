@@ -5,7 +5,7 @@ and `build.sh`.
 
 ## Environment
 
-- Node `22.22.1` (pinned in `.tool-versions`; Dockerfile uses `node:22-alpine`)
+- Node `26.13.0` (pinned in `.tool-versions`; Dockerfile uses `node:26-alpine`)
 - Yarn `4.5.1` via `packageManager` field; `yarnPath: .yarn/releases/yarn-4.5.1.cjs`
   (committed), `nodeLinker: node-modules` (`.yarnrc.yml`). Use `corepack enable` if yarn
   isn't already the pinned version.
@@ -128,7 +128,7 @@ Release sequence (from README, verified against the scripts):
   on other platforms plain `docker build` + pushes only `:latest` (the version-tagged
   image is built but not pushed — asymmetry noted in `docs/project-status.md`).
 - `Dockerfile`: copies the **prebuilt** `dist/` into the image as `./kbeditor` and serves
-  it with `yarn dlx http-server . -p 5173 --spa` on `node:22-alpine` (no build inside the
+  it with `yarn dlx http-server . -p 5173 --spa` on `node:26-alpine` (no build inside the
   image). Serving from `.` with dist at `./kbeditor` matches the `/kbeditor/` base path.
 
 ## Debugging tips

@@ -18,7 +18,7 @@ For a module-by-module navigation map see `docs/CODEBASE_INDEX.md`.
   `react-error-boundary`
 - No Redux/Zustand and no HTTP library: state is React Context + hooks, transport is
   `fetch` wrapped in `src/lib/services/request.js`
-- Tooling: Yarn 4.5.1 (node-modules linker), Node `22.22.1` (`.tool-versions`),
+- Tooling: Yarn 4.5.1 (node-modules linker), Node `26.13.0` (`.tool-versions`),
   ESLint 10 flat config, Prettier 3
 
 ## Backend services
