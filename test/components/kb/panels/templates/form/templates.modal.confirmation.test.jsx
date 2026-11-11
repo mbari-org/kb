@@ -60,7 +60,7 @@ const renderAddHarness = () => {
     addTemplate: vi.fn().mockResolvedValue(undefined),
     filters: { concept: 'dingo' },
   }
-  const panelDataValue = { templates: [] }
+  const panelDataValue = { pendingHistory: [], templates: [] }
 
   return render(
     <PanelDataContext.Provider value={panelDataValue}>

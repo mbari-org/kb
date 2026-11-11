@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { use, useMemo } from 'react'
 
 import { Box, Link } from '@mui/material'
 
@@ -6,15 +6,20 @@ import { CiEdit } from 'react-icons/ci'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 
 import ActionIcon from '@/components/icon/ActionIcon'
+import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
+import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
+  const { filters } = use(ReferencesContext)
+  const hasPendingDelete = useConceptHasPendingDelete(filters[SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT])
 
   const columns = useMemo(() => [
     {
       field: 'actions',
       width: 100, headerClassName: 'bold-header',
       headerName: '',
-      renderCell: params => (
+      renderCell: params => !hasPendingDelete && (
         <Box>
           <ActionIcon
             color='cancel'
@@ -87,7 +92,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
       ),
       valueGetter: params => params.join(', ') || '',
     },
-  ], [deleteReferenceModal, editReferenceModal])
+  ], [deleteReferenceModal, editReferenceModal, hasPendingDelete])
 
   return columns
 }

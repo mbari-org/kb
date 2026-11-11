@@ -11,6 +11,7 @@ import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContex
 import UserContext from '@/contexts/user/UserContext'
 
 import { isStateModified } from '@/lib/concept/state/state'
+import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 import { pendingChild } from '@/lib/model/history'
 
 import { RESETTING } from '@/lib/constants'
@@ -28,8 +29,7 @@ const ConceptEditingActions = () => {
   const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { isReadOnly } = use(UserContext)
 
-  const pendingConcept = pending(PENDING.DATA.CONCEPT)
-  const pendingParent = pending(PENDING.DATA.PARENT)
+  const hasPendingDelete = useConceptHasPendingDelete(concept.name)
 
   const displayPending = useDisplayPending()
   const displayStaged = useDisplayStaged()
@@ -67,10 +67,11 @@ const ConceptEditingActions = () => {
     displayStaged(STAGED)
   }, [modifyConcept, displayStaged])
 
-  const showPendingButton = useMemo(() => {
-    const hasPending = pendingConcept?.length > 0 || pendingChild(pendingParent, concept.name)
-    return !isEditing && hasPending
-  }, [pendingConcept, pendingParent, concept.name, isEditing])
+  const showPendingButton = !isEditing && hasPendingDelete
+  const showOtherPendingButton =
+    !isEditing &&
+    !hasPendingDelete &&
+    (pending(PENDING.DATA.CONCEPT).length > 0 || pendingChild(pending(PENDING.DATA.PARENT), concept.name))
 
   return (
     <Box
@@ -92,6 +93,11 @@ const ConceptEditingActions = () => {
       {!showPendingButton && !isReadOnly && (
         <Button color={isEditing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
           {editCancelDiscardButtonText}
+        </Button>
+      )}
+      {showOtherPendingButton && (
+        <Button color='main' onClick={handlePending} sx={{ margin: '0 10px' }} variant='contained'>
+          {PENDING_ACTION}
         </Button>
       )}
       {isEditing && isModified && (

@@ -11,6 +11,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { createError, createValidationError } from '@/lib/errors'
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
+import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 
 import {
   createHandlers,
@@ -36,6 +37,7 @@ const useAddRealizationButton = () => {
   const { addRealization, filters } = use(RealizationsContext)
   const { getConceptRealizations } = use(PanelDataContext)
   const { loadConcept } = use(TaxonomyContext)
+  const hasPendingDelete = useConceptHasPendingDelete(filters[REALIZATIONS.FILTERS.CONCEPT])
 
   const isDuplicateCheck = useCallback(
     realization => isDuplicateRealization(getConceptRealizations(realization.concept) ?? [], realization),
@@ -198,19 +200,19 @@ const useAddRealizationButton = () => {
 
   const AddRealizationButton = useCallback(() => {
     const conceptSelected = Boolean(filters?.[REALIZATIONS.FILTERS.CONCEPT])
-    const tooltip = conceptSelected
+    const tooltip = hasPendingDelete ? CONFIG.CONCEPT.PENDING_DELETE : conceptSelected
       ? CONFIG.PANELS.REALIZATIONS.PANEL.TOOLTIP.ADD.CONCEPT_SELECTED
       : CONFIG.PANELS.REALIZATIONS.PANEL.TOOLTIP.ADD.CONCEPT_NOT_SELECTED
 
     return (
       <PanelAddButton
-        disabled={!conceptSelected}
+        disabled={!conceptSelected || hasPendingDelete}
         onClick={addRealizationModal}
         tooltip={tooltip}
         label={CONFIG.BUTTON.ADD}
       />
     )
-  }, [addRealizationModal, filters])
+  }, [addRealizationModal, filters, hasPendingDelete])
 
   return AddRealizationButton
 }

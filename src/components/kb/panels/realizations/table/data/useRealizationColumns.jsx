@@ -12,15 +12,17 @@ import TemplateCell from '@/components/kb/panels/templates/table/data/TemplateCe
 import UserContext from '@/contexts/user/UserContext'
 
 import { humanTimestamp } from '@/lib/utils'
+import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
 
 const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal }) => {
-  const { getPendingRealizationItem, updateFilters } = use(RealizationsContext)
+  const { filters, getPendingRealizationItem, updateFilters } = use(RealizationsContext)
   const { updateSelected } = use(SelectedContext)
   const { isAdmin } = use(UserContext)
   const openPendingItem = usePendingItemModal()
+  const hasPendingDelete = useConceptHasPendingDelete(filters[REALIZATIONS.FILTERS.CONCEPT])
 
   return useMemo(
     () => [
@@ -44,6 +46,8 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
               </Box>
             )
           }
+
+          if (hasPendingDelete) return null
 
           return (
             <Box>
@@ -110,6 +114,7 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
       deleteRealizationModal,
       editRealizationModal,
       getPendingRealizationItem,
+      hasPendingDelete,
       isAdmin,
       openPendingItem,
       updateFilters,

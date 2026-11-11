@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import useRealizationColumns from '@/components/kb/panels/realizations/table/data/useRealizationColumns'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
@@ -42,16 +43,18 @@ const PENDING_ITEM = {
   newValue: 'eats | nil | weekly',
 }
 
-const createWrapper = ({ isAdmin = false, isReadOnly = false, pendingItem = null } = {}) => {
+const createWrapper = ({ isAdmin = false, isReadOnly = false, pendingItem = null, pendingHistory = [] } = {}) => {
   const getPendingRealizationItem = vi.fn(() => pendingItem)
   const updateFilters = vi.fn()
   const updateSelected = vi.fn()
 
   const Wrapper = ({ children }) => (
     <UserContext.Provider value={{ isAdmin, isReadOnly }}>
-      <RealizationsContext.Provider value={{ getPendingRealizationItem, updateFilters }}>
-        <SelectedContext.Provider value={{ updateSelected }}>{children}</SelectedContext.Provider>
-      </RealizationsContext.Provider>
+      <PanelDataContext.Provider value={{ pendingHistory }}>
+        <RealizationsContext.Provider value={{ filters: { concept: 'dingo' }, getPendingRealizationItem, updateFilters }}>
+          <SelectedContext.Provider value={{ updateSelected }}>{children}</SelectedContext.Provider>
+        </RealizationsContext.Provider>
+      </PanelDataContext.Provider>
     </UserContext.Provider>
   )
   Wrapper.displayName = 'UseRealizationColumnsTestWrapper'
@@ -59,10 +62,10 @@ const createWrapper = ({ isAdmin = false, isReadOnly = false, pendingItem = null
   return { Wrapper }
 }
 
-const renderActionsCell = ({ isAdmin, isReadOnly, pendingItem } = {}) => {
+const renderActionsCell = ({ isAdmin, isReadOnly, pendingItem, pendingHistory } = {}) => {
   const deleteRealizationModal = vi.fn()
   const editRealizationModal = vi.fn()
-  const { Wrapper } = createWrapper({ isAdmin, isReadOnly, pendingItem })
+  const { Wrapper } = createWrapper({ isAdmin, isReadOnly, pendingItem, pendingHistory })
 
   const { result } = renderHook(() => useRealizationColumns({ deleteRealizationModal, editRealizationModal }), {
     wrapper: Wrapper,
@@ -115,7 +118,7 @@ describe('useRealizationColumns actions column', () => {
 
   it('renders approve/reject stamp for an admin on a pending row', async () => {
     const user = userEvent.setup()
-    renderActionsCell({ isAdmin: true, pendingItem: PENDING_ITEM })
+    renderActionsCell({ isAdmin: true, pendingItem: PENDING_ITEM, pendingHistory: [PENDING_ITEM] })
 
     expect(screen.queryByText('delete-icon')).not.toBeInTheDocument()
     expect(screen.queryByText('edit-icon')).not.toBeInTheDocument()

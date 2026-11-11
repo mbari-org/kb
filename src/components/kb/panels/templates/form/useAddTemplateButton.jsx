@@ -9,6 +9,7 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
+import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 
 import CONFIG from '@/lib/config'
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -32,6 +33,7 @@ const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
 const useAddTemplateButton = () => {
   const { addTemplate, filters } = use(TemplatesContext)
   const { templates: allTemplates } = use(PanelDataContext)
+  const hasPendingDelete = useConceptHasPendingDelete(filters[SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT])
 
   const { closeModal, createModal, updateModalData, withProcessing } = useTemplatesModalOperationsContext()
 
@@ -184,19 +186,19 @@ const useAddTemplateButton = () => {
   const AddTemplateButton = useCallback(() => {
     const { TEMPLATES } = SELECTED.SETTINGS
     const conceptSelected = Boolean(filters?.[TEMPLATES.FILTERS.CONCEPT])
-    const tooltip = conceptSelected
+    const tooltip = hasPendingDelete ? CONFIG.CONCEPT.PENDING_DELETE : conceptSelected
       ? CONFIG.PANELS.TEMPLATES.PANEL.TOOLTIP.ADD.CONCEPT_SELECTED
       : CONFIG.PANELS.TEMPLATES.PANEL.TOOLTIP.ADD.CONCEPT_NOT_SELECTED
 
     return (
       <PanelAddButton
-        disabled={!conceptSelected}
+        disabled={!conceptSelected || hasPendingDelete}
         onClick={addTemplateModal}
         tooltip={tooltip}
         label={CONFIG.BUTTON.ADD}
       />
     )
-  }, [addTemplateModal, filters])
+  }, [addTemplateModal, filters, hasPendingDelete])
 
   return AddTemplateButton
 }

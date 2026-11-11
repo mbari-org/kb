@@ -16,6 +16,7 @@
   },
   "NO_ITEMS": "None",
   "NO_MEDIA": "No Media",
+  "PENDING_DELETE": "The selected Concept has a pending deletion",
   "SELECT": {
     "CONCEPT": "Concept",
     "TO_CONCEPT": "To Concept"

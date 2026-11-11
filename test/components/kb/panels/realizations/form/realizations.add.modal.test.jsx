@@ -55,7 +55,7 @@ const renderAddHarness = (filters = { concept: 'dingo' }) => {
     addRealization: addRealizationMock,
     filters,
   }
-  const panelDataValue = { getConceptRealizations: vi.fn(() => []) }
+  const panelDataValue = { getConceptRealizations: vi.fn(() => []), pendingHistory: [] }
 
   return render(
     <TaxonomyContext.Provider value={{ loadConcept: vi.fn() }}>

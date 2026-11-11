@@ -173,6 +173,7 @@ export const ConceptPanelTestWrapper = ({
   initialAliases = [],
   initialMedia = [],
   initialPendingConcept = [],
+  initialPendingHistory = [],
   initialRealizations = [],
   initialReferences = [],
   initialTemplates = [],
@@ -212,6 +213,7 @@ export const ConceptPanelTestWrapper = ({
   )
   const [stagedState, dispatch] = useReducer(conceptStateReducer, initialState || {})
   const [confirmReset, setConfirmReset] = useState(null)
+  const [pendingConfirm, setPendingConfirm] = useState(null)
   const [isEditing, setEditing] = useState(false)
   const [selectedSettings, setSelectedSettings] = useState(initialSelectedSettings)
 
@@ -327,7 +329,7 @@ export const ConceptPanelTestWrapper = ({
   }
 
   const mockPanelDataValue = {
-    pendingHistory: [],
+    pendingHistory: initialPendingHistory,
     templates: initialTemplates,
     getConceptTemplates: vi.fn(conceptName =>
       conceptName ? initialTemplates.filter(template => template.concept === conceptName) : initialTemplates
@@ -388,7 +390,14 @@ export const ConceptPanelTestWrapper = ({
                                 isPhylogenyRoot,
                                 isEditing,
                                 setEditing,
-                                pending: key => (key === PENDING.DATA.CONCEPT ? initialPendingConcept : []),
+                                pending: key => {
+                                  if (key === PENDING.DATA.CONCEPT) return initialPendingConcept
+                                  if (key === PENDING.DATA.PARENT) {
+                                    return initialPendingHistory.filter(item => item.concept === concept?.parent)
+                                  }
+                                  return pendingConfirm
+                                },
+                                setPendingConfirm,
                               }}
                             >
                               <ConceptStagedContext.Provider

@@ -4,6 +4,7 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import Actions from '@/components/common/factory/Actions'
 import Title from '@/components/common/factory/Title'
 import { createError, createValidationError } from '@/lib/errors'
+import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -32,6 +33,7 @@ const useAddReferenceButton = () => {
   const { closeModal, createModal, updateModalData, withProcessing } = useReferencesModalOperationsContext()
 
   const conceptName = filters[FILTERS.CONCEPT] || null
+  const hasPendingDelete = useConceptHasPendingDelete(conceptName)
 
   const initialReferenceData = useMemo(() => createInitialReference(conceptName), [conceptName])
 
@@ -160,12 +162,13 @@ const useAddReferenceButton = () => {
   const AddReferenceButton = useCallback(
     () => (
       <PanelAddButton
+        disabled={hasPendingDelete}
         onClick={addReferenceModal}
         label={CONFIG.BUTTON.ADD}
-        tooltip={CONFIG.PANELS.REFERENCES.PANEL.TOOLTIP.ADD}
+        tooltip={hasPendingDelete ? CONFIG.CONCEPT.PENDING_DELETE : CONFIG.PANELS.REFERENCES.PANEL.TOOLTIP.ADD}
       />
     ),
-    [addReferenceModal]
+    [addReferenceModal, hasPendingDelete]
   )
 
   return AddReferenceButton

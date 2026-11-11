@@ -10,14 +10,16 @@ import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
 import TemplateCell from './TemplateCell'
 
 import { humanTimestamp } from '@/lib/utils'
+import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
-  const { getPendingTemplateAction, updateFilters } = use(TemplatesContext)
+  const { filters, getPendingTemplateAction, updateFilters } = use(TemplatesContext)
   const { updateSelected } = use(SelectedContext)
   const { updateSettings } = use(SelectedSettingsContext)
+  const hasPendingDelete = useConceptHasPendingDelete(filters[TEMPLATES.FILTERS.CONCEPT])
 
   const columns = useMemo(() => [
     {
@@ -27,7 +29,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       sortable: false,
       headerClassName: 'bold-header',
       renderCell: params =>
-        getPendingTemplateAction(params.row) ? null : (
+        hasPendingDelete || getPendingTemplateAction(params.row) ? null : (
           <Box>
             <ActionIcon
               color='cancel'
@@ -90,7 +92,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },
-  ], [deleteTemplateModal, editTemplateModal, getPendingTemplateAction, updateFilters, updateSelected, updateSettings])
+  ], [deleteTemplateModal, editTemplateModal, getPendingTemplateAction, hasPendingDelete, updateFilters, updateSelected, updateSettings])
 
   return columns
 }
