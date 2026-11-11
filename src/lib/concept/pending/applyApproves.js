@@ -28,6 +28,9 @@ const applyApproval = (concept, pendingItem, allItems) => {
     case HISTORY_FIELD.RANK:
       return approveRank(concept, pendingItem, allItems)
 
+    case HISTORY_FIELD.REALIZATION:
+      return
+
     case HISTORY_FIELD.TEMPLATE:
       return approveTemplate(concept, pendingItem, allItems)
 

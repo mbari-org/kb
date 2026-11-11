@@ -28,6 +28,9 @@ const applyReject = (concept, pendingItem, allItems) => {
     case HISTORY_FIELD.RANK:
       return rejectRank(concept, pendingItem, allItems)
 
+    case HISTORY_FIELD.REALIZATION:
+      return
+
     case HISTORY_FIELD.TEMPLATE:
       return rejectTemplate(concept, pendingItem, allItems)
 
