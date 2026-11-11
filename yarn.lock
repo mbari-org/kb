@@ -3314,7 +3314,7 @@ __metadata:
     react-error-boundary: "npm:^6.1.6"
     react-icons: "npm:^5.7.0"
     react-router-dom: "npm:^7.18.5"
-    swiper: "npm:^12.2.0"
+    swiper: "npm:^14.4.0"
     vite: "npm:8.3.8"
     vitest: "npm:5.1.0"
   languageName: unknown
@@ -4757,10 +4757,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:^12.2.0":
-  version: 12.2.0
-  resolution: "swiper@npm:12.2.0"
-  checksum: 10c0/459c9621e170130c0a6874b05e24fefd0411529600a17b2d8afc4987dc2e803ab18d42983081b723423819d464568fdb541b6c3f517e558c60888c644dc4ead1
+"swiper@npm:^14.4.0":
+  version: 14.4.0
+  resolution: "swiper@npm:14.4.0"
+  checksum: 10c0/c7554da132e00667e2bb35cc239ad93c8f7c272f0a19b659e2fd2b9a3fe61c17ff607edb67efef6bc92e31d48f59198be2b7999c2a7c8678c3c50d3838094bf3
   languageName: node
   linkType: hard
 
