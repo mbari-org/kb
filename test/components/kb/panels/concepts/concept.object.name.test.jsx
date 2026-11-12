@@ -382,3 +382,23 @@ describe('concept name pending deletion', () => {
     expect(screen.getByText('object')).toHaveStyle({ color: kbTheme.concept.color.edit })
   })
 })
+
+describe('concept name pending add', () => {
+  it('colors the name green for a pending add even when the concept has other pending items', () => {
+    const addition = { concept: 'root', field: HISTORY_FIELD.CHILD, action: ACTION.ADD, newValue: 'object' }
+    const mediaItem = { concept: 'object', field: HISTORY_FIELD.MEDIA, action: ACTION.ADD, newValue: 'image.png' }
+
+    render(
+      <TestWrapper
+        initialConcept={objectConcept}
+        pendingConcept={[addition, mediaItem]}
+        pendingHistory={[addition, mediaItem]}
+        pendingParent={[addition]}
+      >
+        <ConceptName />
+      </TestWrapper>
+    )
+
+    expect(screen.getByText('object')).toHaveStyle({ color: kbTheme.concept.color.add })
+  })
+})

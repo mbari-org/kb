@@ -18,7 +18,7 @@ const { CONCEPT, PROCESSING } = CONFIG
 
 const ChangeStructureChoices = ({ closeChoices }) => {
   const [asyncError, setAsyncError] = useState(null)
-  const { disableDelete, disableChangeName, disableChangeParent } = useStructureChoices()
+  const { disableDelete, disableChangeName, disableChangeParent, hasPendingAdd } = useStructureChoices()
   const { beginProcessing } = use(AppModalContext)
 
   const addChild = useAddChildModal()
@@ -93,7 +93,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
               text={CONCEPT.STRUCTURE.CHANGE_PARENT}
             />
             <StructureChoiceButton
-              disabled={false}
+              disabled={hasPendingAdd}
               onClick={handleClick(addChild)}
               text={CONCEPT.STRUCTURE.ADD_CHILD}
             />

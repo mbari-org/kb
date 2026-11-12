@@ -6,9 +6,10 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { hasPendingStructure } from '@/lib/model/history'
+import { hasPendingStructure, pendingChild } from '@/lib/model/history'
 
 import { ACTION } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const hasStagedStructure = (concept, stagedState) => {
   const hasStagedChildren = stagedState.children.some(child => child.action !== ACTION.NONE)
@@ -30,6 +31,8 @@ const useStructureChoices = () => {
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
   const pendingStructure = hasPendingStructure(pending, concept?.name)
+
+  const hasPendingAdd = pendingChild(pending(PENDING.DATA.PARENT), concept?.name)?.action === ACTION.ADD
 
   const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = hasStagedStructure(
     concept,
@@ -56,6 +59,7 @@ const useStructureChoices = () => {
     isRoot || pendingStructure.parent || hasStagedDelete || hasStagedParent || hasStagedChildren
 
   return {
+    hasPendingAdd,
     hasStagedChildren,
     hasStagedDelete,
     hasStagedName,

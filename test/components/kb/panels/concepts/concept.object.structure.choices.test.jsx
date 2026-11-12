@@ -24,6 +24,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import CONFIG from '@/lib/config'
+import { PENDING } from '@/lib/constants/pending.js'
 
 const BUTTON = CONFIG.BUTTON
 
@@ -176,7 +177,7 @@ const objectInitialState = {
   name: { value: 'object', action: 'None' },
 }
 
-const TestWrapper = ({ children }) => {
+const TestWrapper = ({ children, pendingFn = () => [] }) => {
   const [concept, setConcept] = useState(rootConcept)
   const [isEditing, setEditing] = useState(false)
 
@@ -306,7 +307,7 @@ const TestWrapper = ({ children }) => {
                             isMarineOrganism: false,
                             isEditing,
                             setEditing,
-                            pending: () => [],
+                            pending: pendingFn,
                           }}
                         >
                           <ConceptStagedContext.Provider
@@ -398,5 +399,46 @@ describe('concept object structure choices', () => {
     // Verify ADD_CHILD button is enabled
     const addChildButton = screen.getByRole('button', { name: ADD_CHILD })
     expect(addChildButton).toBeEnabled()
+  })
+
+  it('hides the structure choices action when the concept has a pending Add Concept action', async () => {
+    const pendingAddConcept = {
+      id: 'pending-add-object',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'object',
+      oldValue: null,
+      creatorName: 'admin',
+      creationTimestamp: '2026-11-01T00:00:00.000Z',
+    }
+    const pendingFn = key => (key === PENDING.DATA.PARENT ? [pendingAddConcept] : [])
+
+    const user = userEvent.setup()
+
+    render(
+      <TestWrapper pendingFn={pendingFn}>
+        <Concepts />
+      </TestWrapper>
+    )
+
+    const conceptInput = screen.getByRole('combobox')
+    await user.click(conceptInput)
+    await user.clear(conceptInput)
+    await user.type(conceptInput, 'object')
+
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'object' })).toBeInTheDocument()
+    })
+    await user.click(screen.getByRole('option', { name: 'object' }))
+
+    const editButton = screen.getByRole('button', { name: BUTTON.EDIT })
+    await user.click(editButton)
+
+    await waitFor(() => {
+      expect(screen.getAllByText('object').length).toBeGreaterThan(0)
+    })
+
+    expect(getStructureActionButton()).not.toBeInTheDocument()
   })
 })
