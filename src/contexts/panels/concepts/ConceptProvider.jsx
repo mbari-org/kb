@@ -33,9 +33,11 @@ const { PROCESSING } = CONFIG
 const ConceptProvider = ({ children }) => {
   const { showBoundary } = useErrorBoundary()
   const { beginProcessing } = use(AppModalContext)
-  const isSettingConceptRef = useRef(false)
+  const conceptRef = useRef(null)
   const conceptSwitchStopRef = useRef(null)
   const previousConceptKeyRef = useRef(null)
+  const setConceptQueueRef = useRef(Promise.resolve())
+  const settingConceptCountRef = useRef(0)
 
   const { apiFns, phylogenyRoot } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
@@ -122,61 +124,67 @@ const ConceptProvider = ({ children }) => {
   }, [stagedState?.aliasIndex, stagedState?.mediaIndex, stagedState?.realizationIndex])
 
   const handleSetConcept = useCallback(
-    async (updatedConcept, pendingHistoryOverride) => {
-      if (isSettingConceptRef.current) return
-      isSettingConceptRef.current = true
+    (updatedConcept, pendingHistoryOverride) => {
+      settingConceptCountRef.current += 1
 
-      try {
-        const isSameConcept = concept?.name && concept?.name === updatedConcept.name
-        if (!isSameConcept) {
-          setEditing(false)
-        }
-
-        if (pendingHistoryOverride) {
-          pendingHistoryRef.current = pendingHistoryOverride
-        }
-
-        const pendingConcept = pendingHistoryRef.current.filter(history => history.concept === updatedConcept.name)
-
-        const realizations = await ensureConceptRealizations(updatedConcept.name)
-
-        const conceptWithTemplates = {
-          ...updatedConcept,
-          realizations,
-          templates: getConceptTemplates(updatedConcept.name),
-        }
-
-        const initialState = initialConceptState(conceptWithTemplates, pendingConcept)
-
-        if (isSameConcept) {
-          const clampIndex = (index, length) => {
-            if (!Number.isFinite(index)) return 0
-            if (!Number.isFinite(length) || length <= 0) return 0
-            return Math.max(0, Math.min(index, length - 1))
+      const run = setConceptQueueRef.current.then(async () => {
+        try {
+          const isSameConcept = conceptRef.current?.name && conceptRef.current.name === updatedConcept.name
+          if (!isSameConcept) {
+            setEditing(false)
           }
 
-          initialState.aliasIndex = clampIndex(indexRef.current.aliasIndex, initialState.aliases?.length)
-          initialState.mediaIndex = clampIndex(indexRef.current.mediaIndex, initialState.media?.length)
-          initialState.realizationIndex = clampIndex(
-            indexRef.current.realizationIndex,
-            initialState.realizations?.length
-          )
+          if (pendingHistoryOverride) {
+            pendingHistoryRef.current = pendingHistoryOverride
+          }
+
+          const pendingConcept = pendingHistoryRef.current.filter(history => history.concept === updatedConcept.name)
+
+          const realizations = await ensureConceptRealizations(updatedConcept.name)
+
+          const conceptWithTemplates = {
+            ...updatedConcept,
+            realizations,
+            templates: getConceptTemplates(updatedConcept.name),
+          }
+
+          const initialState = initialConceptState(conceptWithTemplates, pendingConcept)
+
+          if (isSameConcept) {
+            const clampIndex = (index, length) => {
+              if (!Number.isFinite(index)) return 0
+              if (!Number.isFinite(length) || length <= 0) return 0
+              return Math.max(0, Math.min(index, length - 1))
+            }
+
+            initialState.aliasIndex = clampIndex(indexRef.current.aliasIndex, initialState.aliases?.length)
+            initialState.mediaIndex = clampIndex(indexRef.current.mediaIndex, initialState.media?.length)
+            initialState.realizationIndex = clampIndex(
+              indexRef.current.realizationIndex,
+              initialState.realizations?.length
+            )
+          }
+
+          const stagedState = structuredClone(initialState)
+
+          setInitialState(initialState)
+          dispatch({ type: CONCEPT_STATE.INITIAL, update: stagedState })
+
+          conceptRef.current = conceptWithTemplates
+          setConcept(conceptWithTemplates)
+        } finally {
+          // Keep the count up until after the render flush from this set so the
+          // taxonomy-sync effect's echo of it is skipped, not re-applied.
+          setTimeout(() => {
+            settingConceptCountRef.current -= 1
+          }, 0)
         }
+      })
 
-        const stagedState = structuredClone(initialState)
-
-        setInitialState(initialState)
-        dispatch({ type: CONCEPT_STATE.INITIAL, update: stagedState })
-
-        setConcept(conceptWithTemplates)
-      } finally {
-        // Reset the ref on the next tick
-        setTimeout(() => {
-          isSettingConceptRef.current = false
-        }, 0)
-      }
+      setConceptQueueRef.current = run.catch(() => {})
+      return run
     },
-    [concept?.name, ensureConceptRealizations, getConceptTemplates]
+    [ensureConceptRealizations, getConceptTemplates]
   )
 
   const conceptLoader = useConceptLoader({
@@ -249,7 +257,7 @@ const ConceptProvider = ({ children }) => {
     if (!selectedConcept) return
     if (selectedConcept !== concept?.name) return
     if (!isConceptLoaded(selectedConcept)) return
-    if (isSettingConceptRef.current) return
+    if (settingConceptCountRef.current > 0) return
     if (isEditing) return
     if (isConceptModified) return
 

@@ -63,6 +63,28 @@ const RenameProbe = ({ selectedRef }) => {
   )
 }
 
+const firstConcept = { ...concept, name: 'first' }
+const secondConcept = { ...concept, name: 'second' }
+
+const SerializeProbe = ({ selectedRef }) => {
+  const { concept: current, setConcept } = use(ConceptContext)
+  return (
+    <>
+      <div data-testid='concept-name'>{current?.name || ''}</div>
+      <button
+        onClick={() => {
+          selectedRef.current = 'second'
+          setConcept(firstConcept)
+          setConcept(secondConcept)
+        }}
+        type='button'
+      >
+        switch
+      </button>
+    </>
+  )
+}
+
 const renderProvider = ({ apiPayload, probe, selectedName = 'dingo', selectedRef, taxonomyValue }) => {
   const selectionRef = selectedRef || { current: selectedName }
   const beginProcessing = vi.fn(() => vi.fn())
@@ -189,6 +211,37 @@ describe('ConceptProvider', () => {
       expect(screen.getByTestId('concept-path').textContent).toBe(JSON.stringify(['root', 'dingo']))
     })
     expect(apiPayload).not.toHaveBeenCalled()
+  })
+
+  it('serializes rapid setConcept calls instead of dropping them', async () => {
+    const apiPayload = vi.fn(async fn => {
+      throw new Error(`Unexpected api call: ${fn?.name || 'unknown'}`)
+    })
+    const conceptsByName = { dingo: concept, first: firstConcept, second: secondConcept }
+    const taxonomyValue = {
+      getConcept: name => conceptsByName[name] || null,
+      getConceptPath: name => (conceptsByName[name] ? ['root', name] : null),
+      getConceptPrimaryName: name => (conceptsByName[name] ? name : undefined),
+      isConceptLoaded: name => Boolean(conceptsByName[name]),
+      loadConcept: vi.fn(async name => conceptsByName[name]),
+      taxonomy: { rootName: 'root' },
+    }
+    const selectedRef = { current: 'dingo' }
+
+    renderProvider({ apiPayload, probe: <SerializeProbe selectedRef={selectedRef} />, selectedRef, taxonomyValue })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('concept-name').textContent).toBe('dingo')
+    })
+
+    await act(async () => {
+      screen.getByRole('button', { name: 'switch' }).click()
+      await new Promise(resolve => setTimeout(resolve, 0))
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('concept-name').textContent).toBe('second')
+    })
   })
 
   it('converges an alias selection to the primary name after the concept loads', async () => {
