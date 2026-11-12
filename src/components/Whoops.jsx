@@ -1,6 +1,7 @@
+import { useState, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Alert, Box, Button, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import { clearStores } from '@/lib/local/store/clearStores'
@@ -12,9 +13,17 @@ import { getCommitHash, getVersion } from '@/version'
 import whoopsImage from '@/assets/whoops.jpg'
 
 const BAIL_TO_LOCATION = '/kbeditor/'
+const ALERT_DISMISS_MS = 5000
 
 const Whoops = ({ children }) => {
+  const [showAlert, setShowAlert] = useState(false)
   const theme = useTheme()
+
+  useEffect(() => {
+    if (!showAlert) return
+    const timer = setTimeout(() => setShowAlert(false), ALERT_DISMISS_MS)
+    return () => clearTimeout(timer)
+  }, [showAlert])
 
   // Using window.location.href bypasses the React error boundary
   const handleForcedLogout = () => {
@@ -34,7 +43,7 @@ const Whoops = ({ children }) => {
     const infoToCopy = `${versionStamp}\n\n${responseMessage}\n\nStack Trace:\n${stack || CONFIG.WHOOPS.MESSAGE.NO_STACK}`
 
     await navigator.clipboard.writeText(infoToCopy)
-    alert(CONFIG.WHOOPS.ALERT)
+    setShowAlert(true)
   }
 
   const renderWhoops = ({ error }) => {
@@ -80,6 +89,15 @@ const Whoops = ({ children }) => {
           height: '100vh',
         }}
       >
+        {showAlert && (
+          <Alert
+            severity='success'
+            onClose={() => setShowAlert(false)}
+            sx={{ position: 'absolute', top: 16, left: 16, right: 16 }}
+          >
+            {CONFIG.WHOOPS.ALERT}
+          </Alert>
+        )}
         <Box
           component='img'
           src={whoopsImage}

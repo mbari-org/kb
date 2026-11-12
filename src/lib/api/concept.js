@@ -17,7 +17,10 @@ const createConcept = async (config, updates) => oniUserPost({ config, path: ['c
 
 const deleteConcept = async (config, conceptName) => oniUserDelete({ config, path: ['concept', conceptName] })
 
-const getConcept = async (config, conceptName) => oniGet({ config, path: ['concept', conceptName] })
+const getConcept = async (config, conceptName) => {
+  const concept = await oniGet({ config, path: ['concept', conceptName] })
+  return concept
+}
 
 const getConceptAnnotations = async (config, conceptName) =>
   annosaurusGet({ config, path: ['fast', 'concept', conceptName] })

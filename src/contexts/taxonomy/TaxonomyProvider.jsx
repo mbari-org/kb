@@ -236,10 +236,10 @@ const TaxonomyProvider = ({ children }) => {
 
   const getConceptPrimaryName = useCallback(
     conceptName => {
-      if (!taxonomy) return null
-      return getTaxonomyConceptPrimaryName(taxonomy, conceptName)
+      if (!taxonomyRef.current) return null
+      return getTaxonomyConceptPrimaryName(taxonomyRef.current, conceptName)
     },
-    [taxonomy]
+    []
   )
 
   const getAncestorNames = useCallback(

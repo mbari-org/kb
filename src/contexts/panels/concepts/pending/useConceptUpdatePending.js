@@ -43,7 +43,7 @@ const useConceptUpdatePending = () => {
             ? (closestConcept(staleConcept.name)?.name ?? staleConcept.parent)
             : null
 
-          let orderedItems = pendingItems
+          let orderedItems = approval === PENDING.APPROVAL.REJECT ? [...pendingItems].reverse() : pendingItems
           if (addItem) {
             orderedItems = approval === PENDING.APPROVAL.ACCEPT ? moveAddToFirst(orderedItems) : moveAddToLast(orderedItems)
           }

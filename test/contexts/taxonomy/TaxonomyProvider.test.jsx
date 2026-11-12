@@ -449,6 +449,24 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(errors).toEqual([])
   })
 
+  it('resolves primary names against the latest taxonomy during an async edit', async () => {
+    const { errors, getContext } = await renderTaxonomy()
+    const staleConcept = getContext().getConcept('moving-child')
+    const staleGetPrimaryName = getContext().getConceptPrimaryName
+    const freshConcept = {
+      ...cloneConcept(staleConcept),
+      name: 'renamed-child',
+    }
+
+    await act(async () => {
+      await getContext().conceptEditsRefresh(freshConcept, staleConcept)
+    })
+
+    expect(staleGetPrimaryName('moving-child-alias')).toBe('renamed-child')
+    expect(staleGetPrimaryName('renamed-child')).toBe('renamed-child')
+    expect(errors).toEqual([])
+  })
+
   it('repoints loaded children to the new name on rename-only edits', async () => {
     const { errors, getContext } = await renderTaxonomy({ isKbDebug: true })
     const staleConcept = getContext().getConcept('old-parent')

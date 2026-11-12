@@ -150,9 +150,12 @@ file and function that implements it.
 
 1. Entry hooks: `useConceptUpdatePending`
    (`src/contexts/panels/concepts/pending/useConceptUpdatePending.js`) maps selected
-   pending ids to items, orders them (accept: Add first, Delete last; reject: others
-   first, Add/Delete last — ONI cascades removal of a concept's remaining pending items
-   on approved child-delete and rejected child-add), and wraps in
+   pending ids to items, orders them (accept replays in creation order with Add first
+   and Delete last; reject undoes in reverse creation order with Add/Delete last —
+   ONI cascades removal of a concept's remaining pending items on approved
+   child-delete and rejected child-add, and reject-undo must pop dependent changes
+   first, e.g. an alias add of an old name must be rejected before the rename that
+   made it available), and wraps in
    `withProcessing(PROCESSING.UPDATE)`;
    `useHistoryUpdatePending` (`src/contexts/panels/history/useHistoryUpdatePending.js`)
    handles single items without the processing overlay. Both build the orchestrator
@@ -160,21 +163,35 @@ file and function that implements it.
    (`src/contexts/common/useProcessPendingDeps.js`).
 2. Orchestrator `processPendingApproval`
    (`src/lib/concept/pending/processPendingApproval.js:13`):
-   a. `Promise.all` of `apiPayload(updatePendingItem, [approval, item.id])` PUTs
-      (`src/lib/api/history.js`).
-   b. `resetConceptPaths()` if any ACCEPT touches NAME/PARENT (`structuralFields`).
-   c. `Promise.all` of `refreshData(PENDING_HISTORY)` + `reloadConceptRealizations` for
+   a. Groups items by `item.concept` and resolves each group's stale concept
+      (`loadConcept`) **before** submitting anything — approvals can rename or remove
+      concepts server-side (e.g. a rejected rename restores the old name), after which
+      fetching the pre-approval name would 404.
+   b. Sequential `apiPayload(updatePendingItem, [approval, item.id])` PUTs
+      (`src/lib/api/history.js`) in the order given by the entry hook.
+   c. `resetConceptPaths()` if any item touches NAME/PARENT (`structuralFields`),
+      approve or reject.
+   d. `Promise.all` of `refreshData(PENDING_HISTORY)` + `reloadConceptRealizations` for
       concepts with REALIZATION-field items (there is **no REALIZATION case** in the
       mutator switch — realization approvals are handled by this cache reload).
-   d. Per concept group: `cloneStale(apiFns, staleConcept, false)` — a purely **local**
+   e. Per concept group: `cloneStale(apiFns, staleConcept, false)` — a purely **local**
       clone (no server refetch) — then `applyRejects` / `applyApprovals`, then
       `conceptEditsRefresh(freshConcept, staleConcept)`; `updateSelected` if renamed.
 3. Mutator dispatch: `HISTORY_FIELD` switches in `src/lib/concept/pending/applyApproves.js:11`
    and `applyRejects.js:11` route to the pure mutators in
    `src/contexts/panels/concepts/pending/{approve,reject}/` (alias, child, media, rank,
-   template, value — NAME and PARENT both use `approveValue`/`rejectValue`). Unknown
+   template, value). ONI uses the field string `ConceptName` for both primary-name
+   renames and alias changes (`HISTORY_FIELD.NAME` and `HISTORY_FIELD.ALIAS` are the
+   same string), so the `ConceptName` case disambiguates via `isPendingName`
+   (field + `Edit` action + `concept === newValue`): primary renames go to
+   `approveValue`/`rejectValue` (set/restore `concept.name`), everything else to
+   `approveAlias`/`rejectAlias`. PARENT uses `approveValue`/`rejectValue`. Unknown
    fields throw `createError('Invalid Pending Field')`.
 4. The optimistic result is applied via `setConcept(optimisticConcept, pendingHistory)`.
+   The returned `concepts` map is keyed by the items' `concept` (the displayed,
+   pre-rename name) so the Concepts panel finds the optimistic concept after a rename
+   is approved or rejected; `processPendingApproval` itself calls `updateSelected`
+   with the new name when a rename changes `concept.name`.
 
 ## 7. Preferences persistence
 

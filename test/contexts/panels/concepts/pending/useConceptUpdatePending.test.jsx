@@ -338,7 +338,7 @@ describe('useConceptUpdatePending', () => {
     expect(processPendingApprovalMock).toHaveBeenCalledWith(
       expect.objectContaining({
         approval: 'reject',
-        items: [mediaItem, rankItem, childDeleteItem],
+        items: [rankItem, mediaItem, childDeleteItem],
       })
     )
   })
@@ -418,9 +418,102 @@ describe('useConceptUpdatePending', () => {
     expect(processPendingApprovalMock).toHaveBeenCalledWith(
       expect.objectContaining({
         approval: 'reject',
-        items: [mediaItem, rankItem, addItem],
+        items: [rankItem, mediaItem, addItem],
       })
     )
+  })
+
+  it('rejects all items in reverse creation order so dependent changes are undone first', async () => {
+    const renameItem = {
+      id: 'p1',
+      concept: 'dingo-2',
+      field: 'ConceptName',
+      action: 'Edit',
+      oldValue: 'dingo',
+      newValue: 'dingo-2',
+    }
+    const aliasAddItem = { id: 'p2', concept: 'dingo-2', field: 'ConceptName', action: 'Add', newValue: 'dingo' }
+
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: [],
+      updated: ['dingo-2'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => ({ name: 'dingo-2', parent: 'root' })),
+      pendingItems: [renameItem, aliasAddItem],
+      refreshData: vi.fn(),
+      setConcept: vi.fn(async () => {}),
+      updateSelected: vi.fn(),
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'reject', pendingIds: ['p1', 'p2'] })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'reject',
+        items: [aliasAddItem, renameItem],
+      })
+    )
+  })
+
+  it('applies the concept under its displayed name when a rename reject restores the old name', async () => {
+    const renameItem = {
+      id: 'p1',
+      concept: 'pending-concept',
+      field: 'ConceptName',
+      action: 'Edit',
+      oldValue: 'old-name',
+      newValue: 'pending-concept',
+    }
+    const restoredConcept = { name: 'old-name', parent: 'root' }
+
+    const setConcept = vi.fn(async () => {})
+    const updateSelected = vi.fn()
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async ({ deps }) => {
+      deps.updateSelected({ concept: 'old-name' })
+      return {
+        concepts: { 'pending-concept': restoredConcept },
+        pendingHistory: [],
+        removed: [],
+        updated: ['old-name'],
+      }
+    })
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(),
+      pendingItems: [renameItem],
+      refreshData: vi.fn(),
+      setConcept,
+      updateSelected,
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    let remaining
+    await act(async () => {
+      remaining = await result.current({ approval: 'reject', pendingIds: ['p1'] })
+    })
+
+    expect(setConcept).toHaveBeenCalledWith(restoredConcept, [])
+    expect(updateSelected).toHaveBeenCalledWith({ concept: 'old-name' })
+    expect(updateSelected).not.toHaveBeenCalledWith({ concept: 'root' })
+    expect(remaining).toBe(false)
   })
 
   it('rejects a pending add without acting on the concept\'s other pending items', async () => {

@@ -18,12 +18,25 @@ export const processPendingApproval = async ({
 }) => {
   if (!items || items.length === 0) return { concepts: {}, pendingHistory: [], removed: [], updated: [] }
 
+  const groups = items.reduce((acc, item) => {
+    const key = item.concept
+    if (!acc[key]) acc[key] = []
+    acc[key].push(item)
+    return acc
+  }, {})
+
+  const staleConcepts = {}
+  for (const conceptName of Object.keys(groups)) {
+    if (!getConcept(conceptName)) continue
+    staleConcepts[conceptName] = await loadConcept(conceptName)
+  }
+
   for (const item of items) {
     await apiFns.apiPayload(updatePendingItem, [approval, item.id])
   }
 
   const structuralFields = [HISTORY_FIELD.NAME, HISTORY_FIELD.PARENT]
-  if (approval === PENDING.APPROVAL.ACCEPT && items.some(item => structuralFields.includes(item.field))) {
+  if (items.some(item => structuralFields.includes(item.field))) {
     resetConceptPaths()
   }
 
@@ -36,20 +49,13 @@ export const processPendingApproval = async ({
     ...realizationConcepts.map(conceptName => reloadConceptRealizations(conceptName)),
   ])
 
-  const groups = items.reduce((acc, item) => {
-    const key = item.concept
-    if (!acc[key]) acc[key] = []
-    acc[key].push(item)
-    return acc
-  }, {})
-
   const updated = []
   const concepts = {}
 
   for (const conceptName of Object.keys(groups)) {
     const conceptItems = groups[conceptName]
-    if (!getConcept(conceptName)) continue
-    const staleConcept = await loadConcept(conceptName)
+    const staleConcept = staleConcepts[conceptName]
+    if (!staleConcept) continue
 
     let freshConcept = staleConcept
 
@@ -73,7 +79,7 @@ export const processPendingApproval = async ({
     updated.push(updatedName)
 
     if (updatedConcept) {
-      concepts[updatedName] = updatedConcept
+      concepts[conceptName] = updatedConcept
     }
   }
 

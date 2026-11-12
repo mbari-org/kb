@@ -1,6 +1,8 @@
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { createError } from '@/lib/errors'
 
+import { isPendingName } from '@/lib/concept/state/name'
+
 import rejectAlias from '@/contexts/panels/concepts/pending/reject/rejectAlias'
 import rejectChild from '@/contexts/panels/concepts/pending/reject/rejectChild'
 import rejectMedia from '@/contexts/panels/concepts/pending/reject/rejectMedia'
@@ -11,16 +13,15 @@ import rejectValue from '@/contexts/panels/concepts/pending/reject/rejectValue'
 const applyReject = (concept, pendingItem, allItems) => {
   switch (pendingItem.field) {
     case HISTORY_FIELD.ALIAS:
-      return rejectAlias(concept, pendingItem, allItems)
+      return isPendingName(pendingItem)
+        ? rejectValue(concept, pendingItem, allItems)
+        : rejectAlias(concept, pendingItem, allItems)
 
     case HISTORY_FIELD.CHILD:
       return rejectChild(concept, pendingItem, allItems)
 
     case HISTORY_FIELD.MEDIA:
       return rejectMedia(concept, pendingItem, allItems)
-
-    case HISTORY_FIELD.NAME:
-      return rejectValue(concept, pendingItem, allItems)
 
     case HISTORY_FIELD.PARENT:
       return rejectValue(concept, pendingItem, allItems)

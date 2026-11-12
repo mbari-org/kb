@@ -1,6 +1,8 @@
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { createError } from '@/lib/errors'
 
+import { isPendingName } from '@/lib/concept/state/name'
+
 import approveAlias from '@/contexts/panels/concepts/pending/approve/approveAlias'
 import approveChild from '@/contexts/panels/concepts/pending/approve/approveChild'
 import approveMedia from '@/contexts/panels/concepts/pending/approve/approveMedia'
@@ -11,16 +13,15 @@ import approveValue from '@/contexts/panels/concepts/pending/approve/approveValu
 const applyApproval = (concept, pendingItem, allItems) => {
   switch (pendingItem.field) {
     case HISTORY_FIELD.ALIAS:
-      return approveAlias(concept, pendingItem, allItems)
+      return isPendingName(pendingItem)
+        ? approveValue(concept, pendingItem, allItems)
+        : approveAlias(concept, pendingItem, allItems)
 
     case HISTORY_FIELD.CHILD:
       return approveChild(concept, pendingItem, allItems)
 
     case HISTORY_FIELD.MEDIA:
       return approveMedia(concept, pendingItem, allItems)
-
-    case HISTORY_FIELD.NAME:
-      return approveValue(concept, pendingItem, allItems)
 
     case HISTORY_FIELD.PARENT:
       return approveValue(concept, pendingItem, allItems)

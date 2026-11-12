@@ -87,7 +87,7 @@ describe('processPendingApproval', () => {
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'renamed-concept' })
     expect(result).toEqual({
       concepts: {
-        'renamed-concept': updatedConcept,
+        'old-concept': updatedConcept,
       },
       removed: [],
       pendingHistory: [],
@@ -174,6 +174,50 @@ describe('processPendingApproval', () => {
     expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
     expect(result.removed).toEqual(['try'])
     expect(result.updated).toEqual(['miscellany'])
+  })
+
+  it('resolves stale concepts before submitting approvals so a post-approval rename cannot 404', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: [],
+      media: [],
+      name: 'dingo-2',
+      parent: 'root',
+      rankLevel: '',
+      rankName: '',
+    }
+
+    const calls = []
+    const apiFns = {
+      apiPayload: vi.fn(async () => {
+        calls.push('put')
+      }),
+    }
+    const conceptEditsRefresh = vi.fn(async concept => ({ concept }))
+    const getConcept = vi.fn(() => staleConcept)
+    const loadConcept = vi.fn(async () => {
+      calls.push('load')
+      return staleConcept
+    })
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
+    const resetConceptPaths = vi.fn()
+    const updateSelected = vi.fn()
+
+    const items = [
+      { concept: 'dingo-2', field: 'ConceptName', action: 'Edit', oldValue: 'dingo', newValue: 'dingo-2', id: 'pending-1' },
+    ]
+
+    cloneStaleMock.mockResolvedValue({ ...staleConcept })
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.REJECT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected },
+      items,
+    })
+
+    expect(calls).toEqual(['load', 'put'])
   })
 
   it('removes approved child deletes from concept selection history, but not rejected ones', async () => {

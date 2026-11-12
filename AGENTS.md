@@ -95,6 +95,7 @@ This file provides guidance to coding agents when working with code in this repo
   - incremental concept/descendant hydration for tree navigation.
 - Descendant (expand-all) loads commit the phylogeny structure immediately; per-concept media for tree icons then fills in asynchronously via `loadConceptMediaIncremental`, breadth-first (children before grandchildren, matching how the user reads the tree). Media-fill failures never reach the error boundary; unset `media` simply renders no icon.
 - All taxonomy mutations — concept/children/descendants loads, `conceptEditsRefresh`, background media flushes — are serialized through `enqueueTaxonomyMutation` in `TaxonomyProvider`: each mutation builds on the latest committed taxonomy (`taxonomyRef`) rather than a render-scope snapshot, so concurrent loaders (e.g. an opt-click descendants expand racing the selection-triggered concept load) cannot clobber each other's commits.
+- `getConceptPrimaryName` reads `taxonomyRef.current`, not render-scope `taxonomy` state, so alias→primary resolution stays current inside async mutation flows — e.g. `updateSelected` called immediately after a rename commit, before React has re-rendered.
 - Taxonomy model logic lives in `src/lib/model/taxonomy.js` (tree building, alias mapping, refresh/remove logic).
 - `ConceptProvider` owns staged concept editing:
   - reducer-driven staged state (`conceptStateReducer`)
