@@ -150,9 +150,14 @@ file and function that implements it.
 
 1. Entry hooks: `useConceptUpdatePending`
    (`src/contexts/panels/concepts/pending/useConceptUpdatePending.js`) maps selected
-   pending ids to items and wraps in `withProcessing(PROCESSING.UPDATE)`;
+   pending ids to items, orders them (accept: Add first, Delete last; reject: others
+   first, Add/Delete last — ONI cascades removal of a concept's remaining pending items
+   on approved child-delete and rejected child-add), and wraps in
+   `withProcessing(PROCESSING.UPDATE)`;
    `useHistoryUpdatePending` (`src/contexts/panels/history/useHistoryUpdatePending.js`)
-   handles single items without the processing overlay.
+   handles single items without the processing overlay. Both build the orchestrator
+   `deps` object via `useProcessPendingDeps`
+   (`src/contexts/common/useProcessPendingDeps.js`).
 2. Orchestrator `processPendingApproval`
    (`src/lib/concept/pending/processPendingApproval.js:13`):
    a. `Promise.all` of `apiPayload(updatePendingItem, [approval, item.id])` PUTs

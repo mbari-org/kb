@@ -52,7 +52,25 @@ const hasPendingStructure = (pending, conceptName) => {
   }
 }
 
+const isPendingAdd = item => item.field === HISTORY_FIELD.CHILD && item.action === ACTION.ADD
+
 const isPendingDelete = item => item.field === HISTORY_FIELD.CHILD && item.action === ACTION.DELETE
+
+const moveAddToFirst = items => {
+  const [adds, others] = items.reduce(
+    ([add, rest], item) => (isPendingAdd(item) ? [[...add, item], rest] : [add, [...rest, item]]),
+    [[], []]
+  )
+  return [...adds, ...others]
+}
+
+const moveAddToLast = items => {
+  const [adds, others] = items.reduce(
+    ([add, rest], item) => (isPendingAdd(item) ? [[...add, item], rest] : [add, [...rest, item]]),
+    [[], []]
+  )
+  return [...others, ...adds]
+}
 
 const moveDeleteToLast = items => {
   const [deletes, others] = items.reduce(
@@ -130,7 +148,10 @@ const pendingIds = (pendingConcept, targetGroup) => {
 export {
   hasPending,
   hasPendingStructure,
+  isPendingAdd,
   isPendingDelete,
+  moveAddToFirst,
+  moveAddToLast,
   moveDeleteToLast,
   pendingActionText,
   pendingChild,

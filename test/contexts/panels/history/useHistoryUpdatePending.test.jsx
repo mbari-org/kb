@@ -55,38 +55,12 @@ describe('useHistoryUpdatePending', () => {
     oldValue: 'doomed-concept',
   }
 
-  it('rejects the deleted concept\'s other pending items before approving its delete', async () => {
+  it('approves a delete without acting on the concept\'s other pending items', async () => {
     const mediaItem = { id: 'p1', concept: 'doomed-concept', field: 'Media', action: 'Edit' }
     const rankItem = { id: 'p2', concept: 'doomed-concept', field: 'Rank', action: 'Edit' }
     const unrelatedItem = { id: 'p3', concept: 'other-concept', field: 'Rank', action: 'Edit' }
 
     const { wrapper } = buildWrapper({ pendingHistory: [mediaItem, rankItem, unrelatedItem, deleteItem] })
-
-    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
-
-    await act(async () => {
-      await result.current({ approval: 'approve', item: deleteItem })
-    })
-
-    expect(processPendingApprovalMock).toHaveBeenCalledTimes(2)
-    expect(processPendingApprovalMock).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        approval: 'reject',
-        items: [mediaItem, rankItem],
-      })
-    )
-    expect(processPendingApprovalMock).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        approval: 'approve',
-        items: [deleteItem],
-      })
-    )
-  })
-
-  it('approves a delete without a reject phase when the concept has no other pending items', async () => {
-    const { wrapper } = buildWrapper({ pendingHistory: [deleteItem] })
 
     const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
 
@@ -139,6 +113,60 @@ describe('useHistoryUpdatePending', () => {
       expect.objectContaining({
         approval: 'approve',
         items: [mediaItem],
+      })
+    )
+  })
+
+  it('rejects a pending add without acting on the concept\'s other pending items', async () => {
+    const addItem = {
+      id: 'p8',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'new-concept',
+    }
+    const mediaItem = { id: 'p1', concept: 'new-concept', field: 'Media', action: 'Edit' }
+
+    const { wrapper } = buildWrapper({ pendingHistory: [addItem, mediaItem] })
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'reject', item: addItem })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'reject',
+        items: [addItem],
+      })
+    )
+  })
+
+  it('approves a pending add with no side effects on other pending items', async () => {
+    const addItem = {
+      id: 'p8',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'new-concept',
+    }
+    const mediaItem = { id: 'p1', concept: 'new-concept', field: 'Media', action: 'Edit' }
+
+    const { wrapper } = buildWrapper({ pendingHistory: [addItem, mediaItem] })
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'approve', item: addItem })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'approve',
+        items: [addItem],
       })
     )
   })

@@ -89,7 +89,7 @@ describe('processPendingApproval', () => {
       concepts: {
         'renamed-concept': updatedConcept,
       },
-      deleted: [],
+      removed: [],
       pendingHistory: [],
       updated: ['renamed-concept'],
     })
@@ -172,7 +172,7 @@ describe('processPendingApproval', () => {
     expect(cloneStaleMock).toHaveBeenCalledWith(apiFns, loadedConcept, false)
     expect(conceptEditsRefresh).toHaveBeenCalledWith(optimisticConcept, loadedConcept)
     expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
-    expect(result.deleted).toEqual(['try'])
+    expect(result.removed).toEqual(['try'])
     expect(result.updated).toEqual(['miscellany'])
   })
 
@@ -220,12 +220,13 @@ describe('processPendingApproval', () => {
 
     const childAddItem = { concept: 'miscellany', field: 'Concept.child', action: 'Add', newValue: 'try', id: 'pending-2' }
 
-    await processPendingApproval({
+    const rejectAddResult = await processPendingApproval({
       approval: PENDING.APPROVAL.REJECT,
       deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, updateSelected },
       items: [childAddItem],
     })
 
     expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
+    expect(rejectAddResult.removed).toEqual(['try'])
   })
 })

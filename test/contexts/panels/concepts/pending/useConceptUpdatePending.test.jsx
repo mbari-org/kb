@@ -64,7 +64,7 @@ describe('useConceptUpdatePending', () => {
 
     processPendingApprovalMock.mockImplementation(async () => ({
       concepts: { 'pending-concept': optimisticConcept },
-      deleted: [],
+      removed: [],
       pendingHistory,
       updated: ['pending-concept'],
     }))
@@ -112,7 +112,7 @@ describe('useConceptUpdatePending', () => {
 
     processPendingApprovalMock.mockImplementation(async () => ({
       concepts: {},
-      deleted: [],
+      removed: [],
       pendingHistory,
       updated: ['pending-concept'],
     }))
@@ -156,7 +156,7 @@ describe('useConceptUpdatePending', () => {
 
     processPendingApprovalMock.mockImplementation(async () => ({
       concepts: {},
-      deleted: ['pending-concept'],
+      removed: ['pending-concept'],
       pendingHistory,
       updated: ['root'],
     }))
@@ -188,10 +188,10 @@ describe('useConceptUpdatePending', () => {
     )
     expect(setConcept).not.toHaveBeenCalled()
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
-    expect(remaining).toBe(false)
+    expect(remaining).toBe(true)
   })
 
-  it('rejects the concept\'s other pending items before approving its delete', async () => {
+  it('approves a delete without acting on the concept\'s other pending items', async () => {
     const mediaItem = { id: 'p1', concept: 'pending-concept', field: 'Media', action: 'Edit' }
     const rankItem = { id: 'p2', concept: 'pending-concept', field: 'Rank', action: 'Edit' }
     const childDeleteItem = {
@@ -208,7 +208,7 @@ describe('useConceptUpdatePending', () => {
 
     processPendingApprovalMock.mockImplementation(async () => ({
       concepts: {},
-      deleted: ['pending-concept'],
+      removed: ['pending-concept'],
       pendingHistory: [],
       updated: ['root'],
     }))
@@ -232,23 +232,15 @@ describe('useConceptUpdatePending', () => {
       remaining = await result.current({ approval: 'approve', pendingIds: ['p9'] })
     })
 
-    expect(processPendingApprovalMock).toHaveBeenCalledTimes(2)
-    expect(processPendingApprovalMock).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        approval: 'reject',
-        items: [mediaItem, rankItem],
-      })
-    )
-    expect(processPendingApprovalMock).toHaveBeenNthCalledWith(
-      2,
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
       expect.objectContaining({
         approval: 'approve',
         items: [childDeleteItem],
       })
     )
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
-    expect(remaining).toBe(false)
+    expect(remaining).toBe(true)
   })
 
   it('approves all items with the delete approved last', async () => {
@@ -269,7 +261,7 @@ describe('useConceptUpdatePending', () => {
 
     processPendingApprovalMock.mockImplementation(async () => ({
       concepts: { 'pending-concept': { name: 'pending-concept', parent: 'root' } },
-      deleted: ['pending-concept'],
+      removed: ['pending-concept'],
       pendingHistory: [],
       updated: ['pending-concept', 'root'],
     }))
@@ -319,7 +311,7 @@ describe('useConceptUpdatePending', () => {
 
     processPendingApprovalMock.mockImplementation(async () => ({
       concepts: {},
-      deleted: [],
+      removed: [],
       pendingHistory: [],
       updated: ['pending-concept', 'root'],
     }))
@@ -349,5 +341,174 @@ describe('useConceptUpdatePending', () => {
         items: [mediaItem, rankItem, childDeleteItem],
       })
     )
+  })
+
+  it('approves all items with the concept add approved first', async () => {
+    const addItem = { id: 'p0', concept: 'root', field: 'Concept.child', action: 'Add', newValue: 'pending-concept' }
+    const mediaItem = { id: 'p1', concept: 'pending-concept', field: 'Media', action: 'Edit' }
+    const rankItem = { id: 'p2', concept: 'pending-concept', field: 'Rank', action: 'Edit' }
+
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: [],
+      updated: ['root', 'pending-concept'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => ({ name: 'pending-concept', parent: 'root' })),
+      pendingHistory: [addItem, mediaItem, rankItem],
+      pendingItems: [mediaItem, rankItem, addItem],
+      refreshData: vi.fn(),
+      setConcept: vi.fn(async () => {}),
+      updateSelected: vi.fn(),
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'approve', pendingIds: ['p1', 'p2', 'p0'] })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'approve',
+        items: [addItem, mediaItem, rankItem],
+      })
+    )
+  })
+
+  it('rejects all items with the concept add rejected last', async () => {
+    const addItem = { id: 'p0', concept: 'root', field: 'Concept.child', action: 'Add', newValue: 'pending-concept' }
+    const mediaItem = { id: 'p1', concept: 'pending-concept', field: 'Media', action: 'Edit' }
+    const rankItem = { id: 'p2', concept: 'pending-concept', field: 'Rank', action: 'Edit' }
+
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: ['pending-concept'],
+      updated: ['root'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => null),
+      pendingHistory: [addItem, mediaItem, rankItem],
+      pendingItems: [mediaItem, rankItem, addItem],
+      refreshData: vi.fn(),
+      setConcept: vi.fn(async () => {}),
+      updateSelected: vi.fn(),
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'reject', pendingIds: ['p0', 'p1', 'p2'] })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'reject',
+        items: [mediaItem, rankItem, addItem],
+      })
+    )
+  })
+
+  it('rejects a pending add without acting on the concept\'s other pending items', async () => {
+    const addItem = { id: 'p0', concept: 'root', field: 'Concept.child', action: 'Add', newValue: 'pending-concept' }
+    const mediaItem = { id: 'p1', concept: 'pending-concept', field: 'Media', action: 'Edit' }
+    const rankItem = { id: 'p2', concept: 'pending-concept', field: 'Rank', action: 'Edit' }
+
+    const updateSelected = vi.fn()
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: ['pending-concept'],
+      updated: ['root'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => null),
+      pendingHistory: [addItem, mediaItem, rankItem],
+      pendingItems: [mediaItem, rankItem, addItem],
+      refreshData: vi.fn(),
+      setConcept: vi.fn(async () => {}),
+      updateSelected,
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    let remaining
+    await act(async () => {
+      remaining = await result.current({ approval: 'reject', pendingIds: ['p0'] })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'reject',
+        items: [addItem],
+      })
+    )
+    expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
+    expect(remaining).toBe(true)
+  })
+
+  it('approves a pending add with no side effects on other pending items', async () => {
+    const addItem = { id: 'p0', concept: 'root', field: 'Concept.child', action: 'Add', newValue: 'pending-concept' }
+    const mediaItem = { id: 'p1', concept: 'pending-concept', field: 'Media', action: 'Edit' }
+
+    const setConcept = vi.fn(async () => {})
+    const updateSelected = vi.fn()
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: [],
+      updated: ['root'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => ({ name: 'pending-concept', parent: 'root' })),
+      pendingHistory: [addItem, mediaItem],
+      pendingItems: [mediaItem, addItem],
+      refreshData: vi.fn(),
+      setConcept,
+      updateSelected,
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    let remaining
+    await act(async () => {
+      remaining = await result.current({ approval: 'approve', pendingIds: ['p0'] })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'approve',
+        items: [addItem],
+      })
+    )
+    expect(setConcept).not.toHaveBeenCalled()
+    expect(updateSelected).not.toHaveBeenCalled()
+    expect(remaining).toBe(true)
   })
 })
