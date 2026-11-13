@@ -1,52 +1,23 @@
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { createError } from '@/lib/errors'
 import { createConcept } from '@/lib/api/concept'
 
 import { drop } from '@/lib/utils'
 
 const { CHILD } = CONCEPT_STATE
 
-const submitChildren = ([submit, { concept, updatesInfo }]) => {
-  const { hasUpdated, updatedValue } = updatesInfo
-
-  if (!hasUpdated(CONCEPT.FIELD.CHILDREN)) {
-    return []
+const buildChildSubmit = (op, effective) => {
+  const { action, index, item } = op
+  if (action !== CHILD.ADD) {
+    throw new Error(`Unknown child action: ${action}`)
   }
 
-  const submitChild = (apiFn, trackerInfo) =>
-    submit(apiFn, trackerInfo.params)
-      .then(response => ({
-        field: CONCEPT.FIELD.CHILDREN,
-        response,
-        ...trackerInfo,
-      }))
-      .catch(error => ({
-        field: CONCEPT.FIELD.CHILDREN,
-        error: createError(
-          'Child Creation Failed',
-          `Failed to add child concept ${trackerInfo.params.name} to ${concept.name}`,
-          {
-            childName: trackerInfo.params.name,
-            parentName: concept.name,
-            action: trackerInfo.action,
-            index: trackerInfo.index,
-          },
-          error
-        ),
-        ...trackerInfo,
-      }))
-
-  const submitters = updatedValue(CONCEPT.FIELD.CHILDREN).reduce((acc, update, index) => {
-    if (update.action === CHILD.ADD) {
-      const params = drop({ ...update, parentName: concept.name }, ['action', 'index'])
-      const trackerInfo = { action: CHILD.ADD, index, params, update }
-      acc.push(() => submitChild(createConcept, trackerInfo))
-    }
-    return acc
-  }, [])
-
-  return submitters
+  const params = drop({ ...item, parentName: effective.state.name }, ['action', 'index', 'stagedSeq'])
+  return {
+    apiFn: createConcept,
+    params,
+    tracker: { action: CHILD.ADD, field: CONCEPT.FIELD.CHILDREN, index, update: item },
+  }
 }
 
-export default submitChildren
+export default buildChildSubmit

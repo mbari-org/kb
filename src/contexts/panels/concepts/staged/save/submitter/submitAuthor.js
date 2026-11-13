@@ -2,25 +2,18 @@ import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { updateConceptAuthor } from '@/lib/api/concept'
 
-const submitAuthor = ([submit, { concept, updatesInfo }]) => {
-  const { hasUpdated, updatedValue } = updatesInfo
-
-  const submitters = []
-  if (hasUpdated(CONCEPT.FIELD.AUTHOR)) {
-    const author =
-      updatedValue(CONCEPT.FIELD.AUTHOR)?.value ?? updatedValue(CONCEPT.FIELD.AUTHOR)
-    const params = [concept.name, { author }]
-    submitters.push(() =>
-      submit(updateConceptAuthor, params).then(response => ({
-        field: CONCEPT.FIELD.AUTHOR,
-        action: CONCEPT_STATE.AUTHOR,
-        params,
-        update: { author },
-        response,
-      }))
-    )
+const buildAuthorSubmit = (op, effective) => {
+  const author = op.item.value
+  const params = [effective.state.name, { author }]
+  return {
+    apiFn: updateConceptAuthor,
+    params,
+    tracker: {
+      action: CONCEPT_STATE.AUTHOR,
+      field: CONCEPT.FIELD.AUTHOR,
+      update: { author },
+    },
   }
-  return submitters
 }
 
-export default submitAuthor
+export default buildAuthorSubmit

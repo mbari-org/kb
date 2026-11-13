@@ -12,16 +12,22 @@ import {
   resetRealizations,
 } from '@/lib/concept/state/realizations'
 import { editValue } from '@/lib/concept/state/value'
+import { stampStagedEdits } from '@/lib/concept/state/stagedSeq'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } = CONCEPT_STATE
 
 const conceptStateReducer = (stagedState, { type, update, initialState }) => {
+  if (type === CONCEPT_STATE.INITIAL) return update
+
   const params = { initialState, stagedState, update }
+  return stampStagedEdits(reduce(params, type))
+}
+
+const reduce = (params, type) => {
+  const { stagedState } = params
   switch (type) {
-    case CONCEPT_STATE.INITIAL:
-      return update
 
     case ALIAS.ADD:
       return addAlias(params)

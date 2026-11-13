@@ -110,7 +110,7 @@ const demotePrimary = ({ editingItem, media, updatedItem, initialMedia }) => {
   const demotedItem = result[demotedIndex]
   if (demotedItem.action === CONCEPT_STATE.MEDIA_ITEM.EDIT && initialMedia) {
     const initialDemotedItem = initialMedia.find(item => item.stateId === demotedItem.stateId)
-    if (initialDemotedItem && isEqualWithout(demotedItem, initialDemotedItem, ['action', 'isPrimary'])) {
+    if (initialDemotedItem && isEqualWithout(demotedItem, initialDemotedItem, ['action', 'isPrimary', 'stagedSeq'])) {
       return result.map((item, index) =>
         index === demotedIndex ? { ...item, action: CONCEPT_STATE.NO_ACTION } : item
       )
@@ -236,7 +236,7 @@ const editMedia = ({ initialState, stagedState, update }) => {
 
   // Check if we're restoring to initial state before setting action
   const initialItem = initialState?.media?.find(item => item.stateId === updatedItem.stateId)
-  const isRestoringToInitial = initialItem && isEqualWithout(updatedItem, initialItem, ['action'])
+  const isRestoringToInitial = initialItem && isEqualWithout(updatedItem, initialItem, ['action', 'stagedSeq'])
 
   if (isRestoringToInitial) {
     if (updatedItem.action === CONCEPT_STATE.MEDIA_ITEM.EDIT) {

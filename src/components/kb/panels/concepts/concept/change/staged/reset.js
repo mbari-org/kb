@@ -1,6 +1,8 @@
 import { CONCEPT, RESETTING } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
+import { isStagedAction } from '@/lib/concept/state/staged'
+
 const { RESET } = CONCEPT_STATE
 
 const resettingAll = confirmReset => {
@@ -84,9 +86,6 @@ const resettingRealization = (confirmReset, index) => {
 
   return RESETTING.EXTENT.OTHER
 }
-
-const isStagedAction = action =>
-  action !== CONCEPT_STATE.NO_ACTION && !action.toLowerCase().startsWith('pending')
 
 export {
   isStagedAction,

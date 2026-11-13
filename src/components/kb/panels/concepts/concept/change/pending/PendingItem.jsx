@@ -9,37 +9,28 @@ import { pendingActionValue } from '@/components/kb/panels/concepts/concept/chan
 
 import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
-import { pendingInfo } from '@/lib/model/history'
+import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 
 const { APPROVAL } = PENDING
 
-const PendingItem = ({ group, item }) => {
+const PendingItem = ({ infoRows = [], item }) => {
   const approval = usePendingItemApproval(item)
 
   const itemSx = otherApprovalSx(approval)
   const disabled = approval === APPROVAL.OTHER
 
-  const itemTitle = pendingActionValue(item)
-
   const pendingDetailTitle = (
     <>
-      <PendingButtons approval={approval} group={group} item={item} />
-      <PendingItemTitle sx={itemSx} action={item.action} title={itemTitle} />
+      <PendingButtons approval={approval} item={item} />
+      <PendingItemTitle sx={itemSx} action={`${pendingFieldLabel(item)} ${item.action}`} title={pendingActionValue(item)} />
     </>
   )
 
-  const pendingDetailValues = (
-    <PendingValues pendingValues={pendingInfo(item)} disabled={disabled} />
-  )
+  const pendingDetailValues = <PendingValues pendingValues={[...infoRows, ...pendingInfo(item)]} disabled={disabled} />
 
-  return (
-    <PendingDetail
-      pendingDetailTitle={pendingDetailTitle}
-      pendingDetailValues={pendingDetailValues}
-    />
-  )
+  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
 }
 
 export default PendingItem

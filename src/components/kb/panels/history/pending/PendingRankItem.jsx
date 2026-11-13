@@ -5,7 +5,7 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
 
 import { formatDelta, formatField } from '@/components/common/format'
-import { pendingActionText, pendingInfo } from '@/lib/model/history'
+import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
 
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 
@@ -16,7 +16,7 @@ const PendingRankItem = ({ item }) => {
   const fieldDelta = formatDelta(item.oldValue, item.newValue)
 
   const pendingDetailTitle = (
-    <Typography sx={{ fontWeight: 'bold' }}>{pendingActionText(item.action)}</Typography>
+    <Typography sx={{ fontWeight: 'bold' }}>{`${pendingFieldLabel(item)} ${item.action}`}</Typography>
   )
 
   const pendingDetailValues = (

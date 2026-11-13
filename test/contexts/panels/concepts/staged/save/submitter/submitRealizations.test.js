@@ -1,9 +1,11 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import conceptStateReducer from '@/contexts/panels/concepts/staged/edit/conceptStateReducer'
-import { stateUpdatesInfo } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
-import submitRealizations from '@/contexts/panels/concepts/staged/save/submitter/submitRealizations'
+import buildRealizationSubmit from '@/contexts/panels/concepts/staged/save/submitter/submitRealizations'
+import { createEffectiveState } from '@/lib/concept/state/effectiveState'
+import { buildStagedJournal } from '@/lib/concept/state/stagedJournal'
 import * as realizations from '@/lib/concept/state/realizations'
+import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState'
 
 const { REALIZATION } = CONCEPT_STATE
@@ -16,7 +18,7 @@ const baseStagedState = {
   deleteConcept: false,
   media: [],
   mediaIndex: 0,
-  name: { action: 'None', value: '', extent: '' },
+  name: { action: 'None', value: 'dingo', extent: '' },
   parent: { action: 'None', value: '' },
   rank: { action: 'None', level: '', name: '' },
   realizations: [],
@@ -24,9 +26,8 @@ const baseStagedState = {
   templates: [],
 }
 
-describe('submitRealizations', () => {
-  it('submits EDIT with the correct prior id and diff after an add re-sorted the staged array', async () => {
-    // Server order (zebra first) differs from display sort order (alpha first)
+describe('buildRealizationSubmit', () => {
+  it('builds EDIT with the correct prior id after an add re-sorted the staged array', () => {
     const concept = {
       name: 'dingo',
       realizations: [
@@ -38,8 +39,6 @@ describe('submitRealizations', () => {
     const initial = { ...baseStagedState, ...realizations.initialState(concept, []) }
     let staged = structuredClone(initial)
 
-    // The added realization sorts into the middle of the staged array,
-    // shifting the positional index of zebra from 0 (server order) to 2
     staged = conceptStateReducer(staged, {
       type: REALIZATION.ADD,
       update: {
@@ -59,27 +58,24 @@ describe('submitRealizations', () => {
       initialState: initial,
     })
 
-    const updatesInfo = stateUpdatesInfo(initial, staged)
-    const submit = vi.fn(() => Promise.resolve({ ok: true }))
+    const ops = buildStagedJournal(initial, staged)
+    const effective = createEffectiveState(initial, { applyImmediately: false })
 
-    const results = await Promise.all(submitRealizations([submit, { concept, updatesInfo }]).map(submitOne => submitOne()))
+    const addOp = ops.find(op => op.action === REALIZATION.ADD)
+    const editOp = ops.find(op => op.action === REALIZATION.EDIT)
 
-    const addResult = results.find(result => result.action === REALIZATION.ADD)
-    expect(addResult.error).toBeUndefined()
-    expect(addResult.params).toEqual({
+    expect(buildRealizationSubmit(addOp, effective).params).toEqual({
       linkName: 'middle',
       toConcept: 'Em',
       linkValue: 'm',
       concept: 'dingo',
     })
 
-    const editResult = results.find(result => result.action === REALIZATION.EDIT)
-    expect(editResult.error).toBeUndefined()
-    // zebra's server id is 11; a positional pairing would have used alpha's id 22
-    expect(editResult.params).toEqual([11, { linkValue: 'z-edited' }])
+    expect(buildRealizationSubmit(editOp, effective).params).toEqual([11, { linkValue: 'z-edited' }])
+    expect(addOp.field).toBe(CONCEPT.FIELD.REALIZATIONS)
   })
 
-  it('submits DELETE with the staged item server id', async () => {
+  it('builds DELETE with the staged item server id', () => {
     const concept = {
       name: 'dingo',
       realizations: [
@@ -98,13 +94,10 @@ describe('submitRealizations', () => {
       initialState: initial,
     })
 
-    const updatesInfo = stateUpdatesInfo(initial, staged)
-    const submit = vi.fn(() => Promise.resolve({ ok: true }))
+    const ops = buildStagedJournal(initial, staged)
+    const effective = createEffectiveState(initial, { applyImmediately: false })
+    const deleteOp = ops.find(op => op.action === REALIZATION.DELETE)
 
-    const results = await Promise.all(submitRealizations([submit, { concept, updatesInfo }]).map(submitOne => submitOne()))
-
-    expect(results).toHaveLength(1)
-    expect(results[0].action).toBe(REALIZATION.DELETE)
-    expect(results[0].params).toBe(22)
+    expect(buildRealizationSubmit(deleteOp, effective).params).toBe(22)
   })
 })

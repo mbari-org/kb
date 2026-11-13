@@ -1,5 +1,4 @@
 import { actionColor } from '@/components/kb/panels/concepts/concept/change/action'
-import { isStagedAction } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 
@@ -9,6 +8,9 @@ const deleteItem = edit => {
   return { ...edit, updates: {} }
 }
 
+const isStagedAction = action =>
+  action !== CONCEPT_STATE.NO_ACTION && !action.toLowerCase().startsWith('pending')
+
 const displayItem = (item, fields) => {
   return fields.reduce((fields, field) => {
     fields.push([field, item[field]])
@@ -17,7 +19,7 @@ const displayItem = (item, fields) => {
 }
 
 const editItem = edit => {
-  const { action, index, initial, staged, stateId } = edit
+  const { action, index, initial, staged, stagedSeq, stateId } = edit
   const updates = staged.reduce((acc, [field, value], index) => {
     const initialValue = initial ? initial[index][1] : null
     if (value !== initialValue) {
@@ -29,6 +31,7 @@ const editItem = edit => {
   return {
     action,
     index,
+    stagedSeq,
     stateId,
     updates,
   }
@@ -76,7 +79,7 @@ const itemEdit = ({ displayFields, index, initialItem, stagedItem, stateTypes })
   const initial = action === stateTypes.ADD ? null : displayItem(initialItem, displayFields)
   const staged = action === stateTypes.DELETE ? null : displayItem(stagedItem, displayFields)
 
-  return { action, index, initial, staged, stateId: stagedItem.stateId }
+  return { action, index, initial, staged, stagedSeq: stagedItem.stagedSeq, stateId: stagedItem.stateId }
 }
 
-export { deleteItem, displayItem, editItem, stagedBorder, stagedEdits }
+export { deleteItem, displayItem, editItem, isStagedAction, stagedBorder, stagedEdits }

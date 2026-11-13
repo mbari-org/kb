@@ -2,6 +2,7 @@ import { isPendingChild } from '@/lib/concept/state/children'
 import { isPendingName } from '@/lib/concept/state/name'
 
 import { ACTION } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
@@ -9,7 +10,7 @@ import CONFIG from '@/lib/config'
 
 import { capitalize, humanTimestamp, isEmpty, pick } from '@/lib/utils'
 
-const { CONCEPT: group } = CONFIG.PANELS.CONCEPTS.MODALS
+const { ITEM: itemLabel } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const hasPending = (pending, field) => (field ? !isEmpty(pendingItems(pending, field)) : !isEmpty(pending))
 
@@ -44,11 +45,16 @@ const hasPendingStructure = (pending, conceptName) => {
 
   const hasPendingChildren = pendingConcept.some(isPendingChild)
 
+  const hasPendingParentChange = pendingConcept.some(
+    pendingItem => pendingItem.field === HISTORY_FIELD.PARENT && pendingItem.action === ACTION.EDIT
+  )
+
   return {
     any: hasPendingName || hasPendingChildren || hasPendingParent,
     children: hasPendingChildren,
     name: hasPendingName,
     parent: hasPendingParent,
+    parentChange: hasPendingParentChange,
   }
 }
 
@@ -100,49 +106,34 @@ const pendingValues = pendingItem =>
     ['creationTimestamp', 'created'],
   ])
 
-const historyFieldForGroup = groupValue => {
-  switch (groupValue) {
-    case group.ALIASES:
-      return HISTORY_FIELD.ALIAS
+const pendingFieldLabel = pendingItem => {
+  switch (pendingItem.field) {
+    case HISTORY_FIELD.CHILD:
+      return itemLabel.CHILD
 
-    case group.CHILDREN:
-      return HISTORY_FIELD.CHILD
+    case HISTORY_FIELD.MEDIA:
+      return itemLabel.MEDIA
 
-    case group.MEDIA:
-      return HISTORY_FIELD.MEDIA
+    case HISTORY_FIELD.NAME:
+      return isPendingName(pendingItem) ? itemLabel.NAME : itemLabel.ALIAS
 
-    case group.NAME:
-      return HISTORY_FIELD.NAME
+    case HISTORY_FIELD.PARENT:
+      return itemLabel.PARENT
 
-    case group.PARENT:
-      return HISTORY_FIELD.PARENT
+    case HISTORY_FIELD.RANK:
+      return itemLabel.RANK
 
-    case group.RANK:
-      return HISTORY_FIELD.RANK
+    case HISTORY_FIELD.REALIZATION:
+      return itemLabel.REALIZATION
 
-    case group.REALIZATIONS:
-      return HISTORY_FIELD.REALIZATION
-
-    case group.TEMPLATES:
-      return HISTORY_FIELD.TEMPLATE
+    case HISTORY_FIELD.TEMPLATE:
+      return itemLabel.TEMPLATE
 
     default:
-      return null
+      throw createError('Invalid Pending Field', `Cannot label pending item with unknown field: ${pendingItem.field}`, {
+        pendingItem,
+      })
   }
-}
-
-const pendingIds = (pendingConcept, targetGroup) => {
-  const fieldName = historyFieldForGroup(targetGroup)
-
-  if (targetGroup === group.ALL) {
-    return pendingConcept.map(history => history.id)
-  }
-
-  if (fieldName) {
-    return pendingItems(pendingConcept, fieldName).map(history => history.id)
-  }
-
-  return [targetGroup]
 }
 
 export {
@@ -155,7 +146,7 @@ export {
   moveDeleteToLast,
   pendingActionText,
   pendingChild,
-  pendingIds,
+  pendingFieldLabel,
   pendingInfo,
   pendingItems,
   pendingValues,

@@ -4,10 +4,10 @@ import { Box, Stack } from '@mui/material'
 
 import ModalActionText from '@/components/common/ModalActionText'
 
-import StagedAliases from '@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAliases'
-import StagedChildren from '@/components/kb/panels/concepts/concept/change/staged/children/StagedChildren'
-import StagedMedia from '@/components/kb/panels/concepts/concept/change/staged/media/StagedMedia'
-import StagedRealizations from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealizations'
+import StagedAlias from '@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAlias'
+import StagedChild from '@/components/kb/panels/concepts/concept/change/staged/children/StagedChild'
+import StagedMediaItem from '@/components/kb/panels/concepts/concept/change/staged/media/StagedMediaItem'
+import StagedRealization from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealization'
 
 import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
@@ -17,49 +17,131 @@ import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContex
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 
 import { stateUpdates } from '@/contexts/panels/concepts/staged/edit/stateUpdates'
+import { stagedAliasesEdits } from '@/lib/concept/state/aliases'
+import { stagedChildren } from '@/lib/concept/state/children'
+import { stagedMediaEdits } from '@/lib/concept/state/media'
+import { stagedRealizationEdits } from '@/lib/concept/state/realizations'
 import { isStateModified } from '@/lib/concept/state/state'
+
+import { resettingItem } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import CONFIG from '@/lib/config'
 import { CONCEPT } from '@/lib/constants'
 
-const { STAGED, CONCEPT: CONCEPT_MODALS } = CONFIG.PANELS.CONCEPTS.MODALS
+const { ITEM, STAGED } = CONFIG.PANELS.CONCEPTS.MODALS
+
+const ARRAY_FIELDS = [
+  [CONCEPT.FIELD.ALIASES, stagedAliasesEdits],
+  [CONCEPT.FIELD.CHILDREN, stagedChildren],
+  [CONCEPT.FIELD.MEDIA, stagedMediaEdits],
+  [CONCEPT.FIELD.REALIZATIONS, stagedRealizationEdits],
+]
+
+const VALUE_FIELDS = [CONCEPT.FIELD.NAME, CONCEPT.FIELD.AUTHOR, CONCEPT.FIELD.PARENT, CONCEPT.FIELD.RANK]
+
+const FIELD_LABEL = {
+  [CONCEPT.FIELD.AUTHOR]: ITEM.AUTHOR,
+  [CONCEPT.FIELD.NAME]: ITEM.NAME,
+  [CONCEPT.FIELD.PARENT]: ITEM.PARENT,
+  [CONCEPT.FIELD.RANK]: ITEM.RANK,
+}
 
 const StagedContent = () => {
   const { initialState } = use(ConceptContext)
-  const { stagedState } = use(ConceptStagedContext)
+  const { confirmReset, stagedState } = use(ConceptStagedContext)
   const { closeModal } = use(ConceptModalContext)
 
-  const stagedEdits = useMemo(
-    () => Object.entries(stateUpdates(initialState, stagedState)).sort(([keyA], [keyB]) => keyA.localeCompare(keyB)),
+  const updates = useMemo(
+    () => stateUpdates(initialState, stagedState),
     [initialState, stagedState]
   )
 
-  const stagedComponent = stagedEdit => {
-    const [field, _] = stagedEdit
-    switch (field) {
-      case CONCEPT.FIELD.ALIASES:
-        return <StagedAliases key={field} stagedEdit={stagedEdit} />
+  const stagedItems = useMemo(() => {
+    const arrayItems = ARRAY_FIELDS.flatMap(([field, editsFn]) =>
+      updates[field]
+        ? editsFn([field, updates[field]]).map(edit => ({
+            edit,
+            field,
+            initialItem: updates[field].initial?.[edit.index],
+            key: `${field}-${edit.stateId ?? edit.index}`,
+            seq: edit.stagedSeq,
+          }))
+        : []
+    )
 
-      case CONCEPT.FIELD.AUTHOR:
-        return <StagedValue key={field} group={CONCEPT_MODALS.AUTHOR} stagedEdit={stagedEdit} />
+    const valueItems = VALUE_FIELDS.filter(field => updates[field]).map(field => ({
+      field,
+      key: field,
+      seq: updates[field].staged.stagedSeq,
+      stagedEdit: [field, updates[field]],
+    }))
+
+    return [...arrayItems, ...valueItems].sort((a, b) => a.seq - b.seq)
+  }, [updates])
+
+  const stagedComponent = item => {
+    switch (item.field) {
+      case CONCEPT.FIELD.ALIASES:
+        return (
+          <StagedAlias
+            key={item.key}
+            initialItem={item.initialItem}
+            resetting={resettingItem(confirmReset, item.field, item.edit.index)}
+            stagedItem={item.edit}
+          />
+        )
 
       case CONCEPT.FIELD.CHILDREN:
-        return <StagedChildren key={field} stagedEdit={stagedEdit} />
+        return (
+          <StagedChild
+            key={item.key}
+            initialItem={item.initialItem}
+            resetting={resettingItem(confirmReset, item.field, item.edit.index)}
+            stagedItem={item.edit}
+          />
+        )
 
       case CONCEPT.FIELD.MEDIA:
-        return <StagedMedia key={field} stagedEdit={stagedEdit} />
-
-      case CONCEPT.FIELD.NAME:
-        return <StagedObject key={field} group={CONCEPT_MODALS.NAME} stagedEdit={stagedEdit} />
-
-      case CONCEPT.FIELD.PARENT:
-        return <StagedValue key={field} group={CONCEPT_MODALS.PARENT} stagedEdit={stagedEdit} />
-
-      case CONCEPT.FIELD.RANK:
-        return <StagedObject key={field} group={CONCEPT_MODALS.RANK} stagedEdit={stagedEdit} />
+        return (
+          <StagedMediaItem
+            key={item.key}
+            initialItem={item.initialItem}
+            resetting={resettingItem(confirmReset, item.field, item.edit.index)}
+            stagedItem={item.edit}
+          />
+        )
 
       case CONCEPT.FIELD.REALIZATIONS:
-        return <StagedRealizations key={field} stagedEdit={stagedEdit} />
+        return (
+          <StagedRealization
+            key={item.key}
+            initialItem={item.initialItem}
+            resetting={resettingItem(confirmReset, item.field, item.edit.index)}
+            stagedItem={item.edit}
+          />
+        )
+
+      case CONCEPT.FIELD.NAME:
+      case CONCEPT.FIELD.RANK:
+        return (
+          <StagedObject
+            key={item.key}
+            field={item.field}
+            label={FIELD_LABEL[item.field]}
+            stagedEdit={item.stagedEdit}
+          />
+        )
+
+      case CONCEPT.FIELD.AUTHOR:
+      case CONCEPT.FIELD.PARENT:
+        return (
+          <StagedValue
+            key={item.key}
+            field={item.field}
+            label={FIELD_LABEL[item.field]}
+            stagedEdit={item.stagedEdit}
+          />
+        )
 
       default:
         return null
@@ -75,7 +157,7 @@ const StagedContent = () => {
   return (
     <Stack direction='column' spacing={1}>
       <ModalActionText text={STAGED.DESCRIPTION} />
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '60vh', overflowY: 'auto', pr: 1 }}>{stagedEdits.map(stagedComponent)}</Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '60vh', overflowY: 'auto', pr: 1 }}>{stagedItems.map(stagedComponent)}</Box>
     </Stack>
   )
 }

@@ -390,6 +390,7 @@ describe('concept object structure choices', () => {
 
     // Verify CHANGE_NAME, CHANGE_PARENT, DELETE_CONCEPT buttons are disabled
     const changeNameButton = screen.getByRole('button', { name: CHANGE_NAME })
+    expect(changeNameButton.closest('.MuiStack-root').parentElement).toHaveStyle({ marginTop: '24px' })
     const changeParentButton = screen.getByRole('button', { name: CHANGE_PARENT })
     const deleteConceptButton = screen.getByRole('button', { name: DELETE_CONCEPT })
     expect(changeNameButton).toBeDisabled()
@@ -401,7 +402,7 @@ describe('concept object structure choices', () => {
     expect(addChildButton).toBeEnabled()
   })
 
-  it('hides the structure choices action when the concept has a pending Add Concept action', async () => {
+  it('shows the structure choices action when the concept has a pending Add Concept action', async () => {
     const pendingAddConcept = {
       id: 'pending-add-object',
       concept: 'root',
@@ -439,6 +440,6 @@ describe('concept object structure choices', () => {
       expect(screen.getAllByText('object').length).toBeGreaterThan(0)
     })
 
-    expect(getStructureActionButton()).not.toBeInTheDocument()
+    expect(getStructureActionButton()).toBeInTheDocument()
   })
 })

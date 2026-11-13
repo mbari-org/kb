@@ -3,95 +3,52 @@ import { createRealization, deleteRealization, updateRealization } from '@/lib/a
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const { REALIZATION: REALIZATION } = CONCEPT_STATE
-
-import { createError } from '@/lib/errors'
 import { diff, drop, pick } from '@/lib/utils'
-const submitRealizations = ([submit, { concept, updatesInfo }]) => {
-  const { hasUpdated, initialValue, updatedValue } = updatesInfo
 
-  if (!hasUpdated(CONCEPT.FIELD.REALIZATIONS)) {
-    return []
-  }
+const { REALIZATION } = CONCEPT_STATE
 
-  const initialRealizations = initialValue(CONCEPT.FIELD.REALIZATIONS)
+const buildRealizationSubmit = (op, effective) => {
+  const { action, index, item } = op
 
-  const submitRealization = (apiFn, trackerInfo) =>
-    submit(apiFn, trackerInfo.params)
-      .then(response => ({
-        field: CONCEPT.FIELD.REALIZATIONS,
-        response,
-        ...trackerInfo,
-      }))
-      .catch(error => ({
-        field: CONCEPT.FIELD.REALIZATIONS,
-        error: createError(
-          'Realization Operation Failed',
-          `Failed to ${getRealizationActionMessage(trackerInfo.action)} realization for concept ${concept.name}`,
-          {
-            conceptName: concept.name,
-            realizationId: trackerInfo.update.id,
-            linkName: trackerInfo.update.linkName,
-            toConcept: trackerInfo.update.toConcept,
-            action: trackerInfo.action,
-            index: trackerInfo.index,
-          },
-          error
-        ),
-        ...trackerInfo,
-      }))
-
-  const getRealizationActionMessage = action => {
-    switch (action) {
-      case REALIZATION.ADD:
-        return 'add'
-      case REALIZATION.EDIT:
-        return 'update'
-      case REALIZATION.DELETE:
-        return 'delete'
-      default:
-        return 'process'
+  switch (action) {
+    case REALIZATION.ADD: {
+      const realization = pick(item, ['linkName', 'toConcept', 'linkValue'])
+      const params = {
+        ...realization,
+        concept: effective.state.name,
+      }
+      return {
+        apiFn: createRealization,
+        params,
+        tracker: { action, field: CONCEPT.FIELD.REALIZATIONS, index, update: item },
+      }
     }
-  }
 
-  const realizationAdd = update => {
-    const realization = pick(update, ['linkName', 'toConcept', 'linkValue'])
-    const params = {
-      ...realization,
-      concept: concept.name,
+    case REALIZATION.EDIT: {
+      const prior = effective.findRealization(item)
+      const updateDiff = diff(item, prior)
+      const realization = drop(updateDiff, ['action', 'stagedSeq', 'stateId'])
+      const params = [prior.id, realization]
+      return {
+        apiFn: updateRealization,
+        params,
+        tracker: { action, field: CONCEPT.FIELD.REALIZATIONS, index, update: item },
+      }
     }
-    return { apiFn: createRealization, params, action: REALIZATION.ADD }
+
+    case REALIZATION.DELETE: {
+      const prior = effective.findRealization(item)
+      const params = prior.id
+      return {
+        apiFn: deleteRealization,
+        params,
+        tracker: { action, field: CONCEPT.FIELD.REALIZATIONS, index, update: item },
+      }
+    }
+
+    default:
+      throw new Error(`Unknown realization action: ${action}`)
   }
-
-  const realizationEdit = update => {
-    const prior = initialRealizations.find(item => item.stateId === update.stateId)
-    const updateDiff = diff(update, prior)
-    const realization = drop(updateDiff, ['action'])
-    const params = [prior.id, realization]
-    return { apiFn: updateRealization, params, action: REALIZATION.EDIT }
-  }
-
-  const realizationDelete = update => {
-    const params = update.id
-    return { apiFn: deleteRealization, params, action: REALIZATION.DELETE }
-  }
-
-  const actionSubmitter = {
-    [REALIZATION.ADD]: realizationAdd,
-    [REALIZATION.EDIT]: realizationEdit,
-    [REALIZATION.DELETE]: realizationDelete,
-  }
-
-  const submitters = updatedValue(CONCEPT.FIELD.REALIZATIONS).reduce((acc, update, index) => {
-    const submitter = actionSubmitter[update.action]
-    if (!submitter) return acc
-    const { apiFn, params, action } = submitter(update, index)
-    const trackerInfo = { action, index, params, update }
-    acc.push(() => submitRealization(apiFn, trackerInfo))
-    return acc
-  }, [])
-
-  return submitters
 }
 
-export default submitRealizations
+export default buildRealizationSubmit

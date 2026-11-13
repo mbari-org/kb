@@ -2,53 +2,45 @@ import { use } from 'react'
 import { Box, Typography } from '@mui/material'
 
 import FieldValueDisplay from '@/components/common/FieldValueDisplay'
-import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
+import StagedItem from '@/components/kb/panels/concepts/concept/change/staged/StagedItem'
+import StagedItemReset from '@/components/kb/panels/concepts/concept/change/staged/reset/StagedItemReset'
 
 import { formatDelta } from '@/components/common/format'
 import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
-import { RESETTING } from '@/lib/constants'
-
-const StagedObject = ({ group, stagedEdit }) => {
+const StagedObject = ({ field, label, stagedEdit }) => {
   const { confirmReset } = use(ConceptStagedContext)
 
-  const [field, { initial, staged }] = stagedEdit
+  const [, { initial, staged }] = stagedEdit
 
-  const groupResetting = resettingGroup(confirmReset, group)
+  const resetting = resettingGroup(confirmReset, field)
 
-  const disabled = groupResetting === RESETTING.EXTENT.OTHER
+  const itemDetail = () => (
+    <Box>
+      {Object.keys(initial)
+        .filter(key => key !== 'action')
+        .map(key => {
+          if (initial[key] !== staged[key]) {
+            const deltaValue = formatDelta(initial[key], staged[key])
+            return <FieldValueDisplay key={key} field={key} value={deltaValue} />
+          }
+          return null
+        })}
+    </Box>
+  )
 
-  const GroupHeader = () => {
-    return (
-      <Typography sx={{ fontSize: '1.4rem', opacity: disabled ? 0.5 : 1 }}>{group}</Typography>
-    )
-  }
+  const itemHeader = () => <Typography>{label} Edit:</Typography>
 
-  const GroupBody = () => {
-    return (
-      <Box sx={{ ml: 3 }}>
-        {Object.keys(initial)
-          .filter(field => field !== 'action')
-          .map(field => {
-            if (initial[field] !== staged[field]) {
-              const deltaValue = formatDelta(initial[field], staged[field])
-              return <FieldValueDisplay key={field} field={field} value={deltaValue} />
-            }
-            return null
-          })}
-      </Box>
-    )
-  }
+  const itemReset = () => <StagedItemReset group={field} resetting={resetting} stagedItem={staged} />
 
   return (
-    <StagedGroup
-      group={field}
-      GroupBody={GroupBody}
-      GroupHeader={GroupHeader}
-      initial={initial}
-      resetting={groupResetting}
+    <StagedItem
+      ItemDetail={itemDetail}
+      ItemHeader={itemHeader}
+      ItemReset={itemReset}
+      resetting={resetting}
     />
   )
 }

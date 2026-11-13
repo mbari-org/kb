@@ -2,8 +2,6 @@ import { use, useCallback, useEffect, useState } from 'react'
 
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
-import { ACTION } from '@/lib/constants'
-import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
 const { CONCEPT, CONFIRM, PARENT } = PENDING.DATA
@@ -20,14 +18,7 @@ const useConceptPending = concept => {
   const conceptPendingHistory = (conceptName, pendingHistory) => {
     if (!conceptName || !pendingHistory) return []
 
-    const pendingConcept = pendingHistory.filter(historyItem => historyItem.concept === conceptName)
-    const childPending = pendingHistory.find(
-      historyItem =>
-        historyItem.action === ACTION.ADD &&
-        historyItem.field === HISTORY_FIELD.CHILD &&
-        historyItem.newValue === conceptName
-    )
-    return childPending ? [...pendingConcept, childPending] : pendingConcept
+    return pendingHistory.filter(historyItem => historyItem.concept === conceptName)
   }
 
   const parentPendingHistory = (parentName, pendingHistory) => {

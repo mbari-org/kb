@@ -25,7 +25,23 @@
     "CHANGE_NAME": "Change Name",
     "CHANGE_PARENT": "Change Parent",
     "ADD_CHILD": "Add Child",
-    "DELETE_CONCEPT": "Delete Concept"
+    "DELETE_CONCEPT": "Delete Concept",
+    "DISABLED": {
+      "ROOT": "Not available on the taxonomy root",
+      "HAS_CHILDREN": "Remove or reassign children before deleting",
+      "PENDING_ADD": "Not available while this concept has a pending add",
+      "PENDING_NAME": "Not available while a rename is pending",
+      "PENDING_PARENT": "Not available while a parent change is pending",
+      "PENDING_DELETE": "Not available while this concept has a pending delete",
+      "STAGED_NAME": "Reset the staged name change first",
+      "STAGED_PARENT": "Reset the staged parent change first",
+      "STAGED_CHILDREN": "Reset staged child changes first",
+      "STAGED_OTHER": "Discard or save staged edits first",
+      "STAGED_DELETE": "A concept delete is already in progress"
+    }
   },
-  "TO_SPECIAL": ["self", "nil"]
+  "TO_SPECIAL": [
+    "self",
+    "nil"
+  ]
 }

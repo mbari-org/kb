@@ -8,7 +8,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 const useProcessPendingDeps = () => {
   const { apiFns } = use(ConfigContext)
-  const { refreshData, reloadConceptRealizations } = use(PanelDataContext)
+  const { getReferences, refreshData, reloadConceptRealizations } = use(PanelDataContext)
   const { resetConceptPaths } = use(ConceptContext)
   const { concepts: conceptSelection, updateSelected } = use(SelectedContext)
   const { conceptEditsRefresh, getConcept, loadConcept } = use(TaxonomyContext)
@@ -18,6 +18,7 @@ const useProcessPendingDeps = () => {
       apiFns,
       conceptEditsRefresh,
       getConcept,
+      getReferences,
       loadConcept,
       refreshData,
       reloadConceptRealizations,
@@ -30,6 +31,7 @@ const useProcessPendingDeps = () => {
       conceptEditsRefresh,
       conceptSelection,
       getConcept,
+      getReferences,
       loadConcept,
       refreshData,
       reloadConceptRealizations,

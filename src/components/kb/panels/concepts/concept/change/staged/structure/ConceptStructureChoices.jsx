@@ -18,7 +18,16 @@ const { CONCEPT, PROCESSING } = CONFIG
 
 const ChangeStructureChoices = ({ closeChoices }) => {
   const [asyncError, setAsyncError] = useState(null)
-  const { disableDelete, disableChangeName, disableChangeParent, hasPendingAdd } = useStructureChoices()
+  const {
+    disableAddChild,
+    disableAddChildReason,
+    disableChangeName,
+    disableChangeNameReason,
+    disableChangeParent,
+    disableChangeParentReason,
+    disableDelete,
+    disableDeleteReason,
+  } = useStructureChoices()
   const { beginProcessing } = use(AppModalContext)
 
   const addChild = useAddChildModal()
@@ -80,20 +89,23 @@ const ChangeStructureChoices = ({ closeChoices }) => {
           <IoCloseSharp size={24} />
         </IconButton>
 
-        <Stack spacing={5} mt={3}>
+        <Stack spacing={5} sx={{ mt: 3 }}>
           <Stack spacing={2.5}>
             <StructureChoiceButton
               disabled={disableChangeName}
+              disabledReason={disableChangeNameReason}
               onClick={handleClick(changeName)}
               text={CONCEPT.STRUCTURE.CHANGE_NAME}
             />
             <StructureChoiceButton
               disabled={disableChangeParent}
+              disabledReason={disableChangeParentReason}
               onClick={handleClick(changeParent, PROCESSING.ARG.CONCEPT_DESCENDANTS)}
               text={CONCEPT.STRUCTURE.CHANGE_PARENT}
             />
             <StructureChoiceButton
-              disabled={hasPendingAdd}
+              disabled={disableAddChild}
+              disabledReason={disableAddChildReason}
               onClick={handleClick(addChild)}
               text={CONCEPT.STRUCTURE.ADD_CHILD}
             />
@@ -101,6 +113,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
           <StructureChoiceButton
             color='cancel'
             disabled={disableDelete}
+            disabledReason={disableDeleteReason}
             onClick={handleClick(deleteConcept, PROCESSING.ARG.CONCEPT_DEPENDENCIES)}
             text={CONCEPT.STRUCTURE.DELETE_CONCEPT}
           />

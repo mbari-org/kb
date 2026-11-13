@@ -10,16 +10,23 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdatePending'
 
 const processPendingApprovalMock = vi.fn()
+const relatedDataCountsMock = vi.fn()
+const performReassignmentsMock = vi.fn()
 
 vi.mock('@/lib/concept/pending/processPendingApproval', () => ({
   default: (...args) => processPendingApprovalMock(...args),
+}))
+
+vi.mock('@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts', () => ({
+  performReassignments: (...args) => performReassignmentsMock(...args),
+  relatedDataCounts: (...args) => relatedDataCountsMock(...args),
 }))
 
 const buildWrapper = ({ pendingHistory = [] }) => {
   const wrapper = ({ children }) => (
     <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
       <PanelDataContext.Provider
-        value={{ pendingHistory, refreshData: vi.fn(), reloadConceptRealizations: vi.fn() }}
+        value={{ getReferences: vi.fn(() => []), pendingHistory, refreshData: vi.fn(), reloadConceptRealizations: vi.fn() }}
       >
         <SelectedContext.Provider value={{ concepts: { removeName: vi.fn() }, updateSelected: vi.fn() }}>
           <TaxonomyContext.Provider
@@ -169,5 +176,59 @@ describe('useHistoryUpdatePending', () => {
         items: [addItem],
       })
     )
+  })
+
+  const renameItem = {
+    id: 'p7',
+    concept: 'dingo-2',
+    field: 'ConceptName',
+    action: 'Edit',
+    oldValue: 'dingo',
+    newValue: 'dingo-2',
+  }
+
+  it('reassigns related data after approving a rename with reassign extent', async () => {
+    const counts = [{ title: 'Annotations', value: 2 }]
+    relatedDataCountsMock.mockImplementation(async () => counts)
+
+    const { wrapper } = buildWrapper({})
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'approve', item: renameItem, nameChangeType: 'Reassign Related Data' })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(relatedDataCountsMock).toHaveBeenCalledWith(
+      expect.objectContaining({ concept: { name: 'dingo-2' }, renamedFrom: 'dingo' })
+    )
+    expect(performReassignmentsMock).toHaveBeenCalledWith('dingo', 'dingo-2', counts)
+  })
+
+  it('does not reassign related data when the rename approval extent is name only', async () => {
+    const { wrapper } = buildWrapper({})
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'approve', item: renameItem, nameChangeType: 'Name Only' })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(performReassignmentsMock).not.toHaveBeenCalled()
+  })
+
+  it('does not reassign related data when a rename is rejected', async () => {
+    const { wrapper } = buildWrapper({})
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'reject', item: renameItem, nameChangeType: 'Reassign Related Data' })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(performReassignmentsMock).not.toHaveBeenCalled()
   })
 })

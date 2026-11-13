@@ -1,45 +1,43 @@
 import { use } from 'react'
+import { Box, Typography } from '@mui/material'
 
-import StagedGroup from '@/components/kb/panels/concepts/concept/change/staged/StagedGroup'
+import StagedItem from '@/components/kb/panels/concepts/concept/change/staged/StagedItem'
+import StagedItemReset from '@/components/kb/panels/concepts/concept/change/staged/reset/StagedItemReset'
 
-import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import { formatDelta } from '@/components/common/format'
+import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
-import { RESETTING } from '@/lib/constants'
-
-import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/staged/reset'
-
-const StagedValue = ({ group, stagedEdit }) => {
+const StagedValue = ({ field, label, stagedEdit }) => {
   const { confirmReset } = use(ConceptStagedContext)
 
-  const [field, item] = stagedEdit
+  const [, item] = stagedEdit
 
-  const groupResetting = resettingGroup(confirmReset, group)
+  const resetting = resettingGroup(confirmReset, field)
 
-  const disabled = groupResetting === RESETTING.EXTENT.OTHER
+  const normalize = v => (v && typeof v === 'object' && 'value' in v ? v.value : v)
+  const deltaValue = formatDelta(normalize(item.initial), normalize(item.staged))
 
-  const GroupHeader = () => {
-    const { initial, staged } = item
+  const itemDetail = () => null
 
-    const normalize = v => (v && typeof v === 'object' && 'value' in v ? v.value : v)
-    const initialValue = normalize(initial)
-    const stagedValue = normalize(staged)
+  const itemHeader = () => (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Typography>{label} Edit:</Typography>
+      <Typography sx={{ fontWeight: 'bold' }}>{deltaValue}</Typography>
+    </Box>
+  )
 
-    const value = formatDelta(initialValue, stagedValue)
-    return <FieldValueDisplay disabled={disabled} field={field} value={value} />
-  }
-
-  const GroupBody = () => null
+  const itemReset = () => (
+    <StagedItemReset group={field} resetting={resetting} stagedItem={item.staged} />
+  )
 
   return (
-    <StagedGroup
-      group={field}
-      GroupBody={GroupBody}
-      GroupHeader={GroupHeader}
-      initial={item.initial}
-      resetting={groupResetting}
+    <StagedItem
+      ItemDetail={itemDetail}
+      ItemHeader={itemHeader}
+      ItemReset={itemReset}
+      resetting={resetting}
     />
   )
 }

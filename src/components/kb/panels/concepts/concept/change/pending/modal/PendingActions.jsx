@@ -4,6 +4,7 @@ import { createActions } from '@/components/modal/conceptModalFactory'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConceptUpdatePending'
@@ -20,6 +21,7 @@ const GROUP = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 const PendingActions = () => {
   const { concept, pending, setPendingConfirm } = use(ConceptContext)
   const { closeModal } = use(ConceptModalContext)
+  const { modalData } = use(ConceptModalDataContext)
 
   const { isAdmin } = use(UserContext)
 
@@ -100,7 +102,10 @@ const PendingActions = () => {
           break
 
         case CONFIRM: {
-          const isMorePending = await updatePending(pendingConfirm)
+          const isMorePending = await updatePending({
+            ...pendingConfirm,
+            nameChangeType: modalData?.nameChangeType,
+          })
           if (!isMorePending) {
             closeModal()
           }
@@ -119,7 +124,7 @@ const PendingActions = () => {
           break
       }
     },
-    [closeModal, pendingConfirm, pendingIds, setPendingConfirm, updatePending]
+    [closeModal, modalData, pendingConfirm, pendingIds, setPendingConfirm, updatePending]
   )
 
   return createActions({ colors, disabled, labels, onAction }, 'PendingActions')

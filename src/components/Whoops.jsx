@@ -200,7 +200,13 @@ const Whoops = ({ children }) => {
   }
 
   return (
-    <ErrorBoundary fallbackRender={renderWhoops} onReset={handleReset}>
+    <ErrorBoundary
+      fallbackRender={renderWhoops}
+      onReset={handleReset}
+      onError={(error, info) => {
+        error.stack = `${error.stack}\n\nComponent Stack:${info.componentStack}`
+      }}
+    >
       {children}
     </ErrorBoundary>
   )

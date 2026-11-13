@@ -6,7 +6,7 @@ import PendingValues from '@/components/kb/panels/concepts/concept/change/pendin
 
 import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
-import { pendingInfo } from '@/lib/model/history'
+import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
@@ -19,7 +19,7 @@ const PendingAliasItem = ({ item }) => {
 
   const pendingDetailTitle = (
     <Box>
-      <PendingItemTitle sx={aliasSx} action={item.action} title={title} />
+      <PendingItemTitle sx={aliasSx} action={`${pendingFieldLabel(item)} ${item.action}`} title={title} />
     </Box>
   )
 

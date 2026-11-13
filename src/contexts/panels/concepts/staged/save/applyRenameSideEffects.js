@@ -1,8 +1,13 @@
+import { performReassignments } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
+
 import { CONCEPT } from '@/lib/constants'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PREFS } from '@/lib/constants/prefs.js'
 
+import CONFIG from '@/lib/config'
+
 const { KEY } = PREFS.USER
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 
 const getNameUpdate = updatesInfo => {
   const updated = updatesInfo.updatedValue(CONCEPT.FIELD.NAME)
@@ -11,14 +16,6 @@ const getNameUpdate = updatesInfo => {
     extent: updated.extent,
     relatedDataCounts: updated.relatedDataCounts,
   }
-}
-
-const performReassignments = async (conceptName, newConceptName, relatedDataCounts) => {
-  const reassignmentPromises = relatedDataCounts
-    .filter(count => count.value > 0 && count.reassignFn)
-    .map(count => count.reassignFn({ old: conceptName, new: newConceptName }))
-
-  return Promise.all(reassignmentPromises)
 }
 
 const conceptPrefsUpdate = async (updatesContext, newConceptName) => {
@@ -55,12 +52,14 @@ const settingsUpdate = (updatesContext, staleName, newConceptName) => {
 }
 
 const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
-  const { value: newConceptName, relatedDataCounts } = getNameUpdate(updatesInfo)
+  const { value: newConceptName, extent, relatedDataCounts } = getNameUpdate(updatesInfo)
   const staleConcept = updatesContext.staleConcept
   const { renameConceptRealizations, renameRealizationToConceptNames, savePreferences, refreshPanelData } =
     updatesContext
 
-  await performReassignments(staleConcept.name, newConceptName, relatedDataCounts)
+  if (extent === REASSIGN) {
+    await performReassignments(staleConcept.name, newConceptName, relatedDataCounts)
+  }
 
   renameConceptRealizations(staleConcept.name, newConceptName)
   renameRealizationToConceptNames(staleConcept.name, newConceptName)

@@ -1,63 +1,11 @@
-import { useMemo } from 'react'
+import PendingItem from '@/components/kb/panels/concepts/concept/change/pending/PendingItem'
 
-import { Box, Typography } from '@mui/material'
-
-import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
-import PendingDetail from '@/components/kb/panels/concepts/concept/change/pending/PendingDetail'
-import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
-
-import { otherApprovalSx } from '@/components/common/format'
-
-import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
-
-import { pendingInfo } from '@/lib/model/history'
-
-import { ACTION, CONCEPT } from '@/lib/constants'
-import { PENDING } from '@/lib/constants/pending.js'
-import CONFIG from '@/lib/config'
-
-const { APPROVAL } = PENDING
+import { CONCEPT } from '@/lib/constants'
 
 const ChildDetail = ({ pendingChild }) => {
-  const approval = usePendingItemApproval(pendingChild)
+  const infoRows = pendingChild.parent ? [[CONCEPT.FIELD.PARENT, pendingChild.parent]] : []
 
-  const aliasSx = otherApprovalSx(approval)
-  const disabled = approval === APPROVAL.OTHER
-
-  const childName = useMemo(() => {
-    if (pendingChild.action === ACTION.ADD) {
-      return pendingChild.newValue
-    }
-    if (pendingChild.action === ACTION.DELETE) {
-      return pendingChild.oldValue
-    }
-    return ''
-  }, [pendingChild])
-
-  const childInfo = useMemo(() => {
-    const info = []
-    if (pendingChild.parent) {
-      info.push([CONCEPT.FIELD.PARENT, pendingChild.parent])
-    }
-    info.push(...pendingInfo(pendingChild))
-    return info
-  }, [pendingChild])
-
-  const pendingDetailTitle = (
-    <>
-      <PendingButtons approval={approval} group={CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.CHILDREN} item={pendingChild} />
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography sx={aliasSx}>{pendingChild.action}</Typography>
-        {childName !== pendingChild.concept && (
-          <Typography sx={{ ...aliasSx, fontWeight: 'bold' }}>: {childName}</Typography>
-        )}
-      </Box>
-    </>
-  )
-
-  const pendingDetailValues = <PendingValues pendingValues={childInfo} disabled={disabled} />
-
-  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
+  return <PendingItem infoRows={infoRows} item={pendingChild} />
 }
 
 export default ChildDetail

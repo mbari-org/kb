@@ -11,15 +11,13 @@ import HandIcon from '@/components/icon/HandIcon'
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { pendingIds } from '@/lib/model/history'
-
 import { PENDING } from '@/lib/constants/pending.js'
 
 const { ACCEPT, OTHER, REJECT } = PENDING.APPROVAL
 
-const PendingButtons = ({ approval, group, item }) => {
+const PendingButtons = ({ approval, item }) => {
   const { isAdmin } = use(UserContext)
-  const { pending, setPendingConfirm } = use(ConceptContext)
+  const { setPendingConfirm } = use(ConceptContext)
 
   const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
     if (!isAdmin) {
@@ -40,14 +38,12 @@ const PendingButtons = ({ approval, group, item }) => {
 
   const handleClick = useCallback(
     clicked => {
-      const pendingConcept = pending(PENDING.DATA.CONCEPT)
       setPendingConfirm({
         approval: clicked,
-        group,
-        pendingIds: item ? [item.id] : pendingIds(pendingConcept, group),
+        pendingIds: [item.id],
       })
     },
-    [group, pending, item, setPendingConfirm]
+    [item, setPendingConfirm]
   )
 
   const [acceptApproved, rejectApproved] = !approval

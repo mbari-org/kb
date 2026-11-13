@@ -95,6 +95,12 @@ file and function that implements it.
    `isModified(initial, staged)`, `stateUpdates(initial, staged)`, plus `edit*`/`reset*`
    handlers. Aggregated by `src/lib/concept/state/state.js` (`initialConceptState`,
    `isStateModified`) and `staged/edit/stateUpdates.js` (`stateUpdatesInfo`).
+   Every non-INITIAL result passes through `stampStagedEdits`
+   (`src/lib/concept/state/stagedSeq.js`), which assigns a monotonic `stagedSeq` to each
+   newly staged item (pending-decorated `'* Pending'` items excluded, so their presence
+   never trips `isModified`). The Staged modal (`staged/modal/StagedContent.jsx`) renders
+   one flat list of self-describing items (`Field Action: value`) sorted by `stagedSeq`;
+   per-item reset only, no group level. Submitters drop `stagedSeq` from API payloads.
 3. Reset-confirm flow: `useModifyConcept.js` intercepts reset actions into
    `confirmingDiscard`; the confirm UI (`StagedActions`) replays `CONFIRMED.YES` through
    `resetConceptState.js` (re-dispatch with `initialState` slices) or clears on
@@ -113,16 +119,26 @@ file and function that implements it.
 2. `useSaveStaged` (`src/contexts/panels/concepts/staged/save/useSaveStaged.js:32`) wraps
    everything in `withProcessing(PROCESSING.SAVE)`; dependencies gathered via
    `useUpdatesContext`.
-3. `submitStaged` (`submitStaged.js:14`) — computes `stateUpdatesInfo(initialState,
-   stagedState)`, then one `Promise.all` over the **8 submitters**: `submitAliases`,
-   `submitAuthor`, `submitChildren`, `submitMedia`, `submitName`, `submitParent`,
-   `submitRank`, `submitRealizations` (`staged/save/submitter/*`). Any `.error` results
-   are grouped by field and thrown as `createError('Concept Save Error', …)`. Note:
+3. `submitStaged` (`submitStaged.js`) — computes `stateUpdatesInfo(initialState,
+   stagedState)` for diff/display helpers, builds a chrono journal via
+   `buildStagedJournal` (`src/lib/concept/state/stagedJournal.js`) ordered by
+   `stagedSeq`, then replays each op with lazy per-field builders
+   (`staged/save/submitter/*`). Params are read from
+   `createEffectiveState(..., { applyImmediately: isAdmin })`
+   (`src/lib/concept/state/effectiveState.js`): after each successful op, NAME always
+   advances the server-effective name (ONI renames in place for every role; pending
+   is history/reassignment only). Other fields advance only for admin. Stops at the
+   first failure and reports completed / failed / skipped ops in
+   `createError('Concept Save Error', …)`. Note:
    `templates` is a staged field but has **no submitter** — template changes flow through
    the pending workflow instead.
 4. If the concept was renamed: `applyRenameSideEffects.js` — (a) `performReassignments`
    over `relatedDataCounts` entries with `value > 0` (each entry's `reassignFn({old,
-   new})`); (b) local realization-cache relabels (`renameConceptRealizations` re-keys
+   new})`), **only when the staged name extent is `REASSIGN`** — a non-admin creator
+   stages with extent `''` and an admin may pick `NAME_ONLY`, both deferring
+   reassignment of related data to the pending-approval step (§6), so the data keeps
+   referencing the old name while the rename is pending; (b) local realization-cache
+   relabels (`renameConceptRealizations` re-keys
    the concept's own items and rewrites their `concept` field;
    `renameRealizationToConceptNames` rewrites cached `toConcept` values — the server
    cascades both sides of a rename, so no realization refetch is needed); (c) prefs
@@ -147,6 +163,12 @@ file and function that implements it.
    pendingHistory)` → `setEditing(false)` → `updateSelected({concept})` → `closeModal()`.
 
 ## 6. Pending-history approval/rejection
+
+The Concepts pending modal (`pending/modal/PendingContent.jsx`) renders one flat list of
+pending items sorted by `creationTimestamp`, each with a self-describing title
+(`Field Action: value`, labels from `CONFIG.PANELS.CONCEPTS.MODALS.ITEM` via
+`pendingFieldLabel` in `src/lib/model/history.js`) and per-item approve/reject only — no
+group level. Approve/Reject All remain modal-level actions in `PendingActions.jsx`.
 
 1. Entry hooks: `useConceptUpdatePending`
    (`src/contexts/panels/concepts/pending/useConceptUpdatePending.js`) maps selected
@@ -192,6 +214,36 @@ file and function that implements it.
    pre-rename name) so the Concepts panel finds the optimistic concept after a rename
    is approved or rejected; `processPendingApproval` itself calls `updateSelected`
    with the new name when a rename changes `concept.name`.
+5. Rename extent: pending rename UI (`pending/concept/NameDetail.jsx` in the Concepts
+   pending modal, `history/pending/PendingNameItem.jsx` in the History panel) loads
+   related-data counts via `usePendingNameData` (`pending/usePendingNameData.js`) —
+   the rename was applied server-side when staged, so counts load with
+   `renamedFrom: oldValue`: name-string data (annotations, to-concept associations/
+   realizations/templates — entries flagged `byNameString`) still references the old
+   name and is counted by it, while concept-bound data (own realizations, defined
+   templates — flagged `conceptBound`) follows the in-place rename via FK and its
+   endpoints 404 on the pre-rename name, so those entries are skipped (they need no
+   reassignment decision and are excluded from `hasRelatedData`/display everywhere);
+   references are FK-bound too and counted locally by the new name. Admins see the
+   `NameChangeExtent` radio (default `REASSIGN`) and the counts only when
+   `hasRelatedData`; with no reassignable data the radio is hidden. The chosen extent
+   travels with the confirm (`nameChangeType` via `ConceptModalDataContext` for the
+   Concepts modal, via the shared panel modal data for History); on ACCEPT with
+   `REASSIGN` the entry hook reloads counts the same way and runs
+   `performReassignments(oldValue, newValue, counts)` after `processPendingApproval`
+   succeeds. `hasRelatedData` and `performReassignments` live in
+   `staged/name/relatedDataCounts.js`, shared with the staged Change Name modal.
+6. No frontend cascade around renames: ONI applies a rename in place when it is
+   staged, so approving the pending rename is a server-side no-op and rejecting
+   it (`ConceptNameService.inTxnRejectReplace`) only sets the ConceptName row
+   back to the old value — aliases, media, templates, and realizations are
+   separate entities and stay attached to the concept either way. Other pending
+   items for the concept therefore remain approvable in any order relative to
+   the rename (verified against ONI `HistoryActionService`), and the frontend
+   never cascade-rejects or reorders them. The only ordering constraints are the
+   Add-first/last and Delete-last rules above, which exist because ONI purges a
+   concept's remaining pending items on approved child-delete and rejected
+   child-add.
 
 ## 7. Preferences persistence
 

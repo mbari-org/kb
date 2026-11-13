@@ -3,15 +3,7 @@ import { Box, Stack } from '@mui/material'
 
 import ModalActionText from '@/components/common/ModalActionText'
 
-import AliasesDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/AliasesDetail'
-import ChildDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ChildDetail'
-import ChildrenDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ChildrenDetail'
-import MediaDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/MediaDetail'
-import NameDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/NameDetail'
-import ParentDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/ParentDetail'
-import RankDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RankDetail'
-import RealizationsDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/RealizationsDetail'
-import TemplatesDetail from '@/components/kb/panels/concepts/concept/change/pending/concept/TemplatesDetail'
+import PendingConceptItem from '@/components/kb/panels/concepts/concept/change/pending/concept/PendingConceptItem'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -42,19 +34,17 @@ const PendingContent = () => {
     return null
   }
 
+  const pendingItems = [...pendingConcept, ...(pendingChild ? [pendingChild] : [])].sort(
+    (a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp)
+  )
+
   return (
     <Stack direction='column' spacing={1}>
       <ModalActionText text={MODALS.PENDING.DESCRIPTION} />
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '60vh', overflowY: 'auto', pr: 1 }}>
-        {pendingChild && <ChildDetail pendingChild={pendingChild} />}
-        <AliasesDetail pendingConcept={pendingConcept} />
-        {!pendingChild && <ChildrenDetail pendingConcept={pendingConcept} />}
-        <MediaDetail pendingConcept={pendingConcept} />
-        <NameDetail pendingConcept={pendingConcept} />
-        <ParentDetail pendingConcept={pendingConcept} />
-        <RankDetail pendingConcept={pendingConcept} />
-        <RealizationsDetail pendingConcept={pendingConcept} />
-        <TemplatesDetail pendingConcept={pendingConcept} />
+        {pendingItems.map(item => (
+          <PendingConceptItem key={item.id} item={item} />
+        ))}
       </Box>
     </Stack>
   )

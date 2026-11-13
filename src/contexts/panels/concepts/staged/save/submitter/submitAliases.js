@@ -3,69 +3,57 @@ import { createAlias, deleteAlias, updateAlias } from '@/lib/api/aliases'
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const { ALIAS: ALIAS } = CONCEPT_STATE
-
 import { diff, drop, pick } from '@/lib/utils'
 
-const submitAliases = ([submit, { concept, updatesInfo }]) => {
-  const { hasUpdated, initialValue, updatedValue } = updatesInfo
+const { ALIAS } = CONCEPT_STATE
 
-  if (!hasUpdated(CONCEPT.FIELD.ALIASES)) {
-    return []
-  }
+const buildAliasSubmit = (op, effective) => {
+  const { action, index, item } = op
 
-  const initialAliases = initialValue(CONCEPT.FIELD.ALIASES)
-
-  const submitAlias = (apiFn, trackerInfo) =>
-    submit(apiFn, trackerInfo.params).then(response => ({
-      field: CONCEPT.FIELD.ALIASES,
-      response,
-      ...trackerInfo,
-    }))
-
-  const aliasAdd = update => {
-    const aliasUpdate = pick(update, ['author', 'nameType'])
-    const params = {
-      ...aliasUpdate,
-      name: concept.name,
-      newName: update.name,
+  switch (action) {
+    case ALIAS.ADD: {
+      const aliasUpdate = pick(item, ['author', 'nameType'])
+      const params = {
+        ...aliasUpdate,
+        name: effective.state.name,
+        newName: item.name,
+      }
+      return {
+        apiFn: createAlias,
+        params,
+        tracker: { action, field: CONCEPT.FIELD.ALIASES, index, update: item },
+      }
     }
-    return { apiFn: createAlias, params, action: ALIAS.ADD }
-  }
 
-  const aliasEdit = (update, index) => {
-    const prior = initialAliases[index]
-    const updateDiff = diff(update, prior)
-    const aliasUpdate = drop(updateDiff, ['action'])
-    if (aliasUpdate.name) {
-      aliasUpdate.newName = update.name
-      delete aliasUpdate.name
+    case ALIAS.EDIT: {
+      const prior = effective.findAlias(item)
+      const updateDiff = diff(item, prior)
+      const aliasUpdate = drop(updateDiff, ['action', 'index', 'stagedSeq'])
+      if (aliasUpdate.name) {
+        aliasUpdate.newName = item.name
+        delete aliasUpdate.name
+      }
+      const params = [prior.name, aliasUpdate]
+      return {
+        apiFn: updateAlias,
+        params,
+        tracker: { action, field: CONCEPT.FIELD.ALIASES, index, update: item },
+      }
     }
-    const params = [prior.name, aliasUpdate]
-    return { apiFn: updateAlias, params, action: ALIAS.EDIT }
+
+    case ALIAS.DELETE: {
+      const prior = effective.findAlias(item)
+      const params = prior.name
+      return {
+        apiFn: deleteAlias,
+        params,
+        tracker: { action, field: CONCEPT.FIELD.ALIASES, index, update: item },
+      }
+    }
+
+    default:
+      throw new Error(`Unknown alias action: ${action}`)
   }
-
-  const aliasDelete = update => {
-    const params = update.name
-    return { apiFn: deleteAlias, params, action: ALIAS.DELETE }
-  }
-
-  const actionSubmitter = {
-    [ALIAS.ADD]: aliasAdd,
-    [ALIAS.EDIT]: (u, i) => aliasEdit(u, i),
-    [ALIAS.DELETE]: aliasDelete,
-  }
-
-  const submitters = updatedValue(CONCEPT.FIELD.ALIASES).reduce((acc, update, index) => {
-    const submitter = actionSubmitter[update.action]
-    if (!submitter) return acc
-    const { apiFn, params, action } = submitter(update, index)
-    const trackerInfo = { action, index, params, update }
-    acc.push(() => submitAlias(apiFn, trackerInfo))
-    return acc
-  }, [])
-
-  return submitters
 }
 
-export default submitAliases
+export default buildAliasSubmit

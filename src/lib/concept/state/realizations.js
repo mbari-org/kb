@@ -68,6 +68,7 @@ const editRealization = ({ stagedState, update }) => {
     const updatedItem = {
       ...update.realizationItem,
       action: CONCEPT_STATE.REALIZATION.ADD,
+      stagedSeq: realizationItem.stagedSeq,
     }
     return {
       ...stagedState,

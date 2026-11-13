@@ -238,14 +238,14 @@ describe('conceptStateReducer', () => {
 
   describe('RESET', () => {
     it('ALIASES: resets aliases from update', () => {
-      const stagedState = { ...baseStagedState, aliases: [{ name: BUTTON.STAGED }] }
-      const update = { aliases: [{ name: 'Reset' }] }
+      const stagedState = { ...baseStagedState, aliases: [{ name: BUTTON.STAGED, action: 'None' }] }
+      const update = { aliases: [{ name: 'Reset', action: 'None' }] }
       const result = conceptStateReducer(stagedState, {
         type: RESET.ALIASES,
         update,
         initialState: baseStagedState,
       })
-      expect(result.aliases).toEqual([{ name: 'Reset', index: 0 }])
+      expect(result.aliases).toEqual([{ name: 'Reset', action: 'None', index: 0 }])
     })
 
     it('AUTHOR: resets author from update', () => {
@@ -278,25 +278,25 @@ describe('conceptStateReducer', () => {
     })
 
     it('CHILDREN: resets all children from update', () => {
-      const stagedState = { ...baseStagedState, children: [{ name: BUTTON.STAGED }] }
-      const update = { children: [{ name: 'Reset' }] }
+      const stagedState = { ...baseStagedState, children: [{ name: BUTTON.STAGED, action: 'None' }] }
+      const update = { children: [{ name: 'Reset', action: 'None' }] }
       const result = conceptStateReducer(stagedState, {
         type: RESET.CHILDREN,
         update,
         initialState: baseStagedState,
       })
-      expect(result.children).toEqual([{ name: 'Reset' }])
+      expect(result.children).toEqual([{ name: 'Reset', action: 'None' }])
     })
 
     it('MEDIA: resets media from update', () => {
-      const stagedState = { ...baseStagedState, media: [{ url: 'staged' }] }
-      const update = { media: [{ url: 'reset', stateId: 's1' }] }
+      const stagedState = { ...baseStagedState, media: [{ url: 'staged', action: 'None' }] }
+      const update = { media: [{ url: 'reset', stateId: 's1', action: 'None' }] }
       const result = conceptStateReducer(stagedState, {
         type: RESET.MEDIA,
         update,
         initialState: baseStagedState,
       })
-      expect(result.media).toEqual([{ url: 'reset', stateId: 's1' }])
+      expect(result.media).toEqual([{ url: 'reset', stateId: 's1', action: 'None' }])
     })
 
     it('NAME: resets name from update', () => {
@@ -333,20 +333,23 @@ describe('conceptStateReducer', () => {
     })
 
     it('REALIZATIONS: resets realizations from update', () => {
-      const stagedState = { ...baseStagedState, realizations: [{ linkName: 'Staged' }] }
-      const update = { realizations: [{ linkName: 'Reset' }] }
+      const stagedState = {
+        ...baseStagedState,
+        realizations: [{ linkName: 'Staged', action: 'None' }],
+      }
+      const update = { realizations: [{ linkName: 'Reset', action: 'None' }] }
       const result = conceptStateReducer(stagedState, {
         type: RESET.REALIZATIONS,
         update,
         initialState: baseStagedState,
       })
-      expect(result.realizations).toEqual([{ linkName: 'Reset' }])
+      expect(result.realizations).toEqual([{ linkName: 'Reset', action: 'None' }])
     })
   })
 
   describe('default', () => {
     it('returns stagedState unchanged for unknown action type', () => {
-      const stagedState = { ...baseStagedState, name: { value: 'Unchanged' } }
+      const stagedState = { ...baseStagedState, name: { action: 'None', value: 'Unchanged' } }
       const result = conceptStateReducer(stagedState, {
         type: 'UNKNOWN_ACTION',
         update: {},

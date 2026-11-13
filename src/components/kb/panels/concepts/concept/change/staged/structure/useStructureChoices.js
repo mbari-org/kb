@@ -1,6 +1,7 @@
 import { use, useMemo } from 'react'
 
 import { isStateModified } from '@/lib/concept/state/state'
+import { isStagedAction } from '@/lib/concept/state/staged'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
@@ -9,13 +10,18 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { hasPendingStructure, pendingChild } from '@/lib/model/history'
 
 import { ACTION } from '@/lib/constants'
+import { CONCEPT } from '@/lib/constants/concept.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
-const hasStagedStructure = (concept, stagedState) => {
-  const hasStagedChildren = stagedState.children.some(child => child.action !== ACTION.NONE)
-  const hasStagedDelete = stagedState.delete
-  const hasStagedName = stagedState.name.action !== ACTION.NONE
-  const hasStagedParent = stagedState.parent.action !== ACTION.NONE
+import CONFIG from '@/lib/config'
+
+const DISABLED = CONFIG.CONCEPT.STRUCTURE.DISABLED
+
+const hasStagedStructure = stagedState => {
+  const hasStagedChildren = stagedState.children.some(child => isStagedAction(child.action))
+  const hasStagedDelete = Boolean(stagedState[CONCEPT.FIELD.DELETE])
+  const hasStagedName = isStagedAction(stagedState.name.action)
+  const hasStagedParent = isStagedAction(stagedState.parent.action)
 
   return {
     hasStagedChildren,
@@ -25,6 +31,8 @@ const hasStagedStructure = (concept, stagedState) => {
   }
 }
 
+const firstReason = (...candidates) => candidates.find(Boolean) || null
+
 const useStructureChoices = () => {
   const { concept, initialState, pending } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
@@ -32,31 +40,56 @@ const useStructureChoices = () => {
 
   const pendingStructure = hasPendingStructure(pending, concept?.name)
 
-  const hasPendingAdd = pendingChild(pending(PENDING.DATA.PARENT), concept?.name)?.action === ACTION.ADD
+  const hasPendingAdd =
+    pendingChild(pending(PENDING.DATA.PARENT), concept?.name)?.action === ACTION.ADD
 
-  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = hasStagedStructure(
-    concept,
-    stagedState
-  )
+  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = hasStagedStructure(stagedState)
 
   const isRoot = isTaxonomyRoot(concept)
-
   const hasChildren = concept?.children?.length > 0
+  const hasOtherStagedEdits = isStateModified({ initialState, stagedState })
 
-  const disableDelete = useMemo(
-    () =>
-      isRoot ||
-      hasChildren ||
-      hasStagedChildren ||
-      hasStagedDelete ||
-      isStateModified({ initialState, stagedState }) ||
-      pendingStructure.any,
-    [hasChildren, hasStagedChildren, hasStagedDelete, initialState, isRoot, pendingStructure.any, stagedState]
+  const disableChangeNameReason = firstReason(
+    isRoot && DISABLED.ROOT,
+    hasPendingAdd && DISABLED.PENDING_ADD,
+    pendingStructure.name && DISABLED.PENDING_NAME,
+    hasStagedDelete && DISABLED.STAGED_DELETE,
+    hasStagedName && DISABLED.STAGED_NAME
   )
-  const disableChangeName =
-    isRoot || pendingStructure.name || hasStagedDelete || hasStagedName || hasStagedChildren
-  const disableChangeParent =
-    isRoot || pendingStructure.parent || hasStagedDelete || hasStagedParent || hasStagedChildren
+
+  const disableChangeParentReason = firstReason(
+    isRoot && DISABLED.ROOT,
+    hasPendingAdd && DISABLED.PENDING_ADD,
+    pendingStructure.parent && DISABLED.PENDING_DELETE,
+    pendingStructure.parentChange && DISABLED.PENDING_PARENT,
+    hasStagedDelete && DISABLED.STAGED_DELETE,
+    hasStagedParent && DISABLED.STAGED_PARENT,
+    hasStagedChildren && DISABLED.STAGED_CHILDREN
+  )
+
+  const disableAddChildReason = firstReason(hasPendingAdd && DISABLED.PENDING_ADD)
+
+  const disableDeleteReason = useMemo(
+    () =>
+      firstReason(
+        isRoot && DISABLED.ROOT,
+        hasPendingAdd && DISABLED.PENDING_ADD,
+        hasChildren && DISABLED.HAS_CHILDREN,
+        hasStagedChildren && DISABLED.STAGED_CHILDREN,
+        hasStagedDelete && DISABLED.STAGED_DELETE,
+        hasOtherStagedEdits && DISABLED.STAGED_OTHER,
+        pendingStructure.parent && DISABLED.PENDING_DELETE
+      ),
+    [
+      hasChildren,
+      hasOtherStagedEdits,
+      hasPendingAdd,
+      hasStagedChildren,
+      hasStagedDelete,
+      isRoot,
+      pendingStructure.parent,
+    ]
+  )
 
   return {
     hasPendingAdd,
@@ -64,9 +97,14 @@ const useStructureChoices = () => {
     hasStagedDelete,
     hasStagedName,
     hasStagedParent,
-    disableDelete,
-    disableChangeName,
-    disableChangeParent,
+    disableAddChild: Boolean(disableAddChildReason),
+    disableAddChildReason,
+    disableChangeName: Boolean(disableChangeNameReason),
+    disableChangeNameReason,
+    disableChangeParent: Boolean(disableChangeParentReason),
+    disableChangeParentReason,
+    disableDelete: Boolean(disableDeleteReason),
+    disableDeleteReason,
   }
 }
 

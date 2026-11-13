@@ -6,7 +6,10 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useProcessPendingDeps from '@/contexts/common/useProcessPendingDeps'
 
+import { performReassignments, relatedDataCounts } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
+
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
+import { isPendingName } from '@/lib/concept/state/name'
 import { PENDING } from '@/lib/constants/pending.js'
 
 import { isPendingAdd, isPendingDelete, moveAddToFirst, moveAddToLast, moveDeleteToLast } from '@/lib/model/history'
@@ -14,6 +17,7 @@ import { isPendingAdd, isPendingDelete, moveAddToFirst, moveAddToLast, moveDelet
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 
 const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
@@ -23,8 +27,8 @@ const useConceptUpdatePending = () => {
 
   return useCallback(
     async pendingConfirm => {
-      const { approval, pendingIds } = pendingConfirm
-      const { getConcept, updateSelected } = deps
+      const { approval, pendingIds, nameChangeType } = pendingConfirm
+      const { apiFns, getConcept, getReferences, updateSelected } = deps
 
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
       const pendingParent = pending(PENDING.DATA.PARENT)
@@ -53,6 +57,19 @@ const useConceptUpdatePending = () => {
 
           const result = await processPendingApproval({ approval, deps, items: orderedItems })
           const isMorePending = pendingConcept.length !== pendingItems.length
+
+          if (approval === PENDING.APPROVAL.ACCEPT && nameChangeType === REASSIGN) {
+            const renameItem = pendingItems.find(isPendingName)
+            if (renameItem) {
+              const counts = await relatedDataCounts({
+                apiFns,
+                concept: { name: renameItem.newValue },
+                getReferences,
+                renamedFrom: renameItem.oldValue,
+              })
+              await performReassignments(renameItem.oldValue, renameItem.newValue, counts)
+            }
+          }
 
           const { concepts, pendingHistory: updatedPendingHistory, removed, updated } = result
 

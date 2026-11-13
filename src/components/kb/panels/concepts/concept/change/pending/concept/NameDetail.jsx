@@ -1,36 +1,40 @@
 import { use, useEffect } from 'react'
 
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 
 import NameChangeExtent from '@/components/common/NameChangeExtent'
+import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
 import PendingButtons from '@/components/kb/panels/concepts/concept/change/pending/PendingButtons'
-import PendingGroup from '@/components/kb/panels/concepts/concept/change/pending/PendingGroup'
+import PendingDetail from '@/components/kb/panels/concepts/concept/change/pending/PendingDetail'
+import PendingItemTitle from '@/components/kb/panels/concepts/concept/change/pending/PendingItemTitle'
 import PendingValues from '@/components/kb/panels/concepts/concept/change/pending/PendingValues'
+import usePendingNameData from '@/components/kb/panels/concepts/concept/change/pending/usePendingNameData'
 
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import UserContext from '@/contexts/user/UserContext'
 
-import { otherApprovalSx } from '@/components/common/format'
+import { formatDelta, otherApprovalSx } from '@/components/common/format'
 
-import usePendingGroupApproval from '@/contexts/panels/concepts/pending/usePendingGroupApproval'
+import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
-import { formatDelta } from '@/components/common/format'
-import { isPendingName } from '@/lib/concept/state/name'
-import { pendingInfo } from '@/lib/model/history'
+import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
 const { APPROVAL } = PENDING
 const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
+const { REALIZATIONS, TEMPLATES_DEFINED } =
+  CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
 
-const NameDetail = ({ pendingConcept }) => {
+const NameDetail = ({ pendingName }) => {
   const { setModalData } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
   const { isAdmin } = use(UserContext)
 
-  const approval = usePendingGroupApproval(CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.NAME)
+  const approval = usePendingItemApproval(pendingName)
+  const nameData = usePendingNameData(pendingName)
 
   useEffect(() => {
     setModalData(prevData => ({
@@ -39,10 +43,8 @@ const NameDetail = ({ pendingConcept }) => {
     }))
   }, [setModalData])
 
-  const pendingName = pendingConcept.find(isPendingName)
-  if (!pendingName) {
-    return null
-  }
+  const nameSx = otherApprovalSx(approval)
+  const disabled = approval === APPROVAL.OTHER
 
   const nameChangeType = modalData?.nameChangeType
 
@@ -53,30 +55,34 @@ const NameDetail = ({ pendingConcept }) => {
     }))
   }
 
-  const nameSx = otherApprovalSx(approval)
+  const filteredCounts = nameData?.counts.filter(
+    count => count.title !== TEMPLATES_DEFINED && count.title !== REALIZATIONS
+  )
 
-  const nameDelta = formatDelta(pendingName.oldValue, pendingName.newValue)
-
-  const pendingGroupTitle = (
+  const pendingDetailTitle = (
     <>
-      <PendingButtons approval={approval} group={CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT.NAME} />
-      <Typography sx={nameSx}>Name: </Typography>
-      <Typography sx={{ ...nameSx, fontWeight: 'bold' }}>{nameDelta}</Typography>
+      <PendingButtons approval={approval} item={pendingName} />
+      <PendingItemTitle
+        sx={nameSx}
+        action={`${pendingFieldLabel(pendingName)} ${pendingName.action}`}
+        title={formatDelta(pendingName.oldValue, pendingName.newValue)}
+      />
     </>
   )
 
-  const pendingGroupDetail = (
+  const pendingDetailValues = (
     <>
-      <PendingValues disabled={approval === APPROVAL.OTHER} pendingValues={pendingInfo(pendingName)} />
-      {isAdmin && (
+      <PendingValues disabled={disabled} pendingValues={pendingInfo(pendingName)} />
+      {isAdmin && nameData?.hasRelatedData && (
         <Box sx={{ ml: 16 }}>
           <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
         </Box>
       )}
+      <RelatedDataCounts relatedDataCounts={filteredCounts} />
     </>
   )
 
-  return <PendingGroup pendingGroupTitle={pendingGroupTitle} pendingGroupDetail={pendingGroupDetail} />
+  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
 }
 
 export default NameDetail

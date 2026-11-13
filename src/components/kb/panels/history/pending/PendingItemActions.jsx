@@ -21,7 +21,7 @@ const HistoryPendingActions = props => {
 
   const updatePending = useHistoryUpdatePending()
 
-  const { item } = { ...modalData, ...props }
+  const { item, nameChangeType } = { ...modalData, ...props }
 
   const [pendingConfirm, setPendingConfirm] = useState(null)
 
@@ -68,7 +68,7 @@ const HistoryPendingActions = props => {
       case CONFIRM: {
         try {
           const stop = beginProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
-          await updatePending({ approval: pendingConfirm, item }).finally(stop)
+          await updatePending({ approval: pendingConfirm, item, nameChangeType }).finally(stop)
         } finally {
           closeModal(true)
         }

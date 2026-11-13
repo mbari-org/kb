@@ -2,6 +2,7 @@ import aliasAdd from '@/config/panels/concepts/modals/alias/add.json'
 import aliasDelete from '@/config/panels/concepts/modals/alias/delete.json'
 import aliasEdit from '@/config/panels/concepts/modals/alias/edit.json'
 import concept from '@/config/panels/concepts/modals/group.json'
+import item from '@/config/panels/concepts/modals/item.json'
 import mediaAdd from '@/config/panels/concepts/modals/media/add.json'
 import mediaDelete from '@/config/panels/concepts/modals/media/delete.json'
 import mediaEdit from '@/config/panels/concepts/modals/media/edit.json'
@@ -24,6 +25,7 @@ export const MODALS = {
     EDIT: aliasEdit,
   },
   CONCEPT: concept,
+  ITEM: item,
   MEDIA: {
     ADD: mediaAdd,
     DELETE: mediaDelete,
