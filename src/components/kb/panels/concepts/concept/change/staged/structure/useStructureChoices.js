@@ -17,10 +17,10 @@ import CONFIG from '@/lib/config'
 const DISABLED = CONFIG.CONCEPT.STRUCTURE.DISABLED
 
 const hasStagedStructure = stagedState => {
-  const hasStagedChildren = stagedState.children.some(child => isStagedAction(child.action))
+  const hasStagedChildren = stagedState.children.some(child => isStagedAction(child.action) && !child.historyId)
   const hasStagedDelete = Boolean(stagedState[CONCEPT.FIELD.DELETE])
-  const hasStagedName = isStagedAction(stagedState.name.action)
-  const hasStagedParent = isStagedAction(stagedState.parent.action)
+  const hasStagedName = isStagedAction(stagedState.name.action) && !stagedState.name.historyId
+  const hasStagedParent = isStagedAction(stagedState.parent.action) && !stagedState.parent.historyId
 
   return {
     hasStagedChildren,

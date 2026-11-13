@@ -40,51 +40,33 @@ const PendingActions = () => {
     return pendingChild && !ids.includes(pendingChild.id) ? [...ids, pendingChild.id] : ids
   }, [concept.name, pendingConcept, pendingConfirm, pendingParent])
 
-  const [disabled, labels] = useMemo(() => {
+  const [colors, disabled, labels] = useMemo(() => {
+    const actionColors = ['clean', 'main', 'cancel']
+
     if (!isAdmin) {
-      return [
-        [true, false, true],
-        [APPROVE_ALL, CLOSE, REJECT_ALL],
-      ]
+      return [['main'], [false], [CLOSE]]
     }
 
     if (!pendingConfirm) {
-      return [
-        [false, false, false],
-        [APPROVE_ALL, CLOSE, REJECT_ALL],
-      ]
+      return [actionColors, [false, false, false], [APPROVE_ALL, CLOSE, REJECT_ALL]]
     }
 
     if (pendingConfirm.approval === APPROVAL.ACCEPT && pendingConfirm.group === GROUP.ALL) {
-      return [
-        [false, false, true],
-        [CONFIRM, CLOSE, REJECT_ALL],
-      ]
+      return [actionColors, [false, false, true], [CONFIRM, CLOSE, REJECT_ALL]]
     }
 
     if (pendingConfirm.approval === APPROVAL.REJECT && pendingConfirm.group === GROUP.ALL) {
-      return [
-        [true, false, false],
-        [APPROVE_ALL, CLOSE, CONFIRM],
-      ]
+      return [actionColors, [true, false, false], [APPROVE_ALL, CLOSE, CONFIRM]]
     }
 
     if (pendingConfirm.approval === APPROVAL.ACCEPT) {
-      return [
-        [false, false, true],
-        [CONFIRM, CLOSE, REJECT],
-      ]
+      return [actionColors, [false, false, true], [CONFIRM, CLOSE, REJECT]]
     }
 
     if (pendingConfirm.approval === APPROVAL.REJECT) {
-      return [
-        [true, false, false],
-        [APPROVE, CLOSE, CONFIRM],
-      ]
+      return [actionColors, [true, false, false], [APPROVE, CLOSE, CONFIRM]]
     }
   }, [isAdmin, pendingConfirm])
-
-  const colors = ['clean', 'main', 'cancel']
 
   const onAction = useCallback(
     async label => {

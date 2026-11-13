@@ -45,9 +45,8 @@ describe('Concept panel with pending history', () => {
 
     const edit = screen.getByRole('button', { name: BUTTON.EDIT })
     const pending = screen.getByRole('button', { name: BUTTON.PENDING })
-    const save = screen.getByRole('button', { name: BUTTON.SAVE })
+    expect(screen.queryByRole('button', { name: BUTTON.SAVE })).not.toBeInTheDocument()
     expect(edit.compareDocumentPosition(pending) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(pending.compareDocumentPosition(save) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
 
     await user.click(pending)
     expect(screen.getByText(CONFIG.PANELS.CONCEPTS.MODALS.PENDING.DESCRIPTION)).toBeInTheDocument()

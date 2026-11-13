@@ -67,11 +67,11 @@ const ConceptEditingActions = () => {
     displayStaged(STAGED)
   }, [modifyConcept, displayStaged])
 
-  const showPendingButton = !isEditing && hasPendingDelete
-  const showOtherPendingButton =
+  const showPendingButton =
     !isEditing &&
-    !hasPendingDelete &&
-    (pending(PENDING.DATA.CONCEPT).length > 0 || pendingChild(pending(PENDING.DATA.PARENT), concept.name))
+    (hasPendingDelete ||
+      pending(PENDING.DATA.CONCEPT).length > 0 ||
+      pendingChild(pending(PENDING.DATA.PARENT), concept.name))
 
   return (
     <Box
@@ -79,37 +79,37 @@ const ConceptEditingActions = () => {
         alignItems: 'center',
         bottom: 70,
         display: 'flex',
-        justifyContent: 'space-between',
         left: 10,
         position: 'absolute',
         right: 15,
       }}
     >
-      {showPendingButton && (
-        <Button color='main' onClick={handlePending} variant='contained'>
-          {PENDING_ACTION}
-        </Button>
-      )}
-      {!showPendingButton && !isReadOnly && (
-        <Button color={isEditing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
-          {editCancelDiscardButtonText}
-        </Button>
-      )}
-      {showOtherPendingButton && (
-        <Button color='main' onClick={handlePending} sx={{ margin: '0 10px' }} variant='contained'>
-          {PENDING_ACTION}
-        </Button>
-      )}
-      {isEditing && isModified && (
-        <Button disabled={isReadOnly} onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
-          {STAGED}
-        </Button>
-      )}
-      {!isReadOnly && (
-        <Button disabled={isReadOnly || !isEditing || !isModified} onClick={handleSave} variant='contained'>
-          {SAVE}
-        </Button>
-      )}
+      <Box sx={{ flex: 1 }}>
+        {!isReadOnly && (isEditing || !hasPendingDelete) && (
+          <Button color={isEditing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
+            {editCancelDiscardButtonText}
+          </Button>
+        )}
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        {showPendingButton && (
+          <Button color='main' onClick={handlePending} sx={{ margin: '0 10px' }} variant='contained'>
+            {PENDING_ACTION}
+          </Button>
+        )}
+        {isEditing && isModified && (
+          <Button disabled={isReadOnly} onClick={handleStaged} sx={{ margin: '0 10px' }} variant='contained'>
+            {STAGED}
+          </Button>
+        )}
+      </Box>
+      <Box sx={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+        {!isReadOnly && isEditing && isModified && (
+          <Button onClick={handleSave} variant='contained'>
+            {SAVE}
+          </Button>
+        )}
+      </Box>
     </Box>
   )
 }

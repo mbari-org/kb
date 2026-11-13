@@ -165,6 +165,33 @@ describe('useStructureChoices', () => {
     expect(result.current.disableChangeParent).toBe(false)
   })
 
+  it('does not treat pending-decorated children as staged child changes', () => {
+    const concept = { name: 'dingo', children: ['pup'] }
+    const stagedState = {
+      ...baseStaged,
+      children: [{ action: 'Add Pending', historyId: 'h1', index: 0, name: 'pup' }],
+    }
+    const pendingMap = {
+      [PENDING.DATA.CONCEPT]: [
+        {
+          action: ACTION.ADD,
+          concept: 'dingo',
+          field: HISTORY_FIELD.CHILD,
+          newValue: 'pup',
+        },
+      ],
+      [PENDING.DATA.PARENT]: [],
+    }
+
+    const { result } = renderHook(() => useStructureChoices(), {
+      wrapper: wrapperFor({ concept, pendingMap, stagedState }),
+    })
+
+    expect(result.current.hasStagedChildren).toBe(false)
+    expect(result.current.disableChangeParent).toBe(false)
+    expect(result.current.disableChangeName).toBe(false)
+  })
+
   it('allows change name when the concept has non-rename pending items', () => {
     const concept = { name: 'dingo', children: [] }
     const pendingMap = {
