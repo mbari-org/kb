@@ -186,7 +186,7 @@ describe('useStructureChoices', () => {
     expect(result.current.disableChangeName).toBe(false)
   })
 
-  it('disables delete when other staged edits exist (G3)', () => {
+  it('allows delete with staged edits, which are discarded by the delete action', () => {
     const concept = { name: 'dingo', children: [] }
     const stagedState = {
       ...baseStaged,
@@ -201,7 +201,24 @@ describe('useStructureChoices', () => {
       wrapper: wrapperFor({ concept, pendingMap, stagedState }),
     })
 
-    expect(result.current.disableDelete).toBe(true)
-    expect(result.current.disableDeleteReason).toBe(DISABLED.STAGED_OTHER)
+    expect(result.current.disableDelete).toBe(false)
+  })
+
+  it('allows delete with staged child edits', () => {
+    const concept = { name: 'dingo', children: [] }
+    const stagedState = {
+      ...baseStaged,
+      children: [{ action: CONCEPT_STATE.CHILD.ADD, name: 'pup' }],
+    }
+    const pendingMap = {
+      [PENDING.DATA.CONCEPT]: [],
+      [PENDING.DATA.PARENT]: [],
+    }
+
+    const { result } = renderHook(() => useStructureChoices(), {
+      wrapper: wrapperFor({ concept, pendingMap, stagedState }),
+    })
+
+    expect(result.current.disableDelete).toBe(false)
   })
 })

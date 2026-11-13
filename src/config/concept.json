@@ -36,7 +36,6 @@
       "STAGED_NAME": "Reset the staged name change first",
       "STAGED_PARENT": "Reset the staged parent change first",
       "STAGED_CHILDREN": "Reset staged child changes first",
-      "STAGED_OTHER": "Discard or save staged edits first",
       "STAGED_DELETE": "A concept delete is already in progress"
     }
   },

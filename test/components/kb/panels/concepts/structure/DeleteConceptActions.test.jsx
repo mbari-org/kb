@@ -12,6 +12,7 @@ import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPend
 
 import { deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
@@ -69,6 +70,8 @@ describe('DeleteConceptActions', () => {
 
   it('runs the delete flow through withProcessing when Confirm is clicked', async () => {
     const concept = { name: 'doomed', parent: 'root' }
+    const initialState = { name: { action: 'None', value: 'doomed' } }
+    const modifyConcept = vi.fn()
     const updatedTaxonomy = { conceptMap: {}, aliasMap: {} }
     const closestConcept = { name: 'sibling' }
 
@@ -93,8 +96,8 @@ describe('DeleteConceptActions', () => {
     render(
       <ThemeProvider theme={kbTheme}>
         <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
-          <ConceptContext.Provider value={{ concept, pending: () => [] }}>
-            <ConceptStagedContext.Provider value={{ confirmReset: null }}>
+          <ConceptContext.Provider value={{ concept, initialState, pending: () => [] }}>
+            <ConceptStagedContext.Provider value={{ confirmReset: null, modifyConcept }}>
               <ConceptModalContext.Provider value={{ closeModal, setModalData: vi.fn(), withProcessing }}>
                 <ConceptModalDataContext.Provider
                   value={{ modalData: { alertType: 'delete', isValid: true, reassign: null, relatedDataCounts: [] } }}
@@ -139,6 +142,7 @@ describe('DeleteConceptActions', () => {
 
     expect(withProcessing).toHaveBeenCalledWith(expect.any(Function), PROCESSING.DELETE, PROCESSING.ARG.CONCEPT)
     expect(deleteTaxonomyConceptMock).toHaveBeenCalled()
+    expect(modifyConcept).toHaveBeenCalledWith({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
     expect(closeModal).toHaveBeenCalledWith(true, expect.any(Function))
     expect(removeName).toHaveBeenCalledWith('doomed')
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'sibling' })
@@ -168,7 +172,7 @@ describe('DeleteConceptActions', () => {
 
       return (
         <ConceptContext.Provider value={{ concept, initialState: null, isEditing, pending, setEditing, setPendingConfirm }}>
-          <ConceptStagedContext.Provider value={{ confirmReset: null }}>
+          <ConceptStagedContext.Provider value={{ confirmReset: null, modifyConcept: vi.fn() }}>
             <div data-testid='editing-actions'>
               <ConceptEditingActions />
             </div>

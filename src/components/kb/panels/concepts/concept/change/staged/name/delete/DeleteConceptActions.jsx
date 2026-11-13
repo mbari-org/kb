@@ -4,6 +4,7 @@ import { createActions } from '@/components/modal/conceptModalFactory'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -23,6 +24,7 @@ import {
 } from '@/lib/model/taxonomy'
 
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import CONFIG from '@/lib/config'
 
@@ -31,7 +33,8 @@ const { CANCEL, CONFIRM, DELETE, DISCARD } = CONFIG.BUTTON
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept, setEditing } = use(ConceptContext)
+  const { concept, initialState, setEditing } = use(ConceptContext)
+  const { modifyConcept } = use(ConceptStagedContext)
   const { closeModal, setModalData, withProcessing } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
   const {
@@ -86,6 +89,7 @@ const DeleteConceptActions = () => {
             async () => {
               await apiFns.apiPayload(apiDeleteConcept, concept.name)
               await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
+              modifyConcept({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
               setEditing(false)
               closeModal(true)
             },
@@ -142,6 +146,7 @@ const DeleteConceptActions = () => {
 
             updateTaxonomy(updatedTaxonomy)
 
+            modifyConcept({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
             closeModal(true, () => {
               conceptSelection.removeName(concept.name)
               updateSelected({ concept: closestConcept.name })

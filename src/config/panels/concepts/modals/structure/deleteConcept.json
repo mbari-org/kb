@@ -1,5 +1,6 @@
 {
   "DELETE_CONCEPT": "Delete Concept",
+  "DISCARDS_STAGED": "Any staged edits will be discarded.",
   "ERROR_MESSAGE": "Please select a valid concept to reassign Concept related data",
   "LABEL": "DELETE CONCEPT",
   "MUST_REASSIGN": "Related data must be reassigned to another concept.",

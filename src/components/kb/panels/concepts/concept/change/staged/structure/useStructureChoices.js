@@ -1,6 +1,5 @@
 import { use, useMemo } from 'react'
 
-import { isStateModified } from '@/lib/concept/state/state'
 import { isStagedAction } from '@/lib/concept/state/staged'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -34,7 +33,7 @@ const hasStagedStructure = stagedState => {
 const firstReason = (...candidates) => candidates.find(Boolean) || null
 
 const useStructureChoices = () => {
-  const { concept, initialState, pending } = use(ConceptContext)
+  const { concept, pending } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
@@ -47,7 +46,6 @@ const useStructureChoices = () => {
 
   const isRoot = isTaxonomyRoot(concept)
   const hasChildren = concept?.children?.length > 0
-  const hasOtherStagedEdits = isStateModified({ initialState, stagedState })
 
   const disableChangeNameReason = firstReason(
     isRoot && DISABLED.ROOT,
@@ -75,20 +73,10 @@ const useStructureChoices = () => {
         isRoot && DISABLED.ROOT,
         hasPendingAdd && DISABLED.PENDING_ADD,
         hasChildren && DISABLED.HAS_CHILDREN,
-        hasStagedChildren && DISABLED.STAGED_CHILDREN,
         hasStagedDelete && DISABLED.STAGED_DELETE,
-        hasOtherStagedEdits && DISABLED.STAGED_OTHER,
         pendingStructure.parent && DISABLED.PENDING_DELETE
       ),
-    [
-      hasChildren,
-      hasOtherStagedEdits,
-      hasPendingAdd,
-      hasStagedChildren,
-      hasStagedDelete,
-      isRoot,
-      pendingStructure.parent,
-    ]
+    [hasChildren, hasPendingAdd, hasStagedDelete, isRoot, pendingStructure.parent]
   )
 
   return {

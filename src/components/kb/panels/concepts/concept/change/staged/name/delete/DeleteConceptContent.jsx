@@ -9,17 +9,21 @@ import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/stag
 import { validateConceptInput } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
+import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
+
+import { isStateModified } from '@/lib/concept/state/state'
 
 import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
 
 const DeleteConceptContent = () => {
-  const { concept } = use(ConceptContext)
+  const { concept, initialState } = use(ConceptContext)
+  const { stagedState } = use(ConceptStagedContext)
   const { setModalData } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
   const { getNames } = use(TaxonomyContext)
@@ -30,6 +34,7 @@ const DeleteConceptContent = () => {
 
   const { relatedDataCounts, isLoading } = modalData
   const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
+  const hasStagedEdits = isStateModified({ initialState, stagedState })
 
   const validateInput = useCallback(
     input => validateConceptInput(input, getNames(), [concept.name]),
@@ -66,6 +71,7 @@ const DeleteConceptContent = () => {
       {!modalData.isLoading && hasRelatedData && (
         <Typography align='center'>{MODALS.STRUCTURE.DELETE_CONCEPT.MUST_REASSIGN}</Typography>
       )}
+      {hasStagedEdits && <Typography align='center'>{MODALS.STRUCTURE.DELETE_CONCEPT.DISCARDS_STAGED}</Typography>}
 
       {isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData.isLoading && hasRelatedData && <RelatedDataCounts relatedDataCounts={relatedDataCounts} />}
