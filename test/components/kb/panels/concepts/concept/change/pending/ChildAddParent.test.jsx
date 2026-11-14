@@ -1,12 +1,19 @@
 import { render, screen } from '@testing-library/react'
+import { ThemeProvider } from '@mui/material/styles'
 import { describe, expect, it, vi } from 'vitest'
 
 import PendingContent from '@/components/kb/panels/concepts/concept/change/pending/modal/PendingContent'
 import PendingChildItem from '@/components/kb/panels/history/pending/PendingChildItem'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import UserContext from '@/contexts/user/UserContext'
 import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
+import kbTheme from '@/lib/theme'
+
+vi.mock('@/components/kb/panels/concepts/concept/change/pending/usePendingNameData', () => ({
+  default: () => null,
+}))
 
 const childAdd = {
   id: 'child-add',
@@ -50,5 +57,51 @@ describe('pending child additions', () => {
     render(<PendingChildItem item={{ ...childAdd, action: ACTION.DELETE, oldValue: 'child-concept' }} />)
 
     expect(screen.queryByText('Parent:')).not.toBeInTheDocument()
+  })
+})
+
+describe('pending detail alignment', () => {
+  it.each([
+    ['child addition', childAdd],
+    ['name change', {
+      id: 'rename',
+      concept: 'new-name',
+      field: HISTORY_FIELD.NAME,
+      action: ACTION.EDIT,
+      oldValue: 'old-name',
+      newValue: 'new-name',
+      creationTimestamp: '2026-11-12T16:24:30Z',
+    }],
+  ])('keeps %s details aligned with the title when approval buttons are hidden', (_description, item) => {
+    const pending = key => {
+      if (key === PENDING.DATA.CONCEPT) return [item]
+      if (key === PENDING.DATA.PARENT) return []
+      return null
+    }
+    const content = isAdmin => (
+      <ThemeProvider theme={kbTheme}>
+        <UserContext.Provider value={{ isAdmin }}>
+          <ConceptModalContext.Provider value={{ setModal: vi.fn(), setModalData: vi.fn() }}>
+            <ConceptModalDataContext.Provider value={{ modalData: {} }}>
+              <ConceptContext.Provider value={{ concept: { name: item.concept, parent: 'root' }, pending }}>
+                <PendingContent />
+              </ConceptContext.Provider>
+            </ConceptModalDataContext.Provider>
+          </ConceptModalContext.Provider>
+        </UserContext.Provider>
+      </ThemeProvider>
+    )
+    const { rerender } = render(content(true))
+    const title = screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Name Edit:')
+    const values = screen.getByText('Creator:').parentElement.parentElement
+    expect(screen.getAllByRole('button')).toHaveLength(2)
+    expect(values.parentElement).toBe(title.parentElement.parentElement)
+    expect(values).toHaveStyle({ marginLeft: '16.8px' })
+
+    rerender(content(false))
+    expect(screen.queryAllByRole('button')).toHaveLength(0)
+    expect(screen.getByText('Creator:').parentElement.parentElement.parentElement).toBe(
+      screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Name Edit:').parentElement.parentElement
+    )
   })
 })

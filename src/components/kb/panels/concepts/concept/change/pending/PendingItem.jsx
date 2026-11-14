@@ -22,15 +22,17 @@ const PendingItem = ({ infoRows = [], item }) => {
   const disabled = approval === APPROVAL.OTHER
 
   const pendingDetailTitle = (
-    <>
-      <PendingButtons approval={approval} item={item} />
-      <PendingItemTitle sx={itemSx} action={`${pendingFieldLabel(item)} ${item.action}`} title={pendingActionValue(item)} />
-    </>
+    <PendingItemTitle sx={itemSx} action={`${pendingFieldLabel(item)} ${item.action}`} title={pendingActionValue(item)} />
   )
+  const pendingDetailValues = <PendingValues disabled={disabled} leftMargin={2.1} pendingValues={[...infoRows, ...pendingInfo(item)]} />
 
-  const pendingDetailValues = <PendingValues pendingValues={[...infoRows, ...pendingInfo(item)]} disabled={disabled} />
-
-  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
+  return (
+    <PendingDetail
+      pendingDetailButtons={<PendingButtons approval={approval} item={item} />}
+      pendingDetailTitle={pendingDetailTitle}
+      pendingDetailValues={pendingDetailValues}
+    />
+  )
 }
 
 export default PendingItem

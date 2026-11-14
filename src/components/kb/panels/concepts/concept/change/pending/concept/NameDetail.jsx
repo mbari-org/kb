@@ -60,19 +60,15 @@ const NameDetail = ({ pendingName }) => {
   )
 
   const pendingDetailTitle = (
-    <>
-      <PendingButtons approval={approval} item={pendingName} />
-      <PendingItemTitle
-        sx={nameSx}
-        action={`${pendingFieldLabel(pendingName)} ${pendingName.action}`}
-        title={formatDelta(pendingName.oldValue, pendingName.newValue)}
-      />
-    </>
+    <PendingItemTitle
+      sx={nameSx}
+      action={`${pendingFieldLabel(pendingName)} ${pendingName.action}`}
+      title={formatDelta(pendingName.oldValue, pendingName.newValue)}
+    />
   )
 
-  const pendingDetailValues = (
+  const pendingDetailExtras = (
     <>
-      <PendingValues disabled={disabled} pendingValues={pendingInfo(pendingName)} />
       {isAdmin && nameData?.hasRelatedData && (
         <Box sx={{ ml: 16 }}>
           <NameChangeExtent nameChangeType={nameChangeType} onChange={handleNameChangeType} />
@@ -82,7 +78,14 @@ const NameDetail = ({ pendingName }) => {
     </>
   )
 
-  return <PendingDetail pendingDetailTitle={pendingDetailTitle} pendingDetailValues={pendingDetailValues} />
+  return (
+    <PendingDetail
+      pendingDetailButtons={<PendingButtons approval={approval} item={pendingName} />}
+      pendingDetailExtras={pendingDetailExtras}
+      pendingDetailTitle={pendingDetailTitle}
+      pendingDetailValues={<PendingValues disabled={disabled} leftMargin={2.1} pendingValues={pendingInfo(pendingName)} />}
+    />
+  )
 }
 
 export default NameDetail
