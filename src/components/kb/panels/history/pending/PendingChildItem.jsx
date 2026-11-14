@@ -8,6 +8,7 @@ import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
 import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
 
+import { ACTION, CONCEPT } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
 
 const { APPROVAL } = PENDING
@@ -23,7 +24,14 @@ const PendingChildItem = ({ item }) => {
   )
 
   const pendingDetailValues = (
-    <PendingValues disabled={false} leftMargin={6} pendingValues={pendingInfo(item)} />
+    <PendingValues
+      disabled={false}
+      leftMargin={6}
+      pendingValues={[
+        ...(item.action === ACTION.ADD ? [[CONCEPT.FIELD.PARENT, item.concept]] : []),
+        ...pendingInfo(item),
+      ]}
+    />
   )
 
   return (

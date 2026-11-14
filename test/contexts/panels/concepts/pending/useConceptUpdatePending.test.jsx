@@ -34,7 +34,7 @@ describe('useConceptUpdatePending', () => {
     vi.clearAllMocks()
   })
 
-  const buildWrapper = ({ closestConcept = vi.fn(), conceptEditsRefresh, getConcept, pendingHistory = [], pendingItems, parentPendingItems = [], refreshData, setConcept, updateSelected, withProcessing }) => {
+  const buildWrapper = ({ closestConcept = vi.fn(), conceptEditsRefresh, getConcept, isDescendant = vi.fn(() => false), pendingHistory = [], pendingItems, parentPendingItems = [], refreshData, setConcept, updateSelected, withProcessing }) => {
     const staleConcept = { name: 'pending-concept', parent: 'root' }
     const pending = vi.fn(key => {
       if (key === PENDING.DATA.CONCEPT) return pendingItems
@@ -46,7 +46,7 @@ describe('useConceptUpdatePending', () => {
       <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
         <PanelDataContext.Provider value={{ pendingHistory, refreshData }}>
           <SelectedContext.Provider value={{ concepts: { removeName: vi.fn() }, updateSelected }}>
-            <TaxonomyContext.Provider value={{ closestConcept, conceptEditsRefresh, getConcept, loadConcept: vi.fn() }}>
+            <TaxonomyContext.Provider value={{ closestConcept, conceptEditsRefresh, getConcept, isDescendant, loadConcept: vi.fn() }}>
               <ConceptModalContext.Provider value={{ withProcessing }}>
                 <ConceptContext.Provider value={{ concept: staleConcept, pending, setConcept }}>
                   {children}
@@ -196,7 +196,7 @@ describe('useConceptUpdatePending', () => {
     )
     expect(setConcept).not.toHaveBeenCalled()
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
-    expect(remaining).toBe(true)
+    expect(remaining).toBe(false)
   })
 
   it('approves a delete without acting on the concept\'s other pending items', async () => {
@@ -248,7 +248,7 @@ describe('useConceptUpdatePending', () => {
       })
     )
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
-    expect(remaining).toBe(true)
+    expect(remaining).toBe(false)
   })
 
   it('approves all items with the delete approved last', async () => {
@@ -391,7 +391,7 @@ describe('useConceptUpdatePending', () => {
     )
   })
 
-  it('rejects all items with the concept add rejected last', async () => {
+  it('rejects only the pending add, leaving the concept\'s other pending items for ONI to purge', async () => {
     const addItem = { id: 'p0', concept: 'root', field: 'Concept.child', action: 'Add', newValue: 'pending-concept' }
     const mediaItem = { id: 'p1', concept: 'pending-concept', field: 'Media', action: 'Edit' }
     const rankItem = { id: 'p2', concept: 'pending-concept', field: 'Rank', action: 'Edit' }
@@ -426,9 +426,71 @@ describe('useConceptUpdatePending', () => {
     expect(processPendingApprovalMock).toHaveBeenCalledWith(
       expect.objectContaining({
         approval: 'reject',
-        items: [rankItem, mediaItem, addItem],
+        items: [addItem],
       })
     )
+  })
+
+  it('rejects only the highest add when pending adds are chained, letting ONI purge the branch', async () => {
+    const formatAdd = { id: 'p0', concept: 'data file', field: 'Concept.child', action: 'Add', newValue: 'format' }
+    const imageAdd = { id: 'p1', concept: 'format', field: 'Concept.child', action: 'Add', newValue: 'image' }
+    const imageMedia = { id: 'p2', concept: 'image', field: 'Media', action: 'Add' }
+
+    const removeName = vi.fn()
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: ['format'],
+      updated: ['data file'],
+    }))
+
+    const staleConcept = { name: 'format', parent: 'data file' }
+    const pending = vi.fn(key => {
+      if (key === PENDING.DATA.CONCEPT) return [imageAdd, imageMedia]
+      if (key === PENDING.DATA.PARENT) return [formatAdd]
+      return []
+    })
+
+    const wrapper = ({ children }) => (
+      <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
+        <PanelDataContext.Provider value={{ pendingHistory: [], refreshData: vi.fn() }}>
+          <SelectedContext.Provider value={{ concepts: { removeName }, updateSelected: vi.fn() }}>
+            <TaxonomyContext.Provider
+              value={{
+                closestConcept: vi.fn(() => ({ name: 'data file' })),
+                conceptEditsRefresh: vi.fn(),
+                getConcept: vi.fn(() => null),
+                isDescendant: vi.fn((root, name) => root === 'format' && name === 'image'),
+                loadConcept: vi.fn(),
+              }}
+            >
+              <ConceptModalContext.Provider value={{ withProcessing }}>
+                <ConceptContext.Provider value={{ concept: staleConcept, pending, setConcept: vi.fn(async () => {}) }}>
+                  {children}
+                </ConceptContext.Provider>
+              </ConceptModalContext.Provider>
+            </TaxonomyContext.Provider>
+          </SelectedContext.Provider>
+        </PanelDataContext.Provider>
+      </ConfigContext.Provider>
+    )
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: 'reject', pendingIds: ['p0', 'p1', 'p2'] })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: 'reject',
+        items: [formatAdd],
+      })
+    )
+    expect(removeName).toHaveBeenCalledWith('image')
   })
 
   it('approves all items in creation order with a rename present, since ONI applies renames immediately', async () => {
@@ -611,7 +673,7 @@ describe('useConceptUpdatePending', () => {
       })
     )
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
-    expect(remaining).toBe(true)
+    expect(remaining).toBe(false)
   })
 
   it('approves a pending add with no side effects on other pending items', async () => {

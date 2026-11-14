@@ -21,6 +21,7 @@ import { stagedAliasesEdits } from '@/lib/concept/state/aliases'
 import { stagedChildren } from '@/lib/concept/state/children'
 import { stagedMediaEdits } from '@/lib/concept/state/media'
 import { stagedRealizationEdits } from '@/lib/concept/state/realizations'
+import { buildStagedJournal } from '@/lib/concept/state/stagedJournal'
 import { isStateModified } from '@/lib/concept/state/state'
 
 import { resettingItem } from '@/components/kb/panels/concepts/concept/change/staged/reset'
@@ -55,6 +56,21 @@ const StagedContent = () => {
     () => stateUpdates(initialState, stagedState),
     [initialState, stagedState]
   )
+
+  const childParents = useMemo(() => {
+    if (!updates[CONCEPT.FIELD.CHILDREN]) return new Map()
+
+    let parentName = initialState.name.value
+    const parents = new Map()
+    for (const op of buildStagedJournal(initialState, stagedState)) {
+      if (op.field === CONCEPT.FIELD.NAME) {
+        parentName = op.item.value
+      } else if (op.field === CONCEPT.FIELD.CHILDREN) {
+        parents.set(op.index, parentName)
+      }
+    }
+    return parents
+  }, [initialState, stagedState, updates])
 
   const stagedItems = useMemo(() => {
     const arrayItems = ARRAY_FIELDS.flatMap(([field, editsFn]) =>
@@ -96,6 +112,7 @@ const StagedContent = () => {
           <StagedChild
             key={item.key}
             initialItem={item.initialItem}
+            parentName={childParents.get(item.edit.index)}
             resetting={resettingItem(confirmReset, item.field, item.edit.index)}
             stagedItem={item.edit}
           />

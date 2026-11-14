@@ -89,7 +89,7 @@ const PendingActions = () => {
             nameChangeType: modalData?.nameChangeType,
           })
           if (!isMorePending) {
-            closeModal()
+            closeModal(true)
           }
           setPendingConfirm(null)
           break

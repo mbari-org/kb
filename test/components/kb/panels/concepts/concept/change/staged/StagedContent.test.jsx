@@ -11,7 +11,7 @@ vi.mock('@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAli
   default: ({ stagedItem }) => <div data-testid={`staged-alias-${stagedItem.updates.name}`} />,
 }))
 vi.mock('@/components/kb/panels/concepts/concept/change/staged/children/StagedChild', () => ({
-  default: ({ stagedItem }) => <div data-testid={`staged-child-${stagedItem.updates.name}`} />,
+  default: ({ parentName, stagedItem }) => <div data-testid={`staged-child-${stagedItem.updates.name}`} data-parent={parentName} />,
 }))
 vi.mock('@/components/kb/panels/concepts/concept/change/staged/media/StagedMediaItem', () => ({
   default: ({ stagedItem }) => <div data-testid={`staged-media-${stagedItem.updates.url}`} />,
@@ -95,5 +95,27 @@ describe('StagedContent', () => {
     const { closeModal } = renderStagedContent({ initialState: baseState, stagedState: baseState })
 
     expect(closeModal).toHaveBeenCalledWith(true)
+  })
+
+  it('closes the modal when the concept state is unavailable', () => {
+    const { closeModal } = renderStagedContent({ initialState: null, stagedState: {} })
+
+    expect(closeModal).toHaveBeenCalledWith(true)
+  })
+
+  it('uses the parent name at each child addition in staged save order', () => {
+    const initialState = { ...baseState, name: { action: 'None', value: 'original', extent: '' } }
+    const stagedState = {
+      ...initialState,
+      name: { action: 'Edit Name', value: 'renamed', extent: '', stagedSeq: 2 },
+      children: [
+        { name: 'first', author: '', rankName: '', rankLevel: '', action: 'Add Child', index: 0, stagedSeq: 1 },
+        { name: 'second', author: '', rankName: '', rankLevel: '', action: 'Add Child', index: 1, stagedSeq: 3 },
+      ],
+    }
+
+    const { getByTestId } = renderStagedContent({ initialState, stagedState })
+    expect(getByTestId('staged-child-first')).toHaveAttribute('data-parent', 'original')
+    expect(getByTestId('staged-child-second')).toHaveAttribute('data-parent', 'renamed')
   })
 })

@@ -22,7 +22,7 @@ const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
   const { withProcessing } = use(ConceptModalContext)
-  const { closestConcept } = use(TaxonomyContext)
+  const { closestConcept, isDescendant } = use(TaxonomyContext)
   const deps = useProcessPendingDeps()
 
   return useCallback(
@@ -53,6 +53,19 @@ const useConceptUpdatePending = () => {
           }
           if (deleteItem) {
             orderedItems = moveDeleteToLast(orderedItems)
+          }
+
+          if (approval === PENDING.APPROVAL.REJECT && addItem) {
+            // ONI branch-deletes on Add reject, purging all pending rows in the branch, so
+            //  submitting those rows would hit already-removed history records.
+            const rejectedAdds = orderedItems.filter(isPendingAdd)
+            const inRejectedBranch = item =>
+              rejectedAdds.some(
+                add => item.id !== add.id && (item.concept === add.newValue || isDescendant(add.newValue, item.concept))
+              )
+            const prunedConceptNames = [...new Set(orderedItems.filter(inRejectedBranch).map(item => item.concept))]
+            prunedConceptNames.forEach(name => deps.removeSelectedConceptName(name))
+            orderedItems = orderedItems.filter(item => !inRejectedBranch(item))
           }
 
           const result = await processPendingApproval({ approval, deps, items: orderedItems })
@@ -89,13 +102,13 @@ const useConceptUpdatePending = () => {
             updateSelected({ concept: staleConcept.parent })
           }
 
-          return isMorePending
+          return !removed.includes(conceptName) && isMorePending
         },
         PROCESSING.UPDATE,
         `${PROCESSING.ARG.PENDING}: ${approval}`
       )
     },
-    [closestConcept, deps, pending, setConcept, staleConcept, withProcessing]
+    [closestConcept, deps, isDescendant, pending, setConcept, staleConcept, withProcessing]
   )
 }
 

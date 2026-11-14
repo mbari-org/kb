@@ -8,7 +8,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import { drop } from '@/lib/utils'
 import { CONCEPT } from '@/lib/constants'
 
-const StagedChildDetail = ({ stagedChild }) => {
+const StagedChildDetail = ({ parentName, stagedChild }) => {
   const { isPhylogenyRoot } = use(ConceptContext)
   const { updates } = stagedChild
 
@@ -22,6 +22,7 @@ const StagedChildDetail = ({ stagedChild }) => {
 
   return (
     <Box>
+      <FieldValueDisplay field={CONCEPT.FIELD.PARENT} value={parentName} />
       {fieldValues?.map(([field, value]) => (
         <FieldValueDisplay key={field} field={field} value={value} />
       ))}
