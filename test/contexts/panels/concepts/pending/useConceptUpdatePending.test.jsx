@@ -16,6 +16,11 @@ import CONFIG from '@/lib/config'
 const processPendingApprovalMock = vi.fn()
 const relatedDataCountsMock = vi.fn()
 const performReassignmentsMock = vi.fn()
+const showBoundaryMock = vi.fn()
+
+vi.mock('react-error-boundary', () => ({
+  useErrorBoundary: () => ({ showBoundary: showBoundaryMock }),
+}))
 
 vi.mock('@/lib/concept/pending/processPendingApproval', () => ({
   default: (...args) => processPendingApprovalMock(...args),

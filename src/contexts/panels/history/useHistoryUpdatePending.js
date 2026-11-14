@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import useProcessPendingDeps from '@/contexts/common/useProcessPendingDeps'
 
@@ -13,11 +14,17 @@ import CONFIG from '@/lib/config'
 const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 
 const useHistoryUpdatePending = () => {
+  const { showBoundary } = useErrorBoundary()
   const deps = useProcessPendingDeps()
 
   return useCallback(
     async ({ approval, item, nameChangeType }) => {
-      await processPendingApproval({ approval, deps, items: [item] })
+      try {
+        await processPendingApproval({ approval, deps, items: [item] })
+      } catch (error) {
+        showBoundary(error)
+        return false
+      }
 
       if (approval === PENDING.APPROVAL.ACCEPT && nameChangeType === REASSIGN && isPendingName(item)) {
         const counts = await relatedDataCounts({
@@ -31,7 +38,7 @@ const useHistoryUpdatePending = () => {
 
       return true
     },
-    [deps]
+    [deps, showBoundary]
   )
 }
 

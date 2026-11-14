@@ -18,9 +18,15 @@ vi.mock('@/lib/concept/pending/cloneStale', () => ({
 
 import { processPendingApproval } from '@/lib/concept/pending/processPendingApproval'
 
+import { getConcept } from '@/lib/api/concept'
 import { updatePendingItem } from '@/lib/api/history'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PENDING } from '@/lib/constants/pending.js'
+
+const okApiFns = () => ({
+  apiPayload: vi.fn(async () => ({})),
+  apiRaw: vi.fn(async () => ({ payload: {} })),
+})
 
 describe('processPendingApproval', () => {
   it('groups approved items by concept and refreshes renamed concepts once', async () => {
@@ -38,9 +44,7 @@ describe('processPendingApproval', () => {
     const optimisticConcept = { ...staleConcept }
     const updatedConcept = { ...optimisticConcept, name: 'renamed-concept' }
 
-    const apiFns = {
-      apiPayload: vi.fn(async () => ({})),
-    }
+    const apiFns = okApiFns()
     const conceptEditsRefresh = vi.fn(async () => ({ concept: updatedConcept }))
     const getConcept = vi.fn(conceptName => {
       if (conceptName === 'old-concept') {
@@ -69,11 +73,11 @@ describe('processPendingApproval', () => {
       items,
     })
 
-    expect(apiFns.apiPayload).toHaveBeenNthCalledWith(1, updatePendingItem, [
+    expect(apiFns.apiRaw).toHaveBeenNthCalledWith(1, updatePendingItem, [
       PENDING.APPROVAL.ACCEPT,
       'pending-1',
     ])
-    expect(apiFns.apiPayload).toHaveBeenNthCalledWith(2, updatePendingItem, [
+    expect(apiFns.apiRaw).toHaveBeenNthCalledWith(2, updatePendingItem, [
       PENDING.APPROVAL.ACCEPT,
       'pending-2',
     ])
@@ -107,7 +111,7 @@ describe('processPendingApproval', () => {
       rankName: '',
     }
 
-    const apiFns = { apiPayload: vi.fn(async () => ({})) }
+    const apiFns = okApiFns()
     const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
     const getConcept = vi.fn(() => staleConcept)
     const loadConcept = vi.fn(async () => staleConcept)
@@ -149,7 +153,7 @@ describe('processPendingApproval', () => {
     }
     const optimisticConcept = { ...loadedConcept, children: [] }
 
-    const apiFns = { apiPayload: vi.fn(async () => ({})) }
+    const apiFns = okApiFns()
     const conceptEditsRefresh = vi.fn(async () => ({ concept: optimisticConcept }))
     const getConcept = vi.fn(() => partialConcept)
     const loadConcept = vi.fn(async () => loadedConcept)
@@ -190,8 +194,10 @@ describe('processPendingApproval', () => {
 
     const calls = []
     const apiFns = {
-      apiPayload: vi.fn(async () => {
+      apiPayload: vi.fn(async () => ({})),
+      apiRaw: vi.fn(async () => {
         calls.push('put')
+        return { payload: {} }
       }),
     }
     const conceptEditsRefresh = vi.fn(async concept => ({ concept }))
@@ -232,7 +238,7 @@ describe('processPendingApproval', () => {
       rankName: '',
     }
 
-    const apiFns = { apiPayload: vi.fn(async () => ({})) }
+    const apiFns = okApiFns()
     const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
     const getConcept = vi.fn(() => staleConcept)
     const loadConcept = vi.fn(async () => staleConcept)
@@ -272,5 +278,115 @@ describe('processPendingApproval', () => {
 
     expect(removeSelectedConceptName).toHaveBeenCalledWith('try')
     expect(rejectAddResult.removed).toEqual(['try'])
+  })
+
+  it('refuses to approve a child add when the child concept no longer exists', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: [],
+      media: [],
+      name: 'miscellany',
+      parent: 'object',
+      rankLevel: '',
+      rankName: '',
+    }
+
+    const apiFns = {
+      apiPayload: vi.fn(async () => ({})),
+      apiRaw: vi.fn(async request =>
+        request === getConcept ? { error: { title: 'Not Found' } } : { payload: {} }
+      ),
+    }
+    const conceptEditsRefresh = vi.fn()
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const items = [{ concept: 'miscellany', field: 'Concept.child', action: 'Add', newValue: 'try', id: 'pending-1' }]
+
+    await expect(
+      processPendingApproval({
+        approval: PENDING.APPROVAL.ACCEPT,
+        deps: { apiFns, conceptEditsRefresh, getConcept: vi.fn(() => staleConcept), loadConcept: vi.fn(), refreshData, reloadConceptRealizations: vi.fn(), updateSelected: vi.fn() },
+        items,
+      })
+    ).rejects.toMatchObject({ title: 'Stale Pending Child' })
+
+    expect(apiFns.apiRaw).toHaveBeenCalledTimes(1)
+    expect(apiFns.apiRaw).toHaveBeenCalledWith(getConcept, 'try')
+    expect(apiFns.apiRaw).not.toHaveBeenCalledWith(updatePendingItem, expect.anything())
+    expect(conceptEditsRefresh).not.toHaveBeenCalled()
+  })
+
+  it('refuses to reject a child delete when the child concept no longer exists', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: [],
+      media: [],
+      name: 'miscellany',
+      parent: 'object',
+      rankLevel: '',
+      rankName: '',
+    }
+
+    const apiFns = {
+      apiPayload: vi.fn(async () => ({})),
+      apiRaw: vi.fn(async request =>
+        request === getConcept ? { error: { title: 'Not Found' } } : { payload: {} }
+      ),
+    }
+    const conceptEditsRefresh = vi.fn()
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const items = [{ concept: 'miscellany', field: 'Concept.child', action: 'Delete', oldValue: 'try', id: 'pending-1' }]
+
+    await expect(
+      processPendingApproval({
+        approval: PENDING.APPROVAL.REJECT,
+        deps: { apiFns, conceptEditsRefresh, getConcept: vi.fn(() => staleConcept), loadConcept: vi.fn(), refreshData, reloadConceptRealizations: vi.fn(), updateSelected: vi.fn() },
+        items,
+      })
+    ).rejects.toMatchObject({ title: 'Stale Pending Child' })
+
+    expect(apiFns.apiRaw).toHaveBeenCalledTimes(1)
+    expect(conceptEditsRefresh).not.toHaveBeenCalled()
+  })
+
+  it('refreshes pending history and aborts when a submit fails mid-batch', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: [],
+      media: [],
+      name: 'dingo',
+      parent: 'root',
+      rankLevel: '',
+      rankName: '',
+    }
+
+    let puts = 0
+    const apiFns = {
+      apiPayload: vi.fn(async () => ({})),
+      apiRaw: vi.fn(async () => {
+        puts += 1
+        return puts === 1 ? { payload: {} } : { error: { title: 'Server Error' } }
+      }),
+    }
+    const conceptEditsRefresh = vi.fn()
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const items = [
+      { concept: 'dingo', field: 'ConceptName', action: 'Edit', oldValue: 'dingo', newValue: 'dingo-2', id: 'pending-1' },
+      { concept: 'dingo', field: 'Media', action: 'Add', id: 'pending-2' },
+    ]
+
+    await expect(
+      processPendingApproval({
+        approval: PENDING.APPROVAL.ACCEPT,
+        deps: { apiFns, conceptEditsRefresh, getConcept: vi.fn(() => staleConcept), loadConcept: vi.fn(async () => staleConcept), refreshData, reloadConceptRealizations: vi.fn(), updateSelected: vi.fn() },
+        items,
+      })
+    ).rejects.toMatchObject({ title: 'Pending Update Failed' })
+
+    expect(apiFns.apiRaw).toHaveBeenCalledTimes(2)
+    expect(refreshData).toHaveBeenCalledWith(PANEL_DATA.PENDING_HISTORY)
+    expect(conceptEditsRefresh).not.toHaveBeenCalled()
   })
 })

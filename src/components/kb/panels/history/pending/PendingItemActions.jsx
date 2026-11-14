@@ -66,10 +66,9 @@ const HistoryPendingActions = props => {
       }
 
       case CONFIRM: {
-        try {
-          const stop = beginProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
-          await updatePending({ approval: pendingConfirm, item, nameChangeType }).finally(stop)
-        } finally {
+        const stop = beginProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
+        const processed = await updatePending({ approval: pendingConfirm, item, nameChangeType }).finally(stop)
+        if (processed !== false) {
           closeModal(true)
         }
         break

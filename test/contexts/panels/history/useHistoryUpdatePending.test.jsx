@@ -9,9 +9,18 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdatePending'
 
+import CONFIG from '@/lib/config'
+
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
+
 const processPendingApprovalMock = vi.fn()
 const relatedDataCountsMock = vi.fn()
 const performReassignmentsMock = vi.fn()
+const showBoundaryMock = vi.fn()
+
+vi.mock('react-error-boundary', () => ({
+  useErrorBoundary: () => ({ showBoundary: showBoundaryMock }),
+}))
 
 vi.mock('@/lib/concept/pending/processPendingApproval', () => ({
   default: (...args) => processPendingApprovalMock(...args),
@@ -82,6 +91,33 @@ describe('useHistoryUpdatePending', () => {
         items: [deleteItem],
       })
     )
+  })
+
+  it('shows the boundary and skips reassignments when processing fails', async () => {
+    const renameItem = {
+      id: 'p1',
+      concept: 'dingo-2',
+      field: 'ConceptName',
+      action: 'Edit',
+      oldValue: 'dingo',
+      newValue: 'dingo-2',
+    }
+    const failure = { title: 'Stale Pending Child' }
+    processPendingApprovalMock.mockRejectedValueOnce(failure)
+
+    const { wrapper } = buildWrapper({ pendingHistory: [renameItem] })
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    let remaining
+    await act(async () => {
+      remaining = await result.current({ approval: 'approve', item: renameItem, nameChangeType: REASSIGN })
+    })
+
+    expect(showBoundaryMock).toHaveBeenCalledWith(failure)
+    expect(relatedDataCountsMock).not.toHaveBeenCalled()
+    expect(performReassignmentsMock).not.toHaveBeenCalled()
+    expect(remaining).toBe(false)
   })
 
   it('rejects a delete with no side effects on other pending items', async () => {

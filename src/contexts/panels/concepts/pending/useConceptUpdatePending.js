@@ -1,4 +1,5 @@
 import { use, useCallback } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -6,7 +7,10 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useProcessPendingDeps from '@/contexts/common/useProcessPendingDeps'
 
-import { performReassignments, relatedDataCounts } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
+import {
+  performReassignments,
+  relatedDataCounts,
+} from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 import { isPendingName } from '@/lib/concept/state/name'
@@ -23,6 +27,7 @@ const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
   const { withProcessing } = use(ConceptModalContext)
   const { closestConcept, isDescendant } = use(TaxonomyContext)
+  const { showBoundary } = useErrorBoundary()
   const deps = useProcessPendingDeps()
 
   return useCallback(
@@ -49,15 +54,14 @@ const useConceptUpdatePending = () => {
 
           let orderedItems = approval === PENDING.APPROVAL.REJECT ? [...pendingItems].reverse() : pendingItems
           if (addItem) {
-            orderedItems = approval === PENDING.APPROVAL.ACCEPT ? moveAddToFirst(orderedItems) : moveAddToLast(orderedItems)
+            orderedItems =
+              approval === PENDING.APPROVAL.ACCEPT ? moveAddToFirst(orderedItems) : moveAddToLast(orderedItems)
           }
           if (deleteItem) {
             orderedItems = moveDeleteToLast(orderedItems)
           }
 
           if (approval === PENDING.APPROVAL.REJECT && addItem) {
-            // ONI branch-deletes on Add reject, purging all pending rows in the branch, so
-            //  submitting those rows would hit already-removed history records.
             const rejectedAdds = orderedItems.filter(isPendingAdd)
             const inRejectedBranch = item =>
               rejectedAdds.some(
@@ -106,9 +110,12 @@ const useConceptUpdatePending = () => {
         },
         PROCESSING.UPDATE,
         `${PROCESSING.ARG.PENDING}: ${approval}`
-      )
+      ).catch(error => {
+        showBoundary(error)
+        return undefined
+      })
     },
-    [closestConcept, deps, isDescendant, pending, setConcept, staleConcept, withProcessing]
+    [closestConcept, deps, isDescendant, pending, setConcept, showBoundary, staleConcept, withProcessing]
   )
 }
 

@@ -5,6 +5,7 @@ import { use, useState, useCallback, useReducer, useEffect, useMemo } from 'reac
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import { BrowserRouter } from 'react-router-dom'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import kbTheme from '@/lib/theme'
 import ConceptModal from '@/components/modal/ConceptModal'
@@ -369,7 +370,8 @@ export const ConceptPanelTestWrapper = ({
     <ThemeProvider theme={kbTheme}>
       <CssBaseline />
       <BrowserRouter>
-        <UserContext.Provider value={mockUserValue}>
+        <ErrorBoundary fallback={null}>
+          <UserContext.Provider value={mockUserValue}>
           <ConfigContext.Provider value={mockConfigValue}>
             <AppModalContext.Provider value={mockAppModalValue}>
               <PanelDataContext.Provider value={mockPanelDataValue}>
@@ -420,7 +422,8 @@ export const ConceptPanelTestWrapper = ({
               </PanelDataContext.Provider>
             </AppModalContext.Provider>
           </ConfigContext.Provider>
-        </UserContext.Provider>
+          </UserContext.Provider>
+        </ErrorBoundary>
       </BrowserRouter>
     </ThemeProvider>
   )
