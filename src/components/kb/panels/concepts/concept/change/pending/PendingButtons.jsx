@@ -19,22 +19,26 @@ const PendingButtons = ({ approval, item }) => {
   const { isAdmin } = use(UserContext)
   const { setPendingConfirm } = use(ConceptContext)
 
-  const [disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
+  const [shouldHide, disableReject, disableAccept, rejectIcon, acceptIcon] = useMemo(() => {
     if (!isAdmin) {
-      return [true, true, RejectIcon, AcceptIcon]
+      return [true, true, true, RejectIcon, AcceptIcon]
     }
 
     switch (approval) {
       case OTHER:
-        return [true, true, RejectIcon, AcceptIcon]
+        return [false, true, true, RejectIcon, AcceptIcon]
       case ACCEPT:
-        return [true, false, RejectIcon, HandIcon]
+        return [false, true, false, RejectIcon, HandIcon]
       case REJECT:
-        return [false, true, HandIcon, AcceptIcon]
+        return [false, false, true, HandIcon, AcceptIcon]
       default:
-        return [false, false, RejectIcon, AcceptIcon]
+        return [false, false, false, RejectIcon, AcceptIcon]
     }
   }, [approval, isAdmin])
+
+  if (shouldHide) {
+    return null
+  }
 
   const handleClick = useCallback(
     clicked => {

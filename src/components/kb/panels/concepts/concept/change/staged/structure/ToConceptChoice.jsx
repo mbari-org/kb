@@ -1,6 +1,6 @@
 import { use, useMemo } from 'react'
 import { useTheme } from '@mui/material/styles'
-import { Stack, Typography, Autocomplete, TextField, Divider } from '@mui/material'
+import { Stack, Typography, Autocomplete, TextField, Divider, FormHelperText } from '@mui/material'
 
 import filterConceptOptions from '@/lib/concept/filterConceptOptions'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -28,58 +28,72 @@ const ToConceptChoice = ({
   }, [optionNames, value])
 
   return (
-    <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
-      <Typography align='center'>{label}:</Typography>
-      <Autocomplete
-        filterOptions={filterConceptOptions}
-        onChange={handleChange}
-        options={optionNames}
-        renderInput={params => (
-          <TextField
-            {...params}
-            error={error}
-            fullWidth
-            onKeyDown={event => {
-              if (event.key === 'Enter' && onEnter) {
-                onEnter(event)
-              }
-            }}
-            onChange={handleKeyUp}
-            required={required}
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
+    <Stack direction='column' spacing={0.5}>
+      <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
+        <Typography align='center'>{label}:</Typography>
+        <Autocomplete
+          filterOptions={filterConceptOptions}
+          onChange={handleChange}
+          options={optionNames}
+          renderInput={params => (
+            <TextField
+              {...params}
+              error={error}
+              fullWidth
+              onKeyDown={event => {
+                if (event.key === 'Enter' && onEnter) {
+                  onEnter(event)
+                }
+              }}
+              onChange={handleKeyUp}
+              required={required}
+              sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+                '& input': {
+                  color: isValidSelection ? theme.concept.color.add : theme.palette.grey[700],
+                  fontSize: theme.concept.updateFontSize,
+                  fontFamily: theme.concept.fontFamily,
+                  fontWeight: theme.concept.fontWeight,
+                },
+                '&:after': {
+                  borderBottom: `2px solid ${
+                    error ? theme.palette.error.main : theme.palette.primary.main
+                  }`,
+                  content: '""',
+                },
+                '&:before': {
+                  border: 'none',
+                  content: '""',
+                },
                 border: 'none',
-              },
-              '& input': {
-                color: isValidSelection ? theme.concept.color.add : theme.palette.grey[700],
                 fontSize: theme.concept.updateFontSize,
                 fontFamily: theme.concept.fontFamily,
                 fontWeight: theme.concept.fontWeight,
-              },
-              '&:after': {
-                borderBottom: `2px solid ${
-                  error ? theme.palette.error.main : theme.palette.primary.main
-                }`,
-                content: '""',
-              },
-              '&:before': {
-                border: 'none',
-                content: '""',
-              },
-              border: 'none',
-              fontSize: theme.concept.updateFontSize,
-              fontFamily: theme.concept.fontFamily,
-              fontWeight: theme.concept.fontWeight,
-              ml: -2,
-            }}
-            value={value || ''}
-          />
-        )}
-        size='small'
-        value={value || ''}
-        sx={{ width: '500px' }}
-      />
-      <Divider sx={{ marginTop: 1 }} />
+                ml: -2,
+              }}
+              value={value || ''}
+            />
+          )}
+          size='small'
+          value={value || ''}
+          sx={{ width: '500px' }}
+        />
+        <Divider sx={{ marginTop: 1 }} />
+      </Stack>
+      {error && (
+        <FormHelperText
+          error
+          sx={{
+            ml: 'calc(30px + 24px)',
+            mt: 0.5,
+            fontSize: '0.75rem',
+          }}
+        >
+          Concept not known
+        </FormHelperText>
+      )}
     </Stack>
   )
 }
