@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
+import isValidMedia from '@/lib/validators/isValidMedia'
 
 import {
   ConceptPanelTestWrapper,
@@ -43,6 +44,41 @@ describe('Media Combined Flows - Add then Edit', () => {
       { timeout: 5000 }
     )
   }
+
+  it('preserves credit and caption when staging immediately after editing them', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <ConceptPanelTestWrapper>
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    await enterEditMode(user, screen)
+    await clickAddMediaButton(user, screen)
+    await fillMediaForm(user, screen, { url: MEDIA_URLS.IMAGE.head_01 })
+    await waitFor(() => expect(isValidMedia).toHaveBeenLastCalledWith(MEDIA_URLS.IMAGE.head_01))
+
+    fireEvent.change(screen.getByRole('textbox', { name: /credit/i }), { target: { value: 'Initial Credit' } })
+    fireEvent.change(screen.getByRole('textbox', { name: /caption/i }), { target: { value: 'Initial Caption' } })
+    await waitForStageButtonEnabled()
+    await clickStageButton(user, screen)
+    await waitFor(() => expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument())
+
+    await clickEditMediaButton(user, screen)
+    expect(screen.getByRole('textbox', { name: /credit/i })).toHaveValue('Initial Credit')
+    expect(screen.getByRole('textbox', { name: /caption/i })).toHaveValue('Initial Caption')
+
+    fireEvent.change(screen.getByRole('textbox', { name: /credit/i }), { target: { value: 'Updated Credit' } })
+    fireEvent.change(screen.getByRole('textbox', { name: /caption/i }), { target: { value: 'Updated Caption' } })
+    await waitForStageButtonEnabled()
+    await clickStageButton(user, screen)
+    await waitFor(() => expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument())
+
+    await clickEditMediaButton(user, screen)
+    expect(screen.getByRole('textbox', { name: /credit/i })).toHaveValue('Updated Credit')
+    expect(screen.getByRole('textbox', { name: /caption/i })).toHaveValue('Updated Caption')
+  }, 15000)
 
   it('adds media then edits the URL of the same item', async () => {
     const user = userEvent.setup()

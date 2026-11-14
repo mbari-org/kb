@@ -12,7 +12,6 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
 import useStageMedia from './useStageMedia'
-import useDebounce from '@/lib/hooks/useDebounce'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 
@@ -74,10 +73,6 @@ const EditMediaContent = () => {
     }))
   }
 
-  const debouncedApplyFieldUpdate = useDebounce((field, fieldValue, fieldIsModified) => {
-    applyFieldUpdate(field, fieldValue, fieldIsModified)
-  }, 300)
-
   const handleUrlChange = newUrl => {
     const updatedMediaItem = {
       ...formMediaItem,
@@ -109,12 +104,7 @@ const EditMediaContent = () => {
         ? updatedMediaItem[field] !== EMPTY_MEDIA_ITEM[field]
         : stagedState.media[mediaIndex][field] !== updatedMediaItem[field]
 
-    if (type === 'checkbox') {
-      applyFieldUpdate(field, updatedMediaItem[field], fieldIsModified)
-      return
-    }
-
-    debouncedApplyFieldUpdate(field, updatedMediaItem[field], fieldIsModified)
+    applyFieldUpdate(field, updatedMediaItem[field], fieldIsModified)
   }
 
   const stageMedia = useStageMedia()

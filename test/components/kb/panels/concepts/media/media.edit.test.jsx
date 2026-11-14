@@ -801,7 +801,7 @@ describe('Media Edit - Validation', () => {
     })
   })
 
-  it('discard button closes modal without saving changes', async () => {
+  it('confirms discarding modified media without saving changes', async () => {
     const user = userEvent.setup()
 
     const initialMedia = [
@@ -832,11 +832,16 @@ describe('Media Edit - Validation', () => {
 
     await clickDiscardButton(user, screen)
 
+    await user.click(await screen.findByRole('button', { name: BUTTON.CONFIRM }))
+
     await waitFor(() => {
       expect(screen.queryByRole('textbox', { name: /url/i })).not.toBeInTheDocument()
     })
 
     expect(screen.queryByRole('button', { name: BUTTON.DISCARD_ALL })).not.toBeInTheDocument()
+
+    await clickEditMediaButton(user, screen)
+    expect(screen.getByRole('textbox', { name: /credit/i })).toHaveValue('Original Credit')
   })
 
   it('stage button disabled when no changes made', async () => {
