@@ -36,10 +36,6 @@ const PendingButtons = ({ approval, item }) => {
     }
   }, [approval, isAdmin])
 
-  if (shouldHide) {
-    return null
-  }
-
   const handleClick = useCallback(
     clicked => {
       setPendingConfirm({
@@ -49,6 +45,10 @@ const PendingButtons = ({ approval, item }) => {
     },
     [item, setPendingConfirm]
   )
+
+  if (shouldHide) {
+    return null
+  }
 
   const [acceptApproved, rejectApproved] = !approval
     ? [false, false]

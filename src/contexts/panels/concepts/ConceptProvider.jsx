@@ -220,6 +220,7 @@ const ConceptProvider = ({ children }) => {
 
     if (selectedConcept !== concept?.name && panels.current() === SELECTED.PANELS.CONCEPTS) {
       if (isStateModified({ initialState, stagedState })) {
+        stopConceptSwitchProcessing()
         displayStaged(BACK_TO_EDITING)
         setModalData(prev => ({ ...prev, concept: selectedConcept }))
       } else {

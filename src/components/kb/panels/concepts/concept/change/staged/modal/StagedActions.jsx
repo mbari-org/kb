@@ -38,7 +38,7 @@ const getLabels = (confirmReset, intent) => {
 }
 
 const StagedActions = ({ intent }) => {
-  const { initialState, setEditing } = use(ConceptContext)
+  const { concept, initialState, setEditing } = use(ConceptContext)
   const { confirmReset, modifyConcept, stagedState } = use(ConceptStagedContext)
   const { closeModal } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
@@ -109,6 +109,9 @@ const StagedActions = ({ intent }) => {
         case BACK_TO_EDIT:
           setGuardedAction(null)
           modifyConcept({ type: CONFIRMED.NO })
+          if (modalData?.concept) {
+            updateSelected({ concept: concept.name })
+          }
           closeModal()
           break
 
@@ -135,7 +138,7 @@ const StagedActions = ({ intent }) => {
           break
       }
     },
-    [closeModal, handleSpecialAction, modifyConcept, saveStaged, setGuardedAction]
+    [closeModal, concept, handleSpecialAction, modalData, modifyConcept, saveStaged, setGuardedAction, updateSelected]
   )
 
   const labels = useMemo(() => getLabels(confirmReset, intent), [confirmReset, intent])
