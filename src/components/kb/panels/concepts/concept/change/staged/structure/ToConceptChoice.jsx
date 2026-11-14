@@ -5,6 +5,10 @@ import { Stack, Typography, Autocomplete, TextField, Divider, FormHelperText } f
 import filterConceptOptions from '@/lib/concept/filterConceptOptions'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
+import CONFIG from '@/lib/config'
+
+const { NOT_KNOWN } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.TO_CONCEPT
+
 const ToConceptChoice = ({
   error,
   handleChange,
@@ -91,7 +95,7 @@ const ToConceptChoice = ({
             fontSize: '0.75rem',
           }}
         >
-          Concept not known
+          {NOT_KNOWN}
         </FormHelperText>
       )}
     </Stack>

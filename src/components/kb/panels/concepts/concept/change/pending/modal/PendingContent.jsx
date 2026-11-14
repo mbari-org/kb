@@ -1,4 +1,4 @@
-import { use } from 'react'
+import { use, useEffect } from 'react'
 import { Box, Stack } from '@mui/material'
 
 import ModalActionText from '@/components/common/ModalActionText'
@@ -25,16 +25,21 @@ const PendingContent = () => {
   const pendingParent = pending(PENDING.DATA.PARENT)
 
   const pendingChild = getPendingChild(pendingParent, concept.name)
-  if (pendingChild) {
-    pendingChild.parent = concept.parent
-  }
+  const pendingChildItem = pendingChild ? { ...pendingChild, parent: concept.parent } : null
 
-  if (isEmpty(pendingConcept) && !pendingChild) {
-    setModal(null)
+  const isEmptyPending = isEmpty(pendingConcept) && !pendingChildItem
+
+  useEffect(() => {
+    if (isEmptyPending) {
+      setModal(null)
+    }
+  }, [isEmptyPending, setModal])
+
+  if (isEmptyPending) {
     return null
   }
 
-  const pendingItems = [...pendingConcept, ...(pendingChild ? [pendingChild] : [])].sort(
+  const pendingItems = [...pendingConcept, ...(pendingChildItem ? [pendingChildItem] : [])].sort(
     (a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp)
   )
 

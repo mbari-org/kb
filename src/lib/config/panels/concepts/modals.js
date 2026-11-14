@@ -17,6 +17,7 @@ import addChild from '@/config/panels/concepts/modals/structure/addChild.json'
 import changeName from '@/config/panels/concepts/modals/structure/changeName.json'
 import changeParent from '@/config/panels/concepts/modals/structure/changeParent.json'
 import deleteConcept from '@/config/panels/concepts/modals/structure/deleteConcept.json'
+import toConcept from '@/config/panels/concepts/modals/structure/toConcept.json'
 
 export const MODALS = {
   ALIAS: {
@@ -45,5 +46,6 @@ export const MODALS = {
     CHANGE_NAME: changeName,
     CHANGE_PARENT: changeParent,
     DELETE_CONCEPT: deleteConcept,
+    TO_CONCEPT: toConcept,
   },
 }
