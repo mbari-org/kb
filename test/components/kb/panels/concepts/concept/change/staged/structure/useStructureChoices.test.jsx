@@ -45,7 +45,7 @@ const wrapperFor = ({ concept, pendingMap, stagedState, isRoot = false }) => {
 }
 
 describe('useStructureChoices', () => {
-  it('disables all structure actions on a pending-add concept (G1)', () => {
+  it('blocks rename, parent change, and delete on a pending-add concept, but allows add child (G1)', () => {
     const concept = { name: 'new-kid', children: [] }
     const pendingMap = {
       [PENDING.DATA.CONCEPT]: [],
@@ -64,9 +64,9 @@ describe('useStructureChoices', () => {
 
     expect(result.current.disableChangeName).toBe(true)
     expect(result.current.disableChangeParent).toBe(true)
-    expect(result.current.disableAddChild).toBe(true)
     expect(result.current.disableDelete).toBe(true)
     expect(result.current.disableChangeNameReason).toBe(DISABLED.PENDING_ADD)
+    expect(result.current.disableAddChild).toBe(false)
   })
 
   it('disables change name when a rename is pending (G2)', () => {

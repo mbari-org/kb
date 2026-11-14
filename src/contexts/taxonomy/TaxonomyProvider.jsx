@@ -26,6 +26,7 @@ import {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   loadTaxonomyConceptGrandchildren,
+  removeBranchFromMaps,
   removeTaxonomyConcept,
 } from '@/lib/model/taxonomy'
 
@@ -135,13 +136,7 @@ const TaxonomyProvider = ({ children }) => {
           )
 
           removedChildren.forEach(childName => {
-            const removed = conceptMap[childName]
-            if (removed) {
-              removed.alternateNames.forEach(aliasName => {
-                delete aliasMap[aliasName]
-              })
-              delete conceptMap[childName]
-            }
+            removeBranchFromMaps(conceptMap, aliasMap, childName)
           })
         }
 

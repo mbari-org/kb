@@ -513,6 +513,17 @@ const insertConcept = (concept, conceptMap, aliasMap) => {
   })
 }
 
+const removeBranchFromMaps = (conceptMap, aliasMap, rootName) => {
+  const concept = conceptMap[rootName]
+  if (concept) {
+    concept.children?.forEach(childName => removeBranchFromMaps(conceptMap, aliasMap, childName))
+    concept.alternateNames?.forEach(alternateName => {
+      delete aliasMap[alternateName]
+    })
+  }
+  delete conceptMap[rootName]
+}
+
 const removeTaxonomyConcept = (taxonomy, concept) => {
   if (concept.children.length > 0) {
     throw createError('Delete Validation Error', `Cannot delete concept "${concept.name}" because it has children`, {
@@ -566,5 +577,6 @@ export {
   loadTaxonomyConcept,
   loadTaxonomyConceptDescendants,
   loadTaxonomyConceptGrandchildren,
+  removeBranchFromMaps,
   removeTaxonomyConcept,
 }

@@ -65,7 +65,7 @@ const useStructureChoices = () => {
     hasStagedChildren && DISABLED.STAGED_CHILDREN
   )
 
-  const disableAddChildReason = firstReason(hasPendingAdd && DISABLED.PENDING_ADD)
+  const disableAddChildReason = null
 
   const disableDeleteReason = useMemo(
     () =>
