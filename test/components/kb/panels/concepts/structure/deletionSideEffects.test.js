@@ -76,6 +76,7 @@ describe('deletionSideEffects postSideEffects', () => {
     renameRealizationToConceptNames: vi.fn(),
     savePreferences: vi.fn(async () => ({})),
     settings: {},
+    updatePreferences: vi.fn(async () => ({})),
   })
 
   it('removes the deleted concept key and leaves other keys alone when there is no reassign', async () => {
@@ -83,6 +84,8 @@ describe('deletionSideEffects postSideEffects', () => {
 
     await postSideEffects(deleteConceptContext)
 
+    expect(deleteConceptContext.updatePreferences).toHaveBeenCalledWith('concepts', { state: [], position: -1 })
+    expect(deleteConceptContext.savePreferences).toHaveBeenCalledWith('settings', expect.anything())
     expect(deleteConceptContext.invalidateConceptRealizations).toHaveBeenCalledWith('OldConcept')
     expect(deleteConceptContext.invalidateConceptRealizations).toHaveBeenCalledTimes(1)
     expect(deleteConceptContext.renameRealizationToConceptNames).not.toHaveBeenCalled()

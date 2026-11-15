@@ -21,6 +21,7 @@ const buildContext = () => ({
   renameRealizationToConceptNames: vi.fn(),
   savePreferences: vi.fn(async () => {}),
   staleConcept: { name: 'old-name' },
+  updatePreferences: vi.fn(async () => {}),
 })
 
 const buildUpdatesInfo = ({ extent }) => ({
@@ -65,7 +66,11 @@ describe('applyRenameSideEffects', () => {
 
     expect(updatesContext.renameConceptRealizations).toHaveBeenCalledWith('old-name', 'new-name')
     expect(updatesContext.renameRealizationToConceptNames).toHaveBeenCalledWith('old-name', 'new-name')
-    expect(updatesContext.savePreferences).toHaveBeenCalledTimes(2)
+    expect(updatesContext.updatePreferences).toHaveBeenCalledWith('concepts', {
+      state: ['new-name'],
+      position: 0,
+    })
+    expect(updatesContext.savePreferences).toHaveBeenCalledTimes(1)
     expect(updatesContext.refreshPanelData).toHaveBeenCalledTimes(2)
   })
 })

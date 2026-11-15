@@ -54,7 +54,7 @@ const settingsUpdate = (updatesContext, staleName, newConceptName) => {
 const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   const { value: newConceptName, extent, relatedDataCounts } = getNameUpdate(updatesInfo)
   const staleConcept = updatesContext.staleConcept
-  const { renameConceptRealizations, renameRealizationToConceptNames, savePreferences, refreshPanelData } =
+  const { renameConceptRealizations, renameRealizationToConceptNames, savePreferences, updatePreferences, refreshPanelData } =
     updatesContext
 
   if (extent === REASSIGN) {
@@ -68,7 +68,7 @@ const applyRenameSideEffects = async (updatesContext, updatesInfo) => {
   const updatedSettings = settingsUpdate(updatesContext, staleConcept.name, newConceptName)
 
   await Promise.all([
-    savePreferences(KEY.CONCEPTS, updatedConceptPrefs),
+    updatePreferences(KEY.CONCEPTS, updatedConceptPrefs),
     savePreferences(KEY.SETTINGS, updatedSettings),
 
     refreshPanelData(PANEL_DATA.REFERENCES),

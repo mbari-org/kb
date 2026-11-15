@@ -114,7 +114,7 @@ describe('useSaveStaged', () => {
           <PanelDataContext.Provider
             value={{ getReferences: vi.fn(), refreshData, reloadConceptRealizations: vi.fn(async () => []) }}
           >
-            <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
+            <PreferencesContext.Provider value={{ savePreferences: vi.fn(), updatePreferences: vi.fn() }}>
               <SelectedContext.Provider value={{ updateSelected }}>
                 <SelectedSettingsContext.Provider value={{ getSettings: vi.fn(() => ({})) }}>
                   <TaxonomyContext.Provider value={{ conceptEditsRefresh }}>
@@ -329,7 +329,7 @@ describe('useSaveStaged', () => {
           <PanelDataContext.Provider
             value={{ getReferences: vi.fn(), refreshData, reloadConceptRealizations }}
           >
-            <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
+            <PreferencesContext.Provider value={{ savePreferences: vi.fn(), updatePreferences: vi.fn() }}>
               <SelectedContext.Provider value={{ updateSelected: vi.fn() }}>
                 <SelectedSettingsContext.Provider value={{ getSettings: vi.fn(() => ({})) }}>
                   <TaxonomyContext.Provider

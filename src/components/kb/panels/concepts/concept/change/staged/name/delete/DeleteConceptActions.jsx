@@ -46,7 +46,7 @@ const DeleteConceptActions = () => {
     setClearTemplateFilters,
     templates,
   } = use(PanelDataContext)
-  const { savePreferences } = use(PreferencesContext)
+  const { savePreferences, updatePreferences } = use(PreferencesContext)
   const { concepts: conceptSelection, updateSelected } = use(SelectedContext)
   const { settings } = use(SelectedSettingsContext)
   const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
@@ -115,6 +115,7 @@ const DeleteConceptActions = () => {
           setClearTemplateFilters,
           settings,
           templates,
+          updatePreferences,
         }
 
         // CxNote due to closures the taxonomy must be directly manipulated

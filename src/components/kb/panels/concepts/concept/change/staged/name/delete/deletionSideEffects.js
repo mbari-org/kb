@@ -22,7 +22,7 @@ const { ANNOTATIONS, ASSOCIATIONS, REALIZATIONS, REALIZATIONS_TO, REFERENCES, TE
 const { EMPTY_FILTERS } = dataFilters(SELECTED.SETTINGS.TEMPLATES.KEY)
 
 const performConceptPrefsUpdate = async deleteConceptContext => {
-  const { concept, getPreferences } = deleteConceptContext
+  const { concept, getPreferences, updatePreferences } = deleteConceptContext
   const conceptPrefs = await getPreferences(KEY.CONCEPTS)
   const removalsAtOrBeforePosition = conceptPrefs.state
     .slice(0, conceptPrefs.position + 1)
@@ -37,7 +37,7 @@ const performConceptPrefsUpdate = async deleteConceptContext => {
     updatedPosition = updatedPrefsState.length - 1
   }
   const updatedConceptPrefs = { state: updatedPrefsState, position: updatedPosition }
-  return deleteConceptContext.savePreferences(KEY.CONCEPTS, updatedConceptPrefs)
+  return updatePreferences(KEY.CONCEPTS, updatedConceptPrefs)
 }
 
 const performSettingsUpdate = deleteConceptContext => {

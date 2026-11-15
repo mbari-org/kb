@@ -113,7 +113,7 @@ describe('DeleteConceptActions', () => {
                       templates: [],
                     }}
                   >
-                    <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
+                    <PreferencesContext.Provider value={{ savePreferences: vi.fn(), updatePreferences: vi.fn() }}>
                       <SelectedContext.Provider value={{ concepts: { removeName }, updateSelected }}>
                         <SelectedSettingsContext.Provider value={{ settings: {} }}>
                           <TaxonomyContext.Provider value={{ taxonomy: {}, updateTaxonomy }}>
@@ -214,7 +214,7 @@ describe('DeleteConceptActions', () => {
             <ConceptModalDataContext.Provider
               value={{ modalData: { alertType: 'delete', isValid: true, reassign: null, relatedDataCounts: [] } }}
             >
-              <PreferencesContext.Provider value={{ savePreferences: vi.fn() }}>
+              <PreferencesContext.Provider value={{ savePreferences: vi.fn(), updatePreferences: vi.fn() }}>
                 <SelectedContext.Provider value={{ concepts: { removeName: vi.fn() }, updateSelected }}>
                   <SelectedSettingsContext.Provider value={{ settings: {} }}>
                     <TaxonomyContext.Provider value={{ taxonomy: {}, updateTaxonomy }}>

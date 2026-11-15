@@ -138,8 +138,9 @@ const PreferencesProvider = ({ children }) => {
       onInitSettingsRef,
       panelSelection,
       savePreferences,
+      updatePreferences,
     }),
-    [conceptSelection, currentConcept, currentPanel, isLoading, panelSelection, savePreferences]
+    [conceptSelection, currentConcept, currentPanel, isLoading, panelSelection, savePreferences, updatePreferences]
   )
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>

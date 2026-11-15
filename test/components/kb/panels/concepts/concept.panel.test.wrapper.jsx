@@ -364,7 +364,7 @@ export const ConceptPanelTestWrapper = ({
     getPreferences: vi.fn(() => Promise.resolve({})),
   }
   const mockRefreshValue = { refresh: vi.fn(() => Promise.resolve()) }
-  const mockPreferencesValue = { savePreferences: vi.fn(() => Promise.resolve()) }
+  const mockPreferencesValue = { savePreferences: vi.fn(() => Promise.resolve()), updatePreferences: vi.fn(() => Promise.resolve()) }
 
   return (
     <ThemeProvider theme={kbTheme}>
