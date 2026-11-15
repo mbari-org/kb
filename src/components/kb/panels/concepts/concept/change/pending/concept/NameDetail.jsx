@@ -18,7 +18,7 @@ import { formatDelta, otherApprovalSx } from '@/components/common/format'
 
 import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
-import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
+import { pendingInfo } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
@@ -62,7 +62,7 @@ const NameDetail = ({ pendingName }) => {
   const pendingDetailTitle = (
     <PendingItemTitle
       sx={nameSx}
-      action={`${pendingFieldLabel(pendingName)} ${pendingName.action}`}
+      action={CONFIG.CONCEPT.STRUCTURE.CHANGE_NAME}
       title={formatDelta(pendingName.oldValue, pendingName.newValue)}
     />
   )

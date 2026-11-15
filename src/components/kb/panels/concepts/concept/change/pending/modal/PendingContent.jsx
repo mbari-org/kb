@@ -7,6 +7,7 @@ import PendingConceptItem from '@/components/kb/panels/concepts/concept/change/p
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 
 import { pendingChild as getPendingChild } from '@/lib/model/history'
 
@@ -20,6 +21,7 @@ const { MODALS } = CONFIG.PANELS.CONCEPTS
 const PendingContent = () => {
   const { concept, pending } = use(ConceptContext)
   const { setModal } = use(ConceptModalContext)
+  const { processing } = use(ConceptModalProcessingContext)
 
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
@@ -30,10 +32,10 @@ const PendingContent = () => {
   const isEmptyPending = isEmpty(pendingConcept) && !pendingChildItem
 
   useEffect(() => {
-    if (isEmptyPending) {
+    if (isEmptyPending && !processing) {
       setModal(null)
     }
-  }, [isEmptyPending, setModal])
+  }, [isEmptyPending, processing, setModal])
 
   if (isEmptyPending) {
     return null

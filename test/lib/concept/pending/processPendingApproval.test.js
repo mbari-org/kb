@@ -139,6 +139,43 @@ describe('processPendingApproval', () => {
     expect(reloadConceptRealizations).toHaveBeenCalledWith('wolf')
   })
 
+  it('reloads realizations against the restored name when a reject batch renames back', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: [],
+      media: [],
+      name: 'data file - 2',
+      parent: 'root',
+      rankLevel: '',
+      rankName: '',
+    }
+
+    const apiFns = okApiFns()
+    const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
+    const getConcept = vi.fn(() => staleConcept)
+    const loadConcept = vi.fn(async () => staleConcept)
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
+    const resetConceptPaths = vi.fn()
+    const updateSelected = vi.fn()
+    const items = [
+      { concept: 'data file - 2', field: 'LinkRealization', id: 'pending-1' },
+      { concept: 'data file - 2', field: 'ConceptName', action: 'Edit', oldValue: 'data file', newValue: 'data file - 2', id: 'pending-2' },
+    ]
+
+    cloneStaleMock.mockResolvedValue({ ...staleConcept })
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.REJECT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, resetConceptPaths, updateSelected },
+      items,
+    })
+
+    expect(reloadConceptRealizations).toHaveBeenCalledTimes(1)
+    expect(reloadConceptRealizations).toHaveBeenCalledWith('data file')
+  })
+
   it('fully loads a partially loaded group concept before cloning', async () => {
     const partialConcept = { name: 'miscellany', parent: 'object', children: ['try'] }
     const loadedConcept = {

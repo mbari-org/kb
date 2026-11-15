@@ -7,6 +7,7 @@ import PendingChildItem from '@/components/kb/panels/history/pending/PendingChil
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 import UserContext from '@/contexts/user/UserContext'
 import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
 import kbTheme from '@/lib/theme'
@@ -36,11 +37,13 @@ describe('pending child additions', () => {
     }
     render(
       <UserContext.Provider value={{ isAdmin: false }}>
-        <ConceptModalContext.Provider value={{ setModal: vi.fn() }}>
-          <ConceptContext.Provider value={{ concept, pending }}>
-            <PendingContent />
-          </ConceptContext.Provider>
-        </ConceptModalContext.Provider>
+        <ConceptModalProcessingContext.Provider value={{ processing: false }}>
+          <ConceptModalContext.Provider value={{ setModal: vi.fn() }}>
+            <ConceptContext.Provider value={{ concept, pending }}>
+              <PendingContent />
+            </ConceptContext.Provider>
+          </ConceptModalContext.Provider>
+        </ConceptModalProcessingContext.Provider>
       </UserContext.Provider>
     )
 
@@ -81,18 +84,20 @@ describe('pending detail alignment', () => {
     const content = isAdmin => (
       <ThemeProvider theme={kbTheme}>
         <UserContext.Provider value={{ isAdmin }}>
-          <ConceptModalContext.Provider value={{ setModal: vi.fn(), setModalData: vi.fn() }}>
-            <ConceptModalDataContext.Provider value={{ modalData: {} }}>
-              <ConceptContext.Provider value={{ concept: { name: item.concept, parent: 'root' }, pending }}>
-                <PendingContent />
-              </ConceptContext.Provider>
-            </ConceptModalDataContext.Provider>
-          </ConceptModalContext.Provider>
+          <ConceptModalProcessingContext.Provider value={{ processing: false }}>
+            <ConceptModalContext.Provider value={{ setModal: vi.fn(), setModalData: vi.fn() }}>
+              <ConceptModalDataContext.Provider value={{ modalData: {} }}>
+                <ConceptContext.Provider value={{ concept: { name: item.concept, parent: 'root' }, pending }}>
+                  <PendingContent />
+                </ConceptContext.Provider>
+              </ConceptModalDataContext.Provider>
+            </ConceptModalContext.Provider>
+          </ConceptModalProcessingContext.Provider>
         </UserContext.Provider>
       </ThemeProvider>
     )
     const { rerender } = render(content(true))
-    const title = screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Name Edit:')
+    const title = screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Change Name:')
     const values = screen.getByText('Creator:').parentElement.parentElement
     expect(screen.getAllByRole('button')).toHaveLength(2)
     expect(values.parentElement).toBe(title.parentElement.parentElement)
@@ -101,7 +106,7 @@ describe('pending detail alignment', () => {
     rerender(content(false))
     expect(screen.queryAllByRole('button')).toHaveLength(0)
     expect(screen.getByText('Creator:').parentElement.parentElement.parentElement).toBe(
-      screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Name Edit:').parentElement.parentElement
+      screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Change Name:').parentElement.parentElement
     )
   })
 })

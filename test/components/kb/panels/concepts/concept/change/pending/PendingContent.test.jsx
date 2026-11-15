@@ -5,6 +5,7 @@ import PendingContent from '@/components/kb/panels/concepts/concept/change/pendi
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 
 import { PENDING } from '@/lib/constants/pending.js'
 
@@ -40,7 +41,7 @@ const mediaItem = {
   creationTimestamp: '2026-11-12T16:23:00Z',
 }
 
-const renderPendingContent = ({ pendingConcept, pendingParent = [] }) => {
+const renderPendingContent = ({ pendingConcept, pendingParent = [], processing = false }) => {
   const setModal = vi.fn()
   const pending = vi.fn(key => {
     if (key === PENDING.DATA.CONCEPT) return pendingConcept
@@ -48,15 +49,21 @@ const renderPendingContent = ({ pendingConcept, pendingParent = [] }) => {
     return []
   })
 
-  const utils = render(
-    <ConceptModalContext.Provider value={{ setModal }}>
-      <ConceptContext.Provider value={{ concept: { name: 'dingo-2', parent: 'root' }, pending }}>
-        <PendingContent />
-      </ConceptContext.Provider>
-    </ConceptModalContext.Provider>
+  const tree = isProcessing => (
+    <ConceptModalProcessingContext.Provider value={{ processing: isProcessing }}>
+      <ConceptModalContext.Provider value={{ setModal }}>
+        <ConceptContext.Provider value={{ concept: { name: 'dingo-2', parent: 'root' }, pending }}>
+          <PendingContent />
+        </ConceptContext.Provider>
+      </ConceptModalContext.Provider>
+    </ConceptModalProcessingContext.Provider>
   )
 
-  return { ...utils, setModal }
+  const utils = render(
+    tree(processing)
+  )
+
+  return { ...utils, setModal, rerenderProcessing: isProcessing => utils.rerender(tree(isProcessing)) }
 }
 
 const itemOrder = container =>
@@ -96,5 +103,15 @@ describe('PendingContent', () => {
 
     expect(setModal).toHaveBeenCalledWith(null)
     expect(itemOrder(container)).toEqual([])
+  })
+
+  it('keeps the modal open while pending actions are processing', () => {
+    const { setModal, rerenderProcessing } = renderPendingContent({ pendingConcept: [], processing: true })
+
+    expect(setModal).not.toHaveBeenCalled()
+
+    rerenderProcessing(false)
+
+    expect(setModal).toHaveBeenCalledWith(null)
   })
 })

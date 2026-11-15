@@ -195,7 +195,9 @@ group level. Approve/Reject All remain modal-level actions in `PendingActions.js
       approve or reject.
    d. `Promise.all` of `refreshData(PENDING_HISTORY)` + `reloadConceptRealizations` for
       concepts with REALIZATION-field items (there is **no REALIZATION case** in the
-      mutator switch — realization approvals are handled by this cache reload).
+      mutator switch — realization approvals are handled by this cache reload). When a
+      reject batch contains the concept's rename, the reload uses the rename's `oldValue`,
+      since ONI has already restored the old name by this point.
    e. Per concept group: `cloneStale(apiFns, staleConcept, false)` — a purely **local**
       clone (no server refetch) — then `applyRejects` / `applyApprovals`, then
       `conceptEditsRefresh(freshConcept, staleConcept)`; `updateSelected` if renamed.

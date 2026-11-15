@@ -9,6 +9,7 @@ import { createError } from '@/lib/errors'
 import { applyApprovals } from '@/lib/concept/pending/applyApproves'
 import { applyRejects } from '@/lib/concept/pending/applyRejects'
 import cloneStale from '@/lib/concept/pending/cloneStale'
+import { isPendingName } from '@/lib/concept/state/name'
 
 // processPendingApproval handles both pending approve and reject. The nomenclature is approval reject or approval
 // approve.
@@ -81,8 +82,15 @@ export const processPendingApproval = async ({
     resetConceptPaths()
   }
 
+  // A rejected rename has already restored the old name on ONI, so reload against oldValue.
+  const effectiveName = conceptName => {
+    if (approval !== PENDING.APPROVAL.REJECT) return conceptName
+    const nameItem = items.find(item => isPendingName(item) && item.concept === conceptName)
+    return nameItem ? nameItem.oldValue : conceptName
+  }
+
   const realizationConcepts = [
-    ...new Set(items.filter(item => item.field === HISTORY_FIELD.REALIZATION).map(item => item.concept)),
+    ...new Set(items.filter(item => item.field === HISTORY_FIELD.REALIZATION).map(item => effectiveName(item.concept))),
   ]
 
   const [{ pendingHistory }] = await Promise.all([
