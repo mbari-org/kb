@@ -10,29 +10,33 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import CONFIG from '@/lib/config'
 
 const SidebarSelectAuxiliary = ({ concepts, onScrollToConcept }) => {
-  const { prepareConceptSwitch } = use(ConceptContext)
+  const { concept, prepareConceptSwitch } = use(ConceptContext)
 
   const history = useMemo(() => {
-    // Paint the loading overlay first, then navigate on the next frames.
-    // After expand-all the tree re-render is heavy; without yielding, the browser
-    // never paints the overlay until that work finishes (looks like a multi-second hang).
-    const go = fn => (...args) => {
-      prepareConceptSwitch()
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
+    const go =
+      (fn, items, index) =>
+      (...args) => {
+        if (items()[index(...args)] === concept.name) {
           fn(...args)
+          return
+        }
+
+        prepareConceptSwitch()
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            fn(...args)
+          })
         })
-      })
-    }
+      }
 
     return {
       ...concepts,
-      back: go(concepts.back),
-      forward: go(concepts.forward),
-      goBack: go(concepts.goBack),
-      goForward: go(concepts.goForward),
+      back: go(concepts.back, concepts.backItems, () => 0),
+      forward: go(concepts.forward, concepts.forwardItems, () => 0),
+      goBack: go(concepts.goBack, concepts.backItems, delta => delta - 1),
+      goForward: go(concepts.goForward, concepts.forwardItems, delta => delta - 1),
     }
-  }, [concepts, prepareConceptSwitch])
+  }, [concept, concepts, prepareConceptSwitch])
 
   const conceptExport = <ConceptExport />
   const conceptScroll = <ConceptScroll onScrollToConcept={onScrollToConcept} />

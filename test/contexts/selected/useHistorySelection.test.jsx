@@ -61,4 +61,21 @@ describe('useHistorySelection', () => {
     expect(result.current.getState()).toEqual(['Concepts', 'History'])
     expect(onCurrentChange).toHaveBeenLastCalledWith('History')
   })
+
+  it('updates history when entries change without changing the current item or position', () => {
+    const { result } = renderHook(() => useHistorySelection('Concepts'))
+
+    act(() => {
+      result.current.init({ state: ['Concepts', 'History'], position: 0 })
+    })
+
+    expect(result.current.forwardItems()).toEqual(['History'])
+    expect(result.current.canGoForward()).toBe(true)
+
+    const selection = result.current
+    act(() => {
+      result.current.init({ state: ['Concepts', 'History'], position: 0 })
+    })
+    expect(result.current).toBe(selection)
+  })
 })

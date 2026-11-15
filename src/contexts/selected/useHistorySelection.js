@@ -4,21 +4,34 @@ import { useCallback, useMemo, useState } from 'react'
 const useHistorySelection = (defaultValue, onCurrentChange) => {
   const store = useMemo(() => createHistoryState(defaultValue), [defaultValue])
 
-  const [current, setCurrent] = useState(() => store.current())
+  const [current, setCurrent] = useState(() => ({
+    value: store.current(),
+    position: store.getPosition(),
+    entries: store.getState(),
+  }))
 
   const updateCurrent = useCallback(
     value => {
-      setCurrent(value)
+      const position = store.getPosition()
+      const entries = store.getState()
+      setCurrent(previous =>
+        previous.value === value &&
+        previous.position === position &&
+        previous.entries.length === entries.length &&
+        previous.entries.every((entry, index) => entry === entries[index])
+          ? previous
+          : { value, position, entries }
+      )
       if (onCurrentChange) onCurrentChange(value)
     },
-    [onCurrentChange]
+    [onCurrentChange, store]
   )
 
   return useMemo(
     () => ({
       ...store,
 
-      current: () => current,
+      current: () => current.value,
 
       push: value => {
         store.push(value)
