@@ -1,0 +1,44 @@
+{
+  "ALIAS": {
+    "ADD": "Add Alias",
+    "EDIT": "Edit Alias",
+    "DELETE": "Delete Alias"
+  },
+  "AUTHOR": {
+    "EDIT": "Edit Author"
+  },
+  "CHILD": {
+    "ADD": "Add Child",
+    "EDIT": "Edit Child",
+    "DELETE": "Delete Child"
+  },
+  "MEDIA": {
+    "ADD": "Add Media",
+    "EDIT": "Edit Media",
+    "DELETE": "Delete Media"
+  },
+  "NAME": {
+    "CHANGE": "Change Name",
+    "EDIT": "Edit Name"
+  },
+  "PARENT": {
+    "ADD": "Add Parent",
+    "EDIT": "Change Parent",
+    "DELETE": "Delete Parent"
+  },
+  "RANK": {
+    "ADD": "Add Rank",
+    "EDIT": "Edit Rank",
+    "DELETE": "Delete Rank"
+  },
+  "REALIZATION": {
+    "ADD": "Add Realization",
+    "EDIT": "Edit Realization",
+    "DELETE": "Delete Realization"
+  },
+  "TEMPLATE": {
+    "ADD": "Add Template",
+    "EDIT": "Edit Template",
+    "DELETE": "Delete Template"
+  }
+}

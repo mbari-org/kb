@@ -9,7 +9,7 @@ import { pendingActionValue } from '@/components/kb/panels/concepts/concept/chan
 
 import usePendingItemApproval from '@/contexts/panels/concepts/pending/usePendingItemApproval'
 
-import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
+import { pendingInfo, pendingItemLabel } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 
@@ -22,7 +22,7 @@ const PendingItem = ({ infoRows = [], item }) => {
   const disabled = approval === APPROVAL.OTHER
 
   const pendingDetailTitle = (
-    <PendingItemTitle sx={itemSx} action={`${pendingFieldLabel(item)} ${item.action}`} title={pendingActionValue(item)} />
+    <PendingItemTitle sx={itemSx} action={pendingItemLabel(item)} title={pendingActionValue(item)} />
   )
   const pendingDetailValues = <PendingValues disabled={disabled} leftMargin={2.1} pendingValues={[...infoRows, ...pendingInfo(item)]} />
 

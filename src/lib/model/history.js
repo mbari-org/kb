@@ -1,16 +1,13 @@
 import { isPendingChild } from '@/lib/concept/state/children'
 import { isPendingName } from '@/lib/concept/state/name'
+import itemTitle from '@/lib/concept/itemTitle'
 
 import { ACTION } from '@/lib/constants'
 import { createError } from '@/lib/errors'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
-import CONFIG from '@/lib/config'
-
 import { capitalize, humanTimestamp, isEmpty, pick } from '@/lib/utils'
-
-const { ITEM: itemLabel } = CONFIG.PANELS.CONCEPTS.MODALS
 
 const hasPending = (pending, field) => (field ? !isEmpty(pendingItems(pending, field)) : !isEmpty(pending))
 
@@ -106,28 +103,28 @@ const pendingValues = pendingItem =>
     ['creationTimestamp', 'created'],
   ])
 
-const pendingFieldLabel = pendingItem => {
+const pendingItemField = pendingItem => {
   switch (pendingItem.field) {
     case HISTORY_FIELD.CHILD:
-      return itemLabel.CHILD
+      return 'CHILD'
 
     case HISTORY_FIELD.MEDIA:
-      return itemLabel.MEDIA
+      return 'MEDIA'
 
     case HISTORY_FIELD.NAME:
-      return isPendingName(pendingItem) ? itemLabel.NAME : itemLabel.ALIAS
+      return isPendingName(pendingItem) ? 'NAME' : 'ALIAS'
 
     case HISTORY_FIELD.PARENT:
-      return itemLabel.PARENT
+      return 'PARENT'
 
     case HISTORY_FIELD.RANK:
-      return itemLabel.RANK
+      return 'RANK'
 
     case HISTORY_FIELD.REALIZATION:
-      return itemLabel.REALIZATION
+      return 'REALIZATION'
 
     case HISTORY_FIELD.TEMPLATE:
-      return itemLabel.TEMPLATE
+      return 'TEMPLATE'
 
     default:
       throw createError('Invalid Pending Field', `Cannot label pending item with unknown field: ${pendingItem.field}`, {
@@ -135,6 +132,8 @@ const pendingFieldLabel = pendingItem => {
       })
   }
 }
+
+const pendingItemLabel = pendingItem => itemTitle(pendingItemField(pendingItem), pendingItem.action)
 
 export {
   hasPending,
@@ -146,8 +145,8 @@ export {
   moveDeleteToLast,
   pendingActionText,
   pendingChild,
-  pendingFieldLabel,
   pendingInfo,
+  pendingItemLabel,
   pendingItems,
   pendingValues,
 }

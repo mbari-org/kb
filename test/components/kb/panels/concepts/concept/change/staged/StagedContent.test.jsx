@@ -1,11 +1,16 @@
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import StagedContent from '@/components/kb/panels/concepts/concept/change/staged/modal/StagedContent'
+import StagedAliasHeader from '@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAliasHeader'
+import StagedChildHeader from '@/components/kb/panels/concepts/concept/change/staged/children/StagedChildHeader'
+import StagedMediaItemHeader from '@/components/kb/panels/concepts/concept/change/staged/media/StagedMediaItemHeader'
+import StagedRealizationHeader from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealizationHeader'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import CONFIG from '@/lib/config'
 
 vi.mock('@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAlias', () => ({
   default: ({ stagedItem }) => <div data-testid={`staged-alias-${stagedItem.updates.name}`} />,
@@ -19,12 +24,12 @@ vi.mock('@/components/kb/panels/concepts/concept/change/staged/media/StagedMedia
 vi.mock('@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealization', () => ({
   default: ({ stagedItem }) => <div data-testid={`staged-realization-${stagedItem.updates.linkName}`} />,
 }))
-vi.mock('@/components/kb/panels/concepts/concept/change/staged/StagedObject', () => ({
-  default: ({ field }) => <div data-testid={`staged-object-${field}`} />,
-}))
-vi.mock('@/components/kb/panels/concepts/concept/change/staged/StagedValue', () => ({
-  default: ({ field }) => <div data-testid={`staged-value-${field}`} />,
-}))
+vi.mock('@/components/kb/panels/concepts/concept/change/staged/StagedObject', async importOriginal => {
+  const { default: StagedObject } = await importOriginal()
+  return {
+    default: props => <div data-testid={`staged-object-${props.field}`}><StagedObject {...props} /></div>,
+  }
+})
 
 const baseState = {
   aliasIndex: 0,
@@ -97,10 +102,60 @@ describe('StagedContent', () => {
     expect(closeModal).toHaveBeenCalledWith(true)
   })
 
+  it('labels staged parent and author edits', () => {
+    const initialState = { ...baseState, parent: { action: 'None', value: 'old-parent' } }
+    const stagedState = {
+      ...initialState,
+      author: { action: 'Edit', value: 'new-author', stagedSeq: 2 },
+      parent: { action: 'Edit', value: 'new-parent', stagedSeq: 1 },
+    }
+
+    renderStagedContent({ initialState, stagedState })
+
+    expect(screen.getByText('Change Parent:')).toBeInTheDocument()
+    expect(screen.getByText(/old-parent.*new-parent/)).toBeInTheDocument()
+    expect(screen.queryByText('Parent Edit:')).not.toBeInTheDocument()
+    expect(screen.getByText('Edit Author:')).toBeInTheDocument()
+  })
+
+  it('labels staged name and rank edits', () => {
+    const initialState = { ...baseState, name: { action: 'None', value: 'old-name', extent: '' } }
+    const stagedState = {
+      ...initialState,
+      name: { action: 'Edit Name', value: 'new-name', extent: '', stagedSeq: 1 },
+      rank: { action: 'Edit Rank', level: '1', name: 'species', stagedSeq: 2 },
+    }
+    renderStagedContent({ initialState, stagedState })
+
+    expect(screen.getByTestId('staged-object-name')).toHaveTextContent('Edit Name:')
+    expect(screen.getByTestId('staged-object-rank')).toHaveTextContent('Edit Rank:')
+  })
+
   it('closes the modal when the concept state is unavailable', () => {
     const { closeModal } = renderStagedContent({ initialState: null, stagedState: {} })
 
     expect(closeModal).toHaveBeenCalledWith(true)
+  })
+
+  describe('staged item headers', () => {
+    it.each([
+      ['ALIAS', StagedAliasHeader, 'stagedAlias', { action: 'Add Alias', updates: { name: 'alias' } }, 'Add Alias'],
+      ['CHILD', StagedChildHeader, 'stagedChild', { action: 'Add Child', updates: { name: 'child' } }, 'Add Child'],
+      ['MEDIA', StagedMediaItemHeader, 'stagedMediaItem', { action: 'Add Media', updates: { url: 'image.png' } }, 'Add Media'],
+      ['REALIZATION', StagedRealizationHeader, 'stagedRealization', { action: 'Add Realization', updates: { linkName: 'link' } }, 'Add Realization'],
+    ])('uses the configured %s action title', (field, Header, prop, item, expected) => {
+      const titles = CONFIG.PANELS.CONCEPTS.MODALS.ITEM_TITLES[field]
+      const original = titles.ADD
+      const { rerender } = render(<Header {...{ [prop]: item }} />)
+      expect(screen.getByText(`${expected}:`)).toBeInTheDocument()
+      titles.ADD = 'Configured action title'
+      try {
+        rerender(<Header {...{ [prop]: item }} />)
+        expect(screen.getByText('Configured action title:')).toBeInTheDocument()
+      } finally {
+        titles.ADD = original
+      }
+    })
   })
 
   it('uses the parent name at each child addition in staged save order', () => {

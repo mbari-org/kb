@@ -23,7 +23,7 @@ const StagedValue = ({ field, label, stagedEdit }) => {
 
   const itemHeader = () => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <Typography>{label} Edit:</Typography>
+      <Typography>{label}:</Typography>
       <Typography sx={{ fontWeight: 'bold' }}>{deltaValue}</Typography>
     </Box>
   )

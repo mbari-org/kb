@@ -62,7 +62,7 @@ const NameDetail = ({ pendingName }) => {
   const pendingDetailTitle = (
     <PendingItemTitle
       sx={nameSx}
-      action={CONFIG.CONCEPT.STRUCTURE.CHANGE_NAME}
+      action={CONFIG.PANELS.CONCEPTS.MODALS.ITEM_TITLES.NAME.CHANGE}
       title={formatDelta(pendingName.oldValue, pendingName.newValue)}
     />
   )

@@ -2,9 +2,7 @@ import { Box, Typography } from '@mui/material'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 
-import CONFIG from '@/lib/config'
-
-const { ITEM } = CONFIG.PANELS.CONCEPTS.MODALS
+import itemTitle from '@/lib/concept/itemTitle'
 
 const StagedChildHeader = ({ initialChild, stagedChild }) => {
   const { action, updates } = stagedChild
@@ -13,7 +11,7 @@ const StagedChildHeader = ({ initialChild, stagedChild }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <Typography>
-        {ITEM.CHILD} {actionVerb(action)}:
+        {itemTitle('CHILD', actionVerb(action))}:
       </Typography>
       <Typography sx={{ fontWeight: 'bold' }}>{childName}</Typography>
     </Box>

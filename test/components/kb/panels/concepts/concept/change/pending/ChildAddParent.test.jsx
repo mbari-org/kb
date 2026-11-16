@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import PendingContent from '@/components/kb/panels/concepts/concept/change/pending/modal/PendingContent'
 import PendingChildItem from '@/components/kb/panels/history/pending/PendingChildItem'
+import PendingParentItem from '@/components/kb/panels/history/pending/PendingParentItem'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
@@ -22,6 +23,16 @@ const childAdd = {
   field: HISTORY_FIELD.CHILD,
   action: ACTION.ADD,
   newValue: 'child-concept',
+  creationTimestamp: '2026-11-12T16:24:30Z',
+}
+
+const parentEdit = {
+  id: 'parent-edit',
+  concept: 'child-concept',
+  field: HISTORY_FIELD.PARENT,
+  action: ACTION.EDIT,
+  oldValue: 'old-parent',
+  newValue: 'new-parent',
   creationTimestamp: '2026-11-12T16:24:30Z',
 }
 
@@ -48,6 +59,38 @@ describe('pending child additions', () => {
     )
 
     expect(screen.getByText('Parent:').parentElement).toHaveTextContent('parent-concept')
+  })
+
+  describe('pending parent changes', () => {
+    it('labels a parent edit in the Concept pending modal', () => {
+      const pending = key => {
+        if (key === PENDING.DATA.CONCEPT) return [parentEdit]
+        if (key === PENDING.DATA.PARENT) return []
+        return null
+      }
+
+      render(
+        <UserContext.Provider value={{ isAdmin: false }}>
+          <ConceptModalProcessingContext.Provider value={{ processing: false }}>
+            <ConceptModalContext.Provider value={{ setModal: vi.fn() }}>
+              <ConceptContext.Provider value={{ concept: { name: 'child-concept', parent: 'new-parent' }, pending }}>
+                <PendingContent />
+              </ConceptContext.Provider>
+            </ConceptModalContext.Provider>
+          </ConceptModalProcessingContext.Provider>
+        </UserContext.Provider>
+      )
+
+      expect(screen.getByText('Change Parent:')).toBeInTheDocument()
+      expect(screen.getByText(/old-parent.*new-parent/)).toBeInTheDocument()
+    })
+
+    it('labels a parent edit in History pending details', () => {
+      render(<PendingParentItem item={parentEdit} />)
+
+      expect(screen.getByText('Change Parent:')).toBeInTheDocument()
+      expect(screen.getByText(/old-parent.*new-parent/)).toBeInTheDocument()
+    })
   })
 
   it('shows the parent in History pending details', () => {
@@ -97,7 +140,7 @@ describe('pending detail alignment', () => {
       </ThemeProvider>
     )
     const { rerender } = render(content(true))
-    const title = screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Change Name:')
+    const title = screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Add Child:' : 'Change Name:')
     const values = screen.getByText('Creator:').parentElement.parentElement
     expect(screen.getAllByRole('button')).toHaveLength(2)
     expect(values.parentElement).toBe(title.parentElement.parentElement)
@@ -106,7 +149,7 @@ describe('pending detail alignment', () => {
     rerender(content(false))
     expect(screen.queryAllByRole('button')).toHaveLength(0)
     expect(screen.getByText('Creator:').parentElement.parentElement.parentElement).toBe(
-      screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Child Add:' : 'Change Name:').parentElement.parentElement
+      screen.getByText(item.field === HISTORY_FIELD.CHILD ? 'Add Child:' : 'Change Name:').parentElement.parentElement
     )
   })
 })

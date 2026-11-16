@@ -32,7 +32,9 @@ The deepest UI tree. Major areas:
   framework.
 - **Editing UI** — `concept/change/staged/*` per-field staged editors; `change/pending/*`
   read-only approval mirror of the same fields; `staged/modal/StagedActions.jsx` drives
-  save/reset with confirm-discard flow.
+  save/reset with confirm-discard flow. Staged and pending item titles are configured in
+  `src/config/panels/concepts/modals/itemTitles.json`; the separate name-edit and
+  change-name entries preserve the current wording in each display.
 
 ## Table panels (`src/components/kb/panels/`)
 

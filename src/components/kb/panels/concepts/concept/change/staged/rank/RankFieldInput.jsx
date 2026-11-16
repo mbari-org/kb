@@ -51,7 +51,15 @@ const RankFieldInput = ({ field, initialRank, label, rank, onChange, onClear }) 
 
   return (
     <FormControl {...inputStyle}>
-      <Box sx={{ border, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+      <Box
+        sx={{
+          border,
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          '&:focus-within .MuiAutocomplete-clearIndicator': { visibility: 'visible' },
+        }}
+      >
         <Autocomplete
           clearText={clearLabel}
           disableClearable={!isAdmin || !onClear}

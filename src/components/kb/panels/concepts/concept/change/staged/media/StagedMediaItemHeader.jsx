@@ -2,21 +2,18 @@ import { Box, Typography } from '@mui/material'
 
 import { actionVerb } from '@/components/kb/panels/concepts/concept/change/action'
 
-import CONFIG from '@/lib/config'
-
-const { ITEM } = CONFIG.PANELS.CONCEPTS.MODALS
+import itemTitle from '@/lib/concept/itemTitle'
 
 const urlFile = url => url?.split('/').pop()
 
 const StagedMediaItemHeader = ({ initialMediaItem, stagedMediaItem }) => {
   const { action, updates } = stagedMediaItem
-  const actionText = actionVerb(action)
   const actionFile = urlFile(initialMediaItem?.url) || urlFile(updates?.url) || ''
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <Typography>
-        {ITEM.MEDIA} {actionText}:
+        {itemTitle('MEDIA', actionVerb(action))}:
       </Typography>
       <Typography sx={{ fontWeight: 'bold' }}>{actionFile}</Typography>
     </Box>

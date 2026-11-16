@@ -31,7 +31,7 @@ const StagedObject = ({ field, label, stagedEdit }) => {
     </Box>
   )
 
-  const itemHeader = () => <Typography>{label} Edit:</Typography>
+  const itemHeader = () => <Typography>{label}:</Typography>
 
   const itemReset = () => <StagedItemReset group={field} resetting={resetting} stagedItem={staged} />
 

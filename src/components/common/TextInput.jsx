@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Box, TextField, IconButton } from '@mui/material'
-import { IoClose } from 'react-icons/io5'
+import { MdClose } from 'react-icons/md'
 
 const TextInput = ({
   value,
@@ -39,7 +39,18 @@ const TextInput = ({
   }, [onChange, textFieldProps.name])
 
   return (
-    <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+    <Box
+      sx={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        '& .text-input-clear': { visibility: 'hidden' },
+        '@media (pointer: fine)': {
+          '&:hover .text-input-clear': { visibility: 'visible' },
+        },
+        '&:focus-within .text-input-clear': { visibility: 'visible' },
+      }}
+    >
       <TextField
         {...textFieldProps}
         onChange={handleInputChange}
@@ -51,6 +62,7 @@ const TextInput = ({
       />
       {showClearButton && inputValue && (
         <IconButton
+          className='text-input-clear'
           size='small'
           onClick={handleClear}
           sx={{
@@ -58,13 +70,13 @@ const TextInput = ({
             right: 0,
             top: '50%',
             transform: 'translateY(-50%)',
-            paddingRight: 0.25,
+            padding: 0.5,
             '&:hover': {
               backgroundColor: 'rgba(0, 0, 0, 0.04)',
             },
           }}
         >
-          <IoClose size={16} />
+          <MdClose size={20} />
         </IconButton>
       )}
     </Box>

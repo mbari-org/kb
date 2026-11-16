@@ -12,7 +12,7 @@ import { usePanelModalOperationsContext } from '@/contexts/panel/modal'
 
 import { otherApprovalSx } from '@/components/common/format'
 import { pendingActionValue } from '@/components/kb/panels/concepts/concept/change/action'
-import { pendingFieldLabel, pendingInfo } from '@/lib/model/history'
+import { pendingInfo, pendingItemLabel } from '@/lib/model/history'
 import { isPendingName } from '@/lib/concept/state/name'
 
 import { PENDING } from '@/lib/constants/pending.js'
@@ -48,7 +48,7 @@ const PendingNameItem = ({ item, isAdmin }) => {
 
   const pendingDetailTitle = (
     <Box>
-      <PendingItemTitle sx={nameSx} action={`${pendingFieldLabel(item)} ${item.action}`} title={title} />
+      <PendingItemTitle sx={nameSx} action={pendingItemLabel(item)} title={title} />
     </Box>
   )
 
