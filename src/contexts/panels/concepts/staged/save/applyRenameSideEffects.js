@@ -28,8 +28,7 @@ const conceptPrefsUpdate = async (updatesContext, newConceptName) => {
 }
 
 const settingsUpdate = (updatesContext, staleName, newConceptName) => {
-  const { getSettings } = updatesContext
-  const currentSettings = getSettings(KEY.SETTINGS) || {}
+  const { settings: currentSettings } = updatesContext
 
   const updatedSettings = {
     ...currentSettings,

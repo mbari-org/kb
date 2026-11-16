@@ -20,6 +20,10 @@ const buildContext = () => ({
   renameConceptRealizations: vi.fn(),
   renameRealizationToConceptNames: vi.fn(),
   savePreferences: vi.fn(async () => {}),
+  settings: {
+    history: { type: 'pending' },
+    templates: { byAvailable: false, filters: { concept: 'old-name' } },
+  },
   staleConcept: { name: 'old-name' },
   updatePreferences: vi.fn(async () => {}),
 })
@@ -71,6 +75,13 @@ describe('applyRenameSideEffects', () => {
       position: 0,
     })
     expect(updatesContext.savePreferences).toHaveBeenCalledTimes(1)
+    expect(updatesContext.savePreferences).toHaveBeenCalledWith('settings', {
+      history: { type: 'pending' },
+      templates: {
+        byAvailable: false,
+        filters: { concept: 'new-name' },
+      },
+    })
     expect(updatesContext.refreshPanelData).toHaveBeenCalledTimes(2)
   })
 })

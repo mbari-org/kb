@@ -20,7 +20,7 @@ const useUpdatesContext = () => {
     renameRealizationToConceptNames,
   } = use(PanelDataContext)
   const { savePreferences, updatePreferences } = use(PreferencesContext)
-  const { getSettings } = use(SelectedSettingsContext)
+  const { getSettings, settings } = use(SelectedSettingsContext)
   const { getPreferences, isAdmin, user } = use(UserContext)
 
   return {
@@ -35,6 +35,7 @@ const useUpdatesContext = () => {
     renameConceptRealizations,
     renameRealizationToConceptNames,
     savePreferences,
+    settings,
     staleConcept,
     updatePreferences,
     user,
