@@ -63,7 +63,7 @@ const useChangeParentModal = () => {
       alreadyGettingDescendants.current = true
 
       const descendantNames = await getDescendantNames(apiFns, concept.name)
-      const omitChoices = [concept.name, concept.parent, ...descendantNames]
+      const omitChoices = [concept.name, concept.parent, ...concept.alternateNames, ...descendantNames]
 
       const modal = changeParentModal(omitChoices)
       const onClose = changeParentOnClose(modifyConcept)

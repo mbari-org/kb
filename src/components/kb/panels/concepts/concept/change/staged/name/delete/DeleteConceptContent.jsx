@@ -1,4 +1,4 @@
-import { use, useCallback, useState } from 'react'
+import { use, useCallback, useMemo, useState } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
 
@@ -36,9 +36,11 @@ const DeleteConceptContent = () => {
   const hasRelatedData = relatedDataCounts?.some(count => count.value > 0)
   const hasStagedEdits = isStateModified({ initialState, stagedState })
 
+  const omitChoices = useMemo(() => [concept.name, ...concept.alternateNames], [concept])
+
   const validateInput = useCallback(
-    input => validateConceptInput(input, getNames(), [concept.name]),
-    [concept.name, getNames]
+    input => validateConceptInput(input, getNames(), omitChoices),
+    [getNames, omitChoices]
   )
 
   const handleChange = (_event, selectedName) => {
@@ -85,7 +87,7 @@ const DeleteConceptContent = () => {
                   handleChange={handleChange}
                   handleKeyUp={handleKeyUp}
                   label={MODALS.HIERARCHY.DELETE_CONCEPT.REASSIGN_TO}
-                  omitChoices={[concept.name]}
+                  omitChoices={omitChoices}
                   required
                   value={reassign}
                 />
