@@ -17,6 +17,7 @@ import UserContext from '@/contexts/user/UserContext'
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
 import { normalizeConcept, deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
+import enqueueConceptMutation from '@/lib/concept/enqueueConceptMutation'
 import {
   deleteConcept as deleteTaxonomyConcept,
   getConcept as getTaxonomyConcept,
@@ -121,39 +122,40 @@ const DeleteConceptActions = () => {
         // CxNote due to closures the taxonomy must be directly manipulated
 
         await withProcessing(
-          async () => {
-            const preDeleteResults = await preSideEffects(deleteConceptContext)
-            const { closestConcept, taxonomy: updatedTaxonomy } = await deleteTaxonomyConcept(taxonomy, concept, apiFns)
-            const postDeleteResults = await postSideEffects(deleteConceptContext)
+          () =>
+            enqueueConceptMutation(concept.name, async () => {
+              const preDeleteResults = await preSideEffects(deleteConceptContext)
+              const { closestConcept, taxonomy: updatedTaxonomy } = await deleteTaxonomyConcept(taxonomy, concept, apiFns)
+              const postDeleteResults = await postSideEffects(deleteConceptContext)
 
-            const results = { ...preDeleteResults, ...postDeleteResults }
+              const results = { ...preDeleteResults, ...postDeleteResults }
 
-            await applyResults(refreshPanelData, results)
+              await applyResults(refreshPanelData, results)
 
-            if (reassign) {
-              const reassignedConcept = getTaxonomyConcept(updatedTaxonomy, reassign)
-              if (reassignedConcept) {
-                await normalizeConcept(apiFns, reassignedConcept)
-                insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+              if (reassign) {
+                const reassignedConcept = getTaxonomyConcept(updatedTaxonomy, reassign)
+                if (reassignedConcept) {
+                  await normalizeConcept(apiFns, reassignedConcept)
+                  insertConcept(reassignedConcept, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+                }
               }
-            }
-            if (closestConcept && closestConcept.name !== reassign) {
-              const closestInTaxonomy = getTaxonomyConcept(updatedTaxonomy, closestConcept.name)
-              if (closestInTaxonomy) {
-                await normalizeConcept(apiFns, closestInTaxonomy)
-                insertConcept(closestInTaxonomy, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+              if (closestConcept && closestConcept.name !== reassign) {
+                const closestInTaxonomy = getTaxonomyConcept(updatedTaxonomy, closestConcept.name)
+                if (closestInTaxonomy) {
+                  await normalizeConcept(apiFns, closestInTaxonomy)
+                  insertConcept(closestInTaxonomy, updatedTaxonomy.conceptMap, updatedTaxonomy.aliasMap)
+                }
               }
-            }
 
-            updateTaxonomy(updatedTaxonomy)
+              updateTaxonomy(updatedTaxonomy)
 
-            modifyConcept({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
-            closeModal(true, () => {
-              conceptSelection.removeName(concept.name)
-              updateSelected({ concept: closestConcept.name })
-              setClearTemplateFilters(true)
-            })
-          },
+              modifyConcept({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
+              closeModal(true, () => {
+                conceptSelection.removeName(concept.name)
+                updateSelected({ concept: closestConcept.name })
+                setClearTemplateFilters(true)
+              })
+            }),
           PROCESSING.DELETE,
           PROCESSING.ARG.CONCEPT
         )

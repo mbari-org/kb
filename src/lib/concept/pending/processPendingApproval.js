@@ -9,6 +9,7 @@ import { createError } from '@/lib/errors'
 import { applyApprovals } from '@/lib/concept/pending/applyApproves'
 import { applyRejects } from '@/lib/concept/pending/applyRejects'
 import cloneStale from '@/lib/concept/pending/cloneStale'
+import enqueueConceptMutation from '@/lib/concept/enqueueConceptMutation'
 import { isPendingName } from '@/lib/concept/state/name'
 
 // processPendingApproval handles both pending approve and reject. The nomenclature is approval reject or approval
@@ -42,7 +43,7 @@ const validateRestoredChildren = async (apiFns, approval, items) => {
   }
 }
 
-export const processPendingApproval = async ({
+const processPendingApprovalUnlocked = async ({
   approval,
   items,
   deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, resetConceptPaths, updateSelected },
@@ -147,6 +148,14 @@ export const processPendingApproval = async ({
     })
 
   return { concepts, pendingHistory, removed, updated }
+}
+
+// Serialize the batch behind every involved concept's mutation queue so it cannot
+// interleave with a staged save or delete of the same concept.
+export const processPendingApproval = args => {
+  const names = [...new Set(args.items?.map(item => item.concept) ?? [])]
+  const chain = names.reduce((run, name) => enqueueConceptMutation(name, () => run), Promise.resolve())
+  return chain.then(() => processPendingApprovalUnlocked(args))
 }
 
 export default processPendingApproval

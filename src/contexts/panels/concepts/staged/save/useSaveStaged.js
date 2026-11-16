@@ -13,6 +13,8 @@ import applyUpdateResults from '@/contexts/panels/concepts/staged/save/applyUpda
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import useUpdatesContext from '@/contexts/panels/concepts/staged/save/useUpdatesContext'
 
+import enqueueConceptMutation from '@/lib/concept/enqueueConceptMutation'
+
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
@@ -31,65 +33,67 @@ const useSaveStaged = () => {
   const updatesContext = useUpdatesContext()
 
   return useCallback(() => {
-    return withProcessing(
-      async () => {
-        const { apiFns, isAdmin, refreshPanelData, reloadConceptRealizations, staleConcept } = updatesContext
+    return enqueueConceptMutation(updatesContext.staleConcept.name, () =>
+      withProcessing(
+        async () => {
+          const { apiFns, isAdmin, refreshPanelData, reloadConceptRealizations, staleConcept } = updatesContext
 
-        const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
+          const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
 
-        const conceptName = updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
+          const conceptName = updatesInfo?.updatedValue(CONCEPT.FIELD.NAME)?.value || staleConcept.name
 
-        const nameUpdated = updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)
+          const nameUpdated = updatesInfo.hasUpdated(CONCEPT.FIELD.NAME)
 
-        if (nameUpdated) {
-          await applyRenameSideEffects(updatesContext, updatesInfo)
-        }
+          if (nameUpdated) {
+            await applyRenameSideEffects(updatesContext, updatesInfo)
+          }
 
-        if (updatesInfo.hasUpdated(CONCEPT.FIELD.PARENT)) {
-          resetConceptPaths()
-        } else if (nameUpdated) {
-          relabelConceptPaths(staleConcept.name, conceptName)
-        }
+          if (updatesInfo.hasUpdated(CONCEPT.FIELD.PARENT)) {
+            resetConceptPaths()
+          } else if (nameUpdated) {
+            relabelConceptPaths(staleConcept.name, conceptName)
+          }
 
-        if (updatesInfo.hasUpdated(CONCEPT.FIELD.REALIZATIONS)) {
-          await reloadConceptRealizations(conceptName)
-        }
+          if (updatesInfo.hasUpdated(CONCEPT.FIELD.REALIZATIONS)) {
+            await reloadConceptRealizations(conceptName)
+          }
 
-        const freshConcept = { ...staleConcept, name: conceptName }
-        delete freshConcept.realizations
-        delete freshConcept.templates
-        if (freshConcept.media === undefined) {
-          await normalizeConcept(apiFns, freshConcept)
-        }
+          const freshConcept = { ...staleConcept, name: conceptName }
+          delete freshConcept.realizations
+          delete freshConcept.templates
+          if (freshConcept.media === undefined) {
+            await normalizeConcept(apiFns, freshConcept)
+          }
 
-        await applyUpdateResults({
-          freshConcept,
-          isAdmin,
-          staleConcept,
-          updatesInfo,
-        })
+          await applyUpdateResults({
+            freshConcept,
+            isAdmin,
+            staleConcept,
+            updatesInfo,
+          })
 
-        const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
+          const { pendingHistory } = await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
 
-        const createdChildPayloads = updatesInfo.results
-          .filter(result => result.field === CONCEPT.FIELD.CHILDREN && result.action === CONCEPT_STATE.CHILD.ADD)
-          .reduce((acc, result) => ({ ...acc, [result.response.name]: result.response }), {})
+          const createdChildPayloads = updatesInfo.results
+            .filter(result => result.field === CONCEPT.FIELD.CHILDREN && result.action === CONCEPT_STATE.CHILD.ADD)
+            .reduce((acc, result) => ({ ...acc, [result.response.name]: result.response }), {})
 
-        const { concept: updatedConcept } = await conceptEditsRefresh(
-          freshConcept,
-          updatesContext.staleConcept,
-          createdChildPayloads
-        )
+          const { concept: updatedConcept } = await conceptEditsRefresh(
+            freshConcept,
+            updatesContext.staleConcept,
+            createdChildPayloads
+          )
 
-        await setConcept(updatedConcept, pendingHistory)
-        setEditing(false)
+          await setConcept(updatedConcept, pendingHistory)
+          setEditing(false)
 
-        updateSelected({ concept: updatedConcept.name })
+          updateSelected({ concept: updatedConcept.name })
 
-        closeModal()
-      },
-      PROCESSING.SAVE,
-      PROCESSING.ARG.CONCEPT
+          closeModal()
+        },
+        PROCESSING.SAVE,
+        PROCESSING.ARG.CONCEPT
+      )
     )
   }, [
     closeModal,
