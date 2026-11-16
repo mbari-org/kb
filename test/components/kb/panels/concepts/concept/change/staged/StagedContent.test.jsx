@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import StagedContent from '@/components/kb/panels/concepts/concept/change/staged/modal/StagedContent'
@@ -10,6 +10,8 @@ import StagedRealizationHeader from '@/components/kb/panels/concepts/concept/cha
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
+import ConfigContext from '@/contexts/config/ConfigContext'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import CONFIG from '@/lib/config'
 
 vi.mock('@/components/kb/panels/concepts/concept/change/staged/aliases/StagedAlias', () => ({
@@ -47,20 +49,27 @@ const baseState = {
   templates: [],
 }
 
-const renderStagedContent = ({ initialState, stagedState }) => {
+const renderStagedContent = ({ initialState, stagedState, relatedCount = 0 }) => {
   const closeModal = vi.fn()
+  const apiResult = vi.fn(async () => relatedCount)
+  const configValue = { apiFns: { apiResult } }
+  const panelDataValue = { getReferences: vi.fn(() => []) }
 
   const utils = render(
-    <ConceptModalContext.Provider value={{ closeModal }}>
-      <ConceptContext.Provider value={{ initialState }}>
-        <ConceptStagedContext.Provider value={{ confirmReset: null, stagedState }}>
-          <StagedContent />
-        </ConceptStagedContext.Provider>
-      </ConceptContext.Provider>
-    </ConceptModalContext.Provider>
+    <ConfigContext.Provider value={configValue}>
+      <PanelDataContext.Provider value={panelDataValue}>
+        <ConceptModalContext.Provider value={{ closeModal }}>
+          <ConceptContext.Provider value={{ initialState }}>
+            <ConceptStagedContext.Provider value={{ confirmReset: null, stagedState }}>
+              <StagedContent />
+            </ConceptStagedContext.Provider>
+          </ConceptContext.Provider>
+        </ConceptModalContext.Provider>
+      </PanelDataContext.Provider>
+    </ConfigContext.Provider>
   )
 
-  return { ...utils, closeModal }
+  return { ...utils, apiResult, closeModal }
 }
 
 const itemOrder = container =>
@@ -127,8 +136,30 @@ describe('StagedContent', () => {
     }
     renderStagedContent({ initialState, stagedState })
 
-    expect(screen.getByTestId('staged-object-name')).toHaveTextContent('Edit Name:')
+    expect(screen.getByTestId('staged-object-name')).toHaveTextContent('Change Name:')
     expect(screen.getByTestId('staged-object-rank')).toHaveTextContent('Edit Rank:')
+  })
+
+  const renamedState = () => {
+    const initialState = { ...baseState, name: { action: 'None', value: 'old-name', extent: '' } }
+    const stagedState = {
+      ...initialState,
+      name: { action: 'Edit Name', value: 'new-name', extent: 'Reassign Related Data', stagedSeq: 1 },
+    }
+    return { initialState, stagedState }
+  }
+
+  it('omits the name extent when the concept has no related data', async () => {
+    const { apiResult } = renderStagedContent(renamedState())
+
+    await waitFor(() => expect(apiResult).toHaveBeenCalledTimes(6))
+    expect(screen.queryByText(/Reassign Related Data/)).not.toBeInTheDocument()
+  })
+
+  it('shows the name extent when the concept has related data', async () => {
+    renderStagedContent({ ...renamedState(), relatedCount: 1 })
+
+    expect(await screen.findByText(/Reassign Related Data/)).toBeInTheDocument()
   })
 
   it('closes the modal when the concept state is unavailable', () => {

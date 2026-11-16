@@ -12,6 +12,8 @@ import StagedRealization from '@/components/kb/panels/concepts/concept/change/st
 import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
 
+import useHasRelatedData from '@/components/kb/panels/concepts/concept/change/staged/name/useHasRelatedData'
+
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
@@ -56,6 +58,8 @@ const StagedContent = () => {
     () => stateUpdates(initialState, stagedState),
     [initialState, stagedState]
   )
+
+  const nameHasRelatedData = useHasRelatedData(updates[CONCEPT.FIELD.NAME] ? initialState.name.value : null)
 
   const childParents = useMemo(() => {
     if (!updates[CONCEPT.FIELD.CHILDREN]) return new Map()
@@ -139,6 +143,16 @@ const StagedContent = () => {
         )
 
       case CONCEPT.FIELD.NAME:
+        return (
+          <StagedObject
+            key={item.key}
+            field={item.field}
+            label={FIELD_LABEL[item.field]}
+            omitKeys={nameHasRelatedData ? [] : ['extent']}
+            stagedEdit={item.stagedEdit}
+          />
+        )
+
       case CONCEPT.FIELD.RANK:
         return (
           <StagedObject

@@ -10,7 +10,7 @@ import { resettingGroup } from '@/components/kb/panels/concepts/concept/change/s
 
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 
-const StagedObject = ({ field, label, stagedEdit }) => {
+const StagedObject = ({ field, label, omitKeys = [], stagedEdit }) => {
   const { confirmReset } = use(ConceptStagedContext)
 
   const [, { initial, staged }] = stagedEdit
@@ -20,7 +20,7 @@ const StagedObject = ({ field, label, stagedEdit }) => {
   const itemDetail = () => (
     <Box>
       {Object.keys(initial)
-        .filter(key => key !== 'action')
+        .filter(key => key !== 'action' && !omitKeys.includes(key))
         .map(key => {
           if (initial[key] !== staged[key]) {
             const deltaValue = formatDelta(initial[key], staged[key])

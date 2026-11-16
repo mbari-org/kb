@@ -21,7 +21,7 @@ describe('pendingItemLabel', () => {
 
     const aliasEdit = { ...base, field: 'ConceptName', oldValue: 'a', newValue: 'b' }
 
-    expect(pendingItemLabel(rename)).toBe('Edit Name')
+    expect(pendingItemLabel(rename)).toBe('Change Name')
     expect(pendingItemLabel(aliasAdd)).toBe('Add Alias')
     expect(pendingItemLabel(aliasEdit)).toBe('Edit Alias')
   })
