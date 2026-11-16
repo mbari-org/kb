@@ -18,7 +18,9 @@ const SelectedProvider = ({ children }) => {
   const { settings, setSettings, getSettings, updateSettings: stateUpdateSettings } = useSettings()
 
   useEffect(() => {
-    onInitSettingsRef.current = setSettings
+    onInitSettingsRef.current = value => {
+      setSettings(previous => ({ ...previous, ...value }))
+    }
     getSettingsRef.current = () => settings
   }, [setSettings, settings, onInitSettingsRef, getSettingsRef])
 

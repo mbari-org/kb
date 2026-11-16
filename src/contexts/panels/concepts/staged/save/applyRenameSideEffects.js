@@ -29,21 +29,32 @@ const conceptPrefsUpdate = async (updatesContext, newConceptName) => {
 
 const settingsUpdate = (updatesContext, staleName, newConceptName) => {
   const { settings: currentSettings } = updatesContext
+  const remap = value => (value === staleName ? newConceptName : value)
 
   const updatedSettings = {
     ...currentSettings,
+    references: {
+      ...currentSettings.references,
+      filters: {
+        ...currentSettings.references?.filters,
+        concept: remap(currentSettings.references?.filters?.concept),
+        concepts: remap(currentSettings.references?.filters?.concepts),
+      },
+    },
     templates: {
       ...currentSettings.templates,
       filters: {
         ...currentSettings.templates?.filters,
-        concept:
-          currentSettings.templates?.filters?.concept === staleName
-            ? newConceptName
-            : currentSettings.templates?.filters?.concept,
-        toConcept:
-          currentSettings.templates?.filters?.toConcept === staleName
-            ? newConceptName
-            : currentSettings.templates?.filters?.toConcept,
+        concept: remap(currentSettings.templates?.filters?.concept),
+        toConcept: remap(currentSettings.templates?.filters?.toConcept),
+      },
+    },
+    realizations: {
+      ...currentSettings.realizations,
+      filters: {
+        ...currentSettings.realizations?.filters,
+        concept: remap(currentSettings.realizations?.filters?.concept),
+        toConcept: remap(currentSettings.realizations?.filters?.toConcept),
       },
     },
   }

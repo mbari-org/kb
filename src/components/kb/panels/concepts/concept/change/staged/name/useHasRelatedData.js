@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
@@ -14,11 +14,16 @@ const useHasRelatedData = conceptName => {
 
   const [hasData, setHasData] = useState(false)
 
+  const getReferencesRef = useRef(getReferences)
+  useEffect(() => {
+    getReferencesRef.current = getReferences
+  }, [getReferences])
+
   useEffect(() => {
     if (!conceptName) return
 
     let cancelled = false
-    relatedDataCounts({ apiFns, concept: { name: conceptName }, getReferences }).then(counts => {
+    relatedDataCounts({ apiFns, concept: { name: conceptName }, getReferences: getReferencesRef.current }).then(counts => {
       if (!cancelled) {
         setHasData(hasRelatedData(counts))
       }
@@ -26,7 +31,7 @@ const useHasRelatedData = conceptName => {
     return () => {
       cancelled = true
     }
-  }, [apiFns, conceptName, getReferences])
+  }, [apiFns, conceptName])
 
   return hasData
 }
