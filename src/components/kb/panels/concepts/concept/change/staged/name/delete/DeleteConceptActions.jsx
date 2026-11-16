@@ -119,13 +119,15 @@ const DeleteConceptActions = () => {
           updatePreferences,
         }
 
-        // CxNote due to closures the taxonomy must be directly manipulated
-
         await withProcessing(
           () =>
-            enqueueConceptMutation(concept.name, async () => {
+            enqueueConceptMutation(async () => {
               const preDeleteResults = await preSideEffects(deleteConceptContext)
-              const { closestConcept, taxonomy: updatedTaxonomy } = await deleteTaxonomyConcept(taxonomy, concept, apiFns)
+              const { closestConcept, taxonomy: updatedTaxonomy } = await deleteTaxonomyConcept(
+                taxonomy,
+                concept,
+                apiFns
+              )
               const postDeleteResults = await postSideEffects(deleteConceptContext)
 
               const results = { ...preDeleteResults, ...postDeleteResults }

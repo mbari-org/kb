@@ -30,9 +30,7 @@ const validateRestoredChildren = async (apiFns, approval, items) => {
     const { error } = await apiFns.apiRaw(apiGetConcept, childName)
     if (error) {
       const instead =
-        approval === PENDING.APPROVAL.ACCEPT
-          ? 'Reject the pending add instead.'
-          : 'Approve the pending delete instead.'
+        approval === PENDING.APPROVAL.ACCEPT ? 'Reject the pending add instead.' : 'Approve the pending delete instead.'
       throw createError(
         'Stale Pending Child',
         `Cannot ${approval} the pending ${item.action.toLowerCase()} of child "${childName}" on "${item.concept}" because the concept no longer exists. ${instead}`,
@@ -46,7 +44,17 @@ const validateRestoredChildren = async (apiFns, approval, items) => {
 const processPendingApprovalUnlocked = async ({
   approval,
   items,
-  deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, resetConceptPaths, updateSelected },
+  deps: {
+    apiFns,
+    conceptEditsRefresh,
+    getConcept,
+    loadConcept,
+    refreshData,
+    reloadConceptRealizations,
+    removeSelectedConceptName,
+    resetConceptPaths,
+    updateSelected,
+  },
 }) => {
   if (!items || items.length === 0) return { concepts: {}, pendingHistory: [], removed: [], updated: [] }
 
@@ -150,12 +158,6 @@ const processPendingApprovalUnlocked = async ({
   return { concepts, pendingHistory, removed, updated }
 }
 
-// Serialize the batch behind every involved concept's mutation queue so it cannot
-// interleave with a staged save or delete of the same concept.
-export const processPendingApproval = args => {
-  const names = [...new Set(args.items?.map(item => item.concept) ?? [])]
-  const chain = names.reduce((run, name) => enqueueConceptMutation(name, () => run), Promise.resolve())
-  return chain.then(() => processPendingApprovalUnlocked(args))
-}
+export const processPendingApproval = args => enqueueConceptMutation(() => processPendingApprovalUnlocked(args))
 
 export default processPendingApproval

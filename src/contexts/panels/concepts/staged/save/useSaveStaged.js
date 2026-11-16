@@ -33,9 +33,9 @@ const useSaveStaged = () => {
   const updatesContext = useUpdatesContext()
 
   return useCallback(() => {
-    return enqueueConceptMutation(updatesContext.staleConcept.name, () =>
-      withProcessing(
-        async () => {
+    return withProcessing(
+      () =>
+        enqueueConceptMutation(async () => {
           const { apiFns, isAdmin, refreshPanelData, reloadConceptRealizations, staleConcept } = updatesContext
 
           const updatesInfo = await submitStaged(initialState, stagedState, updatesContext)
@@ -90,10 +90,9 @@ const useSaveStaged = () => {
           updateSelected({ concept: updatedConcept.name })
 
           closeModal()
-        },
-        PROCESSING.SAVE,
-        PROCESSING.ARG.CONCEPT
-      )
+        }),
+      PROCESSING.SAVE,
+      PROCESSING.ARG.CONCEPT
     )
   }, [
     closeModal,

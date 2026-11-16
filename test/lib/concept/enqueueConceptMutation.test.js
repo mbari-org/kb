@@ -13,16 +13,16 @@ const deferred = () => {
 }
 
 describe('enqueueConceptMutation', () => {
-  it('serializes mutations for the same concept in order', async () => {
+  it('serializes mutations in arrival order', async () => {
     const events = []
     const gate = deferred()
 
-    const first = enqueueConceptMutation('dingo', async () => {
+    const first = enqueueConceptMutation(async () => {
       events.push('first:start')
       await gate.promise
       events.push('first:end')
     })
-    const second = enqueueConceptMutation('dingo', async () => {
+    const second = enqueueConceptMutation(async () => {
       events.push('second:start')
     })
 
@@ -34,34 +34,35 @@ describe('enqueueConceptMutation', () => {
     expect(events).toEqual(['first:start', 'first:end', 'second:start'])
   })
 
-  it('runs mutations for different concepts concurrently', async () => {
+  it('serializes mutations regardless of concept', async () => {
     const events = []
     const gate = deferred()
 
-    const first = enqueueConceptMutation('dingo', async () => {
+    const first = enqueueConceptMutation(async () => {
       events.push('first:start')
       await gate.promise
       events.push('first:end')
     })
-    const second = enqueueConceptMutation('coyote', async () => {
+    const second = enqueueConceptMutation(async () => {
       events.push('second:start')
     })
 
     await Promise.resolve()
-    expect(events).toEqual(['first:start', 'second:start'])
+    expect(events).toEqual(['first:start'])
 
     gate.resolve()
     await Promise.all([first, second])
+    expect(events).toEqual(['first:start', 'first:end', 'second:start'])
   })
 
   it('propagates the error to the caller without poisoning the queue', async () => {
     const failure = new Error('boom')
     const events = []
 
-    const first = enqueueConceptMutation('dingo', async () => {
+    const first = enqueueConceptMutation(async () => {
       throw failure
     })
-    const second = enqueueConceptMutation('dingo', async () => {
+    const second = enqueueConceptMutation(async () => {
       events.push('second:ran')
     })
 
