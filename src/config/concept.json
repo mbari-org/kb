@@ -16,31 +16,28 @@
   },
   "NO_ITEMS": "None",
   "NO_MEDIA": "No Media",
-  "PENDING_DELETE": "The selected Concept has a pending deletion",
+  "PENDING_DELETE": "The selected Concept has a Pending Delete",
   "SELECT": {
     "CONCEPT": "Concept",
     "TO_CONCEPT": "To Concept"
   },
-  "STRUCTURE": {
+  "HIERARCHY": {
     "CHANGE_NAME": "Change Name",
     "CHANGE_PARENT": "Change Parent",
     "ADD_CHILD": "Add Child",
     "DELETE_CONCEPT": "Delete Concept",
     "DISABLED": {
-      "ROOT": "Not available on the taxonomy root",
-      "HAS_CHILDREN": "Remove or reassign children before deleting",
-      "PENDING_ADD": "Not available while this concept has a pending add",
-      "PENDING_NAME": "Not available while a rename is pending",
-      "PENDING_PARENT": "Not available while a parent change is pending",
-      "PENDING_DELETE": "Not available while this concept has a pending delete",
-      "STAGED_NAME": "Reset the staged name change first",
-      "STAGED_PARENT": "Reset the staged parent change first",
-      "STAGED_CHILDREN": "Reset staged child changes first",
-      "STAGED_DELETE": "A concept delete is already in progress"
+      "ROOT": "Not available on the Taxonomy root",
+      "HAS_CHILDREN": "Remove or reassign Concept Children before deleting",
+      "PENDING_ADD": "Not available while this Concept has a Pending Add",
+      "PENDING_NAME": "Not available while a Concept has a Pending Rename ",
+      "PENDING_PARENT": "Not available while a Concept has a Pending Change Parent",
+      "PENDING_DELETE": "Not available while this Concept has a Pending Delete",
+      "STAGED_NAME": "Reset the Staged Change Name first",
+      "STAGED_PARENT": "Reset the Staged Change Parent first",
+      "STAGED_CHILDREN": "Reset Staged Change Children first",
+      "STAGED_DELETE": "A Delete Concept action is already in progress"
     }
   },
-  "TO_SPECIAL": [
-    "self",
-    "nil"
-  ]
+  "TO_SPECIAL": ["self", "nil"]
 }

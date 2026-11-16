@@ -3,7 +3,7 @@ import { FormControlLabel, Radio, Stack, Typography } from '@mui/material'
 import CONFIG from '@/lib/config'
 
 const { NAME_ONLY, REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
-const { NAME_ONLY_WARN } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
+const { NAME_ONLY_WARN } = CONFIG.PANELS.CONCEPTS.MODALS.HIERARCHY.CHANGE_NAME
 
 const textSx = {
   '& .MuiFormControlLabel-label': {

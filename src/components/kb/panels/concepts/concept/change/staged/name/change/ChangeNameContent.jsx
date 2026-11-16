@@ -23,7 +23,7 @@ import CONFIG from '@/lib/config'
 
 const { MODALS } = CONFIG.PANELS.CONCEPTS
 const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
-const { REALIZATIONS, TEMPLATES_DEFINED } = MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
+const { REALIZATIONS, TEMPLATES_DEFINED } = MODALS.HIERARCHY.CHANGE_NAME.RELATED_DATA_COUNTS
 
 const ChangeNameContent = () => {
   const theme = useTheme()
@@ -71,7 +71,7 @@ const ChangeNameContent = () => {
 
   return (
     <Box>
-      <ModalActionText text={MODALS.STRUCTURE.CHANGE_NAME.LABEL} />
+      <ModalActionText text={MODALS.HIERARCHY.CHANGE_NAME.LABEL} />
       {modalData?.isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData?.isLoading && (
         <Box>

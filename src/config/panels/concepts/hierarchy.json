@@ -6,6 +6,6 @@
       "ADD_CHILD": "Add Child",
       "DELETE_CONCEPT": "Delete Concept"
     },
-    "TOOLTIP": "Edit Concept structure"
+    "TOOLTIP": "Edit Concept hierarchy"
   }
 }

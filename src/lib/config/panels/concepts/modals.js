@@ -14,11 +14,11 @@ import realizationAdd from '@/config/panels/concepts/modals/realization/add.json
 import realizationDelete from '@/config/panels/concepts/modals/realization/delete.json'
 import realizationEdit from '@/config/panels/concepts/modals/realization/edit.json'
 import staged from '@/config/panels/concepts/modals/staged.json'
-import addChild from '@/config/panels/concepts/modals/structure/addChild.json'
-import changeName from '@/config/panels/concepts/modals/structure/changeName.json'
-import changeParent from '@/config/panels/concepts/modals/structure/changeParent.json'
-import deleteConcept from '@/config/panels/concepts/modals/structure/deleteConcept.json'
-import toConcept from '@/config/panels/concepts/modals/structure/toConcept.json'
+import addChild from '@/config/panels/concepts/modals/hierarchy/addChild.json'
+import changeName from '@/config/panels/concepts/modals/hierarchy/changeName.json'
+import changeParent from '@/config/panels/concepts/modals/hierarchy/changeParent.json'
+import deleteConcept from '@/config/panels/concepts/modals/hierarchy/deleteConcept.json'
+import toConcept from '@/config/panels/concepts/modals/hierarchy/toConcept.json'
 
 export const MODALS = {
   ALIAS: {
@@ -43,7 +43,7 @@ export const MODALS = {
     EDIT: realizationEdit,
   },
   STAGED: staged,
-  STRUCTURE: {
+  HIERARCHY: {
     ADD_CHILD: addChild,
     CHANGE_NAME: changeName,
     CHANGE_PARENT: changeParent,

@@ -3,17 +3,17 @@ import { use, useState } from 'react'
 import { Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import ConceptStructureIcon from '@/components/icon/ConceptStructureIcon'
-import ChangeStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/ConceptStructureChoices'
+import ConceptHierarchyIcon from '@/components/icon/ConceptHierarchyIcon'
+import ConceptHierarchyChoices from '@/components/kb/panels/concepts/concept/change/staged/hierarchy/ConceptHierarchyChoices'
 import DsgLink from '@/components/kb/panels/concepts/concept/detail/dsgLink/DsgLink'
 
-import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
+import useHierarchyChoices from '@/components/kb/panels/concepts/concept/change/staged/hierarchy/useHierarchyChoices'
 import useConceptItem from '@/components/kb/panels/concepts/sidebar/tree/lib/useConceptItem'
 
 import UserContext from '@/contexts/user/UserContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
-import { hasPendingStructure } from '@/lib/model/history'
+import { hasPendingHierarchy } from '@/lib/model/history'
 import { ACTION } from '@/lib/constants'
 
 const ConceptName = () => {
@@ -23,21 +23,21 @@ const ConceptName = () => {
   const { concept, isEditing, pending } = use(ConceptContext)
   const treeItem = useConceptItem(concept.name)
 
-  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = useStructureChoices()
-  const hasStagedStructure = hasStagedChildren || hasStagedDelete || hasStagedName || hasStagedParent
+  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = useHierarchyChoices()
+  const hasStagedHierarchy = hasStagedChildren || hasStagedDelete || hasStagedName || hasStagedParent
 
-  const [showStructureChoicesModal, setShowStructureChoices] = useState(false)
+  const [showHierarchyChoicesModal, setShowHierarchyChoices] = useState(false)
 
-  const showStructureButton = isEditing && !showStructureChoicesModal && !hasStagedDelete && !isReadOnly
+  const showHierarchyButton = isEditing && !showHierarchyChoicesModal && !hasStagedDelete && !isReadOnly
 
-  const hasPending = hasPendingStructure(pending, concept.name)
+  const hasPending = hasPendingHierarchy(pending, concept.name)
 
   const conceptColor =
     treeItem?.pendingAction === ACTION.ADD
       ? theme.concept.color.add
       : treeItem?.pendingAction === ACTION.DELETE
         ? theme.concept.color.remove
-        : hasStagedStructure || hasPending.any
+        : hasStagedHierarchy || hasPending.any
           ? theme.concept.color.edit
           : theme.palette.primary.main
 
@@ -56,8 +56,8 @@ const ConceptName = () => {
       >
         <DsgLink concept={concept} />
       </Typography>
-      {showStructureButton && <ConceptStructureIcon onClick={() => setShowStructureChoices(true)} />}
-      {showStructureChoicesModal && <ChangeStructureChoices closeChoices={() => setShowStructureChoices(false)} />}
+      {showHierarchyButton && <ConceptHierarchyIcon onClick={() => setShowHierarchyChoices(true)} />}
+      {showHierarchyChoicesModal && <ConceptHierarchyChoices closeChoices={() => setShowHierarchyChoices(false)} />}
     </Stack>
   )
 }

@@ -28,7 +28,7 @@ import { PENDING } from '@/lib/constants/pending.js'
 
 const BUTTON = CONFIG.BUTTON
 
-const { CHANGE_NAME, CHANGE_PARENT, ADD_CHILD, DELETE_CONCEPT } = CONFIG.CONCEPT.STRUCTURE
+const { CHANGE_NAME, CHANGE_PARENT, ADD_CHILD, DELETE_CONCEPT } = CONFIG.CONCEPT.HIERARCHY
 
 const resolveActionTarget = element => {
   if (!element) return null
@@ -38,19 +38,19 @@ const resolveActionTarget = element => {
   )
 }
 
-const getStructureActionButton = () => {
-  const byLabel = screen.queryByLabelText(/edit concept structure/i)
+const getHierarchyActionButton = () => {
+  const byLabel = screen.queryByLabelText(/edit concept hierarchy/i)
   if (byLabel) {
     return resolveActionTarget(byLabel)
   }
 
-  const byRole = screen.queryByRole('button', { name: /edit concept structure/i })
+  const byRole = screen.queryByRole('button', { name: /edit concept hierarchy/i })
   if (byRole) {
     return byRole
   }
 
   const byTitle = Array.from(document.querySelectorAll('[title]')).find(
-    element => element.getAttribute('title')?.toLowerCase() === 'edit concept structure'
+    element => element.getAttribute('title')?.toLowerCase() === 'edit concept hierarchy'
   )
   return resolveActionTarget(byTitle)
 }
@@ -277,7 +277,7 @@ const TestWrapper = ({ children, pendingFn = () => [] }) => {
     isLoading: false,
   }
 
-  // Admin role so Edit button and structure icon are enabled (not read-only)
+  // Admin role so Edit button and hierarchy icon are enabled (not read-only)
   const mockUserValue = { user: { role: 'Admin' } }
 
   const stagedState = concept?.name === 'object' ? objectStagedState : baseStagedState
@@ -334,12 +334,12 @@ const TestWrapper = ({ children, pendingFn = () => [] }) => {
   )
 }
 
-describe('concept object structure choices', () => {
+describe('concept object hierarchy choices', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  it('selects object, clicks Edit, verifies isEditing, opens structure choices, verifies button states', async () => {
+  it('selects object, clicks Edit, verifies isEditing, opens hierarchy choices, verifies button states', async () => {
     const user = userEvent.setup()
 
     render(
@@ -368,19 +368,19 @@ describe('concept object structure choices', () => {
     expect(editButton).toBeInTheDocument()
     await user.click(editButton)
 
-    // Verify ConceptProvider context has isEditing true - ConceptStructureIcon only shows when isEditing
-    // ConceptStructureIcon is an IconButton with tooltip "Edit Concept Structure"
+    // Verify ConceptProvider context has isEditing true - ConceptHierarchyIcon only shows when isEditing
+    // ConceptHierarchyIcon is an IconButton with tooltip "Edit Concept Hierarchy"
     await waitFor(() => {
-      const structureActionButton = getStructureActionButton()
-      expect(structureActionButton).toBeInTheDocument()
+      const hierarchyActionButton = getHierarchyActionButton()
+      expect(hierarchyActionButton).toBeInTheDocument()
     })
 
-    // Verify ConceptView ConceptName has ConceptStructureIcon - click it
-    const structureIcon = getStructureActionButton()
-    expect(structureIcon).toBeInTheDocument()
-    await user.click(structureIcon)
+    // Verify ConceptView ConceptName has ConceptHierarchyIcon - click it
+    const hierarchyIcon = getHierarchyActionButton()
+    expect(hierarchyIcon).toBeInTheDocument()
+    await user.click(hierarchyIcon)
 
-    // Verify ChangeStructureChoices is displayed
+    // Verify ConceptHierarchyChoices is displayed
     await waitFor(() => {
       expect(screen.getByText(CHANGE_NAME)).toBeInTheDocument()
       expect(screen.getByText(CHANGE_PARENT)).toBeInTheDocument()
@@ -402,7 +402,7 @@ describe('concept object structure choices', () => {
     expect(addChildButton).toBeEnabled()
   })
 
-  it('shows the structure choices action when the concept has a pending Add Concept action', async () => {
+  it('shows the hierarchy choices action when the concept has a pending Add Concept action', async () => {
     const pendingAddConcept = {
       id: 'pending-add-object',
       concept: 'root',
@@ -440,6 +440,6 @@ describe('concept object structure choices', () => {
       expect(screen.getAllByText('object').length).toBeGreaterThan(0)
     })
 
-    expect(getStructureActionButton()).toBeInTheDocument()
+    expect(getHierarchyActionButton()).toBeInTheDocument()
   })
 })

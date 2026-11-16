@@ -7,10 +7,10 @@ import { isPendingName } from '@/lib/concept/state/name'
 
 import { PENDING } from '@/lib/constants/pending.js'
 
-const useHasPendingStructure = () => {
+const useHasPendingHierarchy = () => {
   const { concept, pending } = use(ConceptContext)
 
-  const pendingStructure = {
+  const pendingHierarchy = {
     any: false,
     children: false,
     name: false,
@@ -20,7 +20,7 @@ const useHasPendingStructure = () => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
 
-  if (!pendingConcept || !pendingParent) return pendingStructure
+  if (!pendingConcept || !pendingParent) return pendingHierarchy
 
   const hasPendingName = pendingConcept.some(isPendingName)
 
@@ -32,4 +32,4 @@ const useHasPendingStructure = () => {
   }
 }
 
-export default useHasPendingStructure
+export default useHasPendingHierarchy

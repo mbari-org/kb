@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { hasPendingStructure, pendingChild } from '@/lib/model/history'
+import { hasPendingHierarchy, pendingChild } from '@/lib/model/history'
 
 import { ACTION } from '@/lib/constants'
 import { CONCEPT } from '@/lib/constants/concept.js'
@@ -14,9 +14,9 @@ import { PENDING } from '@/lib/constants/pending.js'
 
 import CONFIG from '@/lib/config'
 
-const DISABLED = CONFIG.CONCEPT.STRUCTURE.DISABLED
+const DISABLED = CONFIG.CONCEPT.HIERARCHY.DISABLED
 
-const hasStagedStructure = stagedState => {
+const hasStagedHierarchy = stagedState => {
   const hasStagedChildren = stagedState.children.some(child => isStagedAction(child.action) && !child.historyId)
   const hasStagedDelete = Boolean(stagedState[CONCEPT.FIELD.DELETE])
   const hasStagedName = isStagedAction(stagedState.name.action) && !stagedState.name.historyId
@@ -32,17 +32,17 @@ const hasStagedStructure = stagedState => {
 
 const firstReason = (...candidates) => candidates.find(Boolean) || null
 
-const useStructureChoices = () => {
+const useHierarchyChoices = () => {
   const { concept, pending } = use(ConceptContext)
   const { stagedState } = use(ConceptStagedContext)
   const { isRoot: isTaxonomyRoot } = use(TaxonomyContext)
 
-  const pendingStructure = hasPendingStructure(pending, concept?.name)
+  const pendingHierarchy = hasPendingHierarchy(pending, concept?.name)
 
   const hasPendingAdd =
     pendingChild(pending(PENDING.DATA.PARENT), concept?.name)?.action === ACTION.ADD
 
-  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = hasStagedStructure(stagedState)
+  const { hasStagedChildren, hasStagedDelete, hasStagedName, hasStagedParent } = hasStagedHierarchy(stagedState)
 
   const isRoot = isTaxonomyRoot(concept)
   const hasChildren = concept?.children?.length > 0
@@ -50,7 +50,7 @@ const useStructureChoices = () => {
   const disableChangeNameReason = firstReason(
     isRoot && DISABLED.ROOT,
     hasPendingAdd && DISABLED.PENDING_ADD,
-    pendingStructure.name && DISABLED.PENDING_NAME,
+    pendingHierarchy.name && DISABLED.PENDING_NAME,
     hasStagedDelete && DISABLED.STAGED_DELETE,
     hasStagedName && DISABLED.STAGED_NAME
   )
@@ -58,8 +58,8 @@ const useStructureChoices = () => {
   const disableChangeParentReason = firstReason(
     isRoot && DISABLED.ROOT,
     hasPendingAdd && DISABLED.PENDING_ADD,
-    pendingStructure.parent && DISABLED.PENDING_DELETE,
-    pendingStructure.parentChange && DISABLED.PENDING_PARENT,
+    pendingHierarchy.parent && DISABLED.PENDING_DELETE,
+    pendingHierarchy.parentChange && DISABLED.PENDING_PARENT,
     hasStagedDelete && DISABLED.STAGED_DELETE,
     hasStagedParent && DISABLED.STAGED_PARENT,
     hasStagedChildren && DISABLED.STAGED_CHILDREN
@@ -74,9 +74,9 @@ const useStructureChoices = () => {
         hasPendingAdd && DISABLED.PENDING_ADD,
         hasChildren && DISABLED.HAS_CHILDREN,
         hasStagedDelete && DISABLED.STAGED_DELETE,
-        pendingStructure.parent && DISABLED.PENDING_DELETE
+        pendingHierarchy.parent && DISABLED.PENDING_DELETE
       ),
-    [hasChildren, hasPendingAdd, hasStagedDelete, isRoot, pendingStructure.parent]
+    [hasChildren, hasPendingAdd, hasStagedDelete, isRoot, pendingHierarchy.parent]
   )
 
   return {
@@ -96,4 +96,4 @@ const useStructureChoices = () => {
   }
 }
 
-export default useStructureChoices
+export default useHierarchyChoices

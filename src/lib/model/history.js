@@ -28,7 +28,7 @@ const pendingChild = (pendingConcept, childName) => {
   )
 }
 
-const hasPendingStructure = (pending, conceptName) => {
+const hasPendingHierarchy = (pending, conceptName) => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
 
@@ -137,7 +137,7 @@ const pendingItemLabel = pendingItem => itemTitle(pendingItemField(pendingItem),
 
 export {
   hasPending,
-  hasPendingStructure,
+  hasPendingHierarchy,
   isPendingAdd,
   isPendingDelete,
   moveAddToFirst,

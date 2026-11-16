@@ -7,7 +7,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import ModalActionText from '@/components/common/ModalActionText'
 
-import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
+import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/hierarchy/ToConceptChoice'
 import { validateConceptInput } from '@/components/modal/concept/conceptModalUtils'
 
 import CONFIG from '@/lib/config'
@@ -58,7 +58,7 @@ const ChangeParentContent = ({ omitChoices = [] }) => {
   return (
     <Box>
       <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
-        <ModalActionText text={MODALS.STRUCTURE.CHANGE_PARENT.LABEL} />
+        <ModalActionText text={MODALS.HIERARCHY.CHANGE_PARENT.LABEL} />
         <Typography sx={{ fontWeight: 'bold' }} variant='h6'>
           {concept.parent}
         </Typography>
@@ -68,7 +68,7 @@ const ChangeParentContent = ({ omitChoices = [] }) => {
           error={toConcept !== null && toConcept !== '' && !validateInput(toConcept)}
           handleChange={handleChange}
           handleKeyUp={handleKeyUp}
-          label={MODALS.STRUCTURE.CHANGE_PARENT.TO}
+          label={MODALS.HIERARCHY.CHANGE_PARENT.TO}
           omitChoices={omitChoices}
           value={toConcept}
         />

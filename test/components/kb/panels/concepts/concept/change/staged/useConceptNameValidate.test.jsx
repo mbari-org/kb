@@ -12,7 +12,7 @@ import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import CONFIG from '@/lib/config'
 
-const CHANGE_NAME = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
+const CHANGE_NAME = CONFIG.PANELS.CONCEPTS.MODALS.HIERARCHY.CHANGE_NAME
 
 const baseStaged = {
   aliases: [],

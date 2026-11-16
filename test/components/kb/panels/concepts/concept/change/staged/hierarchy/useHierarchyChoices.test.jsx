@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
+import useHierarchyChoices from '@/components/kb/panels/concepts/concept/change/staged/hierarchy/useHierarchyChoices'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
@@ -14,7 +14,7 @@ import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
-const DISABLED = CONFIG.CONCEPT.STRUCTURE.DISABLED
+const DISABLED = CONFIG.CONCEPT.HIERARCHY.DISABLED
 
 const baseStaged = {
   aliases: [],
@@ -40,11 +40,11 @@ const wrapperFor = ({ concept, pendingMap, stagedState, isRoot = false }) => {
       </ConceptContext.Provider>
     </TaxonomyContext.Provider>
   )
-  Wrapper.displayName = 'UseStructureChoicesTestWrapper'
+  Wrapper.displayName = 'UseHierarchyChoicesTestWrapper'
   return Wrapper
 }
 
-describe('useStructureChoices', () => {
+describe('useHierarchyChoices', () => {
   it('blocks rename, parent change, and delete on a pending-add concept, but allows add child (G1)', () => {
     const concept = { name: 'new-kid', children: [] }
     const pendingMap = {
@@ -58,7 +58,7 @@ describe('useStructureChoices', () => {
       ],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState: baseStaged }),
     })
 
@@ -83,7 +83,7 @@ describe('useStructureChoices', () => {
       [PENDING.DATA.PARENT]: [],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState: baseStaged }),
     })
 
@@ -106,7 +106,7 @@ describe('useStructureChoices', () => {
       [PENDING.DATA.PARENT]: [],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState: baseStaged }),
     })
 
@@ -127,7 +127,7 @@ describe('useStructureChoices', () => {
       ],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState: baseStaged }),
     })
 
@@ -157,7 +157,7 @@ describe('useStructureChoices', () => {
       [PENDING.DATA.PARENT]: [],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState: baseStaged }),
     })
 
@@ -183,7 +183,7 @@ describe('useStructureChoices', () => {
       [PENDING.DATA.PARENT]: [],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState }),
     })
 
@@ -206,7 +206,7 @@ describe('useStructureChoices', () => {
       [PENDING.DATA.PARENT]: [],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState: baseStaged }),
     })
 
@@ -224,7 +224,7 @@ describe('useStructureChoices', () => {
       [PENDING.DATA.PARENT]: [],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState }),
     })
 
@@ -242,7 +242,7 @@ describe('useStructureChoices', () => {
       [PENDING.DATA.PARENT]: [],
     }
 
-    const { result } = renderHook(() => useStructureChoices(), {
+    const { result } = renderHook(() => useHierarchyChoices(), {
       wrapper: wrapperFor({ concept, pendingMap, stagedState }),
     })
 

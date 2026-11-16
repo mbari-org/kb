@@ -5,7 +5,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import CONFIG from '@/lib/config'
 
-const { NON_ADMIN_MESSAGE } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
+const { NON_ADMIN_MESSAGE } = CONFIG.PANELS.CONCEPTS.MODALS.HIERARCHY.CHANGE_NAME
 
 const RelatedDataCounts = ({ relatedDataCounts }) => {
   const { isAdmin } = use(UserContext)

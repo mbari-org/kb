@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 
 import TooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
-const StructureChoiceButton = ({ color = 'primary', disabled, disabledReason, onClick, text }) => {
+const HierarchyChoiceButton = ({ color = 'primary', disabled, disabledReason, onClick, text }) => {
   const button = (
     <Button variant='contained' color={color} disabled={disabled} onClick={onClick} fullWidth>
       {text}
@@ -20,4 +20,4 @@ const StructureChoiceButton = ({ color = 'primary', disabled, disabledReason, on
   )
 }
 
-export default StructureChoiceButton
+export default HierarchyChoiceButton

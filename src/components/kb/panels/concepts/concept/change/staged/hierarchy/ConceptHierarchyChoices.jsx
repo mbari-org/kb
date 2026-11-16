@@ -2,21 +2,21 @@ import { use, useState } from 'react'
 import { Box, IconButton, Modal, Stack } from '@mui/material'
 import { IoCloseSharp } from 'react-icons/io5'
 
-import StructureChoiceButton from './StructureChoiceButton'
+import HierarchyChoiceButton from './HierarchyChoiceButton'
 
 import useAddChildModal from '@/components/kb/panels/concepts/concept/change/staged/children/useAddChildModal'
 import useChangeNameModal from '@/components/kb/panels/concepts/concept/change/staged/name/change/useChangeNameModal'
 import useChangeParentModal from '@/components/kb/panels/concepts/concept/change/staged/parent/useChangeParentModal'
 import useDeleteConceptModal from '@/components/kb/panels/concepts/concept/change/staged/name/delete/useDeleteConceptModal'
 
-import useStructureChoices from '@/components/kb/panels/concepts/concept/change/staged/structure/useStructureChoices'
+import useHierarchyChoices from '@/components/kb/panels/concepts/concept/change/staged/hierarchy/useHierarchyChoices'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import CONFIG from '@/lib/config'
 
 const { CONCEPT, PROCESSING } = CONFIG
 
-const ChangeStructureChoices = ({ closeChoices }) => {
+const ConceptHierarchyChoices = ({ closeChoices }) => {
   const [asyncError, setAsyncError] = useState(null)
   const {
     disableAddChild,
@@ -27,7 +27,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
     disableChangeParentReason,
     disableDelete,
     disableDeleteReason,
-  } = useStructureChoices()
+  } = useHierarchyChoices()
   const { beginProcessing } = use(AppModalContext)
 
   const addChild = useAddChildModal()
@@ -39,7 +39,7 @@ const ChangeStructureChoices = ({ closeChoices }) => {
   }
 
   const handleClick =
-    (structureFn, processingValue = null) =>
+    (hierarchyFn, processingValue = null) =>
     async event => {
       event.preventDefault()
       closeChoices()
@@ -47,13 +47,13 @@ const ChangeStructureChoices = ({ closeChoices }) => {
         if (processingValue) {
           const stop = beginProcessing(PROCESSING.LOAD, processingValue)
           try {
-            await structureFn()
+            await hierarchyFn()
           } finally {
             stop()
           }
           return
         }
-        await structureFn()
+        await hierarchyFn()
       } catch (error) {
         setAsyncError(error)
       }
@@ -91,31 +91,31 @@ const ChangeStructureChoices = ({ closeChoices }) => {
 
         <Stack spacing={5} sx={{ mt: 3 }}>
           <Stack spacing={2.5}>
-            <StructureChoiceButton
+            <HierarchyChoiceButton
               disabled={disableChangeName}
               disabledReason={disableChangeNameReason}
               onClick={handleClick(changeName)}
-              text={CONCEPT.STRUCTURE.CHANGE_NAME}
+              text={CONCEPT.HIERARCHY.CHANGE_NAME}
             />
-            <StructureChoiceButton
+            <HierarchyChoiceButton
               disabled={disableChangeParent}
               disabledReason={disableChangeParentReason}
               onClick={handleClick(changeParent, PROCESSING.ARG.CONCEPT_DESCENDANTS)}
-              text={CONCEPT.STRUCTURE.CHANGE_PARENT}
+              text={CONCEPT.HIERARCHY.CHANGE_PARENT}
             />
-            <StructureChoiceButton
+            <HierarchyChoiceButton
               disabled={disableAddChild}
               disabledReason={disableAddChildReason}
               onClick={handleClick(addChild)}
-              text={CONCEPT.STRUCTURE.ADD_CHILD}
+              text={CONCEPT.HIERARCHY.ADD_CHILD}
             />
           </Stack>
-          <StructureChoiceButton
+          <HierarchyChoiceButton
             color='cancel'
             disabled={disableDelete}
             disabledReason={disableDeleteReason}
             onClick={handleClick(deleteConcept, PROCESSING.ARG.CONCEPT_DEPENDENCIES)}
-            text={CONCEPT.STRUCTURE.DELETE_CONCEPT}
+            text={CONCEPT.HIERARCHY.DELETE_CONCEPT}
           />
         </Stack>
       </Box>
@@ -123,4 +123,4 @@ const ChangeStructureChoices = ({ closeChoices }) => {
   )
 }
 
-export default ChangeStructureChoices
+export default ConceptHierarchyChoices

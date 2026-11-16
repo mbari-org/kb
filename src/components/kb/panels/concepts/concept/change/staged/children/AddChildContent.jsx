@@ -83,12 +83,12 @@ const AddChildContent = () => {
 
   return (
     <Box component='form' id={ADD_CHILD_FORM_ID} onSubmit={handleStage}>
-      <ModalActionText text={MODALS.STRUCTURE.ADD_CHILD.LABEL} />
+      <ModalActionText text={MODALS.HIERARCHY.ADD_CHILD.LABEL} />
       <FormControl {...inputStyle}>
         <TextField
           error={false}
           helperText={nameError ? nameHelperText : ' '}
-          label={MODALS.STRUCTURE.ADD_CHILD.NAME}
+          label={MODALS.HIERARCHY.ADD_CHILD.NAME}
           name={CONCEPT.FIELD.NAME}
           onChange={handleChange(CONCEPT.FIELD.NAME)}
           required
@@ -104,7 +104,7 @@ const AddChildContent = () => {
       </FormControl>
       <FormControl {...inputStyle}>
         <TextField
-          label={MODALS.STRUCTURE.ADD_CHILD.AUTHOR}
+          label={MODALS.HIERARCHY.ADD_CHILD.AUTHOR}
           name={CONCEPT.FIELD.AUTHOR}
           onChange={handleChange(CONCEPT.FIELD.AUTHOR)}
           value={formChild.author}
@@ -115,7 +115,7 @@ const AddChildContent = () => {
           <RankFieldInput
             field={CONCEPT.RANK.NAME}
             initialRank={initialRank}
-            label={MODALS.STRUCTURE.ADD_CHILD.RANK.NAME}
+            label={MODALS.HIERARCHY.ADD_CHILD.RANK.NAME}
             rank={formRank}
             onChange={handleRankNameChange}
             onClear={() => handleClear({ rankLevel: '', rankName: '' })}
@@ -123,7 +123,7 @@ const AddChildContent = () => {
           <RankFieldInput
             field={CONCEPT.RANK.LEVEL}
             initialRank={initialRank}
-            label={MODALS.STRUCTURE.ADD_CHILD.RANK.LEVEL}
+            label={MODALS.HIERARCHY.ADD_CHILD.RANK.LEVEL}
             rank={formRank}
             onChange={handleChange(rankField(CONCEPT.RANK.LEVEL))}
             onClear={() => handleClear({ rankLevel: '' })}

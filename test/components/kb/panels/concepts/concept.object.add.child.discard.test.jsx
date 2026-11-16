@@ -33,7 +33,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 import CONFIG from '@/lib/config'
 
-const { ADD_CHILD } = CONFIG.CONCEPT.STRUCTURE
+const { ADD_CHILD } = CONFIG.CONCEPT.HIERARCHY
 const BUTTON = CONFIG.BUTTON
 
 const resolveActionTarget = element => {
@@ -287,13 +287,13 @@ const TestWrapper = ({ children }) => {
   )
 }
 
-const getStructureIconButton = () => {
-  const byLabel = screen.queryByLabelText(/edit concept structure/i)
+const getHierarchyIconButton = () => {
+  const byLabel = screen.queryByLabelText(/edit concept hierarchy/i)
   if (byLabel) return resolveActionTarget(byLabel)
-  const byRole = screen.queryByRole('button', { name: /edit concept structure/i })
+  const byRole = screen.queryByRole('button', { name: /edit concept hierarchy/i })
   if (byRole) return byRole
   const byTitle = Array.from(document.querySelectorAll('[title]')).find(
-    element => element.getAttribute('title')?.toLowerCase() === 'edit concept structure'
+    element => element.getAttribute('title')?.toLowerCase() === 'edit concept hierarchy'
   )
   return resolveActionTarget(byTitle)
 }
@@ -307,7 +307,7 @@ describe('concept object add child discard', () => {
     expect(normalizeConceptName('Deep\t\tSea\nCoral')).toBe('Deep Sea Coral')
   })
 
-  it('adds child dingo, stages, discards all, verifies ConceptStructureIcon is hidden', async () => {
+  it('adds child dingo, stages, discards all, verifies ConceptHierarchyIcon is hidden', async () => {
     const user = userEvent.setup()
 
     render(
@@ -316,7 +316,7 @@ describe('concept object add child discard', () => {
       </TestWrapper>
     )
 
-    // Select concept 'object' in ConceptSelect (as in structure choices test)
+    // Select concept 'object' in ConceptSelect (as in hierarchy choices test)
     const conceptInput = screen.getByRole('combobox')
     await user.click(conceptInput)
     await user.clear(conceptInput)
@@ -335,12 +335,12 @@ describe('concept object add child discard', () => {
     const editButton = screen.getByRole('button', { name: BUTTON.EDIT })
     await user.click(editButton)
 
-    // Click structure choices icon
+    // Click hierarchy choices icon
     await waitFor(() => {
-      expect(getStructureIconButton()).toBeInTheDocument()
+      expect(getHierarchyIconButton()).toBeInTheDocument()
     })
-    const structureIcon = getStructureIconButton()
-    await user.click(structureIcon)
+    const hierarchyIcon = getHierarchyIconButton()
+    await user.click(hierarchyIcon)
 
     // Click ADD_CHILD button
     await waitFor(() => {
@@ -387,9 +387,9 @@ describe('concept object add child discard', () => {
     const confirmDiscardButton = screen.getByRole('button', { name: BUTTON.DISCARD })
     await user.click(confirmDiscardButton)
 
-    // Verify ConceptStructureIcon is not displayed
+    // Verify ConceptHierarchyIcon is not displayed
     await waitFor(() => {
-      expect(getStructureIconButton()).not.toBeInTheDocument()
+      expect(getHierarchyIconButton()).not.toBeInTheDocument()
     })
   })
 })

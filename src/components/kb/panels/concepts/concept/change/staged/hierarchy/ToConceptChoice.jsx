@@ -7,7 +7,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import CONFIG from '@/lib/config'
 
-const { NOT_KNOWN } = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.TO_CONCEPT
+const { NOT_KNOWN } = CONFIG.PANELS.CONCEPTS.MODALS.HIERARCHY.TO_CONCEPT
 
 const ToConceptChoice = ({
   error,

@@ -5,7 +5,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import ProcessingMsg from '@/components/common/ProcessingMessage'
 import RelatedDataCounts from '@/components/common/concept/RelatedDataCounts'
 
-import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
+import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/hierarchy/ToConceptChoice'
 import { validateConceptInput } from '@/components/modal/concept/conceptModalUtils'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -63,15 +63,15 @@ const DeleteConceptContent = () => {
         color='cancel'
         sx={{ fontSize: theme => theme.typography.fontSize * 1.5, fontWeight: 'bold' }}
       >
-        {MODALS.STRUCTURE.DELETE_CONCEPT.LABEL}
+        {MODALS.HIERARCHY.DELETE_CONCEPT.LABEL}
       </Typography>
       {!modalData.isLoading && !hasRelatedData && (
-        <Typography align='center'>{MODALS.STRUCTURE.DELETE_CONCEPT.NO_RELATED_DATA}</Typography>
+        <Typography align='center'>{MODALS.HIERARCHY.DELETE_CONCEPT.NO_RELATED_DATA}</Typography>
       )}
       {!modalData.isLoading && hasRelatedData && (
-        <Typography align='center'>{MODALS.STRUCTURE.DELETE_CONCEPT.MUST_REASSIGN}</Typography>
+        <Typography align='center'>{MODALS.HIERARCHY.DELETE_CONCEPT.MUST_REASSIGN}</Typography>
       )}
-      {hasStagedEdits && <Typography align='center'>{MODALS.STRUCTURE.DELETE_CONCEPT.DISCARDS_STAGED}</Typography>}
+      {hasStagedEdits && <Typography align='center'>{MODALS.HIERARCHY.DELETE_CONCEPT.DISCARDS_STAGED}</Typography>}
 
       {isLoading && <ProcessingMsg message='Loading related data...' />}
       {!modalData.isLoading && hasRelatedData && <RelatedDataCounts relatedDataCounts={relatedDataCounts} />}
@@ -84,7 +84,7 @@ const DeleteConceptContent = () => {
                   error={!isValid}
                   handleChange={handleChange}
                   handleKeyUp={handleKeyUp}
-                  label={MODALS.STRUCTURE.DELETE_CONCEPT.REASSIGN_TO}
+                  label={MODALS.HIERARCHY.DELETE_CONCEPT.REASSIGN_TO}
                   omitChoices={[concept.name]}
                   required
                   value={reassign}
@@ -95,7 +95,7 @@ const DeleteConceptContent = () => {
 
           {!isValid && (
             <Typography color='cancel' variant='caption'>
-              {MODALS.STRUCTURE.DELETE_CONCEPT.ERROR_MESSAGE}
+              {MODALS.HIERARCHY.DELETE_CONCEPT.ERROR_MESSAGE}
             </Typography>
           )}
         </Stack>

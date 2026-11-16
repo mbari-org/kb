@@ -2,7 +2,7 @@ import { CiEdit } from 'react-icons/ci'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 
-const ConceptStructureIcon = ({ onClick, sx = {} }) => {
+const ConceptHierarchyIcon = ({ onClick, sx = {} }) => {
   return (
     <ActionIcon
       Icon={CiEdit}
@@ -15,9 +15,9 @@ const ConceptStructureIcon = ({ onClick, sx = {} }) => {
         padding: 0,
         ...sx,
       }}
-      tooltip='Edit Concept Structure'
+      tooltip='Edit Concept Hierarchy'
     />
   )
 }
 
-export default ConceptStructureIcon
+export default ConceptHierarchyIcon

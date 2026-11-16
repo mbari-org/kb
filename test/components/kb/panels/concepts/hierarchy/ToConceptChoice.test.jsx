@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { ThemeProvider } from '@mui/material/styles'
 
 import kbTheme from '@/lib/theme'
-import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/structure/ToConceptChoice'
+import ToConceptChoice from '@/components/kb/panels/concepts/concept/change/staged/hierarchy/ToConceptChoice'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 describe('ToConceptChoice', () => {

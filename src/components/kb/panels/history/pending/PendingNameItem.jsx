@@ -22,7 +22,7 @@ import CONFIG from '@/lib/config'
 const { APPROVAL } = PENDING
 const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 const { REALIZATIONS, TEMPLATES_DEFINED } =
-  CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME.RELATED_DATA_COUNTS
+  CONFIG.PANELS.CONCEPTS.MODALS.HIERARCHY.CHANGE_NAME.RELATED_DATA_COUNTS
 
 const PendingNameItem = ({ item, isAdmin }) => {
   const { updateModalData } = usePanelModalOperationsContext()

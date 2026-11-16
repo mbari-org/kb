@@ -11,7 +11,7 @@ import { binSearch } from '@/lib/utils'
 
 import CONFIG from '@/lib/config'
 
-const CHANGE_NAME = CONFIG.PANELS.CONCEPTS.MODALS.STRUCTURE.CHANGE_NAME
+const CHANGE_NAME = CONFIG.PANELS.CONCEPTS.MODALS.HIERARCHY.CHANGE_NAME
 
 const useConceptNameValidate = (formData, modifiedFields) => {
   const { stagedState } = use(ConceptStagedContext)
