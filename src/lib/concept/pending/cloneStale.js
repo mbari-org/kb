@@ -1,4 +1,5 @@
 import { getConcept } from '@/lib/api/concept'
+import { sortConceptChildren } from '@/lib/model/concept'
 
 export const cloneStale = async (apiFns, staleConcept, useServerBase = true) => {
   let base = {}
@@ -14,7 +15,7 @@ export const cloneStale = async (apiFns, staleConcept, useServerBase = true) => 
   freshConcept.rankName = staleConcept.rankName
   freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
   freshConcept.alternateNames = [...staleConcept.alternateNames]
-  freshConcept.children = [...staleConcept.children]
+  freshConcept.children = sortConceptChildren(staleConcept.children)
   freshConcept.media = staleConcept.media.map(media => ({ ...media }))
   freshConcept.templates = (staleConcept.templates || []).map(template => ({ ...template }))
 

@@ -29,6 +29,9 @@ const getDescendantNames = async (apiFns, conceptName) => {
   return descendantNames(phylogeny)
 }
 
+const sortConceptChildren = children =>
+  [...children].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+
 const getNextSibling = (concept, getConcept) => {
   const parent = getConcept(concept.parent)
   if (concept && parent) {
@@ -63,5 +66,6 @@ export {
   getDescendantsInfo,
   getNextSibling,
   getPrevSibling,
+  sortConceptChildren,
 }
 

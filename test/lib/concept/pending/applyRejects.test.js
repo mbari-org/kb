@@ -63,4 +63,34 @@ describe('applyRejects', () => {
     expect(concept.name).toBe('dingo-2')
     expect(concept.alternateNames).toEqual(['dingo'])
   })
+
+  it('sorts children case insensitively when restoring a rejected deletion', () => {
+    const concept = { ...renamedConcept(), children: ['zebra'] }
+
+    applyRejects(concept, [
+      {
+        concept: 'dingo-2',
+        field: HISTORY_FIELD.CHILD,
+        action: ACTION.DELETE,
+        oldValue: 'Beta',
+      },
+    ])
+
+    expect(concept.children).toEqual(['Beta', 'zebra'])
+  })
+
+  it('preserves case-insensitive sorting when rejecting child additions', () => {
+    const concept = { ...renamedConcept(), children: ['alpha', 'Beta', 'zebra'] }
+
+    applyRejects(concept, [
+      {
+        concept: 'dingo-2',
+        field: HISTORY_FIELD.CHILD,
+        action: ACTION.ADD,
+        newValue: 'alpha',
+      },
+    ])
+
+    expect(concept.children).toEqual(['Beta', 'zebra'])
+  })
 })

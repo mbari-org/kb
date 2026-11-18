@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildTree, buildTreeItems } from '@/lib/model/taxonomy'
+import { buildTree, buildTreeItems, insertConcept } from '@/lib/model/taxonomy'
 
 const concept = (name, children = []) => ({ children, name })
 
@@ -76,5 +76,33 @@ describe('buildTree structural sharing', () => {
 
     expect(third).not.toBe(first)
     expect(third[0].children).toEqual([])
+  })
+})
+
+describe('insertConcept', () => {
+  it('sorts concept children case insensitively', () => {
+    const conceptMap = {}
+    const aliasMap = {}
+    const concept = {
+      alternateNames: [],
+      children: ['zebra', 'Beta', 'alpha'],
+      name: 'parent',
+    }
+
+    insertConcept(concept, conceptMap, aliasMap)
+
+    expect(concept.children).toEqual(['alpha', 'Beta', 'zebra'])
+    expect(conceptMap.parent).toBe(concept)
+  })
+
+  it('preserves children that have not been loaded', () => {
+    const concept = {
+      alternateNames: [],
+      name: 'parent',
+    }
+
+    insertConcept(concept, {}, {})
+
+    expect(concept).not.toHaveProperty('children')
   })
 })

@@ -370,6 +370,32 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(errors).toEqual([])
   })
 
+  it('sorts edited concept children case insensitively before committing them', async () => {
+    const { errors, getContext, store } = await renderTaxonomy()
+    addStoreConcept(store, { name: 'alpha', parent: 'old-parent' })
+    addStoreConcept(store, { name: 'Beta', parent: 'old-parent' })
+    addStoreConcept(store, { name: 'zebra', parent: 'old-parent' })
+    const staleConcept = getContext().getConcept('old-parent')
+    const freshConcept = {
+      ...cloneConcept(staleConcept),
+      children: ['zebra', 'Beta', 'moving-child', 'alpha'],
+    }
+
+    let result
+    await act(async () => {
+      result = await getContext().conceptEditsRefresh(freshConcept, staleConcept)
+    })
+
+    expect(result.concept.children).toEqual(['alpha', 'Beta', 'moving-child', 'zebra'])
+    expect(getContext().getConcept('old-parent').children).toEqual([
+      'alpha',
+      'Beta',
+      'moving-child',
+      'zebra',
+    ])
+    expect(errors).toEqual([])
+  })
+
   it('removes child concepts and their aliases from taxonomy names and maps', async () => {
     const { errors, getContext } = await renderTaxonomy()
     const staleConcept = getContext().getConcept('old-parent')
@@ -726,6 +752,27 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
     expect(apiCallsFor(apiFns.apiPayload, apiDescendants)).toHaveLength(1)
     expect(apiCallsFor(apiFns.apiPayload, apiChildren)).toHaveLength(0)
     expect(apiCallsFor(apiFns.apiPayload, getMedia)).toHaveLength(0)
+    expect(errors).toEqual([])
+  })
+
+  it('sorts phylogeny child arrays case insensitively', async () => {
+    const { errors, getContext, store } = await renderTaxonomy()
+
+    addStoreConcept(store, { name: 'alpha', parent: 'old-parent' })
+    addStoreConcept(store, { name: 'Beta', parent: 'old-parent' })
+    addStoreConcept(store, { name: 'zebra', parent: 'old-parent' })
+    store.children['old-parent'] = ['zebra', 'moving-child', 'Beta', 'alpha']
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+
+    expect(getContext().getConcept('old-parent').children).toEqual([
+      'alpha',
+      'Beta',
+      'moving-child',
+      'zebra',
+    ])
     expect(errors).toEqual([])
   })
 

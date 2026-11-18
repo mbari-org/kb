@@ -1,10 +1,11 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { sortConceptChildren } from '@/lib/model/concept'
 
 const applyChildrenResults = ({ concept, result }) => {
   if (result.action === CONCEPT_STATE.CHILD.ADD) {
     const childName = result.response?.name || result.update.name
     if (!concept.children.includes(childName)) {
-      concept.children = [...concept.children, childName].sort()
+      concept.children = sortConceptChildren([...concept.children, childName])
     }
   }
 }

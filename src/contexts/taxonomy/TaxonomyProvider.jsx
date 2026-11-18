@@ -5,7 +5,7 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { getConcept as apiConcept } from '@/lib/model/concept'
+import { getConcept as apiConcept, sortConceptChildren } from '@/lib/model/concept'
 
 import {
   applyConceptMedia,
@@ -156,7 +156,7 @@ const TaxonomyProvider = ({ children }) => {
           const freshParent = copyParent(freshConcept.parent)
           if (!freshParent.children.includes(freshConcept.name)) {
             freshParent.children.push(freshConcept.name)
-            freshParent.children.sort()
+            freshParent.children = sortConceptChildren(freshParent.children)
           }
           insertConcept(freshParent, conceptMap, aliasMap)
           const staleParent = copyParent(staleConcept.parent)
@@ -169,7 +169,7 @@ const TaxonomyProvider = ({ children }) => {
           parent.children = parent.children.filter(child => child !== staleConcept.name)
           if (!parent.children.includes(freshConcept.name)) {
             parent.children.push(freshConcept.name)
-            parent.children.sort()
+            parent.children = sortConceptChildren(parent.children)
           }
           insertConcept(parent, conceptMap, aliasMap)
         }

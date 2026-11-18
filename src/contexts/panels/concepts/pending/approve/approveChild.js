@@ -1,16 +1,17 @@
 import { ACTION } from '@/lib/constants'
 import { createError } from '@/lib/errors'
+import { sortConceptChildren } from '@/lib/model/concept'
 
 const approveChild = (concept, item) => {
   switch (item.action) {
     case ACTION.ADD: {
       const next = [...concept.children, item.newValue]
-      concept.children = Array.from(new Set(next)).sort()
+      concept.children = sortConceptChildren(Array.from(new Set(next)))
       break
     }
 
     case ACTION.DELETE: {
-      concept.children = concept.children.filter(child => child !== item.oldValue)
+      concept.children = sortConceptChildren(concept.children.filter(child => child !== item.oldValue))
       break
     }
 

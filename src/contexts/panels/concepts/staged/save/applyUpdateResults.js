@@ -1,4 +1,5 @@
 import { CONCEPT } from '@/lib/constants'
+import { sortConceptChildren } from '@/lib/model/concept'
 
 import applyAliasResults from '@/contexts/panels/concepts/staged/save/applier/applyAliasResults'
 import applyAuthorResults from '@/contexts/panels/concepts/staged/save/applier/applyAuthorResults'
@@ -11,7 +12,7 @@ const applyUpdateResults = async ({ freshConcept, isAdmin, staleConcept, updates
 
   freshConcept.aliases = staleConcept.aliases.map(alias => ({ ...alias }))
   freshConcept.alternateNames = [...staleConcept.alternateNames]
-  freshConcept.children = [...staleConcept.children]
+  freshConcept.children = sortConceptChildren(staleConcept.children)
   freshConcept.parent = staleConcept.parent
 
   const appliers = {

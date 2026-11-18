@@ -13,6 +13,7 @@ import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '
 
 import { createError } from '@/lib/errors'
 import { orderedAliases } from '@/lib/model/aliases'
+import { sortConceptChildren } from '@/lib/model/concept'
 import { filterRanks } from '@/lib/model/rank'
 
 import { treeItem } from '@/components/kb/panels/concepts/sidebar/tree/lib/taxonomyItem'
@@ -464,8 +465,7 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
       if (parentName !== undefined && updated.name !== taxonomy.rootName) {
         updated.parent = parentName
       }
-      conceptMap[node.name] = updated
-      rebindAliases(updated, aliasMap)
+      insertConcept(updated, conceptMap, aliasMap)
     } else {
       insertConcept(
         {
@@ -504,6 +504,10 @@ const loadTaxonomyConceptDescendants = async (taxonomy, concept, apiFns) => {
 const insertConcept = (concept, conceptMap, aliasMap) => {
   // Absent media means "not fetched yet"; an array gets canonical mediaType items.
   concept.media = concept.media?.map(typeMediaItem)
+
+  if (concept.children) {
+    concept.children = sortConceptChildren(concept.children)
+  }
 
   delete concept.linkRealizations
 
