@@ -2,6 +2,8 @@ import { Menu, MenuItem, ListSubheader } from '@mui/material'
 
 import CONFIG from '@/lib/config'
 
+const MENU_MAX_HEIGHT = 300
+
 const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick }) => {
   return (
     <Menu
@@ -11,7 +13,7 @@ const ReferenceConceptsDropDown = ({ anchorEl, onClose, concepts, onConceptClick
       slotProps={{
         paper: {
           style: {
-            maxHeight: 300,
+            maxHeight: MENU_MAX_HEIGHT,
             width: anchorEl?.offsetWidth,
           },
         },

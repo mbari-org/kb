@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 
+const MENU_MAX_HEIGHT = 300
+
 const NavHistoryButton = ({ dropItems, icon: Icon, label, onClick, onItemSelect, ...props }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [hoveredIndex, setHoveredIndex] = useState(-1)
@@ -131,7 +133,7 @@ const NavHistoryButton = ({ dropItems, icon: Icon, label, onClick, onItemSelect,
           PaperProps={{
             sx: {
               mt: 1,
-              maxHeight: 300,
+              maxHeight: MENU_MAX_HEIGHT,
               width: 200,
               '& .MuiMenuItem-root': {
                 fontSize: '0.875rem',

@@ -6,6 +6,7 @@ import KBInfoIcon from '@/components/icon/KBInfoIcon'
 import KBPopover from '@/components/common/popover/KBPopover'
 
 const { CONFIG_SERVICE } = CONFIG.STARTUP
+const POPOVER_MAX_WIDTH = 300
 
 const ServiceInfo = ({ disabled, onApplyDefault }) => {
   const configServiceInfo = ({ close }) => (
@@ -25,7 +26,7 @@ const ServiceInfo = ({ disabled, onApplyDefault }) => {
       {disabled ? (
         <KBInfoIcon disabled />
       ) : (
-        <KBPopover content={configServiceInfo} paperSx={{ maxWidth: 300 }}>
+        <KBPopover content={configServiceInfo} paperSx={{ maxWidth: POPOVER_MAX_WIDTH }}>
           <KBInfoIcon />
         </KBPopover>
       )}

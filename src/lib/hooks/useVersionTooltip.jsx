@@ -12,6 +12,8 @@ import {
   isDirty,
 } from '@/version'
 
+const TOOLTIP_MIN_WIDTH = 300
+
 /**
  * Hook that returns a tooltip component with detailed version information
  * @returns {JSX.Element} A Box component containing version details for use in tooltips
@@ -39,7 +41,7 @@ const useVersionTooltip = () => {
     return (
       <Box
         sx={{
-          minWidth: 300,
+          minWidth: TOOLTIP_MIN_WIDTH,
           p: 1.5,
           borderRadius: 1,
           overflow: 'hidden',

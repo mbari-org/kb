@@ -8,6 +8,8 @@ import { ROLES } from '@/lib/constants/roles.js'
 import useDebounce from '@/lib/hooks/useDebounce'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
 
+const USER_CHANGE_DEBOUNCE_MS = 300
+
 const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
   const [showConfirm, setShowConfirm] = useState(false)
   const [touched, setTouched] = useState({})
@@ -17,7 +19,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
     setLocalUser(user)
   }, [user])
 
-  const debouncedOnChange = useDebounce(onChange, 300)
+  const debouncedOnChange = useDebounce(onChange, USER_CHANGE_DEBOUNCE_MS)
 
   const handleChange = field => event => {
     const value = event.target.value
