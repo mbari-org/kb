@@ -7,13 +7,14 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import CONFIG from '@/lib/config'
 import { CONCEPT } from '@/lib/constants'
 
-import { setCollapseAnimatingId } from './collapseAnimationStore'
+import { setGroupTransitionAnimatingId } from './groupTransitionAnimationStore'
 
 const { PROCESSING } = CONFIG
 
 // Delay from the top-node group transition start until the collapsing id clears;
 //  covers MUI Collapse's default exit duration.
 const COLLAPSE_ANIMATION_MS = 350
+const EXPAND_ANIMATION_MS = 350
 
 // Prune count above which collapse shows a processing overlay while the deep
 //  unmount blocks the main thread.
@@ -44,7 +45,7 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
   const { conceptPath } = use(ConceptContext)
   const { cancelDescendantMedia, loadConceptChildren, loadConceptDescendants, taxonomy } = use(TaxonomyContext)
 
-  const collapseTimerRef = useRef(null)
+  const animationTimerRef = useRef(null)
 
   const isExpanded = useCallback(
     concept => {
@@ -63,7 +64,7 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
       const pruning = allDescendants(taxonomy, concept.name)
       pruning.shift()
 
-      clearTimeout(collapseTimerRef.current)
+      clearTimeout(animationTimerRef.current)
       cancelDescendantMedia(pruning)
 
       const stop =
@@ -77,12 +78,15 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
       }
 
       const phase2 = () => {
-        setCollapseAnimatingId(concept.name)
+        setGroupTransitionAnimatingId(concept.name)
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             setExpandedItems(prevItems => prevItems.filter(id => id !== concept.name))
             stop?.()
-            collapseTimerRef.current = setTimeout(() => setCollapseAnimatingId(null), COLLAPSE_ANIMATION_MS)
+            animationTimerRef.current = setTimeout(
+              () => setGroupTransitionAnimatingId(null),
+              COLLAPSE_ANIMATION_MS
+            )
           })
         })
       }
@@ -102,11 +106,33 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
     [beginProcessing, cancelDescendantMedia, setExpandedItems, taxonomy]
   )
 
-  const expand = useCallback(() => {
-    if (conceptPath) {
-      setExpandedItems(prevItems => [...new Set([...prevItems, ...conceptPath])])
-    }
-  }, [setExpandedItems, conceptPath])
+  const animateExpand = useCallback(
+    (concept, updateExpandedItems) => {
+      clearTimeout(animationTimerRef.current)
+      setGroupTransitionAnimatingId(concept.name)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          updateExpandedItems()
+          animationTimerRef.current = setTimeout(
+            () => setGroupTransitionAnimatingId(null),
+            EXPAND_ANIMATION_MS
+          )
+        })
+      })
+    },
+    []
+  )
+
+  const expand = useCallback(
+    concept => {
+      if (!conceptPath) return
+
+      animateExpand(concept, () => {
+        setExpandedItems(prevItems => [...new Set([...prevItems, ...conceptPath])])
+      })
+    },
+    [animateExpand, conceptPath, setExpandedItems]
+  )
 
   const expandToParent = useCallback(() => {
     if (conceptPath) {
@@ -116,10 +142,12 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
 
   const expandSelf = useCallback(
     concept => {
-      setExpandedItems(prevItems => [...new Set([...prevItems, concept.name])])
+      animateExpand(concept, () => {
+        setExpandedItems(prevItems => [...new Set([...prevItems, concept.name])])
+      })
       loadConceptChildren(concept.name)
     },
-    [loadConceptChildren, setExpandedItems]
+    [animateExpand, loadConceptChildren, setExpandedItems]
   )
 
   const descendants = useCallback(

@@ -5,7 +5,10 @@ import { TreeItemProvider, TreeItem } from '@mui/x-tree-view'
 
 import ConceptTreeLabel from './ConceptTreeLabel'
 
-import { isCollapseAnimating, subscribeCollapseAnimating } from './lib/collapseAnimationStore'
+import {
+  isGroupTransitionAnimating,
+  subscribeGroupTransitionAnimating,
+} from './lib/groupTransitionAnimationStore'
 
 const InstantGroupTransition = ({ children, className, in: expanded }) =>
   expanded ? (
@@ -16,7 +19,9 @@ const InstantGroupTransition = ({ children, className, in: expanded }) =>
 
 const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
   const { itemId } = props
-  const transition = useSyncExternalStore(subscribeCollapseAnimating, () => isCollapseAnimating(itemId))
+  const transition = useSyncExternalStore(subscribeGroupTransitionAnimating, () =>
+    isGroupTransitionAnimating(itemId)
+  )
 
   return (
     <TreeItemProvider itemId={itemId}>

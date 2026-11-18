@@ -1,7 +1,11 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, renderHook } from '@testing-library/react'
 
 import useExpandConcept from '@/components/kb/panels/concepts/sidebar/tree/lib/useExpandConcept'
+import {
+  isGroupTransitionAnimating,
+  setGroupTransitionAnimatingId,
+} from '@/components/kb/panels/concepts/sidebar/tree/lib/groupTransitionAnimationStore'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -34,7 +38,7 @@ const makeWrapper = (conceptPath, taxonomyFns) => {
 
 const setup = (conceptPath = null) => {
   const loadConceptChildren = vi.fn()
-  const loadConceptDescendants = vi.fn()
+  const loadConceptDescendants = vi.fn(async () => taxonomy)
   const cancelDescendantMedia = vi.fn()
   const setExpandedItems = vi.fn()
   const { result } = renderHook(() => useExpandConcept([], setExpandedItems), {
@@ -47,6 +51,11 @@ vi.stubGlobal('requestAnimationFrame', cb => cb())
 
 const applyUpdate = (setExpandedItems, items) =>
   setExpandedItems.mock.calls.reduce((updated, [updater]) => updater(updated), items)
+
+afterEach(() => {
+  setGroupTransitionAnimatingId(null)
+  vi.useRealTimers()
+})
 
 describe('useExpandConcept collapse', () => {
   it('removes the concept and all its descendants from expandedItems', () => {
@@ -91,6 +100,47 @@ describe('useExpandConcept self', () => {
     })
 
     expect(loadConceptChildren).toHaveBeenCalledWith('object')
+  })
+
+  it('animates only the node being expanded and clears the transition marker', async () => {
+    vi.useFakeTimers()
+    const { expandConcept } = setup()
+
+    act(() => {
+      expandConcept({ name: 'object' }, CONCEPT.EXPAND.SELF)
+    })
+
+    expect(isGroupTransitionAnimating('object')).toBe(true)
+    expect(isGroupTransitionAnimating('physical object')).toBe(false)
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(400)
+    })
+
+    expect(isGroupTransitionAnimating('object')).toBe(false)
+  })
+})
+
+describe('useExpandConcept expansion', () => {
+  it('animates ordinary expansion', () => {
+    const { expandConcept, setExpandedItems } = setup(['root', 'object'])
+
+    act(() => {
+      expandConcept({ name: 'object' }, CONCEPT.EXPAND.ON)
+    })
+
+    expect(isGroupTransitionAnimating('object')).toBe(true)
+    expect(applyUpdate(setExpandedItems, [])).toEqual(['root', 'object'])
+  })
+
+  it('does not animate expand all', () => {
+    const { expandConcept } = setup()
+
+    act(() => {
+      expandConcept({ name: 'object' }, CONCEPT.EXPAND.DESCENDANTS)
+    })
+
+    expect(isGroupTransitionAnimating('object')).toBe(false)
   })
 })
 
