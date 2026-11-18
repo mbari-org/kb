@@ -934,6 +934,99 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
   })
 })
 
+describe('TaxonomyProvider descendant media cancellation', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  const addLeafDescendants = (store, names) => {
+    names.forEach(name => addStoreConcept(store, { children: [], name, parent: 'old-parent' }))
+    store.children['old-parent'] = [...store.children['old-parent'], ...names]
+  }
+
+  const gateMedia = apiFns => {
+    let releaseMedia
+    const mediaGate = new Promise(resolve => {
+      releaseMedia = resolve
+    })
+    const apiPayloadImpl = apiFns.apiPayload.getMockImplementation()
+    apiFns.apiPayload.mockImplementation(async (fn, value, ignoreError) => {
+      if (fn === getMedia) {
+        await mediaGate
+      }
+      return apiPayloadImpl(fn, value, ignoreError)
+    })
+    return releaseMedia
+  }
+
+  it('stops not-yet-started media fetches for cancelled descendant names', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+
+    const leafNames = ['leaf-1', 'leaf-2', 'leaf-3', 'leaf-4', 'leaf-5', 'leaf-6', 'leaf-7', 'leaf-8']
+    addLeafDescendants(store, leafNames)
+    const releaseMedia = gateMedia(apiFns)
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+
+    // Batch 1 (leaf-1..6) is in flight behind the gate; leaf-7/leaf-8 are still queued.
+    getContext().cancelDescendantMedia(['leaf-7', 'leaf-8'])
+    await act(async () => {
+      releaseMedia()
+    })
+
+    await waitFor(() => {
+      expect(getContext().getConcept('leaf-1').media).toBeDefined()
+    })
+
+    const fetchedNames = apiCallsFor(apiFns.apiPayload, getMedia).map(([, name]) => name)
+    expect(fetchedNames).not.toContain('leaf-7')
+    expect(fetchedNames).not.toContain('leaf-8')
+    expect(getContext().getConcept('leaf-7').media).toBeUndefined()
+    expect(getContext().getConcept('leaf-8').media).toBeUndefined()
+    expect(errors).toEqual([])
+  })
+
+  it('heals media for structure-stub children on loadConceptChildren', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+
+    const leafNames = ['leaf-1', 'leaf-2', 'leaf-3', 'leaf-4', 'leaf-5', 'leaf-6', 'leaf-7', 'leaf-8']
+    addLeafDescendants(store, leafNames)
+    const cancelledNames = leafNames.slice(6)
+    const releaseMedia = gateMedia(apiFns)
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+
+    getContext().cancelDescendantMedia(cancelledNames)
+    await act(async () => {
+      releaseMedia()
+    })
+    await waitFor(() => {
+      expect(getContext().getConcept('leaf-1').media).toBeDefined()
+    })
+    cancelledNames.forEach(name => {
+      expect(getContext().getConcept(name).media).toBeUndefined()
+    })
+
+    apiFns.apiPayload.mockClear()
+    await act(async () => {
+      await getContext().loadConceptChildren('old-parent')
+    })
+
+    await waitFor(() => {
+      cancelledNames.forEach(name => {
+        expect(getContext().getConcept(name).media).toBeDefined()
+      })
+    })
+    const fetchedNames = apiCallsFor(apiFns.apiPayload, getMedia).map(([, name]) => name)
+    expect(fetchedNames.sort()).toEqual([...cancelledNames].sort())
+    expect(errors).toEqual([])
+  })
+})
+
 describe('TaxonomyProvider removeConcept', () => {
   beforeEach(() => {
     vi.restoreAllMocks()

@@ -42,7 +42,7 @@ const allDescendants = (taxonomy, conceptName, names = [conceptName]) => {
 const useExpandConcept = (expandedItems, setExpandedItems) => {
   const { beginProcessing } = use(AppModalContext)
   const { conceptPath } = use(ConceptContext)
-  const { loadConceptChildren, loadConceptDescendants, taxonomy } = use(TaxonomyContext)
+  const { cancelDescendantMedia, loadConceptChildren, loadConceptDescendants, taxonomy } = use(TaxonomyContext)
 
   const collapseTimerRef = useRef(null)
 
@@ -64,6 +64,7 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
       pruning.shift()
 
       clearTimeout(collapseTimerRef.current)
+      cancelDescendantMedia(pruning)
 
       const stop =
         pruning.length >= COLLAPSE_OVERLAY_THRESHOLD
@@ -98,7 +99,7 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
 
       pruneChunk()
     },
-    [beginProcessing, setExpandedItems, taxonomy]
+    [beginProcessing, cancelDescendantMedia, setExpandedItems, taxonomy]
   )
 
   const expand = useCallback(() => {

@@ -312,12 +312,20 @@ const TaxonomyProvider = ({ children }) => {
   )
 
   const mediaInFlightRef = useRef(new Set())
+  const mediaCancelledRef = useRef(new Set())
+
+  const cancelDescendantMedia = useCallback(names => {
+    names.forEach(name => mediaCancelledRef.current.add(name))
+  }, [])
 
   const fillConceptMedia = useCallback(
     mediaNames => {
       const pending = mediaNames.filter(name => !mediaInFlightRef.current.has(name))
       if (pending.length === 0) return
-      pending.forEach(name => mediaInFlightRef.current.add(name))
+      pending.forEach(name => {
+        mediaCancelledRef.current.delete(name)
+        mediaInFlightRef.current.add(name)
+      })
 
       let accumulated = []
       const flush = () => {
@@ -333,10 +341,15 @@ const TaxonomyProvider = ({ children }) => {
         })
       }
 
-      loadConceptMediaIncremental(pending, apiFns, succeeded => {
-        accumulated.push(...succeeded)
-        if (accumulated.length >= MEDIA_FLUSH_COUNT) flush()
-      }).finally(() => {
+      loadConceptMediaIncremental(
+        pending,
+        apiFns,
+        succeeded => {
+          accumulated.push(...succeeded)
+          if (accumulated.length >= MEDIA_FLUSH_COUNT) flush()
+        },
+        name => mediaCancelledRef.current.has(name)
+      ).finally(() => {
         pending.forEach(name => mediaInFlightRef.current.delete(name))
         flush()
       })
@@ -368,16 +381,24 @@ const TaxonomyProvider = ({ children }) => {
     async conceptName => {
       if (!apiFns || !taxonomyRef.current) return null
       try {
-        return await enqueueTaxonomyMutation(async current => {
+        const committedTaxonomy = await enqueueTaxonomyMutation(async current => {
           if (areTaxonomyConceptChildrenLoaded(current, conceptName)) return current
           const { taxonomy: updatedTaxonomy } = await loadTaxonomyConceptGrandchildren(current, conceptName, apiFns)
           return updatedTaxonomy
         })
+        // Heal media for structure-only stubs left by a descendants load (or by
+        //  cancelling its media fill); children payloads carry media, so this is
+        //  empty for first-time expansion.
+        const missingMedia = getTaxonomyConcept(committedTaxonomy, conceptName).children.filter(
+          child => getTaxonomyConcept(committedTaxonomy, child).media === undefined
+        )
+        fillConceptMedia(missingMedia)
+        return committedTaxonomy
       } catch (error) {
         showBoundary(error)
       }
     },
-    [apiFns, enqueueTaxonomyMutation, showBoundary]
+    [apiFns, enqueueTaxonomyMutation, fillConceptMedia, showBoundary]
   )
 
   const removeConcept = useCallback(
@@ -435,6 +456,7 @@ const TaxonomyProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      cancelDescendantMedia,
       checkConceptName,
       conceptEditsRefresh,
       closestConcept,
@@ -457,6 +479,7 @@ const TaxonomyProvider = ({ children }) => {
       updateTaxonomy,
     }),
     [
+      cancelDescendantMedia,
       checkConceptName,
       conceptEditsRefresh,
       closestConcept,

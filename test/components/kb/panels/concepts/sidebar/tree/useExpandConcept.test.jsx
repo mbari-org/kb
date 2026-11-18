@@ -35,9 +35,10 @@ const makeWrapper = (conceptPath, taxonomyFns) => {
 const setup = (conceptPath = null) => {
   const loadConceptChildren = vi.fn()
   const loadConceptDescendants = vi.fn()
+  const cancelDescendantMedia = vi.fn()
   const setExpandedItems = vi.fn()
   const { result } = renderHook(() => useExpandConcept([], setExpandedItems), {
-    wrapper: makeWrapper(conceptPath, { loadConceptChildren, loadConceptDescendants }),
+    wrapper: makeWrapper(conceptPath, { cancelDescendantMedia, loadConceptChildren, loadConceptDescendants }),
   })
   return { expandConcept: result.current, loadConceptChildren, setExpandedItems }
 }
