@@ -34,6 +34,7 @@ const ActionIcon = ({
         sx={{
           alignItems: 'center',
           borderRadius: '50%',
+          ...(color && { color: hoverColor }),
           cursor: isDisabled ? 'not-allowed' : 'pointer',
           display: 'flex',
           justifyContent: 'center',
@@ -68,6 +69,7 @@ const ActionIcon = ({
       disabled={isDisabled}
       onClick={onClick}
       sx={{
+        ...(color && { color: hoverColor }),
         '&:hover': {
           ...(isDisabled ? {} : theme.kb?.icon?.hover),
           ...(color && !isDisabled && { color: hoverColor }),
