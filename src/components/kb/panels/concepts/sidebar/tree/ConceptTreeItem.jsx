@@ -5,7 +5,14 @@ import { TreeItemProvider, TreeItem } from '@mui/x-tree-view'
 
 import ConceptTreeLabel from './ConceptTreeLabel'
 
-const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
+const InstantGroupTransition = ({ children, className, in: expanded }) =>
+  expanded ? (
+    <ul className={className} role='group'>
+      {children}
+    </ul>
+  ) : null
+
+const ConceptTreeItem = forwardRef(function ConceptItem({ transition = true, ...props }, ref) {
   const { itemId } = props
 
   return (
@@ -14,10 +21,11 @@ const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
         {...props}
         ref={ref}
         slotProps={{
+          ...(transition ? {} : { groupTransition: { timeout: 0 } }),
           label: { itemId },
         }}
         slots={{
-          groupTransition: Collapse,
+          groupTransition: transition ? Collapse : InstantGroupTransition,
           label: ConceptTreeLabel,
         }}
       />
