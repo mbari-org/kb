@@ -1,15 +1,16 @@
 {
   "ARG": {
     "CONCEPT": "Concept",
-    "CONCEPT_DESCENDANTS": "concept descendants",
-    "CONCEPT_DEPENDENCIES": "concept dependencies",
+    "CONCEPT_DESCENDANTS": "Concept descendants",
+    "CONCEPT_DEPENDENCIES": "Concept dependencies",
     "HISTORY": {
-      "CHILDREN": "children history",
-      "DATA": "data",
-      "DESCENDANTS": "descendants history"
+      "CHILDREN": "Children history",
+      "DATA": "Data",
+      "DESCENDANTS": "Descendants history"
     },
-    "PENDING": "pending"
+    "PENDING": "Pending"
   },
+  "COLLAPSE": "Pruning",
   "DELETE": "Delete",
   "LOAD": "Loading",
   "OFF": "",

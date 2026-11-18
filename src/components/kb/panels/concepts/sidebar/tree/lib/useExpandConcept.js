@@ -15,6 +15,14 @@ const { PROCESSING } = CONFIG
 //  covers MUI Collapse's default exit duration.
 const COLLAPSE_ANIMATION_MS = 350
 
+// Prune count above which collapse shows a processing overlay while the deep
+//  unmount blocks the main thread.
+const COLLAPSE_OVERLAY_THRESHOLD = 300
+
+// Descendants pruned per frame, so frames (and timers) keep flowing and the
+//  overlay delay can skip quick collapses.
+const COLLAPSE_PRUNE_CHUNK = 500
+
 const allExpandable = (taxonomy, conceptName, names = []) => {
   const concept = taxonomy.conceptMap[conceptName]
   if (!concept?.children?.length) return names
@@ -45,25 +53,52 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
     [expandedItems]
   )
 
-  // Two-phase collapse: descendants unmount instantly (their expansion is pruned
-  //  first), then the top node's group animates over the remaining shallow block.
+  // Two-phase collapse: descendants are pruned in per-frame chunks (collapsed
+  //  groups render nothing), then the top node's group animates over the
+  //  remaining shallow block. The animating id is set only after the prune
+  //  completes: switching the group transition component while any of the deep
+  //  subtree is still mounted remounts it all.
   const collapse = useCallback(
     concept => {
-      const pruning = new Set(allDescendants(taxonomy, concept.name))
-      pruning.delete(concept.name)
+      const pruning = allDescendants(taxonomy, concept.name)
+      pruning.shift()
 
       clearTimeout(collapseTimerRef.current)
-      setCollapseAnimatingId(concept.name)
-      setExpandedItems(prevItems => prevItems.filter(id => !pruning.has(id)))
 
-      requestAnimationFrame(() => {
+      const stop =
+        pruning.length >= COLLAPSE_OVERLAY_THRESHOLD
+          ? beginProcessing(PROCESSING.COLLAPSE, PROCESSING.ARG.CONCEPT_DESCENDANTS)
+          : null
+
+      const chunks = []
+      for (let i = 0; i < pruning.length; i += COLLAPSE_PRUNE_CHUNK) {
+        chunks.push(new Set(pruning.slice(i, i + COLLAPSE_PRUNE_CHUNK)))
+      }
+
+      const phase2 = () => {
+        setCollapseAnimatingId(concept.name)
         requestAnimationFrame(() => {
-          setExpandedItems(prevItems => prevItems.filter(id => id !== concept.name))
-          collapseTimerRef.current = setTimeout(() => setCollapseAnimatingId(null), COLLAPSE_ANIMATION_MS)
+          requestAnimationFrame(() => {
+            setExpandedItems(prevItems => prevItems.filter(id => id !== concept.name))
+            stop?.()
+            collapseTimerRef.current = setTimeout(() => setCollapseAnimatingId(null), COLLAPSE_ANIMATION_MS)
+          })
         })
-      })
+      }
+
+      const pruneChunk = () => {
+        const chunk = chunks.shift()
+        if (!chunk) {
+          phase2()
+          return
+        }
+        setExpandedItems(prevItems => prevItems.filter(id => !chunk.has(id)))
+        requestAnimationFrame(pruneChunk)
+      }
+
+      pruneChunk()
     },
-    [setExpandedItems, taxonomy]
+    [beginProcessing, setExpandedItems, taxonomy]
   )
 
   const expand = useCallback(() => {
