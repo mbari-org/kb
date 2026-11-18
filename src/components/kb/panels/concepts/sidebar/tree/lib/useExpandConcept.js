@@ -1,4 +1,4 @@
-import { use, useCallback } from 'react'
+import { use, useCallback, useRef } from 'react'
 
 import AppModalContext from '@/contexts/app/AppModalContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -7,7 +7,13 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import CONFIG from '@/lib/config'
 import { CONCEPT } from '@/lib/constants'
 
+import { setCollapseAnimatingId } from './collapseAnimationStore'
+
 const { PROCESSING } = CONFIG
+
+// Delay from the top-node group transition start until the collapsing id clears;
+//  covers MUI Collapse's default exit duration.
+const COLLAPSE_ANIMATION_MS = 350
 
 const allExpandable = (taxonomy, conceptName, names = []) => {
   const concept = taxonomy.conceptMap[conceptName]
@@ -30,6 +36,8 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
   const { conceptPath } = use(ConceptContext)
   const { loadConceptChildren, loadConceptDescendants, taxonomy } = use(TaxonomyContext)
 
+  const collapseTimerRef = useRef(null)
+
   const isExpanded = useCallback(
     concept => {
       return expandedItems.includes(concept.name)
@@ -37,10 +45,23 @@ const useExpandConcept = (expandedItems, setExpandedItems) => {
     [expandedItems]
   )
 
+  // Two-phase collapse: descendants unmount instantly (their expansion is pruned
+  //  first), then the top node's group animates over the remaining shallow block.
   const collapse = useCallback(
     concept => {
       const pruning = new Set(allDescendants(taxonomy, concept.name))
+      pruning.delete(concept.name)
+
+      clearTimeout(collapseTimerRef.current)
+      setCollapseAnimatingId(concept.name)
       setExpandedItems(prevItems => prevItems.filter(id => !pruning.has(id)))
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setExpandedItems(prevItems => prevItems.filter(id => id !== concept.name))
+          collapseTimerRef.current = setTimeout(() => setCollapseAnimatingId(null), COLLAPSE_ANIMATION_MS)
+        })
+      })
     },
     [setExpandedItems, taxonomy]
   )

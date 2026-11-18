@@ -42,7 +42,6 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
   // The slots 'item' field designates the rendering component. Display data is not
   //  provided here; ConceptTreeLabel subscribes to it per item.
   const slots = useMemo(() => ({ item: ConceptTreeItem }), [])
-  const slotProps = useMemo(() => ({ item: { transition: false } }), [])
 
   const handleConceptSelect = useCallback(
     conceptName => {
@@ -123,7 +122,6 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
           onItemClick={handleItemClick}
           selectedItems={selectedItems}
           slots={slots}
-          slotProps={slotProps}
           style={{ flexGrow: 1, height: '100%' }}
         />
       </aside>

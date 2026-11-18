@@ -42,7 +42,10 @@ const setup = (conceptPath = null) => {
   return { expandConcept: result.current, loadConceptChildren, setExpandedItems }
 }
 
-const applyUpdate = (setExpandedItems, items) => setExpandedItems.mock.calls[0][0](items)
+vi.stubGlobal('requestAnimationFrame', cb => cb())
+
+const applyUpdate = (setExpandedItems, items) =>
+  setExpandedItems.mock.calls.reduce((updated, [updater]) => updater(updated), items)
 
 describe('useExpandConcept collapse', () => {
   it('removes the concept and all its descendants from expandedItems', () => {

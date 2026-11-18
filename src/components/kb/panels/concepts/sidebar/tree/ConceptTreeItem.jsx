@@ -1,9 +1,11 @@
-import { forwardRef, memo } from 'react'
+import { forwardRef, memo, useSyncExternalStore } from 'react'
 
 import Collapse from '@mui/material/Collapse'
 import { TreeItemProvider, TreeItem } from '@mui/x-tree-view'
 
 import ConceptTreeLabel from './ConceptTreeLabel'
+
+import { isCollapseAnimating, subscribeCollapseAnimating } from './lib/collapseAnimationStore'
 
 const InstantGroupTransition = ({ children, className, in: expanded }) =>
   expanded ? (
@@ -12,18 +14,16 @@ const InstantGroupTransition = ({ children, className, in: expanded }) =>
     </ul>
   ) : null
 
-const ConceptTreeItem = forwardRef(function ConceptItem({ transition = true, ...props }, ref) {
+const ConceptTreeItem = forwardRef(function ConceptItem(props, ref) {
   const { itemId } = props
+  const transition = useSyncExternalStore(subscribeCollapseAnimating, () => isCollapseAnimating(itemId))
 
   return (
     <TreeItemProvider itemId={itemId}>
       <TreeItem
         {...props}
         ref={ref}
-        slotProps={{
-          ...(transition ? {} : { groupTransition: { timeout: 0 } }),
-          label: { itemId },
-        }}
+        slotProps={{ label: { itemId } }}
         slots={{
           groupTransition: transition ? Collapse : InstantGroupTransition,
           label: ConceptTreeLabel,
