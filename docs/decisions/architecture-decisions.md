@@ -86,7 +86,10 @@ per-concept fetches; concept path (for scroll-into-view) uses `phylogeny/up`
 then fills in asynchronously in throttled batches (`fillConceptMedia`,
 `loadConceptMediaIncremental`) via functional `setTaxonomy` updates, so mid-fill concept
 switches/edits are never clobbered and media failures never reach the error boundary
-(current work on branch `load-media`).
+(current work on branch `load-media`). Batches are also held while the Concepts panel is inactive:
+`setMediaSuspended` (`TaxonomyProvider.jsx`) is driven from `Panels.jsx`, and the fill resumes when
+Concepts is selected again. History reloads are keyed on the selected concept's children, not on
+`getConcept`, so media-only commits do not reload History.
 
 ## AD-8: API layering and result convention
 

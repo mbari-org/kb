@@ -19,6 +19,7 @@ import { getMedia } from '@/lib/api/media'
 import { getConceptLinkRealizations } from '@/lib/api/realizations'
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 import { LOADING } from '@/lib/constants/loading.js'
+import { sleep } from '@/lib/utils'
 
 const cloneItems = items => items.map(item => ({ ...item }))
 
@@ -934,7 +935,7 @@ describe('TaxonomyProvider loadConceptDescendants', () => {
   })
 })
 
-describe('TaxonomyProvider descendant media cancellation', () => {
+describe('TaxonomyProvider descendant media fill', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
   })
@@ -958,6 +959,13 @@ describe('TaxonomyProvider descendant media cancellation', () => {
     })
     return releaseMedia
   }
+
+  const LEAF_NAMES = ['leaf-1', 'leaf-2', 'leaf-3', 'leaf-4', 'leaf-5', 'leaf-6', 'leaf-7', 'leaf-8']
+
+  const fetchedLeafNames = apiFns =>
+    apiCallsFor(apiFns.apiPayload, getMedia)
+      .map(([, name]) => name)
+      .filter(name => name.startsWith('leaf-'))
 
   it('stops not-yet-started media fetches for cancelled descendant names', async () => {
     const { apiFns, errors, getContext, store } = await renderTaxonomy()
@@ -1023,6 +1031,143 @@ describe('TaxonomyProvider descendant media cancellation', () => {
     })
     const fetchedNames = apiCallsFor(apiFns.apiPayload, getMedia).map(([, name]) => name)
     expect(fetchedNames.sort()).toEqual([...cancelledNames].sort())
+    expect(errors).toEqual([])
+  })
+
+  it('holds the next media batch while suspended and resumes it on demand', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+    addLeafDescendants(store, LEAF_NAMES)
+    const releaseMedia = gateMedia(apiFns)
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+    await waitFor(() => {
+      expect(fetchedLeafNames(apiFns)).toHaveLength(6)
+    })
+
+    getContext().setMediaSuspended(true)
+    await act(async () => {
+      releaseMedia()
+      await sleep(20)
+    })
+    expect(fetchedLeafNames(apiFns)).toEqual(LEAF_NAMES.slice(0, 6))
+
+    await act(async () => {
+      getContext().setMediaSuspended(false)
+    })
+    await waitFor(() => {
+      expect(getContext().getConcept('leaf-8').media).toBeDefined()
+    })
+    expect(fetchedLeafNames(apiFns)).toEqual(LEAF_NAMES)
+    expect(errors).toEqual([])
+  })
+
+  it('does not start media fetches for a fill that begins while suspended', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+    addLeafDescendants(store, LEAF_NAMES.slice(0, 2))
+
+    getContext().setMediaSuspended(true)
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+      await sleep(20)
+    })
+    expect(fetchedLeafNames(apiFns)).toEqual([])
+
+    await act(async () => {
+      getContext().setMediaSuspended(false)
+    })
+    await waitFor(() => {
+      expect(getContext().getConcept('leaf-2').media).toBeDefined()
+    })
+    expect(fetchedLeafNames(apiFns)).toEqual(LEAF_NAMES.slice(0, 2))
+    expect(errors).toEqual([])
+  })
+
+  it('skips names cancelled while suspended once the fill resumes', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+    addLeafDescendants(store, LEAF_NAMES)
+    const releaseMedia = gateMedia(apiFns)
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+    await waitFor(() => {
+      expect(fetchedLeafNames(apiFns)).toHaveLength(6)
+    })
+
+    getContext().setMediaSuspended(true)
+    await act(async () => {
+      releaseMedia()
+      await sleep(20)
+    })
+    getContext().cancelDescendantMedia(['leaf-7', 'leaf-8'])
+
+    await act(async () => {
+      getContext().setMediaSuspended(false)
+    })
+    await waitFor(() => {
+      expect(getContext().getConcept('leaf-6').media).toBeDefined()
+    })
+    expect(fetchedLeafNames(apiFns)).toEqual(LEAF_NAMES.slice(0, 6))
+    expect(getContext().getConcept('leaf-7').media).toBeUndefined()
+    expect(getContext().getConcept('leaf-8').media).toBeUndefined()
+    expect(errors).toEqual([])
+  })
+
+  it('restores media for cancelled names requested again while their fill is in flight', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+    addLeafDescendants(store, LEAF_NAMES)
+    const releaseMedia = gateMedia(apiFns)
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+    })
+    getContext().cancelDescendantMedia(['leaf-7', 'leaf-8'])
+    await act(async () => {
+      await getContext().loadConceptChildren('old-parent')
+    })
+
+    await act(async () => {
+      releaseMedia()
+    })
+    await waitFor(() => {
+      expect(getContext().getConcept('leaf-8').media).toBeDefined()
+    })
+    expect(fetchedLeafNames(apiFns)).toEqual(LEAF_NAMES)
+    expect(errors).toEqual([])
+  })
+
+  it('holds the retry attempt while suspended', async () => {
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
+    addLeafDescendants(store, LEAF_NAMES)
+
+    const apiPayloadImpl = apiFns.apiPayload.getMockImplementation()
+    let leafOneAttempts = 0
+    apiFns.apiPayload.mockImplementation(async (fn, value, ignoreError) => {
+      if (fn === getMedia && value === 'leaf-1') {
+        leafOneAttempts += 1
+        if (leafOneAttempts === 1) return undefined
+      }
+      if (fn === getMedia && value === 'leaf-8') {
+        getContext().setMediaSuspended(true)
+      }
+      return apiPayloadImpl(fn, value, ignoreError)
+    })
+
+    await act(async () => {
+      await getContext().loadConceptDescendants(getContext().getConcept('old-parent'))
+      await sleep(20)
+    })
+    expect(leafOneAttempts).toBe(1)
+
+    await act(async () => {
+      getContext().setMediaSuspended(false)
+    })
+    await waitFor(() => {
+      expect(getContext().getConcept('leaf-1').media).toBeDefined()
+    })
+    expect(leafOneAttempts).toBe(2)
     expect(errors).toEqual([])
   })
 })

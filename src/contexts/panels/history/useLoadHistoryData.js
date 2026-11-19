@@ -1,4 +1,4 @@
-import { use, useCallback, useMemo } from 'react'
+import { use, useCallback } from 'react'
 
 import { getConceptHistory, getHistoryCount } from '@/lib/api/history'
 
@@ -20,6 +20,7 @@ const { CONCEPT: SELECTED_CONCEPT, SETTINGS } = SELECTED
 const { HISTORY } = SETTINGS
 
 const DEFAULT_LIMIT = PAGINATION.HISTORY.DEFAULT_LIMIT
+const NO_CHILDREN = []
 
 const useLoadHistoryData = ({ apiFns, conceptHistoryExtent, pendingHistory }) => {
   const { getSelected } = use(SelectedContext)
@@ -29,11 +30,8 @@ const useLoadHistoryData = ({ apiFns, conceptHistoryExtent, pendingHistory }) =>
   const selectedConcept = getSelected(SELECTED_CONCEPT)
   const selectedType = getSettings(HISTORY.KEY, HISTORY.TYPE)
 
-  const conceptChildren = useMemo(() => {
-    if (conceptHistoryExtent !== CHILDREN) return []
-    const concept = getConcept(selectedConcept)
-    return concept?.children || []
-  }, [conceptHistoryExtent, getConcept, selectedConcept])
+  const selectedChildren = conceptHistoryExtent === CHILDREN ? getConcept(selectedConcept)?.children : undefined
+  const conceptChildren = selectedChildren || NO_CHILDREN
 
   const loadConceptData = useCallback(
     async ({ updateConceptState, updatePageState }) => {

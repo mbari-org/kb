@@ -281,3 +281,55 @@ describe('useLoadData concept history', () => {
     })
   })
 })
+
+describe('useLoadData taxonomy commits', () => {
+  const apiFns = { apiPayload: vi.fn(), apiResult: vi.fn(), apiRaw: vi.fn() }
+  const pendingHistory = []
+
+  const createTaxonomyWrapper = taxonomy => {
+    const getSelected = key => (key === SELECTED.CONCEPT ? 'dingo' : null)
+    const getSettings = (key, subKey) =>
+      key === SELECTED.SETTINGS.HISTORY.KEY && subKey === SELECTED.SETTINGS.HISTORY.TYPE
+        ? SELECTED.SETTINGS.HISTORY.TYPES.CONCEPT
+        : undefined
+
+    const Wrapper = ({ children }) => (
+      <SelectedContext.Provider value={{ getSelected }}>
+        <SelectedSettingsContext.Provider value={{ getSettings }}>
+          <TaxonomyContext.Provider value={{ getConcept: taxonomy.getConcept }}>{children}</TaxonomyContext.Provider>
+        </SelectedSettingsContext.Provider>
+      </SelectedContext.Provider>
+    )
+
+    Wrapper.displayName = 'UseLoadDataTaxonomyWrapper'
+    return Wrapper
+  }
+
+  it('keeps the loader stable across taxonomy commits', () => {
+    const taxonomy = { getConcept: () => ({ children: ['pup', 'pack'] }) }
+    const { result, rerender } = renderHook(
+      () => useLoadHistoryData({ apiFns, conceptHistoryExtent: CONCEPT.EXTENT.SOLO, pendingHistory }),
+      { wrapper: createTaxonomyWrapper(taxonomy) }
+    )
+    const loadData = result.current
+
+    taxonomy.getConcept = () => ({ children: ['pup', 'pack'] })
+    rerender()
+
+    expect(result.current).toBe(loadData)
+  })
+
+  it('reloads when the selected concept children change', () => {
+    const taxonomy = { getConcept: () => ({ children: ['pup', 'pack'] }) }
+    const { result, rerender } = renderHook(
+      () => useLoadHistoryData({ apiFns, conceptHistoryExtent: CONCEPT.EXTENT.CHILDREN, pendingHistory }),
+      { wrapper: createTaxonomyWrapper(taxonomy) }
+    )
+    const loadData = result.current
+
+    taxonomy.getConcept = () => ({ children: ['pup'] })
+    rerender()
+
+    expect(result.current).not.toBe(loadData)
+  })
+})

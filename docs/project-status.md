@@ -37,7 +37,7 @@ against the working tree; items marked *(draft notes)* come from `tmp/release.tx
 2. **N+1 media fetch on expand-all** — loading media icons requires one media API call
    per descendant concept and "can still take seconds" *(draft notes)*. The `load-media`
    branch work (incremental batched fill) mitigates the UX; `tmp/measure-phylogeny-media.mjs`
-   measures it.
+   measures it. The fill is held while the Concepts panel is inactive.
 3. **Duplicate linkRealization IDs from the API** — the backend can return the same
    linkRealization object 3-4× in one response (`d040ea93` works around it;
    `tmp/duplicate_realization_ids.tsv` + `tmp/realizations.json` document it).

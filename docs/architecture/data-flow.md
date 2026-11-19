@@ -71,10 +71,12 @@ file and function that implements it.
      expandable names.
 3. Media icons for tree nodes fill in asynchronously after the structure commits:
    `loadTaxonomyConceptDescendants` returns `mediaNames`, and
-   `TaxonomyProvider.fillConceptMedia` (line 295) streams batched `getMedia` fetches
+   `TaxonomyProvider.fillConceptMedia` (line 321) streams batched `getMedia` fetches
    (`loadConceptMediaIncremental`, batches of 6, flush every 60) via functional
    `setTaxonomy` updates, so concept switches/edits mid-fill are never clobbered and
-   media failures never reach the error boundary.
+   media failures never reach the error boundary. Batches are held while the Concepts panel is
+   inactive (`setMediaSuspended`, driven from `src/components/kb/Panels.jsx`) and resume when it
+   is selected again.
 4. Concept-path loading (expand/scroll to current concept): `ConceptProvider.jsx:325-380`
    — on concept change, use the `conceptPathsRef` cache or call `getConceptPhylogenyUp`
    (`src/lib/api/concept.js:38`), parse the nested `children[0]` chain into a path, cache

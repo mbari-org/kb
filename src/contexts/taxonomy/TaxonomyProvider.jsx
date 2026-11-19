@@ -313,6 +313,20 @@ const TaxonomyProvider = ({ children }) => {
 
   const mediaInFlightRef = useRef(new Set())
   const mediaCancelledRef = useRef(new Set())
+  const mediaSuspendedRef = useRef(false)
+  const mediaResumeWaitersRef = useRef([])
+
+  const setMediaSuspended = useCallback(suspended => {
+    mediaSuspendedRef.current = suspended
+    if (!suspended) {
+      mediaResumeWaitersRef.current.splice(0).forEach(resolve => resolve())
+    }
+  }, [])
+
+  const awaitMediaResume = useCallback(() => {
+    if (!mediaSuspendedRef.current) return Promise.resolve()
+    return new Promise(resolve => mediaResumeWaitersRef.current.push(resolve))
+  }, [])
 
   const cancelDescendantMedia = useCallback(names => {
     names.forEach(name => mediaCancelledRef.current.add(name))
@@ -320,12 +334,10 @@ const TaxonomyProvider = ({ children }) => {
 
   const fillConceptMedia = useCallback(
     mediaNames => {
+      mediaNames.forEach(name => mediaCancelledRef.current.delete(name))
       const pending = mediaNames.filter(name => !mediaInFlightRef.current.has(name))
       if (pending.length === 0) return
-      pending.forEach(name => {
-        mediaCancelledRef.current.delete(name)
-        mediaInFlightRef.current.add(name)
-      })
+      pending.forEach(name => mediaInFlightRef.current.add(name))
 
       let accumulated = []
       const flush = () => {
@@ -348,13 +360,14 @@ const TaxonomyProvider = ({ children }) => {
           accumulated.push(...succeeded)
           if (accumulated.length >= MEDIA_FLUSH_COUNT) flush()
         },
-        name => mediaCancelledRef.current.has(name)
+        name => mediaCancelledRef.current.has(name),
+        awaitMediaResume
       ).finally(() => {
         pending.forEach(name => mediaInFlightRef.current.delete(name))
         flush()
       })
     },
-    [apiFns, enqueueTaxonomyMutation]
+    [apiFns, awaitMediaResume, enqueueTaxonomyMutation]
   )
 
   const loadConceptDescendants = useCallback(
@@ -475,6 +488,7 @@ const TaxonomyProvider = ({ children }) => {
       loadConceptDescendants,
       removeConcept,
       rootName,
+      setMediaSuspended,
       taxonomy,
       updateTaxonomy,
     }),
@@ -498,6 +512,7 @@ const TaxonomyProvider = ({ children }) => {
       loadConceptChildren,
       loadConceptDescendants,
       removeConcept,
+      setMediaSuspended,
       taxonomy,
       updateTaxonomy,
     ]

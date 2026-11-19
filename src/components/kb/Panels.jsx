@@ -5,9 +5,13 @@ import panelMods from '@/components/kb/panels/modules'
 import Panel from '@/components/kb/panels/Panel'
 
 import SelectedContext from '@/contexts/selected/SelectedContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const Panels = () => {
   const { panels } = use(SelectedContext)
+  const { setMediaSuspended } = use(TaxonomyContext)
   const activePanel = panels.current()
 
   const [mountedPanels, setMountedPanels] = useState(() => new Set([activePanel]))
@@ -21,6 +25,10 @@ const Panels = () => {
       return () => clearTimeout(timeoutId)
     }
   }, [activePanel, hasPanel])
+
+  useEffect(() => {
+    setMediaSuspended(activePanel !== SELECTED.PANELS.CONCEPTS)
+  }, [activePanel, setMediaSuspended])
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: 0, overflow: 'clip' }}>

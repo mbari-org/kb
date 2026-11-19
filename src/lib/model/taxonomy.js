@@ -421,14 +421,15 @@ const fetchMediaBatch = async (names, apiFns) => {
 // Results stream out via onBatch so callers commit incrementally; unresolved names are
 //  left with media undefined (icon absent) and refetched on a later expand.
 // isCancelled filters not-yet-started fetches (e.g. the concept's branch collapsed);
-//  in-flight calls complete and commit.
-const loadConceptMediaIncremental = async (conceptNames, apiFns, onBatch, isCancelled) => {
+//  in-flight calls complete and commit. awaitResume holds each batch while the fill is suspended.
+const loadConceptMediaIncremental = async (conceptNames, apiFns, onBatch, isCancelled, awaitResume) => {
   let pending = [...conceptNames]
 
   for (let attempt = 1; attempt <= MEDIA_FETCH_ATTEMPTS && pending.length > 0; attempt += 1) {
     const stillFailed = []
 
     for (const batch of chunkNames(pending, MEDIA_FETCH_BATCH_SIZE)) {
+      await awaitResume()
       const active = batch.filter(name => !isCancelled(name))
       const { failed, succeeded } = await fetchMediaBatch(active, apiFns)
       if (succeeded.length > 0) {
