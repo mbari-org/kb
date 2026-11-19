@@ -121,19 +121,16 @@ const initialState = (concept, pendingConcept) => {
 const resetRealizations = ({ stagedState, update }) => {
   const { stateId: resetStateId, realizations: resetRealizationsArray } = update
 
-  if (1 < stagedState.realizations.length && resetStateId !== undefined) {
-    const resetItem = resetRealizationsArray.find(item => item.stateId === resetStateId)
-    if (resetItem) {
-      return {
-        ...stagedState,
-        realizations: stagedState.realizations.map(item => (item.stateId === resetStateId ? resetItem : item)),
-      }
-    }
+  if (resetStateId === undefined) {
+    return { ...stagedState, realizations: update.realizations }
   }
-  return {
-    ...stagedState,
-    realizations: update.realizations,
-  }
+
+  const resetItem = resetRealizationsArray.find(item => item.stateId === resetStateId)
+  const realizations = resetItem
+    ? stagedState.realizations.map(item => (item.stateId === resetStateId ? resetItem : item))
+    : stagedState.realizations.filter(item => item.stateId !== resetStateId)
+
+  return { ...stagedState, realizations }
 }
 
 const stagedRealizationEdits = stagedEdit => {

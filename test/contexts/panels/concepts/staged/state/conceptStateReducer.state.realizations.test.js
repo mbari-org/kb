@@ -5,7 +5,7 @@ import * as realizations from '@/lib/concept/state/realizations'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState'
 import { describe, expect, it } from 'vitest'
 
-const { REALIZATION } = CONCEPT_STATE
+const { REALIZATION, RESET } = CONCEPT_STATE
 
 const baseStagedState = {
   aliasIndex: 0,
@@ -332,6 +332,57 @@ describe('conceptStateReducer realizations', () => {
       const middle = staged.realizations.find(item => item.linkName === 'middle')
       expect(zebra.action).toBe(REALIZATION.DELETE)
       expect(middle.action).toBe(REALIZATION.ADD)
+    })
+  })
+
+  describe('reset of staged ADDs', () => {
+    const concept = {
+      realizations: [{ id: 11, linkName: 'zebra', toConcept: 'Zed', linkValue: 'z' }],
+    }
+    const initial = { ...baseStagedState, ...realizations.initialState(concept, []) }
+
+    const stageAdd = (staged, linkName) =>
+      conceptStateReducer(staged, {
+        type: REALIZATION.ADD,
+        update: { realizationItem: { linkName, toConcept: 'Em', linkValue: 'm' } },
+        initialState: initial,
+      })
+
+    const resetRealization = (staged, stateId) =>
+      conceptStateReducer(staged, {
+        type: RESET.REALIZATIONS,
+        update: { realizations: initial.realizations, stateId },
+        initialState: initial,
+      })
+
+    it('resets one staged ADD and leaves the other staged ADDs', () => {
+      let staged = stageAdd(stageAdd(structuredClone(initial), 'alpha'), 'middle')
+      const alpha = staged.realizations.find(item => item.linkName === 'alpha')
+
+      staged = resetRealization(staged, alpha.stateId)
+
+      expect(staged.realizations.map(item => item.linkName)).toEqual(['middle', 'zebra'])
+      expect(staged.realizations[0].action).toBe(REALIZATION.ADD)
+      expect(staged.realizations[1].action).toBe(CONCEPT_STATE.NO_ACTION)
+    })
+
+    it('restores one edited realization and leaves the staged ADDs', () => {
+      let staged = stageAdd(structuredClone(initial), 'alpha')
+      const zebra = staged.realizations.find(item => item.linkName === 'zebra')
+      staged = conceptStateReducer(staged, {
+        type: REALIZATION.EDIT,
+        update: {
+          realizationStateId: zebra.stateId,
+          realizationItem: { ...zebra, linkValue: 'edited' },
+        },
+        initialState: initial,
+      })
+
+      staged = resetRealization(staged, zebra.stateId)
+
+      expect(staged.realizations.map(item => item.linkName)).toEqual(['alpha', 'zebra'])
+      expect(staged.realizations[0].action).toBe(REALIZATION.ADD)
+      expect(staged.realizations[1]).toMatchObject({ linkValue: 'z', action: CONCEPT_STATE.NO_ACTION })
     })
   })
 })
