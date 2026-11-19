@@ -33,11 +33,15 @@ import { CONCEPT } from '@/lib/constants'
 
 const { ITEM_TITLES, STAGED } = CONFIG.PANELS.CONCEPTS.MODALS
 
+const initialItemByIndex = (initial, edit) => initial?.[edit.index]
+
+const initialItemByStateId = (initial, edit) => initial?.find(item => item.stateId === edit.stateId)
+
 const ARRAY_FIELDS = [
-  [CONCEPT.FIELD.ALIASES, stagedAliasesEdits],
-  [CONCEPT.FIELD.CHILDREN, stagedChildren],
-  [CONCEPT.FIELD.MEDIA, stagedMediaEdits],
-  [CONCEPT.FIELD.REALIZATIONS, stagedRealizationEdits],
+  [CONCEPT.FIELD.ALIASES, stagedAliasesEdits, initialItemByIndex],
+  [CONCEPT.FIELD.CHILDREN, stagedChildren, initialItemByIndex],
+  [CONCEPT.FIELD.MEDIA, stagedMediaEdits, initialItemByIndex],
+  [CONCEPT.FIELD.REALIZATIONS, stagedRealizationEdits, initialItemByStateId],
 ]
 
 const VALUE_FIELDS = [CONCEPT.FIELD.NAME, CONCEPT.FIELD.AUTHOR, CONCEPT.FIELD.PARENT, CONCEPT.FIELD.RANK]
@@ -77,12 +81,12 @@ const StagedContent = () => {
   }, [initialState, stagedState, updates])
 
   const stagedItems = useMemo(() => {
-    const arrayItems = ARRAY_FIELDS.flatMap(([field, editsFn]) =>
+    const arrayItems = ARRAY_FIELDS.flatMap(([field, editsFn, initialItemOf]) =>
       updates[field]
         ? editsFn([field, updates[field]]).map(edit => ({
             edit,
             field,
-            initialItem: updates[field].initial?.[edit.index],
+            initialItem: initialItemOf(updates[field].initial, edit),
             key: `${field}-${edit.stateId ?? edit.index}`,
             seq: edit.stagedSeq,
           }))
