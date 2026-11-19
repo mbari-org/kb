@@ -4,6 +4,7 @@ import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/
 import ConceptReference from '@/components/kb/panels/concepts/concept/detail/references/ConceptReference'
 import InspectIcon from '@/components/icon/InspectIcon'
 
+import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
@@ -19,6 +20,7 @@ const { FILTERS } = REFERENCES
 const ReferenceComponent = ({ item }) => <ConceptReference reference={item} />
 
 const ConceptReferences = () => {
+  const { isEditing } = use(ConceptContext)
   const { getReferences } = use(PanelDataContext)
   const { getSelected, updateSelected } = use(SelectedContext)
   const { updateSettings } = use(SelectedSettingsContext)
@@ -58,9 +60,9 @@ const ConceptReferences = () => {
       items={conceptReferences}
       renderComponent={ReferenceComponent}
       title={CONFIG.PANELS.CONCEPTS.REFERENCES.LABEL}
-      actionComponent={() => (
+      actionComponent={!isEditing && (() => (
         <InspectIcon asDiv={true} onClick={linkToReferences} tooltip={CONFIG.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP} />
-      )}
+      ))}
     />
   )
 }

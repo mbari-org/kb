@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
 import { GUARDED_ACTION } from '@/lib/constants/guardedAction'
 
-import { ConceptPanelTestWrapper } from '../concept.panel.test.wrapper'
+import { ConceptPanelTestWrapper, enterEditMode } from '../concept.panel.test.wrapper'
+import CONFIG from '@/lib/config'
 
 const clickReferencesInspect = async user => {
   await waitFor(() => {
@@ -19,6 +20,46 @@ const clickReferencesInspect = async user => {
 describe('Concept panel references', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  it('replaces panel links with add actions while editing and restores them on cancel', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <ConceptPanelTestWrapper>
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    const section = name => within(screen.getByRole('heading', { name, level: 6 }).parentElement)
+    const references = section('References')
+    const templates = section('Templates')
+    const realizations = section('Realizations')
+    const templateAdd = CONFIG.PANELS.CONCEPTS.MODALS.TEMPLATE.ADD.TOOLTIP
+    const realizationAdd = CONFIG.PANELS.CONCEPTS.MODALS.REALIZATION.ADD.TOOLTIP
+
+    for (const header of [references, templates, realizations]) {
+      expect(header.getByRole('img', { name: 'Inspect' })).toBeInTheDocument()
+    }
+    expect(templates.queryByLabelText(templateAdd)).not.toBeInTheDocument()
+    expect(realizations.queryByLabelText(realizationAdd)).not.toBeInTheDocument()
+
+    await enterEditMode(user, screen)
+
+    for (const header of [references, templates, realizations]) {
+      expect(header.queryByRole('img', { name: 'Inspect' })).not.toBeInTheDocument()
+    }
+    expect(templates.getByLabelText(templateAdd)).toBeInTheDocument()
+    expect(realizations.getByLabelText(realizationAdd)).toBeInTheDocument()
+    expect(templates.getByRole('switch')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: CONFIG.PANELS.CONCEPTS.BUTTON.CANCEL }))
+
+    for (const header of [references, templates, realizations]) {
+      expect(header.getByRole('img', { name: 'Inspect' })).toBeInTheDocument()
+    }
+    expect(templates.queryByLabelText(templateAdd)).not.toBeInTheDocument()
+    expect(realizations.queryByLabelText(realizationAdd)).not.toBeInTheDocument()
   })
 
   it('renders references returned for the selected concept', () => {

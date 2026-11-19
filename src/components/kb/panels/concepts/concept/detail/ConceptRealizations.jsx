@@ -1,6 +1,5 @@
 import { SELECTED } from '@/lib/constants/selected.js'
 import { use } from 'react'
-import { Stack } from '@mui/material'
 
 import ConceptRealization from '@/components/kb/panels/concepts/concept/detail/realizations/ConceptRealization'
 import ConceptPropertyList from '@/components/kb/panels/concepts/concept/detail/properties/ConceptPropertyList'
@@ -25,9 +24,6 @@ const ConceptRealizations = () => {
 
   const realizations = stagedState?.realizations || []
 
-  const IconComponent = () => (
-    <RealizationActionIcon action={CONCEPT_STATE.REALIZATION.ADD} />
-  )
   const linkToRealizations = () => {
     const panel = CONFIG.PANELS.REALIZATIONS.PANEL.NAME
     guardPanelChange({
@@ -39,14 +35,15 @@ const ConceptRealizations = () => {
   }
 
   const ActionComponent = () => (
-    <Stack direction='row' spacing={2}>
+    isEditing ? (
+      <RealizationActionIcon action={CONCEPT_STATE.REALIZATION.ADD} />
+    ) : (
       <InspectIcon
         asDiv={true}
         onClick={linkToRealizations}
         tooltip={CONFIG.PANELS.CONCEPTS.REALIZATIONS.VIEW.TOOLTIP}
       />
-      {isEditing ? <IconComponent /> : null}
-    </Stack>
+    )
   )
 
   return (

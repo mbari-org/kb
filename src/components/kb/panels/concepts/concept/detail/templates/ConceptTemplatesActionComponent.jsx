@@ -62,8 +62,11 @@ const ConceptTemplatesActionComponent = () => {
 
   return (
     <Stack direction='row' spacing={2}>
-      <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />
-      {isEditing ? <TemplateActionIcon action={CONCEPT_STATE.TEMPLATE.ADD} /> : null}
+      {isEditing ? (
+        <TemplateActionIcon action={CONCEPT_STATE.TEMPLATE.ADD} />
+      ) : (
+        <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />
+      )}
       <Box sx={{ position: 'relative', top: 5 }}>
         <PanelDataSwitch
           checked={byAvailable}
