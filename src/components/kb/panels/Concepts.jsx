@@ -15,7 +15,7 @@ const Concepts = () => {
         <ConceptsSidebar />
       </Box>
       <ConceptsPanelDivider setSidebarWidth={setSidebarWidth} />
-      <Box sx={{ flexGrow: 1, minWidth: 0, overflowY: 'clip' }}>
+      <Box sx={{ flexGrow: 1, flexBasis: 0, minWidth: 0, overflowY: 'clip' }}>
         <Concept />
       </Box>
     </Box>
