@@ -38,7 +38,13 @@ export const CONCEPT_STATE = {
     PARENT: 'Reset Parent',
     RANK: 'Reset Rank',
     REALIZATIONS: 'Reset Realizations',
+    TEMPLATES: 'Reset Templates',
     TO_INITIAL: 'Reset To Initial',
+  },
+  TEMPLATE: {
+    ADD: 'Add Template',
+    DELETE: 'Delete Template',
+    EDIT: 'Edit Template',
   },
 }
 

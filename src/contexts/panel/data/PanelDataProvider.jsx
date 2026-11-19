@@ -24,7 +24,12 @@ export const PanelDataProvider = ({ children }) => {
 
   const [explicitConcepts, setExplicitConcepts] = useState([])
   const [references, setReferences] = useState([])
-  const [templates, setTemplates] = useState([])
+  const [templates, setTemplatesState] = useState([])
+  const templatesRef = useRef([])
+  const setTemplates = useCallback(next => {
+    templatesRef.current = next
+    setTemplatesState(next)
+  }, [])
   const [pendingHistory, setPendingHistory] = useState([])
 
   const [realizationsByConcept, setRealizationsByConcept] = useState({})
@@ -76,12 +81,10 @@ export const PanelDataProvider = ({ children }) => {
     [references]
   )
 
-  const getConceptTemplates = useCallback(
-    conceptName => {
-      return conceptName ? templates.filter(template => template.concept === conceptName) : templates
-    },
-    [templates]
-  )
+  const getConceptTemplates = useCallback(conceptName => {
+    const current = templatesRef.current
+    return conceptName ? current.filter(template => template.concept === conceptName) : current
+  }, [])
 
   const getReferences = useCallback(
     conceptName => {
@@ -294,6 +297,7 @@ export const PanelDataProvider = ({ children }) => {
       loadPendingHistory,
       loadReferences,
       loadTemplates,
+      setTemplates,
       withLoadTimeout,
     ]
   )

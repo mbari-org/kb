@@ -16,6 +16,7 @@ const createEffectiveState = (initialState, { applyImmediately }) => {
       name: initialState.rank.name,
     },
     realizations: cloneItems(initialState.realizations),
+    templates: cloneItems(initialState.templates),
   }
 
   const findAlias = item => {
@@ -44,6 +45,8 @@ const createEffectiveState = (initialState, { applyImmediately }) => {
     }
     return undefined
   }
+
+  const findTemplate = item => state.templates.find(template => template.stateId === item.stateId)
 
   const replaceWhere = (list, predicate, next) => {
     const index = list.findIndex(predicate)
@@ -157,6 +160,31 @@ const createEffectiveState = (initialState, { applyImmediately }) => {
         break
       }
 
+      case CONCEPT.FIELD.TEMPLATES: {
+        switch (op.action) {
+          case CONCEPT_STATE.TEMPLATE.ADD:
+            state.templates = [...state.templates, { ...op.item }]
+            break
+          case CONCEPT_STATE.TEMPLATE.DELETE: {
+            const target = findTemplate(op.item)
+            state.templates = state.templates.filter(template => template !== target)
+            break
+          }
+          case CONCEPT_STATE.TEMPLATE.EDIT: {
+            const prior = findTemplate(op.item)
+            if (!prior) break
+            state.templates = replaceWhere(state.templates, template => template === prior, {
+              ...prior,
+              ...op.item,
+            })
+            break
+          }
+          default:
+            break
+        }
+        break
+      }
+
       default:
         break
     }
@@ -167,6 +195,7 @@ const createEffectiveState = (initialState, { applyImmediately }) => {
     findAlias,
     findMedia,
     findRealization,
+    findTemplate,
     get state() {
       return state
     },

@@ -12,6 +12,7 @@ const baseState = {
   parent: { action: 'None', value: '' },
   rank: { action: 'None', level: '', name: '' },
   realizations: [],
+  templates: [],
 }
 
 describe('stampStagedEdits', () => {

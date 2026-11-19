@@ -1,4 +1,4 @@
-import { puid } from 'puid-js'
+import { genStateId } from '@/lib/concept/state/stateId'
 
 import { stagedEdits } from '@/lib/concept/state/staged'
 
@@ -11,11 +11,6 @@ import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { REALIZATION_VALUE_FIELDS } from '@/lib/model/realization'
 
 import { isJsonEqual } from '@/lib/utils'
-
-const { generator, error: generatorError } = puid({ total: 10, risk: 1e15 })
-if (generatorError) throw generatorError
-
-const genStateId = () => generator()
 
 const alignRealizationsByStateId = (initial, staged) => {
   if (!staged || !initial) return staged

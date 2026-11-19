@@ -14,6 +14,9 @@ import realizationAdd from '@/config/panels/concepts/modals/realization/add.json
 import realizationDelete from '@/config/panels/concepts/modals/realization/delete.json'
 import realizationEdit from '@/config/panels/concepts/modals/realization/edit.json'
 import staged from '@/config/panels/concepts/modals/staged.json'
+import templateAdd from '@/config/panels/concepts/modals/template/add.json'
+import templateDelete from '@/config/panels/concepts/modals/template/delete.json'
+import templateEdit from '@/config/panels/concepts/modals/template/edit.json'
 import addChild from '@/config/panels/concepts/modals/hierarchy/addChild.json'
 import changeName from '@/config/panels/concepts/modals/hierarchy/changeName.json'
 import changeParent from '@/config/panels/concepts/modals/hierarchy/changeParent.json'
@@ -43,6 +46,11 @@ export const MODALS = {
     EDIT: realizationEdit,
   },
   STAGED: staged,
+  TEMPLATE: {
+    ADD: templateAdd,
+    DELETE: templateDelete,
+    EDIT: templateEdit,
+  },
   HIERARCHY: {
     ADD_CHILD: addChild,
     CHANGE_NAME: changeName,

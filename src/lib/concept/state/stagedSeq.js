@@ -1,6 +1,6 @@
 import { isStagedAction } from '@/lib/concept/state/staged'
 
-const ARRAY_FIELDS = ['aliases', 'children', 'media', 'realizations']
+const ARRAY_FIELDS = ['aliases', 'children', 'media', 'realizations', 'templates']
 const VALUE_FIELDS = ['author', 'name', 'parent', 'rank']
 
 const isStagedEdit = item =>

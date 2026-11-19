@@ -13,6 +13,7 @@ const baseState = {
   parent: { action: 'None', value: 'root' },
   rank: { action: 'None', level: '', name: '' },
   realizations: [],
+  templates: [],
 }
 
 describe('createEffectiveState', () => {

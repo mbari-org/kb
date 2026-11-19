@@ -92,19 +92,30 @@ export const createModalActions =
     ]
   }
 
-export const createModalContent = (handleFormChange, isEdit, handleDuplicateChange) => {
+export const linkNameOptionsOf = (templates, conceptName) =>
+  conceptName ? [...new Set(templates.map(template => template.linkName).filter(Boolean))] : null
+
+export const createModalContent = ({
+  existingTemplates,
+  handleDuplicateChange,
+  handleFormChange,
+  isEdit,
+  linkNameOptions,
+}) => {
   const formKey = isEdit ? 'edit-template-form' : 'add-template-form'
 
   const TemplateModalContent = modalData => {
     return (
       <TemplateForm
         key={formKey}
-        template={modalData.template}
-        original={modalData.original}
+        alert={modalData.alert}
+        existingTemplates={existingTemplates}
+        isEdit={isEdit}
+        linkNameOptions={linkNameOptions}
         onChange={handleFormChange}
         onDuplicateChange={handleDuplicateChange}
-        isEdit={isEdit}
-        alert={modalData.alert}
+        original={modalData.original}
+        template={modalData.template}
       />
     )
   }

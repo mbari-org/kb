@@ -8,6 +8,7 @@ import buildNameSubmit from '@/contexts/panels/concepts/staged/save/submitter/su
 import buildParentSubmit from '@/contexts/panels/concepts/staged/save/submitter/submitParent'
 import buildRankSubmit from '@/contexts/panels/concepts/staged/save/submitter/submitRank'
 import buildRealizationSubmit from '@/contexts/panels/concepts/staged/save/submitter/submitRealizations'
+import buildTemplateSubmit from '@/contexts/panels/concepts/staged/save/submitter/submitTemplates'
 
 import { createEffectiveState } from '@/lib/concept/state/effectiveState'
 import { buildStagedJournal } from '@/lib/concept/state/stagedJournal'
@@ -23,6 +24,7 @@ const builders = {
   [CONCEPT.FIELD.PARENT]: buildParentSubmit,
   [CONCEPT.FIELD.RANK]: buildRankSubmit,
   [CONCEPT.FIELD.REALIZATIONS]: buildRealizationSubmit,
+  [CONCEPT.FIELD.TEMPLATES]: buildTemplateSubmit,
 }
 
 const wrapSubmitError = (op, effectiveName, error) => {
@@ -62,6 +64,20 @@ const wrapSubmitError = (op, effectiveName, error) => {
           index: op.index,
           linkName: op.item.linkName,
           realizationId: op.item.id,
+          toConcept: op.item.toConcept,
+        },
+        error
+      )
+    case CONCEPT.FIELD.TEMPLATES:
+      return createError(
+        'Template Operation Failed',
+        `Failed to process template for concept ${effectiveName}`,
+        {
+          action: op.action,
+          conceptName: effectiveName,
+          index: op.index,
+          linkName: op.item.linkName,
+          templateId: op.item.id,
           toConcept: op.item.toConcept,
         },
         error

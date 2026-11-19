@@ -41,7 +41,7 @@ const ConceptProvider = ({ children }) => {
 
   const { apiFns, phylogenyRoot } = use(ConfigContext)
   const { setModalData } = use(ConceptModalContext)
-  const { ensureConceptRealizations, getConceptTemplates, pendingHistory, realizationsByConcept } =
+  const { ensureConceptRealizations, getConceptTemplates, pendingHistory, realizationsByConcept, templates } =
     use(PanelDataContext)
   const pendingHistoryRef = useRef(pendingHistory)
   const { getSelected, panels, updateSelected } = use(SelectedContext)
@@ -278,6 +278,7 @@ const ConceptProvider = ({ children }) => {
     isEditing,
     realizationsByConcept,
     taxonomy,
+    templates,
   ])
 
   useEffect(() => {

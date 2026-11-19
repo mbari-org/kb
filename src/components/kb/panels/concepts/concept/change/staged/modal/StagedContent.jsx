@@ -8,6 +8,7 @@ import StagedAlias from '@/components/kb/panels/concepts/concept/change/staged/a
 import StagedChild from '@/components/kb/panels/concepts/concept/change/staged/children/StagedChild'
 import StagedMediaItem from '@/components/kb/panels/concepts/concept/change/staged/media/StagedMediaItem'
 import StagedRealization from '@/components/kb/panels/concepts/concept/change/staged/realizations/StagedRealization'
+import StagedTemplate from '@/components/kb/panels/concepts/concept/change/staged/templates/StagedTemplate'
 
 import StagedObject from '@/components/kb/panels/concepts/concept/change/staged/StagedObject'
 import StagedValue from '@/components/kb/panels/concepts/concept/change/staged/StagedValue'
@@ -23,6 +24,7 @@ import { stagedAliasesEdits } from '@/lib/concept/state/aliases'
 import { stagedChildren } from '@/lib/concept/state/children'
 import { stagedMediaEdits } from '@/lib/concept/state/media'
 import { stagedRealizationEdits } from '@/lib/concept/state/realizations'
+import { stagedTemplateEdits } from '@/lib/concept/state/templates'
 import { buildStagedJournal } from '@/lib/concept/state/stagedJournal'
 import { isStateModified } from '@/lib/concept/state/state'
 
@@ -42,6 +44,7 @@ const ARRAY_FIELDS = [
   [CONCEPT.FIELD.CHILDREN, stagedChildren, initialItemByIndex],
   [CONCEPT.FIELD.MEDIA, stagedMediaEdits, initialItemByIndex],
   [CONCEPT.FIELD.REALIZATIONS, stagedRealizationEdits, initialItemByStateId],
+  [CONCEPT.FIELD.TEMPLATES, stagedTemplateEdits, initialItemByStateId],
 ]
 
 const VALUE_FIELDS = [CONCEPT.FIELD.NAME, CONCEPT.FIELD.AUTHOR, CONCEPT.FIELD.PARENT, CONCEPT.FIELD.RANK]
@@ -139,6 +142,16 @@ const StagedContent = () => {
       case CONCEPT.FIELD.REALIZATIONS:
         return (
           <StagedRealization
+            key={item.key}
+            initialItem={item.initialItem}
+            resetting={resettingItem(confirmReset, item.field, item.edit.index)}
+            stagedItem={item.edit}
+          />
+        )
+
+      case CONCEPT.FIELD.TEMPLATES:
+        return (
+          <StagedTemplate
             key={item.key}
             initialItem={item.initialItem}
             resetting={resettingItem(confirmReset, item.field, item.edit.index)}

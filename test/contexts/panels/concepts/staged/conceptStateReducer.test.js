@@ -18,6 +18,7 @@ const baseStagedState = {
   rank: { action: 'None', level: '', name: '' },
   realizations: [],
   realizationIndex: 0,
+  templates: [],
 }
 
 describe('conceptStateReducer', () => {

@@ -10,6 +10,7 @@ const FIELD_ORDER = [
   CONCEPT.FIELD.PARENT,
   CONCEPT.FIELD.RANK,
   CONCEPT.FIELD.REALIZATIONS,
+  CONCEPT.FIELD.TEMPLATES,
   CONCEPT.FIELD.NAME,
 ]
 
@@ -64,6 +65,7 @@ const buildStagedJournal = (_initialState, stagedState) => {
     ...arrayFieldOps(CONCEPT.FIELD.CHILDREN, stagedState.children),
     ...arrayFieldOps(CONCEPT.FIELD.MEDIA, stagedState.media),
     ...arrayFieldOps(CONCEPT.FIELD.REALIZATIONS, stagedState.realizations),
+    ...arrayFieldOps(CONCEPT.FIELD.TEMPLATES, stagedState.templates),
     ...valueFieldOp(CONCEPT.FIELD.AUTHOR, stagedState.author, stagedState.author.action),
     ...valueFieldOp(CONCEPT.FIELD.NAME, stagedState.name, stagedState.name.action),
     ...valueFieldOp(CONCEPT.FIELD.PARENT, stagedState.parent, stagedState.parent.action),

@@ -11,6 +11,7 @@ import {
   createHandlers,
   createModalActions,
   createModalContent,
+  linkNameOptionsOf,
   processEditTemplateData,
   createTemplateOnClose,
   duplicateTemplateAlert,
@@ -20,6 +21,7 @@ import {
 } from '@/components/kb/panels/templates/form/templateModalUtils'
 
 import CONFIG from '@/lib/config'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 const { PROCESSING } = CONFIG
 const { CANCEL, CONTINUE, DISCARD, SAVE } = CONFIG.BUTTON
@@ -158,7 +160,15 @@ const useEditTemplateButton = () => {
 
       const ContentView = () => {
         const { modalData } = useTemplatesModalDataContext()
-        const TemplateModalContent = createModalContent(handleFormChange, true, handleDuplicateChange)
+        const { filteredTemplates, filters } = use(TemplatesContext)
+        const { templates } = use(PanelDataContext)
+        const TemplateModalContent = createModalContent({
+          existingTemplates: templates,
+          handleDuplicateChange,
+          handleFormChange,
+          isEdit: true,
+          linkNameOptions: linkNameOptionsOf(filteredTemplates, filters[SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT]),
+        })
         return TemplateModalContent(modalData)
       }
 

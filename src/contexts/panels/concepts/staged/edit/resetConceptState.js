@@ -109,6 +109,13 @@ const resetConceptState = (action, dispatch, initialState) => {
       })
       break
 
+    case RESET.TEMPLATES:
+      dispatch({
+        type: RESET.TEMPLATES,
+        update: { templates: initialState.templates, stateId: action.update?.stateId },
+      })
+      break
+
     case RESET.TO_INITIAL:
       resetToInitial(dispatch, initialState)
       break

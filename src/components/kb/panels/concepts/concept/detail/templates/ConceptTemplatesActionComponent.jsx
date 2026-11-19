@@ -2,6 +2,7 @@ import { use, useCallback } from 'react'
 import { Box, Stack } from '@mui/material'
 
 import ConceptTemplatesSwitchTooltip from '@/components/kb/panels/concepts/concept/detail/templates/ConceptTemplatesSwitchTooltip'
+import TemplateActionIcon from '@/components/kb/panels/concepts/concept/change/staged/templates/TemplateActionIcon'
 import InspectIcon from '@/components/icon/InspectIcon'
 import PanelDataSwitch from '@/components/common/panel/PanelDataSwitch'
 
@@ -10,13 +11,14 @@ import SelectedContext from '@/contexts/selected/SelectedContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import useGuardedAction from '@/contexts/user/useGuardedAction'
 
+import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
 const { TEMPLATES } = SELECTED.SETTINGS
 
 const ConceptTemplatesActionComponent = () => {
-  const { concept } = use(ConceptContext)
+  const { concept, isEditing } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
   const { getSettings, updateSettings } = use(SelectedSettingsContext)
   const { guardPanelChange } = useGuardedAction()
@@ -61,6 +63,7 @@ const ConceptTemplatesActionComponent = () => {
   return (
     <Stack direction='row' spacing={2}>
       <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />
+      {isEditing ? <TemplateActionIcon action={CONCEPT_STATE.TEMPLATE.ADD} /> : null}
       <Box sx={{ position: 'relative', top: 5 }}>
         <PanelDataSwitch
           checked={byAvailable}

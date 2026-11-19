@@ -20,6 +20,7 @@ import {
   processAddTemplateData,
   createHandlers,
   createModalContent,
+  linkNameOptionsOf,
   createTemplateOnClose,
   duplicateTemplateAlert,
   isDuplicateTemplate,
@@ -151,7 +152,15 @@ const useAddTemplateButton = () => {
 
     const ContentView = () => {
       const { modalData } = useTemplatesModalDataContext()
-      const TemplateModalContent = createModalContent(handleFormChange, false, handleDuplicateChange)
+      const { filteredTemplates, filters } = use(TemplatesContext)
+      const { templates } = use(PanelDataContext)
+      const TemplateModalContent = createModalContent({
+        existingTemplates: templates,
+        handleDuplicateChange,
+        handleFormChange,
+        isEdit: false,
+        linkNameOptions: linkNameOptionsOf(filteredTemplates, filters[SELECTED.SETTINGS.TEMPLATES.FILTERS.CONCEPT]),
+      })
       return TemplateModalContent(modalData)
     }
 

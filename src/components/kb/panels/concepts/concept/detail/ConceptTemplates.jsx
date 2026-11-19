@@ -10,8 +10,6 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { isSame } from '@/lib/model/realization'
-
 import { filterTemplates } from '@/components/kb/panels/templates/utils'
 
 import { SELECTED } from '@/lib/constants/selected.js'
@@ -35,14 +33,17 @@ const ConceptTemplates = () => {
     const ancestorNames = byAvailable ? getAncestorNames(concept.name) : []
     const concepts = concept.name ? [concept.name, ...ancestorNames] : null
     const filteredTemplates = filterTemplates(templates, { concepts })
+    const stagedTemplates = stagedState?.templates || []
 
     const actionTemplate = template =>
-      stagedState?.templates?.find(stagedTemplate => isSame(template, stagedTemplate)) || {
+      stagedTemplates.find(stagedTemplate => stagedTemplate.id === template.id) || {
         ...template,
         action: CONCEPT_STATE.NO_ACTION,
       }
 
-    return filteredTemplates.map(template => actionTemplate(template))
+    const stagedAdds = stagedTemplates.filter(stagedTemplate => stagedTemplate.action === CONCEPT_STATE.TEMPLATE.ADD)
+
+    return [...filteredTemplates.map(actionTemplate), ...stagedAdds]
   }, [byAvailable, concept.name, getAncestorNames, templates, stagedState?.templates])
 
   return (

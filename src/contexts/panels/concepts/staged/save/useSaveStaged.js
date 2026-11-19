@@ -58,6 +58,10 @@ const useSaveStaged = () => {
             await reloadConceptRealizations(conceptName)
           }
 
+          if (updatesInfo.hasUpdated(CONCEPT.FIELD.TEMPLATES)) {
+            await refreshPanelData(PANEL_DATA.TEMPLATES)
+          }
+
           const freshConcept = { ...staleConcept, name: conceptName }
           delete freshConcept.realizations
           delete freshConcept.templates

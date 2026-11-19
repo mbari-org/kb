@@ -2,29 +2,11 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import LinkNameInput from '@/components/kb/panels/templates/form/LinkNameInput'
-import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
-import { SELECTED } from '@/lib/constants/selected.js'
-
-const { TEMPLATES } = SELECTED.SETTINGS
-const { FILTERS } = TEMPLATES
-
-const renderWithTemplatesContext = (templatesContextValue, props = {}) =>
-  render(
-    <TemplatesContext value={templatesContextValue}>
-      <LinkNameInput onChange={vi.fn()} value='' {...props} />
-    </TemplatesContext>
-  )
 
 describe('LinkNameInput', () => {
-  it('renders plain text input when concept filter is not set', () => {
+  it('renders plain text input when there are no link name options', () => {
     const onChange = vi.fn()
-    renderWithTemplatesContext(
-      {
-        filters: {},
-        filteredTemplates: [],
-      },
-      { onChange, value: 'initial' }
-    )
+    render(<LinkNameInput linkNameOptions={null} onChange={onChange} value='initial' />)
 
     const input = screen.getByRole('textbox', { name: /link name/i })
     expect(input).toBeInTheDocument()
@@ -34,15 +16,9 @@ describe('LinkNameInput', () => {
     expect(onChange).toHaveBeenCalled()
   })
 
-  it('renders autocomplete when concept filter is set and emits normalized values', () => {
+  it('renders autocomplete when link name options are provided and emits normalized values', () => {
     const onChange = vi.fn()
-    renderWithTemplatesContext(
-      {
-        filters: { [FILTERS.CONCEPT]: 'marine organism' },
-        filteredTemplates: [{ linkName: 'curling' }, { linkName: 'curling' }, { linkName: 'grazing' }],
-      },
-      { onChange, value: '' }
-    )
+    render(<LinkNameInput linkNameOptions={['curling', 'grazing']} onChange={onChange} value='' />)
 
     const input = screen.getByRole('combobox', { name: /link name/i })
     fireEvent.change(input, { target: { value: 'curling' } })

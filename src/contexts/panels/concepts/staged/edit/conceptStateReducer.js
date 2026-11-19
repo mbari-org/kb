@@ -11,12 +11,13 @@ import {
   editRealization,
   resetRealizations,
 } from '@/lib/concept/state/realizations'
+import { addTemplate, deleteTemplate, editTemplate, resetTemplates } from '@/lib/concept/state/templates'
 import { editValue } from '@/lib/concept/state/value'
 import { stampStagedEdits } from '@/lib/concept/state/stagedSeq'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET } = CONCEPT_STATE
+const { ALIAS, AUTHOR, CHILD, MEDIA_ITEM, NAME, PARENT, RANK, REALIZATION, RESET, TEMPLATE } = CONCEPT_STATE
 
 const conceptStateReducer = (stagedState, { type, update, initialState }) => {
   if (type === CONCEPT_STATE.INITIAL) return update
@@ -74,6 +75,15 @@ const reduce = (params, type) => {
     case REALIZATION.EDIT:
       return editRealization(params)
 
+    case TEMPLATE.ADD:
+      return addTemplate(params)
+
+    case TEMPLATE.DELETE:
+      return deleteTemplate(params)
+
+    case TEMPLATE.EDIT:
+      return editTemplate(params)
+
     case RESET.ALIASES:
       return resetAliases(params)
 
@@ -100,6 +110,9 @@ const reduce = (params, type) => {
 
     case RESET.REALIZATIONS:
       return resetRealizations(params)
+
+    case RESET.TEMPLATES:
+      return resetTemplates(params)
 
     default:
       return stagedState

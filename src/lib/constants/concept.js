@@ -24,6 +24,7 @@ export const CONCEPT = {
     RANK_LEVEL: 'rankLevel',
     RANK_NAME: 'rankName',
     REALIZATIONS: 'realizations',
+    TEMPLATES: 'templates',
   },
   HISTORY: {
     TYPE: {

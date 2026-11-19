@@ -1,26 +1,11 @@
-import { use, useMemo } from 'react'
 import { Autocomplete, TextField } from '@mui/material'
 
-import TemplatesContext from '@/contexts/panels/templates/TemplatesContext'
-import { SELECTED } from '@/lib/constants/selected.js'
-
-const { TEMPLATES } = SELECTED.SETTINGS
-const { FILTERS } = TEMPLATES
-
-const LinkNameInput = ({ disabled = false, onChange, value }) => {
-  const { filters, filteredTemplates } = use(TemplatesContext)
-
-  const hasFilteredConcept = Boolean(filters[FILTERS.CONCEPT])
-
-  const linkNameOptions = useMemo(() => {
-    return [...new Set(filteredTemplates.map(template => template.linkName).filter(Boolean))]
-  }, [filteredTemplates])
-
+const LinkNameInput = ({ disabled = false, linkNameOptions, onChange, value }) => {
   const setLinkNameValue = nextValue => {
     onChange({ target: { value: nextValue ?? '' } })
   }
 
-  if (!hasFilteredConcept) {
+  if (!linkNameOptions) {
     return (
       <TextField
         disabled={disabled}
