@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { BsInfoCircle } from 'react-icons/bs'
+import { BsInfoCircleFill } from 'react-icons/bs'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
 const KBInfoIcon = ({ tooltip, placement = 'top', size = 18, disabled = false, sx, ...props }) => {
@@ -11,22 +11,21 @@ const KBInfoIcon = ({ tooltip, placement = 'top', size = 18, disabled = false, s
       <IconButton
         disabled={disabled}
         sx={{
-          backgroundColor: disabled ? 'action.disabledBackground' : theme.palette.primary.main,
-          color: disabled ? 'text.disabled' : 'white',
-          padding: 0,
           '&:hover': disabled
             ? {}
             : {
                 ...theme.kb.icon.hover,
-                backgroundColor: theme.palette.primary.main,
-                color: 'white',
-                '& svg': { color: 'white' },
+                backgroundColor: 'transparent',
+                color: 'primary.main',
               },
+          backgroundColor: 'transparent',
+          color: disabled ? 'text.disabled' : 'primary.main',
+          padding: 0,
           ...sx,
         }}
         {...props}
       >
-        <BsInfoCircle size={size} />
+        <BsInfoCircleFill size={size} />
       </IconButton>
     </KBTooltipTarget>
   )
