@@ -1,7 +1,4 @@
 {
-  "CONTENT": {
-    "HEADER": "Add realization"
-  },
   "ALERT": {
     "DISCARD": {
       "LINES": [
@@ -24,5 +21,8 @@
       ],
       "SEVERITY": "success"
     }
+  },
+  "CONTENT": {
+    "HEADER": "Add Realization"
   }
 }

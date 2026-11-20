@@ -27,6 +27,7 @@ import {
 import { getMedia } from '@/lib/api/media'
 import { getConceptLinkRealizations, updateRealization } from '@/lib/api/realizations'
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
+import CONFIG from '@/lib/config'
 
 const ROW = { id: 1, concept: 'target-child', linkName: 'eats', toConcept: 'nil', linkValue: 'fish' }
 const TEMPLATE = { id: 't1', concept: 'old-parent', linkName: 'eats', toConcept: 'nil', linkValue: 'fish' }
@@ -157,6 +158,7 @@ describe('Realizations panel edit save', () => {
     await user.click(screen.getByRole('button', { name: 'edit' }))
 
     const linkValueInput = await screen.findByRole('textbox', { name: 'Link Value' })
+    expect(screen.getByText(CONFIG.PANELS.REALIZATIONS.MODALS.EDIT.CONTENT.HEADER)).toBeInTheDocument()
     await waitFor(() => {
       expect(linkValueInput).toBeEnabled()
     })

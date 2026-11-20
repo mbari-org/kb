@@ -27,6 +27,7 @@ import {
 import { getMedia } from '@/lib/api/media'
 import { createRealization, getConceptLinkRealizations } from '@/lib/api/realizations'
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
+import CONFIG from '@/lib/config'
 
 const TEMPLATE = { id: 't1', concept: 'old-parent', linkName: 'eats', toConcept: 'nil', linkValue: 'fish' }
 
@@ -158,6 +159,7 @@ describe('Realizations panel add save', () => {
     await waitFor(() => {
       expect(screen.getByText('Concept: target-child')).toBeInTheDocument()
     })
+    expect(screen.getByText(CONFIG.PANELS.REALIZATIONS.MODALS.ADD.CONTENT.HEADER)).toBeInTheDocument()
 
     await user.click(await screen.findByRole('button', { name: 'eats' }))
 

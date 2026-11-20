@@ -3,6 +3,7 @@ import { use } from 'react'
 import { FormControl, TextField, Autocomplete } from '@mui/material'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import { getConceptTaxa } from '@/lib/api/concept'
 
 import CONFIG from '@/lib/config'
@@ -11,10 +12,10 @@ const RealizationToConcept = ({
   realizationItem,
   onRealizationChange,
   isValidLinkName,
-  isEdit = false,
   onValidationChange,
 }) => {
   const { apiFns } = use(ConfigContext)
+  const { getNames } = use(TaxonomyContext)
 
   const hasFetchedTaxaRef = useRef(false)
 
@@ -39,16 +40,13 @@ const RealizationToConcept = ({
 
   const handleToConceptChange = useCallback(
     (_event, value) => {
-      if (isSpecial) {
-        return
-      }
       const updatedRealizationItem = {
         ...realizationItem,
         toConcept: value,
       }
       onRealizationChange(updatedRealizationItem, 'toConcept')
     },
-    [realizationItem, onRealizationChange, isSpecial]
+    [realizationItem, onRealizationChange]
   )
 
   const templateId = realizationItem.templateId
@@ -66,7 +64,7 @@ const RealizationToConcept = ({
       return acc
     }, {})
     if (specialMap[toConcept]) {
-      const timeoutId = setTimeout(() => setTaxaNames(specialMap[toConcept]), 0)
+      const timeoutId = setTimeout(() => setTaxaNames([...getNames(), ...CONFIG.CONCEPT.TO_SPECIAL]), 0)
       hasFetchedTaxaRef.current = true
       return () => clearTimeout(timeoutId)
     }
@@ -85,28 +83,7 @@ const RealizationToConcept = ({
 
       fetchTaxa()
     }
-  }, [toConcept, apiFns])
-
-  const renderImmutableField = () => (
-    <TextField
-      label='To Concept'
-      value={toConcept}
-      size='small'
-      disabled
-      sx={{
-        '& .MuiInputBase-input.Mui-disabled': {
-          WebkitTextFillColor: 'rgba(0, 0, 0, 0.87)',
-          color: 'rgba(0, 0, 0, 0.87)',
-        },
-        '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
-          borderColor: 'rgba(0, 0, 0, 0.23)',
-        },
-        '& .MuiInputLabel-root.Mui-disabled': {
-          color: 'rgba(0, 0, 0, 0.6)',
-        },
-      }}
-    />
-  )
+  }, [toConcept, apiFns, getNames])
 
   const renderEditableField = () => (
     <Autocomplete
@@ -123,7 +100,7 @@ const RealizationToConcept = ({
 
   return (
     <FormControl fullWidth margin='normal'>
-      {isEdit || isSpecial ? renderImmutableField() : renderEditableField()}
+      {renderEditableField()}
     </FormControl>
   )
 }

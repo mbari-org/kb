@@ -319,6 +319,7 @@ describe('Realizations modal confirmation flows', () => {
     const Wrapper = ({ confirmDelete }) => <DeleteContent realization={REALIZATION} confirmDelete={confirmDelete} />
 
     const { rerender } = render(<Wrapper confirmDelete={false} />)
+    expect(screen.getByText(CONFIG.PANELS.REALIZATIONS.MODALS.DELETE.CONTENT.HEADER)).toBeInTheDocument()
     expect(screen.getByText(firstWarningLine)).toBeInTheDocument()
     expect(screen.queryByText(firstConfirmLine)).not.toBeInTheDocument()
     rerender(<Wrapper confirmDelete={true} />)

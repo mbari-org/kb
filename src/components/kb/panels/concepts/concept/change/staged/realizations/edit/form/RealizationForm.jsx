@@ -95,7 +95,6 @@ const RealizationForm = ({
         />
       </FormControl>
       <RealizationToConcept
-        isEdit={isEdit}
         isValidLinkName={isValidLinkName}
         onRealizationChange={onRealizationChange}
         onValidationChange={handleToConceptValidationChange}
