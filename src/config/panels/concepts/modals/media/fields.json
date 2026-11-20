@@ -1,0 +1,14 @@
+{
+  "DISPLAY": {
+    "CREDIT": "Credit:",
+    "PRIMARY": "Primary:",
+    "URL": "URL:"
+  },
+  "LABEL": {
+    "CAPTION": "Caption",
+    "CREDIT": "Credit"
+  },
+  "VALIDATION": {
+    "CREDIT_EMPTY": "Credit cannot be empty"
+  }
+}

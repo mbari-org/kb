@@ -1,6 +1,7 @@
 import { CiEdit } from 'react-icons/ci'
 
 import ActionIcon from '@/components/icon/ActionIcon'
+import CONFIG from '@/lib/config'
 
 const ConceptHierarchyIcon = ({ onClick, sx = {} }) => {
   return (
@@ -15,7 +16,7 @@ const ConceptHierarchyIcon = ({ onClick, sx = {} }) => {
         padding: 0,
         ...sx,
       }}
-      tooltip='Edit Concept Hierarchy'
+      tooltip={CONFIG.UI.ICON.CONCEPT_HIERARCHY}
     />
   )
 }

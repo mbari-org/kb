@@ -1,3 +1,5 @@
+import CONFIG from '@/lib/config'
+
 import { apiParams } from './params'
 import apiSend from './send'
 import apiUrl from './url'
@@ -24,7 +26,7 @@ const request = (service, method, tokenType = 'service') => async ({ config, dat
     return {
       error: {
         message: error.message,
-        title: 'Authentication Error',
+        title: CONFIG.ERROR.AUTHENTICATION,
       },
     }
   }

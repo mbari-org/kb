@@ -1,7 +1,11 @@
 import { genRefresh } from '@/lib/auth/refreshKey'
 import { createError } from '@/lib/errors'
 
+import CONFIG from '@/lib/config'
+
 import authUrl from './authUrl'
+
+const { ERROR } = CONFIG.STARTUP.LOGIN
 
 
 const loginReadOnly = async () => {
@@ -23,7 +27,7 @@ const loginReadOnly = async () => {
 const loginUser = async (config, username, password) => {
   const { error, url: loginUrl } = authUrl(config)
   if (error) {
-    return { error: createError('Auth URL Error', error.message || 'Failed to get auth URL', { config }) }
+    return { error: createError('Auth URL Error', error.message || ERROR.AUTH_URL, { config }) }
   }
 
   try {
@@ -34,7 +38,9 @@ const loginUser = async (config, username, password) => {
       return {
         error: createError(
           'Login Failed',
-          loginResponse.status === 401 ? 'Invalid username or password' : `Login failed: ${loginResponse.statusText}`,
+          loginResponse.status === 401
+            ? ERROR.INVALID_CREDENTIALS
+            : ERROR.LOGIN_FAILED.replace('{status}', loginResponse.statusText),
           { status: loginResponse.status, username }
         ),
       }
@@ -44,7 +50,7 @@ const loginUser = async (config, username, password) => {
     const razielToken = token || accessToken
     if (!razielToken) {
       return {
-        error: createError('Login Failed', 'Authentication response missing token', { username }),
+        error: createError('Login Failed', ERROR.MISSING_RESPONSE_TOKEN, { username }),
       }
     }
     const refresh = await genRefresh(password)
@@ -59,7 +65,7 @@ const loginUser = async (config, username, password) => {
     return {
       error: createError(
         'Login Error',
-        error.message === 'Failed to fetch' ? 'Failed to connect to authentication service' : error.message,
+        error.message === 'Failed to fetch' ? ERROR.CONNECT_FAILED : error.message,
         { username },
         error
       ),

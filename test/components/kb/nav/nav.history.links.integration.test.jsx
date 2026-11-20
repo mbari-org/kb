@@ -6,6 +6,8 @@ import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 import panelMods from '@/components/kb/panels/modules'
 import usePanelSelection from '@/contexts/selected/usePanelSelection'
 
+import CONFIG from '@/lib/config'
+
 const PanelHistoryHarness = () => {
   const panels = usePanelSelection()
 
@@ -37,10 +39,10 @@ describe('NavHistoryLinks integration', () => {
     await user.click(screen.getByRole('button', { name: 'push history' }))
     expect(screen.getByTestId('current-panel')).toHaveTextContent('History')
 
-    await user.click(screen.getByRole('button', { name: 'previous' }))
+    await user.click(screen.getByRole('button', { name: CONFIG.UI.NAV.PREVIOUS }))
     expect(screen.getByTestId('current-panel')).toHaveTextContent('Templates')
 
-    await user.click(screen.getByRole('button', { name: 'next' }))
+    await user.click(screen.getByRole('button', { name: CONFIG.UI.NAV.NEXT }))
     expect(screen.getByTestId('current-panel')).toHaveTextContent('History')
   })
 })

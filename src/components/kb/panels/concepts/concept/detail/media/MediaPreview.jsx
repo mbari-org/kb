@@ -17,6 +17,7 @@ import CONFIG from '@/lib/config'
 
 const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
 const { CHOICE } = CONFIG
+const { CREDIT: CREDIT_LABEL, PRIMARY, URL: URL_LABEL } = CONFIG.PANELS.CONCEPTS.MODALS.MEDIA.FIELDS.DISPLAY
 
 const CREDIT_TOOLTIP_MAX_LENGTH = 80
 
@@ -123,16 +124,20 @@ const MediaPreview = ({ setPreviewOn }) => {
         title={
           mediaUrl && (
             <Box>
-              <Box>URL: {mediaUrl}</Box>
+              <Box>
+                {URL_LABEL} {mediaUrl}
+              </Box>
               {mediaItem?.credit && (
                 <Box>
-                  Credit:{' '}
+                  {CREDIT_LABEL}{' '}
                   {mediaItem.credit.length > CREDIT_TOOLTIP_MAX_LENGTH
                     ? `${mediaItem.credit.slice(0, CREDIT_TOOLTIP_MAX_LENGTH)}…`
                     : mediaItem.credit}
                 </Box>
               )}
-              <Box>Primary: {mediaItem?.isPrimary ? CHOICE.YES : CHOICE.NO}</Box>
+              <Box>
+                {PRIMARY} {mediaItem?.isPrimary ? CHOICE.YES : CHOICE.NO}
+              </Box>
             </Box>
           )
         }

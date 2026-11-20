@@ -10,6 +10,8 @@ import ConceptViewToggleButton from './ConceptViewToggleButton'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 
+import CONFIG from '@/lib/config'
+
 const ConceptViewToggle = ({ sx }) => {
   const { isEditing } = use(ConceptContext)
 
@@ -22,7 +24,7 @@ const ConceptViewToggle = ({ sx }) => {
   return (
     <Box sx={sx}>
       <ToggleButtonGroup
-        aria-label='text alignment'
+        aria-label={CONFIG.UI.TOGGLE.VIEW}
         disabled={isEditing}
         exclusive
         onChange={handleViewSelection}

@@ -194,7 +194,7 @@ export const createAddContent = (handleFormChange, handleValidationChange, updat
           />
           <TextField
             fullWidth
-            label='Filter by Link Name'
+            label={CONFIG.PANELS.REALIZATIONS.FORM.LABEL.FILTER_LINK_NAME}
             onChange={event => {
               setFilterLinkName(event.target.value)
               handleRealizationChange({ ...EMPTY_REALIZATION, concept })

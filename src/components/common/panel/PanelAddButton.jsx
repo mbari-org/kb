@@ -1,7 +1,9 @@
 import { Button } from '@mui/material'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 
-const PanelAddButton = ({ onClick, disabled = false, tooltip, label = 'Add' }) => {
+import CONFIG from '@/lib/config'
+
+const PanelAddButton = ({ onClick, disabled = false, tooltip, label = CONFIG.BUTTON.ADD }) => {
   const button = (
     <Button color='primary' disabled={disabled} onClick={onClick} variant='contained'>
       {label}

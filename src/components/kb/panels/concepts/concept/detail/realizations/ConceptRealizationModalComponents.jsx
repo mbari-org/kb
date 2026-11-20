@@ -11,7 +11,7 @@ import CONFIG from '@/lib/config'
 
 const { CLOSE } = CONFIG.BUTTON
 
-const ConceptRealizationModalTitle = () => <Title title='Realization' />
+const ConceptRealizationModalTitle = () => <Title title={CONFIG.PANELS.CONCEPTS.MODALS.REALIZATION.VIEW.TITLE} />
 
 const ConceptRealizationModalContent = () => {
   const { modalData } = use(ConceptModalDataContext)

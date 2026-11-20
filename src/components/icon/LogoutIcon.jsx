@@ -2,12 +2,15 @@ import { useTheme } from '@mui/material/styles'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 import logoutPng from '@/assets/logout-48.png'
+import CONFIG from '@/lib/config'
 
-const LogoutImg = ({ size }) => <img src={logoutPng} alt='Logout' width={size} height={size} />
+const { LOGOUT } = CONFIG.UI.ICON
+
+const LogoutImg = ({ size }) => <img src={logoutPng} alt={LOGOUT} width={size} height={size} />
 
 const LogoutIcon = ({
   onClick,
-  tooltip = 'Logout',
+  tooltip = LOGOUT,
   sx = {},
   asDiv = true,
   hoverBackground = 'transparent', // e.g., 'transparent' or 'primary.main'

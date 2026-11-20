@@ -126,7 +126,7 @@ const useConceptData = () => {
       if (conceptExtent === CONCEPT.EXTENT.DESCENDANTS) {
         const processing = beginProcessing(PROCESSING.LOAD, null, { delayMs: 0 })
         if (processing.updateMessage) {
-          processing.updateMessage('Loading concept descendants ...')
+          processing.updateMessage(CONFIG.EXPORT.MESSAGE.LOADING_DESCENDANTS)
         }
         try {
           const updatedTaxonomy = await loadConceptDescendants(exportedConcept)

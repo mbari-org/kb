@@ -75,7 +75,7 @@ const DeleteConceptContent = () => {
       )}
       {hasStagedEdits && <Typography align='center'>{MODALS.HIERARCHY.DELETE_CONCEPT.DISCARDS_STAGED}</Typography>}
 
-      {isLoading && <ProcessingMsg message='Loading related data...' />}
+      {isLoading && <ProcessingMsg message={CONFIG.UI.LOADING.RELATED_DATA} />}
       {!modalData.isLoading && hasRelatedData && <RelatedDataCounts relatedDataCounts={relatedDataCounts} />}
       {isAdmin && (
         <Stack direction='column' spacing={1} sx={{ alignItems: 'center' }}>

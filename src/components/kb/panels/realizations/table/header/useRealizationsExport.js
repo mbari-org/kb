@@ -15,11 +15,20 @@ import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
-const { PROCESSING } = CONFIG
+const { EXPORT, PANELS, PROCESSING } = CONFIG
+
+const { COMMENT } = EXPORT
+const { HEADERS, TITLE } = PANELS.REALIZATIONS.EXPORT
 
 const { REALIZATIONS } = SELECTED.SETTINGS
 
-const dataHeaders = ['Concept', 'Link Name', 'To Concept', 'Link Value', 'Last Updated']
+const dataHeaders = [
+  HEADERS.CONCEPT,
+  HEADERS.LINK_NAME,
+  HEADERS.TO_CONCEPT,
+  HEADERS.LINK_VALUE,
+  HEADERS.LAST_UPDATED,
+]
 const dataRows = realizations =>
   realizations.map(realization => [
     realization.concept,
@@ -31,10 +40,13 @@ const dataRows = realizations =>
 
 const buildComments = filters => {
   const comments = []
-  filters[REALIZATIONS.FILTERS.CONCEPT] && comments.push(`Concept: ${filters[REALIZATIONS.FILTERS.CONCEPT]}`)
-  filters[REALIZATIONS.FILTERS.LINK_NAME] && comments.push(`Link Name: ${filters[REALIZATIONS.FILTERS.LINK_NAME]}`)
-  filters[REALIZATIONS.FILTERS.TO_CONCEPT] && comments.push(`To Concept: ${filters[REALIZATIONS.FILTERS.TO_CONCEPT]}`)
-  filters[REALIZATIONS.FILTERS.LINK_VALUE] && comments.push(`Link Value: ${filters[REALIZATIONS.FILTERS.LINK_VALUE]}`)
+  const commentFor = (template, value) => value && comments.push(template.replace('{value}', value))
+
+  commentFor(COMMENT.CONCEPT, filters[REALIZATIONS.FILTERS.CONCEPT])
+  commentFor(COMMENT.LINK_NAME, filters[REALIZATIONS.FILTERS.LINK_NAME])
+  commentFor(COMMENT.TO_CONCEPT, filters[REALIZATIONS.FILTERS.TO_CONCEPT])
+  commentFor(COMMENT.LINK_VALUE, filters[REALIZATIONS.FILTERS.LINK_VALUE])
+
   return comments
 }
 
@@ -91,7 +103,7 @@ const useRealizationsExport = () => {
     onProgress,
     paginated: false,
     suggestName,
-    title: 'Knowledge Base Realizations',
+    title: TITLE,
     user,
   })
 }

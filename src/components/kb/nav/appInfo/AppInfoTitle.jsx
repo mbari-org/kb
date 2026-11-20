@@ -1,5 +1,7 @@
 import Title from '@/components/common/factory/Title'
 
-const AppInfoTitle = () => <Title title='App Info' />
+import CONFIG from '@/lib/config'
+
+const AppInfoTitle = () => <Title title={CONFIG.APP_INFO.TITLE} />
 
 export default AppInfoTitle

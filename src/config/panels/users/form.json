@@ -1,0 +1,23 @@
+{
+  "LABEL": {
+    "AFFILIATION": "Affiliation",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "EMAIL": "Email",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "PASSWORD": "Password",
+    "ROLE": "Role",
+    "USERNAME": "Username"
+  },
+  "PLACEHOLDER": {
+    "PASSWORD_EDIT": "Leave blank to keep current password"
+  },
+  "VALIDATION": {
+    "CONFIRM_PASSWORD": "Please confirm your password",
+    "EMAIL": "Valid email is required",
+    "PASSWORDS_MISMATCH": "Passwords do not match",
+    "PASSWORD": "Password is required",
+    "REQUIRED": "{field} is required",
+    "USERNAME_EXISTS": "Username already exists"
+  }
+}

@@ -1,10 +1,9 @@
 import ActionsAlert from './ActionsAlert'
 
+import CONFIG from '@/lib/config'
+
 const DeleteAlert = () => (
-  <ActionsAlert
-    lines={['Deleting a concept is final.', 'Please confirm you want to delete this concept.']}
-    severity='warning'
-  />
+  <ActionsAlert lines={CONFIG.UI.ACTION_ALERT.DELETE} severity='warning' />
 )
 
 export default DeleteAlert

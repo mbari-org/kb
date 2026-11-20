@@ -7,12 +7,14 @@ import itemTitles from '@/config/panels/concepts/modals/itemTitles.json'
 import mediaAdd from '@/config/panels/concepts/modals/media/add.json'
 import mediaDelete from '@/config/panels/concepts/modals/media/delete.json'
 import mediaEdit from '@/config/panels/concepts/modals/media/edit.json'
+import mediaFields from '@/config/panels/concepts/modals/media/fields.json'
 import mediaPrimary from '@/config/panels/concepts/modals/media/primary.json'
 import mediaUrl from '@/config/panels/concepts/modals/media/url.json'
 import pending from '@/config/panels/concepts/modals/pending.json'
 import realizationAdd from '@/config/panels/concepts/modals/realization/add.json'
 import realizationDelete from '@/config/panels/concepts/modals/realization/delete.json'
 import realizationEdit from '@/config/panels/concepts/modals/realization/edit.json'
+import realizationView from '@/config/panels/concepts/modals/realization/view.json'
 import staged from '@/config/panels/concepts/modals/staged.json'
 import templateAdd from '@/config/panels/concepts/modals/template/add.json'
 import templateDelete from '@/config/panels/concepts/modals/template/delete.json'
@@ -36,6 +38,7 @@ export const MODALS = {
     ADD: mediaAdd,
     DELETE: mediaDelete,
     EDIT: mediaEdit,
+    FIELDS: mediaFields,
     PRIMARY: mediaPrimary,
     URL: mediaUrl,
   },
@@ -44,6 +47,7 @@ export const MODALS = {
     ADD: realizationAdd,
     DELETE: realizationDelete,
     EDIT: realizationEdit,
+    VIEW: realizationView,
   },
   STAGED: staged,
   TEMPLATE: {

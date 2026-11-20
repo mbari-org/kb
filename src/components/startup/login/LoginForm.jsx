@@ -11,6 +11,10 @@ import ConfigContext from '@/contexts/config/ConfigContext'
 
 import { loginUser } from '@/lib/services/auth/login'
 
+import CONFIG from '@/lib/config'
+
+const { BUTTON, BUTTON_PENDING, LABEL } = CONFIG.STARTUP.LOGIN
+
 const LoginForm = ({ isVisible = true }) => {
   const usernameRef = useRef(null)
 
@@ -40,11 +44,17 @@ const LoginForm = ({ isVisible = true }) => {
     <Box component='form' action={loginAction}>
       <Card sx={{ bgcolor: 'transparent' }}>
         <CardContent>
-          <LoginInput id='login-user' autoComplete='username' ref={usernameRef} label='Username' name='username' />
+          <LoginInput
+            id='login-user'
+            autoComplete='username'
+            ref={usernameRef}
+            label={LABEL.USERNAME}
+            name='username'
+          />
           <LoginInput
             id='login-password'
             autoComplete='current-password'
-            label='Password'
+            label={LABEL.PASSWORD}
             name='password'
             type='password'
             sx={{ mt: 2 }}
@@ -52,7 +62,7 @@ const LoginForm = ({ isVisible = true }) => {
           <SubmitError errorText={loginState?.error?.message} />
         </CardContent>
         <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-          <SubmitButton buttonText='Login' pendingText='Logging In...' />
+          <SubmitButton buttonText={BUTTON} pendingText={BUTTON_PENDING} />
         </CardActions>
       </Card>
     </Box>

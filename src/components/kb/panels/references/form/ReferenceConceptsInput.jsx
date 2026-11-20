@@ -9,6 +9,8 @@ import { compareIgnoreCase } from './useReferenceForm'
 
 import CONFIG from '@/lib/config'
 
+const { LABEL, PLACEHOLDER } = CONFIG.PANELS.REFERENCES.FORM
+
 const ReferenceConceptsInput = ({
   handleConceptAdd,
   handleConceptDelete,
@@ -47,11 +49,11 @@ const ReferenceConceptsInput = ({
   const conceptsTextField = (
     <TextField
       fullWidth
-      label='Concepts'
+      label={LABEL.CONCEPTS}
       multiline
       onChange={handleConceptDelete}
       onClick={handleTextFieldClick}
-      placeholder='Add concepts using the search box below'
+      placeholder={PLACEHOLDER.CONCEPTS}
       slotProps={{
         input: {
           readOnly: true,

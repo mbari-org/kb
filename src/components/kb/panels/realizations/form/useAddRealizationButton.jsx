@@ -10,6 +10,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import { createError, createValidationError } from '@/lib/errors'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 import { EMPTY_REALIZATION } from '@/lib/model/realization'
 import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 
@@ -60,7 +61,7 @@ const useAddRealizationButton = () => {
       try {
         if (isDuplicateCheck(realization)) {
           updateModalData({ confirmCommit: false })
-          throw createValidationError('Realization already exists', {
+          throw createValidationError(ERROR_TEXT.MESSAGES.REALIZATION_EXISTS, {
             duplicateToConcept: realization?.toConcept,
             duplicateLinkName: realization?.linkName,
           })
@@ -71,8 +72,8 @@ const useAddRealizationButton = () => {
           closeModal(true)
         }, PROCESSING.SAVE)
       } catch (error) {
-        if (error.title === 'Validation Error') {
-          if (error.message === 'Realization already exists') {
+        if (error.title === ERROR_TEXT.TITLES.VALIDATION) {
+          if (error.message === ERROR_TEXT.MESSAGES.REALIZATION_EXISTS) {
             updateModalData({ alert: duplicateAddRealizationAlert() })
           }
           throw error

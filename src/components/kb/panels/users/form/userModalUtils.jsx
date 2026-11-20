@@ -11,6 +11,7 @@ import CONFIG from '@/lib/config'
 const { BUTTON, FIELDS } = CONFIG
 const { CANCEL, CLOSE, LOCK, SAVE, UNLOCK } = BUTTON
 const { AFFILIATION, EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, ROLE, USERNAME } = FIELDS.USER
+const { LABEL } = CONFIG.PANELS.USERS.FORM
 
 const EDITABLE = [AFFILIATION, EMAIL, FIRST_NAME, LAST_NAME, ROLE]
 const EDITABLE_ADD = [...EDITABLE, USERNAME]
@@ -228,12 +229,12 @@ export const createLockUserContent = () => {
     }
 
     const fields = [
-      { label: 'Username', value: user.username },
-      { label: 'Role', value: user.role },
-      { label: 'Affiliation', value: user.affiliation },
-      { label: 'First Name', value: user.firstName },
-      { label: 'Last Name', value: user.lastName },
-      { label: 'Email', value: user.email },
+      { label: LABEL.USERNAME, value: user.username },
+      { label: LABEL.ROLE, value: user.role },
+      { label: LABEL.AFFILIATION, value: user.affiliation },
+      { label: LABEL.FIRST_NAME, value: user.firstName },
+      { label: LABEL.LAST_NAME, value: user.lastName },
+      { label: LABEL.EMAIL, value: user.email },
     ]
 
     // If user is locked, we're unlocking them - show unlocked message

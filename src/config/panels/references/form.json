@@ -1,0 +1,13 @@
+{
+  "LABEL": {
+    "CITATION": "Citation",
+    "CONCEPTS": "Concepts",
+    "DOI": "DOI"
+  },
+  "PLACEHOLDER": {
+    "CONCEPTS": "Add concepts using the search box below"
+  },
+  "VALIDATION": {
+    "DOI_EXISTS": "DOI already exists"
+  }
+}

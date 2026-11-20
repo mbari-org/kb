@@ -72,11 +72,13 @@ const ChangeNameContent = () => {
   return (
     <Box>
       <ModalActionText text={MODALS.HIERARCHY.CHANGE_NAME.LABEL} />
-      {modalData?.isLoading && <ProcessingMsg message='Loading related data...' />}
+      {modalData?.isLoading && <ProcessingMsg message={CONFIG.UI.LOADING.RELATED_DATA} />}
       {!modalData?.isLoading && (
         <Box>
           <Stack direction='row' spacing={2} sx={{ alignItems: 'center', mt: 1, ml: 3 }}>
-            <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>To:</Typography>
+            <Typography sx={{ fontSize: '1.1em', transform: 'translateY(-0.375em)' }}>
+              {MODALS.HIERARCHY.CHANGE_NAME.TO}
+            </Typography>
             <TextField
               error={nameError}
               fullWidth

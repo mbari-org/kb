@@ -8,6 +8,7 @@ import authStore from '@/lib/local/store/authStore'
 import { oniGet } from '@/lib/services/oni/methods'
 import { createError } from '@/lib/errors'
 import { ROLES } from '@/lib/constants/roles.js'
+import CONFIG from '@/lib/config'
 
 const useProcessAuth = (setUser, { onSuccess } = {}) => {
   const handleInvalidAuth = useInvalidAuth(setUser)
@@ -17,7 +18,7 @@ const useProcessAuth = (setUser, { onSuccess } = {}) => {
     async (anAuth, oniUserCredentials) => {
       if (!anAuth?.token) {
         handleInvalidAuth()
-        return { error: createError('Authentication Error', 'Missing authentication token') }
+        return { error: createError(CONFIG.ERROR.AUTHENTICATION, CONFIG.STARTUP.LOGIN.ERROR.MISSING_TOKEN) }
       }
 
       try {
@@ -62,7 +63,12 @@ const useProcessAuth = (setUser, { onSuccess } = {}) => {
         return {
           error: error?.title
             ? error
-            : createError('Authentication Error', error.message || 'Authentication failed', {}, error),
+            : createError(
+                CONFIG.ERROR.AUTHENTICATION,
+                error.message || CONFIG.STARTUP.LOGIN.ERROR.AUTHENTICATION_FAILED,
+                {},
+                error
+              ),
         }
       }
     },

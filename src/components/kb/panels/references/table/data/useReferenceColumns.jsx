@@ -10,6 +10,10 @@ import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
 import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 import { SELECTED } from '@/lib/constants/selected.js'
 
+import CONFIG from '@/lib/config'
+
+const { CITATION, CONCEPTS, DOI } = CONFIG.PANELS.REFERENCES.COLUMNS
+
 const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
   const { filters } = use(ReferencesContext)
   const hasPendingDelete = useConceptHasPendingDelete(filters[SELECTED.SETTINGS.REFERENCES.FILTERS.CONCEPT])
@@ -43,7 +47,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
     {
       field: 'doi',
       headerClassName: 'bold-header',
-      headerName: 'DOI',
+      headerName: DOI,
       renderCell: params => (
         <Box
           sx={{
@@ -61,7 +65,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
       field: 'citation',
       flex: 0.4,
       headerClassName: 'bold-header',
-      headerName: 'Citation',
+      headerName: CITATION,
       renderCell: params => (
         <Box
           sx={{
@@ -77,7 +81,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
     {
       field: 'concepts',
       flex: 0.4,
-      headerName: 'Concepts',
+      headerName: CONCEPTS,
       headerClassName: 'bold-header',
       renderCell: params => (
         <Box

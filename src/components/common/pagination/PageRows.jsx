@@ -1,11 +1,17 @@
 import { Box, Typography } from '@mui/material'
 
-const PageRows = ({ count, limit, offset }) => (
-  <Box sx={{ flex: 1, textAlign: 'center' }}>
-    <Typography variant='body2'>
-      Row {offset + 1} - {Math.min(offset + limit, count)} of {count}
-    </Typography>
-  </Box>
-)
+import CONFIG from '@/lib/config'
+
+const PageRows = ({ count, limit, offset }) => {
+  const rows = CONFIG.UI.PAGINATION.ROWS.replace('{start}', offset + 1)
+    .replace('{end}', Math.min(offset + limit, count))
+    .replace('{count}', count)
+
+  return (
+    <Box sx={{ flex: 1, textAlign: 'center' }}>
+      <Typography variant='body2'>{rows}</Typography>
+    </Box>
+  )
+}
 
 export default PageRows

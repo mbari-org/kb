@@ -13,6 +13,10 @@ export const ERROR_TEXT = {
     500: 'Internal Server Error',
     UNKNOWN: 'Unknown Error',
   },
+  MESSAGES: {
+    REALIZATION_EXISTS: 'Realization already exists',
+    TEMPLATE_EXISTS: 'Template already exists',
+  },
   TITLES: {
     CONCEPT_LOADING: 'Concept Loading Error',
     VALIDATION: 'Validation Error',

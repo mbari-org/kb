@@ -1,5 +1,6 @@
 import aliases from '@/config/panels/concepts/aliases.json'
 import author from '@/config/panels/concepts/author.json'
+import exportConfig from '@/config/panels/concepts/export.json'
 import panel from '@/config/panels/concepts/panel.json'
 import rank from '@/config/panels/concepts/rank.json'
 import realizations from '@/config/panels/concepts/realizations.json'
@@ -22,6 +23,7 @@ export const CONCEPTS = {
     SAVE: BUTTON.SAVE,
     STAGED: BUTTON.STAGED,
   },
+  EXPORT: exportConfig,
   MODALS,
   PANEL: panel,
   RANK: rank,

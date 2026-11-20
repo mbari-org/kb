@@ -1,9 +1,11 @@
 import { Box } from '@mui/material'
 
+import CONFIG from '@/lib/config'
+
 const render = ({ error }) => {
   return (
     <Box role='alert'>
-      <p>Whoops:</p>
+      <p>{CONFIG.UI.ERROR.WHOOPS}</p>
       <pre style={{ color: 'red' }}>{error.message}</pre>
     </Box>
   )

@@ -14,9 +14,19 @@ import csvExport from '@/lib/csvExport'
 import CONFIG from '@/lib/config'
 import { humanTimestamp } from '@/lib/utils'
 
-const { PROCESSING } = CONFIG
+const { PANELS, PROCESSING } = CONFIG
 
-const dataHeaders = ['Username', 'Role', 'Affiliation', 'First Name', 'Last Name', 'Email', 'Last Updated']
+const { HEADERS, TITLE } = PANELS.USERS.EXPORT
+
+const dataHeaders = [
+  HEADERS.USERNAME,
+  HEADERS.ROLE,
+  HEADERS.AFFILIATION,
+  HEADERS.FIRST_NAME,
+  HEADERS.LAST_NAME,
+  HEADERS.EMAIL,
+  HEADERS.LAST_UPDATED,
+]
 
 const dataRows = users =>
   users.map(user => [
@@ -81,7 +91,7 @@ const useUsersExport = () => {
     onProgress,
     paginated: false,
     suggestName,
-    title: 'Knowledge Base Users',
+    title: TITLE,
     user,
   })
 }

@@ -1,10 +1,9 @@
 import ActionsAlert from './ActionsAlert'
 
+import CONFIG from '@/lib/config'
+
 const DuplicateAlert = () => (
-  <ActionsAlert
-    lines={['This realization already exists.', 'Please modify the values to create a unique realization.']}
-    severity='error'
-  />
+  <ActionsAlert lines={CONFIG.UI.ACTION_ALERT.DUPLICATE} severity='error' />
 )
 
 export default DuplicateAlert

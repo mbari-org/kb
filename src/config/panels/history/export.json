@@ -1,0 +1,15 @@
+{
+  "HEADERS": {
+    "ACTION": "Action",
+    "APPROVED": "Approved",
+    "CONCEPT": "Concept",
+    "CREATED": "Created",
+    "CREATOR": "Creator",
+    "FIELD": "Field",
+    "NEW_VALUE": "New Value",
+    "OLD_VALUE": "Old Value",
+    "PROCESSED": "Processed",
+    "PROCESSOR": "Processor"
+  },
+  "TITLE": "Knowledge Base History"
+}

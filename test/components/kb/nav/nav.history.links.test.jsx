@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from 'vitest'
 
 import NavHistoryLinks from '@/components/common/NavHistoryLinks'
 
+import CONFIG from '@/lib/config'
+
 vi.mock('@/components/common/NavHistoryButton', () => ({
   default: ({ disabled, label, onClick, onItemSelect }) => (
     <button
@@ -42,8 +44,8 @@ describe('NavHistoryLinks', () => {
 
     render(<NavHistoryLinks history={history} />)
 
-    await user.click(screen.getByRole('button', { name: 'previous' }))
-    await user.click(screen.getByRole('button', { name: 'next' }))
+    await user.click(screen.getByRole('button', { name: CONFIG.UI.NAV.PREVIOUS }))
+    await user.click(screen.getByRole('button', { name: CONFIG.UI.NAV.NEXT }))
 
     expect(history.back).toHaveBeenCalledTimes(1)
     expect(history.forward).toHaveBeenCalledTimes(1)

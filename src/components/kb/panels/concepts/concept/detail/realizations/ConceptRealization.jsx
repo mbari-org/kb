@@ -55,7 +55,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
     setModal(modal)
   }
 
-  const linkNameLabel = realization.linkName?.trim() || 'View Realization'
+  const linkNameLabel = realization.linkName?.trim() || CONFIG.PANELS.CONCEPTS.MODALS.REALIZATION.VIEW.FALLBACK_LABEL
   const toConceptLabel = realization.toConcept || ''
   const linkValueLabel = realization.linkValue || ''
   const [linkNameWidth = 20, toConceptWidth = 30, linkValueWidth = 50] = widths
@@ -82,7 +82,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
           }}
         >
           <Box
-            aria-label='View realization'
+            aria-label={CONFIG.PANELS.CONCEPTS.MODALS.REALIZATION.VIEW.ARIA_LABEL}
             component='button'
             onClick={handleViewRealization}
             sx={{

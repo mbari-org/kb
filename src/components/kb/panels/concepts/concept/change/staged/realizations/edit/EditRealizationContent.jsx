@@ -112,7 +112,7 @@ const EditRealizationContent = () => {
           />
           <TextField
             fullWidth
-            label='Filter by Link Name'
+            label={CONFIG.PANELS.REALIZATIONS.FORM.LABEL.FILTER_LINK_NAME}
             onChange={event => {
               const newValue = event.target.value
               setFilterLinkName(newValue)

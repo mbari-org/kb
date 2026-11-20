@@ -5,6 +5,7 @@ import Title from '@/components/common/factory/Title'
 import Actions from '@/components/common/factory/Actions'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
 import { createError, createValidationError } from '@/lib/errors'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 
 import { useUsersModalOperationsContext } from '@/contexts/panels/users/modal'
 import UsersContext from '@/contexts/panels/users/UsersContext'
@@ -46,7 +47,7 @@ const useAddUserButton = () => {
           closeModal()
         }, PROCESSING.SAVE)
       } catch (error) {
-        if (error.title === 'Validation Error') {
+        if (error.title === ERROR_TEXT.TITLES.VALIDATION) {
           throw error
         }
         throw createError(

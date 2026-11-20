@@ -101,14 +101,14 @@ const Whoops = ({ children }) => {
         <Box
           component='img'
           src={whoopsImage}
-          alt='Whoops!'
+          alt={CONFIG.WHOOPS.IMAGE_ALT}
           sx={{
             maxWidth: '350px',
             width: '50%',
           }}
         />
         <Typography variant='caption' sx={{ mb: 2.5, mt: 0.5, textAlign: 'center' }}>
-          Version: v{getVersion()} ({getCommitHash()})
+          {`${CONFIG.UI.VERSION.TITLE} v${getVersion()} (${getCommitHash()})`}
         </Typography>
         {error.info && (
           <Typography

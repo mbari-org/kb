@@ -8,8 +8,10 @@ import MediaSwiper from './MediaSwiper'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import { getMediaType } from '@/lib/model/media'
 import { MEDIA } from '@/lib/constants'
+import CONFIG from '@/lib/config'
 
 const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
+const { ALT, ICON_ALT } = CONFIG.UI.MEDIA
 
 const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
   const theme = useTheme()
@@ -43,7 +45,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
         return (
           <img
             key={mediaUrl}
-            alt='Concept Media Icon Display'
+            alt={ICON_ALT}
             onClick={() => setPreviewOn(false)}
             src={mediaUrl}
             style={{
@@ -59,7 +61,7 @@ const MediaDisplay = ({ previewOn, setPreviewOn, url }) => {
         return (
           <img
             key={mediaUrl}
-            alt='Concept Media Display'
+            alt={ALT}
             onClick={() => setPreviewOn(false)}
             src={mediaUrl}
             style={{

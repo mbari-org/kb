@@ -21,5 +21,6 @@
     "ANNOTATIONS": "Annotations Data",
     "KNOWLEDGE_BASE": "Knowledge Base Data"
   },
-  "NAME_PENDING_ADD": "Name collides with a pending add concept"
+  "NAME_PENDING_ADD": "Name collides with a pending add concept",
+  "TO": "To:"
 }

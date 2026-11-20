@@ -7,5 +7,12 @@ node scripts/version/tag.js
 # Note: version.js is gitignored and should not be committed
 # It will be regenerated during build/dev processes
 
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|jsx)$')
+
+if [ -n "$FILES" ]; then
+  echo "Linting staged files..."
+  npx eslint $FILES || exit 1
+fi
+
 exit 0
 

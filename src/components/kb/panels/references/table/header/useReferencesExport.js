@@ -15,17 +15,20 @@ import { CONCEPT } from '@/lib/constants'
 
 import CONFIG from '@/lib/config'
 
-const { PROCESSING } = CONFIG
+const { EXPORT, PANELS, PROCESSING } = CONFIG
 
-const dataHeaders = ['DOI', 'Citation', 'Concepts']
+const { COMMENT } = EXPORT
+const { HEADERS, TITLE } = PANELS.REFERENCES.EXPORT
+
+const dataHeaders = [HEADERS.DOI, HEADERS.CITATION, HEADERS.CONCEPTS]
 
 const dataRows = references => references.map(reference => [reference.doi, reference.citation, reference.concepts])
 
 const buildComments = ({ conceptExtent, byConceptName }) => {
   const comments = []
   if (byConceptName) {
-    comments.push(`Concept: ${byConceptName}`)
-    comments.push(`Extent: ${capitalize(conceptExtent)}`)
+    comments.push(COMMENT.CONCEPT.replace('{value}', byConceptName))
+    comments.push(COMMENT.EXTENT.replace('{value}', capitalize(conceptExtent)))
   }
   return comments
 }
@@ -82,7 +85,7 @@ const useReferencesExport = () => {
     onProgress,
     paginated: false,
     suggestName,
-    title: 'Knowledge Base References',
+    title: TITLE,
     user,
   })
 }

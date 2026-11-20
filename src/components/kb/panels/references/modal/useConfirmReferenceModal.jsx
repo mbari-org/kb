@@ -5,6 +5,7 @@ import Actions from '@/components/common/factory/Actions'
 import ConfirmReferencesContent from './ConfirmReferenceContent'
 
 import { createError } from '@/lib/errors'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
 import ReferencesContext from '@/contexts/panels/references/ReferencesContext'
@@ -26,7 +27,7 @@ const useConfirmReferenceModal = () => {
           closeModal()
         }, PROCESSING.UPDATE)
       } catch (error) {
-        if (error.title === 'Validation Error') {
+        if (error.title === ERROR_TEXT.TITLES.VALIDATION) {
           throw error
         }
         throw createError('Reference Update Error', 'Failed to update reference', { referenceId: reference?.id }, error)
@@ -67,7 +68,7 @@ const useConfirmReferenceModal = () => {
         return <ConfirmReferencesContent reference={updated} original={orig} />
       }
 
-      const TitleView = () => <Title title='Confirm Reference Changes' />
+      const TitleView = () => <Title title={CONFIG.PANELS.REFERENCES.MODALS.CONFIRM.TITLE} />
 
       createModal({
         actionsComponent: ActionView,

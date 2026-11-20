@@ -74,7 +74,11 @@ const ConfigForm = ({ configIsDirty, setConfigIsDirty }) => {
           <SubmitError errorText={submitError || (!isFormDirty ? config?.error : '') || ''} />
         </CardContent>
         <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-          <SubmitButton buttonText='Set' disabled={!isButtonEnabled} pendingText='Setting...' />
+          <SubmitButton
+            buttonText={CONFIG_SERVICE.BUTTON}
+            disabled={!isButtonEnabled}
+            pendingText={CONFIG_SERVICE.BUTTON_PENDING}
+          />
         </CardActions>
       </Card>
     </Box>

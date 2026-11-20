@@ -50,10 +50,10 @@ describe('NavBar history integration', () => {
 
     expect(screen.getByTestId('current-panel')).toHaveTextContent(panelName('HISTORY'))
 
-    await user.click(screen.getByRole('button', { name: 'previous' }))
+    await user.click(screen.getByRole('button', { name: CONFIG.UI.NAV.PREVIOUS }))
     expect(screen.getByTestId('current-panel')).toHaveTextContent(panelName('TEMPLATES'))
 
-    await user.click(screen.getByRole('button', { name: 'next' }))
+    await user.click(screen.getByRole('button', { name: CONFIG.UI.NAV.NEXT }))
     expect(screen.getByTestId('current-panel')).toHaveTextContent(panelName('HISTORY'))
   })
 })

@@ -12,8 +12,9 @@ import CONFIG from '@/lib/config'
 
 import { humanTimestamp } from '@/lib/utils'
 
-const { CHOICE, FIELDS } = CONFIG
+const { CHOICE, FIELDS, PANELS } = CONFIG
 const { AFFILIATION, EMAIL, FIRST_NAME, LAST_NAME, LOCKED, LAST_UPDATED, ROLE, USERNAME } = FIELDS.USER
+const { COLUMNS: COLUMN } = PANELS.USERS
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const lockTooltip = locked =>
@@ -51,14 +52,14 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
     },
     {
       field: USERNAME,
-      headerName: 'Username',
+      headerName: COLUMN.USERNAME,
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
       field: ROLE,
-      headerName: 'Role',
+      headerName: COLUMN.ROLE,
       width: 130,
       type: 'singleSelect',
       valueOptions: Object.values(ROLES),
@@ -67,42 +68,42 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
     },
     {
       field: AFFILIATION,
-      headerName: 'Affiliation',
+      headerName: COLUMN.AFFILIATION,
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
       field: FIRST_NAME,
-      headerName: 'First Name',
+      headerName: COLUMN.FIRST_NAME,
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
       field: LAST_NAME,
-      headerName: 'Last Name',
+      headerName: COLUMN.LAST_NAME,
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
       field: EMAIL,
-      headerName: 'Email',
+      headerName: COLUMN.EMAIL,
       width: 200,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
       field: LOCKED,
-      headerName: 'Locked',
+      headerName: COLUMN.LOCKED,
       width: 100,
       headerClassName: 'bold-header',
       valueGetter: value => (value ? CHOICE.YES : CHOICE.NO),
     },
     {
       field: LAST_UPDATED,
-      headerName: 'Last Update',
+      headerName: COLUMN.LAST_UPDATE,
       width: 250,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),

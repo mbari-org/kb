@@ -15,6 +15,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
 const { TEMPLATES } = SELECTED.SETTINGS
+const { COLUMNS } = CONFIG.PANELS.TEMPLATES
 
 const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
   const { filters, getPendingTemplateAction, updateFilters } = use(TemplatesContext)
@@ -53,7 +54,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
     {
       field: 'concept',
       headerClassName: 'bold-header',
-      headerName: 'Concept',
+      headerName: COLUMNS.CONCEPT,
       renderCell: TemplateCell({
         filterKey: TEMPLATES.FILTERS.CONCEPT,
         updateFilters,
@@ -89,7 +90,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
     {
       field: 'lastUpdated',
       headerClassName: 'bold-header',
-      headerName: 'Last Updated',
+      headerName: COLUMNS.LAST_UPDATED,
       valueFormatter: value => humanTimestamp(value),
       width: 165,
     },

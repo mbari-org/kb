@@ -5,6 +5,7 @@ import RealizationTemplate from './RealizationTemplate'
 import CONFIG from '@/lib/config'
 
 const { CONCEPT } = CONFIG
+const { TEMPLATES } = CONFIG.PANELS.CONCEPTS.REALIZATIONS
 const HEADER_HEIGHT = 42
 
 const RealizationTemplatesList = ({ isLoading = false, maxHeight = 180, onTemplateSelect, templates = [] }) => {
@@ -13,7 +14,7 @@ const RealizationTemplatesList = ({ isLoading = false, maxHeight = 180, onTempla
   return (
     <Box sx={{ mb: 1 }}>
       <Box sx={{ height: HEADER_HEIGHT }}>
-        <ConceptSectionTitle title='Available Templates' sx={{ height: '100%' }}>
+        <ConceptSectionTitle title={TEMPLATES.TITLE} sx={{ height: '100%' }}>
           <Box sx={{ ml: 2, flex: 1 }} />
           {hasTemplates && (
             <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
@@ -34,7 +35,7 @@ const RealizationTemplatesList = ({ isLoading = false, maxHeight = 180, onTempla
       <Box sx={{ height: maxHeight, mt: 1, overflowY: 'auto', pr: 1 }}>
         {isLoading && (
           <Typography variant='body2' sx={{ color: 'text.secondary', py: 1 }}>
-            Loading templates...
+            {TEMPLATES.LOADING}
           </Typography>
         )}
         {!isLoading && hasTemplates && (

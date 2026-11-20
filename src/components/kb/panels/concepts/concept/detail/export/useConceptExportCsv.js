@@ -10,10 +10,13 @@ import { getSuggestedFileName } from './conceptExport'
 import useConceptExportProgress from './useConceptExportProgress'
 
 import { CONCEPT } from '@/lib/constants'
+import CONFIG from '@/lib/config'
 import csvExport from '@/lib/csvExport'
 import { capitalize } from '@/lib/utils'
 
-const dataHeaders = [CONCEPT.FIELD.ID, CONCEPT.FIELD.PARENT_ID, 'names']
+const { CSV } = CONFIG.PANELS.CONCEPTS.EXPORT
+
+const dataHeaders = [CONCEPT.FIELD.ID, CONCEPT.FIELD.PARENT_ID, CSV.HEADER_NAMES]
 
 const conceptNames = (name, alternateNames) => {
   return alternateNames.length > 0
@@ -72,7 +75,7 @@ const useConceptExportCsv = conceptExtent => {
     onProgress,
     paginated: false,
     suggestName: () => getSuggestedFileName({ concept, conceptExtent, extension: 'csv' }),
-    title: `Knowledge Base Concept: ${concept.name}`,
+    title: CSV.TITLE.replace('{name}', concept.name),
     user,
   })
 }

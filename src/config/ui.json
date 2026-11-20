@@ -1,0 +1,89 @@
+{
+  "ACTION_ALERT": {
+    "DELETE": [
+      "Deleting a concept is final.",
+      "Please confirm you want to delete this concept."
+    ],
+    "DUPLICATE": [
+      "This realization already exists.",
+      "Please modify the values to create a unique realization."
+    ],
+    "PENDING": {
+      "ACCEPT": [
+        "Pending edit approval is final.",
+        "Please confirm you want to approve the indicated pending edits."
+      ],
+      "REJECT": [
+        "Pending edit rejection is final.",
+        "Please confirm you want to reject the indicated pending edits."
+      ]
+    }
+  },
+  "APP_INFO": {
+    "LABEL": {
+      "CONFIG": "Config",
+      "ROLE": "Role",
+      "USER": "User"
+    }
+  },
+  "CONCEPT_SCROLL": {
+    "ARIA_LABEL": "scroll to concept",
+    "TOOLTIP": "Scroll to Concept"
+  },
+  "ERROR": {
+    "DETAILS": "Details",
+    "TITLE": "Processing Error",
+    "OK": "OK",
+    "WHOOPS": "Whoops:"
+  },
+  "EXTENT": {
+    "LABEL": "Extent:"
+  },
+  "ICON": {
+    "CONCEPT_HIERARCHY": "Edit Concept Hierarchy",
+    "INFO": "Info",
+    "INSPECT": "Inspect",
+    "LOGOUT": "Logout",
+    "REFRESH_APP": "Refresh App"
+  },
+  "LOADING": {
+    "CONCEPT": "Concept: Loading...",
+    "RELATED_DATA": "Loading related data..."
+  },
+  "MEDIA": {
+    "ALT": "Concept Media Display",
+    "ICON_ALT": "Concept Media Icon Display"
+  },
+  "MODAL": {
+    "CLOSE": "close"
+  },
+  "NAV": {
+    "LOGOUT": "Logout",
+    "NEXT": "next",
+    "PREVIOUS": "previous",
+    "REFRESH_DATA": "Refresh Data"
+  },
+  "PAGINATION": {
+    "OF": "of {total}",
+    "PAGE": "Page",
+    "ROWS": "Row {start} - {end} of {count}",
+    "ROWS_PER_PAGE": "Rows per page:"
+  },
+  "STAMP": {
+    "TOOLTIP": "Approve/Reject"
+  },
+  "TOGGLE": {
+    "HISTORY_TYPE": "history type",
+    "VIEW": "text alignment"
+  },
+  "VERSION": {
+    "BRANCH": "Branch:",
+    "BUILD": "Build:",
+    "COMMIT": "Commit:",
+    "DATE": "Date:",
+    "DIRTY": "Working directory has uncommitted changes",
+    "MESSAGE": "Message:",
+    "STATUS": "Status:",
+    "TITLE": "Version:"
+  }
+}

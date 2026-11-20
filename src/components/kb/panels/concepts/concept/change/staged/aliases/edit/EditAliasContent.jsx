@@ -16,6 +16,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
 
 const { ALIAS: ALIAS_MODAL } = CONFIG.PANELS.CONCEPTS.MODALS
+const { AUTHOR, NAME, TYPE } = CONFIG.PANELS.CONCEPTS.ALIASES
 
 export const ADD_ALIAS_FORM_ID = 'add-alias-form'
 
@@ -64,7 +65,7 @@ const EditAliasContent = () => {
           error={nameError}
           fullWidth
           helperText={nameError ? nameHelperText : ' '}
-          label='Name'
+          label={NAME}
           name='name'
           onChange={handleChange('name')}
           required
@@ -83,7 +84,7 @@ const EditAliasContent = () => {
         <FormControl {...inputStyle} sx={{ flex: 1 }}>
           <TextInput
             fullWidth
-            label='Author'
+            label={AUTHOR}
             name='author'
             onChange={handleChange('author')}
             size='small'
@@ -91,10 +92,10 @@ const EditAliasContent = () => {
           />
         </FormControl>
         <FormControl {...inputStyle} sx={{ width: 130 }}>
-          <InputLabel id={`${formAlias.name}-name-type-label`}>Type</InputLabel>
+          <InputLabel id={`${formAlias.name}-name-type-label`}>{TYPE}</InputLabel>
           <Select
             displayEmpty
-            label='Type'
+            label={TYPE}
             name='nameType'
             labelId={`${formAlias.name}-name-type-label`}
             onChange={handleChange('nameType')}

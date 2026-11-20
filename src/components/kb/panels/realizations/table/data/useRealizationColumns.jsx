@@ -17,6 +17,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
+const { COLUMNS } = CONFIG.PANELS.REALIZATIONS
 
 const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal }) => {
   const { filters, getPendingRealizationItem, updateFilters } = use(RealizationsContext)
@@ -42,7 +43,7 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
                 <StampIcon
                   onClick={() => openPendingItem({ conceptName: pendingItem.concept, item: pendingItem })}
                   sx={{ mr: 1 }}
-                  tooltip='Approve/Reject'
+                  tooltip={CONFIG.UI.STAMP.TOOLTIP}
                 />
               </Box>
             )
@@ -74,7 +75,7 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
       {
         field: 'concept',
         headerClassName: 'bold-header',
-        headerName: 'Concept',
+        headerName: COLUMNS.CONCEPT,
         renderCell: TemplateCell({
           filterKey: REALIZATIONS.FILTERS.CONCEPT,
           updateFilters,
@@ -106,7 +107,7 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
       {
         field: 'lastUpdated',
         headerClassName: 'bold-header',
-        headerName: 'Last Updated',
+        headerName: COLUMNS.LAST_UPDATED,
         valueFormatter: value => humanTimestamp(value),
         width: 165,
       },

@@ -23,6 +23,7 @@
       "APPROVED": "Display all Approved History",
       "CONCEPT": "Display all History for selected Concept",
       "PENDING": "Display all Pending History"
-    }
+    },
+    "FILTER_CONCEPT": "Filter History to this Concept"
   }
 }

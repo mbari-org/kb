@@ -58,7 +58,7 @@ const TemplatesTableHeaderLeft = () => {
         checked={byAvailable}
         disabled={switchDisabled}
         switchFn={switchFn}
-        switchLabel='Available'
+        switchLabel={CONFIG.PANELS.CONCEPTS.TEMPLATES.SWITCH.LABEL}
         switchTooltip={<TemplatesConceptAvailableTooltip />}
       />
     </Box>

@@ -12,7 +12,7 @@ const {
   TOOLTIP: { EXTENT: EXTENT_TOOLTIP, CHILDREN: CHILDREN_TOOLTIP, DESCENDANTS: DESCENDANTS_TOOLTIP },
 } = CONFIG.CONCEPT.EXTENT
 
-const ConceptExtent = ({ initialValue = CONCEPT_VALUE, label = 'Extent:', onChange }) => {
+const ConceptExtent = ({ initialValue = CONCEPT_VALUE, label = CONFIG.UI.EXTENT.LABEL, onChange }) => {
   const [conceptExtent, setConceptExtent] = useState(initialValue)
   const theme = useTheme()
 

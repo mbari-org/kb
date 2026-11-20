@@ -7,7 +7,11 @@ import MediaBaseURLDetail from '@/components/kb/nav/appInfo/mediaBaseURL/MediaBa
 import PhylogenyRootDetail from '@/components/kb/nav/appInfo/phylogenyRoot/PhylogenyRootDetail'
 import UserContext from '@/contexts/user/UserContext'
 import ConfigContext from '@/contexts/config/ConfigContext'
+import CONFIG from '@/lib/config'
 import { getVersion } from '@/version'
+
+const { CONFIG: CONFIG_LABEL, ROLE, USER } = CONFIG.UI.APP_INFO.LABEL
+const { VERSION } = CONFIG.UI
 
 const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName, onEditComplete }) => {
   const { user } = use(UserContext)
@@ -18,9 +22,9 @@ const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName, onEditComple
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ p: 1 }}>
-        <AppInfoDetail label='User' value={user.name} />
-        <AppInfoDetail label='Role' value={user.role} />
-        <AppInfoDetail label='Config' value={config?.url || ''} />
+        <AppInfoDetail label={USER} value={user.name} />
+        <AppInfoDetail label={ROLE} value={user.role} />
+        <AppInfoDetail label={CONFIG_LABEL} value={config?.url || ''} />
         <PhylogenyRootDetail
           conceptNames={conceptNames}
           getConceptPrimaryName={getConceptPrimaryName}
@@ -30,7 +34,7 @@ const AppInfoContent = ({ conceptNames = [], getConceptPrimaryName, onEditComple
         <DsgBaseURLDetail onEditComplete={onEditComplete} />
       </Box>
       <Box sx={{ alignSelf: 'flex-end', mt: 2, pb: 2, textAlign: 'right' }}>
-        <Typography component='span'>Version: </Typography>
+        <Typography component='span'>{VERSION.TITLE}{' '}</Typography>
         <Typography component='span' sx={{ fontWeight: 'bold' }}>
           {version}
         </Typography>

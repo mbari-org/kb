@@ -16,7 +16,7 @@ const HistoryHeaderToggle = ({ onChange }) => {
 
   return (
     <ToggleButtonGroup
-      aria-label='history type'
+      aria-label={CONFIG.UI.TOGGLE.HISTORY_TYPE}
       exclusive
       onChange={onChange}
       size='small'

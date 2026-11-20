@@ -22,6 +22,7 @@ import CONFIG from '@/lib/config'
 import { ACTION } from '@/lib/constants'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
+const MEDIA_FIELDS = MEDIA.FIELDS
 
 export const EDIT_MEDIA_FORM_ID = 'edit-media-form'
 
@@ -121,7 +122,7 @@ const EditMediaContent = () => {
   const modalActionText = actionText === ACTION.EDIT ? MEDIA.EDIT.LABEL : MEDIA.ADD.LABEL
 
   const creditError = modifiedFields.credit && formMediaItem.credit.trim() === ''
-  const creditHelperText = formMediaItem.credit.trim() === '' ? 'Credit cannot be empty' : ''
+  const creditHelperText = formMediaItem.credit.trim() === '' ? MEDIA_FIELDS.VALIDATION.CREDIT_EMPTY : ''
 
   return (
     <Box component='form' id={EDIT_MEDIA_FORM_ID} onSubmit={stageChange}>
@@ -138,7 +139,7 @@ const EditMediaContent = () => {
         <TextField
           error={creditError}
           helperText={modifiedFields.credit ? creditHelperText : ''}
-          label='Credit'
+          label={MEDIA_FIELDS.LABEL.CREDIT}
           name='credit'
           onChange={handleChange}
           required
@@ -146,7 +147,12 @@ const EditMediaContent = () => {
         />
       </FormControl>
       <FormControl fullWidth margin='normal'>
-        <TextField label='Caption' name='caption' onChange={handleChange} value={formMediaItem.caption} />
+        <TextField
+          label={MEDIA_FIELDS.LABEL.CAPTION}
+          name='caption'
+          onChange={handleChange}
+          value={formMediaItem.caption}
+        />
       </FormControl>
       <EditMediaPrimary
         action={action}

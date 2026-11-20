@@ -14,10 +14,10 @@ const { REFERENCES, TEMPLATES, REALIZATIONS } = CONFIG.PANELS.CONCEPTS
 
 const clickReferencesInspect = async user => {
   await waitFor(() => {
-    expect(screen.getAllByRole('img', { name: 'Inspect' }).length).toBeGreaterThan(0)
+    expect(screen.getAllByRole('img', { name: CONFIG.UI.ICON.INSPECT }).length).toBeGreaterThan(0)
   })
 
-  const inspectIcons = screen.getAllByRole('img', { name: 'Inspect' })
+  const inspectIcons = screen.getAllByRole('img', { name: CONFIG.UI.ICON.INSPECT })
   await user.click(inspectIcons[0])
 }
 
@@ -38,7 +38,7 @@ describe('Concept panel references', () => {
 
     for (const name of [REFERENCES.LABEL, TEMPLATES.LABEL, REALIZATIONS.LABEL]) {
       const header = within(screen.getByRole('heading', { name, level: 6 }).parentElement)
-      const icon = header.getByRole('img', { name: 'Inspect' }).parentElement
+      const icon = header.getByRole('img', { name: CONFIG.UI.ICON.INSPECT }).parentElement
       const hoverColors = Array.from(document.styleSheets).flatMap(sheet =>
         Array.from(sheet.cssRules)
           .filter(rule => rule.selectorText?.endsWith(':hover') && icon.matches(rule.selectorText.replace(':hover', '')))
@@ -66,7 +66,7 @@ describe('Concept panel references', () => {
     const realizationAdd = CONFIG.PANELS.CONCEPTS.MODALS.REALIZATION.ADD.TOOLTIP
 
     for (const header of [references, templates, realizations]) {
-      expect(header.getByRole('img', { name: 'Inspect' })).toBeInTheDocument()
+      expect(header.getByRole('img', { name: CONFIG.UI.ICON.INSPECT })).toBeInTheDocument()
     }
     expect(templates.queryByLabelText(templateAdd)).not.toBeInTheDocument()
     expect(realizations.queryByLabelText(realizationAdd)).not.toBeInTheDocument()
@@ -74,7 +74,7 @@ describe('Concept panel references', () => {
     await enterEditMode(user, screen)
 
     for (const header of [references, templates, realizations]) {
-      expect(header.queryByRole('img', { name: 'Inspect' })).not.toBeInTheDocument()
+      expect(header.queryByRole('img', { name: CONFIG.UI.ICON.INSPECT })).not.toBeInTheDocument()
     }
     expect(templates.getByLabelText(templateAdd)).toBeInTheDocument()
     expect(realizations.getByLabelText(realizationAdd)).toBeInTheDocument()
@@ -83,7 +83,7 @@ describe('Concept panel references', () => {
     await user.click(screen.getByRole('button', { name: CONFIG.PANELS.CONCEPTS.BUTTON.CANCEL }))
 
     for (const header of [references, templates, realizations]) {
-      expect(header.getByRole('img', { name: 'Inspect' })).toBeInTheDocument()
+      expect(header.getByRole('img', { name: CONFIG.UI.ICON.INSPECT })).toBeInTheDocument()
     }
     expect(templates.queryByLabelText(templateAdd)).not.toBeInTheDocument()
     expect(realizations.queryByLabelText(realizationAdd)).not.toBeInTheDocument()

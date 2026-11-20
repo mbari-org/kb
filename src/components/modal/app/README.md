@@ -51,6 +51,5 @@ const MyComponent = () => {
 
 ## Current Usage
 
-- `useProcessError` - Global error handling
 - `useBrowserBack` - Logout confirmation on browser back button
 - `KbLoading` - Processing state indicator (reads processing flag only)

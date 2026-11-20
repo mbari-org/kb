@@ -4,6 +4,7 @@ import PanelAddButton from '@/components/common/panel/PanelAddButton'
 import Actions from '@/components/common/factory/Actions'
 import Title from '@/components/common/factory/Title'
 import { createError, createValidationError } from '@/lib/errors'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 
 import { useReferencesModalOperationsContext, useReferencesModalDataContext } from '@/contexts/panels/references/modal'
@@ -60,7 +61,7 @@ const useAddReferenceButton = () => {
           closeModal()
         }, PROCESSING.SAVE)
       } catch (error) {
-        if (error.title === 'Validation Error') {
+        if (error.title === ERROR_TEXT.TITLES.VALIDATION) {
           throw error
         }
         throw createError(

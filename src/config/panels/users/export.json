@@ -1,0 +1,12 @@
+{
+  "HEADERS": {
+    "AFFILIATION": "Affiliation",
+    "EMAIL": "Email",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "LAST_UPDATED": "Last Updated",
+    "ROLE": "Role",
+    "USERNAME": "Username"
+  },
+  "TITLE": "Knowledge Base Users"
+}

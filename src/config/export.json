@@ -1,4 +1,15 @@
 {
+  "COMMENT": {
+    "CONCEPT": "Concept: {value}",
+    "EXTENT": "Extent: {value}",
+    "LINK_NAME": "Link Name: {value}",
+    "LINK_VALUE": "Link Value: {value}",
+    "TO_CONCEPT": "To Concept: {value}",
+    "TYPE": "Type: {value}"
+  },
+  "COMPLETE": {
+    "EXPORTED_AS": "Exported as {file}."
+  },
   "CSV": {
     "FILE_TYPE": "CSV Files",
     "FILE_EXTENSION": ".csv",
@@ -14,7 +25,12 @@
   "DISMISS": "OK",
   "DONE": "File export complete",
   "JSON": {
-    "ALL": "All data"
+    "ALL": "All data",
+    "FILE_TYPE": "JSON Files"
+  },
+  "MESSAGE": {
+    "FORMATTING_DATA": "Formatting concept data ...",
+    "LOADING_DESCENDANTS": "Loading concept descendants ..."
   },
   "TOTAL": "Total"
 }

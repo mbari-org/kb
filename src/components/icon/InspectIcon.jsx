@@ -2,10 +2,11 @@ import { Box } from '@mui/material'
 
 import ActionIcon from './ActionIcon'
 import inspectPng from '@/assets/eye-32.png'
+import CONFIG from '@/lib/config'
 
 const InspectImg = ({ size }) => (
   <Box
-    aria-label='Inspect'
+    aria-label={CONFIG.UI.ICON.INSPECT}
     component='span'
     role='img'
     sx={{

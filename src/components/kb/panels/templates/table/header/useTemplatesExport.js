@@ -20,7 +20,11 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
-const { PROCESSING } = CONFIG
+const { EXPORT, PANELS, PROCESSING } = CONFIG
+
+const { COMMENT } = EXPORT
+const { EXPORT_TYPE } = PANELS.TEMPLATES.PANEL
+const { HEADERS, TITLE } = PANELS.TEMPLATES.EXPORT
 
 const { TEMPLATES } = SELECTED.SETTINGS
 const { FILTERS } = TEMPLATES
@@ -30,26 +34,34 @@ const EXPORT_PAGE_SIZE = PAGINATION.TEMPLATES.EXPORT_PAGE_SIZE
 const buildComments = data => {
   const { byAvailable, filterConcept, filterToConcept, linkName, linkValue } = data
 
-  const comments = [`Type: ${byAvailable ? 'Available' : 'Explicit'}`]
+  const type = byAvailable ? EXPORT_TYPE.AVAILABLE : EXPORT_TYPE.EXPLICIT
+  const comments = [COMMENT.TYPE.replace('{value}', type)]
+  const commentFor = (template, value) => value && comments.push(template.replace('{value}', value))
 
   if (!filterConcept && !filterToConcept && !linkName && !linkValue) {
     return comments
   }
 
   if (filterConcept && !filterToConcept && !linkName && !linkValue) {
-    comments.push(`Concept: ${filterConcept}`)
+    commentFor(COMMENT.CONCEPT, filterConcept)
     return comments
   }
 
-  filterConcept && comments.push(`Concept: ${filterConcept}`)
-  linkName && comments.push(`Link Name: ${linkName}`)
-  filterToConcept && comments.push(`To Concept: ${filterToConcept}`)
-  linkValue && comments.push(`Link Value: ${linkValue}`)
+  commentFor(COMMENT.CONCEPT, filterConcept)
+  commentFor(COMMENT.LINK_NAME, linkName)
+  commentFor(COMMENT.TO_CONCEPT, filterToConcept)
+  commentFor(COMMENT.LINK_VALUE, linkValue)
 
   return comments
 }
 
-const dataHeaders = ['Concept', 'Link Name', 'To Concept', 'Link Value', 'Last Updated']
+const dataHeaders = [
+  HEADERS.CONCEPT,
+  HEADERS.LINK_NAME,
+  HEADERS.TO_CONCEPT,
+  HEADERS.LINK_VALUE,
+  HEADERS.LAST_UPDATED,
+]
 
 const dataRows = templates =>
   templates.map(template => [
@@ -198,7 +210,7 @@ const useTemplatesExport = () => {
     onProgress,
     paginated,
     suggestName,
-    title: 'Knowledge Base Templates Export',
+    title: TITLE,
     user,
   })
 }

@@ -4,6 +4,10 @@ import { Box, TextField } from '@mui/material'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import useDebouncedField from '@/lib/hooks/useDebouncedField'
 
+import CONFIG from '@/lib/config'
+
+const { LABEL, VALIDATION } = CONFIG.PANELS.REFERENCES.FORM
+
 const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
   const { isDoiUnique } = use(PanelDataContext)
 
@@ -15,8 +19,8 @@ const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
       <TextField
         error={!isDoiUnique(doiValue, reference.id)}
         fullWidth
-        helperText={!isDoiUnique(doiValue, reference.id) ? 'DOI already exists' : ''}
-        label='DOI'
+        helperText={!isDoiUnique(doiValue, reference.id) ? VALIDATION.DOI_EXISTS : ''}
+        label={LABEL.DOI}
         onChange={handleDoiChange}
         required
         value={doiValue}
@@ -24,7 +28,7 @@ const ReferenceTextInputs = ({ handleFieldChange, reference }) => {
 
       <TextField
         fullWidth
-        label='Citation'
+        label={LABEL.CITATION}
         maxRows={10}
         minRows={3}
         multiline

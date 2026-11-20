@@ -7,6 +7,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import RealizationTitle from '@/components/kb/panels/realizations/form/RealizationTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError, createValidationError } from '@/lib/errors'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 
 import {
   createHandlers,
@@ -60,7 +61,7 @@ const useEditRealizationButton = () => {
         }
         if (isDuplicateRealization(getConceptRealizations(original.concept) ?? [], realization, original.id)) {
           updateModalData({ confirmCommit: false })
-          throw createValidationError('Realization already exists', {
+          throw createValidationError(ERROR_TEXT.MESSAGES.REALIZATION_EXISTS, {
             realizationId: realization?.id,
             duplicateToConcept: realization?.toConcept,
             duplicateLinkName: realization?.linkName,
@@ -72,8 +73,8 @@ const useEditRealizationButton = () => {
           closeModal(true)
         }, PROCESSING.UPDATE)
       } catch (error) {
-        if (error.title === 'Validation Error') {
-          if (error.message === 'Realization already exists') {
+        if (error.title === ERROR_TEXT.TITLES.VALIDATION) {
+          if (error.message === ERROR_TEXT.MESSAGES.REALIZATION_EXISTS) {
             updateModalData({ alert: duplicateRealizationAlert() })
           }
           throw error

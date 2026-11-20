@@ -8,6 +8,8 @@ import useConceptExportProgress from './useConceptExportProgress'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 
+import CONFIG from '@/lib/config'
+
 const getJsonData = async ({
   conceptExtent,
   includeData,
@@ -15,7 +17,7 @@ const getJsonData = async ({
   onProgress,
 
 }) => {
-  onProgress?.('Formatting concept data ...')
+  onProgress?.(CONFIG.EXPORT.MESSAGE.FORMATTING_DATA)
   const taxonomyData = await getTaxonomyData(conceptExtent, includeData)
   return JSON.stringify(taxonomyData, null, 2) + '\n'
 }
@@ -26,7 +28,7 @@ const dataOutput = async fileName => {
       suggestedName: fileName,
       types: [
         {
-          description: 'JSON Files',
+          description: CONFIG.EXPORT.JSON.FILE_TYPE,
           accept: { 'application/json': ['.json'] },
         },
       ],

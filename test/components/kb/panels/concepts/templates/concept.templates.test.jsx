@@ -5,15 +5,16 @@ import userEvent from '@testing-library/user-event'
 import Concepts from '@/components/kb/panels/Concepts'
 import { GUARDED_ACTION } from '@/lib/constants/guardedAction'
 import { SELECTED } from '@/lib/constants/selected.js'
+import CONFIG from '@/lib/config'
 
 import { ConceptPanelTestWrapper } from '../concept.panel.test.wrapper'
 
 const clickTemplatesInspect = async user => {
   await waitFor(() => {
-    expect(screen.getAllByRole('img', { name: 'Inspect' }).length).toBeGreaterThan(1)
+    expect(screen.getAllByRole('img', { name: CONFIG.UI.ICON.INSPECT }).length).toBeGreaterThan(1)
   })
 
-  const inspectIcons = screen.getAllByRole('img', { name: 'Inspect' })
+  const inspectIcons = screen.getAllByRole('img', { name: CONFIG.UI.ICON.INSPECT })
   await user.click(inspectIcons[1])
 }
 

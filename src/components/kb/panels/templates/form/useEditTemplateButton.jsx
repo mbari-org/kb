@@ -6,6 +6,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TemplateTitle from '@/components/kb/panels/templates/form/TemplateTitle'
 import Actions from '@/components/common/factory/Actions'
 import { createError, createValidationError } from '@/lib/errors'
+import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 
 import {
   createHandlers,
@@ -55,7 +56,7 @@ const useEditTemplateButton = () => {
         // Duplicate check (exclude the original template by id)
         if (isDuplicateTemplate(allTemplates, template, original.id)) {
           updateModalData({ confirmCommit: false })
-          throw createValidationError('Template already exists', {
+          throw createValidationError(ERROR_TEXT.MESSAGES.TEMPLATE_EXISTS, {
             templateId: template?.id,
             duplicateToConcept: template?.toConcept,
             duplicateLinkName: template?.linkName,
@@ -67,8 +68,8 @@ const useEditTemplateButton = () => {
           closeModal()
         }, PROCESSING.UPDATE)
       } catch (error) {
-        if (error.title === 'Validation Error') {
-          if (error.message === 'Template already exists') {
+        if (error.title === ERROR_TEXT.TITLES.VALIDATION) {
+          if (error.message === ERROR_TEXT.MESSAGES.TEMPLATE_EXISTS) {
             updateModalData({ alert: duplicateTemplateAlert() })
           }
           throw error

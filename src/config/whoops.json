@@ -5,6 +5,7 @@
     "LOGOUT": "Logout",
     "RESET": "Reset"
   },
+  "IMAGE_ALT": "Whoops!",
   "MESSAGE": {
     "COPY": "(to send to app developers)",
     "ERROR": "An unexpected error occurred. 😣 To minimize the risk of corrupting data, we won't proceed.",

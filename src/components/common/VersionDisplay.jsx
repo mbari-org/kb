@@ -79,7 +79,7 @@ const VersionDisplay = ({ color = 'grey.300', display = 'text', variant = 'capti
               },
             }}
           >
-            <Typography variant={variant}>v{version}</Typography>
+            <Typography variant={variant}>{`v${version}`}</Typography>
             {IS_KB_DEV && (
               <IconButton
                 className='refresh-button'

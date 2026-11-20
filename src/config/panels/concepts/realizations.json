@@ -2,5 +2,9 @@
   "LABEL": "Realizations",
   "VIEW": {
     "TOOLTIP": "View Realizations for this Concept"
+  },
+  "TEMPLATES": {
+    "LOADING": "Loading templates...",
+    "TITLE": "Available Templates"
   }
 }

@@ -1,11 +1,30 @@
 {
   "CONFIG_SERVICE": {
+    "BUTTON": "Set",
+    "BUTTON_PENDING": "Setting...",
     "DESCRIPTION": "Please enter the URL for your VARS configuration server.",
     "HINT": {
       "TEXT": "At MBARI use",
       "VALUE": "https://m3.shore.mbari.org/config"
     },
     "LABEL": "Config Service URL"
+  },
+  "LOGIN": {
+    "BUTTON": "Login",
+    "BUTTON_PENDING": "Logging In...",
+    "ERROR": {
+      "AUTHENTICATION_FAILED": "Authentication failed",
+      "AUTH_URL": "Failed to get auth URL",
+      "CONNECT_FAILED": "Failed to connect to authentication service",
+      "INVALID_CREDENTIALS": "Invalid username or password",
+      "LOGIN_FAILED": "Login failed: {status}",
+      "MISSING_RESPONSE_TOKEN": "Authentication response missing token",
+      "MISSING_TOKEN": "Missing authentication token"
+    },
+    "LABEL": {
+      "PASSWORD": "Password",
+      "USERNAME": "Username"
+    }
   },
   "READ_ONLY": "Read Only Access"
 }

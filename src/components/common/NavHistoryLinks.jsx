@@ -3,6 +3,10 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 
 import NavHistoryButton from './NavHistoryButton'
 
+import CONFIG from '@/lib/config'
+
+const { NEXT, PREVIOUS } = CONFIG.UI.NAV
+
 const NavHistoryLinks = ({ history }) => {
   if (!history) return null
   const historyGoBack = delta => history.goBack(delta + 1)
@@ -14,7 +18,7 @@ const NavHistoryLinks = ({ history }) => {
         disabled={!history.canGoBack()}
         dropItems={history.backItems()}
         icon={IoChevronBack}
-        label='previous'
+        label={PREVIOUS}
         onClick={history.back}
         onItemSelect={historyGoBack}
       />
@@ -22,7 +26,7 @@ const NavHistoryLinks = ({ history }) => {
         disabled={!history.canGoForward()}
         dropItems={history.forwardItems()}
         icon={IoChevronForward}
-        label='next'
+        label={NEXT}
         onClick={history.forward}
         onItemSelect={historyGoForward}
       />

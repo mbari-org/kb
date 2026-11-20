@@ -2,12 +2,15 @@ import { useTheme } from '@mui/material/styles'
 
 import ActionIcon from '@/components/icon/ActionIcon'
 import infoIcon from '@/assets/info-48.png'
+import CONFIG from '@/lib/config'
 
-const InfoImg = ({ size }) => <img src={infoIcon} alt='Info' width={size} height={size} />
+const { INFO } = CONFIG.UI.ICON
+
+const InfoImg = ({ size }) => <img src={infoIcon} alt={INFO} width={size} height={size} />
 
 const InfoIcon = ({
   onClick,
-  tooltip = 'Info',
+  tooltip = INFO,
   sx = {},
   asDiv = true,
   hoverBackground = 'transparent',

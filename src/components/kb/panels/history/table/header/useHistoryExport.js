@@ -24,8 +24,10 @@ import { SELECTED } from '@/lib/constants/selected.js'
 import CONFIG from '@/lib/config'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
-const { CHOICE, PROCESSING } = CONFIG
-const { TYPE: TYPE_LABEL } = CONFIG.PANELS.HISTORY
+const { CHOICE, EXPORT, PANELS, PROCESSING } = CONFIG
+const { TYPE: TYPE_LABEL } = PANELS.HISTORY
+const { COMMENT } = EXPORT
+const { HEADERS, TITLE } = PANELS.HISTORY.EXPORT
 
 const { TYPE } = CONCEPT.HISTORY
 const { CONCEPT: SELECTED_CONCEPT } = SELECTED
@@ -33,31 +35,31 @@ const { SOLO } = CONCEPT.EXTENT
 const EXPORT_PAGE_SIZE = PAGINATION.HISTORY.EXPORT_PAGE_SIZE
 
 const commentsContent = ({ concept, historyExtent, historyType }) => {
-  let content = [`Type: ${capitalize(historyType)}`]
+  const content = [COMMENT.TYPE.replace('{value}', capitalize(historyType))]
   if (historyExtent) {
-    content.push(`Concept: ${concept}`)
-    content.push(`Extent: ${capitalize(historyExtent)}`)
+    content.push(COMMENT.CONCEPT.replace('{value}', concept))
+    content.push(COMMENT.EXTENT.replace('{value}', capitalize(historyExtent)))
   }
   return content
 }
 
 const dataHeaders = type => {
   const columnHeaders = [
-    'Concept',
-    'Field',
-    'Action',
-    'Creator',
-    'Created',
-    'Old Value',
-    'New Value',
-    'Processor',
-    'Processed',
+    HEADERS.CONCEPT,
+    HEADERS.FIELD,
+    HEADERS.ACTION,
+    HEADERS.CREATOR,
+    HEADERS.CREATED,
+    HEADERS.OLD_VALUE,
+    HEADERS.NEW_VALUE,
+    HEADERS.PROCESSOR,
+    HEADERS.PROCESSED,
   ]
 
   let headers
   switch (type) {
     case TYPE.CONCEPT:
-      headers = ['Approved', ...columnHeaders]
+      headers = [HEADERS.APPROVED, ...columnHeaders]
       break
 
     case TYPE.PENDING:
@@ -209,7 +211,7 @@ const useHistoryExport = () => {
     onProgress,
     paginated: !isConceptExport,
     suggestName,
-    title: 'Knowledge Base History',
+    title: TITLE,
     user,
   })
 }

@@ -1,4 +1,8 @@
 {
+  "EXPORT_TYPE": {
+    "AVAILABLE": "Available",
+    "EXPLICIT": "Explicit"
+  },
   "FILTER": {
     "CURRENT": "Current Filters",
     "LABEL": {

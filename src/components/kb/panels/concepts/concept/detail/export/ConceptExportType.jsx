@@ -2,6 +2,9 @@ import { Stack, Typography, ToggleButtonGroup, ToggleButton } from '@mui/materia
 import { useTheme } from '@mui/material/styles'
 import KBTooltipTarget from '@/components/common/tooltip/KBTooltipTarget'
 import { EXPORT_TYPE } from '@/lib/constants/exportType.js'
+import CONFIG from '@/lib/config'
+
+const { FORMAT, FORMAT_TOOLTIP, TYPE_LABEL } = CONFIG.PANELS.CONCEPTS.EXPORT
 
 const ConceptExportType = ({ value = EXPORT_TYPE.JSON, onChange }) => {
   const theme = useTheme()
@@ -19,15 +22,15 @@ const ConceptExportType = ({ value = EXPORT_TYPE.JSON, onChange }) => {
 
   return (
     <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mr: 0.5 }}>
-      <KBTooltipTarget title='Export format'>
-        <Typography>Type:</Typography>
+      <KBTooltipTarget title={FORMAT_TOOLTIP}>
+        <Typography>{TYPE_LABEL}</Typography>
       </KBTooltipTarget>
       <ToggleButtonGroup value={value} exclusive onChange={handleChange} size='small'>
         <ToggleButton value={EXPORT_TYPE.JSON} sx={toggleButtonSx}>
-          JSON
+          {FORMAT.JSON}
         </ToggleButton>
         <ToggleButton value={EXPORT_TYPE.CSV} sx={toggleButtonSx}>
-          CSV
+          {FORMAT.CSV}
         </ToggleButton>
       </ToggleButtonGroup>
     </Stack>

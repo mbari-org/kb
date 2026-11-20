@@ -10,6 +10,18 @@ import useDebounce from '@/lib/hooks/useDebounce'
 import { useUsersModalDataContext } from '@/contexts/panels/users/modal'
 
 const { AFFILIATION, CONFIRM_PASSWORD, EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, ROLE, USERNAME } = CONFIG.FIELDS.USER
+const { LABEL, PLACEHOLDER, VALIDATION } = CONFIG.PANELS.USERS.FORM
+
+const FIELD_LABEL = {
+  [AFFILIATION]: LABEL.AFFILIATION,
+  [CONFIRM_PASSWORD]: LABEL.CONFIRM_PASSWORD,
+  [EMAIL]: LABEL.EMAIL,
+  [FIRST_NAME]: LABEL.FIRST_NAME,
+  [LAST_NAME]: LABEL.LAST_NAME,
+  [PASSWORD]: LABEL.PASSWORD,
+  [ROLE]: LABEL.ROLE,
+  [USERNAME]: LABEL.USERNAME,
+}
 
 const USER_CHANGE_DEBOUNCE_MS = 300
 
@@ -71,14 +83,14 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
 
   const getHelperText = field => {
     if (!showError(field)) return ''
-    if (field === EMAIL) return 'Valid email is required'
-    if (field === USERNAME && !isEdit) return 'Username already exists'
-    if (field === PASSWORD && !isEdit) return 'Password is required'
+    if (field === EMAIL) return VALIDATION.EMAIL
+    if (field === USERNAME && !isEdit) return VALIDATION.USERNAME_EXISTS
+    if (field === PASSWORD && !isEdit) return VALIDATION.PASSWORD
     if (field === CONFIRM_PASSWORD) {
-      if (!localUser.confirmPassword) return 'Please confirm your password'
-      return 'Passwords do not match'
+      if (!localUser.confirmPassword) return VALIDATION.CONFIRM_PASSWORD
+      return VALIDATION.PASSWORDS_MISMATCH
     }
-    return `${field.charAt(0).toUpperCase() + field.slice(1)} is required`
+    return VALIDATION.REQUIRED.replace('{field}', FIELD_LABEL[field])
   }
 
   const showConfirmPassword = !isEdit || showConfirm
@@ -89,7 +101,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
   return (
     <Stack spacing={2} sx={{ p: 1, width: 500 }}>
       <TextField
-        label='Username'
+        label={LABEL.USERNAME}
         value={localUser.username || ''}
         onChange={handleChange(USERNAME)}
         onBlur={handleBlur(USERNAME)}
@@ -100,7 +112,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         helperText={getHelperText(USERNAME)}
       />
       <TextField
-        label='Password'
+        label={LABEL.PASSWORD}
         value={localUser.password || ''}
         onChange={handleChange(PASSWORD)}
         onBlur={handleBlur(PASSWORD)}
@@ -108,11 +120,11 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         required={!isEdit}
         error={showError(PASSWORD)}
         helperText={getHelperText(PASSWORD)}
-        placeholder={isEdit ? 'Leave blank to keep current password' : ''}
+        placeholder={isEdit ? PLACEHOLDER.PASSWORD_EDIT : ''}
       />
       {showConfirmPassword && (
         <TextField
-          label='Confirm Password'
+          label={LABEL.CONFIRM_PASSWORD}
           value={localUser.confirmPassword || ''}
           onChange={handleChange(CONFIRM_PASSWORD)}
           onBlur={handleBlur(CONFIRM_PASSWORD)}
@@ -124,7 +136,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
       )}
       <TextField
         select
-        label='Role'
+        label={LABEL.ROLE}
         value={localUser.role || ''}
         onChange={handleChange(ROLE)}
         onBlur={handleBlur(ROLE)}
@@ -140,7 +152,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         ))}
       </TextField>
       <TextField
-        label='Affiliation'
+        label={LABEL.AFFILIATION}
         value={localUser.affiliation || ''}
         onChange={handleChange(AFFILIATION)}
         onBlur={handleBlur(AFFILIATION)}
@@ -150,7 +162,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         helperText={getHelperText(AFFILIATION)}
       />
       <TextField
-        label='First Name'
+        label={LABEL.FIRST_NAME}
         value={localUser.firstName || ''}
         onChange={handleChange(FIRST_NAME)}
         onBlur={handleBlur(FIRST_NAME)}
@@ -160,7 +172,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         helperText={getHelperText(FIRST_NAME)}
       />
       <TextField
-        label='Last Name'
+        label={LABEL.LAST_NAME}
         value={localUser.lastName || ''}
         onChange={handleChange(LAST_NAME)}
         onBlur={handleBlur(LAST_NAME)}
@@ -170,7 +182,7 @@ const UserForm = memo(({ user, original, onChange, isEdit = false, users }) => {
         helperText={getHelperText(LAST_NAME)}
       />
       <TextField
-        label='Email'
+        label={LABEL.EMAIL}
         value={localUser.email || ''}
         onChange={handleChange(EMAIL)}
         onBlur={handleBlur(EMAIL)}

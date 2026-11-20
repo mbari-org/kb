@@ -4,6 +4,8 @@ import { Box, Card, CardActions, CardContent, CardHeader, Fade, IconButton, Moda
 
 import ProcessingMsg from '@/components/common/ProcessingMessage'
 
+import CONFIG from '@/lib/config'
+
 const renderSlot = slot => (typeof slot === 'function' ? slot() : slot)
 
 const ModalShell = ({
@@ -43,7 +45,7 @@ const ModalShell = ({
           <Card sx={{ p: 1, pb: 0, position: 'relative', minWidth, maxWidth, width }}>
             <IconButton
               autoFocus={focusClose}
-              aria-label='close'
+              aria-label={CONFIG.UI.MODAL.CLOSE}
               onClick={() => closeModal(false)}
               sx={{ position: 'absolute', right: 0, top: 0 }}
               disabled={isProcessing}

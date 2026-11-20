@@ -1,5 +1,7 @@
 import js from '@eslint/js'
 import react from 'eslint-plugin-react'
+
+import noHardcodedUiLiterals from './eslint-rules/no-hardcoded-ui-literals.js'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
@@ -18,6 +20,7 @@ export default [
       },
     },
     plugins: {
+      local: { rules: { 'no-hardcoded-ui-literals': noHardcodedUiLiterals } },
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
@@ -52,5 +55,11 @@ export default [
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
     settings: { react: { version: '19.0' } },
+  },
+  {
+    files: ['src/**/*.{js,jsx}'],
+    rules: {
+      'local/no-hardcoded-ui-literals': 'error',
+    },
   },
 ]

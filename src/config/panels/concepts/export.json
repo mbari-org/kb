@@ -1,0 +1,17 @@
+{
+  "CSV": {
+    "HEADER_NAMES": "names",
+    "TITLE": "Knowledge Base Concept: {name}"
+  },
+  "CSV_FIELDS": {
+    "ID": "• id",
+    "NAMES": "• names (primary; aliases)",
+    "PARENT_ID": "• parentId"
+  },
+  "FORMAT": {
+    "CSV": "CSV",
+    "JSON": "JSON"
+  },
+  "FORMAT_TOOLTIP": "Export format",
+  "TYPE_LABEL": "Type:"
+}

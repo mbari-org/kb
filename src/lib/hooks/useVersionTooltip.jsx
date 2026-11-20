@@ -2,6 +2,8 @@ import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useMemo } from 'react'
 
+import CONFIG from '@/lib/config'
+
 import {
   getBranchName,
   getBuildDate,
@@ -11,6 +13,8 @@ import {
   getVersion,
   isDirty,
 } from '@/version'
+
+const { BRANCH, BUILD, COMMIT, DATE, DIRTY, MESSAGE, STATUS, TITLE } = CONFIG.UI.VERSION
 
 const TOOLTIP_MIN_WIDTH = 300
 
@@ -49,25 +53,25 @@ const useVersionTooltip = () => {
       >
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Version:</strong>
+            <strong>{TITLE}</strong>
           </Typography>
           <Typography variant='body2'>{version}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Commit:</strong>
+            <strong>{COMMIT}</strong>
           </Typography>
           <Typography variant='body2'>{commitHash}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Date:</strong>
+            <strong>{DATE}</strong>
           </Typography>
           <Typography variant='body2'>{formatDate(commitDate)}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Message:</strong>
+            <strong>{MESSAGE}</strong>
           </Typography>
           <Typography variant='body2' sx={{ wordBreak: 'break-word' }}>
             {commitMessage}
@@ -75,23 +79,23 @@ const useVersionTooltip = () => {
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Build:</strong>
+            <strong>{BUILD}</strong>
           </Typography>
           <Typography variant='body2'>{formatDate(buildDate)}</Typography>
         </Box>
         <Box sx={{ display: 'flex', mb: 1 }}>
           <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-            <strong>Branch:</strong>
+            <strong>{BRANCH}</strong>
           </Typography>
           <Typography variant='body2'>{branchName}</Typography>
         </Box>
         {dirty && (
           <Box sx={{ display: 'flex', mb: 1 }}>
             <Typography variant='body2' sx={{ width: 100, flexShrink: 0 }}>
-              <strong>Status:</strong>
+              <strong>{STATUS}</strong>
             </Typography>
             <Typography variant='body2' sx={{ color: theme.palette.primary.edit }}>
-              Working directory has uncommitted changes
+              {DIRTY}
             </Typography>
           </Box>
         )}

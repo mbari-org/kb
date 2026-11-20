@@ -13,6 +13,7 @@ import { resettingMedia } from '@/components/kb/panels/concepts/concept/change/s
 
 import { mediaItemEdits } from '@/lib/model/media'
 import { RESETTING } from '@/lib/constants'
+import CONFIG from '@/lib/config'
 
 const MediaDetail = ({ edit }) => {
   const [_, media] = edit
@@ -34,7 +35,7 @@ const MediaDetail = ({ edit }) => {
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <MediaReset />
-        <Typography sx={mediaSx}>Media</Typography>
+        <Typography sx={mediaSx}>{CONFIG.PANELS.CONCEPTS.MODALS.ITEM.MEDIA}</Typography>
       </Box>
       <Box sx={{ ml: 3 }}>
         {mediaItemEdits(media).map(mediaItemEdit => {
