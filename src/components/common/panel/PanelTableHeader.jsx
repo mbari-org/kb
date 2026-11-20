@@ -35,13 +35,13 @@ const PanelTableHeader = ({ headerLeft, headerMiddle, headerRight, sx = {} }) =>
       {headerMiddle && (
         <Box
           sx={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
             alignItems: 'center',
+            bottom: theme => theme.spacing(1),
             display: 'flex',
+            left: '50%',
             minWidth: 0,
+            position: 'absolute',
+            transform: 'translateX(-50%)',
           }}
         >
           {headerMiddle}

@@ -21,7 +21,7 @@ const HEADER_SX = {
 const TABLE_SX = {
   flex: '1 1 auto',
   minHeight: 0, // Important for proper flex behavior
-  overflow: 'auto',
+  overflow: 'visible',
 }
 
 /**
