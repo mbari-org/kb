@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { alpha } from '@mui/material/styles'
 import { useTreeItemUtils } from '@mui/x-tree-view/hooks'
 
 import ConceptMediaIcon from './ConceptMediaIcon'
@@ -9,6 +8,7 @@ import ConceptPendingHistoryIcon from './ConceptPendingHistoryIcon'
 import useConceptItem from './lib/useConceptItem'
 
 import { actionColor } from '@/components/kb/panels/concepts/concept/change/action'
+import conceptLinkHover from '@/components/kb/panels/concepts/conceptLinkHover'
 
 const StyledLabel = styled('div')(({ theme, pendingAction, isSelected }) => {
   const baseStyle = {
@@ -18,14 +18,11 @@ const StyledLabel = styled('div')(({ theme, pendingAction, isSelected }) => {
     width: '100%',
     color: theme.palette.common.black,
     fontWeight: 500,
-    '&:hover': !isSelected && {
-      backgroundColor: alpha(theme.palette.primary.main, 0.3),
-      fontStyle: 'italic',
-    },
+    '&:hover': !isSelected && conceptLinkHover(theme),
   }
 
   if (isSelected) {
-    baseStyle.color = theme.palette.common.white
+    baseStyle.color = theme.palette.background.paper
     baseStyle.fontWeight = 600
     baseStyle.border = '1px solid'
     baseStyle.borderColor = theme.palette.primary.main
@@ -33,7 +30,7 @@ const StyledLabel = styled('div')(({ theme, pendingAction, isSelected }) => {
   }
 
   if (pendingAction) {
-    baseStyle.color = isSelected ? theme.palette.common.white : actionColor(pendingAction)
+    baseStyle.color = isSelected ? theme.palette.background.paper : actionColor(pendingAction)
   }
 
   return baseStyle

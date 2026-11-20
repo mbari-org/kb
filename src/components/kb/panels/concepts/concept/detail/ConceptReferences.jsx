@@ -61,7 +61,12 @@ const ConceptReferences = () => {
       renderComponent={ReferenceComponent}
       title={CONFIG.PANELS.CONCEPTS.REFERENCES.LABEL}
       actionComponent={!isEditing && (() => (
-        <InspectIcon asDiv={true} onClick={linkToReferences} tooltip={CONFIG.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP} />
+        <InspectIcon
+          asDiv={true}
+          iconAction='PANEL_LINK'
+          onClick={linkToReferences}
+          tooltip={CONFIG.PANELS.CONCEPTS.REFERENCES.VIEW.TOOLTIP}
+        />
       ))}
     />
   )

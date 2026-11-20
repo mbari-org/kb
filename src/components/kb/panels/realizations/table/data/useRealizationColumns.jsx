@@ -52,8 +52,7 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
           return (
             <Box>
               <ActionIcon
-                color='cancel'
-                colorOnHover
+                iconAction='DELETE'
                 Icon={MdOutlineDeleteForever}
                 onClick={() => deleteRealizationModal(params.row)}
                 restrictReadOnly
@@ -61,8 +60,7 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
                 sx={{ mr: 1 }}
               />
               <ActionIcon
-                color='edit'
-                colorOnHover
+                iconAction='EDIT'
                 Icon={CiEdit}
                 onClick={() => editRealizationModal(params.row)}
                 restrictReadOnly

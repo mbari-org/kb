@@ -8,8 +8,7 @@ const ConceptHierarchyIcon = ({ onClick, sx = {} }) => {
       Icon={CiEdit}
       onClick={onClick}
       size={24}
-      color='edit'
-      colorOnHover
+      iconAction='EDIT'
       sx={{
         mb: 2,
         ml: 0.5,

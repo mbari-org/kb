@@ -40,7 +40,7 @@ const ConceptExportActions = () => {
   }
 
   return (
-    <Actions colors={['cancel', 'main']} disabled={[false, false]} labels={[CANCEL, EXPORT]} onAction={handleAction} />
+    <Actions colors={['cancel', 'export']} disabled={[false, false]} labels={[CANCEL, EXPORT]} onAction={handleAction} />
   )
 }
 

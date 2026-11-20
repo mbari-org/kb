@@ -41,7 +41,7 @@ const PendingActions = () => {
   }, [concept.name, pendingConcept, pendingConfirm, pendingParent])
 
   const [colors, disabled, labels] = useMemo(() => {
-    const actionColors = ['clean', 'main', 'cancel']
+    const actionColors = ['approve', 'main', 'reject']
 
     if (!isAdmin) {
       return [['main'], [false], [CLOSE]]

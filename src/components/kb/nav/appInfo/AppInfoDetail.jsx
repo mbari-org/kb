@@ -18,7 +18,7 @@ const AppInfoDetail = ({ editTooltip, label, onEdit, value }) => {
           {hasEditAction && (
             <ActionIcon
               asDiv
-              color='edit'
+              iconAction='EDIT'
               Icon={CiEdit}
               onClick={onEdit}
               size={20}

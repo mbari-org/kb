@@ -12,7 +12,7 @@ const ConceptExport = () => {
 
   return (
     <KBTooltipTarget title={exportTooltip}>
-      <Button onClick={openExportModal} size='small' sx={{ ml: 1, mt: 0.25, minWidth: 'auto', px: 1 }}>
+      <Button color='export' onClick={openExportModal} size='small' sx={{ ml: 1, mt: 0.25, minWidth: 'auto', px: 1 }}>
         {exportButtonLabel}
       </Button>
     </KBTooltipTarget>

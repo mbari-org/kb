@@ -40,6 +40,7 @@ const ConceptRealizations = () => {
     ) : (
       <InspectIcon
         asDiv={true}
+        iconAction='PANEL_LINK'
         onClick={linkToRealizations}
         tooltip={CONFIG.PANELS.CONCEPTS.REALIZATIONS.VIEW.TOOLTIP}
       />

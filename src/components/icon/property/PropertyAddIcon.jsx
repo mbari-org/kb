@@ -5,7 +5,7 @@ import PropertyActionIcon from './PropertyActionIcon'
 const PropertyAddIcon = ({ onClick, size, tooltip }) => {
   return (
     <PropertyActionIcon
-      color='add.main'
+      iconAction='ADD'
       Icon={MdOutlinePlaylistAdd}
       onClick={onClick}
       size={size}

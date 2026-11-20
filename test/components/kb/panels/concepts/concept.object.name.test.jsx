@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { useState, useCallback } from 'react'
+import { use, useState, useCallback } from 'react'
 
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
@@ -10,6 +10,7 @@ import { BrowserRouter } from 'react-router-dom'
 import kbTheme from '@/lib/theme'
 import Concepts from '@/components/kb/panels/Concepts'
 import ConceptName from '@/components/kb/panels/concepts/concept/detail/ConceptName'
+import ConceptPath from '@/components/kb/panels/concepts/concept/ConceptPath'
 import CONFIG from '@/lib/config'
 import { ACTION, HISTORY_FIELD, PENDING } from '@/lib/constants'
 
@@ -344,8 +345,54 @@ describe('DSG link', () => {
   })
 })
 
+describe('concept path color', () => {
+  const NameAndPath = ({ stagedName = false }) => {
+    const staged = use(ConceptStagedContext)
+    return (
+      <ConceptStagedContext.Provider value={{
+        ...staged,
+        stagedState: {
+          ...staged.stagedState,
+          name: stagedName ? { ...staged.stagedState.name, action: 'Edit Name' } : staged.stagedState.name,
+        },
+      }}>
+        <ConceptPath />
+        <ConceptName />
+      </ConceptStagedContext.Provider>
+    )
+  }
+
+  it('matches the concept name as pending changes are added and resolved', () => {
+    const addition = { action: ACTION.ADD, concept: 'root', field: HISTORY_FIELD.CHILD, newValue: 'object' }
+    const deletion = { action: ACTION.DELETE, concept: 'root', field: HISTORY_FIELD.CHILD, oldValue: 'object' }
+    const pendingName = { action: ACTION.EDIT, concept: 'object', field: HISTORY_FIELD.NAME, newValue: 'object', oldValue: 'old name' }
+    const renderState = ({ history = [], pending = [], stagedName = false } = {}) => (
+      <TestWrapper initialConcept={objectConcept} pendingConcept={pending} pendingHistory={history} pendingParent={history}>
+        <NameAndPath stagedName={stagedName} />
+      </TestWrapper>
+    )
+    const { rerender } = render(renderState())
+    const assertColor = color => {
+      expect(screen.getByRole('button', { name: 'object' })).toHaveStyle({ color })
+      expect(screen.getByText('object', { selector: 'div.MuiTypography-root' })).toHaveStyle({ color })
+    }
+
+    assertColor(kbTheme.palette.primary.main)
+    rerender(renderState({ history: [addition] }))
+    assertColor(kbTheme.concept.color.add)
+    rerender(renderState({ history: [deletion] }))
+    assertColor(kbTheme.concept.color.remove)
+    rerender(renderState({ pending: [pendingName] }))
+    assertColor(kbTheme.concept.color.edit)
+    rerender(renderState({ stagedName: true }))
+    assertColor(kbTheme.concept.color.edit)
+    rerender(renderState())
+    assertColor(kbTheme.palette.primary.main)
+  })
+})
+
 describe('concept name pending deletion', () => {
-  it('colors the name red for its pending deletion and restores its color when resolved', () => {
+  it('uses the deletion color for its pending deletion and restores its color when resolved', () => {
     const deletion = { concept: 'root', field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'object' }
     const renderName = pendingHistory => (
       <TestWrapper
@@ -364,7 +411,7 @@ describe('concept name pending deletion', () => {
     expect(name).toHaveStyle({ color: kbTheme.palette.primary.main })
   })
 
-  it('does not color the name red for a different child or a pending change to its own children', () => {
+  it('does not use the deletion color for a different child or a pending change to its own children', () => {
     const otherDeletion = { concept: 'root', field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'entity' }
     const childDeletion = { field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'child' }
     const { rerender } = render(
@@ -384,7 +431,7 @@ describe('concept name pending deletion', () => {
 })
 
 describe('concept name pending add', () => {
-  it('colors the name green for a pending add even when the concept has other pending items', () => {
+  it('uses the add color for a pending add even when the concept has other pending items', () => {
     const addition = { concept: 'root', field: HISTORY_FIELD.CHILD, action: ACTION.ADD, newValue: 'object' }
     const mediaItem = { concept: 'object', field: HISTORY_FIELD.MEDIA, action: ACTION.ADD, newValue: 'image.png' }
 

@@ -22,8 +22,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
       renderCell: params => !hasPendingDelete && (
         <Box>
           <ActionIcon
-            color='cancel'
-            colorOnHover
+            iconAction='DELETE'
             Icon={MdOutlineDeleteForever}
             onClick={() => deleteReferenceModal(params.row)}
             restrictReadOnly
@@ -31,8 +30,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
             sx={{ mr: 1 }}
           />
           <ActionIcon
-            color='edit'
-            colorOnHover
+            iconAction='EDIT'
             Icon={CiEdit}
             onClick={() => editReferenceModal(params.row)}
             restrictReadOnly

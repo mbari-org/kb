@@ -45,6 +45,8 @@ describe('Concept panel with pending history', () => {
 
     const edit = screen.getByRole('button', { name: BUTTON.EDIT })
     const pending = screen.getByRole('button', { name: BUTTON.PENDING })
+    expect(edit).toHaveClass('MuiButton-colorEdit')
+    expect(pending).toHaveClass('MuiButton-colorPending')
     expect(screen.queryByRole('button', { name: BUTTON.SAVE })).not.toBeInTheDocument()
     expect(edit.compareDocumentPosition(pending) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
 
@@ -53,6 +55,7 @@ describe('Concept panel with pending history', () => {
     await user.click(screen.getByRole('button', { name: BUTTON.CLOSE }))
 
     await user.click(edit)
+    expect(screen.getByRole('button', { name: BUTTON.CANCEL })).toHaveClass('MuiButton-colorCancel')
     expect(screen.getByRole('button', { name: BUTTON.CANCEL })).toBeEnabled()
     expect(screen.queryByRole('button', { name: BUTTON.PENDING })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: BUTTON.CANCEL }))

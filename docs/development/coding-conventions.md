@@ -103,6 +103,13 @@ into `eslint.config.js`.
 - Styling is the MUI `sx` prop: inline objects or module-level SCREAMING_SNAKE constants
   (e.g. `USERS_SX`, `DATA_GRID_PROPS` in `UsersTableData.jsx:17-27`). No `styled()`, no
   CSS modules; `classnames` is a declared dependency with no observed usage.
+- Add/edit/delete and panel-link icons use `iconAction` on `ActionIcon`; their resting and hover
+  colors come from `COLOR.ACTION` in `src/config/color.json` via `theme.kb.icon.colors`. Other palette colors
+  continue to control non-icon styling and unrelated icons.
+- Theme add, edit, and remove colors also use `COLOR.ACTION`. Cancel/reject, clean, and
+  concept-detail colors are configured separately in `src/config/color.json`.
+- MUI buttons use `COLOR.BUTTON` for main/primary, cancel, approve, reject, edit, pending, and export colors.
+  These settings do not change the similarly named palette colors used by other UI elements.
 - Static module-level constants in SCREAMING_SNAKE; destructure registry constants at
   module top (e.g. `const { CONCEPT, PANEL } = SELECTED`).
 

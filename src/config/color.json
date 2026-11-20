@@ -1,0 +1,28 @@
+{
+  "COLOR": {
+    "ACTION": {
+      "ADD": "#008800",
+      "DELETE": "#800000",
+      "EDIT": "#b85b00",
+      "NONE": "#000000",
+      "PANEL_LINK": "#005385"
+    },
+    "BACKGROUND": "#c0c0c0",
+    "BUTTON": {
+      "APPROVE": "#008800",
+      "CANCEL": "#800000",
+      "EDIT": "#005385",
+      "EXPORT": "#005385",
+      "MAIN": "#005385",
+      "PENDING": "#005385",
+      "REJECT": "#800000"
+    },
+    "CANCEL": "#800000",
+    "CLEAN": "#008800",
+    "CONCEPT_DETAIL": "#008800",
+    "MAIN": "#005385",
+    "TABLE": {
+      "BORDER": "#aeaeae"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import ConceptsTree from '@/components/kb/panels/concepts/sidebar/tree/ConceptsTree'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
@@ -13,6 +14,7 @@ const mockBuildTree = vi.fn(() => mockTreeItems)
 const mockGetItemDOMElement = vi.fn(() => null)
 const mockItemClick = vi.fn()
 const mockExpandConcept = vi.fn()
+const theme = createTheme({ palette: { background: { paper: '#abcdef' } } })
 
 vi.mock('@mui/x-tree-view/RichTreeView', () => ({
   RichTreeView: props => {
@@ -59,19 +61,21 @@ const renderTree = ({
   const taxonomy = { rootName: 'root' }
 
   return render(
-    <ConceptContext.Provider value={{ concept, conceptPath, onConceptTreeReady: vi.fn() }}>
-      <SelectedContext.Provider value={{ updateSelected }}>
-        <TaxonomyContext.Provider
-          value={{
-            getConcept,
-            getConceptPrimaryName: name => name,
-            taxonomy,
-          }}
-        >
-          <ConceptsTree autoExpand={null} registerScrollFn={registerScrollFn} setAutoExpand={vi.fn()} />
-        </TaxonomyContext.Provider>
-      </SelectedContext.Provider>
-    </ConceptContext.Provider>
+    <ThemeProvider theme={theme}>
+      <ConceptContext.Provider value={{ concept, conceptPath, onConceptTreeReady: vi.fn() }}>
+        <SelectedContext.Provider value={{ updateSelected }}>
+          <TaxonomyContext.Provider
+            value={{
+              getConcept,
+              getConceptPrimaryName: name => name,
+              taxonomy,
+            }}
+          >
+            <ConceptsTree autoExpand={null} registerScrollFn={registerScrollFn} setAutoExpand={vi.fn()} />
+          </TaxonomyContext.Provider>
+        </SelectedContext.Provider>
+      </ConceptContext.Provider>
+    </ThemeProvider>
   )
 }
 
@@ -90,6 +94,8 @@ describe('ConceptsTree', () => {
     renderTree()
 
     expect(screen.getByTestId('rich-tree-view')).toBeInTheDocument()
+    expect(screen.getByTestId('rich-tree-view').parentElement.parentElement)
+      .toHaveStyle({ backgroundColor: theme.palette.background.paper })
     expect(lastTreeViewProps.selectedItems).toEqual(['dingo'])
     expect(lastTreeViewProps.items).toEqual([{ id: 'root', children: [] }])
     expect(mockBuildTree).toHaveBeenCalledTimes(1)

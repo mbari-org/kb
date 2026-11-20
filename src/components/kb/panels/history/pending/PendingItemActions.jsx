@@ -25,7 +25,7 @@ const HistoryPendingActions = props => {
 
   const [pendingConfirm, setPendingConfirm] = useState(null)
 
-  const colors = ['clean', 'main', 'cancel']
+  const colors = ['approve', 'main', 'reject']
 
   const [disabled, labels] = (() => {
     switch (pendingConfirm) {

@@ -1,13 +1,12 @@
 import ActionIcon from '@/components/icon/ActionIcon'
 
-const PropertyActionIcon = ({ color, colorOnHover = false, Icon, onClick, size = 24, tooltip, sx = {} }) => {
+const PropertyActionIcon = ({ iconAction, Icon, onClick, size = 24, tooltip, sx = {} }) => {
   return (
     <ActionIcon
       Icon={Icon}
       onClick={onClick}
       size={size}
-      color={color}
-      colorOnHover={colorOnHover}
+      iconAction={iconAction}
       tooltip={tooltip}
       asDiv={true}
       sx={{

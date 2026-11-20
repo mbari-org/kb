@@ -2,6 +2,8 @@ import { use } from 'react'
 import { Box, Breadcrumbs, Button } from '@mui/material'
 import { MdNavigateNext } from 'react-icons/md'
 
+import conceptLinkHover from '@/components/kb/panels/concepts/conceptLinkHover'
+import useConceptNameColor from '@/components/kb/panels/concepts/concept/detail/useConceptNameColor'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
@@ -10,6 +12,7 @@ import { SELECTED } from '@/lib/constants/selected.js'
 const ConceptPath = () => {
   const { conceptPath, prepareConceptSwitch } = use(ConceptContext)
   const { updateSelected } = use(SelectedContext)
+  const { color: conceptColor } = useConceptNameColor()
 
   const handlePathClick = path => {
     prepareConceptSwitch()
@@ -40,6 +43,9 @@ const ConceptPath = () => {
           <Button
             key={index}
             color={index === conceptPath.length - 1 ? 'primary' : 'inherit'}
+            sx={index === conceptPath.length - 1
+              ? { color: conceptColor, '&:hover': { backgroundColor: 'transparent' } }
+              : { '&:hover': conceptLinkHover }}
             onClick={() => {
               if (index === conceptPath.length - 1) return
               handlePathClick(path)

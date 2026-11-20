@@ -6,7 +6,23 @@ const PanelDataSwitch = ({ checked, disabled = false, switchFn, switchLabel, swi
     <Box>
       <KBTooltipFormControlLabel
         tooltip={switchTooltip}
-        control={<Switch size='small' checked={checked} disabled={disabled} onChange={switchFn} />}
+        control={
+          <Switch
+            checked={checked}
+            disabled={disabled}
+            onChange={switchFn}
+            size='small'
+            sx={{
+              '& .MuiSwitch-switchBase:not(.Mui-checked):not(.Mui-disabled)': {
+                color: 'grey.700',
+                '& + .MuiSwitch-track': {
+                  backgroundColor: 'grey.700',
+                  opacity: 0.5,
+                },
+              },
+            }}
+          />
+        }
         label={switchLabel}
       />
     </Box>

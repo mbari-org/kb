@@ -18,7 +18,7 @@ const PanelDataExport = ({ count, countLabel, exportButtonLabel, exportFn, expor
           </Typography>
         </Box>
         <KBTooltipTarget title={exportTooltip} wrapper='span' wrapperSx={{ display: 'inline-flex' }}>
-          <Button disabled={count === 0} onClick={exportFn}>
+          <Button color='export' disabled={count === 0} onClick={exportFn}>
             {exportButtonLabel}
           </Button>
         </KBTooltipTarget>

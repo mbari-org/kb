@@ -65,7 +65,7 @@ const ConceptTemplatesActionComponent = () => {
       {isEditing ? (
         <TemplateActionIcon action={CONCEPT_STATE.TEMPLATE.ADD} />
       ) : (
-        <InspectIcon asDiv={true} onClick={linkToTemplates} tooltip={tooltip} />
+        <InspectIcon asDiv={true} iconAction='PANEL_LINK' onClick={linkToTemplates} tooltip={tooltip} />
       )}
       <Box sx={{ position: 'relative', top: 5 }}>
         <PanelDataSwitch

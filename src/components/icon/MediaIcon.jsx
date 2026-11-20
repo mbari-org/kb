@@ -5,7 +5,7 @@ import ActionIcon from '@/components/icon/ActionIcon'
 
 const DEFAULT_SIZE = 24
 
-const MediaIcon = ({ Icon, color, colorOnHover = false, position = 'right', size, tooltip, onClick, sx = {} }) => {
+const MediaIcon = ({ Icon, iconAction, position = 'right', size, tooltip, onClick, sx = {} }) => {
   const theme = useTheme()
 
   return (
@@ -24,8 +24,7 @@ const MediaIcon = ({ Icon, color, colorOnHover = false, position = 'right', size
       }}
     >
       <ActionIcon
-        color={color}
-        colorOnHover={colorOnHover}
+        iconAction={iconAction}
         Icon={Icon}
         onClick={onClick}
         size={size || DEFAULT_SIZE}

@@ -32,8 +32,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
         hasPendingDelete || getPendingTemplateAction(params.row) ? null : (
           <Box>
             <ActionIcon
-              color='cancel'
-              colorOnHover
+              iconAction='DELETE'
               Icon={MdOutlineDeleteForever}
               onClick={() => deleteTemplateModal(params.row)}
               restrictReadOnly
@@ -41,8 +40,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
               sx={{ mr: 1 }}
             />
             <ActionIcon
-              color='edit'
-              colorOnHover
+              iconAction='EDIT'
               Icon={CiEdit}
               onClick={() => editTemplateModal(params.row)}
               restrictReadOnly

@@ -7,6 +7,7 @@ import { GUARDED_ACTION } from '@/lib/constants/guardedAction'
 
 import { ConceptPanelTestWrapper, enterEditMode } from '../concept.panel.test.wrapper'
 import CONFIG from '@/lib/config'
+import theme from '@/lib/theme'
 
 const clickReferencesInspect = async user => {
   await waitFor(() => {
@@ -20,6 +21,29 @@ const clickReferencesInspect = async user => {
 describe('Concept panel references', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  it('uses the panel-link color on hover for each panel link', () => {
+    render(
+      <ConceptPanelTestWrapper>
+        <Concepts />
+      </ConceptPanelTestWrapper>
+    )
+
+    const expectedColor = document.createElement('span')
+    expectedColor.style.color = theme.kb.icon.colors.PANEL_LINK
+
+    for (const name of ['References', 'Templates', 'Realizations']) {
+      const header = within(screen.getByRole('heading', { name, level: 6 }).parentElement)
+      const icon = header.getByRole('img', { name: 'Inspect' }).parentElement
+      const hoverColors = Array.from(document.styleSheets).flatMap(sheet =>
+        Array.from(sheet.cssRules)
+          .filter(rule => rule.selectorText?.endsWith(':hover') && icon.matches(rule.selectorText.replace(':hover', '')))
+          .map(rule => rule.style.color)
+      )
+      expect(icon).toHaveStyle({ color: theme.kb.icon.colors.NONE })
+      expect(hoverColors).toContain(expectedColor.style.color)
+    }
   })
 
   it('replaces panel links with add actions while editing and restores them on cancel', async () => {

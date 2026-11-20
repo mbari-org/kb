@@ -10,7 +10,9 @@ const ActionIcon = ({
   asDiv = false,
   color,
   colorOnHover = false,
+  disabled = false,
   Icon,
+  iconAction,
   onClick,
   restrictReadOnly = false,
   size = SIZE,
@@ -22,10 +24,14 @@ const ActionIcon = ({
   const theme = useTheme()
   const { isReadOnly } = use(UserContext)
 
-  const isDisabled = restrictReadOnly && isReadOnly
+  const isDisabled = disabled || (restrictReadOnly && isReadOnly)
 
-  const hoverColor = color ? theme.palette[color]?.main || theme.palette.primary.main : theme.palette.primary.main
-  const restingColor = color && colorOnHover ? theme.palette.common.black : hoverColor
+  const hoverColor = iconAction
+    ? theme.kb.icon.colors[iconAction]
+    : color ? theme.palette[color]?.main || theme.palette.primary.main : theme.palette.primary.main
+  const restingColor = iconAction
+    ? theme.kb.icon.colors.NONE
+    : color && colorOnHover ? theme.palette.common.black : hoverColor
 
   const sizedIcon = <Icon size={size} />
 
@@ -36,7 +42,7 @@ const ActionIcon = ({
         sx={{
           alignItems: 'center',
           borderRadius: '50%',
-          ...(color && { color: restingColor }),
+          ...((color || iconAction) && { color: restingColor }),
           cursor: isDisabled ? 'not-allowed' : 'pointer',
           display: 'flex',
           justifyContent: 'center',
@@ -44,7 +50,7 @@ const ActionIcon = ({
           padding: '4px',
           '&:hover': {
             ...(isDisabled ? {} : theme.kb?.icon?.hover),
-            ...(color && !isDisabled && { color: hoverColor }),
+            ...((color || iconAction) && !isDisabled && { color: hoverColor }),
           },
           ...sx,
         }}
@@ -71,10 +77,10 @@ const ActionIcon = ({
       disabled={isDisabled}
       onClick={onClick}
       sx={{
-        ...(color && { color: restingColor }),
+        ...((color || iconAction) && { color: restingColor }),
         '&:hover': {
           ...(isDisabled ? {} : theme.kb?.icon?.hover),
-          ...(color && !isDisabled && { color: hoverColor }),
+          ...((color || iconAction) && !isDisabled && { color: hoverColor }),
         },
         ...sx,
       }}

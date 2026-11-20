@@ -29,19 +29,20 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
             Icon={params.row.locked ? AiOutlineLock : AiOutlineUnlock}
             onClick={() => lockUserModal(params.row)}
             tooltip={lockTooltip(params.row.locked)}
-            color={params.row.locked ? 'add' : 'cancel'}
+            iconAction={params.row.locked ? 'ADD' : 'DELETE'}
             size={22}
             sx={{ mr: 1 }}
           />
 
-          <ActionIcon
-            Icon={CiEdit}
-            onClick={() => editUserModal(params.row)}
-            tooltip={CONFIG.PANELS.USERS.PANEL.TOOLTIP.EDIT}
-            color='edit'
-            size={24}
-            disabled={params.row.locked}
-          />
+          <Box component='span' sx={{ display: 'inline-flex', visibility: params.row.locked ? 'hidden' : 'visible' }}>
+            <ActionIcon
+              Icon={CiEdit}
+              onClick={() => editUserModal(params.row)}
+              tooltip={CONFIG.PANELS.USERS.PANEL.TOOLTIP.EDIT}
+              iconAction='EDIT'
+              size={24}
+            />
+          </Box>
         </Box>
       ),
     },

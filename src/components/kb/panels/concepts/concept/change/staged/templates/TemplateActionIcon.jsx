@@ -58,7 +58,7 @@ const TemplateActionIcon = ({ action, size, templateStateId }) => {
 
   const IconComponent = action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
-  return <IconComponent colorOnHover={action !== ADD} onClick={onClick} size={size} tooltip={tooltip} />
+  return <IconComponent onClick={onClick} size={size} tooltip={tooltip} />
 }
 
 export default TemplateActionIcon

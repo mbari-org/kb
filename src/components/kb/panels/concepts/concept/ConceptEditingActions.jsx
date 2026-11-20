@@ -86,14 +86,14 @@ const ConceptEditingActions = () => {
     >
       <Box sx={{ flex: 1 }}>
         {!isReadOnly && (isEditing || !hasPendingDelete) && (
-          <Button color={isEditing ? 'cancel' : 'main'} onClick={handleCancelDiscard} variant='contained'>
+          <Button color={isEditing ? 'cancel' : 'edit'} onClick={handleCancelDiscard} variant='contained'>
             {editCancelDiscardButtonText}
           </Button>
         )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         {showPendingButton && (
-          <Button color='main' onClick={handlePending} sx={{ margin: '0 10px' }} variant='contained'>
+          <Button color='pending' onClick={handlePending} sx={{ margin: '0 10px' }} variant='contained'>
             {PENDING_ACTION}
           </Button>
         )}

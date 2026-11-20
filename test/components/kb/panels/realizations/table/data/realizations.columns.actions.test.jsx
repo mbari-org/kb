@@ -1,12 +1,14 @@
 import { render, renderHook, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { ThemeProvider } from '@mui/material/styles'
 
 import useRealizationColumns from '@/components/kb/panels/realizations/table/data/useRealizationColumns'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import RealizationsContext from '@/contexts/panels/realizations/RealizationsContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import UserContext from '@/contexts/user/UserContext'
+import theme from '@/lib/theme'
 
 const openPendingItem = vi.fn()
 
@@ -49,13 +51,15 @@ const createWrapper = ({ isAdmin = false, isReadOnly = false, pendingItem = null
   const updateSelected = vi.fn()
 
   const Wrapper = ({ children }) => (
-    <UserContext.Provider value={{ isAdmin, isReadOnly }}>
-      <PanelDataContext.Provider value={{ pendingHistory }}>
-        <RealizationsContext.Provider value={{ filters: { concept: 'dingo' }, getPendingRealizationItem, updateFilters }}>
-          <SelectedContext.Provider value={{ updateSelected }}>{children}</SelectedContext.Provider>
-        </RealizationsContext.Provider>
-      </PanelDataContext.Provider>
-    </UserContext.Provider>
+    <ThemeProvider theme={theme}>
+      <UserContext.Provider value={{ isAdmin, isReadOnly }}>
+        <PanelDataContext.Provider value={{ pendingHistory }}>
+          <RealizationsContext.Provider value={{ filters: { concept: 'dingo' }, getPendingRealizationItem, updateFilters }}>
+            <SelectedContext.Provider value={{ updateSelected }}>{children}</SelectedContext.Provider>
+          </RealizationsContext.Provider>
+        </PanelDataContext.Provider>
+      </UserContext.Provider>
+    </ThemeProvider>
   )
   Wrapper.displayName = 'UseRealizationColumnsTestWrapper'
 

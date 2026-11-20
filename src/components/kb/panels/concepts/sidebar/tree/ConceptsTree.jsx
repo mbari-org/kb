@@ -103,6 +103,7 @@ const ConceptsTree = ({ autoExpand, registerScrollFn, setAutoExpand }) => {
     <Box
       ref={sidebarRef}
       sx={{
+        backgroundColor: 'background.paper',
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,

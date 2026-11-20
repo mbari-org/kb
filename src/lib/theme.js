@@ -1,24 +1,52 @@
 import { grey } from '@mui/material/colors'
-import { alpha, createTheme, darken, lighten } from '@mui/material/styles'
+import { alpha, createTheme } from '@mui/material/styles'
+
+import color from '@/config/color.json'
 
 const { palette } = createTheme()
 const { augmentColor } = palette
 const addColor = color => augmentColor({ color: { main: color } })
+const paper = color.COLOR.BACKGROUND
 
-const main = '#005385'
+const buttonColors = {
+  approve: addColor(color.COLOR.BUTTON.APPROVE),
+  cancel: addColor(color.COLOR.BUTTON.CANCEL),
+  edit: addColor(color.COLOR.BUTTON.EDIT),
+  export: addColor(color.COLOR.BUTTON.EXPORT),
+  main: addColor(color.COLOR.BUTTON.MAIN),
+  pending: addColor(color.COLOR.BUTTON.PENDING),
+  reject: addColor(color.COLOR.BUTTON.REJECT),
+}
+
+const buttonColorStyle = ({ main, dark, contrastText }) => ({
+  '@media (hover: hover)': {
+    '&:hover': {
+      '--variant-containedBg': dark,
+      '--variant-outlinedBg': alpha(main, palette.action.hoverOpacity),
+      '--variant-outlinedBorder': main,
+      '--variant-textBg': alpha(main, palette.action.hoverOpacity),
+    },
+  },
+  '--variant-containedBg': main,
+  '--variant-containedColor': contrastText === palette.common.white ? paper : contrastText,
+  '--variant-outlinedBorder': alpha(main, 0.5),
+  '--variant-outlinedColor': main,
+  '--variant-textColor': main,
+})
+
+const main = color.COLOR.MAIN
 const light = alpha(main, 0.1)
 const pale = alpha(main, 0.3)
 
-const add = '#008800'
-const edit = '#ee8311'
+const add = color.COLOR.ACTION.ADD
+const edit = color.COLOR.ACTION.EDIT
 
 const approve = add
-const cancel = '#af0000'
-const clean = '#008800'
-const conceptDetail = '#008800'
-const paper = '#f0f0f0'
+const cancel = color.COLOR.CANCEL
+const clean = color.COLOR.CLEAN
+const conceptDetail = color.COLOR.CONCEPT_DETAIL
 const reject = cancel
-const remove = cancel
+const remove = color.COLOR.ACTION.DELETE
 const selectorActive = grey[100]
 const selectorInactive = grey[400]
 
@@ -39,6 +67,7 @@ const theme = createTheme({
   },
   kb: {
     icon: {
+      colors: color.COLOR.ACTION,
       hover: {
         backgroundColor: 'background.paper',
         color: 'primary.main',
@@ -76,8 +105,6 @@ const theme = createTheme({
     background: {
       default: paper,
       paper,
-      paperDark: darken(paper, 0.1),
-      paperLight: lighten(paper, 0.1),
     },
     approve: addColor(approve),
     cancel: addColor(cancel),
@@ -108,6 +135,16 @@ const theme = createTheme({
     fontWeight: 600,
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          variants: Object.entries({ ...buttonColors, primary: buttonColors.main }).map(([name, value]) => ({
+            props: { color: name },
+            style: buttonColorStyle(value),
+          })),
+        },
+      },
+    },
     MuiFormControl: {
       styleOverrides: {
         root: {

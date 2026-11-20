@@ -2,6 +2,8 @@ import { memo, useMemo } from 'react'
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
+import color from '@/config/color.json'
+
 const CONTAINER_SX = {
   display: 'flex',
   flexDirection: 'column',
@@ -18,25 +20,29 @@ const GRID_WRAPPER_SX = {
 }
 
 const GRID_SX = {
-  height: '100%',
   '& .MuiDataGrid-columnHeaders': {
-    backgroundColor: 'background.paper',
     '& .MuiDataGrid-columnHeader': {
       '& .MuiDataGrid-columnHeaderTitle': {
-        fontWeight: 700,
         fontSize: '1rem',
+        fontWeight: 700,
       },
     },
+    backgroundColor: 'background.paper',
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    color: color.COLOR.TABLE.BORDER,
   },
   '& .MuiDataGrid-footerContainer': {
     display: 'none',
   },
+  '--DataGrid-rowBorderColor': color.COLOR.TABLE.BORDER,
+  borderColor: color.COLOR.TABLE.BORDER,
+  height: '100%',
 }
 
 const FOOTER_SX = {
   backgroundColor: 'background.paper',
-  borderColor: 'divider',
-  borderTop: 1,
+  borderTop: `1px solid ${color.COLOR.TABLE.BORDER}`,
   flexShrink: 0,
   pb: 1,
   pt: 1,
