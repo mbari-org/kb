@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
 import NavHistoryLinks from '@/components/common/NavHistoryLinks'
+import panelMods from '@/components/kb/panels/modules'
 import usePanelSelection from '@/contexts/selected/usePanelSelection'
 
 const PanelHistoryHarness = () => {
@@ -30,7 +31,7 @@ describe('NavHistoryLinks integration', () => {
 
     render(<PanelHistoryHarness />)
 
-    expect(screen.getByTestId('current-panel')).toHaveTextContent('Concepts')
+    expect(screen.getByTestId('current-panel')).toHaveTextContent(panelMods[0].name)
 
     await user.click(screen.getByRole('button', { name: 'push templates' }))
     await user.click(screen.getByRole('button', { name: 'push history' }))

@@ -9,7 +9,7 @@ import { getDescendantNames } from '@/lib/model/concept'
 
 import { sleep } from '@/lib/utils'
 
-import { PAGINATION } from '@/lib/config/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/pagination.js'
 import { CONCEPT } from '@/lib/constants'
 import { ERROR_TEXT } from '@/lib/constants/errorText.js'
 import { SELECTED } from '@/lib/constants/selected.js'

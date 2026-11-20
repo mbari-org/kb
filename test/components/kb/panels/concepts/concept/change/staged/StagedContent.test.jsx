@@ -33,6 +33,9 @@ vi.mock('@/components/kb/panels/concepts/concept/change/staged/StagedObject', as
   }
 })
 
+const { ITEM_TITLES } = CONFIG.PANELS.CONCEPTS.MODALS
+const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
+
 const baseState = {
   aliasIndex: 0,
   aliases: [],
@@ -121,10 +124,10 @@ describe('StagedContent', () => {
 
     renderStagedContent({ initialState, stagedState })
 
-    expect(screen.getByText('Change Parent:')).toBeInTheDocument()
+    expect(screen.getByText(`${ITEM_TITLES.PARENT.EDIT}:`)).toBeInTheDocument()
     expect(screen.getByText(/old-parent.*new-parent/)).toBeInTheDocument()
     expect(screen.queryByText('Parent Edit:')).not.toBeInTheDocument()
-    expect(screen.getByText('Edit Author:')).toBeInTheDocument()
+    expect(screen.getByText(`${ITEM_TITLES.AUTHOR.EDIT}:`)).toBeInTheDocument()
   })
 
   it('labels staged name and rank edits', () => {
@@ -136,15 +139,15 @@ describe('StagedContent', () => {
     }
     renderStagedContent({ initialState, stagedState })
 
-    expect(screen.getByTestId('staged-object-name')).toHaveTextContent('Change Name:')
-    expect(screen.getByTestId('staged-object-rank')).toHaveTextContent('Edit Rank:')
+    expect(screen.getByTestId('staged-object-name')).toHaveTextContent(`${ITEM_TITLES.NAME.EDIT}:`)
+    expect(screen.getByTestId('staged-object-rank')).toHaveTextContent(`${ITEM_TITLES.RANK.EDIT}:`)
   })
 
   const renamedState = () => {
     const initialState = { ...baseState, name: { action: 'None', value: 'old-name', extent: '' } }
     const stagedState = {
       ...initialState,
-      name: { action: 'Edit Name', value: 'new-name', extent: 'Reassign Related Data', stagedSeq: 1 },
+      name: { action: 'Edit Name', value: 'new-name', extent: REASSIGN, stagedSeq: 1 },
     }
     return { initialState, stagedState }
   }
@@ -153,13 +156,13 @@ describe('StagedContent', () => {
     const { apiResult } = renderStagedContent(renamedState())
 
     await waitFor(() => expect(apiResult).toHaveBeenCalledTimes(6))
-    expect(screen.queryByText(/Reassign Related Data/)).not.toBeInTheDocument()
+    expect(screen.queryByText(new RegExp(REASSIGN))).not.toBeInTheDocument()
   })
 
   it('shows the name extent when the concept has related data', async () => {
     renderStagedContent({ ...renamedState(), relatedCount: 1 })
 
-    expect(await screen.findByText(/Reassign Related Data/)).toBeInTheDocument()
+    expect(await screen.findByText(new RegExp(REASSIGN))).toBeInTheDocument()
   })
 
   it('closes the modal when the concept state is unavailable', () => {
@@ -170,15 +173,15 @@ describe('StagedContent', () => {
 
   describe('staged item headers', () => {
     it.each([
-      ['ALIAS', StagedAliasHeader, 'stagedAlias', { action: 'Add Alias', updates: { name: 'alias' } }, 'Add Alias'],
-      ['CHILD', StagedChildHeader, 'stagedChild', { action: 'Add Child', updates: { name: 'child' } }, 'Add Child'],
-      ['MEDIA', StagedMediaItemHeader, 'stagedMediaItem', { action: 'Add Media', updates: { url: 'image.png' } }, 'Add Media'],
-      ['REALIZATION', StagedRealizationHeader, 'stagedRealization', { action: 'Add Realization', updates: { linkName: 'link' } }, 'Add Realization'],
-    ])('uses the configured %s action title', (field, Header, prop, item, expected) => {
-      const titles = CONFIG.PANELS.CONCEPTS.MODALS.ITEM_TITLES[field]
+      ['ALIAS', StagedAliasHeader, 'stagedAlias', { action: 'Add Alias', updates: { name: 'alias' } }],
+      ['CHILD', StagedChildHeader, 'stagedChild', { action: 'Add Child', updates: { name: 'child' } }],
+      ['MEDIA', StagedMediaItemHeader, 'stagedMediaItem', { action: 'Add Media', updates: { url: 'image.png' } }],
+      ['REALIZATION', StagedRealizationHeader, 'stagedRealization', { action: 'Add Realization', updates: { linkName: 'link' } }],
+    ])('uses the configured %s action title', (field, Header, prop, item) => {
+      const titles = ITEM_TITLES[field]
       const original = titles.ADD
       const { rerender } = render(<Header {...{ [prop]: item }} />)
-      expect(screen.getByText(`${expected}:`)).toBeInTheDocument()
+      expect(screen.getByText(`${titles.ADD}:`)).toBeInTheDocument()
       titles.ADD = 'Configured action title'
       try {
         rerender(<Header {...{ [prop]: item }} />)

@@ -77,7 +77,7 @@ Three modal tiers: app-level (`AppModalProvider`), concept-panel (`ConceptModalP
 
 ## src/config/ — bundled UI strings and user-tunable constants (JSON)
 
-Mostly pure label/tooltip/alert-text JSON (no field/column/form specs), consumed via `src/lib/config` wrappers as `CONFIG.PANELS.*`. Per-panel dirs: `concepts/` (rich: aliases, rank, realizations, hierarchy + `modals/{alias,media,realization,hierarchy}/*`), `history/`, `references/`, `templates/`, `users/` (+ their `modals/`), minimal `embargoes|notes|abouthelp`. Root: `appInfo`, `button`, `concept`, `export`, `security` (encryption params), `processing`, `whoops`. The `constants/` dir holds user-tunable numeric/behavioral values (currently `pagination.json` → `PAGINATION`), wrapped by `src/lib/config/constants/` and registered as `CONFIG.CONSTANTS.*`.
+Mostly pure label/tooltip/alert-text JSON (no field/column/form specs), consumed via `src/lib/config` wrappers as `CONFIG.PANELS.*`. Per-panel dirs: `concepts/` (rich: aliases, rank, realizations, hierarchy + `modals/{alias,media,realization,hierarchy}/*`), `history/`, `references/`, `templates/`, `users/` (+ their `modals/`), minimal `embargoes|notes|abouthelp`. Root: `appInfo`, `button`, `concept`, `export`, `security` (encryption params), `processing`, `whoops`. The `constants/` dir holds user-tunable numeric/behavioral values (currently `pagination.json` → `PAGINATION`), wrapped by `src/lib/config/pagination.js` and registered as `CONFIG.CONSTANTS.*`.
 
 ## test/ — Vitest + Testing Library (jsdom, globals)
 

@@ -4,10 +4,13 @@ import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
 import { GUARDED_ACTION } from '@/lib/constants/guardedAction'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 import { ConceptPanelTestWrapper, enterEditMode } from '../concept.panel.test.wrapper'
 import CONFIG from '@/lib/config'
 import theme from '@/lib/theme'
+
+const { REFERENCES, TEMPLATES, REALIZATIONS } = CONFIG.PANELS.CONCEPTS
 
 const clickReferencesInspect = async user => {
   await waitFor(() => {
@@ -33,7 +36,7 @@ describe('Concept panel references', () => {
     const expectedColor = document.createElement('span')
     expectedColor.style.color = theme.kb.icon.colors.PANEL_LINK
 
-    for (const name of ['References', 'Templates', 'Realizations']) {
+    for (const name of [REFERENCES.LABEL, TEMPLATES.LABEL, REALIZATIONS.LABEL]) {
       const header = within(screen.getByRole('heading', { name, level: 6 }).parentElement)
       const icon = header.getByRole('img', { name: 'Inspect' }).parentElement
       const hoverColors = Array.from(document.styleSheets).flatMap(sheet =>
@@ -56,9 +59,9 @@ describe('Concept panel references', () => {
     )
 
     const section = name => within(screen.getByRole('heading', { name, level: 6 }).parentElement)
-    const references = section('References')
-    const templates = section('Templates')
-    const realizations = section('Realizations')
+    const references = section(REFERENCES.LABEL)
+    const templates = section(TEMPLATES.LABEL)
+    const realizations = section(REALIZATIONS.LABEL)
     const templateAdd = CONFIG.PANELS.CONCEPTS.MODALS.TEMPLATE.ADD.TOOLTIP
     const realizationAdd = CONFIG.PANELS.CONCEPTS.MODALS.REALIZATION.ADD.TOOLTIP
 
@@ -129,7 +132,7 @@ describe('Concept panel references', () => {
     await clickReferencesInspect(user)
 
     await waitFor(() => {
-      expect(onUpdateSelected).toHaveBeenCalledWith({ panel: 'References' })
+      expect(onUpdateSelected).toHaveBeenCalledWith({ panel: SELECTED.PANELS.REFERENCES })
     })
     expect(onUpdateSettings).toHaveBeenCalledWith({
       references: { filters: { concept: 'dingo' } },
@@ -160,7 +163,7 @@ describe('Concept panel references', () => {
       expect(onSetGuardedAction).toHaveBeenCalledWith({
         type: GUARDED_ACTION.CHANGE_PANEL,
         payload: {
-          panel: 'References',
+          panel: SELECTED.PANELS.REFERENCES,
           settings: {
             references: { filters: { concept: 'dingo' } },
           },

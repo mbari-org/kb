@@ -17,6 +17,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const BUTTON = CONFIG.BUTTON
+const RANK = CONFIG.PANELS.CONCEPTS.RANK
 
 const selectRankOption = async (user, label, option) => {
   const select = screen.getByRole('combobox', { name: label })
@@ -69,8 +70,8 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    expect(screen.queryByRole('combobox', { name: 'Name' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('combobox', { name: 'Level' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('combobox', { name: RANK.NAME })).not.toBeInTheDocument()
+    expect(screen.queryByRole('combobox', { name: RANK.LEVEL })).not.toBeInTheDocument()
   })
 
   it('shows rank fields when concept is under phylogeny root setting', () => {
@@ -80,8 +81,8 @@ describe('Rank state integrity', () => {
       </ConceptPanelTestWrapper>
     )
 
-    expect(screen.getByRole('combobox', { name: 'Name' })).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Level' })).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: RANK.NAME })).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: RANK.LEVEL })).toBeInTheDocument()
   })
 
   it('allows reverting rank name back to the initial value', async () => {
@@ -101,13 +102,13 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await selectRankOption(user, 'Name', 'Aves')
+    await selectRankOption(user, RANK.NAME, 'Aves')
     await waitFor(() => {
       expect(latestState.stagedRank.name).toBe('Aves')
       expect(latestState.stagedRank.action).toBe(CONCEPT_STATE.RANK)
     })
 
-    await selectRankOption(user, 'Name', 'Mammalia')
+    await selectRankOption(user, RANK.NAME, 'Mammalia')
     await waitFor(() => {
       expect(latestState.stagedRank.name).toBe('Mammalia')
       expect(latestState.stagedRank.level).toBe('Class')
@@ -132,14 +133,14 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await selectRankOption(user, 'Name', 'Aves')
-    await selectRankOption(user, 'Level', 'Subclass')
+    await selectRankOption(user, RANK.NAME, 'Aves')
+    await selectRankOption(user, RANK.LEVEL, 'Subclass')
     await waitFor(() => {
       expect(latestState.stagedRank.name).toBe('Aves')
       expect(latestState.stagedRank.level).toBe('Subclass')
     })
 
-    await selectRankOption(user, 'Level', 'Class')
+    await selectRankOption(user, RANK.LEVEL, 'Class')
     await waitFor(() => {
       expect(latestState.stagedRank.level).toBe('Class')
       expect(latestState.stagedRank.name).toBe('Aves')
@@ -158,7 +159,7 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await user.click(screen.getByRole('combobox', { name: 'Name' }))
+    await user.click(screen.getByRole('combobox', { name: RANK.NAME }))
     await waitFor(() => {
       expect(screen.getByRole('option', { name: 'Reptilia' })).toBeInTheDocument()
     })
@@ -182,7 +183,7 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await selectRankOption(user, 'Name', 'Aves')
+    await selectRankOption(user, RANK.NAME, 'Aves')
     await waitFor(() => {
       expect(latestState.stagedRank.name).toBe('Aves')
       expect(latestState.stagedRank.level).toBe('Class')
@@ -206,7 +207,7 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await selectRankOption(user, 'Name', 'Reptilia')
+    await selectRankOption(user, RANK.NAME, 'Reptilia')
     await waitFor(() => {
       expect(latestState.stagedRank.name).toBe('Reptilia')
       expect(latestState.stagedRank.level).toBe('')
@@ -225,7 +226,7 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await user.click(screen.getByRole('combobox', { name: 'Level' }))
+    await user.click(screen.getByRole('combobox', { name: RANK.LEVEL }))
     await waitFor(() => {
       expect(screen.getByRole('option', { name: 'Class' })).toBeInTheDocument()
     })
@@ -249,13 +250,13 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await selectRankOption(user, 'Name', 'Aves')
-    await selectRankOption(user, 'Level', 'Subclass')
+    await selectRankOption(user, RANK.NAME, 'Aves')
+    await selectRankOption(user, RANK.LEVEL, 'Subclass')
     await waitFor(() => {
       expect(latestState.stagedRank.level).toBe('Subclass')
     })
 
-    await user.click(screen.getByRole('button', { name: 'Clear Rank Level' }))
+    await user.click(screen.getByRole('button', { name: RANK.CLEAR.LEVEL }))
     await waitFor(() => {
       expect(latestState.stagedRank.level).toBe('')
       expect(latestState.stagedRank.name).toBe('Aves')
@@ -281,8 +282,8 @@ describe('Rank state integrity', () => {
     await enterEditMode(user, screen)
 
     // The Autocomplete clear indicator is visibility-hidden until the field has focus
-    await user.click(screen.getByRole('combobox', { name: 'Name' }))
-    await user.click(screen.getByRole('button', { name: 'Clear Rank Name' }))
+    await user.click(screen.getByRole('combobox', { name: RANK.NAME }))
+    await user.click(screen.getByRole('button', { name: RANK.CLEAR.NAME }))
     await waitFor(() => {
       expect(latestState.stagedRank.name).toBe('')
       expect(latestState.stagedRank.level).toBe('')
@@ -299,13 +300,13 @@ describe('Rank state integrity', () => {
       </ConceptPanelTestWrapper>
     )
 
-    expect(screen.getByRole('combobox', { name: 'Name' })).toBeDisabled()
-    expect(screen.getByRole('combobox', { name: 'Level' })).toBeDisabled()
+    expect(screen.getByRole('combobox', { name: RANK.NAME })).toBeDisabled()
+    expect(screen.getByRole('combobox', { name: RANK.LEVEL })).toBeDisabled()
 
     await enterEditMode(user, screen)
 
-    expect(screen.getByRole('combobox', { name: 'Name' })).toBeEnabled()
-    expect(screen.getByRole('combobox', { name: 'Level' })).toBeEnabled()
+    expect(screen.getByRole('combobox', { name: RANK.NAME })).toBeEnabled()
+    expect(screen.getByRole('combobox', { name: RANK.LEVEL })).toBeEnabled()
   })
 
   it('hides rank clear buttons when not editing', () => {
@@ -315,8 +316,8 @@ describe('Rank state integrity', () => {
       </ConceptPanelTestWrapper>
     )
 
-    expect(screen.queryByRole('button', { name: 'Clear Rank Name' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Clear Rank Level' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: RANK.CLEAR.NAME })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: RANK.CLEAR.LEVEL })).not.toBeInTheDocument()
   })
 
   it('hides rank clear buttons for non-admin users', async () => {
@@ -335,8 +336,8 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    expect(screen.queryByRole('button', { name: 'Clear Rank Name' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Clear Rank Level' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: RANK.CLEAR.NAME })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: RANK.CLEAR.LEVEL })).not.toBeInTheDocument()
   })
 
   it('updates rank name/level and discard all restores initial rank state', async () => {
@@ -356,8 +357,8 @@ describe('Rank state integrity', () => {
 
     await enterEditMode(user, screen)
 
-    await selectRankOption(user, 'Name', 'Aves')
-    await selectRankOption(user, 'Level', 'Subclass')
+    await selectRankOption(user, RANK.NAME, 'Aves')
+    await selectRankOption(user, RANK.LEVEL, 'Subclass')
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: BUTTON.SAVE })).toBeEnabled()

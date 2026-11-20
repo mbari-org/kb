@@ -94,7 +94,7 @@ const RealizationToConcept = ({
       disabled={!isValidLinkName}
       disableClearable={true}
       freeSolo={false}
-      renderInput={params => <TextField {...params} label='To Concept' size='small' />}
+      renderInput={params => <TextField {...params} label={CONFIG.LINK.FIELDS.TO_CONCEPT} size='small' />}
     />
   )
 

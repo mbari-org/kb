@@ -34,7 +34,7 @@ const ConceptRealizations = () => {
     })
   }
 
-  const ActionComponent = () => (
+  const ActionComponent = () =>
     isEditing ? (
       <RealizationActionIcon action={CONCEPT_STATE.REALIZATION.ADD} />
     ) : (
@@ -45,14 +45,13 @@ const ConceptRealizations = () => {
         tooltip={CONFIG.PANELS.CONCEPTS.REALIZATIONS.VIEW.TOOLTIP}
       />
     )
-  )
 
   return (
     <ConceptPropertyList
       actionComponent={ActionComponent}
       renderComponent={RealizationComponent}
       items={realizations}
-      title='Realizations'
+      title={CONFIG.PANELS.CONCEPTS.REALIZATIONS.LABEL}
     />
   )
 }

@@ -8,6 +8,9 @@ import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext
 import UserContext from '@/contexts/user/UserContext'
 import { ROLES } from '@/lib/constants/roles'
 import { SELECTED } from '@/lib/constants/selected'
+import CONFIG from '@/lib/config'
+
+const { CHOICE } = CONFIG
 
 const openPendingItem = vi.fn()
 
@@ -187,10 +190,10 @@ describe('useHistoryColumns', () => {
     expect(openPendingItem).toHaveBeenCalledWith({ conceptName: 'dingo', item: pendingRow })
 
     rerender(approvedColumn.renderCell({ row: approvedRow }))
-    expect(screen.getByText('Yes')).toBeInTheDocument()
+    expect(screen.getByText(CHOICE.YES)).toBeInTheDocument()
 
     rerender(approvedColumn.renderCell({ row: rejectedRow }))
-    expect(screen.getByText('No')).toBeInTheDocument()
+    expect(screen.getByText(CHOICE.NO)).toBeInTheDocument()
   })
 
   it('shows Pending text for concept pending rows when user is non-admin', () => {
@@ -205,7 +208,7 @@ describe('useHistoryColumns', () => {
     const approvedColumn = result.current.find(column => column.field === 'approved')
     render(approvedColumn.renderCell({ row: pendingRow }))
 
-    expect(screen.getByText('Pending')).toBeInTheDocument()
+    expect(screen.getByText(CONFIG.PANELS.HISTORY.TYPE.PENDING)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'stamp' })).not.toBeInTheDocument()
   })
 })

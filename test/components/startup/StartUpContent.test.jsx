@@ -6,7 +6,10 @@ import { ErrorBoundary } from 'react-error-boundary'
 import StartUpContent from '@/components/startup/StartUpContent'
 import ConfigContext from '@/contexts/config/ConfigContext'
 import UserContext from '@/contexts/user/UserContext'
+import CONFIG from '@/lib/config'
 import kbTheme from '@/lib/theme'
+
+const { READ_ONLY } = CONFIG.STARTUP
 
 const TestWrapper = ({ children, config, userValue }) => (
   <ErrorBoundary fallback={<div>Error</div>}>
@@ -31,7 +34,7 @@ describe('StartUpContent', () => {
       </TestWrapper>
     )
 
-    expect(screen.queryByRole('button', { name: 'Read Only Access' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: READ_ONLY })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Login' })).not.toBeInTheDocument()
   })
 
@@ -45,7 +48,7 @@ describe('StartUpContent', () => {
       </TestWrapper>
     )
 
-    expect(screen.getByRole('button', { name: 'Read Only Access' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: READ_ONLY })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
   })
 })

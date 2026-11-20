@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { getReferences as getReferencesApi } from '@/lib/api/references'
 
-import { PAGINATION } from '@/lib/config/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/pagination.js'
 import { createError } from '@/lib/errors'
 import { createReference } from '@/lib/model/reference'
 

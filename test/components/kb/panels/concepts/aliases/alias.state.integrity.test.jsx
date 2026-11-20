@@ -17,6 +17,7 @@ import {
 import CONFIG from '@/lib/config'
 
 const BUTTON = CONFIG.BUTTON
+const ALIAS_MODAL = CONFIG.PANELS.CONCEPTS.MODALS.ALIAS
 
 const cloneAliases = aliases => aliases.map(item => ({ ...item }))
 
@@ -95,10 +96,10 @@ describe('Alias state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickAliasAction(user, 'Add alias')
+    await clickAliasAction(user, ALIAS_MODAL.ADD.LABEL)
 
     await waitFor(() => {
-      expect(screen.getByText('Add alias')).toBeInTheDocument()
+      expect(screen.getByText(ALIAS_MODAL.ADD.LABEL)).toBeInTheDocument()
     })
 
     const aliasForm = document.getElementById('add-alias-form')
@@ -111,7 +112,7 @@ describe('Alias state integrity', () => {
     await clickStageButton(user, screen)
 
     await waitFor(() => {
-      expect(screen.queryByText('Add alias')).not.toBeInTheDocument()
+      expect(screen.queryByText(ALIAS_MODAL.ADD.LABEL)).not.toBeInTheDocument()
     })
 
     await waitFor(() => {
@@ -139,10 +140,10 @@ describe('Alias state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickAliasAction(user, 'Edit alias')
+    await clickAliasAction(user, ALIAS_MODAL.EDIT.LABEL)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit alias')).toBeInTheDocument()
+      expect(screen.getByText(ALIAS_MODAL.EDIT.LABEL)).toBeInTheDocument()
     })
 
     const aliasForm = document.getElementById('add-alias-form')
@@ -184,10 +185,10 @@ describe('Alias state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickAliasAction(user, 'Delete alias')
+    await clickAliasAction(user, ALIAS_MODAL.DELETE.LABEL)
 
     await waitFor(() => {
-      expect(screen.getByText('Delete alias')).toBeInTheDocument()
+      expect(screen.getByText(ALIAS_MODAL.DELETE.LABEL)).toBeInTheDocument()
     })
 
     await clickStageButton(user, screen)
@@ -216,10 +217,10 @@ describe('Alias state integrity', () => {
     )
 
     await enterEditMode(user, screen)
-    await clickAliasAction(user, 'Edit alias')
+    await clickAliasAction(user, ALIAS_MODAL.EDIT.LABEL)
 
     await waitFor(() => {
-      expect(screen.getByText('Edit alias')).toBeInTheDocument()
+      expect(screen.getByText(ALIAS_MODAL.EDIT.LABEL)).toBeInTheDocument()
     })
 
     const aliasForm = document.getElementById('add-alias-form')

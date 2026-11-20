@@ -14,6 +14,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import useConceptDetailStyle from '@/components/kb/panels/concepts/concept/change/staged/useConceptDetailStyle'
 
 import { stagedBorder } from '@/lib/concept/state/staged'
+import CONFIG from '@/lib/config'
 
 const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
   const theme = useTheme()
@@ -97,7 +98,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
           />
           <TextField
             {...infoStyle}
-            label='Link Name'
+            label={CONFIG.LINK.FIELDS.LINK_NAME}
             sx={{
               ...infoStyle.sx,
               '& .MuiInputBase-input': {
@@ -121,7 +122,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
         <Box sx={{ flex: `0 0 ${toConceptWidth}%`, maxWidth: `${toConceptWidth}%`, minWidth: 0 }}>
           <TextField
             {...infoStyle}
-            label='To Concept'
+            label={CONFIG.LINK.FIELDS.TO_CONCEPT}
             sx={{
               ...infoStyle.sx,
               '& .MuiInputBase-input': {
@@ -138,7 +139,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
         <Box sx={{ flex: `0 0 ${linkValueWidth}%`, maxWidth: `${linkValueWidth}%`, minWidth: 0 }}>
           <TextField
             {...infoStyle}
-            label='Link Value'
+            label={CONFIG.LINK.FIELDS.LINK_VALUE}
             sx={{
               ...infoStyle.sx,
               '& .MuiInputBase-input': {

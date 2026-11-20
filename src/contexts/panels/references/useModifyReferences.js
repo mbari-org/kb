@@ -10,7 +10,7 @@ import {
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
-import { PAGINATION } from '@/lib/config/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/pagination.js'
 
 import { createReference } from '@/lib/model/reference'
 

@@ -13,8 +13,10 @@ import { stagedBorder } from '@/lib/concept/state/staged'
 import { PENDING } from '@/lib/constants/pending.js'
 import { getMediaType } from '@/lib/model/media'
 import { MEDIA } from '@/lib/constants'
+import CONFIG from '@/lib/config'
 
 const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
+const { CHOICE } = CONFIG
 
 const CREDIT_TOOLTIP_MAX_LENGTH = 80
 
@@ -130,7 +132,7 @@ const MediaPreview = ({ setPreviewOn }) => {
                     : mediaItem.credit}
                 </Box>
               )}
-              <Box>Primary: {mediaItem?.isPrimary ? 'Yes' : 'No'}</Box>
+              <Box>Primary: {mediaItem?.isPrimary ? CHOICE.YES : CHOICE.NO}</Box>
             </Box>
           )
         }

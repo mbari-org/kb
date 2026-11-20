@@ -6,7 +6,7 @@ import CONFIG from '@/lib/config'
 const ToConceptSelectAuxiliary = ({ onChange }) => {
   return (
     <ConceptSelectAuxiliary
-      label={CONFIG.CONCEPT.SELECT.TO_CONCEPT}
+      label={CONFIG.LINK.FIELDS.TO_CONCEPT}
       components={[null, <ToConceptSpecial key='to-concept-special' onChange={onChange} />]}
     />
   )

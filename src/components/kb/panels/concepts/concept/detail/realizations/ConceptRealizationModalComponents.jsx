@@ -33,7 +33,7 @@ const ConceptRealizationModalContent = () => {
     <Stack spacing={2} sx={{ pt: 1 }}>
       <TextField
         {...infoStyle}
-        label='Link Name'
+        label={CONFIG.LINK.FIELDS.LINK_NAME}
         minRows={1}
         multiline
         sx={wrappedFieldSx}
@@ -41,7 +41,7 @@ const ConceptRealizationModalContent = () => {
       />
       <TextField
         {...infoStyle}
-        label='To Concept'
+        label={CONFIG.LINK.FIELDS.TO_CONCEPT}
         minRows={1}
         multiline
         sx={wrappedFieldSx}
@@ -49,7 +49,7 @@ const ConceptRealizationModalContent = () => {
       />
       <TextField
         {...infoStyle}
-        label='Link Value'
+        label={CONFIG.LINK.FIELDS.LINK_VALUE}
         minRows={1}
         multiline
         sx={wrappedFieldSx}

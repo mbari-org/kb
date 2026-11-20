@@ -13,10 +13,5 @@
     "CONFIRM_WARNING": ["Deleting this Realization is final.", "Please confirm you want to permanently delete it."],
     "HEADER": "Delete Realization",
     "WARNING": ["This Realization will be permanently deleted.", "This action cannot be undone."]
-  },
-  "FIELDS": {
-    "LINK_NAME": "Link Name",
-    "LINK_VALUE": "Link Value",
-    "TO_CONCEPT": "To Concept"
   }
 }

@@ -18,8 +18,7 @@
   "NO_MEDIA": "No Media",
   "PENDING_DELETE": "The selected Concept has a Pending Delete",
   "SELECT": {
-    "CONCEPT": "Concept",
-    "TO_CONCEPT": "To Concept"
+    "CONCEPT": "Concept"
   },
   "HIERARCHY": {
     "CHANGE_NAME": "Change Name",

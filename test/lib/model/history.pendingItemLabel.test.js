@@ -3,16 +3,18 @@ import { describe, expect, it } from 'vitest'
 import CONFIG from '@/lib/config'
 import { pendingItemLabel } from '@/lib/model/history'
 
+const ITEM_TITLES = CONFIG.PANELS.CONCEPTS.MODALS.ITEM_TITLES
+
 const base = { id: 'p1', concept: 'dingo-2', action: 'Edit', oldValue: 'a', newValue: 'b' }
 
 describe('pendingItemLabel', () => {
   it('labels each pending field', () => {
-    expect(pendingItemLabel({ ...base, field: 'Concept.child', action: 'Add' })).toBe('Add Child')
-    expect(pendingItemLabel({ ...base, field: 'Media' })).toBe('Edit Media')
-    expect(pendingItemLabel({ ...base, field: 'Concept.parent' })).toBe('Change Parent')
-    expect(pendingItemLabel({ ...base, field: 'Rank' })).toBe('Edit Rank')
-    expect(pendingItemLabel({ ...base, field: 'LinkRealization' })).toBe('Edit Realization')
-    expect(pendingItemLabel({ ...base, field: 'LinkTemplate' })).toBe('Edit Template')
+    expect(pendingItemLabel({ ...base, field: 'Concept.child', action: 'Add' })).toBe(ITEM_TITLES.CHILD.ADD)
+    expect(pendingItemLabel({ ...base, field: 'Media' })).toBe(ITEM_TITLES.MEDIA.EDIT)
+    expect(pendingItemLabel({ ...base, field: 'Concept.parent' })).toBe(ITEM_TITLES.PARENT.EDIT)
+    expect(pendingItemLabel({ ...base, field: 'Rank' })).toBe(ITEM_TITLES.RANK.EDIT)
+    expect(pendingItemLabel({ ...base, field: 'LinkRealization' })).toBe(ITEM_TITLES.REALIZATION.EDIT)
+    expect(pendingItemLabel({ ...base, field: 'LinkTemplate' })).toBe(ITEM_TITLES.TEMPLATE.EDIT)
   })
 
   it('distinguishes a primary rename from an alias change', () => {
@@ -21,13 +23,13 @@ describe('pendingItemLabel', () => {
 
     const aliasEdit = { ...base, field: 'ConceptName', oldValue: 'a', newValue: 'b' }
 
-    expect(pendingItemLabel(rename)).toBe('Change Name')
-    expect(pendingItemLabel(aliasAdd)).toBe('Add Alias')
-    expect(pendingItemLabel(aliasEdit)).toBe('Edit Alias')
+    expect(pendingItemLabel(rename)).toBe(ITEM_TITLES.NAME.EDIT)
+    expect(pendingItemLabel(aliasAdd)).toBe(ITEM_TITLES.ALIAS.ADD)
+    expect(pendingItemLabel(aliasEdit)).toBe(ITEM_TITLES.ALIAS.EDIT)
   })
 
   it('uses the configured title', () => {
-    const titles = CONFIG.PANELS.CONCEPTS.MODALS.ITEM_TITLES.ALIAS
+    const titles = ITEM_TITLES.ALIAS
     const original = titles.ADD
     titles.ADD = 'Configured alias title'
     try {

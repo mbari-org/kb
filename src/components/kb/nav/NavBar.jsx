@@ -11,6 +11,8 @@ import panelMods from '@/components/kb/panels/modules'
 import UserContext from '@/contexts/user/UserContext'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 
+import CONFIG from '@/lib/config'
+
 const NavBar = ({ selectPanel }) => {
   const { isAdmin } = use(UserContext)
   const { panels, isLoading } = use(SelectedContext)
@@ -19,7 +21,7 @@ const NavBar = ({ selectPanel }) => {
 
   const panelNames = isAdmin
     ? panelMods.map(({ name }) => name)
-    : panelMods.map(({ name }) => name).filter(name => name !== 'Users')
+    : panelMods.map(({ name }) => name).filter(name => name !== CONFIG.PANELS.USERS.PANEL.NAME)
 
   return (
     <AppBar

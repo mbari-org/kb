@@ -2,12 +2,13 @@ import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { getConceptLinkRealizations, getRealizations } from '@/lib/api/realizations'
-import { PAGINATION } from '@/lib/config/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/pagination.js'
 import useLoadRealizations from '@/contexts/panel/data/useLoadRealizations'
 
 const PAGE_SIZE = Math.max(...PAGINATION.REALIZATIONS.PAGE_SIZE_OPTIONS)
 
 const fullPage = offset => Array.from({ length: PAGE_SIZE }, (_, index) => ({ id: `r-${offset + index}` }))
+const pageOffset = page => page * PAGE_SIZE
 
 describe('useLoadRealizations', () => {
   it('loads pages in parallel batches until a short page is encountered', async () => {
@@ -15,7 +16,7 @@ describe('useLoadRealizations', () => {
     const apiFns = {
       apiPayload: vi.fn(async (fn, { offset }) => {
         calls.push(offset)
-        if (offset === 500) return { content: [{ id: 'r-500' }] }
+        if (offset === pageOffset(5)) return { content: [{ id: `r-${offset}` }] }
         return { content: fullPage(offset) }
       }),
     }
@@ -28,7 +29,7 @@ describe('useLoadRealizations', () => {
     })
 
     expect(apiFns.apiPayload).toHaveBeenCalledWith(getRealizations, { limit: PAGE_SIZE, offset: 0 })
-    expect(calls.slice(0, 5)).toEqual([0, 100, 200, 300, 400])
+    expect(calls.slice(0, 5)).toEqual([0, 1, 2, 3, 4].map(pageOffset))
     expect(calls.length).toBe(10)
     expect(realizations).toHaveLength(5 * PAGE_SIZE + 1)
   })

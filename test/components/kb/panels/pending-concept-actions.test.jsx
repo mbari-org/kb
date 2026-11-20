@@ -17,6 +17,7 @@ import SelectedSettingsContext from '@/contexts/selected/SelectedSettingsContext
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
+import CONFIG from '@/lib/config'
 import theme from '@/lib/theme'
 
 vi.mock('react-icons/md', () => ({ MdOutlineDeleteForever: () => <span>delete-icon</span> }))
@@ -36,6 +37,7 @@ vi.mock('@/contexts/panels/references/modal', () => ({
 }))
 
 const noop = () => {}
+const { ADD } = CONFIG.BUTTON
 const row = { concept: 'another-row-concept' }
 
 const TemplatesActions = () => {
@@ -89,7 +91,7 @@ describe.each([
   it('updates Add and row actions as the selected Concept gains and clears a pending deletion', () => {
     const { rerender } = render(<Harness Panel={Panel} />)
 
-    expect(screen.getByRole('button', { name: 'Add' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: ADD })).toBeEnabled()
     expect(screen.getByText('delete-icon')).toBeInTheDocument()
     expect(screen.getByText('edit-icon')).toBeInTheDocument()
 
@@ -99,12 +101,12 @@ describe.each([
         pendingHistory={[{ concept: 'parent', field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'selected' }]}
       />
     )
-    expect(screen.getByRole('button', { name: 'Add' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: ADD })).toBeDisabled()
     expect(screen.queryByText('delete-icon')).not.toBeInTheDocument()
     expect(screen.queryByText('edit-icon')).not.toBeInTheDocument()
 
     rerender(<Harness Panel={Panel} pendingHistory={[{ concept: 'selected', field: HISTORY_FIELD.NAME, action: ACTION.EDIT }]} />)
-    expect(screen.getByRole('button', { name: 'Add' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: ADD })).toBeEnabled()
     expect(screen.getByText('delete-icon')).toBeInTheDocument()
     expect(screen.getByText('edit-icon')).toBeInTheDocument()
 
@@ -114,7 +116,7 @@ describe.each([
         pendingHistory={[{ concept: 'parent', field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'other' }]}
       />
     )
-    expect(screen.getByRole('button', { name: 'Add' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: ADD })).toBeEnabled()
     expect(screen.getByText('edit-icon')).toBeInTheDocument()
 
     rerender(
@@ -124,7 +126,7 @@ describe.each([
         pendingHistory={[{ concept: 'parent', field: HISTORY_FIELD.CHILD, action: ACTION.DELETE, oldValue: 'selected' }]}
       />
     )
-    expect(screen.getByRole('button', { name: 'Add' })).toHaveProperty('disabled', requiresConcept)
+    expect(screen.getByRole('button', { name: ADD })).toHaveProperty('disabled', requiresConcept)
     expect(screen.getByText('delete-icon')).toBeInTheDocument()
   })
 
@@ -136,7 +138,7 @@ describe.each([
     const pendingHistory = [pendingItem]
     render(<Harness Panel={Panel} pendingHistory={pendingHistory} />)
 
-    expect(screen.getByRole('button', { name: 'Add' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: ADD })).toBeEnabled()
     expect(screen.getByText('delete-icon')).toBeInTheDocument()
     expect(screen.getByText('edit-icon')).toBeInTheDocument()
   })

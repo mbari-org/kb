@@ -1,5 +1,7 @@
 import { Autocomplete, TextField } from '@mui/material'
 
+import CONFIG from '@/lib/config'
+
 const LinkNameInput = ({ disabled = false, linkNameOptions, onChange, value }) => {
   const setLinkNameValue = nextValue => {
     onChange({ target: { value: nextValue ?? '' } })
@@ -10,7 +12,7 @@ const LinkNameInput = ({ disabled = false, linkNameOptions, onChange, value }) =
       <TextField
         disabled={disabled}
         fullWidth
-        label='Link Name'
+        label={CONFIG.LINK.FIELDS.LINK_NAME}
         onChange={onChange}
         required
         size='small'
@@ -27,7 +29,7 @@ const LinkNameInput = ({ disabled = false, linkNameOptions, onChange, value }) =
       onChange={(_, newValue) => setLinkNameValue(newValue)}
       onInputChange={(_, newInputValue) => setLinkNameValue(newInputValue)}
       options={linkNameOptions}
-      renderInput={params => <TextField {...params} disabled={disabled} label='Link Name' required size='small' />}
+      renderInput={params => <TextField {...params} disabled={disabled} label={CONFIG.LINK.FIELDS.LINK_NAME} required size='small' />}
       size='small'
       value={value}
     />

@@ -147,6 +147,8 @@ describe('Realizations panel edit save', () => {
       </ErrorBoundary>
     )
 
+  const BUTTON = CONFIG.BUTTON
+
   it('dismisses the edit modal after a successful save', async () => {
     const user = userEvent.setup()
     renderPanel()
@@ -157,7 +159,7 @@ describe('Realizations panel edit save', () => {
 
     await user.click(screen.getByRole('button', { name: 'edit' }))
 
-    const linkValueInput = await screen.findByRole('textbox', { name: 'Link Value' })
+    const linkValueInput = await screen.findByRole('textbox', { name: CONFIG.LINK.FIELDS.LINK_VALUE })
     expect(screen.getByText(CONFIG.PANELS.REALIZATIONS.MODALS.EDIT.CONTENT.HEADER)).toBeInTheDocument()
     await waitFor(() => {
       expect(linkValueInput).toBeEnabled()
@@ -166,8 +168,8 @@ describe('Realizations panel edit save', () => {
     await user.clear(linkValueInput)
     await user.type(linkValueInput, 'squid')
 
-    await user.click(screen.getByRole('button', { name: 'Save' }))
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(screen.getByRole('button', { name: BUTTON.SAVE }))
+    await user.click(screen.getByRole('button', { name: BUTTON.SAVE }))
 
     await waitFor(() => {
       expect(screen.queryByText('Concept: target-child')).not.toBeInTheDocument()

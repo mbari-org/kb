@@ -1,4 +1,4 @@
-import { PAGINATION } from './constants/pagination.js'
+import { PAGINATION } from './pagination.js'
 
 export const CONSTANTS = {
   PAGINATION,

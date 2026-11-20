@@ -15,8 +15,11 @@ import { humanTimestamp } from '@/lib/utils'
 
 import { SELECTED } from '@/lib/constants/selected.js'
 import { CONCEPT } from '@/lib/constants'
+import CONFIG from '@/lib/config'
 
+const { CHOICE } = CONFIG
 const { TYPE } = CONCEPT.HISTORY
+const { TYPE: TYPE_LABEL } = CONFIG.PANELS.HISTORY
 const { HISTORY } = SELECTED.SETTINGS
 
 const SORTING_ORDER = ['asc', 'desc']
@@ -67,9 +70,9 @@ const useHistoryColumns = ({ type }) => {
 
       let content
       isPending && (content = <StampIcon onClick={() => handleConceptApproval(params.row)} tooltip='Approve/Reject' />)
-      !isPending && isApproved && (content = 'Yes')
-      !isPending && !isApproved && (content = 'No')
-      isPending && !isAdmin && (content = 'Pending')
+      !isPending && isApproved && (content = CHOICE.YES)
+      !isPending && !isApproved && (content = CHOICE.NO)
+      isPending && !isAdmin && (content = TYPE_LABEL.PENDING)
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>{content}</Box>

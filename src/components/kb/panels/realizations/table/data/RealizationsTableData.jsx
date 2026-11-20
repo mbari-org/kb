@@ -9,7 +9,7 @@ import RealizationsContext from '@/contexts/panels/realizations/RealizationsCont
 import useEditRealizationButton from '@/components/kb/panels/realizations/form/useEditRealizationButton'
 import useDeleteRealizationButton from '@/components/kb/panels/realizations/form/useDeleteRealizationButton'
 
-import { PAGINATION } from '@/lib/config/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/pagination.js'
 
 const { PAGE_SIZE_OPTIONS, DEFAULT_LIMIT } = PAGINATION.REALIZATIONS
 

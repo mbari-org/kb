@@ -100,6 +100,8 @@ into `eslint.config.js`.
   (`src/lib/config/`) — 206 usages across 140 files. Do not hardcode labels/tooltips/
   alert text in components. Known exceptions (debt, not precedent): `UserForm.jsx` form
   labels and `useUserColumns.jsx` `headerName`s are hardcoded.
+- Link field labels shared by Realizations and Templates use `CONFIG.LINK.FIELDS`
+  from `src/config/link.json`. CSV headers remain independent of these UI labels.
 - Styling is the MUI `sx` prop: inline objects or module-level SCREAMING_SNAKE constants
   (e.g. `USERS_SX`, `DATA_GRID_PROPS` in `UsersTableData.jsx:17-27`). No `styled()`, no
   CSS modules; `classnames` is a declared dependency with no observed usage.
@@ -134,7 +136,7 @@ into `eslint.config.js`.
 
 - Developer constants governing internal structure/processing live in
   `src/lib/constants/`; user-tunable numeric/behavioral values live in
-  `src/config/constants/*.json` wrapped by `src/lib/config/constants/` and exposed as
+  `src/config/constants/*.json` wrapped by `src/lib/config/` and exposed as
   `CONFIG.CONSTANTS.*` (precedent: `PAGINATION` moved there 2026-10-30).
 - Temporary workarounds use the `Cx`-prefix convention (`CxTmp`, `CxTBD`, `CxInc`)
   instead of TODO/FIXME comments — there are deliberately zero TODO/FIXME markers in

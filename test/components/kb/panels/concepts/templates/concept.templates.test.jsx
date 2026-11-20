@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 
 import Concepts from '@/components/kb/panels/Concepts'
 import { GUARDED_ACTION } from '@/lib/constants/guardedAction'
+import { SELECTED } from '@/lib/constants/selected.js'
 
 import { ConceptPanelTestWrapper } from '../concept.panel.test.wrapper'
 
@@ -56,7 +57,7 @@ describe('Concept panel templates', () => {
     await clickTemplatesInspect(user)
 
     await waitFor(() => {
-      expect(onUpdateSelected).toHaveBeenCalledWith({ panel: 'Templates' })
+      expect(onUpdateSelected).toHaveBeenCalledWith({ panel: SELECTED.PANELS.TEMPLATES })
     })
     expect(onUpdateSettings).toHaveBeenCalledWith({
       templates: {
@@ -89,7 +90,7 @@ describe('Concept panel templates', () => {
       expect(onSetGuardedAction).toHaveBeenCalledWith({
         type: GUARDED_ACTION.CHANGE_PANEL,
         payload: {
-          panel: 'Templates',
+          panel: SELECTED.PANELS.TEMPLATES,
           settings: {
             templates: {
               filters: { concept: 'dingo' },

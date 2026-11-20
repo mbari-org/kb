@@ -3,6 +3,14 @@ import { describe, expect, it, vi, beforeEach } from 'vitest'
 
 import useInitPrefs from '@/contexts/preferences/useInitPrefs'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+import CONFIG from '@/lib/config'
+
+vi.mock('@/config/panels/concepts/panel.json', async importOriginal => {
+  const original = await importOriginal()
+  return { default: { ...original.default, NAME: 'Configured concepts panel' } }
+})
+
+const conceptsPanel = CONFIG.PANELS.CONCEPTS.PANEL.NAME
 
 const createSelection = ({ position = 0, state = [] } = {}) => ({
   getPosition: vi.fn(() => position),
@@ -20,10 +28,10 @@ const createArgs = overrides => ({
   createPreferences: vi.fn(),
   getPreferences: vi.fn(async () => ({
     concepts: { state: ['root'], position: 0 },
-    panels: { state: ['Concepts'], position: 0 },
+    panels: { state: [conceptsPanel], position: 0 },
     settings: {},
   })),
-  panelSelection: createSelection({ state: ['Concepts'] }),
+  panelSelection: createSelection({ state: [conceptsPanel] }),
   preferencesInitialized: false,
   getSettings: vi.fn(() => ({})),
   getSettingsRef: { current: null },
@@ -67,7 +75,7 @@ describe('useInitPrefs', () => {
           state: ['root', 'dingo', 'dingo', 'deleted', 'object', 'dingo', 'deleted'],
           position: 5,
         },
-        panels: { state: ['Concepts'], position: 0 },
+        panels: { state: [conceptsPanel], position: 0 },
         settings: {},
       })),
     })
@@ -104,7 +112,7 @@ describe('useInitPrefs', () => {
           state: ['object', 'behavior', 'CDF', 'behavior', 'NetCDF', 'CDF', 'wood'],
           position: 4,
         },
-        panels: { state: ['Concepts'], position: 0 },
+        panels: { state: [conceptsPanel], position: 0 },
         settings: {},
       })),
     })
@@ -131,7 +139,7 @@ describe('useInitPrefs', () => {
           state: ['root', 'dingo', 'object'],
           position: 1,
         },
-        panels: { state: ['Concepts'], position: 0 },
+        panels: { state: [conceptsPanel], position: 0 },
         settings: {},
       })),
     })
@@ -155,7 +163,7 @@ describe('useInitPrefs', () => {
           state: ['root', 'deleted', 'dingo', 'object'],
           position: 2,
         },
-        panels: { state: ['Concepts'], position: 0 },
+        panels: { state: [conceptsPanel], position: 0 },
         settings: {},
       })),
     })
@@ -182,7 +190,7 @@ describe('useInitPrefs', () => {
           state: ['deleted-a', 'deleted-b'],
           position: 1,
         },
-        panels: { state: ['Concepts'], position: 0 },
+        panels: { state: [conceptsPanel], position: 0 },
         settings: {},
       })),
     })
@@ -204,6 +212,7 @@ describe('useInitPrefs', () => {
 
   it('falls back to default panel when panel history is empty', async () => {
     const args = createArgs({
+      panelSelection: createSelection({ state: ['Existing default'] }),
       getPreferences: vi.fn(async () => ({
         concepts: {
           state: ['root'],
@@ -221,18 +230,18 @@ describe('useInitPrefs', () => {
 
     await waitFor(() => {
       expect(args.panelSelection.init).toHaveBeenCalledWith({
-        state: ['Concepts'],
+        state: ['Existing default'],
         position: 0,
       })
     })
 
     expect(args.updatePreferences).toHaveBeenCalledWith('panels', {
-      state: ['Concepts'],
+      state: ['Existing default'],
       position: 0,
     })
   })
 
-  it('falls back to Concepts when panel selection has no default panel', async () => {
+  it('falls back to the configured Concepts panel when panel selection has no default panel', async () => {
     const args = createArgs({
       panelSelection: createSelection({ state: [] }),
       getPreferences: vi.fn(async () => ({
@@ -252,14 +261,14 @@ describe('useInitPrefs', () => {
 
     await waitFor(() => {
       expect(args.panelSelection.init).toHaveBeenCalledWith({
-        state: ['Concepts'],
+        state: [conceptsPanel],
         position: 0,
       })
     })
 
     expect(args.showBoundary).not.toHaveBeenCalled()
     expect(args.updatePreferences).toHaveBeenCalledWith('panels', {
-      state: ['Concepts'],
+      state: [conceptsPanel],
       position: 0,
     })
   })

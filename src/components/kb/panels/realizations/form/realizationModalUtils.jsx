@@ -300,7 +300,8 @@ export const createDeleteRealizationContent = () => {
   }
   const DeleteRealizationContent = currentModalData => {
     const { realization } = currentModalData
-    const { ALERT, CONTENT, FIELDS } = DELETE_MODAL
+    const { ALERT, CONTENT } = DELETE_MODAL
+    const { FIELDS } = CONFIG.LINK
     const warningLines = ALERT.WARNING.LINES
     const confirmLines = ALERT.CONFIRM_WARNING.LINES
     const showConfirmWarning = Boolean(currentModalData.confirmDelete)

@@ -6,12 +6,15 @@ import { ThemeProvider } from '@mui/material/styles'
 
 import kbTheme from '@/lib/theme'
 import ChangeParentContent from '@/components/kb/panels/concepts/concept/change/staged/parent/ChangeParentContent'
+import CONFIG from '@/lib/config'
 import ChangeParentActions from '@/components/kb/panels/concepts/concept/change/staged/parent/ChangeParentActions'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptModalDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
+
+const { STAGE } = CONFIG.BUTTON
 
 const TestChangeParent = ({
   concept = { name: 'childConcept', parent: 'root' },
@@ -68,7 +71,7 @@ describe('ChangeParent modal validation', () => {
     const user = userEvent.setup()
     render(<TestChangeParent />)
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: STAGE })
     expect(stageButton).toBeDisabled()
 
     const input = screen.getByRole('combobox')
@@ -81,7 +84,7 @@ describe('ChangeParent modal validation', () => {
     const user = userEvent.setup()
     render(<TestChangeParent />)
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: STAGE })
     const input = screen.getByRole('combobox')
 
     await user.type(input, 'root')
@@ -92,7 +95,7 @@ describe('ChangeParent modal validation', () => {
     const user = userEvent.setup()
     render(<TestChangeParent />)
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: STAGE })
     const input = screen.getByRole('combobox')
 
     await user.click(input)
@@ -108,7 +111,7 @@ describe('ChangeParent modal validation', () => {
     const user = userEvent.setup()
     render(<TestChangeParent />)
 
-    const stageButton = screen.getByRole('button', { name: 'Stage' })
+    const stageButton = screen.getByRole('button', { name: STAGE })
     const input = screen.getByRole('combobox')
 
     await user.click(input)

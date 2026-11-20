@@ -6,8 +6,10 @@ import AppModalContext from '@/contexts/app/AppModalContext'
 
 import isValidUrl from '@/lib/validators/isValidUrl'
 import useDebounce from '@/lib/hooks/useDebounce'
+import CONFIG from '@/lib/config'
 
 const URL_CHECK_DEBOUNCE_TIME = 500
+const { URL } = CONFIG.PANELS.CONCEPTS.MODALS.MEDIA
 const BaseURLContent = ({ description, detail, fieldLabel, hint, modalDataValueKey }) => {
   const { modalData, setModalData } = use(AppModalContext)
   const alert = modalData.alert || null
@@ -76,11 +78,11 @@ const BaseURLContent = ({ description, detail, fieldLabel, hint, modalDataValueK
 
   const fieldHelperText =
     trimmedBaseUrl !== '' && !isValidUrl(trimmedBaseUrl)
-      ? 'Please enter a valid URL'
+      ? URL.INVALID_URL_ERROR
       : urlStatus.loading
-        ? 'Checking URL...'
+        ? URL.CHECKING
         : !urlStatus.valid
-          ? 'URL is not accessible'
+          ? URL.INACCESSIBLE_ERROR
           : ' '
 
   return (

@@ -6,7 +6,7 @@ import Pagination from '@/components/common/Pagination'
 
 import useHistoryColumns from '@/components/kb/panels/history/useHistoryColumns'
 
-import { PAGINATION } from '@/lib/config/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/pagination.js'
 import { CONCEPT } from '@/lib/constants'
 
 const { TYPE } = CONCEPT.HISTORY

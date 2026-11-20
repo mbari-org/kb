@@ -2,10 +2,7 @@
   "FILTER": {
     "CURRENT": "Current Filters",
     "LABEL": {
-      "CONCEPT": "Concept",
-      "LINK_NAME": "Link Name",
-      "TO_CONCEPT": "To Concept",
-      "LINK_VALUE": "Link Value"
+      "CONCEPT": "Concept"
     },
     "NONE": "*",
     "NO_SET": "not set"

@@ -6,6 +6,7 @@ import { createError } from '@/lib/errors'
 import { isEmpty } from '@/lib/utils'
 
 import { PREFS } from '@/lib/constants/prefs.js'
+import CONFIG from '@/lib/config'
 
 const { KEY } = PREFS.USER
 
@@ -144,7 +145,7 @@ const useInitPrefs = ({
                 })
               : normalizedConcepts
           const normalizedPanels = normalizeHistoryPreferences(allPrefs.panels)
-          const defaultPanelName = panelSelection.getState()[0] || 'Concepts'
+          const defaultPanelName = panelSelection.getState()[0] || CONFIG.PANELS.CONCEPTS.PANEL.NAME
           const panelsForInit =
             normalizedPanels.state.length === 0
               ? normalizeHistoryPreferences({

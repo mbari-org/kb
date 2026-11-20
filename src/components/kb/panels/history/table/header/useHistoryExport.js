@@ -17,14 +17,15 @@ import csvExport from '@/lib/csvExport'
 
 import { capitalize } from '@/lib/utils'
 
-import { PAGINATION } from '@/lib/config/constants/pagination.js'
+import { PAGINATION } from '@/lib/config/pagination.js'
 import { CONCEPT } from '@/lib/constants'
 import { SELECTED } from '@/lib/constants/selected.js'
 
 import CONFIG from '@/lib/config'
 import { conceptNameForFilename, humanTimestamp } from '@/lib/utils'
 
-const { PROCESSING } = CONFIG
+const { CHOICE, PROCESSING } = CONFIG
+const { TYPE: TYPE_LABEL } = CONFIG.PANELS.HISTORY
 
 const { TYPE } = CONCEPT.HISTORY
 const { CONCEPT: SELECTED_CONCEPT } = SELECTED
@@ -98,7 +99,7 @@ const rowData = (item, type) => {
   switch (type) {
     case TYPE.CONCEPT:
       return [
-        item.approved ? 'Yes' : 'Pending',
+        item.approved ? CHOICE.YES : TYPE_LABEL.PENDING,
         ...itemData,
         item.processorName,
         humanTimestamp(item.processedTimestamp),

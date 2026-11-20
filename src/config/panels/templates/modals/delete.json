@@ -1,22 +1,17 @@
 {
-  "CONTENT": {
-    "HEADER": "Delete Template",
-    "WARNING": ["This Template will be permanently deleted.", "This action cannot be undone."],
-    "CONFIRM_WARNING": ["Deleting this Template is final.", "Please confirm you want to permanently delete it."]
-  },
   "ALERT": {
-    "WARNING": {
-      "LINES": ["This Template will be permanently deleted.", "This action cannot be undone."],
-      "SEVERITY": "warning"
-    },
     "CONFIRM_WARNING": {
       "LINES": ["Deleting this Template is final.", "Please confirm you want to permanently delete it."],
       "SEVERITY": "error"
+    },
+    "WARNING": {
+      "LINES": ["This Template will be permanently deleted.", "This action cannot be undone."],
+      "SEVERITY": "warning"
     }
   },
-  "FIELDS": {
-    "LINK_NAME": "Link Name",
-    "TO_CONCEPT": "To Concept",
-    "LINK_VALUE": "Link Value"
+  "CONTENT": {
+    "CONFIRM_WARNING": ["Deleting this Template is final.", "Please confirm you want to permanently delete it."],
+    "HEADER": "Delete Template",
+    "WARNING": ["This Template will be permanently deleted.", "This action cannot be undone."]
   }
 }

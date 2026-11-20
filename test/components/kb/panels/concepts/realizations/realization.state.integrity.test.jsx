@@ -157,7 +157,7 @@ describe('Realization state integrity', () => {
       expect(getModalText(REALIZATION_MODAL.EDIT.LABEL)).toBeInTheDocument()
     })
 
-    const linkValueInput = screen.getByRole('textbox', { name: 'Link Value' })
+    const linkValueInput = screen.getByRole('textbox', { name: CONFIG.LINK.FIELDS.LINK_VALUE })
     await user.clear(linkValueInput)
     await user.type(linkValueInput, 'squid')
 
@@ -236,7 +236,7 @@ describe('Realization state integrity', () => {
       expect(getModalText(REALIZATION_MODAL.EDIT.LABEL)).toBeInTheDocument()
     })
 
-    const linkValueInput = screen.getByRole('textbox', { name: 'Link Value' })
+    const linkValueInput = screen.getByRole('textbox', { name: CONFIG.LINK.FIELDS.LINK_VALUE })
     await user.clear(linkValueInput)
     await user.type(linkValueInput, 'squid')
 

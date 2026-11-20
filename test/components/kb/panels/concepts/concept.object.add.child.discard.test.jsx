@@ -34,6 +34,7 @@ import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import CONFIG from '@/lib/config'
 
 const { ADD_CHILD } = CONFIG.CONCEPT.HIERARCHY
+const { ADD_CHILD: ADD_CHILD_MODAL } = CONFIG.PANELS.CONCEPTS.MODALS.HIERARCHY
 const BUTTON = CONFIG.BUTTON
 
 const resolveActionTarget = element => {
@@ -351,7 +352,7 @@ describe('concept object add child discard', () => {
 
     // In the add child modal: enter name 'dingo' and author 'me'
     await waitFor(() => {
-      expect(screen.getByText('Add Child')).toBeInTheDocument()
+      expect(screen.getByText(ADD_CHILD_MODAL.LABEL)).toBeInTheDocument()
     })
     const nameInput = screen.getByRole('textbox', { name: /name/i })
     const authorInput = screen.getByRole('textbox', { name: /author/i })

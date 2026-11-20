@@ -14,6 +14,7 @@ import UserContext from '@/contexts/user/UserContext'
 import { humanTimestamp } from '@/lib/utils'
 import useConceptHasPendingDelete from '@/lib/hooks/useConceptHasPendingDelete'
 import { SELECTED } from '@/lib/constants/selected.js'
+import CONFIG from '@/lib/config'
 
 const { REALIZATIONS } = SELECTED.SETTINGS
 
@@ -84,21 +85,21 @@ const useRealizationColumns = ({ deleteRealizationModal, editRealizationModal })
       {
         field: 'linkName',
         headerClassName: 'bold-header',
-        headerName: 'Link Name',
+        headerName: CONFIG.LINK.FIELDS.LINK_NAME,
         renderCell: TemplateCell({ filterKey: REALIZATIONS.FILTERS.LINK_NAME, updateFilters }),
         width: 175,
       },
       {
         field: 'toConcept',
         headerClassName: 'bold-header',
-        headerName: 'To Concept',
+        headerName: CONFIG.LINK.FIELDS.TO_CONCEPT,
         renderCell: TemplateCell({ filterKey: REALIZATIONS.FILTERS.TO_CONCEPT, updateFilters }),
         width: 175,
       },
       {
         field: 'linkValue',
         headerClassName: 'bold-header',
-        headerName: 'Link Value',
+        headerName: CONFIG.LINK.FIELDS.LINK_VALUE,
         renderCell: TemplateCell({ filterKey: REALIZATIONS.FILTERS.LINK_VALUE, updateFilters }),
         width: 250,
       },

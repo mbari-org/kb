@@ -3,6 +3,7 @@ import { FormControl, Stack } from '@mui/material'
 
 import TextInput from '@/components/common/TextInput'
 import useAvailableLinkTemplates from '@/components/kb/panels/concepts/concept/change/staged/realizations/edit/useAvailableLinkTemplates'
+import CONFIG from '@/lib/config'
 import RealizationToConcept from './RealizationToConcept'
 
 export const EDIT_REALIZATION_FORM_ID = 'edit-realization-form'
@@ -75,7 +76,7 @@ const RealizationForm = ({
       <FormControl fullWidth margin='normal'>
         <TextInput
           disabled
-          label='Link Name'
+          label={CONFIG.LINK.FIELDS.LINK_NAME}
           name='linkName'
           showClearButton={false}
           size='small'
@@ -103,7 +104,7 @@ const RealizationForm = ({
       <FormControl fullWidth margin='normal'>
         <TextInput
           disabled={!isValidLinkName}
-          label='Link Value'
+          label={CONFIG.LINK.FIELDS.LINK_VALUE}
           minRows={isEdit ? 1 : undefined}
           multiline={isEdit}
           name='linkValue'

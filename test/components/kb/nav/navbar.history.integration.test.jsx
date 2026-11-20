@@ -3,10 +3,14 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import NavBar from '@/components/kb/nav/NavBar'
+import panelMods from '@/components/kb/panels/modules'
 import SelectedContext from '@/contexts/selected/SelectedContext'
 import usePanelSelection from '@/contexts/selected/usePanelSelection'
 import UserContext from '@/contexts/user/UserContext'
 import { ROLES } from '@/lib/constants/roles.js'
+import CONFIG from '@/lib/config'
+
+const panelName = key => CONFIG.PANELS[key].PANEL.NAME
 
 vi.mock('@/components/kb/nav/UserActions', () => ({
   default: () => <div data-testid='user-actions' />,
@@ -39,17 +43,17 @@ describe('NavBar history integration', () => {
 
     render(<NavBarHarness />)
 
-    expect(screen.getByTestId('current-panel')).toHaveTextContent('Concepts')
+    expect(screen.getByTestId('current-panel')).toHaveTextContent(panelMods[0].name)
 
-    await user.click(screen.getByRole('button', { name: 'panel-Templates' }))
-    await user.click(screen.getByRole('button', { name: 'panel-History' }))
+    await user.click(screen.getByRole('button', { name: `panel-${panelName('TEMPLATES')}` }))
+    await user.click(screen.getByRole('button', { name: `panel-${panelName('HISTORY')}` }))
 
-    expect(screen.getByTestId('current-panel')).toHaveTextContent('History')
+    expect(screen.getByTestId('current-panel')).toHaveTextContent(panelName('HISTORY'))
 
     await user.click(screen.getByRole('button', { name: 'previous' }))
-    expect(screen.getByTestId('current-panel')).toHaveTextContent('Templates')
+    expect(screen.getByTestId('current-panel')).toHaveTextContent(panelName('TEMPLATES'))
 
     await user.click(screen.getByRole('button', { name: 'next' }))
-    expect(screen.getByTestId('current-panel')).toHaveTextContent('History')
+    expect(screen.getByTestId('current-panel')).toHaveTextContent(panelName('HISTORY'))
   })
 })

@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles'
 
 import ConfigForm from '@/components/startup/config/ConfigForm'
 import ConfigContext from '@/contexts/config/ConfigContext'
+import CONFIG from '@/lib/config'
 import kbTheme from '@/lib/theme'
 
 describe('ConfigForm', () => {
@@ -22,7 +23,7 @@ describe('ConfigForm', () => {
       </ThemeProvider>
     )
 
-    const input = screen.getByRole('textbox', { name: 'Config Service URL' })
+    const input = screen.getByRole('textbox', { name: CONFIG.STARTUP.CONFIG_SERVICE.LABEL })
     await user.type(input, 'https://localhost')
     await user.click(screen.getByRole('button', { name: 'Set' }))
 

@@ -12,6 +12,8 @@ import CONFIG from '@/lib/config'
 
 import { humanTimestamp } from '@/lib/utils'
 
+const { CHOICE } = CONFIG
+
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const lockTooltip = locked =>
     locked ? CONFIG.PANELS.USERS.PANEL.TOOLTIP.UNLOCK : CONFIG.PANELS.USERS.PANEL.TOOLTIP.LOCK
@@ -95,7 +97,7 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
       headerName: 'Locked',
       width: 100,
       headerClassName: 'bold-header',
-      valueGetter: params => (params ? 'Yes' : 'No'),
+      valueGetter: value => (value ? CHOICE.YES : CHOICE.NO),
     },
     {
       field: 'lastUpdated',

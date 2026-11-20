@@ -39,9 +39,9 @@ const useFilterTooltip = filterTemplate => {
         <Box sx={{ minWidth: 400 }}>
           <Stack direction='column' spacing={1}>
             {renderFilterRow(FILTER.LABEL.CONCEPT, concept)}
-            {renderFilterRow(FILTER.LABEL.LINK_NAME, linkName)}
-            {renderFilterRow(FILTER.LABEL.TO_CONCEPT, toConcept)}
-            {renderFilterRow(FILTER.LABEL.LINK_VALUE, linkValue)}
+            {renderFilterRow(CONFIG.LINK.FIELDS.LINK_NAME, linkName)}
+            {renderFilterRow(CONFIG.LINK.FIELDS.TO_CONCEPT, toConcept)}
+            {renderFilterRow(CONFIG.LINK.FIELDS.LINK_VALUE, linkValue)}
           </Stack>
         </Box>
       </Stack>

@@ -11,7 +11,7 @@ import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdateP
 
 import CONFIG from '@/lib/config'
 
-const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
+const { REASSIGN, NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
 
 const processPendingApprovalMock = vi.fn()
 const relatedDataCountsMock = vi.fn()
@@ -232,7 +232,7 @@ describe('useHistoryUpdatePending', () => {
     const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
 
     await act(async () => {
-      await result.current({ approval: 'approve', item: renameItem, nameChangeType: 'Reassign Related Data' })
+      await result.current({ approval: 'approve', item: renameItem, nameChangeType: REASSIGN })
     })
 
     expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
@@ -248,7 +248,7 @@ describe('useHistoryUpdatePending', () => {
     const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
 
     await act(async () => {
-      await result.current({ approval: 'approve', item: renameItem, nameChangeType: 'Name Only' })
+      await result.current({ approval: 'approve', item: renameItem, nameChangeType: NAME_ONLY })
     })
 
     expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
@@ -261,7 +261,7 @@ describe('useHistoryUpdatePending', () => {
     const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
 
     await act(async () => {
-      await result.current({ approval: 'reject', item: renameItem, nameChangeType: 'Reassign Related Data' })
+      await result.current({ approval: 'reject', item: renameItem, nameChangeType: REASSIGN })
     })
 
     expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)

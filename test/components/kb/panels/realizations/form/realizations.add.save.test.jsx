@@ -146,15 +146,17 @@ describe('Realizations panel add save', () => {
       </ErrorBoundary>
     )
 
+  const BUTTON = CONFIG.BUTTON
+
   it('creates the realization from a template selection and dismisses the modal', async () => {
     const user = userEvent.setup()
     renderPanel()
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: BUTTON.ADD })).toBeInTheDocument()
     })
 
-    await user.click(screen.getByRole('button', { name: 'Add' }))
+    await user.click(screen.getByRole('button', { name: BUTTON.ADD }))
 
     await waitFor(() => {
       expect(screen.getByText('Concept: target-child')).toBeInTheDocument()
@@ -163,8 +165,8 @@ describe('Realizations panel add save', () => {
 
     await user.click(await screen.findByRole('button', { name: 'eats' }))
 
-    await user.click(screen.getByRole('button', { name: 'Save' }))
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(screen.getByRole('button', { name: BUTTON.SAVE }))
+    await user.click(screen.getByRole('button', { name: BUTTON.SAVE }))
 
     await waitFor(() => {
       expect(screen.queryByText('Concept: target-child')).not.toBeInTheDocument()
