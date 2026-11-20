@@ -23,6 +23,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
         <Box>
           <ActionIcon
             color='cancel'
+            colorOnHover
             Icon={MdOutlineDeleteForever}
             onClick={() => deleteReferenceModal(params.row)}
             restrictReadOnly
@@ -31,6 +32,7 @@ const useReferenceColumns = ({ deleteReferenceModal, editReferenceModal }) => {
           />
           <ActionIcon
             color='edit'
+            colorOnHover
             Icon={CiEdit}
             onClick={() => editReferenceModal(params.row)}
             restrictReadOnly

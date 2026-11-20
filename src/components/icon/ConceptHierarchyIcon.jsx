@@ -9,6 +9,7 @@ const ConceptHierarchyIcon = ({ onClick, sx = {} }) => {
       onClick={onClick}
       size={24}
       color='edit'
+      colorOnHover
       sx={{
         mb: 2,
         ml: 0.5,

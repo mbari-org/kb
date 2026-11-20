@@ -59,7 +59,7 @@ const MediaModifyIcon = ({ action, mediaIndex, size }) => {
 
   const IconComponent = action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
-  return <IconComponent onClick={onClick} size={size} />
+  return <IconComponent colorOnHover={action !== ADD} onClick={onClick} size={size} />
 }
 
 export default MediaModifyIcon

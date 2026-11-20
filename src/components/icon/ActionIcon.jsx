@@ -9,6 +9,7 @@ const BUTTON_SIZE = 'small'
 const ActionIcon = ({
   asDiv = false,
   color,
+  colorOnHover = false,
   Icon,
   onClick,
   restrictReadOnly = false,
@@ -24,6 +25,7 @@ const ActionIcon = ({
   const isDisabled = restrictReadOnly && isReadOnly
 
   const hoverColor = color ? theme.palette[color]?.main || theme.palette.primary.main : theme.palette.primary.main
+  const restingColor = color && colorOnHover ? theme.palette.common.black : hoverColor
 
   const sizedIcon = <Icon size={size} />
 
@@ -34,7 +36,7 @@ const ActionIcon = ({
         sx={{
           alignItems: 'center',
           borderRadius: '50%',
-          ...(color && { color: hoverColor }),
+          ...(color && { color: restingColor }),
           cursor: isDisabled ? 'not-allowed' : 'pointer',
           display: 'flex',
           justifyContent: 'center',
@@ -69,7 +71,7 @@ const ActionIcon = ({
       disabled={isDisabled}
       onClick={onClick}
       sx={{
-        ...(color && { color: hoverColor }),
+        ...(color && { color: restingColor }),
         '&:hover': {
           ...(isDisabled ? {} : theme.kb?.icon?.hover),
           ...(color && !isDisabled && { color: hoverColor }),

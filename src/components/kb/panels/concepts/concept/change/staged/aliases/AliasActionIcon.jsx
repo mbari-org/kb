@@ -56,7 +56,7 @@ const AliasActionIcon = ({ action, aliasIndex, size }) => {
 
   const IconComponent = action === ADD ? PropertyAddIcon : action === DELETE ? PropertyDeleteIcon : PropertyEditIcon
 
-  return <IconComponent onClick={onClick} size={size} tooltip={tooltip} />
+  return <IconComponent colorOnHover={action !== ADD} onClick={onClick} size={size} tooltip={tooltip} />
 }
 
 export default AliasActionIcon

@@ -16,7 +16,7 @@ import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalCo
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
-const MediaAction = ({ Icon, action, color, position = 'right', size, tooltip, sx = {} }) => {
+const MediaAction = ({ Icon, action, color, colorOnHover = false, position = 'right', size, tooltip, sx = {} }) => {
   const { initialState } = use(ConceptContext)
   const { modifyConcept, stagedState } = use(ConceptStagedContext)
   const { mediaBaseURL } = use(ConfigContext)
@@ -58,6 +58,7 @@ const MediaAction = ({ Icon, action, color, position = 'right', size, tooltip, s
     <MediaIcon
       Icon={Icon}
       color={color}
+      colorOnHover={colorOnHover}
       position={position}
       size={size}
       tooltip={tooltip}

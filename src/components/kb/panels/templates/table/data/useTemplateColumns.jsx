@@ -33,6 +33,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
           <Box>
             <ActionIcon
               color='cancel'
+              colorOnHover
               Icon={MdOutlineDeleteForever}
               onClick={() => deleteTemplateModal(params.row)}
               restrictReadOnly
@@ -41,6 +42,7 @@ const useTemplateColumns = ({ deleteTemplateModal, editTemplateModal }) => {
             />
             <ActionIcon
               color='edit'
+              colorOnHover
               Icon={CiEdit}
               onClick={() => editTemplateModal(params.row)}
               restrictReadOnly

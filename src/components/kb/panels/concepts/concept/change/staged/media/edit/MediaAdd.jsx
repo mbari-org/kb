@@ -12,6 +12,7 @@ const MediaAdd = ({ position, size, sx }) => {
     <MediaAction
       action={CONCEPT_STATE.MEDIA_ITEM.ADD}
       color='add'
+      colorOnHover
       Icon={MdOutlineAddPhotoAlternate}
       position={position}
       size={size}

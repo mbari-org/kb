@@ -12,6 +12,7 @@ const MediaDelete = () => {
     <MediaAction
       action={CONCEPT_STATE.MEDIA_ITEM.DELETE}
       color='cancel'
+      colorOnHover
       Icon={MdOutlineDeleteForever}
       position='left'
       tooltip={MEDIA.DELETE.TOOLTIP}

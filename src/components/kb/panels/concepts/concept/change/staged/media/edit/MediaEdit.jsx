@@ -12,6 +12,7 @@ const MediaEdit = () => {
     <MediaAction
       action={CONCEPT_STATE.MEDIA_ITEM.EDIT}
       color='edit'
+      colorOnHover
       Icon={CiEdit}
       position='right'
       tooltip={MEDIA.EDIT.TOOLTIP}
