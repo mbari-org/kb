@@ -3,12 +3,14 @@ import { stagedEdits } from '@/lib/concept/state/staged'
 import { ACTION } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { FIELDS } from '@/lib/config/fields.js'
 
 import { orderedAliases } from '@/lib/model/aliases'
 
 import { drop, isJsonEqual } from '@/lib/utils'
 
-const ALIAS_FIELDS = ['id', 'name', 'nameType', 'author']
+const { AUTHOR, ID, NAME, NAME_TYPE } = FIELDS.ALIAS
+const ALIAS_FIELDS = [ID, NAME, NAME_TYPE, AUTHOR]
 const reindexAliases = aliases => aliases.map((alias, index) => ({ ...alias, index }))
 
 const addAlias = ({ stagedState, update }) => {
@@ -121,7 +123,7 @@ const stagedAliasesEdits = stagedEdit => {
   const [_field, aliases] = stagedEdit
 
   return stagedEdits({
-    displayFields: drop(ALIAS_FIELDS, ['id']),
+    displayFields: drop(ALIAS_FIELDS, [ID]),
     initial: aliases.initial,
     staged: aliases.staged,
     stateTypes: CONCEPT_STATE.ALIAS,

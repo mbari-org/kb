@@ -9,12 +9,13 @@ import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptMod
 import CONFIG from '@/lib/config'
 
 const { REALIZATION } = CONFIG.PANELS.CONCEPTS.MODALS
+const { FIELDS } = CONFIG
 
 const DeleteRealizationContent = () => {
   const { modalData } = use(ConceptModalDataContext)
   const { realizationItem } = modalData
 
-  const keys = ['linkName', 'toConcept', 'linkValue']
+  const keys = [FIELDS.REALIZATION.LINK_NAME, FIELDS.REALIZATION.TO_CONCEPT, FIELDS.REALIZATION.LINK_VALUE]
 
   return (
     <Box>

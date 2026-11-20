@@ -1,8 +1,10 @@
 import { displayItem, stagedEdits } from '@/lib/concept/state/staged'
 import { MEDIA } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { FIELDS } from '@/lib/config/fields.js'
 
 const { IMAGE, VIDEO, ICON } = MEDIA.TYPE
+const { IS_PRIMARY, MEDIA_TYPE } = FIELDS.MEDIA
 
 // Derive a canonical media type from mimeType and/or URL.
 const deriveMediaType = ({ mimeType, url } = {}) => {
@@ -46,7 +48,7 @@ const hasPrimary = media => !!getPrimary(media)
 // Prefer explicit mediaType on the item; fall back to derived type from mimeType/URL.
 // Normalize explicit mediaType to match the canonical values in MEDIA_TYPE.
 const getItemMediaType = item => {
-  const raw = item?.mediaType
+  const raw = item?.[MEDIA_TYPE]
   if (typeof raw === 'string') {
     const upper = raw.toUpperCase()
     if (MEDIA.ORDER.includes(upper)) {
@@ -62,7 +64,7 @@ const getPrimaryOfType = (media, type) => mediaOfType(media, type).find(isPrimar
 
 const hasPrimaryOfType = (media, type) => !!getPrimaryOfType(media, type)
 
-const isPrimary = mediaItem => !!mediaItem.isPrimary
+const isPrimary = mediaItem => !!mediaItem[IS_PRIMARY]
 
 const mediaItemEdits = ({ initial, staged }) =>
   stagedEdits({
@@ -76,7 +78,7 @@ const mediaItemFields = mediaItem => displayItem(mediaItem, MEDIA.DISPLAY)
 
 const typeMediaItem = mediaItem => ({
   ...mediaItem,
-  mediaType: getItemMediaType(mediaItem),
+  [MEDIA_TYPE]: getItemMediaType(mediaItem),
 })
 
 export {

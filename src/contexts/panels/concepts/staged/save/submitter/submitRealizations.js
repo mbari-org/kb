@@ -2,6 +2,7 @@ import { createRealization, deleteRealization, updateRealization } from '@/lib/a
 
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { FIELDS } from '@/lib/config/fields.js'
 
 import { diff, drop, pick } from '@/lib/utils'
 
@@ -12,7 +13,7 @@ const buildRealizationSubmit = (op, effective) => {
 
   switch (action) {
     case REALIZATION.ADD: {
-      const realization = pick(item, ['linkName', 'toConcept', 'linkValue'])
+      const realization = pick(item, [FIELDS.REALIZATION.LINK_NAME, FIELDS.REALIZATION.TO_CONCEPT, FIELDS.REALIZATION.LINK_VALUE])
       const params = {
         ...realization,
         concept: effective.state.name,
@@ -27,7 +28,7 @@ const buildRealizationSubmit = (op, effective) => {
     case REALIZATION.EDIT: {
       const prior = effective.findRealization(item)
       const updateDiff = diff(item, prior)
-      const realization = drop(updateDiff, ['action', 'stagedSeq', 'stateId'])
+      const realization = drop(updateDiff, [FIELDS.STAGED.ACTION, FIELDS.STAGED.STAGED_SEQ, FIELDS.STAGED.STATE_ID])
       const params = [prior.id, realization]
       return {
         apiFn: updateRealization,

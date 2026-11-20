@@ -1,8 +1,13 @@
+import { FIELDS } from '@/lib/config/fields.js'
 import { pick } from '@/lib/utils'
 
-const REALIZATION_VALUE_FIELDS = ['linkName', 'toConcept', 'linkValue']
+const REALIZATION_VALUE_FIELDS = [
+  FIELDS.REALIZATION.LINK_NAME,
+  FIELDS.REALIZATION.TO_CONCEPT,
+  FIELDS.REALIZATION.LINK_VALUE,
+]
 
-export const REALIZATION_FIELDS = ['concept', ...REALIZATION_VALUE_FIELDS]
+export const REALIZATION_FIELDS = [FIELDS.REALIZATION.CONCEPT, ...REALIZATION_VALUE_FIELDS]
 
 export const EMPTY_REALIZATION = Object.fromEntries(REALIZATION_FIELDS.map(field => [field, '']))
 

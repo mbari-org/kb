@@ -6,13 +6,15 @@ import CONFIG from '@/lib/config'
 import { diff, filterObject, pick } from '@/lib/utils'
 
 const { CANCEL, CONTINUE, DELETE, DISCARD, DISCARD_ALL, SAVE } = CONFIG.BUTTON
-const { CONCEPT } = CONFIG
+const { CONCEPT, FIELDS } = CONFIG
+
+const { CITATION, CONCEPTS, DOI } = FIELDS.REFERENCE
 
 export const REFERENCE_FIELDS = {
-  ADD_SUBMIT: ['citation', 'doi', 'concepts'],
-  EDITABLE: ['citation', 'doi', 'concepts'],
-  REQUIRED_ADD: ['citation', 'doi'],
-  REQUIRED_BASE: ['citation', 'doi'],
+  ADD_SUBMIT: [CITATION, DOI, CONCEPTS],
+  EDITABLE: [CITATION, DOI, CONCEPTS],
+  REQUIRED_ADD: [CITATION, DOI],
+  REQUIRED_BASE: [CITATION, DOI],
 }
 
 export const createReferenceValidator =
@@ -52,7 +54,7 @@ export const createChangeDetector =
 
     const fieldsToCompare = REFERENCE_FIELDS.EDITABLE
     return fieldsToCompare.some(field => {
-      if (field === 'concepts') {
+      if (field === CONCEPTS) {
         // Compare arrays
         const originalConcepts = original[field] || []
         const currentConcepts = referenceData[field] || []
@@ -148,7 +150,7 @@ export const createInitialReference = initialConcept => ({
 
 export const processEditReferenceData = (reference, original) => {
   const hasFieldChanges = REFERENCE_FIELDS.EDITABLE.some(field => {
-    if (field === 'concepts') {
+    if (field === CONCEPTS) {
       const originalConcepts = original[field] || []
       const currentConcepts = reference[field] || []
       return JSON.stringify(originalConcepts.sort()) !== JSON.stringify(currentConcepts.sort())
@@ -172,7 +174,7 @@ export const processAddReferenceData = reference => {
   // API requires concepts array (even if empty)
   return {
     ...filterObject(data, (key, value) => {
-      if (key === 'concepts') {
+      if (key === CONCEPTS) {
         return true
       }
       return value && value.trim() !== ''

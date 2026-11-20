@@ -1,7 +1,10 @@
 import { isStagedAction } from '@/lib/concept/state/staged'
 
-const ARRAY_FIELDS = ['aliases', 'children', 'media', 'realizations', 'templates']
-const VALUE_FIELDS = ['author', 'name', 'parent', 'rank']
+import { CONCEPT } from '@/lib/constants'
+
+const { FIELD } = CONCEPT
+const ARRAY_FIELDS = [FIELD.ALIASES, FIELD.CHILDREN, FIELD.MEDIA, FIELD.REALIZATIONS, FIELD.TEMPLATES]
+const VALUE_FIELDS = [FIELD.AUTHOR, FIELD.NAME, FIELD.PARENT, FIELD.RANK]
 
 const isStagedEdit = item =>
   isStagedAction(item.action) && !item.action.toLowerCase().endsWith(' pending')

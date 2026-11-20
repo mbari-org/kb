@@ -5,6 +5,7 @@ import { COMMON } from './common.js'
 import { CONCEPT } from './concept.js'
 import { CONSTANTS } from './constants.js'
 import { EXPORT } from './export.js'
+import { FIELDS } from './fields.js'
 import { LINK } from './link.js'
 import { PANELS } from './panels.js'
 import { PROCESSING } from './processing.js'
@@ -21,6 +22,7 @@ export default {
   CONCEPT,
   CONSTANTS,
   EXPORT,
+  FIELDS,
   LINK,
   PANELS,
   PROCESSING,

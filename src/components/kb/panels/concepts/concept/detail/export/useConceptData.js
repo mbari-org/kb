@@ -15,17 +15,18 @@ import { loadTemplates } from '@/lib/model/templates'
 import { drop } from '@/lib/utils'
 import CONFIG from '@/lib/config'
 
-const { PROCESSING } = CONFIG
-export const ALWAYS_INCLUDED_FIELDS = ['name', 'children']
+const { FIELDS, PROCESSING } = CONFIG
+const { FIELD } = CONCEPT
+export const ALWAYS_INCLUDED_FIELDS = [FIELD.NAME, FIELD.CHILDREN]
 export const OPTIONAL_FIELDS = [
-  'aliases',
-  'author',
-  'media',
-  'parent',
-  'rank',
-  'realizations',
-  'references',
-  'templates',
+  FIELD.ALIASES,
+  FIELD.AUTHOR,
+  FIELD.MEDIA,
+  FIELD.PARENT,
+  FIELD.RANK,
+  FIELD.REALIZATIONS,
+  FIELD.REFERENCES,
+  FIELD.TEMPLATES,
 ]
 
 const conceptDataFn = (apiFns, ensureConceptRealizations) => {
@@ -48,14 +49,16 @@ const conceptDataFn = (apiFns, ensureConceptRealizations) => {
 
     if (includeFields.aliases) {
       const aliases = await loadAliases(apiFns, source)
-      exportData.aliases = aliases.map(alias => drop(alias, ['id']))
+      exportData.aliases = aliases.map(alias => drop(alias, [FIELDS.ALIAS.ID]))
     }
     if (includeFields.author) {
       exportData.author = source.author
     }
     if (includeFields.media) {
       exportData.media = source.media
-        ? source.media.map(item => drop(item, ['conceptName', 'id', 'lastUpdated']))
+        ? source.media.map(item =>
+            drop(item, [FIELDS.SHARED.CONCEPT_NAME, FIELDS.SHARED.ID, FIELDS.SHARED.LAST_UPDATED])
+          )
         : []
     }
     if (includeFields.parent) {
@@ -67,15 +70,17 @@ const conceptDataFn = (apiFns, ensureConceptRealizations) => {
     }
     if (includeFields.realizations) {
       const realizations = await ensureConceptRealizations(concept.name)
-      exportData.realizations = realizations.map(realization => drop(realization, ['id']))
+      exportData.realizations = realizations.map(realization => drop(realization, [FIELDS.SHARED.ID]))
     }
     if (includeFields.references) {
       const references = await loadReferences(apiFns, concept)
-      exportData.references = references.map(reference => drop(reference, ['id', 'lastUpdated']))
+      exportData.references = references.map(reference =>
+        drop(reference, [FIELDS.SHARED.ID, FIELDS.SHARED.LAST_UPDATED])
+      )
     }
     if (includeFields.templates) {
       const templates = await loadTemplates(apiFns, concept)
-      exportData.templates = templates.map(template => drop(template, ['id', 'lastUpdated']))
+      exportData.templates = templates.map(template => drop(template, [FIELDS.SHARED.ID, FIELDS.SHARED.LAST_UPDATED]))
     }
     return exportData
   }

@@ -1,3 +1,7 @@
+import { FIELDS } from '@/lib/config/fields.js'
+
+const { CAPTION, CREDIT, IS_PRIMARY, URL } = FIELDS.MEDIA
+
 const MEDIA = {
   TYPE: {
     IMAGE: 'IMAGE',
@@ -9,7 +13,7 @@ const MEDIA = {
     VIDEO: new Set(['mp4', 'mov', 'm4v', 'webm', 'ogg', 'ogv']),
     ICON: new Set(['ico']),
   },
-  DISPLAY: ['url', 'credit', 'caption', 'isPrimary'],
+  DISPLAY: [URL, CREDIT, CAPTION, IS_PRIMARY],
 }
 
 MEDIA.ORDER = [MEDIA.TYPE.IMAGE, MEDIA.TYPE.VIDEO, MEDIA.TYPE.ICON]

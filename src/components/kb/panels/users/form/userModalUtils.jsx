@@ -8,15 +8,17 @@ import { diff, filterObject, pick } from '@/lib/utils'
 
 import CONFIG from '@/lib/config'
 
-const { CANCEL, CLOSE, LOCK, SAVE, UNLOCK } = CONFIG.BUTTON
+const { BUTTON, FIELDS } = CONFIG
+const { CANCEL, CLOSE, LOCK, SAVE, UNLOCK } = BUTTON
+const { AFFILIATION, EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, ROLE, USERNAME } = FIELDS.USER
 
-const EDITABLE = ['affiliation', 'email', 'firstName', 'lastName', 'role']
-const EDITABLE_ADD = [...EDITABLE, 'username']
+const EDITABLE = [AFFILIATION, EMAIL, FIRST_NAME, LAST_NAME, ROLE]
+const EDITABLE_ADD = [...EDITABLE, USERNAME]
 
 export const createUserValidator =
   (isEdit = false) =>
   userData => {
-    const requiredFields = isEdit ? EDITABLE_ADD : [...EDITABLE_ADD, 'password']
+    const requiredFields = isEdit ? EDITABLE_ADD : [...EDITABLE_ADD, PASSWORD]
 
     const allFieldsFilled = requiredFields.every(field => {
       const value = userData[field] || ''
@@ -39,7 +41,7 @@ const createChangeDetector =
   (userData, original = null) => {
     if (!isEdit) {
       // For add mode, any non-empty field means changes
-      const fieldsToCheck = [...EDITABLE_ADD, 'password']
+      const fieldsToCheck = [...EDITABLE_ADD, PASSWORD]
       return fieldsToCheck.some(field => {
         const value = userData[field] || ''
         return value.trim() !== ''
@@ -140,13 +142,13 @@ export const processEditUserData = (user, original) => {
 
   // Get updates, excluding empty password
   return filterObject(
-    diff(pick(user, [...EDITABLE, 'password']), original),
-    (key, value) => !(key === 'password' && (!value || value.trim() === ''))
+    diff(pick(user, [...EDITABLE, PASSWORD]), original),
+    (key, value) => !(key === PASSWORD && (!value || value.trim() === ''))
   )
 }
 
 export const processAddUserData = user => {
-  return filterObject(pick(user, [...EDITABLE_ADD, 'password']), (key, value) => value && value.trim() !== '')
+  return filterObject(pick(user, [...EDITABLE_ADD, PASSWORD]), (key, value) => value && value.trim() !== '')
 }
 
 export const createHandlers = (updateModalData, closeModal, isEdit) => {

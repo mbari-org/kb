@@ -1,7 +1,8 @@
 import { getConcept as getConceptApi } from '@/lib/api/concept'
+import { FIELDS } from '@/lib/config/fields.js'
 import { pick } from '@/lib/utils'
 
-const REFERENCE_FIELDS = ['citation', 'doi', 'concepts']
+const REFERENCE_FIELDS = [FIELDS.REFERENCE.CITATION, FIELDS.REFERENCE.DOI, FIELDS.REFERENCE.CONCEPTS]
 
 const sortConcepts = concepts => [...(concepts || [])].sort((a, b) => a.localeCompare(b))
 

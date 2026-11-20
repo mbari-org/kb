@@ -1,9 +1,12 @@
 import { getConcept as apiConcept, getConceptChildren, getConceptPhylogenyDown } from '@/lib/api/concept'
+import { CONCEPT } from '@/lib/constants'
 import { pick } from '@/lib/utils'
+
+const { FIELD } = CONCEPT
 
 const getChildrenInfo = async (apiFns, conceptName) => {
   const children = await apiFns.apiPayload(getConceptChildren, conceptName)
-  return children.map(child => pick(child, ['id', 'name', 'alternateNames']))
+  return children.map(child => pick(child, [FIELD.ID, FIELD.NAME, FIELD.ALTERNATE_NAMES]))
 }
 
 const getConcept = async (apiFns, conceptName) =>

@@ -12,7 +12,8 @@ import CONFIG from '@/lib/config'
 
 import { humanTimestamp } from '@/lib/utils'
 
-const { CHOICE } = CONFIG
+const { CHOICE, FIELDS } = CONFIG
+const { AFFILIATION, EMAIL, FIRST_NAME, LAST_NAME, LOCKED, LAST_UPDATED, ROLE, USERNAME } = FIELDS.USER
 
 const useUserColumns = ({ editUserModal, lockUserModal }) => {
   const lockTooltip = locked =>
@@ -49,14 +50,14 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
       ),
     },
     {
-      field: 'username',
+      field: USERNAME,
       headerName: 'Username',
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
-      field: 'role',
+      field: ROLE,
       headerName: 'Role',
       width: 130,
       type: 'singleSelect',
@@ -65,42 +66,42 @@ const useUserColumns = ({ editUserModal, lockUserModal }) => {
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
-      field: 'affiliation',
+      field: AFFILIATION,
       headerName: 'Affiliation',
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
-      field: 'firstName',
+      field: FIRST_NAME,
       headerName: 'First Name',
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
-      field: 'lastName',
+      field: LAST_NAME,
       headerName: 'Last Name',
       width: 130,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
-      field: 'email',
+      field: EMAIL,
       headerName: 'Email',
       width: 200,
       headerClassName: 'bold-header',
       cellClassName: params => (params.row.locked ? 'disabled-cell' : ''),
     },
     {
-      field: 'locked',
+      field: LOCKED,
       headerName: 'Locked',
       width: 100,
       headerClassName: 'bold-header',
       valueGetter: value => (value ? CHOICE.YES : CHOICE.NO),
     },
     {
-      field: 'lastUpdated',
+      field: LAST_UPDATED,
       headerName: 'Last Update',
       width: 250,
       headerClassName: 'bold-header',

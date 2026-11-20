@@ -6,8 +6,10 @@ import FieldValueDisplay from '@/components/common/FieldValueDisplay'
 import { formatDelta } from '@/components/common/format'
 
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { FIELDS } from '@/lib/config/fields.js'
 
 const { MEDIA_ITEM: MEDIA_ITEM } = CONCEPT_STATE
+const { CAPTION, CREDIT, IS_PRIMARY } = FIELDS.MEDIA
 
 const StagedMediaItemDetail = ({ initialMediaItem, stagedMediaItem }) => {
   const { action, updates } = stagedMediaItem
@@ -16,9 +18,9 @@ const StagedMediaItemDetail = ({ initialMediaItem, stagedMediaItem }) => {
     let fieldValues
     switch (action) {
       case MEDIA_ITEM.ADD:
-        fieldValues = ['credit', 'caption', 'isPrimary'].map(field => [
+        fieldValues = [CREDIT, CAPTION, IS_PRIMARY].map(field => [
           field,
-          field === 'isPrimary' ? (updates[field] === true ? 'true' : 'false') : updates[field],
+          field === IS_PRIMARY ? (updates[field] === true ? 'true' : 'false') : updates[field],
         ])
         break
 

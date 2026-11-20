@@ -11,6 +11,7 @@ import { getItemMediaType } from '@/lib/model/media'
 import { pick } from '@/lib/utils'
 
 const { MEDIA } = CONFIG.PANELS.CONCEPTS.MODALS
+const { FIELDS } = CONFIG
 
 const DeleteMediaContent = () => {
   const {
@@ -18,7 +19,9 @@ const DeleteMediaContent = () => {
   } = use(ConceptStagedContext)
 
   const mediaItem = media?.[mediaIndex]
-  const detail = mediaItem ? pick(mediaItem, ['url', 'credit', 'caption', 'isPrimary']) : {}
+  const detail = mediaItem
+    ? pick(mediaItem, [FIELDS.MEDIA.URL, FIELDS.MEDIA.CREDIT, FIELDS.MEDIA.CAPTION, FIELDS.MEDIA.IS_PRIMARY])
+    : {}
   const mediaType = getItemMediaType(mediaItem)
   const hasOtherMediaOfType = mediaType
     ? media.some((item, index) => index !== mediaIndex && getItemMediaType(item) === mediaType)

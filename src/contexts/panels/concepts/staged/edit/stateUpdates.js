@@ -12,7 +12,9 @@ import * as realizations from '@/lib/concept/state/realizations'
 import * as templates from '@/lib/concept/state/templates'
 import * as value from '@/lib/concept/state/value'
 
-const INDEX_FIELDS = ['aliasIndex', 'mediaIndex', 'realizationIndex']
+import { FIELDS } from '@/lib/config/fields.js'
+
+const INDEX_FIELDS = [FIELDS.STAGED.ALIAS_INDEX, FIELDS.STAGED.MEDIA_INDEX, FIELDS.STAGED.REALIZATION_INDEX]
 
 const stateUpdates = (initialState, stagedState) => {
   if (!isStateModified({ initialState, stagedState })) return {}

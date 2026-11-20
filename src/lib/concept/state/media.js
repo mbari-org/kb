@@ -7,6 +7,7 @@ import { stagedEdits } from '@/lib/concept/state/staged'
 import { ACTION, MEDIA } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
+import { FIELDS } from '@/lib/config/fields.js'
 
 import { isEqualWithout, isJsonEqual } from '@/lib/utils'
 
@@ -110,7 +111,14 @@ const demotePrimary = ({ editingItem, media, updatedItem, initialMedia }) => {
   const demotedItem = result[demotedIndex]
   if (demotedItem.action === CONCEPT_STATE.MEDIA_ITEM.EDIT && initialMedia) {
     const initialDemotedItem = initialMedia.find(item => item.stateId === demotedItem.stateId)
-    if (initialDemotedItem && isEqualWithout(demotedItem, initialDemotedItem, ['action', 'isPrimary', 'stagedSeq'])) {
+    if (
+      initialDemotedItem &&
+      isEqualWithout(demotedItem, initialDemotedItem, [
+        FIELDS.STAGED.ACTION,
+        FIELDS.MEDIA.IS_PRIMARY,
+        FIELDS.STAGED.STAGED_SEQ,
+      ])
+    ) {
       return result.map((item, index) =>
         index === demotedIndex ? { ...item, action: CONCEPT_STATE.NO_ACTION } : item
       )
@@ -236,7 +244,8 @@ const editMedia = ({ initialState, stagedState, update }) => {
 
   // Check if we're restoring to initial state before setting action
   const initialItem = initialState?.media?.find(item => item.stateId === updatedItem.stateId)
-  const isRestoringToInitial = initialItem && isEqualWithout(updatedItem, initialItem, ['action', 'stagedSeq'])
+  const isRestoringToInitial =
+    initialItem && isEqualWithout(updatedItem, initialItem, [FIELDS.STAGED.ACTION, FIELDS.STAGED.STAGED_SEQ])
 
   if (isRestoringToInitial) {
     if (updatedItem.action === CONCEPT_STATE.MEDIA_ITEM.EDIT) {

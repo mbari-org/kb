@@ -7,10 +7,15 @@ import { diff, filterObject, pick } from '@/lib/utils'
 
 import CONFIG from '@/lib/config'
 
-const { BUTTON } = CONFIG
+const { BUTTON, FIELDS } = CONFIG
 const { ADD, EDIT, DELETE: DELETE_MODAL } = CONFIG.PANELS.TEMPLATES.MODALS
 
-const TEMPLATE_FIELDS = ['concept', 'linkName', 'toConcept', 'linkValue']
+const TEMPLATE_FIELDS = [
+  FIELDS.REALIZATION.CONCEPT,
+  FIELDS.REALIZATION.LINK_NAME,
+  FIELDS.REALIZATION.TO_CONCEPT,
+  FIELDS.REALIZATION.LINK_VALUE,
+]
 
 const hasInput = (templateData, field) => templateData[field]?.trim() !== ''
 
@@ -190,7 +195,7 @@ export const createDeleteTemplateContent = () => {
   const DeleteTemplateContent = currentModalData => {
     const { template } = currentModalData
     const { ALERT, CONTENT } = DELETE_MODAL
-    const { FIELDS } = CONFIG.LINK
+    const { FIELDS: LABEL_FIELDS } = CONFIG.LINK
     const warningLines = ALERT.WARNING.LINES
     const confirmLines = ALERT.CONFIRM_WARNING.LINES
     const showConfirmWarning = Boolean(currentModalData.confirmDelete)
@@ -199,9 +204,9 @@ export const createDeleteTemplateContent = () => {
     const warningColor = getSeverityColor(warningSeverity)
 
     const fields = [
-      { label: FIELDS.LINK_NAME, value: template.linkName },
-      { label: FIELDS.TO_CONCEPT, value: template.toConcept },
-      { label: FIELDS.LINK_VALUE, value: template.linkValue },
+      { label: LABEL_FIELDS.LINK_NAME, value: template.linkName },
+      { label: LABEL_FIELDS.TO_CONCEPT, value: template.toConcept },
+      { label: LABEL_FIELDS.LINK_VALUE, value: template.linkValue },
     ]
 
     return (

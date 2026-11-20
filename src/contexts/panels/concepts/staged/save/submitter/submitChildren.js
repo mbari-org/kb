@@ -1,6 +1,7 @@
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { createConcept } from '@/lib/api/concept'
+import { FIELDS } from '@/lib/config/fields.js'
 
 import { drop } from '@/lib/utils'
 
@@ -12,7 +13,11 @@ const buildChildSubmit = (op, effective) => {
     throw new Error(`Unknown child action: ${action}`)
   }
 
-  const params = drop({ ...item, parentName: effective.state.name }, ['action', 'index', 'stagedSeq'])
+  const params = drop({ ...item, parentName: effective.state.name }, [
+    FIELDS.STAGED.ACTION,
+    FIELDS.STAGED.INDEX,
+    FIELDS.STAGED.STAGED_SEQ,
+  ])
   return {
     apiFn: createConcept,
     params,

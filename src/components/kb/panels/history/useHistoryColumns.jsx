@@ -21,6 +21,7 @@ const { CHOICE } = CONFIG
 const { TYPE } = CONCEPT.HISTORY
 const { TYPE: TYPE_LABEL } = CONFIG.PANELS.HISTORY
 const { HISTORY } = SELECTED.SETTINGS
+const { HISTORY: HISTORY_FIELDS } = CONFIG.FIELDS
 
 const SORTING_ORDER = ['asc', 'desc']
 
@@ -43,14 +44,14 @@ const useHistoryColumns = ({ type }) => {
     }
 
     const sortableFields = [
-      'action',
-      ...(type === TYPE.CONCEPT ? ['approved'] : ['concept']),
-      'creationTimestamp',
-      'creatorName',
-      'field',
-      'newValue',
-      'oldValue',
-      ...(type !== TYPE.PENDING ? ['processedTimestamp', 'processorName'] : []),
+      HISTORY_FIELDS.ACTION,
+      ...(type === TYPE.CONCEPT ? [HISTORY_FIELDS.APPROVED] : [HISTORY_FIELDS.CONCEPT]),
+      HISTORY_FIELDS.CREATION_TIMESTAMP,
+      HISTORY_FIELDS.CREATOR_NAME,
+      HISTORY_FIELDS.FIELD,
+      HISTORY_FIELDS.NEW_VALUE,
+      HISTORY_FIELDS.OLD_VALUE,
+      ...(type !== TYPE.PENDING ? [HISTORY_FIELDS.PROCESSED_TIMESTAMP, HISTORY_FIELDS.PROCESSOR_NAME] : []),
     ]
 
     const sortableProps = field =>
@@ -105,31 +106,31 @@ const useHistoryColumns = ({ type }) => {
 
     const conceptColumn =
       type !== TYPE.CONCEPT
-        ? { ...columnProps('concept', 'Concept', 200), renderCell: conceptLinkCell }
-        : columnProps('concept', 'Concept', 200)
+        ? { ...columnProps(HISTORY_FIELDS.CONCEPT, 'Concept', 200), renderCell: conceptLinkCell }
+        : columnProps(HISTORY_FIELDS.CONCEPT, 'Concept', 200)
 
     const baseColumns = [
       conceptColumn,
-      columnProps('field', 'Field', 130),
-      columnProps('action', 'Action', 100),
-      columnProps('creatorName', 'Creator', 130),
-      columnProps('oldValue', 'Old Value', 200),
-      columnProps('newValue', 'New Value', 200),
+      columnProps(HISTORY_FIELDS.FIELD, 'Field', 130),
+      columnProps(HISTORY_FIELDS.ACTION, 'Action', 100),
+      columnProps(HISTORY_FIELDS.CREATOR_NAME, 'Creator', 130),
+      columnProps(HISTORY_FIELDS.OLD_VALUE, 'Old Value', 200),
+      columnProps(HISTORY_FIELDS.NEW_VALUE, 'New Value', 200),
       {
-        ...columnProps('creationTimestamp', 'Created', 165),
+        ...columnProps(HISTORY_FIELDS.CREATION_TIMESTAMP, 'Created', 165),
         valueFormatter: value => humanTimestamp(value),
       },
     ]
 
     const approvedColumn = {
-      ...columnProps('approved', 'Approved', 100),
+      ...columnProps(HISTORY_FIELDS.APPROVED, 'Approved', 100),
       renderCell: approvedCell,
     }
 
     const processorColumns = [
-      columnProps('processorName', 'Processor', 100),
+      columnProps(HISTORY_FIELDS.PROCESSOR_NAME, 'Processor', 100),
       {
-        ...columnProps('processedTimestamp', 'Processed', 165),
+        ...columnProps(HISTORY_FIELDS.PROCESSED_TIMESTAMP, 'Processed', 165),
         valueFormatter: value => humanTimestamp(value),
       },
     ]

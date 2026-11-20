@@ -1,0 +1,69 @@
+{
+  "SHARED": {
+    "ID": "id",
+    "CONCEPT_NAME": "conceptName",
+    "LAST_UPDATED": "lastUpdated"
+  },
+  "ALIAS": {
+    "ID": "id",
+    "NAME": "name",
+    "NAME_TYPE": "nameType",
+    "AUTHOR": "author"
+  },
+  "MEDIA": {
+    "ID": "id",
+    "URL": "url",
+    "CREDIT": "credit",
+    "CAPTION": "caption",
+    "IS_PRIMARY": "isPrimary",
+    "MEDIA_TYPE": "mediaType"
+  },
+  "REALIZATION": {
+    "CONCEPT": "concept",
+    "LINK_NAME": "linkName",
+    "TO_CONCEPT": "toConcept",
+    "LINK_VALUE": "linkValue",
+    "TEMPLATE_ID": "templateId"
+  },
+  "REFERENCE": {
+    "ID": "id",
+    "CITATION": "citation",
+    "DOI": "doi",
+    "CONCEPTS": "concepts"
+  },
+  "HISTORY": {
+    "ACTION": "action",
+    "CONCEPT": "concept",
+    "FIELD": "field",
+    "CREATOR_NAME": "creatorName",
+    "CREATION_TIMESTAMP": "creationTimestamp",
+    "OLD_VALUE": "oldValue",
+    "NEW_VALUE": "newValue",
+    "PROCESSED_TIMESTAMP": "processedTimestamp",
+    "PROCESSOR_NAME": "processorName",
+    "APPROVED": "approved",
+    "ID": "id"
+  },
+  "USER": {
+    "USERNAME": "username",
+    "PASSWORD": "password",
+    "CONFIRM_PASSWORD": "confirmPassword",
+    "EMAIL": "email",
+    "ROLE": "role",
+    "LOCKED": "locked",
+    "FIRST_NAME": "firstName",
+    "LAST_NAME": "lastName",
+    "AFFILIATION": "affiliation",
+    "LAST_UPDATED": "lastUpdated"
+  },
+  "STAGED": {
+    "ACTION": "action",
+    "INDEX": "index",
+    "STAGED_SEQ": "stagedSeq",
+    "STATE_ID": "stateId",
+    "ALIAS_INDEX": "aliasIndex",
+    "MEDIA_INDEX": "mediaIndex",
+    "REALIZATION_INDEX": "realizationIndex",
+    "HISTORY_ID": "historyId"
+  }
+}

@@ -1,9 +1,10 @@
 import { getExplicitTemplates } from '@/lib/api/templates'
+import { FIELDS } from '@/lib/config/fields.js'
 import { pick } from '@/lib/utils'
 
 import { REALIZATION_FIELDS, REALIZATION_VALUE_FIELDS } from './realization'
 
-const TEMPLATE_FIELDS = [...REALIZATION_FIELDS, 'templateId']
+const TEMPLATE_FIELDS = [...REALIZATION_FIELDS, FIELDS.REALIZATION.TEMPLATE_ID]
 
 export const EMPTY_TEMPLATE = Object.fromEntries(TEMPLATE_FIELDS.map(field => [field, '']))
 

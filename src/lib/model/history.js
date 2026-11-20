@@ -4,6 +4,7 @@ import itemTitle from '@/lib/concept/itemTitle'
 
 import { ACTION } from '@/lib/constants'
 import { createError } from '@/lib/errors'
+import { FIELDS } from '@/lib/config/fields.js'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
 
@@ -84,7 +85,7 @@ const moveDeleteToLast = items => {
 }
 
 const pendingActionText = action => {
-  const actionText = action !== 'REPLACE' ? action : 'Edit'
+  const actionText = action !== 'REPLACE' ? action : ACTION.EDIT
   return capitalize(actionText)
 }
 
@@ -97,10 +98,10 @@ const pendingInfo = pendingItem => {
 
 const pendingValues = pendingItem =>
   pick(pendingItem, [
-    ['oldValue', 'before'],
-    ['newValue', 'after'],
-    ['creatorName', 'user'],
-    ['creationTimestamp', 'created'],
+    [FIELDS.HISTORY.OLD_VALUE, 'before'],
+    [FIELDS.HISTORY.NEW_VALUE, 'after'],
+    [FIELDS.HISTORY.CREATOR_NAME, 'user'],
+    [FIELDS.HISTORY.CREATION_TIMESTAMP, 'created'],
   ])
 
 const pendingItemField = pendingItem => {

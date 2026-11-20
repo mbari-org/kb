@@ -5,6 +5,12 @@
 
 import LZString from 'lz-string'
 
+import { FIELDS } from '@/lib/config/fields.js'
+import { SELECTED } from '@/lib/constants/selected.js'
+
+const { HISTORY: HISTORY_FIELD } = FIELDS
+const { CONCEPT: FILTER_CONCEPT, LINK_NAME, LINK_VALUE, TO_CONCEPT } = SELECTED.SETTINGS.TEMPLATES.FILTERS
+
 const MAX_PREFERENCE_LENGTH = 255
 
 const PREF_TYPES = {
@@ -20,15 +26,15 @@ const HISTORY_TYPE_CODING = {
 }
 
 const HISTORY_SORT_FIELD_CODING = {
-  action: 'a',
-  concept: 'c',
-  creationTimestamp: 'ct',
-  creatorName: 'cr',
-  field: 'f',
-  newValue: 'n',
-  oldValue: 'o',
-  processedTimestamp: 'pt',
-  processorName: 'pr',
+  [HISTORY_FIELD.ACTION]: 'a',
+  [HISTORY_FIELD.CONCEPT]: 'c',
+  [HISTORY_FIELD.CREATION_TIMESTAMP]: 'ct',
+  [HISTORY_FIELD.CREATOR_NAME]: 'cr',
+  [HISTORY_FIELD.FIELD]: 'f',
+  [HISTORY_FIELD.NEW_VALUE]: 'n',
+  [HISTORY_FIELD.OLD_VALUE]: 'o',
+  [HISTORY_FIELD.PROCESSED_TIMESTAMP]: 'pt',
+  [HISTORY_FIELD.PROCESSOR_NAME]: 'pr',
 }
 
 const HISTORY_SORT_ORDER_CODING = {
@@ -37,7 +43,7 @@ const HISTORY_SORT_ORDER_CODING = {
 }
 
 const DEFAULT_HISTORY_SORT = {
-  field: 'creationTimestamp',
+  field: HISTORY_FIELD.CREATION_TIMESTAMP,
   order: 'desc',
 }
 
@@ -82,10 +88,10 @@ const toArray = (type, value) => {
       //   historySort: array of [fieldCode, orderCode] per history type, in HISTORY_TYPE_CODING key order
       const filters = value.templates?.filters || {}
       const filtersArray = [
-        filters.concept || '',
-        filters.toConcept || '',
-        filters.linkName || '',
-        filters.linkValue || '',
+        filters[FILTER_CONCEPT] || '',
+        filters[TO_CONCEPT] || '',
+        filters[LINK_NAME] || '',
+        filters[LINK_VALUE] || '',
       ]
       const sort = value.history?.sort || {}
       const sortArray = Object.keys(HISTORY_TYPE_CODING).map(type => {
@@ -121,10 +127,10 @@ const fromArray = (type, arr) => {
       //   historySort defaults per type when absent (preferences stored before the slot existed)
       const filtersArray = arr[3] || []
       const filters = {}
-      if (filtersArray[0]) filters.concept = filtersArray[0]
-      if (filtersArray[1]) filters.toConcept = filtersArray[1]
-      if (filtersArray[2]) filters.linkName = filtersArray[2]
-      if (filtersArray[3]) filters.linkValue = filtersArray[3]
+      if (filtersArray[0]) filters[FILTER_CONCEPT] = filtersArray[0]
+      if (filtersArray[1]) filters[TO_CONCEPT] = filtersArray[1]
+      if (filtersArray[2]) filters[LINK_NAME] = filtersArray[2]
+      if (filtersArray[3]) filters[LINK_VALUE] = filtersArray[3]
       const sortArray = arr[4] || []
       const sort = {}
       Object.keys(HISTORY_TYPE_CODING).forEach((type, index) => {

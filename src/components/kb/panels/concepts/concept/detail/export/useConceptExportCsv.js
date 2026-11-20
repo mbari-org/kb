@@ -13,11 +13,7 @@ import { CONCEPT } from '@/lib/constants'
 import csvExport from '@/lib/csvExport'
 import { capitalize } from '@/lib/utils'
 
-const dataHeaders = [
-  'id',
-  'parentId',
-  'names',
-]
+const dataHeaders = [CONCEPT.FIELD.ID, CONCEPT.FIELD.PARENT_ID, 'names']
 
 const conceptNames = (name, alternateNames) => {
   return alternateNames.length > 0

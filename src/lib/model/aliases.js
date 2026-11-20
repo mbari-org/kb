@@ -2,8 +2,10 @@ import { capitalize, isJsonEqual, pick } from '@/lib/utils'
 
 import { getConceptNames } from '@/lib/api/concept'
 import { ALIAS } from '@/lib/constants/alias.js'
+import { FIELDS } from '@/lib/config/fields.js'
 
-const ALIAS_FIELDS = ['id', 'author', 'name', 'nameType']
+const { AUTHOR, ID, NAME, NAME_TYPE } = FIELDS.ALIAS
+const ALIAS_FIELDS = [ID, AUTHOR, NAME, NAME_TYPE]
 
 const EMPTY_ALIAS = {
   author: '',
