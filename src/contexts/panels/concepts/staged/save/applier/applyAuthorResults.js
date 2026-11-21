@@ -1,5 +1,7 @@
+import { primaryName } from '@/lib/model/aliases'
+
 const applyAuthorResults = ({ concept, result }) => {
-  concept.author = result.update.author
+  concept.author = primaryName(result.response).author
 }
 
 export default applyAuthorResults

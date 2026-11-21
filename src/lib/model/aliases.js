@@ -22,7 +22,11 @@ const orderedAliases = aliases => {
   return ALIAS.TYPE.flatMap(type => sortedType(nameTypes, type))
 }
 
-const extractPrimaryNameId = rawNames => rawNames.find(name => capitalize(name.nameType) === ALIAS.PRIMARY_TYPE).id
+const isPrimaryName = rawName => capitalize(rawName.nameType) === ALIAS.PRIMARY_TYPE
+
+const primaryName = rawConcept => rawConcept.names.find(isPrimaryName)
+
+const extractPrimaryNameId = rawNames => rawNames.find(isPrimaryName).id
 
 const nameIdFromResponse = (rawConcept, name) => rawConcept.names.find(rawName => rawName.name === name).id
 
@@ -42,6 +46,20 @@ const loadAliases = async (apiFns, concept) => {
   return aliases
 }
 
+const snapshotFromRawConcept = rawConcept => {
+  const primary = primaryName(rawConcept)
+  return {
+    alternateNames: rawConcept.names
+      .filter(rawName => !isPrimaryName(rawName))
+      .map(rawName => rawName.name)
+      .sort(),
+    aliases: orderedAliases(rawConcept.names),
+    author: primary.author,
+    name: primary.name,
+    primaryNameId: primary.id,
+  }
+}
+
 export {
   aliasesEqual,
   aliasFields,
@@ -51,4 +69,6 @@ export {
   loadConceptNames,
   nameIdFromResponse,
   orderedAliases,
+  primaryName,
+  snapshotFromRawConcept,
 }

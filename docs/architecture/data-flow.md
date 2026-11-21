@@ -157,16 +157,16 @@ file and function that implements it.
 5. `relabelConceptPaths(old, new)` when NAME changed without PARENT (paths are
    unchanged except for the renamed element); `resetConceptPaths()` when PARENT
    changed; `reloadConceptRealizations` when REALIZATIONS changed.
-6. Refetch: `apiPayload(getConcept, conceptName)` → `normalizeConcept` — skipped for a
-   **pure rename** (only NAME staged): the fresh concept is built locally as
-   `{ ...staleConcept, name }` (minus UI-attached `realizations`/`templates`; media is
-   reused, or fetched alone if not yet loaded), since a rename changes nothing else
-   on the server.
-7. `applyUpdateResults` (`applyUpdateResults.js:9`) — seeds fresh aliases/alternateNames/
-   children/parent from stale, then dispatches results through the **5 appliers**
-   (`applyAliasResults`, `applyAuthorResults`, `applyChildrenResults`,
-   `applyParentResults`, `applyRankResults` in `staged/save/applier/*`); name comes from
-   the refetch, media is not re-applied.
+6. Post-save state: no server refetch. The fresh concept is `{ ...staleConcept, name }`
+   (minus UI-attached `realizations`/`templates`; `normalizeConcept` only when media is unset).
+   The write responses then replace the fields they own (step 7).
+7. `applyUpdateResults` (`applyUpdateResults.js`) seeds aliases, alternateNames, children, and
+   parent from stale, then applies each result in journal order (AD-18). NAME and ALIASES take
+   the concept's names from the `RawConcept` response (`snapshotFromRawConcept`: name, primary
+   name id, author, aliases with ids, alternate names). AUTHOR takes the primary name's author
+   from `response.names`. RANK takes `rankLevel` and `rankName` from the `ConceptMetadata`
+   response. CHILDREN takes the created child's name from its response. MEDIA takes the response
+   item. PARENT keeps the accepted `parentName`, because the response has no parent.
 8. `refreshPanelData(PANEL_DATA.PENDING_HISTORY)` → `conceptEditsRefresh(freshConcept,
    staleConcept, createdChildPayloads)` (TaxonomyProvider reconciliation; a created child is inserted from its create payload plus one `loadConceptNames` read) → `setConcept(updatedConcept,
    pendingHistory)` → `setEditing(false)` → `updateSelected({concept})` → `closeModal()`.
