@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { use, useState, useCallback, useReducer, useEffect, useMemo } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
@@ -249,8 +250,9 @@ const TestWrapper = ({ children }) => {
                       <ConceptModalProvider>
                         <SelectedContext.Provider value={mockSelectedValue}>
                           <SelectedSettingsContext.Provider value={mockSelectedSettingsValue}>
+                          <ErrorBoundary fallbackRender={() => null}>
                             <ConceptContext.Provider
-                              value={{
+                                value={{
                                 concept,
                                 conceptPath: concept ? [concept.name] : null,
                                 onConceptTreeReady: vi.fn(),
@@ -260,8 +262,8 @@ const TestWrapper = ({ children }) => {
                                 isEditing,
                                 setEditing,
                                 pending: () => [],
-                              }}
-                            >
+                                }}
+                              >
                               <ConceptStagedContext.Provider
                                 value={{
                                   stagedState,
@@ -273,6 +275,7 @@ const TestWrapper = ({ children }) => {
                                 <ConceptModalRenderer />
                               </ConceptStagedContext.Provider>
                             </ConceptContext.Provider>
+                          </ErrorBoundary>
                           </SelectedSettingsContext.Provider>
                         </SelectedContext.Provider>
                       </ConceptModalProvider>

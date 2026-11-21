@@ -64,7 +64,10 @@ This file provides guidance to coding agents when working with code in this repo
 - `ConfigProvider` is the integration point for backend endpoint discovery:
   - fetches `<config-url>/endpoints` via `getEndpoints`
   - builds service lookup for `oni` and `annosaurus`
-  - exposes `apiFns` helpers (`apiPayload`, `apiPaginated`, `apiResult`, `apiRaw`) used by the rest of the app.
+  - exposes `apiFns` helpers (`apiPayload`, `apiPaginated`, `apiResult`, `apiRaw`, `apiWrite`) used by the rest of the app.
+    - Reads use `apiPayload`, `apiPaginated`, or `apiResult`; failures show the `Whoops` boundary.
+    - Writes whose result decides the next step use `apiWrite`, which throws `{...error, status}` to the caller.
+    - `apiRaw` is for callers that check `error` themselves. See AD-16 in `docs/decisions/architecture-decisions.md`.
 - API modules in `src/lib/api/` are thin per-domain wrappers; transport is centralized in:
   - `src/lib/services/request.js` (token attach, exactly one 401-retry after refresh)
   - `src/lib/services/oni/methods.js`
@@ -119,7 +122,7 @@ This file provides guidance to coding agents when working with code in this repo
 - Pending-history approve/reject mutators live in `src/contexts/panels/concepts/pending/{approve,reject}/` and are orchestrated by `src/lib/concept/pending/processPendingApproval.js`.
 
 ### Modal architecture (three tiers)
-- App level: `AppModalProvider` + `src/components/modal/AppModal.jsx` (errors, logout confirm, export complete, app info).
+- App level: `AppModalProvider` + `src/components/modal/AppModal.jsx` (logout confirm, export complete, app info). Errors go to the `Whoops` boundary, not AppModal.
 - Concept panel: `ConceptModalProvider` (hand-rolled) + `ConceptModal.jsx` (staged/pending editing modals). It provides three contexts: `ConceptModalContext` (ops, stable identity: closeModal, setModal, setModalData, beginProcessing, withProcessing), `ConceptModalDataContext` (`modal`, `modalData`), and `ConceptModalProcessingContext` (`processing`, `processingMessage`). Ops is stabilized via refs (onCloseRef/modalDataRef/processingRef in closeModal), so modal triggers never re-render from modal activity.
 - Other panels: factory-generated via `src/contexts/common/createPanelModalProvider.jsx` (two contexts per panel: Data + Operations) + shared `PanelModal.jsx`/`ModalShell.jsx`. A shared instance (`src/contexts/panel/modal/`) is mounted in `KnowledgeBase.jsx`; per-panel instances (`src/contexts/panels/<name>/modal.js`) mount inside each panel provider.
 

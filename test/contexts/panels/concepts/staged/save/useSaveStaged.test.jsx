@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
+import useApiFns from '@/contexts/config/useApiFns'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
@@ -16,6 +17,7 @@ import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
 import { getConceptByName as apiGetConcept } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants'
+import { createError } from '@/lib/errors'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 
 const applyRenameSideEffectsMock = vi.fn()
@@ -380,5 +382,33 @@ describe('useSaveStaged', () => {
 
     expect(reloadConceptRealizations).not.toHaveBeenCalled()
     expect(refreshData).toHaveBeenCalledWith('pendingHistory')
+  })
+
+  it('does not reconcile the taxonomy or concept state when a save write fails', async () => {
+    const harness = buildRenameHarness({ isUpdatedField: field => field === CONCEPT.FIELD.NAME })
+    const { result: apiHook } = renderHook(() => useApiFns({}, vi.fn()))
+    const writeFailure = await apiHook.current
+      .apiWrite(async () => ({ error: { title: 'Server Error', message: 'boom', details: {} }, status: 500 }), {})
+      .catch(error => error)
+    submitStagedMock.mockImplementation(async () => {
+      throw createError('Concept Save Error', 'Failed to save changes to concept old-concept', {}, writeFailure)
+    })
+
+    const { result } = renderHook(() => useSaveStaged(), { wrapper: harness.wrapper })
+    await act(async () => {
+      await expect(result.current()).rejects.toMatchObject({
+        title: 'Concept Save Error',
+        original: { title: 'Server Error', status: 500 },
+      })
+    })
+
+    expect(applyRenameSideEffectsMock).not.toHaveBeenCalled()
+    expect(applyUpdateResultsMock).not.toHaveBeenCalled()
+    expect(harness.conceptEditsRefresh).not.toHaveBeenCalled()
+    expect(harness.relabelConceptPaths).not.toHaveBeenCalled()
+    expect(harness.refreshData).not.toHaveBeenCalled()
+    expect(harness.setConcept).not.toHaveBeenCalled()
+    expect(harness.updateSelected).not.toHaveBeenCalled()
+    expect(harness.closeModal).not.toHaveBeenCalled()
   })
 })

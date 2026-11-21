@@ -15,9 +15,9 @@ file and function that implements it.
    - otherwise → per-service token (`config.getServiceToken(service)`); used for reads.
    - On `result.status === 401`: exactly **one** retry with a refreshed token.
 4. `src/lib/services/send.js` (`apiSend`) performs the `fetch` and normalizes results:
-   `{payload, status}` on 200, `{error: createApiError(...), status}` otherwise.
+   `{payload, status}` on 200, `{error: createApiError(...), status}` otherwise. Network failures return `{error}` with no `status`.
 5. Contexts unwrap via `ConfigContext.apiFns` (`apiPayload`, `apiPaginated`, `apiResult`,
-   `apiRaw`) — never raw `fetch` outside `src/lib/services/`.
+   `apiRaw`, `apiWrite`) — never raw `fetch` outside `src/lib/services/`. The helper choice is in `docs/development/coding-conventions.md` (API calls and errors).
 
 ## 2. App startup and authentication
 
@@ -131,7 +131,7 @@ file and function that implements it.
    advances the server-effective name (ONI renames in place for every role; pending
    is history/reassignment only). Other fields advance only for admin. Stops at the
    first failure and reports completed / failed / skipped ops in
-   `createError('Concept Save Error', …)`. Note:
+   `createError('Concept Save Error', …)`. A failed write throws through `apiWrite`, so the first HTTP failure stops here. Note:
    `templates` is a staged field but has **no submitter** — template changes flow through
    the pending workflow instead.
 4. If the concept was renamed: `applyRenameSideEffects.js` — (a) `performReassignments`
@@ -191,8 +191,8 @@ group level. Approve/Reject All remain modal-level actions in `PendingActions.js
       (`loadConcept`) **before** submitting anything — approvals can rename or remove
       concepts server-side (e.g. a rejected rename restores the old name), after which
       fetching the pre-approval name would 404.
-   b. Sequential `apiPayload(updatePendingItem, [approval, item.id])` PUTs
-      (`src/lib/api/history.js`) in the order given by the entry hook.
+   b. Sequential `apiRaw(updatePendingItem, [approval, item.id])` PUTs
+      (`src/lib/api/history.js`) in the order given by the entry hook. Each `error` is checked: a failure refreshes pending history and throws `Pending Update Failed`, and items already processed in the batch stay processed.
    c. `resetConceptPaths()` if any item touches NAME/PARENT (`structuralFields`),
       approve or reject.
    d. `Promise.all` of `refreshData(PENDING_HISTORY)` + `reloadConceptRealizations` for
@@ -282,7 +282,7 @@ group level. Approve/Reject All remain modal-level actions in `PendingActions.js
    full loads; `filteredRealizations` applies concept/toConcept/linkName/linkValue
    filters via `useMemo`. Filter state persists through `SelectedSettingsContext`.
 3. CRUD: `useModifyRealizations.js` — `createRealization`/`updateRealization`/
-   `deleteRealization` via `apiFns.apiPayload`, each followed by
+   `deleteRealization` via `apiFns.apiPayload` (still on `apiPayload`; see known debt in `docs/project-status.md`), each followed by
    `Promise.all([reloadConceptRealizations(concept), refreshData(PENDING_HISTORY)])`.
 4. Pending gating: `getPendingRealizationItem` matches pending history
    (`HISTORY_FIELD.REALIZATION`, same concept, matching realization string);

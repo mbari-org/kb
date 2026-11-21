@@ -2,14 +2,17 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { ThemeProvider } from '@mui/material/styles'
 
 import kbTheme from '@/lib/theme'
 
 import DeleteConceptActions from '@/components/kb/panels/concepts/concept/change/staged/name/delete/DeleteConceptActions'
+import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
+import { renameToConceptAssociations } from '@/lib/api/associations'
 import { deleteConceptByName as apiDeleteConcept } from '@/lib/api/concept'
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -95,7 +98,7 @@ describe('DeleteConceptActions', () => {
 
     render(
       <ThemeProvider theme={kbTheme}>
-        <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn() } }}>
+        <ConfigContext.Provider value={{ apiFns: { apiPayload: vi.fn(), apiWrite: vi.fn() } }}>
           <ConceptContext.Provider value={{ concept, initialState, pending: () => [] }}>
             <ConceptStagedContext.Provider value={{ confirmReset: null, modifyConcept }}>
               <ConceptModalContext.Provider value={{ closeModal, setModalData: vi.fn(), withProcessing }}>
@@ -158,7 +161,7 @@ describe('DeleteConceptActions', () => {
       oldValue: concept.name,
     }
 
-    const apiPayload = vi.fn(async () => ({}))
+    const apiWrite = vi.fn(async () => ({}))
     const closeModal = vi.fn()
     const refreshData = vi.fn(async () => ({}))
     const setModal = vi.fn()
@@ -209,7 +212,7 @@ describe('DeleteConceptActions', () => {
 
     render(
       <ThemeProvider theme={kbTheme}>
-        <ConfigContext.Provider value={{ apiFns: { apiPayload } }}>
+        <ConfigContext.Provider value={{ apiFns: { apiWrite } }}>
           <ConceptModalContext.Provider value={{ closeModal, setModal, setModalData: vi.fn(), withProcessing }}>
             <ConceptModalDataContext.Provider
               value={{ modalData: { alertType: 'delete', isValid: true, reassign: null, relatedDataCounts: [] } }}
@@ -248,10 +251,114 @@ describe('DeleteConceptActions', () => {
     await user.click(pendingButton)
     expect(setModal).toHaveBeenCalled()
 
-    expect(apiPayload).toHaveBeenCalledWith(apiDeleteConcept, 'doomed')
+    expect(apiWrite).toHaveBeenCalledWith(apiDeleteConcept, 'doomed')
     expect(refreshData).toHaveBeenCalledWith(PANEL_DATA.PENDING_HISTORY)
     expect(deleteTaxonomyConceptMock).not.toHaveBeenCalled()
     expect(updateTaxonomy).not.toHaveBeenCalled()
     expect(updateSelected).not.toHaveBeenCalled()
+  })
+
+  const renderConfirmStep = ({ apiWrite, isAdmin, reassign = null, relatedDataCounts = [] }) => {
+    const concept = { name: 'doomed', parent: 'root' }
+    const spies = {
+      closeModal: vi.fn(),
+      fallbackRender: vi.fn(() => <div>boundary</div>),
+      modifyConcept: vi.fn(),
+      refreshData: vi.fn(async () => ({})),
+      updateTaxonomy: vi.fn(),
+      withProcessing: vi.fn(async work => work()),
+    }
+
+    render(
+      <ThemeProvider theme={kbTheme}>
+        <ErrorBoundary fallbackRender={spies.fallbackRender}>
+          <ConfigContext.Provider value={{ apiFns: { apiWrite } }}>
+            <ConceptContext.Provider
+              value={{ concept, initialState: { name: { action: 'None', value: 'doomed' } }, pending: () => [] }}
+            >
+              <ConceptStagedContext.Provider value={{ confirmReset: null, modifyConcept: spies.modifyConcept }}>
+                <ConceptModalContext.Provider
+                  value={{ closeModal: spies.closeModal, setModalData: vi.fn(), withProcessing: spies.withProcessing }}
+                >
+                  <ConceptModalDataContext.Provider
+                    value={{ modalData: { alertType: 'delete', isValid: true, reassign, relatedDataCounts } }}
+                  >
+                    <PanelDataContext.Provider
+                      value={{
+                        ensureConceptRealizations: vi.fn(async () => []),
+                        getReferences: vi.fn(),
+                        invalidateConceptRealizations: vi.fn(),
+                        refreshData: spies.refreshData,
+                        renameRealizationToConceptNames: vi.fn(),
+                        setClearTemplateFilters: vi.fn(),
+                        templates: [],
+                      }}
+                    >
+                      <PreferencesContext.Provider value={{ savePreferences: vi.fn(), updatePreferences: vi.fn() }}>
+                        <SelectedContext.Provider value={{ concepts: { removeName: vi.fn() }, updateSelected: vi.fn() }}>
+                          <SelectedSettingsContext.Provider value={{ settings: {} }}>
+                            <TaxonomyContext.Provider value={{ taxonomy: {}, updateTaxonomy: spies.updateTaxonomy }}>
+                              <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin }}>
+                                <DeleteConceptActions />
+                              </UserContext.Provider>
+                            </TaxonomyContext.Provider>
+                          </SelectedSettingsContext.Provider>
+                        </SelectedContext.Provider>
+                      </PreferencesContext.Provider>
+                    </PanelDataContext.Provider>
+                  </ConceptModalDataContext.Provider>
+                </ConceptModalContext.Provider>
+              </ConceptStagedContext.Provider>
+            </ConceptContext.Provider>
+          </ConfigContext.Provider>
+        </ErrorBoundary>
+      </ThemeProvider>
+    )
+
+    return spies
+  }
+
+  it('does not delete the concept when a reassignment write fails, and surfaces the error', async () => {
+    const { preSideEffects: actualPreSideEffects } = await vi.importActual(
+      '@/components/kb/panels/concepts/concept/change/staged/name/delete/deletionSideEffects'
+    )
+    preSideEffectsMock.mockImplementation((...args) => actualPreSideEffects(...args))
+    const apiWrite = vi.fn(async () => {
+      throw { title: 'Server Error', message: 'boom', details: {}, status: 500 }
+    })
+
+    const spies = renderConfirmStep({
+      apiWrite,
+      isAdmin: true,
+      reassign: 'wolf',
+      relatedDataCounts: [{ title: RELATED_DATA_COUNTS.ASSOCIATIONS, value: 1 }],
+    })
+
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
+
+    await waitFor(() => expect(spies.fallbackRender).toHaveBeenCalled())
+    expect(spies.fallbackRender.mock.calls[0][0].error).toMatchObject({ message: 'boom', status: 500 })
+    expect(apiWrite).toHaveBeenCalledWith(renameToConceptAssociations, { old: 'doomed', new: 'wolf' })
+    expect(deleteTaxonomyConceptMock).not.toHaveBeenCalled()
+    expect(spies.updateTaxonomy).not.toHaveBeenCalled()
+    expect(spies.closeModal).not.toHaveBeenCalled()
+  })
+
+  it('keeps the concept and staged edits when the non-admin delete request fails', async () => {
+    const apiWrite = vi.fn(async () => {
+      throw { title: 'Server Error', message: 'boom', details: {}, status: 500 }
+    })
+
+    const spies = renderConfirmStep({ apiWrite, isAdmin: false })
+
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
+
+    await waitFor(() => expect(spies.fallbackRender).toHaveBeenCalled())
+    expect(apiWrite).toHaveBeenCalledWith(apiDeleteConcept, 'doomed')
+    expect(spies.refreshData).not.toHaveBeenCalled()
+    expect(spies.modifyConcept).not.toHaveBeenCalled()
+    expect(spies.closeModal).not.toHaveBeenCalled()
   })
 })

@@ -69,11 +69,11 @@ const preSideEffects = async deleteConceptContext => {
     if (count.value > 0) {
       switch (count.title) {
         case ASSOCIATIONS:
-          results[ASSOCIATIONS] = await apiFns.apiPayload(renameToConceptAssociations, oldNewPayload)
+          results[ASSOCIATIONS] = await apiFns.apiWrite(renameToConceptAssociations, oldNewPayload)
           break
 
         case ANNOTATIONS:
-          results[ANNOTATIONS] = await apiFns.apiPayload(renameConceptObservations, oldNewPayload)
+          results[ANNOTATIONS] = await apiFns.apiWrite(renameConceptObservations, oldNewPayload)
           break
 
         case REALIZATIONS: {
@@ -99,7 +99,7 @@ const preSideEffects = async deleteConceptContext => {
 
           const realizationResults = []
           for (const { linkName, linkValue, toConcept } of realizationsToReassign) {
-            const res = await apiFns.apiPayload(createRealization, {
+            const res = await apiFns.apiWrite(createRealization, {
               concept: reassign,
               linkName,
               linkValue,
@@ -112,13 +112,13 @@ const preSideEffects = async deleteConceptContext => {
         }
 
         case REALIZATIONS_TO:
-          results[REALIZATIONS_TO] = await apiFns.apiPayload(renameToConceptRealizations, oldNewPayload)
+          results[REALIZATIONS_TO] = await apiFns.apiWrite(renameToConceptRealizations, oldNewPayload)
           break
 
         case REFERENCES: {
           const referenceResults = []
           for (const reference of concept.references || []) {
-            const res = await apiFns.apiPayload(renameReferenceConcept, [reference.id, concept.name, reassign])
+            const res = await apiFns.apiWrite(renameReferenceConcept, [reference.id, concept.name, reassign])
             referenceResults.push(res)
           }
           results[REFERENCES] = referenceResults
@@ -142,7 +142,7 @@ const preSideEffects = async deleteConceptContext => {
 
           const templateResults = []
           for (const { linkName, linkValue, toConcept } of templateToReassign) {
-            const res = await apiFns.apiPayload(createConceptTemplate, {
+            const res = await apiFns.apiWrite(createConceptTemplate, {
               concept: reassign,
               linkName,
               linkValue,
@@ -155,7 +155,7 @@ const preSideEffects = async deleteConceptContext => {
         }
 
         case TEMPLATES_TO:
-          results[TEMPLATES_TO] = await apiFns.apiPayload(renameToConceptTemplates, oldNewPayload)
+          results[TEMPLATES_TO] = await apiFns.apiWrite(renameToConceptTemplates, oldNewPayload)
           break
       }
     }

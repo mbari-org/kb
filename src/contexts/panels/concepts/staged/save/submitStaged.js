@@ -89,7 +89,7 @@ const wrapSubmitError = (op, effectiveName, error) => {
 
 const submitStaged = async (initialState, stagedState, updatesContext) => {
   const { apiFns, isAdmin, staleConcept } = updatesContext
-  const submit = apiFns.apiPayload
+  const submit = apiFns.apiWrite
 
   const info = stateUpdatesInfo(initialState, stagedState)
   const ops = buildStagedJournal(initialState, stagedState)

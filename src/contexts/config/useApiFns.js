@@ -14,6 +14,16 @@ const useApiFns = (config, showBoundary) => {
       return payload
     }
 
+    const apiWrite = async (writeRequest, params) => {
+      const { error, payload, status } = await writeRequest(config, params)
+
+      if (error) {
+        const writeError = { ...error, status }
+        throw writeError
+      }
+      return payload
+    }
+
     const apiPaginated = async (paginationRequest, params) => {
       // Even though the API returns limit and offset values, they simply echo the values sent by
       // the client. The values for limit and offset are maintained internally by the client itself.
@@ -40,6 +50,7 @@ const useApiFns = (config, showBoundary) => {
       apiRaw,
       apiResult,
       apiPaginated,
+      apiWrite,
     }
   }, [config, showBoundary])
 }

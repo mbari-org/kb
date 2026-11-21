@@ -83,6 +83,7 @@ against the working tree; items marked *(draft notes)* come from `tmp/release.tx
 7. **Hot-spot files** — `src/lib/model/taxonomy.js` (~660 lines) and
    `src/contexts/taxonomy/TaxonomyProvider.jsx` (~420) carry the most complexity and the
    most churn; changes there warrant running the taxonomy context + tree component tests.
+8. **Writes still on `apiPayload`** — a failed write resolves `undefined`, the boundary is shown, and the caller keeps going. Affected: `useModifyTemplates.js` (add, edit, delete), `useModifyRealizations.js` (add, edit, delete), `useModifyReferences.js` (add, delete), `UsersProvider.jsx` (add, edit), `updateReferenceFields.js`, `updateReferenceConcepts.js` (the add/remove loop keeps going after a failed call), `src/contexts/panels/concepts/references.js` (rename or remove per reference), and `patchPrimaryImageFlag` in `src/lib/api/media.js` (sets the local flag even when the update failed). Move these to `apiWrite` per AD-16. The save, delete, and reassignment writes are already converted.
 
 ## Stale documentation
 

@@ -88,4 +88,19 @@ describe('applyRenameSideEffects', () => {
     })
     expect(updatesContext.refreshPanelData).toHaveBeenCalledTimes(2)
   })
+
+  it('stops before local renames, preference updates, and panel refresh when a reassignment write fails', async () => {
+    performReassignmentsMock.mockRejectedValueOnce({ title: 'Server Error', message: 'boom', status: 500 })
+    const updatesContext = buildContext()
+
+    await expect(applyRenameSideEffects(updatesContext, buildUpdatesInfo({ extent: REASSIGN }))).rejects.toMatchObject({
+      status: 500,
+    })
+
+    expect(updatesContext.renameConceptRealizations).not.toHaveBeenCalled()
+    expect(updatesContext.renameRealizationToConceptNames).not.toHaveBeenCalled()
+    expect(updatesContext.updatePreferences).not.toHaveBeenCalled()
+    expect(updatesContext.savePreferences).not.toHaveBeenCalled()
+    expect(updatesContext.refreshPanelData).not.toHaveBeenCalled()
+  })
 })

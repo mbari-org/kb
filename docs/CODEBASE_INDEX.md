@@ -50,7 +50,7 @@ Context/provider pairing exceptions (contexts with no dedicated provider file):
 
 | Provider | Role |
 |---|---|
-| `config/ConfigProvider` | Endpoint discovery, service-token manager, app preferences (`mediaBaseURL`, `phylogenyRoot`, `dsgConceptUrl`), `apiFns` (`apiPayload`/`apiPaginated`/`apiResult`/`apiRaw`) |
+| `config/ConfigProvider` | Endpoint discovery, service-token manager, app preferences (`mediaBaseURL`, `phylogenyRoot`, `dsgConceptUrl`), `apiFns` (`apiPayload`/`apiPaginated`/`apiResult`/`apiRaw`/`apiWrite`) |
 | `user/UserProvider` | Session lifecycle, token refresh (1h window), unsaved-changes guard (`guardedAction`), `savePreferencesRef` flush slot. Internals in `user/lib/` (`useProcessAuth`, `useRefreshUser`, `useLogout`, `useInvalidAuth`) |
 | `taxonomy/TaxonomyProvider` | Normalized taxonomy graph, lazy hydration, integrity checks (`useTaxonomyIntegrity`), `conceptEditsRefresh` post-edit reconciliation; all mutations serialized through `enqueueTaxonomyMutation` (latest-state queue) so concurrent loaders can't clobber each other |
 | `preferences/PreferencesProvider` | Server prefs bridge: `useInitPrefs` (normalize stored history), `usePrefsTimer` (autosave), `useSavePrefs` (dirty-flag flush) |

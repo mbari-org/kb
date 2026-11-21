@@ -8,9 +8,14 @@ import {
 } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 import { getConceptAnnotationsCount } from '@/lib/api/annotations'
-import { getToConceptAssociationsCount } from '@/lib/api/associations'
-import { getConceptRealizationCount, getToConceptRealizationsCount } from '@/lib/api/realizations'
-import { getConceptTemplateCount, getToConceptTemplateCount } from '@/lib/api/templates'
+import { getToConceptAssociationsCount, renameToConceptAssociations } from '@/lib/api/associations'
+import { renameConceptObservations } from '@/lib/api/observations'
+import {
+  getConceptRealizationCount,
+  getToConceptRealizationsCount,
+  renameToConceptRealizations,
+} from '@/lib/api/realizations'
+import { getConceptTemplateCount, getToConceptTemplateCount, renameToConceptTemplates } from '@/lib/api/templates'
 
 vi.mock('@/lib/api/annotations', () => ({ getConceptAnnotationsCount: vi.fn() }))
 vi.mock('@/lib/api/associations', () => ({
@@ -85,6 +90,46 @@ describe('performReassignments', () => {
     await performReassignments('old-name', 'new-name', counts)
 
     expect(reassignFn).not.toHaveBeenCalled()
+  })
+})
+
+describe('reassignment writes', () => {
+  const writeFailure = { title: 'Server Error', message: 'boom', details: {}, status: 500 }
+
+  it.each([
+    [RELATED_DATA_COUNTS.ANNOTATIONS, renameConceptObservations],
+    [RELATED_DATA_COUNTS.ASSOCIATIONS, renameToConceptAssociations],
+    [RELATED_DATA_COUNTS.REALIZATIONS_TO, renameToConceptRealizations],
+    [RELATED_DATA_COUNTS.TEMPLATES_TO, renameToConceptTemplates],
+  ])('writes %s through apiWrite and rejects when the write fails', async (title, apiFn) => {
+    const apiFns = {
+      apiPayload: vi.fn(),
+      apiResult: vi.fn(async () => 1),
+      apiWrite: vi.fn(async () => {
+        throw writeFailure
+      }),
+    }
+    const counts = await relatedDataCounts({ apiFns, concept: { name: 'dingo' }, getReferences: () => [] })
+    const { reassignFn } = counts.find(count => count.title === title)
+
+    await expect(reassignFn({ old: 'dingo', new: 'wolf' })).rejects.toMatchObject({ status: 500 })
+    expect(apiFns.apiWrite).toHaveBeenCalledWith(apiFn, { old: 'dingo', new: 'wolf' })
+    expect(apiFns.apiPayload).not.toHaveBeenCalled()
+  })
+
+  it('rejects performReassignments when any reassignment write fails', async () => {
+    const counts = [
+      {
+        title: RELATED_DATA_COUNTS.ANNOTATIONS,
+        value: 2,
+        reassignFn: vi.fn(async () => {
+          throw writeFailure
+        }),
+      },
+      { title: RELATED_DATA_COUNTS.ASSOCIATIONS, value: 1, reassignFn: vi.fn(async () => {}) },
+    ]
+
+    await expect(performReassignments('dingo', 'wolf', counts)).rejects.toMatchObject({ status: 500 })
   })
 })
 

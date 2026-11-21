@@ -1,4 +1,5 @@
 import { use, useCallback, useEffect, useMemo, useRef } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 
 import Actions from '@/components/modal/actions/Actions'
 
@@ -46,6 +47,7 @@ const StagedActions = ({ intent }) => {
   const { updateSelected } = use(SelectedContext)
   const { updateSettings } = use(SelectedSettingsContext)
   const { logout, setGuardedAction } = use(UserContext)
+  const { showBoundary } = useErrorBoundary()
 
   const saveStaged = useSaveStaged()
   const resetConfirmedRef = useRef(false)
@@ -129,8 +131,12 @@ const StagedActions = ({ intent }) => {
           break
 
         case SAVE:
-          await saveStaged()
-          handleSpecialAction()
+          try {
+            await saveStaged()
+            handleSpecialAction()
+          } catch (error) {
+            showBoundary(error)
+          }
           break
 
         default:
@@ -138,7 +144,7 @@ const StagedActions = ({ intent }) => {
           break
       }
     },
-    [closeModal, concept, handleSpecialAction, modalData, modifyConcept, saveStaged, setGuardedAction, updateSelected]
+    [closeModal, concept, handleSpecialAction, modalData, modifyConcept, saveStaged, setGuardedAction, showBoundary, updateSelected]
   )
 
   const labels = useMemo(() => getLabels(confirmReset, intent), [confirmReset, intent])

@@ -99,7 +99,7 @@ Concepts is selected again. History reloads are keyed on the selected concept's 
 `{payload}` / `{error, status}`; contexts unwrap through `ConfigContext.apiFns`. No HTTP
 library (no axios — the README's claim is stale). Reads use per-service JWTs; attributed
 mutations use the oni *user* token (`oniUser*` bindings) so the backend can attribute
-changes to the logged-in user.
+changes to the logged-in user. Which helper a call uses (`apiPayload`, `apiWrite`, `apiRaw`) is decided in AD-16.
 
 ## AD-9: Service-token manager with read-only short-circuit
 
@@ -154,13 +154,12 @@ full tests, and a smoke-tested deploy to a local nginx before
 **[documented]** Project policy (`AGENTS.md`): errors surface at their source; guards
 only where a real recovery path exists; code must be self-explanatory, with rationale in
 docs/commit messages. Verified in the source (~0.35 comment lines/file; errors routed to
-the `Whoops` boundary or AppModal).
+the `Whoops` boundary.
 
-## AD-15: Error routing to boundaries, not local swallowing
+## AD-15: Error routing to the boundary, not local swallowing
 
-**[inferred]** Async failures in critical paths are explicitly routed to the
-`Whoops` error boundary via `showBoundary` (taxonomy initial load with
-`withTimeout(LOADING.STARTUP.TAXONOMY_TIMEOUT)`, preference flush, autosave timer), while
-user-recoverable failures become structured errors (`createError`/`createApiError` in
-`src/lib/errors.js`) shown in AppModal. Non-critical embellishments (tree media icons)
-fail silently by design (AD-7).
+**[documented]** Request and write failures reach the user through the `Whoops` error boundary (`showBoundary`). `AppModal` renders app-level dialogs only (logout confirm, export complete, app info) and has no error display. Critical async failures are routed there explicitly (taxonomy initial load with `withTimeout(LOADING.STARTUP.TAXONOMY_TIMEOUT)`, preference flush, autosave timer). Which helper a call uses decides where its failure lands (AD-16). Non-critical embellishments (tree media icons) fail silently by design (AD-7).
+
+## AD-16: Reads, writes, and caller-checked calls use separate API helpers
+
+**[documented]** `apiPayload` shows the error boundary on failure and resolves `undefined`, so a write made through it looked successful to its caller: save and delete flows continued past a failed write, and a failed DELETE still removed the concept from the tree. Decision: reads use `apiPayload`, `apiPaginated`, or `apiResult`. Writes whose result decides the next step use `apiWrite`, which throws `{...error, status}` and shows nothing. Calls that need the error as data use `apiRaw`, and the caller checks `error`. Consequences: a write caller must not catch and continue, and `status` is available for later decisions about ambiguous outcomes (500 or no response). Writes still on `apiPayload` are listed as known debt in `docs/project-status.md`. Evidence: `src/contexts/config/useApiFns.js` and the Phase 0 commit.

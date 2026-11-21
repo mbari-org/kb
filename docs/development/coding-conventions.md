@@ -8,7 +8,7 @@ Conventions observed in the source (sampled across `src/components`, `src/contex
 - **No defensive programming — hard rule.** No guards, fallbacks, type-checks, or
   null-checks for conditions that should not occur; let errors surface at their source.
   Only handle an error where there is a real "what should happen next" answer. Errors
-  route to the `Whoops` boundary or AppModal rather than being swallowed. A guard for an
+  route to the `Whoops` boundary or are thrown to the caller, never swallowed. A guard for an
   impossible state costs a future maintainer a wasted thought cycle ("when is this not
   an Array? what should happen then?"). When a value has exactly two real states (e.g.
   absent vs. Array), use the precise construct (`?.`) rather than a type check
@@ -93,6 +93,15 @@ into `eslint.config.js`.
   architecture-decisions.md` for why.
 - API results follow `{payload}` / `{error, status}`; unwrap via `apiFns` from
   `ConfigContext`, never raw `fetch` outside `src/lib/services/`.
+
+## API calls and errors
+
+- Choose the helper by what the caller does with a failure, not by HTTP method:
+  - `apiPayload`, `apiPaginated`, `apiResult`: reads. A failure shows the `Whoops` boundary and resolves `undefined`. `apiPayload(fn, params, true)` suppresses the boundary for non-fatal reads, such as media batches that retry later.
+  - `apiWrite`: writes whose result decides the next step (local state, later operations, closing a modal, tree changes). A failure throws `{...error, status}` with no boundary. `status` is absent when no HTTP response arrived. Let it propagate to the failure path; do not catch and continue.
+  - `apiRaw`: the caller checks `error` itself, as the pending-approval loop does in `src/lib/concept/pending/processPendingApproval.js`.
+- Read-only POST query endpoints are reads and use `apiPayload`.
+- Writes still on `apiPayload` are listed as known debt in `docs/project-status.md`.
 
 ## UI strings and styling
 

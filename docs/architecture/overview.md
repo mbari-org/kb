@@ -118,12 +118,12 @@ slots) + concept detail/editing view. Notes and Embargoes are `EmptyPanel` place
   and mutated in `src/lib/model/taxonomy.js`; all inserts go through the `insertConcept`
   choke point; tree items use structural-sharing caches in `buildTree`.
 - API results follow `{payload}` / `{error, status}`; contexts unwrap them via
-  `ConfigContext.apiFns` (`apiPayload`, `apiPaginated`, `apiResult`, `apiRaw`), never raw
+  `ConfigContext.apiFns` (`apiPayload`, `apiPaginated`, `apiResult`, `apiRaw`, `apiWrite`), never raw
   `fetch`.
 
 ## Modal architecture (three tiers)
 
-1. **App level** — `AppModalProvider` + `src/components/modal/AppModal.jsx` (errors,
+1. **App level** — `AppModalProvider` + `src/components/modal/AppModal.jsx` (dialogs:
    logout confirm, export complete, app info).
 2. **Concept panel** — hand-rolled `ConceptModalProvider` + `ConceptModal.jsx`; three
    contexts (ops stabilized via refs so modal activity never re-renders triggers, plus
@@ -137,6 +137,6 @@ slots) + concept detail/editing view. Notes and Embargoes are `EmptyPanel` place
 
 ## Error handling philosophy
 
-Errors surface to the `Whoops` error boundary or the AppModal error display rather than
+Errors surface to the `Whoops` error boundary rather than
 being swallowed locally. Project policy (see `AGENTS.md`) is *no defensive programming*:
-handle errors only where there is a real recovery path.
+handle errors only where there is a real recovery path. Write failures from `apiWrite` are thrown to the caller, which decides what happens next (AD-16).

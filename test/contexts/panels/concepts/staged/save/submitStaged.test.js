@@ -1,8 +1,17 @@
 import { describe, expect, it, vi } from 'vitest'
+import { renderHook } from '@testing-library/react'
 
+import useApiFns from '@/contexts/config/useApiFns'
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
+
+vi.mock('@/lib/services/oni/methods', async importOriginal => ({
+  ...(await importOriginal()),
+  oniUserPost: vi.fn(),
+  oniUserPut: vi.fn(),
+}))
 
 const baseState = {
   aliasIndex: 0,
@@ -21,7 +30,7 @@ const baseState = {
 }
 
 const updatesContext = ({ isAdmin, submit }) => ({
-  apiFns: { apiPayload: submit },
+  apiFns: { apiWrite: submit },
   isAdmin,
   staleConcept: { name: 'dingo' },
 })
@@ -52,11 +61,7 @@ describe('submitStaged chrono replay', () => {
 
     const info = await submitStaged(baseState, staged, updatesContext({ isAdmin: true, submit }))
 
-    expect(calls.map(call => call.name)).toEqual([
-      'updateConceptName',
-      'createAlias',
-      'createConcept',
-    ])
+    expect(calls.map(call => call.name)).toEqual(['updateConceptName', 'createAlias', 'createConcept'])
     expect(calls[0].params).toEqual(['dingo', { name: 'wolf' }])
     expect(calls[1].params.name).toBe('wolf')
     expect(calls[2].params.parentName).toBe('wolf')
@@ -94,12 +99,13 @@ describe('submitStaged chrono replay', () => {
   })
 
   it('stops on first failure and reports skipped ops', async () => {
-    const submit = vi.fn(async (apiFn, params) => {
-      if (apiFn.name === 'createAlias') {
-        throw { message: 'boom', details: {} }
-      }
-      return { ok: true, params }
-    })
+    oniUserPut.mockResolvedValue({ payload: {}, status: 200 })
+    oniUserPost.mockImplementation(async ({ path }) =>
+      path[0] === 'names'
+        ? { error: { title: 'Server Error', message: 'boom', details: {} }, status: 500 }
+        : { payload: {}, status: 200 }
+    )
+    const { result } = renderHook(() => useApiFns({}, vi.fn()))
 
     const staged = {
       ...baseState,
@@ -118,20 +124,18 @@ describe('submitStaged chrono replay', () => {
     }
 
     await expect(
-      submitStaged(baseState, staged, updatesContext({ isAdmin: true, submit }))
+      submitStaged(baseState, staged, { apiFns: result.current, isAdmin: true, staleConcept: { name: 'dingo' } })
     ).rejects.toMatchObject({
       title: 'Concept Save Error',
       details: {
         completedOperations: [{ field: CONCEPT.FIELD.NAME, action: CONCEPT_STATE.NAME }],
-        skippedOperations: [
-          {
-            field: CONCEPT.FIELD.CHILDREN,
-            action: CONCEPT_STATE.CHILD.ADD,
-          },
-        ],
+        failedOperations: [{ field: CONCEPT.FIELD.ALIASES, message: 'boom' }],
+        skippedOperations: [{ field: CONCEPT.FIELD.CHILDREN, action: CONCEPT_STATE.CHILD.ADD }],
       },
+      original: { title: 'Server Error', message: 'boom', status: 500 },
     })
 
-    expect(submit).toHaveBeenCalledTimes(2)
+    expect(oniUserPut).toHaveBeenCalledTimes(1)
+    expect(oniUserPost).toHaveBeenCalledTimes(1)
   })
 })

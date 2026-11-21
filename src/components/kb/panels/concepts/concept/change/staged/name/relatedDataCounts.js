@@ -36,14 +36,14 @@ export const relatedDataCounts = async ({ apiFns, concept, getReferences, rename
       title: RELATED_DATA_COUNTS.ANNOTATIONS,
       type: RELATED_DATA_TYPE.ANNOTATIONS,
       apiCountFn: getConceptAnnotationsCount,
-      reassignFn: payload => apiFns.apiPayload(renameConceptObservations, payload),
+      reassignFn: payload => apiFns.apiWrite(renameConceptObservations, payload),
       byNameString: true,
     },
     {
       title: RELATED_DATA_COUNTS.ASSOCIATIONS,
       type: RELATED_DATA_TYPE.ANNOTATIONS,
       apiCountFn: getToConceptAssociationsCount,
-      reassignFn: payload => apiFns.apiPayload(renameToConceptAssociations, payload),
+      reassignFn: payload => apiFns.apiWrite(renameToConceptAssociations, payload),
       byNameString: true,
     },
     {
@@ -56,7 +56,7 @@ export const relatedDataCounts = async ({ apiFns, concept, getReferences, rename
       title: RELATED_DATA_COUNTS.REALIZATIONS_TO,
       type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       apiCountFn: getToConceptRealizationsCount,
-      reassignFn: payload => apiFns.apiPayload(renameToConceptRealizations, payload),
+      reassignFn: payload => apiFns.apiWrite(renameToConceptRealizations, payload),
       byNameString: true,
     },
     {
@@ -74,7 +74,7 @@ export const relatedDataCounts = async ({ apiFns, concept, getReferences, rename
       title: RELATED_DATA_COUNTS.TEMPLATES_TO,
       type: RELATED_DATA_TYPE.KNOWLEDGE_BASE,
       apiCountFn: getToConceptTemplateCount,
-      reassignFn: payload => apiFns.apiPayload(renameToConceptTemplates, payload),
+      reassignFn: payload => apiFns.apiWrite(renameToConceptTemplates, payload),
       byNameString: true,
     },
   ]

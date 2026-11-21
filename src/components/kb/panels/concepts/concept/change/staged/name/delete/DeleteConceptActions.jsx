@@ -88,7 +88,7 @@ const DeleteConceptActions = () => {
         if (!isAdmin) {
           await withProcessing(
             async () => {
-              await apiFns.apiPayload(apiDeleteConcept, concept.name)
+              await apiFns.apiWrite(apiDeleteConcept, concept.name)
               await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
               modifyConcept({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
               setEditing(false)

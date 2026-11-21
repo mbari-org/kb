@@ -79,7 +79,7 @@ const deleteConcept = async (taxonomy, concept, apiFns) => {
     })
   }
 
-  await apiFns.apiPayload(apiDelete, concept.name)
+  await apiFns.apiWrite(apiDelete, concept.name)
 
   const conceptMap = { ...taxonomy.conceptMap }
   delete conceptMap[concept.name]

@@ -139,4 +139,4 @@ Release sequence (from README, verified against the scripts):
   `tmp/attribute-long-tasks.mjs`, and `tmp/resolve-trace-names.mjs` scripts attribute long
   tasks to source lines via source maps.
 - `Whoops` error boundary catches render/lifecycle errors app-wide; async errors are
-  routed there explicitly (e.g. preference flush, taxonomy load) via `showBoundary`.
+  routed there explicitly (e.g. preference flush, taxonomy load, read failures) via `showBoundary`. Write failures from `apiWrite` are thrown to the caller instead (AD-16).

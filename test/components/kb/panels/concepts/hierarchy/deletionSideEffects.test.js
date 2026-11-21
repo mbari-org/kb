@@ -5,13 +5,17 @@ import {
   preSideEffects,
 } from '@/components/kb/panels/concepts/concept/change/staged/name/delete/deletionSideEffects'
 import { RELATED_DATA_COUNTS } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
-import { createRealization } from '@/lib/api/realizations'
+import { renameToConceptAssociations } from '@/lib/api/associations'
+import { renameConceptObservations } from '@/lib/api/observations'
+import { createRealization, renameToConceptRealizations } from '@/lib/api/realizations'
+import { renameReferenceConcept } from '@/lib/api/references'
+import { createConceptTemplate, renameToConceptTemplates } from '@/lib/api/templates'
 
 describe('deletionSideEffects preSideEffects', () => {
   it('recreates explicitly defined realizations on the reassigned concept if not already existing', async () => {
     const createdPayloads = []
     const apiFns = {
-      apiPayload: vi.fn(async (apiFn, payload) => {
+      apiWrite: vi.fn(async (apiFn, payload) => {
         if (apiFn === createRealization) {
           createdPayloads.push(payload)
           return { id: 100, ...payload }
@@ -63,6 +67,76 @@ describe('deletionSideEffects preSideEffects', () => {
       { concept: 'ReassignedConcept', linkName: 'self-link', linkValue: 'nil', toConcept: 'ReassignedConcept' },
     ])
     expect(results[RELATED_DATA_COUNTS.REALIZATIONS]).toHaveLength(2)
+  })
+})
+
+const writeFailure = { title: 'Server Error', message: 'boom', details: {}, status: 500 }
+
+describe('deletionSideEffects preSideEffects reassignment writes', () => {
+  const reassignmentCases = [
+    { title: RELATED_DATA_COUNTS.ANNOTATIONS, apiFn: renameConceptObservations, concept: { name: 'OldConcept' } },
+    { title: RELATED_DATA_COUNTS.ASSOCIATIONS, apiFn: renameToConceptAssociations, concept: { name: 'OldConcept' } },
+    {
+      title: RELATED_DATA_COUNTS.REALIZATIONS,
+      apiFn: createRealization,
+      concept: { name: 'OldConcept' },
+      ensureConceptRealizations: async name =>
+        name === 'OldConcept' ? [{ linkName: 'sample-link', linkValue: 'nil', toConcept: 'TargetConcept' }] : [],
+    },
+    { title: RELATED_DATA_COUNTS.REALIZATIONS_TO, apiFn: renameToConceptRealizations, concept: { name: 'OldConcept' } },
+    {
+      title: RELATED_DATA_COUNTS.REFERENCES,
+      apiFn: renameReferenceConcept,
+      concept: { name: 'OldConcept', references: [{ id: 9 }] },
+    },
+    {
+      title: RELATED_DATA_COUNTS.TEMPLATES_DEFINED,
+      apiFn: createConceptTemplate,
+      concept: { name: 'OldConcept' },
+      templates: [{ concept: 'OldConcept', linkName: 'sample-link', linkValue: 'nil', toConcept: 'TargetConcept' }],
+    },
+    { title: RELATED_DATA_COUNTS.TEMPLATES_TO, apiFn: renameToConceptTemplates, concept: { name: 'OldConcept' } },
+  ]
+
+  it.each(reassignmentCases)(
+    'routes $title through apiWrite and rejects the flow when the write fails',
+    async ({ title, apiFn, concept, ensureConceptRealizations = async () => [], templates = [] }) => {
+      const apiFns = {
+        apiPayload: vi.fn(),
+        apiWrite: vi.fn(async () => {
+          throw writeFailure
+        }),
+      }
+
+      await expect(
+        preSideEffects({
+          apiFns,
+          concept,
+          ensureConceptRealizations,
+          reassign: 'NewConcept',
+          relatedDataCounts: [{ title, value: 1 }],
+          templates,
+        })
+      ).rejects.toMatchObject({ status: 500 })
+
+      expect(apiFns.apiWrite).toHaveBeenCalledWith(apiFn, expect.anything())
+      expect(apiFns.apiPayload).not.toHaveBeenCalled()
+    }
+  )
+
+  it('returns the reassignment result when the write succeeds', async () => {
+    const apiFns = { apiPayload: vi.fn(), apiWrite: vi.fn(async () => ({ count: 2 })) }
+
+    const results = await preSideEffects({
+      apiFns,
+      concept: { name: 'OldConcept' },
+      reassign: 'NewConcept',
+      relatedDataCounts: [{ title: RELATED_DATA_COUNTS.ASSOCIATIONS, value: 2 }],
+      templates: [],
+    })
+
+    expect(results[RELATED_DATA_COUNTS.ASSOCIATIONS]).toEqual({ count: 2 })
+    expect(apiFns.apiPayload).not.toHaveBeenCalled()
   })
 })
 

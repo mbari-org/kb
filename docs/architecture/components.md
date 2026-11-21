@@ -66,7 +66,7 @@ Notes and Embargoes render `EmptyPanel` placeholders only.
 
 Three tiers (detail in `docs/architecture/overview.md`):
 
-- `AppModal.jsx` — app-level (errors, logout confirm, export complete, app info)
+- `AppModal.jsx` — app-level dialogs (logout confirm, export complete, app info)
 - `ConceptModal.jsx` — concept-panel staged/pending editing modals
 - `PanelModal.jsx` + `ModalShell.jsx` — shared shell for all factory-generated panel
   modals (since the 2026-10-31 "DRY edit modals" rework)
