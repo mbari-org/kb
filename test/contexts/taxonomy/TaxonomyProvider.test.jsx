@@ -44,12 +44,20 @@ const cloneConcept = concept => {
   return cloned
 }
 
+let fixtureIdSequence = 0
+const nextFixtureId = () => {
+  fixtureIdSequence += 1
+  return fixtureIdSequence
+}
+
 const createConceptRecord = ({ alternateNames = [], children, name, parent }) => {
   const concept = {
     alternateNames,
+    id: nextFixtureId(),
     media: [],
     name,
     parent,
+    primaryNameId: nextFixtureId(),
     realizations: [],
     references: [],
     templates: [],
@@ -101,12 +109,11 @@ const addStoreConcept = (store, { alternateNames = [], children, name, parent })
   store.children[name] = children || []
 }
 
-const createAliases = (store, conceptName) =>
-  (store.concepts[conceptName]?.alternateNames || []).map(name => ({
-    author: '',
-    name,
-    nameType: 'Common',
-  }))
+const createAliases = (store, conceptName) => {
+  const concept = store.concepts[conceptName]
+  const alternates = concept.alternateNames.map(name => ({ author: '', name, nameType: 'Common' }))
+  return [{ author: '', id: concept.primaryNameId, name: conceptName, nameType: 'primary' }, ...alternates]
+}
 
 const sortNames = store =>
   Object.values(store.concepts)
@@ -335,8 +342,15 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(errors).toEqual([])
   })
 
-  it('inserts a created child from its create payload without fetching', async () => {
+  it('inserts a created child from its create payload and reads its names once', async () => {
     const { apiFns, errors, getContext } = await renderTaxonomy()
+    const apiPayloadImpl = apiFns.apiPayload.getMockImplementation()
+    apiFns.apiPayload.mockImplementation(async (fn, value) => {
+      if (fn === apiConceptNames && value === 'created-child') {
+        return [{ id: 77, name: 'created-child', nameType: 'primary' }]
+      }
+      return apiPayloadImpl(fn, value)
+    })
     const staleConcept = getContext().getConcept('old-parent')
     const freshConcept = {
       ...cloneConcept(staleConcept),
@@ -364,10 +378,14 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(createdChild.parent).toBe('old-parent')
     expect(createdChild.children).toEqual([])
     expect(createdChild.aliases).toEqual([])
+    expect(createdChild.primaryNameId).toBe(77)
     expect(getContext().isConceptLoaded('created-child')).toBe(true)
     expect(
       apiCallsFor(apiFns.apiPayload, apiConcept).filter(([, conceptName]) => conceptName === 'created-child')
     ).toHaveLength(0)
+    expect(
+      apiCallsFor(apiFns.apiPayload, apiConceptNames).filter(([, conceptName]) => conceptName === 'created-child')
+    ).toHaveLength(1)
     expect(errors).toEqual([])
   })
 
@@ -638,8 +656,14 @@ describe('TaxonomyProvider loadConcept', () => {
     vi.restoreAllMocks()
   })
 
+  it('stores the primary name id on the root concept from the root load', async () => {
+    const { getContext, store } = await renderTaxonomy()
+
+    expect(getContext().getConcept('root').primaryNameId).toBe(store.concepts.root.primaryNameId)
+  })
+
   it('loads aliases and descendants for an unloaded concept, then short-circuits once loaded', async () => {
-    const { apiFns, errors, getContext } = await renderTaxonomy()
+    const { apiFns, errors, getContext, store } = await renderTaxonomy()
     expect(getContext().isConceptLoaded('old-parent')).toBeFalsy()
     expect(getContext().getConcept('grandchild')).toBeNull()
 
@@ -655,6 +679,7 @@ describe('TaxonomyProvider loadConcept', () => {
         .getConcept('old-parent')
         .aliases.map(alias => alias.name)
     ).toEqual(['old-parent-alias'])
+    expect(getContext().getConcept('old-parent').primaryNameId).toBe(store.concepts['old-parent'].primaryNameId)
     expect(getContext().getConcept('moving-child').children).toEqual(['grandchild'])
     expect(getContext().getConcept('grandchild').parent).toBe('moving-child')
 

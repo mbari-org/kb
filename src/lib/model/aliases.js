@@ -22,15 +22,22 @@ const orderedAliases = aliases => {
   return ALIAS.TYPE.flatMap(type => sortedType(nameTypes, type))
 }
 
+const extractPrimaryNameId = rawNames => rawNames.find(name => capitalize(name.nameType) === ALIAS.PRIMARY_TYPE).id
+
 const sortedType = (aliases, type) =>
   aliases.filter(alias => alias.nameType === type).sort((a, b) => a.name.localeCompare(b.name))
+
+const loadConceptNames = async (apiFns, conceptName) => {
+  const conceptNames = await apiFns.apiPayload(getConceptNames, conceptName)
+  return { aliases: orderedAliases(conceptNames), primaryNameId: extractPrimaryNameId(conceptNames) }
+}
 
 const loadAliases = async (apiFns, concept) => {
   if (concept.aliases) {
     return concept.aliases
   }
-  const aliases = await apiFns.apiPayload(getConceptNames, concept.name)
-  return orderedAliases(aliases)
+  const { aliases } = await loadConceptNames(apiFns, concept.name)
+  return aliases
 }
 
-export { aliasesEqual, aliasFields, EMPTY_ALIAS, loadAliases, orderedAliases }
+export { aliasesEqual, aliasFields, EMPTY_ALIAS, extractPrimaryNameId, loadAliases, loadConceptNames, orderedAliases }

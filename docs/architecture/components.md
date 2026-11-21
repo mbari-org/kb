@@ -106,7 +106,8 @@ Provider responsibilities:
   `savePreferencesRef` flush slot. Internals in `user/lib/` (`useProcessAuth`,
   `useRefreshUser`, `useLogout`, `useInvalidAuth`, `useAuthUser`).
 - **`TaxonomyProvider`** — normalized taxonomy graph, lazy hydration loaders,
-  integrity checks (`useTaxonomyIntegrity`), `conceptEditsRefresh` post-edit
+  integrity checks (`useTaxonomyIntegrity`; dev mode also requires a numeric `id` and
+  `primaryNameId` on concepts with aliases), `conceptEditsRefresh` post-edit
   reconciliation, incremental media-icon fill (`fillConceptMedia`).
 - **`PreferencesProvider`** — server prefs bridge: `useInitPrefs` (normalize stored
   history), `usePrefsTimer` (15s autosave of dirty keys), `useSavePrefs` (flush).

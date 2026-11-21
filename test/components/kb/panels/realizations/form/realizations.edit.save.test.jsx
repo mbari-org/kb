@@ -69,7 +69,7 @@ const createApiFns = store => ({
     if (fn === apiRanks) return []
     if (fn === apiConcept) return cloneConcept(store.concepts[value])
     if (fn === apiChildren) return (store.children[value] || []).map(childName => cloneConcept(store.concepts[childName]))
-    if (fn === apiConceptNames) return []
+    if (fn === apiConceptNames) return [{ author: '', id: 1, name: value, nameType: 'primary' }]
     if (fn === apiParent) return { name: store.concepts[value]?.parent }
     if (fn === getMedia) return []
     if (fn === getConceptLinkRealizations) return []

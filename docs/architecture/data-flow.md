@@ -85,6 +85,7 @@ file and function that implements it.
    `useConceptsTreeScroll.jsx` smooth-scrolls to the node (bounded 100ms × 80 poll,
    cancels on user scroll). `relabelConceptPaths` rewrites the cache on rename;
    `resetConceptPaths` clears it on re-parent.
+5. Loaded-concept shape: `loadConceptNames` (`src/lib/model/aliases.js`) reads a concept's names once and returns `aliases` (ordered Common/Synonym/Former) and `primaryNameId` (the primary name's id, taken from the raw payload before filtering; a payload without a primary name fails here). The root load, `loadTaxonomyConcept`, and created children (§5) store both fields on the concept. The export's `loadAliases` returns aliases without writing to the concept, since its source can be shared state. Structure-only stubs from a descendants load carry neither field until selected. Dev-mode integrity (`useTaxonomyIntegrity`) requires a numeric `id` and `primaryNameId` on any concept with `aliases`.
 
 ## 4. Concept editing state machine
 
@@ -161,7 +162,7 @@ file and function that implements it.
    `applyParentResults`, `applyRankResults` in `staged/save/applier/*`); name comes from
    the refetch, media is not re-applied.
 8. `refreshPanelData(PANEL_DATA.PENDING_HISTORY)` → `conceptEditsRefresh(freshConcept,
-   staleConcept)` (TaxonomyProvider reconciliation) → `setConcept(updatedConcept,
+   staleConcept, createdChildPayloads)` (TaxonomyProvider reconciliation; a created child is inserted from its create payload plus one `loadConceptNames` read) → `setConcept(updatedConcept,
    pendingHistory)` → `setEditing(false)` → `updateSelected({concept})` → `closeModal()`.
 
 ## 6. Pending-history approval/rejection
@@ -201,7 +202,7 @@ group level. Approve/Reject All remain modal-level actions in `PendingActions.js
       reject batch contains the concept's rename, the reload uses the rename's `oldValue`,
       since ONI has already restored the old name by this point.
    e. Per concept group: `cloneStale(apiFns, staleConcept, false)` — a purely **local**
-      clone (no server refetch) — then `applyRejects` / `applyApprovals`, then
+      clone (no server refetch; it carries `id` and `primaryNameId`) — then `applyRejects` / `applyApprovals`, then
       `conceptEditsRefresh(freshConcept, staleConcept)`; `updateSelected` if renamed.
 3. Mutator dispatch: `HISTORY_FIELD` switches in `src/lib/concept/pending/applyApproves.js:11`
    and `applyRejects.js:11` route to the pure mutators in

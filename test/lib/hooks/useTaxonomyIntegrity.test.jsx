@@ -76,4 +76,16 @@ describe('useTaxonomyIntegrity', () => {
       /aliasMap alias "parent-alias" points to a concept object that differs/
     )
   })
+
+  it('requires a numeric id and primaryNameId on concepts with loaded aliases', () => {
+    const taxonomy = createTaxonomy()
+    taxonomy.conceptMap.parent.aliases = []
+    const { result } = renderHook(() => useTaxonomyIntegrity())
+
+    expect(() => result.current(taxonomy)).toThrow(/has aliases without a numeric id and primaryNameId/)
+
+    taxonomy.conceptMap.parent.id = 2
+    taxonomy.conceptMap.parent.primaryNameId = 3
+    expect(() => result.current(taxonomy)).not.toThrow()
+  })
 })

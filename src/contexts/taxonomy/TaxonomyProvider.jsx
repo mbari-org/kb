@@ -5,6 +5,7 @@ import TaxonomyContext from './TaxonomyContext'
 
 import ConfigContext from '@/contexts/config/ConfigContext'
 
+import { loadConceptNames } from '@/lib/model/aliases'
 import { getConcept as apiConcept, sortConceptChildren } from '@/lib/model/concept'
 
 import {
@@ -129,7 +130,9 @@ const TaxonomyProvider = ({ children }) => {
                 }
 
                 const payload = createdChildPayloads[childName]
-                const child = payload ? { ...payload, aliases: [], children: [] } : await apiConcept(apiFns, childName)
+                const child = payload
+                  ? { ...payload, ...(await loadConceptNames(apiFns, childName)), children: [] }
+                  : await apiConcept(apiFns, childName)
                 child.parent = freshConcept.name
                 insertConcept(child, conceptMap, aliasMap)
               })

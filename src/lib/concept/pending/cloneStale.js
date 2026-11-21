@@ -10,6 +10,8 @@ export const cloneStale = async (apiFns, staleConcept, useServerBase = true) => 
   const freshConcept = { ...base }
 
   freshConcept.name = staleConcept.name
+  freshConcept.id = staleConcept.id
+  freshConcept.primaryNameId = staleConcept.primaryNameId
   freshConcept.parent = staleConcept.parent
   freshConcept.rankLevel = staleConcept.rankLevel
   freshConcept.rankName = staleConcept.rankName

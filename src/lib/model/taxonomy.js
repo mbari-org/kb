@@ -2,7 +2,6 @@ import {
   getConceptChildren as apiChildren,
   getConceptByName as apiConcept,
   getConceptPhylogenyDown as apiDescendants,
-  getConceptNames as apiConceptNames,
   deleteConceptByName as apiDelete,
   getConceptParent as apiParent,
   normalizeConcept,
@@ -12,7 +11,7 @@ import { getMedia } from '@/lib/api/media'
 import { getNames as apiNames, getRanks as apiRanks, getRoot as apiRoot } from '@/lib/api/taxonomy'
 
 import { createError } from '@/lib/errors'
-import { orderedAliases } from '@/lib/model/aliases'
+import { loadConceptNames } from '@/lib/model/aliases'
 import { sortConceptChildren } from '@/lib/model/concept'
 import { filterRanks } from '@/lib/model/rank'
 
@@ -217,8 +216,9 @@ const loadTaxonomy = async apiFns => {
   const rootConcept = await apiFns.apiPayload(apiConcept, root.name)
   await normalizeConcept(apiFns, rootConcept)
 
-  const rootConceptNames = await apiFns.apiPayload(apiConceptNames, rootConcept.name)
-  rootConcept.aliases = orderedAliases(rootConceptNames)
+  const { aliases, primaryNameId } = await loadConceptNames(apiFns, rootConcept.name)
+  rootConcept.aliases = aliases
+  rootConcept.primaryNameId = primaryNameId
 
   const aliasMap = rootConcept.aliases.reduce((acc, alias) => {
     acc[alias.name] = rootConcept
@@ -272,8 +272,9 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
   }
 
   if (!concept.aliases) {
-    const conceptNames = await apiFns.apiPayload(apiConceptNames, concept.name)
-    concept.aliases = orderedAliases(conceptNames)
+    const { aliases, primaryNameId } = await loadConceptNames(apiFns, concept.name)
+    concept.aliases = aliases
+    concept.primaryNameId = primaryNameId
   }
 
   // If the concept already has children, we only need to load the concept's grand children. This

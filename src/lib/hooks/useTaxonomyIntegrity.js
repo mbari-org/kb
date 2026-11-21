@@ -41,6 +41,11 @@ const useTaxonomyIntegrity = () => {
       if (!Array.isArray(concept.alternateNames)) {
         addError(`Concept "${name}" has invalid alternateNames; expected an array`)
       }
+      if (concept.aliases !== undefined) {
+        if (typeof concept.id !== 'number' || typeof concept.primaryNameId !== 'number') {
+          addError(`Concept "${name}" has aliases without a numeric id and primaryNameId`)
+        }
+      }
 
       // Parent invariants
       if (name === rootName) {
