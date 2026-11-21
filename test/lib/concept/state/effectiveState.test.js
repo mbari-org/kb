@@ -65,4 +65,32 @@ describe('createEffectiveState', () => {
     const prior = effective.findAlias({ id: 1, name: 'whatever' })
     expect(prior.name).toBe('new-alias')
   })
+
+  it('carries the concept id and primary name id into the effective state', () => {
+    const effective = createEffectiveState({ ...baseState, id: 42, primaryNameId: 7 }, { applyImmediately: false })
+
+    expect(effective.state.id).toBe(42)
+    expect(effective.state.primaryNameId).toBe(7)
+  })
+
+  it('records the server id of an added alias from the add response', () => {
+    const effective = createEffectiveState({ ...baseState, id: 42, primaryNameId: 7 }, { applyImmediately: true })
+    const response = {
+      names: [
+        { id: 1, name: 'dingo', nameType: 'primary' },
+        { id: 9, name: 'wolf', nameType: 'synonym' },
+      ],
+    }
+
+    effective.apply(
+      {
+        field: CONCEPT.FIELD.ALIASES,
+        action: CONCEPT_STATE.ALIAS.ADD,
+        item: { name: 'wolf', author: '', nameType: 'Synonym', action: CONCEPT_STATE.ALIAS.ADD, index: 1 },
+      },
+      response
+    )
+
+    expect(effective.findAlias({ name: 'wolf' }).id).toBe(9)
+  })
 })

@@ -107,7 +107,7 @@ const submitStaged = async (initialState, stagedState, updatesContext) => {
     try {
       const response = await submit(apiFn, params)
       results.push({ ...tracker, params, response })
-      effective.apply(op)
+      effective.apply(op, response)
     } catch (error) {
       const wrapped = wrapSubmitError(op, conceptName, error)
       results.push({ ...tracker, params, error: wrapped })

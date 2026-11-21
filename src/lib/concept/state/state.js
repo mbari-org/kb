@@ -48,7 +48,7 @@ const isStateModified = ({ initialState, stagedState }) => {
 }
 
 const initialConceptState = (concept, pendingConcept) => {
-  const state = { ...indexState }
+  const state = { ...indexState, id: concept.id, primaryNameId: concept.primaryNameId }
   for (const { initialState } of STATE_FIELDS) {
     Object.assign(state, initialState(concept, pendingConcept))
   }

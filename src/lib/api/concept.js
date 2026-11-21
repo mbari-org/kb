@@ -17,7 +17,7 @@ const createConcept = async (config, updates) => oniUserPost({ config, path: ['c
 
 const deleteConceptById = async (config, conceptId) => oniUserDelete({ config, path: ['concept', 'id', conceptId] })
 
-const deleteConceptByName = async (config, conceptName) => oniUserDelete({ config, path: ['concept', conceptName] })
+const deleteConceptNameById = async (config, nameId) => oniUserDelete({ config, path: ['names', 'id', nameId] })
 
 const getConceptById = async (config, conceptId) => oniGet({ config, path: ['concept', 'id', conceptId] })
 
@@ -42,22 +42,16 @@ const getConceptPhylogenyUp = async (config, conceptName) => oniGet({ config, pa
 
 const getConceptTaxa = async (config, conceptName) => oniGet({ config, path: ['phylogeny', 'taxa', conceptName] })
 
-const updateConceptAuthor = async (config, [conceptName, updates]) =>
-  oniUserPut({ config, path: ['names', conceptName], data: updates })
-
 const updateConceptById = async (config, [conceptId, updates]) =>
   oniUserPut({ config, path: ['concept', 'id', conceptId], data: updates })
 
-const updateConceptByName = async (config, [conceptName, updates]) =>
-  oniUserPut({ config, path: ['concept', conceptName], data: updates })
-
-const updateConceptName = async (config, [conceptName, updates]) =>
-  oniUserPut({ config, path: ['names', conceptName], data: { newName: updates.name } })
+const updateConceptNameById = async (config, [nameId, updates]) =>
+  oniUserPut({ config, path: ['names', 'id', nameId], data: updates })
 
 export {
   createConcept,
   deleteConceptById,
-  deleteConceptByName,
+  deleteConceptNameById,
   getConceptById,
   getConceptByName,
   getConceptAnnotations,
@@ -68,8 +62,6 @@ export {
   getConceptPhylogenyUp,
   getConceptTaxa,
   normalizeConcept,
-  updateConceptAuthor,
   updateConceptById,
-  updateConceptByName,
-  updateConceptName,
+  updateConceptNameById,
 }

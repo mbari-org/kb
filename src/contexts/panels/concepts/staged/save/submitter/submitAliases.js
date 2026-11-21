@@ -1,4 +1,5 @@
-import { createAlias, deleteAlias, updateAlias } from '@/lib/api/aliases'
+import { createAlias } from '@/lib/api/aliases'
+import { deleteConceptNameById, updateConceptNameById } from '@/lib/api/concept'
 
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -34,9 +35,9 @@ const buildAliasSubmit = (op, effective) => {
         aliasUpdate.newName = item.name
         delete aliasUpdate.name
       }
-      const params = [prior.name, aliasUpdate]
+      const params = [prior.id, aliasUpdate]
       return {
-        apiFn: updateAlias,
+        apiFn: updateConceptNameById,
         params,
         tracker: { action, field: CONCEPT.FIELD.ALIASES, index, update: item },
       }
@@ -44,9 +45,9 @@ const buildAliasSubmit = (op, effective) => {
 
     case ALIAS.DELETE: {
       const prior = effective.findAlias(item)
-      const params = prior.name
+      const params = prior.id
       return {
-        apiFn: deleteAlias,
+        apiFn: deleteConceptNameById,
         params,
         tracker: { action, field: CONCEPT.FIELD.ALIASES, index, update: item },
       }

@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { deleteConceptByName } from '@/lib/api/concept'
+import { deleteConceptById } from '@/lib/api/concept'
 import { deleteConcept } from '@/lib/model/taxonomy'
 
 const concept = (name, extra = {}) => ({ name, alternateNames: [], children: [], media: [], ...extra })
 
 const buildTaxonomy = () => {
-  const doomed = concept('doomed', { parent: 'science' })
+  const doomed = concept('doomed', { id: 42, parent: 'science' })
   const science = concept('science', { children: ['doomed'] })
   const taxonomy = {
     aliasMap: {},
@@ -27,7 +27,7 @@ describe('deleteConcept', () => {
 
     const { closestConcept, taxonomy: updated } = await deleteConcept(taxonomy, doomed, apiFns)
 
-    expect(apiFns.apiWrite).toHaveBeenCalledWith(deleteConceptByName, 'doomed')
+    expect(apiFns.apiWrite).toHaveBeenCalledWith(deleteConceptById, 42)
     expect(updated.conceptMap.doomed).toBeUndefined()
     expect(updated.conceptMap.science.children).toEqual([])
     expect(updated.names).toEqual(['science'])

@@ -16,7 +16,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
-import { normalizeConcept, deleteConceptByName as apiDeleteConcept } from '@/lib/api/concept'
+import { deleteConceptById as apiDeleteConceptById, normalizeConcept } from '@/lib/api/concept'
 import enqueueConceptMutation from '@/lib/concept/enqueueConceptMutation'
 import {
   deleteConcept as deleteTaxonomyConcept,
@@ -88,7 +88,7 @@ const DeleteConceptActions = () => {
         if (!isAdmin) {
           await withProcessing(
             async () => {
-              await apiFns.apiWrite(apiDeleteConcept, concept.name)
+              await apiFns.apiWrite(apiDeleteConceptById, concept.id)
               await refreshPanelData(PANEL_DATA.PENDING_HISTORY)
               modifyConcept({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
               setEditing(false)

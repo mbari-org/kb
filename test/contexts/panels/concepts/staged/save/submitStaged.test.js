@@ -15,6 +15,8 @@ vi.mock('@/lib/services/oni/methods', async importOriginal => ({
 
 const baseState = {
   aliasIndex: 0,
+  id: 42,
+  primaryNameId: 7,
   aliases: [],
   author: { action: 'None', value: '' },
   children: [],
@@ -40,6 +42,9 @@ describe('submitStaged chrono replay', () => {
     const calls = []
     const submit = vi.fn(async (apiFn, params) => {
       calls.push({ name: apiFn.name, params })
+      if (apiFn.name === 'createAlias') {
+        return { names: [{ id: 3, name: 'alias-1', nameType: 'synonym' }] }
+      }
       return { ok: true }
     })
 
@@ -61,8 +66,8 @@ describe('submitStaged chrono replay', () => {
 
     const info = await submitStaged(baseState, staged, updatesContext({ isAdmin: true, submit }))
 
-    expect(calls.map(call => call.name)).toEqual(['updateConceptName', 'createAlias', 'createConcept'])
-    expect(calls[0].params).toEqual(['dingo', { name: 'wolf' }])
+    expect(calls.map(call => call.name)).toEqual(['updateConceptNameById', 'createAlias', 'createConcept'])
+    expect(calls[0].params).toEqual([7, { newName: 'wolf' }])
     expect(calls[1].params.name).toBe('wolf')
     expect(calls[2].params.parentName).toBe('wolf')
     expect(info.results).toHaveLength(3)
@@ -93,8 +98,8 @@ describe('submitStaged chrono replay', () => {
 
     await submitStaged(baseState, staged, updatesContext({ isAdmin: false, submit }))
 
-    expect(calls.map(call => call.name)).toEqual(['updateConceptName', 'createAlias'])
-    expect(calls[0].params).toEqual(['dingo', { name: 'wolf' }])
+    expect(calls.map(call => call.name)).toEqual(['updateConceptNameById', 'createAlias'])
+    expect(calls[0].params).toEqual([7, { newName: 'wolf' }])
     expect(calls[1].params.name).toBe('wolf')
   })
 

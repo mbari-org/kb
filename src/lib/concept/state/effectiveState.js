@@ -1,10 +1,13 @@
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { nameIdFromResponse } from '@/lib/model/aliases'
 
 const cloneItems = items => items.map(item => ({ ...item }))
 
 const createEffectiveState = (initialState, { applyImmediately }) => {
   const state = {
+    id: initialState.id,
+    primaryNameId: initialState.primaryNameId,
     aliases: cloneItems(initialState.aliases),
     author: initialState.author.value,
     children: cloneItems(initialState.children),
@@ -54,7 +57,7 @@ const createEffectiveState = (initialState, { applyImmediately }) => {
     return list.toSpliced(index, 1, next)
   }
 
-  const apply = op => {
+  const apply = (op, response) => {
     if (op.field === CONCEPT.FIELD.NAME) {
       state.name = op.item.value
       return
@@ -81,7 +84,7 @@ const createEffectiveState = (initialState, { applyImmediately }) => {
       case CONCEPT.FIELD.ALIASES: {
         switch (op.action) {
           case CONCEPT_STATE.ALIAS.ADD:
-            state.aliases = [...state.aliases, { ...op.item }]
+            state.aliases = [...state.aliases, { ...op.item, id: nameIdFromResponse(response, op.item.name) }]
             break
           case CONCEPT_STATE.ALIAS.DELETE: {
             const target = findAlias(op.item)

@@ -13,7 +13,7 @@ import ConceptEditingActions from '@/components/kb/panels/concepts/concept/Conce
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
 import { renameToConceptAssociations } from '@/lib/api/associations'
-import { deleteConceptByName as apiDeleteConcept } from '@/lib/api/concept'
+import { deleteConceptById as apiDeleteConceptById } from '@/lib/api/concept'
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
@@ -153,7 +153,7 @@ describe('DeleteConceptActions', () => {
   })
 
   it('leaves the concept in the taxonomy and refreshes pending history for a non-admin delete', async () => {
-    const concept = { name: 'doomed', parent: 'root' }
+    const concept = { id: 42, name: 'doomed', parent: 'root' }
     const pendingDeletion = {
       concept: 'root',
       field: HISTORY_FIELD.CHILD,
@@ -251,7 +251,7 @@ describe('DeleteConceptActions', () => {
     await user.click(pendingButton)
     expect(setModal).toHaveBeenCalled()
 
-    expect(apiWrite).toHaveBeenCalledWith(apiDeleteConcept, 'doomed')
+    expect(apiWrite).toHaveBeenCalledWith(apiDeleteConceptById, 42)
     expect(refreshData).toHaveBeenCalledWith(PANEL_DATA.PENDING_HISTORY)
     expect(deleteTaxonomyConceptMock).not.toHaveBeenCalled()
     expect(updateTaxonomy).not.toHaveBeenCalled()
@@ -259,7 +259,7 @@ describe('DeleteConceptActions', () => {
   })
 
   const renderConfirmStep = ({ apiWrite, isAdmin, reassign = null, relatedDataCounts = [] }) => {
-    const concept = { name: 'doomed', parent: 'root' }
+    const concept = { id: 42, name: 'doomed', parent: 'root' }
     const spies = {
       closeModal: vi.fn(),
       fallbackRender: vi.fn(() => <div>boundary</div>),
@@ -356,7 +356,7 @@ describe('DeleteConceptActions', () => {
     await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
 
     await waitFor(() => expect(spies.fallbackRender).toHaveBeenCalled())
-    expect(apiWrite).toHaveBeenCalledWith(apiDeleteConcept, 'doomed')
+    expect(apiWrite).toHaveBeenCalledWith(apiDeleteConceptById, 42)
     expect(spies.refreshData).not.toHaveBeenCalled()
     expect(spies.modifyConcept).not.toHaveBeenCalled()
     expect(spies.closeModal).not.toHaveBeenCalled()

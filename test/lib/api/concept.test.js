@@ -7,7 +7,13 @@ vi.mock('@/lib/services/oni/methods', () => ({
 }))
 
 import { oniGet, oniUserDelete, oniUserPut } from '@/lib/services/oni/methods'
-import { deleteConceptById, getConceptById, updateConceptById } from '@/lib/api/concept'
+import {
+  deleteConceptById,
+  deleteConceptNameById,
+  getConceptById,
+  updateConceptById,
+  updateConceptNameById,
+} from '@/lib/api/concept'
 
 const config = { url: 'https://example.test' }
 
@@ -48,5 +54,33 @@ describe('concept API by id', () => {
       data: updates,
     })
     expect(result).toEqual({ payload: { id: 42 } })
+  })
+})
+
+describe('concept name API by id', () => {
+  it('updates a concept name by id', async () => {
+    oniUserPut.mockResolvedValueOnce({ payload: { id: 7 } })
+    const updates = { newName: 'wolf' }
+
+    const result = await updateConceptNameById(config, [7, updates])
+
+    expect(oniUserPut).toHaveBeenCalledWith({
+      config,
+      path: ['names', 'id', 7],
+      data: updates,
+    })
+    expect(result).toEqual({ payload: { id: 7 } })
+  })
+
+  it('deletes a concept name by id', async () => {
+    oniUserDelete.mockResolvedValueOnce({ payload: {} })
+
+    const result = await deleteConceptNameById(config, 7)
+
+    expect(oniUserDelete).toHaveBeenCalledWith({
+      config,
+      path: ['names', 'id', 7],
+    })
+    expect(result).toEqual({ payload: {} })
   })
 })

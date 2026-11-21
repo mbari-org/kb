@@ -1,12 +1,12 @@
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { updateConceptName } from '@/lib/api/concept'
+import { updateConceptNameById } from '@/lib/api/concept'
 
 const buildNameSubmit = (op, effective) => {
   const name = op.item
-  const params = [effective.state.name, { name: name.value }]
+  const params = [effective.state.primaryNameId, { newName: name.value }]
   return {
-    apiFn: updateConceptName,
+    apiFn: updateConceptNameById,
     params,
     tracker: {
       action: CONCEPT_STATE.NAME,

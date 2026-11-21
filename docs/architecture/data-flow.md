@@ -98,6 +98,8 @@ file and function that implements it.
    `isModified(initial, staged)`, `stateUpdates(initial, staged)`, plus `edit*`/`reset*`
    handlers. Aggregated by `src/lib/concept/state/state.js` (`initialConceptState`,
    `isStateModified`) and `staged/edit/stateUpdates.js` (`stateUpdatesInfo`).
+   `initialConceptState` also carries the identity keys `id` and `primaryNameId`. They are not
+   fields: diffing iterates the field modules, never the object's keys.
    Every non-INITIAL result passes through `stampStagedEdits`
    (`src/lib/concept/state/stagedSeq.js`), which assigns a monotonic `stagedSeq` to each
    newly staged item (pending-decorated `'* Pending'` items excluded, so their presence
@@ -128,9 +130,13 @@ file and function that implements it.
    `stagedSeq`, then replays each op with lazy per-field builders
    (`staged/save/submitter/*`). Params are read from
    `createEffectiveState(..., { applyImmediately: isAdmin })`
-   (`src/lib/concept/state/effectiveState.js`): after each successful op, NAME always
+   (`src/lib/concept/state/effectiveState.js`), which carries the concept `id`, the
+   `primaryNameId`, and each alias `id`: after each successful op, NAME always
    advances the server-effective name (ONI renames in place for every role; pending
-   is history/reassignment only). Other fields advance only for admin. Stops at the
+   is history/reassignment only). Other fields advance only for admin. Writes address ids
+   (AD-17): parent and rank by `id`, rename and author by `primaryNameId`, and alias edit and
+   delete by alias `id`. Alias create stays anchored on the current name, and an added alias
+   takes its `id` from the add response. Stops at the
    first failure and reports completed / failed / skipped ops in
    `createError('Concept Save Error', …)`. A failed write throws through `apiWrite`, so the first HTTP failure stops here. Note:
    `templates` is a staged field but has **no submitter** — template changes flow through
@@ -203,7 +209,10 @@ group level. Approve/Reject All remain modal-level actions in `PendingActions.js
       since ONI has already restored the old name by this point.
    e. Per concept group: `cloneStale(apiFns, staleConcept, false)` — a purely **local**
       clone (no server refetch; it carries `id` and `primaryNameId`) — then `applyRejects` / `applyApprovals`, then
-      `conceptEditsRefresh(freshConcept, staleConcept)`; `updateSelected` if renamed.
+      when the group has alias changes and the batch does not delete the concept, the names are
+      re-read (`loadConceptNames`) so alias
+      and primary name ids are current. Then `conceptEditsRefresh(freshConcept, staleConcept)`;
+      `updateSelected` if renamed.
 3. Mutator dispatch: `HISTORY_FIELD` switches in `src/lib/concept/pending/applyApproves.js:11`
    and `applyRejects.js:11` route to the pure mutators in
    `src/contexts/panels/concepts/pending/{approve,reject}/` (alias, child, media, rank,

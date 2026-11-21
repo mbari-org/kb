@@ -24,6 +24,8 @@ const orderedAliases = aliases => {
 
 const extractPrimaryNameId = rawNames => rawNames.find(name => capitalize(name.nameType) === ALIAS.PRIMARY_TYPE).id
 
+const nameIdFromResponse = (rawConcept, name) => rawConcept.names.find(rawName => rawName.name === name).id
+
 const sortedType = (aliases, type) =>
   aliases.filter(alias => alias.nameType === type).sort((a, b) => a.name.localeCompare(b.name))
 
@@ -40,4 +42,13 @@ const loadAliases = async (apiFns, concept) => {
   return aliases
 }
 
-export { aliasesEqual, aliasFields, EMPTY_ALIAS, extractPrimaryNameId, loadAliases, loadConceptNames, orderedAliases }
+export {
+  aliasesEqual,
+  aliasFields,
+  EMPTY_ALIAS,
+  extractPrimaryNameId,
+  loadAliases,
+  loadConceptNames,
+  nameIdFromResponse,
+  orderedAliases,
+}

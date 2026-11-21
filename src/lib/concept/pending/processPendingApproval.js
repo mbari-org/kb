@@ -5,6 +5,7 @@ import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PENDING } from '@/lib/constants/pending.js'
 import { createError } from '@/lib/errors'
+import { loadConceptNames } from '@/lib/model/aliases'
 
 import { applyApprovals } from '@/lib/concept/pending/applyApproves'
 import { applyRejects } from '@/lib/concept/pending/applyRejects'
@@ -19,6 +20,15 @@ const restoredChildName = (approval, item) => {
   if (item.field !== HISTORY_FIELD.CHILD) return null
   if (approval === PENDING.APPROVAL.ACCEPT && item.action === ACTION.ADD) return item.newValue
   if (approval === PENDING.APPROVAL.REJECT && item.action === ACTION.DELETE) return item.oldValue
+  return null
+}
+
+const isAliasItem = item => item.field === HISTORY_FIELD.ALIAS && !isPendingName(item)
+
+const removedChildName = (approval, item) => {
+  if (item.field !== HISTORY_FIELD.CHILD) return null
+  if (approval === PENDING.APPROVAL.ACCEPT && item.action === ACTION.DELETE) return item.oldValue
+  if (approval === PENDING.APPROVAL.REJECT && item.action === ACTION.ADD) return item.newValue
   return null
 }
 
@@ -109,6 +119,7 @@ const processPendingApprovalUnlocked = async ({
 
   const updated = []
   const concepts = {}
+  const removedNames = new Set(items.map(item => removedChildName(approval, item)).filter(Boolean))
 
   for (const conceptName of Object.keys(groups)) {
     const conceptItems = groups[conceptName]
@@ -124,6 +135,13 @@ const processPendingApprovalUnlocked = async ({
     } else if (approval === PENDING.APPROVAL.ACCEPT) {
       freshConcept = await cloneStale(apiFns, staleConcept, false)
       applyApprovals(freshConcept, conceptItems)
+    }
+
+    if (conceptItems.some(isAliasItem) && !removedNames.has(conceptName)) {
+      const { aliases, primaryNameId } = await loadConceptNames(apiFns, freshConcept.name)
+      freshConcept.aliases = aliases
+      freshConcept.alternateNames = aliases.map(alias => alias.name).sort()
+      freshConcept.primaryNameId = primaryNameId
     }
 
     const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, staleConcept)

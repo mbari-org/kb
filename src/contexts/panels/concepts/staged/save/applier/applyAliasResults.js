@@ -1,4 +1,5 @@
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { nameIdFromResponse } from '@/lib/model/aliases'
 
 const applyAliasResults = ({ concept, isAdmin, result }) => {
   const addAlias = alias => {
@@ -6,42 +7,33 @@ const applyAliasResults = ({ concept, isAdmin, result }) => {
     concept.alternateNames = [...concept.alternateNames, alias.name]
   }
 
-  const deleteAlias = name => {
-    concept.aliases = concept.aliases.filter(alias => alias.name !== name)
-    concept.alternateNames = concept.alternateNames.filter(alternateName => alternateName !== name)
+  const deleteAlias = id => {
+    const prior = concept.aliases.find(alias => alias.id === id)
+    concept.aliases = concept.aliases.filter(alias => alias.id !== id)
+    concept.alternateNames = concept.alternateNames.filter(alternateName => alternateName !== prior.name)
   }
 
-  const editAlias = (priorName, updates) => {
-    const index = concept.aliases.findIndex(alias => alias.name === priorName)
-    if (index >= 0) {
-      const prior = concept.aliases[index]
-      const nextName = updates.newName ?? prior.name
-      const next = { ...prior, ...updates }
-      if (updates.newName) {
-        next.name = updates.newName
-        concept.alternateNames = concept.alternateNames
-          .filter(alternateName => alternateName !== prior.name)
-          .concat(nextName)
-      }
-      concept.aliases = concept.aliases.toSpliced(index, 1, next)
+  const editAlias = (id, updates) => {
+    const index = concept.aliases.findIndex(alias => alias.id === id)
+    const prior = concept.aliases[index]
+    const { newName, ...fields } = updates
+    const next = { ...prior, ...fields, name: newName ?? prior.name }
+    if (newName) {
+      concept.alternateNames = concept.alternateNames
+        .filter(alternateName => alternateName !== prior.name)
+        .concat(newName)
     }
+    concept.aliases = concept.aliases.toSpliced(index, 1, next)
   }
 
   switch (result.action) {
     case CONCEPT_STATE.ALIAS.ADD: {
-      const payload = result.response?.payload
-      payload?.name
-        ? addAlias({
-            id: payload.id,
-            author: payload.author,
-            name: payload.name,
-            nameType: payload.nameType,
-          })
-        : addAlias({
-            author: result.update.author,
-            name: result.update.name,
-            nameType: result.update.nameType,
-          })
+      addAlias({
+        id: nameIdFromResponse(result.response, result.update.name),
+        author: result.update.author,
+        name: result.update.name,
+        nameType: result.update.nameType,
+      })
       break
     }
 
@@ -53,8 +45,8 @@ const applyAliasResults = ({ concept, isAdmin, result }) => {
     }
 
     case CONCEPT_STATE.ALIAS.EDIT: {
-      const [priorName, updates] = result.params
-      editAlias(priorName, updates)
+      const [priorId, updates] = result.params
+      editAlias(priorId, updates)
       break
     }
 

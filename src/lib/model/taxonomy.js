@@ -2,7 +2,7 @@ import {
   getConceptChildren as apiChildren,
   getConceptByName as apiConcept,
   getConceptPhylogenyDown as apiDescendants,
-  deleteConceptByName as apiDelete,
+  deleteConceptById as apiDeleteById,
   getConceptParent as apiParent,
   normalizeConcept,
 } from '@/lib/api/concept'
@@ -78,7 +78,7 @@ const deleteConcept = async (taxonomy, concept, apiFns) => {
     })
   }
 
-  await apiFns.apiWrite(apiDelete, concept.name)
+  await apiFns.apiWrite(apiDeleteById, concept.id)
 
   const conceptMap = { ...taxonomy.conceptMap }
   delete conceptMap[concept.name]
