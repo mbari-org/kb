@@ -16,7 +16,7 @@ import UserContext from '@/contexts/user/UserContext'
 import useModifyRealizations from '@/contexts/panels/realizations/useModifyRealizations'
 
 import {
-  getConcept as apiConcept,
+  getConceptByName as apiConcept,
   getConceptChildren as apiChildren,
   getConceptNames as apiConceptNames,
   getConceptParent as apiParent,

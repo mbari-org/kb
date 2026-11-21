@@ -1,10 +1,10 @@
-import { getConcept } from '@/lib/api/concept'
+import { getConceptByName } from '@/lib/api/concept'
 import { sortConceptChildren } from '@/lib/model/concept'
 
 export const cloneStale = async (apiFns, staleConcept, useServerBase = true) => {
   let base = {}
   if (useServerBase) {
-    base = await apiFns.apiPayload(getConcept, staleConcept.name)
+    base = await apiFns.apiPayload(getConceptByName, staleConcept.name)
   }
 
   const freshConcept = { ...base }

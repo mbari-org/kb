@@ -19,7 +19,7 @@ import {
 } from '@/contexts/panels/realizations/modal'
 
 import {
-  getConcept as apiConcept,
+  getConceptByName as apiConcept,
   getConceptChildren as apiChildren,
   getConceptNames as apiConceptNames,
   getConceptParent as apiParent,

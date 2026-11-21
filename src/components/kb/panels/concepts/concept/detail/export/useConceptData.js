@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { getConcept as apiConcept, normalizeConcept } from '@/lib/api/concept'
+import { getConceptByName as apiConcept, normalizeConcept } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants/concept'
 import { loadAliases } from '@/lib/model/aliases'
 import { loadReferences } from '@/lib/model/reference'

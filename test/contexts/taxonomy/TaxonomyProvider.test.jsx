@@ -9,7 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import {
-  getConcept as apiConcept,
+  getConceptByName as apiConcept,
   getConceptChildren as apiChildren,
   getConceptParent as apiParent,
   getConceptPhylogenyDown as apiDescendants,

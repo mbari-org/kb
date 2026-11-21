@@ -1,4 +1,4 @@
-import { getConcept as apiGetConcept } from '@/lib/api/concept'
+import { getConceptByName as apiGetConcept } from '@/lib/api/concept'
 import { updatePendingItem } from '@/lib/api/history'
 import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'

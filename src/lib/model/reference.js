@@ -1,4 +1,4 @@
-import { getConcept as getConceptApi } from '@/lib/api/concept'
+import { getConceptByName as getConceptApi } from '@/lib/api/concept'
 import { FIELDS } from '@/lib/config/fields.js'
 import { pick } from '@/lib/utils'
 

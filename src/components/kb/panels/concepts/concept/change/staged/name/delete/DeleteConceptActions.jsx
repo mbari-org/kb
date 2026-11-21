@@ -16,7 +16,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
-import { normalizeConcept, deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
+import { normalizeConcept, deleteConceptByName as apiDeleteConcept } from '@/lib/api/concept'
 import enqueueConceptMutation from '@/lib/concept/enqueueConceptMutation'
 import {
   deleteConcept as deleteTaxonomyConcept,

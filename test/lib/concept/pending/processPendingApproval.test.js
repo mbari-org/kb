@@ -18,7 +18,7 @@ vi.mock('@/lib/concept/pending/cloneStale', () => ({
 
 import { processPendingApproval } from '@/lib/concept/pending/processPendingApproval'
 
-import { getConcept } from '@/lib/api/concept'
+import { getConceptByName } from '@/lib/api/concept'
 import { updatePendingItem } from '@/lib/api/history'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PENDING } from '@/lib/constants/pending.js'
@@ -332,7 +332,7 @@ describe('processPendingApproval', () => {
     const apiFns = {
       apiPayload: vi.fn(async () => ({})),
       apiRaw: vi.fn(async request =>
-        request === getConcept ? { error: { title: 'Not Found' } } : { payload: {} }
+        request === getConceptByName ? { error: { title: 'Not Found' } } : { payload: {} }
       ),
     }
     const conceptEditsRefresh = vi.fn()
@@ -348,7 +348,7 @@ describe('processPendingApproval', () => {
     ).rejects.toMatchObject({ title: 'Stale Pending Child' })
 
     expect(apiFns.apiRaw).toHaveBeenCalledTimes(1)
-    expect(apiFns.apiRaw).toHaveBeenCalledWith(getConcept, 'try')
+    expect(apiFns.apiRaw).toHaveBeenCalledWith(getConceptByName, 'try')
     expect(apiFns.apiRaw).not.toHaveBeenCalledWith(updatePendingItem, expect.anything())
     expect(conceptEditsRefresh).not.toHaveBeenCalled()
   })
@@ -368,7 +368,7 @@ describe('processPendingApproval', () => {
     const apiFns = {
       apiPayload: vi.fn(async () => ({})),
       apiRaw: vi.fn(async request =>
-        request === getConcept ? { error: { title: 'Not Found' } } : { payload: {} }
+        request === getConceptByName ? { error: { title: 'Not Found' } } : { payload: {} }
       ),
     }
     const conceptEditsRefresh = vi.fn()

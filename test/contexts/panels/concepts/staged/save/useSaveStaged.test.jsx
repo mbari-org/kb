@@ -14,7 +14,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
-import { getConcept as apiGetConcept } from '@/lib/api/concept'
+import { getConceptByName as apiGetConcept } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 

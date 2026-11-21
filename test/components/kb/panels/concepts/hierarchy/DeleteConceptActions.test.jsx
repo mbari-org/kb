@@ -10,7 +10,7 @@ import DeleteConceptActions from '@/components/kb/panels/concepts/concept/change
 import ConceptEditingActions from '@/components/kb/panels/concepts/concept/ConceptEditingActions'
 import useConceptPending from '@/contexts/panels/concepts/pending/useConceptPending'
 
-import { deleteConcept as apiDeleteConcept } from '@/lib/api/concept'
+import { deleteConceptByName as apiDeleteConcept } from '@/lib/api/concept'
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'

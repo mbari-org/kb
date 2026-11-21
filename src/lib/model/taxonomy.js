@@ -1,9 +1,9 @@
 import {
   getConceptChildren as apiChildren,
-  getConcept as apiConcept,
+  getConceptByName as apiConcept,
   getConceptPhylogenyDown as apiDescendants,
   getConceptNames as apiConceptNames,
-  deleteConcept as apiDelete,
+  deleteConceptByName as apiDelete,
   getConceptParent as apiParent,
   normalizeConcept,
 } from '@/lib/api/concept'

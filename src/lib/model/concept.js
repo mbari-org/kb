@@ -1,4 +1,4 @@
-import { getConcept as apiConcept, getConceptChildren, getConceptPhylogenyDown } from '@/lib/api/concept'
+import { getConceptByName as apiConcept, getConceptChildren, getConceptPhylogenyDown } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants'
 import { pick } from '@/lib/utils'
 

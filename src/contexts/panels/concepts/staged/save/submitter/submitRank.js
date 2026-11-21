@@ -1,6 +1,6 @@
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { updateConceptRank } from '@/lib/api/concept'
+import { updateConceptByName } from '@/lib/api/concept'
 
 const buildRankSubmit = (op, effective) => {
   const rankUpdate = {
@@ -9,7 +9,7 @@ const buildRankSubmit = (op, effective) => {
   }
   const params = [effective.state.name, rankUpdate]
   return {
-    apiFn: updateConceptRank,
+    apiFn: updateConceptByName,
     params,
     tracker: {
       action: CONCEPT_STATE.RANK,
