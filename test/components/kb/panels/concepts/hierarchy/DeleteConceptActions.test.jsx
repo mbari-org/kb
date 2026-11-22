@@ -319,46 +319,56 @@ describe('DeleteConceptActions', () => {
   }
 
   it('does not delete the concept when a reassignment write fails, and surfaces the error', async () => {
-    const { preSideEffects: actualPreSideEffects } = await vi.importActual(
-      '@/components/kb/panels/concepts/concept/change/staged/name/delete/deletionSideEffects'
-    )
-    preSideEffectsMock.mockImplementation((...args) => actualPreSideEffects(...args))
-    const apiWrite = vi.fn(async () => {
-      throw { title: 'Server Error', message: 'boom', details: {}, status: 500 }
-    })
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      const { preSideEffects: actualPreSideEffects } = await vi.importActual(
+        '@/components/kb/panels/concepts/concept/change/staged/name/delete/deletionSideEffects'
+      )
+      preSideEffectsMock.mockImplementation((...args) => actualPreSideEffects(...args))
+      const apiWrite = vi.fn(async () => {
+        throw { title: 'Server Error', message: 'boom', details: {}, status: 500 }
+      })
 
-    const spies = renderConfirmStep({
-      apiWrite,
-      isAdmin: true,
-      reassign: 'wolf',
-      relatedDataCounts: [{ title: RELATED_DATA_COUNTS.ASSOCIATIONS, value: 1 }],
-    })
+      const spies = renderConfirmStep({
+        apiWrite,
+        isAdmin: true,
+        reassign: 'wolf',
+        relatedDataCounts: [{ title: RELATED_DATA_COUNTS.ASSOCIATIONS, value: 1 }],
+      })
 
-    const user = userEvent.setup()
-    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
+      const user = userEvent.setup()
+      await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
 
-    await waitFor(() => expect(spies.fallbackRender).toHaveBeenCalled())
-    expect(spies.fallbackRender.mock.calls[0][0].error).toMatchObject({ message: 'boom', status: 500 })
-    expect(apiWrite).toHaveBeenCalledWith(renameToConceptAssociations, { old: 'doomed', new: 'wolf' })
-    expect(deleteTaxonomyConceptMock).not.toHaveBeenCalled()
-    expect(spies.updateTaxonomy).not.toHaveBeenCalled()
-    expect(spies.closeModal).not.toHaveBeenCalled()
+      await waitFor(() => expect(spies.fallbackRender).toHaveBeenCalled())
+      expect(spies.fallbackRender.mock.calls[0][0].error).toMatchObject({ message: 'boom', status: 500 })
+      expect(apiWrite).toHaveBeenCalledWith(renameToConceptAssociations, { old: 'doomed', new: 'wolf' })
+      expect(deleteTaxonomyConceptMock).not.toHaveBeenCalled()
+      expect(spies.updateTaxonomy).not.toHaveBeenCalled()
+      expect(spies.closeModal).not.toHaveBeenCalled()
+    } finally {
+      consoleErrorSpy.mockRestore()
+    }
   })
 
   it('keeps the concept and staged edits when the non-admin delete request fails', async () => {
-    const apiWrite = vi.fn(async () => {
-      throw { title: 'Server Error', message: 'boom', details: {}, status: 500 }
-    })
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      const apiWrite = vi.fn(async () => {
+        throw { title: 'Server Error', message: 'boom', details: {}, status: 500 }
+      })
 
-    const spies = renderConfirmStep({ apiWrite, isAdmin: false })
+      const spies = renderConfirmStep({ apiWrite, isAdmin: false })
 
-    const user = userEvent.setup()
-    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
+      const user = userEvent.setup()
+      await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
 
-    await waitFor(() => expect(spies.fallbackRender).toHaveBeenCalled())
-    expect(apiWrite).toHaveBeenCalledWith(apiDeleteConceptById, 42)
-    expect(spies.refreshData).not.toHaveBeenCalled()
-    expect(spies.modifyConcept).not.toHaveBeenCalled()
-    expect(spies.closeModal).not.toHaveBeenCalled()
+      await waitFor(() => expect(spies.fallbackRender).toHaveBeenCalled())
+      expect(apiWrite).toHaveBeenCalledWith(apiDeleteConceptById, 42)
+      expect(spies.refreshData).not.toHaveBeenCalled()
+      expect(spies.modifyConcept).not.toHaveBeenCalled()
+      expect(spies.closeModal).not.toHaveBeenCalled()
+    } finally {
+      consoleErrorSpy.mockRestore()
+    }
   })
 })

@@ -18,7 +18,7 @@ vi.mock('@/lib/concept/pending/cloneStale', () => ({
 
 import { processPendingApproval } from '@/lib/concept/pending/processPendingApproval'
 
-import { getConceptNameById } from '@/lib/api/concept'
+import { getConceptNamesById } from '@/lib/api/concept'
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
 
@@ -43,7 +43,7 @@ describe('processPendingApproval alias changes', () => {
       { id: 9, name: 'wolf', nameType: 'synonym', author: '' },
     ]
     const apiFns = {
-      apiPayload: vi.fn(async fn => (fn === getConceptNameById ? { names: serverNames } : {})),
+      apiPayload: vi.fn(async fn => (fn === getConceptNamesById ? { names: serverNames } : {})),
       apiRaw: vi.fn(async () => ({ payload: {} })),
     }
     const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
@@ -72,7 +72,7 @@ describe('processPendingApproval alias changes', () => {
       items,
     })
 
-    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNameById, 1)
+    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNamesById, 1)
     expect(conceptEditsRefresh).toHaveBeenCalledWith(
       expect.objectContaining({
         aliases: [{ id: 9, name: 'wolf', author: '', nameType: 'Synonym' }],
@@ -90,7 +90,7 @@ describe('processPendingApproval alias changes', () => {
       { id: 9, name: 'wolf', nameType: 'synonym', author: '' },
     ]
     const apiFns = {
-      apiPayload: vi.fn(async fn => (fn === getConceptNameById ? { names: serverNames } : {})),
+      apiPayload: vi.fn(async fn => (fn === getConceptNamesById ? { names: serverNames } : {})),
       apiRaw: vi.fn(async () => ({ payload: {} })),
     }
     const conceptEditsRefresh = vi.fn(async concept => ({ concept }))
@@ -130,7 +130,7 @@ describe('processPendingApproval alias changes', () => {
       items,
     })
 
-    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNameById, 1)
+    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNamesById, 1)
     expect(conceptEditsRefresh).toHaveBeenCalledWith(
       expect.objectContaining({
         alternateNames: ['wolf'],
@@ -175,7 +175,7 @@ describe('processPendingApproval alias changes', () => {
       items,
     })
 
-    expect(apiFns.apiPayload).not.toHaveBeenCalledWith(getConceptNameById, 1)
+    expect(apiFns.apiPayload).not.toHaveBeenCalledWith(getConceptNamesById, 1)
     expect(conceptEditsRefresh).toHaveBeenCalledTimes(2)
   })
 })

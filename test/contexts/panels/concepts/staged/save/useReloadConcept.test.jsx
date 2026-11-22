@@ -14,7 +14,7 @@ import UserContext from '@/contexts/user/UserContext'
 
 import useReloadConcept from '@/contexts/panels/concepts/staged/save/useReloadConcept'
 
-import { getConceptById, getConceptChildren, getConceptNameById, getConceptParent } from '@/lib/api/concept'
+import { getConceptById, getConceptChildren, getConceptNamesById, getConceptParent } from '@/lib/api/concept'
 import CONFIG from '@/lib/config'
 
 const { PROCESSING } = CONFIG
@@ -40,7 +40,7 @@ const serverRoutes = ({ name, parent, children }) =>
       getConceptById,
       () => ({ id: 42, name, rankLevel: 'Species', rankName: 'Species', alternateNames: [], author: '' }),
     ],
-    [getConceptNameById, () => ({ id: 42, names: [{ id: 7, name, nameType: 'Primary', author: 'Smith' }] })],
+    [getConceptNamesById, () => ({ id: 42, names: [{ id: 7, name, nameType: 'Primary', author: 'Smith' }] })],
     [getConceptChildren, () => children.map(child => ({ id: 9, name: child }))],
     [getConceptParent, () => ({ name: parent })],
   ])
@@ -103,7 +103,9 @@ const buildHarness = ({ isRootConcept = false, server = {} } = {}) => {
                         setEditing,
                       }}
                     >
-                      <ConceptStagedContext.Provider value={{ stagedState: {} }}>{children}</ConceptStagedContext.Provider>
+                      <ConceptStagedContext.Provider value={{ stagedState: {} }}>
+                        {children}
+                      </ConceptStagedContext.Provider>
                     </ConceptContext.Provider>
                   </ConceptModalContext.Provider>
                 </TaxonomyContext.Provider>
@@ -148,7 +150,7 @@ describe('useReloadConcept', () => {
 
     expect(harness.withProcessing).toHaveBeenCalledWith(expect.any(Function), PROCESSING.LOAD, PROCESSING.ARG.CONCEPT)
     expect(harness.apiFns.apiPayload).toHaveBeenCalledWith(getConceptById, 42)
-    expect(harness.apiFns.apiPayload).toHaveBeenCalledWith(getConceptNameById, 7)
+    expect(harness.apiFns.apiPayload).toHaveBeenCalledWith(getConceptNamesById, 7)
     expect(harness.apiFns.apiPayload).toHaveBeenCalledWith(getConceptChildren, 'dingo')
     expect(harness.apiFns.apiPayload).toHaveBeenCalledWith(getConceptParent, 'dingo')
     expect(remapConceptNameMock).not.toHaveBeenCalled()

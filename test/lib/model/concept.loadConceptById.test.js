@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { getConceptById, getConceptChildren, getConceptNameById, getConceptParent } from '@/lib/api/concept'
+import { getConceptById, getConceptChildren, getConceptNamesById, getConceptParent } from '@/lib/api/concept'
 import { loadConceptById } from '@/lib/model/concept'
 
 const normalizeConceptMock = vi.fn()
@@ -20,7 +20,7 @@ const serverRoutes = ({ name = 'dingo', parent = 'root', children = ['pup'] } = 
       () => ({ id: 42, name, rankLevel: 'Species', rankName: 'Species', alternateNames: ['old'], author: '' }),
     ],
     [
-      getConceptNameById,
+      getConceptNamesById,
       () => ({
         id: 42,
         names: [
@@ -49,7 +49,7 @@ describe('loadConceptById', () => {
     const concept = await loadConceptById(apiFns, { id: 42, name: 'dingo', primaryNameId: 7 }, false)
 
     expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptById, 42)
-    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNameById, 7)
+    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNamesById, 7)
     expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptChildren, 'dingo')
     expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptParent, 'dingo')
     expect(concept).toMatchObject({

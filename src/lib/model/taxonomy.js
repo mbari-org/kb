@@ -1,9 +1,9 @@
 import {
-  getConceptChildren as apiChildren,
-  getConceptByName as apiConcept,
-  getConceptPhylogenyDown as apiDescendants,
   deleteConceptById as apiDeleteById,
+  getConceptByName,
+  getConceptChildren as apiChildren,
   getConceptParent as apiParent,
+  getConceptPhylogenyDown as apiDescendants,
   normalizeConcept,
 } from '@/lib/api/concept'
 import { getMedia } from '@/lib/api/media'
@@ -213,7 +213,7 @@ const loadTaxonomy = async apiFns => {
     apiFns.apiPayload(apiRanks),
   ])
 
-  const rootConcept = await apiFns.apiPayload(apiConcept, root.name)
+  const rootConcept = await apiFns.apiPayload(getConceptByName, root.name)
   await normalizeConcept(apiFns, rootConcept)
 
   const { aliases, primaryNameId } = await loadConceptNames(apiFns, rootConcept.name)
@@ -254,7 +254,7 @@ const loadTaxonomyConcept = async (taxonomy, conceptName, apiFns) => {
 
   let concept
   if (!taxonomyConcept || isStructureOnly(taxonomyConcept)) {
-    concept = await apiFns.apiPayload(apiConcept, conceptName)
+    concept = await apiFns.apiPayload(getConceptByName, conceptName)
     await normalizeConcept(apiFns, concept)
     if (structureChildren) {
       concept.children = structureChildren

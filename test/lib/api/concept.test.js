@@ -11,7 +11,7 @@ import {
   deleteConceptById,
   deleteConceptNameById,
   getConceptById,
-  getConceptNameById,
+  getConceptNamesById,
   updateConceptById,
   updateConceptNameById,
 } from '@/lib/api/concept'
@@ -76,7 +76,7 @@ describe('concept name API by id', () => {
   it('fetches a concept name by id', async () => {
     oniGet.mockResolvedValueOnce({ payload: { id: 7 } })
 
-    const result = await getConceptNameById(config, 7)
+    const result = await getConceptNamesById(config, 7)
 
     expect(oniGet).toHaveBeenCalledWith({
       config,

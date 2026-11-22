@@ -9,7 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 import UserContext from '@/contexts/user/UserContext'
 
 import {
-  getConceptByName as apiConcept,
+  getConceptByName,
   getConceptChildren as apiChildren,
   getConceptParent as apiParent,
   getConceptPhylogenyDown as apiDescendants,
@@ -128,7 +128,7 @@ const createApiFns = store => ({
       return sortNames(store)
     } else if (fn === apiRanks) {
       return [...store.ranks]
-    } else if (fn === apiConcept) {
+    } else if (fn === getConceptByName) {
       return cloneConcept(store.concepts[value])
     } else if (fn === apiChildren) {
       return (store.children[value] || []).map(childName => cloneConcept(store.concepts[childName]))
@@ -337,7 +337,7 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(getContext().getNames()).toContain('fetched-child')
     expect(getContext().getNames()).toContain('fetched-child-alias')
     expect(
-      apiCallsFor(apiFns.apiPayload, apiConcept).filter(([, conceptName]) => conceptName === 'fetched-child')
+      apiCallsFor(apiFns.apiPayload, getConceptByName).filter(([, conceptName]) => conceptName === 'fetched-child')
     ).toHaveLength(1)
     expect(errors).toEqual([])
   })
@@ -381,7 +381,7 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
     expect(createdChild.primaryNameId).toBe(77)
     expect(getContext().isConceptLoaded('created-child')).toBe(true)
     expect(
-      apiCallsFor(apiFns.apiPayload, apiConcept).filter(([, conceptName]) => conceptName === 'created-child')
+      apiCallsFor(apiFns.apiPayload, getConceptByName).filter(([, conceptName]) => conceptName === 'created-child')
     ).toHaveLength(0)
     expect(
       apiCallsFor(apiFns.apiPayload, apiConceptNames).filter(([, conceptName]) => conceptName === 'created-child')
@@ -469,7 +469,7 @@ describe('TaxonomyProvider conceptEditsRefresh', () => {
 
     expect(getContext().getConcept('moving-child')).toBe(movedChild)
     expect(getContext().getConcept('new-parent').children).toEqual(['moving-child'])
-    expect(apiCallsFor(apiFns.apiPayload, apiConcept)).toHaveLength(0)
+    expect(apiCallsFor(apiFns.apiPayload, getConceptByName)).toHaveLength(0)
     expect(errors).toEqual([])
   })
 

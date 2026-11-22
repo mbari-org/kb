@@ -6,7 +6,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
-import { getConceptByName as apiConcept, normalizeConcept } from '@/lib/api/concept'
+import { getConceptByName, normalizeConcept } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants/concept'
 import { loadAliases } from '@/lib/model/aliases'
 import { loadReferences } from '@/lib/model/reference'
@@ -34,7 +34,7 @@ const conceptDataFn = (apiFns, ensureConceptRealizations) => {
     let source = concept
     const needsPayload = includeFields.author || includeFields.media || includeFields.rank
     if (needsPayload && isStructureOnly(concept)) {
-      source = await apiFns.apiPayload(apiConcept, concept.name)
+      source = await apiFns.apiPayload(getConceptByName, concept.name)
       await normalizeConcept(apiFns, source)
       source.children = concept.children
       if (concept.parent !== undefined) {

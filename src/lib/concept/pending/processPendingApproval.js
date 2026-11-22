@@ -1,4 +1,4 @@
-import { getConceptByName as apiGetConcept, getConceptNameById } from '@/lib/api/concept'
+import { getConceptByName as apiGetConcept, getConceptNamesById } from '@/lib/api/concept'
 import { updatePendingItem } from '@/lib/api/history'
 import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
@@ -139,7 +139,7 @@ const processPendingApprovalUnlocked = async ({
 
     if (conceptItems.some(isAliasItem) && !removedNames.has(conceptName)) {
       const { aliases, alternateNames } = snapshotFromRawConcept(
-        await apiFns.apiPayload(getConceptNameById, freshConcept.primaryNameId)
+        await apiFns.apiPayload(getConceptNamesById, freshConcept.primaryNameId)
       )
       freshConcept.aliases = aliases
       freshConcept.alternateNames = alternateNames

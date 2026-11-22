@@ -16,7 +16,7 @@ import UserContext from '@/contexts/user/UserContext'
 import useModifyRealizations from '@/contexts/panels/realizations/useModifyRealizations'
 
 import {
-  getConceptByName as apiConcept,
+  getConceptByName,
   getConceptChildren as apiChildren,
   getConceptNames as apiConceptNames,
   getConceptParent as apiParent,
@@ -71,7 +71,7 @@ const createApiFns = (store, { isAdmin }) => ({
     if (fn === apiRoot) return { name: 'root' }
     if (fn === apiNames) return Object.keys(store.concepts).sort()
     if (fn === apiRanks) return []
-    if (fn === apiConcept) return cloneConcept(store.concepts[value])
+    if (fn === getConceptByName) return cloneConcept(store.concepts[value])
     if (fn === apiChildren) return (store.children[value] || []).map(childName => cloneConcept(store.concepts[childName]))
     if (fn === apiConceptNames) return [{ author: '', id: 1, name: value, nameType: 'primary' }]
     if (fn === apiParent) return { name: store.concepts[value]?.parent }

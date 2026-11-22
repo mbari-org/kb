@@ -1,14 +1,14 @@
 import {
   getConceptById,
-  getConceptByName as apiConcept,
+  getConceptByName,
   getConceptChildren,
-  getConceptNameById,
+  getConceptNamesById,
   getConceptParent,
   getConceptPhylogenyDown,
   normalizeConcept,
 } from '@/lib/api/concept'
-import { snapshotFromRawConcept } from '@/lib/model/aliases'
 import { CONCEPT } from '@/lib/constants'
+import { snapshotFromRawConcept } from '@/lib/model/aliases'
 import { pick } from '@/lib/utils'
 
 const { FIELD } = CONCEPT
@@ -18,8 +18,7 @@ const getChildrenInfo = async (apiFns, conceptName) => {
   return children.map(child => pick(child, [FIELD.ID, FIELD.NAME, FIELD.ALTERNATE_NAMES]))
 }
 
-const getConcept = async (apiFns, conceptName) =>
-  apiFns.apiPayload(apiConcept, conceptName)
+const getConcept = async (apiFns, conceptName) => apiFns.apiPayload(getConceptByName, conceptName)
 
 const getDescendantsInfo = async (apiFns, conceptName, conceptId, descendantsInfo = []) => {
   const children = await getChildrenInfo(apiFns, conceptName)
@@ -35,8 +34,7 @@ const getDescendantsInfo = async (apiFns, conceptName, conceptId, descendantsInf
 const getDescendantNames = async (apiFns, conceptName) => {
   const phylogeny = await apiFns.apiPayload(getConceptPhylogenyDown, conceptName)
 
-  const descendantNames = node =>
-    (node.children || []).flatMap(child => [child.name, ...descendantNames(child)])
+  const descendantNames = node => (node.children || []).flatMap(child => [child.name, ...descendantNames(child)])
 
   return descendantNames(phylogeny)
 }
@@ -73,7 +71,7 @@ const getPrevSibling = (concept, getConcept) => {
 
 const loadConceptById = async (apiFns, concept, isRoot) => {
   const metadata = await apiFns.apiPayload(getConceptById, concept.id)
-  const rawConcept = await apiFns.apiPayload(getConceptNameById, concept.primaryNameId)
+  const rawConcept = await apiFns.apiPayload(getConceptNamesById, concept.primaryNameId)
   const names = snapshotFromRawConcept(rawConcept)
   const children = await apiFns.apiPayload(getConceptChildren, names.name)
   const parentName = isRoot ? undefined : (await apiFns.apiPayload(getConceptParent, names.name)).name
@@ -96,4 +94,3 @@ export {
   loadConceptById,
   sortConceptChildren,
 }
-
