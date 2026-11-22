@@ -144,3 +144,38 @@ describe('submitStaged chrono replay', () => {
     expect(oniUserPost).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('submitStaged write failure outcome', () => {
+  const renameStaged = {
+    ...baseState,
+    name: { action: CONCEPT_STATE.NAME, value: 'wolf', extent: '', stagedSeq: 1 },
+  }
+
+  const saveRename = async failure => {
+    oniUserPut.mockResolvedValueOnce(failure)
+    const { result } = renderHook(() => useApiFns({}, vi.fn()))
+    return submitStaged(baseState, renameStaged, {
+      apiFns: result.current,
+      isAdmin: true,
+      staleConcept: { name: 'dingo' },
+    })
+  }
+
+  it('marks a server error as outcome unknown', async () => {
+    await expect(
+      saveRename({ error: { title: 'Server Error', message: 'boom', details: {} }, status: 500 })
+    ).rejects.toMatchObject({ title: 'Concept Save Error', details: { outcomeUnknown: true } })
+  })
+
+  it('marks a network failure without a status as outcome unknown', async () => {
+    await expect(
+      saveRename({ error: { title: 'Network Error', message: 'offline', details: {} } })
+    ).rejects.toMatchObject({ details: { outcomeUnknown: true } })
+  })
+
+  it('marks a client error as not applied', async () => {
+    await expect(
+      saveRename({ error: { title: 'Bad Request', message: 'exists', details: {} }, status: 400 })
+    ).rejects.toMatchObject({ details: { outcomeUnknown: false } })
+  })
+})

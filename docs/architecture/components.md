@@ -118,8 +118,9 @@ Provider responsibilities:
   on-demand), templates, pending history, `explicitConcepts`; `refreshData(type)`.
 - **`ConceptProvider`** — the editing state machine: `concept` + immutable `initialState`
   + `stagedState` reducer; `staged/edit/` (reducer, `useModifyConcept` reset-confirm
-  flow), `staged/save/` (`useSaveStaged`, 8 `submitter/*`, 5 `applier/*`,
-  `applyRenameSideEffects`), `pending/` (`useConceptPending`, `useConceptUpdatePending`,
+  flow), `staged/save/` (`useSaveStaged`, `useReloadConcept` for outcome-unknown reloads, 8
+  `submitter/*`, 5 `applier/*`, `applyRenameSideEffects`, `remapConceptName`), `pending/`
+  (`useConceptPending`, `useConceptUpdatePending`,
   `approve/*` + `reject/*` pure mutators). Provides `ConceptContext` +
   `ConceptStagedContext` inline.
 - **`ConceptModalProvider`** — hand-rolled; ops context stabilized via

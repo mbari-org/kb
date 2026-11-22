@@ -11,6 +11,7 @@ import {
   deleteConceptById,
   deleteConceptNameById,
   getConceptById,
+  getConceptNameById,
   updateConceptById,
   updateConceptNameById,
 } from '@/lib/api/concept'
@@ -68,6 +69,18 @@ describe('concept name API by id', () => {
       config,
       path: ['names', 'id', 7],
       data: updates,
+    })
+    expect(result).toEqual({ payload: { id: 7 } })
+  })
+
+  it('fetches a concept name by id', async () => {
+    oniGet.mockResolvedValueOnce({ payload: { id: 7 } })
+
+    const result = await getConceptNameById(config, 7)
+
+    expect(oniGet).toHaveBeenCalledWith({
+      config,
+      path: ['names', 'id', 7],
     })
     expect(result).toEqual({ payload: { id: 7 } })
   })

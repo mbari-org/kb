@@ -37,3 +37,5 @@ export const getHttpErrorTitle = status => {
   }
   return ERROR_TEXT.HTTP.UNKNOWN
 }
+
+export const isAmbiguousWriteError = error => error.status === undefined || error.status >= 500

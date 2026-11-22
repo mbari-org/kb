@@ -13,7 +13,7 @@ import buildTemplateSubmit from '@/contexts/panels/concepts/staged/save/submitte
 import { createEffectiveState } from '@/lib/concept/state/effectiveState'
 import { buildStagedJournal } from '@/lib/concept/state/stagedJournal'
 import { CONCEPT } from '@/lib/constants'
-import { createError } from '@/lib/errors'
+import { createError, isAmbiguousWriteError } from '@/lib/errors'
 
 const builders = {
   [CONCEPT.FIELD.ALIASES]: buildAliasSubmit,
@@ -104,16 +104,17 @@ const submitStaged = async (initialState, stagedState, updatesContext) => {
     const { apiFn, params, tracker } = builder(op, effective)
     const conceptName = effective.state.name
 
+    let response
     try {
-      const response = await submit(apiFn, params)
-      results.push({ ...tracker, params, response })
-      effective.apply(op, response)
+      response = await submit(apiFn, params)
     } catch (error) {
       const wrapped = wrapSubmitError(op, conceptName, error)
       results.push({ ...tracker, params, error: wrapped })
-      failedOp = { index: i, op }
+      failedOp = { index: i, op, outcomeUnknown: isAmbiguousWriteError(error) }
       break
     }
+    results.push({ ...tracker, params, response })
+    effective.apply(op, response)
   }
 
   info.results = results
@@ -152,6 +153,7 @@ const submitStaged = async (initialState, stagedState, updatesContext) => {
         conceptName: staleConcept.name,
         failedOperations,
         failuresByField,
+        outcomeUnknown: failedOp.outcomeUnknown,
         skippedOperations,
       },
       failedResults[0].error

@@ -18,6 +18,7 @@
   "PENDING": "Pending",
   "REJECT": "Reject",
   "REJECT_ALL": "Reject All",
+  "RELOAD": "Reload",
   "SAVE": "Save",
   "STAGE": "Stage",
   "STAGED": "Staged",

@@ -1,4 +1,8 @@
 {
   "DESCRIPTION": "Staged Edits",
+  "OUTCOME_UNKNOWN": [
+    "The server did not confirm this save. It may or may not have been applied.",
+    "Reload to load the concept from the server. Staged edits are discarded, so re-apply any change that is missing."
+  ],
   "WARNING": ["Discarding Edits is final.", "Please confirm you want to discard the indicated Edits."]
 }

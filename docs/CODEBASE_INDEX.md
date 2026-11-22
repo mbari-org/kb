@@ -98,7 +98,7 @@ Mostly pure label/tooltip/alert-text JSON (no field/column/form specs), consumed
 `api/*.js` → `services/<svc>/methods.js` → `request.js` (service token for reads, oni-user token for attributed mutations, one 401-retry after refresh) → fetch. Contexts unwrap via `ConfigContext.apiFns`. Result convention: `{payload}` / `{error, status}` / `{error, result}`.
 
 ### Concept save
-`StagedActions` → `useSaveStaged` → `submitStaged` (8 field submitters in `staged/save/submitter/`, `Promise.all`) → `applyRenameSideEffects` (if renamed: related-data reassignment, prefs history rewrite, template filter rewrite) → refetch + `normalizeConcept` → `applyUpdateResults` (per-field `applier/*`) → refresh pending history → `conceptEditsRefresh` (taxonomy reconciliation) → `setConcept` → exit editing.
+`StagedActions` → `useSaveStaged` → `submitStaged` (sequential ops, stops at the first failure; 8 field submitters in `staged/save/submitter/`) → `applyRenameSideEffects` (if renamed: related-data reassignment, then `remapConceptName`) → `applyUpdateResults` (per-field `applier/*`, from write responses) → refresh pending history → `conceptEditsRefresh` (taxonomy reconciliation) → `setConcept` → exit editing. An outcome-unknown failure (5xx or no status) opens the save-outcome-unknown modal instead; Reload runs `useReloadConcept` (by-id reads that replace the state and discard staged edits).
 
 ### Pending approval
 Context hooks (`useConceptUpdatePending` / `useHistoryUpdatePending`) → `lib/concept/pending/processPendingApproval` → `updatePendingItem` PUTs → optimistic clone/mutate via `panels/concepts/pending/approve/*` or `reject/*` (pure mutators dispatched by `HISTORY_FIELD`) → `conceptEditsRefresh`.

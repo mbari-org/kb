@@ -2,6 +2,7 @@ import { use, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import Actions from '@/components/modal/actions/Actions'
+import useDisplaySaveOutcomeUnknown from '@/components/kb/panels/concepts/concept/change/staged/modal/useDisplaySaveOutcomeUnknown'
 
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptStagedContext from '@/contexts/panels/concepts/ConceptStagedContext'
@@ -50,6 +51,7 @@ const StagedActions = ({ intent }) => {
   const { showBoundary } = useErrorBoundary()
 
   const saveStaged = useSaveStaged()
+  const displaySaveOutcomeUnknown = useDisplaySaveOutcomeUnknown()
   const resetConfirmedRef = useRef(false)
 
   const handleSpecialAction = useCallback(() => {
@@ -135,7 +137,12 @@ const StagedActions = ({ intent }) => {
             await saveStaged()
             handleSpecialAction()
           } catch (error) {
-            showBoundary(error)
+            if (error.details?.outcomeUnknown) {
+              setGuardedAction(null)
+              displaySaveOutcomeUnknown()
+            } else {
+              showBoundary(error)
+            }
           }
           break
 
@@ -144,7 +151,18 @@ const StagedActions = ({ intent }) => {
           break
       }
     },
-    [closeModal, concept, handleSpecialAction, modalData, modifyConcept, saveStaged, setGuardedAction, showBoundary, updateSelected]
+    [
+      closeModal,
+      concept,
+      displaySaveOutcomeUnknown,
+      handleSpecialAction,
+      modalData,
+      modifyConcept,
+      saveStaged,
+      setGuardedAction,
+      showBoundary,
+      updateSelected,
+    ]
   )
 
   const labels = useMemo(() => getLabels(confirmReset, intent), [confirmReset, intent])

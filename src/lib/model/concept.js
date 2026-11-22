@@ -1,4 +1,13 @@
-import { getConceptByName as apiConcept, getConceptChildren, getConceptPhylogenyDown } from '@/lib/api/concept'
+import {
+  getConceptById,
+  getConceptByName as apiConcept,
+  getConceptChildren,
+  getConceptNameById,
+  getConceptParent,
+  getConceptPhylogenyDown,
+  normalizeConcept,
+} from '@/lib/api/concept'
+import { snapshotFromRawConcept } from '@/lib/model/aliases'
 import { CONCEPT } from '@/lib/constants'
 import { pick } from '@/lib/utils'
 
@@ -62,6 +71,21 @@ const getPrevSibling = (concept, getConcept) => {
   return null
 }
 
+const loadConceptById = async (apiFns, concept, isRoot) => {
+  const metadata = await apiFns.apiPayload(getConceptById, concept.id)
+  const rawConcept = await apiFns.apiPayload(getConceptNameById, concept.primaryNameId)
+  const names = snapshotFromRawConcept(rawConcept)
+  const children = await apiFns.apiPayload(getConceptChildren, names.name)
+  const parentName = isRoot ? undefined : (await apiFns.apiPayload(getConceptParent, names.name)).name
+
+  return normalizeConcept(apiFns, {
+    ...metadata,
+    ...names,
+    children: sortConceptChildren(children.map(child => child.name)),
+    parent: parentName,
+  })
+}
+
 export {
   getChildrenInfo,
   getConcept,
@@ -69,6 +93,7 @@ export {
   getDescendantsInfo,
   getNextSibling,
   getPrevSibling,
+  loadConceptById,
   sortConceptChildren,
 }
 

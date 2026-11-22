@@ -138,7 +138,7 @@ file and function that implements it.
    delete by alias `id`. Alias create stays anchored on the current name, and an added alias
    takes its `id` from the add response. Stops at the
    first failure and reports completed / failed / skipped ops in
-   `createError('Concept Save Error', …)`. A failed write throws through `apiWrite`, so the first HTTP failure stops here. Note:
+   `createError('Concept Save Error', …)`, with `details.outcomeUnknown` set by `isAmbiguousWriteError` (`src/lib/errors.js`; see step 9). A failed write throws through `apiWrite`, so the first HTTP failure stops here. Note:
    `templates` is a staged field but has **no submitter** — template changes flow through
    the pending workflow instead.
 4. If the concept was renamed: `applyRenameSideEffects.js` — (a) `performReassignments`
@@ -170,6 +170,7 @@ file and function that implements it.
 8. `refreshPanelData(PANEL_DATA.PENDING_HISTORY)` → `conceptEditsRefresh(freshConcept,
    staleConcept, createdChildPayloads)` (TaxonomyProvider reconciliation; a created child is inserted from its create payload plus one `loadConceptNames` read) → `setConcept(updatedConcept,
    pendingHistory)` → `setEditing(false)` → `updateSelected({concept})` → `closeModal()`.
+9. Ambiguous outcome (AD-19). `StagedActions` checks `error.details?.outcomeUnknown` on a rejected save. It clears the guarded action and replaces the staged modal with the save-outcome-unknown modal (`useDisplaySaveOutcomeUnknown`, `SaveOutcomeUnknownContent`, `SaveOutcomeUnknownActions`). That modal's close handler returns `false`, so Reload is the only way out. Nothing is retried, and no applier or `conceptEditsRefresh` runs. Other save errors still go to the boundary. Reload (`useReloadConcept`): `loadConceptById` (`src/lib/model/concept.js`) reads `GET /concept/id/{id}` and `GET /names/id/{primaryNameId}`, then children and parent by name (parent skipped at the root). It runs `remapConceptName` if the name changed (shared with `applyRenameSideEffects`), relabels or resets paths, reloads realizations, templates, and pending history, runs `conceptEditsRefresh`, then calls `setConcept` (which discards staged edits), `setEditing(false)`, `updateSelected`, and `closeModal(true)`. The compare-and-accept branch from the plan is not implemented.
 
 ## 6. Pending-history approval/rejection
 
