@@ -50,9 +50,11 @@ describe('pending child additions', () => {
       <UserContext.Provider value={{ isAdmin: false }}>
         <ConceptModalProcessingContext.Provider value={{ processing: false }}>
           <ConceptModalContext.Provider value={{ setModal: vi.fn() }}>
-            <ConceptContext.Provider value={{ concept, pending }}>
-              <PendingContent />
-            </ConceptContext.Provider>
+            <ConceptModalDataContext.Provider value={{ modalData: {} }}>
+              <ConceptContext.Provider value={{ concept, pending }}>
+                <PendingContent />
+              </ConceptContext.Provider>
+            </ConceptModalDataContext.Provider>
           </ConceptModalContext.Provider>
         </ConceptModalProcessingContext.Provider>
       </UserContext.Provider>
@@ -73,9 +75,11 @@ describe('pending child additions', () => {
         <UserContext.Provider value={{ isAdmin: false }}>
           <ConceptModalProcessingContext.Provider value={{ processing: false }}>
             <ConceptModalContext.Provider value={{ setModal: vi.fn() }}>
-              <ConceptContext.Provider value={{ concept: { name: 'child-concept', parent: 'new-parent' }, pending }}>
-                <PendingContent />
-              </ConceptContext.Provider>
+              <ConceptModalDataContext.Provider value={{ modalData: {} }}>
+                <ConceptContext.Provider value={{ concept: { name: 'child-concept', parent: 'new-parent' }, pending }}>
+                  <PendingContent />
+                </ConceptContext.Provider>
+              </ConceptModalDataContext.Provider>
             </ConceptModalContext.Provider>
           </ConceptModalProcessingContext.Provider>
         </UserContext.Provider>

@@ -28,6 +28,13 @@ const okApiFns = () => ({
   apiRaw: vi.fn(async () => ({ payload: {} })),
 })
 
+const freeNameApiFns = () => ({
+  apiPayload: vi.fn(async () => ({})),
+  apiRaw: vi.fn(async request =>
+    request === getConceptByName ? { error: { title: 'Not Found' }, status: 404 } : { payload: {} }
+  ),
+})
+
 describe('processPendingApproval', () => {
   it('groups approved items by concept and refreshes renamed concepts once', async () => {
     const staleConcept = {
@@ -151,7 +158,7 @@ describe('processPendingApproval', () => {
       rankName: '',
     }
 
-    const apiFns = okApiFns()
+    const apiFns = freeNameApiFns()
     const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
     const getConcept = vi.fn(() => staleConcept)
     const loadConcept = vi.fn(async () => staleConcept)
@@ -232,7 +239,8 @@ describe('processPendingApproval', () => {
     const calls = []
     const apiFns = {
       apiPayload: vi.fn(async () => ({})),
-      apiRaw: vi.fn(async () => {
+      apiRaw: vi.fn(async request => {
+        if (request === getConceptByName) return { error: { title: 'Not Found' }, status: 404 }
         calls.push('put')
         return { payload: {} }
       }),

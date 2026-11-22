@@ -6,6 +6,7 @@ import useProcessPendingDeps from '@/contexts/common/useProcessPendingDeps'
 import { performReassignments, relatedDataCounts } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
+import { isRenameRejectBlocked } from '@/lib/concept/pending/renameRejectBlocked'
 import { isPendingName } from '@/lib/concept/state/name'
 
 import { PENDING } from '@/lib/constants/pending.js'
@@ -22,6 +23,7 @@ const useHistoryUpdatePending = () => {
       try {
         await processPendingApproval({ approval, deps, items: [item] })
       } catch (error) {
+        if (isRenameRejectBlocked(error)) throw error
         showBoundary(error)
         return false
       }

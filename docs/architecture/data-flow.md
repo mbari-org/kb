@@ -195,6 +195,7 @@ group level. Approve/Reject All remain modal-level actions in `PendingActions.js
    (`src/contexts/common/useProcessPendingDeps.js`).
 2. Orchestrator `processPendingApproval`
    (`src/lib/concept/pending/processPendingApproval.js:13`):
+   Before any write, a reject of a rename checks the old name (`validateRenameRejects`, `src/lib/concept/pending/renameRejectBlocked.js`). A concept or alias that already holds the name blocks the whole batch with `Rename Reject Blocked`. Both pending modals replace the confirm text with the reason and leave Close as the only action (the Concepts modal sets `closeOnly`, which `usePendingItemApproval` reads to disable per-item buttons). The item stays pending, and the error boundary is not used for this.
    a. Groups items by `item.concept` and resolves each group's stale concept
       (`loadConcept`) **before** submitting anything — approvals can rename or remove
       concepts server-side (e.g. a rejected rename restores the old name), after which

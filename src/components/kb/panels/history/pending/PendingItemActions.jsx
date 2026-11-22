@@ -5,10 +5,12 @@ import { usePanelModalDataContext, usePanelModalOperationsContext } from '@/cont
 
 import Actions from '@/components/common/factory/Actions'
 import PendingAlert from '@/components/modal/actions/PendingAlert'
+import ActionsAlert from '@/components/modal/actions/ActionsAlert'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import { createError } from '@/lib/errors'
 import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdatePending'
+import { isRenameRejectBlocked, renameRejectLines } from '@/lib/concept/pending/renameRejectBlocked'
 
 import CONFIG from '@/lib/config'
 
@@ -24,10 +26,15 @@ const HistoryPendingActions = props => {
   const { item, nameChangeType } = { ...modalData, ...props }
 
   const [pendingConfirm, setPendingConfirm] = useState(null)
+  const [notice, setNotice] = useState(null)
 
-  const colors = ['approve', 'main', 'reject']
+  const colors = notice ? ['main'] : ['approve', 'main', 'reject']
 
   const [disabled, labels] = (() => {
+    if (notice) {
+      return [[false], [CLOSE]]
+    }
+
     switch (pendingConfirm) {
       case PENDING.APPROVAL.ACCEPT:
         return [
@@ -67,7 +74,15 @@ const HistoryPendingActions = props => {
 
       case CONFIRM: {
         const stop = beginProcessing(PROCESSING.UPDATE, PROCESSING.ARG.PENDING)
-        const processed = await updatePending({ approval: pendingConfirm, item, nameChangeType }).finally(stop)
+        setNotice(null)
+        const processed = await updatePending({ approval: pendingConfirm, item, nameChangeType })
+          .catch(error => {
+            if (!isRenameRejectBlocked(error)) throw error
+            setNotice(renameRejectLines(error))
+            setPendingConfirm(null)
+            return false
+          })
+          .finally(stop)
         if (processed !== false) {
           closeModal(true)
         }
@@ -91,6 +106,7 @@ const HistoryPendingActions = props => {
     <Box sx={{ height: '100%', width: '100%' }}>
       <Stack spacing={0} sx={{ alignItems: 'center', mt: 1, height: 60, justifyContent: 'center' }}>
         {!!pendingConfirm && <PendingAlert approval={pendingConfirm} />}
+        {!!notice && <ActionsAlert lines={notice} severity='warning' />}
       </Stack>
       <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
     </Box>

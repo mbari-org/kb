@@ -12,6 +12,7 @@ import { applyRejects } from '@/lib/concept/pending/applyRejects'
 import cloneStale from '@/lib/concept/pending/cloneStale'
 import enqueueConceptMutation from '@/lib/concept/enqueueConceptMutation'
 import { isPendingName } from '@/lib/concept/state/name'
+import { createRenameRejectBlocked, RENAME_REJECT_REASON } from '@/lib/concept/pending/renameRejectBlocked'
 
 // processPendingApproval handles both pending approve and reject. The nomenclature is approval reject or approval
 // approve.
@@ -51,6 +52,23 @@ const validateRestoredChildren = async (apiFns, approval, items) => {
   }
 }
 
+const HTTP_NOT_FOUND = 404
+
+const validateRenameRejects = async (apiFns, approval, items) => {
+  if (approval !== PENDING.APPROVAL.REJECT) return
+
+  for (const item of items.filter(isPendingName)) {
+    const { error, payload, status } = await apiFns.apiRaw(apiGetConcept, item.oldValue)
+    if (!error) {
+      if (payload.name === item.oldValue) {
+        throw createRenameRejectBlocked(RENAME_REJECT_REASON.CONCEPT_ADDED, item.oldValue)
+      }
+      throw createRenameRejectBlocked(RENAME_REJECT_REASON.ALIAS_HELD, item.oldValue, payload.name)
+    }
+    if (status !== HTTP_NOT_FOUND) throw error
+  }
+}
+
 const processPendingApprovalUnlocked = async ({
   approval,
   items,
@@ -69,6 +87,7 @@ const processPendingApprovalUnlocked = async ({
   if (!items || items.length === 0) return { concepts: {}, pendingHistory: [], removed: [], updated: [] }
 
   await validateRestoredChildren(apiFns, approval, items)
+  await validateRenameRejects(apiFns, approval, items)
 
   const groups = items.reduce((acc, item) => {
     const key = item.concept

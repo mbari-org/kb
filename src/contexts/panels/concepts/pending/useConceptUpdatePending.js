@@ -13,6 +13,7 @@ import {
 } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
+import { isRenameRejectBlocked } from '@/lib/concept/pending/renameRejectBlocked'
 import { isPendingName } from '@/lib/concept/state/name'
 import { PENDING } from '@/lib/constants/pending.js'
 
@@ -111,6 +112,7 @@ const useConceptUpdatePending = () => {
         PROCESSING.UPDATE,
         `${PROCESSING.ARG.PENDING}: ${approval}`
       ).catch(error => {
+        if (isRenameRejectBlocked(error)) throw error
         showBoundary(error)
         return undefined
       })

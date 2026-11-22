@@ -1,4 +1,14 @@
 {
   "DESCRIPTION": "Pending History",
-  "INFO": ["Pending edit approval is final.", "Please confirm you want to approve the indicated Pending edits."]
+  "INFO": ["Pending edit approval is final.", "Please confirm you want to approve the indicated Pending edits."],
+  "RENAME_REJECT": {
+    "ALIAS_HELD": [
+      "Alias {name} has been added to Concept {owner}.",
+      "You must remove Alias {name} if you want to reject this rename."
+    ],
+    "CONCEPT_ADDED": [
+      "Concept '{name}' has been added since this rename request.",
+      "You must remove Concept '{name}' if you want to reject this rename."
+    ]
+  }
 }
