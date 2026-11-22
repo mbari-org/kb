@@ -15,7 +15,6 @@ import UserContext from '@/contexts/user/UserContext'
 
 import useSaveStaged from '@/contexts/panels/concepts/staged/save/useSaveStaged'
 
-import { getConceptByName as apiGetConcept } from '@/lib/api/concept'
 import { CONCEPT } from '@/lib/constants'
 import { createError } from '@/lib/errors'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
@@ -74,11 +73,8 @@ describe('useSaveStaged', () => {
     }
 
     const apiFns = {
-      apiPayload: vi.fn(async (fn, conceptName) => {
-        if (fn === apiGetConcept) {
-          return fetchedConcept
-        }
-        throw new Error(`Unexpected api function: ${fn?.name || 'unknown'} ${conceptName || ''}`)
+      apiPayload: vi.fn(async fn => {
+        throw new Error(`Unexpected server read during save: ${fn?.name || 'unknown'}`)
       }),
     }
     const closeModal = vi.fn()
@@ -312,10 +308,7 @@ describe('useSaveStaged', () => {
 
     const apiFns = {
       apiPayload: vi.fn(async fn => {
-        if (fn === apiGetConcept) {
-          return freshConcept
-        }
-        throw new Error(`Unexpected api function: ${fn?.name || 'unknown'}`)
+        throw new Error(`Unexpected server read during save: ${fn?.name || 'unknown'}`)
       }),
     }
     const refreshData = vi.fn(async () => ({ pendingHistory: [] }))

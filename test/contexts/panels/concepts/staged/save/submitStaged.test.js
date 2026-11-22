@@ -1,14 +1,15 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHook } from '@testing-library/react'
 
 import useApiFns from '@/contexts/config/useApiFns'
 import submitStaged from '@/contexts/panels/concepts/staged/save/submitStaged'
 import { CONCEPT } from '@/lib/constants'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
-import { oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
+import { oniUserDelete, oniUserPost, oniUserPut } from '@/lib/services/oni/methods'
 
 vi.mock('@/lib/services/oni/methods', async importOriginal => ({
   ...(await importOriginal()),
+  oniUserDelete: vi.fn(),
   oniUserPost: vi.fn(),
   oniUserPut: vi.fn(),
 }))
@@ -142,6 +143,98 @@ describe('submitStaged chrono replay', () => {
 
     expect(oniUserPut).toHaveBeenCalledTimes(1)
     expect(oniUserPost).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('submitStaged ids and rejected writes', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('stops at a rejected parent move before later writes', async () => {
+    oniUserPut.mockResolvedValueOnce({
+      error: { title: 'Bad Request', message: 'Invalid parent', details: {} },
+      status: 400,
+    })
+    const { result } = renderHook(() => useApiFns({}, vi.fn()))
+    const staged = {
+      ...baseState,
+      aliases: [
+        {
+          name: 'alias-1',
+          author: '',
+          nameType: 'synonym',
+          action: CONCEPT_STATE.ALIAS.ADD,
+          index: 0,
+          stagedSeq: 2,
+        },
+      ],
+      parent: { action: CONCEPT_STATE.PARENT, value: 'object', stagedSeq: 1 },
+    }
+
+    await expect(
+      submitStaged(baseState, staged, { apiFns: result.current, isAdmin: true, staleConcept: { name: 'dingo' } })
+    ).rejects.toMatchObject({
+      title: 'Concept Save Error',
+      details: {
+        completedOperations: [],
+        failedOperations: [{ field: CONCEPT.FIELD.PARENT, message: 'Invalid parent' }],
+        outcomeUnknown: false,
+        skippedOperations: [{ action: CONCEPT_STATE.ALIAS.ADD, field: CONCEPT.FIELD.ALIASES }],
+      },
+    })
+
+    expect(oniUserPut).toHaveBeenCalledWith(
+      expect.objectContaining({ path: ['concept', 'id', 42], data: { parentName: 'object' } })
+    )
+    expect(oniUserPost).not.toHaveBeenCalled()
+  })
+
+  it('addresses parent, rank, alias edit, and alias delete writes by id', async () => {
+    oniUserPut.mockResolvedValue({ payload: {}, status: 200 })
+    oniUserDelete.mockResolvedValueOnce({ payload: {}, status: 200 })
+    const { result } = renderHook(() => useApiFns({}, vi.fn()))
+    const initial = {
+      ...baseState,
+      aliases: [
+        { id: 9, name: 'wolf', author: '', nameType: 'Synonym' },
+        { id: 10, name: 'fox', author: '', nameType: 'Common' },
+      ],
+    }
+    const staged = {
+      ...initial,
+      aliases: [
+        {
+          id: 9,
+          name: 'wolfie',
+          author: '',
+          nameType: 'Synonym',
+          action: CONCEPT_STATE.ALIAS.EDIT,
+          index: 0,
+          stagedSeq: 3,
+        },
+        {
+          id: 10,
+          name: 'fox',
+          author: '',
+          nameType: 'Common',
+          action: CONCEPT_STATE.ALIAS.DELETE,
+          index: 1,
+          stagedSeq: 4,
+        },
+      ],
+      parent: { action: CONCEPT_STATE.PARENT, value: 'object', stagedSeq: 1 },
+      rank: { action: CONCEPT_STATE.RANK, level: 'Species', name: 'species', stagedSeq: 2 },
+    }
+
+    await submitStaged(initial, staged, { apiFns: result.current, isAdmin: true, staleConcept: { name: 'dingo' } })
+
+    expect(oniUserPut.mock.calls.map(([request]) => [request.path, request.data])).toEqual([
+      [['concept', 'id', 42], { parentName: 'object' }],
+      [['concept', 'id', 42], { rankLevel: 'Species', rankName: 'species' }],
+      [['names', 'id', 9], { newName: 'wolfie' }],
+    ])
+    expect(oniUserDelete.mock.calls.map(([request]) => request.path)).toEqual([['names', 'id', 10]])
   })
 })
 

@@ -211,8 +211,8 @@ group level. Approve/Reject All remain modal-level actions in `PendingActions.js
    e. Per concept group: `cloneStale(apiFns, staleConcept, false)` — a purely **local**
       clone (no server refetch; it carries `id` and `primaryNameId`) — then `applyRejects` / `applyApprovals`, then
       when the group has alias changes and the batch does not delete the concept, the names are
-      re-read (`loadConceptNames`) so alias
-      and primary name ids are current. Then `conceptEditsRefresh(freshConcept, staleConcept)`;
+      re-read by `primaryNameId` (`GET /names/id/{id}`, `snapshotFromRawConcept`) so aliases and
+      alternate names are current. Then `conceptEditsRefresh(freshConcept, staleConcept)`;
       `updateSelected` if renamed.
 3. Mutator dispatch: `HISTORY_FIELD` switches in `src/lib/concept/pending/applyApproves.js:11`
    and `applyRejects.js:11` route to the pure mutators in

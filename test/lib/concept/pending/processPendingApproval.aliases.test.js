@@ -18,29 +18,32 @@ vi.mock('@/lib/concept/pending/cloneStale', () => ({
 
 import { processPendingApproval } from '@/lib/concept/pending/processPendingApproval'
 
-import { getConceptNames } from '@/lib/api/concept'
+import { getConceptNameById } from '@/lib/api/concept'
 import { ACTION, HISTORY_FIELD } from '@/lib/constants'
 import { PENDING } from '@/lib/constants/pending.js'
 
+const staleAliasConcept = () => ({
+  aliases: [],
+  alternateNames: [],
+  children: [],
+  media: [],
+  name: 'dingo',
+  parent: 'root',
+  primaryNameId: 1,
+  rankLevel: '',
+  rankName: '',
+  realizations: [],
+})
+
 describe('processPendingApproval alias changes', () => {
-  it('re-reads the concept names so approved alias adds carry their server ids', async () => {
-    const staleConcept = {
-      aliases: [],
-      alternateNames: [],
-      children: [],
-      media: [],
-      name: 'dingo',
-      parent: 'root',
-      rankLevel: '',
-      rankName: '',
-      realizations: [],
-    }
+  it('re-reads the names by primary name id so approved alias adds carry their server ids', async () => {
+    const staleConcept = staleAliasConcept()
     const serverNames = [
-      { id: 1, name: 'dingo', nameType: 'primary' },
-      { id: 9, name: 'wolf', nameType: 'synonym' },
+      { id: 1, name: 'dingo', nameType: 'primary', author: 'Smith' },
+      { id: 9, name: 'wolf', nameType: 'synonym', author: '' },
     ]
     const apiFns = {
-      apiPayload: vi.fn(async fn => (fn === getConceptNames ? serverNames : {})),
+      apiPayload: vi.fn(async fn => (fn === getConceptNameById ? { names: serverNames } : {})),
       apiRaw: vi.fn(async () => ({ payload: {} })),
     }
     const conceptEditsRefresh = vi.fn(async () => ({ concept: staleConcept }))
@@ -69,10 +72,10 @@ describe('processPendingApproval alias changes', () => {
       items,
     })
 
-    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNames, 'dingo')
+    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNameById, 1)
     expect(conceptEditsRefresh).toHaveBeenCalledWith(
       expect.objectContaining({
-        aliases: [{ id: 9, name: 'wolf', nameType: 'Synonym' }],
+        aliases: [{ id: 9, name: 'wolf', author: '', nameType: 'Synonym' }],
         alternateNames: ['wolf'],
         primaryNameId: 1,
       }),
@@ -80,18 +83,68 @@ describe('processPendingApproval alias changes', () => {
     )
   })
 
-  it('does not re-read names for a concept the same batch deletes', async () => {
-    const staleConcept = {
-      aliases: [],
-      alternateNames: [],
-      children: [],
-      media: [],
-      name: 'dingo',
-      parent: 'root',
-      rankLevel: '',
-      rankName: '',
-      realizations: [],
+  it('re-reads the names by primary name id after a rename in the same batch', async () => {
+    const staleConcept = staleAliasConcept()
+    const serverNames = [
+      { id: 1, name: 'wolf-renamed', nameType: 'primary', author: '' },
+      { id: 9, name: 'wolf', nameType: 'synonym', author: '' },
+    ]
+    const apiFns = {
+      apiPayload: vi.fn(async fn => (fn === getConceptNameById ? { names: serverNames } : {})),
+      apiRaw: vi.fn(async () => ({ payload: {} })),
     }
+    const conceptEditsRefresh = vi.fn(async concept => ({ concept }))
+    const getConcept = vi.fn(() => staleConcept)
+    const loadConcept = vi.fn(async () => staleConcept)
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const updateSelected = vi.fn()
+    const items = [
+      {
+        concept: 'wolf-renamed',
+        field: HISTORY_FIELD.NAME,
+        action: ACTION.EDIT,
+        oldValue: 'dingo',
+        newValue: 'wolf-renamed',
+        id: 'pending-1',
+      },
+      { concept: 'wolf-renamed', field: HISTORY_FIELD.ALIAS, action: ACTION.ADD, newValue: 'wolf', id: 'pending-2' },
+    ]
+
+    cloneStaleMock.mockResolvedValue({ ...staleConcept })
+    applyApprovalsMock.mockImplementationOnce(concept => {
+      concept.name = 'wolf-renamed'
+    })
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.ACCEPT,
+      deps: {
+        apiFns,
+        conceptEditsRefresh,
+        getConcept,
+        loadConcept,
+        refreshData,
+        reloadConceptRealizations: vi.fn(async () => []),
+        resetConceptPaths: vi.fn(),
+        updateSelected,
+      },
+      items,
+    })
+
+    expect(apiFns.apiPayload).toHaveBeenCalledWith(getConceptNameById, 1)
+    expect(conceptEditsRefresh).toHaveBeenCalledWith(
+      expect.objectContaining({
+        alternateNames: ['wolf'],
+        aliases: [{ id: 9, name: 'wolf', author: '', nameType: 'Synonym' }],
+        name: 'wolf-renamed',
+        primaryNameId: 1,
+      }),
+      staleConcept
+    )
+    expect(updateSelected).toHaveBeenCalledWith({ concept: 'wolf-renamed' })
+  })
+
+  it('does not re-read names for a concept the same batch deletes', async () => {
+    const staleConcept = staleAliasConcept()
     const apiFns = {
       apiPayload: vi.fn(async () => ({})),
       apiRaw: vi.fn(async () => ({ payload: {} })),
@@ -122,7 +175,7 @@ describe('processPendingApproval alias changes', () => {
       items,
     })
 
-    expect(apiFns.apiPayload).not.toHaveBeenCalledWith(getConceptNames, 'dingo')
+    expect(apiFns.apiPayload).not.toHaveBeenCalledWith(getConceptNameById, 1)
     expect(conceptEditsRefresh).toHaveBeenCalledTimes(2)
   })
 })

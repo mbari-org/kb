@@ -1,11 +1,11 @@
-import { getConceptByName as apiGetConcept } from '@/lib/api/concept'
+import { getConceptByName as apiGetConcept, getConceptNameById } from '@/lib/api/concept'
 import { updatePendingItem } from '@/lib/api/history'
 import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PENDING } from '@/lib/constants/pending.js'
 import { createError } from '@/lib/errors'
-import { loadConceptNames } from '@/lib/model/aliases'
+import { snapshotFromRawConcept } from '@/lib/model/aliases'
 
 import { applyApprovals } from '@/lib/concept/pending/applyApproves'
 import { applyRejects } from '@/lib/concept/pending/applyRejects'
@@ -138,10 +138,11 @@ const processPendingApprovalUnlocked = async ({
     }
 
     if (conceptItems.some(isAliasItem) && !removedNames.has(conceptName)) {
-      const { aliases, primaryNameId } = await loadConceptNames(apiFns, freshConcept.name)
+      const { aliases, alternateNames } = snapshotFromRawConcept(
+        await apiFns.apiPayload(getConceptNameById, freshConcept.primaryNameId)
+      )
       freshConcept.aliases = aliases
-      freshConcept.alternateNames = aliases.map(alias => alias.name).sort()
-      freshConcept.primaryNameId = primaryNameId
+      freshConcept.alternateNames = alternateNames
     }
 
     const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, staleConcept)
