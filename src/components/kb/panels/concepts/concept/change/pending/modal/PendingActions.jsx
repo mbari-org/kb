@@ -42,11 +42,15 @@ const PendingActions = () => {
     return pendingChild && !ids.includes(pendingChild.id) ? [...ids, pendingChild.id] : ids
   }, [concept.name, pendingConcept, pendingConfirm, pendingParent])
 
-  const [colors, disabled, labels] = useMemo(() => {
+  const [colors, hidden, labels] = useMemo(() => {
     const actionColors = ['approve', 'main', 'reject']
 
-    if (!isAdmin || closeOnly) {
+    if (!isAdmin) {
       return [['main'], [false], [CLOSE]]
+    }
+
+    if (closeOnly) {
+      return [actionColors, [true, false, true], [APPROVE_ALL, CLOSE, REJECT_ALL]]
     }
 
     if (!pendingConfirm) {
@@ -79,6 +83,10 @@ const PendingActions = () => {
         }
 
         case CLOSE:
+          if (closeOnly) {
+            setModalData(prev => ({ ...prev, alert: null, closeOnly: false }))
+            break
+          }
           if (!pendingConfirm) {
             closeModal()
           }
@@ -116,10 +124,10 @@ const PendingActions = () => {
           break
       }
     },
-    [closeModal, modalData, pendingConfirm, pendingIds, setModalData, setPendingConfirm, updatePending]
+    [closeModal, closeOnly, modalData, pendingConfirm, pendingIds, setModalData, setPendingConfirm, updatePending]
   )
 
-  return createActions({ colors, disabled, labels, onAction }, 'PendingActions')
+  return createActions({ colors, hidden, labels, onAction }, 'PendingActions')
 }
 
 export default PendingActions

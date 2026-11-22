@@ -2,20 +2,26 @@ import { Box } from '@mui/material'
 
 import ActionButton from './ActionButton'
 
-const Actions = ({ colors, disabled, labels, onAction }) => {
+const Actions = ({ colors, disabled, hidden, labels, onAction }) => {
   const actionColor = index => (colors ? colors[index] : 'main')
 
-  const actions = labels.map((label, index) => (
-    <ActionButton
-      color={actionColor(index)}
-      disabled={disabled && disabled[index]}
-      index={index}
-      key={index}
-      label={label}
-      onAction={onAction}
-      totalActions={labels.length}
-    />
-  ))
+  const actions = labels.map((label, index) => {
+    if (hidden && hidden[index]) {
+      return <Box key={index} />
+    }
+
+    return (
+      <ActionButton
+        color={actionColor(index)}
+        disabled={disabled && disabled[index]}
+        index={index}
+        key={index}
+        label={label}
+        onAction={onAction}
+        totalActions={labels.length}
+      />
+    )
+  })
 
   const getGridLayout = () => {
     if (labels.length === 1) {

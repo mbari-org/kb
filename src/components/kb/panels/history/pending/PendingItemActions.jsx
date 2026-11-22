@@ -30,7 +30,7 @@ const HistoryPendingActions = props => {
 
   const colors = notice ? ['main'] : ['approve', 'main', 'reject']
 
-  const [disabled, labels] = (() => {
+  const [hidden, labels] = (() => {
     if (notice) {
       return [[false], [CLOSE]]
     }
@@ -108,7 +108,7 @@ const HistoryPendingActions = props => {
         {!!pendingConfirm && <PendingAlert approval={pendingConfirm} />}
         {!!notice && <ActionsAlert lines={notice} severity='warning' />}
       </Stack>
-      <Actions colors={colors} disabled={disabled} labels={labels} onAction={onAction} />
+      <Actions colors={colors} hidden={hidden} labels={labels} onAction={onAction} />
     </Box>
   )
 }

@@ -15,7 +15,7 @@ import ConceptModalDataContext from '@/contexts/panels/concepts/modal/ConceptMod
 
 import { PENDING } from '@/lib/constants/pending.js'
 
-const Actions = ({ colors, disabled, labels, onAction }) => {
+const Actions = ({ colors, disabled, hidden, labels, onAction }) => {
   const { pending } = use(ConceptContext)
   const { confirmReset } = use(ConceptStagedContext)
   const { modalData } = use(ConceptModalDataContext)
@@ -26,17 +26,23 @@ const Actions = ({ colors, disabled, labels, onAction }) => {
 
   const actionColor = index => (colors ? colors[index] : 'main')
 
-  const actions = labels.map((label, index) => (
-    <Action
-      color={actionColor(index)}
-      disabled={disabled && disabled[index]}
-      index={index}
-      key={index}
-      label={label}
-      onAction={onAction}
-      totalActions={labels.length}
-    />
-  ))
+  const actions = labels.map((label, index) => {
+    if (hidden && hidden[index]) {
+      return <Box key={index} />
+    }
+
+    return (
+      <Action
+        color={actionColor(index)}
+        disabled={disabled && disabled[index]}
+        index={index}
+        key={index}
+        label={label}
+        onAction={onAction}
+        totalActions={labels.length}
+      />
+    )
+  })
 
   // Determine grid layout based on number of actions
   const getGridLayout = () => {

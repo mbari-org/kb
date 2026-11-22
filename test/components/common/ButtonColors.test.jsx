@@ -133,7 +133,7 @@ describe('button colors', () => {
     await user.click(approve)
     const confirm = screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM })
     expect(buttonVariables(confirm).at(-1)).toBe(color.COLOR.BUTTON.APPROVE)
-    expect(reject).toBeDisabled()
+    expect(screen.queryByRole('button', { name: CONFIG.BUTTON.REJECT })).not.toBeInTheDocument()
   })
 
   it('uses approval and rejection colors for pending concept actions', () => {

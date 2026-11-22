@@ -140,6 +140,7 @@ into `eslint.config.js`.
   `load: () => import(...)` chunk loader — never `React.lazy`.
 - Panel modals use the factory (`createPanelModalProvider`); the concept panel keeps its
   hand-rolled three-context provider. Don't hand-roll new modal contexts.
+- Action bars (`modal/actions/Actions.jsx`, `common/factory/Actions.jsx`) take parallel `colors`, `disabled`, `hidden`, and `labels` arrays. A hidden entry renders an empty placeholder so the remaining buttons keep their grid columns.
 
 ## Constants
 

@@ -61,4 +61,22 @@ describe('PendingItemActions rename reject', () => {
     expect(screen.getByRole('button', { name: CONFIG.BUTTON.CLOSE })).toBeInTheDocument()
     expect(closeModalMock).not.toHaveBeenCalledWith(true)
   })
+
+  it('hides Approve once Reject is selected and keeps the other buttons in place', async () => {
+    render(
+      <ThemeProvider theme={kbTheme}>
+        <PendingItemActions />
+      </ThemeProvider>
+    )
+
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.REJECT }))
+
+    const close = screen.getByRole('button', { name: CONFIG.BUTTON.CLOSE })
+    const slots = close.parentElement.children
+    expect(screen.queryByRole('button', { name: CONFIG.BUTTON.APPROVE })).not.toBeInTheDocument()
+    expect(slots[0]).toBeEmptyDOMElement()
+    expect(slots[1]).toBe(close)
+    expect(slots[2]).toBe(screen.getByRole('button', { name: CONFIG.BUTTON.CONFIRM }))
+  })
 })

@@ -21,6 +21,7 @@ import CONFIG from '@/lib/config'
 import kbTheme from '@/lib/theme'
 
 const updatePendingMock = vi.fn()
+const { ALL } = CONFIG.PANELS.CONCEPTS.MODALS.CONCEPT
 
 vi.mock('@/contexts/panels/concepts/pending/useConceptUpdatePending', () => ({
   default: () => updatePendingMock,
@@ -70,10 +71,45 @@ describe('PendingActions rename reject', () => {
     expect(spies.setPendingConfirm).toHaveBeenCalledWith(null)
   })
 
-  it('offers only Close once the reject is blocked', () => {
+  it('offers only Close once the reject is blocked, keeping it in the middle slot', () => {
     renderPendingActions(null, { closeOnly: true })
 
     expect(screen.getAllByRole('button')).toHaveLength(1)
-    expect(screen.getByRole('button', { name: CONFIG.BUTTON.CLOSE })).toBeInTheDocument()
+    const close = screen.getByRole('button', { name: CONFIG.BUTTON.CLOSE })
+    const slots = close.parentElement.children
+    expect(slots).toHaveLength(3)
+    expect(slots[1]).toBe(close)
+  })
+
+  it('dismisses the blocked alert on Close without closing the modal', async () => {
+    const spies = renderPendingActions(null, { closeOnly: true, alert: { lines: ['blocked'], severity: 'warning' } })
+
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: CONFIG.BUTTON.CLOSE }))
+
+    expect(spies.closeModal).not.toHaveBeenCalled()
+    expect(spies.setModalData).toHaveBeenCalledTimes(1)
+    const [update] = spies.setModalData.mock.calls[0]
+    expect(update({ closeOnly: true, alert: { lines: ['blocked'] }, nameChangeType: 'rename' })).toEqual({
+      closeOnly: false,
+      alert: null,
+      nameChangeType: 'rename',
+    })
+  })
+
+  it.each([
+    [{ approval: PENDING.APPROVAL.ACCEPT, group: ALL, pendingIds: ['p1'] }, CONFIG.BUTTON.REJECT_ALL],
+    [{ approval: PENDING.APPROVAL.ACCEPT, pendingIds: ['p1'] }, CONFIG.BUTTON.REJECT],
+    [{ approval: PENDING.APPROVAL.REJECT, group: ALL, pendingIds: ['p1'] }, CONFIG.BUTTON.APPROVE_ALL],
+    [{ approval: PENDING.APPROVAL.REJECT, pendingIds: ['p1'] }, CONFIG.BUTTON.APPROVE],
+  ])('hides the opposing action and keeps the other buttons in place', (pendingConfirm, hiddenLabel) => {
+    renderPendingActions(pendingConfirm)
+
+    const close = screen.getByRole('button', { name: CONFIG.BUTTON.CLOSE })
+    const slots = close.parentElement.children
+    expect(screen.queryByRole('button', { name: hiddenLabel })).not.toBeInTheDocument()
+    expect(slots).toHaveLength(3)
+    expect(slots[1]).toBe(close)
+    expect(Array.from(slots).filter(slot => slot.textContent === '')).toHaveLength(1)
   })
 })
