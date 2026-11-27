@@ -6,6 +6,7 @@ import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { PENDING } from '@/lib/constants/pending.js'
 import { createError } from '@/lib/errors'
 import { snapshotFromRawConcept } from '@/lib/model/aliases'
+import { getConcept as getTaxonomyConcept } from '@/lib/model/taxonomy'
 
 import { applyApprovals } from '@/lib/concept/pending/applyApproves'
 import { applyRejects } from '@/lib/concept/pending/applyRejects'
@@ -26,10 +27,17 @@ const restoredChildName = (approval, item) => {
 
 const isAliasItem = item => item.field === HISTORY_FIELD.ALIAS && !isPendingName(item)
 
+const isSupersededChildAdd = (getConcept, approval, item) => {
+  if (approval !== PENDING.APPROVAL.ACCEPT) return false
+  if (item.field !== HISTORY_FIELD.CHILD || item.action !== ACTION.ADD) return false
+  const child = getConcept(item.newValue)
+  return Boolean(child) && child.parent !== item.concept
+}
+
 const removedChildName = (approval, item) => {
   if (item.field !== HISTORY_FIELD.CHILD) return null
   if (approval === PENDING.APPROVAL.ACCEPT && item.action === ACTION.DELETE) return item.oldValue
-  if (approval === PENDING.APPROVAL.REJECT && item.action === ACTION.ADD) return item.newValue
+  if (approval === PENDING.APPROVAL.REJECT && item.action === ACTION.ADD) return item.recordedName
   return null
 }
 
@@ -89,6 +97,10 @@ const processPendingApprovalUnlocked = async ({
   await validateRestoredChildren(apiFns, approval, items)
   await validateRenameRejects(apiFns, approval, items)
 
+  const supersededAddIds = new Set(
+    items.filter(item => isSupersededChildAdd(getConcept, approval, item)).map(item => item.id)
+  )
+
   const groups = items.reduce((acc, item) => {
     const key = item.concept
     if (!acc[key]) acc[key] = []
@@ -140,9 +152,12 @@ const processPendingApprovalUnlocked = async ({
   const concepts = {}
   const removedNames = new Set(items.map(item => removedChildName(approval, item)).filter(Boolean))
 
+  let committedTaxonomy = null
   for (const conceptName of Object.keys(groups)) {
     const conceptItems = groups[conceptName]
-    const staleConcept = staleConcepts[conceptName]
+    const staleConcept = committedTaxonomy
+      ? getTaxonomyConcept(committedTaxonomy, conceptName)
+      : staleConcepts[conceptName]
     if (!staleConcept) continue
 
     let freshConcept = staleConcept
@@ -153,7 +168,10 @@ const processPendingApprovalUnlocked = async ({
       applyRejects(freshConcept, conceptItems)
     } else if (approval === PENDING.APPROVAL.ACCEPT) {
       freshConcept = await cloneStale(apiFns, staleConcept, false)
-      applyApprovals(freshConcept, conceptItems)
+      applyApprovals(
+        freshConcept,
+        conceptItems.filter(item => !supersededAddIds.has(item.id))
+      )
     }
 
     if (conceptItems.some(isAliasItem) && !removedNames.has(conceptName)) {
@@ -164,7 +182,8 @@ const processPendingApprovalUnlocked = async ({
       freshConcept.alternateNames = alternateNames
     }
 
-    const { concept: updatedConcept } = await conceptEditsRefresh(freshConcept, staleConcept)
+    const { concept: updatedConcept, taxonomy } = await conceptEditsRefresh(freshConcept, staleConcept)
+    committedTaxonomy = taxonomy
 
     const updatedName = updatedConcept?.name || conceptName
 
@@ -188,8 +207,8 @@ const processPendingApprovalUnlocked = async ({
         removed.push(item.oldValue)
       }
       if (approval === PENDING.APPROVAL.REJECT && item.action === ACTION.ADD) {
-        removeSelectedConceptName(item.newValue)
-        removed.push(item.newValue)
+        removeSelectedConceptName(item.recordedName)
+        removed.push(item.recordedName)
       }
     })
 

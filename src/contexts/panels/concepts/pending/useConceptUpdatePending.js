@@ -1,6 +1,7 @@
 import { use, useCallback } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
@@ -12,12 +13,14 @@ import {
   relatedDataCounts,
 } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
+import { childAddDependents, withDependents } from '@/lib/concept/pending/childAddDependents'
+import orderPendingBatch from '@/lib/concept/pending/orderPendingBatch'
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 import { isRenameRejectBlocked } from '@/lib/concept/pending/renameRejectBlocked'
 import { isPendingName } from '@/lib/concept/state/name'
 import { PENDING } from '@/lib/constants/pending.js'
 
-import { isPendingAdd, isPendingDelete, moveAddToFirst, moveAddToLast, moveDeleteToLast } from '@/lib/model/history'
+import { isPendingAdd, isPendingDelete } from '@/lib/model/history'
 
 import CONFIG from '@/lib/config'
 
@@ -28,6 +31,7 @@ const useConceptUpdatePending = () => {
   const { concept: staleConcept, pending, setConcept } = use(ConceptContext)
   const { withProcessing } = use(ConceptModalContext)
   const { closestConcept, isDescendant } = use(TaxonomyContext)
+  const { pendingHistory } = use(PanelDataContext)
   const { showBoundary } = useErrorBoundary()
   const deps = useProcessPendingDeps()
 
@@ -39,8 +43,10 @@ const useConceptUpdatePending = () => {
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
       const pendingParent = pending(PENDING.DATA.PARENT)
 
-      const pendingItems = pendingIds.map(pendingId =>
-        [...pendingConcept, ...pendingParent].find(item => item.id === pendingId)
+      const pendingItems = withDependents(
+        approval,
+        pendingIds.map(pendingId => [...pendingConcept, ...pendingParent].find(item => item.id === pendingId)),
+        pendingHistory
       )
 
       return withProcessing(
@@ -53,20 +59,19 @@ const useConceptUpdatePending = () => {
             ? (closestConcept(staleConcept.name)?.name ?? staleConcept.parent)
             : null
 
-          let orderedItems = approval === PENDING.APPROVAL.REJECT ? [...pendingItems].reverse() : pendingItems
-          if (addItem) {
-            orderedItems =
-              approval === PENDING.APPROVAL.ACCEPT ? moveAddToFirst(orderedItems) : moveAddToLast(orderedItems)
-          }
-          if (deleteItem) {
-            orderedItems = moveDeleteToLast(orderedItems)
-          }
+          let orderedItems = orderPendingBatch(approval, pendingItems)
 
           if (approval === PENDING.APPROVAL.REJECT && addItem) {
             const rejectedAdds = orderedItems.filter(isPendingAdd)
+            const dependentIds = new Set(
+              rejectedAdds.flatMap(add => childAddDependents(add, pendingHistory)).map(item => item.id)
+            )
             const inRejectedBranch = item =>
               rejectedAdds.some(
-                add => item.id !== add.id && (item.concept === add.newValue || isDescendant(add.newValue, item.concept))
+                add =>
+                  item.id !== add.id &&
+                  !dependentIds.has(item.id) &&
+                  (item.concept === add.newValue || isDescendant(add.newValue, item.concept))
               )
             const prunedConceptNames = [...new Set(orderedItems.filter(inRejectedBranch).map(item => item.concept))]
             prunedConceptNames.forEach(name => deps.removeSelectedConceptName(name))
@@ -93,8 +98,9 @@ const useConceptUpdatePending = () => {
 
           const conceptName = staleConcept.name
           const optimisticConcept = concepts?.[conceptName]
+          const viewedName = optimisticConcept?.name ?? conceptName
 
-          if (removed.includes(conceptName)) {
+          if (removed.includes(viewedName)) {
             updateSelected({ concept: removedClosestName })
           } else if (optimisticConcept) {
             await setConcept(optimisticConcept, updatedPendingHistory)
@@ -107,17 +113,18 @@ const useConceptUpdatePending = () => {
             updateSelected({ concept: staleConcept.parent })
           }
 
-          return !removed.includes(conceptName) && isMorePending
+          return !removed.includes(viewedName) && isMorePending
         },
         PROCESSING.UPDATE,
-        `${PROCESSING.ARG.PENDING}: ${approval}`
+        `${PROCESSING.ARG.PENDING}: ${approval}`,
+        { delayMs: 0 }
       ).catch(error => {
         if (isRenameRejectBlocked(error)) throw error
         showBoundary(error)
         return undefined
       })
     },
-    [closestConcept, deps, isDescendant, pending, setConcept, showBoundary, staleConcept, withProcessing]
+    [closestConcept, deps, isDescendant, pending, pendingHistory, setConcept, showBoundary, staleConcept, withProcessing]
   )
 }
 

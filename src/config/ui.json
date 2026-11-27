@@ -1,22 +1,10 @@
 {
   "ACTION_ALERT": {
-    "DELETE": [
-      "Deleting a concept is final.",
-      "Please confirm you want to delete this concept."
-    ],
-    "DUPLICATE": [
-      "This realization already exists.",
-      "Please modify the values to create a unique realization."
-    ],
+    "DELETE": ["Deleting a concept is final.", "Please confirm you want to delete this concept."],
+    "DUPLICATE": ["This realization already exists.", "Please modify the values to create a unique realization."],
     "PENDING": {
-      "ACCEPT": [
-        "Pending edit approval is final.",
-        "Please confirm you want to approve the indicated pending edits."
-      ],
-      "REJECT": [
-        "Pending edit rejection is final.",
-        "Please confirm you want to reject the indicated pending edits."
-      ]
+      "ACCEPT": ["Pending edit approval is final.", "Please confirm you want to approve the indicated pending edits."],
+      "REJECT": ["Pending edit rejection is final.", "Please confirm you want to reject the indicated pending edits."]
     }
   },
   "APP_INFO": {
@@ -61,7 +49,7 @@
     "LOGOUT": "Logout",
     "NEXT": "next",
     "PREVIOUS": "previous",
-    "REFRESH_DATA": "Refresh Data"
+    "RELOAD_DATA": "Reload Data"
   },
   "PAGINATION": {
     "OF": "of {total}",

@@ -88,6 +88,7 @@ describe('applyRejects', () => {
         field: HISTORY_FIELD.CHILD,
         action: ACTION.ADD,
         newValue: 'alpha',
+        recordedName: 'alpha',
       },
     ])
 

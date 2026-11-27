@@ -1,10 +1,13 @@
-import { useCallback } from 'react'
+import { use, useCallback } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 
 import useProcessPendingDeps from '@/contexts/common/useProcessPendingDeps'
+import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { performReassignments, relatedDataCounts } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
+import { withDependents } from '@/lib/concept/pending/childAddDependents'
+import orderPendingBatch from '@/lib/concept/pending/orderPendingBatch'
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 import { isRenameRejectBlocked } from '@/lib/concept/pending/renameRejectBlocked'
 import { isPendingName } from '@/lib/concept/state/name'
@@ -17,11 +20,16 @@ const { REASSIGN } = CONFIG.CONCEPT.CHANGE_NAME
 const useHistoryUpdatePending = () => {
   const { showBoundary } = useErrorBoundary()
   const deps = useProcessPendingDeps()
+  const { pendingHistory } = use(PanelDataContext)
 
   return useCallback(
     async ({ approval, item, nameChangeType }) => {
       try {
-        await processPendingApproval({ approval, deps, items: [item] })
+        await processPendingApproval({
+          approval,
+          deps,
+          items: orderPendingBatch(approval, withDependents(approval, [item], pendingHistory)),
+        })
       } catch (error) {
         if (isRenameRejectBlocked(error)) throw error
         showBoundary(error)
@@ -40,7 +48,7 @@ const useHistoryUpdatePending = () => {
 
       return true
     },
-    [deps, showBoundary]
+    [deps, pendingHistory, showBoundary]
   )
 }
 

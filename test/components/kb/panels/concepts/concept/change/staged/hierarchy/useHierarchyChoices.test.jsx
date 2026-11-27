@@ -45,7 +45,7 @@ const wrapperFor = ({ concept, pendingMap, stagedState, isRoot = false }) => {
 }
 
 describe('useHierarchyChoices', () => {
-  it('blocks rename, parent change, and delete on a pending-add concept, but allows add child (G1)', () => {
+  it('blocks delete on a pending-add concept, but allows rename, change parent, and add child (G1)', () => {
     const concept = { name: 'new-kid', children: [] }
     const pendingMap = {
       [PENDING.DATA.CONCEPT]: [],
@@ -62,10 +62,10 @@ describe('useHierarchyChoices', () => {
       wrapper: wrapperFor({ concept, pendingMap, stagedState: baseStaged }),
     })
 
-    expect(result.current.disableChangeName).toBe(true)
-    expect(result.current.disableChangeParent).toBe(true)
+    expect(result.current.disableChangeName).toBe(false)
+    expect(result.current.disableChangeParent).toBe(false)
     expect(result.current.disableDelete).toBe(true)
-    expect(result.current.disableChangeNameReason).toBe(DISABLED.PENDING_ADD)
+    expect(result.current.disableDeleteReason).toBe(DISABLED.PENDING_ADD)
     expect(result.current.disableAddChild).toBe(false)
   })
 

@@ -49,7 +49,6 @@ const useHierarchyChoices = () => {
 
   const disableChangeNameReason = firstReason(
     isRoot && DISABLED.ROOT,
-    hasPendingAdd && DISABLED.PENDING_ADD,
     pendingHierarchy.name && DISABLED.PENDING_NAME,
     hasStagedDelete && DISABLED.STAGED_DELETE,
     hasStagedName && DISABLED.STAGED_NAME
@@ -57,7 +56,6 @@ const useHierarchyChoices = () => {
 
   const disableChangeParentReason = firstReason(
     isRoot && DISABLED.ROOT,
-    hasPendingAdd && DISABLED.PENDING_ADD,
     pendingHierarchy.parent && DISABLED.PENDING_DELETE,
     pendingHierarchy.parentChange && DISABLED.PENDING_PARENT,
     hasStagedDelete && DISABLED.STAGED_DELETE,

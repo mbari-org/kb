@@ -13,7 +13,7 @@ import RefreshContext from '@/contexts/refresh/RefreshContext'
 
 import CONFIG from '@/lib/config'
 
-const { LOGOUT, REFRESH_DATA } = CONFIG.UI.NAV
+const { LOGOUT, RELOAD_DATA } = CONFIG.UI.NAV
 
 const ICON_SIZE = 22
 
@@ -35,7 +35,7 @@ const UserActions = () => {
   return (
     <Stack direction='row' spacing={1} sx={{ alignItems: 'center', mt: -1.5 }}>
       <InfoIcon onClick={openAppInfoModal} size={ICON_SIZE} tooltip={CONFIG.APP_INFO.TOOLTIP} />
-      <RefreshAppIcon onClick={handleRefresh} size={ICON_SIZE} tooltip={REFRESH_DATA} />
+      <RefreshAppIcon onClick={handleRefresh} size={ICON_SIZE} tooltip={RELOAD_DATA} />
       <LogoutIcon onClick={handleLogout} size={ICON_SIZE} tooltip={LOGOUT} />
     </Stack>
   )

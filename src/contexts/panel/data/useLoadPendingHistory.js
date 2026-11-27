@@ -4,6 +4,7 @@ import { getHistory, getHistoryCount } from '@/lib/api/history'
 
 import { PAGINATION } from '@/lib/config/pagination.js'
 
+import { withCurrentChildNames } from '@/lib/concept/pending/pendingNames'
 import { pendingActionText } from '@/lib/model/history'
 
 const { HISTORY } = PAGINATION
@@ -34,12 +35,9 @@ export const useLoadPendingHistory = apiFns => {
       return acc
     }, Promise.resolve([]))
 
-    return allPendingHistory.map(history => {
-      return {
-        ...history,
-        action: pendingActionText(history.action),
-      }
-    })
+    return withCurrentChildNames(
+      allPendingHistory.map(history => ({ ...history, action: pendingActionText(history.action) }))
+    )
   }, [apiFns])
 
   return loadPendingHistory

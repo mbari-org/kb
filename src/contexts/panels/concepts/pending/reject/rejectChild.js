@@ -5,7 +5,7 @@ const rejectChild = (concept, pendingItem) => {
   switch (pendingItem.action) {
     case ACTION.ADD: {
       concept.children = sortConceptChildren(
-        concept.children.filter(child => child !== pendingItem.newValue)
+        concept.children.filter(child => child !== pendingItem.recordedName)
       )
       break
     }

@@ -313,7 +313,14 @@ describe('processPendingApproval', () => {
 
     expect(removeSelectedConceptName).not.toHaveBeenCalled()
 
-    const childAddItem = { concept: 'miscellany', field: 'Concept.child', action: 'Add', newValue: 'try', id: 'pending-2' }
+    const childAddItem = {
+      concept: 'miscellany',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'try',
+      recordedName: 'try',
+      id: 'pending-2',
+    }
 
     const rejectAddResult = await processPendingApproval({
       approval: PENDING.APPROVAL.REJECT,
