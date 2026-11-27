@@ -95,8 +95,8 @@ Scripts (`scripts/version/`):
 | Command | What it does |
 |---|---|
 | `yarn version:tag` | `tag.js` — regenerate `src/version.js` |
-| `yarn version:check` | `check.js` — gates in order: clean working tree → `yarn lint` → full test suite → test-deploy |
-| `yarn version:test-deploy` | `check.js` **and then** `test-deploy.js` (note: `check.js` already runs test-deploy, so this runs the whole gate twice) |
+| `yarn version:check` | `check.js` — gates in order: clean working tree → `yarn lint` → clean working tree → full test suite → clean working tree → test-deploy |
+| `yarn version:test-deploy` | `check.js` — its final gate runs `test-deploy.js` (build → rsync → nginx restart → smoke test) |
 | `yarn version:release` | `release.js` — requires `main` + clean tree; same gates, then `tag.js`, bump `package.json` version, commit `v<version>`, create git tag. Does **not** push |
 
 `test-deploy.js` requires the sibling repo `../vars-quickstart-public`: builds `dist/`,

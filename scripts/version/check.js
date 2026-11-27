@@ -7,7 +7,9 @@ import { ensureCleanWorkingTree, ensureLintPasses, ensureTestDeployPasses, ensur
 const main = async () => {
   ensureCleanWorkingTree()
   await ensureLintPasses()
+  ensureCleanWorkingTree()
   await ensureTestsPass()
+  ensureCleanWorkingTree()
   await ensureTestDeployPasses()
   console.log('✅ Release pre-checks passed.')
 }

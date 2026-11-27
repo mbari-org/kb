@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import process from 'process'
 
-import { consoleMonitor, run } from './common.js'
+import { consoleMonitor, ensureCleanWorkingTree, run } from './common.js'
 
 const quickstartRoot = path.resolve('../vars-quickstart-public')
 const quickstartNginxHtmlDir = path.join(quickstartRoot, 'temp/nginx/html')
@@ -90,6 +90,7 @@ const verifyTestDeployPrerequisites = () => {
 }
 
 const main = async () => {
+  ensureCleanWorkingTree()
   verifyTestDeployPrerequisites()
 
   const buildCommand = 'yarn'
