@@ -76,6 +76,7 @@ describe('SaveOutcomeUnknownActions', () => {
   })
 
   it('shows the error boundary when the reload fails', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
     reloadConceptMock.mockRejectedValueOnce(new Error('reload failed'))
     const { fallbackRender } = renderActions()
 
@@ -84,5 +85,6 @@ describe('SaveOutcomeUnknownActions', () => {
 
     await waitFor(() => expect(fallbackRender).toHaveBeenCalled())
     expect(fallbackRender.mock.calls[0][0].error).toMatchObject({ message: 'reload failed' })
+    consoleError.mockRestore()
   })
 })

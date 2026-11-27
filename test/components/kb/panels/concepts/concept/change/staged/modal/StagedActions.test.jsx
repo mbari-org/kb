@@ -91,6 +91,7 @@ describe('StagedActions save', () => {
   })
 
   it('shows the error boundary when the write was not applied', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
     saveStagedMock.mockRejectedValueOnce({
       title: 'Concept Save Error',
       message: 'Failed to save changes to concept dingo in fields: name',
@@ -109,5 +110,6 @@ describe('StagedActions save', () => {
     })
     expect(displaySaveOutcomeUnknownMock).not.toHaveBeenCalled()
     expect(spies.setGuardedAction).not.toHaveBeenCalled()
+    consoleError.mockRestore()
   })
 })

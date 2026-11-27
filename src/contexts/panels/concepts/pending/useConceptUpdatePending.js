@@ -13,7 +13,7 @@ import {
   relatedDataCounts,
 } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
-import { childAddDependents, withDependents } from '@/lib/concept/pending/childAddDependents'
+import { childAddDependents, implicitDeleteRejects, withDependents } from '@/lib/concept/pending/childAddDependents'
 import orderPendingBatch from '@/lib/concept/pending/orderPendingBatch'
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 import { isRenameRejectBlocked } from '@/lib/concept/pending/renameRejectBlocked'
@@ -43,14 +43,23 @@ const useConceptUpdatePending = () => {
       const pendingConcept = pending(PENDING.DATA.CONCEPT)
       const pendingParent = pending(PENDING.DATA.PARENT)
 
+      const selectedItems = pendingIds.map(pendingId =>
+        [...pendingConcept, ...pendingParent].find(item => item.id === pendingId)
+      )
+      const implicitRejects = implicitDeleteRejects(approval, selectedItems, pendingHistory)
+      const implicitRejectIds = new Set(implicitRejects.map(item => item.id))
       const pendingItems = withDependents(
         approval,
-        pendingIds.map(pendingId => [...pendingConcept, ...pendingParent].find(item => item.id === pendingId)),
+        selectedItems.filter(item => !implicitRejectIds.has(item.id)),
         pendingHistory
       )
 
       return withProcessing(
         async () => {
+          if (implicitRejects.length > 0) {
+            await processPendingApproval({ approval: PENDING.APPROVAL.REJECT, deps, items: implicitRejects })
+          }
+
           const addItem = pendingItems.find(isPendingAdd)
           const deleteItem = pendingItems.find(isPendingDelete)
 

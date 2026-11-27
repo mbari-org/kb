@@ -6,7 +6,7 @@ import PanelDataContext from '@/contexts/panel/data/PanelDataContext'
 
 import { performReassignments, relatedDataCounts } from '@/components/kb/panels/concepts/concept/change/staged/name/relatedDataCounts'
 
-import { withDependents } from '@/lib/concept/pending/childAddDependents'
+import { implicitDeleteRejects, withDependents } from '@/lib/concept/pending/childAddDependents'
 import orderPendingBatch from '@/lib/concept/pending/orderPendingBatch'
 import processPendingApproval from '@/lib/concept/pending/processPendingApproval'
 import { isRenameRejectBlocked } from '@/lib/concept/pending/renameRejectBlocked'
@@ -24,7 +24,11 @@ const useHistoryUpdatePending = () => {
 
   return useCallback(
     async ({ approval, item, nameChangeType }) => {
+      const implicitRejects = implicitDeleteRejects(approval, [item], pendingHistory)
       try {
+        if (implicitRejects.length > 0) {
+          await processPendingApproval({ approval: PENDING.APPROVAL.REJECT, deps, items: implicitRejects })
+        }
         await processPendingApproval({
           approval,
           deps,

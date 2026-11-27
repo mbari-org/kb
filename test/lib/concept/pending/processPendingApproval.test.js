@@ -332,6 +332,60 @@ describe('processPendingApproval', () => {
     expect(rejectAddResult.removed).toEqual(['try'])
   })
 
+  it('leaves a child delete unapplied when its child add is rejected in the same batch', async () => {
+    const staleConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: ['A'],
+      media: [],
+      name: 'object',
+      parent: 'root',
+      rankLevel: '',
+      rankName: '',
+    }
+    const addItem = {
+      id: 'pending-1',
+      concept: 'object',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'A',
+      recordedName: 'A',
+    }
+    const deleteItem = { id: 'pending-2', concept: 'object', field: 'Concept.child', action: 'Delete', oldValue: 'A' }
+
+    const apiFns = okApiFns()
+    const conceptEditsRefresh = vi.fn(async concept => ({ concept }))
+    const getConcept = vi.fn(() => staleConcept)
+    const loadConcept = vi.fn(async () => staleConcept)
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
+    const removeSelectedConceptName = vi.fn()
+    const updateSelected = vi.fn()
+
+    cloneStaleMock.mockResolvedValue({ ...staleConcept, children: [] })
+    applyRejectsMock.mockClear()
+
+    const result = await processPendingApproval({
+      approval: PENDING.APPROVAL.REJECT,
+      deps: {
+        apiFns,
+        conceptEditsRefresh,
+        getConcept,
+        loadConcept,
+        refreshData,
+        reloadConceptRealizations,
+        removeSelectedConceptName,
+        updateSelected,
+      },
+      items: [addItem, deleteItem],
+    })
+
+    expect(apiFns.apiRaw).toHaveBeenCalledWith(updatePendingItem, [PENDING.APPROVAL.REJECT, 'pending-2'])
+    expect(applyRejectsMock).toHaveBeenCalledTimes(1)
+    expect(applyRejectsMock).toHaveBeenCalledWith(expect.anything(), [addItem])
+    expect(result.removed).toEqual(['A'])
+  })
+
   it('refuses to approve a child add when the child concept no longer exists', async () => {
     const staleConcept = {
       aliases: [],

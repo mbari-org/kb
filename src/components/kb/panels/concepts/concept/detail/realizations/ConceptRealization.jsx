@@ -50,6 +50,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
   }
 
   const handleViewRealization = () => {
+    if (realization.historyId) return
     const modal = createConceptRealizationModal(realization)
     setModalData({ realization })
     setModal(modal)
@@ -88,7 +89,7 @@ const ConceptRealization = ({ realization, widths = [20, 30, 50] }) => {
             sx={{
               background: 'transparent',
               border: 0,
-              cursor: 'pointer',
+              cursor: realization.historyId ? 'default' : 'pointer',
               inset: 0,
               p: 0,
               position: 'absolute',

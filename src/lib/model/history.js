@@ -20,14 +20,15 @@ const pendingItems = (pendingConcept, field) => {
     .sort((a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp))
 }
 
-const pendingChild = (pendingConcept, childName) => {
-  return pendingConcept?.find(
+const pendingChildren = (pendingConcept, childName) =>
+  pendingConcept?.filter(
     pendingItem =>
       pendingItem.field === HISTORY_FIELD.CHILD &&
       ((pendingItem.action === ACTION.ADD && pendingItem.newValue === childName) ||
         (pendingItem.action === ACTION.DELETE && pendingItem.oldValue === childName))
-  )
-}
+  ) ?? []
+
+const pendingChild = (pendingConcept, childName) => pendingChildren(pendingConcept, childName)[0]
 
 const hasPendingHierarchy = (pending, conceptName) => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
@@ -146,6 +147,7 @@ export {
   moveDeleteToLast,
   pendingActionText,
   pendingChild,
+  pendingChildren,
   pendingInfo,
   pendingItemLabel,
   pendingItems,

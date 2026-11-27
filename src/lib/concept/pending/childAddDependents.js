@@ -3,7 +3,7 @@ import { pendingRenameOf } from '@/lib/concept/pending/pendingNames'
 import { ACTION } from '@/lib/constants'
 import { HISTORY_FIELD } from '@/lib/constants/historyField.js'
 import { PENDING } from '@/lib/constants/pending.js'
-import { isPendingAdd } from '@/lib/model/history'
+import { isPendingAdd, isPendingDelete } from '@/lib/model/history'
 
 const childAddDependents = (add, pendingHistory) => {
   const rename = pendingRenameOf(pendingHistory, add.recordedName)
@@ -16,6 +16,15 @@ const childAddDependents = (add, pendingHistory) => {
 
 const renamedChildAdds = (rename, pendingHistory) =>
   pendingHistory.filter(item => isPendingAdd(item) && item.recordedName === rename.oldValue)
+
+const deletedChildAdds = (deletion, pendingHistory) =>
+  pendingHistory.filter(item => isPendingAdd(item) && item.newValue === deletion.oldValue)
+
+const acceptedDependents = (item, pendingHistory) => {
+  if (isPendingName(item)) return renamedChildAdds(item, pendingHistory)
+  if (isPendingDelete(item)) return deletedChildAdds(item, pendingHistory)
+  return []
+}
 
 const withNewDependents = (items, dependents) => {
   const selectedIds = new Set(items.map(item => item.id))
@@ -32,11 +41,23 @@ const withDependents = (approval, items, pendingHistory) => {
     case PENDING.APPROVAL.ACCEPT:
       return withNewDependents(
         items,
-        items.filter(isPendingName).flatMap(rename => renamedChildAdds(rename, pendingHistory))
+        items.flatMap(item => acceptedDependents(item, pendingHistory))
       )
     default:
       return items
   }
 }
 
-export { childAddDependents, withDependents }
+const implicitDeleteRejects = (approval, items, pendingHistory) => {
+  if (approval !== PENDING.APPROVAL.ACCEPT) return []
+
+  return items
+    .filter(isPendingAdd)
+    .flatMap(add =>
+      pendingHistory.filter(
+        item => isPendingDelete(item) && item.concept === add.concept && item.oldValue === add.newValue
+      )
+    )
+}
+
+export { childAddDependents, implicitDeleteRejects, withDependents }

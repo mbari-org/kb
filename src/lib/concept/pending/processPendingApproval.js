@@ -7,6 +7,7 @@ import { PENDING } from '@/lib/constants/pending.js'
 import { createError } from '@/lib/errors'
 import { snapshotFromRawConcept } from '@/lib/model/aliases'
 import { getConcept as getTaxonomyConcept } from '@/lib/model/taxonomy'
+import { isPendingAdd, isPendingDelete } from '@/lib/model/history'
 
 import { applyApprovals } from '@/lib/concept/pending/applyApproves'
 import { applyRejects } from '@/lib/concept/pending/applyRejects'
@@ -33,6 +34,10 @@ const isSupersededChildAdd = (getConcept, approval, item) => {
   const child = getConcept(item.newValue)
   return Boolean(child) && child.parent !== item.concept
 }
+
+const isDeleteOfRejectedAdd = (items, item) =>
+  isPendingDelete(item) &&
+  items.some(add => isPendingAdd(add) && add.concept === item.concept && add.newValue === item.oldValue)
 
 const removedChildName = (approval, item) => {
   if (item.field !== HISTORY_FIELD.CHILD) return null
@@ -165,7 +170,7 @@ const processPendingApprovalUnlocked = async ({
     // Use the local stale concept as the base for optimistic updates
     if (approval === PENDING.APPROVAL.REJECT) {
       freshConcept = await cloneStale(apiFns, staleConcept, false)
-      applyRejects(freshConcept, conceptItems)
+      applyRejects(freshConcept, conceptItems.filter(item => !isDeleteOfRejectedAdd(items, item)))
     } else if (approval === PENDING.APPROVAL.ACCEPT) {
       freshConcept = await cloneStale(apiFns, staleConcept, false)
       applyApprovals(

@@ -16,8 +16,11 @@ import UserContext from '@/contexts/user/UserContext'
 
 import { applyResults, preSideEffects, postSideEffects } from './deletionSideEffects'
 
+import useConceptUpdatePending from '@/contexts/panels/concepts/pending/useConceptUpdatePending'
+
 import { deleteConceptById as apiDeleteConceptById, normalizeConcept } from '@/lib/api/concept'
 import enqueueConceptMutation from '@/lib/concept/enqueueConceptMutation'
+import { pendingChild } from '@/lib/model/history'
 import {
   deleteConcept as deleteTaxonomyConcept,
   getConcept as getTaxonomyConcept,
@@ -26,6 +29,8 @@ import {
 
 import { PANEL_DATA } from '@/lib/constants/panelData.js'
 import { CONCEPT_STATE } from '@/lib/constants/conceptState.js'
+import { ACTION } from '@/lib/constants'
+import { PENDING } from '@/lib/constants/pending.js'
 
 import CONFIG from '@/lib/config'
 
@@ -34,7 +39,7 @@ const { CANCEL, CONFIRM, DELETE, DISCARD } = CONFIG.BUTTON
 
 const DeleteConceptActions = () => {
   const { apiFns } = use(ConfigContext)
-  const { concept, initialState, setEditing } = use(ConceptContext)
+  const { concept, initialState, pending, setEditing } = use(ConceptContext)
   const { modifyConcept } = use(ConceptStagedContext)
   const { closeModal, setModalData, withProcessing } = use(ConceptModalContext)
   const { modalData } = use(ConceptModalDataContext)
@@ -52,6 +57,9 @@ const DeleteConceptActions = () => {
   const { settings } = use(SelectedSettingsContext)
   const { taxonomy, updateTaxonomy } = use(TaxonomyContext)
   const { getPreferences, isAdmin } = use(UserContext)
+
+  const updatePending = useConceptUpdatePending()
+  const pendingAdd = pendingChild(pending(PENDING.DATA.PARENT), concept.name)
 
   const isConfirm = modalData?.alertType === 'delete'
 
@@ -117,6 +125,22 @@ const DeleteConceptActions = () => {
           settings,
           templates,
           updatePreferences,
+        }
+
+        if (pendingAdd?.action === ACTION.ADD) {
+          await withProcessing(
+            async () => {
+              const preDeleteResults = await preSideEffects(deleteConceptContext)
+              await updatePending({ approval: PENDING.APPROVAL.REJECT, pendingIds: [pendingAdd.id] })
+              const postDeleteResults = await postSideEffects(deleteConceptContext)
+              await applyResults(refreshPanelData, { ...preDeleteResults, ...postDeleteResults })
+              modifyConcept({ type: CONCEPT_STATE.INITIAL, update: { ...initialState } })
+              closeModal(true, () => setClearTemplateFilters(true))
+            },
+            PROCESSING.DELETE,
+            PROCESSING.ARG.CONCEPT
+          )
+          break
         }
 
         await withProcessing(

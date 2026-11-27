@@ -9,6 +9,7 @@ import TaxonomyContext from '@/contexts/taxonomy/TaxonomyContext'
 
 import useHistoryUpdatePending from '@/contexts/panels/history/useHistoryUpdatePending'
 
+import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
 
 const { REASSIGN, NAME_ONLY } = CONFIG.CONCEPT.CHANGE_NAME
@@ -183,6 +184,45 @@ describe('useHistoryUpdatePending', () => {
       expect.objectContaining({
         approval: 'reject',
         items: [addItem],
+      })
+    )
+  })
+
+  it('approving a pending add rejects its pending delete first, then approves the add', async () => {
+    const addItem = { id: 'p8', concept: 'root', field: 'Concept.child', action: 'Add', newValue: 'doomed-concept' }
+
+    const { wrapper } = buildWrapper({ pendingHistory: [addItem, deleteItem] })
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: PENDING.APPROVAL.ACCEPT, item: addItem })
+    })
+
+    expect(
+      processPendingApprovalMock.mock.calls.map(([{ approval, items }]) => [approval, items.map(({ id }) => id)])
+    ).toEqual([
+      [PENDING.APPROVAL.REJECT, ['p9']],
+      [PENDING.APPROVAL.ACCEPT, ['p8']],
+    ])
+  })
+
+  it('approving a pending delete still approves its pending add without rejecting anything', async () => {
+    const addItem = { id: 'p8', concept: 'root', field: 'Concept.child', action: 'Add', newValue: 'doomed-concept' }
+
+    const { wrapper } = buildWrapper({ pendingHistory: [addItem, deleteItem] })
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: PENDING.APPROVAL.ACCEPT, item: deleteItem })
+    })
+
+    expect(processPendingApprovalMock).toHaveBeenCalledTimes(1)
+    expect(processPendingApprovalMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        approval: PENDING.APPROVAL.ACCEPT,
+        items: [addItem, deleteItem],
       })
     )
   })

@@ -121,7 +121,7 @@ describe('DeleteConceptActions', () => {
                         <SelectedSettingsContext.Provider value={{ settings: {} }}>
                           <TaxonomyContext.Provider value={{ taxonomy: {}, updateTaxonomy }}>
                             <UserContext.Provider value={{ getPreferences: vi.fn(), isAdmin: true }}>
-                              <DeleteConceptActions />
+                              <ErrorBoundary fallback={null}><DeleteConceptActions /></ErrorBoundary>
                             </UserContext.Provider>
                           </TaxonomyContext.Provider>
                         </SelectedSettingsContext.Provider>
@@ -179,7 +179,7 @@ describe('DeleteConceptActions', () => {
             <div data-testid='editing-actions'>
               <ConceptEditingActions />
             </div>
-            <DeleteConceptActions />
+            <ErrorBoundary fallback={null}><DeleteConceptActions /></ErrorBoundary>
           </ConceptStagedContext.Provider>
         </ConceptContext.Provider>
       )

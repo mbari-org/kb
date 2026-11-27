@@ -69,12 +69,11 @@ const useHierarchyChoices = () => {
     () =>
       firstReason(
         isRoot && DISABLED.ROOT,
-        hasPendingAdd && DISABLED.PENDING_ADD,
         hasChildren && DISABLED.HAS_CHILDREN,
         hasStagedDelete && DISABLED.STAGED_DELETE,
         pendingHierarchy.parent && DISABLED.PENDING_DELETE
       ),
-    [hasChildren, hasPendingAdd, hasStagedDelete, isRoot, pendingHierarchy.parent]
+    [hasChildren, hasStagedDelete, isRoot, pendingHierarchy.parent]
   )
 
   return {

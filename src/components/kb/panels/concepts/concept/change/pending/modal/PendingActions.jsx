@@ -10,7 +10,7 @@ import UserContext from '@/contexts/user/UserContext'
 import useConceptUpdatedPending from '@/contexts/panels/concepts/pending/useConceptUpdatePending'
 import { isRenameRejectBlocked, renameRejectLines } from '@/lib/concept/pending/renameRejectBlocked'
 
-import { pendingChild as getPendingChild } from '@/lib/model/history'
+import { pendingChildren } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
@@ -38,8 +38,8 @@ const PendingActions = () => {
       return pendingConfirm.pendingIds
     }
     const ids = pendingConcept.map(({ id }) => id)
-    const pendingChild = getPendingChild(pendingParent, concept.name)
-    return pendingChild && !ids.includes(pendingChild.id) ? [...ids, pendingChild.id] : ids
+    const childIds = pendingChildren(pendingParent, concept.name).map(({ id }) => id)
+    return [...ids, ...childIds.filter(id => !ids.includes(id))]
   }, [concept.name, pendingConcept, pendingConfirm, pendingParent])
 
   const [colors, hidden, labels] = useMemo(() => {

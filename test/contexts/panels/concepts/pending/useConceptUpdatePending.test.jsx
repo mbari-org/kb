@@ -17,6 +17,8 @@ const processPendingApprovalMock = vi.fn()
 const relatedDataCountsMock = vi.fn()
 const performReassignmentsMock = vi.fn()
 const showBoundaryMock = vi.fn()
+const approvedBatches = () =>
+  processPendingApprovalMock.mock.calls.map(([{ approval, items }]) => [approval, items.map(({ id }) => id)])
 
 vi.mock('react-error-boundary', () => ({
   useErrorBoundary: () => ({ showBoundary: showBoundaryMock }),
@@ -818,6 +820,160 @@ describe('useConceptUpdatePending', () => {
     )
     expect(updateSelected).toHaveBeenCalledWith({ concept: 'root' })
     expect(remaining).toBe(false)
+  })
+
+  it('approving a pending add rejects its pending delete first, then approves the add', async () => {
+    const addItem = {
+      id: 'add',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'pending-concept',
+      creationTimestamp: '2026-11-27T09:56:00Z',
+    }
+    const deleteItem = {
+      id: 'delete',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Delete',
+      oldValue: 'pending-concept',
+      creationTimestamp: '2026-11-27T10:59:00Z',
+    }
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: [],
+      updated: ['root'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => ({ name: 'pending-concept', parent: 'root' })),
+      parentPendingItems: [addItem, deleteItem],
+      pendingHistory: [addItem, deleteItem],
+      pendingItems: [],
+      refreshData: vi.fn(),
+      setConcept: vi.fn(async () => {}),
+      updateSelected: vi.fn(),
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: PENDING.APPROVAL.ACCEPT, pendingIds: ['add'] })
+    })
+
+    expect(approvedBatches()).toEqual([
+      [PENDING.APPROVAL.REJECT, ['delete']],
+      [PENDING.APPROVAL.ACCEPT, ['add']],
+    ])
+  })
+
+  it('approve all rejects the pending delete and approves the add with the other items', async () => {
+    const addItem = {
+      id: 'add',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'pending-concept',
+      creationTimestamp: '2026-11-27T09:56:00Z',
+    }
+    const mediaItem = {
+      id: 'media',
+      concept: 'pending-concept',
+      field: 'Media',
+      action: 'Edit',
+      creationTimestamp: '2026-11-27T09:57:00Z',
+    }
+    const deleteItem = {
+      id: 'delete',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Delete',
+      oldValue: 'pending-concept',
+      creationTimestamp: '2026-11-27T10:59:00Z',
+    }
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: [],
+      updated: ['root'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => ({ name: 'pending-concept', parent: 'root' })),
+      parentPendingItems: [addItem, deleteItem],
+      pendingHistory: [addItem, deleteItem, mediaItem],
+      pendingItems: [mediaItem],
+      refreshData: vi.fn(),
+      setConcept: vi.fn(async () => {}),
+      updateSelected: vi.fn(),
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: PENDING.APPROVAL.ACCEPT, pendingIds: ['delete', 'add', 'media'] })
+    })
+
+    expect(approvedBatches()).toEqual([
+      [PENDING.APPROVAL.REJECT, ['delete']],
+      [PENDING.APPROVAL.ACCEPT, ['add', 'media']],
+    ])
+  })
+
+  it('approving a pending delete still approves its pending add without rejecting anything', async () => {
+    const addItem = {
+      id: 'add',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'pending-concept',
+      creationTimestamp: '2026-11-27T09:56:00Z',
+    }
+    const deleteItem = {
+      id: 'delete',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Delete',
+      oldValue: 'pending-concept',
+      creationTimestamp: '2026-11-27T10:59:00Z',
+    }
+    const withProcessing = vi.fn(async work => work())
+
+    processPendingApprovalMock.mockImplementation(async () => ({
+      concepts: {},
+      pendingHistory: [],
+      removed: ['pending-concept'],
+      updated: ['root'],
+    }))
+
+    const { wrapper } = buildWrapper({
+      conceptEditsRefresh: vi.fn(),
+      getConcept: vi.fn(() => null),
+      parentPendingItems: [addItem, deleteItem],
+      pendingHistory: [addItem, deleteItem],
+      pendingItems: [],
+      refreshData: vi.fn(),
+      setConcept: vi.fn(async () => {}),
+      updateSelected: vi.fn(),
+      withProcessing,
+    })
+
+    const { result } = renderHook(() => useConceptUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: PENDING.APPROVAL.ACCEPT, pendingIds: ['delete'] })
+    })
+
+    expect(approvedBatches()).toEqual([[PENDING.APPROVAL.ACCEPT, ['add', 'delete']]])
   })
 
   it('approves a pending add with no side effects on other pending items', async () => {

@@ -169,11 +169,13 @@ const mergeSettings = (current, update) => {
   )
 }
 
+const NO_PENDING_CONCEPT = []
+
 export const ConceptPanelTestWrapper = ({
   children,
   initialAliases = [],
   initialMedia = [],
-  initialPendingConcept = [],
+  initialPendingConcept = NO_PENDING_CONCEPT,
   initialPendingHistory = [],
   initialRealizations = [],
   initialReferences = [],
@@ -209,8 +211,14 @@ export const ConceptPanelTestWrapper = ({
 
   const [concept, setConcept] = useState(dingoConcept)
   const initialState = useMemo(
-    () => (concept ? initialConceptState({ ...concept, templates: [] }, []) : null),
-    [concept]
+    () =>
+      concept
+        ? initialConceptState(
+            { ...concept, templates: [] },
+            initialPendingConcept.filter(history => history.concept === concept.name)
+          )
+        : null,
+    [concept, initialPendingConcept]
   )
   const [stagedState, dispatch] = useReducer(conceptStateReducer, initialState || {})
   const [confirmReset, setConfirmReset] = useState(null)

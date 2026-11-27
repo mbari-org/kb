@@ -9,7 +9,7 @@ import ConceptContext from '@/contexts/panels/concepts/ConceptContext'
 import ConceptModalContext from '@/contexts/panels/concepts/modal/ConceptModalContext'
 import ConceptModalProcessingContext from '@/contexts/panels/concepts/modal/ConceptModalProcessingContext'
 
-import { pendingChild as getPendingChild } from '@/lib/model/history'
+import { pendingChildren } from '@/lib/model/history'
 
 import { PENDING } from '@/lib/constants/pending.js'
 import CONFIG from '@/lib/config'
@@ -26,10 +26,12 @@ const PendingContent = () => {
   const pendingConcept = pending(PENDING.DATA.CONCEPT)
   const pendingParent = pending(PENDING.DATA.PARENT)
 
-  const pendingChild = getPendingChild(pendingParent, concept.name)
-  const pendingChildItem = pendingChild ? { ...pendingChild, parent: concept.parent } : null
+  const pendingChildItems = pendingChildren(pendingParent, concept.name).map(item => ({
+    ...item,
+    parent: concept.parent,
+  }))
 
-  const isEmptyPending = isEmpty(pendingConcept) && !pendingChildItem
+  const isEmptyPending = isEmpty(pendingConcept) && isEmpty(pendingChildItems)
 
   useEffect(() => {
     if (isEmptyPending && !processing) {
@@ -41,7 +43,7 @@ const PendingContent = () => {
     return null
   }
 
-  const pendingItems = [...pendingConcept, ...(pendingChildItem ? [pendingChildItem] : [])].sort(
+  const pendingItems = [...pendingConcept, ...pendingChildItems].sort(
     (a, b) => new Date(a.creationTimestamp) - new Date(b.creationTimestamp)
   )
 

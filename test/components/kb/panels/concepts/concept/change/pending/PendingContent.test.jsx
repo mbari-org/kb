@@ -98,6 +98,32 @@ describe('PendingContent', () => {
     expect(itemOrder(container)).toEqual(['pending-item-n1', 'pending-item-c1', 'pending-item-a1'])
   })
 
+  it('lists a pending child delete alongside the pending child add of the same concept', () => {
+    const childAddItem = {
+      id: 'c1',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Add',
+      newValue: 'dingo-2',
+      creationTimestamp: '2026-11-12T16:24:30Z',
+    }
+    const childDeleteItem = {
+      id: 'c2',
+      concept: 'root',
+      field: 'Concept.child',
+      action: 'Delete',
+      oldValue: 'dingo-2',
+      creationTimestamp: '2026-11-12T16:26:00Z',
+    }
+
+    const { container } = renderPendingContent({
+      pendingConcept: [],
+      pendingParent: [childAddItem, childDeleteItem],
+    })
+
+    expect(itemOrder(container)).toEqual(['pending-item-c1', 'pending-item-c2'])
+  })
+
   it('closes the modal when there is nothing pending', () => {
     const { container, setModal } = renderPendingContent({ pendingConcept: [] })
 
