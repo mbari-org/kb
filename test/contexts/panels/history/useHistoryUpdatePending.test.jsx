@@ -227,6 +227,22 @@ describe('useHistoryUpdatePending', () => {
     )
   })
 
+  it('rejecting a rename rejects the pending delete of the new name first, in the same batch', async () => {
+    const renameDelete = { id: 'p10', concept: 'root', field: 'Concept.child', action: 'Delete', oldValue: 'dingo-2' }
+
+    const { wrapper } = buildWrapper({ pendingHistory: [renameItem, renameDelete] })
+
+    const { result } = renderHook(() => useHistoryUpdatePending(), { wrapper })
+
+    await act(async () => {
+      await result.current({ approval: PENDING.APPROVAL.REJECT, item: renameItem })
+    })
+
+    expect(
+      processPendingApprovalMock.mock.calls.map(([{ approval, items }]) => [approval, items.map(({ id }) => id)])
+    ).toEqual([[PENDING.APPROVAL.REJECT, ['p10', 'p7']]])
+  })
+
   it('approves a pending add with no side effects on other pending items', async () => {
     const addItem = {
       id: 'p8',

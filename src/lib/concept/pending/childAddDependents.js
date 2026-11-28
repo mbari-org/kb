@@ -49,15 +49,24 @@ const withDependents = (approval, items, pendingHistory) => {
 }
 
 const implicitDeleteRejects = (approval, items, pendingHistory) => {
-  if (approval !== PENDING.APPROVAL.ACCEPT) return []
+  switch (approval) {
+    case PENDING.APPROVAL.ACCEPT:
+      return items
+        .filter(isPendingAdd)
+        .flatMap(add =>
+          pendingHistory.filter(
+            item => isPendingDelete(item) && item.concept === add.concept && item.oldValue === add.newValue
+          )
+        )
 
-  return items
-    .filter(isPendingAdd)
-    .flatMap(add =>
-      pendingHistory.filter(
-        item => isPendingDelete(item) && item.concept === add.concept && item.oldValue === add.newValue
-      )
-    )
+    case PENDING.APPROVAL.REJECT:
+      return items
+        .filter(isPendingName)
+        .flatMap(rename => pendingHistory.filter(item => isPendingDelete(item) && item.oldValue === rename.newValue))
+
+    default:
+      return []
+  }
 }
 
 export { childAddDependents, implicitDeleteRejects, withDependents }

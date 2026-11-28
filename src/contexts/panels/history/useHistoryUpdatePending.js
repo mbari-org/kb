@@ -26,13 +26,16 @@ const useHistoryUpdatePending = () => {
     async ({ approval, item, nameChangeType }) => {
       const implicitRejects = implicitDeleteRejects(approval, [item], pendingHistory)
       try {
-        if (implicitRejects.length > 0) {
+        if (approval === PENDING.APPROVAL.ACCEPT && implicitRejects.length > 0) {
           await processPendingApproval({ approval: PENDING.APPROVAL.REJECT, deps, items: implicitRejects })
         }
         await processPendingApproval({
           approval,
           deps,
-          items: orderPendingBatch(approval, withDependents(approval, [item], pendingHistory)),
+          items: [
+            ...(approval === PENDING.APPROVAL.REJECT ? implicitRejects : []),
+            ...orderPendingBatch(approval, withDependents(approval, [item], pendingHistory)),
+          ],
         })
       } catch (error) {
         if (isRenameRejectBlocked(error)) throw error

@@ -56,7 +56,7 @@ const useConceptUpdatePending = () => {
 
       return withProcessing(
         async () => {
-          if (implicitRejects.length > 0) {
+          if (approval === PENDING.APPROVAL.ACCEPT && implicitRejects.length > 0) {
             await processPendingApproval({ approval: PENDING.APPROVAL.REJECT, deps, items: implicitRejects })
           }
 
@@ -85,6 +85,10 @@ const useConceptUpdatePending = () => {
             const prunedConceptNames = [...new Set(orderedItems.filter(inRejectedBranch).map(item => item.concept))]
             prunedConceptNames.forEach(name => deps.removeSelectedConceptName(name))
             orderedItems = orderedItems.filter(item => !inRejectedBranch(item))
+          }
+
+          if (approval === PENDING.APPROVAL.REJECT) {
+            orderedItems = [...implicitRejects, ...orderedItems]
           }
 
           const result = await processPendingApproval({ approval, deps, items: orderedItems })

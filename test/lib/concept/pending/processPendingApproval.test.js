@@ -183,6 +183,44 @@ describe('processPendingApproval', () => {
     expect(reloadConceptRealizations).toHaveBeenCalledWith('data file')
   })
 
+  it('skips the realization reload for a concept deleted in the same accept batch', async () => {
+    const parentConcept = {
+      aliases: [],
+      alternateNames: [],
+      children: ['B'],
+      media: [],
+      name: 'object',
+      parent: 'root',
+      rankLevel: '',
+      rankName: '',
+    }
+    const childConcept = { ...parentConcept, name: 'B', parent: 'object', children: [] }
+
+    const apiFns = okApiFns()
+    const conceptEditsRefresh = vi.fn(async concept => ({ concept }))
+    const getConcept = vi.fn(name => ({ object: parentConcept, B: childConcept })[name])
+    const loadConcept = vi.fn(async name => getConcept(name))
+    const refreshData = vi.fn(async () => ({ pendingHistory: [] }))
+    const reloadConceptRealizations = vi.fn(async () => [])
+    const removeSelectedConceptName = vi.fn()
+    const updateSelected = vi.fn()
+    const items = [
+      { concept: 'B', field: 'LinkRealization', action: 'Add', newValue: 'comment | self | B', id: 'pending-1' },
+      { concept: 'object', field: 'Concept.child', action: 'Delete', oldValue: 'B', id: 'pending-2' },
+    ]
+
+    cloneStaleMock.mockImplementation(async (_api, concept) => ({ ...concept, children: [...concept.children] }))
+    applyApprovalsMock.mockImplementation(() => {})
+
+    await processPendingApproval({
+      approval: PENDING.APPROVAL.ACCEPT,
+      deps: { apiFns, conceptEditsRefresh, getConcept, loadConcept, refreshData, reloadConceptRealizations, removeSelectedConceptName, updateSelected },
+      items,
+    })
+
+    expect(reloadConceptRealizations).not.toHaveBeenCalledWith('B')
+  })
+
   it('fully loads a partially loaded group concept before cloning', async () => {
     const partialConcept = { name: 'miscellany', parent: 'object', children: ['try'] }
     const loadedConcept = {

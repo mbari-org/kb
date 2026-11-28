@@ -102,6 +102,28 @@ describe('implicitDeleteRejects', () => {
     ])
   })
 
+  it('returns the pending delete of the new name when rejecting a rename, and nothing when approving it', () => {
+    const rename = {
+      id: 'rename',
+      concept: 'spin-2',
+      field: 'ConceptName',
+      action: 'Edit',
+      oldValue: 'spin',
+      newValue: 'spin-2',
+    }
+    const renamedDelete = {
+      id: 'renamed-delete',
+      concept: 'data file',
+      field: 'Concept.child',
+      action: 'Delete',
+      oldValue: 'spin-2',
+    }
+    const history = [rename, spinDelete, renamedDelete]
+
+    expect(implicitDeleteRejects(PENDING.APPROVAL.REJECT, [rename], history)).toEqual([renamedDelete])
+    expect(implicitDeleteRejects(PENDING.APPROVAL.ACCEPT, [rename], history)).toEqual([])
+  })
+
   it('returns nothing when approving a delete or rejecting an add', () => {
     expect(implicitDeleteRejects(PENDING.APPROVAL.ACCEPT, [spinDelete], [addItem, spinDelete])).toEqual([])
     expect(implicitDeleteRejects(PENDING.APPROVAL.REJECT, [addItem], [addItem, spinDelete])).toEqual([])

@@ -144,8 +144,16 @@ const processPendingApprovalUnlocked = async ({
     return nameItem ? nameItem.oldValue : conceptName
   }
 
+  // An approved delete (or rejected add) removes the concept on ONI, so do not reload its realizations.
+  const removedNames = new Set(items.map(item => removedChildName(approval, item)).filter(Boolean))
+
   const realizationConcepts = [
-    ...new Set(items.filter(item => item.field === HISTORY_FIELD.REALIZATION).map(item => effectiveName(item.concept))),
+    ...new Set(
+      items
+        .filter(item => item.field === HISTORY_FIELD.REALIZATION)
+        .map(item => effectiveName(item.concept))
+        .filter(conceptName => !removedNames.has(conceptName))
+    ),
   ]
 
   const [{ pendingHistory }] = await Promise.all([
@@ -155,7 +163,6 @@ const processPendingApprovalUnlocked = async ({
 
   const updated = []
   const concepts = {}
-  const removedNames = new Set(items.map(item => removedChildName(approval, item)).filter(Boolean))
 
   let committedTaxonomy = null
   for (const conceptName of Object.keys(groups)) {
